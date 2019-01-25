@@ -20,7 +20,7 @@
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
           <v-flex>
-            <v-list>
+            <v-list v-if="list.length">
               <v-list-tile
                 v-for="item in list"
                 :key="item.url"
@@ -36,6 +36,7 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
+            <a v-else :href="getLoginUrl()" target="blank">Please login first, then refresh</a>
           </v-flex>
         </v-layout>
       </v-container>
@@ -49,6 +50,8 @@
 </template>
 
 <script>
+
+const URL_BASE = process.env.IS_TESTNET ? 'https://rinkeby.like.co' : 'https://like.co';
 
 export default {
   name: 'App',
@@ -71,6 +74,9 @@ export default {
   methods: {
     setUser(user) {
       this.user = user;
+    },
+    getLoginUrl() {
+      return `${URL_BASE}/in/register`;
     },
   },
 };

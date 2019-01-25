@@ -5,10 +5,12 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
+const API_BASE = process.env.IS_TESTNET ? 'https://api.rinkeby.like.co' : 'https://api.like.co';
+
 export default new Vuex.Store({
   state: {
-    users: ['a'],
-    articles: { a: ['test'] },
+    users: [],
+    articles: {},
   },
   mutations: {
     UPDATE_USER_LIST(state, users) {
@@ -20,11 +22,11 @@ export default new Vuex.Store({
   },
   actions: {
     async fetchUser({ commit }) {
-      const { data } = await axios.get('https://api.rinkeby.like.co/like/info/liked/list', { withCredentials: true });
+      const { data } = await axios.get(`${API_BASE}/like/info/liked/list`, { withCredentials: true });
       commit('UPDATE_USER_LIST', data.list);
     },
     async fetchArticle({ commit }, user) {
-      const { data } = await axios.get(`https://api.rinkeby.like.co/like/info/user/${user}/latest`, { withCredentials: true });
+      const { data } = await axios.get(`${API_BASE}/like/info/user/${user}/latest`, { withCredentials: true });
       commit('UPDATE_USER_URL', { user, list: data.list });
     },
   },
