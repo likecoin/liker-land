@@ -38,8 +38,7 @@ export default new Vuex.Store({
         }
         return a;
       }, []);
-      res.sort((a, b) => a.ts > b.ts);
-      return res;
+      return res.sort((a, b) => b.ts - a.ts);
     },
   },
 });

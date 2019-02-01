@@ -28,7 +28,7 @@
                 target="blank"
               >
                 <v-list-tile-avatar>
-                  <img :src="item.image">
+                  <img v-if="item.image" :src="item.image">
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>{{ item.title }} - {{ item.user }}</v-list-tile-title>
@@ -58,7 +58,7 @@ export default {
   computed: {
     list() {
       if (!this.$store.state.users) return [];
-      if (!this.user) return this.$store.getters.getAllArticles;
+      if (!this.user) return this.$store.getters.getAllArticles.slice(0, 40);
       return this.$store.state.articles[this.user];
     },
   },
