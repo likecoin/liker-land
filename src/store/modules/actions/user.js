@@ -2,10 +2,12 @@ import * as api from '@/util/api';
 import * as types from '@/store/mutation-types';
 
 export async function getOAuthToken({ commit }, authCode) {
-  const { token } = await this.$axios.$get(api.getOAuthCallbackAPI(authCode));
-  commit(types.USER_SET_ACCESS_TOKEN, token);
+  const { access_token: accessToken } = await this.$axios.$get(
+    api.getOAuthCallbackAPI(authCode)
+  );
+  commit(types.USER_SET_ACCESS_TOKEN, accessToken);
   if (window.localStorage) {
-    window.localStorage.setItem('accessToken', token);
+    window.localStorage.setItem('accessToken', accessToken);
   }
 }
 

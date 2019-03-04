@@ -20,4 +20,4 @@ export const getFetchUserArticlesAPI = user =>
 export const getOAuthURL = () =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=read%3Alike.info`;
 export const getOAuthCallbackAPI = authCode =>
-  `${LIKE_CO_URL_BASE}/api/oauth/access_token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
+  `${LIKE_CO_URL_BASE}/api/oauth/access_token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
