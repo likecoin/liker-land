@@ -2,8 +2,9 @@ import * as api from '@/util/api';
 import * as types from '@/store/mutation-types';
 
 export async function getOAuthToken({ commit }, authCode) {
-  const { access_token: accessToken } = await this.$axios.$get(
-    api.getOAuthCallbackAPI(authCode)
+  const { access_token: accessToken } = await this.$axios.$post(
+    api.getOAuthCallbackAPI(),
+    { authCode }
   );
   commit(types.USER_SET_ACCESS_TOKEN, accessToken);
   if (window.localStorage) {
