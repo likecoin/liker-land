@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 const pkg = require('./package');
 
 module.exports = {
@@ -47,6 +49,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    browserBaseURL: '/',
   },
 
   /*
