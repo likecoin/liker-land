@@ -13,23 +13,31 @@ router.get('/users/self', (req, res) => {
   res.sendStatus(404);
 });
 
-router.post('/users/login', async (req, res) => {
-  if (!req.body.authCode) {
-    res.sendStatus(400);
-    return;
+router.post('/users/login', async (req, res, next) => {
+  try {
+    if (!req.body.authCode) {
+      res.sendStatus(400);
+      return;
+    }
+    const { data } = await axios.get(getOAuthCallbackAPI(req.body.authCode));
+    const {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user,
+    } = data;
+    await userCollection.doc(user).set(
+      {
+        accessToken,
+        refreshToken,
+      },
+      { merge: true }
+    );
+    req.session.user = user;
+    req.session.accessToken = accessToken;
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
   }
-  const { data } = await axios.get(getOAuthCallbackAPI(req.body.authCode));
-  const { access_token: accessToken, refresh_token: refreshToken, user } = data;
-  await userCollection.doc(user).set(
-    {
-      accessToken,
-      refreshToken,
-    },
-    { merge: true }
-  );
-  req.session.user = user;
-  req.session.accessToken = accessToken;
-  res.sendStatus(200);
 });
 
 router.post('/users/logout', (req, res) => {

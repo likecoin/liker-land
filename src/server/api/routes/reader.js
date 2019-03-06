@@ -7,26 +7,34 @@ const {
 
 const router = Router();
 
-router.get('/reader/index', async (req, res) => {
-  if (!req.session.user) {
-    res.sendStatus(403);
-    return;
+router.get('/reader/index', async (req, res, next) => {
+  try {
+    if (!req.session.user) {
+      res.sendStatus(403);
+      return;
+    }
+    const { data } = await axios.get(getFetchLikedUserApi(), {
+      headers: { Authorization: `Bearer ${req.session.accessToken}` },
+    });
+    res.json(data);
+  } catch (err) {
+    next(err);
   }
-  const { data } = await axios.get(getFetchLikedUserApi(), {
-    headers: { Authorization: `Bearer ${req.session.accessToken}` },
-  });
-  res.json(data);
 });
 
-router.post('/reader/user/:user', async (req, res) => {
-  if (!req.session.user) {
-    res.sendStatus(403);
-    return;
+router.post('/reader/user/:user', async (req, res, next) => {
+  try {
+    if (!req.session.user) {
+      res.sendStatus(403);
+      return;
+    }
+    const { data } = await axios.get(getFetchUserArticlesAPI(req.params.user), {
+      headers: { Authorization: `Bearer ${req.session.accessToken}` },
+    });
+    res.json(data);
+  } catch (err) {
+    next(err);
   }
-  const { data } = await axios.get(getFetchUserArticlesAPI(req.params.user), {
-    headers: { Authorization: `Bearer ${req.session.accessToken}` },
-  });
-  res.json(data);
 });
 
 module.exports = router;

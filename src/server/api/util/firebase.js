@@ -1,13 +1,17 @@
 const admin = require('firebase-admin');
 const { FIRESTORE_USER_ROOT } = require('../../config/config');
-const serviceAccount = require('../../config/serviceAccountKey.json');
 
 let database;
 if (!process.env.CI) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-
+  if (process.env.FIREBASE_CONFIG) {
+    admin.initializeApp();
+  } else {
+    /* eslint-disable-next-line global-require */
+    const serviceAccount = require('../../config/serviceAccountKey.json');
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  }
   database = admin.firestore();
   database.settings({ timestampsInSnapshots: true });
 }

@@ -35,5 +35,13 @@ router.use(
 );
 router.use(users);
 router.use(reader);
+router.use((err, req, res, next) => {
+  const msg = (err.response && err.response.data) || err.message || err;
+  console.error(msg); // eslint-disable-line no-console
+  if (res.headersSent) {
+    return next(err);
+  }
+  return res.sendStatus(500);
+});
 
 module.exports = router;
