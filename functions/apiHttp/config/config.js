@@ -8,5 +8,6 @@ config.FIRESTORE_USER_ROOT = functions.config().db.FIRESTORE_USER_ROOT;
 config.LIKE_CO_CLIENT_ID = functions.config().likeco_oauth.clientid;
 config.LIKE_CO_CLIENT_SECRET = functions.config().likeco_oauth.secret;
 config.COOKIE_SECRET = functions.config().cookie.secret;
+config.EXTERNAL_URL = functions.config().constant.external_url;
 
 module.exports = config;
