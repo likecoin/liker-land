@@ -19,7 +19,7 @@ router.post('/users/login', async (req, res, next) => {
       res.sendStatus(400);
       return;
     }
-    const { data } = await axios.get(getOAuthCallbackAPI(req.body.authCode));
+    const { data } = await axios.post(getOAuthCallbackAPI(req.body.authCode));
     const {
       access_token: accessToken,
       refresh_token: refreshToken,
