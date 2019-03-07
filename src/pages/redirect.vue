@@ -13,9 +13,11 @@ export default {
     ...mapGetters(['getSubscribedAuthors']),
   },
   async mounted() {
-    const authCode = this.$route.query.auth_code;
-    if (authCode) await this.getOAuthToken(authCode);
-    this.$router.push({ name: 'index' });
+    const { state, auth_code: authCode } = this.$route.query;
+    if (authCode && state) {
+      await this.getOAuthToken({ authCode, state });
+      this.$router.push({ name: 'index' });
+    }
   },
   methods: {
     ...mapActions(['getOAuthToken']),

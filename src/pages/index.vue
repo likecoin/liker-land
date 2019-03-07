@@ -47,7 +47,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { getOAuthURL } from '@/util/api';
+import { getOAuthLoginAPI } from '@/util/api';
 
 export default {
   name: 'Index',
@@ -82,7 +82,7 @@ export default {
       this.user = user;
     },
     getLoginUrl() {
-      return getOAuthURL();
+      return getOAuthLoginAPI();
     },
   },
 };

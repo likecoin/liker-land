@@ -1,7 +1,7 @@
 import * as api from '@/util/api';
 
-export function getOAuthToken({ commit }, authCode) {
-  return this.$axios.$post(api.getOAuthCallbackAPI(), { authCode });
+export function getOAuthToken({ commit }, { authCode, state }) {
+  return this.$axios.$post(api.getOAuthCallbackAPI(), { authCode, state });
 }
 
 export async function fetchLoginStatus({ commit }) {
