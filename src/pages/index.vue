@@ -36,6 +36,7 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
+            <span v-else-if="isLoggedIn">You haven't like anything yet!</span>
             <a v-else :href="getLoginUrl()">Please login first, then refresh</a>
           </v-flex>
         </v-layout>
@@ -52,6 +53,7 @@ export default {
   name: 'Index',
   data() {
     return {
+      isLoggedIn: false,
       user: '',
     };
   },
@@ -64,16 +66,18 @@ export default {
     },
   },
   async mounted() {
-    await this.loadAuthInfo();
-    try {
-      await this.fetchUser();
-      this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
-    } catch (err) {
-      console.error(err); // eslint-disable-line no-console
+    this.isLoggedIn = await this.fetchLoginStatus();
+    if (this.isLoggedIn) {
+      try {
+        await this.fetchUser();
+        this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
+      }
     }
   },
   methods: {
-    ...mapActions(['loadAuthInfo', 'fetchUser', 'fetchArticle']),
+    ...mapActions(['fetchLoginStatus', 'fetchUser', 'fetchArticle']),
     setUser(user) {
       this.user = user;
     },

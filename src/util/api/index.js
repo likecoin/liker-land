@@ -16,3 +16,4 @@ export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}`;
 export const getOAuthURL = () =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=read%3Alike.info`;
 export const getOAuthCallbackAPI = authCode => `/api/users/login`;
+export const getLoginStatus = authCode => `/api/users/self`;
