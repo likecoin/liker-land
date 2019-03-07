@@ -22,7 +22,7 @@ router.get('/reader/index', async (req, res, next) => {
   }
 });
 
-router.post('/reader/user/:user', async (req, res, next) => {
+router.get('/reader/user/:user', async (req, res, next) => {
   try {
     if (!req.session.user) {
       res.sendStatus(403);
