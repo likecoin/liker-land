@@ -30,9 +30,7 @@ router.post('/users/login', async (req, res, next) => {
       res.status(400).send('state mismatch');
     }
 
-    const { data } = await axios.post(
-      getOAuthCallbackAPI(req.body.authCode, req.body.state)
-    );
+    const { data } = await axios.post(getOAuthCallbackAPI(req.body.authCode));
     const {
       access_token: accessToken,
       refresh_token: refreshToken,

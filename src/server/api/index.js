@@ -11,9 +11,10 @@ const { COOKIE_SECRET } = require('../config/config');
 const router = Router();
 
 const cookieSecret =
-  COOKIE_SECRET || process.env.NODE_ENV === 'production'
+  COOKIE_SECRET ||
+  (process.env.NODE_ENV === 'production'
     ? crypto.randomBytes(16).toString('base64')
-    : 'likecoin';
+    : 'likecoin');
 
 router.use(bodyParser.json());
 router.use(
