@@ -3,6 +3,10 @@
 const pkg = require('./package');
 
 module.exports = {
+  env: {
+    IS_TESTNET: process.env.IS_TESTNET,
+    CI: process.env.CI,
+  },
   mode: 'universal',
 
   /*
@@ -38,7 +42,6 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/dotenv',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
