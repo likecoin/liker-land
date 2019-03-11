@@ -46,7 +46,10 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "node-sass": "^4.11.0",
     "prettier": "^1.16.4",
+    "sass-loader": "^7.1.0",
+    "tailwindcss": "^0.7.4",
     "webpack": "^4.29.5"
   },
   "private": false

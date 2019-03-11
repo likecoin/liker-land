@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
 
 const pkg = require('./package');
@@ -31,7 +32,9 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [],
+  css: [
+    { src: '~/assets/css/index.scss', lang: 'scss' },
+  ],
 
   /*
   ** Plugins to load before mounting the App
@@ -61,6 +64,13 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    postcss: {
+      plugins: {
+        tailwindcss: './tailwind.config.js',
+        autoprefixer: {}
+      }
+    },
+
     /*
     ** You can extend webpack config here
     */
