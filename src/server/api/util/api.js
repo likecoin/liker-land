@@ -28,10 +28,8 @@ const apiRefreshAccessToken = async req => {
     return false;
   }
   try {
-    const { data } = await axios.post(
-      getRefreshTokenAPI(userDoc.data().refreshToken)
-    );
-    if (!data.access_token) throw new Error('no accessToken in reply');
+    const { data } = await apiRefreshToken(userDoc.data().refreshToken);
+    if (!data.access_token) throw new Error('no access_token in reply');
     req.session.accessToken = data.access_token;
     return true;
   } catch (err) {
@@ -42,11 +40,39 @@ const apiRefreshAccessToken = async req => {
   }
 };
 
-const getRefreshTokenAPI = refreshToken =>
-  `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`;
-const getFetchLikedUserApi = () => `${LIKECOIN_API_BASE}/like/info/liked/list`;
-const getFetchUserArticlesAPI = user =>
-  `${LIKECOIN_API_BASE}/like/info/user/${user}/latest`;
+async function sendAuthorizedRequest(req, callback) {
+  let Authorization = `Bearer ${req.session.accessToken}`;
+  try {
+    const res = await callback(Authorization);
+    return res;
+  } catch (err) {
+    if (!err.response || err.response.status !== 401) {
+      throw err;
+    }
+    if (await apiRefreshAccessToken(req)) {
+      Authorization = `Bearer ${req.session.accessToken}`;
+      return callback(Authorization);
+    }
+    throw err;
+  }
+}
+
+const apiRefreshToken = refreshToken =>
+  axios.post(
+    `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`
+  );
+const apiFetchLikedUser = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
+      headers: { Authorization },
+    })
+  );
+const apiFetchUserArticles = (user, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/like/info/user/${user}/latest`, {
+      headers: { Authorization },
+    })
+  );
 const getOAuthURL = state =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=read%3Alike.info&state=${state}`;
 const getOAuthCallbackAPI = authCode =>
@@ -54,8 +80,8 @@ const getOAuthCallbackAPI = authCode =>
 
 module.exports = {
   apiRefreshAccessToken,
-  getFetchLikedUserApi,
-  getFetchUserArticlesAPI,
+  apiFetchLikedUser,
+  apiFetchUserArticles,
   getOAuthURL,
   getOAuthCallbackAPI,
 };
