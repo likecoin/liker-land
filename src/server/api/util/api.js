@@ -1,9 +1,12 @@
+const axios = require('axios');
+
 const {
   IS_TESTNET,
   EXTERNAL_URL: CONFIG_EXTERNAL_URL,
   LIKE_CO_CLIENT_ID,
   LIKE_CO_CLIENT_SECRET,
 } = require('../../config/config');
+const { userCollection } = require('../util/firebase');
 
 const LIKECOIN_API_BASE = IS_TESTNET
   ? 'https://api.rinkeby.like.co'
@@ -17,17 +20,68 @@ const EXTERNAL_URL =
     : 'https://civic-liker.firebaseapp.com';
 const OAUTH_REDIRECT_URI = encodeURIComponent(`${EXTERNAL_URL}/redirect`);
 
-const getFetchLikedUserApi = () => `${LIKECOIN_API_BASE}/like/info/liked/list`;
-const getFetchUserArticlesAPI = user =>
-  `${LIKECOIN_API_BASE}/like/info/user/${user}/latest`;
+const apiRefreshAccessToken = async req => {
+  const { user } = req.session;
+  const userDoc = await userCollection.doc(user).get();
+  if (!userDoc.exists || !userDoc.data().refreshToken) {
+    req.session = null;
+    return false;
+  }
+  try {
+    const { data } = await apiRefreshToken(userDoc.data().refreshToken);
+    if (!data.access_token) throw new Error('no access_token in reply');
+    req.session.accessToken = data.access_token;
+    return true;
+  } catch (err) {
+    const msg = (err.response && err.response.data) || err.message || err;
+    console.error(msg); // eslint-disable-line no-console
+    req.session = null;
+    return false;
+  }
+};
+
+async function sendAuthorizedRequest(req, callback) {
+  let Authorization = `Bearer ${req.session.accessToken}`;
+  try {
+    const res = await callback(Authorization);
+    return res;
+  } catch (err) {
+    if (!err.response || err.response.status !== 401) {
+      throw err;
+    }
+    if (await apiRefreshAccessToken(req)) {
+      Authorization = `Bearer ${req.session.accessToken}`;
+      return callback(Authorization);
+    }
+    throw err;
+  }
+}
+
+const apiRefreshToken = refreshToken =>
+  axios.post(
+    `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`
+  );
+const apiFetchLikedUser = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
+      headers: { Authorization },
+    })
+  );
+const apiFetchUserArticles = (user, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/like/info/user/${user}/latest`, {
+      headers: { Authorization },
+    })
+  );
 const getOAuthURL = state =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=read%3Alike.info&state=${state}`;
 const getOAuthCallbackAPI = authCode =>
-  `${LIKE_CO_URL_BASE}/api/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
+  `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
 
 module.exports = {
-  getFetchLikedUserApi,
-  getFetchUserArticlesAPI,
+  apiRefreshAccessToken,
+  apiFetchLikedUser,
+  apiFetchUserArticles,
   getOAuthURL,
   getOAuthCallbackAPI,
 };
