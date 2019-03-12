@@ -43,21 +43,20 @@
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
           <v-flex>
-            <v-list>
-              <v-list-tile
+            <v-list
+              v-if="list.length"
+              class="max-w-full"
+            >
+              <ContentCard
                 v-for="item in list"
                 :key="item.url"
-                :href="item.url"
-                target="blank"
-              >
-                <v-list-tile-avatar>
-                  <img v-if="item.image" :src="item.image">
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.title }} - {{ item.user }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{ item.description }}</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
+                :src="item.url"
+                :author="item.user"
+                :cover-src="item.image"
+                :title="item.title"
+                :description="item.description"
+                class="my-16"
+              />
             </v-list>
           </v-flex>
         </v-layout>
@@ -70,8 +69,13 @@
 import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
+import ContentCard from '~/components/ContentCard';
+
 export default {
   name: 'Index',
+  components: {
+    ContentCard,
+  },
   data() {
     return {
       isLoggedIn: !!this.$store.getters.getUserId,
