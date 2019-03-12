@@ -1,3 +1,2 @@
 export const getOAuthToken = state => state.token;
-
-export default getOAuthToken;
+export const getUserId = state => state.user.id;

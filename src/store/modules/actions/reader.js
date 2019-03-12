@@ -1,4 +1,3 @@
-/* eslint import/prefer-default-export: "off" */
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 
