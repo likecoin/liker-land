@@ -1,12 +1,18 @@
+import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 
-export function getOAuthToken({ commit }, { authCode, state }) {
-  return this.$axios.$post(api.getOAuthCallbackAPI(), { authCode, state });
+export async function getOAuthToken({ commit }, { authCode, state }) {
+  const { user } = await this.$axios.$post(api.getOAuthCallbackAPI(), {
+    authCode,
+    state,
+  });
+  commit(types.USER_SET_USER_INFO, { id: user });
 }
 
 export async function fetchLoginStatus({ commit }) {
   try {
-    await this.$axios.$get(api.getLoginStatus());
+    const { user } = await this.$axios.$get(api.getLoginStatus());
+    commit(types.USER_SET_USER_INFO, { id: user });
     return true;
   } catch (err) {
     return false;

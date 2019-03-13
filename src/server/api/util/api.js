@@ -15,9 +15,10 @@ const LIKE_CO_URL_BASE = IS_TESTNET
   ? 'https://rinkeby.like.co'
   : 'https://like.co';
 const EXTERNAL_URL =
-  CONFIG_EXTERNAL_URL || IS_TESTNET
+  CONFIG_EXTERNAL_URL ||
+  (IS_TESTNET
     ? 'https://civic-liker-develop.firebaseapp.com'
-    : 'https://civic-liker.firebaseapp.com';
+    : 'https://civic-liker.firebaseapp.com');
 const OAUTH_REDIRECT_URI = encodeURIComponent(`${EXTERNAL_URL}/redirect`);
 
 const apiRefreshAccessToken = async req => {
@@ -74,7 +75,7 @@ const apiFetchUserArticles = (user, req) =>
     })
   );
 const getOAuthURL = state =>
-  `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=read%3Alike.info&state=${state}`;
+  `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
 const getOAuthCallbackAPI = authCode =>
   `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
 

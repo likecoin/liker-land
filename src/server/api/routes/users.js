@@ -46,7 +46,7 @@ router.post('/users/login', async (req, res, next) => {
     req.session.user = user;
     req.session.accessToken = accessToken;
     req.session.state = undefined;
-    res.sendStatus(200);
+    res.json({ user });
   } catch (err) {
     next(err);
   }
