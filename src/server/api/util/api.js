@@ -62,6 +62,12 @@ const apiRefreshToken = refreshToken =>
   axios.post(
     `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`
   );
+const apiFetchUserProfile = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/users/profile`, {
+      headers: { Authorization },
+    })
+  );
 const apiFetchLikedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
@@ -81,6 +87,7 @@ const getOAuthCallbackAPI = authCode =>
 
 module.exports = {
   apiRefreshAccessToken,
+  apiFetchUserProfile,
   apiFetchLikedUser,
   apiFetchUserArticles,
   getOAuthURL,

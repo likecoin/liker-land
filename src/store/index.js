@@ -10,9 +10,10 @@ const createStore = () =>
     actions: {
       async nuxtServerInit({ commit }, ctx) {
         try {
-          const { user: id } = await this.$axios.$get(api.getLoginStatus());
-          commit(types.USER_SET_USER_INFO, { id });
+          const userInfo = await this.$axios.$get(api.getLoginStatus());
+          commit(types.USER_SET_USER_INFO, userInfo);
         } catch (err) {
+          console.error(err); // eslint-disable-line no-console
           // no op
         }
       },
