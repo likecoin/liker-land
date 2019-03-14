@@ -2,16 +2,25 @@ const axios = require('axios');
 const crypto = require('crypto');
 const { Router } = require('express');
 const { userCollection } = require('../util/firebase');
-const { getOAuthCallbackAPI, getOAuthURL } = require('../util/api');
+const {
+  apiFetchUserProfile,
+  getOAuthCallbackAPI,
+  getOAuthURL,
+} = require('../util/api');
 
 const router = Router();
 
-router.get('/users/self', (req, res) => {
-  if (req.session.user) {
-    res.json({ user: req.session.user });
-    return;
+router.get('/users/self', async (req, res, next) => {
+  try {
+    if (req.session.user) {
+      const { data } = await apiFetchUserProfile(req);
+      res.json({ user: req.session.user, ...data });
+      return;
+    }
+    res.sendStatus(404);
+  } catch (err) {
+    next(err);
   }
-  res.sendStatus(404);
 });
 
 router.get('/users/login', (req, res) => {
@@ -30,12 +39,14 @@ router.post('/users/login', async (req, res, next) => {
       res.status(400).send('state mismatch');
     }
 
-    const { data } = await axios.post(getOAuthCallbackAPI(req.body.authCode));
+    const { data: tokenData } = await axios.post(
+      getOAuthCallbackAPI(req.body.authCode)
+    );
     const {
       access_token: accessToken,
       refresh_token: refreshToken,
       user,
-    } = data;
+    } = tokenData;
     await userCollection.doc(user).set(
       {
         accessToken,
@@ -46,7 +57,8 @@ router.post('/users/login', async (req, res, next) => {
     req.session.user = user;
     req.session.accessToken = accessToken;
     req.session.state = undefined;
-    res.json({ user });
+    const { data: userData } = await apiFetchUserProfile(req);
+    res.json({ user, ...userData });
   } catch (err) {
     next(err);
   }
