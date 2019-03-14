@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const FirestoreStore = require('firestore-store')(session);
 const { db } = require('./util/firebase');
 const users = require('./routes/users');
+const civic = require('./routes/civic');
 const reader = require('./routes/reader');
 const { COOKIE_SECRET } = require('../config/config');
 
@@ -35,6 +36,7 @@ router.use(
   })
 );
 router.use(users);
+router.use(civic);
 router.use(reader);
 router.use((err, req, res, next) => {
   const msg = (err.response && err.response.data) || err.message || err;
