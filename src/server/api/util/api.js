@@ -78,6 +78,10 @@ const apiFetchUserArticles = (user, req) =>
       headers: { Authorization },
     })
   );
+const apiFetchSuggestedArticles = () =>
+  axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
+const apiFetchArticleDetail = url =>
+  axios.get(`${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`);
 const getOAuthURL = state =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
 const getOAuthCallbackAPI = authCode =>
@@ -88,6 +92,8 @@ module.exports = {
   apiFetchUserProfile,
   apiFetchLikedUser,
   apiFetchUserArticles,
+  apiFetchSuggestedArticles,
+  apiFetchArticleDetail,
   getOAuthURL,
   getOAuthCallbackAPI,
 };
