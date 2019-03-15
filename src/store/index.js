@@ -1,8 +1,12 @@
 /* eslint no-param-reassign: "off" */
+
 import Vuex from 'vuex'; // eslint-disable-line import/no-extraneous-dependencies
+
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
+
 import reader from './modules/reader';
+import ui from './modules/ui';
 import user from './modules/user';
 
 const createStore = () =>
@@ -20,6 +24,7 @@ const createStore = () =>
     },
     modules: {
       reader,
+      ui,
       user,
     },
   });
