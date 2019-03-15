@@ -16,9 +16,7 @@ const LIKE_CO_URL_BASE = IS_TESTNET
   : 'https://like.co';
 const EXTERNAL_URL =
   CONFIG_EXTERNAL_URL ||
-  (IS_TESTNET
-    ? 'https://civic-liker-develop.firebaseapp.com'
-    : 'https://civic-liker.firebaseapp.com');
+  (IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land');
 const OAUTH_REDIRECT_URI = encodeURIComponent(`${EXTERNAL_URL}/redirect`);
 
 const apiRefreshAccessToken = async req => {
