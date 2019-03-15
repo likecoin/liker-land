@@ -1,67 +1,74 @@
 <template>
   <div>
-    <v-navigation-drawer
-      fixed
-      app
-    >
-      <v-list dense>
-        <div v-if="!isLoggedIn">
-          <a :href="getLoginUrl()">Login</a>
-        </div>
-        <v-list-tile
-          v-for="u in getSubscribedAuthors"
-          :key="u"
-          @click="setUser(u)"
+    <header class="page-header">
+      <SiteNavBar class="bg-like-green" />
+    </header>
+    <main class="page-content">
+      <v-app>
+        <v-navigation-drawer
+          fixed
+          app
         >
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{ u }}
-              <v-icon @click.stop="unsubscribeUser(u)">
-                remove
-              </v-icon>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile
-          v-for="u in getUnsubscribedAuthors"
-          :key="u"
-          style="color: grey"
-          @click="subscribeUser(u)"
-        >
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{ u }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-content>
-      <div v-if="!isLoggedIn">
-        <a :href="getLoginUrl()">Please login your Liker ID for a customized reading experience</a>
-      </div>
-      <v-container fluid fill-height>
-        <v-layout justify-center align-center>
-          <v-flex>
-            <v-list
-              v-if="list.length"
-              class="max-w-full"
+          <v-list dense>
+            <div v-if="!isLoggedIn">
+              <a :href="getLoginUrl()">Login</a>
+            </div>
+            <v-list-tile
+              v-for="u in getSubscribedAuthors"
+              :key="u"
+              @click="setUser(u)"
             >
-              <ContentCard
-                v-for="item in list"
-                :key="item.url"
-                :src="item.url"
-                :author="item.user"
-                :cover-src="item.image"
-                :title="item.title"
-                :description="item.description"
-                class="my-16"
-              />
-            </v-list>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-content>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  {{ u }}
+                  <v-icon @click.stop="unsubscribeUser(u)">
+                    remove
+                  </v-icon>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile
+              v-for="u in getUnsubscribedAuthors"
+              :key="u"
+              style="color: grey"
+              @click="subscribeUser(u)"
+            >
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  {{ u }}
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-navigation-drawer>
+        <v-content>
+          <div v-if="!isLoggedIn">
+            <a :href="getLoginUrl()">Please login your Liker ID for a customized reading experience</a>
+          </div>
+          <v-container fluid fill-height>
+            <v-layout justify-center align-center>
+              <v-flex>
+                <v-list
+                  v-if="list.length"
+                  class="max-w-full"
+                >
+                  <ContentCard
+                    v-for="item in list"
+                    :key="item.url"
+                    :src="item.url"
+                    :author="item.user"
+                    :cover-src="item.image"
+                    :title="item.title"
+                    :description="item.description"
+                    class="my-16"
+                  />
+                </v-list>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-content>
+      </v-app>
+    </main>
   </div>
 </template>
 
@@ -70,11 +77,13 @@ import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
 import ContentCard from '~/components/ContentCard';
+import SiteNavBar from '~/components/SiteNavBar';
 
 export default {
   name: 'Index',
   components: {
     ContentCard,
+    SiteNavBar,
   },
   data() {
     return {
