@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle';
+
 const PAGE_HEADER_CLASS = 'page-header';
 const FLOATING_PAGE_HEADER_CLASS = `${PAGE_HEADER_CLASS}--floating`;
 const FLOATING_PAGE_HEADER_MIN_HEIGHT = 8; // In px;
@@ -49,14 +51,14 @@ export default {
     },
   },
   mounted() {
-    // TODO: Throttle the event
-    window.addEventListener('scroll', this.updateLayout);
-    window.addEventListener('resize', this.updateLayout);
+    this.throttledUpdateLayout = throttle(this.updateLayout, 16);
+    window.addEventListener('scroll', this.throttledUpdateLayout);
+    window.addEventListener('resize', this.throttledUpdateLayout);
     this.updateLayout();
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.updateLayout);
-    window.removeEventListener('resize', this.updateLayout);
+    window.removeEventListener('scroll', this.throttledUpdateLayout);
+    window.removeEventListener('resize', this.throttledUpdateLayout);
   },
   methods: {
     getSlotProps(isFloating = false) {
