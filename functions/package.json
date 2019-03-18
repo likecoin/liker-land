@@ -24,6 +24,7 @@
     "firebase-functions": "^2.2.0",
     "firestore-store": "^1.0.0",
     "helmet": "^3.15.1",
+    "lodash.throttle": "^4.1.1",
     "nuxt-start": "^2.4.5",
     "portal-vue": "^1.5.1",
     "source-map-support": "^0.5.10",
