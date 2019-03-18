@@ -42,7 +42,9 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [],
+  plugins: [
+    '~/plugins/portal-vue.js',
+  ],
 
   /*
   ** Nuxt.js modules
@@ -52,6 +54,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/sentry',
     '@nuxtjs/pwa',
+    'portal-vue/nuxt',
   ],
   /*
   ** Axios module configuration
