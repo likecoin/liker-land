@@ -14,7 +14,24 @@
           @click="setUser(u)"
         >
           <v-list-tile-content>
-            <v-list-tile-title>{{ u }}</v-list-tile-title>
+            <v-list-tile-title>
+              {{ u }}
+              <v-icon @click.stop="unsubscribeUser(u)">
+                remove
+              </v-icon>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile
+          v-for="u in getUnsubscribedAuthors"
+          :key="u"
+          style="color: grey"
+          @click="subscribeUser(u)"
+        >
+          <v-list-tile-content>
+            <v-list-tile-title>
+              {{ u }}
+            </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -63,7 +80,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserId', 'getSubscribedAuthors', 'getAllArticles']),
+    ...mapGetters([
+      'getUserId',
+      'getSubscribedAuthors',
+      'getUnsubscribedAuthors',
+      'getAllArticles',
+      'getUserArticles',
+    ]),
     list() {
       if (!this.getSubscribedAuthors) return this.suggestedList.slice(0, 40);
       if (!this.user) {
@@ -72,7 +95,7 @@ export default {
           list = list.concat(this.suggestedList).slice(0, 40);
         return list;
       }
-      return this.$store.state.articles[this.user];
+      return this.getUserArticles(this.user);
     },
   },
   async mounted() {
@@ -92,9 +115,18 @@ export default {
       'fetchReaderIndex',
       'fetchArticle',
       'fetchSuggestedArticles',
+      'subscribeAuthor',
+      'unsubscribeAuthor',
     ]),
     setUser(user) {
       this.user = user;
+    },
+    subscribeUser(user) {
+      this.subscribeAuthor(user);
+    },
+    unsubscribeUser(user) {
+      this.user = undefined;
+      this.unsubscribeAuthor(user);
     },
     getLoginUrl() {
       return getOAuthLoginAPI();
