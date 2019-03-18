@@ -3,72 +3,56 @@
     <header class="page-header">
       <SiteNavBar class="bg-like-green" />
     </header>
+
     <main class="page-content">
-      <v-app>
-        <v-navigation-drawer
-          fixed
-          app
+      <div class="content-list">
+        <div class="content-list__header">
+          <div>Start Reading</div>
+        </div>
+
+        <div
+          v-if="list.length"
+          class="content-list__body"
         >
-          <v-list dense>
-            <div v-if="!isLoggedIn">
-              <a :href="getLoginUrl()">Login</a>
+          <ContentCard
+            v-for="item in list"
+            :key="item.url"
+            :src="item.url"
+            :author="item.user"
+            :cover-src="item.image"
+            :title="item.title"
+            :description="item.description"
+          />
+        </div>
+
+        <!-- Show empty if no article -->
+        <div
+          v-else-if="isLoggedIn"
+          class="content-list__body"
+        >
+          <div class="text-gray-9b text-center rounded bg-white p-40">
+            <div class="text-20 font-600">
+              There are no artical on your reading list
             </div>
-            <v-list-tile
-              v-for="u in getSubscribedAuthors"
-              :key="u"
-              @click="setUser(u)"
-            >
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ u }}
-                  <v-icon @click.stop="unsubscribeUser(u)">
-                    remove
-                  </v-icon>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile
-              v-for="u in getUnsubscribedAuthors"
-              :key="u"
-              style="color: grey"
-              @click="subscribeUser(u)"
-            >
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ u }}
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </v-navigation-drawer>
-        <v-content>
-          <div v-if="!isLoggedIn">
-            <a :href="getLoginUrl()">Please login your Liker ID for a customized reading experience</a>
+            <div class="text-14 text-gray-9b mt-24">
+              Artical will appear here if you started to like some artical. Find some artical from the recommending list.
+            </div>
           </div>
-          <v-container fluid fill-height>
-            <v-layout justify-center align-center>
-              <v-flex>
-                <v-list
-                  v-if="list.length"
-                  class="max-w-full"
-                >
-                  <ContentCard
-                    v-for="item in list"
-                    :key="item.url"
-                    :src="item.url"
-                    :author="item.user"
-                    :cover-src="item.image"
-                    :title="item.title"
-                    :description="item.description"
-                    class="my-16"
-                  />
-                </v-list>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-content>
-      </v-app>
+        </div>
+      </div>
     </main>
+
+    <!-- Sign in/sign up banner -->
+    <div
+      v-if="!isLoggedIn"
+      class="text-center bg-like-green px-12 pt-32 pb-40"
+    >
+      <div class="text-like-cyan text-30 font-200 mb-24">Sign up / Sign in to read more</div>
+      <a
+        :href="getLoginUrl()"
+        class="btn btn--outlined btn--dark"
+      >Sign up / Sign in</a>
+    </div>
   </div>
 </template>
 
@@ -147,3 +131,40 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.content-list {
+  max-width: config('screens.tablet.min');
+
+  @apply bg-gray-f7;
+
+  @apply flex-grow;
+
+  @apply mx-auto;
+  @apply p-16;
+  @apply pt-0;
+
+  @apply w-full;
+
+  @media screen and (min-width: config('screens.tablet.min')) {
+    @apply px-24;
+  }
+
+  &__header {
+    @apply text-like-cyan;
+    @apply text-14;
+    @apply font-600;
+    @apply text-center;
+
+    @apply py-8;
+  }
+
+  &__body {
+    .content-card {
+      &:not(first-child) {
+        @apply mt-16;
+      }
+    }
+  }
+}
+</style>
