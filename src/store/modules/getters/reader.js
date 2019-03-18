@@ -1,4 +1,5 @@
 export const getSubscribedAuthors = state => state.users;
+export const getUnsubscribedAuthors = state => state.unsubscribedUsers;
 
 export const getAllArticles = state => {
   const res = state.users.reduce((a, u) => {
@@ -9,3 +10,5 @@ export const getAllArticles = state => {
   }, []);
   return res.sort((a, b) => b.ts - a.ts);
 };
+
+export const getUserArticles = state => user => state.articles[user] || [];
