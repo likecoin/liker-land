@@ -66,6 +66,8 @@ const apiFetchUserProfile = req =>
       headers: { Authorization },
     })
   );
+const apiFetchUserPublicProfile = user =>
+  axios.get(`${LIKECOIN_API_BASE}/users/id/${user}/min`);
 const apiFetchLikedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
@@ -90,6 +92,7 @@ const getOAuthCallbackAPI = authCode =>
 module.exports = {
   apiRefreshAccessToken,
   apiFetchUserProfile,
+  apiFetchUserPublicProfile,
   apiFetchLikedUser,
   apiFetchUserArticles,
   apiFetchSuggestedArticles,

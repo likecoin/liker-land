@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const {
   apiFetchLikedUser,
+  apiFetchUserPublicProfile,
   apiFetchUserArticles,
   apiFetchSuggestedArticles,
   apiFetchArticleDetail,
 } = require('../util/api');
+const { FieldValue, userCollection } = require('../util/firebase');
 
 const router = Router();
 
@@ -14,8 +16,75 @@ router.get('/reader/index', async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const { data } = await apiFetchLikedUser(req);
-    res.json(data);
+    const [{ data }, userDoc] = await Promise.all([
+      apiFetchLikedUser(req),
+      userCollection.doc(req.session.user).get(),
+    ]);
+    const userSet = new Set(data.list);
+    const { subscribedUsers = [], unsubscribedUsers = [] } = userDoc.data();
+    subscribedUsers.forEach(u => userSet.add(u));
+    unsubscribedUsers.forEach(u => userSet.delete(u));
+    res.json({ list: Array.from(userSet), unsubscribedUsers });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/reader/subscribe/user/:id', async (req, res, next) => {
+  try {
+    if (!req.session.user) {
+      res.sendStatus(403);
+      return;
+    }
+    const { id } = req.params;
+    try {
+      await apiFetchUserPublicProfile(id);
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 404) {
+          res.sendStatus(404);
+          return;
+        }
+      }
+      next(err);
+      return;
+    }
+    const userRef = userCollection.doc(req.session.user);
+    await userRef.update({
+      subscribedUsers: FieldValue.arrayUnion(id),
+      unsubscribedUsers: FieldValue.arrayRemove(id),
+    });
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete('/reader/subscribe/user/:id', async (req, res, next) => {
+  try {
+    if (!req.session.user) {
+      res.sendStatus(403);
+      return;
+    }
+    const { id } = req.params;
+    try {
+      await apiFetchUserPublicProfile(id);
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 404) {
+          res.sendStatus(404);
+          return;
+        }
+      }
+      next(err);
+      return;
+    }
+    const userRef = userCollection.doc(req.session.user);
+    await userRef.update({
+      subscribedUsers: FieldValue.arrayRemove(id),
+      unsubscribedUsers: FieldValue.arrayUnion(id),
+    });
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
