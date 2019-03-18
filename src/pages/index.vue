@@ -1,8 +1,23 @@
 <template>
-  <div>
-    <header class="page-header">
-      <SiteNavBar class="bg-like-green" />
-    </header>
+  <div class="home-page">
+    <PageHeader :is-floatable="true">
+      <template v-slot="{ isFloating }">
+        <SiteNavBar class="bg-like-green" />
+
+        <div
+          v-if="!isFloating"
+          class="text-center bg-like-green px-16 pb-4"
+        >
+          <div class="text-like-cyan font-200 text-30 mb-16">
+            Trade a coffee for a better world
+          </div>
+          <NuxtLink
+            :to="{ name: 'civic' }"
+            class="btn btn--outlined btn--dark mx-0"
+          >Be a Civic Liker</NuxtLink>
+        </div>
+      </template>
+    </PageHeader>
 
     <main class="page-content">
       <div class="content-list">
@@ -61,12 +76,14 @@ import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
 import ContentCard from '~/components/ContentCard';
+import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 
 export default {
   name: 'Index',
   components: {
     ContentCard,
+    PageHeader,
     SiteNavBar,
   },
   data() {

@@ -1,6 +1,8 @@
 <template>
   <nav class="sliding-menu p-4">
     <!-- TODO -->
+
+    <portal-target name="floating-page-header-container" />
   </nav>
 </template>
 
