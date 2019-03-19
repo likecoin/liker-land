@@ -16,10 +16,15 @@ if (!process.env.CI) {
   database.settings({ timestampsInSnapshots: true });
 }
 const db = database;
+const { FieldValue } = admin.firestore;
 
 const getCollectionIfDefined = root =>
   root ? database.collection(root) : null;
 
 const userCollection = getCollectionIfDefined(FIRESTORE_USER_ROOT);
 
-module.exports = { db, userCollection };
+module.exports = {
+  db,
+  FieldValue,
+  userCollection,
+};

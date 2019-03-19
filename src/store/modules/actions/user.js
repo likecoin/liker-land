@@ -18,3 +18,7 @@ export async function fetchLoginStatus({ commit }) {
     return false;
   }
 }
+
+export function setUserCivicLiker({ commit }) {
+  commit(types.USER_UPDATE_USER_INFO, { isSubscribedCivicLiker: true });
+}

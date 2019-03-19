@@ -16,9 +16,7 @@ const LIKE_CO_URL_BASE = IS_TESTNET
   : 'https://like.co';
 const EXTERNAL_URL =
   CONFIG_EXTERNAL_URL ||
-  (IS_TESTNET
-    ? 'https://civic-liker-develop.firebaseapp.com'
-    : 'https://civic-liker.firebaseapp.com');
+  (IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land');
 const OAUTH_REDIRECT_URI = encodeURIComponent(`${EXTERNAL_URL}/redirect`);
 
 const apiRefreshAccessToken = async req => {
@@ -68,6 +66,8 @@ const apiFetchUserProfile = req =>
       headers: { Authorization },
     })
   );
+const apiFetchUserPublicProfile = user =>
+  axios.get(`${LIKECOIN_API_BASE}/users/id/${user}/min`);
 const apiFetchLikedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
@@ -80,6 +80,10 @@ const apiFetchUserArticles = (user, req) =>
       headers: { Authorization },
     })
   );
+const apiFetchSuggestedArticles = () =>
+  axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
+const apiFetchArticleDetail = url =>
+  axios.get(`${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`);
 const getOAuthURL = state =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
 const getOAuthCallbackAPI = authCode =>
@@ -88,8 +92,11 @@ const getOAuthCallbackAPI = authCode =>
 module.exports = {
   apiRefreshAccessToken,
   apiFetchUserProfile,
+  apiFetchUserPublicProfile,
   apiFetchLikedUser,
   apiFetchUserArticles,
+  apiFetchSuggestedArticles,
+  apiFetchArticleDetail,
   getOAuthURL,
   getOAuthCallbackAPI,
 };
