@@ -1,71 +1,53 @@
 <template>
-  <div class="home-page">
-    <PageHeader :is-floatable="true">
-      <template v-slot="{ isFloating }">
-        <SiteNavBar class="bg-like-green" />
+  <main class="page-content">
+    <div class="content-list pt-24">
+      <div class="content-list__header">
+        <div>Start Reading</div>
+      </div>
 
-        <div
-          v-if="!isFloating"
-          class="text-center bg-like-green px-16 pb-16"
-        >
-          <div class="text-like-cyan font-200 text-30 mb-16">
-            Trade a coffee for a better world
+      <div
+        v-if="list.length"
+        class="content-list__body"
+      >
+        <ContentCard
+          v-for="item in list"
+          :key="item.url"
+          :src="item.url"
+          :author="item.user"
+          :cover-src="item.image"
+          :title="item.title"
+          :description="item.description"
+        />
+      </div>
+
+      <!-- Show empty if no article -->
+      <div
+        v-else-if="isLoggedIn"
+        class="content-list__body"
+      >
+        <div class="text-gray-9b text-center  bg-white rounded-8 p-40 ">
+          <div class="text-20 font-600">
+            There are no artical on your reading list
           </div>
-          <NuxtLink
-            :to="{ name: 'civic' }"
-            class="btn btn--outlined btn--dark mx-0"
-          >Be a Civic Liker</NuxtLink>
+          <div class="text-gray-9b text-14 mt-20">
+            Artical will appear here if you started to like some artical. Find some artical from the recommending list.
+          </div>
         </div>
-
-        <TabBar v-if="getUserId">
-          <TabBarItem
-            :is-active="$route.name === 'index'"
-            :to="{ name: 'index' }"
-          >Featured</TabBarItem>
-          <TabBarItem
-            :is-active="$route.name === 'following'"
-            :to="{ name: 'following' }"
-          >Following</TabBarItem>
-          <TabBarItem
-            :is-active="$route.name === 'bookmarks'"
-            :to="{ name: 'bookmarks' }"
-          >Bookmarks</TabBarItem>
-        </TabBar>
-      </template>
-    </PageHeader>
-
-    <nuxt-child />
-
-    <!-- Sign in/sign up banner -->
-    <div
-      v-if="!isLoggedIn"
-      class="text-center bg-like-green px-12 pt-32 pb-40"
-    >
-      <div class="text-like-cyan text-30 font-200 mb-24">Sign up / Sign in to read more</div>
-      <a
-        :href="getLoginUrl()"
-        class="btn btn--outlined btn--dark"
-      >Sign up / Sign in</a>
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
-import PageHeader from '~/components/PageHeader';
-import SiteNavBar from '~/components/SiteNavBar';
-import TabBar from '~/components/TabBar';
-import TabBarItem from '~/components/TabBarItem';
+import ContentCard from '~/components/ContentCard';
 
 export default {
   name: 'Index',
   components: {
-    PageHeader,
-    SiteNavBar,
-    TabBar,
-    TabBarItem,
+    ContentCard,
   },
   data() {
     return {
@@ -129,3 +111,37 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.content-list {
+  @apply flex-grow;
+
+  @apply w-full;
+  @apply max-w-phone;
+
+  @apply mx-auto;
+  @apply px-16;
+  @apply py-24;
+
+  @media screen and (min-width: config('screens.tablet.min')) {
+    @apply px-24;
+  }
+
+  &__header {
+    @apply text-like-cyan;
+    @apply text-14;
+    @apply font-600;
+    @apply text-center;
+
+    @apply py-8;
+  }
+
+  &__body {
+    .content-card {
+      &:not(first-child) {
+        @apply mt-16;
+      }
+    }
+  }
+}
+</style>

@@ -65,6 +65,22 @@ module.exports = {
   },
   sentry: {},
 
+  router: {
+    extendRoutes(routes, resolve) {
+      const index = routes.findIndex(route => route.path === '/');
+      routes[index].children.push({
+        path: '/following',
+        name: 'following',
+        component: resolve(__dirname, 'pages/index/index.vue'),
+      })
+      routes[index].children.push({
+        path: '/bookmarks',
+        name: 'bookmarks',
+        component: resolve(__dirname, 'pages/index/index.vue'),
+      });
+    },
+  },
+
   /*
   ** Build configuration
   */
