@@ -1,6 +1,32 @@
 <template>
-  <nav class="sliding-menu p-4">
+  <nav class="sliding-menu">
     <!-- TODO -->
+
+    <div>
+      <div class="pt-16 px-32">
+        <nuxt-link
+          class="btn btn--outlined btn--dark btn--block"
+          :to="{ name: 'index' }"
+        >Home</nuxt-link>
+
+        <nuxt-link
+          class="btn btn--outlined btn--dark btn--block"
+          :to="{ name: 'civic' }"
+        >Civic Liker</nuxt-link>
+
+        <nuxt-link
+          class="btn btn--outlined btn--dark btn--block"
+          :to="{ name: 'settings' }"
+        >Settings</nuxt-link>
+      </div>
+
+      <div class="flex flex-col mt-24 px-48">
+        <a
+          class="text-white text-14"
+          href="https://help.like.co"
+        >Support</a>
+      </div>
+    </div>
 
     <portal-target name="floating-page-header-container" />
   </nav>
