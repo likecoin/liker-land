@@ -21,15 +21,21 @@
           <TabBarItem
             :is-active="$route.name === 'index'"
             :to="{ name: 'index' }"
-          >Featured</TabBarItem>
+          >
+            <FeaturedIcon />
+          </TabBarItem>
           <TabBarItem
             :is-active="$route.name === 'following'"
             :to="{ name: 'following' }"
-          >Following</TabBarItem>
+          >
+            <WatchingIcon />
+          </TabBarItem>
           <TabBarItem
             :is-active="$route.name === 'bookmarks'"
             :to="{ name: 'bookmarks' }"
-          >Bookmarks</TabBarItem>
+          >
+            <BookmarkIcon />
+          </TabBarItem>
         </TabBar>
       </template>
     </PageHeader>
@@ -59,6 +65,10 @@ import SiteNavBar from '~/components/SiteNavBar';
 import TabBar from '~/components/TabBar';
 import TabBarItem from '~/components/TabBarItem';
 
+import BookmarkIcon from '~/assets/icons/bookmark.svg';
+import FeaturedIcon from '~/assets/icons/featured.svg';
+import WatchingIcon from '~/assets/icons/watching.svg';
+
 export default {
   name: 'Index',
   components: {
@@ -66,6 +76,10 @@ export default {
     SiteNavBar,
     TabBar,
     TabBarItem,
+
+    BookmarkIcon,
+    FeaturedIcon,
+    WatchingIcon,
   },
   computed: {
     ...mapGetters(['getUserId']),
