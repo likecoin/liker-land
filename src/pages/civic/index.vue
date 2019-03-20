@@ -23,6 +23,14 @@ export default {
   computed: {
     ...mapGetters(['getUserIsCivicLiker']),
   },
+  mounted() {
+    const { from, referrer } = this.$route.query;
+    if (window.sessionStorage) {
+      if (from) window.sessionStorage.setItem('civicLikerFrom', from);
+      if (referrer)
+        window.sessionStorage.setItem('civicLikerReferrer', referrer);
+    }
+  },
   methods: {
     onClickButton() {
       this.$router.push({
