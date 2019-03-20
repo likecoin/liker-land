@@ -6,31 +6,42 @@
 
         <div
           v-if="!isFloating"
-          class="text-center bg-like-green px-16 pb-16"
+          :class="[
+            'text-center bg-like-green px-16',
+            getUserId ? 'pb-16' : 'pb-0',
+          ]"
         >
           <div class="text-like-cyan font-200 text-30 mb-16">
             Trade a coffee for a better world
           </div>
           <NuxtLink
+            :class="[
+              'btn btn--outlined btn--dark mx-0',
+              {
+                'mb-0': !getUserId,
+              },
+            ]"
             :to="{ name: 'civic' }"
-            class="btn btn--outlined btn--dark mx-0"
           >Be a Civic Liker</NuxtLink>
         </div>
 
-        <TabBar v-if="getUserId">
+        <TabBar>
           <TabBarItem
+            :class="{ 'pointer-events-none': !getUserId }"
             :is-active="$route.name === 'index'"
             :to="{ name: 'index' }"
           >
-            <FeaturedIcon />
+            <FeaturedIcon :class="{ invisible: !getUserId }" />
           </TabBarItem>
           <TabBarItem
+            v-if="getUserId"
             :is-active="$route.name === 'following'"
             :to="{ name: 'following' }"
           >
             <WatchingIcon />
           </TabBarItem>
           <TabBarItem
+            v-if="getUserId"
             :is-active="$route.name === 'bookmarks'"
             :to="{ name: 'bookmarks' }"
           >
@@ -89,3 +100,16 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.page-header--floating {
+  .site-nav-bar {
+    @apply absolute;
+    @apply pin;
+
+    @apply bg-transparent;
+
+    @apply py-0;
+  }
+}
+</style>
