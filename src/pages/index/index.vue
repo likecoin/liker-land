@@ -1,7 +1,10 @@
 <template>
   <main class="page-content">
     <div class="content-list pt-24">
-      <div class="content-list__header">
+      <div
+        v-if="list.length"
+        class="content-list__header"
+      >
         <div>Start Reading</div>
       </div>
 
@@ -22,16 +25,34 @@
 
       <!-- Show empty if no article -->
       <div
-        v-else-if="isLoggedIn"
+        v-else-if="getUserId"
         class="content-list__body"
       >
-        <div class="text-gray-9b text-center  bg-white rounded-8 p-40 ">
+        <div class="text-gray-9b text-center bg-white rounded-8 p-40">
           <div class="text-20 font-600">
             There are no artical on your reading list
           </div>
           <div class="text-gray-9b text-14 mt-20">
             Artical will appear here if you started to like some artical. Find some artical from the recommending list.
           </div>
+        </div>
+      </div>
+
+      <div
+        v-else-if="$route.name !== 'index'"
+        class="content-list__body"
+      >
+        <div class="text-gray-9b text-center rounded bg-white p-40">
+          <div class="text-xl font-bold">
+            Sign in required
+          </div>
+          <div class="text-gray-9b text-14 mt-24">
+            Please sign up / sign in to enjoy this feature.
+          </div>
+          <a
+            class="btn btn--outlined mt-32"
+            :href="getOAuthLoginAPI()"
+          >Sign up / sign in</a>
         </div>
       </div>
     </div>
@@ -51,62 +72,53 @@ export default {
   },
   data() {
     return {
-      isLoggedIn: !!this.$store.getters.getUserId,
-      user: '',
       suggestedList: [],
     };
   },
   computed: {
-    ...mapGetters([
-      'getUserId',
-      'getSubscribedAuthors',
-      'getUnsubscribedAuthors',
-      'getAllArticles',
-      'getUserArticles',
-    ]),
+    ...mapGetters(['getUserId', 'getSubscribedAuthors', 'getAllArticles']),
     list() {
-      if (!this.getSubscribedAuthors) return this.suggestedList.slice(0, 40);
-      if (!this.user) {
-        let list = this.getAllArticles.slice(0, 40);
-        if (list.length < 40)
-          list = list.concat(this.suggestedList).slice(0, 40);
-        return list;
+      switch (this.$route.name) {
+        case 'index':
+          return this.suggestedList.slice(0, 40);
+
+        case 'following':
+          if (!this.getUserId) return [];
+          return this.getAllArticles.slice(0, 40);
+
+        case 'bookmarks': // TODO
+        default:
+          return [];
       }
-      return this.getUserArticles(this.user);
     },
   },
-  async mounted() {
-    try {
-      if (this.isLoggedIn) {
-        await this.fetchReaderIndex();
-        this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
-      }
-      this.suggestedList = await this.fetchSuggestedArticles();
-    } catch (err) {
-      console.error(err); // eslint-disable-line no-console
-    }
+  watch: {
+    '$route.name': 'fetchList',
+  },
+  mounted() {
+    this.fetchList();
   },
   methods: {
+    getOAuthLoginAPI,
+
     ...mapActions([
-      'fetchLoginStatus',
       'fetchReaderIndex',
       'fetchArticle',
       'fetchSuggestedArticles',
-      'subscribeAuthor',
-      'unsubscribeAuthor',
     ]),
-    setUser(user) {
-      this.user = user;
-    },
-    subscribeUser(user) {
-      this.subscribeAuthor(user);
-    },
-    unsubscribeUser(user) {
-      this.user = undefined;
-      this.unsubscribeAuthor(user);
-    },
-    getLoginUrl() {
-      return getOAuthLoginAPI();
+
+    async fetchList() {
+      try {
+        if (this.getUserId) {
+          await this.fetchReaderIndex();
+          this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
+        }
+        if (!this.suggestedList.length) {
+          this.suggestedList = await this.fetchSuggestedArticles();
+        }
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
+      }
     },
   },
 };

@@ -38,12 +38,12 @@
 
     <!-- Sign in/sign up banner -->
     <div
-      v-if="!isLoggedIn"
+      v-if="!getUserId"
       class="text-center bg-like-green px-12 pt-32 pb-40"
     >
       <div class="text-like-cyan text-30 font-200 mb-24">Sign up / Sign in to read more</div>
       <a
-        :href="getLoginUrl()"
+        :href="getOAuthLoginAPI()"
         class="btn btn--outlined btn--dark"
       >Sign up / Sign in</a>
     </div>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
 import PageHeader from '~/components/PageHeader';
@@ -67,65 +67,11 @@ export default {
     TabBar,
     TabBarItem,
   },
-  data() {
-    return {
-      isLoggedIn: !!this.$store.getters.getUserId,
-      user: '',
-      suggestedList: [],
-    };
-  },
   computed: {
-    ...mapGetters([
-      'getUserId',
-      'getSubscribedAuthors',
-      'getUnsubscribedAuthors',
-      'getAllArticles',
-      'getUserArticles',
-    ]),
-    list() {
-      if (!this.getSubscribedAuthors) return this.suggestedList.slice(0, 40);
-      if (!this.user) {
-        let list = this.getAllArticles.slice(0, 40);
-        if (list.length < 40)
-          list = list.concat(this.suggestedList).slice(0, 40);
-        return list;
-      }
-      return this.getUserArticles(this.user);
-    },
-  },
-  async mounted() {
-    try {
-      if (this.isLoggedIn) {
-        await this.fetchReaderIndex();
-        this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
-      }
-      this.suggestedList = await this.fetchSuggestedArticles();
-    } catch (err) {
-      console.error(err); // eslint-disable-line no-console
-    }
+    ...mapGetters(['getUserId']),
   },
   methods: {
-    ...mapActions([
-      'fetchLoginStatus',
-      'fetchReaderIndex',
-      'fetchArticle',
-      'fetchSuggestedArticles',
-      'subscribeAuthor',
-      'unsubscribeAuthor',
-    ]),
-    setUser(user) {
-      this.user = user;
-    },
-    subscribeUser(user) {
-      this.subscribeAuthor(user);
-    },
-    unsubscribeUser(user) {
-      this.user = undefined;
-      this.unsubscribeAuthor(user);
-    },
-    getLoginUrl() {
-      return getOAuthLoginAPI();
-    },
+    getOAuthLoginAPI,
   },
 };
 </script>
