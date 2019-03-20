@@ -22,6 +22,9 @@ module.exports = {
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
+    script: [
+      { src: '/vendor/typekit.js', type: 'text/javascript' },
+    ],
   },
 
   /*
