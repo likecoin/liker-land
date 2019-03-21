@@ -13,20 +13,20 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    titleTemplate: (titleChunk) => titleChunk ? `${titleChunk} - liker.land` : 'liker.land',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#50e3c2' },
 
   /*
   ** Global CSS
