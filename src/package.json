@@ -1,9 +1,17 @@
 {
-  "name": "civic-liker",
+  "name": "liker-land",
   "version": "1.0.0",
-  "description": "My bee&#39;s knees Nuxt.js project",
-  "author": "William Chong",
-  "private": true,
+  "description": "Liker Land",
+  "contributors": [
+    {
+      "name": "William Chong"
+    },
+    {
+      "name": "Ng Wing Tat, David",
+      "email": "i@ngwingt.at"
+    }
+  ],
+  "repository": "github:likecoin/liker-land",
   "scripts": {
     "dev": "cross-env NODE_ENV=development IS_TESTNET=TRUE nodemon server/index.js --watch server",
     "build": "nuxt build",
@@ -53,5 +61,6 @@
     "require-extension-hooks": "^0.3.3",
     "require-extension-hooks-babel": "^0.1.1",
     "require-extension-hooks-vue": "^2.0.0"
-  }
+  },
+  "private": false
 }
