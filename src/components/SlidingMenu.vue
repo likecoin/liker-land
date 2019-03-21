@@ -7,16 +7,19 @@
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'index' }"
+          @click.native="onClickMenuItem"
         >Home</nuxt-link>
 
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'civic' }"
+          @click.native="onClickMenuItem"
         >Civic Liker</nuxt-link>
 
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'settings' }"
+          @click.native="onClickMenuItem"
         >Settings</nuxt-link>
       </div>
 
@@ -33,8 +36,17 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'SlidingMenu',
+  methods: {
+    ...mapActions(['toggleSlidingMenu']),
+
+    onClickMenuItem() {
+      this.toggleSlidingMenu(false);
+    },
+  },
 };
 </script>
 
