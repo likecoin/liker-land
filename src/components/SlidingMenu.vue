@@ -73,11 +73,27 @@ $sliding-menu-width: 256px;
   // Handle the elements have to translate when sliding menu is opened
   &,
   &-pushee {
-    transition: transform 0.25s ease;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
 
     html[sliding-menu='opened'] & {
       transform: translateX(-#{$sliding-menu-width});
     }
+  }
+  & {
+    transition-property: transform, outline-width;
+
+    outline-style: solid;
+    outline-color: config('colors.like-green');
+    outline-width: 0;
+
+    // Hacking hairline issue when transforming
+    html[sliding-menu='opened'] & {
+      outline-width: 1px;
+    }
+  }
+  &-pushee {
+    transition-property: transform;
   }
 }
 

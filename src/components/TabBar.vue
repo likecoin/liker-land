@@ -32,6 +32,9 @@ export default {
   &__item-list-wrapper {
     max-width: 408px;
 
+    // Hacking hairline issue when transforming
+    margin: 0 -1px;
+
     @apply relative;
 
     @apply w-full;
