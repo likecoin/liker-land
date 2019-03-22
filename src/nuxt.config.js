@@ -36,6 +36,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
     { src: '~/assets/css/index.scss', lang: 'scss' },
   ],
 
@@ -43,6 +44,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
   ],
 
