@@ -61,3 +61,7 @@
   * @import "utilities/background-patterns";
   * @import "utilities/skew-transforms";
   */
+
+.bg-like-gradient {
+  background-image: linear-gradient(78deg, #d2f0f0, #f0e6b4);
+}
