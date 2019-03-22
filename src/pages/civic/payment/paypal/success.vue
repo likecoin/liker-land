@@ -19,22 +19,31 @@ export default {
   data() {
     return {};
   },
+  middleware: 'authenticated',
   computed: {},
-  async fetch({ app: { $axios }, query }) {
+  async mounted() {
+    let from;
+    let referrer;
+    if (window.sessionStorage) {
+      from = window.sessionStorage.getItem('civicLikerFrom');
+      referrer = window.sessionStorage.getItem('civicLikerReferrer');
+    }
     try {
-      await $axios.$post(getPayPalPaymentAPI(), query);
+      await this.$axios.$post(getPayPalPaymentAPI(), {
+        from,
+        referrer,
+        ...this.$route.query,
+      });
+      this.setUserCivicLiker();
+      setTimeout(() => {
+        this.$router.push({
+          name: 'index',
+        });
+      }, 3000);
     } catch (err) {
       console.error(err); // eslint-disable-line no-console
+      throw err;
     }
-    return {};
-  },
-  mounted() {
-    this.setUserCivicLiker();
-    setTimeout(() => {
-      this.$router.push({
-        name: 'index',
-      });
-    }, 3000);
   },
   methods: {
     ...mapActions(['setUserCivicLiker']),

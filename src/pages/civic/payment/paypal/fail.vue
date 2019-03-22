@@ -9,6 +9,7 @@ export default {
   data() {
     return {};
   },
+  middleware: 'authenticated',
   computed: {},
   mounted() {
     setTimeout(() => {
