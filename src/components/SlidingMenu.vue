@@ -1,6 +1,32 @@
 <template>
   <nav class="sliding-menu">
-    <!-- TODO -->
+    <header
+      :class="[
+        'flex pt-24 pl-24 pr-16 pb-16',
+        {
+          'justify-end': !getUserId,
+        },
+      ]"
+    >
+      <div
+        v-if="getUserId"
+        class="flex items-center"
+      >
+        <lc-avatar
+          :src="getUserInfo.avatar"
+          :halo="getUserCivicLikerHalo"
+          size="46"
+        />
+        <span
+          class="text-16 ml-12"
+        >{{ getUserInfo.displayName }}</span>
+      </div>
+      <a
+        v-else
+        class="btn btn--dark btn--block mx-0"
+        :href="getOAuthLoginAPI()"
+      >Sign up / Sign in</a>
+    </header>
 
     <div>
       <div class="pt-16 px-32">
@@ -36,11 +62,18 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+
+import { getOAuthLoginAPI } from '~/util/api';
 
 export default {
   name: 'SlidingMenu',
+  computed: {
+    ...mapGetters(['getUserId', 'getUserInfo', 'getUserCivicLikerHalo']),
+  },
   methods: {
+    getOAuthLoginAPI,
+
     ...mapActions(['toggleSlidingMenu']),
 
     onClickMenuItem() {
