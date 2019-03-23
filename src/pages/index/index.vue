@@ -1,61 +1,61 @@
 <template>
   <main class="page-content">
-    <div class="content-list pt-24">
+    <transition
+      name="content-list__item-"
+      mode="out-in"
+    >
       <div
-        v-if="list.length"
-        class="content-list__header"
+        v-if="isLoading"
+        key="loading"
+        class="content-list"
       >
-        <div>Start Reading</div>
+        <div class="content-list__body mt-32">
+          <ContentCardPlaceholder
+            v-for="key in 2"
+            :key="key"
+          />
+        </div>
       </div>
 
       <div
-        v-if="list.length"
-        class="content-list__body"
+        v-else-if="list.length"
+        key="content"
+        class="content-list"
       >
-        <ContentCard
-          v-for="item in list"
-          :key="item.url"
-          :src="item.url"
-          :author="item.user"
-          :cover-src="item.image"
-          :title="item.title"
-          :description="item.description"
-        />
+        <div class="content-list__header">
+          <div>Start Reading</div>
+        </div>
+        <div class="content-list__body">
+          <ContentCard
+            v-for="item in list"
+            :key="item.url"
+            :src="item.url"
+            :author="item.user"
+            :cover-src="item.image"
+            :title="item.title"
+            :description="item.description"
+          />
+        </div>
       </div>
 
       <!-- Show empty if no article -->
       <div
         v-else-if="getUserId"
-        class="content-list__body"
+        key="empty"
+        class="content-list"
       >
-        <div class="text-gray-9b text-center bg-white rounded-8 p-40">
-          <div class="text-20 font-600">
-            There are no artical on your reading list
-          </div>
-          <div class="text-gray-9b text-14 mt-20">
-            Artical will appear here if you started to like some artical. Find some artical from the recommending list.
+        <div class="content-list__body">
+          <div class="text-gray-9b text-center bg-white rounded-8 p-40">
+            <div class="text-20 font-600">
+              There are no artical on your reading list
+            </div>
+            <div class="text-gray-9b text-14 mt-20">
+              Artical will appear here if you started to like some artical. Find some artical from the recommending list.
+            </div>
           </div>
         </div>
       </div>
-
-      <div
-        v-else-if="$route.name !== 'index'"
-        class="content-list__body"
-      >
-        <div class="text-gray-9b text-center rounded bg-white p-40">
-          <div class="text-xl font-bold">
-            Sign in required
-          </div>
-          <div class="text-gray-9b text-14 mt-24">
-            Please sign up / sign in to enjoy this feature.
-          </div>
-          <a
-            class="btn btn--outlined mt-32"
-            :href="getOAuthLoginAPI()"
-          >Sign up / sign in</a>
-        </div>
-      </div>
-    </div>
+    </transition>
   </main>
 </template>
 
@@ -64,14 +64,17 @@ import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
 import ContentCard from '~/components/ContentCard';
+import ContentCardPlaceholder from '~/components/ContentCardPlaceholder';
 
 export default {
   name: 'Index',
   components: {
     ContentCard,
+    ContentCardPlaceholder,
   },
   data() {
     return {
+      isLoading: true,
       suggestedList: [],
     };
   },
@@ -109,15 +112,29 @@ export default {
 
     async fetchList() {
       try {
-        if (this.getUserId) {
-          await this.fetchReaderIndex();
-          this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
-        }
-        if (!this.suggestedList.length) {
-          this.suggestedList = await this.fetchSuggestedArticles();
+        this.isLoading = true;
+        switch (this.$route.name) {
+          case 'index':
+            if (!this.suggestedList.length) {
+              this.suggestedList = await this.fetchSuggestedArticles();
+            }
+            break;
+
+          case 'following':
+            if (this.getUserId) {
+              await this.fetchReaderIndex();
+              this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
+            }
+            break;
+
+          case 'bookmarks': // TODO
+          default:
+            break;
         }
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -139,6 +156,27 @@ export default {
     @apply px-24;
   }
 
+  &__item {
+    &-- {
+      &enter,
+      &leave-to {
+        opacity: 0;
+      }
+
+      &enter-active,
+      &leave-active {
+        transition-property: opacity;
+        transition-duration: 0.5s;
+      }
+      &enter-active {
+        transition-timing-function: ease-out;
+      }
+      &leave-active {
+        transition-timing-function: ease-in;
+      }
+    }
+  }
+
   &__header {
     @apply text-like-cyan;
     @apply text-14;
@@ -150,8 +188,11 @@ export default {
 
   &__body {
     .content-card {
-      &:not(first-child) {
-        @apply mt-16;
+      &,
+      &-placeholder {
+        &:not(:first-child) {
+          @apply mt-16;
+        }
       }
     }
   }
