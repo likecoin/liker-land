@@ -8,36 +8,37 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import ContentList from '~/components/ContentList';
 
 export default {
-  name: 'Index',
+  name: 'Bookmarks',
   components: {
     ContentList,
   },
+  middleware: 'authenticated',
   data() {
     return {
       isLoading: true,
-      articles: [],
     };
   },
   computed: {
+    ...mapGetters([]),
     items() {
-      return this.articles.slice(0, 40);
+      return [];
     },
   },
   mounted() {
     this.fetchContent();
   },
   methods: {
-    ...mapActions(['fetchSuggestedArticles']),
+    ...mapActions([]),
 
-    async fetchContent() {
+    fetchContent() {
       try {
         this.isLoading = true;
-        this.articles = await this.fetchSuggestedArticles();
+        // TODO
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {

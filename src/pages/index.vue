@@ -38,15 +38,15 @@
           </TabBarItem>
           <TabBarItem
             v-if="getUserId"
-            :is-active="$route.name === 'following'"
-            :to="{ name: 'following' }"
+            :is-active="$route.name === 'index-following'"
+            :to="{ name: 'index-following' }"
           >
             <WatchingIcon />
           </TabBarItem>
           <TabBarItem
             v-if="getUserId"
-            :is-active="$route.name === 'bookmarks'"
-            :to="{ name: 'bookmarks' }"
+            :is-active="$route.name === 'index-bookmarks'"
+            :to="{ name: 'index-bookmarks' }"
           >
             <BookmarkIcon />
           </TabBarItem>

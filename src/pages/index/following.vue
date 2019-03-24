@@ -8,36 +8,38 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import ContentList from '~/components/ContentList';
 
 export default {
-  name: 'Index',
+  name: 'Following',
   components: {
     ContentList,
   },
+  middleware: 'authenticated',
   data() {
     return {
       isLoading: true,
-      articles: [],
     };
   },
   computed: {
+    ...mapGetters(['getAllArticles', 'getSubscribedAuthors']),
     items() {
-      return this.articles.slice(0, 40);
+      return this.getAllArticles.slice(0, 40);
     },
   },
   mounted() {
     this.fetchContent();
   },
   methods: {
-    ...mapActions(['fetchSuggestedArticles']),
+    ...mapActions(['fetchReaderIndex', 'fetchArticle']),
 
     async fetchContent() {
       try {
         this.isLoading = true;
-        this.articles = await this.fetchSuggestedArticles();
+        await this.fetchReaderIndex();
+        this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
