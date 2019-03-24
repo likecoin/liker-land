@@ -8,7 +8,7 @@
         <SiteNavBar class="bg-like-green" />
 
         <div
-          v-if="!isFloating"
+          v-if="!getUserIsCivicLiker && !isFloating"
           :class="[
             'text-center bg-like-green px-16',
             getUserId ? 'pb-16' : 'pb-0',
@@ -96,7 +96,7 @@ export default {
     WatchingIcon,
   },
   computed: {
-    ...mapGetters(['getUserId']),
+    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
   },
   methods: {
     getOAuthLoginAPI,
