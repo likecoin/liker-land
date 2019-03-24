@@ -1,6 +1,11 @@
 <template>
-  <div class="redirect">
-    <h1>Redirecting</h1>
+  <div class="redirect-page bg-like-green">
+    <main class="page-content flex justify-center items-center p-16">
+      <div class="text-like-green text-center bg-white rounded w-full max-w-phone mb-32 p-48">
+        <div class="text-24">Redirecting</div>
+        <LcLoadingIndicator class="text-like-cyan" />
+      </div>
+    </main>
   </div>
 </template>
 
@@ -24,36 +29,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
