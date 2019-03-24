@@ -22,7 +22,8 @@
       class="content-list"
     >
       <div class="content-list__header">
-        <div class="content-list__start-reading-label">Start Reading</div>
+        <div class="content-list__start-reading-label">
+          {{ $t('ContentList.startReading') }}</div>
       </div>
       <div class="content-list__body">
         <ContentCard
@@ -45,7 +46,7 @@
       <div class="content-list__body">
         <div class="content-list__empty">
           <slot name="empty">
-            <h1>There is no article</h1>
+            <h1>{{ $t('ContentList.empty') }}</h1>
           </slot>
         </div>
       </div>

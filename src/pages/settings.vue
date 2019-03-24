@@ -18,5 +18,10 @@ export default {
     PageHeader,
     SiteNavBar,
   },
+  head() {
+    return {
+      title: this.$t('SettingsPage.title'),
+    };
+  },
 };
 </script>

@@ -11,7 +11,7 @@
         <img
           class="w-full"
           :src="CivicLikerHeroImage"
-          alt="Civic Liker"
+          :alt="$t('civicLiker')"
         >
       </div>
       <section class="max-w-desktop mx-auto -mt-24">
@@ -23,27 +23,27 @@
               'civic-pricing-card',
               `civic-pricing-card--${type}`,
               {
-                'hidden laptop:block desktop:block': type === 'generalLiker',
+                'hidden laptop:block desktop:block': type === 'general',
               },
               'm-8',
             ]"
           >
             <div class="civic-pricing-card__header">
               <div class="civic-pricing-card__type">
-                {{ type }}
+                {{ $t(`LikerType.${type}`) }}
               </div>
               <div>
                 <span class="civic-pricing-card__price">{{ price }}</span>
-                <span class="civic-pricing-card__payment-cycle">{{ paymentCycle }}</span>
+                <span class="civic-pricing-card__payment-cycle">{{ $t(paymentCycle) }}</span>
               </div>
               <div
-                v-if="type === 'civicLiker'"
+                v-if="type === 'civic'"
                 class="mt-12 mx-12"
               >
                 <button
                   class="btn btn--outlined btn--block m-0 w-full"
                   @click="onClickUpperRegister"
-                >Register</button>
+                >{{ $t('register') }}</button>
               </div>
             </div>
             <ul class="civic-pricing-card__body">
@@ -58,13 +58,13 @@
                 ]"
               >
                 <TickIcon class="civic-pricing-card__feature-bullet" />
-                {{ key }}
+                {{ $t(`CivicLikerPricing.${key}`) }}
               </li>
             </ul>
           </li>
         </ul>
         <div class="text-like-green text-20 leading-1_5 text-center p-24 desktop:px-32">
-          Have you ever read a great story, detailed news coverage or beautiful picture on the web, wanted to micro reward it but couldn't?
+          {{ $t('CivicPage.slogan') }}
         </div>
       </section>
 
@@ -72,32 +72,21 @@
         <div class="bg-like-gradient">
           <div class="max-w-desktop mx-auto">
             <ul class="list-reset flex flex-col desktop:flex-row items-center desktop:items-stretch p-16 desktop:px-80">
-              <li class="civic-feature-card">
-                <div class="civic-feature-card__header">
-                  Trade a coffee for a better world
-                </div>
-                <div class="civic-feature-card__body">
-                  <p>Have you realized creativity on the web brings no direct income, creators and civil reporters can only rely on ads, outsource projects and most importantly, enthusiasm?</p>
-                  <p>Civic Liker is a movement to reward open contents. For the cost of a cup of coffee, you become a Civic Liker. Whatever you Like will then be turned into a tangible reward to creators.</p>
-                </div>
-              </li>
-
-              <li class="civic-feature-card">
-                <div class="civic-feature-card__header">
-                  Your interest,<br>your taste
-                </div>
-                <div class="civic-feature-card__body">
-                  <p>The US$5 paid monthly by a Civic Liker will be distributed to creators in full amount.* Which creators to support purely depends on the online contents you Like during the month, while the Foundation distributes the reward based on your taste. You may check the distribution of rewards any time down to a cent on our panel.</p>
-                </div>
-              </li>
-
-              <li class="civic-feature-card">
-                <div class="civic-feature-card__header">
-                  Benefiting from<br>Giving
-                </div>
-                <div class="civic-feature-card__body">
-                  <p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>
-                </div>
+              <li
+                v-for="i in 3"
+                :key="i"
+                class="civic-feature-card"
+              >
+                <!-- eslint-disable vue/no-v-html -->
+                <div
+                  class="civic-feature-card__header"
+                  v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
+                />
+                <div
+                  class="civic-feature-card__body"
+                  v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
+                />
+                <!-- eslint-enable vue/no-v-html -->
               </li>
             </ul>
           </div>
@@ -107,11 +96,11 @@
           <div class="civic-pricing-card civic-pricing-card--civicLiker">
             <div class="civic-pricing-card__header">
               <div class="civic-pricing-card__type">
-                {{ pricing[1].type }}
+                {{ $t(`LikerType.${pricing[1].type}`) }}
               </div>
               <div>
                 <span class="civic-pricing-card__price">{{ pricing[1].price }}</span>
-                <span class="civic-pricing-card__payment-cycle">{{ pricing[1].paymentCycle }}</span>
+                <span class="civic-pricing-card__payment-cycle">{{ $t(pricing[1].paymentCycle) }}</span>
               </div>
               <div class="mt-12 mx-12">
                 <button
@@ -131,8 +120,8 @@
       </section>
 
       <section class="max-w-desktop mx-auto text-gray-9b text-12 p-20 laptop:px-20 desktop:px-32 pb-64">
-        <p>*Depending on the payment method a Civic Liker picks, surcharge may apply by payment channels such as credit card gateway. The full amount received by the Foundation will be converted into LikeCoin for distribution to creators, and be converted by creators into currencies of their own countries. The Foundation charge no service fee.</p>
-        <p class="mt-16">Photos by Anthony Tran, Joe Gardner, KE ATLAS, Quentin Keller and Warren Wong</p>
+        <p>{{ $t('CivicPage.footnote.0') }}</p>
+        <p class="mt-16">{{ $t('CivicPage.footnote.1') }}</p>
       </section>
     </main>
   </div>
@@ -149,9 +138,9 @@ import TickIcon from '~/assets/icons/tick.svg';
 
 const pricing = [
   {
-    type: 'generalLiker',
+    type: 'general',
     price: 'USD0.00',
-    paymentCycle: 'perMonth',
+    paymentCycle: 'month',
     features: [
       ['ICRpool', true],
       ['ownRewardPool', false],
@@ -164,9 +153,9 @@ const pricing = [
     ],
   },
   {
-    type: 'civicLiker',
+    type: 'civic',
     price: 'USD5.00',
-    paymentCycle: 'perMonth',
+    paymentCycle: 'month',
     features: [
       ['ICRpool', true],
       ['ownRewardPool', true],
@@ -198,8 +187,13 @@ export default {
     ...mapGetters(['getUserIsCivicLiker']),
 
     registerButtonText() {
-      return this.getUserIsCivicLiker ? 'Registered' : 'Register';
+      return this.$t(this.getUserIsCivicLiker ? 'registered' : 'register');
     },
+  },
+  head() {
+    return {
+      title: this.$t('CivicPage.title'),
+    };
   },
   mounted() {
     const { from, referrer } = this.$route.query;
@@ -263,7 +257,7 @@ export default {
 
     @apply mb-8;
 
-    .civic-pricing-card--civicLiker & {
+    .civic-pricing-card--civic & {
       @apply text-like-green;
     }
   }
@@ -298,6 +292,8 @@ export default {
     }
 
     &-bullet {
+      @apply flex-no-shrink;
+
       @apply w-16;
       @apply h-16;
 
@@ -305,7 +301,7 @@ export default {
 
       @apply fill-current;
 
-      .civic-pricing-card--civicLiker & {
+      .civic-pricing-card--civic & {
         @apply text-like-cyan;
       }
     }

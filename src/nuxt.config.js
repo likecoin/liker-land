@@ -46,6 +46,7 @@ module.exports = {
   plugins: [
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
+    '~/plugins/vue-i18n.js',
   ],
 
   /*

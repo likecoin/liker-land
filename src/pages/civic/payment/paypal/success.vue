@@ -23,18 +23,18 @@
           <TickIcon
             class="w-48 h-48 text-like-cyan fill-current"
           />
-          <div class="text-like-green">你已成為讚賞公民</div>
+          <div class="text-like-green">
+            {{ $t('PaymentSuccessPage.heading') }}
+          </div>
         </div>
         <div class="payment-success-page-receipt__body">
-          <p>
-            多謝你的付款。你的交易已完成，系統已透過電郵傳送購物收據給你。登入你的 PayPal 帳戶，以檢視交易詳細資料。
-          </p>
+          <p>{{ $t('PaymentSuccessPage.body') }}</p>
 
           <div class="mt-24 phone:mx-32 laptop:mx-64 desktop:mx-64">
             <NuxtLink
               class="btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 mx-auto my-0 "
               :to="{ name: 'following '}"
-            >開始讚賞</NuxtLink>
+            > {{ $t('PaymentSuccessPage.continue') }}</NuxtLink>
           </div>
         </div>
       </div>
@@ -59,6 +59,11 @@ export default {
   middleware: 'authenticated',
   computed: {
     ...mapGetters(['getUserInfo']),
+  },
+  head() {
+    return {
+      title: this.$t('PaymentSuccessPage.title'),
+    };
   },
   async mounted() {
     let from;

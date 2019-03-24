@@ -25,36 +25,45 @@
         v-else
         class="btn btn--dark btn--block mx-0"
         :href="getOAuthLoginAPI()"
-      >Sign up / Sign in</a>
+      >{{ $t('signInOrSignUp') }}</a>
     </header>
 
-    <div>
+    <div class="flex-grow">
       <div class="pt-16 px-32">
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'index' }"
           @click.native="onClickMenuItem"
-        >Home</nuxt-link>
+        >{{ $t('SlidingMenu.home') }}</nuxt-link>
 
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'civic' }"
           @click.native="onClickMenuItem"
-        >Civic Liker</nuxt-link>
+        >{{ $t('SlidingMenu.civic') }}</nuxt-link>
 
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'settings' }"
           @click.native="onClickMenuItem"
-        >Settings</nuxt-link>
+        >{{ $t('SlidingMenu.settings') }}</nuxt-link>
       </div>
 
       <div class="flex flex-col mt-24 px-48">
         <a
           class="text-white text-14"
           href="https://help.like.co"
-        >Support</a>
+        >{{ $t('SlidingMenu.support') }}</a>
       </div>
+    </div>
+
+    <div class="flex flex-col mt-48 p-48">
+      <button
+        v-for="locale in locales"
+        :key="locale"
+        class="text-white text-left text-12 font-200"
+        @click="onClickLocale(locale)"
+      >{{ $t(`Locale.${locale}`) }}</button>
     </div>
 
     <portal-target name="floating-page-header-container" />
@@ -69,14 +78,31 @@ import { getOAuthLoginAPI } from '~/util/api';
 export default {
   name: 'SlidingMenu',
   computed: {
-    ...mapGetters(['getUserId', 'getUserInfo', 'getUserCivicLikerHalo']),
+    ...mapGetters([
+      'getUserId',
+      'getUserInfo',
+      'getUserCivicLikerHalo',
+      'getLocale',
+      'getAvailableLocales',
+    ]),
+
+    locales() {
+      return this.getAvailableLocales.filter(
+        locale => locale !== this.getLocale
+      );
+    },
   },
   methods: {
     getOAuthLoginAPI,
 
-    ...mapActions(['toggleSlidingMenu']),
+    ...mapActions(['toggleSlidingMenu', 'setLocale']),
 
     onClickMenuItem() {
+      this.toggleSlidingMenu(false);
+    },
+    onClickLocale(locale) {
+      this.$i18n.locale = locale;
+      this.setLocale(locale);
       this.toggleSlidingMenu(false);
     },
   },

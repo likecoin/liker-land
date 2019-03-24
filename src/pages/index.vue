@@ -15,7 +15,7 @@
           ]"
         >
           <div class="text-like-cyan font-200 text-30 mb-16">
-            Trade a coffee for a better world
+            {{ $t('CivicLikerCTA.slogan') }}
           </div>
           <NuxtLink
             :class="[
@@ -25,7 +25,7 @@
               },
             ]"
             :to="{ name: 'civic' }"
-          >Be a Civic Liker</NuxtLink>
+          >{{ $t('CivicLikerCTA.button') }}</NuxtLink>
         </div>
 
         <TabBar>
@@ -61,11 +61,13 @@
       v-if="!getUserId"
       class="text-center bg-like-green px-12 pt-32 pb-40"
     >
-      <div class="text-like-cyan text-30 font-200 mb-24">Sign up / Sign in to read more</div>
+      <div class="text-like-cyan text-30 font-200 mb-24">
+        {{ $t('SignUpSignInCTA.slogan') }}
+      </div>
       <a
         :href="getOAuthLoginAPI()"
         class="btn btn--outlined btn--dark"
-      >Sign up / Sign in</a>
+      >{{ $t('SignUpSignInCTA.button') }}</a>
     </div>
   </div>
 </template>
