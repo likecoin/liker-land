@@ -14,6 +14,8 @@ if (!process.env.CI) {
   }
   database = admin.firestore();
   database.settings({ timestampsInSnapshots: true });
+} else {
+  database = { collection: () => ({}) };
 }
 const db = database;
 const { FieldValue } = admin.firestore;
