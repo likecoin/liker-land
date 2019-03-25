@@ -44,6 +44,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/sentry',
     '@nuxtjs/pwa',
     '@nuxtjs/vuetify',
   ],
@@ -54,6 +55,7 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
   },
+  sentry: {},
 
   /*
   ** Build configuration
