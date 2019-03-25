@@ -5,12 +5,18 @@
         <SiteNavBar class="text-like-green" />
       </template>
     </PageHeader>
+
+    <main class="page-content page-content--narrow">
+      <SettingsPageHeader />
+      <nuxt-child />
+    </main>
   </div>
 </template>
 
 <script>
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
+import SettingsPageHeader from '~/components/SettingsPageHeader';
 
 export default {
   name: 'SettingsPage',
@@ -18,6 +24,7 @@ export default {
   components: {
     PageHeader,
     SiteNavBar,
+    SettingsPageHeader,
   },
   head() {
     return {

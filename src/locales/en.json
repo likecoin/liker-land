@@ -68,7 +68,13 @@
     "title": "Redirecting"
   },
   "SettingsPage": {
-    "title": "Settings"
+    "title": "Settings",
+    "likerId": "Liker ID",
+    "civicLiker": {
+      "title": "@:civicLiker",
+      "subscribing": "Subscribing"
+    },
+    "subscription": "Follow / Unfollow"
   },
   "SignUpSignInCTA": {
     "slogan": "Sign up / Sign in to read more",
