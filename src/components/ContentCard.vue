@@ -6,13 +6,22 @@
     target="_blank"
   >
     <div class="content-card__header content-card__inset">
-      <span class="content-card__author-name">
+      <span class="content-card__author">
         <a
           :href="authorURL"
           :title="author"
           target="_blank"
-        >{{ author }}</a>
+        >
+          <LcAvatar
+            class="content-card__author-avatar"
+            :src="authorAavtarSrc"
+            :halo="authorAvatarHalo"
+          />{{ author }}</a>
       </span>
+
+      <span
+        class="content-card__like-count"
+      >{{ formattedLikeCount }}<LikeUnit /></span>
     </div>
 
     <div
@@ -46,7 +55,15 @@
 <script>
 import { LIKE_CO_URL_BASE } from '~/constant';
 
+import LikeUnit from '~/assets/icons/like-unit.svg';
+
+import { getUserMinAPI, getLikeButtonTotalLikeCountAPI } from '~/util/api';
+import { getAvatarHaloTypeFromUser } from '~/util/user';
+
 export default {
+  components: {
+    LikeUnit,
+  },
   props: {
     /* The URL of the content */
     src: {
@@ -73,6 +90,13 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      likeCount: 0,
+      authorAavtarSrc: '',
+      authorAvatarHalo: 'none',
+    };
+  },
   computed: {
     authorURL() {
       return `${LIKE_CO_URL_BASE}/${this.author}`;
@@ -80,8 +104,42 @@ export default {
     url() {
       return new URL(this.src);
     },
+    formattedLikeCount() {
+      let { likeCount } = this;
+      let suffix = '';
+      if (likeCount > 1000) {
+        likeCount = Math.floor(likeCount / 1000);
+        suffix = 'k';
+      }
+      return `${likeCount.toLocaleString('en')}${suffix}`;
+    },
     coverPhotoStyle() {
       return { backgroundImage: `url(${this.coverSrc})` };
+    },
+  },
+  watch: {
+    src: 'fetchInfo',
+  },
+  mounted() {
+    this.fetchInfo();
+  },
+  methods: {
+    async fetchInfo() {
+      try {
+        const [authorData, likeCount] = await Promise.all([
+          this.$axios.$get(getUserMinAPI(this.author)),
+          this.$axios.$get(
+            getLikeButtonTotalLikeCountAPI(this.author, this.src)
+          ),
+        ]);
+        // eslint-disable-next-line no-console
+        this.likeCount = likeCount.total;
+        this.authorAavtarSrc = authorData.avatar;
+        this.authorAvatarHalo = getAvatarHaloTypeFromUser(authorData);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
     },
   },
 };
@@ -115,9 +173,22 @@ export default {
 
   &__header {
     @apply flex;
+    @apply items-center;
   }
 
-  &__author-name {
+  &__author-avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+
+    @apply mr-8;
+
+    .lc-avatar__content {
+      width: inherit !important;
+      height: inherit !important;
+    }
+  }
+
+  &__author {
     @apply flex-grow;
 
     > a {
@@ -125,9 +196,34 @@ export default {
       @apply text-like-green;
       @apply font-600;
 
+      @apply flex;
+      @apply items-center;
+
       &:hover {
         @apply text-like-green-dark;
       }
+    }
+  }
+
+  &__like-count {
+    line-height: 0.5;
+
+    @apply text-14;
+    @apply text-gray-4a;
+    @apply font-600;
+
+    @apply flex;
+    @apply items-center;
+    @apply flex-no-grow;
+
+    svg {
+      width: 2rem;
+      height: 0.85em;
+      margin-bottom: 0.1rem;
+
+      @apply ml-8;
+
+      @apply fill-current;
     }
   }
 

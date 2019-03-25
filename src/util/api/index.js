@@ -1,4 +1,4 @@
-import { IS_TESTNET } from '@/constant';
+import { IS_TESTNET, LIKECOIN_API_BASE } from '@/constant';
 
 export const getPaypalPaymentPageURL = (likerId, custom) => {
   let baseURL = IS_TESTNET
@@ -17,3 +17,11 @@ export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
 export const getLoginStatus = () => `/api/users/self`;
+
+export const getUserMinAPI = likerId =>
+  `${LIKECOIN_API_BASE}/users/id/${likerId}/min`;
+
+export const getLikeButtonTotalLikeCountAPI = (likerId, referrerURL) =>
+  `${LIKECOIN_API_BASE}/like/likebutton/${likerId}/total?referrer=${encodeURIComponent(
+    referrerURL
+  )}`;
