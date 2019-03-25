@@ -21,7 +21,11 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+      { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
+      { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
+    ],
     script: [
       { src: '/vendor/typekit.js', type: 'text/javascript' },
     ],
