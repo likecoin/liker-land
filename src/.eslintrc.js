@@ -17,7 +17,10 @@ module.exports = {
     'prettier'
   ],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'vue/multiline-html-element-content-newline': 'off',
+    'vue/singleline-html-element-content-newline': 'off',
+  },
   settings: {
     'import/resolver': {
       webpack: 'webpack.config.js',
