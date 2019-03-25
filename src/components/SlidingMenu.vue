@@ -43,6 +43,7 @@
         >{{ $t('SlidingMenu.civic') }}</nuxt-link>
 
         <nuxt-link
+          v-if="getUserId"
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'settings' }"
           @click.native="onClickMenuItem"

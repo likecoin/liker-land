@@ -14,6 +14,7 @@ import SiteNavBar from '~/components/SiteNavBar';
 
 export default {
   name: 'SettingsPage',
+  middleware: 'authenticated',
   components: {
     PageHeader,
     SiteNavBar,
