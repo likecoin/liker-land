@@ -1,136 +1,137 @@
 <template>
-  <div>
-    <v-navigation-drawer
-      fixed
-      app
+  <div class="home-page">
+    <PageHeader
+      class="z-1"
+      :is-floatable="true"
     >
-      <v-list dense>
-        <div v-if="!isLoggedIn">
-          <a :href="getLoginUrl()">Login</a>
+      <template v-slot="{ isFloating }">
+        <SiteNavBar class="bg-like-green" />
+
+        <div
+          v-if="!getUserIsCivicLiker && !isFloating"
+          :class="[
+            'text-center bg-like-green px-16',
+            getUserId ? 'pb-16' : 'pb-0',
+          ]"
+        >
+          <div class="text-like-cyan font-200 text-30 mb-16">
+            {{ $t('CivicLikerCTA.slogan') }}
+          </div>
+          <NuxtLink
+            :class="[
+              'btn btn--outlined btn--dark mx-0',
+              {
+                'mb-0': !getUserId,
+              },
+            ]"
+            :to="{ name: 'civic' }"
+          >{{ $t('CivicLikerCTA.button') }}</NuxtLink>
         </div>
-        <v-list-tile
-          v-for="u in getSubscribedAuthors"
-          :key="u"
-          @click="setUser(u)"
-        >
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{ u }}
-              <v-icon @click.stop="unsubscribeUser(u)">
-                remove
-              </v-icon>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile
-          v-for="u in getUnsubscribedAuthors"
-          :key="u"
-          style="color: grey"
-          @click="subscribeUser(u)"
-        >
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{ u }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-content>
-      <div v-if="!isLoggedIn">
-        <a :href="getLoginUrl()">Please login your Liker ID for a customized reading experience</a>
+
+        <TabBar>
+          <TabBarItem
+            :class="{ 'pointer-events-none': !getUserId }"
+            :is-active="$route.name === 'index'"
+            :to="{ name: 'index' }"
+          >
+            <FeaturedIcon :class="{ invisible: !getUserId }" />
+          </TabBarItem>
+          <TabBarItem
+            v-if="getUserId"
+            :is-active="$route.name === 'index-following'"
+            :to="{ name: 'index-following' }"
+          >
+            <WatchingIcon />
+          </TabBarItem>
+          <TabBarItem
+            v-if="getUserId"
+            :is-active="$route.name === 'index-bookmarks'"
+            :to="{ name: 'index-bookmarks' }"
+          >
+            <BookmarkIcon />
+          </TabBarItem>
+        </TabBar>
+      </template>
+    </PageHeader>
+
+    <nuxt-child />
+
+    <!-- Sign in/sign up banner -->
+    <div
+      v-if="!getUserId"
+      class="text-center bg-like-green px-12 pt-32 pb-40"
+    >
+      <div class="text-like-cyan text-30 font-200 mb-24">
+        {{ $t('SignUpSignInCTA.slogan') }}
       </div>
-      <v-container fluid fill-height>
-        <v-layout justify-center align-center>
-          <v-flex>
-            <v-list>
-              <v-list-tile
-                v-for="item in list"
-                :key="item.url"
-                :href="item.url"
-                target="blank"
-              >
-                <v-list-tile-avatar>
-                  <img v-if="item.image" :src="item.image">
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.title }} - {{ item.user }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{ item.description }}</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-content>
+      <a
+        :href="getOAuthLoginAPI()"
+        class="btn btn--outlined btn--dark"
+      >{{ $t('SignUpSignInCTA.button') }}</a>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
+
+import PageHeader from '~/components/PageHeader';
+import SiteNavBar from '~/components/SiteNavBar';
+import TabBar from '~/components/TabBar';
+import TabBarItem from '~/components/TabBarItem';
+
+import BookmarkIcon from '~/assets/icons/bookmark.svg';
+import FeaturedIcon from '~/assets/icons/featured.svg';
+import WatchingIcon from '~/assets/icons/watching.svg';
 
 export default {
   name: 'Index',
-  data() {
-    return {
-      isLoggedIn: !!this.$store.getters.getUserId,
-      user: '',
-      suggestedList: [],
-    };
+  components: {
+    PageHeader,
+    SiteNavBar,
+    TabBar,
+    TabBarItem,
+
+    BookmarkIcon,
+    FeaturedIcon,
+    WatchingIcon,
   },
   computed: {
-    ...mapGetters([
-      'getUserId',
-      'getSubscribedAuthors',
-      'getUnsubscribedAuthors',
-      'getAllArticles',
-      'getUserArticles',
-    ]),
-    list() {
-      if (!this.getSubscribedAuthors) return this.suggestedList.slice(0, 40);
-      if (!this.user) {
-        let list = this.getAllArticles.slice(0, 40);
-        if (list.length < 40)
-          list = list.concat(this.suggestedList).slice(0, 40);
-        return list;
-      }
-      return this.getUserArticles(this.user);
-    },
-  },
-  async mounted() {
-    try {
-      if (this.isLoggedIn) {
-        await this.fetchReaderIndex();
-        this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
-      }
-      this.suggestedList = await this.fetchSuggestedArticles();
-    } catch (err) {
-      console.error(err); // eslint-disable-line no-console
-    }
+    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
   },
   methods: {
-    ...mapActions([
-      'fetchLoginStatus',
-      'fetchReaderIndex',
-      'fetchArticle',
-      'fetchSuggestedArticles',
-      'subscribeAuthor',
-      'unsubscribeAuthor',
-    ]),
-    setUser(user) {
-      this.user = user;
-    },
-    subscribeUser(user) {
-      this.subscribeAuthor(user);
-    },
-    unsubscribeUser(user) {
-      this.user = undefined;
-      this.unsubscribeAuthor(user);
-    },
-    getLoginUrl() {
-      return getOAuthLoginAPI();
-    },
+    getOAuthLoginAPI,
   },
 };
 </script>
+
+<style lang="scss">
+.home-page {
+  &::before {
+    z-index: -1;
+
+    content: '';
+
+    @apply fixed;
+    @apply pin;
+
+    @apply bg-gray-f7;
+
+    @apply max-w-phone;
+    @apply w-full;
+    @apply mx-auto;
+  }
+}
+
+.page-header--floating {
+  .site-nav-bar {
+    @apply absolute;
+    @apply pin;
+
+    @apply bg-transparent;
+
+    @apply py-0;
+  }
+}
+</style>

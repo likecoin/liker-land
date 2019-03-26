@@ -1,0 +1,76 @@
+.btn {
+  transition-property: background-color;
+  transition-duration: 0.2s;
+
+  @apply inline-block;
+
+  @apply font-600;
+  @apply text-center;
+
+  @apply rounded-full;
+
+  @apply m-8;
+  @apply px-12;
+  @apply py-8;
+
+  &--block {
+    @apply block;
+  }
+
+  &:not(.btn--block) {
+    @apply min-w-button;
+  }
+
+  &--outlined {
+    @apply text-like-green;
+
+    @apply border-2;
+    @apply border-like-cyan;
+
+    &:hover {
+      @apply bg-like-cyan-translucent;
+    }
+    &:active {
+      @apply bg-like-cyan-translucent-dark;
+    }
+
+    &.btn--dark {
+      @apply text-white;
+    }
+  }
+
+  &:not(.btn--outlined) {
+    @apply text-white;
+
+    @apply bg-like-green;
+
+    &:hover {
+      @apply bg-like-green-dark;
+    }
+
+    &:active {
+      @apply bg-like-green-darker;
+    }
+
+    &.btn--dark {
+      @apply text-like-green;
+
+      @apply bg-like-cyan;
+
+      &:hover {
+        @apply bg-like-cyan-dark;
+      }
+      &:active {
+        @apply bg-like-cyan-darker;
+      }
+    }
+  }
+
+  &--disabled {
+    @apply text-gray-c;
+
+    @apply border-gray-c;
+
+    @apply pointer-events-none;
+  }
+}

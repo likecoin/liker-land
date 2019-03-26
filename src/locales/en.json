@@ -1,0 +1,80 @@
+{
+  "CivicLikerCTA": {
+    "slogan": "Trade a coffee for a better world",
+    "button": "Be a Civic Liker"
+  },
+  "CivicLikerFeature": [
+    {
+      "header": "Trade a coffee for a better world",
+      "body": "<p>Have you realized creativity on the web brings no direct income, creators and civil reporters can only rely on ads, outsource projects and most importantly, enthusiasm?</p><p>Civic Liker is a movement to reward open contents. For the cost of a cup of coffee, you become a Civic Liker. Whatever you Like will then be turned into a tangible reward to creators.</p>"
+    },
+    {
+      "header": "Your interest,<br>your taste",
+      "body": "<p>The US$5 paid monthly by a Civic Liker will be distributed to creators in full amount.* Which creators to support purely depends on the online contents you Like during the month, while the Foundation distributes the reward based on your taste. You may check the distribution of rewards any time down to a cent on our panel.</p>"
+    },
+    {
+      "header": "Benefiting from<br>Giving",
+      "body": "<p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>"
+    }
+  ],
+  "CivicLikerPricing": {
+    "ICRpool": "Influent Creators Reward Pool distribution",
+    "ownRewardPool": "Distribute own reward pool with every Like",
+    "communityVoting": "Participate in community voting",
+    "bonusContent": "Access bonus contents",
+    "idolNewsletter": "Receive idol newsletter",
+    "offlineEvent": "Join offline events",
+    "report": "Detailed reward distribution report",
+    "badges": "Unique, immutable badges"
+  },
+  "CivicPage": {
+    "title": "@:civicLiker",
+    "slogan": "Have you ever read a great story, detailed news coverage or beautiful picture on the web, wanted to micro reward it but couldn't?",
+    "footnote": [
+      "*Depending on the payment method a Civic Liker picks, surcharge may apply by payment channels such as credit card gateway. The full amount received by the Foundation will be converted into LikeCoin for distribution to creators, and be converted by creators into currencies of their own countries. The Foundation charge no service fee.",
+      "Photos by Anthony Tran, Joe Gardner, KE ATLAS, Quentin Keller and Warren Wong"
+    ]
+  },
+  "ContentList": {
+    "startReading": "Start reading",
+    "empty": "There is no article"
+  },
+  "LikerType": {
+    "general": "General Liker",
+    "civic": "@:civicLiker"
+  },
+  "Locale": {
+    "en": "English",
+    "zh-Hant": "繁體中文"
+  },
+  "PaymentFailurePage": {
+    "title": "Payment Unsuccessful"
+  },
+  "PaymentSuccessPage": {
+    "title": "Payment Successful",
+    "heading": "You have becomed a Civic Liker",
+    "body": "Thank you for your payment.",
+    "continue": "Start Liking"
+  },
+  "RedirectPage": {
+    "title": "Redirecting"
+  },
+  "SettingsPage": {
+    "title": "Settings"
+  },
+  "SignUpSignInCTA": {
+    "slogan": "Sign up / Sign in to read more",
+    "button": "@:signInOrSignUp"
+  },
+  "SlidingMenu": {
+    "home": "Home",
+    "civic": "@:CivicPage.title",
+    "settings": "@:SettingsPage.title",
+    "support": "Support"
+  },
+  "civicLiker": "Civic Liker",
+  "month": "month",
+  "register": "Register",
+  "registered": "Registered",
+  "signInOrSignUp": "Sign up / Sign in"
+}
