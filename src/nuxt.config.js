@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
 
 const pkg = require('./package');
@@ -13,30 +14,44 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    titleTemplate: (titleChunk) => titleChunk ? `${titleChunk} - liker.land` : 'liker.land',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description },
       { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+      { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
+      { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
+    ],
+    script: [
+      { src: '/vendor/typekit.js', type: 'text/javascript' },
+    ],
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#50e3c2' },
 
   /*
   ** Global CSS
   */
-  css: [],
+  css: [
+    { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
+    { src: '~/assets/css/index.scss', lang: 'scss' },
+  ],
 
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [],
+  plugins: [
+    '~/plugins/likecoin-ui-vue.js',
+    '~/plugins/portal-vue.js',
+    '~/plugins/vue-i18n.js',
+  ],
 
   /*
   ** Nuxt.js modules
@@ -44,8 +59,10 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/sentry',
     '@nuxtjs/pwa',
-    '@nuxtjs/vuetify',
+    'nuxt-svg-loader',
+    'portal-vue/nuxt',
   ],
   /*
   ** Axios module configuration
@@ -54,11 +71,23 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
   },
+  sentry: {},
+
+  router: {
+    middleware: 'sliding-menu',
+  },
 
   /*
   ** Build configuration
   */
   build: {
+    postcss: {
+      plugins: {
+        tailwindcss: './tailwind.config.js',
+        autoprefixer: {}
+      }
+    },
+
     /*
     ** You can extend webpack config here
     */
@@ -71,7 +100,7 @@ module.exports = {
             enforce: 'pre',
             test: /\.(js|vue)$/,
             loader: 'eslint-loader',
-            exclude: /(node_modules)/,
+            exclude: /(node_modules)||(.svg$)/,
           });
         } else {
           config.devtool = 'source-map';

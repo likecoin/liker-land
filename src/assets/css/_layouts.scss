@@ -1,0 +1,19 @@
+.page-wrapper {
+  @apply flex;
+  @apply flex-col;
+
+  @apply min-h-screen;
+}
+
+.page-content {
+  @apply flex;
+  @apply flex-col;
+  @apply flex-grow;
+
+  &--narrow {
+    @apply w-full;
+    @apply max-w-phone;
+
+    @apply mx-auto;
+  }
+}
