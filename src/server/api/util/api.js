@@ -84,6 +84,20 @@ const apiFetchSuggestedArticles = () =>
   axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
 const apiFetchArticleDetail = url =>
   axios.get(`${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`);
+const apiFetchCivicCSOnline = () =>
+  axios.get(`${LIKE_CO_URL_BASE}/api/civic/csonline`);
+const apiCivicLikerTrialEventById = id =>
+  axios.get(`${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}`);
+const apiCivicLikerJoinTrialEventById = (id, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}/join`,
+      {},
+      {
+        headers: { Authorization },
+      }
+    )
+  );
 const getOAuthURL = state =>
   `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
 const getOAuthCallbackAPI = authCode =>
@@ -97,6 +111,9 @@ module.exports = {
   apiFetchUserArticles,
   apiFetchSuggestedArticles,
   apiFetchArticleDetail,
+  apiFetchCivicCSOnline,
+  apiCivicLikerTrialEventById,
+  apiCivicLikerJoinTrialEventById,
   getOAuthURL,
   getOAuthCallbackAPI,
 };

@@ -15,8 +15,13 @@ export const getSubscribeUserAPI = user => `/api/reader/subscribe/user/${user}`;
 export const getFetchSuggestArticlesApi = () => `/api/reader/suggest`;
 export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
-export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
 export const getLoginStatus = () => `/api/users/self`;
+export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
+export const getCivicCSOnlineAPI = () => `/api/civic/csonline`;
+export const getCivicLikerTrialEventByIdAPI = id =>
+  `/api/civic/trial/events/${id}`;
+export const getCivicLikerJoinTrialEventByIdAPI = id =>
+  `/api/civic/trial/events/${id}/join`;
 
 export const getUserMinAPI = likerId =>
   `${LIKECOIN_API_BASE}/users/id/${likerId}/min`;
