@@ -33,6 +33,7 @@ function getElementHeight(className) {
 
 export default {
   name: 'PageHeader',
+  isTicking: false,
   data() {
     return {
       y: 0,
@@ -51,7 +52,17 @@ export default {
     },
   },
   mounted() {
-    this.throttledUpdateLayout = throttle(this.updateLayout, 16);
+    if (window.requestAnimationFrame) {
+      this.throttledUpdateLayout = () => {
+        if (!this.$options.isTicking) {
+          window.requestAnimationFrame(this.updateLayout);
+          this.$options.isTicking = true;
+        }
+      };
+    } else {
+      // Fallback if requestAnimationFrame is not support
+      this.throttledUpdateLayout = throttle(this.updateLayout, 16);
+    }
     window.addEventListener('scroll', this.throttledUpdateLayout);
     window.addEventListener('resize', this.throttledUpdateLayout);
     this.updateLayout();
@@ -134,6 +145,7 @@ export default {
         );
       }
       /* eslint-enable prettier/prettier */
+      this.$options.isTicking = false;
     },
   },
 };
