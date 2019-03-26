@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const { Router } = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const FirestoreStore = require('firestore-store')(session);
 const { db } = require('./util/firebase');
 const users = require('./routes/users');
@@ -35,6 +36,7 @@ router.use(
     unset: 'destroy',
   })
 );
+router.use(cookieParser());
 router.use(users);
 router.use(civic);
 router.use(reader);
