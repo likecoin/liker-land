@@ -29,6 +29,7 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "consola": "^2.5.6",
+    "cookie-parser": "^1.4.4",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
