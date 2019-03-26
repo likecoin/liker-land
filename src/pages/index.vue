@@ -8,16 +8,18 @@
         <SiteNavBar class="bg-like-green" />
 
         <div
-          v-if="!getUserIsCivicLiker && !isFloating"
+          v-if="!isFloating && (!getUserId || !getUserIsCivicLiker)"
           :class="[
             'text-center bg-like-green px-16',
             getUserId ? 'pb-16' : 'pb-0',
           ]"
         >
-          <div class="text-like-cyan font-200 text-30 mb-16">
-            {{ $t('CivicLikerCTA.slogan') }}
+          <div class="text-like-cyan text-30 font-200 mb-16">
+            {{ $t(!getUserIsCivicLiker ? 'CivicLikerCTA.slogan' : 'SignUpSignInCTA.slogan') }}
           </div>
+
           <NuxtLink
+            v-if="!getUserIsCivicLiker"
             :class="[
               'btn btn--outlined btn--dark mx-0',
               {
@@ -26,6 +28,12 @@
             ]"
             :to="{ name: 'civic' }"
           >{{ $t('CivicLikerCTA.button') }}</NuxtLink>
+          <a
+            v-else
+            :href="getOAuthLoginAPI()"
+            class="btn btn--outlined btn--dark"
+          >{{ $t('SignUpSignInCTA.button') }}</a>
+
         </div>
 
         <TabBar>
