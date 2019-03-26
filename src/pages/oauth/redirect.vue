@@ -26,7 +26,25 @@ export default {
     const { state, auth_code: authCode } = this.$route.query;
     if (authCode && state) {
       await this.getOAuthToken({ authCode, state });
-      this.$router.push({ name: 'index' });
+      let postAuthRoute;
+      let postAuthURL;
+      if (window.sessionStorage) {
+        const storedRoute = window.sessionStorage.getItem(
+          'USER_POST_AUTH_ROUTE'
+        );
+        const storedURL = window.sessionStorage.getItem('USER_POST_AUTH_URL');
+        if (storedRoute) postAuthRoute = JSON.parse(storedRoute);
+        if (storedURL) postAuthURL = decodeURIComponent(storedURL);
+      }
+      // window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+      // window.sessionStorage.removeItem('USER_POST_AUTH_URL');
+      if (postAuthRoute) {
+        this.$router.push(postAuthRoute);
+      } else if (postAuthURL) {
+        window.location.href = postAuthURL;
+      } else {
+        this.$router.push({ name: 'index' });
+      }
     }
   },
   methods: {
