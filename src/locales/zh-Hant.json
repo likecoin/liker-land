@@ -1,4 +1,7 @@
 {
+  "BookmarksPage": {
+    "headerLabel": "你的收藏列表"
+  },
   "CivicLikerCTA": {
     "slogan": "少喝一杯咖啡，共創一個生態",
     "button": "成為讚賞公民"
@@ -36,8 +39,10 @@
     ]
   },
   "ContentList": {
-    "startReading": "開始閱讀",
     "empty": "沒有文章"
+  },
+  "FollowingPage": {
+    "headerLabel": "你的追蹤列表"
   },
   "LikerType": {
     "general": "一般讚客",
