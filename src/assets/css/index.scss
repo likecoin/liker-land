@@ -35,6 +35,8 @@
 
 @import 'layouts';
 
+@import 'transitions';
+
  /**
   * This injects all of Tailwind's utility classes, generated based on your
   * config file.
@@ -62,6 +64,25 @@
   * @import "utilities/skew-transforms";
   */
 
+.page- {
+  &enter,
+  &leave-to {
+    opacity: 0;
+  }
+
+  &enter-active,
+  &leave-active {
+    transition-property: opacity !important;
+    transition-duration: 250ms;
+  }
+  &enter-active {
+    transition-timing-function: ease-out;
+  }
+  &leave-active {
+    transition-timing-function: ease-out;
+  }
+}
+  
 .bg-like-gradient {
   background-image: linear-gradient(78deg, #d2f0f0, #f0e6b4);
 }

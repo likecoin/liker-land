@@ -1,6 +1,9 @@
 <template>
   <div class="home-page">
-    <PageHeader :is-floatable="true">
+    <PageHeader
+      class="z-1"
+      :is-floatable="true"
+    >
       <template v-slot="{ isFloating }">
         <SiteNavBar class="bg-like-green" />
 
@@ -102,6 +105,23 @@ export default {
 </script>
 
 <style lang="scss">
+.home-page {
+  &::before {
+    z-index: -1;
+
+    content: '';
+
+    @apply fixed;
+    @apply pin;
+
+    @apply bg-gray-f7;
+
+    @apply max-w-phone;
+    @apply w-full;
+    @apply mx-auto;
+  }
+}
+
 .page-header--floating {
   .site-nav-bar {
     @apply absolute;
