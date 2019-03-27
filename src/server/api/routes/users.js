@@ -7,14 +7,24 @@ const {
   getOAuthCallbackAPI,
   getOAuthURL,
 } = require('../util/api');
+const { INTERCOM_USER_HASH_SECRET } = require('../../config/config');
+
+function getIntercomUserHash(user) {
+  if (!INTERCOM_USER_HASH_SECRET) return undefined;
+  return crypto
+    .createHmac('sha256', INTERCOM_USER_HASH_SECRET)
+    .update(user)
+    .digest('hex');
+}
 
 const router = Router();
 
 router.get('/users/self', async (req, res, next) => {
   try {
-    if (req.session.user) {
+    const { user } = req.session;
+    if (user) {
       const { data } = await apiFetchUserProfile(req);
-      res.json({ user: req.session.user, ...data });
+      res.json({ user, ...data, intercomToken: getIntercomUserHash(user) });
       return;
     }
     res.sendStatus(404);
@@ -58,7 +68,7 @@ router.post('/users/login', async (req, res, next) => {
     req.session.accessToken = accessToken;
     req.session.state = undefined;
     const { data: userData } = await apiFetchUserProfile(req);
-    res.json({ user, ...userData });
+    res.json({ user, ...userData, intercomToken: getIntercomUserHash(user) });
   } catch (err) {
     next(err);
   }
