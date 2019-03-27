@@ -93,7 +93,7 @@ export default {
   data() {
     return {
       likeCount: 0,
-      authorAavtarSrc: '',
+      authorAavtarSrc: undefined,
       authorAvatarHalo: 'none',
     };
   },
