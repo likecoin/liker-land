@@ -63,6 +63,11 @@
   "RedirectPage": {
     "title": "重新轉向"
   },
+  "SettingsCivicPage": {
+    "title": "@:SettingsPage.title > @:civicLiker",
+    "knowMoreAbout": "了解更多",
+    "subscribed": "已訂閱"
+  },
   "SettingsPage": {
     "title": "設定",
     "likerId": "Liker ID",

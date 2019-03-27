@@ -67,6 +67,11 @@
   "RedirectPage": {
     "title": "Redirecting"
   },
+  "SettingsCivicPage": {
+    "title": "@:SettingsPage.title > @:civicLiker",
+    "knowMoreAbout": "Know more about",
+    "subscribed": "Subscribed"
+  },
   "SettingsPage": {
     "title": "Settings",
     "likerId": "Liker ID",
