@@ -3,7 +3,9 @@
     <NuxtLink
       class="site-nav-bar__logo"
       :to="{ name: 'index' }"
-    >liker.land</NuxtLink>
+    >
+      <Logo />
+    </NuxtLink>
 
     <button
       class="site-nav-bar__menu-button"
@@ -19,8 +21,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import Logo from '~/assets/icons/logo.svg';
+
 export default {
   name: 'SiteNavBar',
+  components: {
+    Logo,
+  },
   computed: {
     ...mapGetters(['getIsSlidingMenuOpen']),
   },
@@ -65,7 +72,12 @@ export default {
 
   &__logo {
     @apply text-inherit-color;
-    @apply font-600;
+
+    svg {
+      width: 6.875rem;
+
+      @apply fill-current;
+    }
   }
 
   &__menu-button {

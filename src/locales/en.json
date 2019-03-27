@@ -1,4 +1,7 @@
 {
+  "BookmarksPage": {
+    "headerLabel": "Your Bookmark List"
+  },
   "CivicLikerCTA": {
     "slogan": "Trade a coffee for a better world",
     "button": "Be a Civic Liker"
@@ -36,8 +39,10 @@
     ]
   },
   "ContentList": {
-    "startReading": "Start reading",
     "empty": "There is no article"
+  },
+  "FollowingPage": {
+    "headerLabel": "Your Following List"
   },
   "LikerType": {
     "general": "General Liker",

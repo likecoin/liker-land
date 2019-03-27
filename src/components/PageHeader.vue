@@ -2,7 +2,10 @@
   <header :class="getRootClass()">
     <slot v-bind="getSlotProps()" />
 
-    <portal to="floating-page-header-container">
+    <portal
+      v-if="isFloatable"
+      to="floating-page-header-container"
+    >
       <div
         class="floating-page-header-container"
         :style="floatingHeaderStyle"
@@ -34,6 +37,12 @@ function getElementHeight(className) {
 export default {
   name: 'PageHeader',
   isTicking: false,
+  props: {
+    isFloatable: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       y: 0,
@@ -52,20 +61,22 @@ export default {
     },
   },
   mounted() {
-    if (window.requestAnimationFrame) {
-      this.throttledUpdateLayout = () => {
-        if (!this.$options.isTicking) {
-          window.requestAnimationFrame(this.updateLayout);
-          this.$options.isTicking = true;
-        }
-      };
-    } else {
-      // Fallback if requestAnimationFrame is not support
-      this.throttledUpdateLayout = throttle(this.updateLayout, 16);
+    if (this.isFloatable) {
+      if (window.requestAnimationFrame) {
+        this.throttledUpdateLayout = () => {
+          if (!this.$options.isTicking) {
+            window.requestAnimationFrame(this.updateLayout);
+            this.$options.isTicking = true;
+          }
+        };
+      } else {
+        // Fallback if requestAnimationFrame is not support
+        this.throttledUpdateLayout = throttle(this.updateLayout, 16);
+      }
+      window.addEventListener('scroll', this.throttledUpdateLayout);
+      window.addEventListener('resize', this.throttledUpdateLayout);
+      this.updateLayout();
     }
-    window.addEventListener('scroll', this.throttledUpdateLayout);
-    window.addEventListener('resize', this.throttledUpdateLayout);
-    this.updateLayout();
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.throttledUpdateLayout);

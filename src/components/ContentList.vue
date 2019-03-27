@@ -4,51 +4,40 @@
     mode="out-in"
   >
     <div
-      v-if="isLoading"
-      key="loading"
+      :key="state"
       class="content-list"
     >
-      <div class="content-list__body mt-32">
-        <ContentCardPlaceholder
-          v-for="key in 2"
-          :key="key"
-        />
+      <div
+        v-if="headerLabel"
+        class="content-list__header"
+      >
+        <div class="content-list__header-label">{{ headerLabel }}</div>
       </div>
-    </div>
-
-    <div
-      v-else-if="items.length"
-      key="content"
-      class="content-list"
-    >
-      <div class="content-list__header">
-        <div class="content-list__start-reading-label">
-          {{ $t('ContentList.startReading') }}</div>
-      </div>
-      <div class="content-list__body">
-        <ContentCard
-          v-for="item in items"
-          :key="item.url"
-          :src="item.url"
-          :author="item.user"
-          :cover-src="item.image"
-          :title="item.title"
-          :description="item.description"
-        />
-      </div>
-    </div>
-
-    <div
-      v-else
-      key="empty"
-      class="content-list"
-    >
-      <div class="content-list__body">
-        <div class="content-list__empty">
-          <slot name="empty">
-            <h1>{{ $t('ContentList.empty') }}</h1>
-          </slot>
-        </div>
+      <div class="ontent-list__body">
+        <template v-if="state === 'loading'">
+          <ContentCardPlaceholder
+            v-for="key in 2"
+            :key="key"
+          />
+        </template>
+        <template v-else-if="state === 'content'">
+          <ContentCard
+            v-for="item in items"
+            :key="item.url"
+            :src="item.url"
+            :author="item.user"
+            :cover-src="item.image"
+            :title="item.title"
+            :description="item.description"
+          />
+        </template>
+        <template v-else>
+          <div class="content-list__empty">
+            <slot name="empty">
+              <h1>{{ $t('ContentList.empty') }}</h1>
+            </slot>
+          </div>
+        </template>
       </div>
     </div>
   </transition>
@@ -72,6 +61,21 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    headerLabel: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    state() {
+      if (this.isLoading) {
+        return 'loading';
+      }
+      if (this.items.length) {
+        return 'content';
+      }
+      return 'empty';
     },
   },
 };
@@ -122,7 +126,7 @@ export default {
     }
   }
 
-  &__start-reading-label {
+  &__header-label {
     @apply text-like-cyan;
     @apply text-14;
     @apply font-600;

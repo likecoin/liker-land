@@ -3,6 +3,7 @@
     <ContentList
       :is-loading="isLoading"
       :items="items"
+      :header-label="$t('BookmarksPage.headerLabel')"
     />
   </main>
 </template>
