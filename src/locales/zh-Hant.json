@@ -44,6 +44,9 @@
   "FollowingPage": {
     "headerLabel": "你的追蹤列表"
   },
+  "ERROR": {
+    "LOGIN_NEEDED": "請登入以觀看內容"
+  },
   "LikerType": {
     "general": "一般讚客",
     "civic": "@:civicLiker"

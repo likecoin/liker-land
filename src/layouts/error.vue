@@ -1,28 +1,32 @@
 <template>
-  <div class="lc-container-0">
-    <h1>
-      {{ error.statusCode }}
-    </h1>
-    <h2>
-      {{ error.message }}
-    </h2>
-    <a
-      v-if="isLoginError"
-      :href="getOAuthLoginAPI()"
-    >{{ $t('signInOrSignUp') }}</a>
-    <nuxt-link
-      :to="{ name: 'index' }"
-    >
-      {{ $t('Error.button.toIndex') }}
-    </nuxt-link>
-  </div>
+  <main class="error-page">
+
+    <h1 class="text-24 mt-16">{{ formattedMessage }}</h1>
+
+    <div class="mt-32 px-80 phone:px-0">
+      <a
+        v-if="isLoginError"
+        class="btn btn--outlined btn--block"
+        :href="getOAuthLoginAPI()"
+      >{{ $t('signInOrSignUp') }}</a>
+      <NuxtLink
+        class="btn btn--outlined btn--block"
+        :to="{ name: 'index' }"
+      >
+        {{ $t('backToHome') }}
+      </NuxtLink>
+    </div>
+
+  </main>
 </template>
 
 <script>
 import { getOAuthLoginAPI } from '~/util/api';
 
+import { defaultLocale } from '~/locales';
+
 export default {
-  layout: 'default',
+  layout: 'dialog',
   props: {
     error: {
       type: Object,
@@ -35,10 +39,26 @@ export default {
     };
   },
   computed: {
+    isLocalizedError() {
+      return this.$te(`ERROR.${this.error.message}`, defaultLocale);
+    },
     isLoginError() {
       const { statusCode, message } = this.error;
       return statusCode === 401 && message === 'LOGIN_NEEDED';
     },
+    formattedMessage() {
+      if (this.isLocalizedError) {
+        return this.$t(`ERROR.${this.error.message}`);
+      }
+
+      const { statusCode, message } = this.error;
+      return `[${statusCode}] ${message}`;
+    },
+  },
+  head() {
+    return {
+      title: this.formattedMessage,
+    };
   },
   mounted() {
     const { isLoginError, error } = this;

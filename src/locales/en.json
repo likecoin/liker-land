@@ -44,6 +44,9 @@
   "FollowingPage": {
     "headerLabel": "Your Following List"
   },
+  "ERROR": {
+    "LOGIN_NEEDED": "Please sign in to view this content"
+  },
   "LikerType": {
     "general": "General Liker",
     "civic": "@:civicLiker"
@@ -77,6 +80,7 @@
     "settings": "@:SettingsPage.title",
     "support": "Support"
   },
+  "backToHome": "Back to home",
   "civicLiker": "Civic Liker",
   "month": "month",
   "register": "Register",
