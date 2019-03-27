@@ -26,21 +26,21 @@ export default {
     if (authCode && state) {
       await this.getOAuthToken({ authCode, state });
       let postAuthRoute;
-      let postAuthURL;
       if (window.sessionStorage) {
         const storedRoute = window.sessionStorage.getItem(
           'USER_POST_AUTH_ROUTE'
         );
-        const storedURL = window.sessionStorage.getItem('USER_POST_AUTH_URL');
+        const storedURL = window.sessionStorage.getItem('USER_POST_AUTH_PATH');
         if (storedRoute) postAuthRoute = JSON.parse(storedRoute);
-        if (storedURL) postAuthURL = decodeURIComponent(storedURL);
+        if (storedURL) {
+          const targetPath = decodeURIComponent(storedURL);
+          if (targetPath[0] === '/') postAuthRoute = targetPath;
+        }
+        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+        window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
       }
-      // window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-      // window.sessionStorage.removeItem('USER_POST_AUTH_URL');
       if (postAuthRoute) {
         this.$router.push(postAuthRoute);
-      } else if (postAuthURL) {
-        window.location.href = postAuthURL;
       } else {
         this.$router.push({ name: 'index' });
       }

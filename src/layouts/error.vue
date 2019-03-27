@@ -62,11 +62,11 @@ export default {
   },
   mounted() {
     const { isLoginError, error } = this;
-    if (isLoginError && error.payload && error.payload.targetUrl) {
+    if (isLoginError && error.payload && error.payload.targetPath) {
       if (window.sessionStorage) {
         window.sessionStorage.setItem(
-          'USER_POST_AUTH_URL',
-          error.payload.targetUrl
+          encodeURIComponent('USER_POST_AUTH_PATH'),
+          error.payload.targetPath
         );
       }
     }

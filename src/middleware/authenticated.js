@@ -1,8 +1,6 @@
-import { TEST_MODE } from '@/constant';
-
 export default function({ req, route, store, error }) {
   if (!store.getters.getUserId) {
-    let targetUrl;
+    let targetPath;
     if (process.client) {
       if (window.sessionStorage) {
         window.sessionStorage.setItem(
@@ -11,10 +9,12 @@ export default function({ req, route, store, error }) {
         );
       }
     } else if (process.server) {
-      targetUrl = encodeURIComponent(
-        `${TEST_MODE ? 'http' : 'https'}://${req.headers.host}${route.fullPath}`
-      );
+      targetPath = route.fullPath;
     }
-    error({ statusCode: 401, message: 'LOGIN_NEEDED', payload: { targetUrl } });
+    error({
+      statusCode: 401,
+      message: 'LOGIN_NEEDED',
+      payload: { targetPath },
+    });
   }
 }
