@@ -7,7 +7,7 @@
     </PageHeader>
 
     <main class="page-content page-content--narrow">
-      <SettingsPageHeader />
+      <SettingsPageHeader :is-show-back="isHeaderShowBack" />
       <nuxt-child />
     </main>
   </div>
@@ -25,6 +25,11 @@ export default {
     PageHeader,
     SiteNavBar,
     SettingsPageHeader,
+  },
+  computed: {
+    isHeaderShowBack() {
+      return /^settings-.+$/.test(this.$route.name);
+    },
   },
   head() {
     return {
