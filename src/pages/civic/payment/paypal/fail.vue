@@ -10,7 +10,10 @@
 
 
 <script>
+import IntercomMixin from '~/mixins/intercom';
+
 export default {
+  mixins: [IntercomMixin],
   data() {
     return {};
   },

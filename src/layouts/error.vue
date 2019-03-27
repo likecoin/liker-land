@@ -22,11 +22,12 @@
 
 <script>
 import { getOAuthLoginAPI } from '~/util/api';
-
 import { defaultLocale } from '~/locales';
+import IntercomMixin from '~/mixins/intercom';
 
 export default {
   layout: 'dialog',
+  mixins: [IntercomMixin],
   props: {
     error: {
       type: Object,
