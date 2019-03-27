@@ -13,7 +13,7 @@
       >
         <div class="content-list__header-label">{{ headerLabel }}</div>
       </div>
-      <div class="ontent-list__body">
+      <div class="content-list__body">
         <template v-if="state === 'loading'">
           <ContentCardPlaceholder
             v-for="key in 2"
