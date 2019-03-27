@@ -79,8 +79,10 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.throttledUpdateLayout);
-    window.removeEventListener('resize', this.throttledUpdateLayout);
+    if (this.isFloatable) {
+      window.removeEventListener('scroll', this.throttledUpdateLayout);
+      window.removeEventListener('resize', this.throttledUpdateLayout);
+    }
   },
   methods: {
     getSlotProps(isFloating = false) {
