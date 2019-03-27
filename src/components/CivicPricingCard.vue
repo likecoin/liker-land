@@ -109,27 +109,51 @@ export default {
 .civic-pricing-card {
   max-width: 288px;
 
+  @apply overflow-hidden;
+
   @apply bg-white;
 
   @apply rounded;
 
-  @apply p-24;
-
   @apply w-full;
 
+  > * {
+    @apply px-24;
+
+    &:first-child {
+      @apply pt-24;
+    }
+
+    &:last-child {
+      @apply pb-24;
+    }
+  }
+
   &__header {
-    min-height: 124px;
+    min-height: 148px;
+
+    @apply pb-12;
   }
 
   &__header + &__body {
-    @apply border-gray-d8;
-    @apply border-t;
+    &::before {
+      content: '';
 
-    @apply pt-24;
+      height: 1px;
+
+      @apply block;
+
+      @apply border-gray-d8;
+      @apply border-t;
+
+      @apply pt-24;
+
+      @apply w-full;
+    }
   }
 
   &__body {
-    @apply list-reset;
+    list-style: none;
   }
 
   &__type {
