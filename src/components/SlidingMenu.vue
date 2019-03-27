@@ -54,6 +54,7 @@
         <a
           class="text-white text-14"
           href="https://help.like.co"
+          @click="onClickSupport"
         >{{ $t('SlidingMenu.support') }}</a>
       </div>
     </div>
@@ -105,6 +106,22 @@ export default {
       this.$i18n.locale = locale;
       this.setLocale(locale);
       this.toggleSlidingMenu(false);
+    },
+    onClickSupport(e) {
+      if (this.$intercom) {
+        if (!this.$intercom.booted) {
+          const { email, user, displayName, intercomToken } = this.getUserInfo;
+          this.$intercom.boot({
+            email,
+            name: displayName || user,
+            user_id: user,
+            user_hash: intercomToken,
+          });
+          this.$intercom.booted = true;
+          this.$intercom.show();
+          e.preventDefault();
+        }
+      }
     },
   },
 };
