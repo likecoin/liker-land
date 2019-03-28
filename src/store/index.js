@@ -8,6 +8,7 @@ import * as api from '@/util/api';
 import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
+import staticData from './modules/staticData';
 
 const createStore = () =>
   new Vuex.Store({
@@ -26,6 +27,7 @@ const createStore = () =>
       reader,
       ui,
       user,
+      staticData,
     },
   });
 

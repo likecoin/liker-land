@@ -20,3 +20,5 @@ export const getLoginStatus = () => `/api/users/self`;
 
 export const getUserMinAPI = likerId =>
   `${LIKECOIN_API_BASE}/users/id/${likerId}/min`;
+export const getArticleDetailAPI = url =>
+  `${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`;
