@@ -16,8 +16,16 @@
       </div>
       <section class="max-w-desktop mx-auto -mt-24">
         <ul class="list-reset flex justify-center">
-          <CivicPricingCard tag="li" class="mx-8" type="general" />
-          <CivicPricingCard tag="li" class="mx-8" type="civic">
+          <CivicPricingCard
+            tag="li"
+            class="mx-8 tablet:hidden phone:hidden"
+            type="general"
+          />
+          <CivicPricingCard
+            tag="li"
+            class="mx-8"
+            type="civic"
+          >
             <template #header>
               <div class="mt-12 mx-12">
                 <button
