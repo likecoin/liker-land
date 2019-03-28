@@ -7,6 +7,7 @@ module.exports = {
   env: {
     IS_TESTNET: process.env.IS_TESTNET,
     CI: process.env.CI,
+    INTERCOM_APPID: process.env.INTERCOM_APPID,
   },
   mode: 'universal',
 
@@ -51,6 +52,7 @@ module.exports = {
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
+    { src: '~/plugins/vue-intercom', ssr: false },
   ],
 
   /*

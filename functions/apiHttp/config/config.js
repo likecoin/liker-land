@@ -12,6 +12,8 @@ config.LIKE_CO_CLIENT_SECRET = functions.config().likeco_oauth.secret;
 
 config.COOKIE_SECRET = functions.config().cookie.secret;
 
+config.INTERCOM_USER_HASH_SECRET = functions.config().intercom.user_hash_secret;
+
 config.PAYPAL_PDT_HOOK = functions.config().hook.paypal_pdt;
 
 config.EXTERNAL_URL = functions.config().constant.external_url;

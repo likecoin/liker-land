@@ -54,6 +54,7 @@
         <a
           class="text-white text-14"
           href="https://help.like.co"
+          @click="onClickSupport"
         >{{ $t('SlidingMenu.support') }}</a>
       </div>
     </div>
@@ -75,9 +76,11 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { getOAuthLoginAPI } from '~/util/api';
+import { IntercomMixinFactory } from '~/mixins/intercom';
 
 export default {
   name: 'SlidingMenu',
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   computed: {
     ...mapGetters([
       'getUserId',
@@ -105,6 +108,14 @@ export default {
       this.$i18n.locale = locale;
       this.setLocale(locale);
       this.toggleSlidingMenu(false);
+    },
+    onClickSupport(e) {
+      if (this.$intercom) {
+        if (this.bootIntercom()) {
+          this.$intercom.show();
+          e.preventDefault();
+        }
+      }
     },
   },
 };

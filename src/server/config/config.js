@@ -9,6 +9,8 @@ config.LIKE_CO_CLIENT_SECRET = process.env.LIKE_CO_CLIENT_SECRET;
 
 config.COOKIE_SECRET = process.env.COOKIE_SECRET;
 
+config.INTERCOM_USER_HASH_SECRET = process.env.INTERCOM_USER_HASH_SECRET;
+
 config.PAYPAL_PDT_HOOK = process.env.PAYPAL_PDT_HOOK;
 
 config.EXTERNAL_URL = process.env.EXTERNAL_URL;
