@@ -47,27 +47,28 @@
       </section>
 
       <section ref="visionSection">
-        <div class="bg-like-gradient">
-          <div class="max-w-desktop mx-auto">
-            <ul class="list-reset flex flex-col desktop:flex-row items-center desktop:items-stretch p-16 desktop:px-80">
-              <li
-                v-for="i in 3"
-                :key="i"
-                class="civic-feature-card"
-              >
-                <!-- eslint-disable vue/no-v-html -->
-                <div
-                  class="civic-feature-card__header"
-                  v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
-                />
-                <div
-                  class="civic-feature-card__body"
-                  v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
-                />
-                <!-- eslint-enable vue/no-v-html -->
-              </li>
-            </ul>
-          </div>
+        <div
+          v-swiper:featureSwiper="$options.featureSwiper"
+          class="civic-feature-card-swiper-container bg-like-gradient"
+        >
+          <ul class="civic-feature-card-wrapper">
+            <li
+              v-for="i in 3"
+              :key="i"
+              class="civic-feature-card"
+            >
+              <!-- eslint-disable vue/no-v-html -->
+              <div
+                class="civic-feature-card__header"
+                v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
+              />
+              <div
+                class="civic-feature-card__body"
+                v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
+              />
+              <!-- eslint-enable vue/no-v-html -->
+            </li>
+          </ul>
         </div>
 
         <div class="bg-white flex justify-center">
@@ -115,6 +116,17 @@ export default {
     SiteNavBar,
     CivicPricingCard,
   },
+  featureSwiper: {
+    slidesPerView: 'auto',
+    spaceBetween: 16,
+    centeredSlides: true,
+
+    slideToClickedSlide: true,
+
+    slideClass: 'civic-feature-card',
+    slideActiveClass: 'civic-feature-card--active',
+    wrapperClass: 'civic-feature-card-wrapper',
+  },
   data() {
     return {
       CivicLikerHeroImage,
@@ -152,18 +164,54 @@ export default {
 </script>
 
 <style lang="scss">
+$civic-feature-card-width: 272px;
+$civic-feature-card-inter-space: 16px;
+$civic-feature-card-swiper-max-width: (
+  $civic-feature-card-width * 3 + $civic-feature-card-inter-space * 4
+);
+
 .civic-feature-card {
-  max-width: 272px;
+  width: $civic-feature-card-width;
 
   @apply overflow-hidden;
 
   @apply bg-white;
 
-  @apply flex-1;
-
-  @apply m-8;
+  @apply flex-no-shrink;
 
   @apply rounded;
+
+  &-swiper-container {
+    z-index: 1;
+
+    @apply relative;
+    @apply overflow-hidden;
+
+    @apply p-16;
+  }
+
+  &-wrapper {
+    @media screen and (min-width: $civic-feature-card-swiper-max-width) {
+      // Disable swiper
+      transform: none !important;
+
+      @apply justify-center;
+
+      // Counter space between option of the swiper
+      .civic-feature-card:last-child {
+        margin-right: 0 !important;
+      }
+    }
+
+    @apply relative;
+
+    @apply list-reset;
+
+    @apply w-full;
+    @apply h-full;
+
+    @apply flex;
+  }
 
   &__header {
     @apply text-like-cyan;
