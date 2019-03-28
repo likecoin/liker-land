@@ -59,6 +59,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/google-analytics',
     '@nuxtjs/sentry',
     '@nuxtjs/pwa',
     'nuxt-svg-loader',
@@ -71,8 +72,12 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
   },
+  googleAnalytics: {
+    id: process.env.GA_TRACKING_ID || '',
+    dev: false, // disable module for nuxt dev
+    disabled: () => !!((window && window.doNotTrack) || (navigator && navigator.doNotTrack)), // eslint-disable-line no-undef
+  },
   sentry: {},
-
   router: {
     middleware: 'sliding-menu',
   },
