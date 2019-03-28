@@ -67,8 +67,28 @@
   "RedirectPage": {
     "title": "Redirecting"
   },
+  "SettingsCivicPage": {
+    "title": "@:SettingsPage.title > @:civicLiker",
+    "knowMoreAbout": "Know more about",
+    "subscribed": "Subscribed"
+  },
+  "SettingsFollowingPage": {
+    "title": "@:SettingsPage.title > Follow / Unfollow",
+    "follow": "Follow",
+    "following": "Following",
+    "noFollowing": "Your have no following authors",
+    "unfollow": "Unfollow",
+    "unfollowed": "Unfollowed",
+    "noUnfollowed": "Your have no unfollowed authors"
+  },
   "SettingsPage": {
-    "title": "Settings"
+    "title": "Settings",
+    "likerId": "Liker ID",
+    "civicLiker": {
+      "title": "@:civicLiker",
+      "subscribing": "Subscribing"
+    },
+    "subscription": "Follow / Unfollow"
   },
   "SignUpSignInCTA": {
     "slogan": "Sign up / Sign in to read more",

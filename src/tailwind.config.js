@@ -828,6 +828,13 @@ module.exports = {
       // center: true,
       // padding: '1rem',
     }),
+    ({ addUtilities }) => {
+      addUtilities({
+        '.bg-like-gradient': {
+          'background-image': 'linear-gradient(78deg, #d2f0f0, #f0e6b4)',
+        },
+      });
+    },
   ],
 
   /*

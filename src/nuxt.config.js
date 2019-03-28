@@ -82,6 +82,16 @@ module.exports = {
   sentry: {},
   router: {
     middleware: 'sliding-menu',
+    extendRoutes(routes, resolve) {
+      // Change /settings/following/unfollowed to /settings/unfollowed
+      let route = routes.find(r => r.path === '/settings');
+      route = route.children.find(r => r.path === 'following');
+      route.children.push({
+        path: '/settings/unfollowed',
+        component: resolve(__dirname, 'pages/settings/following/index.vue'),
+        name: 'settings-unfollowed',
+      });
+    }
   },
 
   /*
