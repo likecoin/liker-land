@@ -34,13 +34,13 @@ export default {
     this.fetchContent();
   },
   methods: {
-    ...mapActions(['fetchReaderIndex', 'fetchArticle']),
+    ...mapActions(['fetchReaderIndex', 'fetchUserArticle']),
 
     async fetchContent() {
       try {
         this.isLoading = true;
         await this.fetchReaderIndex();
-        this.getSubscribedAuthors.forEach(u => this.fetchArticle(u));
+        this.getSubscribedAuthors.forEach(u => this.fetchUserArticle(u));
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
