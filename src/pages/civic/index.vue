@@ -15,7 +15,7 @@
         >
       </div>
       <section class="max-w-desktop mx-auto -mt-24">
-        <ul class="list-reset flex justify-center">
+        <ul class="list-reset flex justify-center overflow-x-hidden">
           <CivicPricingCard
             tag="li"
             class="mx-8 tablet:hidden phone:hidden"
@@ -27,7 +27,7 @@
             type="civic"
           >
             <template #header>
-              <div class="mt-12 mx-12">
+              <div class="relative mt-12 mx-12">
                 <button
                   :class="[
                     'btn btn--outlined btn--block m-0 w-full',
@@ -37,6 +37,12 @@
                   ]"
                   @click="onClickRegister"
                 >{{ registerButtonText }}</button>
+                <LcChopCivicLiker
+                  class="absolute phone:hidden"
+                  style="left: 100%;margin-left: 0.75rem;transform: translateY(-65%) rotate(20deg)"
+                  size="180"
+                  text="LIKE"
+                />
               </div>
             </template>
           </CivicPricingCard>
@@ -71,7 +77,13 @@
           </ul>
         </div>
 
-        <div class="bg-white flex justify-center">
+        <div class="relative bg-white flex justify-center items-center">
+          <LcChopCivicLiker
+            class="absolute phone:hidden z-10 m-24 my-0"
+            style="right: 0;transform: rotate(20deg)"
+            size="120"
+            text="LIKE"
+          />
           <CivicPricingCard
             type="civic"
             :is-show-features="false"
