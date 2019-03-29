@@ -456,7 +456,6 @@ module.exports = {
 
   minWidth: {
     '0': '0',
-    button: '288px',
     full: '100%',
   },
 
