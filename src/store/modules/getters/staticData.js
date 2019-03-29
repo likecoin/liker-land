@@ -1,3 +1,6 @@
 export const getUserInfoById = state => id => state.userInfos[id];
 
-export const getArticleInfoByUrl = state => url => state.articleInfos[url];
+export const getArticleInfoByReferrer = state => referrer =>
+  state.articleInfos[referrer];
+export const getArticleInfoByURL = state => url =>
+  state.articleInfos.find(i => i.url === url);

@@ -23,7 +23,8 @@
         <template v-else-if="state === 'content'">
           <ContentCardWrapper
             v-for="item in items"
-            :key="item.url"
+            :key="item.referrer"
+            :referrer="item.referrer"
             :src="item.url"
             :author-id="item.user"
             :cover-src="item.image"

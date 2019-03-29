@@ -1,8 +1,8 @@
 <template>
-  <ContentCardPlaceholder v-if="!loaded"/>
+  <ContentCardPlaceholder v-if="!loaded" />
   <ContentCard
     v-else
-    :src="src"
+    :src="internalUrl"
     :author="author"
     :title="internalTitle"
     :description="internalDescription"
@@ -16,7 +16,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 import ContentCard from '~/components/ContentCard';
 import ContentCardPlaceholder from '~/components/ContentCardPlaceholder';
-import { getUserMinAPI } from '~/util/api';
 
 export default {
   name: 'ContentCardWrapper',
@@ -26,6 +25,10 @@ export default {
   },
   props: {
     src: {
+      type: String,
+      required: true,
+    },
+    referrer: {
       type: String,
       required: true,
     },
@@ -51,7 +54,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getUserInfoById', 'getArticleInfoByUrl']),
+    ...mapGetters(['getUserInfoById', 'getArticleInfoByReferrer']),
     loaded() {
       return !!this.internalTitle;
     },
@@ -62,6 +65,7 @@ export default {
   data() {
     return {
       author: { user: this.authorId },
+      internalUrl: this.src,
       internalTitle: this.title,
       internalDescription: this.description,
       internalCoverSrc: this.coverSrc,
@@ -69,20 +73,24 @@ export default {
     };
   },
   async mounted() {
-    if (this.authorId) console.log(this.authorId);
-    let promises = [];
-    if (this.articleNeedFetch && !this.getArticleInfoByUrl(this.src)) {
-      promises.push(this.fetchArticleInfo(this.src).catch(() => ({})));
+    const promises = [];
+    if (
+      this.articleNeedFetch &&
+      !this.getArticleInfoByReferrer(this.referrer)
+    ) {
+      promises.push(this.fetchArticleInfo(this.referrer).catch(() => ({})));
     }
     if (!this.author.user) await Promise.all(promises);
-    if (this.getArticleInfoByUrl(this.src)) {
+    if (this.getArticleInfoByReferrer(this.referrer)) {
       const {
+        url,
         image,
         title,
         description,
         like,
         user,
-      } = this.getArticleInfoByUrl(this.src);
+      } = this.getArticleInfoByReferrer(this.referrer);
+      this.internalUrl = url;
       this.internalTitle = title;
       this.internalDescription = description;
       this.internalCoverSrc = image;
@@ -99,5 +107,5 @@ export default {
   methods: {
     ...mapActions(['fetchUserInfo', 'fetchArticleInfo']),
   },
-}
+};
 </script>

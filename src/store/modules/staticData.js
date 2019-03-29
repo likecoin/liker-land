@@ -18,8 +18,8 @@ const mutations = {
   [STATIC_SET_USER_INFO](state, { id, user }) {
     Vue.set(state.userInfos, id, user);
   },
-  [STATIC_SET_ARTICLE_INFO](state, { url, info }) {
-    Vue.set(state.articleInfos, url, info);
+  [STATIC_SET_ARTICLE_INFO](state, { referrer, info }) {
+    Vue.set(state.articleInfos, referrer, info);
   },
 };
 
