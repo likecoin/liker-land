@@ -57,7 +57,7 @@ import { LIKE_CO_URL_BASE } from '~/constant';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
 
-import { getUserMinAPI, getLikeButtonTotalLikeCountAPI } from '~/util/api';
+import { getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
@@ -89,10 +89,14 @@ export default {
       type: String,
       default: '',
     },
+    /* Total like of the content */
+    likeCount: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
-      likeCount: 0,
       authorAavtarSrc: undefined,
       authorAvatarHalo: 'none',
     };
@@ -126,14 +130,8 @@ export default {
   methods: {
     async fetchInfo() {
       try {
-        const [authorData, likeCount] = await Promise.all([
-          this.$axios.$get(getUserMinAPI(this.author)),
-          this.$axios.$get(
-            getLikeButtonTotalLikeCountAPI(this.author, this.src)
-          ),
-        ]);
+        const authorData = await this.$axios.$get(getUserMinAPI(this.author));
         // eslint-disable-next-line no-console
-        this.likeCount = likeCount.total;
         this.authorAavtarSrc = authorData.avatar;
         this.authorAvatarHalo = getAvatarHaloTypeFromUser(authorData);
       } catch (err) {

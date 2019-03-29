@@ -99,9 +99,10 @@ router.get('/reader/suggest', async (req, res, next) => {
       list.map(url =>
         apiFetchArticleDetail(url)
           .then(r => ({ url, ...r.data }))
-          .catch(() => ({}))
+          .catch(() => undefined)
       )
     );
+    list = list.filter(l => !!l);
     res.json({ list });
   } catch (err) {
     next(err);
@@ -115,7 +116,17 @@ router.get('/reader/user/:user', async (req, res, next) => {
       return;
     }
     const { data } = await apiFetchUserArticles(req.params.user, req);
-    res.json(data);
+    let { list } = data;
+    list = await Promise.all(
+      // fetch url data server side
+      list.map(i =>
+        apiFetchArticleDetail(i.url)
+          .then(r => ({ ...i, ...r.data }))
+          .catch(e => undefined)
+      )
+    );
+    list = list.filter(l => !!l);
+    res.json({ list });
   } catch (err) {
     next(err);
   }

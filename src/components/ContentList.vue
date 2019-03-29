@@ -29,6 +29,7 @@
             :cover-src="item.image"
             :title="item.title"
             :description="item.description"
+            :like-count="item.like"
           />
         </template>
         <template v-else>
