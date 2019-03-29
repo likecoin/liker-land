@@ -10,9 +10,9 @@ export const getPaypalPaymentPageURL = (likerId, custom) => {
   return baseURL;
 };
 export const getFetchLikedUserApi = () => `/api/reader/index`;
-export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}`;
-export const getSubscribeUserAPI = user => `/api/reader/subscribe/user/${user}`;
-export const getFetchSuggestArticlesApi = () => `/api/reader/suggest`;
+export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}/works`;
+export const getFollowedUserAPI = user => `/api/reader/follow/user/${user}`;
+export const getFetchSuggestArticlesApi = () => `/api/reader/suggest/works`;
 export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
