@@ -30,24 +30,30 @@
 
     <div class="flex-grow">
       <div class="pt-16 px-32">
-        <nuxt-link
-          class="btn btn--outlined btn--dark btn--block"
+        <NuxtLink
+          class="btn btn--outlined btn--dark btn--block btn--icon-only"
           :to="{ name: `index${getUserId ? '-following' : ''}` }"
+          :title="$t('SlidingMenu.home')"
           @click.native="onClickMenuItem"
-        >{{ $t('SlidingMenu.home') }}</nuxt-link>
+        >
+          <HomeIcon class="btn__icon" />
+        </NuxtLink>
 
-        <nuxt-link
+        <NuxtLink
           class="btn btn--outlined btn--dark btn--block"
           :to="{ name: 'civic' }"
           @click.native="onClickMenuItem"
-        >{{ $t('SlidingMenu.civic') }}</nuxt-link>
+        >{{ $t('SlidingMenu.civic') }}</NuxtLink>
 
-        <nuxt-link
+        <NuxtLink
           v-if="getUserId"
-          class="btn btn--outlined btn--dark btn--block"
+          class="btn btn--outlined btn--dark btn--block btn--with-icon"
           :to="{ name: 'settings' }"
           @click.native="onClickMenuItem"
-        >{{ $t('SlidingMenu.settings') }}</nuxt-link>
+        >
+          <CogIcon class="btn__icon w-16 h-16 ml-12" />{{
+            $t('SlidingMenu.settings')
+          }}</NuxtLink>
       </div>
 
       <div class="flex flex-col mt-24 px-48">
@@ -78,9 +84,16 @@ import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '~/util/api';
 import { IntercomMixinFactory } from '~/mixins/intercom';
 
+import CogIcon from '~/assets/icons/cog.svg';
+import HomeIcon from '~/assets/icons/home.svg';
+
 export default {
   name: 'SlidingMenu',
   mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
+  components: {
+    CogIcon,
+    HomeIcon,
+  },
   computed: {
     ...mapGetters([
       'getUserId',
