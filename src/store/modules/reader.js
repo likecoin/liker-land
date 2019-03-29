@@ -9,8 +9,11 @@ import {
   READER_ADD_UNFOLLOW_USER,
   READER_SET_UNFOLLOW_USER_LIST,
   READER_REMOVE_UNFOLLOW_USER,
-  READER_UPDATE_USER_URL,
-  READER_REMOVE_USER_URL,
+  READER_UPDATE_USER_ARTICLES,
+  READER_REMOVE_USER_ARTICLES,
+  READER_SET_BOOKMARK,
+  READER_ADD_BOOKMARK,
+  READER_REMOVE_BOOKMARK,
 } from '../mutation-types';
 import * as getters from './getters/reader';
 import * as actions from './actions/reader';
@@ -19,6 +22,7 @@ const state = () => ({
   followedUsers: [],
   unfollowedUsers: [],
   articles: {},
+  bookmarks: {},
 });
 
 const mutations = {
@@ -40,11 +44,23 @@ const mutations = {
   [READER_REMOVE_UNFOLLOW_USER](state, user) {
     state.unfollowedUsers = state.unfollowedUsers.filter(u => u !== user);
   },
-  [READER_UPDATE_USER_URL](state, { user, list }) {
+  [READER_UPDATE_USER_ARTICLES](state, { user, list }) {
     Vue.set(state.articles, user, list);
   },
-  [READER_REMOVE_USER_URL](state, user) {
+  [READER_REMOVE_USER_ARTICLES](state, user) {
     Vue.delete(state.articles, user);
+  },
+  [READER_SET_BOOKMARK](state, bookmarks) {
+    state.bookmarks = bookmarks.reduce((acc, b) => {
+      acc[b] = true;
+      return acc;
+    }, {});
+  },
+  [READER_ADD_BOOKMARK](state, bookmark) {
+    Vue.set(state.bookmarks, bookmark, true);
+  },
+  [READER_REMOVE_BOOKMARK](state, bookmark) {
+    Vue.delete(state.bookmarks, bookmark);
   },
 };
 

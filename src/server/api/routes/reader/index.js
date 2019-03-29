@@ -6,10 +6,12 @@ const {
 } = require('../../util/api');
 const { userCollection } = require('../../util/firebase');
 const follow = require('./follow');
+const bookmark = require('./bookmark');
 
 const router = Router();
 
 router.use(follow);
+router.use(bookmark);
 
 router.get('/reader/index', async (req, res, next) => {
   try {
