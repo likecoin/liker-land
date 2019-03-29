@@ -9,14 +9,14 @@
       <span class="content-card__author">
         <a
           :href="authorURL"
-          :title="author"
+          :title="authorId"
           target="_blank"
         >
           <LcAvatar
             class="content-card__author-avatar"
             :src="authorAavtarSrc"
             :halo="authorAvatarHalo"
-          />{{ author }}</a>
+          />{{ authorId }}</a>
       </span>
 
       <span
@@ -56,8 +56,6 @@
 import { LIKE_CO_URL_BASE } from '~/constant';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
-
-import { getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
@@ -71,7 +69,7 @@ export default {
       required: true,
     },
     author: {
-      type: String,
+      type: Object,
       required: true,
     },
     /* The title of the content */
@@ -95,15 +93,18 @@ export default {
       default: 0,
     },
   },
-  data() {
-    return {
-      authorAavtarSrc: undefined,
-      authorAvatarHalo: 'none',
-    };
-  },
   computed: {
+    authorId() {
+      return this.author.user;
+    },
     authorURL() {
-      return `${LIKE_CO_URL_BASE}/${this.author}`;
+      return `${LIKE_CO_URL_BASE}/${this.author.user}`;
+    },
+    authorAvatarHalo() {
+      return getAvatarHaloTypeFromUser(this.author);
+    },
+    authorAavtarSrc() {
+      return this.author.avatar;
     },
     url() {
       return new URL(this.src);
@@ -119,25 +120,6 @@ export default {
     },
     coverPhotoStyle() {
       return { backgroundImage: `url(${this.coverSrc})` };
-    },
-  },
-  watch: {
-    src: 'fetchInfo',
-  },
-  mounted() {
-    this.fetchInfo();
-  },
-  methods: {
-    async fetchInfo() {
-      try {
-        const authorData = await this.$axios.$get(getUserMinAPI(this.author));
-        // eslint-disable-next-line no-console
-        this.authorAavtarSrc = authorData.avatar;
-        this.authorAvatarHalo = getAvatarHaloTypeFromUser(authorData);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      }
     },
   },
 };

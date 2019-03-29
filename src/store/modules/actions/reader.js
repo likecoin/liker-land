@@ -13,7 +13,7 @@ export async function subscribeAuthor({ commit, state, dispatch }, user) {
   await this.$axios.$post(api.getSubscribeUserAPI(user));
   commit(types.READER_ADD_USER, user);
   commit(types.READER_REMOVE_USER_UNSUB_USER, user);
-  dispatch('fetchArticle', user);
+  dispatch('fetchUserArticle', user);
 }
 
 export async function unsubscribeAuthor({ commit, state }, user) {
@@ -23,7 +23,7 @@ export async function unsubscribeAuthor({ commit, state }, user) {
   commit(types.READER_REMOVE_USER_URL, user);
 }
 
-export async function fetchArticle({ commit }, user) {
+export async function fetchUserArticle({ commit }, user) {
   const { list } = await this.$axios.$get(api.getFetchUserArticlesAPI(user));
   commit(types.READER_UPDATE_USER_URL, { user, list });
 }

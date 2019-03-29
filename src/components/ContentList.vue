@@ -21,11 +21,12 @@
           />
         </template>
         <template v-else-if="state === 'content'">
-          <ContentCard
+          <ContentCardWrapper
             v-for="item in items"
-            :key="item.url"
+            :key="item.referrer"
+            :referrer="item.referrer"
             :src="item.url"
-            :author="item.user"
+            :author-id="item.user"
             :cover-src="item.image"
             :title="item.title"
             :description="item.description"
@@ -47,13 +48,13 @@
 </template>
 
 <script>
-import ContentCard from '~/components/ContentCard';
+import ContentCardWrapper from '~/components/ContentCardWrapper';
 import ContentCardPlaceholder from '~/components/ContentCardPlaceholder';
 
 export default {
   name: 'ContentList',
   components: {
-    ContentCard,
+    ContentCardWrapper,
     ContentCardPlaceholder,
   },
   props: {

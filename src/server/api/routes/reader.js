@@ -4,7 +4,6 @@ const {
   apiFetchUserPublicProfile,
   apiFetchUserArticles,
   apiFetchSuggestedArticles,
-  apiFetchArticleDetail,
 } = require('../util/api');
 const { FieldValue, userCollection } = require('../util/firebase');
 
@@ -94,15 +93,7 @@ router.get('/reader/suggest', async (req, res, next) => {
   try {
     const { data } = await apiFetchSuggestedArticles();
     let list = data.editorial.concat(data.pick); // only get editorial and pick list, ignore mostLike
-    list = await Promise.all(
-      // fetch url data server side
-      list.map(url =>
-        apiFetchArticleDetail(url)
-          .then(r => ({ url, ...r.data }))
-          .catch(() => undefined)
-      )
-    );
-    list = list.filter(l => !!l);
+    list = list.map(url => ({ referrer: url, url }));
     res.json({ list });
   } catch (err) {
     next(err);
@@ -117,15 +108,7 @@ router.get('/reader/user/:user', async (req, res, next) => {
     }
     const { data } = await apiFetchUserArticles(req.params.user, req);
     let { list } = data;
-    list = await Promise.all(
-      // fetch url data server side
-      list.map(i =>
-        apiFetchArticleDetail(i.url)
-          .then(r => ({ ...i, ...r.data }))
-          .catch(e => undefined)
-      )
-    );
-    list = list.filter(l => !!l);
+    list = list.map(i => ({ referrer: i.referrer, url: i.url }));
     res.json({ list });
   } catch (err) {
     next(err);
