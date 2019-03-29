@@ -15,11 +15,11 @@
           ]"
         >
           <div class="text-like-cyan text-30 font-200 mb-16">
-            {{ $t(!getUserIsCivicLiker ? 'CivicLikerCTA.slogan' : 'SignUpSignInCTA.slogan') }}
+            {{ $t(getUserId ? 'CivicLikerCTA.slogan' : 'SignUpSignInCTA.slogan') }}
           </div>
 
           <NuxtLink
-            v-if="!getUserIsCivicLiker"
+            v-if="getUserId"
             :class="[
               'btn btn--outlined btn--dark mx-0',
               {

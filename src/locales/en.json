@@ -1,6 +1,12 @@
 {
   "BookmarksPage": {
-    "headerLabel": "Your Bookmark List"
+    "headerLabel": "Your Bookmark List",
+    "empty": {
+      "title": "There is no article on your bookmark list",
+      "content": "Your bookmarked articles will be listed here.",
+      "goToFollowing": "Start reading",
+      "goToFeaturing": "Featured articles"
+    }
   },
   "CivicLikerCTA": {
     "slogan": "Trade a coffee for a better world",
@@ -42,7 +48,12 @@
     "empty": "There is no article"
   },
   "FollowingPage": {
-    "headerLabel": "Your Following List"
+    "headerLabel": "Your Following List",
+    "empty": {
+      "title": "There is no article on your following list",
+      "content": "You can follow an author by clicking the LikeButton of the author. You may find some articles to read in our featured articles list",
+      "goToFeaturing": "Featured articles"
+    }
   },
   "ERROR": {
     "LOGIN_NEEDED": "Please sign in to view this content"

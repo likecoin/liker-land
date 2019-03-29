@@ -1,26 +1,47 @@
 .btn {
-  transition-property: background-color;
+  transition-property: background-color, opacity;
   transition-duration: 0.2s;
 
-  @apply inline-block;
+  @apply relative;
 
   @apply font-600;
   @apply text-center;
 
   @apply rounded-full;
 
+  @apply inline-flex;
+  @apply justify-center;
+  @apply items-center;
+
   @apply m-8;
   @apply px-12;
   @apply py-8;
 
+  // Size management
   &--block {
-    @apply block;
+    @apply flex;
+  }
+  &:not(#{&}--block):not(#{&}--auto-size) {
+    min-width: 12rem;
   }
 
-  &:not(.btn--block) {
-    @apply min-w-button;
+  // Plain style
+  &--plain {
+    @apply text-like-green;
+
+    @apply underline;
+
+    &:hover {
+      @apply opacity-75;
+    }
+
+    &:active {
+      @apply opacity-50;
+    }
   }
 
+
+  // Outlined style
   &--outlined {
     @apply text-like-green;
 
@@ -39,7 +60,8 @@
     }
   }
 
-  &:not(.btn--outlined) {
+  // Default style
+  &:not(#{&}--outlined):not(#{&}--plain) {
     @apply text-white;
 
     @apply bg-like-green;
@@ -66,11 +88,51 @@
     }
   }
 
+  // Disabled style
   &--disabled {
     @apply text-gray-c;
 
     @apply border-gray-c;
 
     @apply pointer-events-none;
+  }
+
+  // Button icon
+  &__icon {
+    @apply fill-current;
+
+    @apply w-16;
+    @apply h-16;
+  }
+  &--icon-only {
+    @apply py-4;
+  }
+  &--icon-only &__icon {
+    margin: 1px;
+
+    @apply inline;
+
+    @apply w-24;
+    @apply h-24;
+  }
+  &:not(#{&}--icon-only) &__icon {
+    @apply absolute;
+  }
+  &--plain &__icon {
+    fill: config('colors.like-cyan');
+  }
+  &--icon-top:not(#{&}--icon-only) &__icon {
+    @apply pin-t;
+    @apply mt-8;
+  }
+  &:not(#{&}--icon-only):not(#{&}--icon-top) &__icon {
+    @apply pin-l;
+    @apply ml-8;
+  }
+  &--with-icon:not(#{&}--icon-top) {
+    @apply px-24;
+  }
+  &--with-icon#{&}--icon-top {
+    @apply pt-24;
   }
 }

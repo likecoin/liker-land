@@ -42,7 +42,7 @@ export default {
       if (postAuthRoute) {
         this.$router.push(postAuthRoute);
       } else {
-        this.$router.push({ name: 'index' });
+        this.$router.push({ name: 'index-following' });
       }
     }
   },

@@ -17,6 +17,11 @@ export default {
   components: {
     ContentList,
   },
+  fetch({ from, query, redirect, store }) {
+    if (!from && store.getters.getUserId) {
+      redirect(307, { name: 'index-following', query });
+    }
+  },
   data() {
     return {
       isLoading: true,

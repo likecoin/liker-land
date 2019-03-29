@@ -109,15 +109,25 @@ export default {
 .civic-pricing-card {
   max-width: 288px;
 
-  @apply overflow-hidden;
-
-  @apply bg-white;
-
-  @apply rounded;
+  @apply relative;
 
   @apply w-full;
 
+  &::before {
+    content: '';
+
+    @apply absolute;
+    @apply overflow-hidden;
+    @apply pin;
+
+    @apply rounded;
+
+    @apply bg-white;
+  }
+
   > * {
+    @apply relative;
+
     @apply px-24;
 
     &:first-child {

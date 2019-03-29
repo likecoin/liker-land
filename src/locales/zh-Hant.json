@@ -1,6 +1,12 @@
 {
   "BookmarksPage": {
-    "headerLabel": "你的收藏列表"
+    "headerLabel": "你的收藏列表",
+    "empty": {
+      "title": "你沒有收藏任何文章",
+      "content": "你收藏了的文章會在這裏列出。",
+      "goToFollowing": "開始閱讀",
+      "goToFeaturing": "精選文章"
+    }
   },
   "CivicLikerCTA": {
     "slogan": "少喝一杯咖啡，共創一個生態",
@@ -42,7 +48,11 @@
     "empty": "沒有文章"
   },
   "FollowingPage": {
-    "headerLabel": "你的追蹤列表"
+    "headerLabel": "你的追蹤列表",
+    "null": {
+      "title": "你沒有追蹤任何作者",
+      "content": "你可以在作者的LikeButton上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。"
+    }
   },
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容"

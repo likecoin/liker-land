@@ -35,7 +35,9 @@
         <template v-else>
           <div class="content-list__empty">
             <slot name="empty">
-              <h1>{{ $t('ContentList.empty') }}</h1>
+              <div class="p-40">
+                <h1>{{ $t('ContentList.empty') }}</h1>
+              </div>
             </slot>
           </div>
         </template>
@@ -140,19 +142,21 @@ export default {
     @apply text-gray-9b;
     @apply text-14;
     @apply text-center;
+    @apply leading-1_5;
+
+    @apply fill-current;
 
     @apply rounded;
 
     @apply bg-white;
 
-    @apply p-40;
-
     h1 {
       @apply text-20;
       @apply font-600;
+      @apply mt-4;
     }
 
-    > *:not(:first-child) {
+    p {
       @apply mt-20;
     }
   }
