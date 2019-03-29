@@ -32,7 +32,7 @@
       <div class="pt-16 px-32">
         <nuxt-link
           class="btn btn--outlined btn--dark btn--block"
-          :to="{ name: 'index' }"
+          :to="{ name: `index${getUserId ? '-following' : ''}` }"
           @click.native="onClickMenuItem"
         >{{ $t('SlidingMenu.home') }}</nuxt-link>
 
