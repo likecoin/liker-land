@@ -31,7 +31,7 @@ export default {
     AuthorListItem,
   },
   computed: {
-    ...mapGetters(['getSubscribedAuthors', 'getUnsubscribedAuthors']),
+    ...mapGetters(['getFollowedAuthors', 'getUnfollowedAuthors']),
 
     isShowingFollowingAuthors() {
       return this.$route.name === 'settings-following';
@@ -39,8 +39,8 @@ export default {
 
     authorLikerIds() {
       return this.isShowingFollowingAuthors
-        ? this.getSubscribedAuthors
-        : this.getUnsubscribedAuthors;
+        ? this.getFollowedAuthors
+        : this.getUnfollowedAuthors;
     },
     actionButtonText() {
       return this.$t(
@@ -61,7 +61,7 @@ export default {
     this.fetchAuthors();
   },
   methods: {
-    ...mapActions(['fetchReaderIndex', 'subscribeAuthor', 'unsubscribeAuthor']),
+    ...mapActions(['fetchReaderIndex', 'followAuthor', 'unfollowAuthor']),
 
     async fetchAuthors() {
       try {
@@ -77,9 +77,9 @@ export default {
       try {
         // TODO: Block user interaction
         if (this.$route.name === 'settings-following') {
-          await this.unsubscribeAuthor(likerId);
+          await this.unfollowAuthor(likerId);
         } else {
-          await this.subscribeAuthor(likerId);
+          await this.followAuthor(likerId);
         }
       } catch (error) {
         // eslint-disable-next-line no-console

@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getAllArticles', 'getSubscribedAuthors']),
+    ...mapGetters(['getAllArticles', 'getFollowedAuthors']),
     items() {
       return this.getAllArticles.slice(0, 40);
     },
@@ -63,7 +63,7 @@ export default {
       try {
         this.isLoading = true;
         await this.fetchReaderIndex();
-        this.getSubscribedAuthors.forEach(u => this.fetchUserArticle(u));
+        this.getFollowedAuthors.forEach(u => this.fetchUserArticle(u));
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
