@@ -57,21 +57,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([]),
+    ...mapGetters(['getUserBookmarks']),
     items() {
-      return [];
+      return this.getUserBookmarks.map(referrer => ({ referrer }));
     },
   },
   mounted() {
     this.fetchContent();
   },
   methods: {
-    ...mapActions([]),
-
-    fetchContent() {
+    ...mapActions(['refreshBookmarkList']),
+    async fetchContent() {
       try {
         this.isLoading = true;
-        // TODO
+        await this.refreshBookmarkList();
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {

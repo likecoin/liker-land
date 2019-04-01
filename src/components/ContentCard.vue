@@ -49,11 +49,24 @@
         class="content-card__description"
       >{{ description }}</div>
     </div>
+    <div>
+      <a
+        @click.prevent="$emit('bookmarkClick')"
+      >
+        <span v-if="isBookmarked">
+          Remove BookMark
+        </span>
+        <span v-else>
+          Add Bookmark
+        </span>
+      </a>
+    </div>
   </a>
 </template>
 
 <script>
 import { LIKE_CO_URL_BASE } from '~/constant';
+import { mapGetters } from 'vuex';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -92,8 +105,13 @@ export default {
       type: Number,
       default: 0,
     },
+    isBookmarked: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
+    ...mapGetters(['addBookmark', 'removeBookmark']),
     authorId() {
       return this.author.user;
     },

@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
 
 import PageHeader from '~/components/PageHeader';
@@ -106,10 +106,24 @@ export default {
     WatchingIcon,
   },
   computed: {
-    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
+    ...mapGetters(['getUserId', 'getUserIsCivicLiker', 'getUserBookmarks']),
+  },
+  mounted() {
+    this.fetchSharedContent();
   },
   methods: {
     getOAuthLoginAPI,
+    ...mapActions(['refreshBookmarkList']),
+    async fetchSharedContent() {
+      try {
+        const promises = [];
+        if (!this.getUserBookmarks.length)
+          promises.push(this.refreshBookmarkList());
+        await Promise.all(promises);
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
+      }
+    },
   },
 };
 </script>

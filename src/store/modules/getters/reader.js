@@ -12,3 +12,6 @@ export const getAllArticles = state => {
 };
 
 export const getUserArticles = state => user => state.articles[user] || [];
+
+export const getIsInBookmark = state => url => state.bookmarks[url];
+export const getUserBookmarks = state => Object.keys(state.bookmarks) || [];

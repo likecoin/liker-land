@@ -20,12 +20,27 @@ export async function unfollowAuthor({ commit, state }, user) {
   await this.$axios.$delete(api.getFollowedUserAPI(user));
   commit(types.READER_ADD_UNFOLLOW_USER, user);
   commit(types.READER_REMOVE_FOLLOW_USER, user);
-  commit(types.READER_REMOVE_USER_URL, user);
+  commit(types.READER_REMOVE_USER_ARTICLES, user);
+}
+
+export async function refreshBookmarkList({ commit }) {
+  const { bookmarks } = await this.$axios.$get(api.getFetchReaderBookmarkAPI());
+  commit(types.READER_SET_BOOKMARK, bookmarks);
+}
+
+export async function addBookmark({ commit }, url) {
+  commit(types.READER_ADD_BOOKMARK, url);
+  await this.$axios.$post(api.getUpdateReaderBookmarkAPI(url));
+}
+
+export async function removeBookmark({ commit }, url) {
+  commit(types.READER_REMOVE_BOOKMARK, url);
+  await this.$axios.$delete(api.getUpdateReaderBookmarkAPI(url));
 }
 
 export async function fetchUserArticle({ commit }, user) {
   const { list } = await this.$axios.$get(api.getFetchUserArticlesAPI(user));
-  commit(types.READER_UPDATE_USER_URL, { user, list });
+  commit(types.READER_UPDATE_USER_ARTICLES, { user, list });
 }
 
 export async function fetchSuggestedArticles({ commit }) {

@@ -13,6 +13,9 @@ export const getFetchLikedUserApi = () => `/api/reader/index`;
 export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}/works`;
 export const getFollowedUserAPI = user => `/api/reader/follow/user/${user}`;
 export const getFetchSuggestArticlesApi = () => `/api/reader/suggest/works`;
+export const getFetchReaderBookmarkAPI = () => '/api/reader/bookmark';
+export const getUpdateReaderBookmarkAPI = url =>
+  `/api/reader/bookmark?url=${encodeURIComponent(url)}`;
 export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
