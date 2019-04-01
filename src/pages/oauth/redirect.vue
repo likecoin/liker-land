@@ -21,25 +21,37 @@ export default {
   async mounted() {
     const { state, auth_code: authCode } = this.$route.query;
     if (authCode && state) {
-      await this.getOAuthToken({ authCode, state });
-      let postAuthRoute;
-      if (window.sessionStorage) {
-        const storedRoute = window.sessionStorage.getItem(
-          'USER_POST_AUTH_ROUTE'
-        );
-        const storedURL = window.sessionStorage.getItem('USER_POST_AUTH_PATH');
-        if (storedRoute) postAuthRoute = JSON.parse(storedRoute);
-        if (storedURL) {
-          const targetPath = decodeURIComponent(storedURL);
-          if (targetPath[0] === '/') postAuthRoute = targetPath;
+      try {
+        await this.getOAuthToken({ authCode, state });
+        let postAuthRoute;
+        if (window.sessionStorage) {
+          const storedRoute = window.sessionStorage.getItem(
+            'USER_POST_AUTH_ROUTE'
+          );
+          const storedURL = window.sessionStorage.getItem(
+            'USER_POST_AUTH_PATH'
+          );
+          if (storedRoute) postAuthRoute = JSON.parse(storedRoute);
+          if (storedURL) {
+            const targetPath = decodeURIComponent(storedURL);
+            if (targetPath[0] === '/') postAuthRoute = targetPath;
+          }
+          window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+          window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
         }
-        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-        window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
-      }
-      if (postAuthRoute) {
-        this.$router.push(postAuthRoute);
-      } else {
-        this.$router.push({ name: 'index-following' });
+        if (postAuthRoute) {
+          this.$router.push(postAuthRoute);
+        } else {
+          this.$router.push({ name: 'index-following' });
+        }
+      } catch (err) {
+        const errData = err.response || err;
+        const errMessage = errData.data || errData.message || errData;
+        console.error(errMessage); // eslint-disable-line no-console
+        this.$nuxt.error({
+          statusCode: errData.status || 400,
+          message: errMessage,
+        });
       }
     }
   },
