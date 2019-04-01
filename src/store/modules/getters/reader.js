@@ -1,8 +1,8 @@
-export const getSubscribedAuthors = state => state.users;
-export const getUnsubscribedAuthors = state => state.unsubscribedUsers;
+export const getFollowedAuthors = state => state.followedUsers;
+export const getUnfollowedAuthors = state => state.unfollowedUsers;
 
 export const getAllArticles = state => {
-  const res = state.users.reduce((a, u) => {
+  const res = state.followedUsers.reduce((a, u) => {
     if (state.articles[u]) {
       return a.concat(state.articles[u]);
     }

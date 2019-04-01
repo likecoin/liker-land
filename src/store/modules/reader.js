@@ -3,12 +3,12 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 
 import {
-  READER_ADD_USER,
-  READER_SET_USER_LIST,
-  READER_REMOVE_USER,
-  READER_ADD_UNSUB_USER,
-  READER_SET_UNSUB_USER_LIST,
-  READER_REMOVE_USER_UNSUB_USER,
+  READER_ADD_FOLLOW_USER,
+  READER_SET_FOLLOW_USER_LIST,
+  READER_REMOVE_FOLLOW_USER,
+  READER_ADD_UNFOLLOW_USER,
+  READER_SET_UNFOLLOW_USER_LIST,
+  READER_REMOVE_UNFOLLOW_USER,
   READER_UPDATE_USER_URL,
   READER_REMOVE_USER_URL,
 } from '../mutation-types';
@@ -16,29 +16,29 @@ import * as getters from './getters/reader';
 import * as actions from './actions/reader';
 
 const state = () => ({
-  users: [],
-  unsubscribedUsers: [],
+  followedUsers: [],
+  unfollowedUsers: [],
   articles: {},
 });
 
 const mutations = {
-  [READER_ADD_USER](state, user) {
-    state.users.push(user);
+  [READER_ADD_FOLLOW_USER](state, user) {
+    state.followedUsers.push(user);
   },
-  [READER_SET_USER_LIST](state, users) {
-    state.users = users;
+  [READER_SET_FOLLOW_USER_LIST](state, users) {
+    state.followedUsers = users;
   },
-  [READER_REMOVE_USER](state, user) {
-    state.users = state.users.filter(u => u !== user);
+  [READER_REMOVE_FOLLOW_USER](state, user) {
+    state.followedUsers = state.followedUsers.users.filter(u => u !== user);
   },
-  [READER_ADD_UNSUB_USER](state, user) {
-    state.unsubscribedUsers.push(user);
+  [READER_ADD_UNFOLLOW_USER](state, user) {
+    state.unfollowedUsers.push(user);
   },
-  [READER_SET_UNSUB_USER_LIST](state, users) {
-    state.unsubscribedUsers = users;
+  [READER_SET_UNFOLLOW_USER_LIST](state, users) {
+    state.unfollowedUsers = users;
   },
-  [READER_REMOVE_USER_UNSUB_USER](state, user) {
-    state.unsubscribedUsers = state.unsubscribedUsers.filter(u => u !== user);
+  [READER_REMOVE_UNFOLLOW_USER](state, user) {
+    state.unfollowedUsers = state.unfollowedUsers.filter(u => u !== user);
   },
   [READER_UPDATE_USER_URL](state, { user, list }) {
     Vue.set(state.articles, user, list);

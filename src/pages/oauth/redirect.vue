@@ -8,14 +8,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Redirect',
   layout: 'dialog',
-  computed: {
-    ...mapGetters(['getSubscribedAuthors']),
-  },
   head() {
     return {
       title: this.$t('RedirectPage.title'),
