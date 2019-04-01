@@ -8,6 +8,8 @@
     :description="internalDescription"
     :cover-src="internalCoverSrc"
     :like-count="internalLikeCount"
+    :is-bookmarked="getIsInBookmark(referrer)"
+    @bookmark-click="onClickBookmark(referrer)"
   />
 </template>
 
@@ -64,7 +66,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserInfoById', 'getArticleInfoByReferrer']),
+    ...mapGetters([
+      'getUserInfoById',
+      'getArticleInfoByReferrer',
+      'getIsInBookmark',
+    ]),
 
     isLoaded() {
       return !!this.internalTitle;
@@ -108,7 +114,19 @@ export default {
     this.author = this.getUserInfoById(this.author.user) || this.author;
   },
   methods: {
-    ...mapActions(['fetchUserInfo', 'fetchArticleInfo']),
+    ...mapActions([
+      'fetchUserInfo',
+      'fetchArticleInfo',
+      'addBookmark',
+      'removeBookmark',
+    ]),
+    onClickBookmark(referrer) {
+      if (this.getIsInBookmark(referrer)) {
+        this.removeBookmark(referrer);
+      } else {
+        this.addBookmark(referrer);
+      }
+    },
   },
 };
 </script>
