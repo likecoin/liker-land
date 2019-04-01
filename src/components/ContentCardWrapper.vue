@@ -1,5 +1,5 @@
 <template>
-  <ContentCardPlaceholder v-if="!loaded" />
+  <ContentCardPlaceholder v-if="!isLoaded" />
   <ContentCard
     v-else
     :src="internalUrl"
@@ -53,15 +53,6 @@ export default {
       default: 0,
     },
   },
-  computed: {
-    ...mapGetters(['getUserInfoById', 'getArticleInfoByReferrer']),
-    loaded() {
-      return !!this.internalTitle;
-    },
-    articleNeedFetch() {
-      return !this.internalTitle || !this.internalLikeCount;
-    },
-  },
   data() {
     return {
       author: { user: this.authorId },
@@ -72,10 +63,20 @@ export default {
       internalLikeCount: this.likeCount,
     };
   },
+  computed: {
+    ...mapGetters(['getUserInfoById', 'getArticleInfoByReferrer']),
+
+    isLoaded() {
+      return !!this.internalTitle;
+    },
+    shouldFetchArticle() {
+      return !this.internalTitle || !this.internalLikeCount;
+    },
+  },
   async mounted() {
     const promises = [];
     if (
-      this.articleNeedFetch &&
+      this.shouldFetchArticle &&
       !this.getArticleInfoByReferrer(this.referrer)
     ) {
       promises.push(this.fetchArticleInfo(this.referrer).catch(() => ({})));
@@ -95,6 +96,7 @@ export default {
       this.internalDescription = description;
       this.internalCoverSrc = image;
       this.internalLikeCount = like;
+      // If authorId is not given, we can retrieve from article info
       if (!this.author.user) {
         this.author = { user };
       }
@@ -103,7 +105,7 @@ export default {
       promises.push(this.fetchUserInfo(this.author.user).catch(() => ({})));
     }
     await Promise.all(promises);
-    this.author = this.getUserInfoById(this.author.user);
+    this.author = this.getUserInfoById(this.author.user) || this.author;
   },
   methods: {
     ...mapActions(['fetchUserInfo', 'fetchArticleInfo']),
