@@ -51,8 +51,8 @@ module.exports = {
   plugins: [
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
-    { src: '~/plugins/vue-awesome-swiper.js', ssr: false },
     '~/plugins/vue-i18n.js',
+    { src: '~/plugins/client-ui-plugins.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
   ],
 
