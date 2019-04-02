@@ -1,13 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
+const theme = require('../src/tailwind.config');
 
-const pkg = require('./package');
+const siteName = 'Liker.Land';
 
 module.exports = {
   env: {
     IS_TESTNET: process.env.IS_TESTNET,
     CI: process.env.CI,
     INTERCOM_APPID: process.env.INTERCOM_APPID,
+    SITE_NAME: siteName,
   },
   mode: 'universal',
 
@@ -15,17 +17,39 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    titleTemplate: (titleChunk) => titleChunk ? `${titleChunk} - liker.land` : 'liker.land',
+    titleTemplate: (titleChunk) => titleChunk ?
+      `${titleChunk} - ${process.env.SITE_NAME}` : process.env.SITE_NAME,
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description },
-      { hid: 'theme-color', name: 'theme-color', content: '#D2F0F0' },
+      { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
+      { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
+      { name: 'msapplication-config', content: '/browserconfig.xml' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
+
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+      { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
+      { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+      { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: theme.colors['like-green'] },
+
+      ...[
+        { width: 320, height: 568, pixelRatio: 2, fileName: 'iphone5_splash.png' },
+        { width: 375, height: 667, pixelRatio: 2, fileName: 'iphone6_splash.png' },
+        { width: 621, height: 1104, pixelRatio: 3, fileName: 'iphoneplus_splash.png' },
+        { width: 375, height: 812, pixelRatio: 3, fileName: 'iphonex_splash.png' },
+        { width: 414, height: 896, pixelRatio: 2, fileName: 'iphonexr_splash.png' },
+        { width: 414, height: 896, pixelRatio: 3, fileName: 'iphonexsmax_splash.png' },
+        { width: 768, height: 1024, pixelRatio: 2, fileName: 'ipad_splash.png' },
+        { width: 834, height: 1112, pixelRatio: 2, fileName: 'ipadpro1_splash.png' },
+        { width: 834, height: 1194, pixelRatio: 2, fileName: 'ipadpro3_splash.png' },
+        { width: 102, height: 1366, pixelRatio: 2, fileName: 'ipadpro2_splash.png' },
+      ].map(({ width, height, pixelRatio, fileName }) => ({
+        rel: 'apple-touch-startup-image',
+        href: `/splash/${fileName}`,
+        media:
+          `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${pixelRatio})`,
+      })),
     ],
     script: [
       { src: '/vendor/typekit.js', type: 'text/javascript' },
@@ -35,7 +59,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#50e3c2' },
+  loading: { color: theme.colors['like-cyan'] },
 
   /*
   ** Global CSS
@@ -64,7 +88,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/google-analytics',
     '@nuxtjs/sentry',
-    '@nuxtjs/pwa',
+    ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
     'portal-vue/nuxt',
   ],
@@ -80,6 +104,38 @@ module.exports = {
     dev: false, // disable module for nuxt dev
     disabled: () => !!((window && window.doNotTrack) || (navigator && navigator.doNotTrack)), // eslint-disable-line no-undef
   },
+
+  /**
+   * Nuxt PWA modules
+   */
+  meta: {
+    name: siteName,
+    theme_color: theme.colors['like-green'],
+    nativeUI: true,
+  },
+  manifest: {
+    name: siteName,
+    short_name: siteName,
+    icons: [
+      '48x48',
+      '72x72',
+      '96x96',
+      '144x144',
+      '192x192',
+      '256x256',
+      '384x384',
+      '512x512',
+    ].map(sizes => ({
+      sizes,
+      src: `/android-chrome-${sizes}.png`,
+      type: 'image/png',
+    })),
+    theme_color: theme.colors['like-green'],
+    background_color: theme.colors['like-green'],
+    display: 'standalone',
+    orientation: 'portrait',
+  },
+
   sentry: {},
   router: {
     middleware: 'sliding-menu',
