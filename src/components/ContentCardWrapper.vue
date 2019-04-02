@@ -85,33 +85,25 @@ export default {
       this.shouldFetchArticle &&
       !this.getArticleInfoByReferrer(this.referrer)
     ) {
-      promises.push(this.fetchArticleInfo(this.referrer).catch(() => ({})));
+      promises.push(
+        this.fetchArticleInfo(this.referrer)
+          .then(() => this.updateArticleInfo())
+          .catch(() => ({}))
+      );
+    } else {
+      this.updateArticleInfo();
     }
     if (!this.author.user) await Promise.all(promises);
-    if (this.getArticleInfoByReferrer(this.referrer)) {
-      const {
-        url,
-        image,
-        title,
-        description,
-        like,
-        user,
-      } = this.getArticleInfoByReferrer(this.referrer);
-      this.internalUrl = url;
-      this.internalTitle = title;
-      this.internalDescription = description;
-      this.internalCoverSrc = image;
-      this.internalLikeCount = like;
-      // If authorId is not given, we can retrieve from article info
-      if (!this.author.user) {
-        this.author = { user };
-      }
-    }
-    if (!this.getUserInfoById(this.author.user)) {
-      promises.push(this.fetchUserInfo(this.author.user).catch(() => ({})));
+    if (this.author.user && !this.getUserInfoById(this.author.user)) {
+      promises.push(
+        this.fetchUserInfo(this.author.user)
+          .then(() => this.updateAuthorInfo())
+          .catch(() => ({}))
+      );
+    } else {
+      this.updateAuthorInfo();
     }
     await Promise.all(promises);
-    this.author = this.getUserInfoById(this.author.user) || this.author;
   },
   methods: {
     ...mapActions([
@@ -126,6 +118,30 @@ export default {
       } else {
         this.addBookmark(referrer);
       }
+    },
+    updateArticleInfo() {
+      if (this.getArticleInfoByReferrer(this.referrer)) {
+        const {
+          url,
+          image,
+          title,
+          description,
+          like,
+          user,
+        } = this.getArticleInfoByReferrer(this.referrer);
+        this.internalUrl = url;
+        this.internalTitle = title;
+        this.internalDescription = description;
+        this.internalCoverSrc = image;
+        this.internalLikeCount = like;
+        // If authorId is not given, we can retrieve from article info
+        if (!this.author.user) {
+          this.author = { user };
+        }
+      }
+    },
+    updateAuthorInfo() {
+      this.author = this.getUserInfoById(this.author.user) || this.author;
     },
   },
 };

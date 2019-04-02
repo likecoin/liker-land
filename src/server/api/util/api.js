@@ -74,11 +74,9 @@ const apiFetchLikedUser = req =>
       headers: { Authorization },
     })
   );
-const apiFetchUserArticles = (user, req) =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKECOIN_API_BASE}/like/info/user/${user}/latest`, {
-      headers: { Authorization },
-    })
+const apiFetchUserArticles = (user, limit) =>
+  axios.get(
+    `${LIKECOIN_API_BASE}/like/info/user/${user}/latest?limit=${limit}`
   );
 const apiFetchSuggestedArticles = () =>
   axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);

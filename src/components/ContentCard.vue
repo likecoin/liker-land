@@ -29,6 +29,7 @@
       class="content-card__cover-photo"
     >
       <img
+        v-lazy="coverSrc"
         :src="coverSrc"
         :alt="title"
       >

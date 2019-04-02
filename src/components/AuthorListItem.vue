@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { getUserMinAPI } from '~/util/api';
+import { mapActions, mapGetters } from 'vuex';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
@@ -42,26 +42,33 @@ export default {
       isLoading: true,
     };
   },
-  watch: {
-    likerId: 'fetchAuthorInfo',
+  computed: {
+    ...mapGetters(['getUserInfoById']),
   },
   mounted() {
     this.fetchAuthorInfo();
   },
   methods: {
+    ...mapActions(['fetchUserInfo']),
     async fetchAuthorInfo() {
       try {
         this.isLoading = true;
-        const authorData = await this.$axios.$get(getUserMinAPI(this.likerId));
-        this.displayName = authorData.displayName;
-        this.avatarSrc = authorData.avatar;
-        this.avatarHalo = getAvatarHaloTypeFromUser(authorData);
+        if (this.likerId && !this.getUserInfoById(this.likerId)) {
+          await this.fetchUserInfo(this.likerId);
+        }
+        this.updateAuthorInfo();
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
       } finally {
         this.isLoading = false;
       }
+    },
+    updateAuthorInfo() {
+      const authorData = this.getUserInfoById(this.likerId);
+      this.displayName = authorData.displayName;
+      this.avatarSrc = authorData.avatar;
+      this.avatarHalo = getAvatarHaloTypeFromUser(authorData);
     },
   },
 };

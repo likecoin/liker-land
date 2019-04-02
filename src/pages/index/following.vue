@@ -45,25 +45,28 @@ export default {
   data() {
     return {
       isLoading: true,
+      articles: [],
     };
   },
   computed: {
-    ...mapGetters(['getAllArticles', 'getFollowedAuthors']),
+    ...mapGetters(['getFollowedAuthors']),
     items() {
-      return this.getAllArticles.slice(0, 40);
+      return this.articles.slice(0, 40);
     },
   },
   mounted() {
     this.fetchContent();
   },
   methods: {
-    ...mapActions(['fetchReaderIndex', 'fetchUserArticle']),
+    ...mapActions(['fetchReaderIndex', 'fetchFollowedArticles']),
 
     async fetchContent() {
       try {
         this.isLoading = true;
         await this.fetchReaderIndex();
-        this.getFollowedAuthors.forEach(u => this.fetchUserArticle(u));
+        if (this.getFollowedAuthors.length) {
+          this.articles = await this.fetchFollowedArticles();
+        }
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
