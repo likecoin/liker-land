@@ -48,7 +48,8 @@ router.get('/reader/user/:user/works', async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const { data } = await apiFetchUserArticles(req.params.user, req);
+    const { limit = 20 } = req.query;
+    const { data } = await apiFetchUserArticles(req.params.user, limit);
     let { list } = data;
     list = list.map(i => {
       const { referrer, url, ts } = i;
