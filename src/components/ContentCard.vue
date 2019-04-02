@@ -13,6 +13,7 @@
           target="_blank"
         >
           <LcAvatar
+            v-lazy-container="{ selector: 'img' }"
             class="content-card__author-avatar"
             :src="authorAavtarSrc"
             :halo="authorAvatarHalo"
@@ -29,6 +30,7 @@
       class="content-card__cover-photo"
     >
       <img
+        v-lazy="coverSrc"
         :src="coverSrc"
         :alt="title"
       >
