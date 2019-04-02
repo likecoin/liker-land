@@ -89,11 +89,11 @@ import HomeIcon from '~/assets/icons/home.svg';
 
 export default {
   name: 'SlidingMenu',
-  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   components: {
     CogIcon,
     HomeIcon,
   },
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   computed: {
     ...mapGetters([
       'getUserId',
