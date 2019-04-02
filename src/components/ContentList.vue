@@ -7,18 +7,23 @@
       :key="transitionKey"
       class="content-list"
     >
+
       <div
         v-if="headerLabel"
         class="content-list__header"
       >
         <div class="content-list__header-label">{{ headerLabel }}</div>
       </div>
+
       <div class="content-list__body">
         <template v-if="state === 'loading'">
-          <ContentCardPlaceholder
-            v-for="key in 2"
+          <div
+            v-for="key in 5"
             :key="key"
-          />
+            class="content-card-wrapper"
+          >
+            <ContentCardPlaceholder />
+          </div>
         </template>
         <template v-else-if="state === 'content'">
           <ContentCardWrapper
@@ -130,12 +135,9 @@ export default {
   }
 
   &__body {
-    .content-card {
-      &,
-      &-placeholder {
-        &:not(:first-child) {
-          @apply mt-16;
-        }
+    .content-card-wrapper {
+      &:not(:first-child) {
+        @apply mt-16;
       }
     }
   }

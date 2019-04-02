@@ -12,6 +12,9 @@ const hasIntersectionObserverSupport =
   'intersectionRatio' in window.IntersectionObserverEntry.prototype;
 
 Vue.use(VueAwesomeSwiper);
-Vue.use(VueLazyLoad, { observer: hasIntersectionObserverSupport });
+Vue.use(VueLazyLoad, {
+  lazyComponent: true,
+  observer: hasIntersectionObserverSupport,
+});
 
 Vue.prototype.$velocity = Velocity;
