@@ -4,7 +4,7 @@
     mode="out-in"
   >
     <div
-      :key="state"
+      :key="transitionKey"
       class="content-list"
     >
       <div
@@ -80,6 +80,16 @@ export default {
         return 'content';
       }
       return 'empty';
+    },
+    transitionKey() {
+      switch (this.state) {
+        case 'loading':
+        case 'content':
+          return 'list';
+
+        default:
+          return 'empty';
+      }
     },
   },
 };
