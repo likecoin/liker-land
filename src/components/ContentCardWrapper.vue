@@ -84,6 +84,8 @@ export default {
           .then(() => this.updateArticleInfo())
           .catch(() => ({}))
       );
+    } else {
+      this.updateArticleInfo();
     }
     if (!this.author.user) await Promise.all(promises);
     if (this.author.user && !this.getUserInfoById(this.author.user)) {
@@ -92,6 +94,8 @@ export default {
           .then(() => this.updateAuthorInfo())
           .catch(() => ({}))
       );
+    } else {
+      this.updateAuthorInfo();
     }
     await Promise.all(promises);
   },
