@@ -50,7 +50,14 @@ router.get('/reader/user/:user/works', async (req, res, next) => {
     }
     const { data } = await apiFetchUserArticles(req.params.user, req);
     let { list } = data;
-    list = list.map(i => ({ referrer: i.referrer, url: i.url }));
+    list = list.map(i => {
+      const { referrer, url, ts } = i;
+      return {
+        referrer,
+        url,
+        ts,
+      };
+    });
     res.json({ list });
   } catch (err) {
     next(err);
