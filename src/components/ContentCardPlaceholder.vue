@@ -10,11 +10,6 @@
       />
     </div>
 
-    <div
-      class="content-card-placeholder__cover-photo"
-      :style="coverPhotoStyle"
-    />
-
     <div class="content-card-placeholder__info content-card-placeholder__inset">
       <div
         class="content-card-placeholder__domain"
@@ -130,14 +125,6 @@ export default {
     @extend %placeholder;
 
     @apply h-20;
-  }
-
-  &__cover-photo {
-    @extend %placeholder;
-
-    height: 200px;
-
-    @apply relative;
   }
 
   &__domain {
