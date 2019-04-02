@@ -105,7 +105,9 @@ export default {
       promises.push(this.fetchUserInfo(this.author.user).catch(() => ({})));
     }
     await Promise.all(promises);
-    this.author = this.getUserInfoById(this.author.user) || this.author;
+    if (this.author.user) {
+      this.author = this.getUserInfoById(this.author.user) || this.author;
+    }
   },
   methods: {
     ...mapActions(['fetchUserInfo', 'fetchArticleInfo']),
