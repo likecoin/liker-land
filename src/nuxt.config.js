@@ -33,6 +33,24 @@ module.exports = {
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
       { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
       { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: theme.colors['like-green'] },
+
+      ...[
+        { width: 320, height: 568, pixelRatio: 2, fileName: 'iphone5_splash.png' },
+        { width: 375, height: 667, pixelRatio: 2, fileName: 'iphone6_splash.png' },
+        { width: 621, height: 1104, pixelRatio: 3, fileName: 'iphoneplus_splash.png' },
+        { width: 375, height: 812, pixelRatio: 3, fileName: 'iphonex_splash.png' },
+        { width: 414, height: 896, pixelRatio: 2, fileName: 'iphonexr_splash.png' },
+        { width: 414, height: 896, pixelRatio: 3, fileName: 'iphonexsmax_splash.png' },
+        { width: 768, height: 1024, pixelRatio: 2, fileName: 'ipad_splash.png' },
+        { width: 834, height: 1112, pixelRatio: 2, fileName: 'ipadpro1_splash.png' },
+        { width: 834, height: 1194, pixelRatio: 2, fileName: 'ipadpro3_splash.png' },
+        { width: 102, height: 1366, pixelRatio: 2, fileName: 'ipadpro2_splash.png' },
+      ].map(({ width, height, pixelRatio, fileName }) => ({
+        rel: 'apple-touch-startup-image',
+        href: `/splash/${fileName}`,
+        media:
+          `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${pixelRatio})`,
+      })),
     ],
     script: [
       { src: '/vendor/typekit.js', type: 'text/javascript' },
