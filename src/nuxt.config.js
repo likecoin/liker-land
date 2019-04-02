@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
-
-const theme = require('./tailwind.config');
+const theme = require('../src/tailwind.config');
 
 const siteName = 'Liker.Land';
 
