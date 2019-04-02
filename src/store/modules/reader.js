@@ -29,7 +29,7 @@ const mutations = {
     state.followedUsers = users;
   },
   [READER_REMOVE_FOLLOW_USER](state, user) {
-    state.followedUsers = state.followedUsers.users.filter(u => u !== user);
+    state.followedUsers = state.followedUsers.filter(u => u !== user);
   },
   [READER_ADD_UNFOLLOW_USER](state, user) {
     state.unfollowedUsers.push(user);
