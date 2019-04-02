@@ -32,3 +32,10 @@ export async function fetchSuggestedArticles({ commit }) {
   const { list } = await this.$axios.$get(api.getFetchSuggestArticlesApi());
   return list;
 }
+
+export async function fetchFollowedArticles({ commit, state }) {
+  const { list } = await this.$axios.$get(
+    api.getFetchArticlesByUsersApi(state.followedUsers)
+  );
+  return list;
+}
