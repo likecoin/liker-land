@@ -6,7 +6,6 @@
 
     <LcAvatar
       v-if="!isLoading"
-      v-lazy-container="{ selector: 'img' }"
       class="author-list-item__avatar"
       :src="avatarSrc"
       :halo="avatarHalo"
