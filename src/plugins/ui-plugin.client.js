@@ -3,6 +3,8 @@ import VueLazyLoad from 'vue-lazyload';
 
 import VueAwesomeSwiper from 'vue-awesome-swiper/dist/ssr';
 
+import Velocity from 'velocity-animate';
+
 const hasIntersectionObserverSupport =
   window &&
   'IntersectionObserver' in window &&
@@ -11,3 +13,5 @@ const hasIntersectionObserverSupport =
 
 Vue.use(VueAwesomeSwiper);
 Vue.use(VueLazyLoad, { observer: hasIntersectionObserverSupport });
+
+Vue.prototype.$velocity = Velocity;
