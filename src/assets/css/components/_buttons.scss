@@ -38,6 +38,10 @@
     &:active {
       @apply opacity-50;
     }
+
+    &.btn--dark {
+      @apply text-white;
+    }
   }
 
 

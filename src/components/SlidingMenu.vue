@@ -28,8 +28,8 @@
       >{{ $t('signInOrSignUp') }}</a>
     </header>
 
-    <div class="flex-grow">
-      <div class="pt-16 px-32">
+    <div class="main-menu">
+      <div class="main-menu__primary-menu">
         <NuxtLink
           class="btn btn--outlined btn--dark btn--block btn--icon-only"
           :to="{ name: `index${getUserId ? '-following' : ''}` }"
@@ -56,12 +56,17 @@
           }}</NuxtLink>
       </div>
 
-      <div class="flex flex-col mt-24 px-48">
+      <div class="main-menu__secondary-menu">
         <a
-          class="text-white text-14"
+          class="btn btn--plain btn--dark btn--auto-size"
           href="https://help.like.co"
           @click="onClickSupport"
         >{{ $t('SlidingMenu.support') }}</a>
+        <NuxtLink
+          v-if="getUserId"
+          class="btn btn--plain btn--dark btn--auto-size"
+          :to="{ name: 'logout' }"
+        >{{ $t('SlidingMenu.logout') }}</NuxtLink>
       </div>
     </div>
 
@@ -178,6 +183,38 @@ $sliding-menu-width: 256px;
   }
   &-pushee {
     transition-property: transform;
+  }
+}
+
+.main-menu {
+  @apply flex-grow;
+
+  &__primary-menu {
+    @apply pt-16;
+    @apply px-32;
+
+    > * {
+      &:not(:first-child) {
+        @apply mt-12;
+      }
+    }
+  }
+
+  &__secondary-menu {
+    @apply flex;
+    @apply flex-col;
+    @apply items-start;
+
+    @apply mt-20;
+    @apply px-48;
+
+    > * {
+      @apply text-14;
+      @apply no-underline;
+      @apply font-400;
+
+      @apply p-0;
+    }
   }
 }
 
