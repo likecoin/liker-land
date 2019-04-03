@@ -175,8 +175,9 @@ export default {
       // Set the wrapper's height to the leaving element's height
       this.$el.style.height = `${el.offsetHeight}px`;
       el.style.position = 'absolute';
-      // Set width & height to prevent collapse if position of the element is absolute
-      el.style.width = `${el.offsetWidth}px`;
+      // Set left, right & height to prevent collapse if position of the element is absolute
+      el.style.left = 0;
+      el.style.right = 0;
       el.style.height = 'inherit';
     },
     onEnter(el, done) {
