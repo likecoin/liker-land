@@ -31,6 +31,7 @@ export async function getOAuthToken({ commit }, { authCode, state }) {
   commit(types.USER_SET_USER_INFO, user);
   // if (this.$sentry) updateSentryUser(user);
   // if (this.$intercom) updateIntercomUser(user);
+  return user;
 }
 
 export async function fetchLoginStatus({ commit }) {
@@ -39,7 +40,7 @@ export async function fetchLoginStatus({ commit }) {
     commit(types.USER_SET_USER_INFO, user);
     // if (this.$sentry) updateSentryUser(user);
     // if (this.$intercom) updateIntercomUser(user);
-    return true;
+    return user;
   } catch (err) {
     return false;
   }

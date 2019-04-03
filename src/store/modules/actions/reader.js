@@ -7,6 +7,7 @@ export async function fetchReaderIndex({ commit }) {
   );
   commit(types.READER_SET_FOLLOW_USER_LIST, list);
   commit(types.READER_SET_UNFOLLOW_USER_LIST, unfollowedUsers);
+  return { list, unfollowedUsers };
 }
 
 export async function followAuthor({ commit, state, dispatch }, user) {
@@ -26,6 +27,7 @@ export async function unfollowAuthor({ commit, state }, user) {
 export async function refreshBookmarkList({ commit }) {
   const { bookmarks } = await this.$axios.$get(api.getFetchReaderBookmarkAPI());
   commit(types.READER_SET_BOOKMARK, bookmarks);
+  return bookmarks;
 }
 
 export async function addBookmark({ commit }, url) {
@@ -41,10 +43,12 @@ export async function removeBookmark({ commit }, url) {
 export async function fetchUserArticle({ commit }, user) {
   const { list } = await this.$axios.$get(api.getFetchUserArticlesAPI(user));
   commit(types.READER_UPDATE_USER_ARTICLES, { user, list });
+  return list;
 }
 
 export async function fetchSuggestedArticles({ commit }) {
   const { list } = await this.$axios.$get(api.getFetchSuggestArticlesApi());
+  commit(types.READER_SET_SUGGEST_ARTICLES, list);
   return list;
 }
 
@@ -52,5 +56,6 @@ export async function fetchFollowedArticles({ commit, state }) {
   const { list } = await this.$axios.$get(
     api.getFetchArticlesByUsersApi(state.followedUsers)
   );
+  commit(types.READER_SET_FOLLOWED_ARTICLES, list);
   return list;
 }

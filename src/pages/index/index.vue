@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import ContentList from '~/components/ContentList';
 
@@ -22,8 +22,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getSuggestedArticles']),
     items() {
-      return this.articles.slice(0, 40);
+      return this.getSuggestedArticles.slice(0, 40);
     },
   },
   fetch({ from, query, redirect, store }) {
@@ -39,8 +40,9 @@ export default {
 
     async fetchContent() {
       try {
-        this.isLoading = true;
-        this.articles = await this.fetchSuggestedArticles();
+        this.isLoading = !this.items.length;
+        const fetchArticles = this.fetchSuggestedArticles();
+        if (!this.items.length) await fetchArticles;
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
