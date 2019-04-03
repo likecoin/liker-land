@@ -62,7 +62,9 @@
       </template>
     </PageHeader>
 
-    <nuxt-child />
+    <main class="page-content">
+      <nuxt-child />
+    </main>
 
     <!-- Sign in/sign up banner -->
     <div
@@ -116,18 +118,16 @@ export default {
 
 <style lang="scss">
 .home-page {
-  &::before {
-    z-index: -1;
-
-    content: '';
-
-    @apply fixed;
-    @apply pin;
+  .page-content {
+    @apply relative;
 
     @apply bg-gray-f7;
 
-    @apply max-w-phone;
+    @apply flex-grow;
+
     @apply w-full;
+    @apply max-w-phone;
+
     @apply mx-auto;
   }
 }

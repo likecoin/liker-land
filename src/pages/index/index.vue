@@ -1,10 +1,8 @@
 <template>
-  <main class="page-content">
-    <ContentList
-      :is-loading="isLoading"
-      :items="items"
-    />
-  </main>
+  <ContentList
+    :is-loading="isLoading"
+    :items="items"
+  />
 </template>
 
 <script>
