@@ -47,9 +47,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getFollowedAuthors']),
+    ...mapGetters(['getFollowedAuthors', 'getFollowedArticles']),
     items() {
-      return this.articles.slice(0, 40);
+      return this.getFollowedArticles.slice(0, 40);
     },
   },
   mounted() {
@@ -60,11 +60,11 @@ export default {
 
     async fetchContent() {
       try {
-        this.isLoading = true;
-        await this.fetchReaderIndex();
-        if (this.getFollowedAuthors.length) {
-          this.articles = await this.fetchFollowedArticles();
-        }
+        this.isLoading = !this.getFollowedAuthors.length || !this.items.length;
+        const fetchReader = this.fetchReaderIndex();
+        if (!this.getFollowedAuthors.length) await fetchReader;
+        const fetchArticles = this.fetchFollowedArticles();
+        if (!this.articles.length) await fetchArticles;
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       } finally {
