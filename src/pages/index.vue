@@ -148,12 +148,17 @@ export default {
 
 .page-header--floating {
   .site-nav-bar {
-    @apply absolute;
     @apply pin;
 
     @apply bg-transparent;
 
-    @apply py-0;
+    @apply pt-12;
+
+    @media screen and (min-width: config('screens.desktop.min')) {
+      @apply absolute;
+
+      @apply py-0;
+    }
   }
 }
 </style>

@@ -103,7 +103,11 @@ export default {
       const headerHeight = getElementHeight(PAGE_HEADER_CLASS);
       const floatingHeaderHeight = getElementHeight(FLOATING_PAGE_HEADER_CLASS);
 
-      const { innerHeight: windowHeight, pageYOffset: scrollY } = window;
+      const {
+        innerWidth: windowWidth,
+        innerHeight: windowHeight,
+        pageYOffset: scrollY,
+      } = window;
       const { scrollHeight } = document.documentElement;
       const diff = scrollY - this.scrollY;
       const isScrollingUp = diff < 0;
@@ -153,7 +157,7 @@ export default {
         // Moving up the floating header until its visible height is minimum
         this.y = clamp(
           this.y - (diff * (isScrollingUp ? 1 : 0.2)),
-          FLOATING_PAGE_HEADER_MIN_HEIGHT - floatingHeaderHeight,
+          windowWidth > 528 ? 0 : FLOATING_PAGE_HEADER_MIN_HEIGHT - floatingHeaderHeight,
           0
         );
       }
