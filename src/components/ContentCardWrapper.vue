@@ -110,13 +110,7 @@ export default {
       'addBookmark',
       'removeBookmark',
     ]),
-    onClickBookmark(referrer) {
-      if (this.getIsInBookmark(referrer)) {
-        this.removeBookmark(referrer);
-      } else {
-        this.addBookmark(referrer);
-      }
-    },
+
     async fetchContent() {
       try {
         this.isLoading = true;
@@ -220,6 +214,14 @@ export default {
       this.isAnimating = false;
     },
     /* eslint-enable no-param-reassign */
+
+    onClickBookmark(referrer) {
+      if (this.getIsInBookmark(referrer)) {
+        this.removeBookmark(referrer);
+      } else {
+        this.addBookmark(referrer);
+      }
+    },
   },
 };
 </script>
