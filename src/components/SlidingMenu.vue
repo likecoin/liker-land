@@ -60,6 +60,7 @@
         <a
           class="btn btn--plain btn--dark btn--auto-size"
           href="https://help.like.co"
+          rel="noopener"
           @click="onClickSupport"
         >{{ $t('SlidingMenu.support') }}</a>
         <NuxtLink
