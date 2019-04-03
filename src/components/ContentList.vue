@@ -25,7 +25,7 @@
             v-for="item in items"
             :key="item.referrer"
             :referrer="item.referrer"
-            :src="item.url"
+            :src="item.url || item.referrer"
             :author-id="item.user"
             :cover-src="item.image"
             :title="item.title"
