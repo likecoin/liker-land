@@ -28,11 +28,15 @@
             ]"
             :to="{ name: 'civic' }"
           >{{ $t('CivicLikerCTA.button') }}</NuxtLink>
-          <a
-            v-else
-            :href="getOAuthLoginAPI()"
-            class="btn btn--outlined btn--dark"
-          >{{ $t('SignUpSignInCTA.button') }}</a>
+          <template v-else>
+            <a
+              :href="getOAuthLoginAPI()"
+              class="btn btn--outlined btn--dark"
+            >{{ $t('signUp') }}</a><br><a
+              :href="getOAuthLoginAPI()"
+              class="btn btn--plain btn--dark text-12 m-0 p-0"
+            >{{ $t('signIn') }}</a>
+          </template>
 
         </div>
 
@@ -77,7 +81,10 @@
       <a
         :href="getOAuthLoginAPI()"
         class="btn btn--outlined btn--dark"
-      >{{ $t('SignUpSignInCTA.button') }}</a>
+      >{{ $t('signUp') }}</a><br><a
+        :href="getOAuthLoginAPI()"
+        class="btn btn--plain btn--dark text-12 m-0 p-0"
+      >{{ $t('signIn') }}</a>
     </div>
   </div>
 </template>
