@@ -91,7 +91,7 @@ import SiteNavBar from '~/components/SiteNavBar';
 import TabBar from '~/components/TabBar';
 import TabBarItem from '~/components/TabBarItem';
 
-import BookmarkIcon from '~/assets/icons/bookmark.svg';
+import BookmarkIcon from '~/assets/icons/bookmark-outlined.svg';
 import FeaturedIcon from '~/assets/icons/featured.svg';
 import WatchingIcon from '~/assets/icons/watching.svg';
 
