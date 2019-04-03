@@ -59,7 +59,7 @@
     </div>
     <div>
       <a
-        @click.prevent="$emit('bookmarkClick')"
+        @click.prevent="$emit('bookmark-click')"
       >
         <span v-if="isBookmarked">
           Remove BookMark
