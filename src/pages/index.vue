@@ -119,7 +119,7 @@ export default {
     async fetchSharedContent() {
       try {
         const promises = [];
-        if (!this.getUserBookmarks.length)
+        if (this.getUsreId && !this.getUserBookmarks.length)
           promises.push(this.refreshBookmarkList());
         await Promise.all(promises);
       } catch (err) {
