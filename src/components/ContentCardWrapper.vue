@@ -1,7 +1,7 @@
 <template>
-  <ContentCardPlaceholder v-if="!isLoaded" />
+  <ContentCardPlaceholder v-if="isLoading" />
   <ContentCard
-    v-else
+    v-else-if="hasContent"
     :src="internalUrl"
     :author="author"
     :title="internalTitle"
@@ -55,6 +55,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       author: { user: this.authorId },
       internalUrl: this.src,
       internalTitle: this.title,
@@ -66,41 +67,49 @@ export default {
   computed: {
     ...mapGetters(['getUserInfoById', 'getArticleInfoByReferrer']),
 
-    isLoaded() {
-      return !!this.internalTitle;
+    hasContent() {
+      return this.internalTitle || this.internalCoverSrc;
     },
     shouldFetchArticle() {
       return !this.internalTitle || !this.internalLikeCount;
     },
   },
-  async mounted() {
-    const promises = [];
-    if (
-      this.shouldFetchArticle &&
-      !this.getArticleInfoByReferrer(this.referrer)
-    ) {
-      promises.push(
-        this.fetchArticleInfo(this.referrer)
-          .then(() => this.updateArticleInfo())
-          .catch(() => ({}))
-      );
-    } else {
-      this.updateArticleInfo();
-    }
-    if (!this.author.user) await Promise.all(promises);
-    if (this.author.user && !this.getUserInfoById(this.author.user)) {
-      promises.push(
-        this.fetchUserInfo(this.author.user)
-          .then(() => this.updateAuthorInfo())
-          .catch(() => ({}))
-      );
-    } else {
-      this.updateAuthorInfo();
-    }
-    await Promise.all(promises);
+  mounted() {
+    this.fetchContent();
   },
   methods: {
     ...mapActions(['fetchUserInfo', 'fetchArticleInfo']),
+    async fetchContent() {
+      try {
+        this.isLoading = true;
+        const promises = [];
+        if (
+          this.shouldFetchArticle &&
+          !this.getArticleInfoByReferrer(this.referrer)
+        ) {
+          promises.push(
+            this.fetchArticleInfo(this.referrer)
+              .then(() => this.updateArticleInfo())
+              .catch(() => ({}))
+          );
+        } else {
+          this.updateArticleInfo();
+        }
+        if (!this.author.user) await Promise.all(promises);
+        if (this.author.user && !this.getUserInfoById(this.author.user)) {
+          promises.push(
+            this.fetchUserInfo(this.author.user)
+              .then(() => this.updateAuthorInfo())
+              .catch(() => ({}))
+          );
+        } else {
+          this.updateAuthorInfo();
+        }
+        await Promise.all(promises);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     updateArticleInfo() {
       if (this.getArticleInfoByReferrer(this.referrer)) {
         const {

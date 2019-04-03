@@ -16,7 +16,7 @@
             class="content-card__author-avatar"
             :src="authorAavtarSrc"
             :halo="authorAvatarHalo"
-          />{{ authorId }}</a>
+          />{{ author.displayName || authorId }}</a>
       </span>
 
       <span
