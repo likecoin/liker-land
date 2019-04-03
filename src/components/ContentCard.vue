@@ -354,6 +354,7 @@ export default {
     @apply text-20;
     @apply text-black;
     @apply font-600;
+    @apply leading-1_25;
     @apply whitespace-normal;
     @apply break-words;
 
@@ -363,6 +364,7 @@ export default {
   &__description {
     @apply text-14;
     @apply text-gray-4a;
+    @apply leading-1_5;
     @apply whitespace-normal;
     @apply break-words;
 
