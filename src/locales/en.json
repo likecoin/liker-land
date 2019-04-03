@@ -66,6 +66,9 @@
     "en": "English",
     "zh-Hant": "繁體中文"
   },
+  "LogoutPage": {
+    "loggingOut": "Logging out"
+  },
   "PaymentFailurePage": {
     "title": "Payment Unsuccessful"
   },
@@ -109,7 +112,8 @@
     "home": "Home",
     "civic": "@:CivicPage.title",
     "settings": "@:SettingsPage.title",
-    "support": "Support"
+    "support": "Support",
+    "logout": "Logout"
   },
   "backToHome": "Back to home",
   "civicLiker": "Civic Liker",

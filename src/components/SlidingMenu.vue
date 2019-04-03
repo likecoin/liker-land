@@ -62,6 +62,11 @@
           href="https://help.like.co"
           @click="onClickSupport"
         >{{ $t('SlidingMenu.support') }}</a>
+        <NuxtLink
+          v-if="getUserId"
+          class="btn btn--plain btn--dark btn--auto-size"
+          :to="{ name: 'logout' }"
+        >{{ $t('SlidingMenu.logout') }}</NuxtLink>
       </div>
     </div>
 
