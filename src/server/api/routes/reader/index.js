@@ -50,6 +50,7 @@ router.get('/reader/works/suggest', async (req, res, next) => {
     const { data } = await apiFetchSuggestedArticles();
     let list = data.editorial.concat(data.pick); // only get editorial and pick list, ignore mostLike
     list = list.map(url => ({ referrer: url }));
+    res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
     next(err);
