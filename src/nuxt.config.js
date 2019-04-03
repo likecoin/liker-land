@@ -61,6 +61,44 @@ module.exports = {
   */
   loading: { color: theme.colors['like-cyan'] },
 
+  render: {
+    csp: {
+      enabled: true,
+      hashAlgorithm: 'sha256',
+      policies: {
+        'default-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          '*',
+        ],
+        'script-src': [
+          "'self'",
+          "'unsafe-inline'", // ignored by browser with sha support
+          'www.google-analytics.com',
+          'js.intercomcdn.com',
+          '*.intercom.io',
+          'use.typekit.net',
+        ],
+        'frame-src': [
+          'www.google.com',
+        ],
+        'connect-src': [
+          "'self'",
+          'data:',
+          '*',
+          'wss://*.intercom.io',
+        ],
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+        ],
+        'report-uri': [
+          process.env.SENTRY_REPORT_URI,
+        ],
+      },
+    },
+  },
   /*
   ** Global CSS
   */
@@ -155,6 +193,19 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    extractCSS: true,
+    babel: {
+      presets: ({ isServer }) => [
+        [
+          '@nuxt/babel-preset-app',
+          {
+            targets: isServer
+              ? { node: '8.11.1' }
+              : 'ie 11, > 0.5%, Firefox ESR',
+          },
+        ],
+      ],
+    },
     postcss: {
       plugins: {
         tailwindcss: './tailwind.config.js',
