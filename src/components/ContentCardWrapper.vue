@@ -1,14 +1,34 @@
 <template>
-  <ContentCardPlaceholder v-if="isLoading" />
-  <ContentCard
-    v-else-if="hasContent"
-    :src="internalUrl"
-    :author="author"
-    :title="internalTitle"
-    :description="internalDescription"
-    :cover-src="internalCoverSrc"
-    :like-count="internalLikeCount"
-  />
+  <div class="content-card-wrapper">
+    <lazy-component
+      class="content-card-wrapper__lazy-load-detector"
+      @show="fetchContent"
+    />
+    <transition
+      :css="false"
+      @before-enter="onBeforeEnter"
+      @before-leave="onBeforeLeave"
+      @enter="onEnter"
+      @leave="onLeave"
+      @after-enter="onAfterEnter"
+    >
+      <ContentCardPlaceholder
+        v-if="isLoading"
+        key="placeholder"
+      />
+      <ContentCard
+        v-else-if="hasContent"
+        key="card"
+        :src="internalUrl"
+        :author="author"
+        :title="internalTitle"
+        :description="internalDescription"
+        :cover-src="internalCoverSrc"
+        :should-fetch-cover="!isAnimating"
+        :like-count="internalLikeCount"
+      />
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -56,6 +76,8 @@ export default {
   data() {
     return {
       isLoading: true,
+      isAnimating: true,
+
       author: { user: this.authorId },
       internalUrl: this.src,
       internalTitle: this.title,
@@ -74,9 +96,7 @@ export default {
       return !this.internalTitle || !this.internalLikeCount;
     },
   },
-  mounted() {
-    this.fetchContent();
-  },
+
   methods: {
     ...mapActions(['fetchUserInfo', 'fetchArticleInfo']),
     async fetchContent() {
@@ -134,6 +154,67 @@ export default {
     updateAuthorInfo() {
       this.author = this.getUserInfoById(this.author.user) || this.author;
     },
+
+    /* eslint-disable no-param-reassign */
+    onBeforeEnter(el) {
+      el.style.opacity = 0;
+    },
+    onBeforeLeave(el) {
+      // Set the wrapper's height to the leaving element's height
+      this.$el.style.height = `${el.offsetHeight}px`;
+      el.style.position = 'absolute';
+      // Set width & height to prevent collapse if position of the element is absolute
+      el.style.width = `${el.offsetWidth}px`;
+      el.style.height = 'inherit';
+    },
+    onEnter(el, done) {
+      if (!this.$velocity) {
+        done();
+        return;
+      }
+
+      // Fade in the entering element
+      this.$velocity(el, { opacity: [1, 'easeOutCubic'] }, { duration: 1000 });
+
+      // Set the wrapper's height to the entering element's height
+      this.$velocity(
+        this.$el,
+        { height: el.offsetHeight },
+        { duration: 1000, easing: 'easeOutCubic', complete: done }
+      );
+    },
+    onLeave(el, done) {
+      if (!this.$velocity) {
+        done();
+        return;
+      }
+      // Fade out the leaving element
+      this.$velocity(
+        el,
+        { opacity: 1 },
+        { duration: 500, easing: 'easeOutCubic', complete: done }
+      );
+    },
+    onAfterEnter(el) {
+      // Remove the wrapper's fixed height
+      el.removeAttribute('style');
+      this.$el.removeAttribute('style');
+      this.isAnimating = false;
+    },
+    /* eslint-enable no-param-reassign */
   },
 };
 </script>
+
+<style lang="scss">
+.content-card-wrapper {
+  @apply relative;
+
+  &__lazy-load-detector {
+    @apply absolute;
+    @apply pin;
+
+    @apply pointer-events-none;
+  }
+}
+</style>

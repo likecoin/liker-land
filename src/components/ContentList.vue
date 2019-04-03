@@ -1,50 +1,58 @@
 <template>
-  <transition
-    name="content-list-"
-    mode="out-in"
-  >
-    <div
-      :key="state"
-      class="content-list"
+  <div class="content-list">
+    <transition
+      name="content-list-layout-"
+      mode="in-out"
     >
       <div
-        v-if="headerLabel"
-        class="content-list__header"
+        :key="state"
+        class="content-list-layout"
       >
-        <div class="content-list__header-label">{{ headerLabel }}</div>
+
+        <div
+          v-if="headerLabel"
+          class="content-list__header"
+        >
+          <div class="content-list__header-label">{{ headerLabel }}</div>
+        </div>
+
+        <div class="content-list__body">
+          <template v-if="state === 'loading'">
+            <div
+              v-for="key in 5"
+              :key="key"
+              class="content-card-wrapper"
+            >
+              <ContentCardPlaceholder />
+            </div>
+          </template>
+          <template v-else-if="state === 'content'">
+            <ContentCardWrapper
+              v-for="item in items"
+              :key="item.referrer"
+              :referrer="item.referrer"
+              :src="item.url || item.referrer"
+              :author-id="item.user"
+              :cover-src="item.image"
+              :title="item.title"
+              :description="item.description"
+              :like-count="item.like"
+            />
+          </template>
+          <template v-else>
+            <div class="content-list__empty">
+              <slot name="empty">
+                <div class="p-40">
+                  <h1>{{ $t('ContentList.empty') }}</h1>
+                </div>
+              </slot>
+            </div>
+          </template>
+        </div>
+
       </div>
-      <div class="content-list__body">
-        <template v-if="state === 'loading'">
-          <ContentCardPlaceholder
-            v-for="key in 2"
-            :key="key"
-          />
-        </template>
-        <template v-else-if="state === 'content'">
-          <ContentCardWrapper
-            v-for="item in items"
-            :key="item.referrer"
-            :referrer="item.referrer"
-            :src="item.url || item.referrer"
-            :author-id="item.user"
-            :cover-src="item.image"
-            :title="item.title"
-            :description="item.description"
-            :like-count="item.like"
-          />
-        </template>
-        <template v-else>
-          <div class="content-list__empty">
-            <slot name="empty">
-              <div class="p-40">
-                <h1>{{ $t('ContentList.empty') }}</h1>
-              </div>
-            </slot>
-          </div>
-        </template>
-      </div>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -87,45 +95,46 @@ export default {
 
 <style lang="scss">
 .content-list {
-  @apply flex-grow;
+  @apply relative;
 
-  @apply w-full;
-  @apply max-w-phone;
+  &-layout {
+    @apply px-16;
+    @apply py-24;
 
-  @apply mx-auto;
-  @apply px-16;
-  @apply py-24;
+    @apply w-full;
 
-  @media screen and (min-width: config('screens.tablet.min')) {
-    @apply px-24;
-  }
-
-  &-- {
-    &enter,
-    &leave-to {
-      opacity: 0;
+    @media screen and (min-width: config('screens.tablet.min')) {
+      @apply px-24;
     }
 
-    &enter-active,
-    &leave-active {
-      transition-property: opacity;
-      transition-duration: 0.5s;
-    }
-    &enter-active {
-      transition-timing-function: ease-out;
-    }
-    &leave-active {
-      transition-timing-function: ease-in;
+    &-- {
+      &enter,
+      &leave-to {
+        opacity: 0;
+      }
+
+      &enter-active,
+      &leave-active {
+        transition-property: opacity;
+        transition-duration: 0.5s;
+      }
+      &enter-active {
+        @apply relative;
+
+        transition-timing-function: ease;
+      }
+      &leave-active {
+        @apply absolute;
+
+        transition-timing-function: ease;
+      }
     }
   }
 
   &__body {
-    .content-card {
-      &,
-      &-placeholder {
-        &:not(:first-child) {
-          @apply mt-16;
-        }
+    .content-card-wrapper {
+      &:not(:first-child) {
+        @apply mt-16;
       }
     }
   }
