@@ -57,16 +57,14 @@
         class="content-card__description"
       >{{ description }}</div>
     </div>
-    <div>
+
+    <div class="content-card__footer content-card__inset">
       <a
-        @click.prevent="$emit('bookmarkClick')"
+        class="content-card__bookmark-button"
+        @click.prevent="$emit('bookmark-click')"
       >
-        <span v-if="isBookmarked">
-          Remove BookMark
-        </span>
-        <span v-else>
-          Add Bookmark
-        </span>
+        <BookmarkIcon v-if="isBookmarked" />
+        <BookmarkOutlinedIcon v-else />
       </a>
     </div>
   </a>
@@ -77,6 +75,9 @@ import { LIKE_CO_URL_BASE } from '~/constant';
 import { mapGetters } from 'vuex';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
+import BookmarkIcon from '~/assets/icons/bookmark.svg';
+import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg';
+
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 function getImageSize(src) {
@@ -96,6 +97,8 @@ function getImageSize(src) {
 export default {
   components: {
     LikeUnit,
+    BookmarkIcon,
+    BookmarkOutlinedIcon,
   },
   props: {
     /* The URL of the content */
@@ -364,6 +367,41 @@ export default {
     @apply break-words;
 
     @apply mt-8;
+  }
+
+  &__footer {
+    @apply flex;
+    @apply justify-end;
+  }
+
+  &__bookmark-button {
+    transition-property: color, opacity, transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+
+    @apply relative;
+
+    @apply text-gray-4a;
+
+    @apply w-24;
+    @apply h-24;
+
+    &:hover {
+      @apply text-like-green;
+    }
+
+    &:active {
+      transform: translateY(1px);
+
+      @apply text-like-green-dark;
+    }
+
+    svg {
+      @apply absolute;
+      @apply pin;
+
+      @apply fill-current;
+    }
   }
 }
 </style>
