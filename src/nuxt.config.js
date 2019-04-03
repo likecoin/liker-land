@@ -23,6 +23,8 @@ module.exports = {
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
+
+      { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.png' },
     ],
     link: [
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
