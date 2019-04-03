@@ -117,8 +117,8 @@ export default {
 
     @apply mr-8;
 
-    @apply w-32;
-    @apply h-32;
+    @apply w-36;
+    @apply h-36;
   }
 
   &__author-name {
@@ -150,10 +150,10 @@ export default {
 
     @apply mt-8;
 
-    @apply h-16;
+    @apply h-14;
 
     & + & {
-      @apply mt-2;
+      @apply mt-4;
     }
   }
 }
