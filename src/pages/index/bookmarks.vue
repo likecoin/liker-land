@@ -1,36 +1,34 @@
 <template>
-  <main class="page-content">
-    <ContentList
-      :is-loading="isLoading"
-      :items="items"
-      :header-label="$t('BookmarksPage.headerLabel')"
-    >
-      <template #empty>
-        <div class="pt-24 px-40">
-          <EmptyIcon class="block mx-auto" style="width:5.5rem" />
-          <h1>{{ $t('BookmarksPage.empty.title') }}</h1>
-          <p>{{ $t('BookmarksPage.empty.content') }}</p>
-        </div>
+  <ContentList
+    :is-loading="isLoading"
+    :items="items"
+    :header-label="$t('BookmarksPage.headerLabel')"
+  >
+    <template #empty>
+      <div class="pt-24 px-40">
+        <EmptyIcon class="block mx-auto" style="width:5.5rem" />
+        <h1>{{ $t('BookmarksPage.empty.title') }}</h1>
+        <p>{{ $t('BookmarksPage.empty.content') }}</p>
+      </div>
 
-        <div class="flex justify-center py-24">
-          <NuxtLink
-            class="btn btn--plain btn--auto-size btn--with-icon btn--icon-top flex-1 m-0 pt-32"
-            :to="{ name: 'index-following' }"
-          >
-            <FollowingIcon class="btn__icon w-24 h-24" />
-            {{ $t('BookmarksPage.empty.goToFollowing') }}
-          </NuxtLink>
-          <NuxtLink
-            class="btn btn--plain btn--auto-size btn--with-icon btn--icon-top flex-1 m-0 pt-32"
-            :to="{ name: 'index' }"
-          >
-            <FeaturedIcon class="btn__icon w-24 h-24" />
-            {{ $t('BookmarksPage.empty.goToFeaturing') }}
-          </NuxtLink>
-        </div>
-      </template>
-    </ContentList>
-  </main>
+      <div class="flex justify-center py-24">
+        <NuxtLink
+          class="btn btn--plain btn--auto-size btn--with-icon btn--icon-top flex-1 m-0 pt-32"
+          :to="{ name: 'index-following' }"
+        >
+          <FollowingIcon class="btn__icon w-24 h-24" />
+          {{ $t('BookmarksPage.empty.goToFollowing') }}
+        </NuxtLink>
+        <NuxtLink
+          class="btn btn--plain btn--auto-size btn--with-icon btn--icon-top flex-1 m-0 pt-32"
+          :to="{ name: 'index' }"
+        >
+          <FeaturedIcon class="btn__icon w-24 h-24" />
+          {{ $t('BookmarksPage.empty.goToFeaturing') }}
+        </NuxtLink>
+      </div>
+    </template>
+  </ContentList>
 </template>
 
 <script>

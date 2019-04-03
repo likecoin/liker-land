@@ -18,7 +18,7 @@ function filterArticleList(list) {
     const { referrer, url, user, ts } = i;
     return {
       referrer,
-      url,
+      url: referrer.toLowerCase() === url.toLowerCase() ? undefined : url,
       user,
       ts,
     };
@@ -49,7 +49,7 @@ router.get('/reader/works/suggest', async (req, res, next) => {
   try {
     const { data } = await apiFetchSuggestedArticles();
     let list = data.editorial.concat(data.pick); // only get editorial and pick list, ignore mostLike
-    list = list.map(url => ({ referrer: url, url }));
+    list = list.map(url => ({ referrer: url }));
     res.json({ list });
   } catch (err) {
     next(err);

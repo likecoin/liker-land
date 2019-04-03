@@ -16,7 +16,7 @@
             class="content-card__author-avatar"
             :src="authorAavtarSrc"
             :halo="authorAvatarHalo"
-          />{{ authorId }}</a>
+          />{{ author.displayName || authorId }}</a>
       </span>
 
       <span
@@ -26,13 +26,20 @@
 
     <div
       v-if="coverSrc"
+      ref="coverPhoto"
       class="content-card__cover-photo"
     >
-      <img
-        v-lazy="coverSrc"
-        :src="coverSrc"
-        :alt="title"
+      <Transition
+        :css="false"
+        @before-enter="onCoverPhotoBeforeEnter"
+        @enter="onCoverPhotoEnter"
       >
+        <img
+          v-if="coverPhotoSize.height"
+          :src="coverSrc"
+          :alt="title"
+        >
+      </Transition>
     </div>
 
     <div class="content-card__info content-card__inset">
@@ -72,6 +79,20 @@ import { mapGetters } from 'vuex';
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
+function getImageSize(src) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => {
+      resolve({
+        width: image.width,
+        height: image.height,
+      });
+    };
+    image.onerror = () => reject();
+    image.src = src;
+  });
+}
+
 export default {
   components: {
     LikeUnit,
@@ -101,6 +122,10 @@ export default {
       type: String,
       default: '',
     },
+    shouldFetchCover: {
+      type: Boolean,
+      default: true,
+    },
     /* Total like of the content */
     likeCount: {
       type: Number,
@@ -111,6 +136,16 @@ export default {
       default: false,
     },
   },
+
+  data() {
+    return {
+      coverPhotoSize: {
+        width: 0,
+        height: 0,
+      },
+    };
+  },
+
   computed: {
     ...mapGetters(['addBookmark', 'removeBookmark']),
     authorId() {
@@ -137,8 +172,52 @@ export default {
       }
       return `${likeCount.toLocaleString('en')}${suffix}`;
     },
-    coverPhotoStyle() {
-      return { backgroundImage: `url(${this.coverSrc})` };
+  },
+
+  watch: {
+    shouldFetchCover: 'fetchCoverInfo',
+  },
+
+  mounted() {
+    this.fetchCoverInfo();
+  },
+
+  methods: {
+    async fetchCoverInfo() {
+      if (this.coverSrc && this.shouldFetchCover) {
+        this.coverPhotoSize = await getImageSize(this.coverSrc);
+      }
+    },
+
+    onCoverPhotoBeforeEnter() {
+      const coverPhotoEl = this.$refs.coverPhoto;
+      if (!coverPhotoEl) return;
+      // Prepare for cover photo animation
+      coverPhotoEl.style.height = 0;
+      coverPhotoEl.style.opacity = 0;
+    },
+
+    onCoverPhotoEnter(_, done) {
+      // Expand the cover photo
+      const coverPhotoEl = this.$refs.coverPhoto;
+      if (!coverPhotoEl) return;
+      const { width, height } = this.coverPhotoSize;
+      this.$velocity(
+        coverPhotoEl,
+        // Set cover photo height that is relative to container width
+        {
+          height: (coverPhotoEl.clientWidth / width) * height,
+          opacity: 1,
+        },
+        {
+          duration: 1000,
+          easing: 'easeOutCubic',
+          complete: () => {
+            coverPhotoEl.removeAttribute('style');
+            done();
+          },
+        }
+      );
     },
   },
 };
