@@ -28,6 +28,12 @@ export const getCivicLikerTrialEventByIdAPI = id =>
 export const getCivicLikerJoinTrialEventByIdAPI = id =>
   `/api/civic/trial/events/${id}/join`;
 
+export const getImageResizeAPI = (url, { width } = {}) =>
+  `https://us-central1-civic-liker${
+    IS_TESTNET ? '-develop' : ''
+  }.cloudfunctions.net/thumbnail/?url=${encodeURIComponent(url)}${
+    width ? `&width=${width}` : ''
+  }`;
 export const getUserMinAPI = likerId =>
   `${LIKECOIN_API_BASE}/users/id/${likerId}/min`;
 export const getArticleDetailAPI = url =>
