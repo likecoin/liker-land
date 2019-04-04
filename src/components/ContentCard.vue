@@ -241,6 +241,8 @@ export default {
 
 <style lang="scss">
 .content-card {
+  transition: background-color 0.2s ease-in-out;
+
   @apply block;
   @apply relative;
 
@@ -341,13 +343,15 @@ export default {
     &:after {
       content: '';
 
+      transition: background-color 0.2s ease-in-out;
+
       @apply absolute;
       @apply pin;
 
       @apply pointer-events-none;
 
       .content-card:hover & {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: rgba(0, 0, 0, 0.03);
       }
     }
   }
