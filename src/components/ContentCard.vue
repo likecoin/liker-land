@@ -26,23 +26,21 @@
       >{{ formattedLikeCount }}<LikeUnit /></span>
     </div>
 
-    <div
-      v-if="coverSrc"
-      ref="coverPhoto"
-      class="content-card__cover-photo"
+    <Transition
+      :css="false"
+      @before-enter="onCoverPhotoBeforeEnter"
+      @enter="onCoverPhotoEnter"
     >
-      <Transition
-        :css="false"
-        @before-enter="onCoverPhotoBeforeEnter"
-        @enter="onCoverPhotoEnter"
+      <div
+        v-if="coverSrc && coverPhotoSize.height"
+        class="content-card__cover-photo"
       >
         <img
-          v-if="coverPhotoSize.height"
           :src="coverSrc"
           :alt="title"
         >
-      </Transition>
-    </div>
+      </div>
+    </Transition>
 
     <div class="content-card__info content-card__inset">
       <a
@@ -209,31 +207,29 @@ export default {
       }
     },
 
-    onCoverPhotoBeforeEnter() {
-      const coverPhotoEl = this.$refs.coverPhoto;
-      if (!coverPhotoEl) return;
+    onCoverPhotoBeforeEnter(el) {
       // Prepare for cover photo animation
-      coverPhotoEl.style.height = 0;
-      coverPhotoEl.style.opacity = 0;
+      /* eslint-disable no-param-reassign */
+      el.style.height = 0;
+      el.style.opacity = 0;
+      /* eslint-enable no-param-reassign */
     },
 
-    onCoverPhotoEnter(_, done) {
+    onCoverPhotoEnter(el, done) {
       // Expand the cover photo
-      const coverPhotoEl = this.$refs.coverPhoto;
-      if (!coverPhotoEl) return;
       const { width, height } = this.coverPhotoSize;
       this.$velocity(
-        coverPhotoEl,
+        el,
         // Set cover photo height that is relative to container width
         {
-          height: (coverPhotoEl.clientWidth / width) * height,
+          height: (el.clientWidth / width) * height,
           opacity: 1,
         },
         {
           duration: 1000,
           easing: 'easeOutCubic',
           complete: () => {
-            coverPhotoEl.removeAttribute('style');
+            el.removeAttribute('style');
             done();
           },
         }
