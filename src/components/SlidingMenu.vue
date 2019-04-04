@@ -1,83 +1,85 @@
 <template>
   <nav class="sliding-menu">
-    <header
-      :class="[
-        'flex pt-24 pl-24 pr-16 pb-16',
-        {
-          'justify-end': !getUserId,
-        },
-      ]"
-    >
-      <div
-        v-if="getUserId"
-        class="flex items-center"
+    <div class="sliding-menu__content">
+      <header
+        :class="[
+          'sliding-menu__header',
+          {
+            'justify-end': !getUserId,
+          },
+        ]"
       >
-        <lc-avatar
-          :src="getUserInfo.avatar"
-          :halo="getUserCivicLikerHalo"
-          size="46"
-        />
-        <span
-          class="text-16 ml-12"
-        >{{ getUserInfo.displayName }}</span>
-      </div>
-      <a
-        v-else
-        class="btn btn--dark btn--block mx-0"
-        :href="getOAuthLoginAPI()"
-      >{{ $t('signInOrSignUp') }}</a>
-    </header>
-
-    <div class="main-menu">
-      <div class="main-menu__primary-menu">
-        <NuxtLink
-          class="btn btn--outlined btn--dark btn--block btn--icon-only"
-          :to="getHomeRoute"
-          :title="$t('SlidingMenu.home')"
-          @click.native="onClickMenuItem"
-        >
-          <HomeIcon class="btn__icon" />
-        </NuxtLink>
-
-        <NuxtLink
-          class="btn btn--outlined btn--dark btn--block"
-          :to="{ name: 'civic' }"
-          @click.native="onClickMenuItem"
-        >{{ $t('SlidingMenu.civic') }}</NuxtLink>
-
-        <NuxtLink
+        <div
           v-if="getUserId"
-          class="btn btn--outlined btn--dark btn--block btn--with-icon"
-          :to="{ name: 'settings' }"
-          @click.native="onClickMenuItem"
+          class="flex items-center"
         >
-          <CogIcon class="btn__icon w-16 h-16 ml-12" />{{
-            $t('SlidingMenu.settings')
-          }}</NuxtLink>
-      </div>
-
-      <div class="main-menu__secondary-menu">
+          <lc-avatar
+            :src="getUserInfo.avatar"
+            :halo="getUserCivicLikerHalo"
+            size="46"
+          />
+          <span
+            class="text-16 ml-12"
+          >{{ getUserInfo.displayName }}</span>
+        </div>
         <a
-          class="btn btn--plain btn--dark btn--auto-size"
-          href="https://help.like.co"
-          rel="noopener"
-          @click="onClickSupport"
-        >{{ $t('SlidingMenu.support') }}</a>
-        <NuxtLink
-          v-if="getUserId"
-          class="btn btn--plain btn--dark btn--auto-size"
-          :to="{ name: 'logout' }"
-        >{{ $t('SlidingMenu.logout') }}</NuxtLink>
+          v-else
+          class="btn btn--dark btn--block mx-0"
+          :href="getOAuthLoginAPI()"
+        >{{ $t('signInOrSignUp') }}</a>
+      </header>
+  
+      <div class="main-menu">
+        <div class="main-menu__primary-menu">
+          <NuxtLink
+            class="btn btn--outlined btn--dark btn--block btn--icon-only"
+            :to="getHomeRoute"
+            :title="$t('SlidingMenu.home')"
+            @click.native="onClickMenuItem"
+          >
+            <HomeIcon class="btn__icon" />
+          </NuxtLink>
+  
+          <NuxtLink
+            class="btn btn--outlined btn--dark btn--block"
+            :to="{ name: 'civic' }"
+            @click.native="onClickMenuItem"
+          >{{ $t('SlidingMenu.civic') }}</NuxtLink>
+  
+          <NuxtLink
+            v-if="getUserId"
+            class="btn btn--outlined btn--dark btn--block btn--with-icon"
+            :to="{ name: 'settings' }"
+            @click.native="onClickMenuItem"
+          >
+            <CogIcon class="btn__icon w-16 h-16 ml-12" />{{
+              $t('SlidingMenu.settings')
+            }}</NuxtLink>
+        </div>
+  
+        <div class="main-menu__secondary-menu">
+          <a
+            class="btn btn--plain btn--dark btn--auto-size"
+            href="https://help.like.co"
+            rel="noopener"
+            @click="onClickSupport"
+          >{{ $t('SlidingMenu.support') }}</a>
+          <NuxtLink
+            v-if="getUserId"
+            class="btn btn--plain btn--dark btn--auto-size"
+            :to="{ name: 'logout' }"
+          >{{ $t('SlidingMenu.logout') }}</NuxtLink>
+        </div>
       </div>
-    </div>
-
-    <div class="flex flex-col mt-48 p-48">
-      <button
-        v-for="locale in locales"
-        :key="locale"
-        class="text-white text-left text-12 font-200"
-        @click="onClickLocale(locale)"
-      >{{ $t(`Locale.${locale}`) }}</button>
+  
+      <div class="flex flex-col mt-48 p-48">
+        <button
+          v-for="locale in locales"
+          :key="locale"
+          class="text-white text-left text-12 font-200"
+          @click="onClickLocale(locale)"
+        >{{ $t(`Locale.${locale}`) }}</button>
+      </div>
     </div>
 
     <portal-target
@@ -168,6 +170,10 @@ html[sliding-menu='opened'] {
 
   @apply h-screen;
 
+  &__content {
+    @apply overflow-y-scroll;
+  }
+
   // Handle the elements have to translate when sliding menu is opened
   &,
   &-pushee {
@@ -211,6 +217,16 @@ html[sliding-menu='opened'] {
   }
   &-pushee {
     transition-property: transform;
+  }
+
+  &__header {
+    @apply flex;
+    @apply flex-no-shrink;
+
+    @apply pt-24;
+    @apply pl-24;
+    @apply pr-16;
+    @apply pb-16;
   }
 }
 
