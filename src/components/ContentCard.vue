@@ -226,8 +226,8 @@ export default {
           opacity: 1,
         },
         {
-          duration: 1000,
-          easing: 'easeOutCubic',
+          duration: 500,
+          easing: 'easeInOutSine',
           complete: () => {
             el.removeAttribute('style');
             done();
