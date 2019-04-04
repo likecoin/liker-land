@@ -46,16 +46,7 @@ export default {
   @apply items-center;
   @apply justify-between;
 
-  @apply p-16;
-
-  @media screen and (min-width: config('screens.desktop.min')) {
-    @apply px-64;
-    @apply py-32;
-
-    &:not(:last-child) {
-      @apply pb-4;
-    }
-  }
+  @apply px-16 py-12;
 
   &__logo,
   &__menu-button {
@@ -75,6 +66,8 @@ export default {
 
   &__logo {
     @apply text-inherit-color;
+
+    @apply -my-8;
 
     &--disabled {
       @apply pointer-events-none;
@@ -99,6 +92,8 @@ export default {
 
     @apply w-32;
     @apply h-32;
+
+    @apply -my-8;
 
     > span {
       width: calc(100% - 0.5em);

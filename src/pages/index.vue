@@ -5,14 +5,18 @@
       :is-floatable="true"
     >
       <template v-slot="{ isFloating }">
-        <SiteNavBar class="bg-like-green" />
+        <SiteNavBar
+          :class="[
+            'bg-like-green',
+            {
+              'relative': isFloating && !getUserId,
+            },
+          ]"
+        />
 
         <div
           v-if="!isFloating && (!getUserId || !getUserIsCivicLiker)"
-          :class="[
-            'text-center bg-like-green px-16',
-            getUserId ? 'pb-16' : 'pb-0',
-          ]"
+          class="text-center bg-like-green px-16 pb-20"
         >
           <div class="text-like-cyan text-30 font-200 mb-16">
             {{ $t(getUserId ? 'CivicLikerCTA.slogan' : 'SignUpSignInCTA.slogan') }}
@@ -42,11 +46,10 @@
 
         <TabBar>
           <TabBarItem
-            :class="{ 'pointer-events-none': !getUserId }"
             :is-active="$route.name === 'index'"
             :to="{ name: 'index' }"
           >
-            <FeaturedIcon :class="{ invisible: !getUserId }" />
+            <FeaturedIcon v-if="getUserId" />
           </TabBarItem>
           <TabBarItem
             v-if="getUserId"
@@ -150,22 +153,6 @@ export default {
     @apply max-w-phone;
 
     @apply mx-auto;
-  }
-}
-
-.page-header--floating {
-  .site-nav-bar {
-    @apply pin;
-
-    @apply bg-transparent;
-
-    @apply pt-12;
-
-    @media screen and (min-width: config('screens.desktop.min')) {
-      @apply absolute;
-
-      @apply py-0;
-    }
   }
 }
 </style>
