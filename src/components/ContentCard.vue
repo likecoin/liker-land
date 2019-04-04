@@ -26,23 +26,21 @@
       >{{ formattedLikeCount }}<LikeUnit /></span>
     </div>
 
-    <div
-      v-if="coverSrc"
-      ref="coverPhoto"
-      class="content-card__cover-photo"
+    <Transition
+      :css="false"
+      @before-enter="onCoverPhotoBeforeEnter"
+      @enter="onCoverPhotoEnter"
     >
-      <Transition
-        :css="false"
-        @before-enter="onCoverPhotoBeforeEnter"
-        @enter="onCoverPhotoEnter"
+      <div
+        v-if="coverSrc && coverPhotoSize.height"
+        class="content-card__cover-photo"
       >
         <img
-          v-if="coverPhotoSize.height"
           :src="coverSrc"
           :alt="title"
         >
-      </Transition>
-    </div>
+      </div>
+    </Transition>
 
     <div class="content-card__info content-card__inset">
       <a
@@ -61,8 +59,12 @@
       >{{ description }}</div>
     </div>
 
-    <div class="content-card__footer content-card__inset">
+    <div
+      v-if="isShowFooter"
+      class="content-card__footer content-card__inset"
+    >
       <a
+        v-if="canBookmark"
         class="content-card__bookmark-button"
         @click.prevent="$emit('bookmark-click')"
       >
@@ -75,7 +77,6 @@
 
 <script>
 import { LIKE_CO_URL_BASE } from '~/constant';
-import { mapGetters } from 'vuex';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
@@ -137,6 +138,10 @@ export default {
       type: Number,
       default: 0,
     },
+    canBookmark: {
+      type: Boolean,
+      default: false,
+    },
     isBookmarked: {
       type: Boolean,
       default: false,
@@ -153,7 +158,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['addBookmark', 'removeBookmark']),
     authorId() {
       return this.author.user;
     },
@@ -178,6 +182,9 @@ export default {
       }
       return `${likeCount.toLocaleString('en')}${suffix}`;
     },
+    isShowFooter() {
+      return this.canBookmark;
+    },
   },
 
   watch: {
@@ -191,35 +198,38 @@ export default {
   methods: {
     async fetchCoverInfo() {
       if (this.coverSrc && this.shouldFetchCover) {
-        this.coverPhotoSize = await getImageSize(this.coverSrc);
+        try {
+          this.coverPhotoSize = await getImageSize(this.coverSrc);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
       }
     },
 
-    onCoverPhotoBeforeEnter() {
-      const coverPhotoEl = this.$refs.coverPhoto;
-      if (!coverPhotoEl) return;
+    onCoverPhotoBeforeEnter(el) {
       // Prepare for cover photo animation
-      coverPhotoEl.style.height = 0;
-      coverPhotoEl.style.opacity = 0;
+      /* eslint-disable no-param-reassign */
+      el.style.height = 0;
+      el.style.opacity = 0;
+      /* eslint-enable no-param-reassign */
     },
 
-    onCoverPhotoEnter(_, done) {
+    onCoverPhotoEnter(el, done) {
       // Expand the cover photo
-      const coverPhotoEl = this.$refs.coverPhoto;
-      if (!coverPhotoEl) return;
       const { width, height } = this.coverPhotoSize;
       this.$velocity(
-        coverPhotoEl,
+        el,
         // Set cover photo height that is relative to container width
         {
-          height: (coverPhotoEl.clientWidth / width) * height,
+          height: (el.clientWidth / width) * height,
           opacity: 1,
         },
         {
-          duration: 1000,
-          easing: 'easeOutCubic',
+          duration: 500,
+          easing: 'easeInOutSine',
           complete: () => {
-            coverPhotoEl.removeAttribute('style');
+            el.removeAttribute('style');
             done();
           },
         }
@@ -231,6 +241,8 @@ export default {
 
 <style lang="scss">
 .content-card {
+  transition: background-color 0.2s ease-in-out;
+
   @apply block;
   @apply relative;
 
@@ -273,6 +285,7 @@ export default {
   }
 
   &__author {
+    @apply flex;
     @apply flex-grow;
 
     > a {
@@ -280,7 +293,7 @@ export default {
       @apply text-like-green;
       @apply font-600;
 
-      @apply flex;
+      @apply inline-flex;
       @apply items-center;
 
       &:hover {
@@ -330,13 +343,15 @@ export default {
     &:after {
       content: '';
 
+      transition: background-color 0.2s ease-in-out;
+
       @apply absolute;
       @apply pin;
 
       @apply pointer-events-none;
 
       .content-card:hover & {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: rgba(0, 0, 0, 0.03);
       }
     }
   }

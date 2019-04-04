@@ -9,8 +9,14 @@
     }
   },
   "CivicLikerCTA": {
-    "slogan": "Trade a coffee for a better world",
-    "button": "Be a Civic Liker"
+    "slogan": {
+      "register": "Trade a coffee for a better world",
+      "upgrade": "@:CivicLikerCTA.slogan.register"
+    },
+    "button": {
+      "register": "Be a Civic Liker",
+      "upgrade": "@:upgrade"
+    }
   },
   "CivicLikerFeature": [
     {
@@ -105,7 +111,7 @@
     "subscription": "Follow / Unfollow"
   },
   "SignUpSignInCTA": {
-    "slogan": "Sign up / Sign in to read more"
+    "slogan": "Sign up to customise stories"
   },
   "SlidingMenu": {
     "home": "Home",
@@ -121,5 +127,6 @@
   "registered": "Registered",
   "signIn": "Sign in",
   "signInOrSignUp": "Sign up / Sign in",
-  "signUp": "Sign up"
+  "signUp": "Sign up",
+  "upgrade": "Upgrade"
 }

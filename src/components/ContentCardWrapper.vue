@@ -26,6 +26,7 @@
         :cover-src="internalCoverSrc"
         :should-fetch-cover="!isAnimating"
         :like-count="internalLikeCount"
+        :can-bookmark="!!getUserId"
         :is-bookmarked="getIsInBookmark(referrer)"
         @bookmark-click="onClickBookmark(referrer)"
       />
@@ -90,6 +91,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserId',
       'getUserInfoById',
       'getArticleInfoByReferrer',
       'getIsInBookmark',

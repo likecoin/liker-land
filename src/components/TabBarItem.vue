@@ -12,6 +12,7 @@
       :to="to"
     >
       <div
+        v-if="shouldShowContent"
         :class="[
           'tab-bar-item-button__content',
           {
@@ -54,6 +55,11 @@ export default {
     to: {
       type: Object,
       default: undefined,
+    },
+  },
+  computed: {
+    shouldShowContent() {
+      return Object.keys(this.$slots).length;
     },
   },
 };

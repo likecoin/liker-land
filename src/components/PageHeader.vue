@@ -177,4 +177,23 @@ export default {
 
   @apply w-screen;
 }
+
+.page-header {
+  @media screen and (min-width: config('screens.desktop.min')) {
+    .site-nav-bar {
+      @apply px-64;
+    }
+
+    &--floating .site-nav-bar {
+      @apply absolute;
+      @apply pin;
+
+      @apply bg-transparent;
+    }
+
+    &:not(&--floating) .site-nav-bar {
+      @apply pt-32;
+    }
+  }
+}
 </style>

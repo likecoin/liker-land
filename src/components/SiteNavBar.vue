@@ -1,8 +1,11 @@
 <template>
   <div class="site-nav-bar text-white">
     <NuxtLink
-      class="site-nav-bar__logo"
-      :to="{ name: 'index' }"
+      :class="{
+        'site-nav-bar__logo': true,
+        'site-nav-bar__logo--disabled': getHomeRoute.name === $route.name,
+      }"
+      :to="getHomeRoute"
     >
       <Logo />
     </NuxtLink>
@@ -29,7 +32,7 @@ export default {
     Logo,
   },
   computed: {
-    ...mapGetters(['getIsSlidingMenuOpen']),
+    ...mapGetters(['getHomeRoute', 'getIsSlidingMenuOpen']),
   },
   methods: {
     ...mapActions(['toggleSlidingMenu']),
@@ -43,16 +46,7 @@ export default {
   @apply items-center;
   @apply justify-between;
 
-  @apply p-16;
-
-  @media screen and (min-width: config('screens.desktop.min')) {
-    @apply px-64;
-    @apply py-32;
-
-    &:not(:last-child) {
-      @apply pb-4;
-    }
-  }
+  @apply px-16 py-12;
 
   &__logo,
   &__menu-button {
@@ -73,6 +67,12 @@ export default {
   &__logo {
     @apply text-inherit-color;
 
+    @apply -my-8;
+
+    &--disabled {
+      @apply pointer-events-none;
+    }
+
     svg {
       width: 6.875rem;
 
@@ -92,6 +92,8 @@ export default {
 
     @apply w-32;
     @apply h-32;
+
+    @apply -my-8;
 
     > span {
       width: calc(100% - 0.5em);
