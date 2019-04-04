@@ -27,12 +27,16 @@ export default {
   methods: {
     ...mapActions(['toggleSlidingMenu']),
 
-    toggleClickListener(isOn) {
+    toggleEventListener(eventName, isOn) {
       window[`${isOn ? 'add' : 'remove'}EventListener`](
-        'click',
+        eventName,
         this.onWindowClick,
         true
       );
+    },
+    toggleClickListener(isOn) {
+      this.toggleEventListener('click', isOn);
+      this.toggleEventListener('touchend', isOn);
     },
 
     // Dismiss the sliding menu when there is a click event outside it

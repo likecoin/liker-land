@@ -80,7 +80,10 @@
       >{{ $t(`Locale.${locale}`) }}</button>
     </div>
 
-    <portal-target name="floating-page-header-container" />
+    <portal-target
+      class="floating-page-header-container"
+      name="floating-page-header-container"
+    />
   </nav>
 </template>
 
@@ -144,9 +147,13 @@ export default {
 <style lang="scss">
 $sliding-menu-width: 256px;
 
+// Prevent scrolling when sliding menu is opened
+html[sliding-menu='opened'] {
+  @apply overflow-y-hidden;
+}
+
 .sliding-menu {
   left: 100%;
-  z-index: 100;
 
   width: $sliding-menu-width;
 
@@ -165,7 +172,7 @@ $sliding-menu-width: 256px;
   &,
   &-pushee {
     transition-duration: 0.25s;
-    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
 
     html[sliding-menu='opened'] & {
       transform: translateX(-#{$sliding-menu-width});
@@ -178,9 +185,28 @@ $sliding-menu-width: 256px;
     outline-color: config('colors.like-green');
     outline-width: 0;
 
-    // Hacking hairline issue when transforming
     html[sliding-menu='opened'] & {
+      // Hacking hairline issue when transforming
       outline-width: 1px;
+
+      &-pushee {
+        @apply pointer-events-none;
+
+        &::after {
+          content: '';
+
+          @apply absolute;
+          @apply pin;
+
+          @apply pointer-events-auto;
+        }
+      }
+
+      &-toggle {
+        z-index: 9999;
+
+        @apply pointer-events-auto;
+      }
     }
   }
   &-pushee {
@@ -218,10 +244,5 @@ $sliding-menu-width: 256px;
       @apply p-0;
     }
   }
-}
-
-// Prevent scrolling when sliding menu is opened
-html[sliding-menu='opened'] {
-  overflow-y: hidden;
 }
 </style>

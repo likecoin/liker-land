@@ -11,7 +11,7 @@
     </NuxtLink>
 
     <button
-      class="site-nav-bar__menu-button"
+      class="site-nav-bar__menu-button sliding-menu-toggle"
       @click="toggleSlidingMenu(!getIsSlidingMenuOpen)"
     >
       <span />
