@@ -9,8 +9,14 @@
     }
   },
   "CivicLikerCTA": {
-    "slogan": "少喝一杯咖啡，共創一個生態",
-    "button": "成為讚賞公民"
+    "slogan": {
+      "register": "少喝一杯咖啡，共創一個生態",
+      "upgrade": "@:CivicLikerCTA.slogan.register"
+    },
+    "button": {
+      "register": "成為讚賞公民",
+      "upgrade": "@:upgrade"
+    }
   },
   "CivicLikerFeature": [
     {
@@ -115,6 +121,6 @@
   "registered": "已登記",
   "signIn": "登錄",
   "signInOrSignUp": "註冊/登錄",
-  "signUp": "註冊"
-
+  "signUp": "註冊",
+  "upgrade": "升級"
 }

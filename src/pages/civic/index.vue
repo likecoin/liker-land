@@ -36,7 +36,7 @@
                     },
                   ]"
                   @click="onClickRegister"
-                >{{ registerButtonText }}</button>
+                >{{ actionButtonText }}</button>
                 <LcChopCivicLiker
                   class="absolute phone:hidden"
                   style="left: 100%;margin-left: 0.75rem;transform: translateY(-65%) rotate(20deg)"
@@ -98,7 +98,7 @@
                     },
                   ]"
                   @click="onClickRegister"
-                >{{ registerButtonText }}</button>
+                >{{ actionButtonText }}</button>
               </div>
             </template>
           </CivicPricingCard>
@@ -145,9 +145,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserIsCivicLiker']),
+    ...mapGetters(['getUserIsCivicLikerTrial', 'getUserIsCivicLiker']),
 
-    registerButtonText() {
+    actionButtonText() {
+      if (this.getUserIsCivicLikerTrial) {
+        return this.$t('upgrade');
+      }
       return this.$t(this.getUserIsCivicLiker ? 'registered' : 'register');
     },
   },

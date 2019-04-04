@@ -18,9 +18,7 @@
           v-if="!isFloating && (!getUserId || !getUserIsCivicLiker)"
           class="text-center bg-like-green px-16 pb-20"
         >
-          <div class="text-like-cyan text-30 font-200 mb-16">
-            {{ $t(getUserId ? 'CivicLikerCTA.slogan' : 'SignUpSignInCTA.slogan') }}
-          </div>
+          <div class="text-like-cyan text-30 font-200 mb-16">{{ ctaSlogan }}</div>
 
           <NuxtLink
             v-if="getUserId"
@@ -31,7 +29,9 @@
               },
             ]"
             :to="{ name: 'civic' }"
-          >{{ $t('CivicLikerCTA.button') }}</NuxtLink>
+          >{{ $t(
+            `CivicLikerCTA.button.${getUserIsCivicLikerTrial ? 'upgrade' : 'register'}`
+          ) }}</NuxtLink>
           <template v-else>
             <a
               :href="getOAuthLoginAPI()"
@@ -118,7 +118,25 @@ export default {
     WatchingIcon,
   },
   computed: {
-    ...mapGetters(['getUserId', 'getUserIsCivicLiker', 'getUserBookmarks']),
+    ...mapGetters([
+      'getUserId',
+      'getUserIsCivicLiker',
+      'getUserIsCivicLikerTrial',
+      'getUserBookmarks',
+    ]),
+
+    ctaSlogan() {
+      if (this.getUserId) {
+        if (this.getUserIsCivicLiker) {
+          return '';
+        }
+        if (this.getUserIsCivicLikerTrial) {
+          return this.$t('CivicLikerCTA.slogan.upgrade');
+        }
+        return this.$t('CivicLikerCTA.slogan.register');
+      }
+      return this.$t('SignUpSignInCTA.slogan');
+    },
   },
   mounted() {
     this.fetchSharedContent();
