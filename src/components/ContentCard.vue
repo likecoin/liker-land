@@ -16,7 +16,7 @@
         >
           <LcAvatar
             class="content-card__author-avatar"
-            :src="authorAavtarSrc"
+            :src="resizedAvatarSrc"
             :halo="authorAvatarHalo"
           />{{ author.displayName || authorId }}</a>
       </span>
@@ -168,7 +168,7 @@ export default {
     authorAvatarHalo() {
       return getAvatarHaloTypeFromUser(this.author);
     },
-    authorAavtarSrc() {
+    authorAvatarSrc() {
       return this.author.avatar;
     },
     url() {
@@ -189,6 +189,10 @@ export default {
     resizedCoverSrc() {
       if (!this.coverSrc) return undefined;
       return getImageResizeAPI(this.coverSrc);
+    },
+    resizedAvatarSrc() {
+      if (!this.authorAvatarSrc) return undefined;
+      return getImageResizeAPI(this.authorAvatarSrc, { width: 36 });
     },
   },
 

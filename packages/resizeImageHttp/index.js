@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
       responseType: 'stream',
     });
     const transformer = sharp();
-    res.set(`Cache-Control', 'public, max-age=${CACHE_TIME_IN_S}`);
+    res.set('Cache-Control', `public, max-age=${CACHE_TIME_IN_S}`);
     data.pipe(transformer);
     transformer
       .clone()
