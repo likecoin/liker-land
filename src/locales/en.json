@@ -105,8 +105,7 @@
     "subscription": "Follow / Unfollow"
   },
   "SignUpSignInCTA": {
-    "slogan": "Sign up / Sign in to read more",
-    "button": "@:signInOrSignUp"
+    "slogan": "Sign up / Sign in to read more"
   },
   "SlidingMenu": {
     "home": "Home",
@@ -120,5 +119,7 @@
   "month": "month",
   "register": "Register",
   "registered": "Registered",
-  "signInOrSignUp": "Sign up / Sign in"
+  "signIn": "Sign in",
+  "signInOrSignUp": "Sign up / Sign in",
+  "signUp": "Sign up"
 }
