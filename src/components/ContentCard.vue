@@ -93,7 +93,7 @@ function getImageSize(src) {
         height: image.height,
       });
     };
-    image.onerror = () => reject();
+    image.onerror = reject;
     image.src = src;
   });
 }
