@@ -4,7 +4,7 @@ const theme = require('./tailwind.config');
 
 const siteName = 'Liker.Land';
 
-module.exports = {
+const nuxtConfig = {
   env: {
     IS_TESTNET: process.env.IS_TESTNET,
     CI: process.env.CI,
@@ -237,3 +237,11 @@ module.exports = {
     },
   },
 };
+
+if (process.env.INTERCOM_APPID) {
+  nuxtConfig.head.link.push(
+    { rel: 'preload', href: `https://widget.intercom.io/widget/${process.env.INTERCOM_APPID}`, as: 'script' },
+  );
+}
+
+module.exports = nuxtConfig;

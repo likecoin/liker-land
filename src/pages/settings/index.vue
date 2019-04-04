@@ -6,6 +6,7 @@
         :href="likerIdSettingsURL"
         :title="$t('SettingsPage.likerId')"
         target="_blank"
+        rel="noopener"
       >
         <span
           class="settings-menu__item-title"

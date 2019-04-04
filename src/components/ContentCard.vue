@@ -4,6 +4,7 @@
     :href="src"
     :title="title"
     target="_blank"
+    rel="noopener"
   >
     <div class="content-card__header content-card__inset">
       <span class="content-card__author">
@@ -11,6 +12,7 @@
           :href="authorURL"
           :title="authorId"
           target="_blank"
+          rel="noopener"
         >
           <LcAvatar
             class="content-card__author-avatar"
@@ -47,6 +49,7 @@
         class="content-card__domain"
         :href="url.origin"
         target="_blank"
+        rel="noopener"
       >{{ url.hostname }}</a>
       <div
         v-if="title"
