@@ -61,8 +61,9 @@ export default {
     async fetchContent() {
       try {
         this.isLoading = !this.getFollowedAuthors.length || !this.items.length;
-        const fetchReader = this.fetchReaderIndex();
-        if (!this.getFollowedAuthors.length) await fetchReader;
+        // const fetchReader = this.fetchReaderIndex();
+        this.fetchReaderIndex();
+        // if (!this.getFollowedAuthors.length) await fetchReader;
         const fetchArticles = this.fetchFollowedArticles();
         if (!this.articles.length) await fetchArticles;
       } catch (err) {
