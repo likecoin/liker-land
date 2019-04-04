@@ -12,6 +12,7 @@ import ContentList from '~/components/ContentList';
 
 export default {
   name: 'Index',
+  scrollToTop: true,
   components: {
     ContentList,
   },
