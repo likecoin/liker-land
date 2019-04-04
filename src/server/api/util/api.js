@@ -76,7 +76,9 @@ const apiFetchLikedUser = req =>
   );
 const apiFetchUserArticles = (user, limit) =>
   axios.get(
-    `${LIKECOIN_API_BASE}/like/info/user/${user}/latest?limit=${limit}`
+    `${LIKECOIN_API_BASE}/like/info/user/${user}/latest${
+      limit ? `?limit=${limit}` : ''
+    }`
   );
 const apiFetchSuggestedArticles = () =>
   axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);

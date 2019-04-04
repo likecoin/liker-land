@@ -25,21 +25,28 @@ function filterArticleList(list) {
   });
 }
 
+async function getFollowedUserListInfo(req) {
+  const [{ data }, userDoc] = await Promise.all([
+    apiFetchLikedUser(req),
+    userCollection.doc(req.session.user).get(),
+  ]);
+  const userSet = new Set(data.list);
+  const { followedUsers = [], unfollowedUsers = [] } = userDoc.data();
+  followedUsers.forEach(u => userSet.add(u));
+  unfollowedUsers.forEach(u => userSet.delete(u));
+  return { followedUsers: Array.from(userSet), unfollowedUsers };
+}
+
 router.get('/reader/index', async (req, res, next) => {
   try {
     if (!req.session.user) {
       res.sendStatus(403);
       return;
     }
-    const [{ data }, userDoc] = await Promise.all([
-      apiFetchLikedUser(req),
-      userCollection.doc(req.session.user).get(),
-    ]);
-    const userSet = new Set(data.list);
-    const { followedUsers = [], unfollowedUsers = [] } = userDoc.data();
-    followedUsers.forEach(u => userSet.add(u));
-    unfollowedUsers.forEach(u => userSet.delete(u));
-    res.json({ list: Array.from(userSet), unfollowedUsers });
+    const { followedUsers, unfollowedUsers } = await getFollowedUserListInfo(
+      req
+    );
+    res.json({ list: followedUsers, unfollowedUsers });
   } catch (err) {
     next(err);
   }
@@ -57,25 +64,19 @@ router.get('/reader/works/suggest', async (req, res, next) => {
   }
 });
 
-router.get('/reader/works', async (req, res, next) => {
+router.get('/reader/works/followed', async (req, res, next) => {
   try {
     if (!req.session.user) {
       res.sendStatus(403);
       return;
     }
-    const { users, limit = 40 } = req.query;
-    if (!users) {
-      res.sendStatus(400);
-      return;
-    }
-    const userList = users.split(',');
-    if (!userList || !userList.length) {
-      res.sendStatus(400);
-      return;
-    }
+    const { limit = 40 } = req.query;
+    /* TODO: fix this HACK on hardcode 20 articles/user limit */
+    const userArticleLimit = Math.min(limit, 20);
+    const { followedUsers: userList } = await getFollowedUserListInfo(req);
     let articleLists = await Promise.all(
       userList.map(u =>
-        apiFetchUserArticles(u, limit / 20)
+        apiFetchUserArticles(u, userArticleLimit)
           .then(r => r.data.list)
           .catch(e => {})
       )

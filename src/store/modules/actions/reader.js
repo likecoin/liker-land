@@ -52,10 +52,8 @@ export async function fetchSuggestedArticles({ commit }) {
   return list;
 }
 
-export async function fetchFollowedArticles({ commit, state }) {
-  const { list } = await this.$axios.$get(
-    api.getFetchArticlesByUsersApi(state.followedUsers)
-  );
+export async function fetchFollowedArticles({ commit }) {
+  const { list } = await this.$axios.$get(api.getFetchFollowedArticlesApi());
   commit(types.READER_SET_FOLLOWED_ARTICLES, list);
   return list;
 }
