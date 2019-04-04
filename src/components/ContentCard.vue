@@ -200,7 +200,12 @@ export default {
   methods: {
     async fetchCoverInfo() {
       if (this.coverSrc && this.shouldFetchCover) {
-        this.coverPhotoSize = await getImageSize(this.coverSrc);
+        try {
+          this.coverPhotoSize = await getImageSize(this.coverSrc);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
       }
     },
 
