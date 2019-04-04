@@ -61,8 +61,12 @@
       >{{ description }}</div>
     </div>
 
-    <div class="content-card__footer content-card__inset">
+    <div
+      v-if="isShowFooter"
+      class="content-card__footer content-card__inset"
+    >
       <a
+        v-if="canBookmark"
         class="content-card__bookmark-button"
         @click.prevent="$emit('bookmark-click')"
       >
@@ -75,7 +79,6 @@
 
 <script>
 import { LIKE_CO_URL_BASE } from '~/constant';
-import { mapGetters } from 'vuex';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
@@ -137,6 +140,10 @@ export default {
       type: Number,
       default: 0,
     },
+    canBookmark: {
+      type: Boolean,
+      default: false,
+    },
     isBookmarked: {
       type: Boolean,
       default: false,
@@ -153,7 +160,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['addBookmark', 'removeBookmark']),
     authorId() {
       return this.author.user;
     },
@@ -177,6 +183,9 @@ export default {
         suffix = 'k';
       }
       return `${likeCount.toLocaleString('en')}${suffix}`;
+    },
+    isShowFooter() {
+      return this.canBookmark;
     },
   },
 
