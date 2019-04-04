@@ -1,5 +1,8 @@
 <template>
-  <div class="content-card-wrapper">
+  <div
+    v-if="isLoading || hasContent"
+    class="content-card-wrapper"
+  >
     <lazy-component
       class="content-card-wrapper__lazy-load-detector"
       @show="fetchContent"
