@@ -1,8 +1,11 @@
 <template>
   <div class="site-nav-bar text-white">
     <NuxtLink
-      class="site-nav-bar__logo"
-      :to="{ name: 'index' }"
+      :class="{
+        'site-nav-bar__logo': true,
+        'site-nav-bar__logo--disabled': getHomeRoute.name === $route.name,
+      }"
+      :to="getHomeRoute"
     >
       <Logo />
     </NuxtLink>
@@ -29,7 +32,7 @@ export default {
     Logo,
   },
   computed: {
-    ...mapGetters(['getIsSlidingMenuOpen']),
+    ...mapGetters(['getHomeRoute', 'getIsSlidingMenuOpen']),
   },
   methods: {
     ...mapActions(['toggleSlidingMenu']),
@@ -72,6 +75,10 @@ export default {
 
   &__logo {
     @apply text-inherit-color;
+
+    &--disabled {
+      @apply pointer-events-none;
+    }
 
     svg {
       width: 6.875rem;

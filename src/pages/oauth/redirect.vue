@@ -8,11 +8,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Redirect',
   layout: 'dialog',
+  computed: {
+    ...mapGetters(['getHomeRoute']),
+  },
   head() {
     return {
       title: this.$t('RedirectPage.title'),
@@ -42,7 +45,7 @@ export default {
         if (postAuthRoute) {
           this.$router.push(postAuthRoute);
         } else {
-          this.$router.push({ name: 'index-following' });
+          this.$router.push(this.getHomeRoute);
         }
       } catch (err) {
         const errData = err.response || err;

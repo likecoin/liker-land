@@ -32,7 +32,7 @@
       <div class="main-menu__primary-menu">
         <NuxtLink
           class="btn btn--outlined btn--dark btn--block btn--icon-only"
-          :to="{ name: `index${getUserId ? '-following' : ''}` }"
+          :to="getHomeRoute"
           :title="$t('SlidingMenu.home')"
           @click.native="onClickMenuItem"
         >
@@ -105,6 +105,7 @@ export default {
       'getUserId',
       'getUserInfo',
       'getUserCivicLikerHalo',
+      'getHomeRoute',
       'getLocale',
       'getAvailableLocales',
     ]),
