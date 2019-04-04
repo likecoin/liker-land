@@ -1,18 +1,11 @@
 <template>
   <div class="home-page">
     <PageHeader
-      class="z-1"
+      class="home-page__header"
       :is-floatable="true"
     >
       <template v-slot="{ isFloating }">
-        <SiteNavBar
-          :class="[
-            'bg-like-green',
-            {
-              'relative': isFloating && !getUserId,
-            },
-          ]"
-        />
+        <SiteNavBar />
 
         <div
           v-if="!isFloating && (!getUserId || !getUserIsCivicLiker)"
@@ -160,6 +153,36 @@ export default {
 
 <style lang="scss">
 .home-page {
+  &__header {
+    .site-nav-bar {
+      @apply text-white;
+
+      @apply bg-like-green;
+    }
+
+    @media screen and (min-width: config('screens.desktop.min')) {
+      &.page-header--floating {
+        .site-nav-bar {
+          @apply relative;
+          @apply z-1;
+
+          @apply bg-transparent;
+
+          @apply pointer-events-none;
+
+          > * {
+            @apply pointer-events-auto;
+          }
+        }
+
+        .tab-bar {
+          @apply absolute;
+          @apply pin;
+        }
+      }
+    }
+  }
+
   .page-content {
     @apply relative;
 

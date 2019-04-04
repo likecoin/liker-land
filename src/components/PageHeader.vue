@@ -7,7 +7,7 @@
       to="floating-page-header-container"
     >
       <div
-        class="floating-page-header-container"
+        :class="[$vnode.data.staticClass, 'floating-page-header-container']"
         :style="floatingHeaderStyle"
       >
         <header :class="getRootClass(true)">
@@ -179,18 +179,12 @@ export default {
 }
 
 .page-header {
+  @apply z-1;
+
   @media screen and (min-width: config('screens.desktop.min')) {
     .site-nav-bar {
       @apply px-64;
     }
-
-    &--floating .site-nav-bar {
-      @apply absolute;
-      @apply pin;
-
-      @apply bg-transparent;
-    }
-
     &:not(&--floating) .site-nav-bar {
       @apply pt-32;
     }

@@ -12,7 +12,6 @@
       :to="to"
     >
       <div
-        v-if="shouldShowContent"
         :class="[
           'tab-bar-item-button__content',
           {
@@ -20,7 +19,7 @@
           }
         ]"
       >
-        <div>
+        <div v-if="shouldShowContent">
           <slot />
         </div>
       </div>
@@ -78,6 +77,7 @@ export default {
 
     @apply flex;
     @apply flex-col;
+    @apply justify-end;
 
     @apply w-full;
     @apply h-full;
@@ -97,9 +97,6 @@ export default {
       @apply items-center;
       @apply flex-grow;
 
-      @apply px-12;
-      @apply py-8;
-
       > div {
         transition: color 0.5s ease;
 
@@ -108,6 +105,9 @@ export default {
         @apply flex;
         @apply justify-center;
         @apply items-center;
+
+        @apply px-12;
+        @apply py-8;
 
         @apply fill-current;
 

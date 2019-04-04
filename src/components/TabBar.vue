@@ -19,6 +19,7 @@ export default {
   @apply text-like-green;
 
   @apply flex;
+  @apply justify-center;
 
   &::before,
   &::after {
@@ -37,6 +38,8 @@ export default {
 
     @apply relative;
 
+    @apply flex;
+
     @apply w-full;
   }
 
@@ -44,6 +47,7 @@ export default {
     @apply list-reset;
 
     @apply flex;
+    @apply flex-grow;
   }
 }
 </style>
