@@ -283,6 +283,7 @@ export default {
   }
 
   &__author {
+    @apply flex;
     @apply flex-grow;
 
     > a {
@@ -290,7 +291,7 @@ export default {
       @apply text-like-green;
       @apply font-600;
 
-      @apply flex;
+      @apply inline-flex;
       @apply items-center;
 
       &:hover {
