@@ -42,9 +42,8 @@ app.get('/', async (req, res) => {
       responseType: 'stream',
       timeout: 10000,
     });
-    const transformer = sharp();
     res.set('Cache-Control', `public, max-age=${CACHE_TIME_IN_S}`);
-    data.pipe(transformer);
+    const transformer = sharp();
     transformer
       .clone()
       .metadata()
@@ -53,6 +52,7 @@ app.get('/', async (req, res) => {
       .clone()
       .resize(width)
       .pipe(res);
+    data.pipe(transformer);
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
     res.redirect(url);
