@@ -45,6 +45,7 @@ import IntercomMixin from '~/mixins/intercom';
 const LOGIN_ERROR_MESSAGE_SET = new Set([
   'LOGIN_NEEDED',
   'LOGIN_NEEDED_TO_BOOKMARK',
+  'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER',
 ]);
 
 export default {
