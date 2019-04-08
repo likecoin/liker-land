@@ -17,26 +17,26 @@ export default {
     };
   },
   beforeDestroy() {
-    this.toggleClickListener(false);
+    this.manageClickListener(false);
   },
   watch: {
     getIsSlidingMenuOpen(isOpened) {
-      this.toggleClickListener(isOpened);
+      this.manageClickListener(isOpened);
     },
   },
   methods: {
     ...mapActions(['toggleSlidingMenu']),
 
-    toggleEventListener(eventName, isOn) {
-      window[`${isOn ? 'add' : 'remove'}EventListener`](
+    manageEventListener(eventName, isAdd) {
+      window[`${isAdd ? 'add' : 'remove'}EventListener`](
         eventName,
         this.onWindowClick,
         true
       );
     },
-    toggleClickListener(isOn) {
-      this.toggleEventListener('click', isOn);
-      this.toggleEventListener('touchend', isOn);
+    manageClickListener(isAdd) {
+      this.manageEventListener('click', isAdd);
+      this.manageEventListener('touchend', isAdd);
     },
 
     // Dismiss the sliding menu when there is a click event outside it
