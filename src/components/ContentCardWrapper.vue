@@ -41,6 +41,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import ContentCard from '~/components/ContentCard';
 import ContentCardPlaceholder from '~/components/ContentCardPlaceholder';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'ContentCardWrapper',
@@ -226,8 +227,10 @@ export default {
       }
       if (this.getIsInBookmark(referrer)) {
         this.removeBookmark(referrer);
+        logTrackerEvent(this, 'Bookmark', 'BookmarkRemove', referrer, 1);
       } else {
         this.addBookmark(referrer);
+        logTrackerEvent(this, 'Bookmark', 'BookmarkAdd', referrer, 1);
       }
     },
   },

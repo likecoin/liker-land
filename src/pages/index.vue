@@ -29,9 +29,11 @@
             <a
               :href="getOAuthLoginAPI()"
               class="btn btn--outlined btn--dark"
+              @click="logTrackerEvent(this, 'Register', 'RegisterSignUp', 'RegisterSignUp(index header)', 1)"
             >{{ $t('signUp') }}</a><br><a
               :href="getOAuthLoginAPI()"
               class="btn btn--plain btn--dark text-12 m-0 p-0"
+              @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(index header)', 1)"
             >{{ $t('signIn') }}</a>
           </template>
 
@@ -77,9 +79,11 @@
       <a
         :href="getOAuthLoginAPI()"
         class="btn btn--outlined btn--dark"
+        @click="logTrackerEvent(this, 'Register', 'RegisterSignUp', 'RegisterSignUp(index footer)', 1)"
       >{{ $t('signUp') }}</a><br><a
         :href="getOAuthLoginAPI()"
         class="btn btn--plain btn--dark text-12 m-0 p-0"
+        @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(index footer)', 1)"
       >{{ $t('signIn') }}</a>
     </div>
   </div>
@@ -88,6 +92,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { getOAuthLoginAPI } from '@/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -136,6 +141,7 @@ export default {
   },
   methods: {
     getOAuthLoginAPI,
+    logTrackerEvent,
     ...mapActions(['refreshBookmarkList']),
     async fetchSharedContent() {
       try {
