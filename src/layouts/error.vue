@@ -45,12 +45,6 @@ import { getOAuthLoginAPI } from '~/util/api';
 import { defaultLocale } from '~/locales';
 import IntercomMixin from '~/mixins/intercom';
 
-const LOGIN_ERROR_MESSAGE_SET = new Set([
-  'LOGIN_NEEDED',
-  'LOGIN_NEEDED_TO_BOOKMARK',
-  'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER',
-]);
-
 export default {
   layout: 'empty',
   transition: {
@@ -78,8 +72,7 @@ export default {
       return this.$te(`ERROR.${this.error.message}`, defaultLocale);
     },
     isLoginError() {
-      const { message } = this.error;
-      return LOGIN_ERROR_MESSAGE_SET.has(message);
+      return /^LOGIN_NEEDED*/.test(this.error.message);
     },
     formattedMessage() {
       if (this.isLocalizedError) {
