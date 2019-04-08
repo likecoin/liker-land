@@ -15,8 +15,12 @@ const app = express();
 app.use(helmet());
 app.get('/', async (req, res) => {
   const { url } = req.query;
-  const { origin } = req.headers;
+  const { origin, referer } = req.headers;
   if (!IS_TESTNET && origin && !origin.includes(ORIGIN_DOMAIN)) {
+    res.sendStatus(403);
+    return;
+  }
+  if (!IS_TESTNET && referer && !referer.includes(ORIGIN_DOMAIN)) {
     res.sendStatus(403);
     return;
   }
