@@ -42,6 +42,7 @@ import FollowingIcon from '~/assets/icons/watching.svg';
 
 export default {
   name: 'Bookmarks',
+  scrollToTop: true,
   components: {
     ContentList,
     EmptyIcon,

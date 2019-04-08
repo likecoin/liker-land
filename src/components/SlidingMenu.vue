@@ -1,86 +1,91 @@
 <template>
   <nav class="sliding-menu">
-    <header
-      :class="[
-        'flex pt-24 pl-24 pr-16 pb-16',
-        {
-          'justify-end': !getUserId,
-        },
-      ]"
-    >
-      <div
-        v-if="getUserId"
-        class="flex items-center"
+    <div class="sliding-menu__content">
+      <header
+        :class="[
+          'sliding-menu__header',
+          {
+            'justify-end': !getUserId,
+          },
+        ]"
       >
-        <lc-avatar
-          :src="getUserInfo.avatar"
-          :halo="getUserCivicLikerHalo"
-          size="46"
-        />
-        <span
-          class="text-16 ml-12"
-        >{{ getUserInfo.displayName }}</span>
-      </div>
-      <a
-        v-else
-        class="btn btn--dark btn--block mx-0"
-        :href="getOAuthLoginAPI()"
-      >{{ $t('signInOrSignUp') }}</a>
-    </header>
-
-    <div class="main-menu">
-      <div class="main-menu__primary-menu">
-        <NuxtLink
-          class="btn btn--outlined btn--dark btn--block btn--icon-only"
-          :to="getHomeRoute"
-          :title="$t('SlidingMenu.home')"
-          @click.native="onClickMenuItem"
-        >
-          <HomeIcon class="btn__icon" />
-        </NuxtLink>
-
-        <NuxtLink
-          class="btn btn--outlined btn--dark btn--block"
-          :to="{ name: 'civic' }"
-          @click.native="onClickMenuItem"
-        >{{ $t('SlidingMenu.civic') }}</NuxtLink>
-
-        <NuxtLink
+        <div
           v-if="getUserId"
-          class="btn btn--outlined btn--dark btn--block btn--with-icon"
-          :to="{ name: 'settings' }"
-          @click.native="onClickMenuItem"
+          class="flex items-center"
         >
-          <CogIcon class="btn__icon w-16 h-16 ml-12" />{{
-            $t('SlidingMenu.settings')
-          }}</NuxtLink>
-      </div>
-
-      <div class="main-menu__secondary-menu">
+          <lc-avatar
+            :src="getUserInfo.avatar"
+            :halo="getUserCivicLikerHalo"
+            size="46"
+          />
+          <span
+            class="text-16 ml-12"
+          >{{ getUserInfo.displayName }}</span>
+        </div>
         <a
-          class="btn btn--plain btn--dark btn--auto-size"
-          href="https://help.like.co"
-          rel="noopener"
-          @click="onClickSupport"
-        >{{ $t('SlidingMenu.support') }}</a>
-        <NuxtLink
-          v-if="getUserId"
-          class="btn btn--plain btn--dark btn--auto-size"
-          :to="{ name: 'logout' }"
-        >{{ $t('SlidingMenu.logout') }}</NuxtLink>
+          v-else
+          class="btn btn--dark btn--block mx-0"
+          :href="getOAuthLoginAPI()"
+        >{{ $t('signInOrSignUp') }}</a>
+      </header>
+  
+      <div class="main-menu">
+        <div class="main-menu__primary-menu">
+          <NuxtLink
+            class="btn btn--outlined btn--dark btn--block btn--icon-only"
+            :to="getHomeRoute"
+            :title="$t('SlidingMenu.home')"
+            @click.native="onClickMenuItem"
+          >
+            <HomeIcon class="btn__icon" />
+          </NuxtLink>
+  
+          <NuxtLink
+            class="btn btn--outlined btn--dark btn--block"
+            :to="{ name: 'civic' }"
+            @click.native="onClickMenuItem"
+          >{{ $t('SlidingMenu.civic') }}</NuxtLink>
+  
+          <NuxtLink
+            v-if="getUserId"
+            class="btn btn--outlined btn--dark btn--block btn--with-icon"
+            :to="{ name: 'settings' }"
+            @click.native="onClickMenuItem"
+          >
+            <CogIcon class="btn__icon w-16 h-16 ml-12" />{{
+              $t('SlidingMenu.settings')
+            }}</NuxtLink>
+        </div>
+  
+        <div class="main-menu__secondary-menu">
+          <a
+            class="btn btn--plain btn--dark btn--auto-size"
+            href="https://help.like.co"
+            rel="noopener"
+            @click="onClickSupport"
+          >{{ $t('SlidingMenu.support') }}</a>
+          <NuxtLink
+            v-if="getUserId"
+            class="btn btn--plain btn--dark btn--auto-size"
+            :to="{ name: 'logout' }"
+          >{{ $t('SlidingMenu.logout') }}</NuxtLink>
+        </div>
+      </div>
+  
+      <div class="flex flex-col mt-48 p-48">
+        <button
+          v-for="locale in locales"
+          :key="locale"
+          class="text-white text-left text-12 font-200"
+          @click="onClickLocale(locale)"
+        >{{ $t(`Locale.${locale}`) }}</button>
       </div>
     </div>
 
-    <div class="flex flex-col mt-48 p-48">
-      <button
-        v-for="locale in locales"
-        :key="locale"
-        class="text-white text-left text-12 font-200"
-        @click="onClickLocale(locale)"
-      >{{ $t(`Locale.${locale}`) }}</button>
-    </div>
-
-    <portal-target name="floating-page-header-container" />
+    <portal-target
+      class="floating-page-header-container"
+      name="floating-page-header-container"
+    />
   </nav>
 </template>
 
@@ -144,9 +149,13 @@ export default {
 <style lang="scss">
 $sliding-menu-width: 256px;
 
+// Prevent scrolling when sliding menu is opened
+html[sliding-menu='opened'] {
+  @apply overflow-y-hidden;
+}
+
 .sliding-menu {
   left: 100%;
-  z-index: 100;
 
   width: $sliding-menu-width;
 
@@ -161,11 +170,15 @@ $sliding-menu-width: 256px;
 
   @apply h-screen;
 
+  &__content {
+    @apply overflow-y-scroll;
+  }
+
   // Handle the elements have to translate when sliding menu is opened
   &,
   &-pushee {
     transition-duration: 0.25s;
-    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
 
     html[sliding-menu='opened'] & {
       transform: translateX(-#{$sliding-menu-width});
@@ -178,13 +191,42 @@ $sliding-menu-width: 256px;
     outline-color: config('colors.like-green');
     outline-width: 0;
 
-    // Hacking hairline issue when transforming
     html[sliding-menu='opened'] & {
+      // Hacking hairline issue when transforming
       outline-width: 1px;
+
+      &-pushee {
+        @apply pointer-events-none;
+
+        &::after {
+          content: '';
+
+          @apply absolute;
+          @apply pin;
+
+          @apply pointer-events-auto;
+        }
+      }
+
+      &-toggle {
+        z-index: 9999;
+
+        @apply pointer-events-auto;
+      }
     }
   }
   &-pushee {
     transition-property: transform;
+  }
+
+  &__header {
+    @apply flex;
+    @apply flex-no-shrink;
+
+    @apply pt-24;
+    @apply pl-24;
+    @apply pr-16;
+    @apply pb-16;
   }
 }
 
@@ -218,10 +260,5 @@ $sliding-menu-width: 256px;
       @apply p-0;
     }
   }
-}
-
-// Prevent scrolling when sliding menu is opened
-html[sliding-menu='opened'] {
-  overflow-y: hidden;
 }
 </style>

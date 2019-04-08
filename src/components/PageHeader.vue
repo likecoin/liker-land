@@ -6,14 +6,12 @@
       v-if="isFloatable"
       to="floating-page-header-container"
     >
-      <div
-        class="floating-page-header-container"
+      <header
+        :class="[$vnode.data.staticClass, getRootClass(true)]"
         :style="floatingHeaderStyle"
       >
-        <header :class="getRootClass(true)">
-          <slot v-bind="getSlotProps(true)" />
-        </header>
-      </div>
+        <slot v-bind="getSlotProps(true)" />
+      </header>
     </portal>
   </header>
 </template>
@@ -169,28 +167,22 @@ export default {
 </script>
 
 <style lang="scss">
-.floating-page-header-container {
-  right: 100%;
-
-  @apply absolute;
-  @apply pin-t;
-
-  @apply w-screen;
-}
-
 .page-header {
+  @apply z-1;
+
+  &--floating {
+    right: 100%;
+
+    @apply absolute;
+    @apply pin-t;
+
+    @apply w-screen;
+  }
+
   @media screen and (min-width: config('screens.desktop.min')) {
     .site-nav-bar {
       @apply px-64;
     }
-
-    &--floating .site-nav-bar {
-      @apply absolute;
-      @apply pin;
-
-      @apply bg-transparent;
-    }
-
     &:not(&--floating) .site-nav-bar {
       @apply pt-32;
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="site-nav-bar text-white">
+  <div class="site-nav-bar">
     <NuxtLink
       :class="{
         'site-nav-bar__logo': true,
@@ -11,7 +11,7 @@
     </NuxtLink>
 
     <button
-      class="site-nav-bar__menu-button"
+      class="site-nav-bar__menu-button sliding-menu-toggle"
       @click="toggleSlidingMenu(!getIsSlidingMenuOpen)"
     >
       <span />
@@ -67,8 +67,6 @@ export default {
   &__logo {
     @apply text-inherit-color;
 
-    @apply -my-8;
-
     &--disabled {
       @apply pointer-events-none;
     }
@@ -92,8 +90,6 @@ export default {
 
     @apply w-32;
     @apply h-32;
-
-    @apply -my-8;
 
     > span {
       width: calc(100% - 0.5em);

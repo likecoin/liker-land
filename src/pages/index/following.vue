@@ -34,6 +34,7 @@ import FeaturedIcon from '~/assets/icons/featured.svg';
 
 export default {
   name: 'Following',
+  scrollToTop: true,
   components: {
     ContentList,
     EmptyIcon,
