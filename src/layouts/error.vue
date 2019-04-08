@@ -101,7 +101,9 @@ export default {
   },
   methods: {
     onClickBackButton(e) {
-      if (this.error.message === 'LOGIN_NEEDED') {
+      // If the user enters a page requires authenication,
+      // back button should trigger going back instead of refreshing the page
+      if (this.isLoginError && this.error.message === 'LOGIN_NEEDED') {
         e.preventDefault();
         this.$router.back();
       }
