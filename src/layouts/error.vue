@@ -17,8 +17,7 @@
               <a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
-              >{{ $t('signIn') }}</a>
-              <a
+              >{{ $t('signIn') }}</a><a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
               >{{ $t('signUp') }}</a>
@@ -27,8 +26,7 @@
               class="btn btn--plain btn--auto-size text-14 mx-0"
               href=""
               @click="onClickBackButton"
-            >{{ $t('back') }}</a>
-            <a
+            >{{ $t('back') }}</a><a
               class="btn btn--plain btn--auto-size text-14 mx-0"
               href="/"
             >{{ $t('backToHome') }}</a>
