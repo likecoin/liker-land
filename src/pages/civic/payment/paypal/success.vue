@@ -44,6 +44,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { getPayPalPaymentAPI } from '@/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import RadialBlastGraph from '~/assets/images/civic/radial-blast.svg';
 import TickIcon from '~/assets/icons/tick.svg';
@@ -68,6 +69,13 @@ export default {
   async mounted() {
     let from;
     let referrer;
+    logTrackerEvent(
+      this,
+      'Civic',
+      'CivicPaymentSuccess',
+      'CivicPaymentSuccess(paypal)',
+      1
+    );
     if (window.sessionStorage) {
       from = window.sessionStorage.getItem('civicLikerFrom');
       referrer = window.sessionStorage.getItem('civicLikerReferrer');
@@ -79,6 +87,13 @@ export default {
         ...this.$route.query,
       });
       this.setUserCivicLiker();
+      logTrackerEvent(
+        this,
+        'Civic',
+        'CivicRegisterComplete',
+        'CivicRegisterComplete(paypal)',
+        1
+      );
       setTimeout(() => {
         this.$router.push({
           name: 'index',

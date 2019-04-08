@@ -17,9 +17,11 @@
               <a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
+                @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(error)', 1)"
               >{{ $t('signIn') }}</a><a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
+                @click="logTrackerEvent(this, 'Register', 'RegistersignUp', 'RegisterSignUp(error)', 1)"
               >{{ $t('signUp') }}</a>
             </div>
             <a
@@ -40,6 +42,7 @@
 
 <script>
 import { getOAuthLoginAPI } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
 import IntercomMixin from '~/mixins/intercom';
 
@@ -84,11 +87,6 @@ export default {
       return `[${statusCode}] ${message}`;
     },
   },
-  head() {
-    return {
-      title: this.formattedMessage,
-    };
-  },
   mounted() {
     if (this.isLoginError) {
       if (window.sessionStorage) {
@@ -100,6 +98,7 @@ export default {
     }
   },
   methods: {
+    logTrackerEvent,
     onClickBackButton(e) {
       // If the user enters a page requires authenication,
       // back button should trigger going back instead of refreshing the page
@@ -108,6 +107,11 @@ export default {
         this.$router.back();
       }
     },
+  },
+  head() {
+    return {
+      title: this.formattedMessage,
+    };
   },
 };
 </script>

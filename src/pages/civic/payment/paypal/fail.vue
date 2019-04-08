@@ -11,6 +11,7 @@
 
 <script>
 import IntercomMixin from '~/mixins/intercom';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [IntercomMixin],
@@ -25,6 +26,13 @@ export default {
     };
   },
   mounted() {
+    logTrackerEvent(
+      this,
+      'Civic',
+      'CivicPaymentError',
+      'CivicPaymentError(paypal)',
+      1
+    );
     setTimeout(() => {
       this.$router.push({
         name: 'civic',

@@ -25,6 +25,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import AuthorListItem from '~/components/AuthorListItem';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   components: {
@@ -78,8 +79,10 @@ export default {
         // TODO: Block user interaction
         if (this.$route.name === 'settings-following') {
           await this.unfollowAuthor(likerId);
+          logTrackerEvent(this, 'Follow', 'FollowRemove', likerId, 1);
         } else {
           await this.followAuthor(likerId);
+          logTrackerEvent(this, 'Follow', 'FollowAdd', likerId, 1);
         }
       } catch (error) {
         // eslint-disable-next-line no-console

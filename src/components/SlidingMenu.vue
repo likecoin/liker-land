@@ -26,6 +26,7 @@
           v-else
           class="btn btn--dark btn--block mx-0"
           :href="getOAuthLoginAPI()"
+          @click="logTrackerEvent(this, 'Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
         >{{ $t('signInOrSignUp') }}</a>
       </header>
   
@@ -94,6 +95,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { getOAuthLoginAPI } from '~/util/api';
 import { IntercomMixinFactory } from '~/mixins/intercom';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
@@ -123,6 +125,7 @@ export default {
   },
   methods: {
     getOAuthLoginAPI,
+    logTrackerEvent,
 
     ...mapActions(['toggleSlidingMenu', 'setLocale']),
 

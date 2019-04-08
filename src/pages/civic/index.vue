@@ -119,6 +119,7 @@ import { mapGetters } from 'vuex';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 import CivicPricingCard from '~/components/CivicPricingCard';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import CivicLikerHeroImage from '~/assets/images/civic/hero.png';
 
@@ -170,12 +171,22 @@ export default {
       if (referrer)
         window.sessionStorage.setItem('civicLikerReferrer', referrer);
     }
+    logTrackerEvent(this, 'Civic', 'CivicPageLoad', 'CivicPageLoad(civic)', 1);
   },
   methods: {
     onClickActionButton() {
       if (!this.getUserId) {
         throw new Error('LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER');
       }
+      logTrackerEvent(
+        this,
+        'Civic',
+        'CivicClickRegister',
+        `CivicClick${
+          this.getUserIsCivicLikerTrial ? 'Upgrade' : 'Register'
+        }(civic)`,
+        1
+      );
       this.$router.push({
         name: 'civic-register',
         query: this.$route.query,
