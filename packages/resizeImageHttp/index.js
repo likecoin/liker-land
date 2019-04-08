@@ -40,6 +40,7 @@ app.get('/', async (req, res) => {
       method: 'GET',
       url,
       responseType: 'stream',
+      timeout: 10000,
     });
     const transformer = sharp();
     res.set('Cache-Control', `public, max-age=${CACHE_TIME_IN_S}`);
