@@ -25,6 +25,11 @@ import { getOAuthLoginAPI } from '~/util/api';
 import { defaultLocale } from '~/locales';
 import IntercomMixin from '~/mixins/intercom';
 
+const LOGIN_ERROR_MESSAGE_SET = new Set([
+  'LOGIN_NEEDED',
+  'LOGIN_NEEDED_TO_BOOKMARK',
+]);
+
 export default {
   layout: 'dialog',
   mixins: [IntercomMixin],
@@ -44,8 +49,8 @@ export default {
       return this.$te(`ERROR.${this.error.message}`, defaultLocale);
     },
     isLoginError() {
-      const { statusCode, message } = this.error;
-      return statusCode === 401 && message === 'LOGIN_NEEDED';
+      const { message } = this.error;
+      return LOGIN_ERROR_MESSAGE_SET.has(message);
     },
     formattedMessage() {
       if (this.isLocalizedError) {

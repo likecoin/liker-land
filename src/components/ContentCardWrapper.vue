@@ -218,6 +218,9 @@ export default {
     /* eslint-enable no-param-reassign */
 
     onClickBookmark(referrer) {
+      if (!this.getUserId) {
+        throw new Error('LOGIN_NEEDED_TO_BOOKMARK');
+      }
       if (this.getIsInBookmark(referrer)) {
         this.removeBookmark(referrer);
       } else {

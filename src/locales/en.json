@@ -62,7 +62,8 @@
     }
   },
   "ERROR": {
-    "LOGIN_NEEDED": "Please sign in to view this content"
+    "LOGIN_NEEDED": "Please sign in to view this content",
+    "LOGIN_NEEDED_TO_BOOKMARK": "Please sign in to bookmark this content"
   },
   "LikerType": {
     "general": "General Liker",

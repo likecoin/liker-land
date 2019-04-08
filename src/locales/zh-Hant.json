@@ -61,7 +61,8 @@
     }
   },
   "ERROR": {
-    "LOGIN_NEEDED": "請登入以觀看內容"
+    "LOGIN_NEEDED": "請登入以觀看內容",
+    "LOGIN_NEEDED_TO_BOOKMARK": "請登入以收藏內容"
   },
   "LikerType": {
     "general": "一般讚客",
