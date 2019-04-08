@@ -1,4 +1,8 @@
-import { IS_TESTNET, LIKECOIN_API_BASE } from '@/constant';
+import {
+  IS_TESTNET,
+  LIKECOIN_API_BASE,
+  LIKE_CO_CLOUD_FN_BASE,
+} from '@/constant';
 
 export const getPaypalPaymentPageURL = (likerId, custom) => {
   let baseURL = IS_TESTNET
@@ -29,9 +33,7 @@ export const getCivicLikerJoinTrialEventByIdAPI = id =>
   `/api/civic/trial/events/${id}/join`;
 
 export const getImageResizeAPI = (url, { width } = {}) =>
-  `https://us-central1-civic-liker${
-    IS_TESTNET ? '-develop' : ''
-  }.cloudfunctions.net/thumbnail/?url=${encodeURIComponent(url)}${
+  `${LIKE_CO_CLOUD_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${
     width ? `&width=${width}` : ''
   }`;
 export const getUserMinAPI = likerId =>

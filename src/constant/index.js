@@ -10,3 +10,7 @@ export const LIKECOIN_API_BASE = IS_TESTNET
 export const LIKE_CO_URL_BASE = IS_TESTNET
   ? 'https://rinkeby.like.co'
   : 'https://like.co';
+
+export const LIKE_CO_CLOUD_FN_BASE = `https://us-central1-civic-liker${
+  IS_TESTNET ? '-develop' : ''
+}.cloudfunctions.net`;
