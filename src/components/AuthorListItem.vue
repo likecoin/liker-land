@@ -7,7 +7,7 @@
     <LcAvatar
       v-if="!isLoading"
       class="author-list-item__avatar"
-      :src="avatarSrc"
+      :src="resizedAvatarSrc"
       :halo="avatarHalo"
       size="36"
     />
@@ -21,6 +21,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
+import { getImageResizeAPI } from '~/util/api';
 
 export default {
   props: {
@@ -44,6 +45,10 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfoById']),
+    resizedAvatarSrc() {
+      if (!this.avatarSrc) return undefined;
+      return getImageResizeAPI(this.avatarSrc, { width: 36 });
+    },
   },
   mounted() {
     this.fetchAuthorInfo();

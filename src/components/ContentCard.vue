@@ -16,7 +16,7 @@
         >
           <LcAvatar
             class="content-card__author-avatar"
-            :src="authorAavtarSrc"
+            :src="resizedAvatarSrc"
             :halo="authorAvatarHalo"
           />{{ author.displayName || authorId }}</a>
       </span>
@@ -36,7 +36,7 @@
         class="content-card__cover-photo"
       >
         <img
-          :src="coverSrc"
+          :src="resizedCoverSrc"
           :alt="title"
         >
       </div>
@@ -77,6 +77,7 @@
 
 <script>
 import { LIKE_CO_URL_BASE } from '~/constant';
+import { getImageResizeAPI } from '~/util/api';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
@@ -167,7 +168,7 @@ export default {
     authorAvatarHalo() {
       return getAvatarHaloTypeFromUser(this.author);
     },
-    authorAavtarSrc() {
+    authorAvatarSrc() {
       return this.author.avatar;
     },
     url() {
@@ -185,6 +186,14 @@ export default {
     isShowFooter() {
       return this.canBookmark;
     },
+    resizedCoverSrc() {
+      if (!this.coverSrc) return undefined;
+      return getImageResizeAPI(this.coverSrc);
+    },
+    resizedAvatarSrc() {
+      if (!this.authorAvatarSrc) return undefined;
+      return getImageResizeAPI(this.authorAvatarSrc, { width: 36 });
+    },
   },
 
   watch: {
@@ -199,7 +208,7 @@ export default {
     async fetchCoverInfo() {
       if (this.coverSrc && this.shouldFetchCover) {
         try {
-          this.coverPhotoSize = await getImageSize(this.coverSrc);
+          this.coverPhotoSize = await getImageSize(this.resizedCoverSrc);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
