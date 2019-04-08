@@ -78,6 +78,9 @@ export default {
       if (this.isLocalizedError) {
         return this.$t(`ERROR.${this.error.message}`);
       }
+      if (this.isLoginError) {
+        return this.$t('Error.LOGIN_NEEDED');
+      }
 
       const { statusCode, message } = this.error;
       return `[${statusCode}] ${message}`;
