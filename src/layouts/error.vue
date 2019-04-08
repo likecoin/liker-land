@@ -24,11 +24,14 @@
               >{{ $t('signUp') }}</a>
             </div>
             <a
-              class="btn btn--plain btn--auto-size text-14"
+              class="btn btn--plain btn--auto-size text-14 mx-0"
+              href=""
+              @click="onClickBackButton"
+            >{{ $t('back') }}</a>
+            <a
+              class="btn btn--plain btn--auto-size text-14 mx-0"
               href="/"
-            >
-              {{ $t('backToHome') }}
-            </a>
+            >{{ $t('backToHome') }}</a>
           </div>
 
         </main>
@@ -101,6 +104,14 @@ export default {
         );
       }
     }
+  },
+  methods: {
+    onClickBackButton(e) {
+      if (this.error.message === 'LOGIN_NEEDED') {
+        e.preventDefault();
+        this.$router.back();
+      }
+    },
   },
 };
 </script>
