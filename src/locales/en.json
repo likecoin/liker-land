@@ -62,7 +62,9 @@
     }
   },
   "ERROR": {
-    "LOGIN_NEEDED": "Please sign in to view this content"
+    "LOGIN_NEEDED": "Please sign in to view this content",
+    "LOGIN_NEEDED_TO_BOOKMARK": "Please sign in to bookmark this content",
+    "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "Please sign in to register Civic Liker"
   },
   "LikerType": {
     "general": "General Liker",
@@ -120,6 +122,7 @@
     "support": "Support",
     "logout": "Logout"
   },
+  "back": "Back",
   "backToHome": "Back to home",
   "civicLiker": "Civic Liker",
   "month": "month",

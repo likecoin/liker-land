@@ -35,7 +35,7 @@
                       'btn--disabled': !!getUserIsCivicLiker,
                     },
                   ]"
-                  @click="onClickRegister"
+                  @click="onClickActionButton"
                 >{{ actionButtonText }}</button>
                 <LcChopCivicLiker
                   class="absolute phone:hidden"
@@ -97,7 +97,7 @@
                       'btn--disabled': !!getUserIsCivicLiker,
                     },
                   ]"
-                  @click="onClickRegister"
+                  @click="onClickActionButton"
                 >{{ actionButtonText }}</button>
               </div>
             </template>
@@ -145,7 +145,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserIsCivicLikerTrial', 'getUserIsCivicLiker']),
+    ...mapGetters([
+      'getUserId',
+      'getUserIsCivicLikerTrial',
+      'getUserIsCivicLiker',
+    ]),
 
     actionButtonText() {
       if (this.getUserIsCivicLikerTrial) {
@@ -168,7 +172,10 @@ export default {
     }
   },
   methods: {
-    onClickRegister() {
+    onClickActionButton() {
+      if (!this.getUserId) {
+        throw new Error('LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER');
+      }
       this.$router.push({
         name: 'civic-register',
         query: this.$route.query,

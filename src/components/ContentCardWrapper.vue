@@ -29,7 +29,6 @@
         :cover-src="internalCoverSrc"
         :should-fetch-cover="!isAnimating"
         :like-count="internalLikeCount"
-        :can-bookmark="!!getUserId"
         :is-bookmarked="getIsInBookmark(referrer)"
         @bookmark-click="onClickBookmark(referrer)"
       />
@@ -222,6 +221,9 @@ export default {
     /* eslint-enable no-param-reassign */
 
     onClickBookmark(referrer) {
+      if (!this.getUserId) {
+        throw new Error('LOGIN_NEEDED_TO_BOOKMARK');
+      }
       if (this.getIsInBookmark(referrer)) {
         this.removeBookmark(referrer);
       } else {

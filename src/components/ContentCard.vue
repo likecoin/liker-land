@@ -59,12 +59,8 @@
       >{{ description }}</div>
     </div>
 
-    <div
-      v-if="isShowFooter"
-      class="content-card__footer content-card__inset"
-    >
+    <div class="content-card__footer content-card__inset">
       <a
-        v-if="canBookmark"
         class="content-card__bookmark-button"
         @click.prevent="$emit('bookmark-click')"
       >
@@ -139,10 +135,6 @@ export default {
       type: Number,
       default: 0,
     },
-    canBookmark: {
-      type: Boolean,
-      default: false,
-    },
     isBookmarked: {
       type: Boolean,
       default: false,
@@ -182,9 +174,6 @@ export default {
         suffix = 'k';
       }
       return `${likeCount.toLocaleString('en')}${suffix}`;
-    },
-    isShowFooter() {
-      return this.canBookmark;
     },
     resizedCoverSrc() {
       if (!this.coverSrc) return undefined;
