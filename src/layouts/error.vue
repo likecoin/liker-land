@@ -93,12 +93,11 @@ export default {
     };
   },
   mounted() {
-    const { isLoginError, error } = this;
-    if (isLoginError && error.payload && error.payload.targetPath) {
+    if (this.isLoginError) {
       if (window.sessionStorage) {
         window.sessionStorage.setItem(
-          encodeURIComponent('USER_POST_AUTH_PATH'),
-          error.payload.targetPath
+          'USER_POST_AUTH_ROUTE',
+          JSON.stringify(this.$route)
         );
       }
     }
