@@ -70,7 +70,7 @@ export default {
       return this.$te(`ERROR.${this.error.message}`, defaultLocale);
     },
     isLoginError() {
-      return /^LOGIN_NEEDED*/.test(this.error.message);
+      return /^LOGIN_NEEDED.*/.test(this.error.message);
     },
     formattedMessage() {
       if (this.isLocalizedError) {
