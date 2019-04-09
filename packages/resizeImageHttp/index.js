@@ -11,17 +11,23 @@ const {
   IS_TESTNET,
 } = process.env;
 
+const whiteListHostNames = [ORIGIN_DOMAIN];
+if (IS_TESTNET) whiteListHostNames.push('localhost');
+
 const app = express();
 
 app.use(helmet());
 app.get('/', async (req, res) => {
   const { url } = req.query;
-  const { referer } = req.headers;
+  let { width = MAX_THUMB_SIZE } = req.query;
+  const { referer, origin } = req.headers;
+  if (!url) {
+    res.sendStatus(400);
+    return;
+  }
   if (referer) {
     try {
       const parsedUrl = new URL(referer);
-      const whiteListHostNames = [ORIGIN_DOMAIN];
-      if (IS_TESTNET) whiteListHostNames.push('localhost');
       if (!whiteListHostNames.includes(parsedUrl.hostname)) {
         res.sendStatus(403);
         return;
@@ -31,11 +37,10 @@ app.get('/', async (req, res) => {
       return;
     }
   }
-  if (!url) {
-    res.sendStatus(400);
+  if (origin && !whiteListHostNames.includes(origin)) {
+    res.sendStatus(403);
     return;
   }
-  let { width = MAX_THUMB_SIZE } = req.query;
   try {
     width = Number(width);
     width = Math.min(width, MAX_THUMB_SIZE);
