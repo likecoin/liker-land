@@ -7,23 +7,58 @@
     rel="noopener"
   >
     <div class="content-card__header content-card__inset">
-      <span class="content-card__author">
-        <a
-          :href="authorURL"
-          :title="authorId"
-          target="_blank"
-          rel="noopener"
+      <div class="content-card__header-left">
+        <Transition
+          :css="false"
+          mode="out-in"
+          @before-enter="onElemBeforeEnter"
+          @enter="onElemEnter"
+          @leave="onElemLeave"
         >
-          <LcAvatar
-            class="content-card__author-avatar"
-            :src="resizedAvatarSrc"
-            :halo="authorAvatarHalo"
-          />{{ author.displayName || authorId }}</a>
-      </span>
+          <a
+            v-if="authorId"
+            class="content-card__author"
+            :href="authorURL"
+            :title="authorName"
+            target="_blank"
+            rel="noopener"
+          >
+            <LcAvatar
+              class="content-card__author-avatar"
+              :src="resizedAuthorAvatarSrc"
+              :halo="authorAvatarHalo"
+            />{{ authorName }}</a>
 
-      <span
-        class="content-card__like-count"
-      >{{ formattedLikeCount }}<LikeUnit /></span>
+          <div
+            v-else
+            class="content-card__author-placeholder"
+          >
+            <div class="avatar content-card__placeholder-bg" />
+            <div class="name content-card__placeholder-text content-card__placeholder-bg" />
+          </div>
+        </Transition>
+      </div>
+
+      <div class="content-card__header-right">
+        <Transition
+          :css="false"
+          mode="out-in"
+          @before-enter="onElemBeforeEnter"
+          @enter="onElemEnter"
+          @leave="onElemLeave"
+        >
+          <span
+            v-if="likeCount !== -1"
+            key="like-count"
+            class="content-card__like-count"
+          >{{ formattedLikeCount }}<LikeUnit /></span>
+          <div
+            v-else
+            key="like-count-placeholder"
+            class="content-card__like-count-placeholder content-card__placeholder-bg"
+          />
+        </Transition>
+      </div>
     </div>
 
     <Transition
@@ -42,32 +77,71 @@
       </div>
     </Transition>
 
-    <div class="content-card__info content-card__inset">
-      <a
-        class="content-card__domain"
-        :href="url.origin"
-        target="_blank"
-        rel="noopener"
-      >{{ url.hostname }}</a>
+    <Transition
+      :css="false"
+      mode="out-in"
+      @before-enter="onInfoBeforeEnter"
+      @enter="onInfoEnter"
+      @before-leave="onInfoBeforeLeave"
+      @leave="onInfoLeave"
+    >
       <div
-        v-if="title"
-        class="content-card__title"
-      >{{ title }}</div>
+        v-if="title || description"
+        key="info"
+        class="content-card__info content-card__inset"
+      >
+        <a
+          class="content-card__domain"
+          :href="url.origin"
+          target="_blank"
+          rel="noopener"
+        >{{ url.hostname }}</a>
+        <div
+          class="content-card__title"
+        >{{ title }}</div>
+        <div
+          class="content-card__description"
+        >{{ description }}</div>
+      </div>
       <div
-        v-if="description"
-        class="content-card__description"
-      >{{ description }}</div>
-    </div>
+        v-else-if="title === '' && description === ''"
+        key="info-empty"
+      />
+      <div
+        v-else
+        key="info-placeholer"
+        class="content-card__info-placeholder content-card__inset content-card__placeholder-bg"
+      >
+        <div class="domain content-card__placeholder-text" />
+        <div class="title content-card__placeholder-text" />
+        <div class="description content-card__placeholder-text" />
+        <div class="description content-card__placeholder-text" />
+        <div class="description content-card__placeholder-text" />
+      </div>
+    </Transition>
 
     <div class="content-card__footer content-card__inset">
-      <a
-        class="content-card__bookmark-button"
-        @click.prevent="$emit('bookmark-click')"
+      <Transition
+        :css="false"
+        @before-enter="onElemBeforeEnter"
+        @enter="onElemEnter"
+        @leave="onElemLeave"
       >
-        <BookmarkIcon v-if="isBookmarked" />
-        <BookmarkOutlinedIcon v-else />
-      </a>
+        <div
+          v-if="shouldShowActionBar"
+          class="content-card__action-bar"
+        >
+          <button
+            class="content-card__bookmark-button"
+            @click.prevent="$emit('bookmark-click')"
+          >
+            <BookmarkIcon v-if="isBookmarked" />
+            <BookmarkOutlinedIcon v-else />
+          </button>
+        </div>
+      </Transition>
     </div>
+
   </a>
 </template>
 
@@ -105,35 +179,31 @@ export default {
     /* The URL of the content */
     src: {
       type: String,
-      required: true,
+      default: undefined,
     },
     author: {
       type: Object,
-      required: true,
+      default: () => ({}),
     },
     /* The title of the content */
     title: {
       type: String,
-      default: '',
+      default: undefined,
     },
     /* The description of the content */
     description: {
       type: String,
-      default: '',
+      default: undefined,
     },
     /* The URL of the cover photo of the content */
     coverSrc: {
       type: String,
-      default: '',
-    },
-    shouldFetchCover: {
-      type: Boolean,
-      default: true,
+      default: undefined,
     },
     /* Total like of the content */
     likeCount: {
       type: Number,
-      default: 0,
+      default: -1,
     },
     isBookmarked: {
       type: Boolean,
@@ -154,6 +224,9 @@ export default {
     authorId() {
       return this.author.user;
     },
+    authorName() {
+      return this.author.displayName || this.authorId;
+    },
     authorURL() {
       return `${LIKE_CO_URL_BASE}/${this.author.user}`;
     },
@@ -164,7 +237,11 @@ export default {
       return this.author.avatar;
     },
     url() {
-      return new URL(this.src);
+      try {
+        return new URL(this.src);
+      } catch (error) {
+        return undefined;
+      }
     },
     formattedLikeCount() {
       let { likeCount } = this;
@@ -179,14 +256,21 @@ export default {
       if (!this.coverSrc) return undefined;
       return getImageResizeAPI(this.coverSrc);
     },
-    resizedAvatarSrc() {
+    resizedAuthorAvatarSrc() {
       if (!this.authorAvatarSrc) return undefined;
       return getImageResizeAPI(this.authorAvatarSrc, { width: 36 });
+    },
+    shouldShowActionBar() {
+      return (
+        this.authorId &&
+        (this.title !== undefined || this.description !== undefined) &&
+        this.coverSrc !== undefined
+      );
     },
   },
 
   watch: {
-    shouldFetchCover: 'fetchCoverInfo',
+    resizedCoverSrc: 'fetchCoverInfo',
   },
 
   mounted() {
@@ -195,7 +279,7 @@ export default {
 
   methods: {
     async fetchCoverInfo() {
-      if (this.coverSrc && this.shouldFetchCover) {
+      if (this.coverSrc) {
         try {
           this.coverPhotoSize = await getImageSize(this.resizedCoverSrc);
         } catch (error) {
@@ -203,6 +287,36 @@ export default {
           console.error(error);
         }
       }
+    },
+
+    onElemBeforeEnter(el) {
+      // eslint-disable-next-line no-param-reassign
+      el.style.opacity = 0;
+    },
+    onElemEnter(el, done) {
+      this.$velocity(
+        el,
+        { opacity: 1 },
+        {
+          duration: 500,
+          easing: 'easeInOutSine',
+          complete: () => {
+            el.removeAttribute('style');
+            done();
+          },
+        }
+      );
+    },
+    onElemLeave(el, done) {
+      this.$velocity(
+        el,
+        { opacity: 0 },
+        {
+          duration: 250,
+          easing: 'easeInOutSine',
+          complete: done,
+        }
+      );
     },
 
     onCoverPhotoBeforeEnter(el) {
@@ -224,6 +338,35 @@ export default {
           opacity: 1,
         },
         {
+          duration: 750,
+          easing: 'easeInOutSine',
+          complete: () => {
+            el.removeAttribute('style');
+            done();
+          },
+        }
+      );
+    },
+
+    onInfoBeforeEnter(el) {
+      /* eslint-disable no-param-reassign */
+      el.style.opacity = 0;
+      el.style.overflow = 'hidden';
+      /* eslint-enable no-param-reassign */
+    },
+    onInfoEnter(el, done) {
+      const targetHeight = el.offsetHeight;
+
+      // eslint-disable-next-line no-param-reassign
+      el.style.height = `${this.infoLeavingHeight}px`;
+
+      this.$velocity(
+        el,
+        {
+          height: targetHeight,
+          opacity: 1,
+        },
+        {
           duration: 500,
           easing: 'easeInOutSine',
           complete: () => {
@@ -233,13 +376,27 @@ export default {
         }
       );
     },
+    onInfoBeforeLeave(el) {
+      this.infoLeavingHeight = el.offsetHeight;
+    },
+    onInfoLeave(el, done) {
+      this.$velocity(
+        el,
+        { opacity: 0 },
+        {
+          duration: 250,
+          easing: 'easeInSine',
+          complete: done,
+        }
+      );
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .content-card {
-  transition: background-color 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
 
   @apply block;
   @apply relative;
@@ -253,49 +410,145 @@ export default {
   @apply rounded-8;
 
   &:hover {
-    @apply bg-gray-f7;
+    opacity: 0.75;
+  }
+
+  > * {
+    &:first-child {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
   }
 
   &__inset {
-    @apply px-16;
-    @apply py-12;
+    border-left-width: 1rem;
+    border-right-width: 1rem;
+
+    border-top-width: 0.75rem;
+    border-bottom-width: 0.75rem;
+
+    @apply border-transparent;
+    @apply border-solid;
 
     & + & {
-      @apply pt-0;
+      border-top-width: 0;
     }
+  }
+
+  &__placeholder-text {
+    box-sizing: content-box;
+
+    min-height: 0.5rem;
+
+    border-color: currentColor;
+
+    @apply text-white;
+
+    @apply flex;
+    @apply justify-between;
+
+    &::before,
+    &::after {
+      content: '';
+
+      @apply bg-current;
+    }
+  }
+
+  &__placeholder-bg {
+    @keyframes placeholder-shimming {
+      0% {
+        background-position-x: -100vw;
+      }
+      100% {
+        background-position-x: 100vw;
+      }
+    }
+
+    background-size: 100vw 100%;
+    background-repeat: no-repeat;
+    background-clip: padding-box;
+    background-image: linear-gradient(
+      to right,
+      hsla(0, 0%, 100%, 0),
+      hsla(0, 0%, 100%, 0.5),
+      hsla(0, 0%, 0%, 0) 50%
+    );
+
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholder-shimming;
+    animation-timing-function: linear;
+
+    @apply bg-gray-e6;
   }
 
   &__header {
     @apply flex;
-    @apply items-center;
-  }
 
-  &__author-avatar {
-    width: 2.25rem;
-    height: 2.25rem;
+    &-left {
+      @apply flex-grow;
+    }
 
-    @apply mr-8;
+    &-left,
+    &-right {
+      @apply relative;
 
-    .lc-avatar__content {
-      width: inherit !important;
-      height: inherit !important;
+      @apply flex;
+      @apply items-center;
     }
   }
 
   &__author {
-    @apply flex;
-    @apply flex-grow;
+    @apply inline-flex;
+    @apply items-center;
 
-    > a {
-      @apply text-18;
-      @apply text-like-green;
-      @apply font-600;
+    @apply text-18;
+    @apply text-like-green;
+    @apply font-600;
 
-      @apply inline-flex;
-      @apply items-center;
+    a#{&}:hover {
+      @apply text-like-green-dark;
+    }
 
-      &:hover {
-        @apply text-like-green-dark;
+    &-avatar {
+      width: 2.25rem;
+      height: 2.25rem;
+
+      @apply mr-8;
+
+      .lc-avatar__content {
+        width: inherit !important;
+        height: inherit !important;
+      }
+    }
+
+    &-placeholder {
+      @apply flex;
+      @apply flex-grow;
+
+      .avatar {
+        @apply w-36;
+        @apply h-36;
+
+        @apply rounded-full;
+      }
+
+      .name {
+        border-top-width: 0.5rem;
+        border-bottom-width: 0.5rem;
+
+        width: 7.5rem;
+
+        &::before {
+          @apply w-8;
+        }
       }
     }
   }
@@ -309,7 +562,11 @@ export default {
 
     @apply flex;
     @apply items-center;
-    @apply flex-no-grow;
+
+    &-placeholder {
+      @apply w-64;
+      @apply h-16;
+    }
 
     svg {
       width: 2rem;
@@ -354,6 +611,41 @@ export default {
     }
   }
 
+  &__info {
+    &-placeholder {
+      .domain {
+        @apply h-14;
+
+        &::after {
+          width: 70%;
+        }
+      }
+
+      .title {
+        border-top-width: 0.5rem;
+        border-bottom-width: 0.25em;
+
+        @apply h-20;
+
+        &::after {
+          width: 20%;
+        }
+      }
+
+      .description {
+        border-top-width: 0.25rem;
+
+        @apply h-16;
+
+        &:last-child {
+          &::after {
+            width: 35%;
+          }
+        }
+      }
+    }
+  }
+
   &__domain {
     @apply inline-block;
 
@@ -388,6 +680,10 @@ export default {
   }
 
   &__footer {
+    min-height: 1.5rem;
+  }
+
+  &__action-bar {
     @apply flex;
     @apply justify-end;
   }
