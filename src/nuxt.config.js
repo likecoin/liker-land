@@ -23,7 +23,8 @@ const nuxtConfig = {
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
-
+      { hid: 'description', name: 'description', content: 'Connecting stories that matter, writers who think and readers who care by combining Like and Reward.' },
+      { hid: 'og:description', property: 'og:description', content: 'Connecting stories that matter, writers who think and readers who care by combining Like and Reward.' },
       { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.png' },
     ],
     link: [
@@ -54,8 +55,20 @@ const nuxtConfig = {
       })),
     ],
     script: [
+      {
+        hid: 'schema',
+        innerHTML: JSON.stringify({
+          '@context': 'http://www.schema.org',
+          '@type': 'Organization',
+          name: 'Civic Liker',
+          url: 'https://liker.land',
+          logo: 'https://liker.land/logo.png',
+        }),
+        type: 'application/ld+json',
+      },
       { src: '/vendor/typekit.js', type: 'text/javascript' },
     ],
+    __dangerouslyDisableSanitizersByTagID: { schema: ['innerHTML'] },
   },
 
   /*
