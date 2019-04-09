@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const axios = require('axios');
 const sharp = require('sharp');
+const { URL } = require('url');
 
 const {
   MAX_THUMB_SIZE = 478,
@@ -10,25 +11,36 @@ const {
   IS_TESTNET,
 } = process.env;
 
+const whiteListHostNames = [ORIGIN_DOMAIN];
+if (IS_TESTNET) whiteListHostNames.push('localhost');
+
 const app = express();
 
 app.use(helmet());
 app.get('/', async (req, res) => {
   const { url } = req.query;
-  const { origin, referer } = req.headers;
-  if (!IS_TESTNET && origin && !origin.includes(ORIGIN_DOMAIN)) {
-    res.sendStatus(403);
-    return;
-  }
-  if (!IS_TESTNET && referer && !referer.includes(ORIGIN_DOMAIN)) {
-    res.sendStatus(403);
-    return;
-  }
+  let { width = MAX_THUMB_SIZE } = req.query;
+  const { referer, origin } = req.headers;
   if (!url) {
     res.sendStatus(400);
     return;
   }
-  let { width = MAX_THUMB_SIZE } = req.query;
+  if (referer) {
+    try {
+      const parsedUrl = new URL(referer);
+      if (!whiteListHostNames.includes(parsedUrl.hostname)) {
+        res.sendStatus(403);
+        return;
+      }
+    } catch (err) {
+      res.sendStatus(400);
+      return;
+    }
+  }
+  if (origin && !whiteListHostNames.includes(origin)) {
+    res.sendStatus(403);
+    return;
+  }
   try {
     width = Number(width);
     width = Math.min(width, MAX_THUMB_SIZE);
