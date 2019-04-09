@@ -3,7 +3,7 @@ import VueLazyLoad from 'vue-lazyload';
 
 import VueAwesomeSwiper from 'vue-awesome-swiper/dist/ssr';
 
-import Velocity from 'velocity-animate';
+import { TweenLite } from 'gsap/TweenMax';
 
 const hasIntersectionObserverSupport =
   window &&
@@ -17,4 +17,6 @@ Vue.use(VueLazyLoad, {
   observer: hasIntersectionObserverSupport,
 });
 
-Vue.prototype.$velocity = Velocity;
+Vue.prototype.$gsap = {
+  TweenLite,
+};

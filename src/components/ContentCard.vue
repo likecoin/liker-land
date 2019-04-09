@@ -11,7 +11,6 @@
         <Transition
           :css="false"
           mode="out-in"
-          @before-enter="onElemBeforeEnter"
           @enter="onElemEnter"
           @leave="onElemLeave"
         >
@@ -43,7 +42,6 @@
         <Transition
           :css="false"
           mode="out-in"
-          @before-enter="onElemBeforeEnter"
           @enter="onElemEnter"
           @leave="onElemLeave"
         >
@@ -63,7 +61,6 @@
 
     <Transition
       :css="false"
-      @before-enter="onCoverPhotoBeforeEnter"
       @enter="onCoverPhotoEnter"
     >
       <div
@@ -80,10 +77,9 @@
     <Transition
       :css="false"
       mode="out-in"
-      @before-enter="onInfoBeforeEnter"
       @enter="onInfoEnter"
       @before-leave="onInfoBeforeLeave"
-      @leave="onInfoLeave"
+      @leave="onElemLeave"
     >
       <div
         v-if="title || description"
@@ -123,7 +119,6 @@
     <div class="content-card__footer content-card__inset">
       <Transition
         :css="false"
-        @before-enter="onElemBeforeEnter"
         @enter="onElemEnter"
         @leave="onElemLeave"
       >
@@ -289,18 +284,15 @@ export default {
       }
     },
 
-    onElemBeforeEnter(el) {
-      // eslint-disable-next-line no-param-reassign
-      el.style.opacity = 0;
-    },
     onElemEnter(el, done) {
-      this.$velocity(
+      this.$gsap.TweenLite.fromTo(
         el,
-        { opacity: 1 },
+        0.5,
+        { opacity: 0 },
         {
-          duration: 500,
-          easing: 'easeInOutSine',
-          complete: () => {
+          opacity: 1,
+          ease: 'easeOutPower2',
+          onComplete: () => {
             el.removeAttribute('style');
             done();
           },
@@ -308,39 +300,28 @@ export default {
       );
     },
     onElemLeave(el, done) {
-      this.$velocity(
-        el,
-        { opacity: 0 },
-        {
-          duration: 250,
-          easing: 'easeInOutSine',
-          complete: done,
-        }
-      );
-    },
-
-    onCoverPhotoBeforeEnter(el) {
-      // Prepare for cover photo animation
-      /* eslint-disable no-param-reassign */
-      el.style.height = 0;
-      el.style.opacity = 0;
-      /* eslint-enable no-param-reassign */
+      this.$gsap.TweenLite.to(el, 0.25, {
+        opacity: 1,
+        ease: 'easeInPower2',
+        onComplete: done,
+      });
     },
 
     onCoverPhotoEnter(el, done) {
       // Expand the cover photo
       const { width, height } = this.coverPhotoSize;
-      this.$velocity(
+      this.$gsap.TweenLite.fromTo(
         el,
-        // Set cover photo height that is relative to container width
+        0.75,
+        {
+          height: 0,
+          opacity: 0,
+        },
         {
           height: (el.clientWidth / width) * height,
           opacity: 1,
-        },
-        {
-          duration: 750,
-          easing: 'easeInOutSine',
-          complete: () => {
+          ease: 'easeOutPower2',
+          onComplete: () => {
             el.removeAttribute('style');
             done();
           },
@@ -348,28 +329,19 @@ export default {
       );
     },
 
-    onInfoBeforeEnter(el) {
-      /* eslint-disable no-param-reassign */
-      el.style.opacity = 0;
-      el.style.overflow = 'hidden';
-      /* eslint-enable no-param-reassign */
-    },
     onInfoEnter(el, done) {
-      const targetHeight = el.offsetHeight;
-
-      // eslint-disable-next-line no-param-reassign
-      el.style.height = `${this.infoLeavingHeight}px`;
-
-      this.$velocity(
+      this.$gsap.TweenLite.fromTo(
         el,
+        0.5,
         {
-          height: targetHeight,
-          opacity: 1,
+          opacity: 0,
+          height: this.infoLeavingHeight,
         },
         {
-          duration: 500,
-          easing: 'easeInOutSine',
-          complete: () => {
+          opacity: 1,
+          height: el.offsetHeight,
+          ease: 'easeOutPower2',
+          onComplete: () => {
             el.removeAttribute('style');
             done();
           },
@@ -378,17 +350,6 @@ export default {
     },
     onInfoBeforeLeave(el) {
       this.infoLeavingHeight = el.offsetHeight;
-    },
-    onInfoLeave(el, done) {
-      this.$velocity(
-        el,
-        { opacity: 0 },
-        {
-          duration: 250,
-          easing: 'easeInSine',
-          complete: done,
-        }
-      );
     },
   },
 };
