@@ -52,6 +52,11 @@ jobs:
       - run:
           name: Dependencies
           command: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
+      - run:
+          name: Add robots.txt
+          command: |
+            echo 'User-agent: *' > public_base/robots.txt
+            echo 'Disallow: /' >> public_base/robots.txt
       - deploy:
           name: Deploy
           command: |
