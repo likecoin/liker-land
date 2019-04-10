@@ -23,7 +23,7 @@
               :key="key"
               class="content-card-wrapper"
             >
-              <ContentCardPlaceholder />
+              <ContentCard />
             </div>
           </template>
           <template v-else-if="state === 'content'">
@@ -56,14 +56,14 @@
 </template>
 
 <script>
+import ContentCard from '~/components/ContentCard';
 import ContentCardWrapper from '~/components/ContentCardWrapper';
-import ContentCardPlaceholder from '~/components/ContentCardPlaceholder';
 
 export default {
   name: 'ContentList',
   components: {
+    ContentCard,
     ContentCardWrapper,
-    ContentCardPlaceholder,
   },
   props: {
     isLoading: {
