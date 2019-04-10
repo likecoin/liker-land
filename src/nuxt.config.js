@@ -129,6 +129,7 @@ const nuxtConfig = {
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
+    '~/plugins/v-tooltip.js',
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
   ],
