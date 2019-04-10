@@ -58,7 +58,8 @@ export default {
   computed: {
     ...mapGetters(['getUserBookmarks']),
     items() {
-      return this.getUserBookmarks.map(referrer => ({ referrer }));
+      const items = this.getUserBookmarks.map(referrer => ({ referrer }));
+      return items.reverse();
     },
   },
   mounted() {
