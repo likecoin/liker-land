@@ -90,6 +90,13 @@ export default {
       return 'empty';
     },
   },
+  watch: {
+    state(state) {
+      if (state === 'content') {
+        this.$Lazyload.lazyLoadHandler();
+      }
+    },
+  },
 };
 </script>
 

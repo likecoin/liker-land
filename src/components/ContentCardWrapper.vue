@@ -4,6 +4,7 @@
     class="content-card-wrapper"
   >
     <lazy-component
+      :key="referrer"
       class="content-card-wrapper__lazy-load-detector"
       @show="fetchContent"
     />
