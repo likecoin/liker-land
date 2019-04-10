@@ -20,7 +20,7 @@ app.use(helmet());
 app.get('/', async (req, res) => {
   const { url } = req.query;
   let { width = MAX_THUMB_SIZE } = req.query;
-  const { referer, origin } = req.headers;
+  const { referer, origin, accept = '' } = req.headers;
   if (!url) {
     res.sendStatus(400);
     return;
@@ -55,15 +55,22 @@ app.get('/', async (req, res) => {
       timeout: 10000,
     });
     res.set('Cache-Control', `public, max-age=${CACHE_TIME_IN_S}`);
+    res.vary('Accept'); // vary cache for accept to allow auto webp serving
     const transformer = sharp();
-    transformer
+    let resizer = transformer
       .clone()
-      .metadata()
-      .then(m => res.type(m.format));
-    transformer
-      .clone()
-      .resize(width)
-      .pipe(res);
+      .rotate()
+      .resize(width);
+    if (accept.includes('image/webp')) {
+      resizer = resizer.webp();
+      res.type('webp');
+    } else {
+      transformer
+        .clone()
+        .metadata()
+        .then(m => res.type(m.format));
+    }
+    resizer.pipe(res);
     data.pipe(transformer);
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
