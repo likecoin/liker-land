@@ -1,5 +1,6 @@
-const axios = require('axios');
-
+const http = require('http');
+const https = require('https');
+const Axios = require('axios');
 const {
   IS_TESTNET,
   EXTERNAL_URL: CONFIG_EXTERNAL_URL,
@@ -18,6 +19,12 @@ const EXTERNAL_URL =
   CONFIG_EXTERNAL_URL ||
   (IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land');
 const OAUTH_REDIRECT_URI = encodeURIComponent(`${EXTERNAL_URL}/oauth/redirect`);
+
+const axios = Axios.create({
+  timeout: 60000,
+  httpAgent: new http.Agent({ keepAlive: true }),
+  httpsAgent: new https.Agent({ keepAlive: true }),
+});
 
 const apiRefreshAccessToken = async req => {
   const { user } = req.session;
