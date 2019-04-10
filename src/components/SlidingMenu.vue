@@ -29,7 +29,7 @@
           @click="logTrackerEvent(this, 'Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
         >{{ $t('signInOrSignUp') }}</a>
       </header>
-  
+
       <div class="main-menu">
         <div class="main-menu__primary-menu">
           <NuxtLink
@@ -40,13 +40,13 @@
           >
             <HomeIcon class="btn__icon" />
           </NuxtLink>
-  
+
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block"
             :to="{ name: 'civic' }"
             @click.native="onClickMenuItem"
           >{{ $t('SlidingMenu.civic') }}</NuxtLink>
-  
+
           <NuxtLink
             v-if="getUserId"
             class="btn btn--outlined btn--dark btn--block btn--with-icon"
@@ -57,7 +57,7 @@
               $t('SlidingMenu.settings')
             }}</NuxtLink>
         </div>
-  
+
         <div class="main-menu__secondary-menu">
           <a
             class="btn btn--plain btn--dark btn--auto-size"
@@ -72,7 +72,7 @@
           >{{ $t('SlidingMenu.logout') }}</NuxtLink>
         </div>
       </div>
-  
+
       <div class="flex flex-col mt-48 p-48">
         <button
           v-for="locale in locales"
@@ -197,6 +197,10 @@ html[sliding-menu='opened'] {
     html[sliding-menu='opened'] & {
       // Hacking hairline issue when transforming
       outline-width: 1px;
+
+      .page-header {
+        @apply pointer-events-none;
+      }
 
       &-pushee {
         @apply pointer-events-none;

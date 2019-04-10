@@ -44,7 +44,10 @@ export default {
       if (!this.getIsSlidingMenuOpen) return;
 
       const component = this.$refs.slidingMenu;
-      const isClickedOutside = component && !component.$el.contains(e.target);
+      const isClickedOutside =
+        component &&
+        !component.$el.contains(e.target) &&
+        !e.target.classList.contains('sliding-menu-toggle');
       if (isClickedOutside) {
         // Intercept the event to menu button that preventing the action
         e.stopPropagation();
