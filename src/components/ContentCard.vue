@@ -148,6 +148,7 @@ import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
 import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg';
 
+import { checkIsMobileClient } from '~/util/client';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 function getImageSize(src) {
@@ -223,6 +224,9 @@ export default {
       return this.author.displayName || this.authorId;
     },
     authorURL() {
+      if (checkIsMobileClient()) {
+        return this.src;
+      }
       return `${LIKE_CO_URL_BASE}/${this.author.user}`;
     },
     authorAvatarHalo() {
