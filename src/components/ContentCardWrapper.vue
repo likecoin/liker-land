@@ -1,12 +1,9 @@
 <template>
-  <div
+  <lazy-component
     v-if="isLoading || hasContent"
     class="content-card-wrapper"
+    @show="fetchContent"
   >
-    <lazy-component
-      class="content-card-wrapper__lazy-load-detector"
-      @show="fetchContent"
-    />
     <ContentCard
       :src="internalUrl"
       :author="author"
@@ -17,7 +14,7 @@
       :is-bookmarked="getIsInBookmark(referrer)"
       @bookmark-click="onClickBookmark(referrer)"
     />
-  </div>
+  </lazy-component>
 </template>
 
 <script>
@@ -172,13 +169,6 @@ export default {
 
 <style lang="scss">
 .content-card-wrapper {
-  @apply relative;
-
-  &__lazy-load-detector {
-    @apply absolute;
-    @apply pin;
-
-    @apply pointer-events-none;
-  }
+  min-height: 8rem;
 }
 </style>
