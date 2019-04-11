@@ -96,11 +96,11 @@
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > Follow / Unfollow",
-    "follow": "Follow",
-    "following": "Following",
+    "follow": "@:follow",
+    "following": "@:following",
     "noFollowing": "Your have no following authors",
-    "unfollow": "Unfollow",
-    "unfollowed": "Unfollowed",
+    "unfollow": "@:unfollow",
+    "unfollowed": "@:unfollowed",
     "noUnfollowed": "Your have no unfollowed authors"
   },
   "SettingsPage": {
@@ -125,11 +125,15 @@
   "back": "Back",
   "backToHome": "Back to home",
   "civicLiker": "Civic Liker",
+  "follow": "Follow",
+  "following": "Following",
   "month": "month",
   "register": "Register",
   "registered": "Registered",
   "signIn": "Sign in",
   "signInOrSignUp": "Sign up / Sign in",
   "signUp": "Sign up",
+  "unfollow": "Unfollow",
+  "unfollowed": "Unfollowed",
   "upgrade": "Upgrade"
 }

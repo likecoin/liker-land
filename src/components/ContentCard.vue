@@ -127,12 +127,37 @@
           class="content-card__action-bar"
         >
           <button
-            class="content-card__bookmark-button"
+            class="content-card__action-bar-button"
             @click.prevent="$emit('bookmark-click')"
           >
             <BookmarkIcon v-if="isBookmarked" />
             <BookmarkOutlinedIcon v-else />
           </button>
+
+          <v-popover
+            :auto-hide="true"
+            placement="auto"
+          >
+            <button
+              class="content-card__action-bar-button"
+              @click.prevent=""
+            >
+              <MoreIcon />
+            </button>
+
+            <ul
+              slot="popover"
+              class="content-card-option-list"
+            >
+              <li class="content-card-option-list-item">
+                <button
+                  v-close-popover
+                  @click="$emit('toggle-follow')"
+                >{{ $t(isFollowed ? 'unfollow' : 'follow') }}</button>
+              </li>
+            </ul>
+          </v-popover>
+
         </div>
       </Transition>
     </div>
@@ -147,6 +172,7 @@ import { getImageResizeAPI } from '~/util/api';
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
 import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg';
+import MoreIcon from '~/assets/icons/more.svg';
 
 import { checkIsMobileClient } from '~/util/client';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -170,6 +196,7 @@ export default {
     LikeUnit,
     BookmarkIcon,
     BookmarkOutlinedIcon,
+    MoreIcon,
   },
   props: {
     /* The URL of the content */
@@ -202,6 +229,10 @@ export default {
       default: -1,
     },
     isBookmarked: {
+      type: Boolean,
+      default: false,
+    },
+    isFollowed: {
       type: Boolean,
       default: false,
     },
@@ -651,35 +682,68 @@ export default {
   &__action-bar {
     @apply flex;
     @apply justify-end;
+
+    > * {
+      &:not(:first-child) {
+        @apply ml-12;
+      }
+    }
+
+    &-button {
+      transition-property: color, opacity, transform;
+      transition-duration: 0.2s;
+      transition-timing-function: ease;
+
+      @apply relative;
+
+      @apply text-gray-4a;
+
+      @apply w-24;
+      @apply h-24;
+
+      &:hover {
+        @apply text-like-green;
+      }
+
+      &:active {
+        transform: translateY(1px);
+
+        @apply text-like-green-dark;
+      }
+
+      svg {
+        @apply absolute;
+        @apply pin;
+
+        @apply fill-current;
+      }
+    }
   }
 
-  &__bookmark-button {
-    transition-property: color, opacity, transform;
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
+  &-option-list {
+    min-width: 180px;
 
-    @apply relative;
+    @apply list-reset;
 
-    @apply text-gray-4a;
+    @apply bg-white;
+    @apply rounded;
 
-    @apply w-24;
-    @apply h-24;
+    &-item {
+      transition: opacity 0.15s ease;
 
-    &:hover {
-      @apply text-like-green;
-    }
+      @apply block;
 
-    &:active {
-      transform: translateY(1px);
+      @apply text-14;
+      @apply text-center;
 
-      @apply text-like-green-dark;
-    }
+      @apply px-16;
+      @apply py-12;
 
-    svg {
-      @apply absolute;
-      @apply pin;
+      @apply w-full;
 
-      @apply fill-current;
+      &:hover {
+        @apply opacity-75;
+      }
     }
   }
 }

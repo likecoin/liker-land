@@ -1,5 +1,7 @@
 export const getFollowedAuthors = state => state.followedUsers;
 export const getUnfollowedAuthors = state => state.unfollowedUsers;
+export const getIsFollowedAuthor = state => id =>
+  state.followedUsers.includes(id);
 
 export const getAllArticles = state => {
   const res = state.followedUsers.reduce((a, u) => {
