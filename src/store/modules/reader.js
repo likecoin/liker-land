@@ -48,10 +48,13 @@ const mutations = {
     state.unfollowedUsers = state.unfollowedUsers.filter(u => u !== user);
   },
   [READER_SET_FOLLOWED_ARTICLES](state, list) {
+    list = list.sort((a, b) => b.ts - a.ts);
     Vue.set(state.articles, 'follow', list);
   },
   [READER_APPEND_FOLLOWED_ARTICLES](state, list) {
-    Vue.set(state.articles, 'follow', state.articles.follow.concat(list));
+    list = state.articles.follow.concat(list);
+    list = list.sort((a, b) => b.ts - a.ts);
+    Vue.set(state.articles, 'follow', list);
   },
   [READER_SET_SUGGEST_ARTICLES](state, list) {
     Vue.set(state.articles, 'suggest', list);

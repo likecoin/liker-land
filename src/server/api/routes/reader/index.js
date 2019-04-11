@@ -70,13 +70,13 @@ router.get('/reader/works/followed', async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const { limit = 40 } = req.query;
+    const { after, before, limit = 40 } = req.query;
     /* TODO: fix this HACK on hardcode 20 articles/user limit */
     const userArticleLimit = Math.min(limit, 20);
     const { followedUsers: userList } = await getFollowedUserListInfo(req);
     let articleLists = await Promise.all(
       userList.map(u =>
-        apiFetchUserArticles(u, userArticleLimit)
+        apiFetchUserArticles(u, { limit: userArticleLimit, after, before })
           .then(r => r.data.list)
           .catch(e => {})
       )

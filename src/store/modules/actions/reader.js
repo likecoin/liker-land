@@ -57,3 +57,11 @@ export async function fetchFollowedArticles({ commit }) {
   commit(types.READER_SET_FOLLOWED_ARTICLES, list);
   return list;
 }
+
+export async function updateFollowedArticles({ commit }, { after, before }) {
+  const { list } = await this.$axios.$get(api.getFetchFollowedArticlesApi(), {
+    params: { after, before },
+  });
+  commit(types.READER_APPEND_FOLLOWED_ARTICLES, list);
+  return list;
+}
