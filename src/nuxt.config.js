@@ -23,8 +23,8 @@ const nuxtConfig = {
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
-      { hid: 'description', name: 'description', content: 'Connecting stories that matter, writers who think and readers who care by combining Like and Reward.' },
-      { hid: 'og:description', property: 'og:description', content: 'Connecting stories that matter, writers who think and readers who care by combining Like and Reward.' },
+      { hid: 'description', name: 'description', content: 'Where every Like is a Reward. Stories that matter, writers who think and readers who care.' },
+      { hid: 'og:description', property: 'og:description', content: 'Where every Like is a Reward. Stories that matter, writers who think and readers who care.' },
       { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.png' },
     ],
     link: [
