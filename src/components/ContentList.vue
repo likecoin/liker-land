@@ -3,6 +3,7 @@
     <transition
       name="content-list-layout-"
       mode="in-out"
+      @after-leave="$Lazyload.lazyLoadHandler()"
     >
       <div
         :key="state"
