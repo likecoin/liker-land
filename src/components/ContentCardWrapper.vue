@@ -76,6 +76,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserId',
       'getUserInfoById',
       'getArticleInfoByReferrer',
       'getIsInBookmark',
