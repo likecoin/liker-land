@@ -135,12 +135,14 @@
           </button>
 
           <v-popover
-            :auto-hide="true"
+            :open.sync="isOptionMenuOpen"
+            :auto-hide="!isUpdatingFollow"
+            trigger="manual"
             placement="auto"
           >
             <button
               class="content-card__action-bar-button"
-              @click.prevent=""
+              @click.prevent="onClickOptionButton"
             >
               <MoreIcon />
             </button>
@@ -150,9 +152,18 @@
               class="content-card-option-list"
             >
               <li class="content-card-option-list-item">
+                <LcLoadingIndicator
+                  v-if="isUpdatingFollow"
+                  class="m-0 text-12"
+                />
+                <TickIcon
+                  v-else-if="isUpdatedFollow"
+                  class="w-20"
+                />
                 <button
-                  v-close-popover
-                  @click="$emit('toggle-follow')"
+                  v-else
+                  class="content-card-option-list-item__button"
+                  @click="onToggleFollow"
                 >{{ $t(isFollowed ? 'unfollow' : 'follow') }}</button>
               </li>
             </ul>
@@ -173,6 +184,7 @@ import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
 import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg';
 import MoreIcon from '~/assets/icons/more.svg';
+import TickIcon from '~/assets/icons/tick.svg';
 
 import { checkIsMobileClient } from '~/util/client';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -197,6 +209,7 @@ export default {
     BookmarkIcon,
     BookmarkOutlinedIcon,
     MoreIcon,
+    TickIcon,
   },
   props: {
     /* The URL of the content */
@@ -244,6 +257,9 @@ export default {
         width: 0,
         height: 0,
       },
+      isOptionMenuOpen: false,
+      isUpdatingFollow: false,
+      isUpdatedFollow: false,
     };
   },
 
@@ -385,6 +401,20 @@ export default {
     },
     onInfoBeforeLeave(el) {
       this.infoLeavingHeight = el.offsetHeight;
+    },
+
+    onClickOptionButton() {
+      this.isUpdatedFollow = false;
+      this.isOptionMenuOpen = true;
+    },
+    onToggleFollow() {
+      this.isUpdatingFollow = true;
+      this.$emit('toggle-follow', this.onUpdatedFollow);
+    },
+    onUpdatedFollow() {
+      this.isUpdatingFollow = false;
+      this.isUpdatedFollow = true;
+      this.isOptionMenuOpen = false;
     },
   },
 };
@@ -721,7 +751,9 @@ export default {
   }
 
   &-option-list {
-    min-width: 180px;
+    min-width: 10rem;
+
+    @apply overflow-hidden;
 
     @apply list-reset;
 
@@ -729,20 +761,35 @@ export default {
     @apply rounded;
 
     &-item {
-      transition: opacity 0.15s ease;
-
-      @apply block;
+      @apply flex;
+      @apply justify-center;
+      @apply items-center;
 
       @apply text-14;
       @apply text-center;
 
-      @apply px-16;
-      @apply py-12;
+      @apply h-36;
 
-      @apply w-full;
+      &__button {
+        height: inherit;
 
-      &:hover {
-        @apply opacity-75;
+        transition-property: opacity, background-color;
+        transition-duration: 0.15s;
+        transition-timing-function: ease;
+
+        @apply flex-grow;
+
+        &:hover {
+          background: rgba(black, 0.05);
+
+          @apply opacity-50;
+
+          @apply px-16;
+        }
+
+        &:active {
+          @apply opacity-25;
+        }
       }
     }
   }

@@ -172,16 +172,17 @@ export default {
       }
     },
 
-    onClickFollowAuthor() {
+    async onClickFollowAuthor(done) {
       if (!this.getUserId) {
         throw new Error('LOGIN_NEEDED_TO_FOLLOW_AUTHOR');
       }
       const { user: id } = this.author;
       if (this.getIsFollowedAuthor(id)) {
-        this.unfollowAuthor(id);
+        await this.unfollowAuthor(id);
       } else {
-        this.followAuthor(id);
+        await this.followAuthor(id);
       }
+      done();
     },
   },
 };
