@@ -63,6 +63,8 @@ export default {
 .settings-menu {
   @apply list-reset;
 
+  @apply mb-48;
+
   li {
     transition-duration: 0.25s;
     transition-timing-function: ease;
