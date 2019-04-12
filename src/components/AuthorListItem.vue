@@ -20,15 +20,16 @@
       name="accessory-view"
     >
       <TransitionGroup
+        ref="accessoryView"
         name="author-list-item__accessory-view-"
         class="author-list-item__accessory-view"
         tag="div"
       >
         <button
-          v-if="!isOpenAccessory"
+          v-if="!isOpenAccessoryView"
           key="accessory-toggle-button"
           class="author-list-item__accessory-view-toggle-button"
-          @click="isOpenAccessory = true"
+          @click="isOpenAccessoryView = true"
         >
           <MoreIcon />
         </button>
@@ -70,7 +71,7 @@ export default {
       avatarHalo: 'none',
 
       isLoading: true,
-      isOpenAccessory: false,
+      isOpenAccessoryView: false,
     };
   },
   computed: {
@@ -80,8 +81,16 @@ export default {
       return getImageResizeAPI(this.avatarSrc, { width: 36 });
     },
   },
+  watch: {
+    isOpenAccessoryView(isOpenAccessoryView) {
+      this.manageWindowClickListener(isOpenAccessoryView);
+    },
+  },
   mounted() {
     this.fetchAuthorInfo();
+  },
+  beforeDestroy() {
+    this.manageWindowClickListener(false);
   },
   methods: {
     ...mapActions(['fetchUserInfo']),
@@ -104,6 +113,25 @@ export default {
       this.displayName = authorData.displayName;
       this.avatarSrc = authorData.avatar;
       this.avatarHalo = getAvatarHaloTypeFromUser(authorData);
+    },
+
+    manageWindowEventListener(eventName, isAdd) {
+      window[`${isAdd ? 'add' : 'remove'}EventListener`](
+        eventName,
+        this.onWindowClick,
+        true
+      );
+    },
+    manageWindowClickListener(isAdd) {
+      this.manageWindowEventListener('click', isAdd);
+      this.manageWindowEventListener('touchend', isAdd);
+    },
+
+    onWindowClick(e) {
+      const component = this.$refs.accessoryView;
+      if (!component || !component.$el.contains(e.target)) {
+        this.isOpenAccessoryView = false;
+      }
     },
   },
 };
@@ -192,7 +220,6 @@ export default {
       }
 
       &:active {
-
         @apply opacity-50;
       }
     }
