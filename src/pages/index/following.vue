@@ -44,21 +44,41 @@ export default {
   data() {
     return {
       isLoading: true,
+      isLoadingMore: false,
+      isNoMoreUpdate: false,
       articles: [],
     };
   },
   computed: {
     ...mapGetters(['getFollowedAuthors', 'getFollowedArticles']),
     items() {
-      return this.getFollowedArticles.slice(0, 40);
+      return this.getFollowedArticles;
     },
   },
   mounted() {
     this.fetchContent();
+    window.addEventListener('scroll', this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
-    ...mapActions(['fetchReaderIndex', 'fetchFollowedArticles']),
-
+    ...mapActions([
+      'fetchReaderIndex',
+      'fetchFollowedArticles',
+      'updateFollowedArticles',
+    ]),
+    onScroll(e) {
+      const { innerHeight: windowHeight, pageYOffset: scrollY } = window;
+      const { scrollHeight } = document.documentElement;
+      if (
+        scrollY >= scrollHeight - windowHeight * 2 &&
+        !this.isLoadingMore &&
+        !this.isNoMoreUpdate
+      ) {
+        this.fetchMoreContent();
+      }
+    },
     async fetchContent() {
       try {
         this.isLoading = !this.getFollowedAuthors.length || !this.items.length;
@@ -71,6 +91,19 @@ export default {
         console.error(err); // eslint-disable-line no-console
       } finally {
         this.isLoading = false;
+      }
+    },
+    async fetchMoreContent() {
+      try {
+        this.isLoadingMore = true;
+        const lastIndex = this.getFollowedArticles.length - 1;
+        const lastTs = this.getFollowedArticles[lastIndex].ts;
+        const list = await this.updateFollowedArticles({ before: lastTs });
+        if (!list || !list.length) this.isNoMoreUpdate = true;
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
+      } finally {
+        this.isLoadingMore = false;
       }
     },
   },
