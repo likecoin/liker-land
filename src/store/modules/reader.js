@@ -21,6 +21,10 @@ import {
 import * as getters from './getters/reader';
 import * as actions from './actions/reader';
 
+function sortArticles(list) {
+  return list.sort((a, b) => b.ts - a.ts);
+}
+
 const state = () => ({
   followedUsers: [],
   unfollowedUsers: [],
@@ -48,13 +52,11 @@ const mutations = {
     state.unfollowedUsers = state.unfollowedUsers.filter(u => u !== user);
   },
   [READER_SET_FOLLOWED_ARTICLES](state, list) {
-    list = list.sort((a, b) => b.ts - a.ts);
-    Vue.set(state.articles, 'follow', list);
+    Vue.set(state.articles, 'follow', sortArticles(list));
   },
   [READER_APPEND_FOLLOWED_ARTICLES](state, list) {
     list = state.articles.follow.concat(list);
-    list = list.sort((a, b) => b.ts - a.ts);
-    Vue.set(state.articles, 'follow', list);
+    Vue.set(state.articles, 'follow', sortArticles(list));
   },
   [READER_SET_SUGGEST_ARTICLES](state, list) {
     Vue.set(state.articles, 'suggest', list);

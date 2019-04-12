@@ -98,8 +98,7 @@ export default {
         this.isLoadingMore = true;
         const lastIndex = this.getFollowedArticles.length - 1;
         const lastTs = this.getFollowedArticles[lastIndex].ts;
-        const fetchArticles = this.updateFollowedArticles({ before: lastTs });
-        const list = await fetchArticles;
+        const list = await this.updateFollowedArticles({ before: lastTs });
         if (!list || !list.length) this.isNoMoreUpdate = true;
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
