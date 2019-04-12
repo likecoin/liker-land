@@ -6,9 +6,22 @@
         :key="id"
         :liker-id="id"
       >
-        <template>
+        <template
+          v-if="isShowingFollowingAuthors"
+          v-slot:accessory-view-button
+        >
           <button
-            class="btn btn--outlined btn--block"
+            key="unfollow-button"
+            class="unfollow-button"
+            @click="onClickActionButton(id)"
+          >{{ actionButtonText }}</button>
+        </template>
+        <template
+          v-else
+          v-slot:accessory-view
+        >
+          <button
+            class="btn btn--plain no-underline btn--block"
             @click="onClickActionButton(id)"
           >{{ actionButtonText }}</button>
         </template>
@@ -77,7 +90,7 @@ export default {
     async onClickActionButton(likerId) {
       try {
         // TODO: Block user interaction
-        if (this.$route.name === 'settings-following') {
+        if (this.isShowingFollowingAuthors) {
           await this.unfollowAuthor(likerId);
           logTrackerEvent(this, 'Follow', 'FollowRemove', likerId, 1);
         } else {
@@ -98,5 +111,18 @@ export default {
   list-style: none; // Can use @apply list-none for Tailwind CSS v1.0.0+
 
   @apply p-0;
+
+  .unfollow-button {
+    background: #6e2828;
+
+    transition: opacity 0.25s ease;
+
+    @apply text-white;
+    @apply text-14;
+
+    &:active {
+      @apply opacity-75;
+    }
+  }
 }
 </style>
