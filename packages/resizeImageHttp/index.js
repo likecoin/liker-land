@@ -9,6 +9,7 @@ const {
   ORIGIN_DOMAIN = 'liker.land',
   CACHE_TIME_IN_S = 86400,
   IS_TESTNET,
+  IS_ENABLE_WEBP,
 } = process.env;
 
 const whiteListHostNames = [ORIGIN_DOMAIN];
@@ -61,7 +62,7 @@ app.get('/', async (req, res) => {
       .clone()
       .rotate()
       .resize(width);
-    if (accept.includes('image/webp')) {
+    if (IS_ENABLE_WEBP && accept.includes('image/webp')) {
       resizer = resizer.webp();
       res.type('webp');
     } else {
