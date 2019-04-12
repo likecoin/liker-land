@@ -53,6 +53,9 @@
   "ContentList": {
     "empty": "There is no article"
   },
+  "FeaturedPage": {
+    "headerLabel": "Today"
+  },
   "FollowingPage": {
     "headerLabel": "Your Following List",
     "empty": {

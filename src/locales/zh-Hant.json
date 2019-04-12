@@ -53,6 +53,9 @@
   "ContentList": {
     "empty": "沒有文章"
   },
+  "FeaturedPage": {
+    "headerLabel": "Today"
+  },
   "FollowingPage": {
     "headerLabel": "你的追蹤列表",
     "null": {
