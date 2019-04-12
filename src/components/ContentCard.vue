@@ -127,12 +127,48 @@
           class="content-card__action-bar"
         >
           <button
-            class="content-card__bookmark-button"
+            class="content-card__action-bar-button"
             @click.prevent="$emit('bookmark-click')"
           >
             <BookmarkIcon v-if="isBookmarked" />
             <BookmarkOutlinedIcon v-else />
           </button>
+
+          <v-popover
+            :open.sync="isOptionMenuOpen"
+            :auto-hide="!isUpdatingFollow"
+            trigger="manual"
+            placement="auto"
+          >
+            <button
+              class="content-card__action-bar-button"
+              @click.prevent="onClickOptionButton"
+            >
+              <MoreIcon />
+            </button>
+
+            <ul
+              slot="popover"
+              class="content-card-option-list"
+            >
+              <li class="content-card-option-list-item">
+                <LcLoadingIndicator
+                  v-if="isUpdatingFollow"
+                  class="m-0 text-12"
+                />
+                <TickIcon
+                  v-else-if="isUpdatedFollow"
+                  class="w-20"
+                />
+                <button
+                  v-else
+                  class="content-card-option-list-item__button"
+                  @click="onToggleFollow"
+                >{{ $t(isFollowed ? 'unfollow' : 'follow') }}</button>
+              </li>
+            </ul>
+          </v-popover>
+
         </div>
       </Transition>
     </div>
@@ -147,6 +183,8 @@ import { getImageResizeAPI } from '~/util/api';
 import LikeUnit from '~/assets/icons/like-unit.svg';
 import BookmarkIcon from '~/assets/icons/bookmark.svg';
 import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg';
+import MoreIcon from '~/assets/icons/more.svg';
+import TickIcon from '~/assets/icons/tick.svg';
 
 import { checkIsMobileClient } from '~/util/client';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -170,6 +208,8 @@ export default {
     LikeUnit,
     BookmarkIcon,
     BookmarkOutlinedIcon,
+    MoreIcon,
+    TickIcon,
   },
   props: {
     /* The URL of the content */
@@ -205,6 +245,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isFollowed: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -213,6 +257,9 @@ export default {
         width: 0,
         height: 0,
       },
+      isOptionMenuOpen: false,
+      isUpdatingFollow: false,
+      isUpdatedFollow: false,
     };
   },
 
@@ -354,6 +401,20 @@ export default {
     },
     onInfoBeforeLeave(el) {
       this.infoLeavingHeight = el.offsetHeight;
+    },
+
+    onClickOptionButton() {
+      this.isUpdatedFollow = false;
+      this.isOptionMenuOpen = true;
+    },
+    onToggleFollow() {
+      this.isUpdatingFollow = true;
+      this.$emit('toggle-follow', this.onUpdatedFollow);
+    },
+    onUpdatedFollow() {
+      this.isUpdatingFollow = false;
+      this.isUpdatedFollow = true;
+      this.isOptionMenuOpen = false;
     },
   },
 };
@@ -651,35 +712,85 @@ export default {
   &__action-bar {
     @apply flex;
     @apply justify-end;
+
+    > * {
+      &:not(:first-child) {
+        @apply ml-12;
+      }
+    }
+
+    &-button {
+      transition-property: color, opacity, transform;
+      transition-duration: 0.2s;
+      transition-timing-function: ease;
+
+      @apply relative;
+
+      @apply text-gray-4a;
+
+      @apply w-24;
+      @apply h-24;
+
+      &:hover {
+        @apply text-like-green;
+      }
+
+      &:active {
+        transform: translateY(1px);
+
+        @apply text-like-green-dark;
+      }
+
+      svg {
+        @apply absolute;
+        @apply pin;
+
+        @apply fill-current;
+      }
+    }
   }
 
-  &__bookmark-button {
-    transition-property: color, opacity, transform;
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
+  &-option-list {
+    min-width: 10rem;
 
-    @apply relative;
+    @apply overflow-hidden;
 
-    @apply text-gray-4a;
+    @apply list-reset;
 
-    @apply w-24;
-    @apply h-24;
+    @apply bg-white;
+    @apply rounded;
 
-    &:hover {
-      @apply text-like-green;
-    }
+    &-item {
+      @apply flex;
+      @apply justify-center;
+      @apply items-center;
 
-    &:active {
-      transform: translateY(1px);
+      @apply text-14;
+      @apply text-center;
 
-      @apply text-like-green-dark;
-    }
+      @apply h-36;
 
-    svg {
-      @apply absolute;
-      @apply pin;
+      &__button {
+        height: inherit;
 
-      @apply fill-current;
+        transition-property: opacity, background-color;
+        transition-duration: 0.15s;
+        transition-timing-function: ease;
+
+        @apply flex-grow;
+
+        &:hover {
+          background: rgba(black, 0.05);
+
+          @apply opacity-50;
+
+          @apply px-16;
+        }
+
+        &:active {
+          @apply opacity-25;
+        }
+      }
     }
   }
 }

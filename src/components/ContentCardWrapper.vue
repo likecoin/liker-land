@@ -12,7 +12,9 @@
       :cover-src="internalCoverSrc"
       :like-count="internalLikeCount"
       :is-bookmarked="getIsInBookmark(referrer)"
+      :is-followed="getIsFollowedAuthor(author.user)"
       @bookmark-click="onClickBookmark(referrer)"
+      @toggle-follow="onClickFollowAuthor"
     />
   </lazy-component>
 </template>
@@ -77,6 +79,7 @@ export default {
       'getUserInfoById',
       'getArticleInfoByReferrer',
       'getIsInBookmark',
+      'getIsFollowedAuthor',
     ]),
 
     hasContent() {
@@ -93,6 +96,8 @@ export default {
       'fetchArticleInfo',
       'addBookmark',
       'removeBookmark',
+      'followAuthor',
+      'unfollowAuthor',
     ]),
 
     async fetchContent() {
@@ -162,6 +167,19 @@ export default {
         this.addBookmark(referrer);
         logTrackerEvent(this, 'Bookmark', 'BookmarkAdd', referrer, 1);
       }
+    },
+
+    async onClickFollowAuthor(done) {
+      if (!this.getUserId) {
+        throw new Error('LOGIN_NEEDED_TO_FOLLOW_AUTHOR');
+      }
+      const { user: id } = this.author;
+      if (this.getIsFollowedAuthor(id)) {
+        await this.unfollowAuthor(id);
+      } else {
+        await this.followAuthor(id);
+      }
+      done();
     },
   },
 };

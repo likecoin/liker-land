@@ -1,0 +1,50 @@
+.v-popover {
+  line-height: 0;
+}
+
+.tooltip {
+  display: block !important;
+  z-index: 10000;
+
+  #{&}-inner {
+    box-shadow: 0 1pt 2pt rgba(black, 0.2);
+
+    @apply text-gray-4a;
+
+    @apply bg-white;
+
+    @apply border;
+    @apply rounded-8;
+    @apply border-gray-e6;
+  }
+
+  &[x-placement^="top"] {
+    @apply mb-4;
+  }
+
+  &[x-placement^="bottom"] {
+    @apply mt-4;
+  }
+
+  &[x-placement^="right"] {
+    @apply ml-4;
+  }
+
+  &[x-placement^="left"] {
+    @apply mr-4;
+  }
+
+  &[aria-hidden='true'] {
+    transition: opacity 0.25s, visibility 0.25s;
+
+    @apply invisible;
+    @apply opacity-0;
+  }
+
+  &[aria-hidden='false'] {
+    transition: opacity 0.15s;
+
+    @apply visible;
+    @apply opacity-100;
+  }
+}
