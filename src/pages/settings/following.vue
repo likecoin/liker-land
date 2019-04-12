@@ -41,13 +41,18 @@ export default {
 
   @apply bg-white;
 
+  @apply mb-48;
   @apply pb-24;
+
+  @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+    @apply mx-16;
+  }
 
   .tab-bar {
     @apply mb-24;
 
     .tab-bar-item-button__content {
-      @apply py-16;
+      @apply leading-2;
     }
   }
 }
