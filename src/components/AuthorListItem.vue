@@ -102,8 +102,12 @@ export default {
     @apply text-gray-4a;
     @apply text-18;
     @apply font-600;
+    @apply leading-1_5;
+    @apply truncate;
 
     @apply flex-grow;
+
+    @apply mr-12;
   }
 }
 </style>
