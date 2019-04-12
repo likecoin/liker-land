@@ -3,6 +3,7 @@ const {
   apiFetchLikedUser,
   apiFetchUserArticles,
   apiFetchSuggestedArticles,
+  apiFetchFollowedArticles,
 } = require('../../util/api');
 const { userCollection } = require('../../util/firebase');
 const follow = require('./follow');
@@ -72,22 +73,18 @@ router.get('/reader/works/followed', async (req, res, next) => {
     }
     const { after, before, limit = 40 } = req.query;
     /* TODO: fix this HACK on hardcode 20 articles/user limit */
-    const userArticleLimit = Math.min(limit, 20);
-    const { followedUsers: userList } = await getFollowedUserListInfo(req);
-    let articleLists = await Promise.all(
-      userList.map(u =>
-        apiFetchUserArticles(u, { limit: userArticleLimit, after, before })
-          .then(r => r.data.list)
-          .catch(e => {})
-      )
-    );
-    articleLists = articleLists.filter(a => a && a.length);
-    const articles = articleLists.reduce((acc, list) => {
-      if (!list || !list.length) return acc;
-      return acc.concat(filterArticleList(list));
-    }, []);
-    articles.sort((a, b) => b.ts - a.ts).splice(limit);
-    res.json({ list: articles });
+    const { followedUsers: users } = await getFollowedUserListInfo(req);
+    if (!users || !users.length) {
+      res.json({ list: [] });
+      return;
+    }
+    const { data } = await apiFetchFollowedArticles(users, {
+      after,
+      before,
+      limit,
+    });
+    data.list.sort((a, b) => b.ts - a.ts).splice(limit);
+    res.json({ list: data.list });
   } catch (err) {
     next(err);
   }

@@ -81,6 +81,18 @@ const apiFetchLikedUser = req =>
       headers: { Authorization },
     })
   );
+const apiFetchFollowedArticles = (users, { limit, after, before }) =>
+  axios.post(
+    `${LIKECOIN_API_BASE}/like/info/users/latest`,
+    { users },
+    {
+      params: {
+        limit,
+        after,
+        before,
+      },
+    }
+  );
 const apiFetchUserArticles = (user, { limit, after, before }) =>
   axios.get(`${LIKECOIN_API_BASE}/like/info/user/${user}/latest`, {
     params: {
@@ -117,6 +129,7 @@ module.exports = {
   apiFetchUserProfile,
   apiFetchUserPublicProfile,
   apiFetchLikedUser,
+  apiFetchFollowedArticles,
   apiFetchUserArticles,
   apiFetchSuggestedArticles,
   apiFetchArticleDetail,
