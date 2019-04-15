@@ -66,6 +66,7 @@
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容",
     "LOGIN_NEEDED_TO_BOOKMARK": "請登入以收藏內容",
+    "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "請登入以追蹤內容的作者",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "請登入以註冊讚賞公民"
   },
   "LikerType": {
