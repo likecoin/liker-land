@@ -43,9 +43,9 @@ export default {
           window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
         }
         if (postAuthRoute) {
-          this.$router.push(postAuthRoute);
+          this.$router.replace(postAuthRoute);
         } else {
-          this.$router.push(this.getHomeRoute);
+          this.$router.replace(this.getHomeRoute);
         }
       } catch (err) {
         const errData = err.response || err;
