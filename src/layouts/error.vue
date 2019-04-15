@@ -80,7 +80,7 @@ export default {
         return this.$t(`ERROR.${this.error.message}`);
       }
       if (this.isLoginError) {
-        return this.$t('Error.LOGIN_NEEDED');
+        return this.$t('ERROR.LOGIN_NEEDED');
       }
 
       const { statusCode, message } = this.error;

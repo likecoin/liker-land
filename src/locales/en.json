@@ -67,6 +67,7 @@
   "ERROR": {
     "LOGIN_NEEDED": "Please sign in to view this content",
     "LOGIN_NEEDED_TO_BOOKMARK": "Please sign in to bookmark this content",
+    "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "Please sign in to follow this author",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "Please sign in to register Civic Liker"
   },
   "LikerType": {

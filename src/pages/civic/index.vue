@@ -176,7 +176,11 @@ export default {
   methods: {
     onClickActionButton() {
       if (!this.getUserId) {
-        throw new Error('LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER');
+        this.$nuxt.error({
+          message: 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER',
+          statusCode: 401,
+        });
+        return;
       }
       logTrackerEvent(
         this,
