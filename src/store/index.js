@@ -18,8 +18,13 @@ const createStore = () =>
           const userInfo = await this.$axios.$get(api.getLoginStatus());
           commit(types.USER_SET_USER_INFO, userInfo);
         } catch (err) {
+          if (err.response) {
+            if (err.response.status === 404) {
+              // no op
+              return;
+            }
+          }
           console.error(err); // eslint-disable-line no-console
-          // no op
         }
       },
     },
