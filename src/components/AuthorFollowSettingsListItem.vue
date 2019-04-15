@@ -12,7 +12,10 @@
         key="unfollow-button"
         class="unfollow-button"
         @click="onClickActionButton"
-      >{{ $t('SettingsFollowingPage.unfollow') }}</button>
+      >
+        <LcLoadingIndicator v-if="isUpdating" />
+        <template v-else>{{ $t('SettingsFollowingPage.unfollow') }}</template>
+      </button>
     </template>
     <template
       v-else
@@ -21,7 +24,10 @@
       <button
         class="btn btn--plain no-underline btn--block"
         @click="onClickActionButton"
-      >{{ $t('SettingsFollowingPage.follow') }}</button>
+      >
+        <LcLoadingIndicator v-if="isUpdating" />
+        <template v-else>{{ $t('SettingsFollowingPage.follow') }}</template>
+      </button>
     </template>
   </AuthorListItem>
 </template>
@@ -47,12 +53,18 @@ export default {
       default: true,
     },
   },
+  data() {
+    return {
+      isUpdating: false,
+    };
+  },
   methods: {
     ...mapActions(['followAuthor', 'unfollowAuthor']),
 
     async onClickActionButton() {
+      if (this.isUpdating) return;
       try {
-        // TODO: Block user interaction
+        this.isUpdating = true;
         if (this.isFollowing) {
           await this.unfollowAuthor(this.likerId);
           logTrackerEvent(this, 'Follow', 'FollowRemove', this.likerId, 1);
@@ -63,6 +75,8 @@ export default {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
+      } finally {
+        this.isUpdating = false;
       }
     },
   },
@@ -82,6 +96,12 @@ export default {
     &:active {
       @apply opacity-75;
     }
+  }
+
+  .lc-loading-indicator {
+    @apply text-12;
+
+    @apply m-0;
   }
 }
 </style>
