@@ -5,6 +5,11 @@
   >
 
     <div class="author-list-item__content-view">
+      <span
+        v-if="isLoading"
+        key="placeholder"
+        class="author-list-item__avatar-placeholder placeholder-shimmer"
+      />
       <LcAvatar
         v-if="!isLoading"
         class="author-list-item__avatar"
@@ -12,7 +17,15 @@
         :halo="avatarHalo"
         size="36"
       />
-      <span class="author-list-item__name">{{ displayName }}</span>
+      <span
+        v-if="isLoading"
+        key="placeholder"
+        class="author-list-item__name-placeholder placeholder-shimmer"
+      />
+      <span
+        v-else
+        class="author-list-item__name"
+      >{{ displayName }}</span>
     </div>
 
     <slot
@@ -162,6 +175,13 @@ export default {
 
   &__avatar {
     @apply mr-16;
+
+    &-placeholder {
+      @apply rounded-full;
+
+      @apply w-36;
+      @apply h-36;
+    }
   }
 
   &__name {
@@ -170,6 +190,14 @@ export default {
     @apply font-600;
     @apply leading-1_5;
     @apply truncate;
+
+    &-placeholder {
+      width: 10rem;
+
+      @apply ml-12;
+
+      @apply h-20;
+    }
   }
 
   &__accessory-view {
