@@ -17,6 +17,7 @@ import {
   READER_SET_BOOKMARK,
   READER_ADD_BOOKMARK,
   READER_REMOVE_BOOKMARK,
+  READER_CLEAR_FOR_LOGOUT,
 } from '../mutation-types';
 import * as getters from './getters/reader';
 import * as actions from './actions/reader';
@@ -78,6 +79,11 @@ const mutations = {
   },
   [READER_REMOVE_BOOKMARK](state, bookmark) {
     Vue.delete(state.bookmarks, bookmark);
+  },
+  [READER_CLEAR_FOR_LOGOUT](state) {
+    state.followedUsers = [];
+    state.unfollowedUsers = [];
+    state.bookmarks = {};
   },
 };
 

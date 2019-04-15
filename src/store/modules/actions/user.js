@@ -49,6 +49,17 @@ export async function fetchLoginStatus({ commit }) {
   }
 }
 
+export async function userLogout({ commit }) {
+  await this.$axios.$post(api.getLogoutAPI());
+  commit(types.USER_SET_USER_INFO, {});
+  commit(types.READER_CLEAR_FOR_LOGOUT);
+  if (this.$sentry) updateSentryUser(this.$sentry, null);
+  if (this.$intercom && this.$intercom.booted) {
+    this.$intercom.shutdown();
+    this.$intercom.booted = false;
+  }
+}
+
 export function setUserCivicLiker({ commit }) {
   commit(types.USER_UPDATE_USER_INFO, { isSubscribedCivicLiker: true });
 }

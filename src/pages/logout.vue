@@ -8,14 +8,20 @@
 </template>
 
 <script>
-import { getLogoutAPI } from '~/util/api';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   layout: 'dialog',
   middleware: 'authenticated',
+  computed: {
+    ...mapGetters(['getHomeRoute']),
+  },
   async mounted() {
-    await this.$axios.$post(getLogoutAPI());
-    window.location.href = '/';
+    await this.userLogout();
+    this.$router.replace(this.getHomeRoute);
+  },
+  methods: {
+    ...mapActions(['userLogout']),
   },
 };
 </script>

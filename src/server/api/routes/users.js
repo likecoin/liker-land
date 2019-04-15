@@ -75,7 +75,7 @@ router.post('/users/login', async (req, res, next) => {
 });
 
 router.post('/users/logout', (req, res) => {
-  req.session = null;
+  if (req.session) req.session = null;
   res.sendStatus(200);
 });
 
