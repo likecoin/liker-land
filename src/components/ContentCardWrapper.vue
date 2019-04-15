@@ -158,7 +158,11 @@ export default {
 
     onClickBookmark(referrer) {
       if (!this.getUserId) {
-        throw new Error('LOGIN_NEEDED_TO_BOOKMARK');
+        this.$nuxt.error({
+          message: 'LOGIN_NEEDED_TO_BOOKMARK',
+          statusCode: 401,
+        });
+        return;
       }
       if (this.getIsInBookmark(referrer)) {
         this.removeBookmark(referrer);
@@ -171,7 +175,11 @@ export default {
 
     async onClickFollowAuthor(done) {
       if (!this.getUserId) {
-        throw new Error('LOGIN_NEEDED_TO_FOLLOW_AUTHOR');
+        this.$nuxt.error({
+          message: 'LOGIN_NEEDED_TO_FOLLOW_AUTHOR',
+          statusCode: 401,
+        });
+        return;
       }
       const { user: id } = this.author;
       if (this.getIsFollowedAuthor(id)) {
