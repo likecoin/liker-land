@@ -150,6 +150,8 @@ export default {
   }
 
   &__content-view {
+    @apply overflow-hidden;
+
     @apply flex;
     @apply items-center;
     @apply flex-grow;
