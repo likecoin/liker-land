@@ -156,10 +156,17 @@ export default {
 
   transition: background-color 0.25s ease;
 
+  @apply border-t;
+  @apply border-gray-e6;
+
   @apply flex;
 
   &:hover {
     @apply bg-gray-f7;
+  }
+
+  &:last-child {
+    @apply border-b;
   }
 
   &__content-view {
