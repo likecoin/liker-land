@@ -57,6 +57,8 @@ export default {
       @apply justify-end;
       @apply items-center;
 
+      @apply cursor-pointer;
+
       svg {
         @apply text-like-cyan;
 

@@ -1,7 +1,7 @@
 <template>
   <component
     :is="tag"
-    class="author-list-item list-view-item"
+    class="author-list-item list-view-item list-view-item--no-hover"
   >
 
     <div class="author-list-item__content-view list-view-item__content-view">

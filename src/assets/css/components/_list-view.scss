@@ -15,15 +15,20 @@
   &-item {
     min-height: 52px;
   
-    transition: background-color 0.25s ease;
+    transition: opacity 0.25s ease;
   
     @apply border-t;
     @apply border-gray-e6;
   
     @apply flex;
-  
-    &:hover {
-      @apply bg-gray-f7;
+    
+    &:not(&--no-hover) {
+      &:hover {
+        @apply opacity-75;
+      }
+      &:active {
+        @apply opacity-50;
+      }
     }
   
     &:last-child {
