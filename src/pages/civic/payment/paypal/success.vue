@@ -33,7 +33,7 @@
           <div class="mt-24 phone:mx-32 laptop:mx-64 desktop:mx-64">
             <NuxtLink
               class="btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 mx-auto my-0 "
-              :to="{ name: 'following '}"
+              :to="getHomeRoute"
             > {{ $t('PaymentSuccessPage.continue') }}</NuxtLink>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default {
   },
   middleware: 'authenticated',
   computed: {
-    ...mapGetters(['getUserInfo']),
+    ...mapGetters(['getUserInfo', 'getHomeRoute']),
   },
   head() {
     return {
