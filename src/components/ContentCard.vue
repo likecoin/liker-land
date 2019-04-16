@@ -32,8 +32,8 @@
             v-else
             class="content-card__author-placeholder"
           >
-            <div class="avatar content-card__placeholder-bg" />
-            <div class="name content-card__placeholder-text content-card__placeholder-bg" />
+            <div class="avatar placeholder-shimmer" />
+            <div class="name content-card__placeholder-text placeholder-shimmer" />
           </div>
         </Transition>
       </div>
@@ -53,7 +53,7 @@
           <div
             v-else
             key="like-count-placeholder"
-            class="content-card__like-count-placeholder content-card__placeholder-bg"
+            class="content-card__like-count-placeholder placeholder-shimmer"
           />
         </Transition>
       </div>
@@ -106,7 +106,7 @@
       <div
         v-else
         key="info-placeholer"
-        class="content-card__info-placeholder content-card__inset content-card__placeholder-bg"
+        class="content-card__info-placeholder content-card__inset placeholder-shimmer"
       >
         <div class="domain content-card__placeholder-text" />
         <div class="title content-card__placeholder-text" />
@@ -484,35 +484,6 @@ export default {
 
       @apply bg-current;
     }
-  }
-
-  &__placeholder-bg {
-    @keyframes placeholder-shimming {
-      0% {
-        background-position-x: -100vw;
-      }
-      100% {
-        background-position-x: 100vw;
-      }
-    }
-
-    background-size: 100vw 100%;
-    background-repeat: no-repeat;
-    background-clip: padding-box;
-    background-image: linear-gradient(
-      to right,
-      hsla(0, 0%, 100%, 0),
-      hsla(0, 0%, 100%, 0.5),
-      hsla(0, 0%, 0%, 0) 50%
-    );
-
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-name: placeholder-shimming;
-    animation-timing-function: linear;
-
-    @apply bg-gray-e6;
   }
 
   &__header {
