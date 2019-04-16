@@ -1,0 +1,56 @@
+.list-view {
+  @apply list-reset;
+
+  &--rounded {
+    @apply overflow-hidden;
+
+    @apply rounded;
+  
+    @apply bg-white;
+  
+    @apply mb-48;
+    @apply pb-24;  
+  }
+
+  &-item {
+    min-height: 52px;
+  
+    transition: background-color 0.25s ease;
+  
+    @apply border-t;
+    @apply border-gray-e6;
+  
+    @apply flex;
+  
+    &:hover {
+      @apply bg-gray-f7;
+    }
+  
+    &:last-child {
+      @apply border-b;
+    }
+    &:first-child {
+      .list-view--rounded & {
+        @apply border-t-0;
+      }
+    }
+
+    > * {
+      @apply px-16;
+      @apply py-8;
+    }
+  
+    &__content-view {
+      @apply flex;
+      @apply items-center;
+      @apply flex-grow;
+    }
+  
+    &__accessory-view {
+      width: 5rem;
+  
+      @apply self-stretch;
+      @apply flex-no-shrink;
+    }
+  }
+}

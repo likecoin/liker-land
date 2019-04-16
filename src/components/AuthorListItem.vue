@@ -1,10 +1,10 @@
 <template>
   <component
     :is="tag"
-    class="author-list-item"
+    class="author-list-item list-view-item"
   >
 
-    <div class="author-list-item__content-view">
+    <div class="author-list-item__content-view list-view-item__content-view">
       <span
         v-if="isLoading"
         key="placeholder"
@@ -35,7 +35,7 @@
       <TransitionGroup
         ref="accessoryView"
         name="author-list-item__accessory-view-"
-        class="author-list-item__accessory-view"
+        class="author-list-item__accessory-view list-view-item__accessory-view"
         tag="div"
       >
         <button
@@ -152,34 +152,6 @@ export default {
 
 <style lang="scss">
 .author-list-item {
-  min-height: 52px;
-
-  transition: background-color 0.25s ease;
-
-  @apply border-t;
-  @apply border-gray-e6;
-
-  @apply flex;
-
-  &:hover {
-    @apply bg-gray-f7;
-  }
-
-  &:last-child {
-    @apply border-b;
-  }
-
-  &__content-view {
-    @apply overflow-hidden;
-
-    @apply flex;
-    @apply items-center;
-    @apply flex-grow;
-
-    @apply px-16;
-    @apply py-8;
-  }
-
   &__avatar {
     @apply mr-16;
 
@@ -208,13 +180,8 @@ export default {
   }
 
   &__accessory-view {
-    width: 5rem;
-
     @apply relative;
     @apply overflow-hidden;
-
-    @apply self-stretch;
-    @apply flex-no-shrink;
 
     > * {
       @apply absolute;
