@@ -26,7 +26,7 @@
           v-else
           class="btn btn--dark btn--block mx-0"
           :href="getOAuthLoginAPI()"
-          @click="logTrackerEvent(this, 'Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
+          @click="onClickLogEvent('Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
         >{{ $t('signInOrSignUp') }}</a>
       </header>
 
@@ -122,6 +122,9 @@ export default {
           e.preventDefault();
         }
       }
+    },
+    onClickLogEvent(...args) {
+      logTrackerEvent(this, ...args);
     },
   },
 };
