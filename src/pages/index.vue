@@ -69,22 +69,24 @@
     </main>
 
     <!-- Sign in/sign up banner -->
-    <div
-      v-if="!getUserId"
-      class="text-center bg-like-green px-12 pt-32 pb-40"
-    >
-      <div class="text-like-cyan text-30 font-200 mb-24">
-        {{ $t('SignUpSignInCTA.slogan') }}
+    <div class="relative">
+      <div
+        v-if="!getUserId"
+        class="absolute w-full text-center bg-like-green px-12 pt-32 pb-40"
+      >
+        <div class="text-like-cyan text-30 font-200 mb-24">
+          {{ $t('SignUpSignInCTA.slogan') }}
+        </div>
+        <a
+          :href="getOAuthLoginAPI()"
+          class="btn btn--outlined btn--dark"
+          @click="logTrackerEvent(this, 'Register', 'RegisterSignUp', 'RegisterSignUp(index footer)', 1)"
+        >{{ $t('signUp') }}</a><br><a
+          :href="getOAuthLoginAPI()"
+          class="btn btn--plain btn--dark text-12 m-0 p-0"
+          @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(index footer)', 1)"
+        >{{ $t('signIn') }}</a>
       </div>
-      <a
-        :href="getOAuthLoginAPI()"
-        class="btn btn--outlined btn--dark"
-        @click="logTrackerEvent(this, 'Register', 'RegisterSignUp', 'RegisterSignUp(index footer)', 1)"
-      >{{ $t('signUp') }}</a><br><a
-        :href="getOAuthLoginAPI()"
-        class="btn btn--plain btn--dark text-12 m-0 p-0"
-        @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(index footer)', 1)"
-      >{{ $t('signIn') }}</a>
     </div>
   </div>
 </template>
@@ -159,6 +161,8 @@ export default {
 
 <style lang="scss">
 .home-page {
+  @apply bg-white;
+
   &__header {
     .site-nav-bar {
       @apply text-white;

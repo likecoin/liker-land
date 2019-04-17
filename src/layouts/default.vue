@@ -13,3 +13,9 @@ export default {
   mixins: [slidingMenuMixin],
 };
 </script>
+
+<style lang="scss">
+.page-layout--default {
+  @apply bg-gray-f7;
+}
+</style>

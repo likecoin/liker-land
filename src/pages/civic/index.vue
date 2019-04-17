@@ -1,5 +1,5 @@
 <template>
-  <div class="civic-page bg-gray-f7">
+  <div class="civic-page">
     <PageHeader>
       <template>
         <SiteNavBar class="text-like-green" />

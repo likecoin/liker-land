@@ -125,8 +125,6 @@ export default {
   @apply justify-center;
   @apply items-center;
 
-  @apply bg-like-green;
-
   @apply p-16;
 
   &-- {
