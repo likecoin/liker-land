@@ -1,6 +1,15 @@
 <template>
   <ul
-    v-if="authorLikerIds.length"
+    v-if="isLoading"
+    class="author-follow-settings-list author-follow-settings-list--loading"
+  >
+    <AuthorFollowSettingsListItem
+      v-for="key in 5"
+      :key="key"
+    />
+  </ul>
+  <ul
+    v-else-if="authorLikerIds.length"
     class="author-follow-settings-list"
   >
     <AuthorFollowSettingsListItem
@@ -24,6 +33,11 @@ import AuthorFollowSettingsListItem from '~/components/AuthorFollowSettingsListI
 export default {
   components: {
     AuthorFollowSettingsListItem,
+  },
+  data() {
+    return {
+      isLoading: true,
+    };
   },
   computed: {
     ...mapGetters(['getFollowedAuthors', 'getUnfollowedAuthors']),
@@ -53,11 +67,13 @@ export default {
 
     async fetchAuthors() {
       try {
-        // TODO: Show loading screen
+        this.isLoading = true;
         await this.fetchReaderIndex();
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },

@@ -74,7 +74,7 @@ export default {
     },
     likerId: {
       type: String,
-      required: true,
+      default: undefined,
     },
   },
   data() {
@@ -122,7 +122,7 @@ export default {
       }
     },
     updateAuthorInfo() {
-      const authorData = this.getUserInfoById(this.likerId);
+      const authorData = this.getUserInfoById(this.likerId) || {};
       this.displayName = authorData.displayName;
       this.avatarSrc = authorData.avatar;
       this.avatarHalo = getAvatarHaloTypeFromUser(authorData);
