@@ -17,11 +17,11 @@
               <a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
-                @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(error)', 1)"
+                @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error)', 1)"
               >{{ $t('signIn') }}</a><a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
-                @click="logTrackerEvent(this, 'Register', 'RegistersignUp', 'RegisterSignUp(error)', 1)"
+                @click="onClickLogEvent('Register', 'RegistersignUp', 'RegisterSignUp(error)', 1)"
               >{{ $t('signUp') }}</a>
             </div>
             <a
@@ -106,6 +106,9 @@ export default {
         e.preventDefault();
         this.$router.back();
       }
+    },
+    onClickLogEvent(...args) {
+      logTrackerEvent(this, ...args);
     },
   },
   head() {

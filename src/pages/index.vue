@@ -29,11 +29,11 @@
             <a
               :href="getOAuthLoginAPI()"
               class="btn btn--outlined btn--dark"
-              @click="logTrackerEvent(this, 'Register', 'RegisterSignUp', 'RegisterSignUp(index header)', 1)"
+              @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(index header)', 1)"
             >{{ $t('signUp') }}</a><br><a
               :href="getOAuthLoginAPI()"
               class="btn btn--plain btn--dark text-12 m-0 p-0"
-              @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(index header)', 1)"
+              @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(index header)', 1)"
             >{{ $t('signIn') }}</a>
           </template>
 
@@ -80,11 +80,11 @@
         <a
           :href="getOAuthLoginAPI()"
           class="btn btn--outlined btn--dark"
-          @click="logTrackerEvent(this, 'Register', 'RegisterSignUp', 'RegisterSignUp(index footer)', 1)"
+          @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(index footer)', 1)"
         >{{ $t('signUp') }}</a><br><a
           :href="getOAuthLoginAPI()"
           class="btn btn--plain btn--dark text-12 m-0 p-0"
-          @click="logTrackerEvent(this, 'Register', 'RegisterSignIn', 'RegisterSignIn(index footer)', 1)"
+          @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(index footer)', 1)"
         >{{ $t('signIn') }}</a>
       </div>
     </div>
@@ -154,6 +154,9 @@ export default {
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
       }
+    },
+    onClickLogEvent(...args) {
+      logTrackerEvent(this, ...args);
     },
   },
 };
