@@ -1,23 +1,25 @@
 <template>
   <div class="content-list">
-    <transition
-      name="content-list-layout-"
-      mode="in-out"
-      @after-leave="$Lazyload.lazyLoadHandler()"
+
+    <div
+      class="content-list-layout"
     >
       <div
-        :key="state"
-        class="content-list-layout"
+        v-if="headerLabel"
+        class="content-list__header"
       >
+        <div class="content-list__header-label">{{ headerLabel }}</div>
+      </div>
 
+      <Transition
+        :name="transitionName"
+        mode="out-in"
+        @after-enter="$Lazyload.lazyLoadHandler()"
+      >
         <div
-          v-if="headerLabel"
-          class="content-list__header"
+          :key="state"
+          class="content-list__body"
         >
-          <div class="content-list__header-label">{{ headerLabel }}</div>
-        </div>
-
-        <div class="content-list__body">
           <template v-if="state === 'loading'">
             <div
               v-for="key in 5"
@@ -50,9 +52,9 @@
             </div>
           </template>
         </div>
+      </Transition>
 
-      </div>
-    </transition>
+    </div>
   </div>
 </template>
 
@@ -80,6 +82,11 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      isShowTransition: true,
+    };
+  },
   computed: {
     state() {
       if (this.isLoading) {
@@ -89,6 +96,15 @@ export default {
         return 'content';
       }
       return 'empty';
+    },
+    transitionName() {
+      return this.isShowTransition ? 'content-list-layout-' : undefined;
+    },
+  },
+  watch: {
+    state(newState, oldState) {
+      // Don't show transition when loading -> content
+      this.isShowTransition = oldState !== 'loading' || newState !== 'content';
     },
   },
 };
@@ -119,14 +135,8 @@ export default {
         transition-property: opacity;
         transition-duration: 0.5s;
       }
-      &enter-active {
-        @apply relative;
-
-        transition-timing-function: ease;
-      }
+      &enter-active,
       &leave-active {
-        @apply absolute;
-
         transition-timing-function: ease;
       }
     }

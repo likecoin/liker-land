@@ -6,20 +6,20 @@
 
     <div class="author-list-item__content-view list-view-item__content-view">
       <span
-        v-if="isLoading"
-        key="placeholder"
+        v-if="shouldShowPlaceholder"
+        key="avatar-placeholder"
         class="author-list-item__avatar-placeholder placeholder-shimmer"
       />
       <LcAvatar
-        v-if="!isLoading"
+        v-else
         class="author-list-item__avatar"
         :src="resizedAvatarSrc"
         :halo="avatarHalo"
         size="36"
       />
       <span
-        v-if="isLoading"
-        key="placeholder"
+        v-if="shouldShowPlaceholder"
+        key="name-placeholder"
         class="author-list-item__name-placeholder placeholder-shimmer"
       />
       <span
@@ -29,7 +29,7 @@
     </div>
 
     <slot
-      v-if="!isLoading"
+      v-if="!shouldShowPlaceholder"
       name="accessory-view"
     >
       <TransitionGroup
@@ -89,9 +89,13 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfoById']),
+
     resizedAvatarSrc() {
       if (!this.avatarSrc) return undefined;
       return getImageResizeAPI(this.avatarSrc, { width: 36 });
+    },
+    shouldShowPlaceholder() {
+      return !this.likerId || this.isLoading;
     },
   },
   watch: {
