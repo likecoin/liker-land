@@ -1,54 +1,74 @@
 <template>
-  <ul class="settings-menu">
-    <li>
-      <a
-        class="settings-menu__item"
-        :href="likerIdSettingsURL"
-        :title="$t('SettingsPage.likerId')"
-        target="_blank"
-        rel="noopener"
-      >
-        <span
-          class="settings-menu__item-title"
-        >{{ $t('SettingsPage.likerId') }}</span>
-        <span
-          class="settings-menu__item-subtitle"
-        >{{ getUserId }}</span>
-      </a>
-    </li>
-    <li>
-      <NuxtLink
-        class="settings-menu__item"
-        :to="{ name: 'settings-civic' }"
-      >
-        <span
-          class="settings-menu__item-title"
-        >{{ $t('SettingsPage.civicLiker.title') }}</span>
-        <span
-          v-if="getUserIsCivicLiker"
-          class="settings-menu__item-subtitle"
-        >{{ $t('SettingsPage.civicLiker.subscribing') }}</span>
-      </NuxtLink>
-    </li>
-    <li>
-      <NuxtLink
-        class="settings-menu__item"
-        :to="{ name: 'settings-following' }"
-      >
-        <span
-          class="settings-menu__item-title"
-        >{{ $t('SettingsPage.subscription') }}</span>
-      </NuxtLink>
-    </li>
-  </ul>
+  <div class="settings-page-body">
+    <ul class="settings-menu">
+      <li>
+        <NuxtLink
+          class="settings-menu__item"
+          :to="{ name: 'settings-language' }"
+        >
+          <GlobeIcon class="settings-menu__item-title-icon" />
+          <span
+            class="settings-menu__item-title"
+          >{{ $t('SettingsPage.language') }}</span>
+        </NuxtLink>
+      </li>
+    </ul>
+    <ul class="settings-menu">
+      <li>
+        <a
+          class="settings-menu__item"
+          :href="likerIdSettingsURL"
+          :title="$t('SettingsPage.likerId')"
+          target="_blank"
+          rel="noopener"
+        >
+          <span
+            class="settings-menu__item-title"
+          >{{ $t('SettingsPage.likerId') }}</span>
+          <span
+            class="settings-menu__item-subtitle"
+          >{{ getUserId }}</span>
+        </a>
+      </li>
+      <li>
+        <NuxtLink
+          class="settings-menu__item"
+          :to="{ name: 'settings-civic' }"
+        >
+          <span
+            class="settings-menu__item-title"
+          >{{ $t('SettingsPage.civicLiker.title') }}</span>
+          <span
+            v-if="getUserIsCivicLiker"
+            class="settings-menu__item-subtitle"
+          >{{ $t('SettingsPage.civicLiker.subscribing') }}</span>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          class="settings-menu__item"
+          :to="{ name: 'settings-following' }"
+        >
+          <span
+            class="settings-menu__item-title"
+          >{{ $t('SettingsPage.subscription') }}</span>
+        </NuxtLink>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import GlobeIcon from '~/assets/icons/globe.svg';
+
 import { LIKE_CO_URL_BASE } from '~/constant';
 
 export default {
+  components: {
+    GlobeIcon,
+  },
   computed: {
     ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
 
@@ -60,10 +80,20 @@ export default {
 </script>
 
 <style lang="scss">
+.settings-page-body {
+  @apply mb-48;
+}
+
 .settings-menu {
   @apply list-reset;
 
-  @apply mb-48;
+  & + & {
+    @apply mt-8;
+
+    @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+      @apply mt-24;
+    }
+  }
 
   li {
     transition-duration: 0.25s;
@@ -104,8 +134,6 @@ export default {
       @apply border-like-cyan;
       @apply rounded-full;
 
-      @apply mx-16;
-
       &:hover {
         @apply bg-like-cyan-translucent;
       }
@@ -123,16 +151,30 @@ export default {
     @apply flex;
     @apply items-center;
 
+    @apply text-like-green;
+
     @apply pl-24;
     @apply pr-16;
     @apply py-12;
 
     &-title {
       @apply text-16;
-      @apply text-like-green;
       @apply font-600;
 
       @apply flex-grow;
+    }
+
+    &-title-icon {
+      @apply mr-8;
+
+      @apply w-20;
+      @apply h-20;
+
+      @apply fill-current;
+
+      @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+        @apply -ml-8;
+      }
     }
 
     &-subtitle {

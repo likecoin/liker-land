@@ -72,15 +72,6 @@
           >{{ $t('SlidingMenu.logout') }}</NuxtLink>
         </div>
       </div>
-
-      <div class="flex flex-col mt-48 p-48">
-        <button
-          v-for="locale in locales"
-          :key="locale"
-          class="text-white text-left text-12 font-200"
-          @click="onClickLocale(locale)"
-        >{{ $t(`Locale.${locale}`) }}</button>
-      </div>
     </div>
 
     <portal-target
@@ -113,28 +104,15 @@ export default {
       'getUserInfo',
       'getUserCivicLikerHalo',
       'getHomeRoute',
-      'getLocale',
-      'getAvailableLocales',
     ]),
-
-    locales() {
-      return this.getAvailableLocales.filter(
-        locale => locale !== this.getLocale
-      );
-    },
   },
   methods: {
     getOAuthLoginAPI,
     logTrackerEvent,
 
-    ...mapActions(['toggleSlidingMenu', 'setLocale']),
+    ...mapActions(['toggleSlidingMenu']),
 
     onClickMenuItem() {
-      this.toggleSlidingMenu(false);
-    },
-    onClickLocale(locale) {
-      this.$i18n.locale = locale;
-      this.setLocale(locale);
       this.toggleSlidingMenu(false);
     },
     onClickSupport(e) {

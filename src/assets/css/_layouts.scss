@@ -15,5 +15,9 @@
     @apply max-w-phone;
 
     @apply mx-auto;
+
+    @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+      @apply px-16;
+    }
   }
 }
