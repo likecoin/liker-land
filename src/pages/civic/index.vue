@@ -162,6 +162,24 @@ export default {
   head() {
     return {
       title: this.$t('CivicPage.title'),
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('CivicPage.slogan'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('CivicPage.slogan'),
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: 'https://liker.land/images/og/civic.png',
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
     };
   },
   mounted() {
