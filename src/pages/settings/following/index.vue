@@ -1,28 +1,33 @@
 <template>
-  <ul
-    v-if="isLoading"
-    class="author-follow-settings-list author-follow-settings-list--loading"
-  >
-    <AuthorFollowSettingsListItem
-      v-for="key in 5"
-      :key="key"
-    />
-  </ul>
-  <ul
-    v-else-if="authorLikerIds.length"
-    class="author-follow-settings-list"
-  >
-    <AuthorFollowSettingsListItem
-      v-for="id in authorLikerIds"
-      :key="id"
-      :liker-id="id"
-      :is-following="isShowingFollowingAuthors"
-    />
-  </ul>
-  <div
-    v-else
-    class="text-gray-c text-center px-16 py-48"
-  >{{ emptyListText }}</div>
+  <Transition name="fade" mode="out-in">
+    <ul
+      v-if="isLoading"
+      key="loading"
+      class="author-follow-settings-list author-follow-settings-list--loading"
+    >
+      <AuthorFollowSettingsListItem
+        v-for="key in 3"
+        :key="key"
+      />
+    </ul>
+    <ul
+      v-else-if="authorLikerIds.length"
+      key="content"
+      class="author-follow-settings-list"
+    >
+      <AuthorFollowSettingsListItem
+        v-for="id in authorLikerIds"
+        :key="id"
+        :liker-id="id"
+        :is-following="isShowingFollowingAuthors"
+      />
+    </ul>
+    <div
+      v-else
+      key="empty"
+      class="author-follow-settings-list author-follow-settings-list--empty"
+    >{{ emptyListText }}</div>
+  </Transition>
 </template>
 
 <script>
@@ -36,7 +41,7 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
+      isLoading: false,
     };
   },
   computed: {
@@ -82,6 +87,19 @@ export default {
 
 <style lang="scss">
 .author-follow-settings-list {
+  min-height: 10rem;
+
   @apply list-reset;
+
+  &--empty {
+    @apply text-gray-c;
+    @apply text-center;
+
+    @apply p-16;
+
+    @apply flex;
+    @apply justify-center;
+    @apply items-center;
+  }
 }
 </style>
