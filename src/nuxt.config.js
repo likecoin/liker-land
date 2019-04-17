@@ -166,6 +166,7 @@ const nuxtConfig = {
     name: siteName,
     theme_color: theme.colors['like-green'],
     nativeUI: true,
+    appleStatusBarStyle: 'black-translucent',
   },
   manifest: {
     name: siteName,

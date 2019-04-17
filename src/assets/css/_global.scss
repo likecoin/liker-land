@@ -11,6 +11,37 @@ html {
   font-size: 16px;
 }
 
+body {
+  @apply bg-like-green;
+
+  &::before,
+  &::after {
+    content: '';
+
+    @apply fixed;
+    @apply pin-l;
+    @apply pin-r;
+  }
+
+  &::before {
+    z-index: 10000;
+    top: -100vh;
+
+    background-color: inherit;
+
+    @apply h-screen;
+  }
+
+  &::after {
+    z-index: 10001;
+    bottom: 100vh;
+
+    height: 1px;
+
+    background-color: rgba(white, 0.05);
+  }
+}
+
 a {
   @apply no-underline;
 }

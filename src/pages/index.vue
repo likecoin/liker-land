@@ -159,6 +159,8 @@ export default {
 
 <style lang="scss">
 .home-page {
+  @apply bg-white;
+
   &__header {
     .site-nav-bar {
       @apply text-white;

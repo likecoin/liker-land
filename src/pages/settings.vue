@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-page bg-gray-f7">
+  <div class="settings-page">
     <PageHeader>
       <template>
         <SiteNavBar class="text-like-green" />

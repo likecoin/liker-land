@@ -8,8 +8,6 @@
 
 <style lang="scss">
 .page-layout--dialog {
-  @apply bg-like-green;
-
   .page-wrapper {
     @apply flex;
     @apply justify-center;
