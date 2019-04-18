@@ -57,6 +57,8 @@ router.post('/users/login', async (req, res, next) => {
       refresh_token: refreshToken,
       user,
     } = tokenData;
+    const userDoc = await userCollection.doc(user).get();
+    const isNew = !userDoc.exists;
     await userCollection.doc(user).set(
       {
         accessToken,
@@ -68,7 +70,12 @@ router.post('/users/login', async (req, res, next) => {
     req.session.accessToken = accessToken;
     req.session.state = undefined;
     const { data: userData } = await apiFetchUserProfile(req);
-    res.json({ user, ...userData, intercomToken: getIntercomUserHash(user) });
+    res.json({
+      user,
+      ...userData,
+      intercomToken: getIntercomUserHash(user),
+      isNew,
+    });
   } catch (err) {
     next(err);
   }

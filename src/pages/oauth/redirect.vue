@@ -9,6 +9,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'Redirect',
@@ -25,7 +26,22 @@ export default {
     const { state, auth_code: authCode } = this.$route.query;
     if (authCode && state) {
       try {
-        await this.getOAuthToken({ authCode, state });
+        const user = await this.postLoginToken({ authCode, state });
+        if (user.isNew) {
+          logTrackerEvent(
+            'Register',
+            'RegisterSignUpSuccess',
+            'RegisterSignUpSuccess',
+            1
+          );
+        } else {
+          logTrackerEvent(
+            'Register',
+            'RegisterSignInSuccess',
+            'RegisterSignInSuccess',
+            1
+          );
+        }
         let postAuthRoute;
         if (window.sessionStorage) {
           const storedRoute = window.sessionStorage.getItem(
@@ -59,7 +75,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getOAuthToken']),
+    ...mapActions(['postLoginToken']),
   },
 };
 </script>
