@@ -29,6 +29,7 @@ export default {
         const user = await this.postLoginToken({ authCode, state });
         if (user.isNew) {
           logTrackerEvent(
+            this,
             'Register',
             'RegisterSignUpSuccess',
             'RegisterSignUpSuccess',
@@ -36,6 +37,7 @@ export default {
           );
         } else {
           logTrackerEvent(
+            this,
             'Register',
             'RegisterSignInSuccess',
             'RegisterSignInSuccess',
@@ -67,14 +69,14 @@ export default {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
-        logTrackerEvent('Register', 'RegisterError', errMessage, 1);
+        logTrackerEvent(this, 'Register', 'RegisterError', errMessage, 1);
         this.$nuxt.error({
           statusCode: errData.status || 400,
           message: errMessage,
         });
       }
     } else {
-      logTrackerEvent('Register', 'RegisterFail', error, 1);
+      logTrackerEvent(this, 'Register', 'RegisterFail', error, 1);
       if (window.sessionStorage) {
         window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
         window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
