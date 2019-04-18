@@ -128,6 +128,8 @@ export default {
 
 <style lang="scss">
 .error-dialog {
+  z-index: 9999;
+
   @apply absolute;
   @apply pin;
 

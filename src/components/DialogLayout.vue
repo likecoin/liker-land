@@ -72,7 +72,7 @@ export default {
     @apply h-80;
   }
 
-  .page-content {
+  .page-content:not(#{&}) {
     @apply flex-no-grow;
 
     @apply text-like-green;
