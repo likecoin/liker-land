@@ -23,7 +23,7 @@ export default {
     };
   },
   async mounted() {
-    const { state, auth_code: authCode } = this.$route.query;
+    const { error, state, auth_code: authCode } = this.$route.query;
     if (authCode && state) {
       try {
         const user = await this.postLoginToken({ authCode, state });
@@ -67,11 +67,22 @@ export default {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
+        logTrackerEvent('Register', 'RegisterError', errMessage, 1);
         this.$nuxt.error({
           statusCode: errData.status || 400,
           message: errMessage,
         });
       }
+    } else {
+      logTrackerEvent('Register', 'RegisterFail', error, 1);
+      if (window.sessionStorage) {
+        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+        window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
+      }
+      this.$nuxt.error({
+        statusCode: 400,
+        message: error,
+      });
     }
   },
   methods: {
