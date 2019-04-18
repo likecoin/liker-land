@@ -135,7 +135,10 @@ $sliding-menu-width: 256px;
 
 // Prevent scrolling when sliding menu is opened
 html[sliding-menu='opened'] {
-  @apply overflow-y-hidden;
+  &,
+  & body {
+    @apply overflow-hidden;
+  }
 }
 
 .sliding-menu {
