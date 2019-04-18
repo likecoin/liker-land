@@ -26,7 +26,7 @@ function updateIntercomUser(
   }
 }
 
-export async function getOAuthToken({ commit }, { authCode, state }) {
+export async function postLoginToken({ commit }, { authCode, state }) {
   const user = await this.$axios.$post(api.getOAuthCallbackAPI(), {
     authCode,
     state,

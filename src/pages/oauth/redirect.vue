@@ -9,6 +9,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'Redirect',
@@ -22,10 +23,25 @@ export default {
     };
   },
   async mounted() {
-    const { state, auth_code: authCode } = this.$route.query;
+    const { error, state, auth_code: authCode } = this.$route.query;
     if (authCode && state) {
       try {
-        await this.getOAuthToken({ authCode, state });
+        const user = await this.postLoginToken({ authCode, state });
+        if (user.isNew) {
+          logTrackerEvent(
+            'Register',
+            'RegisterSignUpSuccess',
+            'RegisterSignUpSuccess',
+            1
+          );
+        } else {
+          logTrackerEvent(
+            'Register',
+            'RegisterSignInSuccess',
+            'RegisterSignInSuccess',
+            1
+          );
+        }
         let postAuthRoute;
         if (window.sessionStorage) {
           const storedRoute = window.sessionStorage.getItem(
@@ -51,15 +67,26 @@ export default {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
+        logTrackerEvent('Register', 'RegisterError', errMessage, 1);
         this.$nuxt.error({
           statusCode: errData.status || 400,
           message: errMessage,
         });
       }
+    } else {
+      logTrackerEvent('Register', 'RegisterFail', error, 1);
+      if (window.sessionStorage) {
+        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+        window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
+      }
+      this.$nuxt.error({
+        statusCode: 400,
+        message: error,
+      });
     }
   },
   methods: {
-    ...mapActions(['getOAuthToken']),
+    ...mapActions(['postLoginToken']),
   },
 };
 </script>

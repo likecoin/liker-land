@@ -17,11 +17,11 @@
               <a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
-                @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error)', 1)"
+                @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
               >{{ $t('signIn') }}</a><a
                 class="btn btn--outlined"
                 :href="getOAuthLoginAPI()"
-                @click="onClickLogEvent('Register', 'RegistersignUp', 'RegisterSignUp(error)', 1)"
+                @click="onClickLogEvent('Register', 'RegistersignUp', 'RegisterSignUp(error page)', 1)"
               >{{ $t('signUp') }}</a>
             </div>
             <a
