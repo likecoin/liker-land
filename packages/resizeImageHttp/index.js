@@ -7,12 +7,13 @@ const { URL } = require('url');
 const {
   MAX_THUMB_SIZE = 478,
   ORIGIN_DOMAIN = 'liker.land',
+  CLOUD_FN_DOMAIN = 'us-central1-civic-liker.cloudfunctions.net',
   CACHE_TIME_IN_S = 86400,
   IS_TESTNET,
   IS_ENABLE_WEBP,
 } = process.env;
 
-const whiteListHostNames = [ORIGIN_DOMAIN];
+const whiteListHostNames = [ORIGIN_DOMAIN, CLOUD_FN_DOMAIN];
 if (IS_TESTNET) whiteListHostNames.push('localhost');
 
 const app = express();
