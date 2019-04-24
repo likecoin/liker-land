@@ -3,44 +3,48 @@
     name="error-dialog-"
     appear
   >
-    <div class="error-dialog page-wrapper">
-      <Transition
-        name="error-dialog-content-"
-        appear
-      >
-        <main class="error-dialog-content">
+    <DialogLayout class="error-dialog">
+      <template #body>
+        <Transition
+          name="error-dialog-content-"
+          appear
+        >
+          <main class="page-content error-dialog-content">
 
-          <h1 class="text-24 mt-16">{{ formattedMessage }}</h1>
+            <h1 class="text-24 mt-16">{{ formattedMessage }}</h1>
 
-          <div class="mt-32 px-12 phone:px-0">
-            <div v-if="isLoginError">
+            <div class="mt-32 px-12 phone:px-0">
+              <div v-if="isLoginError">
+                <a
+                  class="btn btn--outlined"
+                  :href="getOAuthLoginAPI()"
+                  @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
+                >{{ $t('signIn') }}</a><a
+                  class="btn btn--outlined"
+                  :href="getOAuthLoginAPI()"
+                  @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
+                >{{ $t('signUp') }}</a>
+              </div>
               <a
-                class="btn btn--outlined"
-                :href="getOAuthLoginAPI()"
-                @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
-              >{{ $t('signIn') }}</a><a
-                class="btn btn--outlined"
-                :href="getOAuthLoginAPI()"
-                @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
-              >{{ $t('signUp') }}</a>
+                class="btn btn--plain btn--auto-size text-14 mx-0"
+                href=""
+                @click="onClickBackButton"
+              >{{ $t('back') }}</a><a
+                class="btn btn--plain btn--auto-size text-14 mx-0"
+                href="/"
+              >{{ $t('backToHome') }}</a>
             </div>
-            <a
-              class="btn btn--plain btn--auto-size text-14 mx-0"
-              href=""
-              @click="onClickBackButton"
-            >{{ $t('back') }}</a><a
-              class="btn btn--plain btn--auto-size text-14 mx-0"
-              href="/"
-            >{{ $t('backToHome') }}</a>
-          </div>
 
-        </main>
-      </Transition>
-    </div>
+          </main>
+        </Transition>
+      </template>
+    </DialogLayout>
   </Transition>
 </template>
 
 <script>
+import DialogLayout from '~/components/DialogLayout';
+
 import { getOAuthLoginAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
@@ -55,6 +59,9 @@ export default {
   layoutTransition: {
     name: '',
     css: false,
+  },
+  components: {
+    DialogLayout,
   },
   mixins: [IntercomMixin],
   props: {
@@ -121,24 +128,21 @@ export default {
 
 <style lang="scss">
 .error-dialog {
+  z-index: 9999;
+
   @apply absolute;
   @apply pin;
-
-  @apply flex;
-  @apply justify-center;
-  @apply items-center;
-
-  @apply p-16;
 
   &-- {
     &enter,
     &leave-to {
       opacity: 0;
+      transform: translateY(4%);
     }
 
     &enter-active,
     &leave-active {
-      transition-property: opacity !important;
+      transition-property: opacity, transform !important;
       transition-duration: 0.5;
     }
     &enter-active {
@@ -150,25 +154,11 @@ export default {
   }
 
   &-content {
-    @apply flex-no-grow;
-
-    @apply text-like-green;
-    @apply text-center;
-
-    @apply bg-white;
-
-    @apply rounded;
-
-    @apply p-24;
-
-    @apply w-full;
-    @apply max-w-phone;
-
     &-- {
       &enter,
       &leave-to {
         opacity: 0;
-        transform: translateY(100px) scale(0.95);
+        transform: scale(0.95);
       }
 
       &enter-active,

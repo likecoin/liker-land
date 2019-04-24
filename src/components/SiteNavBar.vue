@@ -2,8 +2,8 @@
   <div class="site-nav-bar">
     <NuxtLink
       :class="{
-        'site-nav-bar__logo': true,
-        'site-nav-bar__logo--disabled': getHomeRoute.name === $route.name,
+        'site-logo site-nav-bar__logo': true,
+        'site-logo--disabled': getHomeRoute.name === $route.name,
       }"
       :to="getHomeRoute"
     >
@@ -48,7 +48,6 @@ export default {
 
   @apply px-16 py-12;
 
-  &__logo,
   &__menu-button {
     transition-property: transform, opacity;
     transition-duration: 0.2s;
@@ -66,16 +65,6 @@ export default {
 
   &__logo {
     @apply text-inherit-color;
-
-    &--disabled {
-      @apply pointer-events-none;
-    }
-
-    svg {
-      width: 6.875rem;
-
-      @apply fill-current;
-    }
   }
 
   &__menu-button {

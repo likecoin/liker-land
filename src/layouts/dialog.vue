@@ -1,36 +1,17 @@
 <template>
-  <div class="page-layout page-layout--dialog">
-    <div class="page-wrapper">
+  <DialogLayout>
+    <template #body>
       <nuxt class="page-content" />
-    </div>
-  </div>
+    </template>
+  </DialogLayout>
 </template>
 
-<style lang="scss">
-.page-layout--dialog {
-  .page-wrapper {
-    @apply flex;
-    @apply justify-center;
-    @apply items-center;
+<script>
+import DialogLayout from '~/components/DialogLayout';
 
-    @apply px-16;
-  }
-
-  .page-content {
-    @apply flex-no-grow;
-
-    @apply text-like-green;
-    @apply text-center;
-
-    @apply bg-white;
-
-    @apply rounded;
-
-    @apply mb-32;
-    @apply p-24;
-
-    @apply w-full;
-    @apply max-w-phone;
-  }
-}
-</style>
+export default {
+  components: {
+    DialogLayout,
+  },
+};
+</script>
