@@ -1,15 +1,11 @@
-<template>
-  <div class="page-layout page-layout--dialog">
-    <div class="page-wrapper">
-      <NuxtLink
-        class="site-logo"
-        :to="getHomeRoute"
-      ><LikerLandLogo /></NuxtLink>
-      <LikerLogo class="liker-logo" />
-      <header class="page-header" />
-      <slot name="body" />
-    </div>
-  </div>
+<template lang="pug">
+  .page-layout.page-layout--dialog
+    .page-wrapper
+      NuxtLink.site-logo(:to="getHomeRoute")
+        LikerLandLogo
+      LikerLogo.liker-logo
+      header.page-header
+      slot(name="body")
 </template>
 
 <script>
