@@ -20,12 +20,12 @@
             .mt-32.px-12(class="phone:px-0")
               div(v-if="isLoginError")
                 a.btn.btn--outlined(
-                  :href="getOAuthLoginAPI()"
+                  :href="getOAuthLoginAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
                 )
                   | {{ $t('signIn') }}
                 a.btn.btn--outlined(
-                  :href="getOAuthLoginAPI()"
+                  :href="getOAuthLoginAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
                 )
                   | {{ $t('signUp') }}
@@ -67,12 +67,9 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      getOAuthLoginAPI,
-    };
-  },
   computed: {
+    getOAuthLoginAPI,
+
     i18nKeyBase() {
       return `ERROR.${this.error.message}`;
     },
@@ -87,9 +84,6 @@ export default {
     },
     isObjectLocalizedError() {
       return this.$te(this.i18nKeyMessage, defaultLocale);
-    },
-    isLocalizedError() {
-      return this.isStringLocalizedError || this.isObjectLocalizedError;
     },
     isLoginError() {
       return /^LOGIN_NEEDED.*/.test(this.error.message);
@@ -126,7 +120,6 @@ export default {
     }
   },
   methods: {
-    logTrackerEvent,
     onClickBackButton(e) {
       // If the user enters a page requires authenication,
       // back button should trigger going back instead of refreshing the page
@@ -157,14 +150,15 @@ export default {
   &-- {
     &enter,
     &leave-to {
-      opacity: 0;
       transform: translateY(4%);
+
+      opacity: 0;
     }
 
     &enter-active,
     &leave-active {
-      transition-property: opacity, transform !important;
       transition-duration: 0.5;
+      transition-property: opacity, transform !important;
     }
     &enter-active {
       transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
@@ -178,14 +172,15 @@ export default {
     &-- {
       &enter,
       &leave-to {
-        opacity: 0;
         transform: scale(0.95);
+
+        opacity: 0;
       }
 
       &enter-active,
       &leave-active {
-        transition-property: opacity, transform !important;
         transition-duration: 0.5s;
+        transition-property: opacity, transform !important;
       }
       &enter-active {
         transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
