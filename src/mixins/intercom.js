@@ -6,7 +6,7 @@ export const IntercomMixinFactory = (options = { isBootAtMounted: true }) => ({
   },
   mounted() {
     if (!this.$intercom) return;
-    if (options.isBootAtMounted) this.bootIntercom();
+    if (options.isBootAtMounted) this.$nextTick(() => this.bootIntercom());
   },
   beforeDestroy() {
     if (!this.$intercom) return;
@@ -15,22 +15,31 @@ export const IntercomMixinFactory = (options = { isBootAtMounted: true }) => ({
   methods: {
     bootIntercom() {
       if (!this.$intercom.booted) {
-        const { email, user, displayName, intercomToken } = this.getUserInfo;
-        this.$intercom.boot({
-          email,
-          name: displayName || user,
-          user_id: user,
-          user_hash: intercomToken,
-        });
-        this.$intercom.booted = true;
-        return true;
+        try {
+          const { email, user, displayName, intercomToken } = this.getUserInfo;
+          this.$intercom.boot({
+            email,
+            name: displayName || user,
+            user_id: user,
+            user_hash: intercomToken,
+          });
+          this.$intercom.booted = true;
+          return true;
+        } catch (err) {
+          console.error(err); // eslint-disable-line no-console
+          return false;
+        }
       }
       return false;
     },
     shutdownIntercom() {
       if (this.$intercom.booted) {
-        this.$intercom.shutdown();
-        this.$intercom.booted = false;
+        try {
+          this.$intercom.shutdown();
+          this.$intercom.booted = false;
+        } catch (err) {
+          console.error(err); // eslint-disable-line no-console
+        }
       }
     },
   },
