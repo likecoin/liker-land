@@ -42,6 +42,12 @@
     "report": "Detailed reward distribution report",
     "badges": "Unique, immutable badges"
   },
+  "CivicLikerTrialPage": {
+    "title": "Civic Liker Trial",
+    "joining": "Joining",
+    "thankYou": "Thank you for joining",
+    "subscriptionPeriod": "Your subscription is valid from {start} to {end}"
+  },
   "CivicPage": {
     "title": "@:civicLiker",
     "slogan": "Have you ever read a great story, detailed news coverage or beautiful picture on the web, wanted to micro reward it but couldn't?",
@@ -68,7 +74,27 @@
     "LOGIN_NEEDED": "Please sign in to view this content",
     "LOGIN_NEEDED_TO_BOOKMARK": "Please sign in to bookmark this content",
     "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "Please sign in to follow this author",
-    "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "Please sign in to register Civic Liker"
+    "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "Please sign in to register Civic Liker",
+    "CIVIC_LIKER_ALREADY_PAID": {
+      "title": "You are already a Civic Liker",
+      "message": "Thanks for your support, but you registered as a Civic Liker successfully."
+    },
+    "CIVIC_LIKER_TRIAL_EVENT_EXPIRED": {
+      "title": "The promotion does not exist",
+      "message": "Thanks for your support, but the promotion is over. Please contact us for help."
+    },
+    "CIVIC_LIKER_TRIAL_EVENT_JOINED": {
+      "title": "You have joined the free Civic Liker Trial program before",
+      "message": "The free plan is once in a lifetime. Apply to become a real Civic Liker now, trade a coffee for a better world."
+    },
+    "CIVIC_LIKER_TRIAL_EVENT_NOT_EXIST": {
+      "title": "The promotion does not exist",
+      "message": "Thanks for your support, but the promotion does not exist. Please contact us for help."
+    },
+    "CIVIC_LIKER_TRIAL_EVENT_UNKNOWN": {
+      "title": "Oops! There is something wrong",
+      "message": "Thanks for your support. Please contact us for help."
+    }
   },
   "LikerType": {
     "general": "General Liker",
@@ -133,7 +159,9 @@
   "follow": "Follow",
   "following": "Following",
   "join": "Join",
+  "learnMore": "Learn More",
   "month": "month",
+  "ok": "OK",
   "register": "Register",
   "registered": "Registered",
   "signIn": "Sign in",
