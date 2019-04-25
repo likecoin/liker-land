@@ -1,45 +1,38 @@
-<template>
-  <Transition
+<template lang="pug">
+  Transition(
     name="error-dialog-"
     appear
-  >
-    <DialogLayout class="error-dialog">
-      <template #body>
-        <Transition
+  )
+    DialogLayout.error-dialog
+      template(#body)
+        Transition(
           name="error-dialog-content-"
           appear
-        >
-          <main class="page-content error-dialog-content">
+        )
+          main.page-content.error-dialog-content
 
-            <h1 class="text-24 mt-16">{{ formattedMessage }}</h1>
+            h1.text-24.mt-16 {{ formattedMessage }}
 
-            <div class="mt-32 px-12 phone:px-0">
-              <div v-if="isLoginError">
-                <a
-                  class="btn btn--outlined"
+            .mt-32.px-12(class="phone:px-0")
+              div(v-if="isLoginError")
+                a.btn.btn--outlined(
                   :href="getOAuthLoginAPI()"
                   @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
-                >{{ $t('signIn') }}</a><a
-                  class="btn btn--outlined"
+                )
+                  | {{ $t('signIn') }}
+                a.btn.btn--outlined(
                   :href="getOAuthLoginAPI()"
                   @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
-                >{{ $t('signUp') }}</a>
-              </div>
-              <a
-                class="btn btn--plain btn--auto-size text-14 mx-0"
+                )
+                  | {{ $t('signUp') }}
+
+              a.btn.btn--plain.btn--auto-size.text-14.mx-0(
                 href=""
                 @click="onClickBackButton"
-              >{{ $t('back') }}</a><a
-                class="btn btn--plain btn--auto-size text-14 mx-0"
-                href="/"
-              >{{ $t('backToHome') }}</a>
-            </div>
-
-          </main>
-        </Transition>
-      </template>
-    </DialogLayout>
-  </Transition>
+              )
+                | {{ $t('back') }}
+              a.btn.btn--plain.btn--auto-size.text-14.mx-0(href="/")
+                | {{ $t('backToHome') }}</a>
 </template>
 
 <script>
