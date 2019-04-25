@@ -1,94 +1,76 @@
-<template>
-  <div class="home-page">
-    <PageHeader
-      class="home-page__header"
-      :is-floatable="true"
-    >
-      <template v-slot="{ isFloating }">
-        <SiteNavBar />
+<template lang="pug">
+  // - CTA mixin
+  mixin cta(position)
+    .text-center.bg-like-green.px-16&attributes(attributes)
+      .text-like-cyan.text-30.font-200.mb-16 {{ ctaSlogan }}
 
-        <div
+      NuxtLink(
+        v-if="getUserId"
+        :class=`{
+          'btn btn--outlined btn--dark mx-0': true,
+          'mb-0': !getUserId,
+        }`
+        :to="{ name: 'civic' }"
+      )
+        template(v-if="getUserIsCivicLikerTrial")
+          | {{ $t('CivicLikerCTA.button.upgrade') }}
+        template(v-else)
+          | {{ $t('CivicLikerCTA.button.register') }}
+
+      template(v-else)
+        a(
+          class="btn btn--outlined btn--dark"
+          :href="getOAuthLoginAPI"
+          @click=`onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(index ${position})', 1)`
+        ) {{ $t('signUp') }}
+        br
+        a(
+          class="btn btn--plain btn--dark text-12 m-0 p-0"
+          :href="getOAuthLoginAPI"
+          @click=`onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(index ${position})', 1)`
+        ) {{ $t('signIn') }}
+
+  // - Page
+  .home-page
+    PageHeader.home-page__header(:is-floatable="true")
+      template(v-slot="{ isFloating }")
+        SiteNavBar
+
+        +cta('header')(
           v-if="!isFloating && (!getUserId || !getUserIsCivicLiker)"
-          class="text-center bg-like-green px-16 pb-20"
-        >
-          <div class="text-like-cyan text-30 font-200 mb-16">{{ ctaSlogan }}</div>
+          class="pb-20"
+        )
 
-          <NuxtLink
-            v-if="getUserId"
-            :class="[
-              'btn btn--outlined btn--dark mx-0',
-              {
-                'mb-0': !getUserId,
-              },
-            ]"
-            :to="{ name: 'civic' }"
-          >{{ $t(
-            `CivicLikerCTA.button.${getUserIsCivicLikerTrial ? 'upgrade' : 'register'}`
-          ) }}</NuxtLink>
-          <template v-else>
-            <a
-              :href="getOAuthLoginAPI()"
-              class="btn btn--outlined btn--dark"
-              @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(index header)', 1)"
-            >{{ $t('signUp') }}</a><br><a
-              :href="getOAuthLoginAPI()"
-              class="btn btn--plain btn--dark text-12 m-0 p-0"
-              @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(index header)', 1)"
-            >{{ $t('signIn') }}</a>
-          </template>
-
-        </div>
-
-        <TabBar>
-          <TabBarItem
+        TabBar
+          TabBarItem(
             :is-active="$route.name === 'index'"
             :to="{ name: 'index' }"
-          >
-            <FeaturedIcon v-if="getUserId" />
-          </TabBarItem>
-          <TabBarItem
+          )
+            FeaturedIcon(v-if="getUserId")
+
+          TabBarItem(
             v-if="getUserId"
             :is-active="$route.name === 'index-following'"
             :to="{ name: 'index-following' }"
-          >
-            <WatchingIcon />
-          </TabBarItem>
-          <TabBarItem
+          )
+            WatchingIcon
+
+          TabBarItem(
             v-if="getUserId"
             :is-active="$route.name === 'index-bookmarks'"
             :to="{ name: 'index-bookmarks' }"
-          >
-            <BookmarkIcon />
-          </TabBarItem>
-        </TabBar>
-      </template>
-    </PageHeader>
+          )
+            BookmarkIcon
 
-    <main class="page-content">
-      <nuxt-child />
-    </main>
+    main.page-content
+      NuxtChild
 
-    <!-- Sign in/sign up banner -->
-    <div class="relative">
-      <div
-        v-if="!getUserId"
-        class="absolute w-full text-center bg-like-green px-12 pt-32 pb-40"
-      >
-        <div class="text-like-cyan text-30 font-200 mb-24">
-          {{ $t('SignUpSignInCTA.slogan') }}
-        </div>
-        <a
-          :href="getOAuthLoginAPI()"
-          class="btn btn--outlined btn--dark"
-          @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(index footer)', 1)"
-        >{{ $t('signUp') }}</a><br><a
-          :href="getOAuthLoginAPI()"
-          class="btn btn--plain btn--dark text-12 m-0 p-0"
-          @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(index footer)', 1)"
-        >{{ $t('signIn') }}</a>
-      </div>
-    </div>
-  </div>
+    .relative(v-if="!getUserId")
+      +cta('footer')(
+        v-if="!getUserId || !getUserIsCivicLiker"
+        class="absolute w-full pt-32 pb-40"
+      )
+
 </template>
 
 <script>
@@ -124,6 +106,7 @@ export default {
       'getUserIsCivicLikerTrial',
       'getUserBookmarks',
     ]),
+    getOAuthLoginAPI,
 
     ctaSlogan() {
       if (this.getUserId) {
@@ -142,7 +125,6 @@ export default {
     this.fetchSharedContent();
   },
   methods: {
-    getOAuthLoginAPI,
     logTrackerEvent,
     ...mapActions(['refreshBookmarkList']),
     async fetchSharedContent() {

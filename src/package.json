@@ -71,6 +71,8 @@
     "nodemon": "^1.18.9",
     "node-sass": "^4.11.0",
     "prettier": "1.14.3",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
     "require-extension-hooks": "^0.3.3",
     "require-extension-hooks-babel": "^0.1.1",
     "require-extension-hooks-vue": "^2.0.0",
