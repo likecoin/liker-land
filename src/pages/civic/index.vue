@@ -156,7 +156,7 @@ export default {
       if (this.getUserIsCivicLikerTrial) {
         return this.$t('upgrade');
       }
-      return this.$t(this.getUserIsCivicLiker ? 'registered' : 'register');
+      return this.$t(this.getUserIsCivicLiker ? 'registered' : 'join');
     },
   },
   head() {
