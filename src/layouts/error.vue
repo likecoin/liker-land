@@ -11,7 +11,11 @@
         )
           main.page-content.error-dialog-content
 
-            h1.text-24.mt-16 {{ formattedMessage }}
+            template(v-if="formattedTitle")
+              h1.text-28.mt-16.px-12 {{ formattedTitle }}
+              p.text-16.mt-32.leading-1_5 {{ formattedMessage }}
+
+            p.text-24.mt-16.font-600(v-else) {{ formattedMessage }}
 
             .mt-32.px-12(class="phone:px-0")
               div(v-if="isLoginError")
@@ -69,15 +73,39 @@ export default {
     };
   },
   computed: {
+    i18nKeyBase() {
+      return `ERROR.${this.error.message}`;
+    },
+    i18nKeyTitle() {
+      return `${this.i18nKeyBase}.title`;
+    },
+    i18nKeyMessage() {
+      return `${this.i18nKeyBase}.message`;
+    },
+    isStringLocalizedError() {
+      return this.$te(this.i18nKeyBase, defaultLocale);
+    },
+    isObjectLocalizedError() {
+      return this.$te(this.i18nKeyMessage, defaultLocale);
+    },
     isLocalizedError() {
-      return this.$te(`ERROR.${this.error.message}`, defaultLocale);
+      return this.isStringLocalizedError || this.isObjectLocalizedError;
     },
     isLoginError() {
       return /^LOGIN_NEEDED.*/.test(this.error.message);
     },
+    formattedTitle() {
+      if (this.$te(this.i18nKeyTitle, defaultLocale)) {
+        return this.$t(this.i18nKeyTitle);
+      }
+      return undefined;
+    },
     formattedMessage() {
-      if (this.isLocalizedError) {
-        return this.$t(`ERROR.${this.error.message}`);
+      if (this.isObjectLocalizedError) {
+        return this.$t(this.i18nKeyMessage);
+      }
+      if (this.isStringLocalizedError) {
+        return this.$t(this.i18nKeyBase);
       }
       if (this.isLoginError) {
         return this.$t('ERROR.LOGIN_NEEDED');
