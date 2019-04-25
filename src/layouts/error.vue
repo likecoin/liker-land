@@ -30,12 +30,32 @@
                 )
                   | {{ $t('signUp') }}
 
-              a.btn.btn--plain.btn--auto-size.text-14.mx-0(
-                href=""
+              div(v-if=`
+                error.message === 'CIVIC_LIKER_TRIAL_EVENT_JOINED' ||
+                error.message === 'CIVIC_LIKER_ALREADY_PAID'
+              `)
+                NuxtLink.btn.btn--outlined(:to="{ name: 'civic' }") {{ $t('learnMore') }}
+                NuxtLink.btn.btn--outlined(
+                  v-if="error.message === 'CIVIC_LIKER_TRIAL_EVENT_JOINED'"
+                  :to="{ name: 'civic-register' }"
+                )
+                  | {{ $t('upgrade') }}
+
+              // - Common action button
+              - const btnClass = 'btn btn--plain btn--auto-size text-14 mx-0'
+
+              button(
+                v-else-if="!error.isBackButtonHidden"
+                class=btnClass
                 @click="onClickBackButton"
               )
                 | {{ $t('back') }}
-              a.btn.btn--plain.btn--auto-size.text-14.mx-0(href="/")
+
+              NuxtLink(
+                class=btnClass
+                :to="{ name: 'index' }"
+                @click.native="onClickHomeButton"
+              )
                 | {{ $t('backToHome') }}</a>
 </template>
 
@@ -88,6 +108,9 @@ export default {
     isLoginError() {
       return /^LOGIN_NEEDED.*/.test(this.error.message);
     },
+    isCivicLikerRelatedError() {
+      return /^CIVIC_LIKER.*/.test(this.error.message);
+    },
     formattedTitle() {
       if (this.$te(this.i18nKeyTitle, defaultLocale)) {
         return this.$t(this.i18nKeyTitle);
@@ -120,12 +143,20 @@ export default {
     }
   },
   methods: {
-    onClickBackButton(e) {
+    onClickBackButton() {
       // If the user enters a page requires authenication,
       // back button should trigger going back instead of refreshing the page
-      if (this.isLoginError && this.error.message === 'LOGIN_NEEDED') {
-        e.preventDefault();
+      if (this.$route.name === 'LOGIN_NEEDED') {
         this.$router.back();
+      } else if (this.isCivicLikerRelatedError) {
+        this.$router.push({ name: 'civic' });
+      } else {
+        window.location.reload();
+      }
+    },
+    onClickHomeButton() {
+      if (this.$route.name === 'index') {
+        window.location.reload();
       }
     },
     onClickLogEvent(...args) {
