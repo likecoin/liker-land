@@ -22,6 +22,7 @@ import TabBar from '~/components/TabBar';
 import TabBarItem from '~/components/TabBarItem';
 
 export default {
+  middleware: 'authenticated',
   components: {
     TabBar,
     TabBarItem,

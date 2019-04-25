@@ -17,7 +17,6 @@ import SettingsPageHeader from '~/components/SettingsPageHeader';
 
 export default {
   name: 'SettingsPage',
-  middleware: 'authenticated',
   components: {
     PageHeader,
     SiteNavBar,

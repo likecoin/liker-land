@@ -6,7 +6,7 @@
           GlobeIcon.settings-menu__item-title-icon
           span.settings-menu__item-title {{ $t('SettingsPage.language') }}
 
-    ul.settings-menu
+    ul.settings-menu(v-if="getUserId")
       li
         a.settings-menu__item(
           :href="likerIdSettingsURL"

@@ -25,6 +25,7 @@ export default {
   components: {
     CivicPricingCard,
   },
+  middleware: 'authenticated',
   computed: {
     ...mapGetters(['getUserIsCivicLiker']),
 
