@@ -56,7 +56,7 @@
                 :to="{ name: 'index' }"
                 @click.native="onClickHomeButton"
               )
-                | {{ $t('backToHome') }}</a>
+                | {{ $t('backToHome') }}
 </template>
 
 <script>
