@@ -1,19 +1,9 @@
-<template>
-  <main :class="rootClass">
-    <CivicPricingCard
-      class="mx-auto"
-      :type="cardType"
-    >
-      <template #header>
-        <div class="mt-12 mx-12">
-          <NuxtLink
-            :class="buttonClass"
-            :to="{ name: 'civic' }"
-          >{{ buttonText }}</NuxtLink>
-        </div>
-      </template>
-    </CivicPricingCard>
-  </main>
+<template lang="pug">
+  main(:class="rootClass")
+    CivicPricingCard.mx-auto(:type="cardType")
+      template(#header)
+        .mt-12.mx-12
+          NuxtLink(:class="buttonClass", :to="buttonTo") {{ buttonText }}
 </template>
 
 <script>
@@ -27,8 +17,11 @@ export default {
   },
   middleware: 'authenticated',
   computed: {
-    ...mapGetters(['getUserIsCivicLiker']),
+    ...mapGetters(['getUserIsCivicLikerTrial', 'getUserIsCivicLiker']),
 
+    isSubscribed() {
+      return this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial;
+    },
     rootClass() {
       return {
         'settings-civic-page': true,
@@ -36,7 +29,7 @@ export default {
       };
     },
     cardType() {
-      return this.getUserIsCivicLiker ? 'civic' : 'general';
+      return this.isSubscribed ? 'civic' : 'general';
     },
     buttonClass() {
       return {
@@ -46,11 +39,19 @@ export default {
       };
     },
     buttonText() {
-      return this.$t(
-        `SettingsCivicPage.${
-          this.getUserIsCivicLiker ? 'subscribed' : 'knowMoreAbout'
-        }`
-      );
+      if (this.getUserIsCivicLiker) {
+        return this.$t('SettingsCivicPage.subscribed');
+      }
+      if (this.getUserIsCivicLikerTrial) {
+        return this.$t('upgrade');
+      }
+      return this.$t('SettingsCivicPage.knowMoreAbout');
+    },
+    buttonTo() {
+      if (this.getUserIsCivicLikerTrial) {
+        return { name: 'civic-register' };
+      }
+      return { name: 'civic' };
     },
   },
   head() {

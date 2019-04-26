@@ -3,6 +3,7 @@ export default function({ req, route, store, error }) {
     error({
       statusCode: 401,
       message: 'LOGIN_NEEDED',
+      isBackButtonHidden: !!process.server,
     });
   }
 }

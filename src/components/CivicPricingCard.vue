@@ -113,14 +113,16 @@ export default {
 
   @apply w-full;
 
+  @apply rounded;
+
   &::before {
     content: '';
+
+    border-radius: inherit;
 
     @apply absolute;
     @apply overflow-hidden;
     @apply pin;
-
-    @apply rounded;
 
     @apply bg-white;
   }
@@ -141,6 +143,9 @@ export default {
 
   &__header {
     min-height: 148px;
+
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
 
     @apply pb-12;
   }

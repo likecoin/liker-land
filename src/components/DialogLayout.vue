@@ -1,15 +1,16 @@
-<template>
-  <div class="page-layout page-layout--dialog">
-    <div class="page-wrapper">
-      <NuxtLink
-        class="site-logo"
-        :to="getHomeRoute"
-      ><LikerLandLogo /></NuxtLink>
-      <LikerLogo class="liker-logo" />
-      <header class="page-header" />
-      <slot name="body" />
-    </div>
-  </div>
+<template lang="pug">
+  .page-layout.page-layout--dialog
+    slot(name="site-logo")
+      .site-logo-wrapper
+        NuxtLink.site-logo(:to="getHomeRoute")
+          LikerLandLogo
+    slot(name="page-wrapper")
+      .page-wrapper
+        slot(name="header")
+          header.page-header
+            slot(name="header-content")
+              LikerLogo.liker-logo
+        slot(name="body")
 </template>
 
 <script>
@@ -42,17 +43,10 @@ export default {
   @apply min-h-screen;
 
   .site-logo {
-    @apply mx-auto;
-    @apply mb-52;
-  }
-
-  .liker-logo {
-    @apply z-1;
-
-    @apply mx-auto;
-    @apply -mb-40;
-
-    @apply w-80;
+    &-wrapper {
+      @apply text-center;
+      @apply mb-52;
+    }
   }
 
   .page-wrapper {
@@ -64,12 +58,17 @@ export default {
   }
 
   .page-header {
-    @apply z-0;
+    @apply text-center;
 
     @apply rounded-t;
     @apply bg-like-gradient;
 
-    @apply h-80;
+    .liker-logo {
+      @apply -mt-40;
+      @apply mb-40;
+
+      @apply w-80;
+    }
   }
 
   .page-content:not(#{&}) {
