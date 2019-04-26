@@ -5,18 +5,24 @@ const { Nuxt } = require('nuxt-start');
 
 const nuxtConfig = require('../nuxt.config.js');
 
-const config = {
-  ...nuxtConfig,
-  dev: false,
-  buildDir: 'nuxt',
-};
+let debug = false;
 
 if ((functions.config().constant || {}).external_url) {
   process.env.API_URL = functions.config().constant.external_url;
 }
+
 if ((functions.config().constant || {}).network === 'rinkeby') {
   process.env.IS_TESTNET = 'TRUE';
+  debug = true;
 }
+
+const config = {
+  ...nuxtConfig,
+  debug,
+  dev: false,
+  buildDir: 'nuxt',
+};
+
 const nuxt = new Nuxt(config);
 
 const app = express();
