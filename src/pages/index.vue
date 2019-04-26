@@ -20,7 +20,7 @@
       template(v-else)
         a(
           class="btn btn--outlined btn--dark"
-          :href="getOAuthLoginAPI"
+          :href="getOAuthRegisterAPI"
           @click=`onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(index ${position})', 1)`
         ) {{ $t('signUp') }}
         br
@@ -75,7 +75,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { getOAuthLoginAPI } from '@/util/api';
+import { getOAuthLoginAPI, getOAuthRegisterAPI } from '@/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import PageHeader from '~/components/PageHeader';
@@ -107,6 +107,7 @@ export default {
       'getUserBookmarks',
     ]),
     getOAuthLoginAPI,
+    getOAuthRegisterAPI,
 
     ctaSlogan() {
       if (this.getUserId) {

@@ -33,10 +33,16 @@ router.get('/users/self', async (req, res, next) => {
   }
 });
 
+router.get('/users/register', (req, res) => {
+  const state = crypto.randomBytes(8).toString('hex');
+  req.session.state = state;
+  res.redirect(getOAuthURL({ state, isLogin: false }));
+});
+
 router.get('/users/login', (req, res) => {
   const state = crypto.randomBytes(8).toString('hex');
   req.session.state = state;
-  res.redirect(getOAuthURL(state));
+  res.redirect(getOAuthURL({ state, isLogin: true }));
 });
 
 router.post('/users/login', async (req, res, next) => {

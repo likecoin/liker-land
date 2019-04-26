@@ -25,7 +25,7 @@
                 )
                   | {{ $t('signIn') }}
                 a.btn.btn--outlined(
-                  :href="getOAuthLoginAPI"
+                  :href="getOAuthRegisterAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
                 )
                   | {{ $t('signUp') }}
@@ -62,7 +62,7 @@
 <script>
 import DialogLayout from '~/components/DialogLayout';
 
-import { getOAuthLoginAPI } from '~/util/api';
+import { getOAuthLoginAPI, getOAuthRegisterAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
 import IntercomMixin from '~/mixins/intercom';
@@ -89,6 +89,7 @@ export default {
   },
   computed: {
     getOAuthLoginAPI,
+    getOAuthRegisterAPI,
 
     i18nKeyBase() {
       return `ERROR.${this.error.message}`;

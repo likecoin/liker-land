@@ -21,6 +21,7 @@ export const getUpdateReaderBookmarkAPI = url =>
   `/api/reader/bookmark?url=${encodeURIComponent(url)}`;
 export const getFetchSuggestArticlesApi = () => `/api/reader/works/suggest`;
 export const getFetchFollowedArticlesApi = () => `/api/reader/works/followed`;
+export const getOAuthRegisterAPI = () => '/api/users/register';
 export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
