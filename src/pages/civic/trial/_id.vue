@@ -4,17 +4,19 @@
       Transition(
         name="page-wrapper-"
         mode="out-in"
+        @after-enter="showCivicLikerStamp"
       )
         .page-wrapper(:key="isJoined.toString()")
           header.page-header
+            // - Use v-show to prefetch avatar
             LcAvatar(
-              v-if="isJoined"
+              v-show="isJoined"
               :src="resizedAuthorAvatarSrc"
               halo="civic-liker"
               size="148"
             )
             LcChopCivicLiker(
-              v-else
+              v-show="!isJoined"
               size="148"
               rotate-z="16"
               is-trial
@@ -31,14 +33,19 @@
             template(v-if="isJoined")
               .chop-art
                 LcChopCivicLiker(
+                  ref="civicLikerStamp"
+                  :text="start"
                   rotate-z="16"
-                  is-trial
+                  style="visibility:hidden"
                 )
+                br
                 LcChopSimple(
+                  ref="approvedStamp"
                   size="210"
                   text="APPROVED"
-                  rotate-z="-6"
+                  rotate-z="-10"
                   is-trial
+                  style="visibility:hidden"
                 )
 
               .my-32
@@ -190,6 +197,26 @@ export default {
       await this.fetchLoginStatus();
       return data;
     },
+
+    showStamp(stampEl, onComplete) {
+      this.$gsap.TweenLite.fromTo(
+        stampEl,
+        0.5,
+        { opacity: 0, scale: 2, visibility: 'visible' },
+        {
+          opacity: 1,
+          scale: 1,
+          ease: 'easeInPower2',
+          onComplete,
+        }
+      );
+    },
+    showCivicLikerStamp() {
+      this.showStamp(this.$refs.civicLikerStamp.$el, this.showApprovedStamp);
+    },
+    showApprovedStamp() {
+      this.showStamp(this.$refs.approvedStamp.$el);
+    },
   },
 };
 </script>
@@ -243,13 +270,8 @@ export default {
     @apply text-center;
 
     .lc-chop-simple {
-      @media screen and (min-width: 401px) {
-        @apply -ml-48;
-      }
-
-      @media screen and (max-width: 400px) {
-        @apply -mt-32;
-      }
+      @apply ml-32;
+      @apply -mt-32;
     }
   }
 }
