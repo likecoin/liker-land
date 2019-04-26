@@ -39,9 +39,9 @@
                 >{{ actionButtonText }}</button>
                 <LcChopCivicLiker
                   class="absolute phone:hidden"
+                  :text="civicLikerStampText"
                   style="left: 100%;margin-left: 0.75rem;transform: translateY(-65%) rotate(20deg)"
                   size="180"
-                  text="LIKE"
                 />
               </div>
             </template>
@@ -80,9 +80,9 @@
         <div class="relative bg-white flex justify-center items-center">
           <LcChopCivicLiker
             class="absolute phone:hidden z-10 m-24 my-0"
+            :text="civicLikerStampText"
             style="right: 0;transform: rotate(20deg)"
             size="120"
-            text="LIKE"
           />
           <CivicPricingCard
             type="civic"
@@ -115,6 +115,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import dateFormat from 'date-fns/format';
 
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -148,6 +149,7 @@ export default {
   computed: {
     ...mapGetters([
       'getUserId',
+      'getUserInfo',
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLiker',
     ]),
@@ -157,6 +159,15 @@ export default {
         return this.$t('upgrade');
       }
       return this.$t(this.getUserIsCivicLiker ? 'registered' : 'join');
+    },
+    civicLikerStampText() {
+      if (this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial) {
+        return dateFormat(
+          new Date(this.getUserInfo.civicLikerSince),
+          'YYYY.MM.DD'
+        );
+      }
+      return 'LIKE';
     },
   },
   head() {
