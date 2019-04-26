@@ -1,19 +1,9 @@
-<template>
-  <main :class="rootClass">
-    <CivicPricingCard
-      class="mx-auto"
-      :type="cardType"
-    >
-      <template #header>
-        <div class="mt-12 mx-12">
-          <NuxtLink
-            :class="buttonClass"
-            :to="{ name: 'civic' }"
-          >{{ buttonText }}</NuxtLink>
-        </div>
-      </template>
-    </CivicPricingCard>
-  </main>
+<template lang="pug">
+  main(:class="rootClass")
+    CivicPricingCard.mx-auto(:type="cardType")
+      template(#header)
+        .mt-12.mx-12
+          NuxtLink(:class="buttonClass", :to="{ name: 'civic' }") {{ buttonText }}
 </template>
 
 <script>
