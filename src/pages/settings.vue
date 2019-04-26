@@ -1,16 +1,13 @@
-<template>
-  <div class="settings-page">
-    <PageHeader>
-      <template>
-        <SiteNavBar class="text-like-green" />
-      </template>
-    </PageHeader>
+<template lang="pug">
+  .settings-page
+    PageHeader
+      template
+        SiteNavBar.text-like-green
 
-    <main class="page-content page-content--narrow">
-      <SettingsPageHeader :is-show-back="isHeaderShowBack" />
-      <nuxt-child />
-    </main>
-  </div>
+    main.page-content.page-content--narrow
+      SettingsPageHeader(:is-show-back="isHeaderShowBack")
+
+      NuxtChild
 </template>
 
 <script>
@@ -20,7 +17,6 @@ import SettingsPageHeader from '~/components/SettingsPageHeader';
 
 export default {
   name: 'SettingsPage',
-  middleware: 'authenticated',
   components: {
     PageHeader,
     SiteNavBar,

@@ -39,6 +39,7 @@ export default {
   components: {
     AuthorFollowSettingsListItem,
   },
+  middleware: 'authenticated',
   data() {
     return {
       isLoading: false,

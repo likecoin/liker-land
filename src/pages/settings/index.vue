@@ -1,61 +1,29 @@
-<template>
-  <div class="settings-page-body">
-    <ul class="settings-menu">
-      <li>
-        <NuxtLink
-          class="settings-menu__item"
-          :to="{ name: 'settings-language' }"
-        >
-          <GlobeIcon class="settings-menu__item-title-icon" />
-          <span
-            class="settings-menu__item-title"
-          >{{ $t('SettingsPage.language') }}</span>
-        </NuxtLink>
-      </li>
-    </ul>
-    <ul class="settings-menu">
-      <li>
-        <a
-          class="settings-menu__item"
+<template lang="pug">
+  .settings-page-body
+    ul.settings-menu
+      li
+        NuxtLink.settings-menu__item(:to="{ name: 'settings-language' }")
+          GlobeIcon.settings-menu__item-title-icon
+          span.settings-menu__item-title {{ $t('SettingsPage.language') }}
+
+    ul.settings-menu(v-if="getUserId")
+      li
+        a.settings-menu__item(
           :href="likerIdSettingsURL"
           :title="$t('SettingsPage.likerId')"
           target="_blank"
           rel="noopener"
-        >
-          <span
-            class="settings-menu__item-title"
-          >{{ $t('SettingsPage.likerId') }}</span>
-          <span
-            class="settings-menu__item-subtitle"
-          >{{ getUserId }}</span>
-        </a>
-      </li>
-      <li>
-        <NuxtLink
-          class="settings-menu__item"
-          :to="{ name: 'settings-civic' }"
-        >
-          <span
-            class="settings-menu__item-title"
-          >{{ $t('SettingsPage.civicLiker.title') }}</span>
-          <span
-            v-if="getUserIsCivicLiker"
-            class="settings-menu__item-subtitle"
-          >{{ $t('SettingsPage.civicLiker.subscribing') }}</span>
-        </NuxtLink>
-      </li>
-      <li>
-        <NuxtLink
-          class="settings-menu__item"
-          :to="{ name: 'settings-following' }"
-        >
-          <span
-            class="settings-menu__item-title"
-          >{{ $t('SettingsPage.subscription') }}</span>
-        </NuxtLink>
-      </li>
-    </ul>
-  </div>
+        )
+          span.settings-menu__item-title {{ $t('SettingsPage.likerId') }}
+          span.settings-menu__item-subtitle {{ getUserId }}
+      li
+        NuxtLink.settings-menu__item(:to="{ name: 'settings-civic' }")
+          span.settings-menu__item-title {{ $t('SettingsPage.civicLiker.title') }}
+          span.settings-menu__item-subtitle(v-if="getUserIsCivicLiker")
+            | {{ $t('SettingsPage.civicLiker.subscribing') }}
+      li
+        NuxtLink.settings-menu__item(:to="{ name: 'settings-following' }")
+          span.settings-menu__item-title {{ $t('SettingsPage.subscription') }}
 </template>
 
 <script>
