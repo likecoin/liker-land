@@ -152,8 +152,6 @@ export default {
   },
   middleware: 'authenticated',
   async mounted() {
-    if (this.error) return;
-
     try {
       const { start, end } = await this.joinCivicLikerTrialEvent(this.eventId);
       this.start = dateFormat(new Date(start), 'YYYY.MM.DD');
