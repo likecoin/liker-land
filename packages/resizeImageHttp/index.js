@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const axios = require('axios');
 const sharp = require('sharp');
+const cors = require('cors');
 const { URL } = require('url');
 
 const {
@@ -14,15 +15,21 @@ const {
 } = process.env;
 
 const whiteListHostNames = [ORIGIN_DOMAIN, CLOUD_FN_DOMAIN];
-if (IS_TESTNET) whiteListHostNames.push('localhost');
+const whiteListOrigins = whiteListHostNames.map(
+  h => new RegExp(`${h.replace(/\./g, '\\.')}$`)
+);
+if (IS_TESTNET) {
+  whiteListHostNames.push('localhost');
+  whiteListOrigins.push(/localhost(:\d*)?$/);
+}
 
 const app = express();
-
+app.use(cors({ origin: whiteListOrigins }));
 app.use(helmet());
 app.get('/', async (req, res) => {
   const { url } = req.query;
   let { width = MAX_THUMB_SIZE } = req.query;
-  const { referer, origin, accept = '' } = req.headers;
+  const { referer, accept = '' } = req.headers;
   if (!url) {
     res.sendStatus(400);
     return;
@@ -38,10 +45,6 @@ app.get('/', async (req, res) => {
       res.sendStatus(400);
       return;
     }
-  }
-  if (origin && !whiteListHostNames.includes(origin)) {
-    res.sendStatus(403);
-    return;
   }
   try {
     width = Number(width);
