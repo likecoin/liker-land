@@ -25,7 +25,7 @@
         <a
           v-else
           class="btn btn--dark btn--block mx-0"
-          :href="getOAuthLoginAPI()"
+          :href="getOAuthRegisterAPI"
           @click="onClickLogEvent('Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
         >{{ $t('signInOrSignUp') }}</a>
       </header>
@@ -83,7 +83,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getOAuthLoginAPI } from '~/util/api';
+import { getOAuthRegisterAPI } from '~/util/api';
 import { IntercomMixinFactory } from '~/mixins/intercom';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -98,6 +98,8 @@ export default {
   },
   mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   computed: {
+    getOAuthRegisterAPI,
+
     ...mapGetters([
       'getUserId',
       'getUserInfo',
@@ -106,7 +108,6 @@ export default {
     ]),
   },
   methods: {
-    getOAuthLoginAPI,
     logTrackerEvent,
 
     ...mapActions(['toggleSlidingMenu']),

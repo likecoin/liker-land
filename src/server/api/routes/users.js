@@ -17,6 +17,11 @@ function getIntercomUserHash(user) {
     .digest('hex');
 }
 
+function setSessionOAuthState(req) {
+  const state = crypto.randomBytes(8).toString('hex');
+  req.session.state = state;
+}
+
 const router = Router();
 
 router.get('/users/self', async (req, res, next) => {
@@ -33,10 +38,14 @@ router.get('/users/self', async (req, res, next) => {
   }
 });
 
+router.get('/users/register', (req, res) => {
+  setSessionOAuthState(req);
+  res.redirect(getOAuthURL({ state: req.session.state, isLogin: false }));
+});
+
 router.get('/users/login', (req, res) => {
-  const state = crypto.randomBytes(8).toString('hex');
-  req.session.state = state;
-  res.redirect(getOAuthURL(state));
+  setSessionOAuthState(req);
+  res.redirect(getOAuthURL({ state: req.session.state, isLogin: true }));
 });
 
 router.post('/users/login', async (req, res, next) => {

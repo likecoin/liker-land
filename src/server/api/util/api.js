@@ -119,8 +119,11 @@ const apiCivicLikerJoinTrialEventById = (id, req) =>
       }
     )
   );
-const getOAuthURL = state =>
-  `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
+const getOAuthURL = ({ state, isLogin }) => {
+  let oAuthUrl = `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
+  if (isLogin) oAuthUrl = `${oAuthUrl}&login=1`;
+  return oAuthUrl;
+};
 const getOAuthCallbackAPI = authCode =>
   `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
 
