@@ -26,6 +26,7 @@
               class="content-card__author-avatar"
               :src="resizedAuthorAvatarSrc"
               :halo="authorAvatarHalo"
+              crossorigin="anonymous"
             />{{ authorName }}</a>
 
           <div
@@ -70,6 +71,7 @@
         <img
           :src="resizedCoverSrc"
           :alt="title"
+          crossorigin="anonymous"
         >
       </div>
     </Transition>
