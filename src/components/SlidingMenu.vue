@@ -16,6 +16,7 @@
           <lc-avatar
             :src="getUserInfo.avatar"
             :halo="getUserCivicLikerHalo"
+            crossorigin="anonymous"
             size="46"
           />
           <span

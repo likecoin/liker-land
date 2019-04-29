@@ -4,11 +4,17 @@ const theme = require('./tailwind.config');
 
 const siteName = 'Liker.Land';
 
+const {
+  IS_TESTNET,
+  CI,
+  INTERCOM_APPID,
+} = process.env;
+
 const nuxtConfig = {
   env: {
-    IS_TESTNET: process.env.IS_TESTNET,
-    CI: process.env.CI,
-    INTERCOM_APPID: process.env.INTERCOM_APPID,
+    IS_TESTNET,
+    CI,
+    INTERCOM_APPID,
     SITE_NAME: siteName,
   },
   mode: 'universal',
@@ -162,6 +168,16 @@ const nuxtConfig = {
   /**
    * Nuxt PWA modules
    */
+  workbox: {
+    runtimeCaching: [
+      {
+        urlPattern: `https://api\\.${IS_TESTNET ? 'rinkeby\\.' : '' }like\\.co/.*`,
+      },
+      {
+        urlPattern: `https://us-central1-civic-liker${IS_TESTNET ? '-develop' : '' }\\.cloudfunctions\\.net/.*`,
+      },
+    ],
+  },
   meta: {
     name: siteName,
     theme_color: theme.colors['like-green'],
