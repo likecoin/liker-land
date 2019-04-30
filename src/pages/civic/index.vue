@@ -40,20 +40,21 @@
           | {{ $t('CivicPage.slogan') }}
 
       section(ref="visionSection")
-        div.civic-feature-card-swiper-container.bg-like-gradient(
-          v-swiper:featureSwiper="$options.featureSwiper"
-        )
-          ul.civic-feature-card-wrapper
-            li.civic-feature-card(
-              v-for="i in 3"
-              :key="i"
-            )
-              .civic-feature-card__header(
-                v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
+        //-
+          div.civic-feature-card-swiper-container.bg-like-gradient(
+            v-swiper:featureSwiper="$options.featureSwiper"
+          )
+            ul.civic-feature-card-wrapper
+              li.civic-feature-card(
+                v-for="i in 3"
+                :key="i"
               )
-              .civic-feature-card__body(
-                v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
-              )
+                .civic-feature-card__header(
+                  v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
+                )
+                .civic-feature-card__body(
+                  v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
+                )
 
         .relative.bg-white.flex.justify-center.items-center
           LcChopCivicLiker.absolute.z-10.m-24.my-0(
@@ -77,7 +78,7 @@
       section.w-full.max-w-desktop.mx-auto.text-gray-9b.text-12.p-20.pb-64(
         class="laptop:px-20 desktop:px-32"
       )
-        p {{ $t('CivicPage.footnote.0') }}
+        //- p {{ $t('CivicPage.footnote.0') }}
         p.mt-16 {{ $t('CivicPage.footnote.1') }}
 </template>
 
