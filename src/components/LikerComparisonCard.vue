@@ -7,70 +7,39 @@
       .liker-comparison-card__type {{ $t(`LikerType.${type}`) }}
 
       div
-        span.liker-comparison-card__price {{ $options.pricing[type].price }}
-        span.liker-comparison-card__payment-cycle {{ $t($options.pricing[type].paymentCycle) }}
+        span.liker-comparison-card__price {{ plan.price }}
+        span.liker-comparison-card__payment-cycle {{ $t(plan.billingCycle) }}
 
       slot(name="header")
 
     ul.liker-comparison-card__body(v-if="isShowFeatures")
       li.liker-comparison-card__feature(
-        v-for="key in $options.featureList"
-        :key="key"
-        :class="{ 'liker-comparison-card__feature--disabled': !$options.pricing[type].features[key] }"
+        v-for="feature in featureList"
+        :key="feature"
+        :class="{ 'liker-comparison-card__feature--disabled': !getFeatureAvailability(feature) }"
       )
         TickIcon.liker-comparison-card__feature-bullet
-        | {{ $t(`CivicLikerPricing.${key}`) }}
+        | {{ getFeatureText(feature) }}
 
 </template>
 
 <script>
 import TickIcon from '~/assets/icons/tick.svg';
 
+const LIKER_FEATURE = {
+  DISTRIBUTE_FUND: 'distributeFund',
+  DISTRIBUTE_OWN_FEE: 'distributeOwnFee',
+  DETAILED_REPORT: 'detailedReport',
+  PARTICIPATE_IN_COMMUNITY: 'participateInCommunity',
+  BONUS_CONTENT: 'bonusContent',
+  OFFLINE_EVENTS: 'offlineEvents',
+};
+
 export default {
   name: 'LikerComparisonCard',
   components: {
     TickIcon,
   },
-  pricing: {
-    general: {
-      price: 'USD0.00',
-      paymentCycle: 'month',
-      features: {
-        ICRpool: true,
-        ownRewardPool: false,
-        communityVoting: false,
-        bonusContent: false,
-        idolNewsletter: false,
-        offlineEvent: false,
-        report: false,
-        badges: false,
-      },
-    },
-    civic: {
-      price: 'USD5.00',
-      paymentCycle: 'month',
-      features: {
-        ICRpool: true,
-        ownRewardPool: true,
-        communityVoting: true,
-        bonusContent: true,
-        idolNewsletter: true,
-        offlineEvent: true,
-        report: true,
-        badges: true,
-      },
-    },
-  },
-  featureList: [
-    'ICRpool',
-    'ownRewardPool',
-    'communityVoting',
-    'bonusContent',
-    'idolNewsletter',
-    'offlineEvent',
-    'report',
-    'badges',
-  ],
   props: {
     type: {
       type: String,
@@ -83,6 +52,52 @@ export default {
     isShowFeatures: {
       type: Boolean,
       default: true,
+    },
+  },
+  computed: {
+    featureList() {
+      return [
+        LIKER_FEATURE.DISTRIBUTE_FUND,
+        LIKER_FEATURE.DISTRIBUTE_OWN_FEE,
+        LIKER_FEATURE.DETAILED_REPORT,
+        LIKER_FEATURE.PARTICIPATE_IN_COMMUNITY,
+        LIKER_FEATURE.BONUS_CONTENT,
+        LIKER_FEATURE.OFFLINE_EVENTS,
+      ];
+    },
+    plan() {
+      switch (this.type) {
+        case 'civic':
+          return {
+            price: 'USD5.00',
+            billingCycle: 'month',
+            features: this.featureList,
+          };
+
+        case 'general':
+        default:
+          return {
+            price: 'USD0.00',
+            billingCycle: 'month',
+            features: [LIKER_FEATURE.DISTRIBUTE_FUND],
+          };
+      }
+    },
+  },
+  methods: {
+    getFeatureAvailability(feature) {
+      return this.plan.features.includes(feature);
+    },
+    getFeatureText(feature) {
+      const i18nPath = `LikerFeature.${feature}`;
+      const i18nPathWithType = `${i18nPath}.${this.type}`;
+      if (this.$te(i18nPathWithType)) {
+        return this.$t(i18nPathWithType);
+      }
+      if (this.$te(i18nPathWithType, this.$i18n.fallbackLocale)) {
+        return this.$t(i18nPathWithType, this.$i18n.fallbackLocale);
+      }
+      return this.$t(i18nPath);
     },
   },
 };
