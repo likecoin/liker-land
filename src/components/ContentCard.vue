@@ -14,13 +14,7 @@
           @enter="onElemEnter"
           @leave="onElemLeave"
         )
-          a.content-card__author(
-            v-if="authorId"
-            :href="authorURL"
-            :title="authorName"
-            target="_blank"
-            rel="noopener"
-          )
+          .content-card__author(v-if="authorId")
             LcAvatar.content-card__author-avatar(
               :src="resizedAuthorAvatarSrc"
               :halo="authorAvatarHalo"
