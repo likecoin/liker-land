@@ -1,181 +1,140 @@
-<template>
-  <a
-    class="content-card"
+<template lang="pug">
+  a.content-card(
     :href="src"
     :title="title"
     target="_blank"
     rel="noopener"
-  >
-    <div class="content-card__header content-card__inset">
-      <div class="content-card__header-left">
-        <Transition
+  )
+    //- Header
+    .content-card__inset.content-card__header
+      .content-card__header-left
+        Transition(
           :css="false"
           mode="out-in"
           @enter="onElemEnter"
           @leave="onElemLeave"
-        >
-          <a
-            v-if="authorId"
-            class="content-card__author"
-            :href="authorURL"
-            :title="authorName"
-            target="_blank"
-            rel="noopener"
-          >
-            <LcAvatar
-              class="content-card__author-avatar"
+        )
+          .content-card__author(v-if="authorId")
+            LcAvatar.content-card__author-avatar(
               :src="resizedAuthorAvatarSrc"
               :halo="authorAvatarHalo"
               crossorigin="anonymous"
-            />{{ authorName }}</a>
+            )
+            | {{ authorName }}
 
-          <div
-            v-else
-            class="content-card__author-placeholder"
-          >
-            <div class="avatar placeholder-shimmer" />
-            <div class="name content-card__placeholder-text placeholder-shimmer" />
-          </div>
-        </Transition>
-      </div>
+          //- Placeholder
+          .content-card__author-placeholder(v-else)
+            .placeholder-shimmer.avatar
+            .placeholder-shimmer.name.content-card__placeholder-text
 
-      <div class="content-card__header-right">
-        <Transition
+      .content-card__header-right
+        Transition(
           :css="false"
           mode="out-in"
           @enter="onElemEnter"
           @leave="onElemLeave"
-        >
-          <span
+        )
+          span.content-card__like-count(
             v-if="likeCount !== -1"
             key="like-count"
-            class="content-card__like-count"
-          >{{ formattedLikeCount }}<LikeUnit /></span>
-          <div
+          )
+            | {{ formattedLikeCount }}
+            LikeUnit
+
+          //- Placeholder
+          .placeholder-shimmer.content-card__like-count-placeholder(
             v-else
             key="like-count-placeholder"
-            class="content-card__like-count-placeholder placeholder-shimmer"
-          />
-        </Transition>
-      </div>
-    </div>
+          )
 
-    <Transition
+    //- Cover Photo
+    Transition(
       :css="false"
       @enter="onCoverPhotoEnter"
-    >
-      <div
+    )
+      .content-card__cover-photo(
         v-if="coverSrc && coverPhotoSize.height"
-        class="content-card__cover-photo"
-      >
-        <img
+      )
+        img(
           :src="resizedCoverSrc"
           :alt="title"
           crossorigin="anonymous"
-        >
-      </div>
-    </Transition>
+        )
 
-    <Transition
+    //- Info
+    Transition(
       :css="false"
       mode="out-in"
       @enter="onInfoEnter"
       @before-leave="onInfoBeforeLeave"
       @leave="onElemLeave"
-    >
-      <div
+    )
+      .content-card__inset.content-card__info(
         v-if="title || description"
         key="info"
-        class="content-card__info content-card__inset"
-      >
-        <a
-          class="content-card__domain"
+      )
+        a.content-card__domain(
           :href="url.origin"
           target="_blank"
           rel="noopener"
-        >{{ url.hostname }}</a>
-        <div
-          class="content-card__title"
-        >{{ title }}</div>
-        <div
-          class="content-card__description"
-        >{{ description }}</div>
-      </div>
-      <div
+        )
+          | {{ url.hostname }}
+        .content-card__title {{ title }}
+        .content-card__description {{ description }}
+      //- Empty content
+      div(
         v-else-if="title === '' && description === ''"
         key="info-empty"
-      />
-      <div
+      )
+      //- Placeholder
+      .content-card__inset.placeholder-shimmer.content-card__info-placeholder(
         v-else
         key="info-placeholer"
-        class="content-card__info-placeholder content-card__inset placeholder-shimmer"
-      >
-        <div class="domain content-card__placeholder-text" />
-        <div class="title content-card__placeholder-text" />
-        <div class="description content-card__placeholder-text" />
-        <div class="description content-card__placeholder-text" />
-        <div class="description content-card__placeholder-text" />
-      </div>
-    </Transition>
+      )
+        .content-card__placeholder-text.domain
+        .content-card__placeholder-text.title
+        .content-card__placeholder-text.description
+        .content-card__placeholder-text.description
+        .content-card__placeholder-text.description
 
-    <div class="content-card__footer content-card__inset">
-      <Transition
+    //- Footer
+    .content-card__inset.content-card__footer
+      Transition(
         :css="false"
         @enter="onElemEnter"
         @leave="onElemLeave"
-      >
-        <div
-          v-if="shouldShowActionBar"
-          class="content-card__action-bar"
-        >
-          <button
-            class="content-card__action-bar-button"
+      )
+        .content-card__action-bar(v-if="shouldShowActionBar")
+          button.content-card__action-bar-button(
             @click.prevent="$emit('bookmark-click')"
-          >
-            <BookmarkIcon v-if="isBookmarked" />
-            <BookmarkOutlinedIcon v-else />
-          </button>
+          )
+            BookmarkIcon(v-if="isBookmarked")
+            BookmarkOutlinedIcon(v-else)
 
-          <v-popover
+          v-popover(
             :open.sync="isOptionMenuOpen"
             :auto-hide="!isUpdatingFollow"
             trigger="manual"
             placement="auto"
-          >
-            <button
-              class="content-card__action-bar-button"
+          )
+            button.content-card__action-bar-button(
               @click.prevent="onClickOptionButton"
-            >
-              <MoreIcon />
-            </button>
+            )
+              MoreIcon
 
-            <ul
-              slot="popover"
-              class="content-card-option-list"
-            >
-              <li class="content-card-option-list-item">
-                <LcLoadingIndicator
+            ul.content-card-option-list(slot="popover")
+              li.content-card-option-list-item
+                LcLoadingIndicator.m-0.text-12(
                   v-if="isUpdatingFollow"
-                  class="m-0 text-12"
-                />
-                <TickIcon
+                )
+                TickIcon.w-20(
                   v-else-if="isUpdatedFollow"
-                  class="w-20"
-                />
-                <button
+                )
+                button.content-card-option-list-item__button(
                   v-else
-                  class="content-card-option-list-item__button"
                   @click="onToggleFollow"
-                >{{ $t(isFollowed ? 'unfollow' : 'follow') }}</button>
-              </li>
-            </ul>
-          </v-popover>
-
-        </div>
-      </Transition>
-    </div>
-
-  </a>
+                )
+                  | {{ $t(isFollowed ? 'unfollow' : 'follow') }}
 </template>
 
 <script>
