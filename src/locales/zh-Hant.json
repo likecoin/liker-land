@@ -32,16 +32,6 @@
       "body": "<p>除了支持喜歡的創作者，讚賞公民還享有參予社群決策、獲取特別收錄內容、收取偶像個人通訊、參與線下活動等一連串福利，利人利己。</p>"
     }
   ],
-  "CivicLikerPricing": {
-    "ICRpool": "群眾掌聲投票支持作品",
-    "ownRewardPool": "100% 個人品味支持作品",
-    "communityVoting": "參與社群決策",
-    "bonusContent": "獲取特別收錄",
-    "idolNewsletter": "收取偶像個人通訊",
-    "offlineEvent": "參與線下活動",
-    "report": "詳細贊助報告",
-    "badges": "永久榮譽徽章"
-  },
   "CivicLikerTrialPage": {
     "title": "讚賞公民免費體驗計劃",
     "joining": "申請中",
@@ -94,6 +84,17 @@
       "title": "噢！發生未知的問題",
       "message": "感謝你的支持。請聯絡客服。"
     }
+  },
+  "LikerFeature": {
+    "distributeFund": {
+      "general": "以 Like 攤分基金，回饋作者",
+      "civic": "以 Like 攤分基金，回饋作者；權重更高"
+    },
+    "distributeOwnFee": "以 Like 攤分個人月費，全數回饋作者",
+    "detailedReport": "查閱回饋去向，掌握一分一毫",
+    "participateInCommunity": "參與社群決策和公投",
+    "bonusContent": "獲得額外內容、書籍、優惠券等專屬禮品",
+    "offlineEvents": "優先參與不定期線下活動"
   },
   "LikerType": {
     "general": "一般讚客",

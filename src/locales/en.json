@@ -32,16 +32,6 @@
       "body": "<p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>"
     }
   ],
-  "CivicLikerPricing": {
-    "ICRpool": "Influent Creators Reward Pool distribution",
-    "ownRewardPool": "Distribute own reward pool with every Like",
-    "communityVoting": "Participate in community voting",
-    "bonusContent": "Access bonus contents",
-    "idolNewsletter": "Receive idol newsletter",
-    "offlineEvent": "Join offline events",
-    "report": "Detailed reward distribution report",
-    "badges": "Unique, immutable badges"
-  },
   "CivicLikerTrialPage": {
     "title": "Civic Liker Trial",
     "joining": "Joining",
@@ -95,6 +85,17 @@
       "title": "Oops! There is something wrong",
       "message": "Thanks for your support. Please contact us for help."
     }
+  },
+  "LikerFeature": {
+    "distributeFund": {
+      "general": "Help distribute Creators Fund with your Like",
+      "civic": "Help distribute Creators Fund with your Like. Enjoy a higher weight"
+    },
+    "distributeOwnFee": "Distribute your own monthly fee in full amount with your Like",
+    "detailedReport": "Detailed report on reward distribution. Know where you spend",
+    "participateInCommunity": "Participate in community decision making process and referenda",
+    "bonusContent": "Receive bonus contents, ebook and coupons",
+    "offlineEvents": "Prioritized participation of offline events"
   },
   "LikerType": {
     "general": "General Liker",
