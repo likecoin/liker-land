@@ -1,43 +1,26 @@
-<template>
-  <component
+<template lang="pug">
+  component.civic-pricing-card(
     :is="tag"
-    :class="[
-      'civic-pricing-card',
-      `civic-pricing-card--${type}`,
-    ]"
-  >
-    <div class="civic-pricing-card__header">
-      <div class="civic-pricing-card__type">
-        {{ $t(`LikerType.${type}`) }}
-      </div>
-      <div>
-        <span
-          class="civic-pricing-card__price"
-        >{{ $options.pricing[type].price }}</span>
-        <span
-          class="civic-pricing-card__payment-cycle"
-        >{{ $t($options.pricing[type].paymentCycle) }}</span>
-      </div>
-      <slot name="header" />
-    </div>
-    <ul
-      v-if="isShowFeatures"
-      class="civic-pricing-card__body"
-    >
-      <li
+    :class="`civic-pricing-card--${type}`"
+  )
+    .civic-pricing-card__header
+      .civic-pricing-card__type {{ $t(`LikerType.${type}`) }}
+
+      div
+        span.civic-pricing-card__price {{ $options.pricing[type].price }}
+        span.civic-pricing-card__payment-cycle {{ $t($options.pricing[type].paymentCycle) }}
+
+      slot(name="header")
+
+    ul.civic-pricing-card__body(v-if="isShowFeatures")
+      li.civic-pricing-card__feature(
         v-for="key in $options.featureList"
         :key="key"
-        :class="[
-          'civic-pricing-card__feature',
-          {
-            'civic-pricing-card__feature--disabled': !$options.pricing[type].features[key],
-          },
-        ]"
-      >
-        <TickIcon class="civic-pricing-card__feature-bullet" />{{ $t(`CivicLikerPricing.${key}`) }}
-      </li>
-    </ul>
-  </component>
+        :class="{ 'civic-pricing-card__feature--disabled': !$options.pricing[type].features[key] }"
+      )
+        TickIcon.civic-pricing-card__feature-bullet
+        | {{ $t(`CivicLikerPricing.${key}`) }}
+
 </template>
 
 <script>
