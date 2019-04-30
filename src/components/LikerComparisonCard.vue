@@ -1,24 +1,24 @@
 <template lang="pug">
-  component.civic-pricing-card(
+  component.liker-comparison-card(
     :is="tag"
-    :class="`civic-pricing-card--${type}`"
+    :class="`liker-comparison-card--${type}`"
   )
-    .civic-pricing-card__header
-      .civic-pricing-card__type {{ $t(`LikerType.${type}`) }}
+    .liker-comparison-card__header
+      .liker-comparison-card__type {{ $t(`LikerType.${type}`) }}
 
       div
-        span.civic-pricing-card__price {{ $options.pricing[type].price }}
-        span.civic-pricing-card__payment-cycle {{ $t($options.pricing[type].paymentCycle) }}
+        span.liker-comparison-card__price {{ $options.pricing[type].price }}
+        span.liker-comparison-card__payment-cycle {{ $t($options.pricing[type].paymentCycle) }}
 
       slot(name="header")
 
-    ul.civic-pricing-card__body(v-if="isShowFeatures")
-      li.civic-pricing-card__feature(
+    ul.liker-comparison-card__body(v-if="isShowFeatures")
+      li.liker-comparison-card__feature(
         v-for="key in $options.featureList"
         :key="key"
-        :class="{ 'civic-pricing-card__feature--disabled': !$options.pricing[type].features[key] }"
+        :class="{ 'liker-comparison-card__feature--disabled': !$options.pricing[type].features[key] }"
       )
-        TickIcon.civic-pricing-card__feature-bullet
+        TickIcon.liker-comparison-card__feature-bullet
         | {{ $t(`CivicLikerPricing.${key}`) }}
 
 </template>
@@ -27,7 +27,7 @@
 import TickIcon from '~/assets/icons/tick.svg';
 
 export default {
-  name: 'CivicPricingCard',
+  name: 'LikerComparisonCard',
   components: {
     TickIcon,
   },
@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang="scss">
-.civic-pricing-card {
+.liker-comparison-card {
   max-width: 288px;
 
   @apply relative;
@@ -160,7 +160,7 @@ export default {
 
     @apply mb-8;
 
-    .civic-pricing-card--civic & {
+    .liker-comparison-card--civic & {
       @apply text-like-green;
     }
   }
@@ -204,7 +204,7 @@ export default {
 
       @apply fill-current;
 
-      .civic-pricing-card--civic & {
+      .liker-comparison-card--civic & {
         @apply text-like-cyan;
       }
     }

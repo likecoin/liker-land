@@ -1,6 +1,6 @@
 <template lang="pug">
   main(:class="rootClass")
-    CivicPricingCard.mx-auto(:type="cardType")
+    LikerComparisonCard.mx-auto(:type="cardType")
       template(#header)
         .mt-12.mx-12
           NuxtLink(:class="buttonClass", :to="buttonTo") {{ buttonText }}
@@ -9,11 +9,11 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import CivicPricingCard from '~/components/CivicPricingCard';
+import LikerComparisonCard from '~/components/LikerComparisonCard';
 
 export default {
   components: {
-    CivicPricingCard,
+    LikerComparisonCard,
   },
   middleware: 'authenticated',
   computed: {
@@ -68,7 +68,7 @@ export default {
   @apply pt-0;
 
   &--subscribed {
-    .civic-pricing-card {
+    .liker-comparison-card {
       &__header {
         @apply bg-like-gradient;
       }

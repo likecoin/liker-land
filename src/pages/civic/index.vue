@@ -13,12 +13,12 @@
 
       section.max-w-desktop.mx-auto.-mt-24
         ul.list-reset.flex.justify-center.overflow-x-hidden
-          CivicPricingCard.mx-8(
+          LikerComparisonCard.mx-8(
             tag="li"
             class="tablet:hidden phone:hidden"
             type="general"
           )
-          CivicPricingCard.mx-8(
+          LikerComparisonCard.mx-8(
             tag="li"
             type="civic"
           )
@@ -62,7 +62,7 @@
             style="right: 0;transform: rotate(20deg)"
             size="120"
           )
-          CivicPricingCard(
+          LikerComparisonCard(
             type="civic"
             :is-show-features="false"
           )
@@ -87,7 +87,7 @@ import dateFormat from 'date-fns/format';
 
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
-import CivicPricingCard from '~/components/CivicPricingCard';
+import LikerComparisonCard from '~/components/LikerComparisonCard';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import CivicLikerHeroImage from '~/assets/images/civic/hero.png';
@@ -96,7 +96,7 @@ export default {
   components: {
     PageHeader,
     SiteNavBar,
-    CivicPricingCard,
+    LikerComparisonCard,
   },
   featureSwiper: {
     slidesPerView: 'auto',
