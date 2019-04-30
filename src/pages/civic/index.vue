@@ -1,116 +1,84 @@
-<template>
-  <div class="civic-page">
-    <PageHeader>
-      <template>
-        <SiteNavBar class="text-like-green" />
-      </template>
-    </PageHeader>
+<template lang="pug">
+  .civic-page
+    PageHeader
+      template
+        SiteNavBar.text-like-green
 
-    <main class="page-content">
-      <div class="max-w-desktop w-full mx-auto">
-        <img
-          class="w-full"
+    main.page-content
+      .max-w-desktop.w-full.mx-auto
+        img.w-full(
           :src="CivicLikerHeroImage"
           :alt="$t('civicLiker')"
-        >
-      </div>
-      <section class="max-w-desktop mx-auto -mt-24">
-        <ul class="list-reset flex justify-center overflow-x-hidden">
-          <CivicPricingCard
+        )
+
+      section.max-w-desktop.mx-auto.-mt-24
+        ul.list-reset.flex.justify-center.overflow-x-hidden
+          CivicPricingCard.mx-8(
             tag="li"
-            class="mx-8 tablet:hidden phone:hidden"
+            class="tablet:hidden phone:hidden"
             type="general"
-          />
-          <CivicPricingCard
+          )
+          CivicPricingCard.mx-8(
             tag="li"
-            class="mx-8"
             type="civic"
-          >
-            <template #header>
-              <div class="relative mt-12 mx-12">
-                <button
-                  :class="[
-                    'btn btn--outlined btn--block m-0 w-full',
-                    {
-                      'btn--disabled': !!getUserIsCivicLiker,
-                    },
-                  ]"
+          )
+            template(#header)
+              .relative.mt-12.mx-12
+                button.btn.btn--outlined.btn--block.m-0.w-full(
+                  :class="{ 'btn--disabled': !!getUserIsCivicLiker }"
                   @click="onClickActionButton"
-                >{{ actionButtonText }}</button>
-                <LcChopCivicLiker
-                  class="absolute phone:hidden"
+                )
+                  | {{ actionButtonText }}
+                LcChopCivicLiker.absolute(
+                  class="phone:hidden"
                   :text="civicLikerStampText"
                   style="left: 100%;margin-left: 0.75rem;transform: translateY(-65%) rotate(20deg)"
                   size="180"
-                />
-              </div>
-            </template>
-          </CivicPricingCard>
-        </ul>
-        <div class="text-like-green text-20 leading-1_5 text-center p-24 desktop:px-32">
-          {{ $t('CivicPage.slogan') }}
-        </div>
-      </section>
+                )
 
-      <section ref="visionSection">
-        <div
+        .text-like-green.text-20.leading-1_5.text-center.p-24(class="desktop:px-32")
+          | {{ $t('CivicPage.slogan') }}
+
+      section(ref="visionSection")
+        div.civic-feature-card-swiper-container.bg-like-gradient(
           v-swiper:featureSwiper="$options.featureSwiper"
-          class="civic-feature-card-swiper-container bg-like-gradient"
-        >
-          <ul class="civic-feature-card-wrapper">
-            <li
+        )
+          ul.civic-feature-card-wrapper
+            li.civic-feature-card(
               v-for="i in 3"
               :key="i"
-              class="civic-feature-card"
-            >
-              <!-- eslint-disable vue/no-v-html -->
-              <div
-                class="civic-feature-card__header"
+            )
+              .civic-feature-card__header(
                 v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
-              />
-              <div
-                class="civic-feature-card__body"
+              )
+              .civic-feature-card__body(
                 v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
-              />
-              <!-- eslint-enable vue/no-v-html -->
-            </li>
-          </ul>
-        </div>
+              )
 
-        <div class="relative bg-white flex justify-center items-center">
-          <LcChopCivicLiker
-            class="absolute phone:hidden z-10 m-24 my-0"
+        .relative.bg-white.flex.justify-center.items-center
+          LcChopCivicLiker.absolute.z-10.m-24.my-0(
+            class="phone:hidden "
             :text="civicLikerStampText"
             style="right: 0;transform: rotate(20deg)"
             size="120"
-          />
-          <CivicPricingCard
+          )
+          CivicPricingCard(
             type="civic"
             :is-show-features="false"
-          >
-            <template #header>
-              <div class="mt-12 mx-12">
-                <button
-                  :class="[
-                    'btn btn--outlined btn--block mx-0 -mb-12 w-full',
-                    {
-                      'btn--disabled': !!getUserIsCivicLiker,
-                    },
-                  ]"
+          )
+            template(#header)
+              .mt-12.mx-12
+                button.btn.btn--outlined.btn--block.mx-0.-mb-12.w-full(
+                  :class="{ 'btn--disabled': !!getUserIsCivicLiker }"
                   @click="onClickActionButton"
-                >{{ actionButtonText }}</button>
-              </div>
-            </template>
-          </CivicPricingCard>
-        </div>
-      </section>
+                )
+                 | {{ actionButtonText }}
 
-      <section class="max-w-desktop mx-auto text-gray-9b text-12 p-20 laptop:px-20 desktop:px-32 pb-64">
-        <p>{{ $t('CivicPage.footnote.0') }}</p>
-        <p class="mt-16">{{ $t('CivicPage.footnote.1') }}</p>
-      </section>
-    </main>
-  </div>
+      section.w-full.max-w-desktop.mx-auto.text-gray-9b.text-12.p-20.pb-64(
+        class="laptop:px-20 desktop:px-32"
+      )
+        p {{ $t('CivicPage.footnote.0') }}
+        p.mt-16 {{ $t('CivicPage.footnote.1') }}
 </template>
 
 <script>
