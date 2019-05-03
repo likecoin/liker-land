@@ -8,6 +8,17 @@ export const availableLocales = [
   'zh-Hant',
 ];
 
+export function covertLikeCoinLocale(locale) {
+  switch (locale) {
+    case 'zh':
+      return 'zh-Hant';
+    case 'cn':
+      return 'zh-Hant'; // temp, no zh-Hans
+    default:
+      return locale;
+  }
+}
+
 export default {
   en,
   'zh-Hant': zhHant,
