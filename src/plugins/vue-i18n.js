@@ -5,7 +5,7 @@ import cookie from 'tiny-cookie';
 import messages, {
   defaultLocale,
   availableLocales,
-  covertLikeCoinLocale,
+  convertLikerCoinLocale,
 } from '../locales';
 
 Vue.use(VueI18n);
@@ -34,7 +34,7 @@ export default ({ app, store, req, res, query }) => {
     locale =
       query.language ||
       cookieLang ||
-      covertLikeCoinLocale(userLocale) ||
+      convertLikerCoinLocale(userLocale) ||
       (window.localStorage && window.localStorage.language) ||
       navLang ||
       defaultLocale;

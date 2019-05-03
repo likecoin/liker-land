@@ -8,7 +8,7 @@ export const availableLocales = [
   'zh-Hant',
 ];
 
-export function covertLikeCoinLocale(locale) {
+export function convertLikerCoinLocale(locale) {
   switch (locale) {
     case 'zh':
       return 'zh-Hant';

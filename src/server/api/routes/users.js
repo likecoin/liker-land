@@ -72,7 +72,7 @@ router.post('/users/login', async (req, res, next) => {
     const { user } = userData;
     req.session.user = user;
 
-    const userDoc = await userCollection.doc().get();
+    const userDoc = await userCollection.doc(user).get();
     const isNew = !userDoc.exists;
     await userCollection.doc(user).set(
       {

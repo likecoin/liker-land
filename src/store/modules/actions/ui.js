@@ -1,9 +1,9 @@
 /* eslint import/prefer-default-export: "off" */
 import * as types from '@/store/mutation-types';
-import { covertLikeCoinLocale } from '@/locales';
+import { convertLikerCoinLocale } from '@/locales';
 
 export function setLocale({ commit }, locale) {
-  commit(types.UI_SET_LOCALE, covertLikeCoinLocale(locale));
+  commit(types.UI_SET_LOCALE, convertLikerCoinLocale(locale));
 }
 
 export function toggleSlidingMenu({ commit }, isToggled) {

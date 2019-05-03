@@ -29,8 +29,8 @@ async function start() {
   }
 
   app.use('/api', api);
-  // Give nuxt middleware to express
   app.use(cookieParser());
+  // Give nuxt middleware to express
   app.use(nuxt.render);
 
   // Listen the server
