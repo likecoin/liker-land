@@ -137,6 +137,7 @@ const nuxtConfig = {
     '~/plugins/vue-i18n.js',
     '~/plugins/v-tooltip.js',
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
+    { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
   ],
 

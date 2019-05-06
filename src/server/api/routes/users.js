@@ -64,8 +64,14 @@ router.post('/users/login', async (req, res, next) => {
     const {
       access_token: accessToken,
       refresh_token: refreshToken,
-      user,
     } = tokenData;
+    req.session.accessToken = accessToken;
+    req.session.state = undefined;
+
+    const { data: userData } = await apiFetchUserProfile(req);
+    const { user } = userData;
+    req.session.user = user;
+
     const userDoc = await userCollection.doc(user).get();
     const isNew = !userDoc.exists;
     await userCollection.doc(user).set(
@@ -75,10 +81,6 @@ router.post('/users/login', async (req, res, next) => {
       },
       { merge: true }
     );
-    req.session.user = user;
-    req.session.accessToken = accessToken;
-    req.session.state = undefined;
-    const { data: userData } = await apiFetchUserProfile(req);
     res.json({
       user,
       ...userData,

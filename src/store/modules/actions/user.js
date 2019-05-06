@@ -26,21 +26,30 @@ function updateIntercomUser(
   }
 }
 
-export async function postLoginToken({ commit }, { authCode, state }) {
+export async function postLoginToken(
+  { commit, dispatch },
+  { authCode, state }
+) {
   const user = await this.$axios.$post(api.getOAuthCallbackAPI(), {
     authCode,
     state,
   });
   commit(types.USER_SET_USER_INFO, user);
+  if (user && user.locale) {
+    dispatch('setLocale', user.locale);
+  }
   if (this.$sentry) updateSentryUser(this.$sentry, user);
   if (this.$intercom) updateIntercomUser(this.$intercom, user);
   return user;
 }
 
-export async function fetchLoginStatus({ commit }) {
+export async function fetchLoginStatus({ commit, dispatch }) {
   try {
     const user = await this.$axios.$get(api.getLoginStatus());
     commit(types.USER_SET_USER_INFO, user);
+    if (user && user.locale) {
+      dispatch('setLocale', user.locale);
+    }
     if (this.$sentry) updateSentryUser(this.$sentry, user);
     if (this.$intercom) updateIntercomUser(this.$intercom, user);
     return user;

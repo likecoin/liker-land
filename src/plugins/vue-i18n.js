@@ -1,13 +1,19 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 import VueI18n from 'vue-i18n';
+import cookie from 'tiny-cookie';
 
-import messages, { defaultLocale, availableLocales } from '../locales';
+import messages, {
+  defaultLocale,
+  availableLocales,
+  convertLikerCoinLocale,
+} from '../locales';
 
 Vue.use(VueI18n);
 
 export default ({ app, store, req, res, query }) => {
   let locale = defaultLocale;
   if (!process.server) {
+    const { user: { user: { locale: userLocale } = {} } = {} } = store.state;
     let navLang =
       navigator.language ||
       (navigator.languages && navigator.languages[0]) ||
@@ -19,8 +25,16 @@ export default ({ app, store, req, res, query }) => {
         navLang = key;
       }
     });
+    let cookieLang = '';
+    try {
+      cookieLang = cookie.get('language');
+    } catch (err) {
+      console.error(err); // eslint-disable-line no-console
+    }
     locale =
       query.language ||
+      cookieLang ||
+      convertLikerCoinLocale(userLocale) ||
       (window.localStorage && window.localStorage.language) ||
       navLang ||
       defaultLocale;
@@ -32,10 +46,6 @@ export default ({ app, store, req, res, query }) => {
       req.acceptsLanguages(availableLocales) ||
       defaultLocale;
     if (!availableLocales.includes(locale)) locale = defaultLocale;
-    /* 77760000000 = 30d */
-    if (req.cookies && req.cookies.language !== locale) {
-      res.cookie('language', locale, { maxAge: 77760000000, secure: true });
-    }
   }
   // Set i18n instance on app
   // This way we can use it in middleware and pages asyncData/fetch
