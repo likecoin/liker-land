@@ -151,6 +151,7 @@ const nuxtConfig = {
     '@nuxtjs/sentry',
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
+    'nuxt-purgecss',
     'portal-vue/nuxt',
   ],
   /*
@@ -164,6 +165,9 @@ const nuxtConfig = {
     id: process.env.GA_TRACKING_ID || '',
     dev: false, // disable module for nuxt dev
     disabled: () => !!((window && window.doNotTrack) || (navigator && navigator.doNotTrack)), // eslint-disable-line no-undef
+  },
+  purgeCSS: {
+    whitelistPatternsChildren: [/^lc-/],
   },
 
   /**
@@ -274,6 +278,10 @@ if (process.env.INTERCOM_APPID) {
   nuxtConfig.head.link.push(
     { rel: 'preload', href: `https://widget.intercom.io/widget/${process.env.INTERCOM_APPID}`, as: 'script' },
   );
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  nuxtConfig.purgeCSS.enabled = true; // force purge in dev
 }
 
 module.exports = nuxtConfig;
