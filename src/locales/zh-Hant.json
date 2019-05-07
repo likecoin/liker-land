@@ -86,10 +86,10 @@
   },
   "LikerFeature": {
     "distributeFund": {
-      "general": "以 Like 攤分基金，回饋作者",
-      "civic": "以 Like 攤分基金，回饋作者；權重更高"
+      "general": "Like 數影響基金分配，回饋作者",
+      "civic": "Like 數影響基金分配，回饋作者；權重較高"
     },
-    "distributeOwnFee": "以 Like 攤分個人月費，全數回饋作者",
+    "distributeOwnFee": "以 Like 分配個人月費，全數回饋作者",
     "detailedReport": "查閱回饋去向，掌握一分一毫",
     "participateInCommunity": "參與社群決策和公投",
     "bonusContent": "獲得額外內容、書籍、優惠券等專屬禮品",
