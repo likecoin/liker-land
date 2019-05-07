@@ -12,7 +12,7 @@
         )
 
       section.max-w-desktop.mx-auto.-mt-24
-        ul.list-reset.flex.justify-center.overflow-x-hidden
+        ul.list-reset.flex.justify-center
           LikerComparisonCard.mx-8(
             tag="li"
             class="tablet:hidden phone:hidden"
