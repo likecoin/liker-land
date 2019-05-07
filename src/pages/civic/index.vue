@@ -19,11 +19,12 @@
                 vimeo-player(
                   ref="introVideoPlayer"
                   :video-id="introVideoVimeoId"
+                  :autoplay="true"
                   :loop="true"
-                  :options="{ background: true }"
+                  :options="{ muted: true }"
                   @play="isIntroVideoVisible = true"
                 )
-                button.civic-page__intro-video-volume-button(
+                button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
                   @click="toggleIntroVideoVolume"
                 )
                   VolumeOffIcon(v-if="isIntroVideoMuted")
@@ -108,6 +109,8 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
+
+import { checkIsMobileClient } from '~/util/client';
 
 export default {
   components: {
@@ -201,6 +204,10 @@ export default {
         window.sessionStorage.setItem('civicLikerReferrer', referrer);
     }
     logTrackerEvent(this, 'Civic', 'CivicPageLoad', 'CivicPageLoad(civic)', 1);
+
+    if (checkIsMobileClient()) {
+      this.isIntroVideoVisible = true;
+    }
   },
   methods: {
     onClickActionButton() {
@@ -255,10 +262,6 @@ export default {
       this.$refs.introVideoPlayer[this.isIntroVideoMuted ? 'unmute' : 'mute']();
       this.isIntroVideoMuted = !this.isIntroVideoMuted;
     },
-    toggleFullScreen() {
-      const iframe = this.$refs.introVideoPlayer.$el.querySelector('iframe');
-      iframe.requestFullscreen();
-    },
   },
 };
 </script>
@@ -294,25 +297,22 @@ $civic-feature-card-swiper-max-width: (
 
         @apply w-full;
         @apply h-full;
-
-        @apply pointer-events-none;
       }
     }
 
-    &-volume-button {
+    &-button {
       transition: opacity 0.25s ease;
 
       @apply absolute;
-      @apply pin-l pin-b;
+      @apply pin-b;
 
       @apply text-like-green;
 
-      @apply ml-4;
       @apply mb-4;
+      @apply p-4;
 
       @apply w-32;
       @apply h-32;
-      @apply p-4;
 
       @apply fill-current;
 
@@ -323,6 +323,12 @@ $civic-feature-card-swiper-max-width: (
       &:active {
         @apply opacity-50;
       }
+    }
+
+    &-volume-button {
+      @apply pin-l;
+
+      @apply ml-4;
     }
   }
 }
