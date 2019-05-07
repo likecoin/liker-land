@@ -3,7 +3,8 @@ import VueLazyLoad from 'vue-lazyload';
 
 import VueAwesomeSwiper from 'vue-awesome-swiper/dist/ssr';
 
-import { TweenLite } from 'gsap/TweenMax';
+import { TweenLite } from 'gsap/all';
+import CSSPlugin from 'gsap/CSSPlugin';
 
 const hasIntersectionObserverSupport =
   window &&
@@ -19,4 +20,5 @@ Vue.use(VueLazyLoad, {
 
 Vue.prototype.$gsap = {
   TweenLite,
+  CSSPlugin, // to make tree-shake happy
 };
