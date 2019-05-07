@@ -5,7 +5,10 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      .civic-page__intro-video
+      .civic-page__intro-video(
+        @mouseenter="onMouseEnterIntroVideo"
+        @mouseleave="onMouseLeaveIntroVideo"
+      )
         div
           Transition(
             :css="false"
@@ -222,6 +225,16 @@ export default {
         query: this.$route.query,
       });
     },
+    onMouseEnterIntroVideo() {
+      if (this.isIntroVideoMuted && this.$refs.introVideoPlayer) {
+        this.$refs.introVideoPlayer.unmute();
+      }
+    },
+    onMouseLeaveIntroVideo() {
+      if (this.isIntroVideoMuted && this.$refs.introVideoPlayer) {
+        this.$refs.introVideoPlayer.mute();
+      }
+    },
 
     fadeInIntroVideo(el, done) {
       this.$gsap.TweenLite.fromTo(
@@ -241,6 +254,10 @@ export default {
     toggleIntroVideoVolume() {
       this.$refs.introVideoPlayer[this.isIntroVideoMuted ? 'unmute' : 'mute']();
       this.isIntroVideoMuted = !this.isIntroVideoMuted;
+    },
+    toggleFullScreen() {
+      const iframe = this.$refs.introVideoPlayer.$el.querySelector('iframe');
+      iframe.requestFullscreen();
     },
   },
 };
