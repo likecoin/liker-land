@@ -103,6 +103,7 @@ const nuxtConfig = {
         ],
         'frame-src': [
           'www.google.com',
+          'player.vimeo.com',
         ],
         'connect-src': [
           "'self'",
@@ -139,6 +140,7 @@ const nuxtConfig = {
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
+    { src: `~/plugins/vue-vimeo-player.client.js`, ssr: false },
   ],
 
   /*

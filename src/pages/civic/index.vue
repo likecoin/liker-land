@@ -5,14 +5,29 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      .max-w-desktop.w-full.mx-auto
-        img.w-full(
-          :src="CivicLikerHeroImage"
-          :alt="$t('civicLiker')"
-        )
+      .civic-page__intro-video
+        div
+          Transition(
+            :css="false"
+            @enter="fadeInIntroVideo"
+          )
+            div(v-show="isIntroVideoVisible")
+              no-ssr
+                vimeo-player(
+                  ref="introVideoPlayer"
+                  :video-id="introVideoVimeoId"
+                  :loop="true"
+                  :options="{ background: true }"
+                  @play="isIntroVideoVisible = true"
+                )
+                button.civic-page__intro-video-volume-button(
+                  @click="toggleIntroVideoVolume"
+                )
+                  VolumeOffIcon(v-if="isIntroVideoMuted")
+                  VolumeOnIcon(v-else)
 
-      section.max-w-desktop.mx-auto.-mt-24
-        ul.list-reset.flex.justify-center.overflow-x-hidden
+      section.max-w-desktop.mx-auto.mt-24
+        ul.list-reset.flex.justify-center
           LikerComparisonCard.mx-8(
             tag="li"
             class="tablet:hidden phone:hidden"
@@ -36,10 +51,7 @@
                   size="180"
                 )
 
-        .text-like-green.text-20.leading-1_5.text-center.p-24(class="desktop:px-32")
-          | {{ $t('CivicPage.slogan') }}
-
-      section(ref="visionSection")
+      section.mt-32(ref="visionSection")
         //-
           div.civic-feature-card-swiper-container.bg-like-gradient(
             v-swiper:featureSwiper="$options.featureSwiper"
@@ -91,13 +103,16 @@ import SiteNavBar from '~/components/SiteNavBar';
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import CivicLikerHeroImage from '~/assets/images/civic/hero.png';
+import VolumeOnIcon from '~/assets/icons/volume-on.svg';
+import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
 export default {
   components: {
     PageHeader,
     SiteNavBar,
     LikerComparisonCard,
+    VolumeOnIcon,
+    VolumeOffIcon,
   },
   featureSwiper: {
     slidesPerView: 'auto',
@@ -112,16 +127,29 @@ export default {
   },
   data() {
     return {
-      CivicLikerHeroImage,
+      isIntroVideoVisible: false,
+      isIntroVideoMuted: true,
     };
   },
   computed: {
     ...mapGetters([
+      'getLocale',
       'getUserId',
       'getUserInfo',
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLiker',
     ]),
+
+    introVideoVimeoId() {
+      switch (this.getLocale) {
+        case 'zh-Hant':
+          return '334615825';
+
+        case 'en':
+        default:
+          return '334616132';
+      }
+    },
 
     actionButtonText() {
       if (this.getUserIsCivicLikerTrial) {
@@ -194,6 +222,26 @@ export default {
         query: this.$route.query,
       });
     },
+
+    fadeInIntroVideo(el, done) {
+      this.$gsap.TweenLite.fromTo(
+        el,
+        2,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          ease: 'easeOutPower2',
+          onComplete: () => {
+            el.removeAttribute('style');
+            done();
+          },
+        }
+      );
+    },
+    toggleIntroVideoVolume() {
+      this.$refs.introVideoPlayer[this.isIntroVideoMuted ? 'unmute' : 'mute']();
+      this.isIntroVideoMuted = !this.isIntroVideoMuted;
+    },
   },
 };
 </script>
@@ -204,6 +252,63 @@ $civic-feature-card-inter-space: 16px;
 $civic-feature-card-swiper-max-width: (
   $civic-feature-card-width * 3 + $civic-feature-card-inter-space * 4
 );
+
+.civic-page {
+  &__intro-video {
+    max-width: config('screens.desktop.min');
+
+    @apply w-full;
+    @apply mx-auto;
+
+    @apply relative;
+
+    > div {
+      padding-top: 56.25%; // Aspect ratio of video
+
+      background-image: url('~assets/images/civic/hero.png');
+
+      @apply bg-center;
+      @apply bg-no-repeat;
+      @apply bg-cover;
+
+      iframe {
+        @apply absolute;
+        @apply pin;
+
+        @apply w-full;
+        @apply h-full;
+
+        @apply pointer-events-none;
+      }
+    }
+
+    &-volume-button {
+      transition: opacity 0.25s ease;
+
+      @apply absolute;
+      @apply pin-l pin-b;
+
+      @apply text-like-green;
+
+      @apply ml-4;
+      @apply mb-4;
+
+      @apply w-32;
+      @apply h-32;
+      @apply p-4;
+
+      @apply fill-current;
+
+      &:hover {
+        @apply opacity-75;
+      }
+
+      &:active {
+        @apply opacity-50;
+      }
+    }
+  }
+}
 
 .civic-feature-card {
   width: $civic-feature-card-width;
