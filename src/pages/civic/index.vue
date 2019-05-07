@@ -36,10 +36,7 @@
                   size="180"
                 )
 
-        .text-like-green.text-20.leading-1_5.text-center.p-24(class="desktop:px-32")
-          | {{ $t('CivicPage.slogan') }}
-
-      section(ref="visionSection")
+      section.mt-32(ref="visionSection")
         //-
           div.civic-feature-card-swiper-container.bg-like-gradient(
             v-swiper:featureSwiper="$options.featureSwiper"
