@@ -138,6 +138,8 @@
 </template>
 
 <script>
+import { VPopover } from 'v-tooltip';
+
 import { LIKE_CO_URL_BASE } from '~/constant';
 import { getImageResizeAPI } from '~/util/api';
 
@@ -166,6 +168,7 @@ function getImageSize(src) {
 
 export default {
   components: {
+    VPopover,
     LikeUnit,
     BookmarkIcon,
     BookmarkOutlinedIcon,
