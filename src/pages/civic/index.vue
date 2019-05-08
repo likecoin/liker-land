@@ -103,6 +103,7 @@ import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 import { logTrackerEvent } from '~/util/EventLogger';
+// import swiperDirective from '~/util/SwiperDirectives';
 
 import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
@@ -117,6 +118,9 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
+  // directives: {
+  //   swiper: swiperDirective,
+  // },
   featureSwiper: {
     slidesPerView: 'auto',
     spaceBetween: 16,

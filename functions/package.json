@@ -33,6 +33,7 @@
     "nuxt-svg-loader": "^1.0.1",
     "portal-vue": "^1.5.1",
     "source-map-support": "^0.5.10",
+    "swiper": "^4.5.0",
     "tiny-cookie": "^1.0.1",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.7",
