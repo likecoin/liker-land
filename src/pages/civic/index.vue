@@ -41,7 +41,7 @@
             template(#header)
               .relative.mt-12.mx-12
                 button.btn.btn--outlined.btn--block.m-0.w-full(
-                  :class="{ 'btn--disabled': !!getUserIsCivicLiker }"
+                  :class="actionButtonClass"
                   @click="onClickActionButton"
                 )
                   | {{ actionButtonText }}
@@ -83,7 +83,7 @@
             template(#header)
               .mt-12.mx-12
                 button.btn.btn--outlined.btn--block.mx-0.-mb-12.w-full(
-                  :class="{ 'btn--disabled': !!getUserIsCivicLiker }"
+                  :class="actionButtonClass"
                   @click="onClickActionButton"
                 )
                  | {{ actionButtonText }}
@@ -155,10 +155,20 @@ export default {
     },
 
     actionButtonText() {
+      if (this.getUserInfo.isCivicLikerRenewalPeriod) {
+        return this.$t('renew');
+      }
       if (this.getUserIsCivicLikerTrial) {
         return this.$t('upgrade');
       }
       return this.$t(this.getUserIsCivicLiker ? 'registered' : 'join');
+    },
+    actionButtonClass() {
+      return {
+        'btn--disabled':
+          this.getUserIsCivicLiker &&
+          !this.getUserInfo.isCivicLikerRenewalPeriod,
+      };
     },
     civicLikerStampText() {
       if (this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial) {
