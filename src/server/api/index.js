@@ -29,6 +29,7 @@ router.use(
     cookie: {
       maxAge: 2592000000, // 30days
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       httpOnly: true,
     },
     resave: false,
