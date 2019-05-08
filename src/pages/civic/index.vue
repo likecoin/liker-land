@@ -145,13 +145,26 @@ export default {
 
     introVideoVimeoId() {
       switch (this.getLocale) {
-        case 'zh-Hant':
+        case 'zh-Hant': {
+          if (this.isCantonese) return '334865461';
           return '334615825';
-
+        }
         case 'en':
         default:
           return '334616132';
       }
+    },
+    isCantonese() {
+      if (!process.client) return false;
+      return (
+        navigator &&
+        ((navigator.language &&
+          navigator.language.toLowerCase().includes('hk')) ||
+          (navigator.languages &&
+            navigator.languages.find(lang =>
+              lang.toLowerCase().includes('hk')
+            )))
+      );
     },
 
     actionButtonText() {
