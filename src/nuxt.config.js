@@ -140,7 +140,6 @@ const nuxtConfig = {
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
-    { src: `~/plugins/vue-vimeo-player.client.js`, ssr: false },
   ],
 
   /*

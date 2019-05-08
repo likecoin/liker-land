@@ -13,7 +13,7 @@
           )
             div(v-show="isIntroVideoVisible")
               no-ssr
-                vimeo-player(
+                vue-vimeo-player(
                   ref="introVideoPlayer"
                   :video-id="introVideoVimeoId"
                   :autoplay="true"
@@ -98,6 +98,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
+import { vueVimeoPlayer } from 'vue-vimeo-player';
 
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -112,6 +113,7 @@ import { checkIsMobileClient } from '~/util/client';
 
 export default {
   components: {
+    vueVimeoPlayer,
     PageHeader,
     SiteNavBar,
     LikerComparisonCard,
