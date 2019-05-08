@@ -5,10 +5,7 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      .civic-page__intro-video(
-        @mouseenter="onMouseEnterIntroVideo"
-        @mouseleave="onMouseLeaveIntroVideo"
-      )
+      .civic-page__intro-video
         div
           Transition(
             :css="false"
@@ -231,16 +228,6 @@ export default {
         name: 'civic-register',
         query: this.$route.query,
       });
-    },
-    onMouseEnterIntroVideo() {
-      if (this.isIntroVideoMuted && this.$refs.introVideoPlayer) {
-        this.$refs.introVideoPlayer.unmute();
-      }
-    },
-    onMouseLeaveIntroVideo() {
-      if (this.isIntroVideoMuted && this.$refs.introVideoPlayer) {
-        this.$refs.introVideoPlayer.mute();
-      }
     },
 
     fadeInIntroVideo(el, done) {
