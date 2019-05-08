@@ -291,11 +291,10 @@ $civic-feature-card-swiper-max-width: (
       transition: opacity 0.25s ease;
 
       @apply absolute;
-      @apply pin-b;
 
       @apply text-like-green;
 
-      @apply mb-4;
+      @apply m-4;
       @apply p-4;
 
       @apply w-32;
@@ -313,9 +312,8 @@ $civic-feature-card-swiper-max-width: (
     }
 
     &-volume-button {
+      @apply pin-t;
       @apply pin-l;
-
-      @apply ml-4;
     }
   }
 }
