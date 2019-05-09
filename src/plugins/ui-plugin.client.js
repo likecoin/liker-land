@@ -1,8 +1,6 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 import VueLazyLoad from 'vue-lazyload';
 
-import VueAwesomeSwiper from 'vue-awesome-swiper/dist/ssr';
-
 import { TweenLite } from 'gsap/all';
 import CSSPlugin from 'gsap/CSSPlugin';
 
@@ -12,7 +10,6 @@ const hasIntersectionObserverSupport =
   'IntersectionObserverEntry' in window &&
   'intersectionRatio' in window.IntersectionObserverEntry.prototype;
 
-Vue.use(VueAwesomeSwiper);
 Vue.use(VueLazyLoad, {
   lazyComponent: true,
   observer: hasIntersectionObserverSupport,
