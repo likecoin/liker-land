@@ -41,13 +41,17 @@ export async function removeBookmark({ commit }, url) {
 }
 
 export async function fetchUserArticle({ commit }, user) {
-  const { list } = await this.$axios.$get(api.getFetchUserArticlesAPI(user));
+  const { list } = await this.$axios.$get(api.getFetchUserArticlesAPI(user), {
+    withCredentials: false,
+  });
   commit(types.READER_UPDATE_USER_ARTICLES, { user, list });
   return list;
 }
 
 export async function fetchSuggestedArticles({ commit }) {
-  const { list } = await this.$axios.$get(api.getFetchSuggestArticlesApi());
+  const { list } = await this.$axios.$get(api.getFetchSuggestArticlesApi(), {
+    withCredentials: false,
+  });
   commit(types.READER_SET_SUGGEST_ARTICLES, list);
   return list;
 }
