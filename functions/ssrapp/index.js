@@ -17,6 +17,10 @@ if ((functions.config().constant || {}).network === 'rinkeby') {
   debug = true;
 }
 
+if ((functions.config().sentry || {}).report_uri) {
+  process.env.SENTRY_REPORT_URI = functions.config().sentry.report_uri;
+}
+
 const config = {
   ...nuxtConfig,
   debug,
