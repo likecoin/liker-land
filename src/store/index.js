@@ -14,7 +14,10 @@ import { AUTH_COOKIE_NAME } from '~/constant';
 const createStore = () =>
   new Vuex.Store({
     actions: {
-      async nuxtServerInit({ commit }, { req }) {
+      async nuxtServerInit({ commit }, { req, res }) {
+        if (res.timing) {
+          res.timing.start('store_init', 'nuxtServerInit Started');
+        }
         try {
           if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
             const userInfo = await this.$axios.$get(api.getLoginStatus());
@@ -22,13 +25,12 @@ const createStore = () =>
           }
         } catch (err) {
           if (err.response) {
-            if (err.response.status === 404) {
-              // no op
-              return;
+            if (err.response.status !== 404) {
+              console.error(err); // eslint-disable-line no-console
             }
           }
-          console.error(err); // eslint-disable-line no-console
         }
+        if (res.timing) res.timing.end('store_init');
       },
     },
     modules: {
