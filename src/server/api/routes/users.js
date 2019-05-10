@@ -7,7 +7,10 @@ const {
   getOAuthCallbackAPI,
   getOAuthURL,
 } = require('../util/api');
+const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../constant');
 const { INTERCOM_USER_HASH_SECRET } = require('../../config/config');
+
+const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
 function getIntercomUserHash(user) {
   if (!INTERCOM_USER_HASH_SECRET) return undefined;
@@ -34,6 +37,8 @@ router.get('/users/self', async (req, res, next) => {
     }
     res.sendStatus(404);
   } catch (err) {
+    if (req.session) req.session = null;
+    res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
     next(err);
   }
 });
@@ -94,6 +99,7 @@ router.post('/users/login', async (req, res, next) => {
 
 router.post('/users/logout', (req, res) => {
   if (req.session) req.session = null;
+  res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
   res.sendStatus(200);
 });
 

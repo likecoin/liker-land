@@ -9,6 +9,7 @@ const users = require('./routes/users');
 const civic = require('./routes/civic');
 const reader = require('./routes/reader');
 const { COOKIE_SECRET } = require('../config/config');
+const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('./constant');
 
 const router = Router();
 
@@ -24,14 +25,9 @@ router.use(
     store: new FirestoreStore({
       database: db,
     }),
-    name: '__session',
+    name: AUTH_COOKIE_NAME,
     secret: cookieSecret,
-    cookie: {
-      maxAge: 2592000000, // 30days
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      httpOnly: true,
-    },
+    cookie: AUTH_COOKIE_OPTION,
     resave: false,
     saveUninitialized: false,
     unset: 'destroy',
