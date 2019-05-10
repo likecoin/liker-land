@@ -18,6 +18,11 @@ const nuxtConfig = {
     SITE_NAME: siteName,
   },
   mode: 'universal',
+  server: {
+    timing: IS_TESTNET ? {
+      total: true
+    } : false,
+  },
 
   /*
   ** Headers of the page
