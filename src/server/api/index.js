@@ -20,11 +20,25 @@ const cookieSecret =
     : 'likecoin');
 
 router.use(bodyParser.json());
+
+/* Do not store JSON as string */
+const store = new FirestoreStore({
+  database: db,
+  parser: {
+    read: doc => doc.session,
+    save: doc => {
+      const data = JSON.parse(JSON.stringify(doc)); // clear object classes
+      return {
+        session: data,
+        dateModified: Date.now(),
+      };
+    },
+  },
+});
+store.touch = undefined; // hack to disable touch
 router.use(
   session({
-    store: new FirestoreStore({
-      database: db,
-    }),
+    store,
     name: AUTH_COOKIE_NAME,
     secret: cookieSecret,
     cookie: AUTH_COOKIE_OPTION,
