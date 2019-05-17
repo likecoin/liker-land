@@ -33,6 +33,9 @@ router.get('/users/self', async (req, res, next) => {
     if (user) {
       const { data } = await apiFetchUserProfile(req);
       res.json({ user, ...data, intercomToken: getIntercomUserHash(user) });
+      await userCollection.doc(user).update({
+        user: data,
+      });
       return;
     }
     res.sendStatus(404);
@@ -81,6 +84,7 @@ router.post('/users/login', async (req, res, next) => {
     const isNew = !userDoc.exists;
     await userCollection.doc(user).set(
       {
+        user: userData,
         accessToken,
         refreshToken,
       },
