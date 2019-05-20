@@ -93,7 +93,7 @@
     "offlineEvents": "優先參與不定期線下活動"
   },
   "LikerType": {
-    "general": "一般讚客",
+    "general": "一般 Liker",
     "civic": "@:civicLiker"
   },
   "LogoutPage": {
@@ -150,7 +150,6 @@
   "civicLiker": "讚賞公民",
   "follow": "追踪",
   "following": "追踪中",
-  "join": "登記",
   "learnMore": "Learn More",
   "month": "月",
   "ok": "OK",

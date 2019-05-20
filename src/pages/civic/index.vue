@@ -162,7 +162,7 @@ export default {
       if (this.getUserId) {
         return this.$t('registered');
       }
-      return this.$t('signUp');
+      return this.$t('register');
     },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
@@ -171,7 +171,10 @@ export default {
       if (this.getUserIsCivicLikerTrial) {
         return this.$t('upgrade');
       }
-      return this.$t(this.getUserIsCivicLiker ? 'registered' : 'join');
+      if (this.getUserIsCivicLiker) {
+        return this.$t('registered');
+      }
+      return this.$t('register');
     },
     actionButtonClassForMuggle() {
       return {
