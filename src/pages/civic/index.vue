@@ -33,14 +33,17 @@
             tag="li"
             type="general"
           )
-            template(#header)
+            template(
+              v-if="!getUserId"
+              #header
+            )
               .relative.mt-12.mx-12
                 a.btn.btn--outlined.btn--block.m-0.w-full(
                   :class="actionButtonClassForMuggle"
                   :href="getOAuthRegisterAPI"
                   @click="onClickActionButtonForMuggle"
                 )
-                  | {{ actionButtonTextForMuggle }}
+                  | {{ $t('register') }}
 
           LikerComparisonCard(
             tag="li"
@@ -158,12 +161,6 @@ export default {
       );
     },
 
-    actionButtonTextForMuggle() {
-      if (this.getUserId) {
-        return this.$t('registered');
-      }
-      return this.$t('register');
-    },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
         return this.$t('renew');
