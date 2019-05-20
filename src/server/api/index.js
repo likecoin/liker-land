@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const FirestoreStore = require('firestore-store')(session);
 const { db } = require('./util/firebase');
+const hook = require('./routes/hook');
 const users = require('./routes/users');
 const civic = require('./routes/civic');
 const reader = require('./routes/reader');
@@ -18,6 +19,9 @@ const cookieSecret =
   (process.env.NODE_ENV === 'production'
     ? crypto.randomBytes(16).toString('base64')
     : 'likecoin');
+
+// webhook should be used before bodyParser
+router.use(hook);
 
 router.use(bodyParser.json());
 
