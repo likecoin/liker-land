@@ -27,14 +27,22 @@
                   VolumeOffIcon(v-if="isIntroVideoMuted")
                   VolumeOnIcon(v-else)
 
-      section.max-w-desktop.mx-auto.mt-24
-        ul.list-reset.flex.justify-center
-          LikerComparisonCard.mx-8(
+      section.civic-page__liker-comparison-card-list
+        ul
+          LikerComparisonCard(
             tag="li"
-            class="tablet:hidden phone:hidden"
             type="general"
           )
-          LikerComparisonCard.mx-8(
+            template(#header)
+              .relative.mt-12.mx-12
+                a.btn.btn--outlined.btn--block.m-0.w-full(
+                  :class="actionButtonClassForMuggle"
+                  :href="getOAuthRegisterAPI"
+                  @click="onClickActionButtonForMuggle"
+                )
+                  | {{ actionButtonTextForMuggle }}
+
+          LikerComparisonCard(
             tag="li"
             type="civic"
           )
@@ -91,6 +99,7 @@ import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
 import { checkIsMobileClient } from '~/util/client';
+import { getOAuthRegisterAPI } from '~/util/api';
 
 export default {
   components: {
@@ -129,6 +138,7 @@ export default {
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLiker',
     ]),
+    getOAuthRegisterAPI,
 
     introVideoVimeoId() {
       switch (this.getLocale) {
@@ -154,6 +164,12 @@ export default {
       );
     },
 
+    actionButtonTextForMuggle() {
+      if (this.getUserId) {
+        return this.$t('registered');
+      }
+      return this.$t('signUp');
+    },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
         return this.$t('renew');
@@ -162,6 +178,11 @@ export default {
         return this.$t('upgrade');
       }
       return this.$t(this.getUserIsCivicLiker ? 'registered' : 'join');
+    },
+    actionButtonClassForMuggle() {
+      return {
+        'btn--disabled': this.getUserId,
+      };
     },
     actionButtonClass() {
       return {
@@ -238,6 +259,15 @@ export default {
         name: 'civic-register',
         query: this.$route.query,
       });
+    },
+    onClickActionButtonForMuggle() {
+      logTrackerEvent(
+        this,
+        'Register',
+        'RegisterSignUp',
+        'RegisterSignUp(civic)',
+        1
+      );
     },
 
     fadeInIntroVideo(el, done) {
@@ -324,6 +354,28 @@ $civic-feature-card-swiper-max-width: (
     &-volume-button {
       @apply pin-t;
       @apply pin-l;
+    }
+  }
+
+  &__liker-comparison-card-list {
+    @apply max-w-desktop;
+
+    @apply mt-24;
+    @apply mx-auto;
+
+    > ul {
+      @apply flex;
+      @apply justify-center;
+
+      @apply list-reset;
+
+      @media screen and (max-width: config('screens.tablet.max')) {
+        @apply flex-col-reverse;
+      }
+    }
+
+    .liker-comparison-card {
+      @apply m-8;
     }
   }
 }
