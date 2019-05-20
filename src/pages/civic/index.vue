@@ -69,25 +69,6 @@
                   v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
                 )
 
-        .relative.bg-white.flex.justify-center.items-center
-          LcChopCivicLiker.absolute.z-10.m-24.my-0(
-            class="phone:hidden "
-            :text="civicLikerStampText"
-            style="right: 0;transform: rotate(20deg)"
-            size="120"
-          )
-          LikerComparisonCard(
-            type="civic"
-            :is-show-features="false"
-          )
-            template(#header)
-              .mt-12.mx-12
-                button.btn.btn--outlined.btn--block.mx-0.-mb-12.w-full(
-                  :class="actionButtonClass"
-                  @click="onClickActionButton"
-                )
-                 | {{ actionButtonText }}
-
       section.w-full.max-w-desktop.mx-auto.text-gray-9b.text-12.p-20.pb-64(
         class="laptop:px-20 desktop:px-32"
       )
