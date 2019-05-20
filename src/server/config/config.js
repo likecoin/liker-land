@@ -13,6 +13,10 @@ config.INTERCOM_USER_HASH_SECRET = process.env.INTERCOM_USER_HASH_SECRET;
 
 config.PAYPAL_PDT_HOOK = process.env.PAYPAL_PDT_HOOK;
 
+config.STRIPE_PRIVATE_KEY = process.env.STRIPE_PRIVATE_KEY;
+config.STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+config.STRIPE_PLAN_ID = process.env.STRIPE_PLAN_ID;
+
 config.EXTERNAL_URL = process.env.EXTERNAL_URL;
 
 module.exports = config;

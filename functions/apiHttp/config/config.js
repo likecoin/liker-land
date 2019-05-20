@@ -16,6 +16,10 @@ config.INTERCOM_USER_HASH_SECRET = functions.config().intercom.user_hash_secret;
 
 config.PAYPAL_PDT_HOOK = functions.config().hook.paypal_pdt;
 
+config.STRIPE_PRIVATE_KEY = functions.config().stripe.private_key;
+config.STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
+config.STRIPE_PLAN_ID = functions.config().stripe.plan_id;
+
 config.EXTERNAL_URL = functions.config().constant.external_url;
 
 module.exports = config;

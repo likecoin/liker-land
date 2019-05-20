@@ -1,14 +1,17 @@
 const axios = require('axios');
 const { Router } = require('express');
 
-const { PAYPAL_PDT_HOOK } = require('../../config/config');
+const { PAYPAL_PDT_HOOK } = require('../../../config/config');
 const {
   apiFetchCivicCSOnline,
   apiCivicLikerTrialEventById,
   apiCivicLikerJoinTrialEventById,
-} = require('../util/api');
+} = require('../../util/api');
+const stripe = require('./stripe');
 
 const router = Router();
+
+router.use(stripe);
 
 router.get('/civic/csonline', async (req, res, next) => {
   try {
