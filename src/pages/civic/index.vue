@@ -76,12 +76,6 @@
                 .civic-feature-card__body(
                   v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
                 )
-
-      section.w-full.max-w-desktop.mx-auto.text-gray-9b.text-12.p-20.pb-64(
-        class="laptop:px-20 desktop:px-32"
-      )
-        //- p {{ $t('CivicPage.footnote.0') }}
-        p.mt-16 {{ $t('CivicPage.footnote.1') }}
 </template>
 
 <script>

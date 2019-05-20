@@ -40,11 +40,7 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "少喝一杯咖啡 共創一個生態",
-    "footnote": [
-      "*Depending on the payment method a Civic Liker picks, surcharge may apply by payment channels such as credit card gateway. The full amount received by the Foundation will be converted into LikeCoin for distribution to creators, and be converted by creators into currencies of their own countries. The Foundation charge no service fee.",
-      "Photos by Anthony Tran, Joe Gardner, KE ATLAS, Quentin Keller and Warren Wong"
-    ]
+    "ogDescription": "少喝一杯咖啡 共創一個生態"
   },
   "ContentList": {
     "empty": "沒有文章"
