@@ -215,7 +215,10 @@ export default {
           content: 'https://liker.land/images/og/civic.png',
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      link: [
+        { rel: 'canonical', href: `${this.$route.path}` },
+        { rel: 'prefetch', href: 'https://js.stripe.com/v3' },
+      ],
     };
   },
   mounted() {
