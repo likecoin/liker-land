@@ -206,12 +206,12 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.$t('CivicPage.slogan'),
+          content: this.$t('CivicPage.ogDescription'),
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: this.$t('CivicPage.slogan'),
+          content: this.$t('CivicPage.ogDescription'),
         },
         {
           hid: 'og:image',
