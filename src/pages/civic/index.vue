@@ -39,9 +39,9 @@
             )
               .relative.mt-12.mx-12
                 a.btn.btn--outlined.btn--block.m-0.w-full(
-                  :class="actionButtonClassForMuggle"
+                  :class="actionButtonClassForGuest"
                   :href="getOAuthRegisterAPI"
-                  @click="onClickActionButtonForMuggle"
+                  @click="onClickActionButtonForGuest"
                 )
                   | {{ $t('register') }}
 
@@ -173,7 +173,7 @@ export default {
       }
       return this.$t('register');
     },
-    actionButtonClassForMuggle() {
+    actionButtonClassForGuest() {
       return {
         'btn--disabled': this.getUserId,
       };
@@ -254,7 +254,7 @@ export default {
         query: this.$route.query,
       });
     },
-    onClickActionButtonForMuggle() {
+    onClickActionButtonForGuest() {
       logTrackerEvent(
         this,
         'Register',
