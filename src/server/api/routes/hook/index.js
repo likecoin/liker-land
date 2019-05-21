@@ -29,7 +29,11 @@ router.post('/hook/stripe', async (req, res, next) => {
         );
         const { userId } = subscription.metadata;
         const userRef = userCollection.doc(userId);
-        await userRef.update({ 'stripe.subscriptionId': subscriptionId });
+        await userRef.update({
+          'stripe.subscriptionId': subscriptionId,
+          'stripe.customerId': subscription.customer,
+          'stripe.planId': subscription.plan.id,
+        });
         break;
       }
       default:

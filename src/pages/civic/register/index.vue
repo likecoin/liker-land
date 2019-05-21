@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div v-if="subscriptionInfo" />
+    <LcLoadingIndicator v-if="!isFetched" class="mx-auto" />
+    <div v-if="subscriptionInfo">
+      <div v-for="key in Object.keys(subscriptionInfo)" :key="key">
+        <span>{{ key }}: </span><span>{{ subscriptionInfo[key] }}</span>
+      </div>
+    </div>
     <!-- Used to display form errors. -->
     <div v-if="error">{{ error }}</div>
   </div>
@@ -14,10 +19,12 @@ export default {
   layout: 'dialog',
   data() {
     return {
+      isFetched: false,
       stripe: null,
       from: undefined,
       referrer: undefined,
       error: '',
+      subscriptionInfo: null,
     };
   },
   head() {
@@ -47,6 +54,7 @@ export default {
     };
   },
   mounted() {
+    this.isFetched = false;
     if (window.sessionStorage) {
       this.from = window.sessionStorage.getItem('civicLikerFrom');
       this.referrer = window.sessionStorage.getItem('civicLikerReferrer');
@@ -59,22 +67,41 @@ export default {
       const data = await this.$axios.$get(
         getStripePaymentAPI({ from, referrer })
       );
+      this.isFetched = true;
+      const { type } = data;
+      if (type === 'session') {
+        await this.initPaymentSession(data.sessionId);
+      } else if (type === 'subscription') {
+        const {
+          status,
+          willCancel,
+          currentPeriodEnd,
+          currentPeriodStart,
+          start,
+          card: { brand, last4 },
+        } = data;
+        this.subscriptionInfo = {
+          willCancel,
+          status,
+          currentPeriodEnd,
+          currentPeriodStart,
+          start,
+          card: { brand, last4 },
+        };
+      }
+    },
+    async initPaymentSession(sessionId) {
       if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {
         console.error('window stripe is missing!'); // eslint-disable-line no-console
         return;
       }
       const stripe = window.Stripe(process.env.STRIPE_PUBLIC_KEY);
       this.stripe = stripe;
-      const { type } = data;
-      if (type === 'session') {
-        const result = await this.stripe.redirectToCheckout({
-          sessionId: data.sessionId,
-        });
-        if (result && result.error) {
-          this.error = result.error.message;
-        }
-      } else if (type === 'subscription') {
-        // TODO
+      const result = await this.stripe.redirectToCheckout({
+        sessionId,
+      });
+      if (result && result.error) {
+        this.error = result.error.message;
       }
     },
   },

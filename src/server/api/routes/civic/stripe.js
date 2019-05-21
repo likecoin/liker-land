@@ -17,16 +17,31 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
     const userRef = userCollection.doc(req.session.user);
     const userDoc = await userRef.get();
     const {
-      stripe: { subscriptionId } = {},
+      stripe: { subscriptionId, customerId } = {},
       user: { email } = {},
     } = userDoc.data();
     if (subscriptionId) {
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-      if (subscription.status === ' active') {
+      const [
+        subscription,
+        { data: [paymentMethod] = [] } = {},
+      ] = await Promise.all([
+        stripe.subscriptions.retrieve(subscriptionId),
+        stripe.paymentMethods.list({
+          customer: customerId,
+          type: 'card',
+          limit: 1,
+        }),
+      ]);
+      const { brand, last4 } = paymentMethod.card;
+      if (subscription.status === 'active') {
         res.json({
           type: 'subscription',
           status: subscription.status,
           willCancel: subscription.cancel_at_period_end,
+          currentPeriodEnd: subscription.current_period_end,
+          currentPeriodStart: subscription.current_period_start,
+          start: subscription.start,
+          card: { brand, last4 },
         });
         return; // exit early with current sub info
       }
