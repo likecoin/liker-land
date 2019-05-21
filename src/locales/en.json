@@ -40,11 +40,7 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "Trade a coffee for a better world",
-    "footnote": [
-      "*Depending on the payment method a Civic Liker picks, surcharge may apply by payment channels such as credit card gateway. The full amount received by the Foundation will be converted into LikeCoin for distribution to creators, and be converted by creators into currencies of their own countries. The Foundation charge no service fee.",
-      "Photos by Anthony Tran, Joe Gardner, KE ATLAS, Quentin Keller and Warren Wong"
-    ]
+    "ogDescription": "Trade a coffee for a better world"
   },
   "ContentList": {
     "empty": "There is no article"
@@ -159,7 +155,6 @@
   "civicLiker": "Civic Liker",
   "follow": "Follow",
   "following": "Following",
-  "join": "Join",
   "learnMore": "Learn More",
   "month": "month",
   "ok": "OK",
