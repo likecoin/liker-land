@@ -43,7 +43,7 @@ export default {
       if (this.$cookie)
         this.$cookie.set('language', locale, {
           expires: '1M',
-          samesite: 'lax',
+          // samesite: 'lax',
         });
     },
   },
