@@ -3,7 +3,7 @@ const AUTH_COOKIE_NAME = '__session';
 const AUTH_COOKIE_OPTION = {
   maxAge: 2592000000, // 30days
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  // sameSite: 'lax',
   httpOnly: true,
 };
 
