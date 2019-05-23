@@ -33,17 +33,14 @@
             tag="li"
             type="general"
           )
-            template(
-              v-if="!getUserId"
-              #header
-            )
+            template(#header)
               .relative.mt-12.mx-12
                 a.btn.btn--outlined.btn--block.m-0.w-full(
                   :class="actionButtonClassForGuest"
                   :href="getOAuthRegisterAPI"
                   @click="onClickActionButtonForGuest"
                 )
-                  | {{ $t('register') }}
+                  | {{ actionButtonTextForGuest }}
 
           LikerComparisonCard(
             tag="li"
@@ -161,6 +158,12 @@ export default {
       );
     },
 
+    actionButtonTextForGuest() {
+      if (this.getUserId) {
+        return this.$t('registered');
+      }
+      return this.$t('CivicPage.registerForFree');
+    },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
         return this.$t('renew');

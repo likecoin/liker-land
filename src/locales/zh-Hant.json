@@ -40,7 +40,8 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "少喝一杯咖啡 共創一個生態"
+    "ogDescription": "少喝一杯咖啡 共創一個生態",
+    "registerForFree": "免費登記"
   },
   "ContentList": {
     "empty": "沒有文章"

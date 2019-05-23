@@ -40,7 +40,8 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "Trade a coffee for a better world"
+    "ogDescription": "Trade a coffee for a better world",
+    "registerForFree": "Register for free"
   },
   "ContentList": {
     "empty": "There is no article"
