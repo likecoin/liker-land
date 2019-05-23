@@ -41,7 +41,10 @@
   "CivicPage": {
     "title": "@:civicLiker",
     "ogDescription": "Trade a coffee for a better world",
-    "registerForFree": "Register for free"
+    "registerForFree": "Register for free",
+    "referrerBanner": {
+      "slogan": "Be a Civic Liker to support{br}{name}"
+    }
   },
   "ContentList": {
     "empty": "There is no article"

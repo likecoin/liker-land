@@ -27,6 +27,29 @@
                   VolumeOffIcon(v-if="isIntroVideoMuted")
                   VolumeOnIcon(v-else)
 
+      section.civic-page__referrer-banner(v-if="isShowReferrerBanner")
+        div
+          .civic-page__referrer-banner-inner-wrapper
+            .civic-page__referrer-banner-lines
+              svg(width="178" height="45" viewBox="0 0 178 45")
+                path(d="M2,28.68H139m-51.46,15h74.32M20,2.68H87.5m-20.77,41h7.09m94.91-41h7.09")
+              svg(width="195" height="59" viewBox="0 0 195 59")
+                path(d="M75.5 2.675h117.137M44.8 2.675h15.837M2.887 21.675H107M117.727 21.675h7.093M37.727 56.675h22.91")
+
+            i18n.civic-page__referrer-banner-slogan(
+              path="CivicPage.referrerBanner.slogan"
+              tag="div"
+            )
+              br(place="br")
+              span.civic-page__referrer-banner-slogan-name(place="name")
+                | {{ referrer.displayName }}
+
+            LcAvatar(
+              :src="referrer.avatar"
+              :halo="referrer.avatarHalo"
+              size="100"
+            )
+
       section.civic-page__liker-comparison-card-list
         ul
           LikerComparisonCard(
@@ -94,6 +117,7 @@ import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
 import { checkIsMobileClient } from '~/util/client';
 import { getOAuthRegisterAPI } from '~/util/api';
+import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
   components: {
@@ -122,6 +146,7 @@ export default {
     return {
       isIntroVideoVisible: false,
       isIntroVideoMuted: true,
+      referrer: undefined,
     };
   },
   computed: {
@@ -157,12 +182,19 @@ export default {
             )))
       );
     },
+    isShowReferrerBanner() {
+      return (
+        this.referrer &&
+        !(this.getUserIsCivicLiker && !this.getUserIsCivicLikerTrial)
+      );
+    },
 
-    actionButtonTextForGuest() {
-      if (this.getUserId) {
-        return this.$t('registered');
-      }
-      return this.$t('CivicPage.registerForFree');
+    actionButtonClass() {
+      return {
+        'btn--disabled':
+          this.getUserIsCivicLiker &&
+          !this.getUserInfo.isCivicLikerRenewalPeriod,
+      };
     },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
@@ -181,12 +213,11 @@ export default {
         'btn--disabled': this.getUserId,
       };
     },
-    actionButtonClass() {
-      return {
-        'btn--disabled':
-          this.getUserIsCivicLiker &&
-          !this.getUserInfo.isCivicLikerRenewalPeriod,
-      };
+    actionButtonTextForGuest() {
+      if (this.getUserId) {
+        return this.$t('registered');
+      }
+      return this.$t('CivicPage.registerForFree');
     },
     civicLikerStampText() {
       if (this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial) {
@@ -197,6 +228,25 @@ export default {
       }
       return 'LIKE';
     },
+  },
+  async asyncData({ route, store }) {
+    // Fetch referrer info
+    const { from } = route.query;
+    if (from) {
+      try {
+        const user = await store.dispatch('fetchUserInfo', from);
+        return {
+          referrer: {
+            ...user,
+            avatarHalo: getAvatarHaloTypeFromUser(user),
+          },
+        };
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
+    }
+    return undefined;
   },
   head() {
     return {
@@ -354,6 +404,100 @@ $civic-feature-card-swiper-max-width: (
     &-volume-button {
       @apply pin-t;
       @apply pin-l;
+    }
+  }
+
+  &__referrer-banner {
+    overflow: hidden;
+
+    > div {
+      position: relative;
+
+      max-width: config('screens.desktop.min');
+      min-height: 9.375rem;
+
+      @apply text-like-cyan;
+      @apply text-24;
+      @apply leading-1_5;
+
+      @apply bg-like-green;
+
+      @apply mt-24;
+      @apply mx-auto;
+    }
+
+    &-inner-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 1rem 16%;
+
+      @media screen and (max-width: config('screens.tablet.min')) {
+        flex-direction: column-reverse;
+
+        @apply px-16;
+      }
+    }
+
+    &-lines {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      left: 0;
+
+      display: flex;
+      justify-content: space-between;
+
+      fill: none;
+      stroke: config('colors.like-cyan');
+      stroke-linecap: round;
+      stroke-width: 0.25rem;
+
+      @media screen and (max-width: config('screens.tablet.min')) {
+        visibility: hidden;
+      }
+
+      > svg {
+        position: absolute;
+
+        &:first-child {
+          right: 100%;
+
+          margin-right: -14%;
+        }
+
+        &:last-child {
+          left: 100%;
+
+          margin-left: -14%;
+        }
+      }
+    }
+
+    &-slogan,
+    .lc-avatar {
+      @apply mx-16;
+      @apply my-8;
+    }
+
+    &-slogan {
+      @media screen and (max-width: config('screens.tablet.min')) {
+        text-align: center;
+      }
+
+      @apply font-200;
+
+      &-name {
+        @apply text-white;
+        @apply font-600;
+      }
+    }
+
+    .lc-avatar .lc-avatar__content {
+      @media screen and (max-width: config('screens.tablet.min')) {
+        width: 4rem !important;
+      }
     }
   }
 
