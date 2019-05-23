@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getStripePaymentAPI } from '~/util/api';
+import { getStripePaymentStatusAPI, getStripePaymentAPI } from '~/util/api';
 
 export default {
   middleware: 'authenticated',
@@ -59,38 +59,45 @@ export default {
       this.from = window.sessionStorage.getItem('civicLikerFrom');
       this.referrer = window.sessionStorage.getItem('civicLikerReferrer');
     }
-    this.initStripe();
+    this.checkStripeSubscription();
   },
   methods: {
-    async initStripe() {
+    async checkStripeSubscription() {
+      let subscriptionInfo;
+      try {
+        subscriptionInfo = await this.$axios.$get(getStripePaymentStatusAPI());
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          await this.initPaymentSession();
+        } else {
+          console.error(err); // eslint-disable-line no-console
+          this.$nuxt.error(err);
+        }
+      } finally {
+        this.isFetched = true;
+      }
+      const {
+        status,
+        willCancel,
+        currentPeriodEnd,
+        currentPeriodStart,
+        start,
+        card: { brand, last4 },
+      } = subscriptionInfo;
+      this.subscriptionInfo = {
+        willCancel,
+        status,
+        currentPeriodEnd,
+        currentPeriodStart,
+        start,
+        card: { brand, last4 },
+      };
+    },
+    async initPaymentSession() {
       const { from, referrer } = this.$route.query;
-      const data = await this.$axios.$get(
+      const { sessionId } = await this.$axios.$get(
         getStripePaymentAPI({ from, referrer })
       );
-      this.isFetched = true;
-      const { type } = data;
-      if (type === 'session') {
-        await this.initPaymentSession(data.sessionId);
-      } else if (type === 'subscription') {
-        const {
-          status,
-          willCancel,
-          currentPeriodEnd,
-          currentPeriodStart,
-          start,
-          card: { brand, last4 },
-        } = data;
-        this.subscriptionInfo = {
-          willCancel,
-          status,
-          currentPeriodEnd,
-          currentPeriodStart,
-          start,
-          card: { brand, last4 },
-        };
-      }
-    },
-    async initPaymentSession(sessionId) {
       if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {
         console.error('window stripe is missing!'); // eslint-disable-line no-console
         return;

@@ -6,20 +6,15 @@ const { EXTERNAL_URL } = require('../../util/api');
 
 const router = Router();
 
-// checkout based purchase endpoint
 router.get('/civic/payment/stripe', async (req, res, next) => {
   try {
     if (!req.session.user) {
       res.sendStatus(403);
       return;
     }
-    const { referrer, from } = req.query;
     const userRef = userCollection.doc(req.session.user);
     const userDoc = await userRef.get();
-    const {
-      stripe: { subscriptionId, customerId } = {},
-      user: { email } = {},
-    } = userDoc.data();
+    const { stripe: { subscriptionId, customerId } = {} } = userDoc.data();
     if (subscriptionId) {
       const [
         subscription,
@@ -32,8 +27,8 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
           limit: 1,
         }),
       ]);
-      const { brand, last4 } = paymentMethod.card;
       if (subscription.status === 'active') {
+        const { brand, last4 } = paymentMethod.card;
         res.json({
           type: 'subscription',
           status: subscription.status,
@@ -43,14 +38,30 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
           start: subscription.start,
           card: { brand, last4 },
         });
-        return; // exit early with current sub info
+        return;
       }
     }
+    res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+});
 
+// checkout based purchase endpoint
+router.get('/civic/payment/stripe/payment', async (req, res, next) => {
+  try {
+    if (!req.session.user) {
+      res.sendStatus(403);
+      return;
+    }
+    const { referrer, from } = req.query;
     // start a new checkout session
     const metadata = { userId: req.session.user };
     if (from) metadata.from = from;
     if (referrer) metadata.referrer = referrer.substring(0, 500);
+    const userRef = userCollection.doc(req.session.user);
+    const userDoc = await userRef.get();
+    const { user: { email } = {} } = userDoc.data();
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'], // only supports card for now
       customer_email: email,
