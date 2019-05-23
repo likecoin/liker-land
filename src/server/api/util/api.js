@@ -128,6 +128,7 @@ const getOAuthCallbackAPI = authCode =>
   `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
 
 module.exports = {
+  EXTERNAL_URL,
   apiRefreshAccessToken,
   apiFetchUserProfile,
   apiFetchUserPublicProfile,

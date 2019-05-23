@@ -27,6 +27,11 @@ export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
 export const getLogoutAPI = () => `/api/users/logout`;
 export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
+export const getStripePaymentAPI = ({ from = '', referrer = '' } = {}) =>
+  `/api/civic/payment/stripe/payment?from=${encodeURIComponent(
+    from
+  )}&referrer=${encodeURIComponent(referrer)}`;
+export const getStripePaymentStatusAPI = () => '/api/civic/payment/stripe';
 export const getCivicCSOnlineAPI = () => `/api/civic/csonline`;
 export const getCivicLikerTrialEventByIdAPI = id =>
   `/api/civic/trial/events/${id}`;

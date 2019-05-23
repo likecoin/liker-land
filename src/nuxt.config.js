@@ -8,6 +8,7 @@ const {
   IS_TESTNET,
   CI,
   INTERCOM_APPID,
+  STRIPE_PUBLIC_KEY,
 } = process.env;
 
 const nuxtConfig = {
@@ -15,6 +16,7 @@ const nuxtConfig = {
     IS_TESTNET,
     CI,
     INTERCOM_APPID,
+    STRIPE_PUBLIC_KEY,
     SITE_NAME: siteName,
   },
   mode: 'universal',
@@ -105,10 +107,13 @@ const nuxtConfig = {
           'js.intercomcdn.com',
           '*.intercom.io',
           'use.typekit.net',
+          'https://js.stripe.com',
         ],
         'frame-src': [
           'www.google.com',
           'player.vimeo.com',
+          'https://js.stripe.com',
+          'https://hooks.stripe.com',
         ],
         'connect-src': [
           "'self'",
