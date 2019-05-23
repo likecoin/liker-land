@@ -36,8 +36,10 @@ router.post('/hook/stripe', async (req, res, next) => {
         });
         break;
       }
-      default:
-        break;
+      default: {
+        res.sendStatus(415);
+        return;
+      }
     }
     res.sendStatus(200);
   } catch (err) {
