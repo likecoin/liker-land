@@ -35,7 +35,7 @@
           )
             template(#header)
               .relative.mt-12.mx-12
-                a.btn.btn--outlined.btn--block.m-0.w-full(
+                a.btn.btn--outlined.btn--block.btn--grayscale.m-0.w-full(
                   :class="actionButtonClassForGuest"
                   :href="getOAuthRegisterAPI"
                   @click="onClickActionButtonForGuest"
