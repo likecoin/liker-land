@@ -27,28 +27,47 @@
                   VolumeOffIcon(v-if="isIntroVideoMuted")
                   VolumeOnIcon(v-else)
 
-      section.civic-page__referrer-banner(v-if="isShowReferrerBanner")
-        div
-          .civic-page__referrer-banner-inner-wrapper
-            .civic-page__referrer-banner-lines
-              svg(width="178" height="45" viewBox="0 0 178 45")
-                path(d="M2,28.68H139m-51.46,15h74.32M20,2.68H87.5m-20.77,41h7.09m94.91-41h7.09")
-              svg(width="195" height="59" viewBox="0 0 195 59")
-                path(d="M75.5 2.675h117.137M44.8 2.675h15.837M2.887 21.675H107M117.727 21.675h7.093M37.727 56.675h22.91")
+      Transition(
+        :css="false"
+        appear
+        @enter="fadeInReferrerBanner"
+      )
+        section.civic-page__referrer-banner(
+          v-if="isShowReferrerBanner"
+          style="opacity:0"
+        )
+          div
+            .civic-page__referrer-banner-inner-wrapper
+              .civic-page__referrer-banner-lines-container
+                .civic-page__referrer-banner-lines
+                  svg(ref="referrerBannerLeftLines" width="200" height="46" viewBox="0 0 200 46")
+                    line(x1="30" y1="3" x2="98" y2="3")
+                    line(x1="180" y1="3" x2="186" y2="3")
+                    line(x1="14" y1="28" x2="150" y2="28")
+                    line(x1="78" y1="44" x2="84" y2="44")
+                    line(x1="112" y1="44" x2="172" y2="44")
+                  svg(ref="referrerBannerRightLines" width="220" height="60" viewBox="0 0 220 60")
+                    line(x1="56" y1="3" x2="74" y2="3")
+                    line(x1="88" y1="3" x2="204" y2="3")
+                    line(x1="16" y1="22" x2="120" y2="22")
+                    line(x1="130" y1="22" x2="138" y2="22")
+                    line(x1="50" y1="56" x2="70" y2="56")
 
-            i18n.civic-page__referrer-banner-slogan(
-              path="CivicPage.referrerBanner.slogan"
-              tag="div"
-            )
-              br(place="br")
-              span.civic-page__referrer-banner-slogan-name(place="name")
-                | {{ referrer.displayName }}
+              i18n.civic-page__referrer-banner-slogan(
+                ref="referrerBannerLeftSlogan"
+                path="CivicPage.referrerBanner.slogan"
+                tag="div"
+              )
+                br(place="br")
+                span.civic-page__referrer-banner-slogan-name(place="name")
+                  | {{ referrer.displayName }}
 
-            LcAvatar(
-              :src="referrer.avatar"
-              :halo="referrer.avatarHalo"
-              size="100"
-            )
+              LcAvatar(
+                ref="referrerBannerAvatar"
+                :src="referrer.avatar"
+                :halo="referrer.avatarHalo"
+                size="100"
+              )
 
       section.civic-page__liker-comparison-card-list
         ul
@@ -339,6 +358,74 @@ export default {
       this.$refs.introVideoPlayer[this.isIntroVideoMuted ? 'unmute' : 'mute']();
       this.isIntroVideoMuted = !this.isIntroVideoMuted;
     },
+    fadeInReferrerBanner(el, done) {
+      const { TweenLite, TweenMax } = this.$gsap;
+      const {
+        referrerBannerLeftLines: leftLines,
+        referrerBannerRightLines: rightLines,
+        referrerBannerLeftSlogan: slogan,
+        referrerBannerAvatar,
+      } = this.$refs;
+      const avatar = referrerBannerAvatar.$el;
+
+      // Animation preparation
+      TweenLite.set([leftLines, rightLines], { opacity: 0.5 });
+      TweenLite.set(leftLines, { x: 100 });
+      TweenLite.set(rightLines, { x: -100 });
+
+      // Fade in & scale the banner
+      TweenLite.fromTo(
+        el,
+        1.5,
+        {
+          opacity: 0,
+          scaleY: 0,
+          backfaceVisibility: 'hidden',
+        },
+        {
+          opacity: 1,
+          scaleY: 1,
+          ease: 'easeOutPower2',
+          onComplete: () => done,
+        }
+      );
+      // Scale up the avatar & the slogan
+      TweenLite.fromTo(
+        [avatar, slogan],
+        2.5,
+        { scale: 0.5 },
+        { scale: 1, ease: 'easeOutBack' }
+      );
+      const avatarHalo = avatar.querySelector('.lc-avatar__content__halo');
+      if (avatarHalo) {
+        // Rotate and scale down the avatar's halo
+        TweenLite.from(avatarHalo, 2.5, {
+          scale: 1.5,
+          rotation: 120,
+          ease: 'easeOutPower2',
+        });
+      }
+      // Translate the lines
+      TweenLite.to([leftLines, rightLines], 2, {
+        x: 0,
+        opacity: 1,
+        ease: 'easeOutPower2',
+        onComplete: () => {
+          [...rightLines.children, ...leftLines.children]
+            .sort(() => 0.5 - Math.random()) // Randomize the order of the lines
+            .forEach((line, i) => {
+              // Add randomized floating animation to each line
+              TweenMax.to(line, 2 + Math.random() * 2, {
+                x: 10 * (Math.random() < 0.5 ? -1 : 1),
+                yoyo: true,
+                ease: 'easeInOut',
+                repeat: -1,
+                delay: Math.random() * i,
+              });
+            });
+        },
+      });
+    },
   },
 };
 </script>
@@ -351,6 +438,8 @@ $civic-feature-card-swiper-max-width: (
 );
 
 .civic-page {
+  perspective: 800px;
+
   &__intro-video {
     max-width: config('screens.desktop.min');
 
@@ -442,11 +531,11 @@ $civic-feature-card-swiper-max-width: (
 
     &-lines {
       position: absolute;
-      top: 56px;
       right: 0;
       left: 0;
 
       display: flex;
+      align-items: center;
       justify-content: space-between;
 
       fill: none;
