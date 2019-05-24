@@ -376,7 +376,7 @@ export default {
       // Fade in & scale the banner
       TweenLite.fromTo(
         el,
-        1.5,
+        0.75,
         {
           opacity: 0,
           scaleY: 0,
@@ -386,45 +386,46 @@ export default {
           opacity: 1,
           scaleY: 1,
           ease: 'easeOutPower2',
-          onComplete: () => done,
+          onComplete: done,
         }
       );
+
       // Scale up the avatar & the slogan
       TweenLite.fromTo(
         [avatar, slogan],
-        2.5,
-        { scale: 0.5 },
+        1.25,
+        { scale: 0.8 },
         { scale: 1, ease: 'easeOutBack' }
       );
+
       const avatarHalo = avatar.querySelector('.lc-avatar__content__halo');
       if (avatarHalo) {
         // Rotate and scale down the avatar's halo
-        TweenLite.from(avatarHalo, 2.5, {
+        TweenLite.from(avatarHalo, 1.25, {
           scale: 1.5,
           rotation: 120,
           ease: 'easeOutPower2',
         });
       }
+
       // Translate the lines
-      TweenLite.to([leftLines, rightLines], 2, {
+      TweenLite.to([leftLines, rightLines], 1, {
         x: 0,
         opacity: 1,
         ease: 'easeOutPower2',
-        onComplete: () => {
-          [...rightLines.children, ...leftLines.children]
-            .sort(() => 0.5 - Math.random()) // Randomize the order of the lines
-            .forEach((line, i) => {
-              // Add randomized floating animation to each line
-              TweenMax.to(line, 2 + Math.random() * 2, {
-                x: 10 * (Math.random() < 0.5 ? -1 : 1),
-                yoyo: true,
-                ease: 'easeInOut',
-                repeat: -1,
-                delay: Math.random() * i,
-              });
-            });
-        },
       });
+      [...rightLines.children, ...leftLines.children]
+        .sort(() => 0.5 - Math.random()) // Randomize the order of the lines
+        .forEach((line, i) => {
+          // Add randomized floating animation to each line
+          TweenMax.to(line, 2 + Math.random() * 2, {
+            x: 10 * (Math.random() < 0.5 ? -1 : 1),
+            yoyo: true,
+            ease: 'easeInOut',
+            repeat: -1,
+            delay: Math.random() * i,
+          });
+        });
     },
   },
 };
