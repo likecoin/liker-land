@@ -62,6 +62,19 @@
     &.btn--dark {
       @apply text-white;
     }
+
+    &.btn--grayscale {
+      @apply text-gray-4a;
+
+      @apply border-gray-9b;
+
+      &:hover {
+        @apply bg-gray-f7;
+      }
+      &:active {
+        @apply bg-gray-e6;
+      }
+    }
   }
 
   // Default style
@@ -94,11 +107,11 @@
 
   // Disabled style
   &--disabled {
-    @apply text-gray-c;
+    pointer-events: none !important;
 
-    @apply border-gray-c;
+    color: config('colors.gray-c') !important;
 
-    @apply pointer-events-none;
+    border-color: config('colors.gray-c') !important;
   }
 
   // Button icon

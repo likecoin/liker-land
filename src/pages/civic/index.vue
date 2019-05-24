@@ -27,23 +27,62 @@
                   VolumeOffIcon(v-if="isIntroVideoMuted")
                   VolumeOnIcon(v-else)
 
+      Transition(
+        :css="false"
+        appear
+        @enter="fadeInReferrerBanner"
+      )
+        section.civic-page__referrer-banner(
+          v-if="isShowReferrerBanner"
+          style="opacity:0"
+        )
+          div
+            .civic-page__referrer-banner-inner-wrapper
+              .civic-page__referrer-banner-lines-container
+                .civic-page__referrer-banner-lines
+                  svg(ref="referrerBannerLeftLines" width="200" height="46" viewBox="0 0 200 46")
+                    line(x1="30" y1="3" x2="98" y2="3")
+                    line(x1="180" y1="3" x2="186" y2="3")
+                    line(x1="14" y1="28" x2="150" y2="28")
+                    line(x1="78" y1="44" x2="84" y2="44")
+                    line(x1="112" y1="44" x2="172" y2="44")
+                  svg(ref="referrerBannerRightLines" width="220" height="60" viewBox="0 0 220 60")
+                    line(x1="56" y1="3" x2="74" y2="3")
+                    line(x1="88" y1="3" x2="204" y2="3")
+                    line(x1="16" y1="22" x2="120" y2="22")
+                    line(x1="130" y1="22" x2="138" y2="22")
+                    line(x1="50" y1="56" x2="70" y2="56")
+
+              i18n.civic-page__referrer-banner-slogan(
+                ref="referrerBannerLeftSlogan"
+                path="CivicPage.referrerBanner.slogan"
+                tag="div"
+              )
+                br(place="br")
+                span.civic-page__referrer-banner-slogan-name(place="name")
+                  | {{ referrer.displayName }}
+
+              LcAvatar(
+                ref="referrerBannerAvatar"
+                :src="referrer.avatar"
+                :halo="referrer.avatarHalo"
+                size="100"
+              )
+
       section.civic-page__liker-comparison-card-list
         ul
           LikerComparisonCard(
             tag="li"
             type="general"
           )
-            template(
-              v-if="!getUserId"
-              #header
-            )
+            template(#header)
               .relative.mt-12.mx-12
-                a.btn.btn--outlined.btn--block.m-0.w-full(
+                a.btn.btn--outlined.btn--block.btn--grayscale.m-0.w-full(
                   :class="actionButtonClassForGuest"
                   :href="getOAuthRegisterAPI"
                   @click="onClickActionButtonForGuest"
                 )
-                  | {{ $t('register') }}
+                  | {{ actionButtonTextForGuest }}
 
           LikerComparisonCard(
             tag="li"
@@ -96,7 +135,8 @@ import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
 import { checkIsMobileClient } from '~/util/client';
-import { getOAuthRegisterAPI } from '~/util/api';
+import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
+import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
   components: {
@@ -125,6 +165,7 @@ export default {
     return {
       isIntroVideoVisible: false,
       isIntroVideoMuted: true,
+      referrer: undefined,
     };
   },
   computed: {
@@ -160,7 +201,20 @@ export default {
             )))
       );
     },
+    isShowReferrerBanner() {
+      return (
+        this.referrer &&
+        !(this.getUserIsCivicLiker && !this.getUserIsCivicLikerTrial)
+      );
+    },
 
+    actionButtonClass() {
+      return {
+        'btn--disabled':
+          this.getUserIsCivicLiker &&
+          !this.getUserInfo.isCivicLikerRenewalPeriod,
+      };
+    },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
         return this.$t('renew');
@@ -178,12 +232,11 @@ export default {
         'btn--disabled': this.getUserId,
       };
     },
-    actionButtonClass() {
-      return {
-        'btn--disabled':
-          this.getUserIsCivicLiker &&
-          !this.getUserInfo.isCivicLikerRenewalPeriod,
-      };
+    actionButtonTextForGuest() {
+      if (this.getUserId) {
+        return this.$t('registered');
+      }
+      return this.$t('CivicPage.registerForFree');
     },
     civicLikerStampText() {
       if (this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial) {
@@ -194,6 +247,25 @@ export default {
       }
       return 'LIKE';
     },
+  },
+  async asyncData({ route, $axios }) {
+    // Fetch referrer info
+    const { from } = route.query;
+    if (from) {
+      try {
+        const user = await $axios.$get(getUserMinAPI(from));
+        return {
+          referrer: {
+            ...user,
+            avatarHalo: getAvatarHaloTypeFromUser(user),
+          },
+        };
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
+    }
+    return undefined;
   },
   head() {
     return {
@@ -286,6 +358,75 @@ export default {
       this.$refs.introVideoPlayer[this.isIntroVideoMuted ? 'unmute' : 'mute']();
       this.isIntroVideoMuted = !this.isIntroVideoMuted;
     },
+    fadeInReferrerBanner(el, done) {
+      const { TweenLite, TweenMax } = this.$gsap;
+      const {
+        referrerBannerLeftLines: leftLines,
+        referrerBannerRightLines: rightLines,
+        referrerBannerLeftSlogan: slogan,
+        referrerBannerAvatar,
+      } = this.$refs;
+      const avatar = referrerBannerAvatar.$el;
+
+      // Animation preparation
+      TweenLite.set([leftLines, rightLines], { opacity: 0.5 });
+      TweenLite.set(leftLines, { x: 100 });
+      TweenLite.set(rightLines, { x: -100 });
+
+      // Fade in & scale the banner
+      TweenLite.fromTo(
+        el,
+        0.75,
+        {
+          opacity: 0,
+          scaleY: 0,
+          backfaceVisibility: 'hidden',
+        },
+        {
+          opacity: 1,
+          scaleY: 1,
+          ease: 'easeOutPower2',
+          onComplete: done,
+        }
+      );
+
+      // Scale up the avatar & the slogan
+      TweenLite.fromTo(
+        [avatar, slogan],
+        1.25,
+        { scale: 0.8 },
+        { scale: 1, ease: 'easeOutBack' }
+      );
+
+      const avatarHalo = avatar.querySelector('.lc-avatar__content__halo');
+      if (avatarHalo) {
+        // Rotate and scale down the avatar's halo
+        TweenLite.from(avatarHalo, 1.25, {
+          scale: 1.5,
+          rotation: 120,
+          ease: 'easeOutPower2',
+        });
+      }
+
+      // Translate the lines
+      TweenLite.to([leftLines, rightLines], 1, {
+        x: 0,
+        opacity: 1,
+        ease: 'easeOutPower2',
+      });
+      [...rightLines.children, ...leftLines.children]
+        .sort(() => 0.5 - Math.random()) // Randomize the order of the lines
+        .forEach((line, i) => {
+          // Add randomized floating animation to each line
+          TweenMax.to(line, 2 + Math.random() * 2, {
+            x: 10 * (Math.random() < 0.5 ? -1 : 1),
+            yoyo: true,
+            ease: 'easeInOut',
+            repeat: -1,
+            delay: Math.random() * i,
+          });
+        });
+    },
   },
 };
 </script>
@@ -298,6 +439,8 @@ $civic-feature-card-swiper-max-width: (
 );
 
 .civic-page {
+  perspective: 800px;
+
   &__intro-video {
     max-width: config('screens.desktop.min');
 
@@ -351,6 +494,100 @@ $civic-feature-card-swiper-max-width: (
     &-volume-button {
       @apply pin-t;
       @apply pin-l;
+    }
+  }
+
+  &__referrer-banner {
+    overflow: hidden;
+
+    > div {
+      position: relative;
+
+      max-width: config('screens.desktop.min');
+      min-height: 9.375rem;
+
+      @apply text-like-cyan;
+      @apply text-24;
+      @apply leading-1_5;
+
+      @apply bg-like-green;
+
+      @apply mt-24;
+      @apply mx-auto;
+    }
+
+    &-inner-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 1rem 16%;
+
+      @media screen and (max-width: config('screens.tablet.min')) {
+        flex-direction: column-reverse;
+
+        @apply px-16;
+      }
+    }
+
+    &-lines {
+      position: absolute;
+      right: 0;
+      left: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      fill: none;
+      stroke: config('colors.like-cyan');
+      stroke-linecap: round;
+      stroke-width: 0.25rem;
+
+      @media screen and (max-width: config('screens.tablet.min')) {
+        visibility: hidden;
+      }
+
+      > svg {
+        position: absolute;
+
+        &:first-child {
+          right: 100%;
+
+          margin-right: -14%;
+        }
+
+        &:last-child {
+          left: 100%;
+
+          margin-left: -14%;
+        }
+      }
+    }
+
+    &-slogan,
+    .lc-avatar {
+      @apply mx-16;
+      @apply my-8;
+    }
+
+    &-slogan {
+      @media screen and (max-width: config('screens.tablet.min')) {
+        text-align: center;
+      }
+
+      @apply font-200;
+
+      &-name {
+        @apply text-white;
+        @apply font-600;
+      }
+    }
+
+    .lc-avatar .lc-avatar__content {
+      @media screen and (max-width: config('screens.tablet.min')) {
+        width: 4rem !important;
+      }
     }
   }
 
