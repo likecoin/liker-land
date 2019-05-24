@@ -65,6 +65,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'], // only supports card for now
       customer_email: email,
+      locale: 'en', // hardcode en before we have zh_Hant
       subscription_data: {
         items: [{ plan: STRIPE_PLAN_ID }],
         metadata,
@@ -93,7 +94,7 @@ router.post('/civic/payment/stripe', async (req, res, next) => {
     const userDoc = await userRef.get();
     const {
       stripe: { customerId } = {},
-      user: { locale, email, displayName } = {},
+      user: { email, displayName } = {},
     } = userDoc.data();
     let customer;
     if (customerId) {
@@ -103,7 +104,7 @@ router.post('/civic/payment/stripe', async (req, res, next) => {
       email,
       metadata: { userId: req.session.user, displayName },
       source: token,
-      preferred_locales: locale ? [locale] : null,
+      // preferred_locales: locale ? [locale] : null,
     };
     if (!customer) {
       customer = await stripe.customers.create(customerInfo);
