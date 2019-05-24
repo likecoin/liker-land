@@ -100,6 +100,10 @@
     "general": "一般 Liker",
     "civic": "@:civicLiker"
   },
+  "Locale": {
+    "en": "English",
+    "zh-Hant": "繁體中文"
+  },
   "LogoutPage": {
     "loggingOut": "登出中"
   },
