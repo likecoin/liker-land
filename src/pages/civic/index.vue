@@ -135,7 +135,7 @@ import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
 import { checkIsMobileClient } from '~/util/client';
-import { getOAuthRegisterAPI } from '~/util/api';
+import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
@@ -248,12 +248,12 @@ export default {
       return 'LIKE';
     },
   },
-  async asyncData({ route, store }) {
+  async asyncData({ route, $axios }) {
     // Fetch referrer info
     const { from } = route.query;
     if (from) {
       try {
-        const user = await store.dispatch('fetchUserInfo', from);
+        const user = await $axios.$get(getUserMinAPI(from));
         return {
           referrer: {
             ...user,
