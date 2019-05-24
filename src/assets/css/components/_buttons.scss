@@ -107,11 +107,11 @@
 
   // Disabled style
   &--disabled {
-    @apply text-gray-c;
+    pointer-events: none !important;
 
-    @apply border-gray-c;
+    color: config('colors.gray-c') !important;
 
-    @apply pointer-events-none;
+    border-color: config('colors.gray-c') !important;
   }
 
   // Button icon
