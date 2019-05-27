@@ -54,9 +54,10 @@
   },
   "FollowingPage": {
     "headerLabel": "你的追蹤列表",
-    "null": {
+    "empty": {
       "title": "你沒有追蹤任何作者",
-      "content": "你可以在作者的LikeButton上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。"
+      "content": "你可以在作者的LikeButton上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。",
+      "goToFeaturing": "前往精選文章列表"
     }
   },
   "ERROR": {
