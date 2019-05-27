@@ -123,7 +123,10 @@
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
     "knowMoreAbout": "Know more about",
-    "subscribed": "Subscribed"
+    "subscribed": "Subscribed",
+    "billingSummary": {
+      "nextBillingDate": "Next billing date"
+    }
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > Follow / Unfollow",

@@ -1,11 +1,6 @@
 <template>
   <div>
     <LcLoadingIndicator v-if="!isFetched" class="mx-auto" />
-    <div v-if="subscriptionInfo">
-      <div v-for="key in Object.keys(subscriptionInfo)" :key="key">
-        <span>{{ key }}: </span><span>{{ subscriptionInfo[key] }}</span>
-      </div>
-    </div>
     <!-- Used to display form errors. -->
     <div v-if="error">{{ error }}</div>
   </div>
@@ -24,7 +19,6 @@ export default {
       from: undefined,
       referrer: undefined,
       error: '',
-      subscriptionInfo: null,
     };
   },
   head() {
@@ -63,9 +57,9 @@ export default {
   },
   methods: {
     async checkStripeSubscription() {
-      let subscriptionInfo;
       try {
-        subscriptionInfo = await this.$axios.$get(getStripePaymentStatusAPI());
+        await this.$axios.$get(getStripePaymentStatusAPI());
+        this.$router.replace({ name: 'settings-civic' });
       } catch (err) {
         if (err.response && err.response.status === 404) {
           await this.initPaymentSession();
@@ -76,22 +70,6 @@ export default {
       } finally {
         this.isFetched = true;
       }
-      const {
-        status,
-        willCancel,
-        currentPeriodEnd,
-        currentPeriodStart,
-        start,
-        card: { brand, last4 },
-      } = subscriptionInfo;
-      this.subscriptionInfo = {
-        willCancel,
-        status,
-        currentPeriodEnd,
-        currentPeriodStart,
-        start,
-        card: { brand, last4 },
-      };
     },
     async initPaymentSession() {
       const { from, referrer } = this.$route.query;
