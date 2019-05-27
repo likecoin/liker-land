@@ -73,7 +73,7 @@ export default {
         @apply bg-like-gradient;
       }
 
-      &__body {
+      &__feature-list {
         &::before {
           @apply border-none;
         }
