@@ -12,9 +12,12 @@ export function logTrackerEvent(vue, category, action, label, value) {
         eventValue: value,
       });
     }
-    if (window.FB && window.FB.AppEvents)
-      window.FB.AppEvents.logEvent(action, value, { label });
-    if (window.fbq) window.fbq('track', action);
+    if (window.fbq) {
+      window.fbq('trackCustom', `LikerLand${category}_${action}`, {
+        label: label.substring(0, 499),
+        value,
+      });
+    }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
     console.error(err); // eslint-disable-line no-console

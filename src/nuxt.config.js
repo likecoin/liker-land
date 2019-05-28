@@ -42,6 +42,7 @@ const nuxtConfig = {
     ],
     link: [
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
+      { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
 
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
@@ -68,6 +69,8 @@ const nuxtConfig = {
       })),
     ],
     script: [
+      { src: '/vendor/typekit.js', type: 'text/javascript' },
+      { src: '/vendor/fb/pixel.js', async: true },
       {
         hid: 'schema',
         innerHTML: JSON.stringify({
@@ -79,7 +82,6 @@ const nuxtConfig = {
         }),
         type: 'application/ld+json',
       },
-      { src: '/vendor/typekit.js', type: 'text/javascript' },
     ],
     __dangerouslyDisableSanitizersByTagID: { schema: ['innerHTML'] },
   },
