@@ -45,6 +45,7 @@ const nuxtConfig = {
       { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
 
+      { rel: 'preconnect', href: 'https://connect.facebook.net' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
       { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
@@ -106,6 +107,7 @@ const nuxtConfig = {
           "'self'",
           "'unsafe-inline'", // ignored by browser with sha support
           'www.google-analytics.com',
+          'connect.facebook.net',
           'js.intercomcdn.com',
           '*.intercom.io',
           'use.typekit.net',
@@ -114,6 +116,8 @@ const nuxtConfig = {
         'frame-src': [
           'www.google.com',
           'player.vimeo.com',
+          '*.facebook.com',
+          '*.facebook.net',
           'https://js.stripe.com',
           'https://hooks.stripe.com',
         ],
