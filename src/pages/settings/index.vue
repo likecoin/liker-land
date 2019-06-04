@@ -9,7 +9,7 @@
     ul.settings-menu(v-if="getUserId")
       li
         a.settings-menu__item(
-          :href="likerIdSettingsURL"
+          :href="getLikerIdSettingsURL"
           :title="$t('SettingsPage.likerId')"
           target="_blank"
           rel="noopener"
@@ -22,6 +22,14 @@
           span.settings-menu__item-subtitle(v-if="getUserIsCivicLiker")
             | {{ $t('SettingsPage.civicLiker.subscribing') }}
       li
+        a.settings-menu__item(
+          :href="getCreatorURL"
+          target="_blank"
+          rel="noopener"
+        )
+          span.settings-menu__item-title {{ $t('SettingsPage.creator.title') }}
+          span.settings-menu__item-subtitle {{ subtitleForCreatorMenuItem }}
+      li
         NuxtLink.settings-menu__item(:to="{ name: 'settings-following' }")
           span.settings-menu__item-title {{ $t('SettingsPage.subscription') }}
 </template>
@@ -31,17 +39,23 @@ import { mapGetters } from 'vuex';
 
 import GlobeIcon from '~/assets/icons/globe.svg';
 
-import { LIKE_CO_URL_BASE } from '~/constant';
+import { getLikerIdSettingsURL, getCreatorURL } from '~/util/links';
 
 export default {
   components: {
     GlobeIcon,
   },
   computed: {
-    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
+    getLikerIdSettingsURL,
+    getCreatorURL,
 
-    likerIdSettingsURL() {
-      return `${LIKE_CO_URL_BASE}/in/settings`;
+    ...mapGetters(['getUserId', 'getUserInfo', 'getUserIsCivicLiker']),
+
+    subtitleForCreatorMenuItem() {
+      if (this.getUserInfo.wallet) {
+        return this.$t('SettingsPage.creator.registered');
+      }
+      return this.$t('SettingsPage.creator.register');
     },
   },
 };

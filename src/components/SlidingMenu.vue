@@ -49,7 +49,7 @@
 
           <a
             class="btn btn--outlined btn--dark btn--block"
-            :href="creatorURL"
+            :href="getCreatorURL"
           >{{ $t('SlidingMenu.creator') }}</a>
 
           <NuxtLink
@@ -91,7 +91,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getOAuthRegisterAPI } from '~/util/api';
 import { IntercomMixinFactory } from '~/mixins/intercom';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { LIKE_CO_URL_BASE } from '~/constant';
+import { getCreatorURL } from '~/util/links';
 
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
@@ -124,9 +124,7 @@ export default {
       }
       return this.$t('SlidingMenu.civic');
     },
-    creatorURL() {
-      return `${LIKE_CO_URL_BASE}/in/creator`;
-    },
+    getCreatorURL,
   },
   methods: {
     logTrackerEvent,

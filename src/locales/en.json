@@ -141,6 +141,11 @@
       "title": "@:civicLiker",
       "subscribing": "Subscribing"
     },
+    "creator": {
+      "title": "Creator",
+      "register": "Register now",
+      "registered": "Registered"
+    },
     "language": "Language",
     "subscription": "Follow / Unfollow"
   },
