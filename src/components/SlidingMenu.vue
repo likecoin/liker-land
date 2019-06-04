@@ -45,7 +45,7 @@
             class="btn btn--outlined btn--dark btn--block"
             :to="{ name: 'civic' }"
             @click.native="onClickMenuItem"
-          >{{ $t('SlidingMenu.civic') }}</NuxtLink>
+          >{{ menuItemTitleForCivic }}</NuxtLink>
 
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block btn--with-icon"
@@ -104,8 +104,20 @@ export default {
       'getUserId',
       'getUserInfo',
       'getUserCivicLikerHalo',
+      'getUserIsCivicLiker',
+      'getUserIsCivicLikerTrial',
       'getHomeRoute',
     ]),
+
+    menuItemTitleForCivic() {
+      if (
+        (this.getUserId && !this.getUserIsCivicLiker) ||
+        this.getUserIsCivicLikerTrial
+      ) {
+        return this.$t('SlidingMenu.civicUpgrade');
+      }
+      return this.$t('SlidingMenu.civic');
+    },
   },
   methods: {
     logTrackerEvent,

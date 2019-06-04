@@ -150,6 +150,7 @@
   "SlidingMenu": {
     "home": "Home",
     "civic": "@:CivicPage.title",
+    "civicUpgrade": "@:upgrade",
     "settings": "@:SettingsPage.title",
     "support": "Support",
     "logout": "Logout"
