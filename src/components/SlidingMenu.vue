@@ -45,7 +45,12 @@
             class="btn btn--outlined btn--dark btn--block"
             :to="{ name: 'civic' }"
             @click.native="onClickMenuItem"
-          >{{ menuItemTitleForCivic }}</NuxtLink>
+          >{{ titleForCivicMenuItem }}</NuxtLink>
+
+          <a
+            class="btn btn--outlined btn--dark btn--block"
+            :href="creatorURL"
+          >{{ $t('SlidingMenu.creator') }}</a>
 
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block btn--with-icon"
@@ -86,6 +91,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getOAuthRegisterAPI } from '~/util/api';
 import { IntercomMixinFactory } from '~/mixins/intercom';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { LIKE_CO_URL_BASE } from '~/constant';
 
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
@@ -109,7 +115,7 @@ export default {
       'getHomeRoute',
     ]),
 
-    menuItemTitleForCivic() {
+    titleForCivicMenuItem() {
       if (
         (this.getUserId && !this.getUserIsCivicLiker) ||
         this.getUserIsCivicLikerTrial
@@ -117,6 +123,9 @@ export default {
         return this.$t('SlidingMenu.civicUpgrade');
       }
       return this.$t('SlidingMenu.civic');
+    },
+    creatorURL() {
+      return `${LIKE_CO_URL_BASE}/in/creator`;
     },
   },
   methods: {

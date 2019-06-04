@@ -151,6 +151,7 @@
     "home": "主頁",
     "civic": "@:CivicPage.title",
     "civicUpgrade": "加強版",
+    "creator": "創作者加盟",
     "settings": "@:SettingsPage.title",
     "support": "幫助",
     "logout": "登出"
