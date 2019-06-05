@@ -123,7 +123,10 @@
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
     "knowMoreAbout": "了解更多",
-    "subscribed": "已訂閱"
+    "subscribed": "已訂閱",
+    "billingSummary": {
+      "nextBillingDate": "下個付款日期"
+    }
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > 追踪/取消追踪",

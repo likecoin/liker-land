@@ -12,7 +12,14 @@
 
       slot(name="header")
 
-    ul.liker-comparison-card__body(v-if="isShowFeatures")
+    .liker-comparison-card__feature-prepend(
+      v-if="$slots['feature-prepend']"
+    )
+      slot(name="feature-prepend")
+
+    ul.liker-comparison-card__feature-list(
+      v-if="isShowFeatures"
+    )
       li.liker-comparison-card__feature(
         v-for="feature in featureList"
         :key="feature"
@@ -126,33 +133,36 @@ export default {
   }
 
   > * {
+    position: relative;
+  }
+
+  &__b {
     @apply relative;
 
-    @apply px-24;
-
-    &:first-child {
-      @apply pt-24;
+    &--mx {
+      @apply px-24;
     }
+  }
 
-    &:last-child {
-      @apply pb-24;
-    }
+  &__header,
+  &__feature-list {
+    @extend .liker-comparison-card__b;
+    @extend .liker-comparison-card__b--mx;
   }
 
   &__header {
-    min-height: 148px;
-
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
 
+    @apply pt-24;
     @apply pb-12;
   }
 
-  &__header + &__body {
+  &__header + &__feature-list {
     &::before {
-      content: '';
-
       height: 1px;
+
+      content: '';
 
       @apply block;
 
@@ -163,10 +173,6 @@ export default {
 
       @apply w-full;
     }
-  }
-
-  &__body {
-    list-style: none;
   }
 
   &__type {
@@ -196,6 +202,12 @@ export default {
   }
 
   &__feature {
+    &-list {
+      list-style: none;
+
+      @apply pb-24;
+    }
+
     @apply text-gray-4a;
 
     @apply flex;
