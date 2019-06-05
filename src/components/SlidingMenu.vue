@@ -110,16 +110,12 @@ export default {
       'getUserId',
       'getUserInfo',
       'getUserCivicLikerHalo',
-      'getUserIsCivicLiker',
-      'getUserIsCivicLikerTrial',
+      'getUserIsCivicLikerPaid',
       'getHomeRoute',
     ]),
 
     titleForCivicMenuItem() {
-      if (
-        (this.getUserId && !this.getUserIsCivicLiker) ||
-        this.getUserIsCivicLikerTrial
-      ) {
+      if (this.getUserId && !this.getUserIsCivicLikerPaid) {
         return this.$t('SlidingMenu.civicUpgrade');
       }
       return this.$t('SlidingMenu.civic');
