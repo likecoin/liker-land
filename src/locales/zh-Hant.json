@@ -108,6 +108,23 @@
   "LogoutPage": {
     "loggingOut": "登出中"
   },
+  "FirstTimeSignInDialog": {
+    "pickSubscription": "請選擇支持方案",
+    "skip": "略過",
+    "headerSlogan": "歡迎你加入成為{br}支持創作的一分子",
+    "becomeCreator": "成為創作者",
+    "comparisonCard": {
+      "civic": {
+        "header": "成為讚賞公民 以實際金錢支持創作",
+        "button": "付費支持",
+        "buttonFootnote": "扣除手續費後將全數支持作者"
+      },
+      "general": {
+        "header": "或 免費成為 Liker",
+        "button": "免費支持"
+      }
+    }
+  },
   "PaymentFailurePage": {
     "title": "付款失敗"
   },
