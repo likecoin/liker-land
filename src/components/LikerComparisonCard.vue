@@ -4,9 +4,10 @@
     :class="`liker-comparison-card--${type}`"
   )
     .liker-comparison-card__header
-      .liker-comparison-card__type {{ $t(`LikerType.${type}`) }}
+      .liker-comparison-card__type
+        | {{ headerTitle || $t(`LikerType.${type}`) }}
 
-      div
+      div(v-if="isShowPrice")
         span.liker-comparison-card__price {{ plan.price }}
         span.liker-comparison-card__payment-cycle {{ $t(plan.billingCycle) }}
 
@@ -56,9 +57,17 @@ export default {
       type: String,
       default: 'div',
     },
+    isShowPrice: {
+      type: Boolean,
+      default: true,
+    },
     isShowFeatures: {
       type: Boolean,
       default: true,
+    },
+    headerTitle: {
+      type: String,
+      default: '',
     },
   },
   computed: {
