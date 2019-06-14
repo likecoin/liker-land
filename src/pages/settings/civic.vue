@@ -42,7 +42,7 @@ import LikerComparisonCard from '~/components/LikerComparisonCard';
 import { getStripePaymentStatusAPI } from '~/util/api';
 
 import AmexIcon from '~/assets/icons/billing-cards/amex.svg';
-import VisaIvon from '~/assets/icons/billing-cards/visa.svg';
+import VisaIcon from '~/assets/icons/billing-cards/visa.svg';
 import MastercardIcon from '~/assets/icons/billing-cards/mastercard.svg';
 
 function getMaskedCardNumber(brand, last4) {
@@ -63,7 +63,7 @@ export default {
   components: {
     LikerComparisonCard,
     AmexIcon,
-    VisaIvon,
+    VisaIcon,
     MastercardIcon,
   },
   middleware: 'authenticated',
