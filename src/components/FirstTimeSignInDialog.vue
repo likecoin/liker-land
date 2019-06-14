@@ -6,6 +6,7 @@
     @before-enter="onBeforeEnter"
     @enter="onEnter"
     @leave="onLeave"
+    @resize="onResize"
   )
     .first-time-signin-dialog
       .first-time-signin-dialog__header(ref="header")
@@ -65,6 +66,7 @@
               LikerComparisonCard(
                 type="civic"
                 :header-title="$t('FirstTimeSignInDialog.comparisonCard.civic.header')"
+                :is-feature-list-collapsible="isFeatureListCollapsible"
               )
                 template(#header)
                   .mt-12.mx-12
@@ -120,6 +122,7 @@ export default {
         !getUserIsCivicLiker &&
         !getUserInfo.isNew &&
         !getUserInfo.hasReadFirstTimeSignInDialog,
+      isFeatureListCollapsible: false,
     };
   },
   computed: {
@@ -303,6 +306,9 @@ export default {
           0
         );
       }
+    },
+    onResize({ width }) {
+      this.isFeatureListCollapsible = width <= 600;
     },
     hide() {
       this.isShow = false;
