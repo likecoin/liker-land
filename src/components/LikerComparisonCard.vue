@@ -4,9 +4,10 @@
     :class="`liker-comparison-card--${type}`"
   )
     .liker-comparison-card__header
-      .liker-comparison-card__type {{ $t(`LikerType.${type}`) }}
+      .liker-comparison-card__type
+        | {{ headerTitle || $t(`LikerType.${type}`) }}
 
-      div
+      div(v-if="isShowPrice")
         span.liker-comparison-card__price {{ plan.price }}
         span.liker-comparison-card__payment-cycle {{ $t(plan.billingCycle) }}
 
@@ -17,20 +18,23 @@
     )
       slot(name="feature-prepend")
 
-    ul.liker-comparison-card__feature-list(
+    CollapsibleView.liker-comparison-card__feature-list(
       v-if="isShowFeatures"
+      :is-collapsible="isFeatureListCollapsible"
     )
-      li.liker-comparison-card__feature(
-        v-for="feature in featureList"
-        :key="feature"
-        :class="{ 'liker-comparison-card__feature--disabled': !getFeatureAvailability(feature) }"
-      )
-        TickIcon.liker-comparison-card__feature-bullet
-        | {{ getFeatureText(feature) }}
+      ul
+        li.liker-comparison-card__feature(
+          v-for="feature in featureList"
+          :key="feature"
+          :class="{ 'liker-comparison-card__feature--disabled': !getFeatureAvailability(feature) }"
+        )
+          TickIcon.liker-comparison-card__feature-bullet
+          | {{ getFeatureText(feature) }}
 
 </template>
 
 <script>
+import CollapsibleView from '~/components/CollapsibleView';
 import TickIcon from '~/assets/icons/tick.svg';
 
 const LIKER_FEATURE = {
@@ -45,6 +49,7 @@ const LIKER_FEATURE = {
 export default {
   name: 'LikerComparisonCard',
   components: {
+    CollapsibleView,
     TickIcon,
   },
   props: {
@@ -56,9 +61,21 @@ export default {
       type: String,
       default: 'div',
     },
+    isShowPrice: {
+      type: Boolean,
+      default: true,
+    },
     isShowFeatures: {
       type: Boolean,
       default: true,
+    },
+    isFeatureListCollapsible: {
+      type: Boolean,
+      default: false,
+    },
+    headerTitle: {
+      type: String,
+      default: '',
     },
   },
   computed: {
@@ -203,9 +220,17 @@ export default {
 
   &__feature {
     &-list {
-      list-style: none;
-
       @apply pb-24;
+
+      &.collapsible-view--collapsible {
+        @apply pb-4;
+      }
+
+      ul {
+        list-style: none;
+
+        @apply p-0;
+      }
     }
 
     @apply text-gray-4a;

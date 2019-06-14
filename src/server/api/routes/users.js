@@ -31,8 +31,17 @@ router.get('/users/self', async (req, res, next) => {
   try {
     const { user } = req.session;
     if (user) {
-      const { data } = await apiFetchUserProfile(req);
-      res.json({ user, ...data, intercomToken: getIntercomUserHash(user) });
+      const [{ data }, userDoc] = await Promise.all([
+        apiFetchUserProfile(req),
+        userCollection.doc(user).get(),
+      ]);
+      const { hasReadWelcomeDialog } = userDoc.data();
+      res.json({
+        user,
+        hasReadWelcomeDialog,
+        ...data,
+        intercomToken: getIntercomUserHash(user),
+      });
       await userCollection.doc(user).update({
         user: data,
       });
@@ -42,6 +51,23 @@ router.get('/users/self', async (req, res, next) => {
   } catch (err) {
     if (req.session) req.session = null;
     res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
+    next(err);
+  }
+});
+
+router.post('/users/self/update', async (req, res, next) => {
+  try {
+    const { user } = req.session;
+    if (user) {
+      const { hasReadWelcomeDialog } = req.body;
+      await userCollection.doc(user).update({
+        hasReadWelcomeDialog,
+      });
+      res.sendStatus(200);
+      return;
+    }
+    res.sendStatus(404);
+  } catch (err) {
     next(err);
   }
 });

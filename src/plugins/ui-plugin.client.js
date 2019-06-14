@@ -1,8 +1,14 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 import VueLazyLoad from 'vue-lazyload';
 
-import { TweenLite, TweenMax } from 'gsap/all';
-import CSSPlugin from 'gsap/CSSPlugin';
+import {
+  TweenLite,
+  TweenMax,
+  TimelineLite,
+  TimelineMax,
+  CSSPlugin,
+  AttrPlugin,
+} from 'gsap/all';
 
 const hasIntersectionObserverSupport =
   window &&
@@ -18,5 +24,10 @@ Vue.use(VueLazyLoad, {
 Vue.prototype.$gsap = {
   TweenLite,
   TweenMax,
-  CSSPlugin, // to make tree-shake happy
+  TimelineLite,
+  TimelineMax,
+
+  // To make tree-shake happy
+  CSSPlugin,
+  AttrPlugin,
 };
