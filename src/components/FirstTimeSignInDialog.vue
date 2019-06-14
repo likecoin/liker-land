@@ -154,7 +154,7 @@ export default {
         body,
       } = this.$refs;
 
-      const tl = new this.$gsap.TimelineLite({ delay: 1, onComplete });
+      const tl = new this.$gsap.TimelineLite({ delay: 1 });
       // Fade in root element
       tl.to(el, 1, {
         opacity: 1,
@@ -194,6 +194,7 @@ export default {
         ease: 'easeOutPower2',
         delay: -0.5,
         clearProps: 'all',
+        onComplete,
       });
       // Zoom out planet
       tl.fromTo(
