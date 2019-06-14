@@ -112,7 +112,7 @@
   "LogoutPage": {
     "loggingOut": "登出中"
   },
-  "FirstTimeSignInDialog": {
+  "WelcomeDialog": {
     "pickSubscription": "請選擇支持方案",
     "skip": "略過",
     "headerSlogan": "歡迎你加入成為{br}支持創作的一分子",

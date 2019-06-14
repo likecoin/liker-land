@@ -1,16 +1,16 @@
 <template lang="pug">
   .dialog-container
-    FirstTimeSignInDialog
+    WelcomeDialog
 
 </template>
 
 <script>
-import FirstTimeSignInDialog from '~/components/FirstTimeSignInDialog';
+import WelcomeDialog from '~/components/WelcomeDialog';
 
 export default {
   name: 'PopupContainer',
   components: {
-    FirstTimeSignInDialog,
+    WelcomeDialog,
   },
 };
 </script>

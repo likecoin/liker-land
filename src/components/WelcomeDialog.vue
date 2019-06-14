@@ -8,16 +8,16 @@
     @leave="onLeave"
     @resize="onResize"
   )
-    .first-time-signin-dialog
-      .first-time-signin-dialog__header(ref="header")
-        a.btn.btn--plain.btn--auto-size.first-time-signin-dialog__skip-button(
+    .welcome-dialog
+      .welcome-dialog__header(ref="header")
+        a.btn.btn--plain.btn--auto-size.welcome-dialog__skip-button(
           ref="skipButton"
           @click="hide"
         )
-          | {{ $t('FirstTimeSignInDialog.skip') }}
+          | {{ $t('WelcomeDialog.skip') }}
 
-        .first-time-signin-dialog__header-content
-          svg.first-time-signin-dialog__planet-art(
+        .welcome-dialog__header-content
+          svg.welcome-dialog__planet-art(
             ref="planet"
             width="320"
             height="96"
@@ -51,21 +51,21 @@
               :r="moon.r"
             )
 
-          i18n.first-time-signin-dialog__header-slogan(
+          i18n.welcome-dialog__header-slogan(
             ref="headerSlogan"
-            path="FirstTimeSignInDialog.headerSlogan"
+            path="WelcomeDialog.headerSlogan"
             tag="div"
           )
             br(place="br")
 
-      .first-time-signin-dialog__body(ref="body")
-        .text-gray-4a.text-14.text-center.font-200.p-16 {{ $t('FirstTimeSignInDialog.pickSubscription') }}
-        .first-time-signin-dialog__liker-comparison-card-container
+      .welcome-dialog__body(ref="body")
+        .text-gray-4a.text-14.text-center.font-200.p-16 {{ $t('WelcomeDialog.pickSubscription') }}
+        .welcome-dialog__liker-comparison-card-container
           ul
             li
               LikerComparisonCard(
                 type="civic"
-                :header-title="$t('FirstTimeSignInDialog.comparisonCard.civic.header')"
+                :header-title="$t('WelcomeDialog.comparisonCard.civic.header')"
                 :is-feature-list-collapsible="isFeatureListCollapsible"
               )
                 template(#header)
@@ -74,14 +74,14 @@
                       :to="{ name: 'civic-register' }"
                       @click.native="onClickActionButton"
                     )
-                      | {{ $t('FirstTimeSignInDialog.comparisonCard.civic.button') }}
+                      | {{ $t('WelcomeDialog.comparisonCard.civic.button') }}
                     .text-gray-9b.text-12.text-center.mt-8
-                      | {{ $t('FirstTimeSignInDialog.comparisonCard.civic.buttonFootnote') }}
+                      | {{ $t('WelcomeDialog.comparisonCard.civic.buttonFootnote') }}
 
             li
               LikerComparisonCard(
                 type="general"
-                :header-title="$t('FirstTimeSignInDialog.comparisonCard.general.header')"
+                :header-title="$t('WelcomeDialog.comparisonCard.general.header')"
                 :is-show-price="false"
                 :is-show-features="false"
               )
@@ -90,14 +90,14 @@
                     button.btn.btn--outlined.btn--block.btn--grayscale.m-0.w-full(
                       @click="onClickActionButton"
                     )
-                      | {{ $t('FirstTimeSignInDialog.comparisonCard.general.button') }}
+                      | {{ $t('WelcomeDialog.comparisonCard.general.button') }}
         .text-center.p-16
           a.btn.btn--plain.btn--auto-size.text-12(
             :href="getCreatorURL"
             target="_blank"
             rel="noopener"
           )
-            | {{ $t('FirstTimeSignInDialog.becomeCreator') }}
+            | {{ $t('WelcomeDialog.becomeCreator') }}
 </template>
 
 <script>
@@ -109,7 +109,7 @@ import { updateProfile } from '~/util/api';
 import { getCreatorURL } from '~/util/links';
 
 export default {
-  name: 'FirstTimeSignInDialog',
+  name: 'WelcomeDialog',
   components: {
     BaseDialog,
     LikerComparisonCard,
@@ -121,7 +121,7 @@ export default {
         getUserId &&
         !getUserIsCivicLiker &&
         !getUserInfo.isNew &&
-        !getUserInfo.hasReadFirstTimeSignInDialog,
+        !getUserInfo.hasReadWelcomeDialog,
       isFeatureListCollapsible: false,
     };
   },
@@ -316,7 +316,7 @@ export default {
     onClickActionButton() {
       this.hide();
       this.$axios.$post(updateProfile(), {
-        hasReadFirstTimeSignInDialog: true,
+        hasReadWelcomeDialog: true,
       });
     },
   },
@@ -324,7 +324,7 @@ export default {
 </script>
 
 <style lang="scss">
-.first-time-signin-dialog {
+.welcome-dialog {
   display: flex;
   flex-direction: column;
 

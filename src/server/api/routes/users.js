@@ -35,10 +35,10 @@ router.get('/users/self', async (req, res, next) => {
         apiFetchUserProfile(req),
         userCollection.doc(user).get(),
       ]);
-      const { hasReadFirstTimeSignInDialog } = userDoc.data();
+      const { hasReadWelcomeDialog } = userDoc.data();
       res.json({
         user,
-        hasReadFirstTimeSignInDialog,
+        hasReadWelcomeDialog,
         ...data,
         intercomToken: getIntercomUserHash(user),
       });
@@ -59,9 +59,9 @@ router.post('/users/self/update', async (req, res, next) => {
   try {
     const { user } = req.session;
     if (user) {
-      const { hasReadFirstTimeSignInDialog } = req.body;
+      const { hasReadWelcomeDialog } = req.body;
       await userCollection.doc(user).update({
-        hasReadFirstTimeSignInDialog,
+        hasReadWelcomeDialog,
       });
       res.sendStatus(200);
       return;
