@@ -21,15 +21,14 @@
   &--block {
     @apply flex;
   }
-  &:not(#{&}--block):not(#{&}--auto-size) {
+  &:not(#{&}--block):not(#{&}--auto-size):not(#{&}--mini) {
     min-width: 12rem;
   }
 
   // Plain style
-  &--plain {
+  &--plain,
+  &--mini {
     @apply text-like-green;
-
-    @apply underline;
 
     &:hover {
       @apply opacity-75;
@@ -42,6 +41,15 @@
     &.btn--dark {
       @apply text-white;
     }
+  }
+
+  &--plain {
+    @apply underline;
+  }
+
+  &--mini {
+    @apply m-0;
+    @apply p-0;
   }
 
 
@@ -78,7 +86,7 @@
   }
 
   // Default style
-  &:not(#{&}--outlined):not(#{&}--plain) {
+  &:not(#{&}--outlined):not(#{&}--plain):not(#{&}--mini) {
     @apply text-white;
 
     @apply bg-like-green;

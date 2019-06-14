@@ -46,6 +46,10 @@
       "slogan": "Register free or as Civic Liker. Every Like will be an actual reward to {name}"
     }
   },
+  "CollapsibleView": {
+    "less": "Less",
+    "more": "More"
+  },
   "ContentList": {
     "empty": "There is no article"
   },

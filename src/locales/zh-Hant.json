@@ -46,6 +46,10 @@
       "slogan": "註冊為免費 Liker 或讚賞公民，每個按讚都是 {name} 的實際收入"
     }
   },
+  "CollapsibleView": {
+    "less": "收起",
+    "more": "更多"
+  },
   "ContentList": {
     "empty": "沒有文章"
   },
