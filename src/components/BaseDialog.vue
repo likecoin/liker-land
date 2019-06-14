@@ -58,6 +58,7 @@ export default {
   },
   mounted() {
     this.resizeObserver = new ResizeObserver(this.onResize);
+    if (this.isShow) this.onResize();
   },
   beforeDestroy() {
     this.resizeObserver.disconnect();
@@ -105,13 +106,22 @@ export default {
     },
     onResize() {
       const windowHeight = window.innerHeight;
-      const contentHeight = this.$refs.contentContainer.offsetHeight;
+      const {
+        offsetWidth: width,
+        offsetHeight: contentHeight,
+        style,
+      } = this.$refs.contentContainer;
 
       // Align the dialog to the vertical center of window
-      this.$refs.contentContainer.style.marginTop =
+      style.marginTop =
         !this.isFullscreen && contentHeight < windowHeight
           ? `${Math.min((windowHeight - contentHeight) / 2, 128)}px`
           : 0;
+
+      this.$emit('resize', {
+        width,
+        height: contentHeight,
+      });
     },
     onClickDialog(e) {
       if (e.target.contains(this.$refs.contentContainer)) {
