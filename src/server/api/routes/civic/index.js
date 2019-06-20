@@ -65,7 +65,7 @@ router.post('/civic/payment/paypal', async (req, res, next) => {
       return;
     }
     if (PAYPAL_PDT_HOOK) {
-      const { amt, cc, cm, sig, st, tx, from, referrer } = req.body;
+      const { amt, cc, cm, sig, st, tx, from, referrer, utmSource } = req.body;
       await axios.post(PAYPAL_PDT_HOOK, {
         amt,
         cc,
@@ -75,6 +75,7 @@ router.post('/civic/payment/paypal', async (req, res, next) => {
         tx,
         from,
         referrer,
+        utmSource,
       });
     }
     res.sendStatus(200);

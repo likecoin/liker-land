@@ -54,11 +54,12 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const { referrer, from } = req.query;
+    const { referrer, from, utm_source: utmSource } = req.query;
     // start a new checkout session
     const metadata = { userId: req.session.user };
-    if (from) metadata.from = from;
+    if (from) metadata.from = from.substring(0, 32);
     if (referrer) metadata.referrer = referrer.substring(0, 500);
+    if (utmSource) metadata.utmSource = utmSource.substring(0, 500);
     const userRef = userCollection.doc(req.session.user);
     const userDoc = await userRef.get();
     const { user: { email } = {} } = userDoc.data();
@@ -89,7 +90,7 @@ router.post('/civic/payment/stripe', async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const { from, referrer, token } = req.body;
+    const { from, referrer, token, utmSource } = req.body;
     const userRef = userCollection.doc(req.session.user);
     const userDoc = await userRef.get();
     const {
@@ -137,6 +138,7 @@ router.post('/civic/payment/stripe', async (req, res, next) => {
       };
       if (from) metadata.from = from;
       if (referrer) metadata.referrer = referrer.substring(0, 500);
+      if (utmSource) metadata.utmSource = utmSource;
       subscription = await stripe.subscriptions.create({
         customer: customer.id,
         items: [{ plan: STRIPE_PLAN_ID }],
