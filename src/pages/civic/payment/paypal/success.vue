@@ -69,6 +69,7 @@ export default {
   async mounted() {
     let from;
     let referrer;
+    let utmSource;
     logTrackerEvent(
       this,
       'Civic',
@@ -79,11 +80,13 @@ export default {
     if (window.sessionStorage) {
       from = window.sessionStorage.getItem('civicLikerFrom');
       referrer = window.sessionStorage.getItem('civicLikerReferrer');
+      utmSource = window.sessionStorage.getItem('civicLikerUtmSource');
     }
     try {
       await this.$axios.$post(getPayPalPaymentAPI(), {
         from,
         referrer,
+        utmSource,
         ...this.$route.query,
       });
       this.setUserCivicLiker();
