@@ -157,6 +157,12 @@ export default {
 
 <style lang="scss">
 .author-list-item {
+  justify-content: space-between;
+
+  &__content-view {
+    max-width: 80%;
+  }
+
   &__avatar {
     @apply mr-16;
 
