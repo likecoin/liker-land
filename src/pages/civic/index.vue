@@ -72,6 +72,7 @@
       section.civic-page__liker-comparison-card-list
         ul
           LikerComparisonCard(
+            v-if="!isShowReferrerBanner"
             tag="li"
             type="general"
           )
@@ -239,7 +240,10 @@ export default {
       return this.$t('CivicPage.registerForFree');
     },
     civicLikerStampText() {
-      if (this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial) {
+      if (
+        (this.getUserIsCivicLiker || this.getUserIsCivicLikerTrial) &&
+        this.getUserInfo.civicLikerSince
+      ) {
         return dateFormat(
           new Date(this.getUserInfo.civicLikerSince),
           'YYYY.MM.DD'
