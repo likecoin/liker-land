@@ -72,9 +72,9 @@ export default {
       }
     },
     async initPaymentSession() {
-      const { from, referrer } = this.$route.query;
+      const { from, referrer, utm_source: utmSource } = this.$route.query;
       const { sessionId } = await this.$axios.$get(
-        getStripePaymentAPI({ from, referrer })
+        getStripePaymentAPI({ from, referrer, utmSource })
       );
       if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {
         console.error('window stripe is missing!'); // eslint-disable-line no-console

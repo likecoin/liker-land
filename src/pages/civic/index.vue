@@ -298,11 +298,13 @@ export default {
     };
   },
   mounted() {
-    const { from, referrer } = this.$route.query;
+    const { from, referrer, utm_source: utmSource } = this.$route.query;
     if (window.sessionStorage) {
       if (from) window.sessionStorage.setItem('civicLikerFrom', from);
       if (referrer)
         window.sessionStorage.setItem('civicLikerReferrer', referrer);
+      if (utmSource)
+        window.sessionStorage.setItem('civicLikerUtmSource', utmSource);
     }
     logTrackerEvent(this, 'Civic', 'CivicPageLoad', 'CivicPageLoad(civic)', 1);
 
