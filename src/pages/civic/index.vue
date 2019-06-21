@@ -72,6 +72,7 @@
       section.civic-page__liker-comparison-card-list
         ul
           LikerComparisonCard(
+            v-if="!isShowReferrerBanner"
             tag="li"
             type="general"
           )
