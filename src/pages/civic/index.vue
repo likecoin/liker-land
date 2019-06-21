@@ -5,7 +5,9 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      .civic-page__intro-video
+      .civic-page__intro-video(
+        :style="introVideoStyle"
+      )
         div
           Transition(
             :css="false"
@@ -135,6 +137,8 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
+import experimentMixin from '~/mixins/experiment';
+
 import { checkIsMobileClient } from '~/util/client';
 import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -148,6 +152,9 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
+  mixins: [
+    experimentMixin('isPlacingIntroVideoBottom', 'video-position', 'bottom'),
+  ],
   // directives: {
   //   swiper: swiperDirective,
   // },
@@ -189,6 +196,12 @@ export default {
         default:
           return '334616132';
       }
+    },
+    introVideoStyle() {
+      if (this.isPlacingIntroVideoBottom) {
+        return { order: 999, marginBottom: '5rem' };
+      }
+      return undefined;
     },
     isCantonese() {
       if (!process.client) return false;

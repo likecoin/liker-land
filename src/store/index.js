@@ -9,7 +9,7 @@ import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
-import { AUTH_COOKIE_NAME } from '~/constant';
+import { AUTH_COOKIE_NAME, EXPERIMENT_COOKIE_NAME } from '~/constant';
 
 const createStore = () =>
   new Vuex.Store({
@@ -18,6 +18,14 @@ const createStore = () =>
         if (res.timing) {
           res.timing.start('store_init', 'nuxtServerInit Started');
         }
+
+        if (req.cookies && req.cookies[EXPERIMENT_COOKIE_NAME]) {
+          commit(
+            types.USER_SET_EXPERIMENT_COOKIE,
+            req.cookies[EXPERIMENT_COOKIE_NAME]
+          );
+        }
+
         try {
           if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
             const userInfo = await this.$axios.$get(api.getLoginStatus());
