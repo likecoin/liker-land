@@ -2,13 +2,15 @@ import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 
 function updateSentryUser($sentry, { user, displayName }) {
-  const opt = {
-    id: user,
-    username: displayName || user,
-  };
-  $sentry.configureScope(scope => {
-    scope.setUser(opt);
-  });
+  if (user) {
+    const opt = {
+      id: user,
+      username: displayName || user,
+    };
+    $sentry.configureScope(scope => {
+      scope.setUser(opt);
+    });
+  }
 }
 
 function updateIntercomUser(
