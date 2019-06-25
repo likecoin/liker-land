@@ -115,6 +115,7 @@ const nuxtConfig = {
         ],
         'frame-src': [
           'www.google.com',
+          'vimeo.com',
           'player.vimeo.com',
           '*.facebook.com',
           '*.facebook.net',
