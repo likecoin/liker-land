@@ -5,29 +5,29 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      .civic-page__intro-video(
-        :style="introVideoStyle"
-      )
-        div
-          Transition(
-            :css="false"
-            @enter="fadeInIntroVideo"
-          )
-            div(v-show="isIntroVideoVisible")
-              no-ssr
-                vue-vimeo-player(
-                  ref="introVideoPlayer"
-                  :video-id="introVideoVimeoId"
-                  :autoplay="true"
-                  :loop="true"
-                  :options="{ muted: true }"
-                  @play="isIntroVideoVisible = true"
-                )
-                button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
-                  @click="toggleIntroVideoVolume"
-                )
-                  VolumeOffIcon(v-if="isIntroVideoMuted")
-                  VolumeOnIcon(v-else)
+      no-ssr
+        .civic-page__intro-video(
+          :style="introVideoStyle"
+        )
+          div
+            Transition(
+              :css="false"
+              @enter="fadeInIntroVideo"
+            )
+              div(v-show="isIntroVideoVisible")
+                  vue-vimeo-player(
+                    ref="introVideoPlayer"
+                    :video-id="introVideoVimeoId"
+                    :autoplay="true"
+                    :loop="true"
+                    :options="{ muted: true }"
+                    @play="isIntroVideoVisible = true"
+                  )
+                  button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
+                    @click="toggleIntroVideoVolume"
+                  )
+                    VolumeOffIcon(v-if="isIntroVideoMuted")
+                    VolumeOnIcon(v-else)
 
       Transition(
         :css="false"
