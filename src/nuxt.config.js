@@ -153,7 +153,6 @@ const nuxtConfig = {
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
     { src: '~/plugins/axios.server.js', mode: 'server' },
-    { src: '~/plugins/experiment.js' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
@@ -229,9 +228,8 @@ const nuxtConfig = {
 
   sentry: {},
   googleOptimize: {
-    cookieName: '__exp',
-    useFetch: true,
-    maxAge: 604800, // 1 week
+    useFetch: false,
+    maxAge: 86400, // 1 day
   },
   router: {
     middleware: 'sliding-menu',
