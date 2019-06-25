@@ -8,6 +8,7 @@
 
 <script>
 import { getStripePaymentStatusAPI, getStripePaymentAPI } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   middleware: 'authenticated',
@@ -48,6 +49,13 @@ export default {
     };
   },
   mounted() {
+    logTrackerEvent(
+      this,
+      'Civic',
+      'CivicRegisterPageLoad',
+      'CivicRegisterPageLoad(civic)',
+      1
+    );
     this.isFetched = false;
     if (window.sessionStorage) {
       this.from = window.sessionStorage.getItem('civicLikerFrom');
