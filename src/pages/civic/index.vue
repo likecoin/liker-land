@@ -5,27 +5,29 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      .civic-page__intro-video
-        div
-          Transition(
-            :css="false"
-            @enter="fadeInIntroVideo"
-          )
-            div(v-show="isIntroVideoVisible")
-              no-ssr
-                vue-vimeo-player(
-                  ref="introVideoPlayer"
-                  :video-id="introVideoVimeoId"
-                  :autoplay="true"
-                  :loop="true"
-                  :options="{ muted: true }"
-                  @play="isIntroVideoVisible = true"
-                )
-                button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
-                  @click="toggleIntroVideoVolume"
-                )
-                  VolumeOffIcon(v-if="isIntroVideoMuted")
-                  VolumeOnIcon(v-else)
+      no-ssr
+        .civic-page__intro-video(
+          :style="introVideoStyle"
+        )
+          div
+            Transition(
+              :css="false"
+              @enter="fadeInIntroVideo"
+            )
+              div(v-show="isIntroVideoVisible")
+                  vue-vimeo-player(
+                    ref="introVideoPlayer"
+                    :video-id="introVideoVimeoId"
+                    :autoplay="true"
+                    :loop="true"
+                    :options="{ muted: true }"
+                    @play="isIntroVideoVisible = true"
+                  )
+                  button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
+                    @click="toggleIntroVideoVolume"
+                  )
+                    VolumeOffIcon(v-if="isIntroVideoMuted")
+                    VolumeOnIcon(v-else)
 
       Transition(
         :css="false"
@@ -135,6 +137,8 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
+import experimentMixin from '~/mixins/experiment';
+
 import { checkIsMobileClient } from '~/util/client';
 import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -148,6 +152,9 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
+  mixins: [
+    experimentMixin('isPlacingIntroVideoBottom', 'video-position', 'bottom'),
+  ],
   // directives: {
   //   swiper: swiperDirective,
   // },
@@ -189,6 +196,12 @@ export default {
         default:
           return '334616132';
       }
+    },
+    introVideoStyle() {
+      if (this.isPlacingIntroVideoBottom) {
+        return { order: 999, marginBottom: '5rem' };
+      }
+      return undefined;
     },
     isCantonese() {
       if (!process.client) return false;
