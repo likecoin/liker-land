@@ -1,16 +1,11 @@
-const isEligible = ({ route }) => !process.server && route.name === 'civic';
-
-export default [
-  {
-    name: 'video-position',
-    experimentID: 'eAkMsrgEREK_E8QJRpQjlw',
-    isEligible,
-    variants: [{ name: 'top', weight: 5 }, { name: 'bottom', weight: 5 }],
-  },
-  {
-    name: 'direct-signin',
-    experimentID: 'a2eVFHwAT86WempNV46KwA',
-    isEligible,
-    variants: [{ name: 'indirect', weight: 5 }, { name: 'direct', weight: 5 }],
-  },
-];
+export default {
+  name: 'civic-page',
+  sections: 2,
+  experimentID: 'ZLsMbsP4SPKNoq6yEszq-A',
+  isEligible: ({ route }) => !process.server && route.name === 'civic',
+  variants: [
+    { name: 'original', weight: 1 },
+    { name: 'bottom-video', weight: 1 },
+    { name: 'direct-signin', weight: 1 },
+  ],
+};

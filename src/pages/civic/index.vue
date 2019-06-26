@@ -153,8 +153,8 @@ export default {
     VolumeOffIcon,
   },
   mixins: [
-    experimentMixin('isPlacingIntroVideoBottom', 'video-position', 'bottom'),
-    experimentMixin('isDirectSignIn', 'direct-signin', 'direct'),
+    experimentMixin('isPlacingIntroVideoBottom', 'civic-page', 'bottom-video'),
+    experimentMixin('isDirectSignIn', 'civic-page', 'direct-signin'),
   ],
   // directives: {
   //   swiper: swiperDirective,

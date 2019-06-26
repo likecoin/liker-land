@@ -1,3 +1,3 @@
 import civic from './civic';
 
-export default [...civic];
+export default [civic];
