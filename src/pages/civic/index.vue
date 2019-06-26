@@ -154,6 +154,7 @@ export default {
   },
   mixins: [
     experimentMixin('isPlacingIntroVideoBottom', 'video-position', 'bottom'),
+    experimentMixin('isDirectSignIn', 'direct-signin', 'direct'),
   ],
   // directives: {
   //   swiper: swiperDirective,
@@ -336,10 +337,14 @@ export default {
         }(civic)`,
         1
       );
-      this.$router.push({
-        name: 'civic-register',
-        query: this.$route.query,
-      });
+      if (this.isDirectSignIn && !this.getUserId) {
+        window.location.href = this.getOAuthRegisterAPI;
+      } else {
+        this.$router.push({
+          name: 'civic-register',
+          query: this.$route.query,
+        });
+      }
     },
     onClickActionButtonForGuest() {
       logTrackerEvent(
