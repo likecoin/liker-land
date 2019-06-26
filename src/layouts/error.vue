@@ -147,10 +147,10 @@ export default {
     onClickBackButton() {
       // If the user enters a page requires authenication,
       // back button should trigger going back instead of refreshing the page
-      if (this.$route.name === 'LOGIN_NEEDED') {
-        this.$router.back();
-      } else if (this.isCivicLikerRelatedError) {
+      if (this.isCivicLikerRelatedError) {
         this.$router.push({ name: 'civic' });
+      } else if (this.isLoginError) {
+        this.$router.back();
       } else {
         window.location.reload();
       }
