@@ -1,36 +1,44 @@
 <template lang="pug">
-  main(:class="rootClass")
-    LcLoadingIndicator.block.mx-auto.py-48.text-like-green.fill-current(
-      v-if="!isFetchedSubscriptionInfo"
+  Transition(name="fade")
+    main(
+      :key="state"
+      :class="rootClass"
     )
-    LikerComparisonCard.mx-auto(
-      v-else
-      :type="cardType"
-      :is-show-features="!subscriptionInfo"
-    )
-      template(
-        v-if="subscriptionInfo"
-        #feature-prepend
+      LcLoadingIndicator.block.py-48.text-like-green.fill-current(
+        v-if="state === 'loading'"
       )
-        .settings-civic-page__billing-summary
-          .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
-            component.settings-civic-page__billing-summary-row-card-icon(
-              :is="`${subscriptionInfo.card.brand}-icon`"
-            )
-            .settings-civic-page__billing-summary-row-value
-              | {{ subscriptionInfo.card.number }}
-          .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
-            label.settings-civic-page__billing-summary-row-label
-              | {{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}
-            .settings-civic-page__billing-summary-row-value
-              | {{ subscriptionInfo.nextBillingDateString }}
+      template(
+        v-else-if="state === 'stripe'"
+      )
+        LikerComparisonCard(
+          type="civic"
+          :is-show-features="false"
+        )
+          template(#feature-prepend)
+            .settings-civic-page__billing-summary
+              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
+                component.settings-civic-page__billing-summary-row-card-icon(
+                  :is="`${subscriptionInfo.card.brand}-icon`"
+                )
+                .settings-civic-page__billing-summary-row-value
+                  | {{ subscriptionInfo.card.number }}
+              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
+                label.settings-civic-page__billing-summary-row-label
+                  | {{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}
+                .settings-civic-page__billing-summary-row-value
+                  | {{ subscriptionInfo.nextBillingDateString }}
 
-      template(
+      LikerComparisonCard(
         v-else
-        #header
+        :type="state"
       )
-        .mt-12.mx-12
-          NuxtLink(:class="buttonClass", :to="buttonTo") {{ buttonText }}
+        template(#header)
+          .mt-12.mx-12
+            NuxtLink(
+              class="buttonClass"
+              :to="buttonTo"
+            )
+              | {{ buttonText }}
 </template>
 
 <script>
@@ -86,8 +94,11 @@ export default {
         'settings-civic-page--subscribed': !!this.getUserIsCivicLiker,
       };
     },
-    cardType() {
-      return this.getUserIsCivicLiker ? 'civic' : 'general';
+    state() {
+      if (!this.isFetchedSubscriptionInfo) return 'loading';
+      if (this.subscriptionInfo) return 'stripe';
+      if (this.getUserIsCivicLiker) return 'civic';
+      return 'general';
     },
     buttonClass() {
       return {
@@ -158,6 +169,10 @@ export default {
 
 <style lang="scss">
 .settings-civic-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   @apply p-16;
   @apply pt-0;
 
