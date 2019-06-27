@@ -1,11 +1,11 @@
 <template>
   <header class="settings-page-header">
-    <NuxtLink
+    <button
       :class="backButtonClass"
-      :to="{ name: 'settings' }"
+      @click="onClickBackButton"
     >
       <SettingsIcon />
-    </NuxtLink>
+    </button>
     <transition name="fade">
       <span v-if="!isShowBack">{{ $t('SettingsPage.title') }}</span>
     </transition>
@@ -32,6 +32,15 @@ export default {
         'settings-page-header__back-button': true,
         'settings-page-header__back-button--disabled': !this.isShowBack,
       };
+    },
+  },
+  methods: {
+    onClickBackButton() {
+      const backRouteName = this.$route.name
+        .split('-')
+        .slice(0, -1)
+        .join('-');
+      if (backRouteName) this.$router.push({ name: backRouteName });
     },
   },
 };
