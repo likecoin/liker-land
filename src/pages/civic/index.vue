@@ -153,7 +153,12 @@ export default {
     VolumeOffIcon,
   },
   mixins: [
-    experimentMixin('isPlacingIntroVideoBottom', 'video-position', 'bottom'),
+    experimentMixin(
+      'isPlacingIntroVideoBottom',
+      'video-position',
+      'bottom',
+      that => that.isShowReferrerBanner
+    ),
   ],
   // directives: {
   //   swiper: swiperDirective,
