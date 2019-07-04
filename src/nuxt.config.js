@@ -112,6 +112,7 @@ const nuxtConfig = {
           '*.intercom.io',
           'use.typekit.net',
           'https://js.stripe.com',
+          'https://admin.typeform.com',
         ],
         'frame-src': [
           'www.google.com',
@@ -121,6 +122,7 @@ const nuxtConfig = {
           '*.facebook.net',
           'https://js.stripe.com',
           'https://hooks.stripe.com',
+          'https://admin.typeform.com',
         ],
         'connect-src': [
           "'self'",
@@ -270,6 +272,7 @@ const nuxtConfig = {
         autoprefixer: {}
       }
     },
+    transpile: ['gsap'],
 
     /*
     ** You can extend webpack config here
