@@ -40,8 +40,11 @@
             circle(r="4" cy="65.5" cx='159')
 
       Transition(name="fade" mode="out-in")
+        LcLoadingIndicator.block.mx-auto.text-12(
+          v-if="state === 'loading'"
+        )
         .text-16.my-16(
-          v-if="state !== 'loading'"
+          v-else-if="state !== 'waiting'"
           :key="heartArtDescriptionKey"
         )
           | {{ $t(`SettingsCivicCancelPage.${heartArtDescriptionKey}`) }}
@@ -51,7 +54,7 @@
       mode="out-in"
     )
       div(
-        v-if="state !== 'loading'"
+        v-if="state !== 'waiting' && state !== 'loading'"
         :key="state"
       )
         button.btn.btn--outlined(
@@ -72,10 +75,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import { Circ } from 'gsap/EasePack';
 import { makePopup as createTypeFormPopup } from '@typeform/embed';
-
-import { getStripePaymentStatusAPI } from '~/util/api';
 
 export default {
   data() {
@@ -126,6 +129,8 @@ export default {
     this.showCracks(tl, 0, 3);
   },
   methods: {
+    ...mapActions(['cancelUserSubscription']),
+
     showCracks(gsapTimeline, ...range) {
       const crackLines = this.$refs.crackLines.slice(...range);
       this.heartCrackLines.slice(...range).forEach(({ x2, y2 }, i) => {
@@ -251,13 +256,13 @@ export default {
       });
       switch (this.state) {
         case 'deciding':
-          this.state = 'loading';
+          this.state = 'waiting';
           this.makeHeartHappy(tl);
           break;
 
         default:
         case 'unsubscribing':
-          this.state = 'loading';
+          this.state = 'waiting';
           this.restoreHeart(tl);
           this.makeHeartHappy(tl);
           break;
@@ -267,7 +272,7 @@ export default {
       this.form.close();
       this.state = 'loading';
       try {
-        await this.$axios.delete(getStripePaymentStatusAPI());
+        await this.cancelUserSubscription();
         this.state = 'unsubscribed';
       } catch (err) {
         this.$nuxt.error(err);

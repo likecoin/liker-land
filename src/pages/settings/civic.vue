@@ -18,18 +18,23 @@
             .settings-civic-page__billing-summary
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
                 component.settings-civic-page__billing-summary-row-card-icon(
-                  :is="`${subscriptionInfo.card.brand}-icon`"
+                  :is="`${getUserSubscriptionInfo.card.brand}-icon`"
                 )
                 .settings-civic-page__billing-summary-row-value
-                  | {{ subscriptionInfo.card.number }}
+                  | {{ maskedCardNumber }}
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
                 label.settings-civic-page__billing-summary-row-label
-                  | {{ $t(`SettingsCivicPage.billingSummary.${subscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
+                  | {{ $t(`SettingsCivicPage.billingSummary.${getUserSubscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
                 .settings-civic-page__billing-summary-row-value
-                  | {{ subscriptionInfo.nextBillingDateString }}
+                  | {{ nextBillingDateString }}
 
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
-          v-if="!subscriptionInfo.willCancel"
+          v-if="getUserSubscriptionInfo.willCancel"
+          :to="{ name: 'civic-register' }"
+        )
+          | {{ $t('SettingsCivicPage.resumeSubscription') }}
+        NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+          v-else
           :to="{ name: 'settings-civic-cancel' }"
         )
           | {{ $t('SettingsCivicPage.cancelSubscription') }}
@@ -50,12 +55,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
 import LikerComparisonCard from '~/components/LikerComparisonCard';
-
-import { getStripePaymentStatusAPI } from '~/util/api';
 
 import AmexIcon from '~/assets/icons/billing-cards/amex.svg';
 import VisaIcon from '~/assets/icons/billing-cards/visa.svg';
@@ -86,11 +89,11 @@ export default {
   data() {
     return {
       isFetchedSubscriptionInfo: false,
-      subscriptionInfo: undefined,
     };
   },
   computed: {
     ...mapGetters([
+      'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLikerPaid',
@@ -105,12 +108,12 @@ export default {
     state() {
       if (!this.isFetchedSubscriptionInfo) return 'loading';
       if (
-        this.subscriptionInfo &&
+        this.getUserSubscriptionInfo &&
         this.$route.name === 'settings-civic-cancel'
       ) {
         return 'cancel';
       }
-      if (this.subscriptionInfo) return 'stripe';
+      if (this.getUserSubscriptionInfo) return 'stripe';
       if (this.getUserIsCivicLiker) return 'civic';
       return 'general';
     },
@@ -136,6 +139,24 @@ export default {
       }
       return { name: 'civic' };
     },
+    nextBillingDateString() {
+      if (this.getUserSubscriptionInfo) {
+        return dateFormat(
+          new Date(this.getUserSubscriptionInfo.currentPeriodEnd * 1000),
+          'YYYY/MM/DD'
+        );
+      }
+      return '';
+    },
+    maskedCardNumber() {
+      if (this.getUserSubscriptionInfo) {
+        const {
+          card: { brand, last4 },
+        } = this.getUserSubscriptionInfo;
+        return getMaskedCardNumber(brand, last4);
+      }
+      return '';
+    },
   },
   head() {
     return {
@@ -146,29 +167,15 @@ export default {
     this.fetchSubscriptionInfo();
   },
   methods: {
+    ...mapActions(['fetchUserSubscriptionInfo']),
+
     async fetchSubscriptionInfo() {
       if (this.getUserIsCivicLikerPaid) {
         try {
-          const {
-            // status,
-            willCancel,
-            currentPeriodEnd: nextBillingDate,
-            // currentPeriodStart,
-            // start,
-            card: { brand, last4 },
-          } = await this.$axios.$get(getStripePaymentStatusAPI());
-          // eslint-disable-next-line no-console
-          this.subscriptionInfo = {
-            willCancel,
-            nextBillingDateString: dateFormat(
-              new Date(nextBillingDate * 1000),
-              'YYYY/MM/DD'
-            ),
-            card: {
-              brand,
-              number: getMaskedCardNumber(brand, last4),
-            },
-          };
+          const { willCancel } = await this.fetchUserSubscriptionInfo();
+          if (willCancel && this.$route.name === 'settings-civic-cancel') {
+            this.$router.replace({ name: 'settings-civic' });
+          }
         } catch (err) {
           if (err.response && err.response.status === 404) {
             if (this.$route.name === 'settings-civic-cancel') {
