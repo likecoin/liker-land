@@ -146,8 +146,19 @@
     "knowMoreAbout": "了解更多",
     "subscribed": "已訂閱",
     "billingSummary": {
+      "cancelDate": "訂閱結束日期",
       "nextBillingDate": "下個付款日期"
-    }
+    },
+    "resumeSubscription": "續訂《讚賞公民》資格",
+    "cancelSubscription": "取消《讚賞公民》資格"
+  },
+  "SettingsCivicCancelPage": {
+    "regretToKnow": "很遺憾得知你退訂《讚賞公民》的決定",
+    "needYourSupport": "好的內容需要你的支持",
+    "thankYourSupport": "感謝你繼續支持",
+    "unsubscribeSucessfully": "已成功退訂",
+    "continue": "繼續支持",
+    "unsubscribe": "退訂《讚賞公民》"
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > 追踪/取消追踪",

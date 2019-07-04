@@ -24,9 +24,17 @@
                   | {{ subscriptionInfo.card.number }}
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
                 label.settings-civic-page__billing-summary-row-label
-                  | {{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}
+                  | {{ $t(`SettingsCivicPage.billingSummary.${subscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
                 .settings-civic-page__billing-summary-row-value
                   | {{ subscriptionInfo.nextBillingDateString }}
+
+        NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+          v-if="!subscriptionInfo.willCancel"
+          :to="{ name: 'settings-civic-cancel' }"
+        )
+          | {{ $t('SettingsCivicPage.cancelSubscription') }}
+
+      NuxtChild(v-else-if="state === 'cancel'")
 
       LikerComparisonCard(
         v-else
@@ -96,6 +104,12 @@ export default {
     },
     state() {
       if (!this.isFetchedSubscriptionInfo) return 'loading';
+      if (
+        this.subscriptionInfo &&
+        this.$route.name === 'settings-civic-cancel'
+      ) {
+        return 'cancel';
+      }
       if (this.subscriptionInfo) return 'stripe';
       if (this.getUserIsCivicLiker) return 'civic';
       return 'general';
@@ -137,7 +151,7 @@ export default {
         try {
           const {
             // status,
-            // willCancel,
+            willCancel,
             currentPeriodEnd: nextBillingDate,
             // currentPeriodStart,
             // start,
@@ -145,6 +159,7 @@ export default {
           } = await this.$axios.$get(getStripePaymentStatusAPI());
           // eslint-disable-next-line no-console
           this.subscriptionInfo = {
+            willCancel,
             nextBillingDateString: dateFormat(
               new Date(nextBillingDate * 1000),
               'YYYY/MM/DD'
@@ -155,7 +170,11 @@ export default {
             },
           };
         } catch (err) {
-          if (!(err.response && err.response.status === 404)) {
+          if (err.response && err.response.status === 404) {
+            if (this.$route.name === 'settings-civic-cancel') {
+              this.$router.replace({ name: 'settings-civic' });
+            }
+          } else {
             console.error(err); // eslint-disable-line no-console
             this.$nuxt.error(err);
           }
