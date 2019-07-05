@@ -1,7 +1,7 @@
 <template lang="pug">
-  .settings-civic-cancel-page
+  .settings-civic-unsubscribe-page
     .text-12(ref="regretText") {{ $t('SettingsCivicCancelPage.regretToKnow') }}
-    .settings-civic-cancel-page--heart-art.mt-16(
+    .settings-civic-unsubscribe-page--heart-art.mt-16(
       ref="heartArt"
       style="visibility:hidden;color:#E35050"
     )
@@ -308,7 +308,7 @@ export default {
 </script>
 
 <style lang="scss">
-.settings-civic-cancel-page {
+.settings-civic-unsubscribe-page {
   width: 100%;
 
   text-align: center;

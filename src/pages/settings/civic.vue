@@ -35,7 +35,7 @@
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
           v-else
-          :to="{ name: 'settings-civic-cancel' }"
+          :to="{ name: 'settings-civic-unsubscribe' }"
         )
           | {{ $t('SettingsCivicPage.cancelSubscription') }}
 
@@ -109,7 +109,7 @@ export default {
       if (!this.isFetchedSubscriptionInfo) return 'loading';
       if (
         this.getUserSubscriptionInfo &&
-        this.$route.name === 'settings-civic-cancel'
+        this.$route.name === 'settings-civic-unsubscribe'
       ) {
         return 'cancel';
       }
@@ -173,12 +173,12 @@ export default {
       if (this.getUserIsCivicLikerPaid) {
         try {
           const { willCancel } = await this.fetchUserSubscriptionInfo();
-          if (willCancel && this.$route.name === 'settings-civic-cancel') {
+          if (willCancel && this.$route.name === 'settings-civic-unsubscribe') {
             this.$router.replace({ name: 'settings-civic' });
           }
         } catch (err) {
           if (err.response && err.response.status === 404) {
-            if (this.$route.name === 'settings-civic-cancel') {
+            if (this.$route.name === 'settings-civic-unsubscribe') {
               this.$router.replace({ name: 'settings-civic' });
             }
           } else {
