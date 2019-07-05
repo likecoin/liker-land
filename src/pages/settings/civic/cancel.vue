@@ -38,6 +38,13 @@
           g(fill="currentColor" stroke="none")
             circle(r="4" cy="65.5" cx='97')
             circle(r="4" cy="65.5" cx='159')
+        g(ref="particles" style="opacity:0;stroke:none;fill:#28646e")
+          circle(r="4" cx="252" cy="12")
+          circle(r="4" cx="222" cy="150")
+          circle(r="2" cx="196" cy="130")
+          circle(r="2" cx="51" cy="128")
+          circle(r="2" cx="28" cy="6")
+          circle(r="4" cx="4" cy="96")
 
       Transition(name="fade" mode="out-in")
         LcLoadingIndicator.block.mx-auto.text-12(
@@ -77,7 +84,7 @@
 <script>
 import { mapActions } from 'vuex';
 
-import { Circ } from 'gsap/EasePack';
+import { Circ, Expo } from 'gsap/EasePack';
 import { makePopup as createTypeFormPopup } from '@typeform/embed';
 
 export default {
@@ -200,7 +207,13 @@ export default {
       tl.to([...crackLines, rightHeartCrackLine], 0.5, { opacity: 0 });
     },
     makeHeartHappy(tl) {
-      const { regretText, heartArt, heartFace, crackLines } = this.$refs;
+      const {
+        regretText,
+        heartArt,
+        heartFace,
+        crackLines,
+        particles,
+      } = this.$refs;
       tl.addLabel('startHappy');
       // Turn green
       tl.to(heartArt, 0.5, { color: '#50E3C2' });
@@ -212,6 +225,13 @@ export default {
         0.5,
         { scale: 0, transformOrigin: 'center' },
         { scale: 1, opacity: 1 },
+        'startHappy'
+      );
+      tl.fromTo(
+        particles,
+        1.25,
+        { scale: 0, transformOrigin: 'center' },
+        { scale: 1, opacity: 1, ease: Expo.easeOut },
         'startHappy'
       );
     },
