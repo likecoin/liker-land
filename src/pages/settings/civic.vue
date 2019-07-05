@@ -26,7 +26,7 @@
                 label.settings-civic-page__billing-summary-row-label
                   | {{ $t(`SettingsCivicPage.billingSummary.${getUserSubscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
                 .settings-civic-page__billing-summary-row-value
-                  | {{ nextBillingDateString }}
+                  | {{ getUserSubscriptionInfo.currentPeriodEndString }}
 
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
           v-if="getUserSubscriptionInfo.willCancel"
@@ -56,7 +56,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import dateFormat from 'date-fns/format';
 
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 
@@ -138,15 +137,6 @@ export default {
         return { name: 'civic-register' };
       }
       return { name: 'civic' };
-    },
-    nextBillingDateString() {
-      if (this.getUserSubscriptionInfo) {
-        return dateFormat(
-          new Date(this.getUserSubscriptionInfo.currentPeriodEnd * 1000),
-          'YYYY/MM/DD'
-        );
-      }
-      return '';
     },
     maskedCardNumber() {
       if (this.getUserSubscriptionInfo) {

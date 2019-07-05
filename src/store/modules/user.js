@@ -1,5 +1,7 @@
 /* eslint no-shadow: "off" */
 /* eslint no-param-reassign: "off" */
+import dateFormat from 'date-fns/format';
+
 import {
   USER_SET_USER_INFO,
   USER_UPDATE_USER_INFO,
@@ -21,6 +23,12 @@ const mutations = {
     state.user = { ...state.user, ...userUpdate };
   },
   [USER_SET_SUBSCRIPTION_INFO](state, subscriptionInfo) {
+    if (subscriptionInfo && subscriptionInfo.currentPeriodEnd) {
+      subscriptionInfo.currentPeriodEndString = dateFormat(
+        new Date(subscriptionInfo.currentPeriodEnd * 1000),
+        'YYYY/MM/DD'
+      );
+    }
     state.subscriptionInfo = subscriptionInfo;
   },
 };

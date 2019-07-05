@@ -54,7 +54,7 @@
           v-else-if="state !== 'waiting'"
           :key="heartArtDescriptionKey"
         )
-          | {{ $t(`SettingsCivicCancelPage.${heartArtDescriptionKey}`) }}
+          | {{ $t(`SettingsCivicCancelPage.${heartArtDescriptionKey}`, { date: getUserSubscriptionInfo.currentPeriodEndString }) }}
 
     Transition(
       :name="state !== 'unsubscribing' ? 'fade' : undefined"
@@ -66,9 +66,9 @@
       )
         button.btn.btn--outlined(
           v-if="state === 'unsubscribed' || state === 'continue'"
-          @click="onClickBackButton"
+          @click="onClickFinishButton"
         )
-          | {{ $t('back') }}
+          | {{ $t('finish') }}
         template(v-else)
           button.btn.btn--outlined(
             @click="onClickContinue"
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { Circ, Expo } from 'gsap/EasePack';
 import { makePopup as createTypeFormPopup } from '@typeform/embed';
@@ -94,6 +94,8 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getUserSubscriptionInfo']),
+
     heartCrackPaths() {
       return [
         'M128.1,28.4l-12.6,28.6',
@@ -298,9 +300,9 @@ export default {
         this.$nuxt.error(err);
       }
     },
-    onClickBackButton() {
+    onClickFinishButton() {
       this.$router[this.state === 'unsubscribed' ? 'replace' : 'push']({
-        name: 'settings-civic',
+        name: 'index-following',
       });
     },
   },
