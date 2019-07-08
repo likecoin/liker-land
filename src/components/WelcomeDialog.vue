@@ -96,11 +96,22 @@
             :href="getCreatorURL"
             target="_blank"
             rel="noopener"
+            @click="onClickActionButton"
           )
             | {{ $t('WelcomeDialog.becomeCreator') }}
 </template>
 
 <script>
+import {
+  Linear,
+  Power1,
+  Power2,
+  Power3,
+  Power4,
+  Back,
+  Sine,
+} from 'gsap/EasePack';
+
 import BaseDialog from '~/components/BaseDialog';
 
 import LikerComparisonCard from '~/components/LikerComparisonCard';
@@ -176,7 +187,7 @@ export default {
             cy: 48,
             r: Math.max(window.innerWidth, window.innerHeight) / zoomValue,
           },
-          ease: 'easeInOutPower3',
+          ease: Power3.easeInOut,
         },
         0
       );
@@ -186,7 +197,7 @@ export default {
       tl.from(
         globe.querySelectorAll('g'),
         2.5,
-        { opacity: 0, ease: 'easeInOutPower3' },
+        { opacity: 0, ease: Power3.easeInOut },
         'planetEnter'
       );
       // Fade in header slogan
@@ -194,7 +205,7 @@ export default {
         scale: 3,
         y: 200,
         opacity: 0,
-        ease: 'easeOutPower2',
+        ease: Power2.easeOut,
         delay: -0.5,
         clearProps: 'all',
         onComplete,
@@ -204,7 +215,7 @@ export default {
         planet,
         3,
         { scale: zoomValue },
-        { scale: 1, ease: 'easeInOutPower3' },
+        { scale: 1, ease: Power3.easeInOut },
         'planetEnter'
       );
 
@@ -212,7 +223,7 @@ export default {
       // Shorten header height
       tl.from(header, 2, {
         height: window.innerHeight,
-        ease: 'easeInOutPower4',
+        ease: Power4.easeInOut,
         clearProps: 'height',
       });
       tl.from(
@@ -224,7 +235,7 @@ export default {
       tl.staggerFrom(
         body.children,
         1,
-        { opacity: 0, y: 20, clearProps: 'all', ease: 'easeOutBack' },
+        { opacity: 0, y: 20, clearProps: 'all', ease: Back.easeOut },
         0.25,
         'showBody'
       );
@@ -240,7 +251,7 @@ export default {
         const r = moon.r * 0.75;
         moonTl.from(moonEl, duration, {
           attr: { cx: moon.x, cy: moon.y, r },
-          ease: 'easeInSine',
+          ease: Sine.easeIn,
         });
         moonTl.to(moonEl, duration, {
           attr: {
@@ -248,15 +259,15 @@ export default {
             cy: 48 + (48 - moon.y),
             r,
           },
-          ease: 'easeOutSine',
+          ease: Sine.easeOut,
         });
         moonTl.to(moonEl, duration, {
           attr: { cx: 160, cy: 48, r: r * 0.75 },
-          ease: 'easeInSine',
+          ease: Sine.easeIn,
         });
         moonTl.to(moonEl, duration, {
           attr: { cx: moon.x, cy: moon.y, r },
-          ease: 'easeOutSine',
+          ease: Sine.easeOut,
         });
         tl.add(moonTl, 0);
       });
@@ -268,7 +279,7 @@ export default {
         {
           transformOrigin: 'center',
           rotation: 360,
-          ease: 'linear',
+          ease: Linear.easeNone,
           repeat: -1,
         },
         2
@@ -280,7 +291,7 @@ export default {
           {
             transformOrigin: 'center',
             rotation: (i % 2 ? 1 : -1) * 360,
-            ease: 'linear',
+            ease: Linear.easeNone,
             repeat: -1,
           },
           0
@@ -292,7 +303,7 @@ export default {
       tl.to(el, 0.25, {
         scale: 0.9,
         opacity: 0,
-        ease: 'easeInPower1',
+        ease: Power1.easeIn,
       });
       const pageWrapper = document.querySelector('.page-wrapper');
       if (pageWrapper) {
@@ -301,7 +312,7 @@ export default {
           0.5,
           {
             opacity: 0.5,
-            ease: 'easeOutPower1',
+            ease: Power1.easeOut,
           },
           0
         );
