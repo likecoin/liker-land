@@ -144,19 +144,19 @@
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
     "knowMoreAbout": "了解更多",
-    "subscribed": "有效中",
+    "subscribed": "生效中",
     "billingSummary": {
       "cancelDate": "訂閱結束日期",
       "nextBillingDate": "下個付款日期"
     },
-    "resumeSubscription": "續訂《讚賞公民》資格",
-    "cancelSubscription": "取消《讚賞公民》資格"
+    "resumeSubscription": "延續《讚賞公民》訂閱",
+    "cancelSubscription": "取消《讚賞公民》訂閱"
   },
   "SettingsCivicCancelPage": {
     "regretToKnow": "很遺憾得知你退訂《讚賞公民》的決定",
     "needYourSupport": "好內容需要你支持",
     "thankYourSupport": "感謝你繼續支持",
-    "unsubscribeSucessfully": "已成功退訂。你的《讚賞公民》資格將於 {date} 停止",
+    "unsubscribeSucessfully": "已成功退訂。你的《讚賞公民》訂閱將於 {date} 失效",
     "continue": "繼續支持",
     "unsubscribe": "退訂《讚賞公民》"
   },
@@ -174,7 +174,7 @@
     "likerId": "Liker ID",
     "civicLiker": {
       "title": "@:civicLiker",
-      "subscribing": "有效中"
+      "subscribing": "生效中"
     },
     "creator": {
       "title": "創作者",
