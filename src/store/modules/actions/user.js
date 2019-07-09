@@ -74,3 +74,14 @@ export async function userLogout({ commit }) {
 export function setUserCivicLiker({ commit }) {
   commit(types.USER_UPDATE_USER_INFO, { isSubscribedCivicLiker: true });
 }
+
+export async function fetchUserSubscriptionInfo({ commit }) {
+  const info = await this.$axios.$get(api.getStripePaymentStatusAPI());
+  commit(types.USER_SET_SUBSCRIPTION_INFO, info);
+  return info;
+}
+
+export async function cancelUserSubscription({ dispatch }) {
+  await this.$axios.$delete(api.getStripePaymentStatusAPI());
+  return dispatch('fetchUserSubscriptionInfo');
+}

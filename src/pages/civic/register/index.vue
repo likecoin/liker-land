@@ -66,8 +66,14 @@ export default {
   methods: {
     async checkStripeSubscription() {
       try {
-        await this.$axios.$get(getStripePaymentStatusAPI());
-        this.$router.replace({ name: 'settings-civic' });
+        const { willCancel } = await this.$axios.$get(
+          getStripePaymentStatusAPI()
+        );
+        if (willCancel) {
+          await this.initPaymentSession();
+        } else {
+          this.$router.replace({ name: 'settings-civic' });
+        }
       } catch (err) {
         if (err.response && err.response.status === 404) {
           await this.initPaymentSession();

@@ -1,45 +1,63 @@
 <template lang="pug">
-  main(:class="rootClass")
-    LcLoadingIndicator.block.mx-auto.py-48.text-like-green.fill-current(
-      v-if="!isFetchedSubscriptionInfo"
+  Transition(name="fade")
+    main(
+      :key="state"
+      :class="rootClass"
     )
-    LikerComparisonCard.mx-auto(
-      v-else
-      :type="cardType"
-      :is-show-features="!subscriptionInfo"
-    )
-      template(
-        v-if="subscriptionInfo"
-        #feature-prepend
+      LcLoadingIndicator.block.py-48.text-like-green.fill-current(
+        v-if="state === 'loading'"
       )
-        .settings-civic-page__billing-summary
-          .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
-            component.settings-civic-page__billing-summary-row-card-icon(
-              :is="`${subscriptionInfo.card.brand}-icon`"
-            )
-            .settings-civic-page__billing-summary-row-value
-              | {{ subscriptionInfo.card.number }}
-          .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
-            label.settings-civic-page__billing-summary-row-label
-              | {{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}
-            .settings-civic-page__billing-summary-row-value
-              | {{ subscriptionInfo.nextBillingDateString }}
+      template(
+        v-else-if="state === 'stripe'"
+      )
+        LikerComparisonCard(
+          type="civic"
+          :is-show-features="false"
+        )
+          template(#feature-prepend)
+            .settings-civic-page__billing-summary
+              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
+                component.settings-civic-page__billing-summary-row-card-icon(
+                  :is="`${getUserSubscriptionInfo.card.brand}-icon`"
+                )
+                .settings-civic-page__billing-summary-row-value
+                  | {{ maskedCardNumber }}
+              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
+                label.settings-civic-page__billing-summary-row-label
+                  | {{ $t(`SettingsCivicPage.billingSummary.${getUserSubscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
+                .settings-civic-page__billing-summary-row-value
+                  | {{ getUserSubscriptionInfo.currentPeriodEndString }}
 
-      template(
+        NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+          v-if="getUserSubscriptionInfo.willCancel"
+          :to="{ name: 'civic-register' }"
+        )
+          | {{ $t('SettingsCivicPage.resumeSubscription') }}
+        NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+          v-else
+          :to="{ name: 'settings-civic-unsubscribe' }"
+        )
+          | {{ $t('SettingsCivicPage.cancelSubscription') }}
+
+      NuxtChild(v-else-if="state === 'cancel'")
+
+      LikerComparisonCard(
         v-else
-        #header
+        :type="state"
       )
-        .mt-12.mx-12
-          NuxtLink(:class="buttonClass", :to="buttonTo") {{ buttonText }}
+        template(#header)
+          .mt-12.mx-12
+            NuxtLink(
+              class="buttonClass"
+              :to="buttonTo"
+            )
+              | {{ buttonText }}
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import dateFormat from 'date-fns/format';
+import { mapActions, mapGetters } from 'vuex';
 
 import LikerComparisonCard from '~/components/LikerComparisonCard';
-
-import { getStripePaymentStatusAPI } from '~/util/api';
 
 import AmexIcon from '~/assets/icons/billing-cards/amex.svg';
 import VisaIcon from '~/assets/icons/billing-cards/visa.svg';
@@ -70,11 +88,11 @@ export default {
   data() {
     return {
       isFetchedSubscriptionInfo: false,
-      subscriptionInfo: undefined,
     };
   },
   computed: {
     ...mapGetters([
+      'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLikerPaid',
@@ -86,8 +104,17 @@ export default {
         'settings-civic-page--subscribed': !!this.getUserIsCivicLiker,
       };
     },
-    cardType() {
-      return this.getUserIsCivicLiker ? 'civic' : 'general';
+    state() {
+      if (!this.isFetchedSubscriptionInfo) return 'loading';
+      if (
+        this.getUserSubscriptionInfo &&
+        this.$route.name === 'settings-civic-unsubscribe'
+      ) {
+        return 'cancel';
+      }
+      if (this.getUserSubscriptionInfo) return 'stripe';
+      if (this.getUserIsCivicLiker) return 'civic';
+      return 'general';
     },
     buttonClass() {
       return {
@@ -111,6 +138,15 @@ export default {
       }
       return { name: 'civic' };
     },
+    maskedCardNumber() {
+      if (this.getUserSubscriptionInfo) {
+        const {
+          card: { brand, last4 },
+        } = this.getUserSubscriptionInfo;
+        return getMaskedCardNumber(brand, last4);
+      }
+      return '';
+    },
   },
   head() {
     return {
@@ -121,30 +157,21 @@ export default {
     this.fetchSubscriptionInfo();
   },
   methods: {
+    ...mapActions(['fetchUserSubscriptionInfo']),
+
     async fetchSubscriptionInfo() {
       if (this.getUserIsCivicLikerPaid) {
         try {
-          const {
-            // status,
-            // willCancel,
-            currentPeriodEnd: nextBillingDate,
-            // currentPeriodStart,
-            // start,
-            card: { brand, last4 },
-          } = await this.$axios.$get(getStripePaymentStatusAPI());
-          // eslint-disable-next-line no-console
-          this.subscriptionInfo = {
-            nextBillingDateString: dateFormat(
-              new Date(nextBillingDate * 1000),
-              'YYYY/MM/DD'
-            ),
-            card: {
-              brand,
-              number: getMaskedCardNumber(brand, last4),
-            },
-          };
+          const { willCancel } = await this.fetchUserSubscriptionInfo();
+          if (willCancel && this.$route.name === 'settings-civic-unsubscribe') {
+            this.$router.replace({ name: 'settings-civic' });
+          }
         } catch (err) {
-          if (!(err.response && err.response.status === 404)) {
+          if (err.response && err.response.status === 404) {
+            if (this.$route.name === 'settings-civic-unsubscribe') {
+              this.$router.replace({ name: 'settings-civic' });
+            }
+          } else {
             console.error(err); // eslint-disable-line no-console
             this.$nuxt.error(err);
           }
@@ -158,6 +185,10 @@ export default {
 
 <style lang="scss">
 .settings-civic-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   @apply p-16;
   @apply pt-0;
 

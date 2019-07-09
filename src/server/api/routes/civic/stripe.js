@@ -175,9 +175,13 @@ router.delete('/civic/payment/stripe', async (req, res, next) => {
         customer: customerId,
         plan: planId, // TODO: auto plan migration?
       });
-      if (currentSubscriptions && currentSubscriptions.length) {
+      if (
+        currentSubscriptions &&
+        currentSubscriptions.data &&
+        currentSubscriptions.data.length
+      ) {
         const results = await Promise.all(
-          currentSubscriptions.map(subscription =>
+          currentSubscriptions.data.map(subscription =>
             stripe.subscriptions.update(subscription.id, {
               cancel_at_period_end: true,
             })

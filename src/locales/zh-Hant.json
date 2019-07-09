@@ -115,7 +115,7 @@
   "WelcomeDialog": {
     "pickSubscription": "請選擇支持方案",
     "skip": "略過",
-    "headerSlogan": "歡迎你加入成為{br}支持創作的一分子",
+    "headerSlogan": "歡迎你加入{br}成為支持創作的一分子",
     "becomeCreator": "成為創作者",
     "comparisonCard": {
       "civic": {
@@ -144,10 +144,21 @@
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
     "knowMoreAbout": "了解更多",
-    "subscribed": "已訂閱",
+    "subscribed": "生效中",
     "billingSummary": {
+      "cancelDate": "訂閱結束日期",
       "nextBillingDate": "下個付款日期"
-    }
+    },
+    "resumeSubscription": "延續《讚賞公民》訂閱",
+    "cancelSubscription": "取消《讚賞公民》訂閱"
+  },
+  "SettingsCivicCancelPage": {
+    "regretToKnow": "很遺憾得知你退訂《讚賞公民》的決定",
+    "needYourSupport": "好內容需要你支持",
+    "thankYourSupport": "感謝你繼續支持",
+    "unsubscribeSucessfully": "已成功退訂。你的《讚賞公民》訂閱將於 {date} 失效",
+    "continue": "繼續支持",
+    "unsubscribe": "退訂《讚賞公民》"
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > 追踪/取消追踪",
@@ -163,7 +174,7 @@
     "likerId": "Liker ID",
     "civicLiker": {
       "title": "@:civicLiker",
-      "subscribing": "訂閱中"
+      "subscribing": "生效中"
     },
     "creator": {
       "title": "創作者",
@@ -188,6 +199,7 @@
   "back": "上一頁",
   "backToHome": "返回首頁",
   "civicLiker": "讚賞公民",
+  "finish": "完成",
   "follow": "追踪",
   "following": "追踪中",
   "learnMore": "Learn More",

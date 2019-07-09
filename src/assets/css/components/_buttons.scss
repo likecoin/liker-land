@@ -70,6 +70,20 @@
     &.btn--dark {
       @apply text-white;
     }
+    &.btn--destructive {
+      $color: #e35050;
+
+      border-color: $color;
+
+      @apply text-like-brown;
+
+      &:hover {
+        background-color: transparentize($color, 0.9);
+      }
+      &:active {
+        background-color: transparentize(darken($color, 20%), 0.8);
+      }
+    }
 
     &.btn--grayscale {
       @apply text-gray-4a;
