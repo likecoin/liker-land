@@ -13,6 +13,13 @@ export const getPaypalPaymentPageURL = (likerId, custom) => {
   }
   return baseURL;
 };
+
+export const getPaypalUnsubscribeURL = () =>
+  `https://www.${
+    IS_TESTNET ? 'sandbox.' : ''
+  }paypal.com/hk/customerprofileweb?cmd=_manage-paylist`;
+export const getOiceSettingsURL = () => 'https://oice.com/profile';
+
 export const getFetchLikedUserApi = () => `/api/reader/index`;
 export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}/works`;
 export const getFollowedUserAPI = user => `/api/reader/follow/user/${user}`;
