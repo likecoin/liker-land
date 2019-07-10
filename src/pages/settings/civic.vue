@@ -40,22 +40,38 @@
           | {{ $t('SettingsCivicPage.cancelSubscription') }}
 
       NuxtChild(v-else-if="state === 'cancel'")
-
-      LikerComparisonCard(
+      template(
         v-else
-        :type="state"
       )
-        template(#header)
-          .mt-12.mx-12
-            NuxtLink(
-              class="buttonClass"
-              :to="buttonTo"
-            )
-              | {{ buttonText }}
+        LikerComparisonCard(
+          :type="state"
+        )
+          template(#header)
+            .mt-12.mx-12
+              NuxtLink(
+                class="buttonClass"
+                :to="buttonTo"
+              )
+                | {{ buttonText }}
+        br
+        span.text-12(
+        )
+          | {{ $t('SettingsCivicPage.cancelSubscription') }}:
+          a.btn.btn--plain.btn--auto-size.text-12.px-0.pl-8(
+            :href="getPaypalUnsubscribeURL"
+          )
+            | Paypal
+          | /
+          a.btn.btn--plain.btn--auto-size.text-12.px-0(
+            :href="getOiceSettingsURL"
+          )
+            | oice
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
+import { getPaypalUnsubscribeURL, getOiceSettingsURL } from '~/util/api';
 
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 
@@ -97,7 +113,8 @@ export default {
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLikerPaid',
     ]),
-
+    getPaypalUnsubscribeURL,
+    getOiceSettingsURL,
     rootClass() {
       return {
         'settings-civic-page': true,
