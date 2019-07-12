@@ -89,8 +89,11 @@ export default {
   },
   computed: {
     getOAuthLoginAPI,
-    getOAuthRegisterAPI,
 
+    getOAuthRegisterAPI() {
+      const { from, referrer } = this.$route.query;
+      return getOAuthRegisterAPI(from, referrer);
+    },
     i18nKeyBase() {
       return `ERROR.${this.error.message}`;
     },

@@ -182,8 +182,10 @@ export default {
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLiker',
     ]),
-    getOAuthRegisterAPI,
-
+    getOAuthRegisterAPI() {
+      const { from, referrer } = this.$route.query;
+      return getOAuthRegisterAPI(from, referrer);
+    },
     introVideoVimeoId() {
       switch (this.getLocale) {
         case 'zh-Hant': {
