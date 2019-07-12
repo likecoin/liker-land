@@ -1,6 +1,7 @@
 const http = require('http');
 const https = require('https');
 const Axios = require('axios');
+const querystring = require('querystring');
 const {
   IS_TESTNET,
   EXTERNAL_URL: CONFIG_EXTERNAL_URL,
@@ -119,10 +120,17 @@ const apiCivicLikerJoinTrialEventById = (id, req) =>
       }
     )
   );
-const getOAuthURL = ({ state, isLogin }) => {
-  let oAuthUrl = `${LIKE_CO_URL_BASE}/in/oauth?client_id=${LIKE_CO_CLIENT_ID}&redirect_uri=${OAUTH_REDIRECT_URI}&scope=profile%20email%20read%3Alike.info%20read%3Acivic_liker%20write%3Acivic_liker&state=${state}`;
-  if (isLogin) oAuthUrl = `${oAuthUrl}&login=1`;
-  return oAuthUrl;
+const getOAuthURL = ({ state, isLogin, from, referrer }) => {
+  const qsPayload = {
+    client_id: LIKE_CO_CLIENT_ID,
+    redirect_uri: OAUTH_REDIRECT_URI,
+    scope: 'profile email read:like.info read:civic_liker write:civic_liker',
+  };
+  if (state) qsPayload.state = state;
+  if (from) qsPayload.from = from;
+  if (referrer) qsPayload.referrer = referrer;
+  if (isLogin) qsPayload.login = '1';
+  return `${LIKE_CO_URL_BASE}/in/oauth?${querystring.stringify(qsPayload)}`;
 };
 const getOAuthCallbackAPI = authCode =>
   `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;

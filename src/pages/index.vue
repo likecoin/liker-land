@@ -107,8 +107,11 @@ export default {
       'getUserBookmarks',
     ]),
     getOAuthLoginAPI,
-    getOAuthRegisterAPI,
 
+    getOAuthRegisterAPI() {
+      const { from, referrer } = this.$route.query;
+      return getOAuthRegisterAPI(from, referrer);
+    },
     ctaSlogan() {
       if (this.getUserId) {
         if (this.getUserIsCivicLiker) {

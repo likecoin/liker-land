@@ -74,12 +74,28 @@ router.post('/users/self/update', async (req, res, next) => {
 
 router.get('/users/register', (req, res) => {
   setSessionOAuthState(req);
-  res.redirect(getOAuthURL({ state: req.session.state, isLogin: false }));
+  const { from, referrer } = req.query;
+  res.redirect(
+    getOAuthURL({
+      state: req.session.state,
+      isLogin: false,
+      from,
+      referrer,
+    })
+  );
 });
 
 router.get('/users/login', (req, res) => {
   setSessionOAuthState(req);
-  res.redirect(getOAuthURL({ state: req.session.state, isLogin: true }));
+  const { from, referrer } = req.query;
+  res.redirect(
+    getOAuthURL({
+      state: req.session.state,
+      isLogin: true,
+      from,
+      referrer,
+    })
+  );
 });
 
 router.post('/users/login', async (req, res, next) => {

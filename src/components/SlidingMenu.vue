@@ -104,8 +104,10 @@ export default {
   },
   mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   computed: {
-    getOAuthRegisterAPI,
-
+    getOAuthRegisterAPI() {
+      const { from, referrer } = this.$route.query;
+      return getOAuthRegisterAPI(from, referrer);
+    },
     ...mapGetters([
       'getUserId',
       'getUserInfo',
