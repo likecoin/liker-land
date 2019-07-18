@@ -79,6 +79,17 @@
             @click="onClickUnsubscribe"
           )
             | {{ $t('SettingsCivicCancelPage.unsubscribe') }}
+          template(v-if="form")
+            br
+            i18n.inline-block.text-12.mt-8(
+              path="SettingsCivicCancelPage.encounterProblem"
+              tag="span"
+            )
+              button.btn.btn--mini(
+                place="here"
+                @click="unsubscribe"
+              )
+                | {{ $t('here') }}
 </template>
 
 <script>
@@ -91,6 +102,7 @@ export default {
   data() {
     return {
       state: 'deciding',
+      form: undefined,
     };
   },
   computed: {
@@ -250,6 +262,15 @@ export default {
       }
       this.form.open();
     },
+    async unsubscribe() {
+      this.state = 'loading';
+      try {
+        await this.cancelUserSubscription();
+        this.state = 'unsubscribed';
+      } catch (err) {
+        this.$nuxt.error(err);
+      }
+    },
     onClickUnsubscribe() {
       switch (this.state) {
         case 'deciding': {
@@ -290,15 +311,9 @@ export default {
           break;
       }
     },
-    async onSubmitFeedbackForm() {
+    onSubmitFeedbackForm() {
       this.form.close();
-      this.state = 'loading';
-      try {
-        await this.cancelUserSubscription();
-        this.state = 'unsubscribed';
-      } catch (err) {
-        this.$nuxt.error(err);
-      }
+      this.unsubscribe();
     },
     onClickFinishButton() {
       this.$router[this.state === 'unsubscribed' ? 'replace' : 'push']({
