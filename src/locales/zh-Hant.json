@@ -158,7 +158,8 @@
     "thankYourSupport": "感謝你繼續支持",
     "unsubscribeSucessfully": "已成功退訂。你的《讚賞公民》訂閱將於 {date} 失效",
     "continue": "繼續支持",
-    "unsubscribe": "退訂《讚賞公民》"
+    "unsubscribe": "退訂《讚賞公民》",
+    "encounterProblem": "退訂遇到問題？請按{here}"
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > 追踪/取消追踪",
@@ -202,6 +203,7 @@
   "finish": "完成",
   "follow": "追踪",
   "following": "追踪中",
+  "here": "這裏",
   "learnMore": "Learn More",
   "month": "月",
   "ok": "OK",
