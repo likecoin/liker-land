@@ -129,7 +129,7 @@ const getOAuthURL = ({ state, isLogin, from, referrer }) => {
   if (state) qsPayload.state = state;
   if (from) qsPayload.from = from;
   if (referrer) qsPayload.referrer = referrer;
-  if (isLogin) qsPayload.login = '1';
+  if (!isLogin) qsPayload.login = '0';
   return `${LIKE_CO_URL_BASE}/in/oauth?${querystring.stringify(qsPayload)}`;
 };
 const getOAuthCallbackAPI = authCode =>
