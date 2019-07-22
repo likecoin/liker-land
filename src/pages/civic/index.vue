@@ -5,29 +5,29 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      no-ssr
-        .civic-page__intro-video(
-          :style="introVideoStyle"
-        )
-          div
+      .civic-page__intro-video(
+        :style="introVideoStyle"
+      )
+        div
+          no-ssr
             Transition(
               :css="false"
               @enter="fadeInIntroVideo"
             )
               div(v-show="isIntroVideoVisible")
-                  vue-vimeo-player(
-                    ref="introVideoPlayer"
-                    :video-id="introVideoVimeoId"
-                    :autoplay="true"
-                    :loop="true"
-                    :options="{ muted: true }"
-                    @play="isIntroVideoVisible = true"
-                  )
-                  button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
-                    @click="toggleIntroVideoVolume"
-                  )
-                    VolumeOffIcon(v-if="isIntroVideoMuted")
-                    VolumeOnIcon(v-else)
+                vue-vimeo-player(
+                  ref="introVideoPlayer"
+                  :video-id="introVideoVimeoId"
+                  :autoplay="true"
+                  :loop="true"
+                  :options="{ muted: true }"
+                  @play="isIntroVideoVisible = true"
+                )
+                button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
+                  @click="toggleIntroVideoVolume"
+                )
+                  VolumeOffIcon(v-if="isIntroVideoMuted")
+                  VolumeOnIcon(v-else)
 
       Transition(
         :css="false"
@@ -105,8 +105,8 @@
                   size="180"
                 )
 
-      section.mt-32(ref="visionSection")
-        //-
+      //-
+        section.mt-32(ref="visionSection")
           div.civic-feature-card-swiper-container.bg-like-gradient(
             v-swiper:featureSwiper="$options.featureSwiper"
           )
