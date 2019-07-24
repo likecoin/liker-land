@@ -130,6 +130,7 @@ export default {
     return {
       isShow:
         getUserId &&
+        !/civic-payment-[a-z]+-success/.test(this.$route.name) &&
         !getUserIsCivicLiker &&
         !getUserInfo.isNew &&
         !getUserInfo.hasReadWelcomeDialog,
