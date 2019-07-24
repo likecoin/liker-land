@@ -23,7 +23,7 @@ export default {
     };
   },
   async mounted() {
-    const { error, state, auth_code: authCode } = this.$route.query;
+    const { error, state, code: authCode } = this.$route.query;
     if (authCode && state) {
       try {
         const user = await this.postLoginToken({ authCode, state });
