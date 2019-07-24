@@ -1,6 +1,6 @@
 export default {
-  name: 'direct-signin',
-  experimentID: '3bQXKlMMTlGIYJxdSysbwQ',
+  name: 'new-layout',
+  experimentID: 'YL2hMTYRQTKTBFKEdL9oQA',
   isEligible: ({ route }) => !process.server && route.name === 'civic',
-  variants: [{ name: 'indirect', weight: 5 }, { name: 'direct', weight: 5 }],
+  variants: [{ name: 'old', weight: 5 }, { name: 'new', weight: 5 }],
 };
