@@ -133,7 +133,7 @@ const getOAuthURL = ({ state, isLogin, from, referrer }) => {
   return `${LIKE_CO_URL_BASE}/in/oauth?${querystring.stringify(qsPayload)}`;
 };
 const getOAuthCallbackAPI = authCode =>
-  `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&auth_code=${authCode}`;
+  `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&code=${authCode}`;
 
 module.exports = {
   EXTERNAL_URL,
