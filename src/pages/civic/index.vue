@@ -419,24 +419,10 @@ export default {
         }(civic)`,
         1
       );
-      if (this.isDirectSignIn && !this.getUserId) {
-        if (window.sessionStorage) {
-          // HACK: set post auth redirect
-          window.sessionStorage.setItem(
-            'USER_POST_AUTH_ROUTE',
-            JSON.stringify({
-              name: 'civic-register',
-              query: this.$route.query,
-            })
-          );
-        }
-        window.location.href = this.getOAuthRegisterAPI;
-      } else {
-        this.$router.push({
-          name: 'civic-register',
-          query: this.$route.query,
-        });
-      }
+      this.$router.push({
+        name: 'civic-register',
+        query: this.$route.query,
+      });
     },
     onClickActionButtonForGuest() {
       logTrackerEvent(
