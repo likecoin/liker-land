@@ -29,7 +29,6 @@
       @enter="fadeInReferrerBanner"
     )
       section.civic-page__referrer-banner(
-        v-if="isShowReferrerBanner"
         style="opacity:0"
       )
         div
@@ -85,114 +84,70 @@
       template
         SiteNavBar.text-like-green
 
-    no-ssr
-      main.page-content.page-content--new(
-        v-if="isNewLayout"
-      )
-        +ReferrerBanner()
+    main.page-content
+      +ReferrerBanner()
 
-        section.civic-page__block.bg-white
-          .civic-page__liker-comparison-card-list
-            ul.px-24
-              LikerComparisonCard(
-                tag="li"
-                type="civic"
-              )
-                template(
-                  v-if="!referrer"
-                  #header
-                )
-                  .relative.mt-12.mx-12.flex.justify-center
-                    button.btn.btn--outlined(
-                      :class="actionButtonClass"
-                      @click="onClickActionButton"
-                    )
-                      | {{ actionButtonText }}
-              .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
-                LcChopCivicLiker(
-                  :text="civicLikerStampText"
-                  style="transform:rotate(16deg)"
-                  size="128"
-                )
-                button.btn.btn--outlined.mt-32(
-                  :class="actionButtonClass"
-                  @click="onClickActionButton"
-                )
-                  | {{ actionButtonText }}
-              LikerComparisonCard(
-                v-else
-                tag="li"
-                type="general"
-              )
-                template(#header)
-                  .relative.mt-12.mx-12.flex.justify-center
-                    a.btn.btn--outlined.btn--grayscale(
-                      :class="actionButtonClassForGuest"
-                      :href="getOAuthRegisterAPI"
-                      @click="onClickActionButtonForGuest"
-                    )
-                      | {{ actionButtonTextForGuest }}
-
-          .p-32
-            +IntroVideo()
-
-      main.page-content(
-        v-else
-      )
-        +IntroVideo()(:style="introVideoStyle")
-
-        +ReferrerBanner()
-
-        section.civic-page__liker-comparison-card-list
-          ul
+      section.civic-page__block.bg-white
+        .civic-page__liker-comparison-card-list
+          ul.px-24
             LikerComparisonCard(
-              v-if="!isShowReferrerBanner"
+              tag="li"
+              type="civic"
+            )
+              template(
+                v-if="!referrer"
+                #header
+              )
+                .relative.mt-12.mx-12.flex.justify-center
+                  button.btn.btn--outlined(
+                    :class="actionButtonClass"
+                    @click="onClickActionButton"
+                  )
+                    | {{ actionButtonText }}
+            .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
+              LcChopCivicLiker(
+                :text="civicLikerStampText"
+                style="transform:rotate(16deg)"
+                size="128"
+              )
+              button.btn.btn--outlined.mt-32(
+                :class="actionButtonClass"
+                @click="onClickActionButton"
+              )
+                | {{ actionButtonText }}
+            LikerComparisonCard(
+              v-else
               tag="li"
               type="general"
             )
               template(#header)
-                .relative.mt-12.mx-12.flex
-                  a.btn.btn--outlined.btn--block.btn--grayscale.m-0.w-full(
+                .relative.mt-12.mx-12.flex.justify-center
+                  a.btn.btn--outlined.btn--grayscale(
                     :class="actionButtonClassForGuest"
                     :href="getOAuthRegisterAPI"
                     @click="onClickActionButtonForGuest"
                   )
                     | {{ actionButtonTextForGuest }}
-            LikerComparisonCard(
-              tag="li"
-              type="civic"
-            )
-              template(#header)
-                .relative.mt-12.mx-12.flex.justify-center
-                  button.btn.btn--outlined.btn--block.m-0.w-full(
-                    :class="actionButtonClass"
-                    @click="onClickActionButton"
-                  )
-                    | {{ actionButtonText }}
-                  LcChopCivicLiker.absolute(
-                    class="phone:hidden"
-                    :text="civicLikerStampText"
-                    style="left: 100%;margin-left: 0.75rem;transform: translateY(-65%) rotate(20deg)"
-                    size="180"
-                  )
 
+        .p-32
+          +IntroVideo()
 
-        //-
-          section.mt-32(ref="visionSection")
-            div.civic-feature-card-swiper-container.bg-like-gradient(
-              v-swiper:featureSwiper="$options.featureSwiper"
-            )
-              ul.civic-feature-card-wrapper
-                li.civic-feature-card(
-                  v-for="i in 3"
-                  :key="i"
+      //-
+        section.mt-32(ref="visionSection")
+          div.civic-feature-card-swiper-container.bg-like-gradient(
+            v-swiper:featureSwiper="$options.featureSwiper"
+          )
+            ul.civic-feature-card-wrapper
+              li.civic-feature-card(
+                v-for="i in 3"
+                :key="i"
+              )
+                .civic-feature-card__header(
+                  v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
                 )
-                  .civic-feature-card__header(
-                    v-html="$t(`CivicLikerFeature[${i - 1}].header`)"
-                  )
-                  .civic-feature-card__body(
-                    v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
-                  )
+                .civic-feature-card__body(
+                  v-html="$t(`CivicLikerFeature[${i - 1}].body`)"
+                )
 </template>
 
 <script>
@@ -209,8 +164,6 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import VolumeOnIcon from '~/assets/icons/volume-on.svg';
 import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
-import experimentMixin from '~/mixins/experiment';
-
 import { checkIsMobileClient } from '~/util/client';
 import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
@@ -224,14 +177,6 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
-  mixins: [
-    experimentMixin(
-      'isNewLayout',
-      'new-layout',
-      'new',
-      () => process.client && !checkIsMobileClient()
-    ),
-  ],
   // directives: {
   //   swiper: swiperDirective,
   // },
@@ -276,12 +221,6 @@ export default {
           return '334616132';
       }
     },
-    introVideoStyle() {
-      if (this.isPlacingIntroVideoBottom) {
-        return { order: 999, marginBottom: '5rem' };
-      }
-      return undefined;
-    },
     isCantonese() {
       if (!process.client) return false;
       return (
@@ -293,16 +232,6 @@ export default {
               lang.toLowerCase().includes('hk')
             )))
       );
-    },
-    isShowReferrerBanner() {
-      return (
-        this.isNewLayout ||
-        (this.referrer &&
-          !(this.getUserIsCivicLiker && !this.getUserIsCivicLikerTrial))
-      );
-    },
-    isPlacingIntroVideoBottom() {
-      return this.isShowReferrerBanner;
     },
 
     actionButtonClass() {
@@ -611,7 +540,6 @@ $civic-feature-card-swiper-max-width: (
       position: relative;
 
       max-width: config('screens.desktop.min');
-      min-height: 9.375rem;
 
       @apply text-like-cyan;
       @apply text-24;
@@ -621,6 +549,21 @@ $civic-feature-card-swiper-max-width: (
 
       @apply mt-24;
       @apply mx-auto;
+
+      .lc-chop {
+        flex-shrink: 0;
+        fill: currentColor;
+
+        @apply text-like-cyan;
+
+        &__content__value {
+          color: inherit;
+        }
+      }
+
+      &-slogan {
+        flex-grow: 1;
+      }
     }
 
     &-inner-wrapper {
@@ -711,42 +654,7 @@ $civic-feature-card-swiper-max-width: (
       @apply list-reset;
 
       @media screen and (max-width: config('screens.tablet.max')) {
-        @apply flex-col-reverse;
-      }
-    }
-
-    .liker-comparison-card {
-      @apply m-8;
-    }
-  }
-
-  .page-content--new {
-    .civic-page__ {
-      &liker-comparison-card-list > ul {
-        @media screen and (max-width: config('screens.tablet.max')) {
-          flex-direction: column;
-        }
-      }
-
-      &referrer-banner {
-        > div {
-          min-height: 0;
-        }
-
-        .lc-chop {
-          flex-shrink: 0;
-          fill: currentColor;
-
-          @apply text-like-cyan;
-
-          &__content__value {
-            color: inherit;
-          }
-        }
-
-        &-slogan {
-          flex-grow: 1;
-        }
+        flex-direction: column;
       }
     }
 
