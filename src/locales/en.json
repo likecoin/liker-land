@@ -43,7 +43,8 @@
     "ogDescription": "Trade a coffee for a better world",
     "registerForFree": "Register for free",
     "referrerBanner": {
-      "slogan": "Register as Civic Liker. Every Like will be an actual reward to {name}"
+      "slogan": "Register as Civic Liker. Every Like will be an actual reward to creators",
+      "sloganWithReferrer": "Register as Civic Liker. Every Like will be an actual reward to {name}"
     }
   },
   "CollapsibleView": {
