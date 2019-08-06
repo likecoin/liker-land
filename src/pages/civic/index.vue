@@ -549,21 +549,6 @@ $civic-feature-card-swiper-max-width: (
 
       @apply mt-24;
       @apply mx-auto;
-
-      .lc-chop {
-        flex-shrink: 0;
-        fill: currentColor;
-
-        @apply text-like-cyan;
-
-        &__content__value {
-          color: inherit;
-        }
-      }
-
-      &-slogan {
-        flex-grow: 1;
-      }
     }
 
     &-inner-wrapper {
@@ -615,6 +600,17 @@ $civic-feature-card-swiper-max-width: (
       }
     }
 
+    .lc-chop {
+      flex-shrink: 0;
+      fill: currentColor;
+
+      @apply text-like-cyan;
+
+      &__content__value {
+        color: inherit;
+      }
+    }
+
     &-slogan,
     .lc-avatar {
       @apply mx-16;
@@ -622,6 +618,8 @@ $civic-feature-card-swiper-max-width: (
     }
 
     &-slogan {
+      flex-grow: 1;
+
       @media screen and (max-width: config('screens.tablet.min')) {
         text-align: center;
       }
