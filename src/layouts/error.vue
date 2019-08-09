@@ -20,7 +20,6 @@
             .mt-32.px-12(class="phone:px-0")
               div(v-if="isLoginError")
                 a.btn.btn--outlined(
-                  v-if="!isNewLayout"
                   :href="getOAuthLoginAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
                 )
@@ -52,19 +51,7 @@
               )
                 | {{ $t('back') }}
 
-              i18n.text-gray-4a.text-14.mx-0(
-                v-if="isNewLayout"
-                path="ErrorPage.likerAlready"
-                tag="span"
-              )
-                a.btn.btn--plain.btn--auto-size.mx-0.px-0(
-                  :href="getOAuthLoginAPI"
-                  place="button"
-                  @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
-                )
-                  | {{ $t('ErrorPage.pleaseSignIn') }}
               NuxtLink(
-                v-else
                 class=btnClass
                 :to="{ name: 'index' }"
                 @click.native="onClickHomeButton"
@@ -76,12 +63,8 @@
 import DialogLayout from '~/components/DialogLayout';
 
 import { getOAuthLoginAPI, getOAuthRegisterAPI } from '~/util/api';
-import { checkIsMobileClient } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
-
 import { defaultLocale } from '~/locales';
-
-import experimentMixin from '~/mixins/experiment';
 import IntercomMixin from '~/mixins/intercom';
 
 export default {
@@ -97,15 +80,7 @@ export default {
   components: {
     DialogLayout,
   },
-  mixins: [
-    IntercomMixin,
-    experimentMixin(
-      'isNewLayout',
-      'civic-register-page-error',
-      'new',
-      () => process.client && !checkIsMobileClient()
-    ),
-  ],
+  mixins: [IntercomMixin],
   props: {
     error: {
       type: Object,
@@ -151,7 +126,7 @@ export default {
         return this.$t(this.i18nKeyMessage);
       }
       if (this.isStringLocalizedError) {
-        return this.$t(this.getExperimentLocalePath(this.i18nKeyBase));
+        return this.$t(this.i18nKeyBase);
       }
       if (this.isLoginError) {
         return this.$t('ERROR.LOGIN_NEEDED');
@@ -172,13 +147,6 @@ export default {
     }
   },
   methods: {
-    getExperimentLocalePath(path) {
-      if (this.isNewLayout && this.$te(`${path}-alternative`)) {
-        return `${path}-alternative`;
-      }
-      return path;
-    },
-
     onClickBackButton() {
       // If the user enters a page requires authenication,
       // back button should trigger going back instead of refreshing the page
