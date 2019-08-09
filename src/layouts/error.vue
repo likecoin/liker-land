@@ -45,29 +45,26 @@
               // - Common action button
               - const btnClass = 'btn btn--plain btn--auto-size text-14 mx-0'
 
-              template(v-else)
-                i18n.text-gray-4a.text-14.mx-0(
-                  v-if="isNewLayout"
-                  path="ErrorPage.likerAlready"
-                  tag="span"
-                )
-                  a.btn.btn--plain.btn--auto-size.mx-0.px-0(
-                    :href="getOAuthLoginAPI"
-                    place="button"
-                    @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
-                  )
-                    | {{ $t('ErrorPage.pleaseSignIn') }}
-                br(v-if="isNewLayout")
+              button(
+                v-else-if="!error.isBackButtonHidden"
+                class=btnClass
+                @click="onClickBackButton"
+              )
+                | {{ $t('back') }}
 
-                button(
-                  v-if="!error.isBackButtonHidden"
-                  class=btnClass
-                  @click="onClickBackButton"
+              i18n.text-gray-4a.text-14.mx-0(
+                v-if="isNewLayout"
+                path="ErrorPage.likerAlready"
+                tag="span"
+              )
+                a.btn.btn--plain.btn--auto-size.mx-0.px-0(
+                  :href="getOAuthLoginAPI"
+                  place="button"
+                  @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
                 )
-                  | {{ $t('back') }}
-
+                  | {{ $t('ErrorPage.pleaseSignIn') }}
               NuxtLink(
-                v-if="!isNewLayout"
+                v-else
                 class=btnClass
                 :to="{ name: 'index' }"
                 @click.native="onClickHomeButton"
@@ -79,6 +76,7 @@
 import DialogLayout from '~/components/DialogLayout';
 
 import { getOAuthLoginAPI, getOAuthRegisterAPI } from '~/util/api';
+import { checkIsMobileClient } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import { defaultLocale } from '~/locales';
@@ -103,9 +101,9 @@ export default {
     IntercomMixin,
     experimentMixin(
       'isNewLayout',
-      'civic-page',
+      'civic-register-page-error',
       'new',
-      that => that.error.message === 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER'
+      () => process.client && !checkIsMobileClient()
     ),
   ],
   props: {
