@@ -65,16 +65,11 @@
       "goToFeaturing": "前往精選文章列表"
     }
   },
-  "ErrorPage": {
-    "likerAlready": "已是 Liker? {button}",
-    "pleaseSignIn": "請登入"
-  },
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容",
     "LOGIN_NEEDED_TO_BOOKMARK": "請登入以收藏內容",
     "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "請登入以追蹤內容的作者",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "請登入以註冊讚賞公民",
-    "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER-alternative": "註冊成為讚賞公民",
     "CIVIC_LIKER_ALREADY_PAID": {
       "title": "你已是讚賞公民",
       "message": "感謝你的支持。你早前已成功成為讚賞公民了。"
