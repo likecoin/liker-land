@@ -139,9 +139,15 @@ export default {
   mounted() {
     if (this.isLoginError) {
       if (window.sessionStorage) {
+        const { name, params, query, hash } = this.$route;
         window.sessionStorage.setItem(
           'USER_POST_AUTH_ROUTE',
-          JSON.stringify(this.$route)
+          JSON.stringify({
+            name,
+            params,
+            query,
+            hash,
+          })
         );
       }
     }
