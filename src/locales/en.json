@@ -45,7 +45,8 @@
     "referrerBanner": {
       "slogan": "Register as Civic Liker. Every Like will be an actual reward to creators",
       "sloganWithReferrer": "Register as Civic Liker. Every Like will be an actual reward to {name}"
-    }
+    },
+    "usingPayment": "Using {method}"
   },
   "CollapsibleView": {
     "less": "Less",

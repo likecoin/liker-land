@@ -1,8 +1,3 @@
-<template>
-  <div />
-</template>
-
-
 <script>
 import { getPaypalPaymentPageURL } from '@/util/api';
 

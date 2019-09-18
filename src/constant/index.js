@@ -16,3 +16,8 @@ export const LIKE_CO_CLOUD_FN_BASE = `https://us-central1-civic-liker${
 }.cloudfunctions.net`;
 
 export const AUTH_COOKIE_NAME = '__session';
+
+export const PAYMENT_METHOD_LIST = [
+  'stripe', // default
+  'paypal',
+];

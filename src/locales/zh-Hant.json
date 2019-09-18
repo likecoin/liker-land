@@ -45,6 +45,11 @@
     "referrerBanner": {
       "slogan": "立即登記成為讚賞公民{br}直接贊助創作者！",
       "sloganWithReferrer": "註冊讚賞公民，每個按讚都是 {name} 的實際收入"
+    },
+    "usingPayment": "使用 {method}",
+    "paymentMethod": {
+      "stripe": "Stripe",
+      "paypal": "PayPal"
     }
   },
   "CollapsibleView": {
