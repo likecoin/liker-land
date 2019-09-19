@@ -46,7 +46,10 @@
       "slogan": "Register as Civic Liker. Every Like will be an actual reward to creators",
       "sloganWithReferrer": "Register as Civic Liker. Every Like will be an actual reward to {name}"
     },
-    "usingPayment": "Using {method}"
+    "usingPayment": "Subscribe by {method}",
+    "paymentMethod": {
+      "stripe": "credit/debit card"
+    }
   },
   "CollapsibleView": {
     "less": "Less",
