@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getStripePaymentStatusAPI, getStripePaymentAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -21,6 +22,9 @@ export default {
       referrer: undefined,
       error: '',
     };
+  },
+  computed: {
+    ...mapGetters(['getUserInfo', 'getUserIsCivicLiker']),
   },
   head() {
     return {
@@ -49,6 +53,13 @@ export default {
     };
   },
   mounted() {
+    if (
+      this.getUserIsCivicLiker &&
+      !this.getUserInfo.isCivicLikerRenewalPeriod
+    ) {
+      this.$router.replace({ name: 'settings-civic' });
+      return;
+    }
     logTrackerEvent(
       this,
       'Civic',
