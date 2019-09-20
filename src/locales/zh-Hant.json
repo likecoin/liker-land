@@ -49,7 +49,8 @@
     "usingPayment": "以 {method} 訂閱",
     "paymentMethod": {
       "stripe": "信用卡/扣帳卡",
-      "paypal": "PayPal"
+      "paypal": "PayPal",
+      "other": "以其他方法轉帳（香港）"
     }
   },
   "CollapsibleView": {
