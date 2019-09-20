@@ -48,7 +48,8 @@
     },
     "usingPayment": "Subscribe by {method}",
     "paymentMethod": {
-      "stripe": "credit/debit card"
+      "stripe": "Credit/debit card",
+      "other": "Other methods (Hong Kong)"
     }
   },
   "CollapsibleView": {

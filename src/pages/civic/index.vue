@@ -203,9 +203,12 @@ import { checkIsMobileClient } from '~/util/client';
 import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
+import { IntercomMixinFactory } from '~/mixins/intercom';
+
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
 export default {
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   components: {
     vueVimeoPlayer,
     PageHeader,
@@ -362,6 +365,19 @@ export default {
         { rel: 'prefetch', href: 'https://js.stripe.com/v3' },
       ],
     };
+  },
+  watch: {
+    selectedPaymentMethod(method, prevMethod) {
+      if (method === 'other') {
+        this.selectedPaymentMethod = prevMethod;
+        if (this.$intercom) {
+          if (!this.$intercom.booted) {
+            this.bootIntercom();
+          }
+          this.$intercom.show();
+        }
+      }
+    },
   },
   mounted() {
     const { from, referrer, utm_source: utmSource } = this.$route.query;
