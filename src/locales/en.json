@@ -50,6 +50,9 @@
     "paymentMethod": {
       "stripe": "Credit/debit card",
       "other": "Other methods (Hong Kong)"
+    },
+    "intercom": {
+      "otherPaymentMethodMessage": "I want to subscribe to Civic Liker with other payment methods"
     }
   },
   "CollapsibleView": {
