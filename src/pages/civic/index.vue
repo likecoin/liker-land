@@ -321,6 +321,21 @@ export default {
       return 'LIKE';
     },
   },
+  watch: {
+    selectedPaymentMethod(method, prevMethod) {
+      if (method === 'other') {
+        this.selectedPaymentMethod = prevMethod;
+        if (this.$intercom) {
+          if (!this.$intercom.booted) {
+            this.bootIntercom();
+          }
+          this.$intercom.showNewMessage(
+            this.$t('CivicPage.intercom.otherPaymentMethodMessage')
+          );
+        }
+      }
+    },
+  },
   async asyncData({ route, $axios }) {
     // Fetch referrer info
     const { from } = route.query;
@@ -365,19 +380,6 @@ export default {
         { rel: 'prefetch', href: 'https://js.stripe.com/v3' },
       ],
     };
-  },
-  watch: {
-    selectedPaymentMethod(method, prevMethod) {
-      if (method === 'other') {
-        this.selectedPaymentMethod = prevMethod;
-        if (this.$intercom) {
-          if (!this.$intercom.booted) {
-            this.bootIntercom();
-          }
-          this.$intercom.show();
-        }
-      }
-    },
   },
   mounted() {
     const { from, referrer, utm_source: utmSource } = this.$route.query;

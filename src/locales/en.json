@@ -49,7 +49,10 @@
     "usingPayment": "Subscribe by {method}",
     "paymentMethod": {
       "stripe": "Credit/debit card",
-      "other": "Other methods (Hong Kong)"
+      "other": "FPS/Payme/other(Hong Kong only)"
+    },
+    "intercom": {
+      "otherPaymentMethodMessage": "I want to subscribe to Civic Liker with other payment methods"
     }
   },
   "CollapsibleView": {

@@ -50,7 +50,10 @@
     "paymentMethod": {
       "stripe": "信用卡/扣帳卡",
       "paypal": "PayPal",
-      "other": "以其他方法轉帳（香港）"
+      "other": "Payme/FPS/其他方法（只限香港）"
+    },
+    "intercom": {
+      "otherPaymentMethodMessage": "我想以其他方法訂閱讚賞公民"
     }
   },
   "CollapsibleView": {
