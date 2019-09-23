@@ -46,13 +46,9 @@
       "slogan": "Register as Civic Liker. Every Like will be an actual reward to creators",
       "sloganWithReferrer": "Register as Civic Liker. Every Like will be an actual reward to {name}"
     },
-    "usingPayment": "Subscribe by {method}",
     "paymentMethod": {
-      "stripe": "Credit/debit card",
-      "other": "FPS/Payme/other(Hong Kong only)"
-    },
-    "intercom": {
-      "otherPaymentMethodMessage": "I want to subscribe to Civic Liker with other payment methods"
+      "stripe": "Subscribe by Credit/debit card",
+      "other": "Subscribe by PayMe/FPS/others method (Hong Kong only)"
     }
   },
   "CollapsibleView": {
