@@ -208,7 +208,6 @@ import { IntercomMixinFactory } from '~/mixins/intercom';
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
 export default {
-  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   components: {
     vueVimeoPlayer,
     PageHeader,
@@ -217,6 +216,7 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   // directives: {
   //   swiper: swiperDirective,
   // },
