@@ -125,6 +125,7 @@ const getOAuthURL = ({ state, isLogin, from, referrer }) => {
     client_id: LIKE_CO_CLIENT_ID,
     redirect_uri: OAUTH_REDIRECT_URI,
     scope: 'profile email read:like.info read:civic_liker write:civic_liker',
+    intercom: '1',
   };
   if (state) qsPayload.state = state;
   if (from) qsPayload.from = from;
