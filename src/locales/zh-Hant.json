@@ -47,9 +47,9 @@
       "sloganWithReferrer": "註冊讚賞公民，每個按讚都是 {name} 的實際收入"
     },
     "paymentMethod": {
-      "stripe": "以信用卡/扣帳卡訂閱",
-      "paypal": "以 PayPal 訂閱",
-      "other": "以 PayMe/FPS/其他方法訂閱（只限香港）"
+      "stripe": "以 信用卡/扣帳卡 每月訂閱",
+      "paypal": "以 PayPal 每月訂閱",
+      "other": "以 PayMe/轉數快 繳付年費 HK$ 468（只限香港）"
     }
   },
   "CollapsibleView": {

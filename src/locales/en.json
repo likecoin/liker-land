@@ -47,8 +47,9 @@
       "sloganWithReferrer": "Register as Civic Liker. Every Like will be an actual reward to {name}"
     },
     "paymentMethod": {
-      "stripe": "Subscribe by Credit/debit card",
-      "other": "Subscribe by PayMe/FPS/others method (Hong Kong only)"
+      "stripe": "Credit Card/Debit Card monthly subscription",
+      "paypal": "PayPal monthly subscription",
+      "other": "PayMe/FPS for annual fee HK$ 468 (HK only)"
     }
   },
   "CollapsibleView": {
