@@ -62,32 +62,18 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
     if (utmSource) metadata.utmSource = utmSource.substring(0, 500);
     const userRef = userCollection.doc(req.session.user);
     const userDoc = await userRef.get();
-    const {
-      user: { email } = {},
-      stripe: { subscriptionId, customerId } = {},
-    } = userDoc.data();
-    const stripePayload = {
+    const { user: { email } = {} } = userDoc.data();
+    const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'], // only supports card for now
       customer_email: email,
       locale: 'en', // hardcode en before we have zh_Hant
-      success_url: `${EXTERNAL_URL}/civic/payment/stripe/success`,
-      cancel_url: `${EXTERNAL_URL}/civic/payment/stripe/fail`,
-    };
-    if (customerId && subscriptionId) {
-      stripePayload.mode = 'setup';
-      stripePayload.setup_intent_data = {
-        metadata: {
-          customer_id: customerId,
-          subscription_id: subscriptionId,
-        },
-      };
-    } else {
-      stripePayload.subscription_data = {
+      subscription_data: {
         items: [{ plan: STRIPE_PLAN_ID }],
         metadata,
-      };
-    }
-    const session = await stripe.checkout.sessions.create(stripePayload);
+      },
+      success_url: `${EXTERNAL_URL}/civic/payment/stripe/success`,
+      cancel_url: `${EXTERNAL_URL}/civic/payment/stripe/fail`,
+    });
     res.json({
       type: 'session',
       sessionId: session.id,

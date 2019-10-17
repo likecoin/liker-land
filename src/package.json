@@ -45,7 +45,7 @@
     "nuxt-svg-loader": "^1.0.1",
     "portal-vue": "^1.5.1",
     "resize-observer": "^1.0.0",
-    "stripe": "^7.10.0",
+    "stripe": "^7.0.0",
     "swiper": "^4.5.0",
     "tiny-cookie": "^1.0.1",
     "v-tooltip": "^2.0.2",
