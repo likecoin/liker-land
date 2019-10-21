@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {
   Linear,
   Power1,
@@ -175,6 +176,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getIsHK']),
     getCreatorURL,
 
     paymentMethods() {
@@ -191,6 +193,12 @@ export default {
         { r: 1.5, x: 289, y: 54 },
       ];
     },
+  },
+  mounted() {
+    if (this.getIsHK) {
+      this.selectedPaymentMethod =
+        PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+    }
   },
   methods: {
     onBeforeEnter(el) {
