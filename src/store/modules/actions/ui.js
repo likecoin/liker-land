@@ -6,6 +6,10 @@ export function setLocale({ commit }, locale) {
   commit(types.UI_SET_LOCALE, convertLikerCoinLocale(locale));
 }
 
+export function setIsHK({ commit }, isHK) {
+  commit(types.UI_SET_IS_HK, isHK);
+}
+
 export function toggleSlidingMenu({ commit }, isToggled) {
   commit(types.UI_TOGGLE_SLIDING_MENU, isToggled);
 }
