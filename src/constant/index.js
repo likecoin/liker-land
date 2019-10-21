@@ -18,7 +18,7 @@ export const LIKE_CO_CLOUD_FN_BASE = `https://us-central1-civic-liker${
 export const AUTH_COOKIE_NAME = '__session';
 
 export const PAYMENT_METHOD_LIST = [
-  'other', // default
   'stripe',
   'paypal',
+  'other', // plz always put `other` at last for hk geoip handle
 ];

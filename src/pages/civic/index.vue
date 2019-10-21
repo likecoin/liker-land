@@ -208,7 +208,6 @@ import { IntercomMixinFactory } from '~/mixins/intercom';
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
 export default {
-  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   components: {
     vueVimeoPlayer,
     PageHeader,
@@ -217,6 +216,7 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   // directives: {
   //   swiper: swiperDirective,
   // },
@@ -242,6 +242,7 @@ export default {
   computed: {
     ...mapGetters([
       'getLocale',
+      'getIsHK',
       'getUserId',
       'getUserInfo',
       'getUserIsCivicLikerTrial',
@@ -367,6 +368,10 @@ export default {
     };
   },
   mounted() {
+    if (this.getIsHK) {
+      this.selectedPaymentMethod =
+        PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+    }
     const { from, referrer, utm_source: utmSource } = this.$route.query;
     if (window.sessionStorage) {
       if (from) window.sessionStorage.setItem('civicLikerFrom', from);
