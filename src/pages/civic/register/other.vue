@@ -30,6 +30,7 @@
 <script>
 import IntercomMixin from '~/mixins/intercom';
 import PayMeImage from '~/assets/images/civic/payme.jpg';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   middleware: 'authenticated',
@@ -47,6 +48,15 @@ export default {
     ) {
       redirect({ name: 'settings-civic' });
     }
+  },
+  mounted() {
+    logTrackerEvent(
+      this,
+      'Civic',
+      'CivicRegisterPageLoad',
+      'CivicRegisterPageLoad(other)',
+      1
+    );
   },
 };
 </script>
