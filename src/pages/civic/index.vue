@@ -2,25 +2,24 @@
   mixin IntroVideo
     .civic-page__intro-video()&attributes(attributes)
       div
-        no-ssr
-          Transition(
-            :css="false"
-            @enter="fadeInIntroVideo"
-          )
-            div(v-show="isIntroVideoVisible")
-              vue-vimeo-player(
-                ref="introVideoPlayer"
-                :video-id="introVideoVimeoId"
-                :autoplay="true"
-                :loop="true"
-                :options="{ muted: true }"
-                @play="isIntroVideoVisible = true"
-              )
-              button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
-                @click="toggleIntroVideoVolume"
-              )
-                VolumeOffIcon(v-if="isIntroVideoMuted")
-                VolumeOnIcon(v-else)
+        Transition(
+          :css="false"
+          @enter="fadeInIntroVideo"
+        )
+          div(v-show="isIntroVideoVisible")
+            vue-vimeo-player(
+              ref="introVideoPlayer"
+              :video-id="introVideoVimeoId"
+              :autoplay="true"
+              :loop="true"
+              :options="{ muted: true }"
+              @play="isIntroVideoVisible = true"
+            )
+            button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
+              @click="toggleIntroVideoVolume"
+            )
+              VolumeOffIcon(v-if="isIntroVideoMuted")
+              VolumeOnIcon(v-else)
 
   mixin ReferrerBanner
     Transition(
@@ -118,54 +117,55 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      +ReferrerBanner()
+      no-ssr
+        +ReferrerBanner()
 
-      section.civic-page__block.bg-white
-        .civic-page__liker-comparison-card-list
-          ul.px-24
-            LikerComparisonCard(
-              tag="li"
-              type="civic"
-            )
-              template(
-                v-if="!referrer"
-                #header
+        section.civic-page__block.bg-white
+          .civic-page__liker-comparison-card-list
+            ul.px-24
+              LikerComparisonCard(
+                tag="li"
+                type="civic"
               )
-                .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
-                  +PaymentSelect
-                  button.btn.btn--outlined(
-                    :class="actionButtonClass"
-                    @click="onClickActionButton"
-                  )
-                    | {{ actionButtonText }}
-            .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
-              LcChopCivicLiker.mb-32(
-                :text="civicLikerStampText"
-                style="transform:rotate(16deg)"
-                size="128"
+                template(
+                  v-if="!referrer"
+                  #header
+                )
+                  .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
+                    +PaymentSelect
+                    button.btn.btn--outlined(
+                      :class="actionButtonClass"
+                      @click="onClickActionButton"
+                    )
+                      | {{ actionButtonText }}
+              .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
+                LcChopCivicLiker.mb-32(
+                  :text="civicLikerStampText"
+                  style="transform:rotate(16deg)"
+                  size="128"
+                )
+                +PaymentSelect
+                button.btn.btn--outlined(
+                  :class="actionButtonClass"
+                  @click="onClickActionButton"
+                )
+                  | {{ actionButtonText }}
+              LikerComparisonCard(
+                v-else
+                tag="li"
+                type="general"
               )
-              +PaymentSelect
-              button.btn.btn--outlined(
-                :class="actionButtonClass"
-                @click="onClickActionButton"
-              )
-                | {{ actionButtonText }}
-            LikerComparisonCard(
-              v-else
-              tag="li"
-              type="general"
-            )
-              template(#header)
-                .relative.mt-12.mx-12.flex.justify-center
-                  a.btn.btn--outlined.btn--grayscale(
-                    :class="actionButtonClassForGuest"
-                    :href="getOAuthRegisterAPI"
-                    @click="onClickActionButtonForGuest"
-                  )
-                    | {{ actionButtonTextForGuest }}
+                template(#header)
+                  .relative.mt-12.mx-12.flex.justify-center
+                    a.btn.btn--outlined.btn--grayscale(
+                      :class="actionButtonClassForGuest"
+                      :href="getOAuthRegisterAPI"
+                      @click="onClickActionButtonForGuest"
+                    )
+                      | {{ actionButtonTextForGuest }}
 
-        .p-32
-          +IntroVideo()
+          .p-32
+            +IntroVideo()
 
       //-
         section.mt-32(ref="visionSection")
