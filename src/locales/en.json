@@ -49,8 +49,7 @@
     "paymentMethod": {
       "stripe": "Credit Card/Debit Card monthly subscription",
       "paypal": "PayPal monthly subscription",
-      "other": "PayMe/FPS for annual fee HK$ 468 (HK only)",
-      "other-alternative": "PayMe/FPS (HK only)"
+      "other": "PayMe/FPS (HK only)"
     }
   },
   "CollapsibleView": {

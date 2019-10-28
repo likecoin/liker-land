@@ -157,7 +157,7 @@ const nuxtConfig = {
     '~/plugins/vue-i18n.js',
     { src: '~/plugins/axios.server.js', mode: 'server' },
     { src: '~/plugins/geoip.server.js', mode: 'server' },
-    { src: '~/plugins/experiment.client.js', mode: 'client' },
+    // { src: '~/plugins/experiment.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
@@ -174,7 +174,7 @@ const nuxtConfig = {
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
     'portal-vue/nuxt',
-    '@likecoin/nuxt-google-optimize',
+    // '@likecoin/nuxt-google-optimize',
   ],
   /*
   ** Axios module configuration
@@ -232,10 +232,10 @@ const nuxtConfig = {
   },
 
   sentry: {},
-  googleOptimize: {
-    useFetch: false,
-    maxAge: 86400, // 1 day
-  },
+  // googleOptimize: {
+  //   useFetch: false,
+  //   maxAge: 86400, // 1 day
+  // },
   router: {
     middleware: 'sliding-menu',
     extendRoutes(routes, resolve) {

@@ -49,8 +49,7 @@
     "paymentMethod": {
       "stripe": "以 信用卡/扣帳卡 每月訂閱",
       "paypal": "以 PayPal 每月訂閱",
-      "other": "以 PayMe/轉數快 繳付年費 HK$ 468（只限香港）",
-      "other-alternative": "以 PayMe/轉數快 繳費"
+      "other": "以 PayMe/轉數快 繳費"
     }
   },
   "CollapsibleView": {
