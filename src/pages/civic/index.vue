@@ -2,25 +2,24 @@
   mixin IntroVideo
     .civic-page__intro-video()&attributes(attributes)
       div
-        no-ssr
-          Transition(
-            :css="false"
-            @enter="fadeInIntroVideo"
-          )
-            div(v-show="isIntroVideoVisible")
-              vue-vimeo-player(
-                ref="introVideoPlayer"
-                :video-id="introVideoVimeoId"
-                :autoplay="true"
-                :loop="true"
-                :options="{ muted: true }"
-                @play="isIntroVideoVisible = true"
-              )
-              button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
-                @click="toggleIntroVideoVolume"
-              )
-                VolumeOffIcon(v-if="isIntroVideoMuted")
-                VolumeOnIcon(v-else)
+        Transition(
+          :css="false"
+          @enter="fadeInIntroVideo"
+        )
+          div(v-show="isIntroVideoVisible")
+            vue-vimeo-player(
+              ref="introVideoPlayer"
+              :video-id="introVideoVimeoId"
+              :autoplay="true"
+              :loop="true"
+              :options="{ muted: true }"
+              @play="isIntroVideoVisible = true"
+            )
+            button.civic-page__intro-video-button.civic-page__intro-video-volume-button(
+              @click="toggleIntroVideoVolume"
+            )
+              VolumeOffIcon(v-if="isIntroVideoMuted")
+              VolumeOnIcon(v-else)
 
   mixin ReferrerBanner
     Transition(
@@ -97,7 +96,7 @@
           path(d='M17.31,5.69c-.31-.09-.63-.16-.95-.22a12.56,12.56,0,0,0-1.94-.13H8.58a.94.94,0,0,0-.93.79L6.41,14v.23a1.06,1.06,0,0,1,1-.9H9.65c4.3,0,7.67-1.74,8.65-6.79a2.14,2.14,0,0,1,.08-.44,5.65,5.65,0,0,0-.8-.34Z' style='fill: #222d65')
           path(d='M7.65,6.13a.94.94,0,0,1,.93-.8h5.84a11.44,11.44,0,0,1,1.94.14,6.68,6.68,0,0,1,1.15.29,4.59,4.59,0,0,1,.79.34,4.75,4.75,0,0,0-1-4.29C16.28.65,14.21,0,11.64,0H4.18a1.06,1.06,0,0,0-1,.9L0,20.6a.63.63,0,0,0,.52.73H5.26L6.41,14Z' style='fill: #253b80')
 
-        span.civic-page__payment-select-fake-label {{ getPaymentText(selectedPaymentMethod) }}
+        span.civic-page__payment-select-fake-label {{ $t(`CivicPage.paymentMethod.${selectedPaymentMethod}`) }}
         svg(width="14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 7")
           polyline(points="1 1 7 6 13 1" style="fill: none;stroke: #28646e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2px")
 
@@ -110,7 +109,7 @@
           :key="method"
           :value="method"
         )
-          | {{ getPaymentText(method) }}
+          | {{ $t(`CivicPage.paymentMethod.${method}`) }}
 
   .civic-page
     PageHeader
@@ -118,54 +117,57 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      +ReferrerBanner()
+      no-ssr
+        +ReferrerBanner()
 
-      section.civic-page__block.bg-white
-        .civic-page__liker-comparison-card-list
-          ul.px-24
-            LikerComparisonCard(
-              tag="li"
-              type="civic"
+        section.civic-page__block.bg-white
+          .civic-page__liker-comparison-card-list
+            ul.px-24(
+              :style="{ flexDirection: referrer && isExperimenting ? 'column-reverse' : undefined }"
             )
-              template(
-                v-if="!referrer"
-                #header
+              LikerComparisonCard(
+                tag="li"
+                type="civic"
               )
-                .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
-                  +PaymentSelect
-                  button.btn.btn--outlined(
-                    :class="actionButtonClass"
-                    @click="onClickActionButton"
-                  )
-                    | {{ actionButtonText }}
-            .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
-              LcChopCivicLiker.mb-32(
-                :text="civicLikerStampText"
-                style="transform:rotate(16deg)"
-                size="128"
+                template(
+                  v-if="!referrer"
+                  #header
+                )
+                  .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
+                    +PaymentSelect
+                    button.btn.btn--outlined(
+                      :class="actionButtonClass"
+                      @click="onClickActionButton"
+                    )
+                      | {{ actionButtonText }}
+              .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
+                LcChopCivicLiker.mb-32(
+                  :text="civicLikerStampText"
+                  style="transform:rotate(16deg)"
+                  size="128"
+                )
+                +PaymentSelect
+                button.btn.btn--outlined(
+                  :class="actionButtonClass"
+                  @click="onClickActionButton"
+                )
+                  | {{ actionButtonText }}
+              LikerComparisonCard(
+                v-else
+                tag="li"
+                type="general"
               )
-              +PaymentSelect
-              button.btn.btn--outlined(
-                :class="actionButtonClass"
-                @click="onClickActionButton"
-              )
-                | {{ actionButtonText }}
-            LikerComparisonCard(
-              v-else
-              tag="li"
-              type="general"
-            )
-              template(#header)
-                .relative.mt-12.mx-12.flex.justify-center
-                  a.btn.btn--outlined.btn--grayscale(
-                    :class="actionButtonClassForGuest"
-                    :href="getOAuthRegisterAPI"
-                    @click="onClickActionButtonForGuest"
-                  )
-                    | {{ actionButtonTextForGuest }}
+                template(#header)
+                  .relative.mt-12.mx-12.flex.justify-center
+                    a.btn.btn--outlined.btn--grayscale(
+                      :class="actionButtonClassForGuest"
+                      :href="getOAuthRegisterAPI"
+                      @click="onClickActionButtonForGuest"
+                    )
+                      | {{ actionButtonTextForGuest }}
 
-        .p-32
-          +IntroVideo()
+          .p-32
+            +IntroVideo()
 
       //-
         section.mt-32(ref="visionSection")
@@ -219,7 +221,12 @@ export default {
   },
   mixins: [
     IntercomMixinFactory({ isBootAtMounted: false }),
-    experimentMixin('isExperiment', 'civic-page', 'new'),
+    experimentMixin(
+      'isExperimenting',
+      'civic-page',
+      'flip',
+      checkIsMobileClient
+    ),
   ],
   // directives: {
   //   swiper: swiperDirective,
@@ -391,15 +398,6 @@ export default {
     }
   },
   methods: {
-    getPaymentText(method) {
-      if (
-        this.isExperiment &&
-        this.$te(`CivicPage.paymentMethod.${method}-alternative`)
-      ) {
-        return this.$t(`CivicPage.paymentMethod.${method}-alternative`);
-      }
-      return this.$t(`CivicPage.paymentMethod.${method}`);
-    },
     onClickActionButton() {
       logTrackerEvent(
         this,
