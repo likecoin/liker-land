@@ -382,7 +382,8 @@ export default {
     if (this.getIsHK) {
       this.selectedPaymentMethod =
         PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
-      this.setLocale('zh-Hant');
+      this.$i18n.locale = 'zh-Hant';
+      this.setLocale(this.$i18n.locale);
     }
     const { from, referrer, utm_source: utmSource } = this.$route.query;
     if (window.sessionStorage) {
