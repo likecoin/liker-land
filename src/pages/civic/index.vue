@@ -188,7 +188,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import dateFormat from 'date-fns/format';
 import { vueVimeoPlayer } from 'vue-vimeo-player';
 
@@ -382,6 +382,7 @@ export default {
     if (this.getIsHK) {
       this.selectedPaymentMethod =
         PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+      this.setLocale('zh-Hant');
     }
     const { from, referrer, utm_source: utmSource } = this.$route.query;
     if (window.sessionStorage) {
@@ -398,6 +399,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setLocale']),
     onClickActionButton() {
       logTrackerEvent(
         this,
