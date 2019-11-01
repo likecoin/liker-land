@@ -122,9 +122,7 @@
 
         section.civic-page__block.bg-white
           .civic-page__liker-comparison-card-list
-            ul.px-24(
-              :style="{ flexDirection: referrer && isExperimenting ? 'column-reverse' : undefined }"
-            )
+            ul.px-24
               LikerComparisonCard(
                 tag="li"
                 type="civic"
@@ -206,7 +204,6 @@ import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 import { IntercomMixinFactory } from '~/mixins/intercom';
-import experimentMixin from '~/mixins/experiment';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
@@ -219,15 +216,7 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
-  mixins: [
-    IntercomMixinFactory({ isBootAtMounted: false }),
-    experimentMixin(
-      'isExperimenting',
-      'civic-page',
-      'flip',
-      checkIsMobileClient
-    ),
-  ],
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   // directives: {
   //   swiper: swiperDirective,
   // },
