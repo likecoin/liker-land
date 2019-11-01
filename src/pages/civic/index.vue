@@ -204,6 +204,7 @@ import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 import { IntercomMixinFactory } from '~/mixins/intercom';
+import experimentMixin from '~/mixins/experiment';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
@@ -216,7 +217,10 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
-  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
+  mixins: [
+    IntercomMixinFactory({ isBootAtMounted: false }),
+    experimentMixin('isExperimenting', 'civic-page', 'monthly'),
+  ],
   // directives: {
   //   swiper: swiperDirective,
   // },
@@ -369,8 +373,10 @@ export default {
   },
   mounted() {
     if (this.getIsHK) {
-      this.selectedPaymentMethod =
-        PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+      if (!this.isExperimenting) {
+        this.selectedPaymentMethod =
+          PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+      }
       this.$i18n.locale = 'zh-Hant';
       this.setLocale(this.$i18n.locale);
     }
