@@ -50,7 +50,7 @@
             template(v-if="referrer")
               i18n.civic-page__referrer-banner-slogan(
                 ref="referrerBannerLeftSlogan"
-                path="CivicPage.referrerBanner.sloganWithReferrer"
+                :path="getRefererSloganPath"
                 tag="div"
               )
                 br(place="br")
@@ -219,7 +219,7 @@ export default {
   },
   mixins: [
     IntercomMixinFactory({ isBootAtMounted: false }),
-    experimentMixin('isExperimenting', 'civic-page', 'monthly'),
+    experimentMixin('isExperimenting', 'civic-page', 'variant'),
   ],
   // directives: {
   //   swiper: swiperDirective,
@@ -269,6 +269,14 @@ export default {
         default:
           return '334616132';
       }
+    },
+    getRefererSloganPath() {
+      const alternativePath =
+        'CivicPage.referrerBanner.sloganWithReferrer-alternative';
+      if (this.isExperimenting && this.$te(alternativePath)) {
+        return alternativePath;
+      }
+      return 'CivicPage.referrerBanner.sloganWithReferrer';
     },
     isCantonese() {
       if (!process.client) return false;
@@ -373,10 +381,8 @@ export default {
   },
   mounted() {
     if (this.getIsHK) {
-      if (!this.isExperimenting) {
-        this.selectedPaymentMethod =
-          PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
-      }
+      this.selectedPaymentMethod =
+        PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
       this.$i18n.locale = 'zh-Hant';
       this.setLocale(this.$i18n.locale);
     }

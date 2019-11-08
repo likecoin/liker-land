@@ -1,6 +1,6 @@
 export default {
   name: 'civic-page',
-  experimentID: 'z3qJJyoBT3uLcJFk42QESg',
+  experimentID: 'CRTLXdjiRfy7OVqShuQwaA',
   isEligible: ({ route }) => !process.server && route.name === 'civic',
-  variants: [{ name: 'origin', weight: 5 }, { name: 'monthly', weight: 5 }],
+  variants: [{ name: 'origin', weight: 5 }, { name: 'variant', weight: 5 }],
 };
