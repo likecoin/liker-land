@@ -132,6 +132,11 @@
                   #header
                 )
                   .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
+                    LikeButtonAnimation.mb-16(
+                      v-if="isExperimenting"
+                      class="-mt-32"
+                      :size="160"
+                    )
                     +PaymentSelect
                     button.btn.btn--outlined(
                       :class="actionButtonClass"
@@ -139,7 +144,18 @@
                     )
                       | {{ actionButtonText }}
               .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
+                .flex.justify-center.mb-24(
+                  v-if="isExperimenting"
+                )
+                  LikeButtonAnimation(:size="180")
+                  LcChopCivicLiker(
+                    class="-ml-32 -mr-32"
+                    :text="civicLikerStampText"
+                    style="transform:rotate(16deg)"
+                    size="128"
+                  )
                 LcChopCivicLiker.mb-32(
+                  v-else
                   :text="civicLikerStampText"
                   style="transform:rotate(16deg)"
                   size="128"
@@ -192,6 +208,7 @@ import { vueVimeoPlayer } from 'vue-vimeo-player';
 
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
+import LikeButtonAnimation from '~/components/LikeButtonAnimation';
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 import { logTrackerEvent } from '~/util/EventLogger';
 // import swiperDirective from '~/util/SwiperDirectives';
@@ -213,6 +230,7 @@ export default {
     vueVimeoPlayer,
     PageHeader,
     SiteNavBar,
+    LikeButtonAnimation,
     LikerComparisonCard,
     VolumeOnIcon,
     VolumeOffIcon,
