@@ -50,7 +50,7 @@
             template(v-if="referrer")
               i18n.civic-page__referrer-banner-slogan(
                 ref="referrerBannerLeftSlogan"
-                :path="getRefererSloganPath"
+                path="CivicPage.referrerBanner.sloganWithReferrer"
                 tag="div"
               )
                 br(place="br")
@@ -287,14 +287,6 @@ export default {
         default:
           return '334616132';
       }
-    },
-    getRefererSloganPath() {
-      const alternativePath =
-        'CivicPage.referrerBanner.sloganWithReferrer-alternative';
-      if (this.isExperimenting && this.$te(alternativePath)) {
-        return alternativePath;
-      }
-      return 'CivicPage.referrerBanner.sloganWithReferrer';
     },
     isCantonese() {
       if (!process.client) return false;
