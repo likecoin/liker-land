@@ -183,7 +183,8 @@
     "creator": "I'm a Creator too",
     "settings": "@:SettingsPage.title",
     "support": "Support",
-    "logout": "Logout"
+    "logout": "Logout",
+    "openWithApp": "Open with Liker.Land app"
   },
   "back": "Back",
   "backToHome": "Home",
