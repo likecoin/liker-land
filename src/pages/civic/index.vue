@@ -132,11 +132,6 @@
                   #header
                 )
                   .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
-                    LikeButtonAnimation.mb-16(
-                      v-if="isExperimenting"
-                      class="-mt-32"
-                      :size="160"
-                    )
                     +PaymentSelect
                     button.btn.btn--outlined(
                       :class="actionButtonClass"
@@ -147,8 +142,12 @@
                 .flex.justify-center.mb-24(
                   v-if="isExperimenting"
                 )
-                  LikeButtonAnimation(:size="180")
+                  LikeButtonAnimation(
+                    :size="180"
+                    :avatar="referrer.avatar"
+                  )
                   LcChopCivicLiker(
+                    v-if="!referrer.avatar"
                     class="-ml-32 -mr-32"
                     :text="civicLikerStampText"
                     style="transform:rotate(16deg)"
@@ -237,7 +236,12 @@ export default {
   },
   mixins: [
     IntercomMixinFactory({ isBootAtMounted: false }),
-    experimentMixin('isExperimenting', 'civic-page', 'variant'),
+    experimentMixin(
+      'isExperimenting',
+      'civic-page',
+      'variant',
+      that => !!that.referrer
+    ),
   ],
   // directives: {
   //   swiper: swiperDirective,
