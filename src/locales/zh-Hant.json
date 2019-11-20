@@ -215,6 +215,12 @@
     "logout": "登出",
     "openWithApp": "以 Liker.Land App 開啟"
   },
+  "SmartAppBanner": {
+    "headerTitle": "選擇以方法瀏覽⋯",
+    "appLabel": "Liker.Land App",
+    "appButtonText": "開啟",
+    "dismissButtonText": "繼續使用瀏覽器瀏覽"
+  },
   "back": "上一頁",
   "backToHome": "返回首頁",
   "civicLiker": "讚賞公民",
