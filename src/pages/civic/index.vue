@@ -142,12 +142,13 @@
                 .flex.justify-center.mb-24(
                   v-if="isExperimenting"
                 )
-                  LikeButtonAnimation(
-                    :size="180"
-                    :avatar="referrer.avatar"
-                  )
+                  template(v-if="referrer && referrer.avatar")
+                    LikeButtonAnimation(
+                      :size="180"
+                      :avatar="referrer.avatar"
+                    )
                   LcChopCivicLiker(
-                    v-if="!referrer.avatar"
+                    v-else
                     class="-ml-32 -mr-32"
                     :text="civicLikerStampText"
                     style="transform:rotate(16deg)"
