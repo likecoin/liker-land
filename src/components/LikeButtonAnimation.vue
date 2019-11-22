@@ -197,6 +197,10 @@ export default {
       type: Number,
       default: 92,
     },
+    isAnimated: {
+      type: Boolean,
+      default: true,
+    },
   },
   beforeDestroy() {
     if (this.tl) this.tl.kill();
@@ -204,6 +208,8 @@ export default {
   methods: {
     onEnter(_, done) {
       done();
+      if (!this.isAnimated) return;
+
       const { pointer, likeButton, claps } = this.$refs;
 
       const tl = new this.$gsap.TimelineMax({ repeat: -1 });
