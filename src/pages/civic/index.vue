@@ -146,6 +146,7 @@
                     LikeButtonAnimation(
                       :size="180"
                       :avatar="referrer.avatar"
+                      :is-animated="false"
                     )
                   LcChopCivicLiker(
                     v-else
