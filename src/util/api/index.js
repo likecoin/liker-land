@@ -4,6 +4,8 @@ import {
   LIKE_CO_CLOUD_FN_BASE,
 } from '@/constant';
 
+export const getAppURL = () => 'https://likecoin.page.link/likeco';
+
 export const getPaypalPaymentPageURL = (likerId, custom) => {
   let baseURL = IS_TESTNET
     ? `https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LFJTWE4PM4VGQ&on0=LikerID&os0=${likerId}`

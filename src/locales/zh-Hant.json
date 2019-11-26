@@ -212,7 +212,14 @@
     "creator": "創作者加盟",
     "settings": "@:SettingsPage.title",
     "support": "幫助",
-    "logout": "登出"
+    "logout": "登出",
+    "openWithApp": "以 Liker.Land App 開啟"
+  },
+  "SmartAppBanner": {
+    "headerTitle": "選擇以方法瀏覽⋯",
+    "appLabel": "Liker.Land App",
+    "appButtonText": "開啟",
+    "dismissButtonText": "繼續使用瀏覽器瀏覽"
   },
   "back": "上一頁",
   "backToHome": "返回首頁",
