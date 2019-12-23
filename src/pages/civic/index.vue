@@ -402,8 +402,18 @@ export default {
       this.$i18n.locale = 'zh-Hant';
       this.setLocale(this.$i18n.locale);
     }
-    const { from, referrer, utm_source: utmSource } = this.$route.query;
+    const {
+      from,
+      referrer,
+      utm_source: utmSource,
+      is_popup: isPopup,
+    } = this.$route.query;
     if (window.sessionStorage) {
+      if (isPopup)
+        window.sessionStorage.setItem(
+          'civicLikerIsPopup',
+          document.referrer || '1'
+        );
       if (from) window.sessionStorage.setItem('civicLikerFrom', from);
       if (referrer)
         window.sessionStorage.setItem('civicLikerReferrer', referrer);

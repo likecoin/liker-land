@@ -136,7 +136,9 @@
     "title": "Payment Successful",
     "heading": "You have became a Civic Liker",
     "body": "Thank you for your payment.",
-    "continue": "Start Liking"
+    "continue": "Start Liking",
+    "backToPreviousSite": "Return to {hostname}",
+    "backToPrevious": "Return to previous site"
   },
   "RedirectPage": {
     "title": "Redirecting"
