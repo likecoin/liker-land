@@ -48,6 +48,7 @@
           >{{ titleForCivicMenuItem }}</NuxtLink>
 
           <a
+            v-if="getUserId"
             class="btn btn--outlined btn--dark btn--block"
             :href="getCreatorURL"
           >{{ $t('SlidingMenu.creator') }}</a>
@@ -76,6 +77,19 @@
           >{{ $t('SlidingMenu.logout') }}</NuxtLink>
         </div>
       </div>
+      <div
+        v-if="isShowAppCTA"
+        class="sliding-menu__app-cta"
+        @click="onClickAppCTA"
+      >
+        <AppIcon
+          class="sliding-menu__app-cta-icon"
+          style="width: 40px"
+        />
+        <span class="sliding-menu__app-cta-label">
+          {{ $t("SlidingMenu.openWithApp") }}
+        </span>
+      </div>
     </div>
 
     <portal-target
@@ -88,21 +102,29 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getOAuthRegisterAPI } from '~/util/api';
+import { getOAuthRegisterAPI, getAppURL } from '~/util/api';
+import { checkIsMobileClient } from '~/util/client';
 import { IntercomMixinFactory } from '~/mixins/intercom';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getCreatorURL } from '~/util/links';
 
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
+import AppIcon from '~/assets/images/app-icon.svg';
 
 export default {
   name: 'SlidingMenu',
   components: {
+    AppIcon,
     CogIcon,
     HomeIcon,
   },
   mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
+  data() {
+    return {
+      isShowAppCTA: false,
+    };
+  },
   computed: {
     getOAuthRegisterAPI() {
       const { from, referrer } = this.$route.query;
@@ -122,6 +144,7 @@ export default {
       }
       return this.$t('SlidingMenu.civic');
     },
+    getAppURL,
     getCreatorURL,
   },
   methods: {
@@ -129,6 +152,9 @@ export default {
 
     ...mapActions(['toggleSlidingMenu']),
 
+    onClickAppCTA() {
+      window.location.href = this.getAppURL;
+    },
     onClickMenuItem() {
       this.toggleSlidingMenu(false);
     },
@@ -143,6 +169,11 @@ export default {
     onClickLogEvent(...args) {
       logTrackerEvent(this, ...args);
     },
+  },
+  mounted() {
+    if (checkIsMobileClient()) {
+      this.isShowAppCTA = true;
+    }
   },
 };
 </script>
@@ -159,6 +190,9 @@ html[sliding-menu='opened'] {
 }
 
 .sliding-menu {
+  display: flex;
+  flex-direction: column;
+
   left: 100%;
 
   width: $sliding-menu-width;
@@ -175,6 +209,10 @@ html[sliding-menu='opened'] {
   @apply h-screen;
 
   &__content {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+
     @apply overflow-y-scroll;
   }
 
@@ -235,6 +273,20 @@ html[sliding-menu='opened'] {
     @apply pl-24;
     @apply pr-16;
     @apply pb-16;
+  }
+
+  &__app-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 10px;
+    border-top-width: 1px;
+    border-style: solid;
+
+    @apply border-like-cyan;
+
+    @apply cursor-pointer;
   }
 }
 

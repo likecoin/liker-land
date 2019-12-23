@@ -183,7 +183,14 @@
     "creator": "I'm a Creator too",
     "settings": "@:SettingsPage.title",
     "support": "Support",
-    "logout": "Logout"
+    "logout": "Logout",
+    "openWithApp": "Open with Liker.Land app"
+  },
+  "SmartAppBanner": {
+    "headerTitle": "Explorer content in…",
+    "appLabel": "Liker.Land App",
+    "appButtonText": "Open",
+    "dismissButtonText": "Continue with browser"
   },
   "back": "Back",
   "backToHome": "Home",
