@@ -154,8 +154,8 @@
     "heading": "你已成為讚賞公民",
     "body": "多謝你的付款。你的交易已完成，系統已透過電郵傳送購物收據給你。",
     "continue": "開始讚賞",
-    "backToPreviousSite": "返回到 {hostname}",
-    "backToPrevious": "返回到原網站"
+    "backToPreviousSite": "返回到 {hostname} 繼續閱讀",
+    "backToPrevious": "返回到原網站繼續閱讀"
   },
   "RedirectPage": {
     "title": "重新轉向"
