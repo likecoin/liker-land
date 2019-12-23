@@ -31,7 +31,14 @@
           <p>{{ $t('PaymentSuccessPage.body') }}</p>
 
           <div class="mt-24 phone:mx-32 laptop:mx-64 desktop:mx-64">
+            <a
+              v-if="isPopup"
+              href="#"
+              class="btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 mx-auto my-0 "
+              @click.prevent="onClickClose"
+            > {{ getCloseButtonText }}</a>
             <NuxtLink
+              v-else
               class="btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 mx-auto my-0 "
               :to="getHomeRoute"
             > {{ $t('PaymentSuccessPage.continue') }}</NuxtLink>
@@ -49,17 +56,36 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import RadialBlastGraph from '~/assets/images/civic/radial-blast.svg';
 import TickIcon from '~/assets/icons/tick.svg';
 
+const parse = require('url-parse');
+
 export default {
   components: {
     RadialBlastGraph,
     TickIcon,
   },
   data() {
-    return {};
+    return {
+      isPopup: '',
+    };
   },
   middleware: 'authenticated',
   computed: {
     ...mapGetters(['getUserInfo', 'getHomeRoute']),
+    getCloseButtonText() {
+      if (this.isPopup && this.isPopup !== '1') {
+        try {
+          const { hostname } = parse(this.isPopup);
+          if (hostname) {
+            return this.$t('PaymentSuccessPage.backToPreviousSite', {
+              hostname,
+            });
+          }
+        } catch (err) {
+          console.error(err); // eslint-disable-line no-console
+        }
+      }
+      return this.$t('PaymentSuccessPage.backToPrevious');
+    },
   },
   head() {
     return {
@@ -70,6 +96,7 @@ export default {
     let from;
     let referrer;
     let utmSource;
+    let isPopup;
     logTrackerEvent(
       this,
       'Civic',
@@ -81,6 +108,8 @@ export default {
       from = window.sessionStorage.getItem('civicLikerFrom');
       referrer = window.sessionStorage.getItem('civicLikerReferrer');
       utmSource = window.sessionStorage.getItem('civicLikerUtmSource');
+      isPopup = window.sessionStorage.getItem('civicLikerIsPopup');
+      if (isPopup) this.isPopup = isPopup;
     }
     try {
       await this.$axios.$post(getPayPalPaymentAPI(), {
@@ -97,11 +126,13 @@ export default {
         'CivicRegisterComplete(paypal)',
         1
       );
-      setTimeout(() => {
-        this.$router.push({
-          name: 'index',
-        });
-      }, 3000);
+      if (!this.isPopup) {
+        setTimeout(() => {
+          this.$router.push({
+            name: 'index',
+          });
+        }, 3000);
+      }
     } catch (err) {
       console.error(err); // eslint-disable-line no-console
       throw err;
@@ -109,6 +140,18 @@ export default {
   },
   methods: {
     ...mapActions(['setUserCivicLiker']),
+    onClickClose() {
+      if (window.sessionStorage) {
+        window.sessionStorage.removeItem('civicLikerIsPopUp');
+      }
+      window.close();
+      /* HACK: Don't stuck user if close didn't work */
+      setTimeout(() => {
+        this.$router.push({
+          name: 'index',
+        });
+      }, 3000);
+    },
   },
 };
 </script>
