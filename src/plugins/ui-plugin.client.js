@@ -8,7 +8,7 @@ import {
   TimelineMax,
   CSSPlugin,
   AttrPlugin,
-} from 'gsap/all';
+} from 'gsap';
 
 const hasIntersectionObserverSupport =
   window &&

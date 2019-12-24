@@ -95,7 +95,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { Circ, Expo } from 'gsap/EasePack';
+import { Circ, Expo } from 'gsap';
 import { makePopup as createTypeFormPopup } from '@typeform/embed';
 
 export default {

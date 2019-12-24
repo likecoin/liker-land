@@ -137,15 +137,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import {
-  Linear,
-  Power1,
-  Power2,
-  Power3,
-  Power4,
-  Back,
-  Sine,
-} from 'gsap/EasePack';
+import { Linear, Power1, Power2, Power3, Power4, Back, Sine } from 'gsap';
 
 import BaseDialog from '~/components/BaseDialog';
 
