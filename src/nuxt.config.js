@@ -95,6 +95,7 @@ const nuxtConfig = {
   render: {
     csp: {
       enabled: true,
+      unsafeInlineCompatibility: true,
       hashAlgorithm: 'sha256',
       policies: {
         'default-src': [
