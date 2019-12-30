@@ -7,7 +7,6 @@ import {
   TimelineLite,
   TimelineMax,
   CSSPlugin,
-  AttrPlugin,
 } from 'gsap';
 
 const hasIntersectionObserverSupport =
@@ -29,5 +28,4 @@ Vue.prototype.$gsap = {
 
   // To make tree-shake happy
   CSSPlugin,
-  AttrPlugin,
 };
