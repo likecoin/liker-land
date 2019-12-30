@@ -41,7 +41,7 @@
     "firestore-store": "^1.0.0",
     "gsap": "^3.0.4",
     "lodash.throttle": "^4.1.1",
-    "nuxt": "^2.4.0",
+    "nuxt": "^2.11.0",
     "nuxt-svg-loader": "^1.0.1",
     "portal-vue": "^1.5.1",
     "resize-observer": "^1.0.0",
