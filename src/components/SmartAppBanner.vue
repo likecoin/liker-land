@@ -26,6 +26,8 @@ import AppIcon from '~/assets/images/app-icon.svg';
 import { getAppURL } from '~/util/api';
 import { checkIsMobileClient } from '~/util/client';
 
+const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic.*)$/;
+
 let hasOpened = false;
 
 export default {
@@ -42,7 +44,11 @@ export default {
     getAppURL,
   },
   mounted() {
-    if (!hasOpened && checkIsMobileClient()) {
+    if (
+      !hasOpened &&
+      checkIsMobileClient() &&
+      !WHITELISTED_ROUTE_REGEX.test(this.$route.name)
+    ) {
       this.isOpen = true;
     }
   },
