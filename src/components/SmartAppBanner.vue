@@ -24,7 +24,7 @@
 <script>
 import AppIcon from '~/assets/images/app-icon.svg';
 import { getAppURL } from '~/util/api';
-import { checkIsMobileClient } from '~/util/client';
+import { checkIsMobileClient, checkIsLikeCoinApp } from '~/util/client';
 
 const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic.*)$/;
 
@@ -47,6 +47,7 @@ export default {
     if (
       !hasOpened &&
       checkIsMobileClient() &&
+      !checkIsLikeCoinApp() &&
       !WHITELISTED_ROUTE_REGEX.test(this.$route.name)
     ) {
       this.isOpen = true;

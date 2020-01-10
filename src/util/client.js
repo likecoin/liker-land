@@ -6,3 +6,9 @@ export function checkIsMobileClient() {
   if (!global.window) return false;
   return MOBILE_CLIENT_REGEX.test(global.window.navigator.userAgent);
 }
+
+export function checkIsLikeCoinApp() {
+  if (!global.window) return false;
+  const { userAgent = '' } = global.window.navigator;
+  return userAgent.includes('LikeCoinApp');
+}
