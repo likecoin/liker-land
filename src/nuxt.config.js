@@ -232,8 +232,12 @@ const nuxtConfig = {
     display: 'standalone',
     orientation: 'portrait',
   },
-
-  sentry: {},
+  sentry: {
+    clientIntegrations: {
+      /* default integrations will still be added due to deep-merge */
+      ReportingObserver: false, // reporting is very noisy on CSP violation.
+    },
+  },
   googleOptimize: {
     useFetch: false,
     maxAge: 86400, // 1 day
