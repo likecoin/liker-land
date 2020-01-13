@@ -56,7 +56,7 @@ const swiperDirective = globalOptions => {
     // Init
     bind(el, binding, vnode) {
       const self = vnode.context
-      if (el.className.indexOf('swiper-container') === -1) {
+      if (typeof el.className === 'string' && el.className.indexOf('swiper-container') === -1) {
         el.className += ((el.className ? ' ' : '') + 'swiper-container')
       }
     },
