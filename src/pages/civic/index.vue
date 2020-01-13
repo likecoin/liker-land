@@ -219,7 +219,7 @@ import VolumeOffIcon from '~/assets/icons/volume-off.svg';
 
 import { checkIsMobileClient } from '~/util/client';
 import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
-import { getAvatarHaloTypeFromUser } from '~/util/user';
+import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 
 import { IntercomMixinFactory } from '~/mixins/intercom';
 import experimentMixin from '~/mixins/experiment';
@@ -353,7 +353,7 @@ export default {
   async asyncData({ route, $axios }) {
     // Fetch referrer info
     const { from } = route.query;
-    if (from) {
+    if (from && checkUserNameValid(from)) {
       try {
         const user = await $axios.$get(getUserMinAPI(from));
         return {
@@ -363,8 +363,9 @@ export default {
           },
         };
       } catch (err) {
+        const msg = (err.response && err.response.data) || err;
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(msg);
       }
     }
     return undefined;

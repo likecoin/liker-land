@@ -19,7 +19,10 @@ function filterArticleList(list) {
     const { referrer, url, user, ts } = i;
     return {
       referrer,
-      url: referrer.toLowerCase() === url.toLowerCase() ? undefined : url,
+      url:
+        referrer && referrer.toLowerCase() === url.toLowerCase()
+          ? undefined
+          : url,
       user,
       ts,
     };
