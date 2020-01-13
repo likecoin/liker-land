@@ -123,7 +123,8 @@ const nuxtConfig = {
           '*.facebook.net',
           'https://js.stripe.com',
           'https://hooks.stripe.com',
-          'https://admin.typeform.com',
+          'admin.typeform.com',
+          'civicliker.typeform.com',
         ],
         'connect-src': [
           "'self'",
