@@ -531,7 +531,7 @@ export default {
         opacity: 1,
         ease: 'easeOutPower2',
       });
-      [...rightLines.children, ...leftLines.children]
+      [...(rightLines.children || []), ...(leftLines.children || [])]
         .sort(() => 0.5 - Math.random()) // Randomize the order of the lines
         .forEach((line, i) => {
           // Add randomized floating animation to each line
