@@ -188,6 +188,9 @@ const nuxtConfig = {
   googleAnalytics: {
     id: process.env.GA_TRACKING_ID || '',
     dev: false, // disable module for nuxt dev
+    debug: {
+      sendHitTask: true,
+    },
     disabled: () => !!((window && window.doNotTrack) || (navigator && navigator.doNotTrack)), // eslint-disable-line no-undef
   },
 
