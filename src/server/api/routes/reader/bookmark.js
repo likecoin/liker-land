@@ -1,11 +1,13 @@
 const { Router } = require('express');
 const { apiFetchArticleDetail } = require('../../util/api');
 const { FieldValue, userCollection } = require('../../util/firebase');
+const { setPrivateCacheHeader } = require('../../middleware/cache');
 
 const router = Router();
 
 router.get('/reader/bookmark', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     if (!req.session.user) {
       res.sendStatus(403);
       return;

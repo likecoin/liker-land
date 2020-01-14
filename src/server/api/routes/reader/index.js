@@ -6,6 +6,7 @@ const {
   apiFetchFollowedArticles,
 } = require('../../util/api');
 const { userCollection } = require('../../util/firebase');
+const { setPrivateCacheHeader } = require('../../middleware/cache');
 const follow = require('./follow');
 const bookmark = require('./bookmark');
 
@@ -43,6 +44,7 @@ async function getFollowedUserListInfo(req) {
 
 router.get('/reader/index', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     if (!req.session.user) {
       res.sendStatus(403);
       return;
@@ -70,6 +72,7 @@ router.get('/reader/works/suggest', async (req, res, next) => {
 
 router.get('/reader/works/followed', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     if (!req.session.user) {
       res.sendStatus(403);
       return;
@@ -95,6 +98,7 @@ router.get('/reader/works/followed', async (req, res, next) => {
 
 router.get('/reader/user/:user/works', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     if (!req.session.user) {
       res.sendStatus(403);
       return;
