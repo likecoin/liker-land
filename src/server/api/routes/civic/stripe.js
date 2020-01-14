@@ -57,7 +57,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const { referrer, from, utm_source: utmSource } = req.query;
+    const { edit, referrer, from, utm_source: utmSource } = req.query;
     // start a new checkout session
     const metadata = { userId: req.session.user };
     if (from) metadata.from = from.substring(0, 32);
@@ -67,24 +67,37 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
     const userDoc = await userRef.get();
     const {
       user: { email } = {},
-      stripe: { customerId } = {},
+      stripe: { subscriptionId, customerId } = {},
     } = userDoc.data();
-    const payload = {
+    const stripePayload = {
       payment_method_types: ['card'], // only supports card for now
       locale: 'en', // hardcode en before we have zh_Hant
-      subscription_data: {
+    };
+    if (edit === '1') {
+      stripePayload.mode = 'setup';
+      stripePayload.setup_intent_data = {
+        metadata: {
+          customer_id: customerId,
+          subscription_id: subscriptionId,
+        },
+      };
+      stripePayload.customer_email = email;
+      stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
+      stripePayload.cancel_url = `${EXTERNAL_URL}/settings/civic`;
+    } else {
+      stripePayload.subscription_data = {
         items: [{ plan: STRIPE_PLAN_ID }],
         metadata,
-      },
-      success_url: `${EXTERNAL_URL}/civic/payment/stripe/success`,
-      cancel_url: `${EXTERNAL_URL}/civic/payment/stripe/fail`,
-    };
-    if (customerId) {
-      payload.customer = customerId;
-    } else {
-      payload.customer_email = email;
+      };
+      stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
+      stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
+      if (customerId) {
+        stripePayload.customer = customerId;
+      } else {
+        stripePayload.customer_email = email;
+      }
     }
-    const session = await stripe.checkout.sessions.create(payload);
+    const session = await stripe.checkout.sessions.create(stripePayload);
     res.json({
       type: 'session',
       sessionId: session.id,

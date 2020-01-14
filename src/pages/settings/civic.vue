@@ -22,6 +22,11 @@
                 )
                 .settings-civic-page__billing-summary-row-value
                   | {{ maskedCardNumber }}
+                a.btn.btn--plain.btn--auto-size.text-12.px-0(
+                  href="#"
+                  @click.prevent="initUpdatePaymentSession"
+                )
+                  | {{ $t('SettingsCivicPage.editPaymentMethod') }}
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
                 label.settings-civic-page__billing-summary-row-label
                   | {{ $t(`SettingsCivicPage.billingSummary.${getUserSubscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
@@ -71,7 +76,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getPaypalUnsubscribeURL, getOiceSettingsURL } from '~/util/api';
+import {
+  getStripeEditPaymentAPI,
+  getPaypalUnsubscribeURL,
+  getOiceSettingsURL,
+} from '~/util/api';
 
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 
@@ -168,6 +177,15 @@ export default {
   head() {
     return {
       title: this.$t('SettingsCivicPage.title'),
+      link: [
+        {
+          hid: 'preload:stripe',
+          rel: 'preload',
+          href: 'https://js.stripe.com/v3',
+          as: 'script',
+        },
+      ],
+      script: [{ hid: 'stripe', src: 'https://js.stripe.com/v3/' }],
     };
   },
   mounted() {
@@ -195,6 +213,21 @@ export default {
         }
       }
       this.isFetchedSubscriptionInfo = true;
+    },
+    async initUpdatePaymentSession() {
+      const { sessionId } = await this.$axios.$get(getStripeEditPaymentAPI());
+      if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {
+        console.error('window stripe is missing!'); // eslint-disable-line no-console
+        return;
+      }
+      const stripe = window.Stripe(process.env.STRIPE_PUBLIC_KEY);
+      this.stripe = stripe;
+      const result = await this.stripe.redirectToCheckout({
+        sessionId,
+      });
+      if (result && result.error) {
+        this.error = result.error.message;
+      }
     },
   },
 };

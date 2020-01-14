@@ -47,9 +47,14 @@ export default {
         },
       ],
       link: [
-        { rel: 'preload', href: 'https://js.stripe.com/v3', as: 'script' },
+        {
+          hid: 'preload:stripe',
+          rel: 'preload',
+          href: 'https://js.stripe.com/v3',
+          as: 'script',
+        },
       ],
-      script: [{ src: 'https://js.stripe.com/v3' }],
+      script: [{ hid: 'stripe', src: 'https://js.stripe.com/v3/' }],
     };
   },
   mounted() {

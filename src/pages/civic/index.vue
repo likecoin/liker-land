@@ -134,7 +134,6 @@
                   .relative.mt-12.mx-12.flex.flex-col.items-center.justify-center
                     +PaymentSelect
                     button.btn.btn--outlined(
-                      :class="actionButtonClass"
                       @click="onClickActionButton"
                     )
                       | {{ actionButtonText }}
@@ -163,7 +162,6 @@
                 )
                 +PaymentSelect
                 button.btn.btn--outlined(
-                  :class="actionButtonClass"
                   @click="onClickActionButton"
                 )
                   | {{ actionButtonText }}
@@ -307,13 +305,6 @@ export default {
       );
     },
 
-    actionButtonClass() {
-      return {
-        'btn--disabled':
-          this.getUserIsCivicLiker &&
-          !this.getUserInfo.isCivicLikerRenewalPeriod,
-      };
-    },
     actionButtonText() {
       if (this.getUserInfo.isCivicLikerRenewalPeriod) {
         return this.$t('renew');
