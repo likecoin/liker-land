@@ -2,6 +2,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const { Router } = require('express');
 const { userCollection } = require('../util/firebase');
+const { setPrivateCacheHeader } = require('../middleware/cache');
 const {
   apiFetchUserProfile,
   getOAuthCallbackAPI,
@@ -29,6 +30,7 @@ const router = Router();
 
 router.get('/users/self', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     const { user } = req.session;
     if (user) {
       const [{ data }, userDoc] = await Promise.all([

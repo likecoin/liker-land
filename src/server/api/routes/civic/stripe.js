@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { userCollection } = require('../../util/firebase');
 const { stripe, STRIPE_PLAN_ID } = require('../../util/stripe');
+const { setPrivateCacheHeader } = require('../../middleware/cache');
 
 const { EXTERNAL_URL } = require('../../util/api');
 
@@ -8,6 +9,7 @@ const router = Router();
 
 router.get('/civic/payment/stripe', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     if (!req.session.user) {
       res.sendStatus(403);
       return;
@@ -50,6 +52,7 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
 // checkout based purchase endpoint
 router.get('/civic/payment/stripe/payment', async (req, res, next) => {
   try {
+    setPrivateCacheHeader(res);
     if (!req.session.user) {
       res.sendStatus(403);
       return;
