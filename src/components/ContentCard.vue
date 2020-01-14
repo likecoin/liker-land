@@ -139,6 +139,7 @@
 
 <script>
 import { VPopover } from 'v-tooltip';
+import parse from 'url-parse';
 
 import { LIKE_CO_URL_BASE } from '~/constant';
 import { getImageResizeAPI } from '~/util/api';
@@ -248,9 +249,9 @@ export default {
     },
     url() {
       try {
-        return new URL(this.src);
+        return parse(this.src);
       } catch (error) {
-        return undefined;
+        return {};
       }
     },
     formattedLikeCount() {
