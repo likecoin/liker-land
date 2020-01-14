@@ -16,6 +16,7 @@
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.10",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/axios": "^5.5.3",
+    "@nuxtjs/google-analytics": "^2.2.0",
     "@nuxtjs/pwa": "^3.0.0-beta.10",
     "@nuxtjs/sentry": "^3.0.1",
     "@typeform/embed": "^0.9.3",

@@ -171,13 +171,12 @@ const nuxtConfig = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/google-analytics',
     '@nuxtjs/sentry',
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
     'portal-vue/nuxt',
-  ],
-  buildModules: [
-    '@nuxtjs/google-analytics',
+    '@likecoin/nuxt-google-optimize',
   ],
   /*
   ** Axios module configuration
