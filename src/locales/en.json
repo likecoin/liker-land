@@ -148,8 +148,12 @@
     "knowMoreAbout": "Know more about",
     "subscribed": "Subscribed",
     "billingSummary": {
+      "cancelDate": "Will cancel at",
       "nextBillingDate": "Next billing date"
-    }
+    },
+    "editPaymentMethod": "Edit",
+    "resumeSubscription": "Resume Civic Liker subscription",
+    "cancelSubscription": "Cancel Civic Liker subscription"
   },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > Follow / Unfollow",

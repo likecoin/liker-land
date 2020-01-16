@@ -47,6 +47,8 @@ export const getStripePaymentAPI = ({
   )}&referrer=${encodeURIComponent(referrer)}&utm_source=${encodeURIComponent(
     utmSource
   )}`;
+export const getStripeEditPaymentAPI = () =>
+  '/api/civic/payment/stripe/payment?edit=1';
 export const getStripePaymentStatusAPI = () => '/api/civic/payment/stripe';
 export const getCivicCSOnlineAPI = () => `/api/civic/csonline`;
 export const getCivicLikerTrialEventByIdAPI = id =>

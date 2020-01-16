@@ -23,17 +23,37 @@ router.post('/hook/stripe', async (req, res, next) => {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
-        const { subscription: subscriptionId } = session;
-        const subscription = await stripe.subscriptions.retrieve(
-          subscriptionId
-        );
-        const { userId } = subscription.metadata;
-        const userRef = userCollection.doc(userId);
-        await userRef.update({
-          'stripe.subscriptionId': subscriptionId,
-          'stripe.customerId': subscription.customer,
-          'stripe.planId': subscription.plan.id,
-        });
+        const {
+          subscription: subscriptionId,
+          setup_intent: setupIntentId,
+        } = session;
+        if (subscriptionId) {
+          const subscription = await stripe.subscriptions.retrieve(
+            subscriptionId
+          );
+          const { userId } = subscription.metadata;
+          const userRef = userCollection.doc(userId);
+          await userRef.update({
+            'stripe.subscriptionId': subscriptionId,
+            'stripe.customerId': subscription.customer,
+            'stripe.planId': subscription.plan.id,
+          });
+        } else if (setupIntentId) {
+          const setupIntent = await stripe.setupIntents.retrieve(setupIntentId);
+          await stripe.paymentMethods.attach(setupIntent.payment_method, {
+            customer: setupIntent.metadata.customer_id,
+          });
+          await stripe.customers.update(setupIntent.metadata.customer_id, {
+            invoice_settings: {
+              default_payment_method: setupIntent.payment_method,
+            },
+          });
+        } else {
+          // eslint-disable-next-line no-console
+          console.error(`Unknown session object evt id: ${event.id}`);
+          res.sendStatus(415);
+          return;
+        }
         break;
       }
       default: {
