@@ -51,6 +51,26 @@ router.use(
     unset: 'destroy',
   })
 );
+router.use((req, res, next) => {
+  // HACK: mitigate issue that express-session set-cookie Expires contains comma
+  // which makes firebase hosting wrongly split the set-cookie header into 2
+  // mitigate by overide cookie serialize function and use MaxAge instead of Expires
+  Object.defineProperty(req.session.cookie, 'data', {
+    get() {
+      return {
+        originalMaxAge: this.originalMaxAge,
+        maxAge: this.maxAge / 1000,
+        secure: this.secure,
+        httpOnly: this.httpOnly,
+        domain: this.domain,
+        path: this.path,
+        sameSite: this.sameSite,
+      };
+    },
+  });
+  next();
+});
+
 router.use(cookieParser());
 router.use(users);
 router.use(civic);
