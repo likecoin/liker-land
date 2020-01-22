@@ -54,7 +54,7 @@
                 tag="div"
               )
                 br(place="br")
-                span.civic-page__referrer-banner-slogan-name(place="name")
+                span.civic-page__referrer-banner-slogan-name.whitespace-no-wrap(place="name")
                   | {{ referrer.displayName }}
 
               LcAvatar(
