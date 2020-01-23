@@ -4,14 +4,31 @@
     appear
   )
     DialogLayout.error-dialog
+      template(
+        v-if="isExperimenting && isLoginErrorFromCivicLikerRegistration"
+        #header-content
+      )
+        LikeButtonAnimation(
+          class="-mt-32"
+          :avatar="referrer ? referrer.avatar : undefined"
+        )
       template(#body)
         Transition(
           name="error-dialog-content-"
           appear
         )
           main.page-content.error-dialog-content
+            i18n.text-24.mt-16.font-600(
+              v-if="isExperimenting && isLoginErrorFromCivicLikerRegistration"
+              :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
+              tag="p"
+            )
+              span.whitespace-no-wrap(
+                v-if="referrer"
+                place="creator"
+              ) {{ referrer.displayName }}
 
-            template(v-if="formattedTitle")
+            template(v-else-if="formattedTitle")
               h1.text-28.mt-16.px-12 {{ formattedTitle }}
               p.text-16.mt-32.leading-1_5 {{ formattedMessage }}
 
@@ -61,10 +78,17 @@
 
 <script>
 import DialogLayout from '~/components/DialogLayout';
+import LikeButtonAnimation from '~/components/LikeButtonAnimation';
 
-import { getOAuthLoginAPI, getOAuthRegisterAPI } from '~/util/api';
+import {
+  getOAuthLoginAPI,
+  getOAuthRegisterAPI,
+  getUserMinAPI,
+} from '~/util/api';
+import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
+import experimentMixin from '~/mixins/experiment';
 import IntercomMixin from '~/mixins/intercom';
 
 export default {
@@ -79,13 +103,27 @@ export default {
   },
   components: {
     DialogLayout,
+    LikeButtonAnimation,
   },
-  mixins: [IntercomMixin],
+  mixins: [
+    IntercomMixin,
+    experimentMixin(
+      'isExperimenting',
+      'civic-register-page',
+      'variant',
+      that => that.isLoginErrorFromCivicLikerRegistration
+    ),
+  ],
   props: {
     error: {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      referrer: undefined,
+    };
   },
   computed: {
     getOAuthLoginAPI,
@@ -112,6 +150,9 @@ export default {
     isLoginError() {
       return /^LOGIN_NEEDED.*/.test(this.error.message);
     },
+    isLoginErrorFromCivicLikerRegistration() {
+      return this.isLoginError && /^civic-register.*/.test(this.$route.name);
+    },
     isCivicLikerRelatedError() {
       return /^CIVIC_LIKER.*/.test(this.error.message);
     },
@@ -136,7 +177,7 @@ export default {
       return `[${statusCode}] ${message}`;
     },
   },
-  mounted() {
+  async mounted() {
     if (this.isLoginError) {
       if (window.sessionStorage) {
         const { name, params, query, hash } = this.$route;
@@ -149,6 +190,23 @@ export default {
             hash,
           })
         );
+      }
+    }
+    if (this.isExperimenting && this.isLoginErrorFromCivicLikerRegistration) {
+      // Fetch referrer info
+      const { from } = this.$route.query;
+      if (from && checkUserNameValid(from)) {
+        try {
+          const user = await this.$axios.$get(getUserMinAPI(from));
+          this.referrer = {
+            ...user,
+            avatarHalo: getAvatarHaloTypeFromUser(user),
+          };
+        } catch (err) {
+          const msg = (err.response && err.response.data) || err;
+          // eslint-disable-next-line no-console
+          console.error(msg);
+        }
       }
     }
   },

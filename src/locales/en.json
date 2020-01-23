@@ -75,6 +75,8 @@
     "LOGIN_NEEDED_TO_BOOKMARK": "Please sign in to bookmark this content",
     "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "Please sign in to follow this author",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "Please sign in to register Civic Liker",
+    "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "Please sign in to support creators",
+    "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "Please sign in to support {creator}",
     "CIVIC_LIKER_ALREADY_PAID": {
       "title": "You are already a Civic Liker",
       "message": "Thanks for your support, but you registered as a Civic Liker successfully."
