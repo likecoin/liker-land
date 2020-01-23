@@ -5,7 +5,7 @@
   )
     DialogLayout.error-dialog
       template(
-        v-if="isLoginErrorFromCivicLiker"
+        v-if="isExperimenting && isLoginErrorFromCivicLiker"
         #header-content
       )
         LikeButtonAnimation(
@@ -19,7 +19,7 @@
         )
           main.page-content.error-dialog-content
             i18n.text-24.mt-16.font-600(
-              v-if="isLoginErrorFromCivicLiker"
+              v-if="isExperimenting && isLoginErrorFromCivicLiker"
               :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
               tag="p"
             )
@@ -88,6 +88,7 @@ import {
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
+import experimentMixin from '~/mixins/experiment';
 import IntercomMixin from '~/mixins/intercom';
 
 export default {
@@ -104,7 +105,15 @@ export default {
     DialogLayout,
     LikeButtonAnimation,
   },
-  mixins: [IntercomMixin],
+  mixins: [
+    IntercomMixin,
+    experimentMixin(
+      'isExperimenting',
+      'civic-register-page',
+      'variant',
+      that => !!that.isLoginErrorFromCivicLiker
+    ),
+  ],
   props: {
     error: {
       type: Object,
@@ -183,7 +192,7 @@ export default {
         );
       }
     }
-    if (this.isLoginErrorFromCivicLiker) {
+    if (this.isExperimenting && this.isLoginErrorFromCivicLiker) {
       // Fetch referrer info
       const { from } = this.$route.query;
       if (from && checkUserNameValid(from)) {

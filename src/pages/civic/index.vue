@@ -138,24 +138,7 @@
                     )
                       | {{ actionButtonText }}
               .flex.flex-col.items-center.justify-center.w-full.max-w-full(v-if="referrer")
-                .flex.justify-center.mb-24(
-                  v-if="isExperimenting"
-                )
-                  template(v-if="referrer && referrer.avatar")
-                    LikeButtonAnimation(
-                      :size="180"
-                      :avatar="referrer.avatar"
-                      :is-animated="false"
-                    )
-                  LcChopCivicLiker(
-                    v-else
-                    class="-ml-32 -mr-32"
-                    :text="civicLikerStampText"
-                    style="transform:rotate(16deg)"
-                    size="128"
-                  )
                 LcChopCivicLiker.mb-32(
-                  v-else
                   :text="civicLikerStampText"
                   style="transform:rotate(16deg)"
                   size="128"
@@ -207,7 +190,6 @@ import { vueVimeoPlayer } from 'vue-vimeo-player';
 
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
-import LikeButtonAnimation from '~/components/LikeButtonAnimation';
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 import { logTrackerEvent } from '~/util/EventLogger';
 // import swiperDirective from '~/util/SwiperDirectives';
@@ -220,7 +202,6 @@ import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 
 import { IntercomMixinFactory } from '~/mixins/intercom';
-import experimentMixin from '~/mixins/experiment';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
@@ -229,20 +210,11 @@ export default {
     vueVimeoPlayer,
     PageHeader,
     SiteNavBar,
-    LikeButtonAnimation,
     LikerComparisonCard,
     VolumeOnIcon,
     VolumeOffIcon,
   },
-  mixins: [
-    IntercomMixinFactory({ isBootAtMounted: false }),
-    experimentMixin(
-      'isExperimenting',
-      'civic-page',
-      'variant',
-      that => !!that.referrer
-    ),
-  ],
+  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
   // directives: {
   //   swiper: swiperDirective,
   // },
