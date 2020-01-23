@@ -111,7 +111,7 @@ export default {
       'isExperimenting',
       'civic-register-page',
       'variant',
-      that => !!that.isLoginErrorFromCivicLiker
+      that => that.isLoginErrorFromCivicLiker
     ),
   ],
   props: {
