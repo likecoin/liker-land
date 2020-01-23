@@ -5,7 +5,7 @@
   )
     DialogLayout.error-dialog
       template(
-        v-if="isExperimenting && isLoginErrorFromCivicLiker"
+        v-if="isExperimenting && isLoginErrorFromCivicLikerRegistration"
         #header-content
       )
         LikeButtonAnimation(
@@ -19,7 +19,7 @@
         )
           main.page-content.error-dialog-content
             i18n.text-24.mt-16.font-600(
-              v-if="isExperimenting && isLoginErrorFromCivicLiker"
+              v-if="isExperimenting && isLoginErrorFromCivicLikerRegistration"
               :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
               tag="p"
             )
@@ -111,7 +111,7 @@ export default {
       'isExperimenting',
       'civic-register-page',
       'variant',
-      that => that.isLoginErrorFromCivicLiker
+      that => that.isLoginErrorFromCivicLikerRegistration
     ),
   ],
   props: {
@@ -150,7 +150,7 @@ export default {
     isLoginError() {
       return /^LOGIN_NEEDED.*/.test(this.error.message);
     },
-    isLoginErrorFromCivicLiker() {
+    isLoginErrorFromCivicLikerRegistration() {
       return this.isLoginError && /^civic-register.*/.test(this.$route.name);
     },
     isCivicLikerRelatedError() {
@@ -192,7 +192,7 @@ export default {
         );
       }
     }
-    if (this.isExperimenting && this.isLoginErrorFromCivicLiker) {
+    if (this.isExperimenting && this.isLoginErrorFromCivicLikerRegistration) {
       // Fetch referrer info
       const { from } = this.$route.query;
       if (from && checkUserNameValid(from)) {
