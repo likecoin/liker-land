@@ -1,7 +1,7 @@
 <template lang="pug">
   a.content-card(
     :href="src"
-    :title="title"
+    :title="normalizedTitle"
     target="_blank"
     rel="noopener"
   )
@@ -23,7 +23,7 @@
             | {{ authorName }}
 
           //- Placeholder
-          .content-card__author-placeholder(v-else)
+          .content-card__author-placeholder(v-else-if="!isBookmarked")
             .placeholder-shimmer.avatar
             .placeholder-shimmer.name.content-card__placeholder-text
 
@@ -43,7 +43,7 @@
 
           //- Placeholder
           .placeholder-shimmer.content-card__like-count-placeholder(
-            v-else
+            v-else-if="!isBookmarked"
             key="like-count-placeholder"
           )
 
@@ -57,7 +57,7 @@
       )
         img(
           :src="resizedCoverSrc"
-          :alt="title"
+          :alt="normalizedTitle"
           crossorigin="anonymous"
         )
 
@@ -70,7 +70,7 @@
       @leave="onElemLeave"
     )
       .content-card__inset.content-card__info(
-        v-if="title || description"
+        v-if="normalizedTitle || description"
         key="info"
       )
         a.content-card__domain(
@@ -79,11 +79,11 @@
           rel="noopener"
         )
           | {{ url.hostname }}
-        .content-card__title {{ title }}
+        .content-card__title {{ normalizedTitle }}
         .content-card__description {{ description }}
       //- Empty content
       div(
-        v-else-if="title === '' && description === ''"
+        v-else-if="normalizedTitle === '' && description === ''"
         key="info-empty"
       )
       //- Placeholder
@@ -253,6 +253,12 @@ export default {
       } catch (error) {
         return {};
       }
+    },
+    normalizedTitle() {
+      if (this.isBookmarked) {
+        return this.title || (this.src && decodeURI(this.src).split('?')[0]);
+      }
+      return this.title;
     },
     formattedLikeCount() {
       let { likeCount } = this;

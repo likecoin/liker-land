@@ -83,7 +83,11 @@ export default {
     ]),
 
     hasContent() {
-      return this.internalTitle || this.internalCoverSrc;
+      return (
+        this.getIsInBookmark(this.referrer) ||
+        this.internalTitle ||
+        this.internalCoverSrc
+      );
     },
     shouldFetchArticle() {
       return !this.internalTitle || !this.internalLikeCount;

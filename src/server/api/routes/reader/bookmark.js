@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { apiFetchArticleDetail } = require('../../util/api');
+const parse = require('url-parse');
 const { FieldValue, userCollection } = require('../../util/firebase');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 
@@ -32,15 +32,9 @@ router.post('/reader/bookmark', async (req, res, next) => {
       return;
     }
     try {
-      await apiFetchArticleDetail(url);
+      parse(url);
     } catch (err) {
-      if (err.response) {
-        if (err.response.status === 404) {
-          res.sendStatus(404);
-          return;
-        }
-      }
-      next(err);
+      res.sendStatus(400);
       return;
     }
     const userRef = userCollection.doc(req.session.user);
@@ -65,15 +59,9 @@ router.delete('/reader/bookmark', async (req, res, next) => {
       return;
     }
     try {
-      await apiFetchArticleDetail(url);
+      parse(url);
     } catch (err) {
-      if (err.response) {
-        if (err.response.status === 404) {
-          res.sendStatus(404);
-          return;
-        }
-      }
-      next(err);
+      res.sendStatus(400);
       return;
     }
     const userRef = userCollection.doc(req.session.user);
