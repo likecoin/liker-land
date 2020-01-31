@@ -202,6 +202,7 @@ import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 
 import { IntercomMixinFactory } from '~/mixins/intercom';
+import experimentMixin from '~/mixins/experiment';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
@@ -214,7 +215,10 @@ export default {
     VolumeOnIcon,
     VolumeOffIcon,
   },
-  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
+  mixins: [
+    IntercomMixinFactory({ isBootAtMounted: false }),
+    experimentMixin('isExperimenting', 'civic-register-page', 'variant'),
+  ],
   // directives: {
   //   swiper: swiperDirective,
   // },

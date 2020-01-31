@@ -107,12 +107,7 @@ export default {
   },
   mixins: [
     IntercomMixin,
-    experimentMixin(
-      'isExperimenting',
-      'civic-register-page',
-      'variant',
-      that => that.isLoginErrorFromCivicLikerRegistration
-    ),
+    experimentMixin('isExperimenting', 'civic-register-page', 'variant'),
   ],
   props: {
     error: {
