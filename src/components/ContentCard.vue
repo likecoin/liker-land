@@ -116,6 +116,7 @@
             :auto-hide="!isUpdatingFollow"
             trigger="manual"
             placement="auto"
+            v-if="authorId"
           )
             button.content-card__action-bar-button(
               @click.prevent="onClickOptionButton"
@@ -279,9 +280,11 @@ export default {
     },
     shouldShowActionBar() {
       return (
-        this.authorId &&
-        (this.title !== undefined || this.description !== undefined) &&
-        this.coverSrc !== undefined
+        this.isBookmarked ||
+        (this.authorId &&
+          (this.normalizedTitle !== undefined ||
+            this.description !== undefined) &&
+          this.coverSrc !== undefined)
       );
     },
   },
