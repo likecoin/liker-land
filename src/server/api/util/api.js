@@ -104,6 +104,14 @@ const apiFetchUserArticles = (user, { limit, after, before }) =>
   });
 const apiFetchSuggestedArticles = () =>
   axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
+const apiPostArticleForInfo = (url, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKECOIN_API_BASE}/like/info`,
+      { url },
+      { headers: { Authorization } }
+    )
+  );
 const apiFetchArticleDetail = url =>
   axios.get(`${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`);
 const apiFetchCivicCSOnline = () =>
@@ -144,6 +152,7 @@ module.exports = {
   apiFetchFollowedArticles,
   apiFetchUserArticles,
   apiFetchSuggestedArticles,
+  apiPostArticleForInfo,
   apiFetchArticleDetail,
   apiFetchCivicCSOnline,
   apiCivicLikerTrialEventById,

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const parse = require('url-parse');
 const { FieldValue, userCollection } = require('../../util/firebase');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
+const { apiPostArticleForInfo } = require('../../util/api');
 
 const router = Router();
 
@@ -37,6 +38,7 @@ router.post('/reader/bookmark', async (req, res, next) => {
       res.sendStatus(400);
       return;
     }
+    await apiPostArticleForInfo(url, req);
     const userRef = userCollection.doc(req.session.user);
     await userRef.update({
       bookmarks: FieldValue.arrayUnion(url),
