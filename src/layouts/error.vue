@@ -5,7 +5,7 @@
   )
     DialogLayout.error-dialog
       template(
-        v-if="isExperimenting && isLoginErrorFromCivicLikerRegistration"
+        v-if="!isExperimenting && isLoginErrorFromCivicLikerRegistration"
         #header-content
       )
         LikeButtonAnimation(
@@ -19,7 +19,7 @@
         )
           main.page-content.error-dialog-content
             i18n.text-24.mt-16.font-600(
-              v-if="isExperimenting && isLoginErrorFromCivicLikerRegistration"
+              v-if="!isExperimenting && isLoginErrorFromCivicLikerRegistration"
               :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
               tag="p"
             )
