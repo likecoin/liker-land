@@ -117,7 +117,9 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      no-ssr
+      no-ssr(v-if="true")
+        CivicLikerPageContentV2
+      no-ssr(v-else)
         +ReferrerBanner()
 
         section.civic-page__block.bg-white
@@ -188,6 +190,7 @@ import { mapGetters, mapActions } from 'vuex';
 import dateFormat from 'date-fns/format';
 import { vueVimeoPlayer } from 'vue-vimeo-player';
 
+import CivicLikerPageContentV2 from '~/components/CivicLikerPageContentV2';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 import LikerComparisonCard from '~/components/LikerComparisonCard';
@@ -208,6 +211,7 @@ import { PAYMENT_METHOD_LIST } from '~/constant';
 
 export default {
   components: {
+    CivicLikerPageContentV2,
     vueVimeoPlayer,
     PageHeader,
     SiteNavBar,
