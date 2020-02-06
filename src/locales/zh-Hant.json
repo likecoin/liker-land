@@ -52,6 +52,18 @@
       "other": "以 PayMe/轉數快 繳費"
     }
   },
+  "CivicPageV2": {
+    "HeroCTA": {
+      "Upper": {
+        "L1": "支持創作成為",
+        "L1wReferrer": "支持 {referrer} 成為"
+      },
+      "Lower": {
+        "L1": "立即登記成為讚賞公民",
+        "L2": "額外讚助 {referrer} 5 美元！"
+      }
+    }
+  },
   "CollapsibleView": {
     "less": "收起",
     "more": "更多"

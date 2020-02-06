@@ -118,7 +118,9 @@
 
     main.page-content
       no-ssr(v-if="true")
-        CivicLikerPageContentV2
+        CivicLikerPageContentV2(
+          :referrer="referrer"
+        )
       no-ssr(v-else)
         +ReferrerBanner()
 
