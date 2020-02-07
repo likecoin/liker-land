@@ -91,9 +91,23 @@
           @click="$emit('click-join')"
         )
 
+    section
+      .bg-white(class="desktop:mx-24 laptop:rounded-8")
+        .text-center.text-30.text-like-green.px-16.py-32
+          | {{ $t('CivicPageV2.MediaSupport.title') }}
+        ul.civic-liker-page-v2__media-list.list-reset.pb-40(class="laptop:px-32")
+          li(
+            v-for="media in mediaList"
+            :key="media.id"
+          )
+            a(:href="media.link" target="_blank")
+              img(:src="media.image")
+
 </template>
 
 <script>
+const getMediaImage = require.context('~/assets/images/civic-v2/media');
+
 export default {
   name: 'CivicLikerPageContentV2',
   props: {
@@ -104,6 +118,31 @@ export default {
     price: {
       type: Number,
       default: 5,
+    },
+  },
+  computed: {
+    mediaList() {
+      return [
+        {
+          id: 'hkcnews',
+          link: '',
+        },
+        {
+          id: 'inmediahk',
+          link: '',
+        },
+        {
+          id: 'matters',
+          link: '',
+        },
+        {
+          id: 'standnews',
+          link: '',
+        },
+      ].map(media => ({
+        ...media,
+        image: getMediaImage(`./${media.id}.png`),
+      }));
     },
   },
 };
@@ -167,6 +206,29 @@ export default {
       transform: translateX(1px) translateY(2px);
 
       background-color: config('colors.like-cyan-translucent-dark');
+    }
+  }
+
+  &__media-list {
+    columns: 4;
+
+    @media screen and (max-width: config('screens.tablet.max')) {
+      max-width: 360px;
+      margin: 0 auto;
+
+      columns: 2;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    img {
+      @media screen and (max-width: config('screens.tablet.max')) {
+        max-width: 144px;
+      }
     }
   }
 }
