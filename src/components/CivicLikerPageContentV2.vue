@@ -1,7 +1,7 @@
 <template lang="pug">
-  .civic-liker-page-v2.my-32
-    section.civic-liker-page-v2__hero.text-20.leading-1_5.font-200
-      svg.w-full(xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 952 583")
+  .civic-liker-page-v2.font-200.leading-1_5.my-32
+    section.civic-liker-page-v2__hero.text-20
+      svg.block.w-full(xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 952 583")
         rect(y="349" width="952" height="234" style="fill: #28646e")
         image(
           x="96"
@@ -65,12 +65,32 @@
               i18n(
                 path="CivicPageV2.HeroCTA.Lower.L2"
                 tag="div"
+                :places="{ price }"
               )
                 span.civic-liker-page-v2__hero-cta-referrer.text-like-cyan(
                   v-if="referrer"
                   place="referrer"
                 )
                   | {{ referrer.displayName }}
+
+    section.flex.flex-col.items-center.text-18.text-center(class="desktop:py-32")
+      i18n.text-24(path="CivicPageV2.Payment.Pricing")
+        span.text-gray-4a.font-400(place="price" style="font-size:62px") {{ price }}
+      i18n.mx-16(
+        path="CivicPageV2.Payment.CTA"
+        style="max-width:510px"
+      )
+        i18n.text-like-green.font-400(path="civicLiker" place="civicLiker")
+
+      .flex.justify-center.items-center.flex-wrap.mx-16.my-24(class="desktop:mt-48")
+        .civic-liker-page-v2__payment-select.m-8
+          slot(name="payment-select")
+        i18n.civic-liker-page-v2__join-button(
+          class="border-solid border-like-cyan border-2 rounded-full text-like-green font-400 m-8 p-8 cursor-pointer"
+          path="CivicPageV2.Payment.JoinButtonText"
+          @click="$emit('click-join')"
+        )
+
 </template>
 
 <script>
@@ -80,6 +100,10 @@ export default {
     referrer: {
       type: Object,
       default: undefined,
+    },
+    price: {
+      type: Number,
+      default: 5,
     },
   },
 };
@@ -112,6 +136,38 @@ export default {
     word-break: break-word;
 
     @apply font-600;
+  }
+
+  &__payment-select {
+    @apply text-16;
+
+    > * {
+      margin: 0 !important;
+
+      @apply bg-white;
+    }
+  }
+
+  &__join-button {
+    min-width: 224px;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
+
+    transition-property: background-color, box-shadow, transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in;
+
+    @apply bg-white;
+
+    &:hover {
+      background-color: config('colors.like-cyan-translucent');
+    }
+
+    &:active {
+      box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
+      transform: translateX(1px) translateY(2px);
+
+      background-color: config('colors.like-cyan-translucent-dark');
+    }
   }
 }
 </style>

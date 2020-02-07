@@ -106,8 +106,8 @@ module.exports = {
 
   screens: {
     phone: { max: '527px' },
-    tablet: { min: '528px', max: '767px' },
-    laptop: { min: '768px', max: '991px' },
+    tablet: { min: '528px', max: '768px' },
+    laptop: { min: '769px' },
     desktop: { min: '992px' },
   },
 
