@@ -121,10 +121,23 @@
             .text-48 150,000+
             div {{ $t("CivicPageV2.MediaSupport.Stats.Content") }}
 
+    section
+      .bg-white(class="desktop:mx-24 laptop:rounded-8")
+        .text-center.text-30.text-like-green.px-16.py-32
+          | {{ $t('CivicPageV2.Benefit.title') }}
+        ul.civic-liker-page-v2__benefit-list.list-reset.pb-40(class="laptop:px-32")
+          li(
+            v-for="benefit in benefitList"
+            :key="benefit.id"
+          )
+            img(:src="benefit.image")
+            .text-center {{ $t(`CivicPageV2.Benefit.${benefit.id}`) }}
+
 </template>
 
 <script>
 const getMediaImage = require.context('~/assets/images/civic-v2/media');
+const getBenefitImage = require.context('~/assets/images/civic-v2/benefits');
 
 export default {
   name: 'CivicLikerPageContentV2',
@@ -160,6 +173,12 @@ export default {
       ].map(media => ({
         ...media,
         image: getMediaImage(`./${media.id}.png`),
+      }));
+    },
+    benefitList() {
+      return ['stats', 'bookmark', 'discount', 'gift'].map(id => ({
+        id,
+        image: getBenefitImage(`./${id}.png`),
       }));
     },
   },
@@ -247,6 +266,29 @@ export default {
       @media screen and (max-width: config('screens.tablet.max')) {
         max-width: 144px;
       }
+    }
+  }
+
+  &__benefit-list {
+    columns: 4;
+
+    @media screen and (max-width: config('screens.tablet.max')) {
+      max-width: 400px;
+      margin: 0 auto;
+
+      columns: 2;
+    }
+
+    li {
+      max-width: 200px;
+
+      @apply p-16;
+    }
+
+    img {
+      display: block;
+      max-width: 114px;
+      margin: 0 auto 16px;
     }
   }
 }

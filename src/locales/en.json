@@ -78,6 +78,13 @@
         "Creator": "Creators",
         "Content": "Contents"
       }
+    },
+    "Benefit": {
+      "title": " 兼享各種福利",
+      "Stats": "月費用作平分給按讚作品，隨時查閱分配細節",
+      "Bookmark": "享用 Liker Land 儲存無限書籤等獨有功能",
+      "Discount": "買書優惠折扣，加盟書店持續增加中",
+      "Gift": "獲取實體小禮品，免費參與線下活動"
     }
   },
   "CollapsibleView": {
