@@ -72,23 +72,26 @@
                 )
                   | {{ referrer.displayName }}
 
-    section.flex.flex-col.items-center.text-18.text-center(class="desktop:py-32")
-      i18n.text-24(path="CivicPageV2.Payment.Pricing")
-        span.text-gray-4a.font-400(place="price" style="font-size:62px") {{ price }}
-      i18n.mx-16(
-        path="CivicPageV2.Payment.CTA"
-        style="max-width:510px"
-      )
-        i18n.text-like-green.font-400(path="civicLiker" place="civicLiker")
-
-      .flex.justify-center.items-center.flex-wrap.mx-16.my-24(class="desktop:mt-48")
-        .civic-liker-page-v2__payment-select.m-8
-          slot(name="payment-select")
-        i18n.civic-liker-page-v2__join-button(
-          class="border-solid border-like-cyan border-2 rounded-full text-like-green font-400 m-8 p-8 cursor-pointer"
-          path="CivicPageV2.Payment.JoinButtonText"
-          @click="$emit('click-join')"
+    mixin PaymentSection
+      section.flex.flex-col.items-center.text-18.text-center(class="desktop:py-32")&attributes(attributes)
+        i18n.text-24(path="CivicPageV2.Payment.Pricing")
+          span.text-gray-4a.font-400(place="price" style="font-size:62px") {{ price }}
+        i18n.mx-16(
+          path="CivicPageV2.Payment.CTA"
+          style="max-width:510px"
         )
+          i18n.text-like-green.font-400(path="civicLiker" place="civicLiker")
+
+        .flex.justify-center.items-center.flex-wrap.mx-16.my-24(class="desktop:mt-48")
+          .civic-liker-page-v2__payment-select.m-8
+            slot(name="payment-select")
+          i18n.civic-liker-page-v2__join-button(
+            class="border-solid border-like-cyan border-2 rounded-full text-like-green font-400 m-8 p-8 cursor-pointer"
+            path="CivicPageV2.Payment.JoinButtonText"
+            @click="$emit('click-join')"
+          )
+    
+    +PaymentSection
 
     section
       .bg-white(class="desktop:mx-24 laptop:rounded-8")
@@ -132,6 +135,8 @@
           )
             img(:src="benefit.image")
             .text-center {{ $t(`CivicPageV2.Benefit.${benefit.id}`) }}
+
+    +PaymentSection
 
 </template>
 
