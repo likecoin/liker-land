@@ -43,10 +43,9 @@
                   place="referrer"
                 )
                   | {{ referrer.displayName }}
-              i18n.mt-8.leading-1(
+              i18n.mt-8.text-56.leading-1(
                 path="civicLiker"
                 tag="div"
-                style="font-size:56px"
               )
 
         foreignObject(
@@ -102,6 +101,25 @@
           )
             a(:href="media.link" target="_blank")
               img(:src="media.image")
+
+    section.font-200.text-18
+      .px-16.py-32(class="desktop:mx-48")
+        .text-like-green.text-30.mx-20.my-16
+          | {{ $t('CivicPageV2.MediaSupport.Stats.TotalCreators') }}
+        .mx-20.my-16 {{ $t('CivicPageV2.MediaSupport.Stats.TotalRewards') }}
+        .mx-20.my-16
+          span.text-56 1,165,000
+          span.ml-16 HKD
+        .flex.flex-wrap
+          .mx-20.my-4
+            .text-48 700+
+            div {{ $t("CivicPageV2.MediaSupport.Stats.Website") }}
+          .mx-20.my-4
+            .text-48 5,000+
+            div {{ $t("CivicPageV2.MediaSupport.Stats.Creator") }}
+          .mx-20.my-4
+            .text-48 150,000+
+            div {{ $t("CivicPageV2.MediaSupport.Stats.Content") }}
 
 </template>
 
