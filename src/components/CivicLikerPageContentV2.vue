@@ -173,7 +173,9 @@
       .bg-white(class="desktop:mx-24 laptop:rounded-8")
         .text-center.text-30.text-like-green.px-16.py-32
           | {{ $t('CivicPageV2.MediaSupport.title') }}
-        ul.civic-liker-page-v2__media-list.list-reset.pb-40(class="laptop:px-32")
+        ul.civic-liker-page-v2__media-list.list-reset.pb-40(
+          class="laptop:px-32 laptop:pt-8 laptop:pb-32"
+        )
           li(
             v-for="media in mediaList"
             :key="media.id"
@@ -186,10 +188,10 @@
         .text-like-green.text-30.mx-20.my-16
           | {{ $t('CivicPageV2.MediaSupport.Stats.TotalCreators') }}
         .mx-20.my-16 {{ $t('CivicPageV2.MediaSupport.Stats.TotalRewards') }}
-        .mx-20.my-16
+        .mx-20.my-16(class="laptop:my-24")
           span.text-48(class="laptop:text-56") 1,165,000
           span.ml-16 HKD
-        .flex.flex-wrap
+        .flex.flex-wrap(class="laptop:my-12")
           .mx-20.my-4
             .text-48 700+
             div {{ $t("CivicPageV2.MediaSupport.Stats.Website") }}
