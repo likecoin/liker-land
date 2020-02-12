@@ -182,12 +182,12 @@
               img(:src="media.image")
 
     section.font-200.text-18
-      .px-16.py-32(class="desktop:mx-48")
+      .py-32(class="desktop:mx-48 laptop:px-16")
         .text-like-green.text-30.mx-20.my-16
           | {{ $t('CivicPageV2.MediaSupport.Stats.TotalCreators') }}
         .mx-20.my-16 {{ $t('CivicPageV2.MediaSupport.Stats.TotalRewards') }}
         .mx-20.my-16
-          span.text-56 1,165,000
+          span.text-48(class="laptop:text-56") 1,165,000
           span.ml-16 HKD
         .flex.flex-wrap
           .mx-20.my-4
