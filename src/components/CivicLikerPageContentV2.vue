@@ -166,7 +166,7 @@
             path="CivicPageV2.Payment.JoinButtonText"
             @click="$emit('click-join')"
           )
-    
+
     +PaymentSection
 
     section
@@ -253,9 +253,7 @@ export default {
     slidesPerView: 'auto',
     spaceBetween: 16,
     centeredSlides: true,
-
     slideToClickedSlide: true,
-
     slideClass: 'civic-liker-page-v2__mobile-benefit-list-item',
     slideActiveClass: 'civic-liker-page-v2__mobile-benefit-list-item--active',
     wrapperClass: 'civic-liker-page-v2__mobile-benefit-list',
@@ -265,10 +263,12 @@ export default {
         'civic-liker-page-v2__mobile-benefit-list-swiper-pagination-bullet',
       bulletActiveClass:
         'civic-liker-page-v2__mobile-benefit-list-swiper-pagination-bullet--active',
+      clickable: true,
     },
   },
   heroSwiper: {
     spaceBetween: 0,
+    slideToClickedSlide: true,
     slideClass: 'civic-liker-page-v2__mobile-hero-slide',
     slideActiveClass: 'civic-liker-page-v2__mobile-hero-slide--active',
     wrapperClass: 'civic-liker-page-v2__mobile-hero',
@@ -277,6 +277,7 @@ export default {
       bulletClass: 'civic-liker-page-v2__mobile-hero-swiper-pagination-bullet',
       bulletActiveClass:
         'civic-liker-page-v2__mobile-hero-swiper-pagination-bullet--active',
+      clickable: true,
     },
   },
   props: {
