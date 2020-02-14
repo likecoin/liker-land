@@ -121,6 +121,7 @@
       no-ssr(v-if="true")
         CivicLikerPageContentV2(
           :referrer="referrer"
+          :rewards-currency="rewardsCurrency"
           @click-join="onClickActionButton"
         )
           template(#payment-select)
@@ -276,6 +277,17 @@ export default {
         case 'en':
         default:
           return '334616132';
+      }
+    },
+    rewardsCurrency() {
+      switch (this.getLocale) {
+        case 'zh-Hant': {
+          if (this.isCantonese) return 'HKD';
+          return 'TWD';
+        }
+        case 'en':
+        default:
+          return 'USD';
       }
     },
     isCantonese() {

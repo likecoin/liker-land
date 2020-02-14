@@ -187,10 +187,11 @@
       .py-32(class="desktop:mx-48 laptop:px-16")
         .text-like-green.text-30.mx-20.my-16
           | {{ $t('CivicPageV2.MediaSupport.Stats.TotalCreators') }}
-        .mx-20.my-16 {{ $t('CivicPageV2.MediaSupport.Stats.TotalRewards') }}
+        .mx-20.my-16 {{ $t('CivicPageV2.MediaSupport.Stats.TotalRewards', { rewards: `${rewardsCurrency} ${rewards}` }) }}
         .mx-20.my-16(class="laptop:my-24")
-          span.text-48(class="laptop:text-56") 1,165,000
-          span.ml-16 HKD
+          span.text-48(class="laptop:text-56") {{ rewards }}
+          span.ml-16 {{ rewardsCurrency }}
+          div {{ $t("CivicPageV2.MediaSupport.Stats.RewardedCreators") }}
         .flex.flex-wrap(class="laptop:my-12")
           .mx-20.my-4
             .text-48 700+
@@ -289,6 +290,10 @@ export default {
       type: Number,
       default: 5,
     },
+    rewardsCurrency: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     mediaList() {
@@ -319,6 +324,17 @@ export default {
         id,
         image: getBenefitImage(`./${id}.png`),
       }));
+    },
+    rewards() {
+      switch (this.rewardsCurrency) {
+        case 'TWD':
+          return '4,500,000';
+        case 'HKD':
+          return '1,200,000';
+        case 'USD':
+        default:
+          return '150,000';
+      }
     },
   },
 };

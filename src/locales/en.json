@@ -72,7 +72,7 @@
       "title": "一份月費支持 4 家公民媒體",
       "Stats": {
         "TotalCreators": "及 700 多個獨立網站的 5000 作者",
-        "TotalRewards": "截止 2020 年 1 月底，讚賞公民運動共回饋創作者 USD150,000",
+        "TotalRewards": "截止 2020 年 1 月底，讚賞公民運動共回饋創作者 {rewards}",
         "RewardedCreators": "已回饋創作者",
         "Website": "Websites",
         "Creator": "Creators",
