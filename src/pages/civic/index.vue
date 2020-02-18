@@ -118,7 +118,7 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      no-ssr(v-if="true")
+      no-ssr(v-if="isExperimenting")
         CivicLikerPageContentV2(
           :referrer="referrer"
           :rewards-currency="rewardsCurrency"
@@ -228,7 +228,7 @@ export default {
   },
   mixins: [
     IntercomMixinFactory({ isBootAtMounted: false }),
-    experimentMixin('isExperimenting', 'civic-register-page', 'variant'),
+    experimentMixin('isExperimenting', 'civic-page', 'variant'),
   ],
   // directives: {
   //   swiper: swiperDirective,
