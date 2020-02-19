@@ -48,6 +48,12 @@ router.post('/hook/stripe', async (req, res, next) => {
               default_payment_method: setupIntent.payment_method,
             },
           });
+          await stripe.subscriptions.update(
+            setupIntent.metadata.subscription_id,
+            {
+              default_payment_method: setupIntent.payment_method,
+            }
+          );
         } else {
           // eslint-disable-next-line no-console
           console.error(`Unknown session object evt id: ${event.id}`);
