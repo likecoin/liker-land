@@ -106,8 +106,8 @@ module.exports = {
 
   screens: {
     phone: { max: '527px' },
-    tablet: { min: '528px', max: '767px' },
-    laptop: { min: '768px', max: '991px' },
+    tablet: { min: '528px', max: '768px' },
+    laptop: { min: '769px' },
     desktop: { min: '992px' },
   },
 
@@ -173,6 +173,7 @@ module.exports = {
     '30': '1.875rem', // 3xl
     '36': '2.25rem', // 4xl
     '48': '3rem', // 5xl
+    '56': '3.5rem', // 6xl
   },
 
   /*

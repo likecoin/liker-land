@@ -52,6 +52,41 @@
       "other": "以 PayMe/轉數快 繳費"
     }
   },
+  "CivicPageV2": {
+    "HeroCTA": {
+      "Upper": {
+        "L1": "支持創作成為",
+        "L1wReferrer": "支持 {referrer} 成為"
+      },
+      "Lower": {
+        "L1": "立即登記成為讚賞公民",
+        "L2": "額外讚助 {referrer} {price} 美元！"
+      }
+    },
+    "Payment": {
+      "CTA": "{civicLiker}是一場回饋新聞和創作的運動。讀者每月付出一杯咖啡的價錢，就能成為讚賞公民；透過按讚，自動分配月費予作者。",
+      "JoinButtonText": "立即加入",
+      "Pricing": "{price} USD/月"
+    },
+    "MediaSupport": {
+      "title": "一份月費支持 4 家公民媒體",
+      "Stats": {
+        "TotalCreators": "及 700 多個獨立網站的 5000 作者",
+        "TotalRewards": "截止 2020 年 1 月底，讚賞公民運動共回饋創作者 {rewards}",
+        "RewardedCreators": "已回饋創作者",
+        "Website": "網站",
+        "Creator": "創作者",
+        "Content": "作品"
+      }
+    },
+    "Benefit": {
+      "title": " 兼享各種福利",
+      "stats": "月費用作平分給按讚作品，隨時查閱分配細節",
+      "bookmark": "享用 Liker Land 儲存無限書籤等獨有功能",
+      "discount": "買書優惠折扣，加盟書店持續增加中",
+      "gift": "獲取實體小禮品，免費參與線下活動"
+    }
+  },
   "CollapsibleView": {
     "less": "收起",
     "more": "更多"
