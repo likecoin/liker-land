@@ -29,7 +29,10 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
           limit: 1,
         }),
       ]);
-      if (subscription.status === 'active') {
+      if (
+        subscription.status === 'active' ||
+        subscription.status === 'past_due'
+      ) {
         const { brand, last4 } = paymentMethod.card;
         res.json({
           type: 'subscription',
