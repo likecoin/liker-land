@@ -22,6 +22,18 @@ router.get('/civic/csonline', async (req, res, next) => {
   }
 });
 
+router.get('/civic/geoip', async (req, res, next) => {
+  const ipCountry = req.headers['x-appengine-country'];
+  const ipCity = req.headers['x-appengine-city'];
+  const cacheServerName = req.headers['x-forwarded-server'] || '';
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.status(200).json({
+    ipCountry,
+    ipCity,
+    cacheServerName,
+  });
+});
+
 router.get('/civic/trial/events/:id', async (req, res, next) => {
   try {
     const { id } = req.params;

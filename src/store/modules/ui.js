@@ -14,7 +14,7 @@ import { defaultLocale, availableLocales } from '../../locales';
 const initialState = () => ({
   locales: availableLocales,
   locale: defaultLocale,
-  isHK: false,
+  isHK: undefined,
   isSlidingMenuOpen: false,
 });
 

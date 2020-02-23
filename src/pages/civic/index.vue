@@ -385,13 +385,28 @@ export default {
       ],
     };
   },
-  mounted() {
-    if (this.getIsHK) {
+  async beforeMount() {
+    let isHK = this.getIsHK;
+    if (isHK === undefined) {
+      isHK = false; // Default not from HK
+      try {
+        const { data: geoData } = await this.$axios.get('/api/civic/geoip');
+        if (geoData.ipCountry || geoData.ipCity) {
+          isHK = geoData.ipCountry === 'HK' || geoData.ipCity === 'hong kong';
+        }
+      } catch (err) {
+        isHK = false;
+      }
+      this.$store.dispatch('setIsHK', isHK);
+    }
+    if (isHK) {
       this.selectedPaymentMethod =
         PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
       this.$i18n.locale = 'zh-Hant';
       this.setLocale(this.$i18n.locale);
     }
+  },
+  mounted() {
     const {
       from,
       referrer,

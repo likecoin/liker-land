@@ -25,17 +25,11 @@ export default ({ app, store, req, res, query }) => {
   const ipCity = req.headers['x-appengine-city'];
   const cacheServerName = req.headers['x-forwarded-server'] || '';
   const browserLanguage = detectHKBrowserLang(req.headers['accept-language']); // browser language workaround
-  if (
-    (ipCountry && ipCountry !== 'ZZ') ||
-    browserLanguage ||
-    ipCity ||
-    cacheServerName
-  ) {
-    const isHK =
-      ipCountry === 'HK' ||
-      browserLanguage === 'HK' ||
-      ipCity === 'hong kong' ||
-      cacheServerName.includes('HKG');
-    store.dispatch('setIsHK', isHK);
+  // Only the cache server of the HKG region causes problem to detect people from HK
+  if (!cacheServerName.includes('HKG')) {
+    store.dispatch(
+      'setIsHK',
+      ipCountry === 'HK' || browserLanguage === 'HK' || ipCity === 'hong kong'
+    );
   }
 };
