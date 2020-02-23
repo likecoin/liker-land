@@ -7,7 +7,7 @@ function detectHKBrowserLang(acceptedLanguage) {
   if (acceptedLanguage) {
     const langs = acceptedLanguage.split(',');
     const len = langs.length > 3 ? 3 : langs.length; // only three first browser language are important
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i += 1) {
       const pair = langs[i].split(';');
       if (pair[0].endsWith('-HK')) {
         // This check if the language is for HK region
