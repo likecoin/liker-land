@@ -31,5 +31,8 @@ export default ({ app, store, req, res, query }) => {
       'setIsHK',
       ipCountry === 'HK' || browserLanguage === 'HK' || ipCity === 'hong kong'
     );
+  } else if (browserLanguage === 'HK') {
+    // We are in a cache but navigator is installed HK
+    store.dispatch('setIsHK', true);
   }
 };
