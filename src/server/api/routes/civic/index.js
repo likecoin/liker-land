@@ -22,7 +22,7 @@ router.get('/civic/csonline', async (req, res, next) => {
   }
 });
 
-router.get('/civic/geoip', async (req, res, next) => {
+router.get('/civic/geoip', (req, res) => {
   const ipCountry = req.headers['x-appengine-country'];
   const ipCity = req.headers['x-appengine-city'];
   const cacheServerName = req.headers['x-forwarded-server'] || '';
