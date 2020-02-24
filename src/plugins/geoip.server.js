@@ -23,16 +23,15 @@ export default ({ app, store, req, res, query }) => {
   // https://cloud.google.com/appengine/docs/standard/go/reference/request-response-headers#app_engine-specific_headers
   const ipCountry = req.headers['x-appengine-country'];
   const ipCity = req.headers['x-appengine-city'];
-  const cacheServerName = req.headers['x-forwarded-server'] || '';
+  // const cacheServerName = req.headers['x-forwarded-server'] || '';
   const browserLanguage = detectHKBrowserLang(req.headers['accept-language']); // browser language workaround
-  // Only the cache server of the HKG region causes problem to detect people from HK
-  if (!cacheServerName.includes('HKG')) {
+  // Check if country is not unknown otherwise fallback to language only check if it's from HK and last is webcall
+  if (ipCountry !== 'ZZ') {
     store.dispatch(
       'setIsHK',
       ipCountry === 'HK' || browserLanguage === 'HK' || ipCity === 'hong kong'
     );
   } else if (browserLanguage === 'HK') {
-    // We are in a cache but navigator is installed HK
     store.dispatch('setIsHK', true);
   }
 };
