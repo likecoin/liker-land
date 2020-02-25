@@ -1,7 +1,9 @@
 const axios = require('axios');
 const { Router } = require('express');
+const cors = require('cors');
 
 const { PAYPAL_PDT_HOOK } = require('../../../config/config');
+const { EXTERNAL_URL } = require('../../util/api');
 const {
   apiFetchCivicCSOnline,
   apiCivicLikerTrialEventById,
@@ -20,6 +22,18 @@ router.get('/civic/csonline', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+router.get('/civic/geoip', cors({ origin: EXTERNAL_URL }), (req, res) => {
+  const ipCountry = req.headers['x-appengine-country'];
+  const ipCity = req.headers['x-appengine-city'];
+  const cacheServerName = req.headers['x-forwarded-server'] || '';
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.status(200).json({
+    ipCountry,
+    ipCity,
+    cacheServerName,
+  });
 });
 
 router.get('/civic/trial/events/:id', async (req, res, next) => {
