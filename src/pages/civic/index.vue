@@ -391,7 +391,7 @@ export default {
       isHK = false; // Default not from HK
       try {
         const { data: geoData } = await this.$axios.get(
-          `${LIKE_CO_CLOUD_FN_BASE}/api/civic/geoip`
+          `${LIKE_CO_CLOUD_FN_BASE}/apiHttp/api/civic/geoip`
         );
         if (geoData.ipCountry || geoData.ipCity) {
           isHK = geoData.ipCountry === 'HK' || geoData.ipCity === 'hong kong';
