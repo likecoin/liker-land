@@ -56,11 +56,11 @@
     "HeroCTA": {
       "Upper": {
         "L1": "支持創作成為",
-        "L1wReferrer": "支持 {referrer} 成為"
+        "L1wReferrer": "支持{referrer}成為讚賞公民"
       },
       "Lower": {
         "L1": "立即登記成為讚賞公民",
-        "L2": "額外讚助 {referrer} {price} 美元！"
+        "L2": "額外贊助 {referrer} {price} 美元！"
       }
     },
     "Payment": {
