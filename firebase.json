@@ -17,6 +17,10 @@
     ],
     "rewrites": [
       {
+        "source": "/api/geoip",
+        "function": "geoipHttp"
+      },
+      {
         "source": "/api/**",
         "function": "apiHttp"
       },
