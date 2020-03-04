@@ -12,10 +12,12 @@ app.get('/api/geoip', (req, res) => {
     const result = geoip.lookup(
       req.headers['fastly-client-ip'] || requestIp.getClientIp(req)
     );
-    res.json({ country: result.country });
+    res.json({ country: (result || {}).country || null });
   } catch (err) {
     console.error(err);
-    res.json({});
+    res.json({
+      country: null,
+    });
   }
 });
 
