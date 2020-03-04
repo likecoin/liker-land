@@ -214,7 +214,7 @@ import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 import { IntercomMixinFactory } from '~/mixins/intercom';
 import experimentMixin from '~/mixins/experiment';
 
-import { PAYMENT_METHOD_LIST, LIKE_CO_CLOUD_FN_BASE } from '~/constant';
+import { PAYMENT_METHOD_LIST } from '~/constant';
 
 export default {
   components: {
@@ -390,14 +390,10 @@ export default {
     if (isHK === undefined) {
       isHK = false; // Default not from HK
       try {
-        const { data: geoData } = await this.$axios.get(
-          `${LIKE_CO_CLOUD_FN_BASE}/apiHttp/api/civic/geoip`
-        );
-        if (geoData.ipCountry || geoData.ipCity) {
-          isHK = geoData.ipCountry === 'HK' || geoData.ipCity === 'hong kong';
-        }
+        const { data: geoData } = await this.$axios.get('api/geoip');
+        isHK = geoData.country === 'HK';
       } catch (err) {
-        isHK = false;
+        console.error(err); // eslint-disable-line no-console
       }
       this.$store.dispatch('setIsHK', isHK);
     }
