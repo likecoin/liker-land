@@ -7,6 +7,7 @@
     main.page-content
       CivicLikerPageContentV2(
         :referrer="referrer"
+        :isExperimenting="isExperimenting"
         :rewards-currency="rewardsCurrency"
         @click-join="onClickActionButton"
       )
@@ -58,7 +59,7 @@ import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 
 import { IntercomMixinFactory } from '~/mixins/intercom';
-// import experimentMixin from '~/mixins/experiment';
+import experimentMixin from '~/mixins/experiment';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
@@ -70,7 +71,7 @@ export default {
   },
   mixins: [
     IntercomMixinFactory({ isBootAtMounted: false }),
-    // experimentMixin('isExperimenting', 'civic-page', 'variant'),
+    experimentMixin('isExperimenting', 'civic-page', 'variant'),
   ],
   // directives: {
   //   swiper: swiperDirective,
