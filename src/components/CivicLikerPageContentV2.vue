@@ -26,6 +26,11 @@
                     place="referrer"
                   )
                     | {{ referrer.displayName }}
+                  span(
+                    class="tablet:hidden"
+                    place="civicLiker"
+                  )
+                    | {{ $t('civicLiker') }}
 
             li.civic-liker-page-v2__mobile-hero-slide.bg-like-green.text-white.text-center.flex.flex-col.justify-center.items-center
               .mt-24 {{ $t('CivicPageV2.HeroCTA.Lower.L1') }}
@@ -152,7 +157,7 @@
         i18n.text-24(path="CivicPageV2.Payment.Pricing")
           span.text-gray-4a.font-400(place="price" style="font-size:62px") {{ price }}
 
-        .flex.justify-center.items-center.flex-wrap.mx-16(class="desktop:mt-48")
+        .flex.justify-center.items-center.flex-wrap.mx-16
           .civic-liker-page-v2__payment-select.m-8
             slot(name="payment-select")
           i18n.civic-liker-page-v2__join-button(

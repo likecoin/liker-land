@@ -176,7 +176,7 @@ const nuxtConfig = {
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
     'portal-vue/nuxt',
-    '@likecoin/nuxt-google-optimize',
+    // '@likecoin/nuxt-google-optimize',
   ],
   /*
   ** Axios module configuration
@@ -241,10 +241,10 @@ const nuxtConfig = {
       ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
   },
-  googleOptimize: {
-    useFetch: false,
-    maxAge: 86400, // 1 day
-  },
+  // googleOptimize: {
+  //   useFetch: false,
+  //   maxAge: 86400, // 1 day
+  // },
   router: {
     middleware: 'sliding-menu',
     extendRoutes(routes, resolve) {
