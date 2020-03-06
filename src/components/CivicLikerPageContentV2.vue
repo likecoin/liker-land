@@ -9,28 +9,39 @@
           ul.civic-liker-page-v2__mobile-hero(
             class="list-reset flex"
           )
-            li.civic-liker-page-v2__mobile-hero-slide.bg-like-green.text-white.flex.items-center
+            li.civic-liker-page-v2__mobile-hero-slide.bg-like-green.text-white.flex.items-center.justify-center
               .mx-4
                 LcAvatar(
                   :src="referrer.avatar"
                   :halo="referrer.avatarHalo"
                   size="64"
                 )
-              .flex-grow.ml-16
-                i18n(
-                  :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
-                  tag="div"
-                )
-                  .civic-liker-page-v2__hero-cta-referrer.text-like-cyan.text-30.leading-1.my-2(
-                    v-if="referrer"
-                    place="referrer"
+              .ml-16
+                template(v-if="isExperimenting && referrer")
+                  i18n(
+                    path="CivicPageV2.HeroCTA.Upper.L1wReferrerMobile"
+                    tag="div"
+                    :places="{ price }"
                   )
-                    | {{ referrer.displayName }}
-                  span(
-                    class="tablet:hidden"
-                    place="civicLiker"
+                    .civic-liker-page-v2__hero-cta-referrer.text-30.text-like-cyan.leading-1(
+                      place="referrer"
+                    )
+                      | {{ referrer.displayName }}
+                template(v-else)
+                  i18n(
+                    :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
+                    tag="div"
                   )
-                    | {{ $t('civicLiker') }}
+                    .civic-liker-page-v2__hero-cta-referrer.text-like-cyan.text-30.leading-1.my-2(
+                      v-if="referrer"
+                      place="referrer"
+                    )
+                      | {{ referrer.displayName }}
+                    span(
+                      class="tablet:hidden"
+                      place="civicLiker"
+                    )
+                      | {{ $t('civicLiker') }}
 
             li.civic-liker-page-v2__mobile-hero-slide.bg-like-green.text-white.text-center.flex.flex-col.justify-center.items-center
               .mt-24 {{ $t('CivicPageV2.HeroCTA.Lower.L1') }}
@@ -114,19 +125,29 @@
         )
           .civic-liker-page-v2__hero-cta.text-right.text-gray-4a
             .max-w-100
-              i18n(
-                :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
-                tag="div"
-              )
-                span.civic-liker-page-v2__hero-cta-referrer.text-like-green(
-                  v-if="referrer"
-                  place="referrer"
+              template(v-if="isExperimenting && referrer")
+                i18n(
+                  path="CivicPageV2.HeroCTA.Upper.L1wReferrerDesktop"
+                  tag="div"
                 )
-                  | {{ referrer.displayName }}
-              i18n.mt-8.text-56.leading-1(
-                path="civicLiker"
-                tag="div"
-              )
+                  .civic-liker-page-v2__hero-cta-referrer.text-36.text-like-green.leading-1(
+                    place="referrer"
+                  )
+                    | {{ referrer.displayName }}
+              template(v-else)
+                i18n(
+                  :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
+                  tag="div"
+                )
+                  span.civic-liker-page-v2__hero-cta-referrer.text-like-green(
+                    v-if="referrer"
+                    place="referrer"
+                  )
+                    | {{ referrer.displayName }}
+                i18n.mt-8.text-56.leading-1(
+                  path="civicLiker"
+                  tag="div"
+                )
 
         foreignObject(
           v-if="referrer"
@@ -287,6 +308,10 @@ export default {
     },
   },
   props: {
+    isExperimenting: {
+      type: Boolean,
+      default: false,
+    },
     referrer: {
       type: Object,
       default: undefined,
