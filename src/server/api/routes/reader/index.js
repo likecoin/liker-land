@@ -17,13 +17,11 @@ router.use(bookmark);
 
 function filterArticleList(list) {
   return list.map(i => {
-    const { referrer, url, user, ts } = i;
+    const { referrer, url: originalUrl, user, ts } = i;
+    const url = originalUrl ? originalUrl.toLowerCase() : undefined;
     return {
       referrer,
-      url:
-        referrer && referrer.toLowerCase() === url.toLowerCase()
-          ? undefined
-          : url,
+      url: referrer && referrer.toLowerCase() === url ? undefined : originalUrl,
       user,
       ts,
     };

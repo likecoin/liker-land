@@ -108,6 +108,7 @@ router.post('/users/login', async (req, res, next) => {
     }
     if (req.body.state !== req.session.state) {
       res.status(400).send('state mismatch');
+      return;
     }
 
     const { data: tokenData } = await axios.post(
