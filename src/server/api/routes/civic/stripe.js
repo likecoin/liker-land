@@ -84,7 +84,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
           subscription_id: subscriptionId,
         },
       };
-      stripePayload.customer_email = email;
+      if (email) stripePayload.customer_email = email;
       stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
       stripePayload.cancel_url = `${EXTERNAL_URL}/settings/civic`;
     } else {
@@ -96,7 +96,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
       if (customerId) {
         stripePayload.customer = customerId;
-      } else {
+      } else if (email) {
         stripePayload.customer_email = email;
       }
     }
