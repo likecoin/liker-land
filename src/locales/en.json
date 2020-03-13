@@ -57,8 +57,7 @@
       "Upper": {
         "L1": "支持創作成為",
         "L1wReferrer": "支持{referrer}成為{civicLiker}",
-        "L1wReferrerDesktop": "成為讚賞公民，支持{referrer}",
-        "L1wReferrerMobile": "支持{referrer}額外配對 {price} 美元贊助"
+        "L1wReferrerDesktop": "成為讚賞公民，支持{referrer}"
       },
       "Lower": {
         "L1": "立即登記成為讚賞公民",

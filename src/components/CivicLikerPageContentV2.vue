@@ -17,31 +17,20 @@
                   size="64"
                 )
               .ml-16
-                template(v-if="isExperimenting && referrer")
-                  i18n(
-                    path="CivicPageV2.HeroCTA.Upper.L1wReferrerMobile"
-                    tag="div"
-                    :places="{ price }"
+                i18n(
+                  :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
+                  tag="div"
+                )
+                  .civic-liker-page-v2__hero-cta-referrer.text-like-cyan.text-30.leading-1.my-2(
+                    v-if="referrer"
+                    place="referrer"
                   )
-                    .civic-liker-page-v2__hero-cta-referrer.text-30.text-like-cyan.leading-1(
-                      place="referrer"
-                    )
-                      | {{ referrer.displayName }}
-                template(v-else)
-                  i18n(
-                    :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
-                    tag="div"
+                    | {{ referrer.displayName }}
+                  span(
+                    class="tablet:hidden"
+                    place="civicLiker"
                   )
-                    .civic-liker-page-v2__hero-cta-referrer.text-like-cyan.text-30.leading-1.my-2(
-                      v-if="referrer"
-                      place="referrer"
-                    )
-                      | {{ referrer.displayName }}
-                    span(
-                      class="tablet:hidden"
-                      place="civicLiker"
-                    )
-                      | {{ $t('civicLiker') }}
+                    | {{ $t('civicLiker') }}
 
             li.civic-liker-page-v2__mobile-hero-slide.bg-like-green.text-white.text-center.flex.flex-col.justify-center.items-center
               .mt-24 {{ $t('CivicPageV2.HeroCTA.Lower.L1') }}
