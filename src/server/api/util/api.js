@@ -128,7 +128,7 @@ const apiCivicLikerJoinTrialEventById = (id, req) =>
       }
     )
   );
-const getOAuthURL = ({ state, isLogin, from, referrer }) => {
+const getOAuthURL = ({ state, isRegister, from, referrer }) => {
   const qsPayload = {
     client_id: LIKE_CO_CLIENT_ID,
     redirect_uri: OAUTH_REDIRECT_URI,
@@ -137,7 +137,7 @@ const getOAuthURL = ({ state, isLogin, from, referrer }) => {
   if (state) qsPayload.state = state;
   if (from) qsPayload.from = from;
   if (referrer) qsPayload.referrer = referrer;
-  if (isLogin) qsPayload.login = '1';
+  if (isRegister) qsPayload.register = '1';
   return `${LIKE_CO_URL_BASE}/in/oauth?${querystring.stringify(qsPayload)}`;
 };
 const getOAuthCallbackAPI = authCode =>

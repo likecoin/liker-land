@@ -80,7 +80,7 @@ router.get('/users/register', (req, res) => {
   res.redirect(
     getOAuthURL({
       state: req.session.state,
-      isLogin: false,
+      isRegister: true,
       from,
       referrer,
     })
@@ -93,7 +93,7 @@ router.get('/users/login', (req, res) => {
   res.redirect(
     getOAuthURL({
       state: req.session.state,
-      isLogin: true,
+      isRegister: false,
       from,
       referrer,
     })
