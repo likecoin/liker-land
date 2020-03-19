@@ -114,29 +114,19 @@
         )
           .civic-liker-page-v2__hero-cta.text-right.text-gray-4a
             .max-w-100
-              template(v-if="isExperimenting && referrer")
-                i18n(
-                  path="CivicPageV2.HeroCTA.Upper.L1wReferrerDesktop"
-                  tag="div"
+              i18n(
+                :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
+                tag="div"
+              )
+                span.civic-liker-page-v2__hero-cta-referrer.text-like-green(
+                  v-if="referrer"
+                  place="referrer"
                 )
-                  .civic-liker-page-v2__hero-cta-referrer.text-36.text-like-green.leading-1(
-                    place="referrer"
-                  )
-                    | {{ referrer.displayName }}
-              template(v-else)
-                i18n(
-                  :path="`CivicPageV2.HeroCTA.Upper.L1${referrer ? 'wReferrer' : ''}`"
-                  tag="div"
-                )
-                  span.civic-liker-page-v2__hero-cta-referrer.text-like-green(
-                    v-if="referrer"
-                    place="referrer"
-                  )
-                    | {{ referrer.displayName }}
-                i18n.mt-8.text-56.leading-1(
-                  path="civicLiker"
-                  tag="div"
-                )
+                  | {{ referrer.displayName }}
+              i18n.mt-8.text-56.leading-1(
+                path="civicLiker"
+                tag="div"
+              )
 
         foreignObject(
           v-if="referrer"
