@@ -56,8 +56,7 @@
     "HeroCTA": {
       "Upper": {
         "L1": "支持創作成為",
-        "L1wReferrer": "支持{referrer}成為{civicLiker}",
-        "L1wReferrerDesktop": "成為讚賞公民，支持{referrer}"
+        "L1wReferrer": "支持{referrer}成為{civicLiker}"
       },
       "Lower": {
         "L1": "立即登記成為讚賞公民",
