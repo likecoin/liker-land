@@ -113,6 +113,7 @@ export default {
     }
     try {
       await this.$axios.$post(getPayPalPaymentAPI(), {
+        version: 2,
         from,
         referrer,
         utmSource,
