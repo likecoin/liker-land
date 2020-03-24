@@ -8,8 +8,8 @@ export const getAppURL = () => 'https://likecoin.page.link/likeco';
 
 export const getPaypalPaymentPageURL = (likerId, custom) => {
   let baseURL = IS_TESTNET
-    ? `https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LFJTWE4PM4VGQ&on0=LikerID&os0=${likerId}`
-    : `https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=65HMAZFASPMJQ&on0=LikerID&os0=${likerId}`;
+    ? `https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4FL73FNJBUXFA&on0=LikerID&os0=${likerId}`
+    : `https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WW2TNJJXZ3MDY&on0=LikerID&os0=${likerId}`;
   if (custom) {
     baseURL += `&custom=${encodeURIComponent(JSON.stringify(custom))}`;
   }
