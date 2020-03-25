@@ -13,10 +13,15 @@ export function logTrackerEvent(vue, category, action, label, value) {
       });
     }
     if (window.fbq) {
-      window.fbq('trackCustom', `LikerLand${category}_${action}`, {
+      const eventName = `LikerLand${category}_${action}`;
+      const eventPayload = {
         label: label.substring(0, 499),
-        value,
-      });
+      };
+      if (eventName === 'LikerLandCivic_CivicPaymentSuccess') {
+        eventPayload.currency = 'USD';
+        eventPayload.value = 5;
+      }
+      window.fbq('trackCustom', eventName, eventPayload);
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
