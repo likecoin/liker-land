@@ -60,7 +60,13 @@ jobs:
       - deploy:
           name: Deploy
           command: |
-            STRIPE_PUBLIC_KEY=${TEST_STRIPE_PUBLIC_KEY} SENTRY_PUBLISH_RELEASE=TRUE SENTRY_DSN=${TEST_SENTRY_DSN} SENTRY_PROJECT=${TEST_SENTRY_PROJECT} INTERCOM_APPID=${TEST_INTERCOM_APPID} firebase deploy --project civic-liker-develop
+            STRIPE_PUBLIC_KEY=${TEST_STRIPE_PUBLIC_KEY} \
+            SENTRY_PUBLISH_RELEASE=TRUE \
+            SENTRY_DSN=${TEST_SENTRY_DSN} \
+            SENTRY_PROJECT=${TEST_SENTRY_PROJECT} \
+            INTERCOM_APPID=${TEST_INTERCOM_APPID} \
+            FACEBOOK_PIXEL_ID=${TEST_FACEBOOK_PIXEL_ID} \
+            firebase deploy --project civic-liker-develop
           environment:
             IS_TESTNET: true
   deploy_mainnet:
@@ -82,7 +88,8 @@ jobs:
       - deploy:
           name: Deploy
           command: |
-            SENTRY_PUBLISH_RELEASE=TRUE firebase deploy --project civic-liker
+            SENTRY_PUBLISH_RELEASE=TRUE \
+            firebase deploy --project civic-liker
 workflows:
   version: 2
   build_and_test:
