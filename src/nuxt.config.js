@@ -9,6 +9,7 @@ const {
   CI,
   INTERCOM_APPID,
   STRIPE_PUBLIC_KEY,
+  FACEBOOK_PIXEL_ID,
 } = process.env;
 
 const nuxtConfig = {
@@ -17,6 +18,7 @@ const nuxtConfig = {
     CI,
     INTERCOM_APPID,
     STRIPE_PUBLIC_KEY,
+    FACEBOOK_PIXEL_ID,
     SITE_NAME: siteName,
   },
   mode: 'universal',
@@ -42,7 +44,6 @@ const nuxtConfig = {
     ],
     link: [
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
-      { rel: 'preload', href: '/vendor/fb/pixel.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
 
       { rel: 'preconnect', href: 'https://connect.facebook.net' },
@@ -71,7 +72,6 @@ const nuxtConfig = {
     ],
     script: [
       { src: '/vendor/typekit.js', type: 'text/javascript' },
-      { src: '/vendor/fb/pixel.js', async: true },
       {
         hid: 'schema',
         innerHTML: JSON.stringify({
@@ -163,6 +163,7 @@ const nuxtConfig = {
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/vue-intercom', ssr: false },
+    { src: '~/plugins/fbpixel.client.js', ssr: false },
   ],
 
   /*
