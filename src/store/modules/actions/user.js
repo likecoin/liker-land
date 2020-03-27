@@ -1,32 +1,10 @@
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
-
-function updateSentryUser($sentry, { user, displayName }) {
-  if (user) {
-    const opt = {
-      id: user,
-      username: displayName || user,
-    };
-    $sentry.configureScope(scope => {
-      scope.setUser(opt);
-    });
-  }
-}
-
-function updateIntercomUser(
-  $intercom,
-  { user, intercomToken, displayName, email }
-) {
-  if ($intercom.booted) {
-    const opt = {
-      user_id: user,
-      user_hash: intercomToken,
-      name: displayName || user,
-      email,
-    };
-    $intercom.update(opt);
-  }
-}
+import {
+  updateSentryUser,
+  updateIntercomUser,
+  setTrackerUser,
+} from '@/util/EventLogger';
 
 export async function postLoginToken(
   { commit, dispatch },
@@ -40,8 +18,9 @@ export async function postLoginToken(
   if (user && user.locale) {
     dispatch('setLocale', user.locale);
   }
-  if (this.$sentry) updateSentryUser(this.$sentry, user);
-  if (this.$intercom) updateIntercomUser(this.$intercom, user);
+  if (this.$sentry) updateSentryUser(this, user);
+  if (this.$intercom) updateIntercomUser(this, user);
+  await setTrackerUser(user);
   return user;
 }
 
@@ -52,8 +31,9 @@ export async function fetchLoginStatus({ commit, dispatch }) {
     if (user && user.locale) {
       dispatch('setLocale', user.locale);
     }
-    if (this.$sentry) updateSentryUser(this.$sentry, user);
-    if (this.$intercom) updateIntercomUser(this.$intercom, user);
+
+    if (this.$sentry) updateSentryUser(this, user);
+    if (this.$intercom) updateIntercomUser(this, user);
     return user;
   } catch (err) {
     return false;
@@ -64,7 +44,7 @@ export async function userLogout({ commit }) {
   await this.$axios.$post(api.getLogoutAPI());
   commit(types.USER_SET_USER_INFO, {});
   commit(types.READER_CLEAR_FOR_LOGOUT);
-  if (this.$sentry) updateSentryUser(this.$sentry, { user: null });
+  if (this.$sentry) updateSentryUser(this, { user: null });
   if (this.$intercom && this.$intercom.booted) {
     this.$intercom.shutdown();
     this.$intercom.booted = false;
