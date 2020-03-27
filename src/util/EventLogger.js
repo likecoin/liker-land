@@ -1,3 +1,59 @@
+function hexString(buffer) {
+  const byteArray = new Uint8Array(buffer);
+  const hexCodes = [...byteArray].map(value => {
+    const hexCode = value.toString(16);
+    const paddedHexCode = hexCode.padStart(2, '0');
+    return paddedHexCode;
+  });
+  return hexCodes.join('');
+}
+
+function digestMessage(message) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  return window.crypto.subtle.digest('SHA-256', data);
+}
+
+export async function setTrackerUser(vue, { user }) {
+  if (window.doNotTrack || navigator.doNotTrack) return;
+  try {
+    if (vue.$ga) {
+      let hashedId = await digestMessage(user);
+      hashedId = hexString(hashedId);
+      vue.$ga.set('userId', hashedId);
+    }
+  } catch (err) {
+    console.error(err); // eslint-disable-line no-console
+  }
+}
+
+export function updateSentryUser(vue, { user, displayName }) {
+  if (user) {
+    const opt = {
+      id: user,
+      username: displayName || user,
+    };
+    vue.$sentry.configureScope(scope => {
+      scope.setUser(opt);
+    });
+  }
+}
+
+export function updateIntercomUser(
+  vue,
+  { user, intercomToken, displayName, email }
+) {
+  if (vue.$intercom.booted) {
+    const opt = {
+      user_id: user,
+      user_hash: intercomToken,
+      name: displayName || user,
+      email,
+    };
+    vue.$intercom.update(opt);
+  }
+}
+
 export function logTrackerEvent(vue, category, action, label, value) {
   try {
     if (vue.$intercom)
