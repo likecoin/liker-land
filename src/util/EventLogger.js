@@ -14,7 +14,7 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setTrackerUser(vue, { user }) {
+export async function setTrackerUser(vue, { user, email }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
   try {
     if (vue.$ga) {
@@ -24,6 +24,12 @@ export async function setTrackerUser(vue, { user }) {
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
+  }
+  if (window.fbq) {
+    const userPayload = {};
+    if (email) userPayload.em = email;
+    if (user) userPayload.external_id = user;
+    window.fbq('init', process.env.FACEBOOK_PIXEL_ID, userPayload);
   }
 }
 
