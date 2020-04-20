@@ -74,6 +74,9 @@ router.post('/civic/payment/paypal', async (req, res, next) => {
         tx,
         from,
         referrer,
+        utmCampaign,
+        utmContent,
+        utmMedium,
         utmSource,
         version,
       } = req.body;
@@ -86,6 +89,9 @@ router.post('/civic/payment/paypal', async (req, res, next) => {
         tx,
         from,
         referrer,
+        utmCampaign,
+        utmContent,
+        utmMedium,
         utmSource,
         version,
       });
