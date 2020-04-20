@@ -166,6 +166,34 @@ export default {
         { rel: 'canonical', href: `${this.$route.path}` },
         { rel: 'prefetch', href: 'https://js.stripe.com/v3' },
       ],
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify([
+            {
+              '@context': 'http://www.schema.org',
+              '@type': 'Product',
+              name: 'Civic Liker',
+              image: ['https://liker.land/images/og/civic.png'],
+              description: this.$t('CivicPage.ogDescription'),
+              brand: {
+                '@type': 'Brand',
+                name: 'Republic of Liker Land',
+              },
+              url: 'https://liker.land/civic',
+              offers: {
+                '@type': 'Offer',
+                availability: 'https://schema.org/InStock',
+                price: '5',
+                priceCurrency: 'USD',
+                url: 'https://liker.land/civic',
+              },
+            },
+          ]),
+          type: 'application/ld+json',
+          body: true,
+        },
+      ],
     };
   },
   async beforeMount() {
