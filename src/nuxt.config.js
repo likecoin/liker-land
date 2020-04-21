@@ -87,12 +87,8 @@ const nuxtConfig = {
             '@type': 'WebApplication',
             name: 'Liker Land',
             applicationCategory: 'LifestyleApplication',
+            operatingSystem: 'All',
             url: 'https://liker.land',
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: '4.3',
-              ratingCount: '16',
-            },
             offers: {
               '@type': 'Offer',
               price: '0',
