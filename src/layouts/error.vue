@@ -88,7 +88,7 @@ import {
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
-import IntercomMixin from '~/mixins/intercom';
+import CrispMixin from '~/mixins/crisp';
 
 export default {
   layout: 'empty',
@@ -104,7 +104,7 @@ export default {
     DialogLayout,
     LikeButtonAnimation,
   },
-  mixins: [IntercomMixin],
+  mixins: [CrispMixin],
   props: {
     error: {
       type: Object,

@@ -9,15 +9,15 @@ const {
   getOAuthURL,
 } = require('../util/api');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../constant');
-const { INTERCOM_USER_HASH_SECRET } = require('../../config/config');
+const { CRISP_USER_HASH_SECRET } = require('../../config/config');
 
 const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
-function getIntercomUserHash(user) {
-  if (!INTERCOM_USER_HASH_SECRET) return undefined;
+function getCrispUserHash(email) {
+  if (!CRISP_USER_HASH_SECRET) return undefined;
   return crypto
-    .createHmac('sha256', INTERCOM_USER_HASH_SECRET)
-    .update(user)
+    .createHmac('sha256', CRISP_USER_HASH_SECRET)
+    .update(email)
     .digest('hex');
 }
 
@@ -42,7 +42,7 @@ router.get('/users/self', async (req, res, next) => {
         user,
         hasReadWelcomeDialog,
         ...data,
-        intercomToken: getIntercomUserHash(user),
+        crispToken: getCrispUserHash(user),
       });
       await userCollection.doc(user).update({
         user: data,
@@ -138,7 +138,7 @@ router.post('/users/login', async (req, res, next) => {
     res.json({
       user,
       ...userData,
-      intercomToken: getIntercomUserHash(user),
+      crispToken: getCrispUserHash(user),
       isNew,
     });
   } catch (err) {

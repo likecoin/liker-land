@@ -28,14 +28,14 @@
 </template>
 
 <script>
-import IntercomMixin from '~/mixins/intercom';
+import CrispMixin from '~/mixins/crisp';
 import PayMeImage from '~/assets/images/civic/payme.jpg';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   middleware: 'authenticated',
   layout: 'dialog',
-  mixins: [IntercomMixin],
+  mixins: [CrispMixin],
   data() {
     return {
       PayMeImage,

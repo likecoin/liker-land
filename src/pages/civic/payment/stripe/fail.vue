@@ -10,11 +10,11 @@
 
 
 <script>
-import IntercomMixin from '~/mixins/intercom';
+import CrispMixin from '~/mixins/crisp';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  mixins: [IntercomMixin],
+  mixins: [CrispMixin],
   data() {
     return {};
   },

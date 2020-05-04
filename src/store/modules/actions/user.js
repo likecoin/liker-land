@@ -2,7 +2,7 @@ import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 import {
   updateSentryUser,
-  updateIntercomUser,
+  updateCrispUser,
   setTrackerUser,
 } from '@/util/EventLogger';
 
@@ -19,7 +19,7 @@ export async function postLoginToken(
     dispatch('setLocale', user.locale);
   }
   if (this.$sentry) updateSentryUser(this, user);
-  if (this.$intercom) updateIntercomUser(this, user);
+  if (this.$crisp) updateCrispUser(this, user);
   await setTrackerUser(this, user);
   return user;
 }
@@ -33,7 +33,7 @@ export async function fetchLoginStatus({ commit, dispatch }) {
     }
 
     if (this.$sentry) updateSentryUser(this, user);
-    if (this.$intercom) updateIntercomUser(this, user);
+    if (this.$crisp) updateCrispUser(this, user);
     return user;
   } catch (err) {
     return false;
@@ -45,9 +45,8 @@ export async function userLogout({ commit }) {
   commit(types.USER_SET_USER_INFO, {});
   commit(types.READER_CLEAR_FOR_LOGOUT);
   if (this.$sentry) updateSentryUser(this, { user: null });
-  if (this.$intercom && this.$intercom.booted) {
-    this.$intercom.shutdown();
-    this.$intercom.booted = false;
+  if (this.$crisp) {
+    this.$crisp.push(['do', 'session:reset']);
   }
 }
 

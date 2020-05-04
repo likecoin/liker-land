@@ -57,7 +57,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { getOAuthRegisterAPI, getUserMinAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 
-import { IntercomMixinFactory } from '~/mixins/intercom';
+import { CrispMixinFactory } from '~/mixins/crisp';
 // import experimentMixin from '~/mixins/experiment';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
@@ -69,7 +69,7 @@ export default {
     SiteNavBar,
   },
   mixins: [
-    IntercomMixinFactory({ isBootAtMounted: false }),
+    CrispMixinFactory({ isBootAtMounted: false }),
     // experimentMixin('isExperimenting', 'civic-page', 'variant'),
   ],
   // directives: {
