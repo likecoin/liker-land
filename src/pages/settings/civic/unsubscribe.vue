@@ -261,6 +261,7 @@ export default {
         );
       }
       this.form.open();
+      this.unsubscribe();
     },
     async unsubscribe() {
       this.state = 'loading';
