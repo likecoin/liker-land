@@ -261,6 +261,7 @@ export default {
         );
       }
       this.form.open();
+      this.unsubscribe();
     },
     async unsubscribe() {
       this.state = 'loading';
@@ -313,7 +314,6 @@ export default {
     },
     onSubmitFeedbackForm() {
       this.form.close();
-      this.unsubscribe();
     },
     onClickFinishButton() {
       this.$router[this.state === 'unsubscribed' ? 'replace' : 'push']({
