@@ -104,7 +104,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { getOAuthRegisterAPI, getAppURL } from '~/util/api';
 import { checkIsMobileClient } from '~/util/client';
-import { IntercomMixinFactory } from '~/mixins/intercom';
+import { CrispMixinFactory } from '~/mixins/crisp';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getCreatorURL } from '~/util/links';
 
@@ -119,7 +119,7 @@ export default {
     CogIcon,
     HomeIcon,
   },
-  mixins: [IntercomMixinFactory({ isBootAtMounted: false })],
+  mixins: [CrispMixinFactory({ isBootAtMounted: false })],
   data() {
     return {
       isShowAppCTA: false,
@@ -159,11 +159,10 @@ export default {
       this.toggleSlidingMenu(false);
     },
     onClickSupport(e) {
-      if (this.$intercom) {
-        if (this.bootIntercom()) {
-          this.$intercom.show();
-          e.preventDefault();
-        }
+      if (this.$crisp) {
+        this.showCrisp();
+        this.$crisp.push(['do', 'chat:open']);
+        e.preventDefault();
       }
     },
     onClickLogEvent(...args) {

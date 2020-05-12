@@ -7,7 +7,7 @@ const siteName = 'Liker.Land';
 const {
   IS_TESTNET,
   CI,
-  INTERCOM_APPID,
+  CRISP_WEBSITE_ID,
   STRIPE_PUBLIC_KEY,
   FACEBOOK_PIXEL_ID,
 } = process.env;
@@ -16,7 +16,7 @@ const nuxtConfig = {
   env: {
     IS_TESTNET,
     CI,
-    INTERCOM_APPID,
+    CRISP_WEBSITE_ID,
     STRIPE_PUBLIC_KEY,
     FACEBOOK_PIXEL_ID,
     SITE_NAME: siteName,
@@ -161,11 +161,10 @@ const nuxtConfig = {
           "'unsafe-inline'", // ignored by browser with sha support
           'www.google-analytics.com',
           'connect.facebook.net',
-          'js.intercomcdn.com',
-          '*.intercom.io',
           'use.typekit.net',
           'https://js.stripe.com',
           'https://admin.typeform.com',
+          '*.crisp.chat',
         ],
         'frame-src': [
           'www.google.com',
@@ -182,11 +181,12 @@ const nuxtConfig = {
           "'self'",
           'data:',
           '*',
-          'wss://*.intercom.io',
+          'wss://client.relay.crisp.chat',
         ],
         'style-src': [
           "'self'",
           "'unsafe-inline'",
+          'client.crisp.chat',
         ],
         'report-uri': [
           process.env.SENTRY_REPORT_URI,
@@ -214,8 +214,8 @@ const nuxtConfig = {
     // { src: '~/plugins/experiment.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
-    { src: '~/plugins/vue-intercom', ssr: false },
     { src: '~/plugins/fbpixel.client.js', ssr: false },
+    { src: '~/plugins/crisp.client.js', ssr: false },
   ],
 
   /*
@@ -359,11 +359,5 @@ const nuxtConfig = {
     },
   },
 };
-
-if (process.env.INTERCOM_APPID) {
-  nuxtConfig.head.link.push(
-    { rel: 'preload', href: `https://widget.intercom.io/widget/${process.env.INTERCOM_APPID}`, as: 'script' },
-  );
-}
 
 module.exports = nuxtConfig;

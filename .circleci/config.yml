@@ -64,7 +64,7 @@ jobs:
             SENTRY_PUBLISH_RELEASE=TRUE \
             SENTRY_DSN=${TEST_SENTRY_DSN} \
             SENTRY_PROJECT=${TEST_SENTRY_PROJECT} \
-            INTERCOM_APPID=${TEST_INTERCOM_APPID} \
+            CRISP_WEBSITE_ID=${TEST_CRISP_WEBSITE_ID} \
             FACEBOOK_PIXEL_ID=${TEST_FACEBOOK_PIXEL_ID} \
             firebase deploy --project civic-liker-develop
           environment:
