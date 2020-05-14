@@ -8,7 +8,11 @@ const {
   getOAuthCallbackAPI,
   getOAuthURL,
 } = require('../util/api');
-const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../constant');
+const {
+  AUTH_COOKIE_NAME,
+  AUTH_COOKIE_OPTION,
+  DEFAULT_FOLLOW_IDS,
+} = require('../constant');
 const { CRISP_USER_HASH_SECRET } = require('../../config/config');
 
 const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
@@ -127,14 +131,17 @@ router.post('/users/login', async (req, res, next) => {
 
     const userDoc = await userCollection.doc(user).get();
     const isNew = !userDoc.exists;
-    await userCollection.doc(user).set(
-      {
-        user: userData,
-        accessToken,
-        refreshToken,
-      },
-      { merge: true }
-    );
+
+    const payload = {
+      user: userData,
+      accessToken,
+      refreshToken,
+    };
+    if (isNew) {
+      payload.followedUsers = DEFAULT_FOLLOW_IDS;
+    }
+    await userCollection.doc(user).set(payload, { merge: true });
+
     res.json({
       user,
       ...userData,

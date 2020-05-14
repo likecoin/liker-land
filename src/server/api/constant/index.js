@@ -7,7 +7,15 @@ const AUTH_COOKIE_OPTION = {
   httpOnly: true,
 };
 
+const DEFAULT_FOLLOW_IDS = [
+  'foundation',
+  'hkcitizennews',
+  'inmediahknet',
+  'standnews',
+];
+
 module.exports = {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
+  DEFAULT_FOLLOW_IDS,
 };
