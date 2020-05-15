@@ -139,8 +139,10 @@ router.post('/users/login', async (req, res, next) => {
     };
     if (isNew) {
       payload.followedUsers = DEFAULT_FOLLOW_IDS;
+      await userCollection.doc(user).create(payload);
+    } else {
+      await userCollection.doc(user).update(payload);
     }
-    await userCollection.doc(user).set(payload, { merge: true });
 
     res.json({
       user,
