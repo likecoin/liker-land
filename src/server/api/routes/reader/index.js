@@ -5,6 +5,7 @@ const {
   apiFetchSuggestedArticles,
   apiFetchFollowedArticles,
   apiFetchFollowedUser,
+  apiFetchFollowedSuperLikes,
 } = require('../../util/api');
 const { userCollection } = require('../../util/firebase');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
@@ -107,6 +108,40 @@ router.get('/reader/works/followed', async (req, res, next) => {
     });
     data.list.sort((a, b) => b.ts - a.ts).splice(limit);
     res.json({ list: data.list });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/reader/works/superlike', async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    if (!req.session.user) {
+      res.sendStatus(403);
+      return;
+    }
+    const { after, before, limit = 20 } = req.query;
+    const { followedUsers: users } = await getFollowedUserListInfo(req);
+    if (!users || !users.length) {
+      res.json({ list: [] });
+      return;
+    }
+    const { data } = await apiFetchFollowedSuperLikes(users, {
+      after,
+      before,
+      limit,
+    });
+    const list = data.list.map(l => {
+      const { id, likee, ts, url } = l;
+      return {
+        superLikeID: id,
+        referrer: url,
+        ts,
+        user: likee,
+      };
+    });
+    list.sort((a, b) => b.ts - a.ts).splice(limit);
+    res.json({ list });
   } catch (err) {
     next(err);
   }
