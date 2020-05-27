@@ -33,6 +33,9 @@ const nuxt = new Nuxt(config);
 const app = express();
 app.use(helmet());
 app.use(cookieParser());
-app.use(nuxt.render);
+app.use(async (req, res) => {
+  await nuxt.ready();
+  nuxt.render(req, res);
+});
 
 module.exports = functions.https.onRequest(app);
