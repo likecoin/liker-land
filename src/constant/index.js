@@ -15,6 +15,10 @@ export const LIKE_CO_CLOUD_FN_BASE = `https://us-central1-civic-liker${
   IS_TESTNET ? '-develop' : ''
 }.cloudfunctions.net`;
 
+export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET
+  ? 'https://rinkeby.like.co/in/logout?is_popup=1'
+  : 'https://like.co/in/logout?is_popup=1';
+
 export const AUTH_COOKIE_NAME = '__session';
 
 export const PAYMENT_METHOD_LIST = [
