@@ -47,11 +47,11 @@
             @click.native="onClickMenuItem"
           >{{ titleForCivicMenuItem }}</NuxtLink>
 
-          <a
+          <NuxtLink
             v-if="getUserId"
             class="btn btn--outlined btn--dark btn--block"
-            :href="getCreatorURL"
-          >{{ $t('SlidingMenu.creator') }}</a>
+            :to="{ name: 'creators' }"
+          >{{ $t('SlidingMenu.creator') }}</NuxtLink>
 
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block btn--with-icon"
@@ -106,7 +106,6 @@ import { getOAuthRegisterAPI, getAppURL } from '~/util/api';
 import { checkIsMobileClient } from '~/util/client';
 import { CrispMixinFactory } from '~/mixins/crisp';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getCreatorURL } from '~/util/links';
 
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
@@ -145,7 +144,6 @@ export default {
       return this.$t('SlidingMenu.civic');
     },
     getAppURL,
-    getCreatorURL,
   },
   methods: {
     logTrackerEvent,

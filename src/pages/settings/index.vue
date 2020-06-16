@@ -22,8 +22,8 @@
           span.settings-menu__item-subtitle(v-if="getUserIsCivicLiker")
             | {{ $t('SettingsPage.civicLiker.subscribing') }}
       li
-        a.settings-menu__item(
-          :href="getCreatorURL"
+        NuxtLink.settings-menu__item(
+          :to="{ name: 'creators' }"
           target="_blank"
           rel="noopener"
         )
@@ -39,7 +39,7 @@ import { mapGetters } from 'vuex';
 
 import GlobeIcon from '~/assets/icons/globe.svg';
 
-import { getLikerIdSettingsURL, getCreatorURL } from '~/util/links';
+import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
   components: {
@@ -47,7 +47,6 @@ export default {
   },
   computed: {
     getLikerIdSettingsURL,
-    getCreatorURL,
 
     ...mapGetters(['getUserId', 'getUserInfo', 'getUserIsCivicLiker']),
 

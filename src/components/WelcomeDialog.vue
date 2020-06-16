@@ -126,8 +126,8 @@
                     )
                       | {{ $t('WelcomeDialog.comparisonCard.general.button') }}
         .text-center.p-16
-          a.btn.btn--plain.btn--auto-size.text-12(
-            :href="getCreatorURL"
+          NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+            :to="{ name: 'creators' }"
             target="_blank"
             rel="noopener"
             @click="onClickActionButton"
@@ -144,7 +144,6 @@ import BaseDialog from '~/components/BaseDialog';
 import LikerComparisonCard from '~/components/LikerComparisonCard';
 
 import { updateProfile } from '~/util/api';
-import { getCreatorURL } from '~/util/links';
 
 import { PAYMENT_METHOD_LIST } from '~/constant';
 
@@ -169,7 +168,6 @@ export default {
   },
   computed: {
     ...mapGetters(['getIsHK']),
-    getCreatorURL,
 
     paymentMethods() {
       return PAYMENT_METHOD_LIST;
