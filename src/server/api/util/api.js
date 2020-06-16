@@ -115,6 +115,50 @@ const apiPostArticleForInfo = (url, req) =>
   );
 const apiFetchArticleDetail = url =>
   axios.get(`${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`);
+const apiFetchFollowedUser = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/users/follow/users`, {
+      headers: { Authorization },
+    })
+  );
+const apiPostFollowedUser = (userId, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKECOIN_API_BASE}/users/follow/users/${userId}`,
+      {},
+      {
+        headers: { Authorization },
+      }
+    )
+  );
+const apiDeleteFollowedUser = (userId, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.delete(`${LIKECOIN_API_BASE}/users/follow/users/${userId}`, {
+      headers: { Authorization },
+    })
+  );
+const apiFetchBookmarks = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/users/bookmarks`, {
+      headers: { Authorization },
+    })
+  );
+const apiPostBookmarks = (url, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKECOIN_API_BASE}/users/bookmarks`,
+      { url },
+      {
+        headers: { Authorization },
+      }
+    )
+  );
+const apiDeleteBookmarks = (bookmarkId, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.delete(`${LIKECOIN_API_BASE}/users/bookmarks/${bookmarkId}`, {
+      headers: { Authorization },
+    })
+  );
 const apiFetchCivicCSOnline = () =>
   axios.get(`${LIKE_CO_URL_BASE}/api/civic/csonline`);
 const apiCivicLikerTrialEventById = id =>
@@ -155,6 +199,12 @@ module.exports = {
   apiFetchSuggestedArticles,
   apiPostArticleForInfo,
   apiFetchArticleDetail,
+  apiFetchBookmarks,
+  apiPostBookmarks,
+  apiDeleteBookmarks,
+  apiFetchFollowedUser,
+  apiPostFollowedUser,
+  apiDeleteFollowedUser,
   apiFetchCivicCSOnline,
   apiCivicLikerTrialEventById,
   apiCivicLikerJoinTrialEventById,
