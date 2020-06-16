@@ -153,11 +153,14 @@ const apiPostBookmarks = (url, req) =>
       }
     )
   );
-const apiDeleteBookmarks = (bookmarkId, req) =>
+const apiDeleteBookmarks = (url, req) =>
   sendAuthorizedRequest(req, Authorization =>
-    axios.delete(`${LIKECOIN_API_BASE}/users/bookmarks/${bookmarkId}`, {
-      headers: { Authorization },
-    })
+    axios.delete(
+      `${LIKECOIN_API_BASE}/users/bookmarks/?url=${encodeURIComponent(url)}`,
+      {
+        headers: { Authorization },
+      }
+    )
   );
 const apiFetchCivicCSOnline = () =>
   axios.get(`${LIKE_CO_URL_BASE}/api/civic/csonline`);
