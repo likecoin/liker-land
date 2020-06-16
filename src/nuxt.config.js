@@ -216,6 +216,7 @@ const nuxtConfig = {
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/fbpixel.client.js', ssr: false },
     { src: '~/plugins/crisp.client.js', ssr: false },
+    { src: '~/plugins/vue-clipboard2', ssr: false },
   ],
 
   /*
