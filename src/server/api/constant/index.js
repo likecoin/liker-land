@@ -19,6 +19,8 @@ const OAUTH_SCOPE_REQUEST = [
   'email',
   'read:like.info',
   'civic_liker',
+  'bookmarks',
+  'follow',
 ];
 
 const OAUTH_SCOPE_REQUIRED = [
@@ -27,6 +29,10 @@ const OAUTH_SCOPE_REQUIRED = [
   'read:like.info',
   'read:civic_liker',
   'write:civic_liker',
+  'read:bookmarks',
+  'write:bookmarks',
+  'read:follow',
+  'write:follow',
 ];
 
 module.exports = {
