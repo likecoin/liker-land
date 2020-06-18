@@ -9,6 +9,7 @@ const {
   LIKE_CO_CLIENT_SECRET,
 } = require('../../config/config');
 const { userCollection } = require('../util/firebase');
+const { OAUTH_SCOPE_REQUEST } = require('../constant');
 
 const LIKECOIN_API_BASE = IS_TESTNET
   ? 'https://api.rinkeby.like.co'
@@ -132,7 +133,7 @@ const getOAuthURL = ({ state, isRegister, from, referrer }) => {
   const qsPayload = {
     client_id: LIKE_CO_CLIENT_ID,
     redirect_uri: OAUTH_REDIRECT_URI,
-    scope: 'profile email read:like.info read:civic_liker write:civic_liker',
+    scope: OAUTH_SCOPE_REQUEST.join(' '),
   };
   if (state) qsPayload.state = state;
   if (from) qsPayload.from = from;

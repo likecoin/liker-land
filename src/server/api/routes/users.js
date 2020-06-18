@@ -1,6 +1,7 @@
 const axios = require('axios');
 const crypto = require('crypto');
 const { Router } = require('express');
+const jwt = require('jsonwebtoken');
 const { userCollection } = require('../util/firebase');
 const { setPrivateCacheHeader } = require('../middleware/cache');
 const {
@@ -12,6 +13,7 @@ const {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
   DEFAULT_FOLLOW_IDS,
+  OAUTH_SCOPE_REQUIRED,
 } = require('../constant');
 const { CRISP_USER_HASH_SECRET } = require('../../config/config');
 
@@ -37,6 +39,10 @@ router.get('/users/self', async (req, res, next) => {
     setPrivateCacheHeader(res);
     const { user } = req.session;
     if (user) {
+      const currentScopes = jwt.decode(req.session.accessToken).scope;
+      if (!OAUTH_SCOPE_REQUIRED.every(s => currentScopes.includes(s))) {
+        throw new Error('Insufficient scopes');
+      }
       const [{ data }, userDoc] = await Promise.all([
         apiFetchUserProfile(req),
         userCollection.doc(user).get(),
