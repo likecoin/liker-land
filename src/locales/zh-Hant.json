@@ -94,6 +94,26 @@
   "ContentList": {
     "empty": "沒有文章"
   },
+  "CreatorsPage": {
+    "Title": "化讚為賞",
+    "Description": "立即為你的作品安裝 LikeCoin button{br}讓讀者可以讚賞支持",
+    "Og": {
+      "Title": "@:CreatorsPage.Title",
+      "Description": "立即為你的作品安裝 LikeCoin button 讓讀者可以讚賞支持"
+    },
+    "PlatformSelectLabel": "LikeCoin button 支持以下平台",
+    "PlatformDescription": {
+      "ConfigLikerID": "可於平台設定中填上 Liker ID，所有文章自動加入讚賞鍵。",
+      "Embedly": "在文章加上以下連結即可嵌入 LikeCoin button。",
+      "Plugin": {
+        "Content": "安裝 {wordpress}，所有文章自動加上 LikeCoin button。LikeCoin button 突出創作者的品牌，跟一般的廣告橫幅完全不同，提供最佳的閱讀體驗。",
+        "WordPress": "WordPress 外掛"
+      },
+      "ProvideLikerID": "媒體特約作者，把 Liker ID 提供給{inmedia}、{standnews}或{hkcnews}等合作平台，即能為文章安裝 LikeCoin button。"
+    },
+    "LikerIDPlaceholer": "<你的 Liker ID>",
+    "GuideLinkPrefix": "https://docs.like.co/v/zh/user-guide/likecoin-button/"
+  },
   "FeaturedPage": {
     "headerLabel": "Today"
   },
@@ -104,6 +124,11 @@
       "content": "你可以在作者的LikeButton上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。",
       "goToFeaturing": "前往精選文章列表"
     }
+  },
+  "Glossary": {
+    "HKCnews": "眾新聞",
+    "InMedia": "香港獨立媒體網",
+    "Standnews": "立場新聞"
   },
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容",
@@ -264,6 +289,8 @@
   "back": "上一頁",
   "backToHome": "返回首頁",
   "civicLiker": "讚賞公民",
+  "copy": "複製",
+  "copied": "已複製",
   "finish": "完成",
   "follow": "追踪",
   "following": "追踪中",
