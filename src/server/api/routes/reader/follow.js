@@ -1,6 +1,9 @@
 const { Router } = require('express');
-const { apiFetchUserPublicProfile } = require('../../util/api');
 const { FieldValue, userCollection } = require('../../util/firebase');
+const {
+  apiPostFollowedUser,
+  apiDeleteFollowedUser,
+} = require('../../util/api');
 
 const router = Router();
 
@@ -12,7 +15,7 @@ router.post('/reader/follow/user/:id', async (req, res, next) => {
     }
     const { id } = req.params;
     try {
-      await apiFetchUserPublicProfile(id);
+      await apiPostFollowedUser(id, req);
     } catch (err) {
       if (err.response) {
         if (err.response.status === 404) {
@@ -25,7 +28,6 @@ router.post('/reader/follow/user/:id', async (req, res, next) => {
     }
     const userRef = userCollection.doc(req.session.user);
     await userRef.update({
-      followedUsers: FieldValue.arrayUnion(id),
       unfollowedUsers: FieldValue.arrayRemove(id),
     });
     res.sendStatus(200);
@@ -42,7 +44,7 @@ router.delete('/reader/follow/user/:id', async (req, res, next) => {
     }
     const { id } = req.params;
     try {
-      await apiFetchUserPublicProfile(id);
+      await apiDeleteFollowedUser(id, req);
     } catch (err) {
       if (err.response) {
         if (err.response.status === 404) {
@@ -56,7 +58,6 @@ router.delete('/reader/follow/user/:id', async (req, res, next) => {
     const userRef = userCollection.doc(req.session.user);
     await userRef.update({
       followedUsers: FieldValue.arrayRemove(id),
-      unfollowedUsers: FieldValue.arrayUnion(id),
     });
     res.sendStatus(200);
   } catch (err) {
