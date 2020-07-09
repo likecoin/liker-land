@@ -24,20 +24,21 @@ router.get('/reader/bookmark', async (req, res, next) => {
     const { bookmarks = [] } = userDoc.data();
     const outputList = [];
     const bookmarksSet = new Set();
-    if (apiBookmarks.data.list) {
-      apiBookmarks.data.list.forEach(b => {
-        if (!bookmarksSet.has(b.url)) {
-          outputList.push(b.url);
-          bookmarksSet.add(b.url);
-        }
-      });
-    }
     bookmarks.forEach(b => {
       if (!bookmarksSet.has(b)) {
         outputList.push(b);
         bookmarksSet.add(b);
       }
     });
+    if (apiBookmarks.data.list) {
+      const { list } = apiBookmarks.data;
+      list.sort((a, b) => a.ts - b.ts).forEach(b => {
+        if (!bookmarksSet.has(b.url)) {
+          outputList.push(b.url);
+          bookmarksSet.add(b.url);
+        }
+      });
+    }
     res.json({ bookmarks: outputList });
   } catch (err) {
     next(err);
