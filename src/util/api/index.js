@@ -36,6 +36,9 @@ export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
 export const getLogoutAPI = () => `/api/users/logout`;
+export const getLikePayPageURL = (from = '') =>
+  `/api/civic/payment/likepay/payment?from=${from}`;
+export const getLikePayPaymentAPI = () => `/api/civic/payment/likepay`;
 export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
 export const getStripePaymentAPI = ({
   from = '',

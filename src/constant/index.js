@@ -24,5 +24,6 @@ export const AUTH_COOKIE_NAME = '__session';
 export const PAYMENT_METHOD_LIST = [
   'stripe',
   'paypal',
+  'likepay',
   'other', // plz always put `other` at last for hk geoip handle
 ];

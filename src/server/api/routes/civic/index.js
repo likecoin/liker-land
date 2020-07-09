@@ -8,9 +8,11 @@ const {
   apiCivicLikerJoinTrialEventById,
 } = require('../../util/api');
 const stripe = require('./stripe');
+const likepay = require('./likepay');
 
 const router = Router();
 
+router.use(likepay);
 router.use(stripe);
 
 router.get('/civic/csonline', async (req, res, next) => {

@@ -16,6 +16,8 @@ config.CRISP_USER_HASH_SECRET = functions.config().crisp.user_hash_secret;
 
 config.PAYPAL_PDT_HOOK = functions.config().hook.paypal_pdt;
 
+config.LIKEPAY_HOOK = functions.config().hook.likepay;
+
 config.STRIPE_PRIVATE_KEY = functions.config().stripe.private_key;
 config.STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
 config.STRIPE_PLAN_ID = functions.config().stripe.plan_id;
