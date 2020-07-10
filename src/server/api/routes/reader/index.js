@@ -53,8 +53,8 @@ async function getFollowedUserListInfo(req) {
     });
   }
   return {
-    followedUsers: Array.from(userSet),
-    unfollowedUsers: Array.from(unfollowedUserSet),
+    followedUsers: Array.from(userSet).sort(),
+    unfollowedUsers: Array.from(unfollowedUserSet).sort(),
   };
 }
 
