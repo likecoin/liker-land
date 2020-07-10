@@ -36,16 +36,26 @@ async function getFollowedUserListInfo(req) {
     apiFetchFollowedUser(req),
   ]);
   const userSet = new Set(data.list);
+  const unfollowedUserSet = new Set();
   const { followedUsers = [], unfollowedUsers = [] } = userDoc.data();
   followedUsers.forEach(u => userSet.add(u));
-  unfollowedUsers.forEach(u => userSet.delete(u));
+  unfollowedUsers.forEach(u => {
+    userSet.delete(u);
+    unfollowedUserSet.add(u);
+  });
   if (apiData.list) {
     const apiFollowed = apiData.list.filter(a => a.isFollowed);
     const apiUnfollowed = apiData.list.filter(a => !a.isFollowed);
     apiFollowed.forEach(u => userSet.add(u.id));
-    apiUnfollowed.forEach(u => userSet.delete(u.id));
+    apiUnfollowed.forEach(u => {
+      userSet.delete(u.id);
+      unfollowedUserSet.add(u);
+    });
   }
-  return { followedUsers: Array.from(userSet), unfollowedUsers };
+  return {
+    followedUsers: Array.from(userSet),
+    unfollowedUsers: Array.from(unfollowedUserSet),
+  };
 }
 
 router.get('/reader/index', async (req, res, next) => {
