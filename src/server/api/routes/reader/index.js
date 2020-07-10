@@ -49,7 +49,7 @@ async function getFollowedUserListInfo(req) {
     apiFollowed.forEach(u => userSet.add(u.id));
     apiUnfollowed.forEach(u => {
       userSet.delete(u.id);
-      unfollowedUserSet.add(u);
+      unfollowedUserSet.add(u.id);
     });
   }
   return {
