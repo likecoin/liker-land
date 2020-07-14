@@ -12,7 +12,12 @@ export default {
       return;
     }
     const { from } = query;
-    redirect(getLikePayPageURL(from));
+    if (process.server) {
+      redirect(getLikePayPageURL(from));
+    } else {
+      // redirect to /api url would fail using redirect() in client
+      window.location = getLikePayPageURL(from);
+    }
   },
 };
 </script>
