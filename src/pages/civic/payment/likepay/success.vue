@@ -1,6 +1,9 @@
 <template>
   <div class="payment-success-page">
-    <div>
+    <template v-if="isLoading">
+      <LcLoadingIndicator class="text-like-cyan mx-auto" />
+    </template>
+    <div v-else>
       <transition
         name="payment-success-page-hero-"
         appear
@@ -65,6 +68,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       isPopup: '',
     };
   },
@@ -96,6 +100,7 @@ export default {
     let referrer;
     let utmSource;
     let isPopup;
+    this.isLoading = true;
     logTrackerEvent(
       this,
       'Civic',
@@ -123,6 +128,7 @@ export default {
         ...queries,
       });
       this.setUserCivicLiker();
+      this.isLoading = false;
       logTrackerEvent(
         this,
         'Civic',
@@ -139,7 +145,9 @@ export default {
       }
     } catch (err) {
       console.error(err); // eslint-disable-line no-console
-      throw err;
+      this.$router.push({
+        name: 'civic-payment-likepay-fail',
+      });
     }
   },
   methods: {
