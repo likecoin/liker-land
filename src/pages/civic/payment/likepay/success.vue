@@ -108,7 +108,7 @@ export default {
       isPopup = window.sessionStorage.getItem('civicLikerIsPopup');
       if (isPopup) this.isPopup = isPopup;
     }
-    const { state, remarks, tx_hash: txHash } = this.$route.query;
+    const { state, remarks, tx_hash: txHash, ...queries } = this.$route.query;
     try {
       if (state) ({ referrer } = JSON.parse(state));
     } catch (err) {
@@ -120,7 +120,7 @@ export default {
         remarks,
         referrer,
         utmSource,
-        ...this.$route.query,
+        ...queries,
       });
       this.setUserCivicLiker();
       logTrackerEvent(
