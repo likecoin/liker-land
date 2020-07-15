@@ -20,7 +20,7 @@ const LIKE_CO_URL_BASE = IS_TESTNET
 const EXTERNAL_URL =
   CONFIG_EXTERNAL_URL ||
   (IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land');
-const OAUTH_REDIRECT_URI = encodeURIComponent(`${EXTERNAL_URL}/oauth/redirect`);
+const OAUTH_REDIRECT_URI = `${EXTERNAL_URL}/oauth/redirect`;
 
 const axios = Axios.create({
   timeout: 60000,
@@ -188,8 +188,19 @@ const getOAuthURL = ({ state, isRegister, from, referrer }) => {
   if (isRegister) qsPayload.register = '1';
   return `${LIKE_CO_URL_BASE}/in/oauth?${querystring.stringify(qsPayload)}`;
 };
-const getOAuthCallbackAPI = authCode =>
-  `${LIKECOIN_API_BASE}/oauth/access_token?client_id=${LIKE_CO_CLIENT_ID}&client_secret=${LIKE_CO_CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${OAUTH_REDIRECT_URI}&code=${authCode}`;
+
+const getOAuthCallbackAPI = authCode => {
+  const qsPayload = {
+    client_id: LIKE_CO_CLIENT_ID,
+    client_secret: LIKE_CO_CLIENT_SECRET,
+    grant_type: 'authorization_code',
+    redirect_uri: OAUTH_REDIRECT_URI,
+    code: authCode,
+  };
+  return `${LIKECOIN_API_BASE}/oauth/access_token?${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 module.exports = {
   EXTERNAL_URL,
