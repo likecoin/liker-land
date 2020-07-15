@@ -49,6 +49,7 @@
     "paymentMethod": {
       "stripe": "Credit Card/Debit Card monthly subscription",
       "paypal": "PayPal monthly subscription",
+      "likepay": "Pay with LIKE",
       "other": "PayMe/FPS (HK only)"
     }
   },

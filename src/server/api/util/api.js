@@ -21,6 +21,7 @@ const EXTERNAL_URL =
   CONFIG_EXTERNAL_URL ||
   (IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land');
 const OAUTH_REDIRECT_URI = `${EXTERNAL_URL}/oauth/redirect`;
+const LIKEPAY_REDIRECT_URI = `${EXTERNAL_URL}/civic/payment/likepay/redirect`;
 
 const axios = Axios.create({
   timeout: 60000,
@@ -202,6 +203,21 @@ const getOAuthCallbackAPI = authCode => {
   )}`;
 };
 
+const getLikePayURL = ({ amount, state, remarks, via, to, fee }) => {
+  const qsPayload = {
+    amount,
+    to,
+    redirect_uri: LIKEPAY_REDIRECT_URI,
+  };
+  if (state) qsPayload.state = state;
+  if (remarks) qsPayload.remarks = remarks;
+  if (via) qsPayload.via = via;
+  if (fee) qsPayload.fee = fee;
+  return `${LIKE_CO_URL_BASE}/in/widget/pay?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 module.exports = {
   EXTERNAL_URL,
   apiRefreshAccessToken,
@@ -224,4 +240,5 @@ module.exports = {
   apiCivicLikerJoinTrialEventById,
   getOAuthURL,
   getOAuthCallbackAPI,
+  getLikePayURL,
 };

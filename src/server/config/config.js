@@ -12,6 +12,7 @@ config.COOKIE_SECRET = process.env.COOKIE_SECRET;
 config.CRISP_USER_HASH_SECRET = process.env.CRISP_USER_HASH_SECRET;
 
 config.PAYPAL_PDT_HOOK = process.env.PAYPAL_PDT_HOOK;
+config.LIKEPAY_HOOK = process.env.LIKEPAY_HOOK;
 
 config.STRIPE_PRIVATE_KEY = process.env.STRIPE_PRIVATE_KEY;
 config.STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
