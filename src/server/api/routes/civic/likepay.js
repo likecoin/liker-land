@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const { getLikePayURL } = require('../../util/api');
 
-const { LIKEPAY_HOOK } = require('../../../config/config');
+const { IS_TESTNET, LIKEPAY_HOOK } = require('../../../config/config');
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.get('/civic/payment/likepay/payment', (req, res, next) => {
     }
     const { from } = req.query;
     const url = getLikePayURL({
-      amount: 15000,
+      amount: IS_TESTNET ? 12 : 15000,
       via: 'foundation',
       to: 'civicpool',
       fee: 0,
