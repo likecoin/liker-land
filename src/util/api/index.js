@@ -37,7 +37,8 @@ export const getUpdateReaderBookmarkAPI = url =>
 export const getFetchSuggestArticlesApi = () => `/api/reader/works/suggest`;
 export const getFetchFollowedArticlesApi = () => `/api/reader/works/followed`;
 export const getFetchLatestSuperLikeApi = () => `/api/reader/superlike/latest`;
-export const getFetchFollowedSuperLikeApi = () => `/api/reader/superlike/followed`;
+export const getFetchFollowedSuperLikeApi = () =>
+  `/api/reader/superlike/followed`;
 export const getOAuthRegisterAPI = (from = '', referrer = '') =>
   `/api/users/register?from=${from}&referrer=${encodeURIComponent(referrer)}`;
 export const getOAuthLoginAPI = () => '/api/users/login';
