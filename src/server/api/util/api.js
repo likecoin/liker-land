@@ -84,6 +84,8 @@ const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
   );
 const apiFetchUserPublicProfile = user =>
   axios.get(`${LIKECOIN_API_BASE}/users/id/${user}/min`);
+const apiFetchLatestSuperLike = () =>
+  axios.get(`${LIKECOIN_API_BASE}/like/share/latest`);
 const apiFetchLikedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
@@ -242,6 +244,7 @@ module.exports = {
   apiFetchUserProfile,
   apiFetchUserSuperLikeStatus,
   apiFetchUserPublicProfile,
+  apiFetchLatestSuperLike,
   apiFetchLikedUser,
   apiFetchFollowedArticles,
   apiFetchFollowedSuperLikes,

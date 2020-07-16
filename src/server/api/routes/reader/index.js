@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
   apiFetchLikedUser,
   apiFetchUserArticles,
+  apiFetchLatestSuperLike,
   apiFetchSuggestedArticles,
   apiFetchFollowedArticles,
   apiFetchFollowedUser,
@@ -87,6 +88,26 @@ router.get('/reader/works/suggest', async (req, res, next) => {
   }
 });
 
+router.get('/reader/superlike/global', async (req, res, next) => {
+  try {
+    const { data } = await apiFetchLatestSuperLike();
+    const list = data.list.map(l => {
+      const { id, likee, ts, url } = l;
+      return {
+        superLikeID: id,
+        referrer: url,
+        ts,
+        user: likee,
+      };
+    });
+    list.sort((a, b) => b.ts - a.ts);
+    res.set('Cache-Control', 'public, max-age=600');
+    res.json({ list });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/reader/works/followed', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
@@ -113,7 +134,7 @@ router.get('/reader/works/followed', async (req, res, next) => {
   }
 });
 
-router.get('/reader/works/superlike', async (req, res, next) => {
+router.get('/reader/works/superlike/followed', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
