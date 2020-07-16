@@ -2,6 +2,7 @@ import {
   IS_TESTNET,
   LIKECOIN_API_BASE,
   LIKE_CO_CLOUD_FN_BASE,
+  LIKECOIN_BUTTON_BASE,
 } from '@/constant';
 
 export const getAppURL = () => 'https://likecoin.page.link/likeco';
@@ -21,6 +22,9 @@ export const getPaypalUnsubscribeURL = () =>
     IS_TESTNET ? 'sandbox.' : ''
   }paypal.com/hk/customerprofileweb?cmd=_manage-paylist`;
 export const getOiceSettingsURL = () => 'https://oice.com/profile';
+
+export const getSuperLikeRedirectLink = superLikeID =>
+  `${LIKECOIN_BUTTON_BASE}/in/redirect/superlike/${superLikeID}`;
 
 export const getFetchLikedUserApi = () => `/api/reader/index`;
 export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}/works`;

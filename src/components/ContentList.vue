@@ -40,6 +40,7 @@
               :title="item.title"
               :description="item.description"
               :like-count="item.like"
+              :super-like-id="item.superLikeID"
             />
           </template>
           <template v-else>

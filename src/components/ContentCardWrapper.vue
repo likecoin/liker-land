@@ -25,6 +25,7 @@ import { mapActions, mapGetters } from 'vuex';
 import ContentCard from '~/components/ContentCard';
 
 import { logTrackerEvent } from '~/util/EventLogger';
+import { getSuperLikeRedirectLink } from '@/util/api';
 
 export default {
   name: 'ContentCardWrapper',
@@ -59,6 +60,10 @@ export default {
     likeCount: {
       type: Number,
       default: -1,
+    },
+    superLikeId: {
+      type: String,
+      default: undefined,
     },
   },
   data() {
@@ -145,7 +150,11 @@ export default {
           like,
           user,
         } = this.getArticleInfoByReferrer(this.referrer);
-        this.internalUrl = url;
+        if (this.superLikeId) {
+          this.internalUrl = getSuperLikeRedirectLink(this.superLikeId);
+        } else {
+          this.internalUrl = url;
+        }
         this.internalTitle = title;
         this.internalDescription = description;
         this.internalCoverSrc = image;
