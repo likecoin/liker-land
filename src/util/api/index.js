@@ -28,12 +28,16 @@ export const getSuperLikeRedirectLink = superLikeID =>
 
 export const getFetchLikedUserApi = () => `/api/reader/index`;
 export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}/works`;
+export const getFetchUserSuperLikeAPI = user =>
+  `/api/reader/user/${user}/superlike`;
 export const getFollowedUserAPI = user => `/api/reader/follow/user/${user}`;
 export const getFetchReaderBookmarkAPI = () => '/api/reader/bookmark';
 export const getUpdateReaderBookmarkAPI = url =>
   `/api/reader/bookmark?url=${encodeURIComponent(url)}`;
 export const getFetchSuggestArticlesApi = () => `/api/reader/works/suggest`;
 export const getFetchFollowedArticlesApi = () => `/api/reader/works/followed`;
+export const getFetchLatestSuperLikeApi = () => `/api/reader/superlike/latest`;
+export const getFetchFollowedSuperLikeApi = () => `/api/reader/superlike/followed`;
 export const getOAuthRegisterAPI = (from = '', referrer = '') =>
   `/api/users/register?from=${from}&referrer=${encodeURIComponent(referrer)}`;
 export const getOAuthLoginAPI = () => '/api/users/login';
