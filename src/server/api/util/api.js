@@ -124,6 +124,14 @@ const apiFetchUserArticles = (user, { limit, after, before }) =>
       before,
     },
   });
+const apiFetchUserSuperlike = (user, { limit, after, before }) =>
+  axios.get(`${LIKECOIN_API_BASE}/like/share/user/${user}/latest`, {
+    params: {
+      limit,
+      after,
+      before,
+    },
+  });
 const apiFetchSuggestedArticles = () =>
   axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
 const apiPostArticleForInfo = (url, req) =>
@@ -249,6 +257,7 @@ module.exports = {
   apiFetchFollowedArticles,
   apiFetchFollowedSuperLikes,
   apiFetchUserArticles,
+  apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
   apiPostArticleForInfo,
   apiFetchArticleDetail,
