@@ -24,7 +24,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserInfo', 'getUserIsCivicLiker']),
+    ...mapGetters([
+      'getUserInfo',
+      'getUserShouldRenewCivic',
+      'getUserIsCivicLiker',
+    ]),
   },
   head() {
     return {
@@ -58,10 +62,7 @@ export default {
     };
   },
   mounted() {
-    if (
-      this.getUserIsCivicLiker &&
-      !this.getUserInfo.isCivicLikerRenewalPeriod
-    ) {
+    if (this.getUserIsCivicLiker && !this.getUserShouldRenewCivic) {
       this.$router.replace({ name: 'settings-civic' });
       return;
     }
