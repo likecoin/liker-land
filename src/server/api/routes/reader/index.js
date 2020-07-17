@@ -21,12 +21,13 @@ router.use(bookmark);
 
 function filterSuperLikeList(list) {
   return list.map(l => {
-    const { id, likee, ts, url } = l;
+    const { id, likee, liker, ts, url } = l;
     return {
       superLikeID: id,
       referrer: url,
       ts,
       user: likee,
+      liker,
     };
   });
 }
