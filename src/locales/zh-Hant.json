@@ -245,13 +245,13 @@
     "encounterProblem": "退訂遇到問題？請按{here}"
   },
   "SettingsFollowingPage": {
-    "title": "@:SettingsPage.title > 追踪/取消追踪",
+    "title": "@:SettingsPage.title > 追蹤/取消追蹤",
     "follow": "@:follow",
     "following": "@:following",
-    "noFollowing": "你沒有追踪中的作者",
+    "noFollowing": "你沒有追蹤中的作者",
     "unfollow": "@:unfollow",
     "unfollowed": "@:unfollowed",
-    "noUnfollowed": "你沒有已取消追踪的作者"
+    "noUnfollowed": "你沒有已取消追蹤的作者"
   },
   "SettingsPage": {
     "title": "設定",
@@ -293,8 +293,8 @@
   "copy": "複製",
   "copied": "已複製",
   "finish": "完成",
-  "follow": "追踪",
-  "following": "追踪中",
+  "follow": "追蹤",
+  "following": "追蹤中",
   "here": "這裏",
   "learnMore": "Learn More",
   "month": "月",
@@ -305,7 +305,7 @@
   "signIn": "登入",
   "signInOrSignUp": "註冊/登入",
   "signUp": "註冊",
-  "unfollow": "取消追踪",
-  "unfollowed": "已取消追踪",
+  "unfollow": "取消追蹤",
+  "unfollowed": "已取消追蹤",
   "upgrade": "升級"
 }
