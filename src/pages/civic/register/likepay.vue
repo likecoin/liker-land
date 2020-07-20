@@ -6,7 +6,7 @@ export default {
   asyncData({ store, redirect, query }) {
     if (
       store.getters.getUserIsCivicLiker &&
-      !store.getters.getUserInfo.isCivicLikerRenewalPeriod
+      !store.getters.getUserShouldRenewCivic
     ) {
       redirect({ name: 'settings-civic' });
       return;

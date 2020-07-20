@@ -5,6 +5,8 @@ export const getUserIsCivicLikerTrial = state => !!state.user.isCivicLikerTrial;
 export const getUserIsCivicLiker = state => !!state.user.isSubscribedCivicLiker;
 export const getUserIsCivicLikerPaid = ({ user }) =>
   user.isSubscribedCivicLiker && !user.isCivicLikerTrial;
+export const getUserShouldRenewCivic = ({ user }) =>
+  user.isCivicLikerRenewalPeriod || user.isExpiredCivicLiker;
 export const getUserCivicLikerHalo = ({ user }) => {
   if (user.isCivicLikerTrial || user.isSubscribedCivicLiker) {
     return 'civic-liker';

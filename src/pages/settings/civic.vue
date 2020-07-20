@@ -34,7 +34,7 @@
                   | {{ getUserSubscriptionInfo.currentPeriodEndString }}
 
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
-          v-if="getUserSubscriptionInfo.willCancel"
+          v-if="getUserSubscriptionInfo.willCancel || getUserShouldRenewCivic"
           :to="{ name: 'civic-register' }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
@@ -54,12 +54,18 @@
           template(#header)
             .mt-12.mx-12
               NuxtLink(
-                class="buttonClass"
+                :class="buttonClass"
                 :to="buttonTo"
               )
                 | {{ buttonText }}
         br
+        NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+          v-if="getUserShouldRenewCivic"
+          :to="{ name: 'civic' }"
+        )
+          | {{ $t('SettingsCivicPage.resumeSubscription') }}
         span.text-12(
+          v-else
         )
           | {{ $t('SettingsCivicPage.cancelSubscription') }}:
           a.btn.btn--plain.btn--auto-size.text-12.px-0.pl-8(
@@ -117,6 +123,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserShouldRenewCivic',
       'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
       'getUserIsCivicLikerTrial',
