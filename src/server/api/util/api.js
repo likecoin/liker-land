@@ -76,8 +76,16 @@ const apiFetchUserProfile = req =>
       headers: { Authorization },
     })
   );
+const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/like/share/self?tz=${tz}`, {
+      headers: { Authorization },
+    })
+  );
 const apiFetchUserPublicProfile = user =>
   axios.get(`${LIKECOIN_API_BASE}/users/id/${user}/min`);
+const apiFetchLatestSuperLike = () =>
+  axios.get(`${LIKECOIN_API_BASE}/like/share/latest`);
 const apiFetchLikedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
@@ -96,8 +104,28 @@ const apiFetchFollowedArticles = (users, { limit, after, before }) =>
       },
     }
   );
+const apiFetchFollowedSuperLikes = (users, { limit, after, before }) =>
+  axios.post(
+    `${LIKECOIN_API_BASE}/like/share/users/latest`,
+    { users },
+    {
+      params: {
+        limit,
+        after,
+        before,
+      },
+    }
+  );
 const apiFetchUserArticles = (user, { limit, after, before }) =>
   axios.get(`${LIKECOIN_API_BASE}/like/info/user/${user}/latest`, {
+    params: {
+      limit,
+      after,
+      before,
+    },
+  });
+const apiFetchUserSuperlike = (user, { limit, after, before }) =>
+  axios.get(`${LIKECOIN_API_BASE}/like/share/user/${user}/latest`, {
     params: {
       limit,
       after,
@@ -222,10 +250,14 @@ module.exports = {
   EXTERNAL_URL,
   apiRefreshAccessToken,
   apiFetchUserProfile,
+  apiFetchUserSuperLikeStatus,
   apiFetchUserPublicProfile,
+  apiFetchLatestSuperLike,
   apiFetchLikedUser,
   apiFetchFollowedArticles,
+  apiFetchFollowedSuperLikes,
   apiFetchUserArticles,
+  apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
   apiPostArticleForInfo,
   apiFetchArticleDetail,

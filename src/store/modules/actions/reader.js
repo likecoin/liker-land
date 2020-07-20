@@ -40,32 +40,54 @@ export async function removeBookmark({ commit }, url) {
   await this.$axios.$delete(api.getUpdateReaderBookmarkAPI(url));
 }
 
-export async function fetchUserArticle({ commit }, user) {
-  const { list } = await this.$axios.$get(api.getFetchUserArticlesAPI(user), {
-    withCredentials: false,
-  });
+export async function fetchUserArticle({ commit, getters }, user) {
+  const { list } = await this.$axios.$get(
+    getters.getUserIsSuperLiker
+      ? api.getFetchUserSuperLikeAPI(user)
+      : api.getFetchUserArticlesAPI(user),
+    {
+      withCredentials: false,
+    }
+  );
   commit(types.READER_UPDATE_USER_ARTICLES, { user, list });
   return list;
 }
 
-export async function fetchSuggestedArticles({ commit }) {
-  const { list } = await this.$axios.$get(api.getFetchSuggestArticlesApi(), {
-    withCredentials: false,
-  });
+export async function fetchSuggestedArticles({ commit, getters }) {
+  const { list } = await this.$axios.$get(
+    getters.getUserIsSuperLiker
+      ? api.getFetchLatestSuperLikeApi()
+      : api.getFetchSuggestArticlesApi(),
+    {
+      withCredentials: false,
+    }
+  );
   commit(types.READER_SET_SUGGEST_ARTICLES, list);
   return list;
 }
 
-export async function fetchFollowedArticles({ commit }) {
-  const { list } = await this.$axios.$get(api.getFetchFollowedArticlesApi());
+export async function fetchFollowedArticles({ commit, getters }) {
+  const { list } = await this.$axios.$get(
+    getters.getUserIsSuperLiker
+      ? api.getFetchFollowedSuperLikeApi()
+      : api.getFetchFollowedArticlesApi()
+  );
   commit(types.READER_SET_FOLLOWED_ARTICLES, list);
   return list;
 }
 
-export async function updateFollowedArticles({ commit }, { after, before }) {
-  const { list } = await this.$axios.$get(api.getFetchFollowedArticlesApi(), {
-    params: { after, before },
-  });
+export async function updateFollowedArticles(
+  { commit, getters },
+  { after, before }
+) {
+  const { list } = await this.$axios.$get(
+    getters.getUserIsSuperLiker
+      ? api.getFetchFollowedSuperLikeApi()
+      : api.getFetchFollowedArticlesApi(),
+    {
+      params: { after, before },
+    }
+  );
   commit(types.READER_APPEND_FOLLOWED_ARTICLES, list);
   return list;
 }

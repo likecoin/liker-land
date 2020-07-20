@@ -17,7 +17,7 @@ const DEFAULT_FOLLOW_IDS = [
 const OAUTH_SCOPE_REQUEST = [
   'profile',
   'email',
-  'read:like.info',
+  'read:like',
   'civic_liker',
   'bookmarks',
   'follow',
@@ -26,7 +26,7 @@ const OAUTH_SCOPE_REQUEST = [
 const OAUTH_SCOPE_REQUIRED = [
   'profile',
   'email',
-  'read:like.info',
+  'read:like',
   'read:civic_liker',
   'write:civic_liker',
   'read:bookmarks',

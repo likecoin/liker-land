@@ -13,6 +13,7 @@ export const getUserCivicLikerHalo = ({ user }) => {
   }
   return 'none';
 };
+export const getUserIsSuperLiker = state => state.user.isSuperLiker;
 export const getHomeRoute = state => ({
   name: state.user.user ? 'index-following' : 'index',
 });

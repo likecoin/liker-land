@@ -6,6 +6,7 @@ const { userCollection } = require('../util/firebase');
 const { setPrivateCacheHeader } = require('../middleware/cache');
 const {
   apiFetchUserProfile,
+  apiFetchUserSuperLikeStatus,
   getOAuthCallbackAPI,
   getOAuthURL,
 } = require('../util/api');
@@ -38,24 +39,29 @@ router.get('/users/self', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     const { user } = req.session;
+    const { tz = 8 } = req.query;
     if (user) {
       const currentScopes = jwt.decode(req.session.accessToken).scope;
       if (!OAUTH_SCOPE_REQUIRED.every(s => currentScopes.includes(s))) {
         throw new Error('Insufficient scopes');
       }
-      const [{ data }, userDoc] = await Promise.all([
+      const [{ data }, { data: superLikeData }, userDoc] = await Promise.all([
         apiFetchUserProfile(req),
+        apiFetchUserSuperLikeStatus(req, tz),
         userCollection.doc(user).get(),
       ]);
       const { hasReadWelcomeDialog } = userDoc.data();
+      const { isSuperLiker } = superLikeData;
       res.json({
         user,
         hasReadWelcomeDialog,
+        isSuperLiker,
         ...data,
         crispToken: getCrispUserHash(user),
       });
       await userCollection.doc(user).update({
         user: data,
+        isSuperLiker,
       });
       return;
     }
@@ -112,6 +118,7 @@ router.get('/users/login', (req, res) => {
 
 router.post('/users/login', async (req, res, next) => {
   try {
+    const { tz = 8 } = req.query;
     if (!req.body.authCode || !req.body.state) {
       res.status(400).send('missing state or authCode');
       return;
@@ -131,8 +138,12 @@ router.post('/users/login', async (req, res, next) => {
     req.session.accessToken = accessToken;
     req.session.state = undefined;
 
-    const { data: userData } = await apiFetchUserProfile(req);
+    const [{ data: userData }, { data: superLikeData }] = await Promise.all([
+      apiFetchUserProfile(req),
+      apiFetchUserSuperLikeStatus(req, tz),
+    ]);
     const { user } = userData;
+    const { isSuperLiker } = superLikeData;
     req.session.user = user;
 
     const userDoc = await userCollection.doc(user).get();
@@ -140,6 +151,7 @@ router.post('/users/login', async (req, res, next) => {
 
     const payload = {
       user: userData,
+      isSuperLiker,
       accessToken,
       refreshToken,
     };
@@ -153,6 +165,7 @@ router.post('/users/login', async (req, res, next) => {
     res.json({
       user,
       ...userData,
+      isSuperLiker,
       crispToken: getCrispUserHash(user),
       isNew,
     });
