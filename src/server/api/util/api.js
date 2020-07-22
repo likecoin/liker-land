@@ -84,8 +84,14 @@ const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
   );
 const apiFetchUserPublicProfile = user =>
   axios.get(`${LIKECOIN_API_BASE}/users/id/${user}/min`);
-const apiFetchLatestSuperLike = () =>
-  axios.get(`${LIKECOIN_API_BASE}/like/share/latest`);
+const apiFetchLatestSuperLike = ({ limit, after, before }) =>
+  axios.get(`${LIKECOIN_API_BASE}/like/share/latest`, {
+    params: {
+      limit,
+      after,
+      before,
+    },
+  });
 const apiFetchLikedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
