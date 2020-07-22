@@ -198,8 +198,8 @@ const apiCivicLikerTrialEventById = id =>
 const apiCivicLikerJoinTrialEventById = (id, req) =>
   sendAuthorizedRequest(req, Authorization =>
     axios.post(
-      `${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}/join`,
-      {},
+      `${LIKE_CO_URL_BASE}/api/iap/hook/trial`,
+      { eventId: id },
       {
         headers: { Authorization },
       }
