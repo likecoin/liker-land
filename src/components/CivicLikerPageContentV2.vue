@@ -154,8 +154,9 @@
 
     mixin PaymentSection
       section.flex.flex-col.items-center.text-18.text-center(class="desktop:py-32")&attributes(attributes)
-        i18n.text-24(path="CivicPageV2.Payment.Pricing")
+        i18n.text-24(:path="`CivicPageV2.Payment.${isYearPlan ? 'Yearly' : ''}Pricing`")
           span.text-gray-4a.font-400(place="price" style="font-size:62px") {{ price }}
+          span(place="currency") {{ priceCurrency }}
 
         .flex.justify-center.items-center.flex-wrap.mx-16
           .civic-liker-page-v2__payment-select.m-8
@@ -298,6 +299,14 @@ export default {
     price: {
       type: Number,
       default: 5,
+    },
+    priceCurrency: {
+      type: String,
+      default: 'USD',
+    },
+    isYearPlan: {
+      type: Boolean,
+      default: false,
     },
     rewardsCurrency: {
       type: String,
