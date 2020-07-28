@@ -67,7 +67,8 @@
     "Payment": {
       "CTA": "{civicLiker}是一場回饋新聞和創作的運動。讀者每月付出一杯咖啡的價錢，就能成為讚賞公民；透過按讚，自動分配月費予作者。",
       "JoinButtonText": "立即加入",
-      "Pricing": "{price} USD/month"
+      "Pricing": "{price} {currency}/month",
+      "YearlyPricing": "{price} {currency}/year"
     },
     "MediaSupport": {
       "title": "一份月費支持 4 家公民媒體",
