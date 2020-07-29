@@ -123,7 +123,7 @@
     "headerLabel": "Your Following List",
     "empty": {
       "title": "There is no article on your following list",
-      "content": "You can follow an author by clicking the LikeButton of the author. You may find some articles to read in our featured articles list",
+      "content": "You can follow an author by clicking the LikeCoin button of the author. You may find some articles to read in our featured articles list",
       "goToFeaturing": "Featured articles"
     }
   },
