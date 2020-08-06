@@ -11,3 +11,7 @@ if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'apiHttp') {
 if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'geoipHttp') {
   exports.geoipHttp = require('./geoipHttp');
 }
+
+if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'backupCron') {
+  exports.backupCron = require('./backupCron');
+}
