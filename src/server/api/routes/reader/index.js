@@ -50,12 +50,14 @@ async function getFollowedUserListInfo(req) {
     apiFetchLikedUser(req),
     apiFetchFollowedUser(req),
   ]);
+  const { user } = req.session;
   const userSet = new Set(data.list);
   const unfollowedUserSet = new Set();
   if (apiData.list) {
     const apiFollowed = apiData.list.filter(a => a.isFollowed);
     const apiUnfollowed = apiData.list.filter(a => !a.isFollowed);
     apiFollowed.forEach(u => userSet.add(u.id));
+    userSet.delete(user);
     apiUnfollowed.forEach(u => {
       userSet.delete(u.id);
       unfollowedUserSet.add(u.id);
