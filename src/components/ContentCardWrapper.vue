@@ -6,6 +6,7 @@
   >
     <ContentCard
       :src="internalUrl"
+      :href="href"
       :author="author"
       :title="internalTitle"
       :description="internalDescription"
@@ -97,6 +98,11 @@ export default {
     shouldFetchArticle() {
       return !this.internalTitle || !this.internalLikeCount;
     },
+    href() {
+      return this.superLikeId
+        ? getSuperLikeRedirectLink(this.superLikeId)
+        : this.internalUrl;
+    },
   },
 
   methods: {
@@ -150,11 +156,7 @@ export default {
           like,
           user,
         } = this.getArticleInfoByReferrer(this.referrer);
-        if (this.superLikeId) {
-          this.internalUrl = getSuperLikeRedirectLink(this.superLikeId);
-        } else {
-          this.internalUrl = url;
-        }
+        this.internalUrl = url;
         this.internalTitle = title;
         this.internalDescription = description;
         this.internalCoverSrc = image;

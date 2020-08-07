@@ -1,6 +1,6 @@
 <template lang="pug">
   a.content-card(
-    :href="src"
+    :href="href || src"
     :title="normalizedTitle"
     target="_blank"
     rel="noopener"
@@ -180,6 +180,13 @@ export default {
   props: {
     /* The URL of the content */
     src: {
+      type: String,
+      default: undefined,
+    },
+    /**
+     * The link URL of the card
+     */
+    href: {
       type: String,
       default: undefined,
     },
