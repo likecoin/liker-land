@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const { FieldValue, userCollection } = require('../../util/firebase');
 const {
   apiPostFollowedUser,
   apiDeleteFollowedUser,
@@ -26,10 +25,6 @@ router.post('/reader/follow/user/:id', async (req, res, next) => {
       next(err);
       return;
     }
-    const userRef = userCollection.doc(req.session.user);
-    await userRef.update({
-      unfollowedUsers: FieldValue.arrayRemove(id),
-    });
     res.sendStatus(200);
   } catch (err) {
     next(err);
@@ -55,10 +50,6 @@ router.delete('/reader/follow/user/:id', async (req, res, next) => {
       next(err);
       return;
     }
-    const userRef = userCollection.doc(req.session.user);
-    await userRef.update({
-      followedUsers: FieldValue.arrayRemove(id),
-    });
     res.sendStatus(200);
   } catch (err) {
     next(err);
