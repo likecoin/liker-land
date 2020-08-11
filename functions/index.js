@@ -1,17 +1,19 @@
 /* eslint-disable global-require */
 
-if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'ssrapp') {
+const currentFunction = process.env.FUNCTION_NAME || process.env.K_SERVICE;
+
+if (!currentFunction || currentFunction === 'ssrapp') {
   exports.ssrapp = require('./ssrapp');
 }
 
-if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'apiHttp') {
+if (!currentFunction || currentFunction === 'apiHttp') {
   exports.apiHttp = require('./apiHttp');
 }
 
-if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'geoipHttp') {
+if (!currentFunction || currentFunction === 'geoipHttp') {
   exports.geoipHttp = require('./geoipHttp');
 }
 
-if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === 'backupCron') {
+if (!currentFunction || currentFunction === 'backupCron') {
   exports.backupCron = require('./backupCron');
 }
