@@ -9,7 +9,6 @@ const {
   apiFetchFollowedUser,
   apiFetchFollowedSuperLikes,
 } = require('../../util/api');
-const { userCollection } = require('../../util/firebase');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const follow = require('./follow');
 const bookmark = require('./bookmark');
@@ -46,19 +45,12 @@ function filterArticleList(list) {
 }
 
 async function getFollowedUserListInfo(req) {
-  const [{ data }, userDoc, { data: apiData }] = await Promise.all([
+  const [{ data }, { data: apiData }] = await Promise.all([
     apiFetchLikedUser(req),
-    userCollection.doc(req.session.user).get(),
     apiFetchFollowedUser(req),
   ]);
   const userSet = new Set(data.list);
   const unfollowedUserSet = new Set();
-  const { followedUsers = [], unfollowedUsers = [] } = userDoc.data();
-  followedUsers.forEach(u => userSet.add(u));
-  unfollowedUsers.forEach(u => {
-    userSet.delete(u);
-    unfollowedUserSet.add(u);
-  });
   if (apiData.list) {
     const apiFollowed = apiData.list.filter(a => a.isFollowed);
     const apiUnfollowed = apiData.list.filter(a => !a.isFollowed);
