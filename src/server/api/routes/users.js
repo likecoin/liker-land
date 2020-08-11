@@ -73,6 +73,30 @@ router.get('/users/self', async (req, res, next) => {
   }
 });
 
+// if client only interested in knowing login status
+router.get('/users/self/min', (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    const { user } = req.session;
+    if (user) {
+      const currentScopes = jwt.decode(req.session.accessToken).scope;
+      if (!OAUTH_SCOPE_REQUIRED.every(s => currentScopes.includes(s))) {
+        throw new Error('Insufficient scopes');
+      }
+      res.json({
+        user,
+        crispToken: getCrispUserHash(user),
+      });
+      return;
+    }
+    res.sendStatus(404);
+  } catch (err) {
+    if (req.session) req.session = null;
+    res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
+    next(err);
+  }
+});
+
 router.post('/users/self/update', async (req, res, next) => {
   try {
     const { user } = req.session;
