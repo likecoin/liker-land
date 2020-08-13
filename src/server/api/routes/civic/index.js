@@ -43,7 +43,7 @@ router.get('/civic/trial/events/:id', async (req, res, next) => {
 router.post('/civic/trial/events/:eventId/join', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { eventId } = req.params;
@@ -63,7 +63,7 @@ router.post('/civic/trial/events/:eventId/join', async (req, res, next) => {
 router.post('/civic/payment/paypal', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     if (PAYPAL_PDT_HOOK) {

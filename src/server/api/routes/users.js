@@ -65,7 +65,7 @@ router.get('/users/self', async (req, res, next) => {
       });
       return;
     }
-    res.sendStatus(404);
+    res.sendStatus(401);
   } catch (err) {
     if (req.session) req.session = null;
     res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
@@ -89,7 +89,7 @@ router.get('/users/self/min', (req, res, next) => {
       });
       return;
     }
-    res.sendStatus(404);
+    res.sendStatus(401);
   } catch (err) {
     if (req.session) req.session = null;
     res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
@@ -108,7 +108,7 @@ router.post('/users/self/update', async (req, res, next) => {
       res.sendStatus(200);
       return;
     }
-    res.sendStatus(404);
+    res.sendStatus(401);
   } catch (err) {
     next(err);
   }

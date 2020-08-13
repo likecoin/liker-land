@@ -9,7 +9,7 @@ const router = Router();
 router.post('/reader/follow/user/:id', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { id } = req.params;
@@ -34,7 +34,7 @@ router.post('/reader/follow/user/:id', async (req, res, next) => {
 router.delete('/reader/follow/user/:id', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { id } = req.params;

@@ -11,7 +11,7 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const userRef = userCollection.doc(req.session.user);
@@ -57,7 +57,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const {
@@ -125,7 +125,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
 router.post('/civic/payment/stripe', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const {
@@ -211,7 +211,7 @@ router.post('/civic/payment/stripe', async (req, res, next) => {
 router.delete('/civic/payment/stripe', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const userRef = userCollection.doc(req.session.user);

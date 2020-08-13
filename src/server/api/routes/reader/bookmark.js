@@ -14,7 +14,7 @@ router.get('/reader/bookmark', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const [userDoc, apiBookmarks] = await Promise.all([
@@ -48,7 +48,7 @@ router.get('/reader/bookmark', async (req, res, next) => {
 router.post('/reader/bookmark', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { url } = req.query;
@@ -78,7 +78,7 @@ router.post('/reader/bookmark', async (req, res, next) => {
 router.delete('/reader/bookmark', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { url } = req.query;
