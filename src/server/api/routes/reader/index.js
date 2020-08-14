@@ -70,7 +70,7 @@ router.get('/reader/index', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { followedUsers, unfollowedUsers } = await getFollowedUserListInfo(
@@ -111,7 +111,7 @@ router.get('/reader/works/followed', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { after, before, limit = 40 } = req.query;
@@ -137,7 +137,7 @@ router.get('/reader/superlike/followed', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { after, before, limit = 20 } = req.query;
@@ -163,7 +163,7 @@ router.get('/reader/user/:user/works', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { after, before, limit = 20 } = req.query;
@@ -184,7 +184,7 @@ router.get('/reader/user/:user/superlike', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { after, before, limit = 20 } = req.query;

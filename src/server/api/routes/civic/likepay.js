@@ -11,7 +11,7 @@ router.get('/civic/payment/likepay/payment', (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     const { from } = req.query;
@@ -32,7 +32,7 @@ router.get('/civic/payment/likepay/payment', (req, res, next) => {
 router.post('/civic/payment/likepay', async (req, res, next) => {
   try {
     if (!req.session.user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
       return;
     }
     if (LIKEPAY_HOOK) {
