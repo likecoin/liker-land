@@ -7,12 +7,6 @@ const AUTH_COOKIE_OPTION = {
   httpOnly: true,
 };
 
-const DEFAULT_FOLLOW_IDS = [
-  'foundation',
-  'hkcitizennews',
-  'inmediahknet',
-  'standnews',
-];
 
 const OAUTH_SCOPE_REQUEST = [
   'profile',
@@ -38,7 +32,6 @@ const OAUTH_SCOPE_REQUIRED = [
 module.exports = {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
-  DEFAULT_FOLLOW_IDS,
   OAUTH_SCOPE_REQUEST,
   OAUTH_SCOPE_REQUIRED,
 };
