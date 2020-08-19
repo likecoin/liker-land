@@ -7,6 +7,8 @@ const AUTH_COOKIE_OPTION = {
   httpOnly: true,
 };
 
+const HALF_DAY_IN_S = 43200;
+const ONE_DAY_IN_MS = 86400000;
 
 const OAUTH_SCOPE_REQUEST = [
   'profile',
@@ -32,6 +34,8 @@ const OAUTH_SCOPE_REQUIRED = [
 module.exports = {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
+  HALF_DAY_IN_S,
+  ONE_DAY_IN_MS,
   OAUTH_SCOPE_REQUEST,
   OAUTH_SCOPE_REQUIRED,
 };
