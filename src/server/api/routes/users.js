@@ -13,7 +13,6 @@ const {
 const {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
-  DEFAULT_FOLLOW_IDS,
   OAUTH_SCOPE_REQUIRED,
 } = require('../constant');
 const { CRISP_USER_HASH_SECRET } = require('../../config/config');
@@ -180,7 +179,6 @@ router.post('/users/login', async (req, res, next) => {
       refreshToken,
     };
     if (isNew) {
-      payload.followedUsers = DEFAULT_FOLLOW_IDS;
       await userCollection.doc(user).create(payload);
     } else {
       await userCollection.doc(user).update(payload);

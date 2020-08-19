@@ -7,12 +7,8 @@ const AUTH_COOKIE_OPTION = {
   httpOnly: true,
 };
 
-const DEFAULT_FOLLOW_IDS = [
-  'foundation',
-  'hkcitizennews',
-  'inmediahknet',
-  'standnews',
-];
+const HALF_DAY_IN_S = 43200;
+const ONE_DAY_IN_MS = 86400000;
 
 const OAUTH_SCOPE_REQUEST = [
   'profile',
@@ -38,7 +34,8 @@ const OAUTH_SCOPE_REQUIRED = [
 module.exports = {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
-  DEFAULT_FOLLOW_IDS,
+  HALF_DAY_IN_S,
+  ONE_DAY_IN_MS,
   OAUTH_SCOPE_REQUEST,
   OAUTH_SCOPE_REQUIRED,
 };
