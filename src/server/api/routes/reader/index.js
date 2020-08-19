@@ -161,11 +161,6 @@ router.get('/reader/superlike/followed', async (req, res, next) => {
 
 router.get('/reader/user/:user/works', async (req, res, next) => {
   try {
-    setPrivateCacheHeader(res);
-    if (!req.session.user) {
-      res.sendStatus(401);
-      return;
-    }
     const { after, before, limit = 20 } = req.query;
     const { data } = await apiFetchUserArticles(req.params.user, {
       after,
@@ -174,6 +169,7 @@ router.get('/reader/user/:user/works', async (req, res, next) => {
     });
     let { list } = data;
     list = filterArticleList(list);
+    res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
     next(err);
@@ -182,11 +178,6 @@ router.get('/reader/user/:user/works', async (req, res, next) => {
 
 router.get('/reader/user/:user/superlike', async (req, res, next) => {
   try {
-    setPrivateCacheHeader(res);
-    if (!req.session.user) {
-      res.sendStatus(401);
-      return;
-    }
     const { after, before, limit = 20 } = req.query;
     const { data } = await apiFetchUserSuperlike(req.params.user, {
       after,
@@ -195,6 +186,7 @@ router.get('/reader/user/:user/superlike', async (req, res, next) => {
     });
     let { list } = data;
     list = filterSuperLikeList(list);
+    res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
     next(err);
