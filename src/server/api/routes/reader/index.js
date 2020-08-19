@@ -128,7 +128,7 @@ router.get('/reader/works/followed', async (req, res, next) => {
       limit,
     });
     data.list.sort((a, b) => b.ts - a.ts).splice(limit);
-    if (before && Date.now() - before > ONE_DAY_IN_MS) {
+    if (data.list.length && before && Date.now() - before > ONE_DAY_IN_MS) {
       res.set('Cache-Control', `private, max-age=${HALF_DAY_IN_S}`);
     }
     res.json({ list: data.list });
@@ -157,7 +157,7 @@ router.get('/reader/superlike/followed', async (req, res, next) => {
     });
     const list = filterSuperLikeList(data.list);
     list.sort((a, b) => b.ts - a.ts).splice(limit);
-    if (before && Date.now() - before > ONE_DAY_IN_MS) {
+    if (data.list.length && before && Date.now() - before > ONE_DAY_IN_MS) {
       res.set('Cache-Control', `private, max-age=${HALF_DAY_IN_S}`);
     }
     res.json({ list });
