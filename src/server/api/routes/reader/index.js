@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const {
-  apiFetchLikedUser,
   apiFetchUserArticles,
   apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
@@ -46,12 +45,9 @@ function filterArticleList(list) {
 }
 
 async function getFollowedUserListInfo(req) {
-  const [{ data }, { data: apiData }] = await Promise.all([
-    apiFetchLikedUser(req),
-    apiFetchFollowedUser(req),
-  ]);
+  const { data: apiData } = await apiFetchFollowedUser(req);
   const { user } = req.session;
-  const userSet = new Set(data.list);
+  const userSet = new Set();
   const unfollowedUserSet = new Set();
   if (apiData.list) {
     const apiFollowed = apiData.list.filter(a => a.isFollowed);

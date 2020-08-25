@@ -92,12 +92,6 @@ const apiFetchLatestSuperLike = ({ limit, after, before }) =>
       before,
     },
   });
-const apiFetchLikedUser = req =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKECOIN_API_BASE}/like/info/liked/list`, {
-      headers: { Authorization },
-    })
-  );
 const apiFetchFollowedArticles = (users, { limit, after, before }) =>
   axios.post(
     `${LIKECOIN_API_BASE}/like/info/users/latest`,
@@ -259,7 +253,6 @@ module.exports = {
   apiFetchUserSuperLikeStatus,
   apiFetchUserPublicProfile,
   apiFetchLatestSuperLike,
-  apiFetchLikedUser,
   apiFetchFollowedArticles,
   apiFetchFollowedSuperLikes,
   apiFetchUserArticles,
