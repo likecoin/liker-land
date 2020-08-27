@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const parse = require('url-parse');
-const { FieldValue, userCollection } = require('../../util/firebase');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const {
   apiFetchBookmarks,
@@ -17,19 +16,9 @@ router.get('/reader/bookmark', async (req, res, next) => {
       res.sendStatus(401);
       return;
     }
-    const [userDoc, apiBookmarks] = await Promise.all([
-      userCollection.doc(req.session.user).get(),
-      apiFetchBookmarks(req),
-    ]);
-    const { bookmarks = [] } = userDoc.data();
+    const apiBookmarks = await apiFetchBookmarks(req);
     const outputList = [];
     const bookmarksSet = new Set();
-    bookmarks.forEach(b => {
-      if (!bookmarksSet.has(b)) {
-        outputList.push(b);
-        bookmarksSet.add(b);
-      }
-    });
     if (apiBookmarks.data.list) {
       const { list } = apiBookmarks.data;
       list.sort((a, b) => a.ts - b.ts).forEach(b => {
@@ -92,10 +81,6 @@ router.delete('/reader/bookmark', async (req, res, next) => {
       res.sendStatus(400);
       return;
     }
-    const userRef = userCollection.doc(req.session.user);
-    await userRef.update({
-      bookmarks: FieldValue.arrayRemove(url),
-    });
     try {
       await apiDeleteBookmarks(url, req);
     } catch (err) {
