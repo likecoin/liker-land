@@ -84,18 +84,6 @@ export default {
           href:
             'https://datastudio.google.com/u/0/reporting/e6168171-b61d-4871-b39f-7b6308f2facc/page/qgR',
         },
-        {
-          name: 'Fund distribution explorer',
-          href: 'https://likecoin.bigdipper.live',
-        },
-        {
-          name: 'Project documentation',
-          href: 'https://docs.like.co/weekly-progress-updates',
-        },
-        {
-          name: 'Technical documentation ',
-          href: 'https://github.com/likecoin/likecoin',
-        },
       ];
     },
   },
