@@ -65,7 +65,7 @@
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         span.text-12(
-          v-else
+          v-else-if="getUserIsCivicLiker"
         )
           | {{ $t('SettingsCivicPage.cancelSubscription') }}:
           a.btn.btn--plain.btn--auto-size.text-12.px-0.pl-8(
