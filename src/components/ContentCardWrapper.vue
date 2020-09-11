@@ -66,6 +66,10 @@ export default {
       type: String,
       default: undefined,
     },
+    superLikeShortId: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -99,9 +103,11 @@ export default {
       return !this.internalTitle || !this.internalLikeCount;
     },
     href() {
-      return this.superLikeId
-        ? getSuperLikeRedirectLink(this.superLikeId)
-        : this.internalUrl;
+      if (this.superLikeShortId) {
+        return getSuperLikeRedirectLink(this.superLikeShortId);
+      }
+      if (this.superLikeId) return getSuperLikeRedirectLink(this.superLikeId);
+      return this.internalUrl;
     },
   },
 

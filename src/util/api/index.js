@@ -2,7 +2,7 @@ import {
   IS_TESTNET,
   LIKECOIN_API_BASE,
   LIKE_CO_CLOUD_FN_BASE,
-  LIKECOIN_BUTTON_BASE,
+  SUPERLIKE_BASE,
 } from '@/constant';
 
 export const getAppURL = () => 'https://likecoin.page.link/likeco';
@@ -24,7 +24,7 @@ export const getPaypalUnsubscribeURL = () =>
 export const getOiceSettingsURL = () => 'https://oice.com/profile';
 
 export const getSuperLikeRedirectLink = superLikeID =>
-  `${LIKECOIN_BUTTON_BASE}/in/redirect/superlike/${superLikeID}`;
+  `${SUPERLIKE_BASE}/${superLikeID}`;
 
 export const getFetchLikedUserApi = () => `/api/reader/index`;
 export const getFetchUserArticlesAPI = user => `/api/reader/user/${user}/works`;
