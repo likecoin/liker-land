@@ -15,6 +15,10 @@ export const LIKECOIN_BUTTON_BASE = IS_TESTNET
   ? 'https://button.rinkeby.like.co'
   : 'https://button.like.co';
 
+export const SUPERLIKE_BASE = IS_TESTNET
+  ? 'https://s.rinkeby.like.co'
+  : 'https://s.like.co';
+
 export const LIKE_CO_CLOUD_FN_BASE = `https://us-central1-civic-liker${
   IS_TESTNET ? '-develop' : ''
 }.cloudfunctions.net`;
