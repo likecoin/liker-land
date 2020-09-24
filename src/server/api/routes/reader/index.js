@@ -1,10 +1,7 @@
 const { Router } = require('express');
 const {
-  apiFetchUserArticles,
   apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
-  apiFetchLatestSuperLike,
-  apiFetchFollowedArticles,
   apiFetchFollowedUser,
   apiFetchFollowedSuperLikes,
 } = require('../../util/api');
@@ -28,19 +25,6 @@ function filterSuperLikeList(list) {
       ts,
       user: likee,
       liker,
-    };
-  });
-}
-
-function filterArticleList(list) {
-  return list.map(i => {
-    const { referrer, url: originalUrl, user, ts } = i;
-    const url = originalUrl ? originalUrl.toLowerCase() : undefined;
-    return {
-      referrer,
-      url: referrer && referrer.toLowerCase() === url ? undefined : originalUrl,
-      user,
-      ts,
     };
   });
 }
@@ -94,48 +78,6 @@ router.get('/reader/works/suggest', async (req, res, next) => {
   }
 });
 
-router.get('/reader/superlike/latest', async (req, res, next) => {
-  try {
-    const { after, before, limit = 20 } = req.query;
-    const { data } = await apiFetchLatestSuperLike({ after, before, limit });
-    const list = filterSuperLikeList(data.list);
-    list.sort((a, b) => b.ts - a.ts);
-    res.set('Cache-Control', 'public, max-age=600');
-    res.json({ list });
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get('/reader/works/followed', async (req, res, next) => {
-  try {
-    setPrivateCacheHeader(res);
-    if (!req.session.user) {
-      res.sendStatus(401);
-      return;
-    }
-    const { after, before, limit = 40 } = req.query;
-    /* TODO: fix this HACK on hardcode 20 articles/user limit */
-    const { followedUsers: users } = await getFollowedUserListInfo(req);
-    if (!users || !users.length) {
-      res.json({ list: [] });
-      return;
-    }
-    const { data } = await apiFetchFollowedArticles(users, {
-      after,
-      before,
-      limit,
-    });
-    data.list.sort((a, b) => b.ts - a.ts).splice(limit);
-    if (data.list.length && before && Date.now() - before > ONE_DAY_IN_MS) {
-      res.set('Cache-Control', `private, max-age=${HALF_DAY_IN_S}`);
-    }
-    res.json({ list: data.list });
-  } catch (err) {
-    next(err);
-  }
-});
-
 router.get('/reader/superlike/followed', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
@@ -159,23 +101,6 @@ router.get('/reader/superlike/followed', async (req, res, next) => {
     if (data.list.length && before && Date.now() - before > ONE_DAY_IN_MS) {
       res.set('Cache-Control', `private, max-age=${HALF_DAY_IN_S}`);
     }
-    res.json({ list });
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get('/reader/user/:user/works', async (req, res, next) => {
-  try {
-    const { after, before, limit = 20 } = req.query;
-    const { data } = await apiFetchUserArticles(req.params.user, {
-      after,
-      before,
-      limit,
-    });
-    let { list } = data;
-    list = filterArticleList(list);
-    res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
     next(err);
