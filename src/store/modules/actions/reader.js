@@ -41,37 +41,23 @@ export async function removeBookmark({ commit }, url) {
 }
 
 export async function fetchUserArticle({ commit, getters }, user) {
-  const { list } = await this.$axios.$get(
-    getters.getUserIsSuperLiker
-      ? api.getFetchUserSuperLikeAPI(user)
-      : api.getFetchUserArticlesAPI(user),
-    {
-      withCredentials: false,
-    }
-  );
+  const { list } = await this.$axios.$get(api.getFetchUserSuperLikeAPI(user), {
+    withCredentials: false,
+  });
   commit(types.READER_UPDATE_USER_ARTICLES, { user, list });
   return list;
 }
 
 export async function fetchSuggestedArticles({ commit, getters }) {
-  const { list } = await this.$axios.$get(
-    getters.getUserIsSuperLiker
-      ? api.getFetchLatestSuperLikeApi()
-      : api.getFetchSuggestArticlesApi(),
-    {
-      withCredentials: false,
-    }
-  );
+  const { list } = await this.$axios.$get(api.getFetchSuggestArticlesApi(), {
+    withCredentials: false,
+  });
   commit(types.READER_SET_SUGGEST_ARTICLES, list);
   return list;
 }
 
 export async function fetchFollowedArticles({ commit, getters }) {
-  const { list } = await this.$axios.$get(
-    getters.getUserIsSuperLiker
-      ? api.getFetchFollowedSuperLikeApi()
-      : api.getFetchFollowedArticlesApi()
-  );
+  const { list } = await this.$axios.$get(api.getFetchFollowedSuperLikeApi());
   commit(types.READER_SET_FOLLOWED_ARTICLES, list);
   return list;
 }
@@ -80,14 +66,9 @@ export async function updateFollowedArticles(
   { commit, getters },
   { after, before }
 ) {
-  const { list } = await this.$axios.$get(
-    getters.getUserIsSuperLiker
-      ? api.getFetchFollowedSuperLikeApi()
-      : api.getFetchFollowedArticlesApi(),
-    {
-      params: { after, before },
-    }
-  );
+  const { list } = await this.$axios.$get(api.getFetchFollowedSuperLikeApi(), {
+    params: { after, before },
+  });
   commit(types.READER_APPEND_FOLLOWED_ARTICLES, list);
   return list;
 }

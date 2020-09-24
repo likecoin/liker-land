@@ -41,22 +41,14 @@
           class="pb-20"
         )
 
-        TabBar
+        TabBar(v-if="getUserId")
           TabBarItem(
-            :is-active="$route.name === 'index'"
-            :to="{ name: 'index' }"
-          )
-            FeaturedIcon(v-if="getUserId")
-
-          TabBarItem(
-            v-if="getUserId"
             :is-active="$route.name === 'index-following'"
             :to="{ name: 'index-following' }"
           )
-            WatchingIcon
+            SuperLikeIcon
 
           TabBarItem(
-            v-if="getUserId"
             :is-active="$route.name === 'index-bookmarks'"
             :to="{ name: 'index-bookmarks' }"
           )
@@ -83,9 +75,8 @@ import SiteNavBar from '~/components/SiteNavBar';
 import TabBar from '~/components/TabBar';
 import TabBarItem from '~/components/TabBarItem';
 
-import BookmarkIcon from '~/assets/icons/bookmark-outlined.svg';
-import FeaturedIcon from '~/assets/icons/featured.svg';
-import WatchingIcon from '~/assets/icons/watching.svg';
+import BookmarkIcon from '~/assets/icons/bookmarks.svg';
+import SuperLikeIcon from '~/assets/icons/super-like.svg';
 
 export default {
   name: 'Index',
@@ -96,8 +87,7 @@ export default {
     TabBarItem,
 
     BookmarkIcon,
-    FeaturedIcon,
-    WatchingIcon,
+    SuperLikeIcon,
   },
   computed: {
     ...mapGetters([
