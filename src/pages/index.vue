@@ -41,23 +41,14 @@
           class="pb-20"
         )
 
-        TabBar
+        TabBar(v-if="getUserId")
           TabBarItem(
-            v-if="!getUserId"
-            :is-active="$route.name === 'index'"
-            :to="{ name: 'index' }"
-          )
-            SuperLikeIcon
-
-          TabBarItem(
-            v-if="getUserId"
             :is-active="$route.name === 'index-following'"
             :to="{ name: 'index-following' }"
           )
             SuperLikeIcon
 
           TabBarItem(
-            v-if="getUserId"
             :is-active="$route.name === 'index-bookmarks'"
             :to="{ name: 'index-bookmarks' }"
           )
