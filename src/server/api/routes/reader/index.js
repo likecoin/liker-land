@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
   apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
+  apiFetchLatestSuperLike,
   apiFetchFollowedUser,
   apiFetchFollowedSuperLikes,
 } = require('../../util/api');
@@ -71,6 +72,19 @@ router.get('/reader/works/suggest', async (req, res, next) => {
     const { data } = await apiFetchSuggestedArticles();
     let list = data.editorial.concat(data.pick); // only get editorial and pick list, ignore mostLike
     list = list.map(url => ({ referrer: url }));
+    res.set('Cache-Control', 'public, max-age=600');
+    res.json({ list });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/reader/superlike/latest', async (req, res, next) => {
+  try {
+    const { after, before, limit = 20 } = req.query;
+    const { data } = await apiFetchLatestSuperLike({ after, before, limit });
+    const list = filterSuperLikeList(data.list);
+    list.sort((a, b) => b.ts - a.ts);
     res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
