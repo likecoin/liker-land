@@ -12,33 +12,35 @@ html {
 }
 
 body {
-  @apply bg-like-green;
+  @media screen and (max-width: 600px) {
+    @apply bg-like-green;
 
-  &::before,
-  &::after {
-    content: '';
+    &::before,
+    &::after {
+      content: '';
 
-    @apply fixed;
-    @apply pin-l;
-    @apply pin-r;
-  }
+      @apply fixed;
+      @apply pin-l;
+      @apply pin-r;
+    }
 
-  &::before {
-    z-index: 10000;
-    top: -100vh;
+    &::before {
+      z-index: 10000;
+      top: -100vh;
 
-    background-color: inherit;
+      background-color: inherit;
 
-    @apply h-screen;
-  }
+      @apply h-screen;
+    }
 
-  &::after {
-    z-index: 10001;
-    bottom: 100vh;
+    &::after {
+      z-index: 10001;
+      bottom: 100vh;
 
-    height: 1px;
+      height: 1px;
 
-    background-color: rgba(white, 0.05);
+      background-color: rgba(white, 0.05);
+    }
   }
 }
 
