@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { handleRestfulError } = require('../../middleware/error');
 const {
   apiPostFollowedUser,
   apiDeleteFollowedUser,
@@ -27,7 +28,7 @@ router.post('/reader/follow/user/:id', async (req, res, next) => {
     }
     res.sendStatus(200);
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
@@ -52,7 +53,7 @@ router.delete('/reader/follow/user/:id', async (req, res, next) => {
     }
     res.sendStatus(200);
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 

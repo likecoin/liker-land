@@ -8,6 +8,7 @@ const {
 } = require('../../util/api');
 const { HALF_DAY_IN_S, ONE_DAY_IN_MS } = require('../../constant');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
+const { handleRestfulError } = require('../../middleware/error');
 const follow = require('./follow');
 const bookmark = require('./bookmark');
 
@@ -63,7 +64,7 @@ router.get('/reader/index', async (req, res, next) => {
     );
     res.json({ list: followedUsers, unfollowedUsers });
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
@@ -88,7 +89,7 @@ router.get('/reader/superlike/latest', async (req, res, next) => {
     res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
@@ -117,7 +118,7 @@ router.get('/reader/superlike/followed', async (req, res, next) => {
     }
     res.json({ list });
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
@@ -134,7 +135,7 @@ router.get('/reader/user/:user/superlike', async (req, res, next) => {
     res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
