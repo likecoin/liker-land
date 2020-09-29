@@ -1,4 +1,8 @@
 {
+  "AppDownloadBadges": {
+    "Start": "Start",
+    "Download": "Download Liker Land"
+  },
   "BookmarksPage": {
     "headerLabel": "Your Bookmark List",
     "empty": {
@@ -126,6 +130,16 @@
       "content": "You can follow an author by clicking the LikeCoin button of the author. You may find some articles to read in our featured articles list",
       "goToFeaturing": "Featured articles"
     }
+  },
+  "GetAppPage": {
+    "Feature": [
+      "Headlines NOT picked by AI",
+      "Civic Media",
+      "Fact Check News",
+      "Public Discussion",
+      "Blogging Platform",
+      "Individual Websites"
+    ]
   },
   "Glossary": {
     "HKCnews": "Hong Kong Citizen News",

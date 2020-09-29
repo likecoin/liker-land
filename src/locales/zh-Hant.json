@@ -1,4 +1,8 @@
 {
+  "AppDownloadBadges": {
+    "Start": "開始",
+    "Download": "下載 Liker Land"
+  },
   "BookmarksPage": {
     "headerLabel": "你的收藏列表",
     "empty": {
@@ -126,6 +130,16 @@
       "content": "你可以在作者的 LikeCoin button 上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。",
       "goToFeaturing": "前往精選文章列表"
     }
+  },
+  "GetAppPage": {
+    "Feature": [
+      "全人工挑選每日頭條",
+      "公民媒體",
+      "事實查核",
+      "公共討論",
+      "部落格平台",
+      "個人網站"
+    ]
   },
   "Glossary": {
     "HKCnews": "眾新聞",
