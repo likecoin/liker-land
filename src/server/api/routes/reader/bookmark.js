@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const parse = require('url-parse');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
+const { handleRestfulError } = require('../../middleware/error');
 const {
   apiFetchBookmarks,
   apiPostBookmarks,
@@ -30,7 +31,7 @@ router.get('/reader/bookmark', async (req, res, next) => {
     }
     res.json({ bookmarks: outputList });
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
@@ -60,7 +61,7 @@ router.post('/reader/bookmark', async (req, res, next) => {
     }
     res.sendStatus(200);
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
@@ -90,7 +91,7 @@ router.delete('/reader/bookmark', async (req, res, next) => {
     }
     res.sendStatus(200);
   } catch (err) {
-    next(err);
+    handleRestfulError(req, res, next, err);
   }
 });
 
