@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <article class="get-app-page">
     <section class="container">
@@ -23,7 +24,8 @@
           <li
             v-for="(feature, key) in $t('GetAppPage.Feature')"
             :key="key"
-          >{{ feature }}</li>
+            v-html="feature"
+          />
         </ul>
       </div>
     </section>
@@ -132,7 +134,26 @@ export default {
     margin-top: 80px;
     padding-bottom: 20px;
 
-    line-height: 2;
+    ul {
+      @apply pl-32;
+      @apply pb-16;
+
+      list-style: none;
+
+      li {
+        &:not(:first-child) {
+          @apply mt-16;
+        }
+
+        /deep/ b {
+          display: block;
+          @apply mb-8;
+          @apply text-like-cyan;
+          @apply text-20;
+          @apply font-600;
+        }
+      }
+    }
 
     @media screen and (min-width: 1025px) {
       border-radius: 10px;
@@ -142,12 +163,9 @@ export default {
       padding-bottom: 440px;
 
       ul {
-        padding-left: 0;
-        list-style: none;
-
         text-align: center;
 
-        @apply text-16;
+        @apply pl-0;
       }
     }
   }
