@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { getAppURL } from '~/util/api';
+
 import Apple from './apple.svg';
 import Google from './google.svg';
 
@@ -46,11 +48,7 @@ export default {
   },
   computed: {
     url() {
-      let url = 'https://likerland.app.link/';
-      if (this.from) {
-        url = `${url}?event=app_referral&referrer=${this.from}`;
-      }
-      return url;
+      return getAppURL({ referrer: this.from });
     },
   },
 };
