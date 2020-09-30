@@ -62,6 +62,7 @@ const colors = {
   'like-green-dark': '#235760',
   'like-green-darker': '#1e4a51',
   'like-brown': '#462814',
+  'like-cyan-light': '#aaf1e7',
   'like-cyan': '#50e3c2',
   'like-cyan-dark': '#22d6ad',
   'like-cyan-darker': '#1aa384',

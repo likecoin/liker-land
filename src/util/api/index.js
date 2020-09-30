@@ -5,7 +5,10 @@ import {
   SUPERLIKE_BASE,
 } from '@/constant';
 
-export const getAppURL = () => 'https://likecoin.page.link/likeco';
+export const getAppURL = ({ referrer = '' } = {}) =>
+  referrer
+    ? `https://likerland.app.link/?event=app_referral&referrer=${referrer}`
+    : 'https://likecoin.page.link/likeco';
 
 export const getPaypalPaymentPageURL = (likerId, custom) => {
   let baseURL = IS_TESTNET

@@ -1,4 +1,8 @@
 {
+  "AppDownloadBadges": {
+    "Start": "開始",
+    "Download": "下載 Liker Land"
+  },
   "BookmarksPage": {
     "headerLabel": "你的收藏列表",
     "empty": {
@@ -126,6 +130,14 @@
       "content": "你可以在作者的 LikeCoin button 上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。",
       "goToFeaturing": "前往精選文章列表"
     }
+  },
+  "GetAppPage": {
+    "Feature": [
+      "<b>內容伯樂</b>立場新聞、獨立媒體、眾新聞、Matters 等為你挑選每日頭條",
+      "<b>多元選擇</b>另有 1400 個網站、11000 作者的 30 多萬篇文章",
+      "<b>深度閱讀</b>把任何網頁儲存到 Liker Land 閱讀列表，慢慢細看",
+      "<b>化讚為賞</b>每個按讚都會成為對創作者的實質鼓勵"
+    ]
   },
   "Glossary": {
     "HKCnews": "眾新聞",

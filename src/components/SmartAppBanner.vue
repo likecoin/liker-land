@@ -26,7 +26,7 @@ import AppIcon from '~/assets/images/app-icon.svg';
 import { getAppURL } from '~/util/api';
 import { checkIsMobileClient, checkIsLikeCoinApp } from '~/util/client';
 
-const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic.*)$/;
+const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic|getapp.*)$/;
 
 let hasOpened = false;
 
