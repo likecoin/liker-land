@@ -79,9 +79,19 @@
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Embedly")
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(src="./medium-demo.webp")
+
+      .creators-page__separator
+
+    section.py-32
+      .center(class="phone:mt-32 tablet:mt-32")
+        .text-center
+          AppLogo
+          AppDownloadBadges.mt-16(type="single" utm-source="creators_page")
 </template>
 
 <script>
+import AppLogo from '~/assets/images/app-logo.svg';
+import AppDownloadBadges from '../AppDownloadBadges/AppDownloadBadges';
 import CopyText from '../CopyText';
 import HeroGraph from './hero-graph.svg';
 import MattersLogo from './logos/matters.svg';
@@ -95,6 +105,8 @@ import MediumLogo from './logos/medium.svg';
 export default {
   name: 'CreatorPage',
   components: {
+    AppLogo,
+    AppDownloadBadges,
     CopyText,
     HeroGraph,
     MattersLogo,
