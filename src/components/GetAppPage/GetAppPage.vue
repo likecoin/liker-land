@@ -48,7 +48,7 @@
 import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
 import AppScreenshotsViewer from '~/components/AppScreenshotsViewer/AppScreenshotsViewer';
 
-import AppLogo from './app-logo.svg';
+import AppLogo from '~/assets/images/app-logo.svg';
 import LessBrowsingTC from './slogan/less-browsing-tc.svg';
 import MoreReadingTC from './slogan/more-reading-tc.svg';
 import LessBrowsingEN from './slogan/less-browsing-en.svg';
