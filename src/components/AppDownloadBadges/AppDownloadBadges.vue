@@ -47,10 +47,14 @@ export default {
       type: String,
       default: '',
     },
+    utmSource: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     url() {
-      return getAppURL({ referrer: this.from });
+      return getAppURL({ referrer: this.from, utmSource: this.utmSource });
     },
     isStartType() {
       return this.type === 'start';

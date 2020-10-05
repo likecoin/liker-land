@@ -12,7 +12,7 @@
           <MoreReadingEN />
         </template>
       </h1>
-      <AppDownloadBadges :from="from" type="start" />
+      <AppDownloadBadges :from="from" type="start" utm-source="getapp_page" />
     </section>
 
     <section class="feature">
@@ -34,7 +34,7 @@
       <div class="center phone:mt-32 tablet:mt-32">
         <div class="text-center">
           <AppLogo class="phone:hidden tablet:hidden mb-20" />
-          <AppDownloadBadges :from="from" />
+          <AppDownloadBadges :from="from" utm-source="getapp_page" />
         </div>
       </div>
       <div class="center">
