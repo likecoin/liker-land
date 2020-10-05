@@ -1,22 +1,24 @@
 <template>
   <div class="app-download-badges">
     <a
+      v-if="!isSingleType"
       class="phone:hidden"
       :href="url"
       target="_blank"
     ><Apple /></a>
     <a
+      v-if="!isSingleType"
       class="phone:hidden"
       :href="url"
       target="_blank"
     ><Google /></a>
     <a
-      class="button rounded-8 text-like-green text-14 text-center font-400 m-8 p-12 phone:inline tablet:hidden laptop:hidden"
+      :class="singleButtonClass"
       :href="url"
       target="_blank"
-    >{{ $t(`AppDownloadBadges.${type === 'start' ? 'Start' : 'Download'}`) }}</a>
+    >{{ $t(`AppDownloadBadges.${isStartType ? 'Start' : 'Download'}`) }}</a>
     <a
-      v-if="type === 'start'"
+      v-if="isStartType"
       class="text-12 text-like-green hover:underline phone:inline tablet:hidden laptop:hidden"
       :href="url"
       target="_blank"
@@ -49,6 +51,20 @@ export default {
   computed: {
     url() {
       return getAppURL({ referrer: this.from });
+    },
+    isStartType() {
+      return this.type === 'start';
+    },
+    isSingleType() {
+      return this.type === 'single';
+    },
+    singleButtonClass() {
+      return {
+        'button rounded-8 text-like-green text-14 text-center font-400 m-8 p-12': true,
+        [this.isSingleType ? 'inline' : 'phone:inline']: true,
+        'tablet:hidden': !this.isSingleType,
+        'laptop:hidden': !this.isSingleType,
+      };
     },
   },
 };
