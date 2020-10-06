@@ -143,7 +143,6 @@ export default {
       }
       return this.$t('SlidingMenu.civic');
     },
-    getAppURL,
   },
   methods: {
     logTrackerEvent,
@@ -151,7 +150,7 @@ export default {
     ...mapActions(['toggleSlidingMenu']),
 
     onClickAppCTA() {
-      window.location.href = this.getAppURL;
+      window.location.href = getAppURL({ utmMedium: 'sliding_menu' });
     },
     onClickMenuItem() {
       this.toggleSlidingMenu(false);

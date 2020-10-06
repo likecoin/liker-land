@@ -86,7 +86,7 @@
       .center(class="phone:mt-32 tablet:mt-32")
         .text-center
           AppLogo
-          AppDownloadBadges.mt-16(type="single" utm-source="creators_page")
+          AppDownloadBadges.mt-16(type="single" utm-medium="creators_page")
 </template>
 
 <script>

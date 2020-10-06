@@ -47,6 +47,10 @@ export default {
       type: String,
       default: '',
     },
+    utmMedium: {
+      type: String,
+      default: '',
+    },
     utmSource: {
       type: String,
       default: '',
@@ -54,7 +58,11 @@ export default {
   },
   computed: {
     url() {
-      return getAppURL({ referrer: this.from, utmSource: this.utmSource });
+      return getAppURL({
+        referrer: this.from,
+        utmSource: this.utmSource,
+        utmMedium: this.utmMedium,
+      });
     },
     isStartType() {
       return this.type === 'start';

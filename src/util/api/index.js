@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import {
   IS_TESTNET,
   LIKECOIN_API_BASE,
@@ -5,11 +6,30 @@ import {
   SUPERLIKE_BASE,
 } from '@/constant';
 
-export const getAppURL = ({ referrer = '', utmSource = '' } = {}) => {
-  const utmSourceQs = `utm_source=${encodeURIComponent(utmSource)}`;
-  return referrer
-    ? `https://likerland.app.link/?event=app_referral&referrer=${referrer}&${utmSourceQs}`
-    : `https://likecoin.page.link/likeco?${utmSourceQs}`;
+export const getAppURL = ({
+  referrer,
+  utmCampaign,
+  utmSource = 'likerland',
+  utmMedium,
+} = {}) => {
+  if (referrer) {
+    const queryObject = {
+      event: 'app_referral',
+      referrer,
+      '~campaign': utmCampaign,
+      '~channel': utmSource,
+      '~feature': utmMedium,
+    };
+    return `https://likerland.app.link/?${querystring.stringify(queryObject)}`;
+  }
+  const queryObject = {
+    utm_campaign: utmCampaign,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
+  };
+  return `https://likecoin.page.link/likerland?${querystring.stringify(
+    queryObject
+  )}`;
 };
 
 export const getPaypalPaymentPageURL = (likerId, custom) => {

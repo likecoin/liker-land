@@ -10,7 +10,7 @@
             span {{ $t('SmartAppBanner.appLabel') }}
           .smart-app-banner__body-row-right
             a.btn.btn--dark.btn--block.w-full(
-              :href="getAppURL"
+              :href="appURL"
               @click="dismiss"
             )
               | {{ $t('SmartAppBanner.appButtonText') }}
@@ -38,10 +38,8 @@ export default {
   data() {
     return {
       isOpen: false,
+      appURL: getAppURL({ utmMedium: 'banner' }),
     };
-  },
-  computed: {
-    getAppURL,
   },
   mounted() {
     if (
