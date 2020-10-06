@@ -132,6 +132,11 @@
     }
   },
   "GetAppPage": {
+    "Title": "Download Liker Land",
+    "Og": {
+      "Title": "@:GetAppPage.Title",
+      "Description": "Follow your trusted Content Jockey. Less browsing. More reading."
+    },
     "Feature": [
       "Headlines NOT picked by AI",
       "Civic Media",
