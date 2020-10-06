@@ -44,7 +44,10 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "少喝一杯咖啡 共創一個生態",
+    "Og": {
+      "Title": "@:civicLiker",
+      "Description": "少喝一杯咖啡 共創一個生態"
+    },
     "registerForFree": "免費登記",
     "referrerBanner": {
       "slogan": "立即登記成為讚賞公民{br}直接贊助創作者！",

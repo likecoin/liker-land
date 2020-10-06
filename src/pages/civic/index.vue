@@ -157,14 +157,19 @@ export default {
       title: this.$t('CivicPage.title'),
       meta: [
         {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('CivicPage.Og.Title'),
+        },
+        {
           hid: 'description',
           name: 'description',
-          content: this.$t('CivicPage.ogDescription'),
+          content: this.$t('CivicPage.Og.Description'),
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: this.$t('CivicPage.ogDescription'),
+          content: this.$t('CivicPage.Og.Description'),
         },
         {
           hid: 'og:image',
