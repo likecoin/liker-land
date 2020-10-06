@@ -101,8 +101,12 @@ export default {
     paymentMethods() {
       return PAYMENT_METHOD_LIST;
     },
+    from() {
+      return this.$route.params.from || this.$route.query.from;
+    },
     getOAuthRegisterAPI() {
-      const { from, referrer } = this.$route.query;
+      const { referrer } = this.$route.query;
+      const { from } = this;
       return getOAuthRegisterAPI(from, referrer);
     },
     rewardsCurrency() {
@@ -134,7 +138,7 @@ export default {
   },
   async asyncData({ route, $axios }) {
     // Fetch referrer info
-    const { from } = route.query;
+    const from = route.params.from || route.query.from;
     if (from && checkUserNameValid(from)) {
       try {
         const user = await $axios.$get(getUserMinAPI(from));
@@ -232,11 +236,11 @@ export default {
   },
   mounted() {
     const {
-      from,
       referrer,
       utm_source: utmSource,
       is_popup: isPopup,
     } = this.$route.query;
+    const { from } = this;
     if (window.sessionStorage) {
       if (isPopup)
         window.sessionStorage.setItem(
