@@ -86,13 +86,20 @@
       .center(class="phone:mt-32 tablet:mt-32")
         .text-center
           AppLogo
-          AppDownloadBadges.mt-16(type="single" utm-medium="creators_page")
+          AppDownloadBadges.mt-16(
+            type="single"
+            :utm-campaign="utmCampaign || 'creators_page'"
+            :utm-source="utmSource"
+            :utm-medium="utmMedium"
+          )
 </template>
 
 <script>
 import AppLogo from '~/assets/images/app-logo.svg';
 import AppDownloadBadges from '../AppDownloadBadges/AppDownloadBadges';
 import CopyText from '../CopyText';
+import utmMixin from '~/mixins/utm';
+
 import HeroGraph from './hero-graph.svg';
 import MattersLogo from './logos/matters.svg';
 import VocusLogo from './logos/vocus.svg';
@@ -117,6 +124,7 @@ export default {
     HKCnewsLogo,
     MediumLogo,
   },
+  mixins: [utmMixin],
   props: {
     likerId: {
       type: String,

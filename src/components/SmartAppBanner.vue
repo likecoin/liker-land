@@ -25,6 +25,7 @@
 import AppIcon from '~/assets/images/app-icon.svg';
 import { getAppURL } from '~/util/api';
 import { checkIsMobileClient, checkIsLikeCoinApp } from '~/util/client';
+import utmMixin from '~/mixins/utm';
 
 const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic|getapp.*)$/;
 
@@ -35,11 +36,20 @@ export default {
   components: {
     AppIcon,
   },
+  mixins: [utmMixin],
   data() {
     return {
       isOpen: false,
-      appURL: getAppURL({ utmMedium: 'banner' }),
     };
+  },
+  computed: {
+    appURL() {
+      return getAppURL({
+        utmCampaign: this.utmCampaign,
+        utmSource: this.utmSource,
+        utmMedium: this.utmMedium || 'banner',
+      });
+    },
   },
   mounted() {
     if (
