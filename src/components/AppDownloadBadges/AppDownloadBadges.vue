@@ -47,6 +47,10 @@ export default {
       type: String,
       default: '',
     },
+    utmCampaign: {
+      type: String,
+      default: '',
+    },
     utmMedium: {
       type: String,
       default: '',
@@ -60,6 +64,7 @@ export default {
     url() {
       return getAppURL({
         referrer: this.from,
+        utmCampaign: this.utmCampaign,
         utmSource: this.utmSource,
         utmMedium: this.utmMedium,
       });

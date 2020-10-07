@@ -5,7 +5,10 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      GetAppPage(:from="$route.query.from")
+      GetAppPage(
+        :from="$route.query.from"
+        v-bind="getUtmProps()"
+      )
 </template>
 
 <script>
@@ -14,6 +17,7 @@ import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
+import utmMixin from '~/mixins/utm';
 
 export default {
   components: {
@@ -21,7 +25,7 @@ export default {
     PageHeader,
     SiteNavBar,
   },
-  mixins: [CrispMixinFactory()],
+  mixins: [CrispMixinFactory(), utmMixin],
   head() {
     return {
       title: this.$t('GetAppPage.Title'),

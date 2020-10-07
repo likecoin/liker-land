@@ -12,7 +12,11 @@
           <MoreReadingEN />
         </template>
       </h1>
-      <AppDownloadBadges :from="from" type="start" utm-medium="getapp_page" />
+      <AppDownloadBadges
+        :from="from"
+        type="start"
+        v-bind="utmProps"
+      />
     </section>
 
     <section class="feature">
@@ -34,7 +38,10 @@
       <div class="center phone:mt-32 tablet:mt-32">
         <div class="text-center">
           <AppLogo class="phone:hidden tablet:hidden mb-20" />
-          <AppDownloadBadges :from="from" utm-medium="getapp_page" />
+          <AppDownloadBadges
+            :from="from"
+            v-bind="utmProps"
+          />
         </div>
       </div>
       <div class="center">
@@ -69,6 +76,27 @@ export default {
     from: {
       type: String,
       default: '',
+    },
+    utmCampaign: {
+      type: String,
+      default: '',
+    },
+    utmMedium: {
+      type: String,
+      default: 'getapp_page',
+    },
+    utmSource: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    utmProps() {
+      return {
+        utmCampaign: this.utmCampaign,
+        utmMedium: this.utmMedium,
+        utmSource: this.utmSource,
+      };
     },
   },
 };
