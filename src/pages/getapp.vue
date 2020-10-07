@@ -22,6 +22,34 @@ export default {
     SiteNavBar,
   },
   mixins: [CrispMixinFactory()],
+  head() {
+    return {
+      title: this.$t('GetAppPage.Title'),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('GetAppPage.Og.Title'),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('GetAppPage.Og.Description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('GetAppPage.Og.Description'),
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: 'https://liker.land/images/og/rocket.png',
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+    };
+  },
 };
 </script>
 

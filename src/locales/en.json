@@ -44,7 +44,10 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "Trade a coffee for a better world",
+    "Og": {
+      "Title": "@:civicLiker",
+      "Description": "Trade a coffee for a better world"
+    },
     "registerForFree": "Register for free",
     "referrerBanner": {
       "slogan": "Register as Civic Liker.{br}Every Like will be an actual reward to creators",
@@ -132,6 +135,11 @@
     }
   },
   "GetAppPage": {
+    "Title": "Download Liker Land",
+    "Og": {
+      "Title": "@:GetAppPage.Title",
+      "Description": "Follow your trusted Content Jockey. Less browsing. More reading."
+    },
     "Feature": [
       "Headlines NOT picked by AI",
       "Civic Media",

@@ -44,7 +44,10 @@
   },
   "CivicPage": {
     "title": "@:civicLiker",
-    "ogDescription": "少喝一杯咖啡 共創一個生態",
+    "Og": {
+      "Title": "@:civicLiker",
+      "Description": "少喝一杯咖啡 共創一個生態"
+    },
     "registerForFree": "免費登記",
     "referrerBanner": {
       "slogan": "立即登記成為讚賞公民{br}直接贊助創作者！",
@@ -132,6 +135,11 @@
     }
   },
   "GetAppPage": {
+    "Title": "下載 Liker Land",
+    "Og": {
+      "Title": "@:GetAppPage.Title",
+      "Description": "下載 Liker Land，以文會友。不是瀏覽，而是閱讀。"
+    },
     "Feature": [
       "<b>內容伯樂</b>立場新聞、獨立媒體、眾新聞、Matters 等為你挑選每日頭條",
       "<b>多元選擇</b>另有 1400 個網站、11000 作者的 30 多萬篇文章",

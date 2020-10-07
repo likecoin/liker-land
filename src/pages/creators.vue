@@ -29,6 +29,11 @@ export default {
       title: this.$t('CreatorsPage.Og.Title'),
       meta: [
         {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('CreatorsPage.Og.Title'),
+        },
+        {
           hid: 'description',
           name: 'description',
           content: this.$t('CreatorsPage.Og.Description'),
