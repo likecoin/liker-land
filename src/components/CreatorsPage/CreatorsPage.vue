@@ -88,9 +88,7 @@
           AppLogo
           AppDownloadBadges.mt-16(
             type="single"
-            :utm-campaign="utmCampaign || 'creators_page'"
-            :utm-source="utmSource"
-            :utm-medium="utmMedium"
+            v-bind="getUtmProps({ utmMedium: 'creators_page' })"
           )
 </template>
 

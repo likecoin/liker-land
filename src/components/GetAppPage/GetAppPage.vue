@@ -15,9 +15,7 @@
       <AppDownloadBadges
         :from="from"
         type="start"
-        :utm-campaign="utmCampaign"
-        :utm-source="utmSource"
-        :utm-medium="utmMedium"
+        v-bind="utmProps"
       />
     </section>
 
@@ -42,9 +40,7 @@
           <AppLogo class="phone:hidden tablet:hidden mb-20" />
           <AppDownloadBadges
             :from="from"
-            :utm-campaign="utmCampaign"
-            :utm-source="utmSource"
-            :utm-medium="utmMedium"
+            v-bind="utmProps"
           />
         </div>
       </div>
@@ -92,6 +88,15 @@ export default {
     utmSource: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    utmProps() {
+      return {
+        utmCampaign: this.utmCampaign,
+        utmMedium: this.utmMedium,
+        utmSource: this.utmSource,
+      };
     },
   },
 };

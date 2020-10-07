@@ -7,9 +7,7 @@
     main.page-content
       GetAppPage(
         :from="$route.query.from"
-        :utm-campaign="utmCampaign"
-        :utm-source="utmSource"
-        :utm-medium="utmMedium"
+        v-bind="getUtmProps()"
       )
 </template>
 

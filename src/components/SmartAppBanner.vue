@@ -44,11 +44,7 @@ export default {
   },
   computed: {
     appURL() {
-      return getAppURL({
-        utmCampaign: this.utmCampaign,
-        utmSource: this.utmSource,
-        utmMedium: this.utmMedium || 'banner',
-      });
+      return getAppURL(this.getUtmProps({ utmMedium: 'banner' }));
     },
   },
   mounted() {

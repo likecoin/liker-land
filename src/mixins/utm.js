@@ -10,4 +10,17 @@ export default {
       return this.$route.query.utm_medium;
     },
   },
+  methods: {
+    getUtmProps({
+      utmCampaign: defaultUtmCampaign,
+      utmSource: defaultUtmSource,
+      utmMedium: defaultUtmMedium,
+    } = {}) {
+      return {
+        utmCampaign: this.utmCampaign || defaultUtmCampaign,
+        utmSource: this.utmSource || defaultUtmSource,
+        utmMedium: this.utmMedium || defaultUtmMedium,
+      };
+    },
+  },
 };
