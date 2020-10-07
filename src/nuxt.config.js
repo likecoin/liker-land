@@ -310,6 +310,12 @@ const nuxtConfig = {
         component: resolve(__dirname, 'pages/settings/following/index.vue'),
         name: 'settings-unfollowed',
       });
+      // /civic/_follow.vue is the civic index
+      routes.push({
+        path: '/civic',
+        component: resolve(__dirname, 'pages/civic/_from.vue'),
+        name: 'civic',
+      });
     }
   },
 
