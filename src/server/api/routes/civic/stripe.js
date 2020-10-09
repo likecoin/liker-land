@@ -85,7 +85,6 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
     } = userDoc.data();
     const stripePayload = {
       payment_method_types: ['card'], // only supports card for now
-      locale: 'en', // hardcode en before we have zh_Hant
     };
     if (edit === '1') {
       stripePayload.mode = 'setup';
