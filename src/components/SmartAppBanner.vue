@@ -27,7 +27,7 @@ import { getAppURL } from '~/util/api';
 import { checkIsMobileClient, checkIsLikeCoinApp } from '~/util/client';
 import utmMixin from '~/mixins/utm';
 
-const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic|getapp.*)$/;
+const WHITELISTED_ROUTE_REGEX = /^(oauth-redirect|civic|getapp|creators.*)$/;
 
 let hasOpened = false;
 
