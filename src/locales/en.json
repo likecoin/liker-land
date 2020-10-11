@@ -269,6 +269,7 @@
     "slogan": "Be a Liker to customise stories"
   },
   "SlidingMenu": {
+    "about": "About",
     "home": "Home",
     "civic": "@:CivicPage.title",
     "civicUpgrade": "@:upgrade",

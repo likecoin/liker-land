@@ -64,6 +64,10 @@
         </div>
 
         <div class="main-menu__secondary-menu">
+          <NuxtLink
+            class="btn btn--plain btn--dark btn--auto-size"
+            :to="{ name: 'about' }"
+          >{{ $t('SlidingMenu.about') }}</NuxtLink>
           <a
             class="btn btn--plain btn--dark btn--auto-size"
             href="https://help.like.co"
