@@ -85,6 +85,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
     } = userDoc.data();
     const stripePayload = {
       payment_method_types: ['card'], // only supports card for now
+      metadata,
     };
     if (edit === '1') {
       stripePayload.mode = 'setup';
@@ -98,10 +99,14 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
       stripePayload.cancel_url = `${EXTERNAL_URL}/settings/civic`;
     } else {
-      stripePayload.subscription_data = {
-        items: [{ plan: STRIPE_PLAN_ID }],
-        metadata,
-      };
+      stripePayload.mode = 'subscription';
+      stripePayload.line_items = [
+        {
+          price: STRIPE_PLAN_ID,
+          quantity: 1,
+        },
+      ];
+      stripePayload.subscription_data = { metadata };
       stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
       stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
       if (customerId) {
@@ -161,7 +166,7 @@ router.post('/civic/payment/stripe', async (req, res, next) => {
     if (customerId) {
       const [currentSubscription] = await stripe.subscriptions.list({
         customer: customer.id,
-        plan: STRIPE_PLAN_ID, // TODO: auto plan migration?
+        price: STRIPE_PLAN_ID, // TODO: auto plan migration?
         limit: 1,
       });
       if (currentSubscription) {
@@ -221,7 +226,7 @@ router.delete('/civic/payment/stripe', async (req, res, next) => {
     if (customerId) {
       const currentSubscriptions = await stripe.subscriptions.list({
         customer: customerId,
-        plan: planId, // TODO: auto plan migration?
+        price: planId, // TODO: auto plan migration?
       });
       if (
         currentSubscriptions &&
