@@ -171,15 +171,13 @@ const apiDeleteBookmarks = (url, req) =>
       }
     )
   );
-const apiFetchCivicCSOnline = () =>
-  axios.get(`${LIKE_CO_URL_BASE}/api/civic/csonline`);
 const apiCivicLikerTrialEventById = id =>
   axios.get(`${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}`);
 const apiCivicLikerJoinTrialEventById = (id, req) =>
   sendAuthorizedRequest(req, Authorization =>
     axios.post(
-      `${LIKE_CO_URL_BASE}/api/iap/hook/trial`,
-      { eventId: id },
+      `${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}/join`,
+      {},
       {
         headers: { Authorization },
       }
@@ -244,7 +242,6 @@ module.exports = {
   apiFetchFollowedUser,
   apiPostFollowedUser,
   apiDeleteFollowedUser,
-  apiFetchCivicCSOnline,
   apiCivicLikerTrialEventById,
   apiCivicLikerJoinTrialEventById,
   getOAuthURL,
