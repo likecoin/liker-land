@@ -18,6 +18,13 @@ module.exports = {
       '..',
       'node_modules/@storybook/core/node_modules/core-js/modules'
     );
+
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+      include: path.resolve(__dirname, '../'),
+    });
+
     return config;
   }
 }
