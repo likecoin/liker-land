@@ -3,7 +3,6 @@ const { Router } = require('express');
 
 const { PAYPAL_PDT_HOOK } = require('../../../config/config');
 const {
-  apiFetchCivicCSOnline,
   apiCivicLikerTrialEventById,
   apiCivicLikerJoinTrialEventById,
 } = require('../../util/api');
@@ -14,15 +13,6 @@ const router = Router();
 
 router.use(likepay);
 router.use(stripe);
-
-router.get('/civic/csonline', async (req, res, next) => {
-  try {
-    const { data } = await apiFetchCivicCSOnline(req);
-    res.json(data);
-  } catch (err) {
-    next(err);
-  }
-});
 
 router.get('/civic/trial/events/:id', async (req, res, next) => {
   try {
