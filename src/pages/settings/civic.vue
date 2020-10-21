@@ -23,8 +23,7 @@
                 .settings-civic-page__billing-summary-row-value
                   | {{ maskedCardNumber }}
                 a.btn.btn--plain.btn--auto-size.text-12.px-0(
-                  href="#"
-                  @click.prevent="initUpdatePaymentSession"
+                  :href="getStripeBillingPortalAPI"
                 )
                   | {{ $t('SettingsCivicPage.editPaymentMethod') }}
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
@@ -83,7 +82,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import {
-  getStripeEditPaymentAPI,
+  getStripeBillingPortalAPI,
   getPaypalUnsubscribeURL,
   getOiceSettingsURL,
 } from '~/util/api';
@@ -131,6 +130,7 @@ export default {
     ]),
     getPaypalUnsubscribeURL,
     getOiceSettingsURL,
+    getStripeBillingPortalAPI,
     rootClass() {
       return {
         'settings-civic-page': true,
@@ -220,21 +220,6 @@ export default {
         }
       }
       this.isFetchedSubscriptionInfo = true;
-    },
-    async initUpdatePaymentSession() {
-      const { sessionId } = await this.$axios.$get(getStripeEditPaymentAPI());
-      if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {
-        console.error('window stripe is missing!'); // eslint-disable-line no-console
-        return;
-      }
-      const stripe = window.Stripe(process.env.STRIPE_PUBLIC_KEY);
-      this.stripe = stripe;
-      const result = await this.stripe.redirectToCheckout({
-        sessionId,
-      });
-      if (result && result.error) {
-        this.error = result.error.message;
-      }
     },
   },
 };

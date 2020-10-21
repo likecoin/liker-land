@@ -125,6 +125,31 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
   }
 });
 
+router.get('/civic/payment/stripe/billing', async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    if (!req.session.user) {
+      res.sendStatus(401);
+      return;
+    }
+    const userRef = userCollection.doc(req.session.user);
+    const userDoc = await userRef.get();
+    const { stripe: { customerId } = {} } = userDoc.data();
+    if (customerId) {
+      const { url } = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+      });
+      if (url) {
+        res.redirect(url);
+        return;
+      }
+    }
+    res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // token based purchase endpoint
 router.post('/civic/payment/stripe', async (req, res, next) => {
   try {
