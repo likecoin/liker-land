@@ -93,34 +93,33 @@
 </template>
 
 <script>
-import AppLogo from '~/assets/images/app-logo.svg';
 import AppDownloadBadges from '../AppDownloadBadges/AppDownloadBadges';
 import CopyText from '../CopyText';
 import utmMixin from '~/mixins/utm';
 
-import HeroGraph from './hero-graph.svg';
-import MattersLogo from './logos/matters.svg';
-import VocusLogo from './logos/vocus.svg';
-import WordPressLogo from './logos/wordpress.svg';
-import InMediaLogo from './logos/inmedia.svg';
-import StandnewsLogo from './logos/standnews.svg';
-import HKCnewsLogo from './logos/hkcnews.svg';
-import MediumLogo from './logos/medium.svg';
-
 export default {
   name: 'CreatorPage',
   components: {
-    AppLogo,
+    AppLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ '~/assets/images/app-logo.svg'),
     AppDownloadBadges,
     CopyText,
-    HeroGraph,
-    MattersLogo,
-    VocusLogo,
-    WordPressLogo,
-    InMediaLogo,
-    StandnewsLogo,
-    HKCnewsLogo,
-    MediumLogo,
+    HeroGraph: () =>
+      import(/* webpackChunkName: "svg-creator" */ './hero-graph.svg'),
+    MattersLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/matters.svg'),
+    VocusLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/vocus.svg'),
+    WordPressLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/wordpress.svg'),
+    InMediaLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/inmedia.svg'),
+    StandnewsLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/standnews.svg'),
+    HKCnewsLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/hkcnews.svg'),
+    MediumLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/medium.svg'),
   },
   mixins: [utmMixin],
   props: {
