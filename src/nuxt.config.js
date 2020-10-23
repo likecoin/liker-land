@@ -43,6 +43,8 @@ const nuxtConfig = {
       { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.png' },
     ],
     link: [
+      { rel: 'preconnect', href: 'https://storage.googleapis.com' },
+      { rel: 'preconnect', href: 'https://p.typekit.net' },
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
 
