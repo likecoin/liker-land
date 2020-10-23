@@ -78,7 +78,7 @@
             +LogoWrapper()(:href="getGuideLink('medium')"): MediumLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Embedly")
           CopyText.mt-24(:text="embedlyLink")
-          img.mt-24(src="./medium-demo.webp")
+          img.mt-24(loading="lazy" src="./medium-demo.webp")
 
       .creators-page__separator
 
