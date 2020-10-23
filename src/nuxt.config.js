@@ -325,6 +325,7 @@ const nuxtConfig = {
   ** Build configuration
   */
   build: {
+    // TODO: wait for https://github.com/faceyspacey/extract-css-chunks-webpack-plugin/pull/300 release
     extractCSS: true,
     babel: {
       presets: ({ isServer }) => [
@@ -332,7 +333,7 @@ const nuxtConfig = {
           '@nuxt/babel-preset-app',
           {
             targets: isServer
-              ? { node: '8.11.1' }
+              ? { node: '10' }
               : { browsers: 'ie 11, > 0.5%, Firefox ESR' },
           },
         ],
