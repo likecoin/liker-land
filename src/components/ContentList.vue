@@ -26,15 +26,19 @@
               :key="key"
               class="content-card-wrapper"
             >
-              <ContentCard />
+              <Card>
+                <Placeholder style="width: 60%;height: 16px" />
+                <Placeholder style="width: 100%;height: 16px;margin-top: 12px" />
+                <Placeholder style="width: 40%;height: 16px;margin-top: 8px" />
+              </Card>
             </div>
           </template>
           <template v-else-if="state === 'content'">
-            <ContentCardWrapper
+            <SuperLikeContentCard
               v-for="item in items"
-              :key="item.referrer"
+              :key="item.superLikeID"
+              class="content-list__card"
               :referrer="item.referrer"
-              :src="item.url || item.referrer"
               :author-id="item.user"
               :cover-src="item.image"
               :title="item.title"
@@ -61,14 +65,16 @@
 </template>
 
 <script>
-import ContentCard from '~/components/ContentCard';
-import ContentCardWrapper from '~/components/ContentCardWrapper';
+import Card from '~/components/Card/Card';
+import Placeholder from '~/components/Placeholder/Placeholder';
+import SuperLikeContentCard from '~/components/SuperLikeContentCard';
 
 export default {
   name: 'ContentList',
   components: {
-    ContentCard,
-    ContentCardWrapper,
+    Card,
+    Placeholder,
+    SuperLikeContentCard,
   },
   props: {
     isLoading: {
@@ -181,6 +187,12 @@ export default {
 
     p {
       @apply mt-20;
+    }
+  }
+
+  &__card {
+    &:not(:first-child) {
+      @apply mt-24;
     }
   }
 }
