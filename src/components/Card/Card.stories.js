@@ -1,5 +1,6 @@
 import Button from '../Button/Button';
 import Identity from '../Identity/Identity';
+import Placeholder from '../Placeholder/Placeholder';
 
 import BookmarkIcon from '../Icon/BookmarkOutlined';
 
@@ -138,3 +139,27 @@ Grid.argTypes = {
     },
   },
 };
+
+export const CardPlaceholder = () => ({
+  components: {
+    Card,
+    Placeholder,
+  },
+  template: `
+    <div style="width: 600px">
+      <Card>
+        <Placeholder style="width: 50%;height: 16px" />
+        <Placeholder style="width: 100%;height: 16px;margin-top: 12px" />
+        <Placeholder style="width: 70%;height: 16px;margin-top: 8px" />
+      </Card>
+      <Card style="margin-top: 24px">
+        <Placeholder style="width: 60%;height: 16px" />
+        <Placeholder style="width: 100%;height: 16px;margin-top: 12px" />
+        <Placeholder style="width: 100%;height: 16px;margin-top: 12px" />
+        <Placeholder style="width: 40%;height: 16px;margin-top: 8px" />
+      </Card>
+    </div>
+  `,
+});
+
+CardPlaceholder.storyName = 'Placeholder';
