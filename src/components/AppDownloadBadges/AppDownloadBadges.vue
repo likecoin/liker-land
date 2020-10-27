@@ -29,14 +29,11 @@
 <script>
 import { getAppURL } from '~/util/api';
 
-import Apple from './apple.svg';
-import Google from './google.svg';
-
 export default {
   name: 'AppDownloadBadges',
   components: {
-    Apple,
-    Google,
+    Apple: () => import(/* webpackChunkName: "svg-app" */ './apple.svg'),
+    Google: () => import(/* webpackChunkName: "svg-app" */ './google.svg'),
   },
   props: {
     type: {
