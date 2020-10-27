@@ -1,5 +1,10 @@
 <template>
-  <div class="card">
+  <a
+    class="card"
+    :href="href"
+    target="_blank"
+    rel="noopener"
+  >
     <img
       v-if="imageSrc"
       class="card__media card__media--image"
@@ -16,7 +21,10 @@
       >{{ description }}</p>
       <slot />
     </div>
-    <footer class="card__footer">
+    <footer
+      v-if="$slots['footer-left'] || $slots['footer-right']"
+      class="card__footer"
+    >
       <div class="card__footer-left">
         <slot name="footer-left" />
       </div>
@@ -24,13 +32,17 @@
         <slot name="footer-right" />
       </div>
     </footer>
-  </div>
+  </a>
 </template>
 
 <script>
 export default {
   name: 'Card',
   props: {
+    href: {
+      type: String,
+      default: '#',
+    },
     imageSrc: {
       type: String,
       default: '',
@@ -52,11 +64,26 @@ $card-inset-x: 24px;
 $card-corner-radius: 8px;
 
 .card {
+  display: block;
+  overflow: hidden;
 
   border: 1px solid #e6e6e6;
   border-radius: $card-corner-radius;
 
   font-family: Source Sans Pro, Arial, sans-serif;
+  text-decoration: none;
+
+  background-color: #fff;
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #fafafa;
+  }
+
+  &:active {
+    background-color: #e6e6e6;
+  }
 
   &__body {
     padding: 16px $card-inset-x;
