@@ -39,7 +39,7 @@
 
       .page-content__right
         header.user-portfolio-page__top-nav
-          Button(
+          Button.user-portfolio-page__top-cta(
             preset="primary"
             :title="$t('PortfolioPage.BecomeCivicLiker')"
             :to="{ name: 'civic', query: { from: user.user } }"
@@ -59,25 +59,26 @@
               @click="tab = 'all'"
             )
 
-        no-ssr
-          Stack(
-            :key="tab"
-            ref="stack"
-            :column-min-width="288"
-            :column-max-width="300"
-            :gutter-width="16"
-            :gutter-height="24"
-          )
-            StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
-              SuperLikeContentCard(
-                :preset="tab === 'works' ? 'work' : 'default'"
-                :referrer="item.referrer"
-                :author-id="item.user"
-                :super-like-id="item.superLikeID"
-                :super-like-short-id="item.superLikeShortID"
-                :timestamp="item.ts"
-                @fetched="onFetched"
-              )
+        .user-portfolio-page__grid
+          no-ssr
+            Stack(
+              :key="tab"
+              ref="stack"
+              :column-min-width="288"
+              :column-max-width="300"
+              :gutter-width="16"
+              :gutter-height="24"
+            )
+              StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
+                SuperLikeContentCard(
+                  :preset="tab === 'works' ? 'work' : 'default'"
+                  :referrer="item.referrer"
+                  :author-id="item.user"
+                  :super-like-id="item.superLikeID"
+                  :super-like-short-id="item.superLikeShortID"
+                  :timestamp="item.ts"
+                  @fetched="onFetched"
+                )
 </template>
 
 <script>
@@ -192,10 +193,6 @@ $action-width: 224px;
     max-width: 1340px;
     margin: 0 auto;
 
-    &__right {
-      padding: 16px;
-    }
-
     @media screen and (min-width: 1000px) {
       display: flex;
       flex-direction: row;
@@ -266,8 +263,6 @@ $action-width: 224px;
     flex-direction: column;
     align-items: flex-end;
 
-    margin-bottom: 24px;
-
     > .button > div {
       min-width: $action-width;
     }
@@ -302,6 +297,26 @@ $action-width: 224px;
         border-bottom: 3px solid #50e3c2;
       }
     }
+  }
+
+  &__grid {
+    margin-top: 24px;
+  }
+
+  @media screen and (max-width: 999px) {
+    & &__top-cta {
+      display: none;
+    }
+
+    & &__tab-bar {
+      margin-top: 16px;
+      justify-content: center;
+    }
+
+    & &__grid {
+      margin: 16px;
+    }
+
   }
 }
 </style>
