@@ -137,6 +137,12 @@ export default {
     background-color: #9b9b9b33;
   }
 
+  &--translucent-light {
+    color: #28646e;
+
+    background-color: transparent;
+  }
+
   &--translucent-dark {
     color: white;
 
