@@ -233,6 +233,14 @@
   "RedirectPage": {
     "title": "Redirecting"
   },
+  "PortfolioPage": {
+    "BecomeCivicLiker": "Become a Civic Liker",
+    "LikePay": "Like Pay",
+    "Tab": {
+      "Works": "Works",
+      "SuperLikes": "Super Likes"
+    }
+  },
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
     "knowMoreAbout": "Know more about",

@@ -248,6 +248,14 @@
   "RedirectPage": {
     "title": "重新轉向"
   },
+  "PortfolioPage": {
+    "BecomeCivicLiker": "成為讚賞公民",
+    "LikePay": "Like Pay",
+    "Tab": {
+      "Works": "作品",
+      "SuperLikes": "已 Super Like 內容"
+    }
+  },
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
     "knowMoreAbout": "了解更多",

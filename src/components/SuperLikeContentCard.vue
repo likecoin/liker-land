@@ -11,10 +11,15 @@
     )
       template(#footer-left)
         Identity(
+          v-if="preset === 'default'"
           :avatar-url="author.avatar"
           :is-avatar-outlined="author.isSubscribedCivicLiker || author.isCivicLikerTrial"
           :display-name="author.displayName || author.user"
         )
+        .super-like-content-card__timestamp(
+          v-else-if="preset === 'work'"
+        )
+          | {{ formatDate(timestamp) }}
 
       template(#footer-right)
         Button(
@@ -27,6 +32,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import dateFormat from 'date-fns/format';
 
 import { getSuperLikeRedirectLink } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -49,6 +55,10 @@ export default {
     Placeholder,
   },
   props: {
+    preset: {
+      type: String,
+      default: 'default',
+    },
     referrer: {
       type: String,
       required: true,
@@ -80,6 +90,10 @@ export default {
     superLikeShortId: {
       type: String,
       default: undefined,
+    },
+    timestamp: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -124,6 +138,10 @@ export default {
       'followAuthor',
       'unfollowAuthor',
     ]),
+
+    formatDate(timestamp) {
+      return dateFormat(new Date(timestamp), 'DD/MM/YYYY');
+    },
 
     async fetchContent() {
       try {
@@ -217,3 +235,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.super-like-content-card {
+  &__timestamp {
+    @apply text-gray-9b;
+    @apply font-200;
+    @apply text-14;
+  }
+}
+</style>
