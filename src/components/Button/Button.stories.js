@@ -14,7 +14,7 @@ export default {
     preset: {
       control: {
         type: 'select',
-        options: ['primary', 'secondary'],
+        options: ['primary', 'secondary', 'translucent-dark'],
       },
     },
     to: {
