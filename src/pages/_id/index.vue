@@ -9,10 +9,10 @@
         .user-portfolio-page__user-info-panel-wrapper
           .user-info-panel
             header
-              LcAvatar(
-                :src="user.avatar"
-                :halo="user.avatarHalo"
-                size="88"
+              Identity(
+                :avatar-url="user.avatar"
+                :avatar-size="88"
+                :is-avatar-outlined="user.isCivicLikerTrial || user.isSubscribedCivicLiker"
               )
 
               .mt-16.text-like-cyan-gray ID: {{ user.user }}
@@ -86,10 +86,11 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { getUserMinAPI, getFetchUserSuperLikeAPI } from '~/util/api';
 import { getLikeCoURL } from '~/util/links';
-import { checkUserNameValid, getAvatarHaloTypeFromUser } from '~/util/user';
+import { checkUserNameValid } from '~/util/user';
 
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
+import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
 import SuperLikeContentCard from '~/components/SuperLikeContentCard';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -101,6 +102,7 @@ export default {
   components: {
     Button,
     ButtonGroup,
+    Identity,
     PageHeader,
     SuperLikeContentCard,
     SiteNavBar,
@@ -132,10 +134,7 @@ export default {
       try {
         const user = await $axios.$get(getUserMinAPI(id));
         return {
-          user: {
-            ...user,
-            avatarHalo: getAvatarHaloTypeFromUser(user),
-          },
+          user,
         };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;

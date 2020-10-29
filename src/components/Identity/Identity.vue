@@ -8,7 +8,10 @@
       :is-disabled="isAvatarDisabled"
       @click="onClickAvatar"
     />
-    <div class="identity__display-name">{{ displayName }}</div>
+    <div
+      v-if="displayName"
+      class="identity__display-name"
+    >{{ displayName }}</div>
   </div>
 </template>
 
