@@ -96,6 +96,7 @@ import SiteNavBar from '~/components/SiteNavBar';
 import { CrispMixinFactory } from '~/mixins/crisp';
 
 export default {
+  layout: 'desktop',
   components: {
     Button,
     ButtonGroup,
