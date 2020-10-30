@@ -150,8 +150,11 @@
   "Glossary": {
     "HKCnews": "眾新聞",
     "InMedia": "香港獨立媒體網",
+    "Matters": "Matters",
+    "Medium": "Medium",
     "Standnews": "立場新聞",
-    "Vocus": "方格子"
+    "Vocus": "方格子",
+    "WordPress": "WordPress"
   },
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容",

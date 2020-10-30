@@ -152,8 +152,11 @@
   "Glossary": {
     "HKCnews": "Hong Kong Citizen News",
     "InMedia": "Hong Kong In-media",
+    "Matters": "Matters",
+    "Medium": "Medium",
     "Standnews": "The Standnews",
-    "Vocus": "Vocus"
+    "Vocus": "Vocus",
+    "WordPress": "WordPress"
   },
   "ERROR": {
     "LOGIN_NEEDED": "Please sign in to view this content",

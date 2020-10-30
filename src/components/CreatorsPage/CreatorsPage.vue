@@ -28,11 +28,11 @@
     section.creators-page__platform-select
       i18n.creators-page__platform-select-title(tag="div" path="CreatorsPage.PlatformSelectLabel")
       .creators-page__platform-select-grid
-        +PlatformSelectGridItem("#config-liker-id")(alt="Matters")
+        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Matters')")
           MattersLogo
         +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Vocus')")
           VocusLogo
-        +PlatformSelectGridItem("#plugin")(alt="WordPress")
+        +PlatformSelectGridItem("#plugin")(:alt="$t('Glossary.WordPress')")
           WordPressLogo
         +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.InMedia')")
           InMediaLogo
@@ -40,7 +40,7 @@
           StandnewsLogo
         +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.HKCnews')")
           HKCnewsLogo
-        +PlatformSelectGridItem("#embedly")(alt="Medium")
+        +PlatformSelectGridItem("#embedly")(:alt="$t('Glossary.Medium')")
           MediumLogo
 
       .creators-page__separator
@@ -49,14 +49,14 @@
       ul.creators-page__platform-list(role='list')
         li#config-liker-id.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('matters')" alt="Matters"): MattersLogo
+            +LogoWrapper()(:href="getGuideLink('matters')" :alt="$t('Glossary.Matters')"): MattersLogo
             +LogoSeparator
             +LogoWrapper()(:href="getGuideLink('vocus')" :alt="$t('Glossary.Vocus')"): VocusLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ConfigLikerID")
 
         li#plugin.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('wordpress')" alt="WordPress"): WordPressLogo
+            +LogoWrapper()(:href="getGuideLink('wordpress')" :alt="$t('Glossary.WordPress')"): WordPressLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Plugin.Content")
             a(place="wordpress" href="https://wordpress.org/plugins/likecoin/" target="_blank")
               | {{ $t('CreatorsPage.PlatformDescription.Plugin.WordPress') }}
@@ -75,7 +75,7 @@
 
         li#embedly.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('medium')" alt="Medium"): MediumLogo
+            +LogoWrapper()(:href="getGuideLink('medium')" :alt="$t('Glossary.Medium')"): MediumLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Embedly")
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(loading="lazy" src="./medium-demo.webp")
