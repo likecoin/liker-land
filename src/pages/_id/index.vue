@@ -315,7 +315,6 @@ $action-width: 224px;
     & &__grid {
       margin: 16px;
     }
-
   }
 }
 </style>
