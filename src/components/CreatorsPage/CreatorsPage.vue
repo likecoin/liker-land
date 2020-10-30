@@ -28,19 +28,19 @@
     section.creators-page__platform-select
       i18n.creators-page__platform-select-title(tag="div" path="CreatorsPage.PlatformSelectLabel")
       .creators-page__platform-select-grid
-        +PlatformSelectGridItem("#config-liker-id")
+        +PlatformSelectGridItem("#config-liker-id")(alt="Matters")
           MattersLogo
-        +PlatformSelectGridItem("#config-liker-id")
+        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Vocus')")
           VocusLogo
-        +PlatformSelectGridItem("#plugin")
+        +PlatformSelectGridItem("#plugin")(alt="WordPress")
           WordPressLogo
-        +PlatformSelectGridItem("#provide-liker-id")
+        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.InMedia')")
           InMediaLogo
-        +PlatformSelectGridItem("#provide-liker-id")
+        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.Standnews')")
           StandnewsLogo
-        +PlatformSelectGridItem("#provide-liker-id")
+        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.HKCnews')")
           HKCnewsLogo
-        +PlatformSelectGridItem("#embedly")
+        +PlatformSelectGridItem("#embedly")(alt="Medium")
           MediumLogo
 
       .creators-page__separator
@@ -49,33 +49,33 @@
       ul.creators-page__platform-list(role='list')
         li#config-liker-id.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('matters')"): MattersLogo
+            +LogoWrapper()(:href="getGuideLink('matters')" alt="Matters"): MattersLogo
             +LogoSeparator
-            +LogoWrapper()(:href="getGuideLink('vocus')"): VocusLogo
+            +LogoWrapper()(:href="getGuideLink('vocus')" :alt="$t('Glossary.Vocus')"): VocusLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ConfigLikerID")
 
         li#plugin.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('wordpress')"): WordPressLogo
+            +LogoWrapper()(:href="getGuideLink('wordpress')" alt="WordPress"): WordPressLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Plugin.Content")
             a(place="wordpress" href="https://wordpress.org/plugins/likecoin/" target="_blank")
               | {{ $t('CreatorsPage.PlatformDescription.Plugin.WordPress') }}
 
         li#provide-liker-id.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(href="https://www.inmediahk.net/"): InMediaLogo
+            +LogoWrapper()(href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')"): InMediaLogo
             +LogoSeparator
-            +LogoWrapper()(href="https://www.thestandnews.com/"): StandnewsLogo
+            +LogoWrapper()(href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')"): StandnewsLogo
             +LogoSeparator
-            +LogoWrapper()(href="https://www.hkcnews.com/"): HKCnewsLogo
+            +LogoWrapper()(href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')"): HKCnewsLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ProvideLikerID")
-            a(place="inmedia" href="https://www.inmediahk.net/" target="_blank") {{ $t('Glossary.InMedia') }}
-            a(place="standnews" href="https://www.thestandnews.com/" target="_blank") {{ $t('Glossary.Standnews') }}
-            a(place="hkcnews" href="https://www.hkcnews.com/" target="_blank") {{ $t('Glossary.HKCnews') }}
+            a(place="inmedia" href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')" target="_blank") {{ $t('Glossary.InMedia') }}
+            a(place="standnews" href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')" target="_blank") {{ $t('Glossary.Standnews') }}
+            a(place="hkcnews" href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')" target="_blank") {{ $t('Glossary.HKCnews') }}
 
         li#embedly.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('medium')"): MediumLogo
+            +LogoWrapper()(:href="getGuideLink('medium')" alt="Medium"): MediumLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Embedly")
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(loading="lazy" src="./medium-demo.webp")
