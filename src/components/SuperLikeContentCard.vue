@@ -10,12 +10,15 @@
       :image-src="internalCoverSrc"
     )
       template(#footer-left)
-        Identity(
+        NuxtLink(
           v-if="preset === 'default'"
-          :avatar-url="author.avatar"
-          :is-avatar-outlined="author.isSubscribedCivicLiker || author.isCivicLikerTrial"
-          :display-name="author.displayName || author.user"
+          :to="{ name: 'id', params: { id: author.user } }"
         )
+          Identity(
+            :avatar-url="author.avatar"
+            :is-avatar-outlined="author.isSubscribedCivicLiker || author.isCivicLikerTrial"
+            :display-name="author.displayName || author.user"
+          )
         .super-like-content-card__timestamp(
           v-else-if="preset === 'work'"
         )
