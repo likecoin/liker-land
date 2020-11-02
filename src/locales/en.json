@@ -241,7 +241,8 @@
     "Tab": {
       "Works": "Works",
       "SuperLikes": "Super Likes"
-    }
+    },
+    "EmptyLabel": "No work"
   },
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",

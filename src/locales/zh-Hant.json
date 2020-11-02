@@ -256,7 +256,8 @@
     "Tab": {
       "Works": "作品",
       "SuperLikes": "已 Super Like 內容"
-    }
+    },
+    "EmptyLabel": "沒有作品"
   },
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",

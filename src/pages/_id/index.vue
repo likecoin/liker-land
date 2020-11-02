@@ -91,7 +91,7 @@
             )
 
         .user-portfolio-page__grid
-          no-ssr
+          ClientOnly(v-if="filteredItems.length > 0")
             Stack(
               :key="tab"
               ref="stack"
@@ -110,6 +110,8 @@
                   :timestamp="item.ts"
                   @fetched="onFetched"
                 )
+          .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
+            | {{ $t('PortfolioPage.EmptyLabel') }}
 </template>
 
 <script>
