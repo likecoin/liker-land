@@ -37,6 +37,37 @@
                     target="_blank"
                   )
 
+            mixin CivicLikerSinceLabel
+              .text-12.text-center.text-gray-9b.font-200
+                | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
+
+            footer.user-info-panel__footer.user-info-panel__footer--desktop
+              .pt-16.px-24.pb-32
+                +CivicLikerSinceLabel.px-4
+
+            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto
+              .px-24.py-16.flex.justify-between.items-center(@click="isShowAbout = !isShowAbout")
+                span.text-14.text-gray-4a.font-200 {{ $t('PortfolioPage.About') }}
+                svg.text-gray-9b(
+                  width="9.82"
+                  height="5.41"
+                  viewBox="0 0 9.82 5.41"
+                  :style="{ transform: `rotateZ(${ isShowAbout ? '180' : '0'}deg)`, transition: 'transform 0.2s ease' }"
+                )
+                  path(
+                    d="M0,0,3.5,3,7,0"
+                    transform="translate(1.41 1.41)"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-miterlimit="10"
+                    stroke-width="2"
+                  )
+              Collapse(:is-show="isShowAbout")
+                .p-24
+                  +CivicLikerSinceLabel
+
       .page-content__right
         header.user-portfolio-page__top-nav
           Button.user-portfolio-page__top-cta(
@@ -83,6 +114,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import dateFormat from 'date-fns/format';
 
 import { getUserMinAPI, getFetchUserSuperLikeAPI } from '~/util/api';
 import { getLikeCoURL } from '~/util/links';
@@ -90,6 +122,7 @@ import { checkUserNameValid } from '~/util/user';
 
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
+import Collapse from '~/components/Collapse/Collapse';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
 import SuperLikeContentCard from '~/components/SuperLikeContentCard';
@@ -102,6 +135,7 @@ export default {
   components: {
     Button,
     ButtonGroup,
+    Collapse,
     Identity,
     PageHeader,
     SuperLikeContentCard,
@@ -112,6 +146,7 @@ export default {
     return {
       items: [],
       tab: 'works',
+      isShowAbout: false,
     };
   },
   computed: {
@@ -126,6 +161,9 @@ export default {
     },
     filteredItems() {
       return this.tab === 'works' ? this.works : this.items;
+    },
+    formattedCivicLikerSince() {
+      return dateFormat(new Date(this.user.civicLikerSince), 'YYYY/MM/DD');
     },
   },
   async asyncData({ route, $axios, error }) {
@@ -185,6 +223,7 @@ export default {
 <style lang="scss">
 $page-padding-top: 48px;
 $action-width: 224px;
+$desktop-width: 1000px;
 
 .user-portfolio-page {
   .page-content {
@@ -192,7 +231,7 @@ $action-width: 224px;
     max-width: 1340px;
     margin: 0 auto;
 
-    @media screen and (min-width: 1000px) {
+    @media screen and (min-width: $desktop-width) {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
@@ -218,16 +257,16 @@ $action-width: 224px;
 
         flex-grow: 1;
       }
-
-      .user-info-panel {
-        overflow: hidden;
-
-        @apply rounded-8;
-      }
     }
   }
 
   .user-info-panel {
+    @media screen and (min-width: $desktop-width) {
+      overflow: hidden;
+
+      @apply rounded-8;
+    }
+
     > header {
       display: flex;
       flex-direction: column;
@@ -236,6 +275,26 @@ $action-width: 224px;
       padding: 32px 40px 28px;
 
       @apply bg-like-green;
+    }
+
+    &__footer {
+      background-color: white;
+
+      &--desktop {
+        @media screen and (max-width: #{$desktop-width - 1px}) {
+          display: none;
+        }
+      }
+
+      &--mobile {
+        max-width: 288px;
+
+        @apply rounded-8;
+
+        @media screen and (min-width: $desktop-width) {
+          display: none;
+        }
+      }
     }
 
     &__actions {
@@ -302,7 +361,7 @@ $action-width: 224px;
     margin-top: 24px;
   }
 
-  @media screen and (max-width: 999px) {
+  @media screen and (max-width: #{$desktop-width - 1px}) {
     & &__top-cta {
       display: none;
     }
