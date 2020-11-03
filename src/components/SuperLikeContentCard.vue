@@ -3,7 +3,12 @@
     class="super-like-content-card"
     @show="fetchContent"
   )
+    Card(v-if="isLoading")
+      Placeholder(style="width: 60%;height: 16px")
+      Placeholder(style="width: 100%;height: 16px;margin-top: 12px")
+      Placeholder(style="width: 40%;height: 16px;margin-top: 8px")
     Card(
+      v-else
       :href="href"
       :title="internalTitle"
       :description="internalDescription"
@@ -11,7 +16,7 @@
     )
       template(#footer-left)
         NuxtLink(
-          v-if="preset === 'default'"
+          v-if="preset === 'default' && author && author.user"
           :to="{ name: 'id', params: { id: author.user } }"
         )
           Identity(
@@ -241,6 +246,9 @@ export default {
 
 <style lang="scss">
 .super-like-content-card {
+  /* Prevent the height too short for lazy-component */
+  min-height: 78px;
+
   &__timestamp {
     @apply text-gray-9b;
     @apply font-200;
