@@ -4,9 +4,9 @@
     @show="fetchContent"
   )
     Card(v-if="isLoading")
-      Placeholder(style="width: 60%;height: 16px")
-      Placeholder(style="width: 100%;height: 16px;margin-top: 12px")
-      Placeholder(style="width: 40%;height: 16px;margin-top: 8px")
+      Placeholder.h-16(class="w-3/5")
+      Placeholder.h-16.mt-12.w-full
+      Placeholder.h-16.mt-8(class="w-2/5")
     Card(
       v-else
       :href="href"
