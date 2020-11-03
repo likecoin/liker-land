@@ -19,7 +19,9 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue .",
     "precommit": "npm run lint",
-    "test": "ava"
+    "test": "ava",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
@@ -56,13 +58,21 @@
     "vue-cookie": "^1.1.4",
     "vue-i18n": "^8.9.0",
     "vue-lazyload": "^1.2.6",
+    "vue-stack-grid": "^1.2.1",
+    "vue-vimeo-player": "0.0.9",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.0",
     "@nuxtjs/eslint-config": "^0.0.1",
+    "@storybook/addon-actions": "^6.0.26",
+    "@storybook/addon-essentials": "^6.0.26",
+    "@storybook/addon-links": "^6.0.26",
+    "@storybook/vue": "^6.0.26",
     "@vue/test-utils": "^1.0.0-beta.27",
     "ava": "^1.0.1",
     "babel-eslint": "^8.2.1",
+    "babel-loader": "^8.1.0",
     "browser-env": "^3.2.5",
     "eslint": "^5.0.1",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -83,6 +93,7 @@
     "prettier": "1.14.3",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "react-is": "^16.13.1",
     "require-extension-hooks": "^0.3.3",
     "require-extension-hooks-babel": "^0.1.1",
     "require-extension-hooks-vue": "^2.0.0",
