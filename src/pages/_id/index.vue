@@ -99,6 +99,7 @@
               :column-max-width="300"
               :gutter-width="16"
               :gutter-height="24"
+              :monitor-images-loaded="true"
             )
               StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
                 SuperLikeContentCard(
