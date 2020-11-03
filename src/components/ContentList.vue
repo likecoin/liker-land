@@ -36,7 +36,7 @@
           <template v-else-if="state === 'content'">
             <SuperLikeContentCard
               v-for="item in items"
-              :key="item.superLikeID"
+              :key="item.superLikeID || item.referrer"
               class="content-list__card"
               :referrer="item.referrer"
               :author-id="item.user"
