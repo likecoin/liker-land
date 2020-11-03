@@ -27,16 +27,16 @@
               class="content-card-wrapper"
             >
               <Card>
-                <Placeholder style="width: 60%;height: 16px" />
-                <Placeholder style="width: 100%;height: 16px;margin-top: 12px" />
-                <Placeholder style="width: 40%;height: 16px;margin-top: 8px" />
+                <Placeholder class="w-3/5 h-16" />
+                <Placeholder class="w-full h-16 mt-12" />
+                <Placeholder class="w-2/5 h-16 mt-8" />
               </Card>
             </div>
           </template>
           <template v-else-if="state === 'content'">
             <SuperLikeContentCard
               v-for="item in items"
-              :key="item.superLikeID"
+              :key="item.superLikeID || item.referrer"
               class="content-list__card"
               :referrer="item.referrer"
               :author-id="item.user"
