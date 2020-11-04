@@ -115,13 +115,23 @@
       "ConfigLikerID": "LikeCoin button will be installed in your articles automatically after filling in your Liker ID in the platform.",
       "Embedly": "Insert the below link to embed LikeCoin button into your articles",
       "Plugin": {
-        "Content": "Install {wordpress} to add LikeCoin button to all articles.  Unlike advertising banners, LikeCoin button delivers the best reading experience together with the author's personal brand.",
+        "Content": "Install {WordPressPlugin} to add LikeCoin button to all articles.  Unlike advertising banners, LikeCoin button delivers the best reading experience together with the author's personal brand.",
         "WordPress": "WordPress Plugin"
       },
-      "ProvideLikerID": "Bloggers can provide Liker ID to partnered media such as {inmedia}, {standnews} or {hkcnews} to install LikeCoin button to their articles."
+      "ProvideLikerID": "Bloggers can provide Liker ID to partnered media such as {InMedia}, {Standnews} or {HKCnews} to install LikeCoin button to their articles.",
+      "PlatformPlugin": "Can add LikeCoin button With third-party plugin on {Pixnet}; Using <iframe> on {blogger} or any other self-hosted websites."
     },
     "LikerIDPlaceholer": "<Your Liker ID>",
-    "GuideLinkPrefix": "https://docs.like.co/v/en/user-guide/likecoin-button/"
+    "GuideLinkBase": "https://docs.like.co/user-guide/content-creators",
+    "GuideLink": {
+      "Blogger": "@:CreatorsPage.GuideLinkBase/content-platforms/blogspot",
+      "Matters": "@:CreatorsPage.GuideLinkBase/content-platforms/matters",
+      "Medium": "@:CreatorsPage.GuideLinkBase/content-platforms/medium",
+      "Pixnet": "@:CreatorsPage.GuideLinkBase/content-platforms/pixnet",
+      "Timelog": "@:CreatorsPage.GuideLinkBase/content-platforms/timelog",
+      "Vocus": "@:CreatorsPage.GuideLinkBase/content-platforms/vocus",
+      "WordPress": "@:CreatorsPage.GuideLinkBase/self-host/wordpress"
+    }
   },
   "FeaturedPage": {
     "headerLabel": "Today"
@@ -150,11 +160,14 @@
     ]
   },
   "Glossary": {
+    "Blogger": "Blogger",
     "HKCnews": "Hong Kong Citizen News",
     "InMedia": "Hong Kong In-media",
     "Matters": "Matters",
     "Medium": "Medium",
+    "Pixnet": "Pixnet",
     "Standnews": "The Standnews",
+    "Timelog": "Timelog",
     "Vocus": "Vocus",
     "WordPress": "WordPress"
   },

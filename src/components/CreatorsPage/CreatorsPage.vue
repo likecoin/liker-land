@@ -42,6 +42,12 @@
           HKCnewsLogo
         +PlatformSelectGridItem("#embedly")(:alt="$t('Glossary.Medium')")
           MediumLogo
+        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Timelog')")
+          TimelogLogo
+        +PlatformSelectGridItem("#platform-plugin")(:alt="$t('Glossary.Pixnet')")
+          PixnetLogo(width="120")
+        +PlatformSelectGridItem("#platform-plugin")(:alt="$t('Glossary.Blogger')")
+          BloggerLogo
 
       .creators-page__separator
 
@@ -49,16 +55,44 @@
       ul.creators-page__platform-list(role='list')
         li#config-liker-id.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('matters')" :alt="$t('Glossary.Matters')"): MattersLogo
+            +LogoWrapper()(:href="getGuideLink('Matters')" :alt="$t('Glossary.Matters')"): MattersLogo
             +LogoSeparator
-            +LogoWrapper()(:href="getGuideLink('vocus')" :alt="$t('Glossary.Vocus')"): VocusLogo
+            +LogoWrapper()(:href="getGuideLink('Vocus')" :alt="$t('Glossary.Vocus')"): VocusLogo
+            +LogoSeparator
+            +LogoWrapper()(:href="getGuideLink('Timelog')" :alt="$t('Glossary.Timelog')"): TimelogLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ConfigLikerID")
+            a(
+              place="Matters"
+              :href="getGuideLink('Matters')"
+              target="_blank"
+              :alt="$t('Glossary.Matters')"
+            )
+              | {{ $t('Glossary.Matters') }}
+            a(
+              place="Vocus"
+              :href="getGuideLink('Vocus')"
+              target="_blank"
+              :alt="$t('Glossary.Vocus')"
+            )
+              | {{ $t('Glossary.Vocus') }}
+            a(
+              place="Timelog"
+              :href="getGuideLink('timelog')"
+              target="_blank"
+              :alt="$t('Glossary.Timelog')"
+            )
+              | {{ $t('Glossary.Timelog') }}
 
         li#plugin.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('wordpress')" :alt="$t('Glossary.WordPress')"): WordPressLogo
+            +LogoWrapper()(:href="getGuideLink('WordPress')" :alt="$t('Glossary.WordPress')"): WordPressLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Plugin.Content")
-            a(place="wordpress" href="https://wordpress.org/plugins/likecoin/" target="_blank")
+            a(
+              place="WordPressPlugin"
+              href="https://wordpress.org/plugins/likecoin/"
+              target="_blank"
+              :alt="$t('CreatorsPage.PlatformDescription.Plugin.WordPress')"
+            )
               | {{ $t('CreatorsPage.PlatformDescription.Plugin.WordPress') }}
 
         li#provide-liker-id.creators-page__platform-list-item
@@ -69,17 +103,43 @@
             +LogoSeparator
             +LogoWrapper()(href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')"): HKCnewsLogo
           i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ProvideLikerID")
-            a(place="inmedia" href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')" target="_blank") {{ $t('Glossary.InMedia') }}
-            a(place="standnews" href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')" target="_blank") {{ $t('Glossary.Standnews') }}
-            a(place="hkcnews" href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')" target="_blank") {{ $t('Glossary.HKCnews') }}
+            a(place="InMedia" href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')" target="_blank") {{ $t('Glossary.InMedia') }}
+            a(place="Standnews" href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')" target="_blank") {{ $t('Glossary.Standnews') }}
+            a(place="HKCnews" href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')" target="_blank") {{ $t('Glossary.HKCnews') }}
 
         li#embedly.creators-page__platform-list-item
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('medium')" :alt="$t('Glossary.Medium')"): MediumLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Embedly")
+            +LogoWrapper()(:href="getGuideLink('Medium')" :alt="$t('Glossary.Medium')"): MediumLogo
+          i18n.creators-page__platform-list-item-text(
+            tag="p"
+            path="CreatorsPage.PlatformDescription.Embedly"
+          )
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(loading="lazy" src="./medium-demo.webp")
 
+        li#platform-plugin.creators-page__platform-list-item
+          .creators-page__platform-list-item-logos
+            +LogoWrapper()(:href="getGuideLink('Blogger')" :alt="$t('Glossary.Blogger')"): BloggerLogo
+            +LogoSeparator
+            +LogoWrapper()(:href="getGuideLink('Pixnet')" :alt="$t('Glossary.Pixnet')"): PixnetLogo
+          i18n.creators-page__platform-list-item-text(
+            tag="p"
+            path="CreatorsPage.PlatformDescription.PlatformPlugin"
+          )
+            a(
+              place="Pixnet"
+              :href="getGuideLink('Pixnet')"
+              target="_blank"
+              :alt="$t('Glossary.Pixnet')"
+            )
+              | {{ $t('Glossary.Pixnet') }}
+            a(
+              place="Blogger"
+              :href="getGuideLink('Blogger')"
+              target="_blank"
+              :alt="$t('Glossary.Blogger')"
+            )
+              | {{ $t('Glossary.Blogger') }}
       .creators-page__separator
 
     section.py-32
@@ -120,6 +180,12 @@ export default {
       import(/* webpackChunkName: "svg-creator" */ './logos/hkcnews.svg'),
     MediumLogo: () =>
       import(/* webpackChunkName: "svg-creator" */ './logos/medium.svg'),
+    BloggerLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/blogger.svg'),
+    PixnetLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/pixnet.svg'),
+    TimelogLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/timelog.svg'),
   },
   mixins: [utmMixin],
   props: {
@@ -133,13 +199,10 @@ export default {
       return `https://button.like.co/${this.likerId ||
         this.$t('CreatorsPage.LikerIDPlaceholer')}`;
     },
-    guideLinkPrefix() {
-      return this.$t('CreatorsPage.GuideLinkPrefix');
-    },
   },
   methods: {
     getGuideLink(suffix) {
-      return `${this.guideLinkPrefix}${suffix}`;
+      return this.$t(`CreatorsPage.GuideLink.${suffix}`);
     },
   },
 };
@@ -289,17 +352,31 @@ export default {
 
       &-logos {
         display: flex;
+        flex-wrap: wrap;
         min-height: 57px;
         margin-bottom: 40px;
         justify-content: center;
         align-items: center;
+
+        @media screen and (max-width: 480px) {
+          flex-direction: column;
+
+          > a {
+            margin: 12px;
+          }
+        }
       }
 
       &-logo-separator {
-        margin: 0 32px;
+        margin: 0 12px;
+        flex-shrink: 0;
 
         @media screen and (max-width: 767px) {
           margin: 0 8px;
+        }
+
+        @media screen and (max-width: 480px) {
+          display: none;
         }
       }
 
@@ -315,6 +392,12 @@ export default {
         }
       }
     }
+  }
+
+  .app-download-badges .button {
+    min-width: 256px !important;
+
+    font-size: 16px !important;
   }
 }
 </style>
