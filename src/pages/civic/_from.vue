@@ -136,12 +136,12 @@ export default {
       );
     },
   },
-  async asyncData({ route, $axios }) {
+  async asyncData({ route, $api }) {
     // Fetch referrer info
     const from = route.params.from || route.query.from;
     if (from && checkUserNameValid(from)) {
       try {
-        const user = await $axios.$get(getUserMinAPI(from));
+        const user = await $api.$get(getUserMinAPI(from));
         return {
           referrer: {
             ...user,
@@ -220,7 +220,7 @@ export default {
     if (isHK === undefined) {
       isHK = false; // Default not from HK
       try {
-        const { data: geoData } = await this.$axios.get('api/geoip');
+        const { data: geoData } = await this.$api.get('api/geoip');
         isHK = geoData.country === 'HK';
       } catch (err) {
         console.error(err); // eslint-disable-line no-console

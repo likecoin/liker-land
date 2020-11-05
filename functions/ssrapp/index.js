@@ -6,8 +6,8 @@ const { Nuxt } = require('nuxt-start');
 
 let debug = false;
 
-if ((functions.config().constant || {}).external_url) {
-  process.env.API_URL = functions.config().constant.external_url;
+if ((functions.config().constant || {}).api_url) {
+  process.env.API_URL = functions.config().constant.api_url;
 }
 
 if ((functions.config().constant || {}).network === 'rinkeby') {

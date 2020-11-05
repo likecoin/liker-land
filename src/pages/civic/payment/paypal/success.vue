@@ -112,7 +112,7 @@ export default {
       if (isPopup) this.isPopup = isPopup;
     }
     try {
-      await this.$axios.$post(getPayPalPaymentAPI(), {
+      await this.$api.$post(getPayPalPaymentAPI(), {
         version: 2,
         from,
         referrer,

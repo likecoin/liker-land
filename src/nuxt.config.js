@@ -208,10 +208,10 @@ const nuxtConfig = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/axios.js',
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
-    { src: '~/plugins/axios.server.js', mode: 'server' },
     { src: '~/plugins/geoip.server.js', mode: 'server' },
     // { src: '~/plugins/experiment.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },

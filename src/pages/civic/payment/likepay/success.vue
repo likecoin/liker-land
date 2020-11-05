@@ -120,7 +120,7 @@ export default {
       console.error(err); // eslint-disable-line no-console
     }
     try {
-      await this.$axios.$post(getLikePayPaymentAPI(), {
+      await this.$api.$post(getLikePayPaymentAPI(), {
         txHash,
         remarks,
         referrer,

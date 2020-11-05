@@ -169,11 +169,11 @@ export default {
       return dateFormat(new Date(this.user.civicLikerSince), 'YYYY/MM/DD');
     },
   },
-  async asyncData({ route, $axios, error }) {
+  async asyncData({ route, $api, error }) {
     const { id } = route.params;
     if (id && checkUserNameValid(id)) {
       try {
-        const user = await $axios.$get(getUserMinAPI(id));
+        const user = await $api.$get(getUserMinAPI(id));
         return {
           user,
         };
@@ -194,7 +194,7 @@ export default {
     ...mapActions(['refreshBookmarkList', 'followAuthor', 'unfollowAuthor']),
 
     async fetchUserSuperLikes() {
-      const { list } = await this.$axios.$get(
+      const { list } = await this.$api.$get(
         getFetchUserSuperLikeAPI(this.user.user)
       );
       this.items = list;
