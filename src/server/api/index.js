@@ -75,6 +75,9 @@ router.use(cookieParser());
 router.use(users);
 router.use(civic);
 router.use(reader);
+router.get('/healthz', (_, res) => {
+  res.sendStatus(200);
+});
 router.use((err, req, res, next) => {
   const msg = (err.response && err.response.data) || err.message || err;
   console.error(msg); // eslint-disable-line no-console
