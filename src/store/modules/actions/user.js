@@ -10,7 +10,7 @@ export async function postLoginToken(
   { commit, dispatch },
   { authCode, state }
 ) {
-  const user = await this.$axios.$post(api.getOAuthCallbackAPI(), {
+  const user = await this.$api.$post(api.getOAuthCallbackAPI(), {
     authCode,
     state,
   });
@@ -26,7 +26,7 @@ export async function postLoginToken(
 
 export async function fetchLoginStatus({ commit, dispatch }) {
   try {
-    const user = await this.$axios.$get(api.getLoginStatus());
+    const user = await this.$api.$get(api.getLoginStatus());
     commit(types.USER_SET_USER_INFO, user);
     if (user && user.locale) {
       dispatch('setLocale', user.locale);
@@ -41,7 +41,7 @@ export async function fetchLoginStatus({ commit, dispatch }) {
 }
 
 export async function userLogout({ commit }) {
-  await this.$axios.$post(api.getLogoutAPI());
+  await this.$api.$post(api.getLogoutAPI());
   commit(types.USER_SET_USER_INFO, {});
   commit(types.READER_CLEAR_FOR_LOGOUT);
   if (this.$sentry) updateSentryUser(this, { user: null });
@@ -55,12 +55,12 @@ export function setUserCivicLiker({ commit }) {
 }
 
 export async function fetchUserSubscriptionInfo({ commit }) {
-  const info = await this.$axios.$get(api.getStripePaymentStatusAPI());
+  const info = await this.$api.$get(api.getStripePaymentStatusAPI());
   commit(types.USER_SET_SUBSCRIPTION_INFO, info);
   return info;
 }
 
 export async function cancelUserSubscription({ dispatch }) {
-  await this.$axios.$delete(api.getStripePaymentStatusAPI());
+  await this.$api.$delete(api.getStripePaymentStatusAPI());
   return dispatch('fetchUserSubscriptionInfo');
 }

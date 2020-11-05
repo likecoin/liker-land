@@ -88,7 +88,7 @@ export default {
   methods: {
     async checkStripeSubscription() {
       try {
-        const { willCancel } = await this.$axios.$get(
+        const { willCancel } = await this.$api.$get(
           getStripePaymentStatusAPI()
         );
         if (willCancel) {
@@ -109,7 +109,7 @@ export default {
     },
     async initPaymentSession() {
       const { from, referrer, utm_source: utmSource } = this.$route.query;
-      const { sessionId } = await this.$axios.$get(
+      const { sessionId } = await this.$api.$get(
         getStripePaymentAPI({ from, referrer, utmSource })
       );
       if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {

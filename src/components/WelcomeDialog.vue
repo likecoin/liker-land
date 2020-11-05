@@ -365,7 +365,7 @@ export default {
     },
     onClickActionButton() {
       this.hide();
-      this.$axios.$post(updateProfile(), {
+      this.$api.$post(updateProfile(), {
         hasReadWelcomeDialog: true,
       });
     },

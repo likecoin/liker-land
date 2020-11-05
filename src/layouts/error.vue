@@ -188,7 +188,7 @@ export default {
       const { from } = this.$route.query;
       if (from && checkUserNameValid(from)) {
         try {
-          const user = await this.$axios.$get(getUserMinAPI(from));
+          const user = await this.$api.$get(getUserMinAPI(from));
           this.referrer = {
             ...user,
             avatarHalo: getAvatarHaloTypeFromUser(user),

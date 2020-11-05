@@ -20,7 +20,7 @@ const createStore = () =>
         }
         try {
           if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
-            const userInfo = await this.$axios.$get(api.getLoginStatus());
+            const userInfo = await this.$api.$get(api.getLoginStatus());
             commit(types.USER_SET_USER_INFO, userInfo);
           }
         } catch (err) {

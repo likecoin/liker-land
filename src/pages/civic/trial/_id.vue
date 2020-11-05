@@ -111,7 +111,7 @@ export default {
       return getImageResizeAPI(this.authorAvatarSrc, { width: 148 });
     },
   },
-  async asyncData({ error, route, store, $axios }) {
+  async asyncData({ error, route, store, $api }) {
     const {
       isSubscribedCivicLiker,
       isCivicLikerTrial,
@@ -131,7 +131,7 @@ export default {
     }
 
     try {
-      await $axios.$get(getCivicLikerTrialEventByIdAPI(route.params.id));
+      await $api.$get(getCivicLikerTrialEventByIdAPI(route.params.id));
       return {};
     } catch (err) {
       switch (err.response.status) {
@@ -189,7 +189,7 @@ export default {
     ...mapActions(['fetchLoginStatus']),
 
     async joinCivicLikerTrialEvent() {
-      const data = await this.$axios.$post(
+      const data = await this.$api.$post(
         getCivicLikerJoinTrialEventByIdAPI(this.eventId)
       );
       await this.fetchLoginStatus();
