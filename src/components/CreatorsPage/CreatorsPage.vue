@@ -1,17 +1,39 @@
 <template lang="pug">
-  mixin PlatformSelectGridItem(href)
-    a.creators-page__platform-select-grid-item(href=href)&attributes(attributes)
+  mixin LinkWrapper(key)
+    - var alt = `$t('Glossary.${key}')`
+    - var href = `getGuideLink('${key}')`
+    a(
+      :alt=alt
+      :href=href
+    )&attributes(attributes)
+      if block
+        block
+      else
+        | {{ !{alt} }}
+
+  mixin PlatformSelectGridItem(id, key)
+    +LinkWrapper(key).creators-page__platform-select-grid-item(href=id)&attributes(attributes)
       svg(width="100%" viewBox="0 0 255 90")
         foreignObject(width="255" height="90")
           .creators-page__platform-select-grid-item-logo-wrapper
             block
 
+  mixin PlatformListItem(id)
+    li.creators-page__platform-list-item(id=id): block
+
   mixin LogoSeparator
     svg.creators-page__platform-list-item-logo-separator(width="35" height="59" viewBox="0 0 35 59" fill="none")
       path(d="M1.5 58L33.5 1" stroke="#979797")
 
-  mixin LogoWrapper
-    a(target="_blank")&attributes(attributes): block
+  mixin LogoWrapper(key)
+    +LinkWrapper(key)(target="_blank")&attributes(attributes): block
+
+  mixin PlatformDescription(key)
+    - var path = `CreatorsPage.PlatformDescription.${key}`
+    i18n.creators-page__platform-list-item-text(tag="p" path=path): block
+
+  mixin PlatformDescriptionLink(key)
+    +LinkWrapper(key)(target="_blank" place=key)
 
   article.creators-page
 
@@ -28,65 +50,40 @@
     section.creators-page__platform-select
       i18n.creators-page__platform-select-title(tag="div" path="CreatorsPage.PlatformSelectLabel")
       .creators-page__platform-select-grid
-        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Matters')")
-          MattersLogo
-        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Vocus')")
-          VocusLogo
-        +PlatformSelectGridItem("#plugin")(:alt="$t('Glossary.WordPress')")
-          WordPressLogo
-        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.InMedia')")
-          InMediaLogo
-        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.Standnews')")
-          StandnewsLogo
-        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.HKCnews')")
-          HKCnewsLogo
-        +PlatformSelectGridItem("#embedly")(:alt="$t('Glossary.Medium')")
-          MediumLogo
-        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Timelog')")
-          TimelogLogo
-        +PlatformSelectGridItem("#platform-plugin")(:alt="$t('Glossary.Pixnet')")
-          PixnetLogo(width="120")
-        +PlatformSelectGridItem("#platform-plugin")(:alt="$t('Glossary.Blogger')")
-          BloggerLogo
+        +PlatformSelectGridItem("#config-liker-id", "Matters"): MattersLogo
+        +PlatformSelectGridItem("#config-liker-id", "Vocus"): VocusLogo
+        +PlatformSelectGridItem("#wordpress", "WordPress"): WordPressLogo
+        +PlatformSelectGridItem("#provide-liker-id", "InMedia"): InMediaLogo
+        +PlatformSelectGridItem("#provide-liker-id", "Standnews"): StandnewsLogo
+        +PlatformSelectGridItem("#provide-liker-id", "HKCnews"): HKCnewsLogo
+        +PlatformSelectGridItem("#embedly", "Medium"): MediumLogo
+        +PlatformSelectGridItem("#config-liker-id", "Timelog"): TimelogLogo
+        +PlatformSelectGridItem("#plugin", "Pixnet"): PixnetLogo(width="120")
+        +PlatformSelectGridItem("#plugin", "Blogger"): BloggerLogo
 
       .creators-page__separator
 
     section.creators-page__platforms
       ul.creators-page__platform-list(role='list')
-        li#config-liker-id.creators-page__platform-list-item
-          .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('Matters')" :alt="$t('Glossary.Matters')"): MattersLogo
-            +LogoSeparator
-            +LogoWrapper()(:href="getGuideLink('Vocus')" :alt="$t('Glossary.Vocus')"): VocusLogo
-            +LogoSeparator
-            +LogoWrapper()(:href="getGuideLink('Timelog')" :alt="$t('Glossary.Timelog')"): TimelogLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ConfigLikerID")
-            a(
-              place="Matters"
-              :href="getGuideLink('Matters')"
-              target="_blank"
-              :alt="$t('Glossary.Matters')"
-            )
-              | {{ $t('Glossary.Matters') }}
-            a(
-              place="Vocus"
-              :href="getGuideLink('Vocus')"
-              target="_blank"
-              :alt="$t('Glossary.Vocus')"
-            )
-              | {{ $t('Glossary.Vocus') }}
-            a(
-              place="Timelog"
-              :href="getGuideLink('timelog')"
-              target="_blank"
-              :alt="$t('Glossary.Timelog')"
-            )
-              | {{ $t('Glossary.Timelog') }}
 
-        li#plugin.creators-page__platform-list-item
+        +PlatformListItem('config-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('WordPress')" :alt="$t('Glossary.WordPress')"): WordPressLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Plugin.Content")
+            +LogoWrapper('Matters'): MattersLogo
+            +LogoSeparator
+            +LogoWrapper('Vocus'): VocusLogo
+            +LogoSeparator
+            +LogoWrapper('Timelog'): TimelogLogo
+          +PlatformDescription('ConfigLikerID')
+            +PlatformDescriptionLink('Matters')
+            +PlatformDescriptionLink('Vocus')
+            +PlatformDescriptionLink('Timelog')
+
+        +PlatformListItem('wordpress')
+          .creators-page__platform-list-item-logos
+            +LogoWrapper('WordPress'): WordPressLogo
+          +PlatformDescription('Plugin.Content')
+            - var wpAlt = "$t('CreatorsPage.PlatformDescription.Plugin.WordPress')"
+            - var wpText = `\{\{ ${alt} \}\}`
             a(
               place="WordPressPlugin"
               href="https://wordpress.org/plugins/likecoin/"
@@ -95,51 +92,34 @@
             )
               | {{ $t('CreatorsPage.PlatformDescription.Plugin.WordPress') }}
 
-        li#provide-liker-id.creators-page__platform-list-item
+        +PlatformListItem('provide-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')"): InMediaLogo
+            +LogoWrapper('InMedia')(href="https://www.inmediahk.net/"): InMediaLogo
             +LogoSeparator
-            +LogoWrapper()(href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')"): StandnewsLogo
+            +LogoWrapper('Standnews')(href="https://www.thestandnews.com/"): StandnewsLogo
             +LogoSeparator
-            +LogoWrapper()(href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')"): HKCnewsLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ProvideLikerID")
-            a(place="InMedia" href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')" target="_blank") {{ $t('Glossary.InMedia') }}
-            a(place="Standnews" href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')" target="_blank") {{ $t('Glossary.Standnews') }}
-            a(place="HKCnews" href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')" target="_blank") {{ $t('Glossary.HKCnews') }}
+            +LogoWrapper('HKCnews')(href="https://www.hkcnews.com/"): HKCnewsLogo
+          +PlatformDescription('ProvideLikerID')
+            +PlatformDescriptionLink('InMedia')(href="https://www.inmediahk.net/")
+            +PlatformDescriptionLink('Standnews')(href="https://www.thestandnews.com/")
+            +PlatformDescriptionLink('HKCnews')(href="https://www.hkcnews.com/")
 
-        li#embedly.creators-page__platform-list-item
+        +PlatformListItem('embedly')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('Medium')" :alt="$t('Glossary.Medium')"): MediumLogo
-          i18n.creators-page__platform-list-item-text(
-            tag="p"
-            path="CreatorsPage.PlatformDescription.Embedly"
-          )
+            +LogoWrapper('Medium'): MediumLogo
+          +PlatformDescription('Embedly')
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(loading="lazy" src="./medium-demo.webp")
 
-        li#platform-plugin.creators-page__platform-list-item
+        +PlatformListItem('plugin')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('Blogger')" :alt="$t('Glossary.Blogger')"): BloggerLogo
+            +LogoWrapper('Blogger'): BloggerLogo
             +LogoSeparator
-            +LogoWrapper()(:href="getGuideLink('Pixnet')" :alt="$t('Glossary.Pixnet')"): PixnetLogo
-          i18n.creators-page__platform-list-item-text(
-            tag="p"
-            path="CreatorsPage.PlatformDescription.PlatformPlugin"
-          )
-            a(
-              place="Pixnet"
-              :href="getGuideLink('Pixnet')"
-              target="_blank"
-              :alt="$t('Glossary.Pixnet')"
-            )
-              | {{ $t('Glossary.Pixnet') }}
-            a(
-              place="Blogger"
-              :href="getGuideLink('Blogger')"
-              target="_blank"
-              :alt="$t('Glossary.Blogger')"
-            )
-              | {{ $t('Glossary.Blogger') }}
+            +LogoWrapper('Pixnet'): PixnetLogo
+          +PlatformDescription('PlatformPlugin')
+            +PlatformDescriptionLink('Pixnet')
+            +PlatformDescriptionLink('Blogger')
+
       .creators-page__separator
 
     section.py-32
