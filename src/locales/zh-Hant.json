@@ -112,16 +112,26 @@
     },
     "PlatformSelectLabel": "LikeCoin button 支持以下部落格平台",
     "PlatformDescription": {
-      "ConfigLikerID": "於平台設定填上 Liker ID，所有部落格文章自動加入讚賞鍵。",
+      "ConfigLikerID": "於 {Matters}、{Vocus} 及 {Timelog} 設定填上 Liker ID 或 LikeCoin button 的連結，令所有部落格文章自動加入 LikeCoin button。",
       "Embedly": "在部落格文章加以下連結即可嵌入 LikeCoin button。",
       "Plugin": {
-        "Content": "安裝 {wordpress}，所有部落格文章自動加上 LikeCoin button。LikeCoin button 突出創作者的品牌，跟一般的廣告橫幅完全不同，提供最佳的閱讀體驗。",
+        "Content": "安裝 {WordPressPlugin}，所有部落格文章自動加上 LikeCoin button。LikeCoin button 突出創作者的品牌，跟一般的廣告橫幅完全不同，提供最佳的閱讀體驗。",
         "WordPress": "WordPress 外掛"
       },
-      "ProvideLikerID": "媒體特約作者，把 Liker ID 提供給{inmedia}、{standnews}或{hkcnews}等合作平台，即能為文章安裝 LikeCoin button。"
+      "ProvideLikerID": "媒體特約作者，把 Liker ID 提供給{InMedia}、{Standnews}或{HKCnews}等合作平台，即能為文章安裝 LikeCoin button。",
+      "PlatformPlugin": "用社群自行開發的外掛，在痞客邦 {Pixnet} 上加入 LikeCoin button；也可以 <iframe> 的方式在 {Blogger} 或其他自建網站上加入 LikeCoin button"
     },
     "LikerIDPlaceholer": "<你的 Liker ID>",
-    "GuideLinkPrefix": "https://docs.like.co/v/zh/user-guide/likecoin-button/"
+    "GuideLinkBase": "https://docs.like.co/v/zh/user-guide/creator",
+    "GuideLink": {
+      "Blogger": "@:CreatorsPage.GuideLinkBase/blogging-platforms/blogspot",
+      "Matters": "@:CreatorsPage.GuideLinkBase/matters",
+      "Medium": "@:CreatorsPage.GuideLinkBase/blogging-platforms#medium",
+      "Pixnet": "@:CreatorsPage.GuideLinkBase/blogging-platforms#pixnet",
+      "Timelog": "@:CreatorsPage.GuideLinkBase/blogging-platforms/timelog",
+      "Vocus": "@:CreatorsPage.GuideLinkBase/blogging-platforms#vocus",
+      "WordPress": "@:CreatorsPage.GuideLinkBase/wordpress"
+    }
   },
   "FeaturedPage": {
     "headerLabel": "Today"
@@ -148,11 +158,14 @@
     ]
   },
   "Glossary": {
+    "Blogger": "Blogger",
     "HKCnews": "眾新聞",
     "InMedia": "香港獨立媒體網",
     "Matters": "Matters",
     "Medium": "Medium",
+    "Pixnet": "痞客邦",
     "Standnews": "立場新聞",
+    "Timelog": "探路客",
     "Vocus": "方格子",
     "WordPress": "WordPress"
   },

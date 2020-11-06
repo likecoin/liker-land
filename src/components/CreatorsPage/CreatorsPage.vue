@@ -1,17 +1,39 @@
 <template lang="pug">
-  mixin PlatformSelectGridItem(href)
-    a.creators-page__platform-select-grid-item(href=href)&attributes(attributes)
+  mixin LinkWrapper(key)
+    - var alt = `$t('Glossary.${key}')`
+    - var href = `getGuideLink('${key}')`
+    a(
+      :alt=alt
+      :href=href
+    )&attributes(attributes)
+      if block
+        block
+      else
+        | {{ !{alt} }}
+
+  mixin PlatformSelectGridItem(id, key)
+    +LinkWrapper(key).creators-page__platform-select-grid-item(href=id)&attributes(attributes)
       svg(width="100%" viewBox="0 0 255 90")
         foreignObject(width="255" height="90")
           .creators-page__platform-select-grid-item-logo-wrapper
             block
 
+  mixin PlatformListItem(id)
+    li.creators-page__platform-list-item(id=id): block
+
   mixin LogoSeparator
     svg.creators-page__platform-list-item-logo-separator(width="35" height="59" viewBox="0 0 35 59" fill="none")
       path(d="M1.5 58L33.5 1" stroke="#979797")
 
-  mixin LogoWrapper
-    a(target="_blank")&attributes(attributes): block
+  mixin LogoWrapper(key)
+    +LinkWrapper(key)(target="_blank")&attributes(attributes): block
+
+  mixin PlatformDescription(key)
+    - var path = `CreatorsPage.PlatformDescription.${key}`
+    i18n.creators-page__platform-list-item-text(tag="p" path=path): block
+
+  mixin PlatformDescriptionLink(key)
+    +LinkWrapper(key)(target="_blank" place=key)
 
   article.creators-page
 
@@ -28,57 +50,75 @@
     section.creators-page__platform-select
       i18n.creators-page__platform-select-title(tag="div" path="CreatorsPage.PlatformSelectLabel")
       .creators-page__platform-select-grid
-        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Matters')")
-          MattersLogo
-        +PlatformSelectGridItem("#config-liker-id")(:alt="$t('Glossary.Vocus')")
-          VocusLogo
-        +PlatformSelectGridItem("#plugin")(:alt="$t('Glossary.WordPress')")
-          WordPressLogo
-        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.InMedia')")
-          InMediaLogo
-        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.Standnews')")
-          StandnewsLogo
-        +PlatformSelectGridItem("#provide-liker-id")(:alt="$t('Glossary.HKCnews')")
-          HKCnewsLogo
-        +PlatformSelectGridItem("#embedly")(:alt="$t('Glossary.Medium')")
-          MediumLogo
+        +PlatformSelectGridItem("#config-liker-id", "Matters"): MattersLogo
+        +PlatformSelectGridItem("#config-liker-id", "Vocus"): VocusLogo
+        +PlatformSelectGridItem("#wordpress", "WordPress"): WordPressLogo
+        +PlatformSelectGridItem("#provide-liker-id", "InMedia"): InMediaLogo
+        +PlatformSelectGridItem("#provide-liker-id", "Standnews"): StandnewsLogo
+        +PlatformSelectGridItem("#provide-liker-id", "HKCnews"): HKCnewsLogo
+        +PlatformSelectGridItem("#embedly", "Medium"): MediumLogo
+        +PlatformSelectGridItem("#config-liker-id", "Timelog"): TimelogLogo
+        +PlatformSelectGridItem("#plugin", "Pixnet"): PixnetLogo(width="120")
+        +PlatformSelectGridItem("#plugin", "Blogger"): BloggerLogo
 
       .creators-page__separator
 
     section.creators-page__platforms
       ul.creators-page__platform-list(role='list')
-        li#config-liker-id.creators-page__platform-list-item
-          .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('matters')" :alt="$t('Glossary.Matters')"): MattersLogo
-            +LogoSeparator
-            +LogoWrapper()(:href="getGuideLink('vocus')" :alt="$t('Glossary.Vocus')"): VocusLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ConfigLikerID")
 
-        li#plugin.creators-page__platform-list-item
+        +PlatformListItem('config-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('wordpress')" :alt="$t('Glossary.WordPress')"): WordPressLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Plugin.Content")
-            a(place="wordpress" href="https://wordpress.org/plugins/likecoin/" target="_blank")
+            +LogoWrapper('Matters'): MattersLogo
+            +LogoSeparator
+            +LogoWrapper('Vocus'): VocusLogo
+            +LogoSeparator
+            +LogoWrapper('Timelog'): TimelogLogo
+          +PlatformDescription('ConfigLikerID')
+            +PlatformDescriptionLink('Matters')
+            +PlatformDescriptionLink('Vocus')
+            +PlatformDescriptionLink('Timelog')
+
+        +PlatformListItem('wordpress')
+          .creators-page__platform-list-item-logos
+            +LogoWrapper('WordPress'): WordPressLogo
+          +PlatformDescription('Plugin.Content')
+            - var wpAlt = "$t('CreatorsPage.PlatformDescription.Plugin.WordPress')"
+            - var wpText = `\{\{ ${alt} \}\}`
+            a(
+              place="WordPressPlugin"
+              href="https://wordpress.org/plugins/likecoin/"
+              target="_blank"
+              :alt="$t('CreatorsPage.PlatformDescription.Plugin.WordPress')"
+            )
               | {{ $t('CreatorsPage.PlatformDescription.Plugin.WordPress') }}
 
-        li#provide-liker-id.creators-page__platform-list-item
+        +PlatformListItem('provide-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')"): InMediaLogo
+            +LogoWrapper('InMedia')(href="https://www.inmediahk.net/"): InMediaLogo
             +LogoSeparator
-            +LogoWrapper()(href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')"): StandnewsLogo
+            +LogoWrapper('Standnews')(href="https://www.thestandnews.com/"): StandnewsLogo
             +LogoSeparator
-            +LogoWrapper()(href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')"): HKCnewsLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.ProvideLikerID")
-            a(place="inmedia" href="https://www.inmediahk.net/" :alt="$t('Glossary.InMedia')" target="_blank") {{ $t('Glossary.InMedia') }}
-            a(place="standnews" href="https://www.thestandnews.com/" :alt="$t('Glossary.Standnews')" target="_blank") {{ $t('Glossary.Standnews') }}
-            a(place="hkcnews" href="https://www.hkcnews.com/" :alt="$t('Glossary.HKCnews')" target="_blank") {{ $t('Glossary.HKCnews') }}
+            +LogoWrapper('HKCnews')(href="https://www.hkcnews.com/"): HKCnewsLogo
+          +PlatformDescription('ProvideLikerID')
+            +PlatformDescriptionLink('InMedia')(href="https://www.inmediahk.net/")
+            +PlatformDescriptionLink('Standnews')(href="https://www.thestandnews.com/")
+            +PlatformDescriptionLink('HKCnews')(href="https://www.hkcnews.com/")
 
-        li#embedly.creators-page__platform-list-item
+        +PlatformListItem('embedly')
           .creators-page__platform-list-item-logos
-            +LogoWrapper()(:href="getGuideLink('medium')" :alt="$t('Glossary.Medium')"): MediumLogo
-          i18n.creators-page__platform-list-item-text(tag="p" path="CreatorsPage.PlatformDescription.Embedly")
+            +LogoWrapper('Medium'): MediumLogo
+          +PlatformDescription('Embedly')
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(loading="lazy" src="./medium-demo.webp")
+
+        +PlatformListItem('plugin')
+          .creators-page__platform-list-item-logos
+            +LogoWrapper('Blogger'): BloggerLogo
+            +LogoSeparator
+            +LogoWrapper('Pixnet'): PixnetLogo
+          +PlatformDescription('PlatformPlugin')
+            +PlatformDescriptionLink('Pixnet')
+            +PlatformDescriptionLink('Blogger')
 
       .creators-page__separator
 
@@ -120,6 +160,12 @@ export default {
       import(/* webpackChunkName: "svg-creator" */ './logos/hkcnews.svg'),
     MediumLogo: () =>
       import(/* webpackChunkName: "svg-creator" */ './logos/medium.svg'),
+    BloggerLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/blogger.svg'),
+    PixnetLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/pixnet.svg'),
+    TimelogLogo: () =>
+      import(/* webpackChunkName: "svg-creator" */ './logos/timelog.svg'),
   },
   mixins: [utmMixin],
   props: {
@@ -133,13 +179,10 @@ export default {
       return `https://button.like.co/${this.likerId ||
         this.$t('CreatorsPage.LikerIDPlaceholer')}`;
     },
-    guideLinkPrefix() {
-      return this.$t('CreatorsPage.GuideLinkPrefix');
-    },
   },
   methods: {
     getGuideLink(suffix) {
-      return `${this.guideLinkPrefix}${suffix}`;
+      return this.$t(`CreatorsPage.GuideLink.${suffix}`);
     },
   },
 };
@@ -289,17 +332,31 @@ export default {
 
       &-logos {
         display: flex;
+        flex-wrap: wrap;
         min-height: 57px;
         margin-bottom: 40px;
         justify-content: center;
         align-items: center;
+
+        @media screen and (max-width: 480px) {
+          flex-direction: column;
+
+          > a {
+            margin: 12px;
+          }
+        }
       }
 
       &-logo-separator {
-        margin: 0 32px;
+        margin: 0 12px;
+        flex-shrink: 0;
 
         @media screen and (max-width: 767px) {
           margin: 0 8px;
+        }
+
+        @media screen and (max-width: 480px) {
+          display: none;
         }
       }
 
@@ -315,6 +372,12 @@ export default {
         }
       }
     }
+  }
+
+  .app-download-badges .button {
+    min-width: 256px !important;
+
+    font-size: 16px !important;
   }
 }
 </style>
