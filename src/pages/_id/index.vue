@@ -99,7 +99,6 @@
               :column-max-width="300"
               :gutter-width="16"
               :gutter-height="24"
-              :monitor-images-loaded="true"
             )
               StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
                 SuperLikeContentCard(
@@ -109,7 +108,8 @@
                   :super-like-id="item.superLikeID"
                   :super-like-short-id="item.superLikeShortID"
                   :timestamp="item.ts"
-                  @fetched="onFetched"
+                  @fetched="updateLayout"
+                  @image-loaded="updateLayout"
                 )
           .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
             | {{ $t('PortfolioPage.EmptyLabel') }}
@@ -199,7 +199,7 @@ export default {
       );
       this.items = list;
     },
-    onFetched() {
+    updateLayout() {
       if (this.$refs.stack) {
         this.$refs.stack.reflow();
       }
