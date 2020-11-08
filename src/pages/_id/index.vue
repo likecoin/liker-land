@@ -2,7 +2,7 @@
   .user-portfolio-page
     PageHeader
       template
-        SiteNavBar.text-white.bg-like-green
+        SiteNavBar.text-white.bg-like-green.pb-32
 
     main.page-content
       aside.page-content__left
@@ -42,7 +42,7 @@
                 | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
 
             footer.user-info-panel__footer.user-info-panel__footer--desktop
-              .pt-16.px-24.pb-32
+              .px-24.py-16
                 +CivicLikerSinceLabel.px-4
 
             footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto

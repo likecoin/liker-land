@@ -121,7 +121,6 @@ export default {
     padding: 0 8px;
 
     font-family: Source Sans Pro, Arial, sans-serif;
-    font-weight: 600;
     font-size: 14px;
   }
 
@@ -135,6 +134,11 @@ export default {
     color: #4a4a4a;
 
     background-color: #9b9b9b33;
+  }
+
+  &--primary &__title,
+  &--secondary &__title {
+    font-weight: 600;
   }
 
   &--translucent-light {
