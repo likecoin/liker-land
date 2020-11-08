@@ -133,6 +133,8 @@ import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
 
+const ITEM_PER_FETCH = 20;
+
 export default {
   layout: 'desktop',
   components: {
@@ -148,6 +150,7 @@ export default {
   data() {
     return {
       items: [],
+      state: 'idle',
       tab: 'works',
       isShowAbout: false,
     };
@@ -188,20 +191,42 @@ export default {
   },
   mounted() {
     this.refreshBookmarkList();
-    this.fetchUserSuperLikes();
+    this.fetchUserSuperLikes().then(this.onScroll);
+    window.addEventListener('scroll', this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
     ...mapActions(['refreshBookmarkList', 'followAuthor', 'unfollowAuthor']),
 
-    async fetchUserSuperLikes() {
-      const { list } = await this.$api.$get(
-        getFetchUserSuperLikeAPI(this.user.user)
-      );
-      this.items = list;
+    async fetchUserSuperLikes({ before } = {}) {
+      try {
+        this.state = before ? 'pending-more' : 'pending';
+        const { list } = await this.$api.$get(
+          getFetchUserSuperLikeAPI(this.user.user),
+          { params: { before, limit: ITEM_PER_FETCH } }
+        );
+        this.items.push(...list);
+        this.state = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.state = 'error';
+      }
     },
     updateLayout() {
       if (this.$refs.stack) {
         this.$refs.stack.reflow();
+      }
+    },
+    onScroll() {
+      const { innerHeight: windowHeight, pageYOffset: scrollY } = window;
+      const { scrollHeight } = document.documentElement;
+      if (this.state === 'done' && scrollY >= scrollHeight - windowHeight * 2) {
+        this.fetchUserSuperLikes({
+          before: this.items[this.items.length - 1].ts,
+        });
       }
     },
     async onToggleFollow() {
