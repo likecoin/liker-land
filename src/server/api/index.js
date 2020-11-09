@@ -79,6 +79,11 @@ router.get('/healthz', (_, res) => {
   res.sendStatus(200);
 });
 router.use((err, req, res, next) => {
+  // return error format as per API
+  if (err.response && err.response.status) {
+    const { status, data, statusText } = err.response;
+    return res.status(status).send(data || statusText);
+  }
   const msg = (err.response && err.response.data) || err.message || err;
   console.error(msg); // eslint-disable-line no-console
   if (res.headersSent) {

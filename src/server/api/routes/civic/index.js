@@ -20,13 +20,7 @@ router.get('/civic/trial/events/:id', async (req, res, next) => {
     const { data } = await apiCivicLikerTrialEventById(id);
     res.json(data);
   } catch (err) {
-    // return error format as per API
-    if (err.response && err.response.status) {
-      const { status, data, statusText } = err.response;
-      res.status(status).send(data || statusText);
-    } else {
-      next(err);
-    }
+    next(err);
   }
 });
 
@@ -40,13 +34,7 @@ router.post('/civic/trial/events/:eventId/join', async (req, res, next) => {
     const { data } = await apiCivicLikerJoinTrialEventById(eventId, req);
     res.json(data);
   } catch (err) {
-    // return error format as per API
-    if (err.response && err.response.status) {
-      const { status, data, statusText } = err.response;
-      res.status(status).send(data || statusText);
-    } else {
-      next(err);
-    }
+    next(err);
   }
 });
 
