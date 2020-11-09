@@ -17,6 +17,7 @@ config.LIKEPAY_HOOK = process.env.LIKEPAY_HOOK;
 config.STRIPE_PRIVATE_KEY = process.env.STRIPE_PRIVATE_KEY;
 config.STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 config.STRIPE_PLAN_ID = process.env.STRIPE_PLAN_ID;
+config.STRIPE_CIVIC_V2_PRICE_ID = process.env.STRIPE_CIVIC_V2_PRICE_ID;
 
 config.EXTERNAL_URL = process.env.EXTERNAL_URL;
 
