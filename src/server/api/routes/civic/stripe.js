@@ -1,6 +1,10 @@
 const { Router } = require('express');
 const { userCollection } = require('../../util/firebase');
-const { stripe, STRIPE_PLAN_ID } = require('../../util/stripe');
+const {
+  stripe,
+  STRIPE_PLAN_ID,
+  STRIPE_CIVIC_V2_PRICE_ID,
+} = require('../../util/stripe');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 
 const { EXTERNAL_URL } = require('../../util/api');
@@ -69,8 +73,10 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       utm_medium: utmMedium,
       utm_source: utmSource,
       quantity: quantityString,
+      civic_liker_version: civicVersionQuery,
     } = req.query;
 
+    const civicLikerVersion = civicVersionQuery === '2' ? 2 : 1;
     let quantity = 1;
     const parsedQuantity = parseInt(quantityString, 10);
     if (parsedQuantity && parsedQuantity > 0) {
@@ -110,7 +116,8 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       stripePayload.mode = 'subscription';
       stripePayload.line_items = [
         {
-          price: STRIPE_PLAN_ID,
+          price:
+            civicLikerVersion === 2 ? STRIPE_CIVIC_V2_PRICE_ID : STRIPE_PLAN_ID,
           quantity,
         },
       ];
