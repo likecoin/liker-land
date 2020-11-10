@@ -33,6 +33,9 @@
             tag="div"
           />
           {{ getAuthorQuantity(id) }}
+          <nuxt-link :to="{ name: 'settings-support-users-id', params: { id } }">
+            Update
+          </nuxt-link>
         </li>
       </ul>
       <div
@@ -45,7 +48,7 @@
       <div><a :href="getStripeBillingPortalAPI">manage info and history</a></div>
       <div>{{ maskedCardNumber }}</div>
       <div>{{ getUserSubscriptionInfo.currentPeriodEndString }}</div>
-      <div>{{ `${getUserSubscriptionInfo.quantity * 5} USD / Month` }}</div>
+      <div>Will be effective on next billing date: {{ `${getUserSubscriptionInfo.quantity * 5} USD / Month` }}</div>
     </div>
   </div>
 </template>
