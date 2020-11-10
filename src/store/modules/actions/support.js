@@ -3,8 +3,13 @@ import * as api from '@/util/api';
 
 export async function fetchCivicSupportingUsers({ commit }) {
   const { list } = await this.$api.$get(api.getCivicSupportingUserListAPI());
-  commit(types.SUPPORT_SET_SUPPORTING_USERS, list);
-  return { list };
+  const map = list.reduce((acc, cur) => {
+    const { id, ...data } = cur;
+    acc[id] = data;
+    return acc;
+  }, {});
+  commit(types.SUPPORT_SET_SUPPORTING_USERS, map);
+  return map;
 }
 
 export async function updateCivicSupportQuantity(
