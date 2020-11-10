@@ -163,7 +163,15 @@ export default {
     },
 
     works() {
-      return this.items.filter(item => item.user === this.user.user);
+      const works = [];
+      const workURLs = new Set();
+      this.items.forEach(item => {
+        if (item.user === this.user.user && !workURLs.has(item.referrer)) {
+          works.push(item);
+          workURLs.add(item.referrer);
+        }
+      });
+      return works;
     },
     filteredItems() {
       return this.tab === 'works' ? this.works : this.items;
