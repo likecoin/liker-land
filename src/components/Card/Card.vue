@@ -9,6 +9,7 @@
       v-if="imageSrc"
       class="card__media card__media--image"
       :src="imageSrc"
+      @load="$emit('image-loaded')"
     >
     <div class="card__body">
       <h1

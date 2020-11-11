@@ -2,7 +2,7 @@
   .user-portfolio-page
     PageHeader
       template
-        SiteNavBar.text-white.bg-like-green
+        SiteNavBar.text-white.bg-like-green.pb-32
 
     main.page-content
       aside.page-content__left
@@ -42,7 +42,7 @@
                 | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
 
             footer.user-info-panel__footer.user-info-panel__footer--desktop
-              .pt-16.px-24.pb-32
+              .px-24.py-16
                 +CivicLikerSinceLabel.px-4
 
             footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto
@@ -99,7 +99,6 @@
               :column-max-width="300"
               :gutter-width="16"
               :gutter-height="24"
-              :monitor-images-loaded="true"
             )
               StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
                 SuperLikeContentCard(
@@ -109,7 +108,8 @@
                   :super-like-id="item.superLikeID"
                   :super-like-short-id="item.superLikeShortID"
                   :timestamp="item.ts"
-                  @fetched="onFetched"
+                  @fetched="updateLayout"
+                  @image-loaded="updateLayout"
                 )
           .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
             | {{ $t('PortfolioPage.EmptyLabel') }}
@@ -133,6 +133,8 @@ import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
 
+const ITEM_PER_FETCH = 20;
+
 export default {
   layout: 'desktop',
   components: {
@@ -148,6 +150,7 @@ export default {
   data() {
     return {
       items: [],
+      state: 'idle',
       tab: 'works',
       isShowAbout: false,
     };
@@ -160,7 +163,15 @@ export default {
     },
 
     works() {
-      return this.items.filter(item => item.user === this.user.user);
+      const works = [];
+      const workURLs = new Set();
+      this.items.forEach(item => {
+        if (item.user === this.user.user && !workURLs.has(item.referrer)) {
+          works.push(item);
+          workURLs.add(item.referrer);
+        }
+      });
+      return works;
     },
     filteredItems() {
       return this.tab === 'works' ? this.works : this.items;
@@ -188,20 +199,42 @@ export default {
   },
   mounted() {
     this.refreshBookmarkList();
-    this.fetchUserSuperLikes();
+    this.fetchUserSuperLikes().then(this.onScroll);
+    window.addEventListener('scroll', this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
     ...mapActions(['refreshBookmarkList', 'followAuthor', 'unfollowAuthor']),
 
-    async fetchUserSuperLikes() {
-      const { list } = await this.$api.$get(
-        getFetchUserSuperLikeAPI(this.user.user)
-      );
-      this.items = list;
+    async fetchUserSuperLikes({ before } = {}) {
+      try {
+        this.state = before ? 'pending-more' : 'pending';
+        const { list } = await this.$api.$get(
+          getFetchUserSuperLikeAPI(this.user.user),
+          { params: { before, limit: ITEM_PER_FETCH } }
+        );
+        this.items.push(...list);
+        this.state = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.state = 'error';
+      }
     },
-    onFetched() {
+    updateLayout() {
       if (this.$refs.stack) {
         this.$refs.stack.reflow();
+      }
+    },
+    onScroll() {
+      const { innerHeight: windowHeight, pageYOffset: scrollY } = window;
+      const { scrollHeight } = document.documentElement;
+      if (this.state === 'done' && scrollY >= scrollHeight - windowHeight * 2) {
+        this.fetchUserSuperLikes({
+          before: this.items[this.items.length - 1].ts,
+        });
       }
     },
     async onToggleFollow() {

@@ -13,6 +13,7 @@
       :title="internalTitle"
       :description="internalDescription"
       :image-src="internalCoverSrc"
+      @image-loaded="$emit('image-loaded')"
     )
       template(#footer-left)
         NuxtLink(
