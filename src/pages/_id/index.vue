@@ -76,7 +76,7 @@
             :to="{ name: 'civic', query: { from: user.user } }"
           )
 
-          nav.user-portfolio-page__tab-bar
+          nav.user-portfolio-page__tab-bar(v-if="items.length > 0 && works.length > 0")
             Button.user-portfolio-page__tab-bar-item(
               :class="{ 'user-portfolio-page__tab-bar-item--active': tab === 'works' }"
               :title="$t('PortfolioPage.Tab.Works')"
@@ -150,7 +150,9 @@ export default {
   data() {
     return {
       items: [],
-      state: 'idle',
+      itemsState: 'idle',
+      works: [],
+      worksState: 'idle',
       tab: 'works',
       isShowAbout: false,
     };
@@ -160,18 +162,6 @@ export default {
 
     likePayURL() {
       return getLikeCoURL(`/${this.user.user}`);
-    },
-
-    works() {
-      const works = [];
-      const workURLs = new Set();
-      this.items.forEach(item => {
-        if (item.user === this.user.user && !workURLs.has(item.referrer)) {
-          works.push(item);
-          workURLs.add(item.referrer);
-        }
-      });
-      return works;
     },
     filteredItems() {
       return this.tab === 'works' ? this.works : this.items;
@@ -199,7 +189,13 @@ export default {
   },
   mounted() {
     this.refreshBookmarkList();
-    this.fetchUserSuperLikes().then(this.onScroll);
+    Promise.all([this.fetchUserWorks(), this.fetchUserSuperLikes()]).then(
+      () => {
+        if (this.works.length === 0 && this.items.length > 0) {
+          this.tab = 'superlikes';
+        }
+      }
+    );
     window.addEventListener('scroll', this.onScroll);
   },
   beforeDestroy() {
@@ -208,19 +204,34 @@ export default {
   methods: {
     ...mapActions(['refreshBookmarkList', 'followAuthor', 'unfollowAuthor']),
 
+    async fetchUserWorks({ before } = {}) {
+      try {
+        this.worksState = before ? 'pending-more' : 'pending';
+        const { list } = await this.$api.$get(
+          getFetchUserSuperLikeAPI(this.user.user),
+          { params: { before, limit: ITEM_PER_FETCH, filter: 'self' } }
+        );
+        this.works.push(...list);
+        this.worksState = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.worksState = 'error';
+      }
+    },
     async fetchUserSuperLikes({ before } = {}) {
       try {
-        this.state = before ? 'pending-more' : 'pending';
+        this.itemsState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
           getFetchUserSuperLikeAPI(this.user.user),
           { params: { before, limit: ITEM_PER_FETCH } }
         );
         this.items.push(...list);
-        this.state = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
+        this.itemsState = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
-        this.state = 'error';
+        this.itemsState = 'error';
       }
     },
     updateLayout() {
@@ -231,10 +242,18 @@ export default {
     onScroll() {
       const { innerHeight: windowHeight, pageYOffset: scrollY } = window;
       const { scrollHeight } = document.documentElement;
-      if (this.state === 'done' && scrollY >= scrollHeight - windowHeight * 2) {
-        this.fetchUserSuperLikes({
-          before: this.items[this.items.length - 1].ts,
-        });
+      if (scrollY >= scrollHeight - windowHeight * 2) {
+        if (this.tab === 'works') {
+          if (this.worksState === 'done') {
+            this.fetchUserWorks({
+              before: this.works[this.works.length - 1].ts,
+            });
+          }
+        } else if (this.itemsState === 'done') {
+          this.fetchUserSuperLikes({
+            before: this.items[this.items.length - 1].ts,
+          });
+        }
       }
     },
     async onToggleFollow() {
