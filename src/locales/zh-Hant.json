@@ -270,7 +270,10 @@
       "Works": "作品",
       "SuperLikes": "已 Super Like 內容"
     },
-    "EmptyLabel": "沒有作品"
+    "EmptyLabel": "沒有作品",
+    "Og": {
+      "Title": "{name}的個人專頁"
+    }
   },
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",

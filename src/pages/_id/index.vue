@@ -187,6 +187,27 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
+  head() {
+    const title = this.$t('PortfolioPage.Og.Title', {
+      name: this.user.displayName,
+    });
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: this.user.avatar,
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+    };
+  },
   mounted() {
     this.refreshBookmarkList();
     this.fetchReaderIndex();
