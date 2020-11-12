@@ -189,6 +189,7 @@ export default {
   },
   mounted() {
     this.refreshBookmarkList();
+    this.fetchReaderIndex();
     Promise.all([this.fetchUserWorks(), this.fetchUserSuperLikes()]).then(
       () => {
         if (this.works.length === 0 && this.items.length > 0) {
@@ -202,7 +203,12 @@ export default {
     window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
-    ...mapActions(['refreshBookmarkList', 'followAuthor', 'unfollowAuthor']),
+    ...mapActions([
+      'fetchReaderIndex',
+      'refreshBookmarkList',
+      'followAuthor',
+      'unfollowAuthor',
+    ]),
 
     async fetchUserWorks({ before } = {}) {
       try {
