@@ -248,14 +248,17 @@
   },
   "PortfolioPage": {
     "About": "About",
-    "CivicLikerSince": "自 {date} 成為讚賞公民",
+    "CivicLikerSince": "Became Civic Liker since {date}",
     "BecomeCivicLiker": "Become a Civic Liker",
     "LikePay": "Like Pay",
     "Tab": {
       "Works": "Works",
       "SuperLikes": "Super Likes"
     },
-    "EmptyLabel": "No work"
+    "EmptyLabel": "No content",
+    "Og": {
+      "Title": "{name}'s Portfolio"
+    }
   },
   "SettingsCivicPage": {
     "title": "@:SettingsPage.title > @:civicLiker",
