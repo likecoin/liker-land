@@ -189,7 +189,7 @@ export default {
   },
   head() {
     const title = this.$t('PortfolioPage.Og.Title', {
-      name: this.user.displayName,
+      name: this.user.displayName.trim(),
     });
     return {
       title,
