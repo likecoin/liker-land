@@ -31,6 +31,14 @@ const OAUTH_SCOPE_REQUIRED = [
   'write:follow',
 ];
 
+const DEFAULT_FOLLOW_IDS = [
+  'foundation',
+  'hkcitizennews',
+  'inmediahknet',
+  'standnews',
+  'hi176-matters',
+];
+
 module.exports = {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
@@ -38,4 +46,5 @@ module.exports = {
   ONE_DAY_IN_MS,
   OAUTH_SCOPE_REQUEST,
   OAUTH_SCOPE_REQUIRED,
+  DEFAULT_FOLLOW_IDS,
 };
