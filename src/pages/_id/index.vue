@@ -91,7 +91,7 @@
             )
 
         .user-portfolio-page__grid
-          ClientOnly(v-if="filteredItems.length > 0")
+          ClientOnly(v-if="isLoading || filteredItems.length > 0")
             Stack(
               :key="tab"
               ref="stack"
@@ -100,17 +100,26 @@
               :gutter-width="16"
               :gutter-height="24"
             )
-              StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
-                SuperLikeContentCard(
-                  :preset="tab === 'works' ? 'work' : 'default'"
-                  :referrer="item.referrer"
-                  :author-id="item.user"
-                  :super-like-id="item.superLikeID"
-                  :super-like-short-id="item.superLikeShortID"
-                  :timestamp="item.ts"
-                  @fetched="updateLayout"
-                  @image-loaded="updateLayout"
-                )
+              template(v-if="isLoading")
+                StackItem(v-for="i in 10" :key="`${i}`")
+                  Card
+                    Placeholder.h-16(:class="`w-${i % 3 + 2}/5`")
+                    Placeholder.h-16.mt-12.w-full
+                    Placeholder.h-16.mt-8.w-full(v-if="i % 2")
+                    Placeholder.h-16.mt-8.w-full(v-if="i % 3")
+                    Placeholder.h-16.mt-8(:class="`w-${i % 3 + 1}/5`")
+              template(v-else)
+                StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
+                  SuperLikeContentCard(
+                    :preset="tab === 'works' ? 'work' : 'default'"
+                    :referrer="item.referrer"
+                    :author-id="item.user"
+                    :super-like-id="item.superLikeID"
+                    :super-like-short-id="item.superLikeShortID"
+                    :timestamp="item.ts"
+                    @fetched="updateLayout"
+                    @image-loaded="updateLayout"
+                  )
           .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
             | {{ $t('PortfolioPage.EmptyLabel') }}
 </template>
@@ -125,24 +134,29 @@ import { checkUserNameValid } from '~/util/user';
 
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
+import Card from '~/components/Card/Card';
 import Collapse from '~/components/Collapse/Collapse';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
+import Placeholder from '~/components/Placeholder/Placeholder';
 import SuperLikeContentCard from '~/components/SuperLikeContentCard';
 import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
 
 const ITEM_PER_FETCH = 20;
+const LOADING_STATES = ['idle', 'pending'];
 
 export default {
   layout: 'desktop',
   components: {
     Button,
     ButtonGroup,
+    Card,
     Collapse,
     Identity,
     PageHeader,
+    Placeholder,
     SuperLikeContentCard,
     SiteNavBar,
   },
@@ -168,6 +182,12 @@ export default {
     },
     formattedCivicLikerSince() {
       return dateFormat(new Date(this.user.civicLikerSince), 'YYYY/MM/DD');
+    },
+    isLoading() {
+      return (
+        LOADING_STATES.includes(this.itemsState) ||
+        LOADING_STATES.includes(this.worksState)
+      );
     },
   },
   async asyncData({ route, $api, error }) {

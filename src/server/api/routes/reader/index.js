@@ -122,13 +122,14 @@ router.get('/reader/superlike/followed', async (req, res, next) => {
   }
 });
 
-router.get('/reader/user/:user/superlike', async (req, res, next) => {
+router.get('/reader/users/:user/superlike', async (req, res, next) => {
   try {
-    const { after, before, limit = 20 } = req.query;
+    const { after, before, limit = 20, filter } = req.query;
     const { data } = await apiFetchUserSuperlike(req.params.user, {
       after,
       before,
       limit,
+      filter,
     });
     let { list } = data;
     list = filterSuperLikeList(list);
