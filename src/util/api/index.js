@@ -53,7 +53,7 @@ export const getSuperLikeRedirectLink = superLikeID =>
 
 export const getFetchLikedUserApi = () => `/api/reader/index`;
 export const getFetchUserSuperLikeAPI = user =>
-  `/api/reader/user/${user}/superlike`;
+  `/api/reader/users/${user}/superlike`;
 export const getFollowedUserAPI = user => `/api/reader/follow/user/${user}`;
 export const getFetchReaderBookmarkAPI = () => '/api/reader/bookmark';
 export const getUpdateReaderBookmarkAPI = url =>
