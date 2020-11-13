@@ -104,12 +104,13 @@ const apiFetchFollowedSuperLikes = (users, { limit, after, before }) =>
       },
     }
   );
-const apiFetchUserSuperlike = (user, { limit, after, before }) =>
+const apiFetchUserSuperlike = (user, { limit, after, before, filter }) =>
   axios.get(`${LIKECOIN_API_BASE}/like/share/user/${user}/latest`, {
     params: {
       limit,
       after,
       before,
+      filter,
     },
   });
 const apiFetchSuggestedArticles = () =>
