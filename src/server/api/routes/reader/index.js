@@ -6,7 +6,11 @@ const {
   apiFetchFollowedUser,
   apiFetchFollowedSuperLikes,
 } = require('../../util/api');
-const { HALF_DAY_IN_S, ONE_DAY_IN_MS } = require('../../constant');
+const {
+  HALF_DAY_IN_S,
+  ONE_DAY_IN_MS,
+  DEFAULT_FOLLOW_IDS,
+} = require('../../constant');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const { handleRestfulError } = require('../../middleware/error');
 const follow = require('./follow');
@@ -72,7 +76,19 @@ router.get('/reader/works/suggest', async (req, res, next) => {
   try {
     const { data } = await apiFetchSuggestedArticles();
     let list = data.editorial.concat(data.pick); // only get editorial and pick list, ignore mostLike
-    list = list.map(url => ({ referrer: url }));
+    if (!list || !list.length) {
+      // HACK: fetch superlike feed from default follow if editorial bugged
+      const { data: superLikeData } = await apiFetchFollowedSuperLikes(
+        DEFAULT_FOLLOW_IDS,
+        {
+          limit: 20,
+        }
+      );
+      list = filterSuperLikeList(superLikeData.list);
+      list.sort((a, b) => b.ts - a.ts).splice(20);
+    } else {
+      list = list.map(url => ({ referrer: url }));
+    }
     res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
   } catch (err) {
