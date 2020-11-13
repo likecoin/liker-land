@@ -91,7 +91,7 @@
             )
 
         .user-portfolio-page__grid
-          ClientOnly(v-if="isLoading || filteredItems.length > 0")
+          ClientOnly(v-if="isLoading || activeItems.length > 0")
             Stack(
               :key="tab"
               ref="stack"
@@ -109,7 +109,7 @@
                     Placeholder.h-16.mt-8.w-full(v-if="i % 3")
                     Placeholder.h-16.mt-8(:class="`w-${i % 3 + 1}/5`")
               template(v-else)
-                StackItem(v-for="(item, i) in filteredItems" :key="item.superLikeID")
+                StackItem(v-for="(item, i) in activeItems" :key="item.superLikeID")
                   SuperLikeContentCard(
                     :preset="tab === 'works' ? 'work' : 'default'"
                     :referrer="item.referrer"
@@ -147,6 +147,18 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 const ITEM_PER_FETCH = 20;
 const LOADING_STATES = ['idle', 'pending'];
 
+function filterItems(inputItems) {
+  const items = [];
+  const urls = new Set();
+  inputItems.forEach(item => {
+    if (!urls.has(item.referrer)) {
+      items.push(item);
+      urls.add(item.referrer);
+    }
+  });
+  return items;
+}
+
 export default {
   layout: 'desktop',
   components: {
@@ -177,8 +189,14 @@ export default {
     likePayURL() {
       return getLikeCoURL(`/${this.user.user}`);
     },
+    filteredWorks() {
+      return filterItems(this.works);
+    },
     filteredItems() {
-      return this.tab === 'works' ? this.works : this.items;
+      return filterItems(this.items);
+    },
+    activeItems() {
+      return this.tab === 'works' ? this.filteredWorks : this.filteredItems;
     },
     formattedCivicLikerSince() {
       return dateFormat(new Date(this.user.civicLikerSince), 'YYYY/MM/DD');
