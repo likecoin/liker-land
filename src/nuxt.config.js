@@ -165,7 +165,11 @@ const nuxtConfig = {
         'script-src': [
           "'self'",
           "'unsafe-inline'", // ignored by browser with sha support
-          'www.google-analytics.com',
+          '*.google-analytics.com',
+          'www.googletagmanager.com',
+          'www.google.com',
+          'googleads.g.doubleclick.net',
+          'www.googleadservices.com',
           'connect.facebook.net',
           'use.typekit.net',
           'https://js.stripe.com',
@@ -182,6 +186,7 @@ const nuxtConfig = {
           'https://hooks.stripe.com',
           'admin.typeform.com',
           'civicliker.typeform.com',
+          'bid.g.doubleclick.net',
         ],
         'connect-src': [
           "'self'",
