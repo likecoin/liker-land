@@ -9,7 +9,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { logTrackerEvent, logConverstion } from '~/util/EventLogger';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'Redirect',
@@ -35,7 +35,6 @@ export default {
             'RegisterSignUpSuccess',
             1
           );
-          logConverstion(this, 'Register');
         } else {
           logTrackerEvent(
             this,
