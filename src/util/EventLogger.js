@@ -57,6 +57,20 @@ export function updateCrispUser(vue, { user, crispToken, displayName, email }) {
   }
 }
 
+export function logConverstion(vue, event) {
+  if (vue.$gtag && process.env.ADWORDS_TRACKING_ID) {
+    let target;
+    if (event === 'Register') {
+      target = `${process.env.ADWORDS_TRACKING_ID}/-lf1CPOZ3ekBENTZvPwB`;
+    }
+    if (target) {
+      vue.$gtag('event', 'conversion', {
+        send_to: target,
+      });
+    }
+  }
+}
+
 export function logTrackerEvent(vue, category, action, label, value) {
   try {
     if (vue.$crisp) {
