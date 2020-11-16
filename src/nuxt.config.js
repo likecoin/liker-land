@@ -10,6 +10,8 @@ const {
   CRISP_WEBSITE_ID,
   STRIPE_PUBLIC_KEY,
   FACEBOOK_PIXEL_ID,
+  GA_TRACKING_ID,
+  ADWORDS_TRACKING_ID,
 } = process.env;
 
 const nuxtConfig = {
@@ -19,6 +21,8 @@ const nuxtConfig = {
     CRISP_WEBSITE_ID,
     STRIPE_PUBLIC_KEY,
     FACEBOOK_PIXEL_ID,
+    GA_TRACKING_ID,
+    ADWORDS_TRACKING_ID,
     SITE_NAME: siteName,
   },
   mode: 'universal',
@@ -212,6 +216,7 @@ const nuxtConfig = {
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
+    { src: '~/plugins/gtag.client.js', mode: 'client' },
     { src: '~/plugins/geoip.server.js', mode: 'server' },
     // { src: '~/plugins/experiment.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
@@ -228,7 +233,6 @@ const nuxtConfig = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/google-analytics',
     '@nuxtjs/sentry',
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
@@ -241,14 +245,6 @@ const nuxtConfig = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
-  },
-  googleAnalytics: {
-    id: process.env.GA_TRACKING_ID || '',
-    dev: false, // disable module for nuxt dev
-    debug: {
-      sendHitTask: true,
-    },
-    disabled: () => !!((window && window.doNotTrack) || (navigator && navigator.doNotTrack)), // eslint-disable-line no-undef
   },
 
   /**
