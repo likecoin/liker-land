@@ -10,6 +10,8 @@ const {
   CRISP_WEBSITE_ID,
   STRIPE_PUBLIC_KEY,
   FACEBOOK_PIXEL_ID,
+  GA_TRACKING_ID,
+  ADWORDS_TRACKING_ID,
 } = process.env;
 
 const nuxtConfig = {
@@ -19,6 +21,8 @@ const nuxtConfig = {
     CRISP_WEBSITE_ID,
     STRIPE_PUBLIC_KEY,
     FACEBOOK_PIXEL_ID,
+    GA_TRACKING_ID,
+    ADWORDS_TRACKING_ID,
     SITE_NAME: siteName,
   },
   mode: 'universal',
@@ -161,7 +165,11 @@ const nuxtConfig = {
         'script-src': [
           "'self'",
           "'unsafe-inline'", // ignored by browser with sha support
-          'www.google-analytics.com',
+          '*.google-analytics.com',
+          'www.googletagmanager.com',
+          'www.google.com',
+          'googleads.g.doubleclick.net',
+          'www.googleadservices.com',
           'connect.facebook.net',
           'use.typekit.net',
           'https://js.stripe.com',
@@ -178,6 +186,7 @@ const nuxtConfig = {
           'https://hooks.stripe.com',
           'admin.typeform.com',
           'civicliker.typeform.com',
+          'bid.g.doubleclick.net',
         ],
         'connect-src': [
           "'self'",
@@ -212,6 +221,7 @@ const nuxtConfig = {
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
+    { src: '~/plugins/gtag.client.js', mode: 'client' },
     { src: '~/plugins/geoip.server.js', mode: 'server' },
     // { src: '~/plugins/experiment.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
@@ -228,7 +238,6 @@ const nuxtConfig = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/google-analytics',
     '@nuxtjs/sentry',
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
@@ -241,14 +250,6 @@ const nuxtConfig = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
-  },
-  googleAnalytics: {
-    id: process.env.GA_TRACKING_ID || '',
-    dev: false, // disable module for nuxt dev
-    debug: {
-      sendHitTask: true,
-    },
-    disabled: () => !!((window && window.doNotTrack) || (navigator && navigator.doNotTrack)), // eslint-disable-line no-undef
   },
 
   /**

@@ -17,10 +17,10 @@ function digestMessage(message) {
 export async function setTrackerUser(vue, { user, email }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
   try {
-    if (vue.$ga) {
+    if (vue.$gtag) {
       let hashedId = await digestMessage(user);
       hashedId = hexString(hashedId);
-      vue.$ga.set('userId', hashedId);
+      vue.$gtag.set({ userId: hashedId });
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
@@ -57,6 +57,20 @@ export function updateCrispUser(vue, { user, crispToken, displayName, email }) {
   }
 }
 
+export function logConverstion(vue, event) {
+  if (vue.$gtag && process.env.ADWORDS_TRACKING_ID) {
+    let target;
+    if (event === 'Register') {
+      target = `${process.env.ADWORDS_TRACKING_ID}/-lf1CPOZ3ekBENTZvPwB`;
+    }
+    if (target) {
+      vue.$gtag('event', 'conversion', {
+        send_to: target,
+      });
+    }
+  }
+}
+
 export function logTrackerEvent(vue, category, action, label, value) {
   try {
     if (vue.$crisp) {
@@ -68,12 +82,11 @@ export function logTrackerEvent(vue, category, action, label, value) {
     }
     // do not track
     if (window.doNotTrack || navigator.doNotTrack) return;
-    if (vue.$ga) {
-      vue.$ga.event({
-        eventCategory: category,
-        eventAction: action,
-        eventLabel: label.substring(0, 499),
-        eventValue: value,
+    if (vue.$gtag) {
+      vue.$gtag.event(action, {
+        event_category: category,
+        event_label: label.substring(0, 499),
+        value,
       });
     }
     if (window.fbq) {
