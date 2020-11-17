@@ -6,19 +6,16 @@
 
     <SlidingMenu ref="slidingMenu" />
 
-    <SmartAppBanner />
   </div>
 </template>
 
 <script>
 import DialogContainer from '~/components/DialogContainer';
-import SmartAppBanner from '~/components/SmartAppBanner';
 import slidingMenuMixin from '~/mixins/sliding-menu';
 
 export default {
   components: {
     DialogContainer,
-    SmartAppBanner,
   },
   mixins: [slidingMenuMixin],
 };
