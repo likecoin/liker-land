@@ -48,7 +48,6 @@
           >{{ titleForCivicMenuItem }}</NuxtLink>
 
           <NuxtLink
-            v-if="getUserId"
             class="btn btn--outlined btn--dark btn--block"
             :to="{ name: 'creators' }"
           >{{ $t('SlidingMenu.creator') }}</NuxtLink>
