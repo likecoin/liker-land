@@ -82,7 +82,7 @@ export function logTrackerEvent(vue, category, action, label, value) {
           target = `${process.env.ADWORDS_TRACKING_ID}/XomhCOjO5OkBENTZvPwB`;
         }
         if (target) {
-          vue.$gtag('event', 'conversion', {
+          vue.$gtag.event('conversion', {
             send_to: target,
           });
         }
