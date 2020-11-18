@@ -131,6 +131,10 @@
       "Timelog": "@:CreatorsPage.GuideLinkBase/blogging-platforms/timelog",
       "Vocus": "@:CreatorsPage.GuideLinkBase/blogging-platforms#vocus",
       "WordPress": "@:CreatorsPage.GuideLinkBase/wordpress"
+    },
+    "CTAButton": {
+      "Register": "立即註冊",
+      "Civic": "成為讚賞公民"
     }
   },
   "FeaturedPage": {

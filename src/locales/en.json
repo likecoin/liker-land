@@ -131,6 +131,10 @@
       "Timelog": "@:CreatorsPage.GuideLinkBase/content-platforms/timelog",
       "Vocus": "@:CreatorsPage.GuideLinkBase/content-platforms/vocus",
       "WordPress": "@:CreatorsPage.GuideLinkBase/self-host/wordpress"
+    },
+    "CTAButton": {
+      "Register": "Register now",
+      "Civic": "Become a Civic Liker"
     }
   },
   "FeaturedPage": {
