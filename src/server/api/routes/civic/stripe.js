@@ -68,7 +68,15 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       utm_content: utmContent,
       utm_medium: utmMedium,
       utm_source: utmSource,
+      quantity: quantityString,
     } = req.query;
+
+    let quantity = 1;
+    const parsedQuantity = parseInt(quantityString, 10);
+    if (parsedQuantity && parsedQuantity > 0) {
+      quantity = parsedQuantity;
+    }
+
     // start a new checkout session
     const metadata = { userId: req.session.user };
     if (from) metadata.from = from.substring(0, 32);
@@ -103,7 +111,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       stripePayload.line_items = [
         {
           price: STRIPE_PLAN_ID,
-          quantity: 1,
+          quantity,
         },
       ];
       stripePayload.subscription_data = { metadata };
