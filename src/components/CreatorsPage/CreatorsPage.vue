@@ -122,18 +122,10 @@
 
       .creators-page__separator
 
-    section.py-32
-      .center(class="phone:mt-32 tablet:mt-32")
-        .text-center
-          AppLogo
-          AppDownloadBadges.mt-16(
-            type="single"
-            v-bind="getUtmProps({ utmMedium: 'creators_page' })"
-          )
+    slot(name="footer")
 </template>
 
 <script>
-import AppDownloadBadges from '../AppDownloadBadges/AppDownloadBadges';
 import CopyText from '../CopyText';
 import utmMixin from '~/mixins/utm';
 
@@ -142,7 +134,6 @@ export default {
   components: {
     AppLogo: () =>
       import(/* webpackChunkName: "svg-creator" */ '~/assets/images/app-logo.svg'),
-    AppDownloadBadges,
     CopyText,
     HeroGraph: () =>
       import(/* webpackChunkName: "svg-creator" */ './hero-graph.svg'),
