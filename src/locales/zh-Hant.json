@@ -42,6 +42,28 @@
     "thankYou": "感謝申請",
     "subscriptionPeriod": "你的讚賞公民體驗有效期為 {start} 至 {end}"
   },
+  "CivicLikerWelcomeView": {
+    "Congratulation": "恭喜！你已成為{br}{name} 的讚賞公民",
+    "Price": "每月 {price} 美元",
+    "Benefits": {
+      "SupportTheCreator": {
+        "Title": "成為作者後援",
+        "Description": "{title} — 每月 {price} 美元，全數支持 {name}"
+      },
+      "DontMissAPixel": {
+        "Title": "追蹤作者更新",
+        "Description": "{title} — 緊貼 {name} 最新作品，及他/她分享的好文"
+      },
+      "ContributeToTheCommunity": {
+        "Title": "貢獻創作生態",
+        "Description": "{title} — 在其他作者的文章「按讚」，分配創作基金，回饋創作"
+      },
+      "SharingGoodContent": {
+        "Title": "分享優秀內容",
+        "Description": "{title} — 以 Super Like 把好文分享到 Liker Land 手機應用程式"
+      }
+    }
+  },
   "CivicPage": {
     "title": "@:civicLiker",
     "Og": {

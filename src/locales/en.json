@@ -42,6 +42,28 @@
     "thankYou": "Thank you for joining",
     "subscriptionPeriod": "Your subscription is valid from {start} to {end}"
   },
+  "CivicLikerWelcomeView": {
+    "Congratulation": "Congratulation!{br}You have become the Civic Liker of {name}",
+    "Price": "{price} USD/mo",
+    "Benefits": {
+      "SupportTheCreator": {
+        "Title": "Support the creator",
+        "Description": "{title} — USD {price} per month to support {name}"
+      },
+      "DontMissAPixel": {
+        "Title": "Don't miss a pixel",
+        "Description": "{title} — Follow the most updated creation and sharing of {name}"
+      },
+      "ContributeToTheCommunity": {
+        "Title": "Contribute to the Community",
+        "Description": "{title} — Click likes to reward other creators by distributing the Creators Fund"
+      },
+      "SharingGoodContent": {
+        "Title": "Sharing good content",
+        "Description": "{title} — Super Like to share good content to Liker Land app"
+      }
+    }
+  },
   "CivicPage": {
     "title": "@:civicLiker",
     "Og": {

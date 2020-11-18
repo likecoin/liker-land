@@ -310,6 +310,7 @@ module.exports = {
   borderWidths: {
     default: '1px',
     '0': '0',
+    '1': '1px',
     '2': '2px',
     '4': '4px',
     '8': '8px',
@@ -566,6 +567,7 @@ module.exports = {
     '48': '3rem',
     '52': '3.25rem',
     '64': '4rem',
+    '72': '4.5rem',
     '80': '5rem',
     '96': '6rem',
     '128': '8rem',
