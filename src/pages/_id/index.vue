@@ -12,7 +12,7 @@
               Identity(
                 :avatar-url="user.avatar"
                 :avatar-size="88"
-                :is-avatar-outlined="user.isCivicLikerTrial || user.isSubscribedCivicLiker"
+                :is-avatar-outlined="isUserCivicLiker"
               )
 
               .mt-16.text-like-cyan-gray ID: {{ user.user }}
@@ -41,11 +41,11 @@
               .text-12.text-center.text-gray-9b.font-200
                 | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
 
-            footer.user-info-panel__footer.user-info-panel__footer--desktop
+            footer.user-info-panel__footer.user-info-panel__footer--desktop(v-if="isUserCivicLiker")
               .px-24.py-16
                 +CivicLikerSinceLabel.px-4
 
-            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto
+            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto(v-if="isUserCivicLiker")
               .px-24.py-16.flex.justify-between.items-center(@click="isShowAbout = !isShowAbout")
                 span.text-14.text-gray-4a.font-200 {{ $t('PortfolioPage.About') }}
                 svg.text-gray-9b(
@@ -205,6 +205,11 @@ export default {
       return (
         LOADING_STATES.includes(this.itemsState) ||
         LOADING_STATES.includes(this.worksState)
+      );
+    },
+    isUserCivicLiker() {
+      return !!(
+        this.user.isCivicLikerTrial || this.user.isSubscribedCivicLiker
       );
     },
   },

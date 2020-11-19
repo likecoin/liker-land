@@ -9,7 +9,10 @@
         :src="url"
         :style="imageStyle"
       >
-      <div class="avatar__halo">
+      <div
+        v-if="isOutlined"
+        class="avatar__halo"
+      >
         <svg viewBox="0 0 152 152">
           <path
             v-if="size > 56"
