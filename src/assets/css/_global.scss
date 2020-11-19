@@ -11,6 +11,14 @@ html {
   font-size: 16px;
 }
 
+@font-face {
+  font-family: 'emoji';
+  src: local("Apple Color Emoji"),
+       local("Segoe UI Emoji"),
+       local("Segoe UI Symbol"),
+       local("Noto Color Emoji");
+}
+
 body {
   @media screen and (max-width: 600px) {
     @apply bg-like-green;

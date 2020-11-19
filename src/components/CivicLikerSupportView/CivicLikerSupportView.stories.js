@@ -1,3 +1,4 @@
+import CivicLikerSupportAmountView from './CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from './CivicLikerSupportLikerView';
 
 export default {
@@ -17,3 +18,32 @@ export const LikerView = () => ({
     />
   `,
 });
+
+export const AmountView = (_, { argTypes }) => ({
+  components: {
+    CivicLikerSupportAmountView,
+  },
+  props: Object.keys(argTypes),
+  template: `
+    <CivicLikerSupportAmountView
+      :hint-text="hintText"
+      :price="price"
+      :currency="currency"
+      :period="period"
+      :prefix="prefix"
+      @click-add="onClickAdd"
+    />
+  `,
+});
+
+AmountView.args = {
+  price: 5,
+  currency: 'USD',
+  period: 'mo',
+  prefix: '☕️',
+  hintText: 'Support kin ko monthly',
+};
+
+AmountView.argTypes = {
+  onClickAdd: { action: 'Clicked add button' },
+};

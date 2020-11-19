@@ -143,6 +143,9 @@ module.exports = {
     mono: [
       'monospace',
     ],
+    emoji: [
+      'emoji',
+    ],
   },
 
   /*
@@ -175,6 +178,7 @@ module.exports = {
     '30': '1.875rem', // 3xl
     '32': '2rem',
     '36': '2.25rem', // 4xl
+    '40': '2.5rem',
     '48': '3rem', // 5xl
     '56': '3.5rem', // 6xl
   },
