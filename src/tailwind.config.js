@@ -364,6 +364,7 @@ module.exports = {
     '4': '.25rem',
     default: '.5em',
     '8': '.5rem',
+    '12': '.75rem',
     full: '9999px',
   },
 
