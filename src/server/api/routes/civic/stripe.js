@@ -7,7 +7,7 @@ const {
 } = require('../../util/stripe');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 
-const { EXTERNAL_URL } = require('../../util/api');
+const { apiCivicLikerGetMeta, EXTERNAL_URL } = require('../../util/api');
 
 const router = Router();
 
@@ -162,6 +162,25 @@ router.get('/civic/payment/stripe/billing', async (req, res, next) => {
       }
     }
     res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/civic/payment/stripe/connect', async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    if (!req.session.user) {
+      res.sendStatus(401);
+      return;
+    }
+    const { data } = await apiCivicLikerGetMeta(req);
+    if (!data || !data.stripeConnectId) {
+      res.sendStatus(404);
+      return;
+    }
+    const link = await stripe.accounts.createLoginLink(data.stripeConnectId);
+    res.redirect(link.url);
   } catch (err) {
     next(err);
   }
