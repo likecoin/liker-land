@@ -78,9 +78,11 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
 
     const civicLikerVersion = civicVersionQuery === '2' ? 2 : 1;
     let quantity = 1;
-    const parsedQuantity = parseInt(quantityString, 10);
-    if (parsedQuantity && parsedQuantity > 0) {
-      quantity = parsedQuantity;
+    if (civicLikerVersion > 1) {
+      const parsedQuantity = parseInt(quantityString, 10);
+      if (parsedQuantity && parsedQuantity > 0) {
+        quantity = parsedQuantity;
+      }
     }
 
     // start a new checkout session
