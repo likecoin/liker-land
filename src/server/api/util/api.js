@@ -184,9 +184,9 @@ const apiCivicLikerJoinTrialEventById = (id, req) =>
       }
     )
   );
-const apiCivicLikerGetMeta = req =>
+const apiCivicLikerGetMetadata = req =>
   sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKE_CO_URL_BASE}/api/civic/meta`, {
+    axios.get(`${LIKE_CO_URL_BASE}/api/civic/metadata`, {
       headers: { Authorization },
     })
   );
@@ -251,7 +251,7 @@ module.exports = {
   apiDeleteFollowedUser,
   apiCivicLikerTrialEventById,
   apiCivicLikerJoinTrialEventById,
-  apiCivicLikerGetMeta,
+  apiCivicLikerGetMetadata,
   getOAuthURL,
   getOAuthCallbackAPI,
   getLikePayURL,

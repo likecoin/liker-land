@@ -7,7 +7,7 @@ const {
 } = require('../../util/stripe');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 
-const { apiCivicLikerGetMeta, EXTERNAL_URL } = require('../../util/api');
+const { apiCivicLikerGetMetadata, EXTERNAL_URL } = require('../../util/api');
 
 const router = Router();
 
@@ -174,7 +174,7 @@ router.get('/civic/payment/stripe/connect', async (req, res, next) => {
       res.sendStatus(401);
       return;
     }
-    const { data } = await apiCivicLikerGetMeta(req);
+    const { data } = await apiCivicLikerGetMetadata(req);
     if (!data || !data.stripeConnectId) {
       res.sendStatus(404);
       return;
