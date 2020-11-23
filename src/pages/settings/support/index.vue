@@ -1,60 +1,104 @@
 <template>
-  <div>
-    <template
-      v-if="state.startsWith('error')"
-    >
-      <div v-if="state === 'error-not-civic'">
-        <div>Support feature is only available to civic liker</div>
-        <nuxt-link :to="{ name: 'civic' }">Become Civic Liker</nuxt-link>
-      </div>
-      <span v-else-if="state === 'error-civic-v2'">
-        <div>Support feature is only available to v2 civic liker'</div>
-      </span>
-      <span v-else>Unknown error</span>
-    </template>
-    <ul
-      v-else-if="state === 'loading'"
-      key="loading"
-      class="author-follow-settings-list author-follow-settings-list--loading"
-    />
-    <template v-else>
-      <h2> Supporting </h2>
-      <ul
-        v-if="authorLikerIds.length"
-        key="content"
-        class="author-follow-settings-list"
-      >
-        <li
-          v-for="id in authorLikerIds"
-          :key="id"
-        >
-          <AuthorListItem
-            :liker-id="id"
-            tag="div"
-          />
-          {{ getAuthorQuantity(id) }}
-          <nuxt-link :to="{ name: 'settings-support-users-id', params: { id } }">
-            Update
-          </nuxt-link>
-        </li>
-      </ul>
+  <div
+    v-if="state.startsWith('error')"
+    class="bg-white rounded-8 px-32 py-24 text-center flex flex-col items-center"
+  >
+    <template v-if="state === 'error-not-civic'">
       <div
-        v-else
-      >You are not supporting anyone yet!</div>
+        class="mt-32 text-16 font-500 text-gray-4a"
+      >{{ $t('SettingsSupportPage.ErrorTitle.NotCivic') }}</div>
+      <Button
+        class="mt-12 mb-32"
+        preset="primary"
+        :title="$t('CivicLikerCTA.button.register')"
+        :to="{ name: 'civic' }"
+      />
     </template>
-    <hr>
-    <div v-if="getUserSubscriptionInfo">
-      <h2> Billing info </h2>
-      <div><a :href="getStripeBillingPortalAPI">manage info and history</a></div>
-      <div>{{ maskedCardNumber }}</div>
-      <div>{{ getUserSubscriptionInfo.currentPeriodEndString }}</div>
-      <div>Will be effective on next billing date: {{ `${getUserSubscriptionInfo.quantity * 5} USD / Month` }}</div>
-    </div>
+    <div
+      v-else-if="state === 'error-civic-v2'"
+      class="my-32 text-16 font-500 text-gray-4a"
+    >{{ $t('SettingsSupportPage.ErrorTitle.NotCivicV2') }}</div>
+    <div
+      v-else
+      class="my-32 text-16 font-500 text-gray-4a"
+    >{{ $t('SettingsSupportPage.ErrorTitle.Unknown') }}</div>
+  </div>
+
+  <ul
+    v-else-if="state === 'loading'"
+    key="loading"
+    class="author-follow-settings-list author-follow-settings-list--loading"
+  />
+
+  <div v-else>
+    <template v-if="getUserSubscriptionInfo">
+      <h2
+        class="text-like-green font-24 font-500"
+      >{{ $t('SettingsSupportPage.Title.ManageSubscription') }}</h2>
+      <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5">
+        <div>
+          <div
+            class="text-24 font-500"
+          >{{ `${getUserSubscriptionInfo.quantity * 5} ${$t('Currency.USD')}${$t('SubscriptionPeriod.Month')}` }}</div>
+          <div>{{ $t('SettingsSupportPage.TotalAmount') }}</div>
+        </div>
+        <div class="flex mt-20">
+          <div class="flex-grow">
+            <div class="font-500">{{ maskedCardNumber }}</div>
+            <div>{{ $t('SettingsSupportPage.PaymentMethod') }}</div>
+          </div>
+          <div class="ml-12">
+            <div>
+              <a
+                class="text-like-green font-500"
+                :href="getStripeBillingPortalAPI"
+              >{{ $t('SettingsSupportPage.ManagePaymentMethod') }}</a>
+            </div>
+            <div class="mt-12">
+              <a
+                class="text-like-green font-500"
+                :href="getStripeBillingPortalAPI"
+              >{{ $t('SettingsSupportPage.BillingHistory') }}</a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-20">
+          <div class="font-500">{{ getUserSubscriptionInfo.currentPeriodEndString }}</div>
+          <div>{{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}</div>
+        </div>
+      </div>
+    </template>
+
+    <h2
+      class="mt-40 text-like-green font-24 font-500"
+    >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
+    <ul
+      v-if="supportingLikerIds.length"
+      key="content"
+      class="supporting-liker-list mt-12"
+    >
+      <li
+        v-for="id in supportingLikerIds"
+        :key="id"
+      >
+        <SupportingLikerView
+          :liker-id="id"
+          :price="getAuthorQuantity(id) * 5"
+        />
+      </li>
+    </ul>
+    <div
+      v-else
+      class="bg-white rounded-8 mt-20 px-32 py-24 text-center text-16 font-500 text-gray-4a"
+    >{{ $t('SettingsSupportPage.NoSupport') }}</div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import AuthorListItem from '~/components/AuthorListItem';
+
+import Button from '~/components/Button/Button';
+import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
+
 import { getStripeBillingPortalAPI } from '~/util/api';
 
 function getMaskedCardNumber(brand, last4) {
@@ -74,7 +118,8 @@ function getMaskedCardNumber(brand, last4) {
 export default {
   middleware: 'authenticated',
   components: {
-    AuthorListItem,
+    Button,
+    SupportingLikerView,
   },
   data() {
     return {
@@ -86,10 +131,9 @@ export default {
       'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
       'getCivicSupportingUsers',
-      'getUserInfoById',
     ]),
     getStripeBillingPortalAPI,
-    authorLikerIds() {
+    supportingLikerIds() {
       return Object.keys(this.getCivicSupportingUsers);
     },
     maskedCardNumber() {
@@ -122,9 +166,27 @@ export default {
   methods: {
     ...mapActions(['fetchUserSubscriptionInfo', 'fetchCivicSupportingUsers']),
     getAuthorQuantity(id) {
-      const { quantity } = this.getCivicSupportingUsers[id];
+      const { quantity = 0 } = this.getCivicSupportingUsers[id] || {};
       return `${5 * quantity} USD/month`;
     },
   },
 };
 </script>
+
+<style lang="scss">
+.supporting-liker-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  list-style: none;
+  margin: 0;
+  padding: 32px;
+  padding-top: 0;
+
+  li {
+    width: 100%;
+    max-width: 220px;
+    padding: 10px;
+  }
+}
+</style>

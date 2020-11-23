@@ -159,6 +159,9 @@
       "Civic": "Become a Civic Liker"
     }
   },
+  "Currency": {
+    "USD": "USD"
+  },
   "FeaturedPage": {
     "headerLabel": "Today"
   },
@@ -322,6 +325,22 @@
     "language": "Language",
     "subscription": "Follow / Unfollow"
   },
+  "SettingsSupportPage": {
+    "Title": {
+      "ManageSubscription": "Manage Civic Liker Subscription",
+      "ManageSupportingUser": "You are supporting"
+    },
+    "ErrorTitle": {
+      "NotCivic": "Support feature is only available to civic liker",
+      "NotCivicV2": "Support feature is only available to v2 civic liker",
+      "Unknown": "Unknown error"
+    },
+    "TotalAmount": "Total monthly subscription amount",
+    "PaymentMethod": "Payment",
+    "ManagePaymentMethod": "Manage Payment Method",
+    "BillingHistory": "Billing History",
+    "NoSupport": "You are not supporting anyone yet!"
+  },
   "SignUpSignInCTA": {
     "slogan": "Be a Liker to customise stories"
   },
@@ -342,13 +361,19 @@
     "appButtonText": "Open",
     "dismissButtonText": "Continue with browser"
   },
+  "SubscriptionPeriod": {
+    "Month": "/mo"
+  },
   "back": "Back",
   "backToHome": "Home",
   "civicLiker": "Civic Liker",
   "copy": "Copy",
   "copied": "Copied",
+  "edit": "編輯",
+  "finish": "Finish",
   "follow": "Follow",
   "following": "Following",
+  "here": "Here",
   "learnMore": "Learn More",
   "month": "month",
   "ok": "OK",
