@@ -341,6 +341,24 @@
     "BillingHistory": "Billing History",
     "NoSupport": "You are not supporting anyone yet!"
   },
+  "SettingsSupportUsersPage": {
+    "Slogan": "Be my Civic Liker",
+    "SloganConfirm": "Cash Support",
+    "Benefits": [
+      {
+        "Title": "Be my Supporting Group",
+        "Description": "Back me up for more great ideas."
+      },
+      {
+        "Title": "Follow Me",
+        "Description": "Get the latest update of my works and sharing."
+      },
+      {
+        "Title": "Contribute to the Community",
+        "Description": "Privilege to reward other creators by liking."
+      }
+    ]
+  },
   "SignUpSignInCTA": {
     "slogan": "Be a Liker to customise stories"
   },
@@ -362,17 +380,35 @@
     "dismissButtonText": "Continue with browser"
   },
   "SubscriptionPeriod": {
-    "Month": "/mo"
+    "Month": "mo"
+  },
+  "SupportSummary": {
+    "Title": "Details",
+    "CurrentCharge": "Civic Liker - {name} (Current)",
+    "NewCharge": "Civic Liker - {name} (New)",
+    "OtherCharge": "Civic Liker (Others)",
+    "BillingDate": "Will be billed automatically on {date}",
+    "Total": "Total",
+    "Confirm": "Confirm Order"
+  },
+  "UpdateSupportQuantity": {
+    "Title": "Choose the monthly supporting amount for {name}",
+    "HintText": "Support {name} monthly",
+    "Next": "Next",
+    "Subscribe": "立即訂閱",
+    "Unsubscribe": "Cancel subscription"
   },
   "back": "Back",
   "backToHome": "Home",
   "civicLiker": "Civic Liker",
+  "confirm": "Confirm",
   "copy": "Copy",
   "copied": "Copied",
   "edit": "編輯",
   "finish": "Finish",
   "follow": "Follow",
   "following": "Following",
+  "goBack": "Back",
   "here": "Here",
   "learnMore": "Learn More",
   "month": "month",

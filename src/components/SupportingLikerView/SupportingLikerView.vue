@@ -8,11 +8,11 @@
     <template #footer>
       <div
         v-if="price"
-        class="text-24 text-gray-4a font-500"
+        class="text-20 text-gray-4a font-500"
       ><span class="font-emoji">{{ priceEmoji }}</span>
-        {{ `${price} ${$t('Currency.USD')}${$t('SubscriptionPeriod.Month')}` }}</div>
+        {{ `${price} ${$t('Currency.USD')}/${$t('SubscriptionPeriod.Month')}` }}</div>
       <nuxt-link
-        class="mt-8 text-12 text-like-green"
+        class="mt-8 text-12 text-like-green underline"
         :to="{ name: 'settings-support-users-id', params: { id: likerId } }"
       >{{ $t('edit') }}</nuxt-link>
     </template>

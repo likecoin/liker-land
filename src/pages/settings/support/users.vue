@@ -91,6 +91,8 @@
       v-else
       class="bg-white rounded-8 mt-20 px-32 py-24 text-center text-16 font-500 text-gray-4a"
     >{{ $t('SettingsSupportPage.NoSupport') }}</div>
+
+    <NuxtChild v-if="$route.params.id" />
   </div>
 </template>
 <script>
@@ -167,7 +169,7 @@ export default {
     ...mapActions(['fetchUserSubscriptionInfo', 'fetchCivicSupportingUsers']),
     getAuthorQuantity(id) {
       const { quantity = 0 } = this.getCivicSupportingUsers[id] || {};
-      return `${5 * quantity} USD/month`;
+      return quantity;
     },
   },
 };
