@@ -1,7 +1,7 @@
 <template>
   <div class="supporting-liker-view bg-white rounded-8 text-center flex flex-col">
     <div
-      class="flex flex-col flex-grow justify-center p-24 cursor-pointer"
+      class="flex flex-col flex-grow items-center p-24 cursor-pointer"
       @click="$emit('click-identity')"
     >
       <Identity

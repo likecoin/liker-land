@@ -1,12 +1,10 @@
 <template>
-  <div
-    class="fixed pin flex justify-center items-center"
-  >
+  <div class="fixed pin flex justify-center items-center">
     <div
       class="absolute pin bg-gray-9b opacity-75"
       @click="onClickBackdrop"
     />
-    <div class="relative max-w-phone">
+    <div class="relative max-w-phone w-full">
       <div
         v-if="state === 'loading'"
         key="loading"
