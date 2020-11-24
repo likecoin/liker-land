@@ -9,6 +9,7 @@ import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
+import support from './modules/support';
 import { AUTH_COOKIE_NAME } from '~/constant';
 
 const createStore = () =>
@@ -38,6 +39,7 @@ const createStore = () =>
       ui,
       user,
       staticData,
+      support,
     },
   });
 

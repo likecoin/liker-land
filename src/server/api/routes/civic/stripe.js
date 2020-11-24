@@ -45,6 +45,7 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
           currentPeriodEnd: subscription.current_period_end,
           currentPeriodStart: subscription.current_period_start,
           start: subscription.start,
+          quantity: subscription.quantity,
           card: { brand, last4 },
         });
         return;
