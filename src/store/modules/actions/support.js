@@ -17,7 +17,7 @@ export async function updateCivicSupportQuantity(
   { user, quantity }
 ) {
   await this.$api.$post(api.getCivicSupportingUserAPI(user), { quantity });
-  commit(types.SUPPORT_SET_SUPPORTING_USER_INFO, user);
+  commit(types.SUPPORT_SET_SUPPORTING_USER_INFO, { user, quantity });
 }
 
 export async function removeCivicSupportUser({ commit }, user) {

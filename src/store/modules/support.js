@@ -18,8 +18,8 @@ const mutations = {
   [SUPPORT_SET_SUPPORTING_USERS](state, supportingUsers) {
     state.supportingUsers = supportingUsers;
   },
-  [SUPPORT_SET_SUPPORTING_USER_INFO](state, id, user) {
-    Vue.set(state.supportingUsers, id, user);
+  [SUPPORT_SET_SUPPORTING_USER_INFO](state, { user, ...info }) {
+    Vue.set(state.supportingUsers, user, info);
   },
   [SUPPORT_REMOVE_SUPPORTING_USER](state, id) {
     Vue.delete(state.supportingUsers, id);
