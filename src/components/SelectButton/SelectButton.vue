@@ -1,6 +1,6 @@
 <template>
   <button :class="rootClass" v-on="$listeners">
-    <div class="select-button__content flex-grow">
+    <div class="select-button__content flex-grow text-left">
       <slot />
     </div>
     <svg
