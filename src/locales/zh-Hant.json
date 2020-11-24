@@ -409,7 +409,7 @@
   "SupportSummary": {
     "Title": "帳單詳情",
     "CurrentCharge": "讚賞公民 - {name}（目前）",
-    "NewCharge": "讚賞公民 - {name}（新增）",
+    "NewCharge": "讚賞公民 - {name}（更新）",
     "OtherCharge": "讚賞公民（其他）",
     "BillingDate": "將於 {date} 自動扣帳",
     "Total": "總額",

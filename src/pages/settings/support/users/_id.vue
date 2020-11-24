@@ -179,7 +179,7 @@
             class="flex justify-between py-12 border-t-1 border-gray-d8"
           >
             <div>{{ $t('SupportSummary.NewCharge', { name: displayName }) }}</div>
-            <div class="font-500 whitespace-no-wrap">{{ `${currency} ${selectedQuantity * dollar}` }}</div>
+            <div class="font-500 whitespace-no-wrap">{{ `${currency} ${(selectedQuantity - currentQuantity) * dollar}` }}</div>
           </div>
 
           <div class="flex justify-between py-12 border-t-1 border-gray-d8">
