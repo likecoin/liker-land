@@ -8,8 +8,9 @@
       <div
         v-if="state === 'loading'"
         key="loading"
-        class="author-follow-settings-list author-follow-settings-list--loading"
-      />
+      >
+        <Spinner class="mx-auto" />
+      </div>
 
       <div
         v-else-if="state === 'new'"
@@ -217,6 +218,7 @@ import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/Civi
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
+import Spinner from '~/components/Spinner/Spinner';
 
 export default {
   components: {
@@ -225,6 +227,7 @@ export default {
     CivicLikerSupportAmountView,
     Identity,
     SelectButton,
+    Spinner,
   },
   middleware: 'authenticated',
   data() {
