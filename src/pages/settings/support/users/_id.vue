@@ -359,7 +359,9 @@ export default {
     },
 
     onClickBackdrop() {
-      this.$router.back();
+      if (this.state !== 'loading') {
+        this.$router.back();
+      }
     },
 
     onClickUpdateQuantity() {
