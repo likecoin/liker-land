@@ -7,7 +7,7 @@
     main.page-content
       CivicLikerPageContentV2(
         :referrer="referrer"
-        :price="isLikePay ? 15000 : 5"
+        :price="isLikePay ? 15000 : 5 * quantity"
         :price-currency="isLikePay ? 'LIKE' : 'USD'"
         :is-year-plan="isLikePay"
         :rewards-currency="rewardsCurrency"
@@ -102,6 +102,12 @@ export default {
     paymentMethods() {
       if (this.civicLikerVersion === 2) return ['stripe'];
       return PAYMENT_METHOD_LIST;
+    },
+    quantity() {
+      if (this.civicLikerVersion !== 2) return 1;
+      const { quantity } = this.$route.query;
+      if (!Number.isInteger(Number(quantity))) return 1;
+      return quantity;
     },
     from() {
       return this.$route.params.from || this.$route.query.from;
