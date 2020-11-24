@@ -82,6 +82,7 @@
         :key="id"
       >
         <SupportingLikerView
+          class="h-full"
           :liker-id="id"
           :price="getAuthorQuantity(id) * 5"
         />
