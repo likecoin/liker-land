@@ -285,7 +285,7 @@ export default {
   async mounted() {
     const promises = [];
     if (!this.getUserIsCivicLiker) {
-      this.$router.replace({ name: 'settings-support-users' });
+      this.$router.replace({ name: 'settings-support' });
       return;
     }
     promises.push(this.fetchLikerInfo());
@@ -300,7 +300,7 @@ export default {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
-      this.$router.replace({ name: 'settings-support-users' });
+      this.$router.replace({ name: 'settings-support' });
     }
     // Set default to  1 for new subscription
     const { quantity = 1 } =
@@ -347,7 +347,7 @@ export default {
         quantity: selectedQuantity,
       });
       await this.fetchUserSubscriptionInfo();
-      this.$router.push({ name: 'settings-support-users' });
+      this.$router.push({ name: 'settings-support' });
     },
     async cancelSubscription() {
       const { authorId } = this;
@@ -355,7 +355,7 @@ export default {
       this.state = 'loading';
       await this.removeCivicSupportUser(authorId);
       await this.fetchUserSubscriptionInfo();
-      this.$router.push({ name: 'settings-support-users' });
+      this.$router.push({ name: 'settings-support' });
     },
 
     onClickBackdrop() {
