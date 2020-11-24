@@ -7,7 +7,7 @@ const {
 } = require('../../util/stripe');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 
-const { EXTERNAL_URL } = require('../../util/api');
+const { apiCivicLikerGetMetadata, EXTERNAL_URL } = require('../../util/api');
 
 const router = Router();
 
@@ -73,9 +73,19 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       utm_content: utmContent,
       utm_medium: utmMedium,
       utm_source: utmSource,
+      quantity: quantityString,
       civic_liker_version: civicVersionQuery,
     } = req.query;
+
     const civicLikerVersion = civicVersionQuery === '2' ? 2 : 1;
+    let quantity = 1;
+    if (civicLikerVersion > 1) {
+      const parsedQuantity = parseInt(quantityString, 10);
+      if (parsedQuantity && parsedQuantity > 0) {
+        quantity = parsedQuantity;
+      }
+    }
+
     // start a new checkout session
     const metadata = { userId: req.session.user };
     if (from) metadata.from = from.substring(0, 32);
@@ -111,7 +121,7 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
         {
           price:
             civicLikerVersion === 2 ? STRIPE_CIVIC_V2_PRICE_ID : STRIPE_PLAN_ID,
-          quantity: 1,
+          quantity,
         },
       ];
       stripePayload.subscription_data = { metadata };
@@ -153,6 +163,25 @@ router.get('/civic/payment/stripe/billing', async (req, res, next) => {
       }
     }
     res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/civic/payment/stripe/connect', async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    if (!req.session.user) {
+      res.sendStatus(401);
+      return;
+    }
+    const { data } = await apiCivicLikerGetMetadata(req);
+    if (!data || !data.stripeConnectId) {
+      res.sendStatus(404);
+      return;
+    }
+    const link = await stripe.accounts.createLoginLink(data.stripeConnectId);
+    res.redirect(link.url);
   } catch (err) {
     next(err);
   }

@@ -111,11 +111,18 @@ export default {
       const {
         from,
         referrer,
+        quantity,
         utm_source: utmSource,
         civic_liker_version: civicLikerVersion,
       } = this.$route.query;
       const { sessionId } = await this.$api.$get(
-        getStripePaymentAPI({ from, referrer, utmSource, civicLikerVersion })
+        getStripePaymentAPI({
+          from,
+          referrer,
+          utmSource,
+          civicLikerVersion,
+          quantity,
+        })
       );
       if (!window.Stripe || !process.env.STRIPE_PUBLIC_KEY) {
         console.error('window stripe is missing!'); // eslint-disable-line no-console
