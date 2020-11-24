@@ -50,6 +50,14 @@ export default {
       type: String,
       default: 'primary',
     },
+    full: {
+      type: Boolean,
+      default: false,
+    },
+    size: {
+      type: String,
+      default: 'default',
+    },
     href: {
       type: String,
       default: '',
@@ -66,7 +74,12 @@ export default {
   computed: {
     buttonProps() {
       return {
-        class: ['button', `button--${this.preset}`],
+        class: [
+          'button',
+          `button--${this.preset}`,
+          `button--${this.size}`,
+          { 'button--full': this.full },
+        ],
         ...this.$attrs,
       };
     },
@@ -109,6 +122,14 @@ export default {
     transition: background-color 0.2s ease;
   }
 
+  &#{&}--full {
+    width: 100%;
+
+    > div {
+      width: inherit;
+    }
+  }
+
   &:hover > div {
     background-color: #00000008;
   }
@@ -124,10 +145,17 @@ export default {
     font-size: 14px;
   }
 
+  &#{&}--large {
+    min-height: 48px;
+  }
+  &#{&}--large &__title {
+    font-size: 16px;
+  }
+
   &--primary {
     color: #28646e;
 
-    background-color: #50e3c2;
+    background-color: #aaf1e7;
   }
 
   &--secondary {
