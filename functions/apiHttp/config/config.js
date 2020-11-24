@@ -21,6 +21,7 @@ config.LIKEPAY_HOOK = functions.config().hook.likepay;
 config.STRIPE_PRIVATE_KEY = functions.config().stripe.private_key;
 config.STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
 config.STRIPE_PLAN_ID = functions.config().stripe.plan_id;
+config.STRIPE_CIVIC_V2_PRICE_ID = functions.config().stripe.civic_v2_price_id;
 
 config.EXTERNAL_URL = functions.config().constant.external_url;
 

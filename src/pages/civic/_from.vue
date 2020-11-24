@@ -87,6 +87,7 @@ export default {
       isIntroVideoMuted: true,
       referrer: undefined,
       selectedPaymentMethod: PAYMENT_METHOD_LIST[0],
+      civicLikerVersion: 1,
     };
   },
   computed: {
@@ -99,6 +100,7 @@ export default {
       'getUserIsCivicLiker',
     ]),
     paymentMethods() {
+      if (this.civicLikerVersion === 2) return ['stripe'];
       return PAYMENT_METHOD_LIST;
     },
     from() {
@@ -139,10 +141,12 @@ export default {
   async asyncData({ route, $api }) {
     // Fetch referrer info
     const from = route.params.from || route.query.from;
+    const civicLikerVersion = Number(route.query.civic_liker_version || 1);
     if (from && checkUserNameValid(from)) {
       try {
         const user = await $api.$get(getUserMinAPI(from));
         return {
+          civicLikerVersion,
           referrer: {
             ...user,
             avatarHalo: getAvatarHaloTypeFromUser(user),
@@ -154,7 +158,7 @@ export default {
         console.error(msg);
       }
     }
-    return undefined;
+    return { civicLikerVersion };
   },
   head() {
     return {
@@ -228,10 +232,14 @@ export default {
       this.$store.dispatch('setIsHK', isHK);
     }
     if (isHK) {
-      this.selectedPaymentMethod =
-        PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+      if (this.civicLikerVersion !== 2) {
+        this.selectedPaymentMethod =
+          PAYMENT_METHOD_LIST[PAYMENT_METHOD_LIST.length - 1];
+      }
       this.$i18n.locale = 'zh-Hant';
       this.setLocale(this.$i18n.locale);
+    } else {
+      [this.selectedPaymentMethod] = this.paymentMethods;
     }
   },
   mounted() {

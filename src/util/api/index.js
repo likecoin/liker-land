@@ -75,10 +75,14 @@ export const getStripePaymentAPI = ({
   from = '',
   referrer = '',
   utmSource = '',
+  civicLikerVersion = 1,
+  quantity = 1,
 } = {}) =>
   `/api/civic/payment/stripe/payment?from=${encodeURIComponent(
     from
-  )}&referrer=${encodeURIComponent(referrer)}&utm_source=${encodeURIComponent(
+  )}&referrer=${encodeURIComponent(
+    referrer
+  )}&civic_liker_version=${civicLikerVersion}&quantity=${quantity}&utm_source=${encodeURIComponent(
     utmSource
   )}`;
 export const getStripeEditPaymentAPI = () =>
