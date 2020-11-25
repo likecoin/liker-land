@@ -93,7 +93,7 @@
       class="bg-white rounded-8 mt-20 px-32 py-24 text-center text-16 font-500 text-gray-4a"
     >{{ $t('SettingsSupportPage.NoSupport') }}</div>
 
-    <NuxtChild v-if="$route.params.id" />
+    <NuxtChild />
   </div>
 </template>
 <script>
