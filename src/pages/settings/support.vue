@@ -1,21 +1,12 @@
 <template>
+  <NuxtChild v-if="state === 'error-not-civic'" />
+
   <div
-    v-if="state.startsWith('error')"
+    v-else-if="state.startsWith('error')"
     class="bg-white rounded-8 px-32 py-24 text-center flex flex-col items-center"
   >
-    <template v-if="state === 'error-not-civic'">
-      <div
-        class="mt-32 text-16 font-500 text-gray-4a"
-      >{{ $t('SettingsSupportPage.ErrorTitle.NotCivic') }}</div>
-      <Button
-        class="mt-12 mb-32"
-        preset="primary"
-        :title="$t('CivicLikerCTA.button.register')"
-        :to="{ name: 'civic' }"
-      />
-    </template>
     <div
-      v-else-if="state === 'error-civic-v2'"
+      v-if="state === 'error-civic-v2'"
       class="my-32 text-16 font-500 text-gray-4a"
     >{{ $t('SettingsSupportPage.ErrorTitle.NotCivicV2') }}</div>
     <div
@@ -99,7 +90,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import Button from '~/components/Button/Button';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
 import { getStripeBillingPortalAPI } from '~/util/api';
@@ -121,7 +111,6 @@ function getMaskedCardNumber(brand, last4) {
 export default {
   middleware: 'authenticated',
   components: {
-    Button,
     SupportingLikerView,
   },
   data() {
@@ -151,6 +140,10 @@ export default {
   },
   async mounted() {
     if (!this.getUserIsCivicLiker) {
+      this.$router.push({
+        name: 'settings-support-users-id',
+        params: { id: 'foundation' },
+      });
       this.state = 'error-not-civic';
       return;
     }

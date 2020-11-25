@@ -1,10 +1,11 @@
 <template>
-  <div class="fixed pin flex justify-center items-center">
+  <div class="fixed pin flex justify-center items-center pointer-events-none">
     <div
-      class="absolute pin bg-gray-9b opacity-75"
+      v-if="getUserIsCivicLiker"
+      class="absolute pin bg-gray-9b opacity-75 pointer-events-auto"
       @click="onClickBackdrop"
     />
-    <div class="relative max-w-phone w-full">
+    <div class="relative max-w-phone w-full pointer-events-auto">
       <Transition
         name="fade"
         mode="out-in"
@@ -44,7 +45,7 @@
               :title="$t('UpdateSupportQuantity.Subscribe')"
               :full="true"
               size="large"
-              @click="updateSubscription"
+              @click="newSubscription"
             />
           </div>
 
@@ -91,7 +92,7 @@
               :title="$t('UpdateSupportQuantity.Subscribe')"
               :full="true"
               size="large"
-              @click="updateSubscription"
+              @click="newSubscription"
             />
           </div>
         </div>
@@ -127,12 +128,15 @@
                 :title="$t('UpdateSupportQuantity.Next')"
                 :full="true"
                 size="large"
-                @click="state = 'confirm'"
+                @click="confirmQuantity"
               />
             </div>
           </div>
 
-          <div class="text-center mt-16">
+          <div
+            v-if="getUserIsCivicLiker"
+            class="text-center mt-16"
+          >
             <a
               class="text-12 text-gray-4a underline"
               href="#"
@@ -290,17 +294,14 @@ export default {
     },
   },
   async mounted() {
-    const promises = [];
-    if (!this.getUserIsCivicLiker) {
-      this.$router.replace({ name: 'settings-support' });
-      return;
-    }
-    promises.push(this.fetchLikerInfo());
-    if (!this.getCivicSupportingUserInfo(this.authorId)) {
-      promises.push(this.fetchCivicSupportingUsers());
-    }
-    if (!this.getUserSubscriptionInfo) {
-      promises.push(this.fetchUserSubscriptionInfo());
+    const promises = [this.fetchLikerInfo()];
+    if (this.getUserIsCivicLiker) {
+      if (!this.getCivicSupportingUserInfo(this.authorId)) {
+        promises.push(this.fetchCivicSupportingUsers());
+      }
+      if (!this.getUserSubscriptionInfo) {
+        promises.push(this.fetchUserSubscriptionInfo());
+      }
     }
     try {
       await Promise.all(promises);
@@ -313,7 +314,7 @@ export default {
     const { quantity = 1 } =
       this.getCivicSupportingUserInfo(this.authorId) || {};
     this.selectedQuantity = quantity;
-    this.state = this.currentQuantity > 0 ? 'select-quantity' : 'new';
+    this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
   },
   methods: {
     ...mapActions([
@@ -345,6 +346,20 @@ export default {
       }
     },
 
+    confirmQuantity() {
+      this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
+    },
+
+    newSubscription() {
+      this.$router.push({
+        name: `civic-register-stripe`,
+        query: {
+          from: this.authorId,
+          civic_liker_version: 2,
+          quantity: this.selectedQuantity,
+        },
+      });
+    },
     async updateSubscription() {
       const { currentQuantity, selectedQuantity, authorId } = this;
       if (currentQuantity === selectedQuantity) return;

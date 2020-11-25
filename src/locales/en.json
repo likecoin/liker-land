@@ -331,7 +331,6 @@
       "ManageSupportingUser": "You are supporting"
     },
     "ErrorTitle": {
-      "NotCivic": "Support feature is only available to civic liker",
       "NotCivicV2": "Support feature is only available to v2 civic liker",
       "Unknown": "Unknown error"
     },
