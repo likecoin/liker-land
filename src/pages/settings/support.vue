@@ -15,11 +15,12 @@
     >{{ $t('SettingsSupportPage.ErrorTitle.Unknown') }}</div>
   </div>
 
-  <ul
+  <div
     v-else-if="state === 'loading'"
     key="loading"
-    class="author-follow-settings-list author-follow-settings-list--loading"
-  />
+  >
+    <Spinner class="mx-auto my-64" />
+  </div>
 
   <div v-else>
     <template v-if="getUserSubscriptionInfo">
@@ -90,6 +91,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
 import { getStripeBillingPortalAPI } from '~/util/api';
@@ -112,6 +114,7 @@ export default {
   middleware: 'authenticated',
   components: {
     SupportingLikerView,
+    Spinner,
   },
   data() {
     return {
