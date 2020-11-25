@@ -39,7 +39,7 @@
         <div>
           <div
             class="text-24 font-500"
-          >{{ `${getUserSubscriptionInfo.quantity * 5} ${$t('Currency.USD')}${$t('SubscriptionPeriod.Month')}` }}</div>
+          >{{ `${getUserSubscriptionInfo.quantity * 5} ${$t('Currency.USD')}/${$t('SubscriptionPeriod.Month')}` }}</div>
           <div>{{ $t('SettingsSupportPage.TotalAmount') }}</div>
         </div>
         <div class="flex mt-20">
