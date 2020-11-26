@@ -5,7 +5,10 @@
         SiteNavBar.text-like-green
 
     main.page-content.page-content--narrow
-      SettingsPageHeader(:is-show-back="isHeaderShowBack")
+      SettingsPageHeader(
+        :class="headerClass"
+        :is-show-back="isHeaderShowBack"
+      )
 
       NuxtChild
 </template>
@@ -23,6 +26,12 @@ export default {
     SettingsPageHeader,
   },
   computed: {
+    headerClass() {
+      const isHideHeader = this.$route.name === 'settings-support-users-id';
+      return {
+        'opacity-0 pointer-events-none': isHideHeader,
+      };
+    },
     isHeaderShowBack() {
       return /^settings-.+$/.test(this.$route.name);
     },

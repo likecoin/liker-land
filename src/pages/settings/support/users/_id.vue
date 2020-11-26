@@ -5,7 +5,7 @@
       class="absolute pin bg-gray-9b opacity-75 pointer-events-auto"
       @click="onClickBackdrop"
     />
-    <div class="relative max-w-phone w-full pointer-events-auto">
+    <div class="relative max-w-phone w-full pointer-events-auto py-32">
       <Transition
         name="fade"
         mode="out-in"
