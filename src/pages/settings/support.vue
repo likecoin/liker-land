@@ -111,7 +111,6 @@ function getMaskedCardNumber(brand, last4) {
 }
 
 export default {
-  middleware: 'authenticated',
   components: {
     SupportingLikerView,
     Spinner,

@@ -249,7 +249,6 @@ export default {
     SelectButton,
     Spinner,
   },
-  middleware: 'authenticated',
   data() {
     return {
       state: 'loading',
