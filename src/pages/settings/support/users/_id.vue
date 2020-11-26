@@ -101,35 +101,45 @@
           v-else-if="state === 'select-quantity'"
           key="select-quantity"
         >
-          <div class="bg-white rounded-8 px-72 py-32 phone:px-16">
-            <Identity
-              :avatar-url="avatarUrl"
-              :avatar-size="64"
-              :is-avatar-outlined="isCivicLiker"
-            />
+          <div class="bg-white rounded-8 py-32 phone:px-16">
 
-            <h2
-              class="mt-12 text-24 text-like-green font-500 leading-1_5"
-            >{{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}</h2>
+            <div class="px-32">
+              <button
+                class="mb-16 settings-page-header__back-button text-like-green"
+                @click="onGoBackFromSelectQuantity"
+              ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
+            </div>
 
-            <div class="mx-24">
-              <SelectButton
-                v-for="option in quantityOptions"
-                :key="option.value"
-                class="w-full mt-12"
-                :is-selected="selectedQuantity === option.value"
-                @click="selectedQuantity = option.value"
-              >
-                <span class="font-emoji text-24">{{ getPriceEmoji(option.value * dollar) }}</span> {{ option.text }}
-              </SelectButton>
-
-              <Button
-                class="mt-24"
-                :title="$t('UpdateSupportQuantity.Next')"
-                :full="true"
-                size="large"
-                @click="confirmQuantity"
+            <div class="mt-16 px-72">
+              <Identity
+                :avatar-url="avatarUrl"
+                :avatar-size="64"
+                :is-avatar-outlined="isCivicLiker"
               />
+  
+              <h2
+                class="mt-12 text-24 text-like-green font-500 leading-1_5"
+              >{{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}</h2>
+  
+              <div class="mx-24">
+                <SelectButton
+                  v-for="option in quantityOptions"
+                  :key="option.value"
+                  class="w-full mt-12"
+                  :is-selected="selectedQuantity === option.value"
+                  @click="selectedQuantity = option.value"
+                >
+                  <span class="font-emoji text-24">{{ getPriceEmoji(option.value * dollar) }}</span> {{ option.text }}
+                </SelectButton>
+  
+                <Button
+                  class="mt-24"
+                  :title="$t('UpdateSupportQuantity.Next')"
+                  :full="true"
+                  size="large"
+                  @click="confirmQuantity"
+                />
+              </div>
             </div>
           </div>
 
@@ -314,7 +324,7 @@ export default {
     const { quantity = 1 } =
       this.getCivicSupportingUserInfo(this.authorId) || {};
     this.selectedQuantity = quantity;
-    this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
+    this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
   },
   methods: {
     ...mapActions([
@@ -378,6 +388,14 @@ export default {
       await this.removeCivicSupportUser(authorId);
       await this.fetchUserSubscriptionInfo();
       this.$router.push({ name: 'settings-support' });
+    },
+
+    onGoBackFromSelectQuantity() {
+      if (this.getUserIsCivicLiker) {
+        this.$router.back();
+      } else {
+        this.state = 'new';
+      }
     },
 
     onClickBackdrop() {
