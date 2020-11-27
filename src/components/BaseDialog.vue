@@ -15,7 +15,7 @@
       :class="rootClass"
       @click="onClickDialog"
     )
-      .base-dialog__content-container(ref="contentContainer")
+      .base-dialog__content-container(:class="contentContainerClass" ref="contentContainer")
         main
           slot
 </template>
@@ -44,6 +44,10 @@ export default {
     isAnimated: {
       type: [Boolean, String],
       default: true,
+    },
+    contentContainerClass: {
+      type: String,
+      default: '',
     },
   },
   computed: {

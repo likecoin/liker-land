@@ -116,11 +116,11 @@
                 :avatar-size="64"
                 :is-avatar-outlined="isCivicLiker"
               />
-  
+
               <h2
                 class="mt-12 text-24 text-like-green font-500 leading-1_5"
               >{{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}</h2>
-  
+
               <div class="mx-24">
                 <SelectButton
                   v-for="option in quantityOptions"
@@ -131,7 +131,7 @@
                 >
                   <span class="font-emoji text-24">{{ getPriceEmoji(option.value * dollar) }}</span> {{ option.text }}
                 </SelectButton>
-  
+
                 <Button
                   class="mt-24"
                   :title="$t('UpdateSupportQuantity.Next')"
@@ -378,7 +378,15 @@ export default {
         quantity: selectedQuantity,
       });
       await this.fetchUserSubscriptionInfo();
-      this.$router.push({ name: 'settings-support' });
+      if (currentQuantity) {
+        this.$router.push({ name: 'settings-support' });
+      } else {
+        this.$router.push({
+          name: 'id',
+          params: { id: authorId },
+          query: { civic_welcome: '1' },
+        });
+      }
     },
     async cancelSubscription() {
       const { authorId } = this;

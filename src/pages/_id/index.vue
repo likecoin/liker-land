@@ -16,7 +16,7 @@
               )
 
               .mt-16.text-like-cyan-gray ID: {{ user.user }}
-              .mt-4.text-30.font-600.text-like-cyan {{ user.displayName }}
+              .mt-4.text-30.font-600.text-like-cyan.text-center {{ user.displayName }}
 
               .user-info-panel__actions
                 Button(
@@ -122,19 +122,50 @@
                   )
           .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
             | {{ $t('PortfolioPage.EmptyLabel') }}
+
+    BaseDialog(
+      :is-show="isShowCivicWelcome"
+      :is-animated="true"
+      :is-fullscreen="false"
+      content-container-class="mt-64 rounded-8 overflow-hidden"
+    )
+      CivicLikerWelcomeView(
+        :price="civicSupport.quantity * 5"
+        :referrer-avatar-url="user.avatar"
+        :referrer-display-name="user.displayName"
+        :is-referrer-civic-liker="isUserCivicLiker"
+      )
+        template(#header)
+          Button.bg-like-green.text-like-cyan-light.rounded-full.shadow-8(
+            @click="isShowCivicWelcome = false"
+          )
+            svg.m-12(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.73 14.73" width="16")
+              g(fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2")
+                line(x1="1" y1="1" x2="13.73" y2="13.73")
+                line(x1="1" y1="13.73" x2="13.73" y2="1")
+
+        template(#footer)
+          AppDownloadBadges.pb-24(:from="user.user")
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
-import { getUserMinAPI, getFetchUserSuperLikeAPI } from '~/util/api';
+import {
+  getUserMinAPI,
+  getFetchUserSuperLikeAPI,
+  getCivicSupportingUserAPI,
+} from '~/util/api';
 import { getLikeCoURL } from '~/util/links';
 import { checkUserNameValid } from '~/util/user';
 
+import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
+import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
 import Card from '~/components/Card/Card';
+import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
 import Collapse from '~/components/Collapse/Collapse';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
@@ -162,9 +193,12 @@ function filterItems(inputItems) {
 export default {
   layout: 'desktop',
   components: {
+    AppDownloadBadges,
+    BaseDialog,
     Button,
     ButtonGroup,
     Card,
+    CivicLikerWelcomeView,
     Collapse,
     Identity,
     PageHeader,
@@ -213,13 +247,20 @@ export default {
       );
     },
   },
-  async asyncData({ route, $api, error }) {
+  async asyncData({ route, query, $api, error }) {
     const { id } = route.params;
     if (id && checkUserNameValid(id)) {
       try {
-        const user = await $api.$get(getUserMinAPI(id));
+        const [user, civicSupport] = await Promise.all([
+          $api.$get(getUserMinAPI(id)),
+          $api
+            .$get(getCivicSupportingUserAPI(id))
+            .catch(() => ({ quantity: 0 })),
+        ]);
         return {
           user,
+          civicSupport,
+          isShowCivicWelcome: query.civic_welcome === '1',
         };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;

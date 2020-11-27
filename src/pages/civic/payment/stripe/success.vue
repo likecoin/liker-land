@@ -86,6 +86,15 @@ export default {
       return this.$t('PaymentSuccessPage.backToPrevious');
     },
   },
+  asyncData({ query, redirect }) {
+    if (query.from) {
+      redirect({
+        name: 'id',
+        params: { id: query.from },
+        query: { civic_welcome: 1 },
+      });
+    }
+  },
   head() {
     return {
       title: this.$t('PaymentSuccessPage.title'),

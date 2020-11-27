@@ -132,6 +132,12 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       } else if (email) {
         stripePayload.customer_email = email;
       }
+
+      if (civicLikerVersion > 1) {
+        stripePayload.success_url = `${
+          stripePayload.success_url
+        }?from=${encodeURIComponent(from)}&quantity=${quantity}`;
+      }
     }
     const session = await stripe.checkout.sessions.create(stripePayload);
     res.json({
