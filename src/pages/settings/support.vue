@@ -27,7 +27,7 @@
       <h2
         class="text-like-green font-24 font-500"
       >{{ $t('SettingsSupportPage.Title.ManageSubscription') }}</h2>
-      <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5">
+      <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16 phone:py-12">
         <div>
           <div
             class="text-24 font-500"
@@ -46,7 +46,7 @@
                 :href="getStripeBillingPortalAPI"
               >{{ $t('SettingsSupportPage.ManagePaymentMethod') }}</a>
             </div>
-            <div class="mt-12">
+            <div class="mt-12 phone:mt-4">
               <a
                 class="text-like-green font-500"
                 :href="getStripeBillingPortalAPI"
@@ -67,7 +67,7 @@
     <ul
       v-if="supportingLikerIds.length"
       key="content"
-      class="supporting-liker-list mt-12"
+      class="supporting-liker-list flex flex-wrap list-reset m-0 mt-12 pb-32"
     >
       <li
         v-for="id in supportingLikerIds"
@@ -172,19 +172,25 @@ export default {
 </script>
 
 <style lang="scss">
-.supporting-liker-list {
-  display: flex;
-  flex-wrap: wrap;
+$list-item-width: 220px;
 
-  list-style: none;
-  margin: 0;
-  padding: 32px;
-  padding-top: 0;
+.supporting-liker-list {
+  padding-left: calc((100% - #{$list-item-width} * 2) / 2) !important;
 
   li {
     width: 100%;
-    max-width: 220px;
+    max-width: $list-item-width;
     padding: 10px;
+  }
+
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+    align-items: center;
+
+    li {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 </style>
