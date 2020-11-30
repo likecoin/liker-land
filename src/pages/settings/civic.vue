@@ -125,6 +125,7 @@ export default {
       'getUserShouldRenewCivic',
       'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
+      'getUserIsCivicLikerV2',
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLikerPaid',
     ]),
@@ -196,7 +197,11 @@ export default {
     };
   },
   mounted() {
-    this.fetchSubscriptionInfo();
+    if (this.getUserIsCivicLikerV2) {
+      this.$router.replace({ name: 'settings-support' });
+    } else {
+      this.fetchSubscriptionInfo();
+    }
   },
   methods: {
     ...mapActions(['fetchUserSubscriptionInfo']),
