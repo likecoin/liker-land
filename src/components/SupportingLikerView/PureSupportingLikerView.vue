@@ -9,7 +9,9 @@
         :avatar-size="64"
         :is-avatar-outlined="isCivicLiker"
       />
-      <span class="mt-12 text-like-green text-20 font-500 underline">{{ displayName }}</span>
+      <div
+        class="w-full mt-12 text-like-green text-20 font-500 underline overflow-hidden"
+      >{{ displayName }}</div>
     </div>
     <div
       v-if="$slots.footer"
