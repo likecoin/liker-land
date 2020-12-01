@@ -164,8 +164,15 @@ export default {
     background-color: #9b9b9b33;
   }
 
+  &--danger {
+    color: #6e2828;
+
+    background-color: #ffc9c9;
+  }
+
   &--primary &__title,
-  &--secondary &__title {
+  &--secondary &__title,
+  &--danger &__title {
     font-weight: 600;
   }
 

@@ -200,6 +200,81 @@
       </div>
     </div>
 
+    <div
+      v-else-if="state === 'cancel'"
+      key="cancel"
+      class="p-32 phone:px-24"
+    >
+      <button
+        class="mb-16 settings-page-header__back-button text-like-green"
+        @click="state = 'select-quantity'"
+      ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
+
+      <div class="mx-24 phone:mx-0">
+        <hr class="my-16 border-t-1 border-gray-d8">
+        <CivicLikerSupportLikerView
+          :class="{ 'my-24 ml-8': isCivicLiker }"
+          :avatar-url="avatarUrl"
+          :display-name="displayName"
+          :is-civic-liker="isCivicLiker"
+          :subtitle="$t('CancelSubscription.Subtitle')"
+        />
+        <hr class="my-16 border-t-1 border-gray-d8">
+      </div>
+
+      <div class="mt-32 mx-40 phone:mx-0">
+        <BrokenHeart class="block mx-auto" />
+
+        <div
+          class="mt-16 text-24 text-like-green font-500 text-center"
+        >{{ $t('CancelSubscription.Title') }}</div>
+
+        <i18n
+          class="mt-32 text-gray-4a text-14 leading-1_5"
+          path="CancelSubscription.Description"
+          tag="p"
+          :places="{ date: nextBillingDate }"
+        >
+          <span class="font-500 text-like-green" place="name">{{ displayName }}</span>
+        </i18n>
+
+        <Button
+          class="mt-32"
+          :title="$t('CancelSubscription.Cancel')"
+          :full="true"
+          size="large"
+          @click="postsubscribe"
+        />
+
+        <Button
+          class="mt-12"
+          preset="danger"
+          :title="$t('CancelSubscription.Confirm')"
+          :full="true"
+          size="large"
+          @click="cancelSubscription"
+        />
+      </div>
+    </div>
+
+    <div
+      v-else-if="state === 'post-cancel'"
+      key="cancel"
+      class="px-72 pt-40 pb-32 phone:px-24"
+    >
+      <div
+        class="mt-16 text-24 text-like-green font-500 text-center"
+      >{{ $t('CancelSubscription.GoodBye') }}</div>
+
+      <Button
+        class="mt-24"
+        :title="$t('ok')"
+        :full="true"
+        size="large"
+        :to="{ name: 'settings-support' }"
+      />
+    </div>
+
     <template #footer>
       <div
         v-if="state === 'loading'"
@@ -214,7 +289,7 @@
         <a
           class="text-12 text-gray-4a underline"
           href="#"
-          @click.prevent="cancelSubscription"
+          @click.prevent="state = 'cancel'"
         >{{ $t('UpdateSupportQuantity.Unsubscribe') }}</a>
       </div>
     </template>
@@ -237,6 +312,8 @@ import Spinner from '~/components/Spinner/Spinner';
 export default {
   components: {
     BaseDialog,
+    BrokenHeart: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/images/civic-v2/broken-heart.svg'),
     Button,
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
@@ -373,6 +450,13 @@ export default {
         },
       });
     },
+    postsubscribe() {
+      this.$router.push({
+        name: 'id',
+        params: { id: this.authorId },
+        query: { civic_welcome: '1' },
+      });
+    },
     async updateSubscription() {
       const { currentQuantity, selectedQuantity, authorId } = this;
       if (currentQuantity === selectedQuantity) return;
@@ -385,11 +469,7 @@ export default {
       if (currentQuantity) {
         this.$router.push({ name: 'settings-support' });
       } else {
-        this.$router.push({
-          name: 'id',
-          params: { id: authorId },
-          query: { civic_welcome: '1' },
-        });
+        this.postsubscribe();
       }
     },
     async cancelSubscription() {
@@ -398,7 +478,7 @@ export default {
       this.state = 'loading';
       await this.removeCivicSupportUser(authorId);
       await this.fetchUserSubscriptionInfo();
-      this.$router.push({ name: 'settings-support' });
+      this.state = 'post-cancel';
     },
 
     onGoBackFromSelectQuantity() {

@@ -12,6 +12,14 @@
       "goToFeaturing": "Featured articles"
     }
   },
+  "CancelSubscription": {
+    "Title": "Don’t go, quality content need your support",
+    "GoodBye": "Goodbye, subscription cancelled",
+    "Subtitle": "Cancel subscription",
+    "Description": "{name} will lose your support at the end of this billing period on {date}, are you sure?",
+    "Cancel": "Continue support",
+    "Confirm": "Cancel subscription"
+  },
   "CivicLikerCTA": {
     "slogan": {
       "register": "Trade a coffee for a better world",
