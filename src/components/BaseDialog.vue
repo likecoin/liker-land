@@ -3,12 +3,7 @@
     :css="isAnimated"
     appear
     name="base-dialog-"
-    @before-enter="onBeforeEnter"
-    @enter="onEnter"
-    @after-enter="onAfterEnter"
-    @before-leave="onBeforeLeave"
-    @leave="onLeave"
-    @after-leave="onAfterLeave"
+    v-on="transitionListeners"
   )
     div(
       v-if="isShow"
@@ -58,6 +53,15 @@ export default {
         'base-dialog--fullscreen': !!this.isFullscreen,
         'base-dialog--with-backdrop': this.isShowBackdrop,
       };
+    },
+    transitionListeners() {
+      const {
+        resize,
+        'click-outside': clickOutside,
+        'update:isShow': updateIsShow,
+        ...listeners
+      } = this.$listeners;
+      return listeners;
     },
   },
   mounted() {
@@ -109,6 +113,7 @@ export default {
       }
     },
     onResize() {
+      if (!this.$refs.contentContainer) return;
       const windowHeight = window.innerHeight;
       const {
         offsetWidth: width,
