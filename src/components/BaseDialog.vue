@@ -10,9 +10,18 @@
       :class="rootClass"
       @click="onClickDialog"
     )
-      .base-dialog__content-container(:class="contentContainerClass" ref="contentContainer")
-        main
-          slot
+      Transition(
+        name="fade"
+        mode="out-in"
+      )
+        .base-dialog__content-container(
+          ref="contentContainer"
+          :key="contentKey"
+        )
+          main(:class="contentContainerClass")
+            slot
+          footer
+            slot(name="footer")
 </template>
 
 <script>
@@ -42,7 +51,11 @@ export default {
     },
     contentContainerClass: {
       type: String,
-      default: '',
+      default: undefined,
+    },
+    contentKey: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {
@@ -189,7 +202,7 @@ export default {
 
       content: '';
 
-      background: rgba(black, 0.2);
+      background: rgba(#e6e6e6, 0.5);
     }
   }
 
@@ -201,8 +214,10 @@ export default {
     .base-dialog:not(.base-dialog--fullscreen) & {
       max-width: config('screens.phone.max');
 
-      background-color: white;
-      box-shadow: 0 4px 25px 0 rgba(black, 0.4);
+      main {
+        background-color: white;
+        box-shadow: 0 4px 25px 0 rgba(black, 0.4);
+      }
 
       @media screen and (min-width: config('screens.tablet.min')) {
         margin: 104px auto 56px;

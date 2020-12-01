@@ -338,7 +338,8 @@
     "PaymentMethod": "Payment",
     "ManagePaymentMethod": "Manage Payment Method",
     "BillingHistory": "Billing History",
-    "NoSupport": "You are not supporting anyone yet!"
+    "Cancelled": "Cancelled subscription",
+    "CancelledDate": "Will be ended on {date}"
   },
   "SettingsSupportUsersPage": {
     "Slogan": "Be my Civic Liker",
@@ -394,7 +395,7 @@
     "Title": "Choose the monthly supporting amount for {name}",
     "HintText": "Support {name} monthly",
     "Next": "Next",
-    "Subscribe": "立即訂閱",
+    "Subscribe": "Subscribe now",
     "Unsubscribe": "Cancel subscription"
   },
   "back": "Back",
@@ -403,7 +404,7 @@
   "confirm": "Confirm",
   "copy": "Copy",
   "copied": "Copied",
-  "edit": "編輯",
+  "edit": "Edit",
   "finish": "Finish",
   "follow": "Follow",
   "following": "Following",

@@ -27,63 +27,84 @@
       <h2
         class="text-like-green font-24 font-500"
       >{{ $t('SettingsSupportPage.Title.ManageSubscription') }}</h2>
-      <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16 phone:py-12">
-        <div>
-          <div
-            class="text-24 font-500"
-          >{{ `${getUserSubscriptionInfo.quantity * 5} ${$t('Currency.USD')}/${$t('SubscriptionPeriod.Month')}` }}</div>
-          <div>{{ $t('SettingsSupportPage.TotalAmount') }}</div>
-        </div>
-        <div class="flex mt-20">
-          <div class="flex-grow">
-            <div class="font-500">{{ maskedCardNumber }}</div>
-            <div>{{ $t('SettingsSupportPage.PaymentMethod') }}</div>
+      <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16">
+        <template v-if="getUserSubscriptionInfo.willCancel">
+          <div class="text-24 font-500">
+            {{ $t('SettingsSupportPage.Cancelled') }}
           </div>
-          <div class="ml-12">
-            <div>
-              <a
-                class="text-like-green font-500"
-                :href="getStripeBillingPortalAPI"
-              >{{ $t('SettingsSupportPage.ManagePaymentMethod') }}</a>
+          <div class="flex mt-20">
+            <div class="flex-grow">
+              <div>{{ $t('SettingsSupportPage.CancelledDate', { date: getUserSubscriptionInfo.currentPeriodEndString }) }}</div>
             </div>
-            <div class="mt-12 phone:mt-4">
+            <div>
               <a
                 class="text-like-green font-500"
                 :href="getStripeBillingPortalAPI"
               >{{ $t('SettingsSupportPage.BillingHistory') }}</a>
             </div>
           </div>
-        </div>
-        <div class="mt-20">
-          <div class="font-500">{{ getUserSubscriptionInfo.currentPeriodEndString }}</div>
-          <div>{{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}</div>
-        </div>
+          <Button
+            class="mt-24"
+            size="large"
+            :title="$t('SettingsCivicCancelPage.continue')"
+            @click="subscribe"
+          />
+        </template>
+        <template v-else>
+          <div>
+            <div
+              class="text-24 font-500"
+            >{{ `${getUserSubscriptionInfo.quantity * 5} ${$t('Currency.USD')}/${$t('SubscriptionPeriod.Month')}` }}</div>
+            <div>{{ $t('SettingsSupportPage.TotalAmount') }}</div>
+          </div>
+          <div class="flex mt-20">
+            <div class="flex-grow">
+              <div class="font-500">{{ maskedCardNumber }}</div>
+              <div>{{ $t('SettingsSupportPage.PaymentMethod') }}</div>
+            </div>
+            <div class="ml-12">
+              <div>
+                <a
+                  class="text-like-green font-500"
+                  :href="getStripeBillingPortalAPI"
+                >{{ $t('SettingsSupportPage.ManagePaymentMethod') }}</a>
+              </div>
+              <div class="mt-12 phone:mt-4">
+                <a
+                  class="text-like-green font-500"
+                  :href="getStripeBillingPortalAPI"
+                >{{ $t('SettingsSupportPage.BillingHistory') }}</a>
+              </div>
+            </div>
+          </div>
+          <div class="mt-20">
+            <div class="font-500">{{ getUserSubscriptionInfo.currentPeriodEndString }}</div>
+            <div>{{ $t('SettingsCivicPage.billingSummary.nextBillingDate') }}</div>
+          </div>
+        </template>
       </div>
     </template>
 
-    <h2
-      class="mt-40 text-like-green font-24 font-500"
-    >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
-    <ul
-      v-if="supportingLikerIds.length"
-      key="content"
-      class="supporting-liker-list flex flex-wrap list-reset m-0 mt-12 pb-32"
-    >
-      <li
-        v-for="id in supportingLikerIds"
-        :key="id"
+    <template v-if="supportingLikerIds.length">
+      <h2
+        class="mt-40 text-like-green font-24 font-500"
+      >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
+      <ul
+        key="content"
+        class="supporting-liker-list flex flex-wrap list-reset m-0 mt-12 pb-32"
       >
-        <SupportingLikerView
-          class="h-full"
-          :liker-id="id"
-          :price="getAuthorQuantity(id) * 5"
-        />
-      </li>
-    </ul>
-    <div
-      v-else
-      class="bg-white rounded-8 mt-20 px-32 py-24 text-center text-16 font-500 text-gray-4a"
-    >{{ $t('SettingsSupportPage.NoSupport') }}</div>
+        <li
+          v-for="id in supportingLikerIds"
+          :key="id"
+        >
+          <SupportingLikerView
+            class="h-full"
+            :liker-id="id"
+            :price="getAuthorQuantity(id) * 5"
+          />
+        </li>
+      </ul>
+    </template>
 
     <NuxtChild />
   </div>
@@ -91,6 +112,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import Button from '~/components/Button/Button';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
@@ -112,6 +134,7 @@ function getMaskedCardNumber(brand, last4) {
 
 export default {
   components: {
+    Button,
     SupportingLikerView,
     Spinner,
   },
@@ -142,10 +165,7 @@ export default {
   },
   async mounted() {
     if (!this.getUserIsCivicLiker) {
-      this.$router.push({
-        name: 'settings-support-users-id',
-        params: { id: 'foundation' },
-      });
+      this.subscribe();
       this.state = 'error-not-civic';
       return;
     }
@@ -154,18 +174,24 @@ export default {
         this.fetchCivicSupportingUsers(),
         this.fetchUserSubscriptionInfo(),
       ]);
+      this.state = 'done';
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
       this.state = 'error-civic-v2';
     }
-    this.state = 'done';
   },
   methods: {
     ...mapActions(['fetchUserSubscriptionInfo', 'fetchCivicSupportingUsers']),
     getAuthorQuantity(id) {
       const { quantity = 0 } = this.getCivicSupportingUsers[id] || {};
       return quantity;
+    },
+    subscribe() {
+      this.$router.push({
+        name: 'settings-support-users-id',
+        params: { id: 'foundation' },
+      });
     },
   },
 };

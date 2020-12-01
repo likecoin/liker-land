@@ -3,6 +3,8 @@ export const getUserSubscriptionInfo = state => state.subscriptionInfo;
 export const getUserId = state => state.user.user;
 export const getUserIsCivicLikerTrial = state => !!state.user.isCivicLikerTrial;
 export const getUserIsCivicLiker = state => !!state.user.isSubscribedCivicLiker;
+export const getUserIsCivicLikerV2 = state =>
+  state.user.civicLikerVersion === 2;
 export const getUserIsCivicLikerPaid = ({ user }) =>
   user.isSubscribedCivicLiker && !user.isCivicLikerTrial;
 export const getUserShouldRenewCivic = ({ user }) =>

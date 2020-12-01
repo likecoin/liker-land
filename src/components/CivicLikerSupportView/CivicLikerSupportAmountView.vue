@@ -1,8 +1,8 @@
 <template>
   <div class="civic-liker-support-amount-view">
     <div class="relative flex items-center justify-center px-32 text-like-green">
-      <div>
-        <span class="text-40 font-500"><span
+      <div class="text-center">
+        <span class="text-40 font-500 phone:text-32"><span
           v-if="prefix"
           class="font-emoji mr-8"
         >{{ prefix }}</span>{{ `${price} ${currency}` }}</span><span class="ml-8 text-16">/{{ period }}</span>

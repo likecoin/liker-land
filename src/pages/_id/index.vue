@@ -125,9 +125,8 @@
 
     BaseDialog(
       :is-show="isShowCivicWelcome"
-      :is-animated="true"
-      :is-fullscreen="false"
-      content-container-class="mt-64 rounded-8 overflow-hidden"
+      content-container-class="mt-64 rounded-8 overflow-hidden phone:rounded-none"
+      @click-outside="isShowCivicWelcome = false"
     )
       CivicLikerWelcomeView(
         :price="civicSupport.quantity * 5"

@@ -362,7 +362,8 @@
     "PaymentMethod": "支付",
     "ManagePaymentMethod": "管理付款方法",
     "BillingHistory": "付款記錄",
-    "NoSupport": "尚未支持任何人"
+    "Cancelled": "已取消訂閱",
+    "CancelledDate": "有效期至 {date}"
   },
   "SettingsSupportUsersPage": {
     "Slogan": "成為我的讚賞公民",

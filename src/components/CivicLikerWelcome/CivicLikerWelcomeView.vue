@@ -1,9 +1,9 @@
 <template>
   <div class="civic-liker-welcome-view bg-white">
-    <header class="civic-liker-welcome-view__header bg-like-green px-32 py-24">
+    <header class="civic-liker-welcome-view__header bg-like-green px-32 py-24 phone:px-16">
       <slot name="header" />
     </header>
-    <div class="flex items-center pt-24 pb-16 px-32">
+    <div class="flex items-center pt-24 pb-16 px-32 phone:px-24">
       <Identity
         class="flex-no-shrink"
         :avatar-size="60"
@@ -17,18 +17,19 @@
       ><br place="br"></i18n>
     </div>
 
-    <hr class="border-t-1 border-gray-e6 mx-32 mb-24">
+    <hr class="border-t-1 border-gray-e6 mx-32 mb-24 phone:mx-24">
 
-    <div class="relative ml-64 mr-80 p-32 pb-40 pr-72 border-1 border-gray-9b rounded-8">
+    <div class="relative ml-64 mr-80 p-32 pb-40 pr-72 border-1 border-gray-9b rounded-8 phone:mx-24 phone:px-24">
       <img
-        class="absolute pin-r -mr-48"
+        class="absolute pin-r -mr-48 phone:w-64 phone:block phone:mx-auto phone:relative"
         src="./check.png"
         role="presentation"
         style="width:96px"
       >
       <i18n
-        class="text-gray-4a text-24"
+        class="text-gray-4a text-24 phone:mt-16 phone:text-center"
         path="CivicLikerWelcomeView.Price"
+        tag="div"
         :places="{ price }"
       />
       <i18n
