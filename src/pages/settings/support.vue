@@ -47,7 +47,10 @@
             class="mt-24"
             size="large"
             :title="$t('SettingsCivicCancelPage.continue')"
-            @click="subscribe"
+            :to="{
+              name: 'settings-support-users-id',
+              params: { id: 'foundation' },
+            }"
           />
         </template>
         <template v-else>
@@ -165,7 +168,6 @@ export default {
   },
   async mounted() {
     if (!this.getUserIsCivicLiker) {
-      this.subscribe();
       this.state = 'error-not-civic';
       return;
     }
@@ -186,12 +188,6 @@ export default {
     getAuthorQuantity(id) {
       const { quantity = 0 } = this.getCivicSupportingUsers[id] || {};
       return quantity;
-    },
-    subscribe() {
-      this.$router.push({
-        name: 'settings-support-users-id',
-        params: { id: 'foundation' },
-      });
     },
   },
 };
