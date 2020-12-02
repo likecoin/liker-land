@@ -10,87 +10,94 @@
     <div
       v-if="state === 'new'"
       key="new"
-      class="px-72 py-48 phone:px-16"
+      class="p-32 phone:px-16"
     >
-      <CivicLikerSupportLikerView
-        :avatar-url="avatarUrl"
-        :display-name="displayName"
-        :is-civic-liker="isCivicLiker"
-        :subtitle="$t('SettingsSupportUsersPage.Slogan')"
-      />
+      <button
+        class="mb-32 settings-page-header__back-button text-like-green"
+        @click="$router.back()"
+      ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
 
-      <hr class="my-24 border-t-1 border-gray-d8">
-
-      <CivicLikerSupportAmountView
-        :price="selectedQuantity * dollar"
-        :currency="currency"
-        :period="$t('SubscriptionPeriod.Month')"
-        :prefix="priceEmoji"
-        :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
-        @click-add="onClickUpdateQuantity"
-      />
-
-      <div class="mx-40 mt-16">
-        <Button
-          :title="$t('UpdateSupportQuantity.Subscribe')"
-          :full="true"
-          size="large"
-          @click="newSubscription"
+      <div class="mx-40 phone:mx-0">
+        <CivicLikerSupportLikerView
+          :avatar-url="avatarUrl"
+          :display-name="displayName"
+          :is-civic-liker="isCivicLiker"
+          :subtitle="$t('SettingsSupportUsersPage.Slogan')"
         />
-      </div>
-
-      <hr class="my-24 border-t-1 border-gray-d8">
-
-      <ul class="m-0 p-0 list-style-none">
-        <li class="flex items-center">
-          <img class="w-80" src="~/assets/images/civic-v2/support/support-group.png">
-          <div class="flex-grow ml-24 phone:ml-12">
-            <h1
-              class="text-like-green text-16"
-            >{{ $t(`SettingsSupportUsersPage.Benefits.0.Title`) }}</h1>
-            <p
-              class="mt-8 text-14 font-200"
-            >{{ $t(`SettingsSupportUsersPage.Benefits.0.Description`) }}</p>
-          </div>
-        </li>
-        <li class="flex items-center mt-24">
-          <img class="w-80" src="~/assets/images/civic-v2/support/follow-me.png">
-          <div class="flex-grow ml-24">
-            <h1
-              class="text-like-green text-16"
-            >{{ $t(`SettingsSupportUsersPage.Benefits.1.Title`) }}</h1>
-            <p
-              class="mt-8 text-14 font-200"
-            >{{ $t(`SettingsSupportUsersPage.Benefits.1.Description`) }}</p>
-          </div>
-        </li>
-        <li class="flex items-center mt-24">
-          <img class="w-80" src="~/assets/images/civic-v2/support/contribute.png">
-          <div class="flex-grow ml-24">
-            <h1
-              class="text-like-green text-16"
-            >{{ $t(`SettingsSupportUsersPage.Benefits.2.Title`) }}</h1>
-            <p
-              class="mt-8 text-14 font-200"
-            >{{ $t(`SettingsSupportUsersPage.Benefits.2.Description`) }}</p>
-          </div>
-        </li>
-      </ul>
-
-      <div class="mx-40 mt-32">
-        <Button
-          :title="$t('UpdateSupportQuantity.Subscribe')"
-          :full="true"
-          size="large"
-          @click="newSubscription"
+  
+        <hr class="my-24 border-t-1 border-gray-d8">
+  
+        <CivicLikerSupportAmountView
+          :price="selectedQuantity * dollar"
+          :currency="currency"
+          :period="$t('SubscriptionPeriod.Month')"
+          :prefix="priceEmoji"
+          :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
+          @click-add="onClickUpdateQuantity"
         />
+  
+        <div class="mx-40 mt-16">
+          <Button
+            :title="$t('UpdateSupportQuantity.Subscribe')"
+            :full="true"
+            size="large"
+            @click="newSubscription"
+          />
+        </div>
+  
+        <hr class="my-24 border-t-1 border-gray-d8">
+  
+        <ul class="m-0 p-0 list-style-none">
+          <li class="flex items-center">
+            <img class="w-80" src="~/assets/images/civic-v2/support/support-group.png">
+            <div class="flex-grow ml-24 phone:ml-12">
+              <h1
+                class="text-like-green text-16"
+              >{{ $t(`SettingsSupportUsersPage.Benefits.0.Title`) }}</h1>
+              <p
+                class="mt-8 text-14 font-200"
+              >{{ $t(`SettingsSupportUsersPage.Benefits.0.Description`) }}</p>
+            </div>
+          </li>
+          <li class="flex items-center mt-24">
+            <img class="w-80" src="~/assets/images/civic-v2/support/follow-me.png">
+            <div class="flex-grow ml-24">
+              <h1
+                class="text-like-green text-16"
+              >{{ $t(`SettingsSupportUsersPage.Benefits.1.Title`) }}</h1>
+              <p
+                class="mt-8 text-14 font-200"
+              >{{ $t(`SettingsSupportUsersPage.Benefits.1.Description`) }}</p>
+            </div>
+          </li>
+          <li class="flex items-center mt-24">
+            <img class="w-80" src="~/assets/images/civic-v2/support/contribute.png">
+            <div class="flex-grow ml-24">
+              <h1
+                class="text-like-green text-16"
+              >{{ $t(`SettingsSupportUsersPage.Benefits.2.Title`) }}</h1>
+              <p
+                class="mt-8 text-14 font-200"
+              >{{ $t(`SettingsSupportUsersPage.Benefits.2.Description`) }}</p>
+            </div>
+          </li>
+        </ul>
+  
+        <div class="mx-40 mt-32">
+          <Button
+            :title="$t('UpdateSupportQuantity.Subscribe')"
+            :full="true"
+            size="large"
+            @click="newSubscription"
+          />
+        </div>
       </div>
     </div>
 
     <div
       v-else-if="state === 'select-quantity'"
       key="select-quantity"
-      class="py-32 px-32 phone:px-24"
+      class="p-32 phone:px-24"
     >
       <button
         class="settings-page-header__back-button text-like-green"
@@ -379,28 +386,15 @@ export default {
       );
     },
   },
-  async mounted() {
-    const promises = [this.fetchLikerInfo()];
-    if (this.getUserIsCivicLiker) {
-      if (!this.getCivicSupportingUserInfo(this.authorId)) {
-        promises.push(this.fetchCivicSupportingUsers());
+  watch: {
+    authorId(authorId, prevAuthorId) {
+      if (authorId !== prevAuthorId) {
+        this.fetchInfo();
       }
-      if (!this.getUserSubscriptionInfo) {
-        promises.push(this.fetchUserSubscriptionInfo());
-      }
-    }
-    try {
-      await Promise.all(promises);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      this.$router.replace({ name: 'settings-support' });
-    }
-    // Set default to  1 for new subscription
-    const { quantity = 1 } =
-      this.getCivicSupportingUserInfo(this.authorId) || {};
-    this.selectedQuantity = quantity;
-    this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
+    },
+  },
+  mounted() {
+    this.fetchInfo();
   },
   methods: {
     ...mapActions([
@@ -430,6 +424,30 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+
+    async fetchInfo() {
+      const promises = [this.fetchLikerInfo()];
+      if (this.getUserIsCivicLiker) {
+        if (!this.getCivicSupportingUserInfo(this.authorId)) {
+          promises.push(this.fetchCivicSupportingUsers());
+        }
+        if (!this.getUserSubscriptionInfo) {
+          promises.push(this.fetchUserSubscriptionInfo());
+        }
+      }
+      try {
+        await Promise.all(promises);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        this.$router.replace({ name: 'settings-support' });
+      }
+      // Set default to  1 for new subscription
+      const { quantity = 1 } =
+        this.getCivicSupportingUserInfo(this.authorId) || {};
+      this.selectedQuantity = quantity;
+      this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
     },
 
     confirmQuantity() {
@@ -490,7 +508,7 @@ export default {
     },
 
     onClickBackdrop() {
-      if (this.state !== 'loading') {
+      if (this.state !== 'loading' && this.getUserIsCivicLiker) {
         this.$router.back();
       }
     },
