@@ -22,7 +22,7 @@
                 Button(
                   preset="primary"
                   :title="$t('PortfolioPage.BecomeCivicLiker')"
-                  :to="{ name: 'civic', query: { from: user.user } }"
+                  :to="ctaTo"
                 )
                 ButtonGroup
                   Button(
@@ -73,7 +73,7 @@
           Button.user-portfolio-page__top-cta(
             preset="primary"
             :title="$t('PortfolioPage.BecomeCivicLiker')"
-            :to="{ name: 'civic', query: { from: user.user } }"
+            :to="ctaTo"
           )
 
           nav.user-portfolio-page__tab-bar(v-if="items.length > 0 && works.length > 0")
@@ -244,6 +244,9 @@ export default {
       return !!(
         this.user.isCivicLikerTrial || this.user.isSubscribedCivicLiker
       );
+    },
+    ctaTo() {
+      return { name: 'civic', query: { from: this.user.user } };
     },
   },
   async asyncData({ route, query, $api, error }) {
