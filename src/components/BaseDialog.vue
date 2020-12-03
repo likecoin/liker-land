@@ -190,6 +190,8 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+
+    pointer-events: none;
   }
 
   &--with-backdrop:not(#{&}--fullscreen) {
@@ -202,12 +204,16 @@ export default {
 
       content: '';
 
+      pointer-events: auto;
+
       background: rgba(#e6e6e6, 0.5);
     }
   }
 
   &__content-container {
     position: relative;
+
+    pointer-events: auto;
 
     width: 100%;
 
