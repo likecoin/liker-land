@@ -444,8 +444,12 @@ export default {
         this.$router.replace({ name: 'settings-support' });
       }
       // Set default to  1 for new subscription
-      const { quantity = 1 } =
+      let { quantity = 1 } =
         this.getCivicSupportingUserInfo(this.authorId) || {};
+      const parsedQuantity = parseInt(this.$route.query.quantity, 10);
+      if (parsedQuantity && parsedQuantity > 0) {
+        quantity = parsedQuantity;
+      }
       this.selectedQuantity = quantity;
       this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
     },
