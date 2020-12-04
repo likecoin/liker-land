@@ -296,7 +296,7 @@ export default {
           getFetchUserSuperLikeAPI(this.user.user),
           { params: { before, limit: ITEM_PER_FETCH } }
         );
-        this.items.push(...list);
+        this.items.push(...list.filter(item => item.user !== this.user.user));
         this.itemsState = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
       } catch (error) {
         // eslint-disable-next-line no-console
