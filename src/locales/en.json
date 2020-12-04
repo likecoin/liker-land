@@ -342,6 +342,7 @@
       "NotCivicV2": "Support feature is only available to v2 civic liker",
       "Unknown": "Unknown error"
     },
+    "AboutCivicLiker": "About Civic Liker",
     "TotalAmount": "Total monthly subscription amount",
     "PaymentMethod": "Payment",
     "ManagePaymentMethod": "Manage Payment Method",

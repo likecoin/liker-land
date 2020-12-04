@@ -43,7 +43,7 @@
 
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block"
-            :to="{ name: 'civic' }"
+            :to="{ name: getUserIsCivicLikerV2 ? 'settings-support' : 'civic' }"
             @click.native="onClickMenuItem"
           >{{ titleForCivicMenuItem }}</NuxtLink>
 
@@ -137,6 +137,7 @@ export default {
       'getUserInfo',
       'getUserCivicLikerHalo',
       'getUserIsCivicLikerPaid',
+      'getUserIsCivicLikerV2',
       'getHomeRoute',
     ]),
 
