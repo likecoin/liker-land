@@ -28,6 +28,7 @@ export default {
       'getUserInfo',
       'getUserShouldRenewCivic',
       'getUserIsCivicLiker',
+      'getUserIsCivicLikerV2',
     ]),
   },
   head() {
@@ -67,8 +68,17 @@ export default {
     };
   },
   mounted() {
-    if (this.getUserIsCivicLiker && !this.getUserShouldRenewCivic) {
-      this.$router.replace({ name: 'settings-civic' });
+    if (this.getUserIsCivicLiker) {
+      if (this.getUserIsCivicLikerV2) {
+        const { from, ...query } = this.$route.query;
+        this.$router.replace({
+          name: 'settings-support-users-id',
+          params: { id: this.$route.query.from },
+          query,
+        });
+      } else if (!this.getUserShouldRenewCivic) {
+        this.$router.replace({ name: 'settings-civic' });
+      }
       return;
     }
     logTrackerEvent(
