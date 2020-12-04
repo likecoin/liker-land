@@ -62,7 +62,10 @@
           </div>
           <div class="flex mt-20">
             <div class="flex-grow">
-              <div class="font-500">{{ maskedCardNumber }}</div>
+              <div class="flex items-center font-500">
+                <span>{{ maskedCardNumber }}</span>
+                <CardBrand class="ml-4 text-16" :brand="cardBrand" />
+              </div>
               <div>{{ $t('SettingsSupportPage.PaymentMethod') }}</div>
             </div>
             <div class="ml-12">
@@ -116,6 +119,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import Button from '~/components/Button/Button';
+import CardBrand from '~/components/CardBrand/CardBrand';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
@@ -138,6 +142,7 @@ function getMaskedCardNumber(brand, last4) {
 export default {
   components: {
     Button,
+    CardBrand,
     SupportingLikerView,
     Spinner,
   },
@@ -162,6 +167,15 @@ export default {
           card: { brand, last4 },
         } = this.getUserSubscriptionInfo;
         return getMaskedCardNumber(brand, last4);
+      }
+      return '';
+    },
+    cardBrand() {
+      if (this.getUserSubscriptionInfo) {
+        const {
+          card: { brand },
+        } = this.getUserSubscriptionInfo;
+        return brand;
       }
       return '';
     },
