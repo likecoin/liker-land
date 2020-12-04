@@ -392,8 +392,7 @@
   },
   "SupportSummary": {
     "Title": "Details",
-    "CurrentCharge": "Civic Liker - {name} (Current)",
-    "NewCharge": "Civic Liker - {name} (New)",
+    "NewCharge": "Civic Liker - {name}",
     "OtherCharge": "Civic Liker (Others)",
     "BillingDate": "Will be billed automatically on {date}",
     "Total": "Total",

@@ -168,19 +168,11 @@
       <hr class="my-16 border-t-1 border-gray-d8">
 
       <div class="mt-20 mx-40 phone:mx-0 text-14 text-gray-4a font-200">
-        <h2 class="text-16 font-500">{{ $t('SupportSummary.Title') }}</h2>
+        <h2 class="mb-16 text-16 font-500">{{ $t('SupportSummary.Title') }}</h2>
 
-        <div class="flex justify-between mt-16 py-12 border-t-1 border-gray-d8">
-          <div>{{ $t('SupportSummary.CurrentCharge', { name: displayName }) }}</div>
-          <div class="font-500 whitespace-no-wrap">{{ `${currency} ${currentQuantity * dollar}` }}</div>
-        </div>
-
-        <div
-          v-if="selectedQuantity !== currentQuantity"
-          class="flex justify-between py-12 border-t-1 border-gray-d8"
-        >
+        <div class="flex justify-between py-12 border-t-1 border-gray-d8">
           <div>{{ $t('SupportSummary.NewCharge', { name: displayName }) }}</div>
-          <div class="font-500 whitespace-no-wrap">{{ `${currency} ${(selectedQuantity - currentQuantity) * dollar}` }}</div>
+          <div class="font-500 whitespace-no-wrap">{{ `${currency} ${selectedQuantity * dollar}` }}</div>
         </div>
 
         <div class="flex justify-between py-12 border-t-1 border-gray-d8">
