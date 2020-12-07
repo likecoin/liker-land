@@ -1,5 +1,10 @@
 <template>
-  <NuxtChild v-if="state === 'error-not-civic'" />
+  <div
+    v-if="state === 'loading'"
+    key="loading"
+  >
+    <Spinner class="mx-auto my-64" />
+  </div>
 
   <div
     v-else-if="state.startsWith('error')"
@@ -13,13 +18,6 @@
       v-else
       class="my-32 text-16 font-500 text-gray-4a"
     >{{ $t('SettingsSupportPage.ErrorTitle.Unknown') }}</div>
-  </div>
-
-  <div
-    v-else-if="state === 'loading'"
-    key="loading"
-  >
-    <Spinner class="mx-auto my-64" />
   </div>
 
   <div v-else>
@@ -54,7 +52,7 @@
             size="large"
             :title="$t('SettingsCivicCancelPage.continue')"
             :to="{
-              name: 'settings-support-users-id',
+              name: 'id-civic',
               params: { id: 'foundation' },
             }"
           />
@@ -117,8 +115,6 @@
         </li>
       </ul>
     </template>
-
-    <NuxtChild />
   </div>
 </template>
 <script>
@@ -130,20 +126,7 @@ import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
 import { getStripeBillingPortalAPI } from '~/util/api';
-
-function getMaskedCardNumber(brand, last4) {
-  switch (brand) {
-    case 'visa':
-    case 'mastercard':
-      return `•••• •••• •••• ${last4}`;
-
-    case 'amex':
-      return `•••• •••••• •${last4}`;
-
-    default:
-      return `•••• ${last4}`;
-  }
-}
+import { getMaskedCardNumber } from '~/util/billing';
 
 export default {
   components: {
@@ -192,10 +175,14 @@ export default {
       return;
     }
     try {
-      await Promise.all([
-        this.fetchCivicSupportingUsers(),
-        this.fetchUserSubscriptionInfo(),
-      ]);
+      const promises = [];
+      if (this.supportingLikerIds.length === 0) {
+        promises.push(this.fetchCivicSupportingUsers());
+      }
+      if (!this.getUserSubscriptionInfo) {
+        promises.push(this.fetchUserSubscriptionInfo());
+      }
+      await Promise.all(promises);
       this.state = 'done';
     } catch (err) {
       // eslint-disable-next-line no-console

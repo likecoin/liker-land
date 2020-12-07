@@ -2,7 +2,7 @@
   <BaseDialog
     :content-key="state"
     :is-show="true"
-    :is-show-backdrop="getUserIsCivicLiker"
+    :is-show-backdrop="isShowBackdrop || state === 'loading'"
     :is-animated="true"
     content-container-class="rounded-8 phone:rounded-none"
     @click-outside="onClickBackdrop"
@@ -24,9 +24,9 @@
           :is-civic-liker="isCivicLiker"
           :subtitle="$t('SettingsSupportUsersPage.Slogan')"
         />
-  
+
         <hr class="my-24 border-t-1 border-gray-d8">
-  
+
         <CivicLikerSupportAmountView
           :price="selectedQuantity * dollar"
           :currency="currency"
@@ -35,7 +35,7 @@
           :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
           @click-add="onClickUpdateQuantity"
         />
-  
+
         <div class="mx-40 mt-16">
           <Button
             :title="$t('UpdateSupportQuantity.Subscribe')"
@@ -44,9 +44,9 @@
             @click="newSubscription"
           />
         </div>
-  
+
         <hr class="my-24 border-t-1 border-gray-d8">
-  
+
         <ul class="m-0 p-0 list-style-none">
           <li class="flex items-center">
             <img class="w-80" src="~/assets/images/civic-v2/support/support-group.png">
@@ -82,7 +82,7 @@
             </div>
           </li>
         </ul>
-  
+
         <div class="mx-40 mt-32">
           <Button
             :title="$t('UpdateSupportQuantity.Subscribe')"
@@ -270,7 +270,7 @@
         :title="$t('ok')"
         :full="true"
         size="large"
-        :to="{ name: 'settings-support' }"
+        :to="{ name: 'settings-civic' }"
       />
     </div>
 
@@ -282,7 +282,7 @@
         <Spinner class="mx-auto my-96" />
       </div>
       <div
-        v-else-if="state === 'select-quantity' && getUserIsCivicLiker && !isCancelled"
+        v-else-if="state === 'select-quantity' && getUserIsCivicLiker && currentQuantity > 0 && !isCancelled"
         class="text-center mt-16"
       >
         <a
@@ -298,7 +298,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
-import { getPriceEmoji } from '../../../../util/civic';
+import { getPriceEmoji } from '~/util/civic';
 
 import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
@@ -319,6 +319,12 @@ export default {
     Identity,
     SelectButton,
     Spinner,
+  },
+  props: {
+    isShowBackdrop: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -390,9 +396,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchCivicSupportingUsers',
       'fetchUserInfo',
       'fetchUserSubscriptionInfo',
+      'fetchCivicSupportingUsers',
       'updateCivicSupportQuantity',
       'removeCivicSupportUser',
     ]),
@@ -433,7 +439,7 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
-        this.$router.replace({ name: 'settings-support' });
+        this.$router.replace({ name: 'settings-civic' });
       }
       // Set default to  1 for new subscription
       let { quantity = 1 } =
@@ -448,7 +454,7 @@ export default {
 
     confirmQuantity() {
       if (this.selectedQuantity === this.currentQuantity) {
-        this.$router.push({ name: 'settings-support' });
+        this.$router.push({ name: 'settings-civic' });
       } else {
         this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
       }
@@ -481,7 +487,7 @@ export default {
       });
       await this.fetchUserSubscriptionInfo();
       if (currentQuantity) {
-        this.$router.push({ name: 'settings-support' });
+        this.$router.push({ name: 'settings-civic' });
       } else {
         this.postsubscribe();
       }

@@ -217,7 +217,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserId', 'getIsFollowedAuthor']),
+    ...mapGetters([
+      'getUserId',
+      'getIsFollowedAuthor',
+      'getUserIsCivicLikerV2',
+    ]),
 
     likePayURL() {
       return getLikeCoURL(`/${this.user.user}`);
@@ -246,7 +250,11 @@ export default {
       );
     },
     ctaTo() {
-      return { name: 'civic', query: { from: this.user.user } };
+      const likerID = this.user.user;
+      if (this.isUserCivicLiker && this.getUserIsCivicLikerV2) {
+        return { name: 'id-civic', params: { id: likerID } };
+      }
+      return { name: 'civic', query: { from: likerID } };
     },
   },
   async asyncData({ route, query, $api, error }) {

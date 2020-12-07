@@ -8,7 +8,10 @@
     />
     <div class="flex-grow ml-24">
       <div class="text-32 text-like-green font-500">{{ displayName }}</div>
-      <div class="text-14 text-gray-4a font-600">{{ subtitle }}</div>
+      <div
+        v-if="subtitle"
+        class="mt-8 text-14 mttext-gray-4a font-600"
+      >{{ subtitle }}</div>
     </div>
   </div>
 </template>

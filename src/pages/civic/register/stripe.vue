@@ -72,7 +72,7 @@ export default {
       if (this.getUserIsCivicLikerV2) {
         const { from, ...query } = this.$route.query;
         this.$router.replace({
-          name: 'settings-support-users-id',
+          name: 'id-civic',
           params: { id: this.$route.query.from },
           query,
         });
