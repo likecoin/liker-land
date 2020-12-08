@@ -486,11 +486,7 @@ export default {
         quantity: selectedQuantity,
       });
       await this.fetchUserSubscriptionInfo();
-      if (currentQuantity) {
-        this.$router.push({ name: 'settings-civic' });
-      } else {
-        this.postsubscribe();
-      }
+      this.postsubscribe();
     },
     async cancelSubscription() {
       const { authorId } = this;
