@@ -471,6 +471,7 @@ export default {
       });
     },
     postsubscribe() {
+      this.state = 'loading';
       this.$router.push({
         name: 'id',
         params: { id: this.authorId },
