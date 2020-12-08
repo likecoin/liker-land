@@ -52,7 +52,7 @@
   },
   "CivicLikerWelcomeView": {
     "Congratulation": "Congratulation!{br}You have become the Civic Liker of {name}",
-    "Price": "{price} USD/mo",
+    "Price": "{emoji} {price} USD/mo",
     "Benefits": {
       "SupportTheCreator": {
         "Title": "Support the creator",

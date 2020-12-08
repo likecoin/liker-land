@@ -129,7 +129,8 @@
       @click-outside="isShowCivicWelcome = false"
     )
       CivicLikerWelcomeView(
-        :price="civicSupport.quantity * 5"
+        :price="supportingAmount"
+        :price-emoji="supportingEmoji"
         :referrer-avatar-url="user.avatar"
         :referrer-display-name="user.displayName"
         :is-referrer-civic-liker="isUserCivicLiker"
@@ -156,6 +157,7 @@ import {
   getFetchUserSuperLikeAPI,
   getCivicSupportingUserAPI,
 } from '~/util/api';
+import { getPriceEmoji } from '~/util/civic';
 import { getLikeCoURL } from '~/util/links';
 import { checkUserNameValid } from '~/util/user';
 
@@ -255,6 +257,12 @@ export default {
         return { name: 'id-civic', params: { id: likerID } };
       }
       return { name: 'civic', query: { from: likerID } };
+    },
+    supportingAmount() {
+      return this.civicSupport.quantity * 5;
+    },
+    supportingEmoji() {
+      return getPriceEmoji(this.supportingAmount);
     },
   },
   async asyncData({ route, query, $api, error }) {

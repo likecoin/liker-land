@@ -5,7 +5,7 @@
     </header>
     <div class="flex items-center pt-24 pb-16 px-32 phone:px-24">
       <Identity
-        class="flex-no-shrink"
+        :class="['flex-no-shrink', { 'ml-4': isReferrerCivicLiker }]"
         :avatar-size="60"
         :avatar-url="referrerAvatarUrl"
         :is-avatar-outlined="isReferrerCivicLiker"
@@ -31,7 +31,8 @@
         path="CivicLikerWelcomeView.Price"
         tag="div"
         :places="{ price }"
-      />
+      ><span v-if="priceEmoji" class="font-emoji" place="emoji">{{ priceEmoji }}</span>
+      </i18n>
       <i18n
         class="mt-8 text-gray-4a text-14 leading-1_5"
         path="CivicLikerWelcomeView.Benefits.SupportTheCreator.Description"
@@ -103,6 +104,10 @@ export default {
     price: {
       type: Number,
       default: 1,
+    },
+    priceEmoji: {
+      type: String,
+      default: '',
     },
     referrerDisplayName: {
       type: String,

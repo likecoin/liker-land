@@ -11,6 +11,7 @@ export const Default = () => ({
   template: `
     <CivicLikerWelcomeView
       :price="5"
+      price-emoji="☕️"
       referrer-avatar-url="https://www.gravatar.com/avatar/?d=mp"
       referrer-display-name="Kin Ko"
       :is-referrer-civic-liker="true"
