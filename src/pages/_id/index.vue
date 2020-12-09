@@ -1,6 +1,6 @@
 <template lang="pug">
   mixin CTAButton
-    Button(v-bind="ctaButtonProps")&attributes(attributes)
+    Button(v-bind="ctaButtonProps" @click="onClickCTAButton")&attributes(attributes)
 
   .user-portfolio-page
     PageHeader
@@ -259,16 +259,26 @@ export default {
     supportingEmoji() {
       return getPriceEmoji(this.supportingAmount);
     },
+    isSupportingCreator() {
+      return this.supportingAmount > 0;
+    },
+    ctaToRoute() {
+      if (this.getUserIsCivicLikerV2) {
+        if (this.isSupportingCreator) {
+          return undefined;
+        }
+        return { name: 'id-civic', params: { id: this.creatorLikerID } };
+      }
+      return { name: 'civic', query: { from: this.creatorLikerID } };
+    },
     ctaButtonProps() {
-      const isSupporting = this.supportingAmount > 0;
+      const isSupporting = this.isSupportingCreator;
       return {
         preset: isSupporting ? 'special' : 'primary',
         title: this.$t(
           `PortfolioPage.CTAButton.${isSupporting ? 'Active' : 'Inactive'}`
         ),
-        to: this.getUserIsCivicLikerV2
-          ? { name: 'id-civic', params: { id: this.creatorLikerID } }
-          : { name: 'civic', query: { from: this.creatorLikerID } },
+        to: this.ctaToRoute,
       };
     },
   },
@@ -406,6 +416,11 @@ export default {
         await this.unfollowAuthor(id);
       } else {
         await this.followAuthor(id);
+      }
+    },
+    onClickCTAButton() {
+      if (this.isSupportingCreator) {
+        this.isShowCivicWelcome = true;
       }
     },
   },
