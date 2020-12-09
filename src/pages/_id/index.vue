@@ -1,4 +1,7 @@
 <template lang="pug">
+  mixin CTAButton
+    Button(v-bind="ctaButtonProps")
+
   .user-portfolio-page
     PageHeader
       template
@@ -12,18 +15,14 @@
               Identity(
                 :avatar-url="user.avatar"
                 :avatar-size="88"
-                :is-avatar-outlined="isUserCivicLiker"
+                :is-avatar-outlined="isCivicLikerCreator"
               )
 
               .mt-16.text-like-cyan-gray ID: {{ user.user }}
               .mt-4.text-30.font-600.text-like-cyan.text-center {{ user.displayName }}
 
-              .user-info-panel__actions
-                Button(
-                  preset="primary"
-                  :title="$t('PortfolioPage.BecomeCivicLiker')"
-                  :to="ctaTo"
-                )
+              .user-info-panel__actions(v-if="!isSelf")
+                +CTAButton
                 ButtonGroup
                   Button(
                     preset="translucent-dark"
@@ -41,11 +40,11 @@
               .text-12.text-center.text-gray-9b.font-200
                 | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
 
-            footer.user-info-panel__footer.user-info-panel__footer--desktop(v-if="isUserCivicLiker")
+            footer.user-info-panel__footer.user-info-panel__footer--desktop(v-if="isCivicLikerCreator")
               .px-24.py-16
                 +CivicLikerSinceLabel.px-4
 
-            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto(v-if="isUserCivicLiker")
+            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto(v-if="isCivicLikerCreator")
               .px-24.py-16.flex.justify-between.items-center(@click="isShowAbout = !isShowAbout")
                 span.text-14.text-gray-4a.font-200 {{ $t('PortfolioPage.About') }}
                 svg.text-gray-9b(
@@ -70,11 +69,7 @@
 
       .page-content__right
         header.user-portfolio-page__top-nav
-          Button.user-portfolio-page__top-cta(
-            preset="primary"
-            :title="$t('PortfolioPage.BecomeCivicLiker')"
-            :to="ctaTo"
-          )
+          +CTAButton.user-portfolio-page__top-cta(v-if="!isSelf")
 
           nav.user-portfolio-page__tab-bar(v-if="items.length > 0 && works.length > 0")
             Button.user-portfolio-page__tab-bar-item(
@@ -124,6 +119,7 @@
             | {{ $t('PortfolioPage.EmptyLabel') }}
 
     BaseDialog(
+      v-if="!isSelf"
       :is-show="isShowCivicWelcome"
       content-container-class="mt-64 rounded-8 overflow-hidden phone:rounded-none"
       @click-outside="isShowCivicWelcome = false"
@@ -133,7 +129,7 @@
         :price-emoji="supportingEmoji"
         :referrer-avatar-url="user.avatar"
         :referrer-display-name="user.displayName"
-        :is-referrer-civic-liker="isUserCivicLiker"
+        :is-referrer-civic-liker="isCivicLikerCreator"
       )
         template(#header)
           Button.bg-like-green.text-like-cyan-light.rounded-full.shadow-8(
@@ -225,8 +221,11 @@ export default {
       'getUserIsCivicLikerV2',
     ]),
 
+    creatorLikerID() {
+      return this.user.user;
+    },
     likePayURL() {
-      return getLikeCoURL(`/${this.user.user}`);
+      return getLikeCoURL(`/${this.creatorLikerID}`);
     },
     filteredWorks() {
       return filterItems(this.works);
@@ -246,23 +245,31 @@ export default {
         LOADING_STATES.includes(this.worksState)
       );
     },
-    isUserCivicLiker() {
+    isSelf() {
+      return this.creatorLikerID === this.getUserId;
+    },
+    isCivicLikerCreator() {
       return !!(
         this.user.isCivicLikerTrial || this.user.isSubscribedCivicLiker
       );
-    },
-    ctaTo() {
-      const likerID = this.user.user;
-      if (this.isUserCivicLiker && this.getUserIsCivicLikerV2) {
-        return { name: 'id-civic', params: { id: likerID } };
-      }
-      return { name: 'civic', query: { from: likerID } };
     },
     supportingAmount() {
       return this.civicSupport.quantity * 5;
     },
     supportingEmoji() {
       return getPriceEmoji(this.supportingAmount);
+    },
+    ctaButtonProps() {
+      const isSupporting = this.supportingAmount > 0;
+      return {
+        preset: isSupporting ? 'special' : 'primary',
+        title: this.$t(
+          `PortfolioPage.CTAButton.${isSupporting ? 'Active' : 'Inactive'}`
+        ),
+        to: this.getUserIsCivicLikerV2
+          ? { name: 'id-civic', params: { id: this.creatorLikerID } }
+          : { name: 'civic', query: { from: this.creatorLikerID } },
+      };
     },
   },
   async asyncData({ route, query, $api, error }) {
@@ -337,7 +344,7 @@ export default {
       try {
         this.worksState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
-          getFetchUserSuperLikeAPI(this.user.user),
+          getFetchUserSuperLikeAPI(this.creatorLikerID),
           { params: { before, limit: ITEM_PER_FETCH, filter: 'self' } }
         );
         this.works.push(...list);
@@ -352,7 +359,7 @@ export default {
       try {
         this.itemsState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
-          getFetchUserSuperLikeAPI(this.user.user),
+          getFetchUserSuperLikeAPI(this.creatorLikerID),
           { params: { before, limit: ITEM_PER_FETCH } }
         );
         this.items.push(...list);

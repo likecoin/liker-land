@@ -301,7 +301,10 @@
   "PortfolioPage": {
     "About": "關於",
     "CivicLikerSince": "自 {date} 成為讚賞公民",
-    "BecomeCivicLiker": "成為讚賞公民",
+    "CTAButton": {
+      "Inactive": "成為讚賞公民",
+      "Active": "贊助中"
+    },
     "LikePay": "Like Pay",
     "Tab": {
       "Works": "作品",

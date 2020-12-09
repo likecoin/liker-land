@@ -286,7 +286,10 @@
   "PortfolioPage": {
     "About": "About",
     "CivicLikerSince": "Became Civic Liker since {date}",
-    "BecomeCivicLiker": "Become a Civic Liker",
+    "CTAButton": {
+      "Inactive": "Become a Civic Liker",
+      "Active": "Supporting"
+    },
     "LikePay": "Like Pay",
     "Tab": {
       "Works": "Works",

@@ -158,6 +158,12 @@ export default {
     background-color: #aaf1e7;
   }
 
+  &--special {
+    color: #28646e;
+
+    @apply bg-like-gradient;
+  }
+
   &--secondary {
     color: #4a4a4a;
 
@@ -172,6 +178,7 @@ export default {
 
   &--primary &__title,
   &--secondary &__title,
+  &--special &__title,
   &--danger &__title {
     font-weight: 600;
   }
