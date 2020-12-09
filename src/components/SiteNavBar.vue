@@ -12,7 +12,10 @@
 
 
     <div class="flex items-center">
-      <div class="relative overflow-hidden leading-0">
+      <div
+        v-if="!getUserId"
+        class="relative overflow-hidden leading-0"
+      >
         <GlobeIcon class="w-20 h-20 fill-current mr-16" />
         <select
           class="absolute pin-y pin-r opacity-0"
@@ -53,6 +56,7 @@ export default {
   computed: {
     ...mapGetters([
       'getHomeRoute',
+      'getUserId',
       'getIsSlidingMenuOpen',
       'getAvailableLocales',
       'getLocale',
