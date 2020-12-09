@@ -32,7 +32,7 @@ export default {
 .card-brand {
   height: 1em;
   line-height: 1;
-  padding: 0.08em;
+  padding: 0 0.1em;
 
   svg {
     display: block;
