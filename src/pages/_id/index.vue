@@ -13,20 +13,20 @@
           .user-info-panel
             header
               Identity(
-                :avatar-url="user.avatar"
+                :avatar-url="creator.avatar"
                 :avatar-size="88"
                 :is-avatar-outlined="isCivicLikerCreator"
               )
 
-              .mt-16.text-like-cyan-gray ID: {{ user.user }}
-              .mt-4.text-30.font-600.text-like-cyan.text-center {{ user.displayName }}
+              .mt-16.text-like-cyan-gray ID: {{ creatorLikerID }}
+              .mt-4.text-30.font-600.text-like-cyan.text-center {{ creator.displayName }}
 
               .user-info-panel__actions(v-if="!isSelf")
                 +CTAButton
                 ButtonGroup
                   Button(
                     preset="translucent-dark"
-                    :title="$t(getIsFollowedAuthor(user.user) ? 'unfollow' : 'follow')"
+                    :title="$t(getIsFollowedAuthor(creatorLikerID) ? 'unfollow' : 'follow')"
                     @click="onToggleFollow"
                   )
                   Button(
@@ -127,8 +127,8 @@
       CivicLikerWelcomeView(
         :price="supportingAmount"
         :price-emoji="supportingEmoji"
-        :referrer-avatar-url="user.avatar"
-        :referrer-display-name="user.displayName"
+        :referrer-avatar-url="creator.avatar"
+        :referrer-display-name="creator.displayName"
         :is-referrer-civic-liker="isCivicLikerCreator"
       )
         template(#header)
@@ -141,7 +141,7 @@
                 line(x1="1" y1="13.73" x2="13.73" y2="1")
 
         template(#footer)
-          AppDownloadBadges.pb-24(:from="user.user")
+          AppDownloadBadges.pb-24(:from="creatorLikerID")
 </template>
 
 <script>
@@ -222,7 +222,7 @@ export default {
     ]),
 
     creatorLikerID() {
-      return this.user.user;
+      return this.creator.user;
     },
     likePayURL() {
       return getLikeCoURL(`/${this.creatorLikerID}`);
@@ -237,7 +237,7 @@ export default {
       return this.tab === 'works' ? this.filteredWorks : this.filteredItems;
     },
     formattedCivicLikerSince() {
-      return dateFormat(new Date(this.user.civicLikerSince), 'YYYY/MM/DD');
+      return dateFormat(new Date(this.creator.civicLikerSince), 'YYYY/MM/DD');
     },
     isLoading() {
       return (
@@ -250,7 +250,7 @@ export default {
     },
     isCivicLikerCreator() {
       return !!(
-        this.user.isCivicLikerTrial || this.user.isSubscribedCivicLiker
+        this.creator.isCivicLikerTrial || this.creator.isSubscribedCivicLiker
       );
     },
     supportingAmount() {
@@ -276,14 +276,14 @@ export default {
     const { id } = route.params;
     if (id && checkUserNameValid(id)) {
       try {
-        const [user, civicSupport] = await Promise.all([
+        const [creator, civicSupport] = await Promise.all([
           $api.$get(getUserMinAPI(id)),
           $api
             .$get(getCivicSupportingUserAPI(id))
             .catch(() => ({ quantity: 0 })),
         ]);
         return {
-          user,
+          creator,
           civicSupport,
           isShowCivicWelcome: query.civic_welcome === '1',
         };
@@ -298,7 +298,7 @@ export default {
   },
   head() {
     const title = this.$t('PortfolioPage.Og.Title', {
-      name: this.user.displayName.trim(),
+      name: this.creator.displayName.trim(),
     });
     return {
       title,
@@ -311,7 +311,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: this.user.avatar,
+          content: this.creator.avatar,
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
@@ -320,7 +320,7 @@ export default {
   mounted() {
     this.refreshBookmarkList();
     this.fetchReaderIndex();
-    Promise.all([this.fetchUserWorks(), this.fetchUserSuperLikes()]).then(
+    Promise.all([this.fetchCreatorWorks(), this.fetchCreatorSuperLikes()]).then(
       () => {
         if (this.works.length === 0 && this.items.length > 0) {
           this.tab = 'superlikes';
@@ -340,7 +340,7 @@ export default {
       'unfollowAuthor',
     ]),
 
-    async fetchUserWorks({ before } = {}) {
+    async fetchCreatorWorks({ before } = {}) {
       try {
         this.worksState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
@@ -355,7 +355,7 @@ export default {
         this.worksState = 'error';
       }
     },
-    async fetchUserSuperLikes({ before } = {}) {
+    async fetchCreatorSuperLikes({ before } = {}) {
       try {
         this.itemsState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
@@ -381,12 +381,12 @@ export default {
       if (scrollY >= scrollHeight - windowHeight * 2) {
         if (this.tab === 'works') {
           if (this.worksState === 'done') {
-            this.fetchUserWorks({
+            this.fetchCreatorWorks({
               before: this.works[this.works.length - 1].ts,
             });
           }
         } else if (this.itemsState === 'done') {
-          this.fetchUserSuperLikes({
+          this.fetchCreatorSuperLikes({
             before: this.items[this.items.length - 1].ts,
           });
         }
@@ -400,7 +400,7 @@ export default {
         });
         return;
       }
-      const { user: id } = this.user;
+      const id = this.creatorLikerID;
       if (this.getIsFollowedAuthor(id)) {
         await this.unfollowAuthor(id);
       } else {
