@@ -1,6 +1,6 @@
 <template lang="pug">
   mixin CTAButton
-    Button(v-bind="ctaButtonProps")
+    Button(v-bind="ctaButtonProps")&attributes(attributes)
 
   .user-portfolio-page
     PageHeader
