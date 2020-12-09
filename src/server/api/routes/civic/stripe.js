@@ -126,7 +126,11 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       ];
       stripePayload.subscription_data = { metadata };
       stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
-      stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
+      if (from) {
+        stripePayload.cancel_url = `${EXTERNAL_URL}/${from}`;
+      } else {
+        stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
+      }
       if (customerId) {
         stripePayload.customer = customerId;
       } else if (email) {
