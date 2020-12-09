@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <LcLoadingIndicator v-if="!isFetched" class="mx-auto" />
-    <!-- Used to display form errors. -->
-    <div v-if="error">{{ error }}</div>
+  <div class="payment-page">
+    <Spinner class="mx-auto my-96" />
   </div>
 </template>
 
@@ -11,9 +9,13 @@ import { mapGetters } from 'vuex';
 import { getStripePaymentStatusAPI, getStripePaymentAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import Spinner from '~/components/Spinner/Spinner';
+
 export default {
   middleware: 'authenticated',
-  layout: 'dialog',
+  components: {
+    Spinner,
+  },
   data() {
     return {
       isFetched: false,
