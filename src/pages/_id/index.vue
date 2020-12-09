@@ -272,7 +272,7 @@ export default {
       };
     },
   },
-  async asyncData({ route, query, $api, error }) {
+  async asyncData({ store, route, query, $api, error }) {
     const { id } = route.params;
     if (id && checkUserNameValid(id)) {
       try {
@@ -285,7 +285,8 @@ export default {
         return {
           creator,
           civicSupport,
-          isShowCivicWelcome: query.civic_welcome === '1',
+          isShowCivicWelcome:
+            store.getters.getUserId && query.civic_welcome === '1',
         };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
