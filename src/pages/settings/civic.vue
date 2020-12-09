@@ -21,5 +21,10 @@ export default {
   computed: {
     ...mapGetters(['getUserIsCivicLikerV2']),
   },
+  fetch({ store, redirect }) {
+    if (!store.getters.getUserIsCivicLiker) {
+      redirect({ name: 'id-civic', params: { id: 'foundation' } });
+    }
+  },
 };
 </script>
