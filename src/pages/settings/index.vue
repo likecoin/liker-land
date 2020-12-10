@@ -22,14 +22,6 @@
           span.settings-menu__item-subtitle(v-if="getUserIsCivicLiker")
             | {{ $t('SettingsPage.civicLiker.subscribing') }}
       li
-        NuxtLink.settings-menu__item(
-          :to="{ name: 'creators' }"
-          target="_blank"
-          rel="noopener"
-        )
-          span.settings-menu__item-title {{ $t('SettingsPage.creator.title') }}
-          span.settings-menu__item-subtitle {{ subtitleForCreatorMenuItem }}
-      li
         NuxtLink.settings-menu__item(:to="{ name: 'settings-following' }")
           span.settings-menu__item-title {{ $t('SettingsPage.subscription') }}
 </template>
@@ -48,14 +40,7 @@ export default {
   computed: {
     getLikerIdSettingsURL,
 
-    ...mapGetters(['getUserId', 'getUserInfo', 'getUserIsCivicLiker']),
-
-    subtitleForCreatorMenuItem() {
-      if (this.getUserInfo.wallet) {
-        return this.$t('SettingsPage.creator.registered');
-      }
-      return this.$t('SettingsPage.creator.register');
-    },
+    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
   },
 };
 </script>
