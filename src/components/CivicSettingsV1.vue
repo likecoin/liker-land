@@ -105,7 +105,6 @@ export default {
       'getUserShouldRenewCivic',
       'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
-      'getUserIsCivicLikerV2',
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLikerPaid',
     ]),
