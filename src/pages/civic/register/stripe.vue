@@ -76,7 +76,7 @@ export default {
         this.$router.replace({
           name: 'id-civic',
           params: { id: this.$route.query.from },
-          query,
+          query: { ...query, initial_state: 'confirm' },
         });
       } else if (!this.getUserShouldRenewCivic) {
         this.$router.replace({ name: 'settings-civic' });

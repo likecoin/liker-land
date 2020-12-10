@@ -308,6 +308,8 @@ import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
 
+const STATES = ['select-quantity', 'new', 'confirm'];
+
 export default {
   components: {
     BaseDialog,
@@ -324,6 +326,10 @@ export default {
     isShowBackdrop: {
       type: Boolean,
       default: false,
+    },
+    initialState: {
+      type: String,
+      default: undefined,
     },
   },
   data() {
@@ -449,7 +455,11 @@ export default {
         quantity = parsedQuantity;
       }
       this.selectedQuantity = quantity;
-      this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
+      if (STATES.includes(this.initialState)) {
+        this.state = this.initialState;
+      } else {
+        this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
+      }
     },
 
     confirmQuantity() {

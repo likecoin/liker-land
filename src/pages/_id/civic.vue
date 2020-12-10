@@ -5,7 +5,10 @@
           SiteNavBar.text-like-green
 
       main.page-content
-        CivicSubscriptionView(:is-show-backdrop="false")
+        CivicSubscriptionView(
+          :is-show-backdrop="false"
+          :initial-state="$route.query.initial_state"
+        )
 </template>
 
 <script>
