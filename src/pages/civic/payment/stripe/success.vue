@@ -34,12 +34,15 @@ export default {
         'CivicRegisterComplete(stripe)',
         1
       );
-      const { from } = this.$route.query;
-      if (this.$route.query.from) {
-        window.location.href = `/${from}?civic_welcome=1`;
-      } else {
-        window.location.href = `/settings/civic`;
-      }
+      // NOTE: Wait 1s for db to sync
+      setTimeout(() => {
+        const { from } = this.$route.query;
+        if (this.$route.query.from) {
+          window.location.href = `/${from}?civic_welcome=1`;
+        } else {
+          window.location.href = `/settings/civic`;
+        }
+      }, 1000);
     } catch (err) {
       console.error(err); // eslint-disable-line no-console
       throw err;
