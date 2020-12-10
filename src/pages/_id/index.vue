@@ -296,7 +296,9 @@ export default {
           creator,
           civicSupport,
           isShowCivicWelcome:
-            store.getters.getUserId && query.civic_welcome === '1',
+            store.getters.getUserId &&
+            civicSupport.quantity > 0 &&
+            query.civic_welcome === '1',
         };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
