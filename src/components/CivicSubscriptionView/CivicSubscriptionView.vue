@@ -194,7 +194,7 @@
           :title="$t('confirm')"
           :full="true"
           size="large"
-          @click="updateSubscription"
+          @click="confirmSubscription"
         />
       </div>
     </div>
@@ -344,6 +344,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserId',
       'getUserSubscriptionInfo',
       'getCivicSupportingUserInfo',
       'getUserIsCivicLiker',
@@ -459,7 +460,7 @@ export default {
       if (STATES.includes(this.initialState)) {
         this.state = this.initialState;
       } else {
-        this.state = this.getUserIsCivicLiker ? 'select-quantity' : 'new';
+        this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
       }
     },
 
@@ -467,20 +468,36 @@ export default {
       this.prevSelectedQuantiy = this.selectedQuantity;
       if (this.selectedQuantity === this.currentQuantity) {
         this.$router.push({ name: 'settings-civic' });
+      } else if (this.getUserIsCivicLiker) {
+        if (this.initialState === 'select-quantity') {
+          this.state = 'confirm';
+        } else {
+          this.updateSubscription();
+        }
       } else {
-        this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
+        this.newSubscription();
       }
     },
 
     newSubscription() {
-      this.$router.push({
-        name: `civic-register-stripe`,
-        query: {
-          from: this.authorId,
-          civic_liker_version: 2,
-          quantity: this.selectedQuantity,
-        },
-      });
+      if (this.getUserId) {
+        this.$router.push({
+          name: `civic-register-stripe`,
+          query: {
+            from: this.authorId,
+            civic_liker_version: 2,
+            quantity: this.selectedQuantity,
+          },
+        });
+      } else {
+        this.$router.push({
+          name: 'id-civic-register',
+          query: {
+            from: this.authorId,
+            quantity: this.selectedQuantity,
+          },
+        });
+      }
     },
     postsubscribe() {
       this.state = 'loading';
@@ -489,6 +506,13 @@ export default {
         params: { id: this.authorId },
         query: { civic_welcome: '1' },
       });
+    },
+    confirmSubscription() {
+      if (this.getUserIsCivicLiker) {
+        this.updateSubscription();
+      } else {
+        this.newSubscription();
+      }
     },
     async updateSubscription() {
       const { currentQuantity, selectedQuantity, authorId } = this;

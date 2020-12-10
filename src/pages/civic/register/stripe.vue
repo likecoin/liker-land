@@ -72,11 +72,11 @@ export default {
   mounted() {
     if (this.getUserIsCivicLiker) {
       if (this.getUserIsCivicLikerV2) {
-        const { from, ...query } = this.$route.query;
+        const { from: id } = this.$route.query;
         this.$router.replace({
-          name: 'id-civic',
-          params: { id: this.$route.query.from },
-          query: { ...query, initial_state: 'confirm' },
+          name: 'id',
+          params: { id },
+          query: { civic_welcome: 1 },
         });
       } else if (!this.getUserShouldRenewCivic) {
         this.$router.replace({ name: 'settings-civic' });

@@ -13,7 +13,11 @@
         {{ `${price} ${$t('Currency.USD')}/${$t('SubscriptionPeriod.Month')}` }}</div>
       <nuxt-link
         class="mt-8 text-12 text-like-green underline"
-        :to="{ name: 'id-civic', params: { id: likerId } }"
+        :to="{
+          name: 'id-civic',
+          params: { id: likerId },
+          query: { initial_state: 'select-quantity' },
+        }"
       >{{ $t('edit') }}</nuxt-link>
     </template>
   </PureSupportingLikerView>
