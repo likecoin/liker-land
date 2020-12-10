@@ -455,6 +455,7 @@ export default {
         quantity = parsedQuantity;
       }
       this.selectedQuantity = quantity;
+      this.prevSelectedQuantiy = quantity;
       if (STATES.includes(this.initialState)) {
         this.state = this.initialState;
       } else {
@@ -463,6 +464,7 @@ export default {
     },
 
     confirmQuantity() {
+      this.prevSelectedQuantiy = this.selectedQuantity;
       if (this.selectedQuantity === this.currentQuantity) {
         this.$router.push({ name: 'settings-civic' });
       } else {
@@ -509,6 +511,7 @@ export default {
     },
 
     onGoBackFromSelectQuantity() {
+      this.selectedQuantity = this.prevSelectedQuantiy;
       if (this.getUserIsCivicLiker) {
         this.$router.back();
       } else {
