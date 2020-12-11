@@ -297,6 +297,7 @@ export default {
           civicSupport,
           isShowCivicWelcome:
             store.getters.getUserId &&
+            civicSupport &&
             civicSupport.quantity > 0 &&
             query.civic_welcome === '1',
         };
