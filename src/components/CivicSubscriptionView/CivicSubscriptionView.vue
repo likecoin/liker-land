@@ -61,7 +61,7 @@
           </li>
           <li class="flex items-center mt-24">
             <img class="w-80" src="~/assets/images/civic-v2/support/follow-me.png">
-            <div class="flex-grow ml-24">
+            <div class="flex-grow ml-24 phone:ml-12">
               <h1
                 class="text-like-green text-16"
               >{{ $t(`SettingsSupportUsersPage.Benefits.1.Title`) }}</h1>
@@ -72,7 +72,7 @@
           </li>
           <li class="flex items-center mt-24">
             <img class="w-80" src="~/assets/images/civic-v2/support/contribute.png">
-            <div class="flex-grow ml-24">
+            <div class="flex-grow ml-24 phone:ml-12">
               <h1
                 class="text-like-green text-16"
               >{{ $t(`SettingsSupportUsersPage.Benefits.2.Title`) }}</h1>
