@@ -398,7 +398,9 @@ export default {
       }
     },
     state(_, prevState) {
-      this.prevState = prevState;
+      if (prevState !== 'loading') {
+        this.prevState = prevState;
+      }
     },
   },
   mounted() {
