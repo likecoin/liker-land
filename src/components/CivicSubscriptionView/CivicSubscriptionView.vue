@@ -14,7 +14,7 @@
     >
       <button
         class="mb-32 settings-page-header__back-button text-like-green"
-        @click="$router.back()"
+        @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
 
       <div class="mx-40 phone:mx-0">
@@ -33,7 +33,7 @@
           :period="$t('SubscriptionPeriod.Month')"
           :prefix="priceEmoji"
           :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
-          @click-add="onClickUpdateQuantity"
+          @click-add="goToSelectQuantity"
         />
 
         <div class="mx-40 mt-16">
@@ -41,7 +41,7 @@
             :title="$t('UpdateSupportQuantity.Subscribe')"
             :full="true"
             size="large"
-            @click="newSubscription"
+            @click="goToConfirm"
           />
         </div>
 
@@ -88,7 +88,7 @@
             :title="$t('UpdateSupportQuantity.Subscribe')"
             :full="true"
             size="large"
-            @click="newSubscription"
+            @click="goToConfirm"
           />
         </div>
       </div>
@@ -101,7 +101,7 @@
     >
       <button
         class="settings-page-header__back-button text-like-green"
-        @click="onGoBackFromSelectQuantity"
+        @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
 
       <div class="mt-16 px-40 phone:px-0">
@@ -144,7 +144,7 @@
     >
       <button
         class="mb-16 settings-page-header__back-button text-like-green"
-        @click="state = 'select-quantity'"
+        @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
 
       <CivicLikerSupportAmountView
@@ -152,7 +152,7 @@
         :currency="currency"
         :period="$t('SubscriptionPeriod.Month')"
         :prefix="priceEmoji"
-        @click-add="onClickUpdateQuantity"
+        @click-add="goToSelectQuantity"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">
@@ -206,7 +206,7 @@
     >
       <button
         class="mb-16 settings-page-header__back-button text-like-green"
-        @click="state = 'select-quantity'"
+        @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
 
       <div class="mx-24 phone:mx-0">
@@ -242,7 +242,7 @@
           :title="$t('CancelSubscription.Cancel')"
           :full="true"
           size="large"
-          @click="postsubscribe"
+          @click="goToWelcomePage"
         />
 
         <Button
@@ -329,7 +329,7 @@ export default {
     },
     initialState: {
       type: String,
-      default: undefined,
+      default: 'default',
     },
   },
   data() {
@@ -396,6 +396,9 @@ export default {
       if (authorId !== prevAuthorId) {
         this.fetchInfo();
       }
+    },
+    state(_, prevState) {
+      this.prevState = prevState;
     },
   },
   mounted() {
@@ -464,31 +467,22 @@ export default {
       }
     },
 
+    goToSelectQuantity() {
+      this.state = 'select-quantity';
+    },
+
     confirmQuantity() {
       this.prevSelectedQuantiy = this.selectedQuantity;
       if (this.selectedQuantity === this.currentQuantity) {
         this.$router.push({ name: 'settings-civic' });
-      } else if (this.getUserIsCivicLiker) {
-        if (this.initialState === 'select-quantity') {
-          this.state = 'confirm';
-        } else {
-          this.updateSubscription();
-        }
       } else {
-        this.newSubscription();
+        this.goToConfirm();
       }
     },
 
-    newSubscription() {
+    goToConfirm() {
       if (this.getUserId) {
-        this.$router.push({
-          name: `civic-register-stripe`,
-          query: {
-            from: this.authorId,
-            civic_liker_version: 2,
-            quantity: this.selectedQuantity,
-          },
-        });
+        this.state = 'confirm';
       } else {
         this.$router.push({
           name: 'id-civic-register',
@@ -499,7 +493,8 @@ export default {
         });
       }
     },
-    postsubscribe() {
+
+    goToWelcomePage() {
       this.state = 'loading';
       this.$router.push({
         name: 'id',
@@ -507,13 +502,22 @@ export default {
         query: { civic_welcome: '1' },
       });
     },
+
     confirmSubscription() {
       if (this.getUserIsCivicLiker) {
         this.updateSubscription();
       } else {
-        this.newSubscription();
+        this.$router.push({
+          name: `civic-register-stripe`,
+          query: {
+            from: this.authorId,
+            civic_liker_version: 2,
+            quantity: this.selectedQuantity,
+          },
+        });
       }
     },
+
     async updateSubscription() {
       const { currentQuantity, selectedQuantity, authorId } = this;
       if (currentQuantity === selectedQuantity) return;
@@ -523,8 +527,9 @@ export default {
         quantity: selectedQuantity,
       });
       await this.fetchUserSubscriptionInfo();
-      this.postsubscribe();
+      this.goToWelcomePage();
     },
+
     async cancelSubscription() {
       const { authorId } = this;
       if (!this.currentQuantity) return;
@@ -534,12 +539,14 @@ export default {
       this.state = 'post-cancel';
     },
 
-    onGoBackFromSelectQuantity() {
-      this.selectedQuantity = this.prevSelectedQuantiy;
-      if (this.getUserIsCivicLiker) {
-        this.$router.back();
+    onClickBackButton() {
+      if (this.state === 'select-quantity') {
+        this.selectedQuantity = this.prevSelectedQuantiy;
+      }
+      if (this.prevState) {
+        this.state = this.prevState;
       } else {
-        this.state = 'new';
+        this.$router.back();
       }
     },
 
@@ -547,10 +554,6 @@ export default {
       if (this.state !== 'loading' && this.getUserIsCivicLiker) {
         this.$router.back();
       }
-    },
-
-    onClickUpdateQuantity() {
-      this.state = 'select-quantity';
     },
   },
 };
