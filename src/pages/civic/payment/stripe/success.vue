@@ -4,6 +4,8 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import Spinner from '~/components/Spinner/Spinner';
@@ -34,19 +36,27 @@ export default {
         'CivicRegisterComplete(stripe)',
         1
       );
-      // NOTE: Wait 1s for db to sync
-      setTimeout(() => {
+      // NOTE: Wait for db sync
+      setTimeout(async () => {
+        await this.fetchLoginStatus();
         const { from } = this.$route.query;
-        if (this.$route.query.from) {
-          window.location.href = `/${from}?civic_welcome=1`;
+        if (from) {
+          this.$router.push({
+            name: 'id',
+            params: { id: from },
+            query: { civic_welcome: 1 },
+          });
         } else {
-          window.location.href = `/settings/civic`;
+          this.$router.push({ name: 'settings-civic' });
         }
-      }, 1000);
+      }, 2000);
     } catch (err) {
       console.error(err); // eslint-disable-line no-console
       throw err;
     }
+  },
+  methods: {
+    ...mapActions(['fetchLoginStatus']),
   },
 };
 </script>
