@@ -308,7 +308,7 @@ import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
 
-const STATES = ['select-quantity', 'new', 'confirm'];
+const STATES = ['select-quantity', 'confirm'];
 
 export default {
   components: {
@@ -462,10 +462,12 @@ export default {
       }
       this.selectedQuantity = quantity;
       this.prevSelectedQuantiy = quantity;
-      if (STATES.includes(this.initialState)) {
-        this.state = this.initialState;
+      if (!this.getUserIsCivicLiker) {
+        this.state = 'new';
       } else {
-        this.state = this.getUserIsCivicLiker ? 'confirm' : 'new';
+        this.state = STATES.includes(this.initialState)
+          ? this.initialState
+          : 'confirm';
       }
     },
 
