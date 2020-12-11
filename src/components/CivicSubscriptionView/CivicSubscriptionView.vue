@@ -397,11 +397,6 @@ export default {
         this.fetchInfo();
       }
     },
-    state(_, prevState) {
-      if (prevState !== 'loading') {
-        this.prevState = prevState;
-      }
-    },
   },
   mounted() {
     this.fetchInfo();
@@ -417,9 +412,19 @@ export default {
 
     getPriceEmoji,
 
+    setState(newState) {
+      if (!this.stateHistory) {
+        this.stateHistory = [];
+      }
+      const { state } = this;
+      if (state !== 'loading') {
+        this.stateHistory.push(state);
+      }
+      this.state = newState;
+    },
+
     async fetchLikerInfo() {
       try {
-        this.isLoading = true;
         if (this.authorId && !this.getUserInfoById(this.authorId)) {
           await this.fetchUserInfo(this.authorId);
         }
@@ -431,8 +436,6 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
-      } finally {
-        this.isLoading = false;
       }
     },
 
@@ -463,16 +466,16 @@ export default {
       this.selectedQuantity = quantity;
       this.prevSelectedQuantiy = quantity;
       if (!this.getUserIsCivicLiker) {
-        this.state = 'new';
+        this.setState('new');
       } else {
-        this.state = STATES.includes(this.initialState)
-          ? this.initialState
-          : 'confirm';
+        this.setState(
+          STATES.includes(this.initialState) ? this.initialState : 'confirm'
+        );
       }
     },
 
     goToSelectQuantity() {
-      this.state = 'select-quantity';
+      this.setState('select-quantity');
     },
 
     confirmQuantity() {
@@ -486,7 +489,7 @@ export default {
 
     goToConfirm() {
       if (this.getUserId) {
-        this.state = 'confirm';
+        this.setState('confirm');
       } else {
         this.$router.push({
           name: 'id-civic-register',
@@ -547,8 +550,8 @@ export default {
       if (this.state === 'select-quantity') {
         this.selectedQuantity = this.prevSelectedQuantiy;
       }
-      if (this.prevState) {
-        this.state = this.prevState;
+      if (this.stateHistory && this.stateHistory.length) {
+        this.state = this.stateHistory.pop();
       } else {
         this.$router.back();
       }
