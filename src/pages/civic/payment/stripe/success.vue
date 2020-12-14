@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -19,6 +19,9 @@ export default {
     return {
       title: this.$t('PaymentSuccessPage.title'),
     };
+  },
+  computed: {
+    ...mapGetters(['getIsFollowedAuthor']),
   },
   mounted() {
     logTrackerEvent(
@@ -36,10 +39,13 @@ export default {
         'CivicRegisterComplete(stripe)',
         1
       );
+      const { from } = this.$route.query;
+      if (from && !this.getIsFollowedAuthor(from)) {
+        this.followAuthor(from);
+      }
       // NOTE: Wait for db sync
       setTimeout(async () => {
         await this.fetchLoginStatus();
-        const { from } = this.$route.query;
         if (from) {
           this.$router.push({
             name: 'id',
