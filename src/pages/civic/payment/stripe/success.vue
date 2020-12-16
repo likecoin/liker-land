@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchLoginStatus']),
+    ...mapActions(['fetchLoginStatus', 'followAuthor']),
   },
 };
 </script>
