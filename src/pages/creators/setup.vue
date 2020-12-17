@@ -5,7 +5,7 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      CreatorsPage(:liker-id="getUserId")
+      CreatorSetupPage(:liker-id="getUserId")
         template(#footer)
           section.py-32.flex.justify-center(class="phone:mt-32 tablet:mt-32")
             a.button(
@@ -23,7 +23,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import CreatorsPage from '~/components/CreatorsPage/CreatorsPage';
+import CreatorSetupPage from '~/components/CreatorSetupPage/CreatorSetupPage';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 
@@ -32,7 +32,7 @@ import { getOAuthRegisterAPI } from '~/util/api';
 
 export default {
   components: {
-    CreatorsPage,
+    CreatorSetupPage,
     PageHeader,
     SiteNavBar,
   },

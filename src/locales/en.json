@@ -134,13 +134,13 @@
     "empty": "There is no article"
   },
   "CreatorsPage": {
-    "Title": "Reinventing the Like",
-    "Description": "Install LikeCoin button in your articles now {br}to let readers support you",
+    "Title": "Gather your Civic Likers",
+    "Description": "Share your sponsor link for monthly subscription income.{br}Install LikeCoin button for earning creators fund.",
     "Og": {
       "Title": "@:CreatorsPage.Title",
-      "Description": "Install LikeCoin button in your articles now to let readers support you"
+      "Description": "@:CreatorsPage.Description"
     },
-    "PlatformSelectLabel": "LikeCoin button support the following platforms",
+    "PlatformSelectLabel": "Publish your work in multi-channels. LikeCoin button supports the following platforms.",
     "PlatformDescription": {
       "ConfigLikerID": "LikeCoin button will be installed in your articles automatically after filling in your Liker ID in the platform.",
       "Embedly": "Insert the below link to embed LikeCoin button into your articles",
@@ -165,6 +165,93 @@
     "CTAButton": {
       "Register": "Register now",
       "Civic": "Become a Civic Liker"
+    }
+  },
+  "CreatorsPageV2": {
+    "Hero": {
+      "Title": "You deserve to be rewarded",
+      "Description": "Build your fans network, get their monthly support.",
+      "CTAButton": "Get Started"
+    },
+    "Setup": {
+      "Anonymous": {
+        "Title": "Setup your business by two steps forward",
+        "Steps": [
+          {
+            "Title": "Register a Liker ID",
+            "Description": "Preview your name with sponsor link",
+            "Placeholder": "Input a Liker ID"
+          },
+          {
+            "Title": "Share your sponsor link.",
+            "Description": "your sponsor link will be:",
+            "CTAButton": "Start Earning Now"
+          }
+        ]
+      },
+      "Registered": {
+        "Title": "Setup your business now",
+        "Steps": [
+          {
+            "Title": "Share your sponsor link.",
+            "Description": "your sponsor link will be:",
+            "CTAButton": "Copy Link"
+          }
+        ]
+      },
+      "Preview": {
+        "LinkCFA": "Pay me a coffee to support my work monthly",
+        "DisplayNamePlaceholder": "Your name",
+        "BottomHint": "Call for your fans' support"
+      }
+    },
+    "TwoBirds": {
+      "Title": "Single plan, double prizes",
+      "Description": "Besides the funding of monthly subscription, get rewarded by the Creators Fund as well if you get \"likes\" from Civic Likers.",
+      "Birds": [
+        {
+          "Title": "Monthly Subscription",
+          "Description": "Get all of the monthly subscription fee after necessary transaction fee is deducted."
+        },
+        {
+          "Title": "Creators Fund",
+          "Description": "Get extra bonus from the Creators Fund if you get \"likes\" from any Civic Likers that are not necessary your subscribers."
+        }
+      ]
+    },
+    "BetterWorld": {
+      "Title": "For a better world",
+      "World": [
+        {
+          "Title": "Open and Share",
+          "Description": "Reach rate go first, say no to pay-wall which suppressing ideas to flow freely."
+        },
+        {
+          "Title": "Cultivate the community",
+          "Description": "Besides supporting creators by monthly subscription fee, Civic Likers support other creators, distributing the Creators Fund by liking good pieces, bringing benefits to the whole community."
+        }
+      ]
+    },
+    "Calculator": {
+      "Title": "Get an idea about your earnings now",
+      "Slider": {
+        "Subscriber": "{count} subscriber(s) ($5/mo)",
+        "Reader": "{count} reader(s)"
+      },
+      "Earnings": {
+        "Subscription": "From monthly subscription",
+        "CreatorsFund": "From Creators Fund",
+        "Total": "pre month"
+      }
+    },
+    "Platforms": {
+      "Title": "Choose whatever platform that fit you",
+      "Description": "Post your sponsor link to any channels.  Besides, various blogging sites support LikeCoin button. Our plugin makes all WordPress sites support the button easily."
+    },
+    "Summary": {
+      "Title": "Action now to monetize your work",
+      "Description": "Your creativity are deserved to be rewarded.  Call out to your fans to join as your Civic Likers and support your work now.",
+      "CTAButton": "Get Started"
     }
   },
   "Currency": {

@@ -1,3 +1,5 @@
+import { IS_TESTNET } from '../constant';
+
 export function getPriceEmoji(price = 0) {
   if (price >= 100) return '🍾';
   if (price >= 50) return '🥩';
@@ -6,6 +8,8 @@ export function getPriceEmoji(price = 0) {
   return '';
 }
 
-export default {
-  getPriceEmoji,
-};
+export function getSponsorLink(likerID) {
+  return `${
+    IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land'
+  }/${likerID}/civic`;
+}

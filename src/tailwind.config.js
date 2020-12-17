@@ -63,6 +63,7 @@ const colors = {
   'like-green-darker': '#1e4a51',
   'like-brown': '#462814',
   'like-cyan-gray': '#a9c1c5',
+  'like-cyan-pale': '#d7ecec',
   'like-cyan-light': '#aaf1e7',
   'like-cyan': '#50e3c2',
   'like-cyan-dark': '#22d6ad',
@@ -367,6 +368,7 @@ module.exports = {
     default: '.5em',
     '8': '.5rem',
     '12': '.75rem',
+    '14': '.875rem',
     full: '9999px',
   },
 
@@ -523,6 +525,7 @@ module.exports = {
   */
 
   maxWidth: {
+    'phone-min': '320px',
     phone: '528px',
     desktop: '1024px',
     full: '100%',
@@ -814,7 +817,7 @@ module.exports = {
     minWidth: ['responsive'],
     negativeMargin: ['responsive'],
     objectFit: [],
-    objectPosition: false,
+    objectPosition: [],
     opacity: ['responsive'],
     outline: ['focus'],
     overflow: ['responsive'],

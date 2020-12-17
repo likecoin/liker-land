@@ -134,13 +134,13 @@
     "empty": "沒有文章"
   },
   "CreatorsPage": {
-    "Title": "化讚為賞",
-    "Description": "你是部落格作者？立即為作品安裝 LikeCoin button{br}讓讀者讚賞支持",
+    "Title": "召集你的讚賞公民",
+    "Description": "分享贊助鏈結，賺取訂閱收入。{br}安裝 LikeCoin button，化讚為賞。",
     "Og": {
       "Title": "@:CreatorsPage.Title",
-      "Description": "你是部落格作者？立即為作品安裝 LikeCoin button 讓讀者讚賞支持"
+      "Description": "@:CreatorsPage.Description"
     },
-    "PlatformSelectLabel": "LikeCoin button 支持以下部落格平台",
+    "PlatformSelectLabel": "在各個渠道發表創作。LikeCoin button 支持以下平台",
     "PlatformDescription": {
       "ConfigLikerID": "於 {Matters}、{Vocus} 及 {Timelog} 設定填上 Liker ID 或 LikeCoin button 的連結，令所有部落格文章自動加入 LikeCoin button。",
       "Embedly": "在部落格文章加以下連結即可嵌入 LikeCoin button。",
@@ -165,6 +165,93 @@
     "CTAButton": {
       "Register": "立即註冊",
       "Civic": "成為讚賞公民"
+    }
+  },
+  "CreatorsPageV2": {
+    "Hero": {
+      "Title": "化讚為賞 回饋創作",
+      "Description": "讓你的支持者每月課金撐你吧！",
+      "CTAButton": "立即行動"
+    },
+    "Setup": {
+      "Anonymous": {
+        "Title": "簡單兩步，設定完成",
+        "Steps": [
+          {
+            "Title": "註冊一個 Liker ID",
+            "Description": "預覽你的贊助鏈結",
+            "Placeholder": "輸入 Liker ID"
+          },
+          {
+            "Title": "分享你的贊助鏈結",
+            "Description": "以下是你的贊助鏈結：",
+            "CTAButton": "開始賺錢"
+          }
+        ]
+      },
+      "Registered": {
+        "Title": "立即設定",
+        "Steps": [
+          {
+            "Title": "分享你的贊助鏈結",
+            "Description": "以下是你的贊助鏈結：",
+            "CTAButton": "複製贊助鏈結"
+          }
+        ]
+      },
+      "Preview": {
+        "LinkCFA": "每月送我一杯咖啡，持續支持我的創作",
+        "DisplayNamePlaceholder": "你的名字",
+        "BottomHint": "呼籲粉絲集氣支持"
+      }
+    },
+    "TwoBirds": {
+      "Title": "一舉兩得，雙重回報",
+      "Description": "除獲得支持者的每月贊助以外，任何讚賞公民為你按讚更可額外獲得「創作基金」的奬勵。",
+      "Birds": [
+        {
+          "Title": "月費訂閱",
+          "Description": "支持者的月費在扣除必要交易成本後，全數直入你的口袋。"
+        },
+        {
+          "Title": "創作基金",
+          "Description": "從非訂閱者的按讚也能經創作基金獲取額外收入。"
+        }
+      ]
+    },
+    "BetterWorld": {
+      "Title": "共創開放的創作生態",
+      "World": [
+        {
+          "Title": "鼓勵開放共享",
+          "Description": "鼓勵資訊流通，不設付費牆，更有利內容觸及率。"
+        },
+        {
+          "Title": "促進生態發展",
+          "Description": "讚賞公民不單每月付費支持創作，同時以「按讚」方式分配創作基金奬勵其他優秀作品，讓整個內容生態受惠。"
+        }
+      ]
+    },
+    "Calculator": {
+      "Title": "計算一下大概的回報吧",
+      "Slider": {
+        "Subscriber": "{count} 位讚賞公民 （5美元/月）",
+        "Reader": "{count} 位按讚的讀者"
+      },
+      "Earnings": {
+        "Subscription": "月費訂閱收入",
+        "CreatorsFund": "創作基金奬勵",
+        "Total": "每月"
+      }
+    },
+    "Platforms": {
+      "Title": "自由選擇發佈平台",
+      "Description": "你可自由張貼贊助鏈結於任何渠道。另，LikeCoin button 支援各大部落格平台，且有外掛程式支援任何 WordPress 網站。"
+    },
+    "Summary": {
+      "Title": "創作有價，一步體驗",
+      "Description": "創意無價，創作有價。立即呼籲你的讀者加入讚賞公民計劃，支持你自由地創作吧。",
+      "CTAButton": "立即行動"
     }
   },
   "Currency": {
