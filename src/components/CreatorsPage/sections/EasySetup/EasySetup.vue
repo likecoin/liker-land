@@ -19,13 +19,44 @@
     p.text-14.text-gray-9b
       block
 
+  mixin SponsorLink
+    .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-9b.rounded-12&attributes(attributes)
+      | {{ sponsorLink }}
+    Button.block.mt-40.mx-auto.p-0.max-w-phone-min(
+      v-clipboard:copy="sponsorLink"
+      :title="$t('CreatorsPageV2.Setup.Registered.Steps[0].CTAButton')"
+      size="large"
+      :full="true"
+    )
+
   mixin FakeText
     .bg-gray-e6.rounded-full.h-16&attributes(attributes)
+
+  mixin FakeContent(type)
+    .bg-white.rounded-12.shadow-4.mt-40.px-40.pb-24.overflow-hidden(
+      :class="['laptop:mr-40 laptop:mt-0', { 'select-none': !likerId }]"
+    )&attributes(attributes)
+      +FakeText(class="w-4/5 -mt-8")
+      +FakeText(class="w-3/5 mt-20")
+      +FakeText(class="mt-20")
+      +FakeText(class="w-1/2 mt-20")
+      if type === 'link'
+        p.mt-20.select-none {{ $t('CreatorsPageV2.Setup.Preview.LinkCFA') }}
+        p.mt-4.underline(style="color:#0091ff") {{ sponsorLink }}
+        .flex.items-center.mt-32.select-none
+          +Avatar()(v-if="avatarUrl" :src="avatarUrl")
+          +Avatar()(v-else src="./assets/avatar.png")
+          span.ml-16.text-18 {{ normalizedName }}
+      else
+        block
+    if type === 'link'
+      .mt-12.text-gray-9b.text-14.text-center
+        | {{ $t('CreatorsPageV2.Setup.Preview.BottomHint') }}
 
   mixin Avatar
     img.w-40.h-40.flex-no-shrink.rounded-full.border-gray-e6.border-1&attributes(attributes)
 
-  section.py-32.px-16
+  section.py-32.px-16(v-if="preset === 'intro'")
     h1.text-30.text-center.text-like-green.font-500
       | {{ $t(`CreatorsPageV2.Setup.${likerId ? 'Registered' : 'Anonymous'}.Title`) }}
     .mt-40(class="laptop:flex")
@@ -36,14 +67,7 @@
         )
           +StepTitle {{ $t('CreatorsPageV2.Setup.Registered.Steps[0].Title') }}
           +StepDescription {{ $t('CreatorsPageV2.Setup.Registered.Steps[0].Description') }}
-          .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-9b.rounded-12
-            | {{ sponsorLink }}
-          Button.block.mt-40.mx-auto.max-w-phone-min(
-            v-clipboard:copy="sponsorLink"
-            :title="$t('CreatorsPageV2.Setup.Registered.Steps[0].CTAButton')"
-            size="large"
-            :full="true"
-          )
+          +SponsorLink
 
         template(v-else)
           +StepBlock(1)
@@ -64,29 +88,43 @@
             .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-9b.rounded-12.select-none
               | {{ sponsorLink }}
             Button.block.mt-40.mx-auto.max-w-phone-min(
-            :title="$t('CreatorsPageV2.Setup.Anonymous.Steps[1].CTAButton')"
-            :href="registerURL"
-            size="large"
-            :full="true"
-          )
+              :title="$t('CreatorsPageV2.Setup.Anonymous.Steps[1].CTAButton')"
+              :href="registerURL"
+              size="large"
+              :full="true"
+            )
 
       .flex-1
-        .bg-white.rounded-12.shadow-4.mt-40.px-40.pb-24.overflow-hidden(
-          :class="{ 'laptop:mr-40 laptop:mt-0': true, 'select-none': !likerId }"
-        )
-          +FakeText(class="w-4/5 -mt-8")
-          +FakeText(class="w-3/5 mt-20")
-          +FakeText(class="mt-20")
-          +FakeText(class="w-1/2 mt-20")
-          p.mt-20.select-none {{ $t('CreatorsPageV2.Setup.Preview.LinkCFA') }}
-          p.mt-4.underline(style="color:#0091ff") {{ sponsorLink }}
-          .flex.items-center.mt-32.select-none
-            +Avatar()(v-if="avatarUrl" :src="avatarUrl")
-            +Avatar()(v-else src="./assets/avatar.png")
-            span.ml-16.text-18 {{ normalizedName }}
+        +FakeContent('link')
 
-        .mt-12.text-gray-9b.text-14.text-center
-          | {{ $t('CreatorsPageV2.Setup.Preview.BottomHint') }}
+  section.px-16(v-else-if="preset === 'setup'")
+    ol.list-reset.leading-1_5
+      li.py-32(class="laptop:flex")
+        .flex.flex-1(class="laptop:mr-40")
+          +StepNum(1)
+          .flex-grow.text-center(class="laptop:text-left")
+            h2.text-30.text-like-green.mb-12 {{ $t('CreatorsPageV2.Setup.Setup.Steps[0].Title') }}
+            +StepDescription {{ $t('CreatorsPageV2.Setup.Registered.Steps[0].Description') }}
+            +SponsorLink
+        .flex-1
+          +FakeContent('link')
+
+      li.py-32.border-t-1.border-gray-e6(class="laptop:flex")
+        .flex.flex-1(class="laptop:mr-40")
+          +StepNum(2)
+          .flex-grow.text-center(class="laptop:text-left")
+            h2.text-30.text-like-green.mb-12 {{ $t('CreatorsPageV2.Setup.Setup.Steps[1].Title') }}
+            +StepDescription {{ $t('CreatorsPageV2.Setup.Setup.Steps[1].Description') }}
+        .flex-1
+          +FakeContent('button')
+            .likecoin-embed.likecoin-button
+              div
+              iframe(
+                scrolling="no"
+                frameborder="0"
+                :src="buttonEmbedURL"
+              )
+
 </template>
 
 <script>
@@ -94,12 +132,17 @@ import { getOAuthRegisterAPI } from '~/util/api';
 import { getSponsorLink } from '~/util/civic';
 
 import Button from '~/components/Button/Button';
+import { LIKECOIN_BUTTON_BASE } from '~/constant';
 
 export default {
   components: {
     Button,
   },
   props: {
+    preset: {
+      type: String,
+      default: 'intro',
+    },
     likerId: {
       type: String,
       default: '',
@@ -133,6 +176,37 @@ export default {
       const { from, referrer } = this.$route.query;
       return getOAuthRegisterAPI(from, referrer);
     },
+    buttonEmbedURL() {
+      return `${LIKECOIN_BUTTON_BASE}/in/embed/${
+        this.likerId
+      }/button?preview=1`;
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+$likecoin-button-max-width: 485px;
+$likecoin-button-max-height: 240px;
+
+.likecoin-button {
+  position: relative;
+  width: 100%;
+  max-width: $likecoin-button-max-width;
+  max-height: $likecoin-button-max-height;
+  margin: 0 auto;
+
+  > div {
+    padding-top: $likecoin-button-max-height / $likecoin-button-max-width * 100%;
+  }
+
+  > iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>

@@ -195,7 +195,18 @@
           {
             "Title": "Share your sponsor link.",
             "Description": "your sponsor link will be:",
-            "CTAButton": "Copy Link"
+            "CTAButton": "Copy Sponsor Link"
+          }
+        ]
+      },
+      "Setup": {
+        "Steps": [
+          {
+            "Title": "Share your sponsor link in any channel"
+          },
+          {
+            "Title": "Install LikeCoin button for earning Creators Fund",
+            "Description": "Get additional bonus from \"Creators Fund\". Civic Likers help to distribute the Creators Fund to any good content by clapping on LikeCoin buttons.  Not only you get additional rewards, the whole ecosystem get benefit as well."
           }
         ]
       },

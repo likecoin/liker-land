@@ -5,7 +5,11 @@
         SiteNavBar.text-like-green
 
     main.page-content
-      CreatorSetupPage(:liker-id="getUserId")
+      CreatorSetupPage(
+        :liker-id="getUserId"
+        :display-name="getUserInfo ? getUserInfo.displayName : ''"
+        :avatar-url="getUserInfo ? getUserInfo.avatarUrl : ''"
+      )
         template(#footer)
           section.py-32.flex.justify-center(class="phone:mt-32 tablet:mt-32")
             a.button(
@@ -66,7 +70,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
+    ...mapGetters(['getUserId', 'getUserIsCivicLiker', 'getUserInfo']),
 
     registerURL() {
       const { from, referrer } = this.$route.query;

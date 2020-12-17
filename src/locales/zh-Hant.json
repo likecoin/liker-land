@@ -199,6 +199,17 @@
           }
         ]
       },
+      "Setup": {
+        "Steps": [
+          {
+            "Title": "在任何渠道分享你的贊助鏈結"
+          },
+          {
+            "Title": "安裝 LikeCoin button，化讚為賞",
+            "Description": "額外賺得「創作基金」的奬勵。任何讚賞公民在你文章中的 LikeCoin button 按讚，都會分配一點創作基金奬勵你。透過化讚為賞的機制鼓勵其他創作者，讓好文獲回報，也為自己創造更多收入，共創一個健康的內容生態。"
+          }
+        ]
+      },
       "Preview": {
         "LinkCFA": "每月送我一杯咖啡，持續支持我的創作",
         "DisplayNamePlaceholder": "你的名字",

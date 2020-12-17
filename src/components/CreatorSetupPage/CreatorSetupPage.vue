@@ -47,6 +47,11 @@
 
       .creators-page__separator
 
+    EasySetup.mt-32.mx-40(
+      preset="setup"
+      v-bind="{ likerId, displayName, avatarUrl }"
+    )
+
     section.creators-page__platform-select
       i18n.creators-page__platform-select-title(tag="div" path="CreatorsPage.PlatformSelectLabel")
       .creators-page__platform-select-grid
@@ -126,12 +131,15 @@
 </template>
 
 <script>
-import CopyText from '../CopyText';
 import utmMixin from '~/mixins/utm';
+
+import CopyText from '../CopyText';
+import EasySetup from '../CreatorsPage/sections/EasySetup/EasySetup';
 
 export default {
   name: 'CreatorPage',
   components: {
+    EasySetup,
     AppLogo: () =>
       import(/* webpackChunkName: "svg-creator" */ '~/assets/images/app-logo.svg'),
     CopyText,
@@ -161,6 +169,14 @@ export default {
   mixins: [utmMixin],
   props: {
     likerId: {
+      type: String,
+      default: '',
+    },
+    displayName: {
+      type: String,
+      default: '',
+    },
+    avatarUrl: {
       type: String,
       default: '',
     },
