@@ -104,7 +104,7 @@ export default {
       return `$${this.subscriptionEarnings}`;
     },
     creatorsFundEarningsMin() {
-      return this.readersCount * 0.009 + this.readersCount * 0.01;
+      return this.readersCount * 0.019;
     },
     creatorsFundEarningsMax() {
       return this.readersCount * 0.1;
