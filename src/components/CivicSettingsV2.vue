@@ -53,7 +53,7 @@
             :title="$t('SettingsCivicCancelPage.continue')"
             :to="{
               name: 'id-civic',
-              params: { id: 'foundation' },
+              params: { id: defaultSupporter },
             }"
           />
         </template>
@@ -120,6 +120,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { DEFAULT_CL_SUPPORTER } from '~/constant';
+
 import Button from '~/components/Button/Button';
 import CardBrand from '~/components/CardBrand/CardBrand';
 import Spinner from '~/components/Spinner/Spinner';
@@ -167,6 +169,9 @@ export default {
         return brand;
       }
       return '';
+    },
+    defaultSupporter() {
+      return DEFAULT_CL_SUPPORTER;
     },
   },
   async mounted() {

@@ -35,3 +35,6 @@ export const PAYMENT_METHOD_LIST = [
   'likepay',
   'other', // plz always put `other` at last for hk geoip handle
 ];
+
+export const DEFAULT_CL_SUPPORTER =
+  process.env.DEFAULT_CL_SUPPORTER || 'foundation';

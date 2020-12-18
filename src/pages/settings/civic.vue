@@ -9,6 +9,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import { DEFAULT_CL_SUPPORTER } from '~/constant';
+
 import CivicSettingsV1 from '~/components/CivicSettingsV1';
 import CivicSettingsV2 from '~/components/CivicSettingsV2';
 
@@ -23,7 +25,7 @@ export default {
   },
   fetch({ store, redirect }) {
     if (!store.getters.getUserIsCivicLiker) {
-      redirect({ name: 'id-civic', params: { id: 'foundation' } });
+      redirect({ name: 'id-civic', params: { id: DEFAULT_CL_SUPPORTER } });
     }
   },
 };
