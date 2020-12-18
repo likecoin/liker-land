@@ -26,10 +26,6 @@
         <h2
           class="flex-grow text-like-green font-24 font-500"
         >{{ $t('SettingsSupportPage.Title.ManageSubscription') }}</h2>
-        <Button
-          :title="$t('SettingsSupportPage.AboutCivicLiker')"
-          :to="{ name: 'civic' }"
-        />
       </div>
       <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16">
         <template v-if="getUserSubscriptionInfo.willCancel">
