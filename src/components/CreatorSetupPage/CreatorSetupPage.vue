@@ -47,8 +47,9 @@
 
       .creators-page__separator
 
-    EasySetup.mt-32.mx-40(
+    EasySetup.mt-32.mx-16(
       preset="setup"
+      class="laptop:mx-40"
       v-bind="{ likerId, displayName, avatarUrl }"
     )
 
@@ -379,12 +380,6 @@ export default {
         }
       }
     }
-  }
-
-  .app-download-badges .button {
-    min-width: 256px !important;
-
-    font-size: 16px !important;
   }
 }
 </style>

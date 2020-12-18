@@ -12,21 +12,27 @@
       )
         template(#footer)
           section.py-32.flex.justify-center(class="phone:mt-32 tablet:mt-32")
-            a.button(
-              v-if="!getUserId"
-              :href="registerURL"
-            )
-              | {{ $t('CreatorsPage.CTAButton.Register') }}
-            NuxtLink.button(
-              v-else-if="!getUserIsCivicLiker"
-              :to="{ name: 'civic-from', params: { from: $route.query.referrer } }"
-            )
-              | {{ $t('CreatorsPage.CTAButton.Civic') }}
+            .max-w-phone-min.w-full
+              Button(
+                v-if="!getUserId"
+                :href="registerURL"
+                :title="$t('CreatorsPage.CTAButton.Register')"
+                size="large"
+                :full="true"
+              )
+              Button(
+                v-else-if="!getUserIsCivicLiker"
+                :to="{ name: 'civic-from', params: { from: $route.query.referrer } }"
+                :title="$t('CreatorsPage.CTAButton.Civic')"
+                size="large"
+                :full="true"
+              )
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import Button from '~/components/Button/Button';
 import CreatorSetupPage from '~/components/CreatorSetupPage/CreatorSetupPage';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -36,6 +42,7 @@ import { getOAuthRegisterAPI } from '~/util/api';
 
 export default {
   components: {
+    Button,
     CreatorSetupPage,
     PageHeader,
     SiteNavBar,
@@ -79,34 +86,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.civic-page .button {
-  min-width: 156px !important;
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
-
-  transition-property: background-color, box-shadow, transform;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in;
-
-  @apply bg-like-cyan-light;
-  @apply rounded-8;
-  @apply text-like-green;
-  @apply text-14;
-  @apply text-center;
-  @apply font-400;
-  @apply m-8;
-  @apply p-12;
-
-  &:hover {
-    background-color: config('colors.like-cyan');
-  }
-
-  &:active {
-    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
-    transform: translateX(1px) translateY(2px);
-
-    background-color: config('colors.like-cyan-dark');
-  }
-}
-</style>

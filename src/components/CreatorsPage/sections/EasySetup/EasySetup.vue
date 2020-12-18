@@ -33,7 +33,7 @@
     .bg-gray-e6.rounded-full.h-16&attributes(attributes)
 
   mixin FakeContent(type)
-    .bg-white.rounded-12.shadow-4.mt-40.px-40.pb-24.overflow-hidden(
+    .bg-white.rounded-12.shadow-4.mt-40.px-40.overflow-hidden(
       :class="['laptop:mr-40 laptop:mt-0', { 'select-none': !likerId }]"
     )&attributes(attributes)
       +FakeText(class="w-4/5 -mt-8")
@@ -43,7 +43,7 @@
       if type === 'link'
         p.mt-20.select-none {{ $t('CreatorsPageV2.Setup.Preview.LinkCFA') }}
         p.mt-4.underline(style="color:#0091ff") {{ sponsorLink }}
-        .flex.items-center.mt-32.select-none
+        .flex.items-center.mt-32.mb-24.select-none
           +Avatar()(v-if="avatarUrl" :src="avatarUrl")
           +Avatar()(v-else src="./assets/avatar.png")
           span.ml-16.text-18 {{ normalizedName }}
@@ -116,14 +116,9 @@
             h2.text-30.text-like-green.mb-12 {{ $t('CreatorsPageV2.Setup.Setup.Steps[1].Title') }}
             +StepDescription {{ $t('CreatorsPageV2.Setup.Setup.Steps[1].Description') }}
         .flex-1
-          +FakeContent('button')
-            .likecoin-embed.likecoin-button
-              div
-              iframe(
-                scrolling="no"
-                frameborder="0"
-                :src="buttonEmbedURL"
-              )
+          +FakeContent('button')(class="pb-0 laptop:-mr-40")
+            .-mx-40
+              FakeLikeCoinButton(:liker-id="likerId")
 
 </template>
 
@@ -132,11 +127,12 @@ import { getOAuthRegisterAPI } from '~/util/api';
 import { getSponsorLink } from '~/util/civic';
 
 import Button from '~/components/Button/Button';
-import { LIKECOIN_BUTTON_BASE } from '~/constant';
+import FakeLikeCoinButton from '~/components/FakeLikeCoinButton/FakeLikeCoinButton';
 
 export default {
   components: {
     Button,
+    FakeLikeCoinButton,
   },
   props: {
     preset: {
@@ -176,37 +172,6 @@ export default {
       const { from, referrer } = this.$route.query;
       return getOAuthRegisterAPI(from, referrer);
     },
-    buttonEmbedURL() {
-      return `${LIKECOIN_BUTTON_BASE}/in/embed/${
-        this.likerId
-      }/button?preview=1`;
-    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-$likecoin-button-max-width: 485px;
-$likecoin-button-max-height: 240px;
-
-.likecoin-button {
-  position: relative;
-  width: 100%;
-  max-width: $likecoin-button-max-width;
-  max-height: $likecoin-button-max-height;
-  margin: 0 auto;
-
-  > div {
-    padding-top: $likecoin-button-max-height / $likecoin-button-max-width * 100%;
-  }
-
-  > iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-  }
-}
-</style>
