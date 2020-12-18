@@ -51,7 +51,7 @@
     "subscriptionPeriod": "你的讚賞公民體驗有效期為 {start} 至 {end}"
   },
   "CivicLikerWelcomeView": {
-    "Congratulation": "恭喜！你已成為{br}{name} 的讚賞公民",
+    "Congratulation": "你已成為{br}{name} 的讚賞公民",
     "Price": "{emoji} 每月 {price} 美元",
     "Benefits": {
       "SupportTheCreator": {

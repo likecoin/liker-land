@@ -51,7 +51,7 @@
     "subscriptionPeriod": "Your subscription is valid from {start} to {end}"
   },
   "CivicLikerWelcomeView": {
-    "Congratulation": "Congratulation!{br}You have become the Civic Liker of {name}",
+    "Congratulation": "You have become the Civic Liker of {name}",
     "Price": "{emoji} {price} USD/mo",
     "Benefits": {
       "SupportTheCreator": {
