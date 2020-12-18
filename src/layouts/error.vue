@@ -142,7 +142,7 @@ export default {
       return /^LOGIN_NEEDED.*/.test(this.error.message);
     },
     isLoginErrorFromCivicLikerRegistration() {
-      return this.isLoginError && /^civic-register.*/.test(this.$route.name);
+      return this.isLoginError && /civic-register.*/.test(this.$route.name);
     },
     isCivicLikerRelatedError() {
       return /^CIVIC_LIKER.*/.test(this.error.message);

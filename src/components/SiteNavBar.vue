@@ -10,32 +10,70 @@
       <Logo />
     </NuxtLink>
 
-    <button
-      class="site-nav-bar__menu-button sliding-menu-toggle"
-      @click="toggleSlidingMenu(!getIsSlidingMenuOpen)"
-    >
-      <span />
-      <span />
-      <span />
-    </button>
+
+    <div class="flex items-center">
+      <div
+        v-if="!getUserId"
+        class="relative overflow-hidden leading-0"
+      >
+        <GlobeIcon class="w-20 h-20 fill-current mr-16" />
+        <select
+          class="absolute pin-y pin-r opacity-0"
+          :value="getLocale"
+          @change="onChangeLocale"
+        >
+          <option
+            v-for="locale in getAvailableLocales"
+            :key="locale"
+            :value="locale"
+          >{{ $t(`Locale.${locale}`) }}</option>
+        </select>
+      </div>
+
+      <button
+        class="site-nav-bar__menu-button sliding-menu-toggle"
+        @click="toggleSlidingMenu(!getIsSlidingMenuOpen)"
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import Logo from '~/assets/icons/logo.svg';
-
 export default {
   name: 'SiteNavBar',
   components: {
-    Logo,
+    Logo: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/logo.svg'),
+    GlobeIcon: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/globe.svg'),
   },
   computed: {
-    ...mapGetters(['getHomeRoute', 'getIsSlidingMenuOpen']),
+    ...mapGetters([
+      'getHomeRoute',
+      'getUserId',
+      'getIsSlidingMenuOpen',
+      'getAvailableLocales',
+      'getLocale',
+    ]),
   },
   methods: {
-    ...mapActions(['toggleSlidingMenu']),
+    ...mapActions(['toggleSlidingMenu', 'setLocale']),
+    onChangeLocale(event) {
+      const { value: locale } = event.target;
+      this.$i18n.locale = locale;
+      this.setLocale(locale);
+      if (this.$cookie) {
+        this.$cookie.set('language', locale, {
+          expires: '1M',
+        });
+      }
+    },
   },
 };
 </script>

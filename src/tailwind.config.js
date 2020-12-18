@@ -63,6 +63,7 @@ const colors = {
   'like-green-darker': '#1e4a51',
   'like-brown': '#462814',
   'like-cyan-gray': '#a9c1c5',
+  'like-cyan-pale': '#d7ecec',
   'like-cyan-light': '#aaf1e7',
   'like-cyan': '#50e3c2',
   'like-cyan-dark': '#22d6ad',
@@ -143,6 +144,9 @@ module.exports = {
     mono: [
       'monospace',
     ],
+    emoji: [
+      'emoji',
+    ],
   },
 
   /*
@@ -173,7 +177,9 @@ module.exports = {
     '20': '1.25rem', // xl
     '24': '1.5rem', // 2xl
     '30': '1.875rem', // 3xl
+    '32': '2rem',
     '36': '2.25rem', // 4xl
+    '40': '2.5rem',
     '48': '3rem', // 5xl
     '56': '3.5rem', // 6xl
   },
@@ -196,6 +202,7 @@ module.exports = {
   fontWeights: {
     '200': 200,
     '400': 400,
+    '500': 500,
     '600': 600,
   },
 
@@ -213,6 +220,7 @@ module.exports = {
   */
 
   leading: {
+    '0': 0,
     '1': 1,
     '1_25': 1.25,
     '1_5': 1.5,
@@ -310,6 +318,7 @@ module.exports = {
   borderWidths: {
     default: '1px',
     '0': '0',
+    '1': '1px',
     '2': '2px',
     '4': '4px',
     '8': '8px',
@@ -358,6 +367,8 @@ module.exports = {
     '4': '.25rem',
     default: '.5em',
     '8': '.5rem',
+    '12': '.75rem',
+    '14': '.875rem',
     full: '9999px',
   },
 
@@ -399,7 +410,9 @@ module.exports = {
     '40': '2.5rem',
     '48': '3rem',
     '64': '4rem',
+    '72': '4.5rem',
     '80': '5rem',
+    '96': '6rem',
     '1/2': '50%',
     '1/3': '33.33333%',
     '2/3': '66.66667%',
@@ -446,8 +459,10 @@ module.exports = {
     '36': '2.25rem',
     '40': '2.5rem',
     '48': '3rem',
+    '72': '4.5rem',
     '64': '4rem',
     '80': '5rem',
+    '96': '6rem',
     full: '100%',
     screen: '100vh',
   },
@@ -510,6 +525,7 @@ module.exports = {
   */
 
   maxWidth: {
+    'phone-min': '320px',
     phone: '528px',
     desktop: '1024px',
     full: '100%',
@@ -566,6 +582,7 @@ module.exports = {
     '48': '3rem',
     '52': '3.25rem',
     '64': '4rem',
+    '72': '4.5rem',
     '80': '5rem',
     '96': '6rem',
     '128': '8rem',
@@ -603,6 +620,7 @@ module.exports = {
     '48': '3rem',
     '52': '3.25rem',
     '64': '4rem',
+    '72': '4.5rem',
     '80': '5rem',
     '96': '6rem',
     '128': '8rem',
@@ -662,6 +680,8 @@ module.exports = {
 
   shadows: {
     none: 'none',
+    '4': '0 1px 4px #00000066',
+    '8': '0 2px 8px #00000066',
   },
 
   /*
@@ -797,7 +817,7 @@ module.exports = {
     minWidth: ['responsive'],
     negativeMargin: ['responsive'],
     objectFit: [],
-    objectPosition: false,
+    objectPosition: [],
     opacity: ['responsive'],
     outline: ['focus'],
     overflow: ['responsive'],

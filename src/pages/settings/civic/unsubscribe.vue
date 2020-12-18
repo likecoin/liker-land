@@ -54,7 +54,7 @@
           v-else-if="state !== 'waiting'"
           :key="heartArtDescriptionKey"
         )
-          | {{ $t(`SettingsCivicCancelPage.${heartArtDescriptionKey}`, { date: getUserSubscriptionInfo.currentPeriodEndString }) }}
+          | {{ $t(`SettingsCivicCancelPage.${heartArtDescriptionKey}`, { date: endDateString }) }}
 
     Transition(
       :name="state !== 'unsubscribing' ? 'fade' : undefined"
@@ -106,7 +106,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserSubscriptionInfo']),
+    ...mapGetters([
+      'getUserSubscriptionInfo',
+      'getUserIsCivicLikerPaid',
+      'getUserIsCivicLikerV2',
+    ]),
 
     heartCrackPaths() {
       return [
@@ -136,8 +140,20 @@ export default {
           return 'needYourSupport';
       }
     },
+    endDateString() {
+      return this.getUserSubscriptionInfo
+        ? this.getUserSubscriptionInfo.currentPeriodEndString
+        : '';
+    },
   },
-  mounted() {
+  fetch({ store, redirect }) {
+    if (store.getters.getUserIsCivicLikerV2) {
+      redirect({ name: 'settings-civic' });
+    }
+  },
+  async mounted() {
+    await this.fetchSubscriptionInfo();
+
     const tl = new this.$gsap.TimelineMax();
     // Fade in heart
     tl.fromTo(
@@ -151,6 +167,25 @@ export default {
   },
   methods: {
     ...mapActions(['cancelUserSubscription']),
+
+    async fetchSubscriptionInfo() {
+      try {
+        if (!this.getUserSubscriptionInfo) {
+          await this.fetchUserSubscriptionInfo();
+        }
+        const { willCancel } = this.getUserSubscriptionInfo;
+        if (willCancel) {
+          this.$router.replace({ name: 'settings-civic' });
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          this.$router.replace({ name: 'settings-civic' });
+        } else {
+          console.error(err); // eslint-disable-line no-console
+          this.$nuxt.error(err);
+        }
+      }
+    },
 
     showCracks(gsapTimeline, ...range) {
       const crackLines = this.$refs.crackLines.slice(...range);

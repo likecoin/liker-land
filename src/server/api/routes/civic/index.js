@@ -8,11 +8,13 @@ const {
 } = require('../../util/api');
 const stripe = require('./stripe');
 const likepay = require('./likepay');
+const support = require('./support');
 
 const router = Router();
 
 router.use(likepay);
 router.use(stripe);
+router.use(support);
 
 router.get('/civic/trial/events/:id', async (req, res, next) => {
   try {

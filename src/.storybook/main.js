@@ -21,7 +21,20 @@ module.exports = {
 
     config.module.rules.push({
       test: /\.scss$/,
-      use: ['style-loader', 'css-loader', 'sass-loader'],
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true,
+            config: {
+              path: './.storybook/',
+            },
+          },
+        },
+        'sass-loader',
+      ],
       include: path.resolve(__dirname, '../'),
     });
 

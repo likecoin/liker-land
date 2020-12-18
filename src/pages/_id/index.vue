@@ -1,4 +1,7 @@
 <template lang="pug">
+  mixin CTAButton
+    Button(v-bind="ctaButtonProps" @click="onClickCTAButton")&attributes(attributes)
+
   .user-portfolio-page
     PageHeader
       template
@@ -10,24 +13,20 @@
           .user-info-panel
             header
               Identity(
-                :avatar-url="user.avatar"
+                :avatar-url="creator.avatar"
                 :avatar-size="88"
-                :is-avatar-outlined="isUserCivicLiker"
+                :is-avatar-outlined="isCivicLikerCreator"
               )
 
-              .mt-16.text-like-cyan-gray ID: {{ user.user }}
-              .mt-4.text-30.font-600.text-like-cyan {{ user.displayName }}
+              .mt-16.text-like-cyan-gray ID: {{ creatorLikerID }}
+              .mt-4.text-30.font-600.text-like-cyan.text-center {{ creator.displayName }}
 
-              .user-info-panel__actions
-                Button(
-                  preset="primary"
-                  :title="$t('PortfolioPage.BecomeCivicLiker')"
-                  :to="{ name: 'civic', query: { from: user.user } }"
-                )
+              .user-info-panel__actions(v-if="!isSelf")
+                +CTAButton
                 ButtonGroup
                   Button(
                     preset="translucent-dark"
-                    :title="$t(getIsFollowedAuthor(user.user) ? 'unfollow' : 'follow')"
+                    :title="$t(getIsFollowedAuthor(creatorLikerID) ? 'unfollow' : 'follow')"
                     @click="onToggleFollow"
                   )
                   Button(
@@ -41,11 +40,11 @@
               .text-12.text-center.text-gray-9b.font-200
                 | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
 
-            footer.user-info-panel__footer.user-info-panel__footer--desktop(v-if="isUserCivicLiker")
+            footer.user-info-panel__footer.user-info-panel__footer--desktop(v-if="isCivicLikerCreator")
               .px-24.py-16
                 +CivicLikerSinceLabel.px-4
 
-            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto(v-if="isUserCivicLiker")
+            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto(v-if="isCivicLikerCreator")
               .px-24.py-16.flex.justify-between.items-center(@click="isShowAbout = !isShowAbout")
                 span.text-14.text-gray-4a.font-200 {{ $t('PortfolioPage.About') }}
                 svg.text-gray-9b(
@@ -70,11 +69,7 @@
 
       .page-content__right
         header.user-portfolio-page__top-nav
-          Button.user-portfolio-page__top-cta(
-            preset="primary"
-            :title="$t('PortfolioPage.BecomeCivicLiker')"
-            :to="{ name: 'civic', query: { from: user.user } }"
-          )
+          +CTAButton.user-portfolio-page__top-cta(v-if="!isSelf")
 
           nav.user-portfolio-page__tab-bar(v-if="items.length > 0 && works.length > 0")
             Button.user-portfolio-page__tab-bar-item(
@@ -122,19 +117,52 @@
                   )
           .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
             | {{ $t('PortfolioPage.EmptyLabel') }}
+
+    BaseDialog(
+      v-if="!isSelf"
+      :is-show="isShowCivicWelcome"
+      content-container-class="mt-64 rounded-8 overflow-hidden phone:rounded-none"
+      @click-outside="isShowCivicWelcome = false"
+    )
+      CivicLikerWelcomeView(
+        :price="supportingAmount"
+        :price-emoji="supportingEmoji"
+        :referrer-avatar-url="creator.avatar"
+        :referrer-display-name="creator.displayName"
+        :is-referrer-civic-liker="isCivicLikerCreator"
+      )
+        template(#header)
+          Button.bg-like-green.text-like-cyan-light.rounded-full.shadow-8(
+            @click="isShowCivicWelcome = false"
+          )
+            svg.m-12(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.73 14.73" width="16")
+              g(fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2")
+                line(x1="1" y1="1" x2="13.73" y2="13.73")
+                line(x1="1" y1="13.73" x2="13.73" y2="1")
+
+        template(#footer)
+          AppDownloadBadges.pb-24(:from="creatorLikerID")
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
-import { getUserMinAPI, getFetchUserSuperLikeAPI } from '~/util/api';
+import {
+  getUserMinAPI,
+  getFetchUserSuperLikeAPI,
+  getCivicSupportingUserAPI,
+} from '~/util/api';
+import { getPriceEmoji } from '~/util/civic';
 import { getLikeCoURL } from '~/util/links';
 import { checkUserNameValid } from '~/util/user';
 
+import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
+import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
 import Card from '~/components/Card/Card';
+import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
 import Collapse from '~/components/Collapse/Collapse';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
@@ -162,9 +190,12 @@ function filterItems(inputItems) {
 export default {
   layout: 'desktop',
   components: {
+    AppDownloadBadges,
+    BaseDialog,
     Button,
     ButtonGroup,
     Card,
+    CivicLikerWelcomeView,
     Collapse,
     Identity,
     PageHeader,
@@ -184,10 +215,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserId', 'getIsFollowedAuthor']),
+    ...mapGetters([
+      'getUserId',
+      'getIsFollowedAuthor',
+      'getUserIsCivicLikerV2',
+    ]),
 
+    creatorLikerID() {
+      return this.creator.user;
+    },
     likePayURL() {
-      return getLikeCoURL(`/${this.user.user}`);
+      return getLikeCoURL(`/${this.creatorLikerID}`);
     },
     filteredWorks() {
       return filterItems(this.works);
@@ -199,7 +237,7 @@ export default {
       return this.tab === 'works' ? this.filteredWorks : this.filteredItems;
     },
     formattedCivicLikerSince() {
-      return dateFormat(new Date(this.user.civicLikerSince), 'YYYY/MM/DD');
+      return dateFormat(new Date(this.creator.civicLikerSince), 'YYYY/MM/DD');
     },
     isLoading() {
       return (
@@ -207,19 +245,61 @@ export default {
         LOADING_STATES.includes(this.worksState)
       );
     },
-    isUserCivicLiker() {
+    isSelf() {
+      return this.creatorLikerID === this.getUserId;
+    },
+    isCivicLikerCreator() {
       return !!(
-        this.user.isCivicLikerTrial || this.user.isSubscribedCivicLiker
+        this.creator.isCivicLikerTrial || this.creator.isSubscribedCivicLiker
       );
     },
+    supportingAmount() {
+      return this.civicSupport.quantity * 5;
+    },
+    supportingEmoji() {
+      return getPriceEmoji(this.supportingAmount);
+    },
+    isSupportingCreator() {
+      return this.supportingAmount > 0;
+    },
+    ctaToRoute() {
+      if (this.getUserIsCivicLikerV2) {
+        if (this.isSupportingCreator) {
+          return undefined;
+        }
+        return { name: 'id-civic', params: { id: this.creatorLikerID } };
+      }
+      return { name: 'civic', query: { from: this.creatorLikerID } };
+    },
+    ctaButtonProps() {
+      const isSupporting = this.isSupportingCreator;
+      return {
+        preset: isSupporting ? 'special' : 'primary',
+        title: this.$t(
+          `PortfolioPage.CTAButton.${isSupporting ? 'Active' : 'Inactive'}`
+        ),
+        to: this.ctaToRoute,
+      };
+    },
   },
-  async asyncData({ route, $api, error }) {
+  async asyncData({ store, route, query, $api, error }) {
     const { id } = route.params;
     if (id && checkUserNameValid(id)) {
       try {
-        const user = await $api.$get(getUserMinAPI(id));
+        const [creator, civicSupport] = await Promise.all([
+          $api.$get(getUserMinAPI(id)),
+          $api
+            .$get(getCivicSupportingUserAPI(id))
+            .catch(() => ({ quantity: 0 })),
+        ]);
         return {
-          user,
+          creator,
+          civicSupport,
+          isShowCivicWelcome:
+            store.getters.getUserId &&
+            civicSupport &&
+            civicSupport.quantity > 0 &&
+            query.civic_welcome === '1',
         };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
@@ -232,7 +312,7 @@ export default {
   },
   head() {
     const title = this.$t('PortfolioPage.Og.Title', {
-      name: this.user.displayName.trim(),
+      name: this.creator.displayName.trim(),
     });
     return {
       title,
@@ -245,7 +325,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: this.user.avatar,
+          content: this.creator.avatar,
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
@@ -254,7 +334,7 @@ export default {
   mounted() {
     this.refreshBookmarkList();
     this.fetchReaderIndex();
-    Promise.all([this.fetchUserWorks(), this.fetchUserSuperLikes()]).then(
+    Promise.all([this.fetchCreatorWorks(), this.fetchCreatorSuperLikes()]).then(
       () => {
         if (this.works.length === 0 && this.items.length > 0) {
           this.tab = 'superlikes';
@@ -274,11 +354,11 @@ export default {
       'unfollowAuthor',
     ]),
 
-    async fetchUserWorks({ before } = {}) {
+    async fetchCreatorWorks({ before } = {}) {
       try {
         this.worksState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
-          getFetchUserSuperLikeAPI(this.user.user),
+          getFetchUserSuperLikeAPI(this.creatorLikerID),
           { params: { before, limit: ITEM_PER_FETCH, filter: 'self' } }
         );
         this.works.push(...list);
@@ -289,11 +369,11 @@ export default {
         this.worksState = 'error';
       }
     },
-    async fetchUserSuperLikes({ before } = {}) {
+    async fetchCreatorSuperLikes({ before } = {}) {
       try {
         this.itemsState = before ? 'pending-more' : 'pending';
         const { list } = await this.$api.$get(
-          getFetchUserSuperLikeAPI(this.user.user),
+          getFetchUserSuperLikeAPI(this.creatorLikerID),
           { params: { before, limit: ITEM_PER_FETCH } }
         );
         this.items.push(...list.filter(item => item.user !== this.user.user));
@@ -315,12 +395,12 @@ export default {
       if (scrollY >= scrollHeight - windowHeight * 2) {
         if (this.tab === 'works') {
           if (this.worksState === 'done') {
-            this.fetchUserWorks({
+            this.fetchCreatorWorks({
               before: this.works[this.works.length - 1].ts,
             });
           }
         } else if (this.itemsState === 'done') {
-          this.fetchUserSuperLikes({
+          this.fetchCreatorSuperLikes({
             before: this.items[this.items.length - 1].ts,
           });
         }
@@ -334,11 +414,16 @@ export default {
         });
         return;
       }
-      const { user: id } = this.user;
+      const id = this.creatorLikerID;
       if (this.getIsFollowedAuthor(id)) {
         await this.unfollowAuthor(id);
       } else {
         await this.followAuthor(id);
+      }
+    },
+    onClickCTAButton() {
+      if (this.isSupportingCreator) {
+        this.isShowCivicWelcome = true;
       }
     },
   },

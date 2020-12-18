@@ -173,7 +173,7 @@
         )
           i18n.text-like-green.font-400(path="civicLiker" place="civicLiker")
 
-    +PaymentSection
+    //- +PaymentSection
 
     section
       .bg-white(class="desktop:mx-24 laptop:rounded-8")
@@ -241,7 +241,7 @@
           .civic-liker-page-v2__mobile-benefit-list-swiper-pagination(slot="pagination")
           .border-b.border-gray-9b.mx-16.mt-32(class="tablet:hidden")
 
-    +PaymentSection
+    //- +PaymentSection
 
 </template>
 

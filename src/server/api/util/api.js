@@ -184,6 +184,34 @@ const apiCivicLikerJoinTrialEventById = (id, req) =>
       }
     )
   );
+const apiCivicLikerListSupportingUser = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKE_CO_URL_BASE}/api/civic/support/users`, {
+      headers: { Authorization },
+    })
+  );
+const apiCivicLikerGetSupportingUser = (id, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKE_CO_URL_BASE}/api/civic/support/users/${id}`, {
+      headers: { Authorization },
+    })
+  );
+const apiCivicLikerSupportUser = (id, quantity, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKE_CO_URL_BASE}/api/civic/support/users/${id}`,
+      { quantity },
+      {
+        headers: { Authorization },
+      }
+    )
+  );
+const apiCivicLikerDeleteSuppoUser = (id, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.delete(`${LIKE_CO_URL_BASE}/api/civic/support/users/${id}`, {
+      headers: { Authorization },
+    })
+  );
 const apiCivicLikerGetMetadata = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKE_CO_URL_BASE}/api/civic/metadata`, {
@@ -251,6 +279,10 @@ module.exports = {
   apiDeleteFollowedUser,
   apiCivicLikerTrialEventById,
   apiCivicLikerJoinTrialEventById,
+  apiCivicLikerListSupportingUser,
+  apiCivicLikerGetSupportingUser,
+  apiCivicLikerSupportUser,
+  apiCivicLikerDeleteSuppoUser,
   apiCivicLikerGetMetadata,
   getOAuthURL,
   getOAuthCallbackAPI,

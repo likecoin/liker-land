@@ -45,6 +45,7 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
           currentPeriodEnd: subscription.current_period_end,
           currentPeriodStart: subscription.current_period_start,
           start: subscription.start,
+          quantity: subscription.quantity,
           card: { brand, last4 },
         });
         return;
@@ -125,11 +126,21 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       ];
       stripePayload.subscription_data = { metadata };
       stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
-      stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
+      if (from) {
+        stripePayload.cancel_url = `${EXTERNAL_URL}/${from}`;
+      } else {
+        stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
+      }
       if (customerId) {
         stripePayload.customer = customerId;
       } else if (email) {
         stripePayload.customer_email = email;
+      }
+
+      if (civicLikerVersion > 1) {
+        stripePayload.success_url = `${
+          stripePayload.success_url
+        }?from=${encodeURIComponent(from)}&quantity=${quantity}`;
       }
     }
     const session = await stripe.checkout.sessions.create(stripePayload);

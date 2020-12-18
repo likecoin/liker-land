@@ -3,21 +3,25 @@
     :css="isAnimated"
     appear
     name="base-dialog-"
-    @before-enter="onBeforeEnter"
-    @enter="onEnter"
-    @after-enter="onAfterEnter"
-    @before-leave="onBeforeLeave"
-    @leave="onLeave"
-    @after-leave="onAfterLeave"
+    v-on="transitionListeners"
   )
     div(
       v-if="isShow"
       :class="rootClass"
       @click="onClickDialog"
     )
-      .base-dialog__content-container(ref="contentContainer")
-        main
-          slot
+      Transition(
+        name="fade"
+        mode="out-in"
+      )
+        .base-dialog__content-container(
+          ref="contentContainer"
+          :key="contentKey"
+        )
+          main(:class="contentContainerClass")
+            slot
+          footer
+            slot(name="footer")
 </template>
 
 <script>
@@ -45,6 +49,14 @@ export default {
       type: [Boolean, String],
       default: true,
     },
+    contentContainerClass: {
+      type: String,
+      default: undefined,
+    },
+    contentKey: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     rootClass() {
@@ -54,6 +66,15 @@ export default {
         'base-dialog--fullscreen': !!this.isFullscreen,
         'base-dialog--with-backdrop': this.isShowBackdrop,
       };
+    },
+    transitionListeners() {
+      const {
+        resize,
+        'click-outside': clickOutside,
+        'update:isShow': updateIsShow,
+        ...listeners
+      } = this.$listeners;
+      return listeners;
     },
   },
   mounted() {
@@ -105,6 +126,7 @@ export default {
       }
     },
     onResize() {
+      if (!this.$refs.contentContainer) return;
       const windowHeight = window.innerHeight;
       const {
         offsetWidth: width,
@@ -168,6 +190,8 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+
+    pointer-events: none;
   }
 
   &--with-backdrop:not(#{&}--fullscreen) {
@@ -180,20 +204,26 @@ export default {
 
       content: '';
 
-      background: rgba(black, 0.2);
+      pointer-events: auto;
+
+      background: rgba(#e6e6e6, 0.5);
     }
   }
 
   &__content-container {
     position: relative;
 
+    pointer-events: auto;
+
     width: 100%;
 
     .base-dialog:not(.base-dialog--fullscreen) & {
       max-width: config('screens.phone.max');
 
-      background-color: white;
-      box-shadow: 0 4px 25px 0 rgba(black, 0.4);
+      main {
+        background-color: white;
+        box-shadow: 0 4px 25px 0 rgba(black, 0.4);
+      }
 
       @media screen and (min-width: config('screens.tablet.min')) {
         margin: 104px auto 56px;
