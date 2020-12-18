@@ -14,7 +14,7 @@
   },
   "CancelSubscription": {
     "Title": "請不要離開，好的內容需要你支持",
-    "GoodBye": "已取消訂閱，再見",
+    "GoodBye": "已成功取消訂閱 {name}，感謝你過去的支持。",
     "Subtitle": "取消訂閱",
     "Description": "{name} 將會在 {date} 失去你的支持，你確定嗎？",
     "Cancel": "繼續支持",

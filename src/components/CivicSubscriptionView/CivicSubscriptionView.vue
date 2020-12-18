@@ -261,9 +261,12 @@
       key="cancel"
       class="px-72 pt-40 pb-32 phone:px-24"
     >
-      <div
+      <i18n
+        tag="div"
         class="mt-16 text-24 text-like-green font-500 text-center"
-      >{{ $t('CancelSubscription.GoodBye') }}</div>
+        path="CancelSubscription.GoodBye"
+        :places="{ name: displayName }"
+      />
 
       <Button
         class="mt-24"
