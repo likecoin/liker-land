@@ -163,6 +163,7 @@
         :display-name="displayName"
         :is-civic-liker="isCivicLiker"
         :subtitle="$t('SettingsSupportUsersPage.SloganConfirm')"
+        :is-subtitle-top="true"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">

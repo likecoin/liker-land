@@ -7,9 +7,13 @@
       :is-avatar-outlined="isCivicLiker"
     />
     <div class="flex-grow ml-24">
+      <div
+        v-if="subtitle && isSubtitleTop"
+        class="mb-8 text-14 mttext-gray-4a font-600"
+      >{{ subtitle }}</div>
       <div class="text-32 text-like-green font-500">{{ displayName }}</div>
       <div
-        v-if="subtitle"
+        v-if="subtitle && !isSubtitleTop"
         class="mt-8 text-14 mttext-gray-4a font-600"
       >{{ subtitle }}</div>
     </div>
@@ -40,6 +44,10 @@ export default {
     subtitle: {
       type: String,
       default: '',
+    },
+    isSubtitleTop: {
+      type: Boolean,
+      default: false,
     },
   },
 };
