@@ -364,7 +364,7 @@ export default {
       return this.$route.params.id;
     },
     quantityOptions() {
-      return [1, 2, 10, 20].map(quantity => ({
+      return [1, 4, 20].map(quantity => ({
         text: `${quantity * this.dollar} ${this.currency}/${this.$t(
           'SubscriptionPeriod.Month'
         )}`,
