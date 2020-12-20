@@ -13,7 +13,7 @@
           :full="true"
           size="large"
         )
-    .flex-grow.flex.items-bottom
+    .flex-grow.flex.justify-end.flex-col
       img.block.mt-24.mx-auto.object-bottom.object-contain(
         class="phone:max-w-full tablet:max-w-phone laptop:-mr-32"
         src="./assets/feature.png"
