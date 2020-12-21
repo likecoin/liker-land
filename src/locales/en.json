@@ -155,9 +155,12 @@
     "GuideLinkBase": "https://docs.like.co/user-guide/content-creators",
     "GuideLink": {
       "Blogger": "@:CreatorsPage.GuideLinkBase/content-platforms/blogspot",
+      "HKCNews": "@:CreatorsPage.GuideLinkBase",
+      "InMedia": "@:CreatorsPage.GuideLinkBase",
       "Matters": "@:CreatorsPage.GuideLinkBase/content-platforms/matters",
       "Medium": "@:CreatorsPage.GuideLinkBase/content-platforms/medium",
       "Pixnet": "@:CreatorsPage.GuideLinkBase/content-platforms/pixnet",
+      "Standnews": "@:CreatorsPage.GuideLinkBase",
       "Timelog": "@:CreatorsPage.GuideLinkBase/content-platforms/timelog",
       "Vocus": "@:CreatorsPage.GuideLinkBase/content-platforms/vocus",
       "WordPress": "@:CreatorsPage.GuideLinkBase/self-host/wordpress"

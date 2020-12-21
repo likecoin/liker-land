@@ -47,6 +47,7 @@ export default {
     PageHeader,
     SiteNavBar,
   },
+  middleware: 'authenticated',
   mixins: [CrispMixinFactory({ isBootAtMounted: false })],
   head() {
     return {
