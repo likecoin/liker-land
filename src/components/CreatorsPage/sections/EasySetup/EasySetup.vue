@@ -24,7 +24,8 @@
       | {{ sponsorLink }}
     Button.block.mt-40.mx-auto.p-0.max-w-phone-min(
       v-clipboard:copy="sponsorLink"
-      :title="$t('CreatorsPageV2.Setup.Registered.Steps[0].CTAButton')"
+      v-clipboard:success="onCopySponsorLink"
+      :title="$t(isCopied ? 'copied' : 'CreatorsPageV2.Setup.Registered.Steps[0].CTAButton')"
       size="large"
       :full="true"
     )
@@ -154,6 +155,7 @@ export default {
   data() {
     return {
       input: '',
+      isCopied: false,
     };
   },
   computed: {
@@ -166,6 +168,11 @@ export default {
         this.input ||
         this.$t('CreatorsPageV2.Setup.Preview.DisplayNamePlaceholder')
       );
+    },
+  },
+  methods: {
+    onCopySponsorLink() {
+      this.isCopied = true;
     },
   },
 };
