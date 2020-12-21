@@ -104,10 +104,12 @@ export default {
       return `$${this.subscriptionEarnings}`;
     },
     creatorsFundEarningsMin() {
-      return this.readersCount * 0.019;
+      // $0.019 * 30 days
+      return this.readersCount * 0.57;
     },
     creatorsFundEarningsMax() {
-      return this.readersCount * 0.1;
+      // $0.1 * 30 days
+      return this.readersCount * 3;
     },
     formattedCreatorsFundEarnings() {
       const {
