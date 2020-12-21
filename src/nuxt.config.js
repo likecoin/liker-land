@@ -182,6 +182,7 @@ const nuxtConfig = {
           'player.vimeo.com',
           '*.facebook.com',
           '*.facebook.net',
+          'button.like.co',
           'https://js.stripe.com',
           'https://hooks.stripe.com',
           'admin.typeform.com',
