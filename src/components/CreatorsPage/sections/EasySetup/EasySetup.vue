@@ -89,7 +89,7 @@
               | {{ sponsorLink }}
             Button.block.mt-40.mx-auto.max-w-phone-min(
               :title="$t('CreatorsPageV2.Setup.Anonymous.Steps[1].CTAButton')"
-              :href="registerURL"
+              :to="{ name: 'creators-setup', query: $route.query }"
               size="large"
               :full="true"
             )
@@ -123,7 +123,6 @@
 </template>
 
 <script>
-import { getOAuthRegisterAPI } from '~/util/api';
 import { getSponsorLink } from '~/util/civic';
 
 import Button from '~/components/Button/Button';
@@ -167,10 +166,6 @@ export default {
         this.input ||
         this.$t('CreatorsPageV2.Setup.Preview.DisplayNamePlaceholder')
       );
-    },
-    registerURL() {
-      const { from, referrer } = this.$route.query;
-      return getOAuthRegisterAPI(from, referrer);
     },
   },
 };

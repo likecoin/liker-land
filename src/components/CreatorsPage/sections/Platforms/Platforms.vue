@@ -8,10 +8,11 @@
         v-for="p in platforms"
         :key="p.id"
       )
-        NuxtLink.bg-white.rounded-8.block(
+        a.bg-white.rounded-8.block(
           class="hover:bg-gray-e6 active:gray-d8"
-          :to="p.to"
+          :href="p.link"
           :alt="p.alt"
+          target="_blank"
         )
           img.block.w-48(
             :src="p.logoSrc"
@@ -88,6 +89,7 @@ export default {
         logoSrc: getLogo(`./${id}.png`),
         to: getSetupRoute(type),
         alt: this.$t(`Glossary.${alt}`),
+        link: this.$t(`CreatorsPage.GuideLink.${alt}`),
       }));
     },
   },
