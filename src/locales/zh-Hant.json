@@ -418,6 +418,10 @@
       "SuperLikes": "已 Super Like 內容"
     },
     "EmptyLabel": "沒有作品",
+    "EmptyCTAForCreator": {
+      "Link": "成為讚賞公民",
+      "Description": "{link}，分享作品到自己的個人主頁"
+    },
     "Og": {
       "Title": "{name} 的個人專頁"
     }

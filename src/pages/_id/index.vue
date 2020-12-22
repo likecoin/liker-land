@@ -115,8 +115,19 @@
                     @fetched="updateLayout"
                     @image-loaded="updateLayout"
                   )
-          .p-24.text-gray-e6.text-36.font-600.text-center(v-else)
-            | {{ $t('PortfolioPage.EmptyLabel') }}
+          .p-64.text-center(v-else)
+            .text-gray-c.text-36.font-600 {{ $t('PortfolioPage.EmptyLabel') }}
+            i18n.mt-64.text-center.text-gray-9b.font-300(
+              v-if="isSelf && !getUserIsCivicLiker"
+              path="PortfolioPage.EmptyCTAForCreator.Description"
+              tag="p"
+            )
+              NuxtLink.text-like-green(
+                class="hover:underline"
+                :to="{ name: 'civic' }"
+                place="link"
+              )
+                | {{ $t('PortfolioPage.EmptyCTAForCreator.Link') }}
 
     BaseDialog(
       v-if="!isSelf"
@@ -218,6 +229,7 @@ export default {
     ...mapGetters([
       'getUserId',
       'getIsFollowedAuthor',
+      'getUserIsCivicLiker',
       'getUserIsCivicLikerV2',
     ]),
 

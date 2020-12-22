@@ -403,6 +403,10 @@
       "SuperLikes": "Super Likes"
     },
     "EmptyLabel": "No content",
+    "EmptyCTAForCreator": {
+      "Link": "Become a Civic Liker",
+      "Description": "{link} to share your content in your portfolio"
+    },
     "Og": {
       "Title": "{name}'s Portfolio"
     }
