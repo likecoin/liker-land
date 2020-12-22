@@ -20,6 +20,12 @@
     "Cancel": "Continue support",
     "Confirm": "Cancel subscription"
   },
+  "CivicEntryPage": {
+    "Og": {
+      "Title": "支持 {name}",
+      "Description": "邀請你成為我，{name} 的讚賞公民，支持我持續創作。"
+    }
+  },
   "CivicLikerCTA": {
     "slogan": {
       "register": "Trade a coffee for a better world",

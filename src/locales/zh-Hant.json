@@ -20,6 +20,12 @@
     "Cancel": "繼續支持",
     "Confirm": "取消訂閱"
   },
+  "CivicEntryPage": {
+    "Og": {
+      "Title": "支持 {name}",
+      "Description": "邀請你成為我，{name} 的讚賞公民，支持我持續創作。"
+    }
+  },
   "CivicLikerCTA": {
     "slogan": {
       "register": "少喝一杯咖啡，共創一個生態",
