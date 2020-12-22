@@ -124,7 +124,7 @@ export default {
         creatorsFundEarningsMin: min,
         creatorsFundEarningsMax: max,
       } = this;
-      return `$${(base + min).toFixed(2)} - ${(base + max).toFixed(2)}`;
+      return `US$${(base + min).toFixed(2)} - ${(base + max).toFixed(2)}`;
     },
   },
 };
