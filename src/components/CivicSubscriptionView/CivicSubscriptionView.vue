@@ -194,9 +194,14 @@
           class="mt-24"
           :title="$t('confirm')"
           :full="true"
+          :disabled="isSelf"
           size="large"
           @click="confirmSubscription"
         />
+        <div
+          v-if="isSelf"
+          class="mt-8 font-500 text-center text-14 text-danger"
+        >{{ $t('SupportSummary.Error.UnableSubSelf') }}</div>
       </div>
     </div>
 
@@ -393,6 +398,9 @@ export default {
       return (
         this.getUserSubscriptionInfo && this.getUserSubscriptionInfo.willCancel
       );
+    },
+    isSelf() {
+      return this.authorId === this.getUserId;
     },
   },
   watch: {

@@ -511,7 +511,10 @@
     "OtherCharge": "Civic Liker (Others)",
     "BillingDate": "Will be billed automatically on {date}",
     "Total": "Total",
-    "Confirm": "Confirm Order"
+    "Confirm": "Confirm Order",
+    "Error": {
+      "UnableSubSelf": "Unable to subscribe yourself"
+    }
   },
   "UpdateSupportQuantity": {
     "Title": "Choose the monthly supporting amount for {name}",

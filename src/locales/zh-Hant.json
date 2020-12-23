@@ -535,7 +535,10 @@
     "OtherCharge": "讚賞公民（其他）",
     "BillingDate": "將於 {date} 自動扣帳",
     "Total": "總額",
-    "Confirm": "確認帳單"
+    "Confirm": "確認帳單",
+    "Error": {
+      "UnableSubSelf": "不能支持自己"
+    }
   },
   "UpdateSupportQuantity": {
     "Title": "請選擇每月支持 {name} 的金額",

@@ -58,6 +58,8 @@ const colors = {
   'gray-f7': '#f7f7f7',
   white: '#ffffff',
 
+  'danger': '#e35050',
+
   'like-green': '#28646e',
   'like-green-dark': '#235760',
   'like-green-darker': '#1e4a51',

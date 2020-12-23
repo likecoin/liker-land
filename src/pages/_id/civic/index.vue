@@ -25,14 +25,8 @@ export default {
     PageHeader,
     SiteNavBar,
   },
-  async asyncData({ store, route, redirect, query, $api, error }) {
-    const currentUserLikerID = store.getters.getUserId;
+  async asyncData({ route, redirect, query, $api, error }) {
     const { id } = route.params;
-
-    if (id === currentUserLikerID) {
-      redirect({ name: 'id', params: { id }, query });
-      return undefined;
-    }
 
     if (id && checkUserNameValid(id)) {
       try {

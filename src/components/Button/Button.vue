@@ -70,6 +70,10 @@ export default {
       type: Object,
       default: undefined,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     buttonProps() {
@@ -78,7 +82,10 @@ export default {
           'button',
           `button--${this.preset}`,
           `button--${this.size}`,
-          { 'button--full': this.full },
+          {
+            'button--full': this.full,
+            'button--disabled': this.disabled,
+          },
         ],
         ...this.$attrs,
       };
@@ -193,6 +200,14 @@ export default {
     color: white;
 
     background-color: transparent;
+  }
+
+  &--disabled {
+    color: #9b9b9b;
+
+    background-color: #ececec;
+
+    pointer-events: none;
   }
 }
 </style>
