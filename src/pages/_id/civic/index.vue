@@ -8,12 +8,14 @@
         CivicSubscriptionView(
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
+          @confirm-subscription="onClickSubscription"
         )
 </template>
 
 <script>
 import { getUserMinAPI } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import CivicSubscriptionView from '~/components/CivicSubscriptionView/CivicSubscriptionView';
 import PageHeader from '~/components/PageHeader';
@@ -40,6 +42,32 @@ export default {
     }
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
+  },
+  mounted() {
+    const { id } = this.$route.params;
+    logTrackerEvent(this, 'Civic', 'CivicPageLoad', `CivicPageLoad(${id})`, 1);
+  },
+  methods: {
+    onClickSubscription() {
+      const { id } = this.$route.params;
+      if (this.getUserIsCivicLiker) {
+        logTrackerEvent(
+          this,
+          'Civic',
+          'CivicClickUpdate',
+          `CivicClickUpdate(${id})`,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'Civic',
+          'CivicClickRegister',
+          `CivicClickRegister(${id})`,
+          1
+        );
+      }
+    },
   },
   head() {
     const name = this.creator.displayName.trim();

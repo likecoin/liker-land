@@ -522,7 +522,8 @@ export default {
       });
     },
 
-    confirmSubscription() {
+    confirmSubscription(e) {
+      this.$emit('confirm-subscription', e);
       if (this.getUserIsCivicLiker) {
         this.updateSubscription();
       } else {
