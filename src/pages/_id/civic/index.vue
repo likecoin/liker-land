@@ -8,6 +8,7 @@
         CivicSubscriptionView(
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
+          @confirm-subscription="onClickSubscription"
         )
 </template>
 
@@ -45,6 +46,28 @@ export default {
   mounted() {
     const { id } = this.$route.params;
     logTrackerEvent(this, 'Civic', 'CivicPageLoad', `CivicPageLoad(${id})`, 1);
+  },
+  methods: {
+    onClickSubscription() {
+      const { id } = this.$route.params;
+      if (this.getUserIsCivicLiker) {
+        logTrackerEvent(
+          this,
+          'Civic',
+          'CivicClickUpdate',
+          `CivicClickUpdate(${id})`,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'Civic',
+          'CivicClickRegister',
+          `CivicClickRegister(${id})`,
+          1
+        );
+      }
+    },
   },
   head() {
     const name = this.creator.displayName.trim();

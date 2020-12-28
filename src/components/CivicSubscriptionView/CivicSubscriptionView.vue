@@ -316,7 +316,6 @@ import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/Civic
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
-import { logTrackerEvent } from '~/util/EventLogger';
 
 const STATES = ['select-quantity', 'confirm'];
 
@@ -523,25 +522,11 @@ export default {
       });
     },
 
-    confirmSubscription() {
-      const { id } = this.$route.params;
+    confirmSubscription(e) {
+      this.$emit('confirm-subscription', e);
       if (this.getUserIsCivicLiker) {
-        logTrackerEvent(
-          this,
-          'Civic',
-          'CivicClickUpdate',
-          `CivicClickUpdate(${id})`,
-          1
-        );
         this.updateSubscription();
       } else {
-        logTrackerEvent(
-          this,
-          'Civic',
-          'CivicClickRegister',
-          `CivicClickRegister(${id})`,
-          1
-        );
         this.$router.push({
           name: `civic-register-stripe`,
           query: {
