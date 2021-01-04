@@ -33,9 +33,14 @@
                   | {{ getUserSubscriptionInfo.currentPeriodEndString }}
 
         a.btn.btn--plain.btn--auto-size.text-12(
-          v-if="getUserSubscriptionInfo.willCancel || getUserShouldRenewCivic"
+          v-if="getUserSubscriptionInfo.willCancel"
           href="#"
           @click="onResumeCanceledSubscription"
+        )
+          | {{ $t('SettingsCivicPage.resumeSubscription') }}
+        NuxtLink.btn.btn--plain.btn--auto-size.text-12(
+          v-else="getUserShouldRenewCivic"
+          :to="{ name: 'civic-register' }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
