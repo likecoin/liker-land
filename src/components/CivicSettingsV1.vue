@@ -39,7 +39,7 @@
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
-          v-else="getUserShouldRenewCivic"
+          v-else-if="getUserShouldRenewCivic"
           :to="{ name: 'civic-register' }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
