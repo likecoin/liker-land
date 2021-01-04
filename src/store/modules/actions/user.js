@@ -64,3 +64,8 @@ export async function cancelUserSubscription({ dispatch }) {
   await this.$api.$delete(api.getStripePaymentStatusAPI());
   return dispatch('fetchUserSubscriptionInfo');
 }
+
+export async function resumeCanceledSubscription({ dispatch }) {
+  await this.$api.$delete(api.getStripePaymentStatusAPI({ resume: true }));
+  return dispatch('fetchUserSubscriptionInfo');
+}

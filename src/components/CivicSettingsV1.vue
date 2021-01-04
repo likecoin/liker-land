@@ -32,8 +32,14 @@
                 .settings-civic-page__billing-summary-row-value
                   | {{ getUserSubscriptionInfo.currentPeriodEndString }}
 
+        a.btn.btn--plain.btn--auto-size.text-12(
+          v-if="getUserSubscriptionInfo.willCancel"
+          href="#"
+          @click="onResumeCanceledSubscription"
+        )
+          | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
-          v-if="getUserSubscriptionInfo.willCancel || getUserShouldRenewCivic"
+          v-else="getUserShouldRenewCivic"
           :to="{ name: 'civic-register' }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
@@ -179,7 +185,7 @@ export default {
     this.fetchSubscriptionInfo();
   },
   methods: {
-    ...mapActions(['fetchUserSubscriptionInfo']),
+    ...mapActions(['fetchUserSubscriptionInfo', 'resumeCanceledSubscription']),
 
     async fetchSubscriptionInfo() {
       if (this.getUserIsCivicLikerPaid) {
@@ -200,6 +206,11 @@ export default {
         }
       }
       this.isFetchedSubscriptionInfo = true;
+    },
+    async onResumeCanceledSubscription() {
+      await this.resumeCanceledSubscription();
+      this.isFetchedSubscriptionInfo = false;
+      await this.fetchSubscriptionInfo();
     },
   },
 };
