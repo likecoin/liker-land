@@ -203,6 +203,7 @@ router.delete('/civic/payment/stripe', async (req, res, next) => {
       res.sendStatus(401);
       return;
     }
+    const { resume } = req.query;
     const userRef = userCollection.doc(req.session.user);
     const userDoc = await userRef.get();
     const {
@@ -221,7 +222,7 @@ router.delete('/civic/payment/stripe', async (req, res, next) => {
         const results = await Promise.all(
           currentSubscriptions.data.map(subscription =>
             stripe.subscriptions.update(subscription.id, {
-              cancel_at_period_end: true,
+              cancel_at_period_end: resume !== '1',
             })
           )
         );

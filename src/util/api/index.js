@@ -89,7 +89,8 @@ export const getStripeEditPaymentAPI = () =>
   '/api/civic/payment/stripe/payment?edit=1';
 export const getStripeBillingPortalAPI = () =>
   '/api/civic/payment/stripe/billing';
-export const getStripePaymentStatusAPI = () => '/api/civic/payment/stripe';
+export const getStripePaymentStatusAPI = ({ resume = false } = {}) =>
+  `/api/civic/payment/stripe?${resume ? 'resume=1' : ''}`;
 export const getCivicCSOnlineAPI = () => `/api/civic/csonline`;
 export const getCivicLikerTrialEventByIdAPI = id =>
   `/api/civic/trial/events/${id}`;
