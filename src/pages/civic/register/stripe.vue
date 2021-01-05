@@ -78,10 +78,12 @@ export default {
           params: { id },
           query: { civic_welcome: 1 },
         });
-      } else if (!this.getUserShouldRenewCivic) {
-        this.$router.replace({ name: 'settings-civic' });
+        return;
       }
-      return;
+      if (!this.getUserShouldRenewCivic) {
+        this.$router.replace({ name: 'settings-civic' });
+        return;
+      }
     }
     logTrackerEvent(
       this,
