@@ -291,7 +291,7 @@
         <Spinner class="mx-auto my-96" />
       </div>
       <div
-        v-else-if="state === 'select-quantity' && getUserIsCivicLiker && currentQuantity > 0 && !isCancelled"
+        v-else-if="state === 'select-quantity' && isUserCurrentCivic && currentQuantity > 0 && !isCancelled"
         class="text-center mt-16"
       >
         <a
@@ -357,6 +357,7 @@ export default {
       'getUserSubscriptionInfo',
       'getCivicSupportingUserInfo',
       'getUserIsCivicLiker',
+      'getUserShouldRenewCivic',
       'getUserInfoById',
     ]),
     dollar() {
@@ -401,6 +402,10 @@ export default {
     },
     isSelf() {
       return this.authorId === this.getUserId;
+    },
+    isUserCurrentCivic() {
+      // allow old v1 user to renew to v2 by not treaing shouldRenew(grace) user as current
+      return this.getUserIsCivicLiker && !this.getUserShouldRenewCivic;
     },
   },
   watch: {
@@ -453,7 +458,7 @@ export default {
 
     async fetchInfo() {
       const promises = [this.fetchLikerInfo()];
-      if (this.getUserIsCivicLiker) {
+      if (this.isUserCurrentCivic) {
         if (!this.getCivicSupportingUserInfo(this.authorId)) {
           promises.push(this.fetchCivicSupportingUsers());
         }
@@ -477,7 +482,7 @@ export default {
       }
       this.selectedQuantity = quantity;
       this.prevSelectedQuantiy = quantity;
-      if (!this.getUserIsCivicLiker) {
+      if (!this.isUserCurrentCivic) {
         this.setState('new');
       } else {
         this.setState(
@@ -524,7 +529,7 @@ export default {
 
     confirmSubscription(e) {
       this.$emit('confirm-subscription', e);
-      if (this.getUserIsCivicLiker) {
+      if (this.isUserCurrentCivic) {
         this.updateSubscription();
       } else {
         this.$router.push({
@@ -571,7 +576,7 @@ export default {
     },
 
     onClickBackdrop() {
-      if (this.state !== 'loading' && this.getUserIsCivicLiker) {
+      if (this.state !== 'loading' && this.isUserCurrentCivic) {
         this.$router.back();
       }
     },
