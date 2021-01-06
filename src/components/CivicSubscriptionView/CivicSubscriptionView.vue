@@ -404,7 +404,7 @@ export default {
       return this.authorId === this.getUserId;
     },
     isUserCurrentCivic() {
-      // allow old v1 user to renew to v2 by not treaing shouldRenew(grace) user as current
+      // allow old v1 user to renew to v2 by not treating shouldRenew(grace) user as current
       return this.getUserIsCivicLiker && !this.getUserShouldRenewCivic;
     },
   },
