@@ -50,7 +50,7 @@ export default {
           this.$router.push({
             name: 'id',
             params: { id: from },
-            query: { civic_welcome: 1 },
+            query: { civic_welcome: '1' },
           });
         } else {
           this.$router.push({ name: 'settings-civic' });
