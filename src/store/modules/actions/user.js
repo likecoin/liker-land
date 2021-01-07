@@ -5,6 +5,7 @@ import {
   updateCrispUser,
   setTrackerUser,
 } from '@/util/EventLogger';
+import { normalizeLocaleForLikeCo } from '@/locales';
 
 export async function postLoginToken(
   { commit, dispatch },
@@ -68,4 +69,15 @@ export async function cancelUserSubscription({ dispatch }) {
 export async function resumeCanceledSubscription({ dispatch }) {
   await this.$api.$delete(api.getStripePaymentStatusAPI({ resume: true }));
   return dispatch('fetchUserSubscriptionInfo');
+}
+
+export async function updatePreferences({ dispatch }, { locale } = {}) {
+  const preferences = {};
+  if (locale) {
+    dispatch('setLocale', locale);
+    preferences.locale = normalizeLocaleForLikeCo(locale);
+  }
+  if (Object.keys(preferences).length) {
+    await this.$api.$post(api.userPreferences(), preferences);
+  }
 }

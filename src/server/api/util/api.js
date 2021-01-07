@@ -76,6 +76,18 @@ const apiFetchUserProfile = req =>
       headers: { Authorization },
     })
   );
+const apiFetchUserPreferences = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/users/preferences`, {
+      headers: { Authorization },
+    })
+  );
+const apiUpdateUserPreferences = (req, params) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(`${LIKECOIN_API_BASE}/users/preferences`, params, {
+      headers: { Authorization },
+    })
+  );
 const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/like/share/self?tz=${tz}`, {
@@ -263,6 +275,8 @@ module.exports = {
   EXTERNAL_URL,
   apiRefreshAccessToken,
   apiFetchUserProfile,
+  apiFetchUserPreferences,
+  apiUpdateUserPreferences,
   apiFetchUserSuperLikeStatus,
   apiFetchUserPublicProfile,
   apiFetchLatestSuperLike,
