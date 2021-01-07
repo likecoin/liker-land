@@ -52,8 +52,8 @@ export default ({ app, store, req, res, query }) => {
     }
     locale =
       query.language ||
-      cookieLang ||
       convertLikerCoinLocale(userLocale) ||
+      cookieLang ||
       (window.localStorage && window.localStorage.language) ||
       navLang ||
       defaultLocale;

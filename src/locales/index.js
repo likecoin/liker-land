@@ -19,6 +19,19 @@ export function convertLikerCoinLocale(locale) {
   }
 }
 
+/**
+ * Normalize liker.land locale for like.co
+ * @param {string} locale liker.land locale
+ */
+export function normalizeLocaleForLikeCo(locale) {
+  switch (locale) {
+    case 'zh-Hant':
+      return 'zh';
+    default:
+      return locale;
+  }
+}
+
 export default {
   en,
   'zh-Hant': zhHant,

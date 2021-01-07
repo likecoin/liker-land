@@ -17,6 +17,7 @@ const OAUTH_SCOPE_REQUEST = [
   'civic_liker',
   'bookmarks',
   'follow',
+  'preferences',
 ];
 
 const OAUTH_SCOPE_REQUIRED = [
@@ -29,6 +30,8 @@ const OAUTH_SCOPE_REQUIRED = [
   'write:bookmarks',
   'read:follow',
   'write:follow',
+  'read:preferences',
+  'write:preferences',
 ];
 
 const DEFAULT_FOLLOW_IDS = [

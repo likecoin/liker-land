@@ -109,3 +109,4 @@ export const getArticleDetailAPI = url =>
   `${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`;
 
 export const updateProfile = () => `/api/users/self/update`;
+export const userPreferences = () => `/api/users/preferences`;

@@ -63,11 +63,11 @@ export default {
     ]),
   },
   methods: {
-    ...mapActions(['toggleSlidingMenu', 'setLocale']),
+    ...mapActions(['toggleSlidingMenu', 'updatePreferences']),
     onChangeLocale(event) {
       const { value: locale } = event.target;
       this.$i18n.locale = locale;
-      this.setLocale(locale);
+      this.updatePreferences({ locale });
       if (this.$cookie) {
         this.$cookie.set('language', locale, {
           expires: '1M',

@@ -9,6 +9,8 @@ const {
   apiFetchUserSuperLikeStatus,
   getOAuthCallbackAPI,
   getOAuthURL,
+  apiFetchUserPreferences,
+  apiUpdateUserPreferences,
 } = require('../util/api');
 const {
   AUTH_COOKIE_NAME,
@@ -108,6 +110,24 @@ router.post('/users/self/update', async (req, res, next) => {
       return;
     }
     res.sendStatus(401);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/users/preferences', async (req, res, next) => {
+  try {
+    const { data } = await apiFetchUserPreferences(req);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/users/preferences', async (req, res, next) => {
+  try {
+    await apiUpdateUserPreferences(req, req.body);
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
