@@ -75,6 +75,7 @@ export const getStripePaymentAPI = ({
   from = '',
   referrer = '',
   utmSource = '',
+  utmMedium = '',
   civicLikerVersion = 1,
   quantity = 1,
 } = {}) =>
@@ -84,7 +85,7 @@ export const getStripePaymentAPI = ({
     referrer
   )}&civic_liker_version=${civicLikerVersion}&quantity=${quantity}&utm_source=${encodeURIComponent(
     utmSource
-  )}`;
+  )}&utm_medium=${encodeURIComponent(utmMedium)}`;
 export const getStripeEditPaymentAPI = () =>
   '/api/civic/payment/stripe/payment?edit=1';
 export const getStripeBillingPortalAPI = () =>
