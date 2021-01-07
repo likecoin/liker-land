@@ -482,13 +482,16 @@ export default {
       }
       this.selectedQuantity = quantity;
       this.prevSelectedQuantiy = quantity;
-      if (!this.isUserCurrentCivic) {
-        this.setState('new');
+
+      let state;
+      if (STATES.includes(this.initialState)) {
+        state = this.initialState;
+      } else if (this.isUserCurrentCivic) {
+        state = 'confirm';
       } else {
-        this.setState(
-          STATES.includes(this.initialState) ? this.initialState : 'confirm'
-        );
+        state = 'new';
       }
+      this.setState(state);
     },
 
     goToSelectQuantity() {
