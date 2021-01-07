@@ -40,7 +40,7 @@
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
           v-else-if="getUserShouldRenewCivic"
-          :to="{ name: 'civic-register-stripe', query: { 'civic_liker_version': '1' } }"
+          :to="{ name: 'civic-register-stripe', query: { civic_liker_version: '1', utm_source: 'settings-civic' } }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
@@ -66,7 +66,7 @@
         br
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
           v-if="getUserShouldRenewCivic"
-          :to="{ name: 'civic-register-stripe', query: { 'civic_liker_version': '1' } }"
+          :to="{ name: 'civic-register-stripe', query: { civic_liker_version: '1', utm_source: 'settings-civic' } }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         span.text-12(

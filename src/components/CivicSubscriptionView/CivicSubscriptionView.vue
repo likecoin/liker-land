@@ -513,6 +513,8 @@ export default {
           query: {
             from: this.authorId,
             quantity: this.selectedQuantity,
+            utm_source: this.$route.query.utm_source,
+            utm_medium: this.$route.query.utm_medium,
           },
         });
       }
@@ -538,6 +540,8 @@ export default {
             from: this.authorId,
             civic_liker_version: 2,
             quantity: this.selectedQuantity,
+            utm_source: this.$route.query.utm_source,
+            utm_medium: this.$route.query.utm_medium,
           },
         });
       }

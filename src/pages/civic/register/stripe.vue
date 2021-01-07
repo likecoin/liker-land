@@ -127,6 +127,7 @@ export default {
         referrer,
         quantity,
         utm_source: utmSource,
+        utm_medium: utmMedium,
         civic_liker_version: civicLikerVersion,
       } = this.$route.query;
       const { sessionId } = await this.$api.$get(
@@ -134,6 +135,7 @@ export default {
           from,
           referrer,
           utmSource,
+          utmMedium,
           civicLikerVersion,
           quantity,
         })
