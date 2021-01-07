@@ -185,13 +185,15 @@ export default {
     }
     if (this.isLoginErrorFromCivicLikerRegistration) {
       // Fetch referrer info
-      const { from } = this.$route.query;
-      if (from && checkUserNameValid(from)) {
+      const { id: paramID } = this.$route.params;
+      const { from: qsLikerID } = this.$route.query;
+      const referrerID = paramID || qsLikerID;
+      if (referrerID && checkUserNameValid(referrerID)) {
         try {
-          const user = await this.$api.$get(getUserMinAPI(from));
+          const referrer = await this.$api.$get(getUserMinAPI(referrerID));
           this.referrer = {
-            ...user,
-            avatarHalo: getAvatarHaloTypeFromUser(user),
+            ...referrer,
+            avatarHalo: getAvatarHaloTypeFromUser(referrer),
           };
         } catch (err) {
           const msg = (err.response && err.response.data) || err;
