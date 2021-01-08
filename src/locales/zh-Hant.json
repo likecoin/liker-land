@@ -132,6 +132,9 @@
       "gift": "獲取實體小禮品，免費參與線下活動"
     }
   },
+  "CivicSettingsV1": {
+    "WillCancel": "你的讚賞公民會籍將繼續生效至 {date}。你可現在續訂原有計劃，亦可待會籍到期後重新訂閱新版本的讚賞公民 2.0 計劃。{compare}"
+  },
   "CollapsibleView": {
     "less": "收起",
     "more": "更多"
@@ -570,5 +573,6 @@
   "signUp": "註冊",
   "unfollow": "取消追蹤",
   "unfollowed": "已取消追蹤",
-  "upgrade": "升級"
+  "upgrade": "升級",
+  "CL1VsCL2": "讚賞公民新舊計劃的比較"
 }

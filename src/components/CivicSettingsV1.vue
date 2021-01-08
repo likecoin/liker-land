@@ -49,6 +49,14 @@
         )
           | {{ $t('SettingsCivicPage.cancelSubscription') }}
 
+        i18n.mt-16.text-12.text-gray-9b.text-center.leading-1_5(
+          v-if="getUserSubscriptionInfo.willCancel"
+          tag="p"
+          path="CivicSettingsV1.WillCancel"
+          :places="{ date: getUserSubscriptionInfo.currentPeriodEndString }"
+        )
+          CL1VsCL2Link(place="compare")
+
       NuxtChild(v-else-if="state === 'cancel'")
       template(
         v-else
@@ -95,6 +103,7 @@ import {
 import { getMaskedCardNumber } from '~/util/billing';
 
 import CardBrand from '~/components/CardBrand/CardBrand';
+import CL1VsCL2Link from '~/components/CL1VsCL2Link';
 
 import LikerComparisonCard from './LikerComparisonCard';
 
@@ -102,6 +111,7 @@ export default {
   components: {
     LikerComparisonCard,
     CardBrand,
+    CL1VsCL2Link,
   },
   middleware: 'authenticated',
   data() {
