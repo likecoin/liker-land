@@ -553,7 +553,12 @@
     "HintText": "每月支持 {name}",
     "Next": "下一步",
     "Subscribe": "立即訂閱",
-    "Unsubscribe": "取消訂閱"
+    "Unsubscribe": "取消訂閱",
+    "CL1": {
+      "Content": "你將以新版本讚賞公民 2.0 計劃延續會籍。如仍欲延續舊版讚賞公民計劃，請點擊{here}。",
+      "Here": "這裡",
+      "Upgrade": "升級至讚賞公民 2.0 計劃"
+    }
   },
   "back": "上一頁",
   "backToHome": "返回首頁",

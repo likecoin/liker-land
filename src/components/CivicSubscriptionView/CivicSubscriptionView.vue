@@ -197,7 +197,7 @@
           :full="true"
           :disabled="isConfirmButtonDisabled"
           size="large"
-          @click="confirmSubscription"
+          @click="onClickConfirmSubscriptionButton"
         />
 
         <div
@@ -300,6 +300,42 @@
       />
     </div>
 
+    <BaseDialog
+      :is-show="isShowUpgradeWarning"
+      content-container-class="max-w-phone-min rounded-8 phone:rounded-none mx-auto"
+    >
+      <div class="p-24">
+        <div class="relative py-12">
+          <Button
+            class="absolute pin-t w-48 h-48 rounded-full shadow-4"
+            preset="primary-invert"
+            @click="isShowUpgradeWarning = false"
+          >
+            <Cross class="w-16 h-16" />
+          </Button>
+          <AlertCircle class="block mx-auto text-like-green w-24 h-24" />
+        </div>
+        <i18n
+          class="mt-16 text-gray-4a leading-1_5 font-400"
+          path="UpdateSupportQuantity.CL1.Content"
+          tag="p"
+        >
+          <NuxtLink
+            class="text-like-green underline"
+            :to="{ name: 'settings-civic' }"
+            place="here"
+          >{{ $t('UpdateSupportQuantity.CL1.Here') }}</NuxtLink>
+        </i18n>
+        <Button
+          class="mt-24"
+          :title="$t('UpdateSupportQuantity.CL1.Upgrade')"
+          :full="true"
+          size="large"
+          @click="confirmSubscription"
+        />
+      </div>
+    </BaseDialog>
+
     <template #footer>
       <div
         v-if="state === 'loading'"
@@ -348,6 +384,8 @@ export default {
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
     CL1VsCL2Link,
+    Cross: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
     Identity,
     SelectButton,
     Spinner,
@@ -370,6 +408,7 @@ export default {
       displayName: '',
       avatarUrl: '',
       isCivicLiker: false,
+      isShowUpgradeWarning: false,
     };
   },
   computed: {
@@ -581,6 +620,14 @@ export default {
       } else {
         // Go back to portfolio for new subscription
         this.$router.push({ name: 'id', params: { id: this.authorId } });
+      }
+    },
+
+    onClickConfirmSubscriptionButton(e) {
+      if (this.getUserShouldRenewCivic) {
+        this.isShowUpgradeWarning = true;
+      } else {
+        this.confirmSubscription(e);
       }
     },
 

@@ -165,6 +165,12 @@ export default {
     background-color: #aaf1e7;
   }
 
+  &--primary-invert {
+    color: #aaf1e7;
+
+    background-color: #28646e;
+  }
+
   &--special {
     color: #28646e;
 
@@ -184,6 +190,7 @@ export default {
   }
 
   &--primary &__title,
+  &--primary-invert &__title,
   &--secondary &__title,
   &--special &__title,
   &--danger &__title {
