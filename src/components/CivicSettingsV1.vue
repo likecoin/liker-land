@@ -17,8 +17,8 @@
           template(#feature-prepend)
             .settings-civic-page__billing-summary
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
-                component.settings-civic-page__billing-summary-row-card-icon(
-                  :is="`${getUserSubscriptionInfo.card.brand}-icon`"
+                CardBrand.settings-civic-page__billing-summary-row-card-icon(
+                  :brand="getUserSubscriptionInfo.card.brand"
                 )
                 .settings-civic-page__billing-summary-row-value
                   | {{ maskedCardNumber }}
@@ -94,11 +94,14 @@ import {
 } from '~/util/api';
 import { getMaskedCardNumber } from '~/util/billing';
 
+import CardBrand from '~/components/CardBrand/CardBrand';
+
 import LikerComparisonCard from './LikerComparisonCard';
 
 export default {
   components: {
     LikerComparisonCard,
+    CardBrand,
   },
   middleware: 'authenticated',
   data() {
