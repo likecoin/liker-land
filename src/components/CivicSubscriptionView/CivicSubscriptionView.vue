@@ -187,6 +187,7 @@
         </div>
 
         <div
+          v-if="!isUserCurrentCivicV1"
           class="mt-24 text-16 font-500"
         >{{ $t('SupportSummary.BillingDate', { date: nextBillingDate }) }}</div>
 
@@ -194,14 +195,30 @@
           class="mt-24"
           :title="$t('confirm')"
           :full="true"
-          :disabled="isSelf"
+          :disabled="isConfirmButtonDisabled"
           size="large"
           @click="confirmSubscription"
         />
+
         <div
-          v-if="isSelf"
-          class="mt-8 font-500 text-center text-14 text-danger"
-        >{{ $t('SupportSummary.Error.UnableSubSelf') }}</div>
+          v-if="isConfirmButtonDisabled"
+          class="flex mt-32 text-like-green"
+        >
+          <AlertCircle class="w-24 h-24 flex-no-shrink mr-12" />
+          <i18n
+            class="flex-grow text-like-green text-14 font-500 leading-1_5"
+            :path="confimrButtonDisabledHintI18nPath"
+            tag="p"
+            :places="{ date: nextBillingDate }"
+          >
+            <NuxtLink
+              class="text-like-green underline"
+              :to="{ name: 'settings-civic-unsubscribe' }"
+              place="unsubscribe"
+            >{{ $t('SupportSummary.Error.CivicV1.Unsubscribe') }}</NuxtLink>
+            <CL1VsCL2Link place="compare" />
+          </i18n>
+        </div>
       </div>
     </div>
 
@@ -313,6 +330,7 @@ import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
+import CL1VsCL2Link from '~/components/CL1VsCL2Link';
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
@@ -321,12 +339,15 @@ const STATES = ['select-quantity', 'confirm'];
 
 export default {
   components: {
+    AlertCircle: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
     BaseDialog,
     BrokenHeart: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/images/civic-v2/broken-heart.svg'),
     Button,
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
+    CL1VsCL2Link,
     Identity,
     SelectButton,
     Spinner,
@@ -357,6 +378,7 @@ export default {
       'getUserSubscriptionInfo',
       'getCivicSupportingUserInfo',
       'getUserIsCivicLiker',
+      'getUserIsCivicLikerV2',
       'getUserShouldRenewCivic',
       'getUserInfoById',
     ]),
@@ -383,7 +405,9 @@ export default {
       return quantity;
     },
     otherQuantity() {
-      if (!this.getUserSubscriptionInfo) return 0;
+      if (!this.getUserSubscriptionInfo || !this.getUserIsCivicLikerV2) {
+        return 0;
+      }
       return this.getUserSubscriptionInfo.quantity - this.currentQuantity;
     },
     priceEmoji() {
@@ -406,6 +430,21 @@ export default {
     isUserCurrentCivic() {
       // allow old v1 user to renew to v2 by not treating shouldRenew(grace) user as current
       return this.getUserIsCivicLiker && !this.getUserShouldRenewCivic;
+    },
+    isUserCurrentCivicV1() {
+      return this.isUserCurrentCivic && !this.getUserIsCivicLikerV2;
+    },
+    isConfirmButtonDisabled() {
+      return this.isSelf || this.isUserCurrentCivicV1;
+    },
+    confimrButtonDisabledHintI18nPath() {
+      if (this.isSelf) {
+        return 'SupportSummary.Error.UnableSubSelf';
+      }
+      if (this.isUserCurrentCivicV1) {
+        return 'SupportSummary.Error.CivicV1.Content';
+      }
+      return '';
     },
   },
   watch: {
@@ -459,7 +498,10 @@ export default {
     async fetchInfo() {
       const promises = [this.fetchLikerInfo()];
       if (this.isUserCurrentCivic) {
-        if (!this.getCivicSupportingUserInfo(this.authorId)) {
+        if (
+          this.getUserIsCivicLikerV2 &&
+          !this.getCivicSupportingUserInfo(this.authorId)
+        ) {
           promises.push(this.fetchCivicSupportingUsers());
         }
         if (!this.getUserSubscriptionInfo) {
@@ -469,8 +511,6 @@ export default {
       try {
         await Promise.all(promises);
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
         this.$router.replace({ name: 'settings-civic' });
       }
       // Set default to  1 for new subscription

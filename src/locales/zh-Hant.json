@@ -540,6 +540,10 @@
     "Total": "總額",
     "Confirm": "確認帳單",
     "Error": {
+      "CivicV1": {
+        "Content": "你的讚賞公民會籍是舊版本，目前無法加入新計劃。如欲以新版讚賞公民 2.0 贊助作者，請先{unsubscribe}，待舊會籍於 {date} 到期後，再重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
+        "Unsubscribe": "退訂"
+      },
       "UnableSubSelf": "不能支持自己"
     }
   },
