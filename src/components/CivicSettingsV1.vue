@@ -50,9 +50,9 @@
           | {{ $t('SettingsCivicPage.cancelSubscription') }}
 
         i18n.mt-16.text-12.text-gray-9b.text-center.leading-1_5(
-          v-if="getUserSubscriptionInfo.willCancel"
+          v-if="hintI18nPath"
           tag="p"
-          path="CivicSettingsV1.WillCancel"
+          :path="hintI18nPath"
           :places="{ date: getUserSubscriptionInfo.currentPeriodEndString }"
         )
           CL1VsCL2Link(place="compare")
@@ -176,6 +176,18 @@ export default {
           card: { brand, last4 },
         } = this.getUserSubscriptionInfo;
         return getMaskedCardNumber(brand, last4);
+      }
+      return '';
+    },
+    hintI18nPath() {
+      if (this.getUserShouldRenewCivic) {
+        return 'CivicSettingsV1.GracePeriod';
+      }
+      if (
+        this.getUserSubscriptionInfo &&
+        this.getUserSubscriptionInfo.willCancel
+      ) {
+        return 'CivicSettingsV1.WillCancel';
       }
       return '';
     },

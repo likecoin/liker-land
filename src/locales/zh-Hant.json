@@ -133,7 +133,8 @@
     }
   },
   "CivicSettingsV1": {
-    "WillCancel": "你的讚賞公民會籍將繼續生效至 {date}。你可現在續訂原有計劃，亦可待會籍到期後重新訂閱新版本的讚賞公民 2.0 計劃。{compare}"
+    "WillCancel": "你的讚賞公民會籍將繼續生效至 {date}。你可現在續訂原有計劃，亦可待會籍到期後重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
+    "GracePeriod": "你可現在續訂原有計劃。如欲轉為以新版本的讚賞公民 2.0 支持作者，請使用作者的贊助連結重新訂閱（格式：https://liker.land/作者的LikerID），也可經由作者的 LikeCoin button 訂閱。"
   },
   "CollapsibleView": {
     "less": "收起",
