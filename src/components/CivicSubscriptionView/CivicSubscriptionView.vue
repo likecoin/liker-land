@@ -532,6 +532,18 @@ export default {
       });
     },
 
+    goBack() {
+      if (this.stateHistory && this.stateHistory.length) {
+        this.state = this.stateHistory.pop();
+      } else if (this.currentQuantity > 0) {
+        // Go back to settings for updating subscription
+        this.$router.push({ name: 'settings-civic' });
+      } else {
+        // Go back to portfolio for new subscription
+        this.$router.push({ name: 'id', params: { id: this.authorId } });
+      }
+    },
+
     confirmSubscription(e) {
       this.$emit('confirm-subscription', e);
       if (this.isUserCurrentCivic) {
@@ -575,16 +587,12 @@ export default {
       if (this.state === 'select-quantity') {
         this.selectedQuantity = this.prevSelectedQuantiy;
       }
-      if (this.stateHistory && this.stateHistory.length) {
-        this.state = this.stateHistory.pop();
-      } else {
-        this.$router.back();
-      }
+      this.goBack();
     },
 
     onClickBackdrop() {
       if (this.state !== 'loading' && this.isUserCurrentCivic) {
-        this.$router.back();
+        this.goBack();
       }
     },
   },
