@@ -68,11 +68,6 @@ export default {
       const { value: locale } = event.target;
       this.$i18n.locale = locale;
       this.updatePreferences({ locale });
-      if (this.$cookie) {
-        this.$cookie.set('language', locale, {
-          expires: '1M',
-        });
-      }
     },
   },
 };

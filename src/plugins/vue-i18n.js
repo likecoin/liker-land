@@ -1,6 +1,5 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 import VueI18n from 'vue-i18n';
-import * as cookie from 'tiny-cookie';
 
 import messages, {
   defaultLocale,
@@ -18,52 +17,15 @@ function getReqAcceptLangauge(req) {
   return req.acceptsLanguages(availableLocales);
 }
 
-function getNavigatorLanguage() {
-  if (
-    navigator.languages &&
-    navigator.languages.find(lang => lang.toLowerCase().includes('zh'))
-  ) {
-    return 'zh-Hant'; // hack to prefer zh-Hant
-  }
-  let navLang =
-    navigator.language ||
-    (navigator.languages && navigator.languages[0]) ||
-    defaultLocale;
-  // TODO: iterate through navigator.languages to find locale
-  navLang = navLang.toLowerCase();
-  availableLocales.forEach(key => {
-    if (navLang.includes(key)) {
-      navLang = key;
-    }
-  });
-  return navLang;
-}
-
-export default ({ app, store, req, res, query }) => {
+export default ({ app, store, req, query }) => {
   let locale = defaultLocale;
   if (!process.server) {
     const { user: { user: { locale: userLocale } = {} } = {} } = store.state;
-    const navLang = getNavigatorLanguage();
-    let cookieLang = '';
-    try {
-      cookieLang = cookie.get('language');
-    } catch (err) {
-      console.error(err); // eslint-disable-line no-console
-    }
     locale =
-      query.language ||
-      convertLikerCoinLocale(userLocale) ||
-      cookieLang ||
-      (window.localStorage && window.localStorage.language) ||
-      navLang ||
-      defaultLocale;
+      query.language || convertLikerCoinLocale(userLocale) || defaultLocale;
     if (!availableLocales.includes(locale)) locale = defaultLocale;
   } else if (req) {
-    locale =
-      query.language ||
-      (req.cookies && req.cookies.language) ||
-      getReqAcceptLangauge(req) ||
-      defaultLocale;
+    locale = query.language || getReqAcceptLangauge(req) || defaultLocale;
     if (!availableLocales.includes(locale)) locale = defaultLocale;
   }
   // Set i18n instance on app
