@@ -5,6 +5,7 @@ import {
   LIKE_CO_CLOUD_FN_BASE,
   SUPERLIKE_BASE,
 } from '@/constant';
+import { normalizeLocaleForLikeCo } from '@/locales';
 
 export const getAppURL = ({
   referrer,
@@ -61,9 +62,20 @@ export const getUpdateReaderBookmarkAPI = url =>
 export const getFetchSuggestArticlesApi = () => `/api/reader/works/suggest`;
 export const getFetchFollowedSuperLikeApi = () =>
   `/api/reader/superlike/followed`;
-export const getOAuthRegisterAPI = (from = '', referrer = '') =>
-  `/api/users/register?from=${from}&referrer=${encodeURIComponent(referrer)}`;
-export const getOAuthLoginAPI = () => '/api/users/login';
+export const getOAuthRegisterAPI = (
+  language = 'zh',
+  from = '',
+  referrer = ''
+) =>
+  `/api/users/register?${querystring.stringify({
+    language: normalizeLocaleForLikeCo(language),
+    from,
+    referrer: encodeURIComponent(referrer),
+  })}`;
+export const getOAuthLoginAPI = (language = 'zh') =>
+  `/api/users/login?language=${querystring.stringify({
+    language: normalizeLocaleForLikeCo(language),
+  })}`;
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
 export const getLogoutAPI = () => `/api/users/logout`;

@@ -230,8 +230,9 @@ const apiCivicLikerGetMetadata = req =>
       headers: { Authorization },
     })
   );
-const getOAuthURL = ({ state, isRegister, from, referrer }) => {
+const getOAuthURL = ({ language, state, isRegister, from, referrer }) => {
   const qsPayload = {
+    language,
     client_id: LIKE_CO_CLIENT_ID,
     redirect_uri: OAUTH_REDIRECT_URI,
     scope: OAUTH_SCOPE_REQUEST.join(' '),

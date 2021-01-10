@@ -96,11 +96,13 @@ export default {
       'getUserIsCivicLikerTrial',
       'getUserBookmarks',
     ]),
-    getOAuthLoginAPI,
+    getOAuthLoginAPI() {
+      return getOAuthLoginAPI(this.$i18n.locale);
+    },
 
     getOAuthRegisterAPI() {
       const { from, referrer } = this.$route.query;
-      return getOAuthRegisterAPI(from, referrer);
+      return getOAuthRegisterAPI(this.$i18n.locale, from, referrer);
     },
     ctaSlogan() {
       if (this.getUserId) {
