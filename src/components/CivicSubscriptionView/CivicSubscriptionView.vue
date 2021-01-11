@@ -550,6 +550,8 @@ export default {
       try {
         await Promise.all(promises);
       } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
         this.$router.replace({ name: 'settings-civic' });
       }
       // Set default to  1 for new subscription
