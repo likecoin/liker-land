@@ -279,9 +279,19 @@ export default {
         if (this.isSupportingCreator) {
           return undefined;
         }
-        return { name: 'id-civic', params: { id: this.creatorLikerID } };
+        return {
+          name: 'id-civic',
+          params: { id: this.creatorLikerID },
+          query: { utm_source: 'portfolio' },
+        };
       }
-      return { name: 'civic', query: { from: this.creatorLikerID } };
+      return {
+        name: 'civic',
+        query: {
+          from: this.creatorLikerID,
+          utm_source: 'portfolio',
+        },
+      };
     },
     ctaButtonProps() {
       const isSupporting = this.isSupportingCreator;
