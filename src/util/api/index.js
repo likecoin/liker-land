@@ -62,18 +62,18 @@ export const getUpdateReaderBookmarkAPI = url =>
 export const getFetchSuggestArticlesApi = () => `/api/reader/works/suggest`;
 export const getFetchFollowedSuperLikeApi = () =>
   `/api/reader/superlike/followed`;
-export const getOAuthRegisterAPI = (
+export const getOAuthRegisterAPI = ({
   language = 'zh',
   from = '',
-  referrer = ''
-) =>
+  referrer = '',
+} = {}) =>
   `/api/users/register?${querystring.stringify({
     language: normalizeLocaleForLikeCo(language),
     from,
     referrer: encodeURIComponent(referrer),
   })}`;
-export const getOAuthLoginAPI = (language = 'zh') =>
-  `/api/users/login?language=${querystring.stringify({
+export const getOAuthLoginAPI = ({ language = 'zh' } = {}) =>
+  `/api/users/login?${querystring.stringify({
     language: normalizeLocaleForLikeCo(language),
   })}`;
 export const getOAuthCallbackAPI = () => `/api/users/login`;

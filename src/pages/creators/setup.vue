@@ -82,7 +82,11 @@ export default {
 
     registerURL() {
       const { from, referrer } = this.$route.query;
-      return getOAuthRegisterAPI(from, referrer);
+      return getOAuthRegisterAPI({
+        language: this.$i18n.locale,
+        from,
+        referrer,
+      });
     },
   },
 };

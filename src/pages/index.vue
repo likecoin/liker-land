@@ -97,12 +97,16 @@ export default {
       'getUserBookmarks',
     ]),
     getOAuthLoginAPI() {
-      return getOAuthLoginAPI(this.$i18n.locale);
+      return getOAuthLoginAPI({ language: this.$i18n.locale });
     },
 
     getOAuthRegisterAPI() {
       const { from, referrer } = this.$route.query;
-      return getOAuthRegisterAPI(this.$i18n.locale, from, referrer);
+      return getOAuthRegisterAPI({
+        language: this.$i18n.locale,
+        from,
+        referrer,
+      });
     },
     ctaSlogan() {
       if (this.getUserId) {
