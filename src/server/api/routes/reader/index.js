@@ -22,17 +22,25 @@ router.use(follow);
 router.use(bookmark);
 
 function filterSuperLikeList(list) {
-  return list.map(l => {
+  const items = [];
+  list.forEach(l => {
     const { id, shortId, likee, liker, ts, url } = l;
-    return {
-      superLikeID: id,
-      superLikeShortID: shortId,
-      referrer: url,
-      ts,
-      user: likee,
-      liker,
-    };
+    try {
+      // Guard malformed URI
+      decodeURI(url);
+      items.push({
+        superLikeID: id,
+        superLikeShortID: shortId,
+        referrer: url,
+        ts,
+        user: likee,
+        liker,
+      });
+    } catch {
+      // no-op
+    }
   });
+  return items;
 }
 
 async function getFollowedUserListInfo(req) {
