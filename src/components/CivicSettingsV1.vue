@@ -1,4 +1,13 @@
 <template lang="pug">
+  mixin HintText()
+    i18n.mt-16.text-12.text-gray-9b.text-center.leading-1_5(
+      v-if="hintI18nPath"
+      tag="p"
+      :path="hintI18nPath"
+      :places="{ date: getUserSubscriptionInfo ? getUserSubscriptionInfo.currentPeriodEndString : '' }"
+    )
+      CL1VsCL2Link(place="compare")
+
   Transition(name="fade")
     main(
       :key="state"
@@ -7,9 +16,10 @@
       LcLoadingIndicator.block.py-48.text-like-green.fill-current(
         v-if="state === 'loading'"
       )
-      template(
-        v-else-if="state === 'stripe'"
-      )
+
+      NuxtChild(v-else-if="state === 'cancel'")
+
+      template(v-else-if="state === 'stripe'")
         LikerComparisonCard(
           type="civic"
           :is-show-features="false"
@@ -49,18 +59,9 @@
         )
           | {{ $t('SettingsCivicPage.cancelSubscription') }}
 
-        i18n.mt-16.text-12.text-gray-9b.text-center.leading-1_5(
-          v-if="hintI18nPath"
-          tag="p"
-          :path="hintI18nPath"
-          :places="{ date: getUserSubscriptionInfo.currentPeriodEndString }"
-        )
-          CL1VsCL2Link(place="compare")
+        +HintText
 
-      NuxtChild(v-else-if="state === 'cancel'")
-      template(
-        v-else
-      )
+      template(v-else)
         LikerComparisonCard(
           :type="state"
         )
@@ -90,6 +91,8 @@
             :href="getOiceSettingsURL"
           )
             | oice
+
+        +HintText
 </template>
 
 <script>
