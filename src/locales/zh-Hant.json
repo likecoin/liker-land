@@ -472,6 +472,10 @@
       "register": "立即註冊",
       "registered": "已註冊"
     },
+    "Supporters": {
+      "Title": "你的支持者",
+      "Count": "{count} 位"
+    },
     "language": "介面語言",
     "subscription": "追蹤設定"
   },

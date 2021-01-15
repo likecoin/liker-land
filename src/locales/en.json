@@ -444,6 +444,10 @@
       "register": "Register now",
       "registered": "Registered"
     },
+    "Supporters": {
+      "Title": "Your supporters",
+      "Count": "1 supporter | {count} supporters"
+    },
     "language": "Language",
     "subscription": "Follow / Unfollow"
   },

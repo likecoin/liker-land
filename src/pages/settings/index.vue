@@ -22,12 +22,17 @@
           span.settings-menu__item-subtitle(v-if="getUserIsCivicLiker")
             | {{ $t('SettingsPage.civicLiker.subscribing') }}
       li
+        NuxtLink.settings-menu__item(:to="{ name: 'settings-support' }")
+          span.settings-menu__item-title {{ $t('SettingsPage.Supporters.Title') }}
+          span.settings-menu__item-subtitle(v-if="getMySupportersCount")
+            | {{ $tc('SettingsPage.Supporters.Count', getMySupportersCount, { count: getMySupportersCount }) }}
+      li
         NuxtLink.settings-menu__item(:to="{ name: 'settings-following' }")
           span.settings-menu__item-title {{ $t('SettingsPage.subscription') }}
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import GlobeIcon from '~/assets/icons/globe.svg';
 
@@ -40,7 +45,13 @@ export default {
   computed: {
     getLikerIdSettingsURL,
 
-    ...mapGetters(['getUserId', 'getUserIsCivicLiker']),
+    ...mapGetters(['getUserId', 'getUserIsCivicLiker', 'getMySupportersCount']),
+  },
+  mounted() {
+    this.fetchMySupporters();
+  },
+  methods: {
+    ...mapActions(['fetchMySupporters']),
   },
 };
 </script>
