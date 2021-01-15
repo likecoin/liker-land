@@ -565,6 +565,9 @@
     },
     "List": {
       "Title": "你的讚賞公民"
+    },
+    "Empty": {
+      "Setup": "營運你的業務"
     }
   },
   "SupportersList": {

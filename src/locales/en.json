@@ -533,6 +533,9 @@
     },
     "List": {
       "Title": "Your Civic Likers"
+    },
+    "Empty": {
+      "Setup": "Setup your business now"
     }
   },
   "SupportersList": {
