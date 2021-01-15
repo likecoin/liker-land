@@ -79,6 +79,8 @@ export default {
 
 <style lang="scss">
 .avatar {
+  flex-shrink: 0;
+
   > div {
     position: relative;
   }
