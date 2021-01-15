@@ -516,6 +516,31 @@
       "UnableSubSelf": "Unable to subscribe yourself"
     }
   },
+  "SupportersDashboard": {
+    "Summary": {
+      "Title": "Summary",
+      "Data": {
+        "Amount": {
+          "Value": "{amount} USD/mo",
+          "Label": "Total monthly subscription"
+        },
+        "Subscribers": "Subscriber | Subscribers"
+      }
+    },
+    "List": {
+      "Title": "Your Civic Likers"
+    }
+  },
+  "SupportersList": {
+    "SortingOptions": {
+      "ts": "Most recent",
+      "id": "Liker ID",
+      "quantity": "Amount"
+    },
+    "Item": {
+      "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
+    }
+  },
   "UpdateSupportQuantity": {
     "Title": "Choose the monthly supporting amount for {name}",
     "HintText": "Support {name} monthly",

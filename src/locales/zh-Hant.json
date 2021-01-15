@@ -548,6 +548,31 @@
       "UnableSubSelf": "不能支持自己"
     }
   },
+  "SupportersDashboard": {
+    "Summary": {
+      "Title": "收入概覽",
+      "Data": {
+        "Amount": {
+          "Value": "{amount} 美元/月",
+          "Label": "月入總額"
+        },
+        "Subscribers": "訂戶"
+      }
+    },
+    "List": {
+      "Title": "你的讚賞公民"
+    }
+  },
+  "SupportersList": {
+    "SortingOptions": {
+      "ts": "按最新",
+      "id": "按 Liker ID",
+      "quantity": "按額度"
+    },
+    "Item": {
+      "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
+    }
+  },
   "UpdateSupportQuantity": {
     "Title": "請選擇每月支持 {name} 的金額",
     "HintText": "每月支持 {name}",
