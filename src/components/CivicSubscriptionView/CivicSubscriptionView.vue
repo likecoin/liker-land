@@ -575,7 +575,8 @@ export default {
       this.setState(state);
     },
 
-    goToSelectQuantity() {
+    goToSelectQuantity(e) {
+      this.$emit('select-quantity', e);
       this.setState('select-quantity');
     },
 
