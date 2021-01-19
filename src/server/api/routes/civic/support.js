@@ -31,8 +31,8 @@ router.get('/civic/support/self', async (req, res, next) => {
       res.sendStatus(401);
       return;
     }
-    const { data } = await apiCivicLikerGetMetadata(req);
-    res.json({ list: data.supporters });
+    const { data = {} } = await apiCivicLikerGetMetadata(req);
+    res.json({ list: data.supporters || [] });
   } catch (err) {
     next(err);
   }

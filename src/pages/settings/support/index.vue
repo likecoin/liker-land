@@ -78,10 +78,13 @@ export default {
     ...mapActions(['fetchMySupporters']),
 
     async fetchSupportersIfNecessary() {
-      if (!this.count) {
-        await this.fetchMySupporters();
+      try {
+        if (!this.count) {
+          await this.fetchMySupporters();
+        }
+      } finally {
+        this.hasFetched = true;
       }
-      this.hasFetched = true;
     },
   },
 };
