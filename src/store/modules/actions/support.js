@@ -24,3 +24,9 @@ export async function removeCivicSupportUser({ commit }, user) {
   await this.$api.$delete(api.getCivicSupportingUserAPI(user));
   commit(types.SUPPORT_REMOVE_SUPPORTING_USER, user);
 }
+
+export async function fetchMySupporters({ commit }) {
+  const { list = [] } = await this.$api.$get(api.getMySupportersAPI());
+  commit(types.SUPPORT_SET_SUPPORTERS, list);
+  return list;
+}

@@ -472,6 +472,10 @@
       "register": "立即註冊",
       "registered": "已註冊"
     },
+    "Supporters": {
+      "Title": "你的支持者",
+      "Count": "{count} 位"
+    },
     "language": "介面語言",
     "subscription": "追蹤設定"
   },
@@ -546,6 +550,34 @@
         "Unsubscribe": "退訂"
       },
       "UnableSubSelf": "不能支持自己"
+    }
+  },
+  "SupportersDashboard": {
+    "Summary": {
+      "Title": "收入概覽",
+      "Data": {
+        "Amount": {
+          "Value": "{amount} 美元/月",
+          "Label": "月入總額"
+        },
+        "Subscribers": "訂戶"
+      }
+    },
+    "List": {
+      "Title": "你的讚賞公民"
+    },
+    "Empty": {
+      "Setup": "營運你的業務"
+    }
+  },
+  "SupportersList": {
+    "SortingOptions": {
+      "ts": "按最新",
+      "id": "按 Liker ID",
+      "quantity": "按額度"
+    },
+    "Item": {
+      "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
     }
   },
   "UpdateSupportQuantity": {

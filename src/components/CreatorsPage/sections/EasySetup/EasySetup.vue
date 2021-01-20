@@ -16,11 +16,11 @@
       block
 
   mixin StepDescription
-    p.text-14.text-gray-9b
+    p.text-14.text-gray-9b&attributes(attributes)
       block
 
   mixin SponsorLink
-    .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-9b.rounded-12&attributes(attributes)
+    .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-4a.rounded-12.truncate&attributes(attributes)
       | {{ sponsorLink }}
     Button.block.mt-40.mx-auto.p-0.max-w-phone-min(
       v-clipboard:copy="sponsorLink"
@@ -120,6 +120,11 @@
           +FakeContent('button')(class="pb-0 laptop:-mr-40")
             .-mx-40
               FakeLikeCoinButton(:liker-id="likerId")
+
+  section.px-16(v-else-if="preset === 'grow-supporters'")
+    h2.text-18.text-gray-4a.mb-12.font-400 {{ $t('CreatorsPageV2.Setup.Setup.Steps[0].Title') }}
+    +StepDescription() {{ $t('CreatorsPageV2.Setup.Registered.Steps[0].Description') }}
+    +SponsorLink
 
 </template>
 

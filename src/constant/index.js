@@ -38,3 +38,5 @@ export const PAYMENT_METHOD_LIST = [
 
 export const DEFAULT_CL_SUPPORTER =
   process.env.DEFAULT_CL_SUPPORTER || 'foundation';
+
+export const CIVIC_LIKER_UNIT_PRICE = 5;

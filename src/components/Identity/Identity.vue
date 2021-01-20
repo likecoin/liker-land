@@ -1,5 +1,5 @@
 <template>
-  <div class="identity">
+  <div class="identity" @click="$emit('click', $event)">
     <Avatar
       class="identity__avatar"
       :url="avatarUrl"
@@ -10,7 +10,7 @@
     />
     <div
       v-if="displayName"
-      class="identity__display-name"
+      :class="['identity__display-name', displayNameClass]"
     >{{ displayName }}</div>
   </div>
 </template>
@@ -44,6 +44,10 @@ export default {
       type: String,
       default: '',
     },
+    displayNameClass: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     onClickAvatar(e) {
@@ -64,6 +68,9 @@ export default {
     font-family: Source Sans Pro, Arial, sans-serif;
     font-size: 1rem;
     font-weight: 500;
+
+    overflow-wrap: anywhere;
+    word-break: break-all;
   }
 }
 </style>

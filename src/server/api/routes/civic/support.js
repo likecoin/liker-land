@@ -5,6 +5,7 @@ const {
   apiCivicLikerGetSupportingUser,
   apiCivicLikerSupportUser,
   apiCivicLikerDeleteSuppoUser,
+  apiCivicLikerGetMetadata,
 } = require('../../util/api');
 
 const router = Router();
@@ -18,6 +19,20 @@ router.get('/civic/support/users', async (req, res, next) => {
     }
     const { data } = await apiCivicLikerListSupportingUser(req);
     res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/civic/support/self', async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    if (!req.session.user) {
+      res.sendStatus(401);
+      return;
+    }
+    const { data = {} } = await apiCivicLikerGetMetadata(req);
+    res.json({ list: data.supporters || [] });
   } catch (err) {
     next(err);
   }

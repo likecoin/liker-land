@@ -444,6 +444,10 @@
       "register": "Register now",
       "registered": "Registered"
     },
+    "Supporters": {
+      "Title": "Your supporters",
+      "Count": "1 supporter | {count} supporters"
+    },
     "language": "Language",
     "subscription": "Follow / Unfollow"
   },
@@ -514,6 +518,34 @@
     "Confirm": "Confirm Order",
     "Error": {
       "UnableSubSelf": "Unable to subscribe yourself"
+    }
+  },
+  "SupportersDashboard": {
+    "Summary": {
+      "Title": "Summary",
+      "Data": {
+        "Amount": {
+          "Value": "{amount} USD/mo",
+          "Label": "Total monthly subscription"
+        },
+        "Subscribers": "Subscriber | Subscribers"
+      }
+    },
+    "List": {
+      "Title": "Your Civic Likers"
+    },
+    "Empty": {
+      "Setup": "Setup your business now"
+    }
+  },
+  "SupportersList": {
+    "SortingOptions": {
+      "ts": "Most recent",
+      "id": "Liker ID",
+      "quantity": "Amount"
+    },
+    "Item": {
+      "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
     }
   },
   "UpdateSupportQuantity": {

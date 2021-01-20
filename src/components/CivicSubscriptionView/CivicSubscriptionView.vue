@@ -361,6 +361,7 @@ import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
 import { getPriceEmoji } from '~/util/civic';
+import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
 
 import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
@@ -422,7 +423,7 @@ export default {
       'getUserInfoById',
     ]),
     dollar() {
-      return 5.0;
+      return CIVIC_LIKER_UNIT_PRICE;
     },
     currency() {
       return this.$t('Currency.USD');
