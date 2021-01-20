@@ -9,6 +9,7 @@
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
           @select-quantity="onClickSelectQuantity"
+          @go-to-confirm="onGoToConfirm"
           @confirm-subscription="onClickSubscription"
         )
 </template>
@@ -28,6 +29,12 @@ export default {
     PageHeader,
     SiteNavBar,
   },
+  computed: {
+    id() {
+      const { id } = this.$route.params;
+      return id;
+    },
+  },
   async asyncData({ route, redirect, query, $api, error }) {
     const { id } = route.params;
 
@@ -45,28 +52,40 @@ export default {
     return undefined;
   },
   mounted() {
-    const { id } = this.$route.params;
-    logTrackerEvent(this, 'Civic', 'CivicPageLoad', `CivicPageLoad(${id})`, 1);
+    logTrackerEvent(
+      this,
+      'Civic',
+      'CivicPageLoad',
+      `CivicPageLoad(${this.id})`,
+      1
+    );
   },
   methods: {
     onClickSelectQuantity() {
-      const { id } = this.$route.params;
       logTrackerEvent(
         this,
         'Civic',
         'CivicClickSelectQuantity',
-        `CivicClickSelectQuantity(${id})`,
+        `CivicClickSelectQuantity(${this.id})`,
+        1
+      );
+    },
+    onGoToConfirm() {
+      logTrackerEvent(
+        this,
+        'Civic',
+        'CivicClickConfirm',
+        `CivicClickConfirm(${this.id})`,
         1
       );
     },
     onClickSubscription() {
-      const { id } = this.$route.params;
       if (this.getUserIsCivicLiker) {
         logTrackerEvent(
           this,
           'Civic',
           'CivicClickUpdate',
-          `CivicClickUpdate(${id})`,
+          `CivicClickUpdate(${this.id})`,
           1
         );
       } else {
@@ -74,7 +93,7 @@ export default {
           this,
           'Civic',
           'CivicClickRegister',
-          `CivicClickRegister(${id})`,
+          `CivicClickRegister(${this.id})`,
           1
         );
       }
