@@ -589,7 +589,8 @@ export default {
       }
     },
 
-    goToConfirm() {
+    goToConfirm(e) {
+      this.$emit('go-to-confirm', e);
       if (this.getUserId) {
         this.setState('confirm');
       } else {
