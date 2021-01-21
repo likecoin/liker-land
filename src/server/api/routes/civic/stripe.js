@@ -140,7 +140,9 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       if (civicLikerVersion > 1) {
         stripePayload.success_url = `${
           stripePayload.success_url
-        }?from=${encodeURIComponent(from)}&quantity=${quantity}`;
+        }?from=${encodeURIComponent(
+          from
+        )}&quantity=${quantity}&civic_liker_version=${civicLikerVersion}`;
       }
     }
     const session = await stripe.checkout.sessions.create(stripePayload);

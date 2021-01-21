@@ -39,13 +39,21 @@ export default {
         'CivicRegisterComplete(stripe)',
         1
       );
-      const { from } = this.$route.query;
+      const {
+        from,
+        civic_liker_version: civicVersionQuery,
+      } = this.$route.query;
+      const civicLikerVersion = civicVersionQuery === '2' ? 2 : 1;
       if (from && !this.getIsFollowedAuthor(from)) {
         this.followAuthor(from);
       }
+      this.setUserCivicLiker({ civicLikerVersion });
       // NOTE: Wait for db sync
       setTimeout(async () => {
-        await this.fetchLoginStatus();
+        const user = await this.fetchLoginStatus();
+        if (!user.isSubscribedCivicLiker) {
+          this.setUserCivicLiker({ civicLikerVersion });
+        }
         if (from) {
           this.$router.push({
             name: 'id',
@@ -62,7 +70,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchLoginStatus', 'followAuthor']),
+    ...mapActions(['fetchLoginStatus', 'followAuthor', 'setUserCivicLiker']),
   },
 };
 </script>
