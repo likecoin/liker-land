@@ -10,6 +10,7 @@
           :initial-state="$route.query.initial_state"
           @select-quantity="onClickSelectQuantity"
           @go-to-confirm="onGoToConfirm"
+          @state-change="onStateChange"
           @confirm-subscription="onClickSubscription"
         )
 </template>
@@ -59,6 +60,10 @@ export default {
       `CivicPageLoad(${this.id})`,
       1
     );
+    const { initial_state: initState } = this.$route.query;
+    if (initState) {
+      this.onStateChange({ state: initState });
+    }
   },
   methods: {
     onClickSelectQuantity() {
@@ -76,6 +81,15 @@ export default {
         'Civic',
         'CivicClickConfirm',
         `CivicClickConfirm(${this.id})`,
+        1
+      );
+    },
+    onStateChange({ state } = {}) {
+      logTrackerEvent(
+        this,
+        'Civic',
+        `CivicViewStateChange${state}`,
+        `CivicViewStateChange${state}(${this.id})`,
         1
       );
     },
