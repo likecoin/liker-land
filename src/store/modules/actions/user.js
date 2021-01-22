@@ -51,8 +51,12 @@ export async function userLogout({ commit }) {
   }
 }
 
-export function setUserCivicLiker({ commit }) {
-  commit(types.USER_UPDATE_USER_INFO, { isSubscribedCivicLiker: true });
+export function setUserCivicLiker({ commit }, { civicLikerVersion = 1 } = {}) {
+  commit(types.USER_UPDATE_USER_INFO, {
+    isSubscribedCivicLiker: true,
+    civicLikerVersion,
+    subscriptionInfo: {},
+  });
 }
 
 export async function fetchUserSubscriptionInfo({ commit }) {
