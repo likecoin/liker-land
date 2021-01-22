@@ -162,7 +162,7 @@
         :avatar-url="avatarUrl"
         :display-name="displayName"
         :is-civic-liker="isCivicLiker"
-        :subtitle="$t('SettingsSupportUsersPage.SloganConfirm')"
+        :subtitle="$t(`SettingsSupportUsersPage.SloganConfirm${isExperimenting ? 'Alt' : ''}`)"
         :is-subtitle-top="true"
       />
 
@@ -402,6 +402,10 @@ export default {
     initialState: {
       type: String,
       default: 'default',
+    },
+    isExperimenting: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
