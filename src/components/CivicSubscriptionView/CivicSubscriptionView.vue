@@ -176,7 +176,10 @@
           <div class="font-500 whitespace-no-wrap">{{ `${currency} ${selectedQuantity * dollar}` }}</div>
         </div>
 
-        <div class="flex justify-between py-12 border-t-1 border-gray-d8">
+        <div
+          v-if="otherQuantity"
+          class="flex justify-between py-12 border-t-1 border-gray-d8"
+        >
           <div>{{ $t('SupportSummary.OtherCharge') }}</div>
           <div class="font-500 whitespace-no-wrap">{{ `${currency} ${otherQuantity * dollar}` }}</div>
         </div>
