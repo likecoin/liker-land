@@ -1,3 +1,3 @@
-import civic from './civic';
+import idCivic from './_id/civic';
 
-export default [civic];
+export default [idCivic];
