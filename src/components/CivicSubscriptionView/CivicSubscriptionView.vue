@@ -524,6 +524,7 @@ export default {
         this.stateHistory.push(state);
       }
       this.state = newState;
+      this.$emit('state-change', { state: newState });
     },
 
     async fetchLikerInfo() {
