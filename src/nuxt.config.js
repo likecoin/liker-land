@@ -224,7 +224,6 @@ const nuxtConfig = {
     '~/plugins/vue-i18n.js',
     { src: '~/plugins/gtag.client.js', mode: 'client' },
     { src: '~/plugins/geoip.server.js', mode: 'server' },
-    { src: '~/plugins/experiment.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/fbpixel.client.js', ssr: false },
@@ -243,7 +242,9 @@ const nuxtConfig = {
     ['@nuxtjs/pwa', { icon: false }],
     'nuxt-svg-loader',
     'portal-vue/nuxt',
-    '@likecoin/nuxt-google-optimize',
+    ['@likecoin/nuxt-google-optimize', {
+      plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
+    }],
   ],
   /*
   ** Axios module configuration
