@@ -92,8 +92,8 @@ export default {
       logTrackerEvent(
         this,
         'Civic',
-        `CivicViewStateChange${state}`,
-        `CivicViewStateChange${state}(${this.id})`,
+        `CivicViewState${state}`,
+        `CivicViewState${state}(${this.id})`,
         1
       );
     },
