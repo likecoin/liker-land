@@ -89,11 +89,11 @@ export function logTrackerEvent(vue, category, action, label, value) {
       }
     }
     if (window.fbq) {
-      const eventName = `LikerLand${category}_${action}`;
+      const eventName = `LikerLand_${action}`;
       const eventPayload = {
         label: label.substring(0, 499),
       };
-      if (eventName === 'LikerLandCivic_CivicPaymentSuccess') {
+      if (eventName === 'LikerLand_CivicPaymentSuccess') {
         eventPayload.currency = 'USD';
         eventPayload.value = 5;
       }
