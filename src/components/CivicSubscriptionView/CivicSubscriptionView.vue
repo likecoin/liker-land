@@ -520,6 +520,7 @@ export default {
         this.stateHistory = [];
       }
       const { state } = this;
+      if (newState === state) return;
       if (state !== 'loading') {
         this.stateHistory.push(state);
       }
