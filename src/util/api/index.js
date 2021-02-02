@@ -66,15 +66,18 @@ export const getOAuthRegisterAPI = ({
   language = 'zh',
   from = '',
   referrer = '',
+  utmSource = '',
 } = {}) =>
   `/api/users/register?${querystring.stringify({
     language: normalizeLocaleForLikeCo(language),
     from,
-    referrer: encodeURIComponent(referrer),
+    referrer,
+    utm_source: utmSource,
   })}`;
-export const getOAuthLoginAPI = ({ language = 'zh' } = {}) =>
+export const getOAuthLoginAPI = ({ language = 'zh', utmSource } = {}) =>
   `/api/users/login?${querystring.stringify({
     language: normalizeLocaleForLikeCo(language),
+    utm_source: utmSource,
   })}`;
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;

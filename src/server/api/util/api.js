@@ -230,7 +230,14 @@ const apiCivicLikerGetMetadata = req =>
       headers: { Authorization },
     })
   );
-const getOAuthURL = ({ language, state, isRegister, from, referrer }) => {
+const getOAuthURL = ({
+  language,
+  state,
+  isRegister,
+  from,
+  referrer,
+  utmSource,
+}) => {
   const qsPayload = {
     language,
     client_id: LIKE_CO_CLIENT_ID,
@@ -241,6 +248,7 @@ const getOAuthURL = ({ language, state, isRegister, from, referrer }) => {
   if (from) qsPayload.from = from;
   if (referrer) qsPayload.referrer = referrer;
   if (isRegister) qsPayload.register = '1';
+  if (utmSource) qsPayload.utm_source = utmSource;
   return `${LIKE_CO_URL_BASE}/in/oauth?${querystring.stringify(qsPayload)}`;
 };
 
