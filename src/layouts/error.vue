@@ -118,15 +118,17 @@ export default {
   },
   computed: {
     getOAuthLoginAPI() {
-      return getOAuthLoginAPI({ language: this.$i18n.locale });
+      const { utm_source: utmSource } = this.$route.query;
+      return getOAuthLoginAPI({ language: this.$i18n.locale, utmSource });
     },
 
     getOAuthRegisterAPI() {
-      const { from, referrer } = this.$route.query;
+      const { from, referrer, utm_source: utmSource } = this.$route.query;
       return getOAuthRegisterAPI({
         language: this.$i18n.locale,
         from,
         referrer,
+        utmSource,
       });
     },
     i18nKeyBase() {

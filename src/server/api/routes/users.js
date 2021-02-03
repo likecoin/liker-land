@@ -135,7 +135,7 @@ router.post('/users/preferences', async (req, res, next) => {
 
 router.get('/users/register', (req, res) => {
   setSessionOAuthState(req);
-  const { from, referrer, language } = req.query;
+  const { from, referrer, language, utm_source: utmSource } = req.query;
   res.redirect(
     getOAuthURL({
       state: req.session.state,
@@ -143,13 +143,14 @@ router.get('/users/register', (req, res) => {
       from,
       referrer,
       language,
+      utmSource,
     })
   );
 });
 
 router.get('/users/login', (req, res) => {
   setSessionOAuthState(req);
-  const { from, referrer, language } = req.query;
+  const { from, referrer, language, utm_source: utmSource } = req.query;
   res.redirect(
     getOAuthURL({
       state: req.session.state,
@@ -157,6 +158,7 @@ router.get('/users/login', (req, res) => {
       from,
       referrer,
       language,
+      utmSource,
     })
   );
 });
