@@ -10,6 +10,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { ONE_HOUR_IN_MS } from '~/constant';
 
 export default {
   name: 'Redirect',
@@ -45,20 +46,22 @@ export default {
           );
         }
         let postAuthRoute;
-        if (window.sessionStorage) {
-          const storedRoute = window.sessionStorage.getItem(
+        if (window.localStorage) {
+          const storedRoute = window.localStorage.getItem(
             'USER_POST_AUTH_ROUTE'
           );
-          const storedURL = window.sessionStorage.getItem(
-            'USER_POST_AUTH_PATH'
-          );
-          if (storedRoute) postAuthRoute = JSON.parse(storedRoute);
-          if (storedURL) {
-            const targetPath = decodeURIComponent(storedURL);
-            if (targetPath[0] === '/') postAuthRoute = targetPath;
+          if (storedRoute) {
+            const postAuthRouteInfo = JSON.parse(storedRoute);
+            if (
+              postAuthRouteInfo.route &&
+              postAuthRouteInfo.ts + ONE_HOUR_IN_MS > Date.now()
+            ) {
+              postAuthRoute = postAuthRouteInfo.route;
+            } else if (postAuthRouteInfo.name) {
+              postAuthRoute = postAuthRouteInfo;
+            }
           }
-          window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-          window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
+          window.localStorage.removeItem('USER_POST_AUTH_ROUTE');
         }
         if (postAuthRoute) {
           this.$router.replace(postAuthRoute);
@@ -79,7 +82,6 @@ export default {
       logTrackerEvent(this, 'Register', 'RegisterFail', error, 1);
       if (window.sessionStorage) {
         window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-        window.sessionStorage.removeItem('USER_POST_AUTH_PATH');
       }
       this.$nuxt.error({
         statusCode: 400,
