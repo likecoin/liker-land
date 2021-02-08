@@ -37,11 +37,6 @@
             .mt-32.px-12(class="phone:px-0")
               div(v-if="isLoginError")
                 a.btn.btn--outlined(
-                  :href="getOAuthLoginAPI"
-                  @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
-                )
-                  | {{ $t('signIn') }}
-                a.btn.btn--outlined(
                   :href="getOAuthRegisterAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
                 )
@@ -61,19 +56,21 @@
               // - Common action button
               - const btnClass = 'btn btn--plain btn--auto-size text-14 mx-0'
 
-              button(
-                v-else-if="!error.isBackButtonHidden"
-                class=btnClass
-                @click="onClickBackButton"
-              )
-                | {{ $t('back') }}
+              template(v-else)
+                a(
+                  v-if="isLoginError"
+                  class=btnClass
+                  :href="getOAuthLoginAPI"
+                  @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
+                )
+                  | {{ $t('signIn') }}
 
-              NuxtLink(
-                class=btnClass
-                :to="{ name: 'index' }"
-                @click.native="onClickHomeButton"
-              )
-                | {{ $t('backToHome') }}
+                button(
+                  v-if="!error.isBackButtonHidden"
+                  class=btnClass
+                  @click="onClickBackButton"
+                )
+                  | {{ $t('back') }}
 </template>
 
 <script>
