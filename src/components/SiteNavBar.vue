@@ -3,7 +3,7 @@
     <NuxtLink
       :class="{
         'site-logo site-nav-bar__logo': true,
-        'site-logo--disabled': getHomeRoute.name === $route.name,
+        'site-logo--disabled': isDisabledNav || getHomeRoute.name === $route.name,
       }"
       :to="getHomeRoute"
     >
@@ -31,6 +31,7 @@
       </div>
 
       <button
+        v-if="!isDisabledNav"
         class="site-nav-bar__menu-button sliding-menu-toggle"
         @click="toggleSlidingMenu(!getIsSlidingMenuOpen)"
       >
@@ -52,6 +53,12 @@ export default {
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/logo.svg'),
     GlobeIcon: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/globe.svg'),
+  },
+  props: {
+    isDisabledNav: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapGetters([

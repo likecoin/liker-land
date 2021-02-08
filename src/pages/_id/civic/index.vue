@@ -2,7 +2,7 @@
   .settings-page
       PageHeader
         template
-          SiteNavBar.text-like-green
+          SiteNavBar.text-like-green(:is-disabled-nav="shouldDisabledNav")
 
       main.page-content
         CivicSubscriptionView(
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import { getUserMinAPI } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -35,9 +37,13 @@ export default {
   },
   mixins: [experimentMixin('isExperimenting', 'id-civic-page', 'variant')],
   computed: {
+    ...mapGetters(['getUserId']),
     id() {
       const { id } = this.$route.params;
       return id;
+    },
+    shouldDisabledNav() {
+      return !this.getUserId;
     },
   },
   async asyncData({ route, redirect, query, $api, error }) {
