@@ -175,15 +175,18 @@ export default {
   },
   async mounted() {
     if (this.isLoginError) {
-      if (window.sessionStorage) {
+      if (window.localStorage) {
         const { name, params, query, hash } = this.$route;
-        window.sessionStorage.setItem(
+        window.localStorage.setItem(
           'USER_POST_AUTH_ROUTE',
           JSON.stringify({
-            name,
-            params,
-            query,
-            hash,
+            route: {
+              name,
+              params,
+              query,
+              hash,
+            },
+            ts: Date.now(),
           })
         );
       }

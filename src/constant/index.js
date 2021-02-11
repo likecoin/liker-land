@@ -3,6 +3,8 @@ export const { IS_TESTNET } = process.env;
 export const TEST_MODE =
   process.env.NODE_ENV !== 'production' || process.env.CI;
 
+export const ONE_HOUR_IN_MS = 3600000;
+
 export const LIKECOIN_API_BASE = IS_TESTNET
   ? 'https://api.rinkeby.like.co'
   : 'https://api.like.co';
