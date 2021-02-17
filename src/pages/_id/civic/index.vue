@@ -8,6 +8,7 @@
         CivicSubscriptionView(
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
+          :is-experimenting="isExperimenting"
           @select-quantity="onClickSelectQuantity"
           @go-to-confirm="onGoToConfirm"
           @state-change="onStateChange"
@@ -22,6 +23,8 @@ import { getUserMinAPI } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import experimentMixin from '~/mixins/experiment';
+
 import CivicSubscriptionView from '~/components/CivicSubscriptionView/CivicSubscriptionView';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -32,6 +35,7 @@ export default {
     PageHeader,
     SiteNavBar,
   },
+  mixins: [experimentMixin('isExperimenting', 'id-civic-page', 'variant')],
   computed: {
     ...mapGetters(['getUserId']),
     id() {

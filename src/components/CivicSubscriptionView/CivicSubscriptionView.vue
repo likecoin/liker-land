@@ -27,23 +27,52 @@
 
         <hr class="my-24 border-t-1 border-gray-d8">
 
-        <CivicLikerSupportAmountView
-          :price="selectedQuantity * dollar"
-          :currency="currency"
-          :period="$t('SubscriptionPeriod.Month')"
-          :prefix="priceEmoji"
-          :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
-          @click-add="goToSelectQuantity"
-        />
-
-        <div class="mx-40 mt-16">
-          <Button
-            :title="$t('UpdateSupportQuantity.Subscribe')"
-            :full="true"
-            size="large"
-            @click="goToConfirm"
-          />
+        <div
+          v-if="isExperimenting"
+          class="-m-8"
+        >
+          <div class="text-16 text-center text-like-green font-600">
+            {{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}
+          </div>
+          <ul
+            class="flex list-reset w-full mt-4"
+            style="min-height: 160px"
+          >
+            <li
+              v-for="option in quantityOptions"
+              :key="option.value"
+              class="flex-1 p-8"
+            >
+              <CivicQuantitySelectItem
+                class="block w-full h-full"
+                :price="option.value * dollar"
+                :price-emoji="getPriceEmoji(option.value * dollar)"
+                :is-selected="selectedQuantity === option.value"
+                @click="selectedQuantity = option.value"
+              />
+            </li>
+          </ul>
         </div>
+
+        <template v-else>
+          <CivicLikerSupportAmountView
+            :price="selectedQuantity * dollar"
+            :currency="currency"
+            :period="$t('SubscriptionPeriod.Month')"
+            :prefix="priceEmoji"
+            :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
+            @click-add="goToSelectQuantity"
+          />
+
+          <div class="mx-40 mt-16">
+            <Button
+              :title="$t('UpdateSupportQuantity.Subscribe')"
+              :full="true"
+              size="large"
+              @click="goToConfirm"
+            />
+          </div>
+        </template>
 
         <hr class="my-24 border-t-1 border-gray-d8">
 
@@ -370,6 +399,7 @@ import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
+import CivicQuantitySelectItem from '~/components/CivicQuantitySelect/CivicQuantitySelectItem';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
@@ -387,6 +417,7 @@ export default {
     Button,
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
+    CivicQuantitySelectItem,
     CL1VsCL2Link,
     Cross: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
@@ -402,6 +433,10 @@ export default {
     initialState: {
       type: String,
       default: 'default',
+    },
+    isExperimenting: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
