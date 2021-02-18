@@ -17,12 +17,15 @@
       div(class="laptop:ml-24")
         .text-like-green.text-32 {{ user.displayName }}
         .mt-8(class="laptop:mr-32")
-          textarea.text-14.text-gray-4a.font-600.w-full(
+          textarea.text-14.text-gray-4a.font-600.w-full.bg-transparent(
             ref="creatorPitchInput"
             v-model="pitch" rows="4" cols="50"
+            :disabled="!isEditingPitch"
           )
         .flex.items-center.mt-12
-          .flex-grow.text-gray-9b.text-12 {{ pitchCharCount }}/280
+          .flex-grow.text-gray-9b.text-12
+            span(:class="{ 'text-danger': pitchCharCount > pitchCharLimit }") {{ pitchCharCount }}
+            | /{{ pitchCharLimit }}
           Button.ml-24.text-like-green.underline.flex-shrink-0(
             v-if="!isEditingPitch"
             preset="plain"
@@ -35,7 +38,7 @@
           Button.ml-24(
             v-else
             preset="primary"
-            :disabled="isUpdatingPitch"
+            :disabled="isUpdatingPitch || pitchCharCount > pitchCharLimit"
             @click="finishPitchEditing"
           )
             .px-8.font-600 {{ $t('confirm') }}
@@ -130,6 +133,9 @@ export default {
         0
       );
     },
+    pitchCharLimit() {
+      return 280;
+    },
   },
   mounted() {
     // eslint-disable-next-line no-console
@@ -151,13 +157,18 @@ export default {
 
     startPitchEditing() {
       this.isEditingPitch = true;
-      if (this.$refs.creatorPitchInput) {
-        this.$refs.creatorPitchInput.focus();
-      }
+      this.$nextTick(() => {
+        if (this.$refs.creatorPitchInput) {
+          this.$refs.creatorPitchInput.focus();
+        }
+      });
     },
     async finishPitchEditing() {
       this.isEditingPitch = false;
-      if (this.pitch !== this.user.creatorPitch) {
+      if (
+        this.pitch !== this.user.creatorPitch &&
+        this.pitchCharCount <= this.pitchCharLimit
+      ) {
         try {
           this.isUpdatingPitch = true;
           await this.updatePreferences({ creatorPitch: this.pitch });
