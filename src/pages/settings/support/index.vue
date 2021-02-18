@@ -19,15 +19,15 @@
         .mt-8(class="laptop:mr-32")
           textarea.text-14.text-gray-4a.font-600.w-full(
             ref="creatorPitchInput"
-            v-model="creatorPitch" rows="4" cols="50"
+            v-model="pitch" rows="4" cols="50"
           )
         .flex.items-center.mt-12
-          .flex-grow.text-gray-9b.text-12 {{ creatorPitchCharCount }}/280
+          .flex-grow.text-gray-9b.text-12 {{ pitchCharCount }}/280
           Button.ml-24.text-like-green.underline.flex-shrink-0(
-            v-if="!isEditingCreatorPitch"
+            v-if="!isEditingPitch"
             preset="plain"
-            :disabled="isUpdatingCreatorPitch"
-            @click="onClickEditCreatorPitch"
+            :disabled="isUpdatingPitch"
+            @click="startPitchEditing"
           )
             .px-4
               EditIcon.w-16.h-16.align-middle
@@ -35,8 +35,8 @@
           Button.ml-24(
             v-else
             preset="primary"
-            :disabled="isUpdatingCreatorPitch"
-            @click="onConfirmCreatorPitch"
+            :disabled="isUpdatingPitch"
+            @click="finishPitchEditing"
           )
             .px-8.font-600 {{ $t('confirm') }}
 
@@ -109,9 +109,9 @@ export default {
   data() {
     return {
       hasFetched: false,
-      creatorPitch: '',
-      isEditingCreatorPitch: false,
-      isUpdatingCreatorPitch: false,
+      pitch: '',
+      isEditingPitch: false,
+      isUpdatingPitch: false,
     };
   },
   computed: {
@@ -124,8 +124,8 @@ export default {
     totalAmount() {
       return this.totalQuantity * CIVIC_LIKER_UNIT_PRICE;
     },
-    creatorPitchCharCount() {
-      return [...`${this.creatorPitch}`].reduce(
+    pitchCharCount() {
+      return [...`${this.pitch}`].reduce(
         (count, char) => count + (char.charCodeAt(0) < 127 ? 1 : 2),
         0
       );
@@ -133,7 +133,7 @@ export default {
   },
   mounted() {
     // eslint-disable-next-line no-console
-    this.creatorPitch = this.user.creatorPitch || '';
+    this.pitch = this.user.creatorPitch || '';
     this.fetchSupportersIfNecessary();
   },
   methods: {
@@ -149,23 +149,23 @@ export default {
       }
     },
 
-    onClickEditCreatorPitch() {
-      this.isEditingCreatorPitch = true;
+    startPitchEditing() {
+      this.isEditingPitch = true;
       if (this.$refs.creatorPitchInput) {
         this.$refs.creatorPitchInput.focus();
       }
     },
-    async onConfirmCreatorPitch() {
-      this.isEditingCreatorPitch = false;
-      if (this.creatorPitch !== this.user.creatorPitch) {
+    async finishPitchEditing() {
+      this.isEditingPitch = false;
+      if (this.pitch !== this.user.creatorPitch) {
         try {
-          this.isUpdatingCreatorPitch = true;
-          await this.updatePreferences({ creatorPitch: this.creatorPitch });
+          this.isUpdatingPitch = true;
+          await this.updatePreferences({ creatorPitch: this.pitch });
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         } finally {
-          this.isUpdatingCreatorPitch = false;
+          this.isUpdatingPitch = false;
         }
       }
     },
