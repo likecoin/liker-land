@@ -22,7 +22,8 @@
           :avatar-url="avatarUrl"
           :display-name="displayName"
           :is-civic-liker="isCivicLiker"
-          :subtitle="$t('SettingsSupportUsersPage.Slogan')"
+          :subtitle="pitch || $t('SettingsSupportUsersPage.Slogan')"
+          :is-subtitle-top="!pitch"
         />
 
         <hr class="my-24 border-t-1 border-gray-d8">
@@ -191,8 +192,8 @@
         :avatar-url="avatarUrl"
         :display-name="displayName"
         :is-civic-liker="isCivicLiker"
-        :subtitle="$t('SettingsSupportUsersPage.SloganConfirm')"
-        :is-subtitle-top="true"
+        :subtitle="pitch || $t('SettingsSupportUsersPage.SloganConfirm')"
+        :is-subtitle-top="!pitch"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">
@@ -448,6 +449,7 @@ export default {
       avatarUrl: '',
       isCivicLiker: false,
       isShowUpgradeWarning: false,
+      pitch: '',
     };
   },
   computed: {
@@ -564,11 +566,12 @@ export default {
         if (this.authorId && !this.getUserInfoById(this.authorId)) {
           await this.fetchUserInfo(this.authorId);
         }
-        const authorData = this.getUserInfoById(this.authorId) || {};
-        this.displayName = authorData.displayName;
-        this.avatarUrl = authorData.avatar;
+        const creatorData = this.getUserInfoById(this.authorId) || {};
+        this.displayName = creatorData.displayName;
+        this.avatarUrl = creatorData.avatar;
         this.isCivicLiker =
-          authorData.isCivicLikerTrial || authorData.isSubscribedCivicLiker;
+          creatorData.isCivicLikerTrial || creatorData.isSubscribedCivicLiker;
+        this.pitch = creatorData.creatorPitch;
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
