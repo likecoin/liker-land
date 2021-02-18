@@ -3,7 +3,44 @@
 
   .px-8.pb-32(v-else)
 
-    h2.text-like-green.font-24.font-500(v-if="count")
+    h2.text-like-green.font-24.font-500 {{ $t('SettingsSupportPage.Title.CreatorPitch') }}
+
+    .bg-white.rounded-8.mt-24.p-32.text-12.text-gray-4a.leading-1_5(
+      class="laptop:flex items-start laptop:pl-64"
+    )
+      Identity.flex-no-shrink(
+        :avatar-size="88"
+        :avatar-url="user.avatar"
+        :is-avatar-outlined="user.isSubscribedCivicLiker"
+      )
+
+      div(class="laptop:ml-24")
+        .text-like-green.text-32 {{ user.displayName }}
+        .mt-8(class="laptop:mr-32")
+          textarea.text-14.text-gray-4a.font-600.w-full(
+            ref="creatorPitchInput"
+            v-model="creatorPitch" rows="4" cols="50"
+          )
+        .flex.items-center.mt-12
+          .flex-grow.text-gray-9b.text-12 {{ creatorPitchCharCount }}/280
+          Button.ml-24.text-like-green.underline.flex-shrink-0(
+            v-if="!isEditingCreatorPitch"
+            preset="plain"
+            :disabled="isUpdatingCreatorPitch"
+            @click="onClickEditCreatorPitch"
+          )
+            .px-4
+              EditIcon.w-16.h-16.align-middle
+              span.ml-4.leading-1.text-12.font-bold {{ $t('edit') }}
+          Button.ml-24(
+            v-else
+            preset="primary"
+            :disabled="isUpdatingCreatorPitch"
+            @click="onConfirmCreatorPitch"
+          )
+            .px-8.font-600 {{ $t('confirm') }}
+
+    h2.mt-32.text-like-green.font-24.font-500(v-if="count")
       | {{ $t('SettingsSupportPage.Title.SponsorLink') }}
     EasySetup.mt-24(
       preset="sponsor-link"
@@ -54,6 +91,8 @@ import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
 
 import Button from '~/components/Button/Button';
 import EasySetup from '~/components/CreatorsPage/sections/EasySetup/EasySetup';
+import EditIcon from '~/components/Icon/Edit';
+import Identity from '~/components/Identity/Identity';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportersList from '~/components/SupportersList/SupportersList';
 
@@ -62,29 +101,43 @@ export default {
   components: {
     Button,
     EasySetup,
+    EditIcon,
+    Identity,
     Spinner,
     SupportersList,
   },
   data() {
     return {
       hasFetched: false,
+      creatorPitch: '',
+      isEditingCreatorPitch: false,
+      isUpdatingCreatorPitch: false,
     };
   },
   computed: {
     ...mapGetters({
       likerId: 'getUserId',
+      user: 'getUserInfo',
       count: 'getMySupportersCount',
       totalQuantity: 'getMySupportersTotalQuantity',
     }),
     totalAmount() {
       return this.totalQuantity * CIVIC_LIKER_UNIT_PRICE;
     },
+    creatorPitchCharCount() {
+      return [...`${this.creatorPitch}`].reduce(
+        (count, char) => count + (char.charCodeAt(0) < 127 ? 1 : 2),
+        0
+      );
+    },
   },
   mounted() {
+    // eslint-disable-next-line no-console
+    this.creatorPitch = this.user.creatorPitch || '';
     this.fetchSupportersIfNecessary();
   },
   methods: {
-    ...mapActions(['fetchMySupporters']),
+    ...mapActions(['fetchMySupporters', 'updatePreferences']),
 
     async fetchSupportersIfNecessary() {
       try {
@@ -93,6 +146,27 @@ export default {
         }
       } finally {
         this.hasFetched = true;
+      }
+    },
+
+    onClickEditCreatorPitch() {
+      this.isEditingCreatorPitch = true;
+      if (this.$refs.creatorPitchInput) {
+        this.$refs.creatorPitchInput.focus();
+      }
+    },
+    async onConfirmCreatorPitch() {
+      this.isEditingCreatorPitch = false;
+      if (this.creatorPitch !== this.user.creatorPitch) {
+        try {
+          this.isUpdatingCreatorPitch = true;
+          await this.updatePreferences({ creatorPitch: this.creatorPitch });
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        } finally {
+          this.isUpdatingCreatorPitch = false;
+        }
       }
     },
   },

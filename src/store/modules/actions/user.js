@@ -75,8 +75,13 @@ export async function resumeCanceledSubscription({ dispatch }) {
   return dispatch('fetchUserSubscriptionInfo');
 }
 
-export async function updatePreferences({ dispatch }, { locale } = {}) {
-  const preferences = {};
+export async function updatePreferences(
+  { dispatch },
+  { locale, creatorPitch } = { creatorPitch: '' }
+) {
+  const preferences = {
+    creatorPitch,
+  };
   if (locale) {
     dispatch('setLocale', locale);
     preferences.locale = normalizeLocaleForLikeCo(locale);

@@ -453,6 +453,7 @@
   },
   "SettingsSupportPage": {
     "Title": {
+      "CreatorPitch": "Creator Pitch",
       "ManageSubscription": "Manage Civic Liker Subscription",
       "ManageSupportingUser": "You are supporting",
       "SponsorLink": "Share your sponsor link"

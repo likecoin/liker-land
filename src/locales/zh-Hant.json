@@ -481,6 +481,7 @@
   },
   "SettingsSupportPage": {
     "Title": {
+      "CreatorPitch": "自我介紹",
       "ManageSubscription": "管理讚賞公民訂閱",
       "ManageSupportingUser": "你正在支持",
       "SponsorLink": "分享你的贊助鏈結"
