@@ -3,7 +3,14 @@
 
   .px-8.pb-32(v-else)
 
-    h2.text-like-green.font-24.font-500 {{ $t('SupportersDashboard.Summary.Title') }}
+    h2.text-like-green.font-24.font-500(v-if="count")
+      | {{ $t('SettingsSupportPage.Title.SponsorLink') }}
+    EasySetup.mt-24(
+      preset="sponsor-link"
+      :liker-id="likerId"
+    )
+
+    h2.mt-32.text-like-green.font-24.font-500 {{ $t('SupportersDashboard.Summary.Title') }}
     ul.list-reset.flex.bg-white.rounded-8.mt-24.px-16.py-8.text-12.text-gray-4a.leading-1_5(
       :class="['phone:px-8', { 'opacity-50 select-none': !count }]"
     )
@@ -45,6 +52,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
 
+import Button from '~/components/Button/Button';
 import EasySetup from '~/components/CreatorsPage/sections/EasySetup/EasySetup';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportersList from '~/components/SupportersList/SupportersList';
@@ -52,6 +60,7 @@ import SupportersList from '~/components/SupportersList/SupportersList';
 export default {
   middleware: 'authenticated',
   components: {
+    Button,
     EasySetup,
     Spinner,
     SupportersList,

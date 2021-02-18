@@ -20,9 +20,9 @@
       block
 
   mixin SponsorLink
-    .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-4a.rounded-12.truncate&attributes(attributes)
+    .mt-8.px-16.py-12.bg-gray-e6.text-18.text-gray-4a.rounded-12.truncate.font-mono&attributes(attributes)
       | {{ sponsorLink }}
-    Button.block.mt-40.mx-auto.p-0.max-w-phone-min(
+    Button.block.mt-16.mx-auto.p-0.max-w-phone-min(
       v-clipboard:copy="sponsorLink"
       v-clipboard:success="onCopySponsorLink"
       :title="$t(isCopied ? 'copied' : 'CreatorsPageV2.Setup.Registered.Steps[0].CTAButton')"
@@ -125,6 +125,9 @@
     h2.text-18.text-gray-4a.mb-12.font-400 {{ $t('CreatorsPageV2.Setup.Setup.Steps[0].Title') }}
     +StepDescription() {{ $t('CreatorsPageV2.Setup.Registered.Steps[0].Description') }}
     +SponsorLink
+
+  section(v-else-if="preset === 'sponsor-link'")
+    +SponsorLink()(class="py-24 bg-white text-like-green text-14 text-center")
 
 </template>
 
