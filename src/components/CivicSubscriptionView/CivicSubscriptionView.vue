@@ -487,6 +487,7 @@ export default {
   computed: {
     ...mapGetters([
       'getUserId',
+      'getUserInfo',
       'getUserSubscriptionInfo',
       'getCivicSupportingUserInfo',
       'getUserIsCivicLiker',
@@ -537,7 +538,7 @@ export default {
       );
     },
     isSelf() {
-      return !this.isPreview && this.authorId === this.getUserId;
+      return this.authorId === this.getUserId;
     },
     isUserCurrentCivic() {
       // allow old v1 user to renew to v2 by not treating shouldRenew(grace) user as current
@@ -547,9 +548,10 @@ export default {
       return this.isUserCurrentCivic && !this.getUserIsCivicLikerV2;
     },
     isConfirmButtonDisabled() {
-      return this.isSelf || this.isUserCurrentCivicV1;
+      return !this.isPreview && (this.isSelf || this.isUserCurrentCivicV1);
     },
     confimrButtonDisabledHintI18nPath() {
+      if (this.isPreview) return '';
       if (this.isSelf) {
         return 'SupportSummary.Error.UnableSubSelf';
       }
@@ -595,10 +597,16 @@ export default {
 
     async fetchLikerInfo() {
       try {
-        if (this.authorId && !this.getUserInfoById(this.authorId)) {
+        if (
+          this.authorId &&
+          !this.isSelf &&
+          !this.getUserInfoById(this.authorId)
+        ) {
           await this.fetchUserInfo(this.authorId);
         }
-        const creatorData = this.getUserInfoById(this.authorId) || {};
+        const creatorData = this.isSelf
+          ? this.getUserInfo
+          : this.getUserInfoById(this.authorId) || {};
         this.displayName = creatorData.displayName;
         this.avatarUrl = creatorData.avatar;
         this.isCivicLiker =
@@ -612,7 +620,7 @@ export default {
 
     async fetchInfo() {
       const promises = [this.fetchLikerInfo()];
-      if (this.isUserCurrentCivic) {
+      if (!this.isPreview && this.isUserCurrentCivic) {
         if (
           this.getUserIsCivicLikerV2 &&
           !this.getCivicSupportingUserInfo(this.authorId)
