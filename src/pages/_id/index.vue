@@ -21,7 +21,7 @@
               .mt-16.text-like-cyan-gray ID: {{ creatorLikerID }}
               .mt-4.text-30.font-600.text-like-cyan.text-center {{ creator.displayName }}
 
-              .mt-12.text-white.text-14.max-w-phone-min.leading-1_5(
+              .whitespace-pre-wrap.mt-12.text-white.text-14.max-w-phone-min.leading-1_5(
                 v-if="creator.creatorPitch"
               )
                 | {{ creator.creatorPitch }}

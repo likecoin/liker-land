@@ -17,7 +17,7 @@
       .flex-grow(class="laptop:ml-24")
         .text-like-green.text-32 {{ user.displayName }}
         .mt-8(class="laptop:mr-32")
-          .text-14.font-600.w-full(
+          .whitespace-pre-wrap.text-14.font-600.w-full(
             v-if="!isEditingPitch"
             :class="pitch ? 'text-gray-4a' : 'text-gray-9b'"
             @click="startPitchEditing"

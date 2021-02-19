@@ -9,7 +9,7 @@
     <div :class="['flex-grow ml-24', { 'flex flex-col-reverse': !isSubtitleTop }]">
       <div
         v-if="subtitle"
-        :class="['text-14 mttext-gray-4a font-600 leading-1_5', isSubtitleTop ? 'mb-8' : 'mt-8']"
+        :class="['whitespace-pre-wrap text-14 mttext-gray-4a font-600 leading-1_5', isSubtitleTop ? 'mb-8' : 'mt-8']"
       >{{ subtitle }}</div>
       <div class="text-32 text-like-green font-500">{{ displayName }}</div>
     </div>
