@@ -499,7 +499,8 @@
     "CancelledDate": "有效期至 {date}",
     "PitchPreview": {
       "Status": "預覽中",
-      "Hint": "你可分享你的贊助連結來呼籲你的讀者去支持你"
+      "Hint": "你可分享你的贊助連結來呼籲你的讀者去支持你",
+      "Placeholder": "輸入你的自我介紹"
     }
   },
   "SettingsSupportUsersPage": {

@@ -471,7 +471,8 @@
     "CancelledDate": "Will end on {date}",
     "PitchPreview": {
       "Status": "Previewing",
-      "Hint": "You can share your sponsor link to you readers to ask for their support"
+      "Hint": "You can share your sponsor link to you readers to ask for their support",
+      "Placeholder": "Enter your pitch"
     }
   },
   "SettingsSupportUsersPage": {

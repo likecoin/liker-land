@@ -14,13 +14,20 @@
         :is-avatar-outlined="user.isSubscribedCivicLiker"
       )
 
-      div(class="laptop:ml-24")
+      .flex-grow(class="laptop:ml-24")
         .text-like-green.text-32 {{ user.displayName }}
         .mt-8(class="laptop:mr-32")
+          .text-14.font-600.w-full(
+            v-if="!isEditingPitch"
+            :class="pitch ? 'text-gray-4a' : 'text-gray-9b'"
+            @click="startPitchEditing"
+          )
+            | {{ pitch || $t('SettingsSupportPage.PitchPreview.Placeholder') }}
           textarea.text-14.text-gray-4a.font-600.w-full.bg-transparent(
+            v-else
             ref="creatorPitchInput"
-            v-model="pitch" rows="4" cols="50"
-            :disabled="!isEditingPitch"
+            v-model="pitch" rows="5" cols="50"
+            :placeholder="$t('SettingsSupportPage.PitchPreview.Placeholder')"
           )
         .flex.items-center.mt-12
           .flex-grow.text-gray-9b.text-12
@@ -35,14 +42,14 @@
             .px-4
               EyeIcon.w-16.h-16.align-middle
               span.ml-4.leading-1.text-12.font-bold {{ $t('preview') }}
-          Button.ml-24.text-like-green.underline.flex-shrink-0(
+          Button.ml-8.text-like-green.underline.flex-shrink-0(
             v-if="!isEditingPitch"
             preset="plain"
             :disabled="isUpdatingPitch"
             @click="startPitchEditing"
           )
             .px-4
-              EditIcon.w-16.h-16.align-middle
+              EditIcon.w-14.h-14.align-middle
               span.ml-4.leading-1.text-12.font-bold {{ $t('edit') }}
           Button.ml-24(
             v-else
