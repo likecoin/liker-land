@@ -158,7 +158,7 @@ export default {
       );
     },
     pitchCharLimit() {
-      return 280;
+      return 150;
     },
   },
   mounted() {
