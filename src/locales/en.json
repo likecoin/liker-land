@@ -468,7 +468,11 @@
     "ManagePaymentMethod": "Manage Payment Method",
     "BillingHistory": "Billing History",
     "Cancelled": "Cancelled subscription",
-    "CancelledDate": "Will end on {date}"
+    "CancelledDate": "Will end on {date}",
+    "PitchPreview": {
+      "Status": "Previewing",
+      "Hint": "You can share your sponsor link to you readers to ask for their support"
+    }
   },
   "SettingsSupportUsersPage": {
     "Slogan": "Be my Civic Liker",
@@ -572,6 +576,7 @@
   "learnMore": "Learn More",
   "month": "month",
   "ok": "OK",
+  "preview": "Preview",
   "register": "Register",
   "registered": "Registered",
   "renew": "Renew",

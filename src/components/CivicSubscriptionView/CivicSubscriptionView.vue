@@ -4,15 +4,34 @@
     :is-show="true"
     :is-show-backdrop="isShowBackdrop || state === 'loading'"
     :is-animated="true"
-    content-container-class="rounded-8 phone:rounded-none"
+    :is-backdrop-opaque="isPreview"
+    :content-container-class="['rounded-8 phone:rounded-none', { 'pointer-events-none select-none': !!isPreview }]"
     @click-outside="onClickBackdrop"
   >
+    <div
+      v-if="isPreview && state !== 'loading'"
+      class="phone:relative fixed pin-t pin-l pin-r z-10"
+    >
+      <div class="flex items-center bg-like-cyan-pale p-16 tablet:p-24 laptop:px-72 pointer-events-auto">
+        <button
+          class="settings-page-header__back-button text-like-green"
+          @click="onClickBackButton"
+        ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
+        <div class="flex flex-wrap items-center text-12 border-l-1 border-gray-4a px-16 py-8">
+          <EyeIcon class="w-16 text-like-green flex-no-shrink" />
+          <span class="ml-4 mr-12 text-like-green flex-no-shrink">{{ $t('SettingsSupportPage.PitchPreview.Status') }}</span>
+          <span class="phone:mt-4 phone:w-full">{{ $t('SettingsSupportPage.PitchPreview.Hint') }}</span>
+        </div>
+      </div>
+    </div>
+
     <div
       v-if="state === 'new'"
       key="new"
       class="p-32 phone:px-16"
     >
       <button
+        v-if="!isPreview"
         class="mb-32 settings-page-header__back-button text-like-green"
         @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
@@ -130,6 +149,7 @@
       class="p-32 phone:px-24"
     >
       <button
+        v-if="!isPreview"
         class="settings-page-header__back-button text-like-green"
         @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
@@ -173,6 +193,7 @@
       class="p-32 phone:px-24"
     >
       <button
+        v-if="!isPreview"
         class="mb-16 settings-page-header__back-button text-like-green"
         @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
@@ -261,6 +282,7 @@
       class="p-32 phone:px-24"
     >
       <button
+        v-if="!isPreview"
         class="mb-16 settings-page-header__back-button text-like-green"
         @click="onClickBackButton"
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
@@ -402,11 +424,12 @@ import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/Civi
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
 import CivicQuantitySelectItem from '~/components/CivicQuantitySelect/CivicQuantitySelectItem';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
+import EyeIcon from '~/components/Icon/Eye';
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
 
-const STATES = ['select-quantity', 'confirm'];
+const STATES = ['new', 'select-quantity', 'confirm'];
 
 export default {
   components: {
@@ -422,6 +445,7 @@ export default {
     CL1VsCL2Link,
     Cross: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
+    EyeIcon,
     Identity,
     SelectButton,
     Spinner,
@@ -436,6 +460,14 @@ export default {
       default: 'default',
     },
     isExperimenting: {
+      type: Boolean,
+      default: false,
+    },
+    likerId: {
+      type: String,
+      default: '',
+    },
+    isPreview: {
       type: Boolean,
       default: false,
     },
@@ -469,7 +501,7 @@ export default {
       return this.$t('Currency.USD');
     },
     authorId() {
-      return this.$route.params.id;
+      return this.likerId || this.$route.params.id;
     },
     quantityOptions() {
       return [1, 4, 20].map(quantity => ({
@@ -505,7 +537,7 @@ export default {
       );
     },
     isSelf() {
-      return this.authorId === this.getUserId;
+      return !this.isPreview && this.authorId === this.getUserId;
     },
     isUserCurrentCivic() {
       // allow old v1 user to renew to v2 by not treating shouldRenew(grace) user as current
@@ -718,15 +750,23 @@ export default {
       this.state = 'post-cancel';
     },
 
-    onClickBackButton() {
+    onClickBackButton(e) {
+      this.$emit('click-back-button', e);
       if (this.state === 'select-quantity') {
         this.selectedQuantity = this.prevSelectedQuantiy;
       }
-      this.goBack();
+      if (!this.isPreview) {
+        this.goBack();
+      }
     },
 
-    onClickBackdrop() {
-      if (this.state !== 'loading' && this.isUserCurrentCivic) {
+    onClickBackdrop(e) {
+      this.$emit('click-backdrop', e);
+      if (
+        !this.isPreview &&
+        this.state !== 'loading' &&
+        this.isUserCurrentCivic
+      ) {
         this.goBack();
       }
     },

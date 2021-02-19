@@ -30,6 +30,15 @@
             v-if="!isEditingPitch"
             preset="plain"
             :disabled="isUpdatingPitch"
+            @click="isShowPitchPreview = true"
+          )
+            .px-4
+              EyeIcon.w-16.h-16.align-middle
+              span.ml-4.leading-1.text-12.font-bold {{ $t('preview') }}
+          Button.ml-24.text-like-green.underline.flex-shrink-0(
+            v-if="!isEditingPitch"
+            preset="plain"
+            :disabled="isUpdatingPitch"
             @click="startPitchEditing"
           )
             .px-4
@@ -42,6 +51,16 @@
             @click="finishPitchEditing"
           )
             .px-8.font-600 {{ $t('confirm') }}
+
+        CivicSubscriptionView(
+          v-if="isShowPitchPreview"
+          initial-state="new"
+          :liker-id="likerId"
+          :is-preview="true"
+          :is-show-backdrop="true"
+          @click-back-button="isShowPitchPreview = false"
+          @click-backdrop="isShowPitchPreview = false"
+        )
 
     h2.mt-32.text-like-green.font-24.font-500(v-if="count")
       | {{ $t('SettingsSupportPage.Title.SponsorLink') }}
@@ -93,8 +112,10 @@ import { mapActions, mapGetters } from 'vuex';
 import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
 
 import Button from '~/components/Button/Button';
+import CivicSubscriptionView from '~/components/CivicSubscriptionView/CivicSubscriptionView';
 import EasySetup from '~/components/CreatorsPage/sections/EasySetup/EasySetup';
 import EditIcon from '~/components/Icon/Edit';
+import EyeIcon from '~/components/Icon/Eye';
 import Identity from '~/components/Identity/Identity';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportersList from '~/components/SupportersList/SupportersList';
@@ -103,8 +124,10 @@ export default {
   middleware: 'authenticated',
   components: {
     Button,
+    CivicSubscriptionView,
     EasySetup,
     EditIcon,
+    EyeIcon,
     Identity,
     Spinner,
     SupportersList,
@@ -115,6 +138,7 @@ export default {
       pitch: '',
       isEditingPitch: false,
       isUpdatingPitch: false,
+      isShowPitchPreview: false,
     };
   },
   computed: {

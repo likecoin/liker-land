@@ -41,6 +41,10 @@ export default {
       type: [Boolean, String],
       default: true,
     },
+    isBackdropOpaque: {
+      type: [Boolean, String],
+      default: false,
+    },
     isClosable: {
       type: [Boolean, String],
       default: true,
@@ -65,6 +69,7 @@ export default {
         'base-dialog--absolute': true,
         'base-dialog--fullscreen': !!this.isFullscreen,
         'base-dialog--with-backdrop': this.isShowBackdrop,
+        'base-dialog--with-backdrop-opaque': this.isBackdropOpaque,
       };
     },
     transitionListeners() {
@@ -194,19 +199,25 @@ export default {
     pointer-events: none;
   }
 
-  &--with-backdrop:not(#{&}--fullscreen) {
-    &::before {
-      position: fixed;
-      top: -50vh;
-      right: -50vw;
-      bottom: -50vh;
-      left: -50vw;
+  &--with-backdrop {
+    &:not(#{&}--fullscreen) {
+      &::before {
+        position: fixed;
+        top: -50vh;
+        right: -50vw;
+        bottom: -50vh;
+        left: -50vw;
 
-      content: '';
+        content: '';
 
-      pointer-events: auto;
+        pointer-events: auto;
 
-      background: rgba(#e6e6e6, 0.5);
+        background: rgba(#e6e6e6, 0.5);
+      }
+    }
+
+    &-opaque::before {
+      background-color: #e6e6e6 !important;
     }
   }
 
