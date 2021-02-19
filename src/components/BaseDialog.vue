@@ -54,7 +54,7 @@ export default {
       default: true,
     },
     contentContainerClass: {
-      type: String,
+      type: [String, Array, Object],
       default: undefined,
     },
     contentKey: {
