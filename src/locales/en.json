@@ -445,7 +445,7 @@
       "registered": "Registered"
     },
     "Supporters": {
-      "Title": "Your supporters",
+      "Title": "Creator Settings",
       "Count": "1 supporter | {count} supporters"
     },
     "language": "Language",

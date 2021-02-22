@@ -473,7 +473,7 @@
       "registered": "已註冊"
     },
     "Supporters": {
-      "Title": "你的支持者",
+      "Title": "作者設定",
       "Count": "{count} 位"
     },
     "language": "介面語言",
@@ -481,7 +481,7 @@
   },
   "SettingsSupportPage": {
     "Title": {
-      "CreatorPitch": "自我介紹",
+      "CreatorPitch": "給讀者的話",
       "ManageSubscription": "管理讚賞公民訂閱",
       "ManageSupportingUser": "你正在支持",
       "SponsorLink": "分享你的贊助鏈結"
@@ -500,7 +500,7 @@
     "PitchPreview": {
       "Status": "預覽中",
       "Hint": "你可分享你的贊助連結來呼籲你的讀者去支持你",
-      "Placeholder": "輸入你的自我介紹"
+      "Placeholder": "輸入給讀者的話"
     }
   },
   "SettingsSupportUsersPage": {
