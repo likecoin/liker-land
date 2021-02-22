@@ -600,9 +600,10 @@ export default {
         if (
           this.authorId &&
           !this.isSelf &&
-          !this.getUserInfoById(this.authorId)
+          (!this.getUserInfoById(this.authorId) ||
+            !this.getUserInfoById(this.authorId).creatorPitch)
         ) {
-          await this.fetchUserInfo(this.authorId);
+          await this.fetchUserInfo({ id: this.authorId, types: ['creator'] });
         }
         const creatorData = this.isSelf
           ? this.getUserInfo

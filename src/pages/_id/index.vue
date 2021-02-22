@@ -314,7 +314,7 @@ export default {
     if (id && checkUserNameValid(id)) {
       try {
         const [creator, civicSupport] = await Promise.all([
-          $api.$get(getUserMinAPI(id)),
+          $api.$get(getUserMinAPI(id, { types: ['creator'] })),
           $api
             .$get(getCivicSupportingUserAPI(id))
             .catch(() => ({ quantity: 0 })),

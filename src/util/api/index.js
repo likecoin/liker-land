@@ -120,8 +120,10 @@ export const getImageResizeAPI = (url, { width } = {}) =>
   `${LIKE_CO_CLOUD_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${
     width ? `&width=${width}` : ''
   }`;
-export const getUserMinAPI = likerId =>
-  `${LIKECOIN_API_BASE}/users/id/${likerId}/min`;
+export const getUserMinAPI = (id, { types = [] } = {}) =>
+  `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
+    type: types.join(','),
+  })}`;
 export const getArticleDetailAPI = url =>
   `${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`;
 
