@@ -474,7 +474,7 @@
     },
     "Supporters": {
       "Title": "作者設定",
-      "Count": "{count} 位"
+      "Count": "支持者 {count}"
     },
     "language": "介面語言",
     "subscription": "追蹤設定"
