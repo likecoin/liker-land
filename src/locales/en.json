@@ -445,7 +445,7 @@
       "registered": "Registered"
     },
     "Supporters": {
-      "Title": "Your supporters",
+      "Title": "Creator Settings",
       "Count": "1 supporter | {count} supporters"
     },
     "language": "Language",
@@ -453,8 +453,10 @@
   },
   "SettingsSupportPage": {
     "Title": {
+      "CreatorPitch": "Creator Pitch",
       "ManageSubscription": "Manage Civic Liker Subscription",
-      "ManageSupportingUser": "You are supporting"
+      "ManageSupportingUser": "You are supporting",
+      "SponsorLink": "Share your sponsor link"
     },
     "ErrorTitle": {
       "NotCivicV2": "Support feature is only available to v2 civic liker",
@@ -466,7 +468,12 @@
     "ManagePaymentMethod": "Manage Payment Method",
     "BillingHistory": "Billing History",
     "Cancelled": "Cancelled subscription",
-    "CancelledDate": "Will end on {date}"
+    "CancelledDate": "Will end on {date}",
+    "PitchPreview": {
+      "Status": "Previewing",
+      "Hint": "You can share your sponsor link to you readers to ask for their support",
+      "Placeholder": "Enter your pitch"
+    }
   },
   "SettingsSupportUsersPage": {
     "Slogan": "Be my Civic Liker",
@@ -570,6 +577,7 @@
   "learnMore": "Learn More",
   "month": "month",
   "ok": "OK",
+  "preview": "Preview",
   "register": "Register",
   "registered": "Registered",
   "renew": "Renew",

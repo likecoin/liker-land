@@ -75,11 +75,18 @@ export async function resumeCanceledSubscription({ dispatch }) {
   return dispatch('fetchUserSubscriptionInfo');
 }
 
-export async function updatePreferences({ dispatch }, { locale } = {}) {
+export async function updatePreferences(
+  { dispatch, commit },
+  { locale, creatorPitch } = {}
+) {
   const preferences = {};
   if (locale) {
     dispatch('setLocale', locale);
     preferences.locale = normalizeLocaleForLikeCo(locale);
+  }
+  if (creatorPitch !== undefined && typeof creatorPitch === 'string') {
+    preferences.creatorPitch = creatorPitch;
+    commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
     await this.$api.$post(api.userPreferences(), preferences);

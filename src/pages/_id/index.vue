@@ -21,6 +21,11 @@
               .mt-16.text-like-cyan-gray ID: {{ creatorLikerID }}
               .mt-4.text-30.font-600.text-like-cyan.text-center {{ creator.displayName }}
 
+              .whitespace-pre-wrap.mt-12.text-white.text-14.max-w-phone-min.leading-1_5(
+                v-if="creator.creatorPitch"
+              )
+                | {{ creator.creatorPitch }}
+
               .user-info-panel__actions(v-if="!isSelf")
                 +CTAButton
                 ButtonGroup
@@ -309,7 +314,7 @@ export default {
     if (id && checkUserNameValid(id)) {
       try {
         const [creator, civicSupport] = await Promise.all([
-          $api.$get(getUserMinAPI(id)),
+          $api.$get(getUserMinAPI(id, { types: ['creator'] })),
           $api
             .$get(getCivicSupportingUserAPI(id))
             .catch(() => ({ quantity: 0 })),

@@ -51,7 +51,9 @@ export default {
 
     if (id && checkUserNameValid(id)) {
       try {
-        const creator = await $api.$get(getUserMinAPI(id));
+        const creator = await $api.$get(
+          getUserMinAPI(id, { types: ['creator'] })
+        );
         return { creator };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
