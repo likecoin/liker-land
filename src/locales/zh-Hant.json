@@ -436,7 +436,7 @@
     "subscribed": "生效中",
     "billingSummary": {
       "cancelDate": "訂閱結束日期",
-      "nextBillingDate": "下個付款日期"
+      "nextBillingDate": "下次付款日期"
     },
     "editPaymentMethod": "修改",
     "resumeSubscription": "延續《讚賞公民》訂閱",
