@@ -8,7 +8,37 @@
         v-if="isLoginErrorFromCivicLikerRegistration"
         #header-content
       )
+        .rounded-t.p-16.bg-like-green(
+          v-if="isExperimenting"
+        )
+            i18n.text-24.mt-16.font-600.text-like-cyan.mt(
+              v-if="isLoginErrorFromCivicLikerRegistration"
+              :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
+              tag="p"
+            )
+              span.whitespace-no-wrap(
+                v-if="referrer"
+                place="creator"
+              )
+                | {{ referrer.displayName }}
+            .flex.flex-row-reverse.items-center.justify-center.mt-32(style="margin-bottom:-70px")
+              Identity(
+                v-if="referrer"
+                class="-ml-8"
+                :avatar-size="105"
+                :avatar-url="referrer.avatar"
+                :is-avatar-outlined="referrer.isSubscribedCivicLiker || referrer.isCivicLikerTrial"
+              )
+              svg.relative(
+                class="-ml-48 tablet:ml-0"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 141.46 37.94"
+                width="140px"
+              )
+                path(d="M141.46,19l-19-19-5.66,5.66L126.15,15H0v8H126.15l-9.32,9.31,5.66,5.66Z" fill="#f4bf7a")
+              img.relative(src="~assets/images/civic-people.png" style="width: 105px")
         LikeButtonAnimation(
+          v-else
           class="-mt-32"
           :avatar="referrer ? referrer.avatar : undefined"
         )
@@ -17,22 +47,23 @@
           name="error-dialog-content-"
           appear
         )
-          main.page-content.error-dialog-content
-            i18n.text-24.mt-16.font-600(
-              v-if="isLoginErrorFromCivicLikerRegistration"
-              :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
-              tag="p"
-            )
-              span.whitespace-no-wrap(
-                v-if="referrer"
-                place="creator"
-              ) {{ referrer.displayName }}
+          main.page-content.error-dialog-content(:class="{ 'pt-48': isExperimenting }")
+            template(v-if="!isExperimenting")
+              i18n.text-24.mt-16.font-600(
+                v-if="isLoginErrorFromCivicLikerRegistration"
+                :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
+                tag="p"
+              )
+                span.whitespace-no-wrap(
+                  v-if="referrer"
+                  place="creator"
+                ) {{ referrer.displayName }}
 
-            template(v-else-if="formattedTitle")
-              h1.text-28.mt-16.px-12 {{ formattedTitle }}
-              p.text-16.mt-32.leading-1_5 {{ formattedMessage }}
+              template(v-else-if="formattedTitle")
+                h1.text-28.mt-16.px-12 {{ formattedTitle }}
+                p.text-16.mt-32.leading-1_5 {{ formattedMessage }}
 
-            p.text-24.mt-16.font-600(v-else) {{ formattedMessage }}
+              p.text-24.mt-16.font-600(v-else) {{ formattedMessage }}
 
             .mt-32.px-12(class="phone:px-0")
               div(v-if="isLoginError")
@@ -74,9 +105,6 @@
 </template>
 
 <script>
-import DialogLayout from '~/components/DialogLayout';
-import LikeButtonAnimation from '~/components/LikeButtonAnimation';
-
 import {
   getOAuthLoginAPI,
   getOAuthRegisterAPI,
@@ -85,7 +113,13 @@ import {
 import { getAvatarHaloTypeFromUser, checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { defaultLocale } from '~/locales';
+
 import CrispMixin from '~/mixins/crisp';
+import experimentMixin from '~/mixins/experiment';
+
+import DialogLayout from '~/components/DialogLayout';
+import Identity from '~/components/Identity/Identity';
+import LikeButtonAnimation from '~/components/LikeButtonAnimation';
 
 export default {
   layout: 'empty',
@@ -99,9 +133,13 @@ export default {
   },
   components: {
     DialogLayout,
+    Identity,
     LikeButtonAnimation,
   },
-  mixins: [CrispMixin],
+  mixins: [
+    CrispMixin,
+    experimentMixin('isExperimenting', 'error-page', 'variant'),
+  ],
   props: {
     error: {
       type: Object,
@@ -120,10 +158,11 @@ export default {
     },
 
     getOAuthRegisterAPI() {
-      const { from, referrer, utm_source: utmSource } = this.$route.query;
+      const { from: qsID, referrer, utm_source: utmSource } = this.$route.query;
+      const { id: paramID } = this.$route.params;
       return getOAuthRegisterAPI({
         language: this.$i18n.locale,
-        from,
+        from: qsID || paramID,
         referrer,
         utmSource,
       });
