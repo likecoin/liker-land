@@ -47,10 +47,7 @@
 
         <hr class="my-24 border-t-1 border-gray-d8">
 
-        <div
-          v-if="isExperimenting"
-          class="-m-8"
-        >
+        <div class="-m-8">
           <div class="text-16 text-center text-like-green font-600">
             {{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}
           </div>
@@ -73,26 +70,14 @@
             </li>
           </ul>
         </div>
-
-        <template v-else>
-          <CivicLikerSupportAmountView
-            :price="selectedQuantity * dollar"
-            :currency="currency"
-            :period="$t('SubscriptionPeriod.Month')"
-            :prefix="priceEmoji"
-            :hint-text="$t('UpdateSupportQuantity.HintText', { name: displayName })"
-            @click-add="goToSelectQuantity"
+        <div class="mx-40 mt-16">
+          <Button
+            :title="$t('UpdateSupportQuantity.Subscribe')"
+            :full="true"
+            size="large"
+            @click="goToConfirm"
           />
-
-          <div class="mx-40 mt-16">
-            <Button
-              :title="$t('UpdateSupportQuantity.Subscribe')"
-              :full="true"
-              size="large"
-              @click="goToConfirm"
-            />
-          </div>
-        </template>
+        </div>
 
         <hr class="my-24 border-t-1 border-gray-d8">
 
@@ -458,10 +443,6 @@ export default {
     initialState: {
       type: String,
       default: 'default',
-    },
-    isExperimenting: {
-      type: Boolean,
-      default: false,
     },
     likerId: {
       type: String,
