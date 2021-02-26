@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { userCollection } = require('../../util/firebase');
+const { userCollection, FieldValue } = require('../../util/firebase');
 const {
   stripe,
   STRIPE_PLAN_ID,
@@ -22,33 +22,45 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
     const userDoc = await userRef.get();
     const { stripe: { subscriptionId, customerId } = {} } = userDoc.data();
     if (subscriptionId) {
-      const [
-        subscription,
-        { data: [paymentMethod] = [] } = {},
-      ] = await Promise.all([
-        stripe.subscriptions.retrieve(subscriptionId),
-        stripe.paymentMethods.list({
-          customer: customerId,
-          type: 'card',
-          limit: 1,
-        }),
-      ]);
-      if (
-        subscription.status === 'active' ||
-        subscription.status === 'past_due'
-      ) {
-        const { brand, last4 } = paymentMethod.card;
-        res.json({
-          type: 'subscription',
-          status: subscription.status,
-          willCancel: subscription.cancel_at_period_end,
-          currentPeriodEnd: subscription.current_period_end,
-          currentPeriodStart: subscription.current_period_start,
-          start: subscription.start,
-          quantity: subscription.quantity,
-          card: { brand, last4 },
-        });
-        return;
+      try {
+        const [
+          subscription,
+          { data: [paymentMethod] = [] } = {},
+        ] = await Promise.all([
+          stripe.subscriptions.retrieve(subscriptionId),
+          stripe.paymentMethods.list({
+            customer: customerId,
+            type: 'card',
+            limit: 1,
+          }),
+        ]);
+        if (
+          subscription.status === 'active' ||
+          subscription.status === 'past_due'
+        ) {
+          const { brand, last4 } = paymentMethod.card;
+          res.json({
+            type: 'subscription',
+            status: subscription.status,
+            willCancel: subscription.cancel_at_period_end,
+            currentPeriodEnd: subscription.current_period_end,
+            currentPeriodStart: subscription.current_period_start,
+            start: subscription.start,
+            quantity: subscription.quantity,
+            card: { brand, last4 },
+          });
+          return;
+        }
+      } catch (error) {
+        if (error.type && error.type.startsWith('Stripe')) {
+          if (error.type === 'StripeInvalidRequestError') {
+            // On the fly delete invalid stripe data
+            await userRef.update({ stripe: FieldValue.delete() });
+          }
+          res.sendStatus(404);
+          return;
+        }
+        throw error;
       }
     }
     res.sendStatus(404);
