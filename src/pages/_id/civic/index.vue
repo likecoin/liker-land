@@ -133,16 +133,31 @@ export default {
           property: 'og:title',
           content: title,
         },
-        {
-          hid: 'description',
-          name: 'description',
-          content: description,
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: description,
-        },
+        ...(this.creator.creatorPitch
+          ? [
+              {
+                hid: 'description',
+                name: 'description',
+                content: this.creator.creatorPitch,
+              },
+              {
+                hid: 'og:description',
+                property: 'og:description',
+                content: this.creator.creatorPitch,
+              },
+            ]
+          : [
+              {
+                hid: 'description',
+                name: 'description',
+                content: description,
+              },
+              {
+                hid: 'og:description',
+                property: 'og:description',
+                content: description,
+              },
+            ]),
         {
           hid: 'og:image',
           property: 'og:image',
