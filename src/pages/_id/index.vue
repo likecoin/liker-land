@@ -341,7 +341,8 @@ export default {
     const title = this.$t('PortfolioPage.Og.Title', {
       name: this.creator.displayName.trim(),
     });
-    return {
+
+    const head = {
       title,
       meta: [
         {
@@ -357,6 +358,23 @@ export default {
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
     };
+
+    if (this.creator.creatorPitch) {
+      head.meta.push(
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.creator.creatorPitch,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.creator.creatorPitch,
+        }
+      );
+    }
+
+    return head;
   },
   mounted() {
     this.refreshBookmarkList();
