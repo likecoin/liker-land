@@ -41,8 +41,7 @@
           :avatar-url="avatarUrl"
           :display-name="displayName"
           :is-civic-liker="isCivicLiker"
-          :subtitle="pitch || $t('SettingsSupportUsersPage.Slogan')"
-          :is-subtitle-top="!pitch"
+          :subtitle="pitch || $t('CreatorPitch.Default')"
         />
 
         <hr class="my-24 border-t-1 border-gray-d8">
@@ -198,8 +197,7 @@
         :avatar-url="avatarUrl"
         :display-name="displayName"
         :is-civic-liker="isCivicLiker"
-        :subtitle="pitch || $t('SettingsSupportUsersPage.SloganConfirm')"
-        :is-subtitle-top="!pitch"
+        :subtitle="pitch || $t('CreatorPitch.Default')"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">
