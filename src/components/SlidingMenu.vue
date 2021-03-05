@@ -9,19 +9,19 @@
           },
         ]"
       >
-        <div
+        <NuxtLink
           v-if="getUserId"
-          class="flex items-center"
+          :to="{ name: 'id', params: { id: getUserId } }"
+          @click.native="toggleSlidingMenu(false)"
         >
-          <lc-avatar
-            :src="getUserInfo.avatar"
-            :halo="getUserCivicLikerHalo"
-            size="46"
+          <Identity
+            :avatar-size="46"
+            :avatar-url="getUserInfo.avatar"
+            :display-name="getUserInfo.displayName"
+            :is-avatar-outlined="getUserCivicLikerHalo !== 'none'"
+            display-name-class="text-white ml-16"
           />
-          <span
-            class="text-16 ml-12"
-          >{{ getUserInfo.displayName }}</span>
-        </div>
+        </NuxtLink>
         <a
           v-else
           class="btn btn--dark btn--block mx-0"
@@ -115,12 +115,15 @@ import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
 import AppIcon from '~/assets/images/app-icon.svg';
 
+import Identity from './Identity/Identity';
+
 export default {
   name: 'SlidingMenu',
   components: {
     AppIcon,
     CogIcon,
     HomeIcon,
+    Identity,
   },
   mixins: [CrispMixinFactory({ isBootAtMounted: false })],
   data() {
