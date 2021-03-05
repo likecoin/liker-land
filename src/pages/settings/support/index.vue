@@ -22,7 +22,7 @@
             :class="pitch ? 'text-gray-4a' : 'text-gray-9b'"
             @click="startPitchEditing"
           )
-            | {{ pitch || $t('SettingsSupportPage.PitchPreview.Placeholder') }}
+            | {{ pitchPreview }}
           textarea.text-14.text-gray-4a.font-600.w-full.bg-transparent(
             v-else
             ref="creatorPitchInput"
@@ -158,11 +158,13 @@ export default {
     totalAmount() {
       return this.totalQuantity * CIVIC_LIKER_UNIT_PRICE;
     },
+    pitchPreview() {
+      return this.pitch || this.$t('CreatorPitch.Default');
+    },
     pitchCharCount() {
-      return [...`${this.pitch}`].reduce(
-        (count, char) => count + (char.charCodeAt(0) < 127 ? 1 : 2),
-        0
-      );
+      return [
+        ...`${this.isEditingPitch ? this.pitch : this.pitchPreview}`,
+      ].reduce((count, char) => count + (char.charCodeAt(0) < 127 ? 1 : 2), 0);
     },
     pitchCharLimit() {
       return 150;
