@@ -116,7 +116,7 @@ export default {
         creatorsFundEarningsMin: min,
         creatorsFundEarningsMax: max,
       } = this;
-      return `$${min.toFixed(2)} - ${max.toFixed(2)}`;
+      return `$${min.toFixed(2)} ~ ${max.toFixed(2)}`;
     },
     formattedTotalEarnings() {
       const {
@@ -124,7 +124,7 @@ export default {
         creatorsFundEarningsMin: min,
         creatorsFundEarningsMax: max,
       } = this;
-      return `US$${(base + min).toFixed(2)} - ${(base + max).toFixed(2)}`;
+      return `US$${(base + min).toFixed(2)} ~ ${(base + max).toFixed(2)}`;
     },
   },
 };
