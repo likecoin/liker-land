@@ -341,8 +341,9 @@ export default {
     const title = this.$t('PortfolioPage.Og.Title', {
       name: this.creator.displayName.trim(),
     });
-
-    const head = {
+    const description =
+      this.creator.creatorPitch || this.$t('CreatorPitch.Default');
+    return {
       title,
       meta: [
         {
@@ -355,26 +356,19 @@ export default {
           property: 'og:image',
           content: this.creator.avatar,
         },
-      ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-    };
-
-    if (this.creator.creatorPitch) {
-      head.meta.push(
         {
           hid: 'og:description',
           property: 'og:description',
-          content: this.creator.creatorPitch,
+          content: description,
         },
         {
           hid: 'description',
           name: 'description',
-          content: this.creator.creatorPitch,
-        }
-      );
-    }
-
-    return head;
+          content: description,
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+    };
   },
   mounted() {
     this.refreshBookmarkList();

@@ -124,7 +124,8 @@ export default {
   head() {
     const name = this.creator.displayName.trim();
     const title = this.$t('CivicEntryPage.Og.Title', { name });
-    const description = this.$t('CivicEntryPage.Og.Description', { name });
+    const description =
+      this.creator.creatorPitch || this.$t('CreatorPitch.Default');
     return {
       title,
       meta: [
@@ -133,32 +134,17 @@ export default {
           property: 'og:title',
           content: title,
         },
-        ...(this.creator.creatorPitch
-          ? [
-              {
-                hid: 'description',
-                name: 'description',
-                content: this.creator.creatorPitch,
-              },
-              {
-                hid: 'og:description',
-                property: 'og:description',
-                content: this.creator.creatorPitch,
-              },
-            ]
-          : [
-              {
-                hid: 'description',
-                name: 'description',
-                content: description,
-              },
-              {
-                hid: 'og:description',
-                property: 'og:description',
-                content: description,
-              },
-            ]),
         {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+  {
           hid: 'og:image',
           property: 'og:image',
           content: 'https://liker.land/images/og/civic-v2.png',
