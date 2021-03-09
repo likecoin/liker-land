@@ -37,7 +37,17 @@
       ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
 
       <div class="mx-40 phone:mx-0">
+        <CivicLikerPitchingView
+          v-if="isExperimenting"
+          :creator-display-name="displayName"
+          :creator-avatar-url="avatarUrl"
+          :is-creator-civic-liker="isCivicLiker"
+          :creator-pitch="pitch || $t('CreatorPitch.Default')"
+          :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
+          :is-supporter-civic-liker="getUserIsCivicLiker"
+        />
         <CivicLikerSupportLikerView
+          v-else
           :avatar-url="avatarUrl"
           :display-name="displayName"
           :is-civic-liker="isCivicLiker"
@@ -48,11 +58,11 @@
 
         <div class="-m-8">
           <div class="text-16 text-center text-like-green font-600">
-            {{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}
+            {{ $t('UpdateSupportQuantity.Title') }}
           </div>
           <ul
             class="flex list-reset w-full mt-4"
-            style="min-height: 160px"
+            :style="{ minHeight: isExperimenting ? 144 : 160 }"
           >
             <li
               v-for="option in quantityOptions"
@@ -64,6 +74,7 @@
                 :price="option.value * dollar"
                 :price-emoji="getPriceEmoji(option.value * dollar)"
                 :is-selected="selectedQuantity === option.value"
+                :is-experimenting="isExperimenting"
                 @click="selectedQuantity = option.value"
               />
             </li>
@@ -82,7 +93,10 @@
 
         <ul class="m-0 p-0 list-style-none">
           <li class="flex items-center">
-            <img class="w-80" src="~/assets/images/civic-v2/support/support-group.png">
+            <img
+              :class="isExperimenting ? 'w-56' : 'w-80'"
+              src="~/assets/images/civic-v2/support/support-group.png"
+            >
             <div class="flex-grow ml-24 phone:ml-12">
               <h1
                 class="text-like-green text-16"
@@ -93,7 +107,10 @@
             </div>
           </li>
           <li class="flex items-center mt-24">
-            <img class="w-80" src="~/assets/images/civic-v2/support/follow-me.png">
+            <img
+              :class="isExperimenting ? 'w-56' : 'w-80'"
+              src="~/assets/images/civic-v2/support/follow-me.png"
+            >
             <div class="flex-grow ml-24 phone:ml-12">
               <h1
                 class="text-like-green text-16"
@@ -104,7 +121,10 @@
             </div>
           </li>
           <li class="flex items-center mt-24">
-            <img class="w-80" src="~/assets/images/civic-v2/support/contribute.png">
+            <img
+              :class="isExperimenting ? 'w-56' : 'w-80'"
+              src="~/assets/images/civic-v2/support/contribute.png"
+            >
             <div class="flex-grow ml-24 phone:ml-12">
               <h1
                 class="text-like-green text-16"
@@ -147,7 +167,7 @@
 
         <h2
           class="mt-12 text-24 text-like-green font-500 leading-1_5"
-        >{{ $t('UpdateSupportQuantity.Title', { name: displayName }) }}</h2>
+        >{{ $t('UpdateSupportQuantity.Title') }}</h2>
 
         <div class="mx-24 phone:mx-0">
           <SelectButton
@@ -192,7 +212,19 @@
 
       <hr class="my-16 border-t-1 border-gray-d8">
 
+      <CivicLikerPitchingView
+        v-if="isExperimenting"
+        class="my-24"
+        :creator-display-name="displayName"
+        :creator-avatar-url="avatarUrl"
+        :is-creator-civic-liker="isCivicLiker"
+        :creator-pitch="pitch || $t('CreatorPitch.Default')"
+        :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
+        :is-supporter-civic-liker="getUserIsCivicLiker"
+      />
+
       <CivicLikerSupportLikerView
+        v-else
         :class="{ 'my-24 ml-8': isCivicLiker }"
         :avatar-url="avatarUrl"
         :display-name="displayName"
@@ -405,6 +437,7 @@ import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
+import CivicLikerPitchingView from '~/components/CivicLikerPitchingView/CivicLikerPitchingView';
 import CivicQuantitySelectItem from '~/components/CivicQuantitySelect/CivicQuantitySelectItem';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
 import EyeIcon from '~/components/Icon/Eye';
@@ -424,6 +457,7 @@ export default {
     Button,
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
+    CivicLikerPitchingView,
     CivicQuantitySelectItem,
     CL1VsCL2Link,
     Cross: () =>
@@ -447,6 +481,10 @@ export default {
       default: '',
     },
     isPreview: {
+      type: Boolean,
+      default: false,
+    },
+    isExperimenting: {
       type: Boolean,
       default: false,
     },

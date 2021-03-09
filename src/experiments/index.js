@@ -1,3 +1,3 @@
-import idCivicRegister from './_id/civic/register';
+import idCivic from './_id/civic';
 
-export default [idCivicRegister];
+export default [idCivic];

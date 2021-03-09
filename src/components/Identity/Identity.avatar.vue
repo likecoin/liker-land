@@ -6,7 +6,7 @@
     <div>
       <img
         class="avatar__image"
-        :src="url"
+        :src="url || 'https://static.like.co/likecoin_de-portrait.jpg'"
         :style="imageStyle"
       >
       <div

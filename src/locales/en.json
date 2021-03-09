@@ -50,6 +50,8 @@
       "body": "<p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>"
     }
   ],
+  "CivicLikerPitchingView.Title": "Support “{name}” monthly",
+  "CivicLikerPitchingView.Subtitle": "Become a Civic Liker",
   "CivicLikerTrialPage": {
     "title": "Civic Liker Trial",
     "joining": "Joining",
@@ -557,7 +559,7 @@
     }
   },
   "UpdateSupportQuantity": {
-    "Title": "Choose the monthly supporting amount for {name}",
+    "Title": "Choose the monthly supporting amount",
     "HintText": "Support {name} monthly",
     "Next": "Next",
     "Subscribe": "Subscribe now",
