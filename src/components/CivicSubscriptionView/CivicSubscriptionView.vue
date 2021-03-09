@@ -730,7 +730,7 @@ export default {
     },
 
     onClickConfirmSubscriptionButton(e) {
-      if (this.getUserShouldRenewCivic) {
+      if (this.isUserCurrentCivicV1) {
         this.isShowUpgradeWarning = true;
       } else {
         this.confirmSubscription(e);
