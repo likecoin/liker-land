@@ -156,6 +156,11 @@ export default {
       return this.$t('SlidingMenu.civic');
     },
   },
+  mounted() {
+    if (checkIsMobileClient()) {
+      this.isShowAppCTA = true;
+    }
+  },
   methods: {
     logTrackerEvent,
 
@@ -177,11 +182,6 @@ export default {
     onClickLogEvent(...args) {
       logTrackerEvent(this, ...args);
     },
-  },
-  mounted() {
-    if (checkIsMobileClient()) {
-      this.isShowAppCTA = true;
-    }
   },
 };
 </script>
