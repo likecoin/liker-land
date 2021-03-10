@@ -11,7 +11,7 @@
         :avatar-url="supporterAvatarUrl"
         :is-avatar-outlined="isSupporterCivicLiker"
       />
-      <ConvertGraph class="flex-shrink mx-12" :style="{ maxWidth: 140 }" />
+      <ConvertGraph class="flex-shrink mx-12 w-full" :style="{ maxWidth: 140 }" />
       <div class="relative flex-no-shrink">
         <Identity
           :avatar-size="80"
