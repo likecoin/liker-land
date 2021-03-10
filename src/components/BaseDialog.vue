@@ -10,12 +10,15 @@
       :class="rootClass"
       @click="onClickDialog"
     )
+      .base-dialog__backdrop
+        slot(name="backdrop")
       Transition(
         name="fade"
         mode="out-in"
       )
         .base-dialog__content-container(
           ref="contentContainer"
+          :class="contentContainerWrapperClass"
           :key="contentKey"
         )
           main(:class="contentContainerClass")
@@ -57,16 +60,24 @@ export default {
       type: [String, Array, Object],
       default: undefined,
     },
+    contentContainerWrapperClass: {
+      type: [String, Array, Object],
+      default: undefined,
+    },
     contentKey: {
       type: String,
       default: undefined,
+    },
+    isAbsolute: {
+      type: [Boolean, String],
+      default: true,
     },
   },
   computed: {
     rootClass() {
       return {
         'base-dialog': true,
-        'base-dialog--absolute': true,
+        'base-dialog--absolute': this.isAbsolute,
         'base-dialog--fullscreen': !!this.isFullscreen,
         'base-dialog--with-backdrop': this.isShowBackdrop,
         'base-dialog--with-backdrop-opaque': this.isBackdropOpaque,

@@ -184,7 +184,7 @@ export default {
       @apply px-64;
     }
     &:not(&--floating) .site-nav-bar {
-      @apply pt-32;
+      @apply py-32;
     }
   }
 }

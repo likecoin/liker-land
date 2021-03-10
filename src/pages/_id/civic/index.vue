@@ -9,6 +9,7 @@
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
           :is-experimenting="isExperimenting"
+          :is-show-pitching-banner="id === 'standnews'"
           @select-quantity="onClickSelectQuantity"
           @go-to-confirm="onGoToConfirm"
           @state-change="onStateChange"
