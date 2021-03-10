@@ -9,7 +9,7 @@
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
           :is-experimenting="isExperimenting"
-          :is-show-pitching-banner="id === 'standnews'"
+          :is-show-pitching-banner="isExperimentingPitchingBanner"
           @select-quantity="onClickSelectQuantity"
           @go-to-confirm="onGoToConfirm"
           @state-change="onStateChange"
@@ -36,7 +36,14 @@ export default {
     PageHeader,
     SiteNavBar,
   },
-  mixins: [experimentMixin('isExperimenting', 'id-civic', 'variant')],
+  mixins: [
+    experimentMixin('isExperimenting', 'id-civic', 'variant'),
+    experimentMixin(
+      'isExperimentingPitchingBanner',
+      'standnews-civic',
+      'variant'
+    ),
+  ],
   computed: {
     ...mapGetters(['getUserId']),
     id() {
