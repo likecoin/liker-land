@@ -24,7 +24,8 @@ export default {
     ...mapGetters(['getUserIsCivicLikerV2']),
   },
   fetch({ store, redirect }) {
-    if (!store.getters.getUserIsCivicLiker) {
+    const { getUserIsCivicLiker, getUserShouldRenewCivic } = store.getters;
+    if (!getUserIsCivicLiker && !getUserShouldRenewCivic) {
       redirect({ name: 'id-civic', params: { id: DEFAULT_CL_SUPPORTER } });
     }
   },

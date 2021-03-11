@@ -73,8 +73,14 @@
               )
                 | {{ buttonText }}
         br
+        a.btn.btn--plain.btn--auto-size.text-12(
+          v-if="getUserShouldRenewCivic && isPastDueUser"
+          :href="getStripeBillingPortalAPI"
+        )
+        | {{ $t('SettingsCivicPage.editPaymentMethod') }}
+        | /
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
-          v-if="getUserShouldRenewCivic"
+          v-if="getUserShouldRenewCivic && !isPastDueUser"
           :to="{ name: 'civic-register-stripe', query: { civic_liker_version: '1', utm_source: 'settings-civic' } }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
@@ -120,6 +126,7 @@ export default {
   data() {
     return {
       isFetchedSubscriptionInfo: false,
+      isPastDueUser: false,
     };
   },
   computed: {
@@ -215,10 +222,14 @@ export default {
   methods: {
     ...mapActions(['fetchUserSubscriptionInfo', 'resumeCanceledSubscription']),
 
-    async fetchSubscriptionInfo() {
+    async fetchSubscriptionInfo({ force = false } = {}) {
       if (this.getUserIsCivicLikerPaid) {
         try {
-          const { willCancel } = await this.fetchUserSubscriptionInfo();
+          if (force || !this.getUserSubscriptionInfo) {
+            await this.fetchUserSubscriptionInfo();
+          }
+          const { willCancel, status } = this.getUserSubscriptionInfo;
+          this.isPastDueUser = status === 'past_due';
           if (willCancel && this.$route.name === 'settings-civic-unsubscribe') {
             this.$router.replace({ name: 'settings-civic' });
           }
