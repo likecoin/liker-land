@@ -37,6 +37,10 @@
                 )
                   | {{ $t('SettingsCivicPage.editPaymentMethod') }}
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
+                v-if=isPastDueUser
+                .settings-civic-page__billing-summary-row-value.text-danger
+                  | {{ $t('SettingsCivicPage.paymentExpired') }}
+              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
                 label.settings-civic-page__billing-summary-row-label
                   | {{ $t(`SettingsCivicPage.billingSummary.${getUserSubscriptionInfo.willCancel ? 'cancel' : 'nextBilling'}Date`) }}
                 .settings-civic-page__billing-summary-row-value
@@ -49,7 +53,7 @@
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
-          v-else-if="getUserShouldRenewCivic"
+          v-else-if="getUserShouldRenewCivic && !isPastDueUser"
           :to="{ name: 'civic-register-stripe', query: { civic_liker_version: '1', utm_source: 'settings-civic' } }"
         )
           | {{ $t('SettingsCivicPage.resumeSubscription') }}
@@ -73,12 +77,6 @@
               )
                 | {{ buttonText }}
         br
-        a.btn.btn--plain.btn--auto-size.text-12(
-          v-if="getUserShouldRenewCivic && isPastDueUser"
-          :href="getStripeBillingPortalAPI"
-        )
-        | {{ $t('SettingsCivicPage.editPaymentMethod') }}
-        | /
         NuxtLink.btn.btn--plain.btn--auto-size.text-12(
           v-if="getUserShouldRenewCivic && !isPastDueUser"
           :to="{ name: 'civic-register-stripe', query: { civic_liker_version: '1', utm_source: 'settings-civic' } }"
@@ -223,7 +221,7 @@ export default {
     ...mapActions(['fetchUserSubscriptionInfo', 'resumeCanceledSubscription']),
 
     async fetchSubscriptionInfo({ force = false } = {}) {
-      if (this.getUserIsCivicLikerPaid) {
+      if (this.getUserIsCivicLikerPaid || this.getUserShouldRenewCivic) {
         try {
           if (force || !this.getUserSubscriptionInfo) {
             await this.fetchUserSubscriptionInfo();

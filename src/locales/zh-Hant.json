@@ -441,6 +441,7 @@
       "cancelDate": "訂閱結束日期",
       "nextBillingDate": "下次付款日期"
     },
+    "paymentExpired": "最近一次訂閱付款失敗，請修改你的付款方法",
     "editPaymentMethod": "修改",
     "resumeSubscription": "延續《讚賞公民》訂閱",
     "cancelSubscription": "取消《讚賞公民》訂閱"

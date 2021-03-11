@@ -422,6 +422,7 @@
       "cancelDate": "Will cancel at",
       "nextBillingDate": "Next billing date"
     },
+    "paymentExpired": "Payment failed for your recent subscription payment. Please update your billing method",
     "editPaymentMethod": "Edit",
     "resumeSubscription": "Resume Civic Liker subscription",
     "cancelSubscription": "Cancel Civic Liker subscription"
