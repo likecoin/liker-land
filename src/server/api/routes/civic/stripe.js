@@ -186,7 +186,8 @@ router.get('/civic/payment/stripe/billing', async (req, res, next) => {
         return;
       }
     }
-    res.sendStatus(404);
+    // redirect to civic settings page if customer not exists
+    res.redirect(`${EXTERNAL_URL}/settings/civic`);
   } catch (err) {
     next(err);
   }
