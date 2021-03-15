@@ -8,7 +8,7 @@
       .relative.w-full.mx-auto(
         :style="{ maxWidth: '800px' }"
       )
-        div(:style="{ paddingTop: '52.25%' }")
+        div(:style="{ paddingTop: '30%' }")
         img.absolute.pin.object-cover(:src="src" :alt="alt")
 </template>
 
