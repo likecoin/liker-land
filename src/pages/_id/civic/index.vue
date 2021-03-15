@@ -37,7 +37,7 @@ export default {
     SiteNavBar,
   },
   mixins: [
-    experimentMixin('isExperimenting', 'id-civic', 'variant'),
+    experimentMixin('isExperimenting', 'id', 'variant'),
     experimentMixin(
       'isExperimentingPitchingBanner',
       'standnews-civic',

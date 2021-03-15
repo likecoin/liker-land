@@ -1,4 +1,4 @@
-import idCivic from './_id/civic';
+import id from './_id';
 import standnewsCivic from './standnews/civic';
 
-export default [idCivic, standnewsCivic];
+export default [id, standnewsCivic];
