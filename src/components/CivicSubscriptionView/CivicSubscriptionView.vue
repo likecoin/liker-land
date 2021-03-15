@@ -47,20 +47,13 @@
 
       <div class="mx-40 phone:mx-0">
         <CivicLikerPitchingView
-          v-if="isExperimenting"
           :creator-display-name="displayName"
           :creator-avatar-url="avatarUrl"
           :is-creator-civic-liker="isCivicLiker"
           :creator-pitch="pitch || $t('CreatorPitch.Default')"
           :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
           :is-supporter-civic-liker="getUserIsCivicLiker"
-        />
-        <CivicLikerSupportLikerView
-          v-else
-          :avatar-url="avatarUrl"
-          :display-name="displayName"
-          :is-civic-liker="isCivicLiker"
-          :subtitle="pitch || $t('CreatorPitch.Default')"
+          :is-experimenting="isExperimenting"
         />
 
         <hr class="my-24 border-t-1 border-gray-d8">
@@ -71,7 +64,7 @@
           </div>
           <ul
             class="flex list-reset w-full mt-4"
-            :style="{ minHeight: isExperimenting ? 144 : 160 }"
+            :style="{ minHeight: 144 }"
           >
             <li
               v-for="option in quantityOptions"
@@ -83,7 +76,6 @@
                 :price="option.value * dollar"
                 :price-emoji="getPriceEmoji(option.value * dollar)"
                 :is-selected="selectedQuantity === option.value"
-                :is-experimenting="isExperimenting"
                 @click="selectedQuantity = option.value"
               />
             </li>
@@ -103,7 +95,7 @@
         <ul class="m-0 p-0 list-style-none">
           <li class="flex items-center">
             <img
-              :class="isExperimenting ? 'w-56' : 'w-80'"
+              class="w-56"
               src="~/assets/images/civic-v2/support/support-group.png"
             >
             <div class="flex-grow ml-24 phone:ml-12">
@@ -117,7 +109,7 @@
           </li>
           <li class="flex items-center mt-24">
             <img
-              :class="isExperimenting ? 'w-56' : 'w-80'"
+              class="w-56"
               src="~/assets/images/civic-v2/support/follow-me.png"
             >
             <div class="flex-grow ml-24 phone:ml-12">
@@ -131,7 +123,7 @@
           </li>
           <li class="flex items-center mt-24">
             <img
-              :class="isExperimenting ? 'w-56' : 'w-80'"
+              class="w-56"
               src="~/assets/images/civic-v2/support/contribute.png"
             >
             <div class="flex-grow ml-24 phone:ml-12">
@@ -222,7 +214,6 @@
       <hr class="my-16 border-t-1 border-gray-d8">
 
       <CivicLikerPitchingView
-        v-if="isExperimenting"
         class="my-24"
         :creator-display-name="displayName"
         :creator-avatar-url="avatarUrl"
@@ -230,15 +221,7 @@
         :creator-pitch="pitch || $t('CreatorPitch.Default')"
         :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
         :is-supporter-civic-liker="getUserIsCivicLiker"
-      />
-
-      <CivicLikerSupportLikerView
-        v-else
-        :class="{ 'my-24 ml-8': isCivicLiker }"
-        :avatar-url="avatarUrl"
-        :display-name="displayName"
-        :is-civic-liker="isCivicLiker"
-        :subtitle="pitch || $t('CreatorPitch.Default')"
+        :is-experimenting="isExperimenting"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">
