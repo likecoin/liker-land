@@ -50,7 +50,7 @@
       "body": "<p>除了支持喜歡的創作者，讚賞公民還享有參予社群決策、獲取特別收錄內容、收取偶像個人通訊、參與線下活動等一連串福利，利人利己。</p>"
     }
   ],
-  "CivicLikerPitchingView.Title": "每月贊助“{name}”",
+  "CivicLikerPitchingView.Title": "按月贊助{name}",
   "CivicLikerPitchingView.Subtitle": "成為讚賞公民",
   "CivicLikerTrialPage": {
     "title": "讚賞公民免費體驗計劃",
@@ -513,7 +513,7 @@
     "Benefits": [
       {
         "Title": "成為作者後援",
-        "Description": "持續支持，鼓勵我專注創作出更優秀的作品。"
+        "Description": "持續支持作者專注創作。"
       },
       {
         "Title": "追蹤作者更新",
