@@ -1,5 +1,41 @@
 <template>
+  <NuxtLink
+    v-if="to"
+    class="card"
+    :to="to"
+  >
+    <img
+      v-if="imageSrc"
+      class="card__media card__media--image"
+      :src="imageSrc"
+      @load="$emit('image-loaded')"
+    >
+    <div class="card__body">
+      <slot name="pre-body" />
+      <h1
+        v-if="title"
+        class="card__title"
+      >{{ title }}</h1>
+      <p
+        v-if="description"
+        class="card__description"
+      >{{ description }}</p>
+      <slot />
+    </div>
+    <footer
+      v-if="$slots['footer-left'] || $slots['footer-right']"
+      class="card__footer"
+    >
+      <div class="card__footer-left">
+        <slot name="footer-left" />
+      </div>
+      <div class="card__footer-right">
+        <slot name="footer-right" />
+      </div>
+    </footer>
+  </NuxtLink>
   <a
+    v-else
     class="card"
     :href="href"
     target="_blank"
@@ -12,6 +48,7 @@
       @load="$emit('image-loaded')"
     >
     <div class="card__body">
+      <slot name="pre-body" />
       <h1
         v-if="title"
         class="card__title"
@@ -43,6 +80,10 @@ export default {
     href: {
       type: String,
       default: '#',
+    },
+    to: {
+      type: Object,
+      default: null,
     },
     imageSrc: {
       type: String,

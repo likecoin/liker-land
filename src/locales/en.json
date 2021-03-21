@@ -134,6 +134,27 @@
       "Gift": "Get limited edition gifts, join offline events"
     }
   },
+
+  "CLP.header.displayname": "Become a Civic Liker to support",
+  "CLP.button.subscribe": "Subscribe now",
+
+  "CLP.contents.title": "Keep updated, Keep supporting",
+  "CLP.contents.description": "You can follow the creator's latest updates, likes and share creative works in Liker Land. Your monthly support keep the creator focused.",
+  "CLP.contents.more": "more works",
+
+  "CLP.betterWorld.title": "For a better world",
+  "CLP.betterWorld.description": "Civic Likers are honourable for the contribution. Their \"like\" is more than just a thumb but rewarding and affirming good content. Support 7,000+ creators in this ecosystem now, many a little makes a mickle.",
+
+  "CLP.effective.title": "Your Likes cause extra bonus to the creators",
+  "CLP.effective.description": "Besides monthly donation, Civic Likers are also empowered to reward \"Creators Fund\" to any creators by liking their works. You donation sum is multiplied.",
+  "CLP.effective.item1.title": "Monthly Subscription",
+  "CLP.effective.item1.description": "Civic Liker's monthly subscription fee transfers directly to designated creator's wallet.",
+  "CLP.effective.item2.title": "Creators Fund",
+  "CLP.effective.item2.description": "Distribute creators fund to creators everyday by liking.",
+
+  "CLP.suggestedCreators.title": "Keep updated, Keep supporting",
+  "CLP.suggestedCreators.description": "You can subscribe creator, likes and share creative works in Liker Land. Your monthly support keep the creator focused.",
+
   "CollapsibleView": {
     "less": "Less",
     "more": "More"

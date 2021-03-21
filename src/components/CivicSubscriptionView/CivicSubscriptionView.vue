@@ -704,8 +704,10 @@ export default {
       } else {
         this.$router.push({
           name: 'id-civic-register',
+          params: {
+            id: this.authorId,
+          },
           query: {
-            from: this.authorId,
             quantity: this.selectedQuantity,
             utm_source: this.$route.query.utm_source,
             utm_medium: this.$route.query.utm_medium,

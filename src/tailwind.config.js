@@ -531,6 +531,8 @@ module.exports = {
 
   maxWidth: {
     'phone-min': '320px',
+    '300': '300px',
+    '480': '480px',
     phone: '528px',
     desktop: '1024px',
     full: '100%',

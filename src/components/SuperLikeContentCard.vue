@@ -9,13 +9,27 @@
       Placeholder.h-16.mt-8(class="w-2/5")
     Card(
       v-else
+      :to="to"
       :href="href"
       :title="internalTitle"
       :description="internalDescription"
-      :image-src="internalCoverSrc"
+      :image-src="preset !== 'creator' ? internalCoverSrc : ''"
       @image-loaded="$emit('image-loaded')"
     )
-      template(#footer-left)
+      template(
+        v-if="preset === 'creator'"
+        #pre-body
+      )
+        Identity.mb-16(
+          v-if="author && author.user"
+          :avatar-url="author.avatar"
+          :is-avatar-outlined="author.isSubscribedCivicLiker || author.isCivicLikerTrial"
+          :display-name="author.displayName || author.user"
+        )
+      template(
+        v-else
+        #footer-left
+      )
         NuxtLink(
           v-if="preset === 'default' && author && author.user"
           :to="{ name: 'id', params: { id: author.user } }"
@@ -30,7 +44,10 @@
         )
           | {{ formatDate(timestamp) }}
 
-      template(#footer-right)
+      template(
+        v-if="preset !== 'creator'"
+        #footer-right
+      )
         Button(
           :preset="getIsInBookmark(referrer) ? 'primary' : 'secondary'"
           @click.prevent="onClickBookmark"
@@ -130,11 +147,22 @@ export default {
       return !this.internalTitle;
     },
     href() {
+      if (this.preset === 'creator') {
+        return undefined;
+      }
       if (this.superLikeShortId) {
         return getSuperLikeRedirectLink(this.superLikeShortId);
       }
       if (this.superLikeId) return getSuperLikeRedirectLink(this.superLikeId);
       return this.internalUrl;
+    },
+    to() {
+      return this.preset === 'creator'
+        ? {
+            name: 'civic-from',
+            params: { from: this.author && this.author.user },
+          }
+        : undefined;
     },
   },
 
