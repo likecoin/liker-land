@@ -62,24 +62,11 @@
           <div class="text-16 text-center text-like-green font-600">
             {{ $t('UpdateSupportQuantity.Title') }}
           </div>
-          <ul
-            class="flex list-reset w-full mt-4"
-            :style="{ minHeight: 144 }"
-          >
-            <li
-              v-for="option in quantityOptions"
-              :key="option.value"
-              class="flex-1 p-8"
-            >
-              <CivicQuantitySelectItem
-                class="block w-full h-full"
-                :price="option.value * dollar"
-                :price-emoji="getPriceEmoji(option.value * dollar)"
-                :is-selected="selectedQuantity === option.value"
-                @click="selectedQuantity = option.value"
-              />
-            </li>
-          </ul>
+          <CivicQuantitySelect
+            v-model="selectedQuantity"
+            :currency="currency"
+            :dollar="dollar"
+          />
         </div>
         <div class="mx-40 mt-16">
           <Button
@@ -431,7 +418,7 @@ import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/Civi
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
 import CivicLikerPitchingBanner from '~/components/CivicLikerPitchingBanner';
 import CivicLikerPitchingView from '~/components/CivicLikerPitchingView/CivicLikerPitchingView';
-import CivicQuantitySelectItem from '~/components/CivicQuantitySelect/CivicQuantitySelectItem';
+import CivicQuantitySelect from '~/components/CivicQuantitySelect/CivicQuantitySelect';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
 import EyeIcon from '~/components/Icon/Eye';
 import Identity from '~/components/Identity/Identity';
@@ -454,7 +441,7 @@ export default {
     CivicLikerSupportAmountView,
     CivicLikerPitchingBanner,
     CivicLikerPitchingView,
-    CivicQuantitySelectItem,
+    CivicQuantitySelect,
     CL1VsCL2Link,
     Cross: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
