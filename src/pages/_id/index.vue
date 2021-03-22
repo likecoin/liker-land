@@ -91,35 +91,13 @@
             )
 
         .user-portfolio-page__grid
-          ClientOnly(v-if="isLoading || activeItems.length > 0")
-            Stack(
-              :key="tab"
-              ref="stack"
-              :column-min-width="288"
-              :column-max-width="300"
-              :gutter-width="16"
-              :gutter-height="24"
-            )
-              template(v-if="isLoading")
-                StackItem(v-for="i in 10" :key="`${i}`")
-                  Card
-                    Placeholder.h-16(:class="`w-${i % 3 + 2}/5`")
-                    Placeholder.h-16.mt-12.w-full
-                    Placeholder.h-16.mt-8.w-full(v-if="i % 2")
-                    Placeholder.h-16.mt-8.w-full(v-if="i % 3")
-                    Placeholder.h-16.mt-8(:class="`w-${i % 3 + 1}/5`")
-              template(v-else)
-                StackItem(v-for="(item, i) in activeItems" :key="item.superLikeID")
-                  SuperLikeContentCard(
-                    :preset="tab === 'works' ? 'work' : 'default'"
-                    :referrer="item.referrer"
-                    :author-id="item.user"
-                    :super-like-id="item.superLikeID"
-                    :super-like-short-id="item.superLikeShortID"
-                    :timestamp="item.ts"
-                    @fetched="updateLayout"
-                    @image-loaded="updateLayout"
-                  )
+          SuperLikeContentGrid(
+            v-if="isLoading || activeItems.length > 0"
+            :key="tab"
+            :preset="tab === 'works' ? 'work' : 'default'"
+            :contents="activeItems"
+            :is-loading="isLoading"
+          )
           .p-64.text-center(v-else)
             .text-gray-c.text-36.font-600 {{ $t('PortfolioPage.EmptyLabel') }}
             i18n.mt-64.text-center.text-gray-9b.font-300(
@@ -177,13 +155,11 @@ import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges'
 import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
-import Card from '~/components/Card/Card';
 import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
 import Collapse from '~/components/Collapse/Collapse';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
-import Placeholder from '~/components/Placeholder/Placeholder';
-import SuperLikeContentCard from '~/components/SuperLikeContentCard';
+import SuperLikeContentGrid from '~/components/SuperLikeContentGrid';
 import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
@@ -210,13 +186,11 @@ export default {
     BaseDialog,
     Button,
     ButtonGroup,
-    Card,
     CivicLikerWelcomeView,
     Collapse,
     Identity,
     PageHeader,
-    Placeholder,
-    SuperLikeContentCard,
+    SuperLikeContentGrid,
     SiteNavBar,
   },
   mixins: [CrispMixinFactory({ isBootAtMounted: false })],
@@ -423,11 +397,6 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
         this.itemsState = 'error';
-      }
-    },
-    updateLayout() {
-      if (this.$refs.stack) {
-        this.$refs.stack.reflow();
       }
     },
     onScroll() {
