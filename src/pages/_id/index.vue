@@ -76,7 +76,7 @@
         header.user-portfolio-page__top-nav
           +CTAButton.user-portfolio-page__top-cta(v-if="!isSelf")
 
-          nav.user-portfolio-page__tab-bar(v-if="items.length > 0 && works.length > 0")
+          nav.user-portfolio-page__tab-bar
             Button.user-portfolio-page__tab-bar-item(
               :class="{ 'user-portfolio-page__tab-bar-item--active': tab === 'works' }"
               :title="$t('PortfolioPage.Tab.Works')"
@@ -98,8 +98,9 @@
             :contents="activeItems"
             :is-loading="isLoading"
           )
-          .p-64.text-center(v-else)
-            .text-gray-c.text-36.font-600 {{ $t('PortfolioPage.EmptyLabel') }}
+          template(v-else)
+            .py-32.text-center.text-gray-c.text-16.font-600.bg-white.border.border-gray-e6.rounded-8
+              | {{ $t('PortfolioPage.EmptyLabel') }}
             i18n.mt-64.text-center.text-gray-9b.font-300(
               v-if="isSelf && !getUserIsCivicLiker"
               path="PortfolioPage.EmptyCTAForCreator.Description"
