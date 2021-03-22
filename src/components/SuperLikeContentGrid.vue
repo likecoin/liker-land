@@ -30,10 +30,14 @@
 </template>
 
 <script>
+import Card from './Card/PureCard';
+import Placeholder from './Placeholder/Placeholder';
 import SuperLikeContentCard from './SuperLikeContentCard';
 
 export default {
   components: {
+    Card,
+    Placeholder,
     SuperLikeContentCard,
   },
   props: {
