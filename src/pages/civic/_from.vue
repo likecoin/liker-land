@@ -24,11 +24,8 @@ import CivicLikerPageWithoutCreator from '~/components/CivicLikerPage/WithoutCre
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 
-import Spinner from '~/components/Spinner/Spinner';
-
 export default {
   components: {
-    Spinner,
     PageHeader,
     SiteNavBar,
     CivicLikerPageWithCreator,
