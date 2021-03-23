@@ -13,11 +13,11 @@
       :href="href"
       :title="internalTitle"
       :description="internalDescription"
-      :image-src="preset !== 'creator' ? internalCoverSrc : ''"
+      :image-src="!isPresetForCreator ? internalCoverSrc : ''"
       @image-loaded="$emit('image-loaded')"
     )
       template(
-        v-if="preset === 'creator'"
+        v-if="isPresetForCreator"
         #pre-body
       )
         Identity.mb-16(
@@ -45,7 +45,7 @@
           | {{ formatDate(timestamp) }}
 
       template(
-        v-if="preset !== 'creator'"
+        v-if="!isPresetForCreator"
         #footer-right
       )
         Button(
@@ -146,8 +146,11 @@ export default {
     shouldFetchArticle() {
       return !this.internalTitle;
     },
+    isPresetForCreator() {
+      return this.preset === 'creator';
+    },
     href() {
-      if (this.preset === 'creator') {
+      if (this.isPresetForCreator) {
         return undefined;
       }
       if (this.superLikeShortId) {
@@ -157,7 +160,7 @@ export default {
       return this.internalUrl;
     },
     to() {
-      return this.preset === 'creator'
+      return this.isPresetForCreator
         ? {
             name: 'civic-from',
             params: { from: this.author && this.author.user },
