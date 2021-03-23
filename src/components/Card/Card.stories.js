@@ -4,7 +4,7 @@ import Placeholder from '../Placeholder/Placeholder';
 
 import BookmarkIcon from '../Icon/BookmarkOutlined';
 
-import Card from './Card';
+import Card from './PureCard';
 
 const items = [
   {

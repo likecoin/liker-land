@@ -42,3 +42,5 @@ export const DEFAULT_CL_SUPPORTER =
   process.env.DEFAULT_CL_SUPPORTER || 'foundation';
 
 export const CIVIC_LIKER_UNIT_PRICE = 5;
+
+export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';

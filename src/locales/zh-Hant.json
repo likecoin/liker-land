@@ -134,6 +134,27 @@
       "gift": "獲取實體小禮品，免費參與線下活動"
     }
   },
+
+  "CLP.header.displayname": "成為讚賞公民，支持",
+  "CLP.button.subscribe": "立即訂閱",
+
+  "CLP.contents.title": "追蹤作者動態，持續支持創作",
+  "CLP.contents.description": "你可在 Liker Land 追蹤 {name} 的作品，按讚鼓勵他，分享好文。你的持續支援能令 {name} 專注創作。",
+  "CLP.contents.more": "更多內容",
+
+  "CLP.betterWorld.title": "共創一個生態",
+  "CLP.betterWorld.description": "每位讚賞公民的付出，都在貢獻創作生態。按讚的意義不只令作者獲得創作基金的奬勵，同時也是一份肯定和關注。目前已有 7,000 多名作者加入了讚賞公民計劃，讓每位的一點一滴匯聚成為涓流，滋養出更健康的創作生態吧！",
+
+  "CLP.suggestedCreators.title": "追蹤作者動態，持續支持創作",
+  "CLP.suggestedCreators.description": "你可在 Liker Land 追蹤作者，按讚鼓勵他，分享好文。你的持續支援能令作者專注創作。",
+
+  "CLP.effective.title": "按讚鼓勵作者，捐款效益倍增",
+  "CLP.effective.description": "成為讚賞公民後，作者不單獲得你的每月贊助，更能因你為他的作品按讚獲得「創作基金」的額外奬勵。你也可為其他作者按讚，回饋更多優秀作者。",
+  "CLP.effective.item1.title": "月費贊助",
+  "CLP.effective.item1.description": "讚賞公民的月費直接支持指定作者。",
+  "CLP.effective.item2.title": "創作基金",
+  "CLP.effective.item2.description": "透過按讚，分配每天發放的創作基金予優秀作者。",
+
   "CivicSettingsV1": {
     "WillCancel": "你的讚賞公民會籍將繼續生效至 {date}。你可現在續訂原有計劃，亦可待會籍到期後重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
     "GracePeriod": "你可現在續訂原有計劃。如欲轉為以新版本的讚賞公民 2.0 支持作者，請使用作者的贊助連結重新訂閱（格式：https://liker.land/作者的LikerID），也可經由作者的 LikeCoin button 訂閱。"

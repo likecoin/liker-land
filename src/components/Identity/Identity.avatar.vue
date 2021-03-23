@@ -6,7 +6,7 @@
     <div>
       <img
         class="avatar__image"
-        :src="url || 'https://static.like.co/likecoin_de-portrait.jpg'"
+        :src="url"
         :style="imageStyle"
       >
       <div
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { DEFAULT_AVATAR } from '../../constant';
+
 export default {
   name: 'IdentityAvatar',
   props: {
@@ -44,7 +46,7 @@ export default {
     },
     url: {
       type: String,
-      default: '',
+      default: DEFAULT_AVATAR,
     },
     isOutlined: {
       type: Boolean,
