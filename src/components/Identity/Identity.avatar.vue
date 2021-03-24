@@ -6,7 +6,7 @@
     <div>
       <img
         class="avatar__image"
-        :src="url"
+        :src="imageSrc"
         :style="imageStyle"
       >
       <div
@@ -65,6 +65,9 @@ export default {
           avatar__disabled: this.isDisabled,
         },
       ];
+    },
+    imageSrc() {
+      return this.url || DEFAULT_AVATAR;
     },
     imageStyle() {
       const borderWidth = `${this.size * 0.05}px`;
