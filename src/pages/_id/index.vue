@@ -255,22 +255,10 @@ export default {
       return this.supportingAmount > 0;
     },
     ctaToRoute() {
-      if (this.getUserIsCivicLikerV2) {
-        if (this.isSupportingCreator) {
-          return undefined;
-        }
-        return {
-          name: 'id-civic',
-          params: { id: this.creatorLikerID },
-          query: { utm_source: 'portfolio' },
-        };
-      }
       return {
-        name: 'civic',
-        query: {
-          from: this.creatorLikerID,
-          utm_source: 'portfolio',
-        },
+        name: 'id-civic',
+        params: { id: this.creatorLikerID },
+        query: { utm_source: 'portfolio' },
       };
     },
     ctaButtonProps() {
