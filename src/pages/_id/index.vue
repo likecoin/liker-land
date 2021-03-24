@@ -255,6 +255,9 @@ export default {
       return this.supportingAmount > 0;
     },
     ctaToRoute() {
+      if (this.isSupportingCreator) {
+        return undefined;
+      }
       return {
         name: 'id-civic',
         params: { id: this.creatorLikerID },
