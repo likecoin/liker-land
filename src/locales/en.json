@@ -178,14 +178,13 @@
         "Content": "Install {WordPressPlugin} to add LikeCoin button to all articles.  Unlike advertising banners, LikeCoin button delivers the best reading experience together with the author's personal brand.",
         "WordPress": "WordPress Plugin"
       },
-      "ProvideLikerID": "Bloggers can provide Liker ID to partnered media such as {InMedia}, {Standnews} or {HKCnews} to install LikeCoin button to their articles.",
+      "ProvideLikerID": "Bloggers can provide Liker ID to partnered media such as {InMedia} or {Standnews} to install LikeCoin button to their articles.",
       "PlatformPlugin": "Can add LikeCoin button With third-party plugin on {Pixnet}; Using <iframe> on {blogger} or any other self-hosted websites."
     },
     "LikerIDPlaceholer": "<Your Liker ID>",
     "GuideLinkBase": "https://docs.like.co/user-guide/content-creators",
     "GuideLink": {
       "Blogger": "@:CreatorsPage.GuideLinkBase/content-platforms/blogspot",
-      "HKCNews": "@:CreatorsPage.GuideLinkBase",
       "InMedia": "@:CreatorsPage.GuideLinkBase",
       "Matters": "@:CreatorsPage.GuideLinkBase/content-platforms/matters",
       "Medium": "@:CreatorsPage.GuideLinkBase/content-platforms/medium",
@@ -329,7 +328,6 @@
   },
   "Glossary": {
     "Blogger": "Blogger",
-    "HKCnews": "Hong Kong Citizen News",
     "InMedia": "Hong Kong In-media",
     "Matters": "Matters",
     "Medium": "Medium",

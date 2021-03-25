@@ -182,14 +182,13 @@
         "Content": "安裝 {WordPressPlugin}，所有部落格文章自動加上 LikeCoin button。LikeCoin button 突出創作者的品牌，跟一般的廣告橫幅完全不同，提供最佳的閱讀體驗。",
         "WordPress": "WordPress 外掛"
       },
-      "ProvideLikerID": "媒體特約作者，把 Liker ID 提供給{InMedia}、{Standnews}或{HKCnews}等合作平台，即能為文章安裝 LikeCoin button。",
+      "ProvideLikerID": "媒體特約作者，把 Liker ID 提供給{InMedia}或{Standnews}等合作平台，即能為文章安裝 LikeCoin button。",
       "PlatformPlugin": "用社群自行開發的外掛，在痞客邦 {Pixnet} 上加入 LikeCoin button；也可以 <iframe> 的方式在 {Blogger} 或其他自建網站上加入 LikeCoin button"
     },
     "LikerIDPlaceholer": "<你的 Liker ID>",
     "GuideLinkBase": "https://docs.like.co/v/zh/user-guide/creator",
     "GuideLink": {
       "Blogger": "@:CreatorsPage.GuideLinkBase/blogging-platforms/blogspot",
-      "HKCNews": "@:CreatorsPage.GuideLinkBase",
       "InMedia": "@:CreatorsPage.GuideLinkBase",
       "Matters": "@:CreatorsPage.GuideLinkBase/matters",
       "Medium": "@:CreatorsPage.GuideLinkBase/blogging-platforms#medium",
@@ -331,7 +330,6 @@
   },
   "Glossary": {
     "Blogger": "Blogger",
-    "HKCnews": "眾新聞",
     "InMedia": "香港獨立媒體網",
     "Matters": "Matters",
     "Medium": "Medium",

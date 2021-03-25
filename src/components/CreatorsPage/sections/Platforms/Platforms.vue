@@ -65,11 +65,6 @@ export default {
           alt: 'Standnews',
         },
         {
-          id: 'hkcnews',
-          type: 'provide-liker-id',
-          alt: 'HKCNews',
-        },
-        {
           id: 'medium',
           type: 'embedly',
           alt: 'Medium',

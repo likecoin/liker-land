@@ -61,7 +61,6 @@
         +PlatformSelectGridItem("#wordpress", "WordPress"): WordPressLogo
         +PlatformSelectGridItem("#provide-liker-id", "InMedia"): InMediaLogo
         +PlatformSelectGridItem("#provide-liker-id", "Standnews"): StandnewsLogo
-        +PlatformSelectGridItem("#provide-liker-id", "HKCnews"): HKCnewsLogo
         +PlatformSelectGridItem("#embedly", "Medium"): MediumLogo
         +PlatformSelectGridItem("#config-liker-id", "Timelog"): TimelogLogo
         +PlatformSelectGridItem("#plugin", "Pixnet"): PixnetLogo(width="120")
@@ -103,12 +102,9 @@
             +LogoWrapper('InMedia')(href="https://www.inmediahk.net/"): InMediaLogo
             +LogoSeparator
             +LogoWrapper('Standnews')(href="https://www.thestandnews.com/"): StandnewsLogo
-            +LogoSeparator
-            +LogoWrapper('HKCnews')(href="https://www.hkcnews.com/"): HKCnewsLogo
           +PlatformDescription('ProvideLikerID')
             +PlatformDescriptionLink('InMedia')(href="https://www.inmediahk.net/")
             +PlatformDescriptionLink('Standnews')(href="https://www.thestandnews.com/")
-            +PlatformDescriptionLink('HKCnews')(href="https://www.hkcnews.com/")
 
         +PlatformListItem('embedly')
           .creators-page__platform-list-item-logos
@@ -156,8 +152,6 @@ export default {
       import(/* webpackChunkName: "svg-creator" */ './logos/inmedia.svg'),
     StandnewsLogo: () =>
       import(/* webpackChunkName: "svg-creator" */ './logos/standnews.svg'),
-    HKCnewsLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/hkcnews.svg'),
     MediumLogo: () =>
       import(/* webpackChunkName: "svg-creator" */ './logos/medium.svg'),
     BloggerLogo: () =>
