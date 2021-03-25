@@ -34,7 +34,7 @@
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "lodash.throttle": "^4.1.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "nuxt-start": "^2.11.0",
     "nuxt-svg-loader": "^1.2.0",
     "portal-vue": "^1.5.1",
