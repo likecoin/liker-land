@@ -98,20 +98,12 @@
             :contents="activeItems"
             :is-loading="isLoading"
           )
-          template(v-else)
-            .py-32.text-center.text-gray-c.text-16.font-600.bg-white.border.border-gray-e6.rounded-8
-              | {{ $t('PortfolioPage.EmptyLabel') }}
-            i18n.mt-64.text-center.text-gray-9b.font-300(
-              v-if="isSelf && !getUserIsCivicLiker"
-              path="PortfolioPage.EmptyCTAForCreator.Description"
-              tag="p"
-            )
-              NuxtLink.text-like-green(
-                class="hover:underline"
-                :to="{ name: 'civic' }"
-                place="link"
-              )
-                | {{ $t('PortfolioPage.EmptyCTAForCreator.Link') }}
+          PortfolioEmptyView.mb-48(
+            v-else
+            :preset="tab"
+            :is-civic-liker="getUserIsCivicLiker"
+            :is-show-tips-for-creator="isSelf"
+          )
 
     BaseDialog(
       v-if="!isSelf"
@@ -152,18 +144,19 @@ import { getPriceEmoji } from '~/util/civic';
 import { getLikeCoURL } from '~/util/links';
 import { checkUserNameValid } from '~/util/user';
 
+import { CrispMixinFactory } from '~/mixins/crisp';
+
 import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
 import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import ButtonGroup from '~/components/Button/ButtonGroup';
 import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
 import Collapse from '~/components/Collapse/Collapse';
+import PortfolioEmptyView from '~/components/PortfolioEmptyView/PortfolioEmptyView';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
 import SuperLikeContentGrid from '~/components/SuperLikeContentGrid';
 import SiteNavBar from '~/components/SiteNavBar';
-
-import { CrispMixinFactory } from '~/mixins/crisp';
 
 const ITEM_PER_FETCH = 20;
 const LOADING_STATES = ['idle', 'pending'];
@@ -191,6 +184,7 @@ export default {
     Collapse,
     Identity,
     PageHeader,
+    PortfolioEmptyView,
     SuperLikeContentGrid,
     SiteNavBar,
   },

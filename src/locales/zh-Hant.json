@@ -433,6 +433,15 @@
   "RedirectPage": {
     "title": "重新轉向"
   },
+  "PortfolioEmptyView.Works.Label": "暫未分享作品",
+  "PortfolioEmptyView.Works.Title": "使用 Super Like，在此個人主頁分享自己的作品",
+  "PortfolioEmptyView.Works.Step1": "{button}，獲得每天兩次 Super Like 的機會",
+  "PortfolioEmptyView.Works.Step2": "在自己文章中的 LikeCoin button 點一下星星，Super Liked！",
+  "PortfolioEmptyView.SuperLiked.Label": "分享最愛的內容",
+  "PortfolioEmptyView.SuperLiked.Title": "Super Like 最愛的內容，跟追蹤者分享你的閱讀品味，同時回饋作者。",
+  "PortfolioEmptyView.SuperLiked.Step1": "{button}，獲得每天兩次 Super Like 的機會",
+  "PortfolioEmptyView.SuperLiked.Step2": "在任何作品中的 LikeCoin button 點一下星星，Super Liked！",
+  "PortfolioEmptyView.Button": "成為讚賞公民",
   "PortfolioPage": {
     "About": "關於",
     "CivicLikerSince": "自 {date} 成為讚賞公民",
@@ -444,11 +453,6 @@
     "Tab": {
       "Works": "作品",
       "SuperLikes": "已 Super Like 內容"
-    },
-    "EmptyLabel": "沒有作品",
-    "EmptyCTAForCreator": {
-      "Link": "成為讚賞公民",
-      "Description": "{link}，分享作品到自己的個人主頁"
     },
     "Og": {
       "Title": "{name} 的個人專頁"

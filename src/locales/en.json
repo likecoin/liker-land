@@ -414,6 +414,15 @@
   "RedirectPage": {
     "title": "Redirecting"
   },
+  "PortfolioEmptyView.Works.Label": "No sharing yet",
+  "PortfolioEmptyView.Works.Title": "Use \"Super Like\" to share your works here",
+  "PortfolioEmptyView.Works.Step1": "{button} to get 2 Super Likes daily",
+  "PortfolioEmptyView.Works.Step2": "Super Like by clicking the star button on your works",
+  "PortfolioEmptyView.SuperLiked.Label": "Share your favorite readings",
+  "PortfolioEmptyView.SuperLiked.Title": "Share your favorite readings to your followers by Super Like, reward the authors at the same time.",
+  "PortfolioEmptyView.SuperLiked.Step1": "{button} to get 2 Super Likes daily",
+  "PortfolioEmptyView.SuperLiked.Step2": "Super Like by clicking the star button on any content",
+  "PortfolioEmptyView.Button": "Become a Civic Liker ",
   "PortfolioPage": {
     "About": "About",
     "CivicLikerSince": "Became Civic Liker since {date}",
@@ -425,11 +434,6 @@
     "Tab": {
       "Works": "Works",
       "SuperLikes": "Super Likes"
-    },
-    "EmptyLabel": "No content",
-    "EmptyCTAForCreator": {
-      "Link": "Become a Civic Liker",
-      "Description": "{link} to share your content in your portfolio"
     },
     "Og": {
       "Title": "{name}'s Portfolio"
