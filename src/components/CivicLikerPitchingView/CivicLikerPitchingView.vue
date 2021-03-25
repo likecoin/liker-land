@@ -11,16 +11,15 @@
         :avatar-url="supporterAvatarUrl"
         :is-avatar-outlined="isSupporterCivicLiker"
       />
-      <ConvertAltGraph
-        v-if="isExperimenting"
+      <div
         class="flex-shrink mx-12 w-full"
-        :style="{ maxWidth: 140 }"
-      />
-      <ConvertGraph
-        v-else
-        class="flex-shrink mx-12 w-full"
-        :style="{ maxWidth: 140 }"
-      />
+        style="max-width: 140px"
+      >
+        <img
+          class="block w-full"
+          src="./convert.svg?inline"
+        >
+      </div>
       <div class="relative flex-no-shrink">
         <Identity
           :avatar-size="80"
@@ -49,15 +48,10 @@
 <script>
 import Identity from '../Identity/Identity';
 
-import ConvertGraph from './convert.svg';
-import ConvertAltGraph from './convert-alt.svg';
-
 export default {
   name: 'CivicLikerSupportLikerView',
   components: {
     Identity,
-    ConvertGraph,
-    ConvertAltGraph,
   },
   props: {
     isSupporterCivicLiker: {
@@ -83,10 +77,6 @@ export default {
     creatorPitch: {
       type: String,
       default: '',
-    },
-    isExperimenting: {
-      type: Boolean,
-      default: false,
     },
   },
 };

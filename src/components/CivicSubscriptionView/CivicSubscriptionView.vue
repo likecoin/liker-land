@@ -5,18 +5,9 @@
     :is-show-backdrop="isShowBackdrop || state === 'loading'"
     :is-animated="true"
     :is-backdrop-opaque="isPreview"
-    :is-absolute="!shouldShowPitchingBanner"
     :content-container-class="['rounded-8 phone:rounded-none', { 'pointer-events-none select-none': !!isPreview }]"
-    :content-container-wrapper-class="{ '-mt-20 phone:mt-0': !!shouldShowPitchingBanner }"
     @click-outside="onClickBackdrop"
   >
-    <template v-if="shouldShowPitchingBanner" #backdrop>
-      <CivicLikerPitchingBanner
-        :src="banner"
-        :alt="pitch || $t('CreatorPitch.Default')"
-      />
-    </template>
-
     <div
       v-if="isPreview && state !== 'loading'"
       class="phone:relative fixed pin-t pin-l pin-r z-10"
@@ -53,7 +44,6 @@
           :creator-pitch="pitch || $t('CreatorPitch.Default')"
           :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
           :is-supporter-civic-liker="getUserIsCivicLiker"
-          :is-experimenting="isExperimenting"
         />
 
         <hr class="my-24 border-t-1 border-gray-d8">
@@ -208,7 +198,6 @@
         :creator-pitch="pitch || $t('CreatorPitch.Default')"
         :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
         :is-supporter-civic-liker="getUserIsCivicLiker"
-        :is-experimenting="isExperimenting"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">
@@ -416,7 +405,6 @@ import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
 import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
-import CivicLikerPitchingBanner from '~/components/CivicLikerPitchingBanner';
 import CivicLikerPitchingView from '~/components/CivicLikerPitchingView/CivicLikerPitchingView';
 import CivicQuantitySelect from '~/components/CivicQuantitySelect/CivicQuantitySelect';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
@@ -426,8 +414,6 @@ import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
 
 const STATES = ['new', 'select-quantity', 'confirm'];
-
-const pitchingBanner = require('~/assets/images/pitching-banners/standnews.jpg');
 
 export default {
   components: {
@@ -439,7 +425,6 @@ export default {
     Button,
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
-    CivicLikerPitchingBanner,
     CivicLikerPitchingView,
     CivicQuantitySelect,
     CL1VsCL2Link,
@@ -463,15 +448,7 @@ export default {
       type: String,
       default: '',
     },
-    isShowPitchingBanner: {
-      type: Boolean,
-      defualt: false,
-    },
     isPreview: {
-      type: Boolean,
-      default: false,
-    },
-    isExperimenting: {
       type: Boolean,
       default: false,
     },
@@ -486,7 +463,6 @@ export default {
       isCivicLiker: false,
       isShowUpgradeWarning: false,
       pitch: '',
-      banner: '',
     };
   },
   computed: {
@@ -565,9 +541,6 @@ export default {
       }
       return '';
     },
-    shouldShowPitchingBanner() {
-      return this.isShowPitchingBanner && this.banner;
-    },
   },
   watch: {
     authorId(authorId, prevAuthorId) {
@@ -621,8 +594,6 @@ export default {
         this.isCivicLiker =
           creatorData.isCivicLikerTrial || creatorData.isSubscribedCivicLiker;
         this.pitch = creatorData.creatorPitch;
-        // TODO: Get pitching banner from Liker's info
-        this.banner = pitchingBanner;
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
