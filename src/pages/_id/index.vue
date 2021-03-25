@@ -98,6 +98,11 @@
             :contents="activeItems"
             :is-loading="isLoading"
           )
+            template(v-if="isSelf" #append)
+              PortfolioEmptyTipsForCreator.rounded-8.border.border-gray-e6.p-32(
+                :preset="tab"
+                :is-civic-liker="getUserIsCivicLiker"
+              )
           PortfolioEmptyView.mb-48(
             v-else
             :preset="tab"
@@ -153,6 +158,7 @@ import ButtonGroup from '~/components/Button/ButtonGroup';
 import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
 import Collapse from '~/components/Collapse/Collapse';
 import PortfolioEmptyView from '~/components/PortfolioEmptyView/PortfolioEmptyView';
+import PortfolioEmptyTipsForCreator from '~/components/PortfolioEmptyView/PortfolioEmptyTipsForCreator';
 import Identity from '~/components/Identity/Identity';
 import PageHeader from '~/components/PageHeader';
 import SuperLikeContentGrid from '~/components/SuperLikeContentGrid';
@@ -185,6 +191,7 @@ export default {
     Identity,
     PageHeader,
     PortfolioEmptyView,
+    PortfolioEmptyTipsForCreator,
     SuperLikeContentGrid,
     SiteNavBar,
   },

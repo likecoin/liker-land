@@ -27,6 +27,8 @@
             @fetched="updateLayout"
             @image-loaded="updateLayout"
           )
+        StackItem(v-if="$slots.append")
+          slot(name="append")
 </template>
 
 <script>
