@@ -21,9 +21,7 @@ export const SUPERLIKE_BASE = IS_TESTNET
   ? 'https://s.rinkeby.like.co'
   : 'https://s.like.co';
 
-export const LIKE_CO_CLOUD_FN_BASE = `https://us-central1-civic-liker${
-  IS_TESTNET ? '-develop' : ''
-}.cloudfunctions.net`;
+export const LIKE_CO_THUMBNAIL_FN_BASE = 'https://static.like.co';
 
 export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET
   ? 'https://rinkeby.like.co/in/logout?is_popup=1'
