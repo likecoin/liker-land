@@ -1,9 +1,9 @@
 <template>
   <div class="card">
     <img
-      v-if="imageSrc"
+      v-if="resizedImageSrc"
       class="card__media card__media--image"
-      :src="imageSrc"
+      :src="resizedImageSrc"
       @load="$emit('image-loaded')"
     >
     <div class="card__body">
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { getImageResizeAPI } from '~/util/api';
+
 export default {
   name: 'Card',
   props: {
@@ -47,6 +49,12 @@ export default {
     description: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    resizedImageSrc() {
+      if (!this.imageSrc) return undefined;
+      return getImageResizeAPI(this.imageSrc, { width: 500 });
     },
   },
 };
