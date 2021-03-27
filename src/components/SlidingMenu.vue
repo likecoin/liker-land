@@ -9,25 +9,27 @@
           },
         ]"
       >
-        <NuxtLink
-          v-if="getUserId"
-          :to="{ name: 'id', params: { id: getUserId } }"
-          @click.native="toggleSlidingMenu(false)"
-        >
-          <Identity
-            :avatar-size="46"
-            :avatar-url="getUserInfo.avatar"
-            :display-name="getUserInfo.displayName"
-            :is-avatar-outlined="getUserCivicLikerHalo !== 'none'"
-            display-name-class="text-white ml-16"
-          />
-        </NuxtLink>
-        <a
-          v-else
-          class="btn btn--dark btn--block mx-0"
-          :href="getOAuthRegisterAPI"
-          @click="onClickLogEvent('Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
-        >{{ $t('signInOrSignUp') }}</a>
+        <ClientOnly>
+          <NuxtLink
+            v-if="getUserId"
+            :to="{ name: 'id', params: { id: getUserId } }"
+            @click.native="toggleSlidingMenu(false)"
+          >
+            <Identity
+              :avatar-size="46"
+              :avatar-url="getUserInfo.avatar"
+              :display-name="getUserInfo.displayName"
+              :is-avatar-outlined="getUserCivicLikerHalo !== 'none'"
+              display-name-class="text-white ml-16"
+            />
+          </NuxtLink>
+          <a
+            v-else
+            class="btn btn--dark btn--block mx-0"
+            :href="getOAuthRegisterAPI"
+            @click="onClickLogEvent('Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
+          >{{ $t('signInOrSignUp') }}</a>
+        </ClientOnly>
       </header>
 
       <div class="main-menu">

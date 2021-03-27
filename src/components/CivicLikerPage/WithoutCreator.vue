@@ -7,15 +7,16 @@
     +Separator
     EffectiveSection.mt-16
     +Separator
-    BetterWorldSection
+    BetterWorldSection(
+      :creators="creators"
+      :is-creators-clickable="true"
+    )
     +Separator
     SuggestedCreatorsSection(:contents="contents")
 
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-
 import Button from '../Button/Button';
 
 import BetterWorldSection from './sections/BetterWorldSection';
@@ -32,17 +33,15 @@ export default {
     FeatureImageSection,
     SuggestedCreatorsSection,
   },
-  computed: {
-    ...mapGetters(['getSuggestedArticles']),
-    contents() {
-      return this.getSuggestedArticles.slice(0, 6);
+  props: {
+    contents: {
+      type: Array,
+      default: () => [],
     },
-  },
-  mounted() {
-    this.fetchSuggestedArticles();
-  },
-  methods: {
-    ...mapActions(['fetchSuggestedArticles']),
+    creators: {
+      type: Array,
+      default: () => [],
+    },
   },
 };
 </script>

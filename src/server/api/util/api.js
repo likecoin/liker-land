@@ -127,6 +127,12 @@ const apiFetchUserSuperlike = (user, { limit, after, before, filter }) =>
   });
 const apiFetchSuggestedArticles = () =>
   axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
+const apiFetchPersonalSuggestedArticles = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKECOIN_API_BASE}/like/suggest/personal`, {
+      headers: { Authorization },
+    })
+  );
 const apiPostArticleForInfo = (url, req) =>
   sendAuthorizedRequest(req, Authorization =>
     axios.post(
@@ -292,6 +298,7 @@ module.exports = {
   apiFetchFollowedSuperLikes,
   apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
+  apiFetchPersonalSuggestedArticles,
   apiPostArticleForInfo,
   apiFetchArticleDetail,
   apiFetchBookmarks,

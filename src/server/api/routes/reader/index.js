@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
   apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
+  apiFetchPersonalSuggestedArticles,
   apiFetchLatestSuperLike,
   apiFetchFollowedUser,
   apiFetchFollowedSuperLikes,
@@ -99,6 +100,15 @@ router.get('/reader/works/suggest', async (req, res, next) => {
     }
     res.set('Cache-Control', 'public, max-age=600');
     res.json({ list });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/reader/works/suggest/personal', async (req, res, next) => {
+  try {
+    const { data } = await apiFetchPersonalSuggestedArticles(req);
+    res.json({ list: data.personal });
   } catch (err) {
     next(err);
   }
