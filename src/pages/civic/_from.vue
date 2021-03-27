@@ -47,15 +47,13 @@ export default {
       'getUserInfoById',
     ]),
     creators() {
-      const creators = [];
-      if (this.creator) {
-        creators.push(this.creator);
-      }
-      creators.push(
-        ...this.contents.map(
-          ({ user }) => this.getUserInfoById(user) || { user }
-        )
+      const creators = this.contents.map(
+        ({ user }) => this.getUserInfoById(user) || { user }
       );
+      // Add given creator to the beginning of the creators list
+      if (this.creator) {
+        creators.unshift(this.creator);
+      }
       return creators.slice(0, 6);
     },
   },
