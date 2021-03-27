@@ -2,7 +2,7 @@ import querystring from 'querystring';
 import {
   IS_TESTNET,
   LIKECOIN_API_BASE,
-  LIKE_CO_CLOUD_FN_BASE,
+  LIKE_CO_THUMBNAIL_FN_BASE,
   SUPERLIKE_BASE,
 } from '@/constant';
 import { normalizeLocaleForLikeCo } from '@/locales';
@@ -117,7 +117,7 @@ export const getCivicSupportingUserAPI = id => `/api/civic/support/users/${id}`;
 export const getMySupportersAPI = () => '/api/civic/support/self';
 
 export const getImageResizeAPI = (url, { width } = {}) =>
-  `${LIKE_CO_CLOUD_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${
+  `${LIKE_CO_THUMBNAIL_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${
     width ? `&width=${width}` : ''
   }`;
 export const getUserMinAPI = (id, { types = [] } = {}) =>
