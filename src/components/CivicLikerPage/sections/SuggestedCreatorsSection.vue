@@ -10,13 +10,23 @@
         preset="creator"
         :contents="contents"
       )
+
+      Button.block.mt-16.mx-auto.p-0.max-w-phone-min.border-2.border-like-cyan.border-solid.font-600.rounded-14(
+        preset="translucent-light"
+        :title="$t('SlidingMenu.creator')"
+        :to="{ name: 'creators' }"
+        size="large"
+        :full="true"
+      )
 </template>
 
 <script>
+import Button from '../../Button/Button';
 import SuperLikeContentGrid from '../../SuperLikeContentGrid';
 
 export default {
   components: {
+    Button,
     SuperLikeContentGrid,
   },
   props: {
