@@ -68,5 +68,37 @@ export default {
       });
     },
   },
+  head() {
+    const name = this.creator.displayName.trim();
+    const title = this.$t('CivicEntryPage.Og.Title', { name });
+    const description =
+      this.creator.creatorPitch || this.$t('CreatorPitch.Default');
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: 'https://liker.land/images/og/civic-v2.png',
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+    };
+  },
 };
 </script>
