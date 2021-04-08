@@ -102,7 +102,6 @@ export default {
           content: 'https://liker.land/images/og/civic-v2.png',
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
     };
   },
 };
