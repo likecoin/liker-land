@@ -69,10 +69,15 @@ export default {
     },
   },
   head() {
-    const name = this.creator.displayName.trim();
-    const title = this.$t('CivicEntryPage.Og.Title', { name });
-    const description =
-      this.creator.creatorPitch || this.$t('CreatorPitch.Default');
+    let title, description;
+    if (this.creator) {
+      const name = this.creator.displayName.trim();
+      title = this.$t('CivicEntryPage.Og.Title', { name });
+      description = this.creator.creatorPitch;
+    } else {
+      title = this.$t('CivicPage.Og.Title');
+      description = this.$t('CivicPage.Og.Description');
+    }
     return {
       title,
       meta: [
