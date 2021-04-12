@@ -1,11 +1,20 @@
 <template>
   <header class="settings-page-header">
-    <button
-      :class="backButtonClass"
-      @click="onClickBackButton"
-    >
-      <SettingsIcon />
-    </button>
+    <div class="flex items-center justify-between w-full">
+      <button
+        :class="backButtonClass"
+        @click="onClickBackButton"
+      >
+        <SettingsIcon />
+      </button>
+
+      <Button
+        v-if="$route.name === 'settings-support'"
+        preset="primary-outline"
+        :title="$t('civicLiker.about')"
+        :to="{ name: 'civic' }"
+      />
+    </div>
     <transition name="fade">
       <span v-if="!isShowBack">{{ $t('SettingsPage.title') }}</span>
     </transition>
@@ -13,11 +22,13 @@
 </template>
 
 <script>
+import Button from '~/components/Button/Button';
 import SettingsIcon from '~/assets/icons/cog.svg';
 
 export default {
   name: 'SettingsPageHeader',
   components: {
+    Button,
     SettingsIcon,
   },
   props: {

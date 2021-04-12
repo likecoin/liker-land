@@ -4,7 +4,12 @@
     .max-w-phone.mx-auto.mt-80.px-24
       h1.text-30.text-like-green.font-500
         | {{ $t('CreatorsPageV2.TwoBirds.Title') }}
-      p.mt-24 {{ $t('CreatorsPageV2.TwoBirds.Description') }}
+      i18n.mt-24(tag="p" path="CreatorsPageV2.TwoBirds.Description")
+        NuxtLink.text-like-green(
+          :to="{ name: 'civic' }"
+          place="civicLiker"
+        )
+          | {{ $tc('civicLikers', 2) }}
     ul.list-reset.my-16(class="laptop:flex")
       li.p-24(class="laptop:flex-1")
         img.mx-auto.block(
