@@ -4,6 +4,7 @@
       :avatar-url="creator.avatar"
       :avatar-size="100"
       :is-avatar-outlined="creator.isSubscribedCivicLiker || creator.isCivicLikerTrial"
+      :is-avatar-outline-extruded="false"
     )
 
   section.mx-16(class="laptop:mx-40")
