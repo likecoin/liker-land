@@ -5,9 +5,43 @@
     :is-show-backdrop="isShowBackdrop || state === 'loading'"
     :is-animated="true"
     :is-backdrop-opaque="isPreview"
-    :content-container-class="['rounded-8 phone:rounded-none', { 'pointer-events-none select-none': !!isPreview }]"
+    :is-absolute="false"
+    :content-container-class="['shadow-none rounded-8 phone:rounded-none', { 'pointer-events-none select-none': !!isPreview }]"
     @click-outside="onClickBackdrop"
   >
+    <template
+      v-if="!isPreview"
+      #header
+    >
+      <div
+        class="flex justify-between items-center mb-24"
+      >
+        <button
+          class="flex items-center settings-page-header__back-button text-like-green"
+          @click="onClickBackButton"
+        >
+          <svg
+            class="w-8 mr-8"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 8.7 16"
+          >
+            <path
+              d="M0,7.9L0,7.9c0,0.4,0.1,0.7,0.3,0.9l6.2,6.7C6.9,16,7.8,16,8.3,15.6c0.5-0.5,0.6-1.3,0.1-1.8L3,7.9l5.4-5.8c0.5-0.5,0.4-1.3-0.1-1.8S7-0.1,6.5,0.4L0.3,7.1C0.1,7.2,0,7.5,0,7.9L0,7.9z"
+              fill="currentColor"
+            />
+          </svg>
+          <span class="whitespace-no-wrap">{{ $t('goBack') }}</span>
+        </button>
+
+        <Button
+          v-if="state === 'new'"
+          preset="primary-outline"
+          :title="$t('civicLiker.about')"
+          :to="{ name: 'civic' }"
+        />
+      </div>
+    </template>
+
     <div
       v-if="isPreview && state !== 'loading'"
       class="phone:relative fixed pin-t pin-l pin-r z-10"
@@ -30,12 +64,6 @@
       key="new"
       class="p-32 phone:px-16"
     >
-      <button
-        v-if="!isPreview"
-        class="mb-32 settings-page-header__back-button text-like-green"
-        @click="onClickBackButton"
-      ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
-
       <div class="mx-40 phone:mx-0">
         <CivicLikerPitchingView
           :creator-display-name="displayName"
@@ -174,12 +202,6 @@
       key="confirm"
       class="p-32 phone:px-24"
     >
-      <button
-        v-if="!isPreview"
-        class="mb-16 settings-page-header__back-button text-like-green"
-        @click="onClickBackButton"
-      ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
-
       <CivicLikerSupportAmountView
         :price="selectedQuantity * dollar"
         :currency="currency"
@@ -264,12 +286,6 @@
       key="cancel"
       class="p-32 phone:px-24"
     >
-      <button
-        v-if="!isPreview"
-        class="mb-16 settings-page-header__back-button text-like-green"
-        @click="onClickBackButton"
-      ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
-
       <div class="mx-24 phone:mx-0">
         <hr class="my-16 border-t-1 border-gray-d8">
         <CivicLikerSupportLikerView

@@ -18,7 +18,12 @@
         )
         h2.mt-32.text-20.text-like-green.font-500
           | {{ $t('CreatorsPageV2.BetterWorld.World[1].Title') }}
-        p.mt-12 {{ $t('CreatorsPageV2.BetterWorld.World[1].Description') }}
+        i18n.mt-12(tag="p" path="CreatorsPageV2.BetterWorld.World[1].Description")
+          NuxtLink.text-like-green(
+            :to="{ name: 'civic' }"
+            place="civicLiker"
+          )
+            | {{ $tc('civicLikers', 2) }}
       li.relative.p-24(class="laptop:w-1/3")
         img.earth(
           class="laptop:absolute laptop:pin-l phone:max-w-full"

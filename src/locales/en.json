@@ -250,7 +250,7 @@
     },
     "TwoBirds": {
       "Title": "Single plan, double prizes",
-      "Description": "Besides the funding of monthly subscription, get rewarded by the Creators Fund as well if you get \"likes\" from Civic Likers.",
+      "Description": "Besides the funding of monthly subscription, get rewarded by the Creators Fund as well if you get \"likes\" from {civicLiker}.",
       "Birds": [
         {
           "Title": "Monthly Subscription",
@@ -271,7 +271,7 @@
         },
         {
           "Title": "Cultivate the community",
-          "Description": "Besides supporting creators by monthly subscription fee, Civic Likers support other creators, distributing the Creators Fund by liking good pieces, bringing benefits to the whole community."
+          "Description": "Besides supporting creators by monthly subscription fee, {civicLiker} support other creators, distributing the Creators Fund by liking good pieces, bringing benefits to the whole community."
         }
       ]
     },
@@ -592,6 +592,8 @@
   "back": "Back",
   "backToHome": "Home",
   "civicLiker": "Civic Liker",
+  "civicLiker.about": "About Civic Liker",
+  "civicLikers": "Civic Liker | Civic Likers",
   "confirm": "Confirm",
   "copy": "Copy",
   "copied": "Copied",

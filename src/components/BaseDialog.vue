@@ -21,9 +21,11 @@
           :class="contentContainerWrapperClass"
           :key="contentKey"
         )
+          header(v-if="$slots.header")
+            slot(name="header")
           main(:class="contentContainerClass")
             slot
-          footer
+          footer(v-if="$slots.footer")
             slot(name="footer")
 </template>
 
@@ -250,6 +252,10 @@ export default {
       @media screen and (min-width: config('screens.tablet.min')) {
         margin: 104px auto 56px;
       }
+    }
+
+    .base-dialog:not(.base-dialog--absolute) & {
+      margin-top: 0 !important;
     }
   }
 }

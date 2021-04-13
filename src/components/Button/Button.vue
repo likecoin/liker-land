@@ -165,6 +165,12 @@ export default {
     background-color: #aaf1e7;
   }
 
+  &--primary-outline {
+    color: #28646e;
+
+    border: 2px solid #aaf1e7;
+  }
+
   &--primary-invert {
     color: #aaf1e7;
 
@@ -190,6 +196,7 @@ export default {
   }
 
   &--primary &__title,
+  &--primary-outline &__title,
   &--primary-invert &__title,
   &--secondary &__title,
   &--special &__title,
