@@ -46,8 +46,11 @@ export default {
       'getArticleInfoByReferrer',
       'getUserInfoById',
     ]),
+    filteredContents() {
+      return this.contents.filter(({ user }) => !!user);
+    },
     creators() {
-      const creators = this.contents.map(
+      const creators = this.filteredContents.map(
         ({ user }) => this.getUserInfoById(user) || { user }
       );
       // Add given creator to the beginning of the creators list
