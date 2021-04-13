@@ -4,8 +4,8 @@ import {
   LIKECOIN_API_BASE,
   LIKE_CO_THUMBNAIL_FN_BASE,
   SUPERLIKE_BASE,
-} from '@/constant';
-import { normalizeLocaleForLikeCo } from '@/locales';
+} from '../../constant';
+import { normalizeLocaleForLikeCo } from '../../locales';
 
 export const getAppURL = ({
   referrer,

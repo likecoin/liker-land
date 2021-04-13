@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { getImageResizeAPI } from '~/util/api';
+import { getImageResizeAPI } from '../../util/api';
 
 export default {
   name: 'Card',
