@@ -58,10 +58,7 @@
 
     +Separator
 
-    BetterWorldSection(
-      :creator-avatar-url="creatorAvatarUrl"
-      :is-creator-civic-liker="isCreatorCivicLiker"
-    )
+    BetterWorldSection(:creators="creators")
 
     +Separator
 
@@ -103,21 +100,9 @@ export default {
     SuperLikeContentGrid,
   },
   props: {
-    creatorId: {
-      type: String,
-      required: true,
-    },
-    creatorDisplayName: {
-      type: String,
-      default: '',
-    },
-    creatorAvatarUrl: {
-      type: String,
-      default: '',
-    },
-    isCreatorCivicLiker: {
-      type: Boolean,
-      default: false,
+    creators: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -131,6 +116,23 @@ export default {
       return {
         backgroundImage: `url(${headerBg})`,
       };
+    },
+    creator() {
+      return this.creators[0] || {};
+    },
+    creatorId() {
+      return this.creator.user;
+    },
+    creatorDisplayName() {
+      return this.creator.displayName;
+    },
+    creatorAvatarUrl() {
+      return this.creator.avatar;
+    },
+    isCreatorCivicLiker() {
+      return (
+        this.creator.isSubscribedCivicLiker || this.creator.isCivicLikerTrial
+      );
     },
   },
   mounted() {

@@ -60,6 +60,8 @@ export const getFetchReaderBookmarkAPI = () => '/api/reader/bookmark';
 export const getUpdateReaderBookmarkAPI = url =>
   `/api/reader/bookmark?url=${encodeURIComponent(url)}`;
 export const getFetchSuggestArticlesApi = () => `/api/reader/works/suggest`;
+export const getFetchPersonalSuggestArticlesApi = () =>
+  `/api/reader/works/suggest/personal`;
 export const getFetchFollowedSuperLikeApi = () =>
   `/api/reader/superlike/followed`;
 export const getOAuthRegisterAPI = ({

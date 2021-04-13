@@ -345,10 +345,11 @@ module.exports = {
   |
   */
 
-  borderColors: global.Object.assign({
+  borderColors: {
     default: colors['gray-e6'],
     current: 'currentColor',
-  }, colors),
+    ...colors,
+  },
 
   /*
   |-----------------------------------------------------------------------------

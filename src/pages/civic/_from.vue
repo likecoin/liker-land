@@ -6,17 +6,20 @@
 
     CivicLikerPageWithCreator.page-content(
       v-if="creator"
-      :creator-id="creator.user"
-      :creator-display-name="creator.displayName"
-      :creator-avatar-url="creator.avatar"
-      :is-creator-civic-liker="creator.isSubscribedCivicLiker"
+      :creators="creators"
       @subscribe="subscribe"
     )
-    CivicLikerPageWithoutCreator(v-else)
+    CivicLikerPageWithoutCreator(
+      v-else
+      :creators="creators"
+      :contents="contents"
+    )
 </template>
 
 <script>
-import { getUserMinAPI } from '~/util/api';
+import { mapActions, mapGetters } from 'vuex';
+
+import { getUserMinAPI, getFetchPersonalSuggestArticlesApi } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 
 import CivicLikerPageWithCreator from '~/components/CivicLikerPage/WithCreator';
@@ -30,6 +33,29 @@ export default {
     SiteNavBar,
     CivicLikerPageWithCreator,
     CivicLikerPageWithoutCreator,
+  },
+  data() {
+    return {
+      contents: [],
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'getUserId',
+      'getSuggestedArticles',
+      'getArticleInfoByReferrer',
+      'getUserInfoById',
+    ]),
+    creators() {
+      const creators = this.contents.map(
+        ({ user }) => this.getUserInfoById(user) || { user }
+      );
+      // Add given creator to the beginning of the creators list
+      if (this.creator) {
+        creators.unshift(this.creator);
+      }
+      return creators.slice(0, 6);
+    },
   },
   async asyncData({ params, query, $api }) {
     const { from: pID } = params;
@@ -53,7 +79,71 @@ export default {
       creator: undefined,
     };
   },
+  mounted() {
+    this.fetchContents();
+  },
   methods: {
+    ...mapActions([
+      'fetchSuggestedArticles',
+      'fetchArticleInfo',
+      'fetchUserInfo',
+    ]),
+
+    async fetchPersonalContents() {
+      const { list } = await this.$api.$get(
+        getFetchPersonalSuggestArticlesApi()
+      );
+      return list;
+    },
+
+    async fetchContents() {
+      // Fetch suggested contents
+      const promises = [this.fetchSuggestedArticles()];
+      if (this.getUserId) {
+        promises.push(this.fetchPersonalContents());
+      }
+      const [, personalContents = []] = await Promise.all(promises);
+      const contents = personalContents.concat(this.getSuggestedArticles);
+
+      // Fetch contents info by URL to retrieve creator ID
+      const contentsWithInfo = await Promise.all(
+        contents.map(({ referrer }) => {
+          const info = this.getArticleInfoByReferrer(referrer);
+          if (!info) {
+            return this.fetchArticleInfo(referrer).catch(() => ({}));
+          }
+          return Promise.resolve(info);
+        })
+      );
+
+      // Grab maximum 6 suggested contents from different creators
+      const creatorIDsSet = new Set();
+      const suggestedContents = [];
+      for (let i = 0; i < contentsWithInfo.length; i += 1) {
+        const content = contentsWithInfo[i];
+        const creatorID = content.user;
+        if (!creatorIDsSet.has(creatorID)) {
+          creatorIDsSet.add(creatorID);
+          suggestedContents.push(content);
+        }
+        if (suggestedContents.length >= 6) {
+          break;
+        }
+      }
+
+      // Rename key `url` to `referrer` for component input
+      this.contents = suggestedContents.map(
+        ({ url: referrer, ...content }) => ({ ...content, referrer })
+      );
+
+      // Trigger fetching creators info
+      this.contents.forEach(({ user: creatorID }) => {
+        if (!this.getUserInfoById(creatorID)) {
+          this.fetchUserInfo(creatorID).catch(() => ({}));
+        }
+      });
+    },
+
     subscribe({ quantity }) {
       this.$router.push({
         name: 'id-civic-register',
