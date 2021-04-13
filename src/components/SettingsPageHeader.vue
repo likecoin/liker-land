@@ -1,12 +1,18 @@
 <template>
   <header class="settings-page-header">
     <div class="flex items-center justify-between w-full">
-      <button
-        :class="backButtonClass"
-        @click="onClickBackButton"
-      >
-        <SettingsIcon />
-      </button>
+      <div class="flex items-center">
+        <button
+          :class="backButtonClass"
+          @click="onClickBackButton"
+        >
+          <SettingsIcon />
+        </button>
+
+        <transition name="fade">
+          <span v-if="!isShowBack">{{ $t('SettingsPage.title') }}</span>
+        </transition>
+      </div>
 
       <Button
         v-if="$route.name === 'settings-support'"
@@ -15,9 +21,6 @@
         :to="{ name: 'civic' }"
       />
     </div>
-    <transition name="fade">
-      <span v-if="!isShowBack">{{ $t('SettingsPage.title') }}</span>
-    </transition>
   </header>
 </template>
 
@@ -62,9 +65,6 @@ export default {
   @apply text-like-green;
   @apply text-16;
   @apply font-600;
-
-  @apply flex;
-  @apply items-center;
 
   @apply mb-24;
   @apply px-8;
