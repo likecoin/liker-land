@@ -96,7 +96,7 @@ export default {
       const { list } = await this.$api.$get(
         getFetchPersonalSuggestArticlesApi()
       );
-      return list;
+      return list.map(referrer => ({ referrer }));
     },
 
     async fetchContents() {
