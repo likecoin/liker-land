@@ -5,6 +5,7 @@
       :url="avatarUrl"
       :size="avatarSize"
       :is-outlined="isAvatarOutlined"
+      :is-outline-extruded="isAvatarOutlineExtruded"
       :is-disabled="isAvatarDisabled"
       @click="onClickAvatar"
     />
@@ -39,6 +40,10 @@ export default {
     isAvatarOutlined: {
       type: Boolean,
       default: false,
+    },
+    isAvatarOutlineExtruded: {
+      type: Boolean,
+      default: true,
     },
     displayName: {
       type: String,

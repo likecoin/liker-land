@@ -52,6 +52,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isOutlineExtruded: {
+      type: Boolean,
+      default: true,
+    },
     isDisabled: {
       type: Boolean,
       default: false,
@@ -63,6 +67,7 @@ export default {
         'avatar',
         {
           avatar__disabled: this.isDisabled,
+          avatar__intruded: !this.isOutlineExtruded,
         },
       ];
     },
@@ -88,6 +93,10 @@ export default {
 
   > div {
     position: relative;
+  }
+
+  &#{&}__intruded > div {
+    transform: scale(0.833);
   }
 
   &__image {
