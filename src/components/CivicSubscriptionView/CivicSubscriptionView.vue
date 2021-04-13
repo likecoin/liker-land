@@ -14,7 +14,7 @@
       #header
     >
       <div
-        class="flex justify-between items-center mb-24"
+        class="flex justify-between items-center mb-24 px-16"
       >
         <button
           class="flex items-center settings-page-header__back-button text-like-green"

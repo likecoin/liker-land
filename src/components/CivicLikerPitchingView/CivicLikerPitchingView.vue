@@ -10,6 +10,7 @@
         :avatar-size="80"
         :avatar-url="supporterAvatarUrl"
         :is-avatar-outlined="isSupporterCivicLiker"
+        :is-avatar-outline-extruded="false"
       />
       <div
         class="flex-shrink mx-12 w-full"
@@ -25,6 +26,7 @@
           :avatar-size="80"
           :avatar-url="creatorAvatarUrl"
           :is-avatar-outlined="isCreatorCivicLiker"
+          :is-avatar-outline-extruded="false"
         />
         <svg
           class="absolute mt-8 mr-16 pin-r text-like-cyan-pale block"
