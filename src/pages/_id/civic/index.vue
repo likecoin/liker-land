@@ -32,6 +32,7 @@ export default {
     PageHeader,
     SiteNavBar,
   },
+  middleware: 'civic-payment',
   computed: {
     ...mapGetters(['getUserId']),
     id() {

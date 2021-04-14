@@ -124,7 +124,6 @@ export default {
   data() {
     return {
       isFetchedSubscriptionInfo: false,
-      isPastDueUser: false,
     };
   },
   computed: {
@@ -135,6 +134,9 @@ export default {
       'getUserIsCivicLikerTrial',
       'getUserIsCivicLikerPaid',
     ]),
+    ...mapGetters({
+      getUserIsSubscriptionPastDue: 'isPastDueUser',
+    }),
     getPaypalUnsubscribeURL,
     getOiceSettingsURL,
     getStripeBillingPortalAPI,
@@ -226,8 +228,7 @@ export default {
           if (force || !this.getUserSubscriptionInfo) {
             await this.fetchUserSubscriptionInfo();
           }
-          const { willCancel, status } = this.getUserSubscriptionInfo;
-          this.isPastDueUser = status === 'past_due';
+          const { willCancel } = this.getUserSubscriptionInfo;
           if (willCancel && this.$route.name === 'settings-civic-unsubscribe') {
             this.$router.replace({ name: 'settings-civic' });
           }
