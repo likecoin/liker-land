@@ -1,5 +1,7 @@
 export const getUserInfo = state => state.user;
 export const getUserSubscriptionInfo = state => state.subscriptionInfo;
+export const getUserIsSubscriptionPastDue = state =>
+  state.subscriptionInfo && state.subscriptionInfo.status === 'past_due';
 export const getUserId = state => state.user.user;
 export const getUserIsCivicLikerTrial = state => !!state.user.isCivicLikerTrial;
 export const getUserIsCivicLiker = state => !!state.user.isSubscribedCivicLiker;
