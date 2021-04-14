@@ -147,7 +147,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/civic-v2.png',
+          content: `https://static.like.co/liker-og-image/${this.creator.user}`,
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],

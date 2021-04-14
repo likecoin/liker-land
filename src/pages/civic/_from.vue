@@ -163,7 +163,8 @@ export default {
     if (this.creator) {
       const name = this.creator.displayName.trim();
       title = this.$t('CivicEntryPage.Og.Title', { name });
-      description = this.creator.creatorPitch;
+      description =
+        this.creator.creatorPitch || this.$t('CreatorPitch.Default');
       image = `https://static.like.co/liker-og-image/${this.creator.user}`;
     } else {
       title = this.$t('CivicPage.Og.Title');

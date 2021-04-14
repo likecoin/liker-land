@@ -321,7 +321,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: this.creator.avatar,
+          content: `https://static.like.co/liker-og-image/${this.creator.user}`,
         },
         {
           hid: 'og:description',
