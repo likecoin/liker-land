@@ -159,14 +159,16 @@ export default {
     },
   },
   head() {
-    let title, description;
+    let title, description, image;
     if (this.creator) {
       const name = this.creator.displayName.trim();
       title = this.$t('CivicEntryPage.Og.Title', { name });
       description = this.creator.creatorPitch;
+      image = `https://static.like.co/liker-og-image/${this.creator.user}`;
     } else {
       title = this.$t('CivicPage.Og.Title');
       description = this.$t('CivicPage.Og.Description');
+      image = 'https://liker.land/images/og/civic-v2.png';
     }
     return {
       title,
@@ -189,7 +191,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/civic-v2.png',
+          content: image,
         },
       ],
     };
