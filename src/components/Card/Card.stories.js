@@ -88,58 +88,6 @@ Default.args = {
   description: items[0].description,
 };
 
-export const Grid = (_, { argTypes }) => ({
-  components: {
-    Button,
-    Card,
-    Identity,
-    BookmarkIcon,
-  },
-  props: Object.keys(argTypes),
-  data() {
-    return {
-      items,
-    };
-  },
-  template: `
-    <div style="min-width: 600px">
-      <Stack :column-min-width="288" :gutter-width="16" :gutter-height="24">
-        <StackItem v-for="(item, i) in items" :key="i">
-          <Card
-            :title="item.title"
-            :description="item.description"
-            :image-src="item.imageSrc"
-          >
-            <template #footer-left>
-              <Identity
-                :avatar-url="item.userAvatarSrc"
-                :display-name="item.userDisplayName"
-              />
-            </template>
-            <template #footer-right>
-              <Button preset="secondary">
-                <BookmarkIcon />
-              </Button>
-            </template>
-          </Card>
-        </StackItem>
-      </Stack>
-    </div>
-  `,
-});
-
-Grid.args = {
-  items,
-};
-
-Grid.argTypes = {
-  items: {
-    control: {
-      type: 'object',
-    },
-  },
-};
-
 export const CardPlaceholder = () => ({
   components: {
     Card,
