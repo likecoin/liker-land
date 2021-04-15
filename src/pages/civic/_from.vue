@@ -19,7 +19,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getUserMinAPI, getFetchPersonalSuggestArticlesApi } from '~/util/api';
+import {
+  getUserMinAPI,
+  getFetchPersonalSuggestArticlesApi,
+  getOgImage,
+} from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 
 import CivicLikerPageWithCreator from '~/components/CivicLikerPage/WithCreator';
@@ -165,7 +169,7 @@ export default {
       title = this.$t('CivicEntryPage.Og.Title', { name });
       description =
         this.creator.creatorPitch || this.$t('CreatorPitch.Default');
-      image = `https://static.like.co/liker-og-image/${this.creator.user}`;
+      image = getOgImage(this.creator.user);
     } else {
       title = this.$t('CivicPage.Og.Title');
       description = this.$t('CivicPage.Og.Description');

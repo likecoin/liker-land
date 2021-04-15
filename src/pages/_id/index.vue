@@ -144,6 +144,7 @@ import {
   getUserMinAPI,
   getFetchUserSuperLikeAPI,
   getCivicSupportingUserAPI,
+  getOgImage,
 } from '~/util/api';
 import { getPriceEmoji } from '~/util/civic';
 import { getLikeCoURL } from '~/util/links';
@@ -308,6 +309,7 @@ export default {
     const title = this.$t('PortfolioPage.Og.Title', {
       name: this.creator.displayName.trim(),
     });
+    const image = getOgImage(this.creator.user);
     const description =
       this.creator.creatorPitch || this.$t('CreatorPitch.Default');
     return {
@@ -321,7 +323,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: `https://static.like.co/liker-og-image/${this.creator.user}`,
+          content: image,
         },
         {
           hid: 'og:description',
