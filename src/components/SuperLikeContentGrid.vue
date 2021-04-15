@@ -1,24 +1,32 @@
 <template lang="pug">
-  mixin LoadingCard
-    Card
-      Placeholder.h-16(:class="`w-${i % 3 + 2}/5`")
-      Placeholder.h-16.mt-12.w-full
-      Placeholder.h-16.mt-8.w-full(v-if="i % 2")
-      Placeholder.h-16.mt-8.w-full(v-if="i % 3")
-      Placeholder.h-16.mt-8(:class="`w-${i % 3 + 1}/5`")
-
-  .flex.flex-wrap.overflow-hidden(v-if="!isWaterfallLayout")
-    template(v-if="isLoading")
-      div(
-        v-for="i in 3" :key="`${i}`"
-        class="w-1/3 -mx-8 -my-12"
+  .grid(ref="grid")
+    .grid-col(
+      v-for="i in columnCount"
+      :key="`${i}`"
+    )
+      PortalTarget(
+        v-for="j in rowCount"
+        :key="`${j}`"
+        :name="`grid-item-${(j - 1) * columnCount + i}`"
       )
-        +LoadingCard
+
+    template(v-if="isLoading")
+      Portal(
+        v-for="i in columnCount"
+        :key="`portal-grid-item-${i}`"
+        :to="`grid-item-${i}`"
+      )
+        Card
+          Placeholder.h-16(:class="`w-${i % 3 + 2}/5`")
+          Placeholder.h-16.mt-12.w-full
+          Placeholder.h-16.mt-8.w-full(v-if="i % 2")
+          Placeholder.h-16.mt-8.w-full(v-if="i % 3")
+          Placeholder.h-16.mt-8(:class="`w-${i % 3 + 1}/5`")
     template(v-else)
-      div(
+      Portal(
         v-for="(item, i) in contents"
         :key="item.superLikeID"
-        class="desktop:w-1/3 laptop:w-1/2 w-full px-8 py-12"
+        :to="`grid-item-${i + 1}`"
       )
         SuperLikeContentCard(
           :preset="preset"
@@ -27,35 +35,12 @@
           :super-like-id="item.superLikeID"
           :super-like-short-id="item.superLikeShortID"
           :timestamp="item.ts"
-          @fetched="updateLayout"
-          @image-loaded="updateLayout"
         )
-
-  ClientOnly(v-else-if="isLoading || contents.length > 0")
-    Stack(
-      ref="stack"
-      :column-min-width="288"
-      :column-max-width="300"
-      :gutter-width="16"
-      :gutter-height="24"
-    )
-      template(v-if="isLoading")
-        StackItem(v-for="i in 3" :key="`${i}`")
-          +LoadingCard
-      template(v-else)
-        StackItem(v-for="(item, i) in contents" :key="item.superLikeID")
-          SuperLikeContentCard(
-            :preset="preset"
-            :referrer="item.referrer"
-            :author-id="item.user"
-            :super-like-id="item.superLikeID"
-            :super-like-short-id="item.superLikeShortID"
-            :timestamp="item.ts"
-            @fetched="updateLayout"
-            @image-loaded="updateLayout"
-          )
-        StackItem(v-if="$slots.append")
-          slot(name="append")
+      Portal(
+        v-if="$slots.append"
+        :to="`grid-item-${contents.length + 1}`"
+      )
+        slot(name="append")
 </template>
 
 <script>
@@ -82,17 +67,66 @@ export default {
       type: Boolean,
       default: false,
     },
-    isWaterfallLayout: {
-      type: Boolean,
-      default: true,
+    minItemWidth: {
+      type: Number,
+      default: 288,
+    },
+    maxItemWidth: {
+      type: Number,
+      default: 300,
     },
   },
+  data() {
+    return {
+      columnCount: 1,
+    };
+  },
+  computed: {
+    itemCount() {
+      let count = this.contents.length;
+      if (this.$slots.append) count += 1;
+      return count;
+    },
+    rowCount() {
+      return Math.ceil(this.itemCount / this.columnCount);
+    },
+  },
+  mounted() {
+    window.addEventListener('resize', this.updateColumnCount);
+    this.updateColumnCount();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.updateColumnCount);
+  },
   methods: {
-    updateLayout() {
-      if (this.$refs.stack) {
-        this.$refs.stack.reflow();
+    updateColumnCount() {
+      if (!this.$refs.grid) return;
+      const { offsetWidth: gridWidth } = this.$refs.grid;
+      const columnCount = Math.floor(
+        Math.max(gridWidth / this.minItemWidth, gridWidth / this.maxItemWidth)
+      );
+      if (columnCount !== this.columnCount) {
+        this.columnCount = columnCount;
       }
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.grid {
+  display: flex;
+
+  &-col {
+    flex: 1;
+
+    &:not(:first-child) {
+      margin-left: 16px;
+    }
+
+    > *:not(:first-child) {
+      margin-top: 24px;
+    }
+  }
+}
+</style>

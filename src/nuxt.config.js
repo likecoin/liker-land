@@ -229,7 +229,6 @@ const nuxtConfig = {
     { src: '~/plugins/fbpixel.client.js', ssr: false },
     { src: '~/plugins/crisp.client.js', ssr: false },
     { src: '~/plugins/vue-clipboard2', ssr: false },
-    { src: '~/plugins/vue-stack-grid.client.js', ssr: false },
   ],
 
   /*

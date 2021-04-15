@@ -9,7 +9,6 @@
       SuperLikeContentGrid(
         preset="creator"
         :contents="contents"
-        :is-waterfall-layout="false"
         :is-loading="contents.length === 0"
       )
 

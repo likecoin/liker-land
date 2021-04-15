@@ -455,6 +455,8 @@ $desktop-width: 1000px;
       padding-top: 0;
 
       &__left {
+        flex-shrink: 0;
+
         width: 100%;
         max-width: 304px;
 
