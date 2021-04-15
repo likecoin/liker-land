@@ -22,7 +22,7 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   getUserMinAPI,
   getFetchPersonalSuggestArticlesApi,
-  getOgImage,
+  getLikerOgImage,
 } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 
@@ -169,7 +169,7 @@ export default {
       title = this.$t('CivicEntryPage.Og.Title', { name });
       description =
         this.creator.creatorPitch || this.$t('CreatorPitch.Default');
-      image = getOgImage(this.creator.user);
+      image = getLikerOgImage(this.creator.user);
     } else {
       title = this.$t('CivicPage.Og.Title');
       description = this.$t('CivicPage.Og.Description');
