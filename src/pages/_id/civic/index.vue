@@ -18,7 +18,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import { getUserMinAPI } from '~/util/api';
+import { getUserMinAPI, getLikerOgImage } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -127,6 +127,7 @@ export default {
     const title = this.$t('CivicEntryPage.Og.Title', { name });
     const description =
       this.creator.creatorPitch || this.$t('CreatorPitch.Default');
+    const image = getLikerOgImage(this.creator.user);
     return {
       title,
       meta: [
@@ -148,7 +149,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/civic-v2.png',
+          content: image,
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],

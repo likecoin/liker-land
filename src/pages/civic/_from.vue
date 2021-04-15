@@ -19,7 +19,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getUserMinAPI, getFetchPersonalSuggestArticlesApi } from '~/util/api';
+import {
+  getUserMinAPI,
+  getFetchPersonalSuggestArticlesApi,
+  getLikerOgImage,
+} from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 
 import CivicLikerPageWithCreator from '~/components/CivicLikerPage/WithCreator';
@@ -162,14 +166,17 @@ export default {
     },
   },
   head() {
-    let title, description;
+    let title, description, image;
     if (this.creator) {
       const name = this.creator.displayName.trim();
       title = this.$t('CivicEntryPage.Og.Title', { name });
-      description = this.creator.creatorPitch;
+      description =
+        this.creator.creatorPitch || this.$t('CreatorPitch.Default');
+      image = getLikerOgImage(this.creator.user);
     } else {
       title = this.$t('CivicPage.Og.Title');
       description = this.$t('CivicPage.Og.Description');
+      image = 'https://liker.land/images/og/civic-v2.png';
     }
     return {
       title,
@@ -192,7 +199,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/civic-v2.png',
+          content: image,
         },
       ],
     };
