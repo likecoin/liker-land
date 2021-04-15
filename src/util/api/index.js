@@ -132,4 +132,5 @@ export const getArticleDetailAPI = url =>
 export const updateProfile = () => `/api/users/self/update`;
 export const userPreferences = () => `/api/users/preferences`;
 
-export const getLikerOgImage = id => `https://static.like.co/liker-og-image/${id}`;
+export const getLikerOgImage = id =>
+  `https://static.like.co/liker-og-image/${id}`;
