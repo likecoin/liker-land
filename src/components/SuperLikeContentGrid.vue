@@ -3,6 +3,7 @@
     .grid-col(
       v-for="i in columnCount"
       :key="`${i}`"
+      :style="`max-width: ${maxItemWidth}px`"
     )
       PortalTarget(
         v-for="j in rowCount"
