@@ -36,8 +36,9 @@
                   :href="getStripeBillingPortalAPI"
                 )
                   | {{ $t('SettingsCivicPage.editPaymentMethod') }}
-              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
-                v-if=isPastDueUser
+              .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx(
+                  v-if="isPastDueUser"
+                )
                 .settings-civic-page__billing-summary-row-value.text-danger
                   | {{ $t('SettingsCivicPage.paymentExpired') }}
               .settings-civic-page__billing-summary-row.liker-comparison-card__b--mx
@@ -135,7 +136,7 @@ export default {
       'getUserIsCivicLikerPaid',
     ]),
     ...mapGetters({
-      getUserIsSubscriptionPastDue: 'isPastDueUser',
+      isPastDueUser: 'getUserIsSubscriptionPastDue',
     }),
     getPaypalUnsubscribeURL,
     getOiceSettingsURL,
