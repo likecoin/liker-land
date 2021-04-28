@@ -99,12 +99,12 @@
 
         +PlatformListItem('provide-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper('InMedia')(href="https://www.inmediahk.net/"): InMediaLogo
+            +LogoWrapper('InMedia'): InMediaLogo
             +LogoSeparator
-            +LogoWrapper('Standnews')(href="https://www.thestandnews.com/"): StandnewsLogo
+            +LogoWrapper('Standnews'): StandnewsLogo
           +PlatformDescription('ProvideLikerID')
-            +PlatformDescriptionLink('InMedia')(href="https://www.inmediahk.net/")
-            +PlatformDescriptionLink('Standnews')(href="https://www.thestandnews.com/")
+            +PlatformDescriptionLink('InMedia')
+            +PlatformDescriptionLink('Standnews')
 
         +PlatformListItem('embedly')
           .creators-page__platform-list-item-logos
