@@ -56,6 +56,7 @@ export default {
       return this.$t('SupportersList.Item.Amount', { amount: this.amount });
     },
     formattedTimestamp() {
+      if (!this.timestamp) return '';
       return dateFormat(new Date(this.timestamp), 'DD/MM/YYYY');
     },
     supporter() {
