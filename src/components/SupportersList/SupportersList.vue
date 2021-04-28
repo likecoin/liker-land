@@ -55,9 +55,14 @@ export default {
             }
 
           // eslint-disable-next-line no-fallthrough
-          case 'ts':
-            return s2.ts - s1.ts;
+          case 'ts': {
+            const tsDiff = (s2.ts || 0) - (s1.ts || 0);
+            if (tsDiff !== 0) {
+              return tsDiff;
+            }
+          }
 
+          // eslint-disable-next-line no-fallthrough
           case 'id':
           default:
             return s1.id.localeCompare(s2.id);
