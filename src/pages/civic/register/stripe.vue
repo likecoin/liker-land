@@ -71,17 +71,17 @@ export default {
   },
   mounted() {
     if (this.getUserIsCivicLiker) {
-      if (this.getUserIsCivicLikerV2) {
-        const { from: id } = this.$route.query;
-        this.$router.replace({
-          name: 'id',
-          params: { id },
-          query: { civic_welcome: 1 },
-        });
-        return;
-      }
       if (!this.getUserShouldRenewCivic) {
-        this.$router.replace({ name: 'settings-civic' });
+        if (this.getUserIsCivicLikerV2) {
+          const { from: id } = this.$route.query;
+          this.$router.replace({
+            name: 'id',
+            params: { id },
+            query: { civic_welcome: 1 },
+          });
+        } else {
+          this.$router.replace({ name: 'settings-civic' });
+        }
         return;
       }
     }

@@ -721,7 +721,7 @@ export default {
 
     confirmSubscription(e) {
       this.$emit('confirm-subscription', e);
-      if (this.getUserIsCivicLikerV2) {
+      if (this.getUserIsCivicLikerV2 && this.getUserSubscriptionInfo) {
         this.updateSubscription();
       } else {
         this.$router.push({
