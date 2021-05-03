@@ -98,7 +98,8 @@ export default {
   },
   computed: {
     subscriptionEarnings() {
-      return this.subscribersCount * this.subscriptionPrice * 0.95;
+      const perPersonPrice = (0.966 * this.subscriptionPrice - 0.3) * 0.98;
+      return Math.floor(this.subscribersCount * perPersonPrice * 100) / 100;
     },
     formattedSubscriptionEarnings() {
       return `$${this.subscriptionEarnings}`;
