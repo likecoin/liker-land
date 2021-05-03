@@ -26,10 +26,11 @@
     template(v-else)
       Portal(
         v-for="(item, i) in contents"
-        :key="item.superLikeID"
+        :key="`grid-item-${i + 1}`"
         :to="`grid-item-${i + 1}`"
       )
         SuperLikeContentCard(
+          :key="item.superLikeID"
           :preset="preset"
           :referrer="item.referrer"
           :author-id="item.user"
