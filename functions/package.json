@@ -42,7 +42,7 @@
     "resize-observer": "^1.0.0",
     "source-map-support": "^0.5.10",
     "stripe": "^8.111.0",
-    "swiper": "^4.5.0",
+    "swiper": "^6.5.1",
     "tiny-cookie": "^1.0.1",
     "url-parse": "^1.4.7",
     "v-tooltip": "^2.0.2",
