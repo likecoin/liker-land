@@ -1,13 +1,14 @@
 <template>
   <div class="civic-liker-support-amount-view">
-    <div class="relative flex items-center justify-center px-32 text-like-green">
+    <div :class="mainRootClass">
       <div class="text-center">
         <span class="text-40 font-500 phone:text-32"><span
-          v-if="prefix"
+          v-if="!isClassic && prefix"
           class="font-emoji mr-8"
         >{{ prefix }}</span>{{ `${price} ${currency}` }}</span><span class="ml-8 text-16">/{{ period }}</span>
       </div>
       <button
+        v-if="!isClassic"
         class="absolute pin-r w-24 h-24 flex justify-center items-center rounded-full border-like-cyan border-1 text-like-green"
         @click="$emit('click-add')"
       >
@@ -50,6 +51,18 @@ export default {
     prefix: {
       type: String,
       default: '',
+    },
+    isClassic: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    mainRootClass() {
+      return [
+        'relative flex items-center justify-center px-32',
+        this.isClassic ? 'text-gray-4a' : 'text-like-green',
+      ];
     },
   },
 };

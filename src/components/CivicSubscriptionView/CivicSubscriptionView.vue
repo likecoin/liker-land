@@ -62,93 +62,127 @@
     <div
       v-if="state === 'new'"
       key="new"
-      class="p-32 phone:px-16"
     >
-      <div class="mx-40 phone:mx-0">
-        <CivicLikerPitchingView
-          :creator-display-name="displayName"
-          :creator-avatar-url="avatarUrl"
-          :is-creator-civic-liker="isCivicLiker"
-          :creator-pitch="pitch || $t('CreatorPitch.Default')"
-          :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
-          :is-supporter-civic-liker="getUserIsCivicLiker"
-        />
-
-        <hr class="my-24 border-t-1 border-gray-d8">
-
-        <div class="-m-8">
-          <div class="text-16 text-center text-like-green font-600">
-            {{ $t('UpdateSupportQuantity.Title') }}
-          </div>
-          <CivicQuantitySelect
-            v-model="selectedQuantity"
+      <div
+        v-if="isClassic"
+        class="pt-32"
+      >
+        <div
+          class="mx-auto px-24 overflow-hidden"
+          style="max-width: 370px; box-sizing: content-box"
+        >
+          <CivicLikerClassicGlobe class="w-full -mb-32" />
+        </div>
+        <hr class="my-0 h-8 bg-gray-f7">
+        <div class="p-32 phone:px-16">
+          <h2 class="text-center text-16 font-500">{{ $t('civic_liker_classic_new_header') }}</h2>
+          <CivicLikerSupportAmountView
+            class="my-24"
+            :price="selectedQuantity * dollar"
             :currency="currency"
-            :dollar="dollar"
+            :period="$t('SubscriptionPeriod.Month')"
+            :is-classic="isClassic"
           />
-        </div>
-        <div class="mx-40 mt-16">
+          <p
+            class="mt-24 font-500"
+          >{{ $t('civic_liker_classic_new_description_title') }}</p>
+          <p
+            class="mt-8"
+          >{{ $t('civic_liker_classic_new_description_content') }}</p>
           <Button
-            :title="$t('UpdateSupportQuantity.Subscribe')"
+            class="mt-48"
+            :title="$t('civic_liker_classic_new_button')"
             :full="true"
             size="large"
             @click="goToConfirm"
           />
         </div>
-
-        <hr class="my-24 border-t-1 border-gray-d8">
-
-        <ul class="m-0 p-0 list-style-none">
-          <li class="flex items-center">
-            <img
-              class="w-56"
-              src="~/assets/images/civic-v2/support/support-group.png"
-            >
-            <div class="flex-grow ml-24 phone:ml-12">
-              <h1
-                class="text-like-green text-16"
-              >{{ $t(`SettingsSupportUsersPage.Benefits.0.Title`) }}</h1>
-              <p
-                class="mt-8 text-14 font-200"
-              >{{ $t(`SettingsSupportUsersPage.Benefits.0.Description`) }}</p>
-            </div>
-          </li>
-          <li class="flex items-center mt-24">
-            <img
-              class="w-56"
-              src="~/assets/images/civic-v2/support/follow-me.png"
-            >
-            <div class="flex-grow ml-24 phone:ml-12">
-              <h1
-                class="text-like-green text-16"
-              >{{ $t(`SettingsSupportUsersPage.Benefits.1.Title`) }}</h1>
-              <p
-                class="mt-8 text-14 font-200"
-              >{{ $t(`SettingsSupportUsersPage.Benefits.1.Description`) }}</p>
-            </div>
-          </li>
-          <li class="flex items-center mt-24">
-            <img
-              class="w-56"
-              src="~/assets/images/civic-v2/support/contribute.png"
-            >
-            <div class="flex-grow ml-24 phone:ml-12">
-              <h1
-                class="text-like-green text-16"
-              >{{ $t(`SettingsSupportUsersPage.Benefits.2.Title`) }}</h1>
-              <p
-                class="mt-8 text-14 font-200"
-              >{{ $t(`SettingsSupportUsersPage.Benefits.2.Description`) }}</p>
-            </div>
-          </li>
-        </ul>
-
-        <div class="mx-40 mt-32">
-          <Button
-            :title="$t('UpdateSupportQuantity.Subscribe')"
-            :full="true"
-            size="large"
-            @click="goToConfirm"
+      </div>
+      <div
+        v-else
+        class="p-32 phone:px-16"
+      >
+        <div class="mx-40 phone:mx-0">
+          <CivicLikerPitchingView
+            :creator-display-name="displayName"
+            :creator-avatar-url="avatarUrl"
+            :is-creator-civic-liker="isCivicLiker"
+            :creator-pitch="pitch || $t('CreatorPitch.Default')"
+            :supporter-avatar-url="getUserInfo && getUserInfo.avatar"
+            :is-supporter-civic-liker="getUserIsCivicLiker"
           />
+          <hr class="my-24 border-t-1 border-gray-d8">
+          <div class="-m-8">
+            <div class="text-16 text-center text-like-green font-600">
+              {{ $t('UpdateSupportQuantity.Title') }}
+            </div>
+            <CivicQuantitySelect
+              v-model="selectedQuantity"
+              :currency="currency"
+              :dollar="dollar"
+            />
+          </div>
+          <div class="mx-40 mt-16">
+            <Button
+              :title="$t('UpdateSupportQuantity.Subscribe')"
+              :full="true"
+              size="large"
+              @click="goToConfirm"
+            />
+          </div>
+          <hr class="my-24 border-t-1 border-gray-d8">
+          <ul class="m-0 p-0 list-style-none">
+            <li class="flex items-center">
+              <img
+                class="w-56"
+                src="~/assets/images/civic-v2/support/support-group.png"
+              >
+              <div class="flex-grow ml-24 phone:ml-12">
+                <h1
+                  class="text-like-green text-16"
+                >{{ $t(`SettingsSupportUsersPage.Benefits.0.Title`) }}</h1>
+                <p
+                  class="mt-8 text-14 font-200"
+                >{{ $t(`SettingsSupportUsersPage.Benefits.0.Description`) }}</p>
+              </div>
+            </li>
+            <li class="flex items-center mt-24">
+              <img
+                class="w-56"
+                src="~/assets/images/civic-v2/support/follow-me.png"
+              >
+              <div class="flex-grow ml-24 phone:ml-12">
+                <h1
+                  class="text-like-green text-16"
+                >{{ $t(`SettingsSupportUsersPage.Benefits.1.Title`) }}</h1>
+                <p
+                  class="mt-8 text-14 font-200"
+                >{{ $t(`SettingsSupportUsersPage.Benefits.1.Description`) }}</p>
+              </div>
+            </li>
+            <li class="flex items-center mt-24">
+              <img
+                class="w-56"
+                src="~/assets/images/civic-v2/support/contribute.png"
+              >
+              <div class="flex-grow ml-24 phone:ml-12">
+                <h1
+                  class="text-like-green text-16"
+                >{{ $t(`SettingsSupportUsersPage.Benefits.2.Title`) }}</h1>
+                <p
+                  class="mt-8 text-14 font-200"
+                >{{ $t(`SettingsSupportUsersPage.Benefits.2.Description`) }}</p>
+              </div>
+            </li>
+          </ul>
+          <div class="mx-40 mt-32">
+            <Button
+              :title="$t('UpdateSupportQuantity.Subscribe')"
+              :full="true"
+              size="large"
+              @click="goToConfirm"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -156,43 +190,99 @@
     <div
       v-else-if="state === 'select-quantity'"
       key="select-quantity"
-      class="p-32 phone:px-24"
     >
-      <button
-        v-if="!isPreview"
-        class="settings-page-header__back-button text-like-green"
-        @click="onClickBackButton"
-      ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
-
-      <div class="mt-16 px-40 phone:px-0">
-        <Identity
-          :avatar-url="avatarUrl"
-          :avatar-size="64"
-          :is-avatar-outlined="isCivicLiker"
-        />
-
-        <h2
-          class="mt-12 text-24 text-like-green font-500 leading-1_5"
-        >{{ $t('UpdateSupportQuantity.Title') }}</h2>
-
-        <div class="mx-24 phone:mx-0">
-          <SelectButton
-            v-for="option in quantityOptions"
-            :key="option.value"
-            class="w-full mt-12"
-            :is-selected="selectedQuantity === option.value"
-            @click="selectedQuantity = option.value"
-          >
-            <span class="font-emoji text-24">{{ getPriceEmoji(option.value * dollar) }}</span> {{ option.text }}
-          </SelectButton>
-
+      <div
+        v-if="isClassic"
+        class="pt-32"
+      >
+        <div
+          class="mx-auto px-24 overflow-hidden"
+          style="max-width: 370px; box-sizing: content-box"
+        >
+          <CivicLikerClassicGlobe class="w-full -mb-32" />
+        </div>
+        <hr class="my-0 h-8 bg-gray-f7">
+        <div class="p-32 phone:px-16">
+          <h2 class="text-center text-16 font-500">{{ $t('civic_liker_classic_new_header') }}</h2>
+          <CivicLikerSupportAmountView
+            class="my-24"
+            :price="selectedQuantity * dollar"
+            :currency="currency"
+            :period="$t('SubscriptionPeriod.Month')"
+            :is-classic="isClassic"
+          />
+          <p
+            class="mt-24 font-500"
+          >{{ $t('civic_liker_classic_new_description_title') }}</p>
+          <p
+            class="mt-8"
+          >{{ $t('civic_liker_classic_new_description_content') }}</p>
           <Button
-            class="mt-24"
-            :title="$t(selectedQuantity === currentQuantity ? 'confirm' : 'UpdateSupportQuantity.Next')"
+            class="mt-48 pointer-events-none relative"
+            preset="secondary-outline"
+            :title="$t('civic_liker_classic_active_button')"
             :full="true"
             size="large"
-            @click="confirmQuantity"
+          >
+            <template #prepend>
+              <TickIcon
+                class="absolute pin-l ml-8 w-24 h-24"
+                style="fill: #36DE00"
+              />
+            </template>
+          </Button>
+          <div
+            v-if="isUserCurrentCivic && currentQuantity > 0 && !isCancelled"
+            class="text-center mt-16"
+          >
+            <a
+              class="text-12 text-gray-4a underline"
+              href="#"
+              @click.prevent="state = 'cancel'"
+            >{{ $t('civic_liker_classic_cancel_button') }}</a>
+          </div>
+        </div>
+      </div>
+      <div
+        v-else
+        class="p-32 phone:px-16"
+      >
+        <button
+          v-if="!isPreview"
+          class="settings-page-header__back-button text-like-green"
+          @click="onClickBackButton"
+        ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
+
+        <div class="mt-16 px-40 phone:px-0">
+          <Identity
+            :avatar-url="avatarUrl"
+            :avatar-size="64"
+            :is-avatar-outlined="isCivicLiker"
           />
+
+          <h2
+            class="mt-12 text-24 text-like-green font-500 leading-1_5"
+          >{{ $t('UpdateSupportQuantity.Title') }}</h2>
+
+          <div class="mx-24 phone:mx-0">
+            <SelectButton
+              v-for="option in quantityOptions"
+              :key="option.value"
+              class="w-full mt-12"
+              :is-selected="selectedQuantity === option.value"
+              @click="selectedQuantity = option.value"
+            >
+              <span class="font-emoji text-24">{{ getPriceEmoji(option.value * dollar) }}</span> {{ option.text }}
+            </SelectButton>
+
+            <Button
+              class="mt-24"
+              :title="$t(selectedQuantity === currentQuantity ? 'confirm' : 'UpdateSupportQuantity.Next')"
+              :full="true"
+              size="large"
+              @click="confirmQuantity"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -207,12 +297,20 @@
         :currency="currency"
         :period="$t('SubscriptionPeriod.Month')"
         :prefix="priceEmoji"
+        :is-classic="isClassic"
         @click-add="goToSelectQuantity"
       />
 
       <hr class="my-16 border-t-1 border-gray-d8">
 
+      <CivicLikerClassicBanner
+        v-if="isClassic"
+        class="block mx-auto"
+        style="width: 246px"
+      />
+
       <CivicLikerPitchingView
+        v-else
         class="my-24"
         :creator-display-name="displayName"
         :creator-avatar-url="avatarUrl"
@@ -242,7 +340,9 @@
 
         <div class="flex justify-between py-12 border-t-1 border-gray-d8 text-16 font-500">
           <div>{{ $t('SupportSummary.Total') }}</div>
-          <div class="text-like-green whitespace-no-wrap">{{ `${currency} ${(otherQuantity + selectedQuantity) * dollar}` }}</div>
+          <div
+            :class="['whitespace-no-wrap', isClassic ? 'text-gray-4a' : 'text-like-green']"
+          >{{ `${currency} ${(otherQuantity + selectedQuantity) * dollar}` }}</div>
         </div>
 
         <div
@@ -288,7 +388,13 @@
     >
       <div class="mx-24 phone:mx-0">
         <hr class="my-16 border-t-1 border-gray-d8">
+        <CivicLikerClassicBanner
+          v-if="isClassic"
+          class="block mx-auto"
+          style="width: 246px"
+        />
         <CivicLikerSupportLikerView
+          v-else
           :class="{ 'my-24 ml-8': isCivicLiker }"
           :avatar-url="avatarUrl"
           :display-name="displayName"
@@ -307,11 +413,18 @@
 
         <i18n
           class="mt-32 text-gray-4a text-14 leading-1_5"
-          path="CancelSubscription.Description"
+          :path="
+            isClassic
+              ? 'civic_liker_classic_cancel_description'
+              : 'CancelSubscription.Description'
+          "
           tag="p"
           :places="{ date: nextBillingDate }"
         >
-          <span class="font-500 text-like-green" place="name">{{ displayName }}</span>
+          <span
+            class="font-500 text-like-green"
+            place="name"
+          >{{ displayName }}</span>
         </i18n>
 
         <Button
@@ -398,7 +511,7 @@
         <Spinner class="mx-auto my-96" />
       </div>
       <div
-        v-else-if="state === 'select-quantity' && isUserCurrentCivic && currentQuantity > 0 && !isCancelled"
+        v-else-if="!isClassic && state === 'select-quantity' && isUserCurrentCivic && currentQuantity > 0 && !isCancelled"
         class="text-center mt-16"
       >
         <a
@@ -422,12 +535,15 @@ import Button from '~/components/Button/Button';
 import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
 import CivicLikerPitchingView from '~/components/CivicLikerPitchingView/CivicLikerPitchingView';
+import CivicLikerClassicBanner from '~/components/CivicLikerClassicAssets/CivicLikerClassicBanner';
+import CivicLikerClassicGlobe from '~/components/CivicLikerClassicAssets/CivicLikerClassicGlobe';
 import CivicQuantitySelect from '~/components/CivicQuantitySelect/CivicQuantitySelect';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
 import EyeIcon from '~/components/Icon/Eye';
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
+import TickIcon from '~/assets/icons/tick.svg';
 
 const STATES = ['new', 'select-quantity', 'confirm'];
 
@@ -439,6 +555,8 @@ export default {
     BrokenHeart: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/images/civic-v2/broken-heart.svg'),
     Button,
+    CivicLikerClassicBanner,
+    CivicLikerClassicGlobe,
     CivicLikerSupportLikerView,
     CivicLikerSupportAmountView,
     CivicLikerPitchingView,
@@ -450,6 +568,7 @@ export default {
     Identity,
     SelectButton,
     Spinner,
+    TickIcon,
   },
   props: {
     isShowBackdrop: {
@@ -536,6 +655,9 @@ export default {
     },
     isSelf() {
       return this.authorId === this.getUserId;
+    },
+    isClassic() {
+      return this.authorId === 'civic-liker';
     },
     isUserCurrentCivic() {
       // allow old v1 user to renew to v2 by not treating shouldRenew(grace) user as current

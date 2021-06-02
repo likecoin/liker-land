@@ -6,6 +6,7 @@
     v-on="$listeners"
   >
     <div>
+      <slot name="prepend" />
       <span
         v-if="title"
         v-bind="titleProps"
@@ -20,6 +21,7 @@
     v-on="$listeners"
   >
     <div>
+      <slot name="prepend" />
       <span
         v-if="title"
         v-bind="titleProps"
@@ -33,6 +35,7 @@
     v-on="$listeners"
   >
     <div>
+      <slot name="prepend" />
       <span
         v-if="title"
         v-bind="titleProps"
@@ -189,6 +192,12 @@ export default {
     background-color: #9b9b9b33;
   }
 
+  &--secondary-outline {
+    color: #28646e;
+
+    border: 2px solid #4a4a4a;
+  }
+
   &--danger {
     color: #6e2828;
 
@@ -199,6 +208,7 @@ export default {
   &--primary-outline &__title,
   &--primary-invert &__title,
   &--secondary &__title,
+  &--secondary-outline &__title,
   &--special &__title,
   &--danger &__title {
     font-weight: 600;

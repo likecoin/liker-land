@@ -26,6 +26,13 @@
       "Description": "邀請你成為我，{name} 的讚賞公民，支持我持續創作。"
     }
   },
+  "civic_liker_classic_new_header": "One subscription for rewarding all creators",
+  "civic_liker_classic_new_description_title": "Civic Liker Classic",
+  "civic_liker_classic_new_description_content": "TODO: Description",
+  "civic_liker_classic_new_button": "Subscribe Now",
+  "civic_liker_classic_active_button": "Active",
+  "civic_liker_classic_cancel_button": "Cancel Civic Liker Classic Subscription",
+  "civic_liker_classic_cancel_description": "Civic Liker Classic subscription will be ended on {date}, are you sure?",
   "CivicLikerCTA": {
     "slogan": {
       "register": "Trade a coffee for a better world",
