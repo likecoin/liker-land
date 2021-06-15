@@ -26,6 +26,7 @@
       "Description": "成為 {name} 的讚賞公民，按月贊助作者，支持內容有價。"
     }
   },
+  "civic_liker_classic": "Civic Liker Classic",
   "civic_liker_classic_new_header": "一個訂閱分散支持",
   "civic_liker_classic_new_description_title": "讚賞公民 Classic",
   "civic_liker_classic_new_description_content": "TODO: 簡介",
@@ -621,6 +622,11 @@
       "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
     }
   },
+  "supporting_classic_view_civic_liker_subtitle": "特別訂閱",
+  "supporting_classic_view_button_active": "已訂閱",
+  "supporting_classic_view_button_inactive": "關於",
+  "supporting_empty_view_description": "你未有支持任何作者",
+  "supporting_empty_view_button": "尋找作者",
   "UpdateSupportQuantity": {
     "Title": "選擇贊助金額",
     "HintText": "每月支持 {name}",

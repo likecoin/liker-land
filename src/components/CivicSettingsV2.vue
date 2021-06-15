@@ -91,35 +91,37 @@
       </div>
     </template>
 
-    <template v-if="supportingLikerIds.length">
-      <h2
-        class="mt-40 text-like-green font-24 font-500"
-      >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
-      <ul
-        key="content"
-        class="supporting-liker-list flex flex-wrap list-reset m-0 mt-12 pb-32"
+    <h2
+      class="mt-40 text-like-green font-24 font-500"
+    >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
+    <ul
+      key="content"
+      class="supporting-liker-list flex flex-wrap list-reset m-0 mt-12 pb-32"
+    >
+      <li v-if="supportingLikerIds.length === 0">
+        <EmptyLikerView class="h-full" />
+      </li>
+      <li
+        v-for="id in subscriptionIds"
+        :key="id"
       >
-        <li
-          v-for="id in supportingLikerIds"
-          :key="id"
-        >
-          <SupportingLikerView
-            class="h-full"
-            :liker-id="id"
-            :price="getAuthorQuantity(id) * 5"
-          />
-        </li>
-      </ul>
-    </template>
+        <SupportingLikerView
+          class="h-full"
+          :liker-id="id"
+          :price="getAuthorQuantity(id) * 5"
+        />
+      </li>
+    </ul>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { DEFAULT_CL_SUPPORTER } from '~/constant';
+import { CIVIC_LIKER_CLASSIC_LIKER_ID, DEFAULT_CL_SUPPORTER } from '~/constant';
 
 import Button from '~/components/Button/Button';
 import CardBrand from '~/components/CardBrand/CardBrand';
+import EmptyLikerView from '~/components/SupportingLikerView/EmptyLikerView';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
@@ -130,6 +132,7 @@ export default {
   components: {
     Button,
     CardBrand,
+    EmptyLikerView,
     SupportingLikerView,
     Spinner,
   },
@@ -146,7 +149,12 @@ export default {
     ]),
     getStripeBillingPortalAPI,
     supportingLikerIds() {
-      return Object.keys(this.getCivicSupportingUsers);
+      return Object.keys(this.getCivicSupportingUsers).filter(
+        id => id !== CIVIC_LIKER_CLASSIC_LIKER_ID
+      );
+    },
+    subscriptionIds() {
+      return this.supportingLikerIds.concat(CIVIC_LIKER_CLASSIC_LIKER_ID);
     },
     maskedCardNumber() {
       if (this.getUserSubscriptionInfo) {

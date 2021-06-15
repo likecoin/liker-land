@@ -59,6 +59,7 @@ const colors = {
   white: '#ffffff',
 
   'danger': '#e35050',
+  'success': '#36de00',
 
   'like-green': '#28646e',
   'like-green-dark': '#235760',

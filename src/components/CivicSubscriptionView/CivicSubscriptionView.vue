@@ -225,10 +225,7 @@
             size="large"
           >
             <template #prepend>
-              <TickIcon
-                class="absolute pin-l ml-8 w-24 h-24"
-                style="fill: #36DE00"
-              />
+              <TickIcon class="absolute pin-l ml-8 w-24 h-24 text-success fill-current" />
             </template>
           </Button>
           <div
@@ -528,7 +525,10 @@ import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
 import { getPriceEmoji } from '~/util/civic';
-import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
+import {
+  CIVIC_LIKER_UNIT_PRICE,
+  CIVIC_LIKER_CLASSIC_LIKER_ID,
+} from '~/constant';
 
 import BaseDialog from '~/components/BaseDialog';
 import Button from '~/components/Button/Button';
@@ -657,7 +657,7 @@ export default {
       return this.authorId === this.getUserId;
     },
     isClassic() {
-      return this.authorId === 'civic-liker';
+      return this.authorId === CIVIC_LIKER_CLASSIC_LIKER_ID;
     },
     isUserCurrentCivic() {
       // allow old v1 user to renew to v2 by not treating shouldRenew(grace) user as current

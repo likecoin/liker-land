@@ -26,6 +26,7 @@
       "Description": "邀請你成為我，{name} 的讚賞公民，支持我持續創作。"
     }
   },
+  "civic_liker_classic": "Civic Liker Classic",
   "civic_liker_classic_new_header": "One subscription for rewarding all creators",
   "civic_liker_classic_new_description_title": "Civic Liker Classic",
   "civic_liker_classic_new_description_content": "TODO: Description",
@@ -589,6 +590,11 @@
       "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
     }
   },
+  "supporting_classic_view_civic_liker_subtitle": "Special subscription",
+  "supporting_classic_view_button_active": "Active",
+  "supporting_classic_view_button_inactive": "About",
+  "supporting_empty_view_description": "You haven't subscribed to any creators",
+  "supporting_empty_view_button": "Find Creators",
   "UpdateSupportQuantity": {
     "Title": "Choose the monthly supporting amount",
     "HintText": "Support {name} monthly",
