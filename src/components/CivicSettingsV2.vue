@@ -22,12 +22,11 @@
 
   <div v-else>
     <template v-if="getUserSubscriptionInfo">
-      <div class="flex items-center">
-        <h2
-          class="flex-grow text-like-green font-24 font-500"
-        >{{ $t('SettingsSupportPage.Title.ManageSubscription') }}</h2>
-      </div>
-      <div class="bg-white rounded-8 mt-24 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16">
+      <CivicLikerFeatureList
+        :since-date="formattedCivicLikerSinceDate"
+        :is-active="getUserIsCivicLiker"
+      />
+      <div class="bg-white rounded-8 mt-16 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16">
         <template v-if="getUserSubscriptionInfo.willCancel">
           <div class="text-24 font-500">
             {{ $t('SettingsSupportPage.Cancelled') }}
@@ -91,6 +90,20 @@
       </div>
     </template>
 
+    <template v-else>
+      <CivicLikerFeatureList />
+
+      <div class="max-w-phone-min mt-24 mb-16 mx-auto">
+        <Button
+          preset="primary"
+          :title="$t('SettingsSupportPage.AboutCivicLiker')"
+          :to="{ name: 'civic' }"
+          :full="true"
+          size="large"
+        />
+      </div>
+    </template>
+
     <h2
       class="mt-40 text-like-green font-24 font-500"
     >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
@@ -116,11 +129,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import dateFormat from 'date-fns/format';
 
 import { CIVIC_LIKER_CLASSIC_LIKER_ID, DEFAULT_CL_SUPPORTER } from '~/constant';
 
 import Button from '~/components/Button/Button';
 import CardBrand from '~/components/CardBrand/CardBrand';
+import CivicLikerFeatureList from '~/components/CivicLikerFeatureList/CivicLikerFeatureList';
 import EmptyLikerView from '~/components/SupportingLikerView/EmptyLikerView';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
@@ -132,6 +147,7 @@ export default {
   components: {
     Button,
     CardBrand,
+    CivicLikerFeatureList,
     EmptyLikerView,
     SupportingLikerView,
     Spinner,
@@ -143,6 +159,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserInfo',
       'getUserSubscriptionInfo',
       'getUserIsCivicLiker',
       'getCivicSupportingUsers',
@@ -164,6 +181,11 @@ export default {
         return getMaskedCardNumber(brand, last4);
       }
       return '';
+    },
+    formattedCivicLikerSinceDate() {
+      const { civicLikerSince: ts = 0 } = this.getUserInfo || {};
+      if (!ts) return '';
+      return dateFormat(ts, 'YYYY/MM/DD');
     },
     cardBrand() {
       if (this.getUserSubscriptionInfo) {

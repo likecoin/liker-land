@@ -58,6 +58,16 @@
       "body": "<p>除了支持喜歡的創作者，讚賞公民還享有參予社群決策、獲取特別收錄內容、收取偶像個人通訊、參與線下活動等一連串福利，利人利己。</p>"
     }
   ],
+  "civic_liker_feature_list_header_title_active": "訂閱中",
+  "civic_liker_feature_list_header_title_inactive": "未訂閱",
+  "civic_liker_feature_list_header_since_date": "自 {date}",
+  "civic_liker_feature_list_item": [
+    "讚賞公民獨有頭像光環，突顯你對社群的貢獻",
+    "創作者獲得你的贊助",
+    "每天擁有兩次 Super Like 權利",
+    "對創作基金的分配有更大影響力",
+    "在個人主頁顯示自己的作品專欄"
+  ],
   "CivicLikerPitchingView.Title": "按月贊助{name}",
   "CivicLikerPitchingView.Subtitle": "成為讚賞公民",
   "CivicLikerTrialPage": {

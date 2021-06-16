@@ -58,6 +58,16 @@
       "body": "<p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>"
     }
   ],
+  "civic_liker_feature_list_header_title_active": "Active",
+  "civic_liker_feature_list_header_title_inactive": "Inactive",
+  "civic_liker_feature_list_header_title_error": "Error",
+  "civic_liker_feature_list_item": [
+    "The Civic Liker halo of your avatar shows your contribution to the community",
+    "Donation to your favourite creators",
+    "Have 2 Super Likes daily",
+    "Have greater influence to the Creators Fund distribution",
+    "Can show your own works in the portfolio page"
+  ],
   "CivicLikerPitchingView.Title": "Support “{name}” monthly",
   "CivicLikerPitchingView.Subtitle": "Become a Civic Liker",
   "CivicLikerTrialPage": {

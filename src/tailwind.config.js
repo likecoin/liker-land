@@ -589,6 +589,7 @@ module.exports = {
     '16': '1rem',
     '20': '1.25rem',
     '24': '1.5rem',
+    '28': '1.75rem',
     '32': '2rem',
     '40': '2.5rem',
     '48': '3rem',
@@ -872,6 +873,9 @@ module.exports = {
       addUtilities({
         '.bg-like-gradient': {
           'background-image': 'linear-gradient(78deg, #d2f0f0, #f0e6b4)',
+        },
+        '.bg-error-gradient': {
+          'background-image': 'linear-gradient(78deg, #f0d2d2, #f0e6b4)',
         },
       });
     },
