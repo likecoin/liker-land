@@ -58,6 +58,8 @@
       "body": "<p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>"
     }
   ],
+  "civic_liker_dashboard_header_title": "Civic Liker",
+  "civic_liker_dashboard_header_about_button": "About this plan",
   "civic_liker_feature_list_header_title_active": "Active",
   "civic_liker_feature_list_header_title_inactive": "Inactive",
   "civic_liker_feature_list_header_title_error": "Error",

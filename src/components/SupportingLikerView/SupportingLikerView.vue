@@ -68,6 +68,9 @@ export default {
       return this.likerId === CIVIC_LIKER_CLASSIC_LIKER_ID;
     },
     to() {
+      if (this.isClassic) {
+        return { name: 'civic-classic' };
+      }
       return {
         name: 'id-civic',
         params: { id: this.likerId },

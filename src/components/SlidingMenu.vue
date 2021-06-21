@@ -46,7 +46,7 @@
           <NuxtLink
             v-if="getUserIsCivicLiker"
             class="btn btn--outlined btn--dark btn--block"
-            :to="{ name: 'settings-civic' }"
+            :to="{ name: 'civic-dashboard' }"
             @click.native="onClickMenuItem"
           >{{ titleForCivicMenuItem }}</NuxtLink>
 

@@ -58,6 +58,8 @@
       "body": "<p>除了支持喜歡的創作者，讚賞公民還享有參予社群決策、獲取特別收錄內容、收取偶像個人通訊、參與線下活動等一連串福利，利人利己。</p>"
     }
   ],
+  "civic_liker_dashboard_header_title": "讚賞公民",
+  "civic_liker_dashboard_header_about_button": "計劃詳情",
   "civic_liker_feature_list_header_title_active": "訂閱中",
   "civic_liker_feature_list_header_title_inactive": "未訂閱",
   "civic_liker_feature_list_header_since_date": "自 {date}",

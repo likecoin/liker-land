@@ -1,10 +1,18 @@
-export default function({ req, res, route, store, error }) {
+export default function({ req, res, route, store, error, redirect }) {
   if (!store.getters.getUserId) {
     let message;
-    if (route.name === 'civic-register') {
-      message = 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER';
-    } else {
-      message = 'LOGIN_NEEDED';
+    switch (route.name) {
+      case 'civic-dashboard':
+        redirect({ name: 'civic' });
+        return;
+
+      case 'civic-register':
+        message = 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER';
+        break;
+
+      default:
+        message = 'LOGIN_NEEDED';
+        break;
     }
 
     error({

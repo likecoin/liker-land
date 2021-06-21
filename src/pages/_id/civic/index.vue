@@ -6,6 +6,7 @@
 
       main.page-content
         CivicSubscriptionView(
+          :liker-id="id"
           :is-show-backdrop="false"
           :initial-state="$route.query.initial_state"
           @select-quantity="onClickSelectQuantity"
@@ -18,6 +19,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import { CIVIC_LIKER_CLASSIC_LIKER_ID } from '~/constant';
+
 import { getUserMinAPI, getLikerOgImage } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -25,6 +28,13 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import CivicSubscriptionView from '~/components/CivicSubscriptionView/CivicSubscriptionView';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
+
+function getIdFromRoute(route) {
+  const isCivicLikerClassicRoute = route.name === 'civic-classic';
+  return isCivicLikerClassicRoute
+    ? CIVIC_LIKER_CLASSIC_LIKER_ID
+    : route.params.id;
+}
 
 export default {
   components: {
@@ -36,16 +46,14 @@ export default {
   computed: {
     ...mapGetters(['getUserId']),
     id() {
-      const { id } = this.$route.params;
-      return id;
+      return getIdFromRoute(this.$route);
     },
     shouldDisabledNav() {
       return !this.getUserId;
     },
   },
-  async asyncData({ route, redirect, query, $api, error }) {
-    const { id } = route.params;
-
+  async asyncData({ route, $api, error }) {
+    const id = getIdFromRoute(route);
     if (id && checkUserNameValid(id)) {
       try {
         const creator = await $api.$get(

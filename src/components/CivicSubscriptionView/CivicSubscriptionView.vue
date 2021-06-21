@@ -772,7 +772,11 @@ export default {
       if (STATES.includes(this.initialState)) {
         state = this.initialState;
       } else if (this.isUserCurrentCivic) {
-        state = 'confirm';
+        if (this.isClassic) {
+          state = 'select-quantity';
+        } else {
+          state = 'confirm';
+        }
       } else {
         state = 'new';
       }
@@ -844,7 +848,11 @@ export default {
     confirmSubscription(e) {
       this.$emit('confirm-subscription', e);
       if (this.getUserIsCivicLikerV2 && this.getUserSubscriptionInfo) {
-        this.updateSubscription();
+        if (this.currentQuantity !== this.selectedQuantity) {
+          this.updateSubscription();
+        } else {
+          this.$router.push({ name: 'civic-dashboard' });
+        }
       } else {
         this.$router.push({
           name: `civic-register-stripe`,
@@ -860,12 +868,10 @@ export default {
     },
 
     async updateSubscription() {
-      const { currentQuantity, selectedQuantity, authorId } = this;
-      if (currentQuantity === selectedQuantity) return;
       this.state = 'loading';
       await this.updateCivicSupportQuantity({
-        user: authorId,
-        quantity: selectedQuantity,
+        user: this.authorId,
+        quantity: this.selectedQuantity,
       });
       await this.fetchUserSubscriptionInfo();
       this.goToWelcomePage();

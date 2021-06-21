@@ -315,12 +315,24 @@ const nuxtConfig = {
         component: resolve(__dirname, 'pages/settings/following/index.vue'),
         name: 'settings-unfollowed',
       });
-      // /civic/_follow.vue is the civic index
-      routes.push({
-        path: '/civic',
-        component: resolve(__dirname, 'pages/civic/_from.vue'),
-        name: 'civic',
-      });
+
+      const civicPageRouteIndex = routes.findIndex(r => r.name === 'civic-from');
+      routes.splice(
+        civicPageRouteIndex,
+        0,
+        // For Civic Liker Classic
+        {
+          path: '/civic/classic',
+          component: resolve(__dirname, 'pages/_id/civic/index.vue'),
+          name: 'civic-classic',
+        },
+        // /civic uses /civic/from template
+        {
+          path: '/civic',
+          component: resolve(__dirname, 'pages/civic/_from.vue'),
+          name: 'civic',
+        }
+      );
     }
   },
 
