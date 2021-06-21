@@ -264,7 +264,10 @@ module.exports = {
   |
   */
 
-  textColors: colors,
+  textColors: {
+    ...colors,
+    current: 'currentColor',
+  },
 
   /*
   |-----------------------------------------------------------------------------
@@ -281,9 +284,9 @@ module.exports = {
   */
 
   backgroundColors: {
-   ...colors,
-   current: 'currentColor',
- },
+    ...colors,
+    current: 'currentColor',
+  },
 
   /*
   |-----------------------------------------------------------------------------

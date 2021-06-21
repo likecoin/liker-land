@@ -89,6 +89,14 @@
           >{{ $t('SlidingMenu.logout') }}</NuxtLink>
         </div>
       </div>
+
+      <CommunityCTA
+        :class="[
+          'text-like-cyan-light',
+          'px-32',
+          'py-24',
+        ]"
+      />
     </div>
 
     <portal-target
@@ -108,12 +116,14 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
 
+import CommunityCTA from './CommunityCTA/CommunityCTA';
 import Identity from './Identity/Identity';
 
 export default {
   name: 'SlidingMenu',
   components: {
     CogIcon,
+    CommunityCTA,
     HomeIcon,
     Identity,
   },
