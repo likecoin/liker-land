@@ -318,12 +318,12 @@
       "Description": "Follow your trusted Content Jockey. Less browsing. More reading."
     },
     "Feature": [
-      "Headlines NOT picked by AI",
-      "Civic Media",
-      "Fact Check News",
-      "Public Discussion",
-      "Blogging Platform",
-      "Individual Websites"
+      {"mainVP": "Be my Supporting Group",
+       "subVP": "Back me up for more great ideas." },
+      {"mainVP": "Follow Me",
+      "subVP": "Get the latest update of my works <br> and sharing." },
+      {"mainVP": "Contributing to the Community",
+        "subVP": "Privilege to reward other creators by <br> liking." }
     ]
   },
   "Glossary": {
