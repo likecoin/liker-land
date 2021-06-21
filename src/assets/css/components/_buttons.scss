@@ -58,7 +58,7 @@
     @apply text-like-green;
 
     @apply border-2;
-    @apply border-like-cyan;
+    @apply border-like-cyan-light;
 
     &:hover {
       @apply bg-like-cyan-translucent;
@@ -116,7 +116,7 @@
     &.btn--dark {
       @apply text-like-green;
 
-      @apply bg-like-cyan;
+      @apply bg-like-cyan-light;
 
       &:hover {
         @apply bg-like-cyan-dark;

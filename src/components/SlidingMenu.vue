@@ -18,9 +18,11 @@
             <Identity
               :avatar-size="46"
               :avatar-url="getUserInfo.avatar"
+              :liker-id="getUserId"
+              liker-id-class="text-white ml-16"
               :display-name="getUserInfo.displayName"
               :is-avatar-outlined="getUserCivicLikerHalo !== 'none'"
-              display-name-class="text-white ml-16"
+              display-name-class="text-white text-20 font-600 ml-16 mt-4"
             />
           </NuxtLink>
           <a
@@ -44,7 +46,6 @@
           </NuxtLink>
 
           <NuxtLink
-            v-if="getUserIsCivicLiker"
             class="btn btn--outlined btn--dark btn--block"
             :to="{ name: 'civic-dashboard' }"
             @click.native="onClickMenuItem"
@@ -56,6 +57,7 @@
           >{{ $t('SlidingMenu.creator') }}</NuxtLink>
 
           <NuxtLink
+            v-if="getUserId"
             class="btn btn--outlined btn--dark btn--block btn--with-icon"
             :to="{ name: 'settings' }"
             @click.native="onClickMenuItem"
@@ -66,6 +68,10 @@
         </div>
 
         <div class="main-menu__secondary-menu">
+          <NuxtLink
+            class="btn btn--plain btn--dark btn--auto-size"
+            :to="{ name: 'getapp' }"
+          >{{ $t('main_menu_app') }}</NuxtLink>
           <NuxtLink
             class="btn btn--plain btn--dark btn--auto-size"
             :to="{ name: 'about' }"
@@ -83,19 +89,6 @@
           >{{ $t('SlidingMenu.logout') }}</NuxtLink>
         </div>
       </div>
-      <div
-        v-if="isShowAppCTA"
-        class="sliding-menu__app-cta"
-        @click="onClickAppCTA"
-      >
-        <AppIcon
-          class="sliding-menu__app-cta-icon"
-          style="width: 40px"
-        />
-        <span class="sliding-menu__app-cta-label">
-          {{ $t("SlidingMenu.openWithApp") }}
-        </span>
-      </div>
     </div>
 
     <portal-target
@@ -108,31 +101,23 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getOAuthRegisterAPI, getAppURL } from '~/util/api';
-import { checkIsMobileClient } from '~/util/client';
+import { getOAuthRegisterAPI } from '~/util/api';
 import { CrispMixinFactory } from '~/mixins/crisp';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
-import AppIcon from '~/assets/images/app-icon.svg';
 
 import Identity from './Identity/Identity';
 
 export default {
   name: 'SlidingMenu',
   components: {
-    AppIcon,
     CogIcon,
     HomeIcon,
     Identity,
   },
   mixins: [CrispMixinFactory({ isBootAtMounted: false })],
-  data() {
-    return {
-      isShowAppCTA: false,
-    };
-  },
   computed: {
     getOAuthRegisterAPI() {
       const { from, referrer } = this.$route.query;
@@ -158,19 +143,11 @@ export default {
       return this.$t('SlidingMenu.civic');
     },
   },
-  mounted() {
-    if (checkIsMobileClient()) {
-      this.isShowAppCTA = true;
-    }
-  },
   methods: {
     logTrackerEvent,
 
     ...mapActions(['toggleSlidingMenu']),
 
-    onClickAppCTA() {
-      window.location.href = getAppURL({ utmMedium: 'sliding_menu' });
-    },
     onClickMenuItem() {
       this.toggleSlidingMenu(false);
     },
@@ -283,20 +260,6 @@ html[sliding-menu='opened'] {
     @apply pl-24;
     @apply pr-16;
     @apply pb-16;
-  }
-
-  &__app-cta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 10px;
-    border-top-width: 1px;
-    border-style: solid;
-
-    @apply border-like-cyan;
-
-    @apply cursor-pointer;
   }
 }
 

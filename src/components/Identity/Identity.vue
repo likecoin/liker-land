@@ -9,10 +9,16 @@
       :is-disabled="isAvatarDisabled"
       @click="onClickAvatar"
     />
-    <div
-      v-if="displayName"
-      :class="['identity__display-name', displayNameClass]"
-    >{{ displayName }}</div>
+    <div>
+      <div
+        v-if="likerId"
+        :class="['text-12 opacity-50 mx-8', likerIdClass]"
+      >ID: {{ likerId }}</div>
+      <div
+        v-if="displayName"
+        :class="['identity__display-name', displayNameClass]"
+      >{{ displayName }}</div>
+    </div>
   </div>
 </template>
 
@@ -44,6 +50,14 @@ export default {
     isAvatarOutlineExtruded: {
       type: Boolean,
       default: true,
+    },
+    likerId: {
+      type: String,
+      default: '',
+    },
+    likerIdClass: {
+      type: String,
+      default: '',
     },
     displayName: {
       type: String,
