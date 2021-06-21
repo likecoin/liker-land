@@ -8,9 +8,14 @@
     .mt-40.mx-40(class="phone:mx-16")
       SuperLikeContentGrid(
         preset="creator"
-        :contents="contents"
-        :is-loading="contents.length === 0"
+        :contents="gridContents"
+        :is-loading="gridContents.length === 0"
       )
+        template(#append)
+          PureSupportingClassicView(
+            :button-to="{ name: 'civic-classic' }"
+            :is-small="true"
+          )
 
       Button.block.mt-16.mx-auto.p-0.max-w-phone-min.border-2.border-like-cyan.border-solid.font-600.rounded-14(
         preset="translucent-light"
@@ -23,17 +28,29 @@
 
 <script>
 import Button from '../../Button/Button';
+import PureSupportingClassicView from '../../SupportingLikerView/PureSupportingClassicView';
 import SuperLikeContentGrid from '../../SuperLikeContentGrid';
 
 export default {
   components: {
     Button,
+    PureSupportingClassicView,
     SuperLikeContentGrid,
   },
   props: {
     contents: {
       type: Array,
       default: () => [],
+    },
+    isShowClassic: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    gridContents() {
+      if (this.isShowClassic) return this.contents.slice(0, 5);
+      return this.contents;
     },
   },
 };

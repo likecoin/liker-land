@@ -3,7 +3,9 @@
     svg.mx-40.hidden(class="laptop:block phone:mx-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 952 526")
       rect(y="292" width="952" height="234" rx="18" fill="#28646e")
       path(d="M195 .17h546v361H195z" fill="none")
-      image(x="195" width="546" height="362.47" xlink:href="../assets/banner-image.jpg" preserveAspectRatio="xMinYMin slice")
+      image(x="423" y="70" width="106" height="100" xlink:href="~/assets/images/civic-liker-icon.svg?inline" preserveAspectRatio="xMinYMin slice")
+      foreignObject(y="200" width="952" height="60")
+        .text-center.text-like-green.text-24 {{ $t('civicLiker') }}
       g(fill="none" stroke="#50e3c2" stroke-linecap="round")
         path(d="M726.7 437.58c-5.7 1.37-9.53 5.8-8.55 9.88a7.4 7.4 0 004.19 4.45c1.42.44 2.41 3.92 1.16 4.82 2.53-1.32 4-2.26 5.17-4.07a14.54 14.54 0 001.6-.3c5.7-1.37 9.53-5.8 8.54-9.88s-6.4-6.28-12.11-4.9zM917.22 224.7l5-2a6.83 6.83 0 003.89-8.83h0L922.3 204a1.61 1.61 0 00-2.08-.92h0l-14.77 5.74a1.61 1.61 0 00-.91 2.08l3.84 9.9a6.84 6.84 0 008.84 3.9zM905.21 213.8l-1.76.69a4.08 4.08 0 003 7.6l1.76-.69" stroke-linejoin="round" stroke-width="4")
         path(d="M890.47 60.9a10.56 10.56 0 11-13.92 5.41h0a10.56 10.56 0 0113.92-5.41z" stroke-miterlimit="10" stroke-width="4")

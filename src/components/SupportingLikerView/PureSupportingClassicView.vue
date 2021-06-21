@@ -39,6 +39,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isSmall: {
+      type: Boolean,
+      default: false,
+    },
     buttonTo: {
       type: Object,
       default: () => ({}),
@@ -61,7 +65,8 @@ export default {
     },
     nameClass() {
       return [
-        'mt-32 text-20 font-500',
+        'font-500',
+        this.isSmall ? 'mt-24 text-16' : 'mt-32 text-20',
         {
           'text-gray-9b': !this.isActive,
         },
@@ -71,6 +76,7 @@ export default {
       return [
         'mt-24 mx-12',
         {
+          'w-2/3': this.isSmall,
           'opacity-50': !this.isActive,
         },
       ];
