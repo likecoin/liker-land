@@ -1,78 +1,84 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article class="get-app-page">
-    <section class="container">
+    <section class="container top-container">
+      <img class="feature-image" src="./getapp-banner.png">
+      <img v-if="showCross" class="cross" src="./cross_3x.png">
+      
+      <div class="center app-logo">
+        <AppLogo />
+      </div>
       <h1 class="slogan center">
         <template v-if="$i18n.locale === 'zh-Hant'">
-          <LessBrowsingTC />
-          <MoreReadingTC />
+          <div class="slogan-text center"> 下載 Liker Land </div>
+          <div class="slogan-text center"> 管理你的 LikeCoin </div>
         </template>
         <template v-else>
-          <LessBrowsingEN />
-          <MoreReadingEN />
+          <div class="slogan-text center"> Download Like Land </div>
+          <div class="slogan-text center"> Manage your LikeCoin </div>
         </template>
       </h1>
-      <AppDownloadBadges
-        :from="from"
-        type="start"
-        v-bind="utmProps"
-      />
+    </section>
+    <section class="container">
+      <hr class="separate-line">
     </section>
 
     <section class="feature">
-      <div class="container side-by-side">
-        <div class="center">
-          <img class="feature-image" src="./featured-image.jpg">
+      <div>
+        <div v-for="(feature, key) in $t('GetAppPage.Feature')" :key="key" class="container side-by-side">
+          <div class="icon-part">
+            <img src="./phone_icon_3x.png" width="56px">
+          </div>
+          <div class="vp-part">
+            <div class="main-vp" v-html="feature.mainVP" /> 
+            <div class="sub-vp" v-html="feature.subVP" />
+          </div>
         </div>
-        <ul class="phone:mt-32 tablet:mt-32">
-          <li
-            v-for="(feature, key) in $t('GetAppPage.Feature')"
-            :key="key"
-            v-html="feature"
-          />
-        </ul>
       </div>
     </section>
 
-    <section class="preview container side-by-side flex phone:flex-col-reverse tablet:flex-col-reverse">
-      <div class="center phone:mt-32 tablet:mt-32">
+    <section class="container">
+      <hr class="separate-line">
+    </section>
+    <section class="footer-container">
+      <h1 class="slogan center">
+        <template v-if="$i18n.locale === 'zh-Hant'">
+          <div class="slogan-text center"> 立即下載 </div>
+        </template>
+        <template v-else>
+          <div class="slogan-text center"> Download Now </div>
+        </template>
+      </h1>
+    </section>
+    <section class="footer-container">
+      <div class="center footer">
         <div class="text-center">
-          <AppLogo class="phone:hidden tablet:hidden mb-20" />
           <AppDownloadBadges
             :from="from"
             v-bind="utmProps"
           />
         </div>
       </div>
-      <div class="center">
-        <AppScreenshotsViewer />
-      </div>
-    </section>
+    </section>    
   </article>
 </template>
 
 <script>
 import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
-import AppScreenshotsViewer from '~/components/AppScreenshotsViewer/AppScreenshotsViewer';
 
 import AppLogo from '~/assets/images/app-logo.svg';
-import LessBrowsingTC from './slogan/less-browsing-tc.svg';
-import MoreReadingTC from './slogan/more-reading-tc.svg';
-import LessBrowsingEN from './slogan/less-browsing-en.svg';
-import MoreReadingEN from './slogan/more-reading-en.svg';
 
 export default {
-  name: 'GetAppPage',
+  name: 'GetAppPageNew',
   components: {
     AppDownloadBadges,
     AppLogo,
-    AppScreenshotsViewer,
-    LessBrowsingEN,
-    LessBrowsingTC,
-    MoreReadingEN,
-    MoreReadingTC,
   },
   props: {
+    showCross: {
+      type: Boolean,
+      default: false,
+    },
     from: {
       type: String,
       default: '',
@@ -89,6 +95,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      singleFeature: '<div>feature.mainVP</div>',
+    };
   },
   computed: {
     utmProps() {
@@ -109,6 +120,33 @@ export default {
   margin-right: auto;
   margin-left: auto;
 
+  .separate-line {
+    background-color: #d8d8d8;
+    height: 1px;
+    width: 80%;
+  }
+
+  .app-logo {
+    padding-top: 20px;
+    @media screen and (max-width: 600px) {
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+  }
+
+  .top-container {
+    padding-top: 100px;
+    @media screen and (max-width: 600px) {
+      text-align: center;
+    }
+  }
+
+  .footer-container {
+    @media screen and (max-width: 600px) {
+      text-align: center;
+    }
+  }
+
   .container {
     @apply px-16;
 
@@ -116,6 +154,10 @@ export default {
     max-width: 600px;
     margin-right: auto;
     margin-left: auto;
+
+    @media screen and (max-width: 600px) {
+      @apply px-0;
+    }
   }
 
   .center {
@@ -124,14 +166,38 @@ export default {
     justify-content: center;
   }
 
+  .footer {
+    padding-bottom: 55px;
+    @media screen and (max-width: 600px) {
+      text-align: center;
+    }
+  }
+
   .side-by-side {
-    @apply py-32;
+    @apply py-16;
+    display: flex;
 
-    @media screen and (min-width: 769px) {
-      display: flex;
+    @media screen and (max-width: 600px) {
+      max-width: 256px;
+    }
 
-      > * {
-        width: 50%;
+    .icon-part {
+      width: 38%;
+      text-align: right;
+      padding-right: 5%;
+
+      @media screen and (max-width: 600px) {
+        width: 20%;
+        text-align: middle;
+      }
+    }
+
+    .vp-part {
+      width: 45%;
+
+      @media screen and (max-width: 600px) {
+        width: 80%;
+        text-align: middle;
       }
     }
   }
@@ -142,8 +208,12 @@ export default {
 
     display: flex;
     flex-wrap: wrap;
-
     text-align: center;
+
+    @media screen and (max-width: 600px) {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
 
     svg {
       max-height: 2.5rem;
@@ -151,50 +221,39 @@ export default {
 
       @apply my-8;
     }
+
+    @media screen and (max-width: 600px) {
+      max-width: 256px;
+      display: inline-block;
+    }
+  }
+  .slogan-text {
+    color: #28646e;
+    font-size: 24px;
+    width: 100%;
+    padding: 10px;
+
+    @media screen and (max-width: 600px) {
+      font-size: 18px;
+    }
   }
 
   .feature {
-    @apply bg-like-green;
-    @apply text-14;
-    @apply text-white;
-    @apply font-400;
-
-    margin-top: 80px;
+    margin-top: 20px;
     padding-bottom: 20px;
 
-    ul {
-      @apply pl-32;
-      @apply pb-16;
-
-      list-style: none;
-
-      li {
-        &:not(:first-child) {
-          @apply mt-16;
-        }
-
-        /deep/ b {
-          display: block;
-          @apply mb-8;
-          @apply text-like-cyan;
-          @apply text-20;
-          @apply font-600;
-        }
-      }
+    .main-vp {
+      font-weight: bold;
+      color: #28646e;
+      font-size: 16px;
+      padding: 0 5px;
     }
 
-    @media screen and (min-width: 1025px) {
-      border-radius: 10px;
-    }
-
-    @media screen and (max-width: 768px) {
-      padding-bottom: 440px;
-
-      ul {
-        text-align: center;
-
-        @apply pl-0;
-      }
+    .sub-vp {
+      color: #4a4a4a;
+      font-size: 14px;
+      padding: 5px;
+      line-height: 20px;
     }
   }
 
@@ -202,19 +261,24 @@ export default {
     display: block;
     width: 100%;
     margin: auto;
-    border-radius: 10px;
+    border-radius: 10px 10px 0px 0px;
     margin-top: -80px;
+    background-color: #28646e;
 
     @media screen and (max-width: 768px) {
-      max-width: 256px;
+      border-radius: 0px;
     }
   }
 
-  .preview {
-    margin-top: -64px;
-
-    @media screen and (max-width: 768px) {
-      margin-top: -482px;
+  .cross {
+    z-index: 2;
+    width: 21px;
+    height: 22px;
+    margin: -295px 0px 300px 32px;
+    @media screen and (max-width: 600px) {
+      width: 12px;
+      height: 12.5px;
+      margin: -75% 0% 53% -88%;
     }
   }
 }

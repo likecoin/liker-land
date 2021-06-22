@@ -318,12 +318,12 @@
       "Description": "Follow your trusted Content Jockey. Less browsing. More reading."
     },
     "Feature": [
-      "Headlines NOT picked by AI",
-      "Civic Media",
-      "Fact Check News",
-      "Public Discussion",
-      "Blogging Platform",
-      "Individual Websites"
+      {"mainVP": "The most user-friendly LikeCoin wallet",
+       "subVP": "The easiest way to send and receive LikeCoin." },
+      {"mainVP": "Check the likes statistics",
+      "subVP": "View the weekly, daily statistics of your LikeCoin bonus, down to each workpiece." },
+      {"mainVP": "LikeCoin staking",
+        "subVP": "Stake your LikeCoin to gain extra reward, and participate in community governance." }
     ]
   },
   "Glossary": {
