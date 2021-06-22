@@ -220,6 +220,8 @@
     }
   },
   "community_cta_title": "Join our community",
+  "creators_dashboard_header_title": "Creator Dashboard",
+  "creators_dashboard_header_about_button": "Tips for Creators",
   "CreatorsPageV2": {
     "Hero": {
       "Title": "You deserve to be rewarded",
@@ -578,7 +580,7 @@
   },
   "SupportersDashboard": {
     "Summary": {
-      "Title": "Summary",
+      "Title": "Monthly Subscription Income",
       "Data": {
         "Amount": {
           "Value": "{amount} USD/mo",

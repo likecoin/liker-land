@@ -224,6 +224,9 @@
     }
   },
   "community_cta_title": "參與我們的社群",
+  "creators_dashboard_header_title": "作者主頁",
+  "creators_dashboard_header_about_button": "作者須知",
+  "creators_dashboard_manage_likecoin_button": "管理你的 LikeCoin",
   "CreatorsPageV2": {
     "Hero": {
       "Title": "化讚為賞 回饋創作",
@@ -610,7 +613,7 @@
   },
   "SupportersDashboard": {
     "Summary": {
-      "Title": "收入概覽",
+      "Title": "每月訂閱收入",
       "Data": {
         "Amount": {
           "Value": "{amount} 美元/月",

@@ -53,7 +53,7 @@
 
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block"
-            :to="{ name: 'creators' }"
+            :to="{ name: 'creators-dashboard' }"
           >{{ $t('SlidingMenu.creator') }}</NuxtLink>
 
           <NuxtLink
