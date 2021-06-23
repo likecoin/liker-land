@@ -5,6 +5,16 @@
 
     Spinner.mx-auto.my-96(v-if="!hasFetched")
 
+    CivicSubscriptionView(
+      v-else-if="isShowPitchPreview"
+      initial-state="new"
+      :liker-id="likerId"
+      :is-preview="true"
+      :is-show-backdrop="true"
+      @click-back-button="isShowPitchPreview = false"
+      @click-backdrop="isShowPitchPreview = false"
+    )
+
     .pb-32.w-full.max-w-phone.mx-auto(class="phone:px-12.tablet:px-12" v-else)
 
       header.flex.items-center.justify-between.mb-24
@@ -83,15 +93,6 @@
               @click="finishPitchEditing"
             )
 
-          CivicSubscriptionView(
-            v-if="isShowPitchPreview"
-            initial-state="new"
-            :liker-id="likerId"
-            :is-preview="true"
-            :is-show-backdrop="true"
-            @click-back-button="isShowPitchPreview = false"
-            @click-backdrop="isShowPitchPreview = false"
-          )
 
       h2.mt-32.text-like-green.font-24.font-500(v-if="count")
         | {{ $t('SettingsSupportPage.Title.SponsorLink') }}

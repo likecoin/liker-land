@@ -21,7 +21,7 @@
           @click="onClickBackButton"
         >
           <svg
-            class="w-8 mr-8"
+            class="w-8 h-8"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 8.7 16"
           >
@@ -47,10 +47,26 @@
       class="phone:relative fixed pin-t pin-l pin-r z-10"
     >
       <div class="flex items-center bg-like-cyan-pale p-16 tablet:p-24 laptop:px-72 pointer-events-auto">
-        <button
-          class="settings-page-header__back-button text-like-green"
+        <Button
+          class="mr-8"
+          preset="plain"
+          :title="$t('goBack')"
+          title-class="whitespace-no-wrap no-underline"
           @click="onClickBackButton"
-        ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
+        >
+          <template #prepend>
+            <svg
+              class="w-12 h-12"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 8.7 16"
+            >
+              <path
+                d="M0,7.9L0,7.9c0,0.4,0.1,0.7,0.3,0.9l6.2,6.7C6.9,16,7.8,16,8.3,15.6c0.5-0.5,0.6-1.3,0.1-1.8L3,7.9l5.4-5.8c0.5-0.5,0.4-1.3-0.1-1.8S7-0.1,6.5,0.4L0.3,7.1C0.1,7.2,0,7.5,0,7.9L0,7.9z"
+                fill="currentColor"
+              />
+            </svg>
+          </template>
+        </Button>
         <div class="flex flex-wrap items-center text-12 border-l-1 border-gray-4a px-16 py-8">
           <EyeIcon class="w-16 text-like-green flex-no-shrink" />
           <span class="ml-4 mr-12 text-like-green flex-no-shrink">{{ $t('SettingsSupportPage.PitchPreview.Status') }}</span>
