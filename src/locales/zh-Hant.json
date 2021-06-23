@@ -83,16 +83,16 @@
     "Price": "{emoji} 每月 {price} 美元",
     "Benefits": {
       "SupportTheCreator": {
-        "Title": "成為作者後援",
+        "Title": "成為創作者後援",
         "Description": "{title} — 每月 {price} 美元，全數支持 {name}"
       },
       "DontMissAPixel": {
-        "Title": "追蹤作者更新",
+        "Title": "追蹤創作者更新",
         "Description": "{title} — 緊貼 {name} 最新作品，及他/她分享的好文"
       },
       "ContributeToTheCommunity": {
         "Title": "貢獻創作生態",
-        "Description": "{title} — 在其他作者的文章「按讚」，分配創作基金，回饋創作"
+        "Description": "{title} — 在其他創作者的文章「按讚」，分配創作基金，回饋創作"
       },
       "SharingGoodContent": {
         "Title": "分享優秀內容",
@@ -130,7 +130,7 @@
       }
     },
     "Payment": {
-      "CTA": "{civicLiker}是一場回饋新聞和創作的運動。讀者每月付出一杯咖啡的價錢，就能成為讚賞公民；透過按讚，自動分配月費予作者。",
+      "CTA": "{civicLiker}是一場回饋新聞和創作的運動。讀者每月付出一杯咖啡的價錢，就能成為讚賞公民；透過按讚，自動分配月費予創作者。",
       "JoinButtonText": "立即加入",
       "Pricing": "{price} {currency}/月",
       "YearlyPricing": "{price} {currency}/年"
@@ -138,7 +138,7 @@
     "MediaSupport": {
       "title": "一份月費支持 4 家公民媒體",
       "Stats": {
-        "TotalCreators": "及 1,400 多個獨立網站的 7000 作者",
+        "TotalCreators": "及 1,400 多個獨立網站的 7000 創作者",
         "TotalRewards": "截止 2020 年 1 月底，讚賞公民運動共回饋創作者 {rewards}",
         "RewardedCreators": "已回饋創作者",
         "Website": "網站",
@@ -148,7 +148,7 @@
     },
     "Benefit": {
       "title": " 兼享各種福利",
-      "stats": "月費回饋指定作者",
+      "stats": "月費回饋指定創作者",
       "bookmark": "享用 Liker Land 儲存無限書籤等獨有功能",
       "discount": "買書優惠折扣，加盟書店持續增加中",
       "gift": "獲取實體小禮品，免費參與線下活動"
@@ -158,26 +158,26 @@
   "CLP.header.displayname": "成為讚賞公民，支持",
   "CLP.button.subscribe": "立即訂閱",
 
-  "CLP.contents.title": "追蹤作者動態，持續支持創作",
+  "CLP.contents.title": "追蹤創作者動態，持續支持創作",
   "CLP.contents.description": "你可在 Liker Land 追蹤 {name} 的作品，按讚鼓勵他，分享好文。你的持續支援能令 {name} 專注創作。",
   "CLP.contents.more": "更多內容",
 
   "CLP.betterWorld.title": "共創一個生態",
-  "CLP.betterWorld.description": "每位讚賞公民的付出，都在貢獻創作生態。按讚的意義不只令作者獲得創作基金的奬勵，同時也是一份肯定和關注。目前已有 7,000 多名作者加入了讚賞公民計劃，讓每位的一點一滴匯聚成為涓流，滋養出更健康的創作生態吧！",
+  "CLP.betterWorld.description": "每位讚賞公民的付出，都在貢獻創作生態。按讚的意義不只令創作者獲得創作基金的奬勵，同時也是一份肯定和關注。目前已有 7,000 多名創作者加入了讚賞公民計劃，讓每位的一點一滴匯聚成為涓流，滋養出更健康的創作生態吧！",
 
-  "CLP.suggestedCreators.title": "追蹤作者動態，持續支持創作",
-  "CLP.suggestedCreators.description": "你可在 Liker Land 追蹤作者，按讚鼓勵他，分享好文。你的持續支援能令作者專注創作。",
+  "CLP.suggestedCreators.title": "追蹤創作者動態，持續支持創作",
+  "CLP.suggestedCreators.description": "你可在 Liker Land 追蹤創作者，按讚鼓勵他，分享好文。你的持續支援能令創作者專注創作。",
 
-  "CLP.effective.title": "按讚鼓勵作者，捐款效益倍增",
-  "CLP.effective.description": "成為讚賞公民後，作者不單獲得你的每月贊助，更能因你為他的作品按讚獲得「創作基金」的額外奬勵。你也可為其他作者按讚，回饋更多優秀作者。",
+  "CLP.effective.title": "按讚鼓勵創作者，捐款效益倍增",
+  "CLP.effective.description": "成為讚賞公民後，創作者不單獲得你的每月贊助，更能因你為他的作品按讚獲得「創作基金」的額外奬勵。你也可為其他創作者按讚，回饋更多優秀創作者。",
   "CLP.effective.item1.title": "月費贊助",
-  "CLP.effective.item1.description": "讚賞公民的月費直接支持指定作者。",
+  "CLP.effective.item1.description": "讚賞公民的月費直接支持指定創作者。",
   "CLP.effective.item2.title": "創作基金",
-  "CLP.effective.item2.description": "透過按讚，分配每天發放的創作基金予優秀作者。",
+  "CLP.effective.item2.description": "透過按讚，分配每天發放的創作基金予優秀創作者。",
 
   "CivicSettingsV1": {
     "WillCancel": "你的讚賞公民會籍將繼續生效至 {date}。你可現在續訂原有計劃，亦可待會籍到期後重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
-    "GracePeriod": "你可現在續訂原有計劃。如欲轉為以新版本的讚賞公民 2.0 支持作者，請使用作者的贊助連結重新訂閱（格式：https://liker.land/作者的LikerID），也可經由作者的 LikeCoin button 訂閱。"
+    "GracePeriod": "你可現在續訂原有計劃。如欲轉為以新版本的讚賞公民 2.0 支持創作者，請使用創作者的贊助連結重新訂閱（格式：https://liker.land/創作者的LikerID），也可經由創作者的 LikeCoin button 訂閱。"
   },
   "CollapsibleView": {
     "less": "收起",
@@ -224,8 +224,8 @@
     }
   },
   "community_cta_title": "參與我們的社群",
-  "creators_dashboard_header_title": "作者主頁",
-  "creators_dashboard_header_about_button": "作者須知",
+  "creators_dashboard_header_title": "創作者主頁",
+  "creators_dashboard_header_about_button": "創作者須知",
   "creators_dashboard_manage_likecoin_button": "管理你的 LikeCoin",
   "CreatorsPageV2": {
     "Hero": {
@@ -334,8 +334,8 @@
   "FollowingPage": {
     "headerLabel": "你的追蹤列表",
     "empty": {
-      "title": "你沒有追蹤任何作者",
-      "content": "你可以在作者的 LikeCoin button 上按讚來追蹤作者。你也可以前往我們的精選文章列表中去閱讀文章。",
+      "title": "你沒有追蹤任何創作者",
+      "content": "你可以在創作者的 LikeCoin button 上按讚來追蹤創作者。你也可以前往我們的精選文章列表中去閱讀文章。",
       "goToFeaturing": "前往精選文章列表"
     }
   },
@@ -347,7 +347,7 @@
     },
     "Feature": [
       "<b>內容伯樂</b>立場新聞、獨立媒體、眾新聞、Matters 等為你挑選每日頭條",
-      "<b>多元選擇</b>另有 1400 個網站、11000 作者的 30 多萬篇文章",
+      "<b>多元選擇</b>另有 1400 個網站、11000 創作者的 30 多萬篇文章",
       "<b>深度閱讀</b>把任何網頁儲存到 Liker Land 閱讀列表，慢慢細看",
       "<b>化讚為賞</b>每個按讚都會成為對創作者的實質鼓勵"
     ]
@@ -366,9 +366,9 @@
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容",
     "LOGIN_NEEDED_TO_BOOKMARK": "請登入以收藏內容",
-    "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "請登入以追蹤內容的作者",
+    "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "請登入以追蹤內容的創作者",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "請登入以註冊讚賞公民",
-    "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持作者",
+    "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持創作者",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}",
     "CIVIC_LIKER_ALREADY_PAID": {
       "title": "你已是讚賞公民",
@@ -393,10 +393,10 @@
   },
   "LikerFeature": {
     "distributeFund": {
-      "general": "Like 數影響基金分配，回饋作者",
-      "civic": "Like 數影響基金分配，回饋作者；權重較高"
+      "general": "Like 數影響基金分配，回饋創作者",
+      "civic": "Like 數影響基金分配，回饋創作者；權重較高"
     },
-    "distributeOwnFee": "以 Like 分配個人月費，全數回饋作者",
+    "distributeOwnFee": "以 Like 分配個人月費，全數回饋創作者",
     "detailedReport": "查閱回饋去向，掌握一分一毫",
     "participateInCommunity": "參與社群決策和公投",
     "bonusContent": "獲得額外內容、書籍、優惠券等專屬禮品",
@@ -422,7 +422,7 @@
       "civic": {
         "header": "成為讚賞公民 以實際金錢支持創作",
         "button": "付費支持",
-        "buttonFootnote": "扣除手續費後將全數支持作者"
+        "buttonFootnote": "扣除手續費後將全數支持創作者"
       },
       "general": {
         "header": "或 免費成為 Liker",
@@ -440,7 +440,7 @@
     "PayMeQR": "PayMe QR code:",
     "stepTwo": "步驟二：傳送過帳記錄",
     "EmailInstruction": "過帳後煩請把你的過帳記錄，連同你的註冊電郵地址，貼到畫面右下方的客服介面，或發電郵到 {0}。傳送的記錄可以是一個轉帳畫面的截屏。",
-    "Ending": "再次感謝你的支持。請多多俾 Like 媒體和作者，讓屬於大眾的內容生態能健康成長。"
+    "Ending": "再次感謝你的支持。請多多俾 Like 媒體和創作者，讓屬於大眾的內容生態能健康成長。"
   },
   "PaymentFailurePage": {
     "title": "付款失敗"
@@ -461,7 +461,7 @@
   "PortfolioEmptyView.Works.Step1": "{button}，獲得每天兩次 Super Like 的機會",
   "PortfolioEmptyView.Works.Step2": "在自己文章中的 LikeCoin button 點一下星星，Super Liked！",
   "PortfolioEmptyView.SuperLiked.Label": "分享最愛的內容",
-  "PortfolioEmptyView.SuperLiked.Title": "Super Like 最愛的內容，跟追蹤者分享你的閱讀品味，同時回饋作者。",
+  "PortfolioEmptyView.SuperLiked.Title": "Super Like 最愛的內容，跟追蹤者分享你的閱讀品味，同時回饋創作者。",
   "PortfolioEmptyView.SuperLiked.Step1": "{button}，獲得每天兩次 Super Like 的機會",
   "PortfolioEmptyView.SuperLiked.Step2": "在任何作品中的 LikeCoin button 點一下星星，Super Liked！",
   "PortfolioEmptyView.Button": "成為讚賞公民",
@@ -507,10 +507,10 @@
     "title": "@:SettingsPage.title > 追蹤/取消追蹤",
     "follow": "@:follow",
     "following": "@:following",
-    "noFollowing": "你沒有追蹤中的作者",
+    "noFollowing": "你沒有追蹤中的創作者",
     "unfollow": "@:unfollow",
     "unfollowed": "@:unfollowed",
-    "noUnfollowed": "你沒有已取消追蹤的作者"
+    "noUnfollowed": "你沒有已取消追蹤的創作者"
   },
   "SettingsPage": {
     "title": "設定",
@@ -525,7 +525,7 @@
       "registered": "已註冊"
     },
     "Supporters": {
-      "Title": "作者設定",
+      "Title": "創作者設定",
       "Count": "支持者 {count}"
     },
     "language": "介面語言",
@@ -560,16 +560,16 @@
     "SloganConfirm": "按月贊助",
     "Benefits": [
       {
-        "Title": "成為作者後援",
-        "Description": "持續支持作者專注創作。"
+        "Title": "成為創作者後援",
+        "Description": "持續支持創作者專注創作。"
       },
       {
-        "Title": "追蹤作者更新",
-        "Description": "關注作者的最新作品及獨到分享。"
+        "Title": "追蹤創作者更新",
+        "Description": "關注創作者的最新作品及獨到分享。"
       },
       {
         "Title": "貢獻創作生態",
-        "Description": "同時可按讚支持其他作者，化讚為賞。"
+        "Description": "同時可按讚支持其他創作者，化讚為賞。"
       }
     ]
   },
@@ -581,7 +581,7 @@
     "home": "主頁",
     "civic": "@:CivicPage.title",
     "civicUpgrade": "加強版",
-    "creator": "創作者加盟",
+    "creator": "創作者",
     "settings": "@:SettingsPage.title",
     "support": "幫助",
     "logout": "登出",
@@ -605,7 +605,7 @@
     "Confirm": "確認帳單",
     "Error": {
       "CivicV1": {
-        "Content": "你的讚賞公民會籍是舊版本，目前無法加入新計劃。如欲以新版讚賞公民 2.0 贊助作者，請先{unsubscribe}，待舊會籍於 {date} 到期後，再重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
+        "Content": "你的讚賞公民會籍是舊版本，目前無法加入新計劃。如欲以新版讚賞公民 2.0 贊助創作者，請先{unsubscribe}，待舊會籍於 {date} 到期後，再重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
         "Unsubscribe": "退訂"
       },
       "UnableSubSelf": "不能支持自己"
@@ -642,8 +642,8 @@
   "supporting_classic_view_civic_liker_subtitle": "特別訂閱",
   "supporting_classic_view_button_active": "已訂閱",
   "supporting_classic_view_button_inactive": "關於",
-  "supporting_empty_view_description": "你未有支持任何作者",
-  "supporting_empty_view_button": "尋找作者",
+  "supporting_empty_view_description": "你未有支持任何創作者",
+  "supporting_empty_view_button": "尋找創作者",
   "UpdateSupportQuantity": {
     "Title": "選擇贊助金額",
     "HintText": "每月支持 {name}",
