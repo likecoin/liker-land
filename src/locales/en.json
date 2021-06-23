@@ -27,13 +27,13 @@
     }
   },
   "civic_liker_classic": "Civic Liker Classic",
-  "civic_liker_classic_new_header": "Fixed cost, all you can like",
+  "civic_liker_classic_new_header": "Fixed cost for all the like",
   "civic_liker_classic_new_description_title": "Civic Liker Classic",
   "civic_liker_classic_new_description_content": "Donate 5 USD per month. The sum will be distributed to different creators based on your likes.",
   "civic_liker_classic_new_button": "Subscribe Now",
   "civic_liker_classic_active_button": "Active",
   "civic_liker_classic_cancel_button": "Cancel Civic Liker Classic Subscription",
-  "civic_liker_classic_cancel_description": "Civic Liker Classic subscription will be ended on {date}, are you sure?",
+  "civic_liker_classic_cancel_description": "Civic Liker Classic subscription will end on {date}, are you sure?",
   "CivicLikerCTA": {
     "slogan": {
       "register": "Trade a coffee for a better world",
@@ -64,11 +64,11 @@
   "civic_liker_feature_list_header_title_inactive": "Inactive",
   "civic_liker_feature_list_header_title_error": "Error",
   "civic_liker_feature_list_item": [
-    "The Civic Liker halo of your avatar shows your contribution to the community",
+    "The Civic Liker halo on your avatar shows your contribution to the community",
     "Donation to your favourite creators",
-    "Have 2 Super Likes daily",
-    "Have greater influence to the Creators Fund distribution",
-    "Can show your own works in the portfolio page"
+    "Two Super Likes daily",
+    "Greater influence to the Creators Fund distribution",
+    "Display your own works in the portfolio page"
   ],
   "CivicLikerPitchingView.Title": "Support “{name}” monthly",
   "CivicLikerPitchingView.Subtitle": "Become a Civic Liker",
