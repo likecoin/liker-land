@@ -4,19 +4,13 @@
     <section class="container top-container">
       <img class="feature-image" src="./getapp-banner.png">
       <img v-if="showCross" class="cross" src="./cross_3x.png">
-      
+
       <div class="center app-logo">
-        <AppLogo />
+        <AppLogo :width="width" />
       </div>
       <h1 class="slogan center">
-        <template v-if="$i18n.locale === 'zh-Hant'">
-          <div class="slogan-text center"> 下載 Liker Land </div>
-          <div class="slogan-text center"> 管理你的 LikeCoin </div>
-        </template>
-        <template v-else>
-          <div class="slogan-text center"> Download Like Land </div>
-          <div class="slogan-text center"> Manage your LikeCoin </div>
-        </template>
+        <div class="slogan-text center">{{ $t("GetAppPage.Download") }}</div>
+        <div class="slogan-text center">{{ $t("GetAppPage.Manage.like") }}</div>
       </h1>
     </section>
     <section class="container">
@@ -25,13 +19,19 @@
 
     <section class="feature">
       <div>
-        <div v-for="(feature, key) in $t('GetAppPage.Feature')" :key="key" class="container side-by-side">
+        <div v-for="number in valueProps" :key="number" class="container side-by-side">
           <div class="icon-part">
             <img src="./phone_icon_3x.png" width="56px">
           </div>
           <div class="vp-part">
-            <div class="main-vp" v-html="feature.mainVP" /> 
-            <div class="sub-vp" v-html="feature.subVP" />
+            <div
+              class="main-vp"
+              v-html="$t(`GetAppPage.Feature.mainVP${number}`)"
+            />
+            <div
+              class="sub-vp"
+              v-html="$t(`GetAppPage.Feature.subVP${number}`)"
+            />
           </div>
         </div>
       </div>
@@ -42,24 +42,16 @@
     </section>
     <section class="footer-container">
       <h1 class="slogan center">
-        <template v-if="$i18n.locale === 'zh-Hant'">
-          <div class="slogan-text center"> 立即下載 </div>
-        </template>
-        <template v-else>
-          <div class="slogan-text center"> Download Now </div>
-        </template>
+        <div class="slogan-text center"> {{ $t("GetAppPage.Download.now") }} </div>
       </h1>
     </section>
     <section class="footer-container">
       <div class="center footer">
         <div class="text-center">
-          <AppDownloadBadges
-            :from="from"
-            v-bind="utmProps"
-          />
+          <AppDownloadBadges :from="from" v-bind="utmProps" />
         </div>
       </div>
-    </section>    
+    </section>
   </article>
 </template>
 
@@ -75,9 +67,19 @@ export default {
     AppLogo,
   },
   props: {
+    valueProps: {
+      type: Array,
+      default() {
+        return [1, 2, 3];
+      },
+    },
     showCross: {
       type: Boolean,
       default: false,
+    },
+    width: {
+      type: String,
+      default: '160',
     },
     from: {
       type: String,
@@ -95,11 +97,6 @@ export default {
       type: String,
       default: '',
     },
-  },
-  data() {
-    return {
-      singleFeature: '<div>feature.mainVP</div>',
-    };
   },
   computed: {
     utmProps() {

@@ -316,16 +316,17 @@
     "Og": {
       "Title": "@:GetAppPage.Title",
       "Description": "Follow your trusted Content Jockey. Less browsing. More reading."
-    },
-    "Feature": [
-      {"mainVP": "The most user-friendly LikeCoin wallet",
-       "subVP": "The easiest way to send and receive LikeCoin." },
-      {"mainVP": "Check the likes statistics",
-      "subVP": "View the weekly, daily statistics of your LikeCoin bonus, down to each workpiece." },
-      {"mainVP": "LikeCoin staking",
-        "subVP": "Stake your LikeCoin to gain extra reward, and participate in community governance." }
-    ]
+    }
   },
+  "GetAppPage.Download": "Download Liker Land",
+  "GetAppPage.Manage.like": "Manage your LikeCoin",
+  "GetAppPage.Download.now": "Download Now",
+  "GetAppPage.Feature.mainVP1": "The most user-friendly LikeCoin wallet",
+  "GetAppPage.Feature.mainVP2": "Check the likes statistics",
+  "GetAppPage.Feature.mainVP3": "LikeCoin staking",
+  "GetAppPage.Feature.subVP1": "The easiest way to send and receive LikeCoin.",
+  "GetAppPage.Feature.subVP2": "View the weekly, daily statistics of your LikeCoin bonus, down to each workpiece.",
+  "GetAppPage.Feature.subVP3": "Stake your LikeCoin to gain extra reward, and participate in community governance.",
   "Glossary": {
     "Blogger": "Blogger",
     "InMedia": "Hong Kong In-media",
