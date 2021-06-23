@@ -21,7 +21,7 @@
           preset="primary-outline"
         />
       </header>
-      <CivicSettingsV2 v-if="getUserIsCivicLikerV2" />
+      <CivicDashboard v-if="getUserIsCivicLikerV2" />
       <CivicSettingsV1 v-else />
     </div>
   </div>
@@ -34,7 +34,7 @@ import { DEFAULT_CL_SUPPORTER } from '~/constant';
 
 import Button from '~/components/Button/Button';
 import CivicSettingsV1 from '~/components/CivicSettingsV1';
-import CivicSettingsV2 from '~/components/CivicSettingsV2';
+import CivicDashboard from '~/components/CivicDashboard';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 
@@ -43,7 +43,7 @@ export default {
   components: {
     Button,
     CivicSettingsV1,
-    CivicSettingsV2,
+    CivicDashboard,
     PageHeader,
     SiteNavBar,
   },
