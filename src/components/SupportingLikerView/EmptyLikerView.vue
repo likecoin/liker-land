@@ -30,9 +30,21 @@
     <span class="mt-32 text-gray-9b text-14 font-400">{{
       $t('supporting_empty_view_description')
     }}</span>
-    <nuxt-link
-      class="mt-24 text-14 font-500 text-like-green underline"
+    <Button
+      class="mt-24"
+      preset="plain"
+      :title="$t('supporting_empty_view_button')"
       :to="{ name: 'civic' }"
-    >{{ $t('supporting_empty_view_button') }}</nuxt-link>
+    />
   </div>
 </template>
+
+<script>
+import Button from '../Button/Button';
+
+export default {
+  components: {
+    Button,
+  },
+};
+</script>

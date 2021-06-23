@@ -81,7 +81,7 @@
             href="https://help.like.co"
             rel="noopener"
             @click="onClickSupport"
-          >{{ $t('SlidingMenu.support') }}</a>
+          >{{ $t('SlidingMenu.support') }} <LinkIcon class="w-12 ml-4" /></a>
           <NuxtLink
             v-if="getUserId"
             class="btn btn--plain btn--dark btn--auto-size"
@@ -118,6 +118,7 @@ import HomeIcon from '~/assets/icons/home.svg';
 
 import CommunityCTA from './CommunityCTA/CommunityCTA';
 import Identity from './Identity/Identity';
+import LinkIcon from './Icon/Link8';
 
 export default {
   name: 'SlidingMenu',
@@ -126,6 +127,7 @@ export default {
     CommunityCTA,
     HomeIcon,
     Identity,
+    LinkIcon,
   },
   mixins: [CrispMixinFactory({ isBootAtMounted: false })],
   computed: {

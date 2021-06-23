@@ -31,15 +31,21 @@
           <div class="text-24 font-500">
             {{ $t('SettingsSupportPage.Cancelled') }}
           </div>
-          <div class="flex mt-20">
+          <div class="flex items-center mt-20">
             <div class="flex-grow">
               <div>{{ $t('SettingsSupportPage.CancelledDate', { date: getUserSubscriptionInfo.currentPeriodEndString }) }}</div>
             </div>
             <div>
-              <a
-                class="text-like-green font-500"
+              <Button
+                class="text-like-green"
+                preset="plain"
                 :href="getStripeBillingPortalAPI"
-              >{{ $t('SettingsSupportPage.BillingHistory') }}</a>
+              >
+                <div class="px-4">
+                  <LinkIcon class="mr-4 align-middle" width="9px" />
+                  <span class="underline">{{ $t('SettingsSupportPage.BillingHistory') }}</span>
+                </div>
+              </Button>
             </div>
           </div>
           <Button
@@ -67,19 +73,28 @@
               </div>
               <div>{{ $t('SettingsSupportPage.PaymentMethod') }}</div>
             </div>
-            <div class="ml-12">
-              <div>
-                <a
-                  class="text-like-green font-500"
-                  :href="getStripeBillingPortalAPI"
-                >{{ $t('SettingsSupportPage.ManagePaymentMethod') }}</a>
-              </div>
-              <div class="mt-12 phone:mt-4">
-                <a
-                  class="text-like-green font-500"
-                  :href="getStripeBillingPortalAPI"
-                >{{ $t('SettingsSupportPage.BillingHistory') }}</a>
-              </div>
+            <div class="flex flex-col items-start ml-12 text-like-green">
+              <Button
+                class="-mt-8"
+                preset="plain"
+                :href="getStripeBillingPortalAPI"
+                :title="$t('SettingsSupportPage.ManagePaymentMethod')"
+                title-class="text-12"
+              >
+                <template #prepend>
+                  <LinkIcon width="9px" />
+                </template>
+              </Button>
+              <Button
+                preset="plain"
+                :href="getStripeBillingPortalAPI"
+                :title="$t('SettingsSupportPage.BillingHistory')"
+                title-class="text-12"
+              >
+                <template #prepend>
+                  <LinkIcon width="9px" />
+                </template>
+              </Button>
             </div>
           </div>
           <div class="mt-20">
@@ -137,6 +152,7 @@ import Button from '~/components/Button/Button';
 import CardBrand from '~/components/CardBrand/CardBrand';
 import CivicLikerFeatureList from '~/components/CivicLikerFeatureList/CivicLikerFeatureList';
 import EmptyLikerView from '~/components/SupportingLikerView/EmptyLikerView';
+import LinkIcon from '~/components/Icon/Link8';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportingLikerView from '~/components/SupportingLikerView/SupportingLikerView';
 
@@ -149,6 +165,7 @@ export default {
     CardBrand,
     CivicLikerFeatureList,
     EmptyLikerView,
+    LinkIcon,
     SupportingLikerView,
     Spinner,
   },

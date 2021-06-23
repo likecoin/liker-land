@@ -52,31 +52,36 @@
             .flex-grow.text-gray-9b.text-12
               span(:class="{ 'text-danger': pitchCharCount > pitchCharLimit }") {{ pitchCharCount }}
               | /{{ pitchCharLimit }}
-            Button.ml-24.text-like-green.underline.flex-shrink-0(
+            Button.ml-24.flex-shrink-0(
               v-if="!isEditingPitch"
               preset="plain"
+              :title="$t('preview')"
+              title-class="text-12"
               :disabled="isUpdatingPitch"
               @click="isShowPitchPreview = true"
             )
-              .px-4
-                EyeIcon.w-16.h-16.align-middle
-                span.ml-4.leading-1.text-12.font-bold {{ $t('preview') }}
-            Button.ml-8.text-like-green.underline.flex-shrink-0(
+              template(#prepend)
+                EyeIcon.w-16.h-16
+            Button.ml-4.flex-shrink-0(
               v-if="!isEditingPitch"
+              key="edit"
+              class="-mr-8"
               preset="plain"
+              :title="$t('edit')"
+              title-class="text-12"
               :disabled="isUpdatingPitch"
               @click="startPitchEditing"
             )
-              .px-4
-                EditIcon.w-14.h-14.align-middle
-                span.ml-4.leading-1.text-12.font-bold {{ $t('edit') }}
+              template(#prepend)
+                EditIcon.w-14.h-14
             Button.ml-24(
               v-else
+              key="confirm"
               preset="primary"
+              :title="$t('confirm')"
               :disabled="isUpdatingPitch || pitchCharCount > pitchCharLimit"
               @click="finishPitchEditing"
             )
-              .px-8.font-600 {{ $t('confirm') }}
 
           CivicSubscriptionView(
             v-if="isShowPitchPreview"
@@ -110,12 +115,14 @@
           .text-12.text-gray-4a
             | {{ $tc('SupportersDashboard.Summary.Data.Subscribers', count, { count }) }}
         li.m-8.flex.items-center
-          Button.text-12.text-like-green.underline(
+          Button(
             preset="plain"
+            :title="$t('creators_dashboard_manage_likecoin_button')"
+            title-class="text-12"
             :to="{ name: 'getapp' }"
           )
-            WalletIcon.w-16.h-16.mr-4.align-middle
-            span {{ $t('creators_dashboard_manage_likecoin_button') }}
+            template(#prepend)
+              WalletIcon.w-16.h-16
 
       template(v-if="count")
         h2.mt-32.text-like-green.font-24.font-500 {{ $t('SupportersDashboard.List.Title') }}

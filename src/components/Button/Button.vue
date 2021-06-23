@@ -12,6 +12,7 @@
         v-bind="titleProps"
       >{{ title }}</span>
       <slot v-else />
+      <slot name="append" />
     </div>
   </a>
   <nuxt-link
@@ -27,6 +28,7 @@
         v-bind="titleProps"
       >{{ title }}</span>
       <slot v-else />
+      <slot name="append" />
     </div>
   </nuxt-link>
   <button
@@ -41,6 +43,7 @@
         v-bind="titleProps"
       >{{ title }}</span>
       <slot v-else />
+      <slot name="append" />
     </div>
   </button>
 </template>
@@ -66,6 +69,10 @@ export default {
       default: '',
     },
     title: {
+      type: String,
+      default: '',
+    },
+    titleClass: {
       type: String,
       default: '',
     },
@@ -95,7 +102,7 @@ export default {
     },
     titleProps() {
       return {
-        class: 'button__title',
+        class: ['button__title', this.titleClass],
       };
     },
   },
@@ -162,6 +169,14 @@ export default {
     font-size: 16px;
   }
 
+  &--plain {
+    color: #28646e;
+
+    > div {
+      padding: 0 8px;
+    }
+  }
+
   &--primary {
     color: #28646e;
 
@@ -210,8 +225,20 @@ export default {
   &--secondary &__title,
   &--secondary-outline &__title,
   &--special &__title,
-  &--danger &__title {
+  &--danger &__title,
+  &--plain &__title {
     font-weight: 600;
+  }
+
+  &--plain &__title {
+    text-decoration: underline;
+
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
   }
 
   &--translucent-light {
