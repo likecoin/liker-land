@@ -140,6 +140,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import dateFormat from 'date-fns/format';
 
+import { CIVIC_LIKER_CLASSIC_LIKER_ID } from '~/constant';
+
 import {
   getUserMinAPI,
   getFetchUserSuperLikeAPI,
@@ -277,8 +279,11 @@ export default {
       };
     },
   },
-  async asyncData({ store, route, query, $api, error }) {
+  async asyncData({ store, route, redirect, query, $api, error }) {
     const { id } = route.params;
+    if (id === CIVIC_LIKER_CLASSIC_LIKER_ID) {
+      return redirect({ name: 'civic-classic', query });
+    }
     if (id && checkUserNameValid(id)) {
       try {
         const [creator, civicSupport] = await Promise.all([
