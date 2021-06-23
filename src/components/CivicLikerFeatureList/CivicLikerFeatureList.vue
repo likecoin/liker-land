@@ -6,7 +6,7 @@
           class="w-24 h-24"
           :type="headerIconType"
         />
-        <span :class="headerTitleClass">{{ headerTitle }}</span>
+        <span :class="headerTitleClass">{{ errorMessage || headerTitle }}</span>
       </div>
       <div
         v-if="sinceDate"
@@ -37,9 +37,9 @@ export default {
     StatusIcon,
   },
   props: {
-    isError: {
-      type: Boolean,
-      defualt: false,
+    errorMessage: {
+      type: String,
+      default: '',
     },
     isActive: {
       type: Boolean,
@@ -51,6 +51,9 @@ export default {
     },
   },
   computed: {
+    isError() {
+      return !!this.errorMessage;
+    },
     headerBackgroundClass() {
       if (this.isError) return 'bg-error-gradient';
       if (this.isActive) return 'bg-like-gradient';
