@@ -6,11 +6,11 @@
       <img v-if="showCross" class="cross" src="./cross_3x.png">
 
       <div class="center app-logo">
-        <AppLogo :width="width" />
+        <AppLogo width="160px" />
       </div>
       <h1 class="slogan center">
-        <div class="slogan-text center">{{ $t("GetAppPage.Download") }}</div>
-        <div class="slogan-text center">{{ $t("GetAppPage.Manage.like") }}</div>
+        <div class="slogan-text center">{{ $t('GetAppPage.Download') }}</div>
+        <div class="slogan-text center">{{ $t('GetAppPage.Manage.like') }}</div>
       </h1>
     </section>
     <section class="container">
@@ -19,19 +19,17 @@
 
     <section class="feature">
       <div>
-        <div v-for="number in valueProps" :key="number" class="container side-by-side">
+        <div
+          v-for="(feature, key) in combineFeatures"
+          :key="key"
+          class="container side-by-side"
+        >
           <div class="icon-part">
             <img src="./phone_icon_3x.png" width="56px">
           </div>
           <div class="vp-part">
-            <div
-              class="main-vp"
-              v-html="$t(`GetAppPage.Feature.mainVP${number}`)"
-            />
-            <div
-              class="sub-vp"
-              v-html="$t(`GetAppPage.Feature.subVP${number}`)"
-            />
+            <div class="main-vp">{{ feature.main }}</div>
+            <div class="sub-vp">{{ feature.sub }}</div>
           </div>
         </div>
       </div>
@@ -42,7 +40,9 @@
     </section>
     <section class="footer-container">
       <h1 class="slogan center">
-        <div class="slogan-text center"> {{ $t("GetAppPage.Download.now") }} </div>
+        <div class="slogan-text center">
+          {{ $t('GetAppPage.Download.now') }}
+        </div>
       </h1>
     </section>
     <section class="footer-container">
@@ -67,12 +67,6 @@ export default {
     AppLogo,
   },
   props: {
-    valueProps: {
-      type: Array,
-      default() {
-        return [1, 2, 3];
-      },
-    },
     showCross: {
       type: Boolean,
       default: false,
@@ -98,7 +92,23 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      combinedVPs: [],
+    };
+  },
   computed: {
+    combineFeatures() {
+      const combinedVPs = [];
+      for (let i = 0; i < this.$t('mainVPs').length; i += 1) {
+        const singleVPPair = {
+          main: this.$t('mainVPs')[i],
+          sub: this.$t('subVPs')[i],
+        };
+        combinedVPs.push(singleVPPair);
+      }
+      return combinedVPs;
+    },
     utmProps() {
       return {
         utmCampaign: this.utmCampaign,

@@ -321,12 +321,16 @@
   "GetAppPage.Download": "Download Liker Land",
   "GetAppPage.Manage.like": "Manage your LikeCoin",
   "GetAppPage.Download.now": "Download Now",
-  "GetAppPage.Feature.mainVP1": "The most user-friendly LikeCoin wallet",
-  "GetAppPage.Feature.mainVP2": "Check the likes statistics",
-  "GetAppPage.Feature.mainVP3": "LikeCoin staking",
-  "GetAppPage.Feature.subVP1": "The easiest way to send and receive LikeCoin.",
-  "GetAppPage.Feature.subVP2": "View the weekly, daily statistics of your LikeCoin bonus, down to each workpiece.",
-  "GetAppPage.Feature.subVP3": "Stake your LikeCoin to gain extra reward, and participate in community governance.",
+  "mainVPs": [
+    "The most user-friendly LikeCoin wallet",
+    "Check the likes statistics",
+    "LikeCoin staking"
+  ],
+  "subVPs": [
+    "The easiest way to send and receive LikeCoin.",
+    "View the weekly, daily statistics of your LikeCoin bonus, down to each workpiece.",
+    "Stake your LikeCoin to gain extra reward, and participate in community governance."
+  ],
   "Glossary": {
     "Blogger": "Blogger",
     "InMedia": "Hong Kong In-media",
