@@ -182,17 +182,17 @@
       "PlatformPlugin": "Can add LikeCoin button With third-party plugin on {Pixnet}; Using <iframe> on {blogger} or any other self-hosted websites."
     },
     "LikerIDPlaceholer": "<Your Liker ID>",
-    "GuideLinkBase": "https://docs.like.co/user-guide/content-creators",
+    "GuideLinkBase": "https://docs.like.co/user-guide/creator",
     "GuideLink": {
-      "Blogger": "@:CreatorsPage.GuideLinkBase/content-platforms/blogspot",
+      "Blogger": "@:CreatorsPage.GuideLinkBase/blogging-platforms/blogspot",
       "InMedia": "@:CreatorsPage.GuideLinkBase/blogging-platforms/inmediahk.net",
-      "Matters": "@:CreatorsPage.GuideLinkBase/content-platforms/matters",
-      "Medium": "@:CreatorsPage.GuideLinkBase/content-platforms/medium",
-      "Pixnet": "@:CreatorsPage.GuideLinkBase/content-platforms/pixnet",
+      "Matters": "@:CreatorsPage.GuideLinkBase/matters",
+      "Medium": "@:CreatorsPage.GuideLinkBase/blogging-platforms#medium",
+      "Pixnet": "@:CreatorsPage.GuideLinkBase/blogging-platforms#pixnet",
       "Standnews": "@:CreatorsPage.GuideLinkBase/blogging-platforms/thestandnews",
-      "Timelog": "@:CreatorsPage.GuideLinkBase/content-platforms/timelog",
-      "Vocus": "@:CreatorsPage.GuideLinkBase/content-platforms/vocus",
-      "WordPress": "@:CreatorsPage.GuideLinkBase/self-host/wordpress"
+      "Timelog": "@:CreatorsPage.GuideLinkBase/blogging-platforms/timelog",
+      "Vocus": "@:CreatorsPage.GuideLinkBase/blogging-platforms#vocus",
+      "WordPress": "@:CreatorsPage.GuideLinkBase/wordpress"
     },
     "CTAButton": {
       "Register": "Register now",
