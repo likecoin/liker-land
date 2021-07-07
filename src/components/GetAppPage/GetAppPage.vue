@@ -1,56 +1,47 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article class="get-app-page">
-    <section class="container top-container">
-      <img class="feature-image" src="./getapp-banner.png">
-      <img v-if="showCross" class="cross" src="./cross_3x.png">
-
-      <div class="center app-logo">
-        <AppLogo width="160px" />
-      </div>
-      <h1 class="slogan center">
-        <div class="slogan-text center">{{ $t('GetAppPage.Download') }}</div>
-        <div class="slogan-text center">{{ $t('GetAppPage.Manage.like') }}</div>
-      </h1>
-    </section>
-    <section class="container">
-      <hr class="separate-line">
-    </section>
-
-    <section class="feature">
-      <div>
-        <div
-          v-for="(feature, key) in combineFeatures"
-          :key="key"
-          class="container side-by-side"
-        >
-          <div class="icon-part">
-            <img src="./phone_icon_3x.png" width="56px">
-          </div>
-          <div class="vp-part">
-            <div class="main-vp">{{ feature.main }}</div>
-            <div class="sub-vp">{{ feature.sub }}</div>
+    <section class="screen-wrapper">
+      <section class="container banner-container">
+        <img class="feature-image" src="./getapp-banner.png">
+        <img v-if="showCross" class="cross" src="./cross_3x.png">
+      </section>
+      <section class="container top-container">
+        <div class="center app-logo">
+          <AppLogo width="160px" />
+        </div>
+        <h1 class="slogan center">
+          <div class="slogan-text center">{{ $t('GetAppPage.Download') }}</div>
+          <div class="slogan-text center">{{ $t('GetAppPage.Manage.like') }}</div>
+        </h1>
+      </section>
+      <section class="container">
+        <div class="download-badges">
+          <div class="text-center">
+            <AppDownloadBadges :from="from" v-bind="utmProps" />
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="container">
-      <hr class="separate-line">
-    </section>
-    <section class="footer-container">
-      <h1 class="slogan center">
-        <div class="slogan-text center">
-          {{ $t('GetAppPage.Download.now') }}
+      </section>
+      <section class="container">
+        <hr class="separate-line">
+      </section>
+      <section class="feature">
+        <div>
+          <div
+            v-for="(feature, key) in combineFeatures"
+            :key="key"
+            class="container side-by-side"
+          >
+            <div class="icon-part">
+              <img src="./phone_icon_3x.png" width="56px">
+            </div>
+            <div class="vp-part">
+              <div class="main-vp">{{ feature.main }}</div>
+              <div class="sub-vp">{{ feature.sub }}</div>
+            </div>
+          </div>
         </div>
-      </h1>
-    </section>
-    <section class="footer-container">
-      <div class="center footer">
-        <div class="text-center">
-          <AppDownloadBadges :from="from" v-bind="utmProps" />
-        </div>
-      </div>
+      </section>
     </section>
   </article>
 </template>
@@ -127,165 +118,188 @@ export default {
   margin-right: auto;
   margin-left: auto;
 
-  .separate-line {
-    background-color: #d8d8d8;
-    height: 1px;
-    width: 80%;
-  }
-
-  .app-logo {
-    padding-top: 20px;
-    @media screen and (max-width: 600px) {
-      display: inline-block;
-      padding-bottom: 10px;
-    }
-  }
-
-  .top-container {
-    padding-top: 100px;
-    @media screen and (max-width: 600px) {
-      text-align: center;
-    }
-  }
-
-  .footer-container {
-    @media screen and (max-width: 600px) {
-      text-align: center;
-    }
-  }
-
-  .container {
-    @apply px-16;
-
-    width: 100%;
+  .screen-wrapper {
+    background-color: white;
+    border-radius: 8px;
+    width: 62%;
     max-width: 600px;
     margin-right: auto;
     margin-left: auto;
 
     @media screen and (max-width: 600px) {
-      @apply px-0;
-    }
-  }
-
-  .center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .footer {
-    padding-bottom: 55px;
-    @media screen and (max-width: 600px) {
-      text-align: center;
-    }
-  }
-
-  .side-by-side {
-    @apply py-16;
-    display: flex;
-
-    @media screen and (max-width: 600px) {
-      max-width: 256px;
-    }
-
-    .icon-part {
-      width: 38%;
-      text-align: right;
-      padding-right: 5%;
-
-      @media screen and (max-width: 600px) {
-        width: 20%;
-        text-align: middle;
-      }
-    }
-
-    .vp-part {
-      width: 45%;
-
-      @media screen and (max-width: 600px) {
-        width: 80%;
-        text-align: middle;
-      }
-    }
-  }
-
-  .slogan {
-    @apply text-like-green;
-    @apply my-20;
-
-    display: flex;
-    flex-wrap: wrap;
-    text-align: center;
-
-    @media screen and (max-width: 600px) {
-      margin-top: 0px;
-      margin-bottom: 0px;
-    }
-
-    svg {
-      max-height: 2.5rem;
-      fill: currentColor;
-
-      @apply my-8;
-    }
-
-    @media screen and (max-width: 600px) {
-      max-width: 256px;
-      display: inline-block;
-    }
-  }
-  .slogan-text {
-    color: #28646e;
-    font-size: 24px;
-    width: 100%;
-    padding: 10px;
-
-    @media screen and (max-width: 600px) {
-      font-size: 18px;
-    }
-  }
-
-  .feature {
-    margin-top: 20px;
-    padding-bottom: 20px;
-
-    .main-vp {
-      font-weight: bold;
-      color: #28646e;
-      font-size: 16px;
-      padding: 0 5px;
-    }
-
-    .sub-vp {
-      color: #4a4a4a;
-      font-size: 14px;
-      padding: 5px;
-      line-height: 20px;
-    }
-  }
-
-  .feature-image {
-    display: block;
-    width: 100%;
-    margin: auto;
-    border-radius: 10px 10px 0px 0px;
-    margin-top: -80px;
-    background-color: #28646e;
-
-    @media screen and (max-width: 768px) {
       border-radius: 0px;
+      width: 100%;
     }
-  }
 
-  .cross {
-    z-index: 2;
-    width: 21px;
-    height: 22px;
-    margin: -295px 0px 300px 32px;
-    @media screen and (max-width: 600px) {
-      width: 12px;
-      height: 12.5px;
-      margin: -75% 0% 53% -88%;
+    .separate-line {
+      background-color: #d8d8d8;
+      height: 1px;
+      width: 80%;
+    }
+
+    .app-logo {
+      padding-top: 20px;
+      @media screen and (max-width: 600px) {
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+    }
+
+    .banner-container {
+      margin-top: 100px;
+      background-color: #f7f7f7 !important;
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .top-container {
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .footer-container {
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .container {
+      margin-left: 4rem;
+      margin-right: 4rem;
+      background-color: white;
+      width: 100%;
+      max-width: 600px;
+      margin-right: auto;
+      margin-left: auto;
+
+      @media screen and (max-width: 600px) {
+        @apply px-0;
+      }
+    }
+
+    .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .download-badges {
+      padding-top: 10px;
+      padding-bottom: 20px;
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .side-by-side {
+      @apply py-16;
+      display: flex;
+
+      @media screen and (max-width: 600px) {
+        max-width: 256px;
+      }
+
+      .icon-part {
+        width: 38%;
+        text-align: right;
+        padding-right: 5%;
+
+        @media screen and (max-width: 600px) {
+          width: 20%;
+          text-align: middle;
+        }
+      }
+
+      .vp-part {
+        width: 45%;
+
+        @media screen and (max-width: 600px) {
+          width: 80%;
+          text-align: middle;
+        }
+      }
+    }
+
+    .slogan {
+      @apply text-like-green;
+
+      display: flex;
+      flex-wrap: wrap;
+      text-align: center;
+
+      @media screen and (max-width: 600px) {
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
+      svg {
+        max-height: 2.5rem;
+        fill: currentColor;
+
+        @apply my-8;
+      }
+
+      @media screen and (max-width: 600px) {
+        max-width: 256px;
+        display: inline-block;
+      }
+    }
+    .slogan-text {
+      color: #28646e;
+      font-size: 24px;
+      width: 100%;
+      padding: 10px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 18px;
+      }
+    }
+
+    .feature {
+      margin-top: 20px;
+      margin-bottom: 4rem;
+      padding-bottom: 20px;
+
+      .main-vp {
+        font-weight: bold;
+        color: #28646e;
+        font-size: 16px;
+        padding: 0 5px;
+      }
+
+      .sub-vp {
+        color: #4a4a4a;
+        font-size: 14px;
+        padding: 5px;
+        line-height: 20px;
+      }
+    }
+
+    .feature-image {
+      display: block;
+      width: 100%;
+      margin: auto;
+      border-radius: 10px 10px 0px 0px !important;
+      margin-top: -80px;
+      background-color: #28646e;
+
+      @media screen and (max-width: 768px) {
+        border-radius: 0px !important;
+      }
+    }
+
+    .cross {
+      z-index: 2;
+      width: 21px;
+      height: 22px;
+      margin: -295px 0px 300px 32px;
+      @media screen and (max-width: 600px) {
+        width: 12px;
+        height: 12.5px;
+        margin: -75% 0% 53% -88%;
+      }
     }
   }
 }
