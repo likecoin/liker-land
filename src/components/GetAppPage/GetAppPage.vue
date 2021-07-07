@@ -16,9 +16,15 @@
         </h1>
       </section>
       <section class="container">
+        <div class="download-badges">
+          <div class="text-center">
+            <AppDownloadBadges :from="from" v-bind="utmProps" />
+          </div>
+        </div>
+      </section>
+      <section class="container">
         <hr class="separate-line">
       </section>
-
       <section class="feature">
         <div>
           <div
@@ -33,24 +39,6 @@
               <div class="main-vp">{{ feature.main }}</div>
               <div class="sub-vp">{{ feature.sub }}</div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="container">
-        <hr class="separate-line">
-      </section>
-      <section class="footer-container">
-        <h1 class="slogan center">
-          <div class="slogan-text center">
-            {{ $t('GetAppPage.Download.now') }}
-          </div>
-        </h1>
-      </section>
-      <section class="footer-container">
-        <div class="center footer">
-          <div class="text-center">
-            <AppDownloadBadges :from="from" v-bind="utmProps" />
           </div>
         </div>
       </section>
@@ -135,7 +123,6 @@ export default {
     border-radius: 8px;
     width: 62%;
     max-width: 600px;
-    // text-align: center;
     margin-right: auto;
     margin-left: auto;
 
@@ -198,8 +185,9 @@ export default {
       justify-content: center;
     }
 
-    .footer {
-      padding-bottom: 55px;
+    .download-badges {
+      padding-top: 10px;
+      padding-bottom: 20px;
       @media screen and (max-width: 600px) {
         text-align: center;
       }

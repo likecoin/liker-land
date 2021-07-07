@@ -56,9 +56,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.getapp-page {
-  background: #f7f7f7;
-}
-</style>
