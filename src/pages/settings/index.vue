@@ -17,16 +17,6 @@
           span.settings-menu__item-title {{ $t('SettingsPage.likerId') }}
           span.settings-menu__item-subtitle {{ getUserId }}
       li
-        NuxtLink.settings-menu__item(:to="{ name: 'settings-civic' }")
-          span.settings-menu__item-title {{ $t('SettingsPage.civicLiker.title') }}
-          span.settings-menu__item-subtitle(v-if="getUserIsCivicLiker")
-            | {{ $t('SettingsPage.civicLiker.subscribing') }}
-      li
-        NuxtLink.settings-menu__item(:to="{ name: 'settings-support' }")
-          span.settings-menu__item-title {{ $t('SettingsPage.Supporters.Title') }}
-          span.settings-menu__item-subtitle(v-if="getMySupportersCount")
-            | {{ $tc('SettingsPage.Supporters.Count', getMySupportersCount, { count: getMySupportersCount }) }}
-      li
         NuxtLink.settings-menu__item(:to="{ name: 'settings-following' }")
           span.settings-menu__item-title {{ $t('SettingsPage.subscription') }}
 </template>
@@ -45,7 +35,7 @@ export default {
   computed: {
     getLikerIdSettingsURL,
 
-    ...mapGetters(['getUserId', 'getUserIsCivicLiker', 'getMySupportersCount']),
+    ...mapGetters(['getUserId']),
   },
   mounted() {
     this.fetchMySupporters();
