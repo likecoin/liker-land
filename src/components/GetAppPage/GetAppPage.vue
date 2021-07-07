@@ -259,6 +259,7 @@ export default {
 
     .feature {
       margin-top: 20px;
+      margin-bottom: 4rem;
       padding-bottom: 20px;
 
       .main-vp {
