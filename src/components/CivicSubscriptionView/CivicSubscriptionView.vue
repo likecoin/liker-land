@@ -847,6 +847,8 @@ export default {
       } else if (this.currentQuantity > 0) {
         // Go back to settings for updating subscription
         this.$router.push({ name: 'settings-civic' });
+      } else if (this.isClassic) {
+        this.$router.push({ name: 'civic' });
       } else {
         // Go back to portfolio for new subscription
         this.$router.push({ name: 'id', params: { id: this.authorId } });
