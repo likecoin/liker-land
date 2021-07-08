@@ -4,7 +4,7 @@
         template
           SiteNavBar.text-like-green(:is-disabled-nav="shouldDisabledNav")
 
-      main.page-content
+      main.page-content(class="phone:px-0 px-16")
         CivicSubscriptionView(
           :liker-id="id"
           :is-show-backdrop="false"

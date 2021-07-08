@@ -6,22 +6,23 @@
     :is-animated="true"
     :is-backdrop-opaque="isPreview"
     :is-absolute="false"
-    :content-container-class="['shadow-none rounded-8 phone:rounded-none', { 'pointer-events-none select-none': !!isPreview }]"
+    :content-container-class="[
+      'shadow-none rounded-8 phone:rounded-none',
+      { 'pointer-events-none select-none': !!isPreview },
+    ]"
     @click-outside="onClickBackdrop"
   >
     <template
       v-if="!isPreview"
       #header
     >
-      <div
-        class="flex justify-between items-center mb-24 px-16"
-      >
+      <div class="flex justify-between items-center mb-24 phone:px-16">
         <button
           class="flex items-center settings-page-header__back-button text-like-green"
           @click="onClickBackButton"
         >
           <svg
-            class="w-8 h-8"
+            class="w-12 h-12 mr-4 flex-no-shrink"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 8.7 16"
           >
