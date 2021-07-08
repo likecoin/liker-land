@@ -28,7 +28,7 @@
 
         Button(
           :title="$t('creators_dashboard_header_about_button')"
-          :to="{ name: 'civic' }"
+          :to="{ name: 'creators' }"
           preset="primary-outline"
         )
 
