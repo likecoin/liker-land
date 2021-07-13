@@ -18,7 +18,7 @@
     >
       <div class="flex justify-between items-center mb-24 phone:px-16">
         <button
-          class="flex items-center settings-page-header__back-button text-like-green"
+          class="flex items-center text-like-green"
           @click="onClickBackButton"
         >
           <svg
@@ -261,12 +261,6 @@
         v-else
         class="p-32 phone:px-16"
       >
-        <button
-          v-if="!isPreview"
-          class="settings-page-header__back-button text-like-green"
-          @click="onClickBackButton"
-        ><span class="whitespace-no-wrap">{{ $t('goBack') }}</span></button>
-
         <div class="mt-16 px-40 phone:px-0">
           <Identity
             :avatar-url="avatarUrl"
