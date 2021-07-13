@@ -21,7 +21,7 @@
           preset="primary-outline"
         />
       </header>
-      <CivicDashboard v-if="getUserIsCivicLikerV2" />
+      <CivicDashboard v-if="shouldShowNewDashboard" />
       <CivicSettingsV1 v-else />
     </div>
   </div>
@@ -29,8 +29,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-
-import { DEFAULT_CL_SUPPORTER } from '~/constant';
 
 import Button from '~/components/Button/Button';
 import CivicSettingsV1 from '~/components/CivicSettingsV1';
@@ -48,13 +46,10 @@ export default {
     SiteNavBar,
   },
   computed: {
-    ...mapGetters(['getUserIsCivicLikerV2']),
-  },
-  fetch({ store, redirect }) {
-    const { getUserIsCivicLiker, getUserShouldRenewCivic } = store.getters;
-    if (!getUserIsCivicLiker && !getUserShouldRenewCivic) {
-      redirect({ name: 'id-civic', params: { id: DEFAULT_CL_SUPPORTER } });
-    }
+    ...mapGetters(['getUserIsCivicLikerV2', 'getUserIsCivicLiker']),
+    shouldShowNewDashboard() {
+      return !!(this.getUserIsCivicLikerV2 || !this.getUserIsCivicLiker);
+    },
   },
 };
 </script>
