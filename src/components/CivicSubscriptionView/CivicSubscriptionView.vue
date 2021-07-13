@@ -784,7 +784,11 @@ export default {
         state = this.initialState;
       } else if (this.isUserCurrentCivic) {
         if (this.isClassic) {
-          state = 'select-quantity';
+          if (this.isCancelled) {
+            state = 'new';
+          } else {
+            state = 'select-quantity';
+          }
         } else {
           state = 'confirm';
         }
