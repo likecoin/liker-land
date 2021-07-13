@@ -162,8 +162,8 @@ export default {
     to() {
       return this.isPresetForCreator
         ? {
-            name: 'civic-from',
-            params: { from: this.author && this.author.user },
+            name: 'id-civic',
+            params: { id: this.author && this.author.user },
           }
         : undefined;
     },
