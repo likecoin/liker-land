@@ -148,7 +148,7 @@ export default {
   },
   fetch({ store, redirect }) {
     if (store.getters.getUserIsCivicLikerV2) {
-      redirect({ name: 'settings-civic' });
+      redirect({ name: 'civic-dashboard' });
     }
   },
   async mounted() {

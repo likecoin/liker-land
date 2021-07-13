@@ -440,7 +440,7 @@
           :title="$t('CancelSubscription.Cancel')"
           :full="true"
           size="large"
-          @click="goToWelcomePage"
+          :to="{ name: 'civic-dashboard' }"
         />
 
         <Button
@@ -471,7 +471,7 @@
         :title="$t('ok')"
         :full="true"
         size="large"
-        :to="{ name: 'settings-civic' }"
+        :to="{ name: 'civic-dashboard' }"
       />
     </div>
 
@@ -833,11 +833,15 @@ export default {
 
     goToWelcomePage() {
       this.state = 'loading';
-      this.$router.push({
-        name: 'id',
-        params: { id: this.authorId },
-        query: { civic_welcome: '1' },
-      });
+      if (this.isClassic) {
+        this.$router.push({ name: 'civic-dashboard' });
+      } else {
+        this.$router.push({
+          name: 'id',
+          params: { id: this.authorId },
+          query: { civic_welcome: '1' },
+        });
+      }
     },
 
     goBack() {
@@ -845,7 +849,7 @@ export default {
         this.state = this.stateHistory.pop();
       } else if (this.currentQuantity > 0) {
         // Go back to settings for updating subscription
-        this.$router.push({ name: 'settings-civic' });
+        this.$router.push({ name: 'civic-dashboard' });
       } else if (this.isClassic) {
         this.$router.push({ name: 'civic' });
       } else {
