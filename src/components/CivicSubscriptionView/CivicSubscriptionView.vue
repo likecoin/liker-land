@@ -912,6 +912,7 @@ export default {
     onClickBackdrop(e) {
       this.$emit('click-backdrop', e);
       if (
+        this.isShowBackdrop &&
         !this.isPreview &&
         this.state !== 'loading' &&
         this.isUserCurrentCivic
