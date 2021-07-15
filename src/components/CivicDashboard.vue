@@ -54,10 +54,7 @@
               class="mt-24"
               size="large"
               :title="$t('SettingsCivicCancelPage.continue')"
-              :to="{
-                name: 'id-civic',
-                params: { id: defaultSupporter },
-              }"
+              :to="{ name: 'civic-classic' }"
             />
           </template>
           <template v-else>
