@@ -56,9 +56,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.getapp-page {
-  background: linear-gradient(20deg, #d2f0f0, #f0e6b4);
-}
-</style>

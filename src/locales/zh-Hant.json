@@ -344,14 +344,21 @@
     "Og": {
       "Title": "@:GetAppPage.Title",
       "Description": "下載 Liker Land，以文會友。不是瀏覽，而是閱讀。"
-    },
-    "Feature": [
-      "<b>內容伯樂</b>立場新聞、獨立媒體、眾新聞、Matters 等為你挑選每日頭條",
-      "<b>多元選擇</b>另有 1400 個網站、11000 創作者的 30 多萬篇文章",
-      "<b>深度閱讀</b>把任何網頁儲存到 Liker Land 閱讀列表，慢慢細看",
-      "<b>化讚為賞</b>每個按讚都會成為對創作者的實質鼓勵"
-    ]
+    }
   },
+  "GetAppPage.Download": "下載 Liker Land",
+  "GetAppPage.Manage.like": "管理你的 LikeCoin",
+  "GetAppPage.Download.now": "立即下載",
+  "mainVPs": [
+    "最易用的 LikeCoin 錢包",
+    "查看讚賞數據",
+    "質押 LikeCoin"
+  ],
+  "subVPs": [
+    "用 Liker Land 收發 LikeCoin 最便捷",
+    "每週、每天、每篇文章所獲賺賞，一目了然",
+    "質押 LikeCoin 獲得額外回報，同時參與社群決策"
+  ],
   "Glossary": {
     "Blogger": "Blogger",
     "InMedia": "香港獨立媒體網",

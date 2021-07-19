@@ -1,78 +1,71 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article class="get-app-page">
-    <section class="container">
-      <h1 class="slogan center">
-        <template v-if="$i18n.locale === 'zh-Hant'">
-          <LessBrowsingTC />
-          <MoreReadingTC />
-        </template>
-        <template v-else>
-          <LessBrowsingEN />
-          <MoreReadingEN />
-        </template>
-      </h1>
-      <AppDownloadBadges
-        :from="from"
-        type="start"
-        v-bind="utmProps"
-      />
-    </section>
-
-    <section class="feature">
-      <div class="container side-by-side">
-        <div class="center">
-          <img class="feature-image" src="./featured-image.jpg">
+    <section class="screen-wrapper">
+      <section class="container banner-container">
+        <img class="feature-image" src="./getapp-banner.png">
+        <img v-if="showCross" class="cross" src="./cross_3x.png">
+      </section>
+      <section class="container top-container">
+        <div class="center app-logo">
+          <AppLogo width="160px" />
         </div>
-        <ul class="phone:mt-32 tablet:mt-32">
-          <li
-            v-for="(feature, key) in $t('GetAppPage.Feature')"
+        <h1 class="slogan center">
+          <div class="slogan-text center">{{ $t('GetAppPage.Download') }}</div>
+          <div class="slogan-text center">{{ $t('GetAppPage.Manage.like') }}</div>
+        </h1>
+      </section>
+      <section class="container">
+        <div class="download-badges">
+          <div class="text-center">
+            <AppDownloadBadges :from="from" v-bind="utmProps" />
+          </div>
+        </div>
+      </section>
+      <section class="container">
+        <hr class="separate-line">
+      </section>
+      <section class="feature">
+        <div>
+          <div
+            v-for="(feature, key) in combineFeatures"
             :key="key"
-            v-html="feature"
-          />
-        </ul>
-      </div>
-    </section>
-
-    <section class="preview container side-by-side flex phone:flex-col-reverse tablet:flex-col-reverse">
-      <div class="center phone:mt-32 tablet:mt-32">
-        <div class="text-center">
-          <AppLogo class="phone:hidden tablet:hidden mb-20" />
-          <AppDownloadBadges
-            :from="from"
-            v-bind="utmProps"
-          />
+            class="container side-by-side"
+          >
+            <div class="icon-part">
+              <img src="./phone_icon_3x.png" width="56px">
+            </div>
+            <div class="vp-part">
+              <div class="main-vp">{{ feature.main }}</div>
+              <div class="sub-vp">{{ feature.sub }}</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="center">
-        <AppScreenshotsViewer />
-      </div>
+      </section>
     </section>
   </article>
 </template>
 
 <script>
 import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
-import AppScreenshotsViewer from '~/components/AppScreenshotsViewer/AppScreenshotsViewer';
 
 import AppLogo from '~/assets/images/app-logo.svg';
-import LessBrowsingTC from './slogan/less-browsing-tc.svg';
-import MoreReadingTC from './slogan/more-reading-tc.svg';
-import LessBrowsingEN from './slogan/less-browsing-en.svg';
-import MoreReadingEN from './slogan/more-reading-en.svg';
 
 export default {
-  name: 'GetAppPage',
+  name: 'GetAppPageNew',
   components: {
     AppDownloadBadges,
     AppLogo,
-    AppScreenshotsViewer,
-    LessBrowsingEN,
-    LessBrowsingTC,
-    MoreReadingEN,
-    MoreReadingTC,
   },
   props: {
+    showCross: {
+      type: Boolean,
+      default: false,
+    },
+    width: {
+      type: String,
+      default: '160',
+    },
     from: {
       type: String,
       default: '',
@@ -90,7 +83,23 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      combinedVPs: [],
+    };
+  },
   computed: {
+    combineFeatures() {
+      const combinedVPs = [];
+      for (let i = 0; i < this.$t('mainVPs').length; i += 1) {
+        const singleVPPair = {
+          main: this.$t('mainVPs')[i],
+          sub: this.$t('subVPs')[i],
+        };
+        combinedVPs.push(singleVPPair);
+      }
+      return combinedVPs;
+    },
     utmProps() {
       return {
         utmCampaign: this.utmCampaign,
@@ -109,112 +118,188 @@ export default {
   margin-right: auto;
   margin-left: auto;
 
-  .container {
-    @apply px-16;
-
-    width: 100%;
+  .screen-wrapper {
+    background-color: white;
+    border-radius: 8px;
+    width: 62%;
     max-width: 600px;
     margin-right: auto;
     margin-left: auto;
-  }
 
-  .center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    @media screen and (max-width: 600px) {
+      border-radius: 0px;
+      width: 100%;
+    }
 
-  .side-by-side {
-    @apply py-32;
+    .separate-line {
+      background-color: #d8d8d8;
+      height: 1px;
+      width: 80%;
+    }
 
-    @media screen and (min-width: 769px) {
+    .app-logo {
+      padding-top: 20px;
+      @media screen and (max-width: 600px) {
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+    }
+
+    .banner-container {
+      margin-top: 100px;
+      background-color: #f7f7f7 !important;
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .top-container {
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .footer-container {
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .container {
+      margin-left: 4rem;
+      margin-right: 4rem;
+      background-color: white;
+      width: 100%;
+      max-width: 600px;
+      margin-right: auto;
+      margin-left: auto;
+
+      @media screen and (max-width: 600px) {
+        @apply px-0;
+      }
+    }
+
+    .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .download-badges {
+      padding-top: 10px;
+      padding-bottom: 20px;
+      @media screen and (max-width: 600px) {
+        text-align: center;
+      }
+    }
+
+    .side-by-side {
+      @apply py-16;
       display: flex;
 
-      > * {
-        width: 50%;
+      @media screen and (max-width: 600px) {
+        max-width: 256px;
       }
-    }
-  }
 
-  .slogan {
-    @apply text-like-green;
-    @apply my-20;
+      .icon-part {
+        width: 38%;
+        text-align: right;
+        padding-right: 5%;
 
-    display: flex;
-    flex-wrap: wrap;
-
-    text-align: center;
-
-    svg {
-      max-height: 2.5rem;
-      fill: currentColor;
-
-      @apply my-8;
-    }
-  }
-
-  .feature {
-    @apply bg-like-green;
-    @apply text-14;
-    @apply text-white;
-    @apply font-400;
-
-    margin-top: 80px;
-    padding-bottom: 20px;
-
-    ul {
-      @apply pl-32;
-      @apply pb-16;
-
-      list-style: none;
-
-      li {
-        &:not(:first-child) {
-          @apply mt-16;
+        @media screen and (max-width: 600px) {
+          width: 20%;
+          text-align: middle;
         }
+      }
 
-        /deep/ b {
-          display: block;
-          @apply mb-8;
-          @apply text-like-cyan;
-          @apply text-20;
-          @apply font-600;
+      .vp-part {
+        width: 45%;
+
+        @media screen and (max-width: 600px) {
+          width: 80%;
+          text-align: middle;
         }
       }
     }
 
-    @media screen and (min-width: 1025px) {
-      border-radius: 10px;
-    }
+    .slogan {
+      @apply text-like-green;
 
-    @media screen and (max-width: 768px) {
-      padding-bottom: 440px;
+      display: flex;
+      flex-wrap: wrap;
+      text-align: center;
 
-      ul {
-        text-align: center;
+      @media screen and (max-width: 600px) {
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
 
-        @apply pl-0;
+      svg {
+        max-height: 2.5rem;
+        fill: currentColor;
+
+        @apply my-8;
+      }
+
+      @media screen and (max-width: 600px) {
+        max-width: 256px;
+        display: inline-block;
       }
     }
-  }
+    .slogan-text {
+      color: #28646e;
+      font-size: 24px;
+      width: 100%;
+      padding: 10px;
 
-  .feature-image {
-    display: block;
-    width: 100%;
-    margin: auto;
-    border-radius: 10px;
-    margin-top: -80px;
-
-    @media screen and (max-width: 768px) {
-      max-width: 256px;
+      @media screen and (max-width: 600px) {
+        font-size: 18px;
+      }
     }
-  }
 
-  .preview {
-    margin-top: -64px;
+    .feature {
+      margin-top: 20px;
+      margin-bottom: 4rem;
+      padding-bottom: 20px;
 
-    @media screen and (max-width: 768px) {
-      margin-top: -482px;
+      .main-vp {
+        font-weight: bold;
+        color: #28646e;
+        font-size: 16px;
+        padding: 0 5px;
+      }
+
+      .sub-vp {
+        color: #4a4a4a;
+        font-size: 14px;
+        padding: 5px;
+        line-height: 20px;
+      }
+    }
+
+    .feature-image {
+      display: block;
+      width: 100%;
+      margin: auto;
+      border-radius: 10px 10px 0px 0px !important;
+      margin-top: -80px;
+      background-color: #28646e;
+
+      @media screen and (max-width: 768px) {
+        border-radius: 0px !important;
+      }
+    }
+
+    .cross {
+      z-index: 2;
+      width: 21px;
+      height: 22px;
+      margin: -295px 0px 300px 32px;
+      @media screen and (max-width: 600px) {
+        width: 12px;
+        height: 12.5px;
+        margin: -75% 0% 53% -88%;
+      }
     }
   }
 }
