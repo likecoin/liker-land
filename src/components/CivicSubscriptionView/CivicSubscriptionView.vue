@@ -769,9 +769,10 @@ export default {
         console.error(err);
         this.$router.replace({ name: 'settings-civic' });
       }
+
+      const supportingUserInfo = this.getCivicSupportingUserInfo(this.authorId);
       // Set default to  1 for new subscription
-      let { quantity = 1 } =
-        this.getCivicSupportingUserInfo(this.authorId) || {};
+      let { quantity = 1 } = supportingUserInfo || {};
       const parsedQuantity = parseInt(this.$route.query.quantity, 10);
       if (parsedQuantity && parsedQuantity > 0) {
         quantity = parsedQuantity;
@@ -784,7 +785,7 @@ export default {
         state = this.initialState;
       } else if (this.isUserCurrentCivic) {
         if (this.isClassic) {
-          if (this.selectedQuantity > 0) {
+          if (supportingUserInfo && this.selectedQuantity > 0) {
             state = 'select-quantity';
           } else {
             state = 'new';
