@@ -1,5 +1,6 @@
 import querystring from 'querystring';
 import {
+  CIVIC_LIKER_CLASSIC_LIKER_ID,
   IS_TESTNET,
   LIKECOIN_API_BASE,
   LIKE_CO_THUMBNAIL_FN_BASE,
@@ -133,4 +134,6 @@ export const updateProfile = () => `/api/users/self/update`;
 export const userPreferences = () => `/api/users/preferences`;
 
 export const getLikerOgImage = id =>
-  `https://static.like.co/liker-og-image/${id}.png`;
+  id === CIVIC_LIKER_CLASSIC_LIKER_ID
+    ? 'https://liker.land/images/og/civic-classic.png'
+    : `https://static.like.co/liker-og-image/${id}.png`;
