@@ -6,7 +6,7 @@
       p.mt-24.leading-1_5 {{ $t('CLP.suggestedCreators.description') }}
 
     .mt-40.mx-40(class="phone:mx-16")
-      SuperLikeContentGrid(
+      SuperLikeContentGrid.justify-center(
         preset="creator"
         :contents="gridContents"
         :is-loading="gridContents.length === 0"
