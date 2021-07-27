@@ -2,14 +2,11 @@ export default function({ req, res, route, store, error, redirect }) {
   if (!store.getters.getUserId) {
     let message;
     switch (route.name) {
-      case 'civic-dashboard':
-        redirect({ name: 'civic' });
-        return;
-
       case 'creators-dashboard':
         redirect({ name: 'creators' });
         return;
 
+      case 'civic-dashboard':
       case 'civic-register':
         message = 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER';
         break;
