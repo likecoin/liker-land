@@ -15,7 +15,6 @@
         class="author-list-item__avatar"
         :src="resizedAvatarSrc"
         :halo="avatarHalo"
-        crossorigin="anonymous"
         size="36"
       />
       <span

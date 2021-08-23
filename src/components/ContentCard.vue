@@ -18,7 +18,6 @@
             LcAvatar.content-card__author-avatar(
               :src="resizedAuthorAvatarSrc"
               :halo="authorAvatarHalo"
-              crossorigin="anonymous"
             )
             | {{ authorName }}
 
@@ -58,7 +57,6 @@
         img(
           :src="resizedCoverSrc"
           :alt="normalizedTitle"
-          crossorigin="anonymous"
         )
 
     //- Info
