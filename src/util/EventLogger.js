@@ -25,12 +25,6 @@ export async function setTrackerUser(vue, { user, email }) {
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
   }
-  if (window.fbq) {
-    const userPayload = {};
-    if (email) userPayload.em = email;
-    if (user) userPayload.external_id = user;
-    window.fbq('init', process.env.FACEBOOK_PIXEL_ID, userPayload);
-  }
 }
 
 export function updateSentryUser(vue, { user, displayName }) {
@@ -87,17 +81,6 @@ export function logTrackerEvent(vue, category, action, label, value) {
           });
         }
       }
-    }
-    if (window.fbq) {
-      const eventName = `LikerLand_${action}`;
-      const eventPayload = {
-        label: label.substring(0, 499),
-      };
-      if (eventName === 'LikerLand_CivicPaymentSuccess') {
-        eventPayload.currency = 'USD';
-        eventPayload.value = 5;
-      }
-      window.fbq('trackCustom', eventName, eventPayload);
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
