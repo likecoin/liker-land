@@ -25,6 +25,7 @@ import {
   getLikerOgImage,
 } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
+import { STRIPE_SDK_URL } from '~/constant';
 
 import CivicLikerPageWithCreator from '~/components/CivicLikerPage/WithCreator';
 import CivicLikerPageWithoutCreator from '~/components/CivicLikerPage/WithoutCreator';
@@ -202,6 +203,15 @@ export default {
           content: image,
         },
       ],
+      link: [
+        {
+          hid: 'preload:stripe',
+          rel: 'preload',
+          href: STRIPE_SDK_URL,
+          as: 'script',
+        },
+      ],
+      script: [{ hid: 'stripe', src: STRIPE_SDK_URL }],
     };
   },
 };
