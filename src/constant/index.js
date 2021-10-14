@@ -44,3 +44,5 @@ export const CIVIC_LIKER_UNIT_PRICE = 5;
 export const CIVIC_LIKER_CLASSIC_LIKER_ID = 'civic-liker';
 
 export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';
+
+export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';

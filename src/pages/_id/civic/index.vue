@@ -19,7 +19,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import { CIVIC_LIKER_CLASSIC_LIKER_ID } from '~/constant';
+import { STRIPE_SDK_URL, CIVIC_LIKER_CLASSIC_LIKER_ID } from '~/constant';
 
 import { getUserMinAPI, getLikerOgImage } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
@@ -160,7 +160,16 @@ export default {
           content: image,
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      link: [
+        { rel: 'canonical', href: `${this.$route.path}` },
+        {
+          hid: 'preload:stripe',
+          rel: 'preload',
+          href: STRIPE_SDK_URL,
+          as: 'script',
+        },
+      ],
+      script: [{ hid: 'stripe', src: STRIPE_SDK_URL }],
     };
   },
 };

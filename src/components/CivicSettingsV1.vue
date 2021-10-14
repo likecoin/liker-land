@@ -109,6 +109,7 @@ import {
   getOiceSettingsURL,
 } from '~/util/api';
 import { getMaskedCardNumber } from '~/util/billing';
+import { STRIPE_SDK_URL } from '~/constant';
 
 import CardBrand from '~/components/CardBrand/CardBrand';
 import CL1VsCL2Link from '~/components/CL1VsCL2Link';
@@ -210,11 +211,11 @@ export default {
         {
           hid: 'preload:stripe',
           rel: 'preload',
-          href: 'https://js.stripe.com/v3',
+          href: STRIPE_SDK_URL,
           as: 'script',
         },
       ],
-      script: [{ hid: 'stripe', src: 'https://js.stripe.com/v3/' }],
+      script: [{ hid: 'stripe', src: STRIPE_SDK_URL }],
     };
   },
   mounted() {
