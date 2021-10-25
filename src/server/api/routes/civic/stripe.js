@@ -8,6 +8,7 @@ const {
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 
 const { apiCivicLikerGetMetadata, EXTERNAL_URL } = require('../../util/api');
+const { CIVIC_LIKER_QUANTITY_OPTIONS } = require('../../constant');
 
 const router = Router();
 
@@ -95,6 +96,10 @@ router.get('/civic/payment/stripe/payment', async (req, res, next) => {
       const parsedQuantity = parseInt(quantityString, 10);
       if (parsedQuantity && parsedQuantity > 0) {
         quantity = parsedQuantity;
+      }
+      if (!CIVIC_LIKER_QUANTITY_OPTIONS.includes(quantity)) {
+        res.status(400).send('INVALID QUANTITY');
+        return;
       }
     }
 
