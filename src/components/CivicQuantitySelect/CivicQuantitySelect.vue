@@ -23,7 +23,10 @@
 
 <script>
 import { getPriceEmoji } from '~/util/civic';
-import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
+import {
+  CIVIC_LIKER_UNIT_PRICE,
+  CIVIC_LIKER_QUANTITY_OPTIONS,
+} from '~/constant';
 
 import CivicQuantitySelectItem from './CivicQuantitySelectItem';
 
@@ -50,7 +53,7 @@ export default {
       return this.currency || this.$t('Currency.USD');
     },
     quantityOptions() {
-      return [1, 4, 20].map(quantity => ({
+      return CIVIC_LIKER_QUANTITY_OPTIONS.map(quantity => ({
         text: `${quantity * this.dollar} ${this.normalizedCurrency}/${this.$t(
           'SubscriptionPeriod.Month'
         )}`,
