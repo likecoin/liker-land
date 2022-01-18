@@ -42,7 +42,7 @@ const DEFAULT_FOLLOW_IDS = [
   'hi176-matters',
 ];
 
-const CIVIC_LIKER_QUANTITY_OPTIONS = [1, 4, 20];
+const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
 module.exports = {
   AUTH_COOKIE_NAME,
