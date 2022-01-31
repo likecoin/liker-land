@@ -11,11 +11,6 @@
         :contents="gridContents"
         :is-loading="gridContents.length === 0"
       )
-        template(#append)
-          PureSupportingClassicView(
-            :button-to="{ name: 'civic-classic' }"
-            :is-small="true"
-          )
 
       Button.block.mt-16.mx-auto.p-0.max-w-phone-min.border-2.border-like-cyan.border-solid.font-600.rounded-14(
         preset="translucent-light"

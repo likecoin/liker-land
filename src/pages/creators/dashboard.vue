@@ -3,6 +3,8 @@
     PageHeader
       SiteNavBar(class="text-like-green")
 
+    CivicLikerWeb3Notice(:is-pop-up="true")
+
     Spinner.mx-auto.my-96(v-if="!hasFetched")
 
     CivicSubscriptionView(
@@ -35,7 +37,7 @@
       h2.text-like-green.font-24.font-500 {{ $t('SettingsSupportPage.Title.CreatorPitch') }}
 
       .bg-white.rounded-8.mt-24.p-32.text-12.text-gray-4a.leading-1_5(
-        class="laptop:flex items-start laptop:pl-64"
+        class="items-start laptop:flex laptop:pl-64"
       )
         Identity.flex-no-shrink(
           :avatar-size="88"
@@ -153,6 +155,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
 
 import Button from '~/components/Button/Button';
+import CivicLikerWeb3Notice from '~/components/CivicLikerWeb3Notice';
 import CivicSubscriptionView from '~/components/CivicSubscriptionView/CivicSubscriptionView';
 import EasySetup from '~/components/CreatorsPage/sections/EasySetup/EasySetup';
 import EditIcon from '~/components/Icon/Edit';
@@ -168,6 +171,7 @@ export default {
   middleware: 'authenticated',
   components: {
     Button,
+    CivicLikerWeb3Notice,
     CivicSubscriptionView,
     EasySetup,
     EditIcon,

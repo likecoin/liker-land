@@ -34,6 +34,11 @@
   "civic_liker_classic_active_button": "Active",
   "civic_liker_classic_cancel_button": "Cancel Civic Liker Classic Subscription",
   "civic_liker_classic_cancel_description": "Civic Liker Classic subscription will end on {date}, are you sure?",
+  "civic_liker_web_3_notice_header": "Civic Liker {web3}",
+  "civic_liker_web_3_notice_header_web3": "Web 3",
+  "civic_liker_web_3_notice_message": "為創造未來，也為應對挑戰，讚賞公民將進化到 Web 3 版本：{0}另外，為了不再浪費資源於傳統法規及規避政策風險，{1}",
+  "civic_liker_web_3_notice_message_highlight_1": "2月21日後委託 LikeCoin 至「讚賞公民節點」，即能成為讚賞公民。",
+  "civic_liker_web_3_notice_message_highlight_2": "即日起讚賞公民停止支援信用卡付款，大步邁向純 Web 3 的世界。",
   "CivicLikerCTA": {
     "slogan": {
       "register": "Trade a coffee for a better world",

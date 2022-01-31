@@ -5,15 +5,19 @@
 
     main.page-content.max-w-desktop.w-full.mx-auto
       CreatorsPage
+
+    CivicLikerWeb3Notice(:is-pop-up="true")
 </template>
 
 <script>
+import CivicLikerWeb3Notice from '~/components/CivicLikerWeb3Notice';
 import CreatorsPage from '~/components/CreatorsPage/CreatorsPage';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
 
 export default {
   components: {
+    CivicLikerWeb3Notice,
     CreatorsPage,
     PageHeader,
     SiteNavBar,

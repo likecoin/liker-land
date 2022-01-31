@@ -1,0 +1,101 @@
+<template>
+  <div v-if="!isPopUp || isShow" :class="rootClass">
+    <div
+      v-if="isPopUp && isShow"
+      class="absolute opacity-50 bg-gray-c pin"
+      @click="isShow = false"
+    />
+    <div :class="dialogClass">
+      <div class="flex items-center p-32 bg-like-gradient text-like-green">
+        <img
+          class="mr-16"
+          src="~/assets/images/civic-liker-icon.svg?inline"
+          :alt="$t('civic_liker_dashboard_header_title')"
+          style="width:64px"
+        >
+        <i18n class="text-32" path="civic_liker_web_3_notice_header">
+          <i18n
+            class="font-600"
+            tag="span"
+            path="civic_liker_web_3_notice_header_web3"
+            place="web3"
+          />
+        </i18n>
+      </div>
+      <div class="p-32 bg-white">
+        <i18n class="leading-1_5 font-200" path="civic_liker_web_3_notice_message">
+          <i18n
+            v-for="(path, i) in [
+              'civic_liker_web_3_notice_message_highlight_1',
+              'civic_liker_web_3_notice_message_highlight_2',
+            ]"
+            :key="`${i}`"
+            class="font-400 text-like-green"
+            tag="span"
+            :path="path"
+            :place="`${i}`"
+          />
+        </i18n>
+        <div class="flex justify-center mt-32">
+          <Button
+            :title="$t('civic_liker_web_3_notice_button')"
+            content-class="px-16"
+            :href="url"
+            rel="noreferrer noopener"
+          >
+            <template #prepend>
+              <AlertCircle class="w-16" />
+            </template>
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Button from './Button/Button';
+
+export default {
+  name: 'CivicLikerWeb3Notice',
+  components: {
+    AlertCircle: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
+    Button,
+  },
+  props: {
+    isPopUp: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      isShow: true,
+    };
+  },
+  computed: {
+    rootClass() {
+      return this.isPopUp
+        ? [
+            'fixed',
+            'pin',
+            'flex',
+            'justify-center',
+            'items-start',
+            'pt-64',
+            'z-50',
+          ]
+        : undefined;
+    },
+    dialogClass() {
+      return ['overflow-hidden', 'rounded-14'].concat(
+        ...(this.isPopUp ? ['relative', 'max-w-phone', 'mx-auto'] : [])
+      );
+    },
+    url() {
+      return '';
+    },
+  },
+};
+</script>

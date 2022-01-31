@@ -19,15 +19,15 @@
               :avatar-size="46"
               :avatar-url="getUserInfo.avatar"
               :liker-id="getUserId"
-              liker-id-class="text-white ml-16"
+              liker-id-class="ml-16 text-white"
               :display-name="getUserInfo.displayName"
               :is-avatar-outlined="getUserCivicLikerHalo !== 'none'"
-              display-name-class="text-white text-20 font-600 ml-16 mt-4"
+              display-name-class="mt-4 ml-16 text-white text-20 font-600"
             />
           </NuxtLink>
           <a
             v-else
-            class="btn btn--dark btn--block mx-0"
+            class="mx-0 btn btn--dark btn--block"
             :href="getOAuthRegisterAPI"
             @click="onClickLogEvent('Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
           >{{ $t('signInOrSignUp') }}</a>
@@ -47,7 +47,7 @@
 
           <NuxtLink
             class="btn btn--outlined btn--dark btn--block"
-            :to="{ name: 'civic-dashboard' }"
+            :to="{ name: getUserIsCivicLiker ? 'civic-dashboard' : 'civic' }"
             @click.native="onClickMenuItem"
           >{{ $t('SlidingMenu.civic') }}</NuxtLink>
 
@@ -62,7 +62,7 @@
             :to="{ name: 'settings' }"
             @click.native="onClickMenuItem"
           >
-            <CogIcon class="btn__icon w-16 h-16 ml-12" />{{
+            <CogIcon class="w-16 h-16 ml-12 btn__icon" />{{
               $t('SlidingMenu.settings')
             }}</NuxtLink>
         </div>
@@ -142,6 +142,7 @@ export default {
     ...mapGetters([
       'getUserId',
       'getUserInfo',
+      'getUserIsCivicLiker',
       'getUserCivicLikerHalo',
       'getHomeRoute',
     ]),

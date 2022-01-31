@@ -12,7 +12,7 @@
     <div
       v-else-if="state === 'error-civic-v2'"
       key="error"
-      class="bg-white rounded-8 px-32 py-24 text-center flex flex-col items-center"
+      class="flex flex-col items-center px-32 py-24 text-center bg-white rounded-8"
     >
       <div
         class="my-32 text-16 font-500 text-gray-4a"
@@ -28,7 +28,7 @@
           :since-date="formattedCivicLikerSinceDate"
           :is-active="getUserIsCivicLiker"
         />
-        <div class="bg-white rounded-8 mt-16 px-32 py-24 text-12 text-gray-4a leading-1_5 phone:px-16">
+        <div class="px-32 py-24 mt-16 bg-white rounded-8 text-12 text-gray-4a leading-1_5 phone:px-16">
           <template v-if="getUserSubscriptionInfo.willCancel">
             <div class="text-24 font-500">
               {{ $t('SettingsSupportPage.Cancelled') }}
@@ -103,24 +103,13 @@
           </template>
         </div>
       </template>
-      <template v-else>
-        <CivicLikerFeatureList />
-        <div class="max-w-phone-min mt-24 mb-16 mx-auto">
-          <Button
-            preset="primary"
-            :title="$t('SettingsSupportPage.AboutCivicLiker')"
-            :to="{ name: 'civic' }"
-            :full="true"
-            size="large"
-          />
-        </div>
-      </template>
+      <CivicLikerFeatureList v-else />
       <h2
         class="mt-40 text-like-green font-24 font-500"
       >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
       <ul
         key="content"
-        class="supporting-liker-list flex flex-wrap list-reset m-0 mt-12 pb-32"
+        class="flex flex-wrap pb-32 m-0 mt-12 supporting-liker-list list-reset"
       >
         <li v-if="supportingLikerIds.length === 0">
           <EmptyLikerView class="h-full" />
@@ -185,7 +174,7 @@ export default {
       );
     },
     subscriptionIds() {
-      return this.supportingLikerIds.concat(CIVIC_LIKER_CLASSIC_LIKER_ID);
+      return this.supportingLikerIds;
     },
     maskedCardNumber() {
       if (this.getUserSubscriptionInfo) {

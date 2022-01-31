@@ -5,7 +5,7 @@
     :href="href"
     v-on="$listeners"
   >
-    <div>
+    <div :class="contentClass">
       <slot name="prepend" />
       <span
         v-if="title"
@@ -21,7 +21,7 @@
     :to="to"
     v-on="$listeners"
   >
-    <div>
+    <div :class="contentClass">
       <slot name="prepend" />
       <span
         v-if="title"
@@ -36,7 +36,7 @@
     v-bind="buttonProps"
     v-on="$listeners"
   >
-    <div>
+    <div :class="contentClass">
       <slot name="prepend" />
       <span
         v-if="title"
@@ -75,6 +75,10 @@ export default {
     titleClass: {
       type: String,
       default: '',
+    },
+    contentClass: {
+      type: String,
+      default: undefined,
     },
     to: {
       type: Object,
