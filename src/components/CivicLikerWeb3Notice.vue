@@ -1,26 +1,31 @@
 <template>
   <div v-if="!isPopUp || isShow" :class="rootClass">
     <div
-      v-if="isPopUp && isShow"
+      v-if="isPopUp"
       class="absolute opacity-50 bg-gray-c pin"
-      @click="isShow = false"
+      @click="close"
     />
     <div :class="dialogClass">
-      <div class="flex items-center p-32 bg-like-gradient text-like-green">
-        <img
-          class="mr-16"
-          src="~/assets/images/civic-liker-icon.svg?inline"
-          :alt="$t('civic_liker_dashboard_header_title')"
-          style="width:64px"
-        >
-        <i18n class="text-32" path="civic_liker_web_3_notice_header">
-          <i18n
-            class="font-600"
-            tag="span"
-            path="civic_liker_web_3_notice_header_web3"
-            place="web3"
-          />
-        </i18n>
+      <div class="flex items-start justify-between p-32 bg-like-gradient text-like-green">
+        <div class="flex items-center">
+          <img
+            class="mr-16"
+            src="~/assets/images/civic-liker-icon.svg?inline"
+            :alt="$t('civic_liker_dashboard_header_title')"
+            style="width:64px"
+          >
+          <i18n class="text-32" path="civic_liker_web_3_notice_header">
+            <i18n
+              class="font-600"
+              tag="span"
+              path="civic_liker_web_3_notice_header_web3"
+              place="web3"
+            />
+          </i18n>
+        </div>
+        <Button v-if="isPopUp" preset="plain" @click="close">
+          <Close class="w-16" />
+        </Button>
       </div>
       <div class="p-32 bg-white">
         <i18n class="leading-1_5 font-200" path="civic_liker_web_3_notice_message">
@@ -62,6 +67,8 @@ export default {
     AlertCircle: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
     Button,
+    Close: () =>
+      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
   },
   props: {
     isPopUp: {
@@ -95,6 +102,11 @@ export default {
     },
     url() {
       return '';
+    },
+  },
+  methods: {
+    close() {
+      this.isShow = false;
     },
   },
 };
