@@ -36,9 +36,10 @@
   "civic_liker_classic_cancel_description": "Civic Liker Classic subscription will end on {date}, are you sure?",
   "civic_liker_web_3_notice_header": "Civic Liker {web3}",
   "civic_liker_web_3_notice_header_web3": "Web3",
-  "civic_liker_web_3_notice_message": "為創造未來，也為應對挑戰，讚賞公民將進化到 Web3 版本：{0}另外，為了不再浪費資源於傳統法規及規避政策風險，{1}",
-  "civic_liker_web_3_notice_message_highlight_1": "2月21日後委託 LikeCoin 至「讚賞公民節點」，即能成為讚賞公民。",
-  "civic_liker_web_3_notice_message_highlight_2": "即日起讚賞公民停止支援信用卡付款，大步邁向純 Web3 的世界。",
+  "civic_liker_web_3_notice_message": "To move a step forward to the Metaverse and a step away from political risk, Civic Liker decides to put aside its legacy payment system burden and evolves to a Web3 version. {0} {1}",
+  "civic_liker_web_3_notice_message_highlight_1": "Users can become Civic Likers by delegating certain amount of LikeCoin to the \"Civic Liker\" node after 21st Feb 2022.",
+  "civic_liker_web_3_notice_message_highlight_2": "Civic Liker stops supporting credit card payment with immediate effect.",
+  "civic_liker_web_3_notice_button": "Learn More",
   "CivicLikerCTA": {
     "slogan": {
       "register": "Trade a coffee for a better world",

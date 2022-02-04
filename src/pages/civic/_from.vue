@@ -4,9 +4,7 @@
       template
         SiteNavBar.text-like-green
 
-    CivicLikerWeb3Notice.max-w-phone.mx-auto(
-
-    )
+    CivicLikerWeb3Notice.max-w-phone.mx-auto
 </template>
 
 <script>

@@ -101,7 +101,7 @@ export default {
       );
     },
     url() {
-      return '';
+      return 'https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreigrx6dnzmbnfea3btnbzno272bsfadnhwpztuaaf4z5cyxflarx5y';
     },
   },
   methods: {
