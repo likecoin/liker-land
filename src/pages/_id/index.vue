@@ -27,7 +27,6 @@
                 | {{ creator.creatorPitch }}
 
               .user-info-panel__actions(v-if="!isSelf")
-                +CTAButton
                 ButtonGroup
                   Button(
                     preset="translucent-dark"
@@ -74,7 +73,6 @@
 
       .page-content__right
         header.user-portfolio-page__top-nav
-          +CTAButton.user-portfolio-page__top-cta(v-if="!isSelf")
 
           nav.user-portfolio-page__tab-bar
             Button.user-portfolio-page__tab-bar-item(
@@ -113,7 +111,7 @@
     BaseDialog(
       v-if="!isSelf"
       :is-show="isShowCivicWelcome"
-      content-container-class="mt-64 rounded-8 overflow-hidden phone:rounded-none"
+      content-container-class="mt-64 overflow-hidden rounded-8 phone:rounded-none"
       @click-outside="isShowCivicWelcome = false"
     )
       CivicLikerWelcomeView(

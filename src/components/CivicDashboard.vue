@@ -50,12 +50,6 @@
                 </Button>
               </div>
             </div>
-            <Button
-              class="mt-24"
-              size="large"
-              :title="$t('SettingsCivicCancelPage.continue')"
-              :to="{ name: 'civic-classic' }"
-            />
           </template>
           <template v-else>
             <div>
