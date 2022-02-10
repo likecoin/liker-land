@@ -48,3 +48,8 @@ export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';
 export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';
 
 export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
+
+export const CIVIC_LIKER_V3_STAKING_URL =
+  'https://stake.like.co/validators/cosmosvaloper1jxpfche2386a6m0kvfpj6xq9zlrjtuqwzda6rn';
+
+export const CIVIC_LIKER_V3_VALIDATOR_NAME = 'Civic Liker';
