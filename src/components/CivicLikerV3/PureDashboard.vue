@@ -122,34 +122,6 @@
         />
       </div>
     </section>
-
-    <section class="mt-32">
-      <i18n
-        class="text-24 text-like-green"
-        path="civic_dashboard_v3_benefit_title"
-        tag="h1"
-      />
-      <div class="p-24 mt-32 overflow-hidden bg-white rounded-8">
-        <ul class="flex-wrap p-0 laptop:flex">
-          <li
-            v-for="(benefit, i) in $t('civic_dashboard_v3_benefit_list_items')"
-            :key="i"
-            class="flex items-center w-1/2 p-8"
-          >
-            {{ benefit }}
-            <TickIcon
-              :class="[
-                'w-16',
-                'h-16',
-                'ml-8',
-                'fill-current',
-                isActivating || isActive ? 'text-success' : 'text-gray-c',
-              ]"
-            />
-          </li>
-        </ul>
-      </div>
-    </section>
   </div>
 </template>
 
