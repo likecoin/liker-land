@@ -7,10 +7,6 @@ const router = Router();
 router.get('/civic/staking', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
-    if (!req.session.user) {
-      res.sendStatus(401);
-      return;
-    }
     const { data } = await apiCivicLikerGetStaking(req);
     res.json(data);
   } catch (err) {

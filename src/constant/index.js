@@ -49,10 +49,6 @@ export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';
 
 export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
-export const CIVIC_LIKER_V3_STAKING_URL = IS_TESTNET
-  ? 'https://likecoin-chain-iscn-dev-2.netlify.app/validators/cosmosvaloper1nhg8j9yyt5jmkkg4tl6rm05dhua6wpgy3h9leq'
-  : 'https://stake.like.co/validators/cosmosvaloper1jxpfche2386a6m0kvfpj6xq9zlrjtuqwzda6rn';
-
-export const CIVIC_LIKER_V3_VALIDATOR_NAME = IS_TESTNET
-  ? 'testnet'
-  : 'Civic Liker';
+export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
+  ? 'https://likecoin-chain-iscn-dev-2.netlify.app/validators/'
+  : 'https://stake.like.co/validators/';
