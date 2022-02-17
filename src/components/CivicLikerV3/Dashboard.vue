@@ -1,5 +1,9 @@
 <template>
+  <div v-if="!validatorAddress" class="p-32">
+    <Spinner class="mx-auto" />
+  </div>
   <CivicLikerV3PureDashboard
+    v-else
     :status="status"
     :sign-in-url="signInURL"
     :is-signed-in="!!getUserId"
@@ -17,12 +21,15 @@ import { mapGetters } from 'vuex';
 
 import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '../../constant';
 import { getOAuthLoginAPI, getCivicLikerStakingAPI } from '../../util/api';
+
+import Spinner from '../Spinner/Spinner.vue';
 import CivicLikerV3PureDashboard from './PureDashboard.vue';
 
 export default {
   name: 'CivicLikerV3Dashboard',
   components: {
     CivicLikerV3PureDashboard,
+    Spinner,
   },
   data() {
     return {
