@@ -118,6 +118,7 @@ export const getCivicLikerJoinTrialEventByIdAPI = id =>
 export const getCivicSupportingUserListAPI = () => '/api/civic/support/users';
 export const getCivicSupportingUserAPI = id => `/api/civic/support/users/${id}`;
 export const getMySupportersAPI = () => '/api/civic/support/self';
+export const getCivicLikerStakingAPI = () => '/api/civic/staking';
 
 export const getImageResizeAPI = (url, { width } = {}) =>
   `${LIKE_CO_THUMBNAIL_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${

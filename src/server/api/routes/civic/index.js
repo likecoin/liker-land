@@ -9,12 +9,14 @@ const {
 const stripe = require('./stripe');
 const likepay = require('./likepay');
 const support = require('./support');
+const staking = require('./staking');
 
 const router = Router();
 
 router.use(likepay);
 router.use(stripe);
 router.use(support);
+router.use(staking);
 
 router.get('/civic/trial/events/:id', async (req, res, next) => {
   try {
