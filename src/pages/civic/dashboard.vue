@@ -15,23 +15,21 @@
             $t('civic_liker_dashboard_header_title')
           }}</span>
         </div>
-        <Button :title="$t('civicLiker.about')" preset="secondary-outline" />
+        <Button
+          :title="$t('civicLiker.about')"
+          preset="secondary-outline"
+          href="https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreiayqigrxbmpsrtzgauwpz5muo2lgssmjlfydafqindgupp3gs7syy"
+          target="_blank"
+          rel="noreferrer noopener"
+        />
       </header>
-      <CivicLikerWeb3Notice v-if="!shouldShowV3Dashboard" class="mb-32" />
-      <CivicDashboardV3 v-if="shouldShowV3Dashboard" class="pb-64" />
-      <CivicDashboardV2 v-else-if="shouldShowV2Dashboard" />
-      <CivicSettingsV1 v-else />
+      <CivicDashboardV3 class="pb-64" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 import Button from '~/components/Button/Button';
-import CivicLikerWeb3Notice from '~/components/CivicLikerWeb3Notice';
-import CivicSettingsV1 from '~/components/CivicSettingsV1';
-import CivicDashboardV2 from '~/components/CivicDashboard';
 import CivicDashboardV3 from '~/components/CivicLikerV3/Dashboard';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';
@@ -39,22 +37,9 @@ import SiteNavBar from '~/components/SiteNavBar';
 export default {
   components: {
     Button,
-    CivicLikerWeb3Notice,
-    CivicSettingsV1,
-    CivicDashboardV2,
     CivicDashboardV3,
     PageHeader,
     SiteNavBar,
-  },
-  computed: {
-    ...mapGetters(['getUserIsCivicLikerV2', 'getUserIsCivicLiker']),
-    shouldShowV2Dashboard() {
-      return !!(this.getUserIsCivicLikerV2 || !this.getUserIsCivicLiker);
-    },
-    shouldShowV3Dashboard() {
-      // TODO
-      return true;
-    },
   },
 };
 </script>

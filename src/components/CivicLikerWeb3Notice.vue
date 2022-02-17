@@ -45,7 +45,7 @@
           <Button
             :title="$t('civic_liker_web_3_notice_button')"
             content-class="px-16"
-            :href="url"
+            :to="{ name: 'civic' }"
             rel="noreferrer noopener"
           >
             <template #prepend>
@@ -99,9 +99,6 @@ export default {
       return ['overflow-hidden', 'rounded-14'].concat(
         ...(this.isPopUp ? ['relative', 'max-w-phone', 'mx-auto'] : [])
       );
-    },
-    url() {
-      return 'https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreigrx6dnzmbnfea3btnbzno272bsfadnhwpztuaaf4z5cyxflarx5y';
     },
   },
   methods: {
