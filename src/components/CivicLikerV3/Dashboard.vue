@@ -5,7 +5,6 @@
   <CivicLikerV3PureDashboard
     v-else
     :status="status"
-    :sign-in-url="signInURL"
     :is-signed-in="!!getUserId"
     :avatar-src="getUserInfo && getUserInfo.avatar"
     :staking-validator-name="validatorName"
@@ -13,6 +12,7 @@
     :staking-amount="stakingAmount"
     :staking-amount-target="stakingAmountTarget"
     :active-since="activeSince"
+    @sign-in="handleSignIn"
   />
 </template>
 
@@ -20,7 +20,7 @@
 import { mapGetters } from 'vuex';
 
 import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '../../constant';
-import { getOAuthLoginAPI, getCivicLikerStakingAPI } from '../../util/api';
+import { getCivicLikerStakingAPI } from '../../util/api';
 
 import Spinner from '../Spinner/Spinner.vue';
 import CivicLikerV3PureDashboard from './PureDashboard.vue';
@@ -46,14 +46,14 @@ export default {
     stakingManagementURL() {
       return `${CIVIC_LIKER_V3_STAKING_ENDPOINT}/${this.validatorAddress}`;
     },
-    signInURL() {
-      return getOAuthLoginAPI();
-    },
   },
   mounted() {
     this.fetchStaking();
   },
   methods: {
+    handleSignIn() {
+      this.$router.push({ name: 'civic-dashboard' });
+    },
     async fetchStaking() {
       try {
         const {

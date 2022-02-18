@@ -96,17 +96,29 @@
 
           <footer class="flex flex-col items-center mt-32">
             <Button
+              v-if="!isSignedIn"
               :title="buttonTitle"
-              :href="buttonHref"
-              :preset="isActivating || isActive ? 'secondary-outline' : 'primary'"
+              preset="primary"
+              content-class="px-12"
+              size="large"
+              @click="$emit('sign-in')"
+            >
+              <template #prepend>
+                <LoginIcon class="w-20 h-20" />
+              </template>
+            </Button>
+            <Button
+              v-else
+              :title="buttonTitle"
+              :href="stakingManagementUrl"
+              preset="secondary-outline"
               content-class="px-12"
               size="large"
               target="_blank"
               rel="noreferrer noopener"
             >
               <template #prepend>
-                <LoginIcon v-if="!isSignedIn" class="w-20 h-20" />
-                <PlusIcon v-else-if="!(isActivating || isActive)" class="w-20 h-20" />
+                <PlusIcon class="w-20 h-20" />
               </template>
             </Button>
           </footer>
@@ -157,10 +169,6 @@ export default {
     status: {
       type: String,
       default: 'inactive',
-    },
-    signInUrl: {
-      type: String,
-      default: '',
     },
     isSignedIn: {
       type: Boolean,
@@ -294,12 +302,6 @@ export default {
         default:
           return this.$t('civic_dashboard_v3_summary_action_button_sign_in');
       }
-    },
-    buttonHref() {
-      if (this.isSignedIn) {
-        return this.stakingManagementUrl;
-      }
-      return this.signInUrl;
     },
   },
 };
