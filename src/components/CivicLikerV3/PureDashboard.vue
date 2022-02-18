@@ -200,16 +200,22 @@ export default {
     },
   },
   computed: {
+    roundedRequiredStakingAmount() {
+      return Math.ceil(this.stakingAmountTarget);
+    },
     formattedRequiredStakingAmount() {
-      return this.stakingAmountTarget.toLocaleString();
+      return this.roundedRequiredStakingAmount.toLocaleString();
+    },
+    roundedStakingAmount() {
+      return Math.floor(this.stakingAmount);
     },
     formattedStakingAmount() {
-      return this.stakingAmount.toLocaleString();
+      return Math.floor(this.stakingAmount).toLocaleString();
     },
     formattedRemainingStakingAmount() {
       return (this.stakingStatus === 'fufilled'
-        ? this.stakingAmountTarget
-        : this.stakingAmountTarget - this.stakingAmount
+        ? this.roundedStakingAmount
+        : this.roundedRequiredStakingAmount - this.roundedStakingAmount
       ).toLocaleString();
     },
     stakingDenom() {
