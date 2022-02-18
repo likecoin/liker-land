@@ -212,9 +212,9 @@ export default {
   }
 
   &--secondary-outline {
-    color: #28646e;
+    color: #4a4a4a;
 
-    border: 2px solid #4a4a4a;
+    border: 2px solid #9b9b9b;
   }
 
   &--danger {

@@ -34,7 +34,7 @@
   "civic_dashboard_v3_summary_action_button_manage": "更改委託",
   "civic_dashboard_v3_summary_warning": "委託不會花費你的 LikeCoin，只是鎖定已委託的金額。若要取回已委託的 LikeCoin，需等 21 天冷卻期。",
   "civic_dashboard_v3_summary_status_inactive": "未生效",
-  "civic_dashboard_v3_summary_status_inactive_hint": "委託至「{validator}」驗證人以獲得讚賞公民身份",
+  "civic_dashboard_v3_summary_status_inactive_hint": "委託至「{validator}」驗證人以獲得{civicLiker}身份",
   "civic_dashboard_v3_summary_status_activating": "即將生效{tick}",
   "civic_dashboard_v3_summary_status_activating_hint": "你的@:civicLiker身份即將生效",
   "civic_dashboard_v3_summary_status_active": "已生效{tick}",

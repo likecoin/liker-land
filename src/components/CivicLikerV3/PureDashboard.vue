@@ -32,9 +32,21 @@
               :path="statusHintI18nKey"
               tag="p"
             >
-              <span place="validator" class="text-like-green font-600">{{
+              <a
+                place="validator"
+                class="underline text-like-green font-600"
+                :href="stakingManagementUrl"
+                target="_blank"
+                rel="noreferrer noopener"
+              >{{
                 stakingValidatorName
-              }}</span>
+              }}</a>
+              <i18n
+                place="civicLiker"
+                class="text-like-green font-600"
+                tag="span"
+                path="civicLiker"
+              />
             </i18n>
             <i18n
               v-if="isActivating || isActive"
@@ -53,7 +65,7 @@
               place="amount"
             >{{ formattedRemainingStakingAmount }} {{ stakingDenom }}</span>
             <i18n
-              place="validator"
+              place="civicLiker"
               class="text-like-green font-600"
               tag="span"
               path="civicLiker"
