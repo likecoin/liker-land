@@ -6,13 +6,11 @@
     v-on="$listeners"
   >
     <div :class="contentClass">
-      <slot name="prepend" />
       <span
         v-if="title"
         v-bind="titleProps"
       >{{ title }}</span>
       <slot v-else />
-      <slot name="append" />
     </div>
   </a>
   <nuxt-link
@@ -22,13 +20,11 @@
     v-on="$listeners"
   >
     <div :class="contentClass">
-      <slot name="prepend" />
       <span
         v-if="title"
         v-bind="titleProps"
       >{{ title }}</span>
       <slot v-else />
-      <slot name="append" />
     </div>
   </nuxt-link>
   <button
@@ -37,13 +33,11 @@
     v-on="$listeners"
   >
     <div :class="contentClass">
-      <slot name="prepend" />
       <span
         v-if="title"
         v-bind="titleProps"
       >{{ title }}</span>
       <slot v-else />
-      <slot name="append" />
     </div>
   </button>
 </template>
