@@ -78,7 +78,7 @@
             <div
               class="h-full bg-like-cyan"
               :style="`width: ${
-                (stakingAmount / stakingAmountTarget) * 100
+                Math.min(100, (stakingAmount / stakingAmountTarget) * 100)
               }%`"
             />
           </div>
