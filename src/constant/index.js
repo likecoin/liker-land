@@ -51,4 +51,4 @@ export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
 export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
   ? 'https://likecoin-chain-iscn-dev-2.netlify.app/validators'
-  : 'https://stake.like.co/validators';
+  : 'https://dao.like.co/validators';

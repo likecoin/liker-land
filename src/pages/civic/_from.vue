@@ -14,5 +14,35 @@ export default {
       redirect({ name: 'civic-dashboard' });
     }
   },
+  head() {
+    const title = this.$t('civic_page_v3_title');
+    const description = this.$t('civic_page_v3_description');
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: 'https://liker.land/images/og/civic-v3.png',
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+    };
+  },
 };
 </script>

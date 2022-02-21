@@ -18,7 +18,7 @@
         <Button
           :title="$t('civicLiker.about')"
           preset="secondary-outline"
-          href="https://matters.news/@likecoin/%E8%AE%9A%E8%B3%9E%E5%85%AC%E6%B0%91-web3-%E6%94%B9%E7%89%88%E8%BF%8E%E8%99%8E%E5%B9%B4-bafyreiayqigrxbmpsrtzgauwpz5muo2lgssmjlfydafqindgupp3gs7syy"
+          :href="$t('civic_dashboard_v3_about_url')"
           target="_blank"
           rel="noreferrer noopener"
         >

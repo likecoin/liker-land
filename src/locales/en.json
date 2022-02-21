@@ -26,6 +26,9 @@
       "Description": "邀請你成為我，{name} 的讚賞公民，支持我持續創作。"
     }
   },
+  "civic_page_v3_title": "Civic Liker",
+  "civic_page_v3_description": "Civic Liker is a movement to reward good content and encourage openness.",
+  "civic_dashboard_v3_about_url": "https://docs.like.co/user-guide/civic-liker",
   "civic_dashboard_v3_summary_stake_hint_logout": "Stake at least {amount} to become {civicLiker}",
   "civic_dashboard_v3_summary_stake_hint_unfufilled": "stake {amount} more to become {civicLiker}",
   "civic_dashboard_v3_summary_stake_hint_fufilled": "You have staked {amount}.  The more you stake, the more you reward.",

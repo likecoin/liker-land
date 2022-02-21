@@ -26,6 +26,9 @@
       "Description": "成為 {name} 的讚賞公民，按月贊助作者，支持內容有價。"
     }
   },
+  "civic_page_v3_title": "讚賞公民",
+  "civic_page_v3_description": "讚賞公民是一場回饋優秀內容的運動，讓讀者化讚為賞，回饋創作。",
+  "civic_dashboard_v3_about_url": "https://docs.like.co/v/zh/user-guide/civic-liker",
   "civic_dashboard_v3_summary_stake_hint_logout": "成為{civicLiker}：最少委託 {amount} ",
   "civic_dashboard_v3_summary_stake_hint_unfufilled": "還欠 {amount} 便能成為{civicLiker}",
   "civic_dashboard_v3_summary_stake_hint_fufilled": "已委託 {amount}。委託愈多，回饋愈多！",
