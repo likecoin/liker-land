@@ -49,7 +49,7 @@
               />
             </i18n>
             <i18n
-              v-if="isActivating || isActive"
+              v-if="(isActivating || isActive) && formattedSince"
               class="mt-10 text-10"
               path="civic_dashboard_v3_summary_since"
             >
