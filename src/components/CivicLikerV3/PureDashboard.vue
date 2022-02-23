@@ -6,7 +6,7 @@
       :avatar-src="avatarSrc"
       :active-since="formattedSince"
     />
-    <section class="mt-32">
+    <section v-if="!isFetching" class="mt-32">
       <div class="overflow-hidden bg-white rounded-8">
         <header v-if="!isSignedIn">
           <img
@@ -174,7 +174,7 @@ export default {
   props: {
     status: {
       type: String,
-      default: 'inactive',
+      default: 'fetching',
     },
     isSignedIn: {
       type: Boolean,
@@ -226,6 +226,9 @@ export default {
     },
     stakingDenom() {
       return '$LIKE';
+    },
+    isFetching() {
+      return this.status === 'fetching';
     },
     isActivating() {
       return this.status === 'activating';
