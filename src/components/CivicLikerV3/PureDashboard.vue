@@ -1,11 +1,26 @@
 <template>
   <div class="leading-1_5 text-gray-4a">
-    <section>
+    <CivicLikerV3Header
+      v-if="isSignedIn"
+      :status="status"
+      :avatar-src="avatarSrc"
+      :active-since="formattedSince"
+    />
+    <section class="mt-32">
       <div class="overflow-hidden bg-white rounded-8">
+        <header v-if="!isSignedIn">
+          <img
+            class="object-cover object-center w-full"
+            src="~/assets/images/civic-v3/banner.png"
+            :alt="$t('civic_dashboard_v3_intro_title')"
+            style="height: 168px"
+          >
+        </header>
         <header
-          v-if="isSignedIn"
+          v-else
           :class="[
             'flex',
+            'flex-col',
             'items-center',
             'p-40',
             isActivating || isActive
@@ -13,49 +28,34 @@
               : 'bg-like-cyan-pale',
           ]"
         >
-          <LcAvatar
-            class="mr-24"
-            :src="avatarSrc"
-            size="88"
-            :halo="isActivating || isActive ? 'civic-liker' : 'none'"
-          />
-          <div>
+          <i18n
+            class="flex items-center text-like-green text-20 font-600 leading-2"
+            :path="statusI18nKey"
+          >
+            <TickIcon place="tick" class="w-20 h-20 ml-8 fill-current" />
+          </i18n>
+          <i18n
+            v-if="statusHintI18nKey"
+            class="mt-4"
+            :path="statusHintI18nKey"
+            tag="p"
+          >
+            <a
+              place="validator"
+              class="underline text-like-green font-600"
+              :href="stakingManagementUrl"
+              target="_blank"
+              rel="noreferrer noopener"
+            >{{
+              stakingValidatorName
+            }}</a>
             <i18n
-              class="flex items-center text-like-green text-20 font-600 leading-2"
-              :path="statusI18nKey"
-            >
-              <TickIcon place="tick" class="w-20 h-20 ml-8 fill-current" />
-            </i18n>
-            <i18n
-              v-if="statusHintI18nKey"
-              class="mt-4"
-              :path="statusHintI18nKey"
-              tag="p"
-            >
-              <a
-                place="validator"
-                class="underline text-like-green font-600"
-                :href="stakingManagementUrl"
-                target="_blank"
-                rel="noreferrer noopener"
-              >{{
-                stakingValidatorName
-              }}</a>
-              <i18n
-                place="civicLiker"
-                class="text-like-green font-600"
-                tag="span"
-                path="civicLiker"
-              />
-            </i18n>
-            <i18n
-              v-if="(isActivating || isActive) && formattedSince"
-              class="mt-10 text-10"
-              path="civic_dashboard_v3_summary_since"
-            >
-              <span place="date">{{ formattedSince }}</span>
-            </i18n>
-          </div>
+              place="civicLiker"
+              class="text-like-green font-600"
+              tag="span"
+              path="civicLiker"
+            />
+          </i18n>
         </header>
 
         <div class="py-32 px-52">
@@ -139,6 +139,10 @@
         tag="h1"
       />
       <div class="p-32 mt-32 overflow-hidden bg-white rounded-8">
+        <img
+          src="~/assets/images/civic-v3/banner.png"
+          :alt="$t('civic_dashboard_v3_intro_title')"
+        >
         <i18n
           class="mt-12 px"
           path="civic_dashboard_v3_intro_description"
@@ -153,11 +157,13 @@
 import dateFormat from 'date-fns/format';
 
 import Button from '../Button/Button';
+import CivicLikerV3Header from './Header.vue';
 
 export default {
   name: 'PureCivicDashboardV3',
   components: {
     Button,
+    CivicLikerV3Header,
     LoginIcon: () =>
       import(/* webpackChunkName: "svg-app" */ '../../assets/icons/login.svg'),
     PlusIcon: () =>
