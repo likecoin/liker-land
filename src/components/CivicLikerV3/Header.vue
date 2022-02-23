@@ -1,11 +1,11 @@
 <template>
-  <section>
+  <section class="relative">
     <svg
-      class="overflow-hidden border-2 rounded-14"
+      class="block overflow-hidden border-2 rounded-14"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 528 180"
-      :style="`border-color: ${isInactive ? '#ebebeb' : '#e3ccaf'}`"
+      :style="`border-color: ${isInactive || isFetching ? '#ebebeb' : '#e3ccaf'}`"
     >
       <defs>
         <linearGradient
@@ -44,21 +44,32 @@
         height="178"
         fill="#fff"
       />
-      <image
-        v-if="isInactive"
-        v-bind="bgImageProps"
-        xlink:href="~assets/images/civic-v3/inactive.png"
-      />
-      <image
-        v-else-if="isActivating"
-        v-bind="bgImageProps"
-        xlink:href="~assets/images/civic-v3/activating.png"
-      />
-      <image
-        v-else-if="isActive"
-        v-bind="bgImageProps"
-        xlink:href="~assets/images/civic-v3/active.png"
-      />
+      <transition name="fade">
+        <image
+          v-if="isFetching"
+          key="fetching"
+          v-bind="bgImageProps"
+          xlink:href="~assets/images/civic-v3/fetching.png"
+        />
+        <image
+          v-else-if="isInactive"
+          key="inactive"
+          v-bind="bgImageProps"
+          xlink:href="~assets/images/civic-v3/inactive.png"
+        />
+        <image
+          v-else-if="isActivating"
+          key="activating"
+          v-bind="bgImageProps"
+          xlink:href="~assets/images/civic-v3/activating.png"
+        />
+        <image
+          v-else-if="isActive"
+          key="fetching"
+          v-bind="bgImageProps"
+          xlink:href="~assets/images/civic-v3/active.png"
+        />
+      </transition>
       <!-- <path
         d="M264,40h0a50,50,0,0,1,50,50h0a50,50,0,0,1-50,50h0a50,50,0,0,1-50-50h0A50,50,0,0,1,264,40Z"
         fill="#fff"
@@ -78,6 +89,7 @@
         fill="#fff"
       />
       <image
+        v-if="!isFetching"
         x="222"
         y="48"
         width="84"
@@ -122,12 +134,20 @@
     >
       <span place="date">{{ formattedSince }}</span>
     </i18n>
+    <div v-if="isFetching" class="absolute flex items-center justify-center pin">
+      <Spinner />
+    </div>
   </section>
 </template>
 
 <script>
+import Spinner from '../Spinner/Spinner.vue';
+
 export default {
   name: 'CivicLikerV3Header',
+  components: {
+    Spinner,
+  },
   props: {
     status: {
       type: String,
@@ -143,6 +163,9 @@ export default {
     },
   },
   computed: {
+    isFetching() {
+      return this.status === 'fetching';
+    },
     isInactive() {
       return this.status === 'inactive';
     },

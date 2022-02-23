@@ -40,7 +40,7 @@ export default {
       validatorAddress: '',
       stakingAmountTarget: 0,
       stakingAmount: 0,
-      status: 'inactive',
+      status: 'fetching',
       activeSince: null,
     };
   },
