@@ -20,7 +20,10 @@
 import { mapGetters } from 'vuex';
 
 import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '../../constant';
-import { getCivicLikerStakingAPI } from '../../util/api';
+import {
+  getCivicLikerStakingAPI,
+  getCivicLikerStakingInfoAPI,
+} from '../../util/api';
 
 import Spinner from '../Spinner/Spinner.vue';
 import CivicLikerV3PureDashboard from './PureDashboard.vue';
@@ -35,9 +38,9 @@ export default {
     return {
       validatorName: '',
       validatorAddress: '',
-      status: 'inactive',
-      stakingAmount: 0,
       stakingAmountTarget: 0,
+      stakingAmount: 0,
+      status: 'inactive',
       activeSince: null,
     };
   },
@@ -48,26 +51,41 @@ export default {
     },
   },
   mounted() {
-    this.fetchStaking();
+    this.fetchData();
   },
   methods: {
     handleSignIn() {
       this.$router.push({ name: 'civic-dashboard' });
     },
-    async fetchStaking() {
+    async fetchData() {
+      const fetches = [this.fetchStakingInfo()];
+      if (this.getUserId) {
+        fetches.push(this.fetchStaking());
+      }
+      await Promise.all(fetches);
+    },
+    async fetchStakingInfo() {
       try {
         const {
-          status,
-          stakingAmount,
+          operatorAddress,
+          name,
           stakingAmountTarget,
-          activeSince,
-          validator,
-        } = await this.$api.$get(getCivicLikerStakingAPI());
-        this.validatorAddress = validator.operatorAddress;
-        this.validatorName = validator.description.moniker;
+        } = await this.$api.$get(getCivicLikerStakingInfoAPI());
+        this.validatorName = name;
+        this.validatorAddress = operatorAddress;
+        this.stakingAmountTarget = stakingAmountTarget;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    },
+    async fetchStaking() {
+      try {
+        const { status, stakingAmount, activeSince } = await this.$api.$get(
+          getCivicLikerStakingAPI()
+        );
         this.status = status;
         this.stakingAmount = stakingAmount;
-        this.stakingAmountTarget = stakingAmountTarget;
         if (activeSince) {
           this.activeSince = new Date(activeSince);
         }

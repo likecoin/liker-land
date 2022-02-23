@@ -242,6 +242,8 @@ const apiCivicLikerGetStaking = req =>
       headers: { Authorization },
     })
   );
+const apiCivicLikerGetStakingInfo = () =>
+  axios.get(`${LIKE_CO_URL_BASE}/api/civic/staking/info`);
 const getOAuthURL = ({
   language,
   state,
@@ -321,6 +323,7 @@ module.exports = {
   apiCivicLikerDeleteSuppoUser,
   apiCivicLikerGetMetadata,
   apiCivicLikerGetStaking,
+  apiCivicLikerGetStakingInfo,
   getOAuthURL,
   getOAuthCallbackAPI,
   getLikePayURL,
