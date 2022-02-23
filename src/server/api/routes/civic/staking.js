@@ -10,7 +10,10 @@ const router = Router();
 router.get('/civic/staking/info', async (req, res, next) => {
   try {
     const { data } = await apiCivicLikerGetStakingInfo(req);
-    res.set('Cache-Control', 'public, max-age=86400');
+    res.set(
+      'Cache-Control',
+      'public, max-age=86400, stale-while-revalidate=86400'
+    );
     res.json(data);
   } catch (err) {
     next(err);
