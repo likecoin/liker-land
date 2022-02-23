@@ -63,6 +63,9 @@ export default {
         fetches.push(this.fetchStaking());
       }
       await Promise.all(fetches);
+      if (!this.getUserId) {
+        this.status = 'inactive';
+      }
     },
     async fetchStakingInfo() {
       try {
