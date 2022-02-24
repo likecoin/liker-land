@@ -132,7 +132,7 @@
       path="civic_dashboard_v3_summary_since"
       tag="div"
     >
-      <span place="date">{{ formattedSince }}</span>
+      <span place="date">{{ activeSince }}</span>
     </i18n>
     <div v-if="isFetching" class="absolute flex items-center justify-center pin">
       <Spinner />
