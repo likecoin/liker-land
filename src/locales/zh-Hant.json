@@ -32,7 +32,7 @@
   "civic_dashboard_v3_summary_stake_hint_logout": "成為{civicLiker}：最少委託 {amount} ",
   "civic_dashboard_v3_summary_stake_hint_unfufilled": "還欠 {amount} 便能成為{civicLiker}",
   "civic_dashboard_v3_summary_stake_hint_fufilled": "已委託 {amount}。委託愈多，回饋愈多！",
-  "civic_dashboard_v3_summary_action_button_sign_in": "立即注冊",
+  "civic_dashboard_v3_summary_action_button_sign_in": "立即註冊",
   "civic_dashboard_v3_summary_action_button_delegate": "馬上委託",
   "civic_dashboard_v3_summary_action_button_manage": "更改委託",
   "civic_dashboard_v3_summary_warning": "委託的 LikeCoin 不會被消耗，但取回則需等待 21 天冷靜期。",
