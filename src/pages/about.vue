@@ -9,18 +9,9 @@
 </template>
 
 <script>
-import AboutPage from '~/components/AboutPage/AboutPage';
-import PageHeader from '~/components/PageHeader';
-import SiteNavBar from '~/components/SiteNavBar';
-
-import { CrispMixinFactory } from '~/mixins/crisp';
-
 export default {
-  components: {
-    AboutPage,
-    PageHeader,
-    SiteNavBar,
+  mounted() {
+    window.location.href = 'https://about.like.co/';
   },
-  mixins: [CrispMixinFactory()],
 };
 </script>
