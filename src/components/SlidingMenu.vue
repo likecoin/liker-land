@@ -52,11 +52,6 @@
           >{{ $t('SlidingMenu.civic') }}</NuxtLink>
 
           <NuxtLink
-            class="btn btn--outlined btn--dark btn--block"
-            :to="{ name: 'creators-dashboard' }"
-          >{{ $t('SlidingMenu.creator') }}</NuxtLink>
-
-          <NuxtLink
             v-if="getUserId"
             class="btn btn--outlined btn--dark btn--block btn--with-icon"
             :to="{ name: 'settings' }"
@@ -68,14 +63,6 @@
         </div>
 
         <div class="main-menu__secondary-menu">
-          <NuxtLink
-            class="btn btn--plain btn--dark btn--auto-size"
-            :to="{ name: 'getapp' }"
-          >{{ $t('main_menu_app') }}</NuxtLink>
-          <NuxtLink
-            class="btn btn--plain btn--dark btn--auto-size"
-            :to="{ name: 'about' }"
-          >{{ $t('SlidingMenu.about') }}</NuxtLink>
           <a
             class="btn btn--plain btn--dark btn--auto-size"
             href="https://help.like.co"
