@@ -207,6 +207,7 @@
     "empty": "There is no article"
   },
   "CreatorPitch.Default": "Be my Civic Liker, buy me a coffee for my work every month.",
+  "creators_page_redirect_url": "https://docs.like.co/v/en/user-guide/civic-liker",
   "CreatorsPage": {
     "Title": "Gather your Civic Likers",
     "Description": "Share your sponsor link for monthly subscription income.{br}Install LikeCoin button for earning creators fund.",
