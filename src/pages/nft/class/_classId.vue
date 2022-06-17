@@ -126,6 +126,7 @@ export default {
         this.setAccount(accounts[0].address);
       }, 3000);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   },
