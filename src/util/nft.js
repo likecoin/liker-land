@@ -19,6 +19,13 @@ export async function createNFTSigningClient(signer) {
   return client;
 }
 
+export async function getClassInfo(classId) {
+  const c = await getNFTQueryClient();
+  const client = await c.getQueryClient();
+  const res = await client.nft.class(classId);
+  return res;
+}
+
 export async function getNFTsByClassId(classId, address) {
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();

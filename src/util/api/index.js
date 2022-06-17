@@ -145,7 +145,9 @@ export const getNFTMintInfo = ({ iscnId, classId }) => {
     iscn_id: iscnId,
     class_id: classId,
   };
-  return `${LIKECOIN_API_BASE}/likernft/mint?${querystring.stringify(qsPayload)}`;
+  return `${LIKECOIN_API_BASE}/likernft/mint?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 
 export const getNFTPurchaseInfo = ({ iscnId, classId }) => {
@@ -153,7 +155,9 @@ export const getNFTPurchaseInfo = ({ iscnId, classId }) => {
     iscn_id: iscnId,
     class_id: classId,
   };
-  return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(qsPayload)}`;
+  return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 
 export const getNFTHistory = ({ iscnId, classId, nftId }) => {
@@ -162,7 +166,9 @@ export const getNFTHistory = ({ iscnId, classId, nftId }) => {
     class_id: classId,
     nft_id: nftId,
   };
-  return `${LIKECOIN_API_BASE}/likernft/history?${querystring.stringify(qsPayload)}`;
+  return `${LIKECOIN_API_BASE}/likernft/history?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 
 export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
@@ -171,7 +177,9 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
     class_id: classId,
     nft_id: nftId,
   };
-  return `${LIKECOIN_API_BASE}/likernft/metadata?${querystring.stringify(qsPayload)}`;
+  return `${LIKECOIN_API_BASE}/likernft/metadata?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 
 export const getNFTOwners = ({ iscnId, classId }) => {
@@ -179,5 +187,13 @@ export const getNFTOwners = ({ iscnId, classId }) => {
     iscn_id: iscnId,
     class_id: classId,
   };
-  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(qsPayload)}`;
+  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(
+    qsPayload
+  )}`;
 };
+
+export const getUserOwnNFTClasses = ({ wallet }) =>
+  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/own`;
+
+export const getUserSellNFTClasses = ({ wallet }) =>
+  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
