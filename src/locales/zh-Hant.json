@@ -399,7 +399,7 @@
     "LOGIN_NEEDED": "請登入以觀看內容",
     "LOGIN_NEEDED_TO_BOOKMARK": "請登入以收藏內容",
     "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "請登入以追蹤內容的創作者",
-    "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "請登入以註冊讚賞公民",
+    "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "成為讚賞公民",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持創作者",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}",
     "CIVIC_LIKER_ALREADY_PAID": {
