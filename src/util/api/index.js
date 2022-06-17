@@ -45,8 +45,7 @@ export const getPaypalPaymentPageURL = (likerId, custom) => {
 };
 
 export const getPaypalUnsubscribeURL = () =>
-  `https://www.${
-    IS_TESTNET ? 'sandbox.' : ''
+  `https://www.${IS_TESTNET ? 'sandbox.' : ''
   }paypal.com/hk/customerprofileweb?cmd=_manage-paylist`;
 export const getOiceSettingsURL = () => 'https://oice.com/profile';
 
@@ -122,8 +121,7 @@ export const getCivicLikerStakingAPI = () => '/api/civic/staking';
 export const getCivicLikerStakingInfoAPI = () => '/api/civic/staking/info';
 
 export const getImageResizeAPI = (url, { width } = {}) =>
-  `${LIKE_CO_THUMBNAIL_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${
-    width ? `&width=${width}` : ''
+  `${LIKE_CO_THUMBNAIL_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${width ? `&width=${width}` : ''
   }`;
 export const getUserMinAPI = (id, { types = [] } = {}) =>
   `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
@@ -141,3 +139,45 @@ export const getLikerOgImage = id =>
   id === CIVIC_LIKER_CLASSIC_LIKER_ID
     ? 'https://liker.land/images/og/civic-classic.png'
     : `https://static.like.co/liker-og-image/${id}.png`;
+
+export const getNFTMintInfo = ({ iscnId, classId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/mint?${querystring.stringify(qsPayload)}`;
+};
+
+export const getNFTPurchaseInfo = ({ iscnId, classId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(qsPayload)}`;
+};
+
+export const getNFTHistory = ({ iscnId, classId, nftId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+    nft_id: nftId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/history?${querystring.stringify(qsPayload)}`;
+};
+
+export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+    nft_id: nftId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/metadata?${querystring.stringify(qsPayload)}`;
+};
+
+export const getNFTOwners = ({ iscnId, classId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(qsPayload)}`;
+};
