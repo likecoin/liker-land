@@ -24,6 +24,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@cosmjs/stargate": "^0.28.7",
+    "@likecoin/iscn-js": "^0.2.0-alpha.1",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/axios": "^5.12.2",
@@ -36,6 +38,7 @@
     "body-parser": "^1.18.3",
     "consola": "^2.5.6",
     "cookie-parser": "^1.4.4",
+    "cosmjs-types": "^0.5.0",
     "cross-env": "^5.2.0",
     "date-fns": "^1.30.1",
     "express": "^4.16.4",
