@@ -43,13 +43,13 @@
 import Vue from 'vue';
 import {
   getUserMinAPI,
-  getUserOwnNFTClasses,
   getUserSellNFTClasses,
   getNFTPurchaseInfo,
   getNFTMetadata,
   getNFTOwners,
 } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
+import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
 
 export default {
@@ -103,10 +103,9 @@ export default {
   },
   methods: {
     async fetchUserOwnClasses() {
-      const { data } = await this.$api.get(
-        getUserOwnNFTClasses({ wallet: this.wallet })
-      );
-      this.ownedNFTClassId = data.list;
+      const { nfts } = await getNFTs({ owner: this.wallet });
+      const classIdSet = new Set(nfts.map(n => n.classId));
+      this.ownedNFTClassId = Array.from(classIdSet);
       this.ownedNFTClassId.forEach(id => this.updateNFTClassData(id));
     },
     async fetchUserSellingClasses() {
