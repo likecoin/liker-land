@@ -26,7 +26,7 @@ export async function getClassInfo(classId) {
   return res;
 }
 
-export async function getNFTsByClassId(classId, address) {
+export async function getNFTs({ classId = '', owner = '' }) {
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();
   let nfts = [];
@@ -35,7 +35,7 @@ export async function getNFTsByClassId(classId, address) {
     /* eslint-disable no-await-in-loop */
     const res = await client.nft.NFTs(
       classId,
-      address,
+      owner,
       PageRequest.fromPartial({ key: next })
     );
     ({ nextKey: next } = res.pagination);
@@ -44,9 +44,9 @@ export async function getNFTsByClassId(classId, address) {
   return { nfts };
 }
 
-export async function getNFTCountByClassId(classId, address) {
+export async function getNFTCountByClassId(classId, owner) {
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();
-  const { amount = 0 } = await client.nft.balance(classId, address);
+  const { amount = 0 } = await client.nft.balance(classId, owner);
   return { amount };
 }

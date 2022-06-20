@@ -45,7 +45,8 @@ export const getPaypalPaymentPageURL = (likerId, custom) => {
 };
 
 export const getPaypalUnsubscribeURL = () =>
-  `https://www.${IS_TESTNET ? 'sandbox.' : ''
+  `https://www.${
+    IS_TESTNET ? 'sandbox.' : ''
   }paypal.com/hk/customerprofileweb?cmd=_manage-paylist`;
 export const getOiceSettingsURL = () => 'https://oice.com/profile';
 
@@ -121,7 +122,8 @@ export const getCivicLikerStakingAPI = () => '/api/civic/staking';
 export const getCivicLikerStakingInfoAPI = () => '/api/civic/staking/info';
 
 export const getImageResizeAPI = (url, { width } = {}) =>
-  `${LIKE_CO_THUMBNAIL_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${width ? `&width=${width}` : ''
+  `${LIKE_CO_THUMBNAIL_FN_BASE}/thumbnail/?url=${encodeURIComponent(url)}${
+    width ? `&width=${width}` : ''
   }`;
 export const getUserMinAPI = (id, { types = [] } = {}) =>
   `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
@@ -191,9 +193,6 @@ export const getNFTOwners = ({ iscnId, classId }) => {
     qsPayload
   )}`;
 };
-
-export const getUserOwnNFTClasses = ({ wallet }) =>
-  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/own`;
 
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
