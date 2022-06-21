@@ -23,11 +23,26 @@ export async function fetchUserInfo({ commit, state }, opts) {
   }
   return user;
 }
-export async function fetchArticleInfo({ commit }, { referrer, iscnId }) {
-  const info = await this.$api.$get(
-    api.getArticleDetailAPI({ url: referrer, iscnId })
-  );
-  // TODO: include iscnId as key instead of just referrer
+
+export async function fetchArticleInfo({ commit }, referrer) {
+  const info = await this.$api.$get(api.getArticleDetailAPI(referrer));
   commit(TYPES.STATIC_SET_ARTICLE_INFO, { referrer, info });
+}
+
+export async function fetchNFTPurchaseInfo({ commit }, classId) {
+  const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
+  commit(TYPES.STATIC_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
+  return info;
+}
+
+export async function fetchNFTMetadata({ commit }, classId) {
+  const metadata = await this.$api.$get(api.getNFTMetadata({ classId }));
+  commit(TYPES.STATIC_SET_NFT_CLASS_METADATA, { classId, metadata });
+  return metadata;
+}
+
+export async function fetchNFTOwners({ commit }, classId) {
+  const info = await this.$api.$get(api.getNFTOwners({ classId }));
+  commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
 }
