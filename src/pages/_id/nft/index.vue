@@ -9,14 +9,21 @@
     <section>
       <h2>Owned Works</h2>
       <div v-for="id in ownedNFTClassId" :key="id ">
-        <div v-if="NFTclassInfo[id]">
-          <div :style="`background-color: ${NFTclassInfo[id].metadata.background_color}`">
-            <img :src="NFTclassInfo[id].metadata.image">
+        <div v-if="getNFTClassMetadataById(id)">
+          <div :style="`background-color: ${getNFTClassMetadataById(id).background_color}`">
+            <img :src="getNFTClassMetadataById(id).image">
           </div>
-          <div>iscn owner: {{ NFTclassInfo[id].metadata.iscn_owner }}</div>
-          <button @click="() => onDetails(id)">Details: {{ NFTclassInfo[id].price }} LIKE</button>
-          <div>owned: {{ NFTclassInfo[id].ownedCount }}</div>
-          <div>minted: {{ NFTclassInfo[id].mintedCount }}</div>
+          <div>iscn owner: {{ getNFTClassMetadataById(id).iscn_owner }}</div>
+          <button
+            v-if="getNFTClassPurchaseInfoById(id)"
+            @click="() => onDetails(id)"
+          >
+            Details: {{ getNFTClassPurchaseInfoById(id).price }} LIKE
+          </button>
+          <template v-if="getNFTClassOwnerInfoById(id)">
+            <div>owned: {{ getNFTClassOwnerCount(id) }}</div>
+            <div>minted: {{ getNFTClassMintedCount(id) }}</div>
+          </template>
         </div>
       </div>
     </section>
@@ -24,14 +31,21 @@
     <section>
       <h2>Selling Works</h2>
       <div v-for="id in sellingNFTClassId" :key="id">
-        <div v-if="NFTclassInfo[id]">
-          <div :style="`background-color: ${NFTclassInfo[id].metadata.background_color}`">
-            <img :src="NFTclassInfo[id].metadata.image">
+        <div v-if="getNFTClassMetadataById(id)">
+          <div :style="`background-color: ${getNFTClassMetadataById(id).background_color}`">
+            <img :src="getNFTClassMetadataById(id).image">
           </div>
-          <div>iscn owner: {{ NFTclassInfo[id].metadata.iscn_owner }}</div>
-          <button @click="() => onDetails(id)">Details: {{ NFTclassInfo[id].price }} LIKE</button>
-          <div>owned: {{ NFTclassInfo[id].ownedCount }}</div>
-          <div>minted: {{ NFTclassInfo[id].mintedCount }}</div>
+          <div>iscn owner: {{ getNFTClassMetadataById(id).iscn_owner }}</div>
+          <button
+            v-if="getNFTClassPurchaseInfoById(id)"
+            @click="() => onDetails(id)"
+          >
+            Details: {{ getNFTClassPurchaseInfoById(id).price }} LIKE
+          </button>
+          <template v-if="getNFTClassOwnerInfoById(id)">
+            <div>owned: {{ getNFTClassOwnerCount(id) }}</div>
+            <div>minted: {{ getNFTClassMintedCount(id) }}</div>
+          </template>
         </div>
       </div>
     </section>
@@ -39,15 +53,8 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Vue from 'vue';
-import {
-  getUserMinAPI,
-  getUserSellNFTClasses,
-  getNFTPurchaseInfo,
-  getNFTMetadata,
-  getNFTOwners,
-} from '~/util/api';
+import { mapActions, mapGetters } from 'vuex';
+import { getUserMinAPI, getUserSellNFTClasses } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
@@ -60,12 +67,18 @@ export default {
   data() {
     return {
       userInfo: null,
-      NFTclassInfo: {},
       ownedNFTClassId: [],
       sellingNFTClassId: [],
     };
   },
   computed: {
+    ...mapGetters([
+      'getNFTClassPurchaseInfoById',
+      'getNFTClassMetadataById',
+      'getNFTClassOwnerInfoById',
+      'getNFTClassOwnerCount',
+      'getNFTClassMintedCount',
+    ]),
     isCivicLiker() {
       return !!(
         this.userInfo &&
@@ -102,6 +115,11 @@ export default {
     this.fetchUserSellingClasses();
   },
   methods: {
+    ...mapActions([
+      'fetchNFTPurchaseInfo',
+      'fetchNFTMetadata',
+      'fetchNFTOwners',
+    ]),
     async fetchUserOwnClasses() {
       const { nfts } = await getNFTs({ owner: this.wallet });
       const classIdSet = new Set(nfts.map(n => n.classId));
@@ -115,35 +133,16 @@ export default {
       this.sellingNFTClassId = data.list;
       this.sellingNFTClassId.forEach(id => this.updateNFTClassData(id));
     },
-    // TODO: refactor to store
-    async updateNFTClassData(classId) {
-      if (this.NFTclassInfo[classId]) return;
-      const [metadata, purchaseInfo, owners] = await Promise.all([
-        this.updateNFTClassMetadata(classId),
-        this.updateNFTPurchaseInfo(classId),
-        this.updateNFTOwners(classId),
-      ]);
-      Vue.set(this.NFTclassInfo, classId, {
-        metadata,
-        price: purchaseInfo.price,
-        ownedCount: Object.keys(owners).length,
-        mintedCount: Object.values(owners).reduce(
-          (acc, cur) => acc + cur.length,
-          0
-        ),
-      });
-    },
-    async updateNFTClassMetadata(classId) {
-      const { data } = await this.$api.get(getNFTMetadata({ classId }));
-      return data;
-    },
-    async updateNFTPurchaseInfo(classId) {
-      const { data } = await this.$api.get(getNFTPurchaseInfo({ classId }));
-      return data;
-    },
-    async updateNFTOwners(classId) {
-      const { data } = await this.$api.get(getNFTOwners({ classId }));
-      return data;
+    updateNFTClassData(classId) {
+      if (!this.getNFTClassMetadataById(classId)) {
+        this.fetchNFTMetadata(classId);
+      }
+      if (!this.getNFTClassPurchaseInfoById(classId)) {
+        this.fetchNFTPurchaseInfo(classId);
+      }
+      if (!this.getNFTClassOwnerInfoById(classId)) {
+        this.fetchNFTOwners(classId);
+      }
     },
     onDetails(classId) {
       this.$router.push({ name: 'nft-class-classId', params: { classId } });
