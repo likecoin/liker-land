@@ -15,8 +15,8 @@
     <section>
       <h2>Owners</h2>
       <ul>
-        <li v-for="(o, i) in ownerList" :key="o">
-          {{ o }}: {{ ownedCountList[i] }}
+        <li v-for="o in Object.keys(ownerList)" :key="o">
+          {{ o }}: {{ ownerList[o].length }}
         </li>
       </ul>
     </section>
@@ -29,8 +29,8 @@
     <section>
       <h2>Price</h2>
       <h3>{{ purcahseInfo.currentPrice }}</h3>
-      <h3>minted {{ ownedCountTotal }}</h3>
-      <h3>owner {{ ownerList.length }}</h3>
+      <h3>minted {{ mintedCount }}</h3>
+      <h3>owner {{ ownerCount }}</h3>
       <button @click="onPurchase">Collect Now</button>
     </section>
     <section>
@@ -45,13 +45,11 @@
 </template>
 
 <script>
-import { APP_LIKE_CO_VIEW, LIKECOIN_NFT_API_WALLET } from '~/constant';
-import {
-  getNFTPurchaseInfo,
-  getNFTMetadata,
-  getNFTOwners,
-  getNFTHistory,
-} from '~/util/api';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
+import { APP_LIKE_CO_VIEW } from '~/constant';
+import { getNFTHistory } from '~/util/api';
 import { initKeplr } from '~/util/keplr';
 import { getNFTCountByClassId } from '~/util/nft';
 
@@ -60,17 +58,30 @@ export default {
   data() {
     return {
       wallet: '',
-      iscnOwnerInfo: {},
-      purcahseInfo: {},
-      NFTClassMetadata: {},
-      ownerMap: {},
       userOwnedCount: 0,
+      iscnOwnerInfo: {},
       history: [],
     };
   },
   computed: {
+    ...mapGetters([
+      'getNFTClassPurchaseInfoById',
+      'getNFTClassMetadataById',
+      'getNFTClassOwnerInfoById',
+      'getNFTClassOwnerCount',
+      'getNFTClassMintedCount',
+    ]),
     classId() {
       return this.$route.params.classId;
+    },
+    NFTClassMetadata() {
+      return this.getNFTClassMetadataById(this.classId) || {};
+    },
+    purcahseInfo() {
+      return this.getNFTClassPurchaseInfoById(this.classId) || {};
+    },
+    ownerInfo() {
+      return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
     iscnId() {
       return this.NFTClassMetadata.iscnId;
@@ -102,23 +113,28 @@ export default {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },
     ownerList() {
-      return Object.keys(this.ownerMap).filter(
-        o => o !== LIKECOIN_NFT_API_WALLET
-      );
+      return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
-    ownedCountList() {
-      return Object.keys(this.ownerMap)
-        .filter(o => o !== LIKECOIN_NFT_API_WALLET)
-        .map(o => this.ownerMap[o].length);
+    ownerCount() {
+      return this.getNFTClassOwnerCount(this.classId);
     },
-    ownedCountTotal() {
-      return this.ownedCountList.reduce((acc, cur) => acc + cur, 0);
+    mintedCount() {
+      return this.getNFTClassMintedCount(this.classId);
+    },
+  },
+  watch: {
+    NFTClassMetadata(data) {
+      Vue.set(this.iscnOwnerInfo, 'wallet', data.iscn_owner);
     },
   },
   mounted() {
-    this.updateNFTClassMetdata();
-    this.updateNFTPurchaseInfo();
-    this.updateNFTOwners();
+    if (!this.getNFTClassMetadataById(this.classId)) {
+      this.updateNFTClassMetdata();
+    }
+    if (!this.getNFTClassPurchaseInfoById(this.classId)) {
+      this.updateNFTPurchaseInfo();
+    }
+    if (!this.getNFTClassOwnerInfoById(this.classId)) this.updateNFTOwners();
     this.updateNFTHistory();
     try {
       setTimeout(async () => {
@@ -131,26 +147,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'fetchNFTPurchaseInfo',
+      'fetchNFTMetadata',
+      'fetchNFTOwners',
+    ]),
     async updateNFTClassMetdata() {
-      const { data } = await this.$api.get(
-        getNFTMetadata({ classId: this.classId })
-      );
-      this.NFTClassMetadata = data;
-      this.iscnOwnerInfo = {
-        wallet: data.iscn_owner,
-      };
+      await this.fetchNFTMetadata(this.classId);
     },
     async updateNFTPurchaseInfo() {
-      const { data } = await this.$api.get(
-        getNFTPurchaseInfo({ classId: this.classId })
-      );
-      this.purcahseInfo = data;
+      await this.fetchNFTPurchaseInfo(this.classId);
     },
     async updateNFTOwners() {
-      const { data } = await this.$api.get(
-        getNFTOwners({ classId: this.classId })
-      );
-      this.ownerMap = data;
+      await this.fetchNFTOwners(this.classId);
     },
     async updateNFTHistory() {
       const { data } = await this.$api.get(
