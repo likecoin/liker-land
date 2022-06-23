@@ -130,7 +130,7 @@ export default {
           !this.getArticleInfoByReferrer(this.referrer)
         ) {
           promises.push(
-            this.fetchArticleInfo(this.referrer)
+            this.fetchArticleInfo({ referrer: this.referrer })
               .then(() => this.updateArticleInfo())
               .catch(() => ({}))
           );

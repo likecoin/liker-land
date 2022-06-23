@@ -39,6 +39,7 @@
               :key="item.superLikeID || item.referrer"
               class="content-list__card"
               :referrer="item.referrer"
+              :super-like-iscn-id="item.superLikeIscnId"
               :author-id="item.user"
               :cover-src="item.image"
               :title="item.title"

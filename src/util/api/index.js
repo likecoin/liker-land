@@ -129,8 +129,10 @@ export const getUserMinAPI = (id, { types = [] } = {}) =>
   `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
     type: types.join(','),
   })}`;
-export const getArticleDetailAPI = url =>
-  `${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`;
+export const getArticleDetailAPI = ({ url = '', iscnId = '' }) =>
+  `${LIKECOIN_API_BASE}/like/info?iscn_id=${encodeURIComponent(
+    iscnId
+  )}&url=${encodeURIComponent(url)}`;
 
 export const updateProfile = () => `/api/users/self/update`;
 export const userPreferences = () => `/api/users/preferences`;
