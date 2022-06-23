@@ -141,8 +141,12 @@ const apiPostArticleForInfo = (url, req) =>
       { headers: { Authorization } }
     )
   );
-const apiFetchArticleDetail = url =>
-  axios.get(`${LIKECOIN_API_BASE}/like/info?url=${encodeURIComponent(url)}`);
+const apiFetchArticleDetail = ({ url = '', iscnId = '' }) =>
+  axios.get(
+    `${LIKECOIN_API_BASE}/like/info?iscn_id=${encodeURIComponent(
+      iscnId
+    )}&url=${encodeURIComponent(url)}`
+  );
 const apiFetchFollowedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/users/follow/users`, {

@@ -23,8 +23,11 @@ export async function fetchUserInfo({ commit, state }, opts) {
   }
   return user;
 }
-export async function fetchArticleInfo({ commit }, referrer) {
-  const info = await this.$api.$get(api.getArticleDetailAPI(referrer));
+export async function fetchArticleInfo({ commit }, { referrer, iscnId }) {
+  const info = await this.$api.$get(
+    api.getArticleDetailAPI({ url: referrer, iscnId })
+  );
+  // TODO: include iscnId as key instead of just referrer
   commit(TYPES.STATIC_SET_ARTICLE_INFO, { referrer, info });
   return info;
 }

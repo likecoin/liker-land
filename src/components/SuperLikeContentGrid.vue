@@ -33,6 +33,7 @@
           :key="item.superLikeID"
           :preset="preset"
           :referrer="item.referrer"
+          :super-like-iscn-id="item.superLikeIscnId"
           :author-id="item.user"
           :super-like-id="item.superLikeID"
           :super-like-short-id="item.superLikeShortID"

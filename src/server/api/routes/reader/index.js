@@ -25,13 +25,14 @@ router.use(bookmark);
 function filterSuperLikeList(list) {
   const items = [];
   list.forEach(l => {
-    const { id, shortId, likee, liker, ts, url } = l;
+    const { id, shortId, likee, liker, ts, url, superLikeIscnId } = l;
     try {
       // Guard malformed URI
       decodeURI(url);
       items.push({
         superLikeID: id,
         superLikeShortID: shortId,
+        superLikeIscnId,
         referrer: url,
         ts,
         user: likee,

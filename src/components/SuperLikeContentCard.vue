@@ -85,6 +85,10 @@ export default {
       type: String,
       default: 'default',
     },
+    superLikeIscnId: {
+      type: String,
+      default: undefined,
+    },
     referrer: {
       type: String,
       required: true,
@@ -191,8 +195,10 @@ export default {
           this.shouldFetchArticle &&
           !this.getArticleInfoByReferrer(this.referrer)
         ) {
+          const query = { referrer: this.referrer };
+          if (this.superLikeIscnId) query.iscnId = this.superLikeIscnId;
           promises.push(
-            this.fetchArticleInfo(this.referrer)
+            this.fetchArticleInfo(query)
               .then(() => this.updateArticleInfo())
               .catch(() => ({}))
           );
