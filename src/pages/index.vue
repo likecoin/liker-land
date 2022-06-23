@@ -25,7 +25,7 @@
         ) {{ $t('signUp') }}
         br
         a(
-          class="btn btn--plain btn--dark text-12 m-0 p-0"
+          class="p-0 m-0 btn btn--plain btn--dark text-12"
           :href="getOAuthLoginAPI"
           @click=`onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(index ${position})', 1)`
         ) {{ $t('signIn') }}
@@ -155,7 +155,7 @@ export default {
       @apply bg-like-green;
     }
 
-    @media screen and (min-width: config('screens.desktop.min')) {
+    @media screen and (min-width: config('theme.screens.desktop.min')) {
       &.page-header--floating {
         .site-nav-bar {
           @apply relative;
@@ -172,7 +172,7 @@ export default {
 
         .tab-bar {
           @apply absolute;
-          @apply pin;
+          @apply inset-0;
         }
       }
     }

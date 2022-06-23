@@ -20,7 +20,7 @@
         class="flex items-start"
       >
         <StatusIcon
-          class="w-12 h-12 mr-20 my-2 flex-no-shrink"
+          class="w-12 h-12 mr-20 my-2 shrink-0"
           :type="featureIconType"
         />
         <span :class="descriptionClass">{{ description }}</span>

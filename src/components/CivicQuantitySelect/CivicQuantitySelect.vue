@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul
-      class="flex list-reset w-full mt-4"
+      class="flex list-disc w-full mt-4"
       :style="{ minHeight: 144 }"
     >
       <li

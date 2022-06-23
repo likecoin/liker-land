@@ -60,7 +60,7 @@ export default {
   .page-header {
     @apply text-center;
 
-    @apply rounded-t;
+    @apply rounded-t-[8px];
     @apply bg-like-gradient;
 
     .liker-logo {
@@ -72,14 +72,14 @@ export default {
   }
 
   .page-content:not(#{&}) {
-    @apply flex-no-grow;
+    @apply grow-0;
 
     @apply text-like-green;
     @apply text-center;
 
     @apply bg-white;
 
-    @apply rounded-b;
+    @apply rounded-b-[8px];
 
     @apply mb-32;
     @apply p-24;

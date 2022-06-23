@@ -21,7 +21,7 @@
       <div class="payment-success-page-receipt">
         <div class="payment-success-page-receipt__header bg-like-gradient">
           <TickIcon
-            class="w-48 h-48 text-like-cyan fill-current"
+            class="w-48 h-48 fill-current text-like-cyan"
           />
           <div class="text-like-green">
             {{ $t('PaymentSuccessPage.heading') }}
@@ -34,12 +34,12 @@
             <a
               v-if="isPopup"
               href="#"
-              class="btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 mx-auto my-0 "
+              class="mx-auto my-0 btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 "
               @click.prevent="onClickClose"
             > {{ getCloseButtonText }}</a>
             <NuxtLink
               v-else
-              class="btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 mx-auto my-0 "
+              class="mx-auto my-0 btn btn--outlined btn--block max-w-3 laptop:max-w-2/3 desktop:max-w-2/3 "
               :to="getHomeRoute"
             > {{ $t('PaymentSuccessPage.continue') }}</NuxtLink>
           </div>
@@ -187,7 +187,7 @@ export default {
 
     &__avatar {
       @apply absolute;
-      @apply pin;
+      @apply inset-0;
 
       @apply flex;
       @apply justify-center;
@@ -203,7 +203,7 @@ export default {
     @apply relative;
     @apply z-10;
     @apply overflow-hidden;
-    @apply rounded;
+    @apply rounded-[8px];
 
     @apply bg-white;
 

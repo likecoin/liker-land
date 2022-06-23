@@ -128,7 +128,7 @@ export default {
 
     @apply w-full;
 
-    @media screen and (min-width: config('screens.tablet.min')) {
+    @media screen and (min-width: config('theme.screens.tablet.min')) {
       @apply px-24;
     }
 
@@ -175,7 +175,7 @@ export default {
 
     @apply fill-current;
 
-    @apply rounded;
+    @apply rounded-[8px];
 
     @apply bg-white;
 

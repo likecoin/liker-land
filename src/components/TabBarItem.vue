@@ -90,7 +90,7 @@ export default {
     }
 
     &__content {
-      @apply bg-current;
+      @apply bg-inherit-color;
 
       @apply flex;
       @apply justify-center;
@@ -143,8 +143,8 @@ export default {
 
       @apply h-full;
 
-      @apply flex-no-shrink;
-      @apply flex-no-grow;
+      @apply shrink-0;
+      @apply grow-0;
 
       @apply fill-current;
     }
@@ -189,7 +189,7 @@ export default {
 
       @apply bg-like-cyan;
 
-      @apply rounded;
+      @apply rounded-[8px];
 
       .tab-bar-item--active & {
         transform: translateY(-2px);

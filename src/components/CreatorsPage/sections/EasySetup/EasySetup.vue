@@ -1,6 +1,6 @@
 <template lang="pug">
   mixin StepNum(num)
-    span.flex.justify-center.items-center.flex-no-shrink.w-40.h-40.mx-auto.bg-like-cyan-pale.rounded-full.leading-1(
+    span.flex.justify-center.items-center.shrink-0.w-40.h-40.mx-auto.bg-like-cyan-pale.rounded-full.leading-1(
       class="laptop:mr-16"
     )
       = num
@@ -55,13 +55,13 @@
         | {{ $t('CreatorsPageV2.Setup.Preview.BottomHint') }}
 
   mixin Avatar
-    img.w-40.h-40.flex-no-shrink.rounded-full.border-gray-e6.border-1&attributes(attributes)
+    img.w-40.h-40.shrink-0.rounded-full.border-gray-e6.border-1&attributes(attributes)
 
   section.py-32.px-16(v-if="preset === 'intro'")
     h1.text-30.text-center.text-like-green.font-500
       | {{ $t(`CreatorsPageV2.Setup.${likerId ? 'Registered' : 'Anonymous'}.Title`) }}
     .mt-40(class="laptop:flex")
-      ol.flex-1.list-reset(class="laptop:mr-40")
+      ol.flex-1.list-disc(class="laptop:mr-40")
         +StepBlock(1)(
           v-if="likerId"
           class="mt-40"
@@ -99,7 +99,7 @@
         +FakeContent('link')
 
   section.px-16(v-else-if="preset === 'setup'")
-    ol.list-reset.leading-1_5
+    ol.list-disc.leading-1_5
       li.py-32(class="laptop:flex")
         .flex.flex-1(class="laptop:mr-40")
           +StepNum(1)

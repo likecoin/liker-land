@@ -35,7 +35,7 @@ export const ItemList = () => ({
     CivicQuantitySelectItem,
   },
   template: `
-    <ul class="list-reset flex -m-8" style="min-width: 422px;min-height: 160px">
+    <ul class="list-disc flex -m-8" style="min-width: 422px;min-height: 160px">
       <li class="flex-1 p-8">
         <CivicQuantitySelectItem
           class="block w-full h-full"

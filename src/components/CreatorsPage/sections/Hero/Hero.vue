@@ -2,7 +2,7 @@
   section.bg-white.px-16(
     class="laptop:flex laptop:pr-0 desktop:mx-16 desktop:rounded-12"
   )
-    .flex-no-shrink.flex.items-center.px-16.py-32(class="laptop:p-48 laptop:pr-16")
+    .shrink-0.flex.items-center.px-16.py-32(class="laptop:p-48 laptop:pr-16")
       .text-center.mx-auto(class="laptop:text-left laptop:max-w-phone-min")
         h1.text-32.text-like-green.font-500
           | {{ $t('CreatorsPageV2.Hero.Title') }}

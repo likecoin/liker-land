@@ -2,7 +2,7 @@
   section.pt-40.text-center
     h1.text-30.text-like-green.font-500
       | {{ $t('CreatorsPageV2.BetterWorld.Title') }}
-    ul.list-reset.my-16(class="laptop:flex")
+    ul.list-disc.my-16(class="laptop:flex")
       li.p-24(class="laptop:w-1/3")
         img.mx-auto.block(
           src="./assets/open-and-share.png"
@@ -37,7 +37,7 @@ img.earth {
 
   transform: rotateZ(8deg);
 
-  @media screen and (min-width: config('screens.laptop.min')) {
+  @media screen and (min-width: config('theme.screens.laptop.min')) {
     top: 50%;
     transform: translateY(-50%) rotateZ(8deg);
   }

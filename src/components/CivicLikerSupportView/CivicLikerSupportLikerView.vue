@@ -1,7 +1,7 @@
 <template>
   <div class="civic-liker-support-liker-view flex items-center">
     <Identity
-      class="flex-no-shrink"
+      class="shrink-0"
       :avatar-size="88"
       :avatar-url="avatarUrl"
       :is-avatar-outlined="isCivicLiker"

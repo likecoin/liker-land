@@ -52,12 +52,12 @@ export default {
 }
 
 .settings-menu {
-  @apply list-reset;
+  @apply list-disc;
 
   & + & {
     @apply mt-8;
 
-    @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+    @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
       @apply mt-24;
     }
   }
@@ -66,7 +66,7 @@ export default {
     transition-duration: 0.25s;
     transition-timing-function: ease;
 
-    @media screen and (min-width: calc(config('screens.tablet.min') + 32px)) {
+    @media screen and (min-width: calc(config('theme.screens.tablet.min') + 32px)) {
       transition-property: opacity;
 
       @apply bg-white;
@@ -83,18 +83,18 @@ export default {
       }
 
       &:first-child {
-        @apply rounded-t;
+        @apply rounded-t-[8px];
       }
       &:not(:first-child) {
-        @apply border-t;
+        @apply border-t-2;
         @apply border-gray-e6;
       }
       &:last-child {
-        @apply rounded-b;
+        @apply rounded-b-[8px];
       }
     }
 
-    @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+    @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
       transition-property: background-color;
 
       @apply border-2;
@@ -139,7 +139,7 @@ export default {
 
       @apply fill-current;
 
-      @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+      @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
         @apply -ml-8;
       }
     }

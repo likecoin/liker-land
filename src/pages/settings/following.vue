@@ -38,14 +38,14 @@ export default {
 <style lang="scss">
 .settings-following-page {
   @apply overflow-hidden;
-  @apply rounded;
+  @apply rounded-[8px];
 
   @apply bg-white;
 
   @apply mb-48;
   @apply pb-24;
 
-  @media screen and (max-width: calc(config('screens.phone.max') + 31px)) {
+  @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
     @apply mx-16;
   }
 

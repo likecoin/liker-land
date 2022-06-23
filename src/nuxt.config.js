@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
-const theme = require('./tailwind.config');
+const { theme } = require('./tailwind.config');
 
 const siteName = 'Liker.Land';
 
@@ -238,6 +238,17 @@ const nuxtConfig = {
     //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
     // }],
   ],
+  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+  buildModules: [
+    // https://github.com/postcss/postcss/wiki/PostCSS-8-for-end-users
+    '@nuxt/postcss8',
+    // https://go.nuxtjs.dev/tailwindcss
+    '@nuxtjs/tailwindcss',
+  ],
+
+  // Fix @nuxt/postcss8 error https://github.com/nuxt-community/tailwindcss-module/issues/480
+  devServerHandlers: [],
+  
   /*
   ** Axios module configuration
   */

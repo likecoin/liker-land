@@ -6,7 +6,7 @@
         | {{ $t('CLP.effective.title') }}
       p.mt-24.leading-1_5 {{ $t('CLP.effective.description') }}
 
-    ul.list-reset.mt-16.justify-center(class="laptop:flex")
+    ul.list-disc.mt-16.justify-center(class="laptop:flex")
       li.w-full.max-w-300.mx-auto.p-24(class="phone:flex tablet:flex flex-col laptop:mx-0")
         svg.mx-auto.block(
           xmlns="http://www.w3.org/2000/svg"

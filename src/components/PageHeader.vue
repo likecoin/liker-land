@@ -174,12 +174,12 @@ export default {
     right: 100%;
 
     @apply absolute;
-    @apply pin-t;
+    @apply top-0;
 
     @apply w-screen;
   }
 
-  @media screen and (min-width: config('screens.desktop.min')) {
+  @media screen and (min-width: 992px) {
     .site-nav-bar {
       @apply px-64;
     }

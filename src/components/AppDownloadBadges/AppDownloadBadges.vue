@@ -109,14 +109,14 @@ export default {
     @apply bg-like-cyan-light;
 
     &:hover {
-      background-color: config('colors.like-cyan');
+      background-color: config('theme.colors.like-cyan');
     }
 
     &:active {
       box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
       transform: translateX(1px) translateY(2px);
 
-      background-color: config('colors.like-cyan-dark');
+      background-color: config('theme.colors.like-cyan-dark');
     }
   }
 }

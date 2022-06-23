@@ -15,7 +15,7 @@
             | {{ label }}
 
     Transition(name="fade" mode="out-in")
-      ul.list-reset(:key="orderKey")
+      ul.list-disc(:key="orderKey")
         li.my-8(
           v-for="s in supporters"
           :key="s.id"

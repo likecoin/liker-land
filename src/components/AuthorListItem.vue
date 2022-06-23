@@ -195,7 +195,7 @@ export default {
 
     > * {
       @apply absolute;
-      @apply pin;
+      @apply inset-0;
       @apply w-full;
 
       @apply flex;

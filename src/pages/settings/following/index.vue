@@ -90,7 +90,7 @@ export default {
 .author-follow-settings-list {
   min-height: 10rem;
 
-  @apply list-reset;
+  @apply list-disc;
 
   &--empty {
     @apply text-gray-c;

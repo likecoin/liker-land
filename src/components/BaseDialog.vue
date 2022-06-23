@@ -242,14 +242,14 @@ export default {
     width: 100%;
 
     .base-dialog:not(.base-dialog--fullscreen) & {
-      max-width: config('screens.phone.max');
+      max-width: config('theme.screens.phone.max');
 
       main {
         background-color: white;
         box-shadow: 0 4px 25px 0 rgba(black, 0.4);
       }
 
-      @media screen and (min-width: config('screens.tablet.min')) {
+      @media screen and (min-width: config('theme.screens.tablet.min')) {
         margin: 104px auto 56px;
       }
     }

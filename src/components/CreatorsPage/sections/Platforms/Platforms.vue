@@ -3,7 +3,7 @@
     h1.text-30.text-like-green.font-500
       | {{ $t('CreatorsPageV2.Platforms.Title') }}
     p.mt-12.mx-auto.max-w-phone {{ $t('CreatorsPageV2.Platforms.Description') }}
-    ul.mt-32.list-reset.flex.items-center.justify-center.flex-wrap
+    ul.mt-32.list-disc.flex.items-center.justify-center.flex-wrap
       li.p-8(
         v-for="p in platforms"
         :key="p.id"

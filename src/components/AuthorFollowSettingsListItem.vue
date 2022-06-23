@@ -22,7 +22,7 @@
       v-slot:accessory-view
     >
       <button
-        class="btn btn--plain no-underline btn--block"
+        class="no-underline btn btn--plain btn--block"
         @click="onClickActionButton"
       >
         <LcLoadingIndicator v-if="isUpdating" />
@@ -91,7 +91,7 @@ export default {
     transition: opacity 0.25s ease;
 
     @apply text-white;
-    @apply text-14;
+    @apply text-[14px];
 
     &:active {
       @apply opacity-75;

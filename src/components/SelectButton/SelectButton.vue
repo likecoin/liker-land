@@ -41,7 +41,7 @@ export default {
     },
     tickClass() {
       return [
-        'select-button__tick ml-24 flex-no-shrink',
+        'select-button__tick ml-24 shrink-0',
         {
           invisible: !this.isSelected,
         },

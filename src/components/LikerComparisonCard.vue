@@ -135,7 +135,7 @@ export default {
 
   @apply w-full;
 
-  @apply rounded;
+  @apply rounded-[8px];
 
   &::before {
     content: '';
@@ -144,7 +144,7 @@ export default {
 
     @apply absolute;
     @apply overflow-hidden;
-    @apply pin;
+    @apply inset-0;
 
     @apply bg-white;
   }
@@ -247,7 +247,7 @@ export default {
     }
 
     &-bullet {
-      @apply flex-no-shrink;
+      @apply shrink-0;
 
       @apply w-16;
       @apply h-16;

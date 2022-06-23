@@ -1,5 +1,5 @@
 <template>
-  <div class="eula-page page-content text-gray-4a text-justify">
+  <div class="text-justify eula-page page-content text-gray-4a">
     <h1>End-User License Agreement (EULA) of Liker Land</h1>
     <p>This End-User License Agreement (“EULA”) is a legal agreement between you and oice Limited</p>
     <p>This EULA agreement governs your acquisition and use of our Liker Land software (“Software”) directly from oice Limited or indirectly through a oice Limited authorized reseller or distributor (a “Reseller”).</p>

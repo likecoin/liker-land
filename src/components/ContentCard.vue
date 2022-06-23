@@ -577,7 +577,7 @@ export default {
       transition: background-color 0.2s ease-in-out;
 
       @apply absolute;
-      @apply pin;
+      @apply inset-0;
 
       @apply pointer-events-none;
 
@@ -693,7 +693,7 @@ export default {
 
       svg {
         @apply absolute;
-        @apply pin;
+        @apply inset-0;
 
         @apply fill-current;
       }
@@ -705,10 +705,10 @@ export default {
 
     @apply overflow-hidden;
 
-    @apply list-reset;
+    @apply list-disc;
 
     @apply bg-white;
-    @apply rounded;
+    @apply rounded-[8px];
 
     &-item {
       @apply flex;
