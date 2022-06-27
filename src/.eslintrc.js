@@ -4,14 +4,12 @@ module.exports = {
     browser: true,
     node: true
   },
-  parserOptions: {
-    parser: 'babel-eslint'
-  },
   extends: [
     'airbnb-base',
     '@nuxtjs',
-    'plugin:vue/recommended',
-    'plugin:prettier/recommended'
+    '@nuxtjs/eslint-config-typescript',
+    'plugin:prettier/recommended',
+    'plugin:vue/base'
   ],
   plugins: [
     'prettier'
@@ -27,7 +25,9 @@ module.exports = {
       "ts": "never",
       "tsx": "never",
       "vue": "never"
-    }]
+    }],
+    "no-shadow": "off",
+    "@typescript-eslint/no-unused-vars" : "off"
   },
   settings: {
     'import/resolver': {

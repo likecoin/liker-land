@@ -238,8 +238,14 @@ const nuxtConfig = {
     //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
     // }],
   ],
+  
+  // Auto import components: https://go.nuxtjs.dev/config-components
+  components: true,
+
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    // https://go.nuxtjs.dev/typescript
+    '@nuxt/typescript-build',
     // https://github.com/postcss/postcss/wiki/PostCSS-8-for-end-users
     '@nuxt/postcss8',
     // https://go.nuxtjs.dev/tailwindcss
