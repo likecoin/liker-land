@@ -7,7 +7,7 @@ const api = require('./api');
 const app = express();
 
 // Import and Set Nuxt.js options
-const config = require('../nuxt.config.js');
+const config = require('../nuxt.config');
 
 config.dev = !(process.env.NODE_ENV === 'production');
 

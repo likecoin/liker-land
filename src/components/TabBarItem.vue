@@ -90,7 +90,7 @@ export default {
     }
 
     &__content {
-      @apply bg-inherit-color;
+      @apply bg-current;
 
       @apply flex;
       @apply justify-center;

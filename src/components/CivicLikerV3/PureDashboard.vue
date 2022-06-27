@@ -157,7 +157,7 @@
 import dateFormat from 'date-fns/format';
 
 import Button from '../Button/Button';
-import CivicLikerV3Header from './Header.vue';
+import CivicLikerV3Header from './Header';
 
 export default {
   name: 'PureCivicDashboardV3',

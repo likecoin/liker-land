@@ -13,14 +13,14 @@
         class="ml-24 text-12 text-gray-4a"
       >{{ $t('civic_liker_feature_list_header_since_date', { date: sinceDate }) }}</div>
     </header>
-    <ul class="bg-white list-style-none px-32 py-16 rounded-b-8">
+    <ul class="px-32 py-16 bg-white list-style-none rounded-b-8">
       <li
         v-for="(description, key) in $t('civic_liker_feature_list_item')"
         :key="key"
         class="flex items-start"
       >
         <StatusIcon
-          class="w-12 h-12 mr-20 my-2 shrink-0"
+          class="w-12 h-12 my-2 mr-20 shrink-0"
           :type="featureIconType"
         />
         <span :class="descriptionClass">{{ description }}</span>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import StatusIcon from './CivicLikerFeatureListIcon.vue';
+import StatusIcon from './CivicLikerFeatureListIcon';
 
 export default {
   components: {

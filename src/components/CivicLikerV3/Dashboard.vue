@@ -25,8 +25,8 @@ import {
   getCivicLikerStakingInfoAPI,
 } from '../../util/api';
 
-import Spinner from '../Spinner/Spinner.vue';
-import CivicLikerV3PureDashboard from './PureDashboard.vue';
+import Spinner from '../Spinner/Spinner';
+import CivicLikerV3PureDashboard from './PureDashboard';
 
 export default {
   name: 'CivicLikerV3Dashboard',

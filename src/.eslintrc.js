@@ -20,6 +20,14 @@ module.exports = {
   rules: {
     'vue/multiline-html-element-content-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "mjs": "never",
+      "jsx": "never",
+      "ts": "never",
+      "tsx": "never",
+      "vue": "never"
+    }]
   },
   settings: {
     'import/resolver': {

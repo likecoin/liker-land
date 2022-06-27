@@ -176,7 +176,6 @@ html[sliding-menu='opened'] {
   width: $sliding-menu-width;
 
   @apply fixed;
-  /* @apply inset-x-0; */
   @apply top-0;
 
   @apply text-white;
