@@ -95,7 +95,7 @@
     "eslint-plugin-standard": ">=4.0.0",
     "eslint-plugin-vue": "^5.2.2",
     "extract-css-chunks-webpack-plugin": "^4.8.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.14.0",
     "nodemon": "^1.18.9",
     "prettier": "1.14.3",
     "pug": "^2.0.3",
