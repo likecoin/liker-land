@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/liker-land
     docker:
-      - image: node:10
+      - image: node:14
     steps:
       - checkout
       - restore_cache:
@@ -39,7 +39,7 @@ jobs:
   deploy_rinkeby:
     working_directory: ~/liker-land
     docker:
-      - image: node:10
+      - image: node:14
     steps:
       - checkout
       - run:
@@ -71,7 +71,7 @@ jobs:
   deploy_mainnet:
     working_directory: ~/liker-land
     docker:
-      - image: node:10
+      - image: node:14
     steps:
       - checkout
       - run:
