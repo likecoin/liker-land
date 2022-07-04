@@ -74,6 +74,15 @@ const colors = {
   'like-cyan-darker': '#1aa384',
   'like-cyan-translucent': 'rgba(80, 227, 194, 0.15)',
   'like-cyan-translucent-dark': 'rgba(26, 163, 132, 0.15)',
+
+  'like-dark-green':'#245b64',
+  'like-cyan-extralight': '#D7ECEC',
+  'dark-gray': '#4A4A4A',
+  'medium-gray': '#9B9B9B',
+  'shade-gray': '#EBEBEB',
+  'light-gray': '#F7F7F7',
+  'airdrop-gold':'#D1AB79',
+  'twitter-blue':'#4696F1',
 };
 
 module.exports = {
@@ -129,11 +138,11 @@ module.exports = {
   |
   */
 
-    fonts: {
-      sans: ['open-sans', 'sans-serif'],
-      serif: ['serif'],
-      mono: ['monospace'],
-      emoji: ['emoji'],
+    fontFamily: {
+      'sans': ['open-sans', 'sans-serif'],
+      'serif': ['serif'],
+      'mono': ['monospace'],
+      'emoji': ['emoji'],
     },
 
     /*
