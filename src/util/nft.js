@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
+import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { PageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import { LIKECOIN_CHAIN_NFT_RPC } from '../constant';
 
@@ -22,8 +23,9 @@ export async function createNFTSigningClient(signer) {
 export async function getClassInfo(classId) {
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();
-  const res = await client.nft.class(classId);
-  return res;
+  let { class: nftClass } = await client.nft.class(classId);
+  if (nftClass) nftClass = parseNFTClassDataFields(nftClass);
+  return nftClass;
 }
 
 export async function getNFTs({ classId = '', owner = '' }) {
