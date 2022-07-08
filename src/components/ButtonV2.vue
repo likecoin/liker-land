@@ -53,7 +53,7 @@ export enum Size {
 }
 
 @Component
-export default class Button extends Vue {
+export default class ButtonV2 extends Vue {
   // Preset of the button
   @Prop({ default: 'primary' })
   readonly preset!: string;
