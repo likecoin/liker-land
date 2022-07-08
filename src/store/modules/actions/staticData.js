@@ -1,5 +1,6 @@
 import * as TYPES from '@/store/mutation-types';
 import * as api from '@/util/api';
+import { getClassInfo } from '@/util/nft';
 
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
@@ -36,7 +37,21 @@ export async function fetchNFTPurchaseInfo({ commit }, classId) {
 }
 
 export async function fetchNFTMetadata({ commit }, classId) {
-  const metadata = await this.$api.$get(api.getNFTMetadata({ classId }));
+  let metadata;
+  const [apiMetadata = {}, chainMetadata = {}] = await Promise.all([
+    this.$api
+      .$get(api.getNFTMetadata({ classId }))
+      // eslint-disable-next-line no-console
+      .catch(err => console.error(err)),
+    getClassInfo(classId),
+  ]);
+  const {
+    name,
+    description,
+    data: { parent, metadata: classMetadata = {} } = {},
+  } = chainMetadata;
+  metadata = { name, description, metadata: classMetadata, parent };
+  if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
   commit(TYPES.STATIC_SET_NFT_CLASS_METADATA, { classId, metadata });
   return metadata;
 }

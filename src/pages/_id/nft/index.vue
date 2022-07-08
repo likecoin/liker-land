@@ -13,7 +13,10 @@
           <div :style="`background-color: ${getNFTClassMetadataById(id).background_color}`">
             <img :src="getNFTClassMetadataById(id).image">
           </div>
-          <div>iscn owner: {{ getNFTClassMetadataById(id).iscn_owner }}</div>
+          <div>id: {{ id }}</div>
+          <div v-if="getNFTClassMetadataById(id).iscn_owner">
+            iscn owner: {{ getNFTClassMetadataById(id).iscn_owner }}
+          </div>
           <button
             v-if="getNFTClassPurchaseInfoById(id)"
             @click="() => onDetails(id)"
