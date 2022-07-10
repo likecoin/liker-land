@@ -50,18 +50,21 @@ export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';
 export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
 export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
-  ? 'https://likecoin-chain-iscn-dev-2.netlify.app/validators'
+  ? 'https://likecoin-public-testnet-5.netlify.app/validators'
   : 'https://dao.like.co/validators';
 
 export const LIKECOIN_CHAIN_NFT_RPC = IS_TESTNET
-  ? 'https://node.nft-dev.like.co/rpc/'
+  ? 'https://node.testnet.like.co/rpc/'
   : 'https:/mainnet-node.like.co/rpc/';
 
 export const APP_LIKE_CO_VIEW = IS_TESTNET
   ? 'https://app.rinkeby.like.co/view'
   : 'https://app.like.co/view';
 
-export const LIKECOIN_CHAIN_ID = IS_TESTNET ? 'nft-dev' : 'likecoin-mainnet-2';
+export const LIKECOIN_CHAIN_ID = IS_TESTNET
+  ? 'likecoin-public-testnet-5'
+  : 'likecoin-mainnet-2';
 
-export const LIKECOIN_NFT_API_WALLET =
-  'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp';
+export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
+  ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
+  : 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp';
