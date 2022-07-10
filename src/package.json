@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@cosmjs/stargate": "^0.28.7",
-    "@likecoin/iscn-js": "^0.2.0-alpha.1",
+    "@likecoin/iscn-js": "^0.2.0-rc.1",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxtjs/axios": "^5.12.2",
