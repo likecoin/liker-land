@@ -16,9 +16,9 @@
         v-if="!getUserId"
         class="relative overflow-hidden leading-0"
       >
-        <GlobeIcon class="w-20 h-20 fill-current mr-16" />
+        <GlobeIcon class="w-20 h-20 mr-16 fill-current" />
         <select
-          class="absolute pin-y pin-r opacity-0"
+          class="absolute opacity-0 pin-y pin-r"
           :value="getLocale"
           @change="onChangeLocale"
         >
@@ -86,7 +86,8 @@ export default {
   @apply items-center;
   @apply justify-between;
 
-  @apply px-16 py-12;
+  @apply px-16;
+  @apply py-12;
 
   &__menu-button {
     transition-property: transform, opacity;

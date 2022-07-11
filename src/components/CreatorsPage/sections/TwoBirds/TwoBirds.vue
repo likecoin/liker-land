@@ -10,7 +10,7 @@
           place="civicLiker"
         )
           | {{ $tc('civicLikers', 2) }}
-    ul.list-reset.my-16(class="laptop:flex")
+    ul.list-disc.my-16(class="laptop:flex")
       li.p-24(class="laptop:flex-1")
         img.mx-auto.block(
           src="./assets/subscription.png"

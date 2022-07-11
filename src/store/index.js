@@ -5,12 +5,12 @@ import Vuex from 'vuex'; // eslint-disable-line import/no-extraneous-dependencie
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 
+import { AUTH_COOKIE_NAME } from '~/constant';
 import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
 import support from './modules/support';
-import { AUTH_COOKIE_NAME } from '~/constant';
 
 const createStore = () =>
   new Vuex.Store({

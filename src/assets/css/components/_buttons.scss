@@ -131,9 +131,9 @@
   &--disabled {
     pointer-events: none !important;
 
-    color: config('colors.gray-c') !important;
+    color: config('theme.colors.gray-c') !important;
 
-    border-color: config('colors.gray-c') !important;
+    border-color: config('theme.colors.gray-c') !important;
   }
 
   // Button icon
@@ -158,14 +158,14 @@
     @apply absolute;
   }
   &--plain &__icon {
-    fill: config('colors.like-cyan');
+    fill: config('theme.colors.like-cyan');
   }
   &--icon-top:not(#{&}--icon-only) &__icon {
-    @apply pin-t;
+    @apply top-0;
     @apply mt-8;
   }
   &:not(#{&}--icon-only):not(#{&}--icon-top) &__icon {
-    @apply pin-l;
+    @apply left-0;
     @apply ml-8;
   }
   &--with-icon:not(#{&}--icon-top) {

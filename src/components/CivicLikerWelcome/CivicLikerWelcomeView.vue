@@ -5,7 +5,7 @@
     </header>
     <div class="flex items-center pt-24 pb-16 px-32 phone:px-24">
       <Identity
-        :class="['flex-no-shrink', { 'ml-4': isReferrerCivicLiker }]"
+        :class="['shrink-0', { 'ml-4': isReferrerCivicLiker }]"
         :avatar-size="60"
         :avatar-url="referrerAvatarUrl"
         :is-avatar-outlined="isReferrerCivicLiker"

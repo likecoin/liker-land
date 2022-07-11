@@ -420,7 +420,7 @@ export default {
     @apply text-white;
     @apply mr-80;
 
-    @media screen and (max-width: config('screens.desktop.min')) {
+    @media screen and (max-width: config('theme.screens.desktop.min')) {
       top: 0;
 
       @apply mt-16;
@@ -443,10 +443,10 @@ export default {
       align-items: flex-start;
       justify-content: center;
 
-      @apply list-reset;
+      @apply list-disc;
       @apply -m-8;
 
-      @media screen and (max-width: config('screens.tablet.max')) {
+      @media screen and (max-width: config('theme.screens.tablet.max')) {
         align-items: center;
         flex-direction: column;
       }

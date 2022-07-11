@@ -28,8 +28,7 @@ body {
       content: '';
 
       @apply fixed;
-      @apply pin-l;
-      @apply pin-r;
+      @apply inset-x-0;
     }
 
     &::before {

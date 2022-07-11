@@ -249,7 +249,7 @@ export default {
   z-index: 9999;
 
   @apply absolute;
-  @apply pin;
+  @apply inset-0;
 
   &-- {
     &enter,

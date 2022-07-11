@@ -4,14 +4,12 @@ module.exports = {
     browser: true,
     node: true
   },
-  parserOptions: {
-    parser: 'babel-eslint'
-  },
   extends: [
     'airbnb-base',
     '@nuxtjs',
-    'plugin:vue/recommended',
-    'plugin:prettier/recommended'
+    '@nuxtjs/eslint-config-typescript',
+    'plugin:prettier/recommended',
+    'plugin:vue/base'
   ],
   plugins: [
     'prettier'
@@ -20,6 +18,16 @@ module.exports = {
   rules: {
     'vue/multiline-html-element-content-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "mjs": "never",
+      "jsx": "never",
+      "ts": "never",
+      "tsx": "never",
+      "vue": "never"
+    }],
+    "no-shadow": "off",
+    "@typescript-eslint/no-unused-vars" : "off"
   },
   settings: {
     'import/resolver': {

@@ -39,7 +39,7 @@
       .bg-white.rounded-8.mt-24.p-32.text-12.text-gray-4a.leading-1_5(
         class="items-start laptop:flex laptop:pl-64"
       )
-        Identity.flex-no-shrink(
+        Identity.shrink-0(
           :avatar-size="88"
           :avatar-url="user.avatar"
           :is-avatar-outlined="user.isSubscribedCivicLiker"
@@ -104,7 +104,7 @@
       )
 
       h2.mt-32.text-like-green.font-24.font-500 {{ $t('SupportersDashboard.Summary.Title') }}
-      ul.list-reset.flex.bg-white.rounded-8.mt-24.px-16.py-8.text-12.text-gray-4a.leading-1_5(
+      ul.list-disc.flex.bg-white.rounded-8.mt-24.px-16.py-8.text-12.text-gray-4a.leading-1_5(
         :class="['phone:px-8', { 'opacity-50 select-none': !count }]"
       )
         li.flex-1.m-8

@@ -19,7 +19,7 @@ if ((functions.config().sentry || {}).report_uri) {
   process.env.SENTRY_REPORT_URI = functions.config().sentry.report_uri;
 }
 
-const nuxtConfig = require('../nuxt.config.js');
+const nuxtConfig = require('../nuxt.config');
 
 const config = {
   ...nuxtConfig,

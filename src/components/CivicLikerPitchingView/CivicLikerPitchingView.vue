@@ -6,7 +6,7 @@
     </h1>
     <div class="flex items-center justify-center px-8 tablet:px-20">
       <Identity
-        class="flex-no-shrink"
+        class="shrink-0"
         :avatar-size="80"
         :avatar-url="supporterAvatarUrl"
         :is-avatar-outlined="isSupporterCivicLiker"
@@ -21,7 +21,7 @@
           src="./convert.svg?inline"
         >
       </div>
-      <div class="relative flex-no-shrink">
+      <div class="relative shrink-0">
         <Identity
           :avatar-size="80"
           :avatar-url="creatorAvatarUrl"

@@ -22,7 +22,7 @@
           @click="onClickBackButton"
         >
           <svg
-            class="w-12 h-12 mr-4 flex-no-shrink"
+            class="w-12 h-12 mr-4 shrink-0"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 8.7 16"
           >
@@ -69,8 +69,8 @@
           </template>
         </Button>
         <div class="flex flex-wrap items-center text-12 border-l-1 border-gray-4a px-16 py-8">
-          <EyeIcon class="w-16 text-like-green flex-no-shrink" />
-          <span class="ml-4 mr-12 text-like-green flex-no-shrink">{{ $t('SettingsSupportPage.PitchPreview.Status') }}</span>
+          <EyeIcon class="w-16 text-like-green shrink-0" />
+          <span class="ml-4 mr-12 text-like-green shrink-0">{{ $t('SettingsSupportPage.PitchPreview.Status') }}</span>
           <span class="phone:mt-4 phone:w-full">{{ $t('SettingsSupportPage.PitchPreview.Hint') }}</span>
         </div>
       </div>
@@ -371,7 +371,7 @@
           v-if="isConfirmButtonDisabled"
           class="flex mt-32 text-like-green"
         >
-          <AlertCircle class="w-24 h-24 flex-no-shrink mr-12" />
+          <AlertCircle class="w-24 h-24 shrink-0 mr-12" />
           <i18n
             class="flex-grow text-like-green text-14 font-500 leading-1_5"
             :path="confimrButtonDisabledHintI18nPath"

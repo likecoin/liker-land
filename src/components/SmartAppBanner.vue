@@ -74,7 +74,7 @@ export default {
   right: 0;
   bottom: 0;
 
-  color: config('colors.gray-4a');
+  color: config('theme.colors.gray-4a');
   background-color: rgba(#4a4a4a, 0.5);
 
   &__content-container {

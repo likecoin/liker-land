@@ -176,7 +176,7 @@ html[sliding-menu='opened'] {
   width: $sliding-menu-width;
 
   @apply fixed;
-  @apply pin-t;
+  @apply top-0;
 
   @apply text-white;
   @apply bg-like-green;
@@ -208,7 +208,7 @@ html[sliding-menu='opened'] {
     transition-property: transform, outline-width;
 
     outline-style: solid;
-    outline-color: config('colors.like-green');
+    outline-color: config('theme.colors.like-green');
     outline-width: 0;
 
     html[sliding-menu='opened'] & {
@@ -226,7 +226,7 @@ html[sliding-menu='opened'] {
           content: '';
 
           @apply absolute;
-          @apply pin;
+          @apply inset-0;
 
           @apply pointer-events-auto;
         }
@@ -245,7 +245,7 @@ html[sliding-menu='opened'] {
 
   &__header {
     @apply flex;
-    @apply flex-no-shrink;
+    @apply shrink-0;
 
     @apply pt-24;
     @apply pl-24;

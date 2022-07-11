@@ -44,7 +44,7 @@ export default {
   }
 
   &__item-list {
-    @apply list-reset;
+    @apply list-disc;
 
     @apply flex;
     @apply flex-grow;

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import BannerSmall from './CivicLikerClassicBannerSmall.vue';
+import BannerSmall from './CivicLikerClassicBannerSmall';
 
 export default {
   components: {

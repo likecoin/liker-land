@@ -103,7 +103,7 @@
       >{{ $t('SettingsSupportPage.Title.ManageSupportingUser') }}</h2>
       <ul
         key="content"
-        class="flex flex-wrap pb-32 m-0 mt-12 supporting-liker-list list-reset"
+        class="flex flex-wrap pb-32 m-0 mt-12 supporting-liker-list list-disc"
       >
         <li v-if="supportingLikerIds.length === 0">
           <EmptyLikerView class="h-full" />

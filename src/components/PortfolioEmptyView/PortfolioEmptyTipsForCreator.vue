@@ -1,6 +1,6 @@
 <template lang="pug">
   mixin Bullet
-    span.w-24.h-24.mr-16.flex-no-shrink.flex.items-center.justify-center.border.border-current.rounded-full.font-600
+    span.w-24.h-24.mr-16.shrink-0.flex.items-center.justify-center.border.border-current.rounded-full.font-600
       block
 
   .text-gray-9b.leading-1_25
