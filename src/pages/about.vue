@@ -1,7 +1,7 @@
 <script>
 export default {
-  fetch(context) {
-    context.redirect('https://about.like.co/');
+  fetch({ redirect }) {
+    redirect({ name: 'index' });
   },
 };
 </script>

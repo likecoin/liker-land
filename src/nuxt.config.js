@@ -238,7 +238,7 @@ const nuxtConfig = {
     //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
     // }],
   ],
-  
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -254,7 +254,7 @@ const nuxtConfig = {
 
   // Fix @nuxt/postcss8 error https://github.com/nuxt-community/tailwindcss-module/issues/480
   devServerHandlers: [],
-  
+
   /*
   ** Axios module configuration
   */

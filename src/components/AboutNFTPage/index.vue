@@ -1,0 +1,159 @@
+<template>
+  <div class="about-nft-page px-[24px] laptop:px-[32px]">
+    <div
+      class="
+        w-full
+        max-w-[1024px]
+        mx-auto
+        flex flex-col
+        items-center
+        laptop:block
+      "
+    >
+      <NFTHeroSection class="w-full pb-[64px]" />
+      <NFTWidgetSection class="py-[32px] laptop:py-[64px]" />
+      <NFTPortfolioSection class="py-[32px] laptop:py-[64px]" />
+      <NFTPortalSection class="py-[32px] laptop:py-[64px]" />
+      <NFTPricingSection class="py-[32px] laptop:py-[64px]" />
+      <NFTFAQSection id="faq" class="py-[32px] laptop:py-[64px]" />
+
+      {{ /* Community */ }}
+      <section class="py-[32px] laptop:pt-[64px] pb-[128px]">
+        <h1
+          class="
+            text-[48px]
+            leading-[1]
+            font-proxima font-[300]
+            text-like-green text-center
+          "
+        >{{ $t('about_nft_page_join_the_community_title') }}</h1>
+        <ul
+          class="
+            grid
+            justify-center
+            laptop:grid-flow-col
+            text-like-green
+            p-[24px]
+            pt-[56px]
+            gap-x-[64px] gap-y-[32px]
+          "
+        >
+          <li>
+            <a
+              class="group"
+              href="https://discord.gg/likecoin"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <svg
+                class="block mx-auto transition-colors bg-white rounded-full group-hover:bg-gray-e6"
+                width="48"
+                height="48"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M19.6418 21.8879C20.156 22.522 20.7729 23.2589 20.7729 23.2589C24.3612 23.1453 25.8421 20.9242 25.9879 20.7055C25.996 20.6933 26 20.6873 26 20.6882C26 15.2212 23.5321 10.7825 23.5321 10.7825C21.0814 8.94873 18.7335 9.00015 18.7335 9.00015L18.4936 9.27435C21.407 10.1484 22.7609 11.4337 22.7609 11.4337C21.1612 10.5666 19.4101 10.0139 17.6024 9.80563C16.4512 9.67876 15.289 9.69027 14.1405 9.83991C14.0426 9.84285 13.9451 9.85432 13.8492 9.87418C12.5054 10.036 11.1938 10.4 9.95887 10.9539C9.32476 11.2281 8.94773 11.4337 8.94773 11.4337C8.94773 11.4337 10.353 10.0798 13.4379 9.2058L13.2665 9.00015C13.2665 9.00015 10.9357 8.94873 8.46787 10.7825C8.46787 10.7825 6 15.2212 6 20.6882C6 20.6882 7.43959 23.1561 11.2271 23.2761C11.2271 23.2761 11.8612 22.522 12.3753 21.8708C10.1988 21.2195 9.37618 19.8656 9.37618 19.8656C9.37618 19.8656 9.54756 19.9856 9.85604 20.157C9.87318 20.157 9.87318 20.157 9.92459 20.1912C9.9503 20.2084 9.97601 20.2212 10.0017 20.2341C10.0274 20.2469 10.0531 20.2598 10.0788 20.2769C10.482 20.4996 10.9 20.6943 11.3299 20.8596C12.1428 21.1893 12.9868 21.4362 13.8492 21.5965C15.3148 21.8781 16.8201 21.8839 18.2879 21.6137C19.1399 21.4563 19.9729 21.2093 20.7729 20.8768C21.466 20.6152 22.1271 20.276 22.7438 19.8656C22.7438 19.8656 21.8869 21.2538 19.6418 21.8879ZM17.3111 17.2099C17.3111 16.1645 18.0823 15.3248 19.0591 15.3248C20.0189 15.3248 20.8072 16.1645 20.8072 17.2099C20.8072 18.2554 20.0189 19.0951 19.0591 19.0951C18.0994 19.0951 17.3111 18.2554 17.3111 17.2099ZM11.0557 17.2099C11.0557 16.1645 11.8269 15.3248 12.8038 15.3248C13.7806 15.3248 14.5518 16.1645 14.5518 17.2099C14.5518 18.2554 13.7635 19.0951 12.8038 19.0951C11.844 19.0951 11.0557 18.2554 11.0557 17.2099Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <div class="text-center mt-[4px] group-hover:underline">Discord</div>
+            </a>
+          </li>
+          <li>
+            <a
+              class="group"
+              href="https://github.com/likecoin"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <svg
+                class="block mx-auto transition-colors bg-white rounded-full group-hover:bg-gray-e6"
+                width="48"
+                height="48"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.0127 6.03684C13.6357 6.03443 11.3356 6.87857 9.52448 8.418C7.71336 9.95743 6.50965 12.0915 6.12907 14.4378C5.74848 16.7841 6.21591 19.1893 7.44756 21.2223C8.67922 23.2553 10.5946 24.7832 12.8505 25.5322C13.3478 25.6243 13.532 25.3112 13.532 25.0472C13.532 24.7831 13.532 24.1814 13.532 23.3463C10.7505 23.9603 10.161 22.0077 10.161 22.0077C9.97568 21.4025 9.58192 20.8826 9.04963 20.5402C8.14701 19.9262 9.12331 19.9262 9.12331 19.9262C9.43972 19.9709 9.74181 20.087 10.0067 20.2657C10.2716 20.4444 10.4924 20.6811 10.6522 20.9577C10.7881 21.2041 10.9713 21.4212 11.1912 21.5966C11.4112 21.7719 11.6636 21.9022 11.9341 21.9797C12.2045 22.0573 12.4875 22.0808 12.767 22.0487C13.0465 22.0166 13.3169 21.9297 13.5627 21.7928C13.6013 21.2877 13.819 20.8129 14.1768 20.4542C11.954 20.2025 9.62068 19.3428 9.62068 15.5113C9.60541 14.5184 9.97256 13.5577 10.6461 12.828C10.3455 11.9648 10.3806 11.0201 10.7443 10.1815C10.7443 10.1815 11.5856 9.91136 13.4952 11.207C15.135 10.7567 16.8658 10.7567 18.5057 11.207C20.4153 9.91136 21.2504 10.1815 21.2504 10.1815C21.6179 11.0189 21.6552 11.9643 21.3548 12.828C22.0283 13.5577 22.3954 14.5184 22.3802 15.5113C22.3802 19.3551 20.0407 20.1963 17.8118 20.4235C18.0508 20.6638 18.2354 20.9526 18.353 21.2704C18.4706 21.5883 18.5184 21.9277 18.4934 22.2656C18.4934 23.6042 18.4934 24.6849 18.4934 25.0103C18.4934 25.3357 18.6715 25.5875 19.1811 25.4954C21.4299 24.7393 23.3369 23.2089 24.5621 21.1773C25.7873 19.1457 26.2509 16.7449 25.8704 14.4031C25.4898 12.0613 24.2897 9.93093 22.4842 8.39184C20.6787 6.85275 18.3852 6.00507 16.0127 6V6.03684Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <div class="text-center mt-[4px] group-hover:underline">GitHub</div>
+            </a>
+          </li>
+          <li>
+            <a
+              class="group"
+              href="https://twitter.com/likecoin"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <svg
+                class="block mx-auto transition-colors bg-white rounded-full group-hover:bg-gray-e6"
+                width="48"
+                height="48"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M26 9.92417C25.2642 10.2508 24.4733 10.4708 23.6433 10.57C24.4908 10.0625 25.1417 9.25833 25.4475 8.3C24.655 8.77 23.7767 9.11167 22.8417 9.29583C22.0942 8.49833 21.0267 8 19.8467 8C17.1975 8 15.2508 10.4717 15.8492 13.0375C12.44 12.8667 9.41667 11.2333 7.3925 8.75083C6.3175 10.595 6.835 13.0075 8.66167 14.2292C7.99 14.2075 7.35667 14.0233 6.80417 13.7158C6.75917 15.6167 8.12167 17.395 10.095 17.7908C9.5175 17.9475 8.885 17.9842 8.24167 17.8608C8.76333 19.4908 10.2783 20.6767 12.075 20.71C10.35 22.0625 8.17667 22.6667 6 22.41C7.81583 23.5742 9.97333 24.2533 12.29 24.2533C19.9083 24.2533 24.2125 17.8192 23.9525 12.0483C24.7542 11.4692 25.45 10.7467 26 9.92417Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <div class="text-center mt-[4px] group-hover:underline">Twitter</div>
+            </a>
+          </li>
+          <li>
+            <a
+              class="group"
+              href="https://blog.like.co"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <svg
+                class="block mx-auto transition-colors bg-white rounded-full group-hover:bg-gray-e6"
+                width="48"
+                height="48"
+                viewBox="0 0 32 32"
+                fill="currentColor"
+              >
+                <circle cx="10.4" cy="21.6" r="2.18" />
+                <path d="M8.22,13.88v2.83c3.9,0,7.07,3.17,7.07,7.07h2.83c0-5.47-4.43-9.9-9.9-9.9Zm0-5.66v2.83c7.03,0,12.73,5.7,12.73,12.73h2.83c0-8.59-6.97-15.56-15.56-15.56Z" />
+              </svg>
+              <div class="text-center mt-[4px] group-hover:underline">Blog</div>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</template>
+
+<script>
+import NFTFAQSection from './NFTFAQSection';
+import NFTHeroSection from './NFTHeroSection';
+import NFTPortalSection from './NFTPortalSection';
+import NFTPortfolioSection from './NFTPortfolioSection';
+import NFTPricingSection from './NFTPricingSection';
+import NFTWidgetSection from './NFTWidgetSection';
+
+export default {
+  name: 'AboutPage',
+  components: {
+    NFTFAQSection,
+    NFTHeroSection,
+    NFTPortalSection,
+    NFTPortfolioSection,
+    NFTPricingSection,
+    NFTWidgetSection,
+  },
+};
+</script>

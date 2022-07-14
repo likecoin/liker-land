@@ -1,6 +1,6 @@
 <template>
   <Button
-    class="text-current rounded-full"
+    class="text-current !rounded-full"
     preset="primary-outline"
     target="_blank"
     rel="noopener noreferrer"

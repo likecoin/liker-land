@@ -182,7 +182,7 @@ export default {
   }
 
   &--primary-outline {
-    color: #28646e;
+    color: #aaf1e7;
 
     border: 2px solid #aaf1e7;
   }

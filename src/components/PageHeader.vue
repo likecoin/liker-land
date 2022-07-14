@@ -13,6 +13,11 @@
         <slot v-bind="getSlotProps(true)" />
       </header>
     </portal>
+
+    <PortalTarget
+      name="dialog"
+      multiple
+    />
   </header>
 </template>
 

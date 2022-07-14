@@ -43,7 +43,7 @@
     "express-session": "^1.17.0",
     "firebase-admin": "^8.9.0",
     "firestore-store": "^1.0.0",
-    "gsap": "^3.0.4",
+    "gsap": "^3.10.4",
     "jsonwebtoken": "^8.5.1",
     "lodash.throttle": "^4.1.1",
     "node-fetch": "^2.6.0",

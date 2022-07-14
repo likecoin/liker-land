@@ -1,4 +1,43 @@
 {
+  "about_nft_page_title": "Writing",
+  "about_nft_page_description": "Earn as you write, collect as you read.",
+  "about_nft_page_hero_tagline_1": "Earn as you write,",
+  "about_nft_page_hero_tagline_2": "collect as you read.",
+  "about_nft_page_nft_widget_title": "NFT Widget",
+  "about_nft_page_nft_widget_description": "Everyone can sell their work as NFT without worrying about the technical legwork. We have simplified the process of creating NFT for you. You can quickly turn your writing into an NFT at the same time when you publish to the internet. It is a mini NFT marketplace that can be embedded into any website. Readers can collect their favorite articles. Writers like you can focus on creating quality content.",
+  "about_nft_page_nft_portfolio_title": "NFT Portfolio",
+  "about_nft_page_nft_portfolio_description": "A beautiful NFT clipping board display. Proudly shows your readership and authorship with a verifiable ownership record. Showcase your collections and share your work with friends. Build communities with like-minded readers, use NFT to provide unique experiences on readers' interactions and participation, and build a larger part of your brand identity.",
+  "about_nft_page_nft_portal_title": "NFT Portal",
+  "about_nft_page_nft_portal_description": "Enjoy the benefits of decentralized storage and create NFT in several clicks. No more pages not found, always accessible to your content, truly own and monetize your work. Writers can turn any creative works and URLs into NFTs. This portal lets you handpick your most popular blog post or newsletter into NFT.",
+  "about_nft_page_dynamic_pricing_title": "Dynamic Pricing",
+  "about_nft_page_dynamic_pricing_description": "Write as usual; publish differently. You do not need a fund or a marketing team to launch your own Writing NFTs. No floor price or market maker is required. The bonding curve sets all Writing NFT prices with dynamic pricing. Limitless supply. Each Writing NFT will automatically increase in price after each NFT is collected. ",
+  "about_nft_page_faq_title": "FAQ",
+  "about_nft_page_join_the_community_title": "加入社群",
+  "faq_list": [
+    {
+      "q": "Why publish articles as Writing NFT?",
+      "a": "An individual’s content portfolio can be viewed as part of a reliable decentralized identity in Web3. It’s a record of individual authorship. Writing NFT can guarantee the immutability of content and later verifiable with proof of ownership and property rights."
+    },
+    {
+
+      "q": "How to get started with Writing NFT?",
+      "a": "There are three ways, 1) if you are a WordPress user, you can directly install the free LikeCoin plugin from the WordPress plugins. 2) via NFT Portal, you can mint NFT from any URLs, and it will generate an NFT listing page for you. 3) via the partnered website. There are several media/ blogging platforms that have integrated with LikeCoin. {{list}}"
+    },
+    {
+      "q": "Is owning an NFT the same as owning copyright?",
+      "a": "No. Just as buying a book does not mean buying the copyright, buying the NFT of the work does not mean buying the copyright of the work. Each Writing NFT had its own metadata that would contain the license terms of suggested usage rights."
+    }
+  ],
+  "footer_nav_about_liker_land": "About Liker Land",
+  "footer_nav_about_the_team": "About the Team",
+  "footer_nav_about_likecoin": "About LikeCoin",
+  "footer_nav_civic_liker": "Civic Liker",
+  "footer_nav_help": "Help",
+  "footer_nav_doc": "Doc",
+  "footer_nav_faq": "FAQ",
+  "about_the_team_top_label": "About",
+  "about_the_team_title": "Liker Land Team",
+  "about_the_team_description": "Liker Land is an award-winning blockchain company that builds user-centric protocols and applications in Web3. The awardee of the Google News Innovation Challenge, AppWorks incubatee, and several hackathons winners. Liker Land is currently the maintainer of LikeCoin to provide infrastructure support. Validators of Cosmos, Osmosis, and Desmos.",
   "AppDownloadBadges": {
     "Start": "Start",
     "Download": "Download Liker Land"
@@ -441,6 +480,7 @@
     "loggingOut": "Logging out"
   },
   "main_menu_app": "App",
+  "menu_about_nft": "Writing NFT",
   "OtherPaymentInfo": {
     "title": "如何以 PayMe 或 轉數快繳付《讚賞公民》年費",
     "heading": "香港用戶限定：以信用卡或 PayPal 以外的方法繳費。",

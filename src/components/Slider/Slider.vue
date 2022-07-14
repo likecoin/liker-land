@@ -10,7 +10,7 @@
       <div class="slider__track absolute pin w-full bg-gray-e6 rounded-full pointer-events-none">
         <div class="relative h-full">
           <span
-            class="slider__thumb absolute w-24 h-24 bg-white rounded-full border-like-cyan-light border-2 shadow-4"
+            class="slider__thumb absolute w-24 h-24 bg-white rounded-full border-like-cyan-light border-2 shadow-md"
             :style="{ left: `${value / max * 100}%` }"
           />
         </div>

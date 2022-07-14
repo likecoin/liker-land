@@ -482,7 +482,7 @@
       <div class="p-24">
         <div class="relative py-12">
           <Button
-            class="absolute pin-t w-48 h-48 rounded-full shadow-4"
+            class="absolute pin-t w-48 h-48 rounded-full shadow-md"
             preset="primary-invert"
             @click="isShowUpgradeWarning = false"
           >
