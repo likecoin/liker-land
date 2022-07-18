@@ -350,8 +350,6 @@ const nuxtConfig = {
   ** Build configuration
   */
   build: {
-    // TODO: wait for https://github.com/faceyspacey/extract-css-chunks-webpack-plugin/pull/300 release
-    extractCSS: true,
     babel: {
       presets: ({ isServer }) => [
         [
@@ -363,12 +361,6 @@ const nuxtConfig = {
           },
         ],
       ],
-    },
-    postcss: {
-      plugins: {
-        tailwindcss: './tailwind.config.js',
-        autoprefixer: {}
-      }
     },
     transpile: ['gsap'],
 
