@@ -1,47 +1,327 @@
 <template>
-  <div>
-    <section>
-      <h2>NFT Information</h2>
-      <div :style="`background-color: ${NFTImageBackgroundColor}`">
-        <img :src="NFTImageUrl">
+  <Page>
+    <PageHeader class="w-full text-like-green">
+      <SiteNavBar />
+    </PageHeader>
+
+    <div :class="['flex', 'flex-row', 'justify-center','items-start', 'mt-[32px]','w-full','px-[24px]']">
+      <div
+        :class="[
+          'flex',
+          'flex-col',
+          'mr-[24px]',
+          'w-full',
+          'max-w-[310px]',
+          'flex-grow',
+          'justify-center',
+          'items-center',
+          'text-center',
+        ]"
+      >
+        <!-- NFT Card -->
+        <div
+          :class="[
+            'flex',
+            'flex-col',
+            'rounded-[24px]',
+            'w-[310px]',
+            'mb-[16px]',
+            'overflow-hidden',
+            'w-full',
+            'bg-white',
+          ]"
+        >
+          <div
+            class="h-[180px]"
+            :style="`background-color: ${NFTImageBackgroundColor}`"
+          >
+            <img class="object-cover w-full max-h-[180px]" :src="NFTImageUrl">
+          </div>
+          <div
+            :class="[
+              'flex',
+              'flex-col',
+              'justify-center',
+              'items-center',
+              'whitespace-pre-line',
+              'px-[24px]',
+              'pt-[48px]',
+              'py-[24px]',
+              'relative',
+            ]"
+          >
+            <div class="flex flex-col items-center justify-center mt-[-70px]">
+              <Identity
+                avatar-url=""
+                :avatar-size="40"
+                :is-avatar-outlined="isCivicLiker"
+              />
+              <div class="flex mt-[8px]">
+                <Label class="text-medium-gray" text="by" />
+                <Label class="text-like-green ml-[4px] font-600">{{
+                  (iscnOwnerInfo && iscnOwnerInfo.displayName) ||
+                    iscnOwner | ellipsis
+                }}</Label>
+              </div>
+            </div>
+            <Label preset="h5" class="mt-[12px]" :text="NFTName" />
+            <Label preset="p5" class="mt-[12px]" :text="NFTDescription" />
+            <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
+            <div class="flex justify-center">
+              <ButtonV2
+                preset="outline"
+                class="my-[16px]"
+                :href="NFTExternalUrl"
+                text="View the work"
+              >
+                <template #prepend>
+                  <IconView />
+                </template>
+                <template #append>
+                  <IconNorthEast />
+                </template>
+              </ButtonV2>
+            </div>
+          </div>
+        </div>
+        <!-- NFT Owners -->
+        <CardV2 class="w-full">
+          <div
+            :class="[
+              'flex',
+              'justify-between',
+              'items-center',
+              'mb-[20px]',
+              'text-like-green',
+            ]"
+          >
+            <Label
+              class="w-min font-600"
+              text="Owners"
+              tag="div"
+              preset="h5"
+              valign="middle"
+              content-class="whitespace-nowrap text-like-green "
+              prepend-class="text-like-green"
+            >
+              <template #prepend>
+                <IconPlaceholder />
+              </template>
+            </Label>
+            <IconArrowDown />
+          </div>
+          <div :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[12px]']" />
+          <div class="flex flex-col my-[12px]">
+            <div v-if="ownerCount">
+              <div v-for="o in Object.keys(ownerList)" :key="o">
+                <div class="flex items-center justify-between">
+                  <Label preset="p6">{{ o | ellipsis }}</Label>
+                  <Label preset="p6">{{ ownerList[o].length }}</Label>
+                </div>
+                <div
+                  :class="['bg-shade-gray', 'h-[1px]', 'w-full', 'my-[12px]']"
+                />
+              </div>
+            </div>
+            <div v-else>
+              <div class="flex justify-center">
+                <Label preset="p6"> - no record found</Label>
+              </div>
+            </div>
+            
+          </div>
+        </CardV2>
+        <!-- Metadata -->
+        <div class="flex justify-center">
+          <ButtonV2
+            preset="outline"
+            class="my-[16px]"
+            :href="iscnURL"
+            text="Metadata"
+          >
+            <template #prepend>
+              <IconCode />
+            </template>
+            <template #append>
+              <IconNorthEast />
+            </template>
+          </ButtonV2>
+        </div>
       </div>
-      <div>NFT Name: {{ NFTName }}</div>
-      <div>
-        <img :src="iscnOwnerImageUrl">
-        <div>ISCN Owner: {{ iscnOwnerName }}</div>
+
+      <div :class="['flex', 'flex-col', 'items-center','flex-grow']">
+        <!-- Owning count -->
+        <div
+          class="
+            w-full
+            py-[12px]
+            px-[24px]
+            mb-[16px]
+            rounded-[24px]
+            bg-white
+            border-[2px] border-like-cyan-dark
+          "
+        >
+          <Label preset="h5" text="Owning" class="text-like-green font-600">
+            <template #prepend>
+              <IconCreativeWork />
+            </template>
+            <template #default>
+              <div class="flex items-center">
+                <Label preset="h5" text="Owning" />
+                <Label
+                  v-if="userOwnedCount !== null"
+                  preset="h4"
+                  :text="userOwnedCount"
+                  class="font-[900] ml-[20px]"
+                />
+                <ProgressIndicator v-else preset="thin" class="ml-[20px]" />
+              </div>
+            </template>
+            <template #append>
+              <ButtonV2
+                preset="tertiary"
+                size="mini"
+                text="Transfer"
+                :is-disabled="true"
+              />
+            </template>
+          </Label>
+        </div>
+        <!-- Current Price -->
+        <CardV2 class="w-full mb-[16px]">
+          <div
+            :class="['flex', 'justify-between', 'items-center', 'mb-[20px]']"
+          >
+            <Label
+              class="w-min font-600 mb-[32px]"
+              text="Current Price"
+              tag="div"
+              preset="h5"
+              valign="middle"
+              content-class="whitespace-nowrap text-like-green"
+              prepend-class="text-like-green"
+            >
+              <template #prepend>
+                <IconPrice />
+              </template>
+            </Label>
+          </div>
+          <div class="flex items-baseline justify-start mb-[8px]">
+            <Label
+              preset="h2"
+              class="font-[900] text-like-green"
+            >{{ NFTPrice }} $LIKE</Label>
+            <Label preset="p5" class="text-medium-gray ml-[4px]">{{
+              NFTPriceUSD
+            }}</Label>
+          </div>
+          <div class="flex items-baseline justify-start mb-[28px]">
+            <Label
+              class="text-[10px] text-medium-gray font-[400]"
+              text="Minted"
+            >
+              <template #prepend>
+                <IconMint />
+              </template>
+              <template #append>
+                {{ mintedCount }}
+              </template>
+            </Label>
+            <Label
+              class="text-[10px] text-medium-gray font-[400] ml-[24px]"
+              text="Owners"
+            >
+              <template #prepend>
+                <IconPerson />
+              </template>
+              <template #append>
+                {{ ownerCount }}
+              </template>
+            </Label>
+          </div>
+          <div class="h-[2px] w-[32px] bg-shade-gray mb-[12px]" />
+
+          <div class="flex items-center justify-start">
+            <ButtonV2 text="Collect Now" preset="secondary" :href="`https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(iscnId)}%2F1`">
+              <template #prepend>
+                <IconPlaceholder />
+              </template>
+            </ButtonV2>
+            <ButtonV2 class="ml-[12px]" text="Sell" preset="tertiary" :is-disabled="true">
+              <template #prepend>
+                <IconPlaceholder />
+              </template>
+            </ButtonV2>
+            <Label
+              class="text-[10px] text-medium-gray ml-[12px]"
+            >Owning {{ userOwnedCount }}</Label>
+          </div>
+        </CardV2>
+        <!-- Events -->
+        <CardV2 class="w-full mb-[250px]">
+          <div
+            :class="[
+              'flex',
+              'justify-between',
+              'items-center',
+              'mb-[20px]',
+              'text-like-green',
+            ]"
+          >
+            <Label
+              class="w-min font-600"
+              text="Item Activity"
+              tag="div"
+              preset="h5"
+              valign="middle"
+              content-class="whitespace-nowrap text-like-green "
+              prepend-class="text-like-green"
+            >
+              <template #prepend>
+                <IconPlaceholder />
+              </template>
+            </Label>
+            <IconArrowDown />
+          </div>
+          <div :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[10px]']" />
+          <table v-if="history.length" class="w-full table-fixed text-[10px]">
+            <thead class="border-b-shade-gray border-b-[2px]">
+              <tr class="text-medium-gray py-[12px]">
+                <th><Label text="Event" /></th>
+                <th><Label text="Price($LIKE)" /></th>
+                <th><Label text="From" /></th>
+                <th><Label text="To" /></th>
+                <th><Label text="Date" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="event in history" :key="`${event.txHash}event`" class="py-[12px] border-b-shade-gray border-b-[1px]">
+                <td>
+                  <Label text="Mint">
+                    <template #prepend>
+                      <IconPerson />
+                    </template>
+                  </Label>
+                </td>
+                <td><Label>{{ event.price.toFixed(2) }}</Label></td>
+                <td><Label text="mint" /></td>
+                <td><Label>{{ event.toWallet | ellipsis }}</Label></td>
+                <td>
+                  <Label>
+                    {{ new Date(event.timestamp).toString() | ellipsis }} <IconPerson />
+                  </Label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else class="flex justify-center">
+            <Label class="my-[12px]" preset="p6"> - no record found</Label>
+          </div>
+        </CardV2>
       </div>
-      <a :href="NFTExternalUrl">View Work</a>
-    </section>
-    <section>
-      <h2>Owners</h2>
-      <ul>
-        <li v-for="o in Object.keys(ownerList)" :key="o">
-          {{ o }}: {{ ownerList[o].length }}
-        </li>
-      </ul>
-    </section>
-    <section>
-      <a :href="iscnURL">View Metadata</a>
-    </section>
-    <section v-if="userOwnedCount">
-      <h2>Owning: {{ userOwnedCount }}</h2>
-    </section>
-    <section>
-      <h2>Price</h2>
-      <h3>{{ purcahseInfo.currentPrice }}</h3>
-      <h3>minted {{ mintedCount }}</h3>
-      <h3>owner {{ ownerCount }}</h3>
-      <button @click="onPurchase">Collect Now</button>
-    </section>
-    <section>
-      <h2>Events</h2>
-      <ul>
-        <li v-for="h in history" :key="h.txHash">
-          {{ h.fromWallet }} {{ h.toWallet }} {{ h.price }}LIKE {{ (new Date(h.timestamp)).toString() }}
-        </li>
-      </ul>
-    </section>
-  </div>
+    </div>
+  </Page>
 </template>
 
 <script>
@@ -49,18 +329,38 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { APP_LIKE_CO_VIEW } from '~/constant';
-import { getNFTHistory } from '~/util/api';
+import {
+  getNFTHistory,
+  getAddressLikerIdMinApi,
+  getLIKEPrice,
+} from '~/util/api';
 import { initKeplr } from '~/util/keplr';
 import { getNFTCountByClassId } from '~/util/nft';
 
 export default {
   layout: 'desktop',
+  filters: {
+    ellipsis(value) {
+      if (value) {
+        const len = value.length;
+        const dots = '...';
+        if (!value) return '';
+        if (value.length > 15) {
+          return value.substring(0, 10) + dots + value.substring(len - 5, len);
+        }
+        return value;
+      }
+      return value;
+    },
+  },
   data() {
     return {
       wallet: '',
-      userOwnedCount: 0,
+      userOwnedCount: null,
       iscnOwnerInfo: {},
       history: [],
+      displayName: '',
+      currentPrice: 0,
     };
   },
   computed: {
@@ -74,6 +374,16 @@ export default {
     classId() {
       return this.$route.params.classId;
     },
+    isCivicLiker() {
+      return !!(
+        this.iscnOwnerInfo &&
+        (this.iscnOwnerInfo.isCivicLikerTrial ||
+          this.iscnOwnerInfo.isSubscribedCivicLiker)
+      );
+    },
+    getCivicLikerId() {
+      return this.iscnOwnerInfo && this.iscnOwnerInfo.user;
+    },
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
@@ -84,7 +394,10 @@ export default {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
     iscnId() {
-      return this.NFTClassMetadata.iscnId;
+      return this.NFTClassMetadata.iscn_id;
+    },
+    iscnOwner() {
+      return this.NFTClassMetadata.iscn_owner;
     },
     // nft info
     NFTName() {
@@ -102,13 +415,14 @@ export default {
     NFTExternalUrl() {
       return this.NFTClassMetadata.external_url;
     },
+    NFTPrice() {
+      return this.purcahseInfo.price && this.purcahseInfo.price.toFixed(2);
+    },
+    NFTPriceUSD() {
+      const price = this.currentPrice * this.purcahseInfo.price;
+      return `(${price.toFixed(3)} USD)`;
+    },
     // iscn owner
-    iscnOwnerImageUrl() {
-      return this.iscnOwnerInfo.image;
-    },
-    iscnOwnerName() {
-      return this.iscnOwnerInfo.name || this.iscnOwnerInfo.wallet;
-    },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },
@@ -123,8 +437,23 @@ export default {
     },
   },
   watch: {
-    NFTClassMetadata(data) {
-      Vue.set(this.iscnOwnerInfo, 'wallet', data.iscn_owner);
+    NFTClassMetadata: {
+      async handler(newValue) {
+        if (newValue.iscn_owner) {
+          try {
+            const { data: info } = await this.$api.get(
+              getAddressLikerIdMinApi(newValue.iscn_owner)
+            );
+            if (info) {
+              this.iscnOwnerInfo = info;
+            }
+            return;
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      },
+      immediate: true,
     },
   },
   mounted() {
@@ -136,6 +465,7 @@ export default {
     }
     if (!this.getNFTClassOwnerInfoById(this.classId)) this.updateNFTOwners();
     this.updateNFTHistory();
+    this.getLIKEPrice();
     try {
       setTimeout(async () => {
         const accounts = await initKeplr();
@@ -169,11 +499,33 @@ export default {
     },
     async setAccount(wallet) {
       this.wallet = wallet;
-      this.userOwnedCount = await getNFTCountByClassId();
+      const { amount } = await getNFTCountByClassId(this.classId, wallet);
+      this.userOwnedCount = amount.low;
+    },
+    async updateOwnerName(addr) {
+      try {
+        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
+        this.iscnOwnerInfo = data;
+        return;
+      } catch (error) {
+        console.error(error);
+      }
     },
     async onPurchase() {
       // buy nft
     },
+    async getLIKEPrice() {
+      const { data } = await this.$api.get(getLIKEPrice());
+      this.currentPrice = data.likecoin.usd;
+    },
   },
 };
 </script>
+<style scoped>
+th,
+td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-weight: 400;
+}
+</style>

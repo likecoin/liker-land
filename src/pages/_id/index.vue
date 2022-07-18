@@ -1,303 +1,333 @@
-<template lang="pug">
-  mixin CTAButton
-    Button(v-bind="ctaButtonProps" @click="onClickCTAButton")&attributes(attributes)
+<template>
+  <Page>
+    <PageHeader class="w-full text-like-green">
+      <SiteNavBar />
+    </PageHeader>
+    
+    <div :class="['flex', 'flex-row', 'justify-center', 'mt-[32px]']">
+      <div class="mr-[24px]">
+        <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-[280px]']">
+          <Identity
+            :avatar-url="userInfo && userInfo.avatar"
+            :avatar-size="88"
+            :is-avatar-outlined="isCivicLiker"
+          />
+          <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
+            {{ getCivicLikerId | ellipsis }}
+          </Label>
+          <div :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
+          <Label preset="p6" class="font-200">
+            {{ getCivicLikerDescription }}
+          </Label>
+          <ButtonV2
+            preset="secondary"
+            text="Become Civic Liker"
+            :to="{name: 'civic'}"
+            class="mt-[16px]"
+          />
+          <ButtonV2
+            v-if="userInfo"
+            preset="secondary"
+            text="Like Pay"
+            :href="likePayURL"
+            class="mt-[16px]"
+          >
+            <template #append>
+              <IconNorthEast class="w-[12px]" />
+            </template>
+          </ButtonV2>
+        </CardV2>
+      </div>
+      <div :class="['flex', 'flex-col', 'items-center']">
+        <div
+          :class="[
+            'flex',
+            'flex-shrink',
+            'justify-center',
+            'items-center',
+            'p-[4px]',
+            'mx-auto',
+            'mb-[48px]',
+            'bg-shade-gray',
+            'rounded-[14px]',
+          ]"
+        >
+          <MenuButton
+            text="NFT Collecting"
+            :is-selected="currentPage === 'collecting'"
+            @click="goCollecting"
+          />
+          <MenuButtonDivider />
+          <MenuButton
+            text="Works"
+            :is-selected="currentPage === 'works'"
+            @click="goWorks"
+          />
+        </div>
 
-  .user-portfolio-page
-    PageHeader
-      template
-        SiteNavBar.text-white.bg-like-green.pb-32
+        <ul
+          v-if="currentPage === 'collecting'"
+          :class="['w-full','mx-auto','columns-2','gap-[16px]']"
+        >
+          <li v-for="id in ownedNFTClassId" :key="id" :class="['mx-auto','mb-[5px]','break-inside-avoid']" @click="goDetails(id)">
+            <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
+              <div
+                class="h-[180px]"
+                :style="`background-color: ${
+                  getNFTClassMetadataById(id).background_color
+                }`"
+              >
+                <img class="object-cover w-full max-h-[180px]" :src="getNFTClassMetadataById(id).image">
+              </div>
+              <div
+                :class="[
+                  'flex',
+                  'flex-col',
+                  'text-center',
+                  'whitespace-pre-line',
+                  'px-[24px]',
+                  'pt-[48px]',
+                  'py-[24px]',
+                  'relative'
+                ]"
+              >
+                <div class="flex flex-col items-center justify-center mt-[-70px]">
+                  <Identity
+                    avatar-url=""
+                    :avatar-size="40"
+                  />
+                  <div class="flex mt-[8px]">
+                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{ getNFTClassMetadataById(id).iscn_owner | ellipsis }}</Label>
+                  </div>
+                </div>
+                <Label preset="p5" class="mt-[12px]">{{
+                  getNFTClassMetadataById(id).description
+                }}</Label>
+                <div class="flex justify-center">
+                  <ButtonV2
+                    v-if="getNFTClassPurchaseInfoById(id)"
+                    preset="secondary"
+                    class="my-[16px]"
+                    @click="() => onDetails(id)"
+                  >
+                    {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
+                    <template #prepend>
+                      <IconPrice />
+                    </template>
+                  </ButtonV2>
+                  <ButtonV2
+                    v-else
+                    preset="secondary"
+                    text=" - $LIKE"
+                    class="my-[16px]"
+                    @click="() => onDetails(id)"
+                  >
+                    <template #prepend>
+                      <IconPrice />
+                    </template>
+                  </ButtonV2>
+                </div>
+                <div
+                  v-if="getNFTClassOwnerInfoById(id)"
+                  :class="['flex', 'items-center', 'justify-center']"
+                >
+                  <div class="flex items-center text-medium-gray mr-[18px]">
+                    <IconMint />
+                    <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
+                  </div>
+                  <div class="flex items-center text-medium-gray">
+                    <IconOwner />
+                    <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
 
-    main.page-content
-      aside.page-content__left
-        .user-portfolio-page__user-info-panel-wrapper
-          .user-info-panel
-            header
-              Identity(
-                :avatar-url="creator.avatar"
-                :avatar-size="88"
-                :is-avatar-outlined="isCivicLikerCreator"
-              )
-
-              .mt-16.text-like-cyan-gray ID: {{ creatorLikerID }}
-              .mt-4.text-30.font-600.text-like-cyan.text-center {{ creator.displayName }}
-
-              .whitespace-pre-wrap.mt-12.text-white.text-14.max-w-phone-min.leading-1_5(
-                v-if="creator.creatorPitch"
-              )
-                | {{ creator.creatorPitch }}
-
-              .user-info-panel__actions(v-if="!isSelf")
-                ButtonGroup
-                  Button(
-                    preset="translucent-dark"
-                    :title="$t(getIsFollowedAuthor(creatorLikerID) ? 'unfollow' : 'follow')"
-                    @click="onToggleFollow"
-                  )
-                  Button(
-                    preset="translucent-dark"
-                    :title="$t('PortfolioPage.LikePay')"
-                    :href="likePayURL"
-                    target="_blank"
-                  )
-
-            mixin CivicLikerSinceLabel
-              .text-12.text-center.text-gray-9b.font-200
-                | {{ $t('PortfolioPage.CivicLikerSince', { date: formattedCivicLikerSince }) }}
-
-            footer.user-info-panel__footer.user-info-panel__footer--desktop(v-if="isCivicLikerCreator")
-              .px-24.py-16
-                +CivicLikerSinceLabel.px-4
-
-            footer.user-info-panel__footer.user-info-panel__footer--mobile.mt-16.mx-auto(v-if="isCivicLikerCreator")
-              .px-24.py-16.flex.justify-between.items-center(@click="isShowAbout = !isShowAbout")
-                span.text-14.text-gray-4a.font-200 {{ $t('PortfolioPage.About') }}
-                svg.text-gray-9b(
-                  width="9.82"
-                  height="5.41"
-                  viewBox="0 0 9.82 5.41"
-                  :style="{ transform: `rotateZ(${ isShowAbout ? '180' : '0'}deg)`, transition: 'transform 0.2s ease' }"
-                )
-                  path(
-                    d="M0,0,3.5,3,7,0"
-                    transform="translate(1.41 1.41)"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-miterlimit="10"
-                    stroke-width="2"
-                  )
-              Collapse(:is-show="isShowAbout")
-                .p-24
-                  +CivicLikerSinceLabel
-
-      .page-content__right
-        header.user-portfolio-page__top-nav
-
-          nav.user-portfolio-page__tab-bar
-            Button.user-portfolio-page__tab-bar-item(
-              :class="{ 'user-portfolio-page__tab-bar-item--active': tab === 'works' }"
-              :title="$t('PortfolioPage.Tab.Works')"
-              preset="translucent-light"
-              @click="tab = 'works'"
-            )
-            Button.user-portfolio-page__tab-bar-item(
-              :class="{ 'user-portfolio-page__tab-bar-item--active': tab === 'all' }"
-              :title="$t('PortfolioPage.Tab.SuperLikes')"
-              preset="translucent-light"
-              @click="tab = 'all'"
-            )
-
-        .user-portfolio-page__grid
-          SuperLikeContentGrid(
-            v-if="isLoading || activeItems.length > 0"
-            :key="tab"
-            :preset="tab === 'works' ? 'work' : 'default'"
-            :contents="activeItems"
-            :is-loading="isLoading"
-          )
-            template(v-if="isSelf" #append)
-              PortfolioEmptyTipsForCreator.rounded-8.border.border-gray-e6.p-32(
-                :preset="tab"
-                :is-civic-liker="getUserIsCivicLiker"
-              )
-          PortfolioEmptyView.mb-48(
-            v-else
-            :preset="tab"
-            :is-civic-liker="getUserIsCivicLiker"
-            :is-show-tips-for-creator="isSelf"
-          )
-
-    BaseDialog(
-      v-if="!isSelf"
-      :is-show="isShowCivicWelcome"
-      content-container-class="mt-64 overflow-hidden rounded-8 phone:rounded-none"
-      @click-outside="isShowCivicWelcome = false"
-    )
-      CivicLikerWelcomeView(
-        :price="supportingAmount"
-        :price-emoji="supportingEmoji"
-        :referrer-avatar-url="creator.avatar"
-        :referrer-display-name="creator.displayName"
-        :is-referrer-civic-liker="isCivicLikerCreator"
-      )
-        template(#header)
-          Button.bg-like-green.text-like-cyan-light.rounded-full.shadow-8(
-            @click="isShowCivicWelcome = false"
-          )
-            svg.m-12(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.73 14.73" width="16")
-              g(fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2")
-                line(x1="1" y1="1" x2="13.73" y2="13.73")
-                line(x1="1" y1="13.73" x2="13.73" y2="1")
-
-        template(#footer)
-          AppDownloadBadges.pb-24(:from="creatorLikerID")
+        <ul
+          v-if="currentPage === 'works'"
+          :class="['w-full','mx-auto','columns-2','gap-[16px]']"
+        >
+          <li v-for="id in sellingNFTClassId" :key="id" :class="['mx-auto','mb-[5px]','break-inside-avoid']" @click="goDetails(id)">
+            <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
+              <div
+                class="h-[180px]"
+                :style="`background-color: ${
+                  getNFTClassMetadataById(id).background_color
+                }`"
+              >
+                <img class="object-cover w-full max-h-[180px]" :src="getNFTClassMetadataById(id).image">
+              </div>
+              <div
+                :class="[
+                  'flex',
+                  'flex-col',
+                  'text-center',
+                  'whitespace-pre-line',
+                  'px-[24px]',
+                  'pt-[48px]',
+                  'py-[24px]',
+                  'relative'
+                ]"
+              >
+                <div class="flex flex-col items-center justify-center mt-[-70px]">
+                  <Identity
+                    avatar-url=""
+                    :avatar-size="40"
+                    :is-avatar-outlined="isCivicLiker"
+                  />
+                  <div class="flex mt-[8px]">
+                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{ getCivicLikerId | ellipsis }}</Label>
+                  </div>
+                </div>
+                <Label preset="p5" class="mt-[12px]">{{
+                  getNFTClassMetadataById(id).description
+                }}</Label>
+                <div class="flex justify-center">
+                  <ButtonV2
+                    v-if="getNFTClassPurchaseInfoById(id)"
+                    preset="secondary"
+                    class="my-[16px]"
+                    @click="() => onDetails(id)"
+                  >
+                    {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
+                    <template #prepend>
+                      <IconPrice />
+                    </template>
+                  </ButtonV2>
+                  <ButtonV2
+                    v-else
+                    preset="secondary"
+                    text=" - $LIKE"
+                    class="my-[16px]"
+                    @click="() => onDetails(id)"
+                  >
+                    <template #prepend>
+                      <IconPrice />
+                    </template>
+                  </ButtonV2>
+                </div>
+                <div
+                  v-if="getNFTClassOwnerInfoById(id)"
+                  :class="['flex', 'items-center', 'justify-center']"
+                >
+                  <div class="flex items-center text-medium-gray mr-[18px]">
+                    <IconMint />
+                    <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
+                  </div>
+                  <div class="flex items-center text-medium-gray">
+                    <IconOwner />
+                    <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </Page>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import dateFormat from 'date-fns/format';
-
-import { CIVIC_LIKER_CLASSIC_LIKER_ID } from '~/constant';
-
 import {
   getUserMinAPI,
-  getFetchUserSuperLikeAPI,
-  getCivicSupportingUserAPI,
-  getLikerOgImage,
+  getUserSellNFTClasses,
+  getAddressLikerIdMinApi,
 } from '~/util/api';
-import { getPriceEmoji } from '~/util/civic';
-import { getLikeCoURL } from '~/util/links';
 import { checkUserNameValid } from '~/util/user';
-
-import { CrispMixinFactory } from '~/mixins/crisp';
-
-import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
-import BaseDialog from '~/components/BaseDialog';
-import Button from '~/components/LegacyButton/Button';
-import ButtonGroup from '~/components/LegacyButton/ButtonGroup';
-import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
-import Collapse from '~/components/Collapse/Collapse';
-import PortfolioEmptyView from '~/components/PortfolioEmptyView/PortfolioEmptyView';
-import PortfolioEmptyTipsForCreator from '~/components/PortfolioEmptyView/PortfolioEmptyTipsForCreator';
+import { getNFTs } from '~/util/nft';
+import { getLikeCoURL } from '~/util/links';
 import Identity from '~/components/Identity/Identity';
-import PageHeader from '~/components/PageHeader';
-import SuperLikeContentGrid from '~/components/SuperLikeContentGrid';
-import SiteNavBar from '~/components/SiteNavBar';
-
-const ITEM_PER_FETCH = 20;
-const LOADING_STATES = ['idle', 'pending'];
-
-function filterItems(inputItems) {
-  const items = [];
-  const urls = new Set();
-  inputItems.forEach(item => {
-    if (!urls.has(item.referrer)) {
-      items.push(item);
-      urls.add(item.referrer);
-    }
-  });
-  return items;
-}
 
 export default {
   layout: 'desktop',
   components: {
-    AppDownloadBadges,
-    BaseDialog,
-    Button,
-    ButtonGroup,
-    CivicLikerWelcomeView,
-    Collapse,
     Identity,
-    PageHeader,
-    PortfolioEmptyView,
-    PortfolioEmptyTipsForCreator,
-    SuperLikeContentGrid,
-    SiteNavBar,
   },
-  mixins: [CrispMixinFactory({ isBootAtMounted: false })],
+  filters: {
+    ellipsis(value) {
+      if (value) {
+        const len = value.length;
+        const dots = '...';
+        if (!value) return '';
+        if (value.length > 15) {
+          return value.substring(0, 10) + dots + value.substring(len - 5, len);
+        }
+        return value;
+      }
+      return value;
+    },
+  },
   data() {
     return {
-      items: [],
-      itemsState: 'idle',
-      works: [],
-      worksState: 'idle',
-      tab: 'works',
-      isShowAbout: false,
+      userInfo: null,
+      ownedNFTClassId: [],
+      sellingNFTClassId: [],
+      currentPage: 'collecting',
     };
   },
   computed: {
     ...mapGetters([
-      'getUserId',
-      'getIsFollowedAuthor',
-      'getUserIsCivicLiker',
-      'getUserIsCivicLikerV2',
+      'getNFTClassPurchaseInfoById',
+      'getNFTClassMetadataById',
+      'getNFTClassOwnerInfoById',
+      'getNFTClassOwnerCount',
+      'getNFTClassMintedCount',
     ]),
-
-    creatorLikerID() {
-      return this.creator.user;
+    isCivicLiker() {
+      return !!(
+        this.userInfo &&
+        (this.userInfo.isCivicLikerTrial ||
+          this.userInfo.isSubscribedCivicLiker)
+      );
+    },
+    getCivicLikerId() {
+      return (this.userInfo && this.userInfo.displayName) || this.wallet;
+    },
+    getCivicLikerDescription() {
+      return this.userInfo && this.userInfo.description;
     },
     likePayURL() {
-      return getLikeCoURL(`/${this.creatorLikerID}`);
+      return getLikeCoURL(`/${this.userInfo.displayName}`);
     },
-    filteredWorks() {
-      return filterItems(this.works);
-    },
-    filteredItems() {
-      return filterItems(this.items);
-    },
-    activeItems() {
-      return this.tab === 'works' ? this.filteredWorks : this.filteredItems;
-    },
-    formattedCivicLikerSince() {
-      return dateFormat(new Date(this.creator.civicLikerSince), 'YYYY/MM/DD');
-    },
-    isLoading() {
-      return (
-        LOADING_STATES.includes(this.itemsState) ||
-        LOADING_STATES.includes(this.worksState)
-      );
-    },
-    isSelf() {
-      return this.creatorLikerID === this.getUserId;
-    },
-    isCivicLikerCreator() {
-      return !!(
-        this.creator.isCivicLikerTrial || this.creator.isSubscribedCivicLiker
-      );
-    },
-    supportingAmount() {
-      return this.civicSupport.quantity * 5;
-    },
-    supportingEmoji() {
-      return getPriceEmoji(this.supportingAmount);
-    },
-    isSupportingCreator() {
-      return this.supportingAmount > 0;
-    },
-    ctaToRoute() {
-      if (this.isSupportingCreator) {
-        return undefined;
-      }
-      return {
-        name: 'id-civic',
-        params: { id: this.creatorLikerID },
-        query: { utm_source: 'portfolio' },
-      };
-    },
-    ctaButtonProps() {
-      const isSupporting = this.isSupportingCreator;
-      return {
-        preset: isSupporting ? 'special' : 'primary',
-        title: this.$t(
-          `PortfolioPage.CTAButton.${isSupporting ? 'Active' : 'Inactive'}`
-        ),
-        to: this.ctaToRoute,
-      };
+    cardClasses() {
+      return [
+        'flex',
+        'flex-col',
+        'rounded-[24px]',
+        'w-[310px]',
+        'mb-[16px]',
+        'overflow-hidden',
+        'w-full',
+        'bg-white',
+      ];
     },
   },
-  async asyncData({ store, route, redirect, query, $api, error }) {
+  async asyncData({ route, $api, error }) {
     const { id } = route.params;
-    if (id === CIVIC_LIKER_CLASSIC_LIKER_ID) {
-      return redirect({ name: 'civic-classic', query });
+    if (id.startsWith('like1')) {
+      try {
+        const userInfo = await $api.get(getAddressLikerIdMinApi(id));
+        return {
+          userInfo: userInfo.data,
+          wallet: id,
+        };
+      } catch (error) {
+        console.error(error);
+      }
+      return {
+        wallet: id,
+      };
     }
     if (id && checkUserNameValid(id)) {
       try {
-        const [creator, civicSupport] = await Promise.all([
-          $api.$get(getUserMinAPI(id, { types: ['creator'] })),
-          $api
-            .$get(getCivicSupportingUserAPI(id))
-            .catch(() => ({ quantity: 0 })),
-        ]);
+        const userInfo = await $api.$get(getUserMinAPI(id));
         return {
-          creator,
-          civicSupport,
-          isShowCivicWelcome:
-            store.getters.getUserId &&
-            civicSupport &&
-            civicSupport.quantity > 0 &&
-            query.civic_welcome === '1',
+          userInfo,
+          wallet: userInfo.likeWallet,
         };
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
@@ -308,292 +338,52 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
-  head() {
-    const title = this.$t('PortfolioPage.Og.Title', {
-      name: this.creator.displayName.trim(),
-    });
-    const image = getLikerOgImage(this.creator.user);
-    const description =
-      this.creator.creatorPitch || this.$t('CreatorPitch.Default');
-    return {
-      title,
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: title,
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: image,
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: description,
-        },
-        {
-          hid: 'description',
-          name: 'description',
-          content: description,
-        },
-      ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-    };
-  },
   mounted() {
-    this.refreshBookmarkList();
-    this.fetchReaderIndex();
-    Promise.all([this.fetchCreatorWorks(), this.fetchCreatorSuperLikes()]).then(
-      () => {
-        if (this.works.length === 0 && this.items.length > 0) {
-          this.tab = 'superlikes';
-        }
-      }
-    );
-    window.addEventListener('scroll', this.onScroll);
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.onScroll);
+    this.fetchUserOwnClasses();
+    this.fetchUserSellingClasses();
   },
   methods: {
     ...mapActions([
-      'fetchReaderIndex',
-      'refreshBookmarkList',
-      'followAuthor',
-      'unfollowAuthor',
+      'fetchNFTPurchaseInfo',
+      'fetchNFTMetadata',
+      'fetchNFTOwners',
     ]),
-
-    async fetchCreatorWorks({ before } = {}) {
-      try {
-        this.worksState = before ? 'pending-more' : 'pending';
-        const { list } = await this.$api.$get(
-          getFetchUserSuperLikeAPI(this.creatorLikerID),
-          { params: { before, limit: ITEM_PER_FETCH, filter: 'self' } }
-        );
-        this.works.push(...list);
-        this.worksState = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        this.worksState = 'error';
+    async fetchUserOwnClasses() {
+      const { nfts } = await getNFTs({ owner: this.wallet });
+      const classIdSet = new Set(nfts.map(n => n.classId));
+      this.ownedNFTClassId = Array.from(classIdSet);
+      this.ownedNFTClassId.forEach(id => this.updateNFTClassData(id));
+    },
+    async fetchUserSellingClasses() {
+      const { data } = await this.$api.get(
+        getUserSellNFTClasses({ wallet: this.wallet })
+      );
+      this.sellingNFTClassId = data.list;
+      this.sellingNFTClassId.forEach(id => this.updateNFTClassData(id));
+    },
+    updateNFTClassData(classId) {
+      if (!this.getNFTClassMetadataById(classId)) {
+        this.fetchNFTMetadata(classId);
+      }
+      if (!this.getNFTClassPurchaseInfoById(classId)) {
+        this.fetchNFTPurchaseInfo(classId);
+      }
+      if (!this.getNFTClassOwnerInfoById(classId)) {
+        this.fetchNFTOwners(classId);
       }
     },
-    async fetchCreatorSuperLikes({ before } = {}) {
-      try {
-        this.itemsState = before ? 'pending-more' : 'pending';
-        const { list } = await this.$api.$get(
-          getFetchUserSuperLikeAPI(this.creatorLikerID),
-          { params: { before, limit: ITEM_PER_FETCH } }
-        );
-        this.items.push(
-          ...list.filter(item => item.user !== this.creatorLikerID)
-        );
-        this.itemsState = list.length < ITEM_PER_FETCH ? 'done-more' : 'done';
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        this.itemsState = 'error';
-      }
+    onDetails(classId) {
+      this.$router.push({ name: 'nft-class-classId', params: { classId } });
     },
-    onScroll() {
-      const { innerHeight: windowHeight, pageYOffset: scrollY } = window;
-      const { scrollHeight } = document.documentElement;
-      if (scrollY >= scrollHeight - windowHeight * 2) {
-        if (this.tab === 'works') {
-          if (this.worksState === 'done') {
-            this.fetchCreatorWorks({
-              before: this.works[this.works.length - 1].ts,
-            });
-          }
-        } else if (this.itemsState === 'done') {
-          this.fetchCreatorSuperLikes({
-            before: this.items[this.items.length - 1].ts,
-          });
-        }
-      }
+    goCollecting() {
+      this.currentPage = 'collecting';
     },
-    async onToggleFollow() {
-      if (!this.getUserId) {
-        this.$nuxt.error({
-          message: 'LOGIN_NEEDED_TO_FOLLOW_AUTHOR',
-          statusCode: 401,
-        });
-        return;
-      }
-      const id = this.creatorLikerID;
-      if (this.getIsFollowedAuthor(id)) {
-        await this.unfollowAuthor(id);
-      } else {
-        await this.followAuthor(id);
-      }
+    goDetails(classId) {
+      this.$router.push({ name: 'nft-class-classId', params: { classId } });
     },
-    onClickCTAButton() {
-      if (this.isSupportingCreator) {
-        this.isShowCivicWelcome = true;
-      }
+    goWorks() {
+      this.currentPage = 'works';
     },
   },
 };
 </script>
-
-<style lang="scss">
-$page-padding-top: 48px;
-$action-width: 224px;
-$desktop-width: 1000px;
-
-.user-portfolio-page {
-  .page-content {
-    width: 100%;
-    max-width: 1340px;
-    margin: 0 auto;
-
-    @media screen and (min-width: $desktop-width) {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-
-      padding: 32px;
-      padding-top: 0;
-
-      &__left {
-        flex-shrink: 0;
-
-        width: 100%;
-        max-width: 304px;
-
-        margin-right: 40px;
-
-        position: sticky;
-        top: 0;
-
-        padding-top: $page-padding-top;
-      }
-
-      &__right {
-        padding: 0;
-        padding-top: $page-padding-top;
-
-        flex-grow: 1;
-      }
-    }
-  }
-
-  .user-info-panel {
-    @media screen and (min-width: $desktop-width) {
-      overflow: hidden;
-
-      @apply rounded-8;
-    }
-
-    > header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      padding: 32px 40px 28px;
-
-      @apply bg-like-green;
-    }
-
-    &__footer {
-      background-color: white;
-
-      &--desktop {
-        @media screen and (max-width: #{$desktop-width - 1px}) {
-          display: none;
-        }
-      }
-
-      &--mobile {
-        max-width: 288px;
-
-        @apply rounded-8;
-
-        @media screen and (min-width: $desktop-width) {
-          display: none;
-        }
-      }
-    }
-
-    &__actions {
-      width: 100%;
-      max-width: $action-width;
-      margin-top: 24px;
-
-      .button {
-        width: 100%;
-
-        > div {
-          width: inherit;
-        }
-      }
-
-      > .button-group {
-        margin-top: 12px;
-      }
-    }
-  }
-
-  &__top-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-
-    > .button > div {
-      min-width: $action-width;
-    }
-  }
-
-  &__tab-bar {
-    display: flex;
-    width: 100%;
-
-    border-bottom: 1px solid #e6e6e6;
-
-    &-item {
-      transition: border-color 0.5s ease;
-
-      &#{&} {
-        > div {
-          min-width: 100px;
-
-          border-bottom-right-radius: 8px;
-          border-bottom-left-radius: 8px;
-        }
-
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-
-      &:not(#{&}--active) {
-        border-bottom: 3px solid #50e3c200;
-      }
-
-      &#{&}--active {
-        border-bottom: 3px solid #50e3c2;
-      }
-    }
-  }
-
-  &__grid {
-    margin-top: 24px;
-  }
-
-  @media screen and (max-width: #{$desktop-width - 1px}) {
-    & &__top-cta {
-      display: none;
-    }
-
-    & &__tab-bar {
-      margin-top: 16px;
-      justify-content: center;
-    }
-
-    & &__grid {
-      margin: 16px;
-    }
-  }
-}
-</style>
