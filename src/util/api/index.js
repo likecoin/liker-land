@@ -129,6 +129,8 @@ export const getUserMinAPI = (id, { types = [] } = {}) =>
   `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
     type: types.join(','),
   })}`;
+export const getAddressLikerIdMinApi = addr =>
+  `${LIKECOIN_API_BASE}/users/addr/${addr}/min`;
 export const getArticleDetailAPI = ({ url = '', iscnId = '' }) =>
   `${LIKECOIN_API_BASE}/like/info?iscn_id=${encodeURIComponent(
     iscnId
@@ -196,3 +198,6 @@ export const getNFTOwners = ({ iscnId, classId }) => {
 
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
+
+export const getLIKEPrice = () =>
+  `https://api.coingecko.com/api/v3/simple/price?ids=likecoin&vs_currencies=usd`;
