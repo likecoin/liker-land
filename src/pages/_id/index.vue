@@ -3,10 +3,31 @@
     <PageHeader class="w-full text-like-green">
       <SiteNavBar />
     </PageHeader>
-    
-    <div :class="['flex', 'flex-row', 'justify-center', 'mt-[32px]']">
-      <div class="mr-[24px]">
-        <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-[280px]']">
+
+    <div
+      :class="[
+        'flex',
+
+        'flex-col',
+        'desktop:flex-row',
+
+        'items-center',
+        'desktop:items-start',
+        'desktop:justify-center',
+
+        'mt-[32px]',
+      ]"
+    >
+      <div
+        :class="[
+          'mb-[24px]',
+          'desktop:mr-[24px]',
+
+          'w-full',
+          'desktop:w-[280px]',
+        ]"
+      >
+        <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
           <Identity
             :avatar-url="userInfo && userInfo.avatar"
             :avatar-size="88"
@@ -22,7 +43,7 @@
           <ButtonV2
             preset="secondary"
             text="Become Civic Liker"
-            :to="{name: 'civic'}"
+            :to="{ name: 'civic' }"
             class="mt-[16px]"
           />
           <ButtonV2
@@ -67,9 +88,22 @@
 
         <ul
           v-if="currentPage === 'collecting'"
-          :class="['w-full','mx-auto','columns-2','gap-[16px]']"
+          :class="[
+            'w-full',
+            'mx-auto',
+
+            'columns-1',
+            'laptop:columns-2',
+            
+            'gap-[16px]',
+          ]"
         >
-          <li v-for="id in ownedNFTClassId" :key="id" :class="['mx-auto','mb-[5px]','break-inside-avoid']" @click="goDetails(id)">
+          <li
+            v-for="id in ownedNFTClassId"
+            :key="id"
+            :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
+            @click="goDetails(id)"
+          >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
                 class="h-[180px]"
@@ -77,7 +111,10 @@
                   getNFTClassMetadataById(id).background_color
                 }`"
               >
-                <img class="object-cover w-full max-h-[180px]" :src="getNFTClassMetadataById(id).image">
+                <img
+                  class="object-cover w-full max-h-[180px]"
+                  :src="getNFTClassMetadataById(id).image"
+                >
               </div>
               <div
                 :class="[
@@ -88,16 +125,17 @@
                   'px-[24px]',
                   'pt-[48px]',
                   'py-[24px]',
-                  'relative'
+                  'relative',
                 ]"
               >
-                <div class="flex flex-col items-center justify-center mt-[-70px]">
-                  <Identity
-                    avatar-url=""
-                    :avatar-size="40"
-                  />
+                <div
+                  class="flex flex-col items-center justify-center mt-[-70px]"
+                >
+                  <Identity avatar-url="" :avatar-size="40" />
                   <div class="flex mt-[8px]">
-                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{ getNFTClassMetadataById(id).iscn_owner | ellipsis }}</Label>
+                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
+                      getNFTClassMetadataById(id).iscn_owner | ellipsis
+                    }}</Label>
                   </div>
                 </div>
                 <Label preset="p5" class="mt-[12px]">{{
@@ -147,9 +185,22 @@
 
         <ul
           v-if="currentPage === 'works'"
-          :class="['w-full','mx-auto','columns-2','gap-[16px]']"
+          :class="[
+            'w-full',
+            'mx-auto',
+
+            'columns-1',
+            'laptop:columns-2',
+            
+            'gap-[16px]',
+          ]"
         >
-          <li v-for="id in sellingNFTClassId" :key="id" :class="['mx-auto','mb-[5px]','break-inside-avoid']" @click="goDetails(id)">
+          <li
+            v-for="id in sellingNFTClassId"
+            :key="id"
+            :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
+            @click="goDetails(id)"
+          >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
                 class="h-[180px]"
@@ -157,7 +208,10 @@
                   getNFTClassMetadataById(id).background_color
                 }`"
               >
-                <img class="object-cover w-full max-h-[180px]" :src="getNFTClassMetadataById(id).image">
+                <img
+                  class="object-cover w-full max-h-[180px]"
+                  :src="getNFTClassMetadataById(id).image"
+                >
               </div>
               <div
                 :class="[
@@ -168,17 +222,21 @@
                   'px-[24px]',
                   'pt-[48px]',
                   'py-[24px]',
-                  'relative'
+                  'relative',
                 ]"
               >
-                <div class="flex flex-col items-center justify-center mt-[-70px]">
+                <div
+                  class="flex flex-col items-center justify-center mt-[-70px]"
+                >
                   <Identity
                     avatar-url=""
                     :avatar-size="40"
                     :is-avatar-outlined="isCivicLiker"
                   />
                   <div class="flex mt-[8px]">
-                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{ getCivicLikerId | ellipsis }}</Label>
+                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
+                      getCivicLikerId | ellipsis
+                    }}</Label>
                   </div>
                 </div>
                 <Label preset="p5" class="mt-[12px]">{{
