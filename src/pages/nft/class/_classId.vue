@@ -4,135 +4,192 @@
       <SiteNavBar />
     </PageHeader>
 
-    <div :class="['flex', 'flex-row', 'justify-center','items-start', 'mt-[32px]','w-full','px-[24px]']">
+    <div
+      :class="[
+        'flex',
+
+        'flex-col',
+        'desktop:flex-row',
+
+        'items-center',
+        'justify-center',
+        'desktop:justify-center',
+        'desktop:items-start',
+
+        'w-full',
+        'mt-[32px]',
+        'px-[24px]',
+      ]"
+    >
       <div
         :class="[
           'flex',
           'flex-col',
-          'mr-[24px]',
+
           'w-full',
-          'max-w-[310px]',
+          'desktop:max-w-[310px]',
           'flex-grow',
+
           'justify-center',
           'items-center',
           'text-center',
+          
+          'desktop:mr-[24px]',
         ]"
       >
-        <!-- NFT Card -->
         <div
           :class="[
             'flex',
+
             'flex-col',
-            'rounded-[24px]',
-            'w-[310px]',
-            'mb-[16px]',
-            'overflow-hidden',
+            'laptop:flex-row',
+            'desktop:flex-col',
+
+            'justify-center',
+            
             'w-full',
-            'bg-white',
           ]"
         >
-          <div
-            class="h-[180px]"
-            :style="`background-color: ${NFTImageBackgroundColor}`"
-          >
-            <img class="object-cover w-full max-h-[180px]" :src="NFTImageUrl">
-          </div>
+          <!-- NFT Card -->
           <div
             :class="[
               'flex',
               'flex-col',
-              'justify-center',
-              'items-center',
-              'whitespace-pre-line',
-              'px-[24px]',
-              'pt-[48px]',
-              'py-[24px]',
-              'relative',
+              'rounded-[24px]',
+
+              'w-full',
+              'laptop:min-w-[310px]',
+              'laptop:max-w-[310px]',
+
+              'mb-[16px]',
+              'overflow-hidden',
+              'bg-white',
             ]"
           >
-            <div class="flex flex-col items-center justify-center mt-[-70px]">
-              <Identity
-                avatar-url=""
-                :avatar-size="40"
-                :is-avatar-outlined="isCivicLiker"
-              />
-              <div class="flex mt-[8px]">
-                <Label class="text-medium-gray" text="by" />
-                <Label class="text-like-green ml-[4px] font-600">{{
-                  (iscnOwnerInfo && iscnOwnerInfo.displayName) ||
-                    iscnOwner | ellipsis
-                }}</Label>
+            <div
+              class="h-[180px]"
+              :style="`background-color: ${NFTImageBackgroundColor}`"
+            >
+              <img
+                class="object-cover w-full max-h-[180px]"
+                :src="NFTImageUrl"
+              >
+            </div>
+            <div
+              :class="[
+                'flex',
+                'flex-col',
+                'justify-center',
+                'items-center',
+                'whitespace-pre-line',
+                'px-[24px]',
+                'pt-[48px]',
+                'py-[24px]',
+                'relative',
+              ]"
+            >
+              <div class="flex flex-col items-center justify-center mt-[-70px]">
+                <Identity
+                  avatar-url=""
+                  :avatar-size="40"
+                  :is-avatar-outlined="isCivicLiker"
+                />
+                <div class="flex mt-[8px]">
+                  <Label class="text-medium-gray" text="by" />
+                  <Label class="text-like-green ml-[4px] font-600">{{
+                    (iscnOwnerInfo && iscnOwnerInfo.displayName) ||
+                      iscnOwner | ellipsis
+                  }}</Label>
+                </div>
+              </div>
+              <Label preset="h5" class="mt-[12px]" :text="NFTName" />
+              <Label preset="p5" class="mt-[12px]" :text="NFTDescription" />
+              <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
+              <div class="flex justify-center">
+                <ButtonV2
+                  preset="outline"
+                  class="my-[16px]"
+                  :href="NFTExternalUrl"
+                  text="View the work"
+                >
+                  <template #prepend>
+                    <IconView />
+                  </template>
+                  <template #append>
+                    <IconNorthEast />
+                  </template>
+                </ButtonV2>
+              </div>
+              <!-- Metadata desktop:hidden -->
+              <div :class="['flex', 'desktop:hidden', 'justify-center']">
+                <ButtonV2 preset="outline" :href="iscnURL" text="Metadata">
+                  <template #prepend>
+                    <IconCode />
+                  </template>
+                  <template #append>
+                    <IconNorthEast />
+                  </template>
+                </ButtonV2>
               </div>
             </div>
-            <Label preset="h5" class="mt-[12px]" :text="NFTName" />
-            <Label preset="p5" class="mt-[12px]" :text="NFTDescription" />
-            <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
-            <div class="flex justify-center">
-              <ButtonV2
-                preset="outline"
-                class="my-[16px]"
-                :href="NFTExternalUrl"
-                text="View the work"
+          </div>
+          <!-- NFT Owners -->
+          <CardV2
+            :class="[
+              'w-full',
+
+              'laptop:ml-[12px]',
+              'mb-[16px]',
+              'desktop:m-0',
+            ]"
+          >
+            <div
+              :class="[
+                'flex',
+                'justify-between',
+                'items-center',
+                'mb-[20px]',
+                'text-like-green',
+              ]"
+            >
+              <Label
+                class="w-min font-600"
+                text="Owners"
+                tag="div"
+                preset="h5"
+                valign="middle"
+                content-class="whitespace-nowrap text-like-green "
+                prepend-class="text-like-green"
               >
                 <template #prepend>
-                  <IconView />
+                  <IconPlaceholder />
                 </template>
-                <template #append>
-                  <IconNorthEast />
-                </template>
-              </ButtonV2>
+              </Label>
+              <IconArrowDown />
             </div>
-          </div>
-        </div>
-        <!-- NFT Owners -->
-        <CardV2 class="w-full">
-          <div
-            :class="[
-              'flex',
-              'justify-between',
-              'items-center',
-              'mb-[20px]',
-              'text-like-green',
-            ]"
-          >
-            <Label
-              class="w-min font-600"
-              text="Owners"
-              tag="div"
-              preset="h5"
-              valign="middle"
-              content-class="whitespace-nowrap text-like-green "
-              prepend-class="text-like-green"
-            >
-              <template #prepend>
-                <IconPlaceholder />
-              </template>
-            </Label>
-            <IconArrowDown />
-          </div>
-          <div :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[12px]']" />
-          <div class="flex flex-col my-[12px]">
-            <div v-if="ownerCount">
-              <div v-for="o in Object.keys(ownerList)" :key="o">
-                <div class="flex items-center justify-between">
-                  <Label preset="p6">{{ o | ellipsis }}</Label>
-                  <Label preset="p6">{{ ownerList[o].length }}</Label>
+            <div :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[12px]']" />
+            <div class="flex flex-col my-[12px]">
+              <div v-if="ownerCount">
+                <div v-for="o in Object.keys(ownerList)" :key="o">
+                  <div class="flex items-center justify-between">
+                    <Label preset="p6">{{ o | ellipsis }}</Label>
+                    <Label preset="p6">{{ ownerList[o].length }}</Label>
+                  </div>
+                  <div
+                    :class="['bg-shade-gray', 'h-[1px]', 'w-full', 'my-[12px]']"
+                  />
                 </div>
-                <div
-                  :class="['bg-shade-gray', 'h-[1px]', 'w-full', 'my-[12px]']"
-                />
+              </div>
+              <div v-else>
+                <div class="flex justify-center">
+                  <Label preset="p6"> - no record found</Label>
+                </div>
               </div>
             </div>
-            <div v-else>
-              <div class="flex justify-center">
-                <Label preset="p6"> - no record found</Label>
-              </div>
-            </div>
-            
-          </div>
-        </CardV2>
+          </CardV2>
+        </div>
         <!-- Metadata -->
-        <div class="flex justify-center">
+        <div :class="['hidden', 'desktop:flex', 'justify-center']">
           <ButtonV2
             preset="outline"
             class="my-[16px]"
@@ -149,7 +206,7 @@
         </div>
       </div>
 
-      <div :class="['flex', 'flex-col', 'items-center','flex-grow']">
+      <div :class="['flex', 'flex-col','flex-grow','items-center','w-full']">
         <!-- Owning count -->
         <div
           class="
@@ -243,12 +300,23 @@
           <div class="h-[2px] w-[32px] bg-shade-gray mb-[12px]" />
 
           <div class="flex items-center justify-start">
-            <ButtonV2 text="Collect Now" preset="secondary" :href="`https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(iscnId)}%2F1`">
+            <ButtonV2
+              text="Collect Now"
+              preset="secondary"
+              :href="`https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(
+                iscnId
+              )}%2F1`"
+            >
               <template #prepend>
                 <IconPlaceholder />
               </template>
             </ButtonV2>
-            <ButtonV2 class="ml-[12px]" text="Sell" preset="tertiary" :is-disabled="true">
+            <ButtonV2
+              class="ml-[12px]"
+              text="Sell"
+              preset="tertiary"
+              :is-disabled="true"
+            >
               <template #prepend>
                 <IconPlaceholder />
               </template>
@@ -289,14 +357,18 @@
             <thead class="border-b-shade-gray border-b-[2px]">
               <tr class="text-medium-gray py-[12px]">
                 <th><Label text="Event" /></th>
-                <th><Label text="Price($LIKE)" /></th>
+                <th><Label class="break-normal" text="Price ($LIKE)" /></th>
                 <th><Label text="From" /></th>
                 <th><Label text="To" /></th>
                 <th><Label text="Date" /></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="event in history" :key="`${event.txHash}event`" class="py-[12px] border-b-shade-gray border-b-[1px]">
+              <tr
+                v-for="event in history"
+                :key="`${event.txHash}event`"
+                class="py-[12px] border-b-shade-gray border-b-[1px]"
+              >
                 <td>
                   <Label text="Mint">
                     <template #prepend>
@@ -304,12 +376,17 @@
                     </template>
                   </Label>
                 </td>
-                <td><Label>{{ event.price.toFixed(2) }}</Label></td>
+                <td>
+                  <Label>{{ event.price.toFixed(2) }}</Label>
+                </td>
                 <td><Label text="mint" /></td>
-                <td><Label>{{ event.toWallet | ellipsis }}</Label></td>
+                <td>
+                  <Label class="break-all">{{ event.toWallet | ellipsis }}</Label>
+                </td>
                 <td>
                   <Label>
-                    {{ new Date(event.timestamp).toString() | ellipsis }} <IconPerson />
+                    {{ new Date(event.timestamp).toString() | ellipsis }}
+                    <IconPerson />
                   </Label>
                 </td>
               </tr>
