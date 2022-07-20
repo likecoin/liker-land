@@ -250,18 +250,20 @@ export default {
   },
   methods: {
     initAnimation() {
+      const isLargerScreen = window.innerWidth > 768;
       const tl = this.$gsap.gsap.timeline({
         duration: 0.5,
         ease: 'power4.out',
         scrollTrigger: {
           trigger: `.nft-portfolio-graph`,
-          start: 'top-=50% center',
-          end: 'top center',
+          start: 'top-=60% center',
+          end: `${isLargerScreen ? 'top+=20%' : 'top'} center`,
           scrub: true,
         },
       });
       tl.from('.nft-portfolio-graph h1', {
-        x: '-=100',
+        x: isLargerScreen ? '-=100' : 0,
+        scale: isLargerScreen ? 1 : 0,
         opacity: 0,
       });
       tl.from(
@@ -273,76 +275,72 @@ export default {
         '<'
       );
       const tl2 = this.$gsap.gsap.timeline({
-        duration: 0.5,
         ease: 'power4.inOut',
         scrollTrigger: {
           trigger: `.nft-portfolio-graph`,
-          start: 'top+=25% center',
-          end: 'center center',
+          start: 'top-=25% center-=25%',
+          end: `${isLargerScreen ? 'bottom+=15%' : 'center'} center`,
           scrub: true,
-          pin: window.innerWidth >= 768,
+          pin: isLargerScreen,
         },
       });
+      tl2.addLabel('start');
+
+      tl2.from('.nft-portfolio-graph__highlight-box', {
+        opacity: 0,
+        stagger: 1,
+      });
+
+      const randomBox1X = this.$gsap.gsap.utils.random(-4, 2, 1, true);
+      const randomBox1Y = this.$gsap.gsap.utils.random(-2, 2, 1, true);
+      const randomBox2X = this.$gsap.gsap.utils.random(-1, 5, 1, true);
+      const randomBox2Y = this.$gsap.gsap.utils.random(-3, 1, 1, true);
+      new Array(9)
+        .fill()
+        .map(() => [
+          { x: randomBox1X(), y: randomBox1Y() },
+          { x: randomBox2X(), y: randomBox2Y() },
+        ])
+        .concat([[{ x: 0, y: 0 }, { x: 0, y: 0 }]])
+        .map((params, i) =>
+          params.map(param => ({
+            x: param.x * 47.335,
+            y: param.y * 34.1219,
+            duration: 2,
+            opacity: 1,
+            clearProps: 'opacity',
+          }))
+        )
+        .forEach(([p1, p2]) => {
+          tl2.to('.nft-portfolio-graph__highlight-box1', {
+            ...p1,
+          });
+          tl2.to(
+            '.nft-portfolio-graph__highlight-box2',
+            {
+              ...p2,
+            },
+            '<-=0.5'
+          );
+        });
+
       tl2.from(
         '.nft-portfolio-graph__box',
         {
-          scale: 0.3,
+          x: 'random([100, -100])',
+          y: 'random([100, -100])',
+          scale: 0,
           opacity: 0,
           transformOrigin: 'center center',
           stagger: {
             grid: [7, 5],
             from: 'random',
-            ease: 'back.out(2)',
-            each: 0.25,
+            amount: 20,
+            ease: 'none',
           },
         },
-        '<+=0.25'
+        'start'
       );
-      [
-        [{ x: 1, y: -1 }, { x: 3, y: -1 }],
-        [{ x: -2, y: -1 }, { x: -1, y: -2 }],
-        [{ x: -3, y: -2 }, { x: 2, y: -1 }],
-        [{ x: 1, y: 2 }, { x: 4, y: -2 }],
-        [{ x: -4, y: 0 }, { x: 5, y: 1 }],
-        [{ x: -3, y: -1 }, { x: 2, y: -2 }],
-        [{ x: 0, y: 0 }, { x: 0, y: 0 }],
-      ]
-        .map(params =>
-          params.map(param => ({
-            x: param.x * 47.335,
-            y: param.y * 34.1219,
-          }))
-        )
-        .forEach(([p1, p2]) => {
-          tl2.set('.nft-portfolio-graph__highlight-box1', p1);
-          tl2.set('.nft-portfolio-graph__highlight-box2', p2);
-          tl2.fromTo(
-            '.nft-portfolio-graph__highlight-box',
-            {
-              transformOrigin: 'center center',
-              scale: 0,
-              opacity: 0,
-            },
-            {
-              transformOrigin: 'center center',
-              scale: 1,
-              opacity: 1,
-              stagger: 0.75,
-            }
-          );
-          if (p1.x !== 0) {
-            tl2.to(
-              '.nft-portfolio-graph__highlight-box',
-              {
-                transformOrigin: 'center center',
-                scale: 0,
-                stagger: 0.5,
-                opacity: 0,
-              },
-              '>-=0.25'
-            );
-          }
-        });
     },
   },
 };

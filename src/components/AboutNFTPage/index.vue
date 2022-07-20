@@ -11,9 +11,15 @@
       "
     >
       <NFTHeroSection class="w-full pb-[64px]" />
-      <NFTWidgetSection class="py-[32px] laptop:py-[64px]" />
+      <NFTWidgetSection
+        class="py-[32px] laptop:py-[64px]"
+        :article="articles[0]"
+      />
       <NFTPortfolioSection class="py-[32px] laptop:py-[64px]" />
-      <NFTPortalSection class="py-[32px] laptop:py-[64px]" />
+      <NFTPortalSection
+        class="py-[32px] laptop:py-[64px]"
+        :article="articles[0]"
+      />
       <NFTPricingSection class="py-[32px] laptop:py-[64px]" />
       <NFTFAQSection id="faq" class="py-[32px] laptop:py-[64px]" />
 
@@ -145,6 +151,16 @@ import NFTPortfolioSection from './NFTPortfolioSection';
 import NFTPricingSection from './NFTPricingSection';
 import NFTWidgetSection from './NFTWidgetSection';
 
+const WIDGET_ARTICLES = [
+  {
+    title: 'A Declaration of the Independence of Cyberspace',
+    description: 'Governments of the Industrial World...',
+    price: 1024,
+    // eslint-disable-next-line global-require
+    imgSrc: require('~/assets/images/about/dummy-og.png'),
+  },
+];
+
 export default {
   name: 'AboutPage',
   components: {
@@ -154,6 +170,12 @@ export default {
     NFTPortfolioSection,
     NFTPricingSection,
     NFTWidgetSection,
+  },
+  props: {
+    articles: {
+      type: Array,
+      default: () => WIDGET_ARTICLES,
+    },
   },
 };
 </script>

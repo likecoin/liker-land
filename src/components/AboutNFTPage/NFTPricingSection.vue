@@ -178,7 +178,7 @@ export default {
         opacity: 0.5,
         scale: 0,
         transformOrigin:
-          window.innerWidth >= 768 ? '100% 100%' : 'center center',
+          window.innerWidth > 768 ? '100% 100%' : 'center center',
         ease: 'elastic.out(1, 0.9)',
       });
 
