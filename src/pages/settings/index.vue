@@ -52,12 +52,13 @@ export default {
 }
 
 .settings-menu {
-  @apply list-disc;
+  @apply px-16;
+  @apply list-none;
 
   & + & {
     @apply mt-8;
 
-    @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
+    @media screen and (max-width: 558px) {
       @apply mt-24;
     }
   }
@@ -66,7 +67,7 @@ export default {
     transition-duration: 0.25s;
     transition-timing-function: ease;
 
-    @media screen and (min-width: calc(config('theme.screens.tablet.min') + 32px)) {
+    @media screen and (min-width: 801px) {
       transition-property: opacity;
 
       @apply bg-white;
@@ -94,7 +95,7 @@ export default {
       }
     }
 
-    @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
+    @media screen and (max-width: 558px) {
       transition-property: background-color;
 
       @apply border-2;
@@ -139,7 +140,7 @@ export default {
 
       @apply fill-current;
 
-      @media screen and (max-width: calc(config('theme.screens.phone.max') + 31px)) {
+      @media screen and (max-width: 558px) {
         @apply -ml-8;
       }
     }

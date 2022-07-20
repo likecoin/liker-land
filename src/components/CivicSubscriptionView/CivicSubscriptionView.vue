@@ -45,7 +45,7 @@
 
     <div
       v-if="isPreview && state !== 'loading'"
-      class="phone:relative fixed pin-t pin-l pin-r z-10"
+      class="phone:relative fixed top-0 left-0 right-0 z-10"
     >
       <div class="flex items-center bg-like-cyan-pale p-16 tablet:p-24 laptop:px-72 pointer-events-auto">
         <Button
@@ -242,7 +242,7 @@
             size="large"
           >
             <template #prepend>
-              <TickIcon class="absolute pin-l ml-8 w-24 h-24 text-success fill-current" />
+              <TickIcon class="absolute left-0 ml-8 w-24 h-24 text-success fill-current" />
             </template>
           </Button>
           <div
@@ -482,7 +482,7 @@
       <div class="p-24">
         <div class="relative py-12">
           <Button
-            class="absolute pin-t w-48 h-48 rounded-full shadow-md"
+            class="absolute top-0 w-48 h-48 rounded-full shadow-md"
             preset="primary-invert"
             @click="isShowUpgradeWarning = false"
           >

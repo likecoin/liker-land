@@ -26,7 +26,7 @@
             | {{ $tc('civicLikers', 2) }}
       li.relative.p-24(class="laptop:w-1/3")
         img.earth(
-          class="laptop:absolute laptop:pin-l phone:max-w-full"
+          class="laptop:absolute laptop:left-0 phone:max-w-full"
           src="./assets/better-world.png"
         )
 </template>

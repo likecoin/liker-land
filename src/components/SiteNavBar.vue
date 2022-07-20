@@ -18,7 +18,7 @@
       >
         <GlobeIcon class="w-20 h-20 mr-16 fill-current" />
         <select
-          class="absolute opacity-0 pin-y pin-r"
+          class="absolute inset-y-0 right-0 opacity-0"
           :value="getLocale"
           @change="onChangeLocale"
         >

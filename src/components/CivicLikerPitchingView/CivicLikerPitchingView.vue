@@ -29,7 +29,7 @@
           :is-avatar-outline-extruded="false"
         />
         <svg
-          class="absolute mt-8 mr-16 pin-r text-like-cyan-pale block"
+          class="absolute mt-8 mr-16 right-0 text-like-cyan-pale block"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="18"

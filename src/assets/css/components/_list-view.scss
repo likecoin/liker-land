@@ -5,23 +5,23 @@
     @apply overflow-hidden;
 
     @apply rounded-[8px];
-  
+
     @apply bg-white;
-  
+
     @apply mb-48;
-    @apply pb-24;  
+    @apply pb-24;
   }
 
   &-item {
     min-height: 52px;
-  
+
     transition: opacity 0.25s ease;
-  
+
     @apply border-t;
     @apply border-gray-e6;
-  
+
     @apply flex;
-    
+
     &:not(&--no-hover) {
       &:hover {
         @apply opacity-75;
@@ -30,7 +30,7 @@
         @apply opacity-50;
       }
     }
-  
+
     &:last-child {
       @apply border-b;
     }
@@ -44,16 +44,16 @@
       @apply px-16;
       @apply py-8;
     }
-  
+
     &__content-view {
       @apply flex;
       @apply items-center;
       @apply flex-grow;
     }
-  
+
     &__accessory-view {
       width: 5rem;
-  
+
       @apply self-stretch;
       @apply shrink-0;
     }

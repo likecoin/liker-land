@@ -21,7 +21,7 @@
 
     <div class="relative ml-64 mr-80 p-32 pb-40 pr-72 border-1 border-gray-9b rounded-8 phone:mx-24 phone:px-24">
       <img
-        class="absolute pin-r -mr-48 phone:w-64 phone:block phone:mx-auto phone:relative"
+        class="absolute right-0 -mr-48 phone:w-64 phone:block phone:mx-auto phone:relative"
         src="./check.png"
         role="presentation"
         style="width:96px"

@@ -9,7 +9,7 @@
       </div>
       <button
         v-if="!isClassic"
-        class="absolute pin-r w-24 h-24 flex justify-center items-center rounded-full border-like-cyan border-1 text-like-green"
+        class="absolute right-0 w-24 h-24 flex justify-center items-center rounded-full border-like-cyan border-1 text-like-green"
         @click="$emit('click-add')"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
