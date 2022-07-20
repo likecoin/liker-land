@@ -274,14 +274,10 @@ export default {
         scale: 0.3,
         opacity: 0,
       });
-      tl.from(
-        '.nft-widget-graph__description',
-        {
-          y: '+=100',
-          opacity: 0,
-        },
-        '<'
-      );
+      tl.from('.nft-widget-graph__description', {
+        x: '+=100%',
+        opacity: 0,
+      });
       tl.from(
         '.nft-widget-graph__line',
         {
