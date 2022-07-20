@@ -1,5 +1,5 @@
 <template>
-  <div class="about-nft-page px-[24px] laptop:px-[32px]">
+  <div class="about-nft-page px-[24px] laptop:px-[32px] overflow-x-hidden">
     <div
       class="
         w-full
