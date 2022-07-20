@@ -3,11 +3,12 @@
   <section class="relative justify-center nft-pricing-graph laptop:flex">
     <h1
       class="
-        text-[48px]
+        text-center text-[48px]
+        leading-[56px]
         laptop:text-[72px]
         font-proxima font-[300]
-        text-like-green text-right
-        laptop:absolute laptop:mt-[1em]
+        text-like-green
+        laptop:text-right laptop:absolute laptop:mt-[1em]
         inset-x-0
         top-0
       "
@@ -102,7 +103,10 @@
             opacity=".2"
           />
         </g>
-        <g class="nft-pricing-graph__graph-line" filter="url(#nft-pricing-graph-blur)">
+        <g
+          class="nft-pricing-graph__graph-line"
+          filter="url(#nft-pricing-graph-blur)"
+        >
           <path
             d="M34.41,382c118,0,81-177,209-177,144,0,109,240,249,240,152,0,71-282,239-410"
             fill="none"
@@ -136,6 +140,8 @@
       </svg>
       <div
         class="
+          text-center
+          laptop:text-left
           nft-pricing-graph__description
           mt-[16px]
           laptop:mt-[0px]
@@ -171,7 +177,8 @@ export default {
       tl.from('.nft-pricing-graph h1', {
         opacity: 0.5,
         scale: 0,
-        transformOrigin: '100% 100%',
+        transformOrigin:
+          window.innerWidth >= 768 ? '100% 100%' : 'center center',
         ease: 'elastic.out(1, 0.9)',
       });
 

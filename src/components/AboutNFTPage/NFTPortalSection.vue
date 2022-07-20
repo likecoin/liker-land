@@ -1,11 +1,19 @@
 <template>
-  <section class="items-start justify-center laptop:flex nft-portal-graph">
-    <div class="laptop:mt-[260px] laptop:-mr-[224px] laptop:max-w-[360px] relative z-1">
+  <section
+    class="items-start justify-center w-full laptop:flex nft-portal-graph"
+  >
+    <div
+      class="
+        laptop:mt-[260px] laptop:-mr-[224px] laptop:max-w-[360px]
+        relative
+        z-1
+      "
+    >
       <h1
         class="
           laptop:mb-[16px]
-          text-[48px]
-          laptop:text-[72px]
+          text-[48px] text-center
+          laptop:text-left laptop:text-[72px]
           font-proxima font-[300]
           laptop:leading-[64px]
           text-like-green
@@ -13,7 +21,9 @@
       >
         {{ $t('about_nft_page_nft_portal_title') }}
       </h1>
-      <div class="leading-[22px] nft-portal-graph__description">
+      <div
+        class="hidden laptop:block leading-[22px] nft-portal-graph__description"
+      >
         {{ $t('about_nft_page_nft_portal_description') }}
       </div>
     </div>
@@ -135,10 +145,15 @@
           xlink:href="#c"
         />
         <clipPath id="nft-portal-def-clip">
-          <path d="M298.61,63.35h348c4.42,0,8,3.58,8,8V215.35H290.61V71.35c0-4.42,3.58-8,8-8Z" />
+          <path
+            d="M298.61,63.35h348c4.42,0,8,3.58,8,8V215.35H290.61V71.35c0-4.42,3.58-8,8-8Z"
+          />
         </clipPath>
       </defs>
-      <g class="nft-portal-graph__dummy-widget" filter="url(#nft-portal-graph-shadow)">
+      <g
+        class="nft-portal-graph__dummy-widget"
+        filter="url(#nft-portal-graph-shadow)"
+      >
         <rect
           x="275.61"
           y="48.35"
@@ -193,15 +208,15 @@
           </div>
         </foreignObject>
       </g>
-      <g>
-        <rect
-          y="50.9"
-          width="259"
-          height="320"
-          rx="16"
-          ry="16"
-          fill="#fff"
-        />
+      <rect
+        y="50.9"
+        width="259"
+        height="320"
+        rx="16"
+        ry="16"
+        fill="#fff"
+      />
+      <g class="nft-portal-graph__lines">
         <rect
           x="32"
           y="82.9"
@@ -267,7 +282,10 @@
         />
       </g>
 
-      <g class="nft-portal-graph__url-bar" filter="url(#nft-portal-graph-shadow)">
+      <g
+        class="nft-portal-graph__url-bar"
+        filter="url(#nft-portal-graph-shadow)"
+      >
         <g>
           <path
             d="M47,30.9H212c8.28,0,15,6.72,15,15h0c0,8.28-6.72,15-15,15H47c-8.28,0-15-6.72-15-15h0c0-8.28,6.72-15,15-15Z"
@@ -414,10 +432,18 @@
         />
       </g>
     </svg>
+    <div
+      class="
+        laptop:hidden
+        leading-[22px]
+        text-center
+        nft-portal-graph__description
+      "
+    >
+      {{ $t('about_nft_page_nft_portal_description') }}
+    </div>
   </section>
-
 </template>
-
 
 <script>
 const dotProps = [
@@ -459,12 +485,13 @@ export default {
   },
   methods: {
     initAnimation() {
+      const isLargerScreen = window.innerWidth >= 768;
       const tl = this.$gsap.gsap.timeline({
         duration: 0.5,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: `.nft-portal-graph`,
-          start: 'top-=100% top+=20%',
+          start: `top-=100% ${isLargerScreen ? 'top+=30%' : 'top+=100%'}`,
           end: 'bottom center',
           scrub: true,
         },
@@ -473,17 +500,20 @@ export default {
       tl.from('.nft-portal-graph__url > *', {
         opacity: 0,
         y: 10,
-        stagger: 0.25,
+        stagger: 0.1,
       });
 
-      tl.from(
-        '.nft-portal-graph svg',
-        {
-          y: '-=40%',
-          ease: 'power3.inOut',
-        },
-        '>-=0.5'
-      );
+      tl.from('.nft-portal-graph svg', {
+        x: isLargerScreen ? '+=30%' : '+=45%',
+        y: '-=40%',
+        scale: 1.5,
+        ease: 'power4.inOut',
+      });
+
+      tl.from('.nft-portal-graph__lines > rect', {
+        opacity: 0,
+        stagger: 0.1,
+      });
 
       tl.from(
         '.nft-portal-graph h1',
@@ -491,7 +521,7 @@ export default {
           x: '-=100',
           opacity: 0,
         },
-        '>-=0.6'
+        isLargerScreen ? '>-=0.6' : '<'
       );
       tl.from(
         '.nft-portal-graph__description',
@@ -502,35 +532,33 @@ export default {
         '<+=0.2'
       );
 
-      tl.from('.nft-portal-graph__url-bar', {
-        scale: 1.2,
-        transformOrigin: 'center center',
+      const tl2 = this.$gsap.gsap.timeline({
+        duration: 0.5,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: `.nft-portal-graph`,
+          start: isLargerScreen ? 'center center' : 'top-=100% center',
+          end: 'bottom center',
+          scrub: true,
+          pin: isLargerScreen,
+        },
       });
 
-      tl.from('.nft-portal-graph__pointer', {
+      tl2.from('.nft-portal-graph__pointer', {
         opacity: 0,
         scale: 0,
         rotation: -70,
         transformOrigin: 'left 32',
       });
 
-      const tl2 = this.$gsap.gsap.timeline({
-        duration: 0.5,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: `.nft-portal-graph`,
-          start: 'center center',
-          end: 'bottom center',
-          scrub: true,
-          pin: true,
+      tl2.from(
+        '.nft-portal-graph__dummy-widget',
+        {
+          opacity: 0,
+          x: 16,
         },
-      });
-
-      tl2.from('.nft-portal-graph__dummy-widget', {
-        opacity: 0,
-        y: 16,
-        x: 16,
-      });
+        '>-=0.25'
+      );
     },
   },
 };

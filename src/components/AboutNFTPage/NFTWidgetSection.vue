@@ -11,8 +11,10 @@
         text-like-green text-center
         laptop:mt-[48px]
       "
-    >{{ $t('about_nft_page_nft_widget_title') }}</h1>
-    <div class="items-end justify-center laptop:flex">
+    >
+      {{ $t('about_nft_page_nft_widget_title') }}
+    </h1>
+    <div class="items-end justify-center w-full laptop:flex">
       <svg
         class="max-w-[557px] w-full"
         xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +84,10 @@
             ry="24"
             fill="#fff"
           />
-          <g class="nft-widget-graph__dummy-widget-small" filter="url(#nft-widget-graph-blur)">
+          <g
+            class="nft-widget-graph__dummy-widget-small"
+            filter="url(#nft-widget-graph-blur)"
+          >
             <rect
               x="32"
               y="380"
@@ -124,7 +129,10 @@
             fill="#ebebeb"
           />
         </g>
-        <g class="nft-widget-graph__dummy-widget" filter="url(#nft-widget-graph-shadow)">
+        <g
+          class="nft-widget-graph__dummy-widget"
+          filter="url(#nft-widget-graph-shadow)"
+        >
           <rect
             x="152"
             y="201"
@@ -185,15 +193,16 @@
       </svg>
       <div
         class="
+          text-center
+          laptop:text-left
           nft-widget-graph__description
           mt-[16px]
-          laptop:mt-[0px]
-          laptop:max-w-[320px]
-          laptop:mb-[70px]
-          laptop:ml-[32px]
+          laptop:mt-[0px] laptop:max-w-[320px] laptop:mb-[70px] laptop:ml-[32px]
           leading-[22px]
         "
-      >{{ $t('about_nft_page_nft_widget_description') }}</div>
+      >
+        {{ $t('about_nft_page_nft_widget_description') }}
+      </div>
     </div>
   </section>
 </template>
@@ -248,13 +257,16 @@ export default {
   },
   methods: {
     scrollAnimation() {
+      const isLargerScreen = window.innerWidth >= 768;
       const tl = this.$gsap.gsap.timeline({
         duration: 0.5,
         ease: 'power4.out',
         scrollTrigger: {
-          trigger: `.nft-widget-graph`,
-          start: 'top-=100% top+=10%',
-          end: 'bottom center',
+          trigger: isLargerScreen
+            ? '.nft-widget-graph'
+            : '.nft-widget-graph svg',
+          start: isLargerScreen ? 'top-=100% top+=10%' : 'top-=200% top',
+          end: isLargerScreen ? 'bottom center' : 'center center',
           scrub: true,
         },
       });
@@ -287,11 +299,13 @@ export default {
         duration: 0.5,
         ease: 'power4.out',
         scrollTrigger: {
-          trigger: `.nft-widget-graph`,
-          start: 'center center',
-          end: 'bottom center',
+          trigger: isLargerScreen
+            ? '.nft-widget-graph'
+            : '.nft-widget-graph svg',
+          start: isLargerScreen ? 'center center' : 'top center',
+          end: isLargerScreen ? 'bottom center' : 'center center',
           scrub: true,
-          pin: true,
+          pin: isLargerScreen,
         },
       });
       tl2.from('.nft-widget-graph__dummy-widget', {

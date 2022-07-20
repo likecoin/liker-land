@@ -1,17 +1,19 @@
 <template>
-  <section class="min-h-[600px] nft-portfolio-graph">
+  <section class="laptop:min-h-[600px] nft-portfolio-graph">
     <h1
       class="
-        text-[48px]
-        laptop:text-[72px]
+        text-[48px] text-center
+        laptop:text-left laptop:text-[72px]
         font-proxima font-[300]
         text-like-green
         laptop:-mb-[40px]
         relative
         z-1
       "
-    >{{ $t('about_nft_page_nft_portfolio_title') }}</h1>
-    <div class="items-start justify-center laptop:flex">
+    >
+      {{ $t('about_nft_page_nft_portfolio_title') }}
+    </h1>
+    <div class="items-start justify-center w-full laptop:flex">
       <div class="overflow-hidden laptop:max-w-[375px] w-full">
         <svg
           class="transform scale-[2]"
@@ -114,7 +116,9 @@
             fill="#fff"
           />
           <g filter="url(#nft-portfolio-graph-blur)">
-            <g class="nft-portfolio-graph__highlight-box nft-portfolio-graph__highlight-box1">
+            <g
+              class=" nft-portfolio-graph__highlight-box nft-portfolio-graph__highlight-box1"
+            >
               <rect
                 x="402.5"
                 y="166.79"
@@ -144,7 +148,9 @@
                 fill-opacity=".3"
               />
             </g>
-            <g class="nft-portfolio-graph__highlight-box nft-portfolio-graph__highlight-box2">
+            <g
+              class=" nft-portfolio-graph__highlight-box nft-portfolio-graph__highlight-box2"
+            >
               <rect
                 x="261.09"
                 y="201.39"
@@ -179,11 +185,11 @@
       </div>
       <div
         class="
+          text-center
+          laptop:text-left
           nft-portfolio-graph__description
           mt-[16px]
-          laptop:mt-[24px]
-          laptop:max-w-[470px]
-          laptop:mr-[24px]
+          laptop:mt-[24px] laptop:max-w-[470px] laptop:mr-[24px]
           leading-[22px]
         "
       >
@@ -191,7 +197,6 @@
       </div>
     </div>
   </section>
-
 </template>
 
 <script>
@@ -275,7 +280,7 @@ export default {
           start: 'top+=25% center',
           end: 'center center',
           scrub: true,
-          pin: true,
+          pin: window.innerWidth >= 768,
         },
       });
       tl2.from(
