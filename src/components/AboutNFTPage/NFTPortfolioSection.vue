@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <section class="laptop:min-h-[600px] nft-portfolio-graph">
+  <section class="laptop:min-h-[600px] nft-portfolio-graph" style="opacity: 0">
     <h1
       class="
         text-[48px] text-center
@@ -249,6 +249,11 @@ export default {
   },
   methods: {
     initAnimation() {
+      this.$gsap.gsap.to('.nft-portfolio-graph', {
+        opacity: 1,
+        duration: 0.2,
+        clearProps: 'opacity',
+      });
       const isLargerScreen = window.innerWidth > 768;
       const tl = this.$gsap.gsap.timeline({
         duration: 0.5,

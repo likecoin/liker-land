@@ -1,7 +1,10 @@
 <!-- eslint-disable vue/no-v-html -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <section class="relative justify-center nft-pricing-graph laptop:flex">
+  <section
+    class="relative justify-center nft-pricing-graph laptop:flex"
+    style="opacity: 0"
+  >
     <h1
       class="
         text-center text-[48px]
@@ -161,6 +164,11 @@ export default {
   },
   methods: {
     initAnimation() {
+      this.$gsap.gsap.to('.nft-pricing-graph', {
+        opacity: 1,
+        duration: 0.2,
+        clearProps: 'opacity',
+      });
       const tl = this.$gsap.gsap.timeline({
         duration: 0.5,
         ease: 'power3.out',

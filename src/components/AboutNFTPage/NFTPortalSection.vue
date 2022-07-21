@@ -2,6 +2,7 @@
 <template>
   <section
     class="items-start justify-center w-full laptop:flex nft-portal-graph"
+    style="opacity: 0"
   >
     <div
       class="
@@ -455,6 +456,11 @@ export default {
   },
   methods: {
     initAnimation() {
+      this.$gsap.gsap.to('.nft-portal-graph', {
+        opacity: 1,
+        duration: 0.2,
+        clearProps: 'opacity',
+      });
       const isLargerScreen = window.innerWidth > 768;
       const tl = this.$gsap.gsap.timeline({
         duration: 0.5,
