@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
 
+const path = require('path');
+
 /*
 
 Tailwind - The Utility-First CSS Framework
@@ -86,11 +88,11 @@ const colors = {
 };
 
 module.exports = {
-  content: [
-    './components/**/*.{js,jsx,ts,tsx,vue}',
-    './pages/**/*.{js,jsx,ts,tsx,vue}',
-    './locales/**/*.{json}',
-  ],
+  purge: {
+    content: [
+      path.resolve('./locales/**/*.json'),
+    ],
+  },
   theme: {
     colors,
 
