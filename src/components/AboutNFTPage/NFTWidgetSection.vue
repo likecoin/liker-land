@@ -8,6 +8,7 @@
         z-1
         top-0
         text-[48px]
+        leading-[56px]
         laptop:text-[72px]
         font-proxima font-[300]
         text-like-green text-center
@@ -16,7 +17,9 @@
     >
       {{ $t('about_nft_page_nft_widget_title') }}
     </h1>
-    <div class="items-end justify-center w-full laptop:flex">
+    <div
+      class="mt-[16px] laptop:mt-0 items-end justify-center w-full laptop:flex"
+    >
       <div class="relative laptop:max-w-[557px] w-full">
         <svg
           class="absolute inset-y-0 h-full laptop:relative"

@@ -4,20 +4,21 @@
     <h1
       class="
         text-[48px] text-center
+        leading-[56px]
         laptop:text-left laptop:text-[72px]
         font-proxima font-[300]
         text-like-green
-        laptop:-mb-[40px]
+        laptop:-mb-[24px]
         relative
         z-1
       "
     >
       {{ $t('about_nft_page_nft_portfolio_title') }}
     </h1>
-    <div class="items-start justify-center w-full laptop:flex">
-      <div class="overflow-hidden laptop:max-w-[375px] w-full">
+    <div class="mt-[16px] laptop:mt-0 items-start justify-center w-full laptop:flex">
+      <div class="overflow-hidden">
         <svg
-          class="transform scale-[2]"
+          class="transform scale-[2] mx-auto max-w-[375px] w-full"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 750 360"

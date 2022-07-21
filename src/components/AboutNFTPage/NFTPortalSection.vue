@@ -15,6 +15,7 @@
         class="
           laptop:mb-[16px]
           text-[48px] text-center
+          leading-[56px]
           laptop:text-left laptop:text-[72px]
           font-proxima font-[300]
           laptop:leading-[64px]
