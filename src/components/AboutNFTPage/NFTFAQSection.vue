@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <section>
     <h1
@@ -19,7 +20,7 @@
               {{ faq.question }}
             </template>
             <template #answer>
-              {{ faq.answer }}
+              <div v-html="faq.answer" />
             </template>
           </NFTFAQItem>
         </li>

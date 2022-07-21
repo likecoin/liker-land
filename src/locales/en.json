@@ -19,9 +19,8 @@
       "a": "An individual’s content portfolio can be viewed as part of a reliable decentralized identity in Web3. It’s a record of individual authorship. Writing NFT can guarantee the immutability of content and later verifiable with proof of ownership and property rights."
     },
     {
-
       "q": "How to get started with Writing NFT?",
-      "a": "There are three ways, 1) if you are a WordPress user, you can directly install the free LikeCoin plugin from the WordPress plugins. 2) via NFT Portal, you can mint NFT from any URLs, and it will generate an NFT listing page for you. 3) via the partnered website. There are several media/ blogging platforms that have integrated with LikeCoin. {{list}}"
+      "a": "There are three ways:<ol class=\"list-decimal pl-[22px]\"><li class=\"mt-[8px]\">If you are a WordPress user, you can directly install the free LikeCoin plugin from the <a class=\"text-like-green underline\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://wordpress.org/plugins/likecoin/\">WordPress plugins</a>.</li><li class=\"mt-[8px]\">Via NFT Portal, you can mint NFT from any URLs, and it will generate an NFT listing page for you.</li><li class=\"mt-[8px]\">Via the partnered website. (announce soon)</li></ol>"
     },
     {
       "q": "Is owning an NFT the same as owning copyright?",
