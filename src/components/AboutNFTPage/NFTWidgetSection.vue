@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <section class="relative nft-widget-graph">
     <h1
@@ -150,16 +151,13 @@
       </div>
       <div
         class="
-          text-center
-          laptop:text-left
           nft-widget-graph__description
           mt-[16px]
           laptop:mt-[0px] laptop:max-w-[320px] laptop:mb-[70px] laptop:ml-[32px]
           leading-[22px]
         "
-      >
-        {{ $t('about_nft_page_nft_widget_description') }}
-      </div>
+        v-html="$t('about_nft_page_nft_widget_description')"
+      />
     </div>
   </section>
 </template>

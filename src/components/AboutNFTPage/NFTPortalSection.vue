@@ -1,10 +1,11 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <section
     class="items-start justify-center w-full laptop:flex nft-portal-graph"
   >
     <div
       class="
-        laptop:mt-[260px] laptop:-mr-[224px] laptop:max-w-[360px]
+        laptop:mt-[260px] laptop:-mr-[224px] laptop:max-w-[400px]
         relative
         z-1
       "
@@ -23,9 +24,8 @@
       </h1>
       <div
         class="hidden laptop:block leading-[22px] nft-portal-graph__description"
-      >
-        {{ $t('about_nft_page_nft_portal_description') }}
-      </div>
+        v-html="$t('about_nft_page_nft_portal_description')"
+      />
     </div>
     <div class="max-w-[690px] w-full relative">
       <svg
@@ -411,12 +411,10 @@
       class="
         laptop:hidden
         leading-[22px]
-        text-center
         nft-portal-graph__description
       "
-    >
-      {{ $t('about_nft_page_nft_portal_description') }}
-    </div>
+      v-html="$t('about_nft_page_nft_portal_description')"
+    />
   </section>
 </template>
 

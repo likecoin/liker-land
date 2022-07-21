@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <section class="laptop:min-h-[600px] nft-portfolio-graph">
     <h1
@@ -185,16 +186,14 @@
       </div>
       <div
         class="
-          text-center
-          laptop:text-left
+          text-left
           nft-portfolio-graph__description
           mt-[16px]
-          laptop:mt-[24px] laptop:max-w-[470px] laptop:mr-[24px]
+          laptop:mt-[48px] laptop:max-w-[470px] laptop:mr-[24px]
           leading-[22px]
         "
-      >
-        {{ $t('about_nft_page_nft_portfolio_description') }}
-      </div>
+        v-html="$t('about_nft_page_nft_portfolio_description')"
+      />
     </div>
   </section>
 </template>

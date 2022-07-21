@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <section class="relative justify-center nft-pricing-graph laptop:flex">
@@ -140,17 +141,14 @@
       </svg>
       <div
         class="
-          text-center
-          laptop:text-left
           nft-pricing-graph__description
           mt-[16px]
           laptop:mt-[0px]
           leading-[22px]
           laptop:max-w-[540px]
         "
-      >
-        {{ $t('about_nft_page_dynamic_pricing_description') }}
-      </div>
+        v-html="$t('about_nft_page_dynamic_pricing_description')"
+      />
     </div>
   </section>
 </template>
