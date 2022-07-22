@@ -14,40 +14,93 @@
         <clipPath id="nft-hero-stroke-clip">
           <rect width="960" height="512" />
         </clipPath>
+        <clipPath id="nft-hero-graph__circle-clip">
+          <ellipse cx="565.2" cy="272" rx="109.5" ry="109" fill="none" />
+        </clipPath>
         <radialGradient
-          id="nft-hero-b"
-          cx="-1240.71"
-          cy="-866.69"
-          fx="-1240.71"
-          fy="-866.69"
+          id="nft-hero-graph__circle-gradient-1"
+          cx="-277.43"
+          cy="198.48"
+          fx="-277.43"
+          fy="198.48"
           r="1"
-          gradientTransform="translate(-59901.43 -636752.51) rotate(-44.67) scale(326.42 -571.77)"
+          gradientTransform="translate(-14961.69 -145349.93) rotate(-44.8) scale(328.65 575.71) skewX(-.5)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset=".36" stop-color="#8af5e9" />
+          <stop offset=".35" stop-color="#8af5e9" />
           <stop offset="1" stop-color="#33d875" stop-opacity="0" />
         </radialGradient>
         <radialGradient
-          id="nft-hero-c"
-          cx="-1239.7"
-          cy="-858.63"
-          fx="-1239.7"
-          fy="-858.63"
+          id="nft-hero-graph__circle-gradient-2"
+          cx="-278.75"
+          cy="195.17"
+          fx="-278.75"
+          fy="195.17"
           r="1"
-          gradientTransform="translate(-29477.43 550659.36) rotate(138.5) scale(312.42 -456.96)"
+          gradientTransform="translate(-5546.28 125830.06) rotate(138.37) scale(314.48 460.23) skewX(-.42)"
           gradientUnits="userSpaceOnUse"
         >
           <stop offset="0" stop-color="#f1ff9a" />
           <stop offset=".87" stop-color="#71a988" stop-opacity=".24" />
         </radialGradient>
         <radialGradient
-          id="nft-hero-d"
-          cx="-1231.32"
-          cy="-870.4"
-          fx="-1231.32"
-          fy="-870.4"
+          id="nft-hero-graph__circle-gradient-3"
+          cx="-273.14"
+          cy="199.07"
+          fx="-273.14"
+          fy="199.07"
           r="1"
-          gradientTransform="translate(198125.81 -176953.39) rotate(2.4) scale(154.25 -212.96)"
+          gradientTransform="translate(44673.08 -40672.97) rotate(2.41) scale(154.95 214.92) skewX(.03)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset=".22" stop-color="#a5f0e7" />
+          <stop offset="1" stop-color="#f7c7c7" stop-opacity="0" />
+        </radialGradient>
+        <clipPath id="nft-hero-graph__rect-clip">
+          <rect
+            x="706.7"
+            y="174"
+            width="200"
+            height="199"
+            rx="16"
+            ry="16"
+            fill="none"
+          />
+        </clipPath>
+        <radialGradient
+          id="nft-hero-graph__rect-gradient-1"
+          cx="-276.9"
+          cy="198.78"
+          fx="-276.9"
+          fy="198.78"
+          r="1"
+          gradientTransform="translate(-14961.69 -145349.93) rotate(-44.8) scale(328.65 575.71) skewX(-.5)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset=".35" stop-color="#8af5e9" />
+          <stop offset="1" stop-color="#33d875" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient
+          id="nft-hero-graph__rect-gradient-2"
+          cx="-279.33"
+          cy="194.82"
+          fx="-279.33"
+          fy="194.82"
+          r="1"
+          gradientTransform="translate(-5546.28 125830.06) rotate(138.37) scale(314.48 460.23) skewX(-.42)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stop-color="#f1ff9a" />
+          <stop offset=".87" stop-color="#71a988" stop-opacity=".24" />
+        </radialGradient>
+        <radialGradient
+          id="nft-hero-graph__rect-gradient-3"
+          cx="-271.59"
+          cy="199.03"
+          fx="-271.59"
+          fy="199.03"
+          r="1"
+          gradientTransform="translate(44673.08 -40672.97) rotate(2.41) scale(154.95 214.92) skewX(.03)"
           gradientUnits="userSpaceOnUse"
         >
           <stop offset=".22" stop-color="#a5f0e7" />
@@ -245,67 +298,59 @@
       </defs>
       <g filter="url(#nft-hero-graph-blur)">
         <g>
-          <g class="nft-hero-graph__slide-1-circle nft-hero-graph__element">
-            <ellipse cx="565.23" cy="272" rx="109.5" ry="109" fill="#fff" />
-            <ellipse
-              cx="565.23"
-              cy="272"
-              rx="109.5"
-              ry="109"
-              fill="url(#nft-hero-b)"
+          <g
+            class="nft-hero-graph__slide-1-circle nft-hero-graph__element"
+            clip-path="url(#nft-hero-graph__circle-clip"
+          >
+            <rect x="455.2" y="162" width="220" height="220" fill="#fff" />
+            <rect
+              x="455.2"
+              y="162"
+              width="220"
+              height="220"
+              fill="url(#nft-hero-graph__circle-gradient-1)"
             />
-            <ellipse
-              cx="565.23"
-              cy="272"
-              rx="109.5"
-              ry="109"
-              fill="url(#nft-hero-c)"
+            <rect
+              x="455.2"
+              y="162"
+              width="220"
+              height="220"
+              fill="url(#nft-hero-graph__circle-gradient-2)"
             />
-            <ellipse
-              cx="565.23"
-              cy="272"
-              rx="109.5"
-              ry="109"
-              fill="url(#nft-hero-d)"
+            <rect
+              x="455.2"
+              y="162"
+              width="220"
+              height="220"
+              fill="url(#nft-hero-graph__circle-gradient-3)"
               fill-opacity=".3"
             />
           </g>
-          <g class="nft-hero-graph__slide-1-square nft-hero-graph__element">
+          <g
+            class="nft-hero-graph__slide-1-square nft-hero-graph__element"
+            clip-path="url(#nft-hero-graph__rect-clip)"
+          >
+            <rect x="696.7" y="162" width="220" height="220" fill="#fff" />
             <rect
-              x="706.73"
-              y="174"
-              width="200"
-              height="199"
-              rx="16"
-              ry="16"
-              fill="#fff"
+              x="696.7"
+              y="162"
+              width="220"
+              height="220"
+              fill="url(#nft-hero-graph__rect-gradient-1)"
             />
             <rect
-              x="706.73"
-              y="174"
-              width="200"
-              height="199"
-              rx="16"
-              ry="16"
-              fill="url(#nft-hero-e)"
+              x="696.7"
+              y="162"
+              width="220"
+              height="220"
+              fill="url(#nft-hero-graph__rect-gradient-2)"
             />
             <rect
-              x="706.73"
-              y="174"
-              width="200"
-              height="199"
-              rx="16"
-              ry="16"
-              fill="url(#nft-hero-f)"
-            />
-            <rect
-              x="706.73"
-              y="174"
-              width="200"
-              height="199"
-              rx="16"
-              ry="16"
-              fill="url(#nft-hero-g)"
+              x="696.7"
+              y="162"
+              width="220"
+              height="220"
+              fill="url(#nft-hero-graph__rect-gradient-3)"
               fill-opacity=".3"
             />
           </g>
@@ -444,7 +489,10 @@
           </g>
         </g>
       </g>
-      <g class="scale-[1.85] laptop:scale-[1]" style="transform-origin: left 60%;">
+      <g
+        class="scale-[1.85] laptop:scale-[1]"
+        style="transform-origin: left 60%"
+      >
         <g class="nft-hero-graph__title">
           <polygon
             points="91.17 299 96.8 299 113.52 240.3 107.89 240.3 93.72 291.96 79.29 240.3 74.8 240.3 60.37 291.96 46.2 240.3 40.57 240.3 57.38 299 63.01 299 77 248.58 91.17 299"
@@ -456,7 +504,13 @@
           />
           <g>
             <circle cx="149.89" cy="245.76" r="3.52" fill="#28646e" />
-            <rect x="147.6" y="256.5" width="4.58" height="42.5" fill="#28646e" />
+            <rect
+              x="147.6"
+              y="256.5"
+              width="4.58"
+              height="42.5"
+              fill="#28646e"
+            />
           </g>
           <path
             d="M175.66,300.06c3.52,0,5.54-1.06,7.22-2.64l-1.76-3.52c-.97,1.06-2.73,2.02-4.75,2.02-2.99,0-4.4-2.38-4.4-5.81v-29.48h8.62v-4.14h-8.62v-11.62h-4.66v11.62h-7.04v4.14h7.04v30.18c0,5.81,2.73,9.24,8.36,9.24Z"
@@ -464,7 +518,13 @@
           />
           <g>
             <circle cx="192.94" cy="245.76" r="3.52" fill="#28646e" />
-            <rect x="190.66" y="256.5" width="4.58" height="42.5" fill="#28646e" />
+            <rect
+              x="190.66"
+              y="256.5"
+              width="4.58"
+              height="42.5"
+              fill="#28646e"
+            />
           </g>
           <path
             d="M238.16,299h4.58v-29.74c0-9.59-4.75-13.82-13.38-13.82-6.16,0-12.23,3.78-15.31,7.48v-6.42h-4.58v42.5h4.58v-32.12c2.73-3.78,8.36-7.3,13.82-7.3,6.16,0,10.3,2.46,10.3,10.74v28.69Z"
@@ -488,17 +548,24 @@
           />
         </g>
         <g class="nft-hero-graph__tagline laptop:hidden">
-          <text x="50" y="360" font-size="24px">{{ $t('about_nft_page_hero_tagline_1') }}</text>
-          <text x="260" y="360" font-size="24px">{{ $t('about_nft_page_hero_tagline_2') }}</text>
+          <text x="50" y="360" font-size="24px">
+            {{ $t('about_nft_page_hero_tagline_1') }}
+          </text>
+          <text x="260" y="360" font-size="24px">
+            {{ $t('about_nft_page_hero_tagline_2') }}
+          </text>
         </g>
         <g class="hidden nft-hero-graph__tagline laptop:block">
-          <text x="520" y="280" font-size="24px">{{ $t('about_nft_page_hero_tagline_1') }}</text>
-          <text x="730" y="280" font-size="24px">{{ $t('about_nft_page_hero_tagline_2') }}</text>
+          <text x="520" y="280" font-size="24px">
+            {{ $t('about_nft_page_hero_tagline_1') }}
+          </text>
+          <text x="730" y="280" font-size="24px">
+            {{ $t('about_nft_page_hero_tagline_2') }}
+          </text>
         </g>
       </g>
     </svg>
   </section>
-
 </template>
 
 <script>
@@ -554,6 +621,10 @@ export default {
         transformOrigin: 'center center',
         scale: 0,
       });
+      tl.set('.nft-hero-graph__slide-1-square', {
+        transformOrigin: 'center center',
+        rotation: 180,
+      });
       tl.from('.nft-hero-graph__slide-1-square', {
         opacity: 0,
         x: 100,
@@ -562,8 +633,8 @@ export default {
       tl.to('.nft-hero-graph__slide-1-square', {
         delay: 1,
         ease: 'power3.in',
-        transformOrigin: '13 186',
-        rotation: -270,
+        transformOrigin: '187 186',
+        rotation: '+=270',
         scale: 0,
       });
       tl.to(
