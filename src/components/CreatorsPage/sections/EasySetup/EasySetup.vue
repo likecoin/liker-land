@@ -34,7 +34,7 @@
     .bg-gray-e6.rounded-full.h-16&attributes(attributes)
 
   mixin FakeContent(type)
-    .bg-white.rounded-12.shadow-4.mt-40.px-40.overflow-hidden(
+    .bg-white.rounded-12.shadow-md.mt-40.px-40.overflow-hidden(
       :class="['laptop:mr-40 laptop:mt-0', { 'select-none': !likerId }]"
     )&attributes(attributes)
       +FakeText(class="w-4/5 -mt-8")

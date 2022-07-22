@@ -238,7 +238,7 @@ const nuxtConfig = {
     //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
     // }],
   ],
-  
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -254,7 +254,7 @@ const nuxtConfig = {
 
   // Fix @nuxt/postcss8 error https://github.com/nuxt-community/tailwindcss-module/issues/480
   devServerHandlers: [],
-  
+
   /*
   ** Axios module configuration
   */
@@ -350,8 +350,6 @@ const nuxtConfig = {
   ** Build configuration
   */
   build: {
-    // TODO: wait for https://github.com/faceyspacey/extract-css-chunks-webpack-plugin/pull/300 release
-    extractCSS: true,
     babel: {
       presets: ({ isServer }) => [
         [
@@ -363,12 +361,6 @@ const nuxtConfig = {
           },
         ],
       ],
-    },
-    postcss: {
-      plugins: {
-        tailwindcss: './tailwind.config.js',
-        autoprefixer: {}
-      }
     },
     transpile: ['gsap'],
 

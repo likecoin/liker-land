@@ -46,6 +46,13 @@
           </NuxtLink>
 
           <NuxtLink
+            class="btn btn--outlined btn--dark btn--block btn--icon-only"
+            :to="{ name: 'about' }"
+            title="Writing NFT"
+            @click.native="onClickMenuItem"
+          >{{ $t('menu_about_nft') }}</NuxtLink>
+
+          <NuxtLink
             class="btn btn--outlined btn--dark btn--block"
             :to="{ name: getUserIsCivicLiker ? 'civic-dashboard' : 'civic' }"
             @click.native="onClickMenuItem"

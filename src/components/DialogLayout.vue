@@ -43,6 +43,8 @@ export default {
   @apply min-h-screen;
 
   .site-logo {
+    @apply inline-block;
+
     &-wrapper {
       @apply text-center;
       @apply mb-52;
@@ -66,6 +68,7 @@ export default {
     .liker-logo {
       @apply -mt-40;
       @apply mb-40;
+      @apply mx-auto;
 
       @apply w-80;
     }

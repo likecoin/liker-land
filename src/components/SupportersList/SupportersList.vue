@@ -4,7 +4,7 @@
       .flex.items-center.relative.text-gray-4a.overflow-hidden
         span.text-12 {{ currentSorting }}
         DropdownIcon.w-24.h-24
-        select.absolute.pin-y.pin-r.opacity-0.cursor-pointer(
+        select.absolute.inset-y-0.right-0.opacity-0.cursor-pointer(
           v-model="orderKey"
         )
           option(

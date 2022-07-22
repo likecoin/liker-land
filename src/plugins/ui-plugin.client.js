@@ -7,7 +7,11 @@ import {
   TimelineLite,
   TimelineMax,
   CSSPlugin,
+  gsap,
 } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const hasIntersectionObserverSupport =
   window &&
@@ -26,6 +30,7 @@ Vue.prototype.$gsap = {
   TimelineLite,
   TimelineMax,
 
+  gsap,
   // To make tree-shake happy
   CSSPlugin,
 };

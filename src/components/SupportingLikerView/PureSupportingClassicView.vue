@@ -15,7 +15,7 @@
         v-if="isActive"
         #prepend
       >
-        <TickIcon class="absolute pin-l ml-8 w-16 h-16 text-success fill-current" />
+        <TickIcon class="absolute left-0 ml-8 w-16 h-16 text-success fill-current" />
       </template>
     </Button>
   </div>
