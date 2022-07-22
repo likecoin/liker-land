@@ -22,7 +22,7 @@
               liker-id-class="ml-16 text-white"
               :display-name="getUserInfo.displayName"
               :is-avatar-outlined="getUserCivicLikerHalo !== 'none'"
-              display-name-class="mt-4 ml-16 text-white text-20 font-600"
+              display-name-class="mt-4 !ml-16 !text-white text-20 font-600"
             />
           </NuxtLink>
           <a
