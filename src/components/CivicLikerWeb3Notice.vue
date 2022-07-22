@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import Button from './Button/Button';
+import Button from './LegacyButton/Button';
 
 export default {
   name: 'CivicLikerWeb3Notice',

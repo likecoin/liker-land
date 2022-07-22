@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 import SettingsIcon from '~/assets/icons/cog.svg';
 
 export default {

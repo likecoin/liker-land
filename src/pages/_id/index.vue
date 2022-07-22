@@ -154,8 +154,8 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 
 import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
 import BaseDialog from '~/components/BaseDialog';
-import Button from '~/components/Button/Button';
-import ButtonGroup from '~/components/Button/ButtonGroup';
+import Button from '~/components/LegacyButton/Button';
+import ButtonGroup from '~/components/LegacyButton/ButtonGroup';
 import CivicLikerWelcomeView from '~/components/CivicLikerWelcome/CivicLikerWelcomeView';
 import Collapse from '~/components/Collapse/Collapse';
 import PortfolioEmptyView from '~/components/PortfolioEmptyView/PortfolioEmptyView';

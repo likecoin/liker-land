@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Button from '../../Button/Button';
+import Button from '../../LegacyButton/Button';
 import PureSupportingClassicView from '../../SupportingLikerView/PureSupportingClassicView';
 import SuperLikeContentGrid from '../../SuperLikeContentGrid';
 

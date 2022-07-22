@@ -1,4 +1,4 @@
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 
 import Collapse from './Collapse';
 

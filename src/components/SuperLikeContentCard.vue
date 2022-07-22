@@ -65,8 +65,8 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import BookmarkFilledIcon from '~/components/Icon/BookmarkFilled';
 import BookmarkOutlinedIcon from '~/components/Icon/BookmarkOutlined';
-import Button from '~/components/Button/Button';
-import Card from '~/components/Card/Card';
+import Button from '~/components/LegacyButton/Button';
+import Card from '~/components/LegacyCard/Card';
 import Identity from '~/components/Identity/Identity';
 import Placeholder from '~/components/Placeholder/Placeholder';
 

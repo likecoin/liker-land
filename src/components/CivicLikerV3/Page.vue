@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 import PageHeader from '../PageHeader';
 import SiteNavBar from '../SiteNavBar';
 

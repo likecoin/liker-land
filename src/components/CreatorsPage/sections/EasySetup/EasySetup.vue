@@ -134,7 +134,7 @@
 <script>
 import { getSponsorLink } from '~/util/civic';
 
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 import FakeLikeCoinButton from '~/components/FakeLikeCoinButton/FakeLikeCoinButton';
 
 export default {

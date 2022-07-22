@@ -32,7 +32,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 import CreatorSetupPage from '~/components/CreatorSetupPage/CreatorSetupPage';
 import PageHeader from '~/components/PageHeader';
 import SiteNavBar from '~/components/SiteNavBar';

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import Card from '~/components/Card/Card';
+import Card from '~/components/LegacyCard/Card';
 import Placeholder from '~/components/Placeholder/Placeholder';
 import SuperLikeContentCard from '~/components/SuperLikeContentCard';
 

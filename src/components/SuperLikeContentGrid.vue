@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import Card from './Card/PureCard';
+import Card from './LegacyCard/PureCard';
 import Placeholder from './Placeholder/Placeholder';
 import SuperLikeContentCard from './SuperLikeContentCard';
 

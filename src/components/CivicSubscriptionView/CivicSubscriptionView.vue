@@ -542,7 +542,7 @@ import {
 } from '~/constant';
 
 import BaseDialog from '~/components/BaseDialog';
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 import CivicLikerSupportAmountView from '~/components/CivicLikerSupportView/CivicLikerSupportAmountView';
 import CivicLikerSupportLikerView from '~/components/CivicLikerSupportView/CivicLikerSupportLikerView';
 import CivicLikerPitchingView from '~/components/CivicLikerPitchingView/CivicLikerPitchingView';

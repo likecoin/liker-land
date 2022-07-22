@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 
 export default {
   components: {

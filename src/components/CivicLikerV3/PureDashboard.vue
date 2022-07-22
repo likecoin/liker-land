@@ -156,7 +156,7 @@
 <script>
 import dateFormat from 'date-fns/format';
 
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 import CivicLikerV3Header from './Header';
 
 export default {

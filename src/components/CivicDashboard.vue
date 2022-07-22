@@ -128,7 +128,7 @@ import dateFormat from 'date-fns/format';
 
 import { CIVIC_LIKER_CLASSIC_LIKER_ID, DEFAULT_CL_SUPPORTER } from '~/constant';
 
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 import CardBrand from '~/components/CardBrand/CardBrand';
 import CivicLikerFeatureList from '~/components/CivicLikerFeatureList/CivicLikerFeatureList';
 import EmptyLikerView from '~/components/SupportingLikerView/EmptyLikerView';

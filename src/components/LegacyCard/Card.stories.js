@@ -1,4 +1,4 @@
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 import Identity from '../Identity/Identity';
 import Placeholder from '../Placeholder/Placeholder';
 

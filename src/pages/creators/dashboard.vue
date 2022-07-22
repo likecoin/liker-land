@@ -154,7 +154,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { CIVIC_LIKER_UNIT_PRICE } from '~/constant';
 
-import Button from '~/components/Button/Button';
+import Button from '~/components/LegacyButton/Button';
 import CivicLikerWeb3Notice from '~/components/CivicLikerWeb3Notice';
 import CivicSubscriptionView from '~/components/CivicSubscriptionView/CivicSubscriptionView';
 import EasySetup from '~/components/CreatorsPage/sections/EasySetup/EasySetup';

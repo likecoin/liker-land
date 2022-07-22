@@ -24,7 +24,7 @@
 <script>
 import TickIcon from '../../assets/icons/tick.svg';
 
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 import CivicLikerClassicBannerSmall from '../CivicLikerClassicAssets/CivicLikerClassicBannerSmall';
 
 export default {

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 
 import BetterWorldSection from './sections/BetterWorldSection';
 import EffectiveSection from './sections/EffectiveSection';

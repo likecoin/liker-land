@@ -79,7 +79,7 @@
 <script>
 import { getFetchUserSuperLikeAPI } from '~/util/api';
 
-import Button from '../Button/Button';
+import Button from '../LegacyButton/Button';
 import CivicQuantitySelect from '../CivicQuantitySelect/CivicQuantitySelect';
 import Identity from '../Identity/Identity';
 
