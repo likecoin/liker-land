@@ -29,7 +29,7 @@
       >
         <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
           <Identity
-            :avatar-url="userInfo && userInfo.avatar"
+            :avatar-url="userInfo && userInfo.avatar || `https://avatars.dicebear.com/api/identicon/${wallet}.svg`"
             :avatar-size="88"
             :is-avatar-outlined="isCivicLiker"
           />
@@ -40,23 +40,6 @@
           <Label preset="p6" class="font-200">
             {{ getCivicLikerDescription }}
           </Label>
-          <ButtonV2
-            preset="secondary"
-            text="Become Civic Liker"
-            :to="{ name: 'civic' }"
-            class="mt-[16px]"
-          />
-          <ButtonV2
-            v-if="userInfo"
-            preset="secondary"
-            text="Like Pay"
-            :href="likePayURL"
-            class="mt-[16px]"
-          >
-            <template #append>
-              <IconNorthEast class="w-[12px]" />
-            </template>
-          </ButtonV2>
         </CardV2>
       </div>
       <div :class="['flex', 'flex-col', 'items-center']">
@@ -98,11 +81,11 @@
             'gap-[16px]',
           ]"
         >
-          <li
+          <NuxtLink
             v-for="id in ownedNFTClassId"
             :key="id"
             :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
-            @click="goDetails(id)"
+            :to="{ name: 'nft-class-classId', params: { classId: id } }"
           >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
@@ -180,7 +163,7 @@
                 </div>
               </div>
             </div>
-          </li>
+          </NuxtLink>
         </ul>
 
         <ul
@@ -195,11 +178,11 @@
             'gap-[16px]',
           ]"
         >
-          <li
+          <NuxtLink
             v-for="id in sellingNFTClassId"
             :key="id"
             :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
-            @click="goDetails(id)"
+            :to="{ name: 'nft-class-classId', params: { classId: id } }"
           >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
@@ -281,7 +264,7 @@
                 </div>
               </div>
             </div>
-          </li>
+          </NuxtLink>
         </ul>
       </div>
     </div>
@@ -297,7 +280,6 @@ import {
 } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 import { getNFTs } from '~/util/nft';
-import { getLikeCoURL } from '~/util/links';
 import Identity from '~/components/Identity/Identity';
 
 export default {
@@ -347,9 +329,6 @@ export default {
     },
     getCivicLikerDescription() {
       return this.userInfo && this.userInfo.description;
-    },
-    likePayURL() {
-      return getLikeCoURL(`/${this.userInfo.displayName}`);
     },
     cardClasses() {
       return [

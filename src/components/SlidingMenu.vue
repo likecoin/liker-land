@@ -12,7 +12,7 @@
         <ClientOnly>
           <NuxtLink
             v-if="getUserId"
-            :to="{ name: 'id', params: { id: getUserId } }"
+            :to="`/${getUserId}`"
             @click.native="toggleSlidingMenu(false)"
           >
             <Identity
