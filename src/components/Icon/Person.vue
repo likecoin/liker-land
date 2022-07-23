@@ -1,17 +1,16 @@
 <template>
   <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect width="16" height="16" fill="white" />
-    <circle cx="8" cy="4.5" r="2.5" stroke="currentColor" />
     <path
-      d="M13 13.5C13 10.7386 10.7614 8.5 8 8.5C5.23858 8.5 3 10.7386 3 13.5"
-      stroke="currentColor"
-      stroke-linecap="round"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M8 6C8 4.89543 8.89543 4 10 4C11.1046 4 12 4.89543 12 6C12 7.10457 11.1046 8 10 8C8.89543 8 8 7.10457 8 6ZM10 2C7.79086 2 6 3.79086 6 6C6 8.20914 7.79086 10 10 10C12.2091 10 14 8.20914 14 6C14 3.79086 12.2091 2 10 2ZM5 18C5 15.2386 7.23858 13 10 13C12.7614 13 15 15.2386 15 18C15 18.5523 15.4477 19 16 19C16.5523 19 17 18.5523 17 18C17 14.134 13.866 11 10 11C6.13401 11 3 14.134 3 18C3 18.5523 3.44772 19 4 19C4.55228 19 5 18.5523 5 18Z"
+      fill="currentColor"
     />
   </svg>
 </template>
