@@ -13,6 +13,10 @@ export const LIKE_CO_URL_BASE = IS_TESTNET
   ? 'https://rinkeby.like.co'
   : 'https://like.co';
 
+export const APP_LIKE_CO_URL_BASE = IS_TESTNET
+  ? 'https://app.rinkeby.like.co'
+  : 'https://app.like.co';
+
 export const LIKECOIN_BUTTON_BASE = IS_TESTNET
   ? 'https://button.rinkeby.like.co'
   : 'https://button.like.co';
