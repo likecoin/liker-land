@@ -1,6 +1,6 @@
 <template>
   <div class="rounded-[16px]">
-    <div class="bg-white p-[16px] rounded-[16px]">
+    <NFTWidgetBaseCard>
       <NFTWidgetContentPreview
         :title="title"
         :description="description"
@@ -12,7 +12,7 @@
         :collect-button-label="collectButtonLabel"
         @collect="handleCollect"
       />
-    </div>
+    </NFTWidgetBaseCard>
   </div>
 </template>
 
