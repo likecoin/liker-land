@@ -322,7 +322,7 @@
               <ButtonV2
                 text="Collect Now"
                 preset="secondary"
-                :href="`https://app.rinkeby.like.co/nfttest/button/${encodeURIComponent(
+                :href="`https://${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
                   iscnId
                 )}%2F1`"
               >
