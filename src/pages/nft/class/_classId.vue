@@ -309,7 +309,7 @@
                 text="Owners"
               >
                 <template #prepend>
-                  <IconPerson />
+                  <IconPersonMini />
                 </template>
                 <template #append>
                   {{ ownerCount }}
@@ -400,7 +400,6 @@
                     <LinkV2 :to="`/${event.toWallet}`">
                       <Label class="break-all">{{ event.toWallet | ellipsis }}</Label>
                     </LinkV2>
-                    
                   </td>
                   <td>
                     <LinkV2 :href="`https://node.testnet.like.co/cosmos/tx/v1beta1/txs/${event.txHash}`">
@@ -596,7 +595,6 @@ export default {
         getNFTHistory({ classId: this.classId })
       );
       this.history = data.list;
-      console.log('history', this.history);
     },
     async setAccount(wallet) {
       this.wallet = wallet;

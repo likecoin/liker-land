@@ -46,6 +46,7 @@ export default class Link extends Vue {
       'text-like-green',
       'leading-[22px]',
       'underline',
+      'cursor-pointer',
     ];
   }
 }

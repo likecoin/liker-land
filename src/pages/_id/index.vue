@@ -36,13 +36,25 @@
           <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
             {{ getCivicLikerId | ellipsis }}
           </Label>
-          <div :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
+          <div
+            v-if="getCivicLikerDescription"
+            :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']"
+          />
           <Label preset="p6" class="font-200">
             {{ getCivicLikerDescription }}
           </Label>
         </CardV2>
       </div>
-      <div :class="['flex', 'flex-col', 'items-center']">
+      <div
+        :class="[
+          'flex',
+          'flex-col',
+          'items-center',
+          'w-full',
+          'max-w-[636px]',
+          'desktop:w-[636px]',
+        ]"
+      >
         <div
           :class="[
             'flex',
@@ -57,12 +69,13 @@
           ]"
         >
           <MenuButton
-            text="NFT Collecting"
-            :is-selected="currentPage === 'collecting'"
-            @click="goCollecting"
+            text="NFT Collection"
+            :is-selected="currentPage === 'collection'"
+            @click="goCollection"
           />
-          <MenuButtonDivider />
+          <MenuButtonDivider v-if="sellingNFTClassId.length" />
           <MenuButton
+            v-if="sellingNFTClassId.length"
             text="Works"
             :is-selected="currentPage === 'works'"
             @click="goWorks"
@@ -70,7 +83,7 @@
         </div>
 
         <ul
-          v-if="currentPage === 'collecting'"
+          v-if="currentPage === 'collection'"
           :class="[
             'w-full',
             'mx-auto',
@@ -81,6 +94,32 @@
             'gap-[16px]',
           ]"
         >
+          <div
+            v-if="!ownedNFTClassId.length"
+            :class="[...cardClasses, '!bg-shade-gray']"
+          >
+            <div class="p-[8px] w-full h-[140px]">
+              <div
+                class="z-[5] h-full w-full bg-repeat-space"
+                :style="{
+                  backgroundImage: `url(/images/NFT/background_cross.png)`,
+                }"
+              />
+            </div>
+            <div
+              class="
+                w-full
+                pb-[32px]
+                bg-shade-gray
+                border-t-[1px] border-white
+              "
+            >
+              <div class="flex flex-col justify-center items-center mt-[-21px]">
+                <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
+                <Label class="text-medium-gray mt-[12px]" text="no work" />
+              </div>
+            </div>
+          </div>
           <NuxtLink
             v-for="id in ownedNFTClassId"
             :key="id"
@@ -266,6 +305,10 @@
             </div>
           </NuxtLink>
         </ul>
+        <div class="flex flex-col items-center my-[48px] w-full">
+          <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
+          <ButtonV2 preset="outline" text="Find more Writing NFT" />
+        </div>
       </div>
     </div>
   </Page>
@@ -306,7 +349,7 @@ export default {
       userInfo: null,
       ownedNFTClassId: [],
       sellingNFTClassId: [],
-      currentPage: 'collecting',
+      currentPage: 'works',
     };
   },
   computed: {
@@ -397,6 +440,9 @@ export default {
       );
       this.sellingNFTClassId = data.list;
       this.sellingNFTClassId.forEach(id => this.updateNFTClassData(id));
+      if (!this.sellingNFTClassId.length) {
+        this.currentPage = 'collection';
+      }
     },
     updateNFTClassData(classId) {
       if (!this.getNFTClassMetadataById(classId)) {
@@ -412,8 +458,8 @@ export default {
     onDetails(classId) {
       this.$router.push({ name: 'nft-class-classId', params: { classId } });
     },
-    goCollecting() {
-      this.currentPage = 'collecting';
+    goCollection() {
+      this.currentPage = 'collection';
     },
     goDetails(classId) {
       this.$router.push({ name: 'nft-class-classId', params: { classId } });
