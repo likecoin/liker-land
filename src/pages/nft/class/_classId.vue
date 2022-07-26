@@ -116,8 +116,7 @@
                   <div class="flex mt-[8px]">
                     <Label class="text-medium-gray" text="by" />
                     <Label class="text-like-green ml-[4px] font-600">{{
-                      (iscnOwnerInfo && iscnOwnerInfo.displayName) ||
-                        iscnOwner | ellipsis
+                      displayNameList[iscnOwner] | ellipsis
                     }}</Label>
                   </div>
                 </div>
@@ -186,16 +185,23 @@
                 </Label>
                 <IconArrowDown />
               </div>
-              <div :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[12px]']" />
+              <div
+                :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[12px]']"
+              />
               <div class="flex flex-col my-[12px]">
                 <div v-if="ownerCount">
                   <div v-for="o in Object.keys(ownerList)" :key="o">
                     <div class="flex items-center justify-between">
-                      <Label preset="p6">{{ o | ellipsis }}</Label>
+                      <LinkV2 :to="`/${o}`">{{ displayNameList[o] | ellipsis }}</LinkV2>
                       <Label preset="p6">{{ ownerList[o].length }}</Label>
                     </div>
                     <div
-                      :class="['bg-shade-gray', 'h-[1px]', 'w-full', 'my-[12px]']"
+                      :class="[
+                        'bg-shade-gray',
+                        'h-[1px]',
+                        'w-full',
+                        'my-[12px]',
+                      ]"
                     />
                   </div>
                 </div>
@@ -225,18 +231,20 @@
           </div>
         </div>
 
-        <div :class="['flex', 'flex-col','flex-grow','items-center','w-full']">
+        <div
+          :class="['flex', 'flex-col', 'flex-grow', 'items-center', 'w-full']"
+        >
           <!-- Owning count -->
           <div
             class="
-            w-full
-            py-[12px]
-            px-[24px]
-            mb-[16px]
-            rounded-[24px]
-            bg-white
-            border-[2px] border-like-cyan-dark
-          "
+              w-full
+              py-[12px]
+              px-[24px]
+              mb-[16px]
+              rounded-[24px]
+              bg-white
+              border-[2px] border-like-cyan-dark
+            "
           >
             <Label preset="h5" text="Owning" class="text-like-green font-600">
               <template #prepend>
@@ -322,9 +330,7 @@
               <ButtonV2
                 text="Collect Now"
                 preset="secondary"
-                :href="`https://${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
-                  iscnId
-                )}%2F1`"
+                :href="purchaseUrl"
               >
                 <template #prepend>
                   <IconPlaceholder />
@@ -363,7 +369,7 @@
                 prepend-class="text-like-green"
               >
                 <template #prepend>
-                  <IconPlaceholder />
+                  <IconActivity />
                 </template>
               </Label>
               <IconArrowDown />
@@ -398,12 +404,20 @@
                   <td><Label text="mint" /></td>
                   <td>
                     <LinkV2 :to="`/${event.toWallet}`">
-                      <Label class="break-all">{{ event.toWallet | ellipsis }}</Label>
+                      <Label class="break-all">{{
+                        displayNameList[event.toWallet] | ellipsis
+                      }}</Label>
                     </LinkV2>
                   </td>
                   <td>
-                    <LinkV2 :href="`https://node.testnet.like.co/cosmos/tx/v1beta1/txs/${event.txHash}`">
-                      <time-ago long tooltip="top" :datetime="event.timestamp" />
+                    <LinkV2
+                      :href="`https://node.testnet.like.co/cosmos/tx/v1beta1/txs/${event.txHash}`"
+                    >
+                      <time-ago
+                        long
+                        tooltip="top"
+                        :datetime="event.timestamp"
+                      />
                     </LinkV2>
                   </td>
                 </tr>
@@ -422,7 +436,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { APP_LIKE_CO_VIEW } from '~/constant';
+import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
 import {
   getNFTHistory,
   getAddressLikerIdMinApi,
@@ -457,6 +471,7 @@ export default {
       history: [],
       displayName: '',
       currentPrice: 0,
+      displayNameList: [],
     };
   },
   computed: {
@@ -520,7 +535,7 @@ export default {
     },
     // iscn owner
     iscnURL() {
-      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
+      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}%2F1`;
     },
     ownerList() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -534,35 +549,16 @@ export default {
     getLocale() {
       return this.$i18n.locale;
     },
-  },
-  watch: {
-    NFTClassMetadata: {
-      async handler(newValue) {
-        if (newValue.iscn_owner) {
-          try {
-            const { data: info } = await this.$api.get(
-              getAddressLikerIdMinApi(newValue.iscn_owner)
-            );
-            if (info) {
-              this.iscnOwnerInfo = info;
-            }
-            return;
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      },
-      immediate: true,
+    purchaseUrl() {
+      return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
+        this.iscnId
+      )}%2F1`;
     },
   },
   mounted() {
-    if (!this.getNFTClassMetadataById(this.classId)) {
-      this.updateNFTClassMetdata();
-    }
-    if (!this.getNFTClassPurchaseInfoById(this.classId)) {
-      this.updateNFTPurchaseInfo();
-    }
-    if (!this.getNFTClassOwnerInfoById(this.classId)) this.updateNFTOwners();
+    this.updateNFTClassMetdata();
+    this.updateNFTPurchaseInfo();
+    this.updateNFTOwners();
     this.updateNFTHistory();
     this.getLIKEPrice();
     try {
@@ -583,32 +579,38 @@ export default {
     ]),
     async updateNFTClassMetdata() {
       await this.fetchNFTMetadata(this.classId);
+      this.UpdateDisplayNameList(
+        this.getNFTClassMetadataById(this.classId)?.iscn_owner
+      );
     },
     async updateNFTPurchaseInfo() {
       await this.fetchNFTPurchaseInfo(this.classId);
     },
     async updateNFTOwners() {
       await this.fetchNFTOwners(this.classId);
+      this.UpdateDisplayNameList(
+        Object.keys(this.getNFTClassOwnerInfoById(this.classId))
+      );
     },
     async updateNFTHistory() {
       const { data } = await this.$api.get(
         getNFTHistory({ classId: this.classId })
       );
+
       this.history = data.list;
+      const array = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const list of data.list) {
+        array.push(list.fromWallet, list.toWallet);
+      }
+      this.UpdateDisplayNameList(
+        Object.keys(this.getNFTClassOwnerInfoById([...new Set(array)]))
+      );
     },
     async setAccount(wallet) {
       this.wallet = wallet;
       const { amount } = await getNFTCountByClassId(this.classId, wallet);
       this.userOwnedCount = amount.low;
-    },
-    async updateOwnerName(addr) {
-      try {
-        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
-        this.iscnOwnerInfo = data;
-        return;
-      } catch (error) {
-        console.error(error);
-      }
     },
     async onPurchase() {
       // buy nft
@@ -616,6 +618,26 @@ export default {
     async getLIKEPrice() {
       const { data } = await this.$api.get(getLIKEPrice());
       this.currentPrice = data.likecoin.usd;
+    },
+    async UpdateDisplayNameList(addr) {
+      if (typeof addr === 'string') {
+        this.getAddressLikerId(addr);
+        return;
+      }
+      const results = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const a of addr) {
+        results.push(this.getAddressLikerId(a));
+      }
+      await Promise.all(results);
+    },
+    async getAddressLikerId(addr) {
+      try {
+        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
+        this.displayNameList[addr] = data.displayName;
+      } catch (error) {
+        this.displayNameList[addr] = addr;
+      }
     },
   },
 };

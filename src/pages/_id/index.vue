@@ -125,6 +125,7 @@
             :key="id"
             :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
             :to="{ name: 'nft-class-classId', params: { classId: id } }"
+            target="_blank"
           >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
@@ -156,7 +157,7 @@
                   <Identity avatar-url="" :avatar-size="40" />
                   <div class="flex mt-[8px]">
                     <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
-                      getNFTClassMetadataById(id).iscn_owner | ellipsis
+                      displayNameList[getNFTClassMetadataById(id).iscn_owner] | ellipsis
                     }}</Label>
                   </div>
                 </div>
@@ -222,6 +223,7 @@
             :key="id"
             :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
             :to="{ name: 'nft-class-classId', params: { classId: id } }"
+            target="_blank"
           >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
@@ -350,6 +352,7 @@ export default {
       ownedNFTClassId: [],
       sellingNFTClassId: [],
       currentPage: 'works',
+      displayNameList: [],
     };
   },
   computed: {
@@ -419,8 +422,9 @@ export default {
     return undefined;
   },
   mounted() {
-    this.fetchUserOwnClasses();
+    this.UpdateDisplayNameList(this.wallet);
     this.fetchUserSellingClasses();
+    this.fetchUserOwnClasses();
   },
   methods: {
     ...mapActions([
@@ -444,9 +448,9 @@ export default {
         this.currentPage = 'collection';
       }
     },
-    updateNFTClassData(classId) {
+    async updateNFTClassData(classId) {
       if (!this.getNFTClassMetadataById(classId)) {
-        this.fetchNFTMetadata(classId);
+        await this.fetchNFTMetadata(classId);
       }
       if (!this.getNFTClassPurchaseInfoById(classId)) {
         this.fetchNFTPurchaseInfo(classId);
@@ -454,6 +458,9 @@ export default {
       if (!this.getNFTClassOwnerInfoById(classId)) {
         this.fetchNFTOwners(classId);
       }
+      this.UpdateDisplayNameList(
+        this.getNFTClassMetadataById(classId)?.iscn_owner
+      );
     },
     onDetails(classId) {
       this.$router.push({ name: 'nft-class-classId', params: { classId } });
@@ -466,6 +473,26 @@ export default {
     },
     goWorks() {
       this.currentPage = 'works';
+    },
+    async UpdateDisplayNameList(addr) {
+      if (typeof addr === 'string') {
+        this.getAddressLikerId(addr);
+        return;
+      }
+      const results = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const a of addr) {
+        results.push(this.getAddressLikerId(a));
+      }
+      await Promise.all(results);
+    },
+    async getAddressLikerId(addr) {
+      try {
+        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
+        this.displayNameList[addr] = data.displayName;
+      } catch (e) {
+        this.displayNameList[addr] = addr;
+      }
     },
   },
 };
