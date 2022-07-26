@@ -152,7 +152,7 @@
               </div>
             </div>
             <!-- NFT Owners -->
-            <CardV2
+            <DropDownList
               :class="[
                 'w-full',
 
@@ -160,58 +160,37 @@
                 'mb-[16px]',
                 'desktop:m-0',
               ]"
+              title="Owners"
             >
-              <div
-                :class="[
-                  'flex',
-                  'justify-between',
-                  'items-center',
-                  'mb-[20px]',
-                  'text-like-green',
-                ]"
-              >
-                <Label
-                  class="w-min font-600"
-                  text="Owners"
-                  tag="div"
-                  preset="h5"
-                  valign="middle"
-                  content-class="whitespace-nowrap text-like-green "
-                  prepend-class="text-like-green"
-                >
-                  <template #prepend>
-                    <IconPerson />
-                  </template>
-                </Label>
-                <IconArrowDown />
-              </div>
-              <div
-                :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[12px]']"
-              />
-              <div class="flex flex-col my-[12px]">
-                <div v-if="ownerCount">
-                  <div v-for="o in Object.keys(ownerList)" :key="o">
-                    <div class="flex items-center justify-between">
-                      <LinkV2 :to="`/${o}`">{{ displayNameList[o] | ellipsis }}</LinkV2>
-                      <Label preset="p6">{{ ownerList[o].length }}</Label>
+              <template #titleIcon>
+                <IconPerson />
+              </template>
+              <template #content>
+                <div class="flex flex-col my-[12px]">
+                  <div v-if="ownerCount">
+                    <div v-for="o in Object.keys(ownerList)" :key="o">
+                      <div class="flex items-center justify-between">
+                        <LinkV2 :to="`/${o}`">{{ displayNameList[o] || o | ellipsis }}</LinkV2>
+                        <Label preset="p6">{{ ownerList[o].length }}</Label>
+                      </div>
+                      <div
+                        :class="[
+                          'bg-shade-gray',
+                          'h-[1px]',
+                          'w-full',
+                          'my-[12px]',
+                        ]"
+                      />
                     </div>
-                    <div
-                      :class="[
-                        'bg-shade-gray',
-                        'h-[1px]',
-                        'w-full',
-                        'my-[12px]',
-                      ]"
-                    />
+                  </div>
+                  <div v-else>
+                    <div class="flex justify-center">
+                      <Label preset="p6"> - no record found</Label>
+                    </div>
                   </div>
                 </div>
-                <div v-else>
-                  <div class="flex justify-center">
-                    <Label preset="p6"> - no record found</Label>
-                  </div>
-                </div>
-              </div>
-            </CardV2>
+              </template>
+            </DropDownList>
           </div>
           <!-- Metadata -->
           <div :class="['hidden', 'desktop:flex', 'justify-center']">
@@ -349,84 +328,67 @@
             </div>
           </CardV2>
           <!-- Events -->
-          <CardV2 class="w-full mb-[250px]">
-            <div
-              :class="[
-                'flex',
-                'justify-between',
-                'items-center',
-                'mb-[20px]',
-                'text-like-green',
-              ]"
-            >
-              <Label
-                class="w-min font-600"
-                text="Item Activity"
-                tag="div"
-                preset="h5"
-                valign="middle"
-                content-class="whitespace-nowrap text-like-green "
-                prepend-class="text-like-green"
-              >
-                <template #prepend>
-                  <IconActivity />
-                </template>
-              </Label>
-              <IconArrowDown />
-            </div>
-            <div :class="['bg-shade-gray', 'h-[2px]', 'w-full', 'my-[10px]']" />
-            <table v-if="history.length" class="w-full table-fixed text-[10px]">
-              <thead class="border-b-shade-gray border-b-[2px]">
-                <tr class="text-medium-gray py-[12px]">
-                  <th><Label text="Event" /></th>
-                  <th><Label class="break-normal" text="Price ($LIKE)" /></th>
-                  <th><Label text="From" /></th>
-                  <th><Label text="To" /></th>
-                  <th><Label text="Date" /></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="event in history"
-                  :key="`${event.txHash}event`"
-                  class="py-[12px] border-b-shade-gray border-b-[1px]"
-                >
-                  <td>
-                    <Label text="Mint">
-                      <template #prepend>
-                        <IconCircle />
-                      </template>
-                    </Label>
-                  </td>
-                  <td>
-                    <Label>{{ event.price }}</Label>
-                  </td>
-                  <td><Label text="mint" /></td>
-                  <td>
-                    <LinkV2 :to="`/${event.toWallet}`">
-                      <Label class="break-all">{{
-                        displayNameList[event.toWallet] | ellipsis
-                      }}</Label>
-                    </LinkV2>
-                  </td>
-                  <td>
-                    <LinkV2
-                      :href="`https://node.testnet.like.co/cosmos/tx/v1beta1/txs/${event.txHash}`"
-                    >
-                      <time-ago
-                        long
-                        tooltip="top"
-                        :datetime="event.timestamp"
-                      />
-                    </LinkV2>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div v-else class="flex justify-center">
-              <Label class="my-[12px]" preset="p6"> - no record found</Label>
-            </div>
-          </CardV2>
+          <DropDownList
+            class="w-full mb-[250px]"
+            title="Item Activity"
+          >
+            <template #titleIcon>
+              <IconActivity />
+            </template>
+            <template #content>
+              <table v-if="history.length" class="w-full table-fixed text-[10px]">
+                <thead class="border-b-shade-gray border-b-[2px]">
+                  <tr class="text-medium-gray py-[12px]">
+                    <th><Label text="Event" /></th>
+                    <th><Label class="break-normal" text="Price ($LIKE)" /></th>
+                    <th><Label text="From" /></th>
+                    <th><Label text="To" /></th>
+                    <th><Label text="Date" /></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="event in history"
+                    :key="`${event.txHash}event`"
+                    class="py-[12px] border-b-shade-gray border-b-[1px]"
+                  >
+                    <td>
+                      <Label text="Mint">
+                        <template #prepend>
+                          <IconCircle />
+                        </template>
+                      </Label>
+                    </td>
+                    <td>
+                      <Label>{{ event.price }}</Label>
+                    </td>
+                    <td><Label text="mint" /></td>
+                    <td>
+                      <LinkV2 :to="`/${event.toWallet}`">
+                        <Label class="break-all">{{
+                          displayNameList[event.toWallet] | ellipsis
+                        }}</Label>
+                      </LinkV2>
+                    </td>
+                    <td>
+                      <LinkV2
+                        :href="`https://node.testnet.like.co/cosmos/tx/v1beta1/txs/${event.txHash}`"
+                      >
+                        <time-ago
+                          long
+                          tooltip="top"
+                          :datetime="event.timestamp"
+                        />
+                      </LinkV2>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div v-else class="flex justify-center">
+                <Label class="my-[12px]" preset="p6"> - no record found</Label>
+              </div>
+            </template>
+          </DropDownList>
         </div>
       </div>
     </div></Page>
@@ -445,6 +407,7 @@ import {
 import { initKeplr } from '~/util/keplr';
 import { getNFTCountByClassId } from '~/util/nft';
 import { TimeAgo } from 'vue2-timeago';
+import DropDownList from '~/components/NFTPage/DropDownList';
 
 export default {
   layout: 'desktop',
@@ -462,7 +425,7 @@ export default {
       return value;
     },
   },
-  components: { TimeAgo },
+  components: { TimeAgo, DropDownList },
   data() {
     return {
       wallet: '',
@@ -603,9 +566,7 @@ export default {
       for (const list of data.list) {
         array.push(list.fromWallet, list.toWallet);
       }
-      this.UpdateDisplayNameList(
-        Object.keys(this.getNFTClassOwnerInfoById([...new Set(array)]))
-      );
+      this.UpdateDisplayNameList([...new Set(array)]);
     },
     async setAccount(wallet) {
       this.wallet = wallet;
@@ -634,9 +595,9 @@ export default {
     async getAddressLikerId(addr) {
       try {
         const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
-        this.displayNameList[addr] = data.displayName;
+        Vue.set(this.displayNameList, addr, data.displayName);
       } catch (error) {
-        this.displayNameList[addr] = addr;
+        Vue.set(this.displayNameList, addr, addr);
       }
     },
   },

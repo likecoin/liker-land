@@ -125,7 +125,6 @@
             :key="id"
             :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
             :to="{ name: 'nft-class-classId', params: { classId: id } }"
-            target="_blank"
           >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
@@ -223,7 +222,6 @@
             :key="id"
             :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
             :to="{ name: 'nft-class-classId', params: { classId: id } }"
-            target="_blank"
           >
             <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
               <div
@@ -317,6 +315,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import {
   getUserMinAPI,
@@ -453,13 +452,13 @@ export default {
         await this.fetchNFTMetadata(classId);
       }
       if (!this.getNFTClassPurchaseInfoById(classId)) {
-        this.fetchNFTPurchaseInfo(classId);
+        await this.fetchNFTPurchaseInfo(classId);
       }
       if (!this.getNFTClassOwnerInfoById(classId)) {
-        this.fetchNFTOwners(classId);
+        await this.fetchNFTOwners(classId);
       }
       this.UpdateDisplayNameList(
-        this.getNFTClassMetadataById(classId)?.iscn_owner
+        this.getNFTClassMetadataById(classId).iscn_owner
       );
     },
     onDetails(classId) {
@@ -489,9 +488,9 @@ export default {
     async getAddressLikerId(addr) {
       try {
         const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
-        this.displayNameList[addr] = data.displayName;
-      } catch (e) {
-        this.displayNameList[addr] = addr;
+        Vue.set(this.displayNameList, addr, data.displayName);
+      } catch (error) {
+        Vue.set(this.displayNameList, addr, addr);
       }
     },
   },
