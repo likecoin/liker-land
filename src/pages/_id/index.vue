@@ -75,239 +75,242 @@
           />
           <MenuButtonDivider v-if="sellingNFTClassId.length" />
           <MenuButton
-            v-if="sellingNFTClassId.length"
+            v-if="isLoading || sellingNFTClassId.length"
             text="Works"
             :is-selected="currentPage === 'works'"
             @click="goWorks"
           />
         </div>
 
-        <ul
-          v-if="currentPage === 'collection'"
-          :class="[
-            'w-full',
-            'mx-auto',
+        <CardV2 v-if="isLoading">Loading</CardV2>
+        <div v-else>
+          <ul
+            v-if="currentPage === 'collection'"
+            :class="[
+              'w-full',
+              'mx-auto',
 
-            'columns-1',
-            'laptop:columns-2',
+              'columns-1',
+              'laptop:columns-2',
             
-            'gap-[16px]',
-          ]"
-        >
-          <div
-            v-if="!ownedNFTClassId.length"
-            :class="[...cardClasses, '!bg-shade-gray']"
+              'gap-[16px]',
+            ]"
           >
-            <div class="p-[8px] w-full h-[140px]">
-              <div
-                class="z-[5] h-full w-full bg-repeat-space"
-                :style="{
-                  backgroundImage: `url(/images/NFT/background_cross.png)`,
-                }"
-              />
-            </div>
             <div
-              class="
+              v-if="!ownedNFTClassId.length"
+              :class="[...cardClasses, '!bg-shade-gray']"
+            >
+              <div class="p-[8px] w-full h-[140px]">
+                <div
+                  class="z-[5] h-full w-full bg-repeat-space"
+                  :style="{
+                    backgroundImage: `url(/images/NFT/background_cross.png)`,
+                  }"
+                />
+              </div>
+              <div
+                class="
                 w-full
                 pb-[32px]
                 bg-shade-gray
                 border-t-[1px] border-white
               "
+              >
+                <div class="flex flex-col justify-center items-center mt-[-21px]">
+                  <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
+                  <Label class="text-medium-gray mt-[12px]" text="no work" />
+                </div>
+              </div>
+            </div>
+            <NuxtLink
+              v-for="id in ownedNFTClassId"
+              :key="id"
+              :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
+              :to="{ name: 'nft-class-classId', params: { classId: id } }"
             >
-              <div class="flex flex-col justify-center items-center mt-[-21px]">
-                <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
-                <Label class="text-medium-gray mt-[12px]" text="no work" />
-              </div>
-            </div>
-          </div>
-          <NuxtLink
-            v-for="id in ownedNFTClassId"
-            :key="id"
-            :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
-            :to="{ name: 'nft-class-classId', params: { classId: id } }"
-          >
-            <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
-              <div
-                class="h-[180px]"
-                :style="`background-color: ${
-                  getNFTClassMetadataById(id).background_color
-                }`"
-              >
-                <img
-                  class="object-cover w-full max-h-[180px]"
-                  :src="getNFTClassMetadataById(id).image"
-                >
-              </div>
-              <div
-                :class="[
-                  'flex',
-                  'flex-col',
-                  'text-center',
-                  'whitespace-pre-line',
-                  'px-[24px]',
-                  'pt-[48px]',
-                  'py-[24px]',
-                  'relative',
-                ]"
-              >
+              <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
                 <div
-                  class="flex flex-col items-center justify-center mt-[-70px]"
+                  class="h-[180px]"
+                  :style="`background-color: ${
+                    getNFTClassMetadataById(id).background_color
+                  }`"
                 >
-                  <Identity avatar-url="" :avatar-size="40" />
-                  <div class="flex mt-[8px]">
-                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
-                      displayNameList[getNFTClassMetadataById(id).iscn_owner] | ellipsis
-                    }}</Label>
-                  </div>
-                </div>
-                <Label preset="p5" class="mt-[12px]">{{
-                  getNFTClassMetadataById(id).description
-                }}</Label>
-                <div class="flex justify-center">
-                  <ButtonV2
-                    v-if="getNFTClassPurchaseInfoById(id)"
-                    preset="secondary"
-                    class="my-[16px]"
-                    @click="() => onDetails(id)"
+                  <img
+                    class="object-cover w-full max-h-[180px]"
+                    :src="getNFTClassMetadataById(id).image"
                   >
-                    {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
-                    <template #prepend>
-                      <IconPrice />
-                    </template>
-                  </ButtonV2>
-                  <ButtonV2
-                    v-else
-                    preset="secondary"
-                    text=" - $LIKE"
-                    class="my-[16px]"
-                    @click="() => onDetails(id)"
-                  >
-                    <template #prepend>
-                      <IconPrice />
-                    </template>
-                  </ButtonV2>
                 </div>
                 <div
-                  v-if="getNFTClassOwnerInfoById(id)"
-                  :class="['flex', 'items-center', 'justify-center']"
+                  :class="[
+                    'flex',
+                    'flex-col',
+                    'text-center',
+                    'whitespace-pre-line',
+                    'px-[24px]',
+                    'pt-[48px]',
+                    'py-[24px]',
+                    'relative',
+                  ]"
                 >
-                  <div class="flex items-center text-medium-gray mr-[18px]">
-                    <IconMint />
-                    <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
+                  <div
+                    class="flex flex-col items-center justify-center mt-[-70px]"
+                  >
+                    <Identity avatar-url="" :avatar-size="40" />
+                    <div class="flex mt-[8px]">
+                      <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
+                        displayNameList[getNFTClassMetadataById(id).iscn_owner] | ellipsis
+                      }}</Label>
+                    </div>
                   </div>
-                  <div class="flex items-center text-medium-gray">
-                    <IconOwner />
-                    <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
+                  <Label preset="p5" class="mt-[12px]">{{
+                    getNFTClassMetadataById(id).description
+                  }}</Label>
+                  <div class="flex justify-center">
+                    <ButtonV2
+                      v-if="getNFTClassPurchaseInfoById(id)"
+                      preset="secondary"
+                      class="my-[16px]"
+                      @click="() => onDetails(id)"
+                    >
+                      {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
+                      <template #prepend>
+                        <IconPrice />
+                      </template>
+                    </ButtonV2>
+                    <ButtonV2
+                      v-else
+                      preset="secondary"
+                      text=" - $LIKE"
+                      class="my-[16px]"
+                      @click="() => onDetails(id)"
+                    >
+                      <template #prepend>
+                        <IconPrice />
+                      </template>
+                    </ButtonV2>
+                  </div>
+                  <div
+                    v-if="getNFTClassOwnerInfoById(id)"
+                    :class="['flex', 'items-center', 'justify-center']"
+                  >
+                    <div class="flex items-center text-medium-gray mr-[18px]">
+                      <IconMint />
+                      <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
+                    </div>
+                    <div class="flex items-center text-medium-gray">
+                      <IconOwner />
+                      <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </NuxtLink>
-        </ul>
+            </NuxtLink>
+          </ul>
 
-        <ul
-          v-if="currentPage === 'works'"
-          :class="[
-            'w-full',
-            'mx-auto',
+          <ul
+            v-if="currentPage === 'works'"
+            :class="[
+              'w-full',
+              'mx-auto',
 
-            'columns-1',
-            'laptop:columns-2',
+              'columns-1',
+              'laptop:columns-2',
             
-            'gap-[16px]',
-          ]"
-        >
-          <NuxtLink
-            v-for="id in sellingNFTClassId"
-            :key="id"
-            :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
-            :to="{ name: 'nft-class-classId', params: { classId: id } }"
+              'gap-[16px]',
+            ]"
           >
-            <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
-              <div
-                class="h-[180px]"
-                :style="`background-color: ${
-                  getNFTClassMetadataById(id).background_color
-                }`"
-              >
-                <img
-                  class="object-cover w-full max-h-[180px]"
-                  :src="getNFTClassMetadataById(id).image"
-                >
-              </div>
-              <div
-                :class="[
-                  'flex',
-                  'flex-col',
-                  'text-center',
-                  'whitespace-pre-line',
-                  'px-[24px]',
-                  'pt-[48px]',
-                  'py-[24px]',
-                  'relative',
-                ]"
-              >
+            <NuxtLink
+              v-for="id in sellingNFTClassId"
+              :key="id"
+              :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
+              :to="{ name: 'nft-class-classId', params: { classId: id } }"
+            >
+              <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
                 <div
-                  class="flex flex-col items-center justify-center mt-[-70px]"
+                  class="h-[180px]"
+                  :style="`background-color: ${
+                    getNFTClassMetadataById(id).background_color
+                  }`"
                 >
-                  <Identity
-                    avatar-url=""
-                    :avatar-size="40"
-                    :is-avatar-outlined="isCivicLiker"
-                  />
-                  <div class="flex mt-[8px]">
-                    <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
-                      getCivicLikerId | ellipsis
-                    }}</Label>
-                  </div>
-                </div>
-                <Label preset="p5" class="mt-[12px]">{{
-                  getNFTClassMetadataById(id).description
-                }}</Label>
-                <div class="flex justify-center">
-                  <ButtonV2
-                    v-if="getNFTClassPurchaseInfoById(id)"
-                    preset="secondary"
-                    class="my-[16px]"
-                    @click="() => onDetails(id)"
+                  <img
+                    class="object-cover w-full max-h-[180px]"
+                    :src="getNFTClassMetadataById(id).image"
                   >
-                    {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
-                    <template #prepend>
-                      <IconPrice />
-                    </template>
-                  </ButtonV2>
-                  <ButtonV2
-                    v-else
-                    preset="secondary"
-                    text=" - $LIKE"
-                    class="my-[16px]"
-                    @click="() => onDetails(id)"
-                  >
-                    <template #prepend>
-                      <IconPrice />
-                    </template>
-                  </ButtonV2>
                 </div>
                 <div
-                  v-if="getNFTClassOwnerInfoById(id)"
-                  :class="['flex', 'items-center', 'justify-center']"
+                  :class="[
+                    'flex',
+                    'flex-col',
+                    'text-center',
+                    'whitespace-pre-line',
+                    'px-[24px]',
+                    'pt-[48px]',
+                    'py-[24px]',
+                    'relative',
+                  ]"
                 >
-                  <div class="flex items-center text-medium-gray mr-[18px]">
-                    <IconMint />
-                    <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
+                  <div
+                    class="flex flex-col items-center justify-center mt-[-70px]"
+                  >
+                    <Identity
+                      avatar-url=""
+                      :avatar-size="40"
+                      :is-avatar-outlined="isCivicLiker"
+                    />
+                    <div class="flex mt-[8px]">
+                      <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
+                        getCivicLikerId | ellipsis
+                      }}</Label>
+                    </div>
                   </div>
-                  <div class="flex items-center text-medium-gray">
-                    <IconOwner />
-                    <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
+                  <Label preset="p5" class="mt-[12px]">{{
+                    getNFTClassMetadataById(id).description
+                  }}</Label>
+                  <div class="flex justify-center">
+                    <ButtonV2
+                      v-if="getNFTClassPurchaseInfoById(id)"
+                      preset="secondary"
+                      class="my-[16px]"
+                      @click="() => onDetails(id)"
+                    >
+                      {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
+                      <template #prepend>
+                        <IconPrice />
+                      </template>
+                    </ButtonV2>
+                    <ButtonV2
+                      v-else
+                      preset="secondary"
+                      text=" - $LIKE"
+                      class="my-[16px]"
+                      @click="() => onDetails(id)"
+                    >
+                      <template #prepend>
+                        <IconPrice />
+                      </template>
+                    </ButtonV2>
+                  </div>
+                  <div
+                    v-if="getNFTClassOwnerInfoById(id)"
+                    :class="['flex', 'items-center', 'justify-center']"
+                  >
+                    <div class="flex items-center text-medium-gray mr-[18px]">
+                      <IconMint />
+                      <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
+                    </div>
+                    <div class="flex items-center text-medium-gray">
+                      <IconOwner />
+                      <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </NuxtLink>
-        </ul>
-        <div class="flex flex-col items-center my-[48px] w-full">
-          <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-          <ButtonV2 preset="outline" text="Find more Writing NFT" />
+            </NuxtLink>
+          </ul>
+          <div class="flex flex-col items-center my-[48px] w-full">
+            <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
+            <ButtonV2 preset="outline" text="Find more Writing NFT" />
+          </div>
         </div>
       </div>
     </div>
@@ -352,6 +355,7 @@ export default {
       sellingNFTClassId: [],
       currentPage: 'works',
       displayNameList: [],
+      isLoading: true,
     };
   },
   computed: {
@@ -421,7 +425,6 @@ export default {
     return undefined;
   },
   mounted() {
-    this.UpdateDisplayNameList(this.wallet);
     this.fetchUserSellingClasses();
     this.fetchUserOwnClasses();
   },
@@ -446,6 +449,7 @@ export default {
       if (!this.sellingNFTClassId.length) {
         this.currentPage = 'collection';
       }
+      this.isLoading = false;
     },
     async updateNFTClassData(classId) {
       if (!this.getNFTClassMetadataById(classId)) {

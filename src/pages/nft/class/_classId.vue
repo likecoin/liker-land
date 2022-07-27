@@ -233,12 +233,18 @@
                 <div class="flex items-center">
                   <Label preset="h5" text="Owning" />
                   <Label
-                    v-if="userOwnedCount !== null"
+                    v-if="!isSettingAccount && userOwnedCount !== null"
                     preset="h4"
                     :text="userOwnedCount"
                     class="font-[900] ml-[20px]"
                   />
-                  <ProgressIndicator v-else preset="thin" class="ml-[20px]" />
+                  <Label
+                    v-if="!isSettingAccount && userOwnedCount === null"
+                    preset="h4"
+                    text="-"
+                    class="font-[900] ml-[20px]"
+                  />
+                  <ProgressIndicator v-if="isSettingAccount" preset="thin" class="z-[100] ml-[20px]" />
                 </div>
               </template>
               <template #append>
@@ -376,7 +382,7 @@
                       >
                         <time-ago
                           long
-                          tooltip="top"
+                          tooltip
                           :datetime="event.timestamp"
                         />
                       </LinkV2>
@@ -435,6 +441,7 @@ export default {
       displayName: '',
       currentPrice: 0,
       displayNameList: [],
+      isSettingAccount: true,
     };
   },
   computed: {
@@ -525,11 +532,16 @@ export default {
     this.updateNFTHistory();
     this.getLIKEPrice();
     try {
+      this.isSettingAccount = true;
+      setTimeout(() => {
+        this.isSettingAccount = false;
+      }, 4000);
       setTimeout(async () => {
         const accounts = await initKeplr();
         this.setAccount(accounts[0].address);
       }, 3000);
     } catch (err) {
+      this.isSettingAccount = false;
       // eslint-disable-next-line no-console
       console.error(err);
     }

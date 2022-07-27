@@ -150,7 +150,7 @@ export default class ProgressIndicator extends Vue {
 
   get progressProps() {
     return {
-      class: ['text-like-cyan', 'fill-current'],
+      class: ['text-like-cyan', 'fill-like-cyan'],
       x: -this.measurement.height,
       width: this.progressWidth,
       height: this.measurement.height,
@@ -163,7 +163,7 @@ export default class ProgressIndicator extends Vue {
       class: [
         'text-like-cyan-light',
         { 'text-shade-gray': this.preset === ProgressIndicatorPreset.Thin },
-        'fill-current',
+        'fill-like-cyan-light',
       ],
       width: this.measurement.width,
       height: this.measurement.height,
