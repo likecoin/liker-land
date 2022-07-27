@@ -15,7 +15,7 @@
         'px-[24px]',
       ]"
     >
-      <ButtonV2 
+      <ButtonV2
         preset="plain"
         class="self-start mb-[12px]"
         text="Back"
@@ -52,7 +52,7 @@
             'justify-center',
             'items-center',
             'text-center',
-          
+
             'desktop:mr-[24px]',
           ]"
         >
@@ -65,7 +65,7 @@
               'desktop:flex-col',
 
               'justify-center',
-            
+
               'w-full',
             ]"
           >
@@ -235,7 +235,7 @@
                   <Label
                     v-if="!isSettingAccount && userOwnedCount !== null"
                     preset="h4"
-                    :text="userOwnedCount"
+                    :text="`${userOwnedCount}`"
                     class="font-[900] ml-[20px]"
                   />
                   <Label
@@ -315,7 +315,7 @@
               <ButtonV2
                 text="Collect Now"
                 preset="secondary"
-                :href="purchaseUrl"
+                :href="purchaseURL"
               >
                 <template #prepend>
                   <IconPlaceholder />
@@ -342,7 +342,7 @@
               <IconActivity />
             </template>
             <template #content>
-              <table v-if="history.length" class="w-full table-fixed text-[10px]">
+              <table v-if="NFTHistory.length" class="w-full table-fixed text-[10px]">
                 <thead class="border-b-shade-gray border-b-[2px]">
                   <tr class="text-medium-gray py-[12px]">
                     <th><Label text="Event" /></th>
@@ -354,7 +354,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="event in history"
+                    v-for="event in NFTHistory"
                     :key="`${event.txHash}event`"
                     class="py-[12px] border-b-shade-gray border-b-[1px]"
                   >
@@ -401,19 +401,13 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
-import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
-import {
-  getNFTHistory,
-  getAddressLikerIdMinApi,
-  getLIKEPrice,
-} from '~/util/api';
+import { TimeAgo } from 'vue2-timeago';
+
+import { getLIKEPrice } from '~/util/api';
 import { initKeplr } from '~/util/keplr';
 import { getNFTCountByClassId } from '~/util/nft';
-import { TimeAgo } from 'vue2-timeago';
 import DropDownList from '~/components/NFTPage/DropDownList';
+import nftMixin from '~/mixins/nft';
 
 export default {
   layout: 'desktop',
@@ -432,97 +426,25 @@ export default {
     },
   },
   components: { TimeAgo, DropDownList },
+  mixins: [nftMixin],
   data() {
     return {
-      wallet: '',
       userOwnedCount: null,
-      iscnOwnerInfo: {},
-      history: [],
-      displayName: '',
+
       currentPrice: 0,
-      displayNameList: [],
       isSettingAccount: true,
     };
   },
   computed: {
-    ...mapGetters([
-      'getNFTClassPurchaseInfoById',
-      'getNFTClassMetadataById',
-      'getNFTClassOwnerInfoById',
-      'getNFTClassOwnerCount',
-      'getNFTClassMintedCount',
-    ]),
     classId() {
       return this.$route.params.classId;
     },
-    isCivicLiker() {
-      return !!(
-        this.iscnOwnerInfo &&
-        (this.iscnOwnerInfo.isCivicLikerTrial ||
-          this.iscnOwnerInfo.isSubscribedCivicLiker)
-      );
-    },
-    getCivicLikerId() {
-      return this.iscnOwnerInfo && this.iscnOwnerInfo.user;
-    },
-    NFTClassMetadata() {
-      return this.getNFTClassMetadataById(this.classId) || {};
-    },
-    purcahseInfo() {
-      return this.getNFTClassPurchaseInfoById(this.classId) || {};
-    },
-    ownerInfo() {
-      return this.getNFTClassOwnerInfoById(this.classId) || {};
-    },
-    iscnId() {
-      return this.NFTClassMetadata.iscn_id;
-    },
-    iscnOwner() {
-      return this.NFTClassMetadata.iscn_owner;
-    },
-    // nft info
-    NFTName() {
-      return this.NFTClassMetadata.name;
-    },
-    NFTDescription() {
-      return this.NFTClassMetadata.description;
-    },
-    NFTImageUrl() {
-      return this.NFTClassMetadata.image;
-    },
-    NFTImageBackgroundColor() {
-      return this.NFTClassMetadata.background_color;
-    },
-    NFTExternalUrl() {
-      return this.NFTClassMetadata.external_url;
-    },
-    NFTPrice() {
-      return this.purcahseInfo.price && this.purcahseInfo.price;
-    },
     NFTPriceUSD() {
-      const price = this.currentPrice * this.purcahseInfo.price;
+      const price = this.currentPrice * this.purchaseInfo.price;
       return `(${price.toFixed(3)} USD)`;
-    },
-    // iscn owner
-    iscnURL() {
-      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}%2F1`;
-    },
-    ownerList() {
-      return this.getNFTClassOwnerInfoById(this.classId) || {};
-    },
-    ownerCount() {
-      return this.getNFTClassOwnerCount(this.classId);
-    },
-    mintedCount() {
-      return this.getNFTClassMintedCount(this.classId);
     },
     getLocale() {
       return this.$i18n.locale;
-    },
-    purchaseUrl() {
-      return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
-        this.iscnId
-      )}%2F1`;
     },
   },
   mounted() {
@@ -547,39 +469,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'fetchNFTPurchaseInfo',
-      'fetchNFTMetadata',
-      'fetchNFTOwners',
-    ]),
-    async updateNFTClassMetdata() {
-      await this.fetchNFTMetadata(this.classId);
-      this.UpdateDisplayNameList(
-        this.getNFTClassMetadataById(this.classId)?.iscn_owner
-      );
-    },
-    async updateNFTPurchaseInfo() {
-      await this.fetchNFTPurchaseInfo(this.classId);
-    },
-    async updateNFTOwners() {
-      await this.fetchNFTOwners(this.classId);
-      this.UpdateDisplayNameList(
-        Object.keys(this.getNFTClassOwnerInfoById(this.classId))
-      );
-    },
-    async updateNFTHistory() {
-      const { data } = await this.$api.get(
-        getNFTHistory({ classId: this.classId })
-      );
-
-      this.history = data.list;
-      const array = [];
-      // eslint-disable-next-line no-restricted-syntax
-      for (const list of data.list) {
-        array.push(list.fromWallet, list.toWallet);
-      }
-      this.UpdateDisplayNameList([...new Set(array)]);
-    },
     async setAccount(wallet) {
       this.wallet = wallet;
       const { amount } = await getNFTCountByClassId(this.classId, wallet);
@@ -591,26 +480,6 @@ export default {
     async getLIKEPrice() {
       const { data } = await this.$api.get(getLIKEPrice());
       this.currentPrice = data.likecoin.usd;
-    },
-    async UpdateDisplayNameList(addr) {
-      if (typeof addr === 'string') {
-        this.getAddressLikerId(addr);
-        return;
-      }
-      const results = [];
-      // eslint-disable-next-line no-restricted-syntax
-      for (const a of addr) {
-        results.push(this.getAddressLikerId(a));
-      }
-      await Promise.all(results);
-    },
-    async getAddressLikerId(addr) {
-      try {
-        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
-        Vue.set(this.displayNameList, addr, data.displayName);
-      } catch (error) {
-        Vue.set(this.displayNameList, addr, addr);
-      }
     },
   },
 };
