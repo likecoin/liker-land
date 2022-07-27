@@ -3,6 +3,8 @@
   "about_nft_page_description": "Earn as you write, collect as you read.",
   "about_nft_page_hero_tagline_1": "Earn as you write,",
   "about_nft_page_hero_tagline_2": "collect as you read.",
+  "about_nft_page_nav_campaign": "Collect some works",
+  "about_nft_page_nav_collection": "My collection",
   "about_nft_page_nft_widget_title": "Publish as you write",
   "about_nft_page_nft_widget_description": "<p>The widget is a <b class=\"text-like-green\">mini NFT marketplace</b> that can be <b class=\"text-like-green\">embedded</b> into any website. Writers can focus on creating quality content while readers can collect and own their favorite articles in NFT.</p><p class=\"mt-[16px]\">Everyone can sell their work as NFT without worrying about the technical legwork. With a simplified process of creating an NFT, writers can quickly turn their writing into an NFT at the same time when they publish to the internet.</p>",
   "about_nft_page_nft_portfolio_title": "Collect as you read",
@@ -13,6 +15,10 @@
   "about_nft_page_dynamic_pricing_description": "<p>Write as usual; publish differently.</p><p class=\"mt-[16px]\">The preset <b class=\"text-like-green\">bonding curve</b> design sets all Writing NFT prices with <b class=\"text-like-green\">dynamic pricing</b>. Each Writing NFT will automatically increase in price after each NFT is collected. <b class=\"text-like-green\">Limitless supply</b>, writers do not have to worry about maintaining floor price or supply quantity.</p>",
   "about_nft_page_faq_title": "FAQ",
   "about_nft_page_join_the_community_title": "Join the community",
+  "campaign_nft_page_title": "Writing NFT",
+  "campaign_nft_page_description": "DUMMY TEXT A mini NFT marketplace widget that can be embedded into any website. Enabling collectors to collect their favorite articles. By simplifying the minting NFT flow from publishing to selling, writers can focus on creating quality content and engaging with fans.",
+  "campaign_nft_item_view_details_label": "View NFT details",
+  "campaign_nft_item_header_hint": "Collect this artical as NFT",
   "faq_list": [
     {
       "q": "Why publish articles as Writing NFT?",

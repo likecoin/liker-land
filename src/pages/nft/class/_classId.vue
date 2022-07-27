@@ -397,7 +397,8 @@
           </DropDownList>
         </div>
       </div>
-    </div></Page>
+    </div>
+  </Page>
 </template>
 
 <script>
@@ -406,24 +407,14 @@ import { TimeAgo } from 'vue2-timeago';
 import { getLIKEPrice } from '~/util/api';
 import { initKeplr } from '~/util/keplr';
 import { getNFTCountByClassId } from '~/util/nft';
+import { ellipsis } from '~/util/ui';
 import DropDownList from '~/components/NFTPage/DropDownList';
 import nftMixin from '~/mixins/nft';
 
 export default {
   layout: 'desktop',
   filters: {
-    ellipsis(value) {
-      if (value) {
-        const len = value.length;
-        const dots = '...';
-        if (!value) return '';
-        if (value.length > 15) {
-          return value.substring(0, 8) + dots + value.substring(len - 3, len);
-        }
-        return value;
-      }
-      return value;
-    },
+    ellipsis,
   },
   components: { TimeAgo, DropDownList },
   mixins: [nftMixin],
