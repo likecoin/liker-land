@@ -405,7 +405,6 @@
 import { TimeAgo } from 'vue2-timeago';
 
 import { getLIKEPrice } from '~/util/api';
-import { initKeplr } from '~/util/keplr';
 import { getNFTCountByClassId } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 import DropDownList from '~/components/NFTPage/DropDownList';
@@ -444,20 +443,6 @@ export default {
     this.updateNFTOwners();
     this.updateNFTHistory();
     this.getLIKEPrice();
-    try {
-      this.isSettingAccount = true;
-      setTimeout(() => {
-        this.isSettingAccount = false;
-      }, 4000);
-      setTimeout(async () => {
-        const accounts = await initKeplr();
-        this.setAccount(accounts[0].address);
-      }, 3000);
-    } catch (err) {
-      this.isSettingAccount = false;
-      // eslint-disable-next-line no-console
-      console.error(err);
-    }
   },
   methods: {
     async setAccount(wallet) {
