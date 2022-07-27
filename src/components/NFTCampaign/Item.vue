@@ -34,7 +34,11 @@ export default {
   },
   methods: {
     handleCollect() {
-      window.open(this.purchaseURL, '_blank');
+      window.open(
+        this.purchaseURL,
+        `collect_${this.classId}`,
+        'popup=1,width=768,height=576,top=0,left=0'
+      );
     },
     handleViewDetails() {
       this.$router.push({
