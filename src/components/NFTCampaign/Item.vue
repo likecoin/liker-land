@@ -13,10 +13,12 @@
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     @collect="handleCollect"
     @view-details="handleViewDetails"
+    @like="handleLike"
   />
 </template>
 
 <script>
+import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 
 export default {
@@ -45,6 +47,13 @@ export default {
         name: 'nft-class-classId',
         params: { classId: this.classId },
       });
+    },
+    handleLike() {
+      window.open(
+        `${LIKECOIN_BUTTON_BASE}/in/like/iscn/?iscn_id=${encodeURIComponent(this.iscnId)}&action=like`,
+        `like_${this.classId}`,
+        'popup=1,width=768,height=576,top=0,left=0'
+      );
     },
   },
 };
