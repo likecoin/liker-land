@@ -5,17 +5,17 @@
       <span class="ml-[12px]">like</span>
     </button>
     <div class="flex items-center text-dark-gray ml-[8px]">
-      <Identity
-        :avatar-url="creatorAvatarSrc"
-        :avatar-size="32"
-        :is-avatar-outlined="isCivicLiker"
-      />
       <NuxtLink
-        class="ml-[8px] text-like-green"
+        class="flex items-center text-like-green group"
         :to="`/${formattedCreatorDisplayName}`"
         target="_blank"
       >
-        {{ formattedCreatorDisplayName }}
+        <Identity
+          :avatar-url="creatorAvatarSrc"
+          :avatar-size="32"
+          :is-avatar-outlined="isCivicLiker"
+        />
+        <span class="ml-[8px] group-hover:underline">{{ formattedCreatorDisplayName }}</span>
       </NuxtLink>
     </div>
   </NFTWidgetBaseCard>
