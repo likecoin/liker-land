@@ -97,22 +97,22 @@
                   'relative',
                 ]"
               >
-                <LinkV2
-                  class="flex flex-col items-center justify-center mt-[-70px] no-underline"
-                  :to="`/${displayNameList[iscnOwner]}`"
-                >
+                <div class="flex flex-col items-center justify-center mt-[-70px]">
                   <Identity
                     :avatar-url="avatarList[iscnOwner]"
                     :avatar-size="40"
                     :is-avatar-outlined="civicLikerList[iscnOwner]"
                   />
-                  <div class="flex mt-[8px]">
+                  <NuxtLink
+                    class="flex mt-[8px]"
+                    :to="`/${displayNameList[iscnOwner]}`"
+                  >
                     <Label class="text-medium-gray" text="by" />
                     <Label class="text-like-green ml-[4px] font-600">{{
                       displayNameList[iscnOwner] | ellipsis
                     }}</Label>
-                  </div>
-                </LinkV2>
+                  </NuxtLink>
+                </div>
                 <Label preset="h5" class="mt-[12px]" :text="NFTName" />
                 <Label preset="p5" class="mt-[12px]" :text="NFTDescription" />
                 <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
