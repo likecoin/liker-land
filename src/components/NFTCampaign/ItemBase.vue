@@ -7,7 +7,7 @@
     <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
       <div>
         <NFTWidgetBaseCard
-          class="transition-colors cursor-pointer hover:bg-[#fcfcfc]"
+          class="transition-colors cursor-pointer border-[2px] border-transparent hover:bg-[#fcfcfc] hover:border-like-cyan"
           @click="handleClickNFTDetails"
         >
           <NFTWidgetContentPreview

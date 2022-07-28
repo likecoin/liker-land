@@ -98,7 +98,7 @@
           >
             <div
               v-if="!ownedNFTClassId.length"
-              :class="[...cardClasses, '!bg-shade-gray']"
+              :class="[...cardClasses, '!bg-shade-gray','break-inside-avoid']"
             >
               <div class="p-[8px] w-full h-[140px]">
                 <div
@@ -378,6 +378,13 @@ export default {
         'overflow-hidden',
         'w-full',
         'bg-white',
+        'box-border',
+        'border-[2px]',
+        'border-transparent',
+        'hover:border-like-cyan',
+        'transition',
+        'ease-in',
+        'duration-200',
       ];
     },
   },

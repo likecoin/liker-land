@@ -209,6 +209,7 @@ export default class ButtonV2 extends Vue {
       'text-center',
       'whitespace-nowrap',
       'hover:bg-white',
+      { 'hover:bg-like-cyan-pale': this.preset === 'secondary' },
       'hover:bg-opacity-30',
       'active:bg-opacity-20',
       'transition',
