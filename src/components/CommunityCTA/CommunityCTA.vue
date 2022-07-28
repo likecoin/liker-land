@@ -3,16 +3,16 @@
     <div class="text-center">{{ $t('community_cta_title') }}</div>
     <div class="flex justify-between mt-12">
       <CommunityLink href="https://discord.gg/W4DQ6peZZZ">
-        <DiscordIcon />
+        <DiscordIcon class="w-[24px]" />
       </CommunityLink>
       <CommunityLink href="https://github.com/likecoin">
-        <GitHubIcon />
+        <GitHubIcon class="w-[24px]" />
       </CommunityLink>
       <CommunityLink href="https://medium.com/likecoin">
-        <MediumIcon />
+        <MediumIcon class="w-[24px]" />
       </CommunityLink>
       <CommunityLink href="https://twitter.com/@likecoin">
-        <TwitterIcon />
+        <TwitterIcon class="w-[24px]" />
       </CommunityLink>
     </div>
   </div>
