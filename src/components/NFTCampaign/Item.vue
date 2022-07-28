@@ -8,7 +8,10 @@
     :img-bg-color="NFTImageBackgroundColor"
     :price="NFTPrice"
     :owner-address="iscnOwner"
+    :owner-avatar-src="getAvatar"
     :owner-count="ownerCount"
+    :owner-name="getOwnerDisplayName"
+    :is-civic-liker="getIsCivicLiker"
     :sold-count="mintedCount"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     @collect="handleClickCollect"
@@ -27,6 +30,20 @@ export default {
     classId: {
       type: String,
       required: true,
+    },
+  },
+  computed: {
+    getAvatar() {
+      return (
+        this.avatarList[this.iscnOwner] ||
+        `https://avatars.dicebear.com/api/identicon/${this.iscnOwner}.svg`
+      );
+    },
+    getOwnerDisplayName() {
+      return this.displayNameList[this.iscnOwner];
+    },
+    getIsCivicLiker() {
+      return this.civicLikerList[this.iscnOwner];
     },
   },
   mounted() {

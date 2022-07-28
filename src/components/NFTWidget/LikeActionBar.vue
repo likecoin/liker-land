@@ -5,20 +5,30 @@
       <span class="ml-[12px]">like</span>
     </button>
     <div class="flex items-center text-dark-gray ml-[8px]">
-      <img
-        v-if="creatorAvatarSrc"
-        class="w-[42px] h-[42px] rounded-full mr-[12px]"
-        :src="creatorAvatarSrc"
+      <Identity
+        :avatar-url="creatorAvatarSrc"
+        :avatar-size="32"
+        :is-avatar-outlined="isCivicLiker"
+      />
+      <NuxtLink
+        class="ml-[8px] text-like-green"
+        :to="`/${formattedCreatorDisplayName}`"
+        target="_blank"
       >
-      <span>{{ formattedCreatorDisplayName }}</span>
+        {{ formattedCreatorDisplayName }}
+      </NuxtLink>
     </div>
   </NFTWidgetBaseCard>
 </template>
 
 <script>
 import { ellipsis } from '~/util/ui';
+import Identity from '~/components/Identity/Identity';
 
 export default {
+  components: {
+    Identity,
+  },
   props: {
     iscnId: {
       type: String,
@@ -28,14 +38,18 @@ export default {
       type: String,
       default: '',
     },
-    creatorAddress: {
+    creatorDisplayName: {
       type: String,
       default: '',
+    },
+    isCivicLiker: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
     formattedCreatorDisplayName() {
-      return ellipsis(this.creatorAddress);
+      return ellipsis(this.creatorDisplayName);
     },
   },
   methods: {
