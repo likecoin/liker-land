@@ -18,14 +18,21 @@
         <NFTCampaignHero class="absolute inset-0" />
         <div class="relative mx-auto">
           <h1
-            v-t="'campaign_nft_page_title'"
             class="
               font-proxima font-[300]
-              text-like-green text-[64px]
+              text-like-green text-[32px]
+              laptop:text-[64px]
               leading-[1.25]
               text-center
             "
-          />
+          >
+            <span class="whitespace-nowrap">{{
+              $t('campaign_nft_page_tagline_1')
+            }}</span>
+            <span class="whitespace-nowrap">{{
+              $t('campaign_nft_page_tagline_2')
+            }}</span>
+          </h1>
           <p
             v-t="'campaign_nft_page_description'"
             class="mt-[16px] max-w-[536px] mx-auto"
