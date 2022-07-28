@@ -6,7 +6,7 @@
     </button>
     <div class="flex items-center text-dark-gray ml-[8px]">
       <NuxtLink
-        class="flex items-center text-like-green group"
+        class="flex items-center text-like-green group -my-[8px]"
         :to="`/${formattedCreatorDisplayName}`"
         target="_blank"
       >
