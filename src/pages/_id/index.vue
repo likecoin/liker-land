@@ -92,7 +92,7 @@
 
               'columns-1',
               'laptop:columns-2',
-            
+
               'gap-[16px]',
             ]"
           >
@@ -220,7 +220,7 @@
 
               'columns-1',
               'laptop:columns-2',
-            
+
               'gap-[16px]',
             ]"
           >
@@ -315,7 +315,11 @@
           </ul>
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-            <ButtonV2 preset="outline" text="Find more Writing NFT" />
+            <ButtonV2
+              preset="outline"
+              :text="$t('portfolio_finding_more_button')"
+              to="/campaign/writing-nft"
+            />
           </div>
         </div>
       </div>
