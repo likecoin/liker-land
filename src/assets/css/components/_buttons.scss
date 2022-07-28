@@ -143,12 +143,7 @@
     @apply w-16;
     @apply h-16;
   }
-  &--icon-only {
-    @apply py-4;
-  }
   &--icon-only &__icon {
-    margin: 1px;
-
     @apply inline;
 
     @apply w-24;
