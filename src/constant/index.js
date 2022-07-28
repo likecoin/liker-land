@@ -72,3 +72,11 @@ export const LIKECOIN_CHAIN_ID = IS_TESTNET
 export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
   ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
   : 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp';
+
+export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
+  ? [
+      'likenft10f06wfaql5fxf3g4sy8v57p98lzp7ad92cu34f9aeyhyeklchznsav5npg',
+      'likenft1pwutfz4m6ez0qevzc3re9dsd4e7l4x39nsvud7kmrj5p70tg0nmqlz0wyk',
+      'likenft14tp0n69q8wwvyd6k6fv4cp4jd86r072at6pa2yesue22qtrsnxestryg89',
+    ]
+  : ['likenft1tsncnvhhgkxkww0uaa5lghxr8puvee8rf6d3uxth6cg5h5uur0vqk8338y'];
