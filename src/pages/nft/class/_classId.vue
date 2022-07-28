@@ -115,10 +115,11 @@
 import { getLIKEPrice } from '~/util/api';
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   layout: 'desktop',
-  mixins: [nftMixin, navigationListenerMixin],
+  mixins: [nftMixin, navigationListenerMixin, walletMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
@@ -178,15 +179,33 @@ export default {
         'w-full',
       ];
     },
+    isTransferDisabled() {
+      return this.isSettingAccount || !this.userOwnedCount;
+    },
   },
-  mounted() {
-    this.updateNFTClassMetdata();
-    this.updateNFTPurchaseInfo();
-    this.updateNFTOwners();
-    this.updateNFTHistory();
-    this.getLIKEPrice();
+  watch: {
+    getAddress(newAddress) {
+      this.updateUserOwnedCount(newAddress);
+    },
+  },
+  async mounted() {
+    await Promise.all([
+      this.updateNFTClassMetdata(),
+      this.updateNFTPurchaseInfo(),
+      this.updateNFTOwners(),
+      this.updateNFTHistory(),
+      this.getLIKEPrice(),
+    ]);
+    this.isSettingAccount = false;
   },
   methods: {
+    async updateUserOwnedCount(address) {
+      if (!address) this.userOwnedCount = null;
+      this.isSettingAccount = true;
+      const { amount } = await getNFTCountByClassId(this.classId, address);
+      this.userOwnedCount = amount.low;
+      this.isSettingAccount = false;
+    },
     async onPurchase() {
       // buy nft
     },
