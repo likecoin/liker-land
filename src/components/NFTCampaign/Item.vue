@@ -11,7 +11,6 @@
     :owner-avatar-src="getAvatar"
     :owner-count="ownerCount"
     :owner-name="getOwnerDisplayName"
-    :is-civic-liker="getIsCivicLiker"
     :sold-count="mintedCount"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     @collect="handleClickCollect"
@@ -41,9 +40,6 @@ export default {
     },
     getOwnerDisplayName() {
       return this.displayNameList[this.iscnOwner];
-    },
-    getIsCivicLiker() {
-      return this.civicLikerList[this.iscnOwner];
     },
   },
   mounted() {
