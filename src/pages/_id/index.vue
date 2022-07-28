@@ -156,7 +156,11 @@
                   <div
                     class="flex flex-col items-center justify-center mt-[-70px]"
                   >
-                    <Identity avatar-url="" :avatar-size="40" />
+                    <Identity
+                      :avatar-url="avatarList[getNFTClassMetadataById(id).iscn_owner]"
+                      :avatar-size="40"
+                      :is-avatar-outlined="civicLikerList[getNFTClassMetadataById(id).iscn_owner]"
+                    />
                     <div class="flex mt-[8px]">
                       <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
                         displayNameList[getNFTClassMetadataById(id).iscn_owner] | ellipsis
@@ -255,9 +259,9 @@
                     class="flex flex-col items-center justify-center mt-[-70px]"
                   >
                     <Identity
-                      avatar-url=""
+                      :avatar-url="avatarList[getNFTClassMetadataById(id).iscn_owner]"
                       :avatar-size="40"
-                      :is-avatar-outlined="isCivicLiker"
+                      :is-avatar-outlined="civicLikerList[getNFTClassMetadataById(id).iscn_owner]"
                     />
                     <div class="flex mt-[8px]">
                       <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
@@ -357,6 +361,8 @@ export default {
       sellingNFTClassId: [],
       currentPage: 'works',
       displayNameList: [],
+      avatarList: [],
+      civicLikerList: [],
       isLoading: true,
     };
   },
@@ -495,8 +501,20 @@ export default {
       try {
         const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
         Vue.set(this.displayNameList, addr, data.displayName);
+        Vue.set(
+          this.avatarList,
+          addr,
+          data.avatar ||
+            `https://avatars.dicebear.com/api/identicon/${addr}.svg`
+        );
+        Vue.set(this.civicLikerList, addr, true);
       } catch (error) {
         Vue.set(this.displayNameList, addr, addr);
+        Vue.set(
+          this.avatarList,
+          addr,
+          `https://avatars.dicebear.com/api/identicon/${addr}.svg`
+        );
       }
     },
   },
