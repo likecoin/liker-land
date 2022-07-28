@@ -130,10 +130,8 @@ export default {
         'items-center',
         'rounded-[8px]',
         this.isActive ? 'bg-white' : 'bg-shade-gray',
-        'outline-[2px]',
         {
-          outline: this.isActive,
-          'outline-like-cyan-light': this.isActive,
+          'shadow-[0_0_0_2px_#aaf1e7]': this.isActive,
         },
       ];
     },
@@ -157,6 +155,7 @@ export default {
         'inset-0',
         'flex',
         'px-[8px]',
+        'rounded-[8px]',
         'items-center',
         'justify-center',
         'text-[12px]',
