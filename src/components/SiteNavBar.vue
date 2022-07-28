@@ -12,6 +12,10 @@
 
 
     <div class="flex items-center">
+      <div>
+        <button v-if="!getAddress" @click="connectWallet">Connect</button>
+        <button v-else @click="disconnectWallet">{{ getAddress }}</button>
+      </div>
       <div
         v-if="!getUserId"
         class="relative overflow-hidden leading-0"
@@ -45,6 +49,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'SiteNavBar',
@@ -54,6 +59,7 @@ export default {
     GlobeIcon: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/globe.svg'),
   },
+  mixins: [walletMixin],
   props: {
     isDisabledNav: {
       type: Boolean,
