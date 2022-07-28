@@ -547,22 +547,12 @@
             fill="#28646e"
           />
         </g>
-        <g class="nft-hero-graph__tagline laptop:hidden">
-          <text x="50" y="360" font-size="24px">
-            {{ $t('about_nft_page_hero_tagline_1') }}
-          </text>
-          <text x="260" y="360" font-size="24px">
-            {{ $t('about_nft_page_hero_tagline_2') }}
-          </text>
-        </g>
-        <g class="hidden nft-hero-graph__tagline laptop:block">
-          <text x="520" y="280" font-size="24px">
-            {{ $t('about_nft_page_hero_tagline_1') }}
-          </text>
-          <text x="730" y="280" font-size="24px">
-            {{ $t('about_nft_page_hero_tagline_2') }}
-          </text>
-        </g>
+        <text class="nft-hero-graph__tagline laptop:hidden" x="27%" y="360" font-size="24px" alignment-baseline="middle" text-anchor="middle">
+          {{ $t('about_nft_page_hero_tagline') }}
+        </text>
+        <text class="hidden nft-hero-graph__tagline laptop:block" x="500" y="280" font-size="24px">
+          {{ $t('about_nft_page_hero_tagline') }}
+        </text>
       </g>
     </svg>
   </section>
@@ -589,7 +579,7 @@ export default {
         clearProps: 'y,opacity',
       });
 
-      tlTitle.from('.nft-hero-graph__tagline > text', {
+      tlTitle.from('.nft-hero-graph__tagline', {
         delay: -0.2,
         opacity: 0,
         stagger: 0.2,
