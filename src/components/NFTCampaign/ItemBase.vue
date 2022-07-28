@@ -7,17 +7,18 @@
     <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
       <div>
         <NFTWidgetBaseCard
-          class="transition-colors cursor-pointer border-[2px] border-transparent hover:bg-[#fcfcfc] hover:border-like-cyan"
+          class="group"
           @click="handleClickNFTDetails"
         >
           <NFTWidgetContentPreview
+            class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7]"
             :title="title"
             :description="description"
             :url="url"
             :img-src="imgSrc"
             :img-bg-color="imgBgColor"
           />
-          <div class="flex items-center justify-center text-medium-gray mt-[8px]">
+          <div class="transition-colors group-hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]">
             <NFTWidgetIconEye class="w-[17px]" />
             <span
               class="underline ml-[6px] text-[12px] leading-[5/3]"
