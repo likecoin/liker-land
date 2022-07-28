@@ -170,25 +170,13 @@
                   <Label preset="p5" class="mt-[12px]">{{
                     getNFTClassMetadataById(id).description
                   }}</Label>
-                  <div class="flex justify-center">
+                  <div class="z-[500] flex justify-center">
                     <ButtonV2
-                      v-if="getNFTClassPurchaseInfoById(id)"
                       preset="secondary"
                       class="my-[16px]"
-                      @click="() => onDetails(id)"
+                      @click.stop.prevent="collectNFT(getNFTClassMetadataById(id).iscn_id)"
                     >
-                      {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
-                      <template #prepend>
-                        <IconPrice />
-                      </template>
-                    </ButtonV2>
-                    <ButtonV2
-                      v-else
-                      preset="secondary"
-                      text=" - $LIKE"
-                      class="my-[16px]"
-                      @click="() => onDetails(id)"
-                    >
+                      {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
                         <IconPrice />
                       </template>
@@ -272,25 +260,13 @@
                   <Label preset="p5" class="mt-[12px]">{{
                     getNFTClassMetadataById(id).description
                   }}</Label>
-                  <div class="flex justify-center">
+                  <div class="z-50 flex justify-center">
                     <ButtonV2
-                      v-if="getNFTClassPurchaseInfoById(id)"
                       preset="secondary"
                       class="my-[16px]"
-                      @click="() => onDetails(id)"
+                      @click.stop.prevent="collectNFT(getNFTClassMetadataById(id).iscn_id, id)"
                     >
-                      {{ getNFTClassPurchaseInfoById(id).price }} $LIKE
-                      <template #prepend>
-                        <IconPrice />
-                      </template>
-                    </ButtonV2>
-                    <ButtonV2
-                      v-else
-                      preset="secondary"
-                      text=" - $LIKE"
-                      class="my-[16px]"
-                      @click="() => onDetails(id)"
-                    >
+                      {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
                         <IconPrice />
                       </template>
@@ -335,6 +311,7 @@ import {
   getUserSellNFTClasses,
   getAddressLikerIdMinApi,
 } from '~/util/api';
+import { APP_LIKE_CO_URL_BASE } from '~/constant';
 import { checkUserNameValid } from '~/util/user';
 import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
@@ -477,8 +454,14 @@ export default {
         this.getNFTClassMetadataById(classId).iscn_owner
       );
     },
-    onDetails(classId) {
-      this.$router.push({ name: 'nft-class-classId', params: { classId } });
+    collectNFT(iscnid, classId) {
+      window.open(
+        `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
+          iscnid
+        )}%2F1`,
+        `collect_${this.classId}`,
+        'popup=1,width=768,height=576,top=0,left=0'
+      );
     },
     goCollection() {
       this.currentPage = 'collection';
