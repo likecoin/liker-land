@@ -97,11 +97,14 @@
                   'relative',
                 ]"
               >
-                <div class="flex flex-col items-center justify-center mt-[-70px]">
+                <LinkV2 
+                  class="flex flex-col items-center justify-center mt-[-70px] no-underline"
+                  :to="`/${displayNameList[iscnOwner]}`"
+                >
                   <Identity
-                    avatar-url=""
+                    :avatar-url="avatarList[iscnOwner]"
                     :avatar-size="40"
-                    :is-avatar-outlined="isCivicLiker"
+                    :is-avatar-outlined="civicLikerList[iscnOwner]"
                   />
                   <div class="flex mt-[8px]">
                     <Label class="text-medium-gray" text="by" />
@@ -109,7 +112,7 @@
                       displayNameList[iscnOwner] | ellipsis
                     }}</Label>
                   </div>
-                </div>
+                </LinkV2>
                 <Label preset="h5" class="mt-[12px]" :text="NFTName" />
                 <Label preset="p5" class="mt-[12px]" :text="NFTDescription" />
                 <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
@@ -307,7 +310,7 @@
                 :href="purchaseURL"
               >
                 <template #prepend>
-                  <IconPlaceholder />
+                  <IconPrice />
                 </template>
               </ButtonV2>
               <ButtonV2

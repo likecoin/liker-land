@@ -9,6 +9,8 @@ export default {
       iscnOwnerInfo: {},
       NFTHistory: [],
       displayNameList: [],
+      avatarList: [],
+      civicLikerList: [],
     };
   },
   computed: {
@@ -126,8 +128,20 @@ export default {
       try {
         const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
         Vue.set(this.displayNameList, addr, data.displayName);
+        Vue.set(
+          this.avatarList,
+          addr,
+          data.avatar ||
+            `https://avatars.dicebear.com/api/identicon/${addr}.svg`
+        );
+        Vue.set(this.civicLikerList, addr, true);
       } catch (error) {
         Vue.set(this.displayNameList, addr, addr);
+        Vue.set(
+          this.avatarList,
+          addr,
+          `https://avatars.dicebear.com/api/identicon/${addr}.svg`
+        );
       }
     },
   },
