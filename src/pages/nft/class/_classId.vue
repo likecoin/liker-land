@@ -240,12 +240,15 @@
                 </div>
               </template>
               <template #append>
-                <ButtonV2
-                  preset="tertiary"
-                  size="mini"
-                  text="Transfer"
-                  :is-disabled="true"
-                />
+                <div class="tooltip">
+                  <ButtonV2
+                    preset="tertiary"
+                    size="mini"
+                    text="Transfer"
+                    :is-disabled="true"
+                  />
+                  <span class="tooltiptext">Comming Soon</span>
+                </div>
               </template>
             </Label>
           </div>
@@ -313,16 +316,19 @@
                   <IconPrice />
                 </template>
               </ButtonV2>
-              <ButtonV2
-                class="ml-[12px]"
-                text="Sell"
-                preset="tertiary"
-                :is-disabled="true"
-              >
-                <template #prepend>
-                  <IconPlaceholder />
-                </template>
-              </ButtonV2>
+              <div class="tooltip">
+                <ButtonV2
+                  class="ml-[12px]"
+                  text="Sell"
+                  preset="tertiary"
+                  :is-disabled="true"
+                >
+                  <template #prepend>
+                    <IconPlaceholder />
+                  </template>
+                </ButtonV2>
+                <span class="tooltiptext">Comming Soon</span>
+              </div>
             </div>
           </CardV2>
           <!-- Events -->
@@ -458,5 +464,50 @@ td {
   padding-top: 12px;
   padding-bottom: 12px;
   font-weight: 400;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #9b9b9b;
+  color: #fff;
+  font-size: 8px;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #9b9b9b transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
