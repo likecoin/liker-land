@@ -97,7 +97,7 @@
                   'relative',
                 ]"
               >
-                <LinkV2 
+                <LinkV2
                   class="flex flex-col items-center justify-center mt-[-70px] no-underline"
                   :to="`/${displayNameList[iscnOwner]}`"
                 >
@@ -310,7 +310,7 @@
               <ButtonV2
                 text="Collect Now"
                 preset="secondary"
-                :href="purchaseURL"
+                @click="handleClickCollect"
               >
                 <template #prepend>
                   <IconPrice />
@@ -407,6 +407,7 @@ import { getNFTCountByClassId } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 import DropDownList from '~/components/NFTPage/DropDownList';
 import nftMixin from '~/mixins/nft';
+import navigationListenerMixin from '~/mixins/navigtion-listener';
 
 export default {
   layout: 'desktop',
@@ -414,7 +415,7 @@ export default {
     ellipsis,
   },
   components: { TimeAgo, DropDownList },
-  mixins: [nftMixin],
+  mixins: [nftMixin, navigationListenerMixin],
   data() {
     return {
       userOwnedCount: null,
@@ -454,6 +455,10 @@ export default {
     async getLIKEPrice() {
       const { data } = await this.$api.get(getLIKEPrice());
       this.currentPrice = data.likecoin.usd;
+    },
+    handleClickCollect() {
+      // TODO: Log event
+      this.collectNFT();
     },
   },
 };

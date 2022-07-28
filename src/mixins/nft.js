@@ -144,5 +144,12 @@ export default {
         );
       }
     },
+    collectNFT() {
+      window.open(
+        this.purchaseURL,
+        `collect_${this.classId}`,
+        'popup=1,width=768,height=576,top=0,left=0'
+      );
+    },
   },
 };

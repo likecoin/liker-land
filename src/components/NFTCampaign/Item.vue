@@ -11,7 +11,7 @@
     :owner-count="ownerCount"
     :sold-count="mintedCount"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
-    @collect="handleCollect"
+    @collect="handleClickCollect"
     @view-details="handleViewDetails"
     @like="handleLike"
   />
@@ -35,12 +35,9 @@ export default {
     this.updateNFTOwners();
   },
   methods: {
-    handleCollect() {
-      window.open(
-        this.purchaseURL,
-        `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
-      );
+    handleClickCollect() {
+      // TODO: Log event
+      this.collectNFT();
     },
     handleViewDetails() {
       this.$router.push({
