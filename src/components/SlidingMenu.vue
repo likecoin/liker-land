@@ -27,7 +27,7 @@
           </NuxtLink>
           <a
             v-else
-            class="mx-0 btn btn--dark btn--block"
+            class="hidden mx-0 btn btn--dark btn--block"
             :href="getOAuthRegisterAPI"
             @click="onClickLogEvent('Register', 'RegisterSignInOrSignUp', 'RegisterSignInOrSignUp(sliding)', 1)"
           >{{ $t('signInOrSignUp') }}</a>

@@ -209,6 +209,7 @@
           <!-- Owning count -->
           <div
             class="
+              hidden
               w-full
               py-[12px]
               px-[24px]
