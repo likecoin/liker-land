@@ -127,6 +127,7 @@
               :key="id"
               :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
               :to="{ name: 'nft-class-classId', params: { classId: id } }"
+              target="_blank"
             >
               <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
                 <div
@@ -224,6 +225,7 @@
               :key="id"
               :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
               :to="{ name: 'nft-class-classId', params: { classId: id } }"
+              target="_blank"
             >
               <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
                 <div

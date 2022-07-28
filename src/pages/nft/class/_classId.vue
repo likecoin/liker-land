@@ -15,16 +15,6 @@
         'px-[24px]',
       ]"
     >
-      <ButtonV2
-        preset="plain"
-        class="self-start mb-[12px]"
-        text="Back"
-        @click="$router.go(-1)"
-      >
-        <template #prepend>
-          <IconArrowLeft />
-        </template>
-      </ButtonV2>
       <div
         :class="[
           'flex',
@@ -239,12 +229,11 @@
                     class="font-[900] ml-[20px]"
                   />
                   <Label
-                    v-if="!isSettingAccount && userOwnedCount === null"
+                    v-if="isSettingAccount || userOwnedCount === null"
                     preset="h4"
                     text="-"
                     class="font-[900] ml-[20px]"
                   />
-                  <ProgressIndicator v-if="isSettingAccount" preset="thin" class="z-[100] ml-[20px]" />
                 </div>
               </template>
               <template #append>
