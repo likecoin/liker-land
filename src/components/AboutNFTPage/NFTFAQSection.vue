@@ -27,7 +27,11 @@
       </ul>
 
       <div class="flex justify-center mt-[32px]">
-        <Button preset="outline" href="https://docs.like.co/faq">More FAQ</Button>
+        <ButtonV2
+          preset="outline"
+          href="https://docs.like.co/faq"
+          :text="$t('about_nft_page_faq_more_button')"
+        />
       </div>
     </div>
   </section>
