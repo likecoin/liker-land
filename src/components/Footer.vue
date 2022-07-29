@@ -52,7 +52,7 @@
         text-like-green
       "
     >
-      <a class="hover:underline" href="https://docs.like.co">{{ $t('footer_nav_help') }}</a>
+      <a class="hover:underline" href="https://help.like.co">{{ $t('footer_nav_help') }}</a>
       <a class="hover:underline" href="https://docs.like.co">{{ $t('footer_nav_doc') }}</a>
       <a class="hover:underline" href="https://docs.like.co/faq">{{ $t('footer_nav_faq') }}</a>
     </div>
