@@ -77,13 +77,10 @@
         </div>
       </div>
 
-      <CommunityCTA
-        :class="[
-          'text-like-cyan-light',
-          'px-32',
-          'py-24',
-        ]"
-      />
+      <footer>
+        <div class="text-center text-like-cyan-light">{{ $t('community_cta_title') }}</div>
+        <CommunityCTA :class="['px-32', 'py-24']" />
+      </footer>
     </div>
 
     <portal-target
@@ -103,7 +100,6 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import CogIcon from '~/assets/icons/cog.svg';
 import HomeIcon from '~/assets/icons/home.svg';
 
-import CommunityCTA from './CommunityCTA/CommunityCTA';
 import Identity from './Identity/Identity';
 import LinkIcon from './Icon/Link8';
 
@@ -111,7 +107,6 @@ export default {
   name: 'SlidingMenu',
   components: {
     CogIcon,
-    CommunityCTA,
     HomeIcon,
     Identity,
     LinkIcon,
