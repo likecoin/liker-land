@@ -59,7 +59,7 @@ export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
 
 export const LIKECOIN_CHAIN_NFT_RPC = IS_TESTNET
   ? 'https://node.testnet.like.co/rpc/'
-  : 'https:/mainnet-node.like.co/rpc/';
+  : 'https://mainnet-node.like.co/rpc/';
 
 export const APP_LIKE_CO_VIEW = IS_TESTNET
   ? 'https://app.rinkeby.like.co/view'
