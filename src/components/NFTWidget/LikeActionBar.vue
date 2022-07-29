@@ -7,7 +7,7 @@
     <div class="flex items-center text-dark-gray ml-[8px]">
       <NuxtLink
         class="flex items-center text-like-green group -my-[8px]"
-        :to="`/${creatorDisplayName}`"
+        :to="`/${creatorAddress}`"
         target="_blank"
       >
         <Identity
@@ -39,6 +39,10 @@ export default {
       default: '',
     },
     creatorDisplayName: {
+      type: String,
+      default: '',
+    },
+    creatorAddress: {
       type: String,
       default: '',
     },
