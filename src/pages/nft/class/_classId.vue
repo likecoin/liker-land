@@ -106,7 +106,7 @@
                   />
                   <NuxtLink
                     class="flex mt-[8px]"
-                    :to="`/${displayNameList[iscnOwner]}`"
+                    :to="`/${iscnOwner}`"
                   >
                     <Label class="text-medium-gray" text="by" />
                     <Label class="text-like-green ml-[4px] font-600">{{

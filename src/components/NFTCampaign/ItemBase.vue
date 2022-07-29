@@ -30,6 +30,7 @@
           :creator-display-name="ownerName"
           :creator-avatar-src="ownerAvatarSrc"
           :is-civic-liker="isCivicLiker"
+          :creator-address="ownerAddress"
           @like="handleClickLike"
         />
       </div>
