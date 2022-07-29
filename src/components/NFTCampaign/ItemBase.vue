@@ -18,7 +18,7 @@
             :img-src="imgSrc"
             :img-bg-color="imgBgColor"
           />
-          <div class="transition-colors group-hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]">
+          <div class="transition-colors cursor-pointer group-hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]">
             <NFTWidgetIconEye class="w-[17px]" />
             <span
               class="underline ml-[6px] text-[12px] leading-[5/3]"
