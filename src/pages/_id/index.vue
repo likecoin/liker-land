@@ -40,7 +40,7 @@
             v-if="getCivicLikerDescription"
             :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']"
           />
-          <Label preset="p6" class="font-200">
+          <Label preset="p6" class="break-all font-200">
             {{ getCivicLikerDescription }}
           </Label>
         </CardV2>
@@ -167,9 +167,9 @@
                       }}</Label>
                     </div>
                   </div>
-                  <Label preset="p5" class="mt-[12px]">{{
-                    getNFTClassMetadataById(id).description
-                  }}</Label>
+                  <Label preset="p5" class="mt-[12px] break-all">
+                    {{ getNFTClassMetadataById(id).description }}
+                  </Label>
                   <div class="z-[500] flex justify-center">
                     <ButtonV2
                       preset="secondary"
@@ -257,9 +257,9 @@
                       }}</Label>
                     </div>
                   </div>
-                  <Label preset="p5" class="mt-[12px]">{{
-                    getNFTClassMetadataById(id).description
-                  }}</Label>
+                  <Label preset="p5" class="mt-[12px] break-all">
+                    {{ getNFTClassMetadataById(id).description }}
+                  </Label>
                   <div class="z-50 flex justify-center">
                     <ButtonV2
                       preset="secondary"
