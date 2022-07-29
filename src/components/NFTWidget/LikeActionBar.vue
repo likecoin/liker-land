@@ -7,7 +7,7 @@
     <div class="flex items-center text-dark-gray ml-[8px]">
       <NuxtLink
         class="flex items-center text-like-green group -my-[8px]"
-        :to="`/${formattedCreatorDisplayName}`"
+        :to="`/${creatorDisplayName}`"
         target="_blank"
       >
         <Identity
