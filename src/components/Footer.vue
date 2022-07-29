@@ -12,7 +12,9 @@
           pb-[16px]
         "
       >
-        <Logo class="text-white fill-current h-[16px]" />
+        <NuxtLink class="text-white transition-colors hover:text-like-cyan" to="/">
+          <Logo class="fill-current h-[16px]" />
+        </NuxtLink>
         <CommunityCTA />
       </div>
       <div
