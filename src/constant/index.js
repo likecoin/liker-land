@@ -13,6 +13,10 @@ export const LIKE_CO_URL_BASE = IS_TESTNET
   ? 'https://rinkeby.like.co'
   : 'https://like.co';
 
+export const APP_LIKE_CO_URL_BASE = IS_TESTNET
+  ? 'https://app.rinkeby.like.co'
+  : 'https://app.like.co';
+
 export const LIKECOIN_BUTTON_BASE = IS_TESTNET
   ? 'https://button.rinkeby.like.co'
   : 'https://button.like.co';
@@ -50,5 +54,32 @@ export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';
 export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
 export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
-  ? 'https://likecoin-chain-iscn-dev-2.netlify.app/validators'
+  ? 'https://likecoin-public-testnet-5.netlify.app/validators'
   : 'https://dao.like.co/validators';
+
+export const LIKECOIN_CHAIN_NFT_RPC = IS_TESTNET
+  ? 'https://node.testnet.like.co/rpc/'
+  : 'https:/mainnet-node.like.co/rpc/';
+
+export const APP_LIKE_CO_VIEW = IS_TESTNET
+  ? 'https://app.rinkeby.like.co/view'
+  : 'https://app.like.co/view';
+
+export const LIKECOIN_CHAIN_ID = IS_TESTNET
+  ? 'likecoin-public-testnet-5'
+  : 'likecoin-mainnet-2';
+
+export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
+  ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
+  : 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp';
+
+export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
+  ? [
+      'likenft10f06wfaql5fxf3g4sy8v57p98lzp7ad92cu34f9aeyhyeklchznsav5npg',
+      'likenft1pwutfz4m6ez0qevzc3re9dsd4e7l4x39nsvud7kmrj5p70tg0nmqlz0wyk',
+      'likenft14tp0n69q8wwvyd6k6fv4cp4jd86r072at6pa2yesue22qtrsnxestryg89',
+    ]
+  : [
+      'likenft1c86xz87908m90pl7c6ygulyaxcccsdgy9f7rutxg07xe24wvuksswzukgw',
+      'likenft1qmhrjp4a72w8g72uw64g64g4kmj2gyrje50vg9eus46hn79s7acsk8zpwm',
+    ];

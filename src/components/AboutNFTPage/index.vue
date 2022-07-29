@@ -10,7 +10,7 @@
         laptop:block
       "
     >
-      <NFTHeroSection class="w-full pb-[64px]" />
+      <NFTHeroSection class="w-full" />
       <NFTWidgetSection
         class="py-[32px] laptop:py-[64px]"
         :article="articles[0]"

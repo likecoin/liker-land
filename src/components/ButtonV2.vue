@@ -53,7 +53,7 @@ export enum Size {
 }
 
 @Component
-export default class Button extends Vue {
+export default class ButtonV2 extends Vue {
   // Preset of the button
   @Prop({ default: 'primary' })
   readonly preset!: string;
@@ -209,6 +209,7 @@ export default class Button extends Vue {
       'text-center',
       'whitespace-nowrap',
       'hover:bg-white',
+      { 'hover:bg-like-cyan-pale': this.preset === 'secondary' },
       'hover:bg-opacity-30',
       'active:bg-opacity-20',
       'transition',

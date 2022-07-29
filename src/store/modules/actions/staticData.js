@@ -1,5 +1,6 @@
 import * as TYPES from '@/store/mutation-types';
 import * as api from '@/util/api';
+import { getClassInfo } from '@/util/nft';
 
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
@@ -23,11 +24,40 @@ export async function fetchUserInfo({ commit, state }, opts) {
   }
   return user;
 }
-export async function fetchArticleInfo({ commit }, { referrer, iscnId }) {
-  const info = await this.$api.$get(
-    api.getArticleDetailAPI({ url: referrer, iscnId })
-  );
-  // TODO: include iscnId as key instead of just referrer
+
+export async function fetchArticleInfo({ commit }, referrer) {
+  const info = await this.$api.$get(api.getArticleDetailAPI(referrer));
   commit(TYPES.STATIC_SET_ARTICLE_INFO, { referrer, info });
+}
+
+export async function fetchNFTPurchaseInfo({ commit }, classId) {
+  const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
+  commit(TYPES.STATIC_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
+  return info;
+}
+
+export async function fetchNFTMetadata({ commit }, classId) {
+  let metadata;
+  const [apiMetadata = {}, chainMetadata = {}] = await Promise.all([
+    this.$api
+      .$get(api.getNFTMetadata({ classId }))
+      // eslint-disable-next-line no-console
+      .catch(err => console.error(err)),
+    getClassInfo(classId),
+  ]);
+  const {
+    name,
+    description,
+    data: { parent, metadata: classMetadata = {} } = {},
+  } = chainMetadata;
+  metadata = { name, description, metadata: classMetadata, parent };
+  if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+  commit(TYPES.STATIC_SET_NFT_CLASS_METADATA, { classId, metadata });
+  return metadata;
+}
+
+export async function fetchNFTOwners({ commit }, classId) {
+  const info = await this.$api.$get(api.getNFTOwners({ classId }));
+  commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
 }

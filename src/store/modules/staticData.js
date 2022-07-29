@@ -6,6 +6,9 @@ import {
   STATIC_SET_USER_INFO,
   STATIC_SET_ARTICLE_INFO,
   STATIC_SET_USER_FETCHING,
+  STATIC_SET_NFT_CLASS_PURCHASE_INFO,
+  STATIC_SET_NFT_CLASS_METADATA,
+  STATIC_SET_NFT_CLASS_OWNER_INFO,
 } from '../mutation-types';
 import * as getters from './getters/staticData';
 import * as actions from './actions/staticData';
@@ -13,6 +16,9 @@ import * as actions from './actions/staticData';
 const state = () => ({
   userInfos: {},
   articleInfos: {},
+  nftClassPurchaseInfo: {},
+  nftClassMetadata: {},
+  nftClassOwnerInfo: {},
   fetching: {
     user: {},
     article: {},
@@ -28,6 +34,15 @@ const mutations = {
   },
   [STATIC_SET_USER_FETCHING](state, { id, payload }) {
     Vue.set(state.fetching.user, id, payload);
+  },
+  [STATIC_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
+    Vue.set(state.nftClassPurchaseInfo, classId, info);
+  },
+  [STATIC_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
+    Vue.set(state.nftClassMetadata, classId, metadata);
+  },
+  [STATIC_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
+    Vue.set(state.nftClassOwnerInfo, classId, info);
   },
 };
 

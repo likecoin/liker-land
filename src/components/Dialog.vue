@@ -13,7 +13,7 @@
         @click="handleBackdropClick"
       />
       <div :class="['fixed', 'top-[15vh]']">
-        <Button
+        <ButtonV2
           v-if="hasCloseButton"
           :class="[
             'absolute',
@@ -41,7 +41,7 @@
               fill="currentColor"
             />
           </svg>
-        </Button>
+        </ButtonV2>
         <div
           :class="[
             'relative',

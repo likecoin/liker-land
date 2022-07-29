@@ -129,6 +129,8 @@ export const getUserMinAPI = (id, { types = [] } = {}) =>
   `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
     type: types.join(','),
   })}`;
+export const getAddressLikerIdMinApi = addr =>
+  `${LIKECOIN_API_BASE}/users/addr/${addr}/min`;
 export const getArticleDetailAPI = ({ url = '', iscnId = '' }) =>
   `${LIKECOIN_API_BASE}/like/info?iscn_id=${encodeURIComponent(
     iscnId
@@ -141,3 +143,61 @@ export const getLikerOgImage = id =>
   id === CIVIC_LIKER_CLASSIC_LIKER_ID
     ? 'https://liker.land/images/og/civic-classic.png'
     : `https://static.like.co/liker-og-image/${id}.png`;
+
+export const getNFTMintInfo = ({ iscnId, classId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/mint?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTPurchaseInfo = ({ iscnId, classId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTHistory = ({ iscnId, classId, nftId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+    nft_id: nftId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/history?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+    nft_id: nftId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/metadata?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTOwners = ({ iscnId, classId }) => {
+  const qsPayload = {
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getUserSellNFTClasses = ({ wallet }) =>
+  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
+
+export const getLIKEPrice = () =>
+  `https://api.coingecko.com/api/v3/simple/price?ids=likecoin&vs_currencies=usd`;
