@@ -15,7 +15,7 @@
         <NuxtLink class="text-white transition-colors hover:text-like-cyan" to="/">
           <Logo class="fill-current h-[16px]" />
         </NuxtLink>
-        <CommunityCTA />
+        <CommunityCTA class="mt-[24px] laptop:mt-0 !justify-start" />
       </div>
       <div
         class="
