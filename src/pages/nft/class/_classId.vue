@@ -154,7 +154,7 @@
                 'mb-[16px]',
                 'desktop:m-0',
               ]"
-              title="Owners"
+              :title="$t('nft_details_page_title_collector')"
             >
               <template #titleIcon>
                 <IconPerson />
@@ -296,7 +296,7 @@
               </Label>
               <Label
                 class="text-[10px] text-medium-gray font-[400] ml-[24px]"
-                text="Owners"
+                :text="$t('nft_details_page_title_collector')"
               >
                 <template #prepend>
                   <IconPersonMini />
