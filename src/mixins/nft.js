@@ -44,7 +44,7 @@ export default {
       return this.NFTClassMetadata.iscn_owner;
     },
     iscnURL() {
-      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}%2F1`;
+      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },
     // nft info
     NFTName() {
