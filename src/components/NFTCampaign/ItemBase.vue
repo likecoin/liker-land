@@ -79,7 +79,7 @@ export default {
     },
     ownerCountLabel: {
       type: String,
-      default: 'Owners',
+      default: 'Collectors',
     },
     soldCountLabel: {
       type: String,
