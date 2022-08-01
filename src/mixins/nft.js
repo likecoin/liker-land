@@ -71,6 +71,12 @@ export default {
     ownerCount() {
       return this.getNFTClassOwnerCount(this.classId);
     },
+    sortedOwnerListId() {
+      const { ownerList } = this;
+      return Object.keys(ownerList).sort(
+        (a, b) => ownerList[b].length - ownerList[a].length
+      );
+    },
     mintedCount() {
       return this.getNFTClassMintedCount(this.classId);
     },
