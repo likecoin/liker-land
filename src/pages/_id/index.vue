@@ -257,6 +257,9 @@
                       }}</Label>
                     </div>
                   </div>
+                  <Label preset="h5" class="mt-[12px] break-all">
+                    {{ getNFTClassMetadataById(id).name }}
+                  </Label>
                   <Label preset="p5" class="mt-[12px] break-all">
                     {{ getNFTClassMetadataById(id).description }}
                   </Label>
