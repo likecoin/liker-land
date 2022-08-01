@@ -31,6 +31,7 @@
           :creator-avatar-src="ownerAvatarSrc"
           :is-civic-liker="isCivicLiker"
           :creator-address="ownerAddress"
+          :like-action-label="likeActionLabel"
           @like="handleClickLike"
         />
       </div>
@@ -76,6 +77,10 @@ export default {
     viewDetailsLabel: {
       type: String,
       default: 'View NFT details',
+    },
+    likeActionLabel: {
+      type: String,
+      default: undefined,
     },
     ownerCountLabel: {
       type: String,
