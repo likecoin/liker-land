@@ -418,6 +418,37 @@ export default {
   },
   components: { TimeAgo, DropDownList },
   mixins: [nftMixin, navigationListenerMixin],
+  head() {
+    const title = this.NFTName;
+    const description = this.NFTDescription;
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content:
+            this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg',
+        },
+      ],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+    };
+  },
   data() {
     return {
       userOwnedCount: null,
