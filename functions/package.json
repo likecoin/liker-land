@@ -16,6 +16,7 @@
     "@cosmjs/stargate": "^0.28.7",
     "@google-cloud/firestore": "^4.2.0",
     "@likecoin/iscn-js": "^0.2.0-rc.1",
+    "@likecoin/likecoin-wallet-connector": "0.0.1",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",
     "@nuxt/postcss8": "^1.1.3",
