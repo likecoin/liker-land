@@ -419,8 +419,9 @@ export default {
   components: { TimeAgo, DropDownList },
   mixins: [nftMixin, navigationListenerMixin],
   head() {
-    const title = this.NFTName;
-    const description = this.NFTDescription;
+    const title = this.NFTName || this.$t('nft_details_page_title');
+    const description =
+      this.NFTDescription || this.$t('nft_details_page_description');
     return {
       title,
       meta: [
