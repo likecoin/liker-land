@@ -57,6 +57,10 @@ export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
   ? 'https://likecoin-public-testnet-5.netlify.app/validators'
   : 'https://dao.like.co/validators';
 
+export const LIKECOIN_CHAIN_API = IS_TESTNET
+  ? 'https://node.testnet.like.co'
+  : 'https://mainnet-node.like.co';
+
 export const LIKECOIN_CHAIN_NFT_RPC = IS_TESTNET
   ? 'https://node.testnet.like.co/rpc/'
   : 'https://mainnet-node.like.co/rpc/';

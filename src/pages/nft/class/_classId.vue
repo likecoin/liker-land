@@ -377,10 +377,8 @@
                       </LinkV2>
                     </td>
                     <td>
-                      <LinkV2
-                        :href="`https://node.testnet.like.co/cosmos/tx/v1beta1/txs/${event.txHash}`"
-                      >
-                        <time-ago
+                      <LinkV2 :href="getChainRawTx(event.txHash)">
+                        <TimeAgo
                           long
                           tooltip
                           :datetime="event.timestamp"
@@ -404,7 +402,7 @@
 <script>
 import { TimeAgo } from 'vue2-timeago';
 
-import { getLIKEPrice } from '~/util/api';
+import { getLIKEPrice, getChainRawTx } from '~/util/api';
 import { getNFTCountByClassId } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 import DropDownList from '~/components/NFTPage/DropDownList';
@@ -478,6 +476,7 @@ export default {
     this.getLIKEPrice();
   },
   methods: {
+    getChainRawTx,
     async setAccount(wallet) {
       this.wallet = wallet;
       const { amount } = await getNFTCountByClassId(this.classId, wallet);
