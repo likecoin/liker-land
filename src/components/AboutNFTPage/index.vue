@@ -11,6 +11,11 @@
       "
     >
       <NFTHeroSection class="w-full" />
+      <nav class="py-[32px] laptop:py-[64px] grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
+        <ButtonV2 to="/campaign/writing-nft" preset="secondary">
+          {{ $t('about_nft_page_nav_campaign') }}
+        </ButtonV2>
+      </nav>
       <NFTWidgetSection
         class="py-[32px] laptop:py-[64px]"
         :article="articles[0]"
