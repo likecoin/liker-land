@@ -37,7 +37,8 @@
             preset="tertiary"
             size="mini"
             :text="$t('nft_details_page_button_transfer')"
-            :is-disabled="true"
+            :is-disabled="isTransferDisabled"
+            @click="onTransfer"
           />
         </ToolTips>
       </template>
@@ -54,8 +55,17 @@ export default {
       default: false,
     },
     ownedCount: {
-      type: String,
-      default: undefined,
+      type: Number,
+      default: null,
+    },
+    isTransferDisabled: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  methods: {
+    onTransfer() {
+      this.$emit('transfer');
     },
   },
 };

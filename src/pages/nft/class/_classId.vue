@@ -91,9 +91,10 @@
           :class="[ 'flex-grow', columnClasses ]"
         >
           <NFTPageOwningSection
-            class="hidden"
             :is-setting-account="isSettingAccount"
             :owned-count="userOwnedCount"
+            :is-transfer-disabled="isTransferDisabled"
+            @transfer="onTransfer"
           />
           <NFTPagePriceSection
             :nft-price="NFTPrice"
@@ -112,7 +113,8 @@
 </template>
 
 <script>
-import { getLIKEPrice } from '~/util/api';
+import { getLIKEPrice, postNFTTransfer } from '~/util/api';
+import { getNFTCountByClassId, transferNFT } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
 import walletMixin from '~/mixins/wallet';
@@ -155,6 +157,8 @@ export default {
   data() {
     return {
       userOwnedCount: null,
+      selectedNFTId: 'liker-00fe092b-ea41-487c-9cba-688b93f5b949',
+      recipientAddress: 'like1shkl5gqzxcs9yh3qjdeggaz3yg5s83754dx2dh',
 
       currentPrice: 0,
       isSettingAccount: true,
@@ -200,11 +204,26 @@ export default {
   },
   methods: {
     async updateUserOwnedCount(address) {
-      if (!address) this.userOwnedCount = null;
+      if (!address) {
+        this.userOwnedCount = null;
+        return;
+      }
       this.isSettingAccount = true;
       const { amount } = await getNFTCountByClassId(this.classId, address);
       this.userOwnedCount = amount.low;
       this.isSettingAccount = false;
+    },
+    async onTransfer() {
+      const txHash = await transferNFT({
+        fromAddress: this.getAddress,
+        toAddress: this.recipientAddress,
+        classId: this.classId,
+        nftId: this.selectedNFTId,
+        signer: this.getSigner,
+      });
+      await this.$api.post(
+        postNFTTransfer({ txHash, nftId: this.selectedNFTId })
+      );
     },
     async onPurchase() {
       // buy nft
