@@ -19,6 +19,7 @@ jobs:
       - run:
           name: Build
           command: npm --prefix src run build
+          resource_class: medium+
       - run:
           name: Server Test
           command: npm --prefix src start
