@@ -11,7 +11,7 @@
           @click="handleClickNFTDetails"
         >
           <NFTWidgetContentPreview
-            class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7]"
+            class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7] min-h-[300px]"
             :title="title"
             :description="description"
             :url="url"

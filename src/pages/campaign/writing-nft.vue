@@ -54,7 +54,16 @@
           </svg>
         </div>
       </section>
-      <section class="px-[24px] laptop:px-[40px] max-w-[416px] laptop:max-w-full mx-auto">
+      <section
+        class="
+          w-full
+          max-w-[416px]
+          laptop:max-w-full
+          mx-auto
+          px-[24px]
+          laptop:px-[40px]
+        "
+      >
         <ul>
           <li
             v-for="(nftClassId, index) in nfts"
