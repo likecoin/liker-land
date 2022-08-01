@@ -88,7 +88,7 @@ export default {
     },
     soldCountLabel: {
       type: String,
-      default: 'Sold',
+      default: 'Collected',
     },
 
     // Owner
