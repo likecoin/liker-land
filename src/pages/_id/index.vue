@@ -167,7 +167,7 @@
                       }}</Label>
                     </div>
                   </div>
-                  <Label preset="p5" class="mt-[12px] break-all" align="center">
+                  <Label preset="h5" class="mt-[12px] break-all" align="center">
                     {{ getNFTClassMetadataById(id).name }}
                   </Label>
                   <div class="z-[500] flex justify-center">
@@ -257,7 +257,7 @@
                       }}</Label>
                     </div>
                   </div>
-                  <Label preset="p5" class="mt-[12px] break-all" align="center">
+                  <Label preset="h5" class="mt-[12px] break-all" align="center">
                     {{ getNFTClassMetadataById(id).name }}
                   </Label>
                   <div class="z-50 flex justify-center">
