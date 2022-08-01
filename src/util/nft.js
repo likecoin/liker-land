@@ -52,3 +52,20 @@ export async function getNFTCountByClassId(classId, owner) {
   const { amount = 0 } = await client.nft.balance(classId, owner);
   return { amount };
 }
+
+export async function transferNFT({
+  fromAddress,
+  toAddress,
+  classId,
+  nftId,
+  signer,
+}) {
+  const client = await createNFTSigningClient(signer);
+  const { transactionHash } = await client.sendNFTs(
+    fromAddress,
+    toAddress,
+    classId,
+    [nftId]
+  );
+  return transactionHash;
+}
