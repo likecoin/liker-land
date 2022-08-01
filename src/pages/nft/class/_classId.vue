@@ -285,7 +285,7 @@
             <div class="flex items-baseline justify-start mb-[28px]">
               <Label
                 class="text-[10px] text-medium-gray font-[400]"
-                text="Minted"
+                :text="$t('nft_details_page_collected_count_label')"
               >
                 <template #prepend>
                   <IconMint />
@@ -359,7 +359,7 @@
                     class="py-[12px] border-b-shade-gray border-b-[1px]"
                   >
                     <td>
-                      <Label text="Mint">
+                      <Label :text="$t('nft_details_page_activity_list_event_collect')">
                         <template #prepend>
                           <IconCircle />
                         </template>
@@ -368,7 +368,7 @@
                     <td>
                       <Label>{{ event.price }}</Label>
                     </td>
-                    <td><Label text="mint" /></td>
+                    <td><Label text="-" /></td>
                     <td>
                       <LinkV2 :to="`/${event.toWallet}`">
                         <Label class="break-all">{{

@@ -14,6 +14,7 @@
     :sold-count="mintedCount"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
+    :sold-count-label="$t('campaign_nft_item_collected_count_label')"
     @collect="handleClickCollect"
     @view-details="handleViewDetails"
     @like="handleLike"
