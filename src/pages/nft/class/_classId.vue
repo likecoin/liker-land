@@ -162,7 +162,7 @@
               <template #content>
                 <div class="flex flex-col my-[12px]">
                   <div v-if="ownerCount">
-                    <div v-for="o in Object.keys(ownerList)" :key="o">
+                    <div v-for="o in sortedOwnerListId" :key="o">
                       <div class="flex items-center justify-between">
                         <LinkV2 :to="`/${o}`">{{ displayNameList[o] || o | ellipsis }}</LinkV2>
                         <Label preset="p6">{{ ownerList[o].length }}</Label>
