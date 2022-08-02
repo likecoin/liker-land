@@ -24,9 +24,10 @@
 <script>
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
 
 export default {
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin],
   props: {
     classId: {
       type: String,
@@ -52,7 +53,7 @@ export default {
   methods: {
     handleClickCollect() {
       // TODO: Log event
-      this.collectNFT();
+      this.collectNFT(this.getAddress, this.classId, this.getSigner);
     },
     handleViewDetails() {
       this.$router.push({
