@@ -206,6 +206,17 @@ export const getLIKEPrice = () =>
 export const getChainRawTx = hash =>
   `${LIKECOIN_CHAIN_API}/cosmos/tx/v1beta1/txs/${hash}`;
 
+export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
+  const qsPayload = {
+    tx_hash: txHash,
+    iscn_id: iscnId,
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const postNFTTransfer = ({ txHash, nftId }) => {
   const qsPayload = {
     tx_hash: txHash,
