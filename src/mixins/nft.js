@@ -1,7 +1,12 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
-import { getNFTHistory, getAddressLikerIdMinApi } from '~/util/api';
+import {
+  getNFTHistory,
+  postNFTPurchase,
+  getAddressLikerIdMinApi,
+} from '~/util/api';
+import { sendGrant } from '~/util/nft';
 
 export default {
   data() {
@@ -163,12 +168,19 @@ export default {
         );
       }
     },
-    collectNFT() {
-      window.open(
-        this.purchaseURL,
-        `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
-      );
+    async collectNFT(address, classId, signer) {
+      try {
+        this.classId = classId;
+        const txHash = await sendGrant({
+          senderAddress: address,
+          amountInLIKE: this.purchaseInfo.totalPrice,
+          signer,
+        });
+        await this.$api.post(postNFTPurchase({ txHash, classId }));
+        this.updateNFTData();
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };

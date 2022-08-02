@@ -1,8 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
+import { BigNumber } from 'bignumber.js';
 import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
 import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { PageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
-import { LIKECOIN_CHAIN_NFT_RPC } from '../constant';
+
+import {
+  LIKECOIN_CHAIN_NFT_RPC,
+  LIKECOIN_CHAIN_MIN_DENOM,
+  LIKECOIN_NFT_API_WALLET,
+} from '../constant';
 
 let queryClient = null;
 export async function getNFTQueryClient() {
@@ -51,6 +57,24 @@ export async function getNFTCountByClassId(classId, owner) {
   const client = await c.getQueryClient();
   const { amount = 0 } = await client.nft.balance(classId, owner);
   return { amount };
+}
+
+export async function sendGrant({ senderAddress, amountInLIKE, signer }) {
+  const client = await createNFTSigningClient(signer);
+  const spendLimit = [
+    {
+      denom: LIKECOIN_CHAIN_MIN_DENOM,
+      amount: new BigNumber(amountInLIKE).shiftedBy(9).toFixed(0),
+    },
+  ];
+  const expirationInMs = Date.now() + 1000 * 60;
+  const { transactionHash } = await client.createSendGrant(
+    senderAddress,
+    LIKECOIN_NFT_API_WALLET,
+    spendLimit,
+    expirationInMs
+  );
+  return transactionHash;
 }
 
 export async function transferNFT({
