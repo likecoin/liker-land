@@ -93,7 +93,7 @@ export default {
     },
     populatedCollectors() {
       return this.sortedOwnerListId.map(id => ({
-        ...id,
+        id,
         displayName: this.displayNameList[id] || id,
         collectedCount: this.ownerList[id].length,
       }));
