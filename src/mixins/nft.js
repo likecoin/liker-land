@@ -88,7 +88,7 @@ export default {
     populatedEvents() {
       return this.NFTHistory.map(event => ({
         ...event,
-        displayName: this.displayNameList[event.toWallet] || event.toWallet,
+        toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
       }));
     },
     populatedCollectors() {

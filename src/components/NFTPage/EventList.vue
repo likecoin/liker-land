@@ -37,7 +37,7 @@
             <td>
               <LinkV2 :to="`/${event.toWallet}`">
                 <Label class="break-all">{{
-                  event.displayName | ellipsis
+                  event.toDisplayName | ellipsis
                 }}</Label>
               </LinkV2>
             </td>
