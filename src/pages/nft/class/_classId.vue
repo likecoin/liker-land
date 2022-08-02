@@ -234,7 +234,7 @@ export default {
     },
     handleClickCollect() {
       // TODO: Log event
-      this.collectNFT();
+      this.collectNFT(this.getAddress, this.classId, this.getSigner);
     },
   },
 };

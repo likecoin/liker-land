@@ -174,7 +174,7 @@
                     <ButtonV2
                       preset="secondary"
                       class="my-[16px]"
-                      @click.stop.prevent="collectNFT(getNFTClassMetadataById(id).iscn_id)"
+                      @click.stop.prevent="collectNFT(getAddress, id, getSigner)"
                     >
                       {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
@@ -264,7 +264,7 @@
                     <ButtonV2
                       preset="secondary"
                       class="my-[16px]"
-                      @click.stop.prevent="collectNFT(getNFTClassMetadataById(id).iscn_id, id)"
+                      @click.stop.prevent="collectNFT(getAddress, id, getSigner)"
                     >
                       {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
@@ -311,10 +311,11 @@ import {
   getUserSellNFTClasses,
   getAddressLikerIdMinApi,
 } from '~/util/api';
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
 import { checkUserNameValid } from '~/util/user';
 import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
+import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   layout: 'desktop',
@@ -335,6 +336,7 @@ export default {
       return value;
     },
   },
+  mixins: [nftMixin, walletMixin],
   data() {
     return {
       userInfo: null,
@@ -460,15 +462,6 @@ export default {
       }
       this.UpdateDisplayNameList(
         this.getNFTClassMetadataById(classId).iscn_owner
-      );
-    },
-    collectNFT(iscnid, classId) {
-      window.open(
-        `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
-          iscnid
-        )}%2F1`,
-        `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
       );
     },
     goCollection() {
