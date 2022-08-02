@@ -7,30 +7,28 @@
     :title="$t('nft_details_page_title_collector')"
   >
     <template #titleIcon>
-      <slot name="titleIcon" />
+      <IconPerson />
     </template>
-    <template #content>
-      <div class="flex flex-col my-[12px]">
-        <div v-if="ownerCount">
-          <div v-for="o in ownerList" :key="o">
-            <div class="flex items-center justify-between">
-              <LinkV2 :to="`/${o}`">{{ displayNameList[o] || o | ellipsis }}</LinkV2>
-              <Label preset="p6">{{ collectorList[o].length }}</Label>
-            </div>
-            <div
-              :class="[
-                'bg-shade-gray',
-                'h-[1px]',
-                'w-full',
-                'my-[12px]',
-              ]"
-            />
+    <template #content class="flex flex-col my-[12px]">
+      <div v-if="ownerCount">
+        <div v-for="o in ownerList" :key="o.displayName">
+          <div class="flex items-center justify-between">
+            <LinkV2 :to="`/${o}`">{{ o.displayName | ellipsis }}</LinkV2>
+            <Label preset="p6">{{ o.collectedCount }}</Label>
           </div>
+          <div
+            :class="[
+              'bg-shade-gray',
+              'h-[1px]',
+              'w-full',
+              'my-[12px]',
+            ]"
+          />
         </div>
-        <div v-else>
-          <div class="flex justify-center">
-            <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
-          </div>
+      </div>
+      <div v-else>
+        <div class="flex justify-center">
+          <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
         </div>
       </div>
     </template>
@@ -58,14 +56,6 @@ export default {
     },
     ownerList: {
       type: Array,
-      default: undefined,
-    },
-    displayNameList: {
-      type: Array,
-      default: undefined,
-    },
-    collectorList: {
-      type: Object,
       default: undefined,
     },
   },

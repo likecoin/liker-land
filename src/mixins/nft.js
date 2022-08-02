@@ -8,9 +8,9 @@ export default {
     return {
       iscnOwnerInfo: {},
       NFTHistory: [],
-      displayNameList: [],
-      avatarList: [],
-      civicLikerList: [],
+      displayNameList: {},
+      avatarList: {},
+      civicLikerList: {},
     };
   },
   computed: {
@@ -84,6 +84,19 @@ export default {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
         this.iscnId
       )}%2F1`;
+    },
+    populatedEvents() {
+      return this.NFTHistory.map(event => ({
+        ...event,
+        displayName: this.displayNameList[event.toWallet] || event.toWallet,
+      }));
+    },
+    populatedCollectors() {
+      return this.sortedOwnerListId.map(id => ({
+        ...id,
+        displayName: this.displayNameList[id] || id,
+        collectedCount: this.ownerList[id].length,
+      }));
     },
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <DropDownList
     class="w-full mb-[250px]"
-    title="Item Activity"
+    :title="$t('nft_details_page_activity_list_title')"
   >
     <template #titleIcon>
       <IconActivity />
@@ -37,7 +37,7 @@
             <td>
               <LinkV2 :to="`/${event.toWallet}`">
                 <Label class="break-all">{{
-                  displayNameList[event.toWallet] | ellipsis
+                  event.displayName | ellipsis
                 }}</Label>
               </LinkV2>
             </td>
@@ -72,10 +72,6 @@ export default {
   components: { TimeAgo },
   props: {
     nftHistory: {
-      type: Array,
-      default: undefined,
-    },
-    displayNameList: {
       type: Array,
       default: undefined,
     },

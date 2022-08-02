@@ -17,10 +17,10 @@
     </div>
     <div class="flex items-baseline justify-start mb-[8px]">
       <Label preset="h2" class="font-[900] text-like-green">{{
-        getNFTPrice
+        formattedNFTPrice
       }}</Label>
       <Label preset="p5" class="text-medium-gray ml-[4px]">{{
-        getNFTPriceUSD
+        nftPriceUSD
       }}</Label>
     </div>
     <div class="flex items-baseline justify-start mb-[28px]">
@@ -51,7 +51,7 @@
 
     <div class="flex items-center justify-start">
       <ButtonV2
-        text="Collect Now"
+        :text="$t('nft_details_page_button_collect_now')"
         preset="secondary"
         @click="handleClickCollect"
       >
@@ -62,7 +62,7 @@
       <ToolTips :tool-tip-text="$t('tooltip_comming_soon')">
         <ButtonV2
           class="ml-[12px]"
-          text="Sell"
+          :text="$t('nft_details_page_button_sell')"
           preset="tertiary"
           :is-disabled="true"
         >
@@ -79,7 +79,7 @@ export default {
   name: 'PriceSection',
   props: {
     nftPrice: {
-      type: String,
+      type: Number,
       default: undefined,
     },
     nftPriceUSD: {
@@ -96,11 +96,8 @@ export default {
     },
   },
   computed: {
-    getNFTPrice() {
+    formattedNFTPrice() {
       return `${this.nftPrice} $LIKE`;
-    },
-    getNFTPriceUSD() {
-      return `${this.nftPriceUSD}`;
     },
   },
   methods: {

@@ -15,7 +15,7 @@
   >
     <div
       class="h-[180px]"
-      :style="`background-color: ${backgroundColor}`"
+      :style="`background-color: ${imageBgColor}`"
     >
       <img
         class="object-cover w-full max-h-[180px]"
@@ -101,7 +101,7 @@ export default {
     },
 
     // BackgroundImg
-    backgroundColor: {
+    imageBgColor: {
       type: String,
       default: undefined,
     },

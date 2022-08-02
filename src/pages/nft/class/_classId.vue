@@ -51,7 +51,7 @@
           >
             <NFTPageItemCard
               :root-class="'laptop:w-[310px]'"
-              :background-color="NFTImageBackgroundColor"
+              :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
               :avatar-url="avatarList[iscnOwner]"
               :avatar-size="40"
@@ -66,14 +66,8 @@
             <NFTPageCollectorList
               :root-class="'laptop:ml-[12px] mb-[16px] desktop:m-0'"
               :owner-count="ownerCount"
-              :owner-list="sortedOwnerListId"
-              :display-name-list="displayNameList"
-              :collector-list="ownerList"
-            >
-              <template #titleIcon>
-                <IconPerson />
-              </template>
-            </NFTPageCollectorList>
+              :owner-list="populatedCollectors"
+            />
           </div>
           <!-- Metadata -->
           <div :class="['hidden', 'desktop:flex', 'justify-center']">
@@ -109,8 +103,7 @@
             @collect="handleClickCollect"
           />
           <NFTPageEventList
-            :nft-history="NFTHistory"
-            :display-name-list="displayNameList"
+            :nft-history="populatedEvents"
           />
         </div>
       </section>
