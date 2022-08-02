@@ -170,7 +170,7 @@ export default {
     },
     async collectNFT(address, classId, signer) {
       try {
-        this.classId = classId;
+        if (this.classId !== classId) this.classId = classId;
         const txHash = await sendGrant({
           senderAddress: address,
           amountInLIKE: this.purchaseInfo.totalPrice,
