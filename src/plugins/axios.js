@@ -2,7 +2,7 @@ import HttpAgent, { HttpsAgent } from 'agentkeepalive';
 
 export default function(ctx, inject) {
   let options = {
-    timeout: 30000,
+    timeout: 60000,
   };
   if (process.server) {
     options = {
