@@ -67,7 +67,7 @@ export async function sendGrant({ senderAddress, amountInLIKE, signer }) {
       amount: new BigNumber(amountInLIKE).shiftedBy(9).toFixed(0),
     },
   ];
-  const expirationInMs = Date.now() + 1000 * 60;
+  const expirationInMs = Date.now() + 1000 * 90;
   const { transactionHash } = await client.createSendGrant(
     senderAddress,
     LIKECOIN_NFT_API_WALLET,
