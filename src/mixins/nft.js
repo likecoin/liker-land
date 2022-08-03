@@ -171,15 +171,18 @@ export default {
     async collectNFT(address, classId, signer) {
       try {
         if (this.classId !== classId) this.classId = classId;
+        // TODO: Lock UI and show progress bar
         const txHash = await sendGrant({
           senderAddress: address,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer,
         });
-        await this.$api.post(postNFTPurchase({ txHash, classId }));
-        this.updateNFTData();
+        const res = await this.$api.post(postNFTPurchase({ txHash, classId }));
+        // TODO: display res on UI
       } catch (error) {
         console.error(error);
+      } finally {
+        this.updateNFTData();
       }
     },
   },
