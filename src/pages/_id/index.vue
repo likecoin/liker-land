@@ -174,7 +174,7 @@
                     <ButtonV2
                       preset="secondary"
                       class="my-[16px]"
-                      @click.stop.prevent="collectNFT(getAddress, id, getSigner)"
+                      @click.stop.prevent="handleClickCollect(id)"
                     >
                       {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
@@ -264,7 +264,7 @@
                     <ButtonV2
                       preset="secondary"
                       class="my-[16px]"
-                      @click.stop.prevent="collectNFT(getAddress, id, getSigner)"
+                      @click.stop.prevent="handleClickCollect(id)"
                     >
                       {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
@@ -316,6 +316,7 @@ import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import { connectWallet } from '~/store/modules/actions/wallet';
 
 export default {
   layout: 'desktop',
@@ -504,6 +505,13 @@ export default {
           `https://avatars.dicebear.com/api/identicon/${addr}.svg`
         );
       }
+    },
+    handleClickCollect(id) {
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
+      this.collectNFT(this.getAddress, id, this.getSigner);
     },
   },
 };
