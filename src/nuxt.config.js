@@ -162,6 +162,7 @@ const nuxtConfig = {
         'script-src': [
           "'self'",
           "'unsafe-inline'", // ignored by browser with sha support
+          "'wasm-unsafe-eval'",
           '*.google-analytics.com',
           'www.googletagmanager.com',
           'www.google.com',
