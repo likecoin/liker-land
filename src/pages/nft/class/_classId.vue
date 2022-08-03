@@ -234,6 +234,10 @@ export default {
     },
     handleClickCollect() {
       // TODO: Log event
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
       this.collectNFT(this.getAddress, this.classId, this.getSigner);
     },
   },
