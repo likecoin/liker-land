@@ -194,9 +194,6 @@ const nuxtConfig = {
           "'unsafe-inline'",
           'client.crisp.chat',
         ],
-        'report-uri': [
-          process.env.SENTRY_REPORT_URI,
-        ],
       },
     },
   },
