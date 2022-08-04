@@ -224,6 +224,8 @@ export default {
       await this.$api.post(
         postNFTTransfer({ txHash, nftId: this.selectedNFTId })
       );
+      this.updateNFTOwners();
+      this.updateNFTHistory();
     },
     async onPurchase() {
       // buy nft
@@ -232,13 +234,14 @@ export default {
       const { data } = await this.$api.get(getLIKEPrice());
       this.currentPrice = data.likecoin.usd;
     },
-    handleClickCollect() {
+    async handleClickCollect() {
       // TODO: Log event
       if (!this.getAddress) {
         this.connectWallet();
         return;
       }
-      this.collectNFT(this.getAddress, this.classId, this.getSigner);
+      await this.collectNFT(this.getAddress, this.classId, this.getSigner);
+      this.updateUserOwnedCount(this.getAddress);
     },
   },
 };

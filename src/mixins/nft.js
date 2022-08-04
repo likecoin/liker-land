@@ -183,6 +183,7 @@ export default {
         console.error(error);
       } finally {
         this.updateNFTData();
+        this.updateNFTHistory();
       }
     },
   },
