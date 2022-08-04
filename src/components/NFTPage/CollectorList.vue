@@ -11,10 +11,10 @@
     </template>
     <template #content class="flex flex-col my-[12px]">
       <div v-if="ownerCount">
-        <div v-for="id in ownerList" :key="id.displayName">
+        <div v-for="owner in ownerList" :key="owner.displayName">
           <div class="flex items-center justify-between">
-            <LinkV2 :to="`/${id}`">{{ id.displayName | ellipsis }}</LinkV2>
-            <Label preset="p6">{{ id.collectedCount }}</Label>
+            <LinkV2 :to="`/${owner.id}`">{{ owner.displayName | ellipsis }}</LinkV2>
+            <Label preset="p6">{{ owner.collectedCount }}</Label>
           </div>
           <div
             :class="[
