@@ -502,7 +502,7 @@ export default {
           data.avatar ||
             `https://avatars.dicebear.com/api/identicon/${addr}.svg`
         );
-        Vue.set(this.civicLikerList, addr, true);
+        Vue.set(this.civicLikerList, addr, data.isSubscribedCivicLiker);
       } catch (error) {
         Vue.set(this.displayNameList, addr, addr);
         Vue.set(
