@@ -3,7 +3,6 @@
     :class="[
       'flex',
       'flex-grow',
-      'overflow-x-hidden',
       flexLayoutClass,
     ]"
   >

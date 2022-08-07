@@ -34,7 +34,8 @@
       <template #append>
         <ToolTips :tool-tip-text="$t('tooltip_comming_soon')">
           <ButtonV2
-            preset="tertiary"
+            preset="secondary"
+            class="-z-1"
             size="mini"
             :text="$t('nft_details_page_button_transfer')"
             :is-disabled="isTransferDisabled"
