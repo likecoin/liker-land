@@ -1,9 +1,5 @@
 <template>
   <Page>
-    <PageHeader class="w-full text-like-green">
-      <SiteNavBar />
-    </PageHeader>
-
     <main
       :class="[
         'flex',
@@ -120,7 +116,7 @@ import navigationListenerMixin from '~/mixins/navigtion-listener';
 import walletMixin from '~/mixins/wallet';
 
 export default {
-  layout: 'desktop',
+  layout: 'default',
   mixins: [nftMixin, navigationListenerMixin, walletMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');

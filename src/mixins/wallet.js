@@ -2,7 +2,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['getAddress', 'getSigner']),
+    ...mapGetters(['getAddress', 'getSigner', 'getLikerInfo']),
   },
   methods: {
     ...mapActions(['connectWallet', 'disconnectWallet']),

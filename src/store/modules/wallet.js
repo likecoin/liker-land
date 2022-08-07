@@ -4,6 +4,7 @@ import {
   WALLET_SET_ADDRESS,
   WALLET_SET_SIGNER,
   WALLET_SET_CONNECTOR,
+  WALLET_SET_LIKERINFO,
 } from '../mutation-types';
 
 import * as getters from './getters/wallet';
@@ -13,6 +14,8 @@ const state = () => ({
   address: '',
   signer: null,
   connector: null,
+  likerInfo: null,
+  isInited: null,
 });
 
 const mutations = {
@@ -24,6 +27,9 @@ const mutations = {
   },
   [WALLET_SET_CONNECTOR](state, connector) {
     state.connector = connector;
+  },
+  [WALLET_SET_LIKERINFO](state, likerInfo) {
+    state.likerInfo = likerInfo;
   },
 };
 

@@ -1,8 +1,5 @@
 <template>
   <Page>
-    <PageHeader class="w-full text-like-green">
-      <SiteNavBar />
-    </PageHeader>
 
     <div
       :class="[
@@ -319,7 +316,7 @@ import walletMixin from '~/mixins/wallet';
 import { connectWallet } from '~/store/modules/actions/wallet';
 
 export default {
-  layout: 'desktop',
+  layout: 'default',
   components: {
     Identity,
   },
