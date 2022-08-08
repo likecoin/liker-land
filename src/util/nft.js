@@ -93,3 +93,22 @@ export async function transferNFT({
   );
   return transactionHash;
 }
+
+export function amountToLIKE(likecoin) {
+  if (!likecoin) return -1;
+  if (likecoin.denom === LIKECOIN_CHAIN_MIN_DENOM) {
+    return new BigNumber(likecoin.amount).dividedBy(1e9).toFixed();
+  }
+  console.error(`${likecoin.denom} is not supported denom`);
+  return -1;
+}
+
+export async function getAccountBalance(address) {
+  const c = await getNFTQueryClient();
+  const client = await c.getQueryClient();
+  return amountToLIKE(
+    await client.bank.balance(address, LIKECOIN_CHAIN_MIN_DENOM)
+  );
+}
+
+export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;

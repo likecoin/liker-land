@@ -1,5 +1,7 @@
 <template>
-  <div class="w-full flex items-center justify-between px-[24px] py-[16px]">
+  <div
+    class="w-full flex items-center justify-between px-[24px] py-[16px] z-10"
+  >
     <NuxtLink
       :class="{
         'site-logo site-nav-bar__logo': true,
@@ -12,47 +14,63 @@
 
 
     <div class="flex items-center">
-      <ButtonV2
-        class="relative overflow-hidden leading-0 mr-[24px] text-like-green"
-        preset="tertiary"
-      >
-        <GlobeIcon class="w-20 h-20 fill-like-green" />
-        <select
-          class="absolute inset-y-0 right-0 opacity-0"
-          :value="getLocale"
-          @change="onChangeLocale"
+      <!-- locale -->
+      <div class="relative">
+        <ButtonV2
+          class="overflow-hidden leading-0 mr-[24px]"
+          preset="tertiary"
+          @click="isOpenOptions = !isOpenOptions; isOpenMenu = false"
+          @blur="closeOptions"
         >
-          <option
-            v-for="locale in getAvailableLocales"
-            :key="locale"
-            class="p-[12px] rounded-[8px]"
-            :value="locale"
-          >{{ $t(`Locale.${locale}`) }}</option> 
-          
-        </select>
-        
-      </ButtonV2>
-      <ButtonV2
-        v-if="!getAddress"
-        preset="secondary"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="connectWallet"
+          <GlobeIcon class="w-20 h-20 fill-like-green" />
+        </ButtonV2>
+        <CustomOption
+          v-model="isOpenOptions"
+          :default-value="getCurrentLocals"
+          :options="formatLocales"
+          @onChange="onChangeLocale"
+        />
+      </div>
+      <!-- Avatar -->
+      <div
+        class="relative"
+        tabindex="0"
+        @blur="closeMenu"
       >
-        <template #prepend>
-          <IconLogin />
-        </template>
-      </ButtonV2>
-      <NuxtLink
-        v-else
-        :to="`/${getAddress}`"
-      >
+        <ButtonV2
+          v-if="!getAddress"
+          preset="secondary"
+          :text="$t('header_button_connect_to_wallet')"
+          @click="connectWallet"
+        >
+          <template #prepend>
+            <IconLogin />
+          </template>
+        </ButtonV2>
         <Identity
-          class="cursor-pointer"
+          v-else
+          class="relative cursor-pointer"
           :avatar-url="getAvatar"
           :avatar-size="42"
           :is-avatar-outlined="getIsCivicLiker"
+          @click="isOpenMenu = !isOpenMenu; isOpenOptions = false"
         />
-      </NuxtLink>
+        <CustomOption
+          v-model="isOpenMenu"
+          :default-value="getCurrentLocals"
+          :options="getMenuOptions"
+          @onChange="onChangeMenu"
+          @clickHeader="goDaoLikeCo"
+        >
+          <template #header>
+            <div class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer">
+              <div class="flex flex-coltext-center text-like-green text-[32px] font-600">{{ balance }} </div>
+              <div class="text-medium-gray text-[12px]">{{ $t('header_menu_LIKE') }}</div>
+            </div>
+            <div class="w-full h-[1px] bg-shade-gray" />
+          </template>
+        </CustomOption>
+      </div>
     </div>
   </div>
 </template>
@@ -60,6 +78,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { ellipsis } from '~/util/ui';
+import { getAccountBalance } from '~/util/nft';
+import subWeeks from 'date-fns/sub_weeks/index';
 
 export default {
   name: 'AppHeader',
@@ -78,6 +98,14 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      isOpenOptions: false,
+      isOpenMenu: false,
+      balance: 0,
+      signingMethod: 'keplr',
+    };
   },
   computed: {
     ...mapGetters([
@@ -100,6 +128,43 @@ export default {
     getIsCivicLiker() {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
     },
+    getCurrentLocals() {
+      return this.$t(`Locale.${this.getLocale}`);
+    },
+    formatLocales() {
+      return this.getAvailableLocales.map(locale => ({
+        value: locale,
+        name: this.$t(`Locale.${locale}`),
+      }));
+    },
+    getBalance() {
+      if (this.getAddress) {
+        this.fetchBalance();
+      }
+      return '';
+    },
+    getMenuOptions() {
+      return this.signingMethod === 'likerId'
+        ? [
+            { value: 'portfolio', name: 'Portfolio' },
+            { value: 'civic', name: 'Civic Liker' },
+            { value: 'setting', name: 'Setting' },
+            { value: 'signOut', name: 'Sign Out' },
+          ]
+        : [
+            { value: 'portfolio', name: 'Portfolio' },
+            { value: 'civic', name: 'Civic Liker' },
+            { value: 'signOut', name: 'Sign Out' },
+          ];
+    },
+  },
+  watch: {
+    getAddress: {
+      immediate: true,
+      handler(newAddress) {
+        this.fetchBalance(newAddress);
+      },
+    },
   },
   async mounted() {
     const ans = await this.initIfNecessary();
@@ -112,10 +177,46 @@ export default {
       'disconnectWallet',
       'initIfNecessary',
     ]),
-    onChangeLocale(event) {
-      const { value: locale } = event.target;
-      this.$i18n.locale = locale;
-      this.updatePreferences({ locale });
+    onChangeLocale(value) {
+      this.$i18n.locale = value;
+      this.updatePreferences({ locale: value });
+    },
+    closeOptions() {
+      setTimeout(() => (this.isOpenOptions = false), 100);
+    },
+    closeMenu() {
+      setTimeout(() => (this.isOpenMenu = false), 100);
+    },
+    goDaoLikeCo() {
+      window.open('https://dao.like.co/', '_blank');
+    },
+    onChangeMenu(value) {
+      switch (value) {
+        case 'portfolio':
+          this.$router.push({
+            name: 'id',
+            params: { id: this.getAddress },
+          });
+          break;
+        case 'civic':
+          this.$router.push({ name: 'civic-dashboard' });
+          break;
+
+        case 'setting':
+          this.$router.push({ name: 'setting' });
+          break;
+
+        case 'signOut':
+          this.disconnectWallet();
+          break;
+
+        default:
+          break;
+      }
+    },
+    async fetchBalance() {
+      const num = await Promise.all([getAccountBalance(this.getAddress)]);
+      this.balance = Number(num[0]).toFixed(2);
     },
   },
 };

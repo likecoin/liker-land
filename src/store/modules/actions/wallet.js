@@ -39,6 +39,7 @@ export function disconnectWallet({ commit }) {
   commit(types.WALLET_SET_ADDRESS, '');
   commit(types.WALLET_SET_SIGNER, null);
   commit(types.WALLET_SET_CONNECTOR, null);
+  commit(types.WALLET_SET_LIKERINFO, null);
   // eslint-disable-next-line no-unused-expressions
   window.localStorage?.removeItem(KEY_WALLET_CONNECTOR);
 }
