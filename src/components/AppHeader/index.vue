@@ -136,12 +136,6 @@ export default {
         name: this.$t(`Locale.${locale}`),
       }));
     },
-    getBalance() {
-      if (this.getAddress) {
-        this.fetchBalance();
-      }
-      return '';
-    },
     getMenuOptions() {
       return this.signingMethod === 'likerId'
         ? [
@@ -161,7 +155,7 @@ export default {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        this.fetchBalance(newAddress);
+        if (newAddress) this.fetchBalance(newAddress);
       },
     },
   },
@@ -214,8 +208,8 @@ export default {
       }
     },
     async fetchBalance() {
-      const num = await Promise.all([getAccountBalance(this.getAddress)]);
-      this.balance = Number(num[0]).toFixed(2);
+      const num = await getAccountBalance(this.getAddress);
+      this.balance = Number(num).toFixed(2);
     },
   },
 };
