@@ -138,7 +138,7 @@
         :class="['text-white','ml-[2px]']"
         href="https://docs.like.co/general-guides/trade"
       >
-        {{ $t('error_buyLIKE') }}
+        {{ $t('snackbar_error_buyLIKE') }}
       </LinkV2>
     </Snackbar>
     <Snackbar
