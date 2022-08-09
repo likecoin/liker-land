@@ -1,8 +1,5 @@
 <template>
   <div class="about-page bg-gray-f7">
-    <!-- <PageHeader class="text-like-green">
-      <SiteNavBar />
-    </PageHeader> -->
     <main class="page-content text-gray-4a">
       <AboutNFTPage />
     </main>
@@ -13,8 +10,6 @@
 <script>
 import AboutNFTPage from '../components/AboutNFTPage';
 import Footer from '../components/Footer';
-import PageHeader from '../components/PageHeader';
-import SiteNavBar from '../components/SiteNavBar';
 
 export default {
   name: 'AboutPage',
@@ -22,8 +17,6 @@ export default {
   components: {
     AboutNFTPage,
     Footer,
-    // PageHeader,
-    // SiteNavBar,
   },
   head() {
     const title = this.$t('about_nft_page_title');

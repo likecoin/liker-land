@@ -1,9 +1,5 @@
 <template lang="pug">
   .settings-page
-    PageHeader
-      template
-        SiteNavBar.text-like-green
-
     main.page-content.page-content--narrow
       SettingsPageHeader(:is-show-back="isHeaderShowBack")
 
@@ -11,15 +7,12 @@
 </template>
 
 <script>
-import PageHeader from '~/components/PageHeader';
-import SiteNavBar from '~/components/SiteNavBar';
 import SettingsPageHeader from '~/components/SettingsPageHeader';
 
 export default {
   name: 'SettingsPage',
+  layout: 'default',
   components: {
-    PageHeader,
-    SiteNavBar,
     SettingsPageHeader,
   },
   computed: {

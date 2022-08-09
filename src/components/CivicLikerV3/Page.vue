@@ -1,8 +1,5 @@
 <template>
   <div class="civic-dashboard">
-    <PageHeader>
-      <SiteNavBar class="text-like-green" />
-    </PageHeader>
     <div class="w-full mx-auto max-w-phone phone:px-12 tablet:px-12">
       <header class="flex items-center justify-between mb-24">
         <div class="flex items-center">
@@ -37,12 +34,11 @@
 
 <script>
 import Button from '../LegacyButton/Button';
-import PageHeader from '../PageHeader';
-import SiteNavBar from '../SiteNavBar';
 
 import CivicDashboardV3 from './Dashboard';
 
 export default {
+  layout: 'default',
   components: {
     AlertCircle: () =>
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
@@ -50,8 +46,6 @@ export default {
       import(/* webpackChunkName: "svg-app" */ '~/assets/icons/external-link.svg'),
     Button,
     CivicDashboardV3,
-    PageHeader,
-    SiteNavBar,
   },
 };
 </script>
