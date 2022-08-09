@@ -29,6 +29,7 @@ const nuxtConfig = {
       total: true
     } : false,
   },
+  telemetry: false,
 
   /*
   ** Headers of the page
