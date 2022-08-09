@@ -79,7 +79,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import { ellipsis } from '~/util/ui';
 import { getAccountBalance } from '~/util/nft';
-import subWeeks from 'date-fns/sub_weeks/index';
 
 export default {
   name: 'AppHeader',

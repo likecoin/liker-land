@@ -50,7 +50,9 @@
     <div class="h-[2px] w-[32px] bg-shade-gray mb-[12px]" />
 
     <div class="flex items-center justify-start">
+      <ProgressIndicator v-if="isLoading" />
       <ButtonV2
+        v-else
         :text="$t('nft_details_page_button_collect_now')"
         preset="secondary"
         @click="handleClickCollect"
@@ -93,6 +95,10 @@ export default {
     collectorCount: {
       type: Number,
       default: undefined,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

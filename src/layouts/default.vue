@@ -6,6 +6,10 @@
       name="dialog"
       multiple
     />
+    <PortalTarget
+      name="snackbar"
+      multiple
+    />
   </div>
 </template>
 

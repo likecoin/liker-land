@@ -87,37 +87,85 @@
           :class="[ 'flex-grow', columnClasses ]"
         >
           <NFTPageOwningSection
-            :is-setting-account="isSettingAccount"
             :owned-count="userOwnedCount"
             :is-transfer-disabled="isTransferDisabled"
-            @transfer="onTransfer"
+            :is-loading="isSettingAccount"
+            :is-transferring="isTransferring"
+            @openTransfer="isOpenTransferDialog = true;"
           />
           <NFTPagePriceSection
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
             :minted-count="mintedCount"
             :collector-count="ownerCount"
-            @collect="handleClickCollect"
+            :is-loading="isCollecting"
+            @collect="onCollect"
           />
           <NFTPageEventList
             :nft-history="populatedEvents"
+            :is-loading="isHistoryInfoLoading"
           />
         </div>
       </section>
     </main>
+    <Dialog
+      v-model="isOpenTransferDialog"
+      preset="custom"
+      panel-class="shadow-lg bg-white phone:min-w-[380px] min-w-[520px] w-full p-[48px] rounded-[24px]"
+      :is-disabled-backdrop-click="true"
+    >
+      <Label preset="h3" class="font-600 text-like-green mb-[48px]" :text="$t('nft_details_page_title_transfer')" />
+      <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
+      <TextField :placeholder="$t('nft_details_page_placeholder_transfer')" :error-message="errorMsg" @input="handleInputAddr" />
+      <div class="flex justify-end w-full mt-[56px]">
+        <ProgressIndicator v-if="isTransferring" />
+        <ButtonV2
+          v-else
+          preset="secondary"
+          :is-disabled="!isReadyToTransfer"
+          :text="$t('nft_details_page_button_transfer')"
+          @click="onTransfer"
+        />
+      </div>
+    </Dialog>
+    <Snackbar
+      v-model="isOpenWarningSnackbar"
+      preset="warn"
+    >
+      {{ errorAlert }}
+      <LinkV2
+        v-if="errorType === 'INSUFFICIENT_BALANCE'"
+        :class="['text-white','ml-[2px]']"
+        href="https://docs.like.co/general-guides/trade"
+      >
+        {{ $t('error_buyLIKE') }}
+      </LinkV2>
+    </Snackbar>
+    <Snackbar
+      v-model="isOpenSuccessSnackbar"
+      preset="success"
+    >
+      {{ successMsg }}
+    </Snackbar>
   </Page>
 </template>
 
 <script>
 import { getLIKEPrice, postNFTTransfer } from '~/util/api';
-import { getNFTCountByClassId, transferNFT } from '~/util/nft';
+import {
+  getNFTCountByClassId,
+  transferNFT,
+  getAccountBalance,
+  LIKE_ADDRESS_REGEX,
+} from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
 import walletMixin from '~/mixins/wallet';
+import errorMixin from '~/mixins/error';
 
 export default {
   layout: 'default',
-  mixins: [nftMixin, navigationListenerMixin, walletMixin],
+  mixins: [nftMixin, navigationListenerMixin, walletMixin, errorMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
@@ -153,11 +201,16 @@ export default {
   data() {
     return {
       userOwnedCount: null,
-      selectedNFTId: 'liker-00fe092b-ea41-487c-9cba-688b93f5b949',
-      recipientAddress: 'like1shkl5gqzxcs9yh3qjdeggaz3yg5s83754dx2dh',
+      recipientAddress: '',
 
       currentPrice: 0,
       isSettingAccount: true,
+
+      isOpenTransferDialog: false,
+      errorMsg: '',
+      isReadyToTransfer: false,
+      isTransferring: false,
+      isCollecting: false,
     };
   },
   computed: {
@@ -184,8 +237,11 @@ export default {
     },
   },
   watch: {
-    getAddress(newAddress) {
-      this.updateUserOwnedCount(newAddress);
+    getAddress: {
+      immediate: true,
+      handler(newAddress) {
+        this.updateUserOwnedCount(newAddress);
+      },
     },
   },
   async mounted() {
@@ -210,34 +266,87 @@ export default {
       this.isSettingAccount = false;
     },
     async onTransfer() {
-      const txHash = await transferNFT({
-        fromAddress: this.getAddress,
-        toAddress: this.recipientAddress,
-        classId: this.classId,
-        nftId: this.selectedNFTId,
-        signer: this.getSigner,
-      });
-      await this.$api.post(
-        postNFTTransfer({ txHash, nftId: this.selectedNFTId })
-      );
-      this.updateNFTOwners();
-      this.updateNFTHistory();
+      this.isTransferring = true;
+      let result = null;
+      try {
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') {
+          this.isTransferring = false;
+          throw new Error('INSUFFICIENT_BALANCE');
+        }
+        const txHash = await transferNFT({
+          fromAddress: this.getAddress,
+          toAddress: this.recipientAddress,
+          classId: this.classId,
+          nftId: this.getTransferNFTId,
+          signer: this.getSigner,
+        });
+        result = await this.$api.post(
+          postNFTTransfer({ txHash, nftId: this.getTransferNFTId })
+        );
+      } catch (error) {
+        this.isTransferring = false;
+        this.errorHandling(error);
+      } finally {
+        this.updateNFTData();
+        this.updateNFTHistory();
+        if (result) {
+          this.onTransferComplete();
+        }
+      }
     },
-    async onPurchase() {
-      // buy nft
+    onTransferComplete() {
+      this.isTransferring = false;
+      this.updateUserOwnedCount(this.getAddress);
+      this.handleSuccess(this.$t('snackbar_success_transfer'));
     },
-    async getLIKEPrice() {
-      const { data } = await this.$api.get(getLIKEPrice());
-      this.currentPrice = data.likecoin.usd;
+    handleInputAddr(value) {
+      if (!LIKE_ADDRESS_REGEX.test(value)) {
+        this.errorMsg = this.$t('nft_details_page_errormessage_transfer');
+      } else {
+        this.errorMsg = '';
+        this.recipientAddress = value;
+        this.isReadyToTransfer = true;
+      }
     },
-    async handleClickCollect() {
-      // TODO: Log event
+    async onCollect() {
+      let result = null;
       if (!this.getAddress) {
         this.connectWallet();
         return;
       }
-      await this.collectNFT(this.getAddress, this.classId, this.getSigner);
+      try {
+        this.isCollecting = true;
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') {
+          this.isCollecting = false;
+          this.errorHandling('INSUFFICIENT_BALANCE');
+          return;
+        }
+        result = await this.collectNFT(
+          this.getAddress,
+          this.classId,
+          this.getSigner
+        );
+      } catch (error) {
+        this.isCollecting = false;
+        this.errorHandling(error);
+      } finally {
+        this.updateNFTData();
+        this.updateNFTHistory();
+        if (result) {
+          this.onCollectComplete();
+        }
+      }
+    },
+    onCollectComplete() {
+      this.isCollecting = false;
       this.updateUserOwnedCount(this.getAddress);
+      this.handleSuccess(this.$t('snackbar_success_collect'));
+    },
+    async getLIKEPrice() {
+      const { data } = await this.$api.get(getLIKEPrice());
+      this.currentPrice = data.likecoin.usd;
     },
   },
 };

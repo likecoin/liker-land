@@ -15,7 +15,8 @@
         <IconCreativeWork />
       </template>
       <template #default>
-        <div class="flex items-center">
+        <ProgressIndicator v-if="isLoading" preset="thin" />
+        <div v-else class="flex items-center">
           <Label preset="h5" :text="$t('nft_details_page_label_owning')" />
           <Label
             v-if="!isSettingAccount && ownedCount !== null"
@@ -32,14 +33,15 @@
         </div>
       </template>
       <template #append>
-        <ToolTips :tool-tip-text="$t('tooltip_comming_soon')">
+        <ProgressIndicator v-if="isTransferring" />
+        <ToolTips v-else :show-tool-tip="isTransferDisabled" :tool-tip-text="$t('tooltip_signin')">
           <ButtonV2
             preset="secondary"
             class="-z-1"
             size="mini"
             :text="$t('nft_details_page_button_transfer')"
             :is-disabled="isTransferDisabled"
-            @click="onTransfer"
+            @click="onOpen"
           />
         </ToolTips>
       </template>
@@ -63,10 +65,18 @@ export default {
       type: Boolean,
       default: true,
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isTransferring: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
-    onTransfer() {
-      this.$emit('transfer');
+    onOpen() {
+      this.$emit('openTransfer');
     },
   },
 };

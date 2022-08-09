@@ -16,6 +16,9 @@ export default {
       displayNameList: {},
       avatarList: {},
       civicLikerList: {},
+
+      isOwnerInfoLoading: false,
+      isHistoryInfoLoading: false,
     };
   },
   computed: {
@@ -25,6 +28,7 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
+      'getAddress',
     ]),
     isCivicLiker() {
       return !!(
@@ -94,6 +98,8 @@ export default {
       return this.NFTHistory.map(event => ({
         ...event,
         toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
+        fromDisplayName:
+          this.displayNameList[event.fromWallet] || event.toWafromWalletllet,
       }));
     },
     populatedCollectors() {
@@ -102,6 +108,16 @@ export default {
         displayName: this.displayNameList[id] || id,
         collectedCount: this.ownerList[id].length,
       }));
+    },
+    getTransferNFTId() {
+      const OwnNFT = this.ownerList[this.getAddress];
+      return OwnNFT[0];
+    },
+    getOwnedCount() {
+      const list = this.getNFTClassOwnerInfoById(this.classId);
+      return (
+        (list[this.getAddress] && this.ownerList[this.getAddress].length) || 0
+      );
     },
   },
   methods: {
@@ -131,6 +147,7 @@ export default {
       );
     },
     async updateNFTHistory() {
+      this.isHistoryInfoLoading = true;
       const { data } = await this.$api.get(
         getNFTHistory({ classId: this.classId })
       );
@@ -141,6 +158,7 @@ export default {
         array.push(list.fromWallet, list.toWallet);
       }
       this.updateDisplayNameList([...new Set(array)]);
+      this.isHistoryInfoLoading = false;
     },
     updateDisplayNameList(addresses) {
       if (typeof addresses === 'string') {
@@ -169,22 +187,15 @@ export default {
       }
     },
     async collectNFT(address, classId, signer) {
-      try {
-        if (this.classId !== classId) this.classId = classId;
-        // TODO: Lock UI and show progress bar
-        const txHash = await sendGrant({
-          senderAddress: address,
-          amountInLIKE: this.purchaseInfo.totalPrice,
-          signer,
-        });
-        const res = await this.$api.post(postNFTPurchase({ txHash, classId }));
-        // TODO: display res on UI
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.updateNFTData();
-        this.updateNFTHistory();
-      }
+      if (this.classId !== classId) this.classId = classId;
+      // TODO: Lock UI and show progress bar
+      const txHash = await sendGrant({
+        senderAddress: address,
+        amountInLIKE: this.purchaseInfo.totalPrice,
+        signer,
+      });
+      const res = await this.$api.post(postNFTPurchase({ txHash, classId }));
+      return res;
     },
   },
 };
