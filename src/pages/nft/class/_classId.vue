@@ -345,8 +345,12 @@ export default {
       this.handleSuccess(this.$t('snackbar_success_collect'));
     },
     async getLIKEPrice() {
-      const { data } = await this.$api.get(getLIKEPrice());
-      this.currentPrice = data.likecoin.usd;
+      try {
+        const { data } = await this.$api.get(getLIKEPrice());
+        this.currentPrice = data.likecoin.usd;
+      } catch (error) {
+        this.errorHandling('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
+      }
     },
   },
 };
