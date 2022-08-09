@@ -4,7 +4,7 @@
       <header class="flex items-center justify-between mb-24">
         <div class="flex items-center">
           <img
-            src="~/assets/images/civic-liker-icon.svg?inline"
+            src="~/assets/images/civic-liker-icon.png"
             :alt="$t('civic_liker_dashboard_header_title')"
             style="width:68px"
           >

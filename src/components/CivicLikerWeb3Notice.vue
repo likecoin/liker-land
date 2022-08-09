@@ -10,7 +10,7 @@
         <div class="flex items-center">
           <img
             class="mr-16"
-            src="~/assets/images/civic-liker-icon.svg?inline"
+            src="~/assets/images/civic-liker-icon.png"
             :alt="$t('civic_liker_dashboard_header_title')"
             style="width:64px"
           >
