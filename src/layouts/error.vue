@@ -178,6 +178,17 @@ export default {
     },
   },
   async mounted() {
+    // HACK: to handle firebase function double decoding iscn id, causing route to fail
+    if (this.$route.path.startsWith('/nft/iscn/iscn:/likecoin-chain')) {
+      this.$router.replace({
+        name: 'nft-iscn-iscnId',
+        params: {
+          iscnId: this.$route.path.replace('/nft/iscn/iscn:/', 'iscn://'),
+        },
+      });
+      return;
+    }
+
     if (this.isLoginError) {
       if (window.localStorage) {
         const { name, params, query, hash } = this.$route;
