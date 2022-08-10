@@ -58,7 +58,8 @@
               </div>
             </li>
           </ul>
-          <ButtonV2 preset="secondary" @click="handleClickCollect">
+          <ProgressIndicator v-if="isLoading" />
+          <ButtonV2 v-else preset="secondary" @click="handleClickCollect">
             <template #prepend>
               <NFTWidgetIconInsertCoin />
             </template>
@@ -147,6 +148,10 @@ export default {
     soldCount: {
       type: Number,
       default: 0,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

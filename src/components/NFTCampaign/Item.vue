@@ -12,6 +12,7 @@
     :owner-count="ownerCount"
     :owner-name="getOwnerDisplayName"
     :sold-count="mintedCount"
+    :is-loading="isCollecting"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
     :sold-count-label="$t('campaign_nft_item_collected_count_label')"
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+import { getAccountBalance } from '~/util/nft';
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -33,6 +35,11 @@ export default {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      isCollecting: false,
+    };
   },
   computed: {
     getAvatar() {
@@ -51,13 +58,27 @@ export default {
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
-      // TODO: Log event
+    async handleClickCollect() {
       if (!this.getAddress) {
         this.connectWallet();
         return;
       }
-      this.collectNFT(this.getAddress, this.classId, this.getSigner);
+      try {
+        this.isCollecting = true;
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') {
+          this.isCollecting = false;
+          // TODO: show error message
+          return;
+        }
+        await this.collectNFT(this.getAddress, this.classId, this.getSigner);
+        this.handleSuccess(this.$t('snackbar_success_collect'));
+      } catch (error) {
+        // TODO:show error message
+      } finally {
+        this.isCollecting = false;
+        this.updateNFTPurchaseInfo();
+      }
     },
     handleViewDetails() {
       this.$router.push({
