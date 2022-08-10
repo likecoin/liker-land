@@ -11,4 +11,17 @@ export function ellipsis(value) {
   return value;
 }
 
+export function ellipsisDescription(value) {
+  if (value) {
+    const len = value.length;
+    const dots = '...';
+    if (!value) return '';
+    if (value.length > 200) {
+      return value.substring(0, 200) + dots;
+    }
+    return value;
+  }
+  return value;
+}
+
 export default ellipsis;
