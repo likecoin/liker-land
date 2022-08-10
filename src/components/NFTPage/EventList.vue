@@ -31,7 +31,7 @@
               </Label>
               <Label v-else-if="event.event === 'transfer'" :text="$t('nft_details_page_activity_list_event_transfer')">
                 <template #prepend>
-                  <IconCircle />
+                  <IconTransfer />
                 </template>
               </Label>
             </td>
@@ -39,7 +39,7 @@
               <Label>{{ event.price || '-' }}</Label>
             </td>
             <td>
-              <Label v-if="event.event === 'purchase'">collect</Label>
+              <Label v-if="event.event === 'purchase'">-</Label>
               <LinkV2 v-else-if="event.event === 'transfer'" :to="`/${event.fromWallet}`">
                 <Label class="break-all">{{
                   event.fromDisplayName | ellipsis
@@ -54,7 +54,7 @@
               </LinkV2>
             </td>
             <td>
-              <LinkV2 :href="getChainRawTx(event.txHash)">
+              <LinkV2 class="text-left" :href="getChainRawTx(event.txHash)">
                 <TimeAgo
                   long
                   tooltip
