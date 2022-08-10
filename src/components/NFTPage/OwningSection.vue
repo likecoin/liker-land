@@ -19,13 +19,13 @@
         <div v-else class="flex items-center">
           <Label preset="h5" :text="$t('nft_details_page_label_owning')" />
           <Label
-            v-if="!isSettingAccount && ownedCount !== null"
+            v-if="isLogIn && ownedCount !== null"
             preset="h4"
             :text="`${ownedCount}`"
             class="font-[900] ml-[20px]"
           />
           <Label
-            v-if="isSettingAccount || ownedCount === null"
+            v-if="!isLogIn || ownedCount === null"
             preset="h4"
             text="-"
             class="font-[900] ml-[20px]"
@@ -34,7 +34,7 @@
       </template>
       <template #append>
         <ProgressIndicator v-if="isTransferring" />
-        <ToolTips v-else :show-tool-tip="isTransferDisabled" :tool-tip-text="$t('tooltip_signin')">
+        <ToolTips v-else :show-tool-tip="isTransferDisabled" :tool-tip-text="getToolTipsText">
           <ButtonV2
             preset="secondary"
             class="-z-1"
@@ -53,7 +53,7 @@
 export default {
   name: 'OwningSection',
   props: {
-    isSettingAccount: {
+    isLogIn: {
       type: Boolean,
       default: false,
     },
@@ -72,6 +72,17 @@ export default {
     isTransferring: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    getToolTipsText() {
+      if (this.isLogIn && !this.ownedCount) {
+        return this.$t('tooltip_no_nft');
+      }
+      if (!this.isLogIn) {
+        return this.$t('tooltip_signin');
+      }
+      return undefined;
     },
   },
   methods: {

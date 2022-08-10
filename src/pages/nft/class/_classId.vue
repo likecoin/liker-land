@@ -90,6 +90,7 @@
             :owned-count="userOwnedCount"
             :is-transfer-disabled="isTransferDisabled"
             :is-loading="isSettingAccount"
+            :is-log-in="!!getAddress"
             :is-transferring="isTransferring"
             @openTransfer="isOpenTransferDialog = true;"
           />
