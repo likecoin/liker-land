@@ -53,7 +53,7 @@
         </NuxtLink>
       </div>
       <Label preset="h5" class="mt-[12px]" :text="nftName" />
-      <Label preset="p5" class="mt-[12px]" :text="nftDescription" />
+      <Label preset="p5" class="mt-[12px]" :text="nftDescription | ellipsisDescription" />
       <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
       <div class="flex justify-center">
         <ButtonV2
@@ -86,12 +86,13 @@
 </template>
 
 <script>
-import { ellipsis } from '~/util/ui';
+import { ellipsis, ellipsisDescription } from '~/util/ui';
 
 export default {
   name: 'ItemCard',
   filters: {
     ellipsis,
+    ellipsisDescription,
   },
   props: {
     // rootClass
