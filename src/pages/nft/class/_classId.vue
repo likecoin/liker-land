@@ -89,7 +89,7 @@
           <NFTPageOwningSection
             :owned-count="userOwnedCount"
             :is-transfer-disabled="isTransferDisabled"
-            :is-loading="isSettingAccount"
+            :is-loading="isLoading"
             :is-log-in="!!getAddress"
             :is-transferring="isTransferring"
             @openTransfer="isOpenTransferDialog = true;"
@@ -205,7 +205,7 @@ export default {
       recipientAddress: '',
 
       currentPrice: 0,
-      isSettingAccount: true,
+      isLoading: true,
 
       isOpenTransferDialog: false,
       errorMsg: '',
@@ -234,7 +234,7 @@ export default {
       ];
     },
     isTransferDisabled() {
-      return this.isSettingAccount || !this.userOwnedCount;
+      return this.isLoading || !this.userOwnedCount;
     },
   },
   watch: {
@@ -253,7 +253,7 @@ export default {
       this.updateNFTHistory(),
       this.getLIKEPrice(),
     ]);
-    this.isSettingAccount = false;
+    this.isLoading = false;
   },
   methods: {
     async updateUserOwnedCount(address) {
@@ -261,10 +261,10 @@ export default {
         this.userOwnedCount = null;
         return;
       }
-      this.isSettingAccount = true;
+      this.isLoading = true;
       const { amount } = await getNFTCountByClassId(this.classId, address);
       this.userOwnedCount = amount.low;
-      this.isSettingAccount = false;
+      this.isLoading = false;
     },
     async onTransfer() {
       this.isTransferring = true;
