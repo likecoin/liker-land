@@ -24,16 +24,28 @@
             class="py-[12px] border-b-shade-gray border-b-[1px]"
           >
             <td>
-              <Label :text="$t('nft_details_page_activity_list_event_collect')">
+              <Label v-if="event.event === 'purchase'" :text="$t('nft_details_page_activity_list_event_collect')">
+                <template #prepend>
+                  <IconCircle />
+                </template>
+              </Label>
+              <Label v-else-if="event.event === 'transfer'" :text="$t('nft_details_page_activity_list_event_transfer')">
                 <template #prepend>
                   <IconCircle />
                 </template>
               </Label>
             </td>
             <td>
-              <Label>{{ event.price }}</Label>
+              <Label>{{ event.price || '-' }}</Label>
             </td>
-            <td><Label text="-" /></td>
+            <td>
+              <Label v-if="event.event === 'purchase'">collect</Label>
+              <LinkV2 v-else-if="event.event === 'transfer'" :to="`/${event.fromWallet}`">
+                <Label class="break-all">{{
+                  event.fromDisplayName | ellipsis
+                }}</Label>
+              </LinkV2>
+            </td>
             <td>
               <LinkV2 :to="`/${event.toWallet}`">
                 <Label class="break-all">{{
