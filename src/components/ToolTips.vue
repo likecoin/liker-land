@@ -22,6 +22,7 @@ export default {
 .tooltip {
   position: relative;
   display: inline-block;
+  z-index: 0;
 }
 
 /* Tooltip text */
@@ -37,7 +38,6 @@ export default {
 
   /* Position the tooltip text */
   position: absolute;
-  z-index: 1;
   bottom: 125%;
   left: 50%;
   margin-left: -60px;

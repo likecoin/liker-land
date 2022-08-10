@@ -726,6 +726,22 @@ module.exports = {
         '.bg-error-gradient': {
           'background-image': 'linear-gradient(78deg, #f0d2d2, #f0e6b4)',
         },
+        '.scrollbar-custom': {
+          'scrollbar-width': '5px', /* Firefox */
+          '&::-webkit-scrollbar': { 
+            width: '5px' /* Chrome */
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '4px',
+            background: '#EBEBEB',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#9B9B9B',
+          }
+        },
       });
     },
   ],

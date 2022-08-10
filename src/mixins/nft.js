@@ -85,11 +85,40 @@ export default {
         this.iscnId
       )}%2F1`;
     },
+    trimedEvents() {
+      if (this.NFTHistory.length >= 10) {
+        return this.NFTHistory.filter((id, index) => index <= 10).map(
+          event => ({
+            ...event,
+            toDisplayName:
+              this.displayNameList[event.toWallet] || event.toWallet,
+            fromDisplayName:
+              this.displayNameList[event.fromWallet] ||
+              event.toWafromWalletllet,
+          })
+        );
+      }
+      return undefined;
+    },
     populatedEvents() {
       return this.NFTHistory.map(event => ({
         ...event,
         toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
+        fromDisplayName:
+          this.displayNameList[event.fromWallet] || event.toWafromWalletllet,
       }));
+    },
+    trimedCollectors() {
+      if (this.sortedOwnerListId.length >= 10) {
+        return this.sortedOwnerListId
+          .filter((id, index) => index < 10)
+          .map(id => ({
+            id,
+            displayName: this.displayNameList[id] || id,
+            collectedCount: this.ownerList[id].length,
+          }));
+      }
+      return undefined;
     },
     populatedCollectors() {
       return this.sortedOwnerListId.map(id => ({
