@@ -74,6 +74,13 @@
           </li>
         </ul>
       </section>
+      <section class="mt-[88px] px-[24px]">
+        <h1 class="font-proxima font-[600] text-[32px] leading-[2] text-center text-like-green">{{ $t('campaign_nft_upcoming') }}</h1>
+        <img
+          class="mt-[16px] max-w-[696px] w-full max-h-[316px] border-shade-gray border-[2px] rounded-[24px] mx-auto object-cover"
+          src="~/assets/images/nft/upcoming.jpg"
+        >
+      </section>
     </main>
     <Footer />
   </div>
