@@ -160,7 +160,7 @@ export default {
     },
   },
   async mounted() {
-    const ans = await this.initIfNecessary();
+    await this.initIfNecessary();
   },
   methods: {
     ...mapActions([
