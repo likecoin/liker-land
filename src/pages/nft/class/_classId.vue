@@ -242,9 +242,13 @@ export default {
       },
     },
   },
+  async fetch({ route, store }) {
+    const { classId } = route.params;
+    await store.dispatch('fetchNFTMetadata', classId);
+  },
   async mounted() {
     await Promise.all([
-      this.updateNFTClassMetdata(),
+      this.updateDisplayNameList(this.iscnOwner),
       this.updateNFTPurchaseInfo(),
       this.updateNFTOwners(),
       this.updateNFTHistory(),
