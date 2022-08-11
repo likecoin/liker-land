@@ -61,7 +61,7 @@
           <IconPrice />
         </template>
       </ButtonV2>
-      <ToolTips :tool-tip-text="$t('tooltip_comming_soon')">
+      <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
         <ButtonV2
           class="ml-[12px]"
           :text="$t('nft_details_page_button_sell')"

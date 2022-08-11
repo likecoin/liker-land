@@ -728,7 +728,7 @@ module.exports = {
         },
         '.scrollbar-custom': {
           'scrollbar-width': '5px', /* Firefox */
-          '&::-webkit-scrollbar': { 
+          '&::-webkit-scrollbar': {
             width: '5px' /* Chrome */
           },
           '&::-webkit-scrollbar-track': {
@@ -736,10 +736,10 @@ module.exports = {
           },
           '&::-webkit-scrollbar-thumb': {
             borderRadius: '4px',
-            background: '#50e3c2'
+            background: '#EBEBEB',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: '#1aa384'
+            background: '#9B9B9B',
           }
         },
       });

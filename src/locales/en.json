@@ -23,6 +23,7 @@
   "campaign_nft_item_view_details_label": "View NFT details",
   "campaign_nft_item_collected_count_label": "Collected",
   "campaign_nft_item_header_hint": "Collect this content as NFT",
+  "campaign_nft_upcoming": "Next Writing NFT coming on",
   "faq_list": [
     {
       "q": "Why publish articles as Writing NFT?",
@@ -43,7 +44,7 @@
   "nft_details_page_description": "This content has been published as Writing NFT. Collect now to build your portfolio.",
   "nft_details_page_title_collector": "Collectors",
   "nft_details_page_activity_list_event_collect": "Collect",
-  "nft_details_page_activity_list_event_transfer": "Trasnfer",
+  "nft_details_page_activity_list_event_transfer": "Transfer",
   "nft_details_page_activity_list_event_date": "Date",
   "nft_details_page_activity_list_event_from": "From",
   "nft_details_page_activity_list_event_price": "Price ($LIKE)",
@@ -56,6 +57,7 @@
   "nft_details_page_button_transfer": "Transfer",
   "nft_details_page_button_view": "View the work",
   "nft_details_page_collected_count_label": "Collected",
+  "nft_details_page_button_show_more": "show more",
   "nft_details_page_label_no_record": " - no record found",
   "nft_details_page_label_owning": "Owning",
   "nft_details_page_title_transfer": "Transfer your NFT",
@@ -72,7 +74,7 @@
   "about_the_team_top_label": "About",
   "about_the_team_title": "Liker Land Team",
   "about_the_team_description": "Liker Land is an award-winning blockchain company that builds user-centric protocols and applications in Web3. The awardee of the Google News Innovation Challenge, AppWorks incubatee, and several hackathons winners. Liker Land is currently the maintainer of LikeCoin to provide infrastructure support. Validators of Cosmos, Osmosis, and Desmos.",
-  "tooltip_comming_soon":"Comming Soon",
+  "tooltip_coming_soon":"Coming Soon",
   "tooltip_signin":"Please Sign in First",
   "tooltip_no_nft":"No owned NFTs to transfer",
   "snackbar_error_insufficient":"Oops, Insufficient Balance.",

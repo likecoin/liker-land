@@ -76,6 +76,9 @@ export default {
   },
   computed: {
     getToolTipsText() {
+      if (this.isTransferDisabled) {
+        return this.$t('tooltip_coming_soon');
+      }
       if (this.isLogIn && !this.ownedCount) {
         return this.$t('tooltip_no_nft');
       }
