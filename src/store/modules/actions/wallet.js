@@ -12,11 +12,14 @@ export function initConnector({ state, commit }, { onInit } = {}) {
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
     onInit: async ({ accounts, offlineSigner }) => {
       if (!accounts[0]) return;
-      const { address } = accounts[0];
-      commit(types.WALLET_SET_ADDRESS, address);
+      const { address, bech32Address } = accounts[0];
+      const walletAddress = bech32Address || address;
+      commit(types.WALLET_SET_ADDRESS, walletAddress);
       commit(types.WALLET_SET_SIGNER, offlineSigner);
       try {
-        const userInfo = await this.$api.$get(getAddressLikerIdMinApi(address));
+        const userInfo = await this.$api.$get(
+          getAddressLikerIdMinApi(walletAddress)
+        );
         commit(types.WALLET_SET_LIKERINFO, userInfo);
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
