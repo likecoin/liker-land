@@ -64,7 +64,7 @@
               :iscn-url="iscnURL"
             />
             <NFTPageCollectorList
-              :root-class="'laptop:ml-[12px] mb-[16px] desktop:m-0'"
+              class="laptop:ml-[12px] mb-[16px] desktop:m-0"
               :owner-count="ownerCount"
               :items="populatedCollectors"
             />

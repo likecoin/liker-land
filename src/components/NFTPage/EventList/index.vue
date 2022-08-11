@@ -8,7 +8,7 @@
     </template>
     <template #content>
       <div v-if="items.length">
-        <NFTPageEventListTable :nft-history="trimmedItems || items" />
+        <NFTPageEventListTable :nft-history="trimmedItems" />
         <ShowMore
           v-if="shouldShowMore"
           class="my-[8px]"
@@ -34,18 +34,17 @@ export default {
       type: Array,
       default: undefined,
     },
+    trimmedCount: {
+      type: Number,
+      default: 10,
+    },
   },
   computed: {
     trimmedItems() {
-      if (this.items.length >= 10) {
-        return this.items.filter((id, index) => index <= 9).map(event => ({
-          ...event,
-        }));
-      }
-      return undefined;
+      return this.items.slice(0, this.trimmedCount);
     },
     shouldShowMore() {
-      return !!this.trimmedItems;
+      return this.items.length > this.trimmedItems.length;
     },
   },
 };

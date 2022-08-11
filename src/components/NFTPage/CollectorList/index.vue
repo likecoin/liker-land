@@ -2,7 +2,6 @@
   <DropDownList
     :class="[
       'w-full',
-      rootClass
     ]"
     :title="$t('nft_details_page_title_collector')"
   >
@@ -11,7 +10,7 @@
     </template>
     <template #content class="flex flex-col my-[12px]">
       <div v-if="ownerCount">
-        <NFTPageCollectorListItems :owner-list="trimmedItems || items" />
+        <NFTPageCollectorListItems :owner-list="trimmedItems" />
         <ShowMore
           v-if="shouldShowMore"
         >
@@ -57,12 +56,6 @@
 export default {
   name: 'CollectorList',
   props: {
-    // rootClass
-    rootClass: {
-      type: String,
-      default: undefined,
-    },
-
     // content
     ownerCount: {
       type: Number,
@@ -72,18 +65,17 @@ export default {
       type: Array,
       default: undefined,
     },
+    trimmedCount: {
+      type: Number,
+      default: 10,
+    },
   },
   computed: {
     trimmedItems() {
-      if (this.items.length >= 10) {
-        return this.items.filter((id, index) => index <= 9).map(owner => ({
-          ...owner,
-        }));
-      }
-      return undefined;
+      return this.items.slice(0, this.trimmedCount);
     },
     shouldShowMore() {
-      return !!this.trimmedItems;
+      return this.items.length > this.trimmedItems.length;
     },
   },
 };
