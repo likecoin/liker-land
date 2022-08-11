@@ -64,9 +64,9 @@
               :iscn-url="iscnURL"
             />
             <NFTPageCollectorList
-              :root-class="'laptop:ml-[12px] mb-[16px] desktop:m-0'"
+              class="laptop:ml-[12px] mb-[16px] desktop:m-0"
               :owner-count="ownerCount"
-              :owner-list="populatedCollectors"
+              :items="populatedCollectors"
             />
           </div>
           <!-- Metadata -->
@@ -103,7 +103,7 @@
             @collect="handleClickCollect"
           />
           <NFTPageEventList
-            :nft-history="populatedEvents"
+            :items="populatedEvents"
           />
         </div>
       </section>

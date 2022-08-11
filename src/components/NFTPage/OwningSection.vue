@@ -32,7 +32,7 @@
         </div>
       </template>
       <template #append>
-        <ToolTips :tool-tip-text="$t('tooltip_comming_soon')">
+        <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
           <ButtonV2
             preset="tertiary"
             size="mini"

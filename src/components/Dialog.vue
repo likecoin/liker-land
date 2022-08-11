@@ -47,7 +47,7 @@
             'relative',
             'max-h-[80vh]',
             'overflow-y-scroll',
-            'scrollbar-hidden',
+            'scrollbar-custom',
             panelClass,
           ]"
         >
