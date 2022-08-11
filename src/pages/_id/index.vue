@@ -171,7 +171,7 @@
                     <ButtonV2
                       preset="secondary"
                       class="my-[16px]"
-                      @click.stop.prevent="handleClickCollect(id)"
+                      @click.stop.prevent="handleClickCollect(getNFTClassMetadataById(id).iscn_id)"
                     >
                       {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
@@ -261,7 +261,7 @@
                     <ButtonV2
                       preset="secondary"
                       class="my-[16px]"
-                      @click.stop.prevent="handleClickCollect(id)"
+                      @click.stop.prevent="handleClickCollect(getNFTClassMetadataById(id).iscn_id)"
                     >
                       {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
                       <template #prepend>
@@ -308,6 +308,7 @@ import {
   getUserSellNFTClasses,
   getAddressLikerIdMinApi,
 } from '~/util/api';
+import { APP_LIKE_CO_URL_BASE } from '~/constant';
 import { checkUserNameValid } from '~/util/user';
 import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
@@ -503,13 +504,14 @@ export default {
         );
       }
     },
-    // ERROR: won't work for now, should be refactored to a component later
-    handleClickCollect(id) {
-      if (!this.getAddress) {
-        this.connectWallet();
-        return;
-      }
-      this.collectNFT(this.getAddress, id, this.getSigner);
+    handleClickCollect(iscnid) {
+      window.open(
+        `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
+          iscnid
+        )}%2F1`,
+        `collect_${this.classId}`,
+        'popup=1,width=768,height=576,top=0,left=0'
+      );
     },
   },
 };

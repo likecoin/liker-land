@@ -87,6 +87,7 @@
           :class="[ 'flex-grow', columnClasses ]"
         >
           <NFTPageOwningSection
+            class="hidden"
             :owned-count="userOwnedCount"
             :is-transfer-disabled="isTransferDisabled"
             :is-loading="isLoading"
@@ -282,20 +283,8 @@ export default {
         this.isReadyToTransfer = true;
       }
     },
-    async onCollect() {
-      if (!this.getAddress) {
-        this.connectWallet();
-        return;
-      }
-      try {
-        this.isCollecting = true;
-        await this.collectNFT();
-        this.handleSuccess(this.$t('snackbar_success_collect'));
-      } catch (error) {
-        this.errorHandling(error);
-      } finally {
-        this.isCollecting = false;
-      }
+    onCollect() {
+      this.collectNFT();
     },
     async getLIKEPrice() {
       try {

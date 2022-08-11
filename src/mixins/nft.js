@@ -176,26 +176,12 @@ export default {
         );
       }
     },
-    async collectNFT() {
-      try {
-        const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
-        const txHash = await sendGrant({
-          senderAddress: this.getAddress,
-          amountInLIKE: this.purchaseInfo.totalPrice,
-          signer: this.getSigner,
-        });
-        await this.$api.post(
-          postNFTPurchase({ txHash, classId: this.classId })
-        );
-      } catch (error) {
-        throw error;
-      } finally {
-        this.updateUserOwnedCount(this.getAddress);
-        this.updateNFTOwners();
-        this.updateNFTHistory();
-        this.updateNFTPurchaseInfo();
-      }
+    collectNFT() {
+      window.open(
+        this.purchaseURL,
+        `collect_${this.classId}`,
+        'popup=1,width=768,height=576,top=0,left=0'
+      );
     },
     async transferNFT() {
       try {

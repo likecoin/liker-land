@@ -58,20 +58,8 @@ export default {
     this.updateNFTOwners();
   },
   methods: {
-    async handleClickCollect() {
-      if (!this.getAddress) {
-        this.connectWallet();
-        return;
-      }
-      try {
-        this.isCollecting = true;
-        await this.collectNFT();
-        this.handleSuccess(this.$t('snackbar_success_collect'));
-      } catch (error) {
-        this.errorHandling(error);
-      } finally {
-        this.isCollecting = false;
-      }
+    handleClickCollect() {
+      this.collectNFT();
     },
     handleViewDetails() {
       this.$router.push({
