@@ -184,6 +184,7 @@ export default {
     await store.dispatch('fetchNFTMetadata', classId);
   },
   mounted() {
+    this.updateDisplayNameList(this.iscnOwner);
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
     this.updateNFTHistory();
