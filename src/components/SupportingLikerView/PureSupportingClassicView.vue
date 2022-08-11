@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import TickIcon from '../../assets/icons/tick.svg';
+import TickIcon from '../../assets/icons/tick.svg?inline';
 
 import Button from '../LegacyButton/Button';
 import CivicLikerClassicBannerSmall from '../CivicLikerClassicAssets/CivicLikerClassicBannerSmall';

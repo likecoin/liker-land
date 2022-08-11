@@ -16,7 +16,7 @@
       v-if="!isPreview"
       #header
     >
-      <div class="flex justify-between items-center mb-24 phone:px-16">
+      <div class="flex items-center justify-between mb-24 phone:px-16">
         <button
           class="flex items-center text-like-green"
           @click="onClickBackButton"
@@ -45,14 +45,14 @@
 
     <div
       v-if="isPreview && state !== 'loading'"
-      class="phone:relative fixed top-0 left-0 right-0 z-10"
+      class="fixed top-0 left-0 right-0 z-10 phone:relative"
     >
-      <div class="flex items-center bg-like-cyan-pale p-16 tablet:p-24 laptop:px-72 pointer-events-auto">
+      <div class="flex items-center p-16 pointer-events-auto bg-like-cyan-pale tablet:p-24 laptop:px-72">
         <Button
           class="mr-8"
           preset="plain"
           :title="$t('goBack')"
-          title-class="whitespace-no-wrap no-underline"
+          title-class="no-underline whitespace-no-wrap"
           @click="onClickBackButton"
         >
           <template #prepend>
@@ -68,7 +68,7 @@
             </svg>
           </template>
         </Button>
-        <div class="flex flex-wrap items-center text-12 border-l-1 border-gray-4a px-16 py-8">
+        <div class="flex flex-wrap items-center px-16 py-8 text-12 border-l-1 border-gray-4a">
           <EyeIcon class="w-16 text-like-green shrink-0" />
           <span class="ml-4 mr-12 text-like-green shrink-0">{{ $t('SettingsSupportPage.PitchPreview.Status') }}</span>
           <span class="phone:mt-4 phone:w-full">{{ $t('SettingsSupportPage.PitchPreview.Hint') }}</span>
@@ -85,12 +85,12 @@
         class="pt-32"
       >
         <div
-          class="mx-auto px-24 overflow-hidden"
+          class="px-24 mx-auto overflow-hidden"
           style="max-width: 370px; box-sizing: content-box"
         >
           <CivicLikerClassicGlobe class="w-full -mb-32" />
         </div>
-        <hr class="my-0 h-8 bg-gray-f7">
+        <hr class="h-8 my-0 bg-gray-f7">
         <div class="p-32 phone:px-16">
           <h2 class="text-center text-16 font-500">{{ $t('civic_liker_classic_new_header') }}</h2>
           <CivicLikerSupportAmountView
@@ -130,7 +130,7 @@
           />
           <hr class="my-24 border-t-1 border-gray-d8">
           <div class="-m-8">
-            <div class="text-16 text-center text-like-green font-600">
+            <div class="text-center text-16 text-like-green font-600">
               {{ $t('UpdateSupportQuantity.Title') }}
             </div>
             <CivicQuantitySelect
@@ -148,7 +148,7 @@
             />
           </div>
           <hr class="my-24 border-t-1 border-gray-d8">
-          <ul class="m-0 p-0 list-style-none">
+          <ul class="p-0 m-0 list-style-none">
             <li class="flex items-center">
               <img
                 class="w-56"
@@ -213,12 +213,12 @@
         class="pt-32"
       >
         <div
-          class="mx-auto px-24 overflow-hidden"
+          class="px-24 mx-auto overflow-hidden"
           style="max-width: 370px; box-sizing: content-box"
         >
           <CivicLikerClassicGlobe class="w-full -mb-32" />
         </div>
-        <hr class="my-0 h-8 bg-gray-f7">
+        <hr class="h-8 my-0 bg-gray-f7">
         <div class="p-32 phone:px-16">
           <h2 class="text-center text-16 font-500">{{ $t('civic_liker_classic_new_header') }}</h2>
           <CivicLikerSupportAmountView
@@ -235,22 +235,22 @@
             class="mt-8"
           >{{ $t('civic_liker_classic_new_description_content') }}</p>
           <Button
-            class="mt-48 pointer-events-none relative"
+            class="relative mt-48 pointer-events-none"
             preset="secondary-outline"
             :title="$t('civic_liker_classic_active_button')"
             :full="true"
             size="large"
           >
             <template #prepend>
-              <TickIcon class="absolute left-0 ml-8 w-24 h-24 text-success fill-current" />
+              <TickIcon class="absolute left-0 w-24 h-24 ml-8 fill-current text-success" />
             </template>
           </Button>
           <div
             v-if="isUserCurrentCivic && currentQuantity > 0 && !isCancelled"
-            class="text-center mt-16"
+            class="mt-16 text-center"
           >
             <a
-              class="text-12 text-gray-4a underline"
+              class="underline text-12 text-gray-4a"
               href="#"
               @click.prevent="state = 'cancel'"
             >{{ $t('civic_liker_classic_cancel_button') }}</a>
@@ -261,7 +261,7 @@
         v-else
         class="p-32 phone:px-16"
       >
-        <div class="mt-16 px-40 phone:px-0">
+        <div class="px-40 mt-16 phone:px-0">
           <Identity
             :avatar-url="avatarUrl"
             :avatar-size="64"
@@ -330,12 +330,12 @@
 
       <hr class="my-16 border-t-1 border-gray-d8">
 
-      <div class="mt-20 mx-40 phone:mx-0 text-14 text-gray-4a font-200">
+      <div class="mx-40 mt-20 phone:mx-0 text-14 text-gray-4a font-200">
         <h2 class="mb-16 text-16 font-500">{{ $t('SupportSummary.Title') }}</h2>
 
         <div class="flex justify-between py-12 border-t-1 border-gray-d8">
           <div>{{ $t('SupportSummary.NewCharge', { name: displayName }) }}</div>
-          <div class="font-500 whitespace-no-wrap">{{ `${currency} ${selectedQuantity * dollar}` }}</div>
+          <div class="whitespace-no-wrap font-500">{{ `${currency} ${selectedQuantity * dollar}` }}</div>
         </div>
 
         <div
@@ -343,7 +343,7 @@
           class="flex justify-between py-12 border-t-1 border-gray-d8"
         >
           <div>{{ $t('SupportSummary.OtherCharge') }}</div>
-          <div class="font-500 whitespace-no-wrap">{{ `${currency} ${otherQuantity * dollar}` }}</div>
+          <div class="whitespace-no-wrap font-500">{{ `${currency} ${otherQuantity * dollar}` }}</div>
         </div>
 
         <div class="flex justify-between py-12 border-t-1 border-gray-d8 text-16 font-500">
@@ -371,7 +371,7 @@
           v-if="isConfirmButtonDisabled"
           class="flex mt-32 text-like-green"
         >
-          <AlertCircle class="w-24 h-24 shrink-0 mr-12" />
+          <AlertCircle class="w-24 h-24 mr-12 shrink-0" />
           <i18n
             class="flex-grow text-like-green text-14 font-500 leading-1_5"
             :path="confimrButtonDisabledHintI18nPath"
@@ -379,7 +379,7 @@
             :places="{ date: nextBillingDate }"
           >
             <NuxtLink
-              class="text-like-green underline"
+              class="underline text-like-green"
               :to="{ name: 'settings-civic-unsubscribe' }"
               place="unsubscribe"
             >{{ $t('SupportSummary.Error.CivicV1.Unsubscribe') }}</NuxtLink>
@@ -412,11 +412,11 @@
         <hr class="my-16 border-t-1 border-gray-d8">
       </div>
 
-      <div class="mt-32 mx-40 phone:mx-0">
+      <div class="mx-40 mt-32 phone:mx-0">
         <BrokenHeart class="block mx-auto" />
 
         <div
-          class="mt-16 text-24 text-like-green font-500 text-center"
+          class="mt-16 text-center text-24 text-like-green font-500"
         >{{ $t('CancelSubscription.Title') }}</div>
 
         <i18n
@@ -456,12 +456,12 @@
 
     <div
       v-else-if="state === 'post-cancel'"
-      key="cancel"
-      class="px-72 pt-40 pb-32 phone:px-24"
+      key="post-cancel"
+      class="pt-40 pb-32 px-72 phone:px-24"
     >
       <i18n
         tag="div"
-        class="mt-16 text-24 text-like-green font-500 text-center"
+        class="mt-16 text-center text-24 text-like-green font-500"
         path="CancelSubscription.GoodBye"
         :places="{ name: displayName }"
       />
@@ -477,7 +477,7 @@
 
     <BaseDialog
       :is-show="isShowUpgradeWarning"
-      content-container-class="max-w-phone-min rounded-8 phone:rounded-none mx-auto"
+      content-container-class="mx-auto max-w-phone-min rounded-8 phone:rounded-none"
     >
       <div class="p-24">
         <div class="relative py-12">
@@ -488,7 +488,7 @@
           >
             <Cross class="w-16 h-16" />
           </Button>
-          <AlertCircle class="block mx-auto text-like-green w-24 h-24" />
+          <AlertCircle class="block w-24 h-24 mx-auto text-like-green" />
         </div>
         <i18n
           class="mt-16 text-gray-4a leading-1_5 font-400"
@@ -496,7 +496,7 @@
           tag="p"
         >
           <NuxtLink
-            class="text-like-green underline"
+            class="underline text-like-green"
             :to="{ name: 'settings-civic' }"
             place="here"
           >{{ $t('UpdateSupportQuantity.CL1.Here') }}</NuxtLink>
@@ -520,10 +520,10 @@
       </div>
       <div
         v-else-if="!isClassic && state === 'select-quantity' && isUserCurrentCivic && currentQuantity > 0 && !isCancelled"
-        class="text-center mt-16"
+        class="mt-16 text-center"
       >
         <a
-          class="text-12 text-gray-4a underline"
+          class="underline text-12 text-gray-4a"
           href="#"
           @click.prevent="state = 'cancel'"
         >{{ $t('UpdateSupportQuantity.Unsubscribe') }}</a>
@@ -554,17 +554,18 @@ import EyeIcon from '~/components/Icon/Eye';
 import Identity from '~/components/Identity/Identity';
 import SelectButton from '~/components/SelectButton/SelectButton';
 import Spinner from '~/components/Spinner/Spinner';
-import TickIcon from '~/assets/icons/tick.svg';
+import TickIcon from '~/assets/icons/tick.svg?inline';
+import AlertCircle from '~/assets/icons/alert-circle.svg?inline';
+import Cross from '~/assets/icons/cross.svg?inline';
+import BrokenHeart from '~/assets/images/civic-v2/broken-heart.svg?inline';
 
 const STATES = ['new', 'select-quantity', 'confirm'];
 
 export default {
   components: {
-    AlertCircle: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
+    AlertCircle,
     BaseDialog,
-    BrokenHeart: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/images/civic-v2/broken-heart.svg'),
+    BrokenHeart,
     Button,
     CivicLikerClassicBanner,
     CivicLikerClassicGlobe,
@@ -573,8 +574,7 @@ export default {
     CivicLikerPitchingView,
     CivicQuantitySelect,
     CL1VsCL2Link,
-    Cross: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
+    Cross,
     EyeIcon,
     Identity,
     SelectButton,

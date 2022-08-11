@@ -24,7 +24,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import GlobeIcon from '~/assets/icons/globe.svg';
+import GlobeIcon from '~/assets/icons/globe.svg?inline';
 
 import { getLikerIdSettingsURL } from '~/util/links';
 

@@ -30,12 +30,13 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import DropdownIcon from '~/assets/icons/arrow-bottom.svg?inline';
+
 import SupportersListItem from './SupportersListItem';
 
 export default {
   components: {
-    DropdownIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/arrow-bottom.svg'),
+    DropdownIcon,
     SupportersListItem,
   },
   data() {

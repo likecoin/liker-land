@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import test from 'ava';
-import Logo from '../../assets/icons/logo.svg';
+import Logo from '../../assets/icons/logo.svg?inline';
 
 test('is a Vue instance', t => {
   const wrapper = mount(Logo);

@@ -33,6 +33,9 @@
 </template>
 
 <script>
+import AlertCircle from '~/assets/icons/alert-circle.svg?inline';
+import ExternalLink from '~/assets/icons/external-link.svg?inline';
+
 import Button from '../LegacyButton/Button';
 
 import CivicDashboardV3 from './Dashboard';
@@ -40,10 +43,8 @@ import CivicDashboardV3 from './Dashboard';
 export default {
   layout: 'default',
   components: {
-    AlertCircle: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
-    ExternalLink: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/external-link.svg'),
+    AlertCircle,
+    ExternalLink,
     Button,
     CivicDashboardV3,
   },

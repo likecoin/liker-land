@@ -59,16 +59,17 @@
 </template>
 
 <script>
+import AlertCircle from '~/assets/icons/alert-circle.svg?inline';
+import Close from '~/assets/icons/cross.svg?inline';
+
 import Button from './LegacyButton/Button';
 
 export default {
   name: 'CivicLikerWeb3Notice',
   components: {
-    AlertCircle: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/alert-circle.svg'),
+    AlertCircle,
     Button,
-    Close: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/cross.svg'),
+    Close,
   },
   props: {
     isPopUp: {

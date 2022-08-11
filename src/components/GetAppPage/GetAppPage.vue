@@ -8,7 +8,10 @@
       </section>
       <section class="container top-container">
         <div class="center app-logo">
-          <AppLogo width="160px" />
+          <img
+            class="w-[160px]"
+            src="~/assets/images/app-logo.svg"
+          >
         </div>
         <h1 class="slogan center">
           <div class="slogan-text center">{{ $t('GetAppPage.Download') }}</div>
@@ -49,13 +52,10 @@
 <script>
 import AppDownloadBadges from '~/components/AppDownloadBadges/AppDownloadBadges';
 
-import AppLogo from '~/assets/images/app-logo.svg';
-
 export default {
   name: 'GetAppPageNew',
   components: {
     AppDownloadBadges,
-    AppLogo,
   },
   props: {
     showCross: {

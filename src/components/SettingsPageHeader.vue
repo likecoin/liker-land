@@ -26,7 +26,7 @@
 
 <script>
 import Button from '~/components/LegacyButton/Button';
-import SettingsIcon from '~/assets/icons/cog.svg';
+import SettingsIcon from '~/assets/icons/cog.svg?inline';
 
 export default {
   name: 'SettingsPageHeader',

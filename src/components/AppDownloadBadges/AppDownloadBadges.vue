@@ -5,13 +5,13 @@
       class="phone:hidden"
       :href="url"
       target="_blank"
-    ><Apple /></a>
+    ><img src="./apple.svg"></a>
     <a
       v-if="!isSingleType"
       class="phone:hidden"
       :href="url"
       target="_blank"
-    ><Google /></a>
+    ><img src="./google.svg"></a>
     <a
       :class="singleButtonClass"
       :href="url"
@@ -31,10 +31,6 @@ import { getAppURL } from '~/util/api';
 
 export default {
   name: 'AppDownloadBadges',
-  components: {
-    Apple: () => import(/* webpackChunkName: "svg-app" */ './apple.svg'),
-    Google: () => import(/* webpackChunkName: "svg-app" */ './google.svg'),
-  },
   props: {
     type: {
       type: String,

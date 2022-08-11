@@ -35,7 +35,7 @@
 
 <script>
 import CollapsibleView from '~/components/CollapsibleView';
-import TickIcon from '~/assets/icons/tick.svg';
+import TickIcon from '~/assets/icons/tick.svg?inline';
 
 const LIKER_FEATURE = {
   DISTRIBUTE_FUND: 'distributeFund',

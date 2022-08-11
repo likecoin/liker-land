@@ -16,8 +16,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import LikerLandLogo from '~/assets/icons/logo.svg';
-import LikerLogo from '~/assets/images/liker-logo.svg';
+import LikerLandLogo from '~/assets/icons/logo.svg?inline';
+import LikerLogo from '~/assets/images/liker-logo.svg?inline';
 
 export default {
   name: 'DialogLayout',

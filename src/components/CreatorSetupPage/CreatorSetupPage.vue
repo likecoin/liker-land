@@ -39,7 +39,7 @@
 
     section.creators-page__hero
       .creators-page__hero-graph
-        HeroGraph
+        img(src="./hero-graph.svg")
       i18n.creators-page__hero-title(tag="h1" path="CreatorsPage.Title")
       .creators-page__hero-desc
         i18n.creators-page__hero-desc-text(path="CreatorsPage.Description")
@@ -56,15 +56,14 @@
     section.creators-page__platform-select
       i18n.creators-page__platform-select-title(tag="div" path="CreatorsPage.PlatformSelectLabel")
       .creators-page__platform-select-grid
-        +PlatformSelectGridItem("#config-liker-id", "Matters"): MattersLogo
-        +PlatformSelectGridItem("#config-liker-id", "Vocus"): VocusLogo
-        +PlatformSelectGridItem("#wordpress", "WordPress"): WordPressLogo
-        +PlatformSelectGridItem("#provide-liker-id", "InMedia"): InMediaLogo
-        +PlatformSelectGridItem("#provide-liker-id", "Standnews"): StandnewsLogo
-        +PlatformSelectGridItem("#embedly", "Medium"): MediumLogo
-        +PlatformSelectGridItem("#config-liker-id", "Timelog"): TimelogLogo
-        +PlatformSelectGridItem("#plugin", "Pixnet"): PixnetLogo(width="120")
-        +PlatformSelectGridItem("#plugin", "Blogger"): BloggerLogo
+        +PlatformSelectGridItem("#config-liker-id", "Matters"): img(src="./logos/matters.svg")
+        +PlatformSelectGridItem("#config-liker-id", "Vocus"): img(src="./logos/vocus.svg")
+        +PlatformSelectGridItem("#wordpress", "WordPress"): img(src="./logos/wordpress.svg")
+        +PlatformSelectGridItem("#provide-liker-id", "InMedia"): img(src="./logos/inmedia.svg")
+        +PlatformSelectGridItem("#embedly", "Medium"): img(src="./logos/medium.svg")
+        +PlatformSelectGridItem("#config-liker-id", "Timelog"): img(src="./logos/timelog.svg")
+        +PlatformSelectGridItem("#plugin", "Pixnet"): img(src="./logos/pixnet.svg" width="120")
+        +PlatformSelectGridItem("#plugin", "Blogger"): img(src="./logos/blogger.svg")
 
       .creators-page__separator
 
@@ -73,11 +72,11 @@
 
         +PlatformListItem('config-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper('Matters'): MattersLogo
+            +LogoWrapper('Matters'): img(src="./logos/matters.svg")
             +LogoSeparator
-            +LogoWrapper('Vocus'): VocusLogo
+            +LogoWrapper('Vocus'): img(src="./logos/vocus.svg")
             +LogoSeparator
-            +LogoWrapper('Timelog'): TimelogLogo
+            +LogoWrapper('Timelog'): img(src="./logos/timelog.svg")
           +PlatformDescription('ConfigLikerID')
             +PlatformDescriptionLink('Matters')
             +PlatformDescriptionLink('Vocus')
@@ -85,7 +84,7 @@
 
         +PlatformListItem('wordpress')
           .creators-page__platform-list-item-logos
-            +LogoWrapper('WordPress'): WordPressLogo
+            +LogoWrapper('WordPress'): img(src="./logos/wordpress.svg")
           +PlatformDescription('Plugin.Content')
             - var wpAlt = "$t('CreatorsPage.PlatformDescription.Plugin.WordPress')"
             - var wpText = `\{\{ ${alt} \}\}`
@@ -99,25 +98,23 @@
 
         +PlatformListItem('provide-liker-id')
           .creators-page__platform-list-item-logos
-            +LogoWrapper('InMedia'): InMediaLogo
-            +LogoSeparator
-            +LogoWrapper('Standnews'): StandnewsLogo
+            +LogoWrapper('InMedia'): img(src="./logos/inmedia.svg")
           +PlatformDescription('ProvideLikerID')
             +PlatformDescriptionLink('InMedia')
             +PlatformDescriptionLink('Standnews')
 
         +PlatformListItem('embedly')
           .creators-page__platform-list-item-logos
-            +LogoWrapper('Medium'): MediumLogo
+            +LogoWrapper('Medium'): img(src="./logos/medium.svg")
           +PlatformDescription('Embedly')
           CopyText.mt-24(:text="embedlyLink")
           img.mt-24(loading="lazy" src="./medium-demo.webp")
 
         +PlatformListItem('plugin')
           .creators-page__platform-list-item-logos
-            +LogoWrapper('Blogger'): BloggerLogo
+            +LogoWrapper('Blogger'): img(src="./logos/blogger.svg")
             +LogoSeparator
-            +LogoWrapper('Pixnet'): PixnetLogo
+            +LogoWrapper('Pixnet'): img(src="./logos/pixnet.svg")
           +PlatformDescription('PlatformPlugin')
             +PlatformDescriptionLink('Pixnet')
             +PlatformDescriptionLink('Blogger')
@@ -137,29 +134,7 @@ export default {
   name: 'CreatorPage',
   components: {
     EasySetup,
-    AppLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ '~/assets/images/app-logo.svg'),
     CopyText,
-    HeroGraph: () =>
-      import(/* webpackChunkName: "svg-creator" */ './hero-graph.svg'),
-    MattersLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/matters.svg'),
-    VocusLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/vocus.svg'),
-    WordPressLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/wordpress.svg'),
-    InMediaLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/inmedia.svg'),
-    StandnewsLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/standnews.svg'),
-    MediumLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/medium.svg'),
-    BloggerLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/blogger.svg'),
-    PixnetLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/pixnet.svg'),
-    TimelogLogo: () =>
-      import(/* webpackChunkName: "svg-creator" */ './logos/timelog.svg'),
   },
   mixins: [utmMixin],
   props: {
@@ -254,7 +229,7 @@ export default {
       text-align: right;
     }
 
-    > svg {
+    > img {
       display: block;
       max-width: 400px;
       margin: 10px auto;

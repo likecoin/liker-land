@@ -91,14 +91,15 @@
 </template>
 
 <script>
+import Logo from '~/assets/icons/logo.svg?inline';
+
 import Dialog from './Dialog';
 
 export default {
   name: 'Footer',
   components: {
     Dialog,
-    Logo: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/logo.svg'),
+    Logo,
   },
   data() {
     return {

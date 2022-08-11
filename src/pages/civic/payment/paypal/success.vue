@@ -6,7 +6,10 @@
         appear
       >
         <div class="payment-success-page-hero">
-          <RadialBlastGraph class="payment-success-page-hero__bg" />
+          <img
+            class="payment-success-page-hero__bg"
+            src="~/assets/images/civic/radial-blast.svg"
+          >
 
           <div class="payment-success-page-hero__avatar">
             <lc-avatar
@@ -53,14 +56,12 @@ import { mapActions, mapGetters } from 'vuex';
 import { getPayPalPaymentAPI } from '@/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import RadialBlastGraph from '~/assets/images/civic/radial-blast.svg';
-import TickIcon from '~/assets/icons/tick.svg';
+import TickIcon from '~/assets/icons/tick.svg?inline';
 
 const parse = require('url-parse');
 
 export default {
   components: {
-    RadialBlastGraph,
     TickIcon,
   },
   data() {

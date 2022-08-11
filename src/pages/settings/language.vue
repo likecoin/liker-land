@@ -25,7 +25,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import TickIcon from '~/assets/icons/tick.svg';
+import TickIcon from '~/assets/icons/tick.svg?inline';
 
 export default {
   components: {

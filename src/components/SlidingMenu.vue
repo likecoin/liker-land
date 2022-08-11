@@ -97,8 +97,8 @@ import { getOAuthRegisterAPI } from '~/util/api';
 import { CrispMixinFactory } from '~/mixins/crisp';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import CogIcon from '~/assets/icons/cog.svg';
-import HomeIcon from '~/assets/icons/home.svg';
+import CogIcon from '~/assets/icons/cog.svg?inline';
+import HomeIcon from '~/assets/icons/home.svg?inline';
 
 import Identity from './Identity/Identity';
 import LinkIcon from './Icon/Link8';

@@ -315,15 +315,15 @@
     "LikerIDPlaceholer": "<你的 Liker ID>",
     "GuideLinkBase": "https://docs.like.co/v/zh/user-guide/creator",
     "GuideLink": {
-      "Blogger": "@:CreatorsPage.GuideLinkBase/blogging-platforms/blogspot",
-      "InMedia": "@:CreatorsPage.GuideLinkBase/blogging-platforms/inmediahk.net",
-      "Matters": "@:CreatorsPage.GuideLinkBase/matters",
-      "Medium": "@:CreatorsPage.GuideLinkBase/blogging-platforms#medium",
-      "Pixnet": "@:CreatorsPage.GuideLinkBase/blogging-platforms#pixnet",
-      "Standnews": "@:CreatorsPage.GuideLinkBase/blogging-platforms/thestandnews",
-      "Timelog": "@:CreatorsPage.GuideLinkBase/blogging-platforms/timelog",
-      "Vocus": "@:CreatorsPage.GuideLinkBase/blogging-platforms#vocus",
-      "WordPress": "@:CreatorsPage.GuideLinkBase/wordpress"
+      "Blogger": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/blogspot",
+      "InMedia": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/inmediahk.net",
+      "Matters": "@:(CreatorsPage.GuideLinkBase)/matters",
+      "Medium": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#medium",
+      "Pixnet": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#pixnet",
+      "Standnews": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/thestandnews",
+      "Timelog": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/timelog",
+      "Vocus": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#vocus",
+      "WordPress": "@:(CreatorsPage.GuideLinkBase)/wordpress"
     },
     "CTAButton": {
       "Register": "立即註冊",

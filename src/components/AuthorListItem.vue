@@ -61,7 +61,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 import { getImageResizeAPI } from '~/util/api';
 
-import MoreIcon from '~/assets/icons/more.svg';
+import MoreIcon from '~/assets/icons/more.svg?inline';
 
 export default {
   components: {

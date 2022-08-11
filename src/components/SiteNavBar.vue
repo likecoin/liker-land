@@ -51,13 +51,14 @@
 import { mapActions, mapGetters } from 'vuex';
 import walletMixin from '~/mixins/wallet';
 
+import Logo from '~/assets/icons/logo.svg?inline';
+import GlobeIcon from '~/assets/icons/globe.svg?inline';
+
 export default {
   name: 'SiteNavBar',
   components: {
-    Logo: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/logo.svg'),
-    GlobeIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ '~/assets/icons/globe.svg'),
+    Logo,
+    GlobeIcon,
   },
   mixins: [walletMixin],
   props: {

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import AppIcon from '~/assets/images/app-icon.svg';
+import AppIcon from '~/assets/images/app-icon.svg?inline';
 import { getAppURL } from '~/util/api';
 import { checkIsMobileClient, checkIsLikeCoinApp } from '~/util/client';
 import utmMixin from '~/mixins/utm';

@@ -1,6 +1,6 @@
 <template>
   <span
-    class="card-brand border-1 border-black rounded-4"
+    class="border-black card-brand border-1 rounded-4"
   >
     <AmexIcon v-if="brand === 'amex'" />
     <MasterCardIcon v-else-if="brand === 'mastercard'" />
@@ -9,15 +9,16 @@
 </template>
 
 <script>
+import AmexIcon from './logos/amex.svg?inline';
+import VisaIcon from './logos/visa.svg?inline';
+import MasterCardIcon from './logos/mastercard.svg?inline';
+
 export default {
   name: 'CardBrand',
   components: {
-    AmexIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ './logos/amex.svg'),
-    VisaIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ './logos/visa.svg'),
-    MasterCardIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ './logos/mastercard.svg'),
+    AmexIcon,
+    VisaIcon,
+    MasterCardIcon,
   },
   props: {
     brand: {

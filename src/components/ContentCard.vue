@@ -143,11 +143,11 @@ import parse from 'url-parse';
 import { LIKE_CO_URL_BASE } from '~/constant';
 import { getImageResizeAPI } from '~/util/api';
 
-import LikeUnit from '~/assets/icons/like-unit.svg';
-import BookmarkIcon from '~/assets/icons/bookmark.svg';
-import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg';
-import MoreIcon from '~/assets/icons/more.svg';
-import TickIcon from '~/assets/icons/tick.svg';
+import LikeUnit from '~/assets/icons/like-unit.svg?inline';
+import BookmarkIcon from '~/assets/icons/bookmark.svg?inline';
+import BookmarkOutlinedIcon from '~/assets/icons/bookmark-outlined.svg?inline';
+import MoreIcon from '~/assets/icons/more.svg?inline';
+import TickIcon from '~/assets/icons/tick.svg?inline';
 
 import { checkIsMobileClient } from '~/util/client';
 import { getAvatarHaloTypeFromUser } from '~/util/user';

@@ -156,6 +156,10 @@
 <script>
 import dateFormat from 'date-fns/format';
 
+import LoginIcon from '~/assets/icons/login.svg?inline';
+import PlusIcon from '~/assets/icons/plus.svg?inline';
+import TickIcon from '~/assets/icons/tick.svg?inline';
+
 import Button from '../LegacyButton/Button';
 import CivicLikerV3Header from './Header';
 
@@ -164,12 +168,9 @@ export default {
   components: {
     Button,
     CivicLikerV3Header,
-    LoginIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ '../../assets/icons/login.svg'),
-    PlusIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ '../../assets/icons/plus.svg'),
-    TickIcon: () =>
-      import(/* webpackChunkName: "svg-app" */ '../../assets/icons/tick.svg'),
+    LoginIcon,
+    PlusIcon,
+    TickIcon,
   },
   props: {
     status: {

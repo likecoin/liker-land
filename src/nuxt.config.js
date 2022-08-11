@@ -232,7 +232,6 @@ const nuxtConfig = {
     '@nuxtjs/axios',
     '@nuxtjs/sentry',
     ['@nuxtjs/pwa', { icon: false }],
-    'nuxt-svg-loader',
     'portal-vue/nuxt',
     // ['@likecoin/nuxt-google-optimize', {
     //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
@@ -250,6 +249,7 @@ const nuxtConfig = {
     '@nuxt/postcss8',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/svg',
   ],
 
   // Fix @nuxt/postcss8 error https://github.com/nuxt-community/tailwindcss-module/issues/480
@@ -372,18 +372,8 @@ const nuxtConfig = {
     */
     extend(config, ctx) {
       /* eslint-disable no-param-reassign */
-      // Run ESLint on save
-      if (ctx.isClient) {
-        if (ctx.isDev) {
-          config.module.rules.push({
-            enforce: 'pre',
-            test: /\.(js|vue)$/,
-            loader: 'eslint-loader',
-            exclude: /(node_modules)||(.svg$)/,
-          });
-        } else {
-          config.devtool = 'source-map';
-        }
+      if (ctx.isClient && !ctx.isDev) {
+        config.devtool = 'source-map';
       }
       /* eslint-enable no-param-reassign */
     },
