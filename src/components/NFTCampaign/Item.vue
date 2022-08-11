@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import { getAccountBalance } from '~/util/nft';
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import errorMixin from '~/mixins/error';
 
 export default {
-  mixins: [nftMixin, walletMixin],
+  mixins: [nftMixin, walletMixin, errorMixin],
   props: {
     classId: {
       type: String,
@@ -65,19 +65,12 @@ export default {
       }
       try {
         this.isCollecting = true;
-        const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') {
-          this.isCollecting = false;
-          // TODO: show error message
-          return;
-        }
-        await this.collectNFT(this.getAddress, this.classId, this.getSigner);
+        await this.collectNFT();
         this.handleSuccess(this.$t('snackbar_success_collect'));
       } catch (error) {
-        // TODO:show error message
+        this.errorHandling(error);
       } finally {
         this.isCollecting = false;
-        this.updateNFTPurchaseInfo();
       }
     },
     handleViewDetails() {

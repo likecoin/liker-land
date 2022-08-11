@@ -4,9 +4,10 @@ import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
 import {
   getNFTHistory,
   postNFTPurchase,
+  postNFTTransfer,
   getAddressLikerIdMinApi,
 } from '~/util/api';
-import { sendGrant } from '~/util/nft';
+import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
 
 export default {
   data() {
@@ -109,9 +110,9 @@ export default {
         collectedCount: this.ownerList[id].length,
       }));
     },
-    getTransferNFTId() {
-      const OwnNFT = this.ownerList[this.getAddress];
-      return OwnNFT[0];
+    firstOwnedNFTId() {
+      const ownNFT = this.ownerList[this.getAddress];
+      return ownNFT[0];
     },
   },
   methods: {
@@ -175,16 +176,48 @@ export default {
         );
       }
     },
-    async collectNFT(address, classId, signer) {
-      if (this.classId !== classId) this.classId = classId;
-      // TODO: Lock UI and show progress bar
-      const txHash = await sendGrant({
-        senderAddress: address,
-        amountInLIKE: this.purchaseInfo.totalPrice,
-        signer,
-      });
-      const res = await this.$api.post(postNFTPurchase({ txHash, classId }));
-      return res;
+    async collectNFT() {
+      try {
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        const txHash = await sendGrant({
+          senderAddress: this.getAddress,
+          amountInLIKE: this.purchaseInfo.totalPrice,
+          signer: this.getSigner,
+        });
+        await this.$api.post(
+          postNFTPurchase({ txHash, classId: this.classId })
+        );
+      } catch (error) {
+        throw error;
+      } finally {
+        this.updateUserOwnedCount(this.getAddress);
+        this.updateNFTOwners();
+        this.updateNFTHistory();
+        this.updateNFTPurchaseInfo();
+      }
+    },
+    async transferNFT() {
+      try {
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        const txHash = await transferNFT({
+          fromAddress: this.getAddress,
+          toAddress: this.toAddress,
+          classId: this.classId,
+          nftId: this.firstOwnedNFTId,
+          signer: this.getSigner,
+        });
+        await this.$api.post(
+          postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
+        );
+      } catch (error) {
+        throw error;
+      } finally {
+        this.updateUserOwnedCount(this.getAddress);
+        this.updateNFTOwners();
+        this.updateNFTHistory();
+      }
     },
   },
 };

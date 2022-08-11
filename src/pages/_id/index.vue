@@ -503,6 +503,7 @@ export default {
         );
       }
     },
+    // ERROR: won't work for now, should be refactored to a component later
     handleClickCollect(id) {
       if (!this.getAddress) {
         this.connectWallet();
