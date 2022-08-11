@@ -107,11 +107,6 @@ export default {
       'fetchNFTMetadata',
       'fetchNFTOwners',
     ]),
-    updateNFTData() {
-      this.updateNFTClassMetdata();
-      this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
-    },
     async updateNFTClassMetdata() {
       await this.fetchNFTMetadata(this.classId);
       this.updateDisplayNameList(

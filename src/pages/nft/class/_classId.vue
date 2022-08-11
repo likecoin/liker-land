@@ -179,8 +179,11 @@ export default {
       ];
     },
   },
+  async fetch({ route, store }) {
+    const { classId } = route.params;
+    await store.dispatch('fetchNFTMetadata', classId);
+  },
   mounted() {
-    this.updateNFTClassMetdata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
     this.updateNFTHistory();
