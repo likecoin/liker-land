@@ -64,7 +64,7 @@ import { TimeAgo } from 'vue2-timeago';
 import { getChainRawTx } from '~/util/api';
 
 export default {
-  name: 'EventListItems',
+  name: 'EventListTable',
   filters: {
     ellipsis,
   },

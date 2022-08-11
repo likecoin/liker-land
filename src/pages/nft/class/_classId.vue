@@ -66,9 +66,7 @@
             <NFTPageCollectorList
               :root-class="'laptop:ml-[12px] mb-[16px] desktop:m-0'"
               :owner-count="ownerCount"
-              :owner-list="trimedCollectors || populatedCollectors"
-              :populated-list="populatedCollectors"
-              :should-show-more="!!trimedCollectors"
+              :items="populatedCollectors"
             />
           </div>
           <!-- Metadata -->
@@ -105,10 +103,7 @@
             @collect="handleClickCollect"
           />
           <NFTPageEventList
-            :nft-history="trimedEvents || populatedEvents"
-            :should-show-more="!!trimedEvents"
-            :populated-list="populatedEvents"
-            :is-loading="isHistoryInfoLoading"
+            :items="populatedEvents"
           />
         </div>
       </section>

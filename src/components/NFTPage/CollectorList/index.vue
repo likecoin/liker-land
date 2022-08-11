@@ -11,16 +11,15 @@
     </template>
     <template #content class="flex flex-col my-[12px]">
       <div v-if="ownerCount">
-        <NFTPageCollectorListItems :owner-list="ownerList" />
+        <NFTPageCollectorListItems :owner-list="trimmedItems || items" />
         <ShowMore
           v-if="shouldShowMore"
-          :populated-list="populatedList"
         >
           <template #header>
             <div class="flex justify-between mb-[12px]">
               <Label
                 class="w-min font-600"
-                :text="`${$t('nft_details_page_title_collector')} (${populatedList.length})`"
+                :text="`${$t('nft_details_page_title_collector')} (${items.length})`"
                 preset="h5"
                 valign="middle"
                 content-class="whitespace-nowrap text-like-green "
@@ -42,7 +41,7 @@
             <div class="w-full h-[2px] bg-shade-gray mb-[8px]" />
           </template>
           <template #content>
-            <NFTPageCollectorListItems :owner-list="populatedList" />
+            <NFTPageCollectorListItems :owner-list="items" />
           </template>
         </ShowMore>
       </div>
@@ -69,17 +68,22 @@ export default {
       type: Number,
       default: undefined,
     },
-    ownerList: {
+    items: {
       type: Array,
       default: undefined,
     },
-    populatedList: {
-      type: Array,
-      default: undefined,
+  },
+  computed: {
+    trimmedItems() {
+      if (this.items.length >= 10) {
+        return this.items.filter((id, index) => index <= 9).map(owner => ({
+          ...owner,
+        }));
+      }
+      return undefined;
     },
-    shouldShowMore: {
-      type: Boolean,
-      default: false,
+    shouldShowMore() {
+      return !!this.trimmedItems;
     },
   },
 };

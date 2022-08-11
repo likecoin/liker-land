@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="owner in ownerList" :key="owner.displayName">
+  <ul>
+    <li v-for="owner in ownerList" :key="owner.displayName">
       <div class="flex items-center justify-between">
         <LinkV2 :to="`/${owner.id}`">{{ owner.displayName | ellipsis }}</LinkV2>
         <Label preset="p6">{{ owner.collectedCount }}</Label>
@@ -13,8 +13,8 @@
           'my-[12px]',
         ]"
       />
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <script>

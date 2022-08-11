@@ -7,15 +7,15 @@
       <IconActivity />
     </template>
     <template #content>
-      <div v-if="nftHistory.length">
-        <NFTPageEventListItems :nft-history="nftHistory" />
+      <div v-if="items.length">
+        <NFTPageEventListTable :nft-history="trimmedItems || items" />
         <ShowMore
           v-if="shouldShowMore"
           class="my-[8px]"
         >
           <template #content>
-            <NFTPageEventListItems
-              :nft-history="populatedList"
+            <NFTPageEventListTable
+              :nft-history="items"
             />
           </template>
         </ShowMore>
@@ -30,17 +30,22 @@
 export default {
   name: 'EventList',
   props: {
-    nftHistory: {
+    items: {
       type: Array,
       default: undefined,
     },
-    populatedList: {
-      type: Array,
-      default: undefined,
+  },
+  computed: {
+    trimmedItems() {
+      if (this.items.length >= 10) {
+        return this.items.filter((id, index) => index <= 9).map(event => ({
+          ...event,
+        }));
+      }
+      return undefined;
     },
-    shouldShowMore: {
-      type: Boolean,
-      default: false,
+    shouldShowMore() {
+      return !!this.trimmedItems;
     },
   },
 };
