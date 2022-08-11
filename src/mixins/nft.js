@@ -113,12 +113,6 @@ export default {
       const OwnNFT = this.ownerList[this.getAddress];
       return OwnNFT[0];
     },
-    getOwnedCount() {
-      const list = this.getNFTClassOwnerInfoById(this.classId);
-      return (
-        (list[this.getAddress] && this.ownerList[this.getAddress].length) || 0
-      );
-    },
   },
   methods: {
     ...mapActions([
