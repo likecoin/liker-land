@@ -69,6 +69,7 @@ jobs:
             firebase deploy --project civic-liker-develop
           environment:
             IS_TESTNET: true
+          resource_class: medium+
   deploy_mainnet:
     working_directory: ~/liker-land
     docker:
