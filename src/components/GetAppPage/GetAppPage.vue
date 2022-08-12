@@ -206,6 +206,10 @@ export default {
         text-align: right;
         padding-right: 5%;
 
+        img {
+          display: inline;
+        }
+
         @media screen and (max-width: 600px) {
           width: 20%;
           text-align: middle;
