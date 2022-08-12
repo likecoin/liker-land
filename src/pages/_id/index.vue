@@ -311,6 +311,7 @@ import {
 import { APP_LIKE_CO_URL_BASE } from '~/constant';
 import { checkUserNameValid } from '~/util/user';
 import { getNFTs } from '~/util/nft';
+import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import Identity from '~/components/Identity/Identity';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -391,21 +392,26 @@ export default {
     },
   },
   async asyncData({ route, $api, error }) {
-    const { id } = route.params;
-    if (id.startsWith('like1')) {
-      try {
-        const userInfo = await $api.get(getAddressLikerIdMinApi(id));
+    let { id } = route.params;
+    if (id && isValidAddress(id)) {
+      if (id.startsWith('cosmos1')) {
+        id = convertAddressPrefix(id, 'like');
+      }
+      if (id.startsWith('like1')) {
+        try {
+          const userInfo = await $api.get(getAddressLikerIdMinApi(id));
+          return {
+            userInfo: userInfo.data,
+            wallet: id,
+          };
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
         return {
-          userInfo: userInfo.data,
           wallet: id,
         };
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
       }
-      return {
-        wallet: id,
-      };
     }
     if (id && checkUserNameValid(id)) {
       try {
