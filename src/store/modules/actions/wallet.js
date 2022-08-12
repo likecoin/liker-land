@@ -4,28 +4,32 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { getAddressLikerIdMinApi } from '~/util/api';
 import * as types from '@/store/mutation-types';
 
-export function initConnector({ state, commit }, { onInit } = {}) {
+export async function handleInit({ commit }, { accounts, offlineSigner }) {
+  if (!accounts[0]) return;
+  const { address, bech32Address } = accounts[0];
+  const walletAddress = bech32Address || address;
+  commit(types.WALLET_SET_ADDRESS, walletAddress);
+  commit(types.WALLET_SET_SIGNER, offlineSigner);
+  try {
+    const userInfo = await this.$api.$get(
+      getAddressLikerIdMinApi(walletAddress)
+    );
+    commit(types.WALLET_SET_LIKERINFO, userInfo);
+  } catch (err) {
+    const msg = (err.response && err.response.data) || err;
+    // eslint-disable-next-line no-console
+    console.error(msg);
+  }
+}
+
+export function initConnector({ state, commit, dispatch }, { onInit } = {}) {
   if (state.connector) {
     return state.connector;
   }
   const connector = new LikeCoinWalletConnector({
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
-    onInit: async ({ accounts, offlineSigner }) => {
-      if (!accounts[0]) return;
-      const { address, bech32Address } = accounts[0];
-      const walletAddress = bech32Address || address;
-      commit(types.WALLET_SET_ADDRESS, walletAddress);
-      commit(types.WALLET_SET_SIGNER, offlineSigner);
-      try {
-        const userInfo = await this.$api.$get(
-          getAddressLikerIdMinApi(walletAddress)
-        );
-        commit(types.WALLET_SET_LIKERINFO, userInfo);
-      } catch (err) {
-        const msg = (err.response && err.response.data) || err;
-        // eslint-disable-next-line no-console
-        console.error(msg);
-      }
+    onInit: async result => {
+      await dispatch('handleInit', result);
       if (onInit) {
         onInit();
       }
@@ -52,5 +56,8 @@ export function disconnectWallet({ state, commit }) {
 
 export async function initIfNecessary({ dispatch }) {
   const connector = await dispatch('initConnector');
-  connector.initIfNecessary();
+  const session = connector.restoreSession();
+  if (session) {
+    await dispatch('handleInit', session);
+  }
 }
