@@ -66,23 +66,23 @@
           ]"
         >
           <MenuButton
-            text="NFT Collection"
-            :is-selected="currentPage === 'collection'"
-            @click="goCollection"
+            text="Collected"
+            :is-selected="currentTab === 'collected'"
+            @click="goCollected"
           />
           <MenuButtonDivider v-if="sellingNFTClassId.length" />
           <MenuButton
             v-if="isLoading || sellingNFTClassId.length"
-            text="Works"
-            :is-selected="currentPage === 'works'"
-            @click="goWorks"
+            text="Created"
+            :is-selected="currentTab === 'created'"
+            @click="goCreated"
           />
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
         <div v-else>
           <ul
-            v-if="currentPage === 'collection'"
+            v-if="currentTab === 'collected'"
             :class="[
               'w-full',
               'mx-auto',
@@ -115,7 +115,7 @@
               >
                 <div class="flex flex-col justify-center items-center mt-[-21px]">
                   <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
-                  <Label class="text-medium-gray mt-[12px]" text="no work" />
+                  <Label class="text-medium-gray mt-[12px]" text="no creation" />
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@
           </ul>
 
           <ul
-            v-if="currentPage === 'works'"
+            v-if="currentTab === 'created'"
             :class="[
               'w-full',
               'mx-auto',
@@ -314,7 +314,6 @@ import { getNFTs } from '~/util/nft';
 import Identity from '~/components/Identity/Identity';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import { connectWallet } from '~/store/modules/actions/wallet';
 
 export default {
   layout: 'default',
@@ -341,7 +340,9 @@ export default {
       userInfo: null,
       ownedNFTClassId: [],
       sellingNFTClassId: [],
-      currentPage: 'works',
+      currentTab: ['collected', 'created'].includes(this.$route.query.tab)
+        ? this.$route.query.tab
+        : 'created',
       displayNameList: [],
       avatarList: [],
       civicLikerList: [],
@@ -445,7 +446,7 @@ export default {
       this.sellingNFTClassId = data.list;
       this.sellingNFTClassId.forEach(id => this.updateNFTClassData(id));
       if (!this.sellingNFTClassId.length) {
-        this.currentPage = 'collection';
+        this.currentTab = 'collected';
       }
       this.isLoading = false;
     },
@@ -463,14 +464,14 @@ export default {
         this.getNFTClassMetadataById(classId).iscn_owner
       );
     },
-    goCollection() {
-      this.currentPage = 'collection';
+    goCollected() {
+      this.currentTab = 'collected';
     },
     goDetails(classId) {
       this.$router.push({ name: 'nft-class-classId', params: { classId } });
     },
-    goWorks() {
-      this.currentPage = 'works';
+    goCreated() {
+      this.currentTab = 'created';
     },
     async UpdateDisplayNameList(addr) {
       if (typeof addr === 'string') {
