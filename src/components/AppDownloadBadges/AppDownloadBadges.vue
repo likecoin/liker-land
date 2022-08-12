@@ -74,7 +74,7 @@ export default {
     },
     singleButtonClass() {
       return {
-        'button rounded-8 text-like-green text-14 text-center font-400 m-8 p-12': true,
+        'app-download-button rounded-8 text-like-green text-14 text-center font-400 m-8 p-12': true,
         [this.isSingleType ? 'inline' : 'phone:inline']: true,
         'tablet:hidden': !this.isSingleType,
         'laptop:hidden': !this.isSingleType,
@@ -98,7 +98,7 @@ export default {
     margin: 5px;
   }
 
-  .button {
+  .app-download-button {
     min-width: 156px;
     box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
 

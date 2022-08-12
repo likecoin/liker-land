@@ -441,10 +441,10 @@
     }
   },
   "GetAppPage": {
-    "Title": "下載 Liker Land",
+    "Title": "下載 Liker Land App",
     "Og": {
       "Title": "@:GetAppPage.Title",
-      "Description": "下載 Liker Land，以文會友。不是瀏覽，而是閱讀。"
+      "Description": "Writing NFT：隨心收集，輕鬆出版。"
     }
   },
   "GetAppPage.Download": "下載 Liker Land",
