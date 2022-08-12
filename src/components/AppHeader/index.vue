@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full flex items-center justify-between px-[24px] py-[16px] z-10"
+    class="w-full flex items-center justify-between pl-[56px] py-[40px] pr-[32px] z-10"
   >
     <NuxtLink
       :class="{
@@ -217,21 +217,6 @@ export default {
 
 <style lang="scss">
 .site-nav-bar {
-  &__menu-button {
-    transition-property: transform, opacity;
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
-
-    &:hover {
-      opacity: 0.6;
-    }
-    &:active {
-      transform: scale(0.9);
-
-      opacity: 0.3;
-    }
-  }
-
   &__logo {
     @apply text-inherit-color;
   }
