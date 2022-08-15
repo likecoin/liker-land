@@ -16,8 +16,14 @@
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
     :sold-count-label="$t('campaign_nft_item_collected_count_label')"
+    :content-preview-props="{
+      to: {
+        name: 'nft-class-classId',
+        params: { classId: classId },
+      },
+      tag: 'NuxtLink',
+    }"
     @collect="handleClickCollect"
-    @view-details="handleViewDetails"
     @like="handleLike"
   />
 </template>
@@ -60,12 +66,6 @@ export default {
   methods: {
     handleClickCollect() {
       this.collectNFT();
-    },
-    handleViewDetails() {
-      this.$router.push({
-        name: 'nft-class-classId',
-        params: { classId: this.classId },
-      });
     },
     handleLike() {
       window.open(

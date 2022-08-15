@@ -1,11 +1,8 @@
 <template>
-  <a
+  <component
+    :is="tag"
     class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7"
-    :href="url"
-    :title="title"
-    rel="noopener noreferrer"
-    target="_blank"
-    @click="handleClick"
+    v-bind="$attrs"
   >
     <div
       v-if="imgSrc"
@@ -20,7 +17,7 @@
         {{ description }}
       </div>
     </div>
-  </a>
+  </component>
 </template>
 
 <script>
@@ -42,9 +39,9 @@ export default {
       type: String,
       default: '',
     },
-    url: {
+    tag: {
       type: String,
-      default: '',
+      default: 'div',
     },
   },
   computed: {
@@ -56,7 +53,7 @@ export default {
   },
   methods: {
     handleClick(event) {
-      event.stopPropagation();
+      this.$emit('click', event);
     },
   },
 };

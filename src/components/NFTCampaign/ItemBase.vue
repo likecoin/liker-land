@@ -6,24 +6,27 @@
     />
     <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
       <div>
-        <NFTWidgetBaseCard
-          class="group"
-          @click="handleClickNFTDetails"
-        >
+        <NFTWidgetBaseCard class="flex flex-col items-center">
           <NFTWidgetContentPreview
             class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7] min-h-[300px]"
             :title="title"
             :description="description"
-            :url="url"
             :img-src="imgSrc"
             :img-bg-color="imgBgColor"
+            v-bind="contentPreviewProps"
+            @click="handleClickNFTDetails"
           />
-          <div class="transition-colors cursor-pointer group-hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]">
+          <a
+            class="transition-colors cursor-pointer hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]"
+            :href="url"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             <NFTWidgetIconEye class="w-[17px]" />
             <span
               class="underline ml-[6px] text-[12px] leading-[5/3]"
             >{{ viewDetailsLabel }}</span>
-          </div>
+          </a>
         </NFTWidgetBaseCard>
         <NFTWidgetLikeActionBar
           class="mt-[8px]"
@@ -77,7 +80,7 @@ export default {
     // UI
     viewDetailsLabel: {
       type: String,
-      default: 'View NFT details',
+      default: 'View Content',
     },
     likeActionLabel: {
       type: String,
@@ -135,6 +138,10 @@ export default {
     url: {
       type: String,
       default: '',
+    },
+    contentPreviewProps: {
+      type: Object,
+      default: undefined,
     },
 
     price: {
