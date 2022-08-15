@@ -15,6 +15,9 @@
         <ButtonV2 to="/campaign/writing-nft" preset="secondary">
           {{ $t('about_nft_page_nav_campaign') }}
         </ButtonV2>
+        <ButtonV2 preset="tertiary" @click="navigateToWalletDashboard">
+          {{ $t('about_nft_page_nav_collection') }}
+        </ButtonV2>
       </nav>
       <NFTWidgetSection
         class="py-[32px] laptop:py-[64px]"
@@ -149,6 +152,8 @@
 </template>
 
 <script>
+import walletMixin from '~/mixins/wallet';
+
 import NFTFAQSection from './NFTFAQSection';
 import NFTHeroSection from './NFTHeroSection';
 import NFTPortalSection from './NFTPortalSection';
@@ -176,6 +181,7 @@ export default {
     NFTPricingSection,
     NFTWidgetSection,
   },
+  mixins: [walletMixin],
   props: {
     articles: {
       type: Array,

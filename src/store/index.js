@@ -11,6 +11,7 @@ import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
 import support from './modules/support';
+import wallet from './modules/wallet';
 
 const createStore = () =>
   new Vuex.Store({
@@ -40,6 +41,7 @@ const createStore = () =>
       user,
       staticData,
       support,
+      wallet,
     },
   });
 

@@ -1,8 +1,5 @@
 <template>
   <div class="about-page bg-gray-f7">
-    <PageHeader class="text-like-green">
-      <SiteNavBar />
-    </PageHeader>
     <main
       class="
         page-content
@@ -92,6 +89,7 @@ import navigationListenerMixin from '~/mixins/navigtion-listener';
 
 export default {
   name: 'CampaignWritingNFTPage',
+  layout: 'default',
   mixins: [navigationListenerMixin],
   head() {
     const title = this.$t('campaign_nft_page_title');

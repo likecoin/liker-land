@@ -1,7 +1,13 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
-import { getNFTHistory, getAddressLikerIdMinApi } from '~/util/api';
+import {
+  getNFTHistory,
+  postNFTPurchase,
+  postNFTTransfer,
+  getAddressLikerIdMinApi,
+} from '~/util/api';
+import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
 
 export default {
   data() {
@@ -11,6 +17,9 @@ export default {
       displayNameList: {},
       avatarList: {},
       civicLikerList: {},
+
+      isOwnerInfoLoading: false,
+      isHistoryInfoLoading: false,
     };
   },
   computed: {
@@ -20,6 +29,7 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
+      'getAddress',
     ]),
     isCivicLiker() {
       return !!(
@@ -100,6 +110,10 @@ export default {
         collectedCount: this.ownerList[id].length,
       }));
     },
+    firstOwnedNFTId() {
+      const ownNFT = this.ownerList[this.getAddress];
+      return ownNFT[0];
+    },
   },
   methods: {
     ...mapActions([
@@ -123,6 +137,7 @@ export default {
       );
     },
     async updateNFTHistory() {
+      this.isHistoryInfoLoading = true;
       const { data } = await this.$api.get(
         getNFTHistory({ classId: this.classId })
       );
@@ -133,6 +148,7 @@ export default {
         array.push(list.fromWallet, list.toWallet);
       }
       this.updateDisplayNameList([...new Set(array)]);
+      this.isHistoryInfoLoading = false;
     },
     updateDisplayNameList(addresses) {
       if (typeof addresses === 'string') {
@@ -166,6 +182,28 @@ export default {
         `collect_${this.classId}`,
         'popup=1,width=768,height=576,top=0,left=0'
       );
+    },
+    async transferNFT() {
+      try {
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        const txHash = await transferNFT({
+          fromAddress: this.getAddress,
+          toAddress: this.toAddress,
+          classId: this.classId,
+          nftId: this.firstOwnedNFTId,
+          signer: this.getSigner,
+        });
+        await this.$api.post(
+          postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
+        );
+      } catch (error) {
+        throw error;
+      } finally {
+        this.updateUserOwnedCount(this.getAddress);
+        this.updateNFTOwners();
+        this.updateNFTHistory();
+      }
     },
   },
 };

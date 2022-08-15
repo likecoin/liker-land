@@ -1,7 +1,7 @@
 <template>
-  <div class="tooltip">
+  <div :class="{'tooltip':showToolTip}">
     <slot />
-    <span class="tooltiptext">
+    <span v-if="showToolTip" class="tooltiptext">
       {{ toolTipText }}
     </span>
   </div>
@@ -13,6 +13,10 @@ export default {
     toolTipText: {
       type: String,
       default: undefined,
+    },
+    showToolTip: {
+      type: Boolean,
+      default: true,
     },
   },
 };

@@ -1,9 +1,5 @@
 <template lang="pug">
   .civic-page
-    PageHeader
-      template
-        SiteNavBar.text-like-green
-
     main.page-content
       CreatorSetupPage(
         :liker-id="getUserId"
@@ -34,18 +30,15 @@ import { mapGetters } from 'vuex';
 
 import Button from '~/components/LegacyButton/Button';
 import CreatorSetupPage from '~/components/CreatorSetupPage/CreatorSetupPage';
-import PageHeader from '~/components/PageHeader';
-import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
 import { getOAuthRegisterAPI } from '~/util/api';
 
 export default {
+  layout: 'default',
   components: {
     Button,
     CreatorSetupPage,
-    PageHeader,
-    SiteNavBar,
   },
   middleware: 'authenticated',
   mixins: [CrispMixinFactory({ isBootAtMounted: false })],

@@ -1,7 +1,15 @@
 <template>
   <div class="page-layout page-layout--default">
-    <nuxt class="page-wrapper sliding-menu-pushee" />
-    <SlidingMenu ref="slidingMenu" />
+    <AppHeader class="w-full text-like-green" />
+    <nuxt class="page-wrapper" />
+    <PortalTarget
+      name="dialog"
+      multiple
+    />
+    <PortalTarget
+      name="snackbar"
+      multiple
+    />
   </div>
 </template>
 

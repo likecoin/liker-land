@@ -1,9 +1,5 @@
 <template lang="pug">
   .getapp-page
-    PageHeader
-      template
-        SiteNavBar.text-like-green
-
     main.page-content
       GetAppPage(
         :from="$route.query.from"
@@ -13,17 +9,14 @@
 
 <script>
 import GetAppPage from '~/components/GetAppPage/GetAppPage';
-import PageHeader from '~/components/PageHeader';
-import SiteNavBar from '~/components/SiteNavBar';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
 import utmMixin from '~/mixins/utm';
 
 export default {
+  layout: 'default',
   components: {
     GetAppPage,
-    PageHeader,
-    SiteNavBar,
   },
   mixins: [CrispMixinFactory(), utmMixin],
   head() {

@@ -12,6 +12,7 @@
     :owner-count="ownerCount"
     :owner-name="getOwnerDisplayName"
     :sold-count="mintedCount"
+    :is-loading="isCollecting"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
     :sold-count-label="$t('campaign_nft_item_collected_count_label')"
@@ -24,14 +25,21 @@
 <script>
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
+import errorMixin from '~/mixins/error';
 
 export default {
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin, errorMixin],
   props: {
     classId: {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      isCollecting: false,
+    };
   },
   computed: {
     getAvatar() {
@@ -51,7 +59,6 @@ export default {
   },
   methods: {
     handleClickCollect() {
-      // TODO: Log event
       this.collectNFT();
     },
     handleViewDetails() {

@@ -19,6 +19,7 @@ jobs:
       - run:
           name: Build
           command: npm --prefix src run build
+          resource_class: medium+
       - run:
           name: Server Test
           command: npm --prefix src start
@@ -68,6 +69,7 @@ jobs:
             firebase deploy --project civic-liker-develop
           environment:
             IS_TESTNET: true
+          resource_class: medium+
   deploy_mainnet:
     working_directory: ~/liker-land
     docker:

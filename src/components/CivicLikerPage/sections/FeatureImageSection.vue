@@ -3,7 +3,7 @@
     svg.mx-40.hidden(class="laptop:block phone:mx-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 952 526")
       rect(y="292" width="952" height="234" rx="18" fill="#28646e")
       path(d="M195 .17h546v361H195z" fill="none")
-      image(x="423" y="70" width="106" height="100" xlink:href="~/assets/images/civic-liker-icon.svg?inline" preserveAspectRatio="xMinYMin slice")
+      image(x="423" y="70" width="106" height="100" xlink:href="~/assets/images/civic-liker-icon.png" preserveAspectRatio="xMinYMin slice")
       foreignObject(y="200" width="952" height="60")
         .text-center.text-like-green.text-24 {{ $t('civicLiker') }}
       g(fill="none" stroke="#50e3c2" stroke-linecap="round")

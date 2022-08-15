@@ -1,7 +1,5 @@
 <template lang="pug">
   .creator-dashboard
-    PageHeader
-      SiteNavBar(class="text-like-green")
 
     CivicLikerWeb3Notice(:is-pop-up="true")
 
@@ -162,13 +160,12 @@ import EditIcon from '~/components/Icon/Edit';
 import EyeIcon from '~/components/Icon/Eye';
 import WalletIcon from '~/components/Icon/Wallet';
 import Identity from '~/components/Identity/Identity';
-import PageHeader from '~/components/PageHeader';
-import SiteNavBar from '~/components/SiteNavBar';
 import Spinner from '~/components/Spinner/Spinner';
 import SupportersList from '~/components/SupportersList/SupportersList';
 
 export default {
   middleware: 'authenticated',
+  layout: 'default',
   components: {
     Button,
     CivicLikerWeb3Notice,
@@ -176,10 +173,8 @@ export default {
     EasySetup,
     EditIcon,
     EyeIcon,
-    PageHeader,
     Identity,
     Spinner,
-    SiteNavBar,
     SupportersList,
     WalletIcon,
   },

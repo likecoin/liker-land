@@ -728,7 +728,7 @@ module.exports = {
         },
         '.scrollbar-custom': {
           'scrollbar-width': '5px', /* Firefox */
-          '&::-webkit-scrollbar': { 
+          '&::-webkit-scrollbar': {
             width: '5px' /* Chrome */
           },
           '&::-webkit-scrollbar-track': {

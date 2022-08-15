@@ -29,6 +29,7 @@ const nuxtConfig = {
       total: true
     } : false,
   },
+  telemetry: false,
 
   /*
   ** Headers of the page
@@ -203,6 +204,7 @@ const nuxtConfig = {
   */
   css: [
     { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
+    { src: '@likecoin/wallet-connector/dist/style.css', lang: 'css' },
     { src: '~/assets/css/index.scss', lang: 'scss' },
   ],
 
