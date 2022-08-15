@@ -10,7 +10,7 @@ const { IS_TESTNET } = process.env;
 
 export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
   chainId: LIKECOIN_CHAIN_ID,
-  chainName: IS_TESTNET ? 'LikeCoin public test chain' : 'LikeCoin chain',
+  chainName: IS_TESTNET ? 'LikeCoin public test chain' : 'LikeCoin',
   rpcURL: LIKECOIN_CHAIN_NFT_RPC,
   restURL: LIKECOIN_CHAIN_API,
   coinType: 118,
