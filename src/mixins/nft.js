@@ -67,7 +67,8 @@ export default {
       return this.NFTClassMetadata.image;
     },
     NFTImageBackgroundColor() {
-      return this.NFTClassMetadata.background_color;
+      const color = this.NFTClassMetadata.background_color;
+      return typeof color === 'string' ? color : undefined;
     },
     NFTExternalUrl() {
       return this.NFTClassMetadata.external_url;
