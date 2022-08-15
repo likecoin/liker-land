@@ -6,9 +6,12 @@ export default {
   },
   methods: {
     ...mapActions(['connectWallet', 'disconnectWallet']),
-    navigateToWalletDashboard() {
+    async navigateToWalletDashboard() {
       if (!this.getAddress) {
-        this.connectWallet({ onInit: this.navigateToWalletDashboard });
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.navigateToWalletDashboard();
+        }
       } else {
         this.$router.push({
           name: 'id',

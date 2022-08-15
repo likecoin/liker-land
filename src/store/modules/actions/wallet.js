@@ -4,8 +4,8 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { getAddressLikerIdMinApi } from '~/util/api';
 import * as types from '@/store/mutation-types';
 
-export async function handleInit({ commit }, { accounts, offlineSigner }) {
-  if (!accounts[0]) return;
+export async function initWallet({ commit }, { accounts, offlineSigner }) {
+  if (!accounts[0]) return false;
   const { address, bech32Address } = accounts[0];
   const walletAddress = bech32Address || address;
   commit(types.WALLET_SET_ADDRESS, walletAddress);
@@ -20,28 +20,25 @@ export async function handleInit({ commit }, { accounts, offlineSigner }) {
     // eslint-disable-next-line no-console
     console.error(msg);
   }
+  return true;
 }
 
-export function initConnector({ state, commit, dispatch }, { onInit } = {}) {
+export function initConnector({ state, commit }) {
   if (state.connector) {
     return state.connector;
   }
   const connector = new LikeCoinWalletConnector({
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
-    onInit: async result => {
-      await dispatch('handleInit', result);
-      if (onInit) {
-        onInit();
-      }
-    },
   });
   commit(types.WALLET_SET_CONNECTOR, connector);
   return connector;
 }
 
-export async function connectWallet({ dispatch }, options) {
-  const connector = await dispatch('initConnector', options);
-  connector.openConnectWalletModal();
+export async function connectWallet({ dispatch }) {
+  const connector = await dispatch('initConnector');
+  const wallet = await connector.openConnectWalletModal();
+  if (!wallet) return false;
+  return dispatch('initWallet', wallet);
 }
 
 export function disconnectWallet({ state, commit }) {
@@ -58,6 +55,6 @@ export async function initIfNecessary({ dispatch }) {
   const connector = await dispatch('initConnector');
   const session = connector.restoreSession();
   if (session) {
-    await dispatch('handleInit', session);
+    await dispatch('initWallet', session);
   }
 }
