@@ -3,14 +3,14 @@
     :class="[
       'group',
       {
-        'hidden laptop:table-row': !isActive,
+        'hidden laptop:table-row': !isActive && shouldCollapseInMobile,
       }
     ]"
   >
     <td class="w-[64px] py-[8px]">
       <div :class="priceLabelClass">
         <hr
-          v-if="isActive"
+          v-if="isActive && shouldShowIndicator"
           class="
             absolute
             top-1/2
@@ -21,7 +21,8 @@
             translate-y-[-50%]
           "
         >
-        <span class="relative">{{ priceLabel }}</span>
+        <span class="relative">{{ priceLabel }}</span>&nbsp;
+        <span class="relative text-[0.8em]">$LIKE</span>
       </div>
     </td>
     <td class="pl-[12px] py-[4px]">
@@ -33,13 +34,15 @@
           :class="[
             'grid',
             'grid-cols-10',
-            'gap-[12px]',
-            'pl-[12px]',
+            'gap-[10px]',
+            'items-center',
+            'pl-[8px]',
+            'laptop:pl-[12px]',
             'pr-[48px]',
             'py-[8px]',
           ]"
         >
-          <NFTCampaignPricingSlot
+          <NFTSupplySlot
             v-for="i in total"
             :key="i"
             :type="getSlotType(i)"
@@ -58,13 +61,14 @@
             absolute
             inset-y-0
             right-0
-            mr-[16px]
-            text-[12px] text-medium-gray
+            mr-[6px]
+            laptop:mr-[12px]
+            text-[10px]
+            laptop:text-[12px]
+            text-medium-gray
             leading-[5/3]
           "
-        >
-          {{ available }} left
-        </div>
+        >{{ available }} left</div>
       </div>
     </td>
   </tr>
@@ -89,6 +93,14 @@ export default {
       type: Number,
       default: 0,
     },
+    shouldShowIndicator: {
+      type: Boolean,
+      default: false,
+    },
+    shouldCollapseInMobile: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     isActive() {
@@ -98,15 +110,21 @@ export default {
       return this.type === 'past';
     },
     priceLabel() {
-      return `${this.price} $LIKE`;
+      return `${Math.ceil(this.price).toLocaleString('en-US')}`;
     },
     priceLabelClass() {
       return [
         'relative',
-        'rounded-full',
+        'flex',
+        'flex-wrap',
+        'justify-center',
+        'items-center',
+        'rounded-[10px]',
         'text-center',
         'text-[10px]',
-        'leading-[2]',
+        'leading-[1]',
+        'p-[4px]',
+        'min-h-[20px]',
         'font-600',
         'group-hover',
       ].concat(this.priceLabelClassForType);
@@ -163,6 +181,8 @@ export default {
         this.isActive ? 'text-like-green' : 'text-medium-gray',
         {
           'opacity-0': !this.isPast,
+          'bg-light-gray': this.isPast,
+          'bg-opacity-[0.5]': this.isPast,
           'cursor-pointer': this.isActive,
           'bg-like-cyan-pale': this.isActive,
           'active:bg-like-cyan-light': this.isActive,

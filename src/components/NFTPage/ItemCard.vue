@@ -6,7 +6,6 @@
       'rounded-[24px]',
 
       'w-full',
-      rootClass,
 
       'mb-[16px]',
       'overflow-hidden',
@@ -95,12 +94,6 @@ export default {
     ellipsisDescription,
   },
   props: {
-    // rootClass
-    rootClass: {
-      type: String,
-      default: undefined,
-    },
-
     // BackgroundImg
     imageBgColor: {
       type: String,

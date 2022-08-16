@@ -6,9 +6,9 @@
     />
     <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
       <div>
-        <NFTWidgetBaseCard class="flex flex-col items-center">
+        <NFTWidgetBaseCard class="flex flex-col items-center w-full">
           <NFTWidgetContentPreview
-            class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7] min-h-[300px]"
+            class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7] min-h-[300px] w-full"
             :title="title"
             :description="description"
             :img-src="imgSrc"
@@ -40,9 +40,11 @@
         />
       </div>
       <div>
-        <NFTCampaignPricingTable
-          class="laptop:mt-[8px] w-full"
+        <NFTSupplyTable
+          class="laptop:mt-[8px] w-full laptop:pr-[8px]"
           :sold-count="soldCount"
+          :should-collapse-in-mobile="true"
+          :should-show-indicator="true"
           @collect="handleClickCollect"
         />
         <div class="mt-[16px] flex items-center justify-between">

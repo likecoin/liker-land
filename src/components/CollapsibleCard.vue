@@ -1,7 +1,18 @@
 <template>
-  <CardV2 class="bg-white rounded-[24px] overflow-hidden">
-    <div
-      class="flex justify-between cursor-pointer w-ful"
+  <CardV2
+    class="bg-white rounded-[24px] overflow-hidden"
+    :has-padding="false"
+  >
+    <header
+      :class="[
+        'flex',
+        'justify-between',
+        'cursor-pointer',
+        'w-full',
+        xPaddingClass,
+        'py-[32px]',
+        'text-like-green',
+      ]"
       @click="isOpen = !isOpen"
     >
       <div
@@ -9,8 +20,6 @@
           'flex',
           'justify-between',
           'items-center',
-          'mb-[12px]',
-          'text-like-green',
         ]"
       >
         <Label
@@ -19,8 +28,7 @@
           tag="div"
           preset="h5"
           valign="middle"
-          content-class="whitespace-nowrap text-like-green "
-          prepend-class="text-like-green"
+          content-class="whitespace-nowrap"
         >
           <template #prepend>
             <slot name="titleIcon" />
@@ -29,10 +37,8 @@
       </div>
       <svg
         :class="[
-          'transform transition-transform duration-[0.5s]',
-          {
-            'rotate-180': isOpen,
-          },
+          'transform transition-transform duration-[0.2s]',
+          isOpen ? '-rotate-180' : '-rotate-90',
         ]"
         width="16"
         height="16"
@@ -44,15 +50,25 @@
           fill-rule="evenodd"
           clip-rule="evenodd"
           d="M12.8 10.7943C12.4686 11.2362 11.8418 11.3257 11.4 10.9943L8 8.44434L4.6 10.9943C4.15817 11.3257 3.53137 11.2362 3.2 10.7943C2.86863 10.3525 2.95817 9.72571 3.4 9.39434L7.4 6.39434C7.75555 6.12767 8.24444 6.12767 8.6 6.39434L12.6 9.39434C13.0418 9.72571 13.1314 10.3525 12.8 10.7943Z"
-          fill="#28646E"
+          fill="currentColor"
         />
       </svg>
-    </div>
+    </header>
 
     <Transition @enter="onEnter" @leave="onLeave">
       <div v-if="isOpen">
-        <hr class="w-full mb-[8px] border-[#EBEBEB]">
-        <slot name="content" />
+        <div
+          :class="[
+            xPaddingClass,
+            'pb-[32px]',
+          ]"
+        >
+          <hr
+            v-if="isShowSeparator"
+            class="w-full mb-[8px] border-[#ebebeb]"
+          >
+          <slot name="content" />
+        </div>
       </div>
     </Transition>
   </CardV2>
@@ -60,11 +76,19 @@
 
 <script>
 export default {
-  name: 'DropDownList',
+  name: 'CollapsibleCard',
   props: {
     title: {
       type: String,
       default: undefined,
+    },
+    isNarrow: {
+      type: Boolean,
+      default: false,
+    },
+    isShowSeparator: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -72,11 +96,17 @@ export default {
       isOpen: true,
     };
   },
+  computed: {
+    xPaddingClass() {
+      return this.isNarrow ? 'px-[24px]' : 'px-[32px]';
+    },
+  },
   methods: {
     onEnter(el, done) {
       this.$gsap.gsap.from(el, {
         height: 0,
         duration: 0.25,
+        ease: 'power2.out',
         clearProps: 'height',
         onComplete: () => {
           done();
@@ -86,7 +116,8 @@ export default {
     onLeave(el, done) {
       this.$gsap.gsap.to(el, {
         height: 0,
-        duration: 0.15,
+        ease: 'power2.out',
+        duration: 0.2,
         onComplete: () => {
           done();
         },
