@@ -10,12 +10,6 @@ import {
 import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
 
 export default {
-  props: {
-    classId: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       iscnOwnerInfo: {},
