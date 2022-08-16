@@ -3,6 +3,7 @@
     class="mx-auto mb-[5px] break-inside-avoid"
     :to="{ name: 'nft-class-classId', params: { classId } }"
     target="_blank"
+    @click="handleClickViewDetails"
   >
     <NFTPortfolioCard>
       <div
@@ -72,6 +73,7 @@
 <script>
 import nftMixin from '~/mixins/nft';
 
+import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
 export default {
@@ -86,7 +88,17 @@ export default {
   },
   methods: {
     handleClickCollect() {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
       this.collectNFT();
+    },
+    handleClickViewDetails() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTViewDetails(Portfolio)',
+        this.classId,
+        1
+      );
     },
   },
 };

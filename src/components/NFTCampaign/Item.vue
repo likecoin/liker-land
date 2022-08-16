@@ -23,6 +23,8 @@
       },
       tag: 'NuxtLink',
     }"
+    @view-details="handleClickViewDetails"
+    @view-content="handleClickViewContent"
     @collect="handleClickCollect"
     @like="handleLike"
   />
@@ -33,6 +35,7 @@ import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import errorMixin from '~/mixins/error';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [nftMixin, walletMixin, errorMixin],
@@ -48,9 +51,11 @@ export default {
   },
   methods: {
     handleClickCollect() {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
       this.collectNFT();
     },
     handleLike() {
+      logTrackerEvent(this, 'NFT', 'NFTLike(Campaign)', this.classId, 1);
       window.open(
         `${LIKECOIN_BUTTON_BASE}/in/like/iscn/?iscn_id=${encodeURIComponent(
           this.iscnId
@@ -58,6 +63,12 @@ export default {
         `like_${this.classId}`,
         'popup=1,width=768,height=576,top=0,left=0'
       );
+    },
+    handleClickViewDetails() {
+      logTrackerEvent(this, 'NFT', 'NFTViewDetails(Campaign)', this.classId, 1);
+    },
+    handleClickViewContent() {
+      logTrackerEvent(this, 'NFT', 'NFTViewContent(Campaign)', this.classId, 1);
     },
   },
 };

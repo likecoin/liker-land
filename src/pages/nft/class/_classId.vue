@@ -151,6 +151,7 @@
 
 <script>
 import { getLIKEPrice } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import { getNFTCountByClassId, LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
@@ -264,6 +265,7 @@ export default {
       this.isLoading = false;
     },
     async onTransfer() {
+      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
       try {
         this.isTransferring = true;
         await this.transferNFT();
@@ -284,6 +286,7 @@ export default {
       }
     },
     onCollect() {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
       this.collectNFT();
     },
     async getLIKEPrice() {

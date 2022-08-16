@@ -21,6 +21,7 @@
             :href="url"
             target="_blank"
             rel="noreferrer noopener"
+            @click="handleClickViewContent"
           >
             <NFTWidgetIconEye class="w-[17px]" />
             <span
@@ -169,6 +170,9 @@ export default {
   methods: {
     handleClickNFTDetails() {
       this.$emit('view-details');
+    },
+    handleClickViewContent() {
+      this.$emit('view-content');
     },
     handleClickCollect() {
       this.$emit('collect');

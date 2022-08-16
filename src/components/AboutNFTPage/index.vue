@@ -12,12 +12,15 @@
     >
       <NFTHeroSection class="w-full" />
       <nav class="py-[32px] laptop:py-[64px] grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
-        <ButtonV2 to="/campaign/writing-nft" preset="secondary">
-          {{ $t('about_nft_page_nav_campaign') }}
-        </ButtonV2>
-        <ButtonV2 preset="tertiary" @click="navigateToWalletDashboard">
-          {{ $t('about_nft_page_nav_collection') }}
-        </ButtonV2>
+        <ButtonV2
+          to="/campaign/writing-nft"
+          preset="secondary"
+          @click="handleClickCampaignPageButton"
+        >{{ $t('about_nft_page_nav_campaign') }}</ButtonV2>
+        <ButtonV2
+          preset="tertiary"
+          @click="handleClickMyPageButton"
+        >{{ $t('about_nft_page_nav_collection') }}</ButtonV2>
       </nav>
       <NFTWidgetSection
         class="py-[32px] laptop:py-[64px]"
@@ -153,6 +156,7 @@
 
 <script>
 import walletMixin from '~/mixins/wallet';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import NFTFAQSection from './NFTFAQSection';
 import NFTHeroSection from './NFTHeroSection';
@@ -186,6 +190,15 @@ export default {
     articles: {
       type: Array,
       default: () => WIDGET_ARTICLES,
+    },
+  },
+  methods: {
+    handleClickCampaignPageButton() {
+      logTrackerEvent(this, 'NFT', 'NFTGoToCampaign', 'NFTGoToCampaign', 1);
+    },
+    handleClickMyPageButton() {
+      logTrackerEvent(this, 'NFT', 'NFTGoToMyPage', 'NFTGoToMyPage', 1);
+      this.navigateToWalletDashboard();
     },
   },
 };
