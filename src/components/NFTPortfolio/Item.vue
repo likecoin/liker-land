@@ -44,7 +44,9 @@
           {{ NFTName }}
         </Label>
         <div class="z-[500] flex justify-center">
-          <ButtonV2
+          <ProgressIndicator v-if="isLoading" />
+          <ButtonV2 
+            v-else
             preset="secondary"
             class="my-[16px]"
             @click.stop.prevent="handleClickCollect"
@@ -72,6 +74,8 @@
 
 <script>
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
+import errorMixin from '~/mixins/error';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
@@ -80,16 +84,34 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin, errorMixin],
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   mounted() {
     this.updateNFTClassMetdata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
+    async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
+
+      try {
+        this.isLoading = true;
+        await this.collectNFT();
+        this.handleSuccess(this.$t('snackbar_success_collect'));
+      } catch (error) {
+        this.errorHandling(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     handleClickViewDetails() {
       logTrackerEvent(

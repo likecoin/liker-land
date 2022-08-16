@@ -284,9 +284,24 @@ export default {
         this.isReadyToTransfer = true;
       }
     },
-    onCollect() {
+    async onCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
+
+      try {
+        this.isCollecting = true;
+        await this.collectNFT();
+        this.updateUserOwnedCount(this.getAddress);
+        this.updateNFTHistory();
+        this.handleSuccess(this.$t('snackbar_success_collect'));
+      } catch (error) {
+        this.errorHandling(error);
+      } finally {
+        this.isCollecting = false;
+      }
     },
     async getLIKEPrice() {
       try {

@@ -50,9 +50,22 @@ export default {
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
+    async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
+
+      try {
+        this.isCollecting = true;
+        await this.collectNFT();
+        this.handleSuccess(this.$t('snackbar_success_collect'));
+      } catch (error) {
+        this.errorHandling(error);
+      } finally {
+        this.isCollecting = false;
+      }
     },
     handleLike() {
       logTrackerEvent(this, 'NFT', 'NFTLike(Campaign)', this.classId, 1);
