@@ -81,6 +81,12 @@ export default {
     ellipsis,
   },
   mixins: [nftMixin],
+  props: {
+    classId: {
+      type: String,
+      required: true,
+    },
+  },
   mounted() {
     this.updateNFTClassMetdata();
     this.updateNFTPurchaseInfo();

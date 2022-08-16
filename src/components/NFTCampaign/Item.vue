@@ -39,6 +39,12 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [nftMixin, walletMixin, errorMixin],
+  props: {
+    classId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       isCollecting: false,
