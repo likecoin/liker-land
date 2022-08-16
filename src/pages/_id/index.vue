@@ -24,23 +24,10 @@
           'desktop:w-[280px]',
         ]"
       >
-        <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
-          <Identity
-            :avatar-url="userInfo && userInfo.avatar || `https://avatars.dicebear.com/api/identicon/${wallet}.svg`"
-            :avatar-size="88"
-            :is-avatar-outlined="isCivicLiker"
-          />
-          <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-            {{ getCivicLikerId | ellipsis }}
-          </Label>
-          <div
-            v-if="getCivicLikerDescription"
-            :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']"
-          />
-          <Label preset="p6" class="break-all font-200">
-            {{ getCivicLikerDescription }}
-          </Label>
-        </CardV2>
+        <NFTPortfolioUserInfo
+          :user-info="userInfo"
+          :wallet="wallet"
+        />
       </div>
       <div
         :class="[
@@ -164,14 +151,9 @@ import { checkUserNameValid } from '~/util/user';
 
 import walletMixin from '~/mixins/wallet';
 
-import Identity from '~/components/Identity/Identity';
-
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
-  components: {
-    Identity,
-  },
   filters: {
     ellipsis,
   },
@@ -189,21 +171,6 @@ export default {
       civicLikerList: [],
       isLoading: true,
     };
-  },
-  computed: {
-    isCivicLiker() {
-      return !!(
-        this.userInfo &&
-        (this.userInfo.isCivicLikerTrial ||
-          this.userInfo.isSubscribedCivicLiker)
-      );
-    },
-    getCivicLikerId() {
-      return (this.userInfo && this.userInfo.displayName) || this.wallet;
-    },
-    getCivicLikerDescription() {
-      return this.userInfo && this.userInfo.description;
-    },
   },
   async asyncData({ route, $api, error }) {
     let { id } = route.params;
