@@ -93,9 +93,9 @@
               'gap-[16px]',
             ]"
           >
-            <div
+            <NFTPortfolioCard
               v-if="!ownedNFTClassId.length"
-              :class="[...cardClasses, '!bg-shade-gray','break-inside-avoid']"
+              class="!bg-shade-gray break-inside-avoid"
             >
               <div class="p-[8px] w-full h-[140px]">
                 <div
@@ -105,96 +105,18 @@
                   }"
                 />
               </div>
-              <div
-                class="
-                w-full
-                pb-[32px]
-                bg-shade-gray
-                border-t-[1px] border-white
-              "
-              >
+              <div class="w-full pb-[32px] bg-shade-gray border-t-[1px] border-white">
                 <div class="flex flex-col justify-center items-center mt-[-21px]">
                   <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
                   <Label class="text-medium-gray mt-[12px]" text="no creation" />
                 </div>
               </div>
-            </div>
-            <NuxtLink
+            </NFTPortfolioCard>
+            <NFTPortfolioItem
               v-for="id in ownedNFTClassId"
               :key="id"
-              :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
-              :to="{ name: 'nft-class-classId', params: { classId: id } }"
-              target="_blank"
-            >
-              <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
-                <div
-                  class="h-[180px]"
-                  :style="`background-color: ${
-                    getNFTClassMetadataById(id).background_color
-                  }`"
-                >
-                  <img
-                    class="object-cover w-full max-h-[180px]"
-                    :src="getNFTClassMetadataById(id).image"
-                  >
-                </div>
-                <div
-                  :class="[
-                    'flex',
-                    'flex-col',
-                    'text-center',
-                    'whitespace-pre-line',
-                    'px-[24px]',
-                    'pt-[48px]',
-                    'py-[24px]',
-                    'relative',
-                  ]"
-                >
-                  <div
-                    class="flex flex-col items-center justify-center mt-[-70px]"
-                  >
-                    <Identity
-                      :avatar-url="avatarList[getNFTClassMetadataById(id).iscn_owner]"
-                      :avatar-size="40"
-                      :is-avatar-outlined="civicLikerList[getNFTClassMetadataById(id).iscn_owner]"
-                    />
-                    <div class="flex mt-[8px]">
-                      <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
-                        displayNameList[getNFTClassMetadataById(id).iscn_owner] | ellipsis
-                      }}</Label>
-                    </div>
-                  </div>
-                  <Label preset="h5" class="mt-[12px] break-all" align="center">
-                    {{ getNFTClassMetadataById(id).name }}
-                  </Label>
-                  <div class="z-[500] flex justify-center">
-                    <ButtonV2
-                      preset="secondary"
-                      class="my-[16px]"
-                      @click.stop.prevent="handleClickCollect(getNFTClassMetadataById(id).iscn_id)"
-                    >
-                      {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
-                      <template #prepend>
-                        <IconPrice />
-                      </template>
-                    </ButtonV2>
-                  </div>
-                  <div
-                    v-if="getNFTClassOwnerInfoById(id)"
-                    :class="['flex', 'items-center', 'justify-center']"
-                  >
-                    <div class="flex items-center text-medium-gray mr-[18px]">
-                      <IconMint />
-                      <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
-                    </div>
-                    <div class="flex items-center text-medium-gray">
-                      <IconOwner />
-                      <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </NuxtLink>
+              :class-id="id"
+            />
           </ul>
 
           <ul
@@ -209,82 +131,11 @@
               'gap-[16px]',
             ]"
           >
-            <NuxtLink
+            <NFTPortfolioItem
               v-for="id in sellingNFTClassId"
               :key="id"
-              :class="['mx-auto', 'mb-[5px]', 'break-inside-avoid']"
-              :to="{ name: 'nft-class-classId', params: { classId: id } }"
-              target="_blank"
-            >
-              <div v-if="getNFTClassMetadataById(id)" :class="cardClasses">
-                <div
-                  class="h-[180px]"
-                  :style="`background-color: ${
-                    getNFTClassMetadataById(id).background_color
-                  }`"
-                >
-                  <img
-                    class="object-cover w-full max-h-[180px]"
-                    :src="getNFTClassMetadataById(id).image"
-                  >
-                </div>
-                <div
-                  :class="[
-                    'flex',
-                    'flex-col',
-                    'text-center',
-                    'whitespace-pre-line',
-                    'px-[24px]',
-                    'pt-[48px]',
-                    'py-[24px]',
-                    'relative',
-                  ]"
-                >
-                  <div
-                    class="flex flex-col items-center justify-center mt-[-70px]"
-                  >
-                    <Identity
-                      :avatar-url="avatarList[getNFTClassMetadataById(id).iscn_owner]"
-                      :avatar-size="40"
-                      :is-avatar-outlined="civicLikerList[getNFTClassMetadataById(id).iscn_owner]"
-                    />
-                    <div class="flex mt-[8px]">
-                      <Label class="text-medium-gray">by</Label><Label class="text-like-green ml-[4px] font-[600]">{{
-                        getCivicLikerId | ellipsis
-                      }}</Label>
-                    </div>
-                  </div>
-                  <Label preset="h5" class="mt-[12px] break-all" align="center">
-                    {{ getNFTClassMetadataById(id).name }}
-                  </Label>
-                  <div class="z-50 flex justify-center">
-                    <ButtonV2
-                      preset="secondary"
-                      class="my-[16px]"
-                      @click.stop.prevent="handleClickCollect(getNFTClassMetadataById(id).iscn_id)"
-                    >
-                      {{ (getNFTClassPurchaseInfoById(id) && getNFTClassPurchaseInfoById(id).price) || '-' }} $LIKE
-                      <template #prepend>
-                        <IconPrice />
-                      </template>
-                    </ButtonV2>
-                  </div>
-                  <div
-                    v-if="getNFTClassOwnerInfoById(id)"
-                    :class="['flex', 'items-center', 'justify-center']"
-                  >
-                    <div class="flex items-center text-medium-gray mr-[18px]">
-                      <IconMint />
-                      <div class="ml-[4px]">{{ getNFTClassMintedCount(id) }}</div>
-                    </div>
-                    <div class="flex items-center text-medium-gray">
-                      <IconOwner />
-                      <div class="ml-[4px]">{{ getNFTClassOwnerCount(id) }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </NuxtLink>
+              :class-id="id"
+            />
           </ul>
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
@@ -301,41 +152,30 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
 import {
   getUserMinAPI,
   getUserSellNFTClasses,
   getAddressLikerIdMinApi,
 } from '~/util/api';
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
-import { checkUserNameValid } from '~/util/user';
-import { getNFTs } from '~/util/nft';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
-import Identity from '~/components/Identity/Identity';
-import nftMixin from '~/mixins/nft';
+import { getNFTs } from '~/util/nft';
+import { ellipsis } from '~/util/ui';
+import { checkUserNameValid } from '~/util/user';
+
 import walletMixin from '~/mixins/wallet';
 
+import Identity from '~/components/Identity/Identity';
+
 export default {
+  name: 'NFTPortfolioPage',
   layout: 'default',
   components: {
     Identity,
   },
   filters: {
-    ellipsis(value) {
-      if (value) {
-        const len = value.length;
-        const dots = '...';
-        if (!value) return '';
-        if (value.length > 15) {
-          return value.substring(0, 10) + dots + value.substring(len - 5, len);
-        }
-        return value;
-      }
-      return value;
-    },
+    ellipsis,
   },
-  mixins: [nftMixin, walletMixin],
+  mixins: [walletMixin],
   data() {
     return {
       userInfo: null,
@@ -351,13 +191,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getNFTClassPurchaseInfoById',
-      'getNFTClassMetadataById',
-      'getNFTClassOwnerInfoById',
-      'getNFTClassOwnerCount',
-      'getNFTClassMintedCount',
-    ]),
     isCivicLiker() {
       return !!(
         this.userInfo &&
@@ -370,25 +203,6 @@ export default {
     },
     getCivicLikerDescription() {
       return this.userInfo && this.userInfo.description;
-    },
-    cardClasses() {
-      return [
-        'flex',
-        'flex-col',
-        'rounded-[24px]',
-        'w-[310px]',
-        'mb-[16px]',
-        'overflow-hidden',
-        'w-full',
-        'bg-white',
-        'box-border',
-        'border-[2px]',
-        'border-transparent',
-        'hover:border-like-cyan',
-        'transition',
-        'ease-in',
-        'duration-200',
-      ];
     },
   },
   async asyncData({ route, $api, error }) {
@@ -434,91 +248,26 @@ export default {
     this.fetchUserOwnClasses();
   },
   methods: {
-    ...mapActions([
-      'fetchNFTPurchaseInfo',
-      'fetchNFTMetadata',
-      'fetchNFTOwners',
-    ]),
     async fetchUserOwnClasses() {
       const { nfts } = await getNFTs({ owner: this.wallet });
       const classIdSet = new Set(nfts.map(n => n.classId));
       this.ownedNFTClassId = Array.from(classIdSet);
-      this.ownedNFTClassId.forEach(id => this.updateNFTClassData(id));
     },
     async fetchUserSellingClasses() {
       const { data } = await this.$api.get(
         getUserSellNFTClasses({ wallet: this.wallet })
       );
       this.sellingNFTClassId = data.list;
-      this.sellingNFTClassId.forEach(id => this.updateNFTClassData(id));
       if (!this.sellingNFTClassId.length) {
         this.currentTab = 'collected';
       }
       this.isLoading = false;
     },
-    async updateNFTClassData(classId) {
-      if (!this.getNFTClassMetadataById(classId)) {
-        await this.fetchNFTMetadata(classId);
-      }
-      if (!this.getNFTClassPurchaseInfoById(classId)) {
-        await this.fetchNFTPurchaseInfo(classId);
-      }
-      if (!this.getNFTClassOwnerInfoById(classId)) {
-        await this.fetchNFTOwners(classId);
-      }
-      this.UpdateDisplayNameList(
-        this.getNFTClassMetadataById(classId).iscn_owner
-      );
-    },
     goCollected() {
       this.currentTab = 'collected';
     },
-    goDetails(classId) {
-      this.$router.push({ name: 'nft-class-classId', params: { classId } });
-    },
     goCreated() {
       this.currentTab = 'created';
-    },
-    async UpdateDisplayNameList(addr) {
-      if (typeof addr === 'string') {
-        this.getAddressLikerId(addr);
-        return;
-      }
-      const results = [];
-      // eslint-disable-next-line no-restricted-syntax
-      for (const a of addr) {
-        results.push(this.getAddressLikerId(a));
-      }
-      await Promise.all(results);
-    },
-    async getAddressLikerId(addr) {
-      try {
-        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
-        Vue.set(this.displayNameList, addr, data.displayName);
-        Vue.set(
-          this.avatarList,
-          addr,
-          data.avatar ||
-            `https://avatars.dicebear.com/api/identicon/${addr}.svg`
-        );
-        Vue.set(this.civicLikerList, addr, data.isSubscribedCivicLiker);
-      } catch (error) {
-        Vue.set(this.displayNameList, addr, addr);
-        Vue.set(
-          this.avatarList,
-          addr,
-          `https://avatars.dicebear.com/api/identicon/${addr}.svg`
-        );
-      }
-    },
-    handleClickCollect(iscnid) {
-      window.open(
-        `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
-          iscnid
-        )}%2F1`,
-        `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
-      );
     },
   },
 };

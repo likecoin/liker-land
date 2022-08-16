@@ -10,6 +10,12 @@ import {
 import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
 
 export default {
+  props: {
+    classId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       iscnOwnerInfo: {},
@@ -52,6 +58,15 @@ export default {
     },
     iscnOwner() {
       return this.NFTClassMetadata.iscn_owner;
+    },
+    iscnOwnerAvatar() {
+      return (
+        this.avatarList[this.iscnOwner] ||
+        `https://avatars.dicebear.com/api/identicon/${this.iscnOwner}.svg`
+      );
+    },
+    iscnOwnerDisplayName() {
+      return this.displayNameList[this.iscnOwner];
     },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;

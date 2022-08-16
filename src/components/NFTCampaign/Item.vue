@@ -8,9 +8,9 @@
     :img-bg-color="NFTImageBackgroundColor"
     :price="NFTPrice"
     :owner-address="iscnOwner"
-    :owner-avatar-src="getAvatar"
+    :owner-avatar-src="iscnOwnerAvatar"
     :owner-count="ownerCount"
-    :owner-name="getOwnerDisplayName"
+    :owner-name="iscnOwnerDisplayName"
     :sold-count="mintedCount"
     :is-loading="isCollecting"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
@@ -36,27 +36,10 @@ import errorMixin from '~/mixins/error';
 
 export default {
   mixins: [nftMixin, walletMixin, errorMixin],
-  props: {
-    classId: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       isCollecting: false,
     };
-  },
-  computed: {
-    getAvatar() {
-      return (
-        this.avatarList[this.iscnOwner] ||
-        `https://avatars.dicebear.com/api/identicon/${this.iscnOwner}.svg`
-      );
-    },
-    getOwnerDisplayName() {
-      return this.displayNameList[this.iscnOwner];
-    },
   },
   mounted() {
     this.updateNFTClassMetdata();
