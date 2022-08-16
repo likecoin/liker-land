@@ -41,6 +41,9 @@ export default {
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
+    isWritingNFT() {
+      return !!this.NFTClassMetadata.name;
+    },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
     },
