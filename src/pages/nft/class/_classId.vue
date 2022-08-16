@@ -87,9 +87,8 @@
           :class="[ 'flex-grow', columnClasses ]"
         >
           <NFTPageOwningSection
-            class="hidden"
             :owned-count="userOwnedCount"
-            :is-transfer-disabled="isTransferDisabled"
+            :is-transfer-disabled="true"
             :is-loading="isLoading"
             :is-log-in="!!getAddress"
             :is-transferring="isTransferring"
