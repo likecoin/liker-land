@@ -1,9 +1,5 @@
 # [Liker Land](https://liker.land)
-Where every Like is a Reward. Stories that matter, writers who think and readers who care.
-
-## Feature
-- Personalized web PWA reader
-- Like and follow the reader you like
+Decentralize Publishing in Web3 via Writing NFT. A DAO for content lovers.
 
 ## Development
 
@@ -41,3 +37,6 @@ $ npm --prefix functions install
 ```bash
 $ firebase deploy
 ```
+
+## Changelog
+Please read the changelog [here](CHANGELOG.md).
