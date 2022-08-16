@@ -84,11 +84,11 @@
         </div>
 
         <div
-          :class="[ 'flex-grow', columnClasses ]"
+          :class="['flex-grow', columnClasses ]"
         >
           <NFTPageOwningSection
             :owned-count="userOwnedCount"
-            :is-transfer-disabled="true"
+            :is-transfer-disabled="isTransferDisabled"
             :is-loading="isLoading"
             :is-log-in="!!getAddress"
             :is-transferring="isTransferring"
