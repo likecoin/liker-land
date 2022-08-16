@@ -55,7 +55,7 @@
             </template>
           </ButtonV2>
         </div>
-        <div class="items-center justify-center flexb">
+        <div class="flex items-center justify-center">
           <div class="flex items-center text-medium-gray mr-[18px]">
             <IconMint />
             <div class="ml-[4px]">{{ mintedCount }}</div>
