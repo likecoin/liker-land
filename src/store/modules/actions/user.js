@@ -1,5 +1,6 @@
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
+
 import {
   updateSentryUser,
   updateCrispUser,
@@ -77,7 +78,7 @@ export async function resumeCanceledSubscription({ dispatch }) {
 
 export async function updatePreferences(
   { dispatch, commit },
-  { locale, creatorPitch } = {}
+  { locale, creatorPitch, loginStatus } = {}
 ) {
   const preferences = {};
   if (locale) {
@@ -89,6 +90,7 @@ export async function updatePreferences(
     commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
-    await this.$api.$post(api.userPreferences(), preferences);
+    // Wait until the correct token can be obtained and then carry loginStatus = true
+    if (loginStatus) await this.$api.$post(api.userPreferences(), preferences);
   }
 }
