@@ -44,12 +44,11 @@
         <Label preset="h5" class="mt-[12px] break-all" align="center">
           {{ NFTName }}
         </Label>
-        <div class="z-[500] flex justify-center">
+        <div class="z-[500] flex justify-center my-[16px]">
           <ProgressIndicator v-if="isLoading" />
           <ButtonV2 
             v-else
             preset="secondary"
-            class="my-[16px]"
             @click.stop.prevent="handleClickCollect"
           >
             <span>{{ NFTPrice || '-' }} $LIKE</span>
