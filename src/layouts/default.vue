@@ -10,14 +10,31 @@
       name="snackbar"
       multiple
     />
+    
+    <Snackbar
+      :open="getIsOpenSnackbar"
+      :preset="getPreset"
+      @close="handleClose"
+    >
+      {{ alertMessage }}
+      <LinkV2
+        v-if="alertMessage.toString().includes('INSUFFICIENT_BALANCE')"
+        :class="['text-white','ml-[5px]']"
+        href="https://docs.like.co/general-guides/trade"
+      >
+        {{ $t('snackbar_error_buyLIKE') }}
+      </LinkV2>
+    </Snackbar>
+    
   </div>
 </template>
 
 <script>
 import slidingMenuMixin from '~/mixins/sliding-menu';
+import errorMixin from '~/mixins/error';
 
 export default {
-  mixins: [slidingMenuMixin],
+  mixins: [slidingMenuMixin, errorMixin],
 };
 </script>
 

@@ -1,32 +1,25 @@
-const ErrorType = { INSUFFICIENT_BALANCE: 'INSUFFICIENT_BALANCE' };
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return {
-      isOpenWarningSnackbar: false,
-      isOpenSuccessSnackbar: false,
-      errorType: '',
-      successMsg: '',
-    };
-  },
   computed: {
-    errorAlert() {
-      switch (this.errorType) {
-        case ErrorType.INSUFFICIENT_BALANCE:
-          return this.$t('snackbar_error_insufficient');
-        default:
-          return this.errorType;
-      }
+    ...mapGetters(['getIsOpenSnackbar', 'getAlertType', 'getAlertMessage']),
+    alertMessage() {
+      return this.getAlertMessage;
+    },
+    getPreset() {
+      return this.getAlertType || 'success';
     },
   },
   methods: {
-    errorHandling(err) {
-      this.isOpenWarningSnackbar = true;
-      this.errorType = err.response?.data || err.toString();
+    ...mapActions(['handleErrorAlert', 'handleSuccessAlert', 'closeAlert']),
+    handleError(errorMsg) {
+      this.handleErrorAlert(errorMsg.response?.data || errorMsg);
     },
-    handleSuccess(msg) {
-      this.isOpenSuccessSnackbar = true;
-      this.successMsg = msg;
+    handleSuccess(successMsg) {
+      this.handleSuccessAlert(successMsg);
+    },
+    handleClose() {
+      this.closeAlert();
     },
   },
 };
