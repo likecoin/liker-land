@@ -8,7 +8,7 @@
         class="fixed inset-0"
         @click="close"
       />
-      <div class="fixed bottom-[40px] z-50">
+      <div class="fixed bottom-[40px] z-[1000]">
         <div :class="containerWrapperClasses">
           <Label
             class="w-min"

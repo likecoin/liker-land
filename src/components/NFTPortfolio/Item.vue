@@ -112,9 +112,11 @@ export default {
       try {
         this.isLoading = true;
         await this.collectNFT();
-        this.handleSuccess(this.$t('snackbar_success_collect'));
+        this.handleSuccess(
+          this.$t('snackbar_success_collect', { NFT: this.NFTName })
+        );
       } catch (error) {
-        this.errorHandling(error);
+        this.handleError(error);
       } finally {
         this.isLoading = false;
       }

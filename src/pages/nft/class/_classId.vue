@@ -126,25 +126,6 @@
         />
       </div>
     </Dialog>
-    <Snackbar
-      v-model="isOpenWarningSnackbar"
-      preset="warn"
-    >
-      {{ errorAlert }}
-      <LinkV2
-        v-if="errorType === 'INSUFFICIENT_BALANCE'"
-        :class="['text-white','ml-[2px]']"
-        href="https://docs.like.co/general-guides/trade"
-      >
-        {{ $t('snackbar_error_buyLIKE') }}
-      </LinkV2>
-    </Snackbar>
-    <Snackbar
-      v-model="isOpenSuccessSnackbar"
-      preset="success"
-    >
-      {{ successMsg }}
-    </Snackbar>
   </Page>
 </template>
 
@@ -270,7 +251,7 @@ export default {
         await this.transferNFT();
         this.handleSuccess(this.$t('snackbar_success_transfer'));
       } catch (error) {
-        this.errorHandling(error);
+        this.handleError(error);
       } finally {
         this.isTransferring = false;
       }
@@ -296,9 +277,11 @@ export default {
         await this.collectNFT();
         this.updateUserOwnedCount(this.getAddress);
         this.updateNFTHistory();
-        this.handleSuccess(this.$t('snackbar_success_collect'));
+        this.handleSuccess(
+          this.$t('snackbar_success_collect', { NFT: this.NFTName })
+        );
       } catch (error) {
-        this.errorHandling(error);
+        this.handleError(error);
       } finally {
         this.isCollecting = false;
       }
@@ -308,7 +291,7 @@ export default {
         const { data } = await this.$api.get(getLIKEPrice());
         this.currentPrice = data.likecoin.usd;
       } catch (error) {
-        this.errorHandling('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
+        this.handleError('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
       }
     },
   },

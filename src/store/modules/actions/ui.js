@@ -13,3 +13,21 @@ export function setIsHK({ commit }, isHK) {
 export function toggleSlidingMenu({ commit }, isToggled) {
   commit(types.UI_TOGGLE_SLIDING_MENU, isToggled);
 }
+
+export function handleErrorAlert({ commit }, message) {
+  commit(types.UI_TOGGLE_SNACKBAR, true);
+  commit(types.UI_SET_ALERT_TYPE, 'warn');
+  commit(types.UI_SET_ALERT_MESSAGE, message);
+}
+
+export function handleSuccessAlert({ commit }, message) {
+  commit(types.UI_TOGGLE_SNACKBAR, true);
+  commit(types.UI_SET_ALERT_TYPE, 'success');
+  commit(types.UI_SET_ALERT_MESSAGE, message);
+}
+
+export function closeAlert({ commit }) {
+  commit(types.UI_TOGGLE_SNACKBAR, false);
+  commit(types.UI_SET_ALERT_TYPE, '');
+  commit(types.UI_SET_ALERT_MESSAGE, '');
+}
