@@ -38,8 +38,8 @@
       "a": "No. Just as buying a book does not mean buying the copyright, buying the NFT of the work does not mean buying the copyright of the work. Each Writing NFT had its own metadata that would contain the license terms of suggested usage rights."
     }
   ],
-  "header_button_connect_to_wallet":"Connect to a Wallet",
-  "header_menu_LIKE":"$LIKE",
+  "header_button_connect_to_wallet": "Connect to a Wallet",
+  "header_menu_LIKE": "$LIKE",
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_description": "This content has been published as Writing NFT. Collect now to build your portfolio.",
   "nft_details_page_title_collector": "Collectors",
@@ -74,13 +74,13 @@
   "about_the_team_top_label": "About",
   "about_the_team_title": "Liker Land Team",
   "about_the_team_description": "Liker Land is an award-winning blockchain company that builds user-centric protocols and applications in Web3. The awardee of the Google News Innovation Challenge, AppWorks incubatee, and several hackathons winners. Liker Land is currently the maintainer of LikeCoin to provide infrastructure support. Validators of Cosmos, Osmosis, and Desmos.",
-  "tooltip_coming_soon":"Coming Soon",
-  "tooltip_signin":"Please Sign in First",
-  "tooltip_no_nft":"No owned NFTs to transfer",
-  "snackbar_error_insufficient":"Oops, Insufficient Balance.",
-  "snackbar_success_transfer":"Complete the transfer of NFT.",
-  "snackbar_success_collect":"Complete the collect of {NFT}.",
-  "snackbar_error_buyLIKE":"buy LIKE",
+  "tooltip_coming_soon": "Coming Soon",
+  "tooltip_signin": "Please Sign in First",
+  "tooltip_no_nft": "No owned NFTs to transfer",
+  "snackbar_error_insufficient": "Oops, Insufficient Balance.",
+  "snackbar_success_transfer": "Complete the transfer of NFT.",
+  "snackbar_success_collect": "Complete the collect of 《{NFT}》.",
+  "snackbar_error_buyLIKE": "buy LIKE",
   "AppDownloadBadges": {
     "Start": "Start",
     "Download": "Download Liker Land"
