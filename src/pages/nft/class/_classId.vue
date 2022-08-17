@@ -249,9 +249,9 @@ export default {
       try {
         this.isTransferring = true;
         await this.transferNFT();
-        this.handleSuccess(this.$t('snackbar_success_transfer'));
+        this.alertPromptSuccess(this.$t('snackbar_success_transfer'));
       } catch (error) {
-        this.handleError(error);
+        this.alertPromptError(error);
       } finally {
         this.isTransferring = false;
       }
@@ -277,11 +277,11 @@ export default {
         await this.collectNFT();
         this.updateUserOwnedCount(this.getAddress);
         this.updateNFTHistory();
-        this.handleSuccess(
+        this.alertPromptSuccess(
           this.$t('snackbar_success_collect', { NFT: this.NFTName })
         );
       } catch (error) {
-        this.handleError(error);
+        this.alertPromptError(error);
       } finally {
         this.isCollecting = false;
       }
@@ -291,7 +291,7 @@ export default {
         const { data } = await this.$api.get(getLIKEPrice());
         this.currentPrice = data.likecoin.usd;
       } catch (error) {
-        this.handleError('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
+        this.alertPromptError('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
       }
     },
   },

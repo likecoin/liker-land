@@ -12,9 +12,9 @@
     />
     
     <Snackbar
-      :open="getIsOpenSnackbar"
-      :preset="getPreset"
-      @close="handleClose"
+      :open="uiIsOpenSnackbar"
+      :preset="alertPreset"
+      @close="alertClose"
     >
       {{ alertMessage }}
       <LinkV2
