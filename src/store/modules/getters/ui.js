@@ -7,6 +7,6 @@ export const getAvailableLocales = state => state.locales;
 export const getIsSlidingMenuOpen = state => state.isSlidingMenuOpen;
 export const getIsHK = state => state.isHK;
 
-export const getIsOpenSnackbar = state => state.isOpenSnackbar;
-export const getAlertType = state => state.alertType;
-export const getAlertMessage = state => state.alertMessage;
+export const uiIsOpenSnackbar = state => state.isOpenSnackbar;
+export const uiAlertType = state => state.alertType;
+export const uiAlertMessage = state => state.alertMessage;

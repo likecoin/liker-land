@@ -2,24 +2,28 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['getIsOpenSnackbar', 'getAlertType', 'getAlertMessage']),
+    ...mapGetters(['uiIsOpenSnackbar', 'uiAlertType', 'uiAlertMessage']),
     alertMessage() {
-      return this.getAlertMessage;
+      return this.uiAlertMessage;
     },
-    getPreset() {
-      return this.getAlertType || 'success';
+    alertPreset() {
+      return this.uiAlertType || 'success';
     },
   },
   methods: {
-    ...mapActions(['handleErrorAlert', 'handleSuccessAlert', 'closeAlert']),
-    handleError(errorMsg) {
-      this.handleErrorAlert(errorMsg.response?.data || errorMsg);
+    ...mapActions([
+      'uiPromptErrorAlert',
+      'uiPromptSuccessAlert',
+      'uiCloseAlert',
+    ]),
+    alertPromptError(errorMsg) {
+      this.uiPromptErrorAlert(errorMsg.response?.data || errorMsg);
     },
-    handleSuccess(successMsg) {
-      this.handleSuccessAlert(successMsg);
+    alertPromptSuccess(successMsg) {
+      this.uiPromptSuccessAlert(successMsg);
     },
-    handleClose() {
-      this.closeAlert();
+    alertClose() {
+      this.uiCloseAlert();
     },
   },
 };
