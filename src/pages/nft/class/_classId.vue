@@ -84,7 +84,7 @@
         </div>
 
         <div
-          :class="[ 'flex-grow', columnClasses ]"
+          :class="['flex-grow', columnClasses]"
         >
           <NFTPageOwningSection
             :owned-count="userOwnedCount"

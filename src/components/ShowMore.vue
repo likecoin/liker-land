@@ -9,7 +9,18 @@
     <Dialog
       v-model="isOpenDialog"
       preset="custom"
-      panel-class="shadow-lg bg-white phone:min-w-[380px] min-w-[520px] w-full max-w-[720px] p-[48px] rounded-[24px]"
+      panel-class="
+        p-[48px]
+        rounded-[24px]
+        shadow-lg
+        bg-white
+
+        w-full
+        max-w-[calc(100vw_-_3rem)]
+        laptop:max-w-[720px]
+
+        overflow-x-scroll
+        scrollbar-custom"
     >
       <slot name="header" />
       <slot name="content" />

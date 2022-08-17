@@ -728,8 +728,10 @@ module.exports = {
         },
         '.scrollbar-custom': {
           'scrollbar-width': '5px', /* Firefox */
+          'scrollbar-height': '5px', /* Firefox */
           '&::-webkit-scrollbar': {
-            width: '5px' /* Chrome */
+            width: '5px', /* Chrome */
+            height: '5px' /* Chrome */
           },
           '&::-webkit-scrollbar-track': {
             background: 'transparent'

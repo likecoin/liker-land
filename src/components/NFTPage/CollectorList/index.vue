@@ -15,7 +15,7 @@
           v-if="shouldShowMore"
         >
           <template #header>
-            <div class="flex justify-between mb-[12px]">
+            <div class="flex justify-between mb-[12px] w-[310px]">
               <Label
                 class="w-min font-600"
                 :text="`${$t('nft_details_page_title_collector')} (${items.length})`"
@@ -40,7 +40,7 @@
             <div class="w-full h-[2px] bg-shade-gray mb-[8px]" />
           </template>
           <template #content>
-            <NFTPageCollectorListItems :owner-list="items" />
+            <NFTPageCollectorListItems class="w-[310px]" :owner-list="items" />
           </template>
         </ShowMore>
       </div>
