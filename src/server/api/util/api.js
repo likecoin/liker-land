@@ -30,13 +30,13 @@ const axios = Axios.create({
 });
 
 const apiRefreshAccessToken = async req => {
-  const { user } = req.session;
-  const userDoc = await userCollection.doc(user).get();
-  if (!userDoc.exists || !userDoc.data().refreshToken) {
-    req.session = null;
-    return false;
-  }
   try {
+    const { user } = req.session;
+    const userDoc = await userCollection.doc(user).get();
+    if (!userDoc.exists || !userDoc.data().refreshToken) {
+      req.session = null;
+      return false;
+    }
     const { data } = await apiRefreshToken(userDoc.data().refreshToken);
     if (!data.access_token) throw new Error('no access_token in reply');
     req.session.accessToken = data.access_token;
