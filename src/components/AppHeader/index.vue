@@ -1,17 +1,6 @@
 <template>
   <div
-    :class="[
-      'flex',
-      'items-center',
-      'justify-between',
-      'z-10',
-      'w-full',
-      'py-[40px]',
-      'pl-[32px]',
-      'pr-[24px]',
-      'laptop:pr-[32px]',
-      'laptop:pl-[56px]',
-    ]"
+    class="w-full flex items-center justify-between pl-[56px] py-[40px] pr-[32px] z-10"
   >
     <NuxtLink
       :class="{
@@ -24,11 +13,11 @@
     </NuxtLink>
 
 
-    <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
+    <div class="flex items-center">
       <!-- locale -->
       <div class="relative">
         <ButtonV2
-          class="overflow-hidden leading-0"
+          class="overflow-hidden leading-0 mr-[24px]"
           preset="tertiary"
           @click="isOpenOptions = !isOpenOptions; isOpenMenu = false"
           @blur="closeOptions"
@@ -42,57 +31,46 @@
           @onChange="onChangeLocale"
         />
       </div>
-
-      <ButtonV2
-        v-if="!getAddress"
-        class="hidden laptop:flex"
-        preset="secondary"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="connectWallet"
-      >
-        <template #prepend>
-          <IconLogin />
-        </template>
-      </ButtonV2>
-
-      <ButtonV2
-        v-if="!getAddress"
-        class="-mr-[8px]"
-        preset="plain"
+      <!-- Avatar -->
+      <div
+        class="relative"
         tabindex="0"
-        @click="isOpenMenu = !isOpenMenu; isOpenOptions = false"
         @blur="closeMenu"
       >
-        <IconNav />
-      </ButtonV2>
-      <Identity
-        v-else
-        class="relative cursor-pointer"
-        :avatar-url="getAvatar"
-        :avatar-size="42"
-        :is-avatar-outlined="getIsCivicLiker"
-        tabindex="0"
-        @click="isOpenMenu = !isOpenMenu; isOpenOptions = false"
-        @blur="closeMenu"
-      />
-      <CustomOption
-        v-model="isOpenMenu"
-        :default-value="getCurrentLocals"
-        :options="getMenuOptions"
-        @onChange="onChangeMenu"
-        @clickHeader="goDaoLikeCo"
-      >
-        <template
-          v-if="getAddress"
-          #header
+        <ButtonV2
+          v-if="!getAddress"
+          preset="secondary"
+          :text="$t('header_button_connect_to_wallet')"
+          @click="connectWallet"
         >
-          <div class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer">
-            <div class="flex flex-coltext-center text-like-green text-[32px] font-600">{{ balance }} </div>
-            <div class="text-medium-gray text-[12px]">{{ $t('header_menu_LIKE') }}</div>
-          </div>
-          <div class="w-full h-[1px] bg-shade-gray" />
-        </template>
-      </CustomOption>
+          <template #prepend>
+            <IconLogin />
+          </template>
+        </ButtonV2>
+        <Identity
+          v-else
+          class="relative cursor-pointer"
+          :avatar-url="getAvatar"
+          :avatar-size="42"
+          :is-avatar-outlined="getIsCivicLiker"
+          @click="isOpenMenu = !isOpenMenu; isOpenOptions = false"
+        />
+        <CustomOption
+          v-model="isOpenMenu"
+          :default-value="getCurrentLocals"
+          :options="getMenuOptions"
+          @onChange="onChangeMenu"
+          @clickHeader="goDaoLikeCo"
+        >
+          <template #header>
+            <div class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer">
+              <div class="flex flex-coltext-center text-like-green text-[32px] font-600">{{ balance }} </div>
+              <div class="text-medium-gray text-[12px]">{{ $t('header_menu_LIKE') }}</div>
+            </div>
+            <div class="w-full h-[1px] bg-shade-gray" />
+          </template>
+        </CustomOption>
+      </div>
     </div>
   </div>
 </template>
@@ -160,20 +138,18 @@ export default {
       }));
     },
     getMenuOptions() {
-      const options = [
-        { value: 'profile', name: 'Profile' },
-        { value: 'civic', name: 'Civic Liker' },
-      ];
-
-      if (this.signingMethod === 'likerId') {
-        options.push({ value: 'setting', name: 'Setting' });
-      }
-
-      if (this.getAddress) {
-        options.push({ value: 'signOut', name: 'Sign Out' });
-      }
-
-      return options;
+      return this.signingMethod === 'likerId'
+        ? [
+            { value: 'portfolio', name: 'Portfolio' },
+            { value: 'civic', name: 'Civic Liker' },
+            { value: 'setting', name: 'Setting' },
+            { value: 'signOut', name: 'Sign Out' },
+          ]
+        : [
+            { value: 'portfolio', name: 'Portfolio' },
+            { value: 'civic', name: 'Civic Liker' },
+            { value: 'signOut', name: 'Sign Out' },
+          ];
     },
   },
   watch: {
@@ -208,20 +184,16 @@ export default {
     goDaoLikeCo() {
       window.open('https://dao.like.co/', '_blank');
     },
-    async onChangeMenu(value) {
+    onChangeMenu(value) {
       switch (value) {
-        case 'profile': {
-          if (await this.connectWallet()) {
-            this.$router.push({
-              name: 'id',
-              params: { id: this.getAddress },
-            });
-          }
+        case 'portfolio':
+          this.$router.push({
+            name: 'id',
+            params: { id: this.getAddress },
+          });
           break;
-        }
-
         case 'civic':
-          this.$router.push({ name: 'civic' });
+          this.$router.push({ name: 'civic-dashboard' });
           break;
 
         case 'setting':

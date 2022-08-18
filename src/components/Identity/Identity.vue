@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="identity"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+  <div class="identity" @click="$emit('click', $event)">
     <Avatar
       class="identity__avatar"
       :url="avatarUrl"

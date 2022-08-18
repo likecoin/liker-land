@@ -6,7 +6,6 @@
         w-auto
         absolute
         right-0
-        top-full
         bg-white
         border-shade-gray border-[1px]
         rounded-[24px]
