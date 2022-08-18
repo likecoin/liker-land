@@ -7,6 +7,7 @@ import {
   USER_UPDATE_USER_INFO,
   USER_SET_SUBSCRIPTION_INFO,
 } from '../mutation-types';
+// eslint-disable-next-line import/no-cycle
 import * as actions from './actions/user';
 import * as getters from './getters/user';
 

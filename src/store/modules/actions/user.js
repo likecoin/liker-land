@@ -6,6 +6,8 @@ import {
   setTrackerUser,
 } from '@/util/EventLogger';
 import { normalizeLocaleForLikeCo } from '@/locales';
+// eslint-disable-next-line import/no-cycle
+import user from '@/store/modules/user';
 
 export async function postLoginToken(
   { commit, dispatch },
@@ -89,7 +91,7 @@ export async function updatePreferences(
     commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
-    // Wait until the correct token can be obtained and then carry loginStatus = true
-    if (loginStatus) await this.$api.$post(api.userPreferences(), preferences);
+    if (user.state.user)
+      await this.$api.$post(api.userPreferences(), preferences);
   }
 }
