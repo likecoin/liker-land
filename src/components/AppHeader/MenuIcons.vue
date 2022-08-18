@@ -1,5 +1,5 @@
 <template>
-  <IconPerson v-if="type === 'portfolio'" />
+  <IconPerson v-if="type === 'profile'" />
   <IconLikeEvent v-else-if="type === 'civic'" />
   <IconSetting v-else-if="type === 'setting'" />
   <IconLogOut v-else-if="type === 'signOut'" />
