@@ -89,7 +89,7 @@ export async function updatePreferences(
     commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
-    if (getters.getUserInfo)
+    if (getters.getUserId)
       await this.$api.$post(api.userPreferences(), preferences);
   }
 }
