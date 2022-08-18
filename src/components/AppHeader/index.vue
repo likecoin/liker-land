@@ -159,9 +159,10 @@ export default {
       }));
     },
     getMenuOptions() {
-      const options = [{ value: 'profile', name: 'Profile' }];
-
-      options.push({ value: 'civic', name: 'Civic Liker' });
+      const options = [
+        { value: 'profile', name: 'Profile' },
+        { value: 'civic', name: 'Civic Liker' },
+      ];
 
       if (this.signingMethod === 'likerId') {
         options.push({ value: 'setting', name: 'Setting' });
