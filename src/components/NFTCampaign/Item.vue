@@ -34,11 +34,11 @@
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import errorMixin from '~/mixins/error';
+import alertMixin from '~/mixins/alert';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  mixins: [nftMixin, walletMixin, errorMixin],
+  mixins: [nftMixin, walletMixin, alertMixin],
   props: {
     classId: {
       type: String,

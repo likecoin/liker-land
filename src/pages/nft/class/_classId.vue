@@ -136,11 +136,11 @@ import { getNFTCountByClassId, LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
 import walletMixin from '~/mixins/wallet';
-import errorMixin from '~/mixins/error';
+import alertMixin from '~/mixins/alert';
 
 export default {
   layout: 'default',
-  mixins: [nftMixin, navigationListenerMixin, walletMixin, errorMixin],
+  mixins: [nftMixin, navigationListenerMixin, walletMixin, alertMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
