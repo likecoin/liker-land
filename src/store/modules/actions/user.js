@@ -7,7 +7,7 @@ import {
 } from '@/util/EventLogger';
 import { normalizeLocaleForLikeCo } from '@/locales';
 // eslint-disable-next-line import/no-cycle
-import user from '@/store/modules/user';
+import userStore from '@/store/modules/user';
 
 export async function postLoginToken(
   { commit, dispatch },
@@ -91,7 +91,7 @@ export async function updatePreferences(
     commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
-    if (user.state.user)
+    if (userStore.getUserInfo)
       await this.$api.$post(api.userPreferences(), preferences);
   }
 }
