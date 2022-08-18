@@ -51,9 +51,17 @@ export function disconnectWallet({ state, commit }) {
   commit(types.WALLET_SET_LIKERINFO, null);
 }
 
-export async function initIfNecessary({ dispatch }) {
+export async function restoreSession({ dispatch }) {
   const connector = await dispatch('initConnector');
   const session = connector.restoreSession();
+  if (session) {
+    await dispatch('initWallet', session);
+  }
+}
+
+export async function initIfNecessary({ dispatch }) {
+  const connector = await dispatch('initConnector');
+  const session = await connector.initIfNecessary();
   if (session) {
     await dispatch('initWallet', session);
   }

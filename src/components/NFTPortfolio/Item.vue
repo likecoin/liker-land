@@ -44,10 +44,11 @@
         <Label preset="h5" class="mt-[12px] break-all" align="center">
           {{ NFTName }}
         </Label>
-        <div class="z-[500] flex justify-center">
-          <ButtonV2
+        <div class="z-[500] flex justify-center my-[16px]">
+          <ProgressIndicator v-if="isLoading" />
+          <ButtonV2 
+            v-else
             preset="secondary"
-            class="my-[16px]"
             @click.stop.prevent="handleClickCollect"
           >
             <span>{{ NFTPrice || '-' }} $LIKE</span>
@@ -73,6 +74,8 @@
 
 <script>
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
+import alertMixin from '~/mixins/alert';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
@@ -81,12 +84,17 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin, alertMixin],
   props: {
     classId: {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      isLoading: false,
+    };
   },
   mounted() {
     this.updateNFTClassMetdata();
@@ -94,9 +102,24 @@ export default {
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
+    async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
+
+      try {
+        this.isLoading = true;
+        await this.collectNFT();
+        this.alertPromptSuccess(
+          this.$t('snackbar_success_collect', { NFT: this.NFTName })
+        );
+      } catch (error) {
+        this.alertPromptError(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     handleClickViewDetails() {
       logTrackerEvent(

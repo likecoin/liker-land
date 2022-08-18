@@ -185,7 +185,7 @@ export default {
     },
   },
   async mounted() {
-    await this.initIfNecessary();
+    await this.restoreSession();
   },
   methods: {
     ...mapActions([
@@ -193,7 +193,7 @@ export default {
       'updatePreferences',
       'connectWallet',
       'disconnectWallet',
-      'initIfNecessary',
+      'restoreSession',
     ]),
     onChangeLocale(value) {
       this.$i18n.locale = value;

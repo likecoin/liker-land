@@ -132,6 +132,7 @@ export default {
       'fetchNFTPurchaseInfo',
       'fetchNFTMetadata',
       'fetchNFTOwners',
+      'initIfNecessary',
     ]),
     async updateNFTClassMetdata() {
       await this.fetchNFTMetadata(this.classId);
@@ -188,15 +189,29 @@ export default {
         );
       }
     },
-    collectNFT() {
-      window.open(
-        this.purchaseURL,
-        `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
-      );
+    async collectNFT() {
+      try {
+        await this.initIfNecessary();
+        const balance = await getAccountBalance(this.getAddress);
+        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        const txHash = await sendGrant({
+          senderAddress: this.getAddress,
+          amountInLIKE: this.purchaseInfo.totalPrice,
+          signer: this.getSigner,
+        });
+        await this.$api.post(
+          postNFTPurchase({ txHash, classId: this.classId })
+        );
+      } catch (error) {
+        throw error;
+      } finally {
+        this.updateNFTOwners();
+        this.updateNFTPurchaseInfo();
+      }
     },
     async transferNFT() {
       try {
+        await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
         if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
         const txHash = await transferNFT({
@@ -212,7 +227,6 @@ export default {
       } catch (error) {
         throw error;
       } finally {
-        this.updateUserOwnedCount(this.getAddress);
         this.updateNFTOwners();
         this.updateNFTHistory();
       }
