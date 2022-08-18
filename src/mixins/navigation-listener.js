@@ -7,7 +7,7 @@ export default {
       this.handleNavigationMessage
     );
   },
-  beforeDestory() {
+  beforeDestroy() {
     if (this.collectNFTListener) {
       window.removeEventListener(this.collectNFTListener);
     }

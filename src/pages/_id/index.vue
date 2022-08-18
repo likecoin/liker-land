@@ -52,31 +52,32 @@
           'desktop:w-[636px]',
         ]"
       >
-        <div
-          :class="[
-            'flex',
-            'flex-shrink',
-            'justify-center',
-            'items-center',
-            'p-[4px]',
-            'mx-auto',
-            'mb-[48px]',
-            'bg-shade-gray',
-            'rounded-[14px]',
-          ]"
-        >
-          <MenuButton
-            text="Collected"
-            :is-selected="currentTab === 'collected'"
-            @click="goCollected"
-          />
-          <MenuButtonDivider v-if="sellingNFTClassId.length" />
-          <MenuButton
-            v-if="isLoading || sellingNFTClassId.length"
-            text="Created"
-            :is-selected="currentTab === 'created'"
-            @click="goCreated"
-          />
+        <div :class="['flex','items-center','mb-[48px]','w-full']">
+          <div
+            :class="[
+              'flex',
+              'justify-center',
+              'items-center',
+              'p-[4px]',
+              'mx-auto',
+              'bg-shade-gray',
+              'rounded-[14px]',
+            ]"
+          >
+            <MenuButton
+              text="Collected"
+              :is-selected="currentTab === 'collected'"
+              @click="goCollected"
+            />
+            <MenuButtonDivider v-if="sellingNFTClassId.length" />
+            <MenuButton
+              v-if="isLoading || sellingNFTClassId.length"
+              text="Created"
+              :is-selected="currentTab === 'created'"
+              @click="goCreated"
+            />
+          </div>
+          <ShareButton @copy="handleCopyURL" />
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
@@ -159,10 +160,12 @@ import {
 } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { getNFTs } from '~/util/nft';
-import { ellipsis } from '~/util/ui';
+import { ellipsis, copyToClipboard } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
+import alertMixin from '~/mixins/alert';
 
 import Identity from '~/components/Identity/Identity';
 
@@ -175,7 +178,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin],
+  mixins: [walletMixin, alertMixin],
   data() {
     return {
       userInfo: null,
@@ -268,6 +271,16 @@ export default {
     },
     goCreated() {
       this.currentTab = 'created';
+    },
+    handleCopyURL() {
+      const host = `${window.location.protocol}//${window.location.host}`;
+      const { path } = this.$route;
+      const url = `${host}${path}`;
+      copyToClipboard(url);
+
+      logTrackerEvent(this, 'SharePortFolio', 'CopyShareURL', url, 1);
+
+      this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
   },
 };

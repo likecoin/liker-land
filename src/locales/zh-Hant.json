@@ -75,6 +75,8 @@
   "about_the_team_title": "Liker Land Team",
   "about_the_team_description": "Liker Land is an award-winning blockchain company that builds user-centric protocols and applications in Web3. The awardee of the Google News Innovation Challenge, AppWorks incubatee, and several hackathons winners. Liker Land is currently the maintainer of LikeCoin to provide infrastructure support. Validators of Cosmos, Osmosis, and Desmos.",
   "tooltip_coming_soon": "Coming Soon",
+  "tooltip_share": "Copy URL",
+  "tooltip_share_done": "Copied URL",
   "tooltip_signin": "Please Sign in First",
   "tooltip_no_nft": "No owned NFTs to transfer",
   "snackbar_error_insufficient": "Oops, Insufficient Balance.",

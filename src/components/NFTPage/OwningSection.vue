@@ -4,7 +4,6 @@
       w-full
       py-[12px]
       px-[24px]
-      mb-[16px]
       rounded-[24px]
       bg-white
       border-[2px] border-like-cyan-dark

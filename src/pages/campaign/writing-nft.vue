@@ -85,7 +85,7 @@
 
 <script>
 import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
-import navigationListenerMixin from '~/mixins/navigtion-listener';
+import navigationListenerMixin from '~/mixins/navigation-listener';
 
 export default {
   name: 'CampaignWritingNFTPage',
