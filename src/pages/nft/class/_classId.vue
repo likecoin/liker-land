@@ -84,16 +84,20 @@
         </div>
 
         <div
-          :class="['flex-grow', columnClasses]"
+          :class="[columnClasses]"
         >
-          <NFTPageOwningSection
-            :owned-count="userOwnedCount"
-            :is-transfer-disabled="isTransferDisabled"
-            :is-loading="isLoading"
-            :is-log-in="!!getAddress"
-            :is-transferring="isTransferring"
-            @openTransfer="isOpenTransferDialog = true;"
-          />
+          <div :class="['flex','items-center','mb-[16px]','w-full']">
+            <NFTPageOwningSection
+              class="mr-[16px]"
+              :owned-count="userOwnedCount"
+              :is-transfer-disabled="true"
+              :is-loading="isLoading"
+              :is-log-in="!!getAddress"
+              :is-transferring="isTransferring"
+              @openTransfer="isOpenTransferDialog = true;"
+            />
+            <ClipBoard @copy="handleCopyURL" />
+          </div>
           <NFTPagePriceSection
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
@@ -133,6 +137,8 @@
 import { getLIKEPrice } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getNFTCountByClassId, LIKE_ADDRESS_REGEX } from '~/util/nft';
+import { copyURL } from '~/util/ui';
+
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
 import walletMixin from '~/mixins/wallet';
@@ -293,6 +299,17 @@ export default {
       } catch (error) {
         this.alertPromptError('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
       }
+    },
+    handleCopyURL() {
+      const host = `${window.location.protocol}//${window.location.host}`;
+      const { path } = this.$route;
+      const URL = `${host}${path}?referrer=${this.getAddress}`;
+
+      copyURL(URL);
+
+      logTrackerEvent(this, 'ShareNFTDetails', 'CopyShareURL', URL, 1);
+
+      this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
   },
 };
