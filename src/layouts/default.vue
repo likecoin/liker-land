@@ -14,6 +14,7 @@
     <Snackbar
       :open="uiIsOpenSnackbar"
       :preset="alertPreset"
+      :timeout="getTimeoutSec"
       @close="alertClose"
     >
       {{ alertMessage }}
@@ -35,6 +36,11 @@ import alertMixin from '~/mixins/alert';
 
 export default {
   mixins: [slidingMenuMixin, alertMixin],
+  computed: {
+    getTimeoutSec() {
+      return this.alertPreset === 'success' ? 2000 : null;
+    },
+  },
 };
 </script>
 

@@ -96,7 +96,7 @@
               :is-transferring="isTransferring"
               @openTransfer="isOpenTransferDialog = true;"
             />
-            <ClipBoard @copy="handleCopyURL" />
+            <ShareButton @copy="handleCopyURL" />
           </div>
           <NFTPagePriceSection
             :nft-price="NFTPrice"

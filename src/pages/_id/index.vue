@@ -77,7 +77,7 @@
               @click="goCreated"
             />
           </div>
-          <ClipBoard @copy="handleCopyURL" />
+          <ShareButton @copy="handleCopyURL" />
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
