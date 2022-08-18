@@ -6,8 +6,6 @@ import {
   setTrackerUser,
 } from '@/util/EventLogger';
 import { normalizeLocaleForLikeCo } from '@/locales';
-// eslint-disable-next-line import/no-cycle
-import userStore from '@/store/modules/user';
 
 export async function postLoginToken(
   { commit, dispatch },
@@ -78,8 +76,8 @@ export async function resumeCanceledSubscription({ dispatch }) {
 }
 
 export async function updatePreferences(
-  { dispatch, commit },
-  { locale, creatorPitch, loginStatus } = {}
+  { dispatch, commit, getters },
+  { locale, creatorPitch } = {}
 ) {
   const preferences = {};
   if (locale) {
@@ -91,7 +89,7 @@ export async function updatePreferences(
     commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
-    if (userStore.getUserInfo)
+    if (getters.getUserInfo)
       await this.$api.$post(api.userPreferences(), preferences);
   }
 }
