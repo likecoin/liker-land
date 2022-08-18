@@ -34,11 +34,11 @@
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import errorMixin from '~/mixins/error';
+import alertMixin from '~/mixins/alert';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  mixins: [nftMixin, walletMixin, errorMixin],
+  mixins: [nftMixin, walletMixin, alertMixin],
   props: {
     classId: {
       type: String,
@@ -56,9 +56,24 @@ export default {
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
+    async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        this.connectWallet();
+        return;
+      }
+
+      try {
+        this.isCollecting = true;
+        await this.collectNFT();
+        this.alertPromptSuccess(
+          this.$t('snackbar_success_collect', { NFT: this.NFTName })
+        );
+      } catch (error) {
+        this.alertPromptError(error);
+      } finally {
+        this.isCollecting = false;
+      }
     },
     handleLike() {
       logTrackerEvent(this, 'NFT', 'NFTLike(Campaign)', this.classId, 1);

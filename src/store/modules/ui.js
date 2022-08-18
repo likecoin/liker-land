@@ -7,6 +7,9 @@ import {
   UI_TOGGLE_SLIDING_MENU,
   UI_SET_LOCALE,
   UI_SET_IS_HK,
+  UI_TOGGLE_SNACKBAR,
+  UI_SET_ALERT_TYPE,
+  UI_SET_ALERT_MESSAGE,
 } from '../mutation-types';
 
 import { defaultLocale, availableLocales } from '../../locales';
@@ -16,6 +19,9 @@ const initialState = () => ({
   locale: defaultLocale,
   isHK: undefined,
   isSlidingMenuOpen: false,
+  isOpenSnackbar: false,
+  alertType: '',
+  alertMessage: '',
 });
 
 const mutations = {
@@ -27,6 +33,15 @@ const mutations = {
   },
   [UI_TOGGLE_SLIDING_MENU](state, isToggled) {
     state.isSlidingMenuOpen = isToggled;
+  },
+  [UI_TOGGLE_SNACKBAR](state, isToggled) {
+    state.isOpenSnackbar = isToggled;
+  },
+  [UI_SET_ALERT_TYPE](state, type) {
+    state.alertType = type;
+  },
+  [UI_SET_ALERT_MESSAGE](state, message) {
+    state.alertMessage = message;
   },
 };
 
