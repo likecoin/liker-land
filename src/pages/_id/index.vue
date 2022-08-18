@@ -160,7 +160,7 @@ import {
 } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { getNFTs } from '~/util/nft';
-import { ellipsis, copyURL } from '~/util/ui';
+import { ellipsis, copyToClipboard } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -275,10 +275,10 @@ export default {
     handleCopyURL() {
       const host = `${window.location.protocol}//${window.location.host}`;
       const { path } = this.$route;
-      const URL = `${host}${path}`;
-      copyURL(URL);
+      const url = `${host}${path}`;
+      copyToClipboard(url);
 
-      logTrackerEvent(this, 'SharePortFolio', 'CopyShareURL', URL, 1);
+      logTrackerEvent(this, 'SharePortFolio', 'CopyShareURL', url, 1);
 
       this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
