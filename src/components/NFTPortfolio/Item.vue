@@ -75,7 +75,7 @@
 <script>
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import errorMixin from '~/mixins/error';
+import alertMixin from '~/mixins/alert';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
@@ -84,7 +84,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin, walletMixin, errorMixin],
+  mixins: [nftMixin, walletMixin, alertMixin],
   props: {
     classId: {
       type: String,

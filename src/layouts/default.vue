@@ -31,10 +31,10 @@
 
 <script>
 import slidingMenuMixin from '~/mixins/sliding-menu';
-import errorMixin from '~/mixins/error';
+import alertMixin from '~/mixins/alert';
 
 export default {
-  mixins: [slidingMenuMixin, errorMixin],
+  mixins: [slidingMenuMixin, alertMixin],
 };
 </script>
 
