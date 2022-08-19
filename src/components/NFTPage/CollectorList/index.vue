@@ -1,9 +1,10 @@
 <template>
-  <DropDownList
+  <CollapsibleCard
     :class="[
       'w-full',
     ]"
     :title="$t('nft_details_page_title_collector')"
+    :is-narrow="true"
   >
     <template #titleIcon>
       <IconPerson />
@@ -50,7 +51,7 @@
         </div>
       </div>
     </template>
-  </DropDownList>
+  </CollapsibleCard>
 </template>
 <script>
 export default {

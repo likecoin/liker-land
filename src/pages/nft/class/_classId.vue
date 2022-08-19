@@ -46,7 +46,7 @@
             ]"
           >
             <NFTPageItemCard
-              :root-class="'laptop:w-[310px]'"
+              class="laptop:w-[310px]"
               :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
               :avatar-url="avatarList[iscnOwner]"
@@ -83,9 +83,7 @@
           </div>
         </div>
 
-        <div
-          :class="['flex-grow', columnClasses]"
-        >
+        <div :class="['flex-grow', columnClasses]">
           <NFTPageOwningSection
             :owned-count="userOwnedCount"
             :is-transfer-disabled="true"
@@ -95,17 +93,27 @@
             @openTransfer="isOpenTransferDialog = true;"
           />
           <NFTPagePriceSection
+            class="mt-[16px]"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
-            :minted-count="mintedCount"
+            :collected-count="mintedCount"
             :collector-count="ownerCount"
             :is-loading="isCollecting"
-            @collect="onCollect"
+            @collect="handleCollectFromPriceSection"
           />
-          <NFTPageEventList :items="populatedEvents" />
+          <NFTPageSupplySection
+            class="mt-[16px]"
+            :collected-count="mintedCount"
+            @collect="handleCollectFromSupplySection"
+          />
+          <NFTPageEventList
+            class="mt-[16px]"
+            :items="populatedEvents"
+          />
         </div>
       </section>
     </main>
+
     <Dialog
       v-model="isOpenTransferDialog"
       preset="custom"
@@ -284,8 +292,24 @@ export default {
         this.isReadyToTransfer = true;
       }
     },
-    onCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+    handleCollectFromPriceSection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(DetailsPagePriceSection)',
+        this.classId,
+        1
+      );
+      this.collectNFT();
+    },
+    handleCollectFromSupplySection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(DetailsPageSupplySection)',
+        this.classId,
+        1
+      );
       this.collectNFT();
     },
     async getLIKEPrice() {
