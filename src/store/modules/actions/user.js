@@ -76,7 +76,7 @@ export async function resumeCanceledSubscription({ dispatch }) {
 }
 
 export async function updatePreferences(
-  { dispatch, commit },
+  { dispatch, commit, getters },
   { locale, creatorPitch } = {}
 ) {
   const preferences = {};
@@ -89,6 +89,7 @@ export async function updatePreferences(
     commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
-    await this.$api.$post(api.userPreferences(), preferences);
+    if (getters.getUserId)
+      await this.$api.$post(api.userPreferences(), preferences);
   }
 }

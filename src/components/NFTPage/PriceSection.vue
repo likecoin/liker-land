@@ -1,6 +1,6 @@
 <template>
-  <CardV2 class="w-full mb-[16px]">
-    <div :class="['flex', 'justify-between', 'items-center', 'mb-[20px]']">
+  <CardV2 class="w-full">
+    <div class="flex justify-between items-center mb-[20px]">
       <Label
         class="w-min font-600 mb-[32px]"
         :text="$t('nft_details_page_label_price')"
@@ -16,12 +16,15 @@
       </Label>
     </div>
     <div class="flex items-baseline justify-start mb-[8px]">
-      <Label preset="h2" class="font-[900] text-like-green">{{
-        formattedNFTPrice
-      }}</Label>
-      <Label preset="p5" class="text-medium-gray ml-[4px]">{{
-        nftPriceUSD
-      }}</Label>
+      <Label
+        class="font-[900] text-like-green"
+        preset="h2"
+      >{{ formattedNFTPrice }}</Label>
+      <Label
+        v-if="nftPriceUSD"
+        class="text-medium-gray ml-[4px]"
+        preset="p5"
+      >{{ nftPriceUSD }}</Label>
     </div>
     <div class="flex items-baseline justify-start mb-[28px]">
       <Label
@@ -32,7 +35,7 @@
           <IconMint />
         </template>
         <template #append>
-          {{ mintedCount }}
+          {{ collectedCount }}
         </template>
       </Label>
       <Label
@@ -88,7 +91,7 @@ export default {
       type: String,
       default: undefined,
     },
-    mintedCount: {
+    collectedCount: {
       type: Number,
       default: undefined,
     },
@@ -103,7 +106,7 @@ export default {
   },
   computed: {
     formattedNFTPrice() {
-      return `${this.nftPrice} $LIKE`;
+      return `${this.nftPrice || '-'} $LIKE`;
     },
   },
   methods: {

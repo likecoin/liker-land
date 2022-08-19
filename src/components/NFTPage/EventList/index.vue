@@ -1,5 +1,5 @@
 <template>
-  <DropDownList
+  <CollapsibleCard
     class="w-full mb-[250px]"
     :title="$t('nft_details_page_activity_list_title')"
   >
@@ -45,7 +45,7 @@
         </template>
       </ShowMore>
     </template>
-  </DropDownList>
+  </CollapsibleCard>
 </template>
 <script>
 export default {

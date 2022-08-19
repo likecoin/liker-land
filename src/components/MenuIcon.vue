@@ -10,8 +10,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class MenuIcons extends Vue {
-  // Type of the coin
+export default class MenuIcon extends Vue {
   @Prop(String)
   readonly type!: string | undefined;
 }
