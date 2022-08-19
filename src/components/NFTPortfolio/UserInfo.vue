@@ -8,6 +8,18 @@
     <Label preset="p6" class="break-all font-200">
       {{ likerDescription }}
     </Label>
+    <div :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
+    <NFTPortfolioState 
+      :collected-items="collectedItems"
+      :created-class-ids="createdClassIds"
+    >
+      <template v-slot="stats">
+        <Label preset="p6" class="font-200">Collections: {{ stats.collectedCount }}</Label>
+        <Label preset="p6" class="font-200">Total Value: {{ stats.collectedAmount }}</Label>
+        <Label preset="p6" class="font-200">Creations: {{ stats.createdCount }}</Label>
+        <Label preset="p6" class="font-200">Minted: {{ stats.createdCollectedCount }}</Label>
+      </template>
+    </NFTPortfolioState>
   </CardV2>
 </template>
 <script>
@@ -25,6 +37,14 @@ export default {
     wallet: {
       type: String,
       default: null,
+    },
+    collectedItems: {
+      type: Array,
+      default: () => [],
+    },
+    createdClassIds: {
+      type: Array,
+      default: () => [],
     },
   },
   computed: {
