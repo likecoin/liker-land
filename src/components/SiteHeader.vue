@@ -85,7 +85,7 @@
               rel="noreferrer noopener"
             >
               <div
-                class="flex flex-coltext-center text-like-green text-[32px] font-600"
+                class="text-center text-like-green text-[32px] font-600"
               >{{ balance }}</div>
               <div
                 class="text-medium-gray text-[12px] leading-[1]"
