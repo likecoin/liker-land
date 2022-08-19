@@ -27,6 +27,8 @@
         <NFTPortfolioUserInfo
           :user-info="userInfo"
           :wallet="wallet"
+          :collected-n-f-ts="ownedNFTs"
+          :created-n-f-t-class-ids="sellingNFTClassIds"
         />
       </div>
       <div
@@ -57,9 +59,9 @@
             :is-selected="currentTab === 'collected'"
             @click="goCollected"
           />
-          <MenuButtonDivider v-if="sellingNFTClassId.length" />
+          <MenuButtonDivider v-if="sellingNFTClassIds.length" />
           <MenuButton
-            v-if="isLoading || sellingNFTClassId.length"
+            v-if="isLoading || sellingNFTClassIds.length"
             text="Created"
             :is-selected="currentTab === 'created'"
             @click="goCreated"
@@ -81,7 +83,7 @@
             ]"
           >
             <NFTPortfolioCard
-              v-if="!ownedNFTClassId.length"
+              v-if="!ownedNFTs.length"
               class="!bg-shade-gray break-inside-avoid"
             >
               <div class="p-[8px] w-full h-[140px]">
@@ -100,7 +102,7 @@
               </div>
             </NFTPortfolioCard>
             <NFTPortfolioItem
-              v-for="id in ownedNFTClassId"
+              v-for="id in ownedNFTClassIds"
               :key="id"
               :class-id="id"
             />
@@ -119,7 +121,7 @@
             ]"
           >
             <NFTPortfolioItem
-              v-for="id in sellingNFTClassId"
+              v-for="id in sellingNFTClassIds"
               :key="id"
               :class-id="id"
             />
@@ -160,9 +162,8 @@ export default {
   mixins: [walletMixin],
   data() {
     return {
-      userInfo: null,
-      ownedNFTClassId: [],
-      sellingNFTClassId: [],
+      ownedNFTs: [],
+      sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
@@ -171,6 +172,12 @@ export default {
       civicLikerList: [],
       isLoading: true,
     };
+  },
+  computed: {
+    ownedNFTClassIds() {
+      const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
+      return Array.from(classIdSet);
+    },
   },
   async asyncData({ route, $api, error }) {
     let { id } = route.params;
@@ -212,20 +219,19 @@ export default {
   },
   mounted() {
     this.fetchUserSellingClasses();
-    this.fetchUserOwnClasses();
+    this.fetchUserCollectedNFTs();
   },
   methods: {
-    async fetchUserOwnClasses() {
+    async fetchUserCollectedNFTs() {
       const { nfts } = await getNFTs({ owner: this.wallet });
-      const classIdSet = new Set(nfts.map(n => n.classId));
-      this.ownedNFTClassId = Array.from(classIdSet);
+      this.ownedNFTs = nfts;
     },
     async fetchUserSellingClasses() {
       const { data } = await this.$api.get(
         getUserSellNFTClasses({ wallet: this.wallet })
       );
-      this.sellingNFTClassId = data.list;
-      if (!this.sellingNFTClassId.length) {
+      this.sellingNFTClassIds = data.list;
+      if (!this.sellingNFTClassIds.length) {
         this.currentTab = 'collected';
       }
       this.isLoading = false;

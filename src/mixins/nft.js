@@ -163,6 +163,7 @@ export default {
       this.isHistoryInfoLoading = false;
     },
     updateDisplayNameList(addresses) {
+      if (!addresses) return null;
       if (typeof addresses === 'string') {
         return this.getAddressLikerId(addresses);
       }
