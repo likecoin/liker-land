@@ -1,6 +1,6 @@
 <template>
   <div class="page-layout page-layout--default">
-    <AppHeader class="w-full text-like-green" />
+    <SiteHeader class="w-full text-like-green" />
     <nuxt class="page-wrapper" />
     <PortalTarget
       name="dialog"
@@ -18,11 +18,12 @@ import slidingMenuMixin from '~/mixins/sliding-menu';
 
 export default {
   mixins: [slidingMenuMixin],
+  head() {
+    return {
+      bodyAttrs: {
+        class: ['bg-gray-f7'],
+      },
+    };
+  },
 };
 </script>
-
-<style lang="scss">
-.page-layout--default {
-  @apply bg-gray-f7;
-}
-</style>
