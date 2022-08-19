@@ -42,7 +42,7 @@
       <div>
         <NFTSupplyTable
           class="laptop:mt-[8px] w-full laptop:pr-[8px]"
-          :sold-count="soldCount"
+          :collected-count="soldCount"
           :should-collapse-in-mobile="true"
           :should-show-indicator="true"
           @collect="handleClickCollect"

@@ -44,7 +44,7 @@ export default {
       type: Number,
       default: 0,
     },
-    visableBatch: {
+    visibleBatchesAround: {
       type: Number,
       default: 3,
     },
@@ -62,14 +62,14 @@ export default {
       return getBatch(this.collectedCount);
     },
     shouldHideLowerBound() {
-      return this.activeBatch < this.visableBatch;
+      return this.activeBatch < this.visibleBatchesAround;
     },
     data() {
       const start = Math.max(
-        getBatch(this.collectedCount) - this.visableBatch,
+        getBatch(this.collectedCount) - this.visibleBatchesAround,
         0
       );
-      const end = start + this.visableBatch * 2 + 1;
+      const end = start + this.visibleBatchesAround * 2 + 1;
       const data = [];
       for (let batch = start; batch < end; batch += 1) {
         const batchStart = getBatchStart(batch);
