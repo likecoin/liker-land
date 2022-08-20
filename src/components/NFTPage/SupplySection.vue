@@ -11,6 +11,7 @@
       <NFTSupplyTable
         class="laptop:px-[32px]"
         :collected-count="collectedCount"
+        :visible-batches-ahead="7"
         @collect="handleClickCollect"
       />
     </template>
