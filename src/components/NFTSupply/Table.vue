@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'overflow-y-clip',
+      'overflow-y-hidden',
       shouldCollapseInMobile ? 'laptop:border-y-[2px]' : 'border-y-[2px]',
       'border-shade-gray',
       {
