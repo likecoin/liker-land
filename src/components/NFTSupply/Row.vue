@@ -7,7 +7,7 @@
       }
     ]"
   >
-    <td class="w-[64px] py-[8px]">
+    <td class="w-[64px]">
       <div :class="priceLabelClass">
         <hr
           v-if="isActive && shouldShowIndicator"
@@ -22,7 +22,7 @@
           "
         >
         <span class="relative">{{ priceLabel }}</span>&nbsp;
-        <span class="relative text-[0.8em]">$LIKE</span>
+        <span class="relative text-[0.8em] leading-[1.5]">$LIKE</span>
       </div>
     </td>
     <td class="pl-[12px] py-[4px]">
@@ -186,14 +186,12 @@ export default {
         'text-[12px]',
         'font-600',
         this.isActive ? 'text-like-green' : 'text-medium-gray',
+        this.isActive ? 'bg-like-cyan-pale' : 'bg-light-gray',
+        this.isActive ? 'bg-opacity-[0.8]' : 'bg-opacity-[0.5]',
         {
           'opacity-0': !this.isPast,
-          'bg-light-gray': this.isPast,
-          'bg-opacity-[0.5]': this.isPast,
           'cursor-pointer': this.isActive,
-          'bg-like-cyan-pale': this.isActive,
           'active:bg-like-cyan-light': this.isActive,
-          'bg-opacity-[0.8]': this.isActive,
         },
       ];
     },
