@@ -32,8 +32,8 @@
       >
         <div
           :class="[
-            'grid',
-            'grid-cols-10',
+            'flex',
+            'flex-wrap',
             'gap-[10px]',
             'items-center',
             'pl-[8px]',
@@ -42,11 +42,18 @@
             'py-[8px]',
           ]"
         >
-          <NFTSupplySlot
+          <div
             v-for="i in total"
             :key="i"
-            :type="getSlotType(i)"
-          />
+            :class="[
+              'border-l-[0.5px]',
+              i > 1 && i % 10 === 1
+                ? 'border-dark-gray border-opacity-[0.1] pl-[5px] -ml-[5px]'
+                : 'border-transparent',
+            ]"
+          >
+            <NFTSupplySlot :type="getSlotType(i)" />
+          </div>
         </div>
         <div :class="hoverLabelClass">
           <hr v-if="!isActive" :class="hoverLabelStrikethroughClass">
