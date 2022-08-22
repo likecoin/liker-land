@@ -89,7 +89,7 @@
           <NFTPageOwningSection
             :owned-count="userOwnedCount"
             :is-transfer-disabled="isTransferDisabled"
-            :is-loading="isLoading"
+            :is-loading="isOwnerInfoLoading"
             :is-log-in="!!getAddress"
             :is-transferring="isTransferring"
             @openTransfer="isOpenTransferDialog = true;"
@@ -132,7 +132,7 @@
 <script>
 import { getLIKEPrice } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getNFTCountByClassId, LIKE_ADDRESS_REGEX } from '~/util/nft';
+import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import navigationListenerMixin from '~/mixins/navigtion-listener';
 import walletMixin from '~/mixins/wallet';
@@ -175,12 +175,10 @@ export default {
   },
   data() {
     return {
-      userOwnedCount: null,
       toAddress: '',
 
       currentPrice: 0,
-      isLoading: true,
-
+      isOwnerInfoLoading: true,
       isOpenTransferDialog: false,
       errorMsg: '',
       isReadyToTransfer: false,
@@ -208,14 +206,14 @@ export default {
       ];
     },
     isTransferDisabled() {
-      return this.isLoading || !this.userOwnedCount;
+      return this.isOwnerInfoLoading || !this.userOwnedCount;
     },
   },
   watch: {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        this.updateUserOwnedCount(newAddress);
+        this.updateUserOwnedCount(this.classId, newAddress);
       },
     },
   },
@@ -231,19 +229,9 @@ export default {
       this.updateNFTHistory(),
       this.getLIKEPrice(),
     ]);
-    this.isLoading = false;
+    this.isOwnerInfoLoading = false;
   },
   methods: {
-    async updateUserOwnedCount(address) {
-      if (!address) {
-        this.userOwnedCount = null;
-        return;
-      }
-      this.isLoading = true;
-      const { amount } = await getNFTCountByClassId(this.classId, address);
-      this.userOwnedCount = amount.low;
-      this.isLoading = false;
-    },
     async onTransfer() {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
       try {
@@ -268,20 +256,17 @@ export default {
     async onCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
       if (!this.getAddress) {
-        this.connectWallet();
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.onCollect();
+        }
         return;
       }
-
       try {
         this.isCollecting = true;
         await this.collectNFT();
-        this.updateUserOwnedCount(this.getAddress);
-        this.updateNFTHistory();
-        this.alertPromptSuccess(
-          this.$t('snackbar_success_collect', { NFT: this.NFTName })
-        );
       } catch (error) {
-        this.alertPromptError(error);
+        // no need to handle error
       } finally {
         this.isCollecting = false;
       }

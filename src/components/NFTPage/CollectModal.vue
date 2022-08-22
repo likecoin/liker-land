@@ -228,9 +228,6 @@ export default {
           break;
       }
     },
-    retry() {
-      this.collectNFT();
-    },
   },
 };
 </script>

@@ -45,8 +45,8 @@
           {{ NFTName }}
         </Label>
         <div class="z-[500] flex justify-center my-[16px]">
-          <ProgressIndicator v-if="isLoading" />
-          <ButtonV2 
+          <ProgressIndicator v-if="isCollecting" />
+          <ButtonV2
             v-else
             preset="secondary"
             @click.stop.prevent="handleClickCollect"
@@ -93,11 +93,11 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isCollecting: false,
     };
   },
   mounted() {
-    this.updateNFTClassMetdata();
+    this.updateNFTClassMetadata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
   },
@@ -110,15 +110,13 @@ export default {
       }
 
       try {
-        this.isLoading = true;
+        this.isCollecting = true;
+        this.updateUserOwnedCount(this.classId, this.getAddress);
         await this.collectNFT();
-        this.alertPromptSuccess(
-          this.$t('snackbar_success_collect', { NFT: this.NFTName })
-        );
       } catch (error) {
-        this.alertPromptError(error);
+        // no need to handle error
       } finally {
-        this.isLoading = false;
+        this.isCollecting = false;
       }
     },
     handleClickViewDetails() {

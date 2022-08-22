@@ -51,7 +51,7 @@ export default {
     };
   },
   mounted() {
-    this.updateNFTClassMetdata();
+    this.updateNFTClassMetadata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
   },
@@ -65,12 +65,10 @@ export default {
 
       try {
         this.isCollecting = true;
+        this.updateUserOwnedCount(this.classId, this.getAddress);
         await this.collectNFT();
-        this.alertPromptSuccess(
-          this.$t('snackbar_success_collect', { NFT: this.NFTName })
-        );
       } catch (error) {
-        this.alertPromptError(error);
+        // no need to handle error
       } finally {
         this.isCollecting = false;
       }

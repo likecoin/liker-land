@@ -208,13 +208,13 @@ export default {
         );
       }
     },
-    async updateUserOwnedCount(calssId, address) {
+    async updateUserOwnedCount(classId, address) {
       if (!address) {
         this.userOwnedCount = null;
         return;
       }
       this.isOwnerInfoLoading = true;
-      const { amount } = await getNFTCountByClassId(calssId, address);
+      const { amount } = await getNFTCountByClassId(classId, address);
       this.userOwnedCount = amount.low;
       this.isOwnerInfoLoading = false;
     },
