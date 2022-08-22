@@ -10,14 +10,14 @@
     </Label>
     <div :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
     <NFTPortfolioState 
-      :collected-n-f-ts="collectedNFTs"
-      :created-n-f-t-class-ids="createdNFTClassIds"
+      :collected-items="collectedItems"
+      :created-class-ids="createdClassIds"
     >
-      <template v-slot="slotProps">
-        <Label preset="p6" class="font-200">Collections: {{ slotProps.collectedNFTCount }}</Label>
-        <Label preset="p6" class="font-200">Total Value: {{ slotProps.collectedNFTTotalValue }}</Label>
-        <Label preset="p6" class="font-200">Creations: {{ slotProps.createdNFTClassIdCount }}</Label>
-        <Label preset="p6" class="font-200">Minted: {{ slotProps.createdNFTMintedCount }}</Label>
+      <template v-slot="stats">
+        <Label preset="p6" class="font-200">Collections: {{ stats.collectedCount }}</Label>
+        <Label preset="p6" class="font-200">Total Value: {{ stats.collectedAmount }}</Label>
+        <Label preset="p6" class="font-200">Creations: {{ stats.createdCount }}</Label>
+        <Label preset="p6" class="font-200">Minted: {{ stats.createdCollectedCount }}</Label>
       </template>
     </NFTPortfolioState>
   </CardV2>
@@ -38,11 +38,11 @@ export default {
       type: String,
       default: null,
     },
-    collectedNFTs: {
+    collectedItems: {
       type: Array,
       default: () => [],
     },
-    createdNFTClassIds: {
+    createdClassIds: {
       type: Array,
       default: () => [],
     },

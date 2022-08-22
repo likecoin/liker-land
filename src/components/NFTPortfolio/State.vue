@@ -1,10 +1,10 @@
 <template>
   <div>
     <slot 
-      :collected-n-f-t-count="collectedNFTCount" 
-      :collected-n-f-t-total-value="collectedNFTTotalValue"
-      :created-n-f-t-class-id-count="createdNFTClassIdCount"
-      :created-n-f-t-minted-count="createdNFTMintedCount"
+      :collected-count="collectedCount" 
+      :collected-amount="collectedAmount"
+      :created-count="createdCount"
+      :created-collected-count="createdCollectedCount"
     />
   </div>
 </template>
@@ -13,32 +13,32 @@ import { mapGetters } from 'vuex';
 
 export default {
   props: {
-    collectedNFTs: {
+    collectedItems: {
       type: Array,
       default: () => [],
     },
-    createdNFTClassIds: {
+    createdClassIds: {
       type: Array,
       default: () => [],
     },
   },
   computed: {
     ...mapGetters(['getNFTClassPurchaseInfoById', 'getNFTClassMintedCount']),
-    collectedNFTCount() {
-      return this.collectedNFTs.length;
+    collectedCount() {
+      return this.collectedItems.length;
     },
-    collectedNFTTotalValue() {
-      return this.collectedNFTs.reduce(
+    collectedAmount() {
+      return this.collectedItems.reduce(
         (total, nft) =>
           total + (this.getNFTClassPurchaseInfoById(nft.classId)?.price || 0),
         0
       );
     },
-    createdNFTClassIdCount() {
-      return this.createdNFTClassIds.length;
+    createdCount() {
+      return this.createdClassIds.length;
     },
-    createdNFTMintedCount() {
-      return this.createdNFTClassIds.reduce(
+    createdCollectedCount() {
+      return this.createdClassIds.reduce(
         (total, classId) => total + (this.getNFTClassMintedCount(classId) || 0),
         0
       );

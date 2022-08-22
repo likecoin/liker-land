@@ -27,8 +27,8 @@
         <NFTPortfolioUserInfo
           :user-info="userInfo"
           :wallet="wallet"
-          :collected-n-f-ts="ownedNFTs"
-          :created-n-f-t-class-ids="sellingNFTClassIds"
+          :collected-items="ownedNFTs"
+          :created-class-ids="sellingNFTClassIds"
         />
       </div>
       <div
