@@ -37,15 +37,15 @@ export function uiToggleCollectModal({ commit }) {
   commit(types.UI_SET_COLLECT_ERROR_MESSAGE, '');
 }
 
-export function uiSetCollectOwnedCount({ commit }, ownedCount) {
-  commit(types.UI_SET_COLLECT_OWNED_COUNT, ownedCount);
+export function uiSetCollectedCount({ commit }, count) {
+  commit(types.UI_SET_COLLECT_OWNED_COUNT, count);
 }
 
 export function uiSetCollectStatus({ commit }, status) {
   commit(types.UI_SET_COLLECT_STATUS, status);
 }
 
-export function uiSetCollectFailed({ commit }, error) {
+export function uiSetCollectError({ commit }, error) {
   commit(types.UI_SET_COLLECT_ERROR_MESSAGE, error);
 }
 

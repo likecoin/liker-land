@@ -40,13 +40,6 @@ export const PAYMENT_METHOD_LIST = [
   'other', // plz always put `other` at last for hk geoip handle
 ];
 
-export const WALLET_CONNECTOR_METHOD = [
-  'keplr',
-  'keplr-mobile',
-  'cosmostation',
-  'liker-id',
-];
-
 export const DEFAULT_CL_SUPPORTER =
   process.env.DEFAULT_CL_SUPPORTER || 'foundation';
 
@@ -92,7 +85,7 @@ export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
   ? [
       'likenft10f06wfaql5fxf3g4sy8v57p98lzp7ad92cu34f9aeyhyeklchznsav5npg',
       'likenft1pwutfz4m6ez0qevzc3re9dsd4e7l4x39nsvud7kmrj5p70tg0nmqlz0wyk',
-      'likenft14tp0n69q8wwvyd6k6fv4cp4jd86r072at6pa2yesue22qtrsnxestryg89',
+      'likenft1hajavhgv0zn7fe6j6f6ax82w9ry9jatv4q5jfudn0ws7hfylnv3qj8x70d',
     ]
   : [
       'likenft1f9dlnexdt6l4d8u2hh9ccm5g52q46sw2hllk4ntdhf7n6resg00s5hseuj',

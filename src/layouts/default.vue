@@ -25,7 +25,7 @@
       </LinkV2>
     </Snackbar>
 
-    <NFTPageCollectModal />
+    <NFTPageTxModal />
 
   </div>
 </template>

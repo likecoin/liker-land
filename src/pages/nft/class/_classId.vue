@@ -213,7 +213,7 @@ export default {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        this.updateUserOwnedCount(this.classId, newAddress);
+        this.updateUserCollectedCount(this.classId, newAddress);
       },
     },
   },

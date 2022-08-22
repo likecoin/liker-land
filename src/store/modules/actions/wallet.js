@@ -53,7 +53,7 @@ export function disconnectWallet({ state, commit }) {
   commit(types.WALLET_SET_LIKERINFO, null);
 }
 
-export async function restoreSession({ dispatch, commit }) {
+export async function restoreSession({ dispatch }) {
   const connector = await dispatch('initConnector');
   const session = connector.restoreSession();
   if (session) {
@@ -70,5 +70,5 @@ export async function initIfNecessary({ dispatch, commit }) {
   const connectedWalletType = JSON.parse(
     window.localStorage?.getItem(KEY_CONNECTED_WALLET_TYPE)
   );
-  commit(types.WALLET_SET_METHOD_TYPE, connectedWalletType.method);
+  commit(types.WALLET_SET_METHOD, connectedWalletType.method);
 }

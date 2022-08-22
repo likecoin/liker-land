@@ -86,19 +86,19 @@
     <!-- Button -->
     <div class="flex items-center justify-center w-full mt-[34px]">
       <ButtonV2
-        v-if="uiCollectNFTStatus !== 'processing'"
+        v-if="uiCollectNFTStatus !== 'sign' && uiCollectNFTStatus !== 'processing'"
         :preset="getButtonState.preset"
         :is-disabled="getButtonState.isDisable"
         @click="onClick"
       >
-        {{ getButtonText }}
+        {{ buttonText }}
       </ButtonV2>
       <ProgressIndicator v-else />
     </div>
 
     <!-- Attention -->
     <div
-      v-if="uiCollectNFTStatus === 'sign'"
+      v-if="uiCollectNFTStatus === 'open' || uiCollectNFTStatus === 'sign' || uiCollectNFTStatus === 'processing'"
       class="mt-[48px] border-0 border-dashed border-t-[2px] border-t-shade-gray"
     >
       <AttentionsLedger v-if="walletMethodType === 'keplr'" />
@@ -115,12 +115,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   mixins: [nftMixin, walletMixin, alertMixin],
-  data() {
-    return {
-      showConfirm: false,
-      isOpenKeplr: false,
-    };
-  },
   computed: {
     ...mapGetters([
       'uiIsOpenCollectModal',
@@ -140,6 +134,7 @@ export default {
     },
     formattedStatusTitle() {
       switch (this.uiCollectNFTStatus) {
+        case 'open':
         case 'sign':
         case 'processing':
           switch (this.walletMethodType) {
@@ -176,9 +171,9 @@ export default {
           return '';
       }
     },
-    getButtonText() {
+    buttonText() {
       switch (this.uiCollectNFTStatus) {
-        case 'sign':
+        case 'open':
           switch (this.walletMethodType) {
             case 'keplr':
               return 'Opening Keplr ...';
@@ -207,9 +202,9 @@ export default {
     },
     getButtonState() {
       return {
-        preset: this.uiCollectNFTStatus === 'sign' ? 'tertiary' : 'outline',
-        text: this.getButtonText,
-        isDisable: this.uiCollectNFTStatus === 'sign',
+        preset: this.uiCollectNFTStatus === 'open' ? 'tertiary' : 'outline',
+        text: this.buttonText,
+        isDisable: this.uiCollectNFTStatus === 'open',
       };
     },
   },

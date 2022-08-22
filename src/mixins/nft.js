@@ -15,6 +15,7 @@ import {
 } from '~/util/nft';
 
 const COLLECT_STATUS = {
+  OPEN: 'open',
   SIGN: 'sign',
   PROCESSING: 'processing',
   COMPLETED: 'completed',
@@ -31,7 +32,7 @@ export default {
       avatarList: {},
       civicLikerList: {},
 
-      userOwnedCount: null,
+      userOwnedCount: -1,
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
@@ -149,9 +150,9 @@ export default {
       'fetchNFTOwners',
       'initIfNecessary',
       'uiToggleCollectModal',
-      'uiSetCollectOwnedCount',
+      'uiSetCollectedCount',
       'uiSetCollectStatus',
-      'uiSetCollectFailed',
+      'uiSetCollectError',
     ]),
     async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
@@ -208,7 +209,7 @@ export default {
         );
       }
     },
-    async updateUserOwnedCount(classId, address) {
+    async updateUserCollectedCount(classId, address) {
       if (!address) {
         this.userOwnedCount = null;
         return;
@@ -223,32 +224,34 @@ export default {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
         this.uiToggleCollectModal();
-        this.uiSetCollectOwnedCount(this.userOwnedCount);
+        this.uiSetCollectedCount(this.userOwnedCount);
 
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
-          this.uiSetCollectFailed('INSUFFICIENT_BALANCE');
+          this.uiSetCollectError('INSUFFICIENT_BALANCE');
           this.uiSetCollectStatus(COLLECT_STATUS.INSUFFICIENT);
           return;
         }
 
-        this.uiSetCollectStatus(COLLECT_STATUS.SIGN);
+        this.uiSetCollectStatus(COLLECT_STATUS.OPEN);
+        setTimeout(() => {
+          this.uiSetCollectStatus(COLLECT_STATUS.SIGN);
+        }, 5000);
         const txHash = await sendGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
-
-        if (txHash) this.uiSetCollectStatus(COLLECT_STATUS.PROCESSING);
+        this.uiSetCollectStatus(COLLECT_STATUS.PROCESSING);
         await this.$api.post(
           postNFTPurchase({ txHash, classId: this.classId })
         );
-        await this.updateUserOwnedCount(this.classId, this.getAddress);
+        await this.updateUserCollectedCount(this.classId, this.getAddress);
         this.uiSetCollectStatus(COLLECT_STATUS.COMPLETED);
       } catch (error) {
-        this.uiSetCollectFailed(error.response?.data || error);
+        this.uiSetCollectError(error.response?.data || error);
         this.uiSetCollectStatus(COLLECT_STATUS.FAILED);
       } finally {
-        this.uiSetCollectOwnedCount(this.userOwnedCount);
+        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
@@ -274,7 +277,7 @@ export default {
       } finally {
         this.updateNFTOwners();
         this.updateNFTHistory();
-        this.updateUserOwnedCount(this.classId, this.getAddress);
+        this.updateUserCollectedCount(this.classId, this.getAddress);
       }
     },
   },

@@ -111,7 +111,7 @@ export default {
 
       try {
         this.isCollecting = true;
-        this.updateUserOwnedCount(this.classId, this.getAddress);
+        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
       } catch (error) {
         // no need to handle error
