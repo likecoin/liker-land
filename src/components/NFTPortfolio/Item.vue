@@ -45,7 +45,7 @@
           {{ NFTName }}
         </Label>
         <div class="z-[500] flex justify-center my-[16px]">
-          <ProgressIndicator v-if="isCollecting" />
+          <ProgressIndicator v-if="uiIsOpenCollectModal && isCollecting" />
           <ButtonV2
             v-else
             preset="secondary"

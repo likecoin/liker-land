@@ -14,8 +14,7 @@ import {
   getNFTCountByClassId,
 } from '~/util/nft';
 
-const COLLECT_STATUS = {
-  OPEN: 'open',
+const TX_STATUS = {
   SIGN: 'sign',
   PROCESSING: 'processing',
   COMPLETED: 'completed',
@@ -46,6 +45,7 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
       'getAddress',
+      'uiIsOpenCollectModal',
     ]),
     isCivicLiker() {
       return !!(
@@ -151,8 +151,8 @@ export default {
       'initIfNecessary',
       'uiToggleCollectModal',
       'uiSetCollectedCount',
-      'uiSetCollectStatus',
-      'uiSetCollectError',
+      'uiSetTxStatus',
+      'uiSetTxError',
     ]),
     async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
@@ -223,33 +223,33 @@ export default {
       try {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
+
         this.uiToggleCollectModal();
         this.uiSetCollectedCount(this.userOwnedCount);
 
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
-          this.uiSetCollectError('INSUFFICIENT_BALANCE');
-          this.uiSetCollectStatus(COLLECT_STATUS.INSUFFICIENT);
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
           return;
         }
 
-        this.uiSetCollectStatus(COLLECT_STATUS.OPEN);
-        setTimeout(() => {
-          this.uiSetCollectStatus(COLLECT_STATUS.SIGN);
-        }, 5000);
+        this.uiSetTxStatus(TX_STATUS.SIGN);
         const txHash = await sendGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
-        this.uiSetCollectStatus(COLLECT_STATUS.PROCESSING);
-        await this.$api.post(
-          postNFTPurchase({ txHash, classId: this.classId })
-        );
-        await this.updateUserCollectedCount(this.classId, this.getAddress);
-        this.uiSetCollectStatus(COLLECT_STATUS.COMPLETED);
+        if (txHash && this.uiIsOpenCollectModal) {
+          this.uiSetTxStatus(TX_STATUS.PROCESSING);
+          await this.$api.post(
+            postNFTPurchase({ txHash, classId: this.classId })
+          );
+          await this.updateUserCollectedCount(this.classId, this.getAddress);
+          this.uiSetTxStatus(TX_STATUS.COMPLETED);
+        }
       } catch (error) {
-        this.uiSetCollectError(error.response?.data || error);
-        this.uiSetCollectStatus(COLLECT_STATUS.FAILED);
+        this.uiSetTxError(error.response?.data || error);
+        this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
         this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();

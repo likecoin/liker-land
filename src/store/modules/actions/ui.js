@@ -34,22 +34,22 @@ export function uiCloseAlert({ commit }) {
 
 export function uiToggleCollectModal({ commit }) {
   commit(types.UI_TOGGLE_COLLECT_MODAL, true);
-  commit(types.UI_SET_COLLECT_ERROR_MESSAGE, '');
+  commit(types.UI_SET_TX_ERROR_MESSAGE, '');
 }
 
 export function uiSetCollectedCount({ commit }, count) {
   commit(types.UI_SET_COLLECT_OWNED_COUNT, count);
 }
 
-export function uiSetCollectStatus({ commit }, status) {
-  commit(types.UI_SET_COLLECT_STATUS, status);
+export function uiSetTxStatus({ commit }, status) {
+  commit(types.UI_SET_TX_STATUS, status);
 }
 
-export function uiSetCollectError({ commit }, error) {
-  commit(types.UI_SET_COLLECT_ERROR_MESSAGE, error);
+export function uiSetTxError({ commit }, error) {
+  commit(types.UI_SET_TX_ERROR_MESSAGE, error);
 }
 
-export function uiCloseCollectModal({ commit }) {
+export function uiCloseTxModal({ commit }) {
   commit(types.UI_TOGGLE_COLLECT_MODAL, false);
-  commit(types.UI_SET_COLLECT_STATUS, '');
+  commit(types.UI_SET_TX_STATUS, '');
 }

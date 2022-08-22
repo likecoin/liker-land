@@ -99,7 +99,7 @@
             :nft-price-u-s-d="NFTPriceUSD"
             :minted-count="mintedCount"
             :collector-count="ownerCount"
-            :is-loading="isCollecting"
+            :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="onCollect"
           />
           <NFTPageEventList :items="populatedEvents" />

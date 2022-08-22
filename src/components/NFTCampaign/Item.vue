@@ -12,7 +12,7 @@
     :owner-count="ownerCount"
     :owner-name="iscnOwnerDisplayName"
     :sold-count="mintedCount"
-    :is-loading="isCollecting"
+    :is-loading="uiIsOpenCollectModal && isCollecting"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
     :sold-count-label="$t('campaign_nft_item_collected_count_label')"

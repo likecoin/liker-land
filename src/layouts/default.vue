@@ -25,17 +25,33 @@
       </LinkV2>
     </Snackbar>
 
-    <NFTPageTxModal />
-
+    <TxModal
+      :is-open="uiIsOpenCollectModal"
+      :has-close-button="false"
+      :header-text="$t('nft_details_page_title_collect')"
+      @close="uiCloseTxModal"
+    >
+      <template #header-prepend>
+        <IconPrice />
+      </template>
+      <NFTPageOwning />
+    </TxModal>
   </div>
 </template>
 
 <script>
 import slidingMenuMixin from '~/mixins/sliding-menu';
 import alertMixin from '~/mixins/alert';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   mixins: [slidingMenuMixin, alertMixin],
+  computed: {
+    ...mapGetters(['uiIsOpenCollectModal']),
+  },
+  methods: {
+    ...mapActions(['uiCloseTxModal']),
+  },
 };
 </script>
 

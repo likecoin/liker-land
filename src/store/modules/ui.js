@@ -11,8 +11,8 @@ import {
   UI_SET_ALERT_TYPE,
   UI_SET_ALERT_MESSAGE,
   UI_TOGGLE_COLLECT_MODAL,
-  UI_SET_COLLECT_STATUS,
-  UI_SET_COLLECT_ERROR_MESSAGE,
+  UI_SET_TX_STATUS,
+  UI_SET_TX_ERROR_MESSAGE,
   UI_SET_COLLECT_OWNED_COUNT,
 } from '../mutation-types';
 
@@ -34,8 +34,8 @@ const initialState = () => ({
 
   // NFT collect dialog
   isOpenCollectModal: false,
-  collectStatus: '',
-  collectErrorMessage: '',
+  txStatus: '',
+  txErrorMessage: '',
   ownedCount: null,
 });
 
@@ -64,11 +64,11 @@ const mutations = {
   [UI_SET_COLLECT_OWNED_COUNT](state, ownedCount) {
     state.ownedCount = ownedCount;
   },
-  [UI_SET_COLLECT_STATUS](state, status) {
-    state.collectStatus = status;
+  [UI_SET_TX_STATUS](state, status) {
+    state.txStatus = status;
   },
-  [UI_SET_COLLECT_ERROR_MESSAGE](state, error) {
-    state.collectErrorMessage = error;
+  [UI_SET_TX_ERROR_MESSAGE](state, error) {
+    state.txErrorMessage = error;
   },
 };
 
