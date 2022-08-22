@@ -40,6 +40,13 @@ export const PAYMENT_METHOD_LIST = [
   'other', // plz always put `other` at last for hk geoip handle
 ];
 
+export const WALLET_CONNECTOR_METHOD = [
+  'keplr',
+  'keplr-mobile',
+  'cosmostation',
+  'liker-id',
+];
+
 export const DEFAULT_CL_SUPPORTER =
   process.env.DEFAULT_CL_SUPPORTER || 'foundation';
 

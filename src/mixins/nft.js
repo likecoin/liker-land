@@ -7,7 +7,20 @@ import {
   postNFTTransfer,
   getAddressLikerIdMinApi,
 } from '~/util/api';
-import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
+import {
+  getAccountBalance,
+  transferNFT,
+  sendGrant,
+  getNFTCountByClassId,
+} from '~/util/nft';
+
+const COLLECT_STATUS = {
+  SIGN: 'sign',
+  PROCESSING: 'processing',
+  COMPLETED: 'completed',
+  INSUFFICIENT: 'insufficient',
+  FAILED: 'failed',
+};
 
 export default {
   data() {
@@ -17,6 +30,8 @@ export default {
       displayNameList: {},
       avatarList: {},
       civicLikerList: {},
+
+      userOwnedCount: null,
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
@@ -112,7 +127,7 @@ export default {
         ...event,
         toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
         fromDisplayName:
-          this.displayNameList[event.fromWallet] || event.toWafromWalletllet,
+          this.displayNameList[event.fromWallet] || event.fromWallet,
       }));
     },
     populatedCollectors() {
@@ -133,8 +148,12 @@ export default {
       'fetchNFTMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
+      'uiToggleCollectModal',
+      'uiSetCollectOwnedCount',
+      'uiSetCollectStatus',
+      'uiSetCollectFailed',
     ]),
-    async updateNFTClassMetdata() {
+    async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
       this.updateDisplayNameList(
         this.getNFTClassMetadataById(this.classId)?.iscn_owner
@@ -189,24 +208,50 @@ export default {
         );
       }
     },
+    async updateUserOwnedCount(calssId, address) {
+      if (!address) {
+        this.userOwnedCount = null;
+        return;
+      }
+      this.isOwnerInfoLoading = true;
+      const { amount } = await getNFTCountByClassId(calssId, address);
+      this.userOwnedCount = amount.low;
+      this.isOwnerInfoLoading = false;
+    },
     async collectNFT() {
       try {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        this.uiToggleCollectModal();
+        this.uiSetCollectOwnedCount(this.userOwnedCount);
+
+        if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
+          this.uiSetCollectFailed('INSUFFICIENT_BALANCE');
+          this.uiSetCollectStatus(COLLECT_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetCollectStatus(COLLECT_STATUS.SIGN);
         const txHash = await sendGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
+
+        if (txHash) this.uiSetCollectStatus(COLLECT_STATUS.PROCESSING);
         await this.$api.post(
           postNFTPurchase({ txHash, classId: this.classId })
         );
+        await this.updateUserOwnedCount(this.classId, this.getAddress);
+        this.uiSetCollectStatus(COLLECT_STATUS.COMPLETED);
       } catch (error) {
-        throw error;
+        this.uiSetCollectFailed(error.response?.data || error);
+        this.uiSetCollectStatus(COLLECT_STATUS.FAILED);
       } finally {
+        this.uiSetCollectOwnedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
+        this.updateNFTHistory();
       }
     },
     async transferNFT() {
@@ -229,6 +274,7 @@ export default {
       } finally {
         this.updateNFTOwners();
         this.updateNFTHistory();
+        this.updateUserOwnedCount(this.classId, this.getAddress);
       }
     },
   },

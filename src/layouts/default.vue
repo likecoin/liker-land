@@ -10,7 +10,6 @@
       name="snackbar"
       multiple
     />
-    
     <Snackbar
       :open="uiIsOpenSnackbar"
       :preset="alertPreset"
@@ -25,7 +24,9 @@
         {{ $t('snackbar_error_buyLIKE') }}
       </LinkV2>
     </Snackbar>
-    
+
+    <NFTPageCollectModal />
+
   </div>
 </template>
 

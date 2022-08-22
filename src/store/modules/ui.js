@@ -10,18 +10,33 @@ import {
   UI_TOGGLE_SNACKBAR,
   UI_SET_ALERT_TYPE,
   UI_SET_ALERT_MESSAGE,
+  UI_TOGGLE_COLLECT_MODAL,
+  UI_SET_COLLECT_STATUS,
+  UI_SET_COLLECT_ERROR_MESSAGE,
+  UI_SET_COLLECT_OWNED_COUNT,
 } from '../mutation-types';
 
 import { defaultLocale, availableLocales } from '../../locales';
 
 const initialState = () => ({
+  // locales
   locales: availableLocales,
   locale: defaultLocale,
   isHK: undefined,
+
+  // sliding menu
   isSlidingMenuOpen: false,
+
+  // alert snackbar
   isOpenSnackbar: false,
   alertType: '',
   alertMessage: '',
+
+  // NFT collect dialog
+  isOpenCollectModal: false,
+  collectStatus: '',
+  collectErrorMessage: '',
+  ownedCount: null,
 });
 
 const mutations = {
@@ -42,6 +57,18 @@ const mutations = {
   },
   [UI_SET_ALERT_MESSAGE](state, message) {
     state.alertMessage = message;
+  },
+  [UI_TOGGLE_COLLECT_MODAL](state, isToggled) {
+    state.isOpenCollectModal = isToggled;
+  },
+  [UI_SET_COLLECT_OWNED_COUNT](state, ownedCount) {
+    state.ownedCount = ownedCount;
+  },
+  [UI_SET_COLLECT_STATUS](state, status) {
+    state.collectStatus = status;
+  },
+  [UI_SET_COLLECT_ERROR_MESSAGE](state, error) {
+    state.collectErrorMessage = error;
   },
 };
 
