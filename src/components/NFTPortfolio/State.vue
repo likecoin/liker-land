@@ -1,18 +1,22 @@
 <template>
-  <div>
+  <component :is="tag">
     <slot 
       :collected-count="collectedCount" 
       :collected-amount="collectedAmount"
       :created-count="createdCount"
       :created-collected-count="createdCollectedCount"
     />
-  </div>
+  </component>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 
 export default {
   props: {
+    tag: {
+      type: String,
+      default: 'div',
+    },
     collectedItems: {
       type: Array,
       default: () => [],
