@@ -217,16 +217,14 @@ export default {
       this.isOwnerInfoLoading = true;
       const { amount } = await getNFTCountByClassId(classId, address);
       this.userOwnedCount = amount.low;
+      this.uiSetCollectedCount(this.userOwnedCount);
       this.isOwnerInfoLoading = false;
     },
     async collectNFT() {
       try {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
-
         this.uiToggleCollectModal();
-        this.uiSetCollectedCount(this.userOwnedCount);
-
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
@@ -239,6 +237,7 @@ export default {
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
+
         if (txHash && this.uiIsOpenCollectModal) {
           this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.$api.post(
@@ -261,7 +260,13 @@ export default {
       try {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        if (balance === '0') {
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetTxStatus(TX_STATUS.SIGN);
         const txHash = await transferNFT({
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
@@ -269,12 +274,18 @@ export default {
           nftId: this.firstOwnedNFTId,
           signer: this.getSigner,
         });
+
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
         await this.$api.post(
           postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
         );
+        await this.updateUserCollectedCount(this.classId, this.getAddress);
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
-        throw error;
+        this.uiSetTxError(error.response?.data || error);
+        this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
+        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTHistory();
         this.updateUserCollectedCount(this.classId, this.getAddress);

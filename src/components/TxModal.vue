@@ -3,8 +3,9 @@
     :open="isOpen"
     :has-close-button="hasCloseButton"
     :header-text="headerText"
-    panel-class="shadow-lg bg-white phone:min-w-[380px] min-w-[520px] w-full p-[48px] rounded-[24px]"
+    panel-class="shadow-lg bg-white phone:min-w-[380px] w-[520px] w-full p-[48px] rounded-[24px]"
     :is-disabled-backdrop-click="true"
+    @close="$emit('close')"
   >
     <template #header-prepend>
       <slot name="header-prepend" />
@@ -57,7 +58,7 @@
           class="mb-[24px]"
         />
         <ButtonV2
-          v-if="uiTxNFTStatus !== 'processing'"
+          v-if="uiTxNFTStatus !== 'processing' && buttonText"
           :preset="getButtonState.preset"
           :is-disabled="getButtonState.isDisable"
           @click="onClick"
@@ -191,8 +192,9 @@ export default {
 
         case 'insufficient':
         case 'failed':
-        default:
           return this.$t('tx_modal_button_Close');
+        default:
+          return undefined;
       }
     },
     getButtonState() {

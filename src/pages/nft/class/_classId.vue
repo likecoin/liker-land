@@ -92,7 +92,7 @@
             :is-loading="isOwnerInfoLoading"
             :is-log-in="!!getAddress"
             :is-transferring="isTransferring"
-            @openTransfer="isOpenTransferDialog = true;"
+            @openTransfer="onToggleTransfer"
           />
           <NFTPagePriceSection
             :nft-price="NFTPrice"
@@ -106,26 +106,38 @@
         </div>
       </section>
     </main>
-    <Dialog
-      v-model="isOpenTransferDialog"
-      preset="custom"
-      panel-class="shadow-lg bg-white phone:min-w-[380px] min-w-[520px] w-full p-[48px] rounded-[24px]"
-      :is-disabled-backdrop-click="true"
+    <TxModal
+      :is-open="isOpenTransferModal"
+      :has-close-button="!isTransferring"
+      :header-text="$t('nft_details_page_title_transfer')"
+      @close="isOpenTransferModal = false; isTransferring = false"
     >
-      <Label preset="h3" class="font-600 text-like-green mb-[48px]" :text="$t('nft_details_page_title_transfer')" />
-      <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
-      <TextField :placeholder="$t('nft_details_page_placeholder_transfer')" :error-message="errorMsg" @input="handleInputAddr" />
-      <div class="flex justify-end w-full mt-[56px]">
-        <ProgressIndicator v-if="isTransferring" />
-        <ButtonV2
-          v-else
-          preset="secondary"
-          :is-disabled="!isReadyToTransfer"
-          :text="$t('nft_details_page_button_transfer')"
-          @click="onTransfer"
-        />
+      <template #header-prepend>
+        <IconTransfer />
+      </template>
+      <div>
+        <NFTPageOwning />
+        <div v-if="!isTransferring">
+          <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
+          <TextField
+            :placeholder="$t('nft_details_page_placeholder_transfer')"
+            :error-message="errorMsg"
+            @input="handleInputAddr"
+          />
+          <div class="flex justify-center mt-[24px]">
+            <ButtonV2
+              preset="secondary"
+              :is-disabled="!isReadyToTransfer"
+              :text="$t('nft_details_page_button_transfer')"
+              @click="onTransfer"
+            />
+          </div>
+        </div>
+        <div v-else class="flex justify-center w-ful mb-[12px] border-0 border-dashed border-b-[2px] border-b-shade-gray">
+          <FormField :label="$t('tx_modal_label_send')">{{ toAddress }}</FormField>
+        </div>
       </div>
-    </Dialog>
+    </TxModal>
   </Page>
 </template>
 
@@ -175,11 +187,11 @@ export default {
   },
   data() {
     return {
-      toAddress: '',
+      toAddress: null,
 
       currentPrice: 0,
       isOwnerInfoLoading: true,
-      isOpenTransferDialog: false,
+      isOpenTransferModal: false,
       errorMsg: '',
       isReadyToTransfer: false,
       isTransferring: false,
@@ -232,17 +244,20 @@ export default {
     this.isOwnerInfoLoading = false;
   },
   methods: {
+    onToggleTransfer() {
+      this.isOpenTransferModal = true;
+      this.isTransferring = false;
+      this.isReadyToTransfer = false;
+      this.toAddress = null;
+
+      this.uiSetTxError('');
+      this.uiSetTxStatus('');
+      this.updateUserCollectedCount(this.classId, this.getAddress);
+    },
     async onTransfer() {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
-      try {
-        this.isTransferring = true;
-        await this.transferNFT();
-        this.alertPromptSuccess(this.$t('snackbar_success_transfer'));
-      } catch (error) {
-        this.alertPromptError(error);
-      } finally {
-        this.isTransferring = false;
-      }
+      this.isTransferring = true;
+      await this.transferNFT();
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
@@ -264,6 +279,7 @@ export default {
       }
       try {
         this.isCollecting = true;
+        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
       } catch (error) {
         // no need to handle error
