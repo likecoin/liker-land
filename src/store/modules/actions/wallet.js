@@ -65,10 +65,8 @@ export async function initIfNecessary({ dispatch, commit }) {
   const connector = await dispatch('initConnector');
   const session = await connector.initIfNecessary();
   if (session) {
-    await dispatch('initWallet', session);
+    const { accounts, offlineSigner, method } = session;
+    await dispatch('initWallet', { accounts, offlineSigner });
+    commit(types.WALLET_SET_METHOD_TYPE, method);
   }
-  const connectedWalletType = JSON.parse(
-    window.localStorage?.getItem(KEY_CONNECTED_WALLET_TYPE)
-  );
-  commit(types.WALLET_SET_METHOD, connectedWalletType.method);
 }

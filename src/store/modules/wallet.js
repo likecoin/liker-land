@@ -5,7 +5,7 @@ import {
   WALLET_SET_SIGNER,
   WALLET_SET_CONNECTOR,
   WALLET_SET_LIKERINFO,
-  WALLET_SET_METHOD,
+  WALLET_SET_METHOD_TYPE,
 } from '../mutation-types';
 
 import * as getters from './getters/wallet';
@@ -27,7 +27,7 @@ const mutations = {
   [WALLET_SET_SIGNER](state, signer) {
     state.signer = signer;
   },
-  [WALLET_SET_METHOD](state, method) {
+  [WALLET_SET_METHOD_TYPE](state, method) {
     state.methodType = method;
   },
   [WALLET_SET_CONNECTOR](state, connector) {
