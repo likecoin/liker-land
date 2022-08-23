@@ -105,7 +105,10 @@ export default {
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
       if (!this.getAddress) {
-        this.connectWallet();
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.handleClickCollect();
+        }
         return;
       }
 

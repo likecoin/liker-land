@@ -225,6 +225,7 @@ export default {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
         this.uiToggleCollectModal();
+        this.uiSetCollectedCount(this.userOwnedCount);
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
