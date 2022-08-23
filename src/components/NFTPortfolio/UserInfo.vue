@@ -5,19 +5,48 @@
       {{ likerId | ellipsis }}
     </Label>
     <div v-if="likerDescription" :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
-    <Label preset="p6" class="break-all font-200">
+    <Label preset="p6" class="break-all font-200 my-[28px]">
       {{ likerDescription }}
     </Label>
-    <div :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
-    <NFTPortfolioState 
+    <div class="flex justify-between w-[44px] mx-auto mb-[16px] text-shade-gray">
+      <IconEllipse />
+      <IconEllipse />
+      <IconEllipse />
+    </div>
+    <NFTPortfolioState
       :collected-items="collectedItems"
       :created-class-ids="createdClassIds"
+      class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
     >
       <template v-slot="stats">
-        <Label preset="p6" class="font-200">Collections: {{ stats.collectedCount }}</Label>
-        <Label preset="p6" class="font-200">Total Value: {{ stats.collectedAmount }}</Label>
-        <Label preset="p6" class="font-200">Creations: {{ stats.createdCount }}</Label>
-        <Label preset="p6" class="font-200">Minted: {{ stats.createdCollectedCount }}</Label>
+        <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collections')">
+          <Label preset="p6" class="font-200" :text="stats.collectedCount">
+            <template #prepend>
+              <IconMint />
+            </template>
+          </Label>
+        </ToolTips>
+        <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_value')">
+          <Label preset="p6" class="font-200" :text="stats.collectedAmount">
+            <template #prepend>
+              <IconPriceMini />
+            </template>
+          </Label>
+        </ToolTips>
+        <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_creations')">
+          <Label preset="p6" class="font-200" :text="stats.createdCount">
+            <template #prepend>
+              <IconFlare />
+            </template>
+          </Label>
+        </ToolTips>
+        <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
+          <Label preset="p6" class="font-200" :text="stats.createdCollectedCount">
+            <template #prepend>
+              <IconPersonMini />
+            </template>
+          </Label>
+        </ToolTips>
       </template>
     </NFTPortfolioState>
   </CardV2>
