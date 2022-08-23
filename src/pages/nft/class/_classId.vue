@@ -88,11 +88,11 @@
             <NFTPageOwningSection
               class="mr-[16px]"
               :owned-count="userOwnedCount"
-              :is-transfer-disabled="true"
+              :is-transfer-disabled="!getAddress || !userOwnedCount"
               :is-loading="isLoading"
               :is-log-in="!!getAddress"
               :is-transferring="isTransferring"
-              @openTransfer="isOpenTransferDialog = true;"
+              @openTransfer="onToggleTransfer"
             />
             <ShareButton @copy="handleCopyURL" />
           </div>
@@ -117,36 +117,46 @@
         </div>
       </section>
     </main>
-
-    <Dialog
-      v-model="isOpenTransferDialog"
-      preset="custom"
-      panel-class="shadow-lg bg-white phone:min-w-[380px] min-w-[520px] w-full p-[48px] rounded-[24px]"
-      :is-disabled-backdrop-click="true"
+    <TxModal
+      :is-open="isOpenTransferModal"
+      :has-close-button="!isTransferring"
+      :header-text="$t('nft_details_page_title_transfer')"
+      @close="isOpenTransferModal = false; isTransferring = false"
     >
-      <Label preset="h3" class="font-600 text-like-green mb-[48px]" :text="$t('nft_details_page_title_transfer')" />
-      <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
-      <TextField :placeholder="$t('nft_details_page_placeholder_transfer')" :error-message="errorMsg" @input="handleInputAddr" />
-      <div class="flex justify-end w-full mt-[56px]">
-        <ProgressIndicator v-if="isTransferring" />
-        <ButtonV2
-          v-else
-          preset="secondary"
-          :is-disabled="!isReadyToTransfer"
-          :text="$t('nft_details_page_button_transfer')"
-          @click="onTransfer"
-        />
+      <template #header-prepend>
+        <IconTransfer />
+      </template>
+      <div>
+        <NFTPageOwning />
+        <div v-if="!isTransferring">
+          <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
+          <TextField
+            :placeholder="$t('nft_details_page_placeholder_transfer')"
+            :error-message="errorMsg"
+            @input="handleInputAddr"
+          />
+          <div class="flex justify-center mt-[24px]">
+            <ButtonV2
+              preset="secondary"
+              :is-disabled="!isReadyToTransfer"
+              :text="$t('nft_details_page_button_transfer')"
+              @click="onTransfer"
+            />
+          </div>
+        </div>
+        <div v-else class="flex justify-center w-ful mb-[12px] border-0 border-dashed border-b-[2px] border-b-shade-gray">
+          <FormField :label="$t('tx_modal_label_send')">{{ toAddress }}</FormField>
+        </div>
       </div>
-    </Dialog>
+    </TxModal>
   </Page>
 </template>
 
 <script>
 import { getLIKEPrice } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getNFTCountByClassId, LIKE_ADDRESS_REGEX } from '~/util/nft';
 import { copyToClipboard } from '~/util/ui';
-
+import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
@@ -189,13 +199,11 @@ export default {
   },
   data() {
     return {
-      userOwnedCount: null,
-      toAddress: '',
+      toAddress: null,
 
       currentPrice: 0,
-      isLoading: true,
-
-      isOpenTransferDialog: false,
+      isOwnerInfoLoading: true,
+      isOpenTransferModal: false,
       errorMsg: '',
       isReadyToTransfer: false,
       isTransferring: false,
@@ -222,14 +230,14 @@ export default {
       ];
     },
     isTransferDisabled() {
-      return this.isLoading || !this.userOwnedCount;
+      return this.isOwnerInfoLoading || !this.userOwnedCount;
     },
   },
   watch: {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        this.updateUserOwnedCount(newAddress);
+        this.updateUserCollectedCount(this.classId, newAddress);
       },
     },
   },
@@ -245,30 +253,23 @@ export default {
       this.updateNFTHistory(),
       this.getLIKEPrice(),
     ]);
-    this.isLoading = false;
+    this.isOwnerInfoLoading = false;
   },
   methods: {
-    async updateUserOwnedCount(address) {
-      if (!address) {
-        this.userOwnedCount = null;
-        return;
-      }
-      this.isLoading = true;
-      const { amount } = await getNFTCountByClassId(this.classId, address);
-      this.userOwnedCount = amount.low;
-      this.isLoading = false;
+    onToggleTransfer() {
+      this.isOpenTransferModal = true;
+      this.isTransferring = false;
+      this.isReadyToTransfer = false;
+      this.toAddress = null;
+
+      this.uiSetTxError('');
+      this.uiSetTxStatus('');
+      this.updateUserCollectedCount(this.classId, this.getAddress);
     },
     async onTransfer() {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
-      try {
-        this.isTransferring = true;
-        await this.transferNFT();
-        this.alertPromptSuccess(this.$t('snackbar_success_transfer'));
-      } catch (error) {
-        this.alertPromptError(error);
-      } finally {
-        this.isTransferring = false;
-      }
+      this.isTransferring = true;
+      await this.transferNFT();
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
@@ -282,20 +283,18 @@ export default {
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
       if (!this.getAddress) {
-        this.connectWallet();
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.handleCollect();
+        }
         return;
       }
-
       try {
         this.isCollecting = true;
+        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
-        this.updateUserOwnedCount(this.getAddress);
-        this.updateNFTHistory();
-        this.alertPromptSuccess(
-          this.$t('snackbar_success_collect', { NFT: this.NFTName })
-        );
       } catch (error) {
-        this.alertPromptError(error);
+        // no need to handle error
       } finally {
         this.isCollecting = false;
       }

@@ -7,7 +7,20 @@ import {
   postNFTTransfer,
   getAddressLikerIdMinApi,
 } from '~/util/api';
-import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
+import {
+  getAccountBalance,
+  transferNFT,
+  sendGrant,
+  getNFTCountByClassId,
+} from '~/util/nft';
+
+const TX_STATUS = {
+  SIGN: 'sign',
+  PROCESSING: 'processing',
+  COMPLETED: 'completed',
+  INSUFFICIENT: 'insufficient',
+  FAILED: 'failed',
+};
 
 export default {
   data() {
@@ -17,6 +30,8 @@ export default {
       displayNameList: {},
       avatarList: {},
       civicLikerList: {},
+
+      userOwnedCount: -1,
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
@@ -30,6 +45,7 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
       'getAddress',
+      'uiIsOpenCollectModal',
     ]),
     isCivicLiker() {
       return !!(
@@ -112,7 +128,7 @@ export default {
         ...event,
         toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
         fromDisplayName:
-          this.displayNameList[event.fromWallet] || event.toWafromWalletllet,
+          this.displayNameList[event.fromWallet] || event.fromWallet,
       }));
     },
     populatedCollectors() {
@@ -133,8 +149,12 @@ export default {
       'fetchNFTMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
+      'uiToggleCollectModal',
+      'uiSetCollectedCount',
+      'uiSetTxStatus',
+      'uiSetTxError',
     ]),
-    async updateNFTClassMetdata() {
+    async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
       this.updateDisplayNameList(
         this.getNFTClassMetadataById(this.classId)?.iscn_owner
@@ -189,31 +209,65 @@ export default {
         );
       }
     },
+    async updateUserCollectedCount(classId, address) {
+      if (!address) {
+        this.userOwnedCount = null;
+        return;
+      }
+      this.isOwnerInfoLoading = true;
+      const { amount } = await getNFTCountByClassId(classId, address);
+      this.userOwnedCount = amount.low;
+      this.uiSetCollectedCount(this.userOwnedCount);
+      this.isOwnerInfoLoading = false;
+    },
     async collectNFT() {
       try {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        this.uiToggleCollectModal();
+        this.uiSetCollectedCount(this.userOwnedCount);
+        if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetTxStatus(TX_STATUS.SIGN);
         const txHash = await sendGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
-        await this.$api.post(
-          postNFTPurchase({ txHash, classId: this.classId })
-        );
+
+        if (txHash && this.uiIsOpenCollectModal) {
+          this.uiSetTxStatus(TX_STATUS.PROCESSING);
+          await this.$api.post(
+            postNFTPurchase({ txHash, classId: this.classId })
+          );
+          await this.updateUserCollectedCount(this.classId, this.getAddress);
+          this.uiSetTxStatus(TX_STATUS.COMPLETED);
+        }
       } catch (error) {
-        throw error;
+        this.uiSetTxError(error.response?.data || error);
+        this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
+        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
+        this.updateNFTHistory();
       }
     },
     async transferNFT() {
       try {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        if (balance === '0') {
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetTxStatus(TX_STATUS.SIGN);
         const txHash = await transferNFT({
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
@@ -221,14 +275,21 @@ export default {
           nftId: this.firstOwnedNFTId,
           signer: this.getSigner,
         });
+
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
         await this.$api.post(
           postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
         );
+        await this.updateUserCollectedCount(this.classId, this.getAddress);
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
-        throw error;
+        this.uiSetTxError(error.response?.data || error);
+        this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
+        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTHistory();
+        this.updateUserCollectedCount(this.classId, this.getAddress);
       }
     },
   },

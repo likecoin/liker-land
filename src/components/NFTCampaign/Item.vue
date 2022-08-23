@@ -12,7 +12,7 @@
     :owner-count="ownerCount"
     :owner-name="iscnOwnerDisplayName"
     :sold-count="mintedCount"
-    :is-loading="isCollecting"
+    :is-loading="uiIsOpenCollectModal && isCollecting"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
     :sold-count-label="$t('campaign_nft_item_collected_count_label')"
@@ -51,7 +51,7 @@ export default {
     };
   },
   mounted() {
-    this.updateNFTClassMetdata();
+    this.updateNFTClassMetadata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
   },
@@ -59,18 +59,18 @@ export default {
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
       if (!this.getAddress) {
-        this.connectWallet();
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.handleClickCollect();
+        }
         return;
       }
-
       try {
         this.isCollecting = true;
+        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
-        this.alertPromptSuccess(
-          this.$t('snackbar_success_collect', { NFT: this.NFTName })
-        );
       } catch (error) {
-        this.alertPromptError(error);
+        // no need to handle error
       } finally {
         this.isCollecting = false;
       }

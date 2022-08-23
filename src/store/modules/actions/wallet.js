@@ -4,6 +4,8 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { getAddressLikerIdMinApi } from '~/util/api';
 import * as types from '@/store/mutation-types';
 
+const KEY_CONNECTED_WALLET_TYPE = 'likecoin_wallet_connector_session';
+
 export async function initWallet({ commit }, { accounts, offlineSigner }) {
   if (!accounts[0]) return false;
   const { address, bech32Address } = accounts[0];
@@ -59,10 +61,12 @@ export async function restoreSession({ dispatch }) {
   }
 }
 
-export async function initIfNecessary({ dispatch }) {
+export async function initIfNecessary({ dispatch, commit }) {
   const connector = await dispatch('initConnector');
   const session = await connector.initIfNecessary();
   if (session) {
-    await dispatch('initWallet', session);
+    const { accounts, offlineSigner, method } = session;
+    await dispatch('initWallet', { accounts, offlineSigner });
+    commit(types.WALLET_SET_METHOD_TYPE, method);
   }
 }
