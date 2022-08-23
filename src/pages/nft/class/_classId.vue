@@ -56,8 +56,10 @@
               :display-name="displayNameList[iscnOwner]"
               :nft-name="NFTName"
               :nft-description="NFTDescription"
+              :nft-price="NFTPrice"
               :nft-external-url="NFTExternalUrl"
               :iscn-url="iscnURL"
+              @collect="handleCollectFromPreviewSection"
             />
             <NFTPageCollectorList
               class="laptop:ml-[12px] mb-[16px] desktop:m-0"
@@ -71,7 +73,7 @@
               preset="outline"
               class="my-[16px]"
               :href="iscnURL"
-              text="Metadata"
+              :text="$t('nft_details_page_button_metadata')"
             >
               <template #prepend>
                 <IconCode />
@@ -291,6 +293,16 @@ export default {
         this.toAddress = value;
         this.isReadyToTransfer = true;
       }
+    },
+    handleCollectFromPreviewSection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(DetailsPagePreviewSection)',
+        this.classId,
+        1
+      );
+      this.collectNFT();
     },
     handleCollectFromPriceSection() {
       logTrackerEvent(
