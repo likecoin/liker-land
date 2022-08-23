@@ -12,7 +12,7 @@
   >
     <li>
       <a
-        class="block transition-colors rounded-full bg-like-cyan hover:bg-like-cyan-dark"
+        class="block transition-colors rounded-full bg-like-cyan-light hover:bg-like-cyan"
         href="https://discord.gg/likecoin"
         target="_blank"
         rel="noreferrer noopener"
@@ -34,7 +34,7 @@
     </li>
     <li>
       <a
-        class="block transition-colors rounded-full bg-like-cyan hover:bg-like-cyan-dark"
+        class="block transition-colors rounded-full bg-like-cyan-light hover:bg-like-cyan"
         href="https://github.com/likecoin"
         target="_blank"
         rel="noreferrer noopener"
@@ -56,7 +56,7 @@
     </li>
     <li>
       <a
-        class="block transition-colors rounded-full bg-like-cyan hover:bg-like-cyan-dark"
+        class="block transition-colors rounded-full bg-like-cyan-light hover:bg-like-cyan"
         href="https://twitter.com/likecoin"
         target="_blank"
         rel="noreferrer noopener"
@@ -76,7 +76,7 @@
     </li>
     <li>
       <a
-        class="block transition-colors rounded-full bg-like-cyan hover:bg-like-cyan-dark"
+        class="block transition-colors rounded-full bg-like-cyan-light hover:bg-like-cyan"
         href="https://blog.like.co"
         target="_blank"
         rel="noreferrer noopener"
