@@ -63,7 +63,7 @@
   "nft_details_page_label_transfer": "Enter the recipient address",
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_errormessage_transfer": "You have entered an invalid wallet address. Please try again.",
-  "nft_details_page_label_owning": "Owning",
+  "nft_details_page_label_owning": "Own",
   "nft_details_page_label_price": "Current Price",
   "nft_supply_section_title": "Item Supply",
   "footer_nav_about_liker_land": "About Liker Land",
