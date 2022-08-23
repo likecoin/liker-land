@@ -6,7 +6,7 @@
       px-[24px]
       rounded-[24px]
       bg-white
-      border-[2px] border-like-cyan-dark
+      border-[2px] border-like-cyan-light
     "
   >
     <Label preset="h5" :text="$t('nft_details_page_label_owning')" class="text-like-green font-600">
