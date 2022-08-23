@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'overflow-y-clip',
+      'overflow-y-hidden',
       shouldCollapseInMobile ? 'laptop:border-y-[2px]' : 'border-y-[2px]',
       'border-shade-gray',
       {
@@ -44,7 +44,11 @@ export default {
       type: Number,
       default: 0,
     },
-    visibleBatchesAround: {
+    visibleBatchesAhead: {
+      type: Number,
+      default: 3,
+    },
+    visibleBatchesBehind: {
       type: Number,
       default: 3,
     },
@@ -62,14 +66,17 @@ export default {
       return getBatch(this.collectedCount);
     },
     shouldHideLowerBound() {
-      return this.activeBatch < this.visibleBatchesAround;
+      return this.activeBatch < this.visibleBatchesBehind;
+    },
+    visibleBatches() {
+      return this.visibleBatchesBehind + 1 + this.visibleBatchesAhead;
     },
     data() {
       const start = Math.max(
-        getBatch(this.collectedCount) - this.visibleBatchesAround,
+        getBatch(this.collectedCount) - this.visibleBatchesBehind,
         0
       );
-      const end = start + this.visibleBatchesAround * 2 + 1;
+      const end = start + this.visibleBatches;
       const data = [];
       for (let batch = start; batch < end; batch += 1) {
         const batchStart = getBatchStart(batch);

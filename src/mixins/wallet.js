@@ -29,7 +29,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['connectWallet', 'disconnectWallet', 'initIfNecessary']),
+    ...mapActions([
+      'connectWallet',
+      'disconnectWallet',
+      'initIfNecessary',
+      'restoreSession',
+    ]),
     async navigateToWalletDashboard() {
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();

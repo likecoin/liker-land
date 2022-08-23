@@ -7,7 +7,7 @@
       }
     ]"
   >
-    <td class="w-[64px] py-[8px]">
+    <td class="w-[64px]">
       <div :class="priceLabelClass">
         <hr
           v-if="isActive && shouldShowIndicator"
@@ -22,7 +22,7 @@
           "
         >
         <span class="relative">{{ priceLabel }}</span>&nbsp;
-        <span class="relative text-[0.8em]">$LIKE</span>
+        <span class="relative text-[0.8em] leading-[1.5]">$LIKE</span>
       </div>
     </td>
     <td class="pl-[12px] py-[4px]">
@@ -32,8 +32,8 @@
       >
         <div
           :class="[
-            'grid',
-            'grid-cols-10',
+            'flex',
+            'flex-wrap',
             'gap-[10px]',
             'items-center',
             'pl-[8px]',
@@ -42,11 +42,18 @@
             'py-[8px]',
           ]"
         >
-          <NFTSupplySlot
+          <div
             v-for="i in total"
             :key="i"
-            :type="getSlotType(i)"
-          />
+            :class="[
+              'border-l-[0.5px]',
+              i > 1 && i % 10 === 1
+                ? 'border-dark-gray border-opacity-[0.1] pl-[5px] -ml-[5px]'
+                : 'border-transparent',
+            ]"
+          >
+            <NFTSupplySlot :type="getSlotType(i)" />
+          </div>
         </div>
         <div :class="hoverLabelClass">
           <hr v-if="!isActive" :class="hoverLabelStrikethroughClass">
@@ -179,14 +186,12 @@ export default {
         'text-[12px]',
         'font-600',
         this.isActive ? 'text-like-green' : 'text-medium-gray',
+        this.isActive ? 'bg-like-cyan-pale' : 'bg-light-gray',
+        this.isActive ? 'bg-opacity-[0.8]' : 'bg-opacity-[0.5]',
         {
           'opacity-0': !this.isPast,
-          'bg-light-gray': this.isPast,
-          'bg-opacity-[0.5]': this.isPast,
           'cursor-pointer': this.isActive,
-          'bg-like-cyan-pale': this.isActive,
           'active:bg-like-cyan-light': this.isActive,
-          'bg-opacity-[0.8]': this.isActive,
         },
       ];
     },

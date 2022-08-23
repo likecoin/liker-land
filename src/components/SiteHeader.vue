@@ -151,7 +151,7 @@ export default {
     },
   },
   async mounted() {
-    await this.initIfNecessary();
+    await this.restoreSession();
   },
   methods: {
     ...mapActions(['updatePreferences']),
