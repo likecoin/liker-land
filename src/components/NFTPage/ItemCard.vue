@@ -53,7 +53,17 @@
       </div>
       <Label preset="h5" class="mt-[12px]" :text="nftName" />
       <Label preset="p5" class="mt-[12px]" :text="nftDescription | ellipsisDescription" />
-      <div class="h-[2px] w-[32px] bg-shade-gray mt-[12px]" />
+      <ButtonV2
+        class="mt-[16px]"
+        :text="formattedNFTPrice"
+        preset="secondary"
+        @click="handleClickCollect"
+      >
+        <template #prepend>
+          <IconPrice />
+        </template>
+      </ButtonV2>
+      <hr class="w-[32px] border-shade-gray mt-[12px]">
       <div class="flex justify-center">
         <ButtonV2
           preset="outline"
@@ -137,6 +147,10 @@ export default {
       type: String,
       default: undefined,
     },
+    nftPrice: {
+      type: Number,
+      default: undefined,
+    },
     nftExternalUrl: {
       type: String,
       default: undefined,
@@ -146,6 +160,16 @@ export default {
     iscnUrl: {
       type: String,
       default: undefined,
+    },
+  },
+  computed: {
+    formattedNFTPrice() {
+      return `${this.nftPrice || '-'} $LIKE`;
+    },
+  },
+  methods: {
+    handleClickCollect() {
+      this.$emit('collect');
     },
   },
 };
