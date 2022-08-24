@@ -182,10 +182,9 @@ export default {
   },
   mixins: [walletMixin, alertMixin],
   head() {
-    const title = this.$t('portfolio_title', { name: this.userDisplayName });
-    const description = this.$t('portfolio_description', {
-      name: this.userDisplayName,
-    });
+    const name = ellipsis(this.userDisplayName);
+    const title = this.$t('portfolio_title', { name });
+    const description = this.$t('portfolio_description', { name });
     return {
       title,
       meta: [
