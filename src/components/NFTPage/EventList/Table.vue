@@ -23,7 +23,7 @@
           </Label>
           <Label v-else-if="event.event === 'transfer'" class="break-all" :text="$t('nft_details_page_activity_list_event_transfer')">
             <template #prepend>
-              <IconTransfer />
+              <IconTransferMini />
             </template>
           </Label>
         </td>

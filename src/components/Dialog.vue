@@ -141,7 +141,7 @@ export default class Dialog extends Vue {
     return [
       'absolute',
       'inset-x-0',
-      'z-20',
+      'z-[1000]',
       'top-0',
       'flex',
       'justify-center',

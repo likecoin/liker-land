@@ -44,10 +44,11 @@
         <Label preset="h5" class="mt-[12px] break-all" align="center">
           {{ NFTName }}
         </Label>
-        <div class="z-[500] flex justify-center">
+        <div class="z-[500] flex justify-center my-[16px]">
+          <ProgressIndicator v-if="uiIsOpenCollectModal && isCollecting" />
           <ButtonV2
+            v-else
             preset="secondary"
-            class="my-[16px]"
             @click.stop.prevent="handleClickCollect"
           >
             <span>{{ NFTPrice || '-' }} $LIKE</span>
@@ -73,6 +74,8 @@
 
 <script>
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
+import alertMixin from '~/mixins/alert';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
@@ -81,22 +84,43 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin, alertMixin],
   props: {
     classId: {
       type: String,
       required: true,
     },
   },
+  data() {
+    return {
+      isCollecting: false,
+    };
+  },
   mounted() {
-    this.updateNFTClassMetdata();
+    this.updateNFTClassMetadata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
+    async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.handleClickCollect();
+        }
+        return;
+      }
+
+      try {
+        this.isCollecting = true;
+        this.updateUserCollectedCount(this.classId, this.getAddress);
+        await this.collectNFT();
+      } catch (error) {
+        // no need to handle error
+      } finally {
+        this.isCollecting = false;
+      }
     },
     handleClickViewDetails() {
       logTrackerEvent(
