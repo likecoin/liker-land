@@ -16,9 +16,7 @@
       <IconAttention class="mr-[12px]" />
       <slot name="icon" />
     </div>
-    <div class="whitespace-pre-line text-medium-gray">
-      {{ attentionText }}
-    </div>
+    <Label class="whitespace-pre-line text-medium-gray mt-[12px]" :text="attentionText" />
   </div>
 </template>
 
@@ -26,8 +24,8 @@
 export default {
   props: {
     attentionText: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: undefined,
     },
   },
 };

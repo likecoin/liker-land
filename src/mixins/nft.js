@@ -264,7 +264,7 @@ export default {
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
         }
       } catch (error) {
-        this.uiSetTxError(error.response?.data || error);
+        this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
         this.uiSetCollectedCount(this.userOwnedCount);
@@ -314,7 +314,7 @@ export default {
         await this.updateUserCollectedCount(this.classId, this.getAddress);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
-        this.uiSetTxError(error.response?.data || error);
+        this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
         this.uiSetCollectedCount(this.userOwnedCount);

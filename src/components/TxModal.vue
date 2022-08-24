@@ -75,7 +75,8 @@
         <AttentionSign :attention-text="attentionText">
           <template #icon>
             <IconLedger v-if="walletMethodType === 'keplr'" />
-            <IconLikerLandApp v-if="walletMethodType === 'liker-id'" :class="['w-[32px]', 'h-[32px]']" />
+            <IconLikerLandApp v-if="walletMethodType === 'liker-id'" />
+            <IconKeplrMobile v-if="walletMethodType === 'keplr-mobile'" />
           </template>
         </AttentionSign>
       </div>
