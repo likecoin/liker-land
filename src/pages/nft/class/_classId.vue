@@ -277,12 +277,18 @@ export default {
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
-        this.errorMsg = this.$t('nft_details_page_errormessage_transfer');
-      } else {
-        this.errorMsg = '';
-        this.toAddress = value;
-        this.isReadyToTransfer = true;
+        this.errorMsg = this.$t(
+          'nft_details_page_errormessage_transfer_invalid'
+        );
+        return;
       }
+      if (value === this.getAddress) {
+        this.errorMsg = this.$t('nft_details_page_errormessage_transfer_self');
+        return;
+      }
+      this.errorMsg = '';
+      this.toAddress = value;
+      this.isReadyToTransfer = true;
     },
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);

@@ -11,7 +11,7 @@
       <slot name="header-prepend" />
     </template>
 
-    <div v-if="!showConfirm || uiTxNFTStatus === 'completed'">
+    <div v-if="!showConfirm || uiTxNFTStatus === 'processing'">
       <!-- Main -->
 
       <slot name="default" />
