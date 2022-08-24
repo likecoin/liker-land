@@ -7,10 +7,12 @@
       'border-shade-gray',
       'border-[1px]',
       'rounded-[24px]',
-      'text-dark-gray text-left',
+      'text-dark-gray',
+      'text-left',
       'p-[12px]',
       'grid grid-cols-1',
       'divide-y',
+      'divide-shade-gray'
     ]"
   >
     <slot name="prepend" />
