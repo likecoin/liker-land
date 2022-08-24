@@ -215,7 +215,8 @@ export default {
   },
   data() {
     return {
-      userInfo: null,
+      wallet: undefined,
+      userInfo: undefined,
       ownedNFTClassId: [],
       sellingNFTClassId: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
@@ -253,7 +254,9 @@ export default {
       }
       if (id.startsWith('like1')) {
         try {
-          const userInfo = await $api.get(getAddressLikerIdMinApi(id));
+          const userInfo = await $api.get(getAddressLikerIdMinApi(id), {
+            validateStatus: code => code < 500 && code !== 400,
+          });
           return {
             userInfo: userInfo.data,
             wallet: id,
