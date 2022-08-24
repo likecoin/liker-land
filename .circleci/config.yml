@@ -91,6 +91,7 @@ jobs:
           command: |
             SENTRY_PUBLISH_RELEASE=TRUE \
             firebase deploy --project civic-liker
+          resource_class: medium+
 workflows:
   version: 2
   build_and_test:
