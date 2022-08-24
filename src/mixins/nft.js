@@ -13,6 +13,7 @@ import {
   sendGrant,
   getNFTCountByClassId,
 } from '~/util/nft';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 const TX_STATUS = {
   SIGN: 'sign',
@@ -227,12 +228,20 @@ export default {
         this.uiToggleCollectModal();
         this.uiSetCollectedCount(this.userOwnedCount);
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTCollect-insufficient',
+            this.getAddress,
+            1
+          );
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
           return;
         }
 
         this.uiSetTxStatus(TX_STATUS.SIGN);
+        logTrackerEvent(this, 'NFT', 'NFTCollect-sendGrant', this.classId, 1);
         const txHash = await sendGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
@@ -240,6 +249,13 @@ export default {
         });
 
         if (txHash && this.uiIsOpenCollectModal) {
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTCollect-postNFTPurchase',
+            this.classId,
+            1
+          );
           this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.$api.post(
             postNFTPurchase({ txHash, classId: this.classId })
@@ -262,12 +278,20 @@ export default {
         await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
         if (balance === '0') {
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTTransfer-insufficient',
+            this.getAddress,
+            1
+          );
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
           return;
         }
 
         this.uiSetTxStatus(TX_STATUS.SIGN);
+        logTrackerEvent(this, 'NFT', 'NFTTransfer-sendGrant', this.classId, 1);
         const txHash = await transferNFT({
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
@@ -277,6 +301,13 @@ export default {
         });
 
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTTransfer-postNFTTransfer',
+          this.classId,
+          1
+        );
         await this.$api.post(
           postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
         );

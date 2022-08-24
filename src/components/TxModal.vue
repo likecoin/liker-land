@@ -92,7 +92,7 @@
           preset="outline"
           class="text-danger border-danger"
           :text="$t('tx_modal_quitAlert_confirm')"
-          @click="$emit('close');showConfirm = false"
+          @click="handleCancel"
         >
           <template #prepend>
             <IconBin class="w-[20px]" />
@@ -101,7 +101,7 @@
         <ButtonV2
           preset="outline"
           :text="$t('tx_modal_quitAlert_continue')"
-          @click="showConfirm = false"
+          @click="handleContinue"
         />
       </div>
     </div>
@@ -114,6 +114,7 @@ import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 import { mapGetters } from 'vuex';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [nftMixin, walletMixin, alertMixin],
@@ -185,7 +186,14 @@ export default {
     formattedStatusText() {
       switch (this.uiTxNFTStatus) {
         case 'sign':
-          return this.$t('tx_modal_status_sign_text');
+          if (
+            this.walletMethodType === 'keplr' ||
+            this.walletMethodType === 'cosmostation'
+          ) {
+            return this.$t('tx_modal_status_sign_text');
+          }
+          return undefined;
+
         case 'processing':
           return this.$t('tx_modal_status_processing_text');
 
@@ -237,16 +245,27 @@ export default {
     onClick() {
       switch (this.uiTxNFTStatus) {
         case 'sign':
+          logTrackerEvent(this, 'NFT', 'ShowCancelModal', this.classId, 1);
           this.showConfirm = true;
           break;
         case 'insufficient':
         case 'failed':
         case 'completed':
         default:
+          logTrackerEvent(this, 'NFT', 'ClickModalClose', this.classId, 1);
           this.$emit('close');
           this.showConfirm = false;
           break;
       }
+    },
+    handleContinue() {
+      logTrackerEvent(this, 'NFT', 'ClickContinue', this.classId, 1);
+      this.showConfirm = false;
+    },
+    handleCancel() {
+      logTrackerEvent(this, 'NFT', 'Cancel', this.classId, 1);
+      this.$emit('close');
+      this.showConfirm = false;
     },
   },
 };
