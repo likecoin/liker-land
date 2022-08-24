@@ -596,6 +596,8 @@
   "RedirectPage": {
     "title": "重新轉向"
   },
+  "portfolio_title": "{name}'s Writing NFT",
+  "portfolio_description": "View {name}'s collection of Writing NFT.",
   "portfolio_finding_more_button": "Find more Writing NFT",
   "portfolio_collected_tab_no_item": "Collected NFT will be shown here",
   "PortfolioEmptyView.Works.Label": "暫未分享作品",
