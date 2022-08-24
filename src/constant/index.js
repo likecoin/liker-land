@@ -88,6 +88,7 @@ export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
       'likenft14tp0n69q8wwvyd6k6fv4cp4jd86r072at6pa2yesue22qtrsnxestryg89',
     ]
   : [
+      'likenft1s7xk7wt5q03lsa2a87fnqfc0uny28f46s4gtnakc08qdguxlua4qxrxk7m',
       'likenft1t5ftaxzyrnafewsav8qxvvsafs59a8xe2wnrl594yag04u9zwsjqrq0vgt',
       'likenft1f9dlnexdt6l4d8u2hh9ccm5g52q46sw2hllk4ntdhf7n6resg00s5hseuj',
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
