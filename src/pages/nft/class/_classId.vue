@@ -123,6 +123,7 @@
       :is-open="isOpenTransferModal"
       :has-close-button="!isTransferring"
       :header-text="$t('nft_details_page_title_transfer')"
+      :complete-text="$t('tx_modal_status_complete_text_transfer')"
       @close="isOpenTransferModal = false; isTransferring = false"
     >
       <template #header-prepend>

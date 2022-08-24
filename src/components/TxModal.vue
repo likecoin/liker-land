@@ -11,7 +11,7 @@
       <slot name="header-prepend" />
     </template>
 
-    <div v-if="!showConfirm">
+    <div v-if="!showConfirm || uiTxNFTStatus === 'completed'">
       <!-- Main -->
 
       <slot name="default" />
@@ -69,13 +69,19 @@
 
       <!-- Attention -->
       <div
-        v-if="uiTxNFTStatus === ('sign'||'processing')"
+        v-if="uiTxNFTStatus === 'sign' && attentionText"
         class="mt-[48px] border-0 border-dashed border-t-[2px] border-t-shade-gray"
       >
-        <AttentionsLedger v-if="walletMethodType === 'keplr'" />
-        <AttentionsOpenLikerLandApp v-if="walletMethodType === 'liker-id'" />
+        <AttentionSign :attention-text="attentionText">
+          <template #icon>
+            <IconLedger v-if="walletMethodType === 'keplr'" />
+            <IconLikerLandApp v-if="walletMethodType === 'liker-id'" :class="['w-[32px]', 'h-[32px]']" />
+          </template>
+        </AttentionSign>
       </div>
     </div>
+
+    <!-- Confirm -->
     <div v-else>
       <div
         v-t="'tx_modal_quitAlert_content'"
@@ -125,6 +131,10 @@ export default {
       type: String,
       default: undefined,
     },
+    completeText: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return { showConfirm: false };
@@ -148,36 +158,55 @@ export default {
     formattedStatusTitle() {
       switch (this.uiTxNFTStatus) {
         case 'sign':
-        case 'processing':
           switch (this.walletMethodType) {
             case 'keplr':
-              return this.$t('tx_modal_status_title_keplr');
+              return this.$t('tx_modal_status_sign_title_keplr');
 
             case 'keplr-mobile':
-              return this.$t('tx_modal_status_title_keplrMobile');
+              return this.$t('tx_modal_status_sign_title_keplrMobile');
 
             case 'cosmostation':
-              return this.$t('tx_modal_status_title_cosmostation');
+              return this.$t('tx_modal_status_sign_title_cosmostation');
 
             case 'liker-id':
-              return this.$t('tx_modal_status_title_likerId');
+              return this.$t('tx_modal_status_sign_title_likerId');
 
             default:
-              return this.$t('tx_modal_status_title_keplr');
+              return undefined;
           }
+        case 'processing':
+          return this.$t('tx_modal_status_processing_title');
         case 'completed':
-          return this.$t('tx_modal_status_title_complete');
+          return this.$t('tx_modal_status_complete_title');
         default:
           return undefined;
       }
     },
     formattedStatusText() {
       switch (this.uiTxNFTStatus) {
+        case 'sign':
+          return this.$t('tx_modal_status_sign_text');
         case 'processing':
-          return this.$t('tx_modal_status_text_processing');
+          return this.$t('tx_modal_status_processing_text');
 
         case 'completed':
-        case 'sign':
+          return this.completeText;
+        default:
+          return undefined;
+      }
+    },
+    attentionText() {
+      switch (this.walletMethodType) {
+        case 'keplr':
+          return this.$t('attention_ledger_not_support');
+
+        case 'keplr-mobile':
+          return this.$t('attention_keplrMobile_openApp');
+
+        case 'liker-id':
+          return this.$t('attention_likerland_openApp');
+
+        case 'cosmostation':
         default:
           return undefined;
       }
