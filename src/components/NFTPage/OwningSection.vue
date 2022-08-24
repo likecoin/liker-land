@@ -33,7 +33,7 @@
       </template>
       <template #append>
         <ProgressIndicator v-if="isTransferring" />
-        <ToolTips v-else :show-tool-tip="isTransferDisabled" :tool-tip-text="getToolTipsText">
+        <ToolTips v-else :show-tool-tip="!isLogIn" :tool-tip-text="$t('tooltip_signin')">
           <ButtonV2
             preset="secondary"
             class="-z-1"
@@ -71,17 +71,6 @@ export default {
     isTransferring: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    getToolTipsText() {
-      if (this.isLogIn && !this.ownedCount) {
-        return this.$t('tooltip_no_nft');
-      }
-      if (!this.isLogIn) {
-        return this.$t('tooltip_signin');
-      }
-      return undefined;
     },
   },
   methods: {
