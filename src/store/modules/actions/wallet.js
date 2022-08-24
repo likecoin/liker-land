@@ -10,6 +10,7 @@ export async function initWallet(
 ) {
   if (!accounts[0]) return false;
   commit(types.WALLET_SET_METHOD_TYPE, method);
+  commit(types.WALLET_SET_LIKERINFO, null);
   const { address, bech32Address } = accounts[0];
   const walletAddress = bech32Address || address;
   commit(types.WALLET_SET_ADDRESS, walletAddress);
