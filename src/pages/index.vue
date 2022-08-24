@@ -1,23 +1,13 @@
 <template>
-  <div class="about-page bg-gray-f7">
-    <main class="page-content text-gray-4a">
-      <AboutNFTPage />
-    </main>
-    <Footer />
-  </div>
+  <main class="page-content text-gray-4a">
+    <AboutNFTPage />
+  </main>
 </template>
 
 <script>
-import AboutNFTPage from '../components/AboutNFTPage';
-import Footer from '../components/Footer';
-
 export default {
-  name: 'AboutPage',
+  name: 'HomePage',
   layout: 'default',
-  components: {
-    AboutNFTPage,
-    Footer,
-  },
   head() {
     const title = this.$t('about_nft_page_title');
     const description = this.$t('about_nft_page_description');

@@ -56,8 +56,10 @@
               :display-name="displayNameList[iscnOwner]"
               :nft-name="NFTName"
               :nft-description="NFTDescription"
+              :nft-price="NFTPrice"
               :nft-external-url="NFTExternalUrl"
               :iscn-url="iscnURL"
+              @collect="handleCollectFromPreviewSection"
             />
             <NFTPageCollectorList
               class="laptop:ml-[12px] mb-[16px] desktop:m-0"
@@ -71,7 +73,7 @@
               preset="outline"
               class="my-[16px]"
               :href="iscnURL"
-              text="Metadata"
+              :text="$t('nft_details_page_button_metadata')"
             >
               <template #prepend>
                 <IconCode />
@@ -89,7 +91,7 @@
               class="mr-[16px]"
               :owned-count="userOwnedCount"
               :is-transfer-disabled="!getAddress || !userOwnedCount"
-              :is-loading="isLoading"
+              :is-loading="isOwnerInfoLoading"
               :is-log-in="!!getAddress"
               :is-transferring="isTransferring"
               @openTransfer="onToggleTransfer"
@@ -157,6 +159,7 @@ import { getLIKEPrice } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { copyToClipboard } from '~/util/ui';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
+
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
@@ -298,6 +301,16 @@ export default {
       } finally {
         this.isCollecting = false;
       }
+    },
+    handleCollectFromPreviewSection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(DetailsPagePreviewSection)',
+        this.classId,
+        1
+      );
+      this.handleCollect();
     },
     handleCollectFromPriceSection() {
       logTrackerEvent(

@@ -2,6 +2,7 @@
   <div class="page-layout page-layout--default">
     <SiteHeader class="w-full text-like-green" />
     <nuxt class="page-wrapper" />
+    <Footer />
     <PortalTarget
       name="dialog"
       multiple

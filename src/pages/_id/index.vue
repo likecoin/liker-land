@@ -109,7 +109,10 @@
               <div class="w-full pb-[32px] bg-shade-gray border-t-[1px] border-white">
                 <div class="flex flex-col justify-center items-center mt-[-21px]">
                   <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
-                  <Label class="text-medium-gray mt-[12px]" text="no creation" />
+                  <Label
+                    class="text-medium-gray mt-[12px]"
+                    :text="$t('portfolio_collected_tab_no_item')"
+                  />
                 </div>
               </div>
             </NFTPortfolioCard>
