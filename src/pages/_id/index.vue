@@ -26,20 +26,19 @@
       >
         <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
           <Identity
-            :avatar-url="userInfo && userInfo.avatar || `https://avatars.dicebear.com/api/identicon/${wallet}.svg`"
+            :avatar-url="userAvatar || `https://avatars.dicebear.com/api/identicon/${wallet}.svg`"
             :avatar-size="88"
-            :is-avatar-outlined="isCivicLiker"
+            :is-avatar-outlined="isUserCivicLiker"
           />
           <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-            {{ getCivicLikerId | ellipsis }}
+            {{ userDisplayName | ellipsis }}
           </Label>
-          <div
-            v-if="getCivicLikerDescription"
-            :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']"
-          />
-          <Label preset="p6" class="break-all font-200">
-            {{ getCivicLikerDescription }}
-          </Label>
+          <template v-if="userDescription">
+            <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
+            <Label preset="p6" class="break-all font-200">
+              {{ userDescription }}
+            </Label>
+          </template>
         </CardV2>
       </div>
       <div
@@ -183,9 +182,9 @@ export default {
   },
   mixins: [walletMixin, alertMixin],
   head() {
-    const title = this.$t('portfolio_title', { name: this.getCivicLikerId });
+    const title = this.$t('portfolio_title', { name: this.userDisplayName });
     const description = this.$t('portfolio_description', {
-      name: this.getCivicLikerId,
+      name: this.userDisplayName,
     });
     return {
       title,
@@ -209,8 +208,8 @@ export default {
           hid: 'og:image',
           property: 'og:image',
           content:
-            (this.userInfo && this.userInfo.avatar) ||
-            `https://avatars.dicebear.com/api/identicon/${this.wallet}.svg`,
+            this.userAvatar ||
+            `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`,
         },
       ],
     };
@@ -230,18 +229,21 @@ export default {
     };
   },
   computed: {
-    isCivicLiker() {
+    isUserCivicLiker() {
       return !!(
         this.userInfo &&
         (this.userInfo.isCivicLikerTrial ||
           this.userInfo.isSubscribedCivicLiker)
       );
     },
-    getCivicLikerId() {
+    userDisplayName() {
       return (this.userInfo && this.userInfo.displayName) || this.wallet;
     },
-    getCivicLikerDescription() {
+    userDescription() {
       return this.userInfo && this.userInfo.description;
+    },
+    userAvatar() {
+      return this.userInfo && this.userInfo.avatar;
     },
   },
   async asyncData({ route, $api, error }) {
