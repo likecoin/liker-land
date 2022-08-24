@@ -104,7 +104,7 @@
             :nft-price-u-s-d="NFTPriceUSD"
             :collected-count="mintedCount"
             :collector-count="ownerCount"
-            :is-loading="isCollecting"
+            :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="handleCollectFromPriceSection"
           />
           <NFTPageSupplySection
