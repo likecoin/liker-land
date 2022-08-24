@@ -182,6 +182,39 @@ export default {
     ellipsis,
   },
   mixins: [walletMixin, alertMixin],
+  head() {
+    const title = this.$t('portfolio_title', { name: this.getCivicLikerId });
+    const description = this.$t('portfolio_description', {
+      name: this.getCivicLikerId,
+    });
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content:
+            (this.userInfo && this.userInfo.avatar) ||
+            `https://avatars.dicebear.com/api/identicon/${this.wallet}.svg`,
+        },
+      ],
+    };
+  },
   data() {
     return {
       userInfo: null,
