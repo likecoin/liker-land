@@ -9,7 +9,7 @@
   </component>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   props: {
@@ -45,6 +45,23 @@ export default {
       return this.createdClassIds.reduce(
         (total, classId) => total + (this.getNFTClassMintedCount(classId) || 0),
         0
+      );
+    },
+    collectedClassIds() {
+      const classIdSet = new Set(this.collectedItems.map(n => n.classId));
+      return Array.from(classIdSet);
+    },
+  },
+  watch: {
+    collectedClassIds() {
+      this.lazyGetAllCollectedPurchaseInfo();
+    },
+  },
+  methods: {
+    ...mapActions(['lazyGetNFTPurchaseInfo']),
+    lazyGetAllCollectedPurchaseInfo() {
+      this.collectedClassIds.forEach(classId =>
+        this.lazyGetNFTPurchaseInfo(classId)
       );
     },
   },

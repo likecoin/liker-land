@@ -9,7 +9,7 @@
       {{ likerDescription }}
     </Label>
     <div :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
-    <NFTPortfolioState 
+    <NFTPortfolioStat 
       :collected-items="collectedItems"
       :created-class-ids="createdClassIds"
     >
@@ -19,7 +19,7 @@
         <Label preset="p6" class="font-200">Creations: {{ stats.createdCount }}</Label>
         <Label preset="p6" class="font-200">Minted: {{ stats.createdCollectedCount }}</Label>
       </template>
-    </NFTPortfolioState>
+    </NFTPortfolioStat>
   </CardV2>
 </template>
 <script>

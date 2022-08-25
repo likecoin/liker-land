@@ -36,6 +36,14 @@ export async function fetchNFTPurchaseInfo({ commit }, classId) {
   return info;
 }
 
+export async function lazyGetNFTPurchaseInfo({ commit, getters }, classId) {
+  let info = getters.getNFTClassPurchaseInfoById(classId);
+  if (!info) {
+    info = await fetchNFTPurchaseInfo.call(this, { commit }, classId);
+  }
+  return info;
+}
+
 export async function fetchNFTMetadata({ commit }, classId) {
   let metadata;
   const [apiMetadata = {}, chainMetadata = {}] = await Promise.all([
