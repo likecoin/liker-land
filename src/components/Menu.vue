@@ -2,7 +2,7 @@
   <div
     :class="[
       'min-w-[150px]',
-      'w-auto',
+      'w-max',
       'bg-white',
       'border-shade-gray',
       'border-[1px]',
@@ -30,8 +30,11 @@
       ]"
       @click="handleSelectItem(item.value)"
     >
-      <Label class="py-[16px]">
-        <template #prepend>
+      <Label
+        class="py-[16px]"
+        :align="isShowIcon ? 'left' : 'center'"
+      >
+        <template v-if="isShowIcon" #prepend>
           <MenuIcon :type="item.value" />
         </template>
         <span>{{ item.name }}</span>
@@ -50,6 +53,9 @@ export default class Menu extends Vue {
 
   @Prop(String)
   readonly selectedValue: string | undefined;
+
+  @Prop({ default: false })
+  readonly isShowIcon!: boolean;
 
   handleSelectItem(value: string) {
     this.$emit('select', value);

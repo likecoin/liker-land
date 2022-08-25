@@ -72,6 +72,7 @@
         </template>
         <Menu
           :items="mainMenuItems"
+          :is-show-icon="true"
           @select="handleSelectMenuItem"
         >
           <template
@@ -135,16 +136,16 @@ export default {
     },
     mainMenuItems() {
       const options = [
-        { value: 'profile', name: 'Profile' },
-        { value: 'civic', name: 'Civic Liker' },
+        { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
+        { value: 'civic', name: this.$t('main_menu_civic_liker') },
       ];
 
       if (this.getUserId) {
-        options.push({ value: 'setting', name: 'Setting' });
+        options.push({ value: 'setting', name: this.$t('main_menu_settings') });
       }
 
       if (this.getAddress) {
-        options.push({ value: 'signOut', name: 'Sign Out' });
+        options.push({ value: 'signOut', name: this.$t('main_menu_sign_out') });
       }
 
       return options;
@@ -161,8 +162,8 @@ export default {
     },
     async handleSelectMenuItem(value) {
       switch (value) {
-        case 'profile': {
-          await this.navigateToWalletDashboard();
+        case 'dashboard': {
+          await this.navigateToMyDashboard();
           break;
         }
 

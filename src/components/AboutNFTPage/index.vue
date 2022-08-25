@@ -198,7 +198,7 @@ export default {
     },
     handleClickMyPageButton() {
       logTrackerEvent(this, 'NFT', 'NFTGoToMyPage', 'NFTGoToMyPage', 1);
-      this.navigateToWalletDashboard();
+      this.navigateToMyDashboard();
     },
   },
 };

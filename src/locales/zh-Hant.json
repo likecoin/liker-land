@@ -569,8 +569,10 @@
       }
     }
   },
-  "main_menu_app": "App",
-  "menu_about_nft": "Writing NFT",
+  "main_menu_my_dashboard": "My Dashboard",
+  "main_menu_civic_liker": "Civic Liker",
+  "main_menu_settings": "Settings",
+  "main_menu_sign_out": "Sign Out",
   "OtherPaymentInfo": {
     "title": "如何以 PayMe 或 轉數快繳付《讚賞公民》年費",
     "heading": "香港用戶限定：以信用卡或 PayPal 以外的方法繳費。",
