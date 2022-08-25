@@ -33,7 +33,7 @@
             <IconEllipse />
             <IconEllipse />
           </div>
-          <NFTPortfolioStat
+          <NFTPortfolioUserStats
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
             :collected-items="ownedNFTs"
             :created-class-ids="sellingNFTClassIds"
@@ -72,7 +72,7 @@
                 </Label>
               </ToolTips>
             </template>
-          </NFTPortfolioStat>
+          </NFTPortfolioUserStats>
         </NFTPortfolioUserInfo>
       </div>
       <div
