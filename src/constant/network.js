@@ -23,6 +23,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
   bech32PrefixValPub: 'likevaloperpub',
   bech32PrefixConsAddr: 'likevalcons',
   bech32PrefixConsPub: 'likevalconspub',
+  availableMethods: ['keplr', 'cosmostation', 'liker-id'],
 };
 
 export default LIKECOIN_WALLET_CONNECTOR_CONFIG;
