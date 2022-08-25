@@ -29,12 +29,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['connectWallet', 'disconnectWallet', 'initIfNecessary']),
-    async navigateToWalletDashboard() {
+    ...mapActions([
+      'connectWallet',
+      'disconnectWallet',
+      'initIfNecessary',
+      'restoreSession',
+    ]),
+    async navigateToMyDashboard() {
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
         if (isConnected) {
-          this.navigateToWalletDashboard();
+          this.navigateToMyDashboard();
         }
       } else {
         this.$router.push({

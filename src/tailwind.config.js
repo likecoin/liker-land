@@ -385,6 +385,7 @@ module.exports = {
     width: {
       auto: 'auto',
       px: '1px',
+      max: 'max-content',
       '2': '0.125rem',
       '4': '0.25rem',
       '8': '0.5rem',

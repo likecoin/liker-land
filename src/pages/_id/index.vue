@@ -40,31 +40,35 @@
           >
             <template v-slot="stats">
               <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collections')">
-                <Label preset="p6" class="font-200" :text="stats.collectedCount">
+                <Label preset="p6" class="font-200">
                   <template #prepend>
                     <IconMint />
                   </template>
+                  {{ stats.collectedCount }}
                 </Label>
               </ToolTips>
               <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_value')">
-                <Label preset="p6" class="font-200" :text="stats.collectedAmount">
+                <Label preset="p6" class="font-200">
                   <template #prepend>
                     <IconPriceMini />
                   </template>
+                  {{ stats.collectedAmount }}
                 </Label>
               </ToolTips>
               <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_creations')">
-                <Label preset="p6" class="font-200" :text="stats.createdCount">
+                <Label preset="p6" class="font-200">
                   <template #prepend>
                     <IconFlare />
                   </template>
+                  {{ stats.createdCount }}
                 </Label>
               </ToolTips>
               <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
-                <Label preset="p6" class="font-200" :text="stats.createdCollectedCount">
+                <Label preset="p6" class="font-200">
                   <template #prepend>
                     <IconPersonMini />
                   </template>
+                  {{ stats.createdCollectedCount }}
                 </Label>
               </ToolTips>
             </template>
@@ -81,31 +85,32 @@
           'desktop:w-[636px]',
         ]"
       >
-        <div
-          :class="[
-            'flex',
-            'flex-shrink',
-            'justify-center',
-            'items-center',
-            'p-[4px]',
-            'mx-auto',
-            'mb-[48px]',
-            'bg-shade-gray',
-            'rounded-[14px]',
-          ]"
-        >
-          <MenuButton
-            text="Collected"
-            :is-selected="currentTab === 'collected'"
-            @click="goCollected"
-          />
-          <MenuButtonDivider v-if="sellingNFTClassIds.length" />
-          <MenuButton
-            v-if="isLoading || sellingNFTClassIds.length"
-            text="Created"
-            :is-selected="currentTab === 'created'"
-            @click="goCreated"
-          />
+        <div :class="['flex','items-center','mb-[48px]','w-full']">
+          <div
+            :class="[
+              'flex',
+              'justify-center',
+              'items-center',
+              'p-[4px]',
+              'mx-auto',
+              'bg-shade-gray',
+              'rounded-[14px]',
+            ]"
+          >
+            <MenuButton
+              text="Collected"
+              :is-selected="currentTab === 'collected'"
+              @click="goCollected"
+            />
+            <MenuButtonDivider v-if="sellingNFTClassIds.length" />
+            <MenuButton
+              v-if="isLoading || sellingNFTClassIds.length"
+              text="Created"
+              :is-selected="currentTab === 'created'"
+              @click="goCreated"
+            />
+          </div>
+          <ShareButton @copy="handleCopyURL" />
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
@@ -137,7 +142,10 @@
               <div class="w-full pb-[32px] bg-shade-gray border-t-[1px] border-white">
                 <div class="flex flex-col justify-center items-center mt-[-21px]">
                   <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
-                  <Label class="text-medium-gray mt-[12px]" text="no creation" />
+                  <Label
+                    class="text-medium-gray mt-[12px]"
+                    :text="$t('portfolio_collected_tab_no_item')"
+                  />
                 </div>
               </div>
             </NFTPortfolioCard>
@@ -188,10 +196,12 @@ import {
 } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { getNFTs } from '~/util/nft';
-import { ellipsis } from '~/util/ui';
+import { ellipsis, copyToClipboard } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTPortfolioPage',
@@ -199,9 +209,43 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin],
+  mixins: [walletMixin, alertMixin],
+  head() {
+    const name = ellipsis(this.userDisplayName);
+    const title = this.$t('portfolio_title', { name });
+    const description = this.$t('portfolio_description', { name });
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content:
+            this.userAvatar ||
+            `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`,
+        },
+      ],
+    };
+  },
   data() {
     return {
+      wallet: undefined,
+      userInfo: undefined,
       ownedNFTs: [],
       sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
@@ -227,7 +271,9 @@ export default {
       }
       if (id.startsWith('like1')) {
         try {
-          const userInfo = await $api.get(getAddressLikerIdMinApi(id));
+          const userInfo = await $api.get(getAddressLikerIdMinApi(id), {
+            validateStatus: code => code < 500 && code !== 400,
+          });
           return {
             userInfo: userInfo.data,
             wallet: id,
@@ -281,6 +327,16 @@ export default {
     },
     goCreated() {
       this.currentTab = 'created';
+    },
+    handleCopyURL() {
+      const host = `${window.location.protocol}//${window.location.host}`;
+      const { path } = this.$route;
+      const url = `${host}${path}`;
+      copyToClipboard(url);
+
+      logTrackerEvent(this, 'SharePortFolio', 'CopyShareURL', url, 1);
+
+      this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
   },
 };

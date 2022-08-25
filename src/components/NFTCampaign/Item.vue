@@ -12,7 +12,7 @@
     :owner-count="ownerCount"
     :owner-name="iscnOwnerDisplayName"
     :sold-count="mintedCount"
-    :is-loading="isCollecting"
+    :is-loading="uiIsOpenCollectModal && isCollecting"
     :view-details-label="$t('campaign_nft_item_view_details_label')"
     :like-action-label="$t('campaign_nft_item_like_action_label')"
     :sold-count-label="$t('campaign_nft_item_collected_count_label')"
@@ -34,11 +34,11 @@
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import errorMixin from '~/mixins/error';
+import alertMixin from '~/mixins/alert';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  mixins: [nftMixin, walletMixin, errorMixin],
+  mixins: [nftMixin, walletMixin, alertMixin],
   props: {
     classId: {
       type: String,
@@ -51,14 +51,29 @@ export default {
     };
   },
   mounted() {
-    this.updateNFTClassMetdata();
+    this.updateNFTClassMetadata();
     this.updateNFTPurchaseInfo();
     this.updateNFTOwners();
   },
   methods: {
-    handleClickCollect() {
+    async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
-      this.collectNFT();
+      if (!this.getAddress) {
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.handleClickCollect();
+        }
+        return;
+      }
+      try {
+        this.isCollecting = true;
+        this.updateUserCollectedCount(this.classId, this.getAddress);
+        await this.collectNFT();
+      } catch (error) {
+        // no need to handle error
+      } finally {
+        this.isCollecting = false;
+      }
     },
     handleLike() {
       logTrackerEvent(this, 'NFT', 'NFTLike(Campaign)', this.classId, 1);

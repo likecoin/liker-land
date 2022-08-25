@@ -7,7 +7,21 @@ import {
   postNFTTransfer,
   getAddressLikerIdMinApi,
 } from '~/util/api';
-import { getAccountBalance, transferNFT, sendGrant } from '~/util/nft';
+import {
+  getAccountBalance,
+  transferNFT,
+  sendGrant,
+  getNFTCountByClassId,
+} from '~/util/nft';
+import { logTrackerEvent } from '~/util/EventLogger';
+
+const TX_STATUS = {
+  SIGN: 'sign',
+  PROCESSING: 'processing',
+  COMPLETED: 'completed',
+  INSUFFICIENT: 'insufficient',
+  FAILED: 'failed',
+};
 
 export default {
   data() {
@@ -17,6 +31,8 @@ export default {
       displayNameList: {},
       avatarList: {},
       civicLikerList: {},
+
+      userOwnedCount: -1,
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
@@ -30,6 +46,7 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
       'getAddress',
+      'uiIsOpenCollectModal',
     ]),
     isCivicLiker() {
       return !!(
@@ -112,7 +129,7 @@ export default {
         ...event,
         toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
         fromDisplayName:
-          this.displayNameList[event.fromWallet] || event.toWafromWalletllet,
+          this.displayNameList[event.fromWallet] || event.fromWallet,
       }));
     },
     populatedCollectors() {
@@ -132,8 +149,13 @@ export default {
       'fetchNFTPurchaseInfo',
       'fetchNFTMetadata',
       'fetchNFTOwners',
+      'initIfNecessary',
+      'uiToggleCollectModal',
+      'uiSetCollectedCount',
+      'uiSetTxStatus',
+      'uiSetTxError',
     ]),
-    async updateNFTClassMetdata() {
+    async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
       this.updateDisplayNameList(
         this.getNFTClassMetadataById(this.classId)?.iscn_owner
@@ -189,17 +211,107 @@ export default {
         );
       }
     },
-    collectNFT() {
-      window.open(
-        this.purchaseURL,
-        `collect_${this.classId}`,
-        'popup=1,width=768,height=576,top=0,left=0'
-      );
+    async updateUserCollectedCount(classId, address) {
+      if (!address) {
+        this.userOwnedCount = null;
+        return;
+      }
+      this.isOwnerInfoLoading = true;
+      const { amount } = await getNFTCountByClassId(classId, address);
+      this.userOwnedCount = amount.low;
+      this.uiSetCollectedCount(this.userOwnedCount);
+      this.isOwnerInfoLoading = false;
+    },
+    async collectNFT() {
+      try {
+        await this.initIfNecessary();
+        const balance = await getAccountBalance(this.getAddress);
+        this.uiToggleCollectModal();
+        this.uiSetCollectedCount(this.userOwnedCount);
+        if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTCollectErrorNoBalance',
+            this.getAddress,
+            1
+          );
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetTxStatus(TX_STATUS.SIGN);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectSendGrantRequested',
+          this.classId,
+          1
+        );
+        const txHash = await sendGrant({
+          senderAddress: this.getAddress,
+          amountInLIKE: this.purchaseInfo.totalPrice,
+          signer: this.getSigner,
+        });
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectSendGrantApproved',
+          this.classId,
+          1
+        );
+        if (txHash && this.uiIsOpenCollectModal) {
+          logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
+          this.uiSetTxStatus(TX_STATUS.PROCESSING);
+          await this.$api.post(
+            postNFTPurchase({ txHash, classId: this.classId })
+          );
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTCollectPurchaseCompleted',
+            this.classId,
+            1
+          );
+          await this.updateUserCollectedCount(this.classId, this.getAddress);
+          this.uiSetTxStatus(TX_STATUS.COMPLETED);
+        }
+      } catch (error) {
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
+      } finally {
+        this.uiSetCollectedCount(this.userOwnedCount);
+        this.updateNFTOwners();
+        this.updateNFTPurchaseInfo();
+        this.updateNFTHistory();
+      }
     },
     async transferNFT() {
       try {
+        await this.initIfNecessary();
         const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') throw new Error('INSUFFICIENT_BALANCE');
+        if (balance === '0') {
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTTransferErrorNoBalance',
+            this.getAddress,
+            1
+          );
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetTxStatus(TX_STATUS.SIGN);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTTransferSendRequested',
+          this.classId,
+          1
+        );
         const txHash = await transferNFT({
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
@@ -207,15 +319,41 @@ export default {
           nftId: this.firstOwnedNFTId,
           signer: this.getSigner,
         });
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTTransferSendApproved',
+          this.classId,
+          1
+        );
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTTransferPostTransfer',
+          this.classId,
+          1
+        );
         await this.$api.post(
           postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
         );
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTTransferPostTransferCompleted',
+          this.classId,
+          1
+        );
+        await this.updateUserCollectedCount(this.classId, this.getAddress);
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
-        throw error;
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.updateUserOwnedCount(this.getAddress);
+        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTHistory();
+        this.updateUserCollectedCount(this.classId, this.getAddress);
       }
     },
   },

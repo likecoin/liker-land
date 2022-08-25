@@ -4,6 +4,7 @@ jobs:
     working_directory: ~/liker-land
     docker:
       - image: node:14
+    resource_class: medium+
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +20,6 @@ jobs:
       - run:
           name: Build
           command: npm --prefix src run build
-          resource_class: medium+
       - run:
           name: Server Test
           command: npm --prefix src start
@@ -41,6 +41,7 @@ jobs:
     working_directory: ~/liker-land
     docker:
       - image: node:14
+    resource_class: medium+
     steps:
       - checkout
       - run:
@@ -74,6 +75,7 @@ jobs:
     working_directory: ~/liker-land
     docker:
       - image: node:14
+    resource_class: medium+
     steps:
       - checkout
       - run:
