@@ -36,10 +36,10 @@ export async function fetchNFTPurchaseInfo({ commit }, classId) {
   return info;
 }
 
-export async function lazyGetNFTPurchaseInfo({ commit, getters }, classId) {
+export async function lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
   let info = getters.getNFTClassPurchaseInfoById(classId);
   if (!info) {
-    info = await fetchNFTPurchaseInfo.call(this, { commit }, classId);
+    info = await dispatch('fetchNFTPurchaseInfo', classId);
   }
   return info;
 }
