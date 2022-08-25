@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
-    <slot 
-      :collected-count="collectedCount" 
+    <slot
+      :collected-count="collectedCount"
       :collected-amount="collectedAmount"
       :created-count="createdCount"
       :created-collected-count="createdCollectedCount"
