@@ -105,6 +105,7 @@
             <MenuButtonDivider v-if="sellingNFTClassIds.length" />
             <MenuButton
               v-if="isLoading || sellingNFTClassIds.length"
+
               text="Created"
               :is-selected="currentTab === 'created'"
               @click="goCreated"
@@ -203,6 +204,8 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 
+import Identity from '~/components/Identity/Identity';
+
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
@@ -261,6 +264,9 @@ export default {
     ownedNFTClassIds() {
       const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
       return Array.from(classIdSet);
+    },
+    userAvatar() {
+      return this.userInfo && this.userInfo.avatar;
     },
   },
   async asyncData({ route, $api, error }) {
