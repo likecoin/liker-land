@@ -68,7 +68,7 @@
                   <template #prepend>
                     <IconPersonMini />
                   </template>
-                  {{ stats.createdCollectedCount }}
+                  {{ stats.createdCollectorCount }}
                 </Label>
               </ToolTips>
             </template>

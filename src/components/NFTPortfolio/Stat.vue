@@ -4,7 +4,7 @@
       :collected-count="collectedCount" 
       :collected-amount="collectedAmount"
       :created-count="createdCount"
-      :created-collected-count="createdCollectedCount"
+      :created-collector-count="createdCollectorCount"
     />
   </component>
 </template>
@@ -27,7 +27,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getNFTClassPurchaseInfoById', 'getNFTClassMintedCount']),
+    ...mapGetters(['getNFTClassPurchaseInfoById', 'getNFTClassOwnerInfoById']),
     collectedCount() {
       return this.collectedItems.length;
     },
@@ -41,25 +41,33 @@ export default {
     createdCount() {
       return this.createdClassIds.length;
     },
-    createdCollectedCount() {
-      return this.createdClassIds.reduce(
-        (total, classId) => total + (this.getNFTClassMintedCount(classId) || 0),
-        0
-      );
+    createdCollectorCount() {
+      const ownerSet = new Set();
+      this.createdClassIds.forEach(classId => {
+        const ownerInfo = this.getNFTClassOwnerInfoById(classId);
+        if (ownerInfo) {
+          Object.keys(ownerInfo).forEach(owner => ownerSet.add(owner));
+        }
+      });
+      return ownerSet.size;
     },
   },
   watch: {
     collectedItems() {
       this.lazyGetAllCollectedPurchaseInfo();
     },
+    createdClassIds() {
+      this.lazyGetAllCreatedOwners();
+    },
   },
   methods: {
-    ...mapActions(['lazyGetNFTPurchaseInfo']),
+    ...mapActions(['lazyGetNFTPurchaseInfo', 'lazyGetNFTOwners']),
     lazyGetAllCollectedPurchaseInfo() {
       const classIdSet = new Set(this.collectedItems.map(n => n.classId));
-      classIdSet.forEach(classId =>
-        this.lazyGetNFTPurchaseInfo(classId)
-      );
+      classIdSet.forEach(classId => this.lazyGetNFTPurchaseInfo(classId));
+    },
+    lazyGetAllCreatedOwners() {
+      this.createdClassIds.forEach(classId => this.lazyGetNFTOwners(classId));
     },
   },
 };

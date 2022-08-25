@@ -69,3 +69,11 @@ export async function fetchNFTOwners({ commit }, classId) {
   commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
 }
+
+export async function lazyGetNFTOwners({ getters, dispatch }, classId) {
+  let owners = getters.getNFTClassOwnerInfoById(classId);
+  if (!owners) {
+    owners = await dispatch('fetchNFTOwners', classId);
+  }
+  return owners;
+}
