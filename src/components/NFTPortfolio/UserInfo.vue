@@ -4,10 +4,12 @@
     <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
       {{ userDisplayName | ellipsis }}
     </Label>
-    <div v-if="userDescription" :class="['w-full', 'h-[1px]', 'bg-shade-gray', 'my-[16px]']" />
-    <Label preset="p6" class="break-all font-200 my-[28px]">
-      {{ userDescription }}
-    </Label>
+    <template v-if="userDescription">
+      <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
+      <Label preset="p6" class="break-all font-200 my-[12px]">
+        {{ userDescription }}
+      </Label>
+    </template>
     <slot />
   </CardV2>
 </template>

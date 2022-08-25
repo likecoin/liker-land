@@ -28,7 +28,7 @@
           :user-info="userInfo"
           :wallet="wallet"
         >
-          <div class="flex justify-between w-[44px] mx-auto mb-[16px] text-shade-gray">
+          <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
             <IconEllipse />
             <IconEllipse />
             <IconEllipse />
