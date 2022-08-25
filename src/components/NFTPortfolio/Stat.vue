@@ -47,20 +47,17 @@ export default {
         0
       );
     },
-    collectedClassIds() {
-      const classIdSet = new Set(this.collectedItems.map(n => n.classId));
-      return Array.from(classIdSet);
-    },
   },
   watch: {
-    collectedClassIds() {
+    collectedItems() {
       this.lazyGetAllCollectedPurchaseInfo();
     },
   },
   methods: {
     ...mapActions(['lazyGetNFTPurchaseInfo']),
     lazyGetAllCollectedPurchaseInfo() {
-      this.collectedClassIds.forEach(classId =>
+      const classIdSet = new Set(this.collectedItems.map(n => n.classId));
+      classIdSet.forEach(classId =>
         this.lazyGetNFTPurchaseInfo(classId)
       );
     },
