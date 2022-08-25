@@ -35,11 +35,11 @@ export default {
       'initIfNecessary',
       'restoreSession',
     ]),
-    async navigateToWalletDashboard() {
+    async navigateToMyDashboard() {
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
         if (isConnected) {
-          this.navigateToWalletDashboard();
+          this.navigateToMyDashboard();
         }
       } else {
         this.$router.push({
