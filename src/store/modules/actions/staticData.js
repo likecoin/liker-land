@@ -36,6 +36,14 @@ export async function fetchNFTPurchaseInfo({ commit }, classId) {
   return info;
 }
 
+export async function lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
+  let info = getters.getNFTClassPurchaseInfoById(classId);
+  if (!info) {
+    info = await dispatch('fetchNFTPurchaseInfo', classId);
+  }
+  return info;
+}
+
 export async function fetchNFTMetadata({ commit }, classId) {
   let metadata;
   const [apiMetadata = {}, chainMetadata = {}] = await Promise.all([
@@ -60,4 +68,12 @@ export async function fetchNFTOwners({ commit }, classId) {
   const info = await this.$api.$get(api.getNFTOwners({ classId }));
   commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
+}
+
+export async function lazyGetNFTOwners({ getters, dispatch }, classId) {
+  let owners = getters.getNFTClassOwnerInfoById(classId);
+  if (!owners) {
+    owners = await dispatch('fetchNFTOwners', classId);
+  }
+  return owners;
 }

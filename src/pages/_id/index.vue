@@ -24,22 +24,56 @@
           'desktop:w-[280px]',
         ]"
       >
-        <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
-          <Identity
-            :avatar-url="userAvatar || `https://avatars.dicebear.com/api/identicon/${wallet}.svg`"
-            :avatar-size="88"
-            :is-avatar-outlined="isUserCivicLiker"
-          />
-          <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-            {{ userDisplayName | ellipsis }}
-          </Label>
-          <template v-if="userDescription">
-            <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
-            <Label preset="p6" class="break-all font-200">
-              {{ userDescription }}
-            </Label>
-          </template>
-        </CardV2>
+        <NFTPortfolioUserInfo
+          :user-info="userInfo"
+          :wallet="wallet"
+        >
+          <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
+            <IconEllipse />
+            <IconEllipse />
+            <IconEllipse />
+          </div>
+          <NFTPortfolioUserStats
+            class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
+            :collected-items="ownedNFTs"
+            :created-class-ids="sellingNFTClassIds"
+          >
+            <template v-slot="stats">
+              <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collections')">
+                <Label preset="p6" class="font-200">
+                  <template #prepend>
+                    <IconMint />
+                  </template>
+                  {{ stats.collectedCount }}
+                </Label>
+              </ToolTips>
+              <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_value')">
+                <Label preset="p6" class="font-200">
+                  <template #prepend>
+                    <IconPriceMini />
+                  </template>
+                  {{ stats.collectedAmount }}
+                </Label>
+              </ToolTips>
+              <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_creations')">
+                <Label preset="p6" class="font-200">
+                  <template #prepend>
+                    <IconFlare />
+                  </template>
+                  {{ stats.createdCount }}
+                </Label>
+              </ToolTips>
+              <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
+                <Label preset="p6" class="font-200">
+                  <template #prepend>
+                    <IconPersonMini />
+                  </template>
+                  {{ stats.createdCollectorCount }}
+                </Label>
+              </ToolTips>
+            </template>
+          </NFTPortfolioUserStats>
+        </NFTPortfolioUserInfo>
       </div>
       <div
         :class="[
@@ -68,9 +102,9 @@
               :is-selected="currentTab === 'collected'"
               @click="goCollected"
             />
-            <MenuButtonDivider v-if="sellingNFTClassId.length" />
+            <MenuButtonDivider v-if="sellingNFTClassIds.length" />
             <MenuButton
-              v-if="isLoading || sellingNFTClassId.length"
+              v-if="isLoading || sellingNFTClassIds.length"
               text="Created"
               :is-selected="currentTab === 'created'"
               @click="goCreated"
@@ -94,7 +128,7 @@
             ]"
           >
             <NFTPortfolioCard
-              v-if="!ownedNFTClassId.length"
+              v-if="!ownedNFTs.length"
               class="!bg-shade-gray break-inside-avoid"
             >
               <div class="p-[8px] w-full h-[140px]">
@@ -116,7 +150,7 @@
               </div>
             </NFTPortfolioCard>
             <NFTPortfolioItem
-              v-for="id in ownedNFTClassId"
+              v-for="id in ownedNFTClassIds"
               :key="id"
               :class-id="id"
             />
@@ -135,7 +169,7 @@
             ]"
           >
             <NFTPortfolioItem
-              v-for="id in sellingNFTClassId"
+              v-for="id in sellingNFTClassIds"
               :key="id"
               :class-id="id"
             />
@@ -169,14 +203,9 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 
-import Identity from '~/components/Identity/Identity';
-
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
-  components: {
-    Identity,
-  },
   filters: {
     ellipsis,
   },
@@ -217,8 +246,8 @@ export default {
     return {
       wallet: undefined,
       userInfo: undefined,
-      ownedNFTClassId: [],
-      sellingNFTClassId: [],
+      ownedNFTs: [],
+      sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
@@ -229,21 +258,9 @@ export default {
     };
   },
   computed: {
-    isUserCivicLiker() {
-      return !!(
-        this.userInfo &&
-        (this.userInfo.isCivicLikerTrial ||
-          this.userInfo.isSubscribedCivicLiker)
-      );
-    },
-    userDisplayName() {
-      return (this.userInfo && this.userInfo.displayName) || this.wallet;
-    },
-    userDescription() {
-      return this.userInfo && this.userInfo.description;
-    },
-    userAvatar() {
-      return this.userInfo && this.userInfo.avatar;
+    ownedNFTClassIds() {
+      const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
+      return Array.from(classIdSet);
     },
   },
   async asyncData({ route, $api, error }) {
@@ -288,20 +305,19 @@ export default {
   },
   mounted() {
     this.fetchUserSellingClasses();
-    this.fetchUserOwnClasses();
+    this.fetchUserCollectedNFTs();
   },
   methods: {
-    async fetchUserOwnClasses() {
+    async fetchUserCollectedNFTs() {
       const { nfts } = await getNFTs({ owner: this.wallet });
-      const classIdSet = new Set(nfts.map(n => n.classId));
-      this.ownedNFTClassId = Array.from(classIdSet);
+      this.ownedNFTs = nfts;
     },
     async fetchUserSellingClasses() {
       const { data } = await this.$api.get(
         getUserSellNFTClasses({ wallet: this.wallet })
       );
-      this.sellingNFTClassId = data.list;
-      if (!this.sellingNFTClassId.length) {
+      this.sellingNFTClassIds = data.list;
+      if (!this.sellingNFTClassIds.length) {
         this.currentTab = 'collected';
       }
       this.isLoading = false;
