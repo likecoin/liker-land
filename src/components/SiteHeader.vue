@@ -102,6 +102,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { getLikerIdSettingsURL } from '~/util/links';
+
 import walletMixin from '~/mixins/wallet';
 import { ellipsis } from '~/util/ui';
 
@@ -140,7 +142,7 @@ export default {
         { value: 'civic', name: this.$t('main_menu_civic_liker') },
       ];
 
-      if (this.getUserId) {
+      if (this.getAddress || this.getUserId) {
         options.push({ value: 'setting', name: this.$t('main_menu_settings') });
       }
 
@@ -172,7 +174,11 @@ export default {
           break;
 
         case 'setting':
-          this.$router.push({ name: 'setting' });
+          if (this.getUserId) {
+            this.$router.push({ name: 'setting' });
+          } else {
+            window.open(getLikerIdSettingsURL(), '_blank');
+          }
           break;
 
         case 'signOut':
