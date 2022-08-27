@@ -79,7 +79,7 @@
             v-if="getAddress === wallet"
             preset="outline"
             text="My Dashboard"
-            :to="{ name: 'dashboard' }"
+            @click="goMyDashboard"
           >
             <template #prepend>
               <IconPerson />
@@ -338,10 +338,18 @@ export default {
       this.isLoading = false;
     },
     goCollected() {
+      logTrackerEvent(this, 'MyPortfolio', 'GoCollectedTab', this.wallet, 1);
       this.currentTab = 'collected';
     },
     goCreated() {
+      logTrackerEvent(this, 'MyPortfolio', 'GoCreatedTab', this.wallet, 1);
       this.currentTab = 'created';
+    },
+    goMyDashboard() {
+      logTrackerEvent(this, 'MyPortfolio', 'GoToMyDashboard', this.wallet, 1);
+      this.$router.push({
+        name: 'dashboard',
+      });
     },
     handleCopyURL() {
       const host = `${window.location.protocol}//${window.location.host}`;
@@ -349,7 +357,7 @@ export default {
       const url = `${host}${path}`;
       copyToClipboard(url);
 
-      logTrackerEvent(this, 'SharePortFolio', 'CopyShareURL', url, 1);
+      logTrackerEvent(this, 'MyPortfolio', 'CopyShareURL', url, 1);
 
       this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
