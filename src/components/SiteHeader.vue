@@ -104,6 +104,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import walletMixin from '~/mixins/wallet';
 import { ellipsis } from '~/util/ui';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import Logo from '~/assets/icons/logo.svg?inline';
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
@@ -163,6 +164,7 @@ export default {
     async handleSelectMenuItem(value) {
       switch (value) {
         case 'dashboard': {
+          logTrackerEvent(this, 'SiteHeader', 'NFTGoToMyPage', '', 1);
           await this.navigateToMyDashboard();
           break;
         }
