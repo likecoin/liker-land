@@ -285,6 +285,7 @@
 import { getUserSellNFTClasses, getAddressLikerIdMinApi } from '~/util/api';
 import { getNFTs } from '~/util/nft';
 import { ellipsis, copyToClipboard } from '~/util/ui';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
@@ -394,12 +395,15 @@ export default {
       }
     },
     goCollected() {
+      logTrackerEvent(this, 'MyDashboard', 'GoCollectedTab', this.wallet, 1);
       this.currentTab = 'collected';
     },
     goCreated() {
+      logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
       this.currentTab = 'created';
     },
     goMyPortfolio() {
+      logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
       this.$router.push({
         name: 'id',
         params: { id: this.wallet },
@@ -410,6 +414,7 @@ export default {
       const url = `${host}/${this.wallet}`;
       copyToClipboard(url);
       this.alertPromptSuccess(this.$t('tooltip_share_done'));
+      logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', url, 1);
     },
   },
 };
