@@ -18,124 +18,14 @@
     <div v-else class="flex flex-col items-center mt-[32px]">
       <!-- UserStat -->
       <div class="relative flex items-center mb-[48px] w-full">
-        <NFTPortfolioUserStats
+        <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :collected-items="ownedNFTs"
           :created-class-ids="sellingNFTClassIds"
-        >
-          <template v-slot="stats">
-            <div
-              :class="[
-                'flex',
-                'justify-around',
-                'rounded-[12px]',
-                'w-full',
-                'p-[12px]',
-
-                'mb-[18px]',
-                'laptop:m-0',
-
-                'cursor-pointer',
-                'transition',
-                'duration-200',
-                'hover:bg-shade-gray',
-              ]"
-              @click="goCollected"
-            >
-              <div class="flex flex-col items-center justify-center">
-                <Label
-                  preset="h3"
-                  class="text-like-green mb-[4px]"
-                  :text="stats.collectedCount.toString()"
-                />
-                <Label
-                  preset="h6"
-                  class="text-medium-gray"
-                  :text="$t('nft_portfolio_page_state_collections')"
-                >
-                  <template #prepend>
-                    <IconMint />
-                  </template>
-                </Label>
-              </div>
-              <div class="flex flex-col items-center justify-center">
-                <Label
-                  preset="h3"
-                  class="text-like-green mb-[4px]"
-                  :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
-                    'en-US'
-                  )} ${$t('header_menu_LIKE')}`"
-                />
-                <Label
-                  preset="h6"
-                  class="text-medium-gray"
-                  :text="$t('nft_portfolio_page_state_value')"
-                >
-                  <template #prepend>
-                    <IconPriceMini />
-                  </template>
-                </Label>
-              </div>
-            </div>
-            <div
-              class="
-                hidden
-                laptop:block
-                h-[32px]
-                w-[1px]
-                bg-medium-gray
-                mx-[12px]
-              "
-            />
-            <div
-              :class="[
-                'flex',
-                'justify-around',
-                'rounded-[12px]',
-                'w-full',
-                'p-[12px]',
-                'cursor-pointer',
-                'transition',
-                'duration-200',
-                'hover:bg-shade-gray',
-              ]"
-              @click="goCreated"
-            >
-              <div class="flex flex-col items-center justify-center">
-                <Label
-                  preset="h3"
-                  class="text-like-green mb-[4px]"
-                  :text="isLoading ? '-' : stats.createdCount.toString()"
-                />
-                <Label
-                  preset="h6"
-                  class="text-medium-gray"
-                  :text="$t('nft_portfolio_page_state_creations')"
-                >
-                  <template #prepend>
-                    <IconFlare />
-                  </template>
-                </Label>
-              </div>
-              <div class="flex flex-col items-center justify-center">
-                <Label
-                  preset="h3"
-                  class="text-like-green mb-[4px]"
-                  :text="isLoading ? '-' : stats.createdCount.toString()"
-                />
-                <Label
-                  preset="h6"
-                  class="text-medium-gray"
-                  :text="$t('nft_portfolio_page_state_collectors')"
-                >
-                  <template #prepend>
-                    <IconPersonMini />
-                  </template>
-                </Label>
-              </div>
-            </div>
-          </template>
-        </NFTPortfolioUserStats>
+          :is-loading="isLoading"
+          @goCreated="goCreated"
+          @goCollected="goCollected"
+        />
         <ShareButton class="absolute right-[-40px]" @copy="handleCopyURL" />
       </div>
       <!-- Main -->
