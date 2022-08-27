@@ -60,7 +60,7 @@
                   <template #prepend>
                     <IconFlare />
                   </template>
-                  {{ stats.createdCount }}
+                  {{ isLoading ? '-' : stats.createdCount }}
                 </Label>
               </ToolTips>
               <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
@@ -68,12 +68,24 @@
                   <template #prepend>
                     <IconPersonMini />
                   </template>
-                  {{ stats.createdCollectorCount }}
+                  {{ isLoading ? '-' : stats.createdCollectorCount }}
                 </Label>
               </ToolTips>
             </template>
           </NFTPortfolioUserStats>
         </NFTPortfolioUserInfo>
+        <div class="flex justify-center mt-[18px]">
+          <ButtonV2
+            v-if="getAddress === wallet"
+            preset="outline"
+            text="My Dashboard"
+            :to="{ name: 'dashboard' }"
+          >
+            <template #prepend>
+              <IconPerson />
+            </template>
+          </ButtonV2>
+        </div>
       </div>
       <div
         :class="[
@@ -245,7 +257,7 @@ export default {
   data() {
     return {
       wallet: undefined,
-      userInfo: undefined,
+      userInfo: null,
       ownedNFTs: [],
       sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
@@ -261,6 +273,9 @@ export default {
     ownedNFTClassIds() {
       const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
       return Array.from(classIdSet);
+    },
+    userDisplayName() {
+      return this.userInfo?.displayName || this.wallet;
     },
   },
   async asyncData({ route, $api, error }) {
