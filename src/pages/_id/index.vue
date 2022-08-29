@@ -229,9 +229,6 @@ export default {
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
-      displayNameList: [],
-      avatarList: [],
-      civicLikerList: [],
       isLoading: true,
     };
   },
@@ -241,7 +238,7 @@ export default {
       return Array.from(classIdSet);
     },
     userDisplayName() {
-      return this.userInfo?.displayName || this.wallet;
+      return (this.userInfo && this.userInfo.displayName) || this.wallet;
     },
   },
   async asyncData({ route, $api, error }) {
@@ -304,15 +301,15 @@ export default {
       this.isLoading = false;
     },
     goCollected() {
-      logTrackerEvent(this, 'MyPortfolio', 'GoCollectedTab', this.wallet, 1);
+      logTrackerEvent(this, 'UserPortfolio', 'GoCollectedTab', this.wallet, 1);
       this.currentTab = 'collected';
     },
     goCreated() {
-      logTrackerEvent(this, 'MyPortfolio', 'GoCreatedTab', this.wallet, 1);
+      logTrackerEvent(this, 'UserPortfolio', 'GoCreatedTab', this.wallet, 1);
       this.currentTab = 'created';
     },
     goMyDashboard() {
-      logTrackerEvent(this, 'MyPortfolio', 'GoToMyDashboard', this.wallet, 1);
+      logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
       this.$router.push({
         name: 'dashboard',
       });
@@ -323,7 +320,7 @@ export default {
       const url = `${host}${path}`;
       copyToClipboard(url);
 
-      logTrackerEvent(this, 'MyPortfolio', 'CopyShareURL', url, 1);
+      logTrackerEvent(this, 'UserPortfolio', 'CopyShareURL', url, 1);
 
       this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },

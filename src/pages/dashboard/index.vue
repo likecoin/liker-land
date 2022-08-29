@@ -181,7 +181,7 @@ import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 
 export default {
-  name: 'NFTMyDashboard',
+  name: 'MyDashboardPage',
   layout: 'default',
   filters: {
     ellipsis,
@@ -237,7 +237,7 @@ export default {
       return Array.from(classIdSet);
     },
     userDisplayName() {
-      return this.userInfo?.displayName || this.wallet;
+      return (this.userInfo && this.userInfo.displayName) || this.wallet;
     },
   },
   watch: {
