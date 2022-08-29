@@ -12,6 +12,7 @@ import {
   transferNFT,
   sendGrant,
   getNFTCountByClassId,
+  isWritingNFT,
 } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -59,7 +60,7 @@ export default {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
     isWritingNFT() {
-      return !!this.NFTClassMetadata.name;
+      return isWritingNFT(this.NFTClassMetadata);
     },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
@@ -185,6 +186,7 @@ export default {
       this.isHistoryInfoLoading = false;
     },
     updateDisplayNameList(addresses) {
+      if (!addresses) return null;
       if (typeof addresses === 'string') {
         return this.getAddressLikerId(addresses);
       }

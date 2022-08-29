@@ -116,7 +116,7 @@
               </div>
             </NFTPortfolioCard>
             <NFTPortfolioItem
-              v-for="id in ownedNFTClassId"
+              v-for="id in sortedOwnedNFTClassId"
               :key="id"
               :class-id="id"
             />
@@ -155,13 +155,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import {
   getUserMinAPI,
   getUserSellNFTClasses,
   getAddressLikerIdMinApi,
 } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
-import { getNFTs } from '~/util/nft';
+import { getNFTs, isWritingNFT } from '~/util/nft';
 import { ellipsis, copyToClipboard } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -229,6 +231,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getNFTClassMetadataById']),
     isUserCivicLiker() {
       return !!(
         this.userInfo &&
@@ -244,6 +247,19 @@ export default {
     },
     userAvatar() {
       return this.userInfo && this.userInfo.avatar;
+    },
+    sortedOwnedNFTClassId() {
+      const sorted = [...this.ownedNFTClassId];
+      sorted.sort((a, b) => {
+        const aIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(a))
+          ? 1
+          : 0;
+        const bIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(b))
+          ? 1
+          : 0;
+        return bIsWritingNFT - aIsWritingNFT;
+      });
+      return sorted;
     },
   },
   async asyncData({ route, $api, error }) {
