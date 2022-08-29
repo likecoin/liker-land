@@ -143,11 +143,14 @@
                 </div>
               </div>
             </NFTPortfolioCard>
-            <NFTPortfolioItem
+            <li
               v-for="id in ownedNFTClassIds"
               :key="id"
-              :class-id="id"
-            />
+            >
+              <NFTPortfolioItem
+                :class-id="id"
+              />
+            </li>
           </ul>
 
           <ul
@@ -162,11 +165,14 @@
               'gap-[16px]',
             ]"
           >
-            <NFTPortfolioItem
+            <li
               v-for="id in sellingNFTClassIds"
               :key="id"
-              :class-id="id"
-            />
+            >
+              <NFTPortfolioItem
+                :class-id="id"
+              />
+            </li>
           </ul>
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
