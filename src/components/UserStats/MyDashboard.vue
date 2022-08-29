@@ -33,6 +33,7 @@
             preset="h6"
             class="text-medium-gray"
             :text="$t('nft_portfolio_page_state_collections')"
+            valign="middle"
           >
             <template #prepend>
               <IconMint />
@@ -51,6 +52,7 @@
             preset="h6"
             class="text-medium-gray"
             :text="$t('nft_portfolio_page_state_value')"
+            valign="middle"
           >
             <template #prepend>
               <IconPriceMini />
@@ -85,6 +87,7 @@
             preset="h6"
             class="text-medium-gray"
             :text="$t('nft_portfolio_page_state_creations')"
+            valign="middle"
           >
             <template #prepend>
               <IconFlare />
@@ -101,6 +104,7 @@
             preset="h6"
             class="text-medium-gray"
             :text="$t('nft_portfolio_page_state_collectors')"
+            valign="middle"
           >
             <template #prepend>
               <IconPersonMini />
