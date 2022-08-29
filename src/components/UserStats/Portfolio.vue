@@ -1,5 +1,5 @@
 <template>
-  <NFTPortfolioUserStats
+  <UserStatsBase
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
     :collected-items="collectedItems"
     :created-class-ids="createdClassIds"
@@ -38,7 +38,7 @@
         </Label>
       </ToolTips>
     </template>
-  </NFTPortfolioUserStats>
+  </UserStatsBase>
 </template>
 <script>
 export default {
