@@ -147,8 +147,12 @@
         >
           <NFTWidget
             class="shadow-lg"
-            v-bind="article"
+            :title="NFTName"
+            :description="NFTDescription"
+            :price="NFTPrice"
+            :img-src="NFTImageUrl"
             :collect-button-label="widgetCollectButtonLabel"
+            @collect="handleClickCollectButton"
           />
         </div>
       </div>
@@ -167,6 +171,8 @@
 
 
 <script>
+import nftMixin from '~/mixins/nft';
+
 const lineProps = [
   { y: 48, width: 141 },
   { y: 76, width: 141 },
@@ -183,15 +189,11 @@ const lineProps = [
 
 export default {
   name: 'NFTWidgetGraph',
+  mixins: [nftMixin],
   props: {
-    article: {
-      type: Object,
-      default: () => ({
-        title: '',
-        description: '',
-        price: 0,
-        imgSrc: '',
-      }),
+    classId: {
+      type: String,
+      required: true,
     },
     widgetCollectButtonLabel: {
       type: String,
@@ -205,6 +207,8 @@ export default {
   },
   mounted() {
     this.scrollAnimation();
+    this.updateNFTClassMetadata();
+    this.updateNFTPurchaseInfo();
   },
   methods: {
     scrollAnimation() {
@@ -271,6 +275,9 @@ export default {
         transformOrigin: '0 70%',
         duration: 0.5,
       });
+    },
+    handleClickCollectButton() {
+      this.$emit('collect', this.classId);
     },
   },
 };

@@ -64,6 +64,7 @@
       <ul>
         <li
           v-for="(nftClassId, index) in nfts"
+          :id="nftClassId"
           :key="index"
           :class="{ 'mt-[88px]': index > 0 }"
         >
@@ -123,6 +124,19 @@ export default {
     nfts() {
       return LIKECOIN_NFT_CAMPAIGN_ITEMS;
     },
+  },
+  mounted() {
+    const { hash } = this.$route;
+    if (hash) {
+      try {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch {
+        // No-op
+      }
+    }
   },
 };
 </script>

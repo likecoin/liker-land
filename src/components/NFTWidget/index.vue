@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     handleCollect() {
-      // TODO
+      this.$emit('collect');
     },
   },
 };
