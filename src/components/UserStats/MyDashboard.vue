@@ -1,5 +1,5 @@
 <template>
-  <NFTPortfolioUserStats
+  <UserStatsBase
     class="flex flex-col items-center w-full laptop:flex-row"
     :collected-items="collectedItems"
     :created-class-ids="createdClassIds"
@@ -58,11 +58,11 @@
           </Label>
         </div>
       </div>
+      <hr
+        class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
+      >
       <div
-        class="hidden laptop:block h-[32px] w-[1px] bg-medium-gray mx-[12px]"
-      />
-      <div
-        :class="[
+        :class=" [
           'flex',
           'justify-around',
           'rounded-[12px]',
@@ -109,7 +109,7 @@
         </div>
       </div>
     </template>
-  </NFTPortfolioUserStats>
+  </UserStatsBase>
 </template>
 <script>
 export default {
