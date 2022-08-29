@@ -11,17 +11,11 @@
       "
     >
       <NFTAboutPageHeroSection class="w-full" />
-      <nav class="py-[32px] laptop:py-[64px] grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
-        <ButtonV2
-          to="/campaign/writing-nft"
-          preset="secondary"
-          @click="handleClickCampaignPageButton"
-        >{{ $t('about_nft_page_nav_campaign') }}</ButtonV2>
-        <ButtonV2
-          preset="tertiary"
-          @click="handleClickMyPageButton"
-        >{{ $t('about_nft_page_nav_collection') }}</ButtonV2>
-      </nav>
+      <NFTAboutPageCTASection
+        class="py-[32px] laptop:py-[64px]"
+        @go-campaign="handleClickTopCTACampaignButton"
+        @go-dashboard="handleClickTopCTADashboardButton"
+      />
       <NFTAboutPageWidgetSection
         class="py-[32px] laptop:py-[64px]"
         :article="articles[0]"
@@ -32,6 +26,11 @@
         :article="articles[0]"
       />
       <NFTAboutPagePricingSection class="py-[32px] laptop:py-[64px]" />
+      <NFTAboutPageCTASection
+        class="py-[32px] laptop:py-[64px]"
+        @go-campaign="handleClickBottomCTACampaignButton"
+        @go-dashboard="handleClickBottomCTADashboardButton"
+      />
       <NFTAboutPageFAQSection id="faq" class="py-[32px] laptop:py-[64px]" />
 
       {{ /* Community */ }}
@@ -156,7 +155,6 @@
 </template>
 
 <script>
-import walletMixin from '~/mixins/wallet';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const WIDGET_ARTICLES = [
@@ -171,7 +169,6 @@ const WIDGET_ARTICLES = [
 
 export default {
   name: 'NFTAboutPage',
-  mixins: [walletMixin],
   props: {
     articles: {
       type: Array,
@@ -179,12 +176,23 @@ export default {
     },
   },
   methods: {
-    handleClickCampaignPageButton() {
-      logTrackerEvent(this, 'NFT', 'NFTGoToCampaign', 'NFTGoToCampaign', 1);
+    handleClickTopCTACampaignButton() {
+      logTrackerEvent(this, 'NFTAboutPage', 'CTA(Top)', 'GoToCampaign', 1);
     },
-    handleClickMyPageButton() {
-      logTrackerEvent(this, 'NFT', 'NFTGoToMyPage', 'NFTGoToMyPage', 1);
-      this.navigateToMyDashboard();
+    handleClickTopCTADashboardButton() {
+      logTrackerEvent(this, 'NFTAboutPage', 'CTA(Top)', 'GoToMyDashboard', 1);
+    },
+    handleClickBottomCTACampaignButton() {
+      logTrackerEvent(this, 'NFTAboutPage', 'CTA(Bottom)', 'GoToCampaign', 1);
+    },
+    handleClickBottomCTADashboardButton() {
+      logTrackerEvent(
+        this,
+        'NFTAboutPage',
+        'CTA(Bottom)',
+        'GoToMyDashboard',
+        1
+      );
     },
   },
 };
