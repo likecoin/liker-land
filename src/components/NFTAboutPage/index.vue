@@ -18,12 +18,14 @@
       />
       <NFTAboutPageWidgetSection
         class="py-[32px] laptop:py-[64px]"
-        :article="articles[0]"
+        :class-id="nftClassIds[0]"
+        @collect="handleCollectFromWidgetSection"
       />
       <NFTAboutPagePortfolioSection class="py-[32px] laptop:py-[64px]" />
       <NFTAboutPagePortalSection
         class="py-[32px] laptop:py-[64px]"
-        :article="articles[0]"
+        :class-id="nftClassIds[1]"
+        @collect="handleCollectFromPortalSection"
       />
       <NFTAboutPagePricingSection class="py-[32px] laptop:py-[64px]" />
       <NFTAboutPageCTASection
@@ -155,44 +157,59 @@
 </template>
 
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
+import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
 
-const WIDGET_ARTICLES = [
-  {
-    title: 'A Declaration of the Independence of Cyberspace',
-    description: 'Governments of the Industrial World...',
-    price: 1024,
-    // eslint-disable-next-line global-require
-    imgSrc: require('~/assets/images/about/dummy-og.png'),
-  },
-];
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'NFTAboutPage',
   props: {
-    articles: {
+    nftClassIds: {
       type: Array,
-      default: () => WIDGET_ARTICLES,
+      default: () => LIKECOIN_NFT_CAMPAIGN_ITEMS.slice(0, 2),
     },
   },
   methods: {
     handleClickTopCTACampaignButton() {
-      logTrackerEvent(this, 'NFTAboutPage', 'CTA(Top)', 'GoToCampaign', 1);
+      logTrackerEvent(this, 'NFTAboutPage', 'ClickCTA(Top)', 'GoToCampaign', 1);
     },
     handleClickTopCTADashboardButton() {
-      logTrackerEvent(this, 'NFTAboutPage', 'CTA(Top)', 'GoToMyDashboard', 1);
+      logTrackerEvent(
+        this,
+        'NFTAboutPage',
+        'ClickCTA(Top)',
+        'GoToMyDashboard',
+        1
+      );
     },
     handleClickBottomCTACampaignButton() {
-      logTrackerEvent(this, 'NFTAboutPage', 'CTA(Bottom)', 'GoToCampaign', 1);
+      logTrackerEvent(
+        this,
+        'NFTAboutPage',
+        'ClickCTA(Bottom)',
+        'GoToCampaign',
+        1
+      );
     },
     handleClickBottomCTADashboardButton() {
       logTrackerEvent(
         this,
         'NFTAboutPage',
-        'CTA(Bottom)',
+        'ClickCTA(Bottom)',
         'GoToMyDashboard',
         1
       );
+    },
+    handleCollect(classId) {
+      this.$router.push({ name: 'campaign-writing-nft', hash: `#${classId}` });
+    },
+    handleCollectFromWidgetSection(classId) {
+      logTrackerEvent(this, 'NFTAboutPage', 'GoToCampaign(Widget)', classId, 1);
+      this.handleCollect(classId);
+    },
+    handleCollectFromPortalSection(classId) {
+      logTrackerEvent(this, 'NFTAboutPage', 'GoToCampaign(Portal)', classId, 1);
+      this.handleCollect(classId);
     },
   },
 };

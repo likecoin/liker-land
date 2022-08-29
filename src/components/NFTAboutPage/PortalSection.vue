@@ -330,8 +330,12 @@
       >
         <NFTWidget
           class="shadow-lg"
-          v-bind="article"
+          :title="NFTName"
+          :description="NFTDescription"
+          :price="NFTPrice"
+          :img-src="NFTImageUrl"
           :collect-button-label="widgetCollectButtonLabel"
+          @collect="handleClickCollectButton"
         />
       </div>
       <svg
@@ -421,6 +425,8 @@
 </template>
 
 <script>
+import nftMixin from '~/mixins/nft';
+
 const dotProps = [
   { cx: 85.5, cy: 46.4 },
   { cx: 94.5, cy: 46.4 },
@@ -432,15 +438,11 @@ const dotProps = [
 
 export default {
   name: 'NFTPortalGraph',
+  mixins: [nftMixin],
   props: {
-    article: {
-      type: Object,
-      default: () => ({
-        title: '',
-        description: '',
-        price: 0,
-        imgSrc: '',
-      }),
+    classId: {
+      type: String,
+      required: true,
     },
     widgetCollectButtonLabel: {
       type: String,
@@ -454,6 +456,8 @@ export default {
   },
   mounted() {
     this.initAnimation();
+    this.updateNFTClassMetadata();
+    this.updateNFTPurchaseInfo();
   },
   methods: {
     initAnimation() {
@@ -537,6 +541,9 @@ export default {
         },
         '>-=0.25'
       );
+    },
+    handleClickCollectButton() {
+      this.$emit('collect', this.classId);
     },
   },
 };
