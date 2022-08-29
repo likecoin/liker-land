@@ -21,7 +21,7 @@
           'duration-200',
           'hover:bg-shade-gray',
         ]"
-        @click="$emit('goCollected')"
+        @click="$emit('go-collected')"
       >
         <div class="flex flex-col items-center justify-center">
           <Label
@@ -73,7 +73,7 @@
           'duration-200',
           'hover:bg-shade-gray',
         ]"
-        @click="$emit('goCreated')"
+        @click="$emit('go-created')"
       >
         <div class="flex flex-col items-center justify-center">
           <Label
