@@ -17,7 +17,7 @@
     </div>
     <div v-else class="flex flex-col items-center mt-[32px]">
       <!-- UserStat -->
-      <div class="relative flex items-center mb-[48px] w-full">
+      <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :collected-items="ownedNFTs"
@@ -26,7 +26,7 @@
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
         />
-        <ShareButton class="absolute right-[-40px]" @copy="handleCopyURL" />
+        <ShareButton class="absolute right-0 laptop:right-[-40px]" @copy="handleCopyURL" />
       </div>
       <!-- Main -->
       <div
@@ -40,11 +40,22 @@
           'desktop:w-[636px]',
         ]"
       >
-        <div :class="['flex', 'items-center', 'mb-[48px]', 'w-full']">
+        <div
+          :class="['flex', 'flex-col', 'items-center', 'mb-[48px]', 'w-full']"
+        >
           <ButtonV2
             preset="tertiary"
             text="Portfolio View"
-            class="absolute left-[-120px] rounded-[16px]"
+            :class="[
+              'block',
+              'mb-[12px]',
+
+              'laptop:absolute',
+              'laptop:left-[-100px]',
+              'laptop:m-0',
+
+              'rounded-[16px]',
+            ]"
             @click="goMyPortfolio"
           >
             <template #prepend>
