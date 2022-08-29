@@ -15,14 +15,14 @@
           :key="`faq-${index}`"
           :class="{ 'mt-[8px]': index !== 0 }"
         >
-          <NFTFAQItem :number="index + 1">
+          <NFTAboutPageFAQItem :number="index + 1">
             <template #question>
               {{ faq.question }}
             </template>
             <template #answer>
               <div v-html="faq.answer" />
             </template>
-          </NFTFAQItem>
+          </NFTAboutPageFAQItem>
         </li>
       </ul>
 
@@ -38,12 +38,7 @@
 </template>
 
 <script>
-import NFTFAQItem from './NFTFAQItem';
-
 export default {
-  components: {
-    NFTFAQItem,
-  },
   computed: {
     faqs() {
       return this.$t('faq_list').map(({ q: question, a: answer }) => ({
