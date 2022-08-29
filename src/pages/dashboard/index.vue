@@ -173,11 +173,10 @@
 
 <script>
 import { getAddressLikerIdMinApi } from '~/util/api';
-import { ellipsis, copyToClipboard } from '~/util/ui';
+import { ellipsis } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
-import alertMixin from '~/mixins/alert';
 import portfolioMixin from '~/mixins/portfolio';
 
 export default {
@@ -186,7 +185,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin, alertMixin, portfolioMixin],
+  mixins: [walletMixin, portfolioMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
