@@ -1,8 +1,10 @@
 import { getUserSellNFTClasses } from '~/util/api';
 import { getNFTs } from '~/util/nft';
-import { logTrackerEvent } from '~/util/EventLogger';
+import { copyToClipboard } from '~/util/ui';
+import alertMixin from '~/mixins/alert';
 
 export default {
+  mixins: [alertMixin],
   data() {
     return {
       ownedNFTs: [],
@@ -37,6 +39,12 @@ export default {
     },
     goCreated() {
       this.currentTab = 'created';
+    },
+    copyURL(wallet) {
+      const host = `${window.location.protocol}//${window.location.host}`;
+      const url = `${host}/${wallet}`;
+      copyToClipboard(url);
+      this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
   },
 };

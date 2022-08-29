@@ -287,12 +287,8 @@ export default {
       });
     },
     handleCopyURL() {
-      const host = `${window.location.protocol}//${window.location.host}`;
-      const { path } = this.$route;
-      const url = `${host}${path}`;
-      copyToClipboard(url);
-      logTrackerEvent(this, 'UserPortfolio', 'CopyShareURL', url, 1);
-      this.alertPromptSuccess(this.$t('tooltip_share_done'));
+      this.copyURL(this.wallet);
+      logTrackerEvent(this, 'UserPortfolio', 'CopyShareURL', this.wallet, 1);
     },
   },
 };
