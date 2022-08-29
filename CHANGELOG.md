@@ -1,5 +1,15 @@
 # Changelog
 
+## 2022-08-24
+306e74e2a565f7ec352560ca9539cb1e95ff2cfa
+
+### Added
+- Allow users to transfer their NFTs.
+- Added a share button on the NFT details page and the user portfolio page.
+
+### Changed
+- Integrate the collect flow into liker.land instead of using popup
+
 ## 2022-08-16
 1b22109c5d61420d27992eb4dec1a17d3fc1df5d
 
