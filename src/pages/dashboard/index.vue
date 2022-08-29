@@ -23,8 +23,8 @@
           :collected-items="ownedNFTs"
           :created-class-ids="sellingNFTClassIds"
           :is-loading="isLoading"
-          @goCreated="handleGoCreated"
-          @goCollected="handleGoCollected"
+          @go-created="handleGoCreated"
+          @go-collected="handleGoCollected"
         />
         <ShareButton class="absolute right-[-40px]" @copy="handleCopyURL" />
       </div>
@@ -276,11 +276,8 @@ export default {
       });
     },
     handleCopyURL() {
-      const host = `${window.location.protocol}//${window.location.host}`;
-      const url = `${host}/${this.wallet}`;
-      copyToClipboard(url);
-      this.alertPromptSuccess(this.$t('tooltip_share_done'));
-      logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', url, 1);
+      this.copyURL(this.wallet);
+      logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
     },
   },
 };
