@@ -10,7 +10,7 @@
         laptop:block
       "
     >
-      <NFTHeroSection class="w-full" />
+      <NFTAboutPageHeroSection class="w-full" />
       <nav class="py-[32px] laptop:py-[64px] grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
         <ButtonV2
           to="/campaign/writing-nft"
@@ -22,17 +22,17 @@
           @click="handleClickMyPageButton"
         >{{ $t('about_nft_page_nav_collection') }}</ButtonV2>
       </nav>
-      <NFTWidgetSection
+      <NFTAboutPageWidgetSection
         class="py-[32px] laptop:py-[64px]"
         :article="articles[0]"
       />
-      <NFTPortfolioSection class="py-[32px] laptop:py-[64px]" />
-      <NFTPortalSection
+      <NFTAboutPagePortfolioSection class="py-[32px] laptop:py-[64px]" />
+      <NFTAboutPagePortalSection
         class="py-[32px] laptop:py-[64px]"
         :article="articles[0]"
       />
-      <NFTPricingSection class="py-[32px] laptop:py-[64px]" />
-      <NFTFAQSection id="faq" class="py-[32px] laptop:py-[64px]" />
+      <NFTAboutPagePricingSection class="py-[32px] laptop:py-[64px]" />
+      <NFTAboutPageFAQSection id="faq" class="py-[32px] laptop:py-[64px]" />
 
       {{ /* Community */ }}
       <section class="py-[32px] laptop:pt-[64px] pb-[128px]">
@@ -159,13 +159,6 @@
 import walletMixin from '~/mixins/wallet';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import NFTFAQSection from './NFTFAQSection';
-import NFTHeroSection from './NFTHeroSection';
-import NFTPortalSection from './NFTPortalSection';
-import NFTPortfolioSection from './NFTPortfolioSection';
-import NFTPricingSection from './NFTPricingSection';
-import NFTWidgetSection from './NFTWidgetSection';
-
 const WIDGET_ARTICLES = [
   {
     title: 'A Declaration of the Independence of Cyberspace',
@@ -177,15 +170,7 @@ const WIDGET_ARTICLES = [
 ];
 
 export default {
-  name: 'AboutPage',
-  components: {
-    NFTFAQSection,
-    NFTHeroSection,
-    NFTPortalSection,
-    NFTPortfolioSection,
-    NFTPricingSection,
-    NFTWidgetSection,
-  },
+  name: 'NFTAboutPage',
   mixins: [walletMixin],
   props: {
     articles: {

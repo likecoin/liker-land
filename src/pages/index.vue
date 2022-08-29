@@ -1,6 +1,6 @@
 <template>
   <main class="page-content text-gray-4a">
-    <AboutNFTPage />
+    <NFTAboutPage />
   </main>
 </template>
 
