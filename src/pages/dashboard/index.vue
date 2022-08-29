@@ -23,8 +23,8 @@
           :collected-items="ownedNFTs"
           :created-class-ids="sellingNFTClassIds"
           :is-loading="isLoading"
-          @goCreated="goCreated"
-          @goCollected="goCollected"
+          @goCreated="handleGoCreated"
+          @goCollected="handleGoCollected"
         />
         <ShareButton class="absolute right-[-40px]" @copy="handleCopyURL" />
       </div>
@@ -65,14 +65,14 @@
             <MenuButton
               :text="$t('nft_portfolio_page_label_collected')"
               :is-selected="currentTab === 'collected'"
-              @click="goCollected"
+              @click="handleGoCollected"
             />
             <MenuButtonDivider v-if="sellingNFTClassIds.length" />
             <MenuButton
               v-if="isLoading || sellingNFTClassIds.length"
               :text="$t('nft_portfolio_page_label_created')"
               :is-selected="currentTab === 'created'"
-              @click="goCreated"
+              @click="handleGoCreated"
             />
           </div>
         </div>
@@ -172,13 +172,13 @@
 </template>
 
 <script>
-import { getUserSellNFTClasses, getAddressLikerIdMinApi } from '~/util/api';
-import { getNFTs } from '~/util/nft';
+import { getAddressLikerIdMinApi } from '~/util/api';
 import { ellipsis, copyToClipboard } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
+import portfolioMixin from '~/mixins/portfolio';
 
 export default {
   name: 'MyDashboardPage',
@@ -186,7 +186,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin, alertMixin],
+  mixins: [walletMixin, alertMixin, portfolioMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
@@ -223,19 +223,9 @@ export default {
     return {
       wallet: undefined,
       userInfo: null,
-      ownedNFTs: [],
-      sellingNFTClassIds: [],
-      currentTab: ['collected', 'created'].includes(this.$route.query.tab)
-        ? this.$route.query.tab
-        : 'created',
-      isLoading: true,
     };
   },
   computed: {
-    ownedNFTClassIds() {
-      const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
-      return Array.from(classIdSet);
-    },
     userDisplayName() {
       return (this.userInfo && this.userInfo.displayName) || this.wallet;
     },
@@ -246,27 +236,13 @@ export default {
       handler(newAddress) {
         if (newAddress) {
           this.fetchUserInfo();
-          this.fetchUserSellingClasses();
-          this.fetchUserCollectedNFTs();
+          this.fetchUserSellingClasses(this.getAddress);
+          this.fetchUserCollectedNFTs(this.getAddress);
         }
       },
     },
   },
   methods: {
-    async fetchUserCollectedNFTs() {
-      const { nfts } = await getNFTs({ owner: this.getAddress });
-      this.ownedNFTs = nfts;
-    },
-    async fetchUserSellingClasses() {
-      const { data } = await this.$api.get(
-        getUserSellNFTClasses({ wallet: this.getAddress })
-      );
-      this.sellingNFTClassIds = data.list;
-      if (!this.sellingNFTClassIds.length) {
-        this.currentTab = 'collected';
-      }
-      this.isLoading = false;
-    },
     async fetchUserInfo() {
       try {
         const userInfo = await this.$api.get(
@@ -284,13 +260,13 @@ export default {
         this.wallet = this.getAddress;
       }
     },
-    goCollected() {
+    handleGoCollected() {
       logTrackerEvent(this, 'MyDashboard', 'GoCollectedTab', this.wallet, 1);
-      this.currentTab = 'collected';
+      this.goCollected();
     },
-    goCreated() {
+    handleGoCreated() {
       logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
-      this.currentTab = 'created';
+      this.goCreated();
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
