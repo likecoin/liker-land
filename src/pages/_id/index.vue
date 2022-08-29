@@ -78,14 +78,14 @@
             <MenuButton
               text="Collected"
               :is-selected="currentTab === 'collected'"
-              @click="goCollected"
+              @click="handleGoCollected"
             />
             <MenuButtonDivider v-if="sellingNFTClassIds.length" />
             <MenuButton
               v-if="isLoading || sellingNFTClassIds.length"
               text="Created"
               :is-selected="currentTab === 'created'"
-              @click="goCreated"
+              @click="handleGoCreated"
             />
           </div>
           <ShareButton @copy="handleCopyURL" />
@@ -167,19 +167,15 @@
 </template>
 
 <script>
-import {
-  getUserMinAPI,
-  getUserSellNFTClasses,
-  getAddressLikerIdMinApi,
-} from '~/util/api';
+import { getUserMinAPI, getAddressLikerIdMinApi } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
-import { getNFTs } from '~/util/nft';
 import { ellipsis, copyToClipboard } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
+import portfolioMixin from '~/mixins/portfolio';
 
 export default {
   name: 'NFTPortfolioPage',
@@ -187,7 +183,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin, alertMixin],
+  mixins: [walletMixin, alertMixin, portfolioMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
@@ -224,19 +220,9 @@ export default {
     return {
       wallet: undefined,
       userInfo: null,
-      ownedNFTs: [],
-      sellingNFTClassIds: [],
-      currentTab: ['collected', 'created'].includes(this.$route.query.tab)
-        ? this.$route.query.tab
-        : 'created',
-      isLoading: true,
     };
   },
   computed: {
-    ownedNFTClassIds() {
-      const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
-      return Array.from(classIdSet);
-    },
     userDisplayName() {
       return (this.userInfo && this.userInfo.displayName) || this.wallet;
     },
@@ -282,31 +268,17 @@ export default {
     return undefined;
   },
   mounted() {
-    this.fetchUserSellingClasses();
-    this.fetchUserCollectedNFTs();
+    this.fetchUserSellingClasses(this.wallet);
+    this.fetchUserCollectedNFTs(this.wallet);
   },
   methods: {
-    async fetchUserCollectedNFTs() {
-      const { nfts } = await getNFTs({ owner: this.wallet });
-      this.ownedNFTs = nfts;
-    },
-    async fetchUserSellingClasses() {
-      const { data } = await this.$api.get(
-        getUserSellNFTClasses({ wallet: this.wallet })
-      );
-      this.sellingNFTClassIds = data.list;
-      if (!this.sellingNFTClassIds.length) {
-        this.currentTab = 'collected';
-      }
-      this.isLoading = false;
-    },
-    goCollected() {
+    handleGoCollected() {
       logTrackerEvent(this, 'UserPortfolio', 'GoCollectedTab', this.wallet, 1);
-      this.currentTab = 'collected';
+      this.goCollected();
     },
-    goCreated() {
+    handleGoCreated() {
       logTrackerEvent(this, 'UserPortfolio', 'GoCreatedTab', this.wallet, 1);
-      this.currentTab = 'created';
+      this.goCreated();
     },
     goMyDashboard() {
       logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
@@ -319,9 +291,7 @@ export default {
       const { path } = this.$route;
       const url = `${host}${path}`;
       copyToClipboard(url);
-
       logTrackerEvent(this, 'UserPortfolio', 'CopyShareURL', url, 1);
-
       this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
   },
