@@ -145,6 +145,15 @@ export const getLikerOgImage = id =>
     ? 'https://liker.land/images/og/civic-classic.png'
     : `https://static.like.co/liker-og-image/${id}.png`;
 
+export const getISCNRecord = iscnId => {
+  const qsPayload = {
+    iscn_id: iscnId,
+  };
+  return `${LIKECOIN_CHAIN_API}/iscn/records/id?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getNFTMintInfo = ({ iscnId, classId }) => {
   const qsPayload = {
     iscn_id: iscnId,

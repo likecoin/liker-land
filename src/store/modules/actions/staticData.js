@@ -45,11 +45,13 @@ export async function fetchNFTMetadata({ commit }, classId) {
     uri,
     data: { parent, metadata: classMetadata = {} } = {},
   } = chainMetadata || {};
+  const iscnId = parent?.iscnIdPrefix;
   metadata = {
     name,
     description,
     metadata: classMetadata,
     parent,
+    iscn_id: iscnId,
   };
   if (isValidHttpUrl(uri)) {
     const apiMetadata = await this.$api
@@ -57,6 +59,13 @@ export async function fetchNFTMetadata({ commit }, classId) {
       // eslint-disable-next-line no-console
       .catch(err => console.error(err));
     if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+  } else if (iscnId) {
+    const iscnRecord = await this.$api
+      .$get(api.getISCNRecord(iscnId))
+      // eslint-disable-next-line no-console
+      .catch(err => console.error(err));
+    const iscnOwner = iscnRecord?.owner;
+    if (iscnOwner) metadata = { ...metadata, iscn_owner: iscnOwner };
   }
   commit(TYPES.STATIC_SET_NFT_CLASS_METADATA, { classId, metadata });
   return metadata;
