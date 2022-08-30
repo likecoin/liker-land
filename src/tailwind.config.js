@@ -2,6 +2,15 @@
 
 const path = require('path');
 
+function getLineClamp(value = 1) {
+  return {
+    overflow: 'hidden',
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': `${value}`,
+  }
+}
+
 /*
 
 Tailwind - The Utility-First CSS Framework
@@ -721,6 +730,8 @@ module.exports = {
   plugins: [
     ({ addUtilities }) => {
       addUtilities({
+        '.line-clamp-2': getLineClamp(2),
+        '.line-clamp-4': getLineClamp(4),
         '.bg-like-gradient': {
           'background-image': 'linear-gradient(78deg, #d2f0f0, #f0e6b4)',
         },
