@@ -119,39 +119,16 @@
         </div>
       </section>
     </main>
-    <TxModal
+    <EventModalTransfer
       :is-open="isOpenTransferModal"
-      :has-close-button="!isTransferring"
-      :header-text="$t('nft_details_page_title_transfer')"
-      :complete-text="$t('tx_modal_status_complete_text_transfer')"
+      :is-transferring="isTransferring"
+      :is-ready-to-transfer="isReadyToTransfer"
+      :error-msg="errorMsg"
+      :to-address="toAddress"
       @close="isOpenTransferModal = false; isTransferring = false"
-    >
-      <template #header-prepend>
-        <IconTransfer />
-      </template>
-      <div>
-        <NFTPageOwning />
-        <div v-if="!isTransferring">
-          <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
-          <TextField
-            :placeholder="$t('nft_details_page_placeholder_transfer')"
-            :error-message="errorMsg"
-            @input="handleInputAddr"
-          />
-          <div class="flex justify-center mt-[24px]">
-            <ButtonV2
-              preset="secondary"
-              :is-disabled="!isReadyToTransfer"
-              :text="$t('nft_details_page_button_transfer')"
-              @click="onTransfer"
-            />
-          </div>
-        </div>
-        <div v-else class="flex justify-center w-ful mb-[12px] border-0 border-dashed border-b-[2px] border-b-shade-gray">
-          <FormField :label="$t('tx_modal_label_send')">{{ toAddress }}</FormField>
-        </div>
-      </div>
-    </TxModal>
+      @handle-input-addr="handleInputAddr"
+      @on-transfer="onTransfer"
+    />
   </Page>
 </template>
 
