@@ -114,19 +114,17 @@ export async function getAccountBalance(address) {
 export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;
 
 export function isValidHttpUrl(string) {
-  let url;
-
   try {
-    url = new URL(string);
-  } catch (_) {
-    return false;
+    const url = new URL(string);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    // no op
   }
-
-  return url.protocol === 'http:' || url.protocol === 'https:';
+  return false;
 }
 
-export function isWritingNFT(nftMetadata) {
+export function isWritingNFT(classMetadata) {
   return (
-    nftMetadata?.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
+    classMetadata?.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
   );
 }

@@ -249,15 +249,12 @@ export default {
       return this.userInfo && this.userInfo.avatar;
     },
     sortedOwnedNFTClassId() {
-      const sorted = [...this.ownedNFTClassId];
-      sorted.sort((a, b) => {
-        const aIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(a))
-          ? 1
-          : 0;
-        const bIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(b))
-          ? 1
-          : 0;
-        return bIsWritingNFT - aIsWritingNFT;
+      const sorted = [...this.ownedNFTClassId].sort((a, b) => {
+        const aIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(a));
+        const bIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(b));
+        if (aIsWritingNFT && !bIsWritingNFT) return -1;
+        if (!aIsWritingNFT && bIsWritingNFT) return 1;
+        return 0;
       });
       return sorted;
     },
