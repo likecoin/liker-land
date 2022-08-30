@@ -3,7 +3,7 @@
     :open="isOpen"
     :has-close-button="hasCloseButton"
     :header-text="headerText"
-    panel-class="shadow-lg bg-white phone:min-w-[380px] w-[520px] w-full p-[48px] rounded-[24px]"
+    panel-class="shadow-lg bg-white w-full p-[48px] phone:max-w-[520px] phone:px-[18px] laptop:w-[520px] rounded-[24px]"
     :is-disabled-backdrop-click="true"
     @close="$emit('close')"
   >

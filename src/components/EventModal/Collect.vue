@@ -9,17 +9,29 @@
     <template #header-prepend>
       <IconPrice />
     </template>
-    <NFTPageOwning />
+    <NFTPageOwning
+      :class="[{ '!border-like-green': uiTxNFTStatus === 'complete' }]"
+    />
+    <NFTPortfolioBase
+      class="!w-full !border-shade-gray !cursor-default mt-[-24px]"
+      preset="viewOnly"
+      :class-id="uiTargetClassId"
+    />
   </TxModal>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     isOpen: {
       type: Boolean,
       default: false,
     },
+  },
+  computed: {
+    ...mapGetters(['uiTargetClassId', 'uiTxNFTStatus']),
   },
 };
 </script>

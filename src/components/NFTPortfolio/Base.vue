@@ -56,7 +56,7 @@
       </Label>
       <div
         v-if="preset === 'collectible'"
-        class="z-[500] flex justify-center my-[16px]"
+        class="z-[500] flex justify-center mt-[16px]"
       >
         <ProgressIndicator v-if="uiIsOpenCollectModal && isCollecting" />
         <ButtonV2
@@ -70,7 +70,7 @@
           </template>
         </ButtonV2>
       </div>
-      <div class="flex items-center justify-center">
+      <div class="flex items-center justify-center mt-[16px]">
         <div class="flex items-center text-medium-gray mr-[18px]">
           <IconMint />
           <div class="ml-[4px]">{{ mintedCount }}</div>
@@ -79,9 +79,9 @@
           <IconOwner />
           <div class="ml-[4px]">{{ ownerCount }}</div>
         </div>
-        <div v-if="preset==='viewOnly'" class="flex items-center text-medium-gray">
-          <IconPrice />
-          <div class="ml-[4px]">{{ NFTPrice }}</div>
+        <div v-if="preset==='viewOnly'" class="flex items-center text-like-green ml-[18px]">
+          <IconPriceMini />
+          <div class="ml-[4px]">{{ NFTPrice }} $LIKE</div>
         </div>
       </div>
     </div>

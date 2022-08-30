@@ -41,6 +41,10 @@ export function uiSetCollectedCount({ commit }, count) {
   commit(types.UI_SET_COLLECT_OWNED_COUNT, count);
 }
 
+export function uiSetTargetClassId({ commit }, classId) {
+  commit(types.UI_SET_TARGET_CLASSID, classId);
+}
+
 export function uiSetTxStatus({ commit }, status) {
   commit(types.UI_SET_TX_STATUS, status);
 }

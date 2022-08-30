@@ -14,6 +14,7 @@ import {
   UI_SET_TX_STATUS,
   UI_SET_TX_ERROR_MESSAGE,
   UI_SET_COLLECT_OWNED_COUNT,
+  UI_SET_TARGET_CLASSID,
 } from '../mutation-types';
 
 import { defaultLocale, availableLocales } from '../../locales';
@@ -37,6 +38,7 @@ const initialState = () => ({
   txStatus: '',
   txErrorMessage: '',
   ownedCount: null,
+  targetClassId: null,
 });
 
 const mutations = {
@@ -63,6 +65,9 @@ const mutations = {
   },
   [UI_SET_COLLECT_OWNED_COUNT](state, ownedCount) {
     state.ownedCount = ownedCount;
+  },
+  [UI_SET_TARGET_CLASSID](state, classId) {
+    state.targetClassId = classId;
   },
   [UI_SET_TX_STATUS](state, status) {
     state.txStatus = status;

@@ -152,6 +152,7 @@ export default {
       'initIfNecessary',
       'uiToggleCollectModal',
       'uiSetCollectedCount',
+      'uiSetTargetClassId',
       'uiSetTxStatus',
       'uiSetTxError',
     ]),
@@ -227,6 +228,7 @@ export default {
         const balance = await getAccountBalance(this.getAddress);
         this.uiToggleCollectModal();
         this.uiSetCollectedCount(this.userOwnedCount);
+        this.uiSetTargetClassId(this.classId);
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
           logTrackerEvent(
             this,
