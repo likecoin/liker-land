@@ -35,3 +35,17 @@ export const getNFTClassIdSorter = (_, getters) => classIds => {
   });
   return sorted;
 };
+
+export const getWritingNFTClassIdFilter = (_, getters) => classIds => {
+  const writingNFTClassIds = classIds.filter(id =>
+    isWritingNFT(getters.getNFTClassMetadataById(id))
+  );
+  return writingNFTClassIds;
+};
+
+export const getNonWritingNFTClassIdFilter = (_, getters) => classIds => {
+  const nonWritingNFTClassIds = classIds.filter(
+    id => !isWritingNFT(getters.getNFTClassMetadataById(id))
+  );
+  return nonWritingNFTClassIds;
+};

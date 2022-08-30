@@ -116,7 +116,12 @@
               </div>
             </NFTPortfolioCard>
             <NFTPortfolioItem
-              v-for="id in sortedOwnedNFTClassId"
+              v-for="id in ownedWritingNFTClassId"
+              :key="id"
+              :class-id="id"
+            />
+            <NFTPortfolioNonWritingItem
+              v-for="id in ownedNonWritingNFTClassId"
               :key="id"
               :class-id="id"
             />
@@ -231,7 +236,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassMetadataById', 'getNFTClassIdSorter']),
+    ...mapGetters([
+      'getNFTClassMetadataById',
+      'getWritingNFTClassIdFilter',
+      'getNonWritingNFTClassIdFilter',
+    ]),
     isUserCivicLiker() {
       return !!(
         this.userInfo &&
@@ -248,8 +257,11 @@ export default {
     userAvatar() {
       return this.userInfo && this.userInfo.avatar;
     },
-    sortedOwnedNFTClassId() {
-      return this.getNFTClassIdSorter(this.ownedNFTClassId);
+    ownedWritingNFTClassId() {
+      return this.getWritingNFTClassIdFilter(this.ownedNFTClassId);
+    },
+    ownedNonWritingNFTClassId() {
+      return this.getNonWritingNFTClassIdFilter(this.ownedNFTClassId);
     },
   },
   async asyncData({ route, $api, error }) {
