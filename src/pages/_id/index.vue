@@ -163,7 +163,7 @@ import {
   getAddressLikerIdMinApi,
 } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
-import { getNFTs, isWritingNFT } from '~/util/nft';
+import { getNFTs } from '~/util/nft';
 import { ellipsis, copyToClipboard } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -231,7 +231,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassMetadataById']),
+    ...mapGetters(['getNFTClassMetadataById', 'getNFTClassIdSorter']),
     isUserCivicLiker() {
       return !!(
         this.userInfo &&
@@ -249,14 +249,7 @@ export default {
       return this.userInfo && this.userInfo.avatar;
     },
     sortedOwnedNFTClassId() {
-      const sorted = [...this.ownedNFTClassId].sort((a, b) => {
-        const aIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(a));
-        const bIsWritingNFT = isWritingNFT(this.getNFTClassMetadataById(b));
-        if (aIsWritingNFT && !bIsWritingNFT) return -1;
-        if (!aIsWritingNFT && bIsWritingNFT) return 1;
-        return 0;
-      });
-      return sorted;
+      return this.getNFTClassIdSorter(this.ownedNFTClassId);
     },
   },
   async asyncData({ route, $api, error }) {
