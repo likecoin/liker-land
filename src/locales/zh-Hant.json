@@ -609,6 +609,7 @@
   "portfolio_description": "View {name}'s collection of Writing NFT.",
   "portfolio_finding_more_button": "Find more Writing NFT",
   "portfolio_collected_tab_no_item": "Collected NFT will be shown here",
+  "portfolio_created_tab_no_item": "Created NFT will be shown here",
   "PortfolioEmptyView.Works.Label": "暫未分享作品",
   "PortfolioEmptyView.Works.Title": "使用 Super Like，在此個人主頁分享自己的作品",
   "PortfolioEmptyView.Works.Step1": "{button}，獲得每天兩次 Super Like 的機會",
