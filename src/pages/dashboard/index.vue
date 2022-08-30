@@ -78,9 +78,8 @@
               :is-selected="currentTab === 'collected'"
               @click="handleGoCollected"
             />
-            <MenuButtonDivider v-if="sellingNFTClassIds.length" />
+            <MenuButtonDivider/>
             <MenuButton
-              v-if="isLoading || sellingNFTClassIds.length"
               :text="$t('nft_portfolio_page_label_created')"
               :is-selected="currentTab === 'created'"
               @click="handleGoCreated"
@@ -104,52 +103,11 @@
               'gap-[16px]',
             ]"
           >
-            <NFTPortfolioCard
-              v-if="!ownedNFTs.length"
-              class="!bg-shade-gray break-inside-avoid"
-            >
-              <div class="p-[8px] w-full h-[140px]">
-                <div
-                  class="z-[5] h-full w-full bg-repeat-space"
-                  :style="{
-                    backgroundImage: `url(/images/NFT/background_cross.png)`,
-                  }"
-                />
-              </div>
-              <div
-                class="
-                  w-full
-                  pb-[32px]
-                  bg-shade-gray
-                  border-t-[1px] border-white
-                "
-              >
-                <div
-                  class="flex flex-col justify-center items-center mt-[-21px]"
-                >
-                  <div
-                    class="
-                      w-[42px]
-                      h-[42px]
-                      rounded-[50%]
-                      bg-shade-gray
-                      border-[2px] border-white
-                    "
-                  />
-                  <Label
-                    class="text-medium-gray mt-[12px]"
-                    :text="$t('portfolio_collected_tab_no_item')"
-                  />
-                </div>
-              </div>
-            </NFTPortfolioCard>
-            <li
-              v-for="id in ownedNFTClassIds"
-              :key="id"
-            >
-              <NFTPortfolioItem
-                :class-id="id"
-              />
+            <li>
+              <NFTPortfolioEmpty v-if="!ownedNFTs.length" preset="collected" />
+            </li>
+            <li v-for="id in ownedNFTClassIds" :key="id">
+              <NFTPortfolioItem :class-id="id" />
             </li>
           </ul>
 
@@ -165,6 +123,9 @@
               'gap-[16px]',
             ]"
           >
+            <li>
+              <NFTPortfolioEmpty v-if="!sellingNFTClassIds.length" preset="created" />
+            </li>
             <li
               v-for="id in sellingNFTClassIds"
               :key="id"
