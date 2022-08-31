@@ -86,39 +86,6 @@ export const getOAuthLoginAPI = ({ language = 'zh', utmSource } = {}) =>
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
 export const getLogoutAPI = () => `/api/users/logout`;
-export const getLikePayPageURL = (from = '') =>
-  `/api/civic/payment/likepay/payment?from=${from}`;
-export const getLikePayPaymentAPI = () => `/api/civic/payment/likepay`;
-export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
-export const getStripePaymentAPI = ({
-  from = '',
-  referrer = '',
-  utmSource = '',
-  utmMedium = '',
-  civicLikerVersion = 1,
-  quantity = 1,
-} = {}) =>
-  `/api/civic/payment/stripe/payment?from=${encodeURIComponent(
-    from
-  )}&referrer=${encodeURIComponent(
-    referrer
-  )}&civic_liker_version=${civicLikerVersion}&quantity=${quantity}&utm_source=${encodeURIComponent(
-    utmSource
-  )}&utm_medium=${encodeURIComponent(utmMedium)}`;
-export const getStripeEditPaymentAPI = () =>
-  '/api/civic/payment/stripe/payment?edit=1';
-export const getStripeBillingPortalAPI = () =>
-  '/api/civic/payment/stripe/billing';
-export const getStripePaymentStatusAPI = ({ resume = false } = {}) =>
-  `/api/civic/payment/stripe?${resume ? 'resume=1' : ''}`;
-export const getCivicCSOnlineAPI = () => `/api/civic/csonline`;
-export const getCivicLikerTrialEventByIdAPI = id =>
-  `/api/civic/trial/events/${id}`;
-export const getCivicLikerJoinTrialEventByIdAPI = id =>
-  `/api/civic/trial/events/${id}/join`;
-export const getCivicSupportingUserListAPI = () => '/api/civic/support/users';
-export const getCivicSupportingUserAPI = id => `/api/civic/support/users/${id}`;
-export const getMySupportersAPI = () => '/api/civic/support/self';
 export const getCivicLikerStakingAPI = () => '/api/civic/staking';
 export const getCivicLikerStakingInfoAPI = () => '/api/civic/staking/info';
 

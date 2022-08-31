@@ -5,7 +5,6 @@ export default {
     redirect(302, {
       name: 'civic',
       params,
-      query: { from: 'candycandy772', ...query },
     });
   },
 };

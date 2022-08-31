@@ -40,18 +40,9 @@ export const PAYMENT_METHOD_LIST = [
   'other', // plz always put `other` at last for hk geoip handle
 ];
 
-export const DEFAULT_CL_SUPPORTER =
-  process.env.DEFAULT_CL_SUPPORTER || 'foundation';
-
-export const CIVIC_LIKER_UNIT_PRICE = 5;
-
 export const CIVIC_LIKER_CLASSIC_LIKER_ID = 'civic-liker';
 
 export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';
-
-export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';
-
-export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
 export const LIKECOIN_CHAIN_MIN_DENOM = IS_TESTNET ? 'nanoekil' : 'nanolike';
 

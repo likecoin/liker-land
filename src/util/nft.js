@@ -99,6 +99,7 @@ export function amountToLIKE(likecoin) {
   if (likecoin.denom === LIKECOIN_CHAIN_MIN_DENOM) {
     return new BigNumber(likecoin.amount).dividedBy(1e9).toFixed();
   }
+  // eslint-disable-next-line no-console
   console.error(`${likecoin.denom} is not supported denom`);
   return -1;
 }

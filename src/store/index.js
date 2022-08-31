@@ -10,7 +10,6 @@ import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
-import support from './modules/support';
 import wallet from './modules/wallet';
 
 const createStore = () =>
@@ -40,7 +39,6 @@ const createStore = () =>
       ui,
       user,
       staticData,
-      support,
       wallet,
     },
   });

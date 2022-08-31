@@ -59,22 +59,6 @@ export function setUserCivicLiker({ commit }, { civicLikerVersion = 1 } = {}) {
   });
 }
 
-export async function fetchUserSubscriptionInfo({ commit }) {
-  const info = await this.$api.$get(api.getStripePaymentStatusAPI());
-  commit(types.USER_SET_SUBSCRIPTION_INFO, info);
-  return info;
-}
-
-export async function cancelUserSubscription({ dispatch }) {
-  await this.$api.$delete(api.getStripePaymentStatusAPI());
-  return dispatch('fetchUserSubscriptionInfo');
-}
-
-export async function resumeCanceledSubscription({ dispatch }) {
-  await this.$api.$delete(api.getStripePaymentStatusAPI({ resume: true }));
-  return dispatch('fetchUserSubscriptionInfo');
-}
-
 export async function updatePreferences(
   { dispatch, commit, getters },
   { locale, creatorPitch } = {}
