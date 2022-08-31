@@ -4,11 +4,6 @@
       v-if="!getAddress"
       class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"
     >
-      <Label
-        class="mb-[24px] text-medium-gray"
-        preset="h3"
-        :text="$t('tooltip_signin')"
-      />
       <ButtonV2
         preset="tertiary"
         :text="$t('header_button_connect_to_wallet')"

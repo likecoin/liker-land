@@ -32,7 +32,7 @@
           <Label
             preset="h6"
             class="text-medium-gray"
-            :text="$t('nft_portfolio_page_state_collections')"
+            :text="$t('nft_portfolio_page_label_collected')"
             valign="middle"
           >
             <template #prepend>
@@ -90,7 +90,7 @@
           <Label
             preset="h6"
             class="text-medium-gray"
-            :text="$t('nft_portfolio_page_state_creations')"
+            :text="$t('nft_portfolio_page_label_created')"
             valign="middle"
           >
             <template #prepend>
