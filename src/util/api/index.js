@@ -187,16 +187,6 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
   )}`;
 };
 
-export const getNFTOwners = ({ iscnId, classId }) => {
-  const qsPayload = {
-    iscn_id: iscnId,
-    class_id: classId,
-  };
-  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(
-    qsPayload
-  )}`;
-};
-
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
 
@@ -215,7 +205,7 @@ export const getISCNRecord = iscnId => {
   )}`;
 };
 
-export const getNFTOwnersFromChain = classId => {
+export const getNFTOwners = classId => {
   const qsPayload = {
     class_id: classId,
   };

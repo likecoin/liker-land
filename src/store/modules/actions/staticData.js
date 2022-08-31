@@ -3,7 +3,6 @@ import * as api from '@/util/api';
 import {
   getClassInfo,
   isValidHttpUrl,
-  isWritingNFT,
   formatOwnerInfoFromChain,
 } from '@/util/nft';
 
@@ -77,13 +76,8 @@ export async function fetchNFTMetadata({ commit }, classId) {
 }
 
 export async function fetchNFTOwners({ commit }, classId) {
-  let info;
-  if (isWritingNFT(classId)) {
-    info = await this.$api.$get(api.getNFTOwners({ classId }));
-  } else {
-    const { owners } = await this.$api.$get(api.getNFTOwnersFromChain(classId));
-    info = formatOwnerInfoFromChain(owners);
-  }
+  const { owners } = await this.$api.$get(api.getNFTOwners(classId));
+  const info = formatOwnerInfoFromChain(owners);
   commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
 }
