@@ -140,7 +140,12 @@
             ]"
           >
             <NFTPortfolioItem
-              v-for="id in sellingNFTClassId"
+              v-for="id in sellingWritingNFTClassId"
+              :key="id"
+              :class-id="id"
+            />
+            <NFTPortfolioNonWritingItem
+              v-for="id in sellingNonWritingNFTClassId"
               :key="id"
               :class-id="id"
             />
@@ -262,6 +267,12 @@ export default {
     },
     ownedNonWritingNFTClassId() {
       return this.getNonWritingNFTClassIdFilter(this.ownedNFTClassId);
+    },
+    sellingWritingNFTClassId() {
+      return this.getWritingNFTClassIdFilter(this.sellingNFTClassId);
+    },
+    sellingNonWritingNFTClassId() {
+      return this.getNonWritingNFTClassIdFilter(this.sellingNFTClassId);
     },
   },
   async asyncData({ route, $api, error }) {
