@@ -1,34 +1,32 @@
 <template>
-  <CardV2 class="w-full">
-    <div class="flex justify-between items-center mb-[20px]">
+  <CardV2 :is-dark="true">
+    <Label
+      class="w-min font-600"
+      :text="$t('nft_details_page_label_price')"
+      tag="div"
+      preset="h5"
+      valign="middle"
+      content-class="whitespace-nowrap text-like-cyan"
+      prepend-class="text-like-cyan"
+    >
+      <template #prepend>
+        <IconPrice />
+      </template>
+    </Label>
+    <div class="flex items-baseline justify-start mt-[40px]">
       <Label
-        class="w-min font-600 mb-[32px]"
-        :text="$t('nft_details_page_label_price')"
-        tag="div"
-        preset="h5"
-        valign="middle"
-        content-class="whitespace-nowrap text-like-green"
-        prepend-class="text-like-green"
-      >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </Label>
-    </div>
-    <div class="flex items-baseline justify-start mb-[8px]">
-      <Label
-        class="font-[900] text-like-green"
+        class="font-[900] text-like-cyan"
         preset="h2"
       >{{ formattedNFTPrice }}</Label>
       <Label
         v-if="nftPriceUSD"
-        class="text-medium-gray ml-[4px]"
+        class="ml-[4px]"
         preset="p5"
       >{{ nftPriceUSD }}</Label>
     </div>
-    <div class="flex items-baseline justify-start mb-[28px]">
+    <div class="flex items-baseline justify-start">
       <Label
-        class="text-[10px] text-medium-gray font-[400]"
+        class="text-[10px] font-[400]"
         :text="$t('nft_details_page_collected_count_label')"
       >
         <template #prepend>
@@ -39,7 +37,7 @@
         </template>
       </Label>
       <Label
-        class="text-[10px] text-medium-gray font-[400] ml-[24px]"
+        class="text-[10px] font-[400] ml-[24px] mt-[8px]"
         :text="$t('nft_details_page_title_collector')"
       >
         <template #prepend>
@@ -50,31 +48,33 @@
         </template>
       </Label>
     </div>
-    <div class="h-[2px] w-[32px] bg-shade-gray mb-[12px]" />
 
-    <div class="flex items-center justify-start">
+    <div class="flex items-center justify-start mt-[24px]">
       <ProgressIndicator v-if="isLoading" />
-      <ButtonV2
+      <div
         v-else
-        :text="$t('nft_details_page_button_collect_now')"
-        preset="secondary"
-        @click="handleClickCollect"
+        class="rounded-[18px] p-[2px] bg-cover"
+        style="background-image: url('/images/gradient/like-gradient-lighter-blur.svg')"
       >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </ButtonV2>
+        <div class="relative p-[6px] bg-like-green rounded-[16px]">
+          <ButtonV2
+            :text="$t('nft_details_page_button_collect_now')"
+            preset="secondary"
+            @click="handleClickCollect"
+          >
+            <template #prepend>
+              <IconPrice />
+            </template>
+          </ButtonV2>
+        </div>
+      </div>
       <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
         <ButtonV2
           class="ml-[12px]"
           :text="$t('nft_details_page_button_sell')"
           preset="tertiary"
           :is-disabled="true"
-        >
-          <template #prepend>
-            <IconPlaceholder />
-          </template>
-        </ButtonV2>
+        />
       </ToolTips>
     </div>
   </CardV2>

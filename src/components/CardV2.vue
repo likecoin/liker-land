@@ -22,11 +22,15 @@ export default class Card extends Vue {
   @Prop({ default: true })
   readonly hasPadding!: boolean;
 
+  @Prop({ default: false })
+  readonly isDark!: boolean;
+
   get rootClasses() {
     return [
-      'bg-white',
+      this.isDark ? 'bg-like-green' : 'bg-white',
       'rounded-[24px]',
       {
+        'text-like-cyan-pale': this.isDark,
         'px-[24px] py-[32px]': this.hasPadding,
       },
     ];
