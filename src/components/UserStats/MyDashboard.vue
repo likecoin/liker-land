@@ -98,7 +98,7 @@
           <Label
             preset="h3"
             class="text-like-green mb-[4px]"
-            :text="isLoading ? '-' : stats.createdCount.toString()"
+            :text="isLoading ? '-' : stats.createdCollectorCount.toString()"
           />
           <Label
             preset="h6"
