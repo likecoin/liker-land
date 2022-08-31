@@ -1,52 +1,30 @@
 <template>
   <Page>
-    <main
+    <div
       :class="[
-        'flex',
-        'flex-col',
-        'mx-auto',
-        'w-full',
-        'max-w-[1024px]',
         'mt-[8px]',
-        'px-[24px]',
+        'px-[12px]',
+        'laptop:px-[24px]',
+        'self-stretch',
       ]"
     >
       <section
         :class="[
-          'flex',
-
-          'flex-col',
-          'desktop:flex-row',
-
-          'items-center',
-          'justify-center',
-          'desktop:justify-center',
-          'desktop:items-start',
+          'grid',
+          'grid-cols-1',
+          'desktop:grid-cols-3',
+          'gap-[24px]',
 
           'w-full',
+          'max-w-[1024px]',
+          'mx-auto',
+          'pb-[120px]',
         ]"
       >
-        <div
-          :class="[
-            columnClasses,
-            'desktop:max-w-[310px]',
-            'desktop:mr-[24px]',
-          ]"
-        >
-          <div
-            :class="[
-              'flex',
-
-              'flex-col',
-              'laptop:flex-row',
-              'desktop:flex-col',
-
-              'justify-center',
-              'w-full',
-            ]"
-          >
+        <!-- Left column -->
+        <div class="flex flex-col gap-[24px]">
+          <div class="grid laptop:grid-cols-2 desktop:grid-cols-1 items-start gap-[24px]">
             <NFTPageItemCard
-              class="laptop:w-[310px]"
               :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
               :avatar-url="avatarList[iscnOwner]"
@@ -62,9 +40,10 @@
               @collect="handleCollectFromPreviewSection"
             />
             <NFTPageCollectorList
-              class="laptop:ml-[12px] mb-[16px] desktop:m-0"
+              class="phone:hidden tablet:hidden"
               :owner-count="ownerCount"
               :items="populatedCollectors"
+              :is-narrow="true"
             />
           </div>
           <!-- Metadata -->
@@ -85,8 +64,9 @@
           </div>
         </div>
 
-        <div :class="[columnClasses]">
-          <div :class="['flex','items-center','mb-[16px]','w-full']">
+        <!-- Right column -->
+        <div class="flex flex-col gap-[24px] desktop:col-span-2">
+          <div class="flex items-center w-full">
             <NFTPageOwningSection
               class="mr-[16px]"
               :owned-count="userOwnedCount"
@@ -99,7 +79,6 @@
             <ShareButton @copy="handleCopyURL" />
           </div>
           <NFTPagePriceSection
-            class="mt-[16px]"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
             :collected-count="mintedCount"
@@ -108,17 +87,21 @@
             @collect="handleCollectFromPriceSection"
           />
           <NFTPageSupplySection
-            class="mt-[16px]"
             :collected-count="mintedCount"
             @collect="handleCollectFromSupplySection"
           />
+          <NFTPageCollectorList
+            class="laptop:hidden"
+            :owner-count="ownerCount"
+            :items="populatedCollectors"
+          />
           <NFTPageEventList
-            class="mt-[16px]"
             :items="populatedEvents"
           />
         </div>
       </section>
-    </main>
+    </div>
+
     <TxModal
       :is-open="isOpenTransferModal"
       :has-close-button="!isTransferring"
@@ -221,17 +204,6 @@ export default {
     NFTPriceUSD() {
       const price = this.currentPrice * this.purchaseInfo.price;
       return `(${price.toFixed(3)} USD)`;
-    },
-    columnClasses() {
-      return [
-        'flex',
-        'flex-col',
-        'flex-grow',
-        'justify-center',
-        'items-center',
-        'text-center',
-        'w-full',
-      ];
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userOwnedCount;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="transition duration-200 cursor-pointer text-dark-gray hover:text-medium-gray"
+      class="text-center transition duration-200 cursor-pointer text-dark-gray hover:text-medium-gray"
       @click="isOpenDialog = true"
     >
       {{ this.$t('nft_details_page_button_show_more') }}

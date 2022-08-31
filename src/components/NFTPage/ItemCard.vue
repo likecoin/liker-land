@@ -7,7 +7,6 @@
 
       'w-full',
 
-      'mb-[16px]',
       'overflow-hidden',
       'bg-white',
     ]"
