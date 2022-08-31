@@ -26,24 +26,27 @@
               <IconTransferMini />
             </template>
           </Label>
+          <Label v-else-if="event.event === 'mint_nft'" class="break-all" :text="$t('nft_details_page_activity_list_event_mint_nft')" />
+          <Label v-else-if="event.event === 'new_class'" class="break-all" :text="$t('nft_details_page_activity_list_event_create_class')" />
         </td>
         <td>
           <Label class="break-all">{{ event.price || '-' }}</Label>
         </td>
         <td>
-          <Label v-if="event.event === 'purchase'">-</Label>
-          <LinkV2 v-else-if="event.event === 'transfer'" :to="`/${event.fromWallet}`">
+          <LinkV2 v-if="event.event === 'transfer'" :to="`/${event.fromWallet}`">
             <Label class="break-all">{{
               event.fromDisplayName | ellipsis
             }}</Label>
           </LinkV2>
+          <Label v-else>-</Label>
         </td>
         <td>
-          <LinkV2 :to="`/${event.toWallet}`">
+          <LinkV2 v-if="event.event === 'transfer' || event.event === 'purchase'" :to="`/${event.toWallet}`">
             <Label class="break-all">{{
               event.toDisplayName | ellipsis
             }}</Label>
           </LinkV2>
+          <Label v-else>-</Label>
         </td>
         <td>
           <LinkV2 class="text-left" :href="getChainRawTx(event.txHash)">

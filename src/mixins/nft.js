@@ -26,7 +26,6 @@ const TX_STATUS = {
   FAILED: 'failed',
 };
 
-const NFT_PREMINT_AMOUNT = 1000;
 const NFT_INDEXER_LIMIT_MAX = 100;
 
 export default {
@@ -185,11 +184,7 @@ export default {
         this.NFTHistory = data.list;
       } else {
         let data;
-        ({ data } = await this.$api.get(
-          getNFTEvents({ classId: this.classId, limit: 1 })
-        ));
-        // ignore class creation event(1) and pre-mint + pre-send event(N * 2)
-        let nextKey = data.pagination.next_key + NFT_PREMINT_AMOUNT * 2;
+        let nextKey;
         let count;
         let events = [];
         do {

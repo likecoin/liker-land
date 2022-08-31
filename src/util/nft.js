@@ -130,23 +130,38 @@ export function isWritingNFT(classMetadata) {
 }
 
 function formatNFTEvent(event) {
-  if (event.action !== '/cosmos.nft.v1beta1.MsgSend') return null;
+  const {
+    class_id: classId,
+    nft_id: nftId,
+    sender: fromWallet,
+    receiver: toWallet,
+    tx_hash: txHash,
+    timestamp,
+  } = event;
+  let eventName;
+  switch (event.action) {
+    case '/cosmos.nft.v1beta1.MsgSend':
+      eventName = LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
+      break;
+    case 'new_class':
+    case 'mint_nft':
+    default:
+      eventName = event.action;
+      break;
+  }
   return {
-    event: event.sender === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer',
-    classId: event.class_id,
-    nftId: event.nft_id,
-    fromWallet: event.sender,
-    toWallet: event.receiver,
-    txHash: event.tx_hash,
-    timestamp: Date.parse(event.timestamp),
+    event: eventName,
+    classId,
+    nftId,
+    fromWallet,
+    toWallet,
+    txHash,
+    timestamp: Date.parse(timestamp),
   };
 }
 
 export function formatNFTEventsToHistory(events) {
-  const history = events
-    .map(e => formatNFTEvent(e))
-    .filter(e => e)
-    .sort((a, b) => b.timestamp - a.timestamp);
+  const history = events.map(e => formatNFTEvent(e)).reverse();
   return history;
 }
 
