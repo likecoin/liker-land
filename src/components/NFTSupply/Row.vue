@@ -46,12 +46,31 @@
             v-for="i in total"
             :key="i"
             :class="[
+              'relative',
               'border-l-[0.5px]',
               i > 1 && i % 10 === 1
-                ? 'border-dark-gray border-opacity-[0.1] pl-[5px] -ml-[5px]'
+                ? 'border-dark-gray border-opacity-[0.4] border-dashed pl-[5px] -ml-[5px]'
                 : 'border-transparent',
             ]"
           >
+            <!-- Show the number of the slot for every 10 slots -->
+            <span
+              v-if="i > 1 && i % 10 === 1"
+              :class="[
+                'absolute',
+                'right-full',
+                'bottom-full',
+
+                'translate-x-1/2',
+
+                'text-dark-gray',
+                'text-[5px]',
+                'text-center',
+                'font-bold',
+
+                'opacity-[0.4]',
+              ]"
+            >{{ i - 1 }}</span>
             <NFTSupplySlot :type="getSlotType(i)" />
           </div>
         </div>
