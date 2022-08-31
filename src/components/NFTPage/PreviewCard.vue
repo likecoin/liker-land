@@ -1,15 +1,15 @@
 <template>
-  <div
+  <CardV2
     :class="[
       'flex',
       'flex-col',
-      'rounded-[24px]',
-
-      'w-full',
 
       'overflow-hidden',
-      'bg-white',
+
+      'border-[1px]',
+      'border-shade-gray',
     ]"
+    :has-padding="false"
   >
     <div
       class="h-[180px]"
@@ -50,8 +50,19 @@
           }}</Label>
         </NuxtLink>
       </div>
-      <Label preset="h5" class="mt-[12px]" :text="nftName" />
-      <Label preset="p5" class="mt-[12px]" :text="nftDescription | ellipsisDescription" />
+      <Label
+        class="mt-[12px]"
+        content-class="line-clamp-2"
+        preset="h5"
+        align="center"
+        :text="nftName"
+      />
+      <Label
+        class="mt-[12px]"
+        content-class="line-clamp-4"
+        preset="p5"
+        :text="nftDescription | ellipsisDescription"
+      />
       <ButtonV2
         class="mt-[16px]"
         :text="formattedNFTPrice"
@@ -90,7 +101,7 @@
         </ButtonV2>
       </div>
     </div>
-  </div>
+  </CardV2>
 </template>
 
 <script>

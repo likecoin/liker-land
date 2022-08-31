@@ -24,7 +24,7 @@
         <!-- Left column -->
         <div class="flex flex-col gap-[24px]">
           <div class="grid laptop:grid-cols-2 desktop:grid-cols-1 items-start gap-[24px]">
-            <NFTPageItemCard
+            <NFTPagePreviewCard
               :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
               :avatar-url="avatarList[iscnOwner]"
@@ -37,7 +37,6 @@
               :nft-price="NFTPrice"
               :nft-external-url="NFTExternalUrl"
               :iscn-url="iscnURL"
-              @collect="handleCollectFromPreviewSection"
             />
             <NFTPageCollectorList
               class="phone:hidden tablet:hidden"
@@ -280,16 +279,6 @@ export default {
       } finally {
         this.isCollecting = false;
       }
-    },
-    handleCollectFromPreviewSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTCollect(DetailsPagePreviewSection)',
-        this.classId,
-        1
-      );
-      this.handleCollect();
     },
     handleCollectFromPriceSection() {
       logTrackerEvent(

@@ -155,14 +155,14 @@ export default class Label extends Vue {
   get alignClass(): string {
     switch (this.align) {
       case LabelAlign.Center:
-        return 'justify-center';
+        return 'justify-center text-center';
 
       case LabelAlign.Right:
-        return 'justify-end';
+        return 'justify-end text-right';
 
       case LabelAlign.Left:
       default:
-        return 'justify-start';
+        return 'justify-start text-left';
     }
   }
 
