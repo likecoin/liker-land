@@ -5,7 +5,7 @@
     :created-class-ids="createdClassIds"
   >
     <template v-slot="stats">
-      <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collections')">
+      <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_collected')">
         <Label preset="p6" class="font-200">
           <template #prepend>
             <IconMint />
@@ -21,7 +21,7 @@
           {{ stats.collectedAmount }}
         </Label>
       </ToolTips>
-      <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_creations')">
+      <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_created')">
         <Label preset="p6" class="font-200">
           <template #prepend>
             <IconFlare />
