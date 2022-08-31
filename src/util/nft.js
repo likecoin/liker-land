@@ -128,3 +128,24 @@ export function isWritingNFT(classMetadata) {
     classMetadata?.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
   );
 }
+
+function formatNFTEvent(event) {
+  if (event.action !== '/cosmos.nft.v1beta1.MsgSend') return null;
+  return {
+    event: event.sender === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer',
+    classId: event.class_id,
+    nftId: event.nft_id,
+    fromWallet: event.sender,
+    toWallet: event.receiver,
+    txHash: event.tx_hash,
+    timestamp: Date.parse(event.timestamp),
+  };
+}
+
+export function formatNFTEventsToHistory(events) {
+  const history = events
+    .map(e => formatNFTEvent(e))
+    .filter(e => e)
+    .sort((a, b) => b.timestamp - a.timestamp);
+  return history;
+}

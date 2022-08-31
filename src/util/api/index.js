@@ -215,6 +215,17 @@ export const getISCNRecord = iscnId => {
   )}`;
 };
 
+export const getNFTEvents = ({ classId, limit, key }) => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  if (key) qsPayload.key = key;
+  if (limit) qsPayload.limit = limit;
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
   const qsPayload = {
     tx_hash: txHash,
