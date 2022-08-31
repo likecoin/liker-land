@@ -1,6 +1,14 @@
 <template>
   <component
     :is="componentTag"
+    v-if="isRaw"
+    :class="rawClasses"
+  >
+    <slot />
+  </component>
+  <component
+    :is="componentTag"
+    v-else
     :class="rootClasses"
   >
     <div
@@ -86,6 +94,10 @@ export default class Label extends Vue {
   @Prop([String, Array])
   readonly appendClass!: string | [] | undefined;
 
+  // Class of the append wrapper
+  @Prop({ default: false })
+  readonly isRaw!: boolean;
+
   get isHeader(): boolean {
     return this.preset.startsWith('h');
   }
@@ -105,15 +117,18 @@ export default class Label extends Vue {
     return 'div';
   }
 
-  get rootClasses(): any {
+  get rawClasses(): any {
     return [
-      'flex',
       this.alignClass,
       this.valignClass,
       this.fontSizeClass,
       this.fontWeightClass,
       'leading-[1.35]',
     ];
+  }
+
+  get rootClasses(): any {
+    return ['flex', ...this.rawClasses];
   }
 
   get fontSizeClass(): string {

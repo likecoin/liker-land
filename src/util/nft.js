@@ -59,6 +59,12 @@ export async function getNFTCountByClassId(classId, owner) {
   return { amount };
 }
 
+export async function getISCNRecord(iscnId) {
+  const client = await getNFTQueryClient();
+  const res = await client.queryRecordsById(iscnId);
+  return res;
+}
+
 export async function sendGrant({ senderAddress, amountInLIKE, signer }) {
   const client = await createNFTSigningClient(signer);
   const spendLimit = [

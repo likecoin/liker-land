@@ -12,6 +12,7 @@ import {
   transferNFT,
   sendGrant,
   getNFTCountByClassId,
+  getISCNRecord,
 } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -36,6 +37,8 @@ export default {
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
+
+      nftISCNContentFingerprints: [],
     };
   },
   computed: {
@@ -155,6 +158,17 @@ export default {
       'uiSetTxStatus',
       'uiSetTxError',
     ]),
+    async fetchISCNMetadata() {
+      if (!this.iscnId) return;
+      try {
+        const res = await getISCNRecord(this.iscnId);
+        const [{ data: { contentFingerprints } = {} } = {}] = res?.records;
+        this.nftISCNContentFingerprints = contentFingerprints;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    },
     async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
       this.updateDisplayNameList(

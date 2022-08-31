@@ -35,8 +35,6 @@
               :nft-name="NFTName"
               :nft-description="NFTDescription"
               :nft-price="NFTPrice"
-              :nft-external-url="NFTExternalUrl"
-              :iscn-url="iscnURL"
             />
             <NFTPageCollectorList
               class="phone:hidden tablet:hidden"
@@ -45,22 +43,13 @@
               :is-narrow="true"
             />
           </div>
-          <!-- Metadata -->
-          <div :class="['hidden', 'desktop:flex', 'justify-center']">
-            <ButtonV2
-              preset="outline"
-              class="my-[16px]"
-              :href="iscnURL"
-              :text="$t('nft_details_page_button_metadata')"
-            >
-              <template #prepend>
-                <IconCode />
-              </template>
-              <template #append>
-                <IconNorthEast />
-              </template>
-            </ButtonV2>
-          </div>
+          <NFTPageMetadataSection
+            class="hidden desktop:block"
+            :content-url="NFTExternalUrl"
+            :iscn-id="iscnId"
+            :iscn-url="iscnURL"
+            :content-fingerprints="nftISCNContentFingerprints"
+          />
         </div>
 
         <!-- Right column -->
@@ -84,6 +73,13 @@
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="handleCollectFromPriceSection"
+          />
+          <NFTPageMetadataSection
+            class="desktop:hidden"
+            :content-url="NFTExternalUrl"
+            :iscn-id="iscnId"
+            :iscn-url="iscnURL"
+            :content-fingerprints="nftISCNContentFingerprints"
           />
           <NFTPageSupplySection
             :collected-count="mintedCount"
@@ -227,6 +223,7 @@ export default {
       this.updateNFTOwners(),
       this.updateNFTHistory(),
       this.getLIKEPrice(),
+      this.fetchISCNMetadata(),
     ]);
     this.isOwnerInfoLoading = false;
   },
