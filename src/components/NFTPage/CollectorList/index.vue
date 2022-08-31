@@ -4,19 +4,21 @@
       'w-full',
     ]"
     :title="$t('nft_details_page_title_collector')"
-    :is-narrow="true"
+    :has-content-padding="false"
+    :is-narrow="isNarrow"
   >
     <template #titleIcon>
       <IconPerson />
     </template>
-    <template #content class="flex flex-col my-[12px]">
-      <div v-if="ownerCount">
-        <NFTPageCollectorListItems :owner-list="trimmedItems" />
-        <ShowMore
-          v-if="shouldShowMore"
-        >
+    <template #content="{ contentPaddingClass }">
+      <template v-if="ownerCount">
+        <NFTPageCollectorListItems
+          :class="contentPaddingClass"
+          :owner-list="trimmedItems"
+        />
+        <ShowMore v-if="shouldShowMore">
           <template #header>
-            <div class="flex justify-between mb-[12px] w-[310px]">
+            <div class="flex justify-between mb-[12px] min-w-[310px]">
               <Label
                 class="w-min font-600"
                 :text="`${$t('nft_details_page_title_collector')} (${items.length})`"
@@ -38,17 +40,18 @@
                 prepend-class="text-like-green"
               />
             </div>
-            <div class="w-full h-[2px] bg-shade-gray mb-[8px]" />
+            <hr class="w-full border-shade-gray mb-[8px]">
           </template>
           <template #content>
-            <NFTPageCollectorListItems class="w-[310px]" :owner-list="items" />
+            <NFTPageCollectorListItems class="min-w-[310px]" :owner-list="items" />
           </template>
         </ShowMore>
-      </div>
-      <div v-else>
-        <div class="flex justify-center">
-          <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
-        </div>
+      </template>
+      <div
+        v-else
+        class="flex justify-center items-center min-h-[180px]"
+      >
+        <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
       </div>
     </template>
   </CollapsibleCard>
@@ -69,6 +72,10 @@ export default {
     trimmedCount: {
       type: Number,
       default: 10,
+    },
+    isNarrow: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

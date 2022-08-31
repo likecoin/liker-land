@@ -57,17 +57,15 @@
 
     <Transition @enter="onEnter" @leave="onLeave">
       <div v-if="isOpen">
+        <div v-if="isShowSeparator" :class="xPaddingClass">
+          <hr class="w-full mb-[8px] border-[#ebebeb]">
+        </div>
         <div
-          :class="[
-            xPaddingClass,
-            'pb-[32px]',
-          ]"
+          :class="{
+            [contentPaddingClass]: hasContentPadding,
+          }"
         >
-          <hr
-            v-if="isShowSeparator"
-            class="w-full mb-[8px] border-[#ebebeb]"
-          >
-          <slot name="content" />
+          <slot name="content" :contentPaddingClass="contentPaddingClass" />
         </div>
       </div>
     </Transition>
@@ -90,6 +88,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    hasContentPadding: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -99,6 +101,9 @@ export default {
   computed: {
     xPaddingClass() {
       return this.isNarrow ? 'px-[24px]' : 'px-[32px]';
+    },
+    contentPaddingClass() {
+      return `${this.xPaddingClass} pb-[32px]`;
     },
   },
   methods: {
