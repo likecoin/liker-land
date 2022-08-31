@@ -46,6 +46,7 @@
             ]"
           >
             <NFTPageItemCard
+              v-if="isWritingNFT"
               class="laptop:w-[310px]"
               :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
@@ -60,6 +61,18 @@
               :nft-external-url="NFTExternalUrl"
               :iscn-url="iscnURL"
               @collect="handleCollectFromPreviewSection"
+            />
+            <NFTPageNonWritingItemCard
+              v-else
+              class="laptop:w-[310px]"
+              :avatar-url="avatarList[iscnOwner]"
+              :avatar-size="40"
+              :is-avatar-outlined="civicLikerList[iscnOwner]"
+              :iscn-owner="iscnOwner"
+              :display-name="displayNameList[iscnOwner]"
+              :nft-name="NFTName"
+              :nft-description="NFTDescription" 
+              :iscn-url="iscnURL"
             />
             <NFTPageCollectorList
               class="laptop:ml-[12px] mb-[16px] desktop:m-0"
@@ -99,6 +112,7 @@
             <ShareButton @copy="handleCopyURL" />
           </div>
           <NFTPagePriceSection
+            v-if="isWritingNFT"
             class="mt-[16px]"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
@@ -108,6 +122,7 @@
             @collect="handleCollectFromPriceSection"
           />
           <NFTPageSupplySection
+            v-if="isWritingNFT"
             class="mt-[16px]"
             :collected-count="mintedCount"
             @collect="handleCollectFromSupplySection"
