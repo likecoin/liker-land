@@ -44,10 +44,14 @@
           <Label
             preset="h3"
             class="text-like-green mb-[4px]"
+            valign="bottom"
             :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
-              'en-US'
-            )} ${$t('header_menu_LIKE')}`"
-          />
+              'en-US')}`"
+          >
+            <template #append>
+              <Label preset="h5" class="text-like-green" :text="$t('header_menu_LIKE')" />
+            </template>
+          </Label>
           <Label
             preset="h6"
             class="text-medium-gray"
