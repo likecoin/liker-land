@@ -149,3 +149,14 @@ export function formatNFTEventsToHistory(events) {
     .sort((a, b) => b.timestamp - a.timestamp);
   return history;
 }
+
+export function formatOwnerInfoFromChain(owners) {
+  const ownerInfo = {};
+  owners.forEach(o => {
+    const { owner, nfts } = o;
+    if (owner !== LIKECOIN_NFT_API_WALLET) {
+      ownerInfo[owner] = nfts;
+    }
+  });
+  return ownerInfo;
+}

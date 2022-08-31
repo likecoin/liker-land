@@ -1,6 +1,11 @@
 import * as TYPES from '@/store/mutation-types';
 import * as api from '@/util/api';
-import { getClassInfo, isValidHttpUrl } from '@/util/nft';
+import {
+  getClassInfo,
+  isValidHttpUrl,
+  isWritingNFT,
+  formatOwnerInfoFromChain,
+} from '@/util/nft';
 
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
@@ -72,7 +77,13 @@ export async function fetchNFTMetadata({ commit }, classId) {
 }
 
 export async function fetchNFTOwners({ commit }, classId) {
-  const info = await this.$api.$get(api.getNFTOwners({ classId }));
+  let info;
+  if (isWritingNFT(classId)) {
+    info = await this.$api.$get(api.getNFTOwners({ classId }));
+  } else {
+    const { owners } = await this.$api.$get(api.getNFTOwnersFromChain(classId));
+    info = formatOwnerInfoFromChain(owners);
+  }
   commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
 }
