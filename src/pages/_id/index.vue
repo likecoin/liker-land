@@ -116,12 +116,7 @@
               </div>
             </NFTPortfolioCard>
             <NFTPortfolioItem
-              v-for="id in ownedWritingNFTClassId"
-              :key="id"
-              :class-id="id"
-            />
-            <NFTPortfolioNonWritingItem
-              v-for="id in ownedNonWritingNFTClassId"
+              v-for="id in sortedOwnedNFTClassIds"
               :key="id"
               :class-id="id"
             />
@@ -140,12 +135,7 @@
             ]"
           >
             <NFTPortfolioItem
-              v-for="id in sellingWritingNFTClassId"
-              :key="id"
-              :class-id="id"
-            />
-            <NFTPortfolioNonWritingItem
-              v-for="id in sellingNonWritingNFTClassId"
+              v-for="id in sortedSellingNFTClassIds"
               :key="id"
               :class-id="id"
             />
@@ -241,11 +231,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getNFTClassMetadataById',
-      'getWritingNFTClassIdFilter',
-      'getNonWritingNFTClassIdFilter',
-    ]),
+    ...mapGetters(['getNFTClassMetadataById', 'getNFTClassIdSorter']),
     isUserCivicLiker() {
       return !!(
         this.userInfo &&
@@ -262,17 +248,11 @@ export default {
     userAvatar() {
       return this.userInfo && this.userInfo.avatar;
     },
-    ownedWritingNFTClassId() {
-      return this.getWritingNFTClassIdFilter(this.ownedNFTClassIds);
+    sortedOwnedNFTClassIds() {
+      return this.getNFTClassIdSorter(this.ownedNFTClassIds);
     },
-    ownedNonWritingNFTClassId() {
-      return this.getNonWritingNFTClassIdFilter(this.ownedNFTClassIds);
-    },
-    sellingWritingNFTClassId() {
-      return this.getWritingNFTClassIdFilter(this.sellingNFTClassIds);
-    },
-    sellingNonWritingNFTClassId() {
-      return this.getNonWritingNFTClassIdFilter(this.sellingNFTClassIds);
+    sortedSellingNFTClassIds() {
+      return this.getNFTClassIdSorter(this.sellingNFTClassIds);
     },
   },
   async asyncData({ route, $api, error }) {
