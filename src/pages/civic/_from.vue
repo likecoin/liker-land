@@ -9,11 +9,6 @@ export default {
   components: {
     CivicPageV3,
   },
-  fetch({ redirect, store }) {
-    if (store.getters.getUserId) {
-      redirect({ name: 'civic-dashboard' });
-    }
-  },
   head() {
     const title = this.$t('civic_page_v3_title');
     const description = this.$t('civic_page_v3_description');

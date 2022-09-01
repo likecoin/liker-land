@@ -242,9 +242,14 @@ const apiCivicLikerGetMetadata = req =>
   );
 const apiCivicLikerGetStaking = req =>
   sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKE_CO_URL_BASE}/api/civic/staking`, {
-      headers: { Authorization },
-    })
+    axios.get(
+      `${LIKE_CO_URL_BASE}/api/civic/staking?${querystring.stringify(
+        req.query
+      )}`,
+      {
+        headers: { Authorization },
+      }
+    )
   );
 const apiCivicLikerGetStakingInfo = () =>
   axios.get(`${LIKE_CO_URL_BASE}/api/civic/staking/info`);

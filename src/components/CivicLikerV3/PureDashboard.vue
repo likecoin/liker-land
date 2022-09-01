@@ -6,7 +6,12 @@
       :avatar-src="avatarSrc"
       :active-since="formattedSince"
     />
-    <section v-if="!isFetching" class="mt-32">
+    <section
+      :class="[
+        'mt-32 transition-opacity',
+        { 'opacity-25': isFetching },
+      ]"
+    >
       <div class="overflow-hidden bg-white rounded-8">
         <header v-if="!isSignedIn">
           <img

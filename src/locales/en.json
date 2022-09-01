@@ -139,7 +139,7 @@
   "civic_dashboard_v3_summary_stake_hint_logout": "Stake at least {amount} to become {civicLiker}",
   "civic_dashboard_v3_summary_stake_hint_unfufilled": "stake {amount} more to become {civicLiker}",
   "civic_dashboard_v3_summary_stake_hint_fufilled": "You have staked {amount}.  The more you stake, the more you reward.",
-  "civic_dashboard_v3_summary_action_button_sign_in": "Register now",
+  "civic_dashboard_v3_summary_action_button_sign_in": "Connect Wallet",
   "civic_dashboard_v3_summary_action_button_delegate": "Stake now",
   "civic_dashboard_v3_summary_action_button_manage": "Restake",
   "civic_dashboard_v3_summary_warning": "You can withdraw your staked LikeCoin at anytime, but need to wait for a 21-day cool down period.",
