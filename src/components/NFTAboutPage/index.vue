@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
+import { LIKECOIN_NFT_ABOUT_ITEMS } from '~/constant';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -166,7 +166,7 @@ export default {
   props: {
     nftClassIds: {
       type: Array,
-      default: () => LIKECOIN_NFT_CAMPAIGN_ITEMS.slice(0, 2),
+      default: () => LIKECOIN_NFT_ABOUT_ITEMS,
     },
   },
   methods: {
