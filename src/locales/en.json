@@ -68,7 +68,7 @@
   "nft_details_page_errormessage_transfer_self": "You cannot send Writing NFT to yourself.",
   "nft_details_page_label_price": "Current Price",
   "nft_portfolio_page_state_collections": "Collections",
-  "nft_portfolio_page_state_value": "Total Value",
+  "nft_portfolio_page_state_value": "Asset Value",
   "nft_portfolio_page_state_creations": "Creations",
   "nft_portfolio_page_state_collectors": "Collectors",
   "nft_portfolio_page_label_collected": "Collected",
