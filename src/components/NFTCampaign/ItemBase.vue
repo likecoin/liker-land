@@ -166,7 +166,7 @@ export default {
   },
   computed: {
     collectButtonLabel() {
-      return `${this.price} $LIKE`;
+      return `${this.price} LIKE`;
     },
   },
   methods: {

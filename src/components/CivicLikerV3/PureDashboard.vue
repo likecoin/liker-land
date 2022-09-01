@@ -226,7 +226,7 @@ export default {
       ).toLocaleString();
     },
     stakingDenom() {
-      return '$LIKE';
+      return 'LIKE';
     },
     isFetching() {
       return this.status === 'fetching';
