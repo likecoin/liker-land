@@ -68,9 +68,9 @@
               :is-selected="currentTab === 'collected'"
               @click="goCollected"
             />
-            <MenuButtonDivider v-if="sellingNFTClassId.length" />
+            <MenuButtonDivider v-if="sellingNFTClassIds.length" />
             <MenuButton
-              v-if="isLoading || sellingNFTClassId.length"
+              v-if="isLoading || sellingNFTClassIds.length"
               text="Created"
               :is-selected="currentTab === 'created'"
               @click="goCreated"
@@ -94,7 +94,7 @@
             ]"
           >
             <NFTPortfolioCard
-              v-if="!ownedNFTClassId.length"
+              v-if="!ownedNFTClassIds.length"
               class="!bg-shade-gray break-inside-avoid"
             >
               <div class="p-[8px] w-full h-[140px]">
@@ -229,8 +229,8 @@ export default {
     return {
       wallet: undefined,
       userInfo: undefined,
-      ownedNFTClassId: [],
-      sellingNFTClassId: [],
+      ownedNFTClassIds: [],
+      sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
@@ -263,16 +263,16 @@ export default {
       return this.userInfo && this.userInfo.avatar;
     },
     ownedWritingNFTClassId() {
-      return this.getWritingNFTClassIdFilter(this.ownedNFTClassId);
+      return this.getWritingNFTClassIdFilter(this.ownedNFTClassIds);
     },
     ownedNonWritingNFTClassId() {
-      return this.getNonWritingNFTClassIdFilter(this.ownedNFTClassId);
+      return this.getNonWritingNFTClassIdFilter(this.ownedNFTClassIds);
     },
     sellingWritingNFTClassId() {
-      return this.getWritingNFTClassIdFilter(this.sellingNFTClassId);
+      return this.getWritingNFTClassIdFilter(this.sellingNFTClassIds);
     },
     sellingNonWritingNFTClassId() {
-      return this.getNonWritingNFTClassIdFilter(this.sellingNFTClassId);
+      return this.getNonWritingNFTClassIdFilter(this.sellingNFTClassIds);
     },
   },
   async asyncData({ route, $api, error }) {
@@ -323,14 +323,14 @@ export default {
     async fetchUserOwnClasses() {
       const { nfts } = await getNFTs({ owner: this.wallet });
       const classIdSet = new Set(nfts.map(n => n.classId));
-      this.ownedNFTClassId = Array.from(classIdSet);
+      this.ownedNFTClassIds = Array.from(classIdSet);
     },
     async fetchUserSellingClasses() {
       const { data } = await this.$api.get(
         getUserSellNFTClasses({ wallet: this.wallet })
       );
-      this.sellingNFTClassId = data.list;
-      if (!this.sellingNFTClassId.length) {
+      this.sellingNFTClassIds = data.list;
+      if (!this.sellingNFTClassIds.length) {
         this.currentTab = 'collected';
       }
       this.isLoading = false;
