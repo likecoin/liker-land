@@ -23,43 +23,34 @@
         ]"
         @click="$emit('go-collected')"
       >
-        <div class="flex flex-col items-center justify-center">
-          <Label
-            preset="h3"
-            class="text-like-green mb-[4px]"
-            :text="stats.collectedCount.toString()"
-          />
-          <Label
-            preset="h6"
-            class="text-medium-gray"
-            :text="$t('nft_portfolio_page_label_collected')"
-            valign="middle"
-          >
-            <template #prepend>
-              <IconMint />
-            </template>
-          </Label>
-        </div>
-        <div class="flex flex-col items-center justify-center">
-          <div class="flex items-end">
-            <Label
-              preset="h3"
-              class="text-like-green mb-[4px]"
-              :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
-                'en-US')}`"
-            />&nbsp;<span class="text-like-green mb-[4px]">{{ $t('header_menu_LIKE') }}</span>
-          </div>
-          <Label
-            preset="h6"
-            class="text-medium-gray"
-            :text="$t('nft_portfolio_page_state_value')"
-            valign="middle"
-          >
-            <template #prepend>
-              <IconPriceMini />
-            </template>
-          </Label>
-        </div>
+        <UserStatsItem
+          :is-loading="isLoading"
+          :stats-value="stats.collectedCount.toString()"
+          :label-text="$t('nft_portfolio_page_label_collected')"
+        >
+          <template #label-icon>
+            <IconMint />
+          </template>
+        </UserStatsItem>
+        <UserStatsItem
+          :is-loading="isLoading"
+          preset="custom"
+          :label-text="$t('nft_portfolio_page_state_value')"
+        >
+          <template #custom-stats>
+            <div class="flex items-end">
+              <Label
+                preset="h3"
+                class="text-like-green"
+                :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
+                  'en-US')}`"
+              />&nbsp;<span class="text-like-green">{{ $t('header_menu_LIKE') }}</span>
+            </div>
+          </template>
+          <template #label-icon>
+            <IconPriceMini />
+          </template>
+        </UserStatsItem>
       </div>
       <hr
         class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
@@ -78,40 +69,24 @@
         ]"
         @click="$emit('go-created')"
       >
-        <div class="flex flex-col items-center justify-center">
-          <Label
-            preset="h3"
-            class="text-like-green mb-[4px]"
-            :text="isLoading ? '-' : stats.createdCount.toString()"
-          />
-          <Label
-            preset="h6"
-            class="text-medium-gray"
-            :text="$t('nft_portfolio_page_label_created')"
-            valign="middle"
-          >
-            <template #prepend>
-              <IconFlare />
-            </template>
-          </Label>
-        </div>
-        <div class="flex flex-col items-center justify-center">
-          <Label
-            preset="h3"
-            class="text-like-green mb-[4px]"
-            :text="isLoading ? '-' : stats.createdCollectorCount.toString()"
-          />
-          <Label
-            preset="h6"
-            class="text-medium-gray"
-            :text="$t('nft_portfolio_page_state_collectors')"
-            valign="middle"
-          >
-            <template #prepend>
-              <IconPersonMini />
-            </template>
-          </Label>
-        </div>
+        <UserStatsItem
+          :is-loading="isLoading"
+          :stats-value="stats.createdCount.toString()"
+          :label-text="$t('nft_portfolio_page_label_created')"
+        >
+          <template #label-icon>
+            <IconFlare />
+          </template>
+        </UserStatsItem>
+        <UserStatsItem
+          :is-loading="isLoading"
+          :stats-value="stats.createdCollectorCount.toString()"
+          :label-text="$t('nft_portfolio_page_state_collectors')"
+        >
+          <template #label-icon>
+            <IconPersonMini />
+          </template>
+        </UserStatsItem>
       </div>
     </template>
   </UserStatsBase>
