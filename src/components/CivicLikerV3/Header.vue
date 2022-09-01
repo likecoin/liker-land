@@ -65,7 +65,7 @@
         />
         <image
           v-else-if="isActive"
-          key="fetching"
+          key="active"
           v-bind="bgImageProps"
           xlink:href="~assets/images/civic-v3/active.png"
         />
@@ -134,7 +134,10 @@
     >
       <span place="date">{{ activeSince }}</span>
     </i18n>
-    <div v-if="isFetching" class="absolute flex items-center justify-center pin">
+    <div
+      v-if="isFetching"
+      class="absolute inset-0 flex items-center justify-center"
+    >
       <Spinner />
     </div>
   </section>
