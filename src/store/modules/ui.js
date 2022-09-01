@@ -38,7 +38,7 @@ const initialState = () => ({
   txStatus: '',
   txErrorMessage: '',
   ownedCount: null,
-  targetClassId: null,
+  txTargetClassId: null,
 });
 
 const mutations = {
@@ -67,7 +67,7 @@ const mutations = {
     state.ownedCount = ownedCount;
   },
   [UI_SET_TARGET_CLASSID](state, classId) {
-    state.targetClassId = classId;
+    state.txTargetClassId = classId;
   },
   [UI_SET_TX_STATUS](state, status) {
     state.txStatus = status;

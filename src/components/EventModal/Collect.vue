@@ -43,12 +43,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['uiTargetClassId', 'uiTxNFTStatus']),
+    ...mapGetters(['uiTxTargetClassId', 'uiTxNFTStatus']),
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
     handleShare() {
-      this.copyURL(`nft/class/${this.uiTargetClassId}`);
+      this.copyURL(`nft/class/${this.uiTxTargetClassId}`);
     },
     goToPortfolio() {
       this.$router.push({ name: 'id', params: { id: this.getAddress } });

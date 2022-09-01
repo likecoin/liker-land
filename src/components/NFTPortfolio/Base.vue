@@ -1,22 +1,5 @@
 <template>
-  <div
-    :class="[
-      'flex',
-      'flex-col',
-      'rounded-[24px]',
-      'w-[310px]',
-      'mb-[16px]',
-      'overflow-hidden',
-      'bg-white',
-      'box-border',
-      'border-[2px]',
-      'border-transparent',
-      'hover:border-like-cyan',
-      'transition',
-      'ease-in',
-      'duration-200',
-    ]"
-  >
+  <NFTPortfolioCard>
     <div
       class="h-[180px]"
       :style="`background-color: ${NFTImageBackgroundColor}`"
@@ -85,7 +68,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </NFTPortfolioCard>
 </template>
 
 <script>
