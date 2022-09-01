@@ -22,7 +22,7 @@
           "
         >
         <span class="relative">{{ priceLabel }}</span>&nbsp;
-        <span class="relative text-[0.8em] leading-[1.5]">$LIKE</span>
+        <span class="relative text-[0.8em] leading-[1.5]">LIKE</span>
       </div>
     </td>
     <td class="pl-[12px] py-[4px]">

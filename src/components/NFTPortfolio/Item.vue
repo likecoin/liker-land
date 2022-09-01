@@ -51,7 +51,7 @@
             preset="secondary"
             @click.stop.prevent="handleClickCollect"
           >
-            <span>{{ NFTPrice || '-' }} $LIKE</span>
+            <span>{{ NFTPrice || '-' }} LIKE</span>
             <template #prepend>
               <IconPrice />
             </template>

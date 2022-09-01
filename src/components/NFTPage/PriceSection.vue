@@ -106,7 +106,7 @@ export default {
   },
   computed: {
     formattedNFTPrice() {
-      return `${this.nftPrice || '-'} $LIKE`;
+      return `${this.nftPrice || '-'} LIKE`;
     },
   },
   methods: {
