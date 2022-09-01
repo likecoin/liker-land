@@ -41,17 +41,14 @@
           </Label>
         </div>
         <div class="flex flex-col items-center justify-center">
-          <Label
-            preset="h3"
-            class="text-like-green mb-[4px]"
-            valign="bottom"
-            :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
-              'en-US')}`"
-          >
-            <template #append>
-              <Label preset="h5" class="text-like-green ml-[-8px]" :text="$t('header_menu_LIKE')" />
-            </template>
-          </Label>
+          <div class="flex items-end">
+            <Label
+              preset="h3"
+              class="text-like-green mb-[4px]"
+              :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
+                'en-US')}`"
+            />&nbsp;<span class="text-like-green mb-[4px]">{{ $t('header_menu_LIKE') }}</span>
+          </div>
           <Label
             preset="h6"
             class="text-medium-gray"
