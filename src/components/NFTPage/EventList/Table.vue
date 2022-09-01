@@ -16,18 +16,34 @@
         class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray"
       >
         <td>
-          <Label v-if="event.event === 'purchase'" class="break-all" :text="$t('nft_details_page_activity_list_event_collect')">
+          <Label
+            v-if="event.event === 'purchase'"
+            class="break-all"
+            :text="$t('nft_details_page_activity_list_event_collect')"
+          >
             <template #prepend>
               <IconCircle />
             </template>
           </Label>
-          <Label v-else-if="event.event === 'transfer'" class="break-all" :text="$t('nft_details_page_activity_list_event_transfer')">
+          <Label
+            v-else-if="event.event === 'transfer'"
+            class="break-all"
+            :text="$t('nft_details_page_activity_list_event_transfer')"
+          >
             <template #prepend>
               <IconTransferMini />
             </template>
           </Label>
-          <Label v-else-if="event.event === 'mint_nft'" class="break-all" :text="$t('nft_details_page_activity_list_event_mint_nft')" />
-          <Label v-else-if="event.event === 'new_class'" class="break-all" :text="$t('nft_details_page_activity_list_event_create_class')" />
+          <Label
+            v-else-if="event.event === 'mint_nft'"
+            class="break-all"
+            :text="$t('nft_details_page_activity_list_event_mint_nft')"
+          />
+          <Label
+            v-else-if="event.event === 'new_class'"
+            class="break-all"
+            :text="$t('nft_details_page_activity_list_event_create_class')"
+          />
         </td>
         <td>
           <Label class="break-all">{{ event.price || '-' }}</Label>
