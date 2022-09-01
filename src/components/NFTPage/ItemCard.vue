@@ -166,7 +166,7 @@ export default {
       type: String,
       default: undefined,
     },
-    isWritingNFT: {
+    isWritingNft: {
       type: Boolean,
       default: false,
     },
@@ -180,6 +180,9 @@ export default {
   computed: {
     formattedNFTPrice() {
       return `${this.nftPrice || '-'} $LIKE`;
+    },
+    isWritingNFT() {
+      return this.isWritingNft;
     },
   },
   methods: {

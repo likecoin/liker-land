@@ -58,7 +58,7 @@
               :nft-description="NFTDescription"
               :nft-price="NFTPrice"
               :nft-external-url="NFTExternalUrl"
-              :is-writing-n-f-t="isWritingNFT"
+              :is-writing-nft="isWritingNFT"
               :iscn-url="iscnURL"
               @collect="handleCollectFromPreviewSection"
             />
