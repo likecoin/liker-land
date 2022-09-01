@@ -49,7 +49,7 @@
               'en-US')}`"
           >
             <template #append>
-              <Label preset="h5" class="text-like-green" :text="$t('header_menu_LIKE')" />
+              <Label preset="h5" class="text-like-green ml-[-8px]" :text="$t('header_menu_LIKE')" />
             </template>
           </Label>
           <Label
