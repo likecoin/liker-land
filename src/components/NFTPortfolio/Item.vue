@@ -1,6 +1,5 @@
 <template>
   <NuxtLink
-    v-if="isWritingNFT"
     class="mx-auto mb-[5px] break-inside-avoid"
     :to="{ name: 'nft-class-classId', params: { classId } }"
     target="_blank"
@@ -8,12 +7,23 @@
   >
     <NFTPortfolioCard>
       <div
+        v-if="isWritingNFT"
         class="h-[180px]"
         :style="`background-color: ${NFTImageBackgroundColor}`"
       >
         <img
           class="object-cover w-full max-h-[180px]"
           :src="NFTImageUrl"
+        >
+      </div>
+      <div
+        v-else
+        class="h-[180px]"
+        :style="`background-color: ${NFTImageBackgroundColor}`"
+      >
+        <img
+          class="object-cover h-full max-h-[180px]"
+          src="~/assets/images/nft/primitive-nft.png"
         >
       </div>
       <div
@@ -44,7 +54,7 @@
         <Label preset="h5" class="mt-[12px] break-all" align="center">
           {{ NFTName }}
         </Label>
-        <div class="z-[500] flex justify-center my-[16px]">
+        <div v-if="isWritingNFT" class="z-[500] flex justify-center my-[16px]">
           <ProgressIndicator v-if="uiIsOpenCollectModal && isCollecting" />
           <ButtonV2
             v-else
@@ -96,10 +106,11 @@ export default {
       isCollecting: false,
     };
   },
-  mounted() {
-    this.updateNFTClassMetadata();
-    this.updateNFTPurchaseInfo();
+  async mounted() {
+    await this.updateNFTClassMetadata();
     this.updateNFTOwners();
+    // wait for metadata to determine if it is writing NFT
+    if (this.isWritingNFT) this.updateNFTPurchaseInfo();
   },
   methods: {
     async handleClickCollect() {

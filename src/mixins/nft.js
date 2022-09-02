@@ -6,12 +6,15 @@ import {
   postNFTPurchase,
   postNFTTransfer,
   getAddressLikerIdMinApi,
+  getNFTEvents,
 } from '~/util/api';
 import {
   getAccountBalance,
   transferNFT,
   sendGrant,
   getNFTCountByClassId,
+  isWritingNFT,
+  formatNFTEventsToHistory,
 } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -22,6 +25,8 @@ const TX_STATUS = {
   INSUFFICIENT: 'insufficient',
   FAILED: 'failed',
 };
+
+const NFT_INDEXER_LIMIT_MAX = 100;
 
 export default {
   data() {
@@ -59,7 +64,7 @@ export default {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
     isWritingNFT() {
-      return !!this.NFTClassMetadata.name;
+      return isWritingNFT(this.NFTClassMetadata);
     },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
@@ -172,19 +177,41 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const { data } = await this.$api.get(
-        getNFTHistory({ classId: this.classId })
-      );
-      this.NFTHistory = data.list;
+      if (isWritingNFT(this.NFTClassMetadata)) {
+        const { data } = await this.$api.get(
+          getNFTHistory({ classId: this.classId })
+        );
+        this.NFTHistory = data.list;
+      } else {
+        let data;
+        let nextKey;
+        let count;
+        let events = [];
+        do {
+          // eslint-disable-next-line no-await-in-loop
+          ({ data } = await this.$api.get(
+            getNFTEvents({
+              classId: this.classId,
+              key: nextKey,
+              limit: NFT_INDEXER_LIMIT_MAX,
+            })
+          ));
+          nextKey = data.pagination.next_key;
+          ({ count } = data.pagination);
+          events = events.concat(data.events);
+        } while (count === NFT_INDEXER_LIMIT_MAX);
+        this.NFTHistory = formatNFTEventsToHistory(events);
+      }
       const array = [];
       // eslint-disable-next-line no-restricted-syntax
-      for (const list of data.list) {
+      for (const list of this.NFTHistory) {
         array.push(list.fromWallet, list.toWallet);
       }
       this.updateDisplayNameList([...new Set(array)]);
       this.isHistoryInfoLoading = false;
     },
     updateDisplayNameList(addresses) {
+      if (!addresses) return null;
       if (typeof addresses === 'string') {
         return this.getAddressLikerId(addresses);
       }

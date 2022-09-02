@@ -1,6 +1,10 @@
 import * as TYPES from '@/store/mutation-types';
 import * as api from '@/util/api';
-import { getClassInfo } from '@/util/nft';
+import {
+  getClassInfo,
+  isValidHttpUrl,
+  formatOwnerInfoFromChain,
+} from '@/util/nft';
 
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
@@ -38,26 +42,42 @@ export async function fetchNFTPurchaseInfo({ commit }, classId) {
 
 export async function fetchNFTMetadata({ commit }, classId) {
   let metadata;
-  const [apiMetadata = {}, chainMetadata = {}] = await Promise.all([
-    this.$api
-      .$get(api.getNFTMetadata({ classId }))
-      // eslint-disable-next-line no-console
-      .catch(err => console.error(err)),
-    getClassInfo(classId),
-  ]);
+  const chainMetadata = await getClassInfo(classId);
   const {
     name,
     description,
+    uri,
     data: { parent, metadata: classMetadata = {} } = {},
-  } = chainMetadata;
-  metadata = { name, description, metadata: classMetadata, parent };
-  if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+  } = chainMetadata || {};
+  const iscnId = parent?.iscnIdPrefix;
+  metadata = {
+    name,
+    description,
+    metadata: classMetadata,
+    parent,
+    iscn_id: iscnId,
+  };
+  if (isValidHttpUrl(uri)) {
+    const apiMetadata = await this.$api
+      .$get(uri)
+      // eslint-disable-next-line no-console
+      .catch(err => console.error(err));
+    if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+  } else if (iscnId) {
+    const iscnRecord = await this.$api
+      .$get(api.getISCNRecord(iscnId))
+      // eslint-disable-next-line no-console
+      .catch(err => console.error(err));
+    const iscnOwner = iscnRecord?.owner;
+    if (iscnOwner) metadata = { ...metadata, iscn_owner: iscnOwner };
+  }
   commit(TYPES.STATIC_SET_NFT_CLASS_METADATA, { classId, metadata });
   return metadata;
 }
 
 export async function fetchNFTOwners({ commit }, classId) {
-  const info = await this.$api.$get(api.getNFTOwners({ classId }));
+  const { owners } = await this.$api.$get(api.getNFTOwners(classId));
+  const info = formatOwnerInfoFromChain(owners);
   commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
   return info;
 }

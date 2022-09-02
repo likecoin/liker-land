@@ -187,16 +187,6 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
   )}`;
 };
 
-export const getNFTOwners = ({ iscnId, classId }) => {
-  const qsPayload = {
-    iscn_id: iscnId,
-    class_id: classId,
-  };
-  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(
-    qsPayload
-  )}`;
-};
-
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
 
@@ -205,6 +195,35 @@ export const getLIKEPrice = () =>
 
 export const getChainRawTx = hash =>
   `${LIKECOIN_CHAIN_API}/cosmos/tx/v1beta1/txs/${hash}`;
+
+export const getISCNRecord = iscnId => {
+  const qsPayload = {
+    iscn_id: iscnId,
+  };
+  return `${LIKECOIN_CHAIN_API}/iscn/records/id?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTOwners = classId => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTEvents = ({ classId, limit, key }) => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  if (key) qsPayload.key = key;
+  if (limit) qsPayload.limit = limit;
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
   const qsPayload = {
