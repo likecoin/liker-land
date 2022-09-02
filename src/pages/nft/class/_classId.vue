@@ -35,6 +35,7 @@
               :nft-name="NFTName"
               :nft-description="NFTDescription"
               :nft-price="NFTPrice"
+              @collect="handleCollectFromPreviewSection"
             />
             <NFTPageCollectorList
               class="phone:hidden tablet:hidden"
@@ -276,6 +277,16 @@ export default {
       } finally {
         this.isCollecting = false;
       }
+    },
+    handleCollectFromPreviewSection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(DetailsPagePreviewSection)',
+        this.classId,
+        1
+      );
+      return this.handleCollect();
     },
     handleCollectFromPriceSection() {
       logTrackerEvent(
