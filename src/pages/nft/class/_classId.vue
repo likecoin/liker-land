@@ -248,6 +248,10 @@ export default {
       },
     },
   },
+  asyncData({ query }) {
+    const { action } = query;
+    return { action };
+  },
   async fetch({ route, store }) {
     const { classId } = route.params;
     await store.dispatch('fetchNFTMetadata', classId);
@@ -261,6 +265,10 @@ export default {
       this.getLIKEPrice(),
     ]);
     this.isOwnerInfoLoading = false;
+    if (this.action === 'collect') {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
+      this.handleCollect();
+    }
   },
   methods: {
     onToggleTransfer() {
