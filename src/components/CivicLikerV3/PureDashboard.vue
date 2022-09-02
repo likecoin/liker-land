@@ -64,68 +64,100 @@
         </header>
 
         <div class="py-32 px-52">
-          <i18n :path="stakingHintI18nKey">
-            <span
-              class="text-like-green font-600"
-              place="amount"
-            >{{ formattedRemainingStakingAmount }} {{ stakingDenom }}</span>
-            <i18n
-              place="civicLiker"
-              class="text-like-green font-600"
-              tag="span"
-              path="civicLiker"
-            />
-          </i18n>
 
-          <div
-            class="relative h-8 mt-16 overflow-hidden rounded-full bg-gray-c"
-          >
+          <CivicLikerV3StepSection class="mt-[24px]" :step="1">
+            <i18n path="civic_dashboard_v3_summary_liker_id_description">
+              <i18n
+                place="civicLiker"
+                class="text-like-green font-600"
+                tag="span"
+                path="civicLiker"
+              />
+            </i18n>
+            <div class="border border-shade-gray rounded-[8px] mx-auto mt-[24px] p-[12px] flex justify-center items-center">
+              <i18n
+                :class="[isUnregistered ? 'text-medium-gray' : 'text-like-green' ,'font-600']"
+                tag="span"
+                :path="isUnregistered
+                  ? 'civic_dashboard_v3_summary_liker_id_unregistered'
+                  : 'civic_dashboard_v3_summary_liker_id_registered'
+                "
+              />
+              <TickIcon
+                v-if="!isUnregistered"
+                class="w-16 h-16 ml-8 fill-current text-success"
+              />
+            </div>
+          </CivicLikerV3StepSection>
+
+          <CivicLikerV3StepSection class="mt-[64px]" :step="2">
+            <i18n :path="stakingHintI18nKey">
+              <span
+                class="text-like-green font-600"
+                place="amount"
+              >{{ formattedRemainingStakingAmount }} {{ stakingDenom }}</span>
+              <i18n
+                place="civicLiker"
+                class="text-like-green font-600"
+                tag="span"
+                path="civicLiker"
+              />
+            </i18n>
             <div
-              class="h-full bg-like-cyan"
-              :style="`width: ${
-                Math.min(100, (stakingAmount / stakingAmountTarget) * 100)
-              }%`"
-            />
-          </div>
-
-          <div class="flex items-center mt-16 text-14 text-gray-9b">
-            <TickIcon
-              v-if="isActivating || isActive"
-              class="w-16 h-16 mr-8 fill-current text-success"
-            />
-            <span>
-              <span class="text-like-green">{{ formattedStakingAmount }}</span>
-              / {{ formattedRequiredStakingAmount }} {{ stakingDenom }}
-            </span>
-          </div>
+              class="relative h-8 mt-16 overflow-hidden rounded-full bg-gray-c"
+            >
+              <div
+                class="h-full bg-like-cyan"
+                :style="`width: ${
+                  Math.min(100, (stakingAmount / stakingAmountTarget) * 100)
+                }%`"
+              />
+            </div>
+            <div class="flex items-center mt-16 text-14 text-gray-9b">
+              <TickIcon
+                v-if="isActivating || isActive"
+                class="w-16 h-16 mr-8 fill-current text-success"
+              />
+              <span>
+                <span class="text-like-green">{{ formattedStakingAmount }}</span>
+                / {{ formattedRequiredStakingAmount }} {{ stakingDenom }}
+              </span>
+            </div>
+          </CivicLikerV3StepSection>
 
           <footer class="flex flex-col items-center mt-32">
-            <Button
+            <ButtonV2
               v-if="!isSignedIn"
-              :title="buttonTitle"
-              preset="primary"
-              content-class="px-12"
-              size="large"
+              :text="buttonTitle"
+              preset="secondary"
               @click="$emit('sign-in')"
             >
               <template #prepend>
                 <LoginIcon class="w-20 h-20" />
               </template>
-            </Button>
-            <Button
+            </ButtonV2>
+            <ButtonV2
+              v-else-if="isUnregistered"
+              :text="$t('civic_dashboard_v3_summary_action_button_register')"
+              preset="secondary"
+              @click="$emit('register')"
+            >
+              <template #prepend>
+                <LoginIcon class="w-20 h-20" />
+              </template>
+            </ButtonV2>
+            <ButtonV2
               v-else
-              :title="buttonTitle"
+              :text="buttonTitle"
               :href="stakingManagementUrl"
-              preset="secondary-outline"
-              content-class="px-12"
-              size="large"
+              preset="outline"
               target="_blank"
               rel="noreferrer noopener"
             >
               <template #prepend>
                 <PlusIcon class="w-20 h-20" />
               </template>
-            </Button>
+            </ButtonV2>
           </footer>
         </div>
       </div>
@@ -165,13 +197,11 @@ import LoginIcon from '~/assets/icons/login.svg?inline';
 import PlusIcon from '~/assets/icons/plus.svg?inline';
 import TickIcon from '~/assets/icons/tick.svg?inline';
 
-import Button from '../LegacyButton/Button';
 import CivicLikerV3Header from './Header';
 
 export default {
   name: 'PureCivicDashboardV3',
   components: {
-    Button,
     CivicLikerV3Header,
     LoginIcon,
     PlusIcon,
@@ -236,6 +266,9 @@ export default {
     isFetching() {
       return this.status === 'fetching';
     },
+    isUnregistered() {
+      return this.status === 'unregistered';
+    },
     isActivating() {
       return this.status === 'activating';
     },
@@ -250,6 +283,9 @@ export default {
         case 'activating':
           return 'civic_dashboard_v3_summary_status_activating';
 
+        case 'unregistered':
+          return 'civic_dashboard_v3_summary_status_unregistered';
+
         case 'inactive':
         default:
           return 'civic_dashboard_v3_summary_status_inactive';
@@ -262,6 +298,9 @@ export default {
 
         case 'activating':
           return 'civic_dashboard_v3_summary_status_activating_hint';
+
+        case 'unregistered':
+          return 'civic_dashboard_v3_summary_status_unregistered_hint';
 
         case 'inactive':
         default:
@@ -291,7 +330,7 @@ export default {
     actionButtonI18nKey() {
       switch (this.stakingStatus) {
         case 'fufilled':
-          return 'civic_dashboard_v3_summary_action_button_sign_in';
+          return 'civic_dashboard_v3_summary_action_button_connect_wallet';
         case 'unfufilled':
           return 'civic_dashboard_v3_summary_action_button_delegate';
         case 'logout':
@@ -321,7 +360,9 @@ export default {
           return this.$t('civic_dashboard_v3_summary_action_button_delegate');
         case 'logout':
         default:
-          return this.$t('civic_dashboard_v3_summary_action_button_sign_in');
+          return this.$t(
+            'civic_dashboard_v3_summary_action_button_connect_wallet'
+          );
       }
     },
   },

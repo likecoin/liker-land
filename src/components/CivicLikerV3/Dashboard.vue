@@ -18,6 +18,7 @@
       :staking-amount="stakingAmount"
       :staking-amount-target="stakingAmountTarget"
       :active-since="activeSince"
+      @register="handleRegister"
       @sign-in="handleSignIn"
     />
   </Transition>
@@ -26,11 +27,12 @@
 <script>
 import walletMixin from '~/mixins/wallet';
 
-import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '../../constant';
+import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '~/constant';
 import {
   getCivicLikerStakingAPI,
   getCivicLikerStakingInfoAPI,
-} from '../../util/api';
+} from '~/util/api';
+import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
   name: 'CivicLikerV3Dashboard',
@@ -51,14 +53,23 @@ export default {
     },
   },
   watch: {
-    getAddress() {
-      this.fetchData();
+    getAddress(address) {
+      if (address) {
+        this.fetchData();
+      } else {
+        this.stakingAmount = 0;
+        this.status = 'unregistered';
+        this.activeSince = null;
+      }
     },
   },
   mounted() {
     this.fetchData();
   },
   methods: {
+    handleRegister() {
+      window.open(getLikerIdSettingsURL(), '_blank');
+    },
     handleSignIn() {
       this.connectWallet();
     },
@@ -70,7 +81,7 @@ export default {
       }
       await Promise.all(fetches);
       if (!this.getAddress) {
-        this.status = 'inactive';
+        this.status = 'unregistered';
       }
     },
     async fetchStakingInfo() {

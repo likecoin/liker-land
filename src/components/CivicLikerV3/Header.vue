@@ -170,7 +170,7 @@ export default {
       return this.status === 'fetching';
     },
     isInactive() {
-      return this.status === 'inactive';
+      return ['inactive', 'unregistered'].includes(this.status);
     },
     isActivating() {
       return this.status === 'activating';
