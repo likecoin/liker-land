@@ -1,6 +1,11 @@
 <template>
   <Page>
+    <CardV2
+      v-if="isLoading"
+      class="absolute top-[40%]"
+    >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <main
+      v-else
       :class="[
         'flex',
         'flex-col',
@@ -207,6 +212,7 @@ export default {
   data() {
     return {
       toAddress: null,
+      isLoading: true,
 
       currentPrice: 0,
       isOwnerInfoLoading: true,
@@ -264,7 +270,7 @@ export default {
       this.updateNFTHistory(),
       this.getLIKEPrice(),
     ]);
-    this.isOwnerInfoLoading = false;
+    this.isLoading = false;
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
       this.handleCollect();
