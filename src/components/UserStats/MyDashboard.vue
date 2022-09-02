@@ -34,18 +34,11 @@
         </UserStatsItem>
         <UserStatsItem
           :is-loading="isLoading"
-          preset="custom"
           :label-text="$t('nft_portfolio_page_state_value')"
         >
-          <template #custom-stats>
-            <div class="flex items-end">
-              <Label
-                preset="h3"
-                class="text-like-green"
-                :text="`${Math.ceil(stats.collectedAmount).toLocaleString(
-                  'en-US')}`"
-              />&nbsp;<span class="text-like-green">{{ $t('header_menu_LIKE') }}</span>
-            </div>
+          <template #custom-value>
+            <span>{{ `${Math.ceil(stats.collectedAmount).toLocaleString('en-US')}` }}&nbsp;</span>
+            <span class="text-[16px]">{{ $t('header_menu_LIKE') }}</span>
           </template>
           <template #label-icon>
             <IconPriceMini />

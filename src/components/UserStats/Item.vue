@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-col items-center justify-center">
     <Label
-      v-if="preset === 'default'"
       preset="h3"
       class="text-like-green"
+      content-class="!items-end"
       :text="isLoading ? '-' : statsValue"
-    />
-    <slot v-else name="custom-stats" />
+    >
+      <slot v-if="!isLoading" name="custom-value" />
+    </Label>
     <Label
       preset="h6"
       class="text-medium-gray mt-[4px]"
@@ -22,11 +23,6 @@
 <script>
 export default {
   props: {
-    // The preset of UserStatsItem, option: default and custom
-    preset: {
-      type: String,
-      default: 'default',
-    },
     isLoading: {
       type: Boolean,
       default: false,
