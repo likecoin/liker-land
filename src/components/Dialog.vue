@@ -12,7 +12,7 @@
         ]"
         @click="handleBackdropClick"
       />
-      <div :class="['fixed', 'top-[15vh]']">
+      <div class="fixed w-full max-w-[1920px] mx-auto p-[12px]">
         <ButtonV2
           v-if="hasCloseButton"
           :class="[
@@ -42,11 +42,14 @@
             />
           </svg>
         </ButtonV2>
-        <div
+        <component
+          :is="panelComponent"
           :class="[
             'relative',
+            'w-full',
             'max-h-[80vh]',
-            'overflow-y-scroll',
+            'mx-auto',
+            'overflow-y-auto',
             'scrollbar-custom',
             panelClass,
           ]"
@@ -69,7 +72,7 @@
             </div>
           </template>
           <slot v-else />
-        </div>
+        </component>
         <div
           v-if="$slots.footer"
           :class="[
@@ -116,6 +119,10 @@ export default class Dialog extends Vue {
   // Content text.
   @Prop({ default: '' })
   readonly text!: string;
+
+  // Panel tag.
+  @Prop({ default: 'div' })
+  readonly panelComponent!: string;
 
   // Set to true to disable close by backdrop click
   @Prop({ default: false })

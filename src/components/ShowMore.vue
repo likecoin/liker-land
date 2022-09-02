@@ -34,19 +34,8 @@
     <Dialog
       v-model="isOpenDialog"
       preset="custom"
-      :panel-class="[
-        'px-[32px]',
-        'py-[24px]',
-        'rounded-[24px]',
-        'shadow-lg',
-        'bg-white',
-
-        'w-full',
-        'max-w-[calc(100vw_-_3rem)]',
-
-        'overflow-x-scroll',
-        'scrollbar-custom',
-      ]"
+      panel-class="overflow-x-auto shadow-lg"
+      panel-component="CardV2"
     >
       <slot name="header" />
       <slot name="content" />
