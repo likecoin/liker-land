@@ -1,55 +1,34 @@
 <template>
   <Page>
+    <NFTShare v-if="referrer" class="w-full" />
     <CardV2
-      v-if="isLoading"
+      v-if="isLoading && !referrer"
       class="absolute top-[40%]"
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
-    <main
-      v-else
+    <div
+      v-if="!isLoading && !referrer"
       :class="[
-        'flex',
-        'flex-col',
-        'mx-auto',
-        'w-full',
-        'max-w-[1024px]',
         'mt-[8px]',
-        'px-[24px]',
+        'px-[12px]',
+        'laptop:px-[24px]',
+        'self-stretch',
       ]"
     >
       <section
         :class="[
-          'flex',
-
-          'flex-col',
-          'desktop:flex-row',
-
-          'items-center',
-          'justify-center',
-          'desktop:justify-center',
-          'desktop:items-start',
-
+          'grid',
+          'grid-cols-1',
+          'desktop:grid-cols-3',
+          'gap-[24px]',
           'w-full',
+          'max-w-[1024px]',
+          'mx-auto',
+          'pb-[120px]',
         ]"
       >
-        <div
-          :class="[
-            columnClasses,
-            'desktop:max-w-[310px]',
-            'desktop:mr-[24px]',
-          ]"
-        >
-          <div
-            :class="[
-              'flex',
-
-              'flex-col',
-              'laptop:flex-row',
-              'desktop:flex-col',
-
-              'justify-center',
-              'w-full',
-            ]"
-          >
+        <!-- Left column -->
+        <div class="flex flex-col gap-[24px]">
+          <div class="grid laptop:grid-cols-2 desktop:grid-cols-1 items-start gap-[24px]">
             <NFTPageItemCard
               class="laptop:w-[310px]"
               :image-bg-color="NFTImageBackgroundColor"
@@ -91,8 +70,9 @@
           </div>
         </div>
 
-        <div :class="[columnClasses]">
-          <div :class="['flex','items-center','mb-[16px]','w-full']">
+        <!-- Right column -->
+        <div class="flex flex-col gap-[24px] desktop:col-span-2">
+          <div class="flex items-center w-full">
             <NFTPageOwningSection
               class="mr-[16px]"
               :owned-count="userOwnedCount"
@@ -126,7 +106,7 @@
           />
         </div>
       </section>
-    </main>
+    </div>
     <TxModal
       :is-open="isOpenTransferModal"
       :has-close-button="!isTransferring"
@@ -255,8 +235,8 @@ export default {
     },
   },
   asyncData({ query }) {
-    const { action } = query;
-    return { action };
+    const { action, referrer } = query;
+    return { action, referrer };
   },
   async fetch({ route, store }) {
     const { classId } = route.params;
