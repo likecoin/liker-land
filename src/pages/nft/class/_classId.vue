@@ -23,7 +23,7 @@
       >
         <!-- Left column -->
         <div class="flex flex-col gap-[24px]">
-          <div class="grid laptop:grid-cols-2 desktop:grid-cols-1 items-start gap-[24px]">
+          <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
             <NFTPagePreviewCard
               :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
@@ -37,19 +37,18 @@
               :nft-price="NFTPrice"
               @collect="handleCollectFromPreviewSection"
             />
-            <NFTPageCollectorList
-              class="phone:hidden tablet:hidden"
-              :owner-count="ownerCount"
-              :items="populatedCollectors"
-              :is-narrow="true"
+            <NFTPageMetadataSection
+              :content-url="NFTExternalUrl"
+              :iscn-id="iscnId"
+              :iscn-url="iscnURL"
+              :content-fingerprints="nftISCNContentFingerprints"
             />
           </div>
-          <NFTPageMetadataSection
+          <NFTPageCollectorList
             class="hidden desktop:block"
-            :content-url="NFTExternalUrl"
-            :iscn-id="iscnId"
-            :iscn-url="iscnURL"
-            :content-fingerprints="nftISCNContentFingerprints"
+            :owner-count="ownerCount"
+            :items="populatedCollectors"
+            :is-narrow="true"
           />
         </div>
 
@@ -75,19 +74,12 @@
             :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="handleCollectFromPriceSection"
           />
-          <NFTPageMetadataSection
-            class="desktop:hidden"
-            :content-url="NFTExternalUrl"
-            :iscn-id="iscnId"
-            :iscn-url="iscnURL"
-            :content-fingerprints="nftISCNContentFingerprints"
-          />
           <NFTPageSupplySection
             :collected-count="mintedCount"
             @collect="handleCollectFromSupplySection"
           />
           <NFTPageCollectorList
-            class="laptop:hidden"
+            class="desktop:hidden"
             :owner-count="ownerCount"
             :items="populatedCollectors"
           />
