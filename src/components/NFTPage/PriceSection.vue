@@ -53,8 +53,7 @@
       <ProgressIndicator v-if="isLoading" />
       <div
         v-else
-        class="rounded-[18px] p-[2px] bg-cover"
-        style="background-image: url('/images/gradient/like-gradient-lighter-blur.svg')"
+        class="rounded-[18px] p-[2px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
       >
         <div class="relative p-[6px] bg-like-green rounded-[16px]">
           <ButtonV2
