@@ -27,7 +27,9 @@ export default class Card extends Vue {
 
   get rootClasses() {
     return [
-      this.isDark ? 'bg-like-green' : 'bg-white',
+      this.isDark
+        ? 'bg-like-green bg-gradient-to-r from-transparent to-like-cyan-translucent'
+        : 'bg-white',
       'rounded-[24px]',
       {
         'text-like-cyan-pale': this.isDark,
