@@ -263,13 +263,14 @@ export default {
     await store.dispatch('fetchNFTMetadata', classId);
   },
   async mounted() {
-    await Promise.all([
+    const promises = [
       this.updateDisplayNameList(this.iscnOwner),
-      this.updateNFTPurchaseInfo(),
       this.updateNFTOwners(),
       this.updateNFTHistory(),
       this.getLIKEPrice(),
-    ]);
+    ];
+    if (this.isWritingNFT) promises.push(this.updateNFTPurchaseInfo());
+    await Promise.all(promises);
     this.isLoading = false;
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
