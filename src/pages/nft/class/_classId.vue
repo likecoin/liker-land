@@ -1,12 +1,12 @@
 <template>
   <Page>
-    <NFTShare v-if="referrer" class="w-full" />
+    <NFTShare v-if="isValidToShare" class="w-full" :referrer="referrer" />
     <CardV2
-      v-if="isLoading && !referrer"
+      v-if="isLoading && !isValidToShare"
       class="absolute top-[40%]"
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
-      v-if="!isLoading && !referrer"
+      v-if="!isLoading && !isValidToShare"
       :class="[
         'mt-[8px]',
         'px-[12px]',
@@ -193,6 +193,7 @@ export default {
     return {
       toAddress: null,
       isLoading: true,
+      referrer: null,
 
       currentPrice: 0,
       isOwnerInfoLoading: true,
@@ -225,12 +226,25 @@ export default {
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userOwnedCount;
     },
+    isValidToShare() {
+      return (
+        this.referrer &&
+        (this.referrer === this.iscnOwner ||
+          Object.prototype.hasOwnProperty.call(this.ownerInfo, this.referrer))
+      );
+    },
   },
   watch: {
     getAddress: {
       immediate: true,
       handler(newAddress) {
         this.updateUserCollectedCount(this.classId, newAddress);
+      },
+    },
+    '$route.query.referrer': {
+      immediate: true,
+      handler(toReferrer) {
+        this.referrer = toReferrer;
       },
     },
   },
