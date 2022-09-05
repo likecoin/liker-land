@@ -177,12 +177,18 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      if (isWritingNFT(this.NFTClassMetadata)) {
-        const { data } = await this.$api.get(
-          getNFTHistory({ classId: this.classId })
-        );
-        this.NFTHistory = data.list;
-      } else {
+      if (this.isWritingNFT) {
+        try {
+          const { data } = await this.$api.get(
+            getNFTHistory({ classId: this.classId })
+          );
+          this.NFTHistory = data.list;
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
+      }
+      if (!this.NFTHistory?.length) {
         let data;
         let nextKey;
         let count;
