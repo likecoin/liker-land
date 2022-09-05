@@ -1,12 +1,11 @@
 <template>
   <Page>
-    <NFTShare v-if="isValidToShare" class="w-full" :referrer="referrer" />
     <CardV2
-      v-if="isLoading && !isValidToShare"
+      v-if="isLoading"
       class="absolute top-[40%]"
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
-      v-if="!isLoading && !isValidToShare"
+      v-else
       :class="[
         'mt-[8px]',
         'px-[12px]',
@@ -193,7 +192,6 @@ export default {
     return {
       toAddress: null,
       isLoading: true,
-      referrer: null,
 
       currentPrice: 0,
       isOwnerInfoLoading: true,
@@ -226,13 +224,6 @@ export default {
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userOwnedCount;
     },
-    isValidToShare() {
-      return (
-        this.referrer &&
-        (this.referrer === this.iscnOwner ||
-          Object.prototype.hasOwnProperty.call(this.ownerInfo, this.referrer))
-      );
-    },
   },
   watch: {
     getAddress: {
@@ -241,19 +232,21 @@ export default {
         this.updateUserCollectedCount(this.classId, newAddress);
       },
     },
-    '$route.query.referrer': {
-      immediate: true,
-      handler(toReferrer) {
-        this.referrer = toReferrer;
-      },
-    },
   },
   asyncData({ query }) {
-    const { action, referrer } = query;
-    return { action, referrer };
+    const { action } = query;
+    return { action };
   },
-  async fetch({ route, store }) {
+  async fetch({ route, store, redirect }) {
     const { classId } = route.params;
+    const { referrer } = route.query;
+    if (referrer) {
+      redirect({
+        name: 'nft-class-classId-share',
+        params: { classId },
+        query: { referrer },
+      });
+    }
     await store.dispatch('fetchNFTMetadata', classId);
   },
   async mounted() {

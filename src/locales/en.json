@@ -70,7 +70,7 @@
   "nft_details_page_errormessage_transfer_self": "You cannot send Writing NFT to yourself.",
   "nft_details_page_label_price": "Current Price",
   "nft_details_page_label_loading": "Loading",
-  "nft_share_page_button_portfolio": "Portfolio",
+  "nft_share_page_button_portfolio": "View Portfolio",
   "nft_share_page_collector_title": "I collected this Writing NFT",
   "nft_share_page_creator_title": "I created this Writing NFT",
   "nft_supply_section_title": "Item Supply",
