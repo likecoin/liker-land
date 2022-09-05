@@ -63,7 +63,6 @@
               :nft-description="NFTDescription"
               :nft-price="NFTPrice"
               :nft-external-url="NFTExternalUrl"
-              :is-writing-nft="isWritingNFT"
               :iscn-url="iscnURL"
               @collect="handleCollectFromPreviewSection"
             />
@@ -105,7 +104,7 @@
             <ShareButton @copy="handleCopyURL" />
           </div>
           <NFTPagePriceSection
-            v-if="isWritingNFT"
+            v-if="NFTPrice"
             class="mt-[16px]"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
@@ -115,7 +114,7 @@
             @collect="handleCollectFromPriceSection"
           />
           <NFTPageSupplySection
-            v-if="isWritingNFT"
+            v-if="isWritingNFT && NFTPrice"
             class="mt-[16px]"
             :collected-count="mintedCount"
             @collect="handleCollectFromSupplySection"

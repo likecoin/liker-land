@@ -7,7 +7,7 @@
   >
     <NFTPortfolioCard>
       <div
-        v-if="isWritingNFT"
+        v-if="NFTImageUrl"
         class="h-[180px]"
         :style="`background-color: ${NFTImageBackgroundColor}`"
       >
@@ -54,7 +54,7 @@
         <Label preset="h5" class="mt-[12px] break-all" align="center">
           {{ NFTName }}
         </Label>
-        <div v-if="isWritingNFT" class="z-[500] flex justify-center my-[16px]">
+        <div v-if="NFTPrice" class="z-[500] flex justify-center my-[16px]">
           <ProgressIndicator v-if="uiIsOpenCollectModal && isCollecting" />
           <ButtonV2
             v-else
