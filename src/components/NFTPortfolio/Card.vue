@@ -7,7 +7,6 @@
       'w-[310px]',
       'mb-[16px]',
       'overflow-hidden',
-      'w-full',
       'bg-white',
       'box-border',
       'border-[2px]',
