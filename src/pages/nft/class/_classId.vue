@@ -64,7 +64,7 @@
               class="mr-[16px]"
               :owned-count="userOwnedCount"
               :is-transfer-disabled="!getAddress || !userOwnedCount"
-              :is-loading="isOwnerInfoLoading"
+              :is-loading="isOwnerInfoLoading && !!getAddress"
               :is-log-in="!!getAddress"
               :is-transferring="isTransferring"
               @openTransfer="onToggleTransfer"
