@@ -13,7 +13,7 @@
     ]"
   >
     <div
-      v-if="isWritingNFT"
+      v-if="imageUrl"
       class="h-[180px]"
       :style="`background-color: ${imageBgColor}`"
     >
@@ -64,7 +64,7 @@
       <Label preset="h5" class="mt-[12px]" :text="nftName" />
       <Label preset="p5" class="mt-[12px]" :text="nftDescription | ellipsisDescription" />
       <ButtonV2
-        v-if="isWritingNFT"
+        v-if="nftPrice"
         class="mt-[16px]"
         :text="formattedNFTPrice"
         preset="secondary"
@@ -74,8 +74,8 @@
           <IconPrice />
         </template>
       </ButtonV2>
-      <hr v-if="isWritingNFT" class="w-[32px] border-shade-gray mt-[12px]">
-      <div v-if="isWritingNFT" class="flex justify-center">
+      <hr v-if="nftPrice && nftExternalUrl" class="w-[32px] border-shade-gray mt-[12px]">
+      <div v-if="nftExternalUrl" class="flex justify-center">
         <ButtonV2
           preset="outline"
           class="my-[16px]"
@@ -166,10 +166,6 @@ export default {
       type: String,
       default: undefined,
     },
-    isWritingNft: {
-      type: Boolean,
-      default: false,
-    },
 
     // ISCN Info
     iscnUrl: {
@@ -180,9 +176,6 @@ export default {
   computed: {
     formattedNFTPrice() {
       return `${this.nftPrice || '-'} $LIKE`;
-    },
-    isWritingNFT() {
-      return this.isWritingNft;
     },
   },
   methods: {
