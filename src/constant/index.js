@@ -40,18 +40,9 @@ export const PAYMENT_METHOD_LIST = [
   'other', // plz always put `other` at last for hk geoip handle
 ];
 
-export const DEFAULT_CL_SUPPORTER =
-  process.env.DEFAULT_CL_SUPPORTER || 'foundation';
-
-export const CIVIC_LIKER_UNIT_PRICE = 5;
-
 export const CIVIC_LIKER_CLASSIC_LIKER_ID = 'civic-liker';
 
 export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';
-
-export const STRIPE_SDK_URL = 'https://js.stripe.com/v3/';
-
-export const CIVIC_LIKER_QUANTITY_OPTIONS = [1];
 
 export const LIKECOIN_CHAIN_MIN_DENOM = IS_TESTNET ? 'nanoekil' : 'nanolike';
 
@@ -94,6 +85,16 @@ export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
       'likenft1faqzun5eucvh07j0fnrk7wehs966y32wujxrfuvlkzwdyfg03h6qnrscau',
       'likenft1s7xk7wt5q03lsa2a87fnqfc0uny28f46s4gtnakc08qdguxlua4qxrxk7m',
       'likenft1t5ftaxzyrnafewsav8qxvvsafs59a8xe2wnrl594yag04u9zwsjqrq0vgt',
+      'likenft1f9dlnexdt6l4d8u2hh9ccm5g52q46sw2hllk4ntdhf7n6resg00s5hseuj',
+      'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
+    ];
+
+export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
+  ? [
+      'likenft10f06wfaql5fxf3g4sy8v57p98lzp7ad92cu34f9aeyhyeklchznsav5npg',
+      'likenft1pwutfz4m6ez0qevzc3re9dsd4e7l4x39nsvud7kmrj5p70tg0nmqlz0wyk',
+    ]
+  : [
       'likenft1f9dlnexdt6l4d8u2hh9ccm5g52q46sw2hllk4ntdhf7n6resg00s5hseuj',
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];

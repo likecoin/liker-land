@@ -32,13 +32,15 @@ export function uiCloseAlert({ commit }) {
   commit(types.UI_SET_ALERT_MESSAGE, '');
 }
 
-export function uiToggleCollectModal({ commit }) {
+export function uiToggleCollectModal({ commit }, { classId, collectedCount }) {
   commit(types.UI_TOGGLE_COLLECT_MODAL, true);
   commit(types.UI_SET_TX_ERROR_MESSAGE, '');
+  commit(types.UI_SET_TARGET_CLASSID, classId);
+  commit(types.UI_SET_COLLECT_OWNED_COUNT, collectedCount);
 }
 
-export function uiSetCollectedCount({ commit }, count) {
-  commit(types.UI_SET_COLLECT_OWNED_COUNT, count);
+export function uiSetCollectedCount({ commit }, collectedCount) {
+  commit(types.UI_SET_COLLECT_OWNED_COUNT, collectedCount);
 }
 
 export function uiSetTxStatus({ commit }, status) {

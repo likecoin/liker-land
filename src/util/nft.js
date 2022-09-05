@@ -105,6 +105,7 @@ export function amountToLIKE(likecoin) {
   if (likecoin.denom === LIKECOIN_CHAIN_MIN_DENOM) {
     return new BigNumber(likecoin.amount).dividedBy(1e9).toFixed();
   }
+  // eslint-disable-next-line no-console
   console.error(`${likecoin.denom} is not supported denom`);
   return -1;
 }
@@ -118,3 +119,66 @@ export async function getAccountBalance(address) {
 }
 
 export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;
+
+export function isValidHttpUrl(string) {
+  try {
+    const url = new URL(string);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    // no op
+  }
+  return false;
+}
+
+export function isWritingNFT(classMetadata) {
+  return (
+    classMetadata?.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
+  );
+}
+
+function formatNFTEvent(event) {
+  const {
+    class_id: classId,
+    nft_id: nftId,
+    sender: fromWallet,
+    receiver: toWallet,
+    tx_hash: txHash,
+    timestamp,
+  } = event;
+  let eventName;
+  switch (event.action) {
+    case '/cosmos.nft.v1beta1.MsgSend':
+      eventName = LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
+      break;
+    case 'new_class':
+    case 'mint_nft':
+    default:
+      eventName = event.action;
+      break;
+  }
+  return {
+    event: eventName,
+    classId,
+    nftId,
+    fromWallet,
+    toWallet,
+    txHash,
+    timestamp: Date.parse(timestamp),
+  };
+}
+
+export function formatNFTEventsToHistory(events) {
+  const history = events.map(e => formatNFTEvent(e)).reverse();
+  return history;
+}
+
+export function formatOwnerInfoFromChain(owners) {
+  const ownerInfo = {};
+  owners.forEach(o => {
+    const { owner, nfts } = o;
+    if (owner !== LIKECOIN_NFT_API_WALLET) {
+      ownerInfo[owner] = nfts;
+    }
+  });
+  return ownerInfo;
+}

@@ -3,7 +3,7 @@
     :open="isOpen"
     :has-close-button="hasCloseButton"
     :header-text="headerText"
-    panel-class="shadow-lg bg-white phone:min-w-[380px] w-[520px] w-full p-[48px] rounded-[24px]"
+    panel-class="shadow-lg bg-white w-full p-[48px] phone:max-w-[520px] phone:px-[18px] laptop:w-[520px] rounded-[24px]"
     :is-disabled-backdrop-click="true"
     @close="$emit('close')"
   >
@@ -18,7 +18,7 @@
 
       <!-- Message -->
       <div
-        v-if="!uiTxErrorMessage"
+        v-if="!uiTxErrorMessage && !isCollectCompleted"
         class="flex flex-col items-center justify-center mb-[12px]"
       >
         <Label
@@ -32,7 +32,7 @@
           :text="formattedStatusText"
         />
       </div>
-      <div v-else class="flex items-center justify-center mb-[12px] text-danger">
+      <div v-if="uiTxErrorMessage" class="flex items-center justify-center mb-[12px] text-danger">
         <Label class="text-danger" :text="formattedErrorMessage" preset="p6">
           <template #prepend>
             <IconError />
@@ -58,13 +58,34 @@
           class="mb-[24px]"
         />
         <ButtonV2
-          v-if="uiTxNFTStatus !== 'processing' && buttonText"
+          v-if="buttonText"
           :preset="getButtonState.preset"
           :is-disabled="getButtonState.isDisable"
           @click="onClick"
         >
           {{ buttonText }}
         </ButtonV2>
+      </div>
+      <!-- Button for complete of collecting -->
+      <div
+        v-if="isCollectCompleted"
+        class="flex items-center justify-center"
+      >
+        <ButtonV2
+          preset="secondary"
+          :text="$t('nft_details_page_button_share')"
+          class="mr-[12px]"
+          @click="$emit('handle-share')"
+        >
+          <template #prepend>
+            <IconShare />
+          </template>
+        </ButtonV2>
+        <ButtonV2
+          preset="outline"
+          :text="$t('nft_details_page_button_portfolio')"
+          @click="$emit('go-portfolio')"
+        />
       </div>
 
       <!-- Attention -->
@@ -106,7 +127,6 @@
         />
       </div>
     </div>
-
   </Dialog>
 </template>
 
@@ -120,7 +140,6 @@ import { logTrackerEvent } from '~/util/EventLogger';
 export default {
   mixins: [nftMixin, walletMixin, alertMixin],
   props: {
-    // Dialog
     isOpen: {
       type: Boolean,
       default: false,
@@ -137,6 +156,11 @@ export default {
       type: String,
       default: undefined,
     },
+    // Preset of modal, option: collect and transfer
+    preset: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return { showConfirm: false };
@@ -148,6 +172,9 @@ export default {
       'uiCollectOwnedCount',
       'walletMethodType',
     ]),
+    isCollectCompleted() {
+      return this.preset === 'collect' && this.uiTxNFTStatus === 'completed';
+    },
     formattedErrorMessage() {
       switch (this.uiTxErrorMessage) {
         case 'INSUFFICIENT_BALANCE':
@@ -225,12 +252,17 @@ export default {
         case 'sign':
           return this.$t('tx_modal_button_cancel');
 
-        case 'completed':
-          return this.$t('tx_modal_button_ok');
-
         case 'insufficient':
         case 'failed':
           return this.$t('tx_modal_button_Close');
+
+        case 'completed':
+          if (this.preset === 'collect') {
+            return undefined;
+          }
+          return this.$t('tx_modal_button_ok');
+
+        case 'processing':
         default:
           return undefined;
       }

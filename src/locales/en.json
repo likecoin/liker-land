@@ -43,6 +43,8 @@
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_description": "This content has been published as Writing NFT. Collect now to build your portfolio.",
   "nft_details_page_title_collector": "Collectors",
+  "nft_details_page_activity_list_event_create_class": "Create",
+  "nft_details_page_activity_list_event_mint_nft": "Mint",
   "nft_details_page_activity_list_event_collect": "Collect",
   "nft_details_page_activity_list_event_transfer": "Transfer",
   "nft_details_page_activity_list_event_date": "Date",
@@ -56,6 +58,8 @@
   "nft_details_page_button_transfer": "Transfer",
   "nft_details_page_button_view": "View Content",
   "nft_details_page_button_show_more": "show more",
+  "nft_details_page_button_share": "Share",
+  "nft_details_page_button_portfolio": "Portfolio",
   "nft_details_page_collected_count_label": "Collected",
   "nft_details_page_label_no_record": "No record found",
   "nft_details_page_label_owning": "Own",
@@ -72,6 +76,7 @@
   "nft_details_page_section_metadata_iscn": "ISCN",
   "nft_details_page_section_metadata_ipfs": "IPFS",
   "nft_details_page_section_metadata_ar": "Arweave",
+  "nft_details_page_label_loading": "Loading",
   "nft_supply_section_title": "Item Supply",
   "footer_nav_about_liker_land": "About Liker Land",
   "footer_nav_about_likecoin": "About LikeCoin",
@@ -124,20 +129,6 @@
       "goToFeaturing": "Featured articles"
     }
   },
-  "CancelSubscription": {
-    "Title": "Don’t go, quality content need your support",
-    "GoodBye": "Goodbye, subscription cancelled",
-    "Subtitle": "Cancel subscription",
-    "Description": "{name} will lose your support at the end of this billing period on {date}, are you sure?",
-    "Cancel": "Continue support",
-    "Confirm": "Cancel subscription"
-  },
-  "CivicEntryPage": {
-    "Og": {
-      "Title": "支持 {name}",
-      "Description": "邀請你成為我，{name} 的讚賞公民，支持我持續創作。"
-    }
-  },
   "civic_page_v3_title": "Civic Liker",
   "civic_page_v3_description": "Civic Liker is a movement to reward good content and encourage openness.",
   "civic_dashboard_v3_about_url": "https://docs.like.co/user-guide/civic-liker",
@@ -156,86 +147,12 @@
   "civic_dashboard_v3_summary_since": "Active since {date}",
   "civic_dashboard_v3_intro_title": "A Web3 way to support creators",
   "civic_dashboard_v3_intro_description": "You can you distribute the reward to the creators you “like” via the LikeCoin button. The more you delegate, the more you can reward; and the more voting power for the Creators Fund distribution.",
-  "civic_liker_classic": "Civic Liker Classic",
-  "civic_liker_classic_new_header": "Fixed cost for all the like",
-  "civic_liker_classic_new_description_title": "Civic Liker Classic",
-  "civic_liker_classic_new_description_content": "Donate 5 USD per month. The sum will be distributed to different creators based on your likes.",
-  "civic_liker_classic_new_button": "Subscribe Now",
-  "civic_liker_classic_active_button": "Active",
-  "civic_liker_classic_cancel_button": "Cancel Civic Liker Classic Subscription",
-  "civic_liker_classic_cancel_description": "Civic Liker Classic subscription will end on {date}, are you sure?",
   "civic_liker_web_3_notice_header": "Civic Liker {web3}",
   "civic_liker_web_3_notice_header_web3": "Web3",
   "civic_liker_web_3_notice_message": "To move a step forward to the Metaverse and a step away from political risk, Civic Liker decides to put aside its legacy payment system burden and evolves to a Web3 version. {0} {1}",
   "civic_liker_web_3_notice_message_highlight_1": "Users can become Civic Likers by delegating certain amount of LikeCoin to the \"Civic Liker\" node after 21st Feb 2022.",
   "civic_liker_web_3_notice_message_highlight_2": "Civic Liker stops supporting credit card payment with immediate effect.",
   "civic_liker_web_3_notice_button": "Learn More",
-  "CivicLikerCTA": {
-    "slogan": {
-      "register": "Trade a coffee for a better world",
-      "upgrade": "@:CivicLikerCTA.slogan.register"
-    },
-    "button": {
-      "register": "Be a Civic Liker",
-      "upgrade": "@:upgrade"
-    }
-  },
-  "CivicLikerFeature": [
-    {
-      "header": "Trade a coffee for a better world",
-      "body": "<p>Have you realized creativity on the web brings no direct income, creators and civil reporters can only rely on ads, outsource projects and most importantly, enthusiasm?</p><p>Civic Liker is a movement to reward open contents. For the cost of a cup of coffee, you become a Civic Liker. Whatever you Like will then be turned into a tangible reward to creators.</p>"
-    },
-    {
-      "header": "Your interest,<br>your taste",
-      "body": "<p>The US$5 paid monthly by a Civic Liker will be distributed to creators in full amount.* Which creators to support purely depends on the online contents you Like during the month, while the Foundation distributes the reward based on your taste. You may check the distribution of rewards any time down to a cent on our panel.</p>"
-    },
-    {
-      "header": "Benefiting from<br>Giving",
-      "body": "<p>Other than supporting creators, Civic Likers enjoy various benefits such as taking part in community voting, accessing bonus contents, receiving newsletters from idols and joining offline events.</p>"
-    }
-  ],
-  "civic_liker_dashboard_header_title": "Civic Liker",
-  "civic_liker_dashboard_header_about_button": "About this plan",
-  "civic_liker_feature_list_header_title_active": "Active",
-  "civic_liker_feature_list_header_title_inactive": "Inactive",
-  "civic_liker_feature_list_header_title_error": "Error",
-  "civic_liker_feature_list_item": [
-    "The Civic Liker halo on your avatar shows your contribution to the community",
-    "Donation to your favourite creators",
-    "Two Super Likes daily",
-    "Greater influence to the Creators Fund distribution",
-    "Display your own works in the portfolio page"
-  ],
-  "CivicLikerPitchingView.Title": "Support “{name}” monthly",
-  "CivicLikerPitchingView.Subtitle": "Become a Civic Liker",
-  "CivicLikerTrialPage": {
-    "title": "Civic Liker Trial",
-    "joining": "Joining",
-    "thankYou": "Thank you for joining",
-    "subscriptionPeriod": "Your subscription is valid from {start} to {end}"
-  },
-  "CivicLikerWelcomeView": {
-    "Congratulation": "You have become the Civic Liker of {name}",
-    "Price": "{emoji} {price} USD/mo",
-    "Benefits": {
-      "SupportTheCreator": {
-        "Title": "Support the creator",
-        "Description": "{title} — USD {price} per month to support {name}"
-      },
-      "DontMissAPixel": {
-        "Title": "Don't miss a pixel",
-        "Description": "{title} — Follow the most updated creation and sharing of {name}"
-      },
-      "ContributeToTheCommunity": {
-        "Title": "Contribute to the Community",
-        "Description": "{title} — Click likes to reward other creators by distributing the Creators Fund"
-      },
-      "SharingGoodContent": {
-        "Title": "Sharing good content",
-        "Description": "{title} — Super Like to share good content to Liker Land app"
-      }
-    }
-  },
   "CivicPage": {
     "title": "@:civicLiker",
     "Og": {
@@ -254,43 +171,6 @@
       "other": "PayMe/FPS (HK only)"
     }
   },
-  "CivicPageV2": {
-    "HeroCTA": {
-      "Upper": {
-        "L1": "Support creativity, join",
-        "L1wReferrer": "Support {referrer}, join {civicLiker}"
-      },
-      "Lower": {
-        "L1": "Register Civic Liker now",
-        "L2": "Donate USD{price} to support {referrer}!"
-      }
-    },
-    "Payment": {
-      "CTA": "{civicLiker} is a movement to reward open contents. For the cost of a cup of coffee, you become a Civic Liker. Whatever you Like will then be turned into a tangible reward to creators.",
-      "JoinButtonText": "Join now",
-      "Pricing": "{price} {currency}/month",
-      "YearlyPricing": "{price} {currency}/year"
-    },
-    "MediaSupport": {
-      "title": "A single package to support 4 civic media",
-      "Stats": {
-        "TotalCreators": "and 1,000+ individual websites by 7,000 authors",
-        "TotalRewards": "Up to Jan 2020, the movement had rewarded {rewards}",
-        "RewardedCreators": "to the creators",
-        "Website": "Websites",
-        "Creator": "Creators",
-        "Content": "Contents"
-      }
-    },
-    "Benefit": {
-      "title": " and with other bonus",
-      "Stats": "Distribute your monthly fee to the creations you have liked, track the donation details any time",
-      "Bookmark": "Enjoy premium features such as unlimited bookmarks",
-      "Discount": "Discount for books in individual book stores",
-      "Gift": "Get limited edition gifts, join offline events"
-    }
-  },
-
   "CLP.header.displayname": "Become a Civic Liker to support",
   "CLP.button.subscribe": "Subscribe now",
 
@@ -320,143 +200,7 @@
   },
   "CreatorPitch.Default": "Be my Civic Liker, buy me a coffee for my work every month.",
   "creators_page_redirect_url": "https://docs.like.co/v/en/user-guide/civic-liker",
-  "CreatorsPage": {
-    "Title": "Gather your Civic Likers",
-    "Description": "Share your sponsor link for monthly subscription income.{br}Install LikeCoin button for earning creators fund.",
-    "Og": {
-      "Title": "@:CreatorsPage.Title",
-      "Description": "@:CreatorsPage.Description"
-    },
-    "PlatformSelectLabel": "Publish your work in multi-channels. LikeCoin button supports the following platforms.",
-    "PlatformDescription": {
-      "ConfigLikerID": "LikeCoin button will be installed in your articles automatically after filling in your Liker ID in the platform.",
-      "Embedly": "Insert the below link to embed LikeCoin button into your articles",
-      "Plugin": {
-        "Content": "Install {WordPressPlugin} to add LikeCoin button to all articles.  Unlike advertising banners, LikeCoin button delivers the best reading experience together with the author's personal brand.",
-        "WordPress": "WordPress Plugin"
-      },
-      "ProvideLikerID": "Bloggers can provide Liker ID to partnered media such as {InMedia} or {Standnews} to install LikeCoin button to their articles.",
-      "PlatformPlugin": "Can add LikeCoin button With third-party plugin on {Pixnet}; Using <iframe> on {blogger} or any other self-hosted websites."
-    },
-    "LikerIDPlaceholer": "<Your Liker ID>",
-    "GuideLinkBase": "https://docs.like.co/user-guide/creator",
-    "GuideLink": {
-      "Blogger": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/blogspot",
-      "InMedia": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/inmediahk.net",
-      "Matters": "@:(CreatorsPage.GuideLinkBase)/matters",
-      "Medium": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#medium",
-      "Pixnet": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#pixnet",
-      "Standnews": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/thestandnews",
-      "Timelog": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/timelog",
-      "Vocus": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#vocus",
-      "WordPress": "@:(CreatorsPage.GuideLinkBase)/wordpress"
-    },
-    "CTAButton": {
-      "Register": "Register now",
-      "Civic": "Become a Civic Liker"
-    }
-  },
   "community_cta_title": "Join our community",
-  "creators_dashboard_header_title": "Creator Dashboard",
-  "creators_dashboard_header_about_button": "Tips for Creators",
-  "CreatorsPageV2": {
-    "Hero": {
-      "Title": "You deserve to be rewarded",
-      "Description": "Build your fans network, get their monthly support.",
-      "CTAButton": "Get Started"
-    },
-    "Setup": {
-      "Anonymous": {
-        "Title": "Setup your business by two steps forward",
-        "Steps": [
-          {
-            "Title": "Register a Liker ID",
-            "Description": "Preview your name with sponsor link",
-            "Placeholder": "Input a Liker ID"
-          },
-          {
-            "Title": "Share your sponsor link.",
-            "Description": "your sponsor link will be:",
-            "CTAButton": "Start Earning Now"
-          }
-        ]
-      },
-      "Registered": {
-        "Title": "Setup your business now",
-        "Steps": [
-          {
-            "Title": "Share your sponsor link.",
-            "Description": "your sponsor link will be:",
-            "CTAButton": "Copy Sponsor Link"
-          }
-        ]
-      },
-      "Setup": {
-        "Steps": [
-          {
-            "Title": "Share your sponsor link in any channel"
-          },
-          {
-            "Title": "Install LikeCoin button for earning Creators Fund",
-            "Description": "Get additional bonus from \"Creators Fund\". Civic Likers help to distribute the Creators Fund to any good content by clapping on LikeCoin buttons.  Not only you get additional rewards, the whole ecosystem get benefit as well."
-          }
-        ]
-      },
-      "Preview": {
-        "LinkCFA": "Pay me a coffee to support my work monthly",
-        "DisplayNamePlaceholder": "Your name",
-        "BottomHint": "Call for your fans' support"
-      }
-    },
-    "TwoBirds": {
-      "Title": "Single plan, double prizes",
-      "Description": "Besides the funding of monthly subscription, get rewarded by the Creators Fund as well if you get \"likes\" from {civicLiker}.",
-      "Birds": [
-        {
-          "Title": "Monthly Subscription",
-          "Description": "Get all of the monthly subscription fee after necessary transaction fee is deducted."
-        },
-        {
-          "Title": "Creators Fund",
-          "Description": "Get extra bonus from the Creators Fund if you get \"likes\" from any Likers that are not necessary your subscribers."
-        }
-      ]
-    },
-    "BetterWorld": {
-      "Title": "For a better world",
-      "World": [
-        {
-          "Title": "Open and Share",
-          "Description": "Reach rate go first, say no to pay-wall which suppressing ideas to flow freely."
-        },
-        {
-          "Title": "Cultivate the community",
-          "Description": "Besides supporting creators by monthly subscription fee, {civicLiker} support other creators, distributing the Creators Fund by liking good pieces, bringing benefits to the whole community."
-        }
-      ]
-    },
-    "Calculator": {
-      "Title": "Get an idea about your earnings now",
-      "Slider": {
-        "Subscriber": "{count} subscriber(s) ($5/mo)",
-        "Reader": "{count} reader(s)"
-      },
-      "Earnings": {
-        "Subscription": "From monthly subscription",
-        "CreatorsFund": "From Creators Fund",
-        "Total": "pre month"
-      }
-    },
-    "Platforms": {
-      "Title": "Choose whatever platform that fit you",
-      "Description": "Post your sponsor link to any channels.  Besides, various blogging sites support LikeCoin button. Our plugin makes all WordPress sites support the button easily."
-    },
-    "Summary": {
-      "Title": "Action now to monetize your work",
-      "Description": "Your creativity are deserved to be rewarded.  Call out to your fans to join as your Civic Likers and support your work now.",
-      "CTAButton": "Get Started"
-    }
-  },
   "Currency": {
     "USD": "USD"
   },
@@ -508,27 +252,7 @@
     "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "Please sign in to follow this author",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "Please sign in to register Civic Liker",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "Please sign in to support creators",
-    "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "Please sign in to support {creator}",
-    "CIVIC_LIKER_ALREADY_PAID": {
-      "title": "You are already a Civic Liker",
-      "message": "Thanks for your support, but you registered as a Civic Liker successfully."
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_EXPIRED": {
-      "title": "The promotion does not exist",
-      "message": "Thanks for your support, but the promotion is over. Please contact us for help."
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_JOINED": {
-      "title": "You have joined the free Civic Liker Trial program before",
-      "message": "The free plan is once in a lifetime. Apply to become a real Civic Liker now, trade a coffee for a better world."
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_NOT_EXIST": {
-      "title": "The promotion does not exist",
-      "message": "Thanks for your support, but the promotion does not exist. Please contact us for help."
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_UNKNOWN": {
-      "title": "Oops! There is something wrong",
-      "message": "Thanks for your support. Please contact us for help."
-    }
+    "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "Please sign in to support {creator}"
   },
   "LikerFeature": {
     "distributeFund": {
@@ -556,28 +280,6 @@
   "main_menu_civic_liker": "Civic Liker",
   "main_menu_settings": "Settings",
   "main_menu_sign_out": "Sign Out",
-  "OtherPaymentInfo": {
-    "title": "如何以 PayMe 或 轉數快繳付《讚賞公民》年費",
-    "heading": "香港用戶限定：以信用卡或 PayPal 以外的方法繳費。",
-    "description": "若你是香港用戶，可選用 PayMe 或「轉數快」付款，目前只設繳付一年年費（HKD 468)。",
-    "stepOne": "步驟一：以轉數快或 PayMe 過帳（港幣 468元）",
-    "FPSID": "轉數快 ID： 6636369",
-    "PayMeQR": "PayMe QR code:",
-    "stepTwo": "步驟二：傳送過帳記錄",
-    "EmailInstruction": "過帳後煩請把你的過帳記錄，連同你的註冊電郵地址，貼到畫面右下方的客服介面，或發電郵到 {0}。傳送的記錄可以是一個轉帳畫面的截屏。",
-    "Ending": "再次感謝你的支持。請多多俾 Like 媒體和作者，讓屬於大眾的內容生態能健康成長。"
-  },
-  "PaymentFailurePage": {
-    "title": "Payment Unsuccessful"
-  },
-  "PaymentSuccessPage": {
-    "title": "Payment Successful",
-    "heading": "You have became a Civic Liker",
-    "body": "Thank you for your payment.",
-    "continue": "Start Liking",
-    "backToPreviousSite": "Return to {hostname}",
-    "backToPrevious": "Return to previous site"
-  },
   "RedirectPage": {
     "title": "Redirecting"
   },
@@ -610,19 +312,6 @@
       "Title": "{name}'s Portfolio"
     }
   },
-  "SettingsCivicPage": {
-    "title": "@:SettingsPage.title > @:civicLiker",
-    "knowMoreAbout": "Know more about",
-    "subscribed": "Subscribed",
-    "billingSummary": {
-      "cancelDate": "Will cancel at",
-      "nextBillingDate": "Next billing date"
-    },
-    "paymentExpired": "Payment failed for your recent subscription payment. Please update your billing method",
-    "editPaymentMethod": "Edit",
-    "resumeSubscription": "Resume Civic Liker subscription",
-    "cancelSubscription": "Cancel Civic Liker subscription"
-  },
   "SettingsFollowingPage": {
     "title": "@:SettingsPage.title > Follow / Unfollow",
     "follow": "@:follow",
@@ -651,48 +340,6 @@
     "language": "Language",
     "subscription": "Follow / Unfollow"
   },
-  "SettingsSupportPage": {
-    "Title": {
-      "CreatorPitch": "Creator Pitch",
-      "ManageSubscription": "Manage Civic Liker Subscription",
-      "ManageSupportingUser": "You are supporting",
-      "SponsorLink": "Share your sponsor link"
-    },
-    "ErrorTitle": {
-      "NotCivicV2": "Support feature is only available to v2 civic liker",
-      "Unknown": "Unknown error"
-    },
-    "AboutCivicLiker": "About Civic Liker",
-    "TotalAmount": "Total monthly subscription amount",
-    "PaymentMethod": "Payment",
-    "ManagePaymentMethod": "Manage Payment Method",
-    "BillingHistory": "Billing History",
-    "Cancelled": "Cancelled subscription",
-    "CancelledDate": "Will end on {date}",
-    "PitchPreview": {
-      "Status": "Previewing",
-      "Hint": "You can share your sponsor link to you readers to ask for their support",
-      "Placeholder": "Enter your pitch"
-    }
-  },
-  "SettingsSupportUsersPage": {
-    "Slogan": "Be my Civic Liker",
-    "SloganConfirm": "Cash Support",
-    "Benefits": [
-      {
-        "Title": "Be my Supporting Group",
-        "Description": "Back me up for more great ideas."
-      },
-      {
-        "Title": "Follow Me",
-        "Description": "Get the latest update of my works and sharing."
-      },
-      {
-        "Title": "Contribute to the Community",
-        "Description": "Privilege to reward other creators by liking."
-      }
-    ]
-  },
   "SignUpSignInCTA": {
     "slogan": "Be a Liker to customise stories"
   },
@@ -712,60 +359,6 @@
     "appLabel": "Liker.Land App",
     "appButtonText": "Open",
     "dismissButtonText": "Continue with browser"
-  },
-  "SubscriptionPeriod": {
-    "Month": "mo"
-  },
-  "SupportSummary": {
-    "Title": "Details",
-    "NewCharge": "Civic Liker - {name}",
-    "OtherCharge": "Civic Liker (Others)",
-    "BillingDate": "Will be billed automatically on {date}",
-    "Total": "Total",
-    "Confirm": "Confirm Order",
-    "Error": {
-      "UnableSubSelf": "Unable to subscribe yourself"
-    }
-  },
-  "SupportersDashboard": {
-    "Summary": {
-      "Title": "Monthly Subscription Income",
-      "Data": {
-        "Amount": {
-          "Value": "{amount} USD/mo",
-          "Label": "Total monthly subscription"
-        },
-        "Subscribers": "Subscriber | Subscribers"
-      }
-    },
-    "List": {
-      "Title": "Your Civic Likers"
-    },
-    "Empty": {
-      "Setup": "Setup your business now"
-    }
-  },
-  "SupportersList": {
-    "SortingOptions": {
-      "ts": "Most recent",
-      "id": "Liker ID",
-      "quantity": "Amount"
-    },
-    "Item": {
-      "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
-    }
-  },
-  "supporting_classic_view_civic_liker_subtitle": "Special subscription",
-  "supporting_classic_view_button_active": "Active",
-  "supporting_classic_view_button_inactive": "Subscribe",
-  "supporting_empty_view_description": "You haven't subscribed to any creators",
-  "supporting_empty_view_button": "Find Creators",
-  "UpdateSupportQuantity": {
-    "Title": "Choose the monthly supporting amount",
-    "HintText": "Support {name} monthly",
-    "Next": "Next",
-    "Subscribe": "Subscribe now",
-    "Unsubscribe": "Cancel subscription"
   },
   "back": "Back",
   "backToHome": "Home",

@@ -43,6 +43,8 @@
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_description": "This content has been published as Writing NFT. Collect now to build your portfolio.",
   "nft_details_page_title_collector": "Collectors",
+  "nft_details_page_activity_list_event_create_class": "Create",
+  "nft_details_page_activity_list_event_mint_nft": "Mint",
   "nft_details_page_activity_list_event_collect": "Collect",
   "nft_details_page_activity_list_event_transfer": "Transfer",
   "nft_details_page_activity_list_event_date": "Date",
@@ -56,6 +58,8 @@
   "nft_details_page_button_transfer": "Transfer",
   "nft_details_page_button_view": "View Content",
   "nft_details_page_button_show_more": "Show More",
+  "nft_details_page_button_share": "Share",
+  "nft_details_page_button_portfolio": "Portfolio",
   "nft_details_page_collected_count_label": "Collected",
   "nft_details_page_label_no_record": "No record found",
   "nft_details_page_title_transfer": "Transfer Your NFT",
@@ -72,6 +76,7 @@
   "nft_details_page_section_metadata_iscn": "ISCN",
   "nft_details_page_section_metadata_ipfs": "IPFS",
   "nft_details_page_section_metadata_ar": "Arweave",
+  "nft_details_page_label_loading": "Loading",
   "nft_supply_section_title": "Item Supply",
   "footer_nav_about_liker_land": "About Liker Land",
   "footer_nav_about_likecoin": "About LikeCoin",
@@ -124,20 +129,6 @@
       "goToFeaturing": "精選文章"
     }
   },
-  "CancelSubscription": {
-    "Title": "請不要離開，好的內容需要你支持",
-    "GoodBye": "已成功取消訂閱 {name}，感謝你過去的支持。",
-    "Subtitle": "取消訂閱",
-    "Description": "{name} 將會在 {date} 失去你的支持，你確定嗎？",
-    "Cancel": "繼續支持",
-    "Confirm": "取消訂閱"
-  },
-  "CivicEntryPage": {
-    "Og": {
-      "Title": "支持 {name}",
-      "Description": "成為 {name} 的讚賞公民，按月贊助作者，支持內容有價。"
-    }
-  },
   "civic_page_v3_title": "讚賞公民",
   "civic_page_v3_description": "讚賞公民是一場回饋優秀內容的運動，讓讀者化讚為賞，回饋創作。",
   "civic_dashboard_v3_about_url": "https://docs.like.co/v/zh/user-guide/civic-liker",
@@ -156,86 +147,12 @@
   "civic_dashboard_v3_summary_since": "自 {date} 生效",
   "civic_dashboard_v3_intro_title": "以 Web3 方式支持創作",
   "civic_dashboard_v3_intro_description": "你可以按讚的方式，將委託回報回饋作者。委託愈多，回饋愈多；還可讓作者額外獲得更多的創作基金奬勵。",
-  "civic_liker_classic": "Civic Liker Classic",
-  "civic_liker_classic_new_header": "每月定額 Like 到飽",
-  "civic_liker_classic_new_description_title": "Civic Liker Classic",
-  "civic_liker_classic_new_description_content": "每月定額付出 5 美元，贊助金額按 Like 數攤分給不同作者。",
-  "civic_liker_classic_new_button": "立即訂閱",
-  "civic_liker_classic_active_button": "已訂閱",
-  "civic_liker_classic_cancel_button": "取消讚賞公民 Classic 訂閱",
-  "civic_liker_classic_cancel_description": "讚賞公民 Classic 訂閱將會在 {date} 結束，你確定嗎？",
-  "CivicLikerCTA": {
-    "slogan": {
-      "register": "少喝一杯咖啡，共創一個生態",
-      "upgrade": "@:CivicLikerCTA.slogan.register"
-    },
-    "button": {
-      "register": "成為讚賞公民",
-      "upgrade": "@:upgrade"
-    }
-  },
-  "CivicLikerFeature": [
-    {
-      "header": "少喝一杯咖啡<br>共創一個生態",
-      "body": "<p>有沒有想過，因為網上作品沒有任何收入，創作者和獨立記者只能靠廣告、外包和熱情維持？</p><p>讚賞公民是一場回饋優秀內容的運動。讀者每月付出一杯咖啡的價錢，就能成為讚賞公民，從此每個點讚，都會化成對創作者的實質支持。</p>"
-    },
-    {
-      "header": "按讚投票<br>分配基金",
-      "body": "<p>讚賞公民每月付出的 US$5，金額將不扣除任何行政成本，全數贊助指定創作者*。讚賞公民更可以按讚方式分配創作基金，促進創作社群發展。你亦可隨時查閱資助分配，細至一分一毫，盡在掌握。</p>"
-    },
-    {
-      "header": "豐富福利<br>利人利己",
-      "body": "<p>除了支持喜歡的創作者，讚賞公民還享有參予社群決策、獲取特別收錄內容、收取偶像個人通訊、參與線下活動等一連串福利，利人利己。</p>"
-    }
-  ],
-  "civic_liker_dashboard_header_title": "讚賞公民",
-  "civic_liker_dashboard_header_about_button": "計劃詳情",
-  "civic_liker_feature_list_header_title_active": "訂閱中",
-  "civic_liker_feature_list_header_title_inactive": "未訂閱",
-  "civic_liker_feature_list_header_since_date": "自 {date}",
-  "civic_liker_feature_list_item": [
-    "讚賞公民獨有頭像光環，突顯你對社群的貢獻",
-    "創作者獲得你的贊助",
-    "每天擁有兩次 Super Like 權利",
-    "對創作基金的分配有更大影響力",
-    "在個人主頁顯示自己的作品專欄"
-  ],
   "civic_liker_web_3_notice_header": "讚賞公民 {web3}",
   "civic_liker_web_3_notice_header_web3": "Web3",
   "civic_liker_web_3_notice_message": "為創造未來，也為應對挑戰，讚賞公民將進化到 Web3 版本：{0}另外，為了不再浪費資源於傳統法規及規避政策風險，{1}",
   "civic_liker_web_3_notice_message_highlight_1": "2月21日後委託 LikeCoin 至「讚賞公民節點」，即能成為讚賞公民。",
   "civic_liker_web_3_notice_message_highlight_2": "即日起讚賞公民停止支援信用卡付款，大步邁向純 Web3 的世界。",
   "civic_liker_web_3_notice_button": "了解更多",
-  "CivicLikerPitchingView.Title": "按月贊助{name}",
-  "CivicLikerPitchingView.Subtitle": "成為讚賞公民",
-  "CivicLikerTrialPage": {
-    "title": "讚賞公民免費體驗計劃",
-    "joining": "申請中",
-    "thankYou": "感謝申請",
-    "subscriptionPeriod": "你的讚賞公民體驗有效期為 {start} 至 {end}"
-  },
-  "CivicLikerWelcomeView": {
-    "Congratulation": "你已成為{br}{name} 的讚賞公民",
-    "Price": "{emoji} 每月 {price} 美元",
-    "Benefits": {
-      "SupportTheCreator": {
-        "Title": "成為創作者後援",
-        "Description": "{title} — 每月 {price} 美元，全數支持 {name}"
-      },
-      "DontMissAPixel": {
-        "Title": "追蹤創作者更新",
-        "Description": "{title} — 緊貼 {name} 最新作品，及他/她分享的好文"
-      },
-      "ContributeToTheCommunity": {
-        "Title": "貢獻創作生態",
-        "Description": "{title} — 在其他創作者的文章「按讚」，分配創作基金，回饋創作"
-      },
-      "SharingGoodContent": {
-        "Title": "分享優秀內容",
-        "Description": "{title} — 以 Super Like 把好文分享到 Liker Land 手機應用程式"
-      }
-    }
-  },
   "CivicPage": {
     "title": "@:civicLiker",
     "Og": {
@@ -254,43 +171,6 @@
       "other": "以 PayMe/轉數快 繳費"
     }
   },
-  "CivicPageV2": {
-    "HeroCTA": {
-      "Upper": {
-        "L1": "支持創作成為",
-        "L1wReferrer": "支持{referrer}成為{civicLiker}"
-      },
-      "Lower": {
-        "L1": "立即登記成為讚賞公民",
-        "L2": "額外贊助 {referrer} {price} 美元！"
-      }
-    },
-    "Payment": {
-      "CTA": "{civicLiker}是一場回饋新聞和創作的運動。讀者每月付出一杯咖啡的價錢，就能成為讚賞公民；透過按讚，自動分配月費予創作者。",
-      "JoinButtonText": "立即加入",
-      "Pricing": "{price} {currency}/月",
-      "YearlyPricing": "{price} {currency}/年"
-    },
-    "MediaSupport": {
-      "title": "一份月費支持 4 家公民媒體",
-      "Stats": {
-        "TotalCreators": "及 1,400 多個獨立網站的 7000 創作者",
-        "TotalRewards": "截止 2020 年 1 月底，讚賞公民運動共回饋創作者 {rewards}",
-        "RewardedCreators": "已回饋創作者",
-        "Website": "網站",
-        "Creator": "創作者",
-        "Content": "作品"
-      }
-    },
-    "Benefit": {
-      "title": " 兼享各種福利",
-      "stats": "月費回饋指定創作者",
-      "bookmark": "享用 Liker Land 儲存無限書籤等獨有功能",
-      "discount": "買書優惠折扣，加盟書店持續增加中",
-      "gift": "獲取實體小禮品，免費參與線下活動"
-    }
-  },
-
   "CLP.header.displayname": "成為讚賞公民，支持",
   "CLP.button.subscribe": "立即訂閱",
 
@@ -311,10 +191,6 @@
   "CLP.effective.item2.title": "創作基金",
   "CLP.effective.item2.description": "透過按讚，分配每天發放的創作基金予優秀創作者。",
 
-  "CivicSettingsV1": {
-    "WillCancel": "你的讚賞公民會籍將繼續生效至 {date}。你可現在續訂原有計劃，亦可待會籍到期後重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
-    "GracePeriod": "你可現在續訂原有計劃。如欲轉為以新版本的讚賞公民 2.0 支持創作者，請使用創作者的贊助連結重新訂閱（格式：https://liker.land/創作者的LikerID），也可經由創作者的 LikeCoin button 訂閱。"
-  },
   "CollapsibleView": {
     "less": "收起",
     "more": "更多"
@@ -324,144 +200,7 @@
   },
   "CreatorPitch.Default": "成為我的讚賞公民，每月贊助一杯咖啡，助我走得更遠。",
   "creators_page_redirect_url": "https://docs.like.co/v/zh/user-guide/civic-liker",
-  "CreatorsPage": {
-    "Title": "召集你的讚賞公民",
-    "Description": "分享贊助鏈結，賺取訂閱收入。{br}安裝 LikeCoin button，化讚為賞。",
-    "Og": {
-      "Title": "@:CreatorsPage.Title",
-      "Description": "@:CreatorsPage.Description"
-    },
-    "PlatformSelectLabel": "在各個渠道發表創作。LikeCoin button 支持以下平台",
-    "PlatformDescription": {
-      "ConfigLikerID": "於 {Matters}、{Vocus} 及 {Timelog} 設定填上 Liker ID 或 LikeCoin button 的連結，令所有部落格文章自動加入 LikeCoin button。",
-      "Embedly": "在部落格文章加以下連結即可嵌入 LikeCoin button。",
-      "Plugin": {
-        "Content": "安裝 {WordPressPlugin}，所有部落格文章自動加上 LikeCoin button。LikeCoin button 突出創作者的品牌，跟一般的廣告橫幅完全不同，提供最佳的閱讀體驗。",
-        "WordPress": "WordPress 外掛"
-      },
-      "ProvideLikerID": "媒體特約作者，把 Liker ID 提供給{InMedia}或{Standnews}等合作平台，即能為文章安裝 LikeCoin button。",
-      "PlatformPlugin": "用社群自行開發的外掛，在痞客邦 {Pixnet} 上加入 LikeCoin button；也可以 <iframe> 的方式在 {Blogger} 或其他自建網站上加入 LikeCoin button"
-    },
-    "LikerIDPlaceholer": "<你的 Liker ID>",
-    "GuideLinkBase": "https://docs.like.co/v/zh/user-guide/creator",
-    "GuideLink": {
-      "Blogger": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/blogspot",
-      "InMedia": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/inmediahk.net",
-      "Matters": "@:(CreatorsPage.GuideLinkBase)/matters",
-      "Medium": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#medium",
-      "Pixnet": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#pixnet",
-      "Standnews": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/thestandnews",
-      "Timelog": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms/timelog",
-      "Vocus": "@:(CreatorsPage.GuideLinkBase)/blogging-platforms#vocus",
-      "WordPress": "@:(CreatorsPage.GuideLinkBase)/wordpress"
-    },
-    "CTAButton": {
-      "Register": "立即註冊",
-      "Civic": "成為讚賞公民"
-    }
-  },
   "community_cta_title": "參與我們的社群",
-  "creators_dashboard_header_title": "創作者主頁",
-  "creators_dashboard_header_about_button": "創作者須知",
-  "creators_dashboard_manage_likecoin_button": "管理你的 LikeCoin",
-  "CreatorsPageV2": {
-    "Hero": {
-      "Title": "化讚為賞 回饋創作",
-      "Description": "讓你的支持者每月課金撐你吧！",
-      "CTAButton": "立即行動"
-    },
-    "Setup": {
-      "Anonymous": {
-        "Title": "簡單兩步，設定完成",
-        "Steps": [
-          {
-            "Title": "註冊一個 Liker ID",
-            "Description": "預覽你的贊助鏈結",
-            "Placeholder": "輸入 Liker ID"
-          },
-          {
-            "Title": "分享你的贊助鏈結",
-            "Description": "以下是你的贊助鏈結：",
-            "CTAButton": "開始賺錢"
-          }
-        ]
-      },
-      "Registered": {
-        "Title": "立即設定",
-        "Steps": [
-          {
-            "Title": "分享你的贊助鏈結",
-            "Description": "以下是你的贊助鏈結：",
-            "CTAButton": "複製贊助鏈結"
-          }
-        ]
-      },
-      "Setup": {
-        "Steps": [
-          {
-            "Title": "在任何渠道分享你的贊助鏈結"
-          },
-          {
-            "Title": "安裝 LikeCoin button，化讚為賞",
-            "Description": "額外賺得「創作基金」的奬勵。任何讚賞公民在你文章中的 LikeCoin button 按讚，都會分配一點創作基金奬勵你。透過化讚為賞的機制鼓勵其他創作者，讓好文獲回報，也為自己創造更多收入，共創一個健康的內容生態。"
-          }
-        ]
-      },
-      "Preview": {
-        "LinkCFA": "每月送我一杯咖啡，持續支持我的創作",
-        "DisplayNamePlaceholder": "你的名字",
-        "BottomHint": "呼籲粉絲集氣支持"
-      }
-    },
-    "TwoBirds": {
-      "Title": "一舉兩得，雙重回報",
-      "Description": "除獲得支持者的每月贊助以外，任何{civicLiker}為你按讚更可額外獲得「創作基金」的奬勵。",
-      "Birds": [
-        {
-          "Title": "月費訂閱",
-          "Description": "支持者的月費在扣除必要交易成本後，全數直入你的口袋。"
-        },
-        {
-          "Title": "創作基金",
-          "Description": "任何 Liker 的按讚也能為你帶來創作基金的奬勵。"
-        }
-      ]
-    },
-    "BetterWorld": {
-      "Title": "共創開放的創作生態",
-      "World": [
-        {
-          "Title": "鼓勵開放共享",
-          "Description": "鼓勵資訊流通，不設付費牆，更有利內容觸及率。"
-        },
-        {
-          "Title": "促進生態發展",
-          "Description": "{civicLiker}不單每月付費支持創作，同時以「按讚」方式分配創作基金奬勵其他優秀作品，讓整個內容生態受惠。"
-        }
-      ]
-    },
-    "Calculator": {
-      "Title": "計算一下大概的回報吧",
-      "Slider": {
-        "Subscriber": "{count} 位讚賞公民 （5美元/月）",
-        "Reader": "{count} 位按讚的讀者"
-      },
-      "Earnings": {
-        "Subscription": "月費訂閱收入",
-        "CreatorsFund": "創作基金奬勵",
-        "Total": "每月"
-      }
-    },
-    "Platforms": {
-      "Title": "自由選擇發佈平台",
-      "Description": "你可自由張貼贊助鏈結於任何渠道。另，LikeCoin button 支援各大部落格平台，且有外掛程式支援任何 WordPress 網站。"
-    },
-    "Summary": {
-      "Title": "創作有價，一步體驗",
-      "Description": "創意無價，創作有價。立即呼籲你的讀者加入讚賞公民計劃，支持你自由地創作吧。",
-      "CTAButton": "立即行動"
-    }
-  },
   "Currency": {
     "USD": "美元"
   },
@@ -513,42 +252,7 @@
     "LOGIN_NEEDED_TO_FOLLOW_AUTHOR": "請登入以追蹤內容的創作者",
     "LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER": "成為讚賞公民",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持創作者",
-    "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}",
-    "CIVIC_LIKER_ALREADY_PAID": {
-      "title": "你已是讚賞公民",
-      "message": "感謝你的支持。你早前已成功成為讚賞公民了。"
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_EXPIRED": {
-      "title": "活動已過期",
-      "message": "感謝你的支持，但活動已過期了。請聯絡客服。"
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_JOINED": {
-      "title": "你曾參加過讚賞公民免費體驗計劃",
-      "message": "每人只可參加免費體驗計劃一次。請正式成為讚賞公民，少喝一杯咖啡，共創一個生態。"
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_NOT_EXIST": {
-      "title": "活動不存在",
-      "message": "感謝你的支持，但活動並不存在。請聯絡客服。"
-    },
-    "CIVIC_LIKER_TRIAL_EVENT_UNKNOWN": {
-      "title": "噢！發生未知的問題",
-      "message": "感謝你的支持。請聯絡客服。"
-    }
-  },
-  "LikerFeature": {
-    "distributeFund": {
-      "general": "Like 數影響基金分配，回饋創作者",
-      "civic": "Like 數影響基金分配，回饋創作者；權重較高"
-    },
-    "distributeOwnFee": "以 Like 分配個人月費，全數回饋創作者",
-    "detailedReport": "查閱回饋去向，掌握一分一毫",
-    "participateInCommunity": "參與社群決策和公投",
-    "bonusContent": "獲得額外內容、書籍、優惠券等專屬禮品",
-    "offlineEvents": "優先參與不定期線下活動"
-  },
-  "LikerType": {
-    "general": "一般 Liker",
-    "civic": "@:civicLiker"
+    "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}"
   },
   "Locale": {
     "en": "English",
@@ -578,28 +282,6 @@
   "main_menu_civic_liker": "Civic Liker",
   "main_menu_settings": "Settings",
   "main_menu_sign_out": "Sign Out",
-  "OtherPaymentInfo": {
-    "title": "如何以 PayMe 或 轉數快繳付《讚賞公民》年費",
-    "heading": "香港用戶限定：以信用卡或 PayPal 以外的方法繳費。",
-    "description": "若你是香港用戶，可選用 PayMe 或「轉數快」付款，目前只設繳付一年年費（HKD 468)。",
-    "stepOne": "步驟一：以轉數快或 PayMe 過帳（港幣 468元）",
-    "FPSID": "轉數快 ID： 6636369",
-    "PayMeQR": "PayMe QR code:",
-    "stepTwo": "步驟二：傳送過帳記錄",
-    "EmailInstruction": "過帳後煩請把你的過帳記錄，連同你的註冊電郵地址，貼到畫面右下方的客服介面，或發電郵到 {0}。傳送的記錄可以是一個轉帳畫面的截屏。",
-    "Ending": "再次感謝你的支持。請多多俾 Like 媒體和創作者，讓屬於大眾的內容生態能健康成長。"
-  },
-  "PaymentFailurePage": {
-    "title": "付款失敗"
-  },
-  "PaymentSuccessPage": {
-    "title": "付款成功",
-    "heading": "你已成為讚賞公民",
-    "body": "多謝你的付款。你的交易已完成，系統已透過電郵傳送購物收據給你。",
-    "continue": "開始讚賞",
-    "backToPreviousSite": "返回到 {hostname} 繼續閱讀",
-    "backToPrevious": "返回到原網站繼續閱讀"
-  },
   "RedirectPage": {
     "title": "重新轉向"
   },
@@ -632,98 +314,6 @@
       "Title": "{name} 的個人專頁"
     }
   },
-  "SettingsCivicPage": {
-    "title": "@:SettingsPage.title > @:civicLiker",
-    "knowMoreAbout": "了解更多",
-    "subscribed": "生效中",
-    "billingSummary": {
-      "cancelDate": "訂閱結束日期",
-      "nextBillingDate": "下次付款日期"
-    },
-    "paymentExpired": "最近一次訂閱付款失敗，請修改你的付款方法",
-    "editPaymentMethod": "修改",
-    "resumeSubscription": "延續《讚賞公民》訂閱",
-    "cancelSubscription": "取消《讚賞公民》訂閱"
-  },
-  "SettingsCivicCancelPage": {
-    "regretToKnow": "很遺憾得知你退訂《讚賞公民》的決定",
-    "needYourSupport": "好內容需要你支持",
-    "thankYourSupport": "感謝你繼續支持",
-    "unsubscribeSucessfully": "已成功退訂。你的《讚賞公民》訂閱將於 {date} 失效",
-    "continue": "繼續支持",
-    "unsubscribe": "退訂《讚賞公民》",
-    "encounterProblem": "退訂遇到問題？請按{here}"
-  },
-  "SettingsFollowingPage": {
-    "title": "@:SettingsPage.title > 追蹤/取消追蹤",
-    "follow": "@:follow",
-    "following": "@:following",
-    "noFollowing": "你沒有追蹤中的創作者",
-    "unfollow": "@:unfollow",
-    "unfollowed": "@:unfollowed",
-    "noUnfollowed": "你沒有已取消追蹤的創作者"
-  },
-  "SettingsPage": {
-    "title": "設定",
-    "likerId": "Liker ID",
-    "civicLiker": {
-      "title": "@:civicLiker",
-      "subscribing": "生效中"
-    },
-    "creator": {
-      "title": "創作者",
-      "register": "立即註冊",
-      "registered": "已註冊"
-    },
-    "Supporters": {
-      "Title": "創作者設定",
-      "Count": "支持者 {count}"
-    },
-    "language": "介面語言",
-    "subscription": "追蹤設定"
-  },
-  "SettingsSupportPage": {
-    "Title": {
-      "CreatorPitch": "給讀者的話",
-      "ManageSubscription": "管理讚賞公民訂閱",
-      "ManageSupportingUser": "你正在支持",
-      "SponsorLink": "分享你的贊助鏈結"
-    },
-    "ErrorTitle": {
-      "NotCivicV2": "支持功能僅限於讚賞公民2.0",
-      "Unknown": "未知錯誤"
-    },
-    "AboutCivicLiker": "關於讚賞公民",
-    "TotalAmount": "月費總額",
-    "PaymentMethod": "支付",
-    "ManagePaymentMethod": "管理付款方法",
-    "BillingHistory": "付款記錄",
-    "Cancelled": "已取消訂閱",
-    "CancelledDate": "有效期至 {date}",
-    "PitchPreview": {
-      "Status": "預覽中",
-      "Hint": "你可分享你的贊助連結來呼籲你的讀者去支持你",
-      "Placeholder": "輸入給讀者的話"
-    }
-  },
-  "SettingsSupportUsersPage": {
-    "Slogan": "成為我的讚賞公民",
-    "SloganConfirm": "按月贊助",
-    "Benefits": [
-      {
-        "Title": "成為創作者後援",
-        "Description": "持續支持創作者專注創作。"
-      },
-      {
-        "Title": "追蹤創作者更新",
-        "Description": "關注創作者的最新作品及獨到分享。"
-      },
-      {
-        "Title": "貢獻創作生態",
-        "Description": "同時可按讚支持其他創作者，化讚為賞。"
-      }
-    ]
-  },
   "SignUpSignInCTA": {
     "slogan": "成為 Liker 以訂閱內容"
   },
@@ -743,69 +333,6 @@
     "appLabel": "Liker.Land App",
     "appButtonText": "開啟",
     "dismissButtonText": "繼續使用瀏覽器瀏覽"
-  },
-  "SubscriptionPeriod": {
-    "Month": "每月"
-  },
-  "SupportSummary": {
-    "Title": "帳單詳情",
-    "NewCharge": "讚賞公民 - {name}",
-    "OtherCharge": "讚賞公民（其他）",
-    "BillingDate": "將於 {date} 自動扣帳",
-    "Total": "總額",
-    "Confirm": "確認帳單",
-    "Error": {
-      "CivicV1": {
-        "Content": "你的讚賞公民會籍是舊版本，目前無法加入新計劃。如欲以新版讚賞公民 2.0 贊助創作者，請先{unsubscribe}，待舊會籍於 {date} 到期後，再重新訂閱新版本的讚賞公民 2.0 計劃。{compare}",
-        "Unsubscribe": "退訂"
-      },
-      "UnableSubSelf": "不能支持自己"
-    }
-  },
-  "SupportersDashboard": {
-    "Summary": {
-      "Title": "每月訂閱收入",
-      "Data": {
-        "Amount": {
-          "Value": "{amount} 美元/月",
-          "Label": "月入總額"
-        },
-        "Subscribers": "訂戶"
-      }
-    },
-    "List": {
-      "Title": "你的讚賞公民"
-    },
-    "Empty": {
-      "Setup": "營運你的業務"
-    }
-  },
-  "SupportersList": {
-    "SortingOptions": {
-      "ts": "按最新",
-      "id": "按 Liker ID",
-      "quantity": "按額度"
-    },
-    "Item": {
-      "Amount": "@:SupportersDashboard.Summary.Data.Amount.Value"
-    }
-  },
-  "supporting_classic_view_civic_liker_subtitle": "特別訂閱",
-  "supporting_classic_view_button_active": "已訂閱",
-  "supporting_classic_view_button_inactive": "立即訂閱",
-  "supporting_empty_view_description": "你未有支持任何創作者",
-  "supporting_empty_view_button": "尋找創作者",
-  "UpdateSupportQuantity": {
-    "Title": "選擇贊助金額",
-    "HintText": "每月支持 {name}",
-    "Next": "下一步",
-    "Subscribe": "立即訂閱",
-    "Unsubscribe": "取消訂閱",
-    "CL1": {
-      "Content": "你將以新版本讚賞公民 2.0 計劃延續會籍。如仍欲延續舊版讚賞公民計劃，請點擊{here}。",
-      "Here": "這裡",
-      "Upgrade": "升級至讚賞公民 2.0 計劃"
-    }
   },
   "back": "上一頁",
   "backToHome": "返回首頁",

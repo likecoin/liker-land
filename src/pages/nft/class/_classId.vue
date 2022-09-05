@@ -1,6 +1,11 @@
 <template>
   <Page>
+    <CardV2
+      v-if="isLoading"
+      class="absolute top-[40%]"
+    >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
+      v-else
       :class="[
         'mt-[8px]',
         'px-[12px]',
@@ -67,6 +72,8 @@
             <ShareButton @copy="handleCopyURL" />
           </div>
           <NFTPagePriceSection
+            v-if="NFTPrice"
+            class="mt-[16px]"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
             :collected-count="mintedCount"
@@ -75,6 +82,8 @@
             @collect="handleCollectFromPriceSection"
           />
           <NFTPageSupplySection
+            v-if="isWritingNFT && NFTPrice"
+            class="mt-[16px]"
             :collected-count="mintedCount"
             @collect="handleCollectFromSupplySection"
           />
@@ -89,40 +98,16 @@
         </div>
       </section>
     </div>
-
-    <TxModal
+    <EventModalTransfer
       :is-open="isOpenTransferModal"
-      :has-close-button="!isTransferring"
-      :header-text="$t('nft_details_page_title_transfer')"
-      :complete-text="$t('tx_modal_status_complete_text_transfer')"
+      :is-transferring="isTransferring"
+      :is-ready-to-transfer="isReadyToTransfer"
+      :error-msg="errorMsg"
+      :to-address="toAddress"
       @close="isOpenTransferModal = false; isTransferring = false"
-    >
-      <template #header-prepend>
-        <IconTransfer />
-      </template>
-      <div>
-        <NFTPageOwning />
-        <div v-if="!isTransferring">
-          <Label preset="p6" class="text-medium-gray" :text="$t('nft_details_page_label_transfer')" />
-          <TextField
-            :placeholder="$t('nft_details_page_placeholder_transfer')"
-            :error-message="errorMsg"
-            @input="handleInputAddr"
-          />
-          <div class="flex justify-center mt-[24px]">
-            <ButtonV2
-              preset="secondary"
-              :is-disabled="!isReadyToTransfer"
-              :text="$t('nft_details_page_button_transfer')"
-              @click="onTransfer"
-            />
-          </div>
-        </div>
-        <div v-else class="flex justify-center w-ful mb-[12px] border-0 border-dashed border-b-[2px] border-b-shade-gray">
-          <FormField :label="$t('tx_modal_label_send')">{{ toAddress }}</FormField>
-        </div>
-      </div>
-    </TxModal>
+      @handle-input-addr="handleInputAddr"
+      @on-transfer="onTransfer"
+    />
   </Page>
 </template>
 
@@ -175,6 +160,7 @@ export default {
   data() {
     return {
       toAddress: null,
+      isLoading: true,
 
       currentPrice: 0,
       isOwnerInfoLoading: true,
@@ -205,20 +191,37 @@ export default {
       },
     },
   },
+  asyncData({ query }) {
+    const { action } = query;
+    return { action };
+  },
   async fetch({ route, store }) {
     const { classId } = route.params;
     await store.dispatch('fetchNFTMetadata', classId);
   },
   async mounted() {
-    await Promise.all([
-      this.updateDisplayNameList(this.iscnOwner),
-      this.updateNFTPurchaseInfo(),
-      this.updateNFTOwners(),
-      this.updateNFTHistory(),
-      this.getLIKEPrice(),
-      this.fetchISCNMetadata(),
-    ]);
-    this.isOwnerInfoLoading = false;
+    try {
+      const promises = [
+        this.updateDisplayNameList(this.iscnOwner),
+        this.updateNFTOwners(),
+        this.updateNFTHistory(),
+        this.getLIKEPrice(),
+        this.fetchISCNMetadata(),
+      ];
+      if (this.isWritingNFT) promises.push(this.updateNFTPurchaseInfo());
+      await Promise.all(promises);
+    } catch (error) {
+      if (!error.response?.status === 404) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    } finally {
+      this.isLoading = false;
+    }
+    if (this.action === 'collect') {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
+      this.handleCollect();
+    }
   },
   methods: {
     onToggleTransfer() {

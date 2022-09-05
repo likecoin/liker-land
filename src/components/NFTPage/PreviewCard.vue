@@ -12,12 +12,22 @@
     :has-padding="false"
   >
     <div
+      v-if="imageUrl"
       class="h-[180px]"
       :style="`background-color: ${imageBgColor}`"
     >
       <img
         class="object-cover w-full max-h-[180px]"
         :src="imageUrl"
+      >
+    </div>
+    <div
+      v-else
+      class="h-[180px]"
+    >
+      <img
+        class="object-cover h-full max-h-[180px]"
+        src="~/assets/images/nft/primitive-nft.png"
       >
     </div>
     <div
@@ -64,6 +74,7 @@
         :text="nftDescription | ellipsisDescription"
       />
       <ButtonV2
+        v-if="nftPrice"
         class="mt-[16px]"
         :text="formattedNFTPrice"
         preset="secondary"
@@ -73,6 +84,33 @@
           <IconPrice />
         </template>
       </ButtonV2>
+      <hr v-if="nftPrice && nftExternalUrl" class="w-[32px] border-shade-gray mt-[12px]">
+      <div v-if="nftExternalUrl" class="flex justify-center">
+        <ButtonV2
+          preset="outline"
+          class="my-[16px]"
+          :href="nftExternalUrl"
+          :text="$t('nft_details_page_button_view')"
+        >
+          <template #prepend>
+            <IconView />
+          </template>
+          <template #append>
+            <IconNorthEast />
+          </template>
+        </ButtonV2>
+      </div>
+      <!-- Metadata desktop:hidden -->
+      <div :class="['flex', 'desktop:hidden', 'justify-center']">
+        <ButtonV2 preset="outline" :href="iscnUrl" :text="$t('nft_details_page_button_metadata')">
+          <template #prepend>
+            <IconCode />
+          </template>
+          <template #append>
+            <IconNorthEast />
+          </template>
+        </ButtonV2>
+      </div>
     </div>
   </CardV2>
 </template>

@@ -1,3 +1,5 @@
+import { isWritingNFT } from '~/util/nft';
+
 export const getUserInfoById = state => id => state.userInfos[id];
 
 export const getArticleInfoByReferrer = state => referrer =>
@@ -22,3 +24,16 @@ export const getNFTClassMintedCount = state => id =>
     (acc, val) => acc + val.length,
     0
   );
+
+export const getNFTClassIdSorter = (_, getters) => classIds => {
+  const sorted = [...classIds].sort((a, b) => {
+    const aIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(a));
+    const bIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(b));
+    if (aIsWritingNFT && !bIsWritingNFT) return -1;
+    if (!aIsWritingNFT && bIsWritingNFT) return 1;
+    const priceA = getters.getNFTClassPurchaseInfoById(a)?.price;
+    const priceB = getters.getNFTClassPurchaseInfoById(b)?.price;
+    return priceB - priceA;
+  });
+  return sorted;
+};

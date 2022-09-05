@@ -86,39 +86,6 @@ export const getOAuthLoginAPI = ({ language = 'zh', utmSource } = {}) =>
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
 export const getLogoutAPI = () => `/api/users/logout`;
-export const getLikePayPageURL = (from = '') =>
-  `/api/civic/payment/likepay/payment?from=${from}`;
-export const getLikePayPaymentAPI = () => `/api/civic/payment/likepay`;
-export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
-export const getStripePaymentAPI = ({
-  from = '',
-  referrer = '',
-  utmSource = '',
-  utmMedium = '',
-  civicLikerVersion = 1,
-  quantity = 1,
-} = {}) =>
-  `/api/civic/payment/stripe/payment?from=${encodeURIComponent(
-    from
-  )}&referrer=${encodeURIComponent(
-    referrer
-  )}&civic_liker_version=${civicLikerVersion}&quantity=${quantity}&utm_source=${encodeURIComponent(
-    utmSource
-  )}&utm_medium=${encodeURIComponent(utmMedium)}`;
-export const getStripeEditPaymentAPI = () =>
-  '/api/civic/payment/stripe/payment?edit=1';
-export const getStripeBillingPortalAPI = () =>
-  '/api/civic/payment/stripe/billing';
-export const getStripePaymentStatusAPI = ({ resume = false } = {}) =>
-  `/api/civic/payment/stripe?${resume ? 'resume=1' : ''}`;
-export const getCivicCSOnlineAPI = () => `/api/civic/csonline`;
-export const getCivicLikerTrialEventByIdAPI = id =>
-  `/api/civic/trial/events/${id}`;
-export const getCivicLikerJoinTrialEventByIdAPI = id =>
-  `/api/civic/trial/events/${id}/join`;
-export const getCivicSupportingUserListAPI = () => '/api/civic/support/users';
-export const getCivicSupportingUserAPI = id => `/api/civic/support/users/${id}`;
-export const getMySupportersAPI = () => '/api/civic/support/self';
 export const getCivicLikerStakingAPI = () => '/api/civic/staking';
 export const getCivicLikerStakingInfoAPI = () => '/api/civic/staking/info';
 
@@ -187,16 +154,6 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
   )}`;
 };
 
-export const getNFTOwners = ({ iscnId, classId }) => {
-  const qsPayload = {
-    iscn_id: iscnId,
-    class_id: classId,
-  };
-  return `${LIKECOIN_API_BASE}/likernft/metadata/owners?${querystring.stringify(
-    qsPayload
-  )}`;
-};
-
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
 
@@ -205,6 +162,35 @@ export const getLIKEPrice = () =>
 
 export const getChainRawTx = hash =>
   `${LIKECOIN_CHAIN_API}/cosmos/tx/v1beta1/txs/${hash}`;
+
+export const getISCNRecord = iscnId => {
+  const qsPayload = {
+    iscn_id: iscnId,
+  };
+  return `${LIKECOIN_CHAIN_API}/iscn/records/id?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTOwners = classId => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTEvents = ({ classId, limit, key }) => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  if (key) qsPayload.key = key;
+  if (limit) qsPayload.limit = limit;
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
   const qsPayload = {
