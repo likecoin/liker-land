@@ -382,5 +382,11 @@ export default {
         this.updateUserCollectedCount(this.classId, this.getAddress);
       }
     },
+    goNFTDetails() {
+      this.$router.push({
+        name: 'nft-class-classId',
+        params: { classId: this.classId },
+      });
+    },
   },
 };

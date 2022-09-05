@@ -42,19 +42,19 @@
             ]"
           >
             <Identity
-              :avatar-url="userAvatar"
+              :avatar-url="referrerAvatar"
               :avatar-size="88"
-              :is-avatar-outlined="isUserCivicLiker"
+              :is-avatar-outlined="isReferrerCivicLiker"
             />
             <NuxtLink :class="['flex', 'mt-[8px]']" :to="`/${iscnOwner}`">
               <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-                {{ userDisplayName | ellipsis }}
+                {{ referrerDisplayName | ellipsis }}
               </Label>
             </NuxtLink>
-            <template v-if="userDescription">
+            <template v-if="referrerDescription">
               <hr :class="['w-full', 'border-shade-gray', 'my-[24px]']">
               <Label preset="p6" :class="['break-all', 'font-200']">
-                {{ userDescription }}
+                {{ referrerDescription }}
               </Label>
             </template>
             <ButtonV2
@@ -88,10 +88,7 @@
           <Label preset="h3" class="text-like-green font-600" :text="shareTitle" />
           <div class="w-[480px]">
             <div
-              class="rounded-[18px] p-[3px] bg-cover"
-              style="
-                background-image: url('/images/gradient/like-gradient-lighter-blur.svg');
-              "
+              class="rounded-[18px] p-[3px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
             >
               <NFTWidgetBaseCard
                 :class="[
@@ -130,7 +127,7 @@
                     </ToolTips>
                   </div>
                   <div>
-                    <ProgressIndicator v-if="isCollecting" />
+                    <ProgressIndicator v-if="uiIsOpenCollectModal" />
                     <ButtonV2
                       v-else
                       preset="secondary"
@@ -161,9 +158,10 @@
 </template>
 
 <script>
-import { getLIKEPrice, getAddressLikerIdMinApi } from '~/util/api';
-import { logTrackerEvent } from '~/util/EventLogger';
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
+
+import { getAddressLikerIdMinApi } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
@@ -178,47 +176,46 @@ export default {
   mixins: [nftMixin, navigationListenerMixin, walletMixin],
   data() {
     return {
-      userInfo: null,
+      referrerInfo: null,
       isLoading: true,
-
-      currentPrice: 0,
-      isCollecting: false,
     };
   },
   computed: {
     classId() {
       return this.$route.params.classId;
     },
-    isUserCivicLiker() {
+    isReferrerCivicLiker() {
       return !!(
-        this.userInfo &&
-        (this.userInfo.isCivicLikerTrial ||
-          this.userInfo.isSubscribedCivicLiker)
+        this.referrerInfo &&
+        (this.referrerInfo.isCivicLikerTrial ||
+          this.referrerInfo.isSubscribedCivicLiker)
       );
     },
-    userDisplayName() {
-      return (this.userInfo && this.userInfo.displayName) || this.referrer;
-    },
-    userDescription() {
-      return this.userInfo && this.userInfo.description;
-    },
-    userAvatar() {
+    referrerDisplayName() {
       return (
-        (this.userInfo && this.userInfo.avatar) ||
+        (this.referrerInfo && this.referrerInfo.displayName) || this.referrer
+      );
+    },
+    referrerDescription() {
+      return this.referrerInfo && this.referrerInfo.description;
+    },
+    referrerAvatar() {
+      return (
+        (this.referrerInfo && this.referrerInfo.avatar) ||
         `https://avatars.dicebear.com/api/identicon/${this.referrer}.svg`
       );
     },
-    isCreator() {
+    isReferrerTheCreator() {
       return this.referrer === this.iscnOwner;
     },
-    isCollector() {
+    isReferrerTheCollector() {
       return Object.prototype.hasOwnProperty.call(
         this.ownerInfo,
         this.referrer
       );
     },
     shareTitle() {
-      return this.isCreator
+      return this.isReferrerTheCreator
         ? this.$t('nft_share_page_creator_title')
         : this.$t('nft_share_page_collector_title');
     },
@@ -236,21 +233,28 @@ export default {
       this.updateDisplayNameList(this.iscnOwner),
       this.updateNFTPurchaseInfo(),
       this.updateNFTOwners(),
-      this.updateUerInfo(),
+      this.updateReferrerInfo(),
     ]);
     if (
       this.referrer &&
       this.referrer !== this.iscnOwner &&
-      !Object.prototype.hasOwnProperty.call(this.ownerInfo, this.referrer)
+      !this.ownerInfo[this.referrer]
     ) {
-      this.invalidToShare();
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTViewDetails(ShareRedirect)',
+        this.classId,
+        1
+      );
+      this.goNFTDetails(this.classId);
       return;
     }
     this.isLoading = false;
   },
   methods: {
     async handleCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+      logTrackerEvent(this, 'NFT', 'NFTCollect(SharePage)', this.classId, 1);
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
         if (isConnected) {
@@ -268,15 +272,15 @@ export default {
         this.isCollecting = false;
       }
     },
-    async updateUerInfo() {
+    async updateReferrerInfo() {
       try {
-        const userInfo = await this.$api.get(
+        const referrerInfo = await this.$api.get(
           getAddressLikerIdMinApi(this.referrer),
           {
             validateStatus: code => code < 500 && code !== 400,
           }
         );
-        this.userInfo = userInfo.data;
+        this.referrerInfo = referrerInfo.data;
       } catch (error) {
         // no need to handle error
       }
@@ -289,11 +293,7 @@ export default {
       });
     },
     handleClickNFTDetails() {
-      this.$router.push({
-        name: 'nft-class-classId',
-        params: { classId: this.classId },
-        query: undefined,
-      });
+      this.goNFTDetails(this.classId);
       logTrackerEvent(this, 'NFT', 'NFTViewDetails(Share)', this.classId, 1);
     },
     handleLike() {
@@ -305,27 +305,6 @@ export default {
         `like_${this.classId}`,
         'popup=1,width=768,height=576,top=0,left=0'
       );
-    },
-    invalidToShare() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTViewDetails(invalidToShare)',
-        this.classId,
-        1
-      );
-      this.$router.push({
-        name: 'nft-class-classId',
-        params: { classId: this.classId },
-      });
-    },
-    async getLIKEPrice() {
-      try {
-        const { data } = await this.$api.get(getLIKEPrice());
-        this.currentPrice = data.likecoin.usd;
-      } catch (error) {
-        this.alertPromptError('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
-      }
     },
   },
 };

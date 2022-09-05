@@ -246,6 +246,7 @@ export default {
         params: { classId },
         query: { referrer },
       });
+      return;
     }
     await store.dispatch('fetchNFTMetadata', classId);
   },
