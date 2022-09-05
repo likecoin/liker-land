@@ -15,7 +15,6 @@
       :user-avatar-src="avatarList[iscnOwner]"
       :is-user-civic-liker="civicLikerList[iscnOwner]"
       :image-src="NFTImageUrl"
-      :is-writing-nft="isWritingNFT"
       :is-collecting="uiIsOpenCollectModal && isCollecting"
     />
   </NuxtLink>

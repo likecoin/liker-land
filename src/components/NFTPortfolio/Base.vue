@@ -5,7 +5,7 @@
       :style="`background-color: ${imageBgColor}`"
     >
       <img
-        v-if="isWritingNFT && imageSrc"
+        v-if="imageSrc"
         class="object-cover w-full h-full max-h-[180px]"
         :src="imageSrc"
       >
@@ -42,7 +42,7 @@
       </div>
       <Label preset="h5" class="mt-[12px] break-all" align="center">{{ title }}</Label>
       <div
-        v-if="isWritingNFT"
+        v-if="price !== undefined"
         class="z-[500] flex justify-center mt-[16px]"
       >
         <ProgressIndicator v-if="isCollecting" />
@@ -65,10 +65,6 @@
         <div class="flex items-center text-medium-gray">
           <IconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
-        </div>
-        <div v-if="!isWritingNFT" class="flex items-center text-like-green">
-          <IconPriceMini />
-          <div class="ml-[4px]">{{ formattedPrice }}</div>
         </div>
       </div>
     </div>
@@ -93,7 +89,7 @@ export default {
     },
     price: {
       type: Number,
-      default: 0,
+      default: undefined,
     },
     collectedCount: {
       type: Number,
@@ -102,10 +98,6 @@ export default {
     collectorCount: {
       type: Number,
       default: 0,
-    },
-    isWritingNft: {
-      type: Boolean,
-      default: false,
     },
     isCollecting: {
       type: Boolean,
@@ -133,9 +125,6 @@ export default {
     },
   },
   computed: {
-    isWritingNFT() {
-      return !!this.isWritingNft;
-    },
     formattedPrice() {
       return `${this.price.toLocaleString('en') || '-'} LIKE`;
     },
