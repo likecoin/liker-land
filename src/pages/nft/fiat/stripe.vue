@@ -1,8 +1,9 @@
 <template>
   <Page>
     <div v-if="status === 'error'" class="my-48">
-      Purchase Error: {{ result.errorMessage || 'UNKNOWN' }}
-      Please <nuxt-link :to="classIdRoute">go back</nuxt-link> and retry
+      <p>Purchase Error: {{ result.errorMessage || 'UNKNOWN' }}</p>
+      <p>Your payment authorization would be automatically refunded</p>
+      <p>Please <nuxt-link :to="classIdRoute">go back</nuxt-link> and retry</p>
     </div>
     <div v-else-if="isPolling" class="my-48">
       <div v-if="status === 'new'">Waiting for receive payment info</div>
