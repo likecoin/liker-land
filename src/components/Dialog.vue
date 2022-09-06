@@ -12,7 +12,7 @@
         ]"
         @click="handleBackdropClick"
       />
-      <div class="fixed w-full max-w-[1920px] mx-auto p-[12px]">
+      <div :class="['fixed w-full max-w-[1920px] mx-auto p-[12px]', panelContainerClass]">
         <ButtonV2
           v-if="hasCloseButton"
           :class="[
@@ -107,6 +107,10 @@ export default class Dialog extends Vue {
   // Vertically center the dialog.
   @Prop({ default: true })
   readonly isVerticallyCenter!: boolean;
+
+  // Panel container class.
+  @Prop({ default: '' })
+  readonly panelContainerClass!: string;
 
   // Panel class.
   @Prop({ default: '' })
