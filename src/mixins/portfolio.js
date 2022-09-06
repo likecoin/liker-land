@@ -1,14 +1,49 @@
+import { mapGetters } from 'vuex';
+
 import { getUserSellNFTClasses } from '~/util/api';
 import { getNFTs } from '~/util/nft';
-import { copyToClipboard } from '~/util/ui';
+import { copyToClipboard, ellipsis } from '~/util/ui';
 import alertMixin from '~/mixins/alert';
-import { mapGetters } from 'vuex';
 
 export default {
   mixins: [alertMixin],
+  head() {
+    const name = ellipsis(this.userDisplayName);
+    const title = this.$t('portfolio_title', { name });
+    const description = this.$t('portfolio_description', { name });
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content:
+            this.userAvatar ||
+            `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`,
+        },
+      ],
+    };
+  },
   data() {
     return {
-      ownedNFTs: [],
+      wallet: undefined,
+      userInfo: null,
+      collectedNFTs: [],
       sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
@@ -17,18 +52,27 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getAddress']),
-    ownedNFTClassIds() {
-      const classIdSet = new Set(this.ownedNFTs.map(n => n.classId));
+    ...mapGetters(['getNFTClassIdSorter']),
+    userDisplayName() {
+      return this.userInfo?.displayName || this.wallet;
+    },
+    collectedNFTClassIds() {
+      const classIdSet = new Set(this.collectedNFTs.map(n => n.classId));
       return Array.from(classIdSet);
+    },
+    sortedCollectedNFTClassIds() {
+      return this.getNFTClassIdSorter(this.collectedNFTClassIds);
+    },
+    sortedSellingNFTClassIds() {
+      return this.getNFTClassIdSorter(this.sellingNFTClassIds);
     },
   },
   methods: {
     async fetchUserCollectedNFTs(wallet) {
       const { nfts } = await getNFTs({ owner: wallet });
-      this.ownedNFTs = nfts;
+      this.collectedNFTs = nfts;
     },
-    async fetchUserSellingClasses(wallet) {
+    async fetchUserSellingNFTs(wallet) {
       const { data } = await this.$api.get(getUserSellNFTClasses({ wallet }));
       this.sellingNFTClassIds = data.list;
       if (!this.sellingNFTClassIds.length) {
@@ -42,9 +86,9 @@ export default {
     goCreated() {
       this.currentTab = 'created';
     },
-    copyURL(wallet) {
+    copySharePageURL(wallet, referrer) {
       const host = `${window.location.protocol}//${window.location.host}`;
-      const url = `${host}/${wallet}?referrer=${this.getAddress}`;
+      const url = `${host}/${wallet}?referrer=${referrer}`;
       copyToClipboard(url);
       this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },

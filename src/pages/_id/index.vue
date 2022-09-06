@@ -24,22 +24,34 @@
           'desktop:w-[280px]',
         ]"
       >
-        <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
-          <Identity
-            :avatar-url="userAvatar || `https://avatars.dicebear.com/api/identicon/${wallet}.svg`"
-            :avatar-size="88"
-            :is-avatar-outlined="isUserCivicLiker"
+        <NFTPortfolioUserInfo
+          :user-info="userInfo"
+          :wallet="wallet"
+        >
+          <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
+            <IconEllipse />
+            <IconEllipse />
+            <IconEllipse />
+          </div>
+          <UserStatsPortfolio
+            class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
+            :collected-items="collectedNFTs"
+            :created-class-ids="sellingNFTClassIds"
+            :is-loading="isLoading"
           />
-          <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-            {{ userDisplayName | ellipsis }}
-          </Label>
-          <template v-if="userDescription">
-            <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
-            <Label preset="p6" class="break-all font-200">
-              {{ userDescription }}
-            </Label>
-          </template>
-        </CardV2>
+        </NFTPortfolioUserInfo>
+        <div class="flex justify-center mt-[18px]">
+          <ButtonV2
+            v-if="getAddress === wallet"
+            preset="outline"
+            text="My Dashboard"
+            @click="goMyDashboard"
+          >
+            <template #prepend>
+              <IconPerson />
+            </template>
+          </ButtonV2>
+        </div>
       </div>
       <div
         :class="[
@@ -66,17 +78,17 @@
             <MenuButton
               text="Collected"
               :is-selected="currentTab === 'collected'"
-              @click="goCollected"
+              @click="handleGoCollected"
             />
             <MenuButtonDivider v-if="sellingNFTClassIds.length" />
             <MenuButton
               v-if="isLoading || sellingNFTClassIds.length"
               text="Created"
               :is-selected="currentTab === 'created'"
-              @click="goCreated"
+              @click="handleGoCreated"
             />
           </div>
-          <ShareButton @copy="handleCopyURL" />
+          <ShareButton @copy="handleShare" />
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
@@ -93,33 +105,17 @@
               'gap-[16px]',
             ]"
           >
-            <NFTPortfolioCard
-              v-if="!ownedNFTClassIds.length"
-              class="!bg-shade-gray break-inside-avoid"
-            >
-              <div class="p-[8px] w-full h-[140px]">
-                <div
-                  class="z-[5] h-full w-full bg-repeat-space"
-                  :style="{
-                    backgroundImage: `url(/images/NFT/background_cross.png)`,
-                  }"
-                />
-              </div>
-              <div class="w-full pb-[32px] bg-shade-gray border-t-[1px] border-white">
-                <div class="flex flex-col justify-center items-center mt-[-21px]">
-                  <div class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white" />
-                  <Label
-                    class="text-medium-gray mt-[12px]"
-                    :text="$t('portfolio_collected_tab_no_item')"
-                  />
-                </div>
-              </div>
-            </NFTPortfolioCard>
-            <NFTPortfolioItem
-              v-for="id in sortedOwnedNFTClassIds"
+            <li>
+              <NFTPortfolioEmpty v-if="!sortedCollectedNFTClassIds.length" preset="collected" />
+            </li>
+            <li
+              v-for="id in sortedCollectedNFTClassIds"
               :key="id"
-              :class-id="id"
-            />
+            >
+              <NFTPortfolioItem
+                :class-id="id"
+              />
+            </li>
           </ul>
 
           <ul
@@ -134,11 +130,17 @@
               'gap-[16px]',
             ]"
           >
-            <NFTPortfolioItem
+            <li>
+              <NFTPortfolioEmpty v-if="!sortedSellingNFTClassIds.length" preset="created" />
+            </li>
+            <li
               v-for="id in sortedSellingNFTClassIds"
               :key="id"
-              :class-id="id"
-            />
+            >
+              <NFTPortfolioItem
+                :class-id="id"
+              />
+            </li>
           </ul>
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
@@ -155,106 +157,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
-import {
-  getUserMinAPI,
-  getUserSellNFTClasses,
-  getAddressLikerIdMinApi,
-} from '~/util/api';
+import { getUserMinAPI, getAddressLikerIdMinApi } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
-import { getNFTs } from '~/util/nft';
-import { ellipsis, copyToClipboard } from '~/util/ui';
-import { checkUserNameValid } from '~/util/user';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { checkUserNameValid } from '~/util/user';
 
 import walletMixin from '~/mixins/wallet';
-import alertMixin from '~/mixins/alert';
-
-import Identity from '~/components/Identity/Identity';
+import portfolioMixin from '~/mixins/portfolio';
 
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
-  components: {
-    Identity,
-  },
-  filters: {
-    ellipsis,
-  },
-  mixins: [walletMixin, alertMixin],
-  head() {
-    const name = ellipsis(this.userDisplayName);
-    const title = this.$t('portfolio_title', { name });
-    const description = this.$t('portfolio_description', { name });
-    return {
-      title,
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: title,
-        },
-        {
-          hid: 'description',
-          name: 'description',
-          content: description,
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: description,
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content:
-            this.userAvatar ||
-            `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`,
-        },
-      ],
-    };
-  },
-  data() {
-    return {
-      wallet: undefined,
-      userInfo: undefined,
-      ownedNFTClassIds: [],
-      sellingNFTClassIds: [],
-      currentTab: ['collected', 'created'].includes(this.$route.query.tab)
-        ? this.$route.query.tab
-        : 'created',
-      displayNameList: [],
-      avatarList: [],
-      civicLikerList: [],
-      isLoading: true,
-    };
-  },
-  computed: {
-    ...mapGetters(['getNFTClassMetadataById', 'getNFTClassIdSorter']),
-    isUserCivicLiker() {
-      return !!(
-        this.userInfo &&
-        (this.userInfo.isCivicLikerTrial ||
-          this.userInfo.isSubscribedCivicLiker)
-      );
-    },
-    userDisplayName() {
-      return (this.userInfo && this.userInfo.displayName) || this.wallet;
-    },
-    userDescription() {
-      return this.userInfo && this.userInfo.description;
-    },
-    userAvatar() {
-      return this.userInfo && this.userInfo.avatar;
-    },
-    sortedOwnedNFTClassIds() {
-      return this.getNFTClassIdSorter(this.ownedNFTClassIds);
-    },
-    sortedSellingNFTClassIds() {
-      return this.getNFTClassIdSorter(this.sellingNFTClassIds);
-    },
-  },
+  mixins: [walletMixin, portfolioMixin],
   async asyncData({ route, $api, error }) {
     let { id } = route.params;
     if (id && isValidAddress(id)) {
@@ -276,6 +190,7 @@ export default {
         }
         return {
           wallet: id,
+          userInfo: undefined,
         };
       }
     }
@@ -296,40 +211,25 @@ export default {
     return undefined;
   },
   mounted() {
-    this.fetchUserSellingClasses();
-    this.fetchUserOwnClasses();
+    this.fetchUserSellingNFTs(this.wallet);
+    this.fetchUserCollectedNFTs(this.wallet);
   },
   methods: {
-    async fetchUserOwnClasses() {
-      const { nfts } = await getNFTs({ owner: this.wallet });
-      const classIdSet = new Set(nfts.map(n => n.classId));
-      this.ownedNFTClassIds = Array.from(classIdSet);
+    handleGoCollected() {
+      logTrackerEvent(this, 'UserPortfolio', 'GoCollectedTab', this.wallet, 1);
+      this.goCollected();
     },
-    async fetchUserSellingClasses() {
-      const { data } = await this.$api.get(
-        getUserSellNFTClasses({ wallet: this.wallet })
-      );
-      this.sellingNFTClassIds = data.list;
-      if (!this.sellingNFTClassIds.length) {
-        this.currentTab = 'collected';
-      }
-      this.isLoading = false;
+    handleGoCreated() {
+      logTrackerEvent(this, 'UserPortfolio', 'GoCreatedTab', this.wallet, 1);
+      this.goCreated();
     },
-    goCollected() {
-      this.currentTab = 'collected';
+    handleShare() {
+      this.copySharePageURL(this.wallet, this.getAddress);
+      logTrackerEvent(this, 'UserPortfolio', 'CopyShareURL', this.wallet, 1);
     },
-    goCreated() {
-      this.currentTab = 'created';
-    },
-    handleCopyURL() {
-      const host = `${window.location.protocol}//${window.location.host}`;
-      const { path } = this.$route;
-      const url = `${host}${path}`;
-      copyToClipboard(url);
-
-      logTrackerEvent(this, 'SharePortFolio', 'CopyShareURL', url, 1);
-
-      this.alertPromptSuccess(this.$t('tooltip_share_done'));
+    goMyDashboard() {
+      logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
+      this.$router.push({ name: 'dashboard' });
     },
   },
 };

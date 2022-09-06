@@ -43,8 +43,7 @@ export default {
         }
       } else {
         this.$router.push({
-          name: 'id',
-          params: { id: this.getAddress },
+          name: 'dashboard',
         });
       }
     },
