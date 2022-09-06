@@ -95,7 +95,16 @@ export default {
     },
     // nft info
     NFTName() {
-      return this.NFTClassMetadata.name;
+      switch (this.NFTClassMetadata.name) {
+        case 'Writing NFT - undefined':
+          return `Writing NFT - ${this.NFTClassMetadata.metadata.name}`;
+
+        case 'Liker NFT - undefined':
+          return `Liker NFT - ${this.NFTClassMetadata.metadata.name}`;
+
+        default:
+          return this.NFTClassMetadata.name;
+      }
     },
     NFTDescription() {
       return this.NFTClassMetadata.description;
