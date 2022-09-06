@@ -11,7 +11,7 @@
           <img
             class="mr-16"
             src="~/assets/images/civic-liker-icon.png"
-            :alt="$t('civic_liker_dashboard_header_title')"
+            :alt="$t('civic_page_v3_title')"
             style="width:64px"
           >
           <i18n class="text-32" path="civic_liker_web_3_notice_header">

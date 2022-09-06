@@ -129,5 +129,10 @@ export default {
       return `${this.price.toLocaleString('en') || '-'} LIKE`;
     },
   },
+  methods: {
+    handleClickCollect(event) {
+      this.$emit('collect', event);
+    },
+  },
 };
 </script>
