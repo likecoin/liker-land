@@ -84,33 +84,6 @@
           <IconPrice />
         </template>
       </ButtonV2>
-      <hr v-if="nftPrice && nftExternalUrl" class="w-[32px] border-shade-gray mt-[12px]">
-      <div v-if="nftExternalUrl" class="flex justify-center">
-        <ButtonV2
-          preset="outline"
-          class="my-[16px]"
-          :href="nftExternalUrl"
-          :text="$t('nft_details_page_button_view')"
-        >
-          <template #prepend>
-            <IconView />
-          </template>
-          <template #append>
-            <IconNorthEast />
-          </template>
-        </ButtonV2>
-      </div>
-      <!-- Metadata desktop:hidden -->
-      <div :class="['flex', 'desktop:hidden', 'justify-center']">
-        <ButtonV2 preset="outline" :href="iscnUrl" :text="$t('nft_details_page_button_metadata')">
-          <template #prepend>
-            <IconCode />
-          </template>
-          <template #append>
-            <IconNorthEast />
-          </template>
-        </ButtonV2>
-      </div>
     </div>
   </CardV2>
 </template>

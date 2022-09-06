@@ -5,11 +5,11 @@
         <div class="flex items-center">
           <img
             src="~/assets/images/civic-liker-icon.png"
-            :alt="$t('civic_liker_dashboard_header_title')"
+            :alt="$t('civic_page_v3_title')"
             style="width:68px"
           >
           <span class="ml-16 text-like-green text-24">{{
-            $t('civic_liker_dashboard_header_title')
+            $t('civic_page_v3_title')
           }}</span>
         </div>
         <Button
