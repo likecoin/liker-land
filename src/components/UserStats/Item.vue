@@ -3,7 +3,7 @@
     <Label
       preset="h3"
       class="text-like-green"
-      content-class="!items-end"
+      valign="bottom"
       :text="isLoading ? '-' : statsValue"
     >
       <slot v-if="!isLoading" name="custom-value" />
