@@ -79,6 +79,7 @@
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="handleCollectFromPriceSection"
+            @collectViaFiat="handleCollectViaFiatFromPriceSection"
           />
           <NFTPageSupplySection
             v-if="isWritingNFT && NFTPrice"
@@ -110,7 +111,7 @@
 </template>
 
 <script>
-import { getLIKEPrice } from '~/util/api';
+import { getLIKEPrice, postNewStripeFiatPayment } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 
@@ -297,6 +298,30 @@ export default {
         1
       );
       return this.handleCollect();
+    },
+    async handleCollectViaFiatFromPriceSection() {
+      if (!this.getAddress) {
+        const isConnected = await this.connectWallet();
+        if (isConnected) {
+          this.handleCollectViaFiatFromPriceSection();
+        }
+        return;
+      }
+      try {
+        this.isCollecting = true;
+        const { url } = await this.$api.$post(
+          postNewStripeFiatPayment({
+            classId: this.classId,
+            wallet: this.getAddress,
+          })
+        );
+        if (url) window.location.href = url;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.isCollecting = false;
+      }
     },
     handleCollectFromSupplySection() {
       logTrackerEvent(

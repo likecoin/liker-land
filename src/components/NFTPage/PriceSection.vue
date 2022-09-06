@@ -67,6 +67,17 @@
           </ButtonV2>
         </div>
       </div>
+      <div class="relative p-[6px] bg-like-green rounded-[16px]">
+        <ButtonV2
+          text="Collect via Credit Card"
+          preset="secondary"
+          @click="handleClickCollectViaFiat"
+        >
+          <template #prepend>
+            <IconPrice />
+          </template>
+        </ButtonV2>
+      </div>
       <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
         <ButtonV2
           class="ml-[12px]"
@@ -111,6 +122,9 @@ export default {
   methods: {
     handleClickCollect() {
       this.$emit('collect');
+    },
+    handleClickCollectViaFiat() {
+      this.$emit('collectViaFiat');
     },
   },
 };
