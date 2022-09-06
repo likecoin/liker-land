@@ -144,11 +144,10 @@ export default {
       ];
 
       if (this.getAddress || this.getUserId) {
-        options.push({ value: 'setting', name: this.$t('main_menu_settings') });
-      }
-
-      if (this.getAddress) {
-        options.push({ value: 'signOut', name: this.$t('main_menu_sign_out') });
+        options.push(
+          { value: 'setting', name: this.$t('main_menu_settings') },
+          { value: 'signOut', name: this.$t('main_menu_sign_out') }
+        );
       }
 
       return options;
@@ -158,7 +157,7 @@ export default {
     await this.restoreSession();
   },
   methods: {
-    ...mapActions(['updatePreferences']),
+    ...mapActions(['updatePreferences', 'userLogout']),
     handleSelectLocale(value) {
       this.$i18n.locale = value;
       this.updatePreferences({ locale: value });
@@ -176,15 +175,14 @@ export default {
           break;
 
         case 'setting':
-          if (this.getUserId) {
-            this.$router.push({ name: 'setting' });
-          } else {
-            window.open(getLikerIdSettingsURL(), '_blank');
-          }
+          window.open(getLikerIdSettingsURL(), '_blank');
           break;
 
         case 'signOut':
           this.disconnectWallet();
+          if (this.getUserId) {
+            this.userLogout();
+          }
           break;
 
         default:

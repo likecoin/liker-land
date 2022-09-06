@@ -1,39 +1,42 @@
 <template>
-  <div v-if="!validatorAddress" class="p-32">
-    <Spinner class="mx-auto" />
-  </div>
-  <CivicLikerV3PureDashboard
-    v-else
-    :status="status"
-    :is-signed-in="!!getUserId"
-    :avatar-src="getUserInfo && getUserInfo.avatar"
-    :staking-validator-name="validatorName"
-    :staking-management-url="stakingManagementURL"
-    :staking-amount="stakingAmount"
-    :staking-amount-target="stakingAmountTarget"
-    :active-since="activeSince"
-    @sign-in="handleSignIn"
-  />
+  <Transition name="fade" mode="out-in">
+    <div
+      v-if="!validatorAddress"
+      key="loading"
+      class="flex items-center justify-center min-h-[180px]"
+    >
+      <Spinner class="mx-auto" />
+    </div>
+    <CivicLikerV3PureDashboard
+      v-else
+      key="dashboard"
+      :status="status"
+      :is-signed-in="!!getAddress"
+      :avatar-src="walletUserAvatar"
+      :staking-validator-name="validatorName"
+      :staking-management-url="stakingManagementURL"
+      :staking-amount="stakingAmount"
+      :staking-amount-target="stakingAmountTarget"
+      :active-since="activeSince"
+      @register="handleRegister"
+      @sign-in="handleSignIn"
+    />
+  </Transition>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import walletMixin from '~/mixins/wallet';
 
-import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '../../constant';
+import { CIVIC_LIKER_V3_STAKING_ENDPOINT } from '~/constant';
 import {
   getCivicLikerStakingAPI,
   getCivicLikerStakingInfoAPI,
-} from '../../util/api';
-
-import Spinner from '../Spinner/Spinner';
-import CivicLikerV3PureDashboard from './PureDashboard';
+} from '~/util/api';
+import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
   name: 'CivicLikerV3Dashboard',
-  components: {
-    CivicLikerV3PureDashboard,
-    Spinner,
-  },
+  mixins: [walletMixin],
   data() {
     return {
       validatorName: '',
@@ -45,26 +48,40 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getUserId', 'getUserInfo']),
     stakingManagementURL() {
       return `${CIVIC_LIKER_V3_STAKING_ENDPOINT}/${this.validatorAddress}`;
+    },
+  },
+  watch: {
+    getAddress(address) {
+      if (address) {
+        this.fetchData();
+      } else {
+        this.stakingAmount = 0;
+        this.status = 'unregistered';
+        this.activeSince = null;
+      }
     },
   },
   mounted() {
     this.fetchData();
   },
   methods: {
+    handleRegister() {
+      window.open(getLikerIdSettingsURL(), '_blank');
+    },
     handleSignIn() {
-      this.$router.push({ name: 'civic-dashboard' });
+      this.connectWallet();
     },
     async fetchData() {
+      this.status = 'fetching';
       const fetches = [this.fetchStakingInfo()];
-      if (this.getUserId) {
-        fetches.push(this.fetchStaking());
+      if (this.getAddress) {
+        fetches.push(this.fetchStakingStatus());
       }
       await Promise.all(fetches);
-      if (!this.getUserId) {
-        this.status = 'inactive';
+      if (!this.getAddress) {
+        this.status = 'unregistered';
       }
     },
     async fetchStakingInfo() {
@@ -82,10 +99,10 @@ export default {
         console.error(error);
       }
     },
-    async fetchStaking() {
+    async fetchStakingStatus() {
       try {
         const { status, stakingAmount, activeSince } = await this.$api.$get(
-          getCivicLikerStakingAPI()
+          getCivicLikerStakingAPI(this.getAddress)
         );
         this.status = status;
         this.stakingAmount = stakingAmount;
