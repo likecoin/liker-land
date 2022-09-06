@@ -183,8 +183,8 @@ export default class Label extends Vue {
   get contentWrapperClasses(): any {
     return [
       'flex',
-      'items-center',
       'flex-grow',
+      this.valignClass,
       this.alignClass,
       this.contentClass,
     ];
