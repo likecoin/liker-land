@@ -163,7 +163,6 @@ export default {
       isLoading: true,
 
       currentPrice: 0,
-      isOwnerInfoLoading: true,
       isOpenTransferModal: false,
       errorMsg: '',
       isReadyToTransfer: false,
