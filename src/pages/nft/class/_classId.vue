@@ -64,7 +64,7 @@
               class="mr-[16px]"
               :owned-count="userOwnedCount"
               :is-transfer-disabled="!getAddress || !userOwnedCount"
-              :is-loading="isOwnerInfoLoading && !!getAddress"
+              :is-loading="isOwnerInfoLoading"
               :is-log-in="!!getAddress"
               :is-transferring="isTransferring"
               @openTransfer="onToggleTransfer"
@@ -163,7 +163,6 @@ export default {
       isLoading: true,
 
       currentPrice: 0,
-      isOwnerInfoLoading: true,
       isOpenTransferModal: false,
       errorMsg: '',
       isReadyToTransfer: false,
