@@ -79,14 +79,17 @@
             'items-center',
             'justify-center',
             'rounded-[32px]',
+
             'py-[48px]',
+            'phone:py-[28px]',
+
             'bg-like-cyan-pale',
             'gap-[24px]',
             'desktop:col-span-2',
           ]"
         >
           <Label preset="h3" class="text-like-green font-600" :text="shareTitle" />
-          <div class="w-[480px]">
+          <div class="w-full max-w-[480px] px-[12px] laptop:p-0">
             <div
               class="rounded-[18px] p-[3px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
             >
@@ -114,8 +117,19 @@
                   :img-bg-color="NFTImageBackgroundColor"
                   @click="handleClickNFTDetails"
                 />
-                <div class="flex items-center justify-between mt-[16px] w-full">
-                  <div class="flex items-center">
+                <div
+                  :class="[
+                    'flex',
+                    'items-center',
+                    'justify-between',
+
+                    'phone:flex-col',
+
+                    'mt-[16px]',
+                    'w-full',
+                  ]"
+                >
+                  <div class="flex items-center phone:mb-[18px]">
                     <ToolTips :tool-tip-text="$t('campaign_nft_item_collected_count_label')">
                       <Label preset="h6" class="mr-[22px] text-medium-gray" :text="mintedCount"><template #prepend><IconMint /></template></Label>
                     </ToolTips>
