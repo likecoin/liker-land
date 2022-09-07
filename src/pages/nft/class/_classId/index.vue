@@ -73,7 +73,6 @@
           </div>
           <NFTPagePriceSection
             v-if="NFTPrice"
-            class="mt-[16px]"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="NFTPriceUSD"
             :collected-count="mintedCount"
@@ -83,7 +82,6 @@
           />
           <NFTPageSupplySection
             v-if="isWritingNFT && NFTPrice"
-            class="mt-[16px]"
             :collected-count="mintedCount"
             @collect="handleCollectFromSupplySection"
           />
@@ -193,8 +191,17 @@ export default {
     const { action } = query;
     return { action };
   },
-  async fetch({ route, store }) {
+  async fetch({ route, store, redirect }) {
     const { classId } = route.params;
+    const { referrer } = route.query;
+    if (referrer) {
+      redirect({
+        name: 'nft-class-classId-share',
+        params: { classId },
+        query: { referrer },
+      });
+      return;
+    }
     await store.dispatch('fetchNFTMetadata', classId);
   },
   async mounted() {

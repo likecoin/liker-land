@@ -3,6 +3,7 @@
     :is="tag"
     class="flex flex-col overflow-hidden rounded-[8px] bg-gray-f7"
     v-bind="$attrs"
+    @click="handleClick"
   >
     <div
       v-if="imgSrc"
