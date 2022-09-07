@@ -1,7 +1,6 @@
 <template>
   <nav class="grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
     <ButtonV2
-      to="/campaign/writing-nft"
       preset="secondary"
       @click="handleClickCampaignPageButton"
     >{{ $t('about_nft_page_nav_campaign') }}</ButtonV2>
@@ -23,6 +22,7 @@ export default {
   methods: {
     handleClickCampaignPageButton() {
       // Legacy event
+      this.$router.push({ name: 'campaign-writing-nft' });
       logTrackerEvent(this, 'NFT', 'NFTGoToCampaign', 'NFTGoToCampaign', 1);
       this.$emit('go-campaign');
     },
