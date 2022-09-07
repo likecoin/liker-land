@@ -3,7 +3,7 @@
     <ButtonV2
       to="/campaign/writing-nft"
       preset="secondary"
-      @click="handleClickCampaignPageButton"
+      @click.native="handleClickCampaignPageButton"
     >{{ $t('about_nft_page_nav_campaign') }}</ButtonV2>
     <ButtonV2
       preset="tertiary"
