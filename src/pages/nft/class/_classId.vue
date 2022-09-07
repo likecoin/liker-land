@@ -114,17 +114,16 @@
 <script>
 import { getLIKEPrice } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { copyToClipboard } from '~/util/ui';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 
 import nftMixin from '~/mixins/nft';
+import clipboardMixin from '~/mixins/clipboard';
 import walletMixin from '~/mixins/wallet';
-import alertMixin from '~/mixins/alert';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 
 export default {
   layout: 'default',
-  mixins: [nftMixin, navigationListenerMixin, walletMixin, alertMixin],
+  mixins: [clipboardMixin, nftMixin, navigationListenerMixin, walletMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
@@ -311,14 +310,10 @@ export default {
       }
     },
     handleCopyURL() {
-      const host = `${window.location.protocol}//${window.location.host}`;
-      const { path } = this.$route;
-      const url = `${host}${path}?referrer=${this.getAddress}`;
-
-      copyToClipboard(url);
+      this.copyURLPath(`${this.$route.path}?referrer=${this.getAddress}`, {
+        alertMessage: this.$t('tooltip_share_done'),
+      });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', url, 1);
-
-      this.alertPromptSuccess(this.$t('tooltip_share_done'));
     },
   },
 };

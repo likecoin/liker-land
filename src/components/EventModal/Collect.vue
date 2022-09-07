@@ -32,10 +32,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import portfolioMixin from '~/mixins/portfolio';
+
+import clipboardMixin from '~/mixins/clipboard';
 
 export default {
-  mixins: [portfolioMixin],
+  mixins: [clipboardMixin],
   props: {
     isOpen: {
       type: Boolean,
@@ -43,12 +44,14 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['uiTxTargetClassId', 'uiTxNFTStatus']),
+    ...mapGetters(['getAddress', 'uiTxTargetClassId', 'uiTxNFTStatus']),
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
     handleShare() {
-      this.copyURL(`nft/class/${this.uiTxTargetClassId}`);
+      this.copyURLPath(
+        `nft/class/${this.uiTxTargetClassId}?referrer=${this.getAddress}`
+      );
     },
     goToPortfolio() {
       this.$router.push({ name: 'id', params: { id: this.getAddress } });

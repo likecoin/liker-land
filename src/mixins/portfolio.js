@@ -2,11 +2,11 @@ import { mapGetters } from 'vuex';
 
 import { getUserSellNFTClasses } from '~/util/api';
 import { getNFTs } from '~/util/nft';
-import { copyToClipboard, ellipsis } from '~/util/ui';
-import alertMixin from '~/mixins/alert';
+import { ellipsis } from '~/util/ui';
+import clipboardMixin from '~/mixins/clipboard';
 
 export default {
-  mixins: [alertMixin],
+  mixins: [clipboardMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
@@ -87,10 +87,9 @@ export default {
       this.currentTab = 'created';
     },
     copySharePageURL(wallet, referrer) {
-      const host = `${window.location.protocol}//${window.location.host}`;
-      const url = `${host}/${wallet}?referrer=${referrer}`;
-      copyToClipboard(url);
-      this.alertPromptSuccess(this.$t('tooltip_share_done'));
+      this.copyURLPath(`${wallet}?referrer=${referrer}`, {
+        alertMessage: this.$t('tooltip_share_done'),
+      });
     },
   },
 };
