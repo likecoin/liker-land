@@ -20,7 +20,7 @@
       <!-- Message -->
       <div
         v-if="!uiTxErrorMessage && !isCollectCompleted"
-        class="flex flex-col items-center justify-center mb-[12px]"
+        class="flex flex-col items-center justify-center"
       >
         <Label
           class="text-like-green font-600"
@@ -33,7 +33,7 @@
           :text="formattedStatusText"
         />
       </div>
-      <div v-if="uiTxErrorMessage" class="flex items-center justify-center mb-[12px] text-danger">
+      <div v-if="uiTxErrorMessage" class="flex items-center justify-center my-[12px] text-danger">
         <Label class="text-danger" :text="formattedErrorMessage" preset="p6">
           <template #prepend>
             <IconError />

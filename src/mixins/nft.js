@@ -7,6 +7,7 @@ import {
   postNFTTransfer,
   getAddressLikerIdMinApi,
   getNFTEvents,
+  postNewStripeFiatPayment,
 } from '~/util/api';
 import {
   getAccountBalance,
@@ -273,11 +274,31 @@ export default {
     async collectNFT() {
       try {
         await this.initIfNecessary();
-        const balance = await getAccountBalance(this.getAddress);
+        const balanceFetch = getAccountBalance(this.getAddress);
         this.uiToggleCollectModal({
           classId: this.classId,
           collectedCount: this.userOwnedCount,
+          onSelectMethod: async method => {
+            const balance = await balanceFetch;
+            switch (method) {
+              case 'crypto':
+                this.collectNFTWithCrypto({ balance });
+                break;
+              case 'stripe':
+                this.collectNFTWithStripe();
+                break;
+              default:
+                break;
+            }
+          },
         });
+      } catch (error) {
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
+      }
+    },
+    async collectNFTWithCrypto({ balance }) {
+      try {
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
           logTrackerEvent(
             this,
@@ -335,6 +356,20 @@ export default {
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
+      }
+    },
+    async collectNFTWithStripe() {
+      try {
+        const { url } = await this.$api.$post(
+          postNewStripeFiatPayment({
+            classId: this.classId,
+            wallet: this.getAddress,
+          })
+        );
+        if (url) window.location.href = url;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
       }
     },
     async transferNFT() {

@@ -10,6 +10,8 @@ export const uiAlertMessage = state => state.alertMessage;
 
 export const uiIsOpenCollectModal = state => state.isOpenCollectModal;
 export const uiCollectOwnedCount = state => state.ownedCount;
+export const uiCollectMethodCallback = state =>
+  state.selectCollectMethodCallback;
 export const uiTxTargetClassId = state => state.txTargetClassId;
 export const uiTxNFTStatus = state => state.txStatus;
 export const uiTxErrorMessage = state => state.txErrorMessage;
