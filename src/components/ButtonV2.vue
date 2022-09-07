@@ -218,7 +218,7 @@ export default class ButtonV2 extends Vue {
       {
         'px-[12px] sm:px-[20px]': this.isMini,
         'py-[6px]': this.isMini,
-        'font-semibold': this.isMini,
+        'font-600': this.isMini,
       },
       {
         'px-[16px]': !this.isCircle && !this.isMini,

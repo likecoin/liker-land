@@ -164,7 +164,7 @@ export default class Label extends Vue {
   }
 
   get fontWeightClass(): string {
-    return this.isHeader ? 'font-semibold' : '';
+    return this.isHeader ? 'font-600' : '';
   }
 
   get alignClass(): string {
