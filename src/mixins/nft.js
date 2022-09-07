@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
+import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE, TX_STATUS } from '~/constant';
 import {
   getNFTHistory,
   postNFTPurchase,
@@ -19,14 +19,6 @@ import {
   formatNFTEventsToHistory,
 } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
-
-const TX_STATUS = {
-  SIGN: 'sign',
-  PROCESSING: 'processing',
-  COMPLETED: 'completed',
-  INSUFFICIENT: 'insufficient',
-  FAILED: 'failed',
-};
 
 const NFT_INDEXER_LIMIT_MAX = 100;
 

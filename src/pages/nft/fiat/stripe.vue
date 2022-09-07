@@ -1,38 +1,20 @@
 <template>
-  <Page>
-    <div v-if="status === 'error'" class="my-48">
-      <p>Purchase Error: {{ result.errorMessage || 'UNKNOWN' }}</p>
-      <p>Your payment authorization would be automatically refunded</p>
-      <p>Please <nuxt-link :to="classIdRoute">go back</nuxt-link> and retry</p>
-    </div>
-    <div v-else-if="isPolling" class="my-48">
-      <div v-if="status === 'new'">Waiting for receive payment info</div>
-      <div v-else-if="status === 'processing'">Processing...</div>
-      <LcLoadingIndicator class="text-like-cyan mx-auto" />
-    </div>
-    <div v-else-if="status === 'done'" class="my-48">
-      <h2>Purchase completed.</h2>
-      <p>You have collected this NFT using USD{{ result.fiatPriceString }}</p>
-      <p>View <nuxt-link :to="walletRoute">Your portfolio</nuxt-link> or go to <nuxt-link :to="classIdRoute">NFT page</nuxt-link></p>
-    </div>
-    <div v-else class="my-48">
-      Unknown Status
-    </div>
-  </Page>
+  <Page />
 </template>
 
 <script>
+import { TX_STATUS } from '~/constant';
+
+import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import { getStripeFiatPaymentStatus } from '~/util/api';
 import { sleep } from '~/util/misc';
 
 export default {
   layout: 'default',
-  mixins: [walletMixin],
+  mixins: [nftMixin, walletMixin],
   data() {
     return {
-      classId: this.$route.query.class_id,
-      paymentId: this.$route.query.payment_id,
       result: {},
       status: 'new',
     };
@@ -41,26 +23,58 @@ export default {
     isPolling() {
       return ['new', 'processing'].includes(this.status);
     },
-    walletRoute() {
-      return {
-        name: 'id',
-        params: { id: this.result.wallet || this.getAddress },
-      };
+  },
+  watch: {
+    uiIsOpenCollectModal(isOpen) {
+      if (!isOpen) {
+        if (this.classId) {
+          this.$router.replace({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          });
+        } else {
+          this.$router.replace('/');
+        }
+      }
     },
-    classIdRoute() {
-      return {
-        name: 'nft-class-classId',
-        params: { classId: this.classId },
-      };
+    userOwnedCount(count) {
+      this.uiSetCollectedCount(count);
+    },
+    getAddress(address) {
+      if (address) {
+        this.updateUserCollectedCount(this.classId, address);
+      }
     },
   },
-  mounted() {
-    if (!this.paymentId) {
-      this.$nuxt.error({
+  asyncData({ error, query }) {
+    const { class_id: classId, payment_id: paymentId } = query;
+    if (!paymentId) {
+      error({
         statusCode: 400,
         message: 'MISSING_PAYMENT_ID',
       });
+      return undefined;
     }
+    if (!classId) {
+      error({
+        statusCode: 400,
+        message: 'MISSING_NFT_CLASS_ID',
+      });
+      return undefined;
+    }
+    return {
+      classId,
+      paymentId,
+    };
+  },
+  mounted() {
+    if (this.getAddress) {
+      this.updateUserCollectedCount(this.classId, this.getAddress);
+    }
+    this.uiToggleCollectModal({
+      classId: this.classId,
+      status: TX_STATUS.PROCESSING,
+    });
     this.pollForStatusUpdate();
   },
   methods: {
@@ -76,6 +90,18 @@ export default {
           await sleep(3000);
         } else {
           this.result = res;
+          if (this.status === 'done') {
+            this.uiSetTxStatus(TX_STATUS.COMPLETED);
+            await this.updateUserCollectedCount(this.classId, this.getAddress);
+            this.updateNFTOwners();
+            this.updateNFTPurchaseInfo();
+            this.updateNFTHistory();
+          } else if (this.status === 'error') {
+            this.uiSetTxError(
+              `${result.errorMessage ||
+                'STRIPE_PAYMENT_UNKNOWN_ERROR'}, Your payment authorization would be automatically refunded`
+            );
+          }
         }
         /* eslint-enable no-await-in-loop */
       } while (this.isPolling);

@@ -99,3 +99,11 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
       'likenft1f9dlnexdt6l4d8u2hh9ccm5g52q46sw2hllk4ntdhf7n6resg00s5hseuj',
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];
+
+export const TX_STATUS = {
+  SIGN: 'sign',
+  PROCESSING: 'processing',
+  COMPLETED: 'completed',
+  INSUFFICIENT: 'insufficient',
+  FAILED: 'failed',
+};

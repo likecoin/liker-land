@@ -34,11 +34,14 @@ export function uiCloseAlert({ commit }) {
 
 export function uiToggleCollectModal(
   { commit },
-  { classId, collectedCount, onSelectMethod }
+  { classId, collectedCount, onSelectMethod, status }
 ) {
   commit(types.UI_TOGGLE_COLLECT_MODAL, true);
   commit(types.UI_SET_TX_ERROR_MESSAGE, '');
   commit(types.UI_SET_TARGET_CLASSID, classId);
+  if (status !== undefined) {
+    commit(types.UI_SET_TX_STATUS, status);
+  }
   commit(types.UI_SET_COLLECT_METHOD_CALLBACK, onSelectMethod);
   commit(types.UI_SET_COLLECT_OWNED_COUNT, collectedCount);
 }
