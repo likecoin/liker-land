@@ -58,7 +58,7 @@ export default class FormField extends Vue {
       'flex-shrink-0',
       this.direction === FormField.direction.row ? 'pr-[8px]' : 'mb-[4px]',
       'text-[12px]',
-      'font-semibold',
+      'font-600',
       'text-medium-gray',
       this.labelClasses,
     ];
@@ -86,7 +86,7 @@ export default class FormField extends Vue {
             : 'text-[16px] leading-[22px]',
         ];
       case FormField.contentTypes.strong:
-        return ['font-semibold'];
+        return ['font-600'];
 
       default:
         return [];
