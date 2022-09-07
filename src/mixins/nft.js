@@ -204,7 +204,7 @@ export default {
           fallbackToPrimitiveNFT = true;
         }
       }
-      if (fallbackToPrimitiveNFT) {
+      if (!this.NFTHistory || fallbackToPrimitiveNFT) {
         let data;
         let nextKey;
         let count;
