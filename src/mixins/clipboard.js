@@ -11,7 +11,7 @@ export default {
     },
     copyURLPath(path, options) {
       const host = `${window.location.protocol}//${window.location.host}`;
-      const url = `${host}/${path}`;
+      const url = `${host}${path}`;
       this.copyToClipboard(url, options);
     },
   },
