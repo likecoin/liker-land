@@ -6,7 +6,6 @@
 import { getNFTMintInfo } from '~/util/api';
 
 export default {
-  layout: 'desktop',
   async asyncData({ route, redirect, $api, error }) {
     const { iscnId } = route.params;
     try {
