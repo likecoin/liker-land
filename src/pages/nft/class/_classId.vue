@@ -306,7 +306,10 @@ export default {
         const { data } = await this.$api.get(getLIKEPrice());
         this.currentPrice = data.likecoin.usd;
       } catch (error) {
-        this.alertPromptError('LIKE_PRICE_IS_TEMPORARY_UNAVAILABLE');
+        // eslint-disable-next-line no-console
+        console.error(error);
+        // eslint-disable-next-line no-console
+        console.error('CANNOT_GET_LIKE_PRICE');
       }
     },
     handleCopyURL() {
