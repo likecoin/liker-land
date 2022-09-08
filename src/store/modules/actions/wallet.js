@@ -5,10 +5,15 @@ import { getAddressLikerIdMinApi } from '~/util/api';
 import * as types from '@/store/mutation-types';
 
 export async function initWallet(
-  { commit },
+  { commit, dispatch },
   { method, accounts, offlineSigner }
 ) {
   if (!accounts[0]) return false;
+  const connector = await dispatch('getConnector');
+  connector.on('account_change', async currentMethod => {
+    const connection = await connector.init(currentMethod);
+    dispatch('initWallet', connection);
+  });
   commit(types.WALLET_SET_METHOD_TYPE, method);
   commit(types.WALLET_SET_LIKERINFO, null);
   const { address, bech32Address } = accounts[0];
@@ -28,7 +33,7 @@ export async function initWallet(
   return true;
 }
 
-export function initConnector({ state, commit }) {
+export function getConnector({ state, commit }) {
   if (state.connector) {
     return state.connector;
   }
@@ -40,14 +45,15 @@ export function initConnector({ state, commit }) {
 }
 
 export async function connectWallet({ dispatch }) {
-  const connector = await dispatch('initConnector');
-  const wallet = await connector.openConnectWalletModal();
-  if (!wallet) return false;
-  return dispatch('initWallet', wallet);
+  const connector = await dispatch('getConnector');
+  const connection = await connector.openConnectWalletModal();
+  if (!connection) return false;
+  return dispatch('initWallet', connection);
 }
 
 export function disconnectWallet({ state, commit }) {
   if (state.connector) {
+    state.connector.off('account_change');
     state.connector.disconnect();
   }
   commit(types.WALLET_SET_ADDRESS, '');
@@ -57,7 +63,7 @@ export function disconnectWallet({ state, commit }) {
 }
 
 export async function restoreSession({ dispatch }) {
-  const connector = await dispatch('initConnector');
+  const connector = await dispatch('getConnector');
   const session = connector.restoreSession();
   if (session) {
     const { accounts, method } = session;
@@ -66,7 +72,7 @@ export async function restoreSession({ dispatch }) {
 }
 
 export async function initIfNecessary({ dispatch }) {
-  const connector = await dispatch('initConnector');
+  const connector = await dispatch('getConnector');
   const connection = await connector.initIfNecessary();
   if (connection) {
     const { accounts, offlineSigner, method } = connection;
