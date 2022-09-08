@@ -310,10 +310,11 @@ export default {
       }
     },
     handleCopyURL() {
-      this.copyURLPath(`${this.$route.path}?referrer=${this.getAddress}`, {
+      const path = `${this.$route.path}?referrer=${this.getAddress}`;
+      this.copyURLPath(path, {
         alertMessage: this.$t('tooltip_share_done'),
       });
-      logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', url, 1);
+      logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
     },
   },
 };

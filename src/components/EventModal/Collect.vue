@@ -50,7 +50,7 @@ export default {
     ...mapActions(['uiCloseTxModal']),
     handleShare() {
       this.copyURLPath(
-        `nft/class/${this.uiTxTargetClassId}?referrer=${this.getAddress}`
+        `/nft/class/${this.uiTxTargetClassId}?referrer=${this.getAddress}`
       );
     },
     goToPortfolio() {

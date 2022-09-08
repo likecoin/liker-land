@@ -90,7 +90,7 @@ export default {
       this.currentTab = 'created';
     },
     copySharePageURL(wallet, referrer) {
-      this.copyURLPath(`${wallet}?referrer=${referrer}`, {
+      this.copyURLPath(`/${wallet}?referrer=${referrer}`, {
         alertMessage: this.$t('tooltip_share_done'),
       });
     },
