@@ -1,5 +1,5 @@
 <template>
-  <main class="page-content text-gray-4a">
+  <main class="laptop:-mt-[120px] text-gray-4a">
     <NFTAboutPage />
   </main>
 </template>

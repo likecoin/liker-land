@@ -12,7 +12,7 @@
     >
       <NFTAboutPageHeroSection class="w-full" />
       <NFTAboutPageCTASection
-        class="py-[32px] laptop:py-[64px]"
+        class="pb-[32px] laptop:pb-[64px]"
         @go-campaign="handleClickTopCTACampaignButton"
         @go-dashboard="handleClickTopCTADashboardButton"
       />
