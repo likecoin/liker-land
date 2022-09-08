@@ -46,7 +46,7 @@
               :avatar-size="88"
               :is-avatar-outlined="isReferrerCivicLiker"
             />
-            <NuxtLink :class="['flex', 'mt-[8px]']" :to="`/${iscnOwner}`">
+            <NuxtLink :class="['flex', 'mt-[8px]']" :to="`/${referrer}`">
               <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
                 {{ referrerDisplayName | ellipsis }}
               </Label>
@@ -57,7 +57,15 @@
                 {{ referrerDescription }}
               </Label>
             </template>
+            <UserStatsPortfolio
+              v-if="isReferrerTheCreator"
+              class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray mt-[12px]"
+              :collected-items="collectedNFTs"
+              :created-class-ids="sellingNFTClassIds"
+              :is-loading="isLoading"
+            />
             <ButtonV2
+              v-else
               class="mt-[16px]"
               :text="$t('nft_share_page_button_portfolio')"
               preset="tertiary"
@@ -181,13 +189,14 @@ import { ellipsis } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import portfolioMixin from '~/mixins/portfolio';
 
 export default {
   layout: 'default',
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin, navigationListenerMixin, walletMixin],
+  mixins: [nftMixin, navigationListenerMixin, walletMixin, portfolioMixin],
   data() {
     return {
       referrerInfo: null,
@@ -223,10 +232,7 @@ export default {
       return this.referrer === this.iscnOwner;
     },
     isReferrerTheCollector() {
-      return Object.prototype.hasOwnProperty.call(
-        this.ownerInfo,
-        this.referrer
-      );
+      return !!this.ownerInfo[this.referrer];
     },
     shareTitle() {
       return this.isReferrerTheCreator
@@ -263,6 +269,10 @@ export default {
       );
       this.goNFTDetails(this.classId);
       return;
+    }
+    if (this.isReferrerTheCreator) {
+      this.fetchUserSellingNFTs(this.referrer);
+      this.fetchUserCollectedNFTs(this.referrer);
     }
     this.isLoading = false;
   },
