@@ -54,7 +54,7 @@ export default {
     },
     async fetchWalletBalance() {
       const balance = await getAccountBalance(this.getAddress);
-      this.balance = Number(balance).toFixed(2);
+      this.balance = Math.ceil(Number(balance)).toLocaleString('en-US');
     },
   },
 };

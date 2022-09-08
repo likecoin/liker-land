@@ -37,7 +37,7 @@
           :label-text="$t('nft_portfolio_page_state_value')"
         >
           <template #custom-value>
-            <span>{{ `${Math.ceil(stats.collectedAmount).toLocaleString('en-US')}` }}&nbsp;</span>
+            <span>{{ stats.collectedAmount }}&nbsp;</span>
             <span class="text-[16px]">{{ $t('header_menu_LIKE') }}</span>
           </template>
           <template #label-icon>

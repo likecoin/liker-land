@@ -135,7 +135,10 @@ export default {
       return this.NFTClassMetadata.external_url;
     },
     NFTPrice() {
-      return this.purchaseInfo.price && this.purchaseInfo.price;
+      return (
+        this.purchaseInfo.price &&
+        Math.ceil(this.purchaseInfo.price).toLocaleString('en-US')
+      );
     },
     formattedNFTPriceInLIKE() {
       return this.nftPriceInLIKE !== undefined

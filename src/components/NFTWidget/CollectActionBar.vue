@@ -4,7 +4,7 @@
   >
     <div class="flex text-[16px] leading-[1.25] text-like-green font-600">
       <NFTWidgetIconInsertCoin class="mr-[6px]" />
-      {{ formattedPrice }} LIKE
+      {{ formattedPrice }}
     </div>
     <button
       class="
@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     formattedPrice() {
-      return this.price;
+      return `${this.price || '-'}LIKE`;
     },
   },
   methods: {

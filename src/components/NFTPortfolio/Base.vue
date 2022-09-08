@@ -126,7 +126,7 @@ export default {
   },
   computed: {
     formattedPrice() {
-      return `${this.price.toLocaleString('en') || '-'} LIKE`;
+      return `${this.price || '-'} LIKE`;
     },
   },
   methods: {

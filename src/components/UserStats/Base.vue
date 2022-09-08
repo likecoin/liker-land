@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
-    <slot 
-      :collected-count="collectedCount" 
+    <slot
+      :collected-count="collectedCount"
       :collected-amount="collectedAmount"
       :created-count="createdCount"
       :created-collector-count="createdCollectorCount"
@@ -32,11 +32,12 @@ export default {
       return this.collectedItems.length;
     },
     collectedAmount() {
-      return this.collectedItems.reduce(
+      const amount = this.collectedItems.reduce(
         (total, nft) =>
           total + (this.getNFTClassPurchaseInfoById(nft.classId)?.price || 0),
         0
       );
+      return Math.ceil(amount).toLocaleString('en-US');
     },
     createdCount() {
       return this.createdClassIds.length;
