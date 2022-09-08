@@ -1,7 +1,7 @@
 <template>
-  <div class="page-layout page-layout--default">
-    <SiteHeader class="w-full text-like-green" />
-    <nuxt class="page-wrapper" />
+  <div class="flex flex-col items-stretch min-h-screen">
+    <SiteHeader class="text-like-green" />
+    <nuxt class="flex-grow" />
     <Footer />
     <PortalTarget
       name="dialog"
