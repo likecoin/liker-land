@@ -53,6 +53,9 @@ export default {
   },
   computed: {
     ...mapGetters(['getNFTClassIdSorter']),
+    userAvatar() {
+      return this.userInfo?.avatar;
+    },
     userDisplayName() {
       return this.userInfo?.displayName || this.wallet;
     },
