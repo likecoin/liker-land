@@ -274,9 +274,23 @@ export default {
             const balance = await balanceFetch;
             switch (method) {
               case 'crypto':
+                logTrackerEvent(
+                  this,
+                  'NFT',
+                  'NFTCollectPaymentMethod(LIKE)',
+                  this.classId,
+                  1
+                );
                 this.collectNFTWithCrypto({ balance });
                 break;
               case 'stripe':
+                logTrackerEvent(
+                  this,
+                  'NFT',
+                  'NFTCollectPaymentMethod(Stripe)',
+                  this.classId,
+                  1
+                );
                 this.collectNFTWithStripe();
                 break;
               default:
