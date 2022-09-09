@@ -10,6 +10,8 @@ export async function initWallet(
 ) {
   if (!accounts[0]) return false;
   const connector = await dispatch('getConnector');
+  // Stop previous listener before listening to the new one
+  connector.off('account_change');
   connector.on('account_change', async currentMethod => {
     const connection = await connector.init(currentMethod);
     dispatch('initWallet', connection);
