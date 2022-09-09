@@ -4,18 +4,20 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { getAddressLikerIdMinApi } from '~/util/api';
 import * as types from '@/store/mutation-types';
 
+let accountChangeHandler;
+
 export async function initWallet(
   { commit, dispatch },
   { method, accounts, offlineSigner }
 ) {
   if (!accounts[0]) return false;
   const connector = await dispatch('getConnector');
-  // Stop previous listener before listening to the new one
-  connector.off('account_change');
-  connector.on('account_change', async currentMethod => {
+  accountChangeHandler = async currentMethod => {
     const connection = await connector.init(currentMethod);
     dispatch('initWallet', connection);
-  });
+  };
+  // Listen once per account
+  connector.once('account_change', accountChangeHandler);
   commit(types.WALLET_SET_METHOD_TYPE, method);
   commit(types.WALLET_SET_LIKERINFO, null);
   const { address, bech32Address } = accounts[0];
@@ -55,7 +57,10 @@ export async function connectWallet({ dispatch }) {
 
 export function disconnectWallet({ state, commit }) {
   if (state.connector) {
-    state.connector.off('account_change');
+    if (accountChangeHandler) {
+      state.connector.off('account_change', accountChangeHandler);
+      accountChangeHandler = undefined;
+    }
     state.connector.disconnect();
   }
   commit(types.WALLET_SET_ADDRESS, '');
