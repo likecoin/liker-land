@@ -3,7 +3,7 @@
     class="mx-auto mb-[5px] break-inside-avoid"
     :to="{ name: 'nft-class-classId', params: { classId } }"
     target="_blank"
-    @click="handleClickViewDetails"
+    @click.native="handleClickViewDetails"
   >
     <NFTPortfolioBase
       :class-id="classId"
