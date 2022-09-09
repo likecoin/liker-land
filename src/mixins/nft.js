@@ -191,20 +191,20 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      let fallbackToPrimitiveNFT = false;
+      let hasHistoryInDatabase = false;
       if (this.isWritingNFT) {
         try {
           const { data } = await this.$api.get(
             getNFTHistory({ classId: this.classId })
           );
           this.NFTHistory = data.list;
+          hasHistoryInDatabase = true;
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
-          fallbackToPrimitiveNFT = true;
         }
       }
-      if (!this.NFTHistory || fallbackToPrimitiveNFT) {
+      if (!hasHistoryInDatabase) {
         let data;
         let nextKey;
         let count;
