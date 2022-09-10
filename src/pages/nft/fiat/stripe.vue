@@ -98,7 +98,7 @@ export default {
             this.updateNFTHistory();
           } else if (this.status === 'error') {
             this.uiSetTxError(
-              `${result.errorMessage ||
+              `${this.result.errorMessage ||
                 'STRIPE_PAYMENT_UNKNOWN_ERROR'}, Your payment authorization would be automatically refunded`
             );
           }
