@@ -231,3 +231,12 @@ export const getStripeFiatPaymentStatus = ({ paymentId }) => {
     qsPayload
   )}`;
 };
+
+export const getStripeFiatPrice = ({ classId }) => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/price?${querystring.stringify(
+    qsPayload
+  )}`;
+};

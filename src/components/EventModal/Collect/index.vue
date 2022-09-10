@@ -40,6 +40,7 @@
             :title="$t('nft_collect_modal_method_crypto')"
             :description="$t('nft_collect_modal_method_crypto_description')"
             type="crypto"
+            :price="formattedLIKEPrice"
             @click="uiCollectMethodCallback"
           />
         </li>
@@ -48,6 +49,7 @@
             :title="$t('nft_collect_modal_method_stripe')"
             :description="$t('nft_collect_modal_method_stripe_description')"
             type="stripe"
+            :price="formattedFiatPrice"
             @click="uiCollectMethodCallback"
           />
         </li>
@@ -59,6 +61,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { getStripeFiatPrice } from '~/util/api';
+
 import clipboardMixin from '~/mixins/clipboard';
 
 export default {
@@ -68,6 +72,12 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      LIKEPrice: undefined,
+      fiatPrice: undefined,
+    };
   },
   computed: {
     ...mapGetters([
@@ -86,9 +96,43 @@ export default {
         !!this.uiCollectMethodCallback || this.uiTxNFTStatus === 'completed'
       );
     },
+    formattedLIKEPrice() {
+      return this.LIKEPrice !== undefined
+        ? `${this.LIKEPrice.toLocaleString('en')} LIKE`
+        : '-';
+    },
+    formattedFiatPrice() {
+      return this.fiatPrice !== undefined
+        ? `${this.fiatPrice.toLocaleString('en')} USD`
+        : '-';
+    },
+  },
+  watch: {
+    uiTxTargetClassId(nftClassId) {
+      if (nftClassId) {
+        this.fetchItemPrices();
+      }
+    },
+  },
+  mounted() {
+    if (this.uiTxTargetClassId) {
+      this.fetchItemPrices();
+    }
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
+    async fetchItemPrices() {
+      try {
+        const { LIKEPrice, fiatPrice } = await this.$axios.$get(
+          getStripeFiatPrice({ classId: this.uiTxTargetClassId })
+        );
+        this.LIKEPrice = LIKEPrice;
+        this.fiatPrice = fiatPrice;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    },
     handleShare() {
       this.copyURLPath(
         `/nft/class/${this.uiTxTargetClassId}?referrer=${this.getAddress}`

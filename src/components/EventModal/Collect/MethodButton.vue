@@ -11,6 +11,9 @@
           :type="type"
         />
       </template>
+      <template v-if="price" #append>
+        <span class="text-medium-gray font-400 text-[12px] text-right">{{ price }}</span>
+      </template>
     </Label>
     <Label class="text-medium-gray mt-[8px]" preset="p6">{{ description }}</Label>
   </button>
@@ -31,6 +34,10 @@ export default {
     type: {
       type: String,
       required: true,
+    },
+    price: {
+      type: String,
+      default: '',
     },
   },
   methods: {
