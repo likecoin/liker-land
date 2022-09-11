@@ -132,14 +132,15 @@
 </template>
 
 <script>
-import nftMixin from '~/mixins/nft';
-import walletMixin from '~/mixins/wallet';
-import alertMixin from '~/mixins/alert';
 import { mapGetters } from 'vuex';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import alertMixin from '~/mixins/alert';
+import nftMixin from '~/mixins/nft';
+
 export default {
-  mixins: [nftMixin, walletMixin, alertMixin],
+  mixins: [alertMixin, nftMixin],
   props: {
     isOpen: {
       type: Boolean,

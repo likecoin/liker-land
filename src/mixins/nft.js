@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
+
 import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE, TX_STATUS } from '~/constant';
+
 import {
   getNFTHistory,
   postNFTPurchase,
@@ -8,7 +10,9 @@ import {
   getAddressLikerIdMinApi,
   getNFTEvents,
   postNewStripeFiatPayment,
+  getStripeFiatPrice,
 } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import {
   getAccountBalance,
   transferNFT,
@@ -18,11 +22,13 @@ import {
   isWritingNFT,
   formatNFTEventsToHistory,
 } from '~/util/nft';
-import { logTrackerEvent } from '~/util/EventLogger';
+
+import walletMixin from '~/mixins/wallet';
 
 const NFT_INDEXER_LIMIT_MAX = 100;
 
 export default {
+  mixins: [walletMixin],
   data() {
     return {
       iscnOwnerInfo: {},
@@ -31,12 +37,18 @@ export default {
       avatarList: {},
       civicLikerList: {},
 
-      userOwnedCount: -1,
+      userCollectedCount: undefined,
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
 
       nftISCNContentFingerprints: [],
+
+      nftPriceInLIKE: undefined,
+      nftPriceInUSD: undefined,
+
+      // TODO: Move to VueX store
+      userAccountBalanceFetch: undefined,
     };
   },
   computed: {
@@ -46,7 +58,6 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
-      'getAddress',
       'uiIsOpenCollectModal',
     ]),
     isCivicLiker() {
@@ -105,6 +116,16 @@ export default {
     NFTPrice() {
       return this.purchaseInfo.price && this.purchaseInfo.price;
     },
+    formattedNFTPriceInLIKE() {
+      return this.nftPriceInLIKE !== undefined
+        ? `${this.nftPriceInLIKE.toLocaleString('en')} LIKE`
+        : '-';
+    },
+    formattedNFTPriceInUSD() {
+      return this.nftPriceInUSD !== undefined
+        ? `${this.nftPriceInUSD.toLocaleString('en')} USD`
+        : '-';
+    },
     ownerList() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
@@ -145,6 +166,13 @@ export default {
       return ownNFT[0];
     },
   },
+  watch: {
+    getAddress(newAddress) {
+      if (newAddress) {
+        this.fetchUserCollectedCount();
+      }
+    },
+  },
   methods: {
     ...mapActions([
       'fetchNFTPurchaseInfo',
@@ -175,6 +203,18 @@ export default {
     },
     async updateNFTPurchaseInfo() {
       await this.fetchNFTPurchaseInfo(this.classId);
+    },
+    async fetchNFTPrices(classId) {
+      try {
+        const { LIKEPrice, fiatPrice } = await this.$axios.$get(
+          getStripeFiatPrice({ classId })
+        );
+        this.nftPriceInLIKE = LIKEPrice;
+        this.nftPriceInUSD = fiatPrice;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
     async updateNFTOwners() {
       await this.fetchNFTOwners(this.classId);
@@ -253,57 +293,31 @@ export default {
       }
     },
     async updateUserCollectedCount(classId, address) {
-      if (!address) {
-        this.userOwnedCount = null;
+      if (!address || !classId) {
+        this.userCollectedCount = undefined;
         return;
       }
       this.isOwnerInfoLoading = true;
       const { amount } = await getNFTCountByClassId(classId, address);
-      this.userOwnedCount = amount.low;
-      this.uiSetCollectedCount(this.userOwnedCount);
+      this.userCollectedCount = amount.low;
       this.isOwnerInfoLoading = false;
+    },
+    async fetchUserCollectedCount() {
+      await this.updateUserCollectedCount(this.classId, this.getAddress);
     },
     async collectNFT() {
       try {
         await this.initIfNecessary();
-        const balanceFetch = getAccountBalance(this.getAddress);
-        this.uiToggleCollectModal({
-          classId: this.classId,
-          collectedCount: this.userOwnedCount,
-          onSelectMethod: async method => {
-            const balance = await balanceFetch;
-            switch (method) {
-              case 'crypto':
-                logTrackerEvent(
-                  this,
-                  'NFT',
-                  'NFTCollectPaymentMethod(LIKE)',
-                  this.classId,
-                  1
-                );
-                this.collectNFTWithCrypto({ balance });
-                break;
-              case 'stripe':
-                logTrackerEvent(
-                  this,
-                  'NFT',
-                  'NFTCollectPaymentMethod(Stripe)',
-                  this.classId,
-                  1
-                );
-                this.collectNFTWithStripe();
-                break;
-              default:
-                break;
-            }
-          },
-        });
+        this.fetchUserCollectedCount();
+        this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
+        this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       }
     },
-    async collectNFTWithCrypto({ balance }) {
+    async collectNFTWithLIKE() {
+      const balance = await this.userAccountBalanceFetch;
       try {
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
           logTrackerEvent(
@@ -351,14 +365,13 @@ export default {
             this.classId,
             1
           );
-          await this.updateUserCollectedCount(this.classId, this.getAddress);
+          await this.fetchUserCollectedCount();
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
         }
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
@@ -435,17 +448,19 @@ export default {
           this.classId,
           1
         );
-        await this.updateUserCollectedCount(this.classId, this.getAddress);
+        await this.fetchUserCollectedCount();
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.uiSetCollectedCount(this.userOwnedCount);
+        this.updateNFTPurchaseInfo();
         this.updateNFTOwners();
         this.updateNFTHistory();
-        this.updateUserCollectedCount(this.classId, this.getAddress);
       }
+    },
+    nftDetailsPageURL() {
+      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
     goNFTDetails() {
       this.$router.push({

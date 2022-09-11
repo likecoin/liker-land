@@ -62,8 +62,8 @@
           <div class="flex items-center w-full">
             <NFTPageOwningSection
               class="mr-[16px]"
-              :owned-count="userOwnedCount"
-              :is-transfer-disabled="!getAddress || !userOwnedCount"
+              :owned-count="userCollectedCount"
+              :is-transfer-disabled="!getAddress || !userCollectedCount"
               :is-loading="isOwnerInfoLoading"
               :is-log-in="!!getAddress"
               :is-transferring="isTransferring"
@@ -102,6 +102,7 @@
       :is-ready-to-transfer="isReadyToTransfer"
       :error-msg="errorMsg"
       :to-address="toAddress"
+      :user-collected-count="userCollectedCount"
       @close="isOpenTransferModal = false; isTransferring = false"
       @handle-input-addr="handleInputAddr"
       @on-transfer="onTransfer"
@@ -116,12 +117,11 @@ import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
-import walletMixin from '~/mixins/wallet';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 
 export default {
   layout: 'default',
-  mixins: [clipboardMixin, nftMixin, navigationListenerMixin, walletMixin],
+  mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
@@ -180,15 +180,7 @@ export default {
       return `(${price.toFixed(3)} USD)`;
     },
     isTransferDisabled() {
-      return this.isOwnerInfoLoading || !this.userOwnedCount;
-    },
-  },
-  watch: {
-    getAddress: {
-      immediate: true,
-      handler(newAddress) {
-        this.updateUserCollectedCount(this.classId, newAddress);
-      },
+      return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
   },
   asyncData({ query }) {
@@ -241,7 +233,7 @@ export default {
 
       this.uiSetTxError('');
       this.uiSetTxStatus('');
-      this.updateUserCollectedCount(this.classId, this.getAddress);
+      this.fetchUserCollectedCount();
     },
     async onTransfer() {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
@@ -274,7 +266,6 @@ export default {
       }
       try {
         this.isCollecting = true;
-        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
       } catch (error) {
         // no need to handle error
@@ -324,8 +315,7 @@ export default {
       }
     },
     handleCopyURL() {
-      const path = `${this.$route.path}?referrer=${this.getAddress}`;
-      this.copyURLPath(path, {
+      this.copyURLPath(this.nftDetailsPageURL, {
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);

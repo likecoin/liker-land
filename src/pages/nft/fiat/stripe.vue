@@ -5,14 +5,14 @@
 <script>
 import { TX_STATUS } from '~/constant';
 
-import nftMixin from '~/mixins/nft';
-import walletMixin from '~/mixins/wallet';
 import { getStripeFiatPaymentStatus } from '~/util/api';
 import { sleep } from '~/util/misc';
 
+import nftMixin from '~/mixins/nft';
+
 export default {
   layout: 'default',
-  mixins: [nftMixin, walletMixin],
+  mixins: [nftMixin],
   data() {
     return {
       result: {},
@@ -35,14 +35,6 @@ export default {
         } else {
           this.$router.replace('/');
         }
-      }
-    },
-    userOwnedCount(count) {
-      this.uiSetCollectedCount(count);
-    },
-    getAddress(address) {
-      if (address) {
-        this.updateUserCollectedCount(this.classId, address);
       }
     },
   },
@@ -68,9 +60,6 @@ export default {
     };
   },
   mounted() {
-    if (this.getAddress) {
-      this.updateUserCollectedCount(this.classId, this.getAddress);
-    }
     this.uiToggleCollectModal({
       classId: this.classId,
       status: TX_STATUS.PROCESSING,
@@ -92,11 +81,8 @@ export default {
           this.result = res;
           if (this.status === 'done') {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);
-            await this.updateUserCollectedCount(this.classId, this.getAddress);
-            this.updateNFTOwners();
-            this.updateNFTPurchaseInfo();
-            this.updateNFTHistory();
           } else if (this.status === 'error') {
+            this.uiSetTxStatus(TX_STATUS.FAILED);
             this.uiSetTxError(
               `${this.result.errorMessage ||
                 'STRIPE_PAYMENT_UNKNOWN_ERROR'}, Your payment authorization would be automatically refunded`

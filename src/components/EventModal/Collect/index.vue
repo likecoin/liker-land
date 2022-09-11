@@ -12,7 +12,7 @@
       <IconPrice />
     </template>
     <div
-      v-if="uiTxNFTStatus === 'completed'"
+      v-if="txStatus === 'completed'"
       class="flex flex-col items-center justify-center mb-[12px]"
     >
       <Label
@@ -26,47 +26,53 @@
         :text="$t('tx_modal_status_complete_text_collect')"
       />
     </div>
-    <NFTPageOwning />
-    <section v-if="uiCollectMethodCallback">
-      <Label
-        class="text-like-green"
-        preset="h5"
-        align="center"
-        :text="$t('nft_collect_modal_subtitle_select_collect_method')"
-      />
-      <ul class="mt-[16px] flex flex-col gap-[16px]">
-        <li>
-          <EventModalCollectMethodButton
-            :title="$t('nft_collect_modal_method_crypto')"
-            :description="$t('nft_collect_modal_method_crypto_description')"
-            type="crypto"
-            :price="formattedLIKEPrice"
-            @click="uiCollectMethodCallback"
-          />
-        </li>
-        <li>
-          <EventModalCollectMethodButton
-            :title="$t('nft_collect_modal_method_stripe')"
-            :description="$t('nft_collect_modal_method_stripe_description')"
-            type="stripe"
-            :price="formattedFiatPrice"
-            @click="uiCollectMethodCallback"
-          />
-        </li>
-      </ul>
-    </section>
+    <NFTPageOwning :collected-count="userCollectedCount" />
+    <template v-if="!txStatus">
+      <section v-if="paymentMethod === undefined">
+        <Label
+          class="text-like-green"
+          preset="h5"
+          align="center"
+          :text="$t('nft_collect_modal_subtitle_select_collect_method')"
+        />
+        <ul class="mt-[16px] flex flex-col gap-[16px]">
+          <li>
+            <EventModalCollectMethodButton
+              :title="$t('nft_collect_modal_method_crypto')"
+              :description="$t('nft_collect_modal_method_crypto_description')"
+              type="crypto"
+              :price="formattedNFTPriceInLIKE"
+              @click="handleSelectPaymentMethod"
+            />
+          </li>
+          <li>
+            <EventModalCollectMethodButton
+              :title="$t('nft_collect_modal_method_stripe')"
+              :description="$t('nft_collect_modal_method_stripe_description')"
+              type="stripe"
+              :price="formattedNFTPriceInUSD"
+              @click="handleSelectPaymentMethod"
+            />
+          </li>
+        </ul>
+      </section>
+      <section v-else>
+        <ProgressIndicator class="mx-auto" />
+      </section>
+    </template>
   </TxModal>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getStripeFiatPrice } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import clipboardMixin from '~/mixins/clipboard';
+import nftMixin from '~/mixins/nft';
 
 export default {
-  mixins: [clipboardMixin],
+  mixins: [clipboardMixin, nftMixin],
   props: {
     isOpen: {
       type: Boolean,
@@ -75,67 +81,89 @@ export default {
   },
   data() {
     return {
-      LIKEPrice: undefined,
-      fiatPrice: undefined,
+      paymentMethod: undefined,
     };
   },
   computed: {
-    ...mapGetters([
-      'getAddress',
-      'uiTxTargetClassId',
-      'uiTxNFTStatus',
-      'uiCollectMethodCallback',
-    ]),
+    ...mapGetters({
+      classId: 'uiTxTargetClassId', // Alias for NFT mixin
+      txStatus: 'uiTxNFTStatus',
+    }),
     headerText() {
-      return this.uiCollectMethodCallback
+      return this.paymentMethod === undefined
         ? this.$t('nft_collect_modal_title_collect')
         : this.$t('nft_collect_modal_title_collecting');
     },
     isShowCloseButton() {
-      return (
-        !!this.uiCollectMethodCallback || this.uiTxNFTStatus === 'completed'
-      );
-    },
-    formattedLIKEPrice() {
-      return this.LIKEPrice !== undefined
-        ? `${this.LIKEPrice.toLocaleString('en')} LIKE`
-        : '-';
-    },
-    formattedFiatPrice() {
-      return this.fiatPrice !== undefined
-        ? `${this.fiatPrice.toLocaleString('en')} USD`
-        : '-';
+      return this.paymentMethod === undefined || this.txStatus === 'completed';
     },
   },
   watch: {
-    uiTxTargetClassId(nftClassId) {
+    isOpen(isOpen) {
+      if (isOpen && this.classId) {
+        // Reset state when open modal
+        this.resetState();
+      }
+    },
+    classId(nftClassId) {
       if (nftClassId) {
-        this.fetchItemPrices();
+        // Reset state when NFT Class change
+        this.resetState();
       }
     },
   },
   mounted() {
-    if (this.uiTxTargetClassId) {
-      this.fetchItemPrices();
+    if (this.classId) {
+      this.resetState();
     }
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
-    async fetchItemPrices() {
-      try {
-        const { LIKEPrice, fiatPrice } = await this.$axios.$get(
-          getStripeFiatPrice({ classId: this.uiTxTargetClassId })
-        );
-        this.LIKEPrice = LIKEPrice;
-        this.fiatPrice = fiatPrice;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    resetState() {
+      this.paymentMethod = undefined;
+
+      // Mixin
+      this.nftPriceInLIKE = undefined;
+      this.nftPriceInUSD = undefined;
+      this.userCollectedCount = undefined;
+      this.fetchNFTPrices(this.classId);
+      this.fetchUserCollectedCount();
+    },
+    handleSelectPaymentMethod(method) {
+      switch (method) {
+        case 'crypto':
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTCollectPaymentMethod(LIKE)',
+            this.classId,
+            1
+          );
+          this.collectNFTWithLIKE();
+          break;
+        case 'stripe':
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTCollectPaymentMethod(Stripe)',
+            this.classId,
+            1
+          );
+          this.collectNFTWithStripe();
+          break;
+        default:
+          break;
       }
+      this.paymentMethod = method;
     },
     handleShare() {
-      this.copyURLPath(
-        `/nft/class/${this.uiTxTargetClassId}?referrer=${this.getAddress}`
+      this.copyURLPath(this.nftDetailsPageURL);
+      logTrackerEvent(
+        this,
+        'NFT',
+        'CopyShareURL(CollectModal)',
+        this.classId,
+        1
       );
     },
     goToPortfolio() {

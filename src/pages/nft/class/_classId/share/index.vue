@@ -186,9 +186,8 @@ import { getAddressLikerIdMinApi } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
-import nftMixin from '~/mixins/nft';
-import walletMixin from '~/mixins/wallet';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import nftMixin from '~/mixins/nft';
 import portfolioMixin from '~/mixins/portfolio';
 
 export default {
@@ -196,7 +195,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin, navigationListenerMixin, walletMixin, portfolioMixin],
+  mixins: [navigationListenerMixin, nftMixin, portfolioMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
@@ -320,7 +319,6 @@ export default {
       }
       try {
         this.isCollecting = true;
-        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
       } catch (error) {
         // no need to handle error
