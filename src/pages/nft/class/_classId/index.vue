@@ -151,11 +151,7 @@ export default {
             this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg',
         },
       ],
-      link: [
-        { rel: 'canonical', href: `${this.$route.path}` },
-        { rel: 'preload', href: 'https://js.stripe.com/v3', as: 'script' },
-      ],
-      script: [{ src: 'https://js.stripe.com/v3', async: true }],
+      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
     };
   },
   data() {

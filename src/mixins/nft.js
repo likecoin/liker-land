@@ -29,6 +29,25 @@ const NFT_INDEXER_LIMIT_MAX = 100;
 
 export default {
   mixins: [walletMixin],
+  head() {
+    return {
+      link: [
+        {
+          hid: 'stripe-js-link',
+          rel: 'preload',
+          href: 'https://js.stripe.com/v3',
+          as: 'script',
+        },
+      ],
+      script: [
+        {
+          hid: 'stripe-js-script',
+          src: 'https://js.stripe.com/v3',
+          async: true,
+        },
+      ],
+    };
+  },
   data() {
     return {
       iscnOwnerInfo: {},
