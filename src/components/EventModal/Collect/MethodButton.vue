@@ -1,22 +1,23 @@
 <template>
-  <button
-    class="block w-full border-[4px] border-solid border-shade-gray hover:border-like-cyan-light active:bg-like-cyan-pale rounded-[16px] p-[24px] transition-colors cursor-pointer group"
+  <ButtonV2
+    class="w-full"
+    preset="outline"
     @click="handleClick"
   >
-    <Label class="text-like-green" preset="h4">
-      <template #default>{{ title }}</template>
-      <template #prepend>
-        <EventModalCollectMethodIcon
-          class="w-[32px] h-[32px]"
-          :type="type"
-        />
-      </template>
-      <template v-if="price" #append>
+    <template #prepend>
+      <EventModalCollectMethodIcon
+        class="w-[24px] h-[24px] text-like-green"
+        :type="type"
+      />
+    </template>
+    <span class="w-full text-left font-600">{{ title }}</span>
+    <template v-if="price" #append>
+      <div class="flex items-center justify-end gap-[4px]">
         <span class="text-medium-gray font-400 text-[12px] text-right">{{ price }}</span>
-      </template>
-    </Label>
-    <Label class="text-medium-gray mt-[8px]" preset="p6">{{ description }}</Label>
-  </button>
+        <IconArrowLeft class="w-[16px] h-[16px] rotate-180" />
+      </div>
+    </template>
+  </ButtonV2>
 </template>
 
 <script>
@@ -24,10 +25,6 @@ export default {
   name: 'EventModalCollectMethodButton',
   props: {
     title: {
-      type: String,
-      default: '',
-    },
-    description: {
       type: String,
       default: '',
     },

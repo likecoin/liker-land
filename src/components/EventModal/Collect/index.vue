@@ -35,11 +35,10 @@
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
         />
-        <ul class="mt-[16px] flex flex-col gap-[16px]">
+        <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li>
             <EventModalCollectMethodButton
-              :title="$t('nft_collect_modal_method_crypto')"
-              :description="$t('nft_collect_modal_method_crypto_description')"
+              :title="$t('nft_collect_modal_method_like')"
               type="crypto"
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
@@ -48,7 +47,6 @@
           <li>
             <EventModalCollectMethodButton
               :title="$t('nft_collect_modal_method_stripe')"
-              :description="$t('nft_collect_modal_method_stripe_description')"
               type="stripe"
               :price="formattedNFTPriceInUSD"
               @click="handleSelectPaymentMethod"
