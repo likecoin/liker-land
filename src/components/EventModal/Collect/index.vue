@@ -88,7 +88,7 @@ export default {
       return this.uiTxTargetClassId;
     },
     headerText() {
-      return this.paymentMethod === undefined
+      return this.isShowCloseButton
         ? this.$t('nft_collect_modal_title_collect')
         : this.$t('nft_collect_modal_title_collecting');
     },
