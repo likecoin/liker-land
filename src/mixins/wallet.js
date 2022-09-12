@@ -9,7 +9,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getAddress', 'getSigner', 'getLikerInfo']),
+    ...mapGetters([
+      'getAddress',
+      'getSigner',
+      'getLikerInfo',
+      'walletMethodType',
+    ]),
     isWalletUserCivicLiker() {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
     },

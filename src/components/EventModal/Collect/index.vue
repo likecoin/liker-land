@@ -41,7 +41,7 @@
               class="rounded-b-[0]"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
-              :is-disabled="isInsufficientLIKE"
+              :is-disabled="isInsufficientLIKE || walletMethodType === 'keplr-mobile'"
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
             />
