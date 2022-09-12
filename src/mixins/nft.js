@@ -78,6 +78,8 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
       'uiIsOpenCollectModal',
+      'uiTxTargetClassId',
+      'uiTxNFTStatus',
     ]),
     isCivicLiker() {
       return !!(
@@ -188,6 +190,14 @@ export default {
   watch: {
     getAddress(newAddress) {
       if (newAddress) {
+        this.fetchUserCollectedCount();
+      }
+    },
+    uiTxNFTStatus(status) {
+      if (
+        this.classId === this.uiTxTargetClassId &&
+        status === TX_STATUS.COMPLETED
+      ) {
         this.fetchUserCollectedCount();
       }
     },

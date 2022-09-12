@@ -12,7 +12,7 @@
       <IconPrice />
     </template>
     <div
-      v-if="txStatus === 'completed'"
+      v-if="uiTxNFTStatus === 'completed'"
       class="flex flex-col items-center justify-center mb-[12px]"
     >
       <Label
@@ -27,7 +27,7 @@
       />
     </div>
     <NFTPageOwning :collected-count="userCollectedCount" />
-    <template v-if="!txStatus">
+    <template v-if="!uiTxNFTStatus">
       <section v-if="paymentMethod === undefined">
         <Label
           class="text-like-green"
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -85,17 +85,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      classId: 'uiTxTargetClassId', // Alias for NFT mixin
-      txStatus: 'uiTxNFTStatus',
-    }),
+    classId() {
+      // Alias for NFT mixin
+      return this.uiTxTargetClassId;
+    },
     headerText() {
       return this.paymentMethod === undefined
         ? this.$t('nft_collect_modal_title_collect')
         : this.$t('nft_collect_modal_title_collecting');
     },
     isShowCloseButton() {
-      return this.paymentMethod === undefined || this.txStatus === 'completed';
+      return (
+        this.paymentMethod === undefined || this.uiTxNFTStatus === 'completed'
+      );
     },
   },
   watch: {
