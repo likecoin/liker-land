@@ -38,11 +38,35 @@
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li>
             <EventModalCollectMethodButton
+              class="rounded-b-[0]"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
+              :is-disabled="isInsufficientLIKE"
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
             />
+            <i18n
+              :class="[
+                isInsufficientLIKE ? 'bg-light-gray' : 'bg-like-cyan-pale',
+                isInsufficientLIKE ? 'border-shade-gray' : 'border-medium-gray',
+                'border-2',
+                'border-t-0',
+                'rounded-b-[8px]',
+                'px-[16px]',
+                'py-[4px]',
+                isInsufficientLIKE ? 'text-danger' : 'text-like-green',
+                'text-[12px]',
+                'text-right',
+                'font-[600]',
+              ]"
+              tag="div"
+              path="nft_collect_modal_method_like_available_amount"
+            >
+              <span
+                class="font-[400]"
+                place="amount"
+              >{{ balance }} LIKE</span>
+            </i18n>
           </li>
           <li>
             <EventModalCollectMethodButton
@@ -96,6 +120,9 @@ export default {
       return (
         this.paymentMethod === undefined || this.uiTxNFTStatus === 'completed'
       );
+    },
+    isInsufficientLIKE() {
+      return this.balance < this.nftPriceInLIKE;
     },
   },
   watch: {

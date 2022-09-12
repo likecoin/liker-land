@@ -45,6 +45,7 @@
   "nft_collect_modal_title_collecting": "Collecting NFT",
   "nft_collect_modal_subtitle_select_collect_method": "Select a collect method",
   "nft_collect_modal_method_like": "Pay by LIKE",
+  "nft_collect_modal_method_like_available_amount": "Available {amount}",
   "nft_collect_modal_method_stripe": "Pay by card (Beta)",
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_description": "This content has been published as Writing NFT. Collect now to build your portfolio.",

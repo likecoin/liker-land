@@ -2,6 +2,7 @@
   <ButtonV2
     class="w-full"
     preset="outline"
+    v-bind="$attrs"
     @click="handleClick"
   >
     <template #prepend>
