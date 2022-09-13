@@ -107,6 +107,11 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      isSellHoverLogSend: false,
+    };
+  },
   computed: {
     formattedNFTPrice() {
       return `${this.nftPrice || '-'} LIKE`;
@@ -126,13 +131,16 @@ export default {
       );
     },
     handleMouseEnterSell() {
-      logTrackerEvent(
-        this,
-        'NFTSellButton',
-        'NFTSellButtonHandleMouseEnterSell',
-        '',
-        1
-      );
+      if (!this.isSellHoverLogSend) {
+        logTrackerEvent(
+          this,
+          'NFTSellButton',
+          'NFTSellButtonHandleMouseEnterSell',
+          '',
+          1
+        );
+        this.isSellHoverLogSend = true;
+      }
     },
   },
 };
