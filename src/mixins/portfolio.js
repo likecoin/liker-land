@@ -10,7 +10,7 @@ export default {
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
-    const description = this.$t('portfolio_description', { name });
+    const description = this.$t('portfolio_description');
     return {
       title,
       meta: [
