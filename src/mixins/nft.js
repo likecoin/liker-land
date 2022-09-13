@@ -414,7 +414,10 @@ export default {
             wallet: this.getAddress,
           })
         );
-        if (url) window.location.href = url;
+        if (url) {
+          this.uiSetTxStatus(TX_STATUS.PROCESSING);
+          window.location.href = url;
+        }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
