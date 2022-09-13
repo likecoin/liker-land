@@ -12,28 +12,34 @@
       <slot name="header-prepend" />
     </template>
 
-    <div v-if="!showConfirm || uiTxNFTStatus === 'processing'">
+    <template v-if="!showConfirm || uiTxNFTStatus === 'processing'">
       <!-- Main -->
 
       <slot name="default" />
 
       <!-- Message -->
       <div
-        v-if="!uiTxErrorMessage && !isCollectCompleted"
-        class="flex flex-col items-center justify-center mb-[12px]"
+        v-if="formattedStatusTitle || formattedStatusText"
+        class="flex flex-col items-center justify-center"
       >
         <Label
+          v-if="formattedStatusTitle"
           class="text-like-green font-600"
           preset="h4"
           :text="formattedStatusTitle"
         />
         <Label
+          v-if="formattedStatusText"
           class="text-medium-gray mt-[12px]"
           preset="h6"
           :text="formattedStatusText"
         />
       </div>
-      <div v-if="uiTxErrorMessage" class="flex items-center justify-center mb-[12px] text-danger">
+
+      <div
+        v-if="formattedErrorMessage"
+        class="flex items-center justify-center my-[12px] text-danger"
+      >
         <Label class="text-danger" :text="formattedErrorMessage" preset="p6">
           <template #prepend>
             <IconError />
@@ -52,14 +58,17 @@
         </Label>
       </div>
 
+      <ProgressIndicator
+        v-if="['sign', 'processing'].includes(uiTxNFTStatus)"
+        class="mt-[32px] mx-auto"
+      />
+
       <!-- Button -->
-      <div class="flex flex-col items-center justify-center w-full mt-[34px]">
-        <ProgressIndicator
-          v-if="uiTxNFTStatus === 'sign' || uiTxNFTStatus === 'processing'"
-          class="mb-[24px]"
-        />
+      <div
+        v-if="buttonText"
+        class="flex flex-col items-center justify-center w-full mt-[24px]"
+      >
         <ButtonV2
-          v-if="buttonText"
           :preset="getButtonState.preset"
           :is-disabled="getButtonState.isDisable"
           @click="onClick"
@@ -69,8 +78,8 @@
       </div>
       <!-- Button for complete of collecting -->
       <div
-        v-if="isCollectCompleted"
-        class="flex items-center justify-center"
+        v-else-if="isCollectCompleted"
+        class="flex items-center justify-center mt-[24px]"
       >
         <ButtonV2
           preset="secondary"
@@ -94,7 +103,10 @@
         v-if="uiTxNFTStatus === 'sign' && attentionText"
         class="mt-[48px] border-0 border-dashed border-t-[2px] border-t-shade-gray"
       >
-        <AttentionSign :attention-text="attentionText">
+        <AttentionSign
+          class="pb-0"
+          :attention-text="attentionText"
+        >
           <template #icon>
             <IconLedger v-if="walletMethodType === 'keplr'" />
             <IconLikerLandApp v-if="walletMethodType === 'liker-id'" />
@@ -102,10 +114,10 @@
           </template>
         </AttentionSign>
       </div>
-    </div>
+    </template>
 
     <!-- Confirm -->
-    <div v-else>
+    <template v-else>
       <div
         v-t="'tx_modal_quitAlert_content'"
         class="max-w-[336px] text-center text-medium-gray text-[16px] font-500 mx-auto"
@@ -127,19 +139,20 @@
           @click="handleContinue"
         />
       </div>
-    </div>
+    </template>
   </Dialog>
 </template>
 
 <script>
-import nftMixin from '~/mixins/nft';
-import walletMixin from '~/mixins/wallet';
-import alertMixin from '~/mixins/alert';
 import { mapGetters } from 'vuex';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import alertMixin from '~/mixins/alert';
+import nftMixin from '~/mixins/nft';
+
 export default {
-  mixins: [nftMixin, walletMixin, alertMixin],
+  mixins: [alertMixin, nftMixin],
   props: {
     isOpen: {
       type: Boolean,

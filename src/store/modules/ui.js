@@ -13,7 +13,6 @@ import {
   UI_TOGGLE_COLLECT_MODAL,
   UI_SET_TX_STATUS,
   UI_SET_TX_ERROR_MESSAGE,
-  UI_SET_COLLECT_OWNED_COUNT,
   UI_SET_TARGET_CLASSID,
 } from '../mutation-types';
 
@@ -39,6 +38,7 @@ const initialState = () => ({
   txErrorMessage: '',
   ownedCount: null,
   txTargetClassId: null,
+  selectCollectMethodCallback: null,
 });
 
 const mutations = {
@@ -62,9 +62,6 @@ const mutations = {
   },
   [UI_TOGGLE_COLLECT_MODAL](state, isToggled) {
     state.isOpenCollectModal = isToggled;
-  },
-  [UI_SET_COLLECT_OWNED_COUNT](state, ownedCount) {
-    state.ownedCount = ownedCount;
   },
   [UI_SET_TARGET_CLASSID](state, classId) {
     state.txTargetClassId = classId;

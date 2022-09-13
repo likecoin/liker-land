@@ -1,13 +1,18 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE } from '~/constant';
+
+import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE, TX_STATUS } from '~/constant';
+
 import {
   getNFTHistory,
   postNFTPurchase,
   postNFTTransfer,
   getAddressLikerIdMinApi,
   getNFTEvents,
+  postNewStripeFiatPayment,
+  getStripeFiatPrice,
 } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import {
   getAccountBalance,
   transferNFT,
@@ -17,19 +22,32 @@ import {
   isWritingNFT,
   formatNFTEventsToHistory,
 } from '~/util/nft';
-import { logTrackerEvent } from '~/util/EventLogger';
 
-const TX_STATUS = {
-  SIGN: 'sign',
-  PROCESSING: 'processing',
-  COMPLETED: 'completed',
-  INSUFFICIENT: 'insufficient',
-  FAILED: 'failed',
-};
+import walletMixin from '~/mixins/wallet';
 
 const NFT_INDEXER_LIMIT_MAX = 100;
 
 export default {
+  mixins: [walletMixin],
+  head() {
+    return {
+      link: [
+        {
+          hid: 'stripe-js-link',
+          rel: 'preload',
+          href: 'https://js.stripe.com/v3',
+          as: 'script',
+        },
+      ],
+      script: [
+        {
+          hid: 'stripe-js-script',
+          src: 'https://js.stripe.com/v3',
+          async: true,
+        },
+      ],
+    };
+  },
   data() {
     return {
       iscnOwnerInfo: {},
@@ -38,12 +56,18 @@ export default {
       avatarList: {},
       civicLikerList: {},
 
-      userOwnedCount: -1,
+      userCollectedCount: undefined,
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
 
       nftISCNContentFingerprints: [],
+
+      nftPriceInLIKE: undefined,
+      nftPriceInUSD: undefined,
+
+      // TODO: Move to VueX store
+      userAccountBalanceFetch: undefined,
     };
   },
   computed: {
@@ -53,8 +77,9 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
-      'getAddress',
       'uiIsOpenCollectModal',
+      'uiTxTargetClassId',
+      'uiTxNFTStatus',
     ]),
     isCivicLiker() {
       return !!(
@@ -112,6 +137,16 @@ export default {
     NFTPrice() {
       return this.purchaseInfo.price && this.purchaseInfo.price;
     },
+    formattedNFTPriceInLIKE() {
+      return this.nftPriceInLIKE !== undefined
+        ? `${this.nftPriceInLIKE.toLocaleString('en')} LIKE`
+        : '-';
+    },
+    formattedNFTPriceInUSD() {
+      return this.nftPriceInUSD !== undefined
+        ? `${this.nftPriceInUSD.toLocaleString('en')} USD`
+        : '-';
+    },
     ownerList() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
@@ -152,6 +187,21 @@ export default {
       return ownNFT[0];
     },
   },
+  watch: {
+    getAddress(newAddress) {
+      if (newAddress) {
+        this.fetchUserCollectedCount();
+      }
+    },
+    uiTxNFTStatus(status) {
+      if (
+        this.classId === this.uiTxTargetClassId &&
+        status === TX_STATUS.COMPLETED
+      ) {
+        this.fetchUserCollectedCount();
+      }
+    },
+  },
   methods: {
     ...mapActions([
       'fetchNFTPurchaseInfo',
@@ -182,6 +232,18 @@ export default {
     },
     async updateNFTPurchaseInfo() {
       await this.fetchNFTPurchaseInfo(this.classId);
+    },
+    async fetchNFTPrices(classId) {
+      try {
+        const { LIKEPrice, fiatPrice } = await this.$axios.$get(
+          getStripeFiatPrice({ classId })
+        );
+        this.nftPriceInLIKE = LIKEPrice;
+        this.nftPriceInUSD = fiatPrice;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
     async updateNFTOwners() {
       await this.fetchNFTOwners(this.classId);
@@ -260,24 +322,32 @@ export default {
       }
     },
     async updateUserCollectedCount(classId, address) {
-      if (!address) {
-        this.userOwnedCount = null;
+      if (!address || !classId) {
+        this.userCollectedCount = undefined;
         return;
       }
       this.isOwnerInfoLoading = true;
       const { amount } = await getNFTCountByClassId(classId, address);
-      this.userOwnedCount = amount.low;
-      this.uiSetCollectedCount(this.userOwnedCount);
+      this.userCollectedCount = amount.low;
       this.isOwnerInfoLoading = false;
+    },
+    async fetchUserCollectedCount() {
+      await this.updateUserCollectedCount(this.classId, this.getAddress);
     },
     async collectNFT() {
       try {
         await this.initIfNecessary();
-        const balance = await getAccountBalance(this.getAddress);
-        this.uiToggleCollectModal({
-          classId: this.classId,
-          collectedCount: this.userOwnedCount,
-        });
+        this.fetchUserCollectedCount();
+        this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
+        this.uiToggleCollectModal({ classId: this.classId });
+      } catch (error) {
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
+      }
+    },
+    async collectNFTWithLIKE() {
+      const balance = await this.userAccountBalanceFetch;
+      try {
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
           logTrackerEvent(
             this,
@@ -324,17 +394,30 @@ export default {
             this.classId,
             1
           );
-          await this.updateUserCollectedCount(this.classId, this.getAddress);
+          await this.fetchUserCollectedCount();
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
         }
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.uiSetCollectedCount(this.userOwnedCount);
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
+      }
+    },
+    async collectNFTWithStripe() {
+      try {
+        const { url } = await this.$api.$post(
+          postNewStripeFiatPayment({
+            classId: this.classId,
+            wallet: this.getAddress,
+          })
+        );
+        if (url) window.location.href = url;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
       }
     },
     async transferNFT() {
@@ -394,17 +477,19 @@ export default {
           this.classId,
           1
         );
-        await this.updateUserCollectedCount(this.classId, this.getAddress);
+        await this.fetchUserCollectedCount();
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.uiSetCollectedCount(this.userOwnedCount);
+        this.updateNFTPurchaseInfo();
         this.updateNFTOwners();
         this.updateNFTHistory();
-        this.updateUserCollectedCount(this.classId, this.getAddress);
       }
+    },
+    nftDetailsPageURL() {
+      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
     goNFTDetails() {
       this.$router.push({

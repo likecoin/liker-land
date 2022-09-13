@@ -25,10 +25,9 @@
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
-import walletMixin from '~/mixins/wallet';
 
 export default {
-  mixins: [nftMixin, walletMixin],
+  mixins: [nftMixin],
   props: {
     classId: {
       type: String,
@@ -60,7 +59,6 @@ export default {
 
       try {
         this.isCollecting = true;
-        this.updateUserCollectedCount(this.classId, this.getAddress);
         await this.collectNFT();
       } catch (error) {
         // no need to handle error

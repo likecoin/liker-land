@@ -10,7 +10,7 @@
       <IconTransfer />
     </template>
     <div>
-      <NFTPageOwning />
+      <NFTPageOwning :collected-count="userCollectedCount" />
       <div v-if="!isTransferring">
         <Label
           preset="p6"
@@ -70,6 +70,10 @@ export default {
     },
     toAddress: {
       type: String,
+      default: undefined,
+    },
+    userCollectedCount: {
+      type: Number,
       default: undefined,
     },
   },

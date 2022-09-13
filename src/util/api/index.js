@@ -212,3 +212,31 @@ export const postNFTTransfer = ({ txHash, nftId }) => {
     qsPayload
   )}`;
 };
+
+export const postNewStripeFiatPayment = ({ classId, wallet }) => {
+  const qsPayload = {
+    class_id: classId,
+    wallet,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/new?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getStripeFiatPaymentStatus = ({ paymentId }) => {
+  const qsPayload = {
+    payment_id: paymentId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/status?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getStripeFiatPrice = ({ classId }) => {
+  const qsPayload = {
+    class_id: classId,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/price?${querystring.stringify(
+    qsPayload
+  )}`;
+};

@@ -26,7 +26,7 @@
           <Label preset="h5" :text="$t('nft_details_page_label_owning')" />
           <Label
             preset="h4"
-            :text="uiCollectOwnedCount.toString() || '-'"
+            :text="formattedCollectedCount"
             class="font-[900] ml-[20px]"
           />
         </div>
@@ -39,8 +39,17 @@
 import { mapGetters } from 'vuex';
 
 export default {
+  props: {
+    collectedCount: {
+      type: Number,
+      default: undefined,
+    },
+  },
   computed: {
-    ...mapGetters(['uiTxNFTStatus', 'uiCollectOwnedCount']),
+    ...mapGetters(['uiTxNFTStatus']),
+    formattedCollectedCount() {
+      return this.collectedCount?.toString() || '-';
+    },
   },
 };
 </script>
