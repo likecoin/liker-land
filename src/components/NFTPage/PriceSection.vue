@@ -72,13 +72,17 @@
           class="ml-[12px]"
           :text="$t('nft_details_page_button_sell')"
           preset="tertiary"
-          :is-disabled="true"
+          :is-disabled="false"
+          @mouseenter="handleMouseEnterSell"
+          @click.native="handleClickSell"
         />
       </ToolTips>
     </div>
   </CardV2>
 </template>
 <script>
+import { logTrackerEvent } from '~/util/EventLogger';
+
 export default {
   name: 'PriceSection',
   props: {
@@ -111,6 +115,24 @@ export default {
   methods: {
     handleClickCollect() {
       this.$emit('collect');
+    },
+    handleClickSell() {
+      logTrackerEvent(
+        this,
+        'NFTSellButton',
+        'NFTSellButtonHandleClickSell',
+        '',
+        1
+      );
+    },
+    handleMouseEnterSell() {
+      logTrackerEvent(
+        this,
+        'NFTSellButton',
+        'NFTSellButtonHandleMouseEnterSell',
+        '',
+        1
+      );
     },
   },
 };
