@@ -68,14 +68,21 @@
         </div>
       </div>
       <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
-        <ButtonV2
+        <!-- Wait for the Sell function to open and change the div back to button -->
+        <div
+          style="width:57.86px;height:41.59px;justify-content:center"
+          class="ml-[12px] bg-shade-gray rounded-[10px] flex items-center text-medium-gray"
+          @mouseenter="handleMouseEnterSell"
+          @click="handleClickSell"
+        >{{ $t('nft_details_page_button_sell') }}</div>
+        <!-- <ButtonV2
           class="ml-[12px]"
           :text="$t('nft_details_page_button_sell')"
           preset="tertiary"
           :is-disabled="false"
           @mouseenter="handleMouseEnterSell"
           @click.native="handleClickSell"
-        />
+        /> -->
       </ToolTips>
     </div>
   </CardV2>
