@@ -218,12 +218,13 @@ export default {
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
       this.handleCollect();
+    } else {
+      logPurchaseFlowEvent(this, 'view_item', {
+        name: this.NFTName,
+        price: this.purchaseInfo.price,
+        classId: this.classId,
+      });
     }
-    logPurchaseFlowEvent(this, 'view_item', {
-      name: this.NFTName,
-      price: this.purchaseInfo.price,
-      classId: this.classId,
-    });
   },
   methods: {
     onToggleTransfer() {
