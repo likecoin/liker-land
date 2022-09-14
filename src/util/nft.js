@@ -148,7 +148,8 @@ function formatNFTEvent(event) {
   let eventName;
   switch (event.action) {
     case '/cosmos.nft.v1beta1.MsgSend':
-      eventName = LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
+      eventName =
+        fromWallet === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
       break;
     case 'new_class':
     case 'mint_nft':
