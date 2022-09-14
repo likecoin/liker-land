@@ -79,6 +79,8 @@
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="handleCollectFromPriceSection"
+            @click-sell="handleClickSellFromPriceSection"
+            @hover-sell="handleHoverSellFromPriceSection"
           />
           <NFTPageSupplySection
             v-if="isWritingNFT && NFTPrice"
@@ -288,6 +290,24 @@ export default {
         1
       );
       return this.handleCollect();
+    },
+    handleClickSellFromPriceSection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTSellClick(DetailsPagePriceSection)',
+        this.classId,
+        1
+      );
+    },
+    handleHoverSellFromPriceSection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTSellHover(DetailsPagePriceSection)',
+        this.classId,
+        1
+      );
     },
     handleCollectFromSupplySection() {
       logTrackerEvent(

@@ -81,8 +81,6 @@
   </CardV2>
 </template>
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
-
 export default {
   name: 'PriceSection',
   props: {
@@ -109,7 +107,7 @@ export default {
   },
   data() {
     return {
-      isSellHoverLogSend: false,
+      hasHoverSellButton: false,
     };
   },
   computed: {
@@ -122,23 +120,11 @@ export default {
       this.$emit('collect');
     },
     handleClickSell() {
-      logTrackerEvent(
-        this,
-        'NFTSellButton',
-        'NFTSellButtonHandleClickSell',
-        '',
-        1
-      );
+      this.$emit('click-sell');
     },
     handleMouseEnterSell() {
       if (!this.isSellHoverLogSend) {
-        logTrackerEvent(
-          this,
-          'NFTSellButton',
-          'NFTSellButtonHandleMouseEnterSell',
-          '',
-          1
-        );
+        this.$emit('hover-sell');
         this.isSellHoverLogSend = true;
       }
     },
