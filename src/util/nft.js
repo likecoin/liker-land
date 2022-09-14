@@ -3,8 +3,6 @@ import { BigNumber } from 'bignumber.js';
 import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
 import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { PageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
-
-import { SigningStargateClient } from '@cosmjs/stargate';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import {
   LIKECOIN_CHAIN_NFT_RPC,
@@ -67,14 +65,6 @@ export async function getISCNRecord(iscnId) {
   return res;
 }
 
-async function getSenderClientBySigner(signer) {
-  const senderClient = await SigningStargateClient.connectWithSigner(
-    LIKECOIN_CHAIN_NFT_RPC,
-    signer
-  );
-  return senderClient;
-}
-
 export async function signGrant({ senderAddress, amountInLIKE, signer }) {
   const client = await createNFTSigningClient(signer);
   const spendLimit = [
@@ -96,7 +86,8 @@ export async function signGrant({ senderAddress, amountInLIKE, signer }) {
 
 export async function broadcastTx(signData, signer) {
   const txBytes = TxRaw.encode(signData).finish();
-  const senderClient = await getSenderClientBySigner(signer);
+  const client = await createNFTSigningClient(signer);
+  const senderClient = client.getSigningStargateClient();
   const { transactionHash } = await senderClient.broadcastTx(txBytes);
   return transactionHash;
 }
