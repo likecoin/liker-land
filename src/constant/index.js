@@ -33,13 +33,6 @@ export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET
 
 export const AUTH_COOKIE_NAME = '__session';
 
-export const PAYMENT_METHOD_LIST = [
-  'stripe',
-  'paypal',
-  'likepay',
-  'other', // plz always put `other` at last for hk geoip handle
-];
-
 export const CIVIC_LIKER_CLASSIC_LIKER_ID = 'civic-liker';
 
 export const DEFAULT_AVATAR = 'https://static.like.co/likecoin_de-portrait.jpg';

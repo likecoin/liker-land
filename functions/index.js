@@ -10,10 +10,6 @@ if (!currentFunction || currentFunction === 'apiHttp') {
   exports.apiHttp = require('./apiHttp');
 }
 
-if (!currentFunction || currentFunction === 'geoipHttp') {
-  exports.geoipHttp = require('./geoipHttp');
-}
-
 if (!currentFunction || currentFunction === 'backupCron') {
   exports.backupCron = require('./backupCron');
 }
