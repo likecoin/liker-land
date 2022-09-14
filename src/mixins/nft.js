@@ -22,6 +22,7 @@ import {
   isWritingNFT,
   formatNFTEventsToHistory,
 } from '~/util/nft';
+import formatNumber from '~/util/numberFormat';
 
 import walletMixin from '~/mixins/wallet';
 
@@ -136,8 +137,8 @@ export default {
     },
     NFTPrice() {
       return (
-        this.purchaseInfo.price &&
-        Math.ceil(this.purchaseInfo.price).toLocaleString('en-US')
+        this.purchaseInfo.price && formatNumber(this.purchaseInfo.price)
+        // Math.ceil(this.purchaseInfo.price).toLocaleString('en-US')
       );
     },
     formattedNFTPriceInLIKE() {

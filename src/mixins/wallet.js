@@ -1,6 +1,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { getAccountBalance } from '~/util/nft';
+import formatNumber from '~/util/numberFormat';
 
 export default {
   data() {
@@ -54,7 +55,7 @@ export default {
     },
     async fetchWalletBalance() {
       const balance = await getAccountBalance(this.getAddress);
-      this.balance = Math.ceil(Number(balance)).toLocaleString('en-US');
+      this.balance = formatNumber(Number(balance));
     },
   },
 };

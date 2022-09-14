@@ -10,6 +10,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import formatNumber from '~/util/numberFormat';
 
 export default {
   props: {
@@ -37,7 +38,7 @@ export default {
           total + (this.getNFTClassPurchaseInfoById(nft.classId)?.price || 0),
         0
       );
-      return Math.ceil(amount).toLocaleString('en-US');
+      return formatNumber(amount);
     },
     createdCount() {
       return this.createdClassIds.length;
