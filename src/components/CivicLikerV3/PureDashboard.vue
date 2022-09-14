@@ -169,7 +169,7 @@
       />
     </section>
 
-    <section class="mt-32">
+    <section class="mt-[64px]">
       <i18n
         class="text-24 text-like-green"
         path="civic_dashboard_v3_intro_title"
@@ -177,14 +177,24 @@
       />
       <div class="p-32 mt-32 overflow-hidden bg-white rounded-8">
         <img
-          src="~/assets/images/civic-v3/banner.png"
+          class="rounded-[8px]"
+          src="/images/og/writing-nft.jpg"
           :alt="$t('civic_dashboard_v3_intro_title')"
         >
         <i18n
-          class="mt-12 px"
+          class="mt-32"
           path="civic_dashboard_v3_intro_description"
           tag="p"
         />
+
+        <div class="flex justify-center mt-[32px]">
+          <ButtonV2
+            :text="$t('about_nft_page_title')"
+            preset="secondary"
+            :to="{ name: 'campaign-writing-nft' }"
+            @click.native="handleClickCTAButton"
+          />
+        </div>
       </div>
     </section>
   </div>
@@ -192,6 +202,8 @@
 
 <script>
 import dateFormat from 'date-fns/format';
+
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import LoginIcon from '~/assets/icons/login.svg?inline';
 import PlusIcon from '~/assets/icons/plus.svg?inline';
@@ -364,6 +376,11 @@ export default {
             'civic_dashboard_v3_summary_action_button_connect_wallet'
           );
       }
+    },
+  },
+  methods: {
+    handleClickCTAButton() {
+      logTrackerEvent(this, 'NFT', 'NFTGoToCampaign', 'NFTGoToCampaign', 1);
     },
   },
 };
