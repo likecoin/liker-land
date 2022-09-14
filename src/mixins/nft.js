@@ -12,7 +12,7 @@ import {
   postNewStripeFiatPayment,
   getStripeFiatPrice,
 } from '~/util/api';
-import { logTrackerEvent } from '~/util/EventLogger';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
   getAccountBalance,
   transferNFT,
@@ -397,6 +397,12 @@ export default {
             this.classId,
             1
           );
+          logPurchaseFlowEvent(this, 'purchase', {
+            txHash,
+            name: this.NFTName,
+            price: this.purchaseInfo.price,
+            classId: this.classId,
+          });
           await this.fetchUserCollectedCount();
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
         }

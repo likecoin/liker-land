@@ -7,6 +7,7 @@ import { TX_STATUS } from '~/constant';
 
 import { getStripeFiatPaymentStatus } from '~/util/api';
 import { sleep } from '~/util/misc';
+import { logPurchaseFlowEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 
@@ -81,6 +82,12 @@ export default {
           this.result = res;
           if (this.status === 'done') {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);
+            logPurchaseFlowEvent(this, 'purchase', {
+              txHash: this.result.transactionHash,
+              name: this.NFTName,
+              price: this.result.LIKEPrice,
+              classId: this.classId,
+            });
           } else if (this.status === 'error') {
             this.uiSetTxStatus(TX_STATUS.FAILED);
             this.uiSetTxError(
