@@ -261,24 +261,7 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      let data;
-      let nextKey;
-      let count;
-      let events = [];
-      do {
-        // eslint-disable-next-line no-await-in-loop
-        ({ data } = await this.$api.get(
-          getNFTEvents({
-            classId: this.classId,
-            key: nextKey,
-            limit: NFT_INDEXER_LIMIT_MAX,
-          })
-        ));
-        nextKey = data.pagination.next_key;
-        ({ count } = data.pagination);
-        events = events.concat(data.events);
-      } while (count === NFT_INDEXER_LIMIT_MAX);
-      const historyOnChain = formatNFTEventsToHistory(events);
+      const historyOnChain = await this.getNFTEventsAll();
       this.NFTHistory = historyOnChain;
 
       if (this.isWritingNFT) {
@@ -311,6 +294,26 @@ export default {
       }
       this.updateDisplayNameList([...new Set(array)]);
       this.isHistoryInfoLoading = false;
+    },
+    async getNFTEventsAll() {
+      let data;
+      let nextKey;
+      let count;
+      let events = [];
+      do {
+        // eslint-disable-next-line no-await-in-loop
+        ({ data } = await this.$api.get(
+          getNFTEvents({
+            classId: this.classId,
+            key: nextKey,
+            limit: NFT_INDEXER_LIMIT_MAX,
+          })
+        ));
+        nextKey = data.pagination.next_key;
+        ({ count } = data.pagination);
+        events = events.concat(data.events);
+      } while (count === NFT_INDEXER_LIMIT_MAX);
+      return formatNFTEventsToHistory(events);
     },
     updateDisplayNameList(addresses) {
       if (!addresses) return null;
