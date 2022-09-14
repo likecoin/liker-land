@@ -14,7 +14,10 @@
     <span class="w-full text-left font-600">{{ title }}</span>
     <template v-if="price" #append>
       <div class="flex items-center justify-end gap-[4px]">
-        <span class="text-medium-gray font-400 text-[12px] text-right">{{ price }}</span>
+        <span class="text-medium-gray font-400 text-[12px] text-right">
+          <!-- This value is from formattedNFTPriceInLIKE -->
+          {{ price }}
+        </span>
         <IconArrowLeft class="w-[16px] h-[16px] rotate-180" />
       </div>
     </template>

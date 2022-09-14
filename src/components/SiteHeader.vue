@@ -87,7 +87,7 @@
             >
               <div
                 class="text-center text-like-green text-[32px] font-600"
-              >{{ balance }}</div>
+              >{{ balance | formatNumber }}</div>
               <div
                 class="text-medium-gray text-[12px] leading-[1]"
               >{{ $t('header_menu_LIKE') }}</div>
@@ -105,7 +105,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getLikerIdSettingsURL } from '~/util/links';
 
 import walletMixin from '~/mixins/wallet';
-import { ellipsis } from '~/util/ui';
+import { ellipsis, formatNumber } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import Logo from '~/assets/icons/logo.svg?inline';
@@ -115,6 +115,7 @@ export default {
   name: 'SiteHeader',
   filters: {
     ellipsis,
+    formatNumber,
   },
   components: {
     Logo,

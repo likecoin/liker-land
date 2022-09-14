@@ -4,7 +4,7 @@
   >
     <div class="flex text-[16px] leading-[1.25] text-like-green font-600">
       <NFTWidgetIconInsertCoin class="mr-[6px]" />
-      {{ formattedPrice }} LIKE
+      {{ price | formatNumberWithLIKE }}
     </div>
     <button
       class="
@@ -29,7 +29,12 @@
 </template>
 
 <script>
+import { formatNumberWithLIKE } from '~/util/ui';
+
 export default {
+  filters: {
+    formatNumberWithLIKE,
+  },
   props: {
     collectButtonTitle: {
       type: String,
@@ -38,11 +43,6 @@ export default {
     price: {
       type: Number,
       default: 0,
-    },
-  },
-  computed: {
-    formattedPrice() {
-      return this.price;
     },
   },
   methods: {

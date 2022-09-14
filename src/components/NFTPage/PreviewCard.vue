@@ -76,7 +76,7 @@
       <ButtonV2
         v-if="nftPrice"
         class="mt-[16px]"
-        :text="formattedNFTPrice"
+        :text="nftPrice | formatNumberWithLIKE"
         preset="secondary"
         @click="handleClickCollect"
       >
@@ -89,13 +89,14 @@
 </template>
 
 <script>
-import { ellipsis, ellipsisDescription } from '~/util/ui';
+import { ellipsis, ellipsisDescription, formatNumberWithLIKE } from '~/util/ui';
 
 export default {
   name: 'ItemCard',
   filters: {
     ellipsis,
     ellipsisDescription,
+    formatNumberWithLIKE,
   },
   props: {
     // BackgroundImg

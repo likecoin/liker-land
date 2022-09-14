@@ -65,7 +65,7 @@
               <span
                 class="font-[400]"
                 place="amount"
-              >{{ balance }} LIKE</span>
+              >{{ balance | formatNumberWithLIKE }}</span>
             </i18n>
           </li>
           <li>
@@ -89,11 +89,15 @@
 import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
+import { formatNumberWithLIKE } from '~/util/ui';
 
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
 
 export default {
+  filters: {
+    formatNumberWithLIKE,
+  },
   mixins: [clipboardMixin, nftMixin],
   props: {
     isOpen: {

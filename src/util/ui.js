@@ -1,3 +1,10 @@
+const smallNumFormatter = new Intl.NumberFormat('en-US');
+
+const largeNumFormatter = new Intl.NumberFormat('en-US', {
+  notation: 'compact',
+  maximumFractionDigits: 2,
+});
+
 export function ellipsis(value) {
   if (value) {
     const len = value.length;
@@ -36,6 +43,18 @@ export function copyToClipboard(text) {
   document.execCommand('copy');
   selection.removeAllRanges();
   document.body.removeChild(copyText);
+}
+
+export function formatNumber(num) {
+  return (num >= 10000 ? largeNumFormatter : smallNumFormatter).format(num);
+}
+
+export function formatNumberWithUnit(num, unit) {
+  return `${formatNumber(num)} ${unit}`;
+}
+
+export function formatNumberWithLIKE(num) {
+  return formatNumberWithUnit(num, 'LIKE');
 }
 
 export default ellipsis;

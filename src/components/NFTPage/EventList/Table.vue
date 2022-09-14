@@ -46,7 +46,8 @@
           />
         </td>
         <td>
-          <Label class="break-all">{{ event.price || '-' }}</Label>
+          <Label v-if="event.price" class="break-all" :text="event.price | formatNumber" />
+          <Label v-else class="break-all" text="-" />
         </td>
         <td>
           <LinkV2 v-if="event.event === 'transfer'" :to="`/${event.fromWallet}`">
@@ -78,7 +79,7 @@
   </table>
 </template>
 <script>
-import { ellipsis } from '~/util/ui';
+import { ellipsis, formatNumber } from '~/util/ui';
 import { TimeAgo } from 'vue2-timeago';
 import { getChainRawTx } from '~/util/api';
 
@@ -86,6 +87,7 @@ export default {
   name: 'EventListTable',
   filters: {
     ellipsis,
+    formatNumber,
   },
   components: { TimeAgo },
   props: {

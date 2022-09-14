@@ -51,7 +51,7 @@
           preset="secondary"
           @click.stop.prevent="handleClickCollect"
         >
-          <span>{{ formattedPrice }}</span>
+          <span>{{ price | formatNumberWithLIKE }}</span>
           <template #prepend>
             <IconPrice />
           </template>
@@ -72,11 +72,12 @@
 </template>
 
 <script>
-import { ellipsis } from '~/util/ui';
+import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 export default {
   filters: {
     ellipsis,
+    formatNumberWithLIKE,
   },
   props: {
     classId: {
@@ -122,11 +123,6 @@ export default {
     isUserCivicLiker: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    formattedPrice() {
-      return `${this.price.toLocaleString('en') || '-'} LIKE`;
     },
   },
   methods: {

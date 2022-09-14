@@ -23,6 +23,7 @@ import {
   isWritingNFT,
   formatNFTEventsToHistory,
 } from '~/util/nft';
+import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 
@@ -140,12 +141,12 @@ export default {
     },
     formattedNFTPriceInLIKE() {
       return this.nftPriceInLIKE !== undefined
-        ? `${this.nftPriceInLIKE.toLocaleString('en')} LIKE`
+        ? formatNumberWithLIKE(this.nftPriceInLIKE)
         : '-';
     },
     formattedNFTPriceInUSD() {
       return this.nftPriceInUSD !== undefined
-        ? `${this.nftPriceInUSD.toLocaleString('en')} USD`
+        ? formatNumberWithUnit(this.nftPriceInUSD, 'USD')
         : '-';
     },
     ownerList() {
