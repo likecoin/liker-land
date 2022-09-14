@@ -85,14 +85,14 @@ export async function signGrant({ senderAddress, amountInLIKE, signer }) {
 }
 
 export async function broadcastTx(signData, signer) {
-  const txBytes = TxRaw.encode(signData).finish();
   const client = await createNFTSigningClient(signer);
   const senderClient = client.getSigningStargateClient();
+  const txBytes = TxRaw.encode(signData).finish();
   const { transactionHash } = await senderClient.broadcastTx(txBytes);
   return transactionHash;
 }
 
-export async function transferNFT({
+export async function signTransferNFT({
   fromAddress,
   toAddress,
   classId,
@@ -100,13 +100,14 @@ export async function transferNFT({
   signer,
 }) {
   const client = await createNFTSigningClient(signer);
-  const { transactionHash } = await client.sendNFTs(
+  const signData = await client.sendNFTs(
     fromAddress,
     toAddress,
     classId,
-    [nftId]
+    [nftId],
+    { broadcast: false }
   );
-  return transactionHash;
+  return signData;
 }
 
 export function amountToLIKE(likecoin) {

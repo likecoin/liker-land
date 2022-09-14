@@ -15,7 +15,7 @@ import {
 import { logTrackerEvent } from '~/util/EventLogger';
 import {
   getAccountBalance,
-  transferNFT,
+  signTransferNFT,
   signGrant,
   broadcastTx,
   getNFTCountByClassId,
@@ -450,11 +450,11 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTTransferSendRequested',
+          'NFTTransferSignRequested',
           this.classId,
           1
         );
-        const txHash = await transferNFT({
+        const signData = await signTransferNFT({
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
           classId: this.classId,
@@ -464,11 +464,20 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTTransferSendApproved',
+          'NFTTransferSignApproved',
           this.classId,
           1
         );
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        const txHash = await broadcastTx(signData, this.getSigner);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectBroadcastTxComplete',
+          this.classId,
+          1
+        );
+
         logTrackerEvent(
           this,
           'NFT',
