@@ -473,7 +473,7 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectBroadcastTxComplete',
+          'NFTTransferBroadcastTxComplete',
           this.classId,
           1
         );
