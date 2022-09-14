@@ -105,11 +105,6 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      hasHoverSellButton: false,
-    };
-  },
   computed: {
     formattedNFTPrice() {
       return `${this.nftPrice || '-'} LIKE`;
@@ -123,10 +118,7 @@ export default {
       this.$emit('click-sell');
     },
     handleMouseEnterSell() {
-      if (!this.hasHoverSellButton) {
-        this.$emit('hover-sell');
-        this.hasHoverSellButton = true;
-      }
+      this.$emit('hover-sell');
     },
   },
 };

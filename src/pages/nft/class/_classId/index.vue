@@ -167,6 +167,7 @@ export default {
       isReadyToTransfer: false,
       isTransferring: false,
       isCollecting: false,
+      hasHoverSellButton: false,
     };
   },
   computed: {
@@ -301,13 +302,16 @@ export default {
       );
     },
     handleHoverSellFromPriceSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTSellHover(DetailsPagePriceSection)',
-        this.classId,
-        1
-      );
+      if (!this.hasHoverSellButton) {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTSellHover(DetailsPagePriceSection)',
+          this.classId,
+          1
+        );
+        this.hasHoverSellButton = true;
+      }
     },
     handleCollectFromSupplySection() {
       logTrackerEvent(
