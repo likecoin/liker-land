@@ -217,7 +217,6 @@ const nuxtConfig = {
     '~/plugins/portal-vue.js',
     '~/plugins/vue-i18n.js',
     { src: '~/plugins/gtag.client.js', mode: 'client' },
-    { src: '~/plugins/geoip.server.js', mode: 'server' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/crisp.client.js', ssr: false },
