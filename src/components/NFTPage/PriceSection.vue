@@ -17,7 +17,7 @@
       <Label
         class="font-[900] text-like-cyan"
         preset="h2"
-      >{{ formattedNFTPrice }}</Label>
+      >{{ nftPrice | formatNumberWithLIKE }}</Label>
       <Label
         v-if="nftPriceUSD"
         class="ml-[4px]"
@@ -79,8 +79,13 @@
   </CardV2>
 </template>
 <script>
+import { formatNumberWithLIKE } from '~/util/ui';
+
 export default {
   name: 'PriceSection',
+  filters: {
+    formatNumberWithLIKE,
+  },
   props: {
     nftPrice: {
       type: Number,
@@ -101,11 +106,6 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    formattedNFTPrice() {
-      return `${this.nftPrice || '-'} LIKE`;
     },
   },
   methods: {

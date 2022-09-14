@@ -37,8 +37,7 @@
           :label-text="$t('nft_portfolio_page_state_value')"
         >
           <template #custom-value>
-            <span>{{ stats.collectedAmount }}&nbsp;</span>
-            <span class="text-[16px]">{{ $t('header_menu_LIKE') }}</span>
+            <span>{{ stats.collectedAmount | formatNumber }}</span>
           </template>
           <template #label-icon>
             <IconPriceMini />
@@ -85,7 +84,12 @@
   </UserStatsBase>
 </template>
 <script>
+import { formatNumber } from '~/util/ui';
+
 export default {
+  filters: {
+    formatNumber,
+  },
   props: {
     collectedItems: {
       type: Array,

@@ -45,6 +45,12 @@ export function copyToClipboard(text) {
   document.body.removeChild(copyText);
 }
 
+export function formatNumberWithLIKE(num) {
+  return `${(num >= 10000 ? largeNumFormatter : smallNumFormatter).format(
+    num
+  )} LIKE`;
+}
+
 export function formatNumber(num) {
   return (num >= 10000 ? largeNumFormatter : smallNumFormatter).format(num);
 }

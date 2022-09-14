@@ -10,7 +10,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { formatNumber } from '~/util/ui';
 
 export default {
   props: {
@@ -33,12 +32,11 @@ export default {
       return this.collectedItems.length;
     },
     collectedAmount() {
-      const amount = this.collectedItems.reduce(
+      return this.collectedItems.reduce(
         (total, nft) =>
           total + (this.getNFTClassPurchaseInfoById(nft.classId)?.price || 0),
         0
       );
-      return formatNumber(amount);
     },
     createdCount() {
       return this.createdClassIds.length;

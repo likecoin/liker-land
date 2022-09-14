@@ -69,7 +69,7 @@
             <template #prepend>
               <NFTWidgetIconInsertCoin />
             </template>
-            {{ collectButtonLabel }}
+            {{ price | formatNumberWithLIKE }}
           </ButtonV2>
         </div>
       </div>
@@ -78,7 +78,12 @@
 </template>
 
 <script>
+import { formatNumberWithLIKE } from '~/util/ui';
+
 export default {
+  filters: {
+    formatNumberWithLIKE,
+  },
   props: {
     // UI
     viewDetailsLabel: {
@@ -162,11 +167,6 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    collectButtonLabel() {
-      return `${this.price} LIKE`;
     },
   },
   methods: {
