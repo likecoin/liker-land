@@ -16,7 +16,8 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import {
   getAccountBalance,
   transferNFT,
-  sendGrant,
+  signGrant,
+  broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
   isWritingNFT,
@@ -365,25 +366,33 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectSendGrantRequested',
+          'NFTCollectSignGrantRequested',
           this.classId,
           1
         );
-        const txHash = await sendGrant({
+        const signData = await signGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectSendGrantApproved',
+          'NFTCollectSignGrantApproved',
+          this.classId,
+          1
+        );
+        const txHash = await broadcastTx(signData, this.getSigner);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectBroadcastTxComplete',
           this.classId,
           1
         );
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
-          this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.$api.post(
             postNFTPurchase({ txHash, classId: this.classId })
           );
