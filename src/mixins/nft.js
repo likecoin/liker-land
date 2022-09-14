@@ -1,7 +1,12 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
-import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE, TX_STATUS } from '~/constant';
+import {
+  APP_LIKE_CO_VIEW,
+  APP_LIKE_CO_URL_BASE,
+  TX_STATUS,
+  LIKECOIN_NFT_API_WALLET,
+} from '~/constant';
 
 import {
   getNFTHistory,
@@ -256,38 +261,48 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      let hasHistoryInDatabase = false;
+      let data;
+      let nextKey;
+      let count;
+      let events = [];
+      do {
+        // eslint-disable-next-line no-await-in-loop
+        ({ data } = await this.$api.get(
+          getNFTEvents({
+            classId: this.classId,
+            key: nextKey,
+            limit: NFT_INDEXER_LIMIT_MAX,
+          })
+        ));
+        nextKey = data.pagination.next_key;
+        ({ count } = data.pagination);
+        events = events.concat(data.events);
+      } while (count === NFT_INDEXER_LIMIT_MAX);
+      const historyOnChain = formatNFTEventsToHistory(events);
+      this.NFTHistory = historyOnChain;
+
       if (this.isWritingNFT) {
         try {
           const { data } = await this.$api.get(
             getNFTHistory({ classId: this.classId })
           );
-          this.NFTHistory = data.list;
-          hasHistoryInDatabase = true;
+          const historyInDB = data.list;
+          const txhashToEventMap = new Map();
+          historyOnChain
+            .filter(
+              e =>
+                e.event !== 'new_class' &&
+                e.event !== 'mint_nft' &&
+                e.toWallet !== LIKECOIN_NFT_API_WALLET
+            )
+            .forEach(e => txhashToEventMap.set(e.txHash, e));
+          // overwrite on-chain event with db event
+          historyInDB.forEach(e => txhashToEventMap.set(e.txHash, e));
+          this.NFTHistory = [...txhashToEventMap.values()];
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         }
-      }
-      if (!hasHistoryInDatabase) {
-        let data;
-        let nextKey;
-        let count;
-        let events = [];
-        do {
-          // eslint-disable-next-line no-await-in-loop
-          ({ data } = await this.$api.get(
-            getNFTEvents({
-              classId: this.classId,
-              key: nextKey,
-              limit: NFT_INDEXER_LIMIT_MAX,
-            })
-          ));
-          nextKey = data.pagination.next_key;
-          ({ count } = data.pagination);
-          events = events.concat(data.events);
-        } while (count === NFT_INDEXER_LIMIT_MAX);
-        this.NFTHistory = formatNFTEventsToHistory(events);
       }
       const array = [];
       // eslint-disable-next-line no-restricted-syntax
