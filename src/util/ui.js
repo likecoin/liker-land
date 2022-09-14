@@ -1,6 +1,6 @@
 const smallNumFormatter = new Intl.NumberFormat('en-US');
 
-const largeNumFormatter = new Intl.NumberFormat('en-GB', {
+const largeNumFormatter = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   maximumFractionDigits: 2,
 });
@@ -45,14 +45,16 @@ export function copyToClipboard(text) {
   document.body.removeChild(copyText);
 }
 
-export function formatNumberWithLIKE(num) {
-  return `${(num >= 10000 ? largeNumFormatter : smallNumFormatter).format(
-    num
-  )} LIKE`;
-}
-
 export function formatNumber(num) {
   return (num >= 10000 ? largeNumFormatter : smallNumFormatter).format(num);
+}
+
+export function formatNumberWithUnit(num, unit) {
+  return `${formatNumber(num)} ${unit}`;
+}
+
+export function formatNumberWithLIKE(num) {
+  return formatNumberWithUnit(num, 'LIKE');
 }
 
 export default ellipsis;
