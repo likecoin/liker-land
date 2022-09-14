@@ -278,9 +278,11 @@ export default {
                 e.event !== 'mint_nft' &&
                 e.toWallet !== LIKECOIN_NFT_API_WALLET
             )
-            .forEach(e => txhashToEventMap.set(e.txHash, e));
+            .forEach(e => txhashToEventMap.set(`${e.txHash}-${e.nftId}`, e));
           // overwrite on-chain event with db event
-          historyInDB.forEach(e => txhashToEventMap.set(e.txHash, e));
+          historyInDB.forEach(e =>
+            txhashToEventMap.set(`${e.txHash}-${e.nftId}`, e)
+          );
           this.NFTHistory = [...txhashToEventMap.values()];
         } catch (error) {
           // eslint-disable-next-line no-console
