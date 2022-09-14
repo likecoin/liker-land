@@ -10,7 +10,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import formatNumber from '~/util/numberFormat';
+import { formatNumber } from '~/util/ui';
 
 export default {
   props: {

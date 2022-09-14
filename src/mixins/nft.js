@@ -22,7 +22,7 @@ import {
   isWritingNFT,
   formatNFTEventsToHistory,
 } from '~/util/nft';
-import formatNumber from '~/util/numberFormat';
+import { formatNumber } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 
@@ -136,19 +136,16 @@ export default {
       return this.NFTClassMetadata.external_url;
     },
     NFTPrice() {
-      return (
-        this.purchaseInfo.price && formatNumber(this.purchaseInfo.price)
-        // Math.ceil(this.purchaseInfo.price).toLocaleString('en-US')
-      );
+      return this.purchaseInfo.price && formatNumber(this.purchaseInfo.price);
     },
     formattedNFTPriceInLIKE() {
       return this.nftPriceInLIKE !== undefined
-        ? `${this.nftPriceInLIKE.toLocaleString('en')} LIKE`
+        ? `${formatNumber(this.nftPriceInLIKE)} LIKE`
         : '-';
     },
     formattedNFTPriceInUSD() {
       return this.nftPriceInUSD !== undefined
-        ? `${this.nftPriceInUSD.toLocaleString('en')} USD`
+        ? `${formatNumber(this.nftPriceInUSD)} USD`
         : '-';
     },
     ownerList() {

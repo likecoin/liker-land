@@ -65,7 +65,7 @@
               <span
                 class="font-[400]"
                 place="amount"
-              >{{ balance }} LIKE</span>
+              >{{ formattedBalance }} LIKE</span>
             </i18n>
           </li>
           <li>

@@ -1,12 +1,13 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { getAccountBalance } from '~/util/nft';
-import formatNumber from '~/util/numberFormat';
+import { formatNumber } from '~/util/ui';
 
 export default {
   data() {
     return {
       balance: 0,
+      formattedBalance: 0,
     };
   },
   computed: {
@@ -55,7 +56,8 @@ export default {
     },
     async fetchWalletBalance() {
       const balance = await getAccountBalance(this.getAddress);
-      this.balance = formatNumber(Number(balance));
+      this.balance = Number(balance).toFixed(2);
+      this.formattedBalance = formatNumber(Number(balance));
     },
   },
 };
