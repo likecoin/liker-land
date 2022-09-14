@@ -123,9 +123,9 @@ export default {
       this.$emit('click-sell');
     },
     handleMouseEnterSell() {
-      if (!this.isSellHoverLogSend) {
+      if (!this.hasHoverSellButton) {
         this.$emit('hover-sell');
-        this.isSellHoverLogSend = true;
+        this.hasHoverSellButton = true;
       }
     },
   },
