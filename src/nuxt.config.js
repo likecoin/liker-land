@@ -233,9 +233,9 @@ const nuxtConfig = {
     '@nuxtjs/sentry',
     ['@nuxtjs/pwa', { icon: false }],
     'portal-vue/nuxt',
-    // ['@likecoin/nuxt-google-optimize', {
-    //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
-    // }],
+    ['@likecoin/nuxt-google-optimize', {
+      plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
+    }],
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -313,10 +313,10 @@ const nuxtConfig = {
       ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
   },
-  // googleOptimize: {
-  //   useFetch: false,
-  //   maxAge: 86400, // 1 day
-  // },
+  googleOptimize: {
+    useFetch: false,
+    maxAge: 86400, // 1 day
+  },
   router: {
     middleware: 'sliding-menu',
     extendRoutes(routes, resolve) {
