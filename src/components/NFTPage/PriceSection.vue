@@ -73,6 +73,8 @@
           :text="$t('nft_details_page_button_sell')"
           preset="tertiary"
           :is-disabled="true"
+          @mouseenter="handleMouseEnterSell"
+          @click.native="handleClickSell"
         />
       </ToolTips>
     </div>
@@ -111,6 +113,12 @@ export default {
   methods: {
     handleClickCollect() {
       this.$emit('collect');
+    },
+    handleClickSell() {
+      this.$emit('click-sell');
+    },
+    handleMouseEnterSell() {
+      this.$emit('hover-sell');
     },
   },
 };

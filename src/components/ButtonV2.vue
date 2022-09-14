@@ -3,7 +3,6 @@
     :is="tag"
     :class="rootClasses"
     :to="to || null"
-    :disabled="isDisabled"
     :target="$attrs.href ? '_blank' : null"
     v-on="$listeners"
   >
@@ -184,7 +183,7 @@ export default class ButtonV2 extends Vue {
       'duration-200',
       {
         'justify-center': this.isCircle,
-        'cursor-not-allowed bg-shade-gray text-medium-gray': this.isDisabled,
+        'cursor-default bg-shade-gray text-medium-gray': this.isDisabled,
       },
     ];
   }
