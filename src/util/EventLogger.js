@@ -68,19 +68,44 @@ export function logTrackerEvent(vue, category, action, label, value) {
         event_label: label.substring(0, 499),
         value,
       });
-      if (process.env.ADWORDS_TRACKING_ID) {
-        let target;
-        if (action === 'RegisterSignUpSuccess') {
-          target = `${process.env.ADWORDS_TRACKING_ID}/-lf1CPOZ3ekBENTZvPwB`;
-        } else if (action === 'CivicPaymentSuccess') {
-          target = `${process.env.ADWORDS_TRACKING_ID}/XomhCOjO5OkBENTZvPwB`;
-        }
-        if (target) {
-          vue.$gtag.event('conversion', {
-            send_to: target,
-          });
-        }
-      }
+    }
+  } catch (err) {
+    console.error('logging error:'); // eslint-disable-line no-console
+    console.error(err); // eslint-disable-line no-console
+  }
+}
+
+export function logPurchaseFlowEvent(
+  vue,
+  event,
+  { txHash, name, price, currency = 'LIKE', classId }
+) {
+  try {
+    if (
+      ![
+        'view_item',
+        'begin_checkout',
+        'add_shipping_info',
+        'purchase',
+      ].includes(event)
+    ) {
+      throw new Error('Not purchase event');
+    }
+    if (window.doNotTrack || navigator.doNotTrack) return;
+    if (vue.$gtag) {
+      vue.$gtag.event(event, {
+        transaction_id: txHash,
+        value: price,
+        items: [
+          {
+            item_id: classId,
+            item_name: name,
+            currency,
+            price,
+            quantity: 1,
+          },
+        ],
+      });
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console

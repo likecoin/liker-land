@@ -112,7 +112,7 @@
 
 <script>
 import { getLIKEPrice } from '~/util/api';
-import { logTrackerEvent } from '~/util/EventLogger';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 
 import nftMixin from '~/mixins/nft';
@@ -219,6 +219,11 @@ export default {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
       this.handleCollect();
     }
+    logPurchaseFlowEvent(this, 'view_item', {
+      name: this.NFTName,
+      price: this.purchaseInfo.price,
+      classId: this.classId,
+    });
   },
   methods: {
     onToggleTransfer() {
@@ -252,6 +257,11 @@ export default {
       this.isReadyToTransfer = true;
     },
     async handleCollect() {
+      logPurchaseFlowEvent(this, 'begin_checkout', {
+        name: this.NFTName,
+        price: this.purchaseInfo.price,
+        classId: this.classId,
+      });
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
@@ -260,6 +270,11 @@ export default {
         }
         return;
       }
+      logPurchaseFlowEvent(this, 'add_shipping_info', {
+        name: this.NFTName,
+        price: this.purchaseInfo.price,
+        classId: this.classId,
+      });
       try {
         this.isCollecting = true;
         await this.collectNFT();
