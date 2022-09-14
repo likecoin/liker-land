@@ -15,8 +15,9 @@ import {
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
   getAccountBalance,
-  transferNFT,
-  sendGrant,
+  signTransferNFT,
+  signGrant,
+  broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
   isWritingNFT,
@@ -368,25 +369,33 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectSendGrantRequested',
+          'NFTCollectSignGrantRequested',
           this.classId,
           1
         );
-        const txHash = await sendGrant({
+        const signData = await signGrant({
           senderAddress: this.getAddress,
           amountInLIKE: this.purchaseInfo.totalPrice,
           signer: this.getSigner,
         });
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectSendGrantApproved',
+          'NFTCollectSignGrantApproved',
+          this.classId,
+          1
+        );
+        const txHash = await broadcastTx(signData, this.getSigner);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectBroadcastTxComplete',
           this.classId,
           1
         );
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
-          this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.$api.post(
             postNFTPurchase({ txHash, classId: this.classId })
           );
@@ -450,11 +459,11 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTTransferSendRequested',
+          'NFTTransferSignRequested',
           this.classId,
           1
         );
-        const txHash = await transferNFT({
+        const signData = await signTransferNFT({
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
           classId: this.classId,
@@ -464,11 +473,20 @@ export default {
         logTrackerEvent(
           this,
           'NFT',
-          'NFTTransferSendApproved',
+          'NFTTransferSignApproved',
           this.classId,
           1
         );
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        const txHash = await broadcastTx(signData, this.getSigner);
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTTransferBroadcastTxComplete',
+          this.classId,
+          1
+        );
+
         logTrackerEvent(
           this,
           'NFT',

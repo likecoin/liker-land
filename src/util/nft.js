@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
 import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { PageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
-
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import {
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
@@ -65,7 +65,7 @@ export async function getISCNRecord(iscnId) {
   return res;
 }
 
-export async function sendGrant({ senderAddress, amountInLIKE, signer }) {
+export async function signGrant({ senderAddress, amountInLIKE, signer }) {
   const client = await createNFTSigningClient(signer);
   const spendLimit = [
     {
@@ -74,16 +74,25 @@ export async function sendGrant({ senderAddress, amountInLIKE, signer }) {
     },
   ];
   const expirationInMs = Date.now() + 1000 * 90;
-  const { transactionHash } = await client.createSendGrant(
+  const signData = await client.createSendGrant(
     senderAddress,
     LIKECOIN_NFT_API_WALLET,
     spendLimit,
-    expirationInMs
+    expirationInMs,
+    { broadcast: false }
   );
+  return signData;
+}
+
+export async function broadcastTx(signData, signer) {
+  const client = await createNFTSigningClient(signer);
+  const senderClient = client.getSigningStargateClient();
+  const txBytes = TxRaw.encode(signData).finish();
+  const { transactionHash } = await senderClient.broadcastTx(txBytes);
   return transactionHash;
 }
 
-export async function transferNFT({
+export async function signTransferNFT({
   fromAddress,
   toAddress,
   classId,
@@ -91,13 +100,14 @@ export async function transferNFT({
   signer,
 }) {
   const client = await createNFTSigningClient(signer);
-  const { transactionHash } = await client.sendNFTs(
+  const signData = await client.sendNFTs(
     fromAddress,
     toAddress,
     classId,
-    [nftId]
+    [nftId],
+    { broadcast: false }
   );
-  return transactionHash;
+  return signData;
 }
 
 export function amountToLIKE(likecoin) {
