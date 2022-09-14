@@ -186,6 +186,9 @@ export default {
       const ownNFT = this.ownerList[this.getAddress];
       return ownNFT[0];
     },
+    nftDetailsPageURL() {
+      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
   },
   watch: {
     getAddress(newAddress) {
@@ -487,9 +490,6 @@ export default {
         this.updateNFTOwners();
         this.updateNFTHistory();
       }
-    },
-    nftDetailsPageURL() {
-      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
     goNFTDetails() {
       this.$router.push({
