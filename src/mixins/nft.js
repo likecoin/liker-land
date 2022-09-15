@@ -503,7 +503,11 @@ export default {
           1
         );
         await this.$api.post(
-          postNFTTransfer({ txHash, nftId: this.firstOwnedNFTId })
+          postNFTTransfer({
+            txHash,
+            classId: this.classId,
+            nftId: this.firstOwnedNFTId,
+          })
         );
         logTrackerEvent(
           this,
