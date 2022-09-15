@@ -351,6 +351,13 @@ export default {
       }
     },
     async collectNFTWithLIKE() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `NFTCollectNFTWithLIKE(${this.walletMethodType})`,
+        this.classId,
+        1
+      );
       const balance = await this.userAccountBalanceFetch;
       try {
         if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
