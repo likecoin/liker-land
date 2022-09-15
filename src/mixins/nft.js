@@ -262,7 +262,7 @@ export default {
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
       const historyOnChain = await this.getNFTEventsAll();
-      this.NFTHistory = historyOnChain;
+      let history = historyOnChain;
 
       if (this.isWritingNFT) {
         try {
@@ -270,25 +270,24 @@ export default {
             getNFTHistory({ classId: this.classId })
           );
           const historyInDB = data.list;
-          const txhashToEventMap = new Map();
+          const eventMap = new Map();
           historyOnChain
             .filter(
               e =>
-                e.event !== 'new_class' &&
-                e.event !== 'mint_nft' &&
+                !['new_class', 'mint_nft'].includes(e.event) &&
                 e.toWallet !== LIKECOIN_NFT_API_WALLET
             )
-            .forEach(e => txhashToEventMap.set(`${e.txHash}-${e.nftId}`, e));
+            .forEach(e => eventMap.set(`${e.txHash}-${e.nftId}`, e));
           // overwrite on-chain event with db event
-          historyInDB.forEach(e =>
-            txhashToEventMap.set(`${e.txHash}-${e.nftId}`, e)
-          );
-          this.NFTHistory = [...txhashToEventMap.values()];
+          historyInDB.forEach(e => eventMap.set(`${e.txHash}-${e.nftId}`, e));
+          history = [...eventMap.values()];
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         }
       }
+      this.NFTHistory = history;
+
       const array = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const list of this.NFTHistory) {
@@ -301,7 +300,7 @@ export default {
       let data;
       let nextKey;
       let count;
-      let events = [];
+      const events = [];
       do {
         // eslint-disable-next-line no-await-in-loop
         ({ data } = await this.$api.get(
@@ -313,7 +312,7 @@ export default {
         ));
         nextKey = data.pagination.next_key;
         ({ count } = data.pagination);
-        events = events.concat(data.events);
+        events.push(...data.events);
       } while (count === NFT_INDEXER_LIMIT_MAX);
       return formatNFTEventsToHistory(events);
     },
