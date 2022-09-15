@@ -7,7 +7,7 @@ import { TX_STATUS } from '~/constant';
 
 import { getStripeFiatPaymentStatus } from '~/util/api';
 import { sleep } from '~/util/misc';
-import { logPurchaseFlowEvent } from '~/util/EventLogger';
+import { logPurchaseFlowEvent, logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 
@@ -82,6 +82,13 @@ export default {
           this.result = res;
           if (this.status === 'done') {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTCollectPaymentMethod(Stripe)Completed',
+              this.classId,
+              1
+            );
             logPurchaseFlowEvent(this, 'purchase', {
               txHash: this.result.transactionHash,
               name: this.NFTName,
@@ -90,6 +97,13 @@ export default {
             });
           } else if (this.status === 'error') {
             this.uiSetTxStatus(TX_STATUS.FAILED);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTCollectPaymentMethod(Stripe)Error',
+              this.classId,
+              1
+            );
             this.uiSetTxError(
               `${this.result.errorMessage ||
                 'STRIPE_PAYMENT_UNKNOWN_ERROR'}, Your payment authorization would be automatically refunded`
