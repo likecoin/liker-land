@@ -12,6 +12,7 @@ import {
   getNFTHistory,
   postNFTPurchase,
   postNFTTransfer,
+  postNFTSell,
   getNFTEvents,
   postNewStripeFiatPayment,
   getStripeFiatPrice,
@@ -583,6 +584,62 @@ export default {
         this.updateNFTOwners();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
+      }
+    },
+    async sellNFT(price = this.NFTPrice) {
+      try {
+        await this.initIfNecessary();
+        await this.walletFetchLIKEBalance();
+        if (this.walletLIKEBalance === '0') {
+          logTrackerEvent(
+            this,
+            'NFT',
+            'NFTSellErrorNoBalance',
+            this.getAddress,
+            1
+          );
+          this.uiSetTxError('INSUFFICIENT_BALANCE');
+          this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
+          return;
+        }
+
+        this.uiSetTxStatus(TX_STATUS.SIGN);
+        logTrackerEvent(this, 'NFT', 'NFTSellSignRequested', this.classId, 1);
+        const signData = await signTransferNFT({
+          fromAddress: this.getAddress,
+          toAddress: LIKECOIN_NFT_API_WALLET,
+          classId: this.classId,
+          nftId: this.firstCollectedNFTId,
+          signer: this.getSigner,
+        });
+        logTrackerEvent(this, 'NFT', 'NFTSellSignApproved', this.classId, 1);
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        const txHash = await broadcastTx(signData, this.getSigner);
+        logTrackerEvent(this, 'NFT', 'NFTSellPostTransfer', this.classId, 1);
+        await this.$api.post(
+          postNFTSell({
+            txHash,
+            price,
+            classId: this.classId,
+            nftId: this.firstCollectedNFTId,
+          })
+        );
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTSellPostTransferCompleted',
+          this.classId,
+          1
+        );
+        await this.fetchUserCollectedCount();
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
+      } catch (error) {
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
+      } finally {
+        this.updateNFTPurchaseInfo();
+        this.updateNFTOwners();
+        this.updateNFTHistory();
       }
     },
     goNFTDetails() {

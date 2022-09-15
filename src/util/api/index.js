@@ -215,6 +215,18 @@ export const postNFTTransfer = ({ txHash, classId, nftId }) => {
   )}`;
 };
 
+export const postNFTSell = ({ txHash, classId, nftId, price }) => {
+  const qsPayload = {
+    tx_hash: txHash,
+    class_id: classId,
+    nft_id: nftId,
+    price,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/sell?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const postNewStripeFiatPayment = ({ classId, wallet }) => {
   const qsPayload = {
     class_id: classId,

@@ -67,16 +67,13 @@
           </ButtonV2>
         </div>
       </div>
-      <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
-        <ButtonV2
-          class="ml-[12px]"
-          :text="$t('nft_details_page_button_sell')"
-          preset="tertiary"
-          :is-disabled="true"
-          @mouseenter="handleMouseEnterSell"
-          @click.native="handleClickSell"
-        />
-      </ToolTips>
+      <ButtonV2
+        class="ml-[12px]"
+        :text="$t('nft_details_page_button_sell')"
+        preset="secondary"
+        @mouseenter="handleMouseEnterSell"
+        @click.native="handleClickSell"
+      />
     </div>
   </CardV2>
 </template>

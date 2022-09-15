@@ -132,6 +132,7 @@ import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import { LIKECOIN_NFT_API_WALLET } from '~/constant';
 
 export default {
   layout: 'default',
@@ -291,6 +292,14 @@ export default {
       this.isTransferring = true;
       await this.transferNFT();
     },
+    async onSell() {
+      logTrackerEvent(this, 'NFT', 'NFTSell(DetailsPage)', this.classId, 1);
+      this.isOpenTransferModal = true;
+      this.isTransferring = true;
+      this.isReadyToTransfer = true;
+      this.toAddress = LIKECOIN_NFT_API_WALLET;
+      await this.sellNFT();
+    },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
         this.errorMsg = this.$t(
@@ -362,6 +371,7 @@ export default {
         this.classId,
         1
       );
+      this.onSell();
     },
     handleHoverSellFromPriceSection() {
       if (!this.hasHoverSellButton) {
