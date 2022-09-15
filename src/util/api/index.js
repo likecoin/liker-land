@@ -203,8 +203,9 @@ export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
   )}`;
 };
 
-export const postNFTTransfer = ({ txHash, nftId }) => {
+export const postNFTTransfer = ({ txHash, classId, nftId }) => {
   const qsPayload = {
+    class_id: classId,
     tx_hash: txHash,
     nft_id: nftId,
   };
