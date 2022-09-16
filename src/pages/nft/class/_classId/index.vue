@@ -201,15 +201,15 @@ export default {
   },
   async mounted() {
     try {
-      const promises = [
-        this.updateDisplayNameList(this.iscnOwner),
-        this.updateNFTOwners(),
-        this.updateNFTHistory(),
-        this.getLIKEPrice(),
-        this.fetchISCNMetadata(),
-      ];
-      if (this.isWritingNFT) promises.push(this.updateNFTPurchaseInfo());
-      await Promise.all(promises);
+      this.updateDisplayNameList(this.iscnOwner);
+      this.updateNFTOwners();
+      this.updateNFTHistory();
+      this.getLIKEPrice();
+      const blockingPromises = [this.fetchISCNMetadata()];
+      if (this.isWritingNFT) {
+        blockingPromises.push(this.updateNFTPurchaseInfo());
+      }
+      await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
         // eslint-disable-next-line no-console
@@ -218,6 +218,7 @@ export default {
     } finally {
       this.isLoading = false;
     }
+
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
       this.handleCollect();
