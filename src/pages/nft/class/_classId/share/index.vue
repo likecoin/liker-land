@@ -89,6 +89,7 @@
             'rounded-[32px]',
 
             'py-[48px]',
+            'px-[12px]',
             'phone:py-[28px]',
 
             'bg-like-cyan-pale',
@@ -96,8 +97,8 @@
             'desktop:col-span-2',
           ]"
         >
-          <Label preset="h3" class="text-like-green font-600" :text="shareTitle" />
-          <div class="w-full max-w-[480px] px-[12px] laptop:p-0">
+          <Label preset="h3" align="center" class="text-like-green font-600" :text="shareTitle" />
+          <div class="w-full max-w-[480px]">
             <div
               class="rounded-[18px] p-[3px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
             >
