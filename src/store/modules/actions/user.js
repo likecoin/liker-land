@@ -1,11 +1,13 @@
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
+import { getNFTQueryClient, amountToLIKE } from '~/util/nft';
 import {
   updateSentryUser,
   updateCrispUser,
   setTrackerUser,
 } from '@/util/EventLogger';
 import { normalizeLocaleForLikeCo } from '@/locales';
+import { LIKECOIN_CHAIN_MIN_DENOM } from '~/constant';
 
 export async function postLoginToken(
   { commit, dispatch },
@@ -76,4 +78,13 @@ export async function updatePreferences(
     if (getters.getUserId)
       await this.$api.$post(api.userPreferences(), preferences);
   }
+}
+
+export async function userFetchAccountBalance({ commit }, address) {
+  const c = await getNFTQueryClient();
+  const client = await c.getQueryClient();
+  const balance = amountToLIKE(
+    await client.bank.balance(address, LIKECOIN_CHAIN_MIN_DENOM)
+  );
+  commit(types.USER_ACCOUNT_BALANCE, balance);
 }

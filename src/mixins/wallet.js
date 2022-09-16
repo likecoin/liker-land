@@ -1,19 +1,13 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { getAccountBalance } from '~/util/nft';
-
 export default {
-  data() {
-    return {
-      balance: 0,
-    };
-  },
   computed: {
     ...mapGetters([
       'getAddress',
       'getSigner',
       'getLikerInfo',
       'walletMethodType',
+      'userAccountBalance',
     ]),
     isWalletUserCivicLiker() {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
@@ -29,7 +23,7 @@ export default {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        if (newAddress) this.fetchWalletBalance(newAddress);
+        if (newAddress) this.userFetchAccountBalance(newAddress);
       },
     },
   },
@@ -39,6 +33,7 @@ export default {
       'disconnectWallet',
       'initIfNecessary',
       'restoreSession',
+      'userFetchAccountBalance',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {
@@ -51,10 +46,6 @@ export default {
           name: 'dashboard',
         });
       }
-    },
-    async fetchWalletBalance() {
-      const balance = await getAccountBalance(this.getAddress);
-      this.balance = Number(balance).toFixed(2);
     },
   },
 };

@@ -65,7 +65,7 @@
               <span
                 class="font-[400]"
                 place="amount"
-              >{{ balance | formatNumberWithLIKE }}</span>
+              >{{ userAccountBalance | formatNumberWithLIKE }}</span>
             </i18n>
           </li>
           <li>
@@ -126,7 +126,7 @@ export default {
       );
     },
     isInsufficientLIKE() {
-      return this.balance < this.nftPriceInLIKE;
+      return this.userAccountBalance < this.nftPriceInLIKE;
     },
   },
   watch: {
