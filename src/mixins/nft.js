@@ -361,6 +361,11 @@ export default {
     },
     async collectNFT() {
       try {
+        logPurchaseFlowEvent(this, 'add_to_cart', {
+          name: this.NFTName,
+          price: this.purchaseInfo.price,
+          classId: this.classId,
+        });
         await this.initIfNecessary();
         this.fetchUserCollectedCount();
         this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
