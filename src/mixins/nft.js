@@ -1,7 +1,12 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
-import { APP_LIKE_CO_VIEW, APP_LIKE_CO_URL_BASE, TX_STATUS } from '~/constant';
+import {
+  APP_LIKE_CO_VIEW,
+  APP_LIKE_CO_URL_BASE,
+  TX_STATUS,
+  LIKECOIN_NFT_API_WALLET,
+} from '~/constant';
 
 import {
   getNFTHistory,
@@ -258,39 +263,34 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      let hasHistoryInDatabase = false;
+      const historyOnChain = await this.getNFTEventsAll();
+      let history = historyOnChain;
+
       if (this.isWritingNFT) {
         try {
           const { data } = await this.$api.get(
             getNFTHistory({ classId: this.classId })
           );
-          this.NFTHistory = data.list;
-          hasHistoryInDatabase = true;
+          const historyInDB = data.list;
+          const eventMap = new Map();
+          historyOnChain
+            .filter(
+              e =>
+                !['new_class', 'mint_nft'].includes(e.event) &&
+                e.toWallet !== LIKECOIN_NFT_API_WALLET
+            )
+            .forEach(e => eventMap.set(`${e.txHash}-${e.nftId}`, e));
+          historyInDB.forEach(
+            e => (eventMap.get(`${e.txHash}-${e.nftId}`).price = e.price)
+          );
+          history = [...eventMap.values()];
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         }
       }
-      if (!hasHistoryInDatabase) {
-        let data;
-        let nextKey;
-        let count;
-        let events = [];
-        do {
-          // eslint-disable-next-line no-await-in-loop
-          ({ data } = await this.$api.get(
-            getNFTEvents({
-              classId: this.classId,
-              key: nextKey,
-              limit: NFT_INDEXER_LIMIT_MAX,
-            })
-          ));
-          nextKey = data.pagination.next_key;
-          ({ count } = data.pagination);
-          events = events.concat(data.events);
-        } while (count === NFT_INDEXER_LIMIT_MAX);
-        this.NFTHistory = formatNFTEventsToHistory(events);
-      }
+      this.NFTHistory = history;
+
       const array = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const list of this.NFTHistory) {
@@ -298,6 +298,26 @@ export default {
       }
       this.updateDisplayNameList([...new Set(array)]);
       this.isHistoryInfoLoading = false;
+    },
+    async getNFTEventsAll() {
+      let data;
+      let nextKey;
+      let count;
+      const events = [];
+      do {
+        // eslint-disable-next-line no-await-in-loop
+        ({ data } = await this.$api.get(
+          getNFTEvents({
+            classId: this.classId,
+            key: nextKey,
+            limit: NFT_INDEXER_LIMIT_MAX,
+          })
+        ));
+        nextKey = data.pagination.next_key;
+        ({ count } = data.pagination);
+        events.push(...data.events);
+      } while (count === NFT_INDEXER_LIMIT_MAX);
+      return formatNFTEventsToHistory(events);
     },
     updateDisplayNameList(addresses) {
       if (!addresses) return null;
