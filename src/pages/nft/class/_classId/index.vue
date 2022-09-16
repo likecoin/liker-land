@@ -128,6 +128,8 @@ export default {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
       this.NFTDescription || this.$t('nft_details_page_description');
+    const ogImage =
+      this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg';
     return {
       title,
       meta: [
@@ -149,11 +151,41 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content:
-            this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg',
+          content: ogImage,
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      script: this.purchaseInfo
+        ? [
+            {
+              hid: 'schema',
+              innerHTML: JSON.stringify([
+                {
+                  '@context': 'http://www.schema.org',
+                  '@type': 'Product',
+                  name: title,
+                  image: [ogImage],
+                  description,
+                  brand: {
+                    '@type': 'Brand',
+                    name: 'Writing NFT',
+                  },
+                  sku: this.classId,
+                  iscn: this.iscnId,
+                  url: this.$route.path,
+                  offers: {
+                    '@type': 'Offer',
+                    price: this.purchaseInfo.price,
+                    priceCurrency: 'LIKE',
+                    availability: 'LimitedAvailability',
+                  },
+                },
+              ]),
+              type: 'application/ld+json',
+              body: true,
+            },
+          ]
+        : [],
     };
   },
   data() {
@@ -197,7 +229,13 @@ export default {
       });
       return;
     }
-    await store.dispatch('fetchNFTMetadata', classId);
+    await Promise.all([
+      store.dispatch('fetchNFTMetadata', classId),
+      store
+        .dispatch('fetchNFTPurchaseInfo', classId)
+        // eslint-disable-next-line no-console
+        .catch(err => JSON.stringify(console.error(err))),
+    ]);
   },
   async mounted() {
     try {
@@ -206,9 +244,6 @@ export default {
       this.updateNFTHistory();
       this.getLIKEPrice();
       const blockingPromises = [this.fetchISCNMetadata()];
-      if (this.isWritingNFT) {
-        blockingPromises.push(this.updateNFTPurchaseInfo());
-      }
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {

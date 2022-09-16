@@ -82,9 +82,10 @@ const nuxtConfig = {
           {
             '@context': 'http://www.schema.org',
             '@type': 'Organization',
-            name: 'Republic of Liker Land',
+            name: 'Liker Land',
             url: 'https://liker.land',
             logo: 'https://liker.land/logo.png',
+            sameAs:['https://www.facebook.com/Liker.Land'],
           },
           {
             '@context': 'http://www.schema.org',
