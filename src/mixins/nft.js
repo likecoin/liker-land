@@ -361,15 +361,14 @@ export default {
     },
     async collectNFT() {
       try {
-        await this.initIfNecessary();
-        this.fetchUserCollectedCount();
-        this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
         logPurchaseFlowEvent(this, 'add_to_cart', {
-          txHash,
           name: this.NFTName,
           price: this.purchaseInfo.price,
           classId: this.classId,
         });
+        await this.initIfNecessary();
+        this.fetchUserCollectedCount();
+        this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
