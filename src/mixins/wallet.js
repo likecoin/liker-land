@@ -7,7 +7,7 @@ export default {
       'getSigner',
       'getLikerInfo',
       'walletMethodType',
-      'userAccountBalance',
+      'walletLIKEBalance',
     ]),
     isWalletUserCivicLiker() {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
@@ -23,7 +23,7 @@ export default {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        if (newAddress) this.userFetchAccountBalance(newAddress);
+        if (newAddress) this.walletFetchLIKEBalance(newAddress);
       },
     },
   },
@@ -33,7 +33,7 @@ export default {
       'disconnectWallet',
       'initIfNecessary',
       'restoreSession',
-      'userFetchAccountBalance',
+      'walletFetchLIKEBalance',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {

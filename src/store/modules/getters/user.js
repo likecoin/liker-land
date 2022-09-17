@@ -10,5 +10,3 @@ export const getUserCivicLikerHalo = ({ user }) => {
 export const getHomeRoute = () => ({
   name: 'index',
 });
-export const userAccountBalance = state =>
-  Number(state.accountBalance).toFixed(2);

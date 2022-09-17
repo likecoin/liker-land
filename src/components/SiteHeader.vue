@@ -87,7 +87,7 @@
             >
               <div
                 class="text-center text-like-green text-[32px] font-600"
-              >{{ userAccountBalance | formatNumber }}</div>
+              >{{ walletLIKEBalance | formatNumber }}</div>
               <div
                 class="text-medium-gray text-[12px] leading-[1]"
               >{{ $t('header_menu_LIKE') }}</div>

@@ -83,7 +83,7 @@ export default {
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
-      'userAccountBalance',
+      'walletLIKEBalance',
     ]),
     isCivicLiker() {
       return !!(
@@ -219,7 +219,7 @@ export default {
       'uiSetCollectedCount',
       'uiSetTxStatus',
       'uiSetTxError',
-      'userFetchAccountBalance',
+      'walletFetchLIKEBalance',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -361,7 +361,7 @@ export default {
       try {
         await this.initIfNecessary();
         this.fetchUserCollectedCount();
-        this.userFetchAccountBalance(this.getAddress);
+        this.walletFetchLIKEBalance(this.getAddress);
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
@@ -378,8 +378,8 @@ export default {
       );
       try {
         if (
-          this.userAccountBalance === 0 ||
-          this.userAccountBalance < this.purchaseInfo.totalPrice
+          this.walletLIKEBalance === 0 ||
+          this.walletLIKEBalance < this.purchaseInfo.totalPrice
         ) {
           logTrackerEvent(
             this,
@@ -450,7 +450,7 @@ export default {
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
-        this.userFetchAccountBalance(this.getAddress);
+        this.walletFetchLIKEBalance(this.getAddress);
       }
     },
     async collectNFTWithStripe() {
@@ -470,8 +470,8 @@ export default {
     async transferNFT() {
       try {
         await this.initIfNecessary();
-        this.userFetchAccountBalance(this.getAddress);
-        if (this.userAccountBalance === 0) {
+        this.walletFetchLIKEBalance(this.getAddress);
+        if (this.walletLIKEBalance === 0) {
           logTrackerEvent(
             this,
             'NFT',
@@ -546,7 +546,7 @@ export default {
         this.updateNFTPurchaseInfo();
         this.updateNFTOwners();
         this.updateNFTHistory();
-        this.userFetchAccountBalance(this.getAddress);
+        this.walletFetchLIKEBalance(this.getAddress);
       }
     },
     goNFTDetails() {
