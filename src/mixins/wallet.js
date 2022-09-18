@@ -23,7 +23,7 @@ export default {
     getAddress: {
       immediate: true,
       handler(newAddress) {
-        if (newAddress) this.walletFetchLIKEBalance(newAddress);
+        if (newAddress) this.walletFetchLIKEBalance();
       },
     },
   },

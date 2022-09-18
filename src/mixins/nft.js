@@ -361,7 +361,7 @@ export default {
       try {
         await this.initIfNecessary();
         this.fetchUserCollectedCount();
-        this.walletFetchLIKEBalance(this.getAddress);
+        this.walletFetchLIKEBalance();
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
@@ -450,7 +450,7 @@ export default {
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
-        this.walletFetchLIKEBalance(this.getAddress);
+        this.walletFetchLIKEBalance();
       }
     },
     async collectNFTWithStripe() {
@@ -470,7 +470,7 @@ export default {
     async transferNFT() {
       try {
         await this.initIfNecessary();
-        this.walletFetchLIKEBalance(this.getAddress);
+        this.walletFetchLIKEBalance();
         if (this.walletLIKEBalance === 0) {
           logTrackerEvent(
             this,
@@ -546,7 +546,7 @@ export default {
         this.updateNFTPurchaseInfo();
         this.updateNFTOwners();
         this.updateNFTHistory();
-        this.walletFetchLIKEBalance(this.getAddress);
+        this.walletFetchLIKEBalance();
       }
     },
     goNFTDetails() {

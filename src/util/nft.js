@@ -110,16 +110,6 @@ export async function signTransferNFT({
   return signData;
 }
 
-export function amountToLIKE(likecoin) {
-  if (!likecoin) return -1;
-  if (likecoin.denom === LIKECOIN_CHAIN_MIN_DENOM) {
-    return new BigNumber(likecoin.amount).dividedBy(1e9).toFixed();
-  }
-  // eslint-disable-next-line no-console
-  console.error(`${likecoin.denom} is not supported denom`);
-  return -1;
-}
-
 export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;
 
 export function isValidHttpUrl(string) {
