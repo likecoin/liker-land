@@ -223,13 +223,13 @@ export default {
           // `fetchNFTOwners` might take longer to return the most updated collectors
           // causing `firstCollectedNFTId` to be undefined or collectors list out-sync
           // Should keep fetching if the user just collected the NFT but not found in the collectors list
-          let trys = 0;
-          while (!this.firstCollectedNFTId && trys < 10) {
+          let tries = 0;
+          while (!this.firstCollectedNFTId && tries < 10) {
             // eslint-disable-next-line no-await-in-loop
             await this.updateNFTOwners();
             // eslint-disable-next-line no-await-in-loop
             await sleep(3000);
-            trys += 1;
+            tries += 1;
           }
           this.nftCollectorsSync = undefined;
           resolve();
