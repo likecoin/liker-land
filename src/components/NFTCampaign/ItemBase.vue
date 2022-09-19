@@ -63,7 +63,7 @@
                 <span class="laptop:ml-[8px]">{{ ownerCountLabel }}</span>
               </div>
             </li>
-            <li class="laptop:min-w-[80px]">
+            <li v-if="ownCount" class="laptop:min-w-[80px]">
               <div class="text-[24px] leading-[1.5] font-600 text-like-green">{{ ownCount }}</div>
               <div class="mt-[4px] flex items-center text-[12px] leading-[5/3] font-600 text-like-green">
                 <IconCheck class="w-[16px] hidden laptop:block" />
