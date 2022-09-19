@@ -67,7 +67,7 @@
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
         <div v-if="ownCount" class="flex items-center text-like-green">
-          <span>OWN</span>&nbsp;
+          <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
           <span>{{ ownCount }}</span>
         </div>
       </div>
