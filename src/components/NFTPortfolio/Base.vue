@@ -57,7 +57,7 @@
           </template>
         </ButtonV2>
       </div>
-      <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px]">
+      <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
         <div class="flex items-center text-medium-gray">
           <IconMint />
           <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -66,9 +66,9 @@
           <IconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
-        <div v-if="ownCount" class="flex items-center text-[14px]">
-          <span class="text-like-green">OWN</span>&nbsp;
-          <span class="text-medium-gray">{{ ownCount }}</span>
+        <div v-if="ownCount" class="flex items-center text-like-green">
+          <span>OWN</span>&nbsp;
+          <span>{{ ownCount }}</span>
         </div>
       </div>
     </div>
