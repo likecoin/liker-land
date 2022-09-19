@@ -506,7 +506,7 @@ export default {
     async transferNFT() {
       try {
         await this.initIfNecessary();
-        this.walletFetchLIKEBalance();
+        await this.walletFetchLIKEBalance();
         if (this.walletLIKEBalance === 0) {
           logTrackerEvent(
             this,
