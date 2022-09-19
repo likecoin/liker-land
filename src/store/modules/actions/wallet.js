@@ -2,7 +2,7 @@ import { LikeCoinWalletConnector } from '@likecoin/wallet-connector';
 
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
-import { fetchLIKEBalance } from '~/util/wallet';
+import { getAccountBalance } from '~/util/nft';
 import { getAddressLikerIdMinApi } from '~/util/api';
 
 export async function initWallet(
@@ -83,6 +83,6 @@ export async function initIfNecessary({ dispatch }) {
 
 export async function walletFetchLIKEBalance({ commit, state }) {
   const { address } = state;
-  const balance = await fetchLIKEBalance(address);
+  const balance = await getAccountBalance(address);
   commit(types.WALLET_LIKE_BALANCE, balance);
 }

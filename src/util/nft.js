@@ -112,6 +112,24 @@ export async function signTransferNFT({
 
 export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;
 
+export function amountToLIKE(likecoin) {
+  if (!likecoin) return -1;
+  if (likecoin.denom === LIKECOIN_CHAIN_MIN_DENOM) {
+    return new BigNumber(likecoin.amount).dividedBy(1e9).toFixed();
+  }
+  // eslint-disable-next-line no-console
+  console.error(`${likecoin.denom} is not supported denom`);
+  return -1;
+}
+
+export async function getAccountBalance(address) {
+  const c = await getNFTQueryClient();
+  const client = await c.getQueryClient();
+  return amountToLIKE(
+    await client.bank.balance(address, LIKECOIN_CHAIN_MIN_DENOM)
+  );
+}
+
 export function isValidHttpUrl(string) {
   try {
     const url = new URL(string);
