@@ -66,6 +66,10 @@
           <IconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
+        <div v-if="ownCount" class="flex items-center text-[14px]">
+          <span class="text-like-green">OWN</span>&nbsp;
+          <span class="text-medium-gray">{{ ownCount }}</span>
+        </div>
       </div>
     </div>
   </NFTPortfolioCard>
@@ -123,6 +127,10 @@ export default {
     isUserCivicLiker: {
       type: Boolean,
       default: false,
+    },
+    ownCount: {
+      type: Number,
+      default: 0,
     },
   },
   methods: {

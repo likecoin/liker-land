@@ -16,6 +16,7 @@
       :is-user-civic-liker="civicLikerList[iscnOwner]"
       :image-src="NFTImageUrl"
       :is-collecting="uiIsOpenCollectModal && isCollecting"
+      :own-count="ownCount"
       @collect="handleClickCollect"
     />
   </NuxtLink>

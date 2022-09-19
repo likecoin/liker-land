@@ -189,6 +189,12 @@ export default {
         collectedCount: this.ownerList[id].length,
       }));
     },
+    ownCount() {
+      const arr = this.populatedCollectors.filter(
+        ({ id }) => id === this.getAddress
+      );
+      return arr[0]?.collectedCount || 0;
+    },
     firstOwnedNFTId() {
       const ownNFT = this.ownerList[this.getAddress];
       return ownNFT[0];
