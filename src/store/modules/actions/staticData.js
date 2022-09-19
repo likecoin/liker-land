@@ -6,6 +6,8 @@ import {
   formatOwnerInfoFromChain,
 } from '@/util/nft';
 
+const USER_INFO_EXPIRE_TIME = 1000 * 60 * 10; // 10 minutes
+
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
   let types = [];
@@ -15,18 +17,48 @@ export async function fetchUserInfo({ commit, state }, opts) {
     id = opts;
   }
   let promise;
-  let user;
+  let userInfo;
   if (state.fetching.user[id]) {
     promise = state.fetching.user[id];
-    user = await promise;
+    userInfo = await promise;
   } else {
     promise = this.$api.$get(api.getUserMinAPI(id, { types }));
     commit(TYPES.STATIC_SET_USER_FETCHING, { id, payload: promise });
-    user = await promise;
-    commit(TYPES.STATIC_SET_USER_INFO, { id, user });
+    userInfo = await promise;
+    commit(TYPES.STATIC_SET_USER_INFO_BY_ID, { id, userInfo });
     commit(TYPES.STATIC_SET_USER_FETCHING, { id, payload: null });
   }
-  return user;
+  return userInfo;
+}
+
+export async function fetchUserInfoByAddress({ commit }, address) {
+  let userInfo = {
+    displayName: address,
+    avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
+  };
+  commit(TYPES.STATIC_SET_USER_INFO_BY_ADDRESS, { address, userInfo });
+  commit(TYPES.STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP, {
+    address,
+    timestamp: Date.now(),
+  });
+  try {
+    userInfo = await this.$api.$get(api.getUserMinByAddress(address));
+    commit(TYPES.STATIC_SET_USER_INFO_BY_ADDRESS, { address, userInfo });
+    const { user: id } = userInfo;
+    if (id) commit(TYPES.STATIC_SET_USER_INFO_BY_ID, { id, userInfo });
+  } catch (error) {
+    // no-op
+  }
+  return userInfo;
+}
+
+export async function lazyGetUserInfoByAddress({ getters, dispatch }, address) {
+  let userInfo = getters.getUserInfoByAddress(address);
+  const lastQueryTimestamp = getters.getUserInfoLastQueryTimestamp(address);
+  if (!userInfo || Date.now() > lastQueryTimestamp + USER_INFO_EXPIRE_TIME) {
+    userInfo = await dispatch('fetchUserInfoByAddress', address);
+  }
+  return userInfo;
 }
 
 export async function fetchArticleInfo({ commit }, referrer) {

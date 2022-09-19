@@ -1,6 +1,12 @@
 import { isWritingNFT } from '~/util/nft';
 
-export const getUserInfoById = state => id => state.userInfos[id];
+export const getUserInfoById = state => id => state.userInfosById[id];
+
+export const getUserInfoByAddress = state => address =>
+  state.userInfosByAddress[address];
+
+export const getUserInfoLastQueryTimestamp = state => address =>
+  state.userInfoLastQueryTimestamps[address];
 
 export const getArticleInfoByReferrer = state => referrer =>
   state.articleInfos[referrer];

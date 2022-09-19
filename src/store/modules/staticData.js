@@ -3,7 +3,9 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 
 import {
-  STATIC_SET_USER_INFO,
+  STATIC_SET_USER_INFO_BY_ID,
+  STATIC_SET_USER_INFO_BY_ADDRESS,
+  STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP,
   STATIC_SET_ARTICLE_INFO,
   STATIC_SET_USER_FETCHING,
   STATIC_SET_NFT_CLASS_PURCHASE_INFO,
@@ -14,7 +16,9 @@ import * as getters from './getters/staticData';
 import * as actions from './actions/staticData';
 
 const state = () => ({
-  userInfos: {},
+  userInfosById: {},
+  userInfosByAddress: {},
+  userInfoLastQueryTimestamps: {},
   articleInfos: {},
   nftClassPurchaseInfo: {},
   nftClassMetadata: {},
@@ -26,8 +30,14 @@ const state = () => ({
 });
 
 const mutations = {
-  [STATIC_SET_USER_INFO](state, { id, user }) {
-    Vue.set(state.userInfos, id, user);
+  [STATIC_SET_USER_INFO_BY_ID](state, { id, userInfo }) {
+    Vue.set(state.userInfosById, id, userInfo);
+  },
+  [STATIC_SET_USER_INFO_BY_ADDRESS](state, { address, userInfo }) {
+    Vue.set(state.userInfosByAddress, address, userInfo);
+  },
+  [STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP](state, { address, timestamp }) {
+    Vue.set(state.userInfoLastQueryTimestamps, address, timestamp);
   },
   [STATIC_SET_ARTICLE_INFO](state, { referrer, info }) {
     Vue.set(state.articleInfos, referrer, info);

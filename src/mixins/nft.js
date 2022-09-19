@@ -12,7 +12,6 @@ import {
   getNFTHistory,
   postNFTPurchase,
   postNFTTransfer,
-  getAddressLikerIdMinApi,
   getNFTEvents,
   postNewStripeFiatPayment,
   getStripeFiatPrice,
@@ -57,11 +56,7 @@ export default {
   },
   data() {
     return {
-      iscnOwnerInfo: {},
       NFTHistory: [],
-      displayNameList: {},
-      avatarList: {},
-      civicLikerList: {},
 
       userCollectedCount: undefined,
 
@@ -76,6 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserInfoByAddress',
       'getNFTClassPurchaseInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
@@ -86,6 +82,9 @@ export default {
       'uiTxNFTStatus',
       'walletLIKEBalance',
     ]),
+    iscnOwnerInfo() {
+      return this.getUserInfoByAddress(this.iscnOwner) || {};
+    },
     isCivicLiker() {
       return !!(
         this.iscnOwnerInfo &&
@@ -113,12 +112,12 @@ export default {
     },
     iscnOwnerAvatar() {
       return (
-        this.avatarList[this.iscnOwner] ||
+        this.iscnOwnerInfo.avatar ||
         `https://avatars.dicebear.com/api/identicon/${this.iscnOwner}.svg`
       );
     },
     iscnOwnerDisplayName() {
-      return this.displayNameList[this.iscnOwner];
+      return this.iscnOwnerInfo.displayName;
     },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
@@ -175,15 +174,18 @@ export default {
     populatedEvents() {
       return this.NFTHistory.map(event => ({
         ...event,
-        toDisplayName: this.displayNameList[event.toWallet] || event.toWallet,
+        toDisplayName:
+          this.getUserInfoByAddress(event.toWallet)?.displayName ||
+          event.toWallet,
         fromDisplayName:
-          this.displayNameList[event.fromWallet] || event.fromWallet,
+          this.getUserInfoByAddress(event.fromWallet)?.displayName ||
+          event.fromWallet,
       }));
     },
     populatedCollectors() {
       return this.sortedOwnerListId.map(id => ({
         id,
-        displayName: this.displayNameList[id] || id,
+        displayName: this.getUserInfoByAddress(id)?.displayName || id,
         collectedCount: this.ownerList[id].length,
       }));
     },
@@ -242,6 +244,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'lazyGetUserInfoByAddress',
       'fetchNFTPurchaseInfo',
       'fetchNFTMetadata',
       'fetchNFTOwners',
@@ -351,29 +354,11 @@ export default {
     updateDisplayNameList(addresses) {
       if (!addresses) return null;
       if (typeof addresses === 'string') {
-        return this.getAddressLikerId(addresses);
+        return this.lazyGetUserInfoByAddress(addresses);
       }
-      return Promise.all(addresses.map(this.getAddressLikerId));
-    },
-    async getAddressLikerId(addr) {
-      try {
-        const { data } = await this.$api.get(getAddressLikerIdMinApi(addr));
-        Vue.set(this.displayNameList, addr, data.displayName);
-        Vue.set(
-          this.avatarList,
-          addr,
-          data.avatar ||
-            `https://avatars.dicebear.com/api/identicon/${addr}.svg`
-        );
-        Vue.set(this.civicLikerList, addr, data.isSubscribedCivicLiker);
-      } catch (error) {
-        Vue.set(this.displayNameList, addr, addr);
-        Vue.set(
-          this.avatarList,
-          addr,
-          `https://avatars.dicebear.com/api/identicon/${addr}.svg`
-        );
-      }
+      return Promise.all(
+        addresses.map(address => this.lazyGetUserInfoByAddress(address))
+      );
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {
