@@ -1,3 +1,3 @@
-import writingNFT from './campaign-writing-nft';
+import index from './any';
 
-export default [writingNFT];
+export default [index];
