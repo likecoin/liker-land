@@ -140,7 +140,7 @@ export default {
       return this.NFTClassMetadata.external_url;
     },
     NFTPrice() {
-      return this.purchaseInfo.price && this.purchaseInfo.price;
+      return this.purchaseInfo.price;
     },
     formattedNFTPriceInLIKE() {
       return this.nftPriceInLIKE !== undefined
@@ -186,6 +186,12 @@ export default {
         displayName: this.displayNameList[id] || id,
         collectedCount: this.ownerList[id].length,
       }));
+    },
+    ownCount() {
+      const arr = this.populatedCollectors.filter(
+        ({ id }) => id === this.getAddress
+      );
+      return arr[0]?.collectedCount || 0;
     },
     firstCollectedNFTId() {
       const ownNFT = this.ownerList[this.getAddress];
