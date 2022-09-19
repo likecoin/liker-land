@@ -41,7 +41,7 @@
               class="rounded-b-[0]"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
-              :is-disabled="isInsufficientLIKE || walletMethodType === 'keplr-mobile'"
+              :is-disabled="isInsufficientLIKE || !canPayByLIKE"
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
             />
@@ -127,6 +127,11 @@ export default {
     },
     isInsufficientLIKE() {
       return this.walletLIKEBalance < this.nftPriceInLIKE;
+    },
+    canPayByLIKE() {
+      return !['cosmostation-mobile', 'keplr-mobile'].includes(
+        this.walletMethodType
+      );
     },
   },
   watch: {
