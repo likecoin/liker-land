@@ -23,9 +23,7 @@ export async function initWallet(
   commit(types.WALLET_SET_ADDRESS, walletAddress);
   commit(types.WALLET_SET_SIGNER, offlineSigner);
   try {
-    const userInfo = await this.$api.$get(
-      getUserMinByAddress(walletAddress)
-    );
+    const userInfo = await this.$api.$get(getUserMinByAddress(walletAddress));
     commit(types.WALLET_SET_LIKERINFO, userInfo);
   } catch (err) {
     const msg = (err.response && err.response.data) || err;
