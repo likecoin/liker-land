@@ -110,6 +110,8 @@ export async function signTransferNFT({
   return signData;
 }
 
+export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;
+
 export function amountToLIKE(likecoin) {
   if (!likecoin) return -1;
   if (likecoin.denom === LIKECOIN_CHAIN_MIN_DENOM) {
@@ -127,8 +129,6 @@ export async function getAccountBalance(address) {
     await client.bank.balance(address, LIKECOIN_CHAIN_MIN_DENOM)
   );
 }
-
-export const LIKE_ADDRESS_REGEX = /^like1[ac-hj-np-z02-9]{38}$/;
 
 export function isValidHttpUrl(string) {
   try {

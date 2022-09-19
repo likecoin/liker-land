@@ -18,8 +18,8 @@ import {
   getStripeFiatPrice,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
+import { sleep } from '~/util/misc';
 import {
-  getAccountBalance,
   signTransferNFT,
   signGrant,
   broadcastTx,
@@ -72,9 +72,6 @@ export default {
 
       nftPriceInLIKE: undefined,
       nftPriceInUSD: undefined,
-
-      // TODO: Move to VueX store
-      userAccountBalanceFetch: undefined,
     };
   },
   computed: {
@@ -87,6 +84,7 @@ export default {
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
+      'walletLIKEBalance',
     ]),
     isCivicLiker() {
       return !!(
@@ -142,7 +140,7 @@ export default {
       return this.NFTClassMetadata.external_url;
     },
     NFTPrice() {
-      return this.purchaseInfo.price && this.purchaseInfo.price;
+      return this.purchaseInfo.price;
     },
     formattedNFTPriceInLIKE() {
       return this.nftPriceInLIKE !== undefined
@@ -195,9 +193,9 @@ export default {
       );
       return arr[0]?.collectedCount || 0;
     },
-    firstOwnedNFTId() {
+    firstCollectedNFTId() {
       const ownNFT = this.ownerList[this.getAddress];
-      return ownNFT[0];
+      return ownNFT?.[0];
     },
     nftDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
@@ -217,6 +215,30 @@ export default {
         this.fetchUserCollectedCount();
       }
     },
+    userCollectedCount(newCount, oldCount) {
+      if (
+        newCount === 1 &&
+        oldCount === 0 &&
+        !this.firstCollectedNFTId &&
+        !this.nftCollectorsSync
+      ) {
+        this.nftCollectorsSync = new Promise(async resolve => {
+          // `fetchNFTOwners` might take longer to return the most updated collectors
+          // causing `firstCollectedNFTId` to be undefined or collectors list out-sync
+          // Should keep fetching if the user just collected the NFT but not found in the collectors list
+          let tries = 0;
+          while (!this.firstCollectedNFTId && tries < 10) {
+            // eslint-disable-next-line no-await-in-loop
+            await this.updateNFTOwners();
+            // eslint-disable-next-line no-await-in-loop
+            await sleep(3000);
+            tries += 1;
+          }
+          this.nftCollectorsSync = undefined;
+          resolve();
+        });
+      }
+    },
   },
   methods: {
     ...mapActions([
@@ -228,6 +250,7 @@ export default {
       'uiSetCollectedCount',
       'uiSetTxStatus',
       'uiSetTxError',
+      'walletFetchLIKEBalance',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -374,7 +397,7 @@ export default {
         });
         await this.initIfNecessary();
         this.fetchUserCollectedCount();
-        this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
+        this.walletFetchLIKEBalance();
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
@@ -389,9 +412,11 @@ export default {
         this.classId,
         1
       );
-      const balance = await this.userAccountBalanceFetch;
       try {
-        if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
+        if (
+          this.walletLIKEBalance === 0 ||
+          this.walletLIKEBalance < this.purchaseInfo.totalPrice
+        ) {
           logTrackerEvent(
             this,
             'NFT',
@@ -461,6 +486,7 @@ export default {
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
+        this.walletFetchLIKEBalance();
       }
     },
     async collectNFTWithStripe() {
@@ -480,8 +506,8 @@ export default {
     async transferNFT() {
       try {
         await this.initIfNecessary();
-        const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') {
+        this.walletFetchLIKEBalance();
+        if (this.walletLIKEBalance === 0) {
           logTrackerEvent(
             this,
             'NFT',
@@ -492,6 +518,12 @@ export default {
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
           return;
+        }
+
+        // Wait for collectors sync for getting `firstCollectedNFTId`
+        if (this.nftCollectorsSync) {
+          this.uiSetTxStatus(TX_STATUS.PROCESSING);
+          await this.nftCollectorsSync;
         }
 
         this.uiSetTxStatus(TX_STATUS.SIGN);
@@ -506,7 +538,7 @@ export default {
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
           classId: this.classId,
-          nftId: this.firstOwnedNFTId,
+          nftId: this.firstCollectedNFTId,
           signer: this.getSigner,
         });
         logTrackerEvent(
@@ -537,7 +569,7 @@ export default {
           postNFTTransfer({
             txHash,
             classId: this.classId,
-            nftId: this.firstOwnedNFTId,
+            nftId: this.firstCollectedNFTId,
           })
         );
         logTrackerEvent(
@@ -556,6 +588,7 @@ export default {
         this.updateNFTPurchaseInfo();
         this.updateNFTOwners();
         this.updateNFTHistory();
+        this.walletFetchLIKEBalance();
       }
     },
     goNFTDetails() {
