@@ -243,6 +243,7 @@ export default {
       this.updateNFTOwners();
       this.updateNFTHistory();
       this.getLIKEPrice();
+      this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
     } catch (error) {
