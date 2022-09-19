@@ -18,6 +18,7 @@ import {
   getStripeFiatPrice,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
+import { sleep } from '~/util/misc';
 import {
   signTransferNFT,
   signGrant,
@@ -186,9 +187,9 @@ export default {
         collectedCount: this.ownerList[id].length,
       }));
     },
-    firstOwnedNFTId() {
+    firstCollectedNFTId() {
       const ownNFT = this.ownerList[this.getAddress];
-      return ownNFT[0];
+      return ownNFT?.[0];
     },
     nftDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
@@ -206,6 +207,30 @@ export default {
         status === TX_STATUS.COMPLETED
       ) {
         this.fetchUserCollectedCount();
+      }
+    },
+    userCollectedCount(newCount, oldCount) {
+      if (
+        newCount === 1 &&
+        oldCount === 0 &&
+        !this.firstCollectedNFTId &&
+        !this.nftCollectorsSync
+      ) {
+        this.nftCollectorsSync = new Promise(async resolve => {
+          // `fetchNFTOwners` might take longer to return the most updated collectors
+          // causing `firstCollectedNFTId` to be undefined or collectors list out-sync
+          // Should keep fetching if the user just collected the NFT but not found in the collectors list
+          let tries = 0;
+          while (!this.firstCollectedNFTId && tries < 10) {
+            // eslint-disable-next-line no-await-in-loop
+            await this.updateNFTOwners();
+            // eslint-disable-next-line no-await-in-loop
+            await sleep(3000);
+            tries += 1;
+          }
+          this.nftCollectorsSync = undefined;
+          resolve();
+        });
       }
     },
   },
@@ -489,6 +514,12 @@ export default {
           return;
         }
 
+        // Wait for collectors sync for getting `firstCollectedNFTId`
+        if (this.nftCollectorsSync) {
+          this.uiSetTxStatus(TX_STATUS.PROCESSING);
+          await this.nftCollectorsSync;
+        }
+
         this.uiSetTxStatus(TX_STATUS.SIGN);
         logTrackerEvent(
           this,
@@ -501,7 +532,7 @@ export default {
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
           classId: this.classId,
-          nftId: this.firstOwnedNFTId,
+          nftId: this.firstCollectedNFTId,
           signer: this.getSigner,
         });
         logTrackerEvent(
@@ -532,7 +563,7 @@ export default {
           postNFTTransfer({
             txHash,
             classId: this.classId,
-            nftId: this.firstOwnedNFTId,
+            nftId: this.firstCollectedNFTId,
           })
         );
         logTrackerEvent(
