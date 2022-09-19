@@ -287,11 +287,8 @@ export default {
         console.error(error);
       }
     },
-    async updateNFTOwners() {
-      await this.fetchNFTOwners(this.classId);
-      this.updateDisplayNameList(
-        Object.keys(this.getNFTClassOwnerInfoById(this.classId))
-      );
+    updateNFTOwners() {
+      this.fetchNFTOwners(this.classId);
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
