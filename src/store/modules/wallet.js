@@ -6,6 +6,7 @@ import {
   WALLET_SET_CONNECTOR,
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
+  WALLET_LIKE_BALANCE,
 } from '../mutation-types';
 
 import * as getters from './getters/wallet';
@@ -18,6 +19,7 @@ const state = () => ({
   likerInfo: null,
   isInited: null,
   methodType: null,
+  likeBalance: null,
 });
 
 const mutations = {
@@ -35,6 +37,9 @@ const mutations = {
   },
   [WALLET_SET_LIKERINFO](state, likerInfo) {
     state.likerInfo = likerInfo;
+  },
+  [WALLET_LIKE_BALANCE](state, likeBalance) {
+    state.likeBalance = likeBalance;
   },
 };
 

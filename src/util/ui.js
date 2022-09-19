@@ -1,4 +1,6 @@
-const smallNumFormatter = new Intl.NumberFormat('en-US');
+const smallNumFormatter = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 2,
+});
 
 const largeNumFormatter = new Intl.NumberFormat('en-US', {
   notation: 'compact',

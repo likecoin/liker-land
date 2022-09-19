@@ -19,7 +19,6 @@ import {
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
-  getAccountBalance,
   signTransferNFT,
   signGrant,
   broadcastTx,
@@ -72,9 +71,6 @@ export default {
 
       nftPriceInLIKE: undefined,
       nftPriceInUSD: undefined,
-
-      // TODO: Move to VueX store
-      userAccountBalanceFetch: undefined,
     };
   },
   computed: {
@@ -87,6 +83,7 @@ export default {
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
+      'walletLIKEBalance',
     ]),
     isCivicLiker() {
       return !!(
@@ -222,6 +219,7 @@ export default {
       'uiSetCollectedCount',
       'uiSetTxStatus',
       'uiSetTxError',
+      'walletFetchLIKEBalance',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -368,7 +366,7 @@ export default {
         });
         await this.initIfNecessary();
         this.fetchUserCollectedCount();
-        this.userAccountBalanceFetch = getAccountBalance(this.getAddress);
+        this.walletFetchLIKEBalance();
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
@@ -383,9 +381,11 @@ export default {
         this.classId,
         1
       );
-      const balance = await this.userAccountBalanceFetch;
       try {
-        if (balance === '0' || Number(balance) < this.purchaseInfo.totalPrice) {
+        if (
+          this.walletLIKEBalance === 0 ||
+          this.walletLIKEBalance < this.purchaseInfo.totalPrice
+        ) {
           logTrackerEvent(
             this,
             'NFT',
@@ -455,6 +455,7 @@ export default {
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
+        this.walletFetchLIKEBalance();
       }
     },
     async collectNFTWithStripe() {
@@ -474,8 +475,8 @@ export default {
     async transferNFT() {
       try {
         await this.initIfNecessary();
-        const balance = await getAccountBalance(this.getAddress);
-        if (balance === '0') {
+        this.walletFetchLIKEBalance();
+        if (this.walletLIKEBalance === 0) {
           logTrackerEvent(
             this,
             'NFT',
@@ -550,6 +551,7 @@ export default {
         this.updateNFTPurchaseInfo();
         this.updateNFTOwners();
         this.updateNFTHistory();
+        this.walletFetchLIKEBalance();
       }
     },
     goNFTDetails() {
