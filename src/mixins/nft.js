@@ -288,7 +288,7 @@ export default {
       }
     },
     updateNFTOwners() {
-      this.fetchNFTOwners(this.classId);
+      return this.fetchNFTOwners(this.classId);
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;

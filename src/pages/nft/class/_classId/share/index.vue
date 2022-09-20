@@ -239,7 +239,7 @@ export default {
     };
   },
   computed: {
-    ...mapActions(['fetchUserInfoById']),
+    ...mapActions(['fetchUserInfoByAddress']),
     classId() {
       return this.$route.params.classId;
     },
@@ -333,7 +333,7 @@ export default {
     },
     async updateReferrerInfo() {
       try {
-        const referrerInfo = await this.fetchUserInfoById(this.referrer);
+        const referrerInfo = await this.fetchUserInfoByAddress(this.referrer);
         this.referrerInfo = referrerInfo.data;
       } catch (error) {
         // no need to handle error
