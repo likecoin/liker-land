@@ -179,7 +179,7 @@ export default {
         try {
           const userInfo = await store.dispatch('fetchUserInfoByAddress', id);
           return {
-            userInfo: userInfo.data,
+            userInfo,
             wallet: id,
           };
         } catch (error) {
