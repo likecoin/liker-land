@@ -254,6 +254,7 @@ export default {
       'uiSetTxStatus',
       'uiSetTxError',
       'walletFetchLIKEBalance',
+      'updateUserNFTList',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -470,6 +471,7 @@ export default {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
+        this.updateUserNFTList(this.getAddress);
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();

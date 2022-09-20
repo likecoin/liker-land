@@ -1,10 +1,11 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
+import { getNFTs } from '~/util/nft';
+import { getUserSellNFTClasses } from '@/util/api';
 
-import { NFT_SET_USER_CLASSID_LIST } from '../mutation-types';
+const axios = require('axios');
 
-import * as getters from './getters/nft';
-import * as actions from './actions/nft';
+const NFT_SET_USER_CLASSID_LIST = 'NFT_SET_USER_CLASSID_LIST';
 
 const state = () => ({
   userClassIdList: {},
@@ -13,6 +14,29 @@ const state = () => ({
 const mutations = {
   [NFT_SET_USER_CLASSID_LIST](state, { address, nfts }) {
     Vue.set(state.userClassIdList, address, nfts);
+  },
+};
+
+const getters = {
+  NFTClassIdList: state => state.userClassIdList,
+  NFTClassIdsByAddress: state => address => state.userClassIdList[address],
+};
+
+const actions = {
+  updateUserNFTList: async ({ commit }, address) => {
+    const { nfts } = await getNFTs({ owner: address });
+    const collectedIds = nfts?.map(n => n?.classId);
+    const { data } = await axios.get(
+      getUserSellNFTClasses({ wallet: address })
+    );
+    const createdIds = data?.list;
+    commit(NFT_SET_USER_CLASSID_LIST, {
+      address,
+      nfts: {
+        created: createdIds,
+        collected: collectedIds,
+      },
+    });
   },
 };
 

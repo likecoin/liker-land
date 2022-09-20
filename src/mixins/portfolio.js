@@ -1,7 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { getUserSellNFTClasses } from '~/util/api';
-import { getNFTs } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
 
@@ -92,6 +90,7 @@ export default {
       if (!this.sortedCreatedClassIds.length) {
         this.currentTab = 'collected';
       }
+      this.updateUserNFTList(address);
     },
     goCollected() {
       this.currentTab = 'collected';
