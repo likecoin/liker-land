@@ -17,8 +17,8 @@ import * as actions from './actions/staticData';
 
 const state = () => ({
   userInfosById: {},
-  userInfosByAddress: {},
-  userInfoLastQueryTimestamps: {},
+  userInfoMapByAddress: {},
+  userInfoLastQueryTimestampMap: {},
   articleInfos: {},
   nftClassPurchaseInfo: {},
   nftClassMetadata: {},
@@ -34,10 +34,10 @@ const mutations = {
     Vue.set(state.userInfosById, id, userInfo);
   },
   [STATIC_SET_USER_INFO_BY_ADDRESS](state, { address, userInfo }) {
-    Vue.set(state.userInfosByAddress, address, userInfo);
+    Vue.set(state.userInfoMapByAddress, address, userInfo);
   },
   [STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP](state, { address, timestamp }) {
-    Vue.set(state.userInfoLastQueryTimestamps, address, timestamp);
+    Vue.set(state.userInfoLastQueryTimestampMap, address, timestamp);
   },
   [STATIC_SET_ARTICLE_INFO](state, { referrer, info }) {
     Vue.set(state.articleInfos, referrer, info);

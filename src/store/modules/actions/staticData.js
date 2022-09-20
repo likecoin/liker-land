@@ -37,7 +37,7 @@ export async function fetchUserInfoByAddress({ commit }, address) {
     avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
   };
   try {
-    userInfo = await this.$api.$get(api.getUserMinByAddress(address));
+    userInfo = await this.$api.$get(api.getUserInfoMinByAddress(address));
   } catch (error) {
     // no-op
   }

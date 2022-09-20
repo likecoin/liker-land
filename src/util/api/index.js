@@ -97,7 +97,7 @@ export const getUserMinAPI = (id, { types = [] } = {}) =>
   `${LIKECOIN_API_BASE}/users/id/${id}/min?${querystring.stringify({
     type: types.join(','),
   })}`;
-export const getUserMinByAddress = addr =>
+export const getUserInfoMinByAddress = addr =>
   `${LIKECOIN_API_BASE}/users/addr/${addr}/min`;
 export const getArticleDetailAPI = ({ url = '', iscnId = '' }) =>
   `${LIKECOIN_API_BASE}/like/info?iscn_id=${encodeURIComponent(

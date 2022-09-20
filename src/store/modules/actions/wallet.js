@@ -3,7 +3,7 @@ import { LikeCoinWalletConnector } from '@likecoin/wallet-connector';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
-import { getUserMinByAddress } from '~/util/api';
+import { getUserInfoMinByAddress } from '~/util/api';
 
 export async function initWallet(
   { commit, dispatch },
@@ -23,7 +23,9 @@ export async function initWallet(
   commit(types.WALLET_SET_ADDRESS, walletAddress);
   commit(types.WALLET_SET_SIGNER, offlineSigner);
   try {
-    const userInfo = await this.$api.$get(getUserMinByAddress(walletAddress));
+    const userInfo = await this.$api.$get(
+      getUserInfoMinByAddress(walletAddress)
+    );
     commit(types.WALLET_SET_LIKERINFO, userInfo);
   } catch (err) {
     const msg = (err.response && err.response.data) || err;
