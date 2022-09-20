@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import { getUserMinAPI, getAddressLikerIdMinApi } from '~/util/api';
+import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
@@ -169,7 +169,7 @@ export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
-  async asyncData({ route, $api, error }) {
+  async asyncData({ route, $api, error, store }) {
     let { id } = route.params;
     if (id && isValidAddress(id)) {
       if (id.startsWith('cosmos1')) {
@@ -177,11 +177,9 @@ export default {
       }
       if (id.startsWith('like1')) {
         try {
-          const userInfo = await $api.get(getAddressLikerIdMinApi(id), {
-            validateStatus: code => code < 500 && code !== 400,
-          });
+          const userInfo = await store.dispatch('fetchUserInfoByAddress', id);
           return {
-            userInfo: userInfo.data,
+            userInfo,
             wallet: id,
           };
         } catch (error) {

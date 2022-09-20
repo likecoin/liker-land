@@ -181,9 +181,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import { LIKECOIN_BUTTON_BASE } from '~/constant';
 
-import { getAddressLikerIdMinApi } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
@@ -238,6 +239,7 @@ export default {
     };
   },
   computed: {
+    ...mapActions(['fetchUserInfoByAddress']),
     classId() {
       return this.$route.params.classId;
     },
@@ -331,12 +333,7 @@ export default {
     },
     async updateReferrerInfo() {
       try {
-        const referrerInfo = await this.$api.get(
-          getAddressLikerIdMinApi(this.referrer),
-          {
-            validateStatus: code => code < 500 && code !== 400,
-          }
-        );
+        const referrerInfo = await this.fetchUserInfoByAddress(this.referrer);
         this.referrerInfo = referrerInfo.data;
       } catch (error) {
         // no need to handle error

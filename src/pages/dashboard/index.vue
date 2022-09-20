@@ -145,7 +145,8 @@
 </template>
 
 <script>
-import { getAddressLikerIdMinApi } from '~/util/api';
+import { mapActions } from 'vuex';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
@@ -168,14 +169,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['fetchUserInfoByAddress']),
     async fetchUserInfo() {
       try {
-        const userInfo = await this.$api.get(
-          getAddressLikerIdMinApi(this.getAddress),
-          {
-            validateStatus: code => code < 500 && code !== 400,
-          }
-        );
+        const userInfo = await this.fetchUserInfoByAddress(this.getAddress);
         this.userInfo = userInfo.data;
         this.wallet = this.getAddress;
       } catch (error) {

@@ -6,6 +6,8 @@ import {
   formatOwnerInfoFromChain,
 } from '@/util/nft';
 
+const USER_INFO_EXPIRE_TIME = 1000 * 60 * 10; // 10 minutes
+
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
   let types = [];
@@ -27,6 +29,42 @@ export async function fetchUserInfo({ commit, state }, opts) {
     commit(TYPES.STATIC_SET_USER_FETCHING, { id, payload: null });
   }
   return user;
+}
+
+export async function fetchUserInfoByAddress({ commit, state }, address) {
+  let userInfo = {
+    displayName: address,
+    avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
+  };
+
+  try {
+    let promise = state.fetching.userInfo[address];
+    if (promise) {
+      userInfo = await promise;
+      return userInfo;
+    }
+    promise = this.$api.$get(api.getUserInfoMinByAddress(address));
+    commit(TYPES.STATIC_SET_USER_INFO_FETCHING, { address, promise });
+    userInfo = await promise;
+    commit(TYPES.STATIC_SET_USER_INFO_FETCHING, { address, promise: null });
+  } catch (error) {
+    // no-op
+  }
+  commit(TYPES.STATIC_SET_USER_INFO_BY_ADDRESS, { address, userInfo });
+  commit(TYPES.STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP, {
+    address,
+    timestamp: Date.now(),
+  });
+  return userInfo;
+}
+
+export async function lazyGetUserInfoByAddress({ state, dispatch }, address) {
+  let userInfo = state.userInfoMapByAddress[address];
+  const lastQueryTimestamp = state.userInfoLastQueryTimestampMap[address];
+  if (!userInfo || Date.now() > lastQueryTimestamp + USER_INFO_EXPIRE_TIME) {
+    userInfo = await dispatch('fetchUserInfoByAddress', address);
+  }
+  return userInfo;
 }
 
 export async function fetchArticleInfo({ commit }, referrer) {
