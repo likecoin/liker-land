@@ -7,23 +7,31 @@
     <div
       v-else
       :class="[
-        'mt-[8px]',
+        'flex',
+        'flex-col',
         'px-[12px]',
         'laptop:px-[24px]',
         'self-stretch',
+
+        'w-full',
+        'max-w-[1024px]',
+        'mx-auto',
+        'pb-[120px]',
       ]"
     >
+      <div class="flex items-center justify-start mb-[8px]">
+        <ButtonV2 preset="plain" text="Back" @click="$router.go(-1)">
+          <template #prepend>
+            <IconArrowLeft />
+          </template>
+        </ButtonV2>
+      </div>
       <section
         :class="[
           'grid',
           'grid-cols-1',
           'desktop:grid-cols-3',
           'gap-[24px]',
-
-          'w-full',
-          'max-w-[1024px]',
-          'mx-auto',
-          'pb-[120px]',
         ]"
       >
         <!-- Left column -->
