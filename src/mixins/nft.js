@@ -310,8 +310,11 @@ export default {
             )
             .forEach(e => eventMap.set(`${e.txHash}-${e.nftId}`, e));
           historyInDB.forEach(e => {
-            if (eventMap.has(`${e.txHash}-${e.nftId}`)) {
-              eventMap.get(`${e.txHash}-${e.nftId}`).price = e.price;
+            const key = `${e.txHash}-${e.nftId}`;
+            if (eventMap.has(key)) {
+              eventMap.get(key).price = e.price;
+            } else {
+              eventMap.set(key, e);
             }
           });
           history = [...eventMap.values()];
