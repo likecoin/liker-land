@@ -36,19 +36,16 @@ export async function fetchUserInfoByAddress({ commit }, address) {
     displayName: address,
     avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
   };
+  try {
+    userInfo = await this.$api.$get(api.getUserMinByAddress(address));
+  } catch (error) {
+    // no-op
+  }
   commit(TYPES.STATIC_SET_USER_INFO_BY_ADDRESS, { address, userInfo });
   commit(TYPES.STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP, {
     address,
     timestamp: Date.now(),
   });
-  try {
-    userInfo = await this.$api.$get(api.getUserMinByAddress(address));
-    commit(TYPES.STATIC_SET_USER_INFO_BY_ADDRESS, { address, userInfo });
-    const { user: id } = userInfo;
-    if (id) commit(TYPES.STATIC_SET_USER_INFO_BY_ID, { id, userInfo });
-  } catch (error) {
-    // no-op
-  }
   return userInfo;
 }
 
