@@ -102,3 +102,5 @@ export const TX_STATUS = {
   INSUFFICIENT: 'insufficient',
   FAILED: 'failed',
 };
+
+export const ROUGH_LIKE_TO_USD_PRICE = 0.01;
