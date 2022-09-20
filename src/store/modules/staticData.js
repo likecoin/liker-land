@@ -17,7 +17,7 @@ import * as getters from './getters/staticData';
 import * as actions from './actions/staticData';
 
 const state = () => ({
-  userInfosById: {},
+  userInfos: {},
   userInfoMapByAddress: {},
   userInfoLastQueryTimestampMap: {},
   articleInfos: {},
@@ -33,7 +33,7 @@ const state = () => ({
 
 const mutations = {
   [STATIC_SET_USER_INFO](state, { id, user }) {
-    Vue.set(state.userInfosById, id, user);
+    Vue.set(state.userInfos, id, user);
   },
   [STATIC_SET_USER_INFO_FETCHING](state, { address, promise }) {
     Vue.set(state.fetching.userInfo, address, promise);

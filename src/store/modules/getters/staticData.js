@@ -1,6 +1,6 @@
 import { isWritingNFT } from '~/util/nft';
 
-export const getUserInfoById = state => id => state.userInfosById[id];
+export const getUserInfoById = state => id => state.userInfos[id];
 
 export const getUserInfoByAddress = state => address =>
   state.userInfoMapByAddress[address];
