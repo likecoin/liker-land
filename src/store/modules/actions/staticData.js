@@ -37,13 +37,12 @@ export async function fetchUserInfoByAddress({ commit, state }, address) {
     avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
   };
 
-  let promise = state.fetching.userInfo[address];
-  if (promise) {
-    userInfo = await promise;
-    return userInfo;
-  }
-
   try {
+    let promise = state.fetching.userInfo[address];
+    if (promise) {
+      userInfo = await promise;
+      return userInfo;
+    }
     promise = this.$api.$get(api.getUserInfoMinByAddress(address));
     commit(TYPES.STATIC_SET_USER_INFO_FETCHING, { address, promise });
     userInfo = await promise;
