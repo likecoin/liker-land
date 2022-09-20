@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
+const path = require('path');
 const { theme } = require('./tailwind.config');
 
 const siteName = 'Liker.Land';
@@ -374,6 +375,9 @@ const nuxtConfig = {
       /* eslint-disable no-param-reassign */
       if (ctx.isClient && !ctx.isDev) {
         config.devtool = 'source-map';
+      }
+      if (!ctx.isDev) {
+        config.resolve.alias['bn.js'] = path.join(__dirname, './node_modules/bn.js');
       }
       /* eslint-enable no-param-reassign */
     },
