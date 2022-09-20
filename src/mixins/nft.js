@@ -49,7 +49,7 @@ export default {
         {
           hid: 'stripe-js-script',
           src: 'https://js.stripe.com/v3',
-          async: true,
+          defer: true,
         },
       ],
     };
