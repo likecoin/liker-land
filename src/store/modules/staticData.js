@@ -3,7 +3,7 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 
 import {
-  STATIC_SET_USER_INFO_BY_ID,
+  STATIC_SET_USER_INFO,
   STATIC_SET_USER_INFO_BY_ADDRESS,
   STATIC_SET_USER_INFO_LAST_QUERY_TIMESTAMP,
   STATIC_SET_ARTICLE_INFO,
@@ -30,8 +30,8 @@ const state = () => ({
 });
 
 const mutations = {
-  [STATIC_SET_USER_INFO_BY_ID](state, { id, userInfo }) {
-    Vue.set(state.userInfosById, id, userInfo);
+  [STATIC_SET_USER_INFO](state, { id, user }) {
+    Vue.set(state.userInfosById, id, user);
   },
   [STATIC_SET_USER_INFO_BY_ADDRESS](state, { address, userInfo }) {
     Vue.set(state.userInfoMapByAddress, address, userInfo);

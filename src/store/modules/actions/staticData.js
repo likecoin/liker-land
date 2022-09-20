@@ -17,18 +17,18 @@ export async function fetchUserInfo({ commit, state }, opts) {
     id = opts;
   }
   let promise;
-  let userInfo;
+  let user;
   if (state.fetching.user[id]) {
     promise = state.fetching.user[id];
-    userInfo = await promise;
+    user = await promise;
   } else {
     promise = this.$api.$get(api.getUserMinAPI(id, { types }));
     commit(TYPES.STATIC_SET_USER_FETCHING, { id, payload: promise });
-    userInfo = await promise;
-    commit(TYPES.STATIC_SET_USER_INFO_BY_ID, { id, userInfo });
+    user = await promise;
+    commit(TYPES.STATIC_SET_USER_INFO, { id, user });
     commit(TYPES.STATIC_SET_USER_FETCHING, { id, payload: null });
   }
-  return userInfo;
+  return user;
 }
 
 export async function fetchUserInfoByAddress({ commit }, address) {
