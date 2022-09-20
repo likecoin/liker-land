@@ -309,9 +309,11 @@ export default {
                 e.toWallet !== LIKECOIN_NFT_API_WALLET
             )
             .forEach(e => eventMap.set(`${e.txHash}-${e.nftId}`, e));
-          historyInDB.forEach(
-            e => (eventMap.get(`${e.txHash}-${e.nftId}`).price = e.price)
-          );
+          historyInDB.forEach(e => {
+            if (eventMap.has(`${e.txHash}-${e.nftId}`)) {
+              eventMap.get(`${e.txHash}-${e.nftId}`).price = e.price;
+            }
+          });
           history = [...eventMap.values()];
         } catch (error) {
           // eslint-disable-next-line no-console
