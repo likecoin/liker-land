@@ -120,6 +120,7 @@ import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import { ROUGH_LIKE_TO_USD_PRICE } from '~/constant';
 
 export default {
   layout: 'default',
@@ -175,8 +176,8 @@ export default {
                   url: this.$route.path,
                   offers: {
                     '@type': 'Offer',
-                    price: this.purchaseInfo.price,
-                    priceCurrency: 'LIKE',
+                    price: this.purchaseInfo.price * ROUGH_LIKE_TO_USD_PRICE,
+                    priceCurrency: 'USD',
                     availability: 'LimitedAvailability',
                   },
                 },
