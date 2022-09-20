@@ -47,8 +47,9 @@
             />
             <i18n
               :class="[
-                isInsufficientLIKE ? 'bg-light-gray' : 'bg-like-cyan-pale',
-                isInsufficientLIKE ? 'border-shade-gray' : 'border-medium-gray',
+                isInsufficientLIKE || !canPayByLIKE
+                  ? 'bg-light-gray border-shade-gray'
+                  : 'bg-like-cyan-pale border-medium-gray',
                 'border-2',
                 'border-t-0',
                 'rounded-b-[8px]',
