@@ -15,8 +15,8 @@
       <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
-          :collected-items="collectedNFTs"
-          :created-class-ids="sellingNFTClassIds"
+          :collected-items="collectedClassIds"
+          :created-class-ids="createdClassIds"
           :is-loading="isLoading"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
@@ -99,9 +99,9 @@
             ]"
           >
             <li>
-              <NFTPortfolioEmpty v-if="!sortedCollectedNFTClassIds.length" preset="collected" />
+              <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
             </li>
-            <li v-for="id in sortedCollectedNFTClassIds" :key="id">
+            <li v-for="id in sortedCollectedClassIds" :key="id">
               <NFTPortfolioItem :class-id="id" />
             </li>
           </ul>
@@ -119,10 +119,10 @@
             ]"
           >
             <li>
-              <NFTPortfolioEmpty v-if="!sortedSellingNFTClassIds.length" preset="created" />
+              <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
             </li>
             <li
-              v-for="id in sortedSellingNFTClassIds"
+              v-for="id in sortedCreatedClassIds"
               :key="id"
             >
               <NFTPortfolioItem
@@ -159,11 +159,10 @@ export default {
   watch: {
     getAddress: {
       immediate: true,
-      handler(newAddress) {
+      async handler(newAddress) {
         if (newAddress) {
           this.fetchUserInfo();
-          this.fetchUserSellingNFTs(this.getAddress);
-          this.fetchUserCollectedNFTs(this.getAddress);
+          await this.updateNFTList(this.getAddress);
         }
       },
     },

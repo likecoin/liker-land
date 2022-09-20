@@ -35,8 +35,8 @@
           </div>
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-            :collected-items="collectedNFTs"
-            :created-class-ids="sellingNFTClassIds"
+            :collected-items="collectedClassIds"
+            :created-class-ids="createdClassIds"
             :is-loading="isLoading"
           />
         </NFTPortfolioUserInfo>
@@ -80,9 +80,8 @@
               :is-selected="currentTab === 'collected'"
               @click="handleGoCollected"
             />
-            <MenuButtonDivider v-if="sellingNFTClassIds.length" />
+            <MenuButtonDivider />
             <MenuButton
-              v-if="isLoading || sellingNFTClassIds.length"
               text="Created"
               :is-selected="currentTab === 'created'"
               @click="handleGoCreated"
@@ -106,10 +105,10 @@
             ]"
           >
             <li>
-              <NFTPortfolioEmpty v-if="!sortedCollectedNFTClassIds.length" preset="collected" />
+              <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
             </li>
             <li
-              v-for="id in sortedCollectedNFTClassIds"
+              v-for="id in sortedCollectedClassIds"
               :key="id"
             >
               <NFTPortfolioItem
@@ -131,10 +130,10 @@
             ]"
           >
             <li>
-              <NFTPortfolioEmpty v-if="!sortedSellingNFTClassIds.length" preset="created" />
+              <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
             </li>
             <li
-              v-for="id in sortedSellingNFTClassIds"
+              v-for="id in sortedCreatedClassIds"
               :key="id"
             >
               <NFTPortfolioItem
@@ -208,9 +207,8 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
-  mounted() {
-    this.fetchUserSellingNFTs(this.wallet);
-    this.fetchUserCollectedNFTs(this.wallet);
+  async mounted() {
+    await this.updateNFTList(this.wallet);
   },
   methods: {
     handleGoCollected() {

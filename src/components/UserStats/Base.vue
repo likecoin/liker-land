@@ -33,8 +33,8 @@ export default {
     },
     collectedAmount() {
       return this.collectedItems.reduce(
-        (total, nft) =>
-          total + (this.getNFTClassPurchaseInfoById(nft.classId)?.price || 0),
+        (total, id) =>
+          total + (this.getNFTClassPurchaseInfoById(id)?.price || 0),
         0
       );
     },
@@ -63,7 +63,7 @@ export default {
   methods: {
     ...mapActions(['lazyGetNFTPurchaseInfo', 'lazyGetNFTOwners']),
     lazyGetAllCollectedPurchaseInfo() {
-      const classIdSet = new Set(this.collectedItems.map(n => n.classId));
+      const classIdSet = new Set(this.collectedItems.map(id => id));
       classIdSet.forEach(classId => this.lazyGetNFTPurchaseInfo(classId));
     },
     lazyGetAllCreatedOwners() {
