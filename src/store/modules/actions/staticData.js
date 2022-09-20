@@ -31,13 +31,23 @@ export async function fetchUserInfo({ commit, state }, opts) {
   return user;
 }
 
-export async function fetchUserInfoByAddress({ commit }, address) {
+export async function fetchUserInfoByAddress({ commit, state }, address) {
   let userInfo = {
     displayName: address,
     avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
   };
+
+  let promise = state.fetching.userInfo[address];
+  if (promise) {
+    userInfo = await promise;
+    return userInfo;
+  }
+
   try {
-    userInfo = await this.$api.$get(api.getUserInfoMinByAddress(address));
+    promise = this.$api.$get(api.getUserInfoMinByAddress(address));
+    commit(TYPES.STATIC_SET_USER_INFO_FETCHING, { address, promise });
+    userInfo = await promise;
+    commit(TYPES.STATIC_SET_USER_INFO_FETCHING, { address, promise: null });
   } catch (error) {
     // no-op
   }
@@ -49,9 +59,9 @@ export async function fetchUserInfoByAddress({ commit }, address) {
   return userInfo;
 }
 
-export async function lazyGetUserInfoByAddress({ getters, dispatch }, address) {
-  let userInfo = getters.getUserInfoByAddress(address);
-  const lastQueryTimestamp = getters.getUserInfoLastQueryTimestamp(address);
+export async function lazyGetUserInfoByAddress({ state, dispatch }, address) {
+  let userInfo = state.userInfoMapByAddress[address];
+  const lastQueryTimestamp = state.userInfoLastQueryTimestampMap[address];
   if (!userInfo || Date.now() > lastQueryTimestamp + USER_INFO_EXPIRE_TIME) {
     userInfo = await dispatch('fetchUserInfoByAddress', address);
   }

@@ -5,9 +5,6 @@ export const getUserInfoById = state => id => state.userInfosById[id];
 export const getUserInfoByAddress = state => address =>
   state.userInfoMapByAddress[address];
 
-export const getUserInfoLastQueryTimestamp = state => address =>
-  state.userInfoLastQueryTimestampMap[address];
-
 export const getArticleInfoByReferrer = state => referrer =>
   state.articleInfos[referrer];
 export const getArticleInfoByURL = state => url =>
