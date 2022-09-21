@@ -32,7 +32,7 @@
             'gap-[24px]',
           ]"
         >
-          <CardV2
+          <NFTPortfolioUserInfo
             :class="[
               'flex',
               'flex-col',
@@ -40,28 +40,19 @@
               'w-full',
               'laptop:w-[310px]',
             ]"
+            :user-info="userInfo"
+            :wallet="wallet"
           >
-            <Identity
-              :avatar-url="referrerAvatar"
-              :avatar-size="88"
-              :is-avatar-outlined="isReferrerCivicLiker"
-            />
-            <NuxtLink :class="['flex', 'mt-[8px]']" :to="`/${referrer}`">
-              <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-                {{ referrerDisplayName | ellipsis }}
-              </Label>
-            </NuxtLink>
-            <template v-if="referrerDescription">
-              <hr :class="['w-full', 'border-shade-gray', 'my-[24px]']">
-              <Label preset="p6" :class="['break-all', 'font-200']">
-                {{ referrerDescription }}
-              </Label>
-            </template>
+            <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
+              <IconEllipse />
+              <IconEllipse />
+              <IconEllipse />
+            </div>
             <UserStatsPortfolio
               v-if="isReferrerTheCreator"
-              class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray mt-[12px]"
-              :collected-items="collectedNFTs"
-              :created-class-ids="sellingNFTClassIds"
+              class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
+              :collected-class-ids="collectedClassIds"
+              :created-class-ids="createdClassIds"
               :is-loading="isLoading"
             />
             <ButtonV2
@@ -75,7 +66,7 @@
                 <IconView />
               </template>
             </ButtonV2>
-          </CardV2>
+          </NFTPortfolioUserInfo>
         </div>
         <!-- Right column -->
         <div
@@ -306,9 +297,9 @@ export default {
       this.goNFTDetails(this.classId);
       return;
     }
+    this.wallet = this.referrer;
     if (this.isReferrerTheCreator) {
-      this.fetchUserSellingNFTs(this.referrer);
-      this.fetchUserCollectedNFTs(this.referrer);
+      await this.updateUserNFTList(this.referrer);
     }
     this.isLoading = false;
   },
