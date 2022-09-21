@@ -38,4 +38,4 @@ app.use(async (req, res) => {
   nuxt.render(req, res);
 });
 
-module.exports = functions.https.onRequest(app);
+module.exports = functions.region('us-west2').https.onRequest(app);

@@ -18,11 +18,13 @@
     "rewrites": [
       {
         "source": "/api/**",
-        "function": "apiHttp"
+        "function": "apiHttp",
+        "region": "us-west2"
       },
       {
         "source": "**",
-        "function": "ssrapp"
+        "function": "ssrapp",
+        "region": "us-west2"
       }
     ]
   }
