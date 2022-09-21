@@ -14,6 +14,6 @@ if ((functions.config().constant || {}).api_url) {
   process.env.API_URL = functions.config().constant.api_url;
 }
 
-const internalHttp = functions.https.onRequest(app);
+const internalHttp = functions.region('us-west2').https.onRequest(app);
 
 module.exports = internalHttp;
