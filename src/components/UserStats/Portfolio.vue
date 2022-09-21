@@ -1,7 +1,7 @@
 <template>
   <UserStatsBase
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-    :collected-items="collectedItems"
+    :collected-class-ids="collectedClassIds"
     :created-class-ids="createdClassIds"
   >
     <template v-slot="stats">
@@ -48,7 +48,7 @@ export default {
     formatNumber,
   },
   props: {
-    collectedItems: {
+    collectedClassIds: {
       type: Array,
       default: () => [],
     },

@@ -50,7 +50,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassIdSorter', 'NFTClassIdsByAddress']),
+    ...mapGetters(['getNFTClassIdSorter', 'getNFTClassIdListByAddress']),
     userAvatar() {
       return this.userInfo?.avatar;
     },
@@ -58,7 +58,7 @@ export default {
       return this.userInfo?.displayName || this.wallet;
     },
     nftClassIds() {
-      return this.NFTClassIdsByAddress(this.wallet);
+      return this.getNFTClassIdListByAddress(this.wallet);
     },
     collectedClassIds() {
       return this.nftClassIds?.collected || [];
@@ -82,7 +82,7 @@ export default {
   methods: {
     ...mapActions(['updateUserNFTList']),
     async updateNFTList(address) {
-      if (!this.NFTClassIdsByAddress(address)) {
+      if (!this.getNFTClassIdListByAddress(address)) {
         this.isLoading = true;
         await this.updateUserNFTList(address);
         this.isLoading = false;

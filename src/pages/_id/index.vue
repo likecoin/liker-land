@@ -35,7 +35,7 @@
           </div>
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-            :collected-items="collectedClassIds"
+            :collected-class-ids="collectedClassIds"
             :created-class-ids="createdClassIds"
             :is-loading="isLoading"
           />

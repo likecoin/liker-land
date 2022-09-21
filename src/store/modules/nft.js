@@ -3,8 +3,6 @@ import Vue from 'vue';
 import { getNFTs } from '~/util/nft';
 import { getUserSellNFTClasses } from '@/util/api';
 
-const axios = require('axios');
-
 const NFT_SET_USER_CLASSID_LIST = 'NFT_SET_USER_CLASSID_LIST';
 
 const state = () => ({
@@ -18,18 +16,19 @@ const mutations = {
 };
 
 const getters = {
-  NFTClassIdList: state => state.userClassIdList,
-  NFTClassIdsByAddress: state => address => state.userClassIdList[address],
+  getNFTClassIdList: state => state.userClassIdList,
+  getNFTClassIdListByAddress: state => address =>
+    state.userClassIdList[address],
 };
 
 const actions = {
-  updateUserNFTList: async ({ commit }, address) => {
-    const { nfts } = await getNFTs({ owner: address });
+  async updateUserNFTList({ commit }, address) {
+    const [{ nfts }, { list: createdIds }] = await Promise.all([
+      getNFTs({ owner: address }),
+      this.$api.$get(getUserSellNFTClasses({ wallet: address })),
+    ]);
     const collectedIds = nfts?.map(n => n?.classId);
-    const { data } = await axios.get(
-      getUserSellNFTClasses({ wallet: address })
-    );
-    const createdIds = data?.list;
+
     commit(NFT_SET_USER_CLASSID_LIST, {
       address,
       nfts: {

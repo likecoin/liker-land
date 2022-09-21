@@ -15,7 +15,7 @@
       <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
-          :collected-items="collectedClassIds"
+          :collected-class-ids="collectedClassIds"
           :created-class-ids="createdClassIds"
           :is-loading="isLoading"
           @go-created="handleGoCreated"
