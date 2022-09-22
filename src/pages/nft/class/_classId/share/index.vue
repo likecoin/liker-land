@@ -239,7 +239,6 @@ export default {
     };
   },
   computed: {
-    ...mapActions(['fetchUserInfoByAddress']),
     classId() {
       return this.$route.params.classId;
     },
@@ -313,6 +312,7 @@ export default {
     this.isLoading = false;
   },
   methods: {
+    ...mapActions(['fetchUserInfoByAddress']),
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(SharePage)', this.classId, 1);
       if (!this.getAddress) {
@@ -333,8 +333,7 @@ export default {
     },
     async updateReferrerInfo() {
       try {
-        const referrerInfo = await this.fetchUserInfoByAddress(this.referrer);
-        this.referrerInfo = referrerInfo.data;
+        this.referrerInfo = await this.fetchUserInfoByAddress(this.referrer);
       } catch (error) {
         // no need to handle error
       }
