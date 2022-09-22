@@ -16,7 +16,7 @@ const mutations = {
 };
 
 const getters = {
-  getNFTClassIdList: state => state.userClassIdList,
+  NFTClassIdList: state => state.userClassIdList,
   getNFTClassIdListByAddress: state => address =>
     state.userClassIdList[address],
 };
