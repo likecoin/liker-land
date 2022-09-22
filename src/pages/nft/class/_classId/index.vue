@@ -205,12 +205,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getLIKEPrice']),
+    ...mapGetters(['LIKEPriceInUSD']),
     classId() {
       return this.$route.params.classId;
     },
     NFTPriceUSD() {
-      const price = this.getLIKEPrice * this.purchaseInfo.price;
+      const price = this.LIKEPriceInUSD * this.purchaseInfo.price;
       return `(${price.toFixed(3)} USD)`;
     },
     isTransferDisabled() {

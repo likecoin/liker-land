@@ -41,4 +41,4 @@ export const getNFTClassIdSorter = (_, getters) => classIds => {
   return sorted;
 };
 
-export const getLIKEPrice = state => state.LIKEPriceInUSD;
+export const LIKEPriceInUSD = state => state.LIKEPriceInUSD;
