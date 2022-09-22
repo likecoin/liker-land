@@ -149,10 +149,6 @@ export async function fetchLIKEPrice({ commit }) {
   return price;
 }
 
-export async function lazyFetchLIKEPrice({ state, dispatch }) {
-  let price = state.likePriceInUSD;
-  if (!price) {
-    price = await dispatch('fetchLIKEPrice');
-  }
-  return price;
+export function lazyFetchLIKEPrice({ state, dispatch }) {
+  return state.likePriceInUSD || dispatch('fetchLIKEPrice');
 }
