@@ -40,7 +40,7 @@
               'w-full',
               'laptop:w-[310px]',
             ]"
-            :user-info="userInfo"
+            :user-info="referrerInfo"
             :wallet="wallet"
           >
             <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
@@ -230,30 +230,8 @@ export default {
     };
   },
   computed: {
-    ...mapActions(['fetchUserInfoByAddress']),
     classId() {
       return this.$route.params.classId;
-    },
-    isReferrerCivicLiker() {
-      return !!(
-        this.referrerInfo &&
-        (this.referrerInfo.isCivicLikerTrial ||
-          this.referrerInfo.isSubscribedCivicLiker)
-      );
-    },
-    referrerDisplayName() {
-      return (
-        (this.referrerInfo && this.referrerInfo.displayName) || this.referrer
-      );
-    },
-    referrerDescription() {
-      return this.referrerInfo && this.referrerInfo.description;
-    },
-    referrerAvatar() {
-      return (
-        (this.referrerInfo && this.referrerInfo.avatar) ||
-        `https://avatars.dicebear.com/api/identicon/${this.referrer}.svg`
-      );
     },
     isReferrerTheCreator() {
       return this.referrer === this.iscnOwner;
@@ -297,13 +275,13 @@ export default {
       this.goNFTDetails(this.classId);
       return;
     }
-    this.wallet = this.referrer;
     if (this.isReferrerTheCreator) {
-      await this.updateUserNFTList(this.referrer);
+      await this.updateNFTList(this.referrer);
     }
     this.isLoading = false;
   },
   methods: {
+    ...mapActions(['fetchUserInfoByAddress']),
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(SharePage)', this.classId, 1);
       if (!this.getAddress) {
@@ -324,8 +302,7 @@ export default {
     },
     async updateReferrerInfo() {
       try {
-        const referrerInfo = await this.fetchUserInfoByAddress(this.referrer);
-        this.referrerInfo = referrerInfo.data;
+        this.referrerInfo = await this.fetchUserInfoByAddress(this.referrer);
       } catch (error) {
         // no need to handle error
       }

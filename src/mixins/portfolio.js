@@ -41,8 +41,6 @@ export default {
     return {
       wallet: undefined,
       userInfo: null,
-      collectedNFTs: [],
-      sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
@@ -60,17 +58,20 @@ export default {
     nftClassIds() {
       return this.getNFTClassIdListByAddress(this.wallet);
     },
+
+    // for userStats
     collectedClassIds() {
       return this.nftClassIds?.collected || [];
     },
     createdClassIds() {
       return this.nftClassIds?.created || [];
     },
+
+    // for NFTCardItems
     sortedCollectedClassIds() {
-      const collectedClassIdSet = new Set(this.collectedClassIds);
-      const collectedClassId = Array.from(collectedClassIdSet);
+      const collectedClassIds = [...new Set(this.collectedClassIds)];
       return this.getNFTClassIdSorter(
-        (collectedClassId?.length && collectedClassId) || []
+        (collectedClassIds?.length && collectedClassIds) || []
       );
     },
     sortedCreatedClassIds() {
@@ -82,6 +83,7 @@ export default {
   methods: {
     ...mapActions(['updateUserNFTList']),
     async updateNFTList(address) {
+      this.wallet = address;
       if (!this.getNFTClassIdListByAddress(address)) {
         this.isLoading = true;
         await this.updateUserNFTList(address);
