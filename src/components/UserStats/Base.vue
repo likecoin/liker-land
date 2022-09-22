@@ -63,7 +63,7 @@ export default {
   methods: {
     ...mapActions(['lazyGetNFTPurchaseInfo', 'lazyGetNFTOwners']),
     lazyGetAllCollectedPurchaseInfo() {
-      const classIdSet = new Set(this.collectedClassIds.map(id => id));
+      const classIdSet = new Set(this.collectedClassIds);
       classIdSet.forEach(classId => this.lazyGetNFTPurchaseInfo(classId));
     },
     lazyGetAllCreatedOwners() {

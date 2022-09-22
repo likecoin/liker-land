@@ -162,7 +162,7 @@ export default {
       async handler(newAddress) {
         if (newAddress) {
           this.fetchUserInfo();
-          await this.updateNFTList(this.getAddress);
+          await this.loadNFTListByAddress(this.getAddress);
         }
       },
     },

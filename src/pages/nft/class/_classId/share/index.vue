@@ -276,7 +276,7 @@ export default {
       return;
     }
     if (this.isReferrerTheCreator) {
-      await this.updateNFTList(this.referrer);
+      await this.loadNFTListByAddress(this.referrer);
     }
     this.isLoading = false;
   },

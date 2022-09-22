@@ -208,7 +208,7 @@ export default {
     return undefined;
   },
   async mounted() {
-    await this.updateNFTList(this.wallet);
+    await this.loadNFTListByAddress(this.wallet);
   },
   methods: {
     handleGoCollected() {

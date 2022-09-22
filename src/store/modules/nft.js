@@ -22,7 +22,7 @@ const getters = {
 };
 
 const actions = {
-  async updateUserNFTList({ commit }, address) {
+  async fetchNFTListByAddress({ commit }, address) {
     const [{ nfts }, { list: createdIds }] = await Promise.all([
       getNFTs({ owner: address }),
       this.$api.$get(getUserSellNFTClasses({ wallet: address })),

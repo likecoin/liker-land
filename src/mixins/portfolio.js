@@ -70,29 +70,25 @@ export default {
     // for NFTCardItems
     sortedCollectedClassIds() {
       const collectedClassIds = [...new Set(this.collectedClassIds)];
-      return this.getNFTClassIdSorter(
-        (collectedClassIds?.length && collectedClassIds) || []
-      );
+      return this.getNFTClassIdSorter(collectedClassIds);
     },
     sortedCreatedClassIds() {
-      return this.getNFTClassIdSorter(
-        (this.createdClassIds?.length && this.createdClassIds) || []
-      );
+      return this.getNFTClassIdSorter(this.createdClassIds);
     },
   },
   methods: {
-    ...mapActions(['updateUserNFTList']),
-    async updateNFTList(address) {
+    ...mapActions(['fetchNFTListByAddress']),
+    async loadNFTListByAddress(address) {
       this.wallet = address;
       if (!this.getNFTClassIdListByAddress(address)) {
         this.isLoading = true;
-        await this.updateUserNFTList(address);
+        await this.fetchNFTListByAddress(address);
         this.isLoading = false;
       }
       if (!this.sortedCreatedClassIds.length) {
         this.currentTab = 'collected';
       }
-      this.updateUserNFTList(address);
+      this.fetchNFTListByAddress(address);
     },
     goCollected() {
       this.currentTab = 'collected';
