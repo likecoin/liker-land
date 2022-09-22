@@ -156,7 +156,7 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-      script: this.purchaseInfo
+      script: this.purchaseInfo.price
         ? [
             {
               hid: 'schema',
