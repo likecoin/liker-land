@@ -26,7 +26,6 @@ const state = () => ({
   nftClassMetadata: {},
   nftClassOwnerInfo: {},
   LIKEPriceInUSD: 0,
-  LIKEPriceLastUpdateTimestamp: 0,
   fetching: {
     user: {},
     userInfo: {},

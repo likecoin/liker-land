@@ -7,7 +7,6 @@ import {
 } from '@/util/nft';
 
 const USER_INFO_EXPIRE_TIME = 1000 * 60 * 10; // 10 minutes
-const LIKE_PRICE_EXPIRE_TIME = 1000 * 60; // 1 minutes
 
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
@@ -152,9 +151,8 @@ export async function fetchLIKEPrice({ commit }) {
 
 export async function lazyFetchLIKEPrice({ state, dispatch }) {
   let price = state.likePriceInUSD;
-  const lastUpdate = state.LIKEPriceLastUpdateTimestamp;
-  if (!price || Date.now() > lastUpdate + LIKE_PRICE_EXPIRE_TIME) {
+  if (!price) {
     price = await dispatch('fetchLIKEPrice');
   }
-  return price || state.likePriceInUSD;
+  return price;
 }
