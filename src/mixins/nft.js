@@ -65,7 +65,6 @@ export default {
 
       nftISCNContentFingerprints: [],
 
-      nftPriceInLIKE: undefined,
       nftPriceInUSD: undefined,
     };
   },
@@ -77,6 +76,7 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassMintedCount',
+      'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
@@ -142,9 +142,13 @@ export default {
       return this.purchaseInfo.price;
     },
     formattedNFTPriceInLIKE() {
-      return this.nftPriceInLIKE !== undefined
-        ? formatNumberWithLIKE(this.nftPriceInLIKE)
-        : '-';
+      return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
+    },
+    NFTPriceUSD() {
+      return this.LIKEPriceInUSD * this.NFTPrice;
+    },
+    formattedNFTPriceUSD() {
+      return formatNumberWithUnit(this.NFTPriceUSD.toFixed(3), 'USD');
     },
     formattedNFTPriceInUSD() {
       return this.nftPriceInUSD !== undefined
@@ -277,10 +281,9 @@ export default {
     },
     async fetchNFTPrices(classId) {
       try {
-        const { LIKEPrice, fiatPrice } = await this.$axios.$get(
+        const { fiatPrice } = await this.$axios.$get(
           getStripeFiatPrice({ classId })
         );
-        this.nftPriceInLIKE = LIKEPrice;
         this.nftPriceInUSD = fiatPrice;
       } catch (error) {
         // eslint-disable-next-line no-console

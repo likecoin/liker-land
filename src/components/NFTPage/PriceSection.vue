@@ -22,7 +22,7 @@
         v-if="nftPriceUSD"
         class="ml-[4px]"
         preset="p5"
-      >{{ nftPriceUSD }}</Label>
+      >{{ `(${nftPriceUSD})` }}</Label>
     </div>
     <div class="flex items-baseline justify-start">
       <Label

@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
@@ -204,15 +204,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['LIKEPriceInUSD']),
     classId() {
       return this.$route.params.classId;
-    },
-    NFTPriceUSD() {
-      return this.LIKEPriceInUSD * this.purchaseInfo.price;
-    },
-    formattedNFTPriceUSD() {
-      return `(${this.NFTPriceUSD.toFixed(3)} USD)`;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
