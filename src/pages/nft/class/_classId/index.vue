@@ -74,7 +74,7 @@
           <NFTPagePriceSection
             v-if="NFTPrice"
             :nft-price="NFTPrice"
-            :nft-price-u-s-d="NFTPriceUSD"
+            :nft-price-u-s-d="formattedNFTPriceUSD"
             :collected-count="mintedCount"
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
@@ -121,7 +121,6 @@ import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
-import { ROUGH_LIKE_TO_USD_PRICE } from '~/constant';
 
 export default {
   layout: 'default',
@@ -177,7 +176,7 @@ export default {
                   url: this.$route.path,
                   offers: {
                     '@type': 'Offer',
-                    price: this.purchaseInfo.price * ROUGH_LIKE_TO_USD_PRICE,
+                    price: this.NFTPriceUSD,
                     priceCurrency: 'USD',
                     availability: 'LimitedAvailability',
                   },
@@ -210,8 +209,10 @@ export default {
       return this.$route.params.classId;
     },
     NFTPriceUSD() {
-      const price = this.LIKEPriceInUSD * this.purchaseInfo.price;
-      return `(${price.toFixed(3)} USD)`;
+      return this.LIKEPriceInUSD * this.purchaseInfo.price;
+    },
+    formattedNFTPriceUSD() {
+      return `(${this.NFTPriceUSD.toFixed(3)} USD)`;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
