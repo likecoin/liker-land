@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import { getLIKEPrice } from '~/util/api';
+import { mapGetters, mapActions } from 'vuex';
+
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 
@@ -204,11 +205,12 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getLIKEPrice']),
     classId() {
       return this.$route.params.classId;
     },
     NFTPriceUSD() {
-      const price = this.currentPrice * this.purchaseInfo.price;
+      const price = this.getLIKEPrice * this.purchaseInfo.price;
       return `(${price.toFixed(3)} USD)`;
     },
     isTransferDisabled() {
@@ -243,7 +245,7 @@ export default {
       this.updateDisplayNameList(this.iscnOwner);
       this.updateNFTOwners();
       this.updateNFTHistory();
-      this.getLIKEPrice();
+      this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -268,6 +270,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['lazyFetchLIKEPrice']),
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
@@ -376,17 +379,6 @@ export default {
         1
       );
       return this.handleCollect();
-    },
-    async getLIKEPrice() {
-      try {
-        const { data } = await this.$api.get(getLIKEPrice());
-        this.currentPrice = data.likecoin.usd;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        // eslint-disable-next-line no-console
-        console.error('CANNOT_GET_LIKE_PRICE');
-      }
     },
     handleCopyURL() {
       this.copyURLPath(this.nftDetailsPageURL, {

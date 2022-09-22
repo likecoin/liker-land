@@ -12,6 +12,7 @@ import {
   STATIC_SET_NFT_CLASS_PURCHASE_INFO,
   STATIC_SET_NFT_CLASS_METADATA,
   STATIC_SET_NFT_CLASS_OWNER_INFO,
+  STATIC_SET_LIKE_PRICE_IN_USD,
 } from '../mutation-types';
 import * as getters from './getters/staticData';
 import * as actions from './actions/staticData';
@@ -24,6 +25,8 @@ const state = () => ({
   nftClassPurchaseInfo: {},
   nftClassMetadata: {},
   nftClassOwnerInfo: {},
+  LIKEPriceInUSD: 0,
+  LIKEPriceLastUpdateTimestamp: 0,
   fetching: {
     user: {},
     userInfo: {},
@@ -58,6 +61,9 @@ const mutations = {
   },
   [STATIC_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.nftClassOwnerInfo, classId, info);
+  },
+  [STATIC_SET_LIKE_PRICE_IN_USD](state, LIKEPriceInUSD) {
+    state.LIKEPriceInUSD = LIKEPriceInUSD;
   },
 };
 

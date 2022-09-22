@@ -7,6 +7,7 @@ import {
 } from '@/util/nft';
 
 const USER_INFO_EXPIRE_TIME = 1000 * 60 * 10; // 10 minutes
+const LIKE_PRICE_EXPIRE_TIME = 1000 * 60; // 1 minutes
 
 export async function fetchUserInfo({ commit, state }, opts) {
   let id;
@@ -134,4 +135,26 @@ export async function lazyGetNFTOwners({ getters, dispatch }, classId) {
     owners = await dispatch('fetchNFTOwners', classId);
   }
   return owners;
+}
+
+export async function fetchLIKEPrice({ commit }) {
+  let price = 0;
+  try {
+    const data = await this.$api.$get(api.getLIKEPrice());
+    price = data.likecoin.usd;
+    commit(TYPES.STATIC_SET_LIKE_PRICE_IN_USD, price);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('CANNOT_GET_LIKE_PRICE');
+  }
+  return price;
+}
+
+export async function lazyFetchLIKEPrice({ state, dispatch }) {
+  let price = state.likePriceInUSD;
+  const lastUpdate = state.LIKEPriceLastUpdateTimestamp;
+  if (!price || Date.now() > lastUpdate + LIKE_PRICE_EXPIRE_TIME) {
+    price = await dispatch('fetchLIKEPrice');
+  }
+  return price || state.likePriceInUSD;
 }
