@@ -68,7 +68,11 @@ export default {
   },
   methods: {
     handleRegister() {
-      window.open(getLikerIdSettingsURL(), '_blank');
+      window.open(
+        getLikerIdSettingsURL(),
+        'settings',
+        'menubar=no,location=no,width=576,height=768'
+      );
     },
     handleSignIn() {
       this.connectWallet();

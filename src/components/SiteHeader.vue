@@ -176,7 +176,11 @@ export default {
           break;
 
         case 'setting':
-          window.open(getLikerIdSettingsURL(), '_blank');
+          window.open(
+            getLikerIdSettingsURL(),
+            'settings',
+            'menubar=no,location=no,width=576,height=768'
+          );
           break;
 
         case 'signOut':
