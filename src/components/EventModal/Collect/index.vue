@@ -160,7 +160,6 @@ export default {
       this.paymentMethod = undefined;
 
       // Mixin
-      this.NFTPrice = undefined;
       this.nftPriceInUSD = undefined;
       this.userCollectedCount = undefined;
       this.fetchNFTPrices(this.classId);

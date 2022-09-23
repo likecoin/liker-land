@@ -148,7 +148,7 @@ export default {
       return this.LIKEPriceInUSD * this.NFTPrice;
     },
     formattedNFTPriceUSD() {
-      return formatNumberWithUnit(this.NFTPriceUSD.toFixed(3), 'USD');
+      return formatNumberWithUnit(this.NFTPriceUSD, 'USD');
     },
     formattedNFTPriceInUSD() {
       return this.nftPriceInUSD !== undefined
