@@ -14,13 +14,14 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setTrackerUser(vue, { user, email }) {
+export async function setLoggerUser(vue, { wallet }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
   try {
     if (vue.$gtag) {
-      let hashedId = await digestMessage(user);
+      let hashedId = await digestMessage(wallet);
       hashedId = hexString(hashedId);
       vue.$gtag.set({ userId: hashedId });
+      vue.$gtag.config({ user_id: hashedId });
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console

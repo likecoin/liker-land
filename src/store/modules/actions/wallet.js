@@ -4,6 +4,7 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
 import { getUserInfoMinByAddress } from '~/util/api';
+import { setLoggerUser } from '~/util/EventLogger';
 
 export async function initWallet(
   { commit, dispatch },
@@ -22,6 +23,7 @@ export async function initWallet(
   const walletAddress = bech32Address || address;
   commit(types.WALLET_SET_ADDRESS, walletAddress);
   commit(types.WALLET_SET_SIGNER, offlineSigner);
+  await setLoggerUser(this, walletAddress);
   try {
     const userInfo = await this.$api.$get(
       getUserInfoMinByAddress(walletAddress)

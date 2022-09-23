@@ -1,10 +1,6 @@
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
-import {
-  updateSentryUser,
-  updateCrispUser,
-  setTrackerUser,
-} from '@/util/EventLogger';
+import { updateSentryUser, updateCrispUser } from '@/util/EventLogger';
 import { normalizeLocaleForLikeCo } from '@/locales';
 
 export async function postLoginToken(
@@ -21,7 +17,6 @@ export async function postLoginToken(
   }
   if (this.$sentry) updateSentryUser(this, user);
   if (this.$crisp) updateCrispUser(this, user);
-  await setTrackerUser(this, user);
   return user;
 }
 
