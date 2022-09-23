@@ -46,11 +46,10 @@ export function getConnector({ state, commit }) {
   return connector;
 }
 
-export async function connectWallet({ dispatch }) {
+export async function openConnectWalletModal({ dispatch }) {
   const connector = await dispatch('getConnector');
   const connection = await connector.openConnectWalletModal();
-  if (!connection) return false;
-  return dispatch('initWallet', connection);
+  return connection;
 }
 
 export function disconnectWallet({ state, commit }) {
