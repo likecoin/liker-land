@@ -17,7 +17,7 @@
       <Label
         class="font-[900] text-like-cyan"
         preset="h2"
-      >{{ nftPrice | formatNumberWithLIKE }}</Label>
+      >{{ nftPrice | formatNumberWithLIKE({ isFull: true }) }}</Label>
       <Label
         v-if="nftPriceUSD"
         class="ml-[4px]"

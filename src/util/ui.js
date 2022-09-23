@@ -47,16 +47,19 @@ export function copyToClipboard(text) {
   document.body.removeChild(copyText);
 }
 
-export function formatNumber(num) {
-  return (num >= 10000 ? largeNumFormatter : smallNumFormatter).format(num);
+export function formatNumber(num, options = {}) {
+  return (!options.isFull && num >= 100000
+    ? largeNumFormatter
+    : smallNumFormatter
+  ).format(num);
 }
 
-export function formatNumberWithUnit(num, unit) {
-  return `${formatNumber(num)} ${unit}`;
+export function formatNumberWithUnit(num, unit, options = {}) {
+  return `${formatNumber(num, options)} ${unit}`;
 }
 
-export function formatNumberWithLIKE(num) {
-  return formatNumberWithUnit(num, 'LIKE');
+export function formatNumberWithLIKE(num, options = {}) {
+  return formatNumberWithUnit(num, 'LIKE', options);
 }
 
 export default ellipsis;
