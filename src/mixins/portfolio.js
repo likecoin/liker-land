@@ -1,7 +1,5 @@
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
-import { getUserSellNFTClasses } from '~/util/api';
-import { getNFTs } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
 
@@ -43,45 +41,54 @@ export default {
     return {
       wallet: undefined,
       userInfo: null,
-      collectedNFTs: [],
-      sellingNFTClassIds: [],
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
-      isLoading: true,
+      isLoading: false,
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassIdSorter']),
+    ...mapGetters(['getNFTClassIdSorter', 'getNFTClassIdListByAddress']),
     userAvatar() {
       return this.userInfo?.avatar;
     },
     userDisplayName() {
       return this.userInfo?.displayName || this.wallet;
     },
-    collectedNFTClassIds() {
-      const classIdSet = new Set(this.collectedNFTs.map(n => n.classId));
-      return Array.from(classIdSet);
+    nftClassIds() {
+      return this.getNFTClassIdListByAddress(this.wallet);
     },
-    sortedCollectedNFTClassIds() {
-      return this.getNFTClassIdSorter(this.collectedNFTClassIds);
+
+    // for userStats
+    collectedClassIds() {
+      return this.nftClassIds?.collected || [];
     },
-    sortedSellingNFTClassIds() {
-      return this.getNFTClassIdSorter(this.sellingNFTClassIds);
+    createdClassIds() {
+      return this.nftClassIds?.created || [];
+    },
+
+    // for NFTCardItems
+    sortedCollectedClassIds() {
+      const collectedClassIds = [...new Set(this.collectedClassIds)];
+      return this.getNFTClassIdSorter(collectedClassIds);
+    },
+    sortedCreatedClassIds() {
+      return this.getNFTClassIdSorter(this.createdClassIds);
     },
   },
   methods: {
-    async fetchUserCollectedNFTs(wallet) {
-      const { nfts } = await getNFTs({ owner: wallet });
-      this.collectedNFTs = nfts;
-    },
-    async fetchUserSellingNFTs(wallet) {
-      const { data } = await this.$api.get(getUserSellNFTClasses({ wallet }));
-      this.sellingNFTClassIds = data.list;
-      if (!this.sellingNFTClassIds.length) {
+    ...mapActions(['fetchNFTListByAddress']),
+    async loadNFTListByAddress(address) {
+      this.wallet = address;
+      if (!this.getNFTClassIdListByAddress(address)) {
+        this.isLoading = true;
+        await this.fetchNFTListByAddress(address);
+        this.isLoading = false;
+      }
+      if (!this.sortedCreatedClassIds.length) {
         this.currentTab = 'collected';
       }
-      this.isLoading = false;
+      this.fetchNFTListByAddress(address);
     },
     goCollected() {
       this.currentTab = 'collected';

@@ -8,7 +8,6 @@
       <NuxtLink
         class="flex items-center text-like-green group -my-[8px]"
         :to="`/${creatorAddress}`"
-        target="_blank"
       >
         <Identity
           :avatar-url="creatorAvatarSrc"

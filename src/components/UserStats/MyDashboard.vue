@@ -1,7 +1,7 @@
 <template>
   <UserStatsBase
     class="flex flex-col items-center w-full laptop:flex-row"
-    :collected-items="collectedItems"
+    :collected-class-ids="collectedClassIds"
     :created-class-ids="createdClassIds"
   >
     <template v-slot="stats">
@@ -91,7 +91,7 @@ export default {
     formatNumber,
   },
   props: {
-    collectedItems: {
+    collectedClassIds: {
       type: Array,
       default: () => [],
     },
