@@ -3,22 +3,22 @@ import Vue from 'vue';
 import { getNFTs } from '~/util/nft';
 import { getUserSellNFTClasses } from '@/util/api';
 
-const NFT_SET_USER_CLASSID_LIST = 'NFT_SET_USER_CLASSID_LIST';
+const NFT_SET_USER_CLASSID_LIST_MAP = 'NFT_SET_USER_CLASSID_LIST_MAP';
 
 const state = () => ({
-  userClassIdList: {},
+  userClassIdListMap: {},
 });
 
 const mutations = {
-  [NFT_SET_USER_CLASSID_LIST](state, { address, nfts }) {
-    Vue.set(state.userClassIdList, address, nfts);
+  [NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
+    Vue.set(state.userClassIdListMap, address, nfts);
   },
 };
 
 const getters = {
-  NFTClassIdList: state => state.userClassIdList,
+  NFTClassIdList: state => state.userClassIdListMap,
   getNFTClassIdListByAddress: state => address =>
-    state.userClassIdList[address],
+    state.userClassIdListMap[address],
 };
 
 const actions = {
@@ -29,7 +29,7 @@ const actions = {
     ]);
     const collectedIds = nfts?.map(n => n?.classId);
 
-    commit(NFT_SET_USER_CLASSID_LIST, {
+    commit(NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
       nfts: {
         created: createdIds,
