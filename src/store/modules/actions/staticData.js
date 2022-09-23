@@ -135,3 +135,20 @@ export async function lazyGetNFTOwners({ getters, dispatch }, classId) {
   }
   return owners;
 }
+
+export async function fetchLIKEPrice({ commit }) {
+  let price = 0;
+  try {
+    const data = await this.$api.$get(api.getLIKEPrice());
+    price = data.likecoin.usd;
+    commit(TYPES.STATIC_SET_LIKE_PRICE_IN_USD, price);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('CANNOT_GET_LIKE_PRICE');
+  }
+  return price;
+}
+
+export function lazyFetchLIKEPrice({ state, dispatch }) {
+  return state.likePriceInUSD || dispatch('fetchLIKEPrice');
+}

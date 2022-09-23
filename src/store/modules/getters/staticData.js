@@ -1,5 +1,7 @@
 import { isWritingNFT } from '~/util/nft';
 
+import { ROUGH_LIKE_TO_USD_PRICE } from '~/constant';
+
 export const getUserInfoById = state => id => state.userInfos[id];
 
 export const getUserInfoByAddress = state => address =>
@@ -40,3 +42,6 @@ export const getNFTClassIdSorter = (_, getters) => classIds => {
   });
   return sorted;
 };
+
+export const LIKEPriceInUSD = state =>
+  state.LIKEPriceInUSD || ROUGH_LIKE_TO_USD_PRICE;

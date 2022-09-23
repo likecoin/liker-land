@@ -127,7 +127,7 @@ export default {
       );
     },
     isInsufficientLIKE() {
-      return this.walletLIKEBalance < this.nftPriceInLIKE;
+      return this.walletLIKEBalance < this.NFTPrice;
     },
     canPayByLIKE() {
       return !['cosmostation-mobile', 'keplr-mobile'].includes(
@@ -160,7 +160,6 @@ export default {
       this.paymentMethod = undefined;
 
       // Mixin
-      this.nftPriceInLIKE = undefined;
       this.nftPriceInUSD = undefined;
       this.userCollectedCount = undefined;
       this.fetchNFTPrices(this.classId);

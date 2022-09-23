@@ -82,7 +82,7 @@
           <NFTPagePriceSection
             v-if="NFTPrice"
             :nft-price="NFTPrice"
-            :nft-price-u-s-d="NFTPriceUSD"
+            :nft-price-u-s-d="formattedNFTPriceUSD"
             :collected-count="mintedCount"
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
@@ -121,14 +121,14 @@
 </template>
 
 <script>
-import { getLIKEPrice } from '~/util/api';
+import { mapActions } from 'vuex';
+
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
-import { ROUGH_LIKE_TO_USD_PRICE } from '~/constant';
 
 export default {
   layout: 'default',
@@ -184,7 +184,7 @@ export default {
                   url: this.$route.path,
                   offers: {
                     '@type': 'Offer',
-                    price: this.purchaseInfo.price * ROUGH_LIKE_TO_USD_PRICE,
+                    price: this.NFTPriceUSD,
                     priceCurrency: 'USD',
                     availability: 'LimitedAvailability',
                   },
@@ -214,10 +214,6 @@ export default {
   computed: {
     classId() {
       return this.$route.params.classId;
-    },
-    NFTPriceUSD() {
-      const price = this.currentPrice * this.purchaseInfo.price;
-      return `(${price.toFixed(3)} USD)`;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
@@ -251,7 +247,7 @@ export default {
       this.updateDisplayNameList(this.iscnOwner);
       this.updateNFTOwners();
       this.updateNFTHistory();
-      this.getLIKEPrice();
+      this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -276,6 +272,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['lazyFetchLIKEPrice']),
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
@@ -384,17 +381,6 @@ export default {
         1
       );
       return this.handleCollect();
-    },
-    async getLIKEPrice() {
-      try {
-        const { data } = await this.$api.get(getLIKEPrice());
-        this.currentPrice = data.likecoin.usd;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        // eslint-disable-next-line no-console
-        console.error('CANNOT_GET_LIKE_PRICE');
-      }
     },
     handleCopyURL() {
       this.copyURLPath(this.nftDetailsPageURL, {
