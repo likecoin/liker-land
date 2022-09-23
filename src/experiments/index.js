@@ -1,3 +1,3 @@
-import index from './any';
+import keplrInstallCTA from './keplr-install-cta';
 
-export default [index];
+export default [keplrInstallCTA];

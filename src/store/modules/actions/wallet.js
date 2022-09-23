@@ -6,6 +6,10 @@ import { getAccountBalance } from '~/util/nft';
 import { getUserInfoMinByAddress } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
+export function setKeplrInstallCTAPreset({ commit }, preset) {
+  commit(types.WALLET_SET_KEPLR_INSTALL_CTA_PRESET, preset);
+}
+
 export async function initWallet(
   { commit, dispatch },
   { method, accounts, offlineSigner }
@@ -43,6 +47,7 @@ export function getConnector({ state, commit }) {
   }
   const connector = new LikeCoinWalletConnector({
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
+    keplrInstallCTAPreset: state.keplrInstallCTAPreset,
   });
   commit(types.WALLET_SET_CONNECTOR, connector);
   return connector;
