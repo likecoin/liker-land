@@ -17,6 +17,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
   coinDenom: LIKECOIN_CHAIN_DENOM,
   coinMinimalDenom: LIKECOIN_CHAIN_MIN_DENOM,
   coinDecimals: 9,
+  coinGeckoId: IS_TESTNET ? '' : 'likecoin',
   bech32PrefixAccAddr: 'like',
   bech32PrefixAccPub: 'likepub',
   bech32PrefixValAddr: 'likevaloper',
