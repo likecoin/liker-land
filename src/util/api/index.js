@@ -86,7 +86,8 @@ export const getOAuthLoginAPI = ({ language = 'zh', utmSource } = {}) =>
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getLoginStatus = () => `/api/users/self`;
 export const getLogoutAPI = () => `/api/users/logout`;
-export const getCivicLikerStakingAPI = () => '/api/civic/staking';
+export const getCivicLikerStakingAPI = address =>
+  `/api/civic/staking?address=${address}`;
 export const getCivicLikerStakingInfoAPI = () => '/api/civic/staking/info';
 
 export const getImageResizeAPI = (url, { width } = {}) =>
