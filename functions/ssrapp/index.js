@@ -4,20 +4,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { Nuxt } = require('nuxt-start');
 
-let debug = false;
-
-if ((functions.config().constant || {}).api_url) {
-  process.env.API_URL = functions.config().constant.api_url;
-}
-
-if ((functions.config().constant || {}).network === 'rinkeby') {
-  process.env.IS_TESTNET = 'TRUE';
-  debug = true;
-}
-
-if ((functions.config().sentry || {}).report_uri) {
-  process.env.SENTRY_REPORT_URI = functions.config().sentry.report_uri;
-}
+const debug = process.env.IS_TESTNET === 'TRUE';
 
 const nuxtConfig = require('../nuxt.config');
 
