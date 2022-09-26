@@ -5,11 +5,9 @@ import { logTrackerEvent } from '~/util/EventLogger';
 export default {
   created() {
     // Set Keplr Install CTA preset
-    if (this.$exp?.isEligible?.({ route: this.$route })) {
-      const { name, $activeVariants } = this.$exp;
-      if (name === 'keplr-install-cta' && $activeVariants.length) {
-        this.setKeplrInstallCTAPreset($activeVariants[0].name);
-      }
+    const { name, $activeVariants } = this.$exp;
+    if (name === 'keplr-install-cta' && $activeVariants.length) {
+      this.setKeplrInstallCTAPreset($activeVariants[0].name);
     }
   },
   computed: {
