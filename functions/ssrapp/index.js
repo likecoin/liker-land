@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const { onRequest } = require('firebase-functions/v2/https');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -25,4 +25,4 @@ app.use(async (req, res) => {
   nuxt.render(req, res);
 });
 
-module.exports = functions.region('us-west2').https.onRequest(app);
+module.exports = onRequest({ region: ['us-west1'] }, app);
