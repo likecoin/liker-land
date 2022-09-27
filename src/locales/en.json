@@ -154,7 +154,7 @@
   "civic_dashboard_v3_summary_action_button_connect_wallet": "Connect Wallet",
   "civic_dashboard_v3_summary_action_button_register": "Register Liker ID",
   "civic_dashboard_v3_summary_action_button_delegate": "Stake now",
-  "civic_dashboard_v3_summary_action_button_manage": "Restake",
+  "civic_dashboard_v3_summary_action_button_manage": "Manage Staking",
   "civic_dashboard_v3_summary_warning": "You can withdraw your staked LikeCoin at anytime, but need to wait for a 21-day cool down period.",
   "civic_dashboard_v3_summary_liker_id_description": "Register Liker ID for {civicLiker} admission",
   "civic_dashboard_v3_summary_liker_id_unregistered": "Unregistered",
