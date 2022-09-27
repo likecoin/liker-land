@@ -16,7 +16,7 @@ export default {
         url,
       });
     },
-    shareURLPath({ title, text, path }, options) {
+    shareURLPath({ title, text, path, ...options }) {
       const host = `${window.location.protocol}//${window.location.host}`;
       const url = `${host}${path}`;
       if (navigator.share) {

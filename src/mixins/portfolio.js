@@ -98,16 +98,12 @@ export default {
       this.currentTab = 'created';
     },
     copySharePageURL(wallet, referrer) {
-      this.shareURLPath(
-        {
-          title: this.userDisplayName,
-          text: this.userDisplayName,
-          path: `/${wallet}?referrer=${referrer}`,
-        },
-        {
-          alertMessage: this.$t('tooltip_share_done'),
-        }
-      );
+      this.shareURLPath({
+        title: this.userDisplayName,
+        text: this.userDisplayName,
+        path: `/${wallet}?referrer=${referrer}`,
+        alertMessage: this.$t('tooltip_share_done'),
+      });
     },
   },
 };
