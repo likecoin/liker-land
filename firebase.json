@@ -24,7 +24,7 @@
       {
         "source": "**",
         "function": "ssrapp",
-        "region": "us-west2"
+        "region": "us-west1"
       }
     ]
   }
