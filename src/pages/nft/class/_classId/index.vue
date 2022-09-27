@@ -383,9 +383,16 @@ export default {
       return this.handleCollect();
     },
     handleCopyURL() {
-      this.copyURLPath(this.nftDetailsPageURL, {
-        alertMessage: this.$t('tooltip_share_done'),
-      });
+      this.shareURLPath(
+        {
+          title: this.NFTName,
+          text: this.NFTDescription,
+          path: this.nftDetailsPageURL,
+        },
+        {
+          alertMessage: this.$t('tooltip_share_done'),
+        }
+      );
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
     },
   },

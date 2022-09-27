@@ -2,9 +2,10 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { ellipsis } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
+import nftMixin from '~/mixins/nft';
 
 export default {
-  mixins: [clipboardMixin],
+  mixins: [clipboardMixin, nftMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
@@ -97,9 +98,16 @@ export default {
       this.currentTab = 'created';
     },
     copySharePageURL(wallet, referrer) {
-      this.copyURLPath(`/${wallet}?referrer=${referrer}`, {
-        alertMessage: this.$t('tooltip_share_done'),
-      });
+      this.shareURLPath(
+        {
+          title: this.userDisplayName,
+          text: this.userDisplayName,
+          path: `/${wallet}?referrer=${referrer}`,
+        },
+        {
+          alertMessage: this.$t('tooltip_share_done'),
+        }
+      );
     },
   },
 };
