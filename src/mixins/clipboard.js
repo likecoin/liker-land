@@ -9,10 +9,21 @@ export default {
       copyToClipboard(text);
       this.alertPromptSuccess(alertMessage);
     },
-    copyURLPath(path, options) {
+    share({ title, text, url }) {
+      navigator.share({
+        title,
+        text,
+        url,
+      });
+    },
+    shareURLPath({ title, text, path, ...options }) {
       const host = `${window.location.protocol}//${window.location.host}`;
       const url = `${host}${path}`;
-      this.copyToClipboard(url, options);
+      if (navigator.share) {
+        this.share({ title, text, url });
+      } else {
+        this.copyToClipboard(url, options);
+      }
     },
   },
 };
