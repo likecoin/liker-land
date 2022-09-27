@@ -1,10 +1,23 @@
-const { onRequest } = require('firebase-functions/v2/https');
+const functions = require('firebase-functions');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { Nuxt } = require('nuxt-start');
 
-const debug = process.env.IS_TESTNET === 'TRUE';
+let debug = false;
+
+if ((functions.config().constant || {}).api_url) {
+  process.env.API_URL = functions.config().constant.api_url;
+}
+
+if ((functions.config().constant || {}).network === 'rinkeby') {
+  process.env.IS_TESTNET = 'TRUE';
+  debug = true;
+}
+
+if ((functions.config().sentry || {}).report_uri) {
+  process.env.SENTRY_REPORT_URI = functions.config().sentry.report_uri;
+}
 
 const nuxtConfig = require('../nuxt.config');
 
@@ -25,4 +38,4 @@ app.use(async (req, res) => {
   nuxt.render(req, res);
 });
 
-module.exports = onRequest({ region: ['us-west1'] }, app);
+module.exports = functions.region('us-west2').https.onRequest(app);

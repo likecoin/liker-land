@@ -21,6 +21,7 @@ const EXTERNAL_URL =
   CONFIG_EXTERNAL_URL ||
   (IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land');
 const OAUTH_REDIRECT_URI = `${EXTERNAL_URL}/oauth/redirect`;
+const LIKEPAY_REDIRECT_URI = `${EXTERNAL_URL}/civic/payment/likepay/redirect`;
 
 const axios = Axios.create({
   timeout: 60000,
@@ -93,6 +94,8 @@ const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
       headers: { Authorization },
     })
   );
+const apiFetchUserPublicProfile = user =>
+  axios.get(`${LIKECOIN_API_BASE}/users/id/${user}/min`);
 const apiFetchLatestSuperLike = ({ limit, after, before }) =>
   axios.get(`${LIKECOIN_API_BASE}/like/share/latest`, {
     params: {
@@ -129,6 +132,20 @@ const apiFetchPersonalSuggestedArticles = req =>
     axios.get(`${LIKECOIN_API_BASE}/like/suggest/personal`, {
       headers: { Authorization },
     })
+  );
+const apiPostArticleForInfo = (url, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKECOIN_API_BASE}/like/info`,
+      { url },
+      { headers: { Authorization } }
+    )
+  );
+const apiFetchArticleDetail = ({ url = '', iscnId = '' }) =>
+  axios.get(
+    `${LIKECOIN_API_BASE}/like/info?iscn_id=${encodeURIComponent(
+      iscnId
+    )}&url=${encodeURIComponent(url)}`
   );
 const apiFetchFollowedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
@@ -176,6 +193,52 @@ const apiDeleteBookmarks = (url, req) =>
         headers: { Authorization },
       }
     )
+  );
+const apiCivicLikerTrialEventById = id =>
+  axios.get(`${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}`);
+const apiCivicLikerJoinTrialEventById = (id, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKE_CO_URL_BASE}/api/civic/trial/events/${id}/join`,
+      {},
+      {
+        headers: { Authorization },
+      }
+    )
+  );
+const apiCivicLikerListSupportingUser = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKE_CO_URL_BASE}/api/civic/support/users`, {
+      headers: { Authorization },
+    })
+  );
+const apiCivicLikerGetSupportingUser = (id, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKE_CO_URL_BASE}/api/civic/support/users/${id}`, {
+      headers: { Authorization },
+    })
+  );
+const apiCivicLikerSupportUser = (id, quantity, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.post(
+      `${LIKE_CO_URL_BASE}/api/civic/support/users/${id}`,
+      { quantity },
+      {
+        headers: { Authorization },
+      }
+    )
+  );
+const apiCivicLikerDeleteSuppoUser = (id, req) =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.delete(`${LIKE_CO_URL_BASE}/api/civic/support/users/${id}`, {
+      headers: { Authorization },
+    })
+  );
+const apiCivicLikerGetMetadata = req =>
+  sendAuthorizedRequest(req, Authorization =>
+    axios.get(`${LIKE_CO_URL_BASE}/api/civic/metadata`, {
+      headers: { Authorization },
+    })
   );
 const apiCivicLikerGetStaking = req =>
   sendAuthorizedRequest(req, Authorization =>
@@ -225,6 +288,21 @@ const getOAuthCallbackAPI = authCode => {
   )}`;
 };
 
+const getLikePayURL = ({ amount, state, remarks, via, to, fee }) => {
+  const qsPayload = {
+    amount,
+    to,
+    redirect_uri: LIKEPAY_REDIRECT_URI,
+  };
+  if (state) qsPayload.state = state;
+  if (remarks) qsPayload.remarks = remarks;
+  if (via) qsPayload.via = via;
+  if (fee) qsPayload.fee = fee;
+  return `${LIKE_CO_URL_BASE}/in/widget/pay?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 module.exports = {
   EXTERNAL_URL,
   apiRefreshAccessToken,
@@ -232,19 +310,30 @@ module.exports = {
   apiFetchUserPreferences,
   apiUpdateUserPreferences,
   apiFetchUserSuperLikeStatus,
+  apiFetchUserPublicProfile,
   apiFetchLatestSuperLike,
   apiFetchFollowedSuperLikes,
   apiFetchUserSuperlike,
   apiFetchSuggestedArticles,
   apiFetchPersonalSuggestedArticles,
+  apiPostArticleForInfo,
+  apiFetchArticleDetail,
   apiFetchBookmarks,
   apiPostBookmarks,
   apiDeleteBookmarks,
   apiFetchFollowedUser,
   apiPostFollowedUser,
   apiDeleteFollowedUser,
+  apiCivicLikerTrialEventById,
+  apiCivicLikerJoinTrialEventById,
+  apiCivicLikerListSupportingUser,
+  apiCivicLikerGetSupportingUser,
+  apiCivicLikerSupportUser,
+  apiCivicLikerDeleteSuppoUser,
+  apiCivicLikerGetMetadata,
   apiCivicLikerGetStaking,
   apiCivicLikerGetStakingInfo,
   getOAuthURL,
   getOAuthCallbackAPI,
+  getLikePayURL,
 };
