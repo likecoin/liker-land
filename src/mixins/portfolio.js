@@ -2,10 +2,9 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { ellipsis } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
-import nftMixin from '~/mixins/nft';
 
 export default {
-  mixins: [clipboardMixin, nftMixin],
+  mixins: [clipboardMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
