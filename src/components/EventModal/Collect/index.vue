@@ -89,6 +89,8 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { IS_TESTNET } from '~/constant';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 import { formatNumberWithLIKE } from '~/util/ui';
 
@@ -130,9 +132,11 @@ export default {
       return this.walletLIKEBalance < this.NFTPrice;
     },
     canPayByLIKE() {
-      return !['cosmostation-mobile', 'keplr-mobile'].includes(
-        this.walletMethodType
-      );
+      const notSupportedPlatforms = ['keplr-mobile'];
+      if (!IS_TESTNET) {
+        notSupportedPlatforms.push('cosmostation-mobile');
+      }
+      return !notSupportedPlatforms.includes(this.walletMethodType);
     },
   },
   watch: {
