@@ -32,7 +32,6 @@ import {
   getCivicLikerStakingAPI,
   getCivicLikerStakingInfoAPI,
 } from '~/util/api';
-import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
   name: 'CivicLikerV3Dashboard',
@@ -68,11 +67,7 @@ export default {
   },
   methods: {
     handleRegister() {
-      window.open(
-        getLikerIdSettingsURL(),
-        'settings',
-        'menubar=no,location=no,width=576,height=768'
-      );
+      this.navigateToSettings();
     },
     handleSignIn() {
       this.connectWallet();
