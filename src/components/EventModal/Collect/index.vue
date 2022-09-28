@@ -114,6 +114,9 @@ export default {
     };
   },
   computed: {
+    developerMode() {
+      return !!this.$route.query.debug;
+    },
     classId() {
       // Alias for NFT mixin
       return this.uiTxTargetClassId;
@@ -132,6 +135,7 @@ export default {
       return this.walletLIKEBalance < this.NFTPrice;
     },
     canPayByLIKE() {
+      if (this.developerMode) return true;
       const notSupportedPlatforms = ['keplr-mobile'];
       if (!IS_TESTNET) {
         notSupportedPlatforms.push('cosmostation-mobile');
