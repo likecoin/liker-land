@@ -337,6 +337,10 @@
       "Title": "{name} 的個人專頁"
     }
   },
+  "SettingsPage": {
+    "title": "設定",
+    "language": "介面語言"
+  },
   "SignUpSignInCTA": {
     "slogan": "成為 Liker 以訂閱內容"
   },
