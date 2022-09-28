@@ -164,20 +164,23 @@ export default {
     async handleSelectMenuItem(value) {
       switch (value) {
         case 'dashboard': {
-          logTrackerEvent(this, 'SiteHeader', 'NFTGoToMyPage', '', 1);
+          logTrackerEvent(this, 'site_menu', 'site_menu_click_dashboad', '', 1);
           await this.navigateToMyDashboard();
           break;
         }
 
         case 'civic':
+          logTrackerEvent(this, 'site_menu', 'site_menu_click_civic', '', 1);
           this.$router.push({ name: 'civic' });
           break;
 
         case 'setting':
+          logTrackerEvent(this, 'site_menu', 'site_menu_click_settings', '', 1);
           this.navigateToSettings();
           break;
 
         case 'signOut':
+          logTrackerEvent(this, 'site_menu', 'site_menu_click_signout', '', 1);
           this.disconnectWallet();
           if (this.getUserId) {
             this.userLogout();
