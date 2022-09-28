@@ -102,8 +102,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { getLikerIdSettingsURL } from '~/util/links';
-
 import walletMixin from '~/mixins/wallet';
 import { ellipsis, formatNumber } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -176,11 +174,7 @@ export default {
           break;
 
         case 'setting':
-          window.open(
-            getLikerIdSettingsURL(),
-            'settings',
-            'menubar=no,location=no,width=576,height=768'
-          );
+          this.navigateToSettings();
           break;
 
         case 'signOut':

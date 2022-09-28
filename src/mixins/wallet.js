@@ -1,6 +1,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
+import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
   created() {
@@ -70,6 +71,13 @@ export default {
           name: 'dashboard',
         });
       }
+    },
+    navigateToSettings() {
+      window.open(
+        getLikerIdSettingsURL(),
+        'settings',
+        'menubar=no,location=no,width=576,height=768'
+      );
     },
   },
 };
