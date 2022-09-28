@@ -74,7 +74,7 @@ export default {
     },
     navigateToSettings() {
       window.open(
-        getLikerIdSettingsURL(),
+        getLikerIdSettingsURL({ wallet: this.getAddress || '' }),
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
