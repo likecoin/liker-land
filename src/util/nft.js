@@ -1,7 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BigNumber } from 'bignumber.js';
-import { ISCNQueryClient, ISCNSigningClient } from '@likecoin/iscn-js';
-import { parseNFTClassDataFields } from '@likecoin/iscn-js/dist/messages/parsing';
 import { PageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import {
@@ -11,9 +9,19 @@ import {
 } from '../constant';
 
 let queryClient = null;
+let iscnLib = null;
+
+export async function getISCNLib() {
+  if (!iscnLib) {
+    iscnLib = await import(/* webpackChunkName: "iscn_js" */ '@likecoin/iscn-js');
+  }
+  return iscnLib;
+}
+
 export async function getNFTQueryClient() {
   if (!queryClient) {
-    const client = new ISCNQueryClient();
+    const iscn = await getISCNLib();
+    const client = new iscn.ISCNQueryClient();
     await client.connect(LIKECOIN_CHAIN_NFT_RPC);
     queryClient = client;
   }
@@ -21,7 +29,8 @@ export async function getNFTQueryClient() {
 }
 
 export async function createNFTSigningClient(signer) {
-  const client = new ISCNSigningClient();
+  const iscn = await getISCNLib();
+  const client = new iscn.ISCNSigningClient();
   await client.connectWithSigner(LIKECOIN_CHAIN_NFT_RPC, signer);
   return client;
 }
@@ -30,7 +39,8 @@ export async function getClassInfo(classId) {
   const c = await getNFTQueryClient();
   const client = await c.getQueryClient();
   let { class: nftClass } = await client.nft.class(classId);
-  if (nftClass) nftClass = parseNFTClassDataFields(nftClass);
+  const iscn = await getISCNLib();
+  if (nftClass) nftClass = iscn.parseNFTClassDataFields(nftClass);
   return nftClass;
 }
 

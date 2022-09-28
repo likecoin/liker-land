@@ -1,10 +1,7 @@
 import * as TYPES from '@/store/mutation-types';
 import * as api from '@/util/api';
-import {
-  getClassInfo,
-  isValidHttpUrl,
-  formatOwnerInfoFromChain,
-} from '@/util/nft';
+import { isValidHttpUrl, formatOwnerInfoFromChain } from '@/util/nft';
+import { LIKECOIN_CHAIN_API } from '@/constant';
 
 const USER_INFO_EXPIRE_TIME = 1000 * 60 * 10; // 10 minutes
 
@@ -88,7 +85,10 @@ export async function lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
 
 export async function fetchNFTMetadata({ commit }, classId) {
   let metadata;
-  const chainMetadata = await getClassInfo(classId);
+  // const chainMetadata = await getClassInfo(classId);
+  const { class: chainMetadata } = await this.$api.$get(
+    `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`
+  );
   const {
     name,
     description,

@@ -1,10 +1,17 @@
-import { LikeCoinWalletConnector } from '@likecoin/wallet-connector';
-
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
 import { getUserInfoMinByAddress } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
+
+let likecoinWalletLib = null;
+
+export async function getLikeCoinWalletLib() {
+  if (!likecoinWalletLib) {
+    likecoinWalletLib = await import(/* webpackChunkName: "likecoin_wallet" */ '@likecoin/wallet-connector');
+  }
+  return likecoinWalletLib;
+}
 
 export function setKeplrInstallCTAPreset({ commit }, preset) {
   commit(types.WALLET_SET_KEPLR_INSTALL_CTA_PRESET, preset);
@@ -41,11 +48,12 @@ export async function initWallet(
   return true;
 }
 
-export function getConnector({ state, commit }) {
+export async function getConnector({ state, commit }) {
   if (state.connector) {
     return state.connector;
   }
-  const connector = new LikeCoinWalletConnector({
+  const lib = await getLikeCoinWalletLib();
+  const connector = new lib.LikeCoinWalletConnector({
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
     keplrInstallCTAPreset: state.keplrInstallCTAPreset,
     cosmostationAppWC2Enabled: state.cosmostationAppWC2Enabled,
