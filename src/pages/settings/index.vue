@@ -5,43 +5,14 @@
         NuxtLink.settings-menu__item(:to="{ name: 'settings-language' }")
           GlobeIcon.settings-menu__item-title-icon
           span.settings-menu__item-title {{ $t('SettingsPage.language') }}
-
-    ul.settings-menu(v-if="getUserId")
-      li
-        a.settings-menu__item(
-          :href="getLikerIdSettingsURL"
-          :title="$t('SettingsPage.likerId')"
-          target="_blank"
-          rel="noopener"
-        )
-          span.settings-menu__item-title {{ $t('SettingsPage.likerId') }}
-          span.settings-menu__item-subtitle {{ getUserId }}
-      li
-        NuxtLink.settings-menu__item(:to="{ name: 'settings-following' }")
-          span.settings-menu__item-title {{ $t('SettingsPage.subscription') }}
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
-
-import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
   components: {
     GlobeIcon,
-  },
-  computed: {
-    getLikerIdSettingsURL,
-
-    ...mapGetters(['getUserId']),
-  },
-  mounted() {
-    this.fetchMySupporters();
-  },
-  methods: {
-    ...mapActions(['fetchMySupporters']),
   },
 };
 </script>
