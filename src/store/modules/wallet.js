@@ -2,6 +2,7 @@
 
 import {
   WALLET_SET_KEPLR_INSTALL_CTA_PRESET,
+  WALLET_SET_COSMOSTATION_APP_WC_DIRECT_SIGN_ENABLED,
   WALLET_SET_ADDRESS,
   WALLET_SET_SIGNER,
   WALLET_SET_CONNECTOR,
@@ -15,6 +16,7 @@ import * as actions from './actions/wallet';
 
 const state = () => ({
   keplrInstallCTAPreset: 'origin',
+  cosmostationAppWCDirectSignEnabled: false,
   address: '',
   signer: null,
   connector: null,
@@ -27,6 +29,9 @@ const state = () => ({
 const mutations = {
   [WALLET_SET_KEPLR_INSTALL_CTA_PRESET](state, preset) {
     state.keplrInstallCTAPreset = preset;
+  },
+  [WALLET_SET_COSMOSTATION_APP_WC_DIRECT_SIGN_ENABLED](state, isEnabled) {
+    state.cosmostationAppWCDirectSignEnabled = isEnabled;
   },
   [WALLET_SET_ADDRESS](state, address) {
     state.address = address;

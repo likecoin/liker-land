@@ -48,6 +48,8 @@ export function getConnector({ state, commit }) {
   const connector = new LikeCoinWalletConnector({
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
     keplrInstallCTAPreset: state.keplrInstallCTAPreset,
+    cosmostationAppWCDirectSignEnabled:
+      state.cosmostationAppWCDirectSignEnabled,
   });
   commit(types.WALLET_SET_CONNECTOR, connector);
   return connector;
