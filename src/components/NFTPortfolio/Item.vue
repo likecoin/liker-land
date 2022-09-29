@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    class="mx-auto mb-[5px] break-inside-avoid"
+    class="mx-auto break-inside-avoid"
     :to="{ name: 'nft-class-classId', params: { classId } }"
     @click.native="handleClickViewDetails"
   >

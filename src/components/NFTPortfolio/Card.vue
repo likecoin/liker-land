@@ -3,7 +3,6 @@
     :class="[
       'flex',
       'flex-col',
-      'relative',
       'rounded-[24px]',
       'w-[310px]',
       'overflow-hidden',

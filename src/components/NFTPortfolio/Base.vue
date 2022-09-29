@@ -1,5 +1,5 @@
 <template>
-  <NFTGemWrapper class="mb-[16px]" :collected-count="collectedCount">
+  <NFTGemWrapper :collected-count="collectedCount">
     <NFTPortfolioCard>
       <div
         class="h-[180px]"

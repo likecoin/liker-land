@@ -113,6 +113,7 @@
             >
               <NFTPortfolioItem
                 :class-id="id"
+                class="mb-[16px]"
               />
             </li>
           </ul>
@@ -138,6 +139,7 @@
             >
               <NFTPortfolioItem
                 :class-id="id"
+                class="mb-[16px]"
               />
             </li>
           </ul>
