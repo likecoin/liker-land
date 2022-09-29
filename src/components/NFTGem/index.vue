@@ -27,6 +27,9 @@
 </template>
 
 <script>
+const getLevelImg = require.context('./level/', false, /\.png$/);
+const getSparkImg = require.context('./spark/', false, /\.png$/);
+
 export default {
   props: {
     level: {
@@ -78,13 +81,14 @@ export default {
           return undefined;
       }
     },
+    filename() {
+      return `./${this.level >= 10 ? this.level : `0${this.level}`}.png`;
+    },
     levelImgSrc() {
-      const images = require.context('./level/', false, /\.png$/);
-      return images(`./${this.level}.png`);
+      return getLevelImg(this.filename);
     },
     sparkImgSrc() {
-      const images = require.context('./spark/', false, /\.png$/);
-      return images(`./${this.level}.png`);
+      return getSparkImg(this.filename);
     },
   },
 };
