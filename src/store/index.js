@@ -33,10 +33,7 @@ const createStore = () =>
           }
         }
         if (query.debug !== undefined) {
-          commit(
-            types.WALLET_SET_COSMOSTATION_APP_WC_DIRECT_SIGN_ENABLED,
-            true
-          );
+          commit(types.WALLET_SET_COSMOSTATION_APP_WC2_ENABLED, true);
         }
         if (res.timing) res.timing.end('store_init');
       },
