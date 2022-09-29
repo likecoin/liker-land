@@ -133,13 +133,21 @@ export default {
   name: 'MyDashboardPage',
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
+  data() {
+    return { switchWalletCount: 0 };
+  },
   watch: {
     getAddress: {
       immediate: true,
       async handler(newAddress) {
         if (newAddress) {
-          this.fetchUserInfo();
-          await this.loadNFTListByAddress(this.getAddress);
+          this.switchWalletCount += 1;
+          if (this.switchWalletCount < 2) {
+            this.fetchUserInfo();
+            await this.loadNFTListByAddress(this.getAddress);
+          } else {
+            this.$router.go();
+          }
         }
       },
     },
