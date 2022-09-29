@@ -37,7 +37,7 @@
         <!-- Left column -->
         <div class="flex flex-col gap-[24px]">
           <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
-            <div class="relative">
+            <NFTGemWrapper :collected-count="mintedCount">
               <NFTPagePreviewCard
                 :image-bg-color="NFTImageBackgroundColor"
                 :image-url="NFTImageUrl"
@@ -51,8 +51,7 @@
                 :nft-price="NFTPrice"
                 @collect="handleCollectFromPreviewSection"
               />
-              <NFTPortfolioGem class="absolute bottom-0 translate-y-[-50%] w-[90%]" :active-batch="activeBatch" />
-            </div>
+            </NFTGemWrapper>
             <NFTPageMetadataSection
               :content-url="NFTExternalUrl"
               :iscn-id="iscnId"
@@ -128,7 +127,6 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
-import { getBatch } from '~/util/writing-nft';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -221,9 +219,6 @@ export default {
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
-    },
-    activeBatch() {
-      return getBatch(this.mintedCount);
     },
   },
   asyncData({ query }) {

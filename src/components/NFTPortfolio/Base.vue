@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-[16px] relative">
+  <NFTGemWrapper class="mb-[16px]" :collected-count="collectedCount">
     <NFTPortfolioCard>
       <div
         class="h-[180px]"
@@ -74,13 +74,11 @@
         </div>
       </div>
     </NFTPortfolioCard>
-    <NFTPortfolioGem class="absolute bottom-0 translate-y-[-50%] w-[90%]" :active-batch="activeBatch" />
-  </div>
+  </NFTGemWrapper>
 </template>
 
 <script>
 import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
-import { getBatch } from '~/util/writing-nft';
 
 export default {
   filters: {
@@ -135,11 +133,6 @@ export default {
     ownCount: {
       type: Number,
       default: 0,
-    },
-  },
-  computed: {
-    activeBatch() {
-      return getBatch(this.collectedCount);
     },
   },
   methods: {
