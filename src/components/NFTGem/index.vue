@@ -78,7 +78,7 @@ export default {
           return ['via-[#C0E1FF]'];
 
         default:
-          return undefined;
+          return [];
       }
     },
     filename() {
