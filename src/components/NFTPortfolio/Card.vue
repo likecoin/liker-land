@@ -5,7 +5,6 @@
       'flex-col',
       'rounded-[24px]',
       'w-[310px]',
-      'mb-[16px]',
       'overflow-hidden',
       'bg-white',
       'box-border',

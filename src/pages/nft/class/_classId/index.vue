@@ -37,19 +37,21 @@
         <!-- Left column -->
         <div class="flex flex-col gap-[24px]">
           <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
-            <NFTPagePreviewCard
-              :image-bg-color="NFTImageBackgroundColor"
-              :image-url="NFTImageUrl"
-              :avatar-url="iscnOwnerAvatar"
-              :avatar-size="40"
-              :is-avatar-outlined="isCivicLiker"
-              :iscn-owner="iscnOwner"
-              :display-name="iscnOwnerDisplayName"
-              :nft-name="NFTName"
-              :nft-description="NFTDescription"
-              :nft-price="NFTPrice"
-              @collect="handleCollectFromPreviewSection"
-            />
+            <NFTGemWrapper :collected-count="mintedCount">
+              <NFTPagePreviewCard
+                :image-bg-color="NFTImageBackgroundColor"
+                :image-url="NFTImageUrl"
+                :avatar-url="iscnOwnerAvatar"
+                :avatar-size="40"
+                :is-avatar-outlined="isCivicLiker"
+                :iscn-owner="iscnOwner"
+                :display-name="iscnOwnerDisplayName"
+                :nft-name="NFTName"
+                :nft-description="NFTDescription"
+                :nft-price="NFTPrice"
+                @collect="handleCollectFromPreviewSection"
+              />
+            </NFTGemWrapper>
             <NFTPageMetadataSection
               :content-url="NFTExternalUrl"
               :iscn-id="iscnId"

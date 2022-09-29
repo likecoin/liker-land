@@ -1,78 +1,80 @@
 <template>
-  <NFTPortfolioCard>
-    <div
-      class="h-[180px]"
-      :style="`background-color: ${imageBgColor}`"
-    >
-      <img
-        v-if="imageSrc"
-        class="object-cover w-full h-full max-h-[180px]"
-        :src="imageSrc"
-      >
-      <img
-        v-else
-        class="object-cover w-full h-full max-h-[180px]"
-        src="~/assets/images/nft/primitive-nft.png"
-      >
-    </div>
-    <div
-      :class="[
-        'flex',
-        'flex-col',
-        'text-center',
-        'whitespace-pre-line',
-        'px-[24px]',
-        'pt-[48px]',
-        'py-[24px]',
-        'relative',
-      ]"
-    >
-      <div class="flex flex-col items-center justify-center mt-[-70px]">
-        <Identity
-          :avatar-url="userAvatarSrc"
-          :avatar-size="40"
-          :is-avatar-outlined="isUserCivicLiker"
-        />
-        <div class="flex mt-[8px]">
-          <Label class="text-medium-gray">by</Label>
-          <Label
-            class="text-like-green ml-[4px] font-[600]"
-          >{{ userDisplayName | ellipsis }}</Label>
-        </div>
-      </div>
-      <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
+  <NFTGemWrapper :collected-count="collectedCount">
+    <NFTPortfolioCard>
       <div
-        v-if="price !== undefined"
-        class="z-[500] flex justify-center mt-[16px]"
+        class="h-[180px]"
+        :style="`background-color: ${imageBgColor}`"
       >
-        <ProgressIndicator v-if="isCollecting" />
-        <ButtonV2
-          v-else
-          preset="secondary"
-          @click.stop.prevent="handleClickCollect"
+        <img
+          v-if="imageSrc"
+          class="object-cover w-full h-full max-h-[180px]"
+          :src="imageSrc"
         >
-          <span>{{ price | formatNumberWithLIKE }}</span>
-          <template #prepend>
-            <IconPrice />
-          </template>
-        </ButtonV2>
+        <img
+          v-else
+          class="object-cover w-full h-full max-h-[180px]"
+          src="~/assets/images/nft/primitive-nft.png"
+        >
       </div>
-      <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
-        <div class="flex items-center text-medium-gray">
-          <IconMint />
-          <div class="ml-[4px]">{{ collectedCount }}</div>
+      <div
+        :class="[
+          'flex',
+          'flex-col',
+          'text-center',
+          'whitespace-pre-line',
+          'px-[24px]',
+          'pt-[48px]',
+          'py-[24px]',
+          'relative',
+        ]"
+      >
+        <div class="flex flex-col items-center justify-center mt-[-70px]">
+          <Identity
+            :avatar-url="userAvatarSrc"
+            :avatar-size="40"
+            :is-avatar-outlined="isUserCivicLiker"
+          />
+          <div class="flex mt-[8px]">
+            <Label class="text-medium-gray">by</Label>
+            <Label
+              class="text-like-green ml-[4px] font-[600]"
+            >{{ userDisplayName | ellipsis }}</Label>
+          </div>
         </div>
-        <div class="flex items-center text-medium-gray">
-          <IconOwner />
-          <div class="ml-[4px]">{{ collectorCount }}</div>
+        <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
+        <div
+          v-if="price !== undefined"
+          class="z-[500] flex justify-center mt-[16px]"
+        >
+          <ProgressIndicator v-if="isCollecting" />
+          <ButtonV2
+            v-else
+            preset="secondary"
+            @click.stop.prevent="handleClickCollect"
+          >
+            <span>{{ price | formatNumberWithLIKE }}</span>
+            <template #prepend>
+              <IconPrice />
+            </template>
+          </ButtonV2>
         </div>
-        <div v-if="ownCount" class="flex items-center text-like-green">
-          <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
-          <span>{{ ownCount }}</span>
+        <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+          <div class="flex items-center text-medium-gray">
+            <IconMint />
+            <div class="ml-[4px]">{{ collectedCount }}</div>
+          </div>
+          <div class="flex items-center text-medium-gray">
+            <IconOwner />
+            <div class="ml-[4px]">{{ collectorCount }}</div>
+          </div>
+          <div v-if="ownCount" class="flex items-center text-like-green">
+            <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
+            <span>{{ ownCount }}</span>
+          </div>
         </div>
       </div>
-    </div>
-  </NFTPortfolioCard>
+    </NFTPortfolioCard>
+  </NFTGemWrapper>
 </template>
 
 <script>
