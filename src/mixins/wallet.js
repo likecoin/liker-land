@@ -16,6 +16,7 @@ export default {
       'getAddress',
       'getSigner',
       'getLikerInfo',
+      'getLocale',
       'walletMethodType',
       'walletLIKEBalance',
     ]),
@@ -74,7 +75,10 @@ export default {
     },
     navigateToSettings() {
       window.open(
-        getLikerIdSettingsURL({ wallet: this.getAddress || '' }),
+        getLikerIdSettingsURL({
+          wallet: this.getAddress || '',
+          language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
+        }),
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
