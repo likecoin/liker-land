@@ -1,7 +1,7 @@
 <template>
-  <div class="relative">
+  <div class="relative break-inside-avoid">
     <slot />
-    <NFTGem class="absolute bottom-0 translate-y-[-50%] w-[90%]" :level="gemLevel" />
+    <NFTGem class="translate-y-[-50%] w-[90%]" :level="gemLevel" />
   </div>
 </template>
 
