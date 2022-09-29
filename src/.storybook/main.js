@@ -1,4 +1,4 @@
-const path = require("path");
+const postcss = require('postcss');
 
 module.exports = {
   "stories": [
@@ -6,38 +6,23 @@ module.exports = {
   ],
   "addons": [
     "@storybook/addon-links",
-    "@storybook/addon-essentials"
-  ],
-  "webpackFinal": (config) => {
-    /**
-     * core-js compatibility issue
-     * https://github.com/storybookjs/storybook/issues/11255
-     */
-    config.resolve.alias['core-js/modules'] = path.resolve(
-      __dirname,
-      '..',
-      'node_modules/@storybook/core/node_modules/core-js/modules'
-    );
-
-    config.module.rules.push({
-      test: /\.scss$/,
-      use: [
-        'style-loader',
-        'css-loader',
-        {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true,
-            config: {
-              path: './.storybook/',
-            },
-          },
+    "@storybook/addon-essentials",
+    {
+      name: 'storybook-addon-sass-postcss',
+      options: {
+        postcssLoaderOptions: {
+          implementation: postcss,
         },
-        'sass-loader',
-      ],
-      include: path.resolve(__dirname, '../'),
-    });
-
-    return config;
-  }
+        loadSassAfterPostCSS: true,
+      },
+    },
+    {
+      name: '@storybook/addon-postcss',
+      options: {
+        postcssLoaderOptions: {
+          implementation: postcss,
+        },
+      },
+    },
+  ],
 }
