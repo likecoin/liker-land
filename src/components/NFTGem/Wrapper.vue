@@ -1,5 +1,5 @@
 <template>
-  <div class="relative break-inside-avoid">
+  <div class="relative w-full">
     <slot />
     <NFTGem class="translate-y-[-50%] w-[90%]" :level="gemLevel" />
   </div>

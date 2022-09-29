@@ -1,6 +1,6 @@
 <template>
   <NFTPortfolioCard
-    class="!bg-shade-gray break-inside-avoid"
+    class="!bg-shade-gray"
   >
     <div class="p-[8px] w-full h-[140px]">
       <div
