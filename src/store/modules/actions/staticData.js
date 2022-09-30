@@ -85,6 +85,8 @@ export async function lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
 
 export async function fetchNFTMetadata({ commit }, classId) {
   let metadata;
+  /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
+    which is huge and affects index page performance */
   // const chainMetadata = await getClassInfo(classId);
   const { class: chainMetadata } = await this.$api.$get(
     `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`
