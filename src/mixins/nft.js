@@ -36,6 +36,8 @@ const NFT_INDEXER_LIMIT_MAX = 100;
 export default {
   mixins: [walletMixin],
   head() {
+    // Only load stripe if a wallet is connected
+    if (!this.getAddress) return {};
     return {
       link: [
         {
