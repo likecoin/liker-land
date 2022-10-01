@@ -99,6 +99,9 @@ const colors = {
 module.exports = {
   purge: {
     content: [
+      // Extract from @nuxtjs/tailwindcss for Storybook
+      path.resolve('./components/**/*.{vue,js,ts}'),
+
       path.resolve('./locales/**/*.json'),
     ],
   },

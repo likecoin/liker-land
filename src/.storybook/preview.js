@@ -4,6 +4,7 @@ import VueI18n from 'vue-i18n';
 // HACK: Consistent import to match require at client side for Nuxt.js
 import '../plugins/ui-plugin.client';
 import '../assets/css/index.scss';
+import './tailwind.scss';
 
 import en from '../locales/en.json';
 
