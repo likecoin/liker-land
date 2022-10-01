@@ -101,7 +101,12 @@
 </template>
 
 <script>
+import NFTSupplySlot from './Slot';
+
 export default {
+  components: {
+    NFTSupplySlot,
+  },
   props: {
     type: {
       type: String,
