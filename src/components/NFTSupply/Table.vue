@@ -36,9 +36,14 @@ import {
   getBatchStart,
   getAvailable,
   getPrice,
-} from '~/util/writing-nft';
+} from '../../util/writing-nft';
+
+import NFTSupplyRow from './Row';
 
 export default {
+  components: {
+    NFTSupplyRow,
+  },
   props: {
     collectedCount: {
       type: Number,
