@@ -10,7 +10,7 @@
       class="grow bg-gray-9b"
       :style="imgStyle"
     >
-      <img class="block object-contain" :src="imgSrc" :alt="title">
+      <img class="block object-contain" loading="lazy" :src="imgSrc" :alt="title">
     </div>
     <div class="p-[16px] shrink-0">
       <div class="text-[16px] leading-[1.25] font-[600] line-clamp-2">{{ title }}</div>

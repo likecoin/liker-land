@@ -177,6 +177,7 @@
       />
       <div class="p-32 mt-32 overflow-hidden bg-white rounded-8">
         <img
+          loading="lazy"
           class="rounded-[8px]"
           src="/images/og/writing-nft.jpg"
           :alt="$t('civic_dashboard_v3_intro_title')"
