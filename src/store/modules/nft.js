@@ -3,22 +3,28 @@ import Vue from 'vue';
 import { getNFTs } from '~/util/nft';
 import { getUserSellNFTClasses } from '@/util/api';
 
-const NFT_SET_USER_CLASSID_LIST_MAP = 'NFT_SET_USER_CLASSID_LIST_MAP';
+const NFT_SET_USER_CREATED_CLASS_IDS_MAP = 'NFT_SET_USER_CREATED_CLASS_IDS_MAP';
+const NFT_SET_USER_COLLECTED_NFTS_MAP = 'NFT_SET_USER_COLLECTED_NFTS_MAP';
 
 const state = () => ({
-  userClassIdListMap: {},
+  userCreatedClassIdsMap: {},
+  userCollectedNFTsMap: {},
 });
 
 const mutations = {
-  [NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
-    Vue.set(state.userClassIdListMap, address, nfts);
+  [NFT_SET_USER_CREATED_CLASS_IDS_MAP](state, { address, classIds }) {
+    Vue.set(state.userCreatedClassIdsMap, address, classIds);
+  },
+  [NFT_SET_USER_COLLECTED_NFTS_MAP](state, { address, nfts }) {
+    Vue.set(state.userCollectedNFTsMap, address, nfts);
   },
 };
 
 const getters = {
-  NFTClassIdList: state => state.userClassIdListMap,
-  getNFTClassIdListByAddress: state => address =>
-    state.userClassIdListMap[address],
+  getCreatedClassIdsByAddress: state => address =>
+    state.userCreatedClassIdsMap[address],
+  getCollectedNFTsByAddress: state => address =>
+    state.userCollectedNFTsMap[address],
 };
 
 const actions = {
@@ -27,15 +33,12 @@ const actions = {
       getNFTs({ owner: address }),
       this.$api.$get(getUserSellNFTClasses({ wallet: address })),
     ]);
-    const collectedIds = nfts?.map(n => n?.classId);
 
-    commit(NFT_SET_USER_CLASSID_LIST_MAP, {
+    commit(NFT_SET_USER_CREATED_CLASS_IDS_MAP, {
       address,
-      nfts: {
-        created: createdIds,
-        collected: collectedIds,
-      },
+      classIds: createdIds,
     });
+    commit(NFT_SET_USER_COLLECTED_NFTS_MAP, { address, nfts });
   },
 };
 

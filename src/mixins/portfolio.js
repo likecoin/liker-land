@@ -48,23 +48,26 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassIdSorter', 'getNFTClassIdListByAddress']),
+    ...mapGetters([
+      'getNFTClassIdSorter',
+      'getCreatedClassIdsByAddress',
+      'getCollectedNFTsByAddress',
+    ]),
     userAvatar() {
       return this.userInfo?.avatar;
     },
     userDisplayName() {
       return this.userInfo?.displayName || this.wallet;
     },
-    nftClassIds() {
-      return this.getNFTClassIdListByAddress(this.wallet);
-    },
 
     // for userStats
     collectedClassIds() {
-      return this.nftClassIds?.collected || [];
+      return (this.getCollectedNFTsByAddress(this.wallet) || []).map(
+        nft => nft.classId
+      );
     },
     createdClassIds() {
-      return this.nftClassIds?.created || [];
+      return this.getCreatedClassIdsByAddress(this.wallet) || [];
     },
 
     // for NFTCardItems
@@ -80,7 +83,10 @@ export default {
     ...mapActions(['fetchNFTListByAddress']),
     async loadNFTListByAddress(address) {
       this.wallet = address;
-      if (!this.getNFTClassIdListByAddress(address)) {
+      if (
+        !this.getCreatedClassIdsByAddress(address) ||
+        !this.getCollectedNFTsByAddress(address)
+      ) {
         this.isLoading = true;
         await this.fetchNFTListByAddress(address);
         this.isLoading = false;
