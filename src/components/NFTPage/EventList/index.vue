@@ -22,11 +22,15 @@
           </template>
         </ShowMore>
       </template>
-      <div
-        v-else
-        class="flex justify-center items-center min-h-[180px]"
-      >
+      <div v-else class="flex justify-center items-center min-h-[180px]">
         <Label
+          v-if="isLoading"
+          preset="p6"
+          class="my-[12px]"
+          :text="$t('nft_details_page_label_loading')"
+        />
+        <Label
+          v-else
           preset="p6"
           class="my-[12px]"
           :text="$t('nft_details_page_label_no_record')"
@@ -46,6 +50,10 @@ export default {
     trimmedCount: {
       type: Number,
       default: 10,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

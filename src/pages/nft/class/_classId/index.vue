@@ -104,6 +104,7 @@
           />
           <NFTPageEventList
             :items="populatedEvents"
+            :is-loading="isHistoryInfoLoading"
           />
         </div>
       </section>
