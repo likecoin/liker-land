@@ -12,6 +12,17 @@ let iscnLib = null;
 
 export const NFT_INDEXER_LIMIT_MAX = 100;
 
+export const ORDER_CREATED_CLASS_ID_BY = {
+  PRICE: 'PRICE',
+  ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
+};
+
+export const ORDER_COLLECTED_CLASS_ID_BY = {
+  PRICE: 'PRICE',
+  LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
+  NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
+};
+
 export async function getISCNLib() {
   if (!iscnLib) {
     iscnLib = await import(/* webpackChunkName: "iscn_js" */ '@likecoin/iscn-js');

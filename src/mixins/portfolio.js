@@ -1,6 +1,10 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { ellipsis } from '~/util/ui';
+import {
+  ORDER_CREATED_CLASS_ID_BY,
+  ORDER_COLLECTED_CLASS_ID_BY,
+} from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
 
 export default {
@@ -48,7 +52,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassIdSorter', 'getNFTClassIdListByAddress']),
+    ...mapGetters([
+      'getCreatedClassSorter',
+      'getCollectedClassSorter',
+      'getNFTClassIdListByAddress',
+    ]),
     userAvatar() {
       return this.userInfo?.avatar;
     },
@@ -69,11 +77,17 @@ export default {
 
     // for NFTCardItems
     sortedCollectedClassIds() {
-      const collectedClassIds = [...new Set(this.collectedClassIds)];
-      return this.getNFTClassIdSorter(collectedClassIds);
+      return this.getCollectedClassSorter(
+        this.collectedClassIds,
+        this.wallet,
+        ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT
+      );
     },
     sortedCreatedClassIds() {
-      return this.getNFTClassIdSorter(this.createdClassIds);
+      return this.getCreatedClassSorter(
+        this.createdClassIds,
+        ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP
+      );
     },
   },
   methods: {

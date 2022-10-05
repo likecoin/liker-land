@@ -3,6 +3,8 @@ import Vue from 'vue';
 import * as api from '@/util/api';
 import {
   NFT_INDEXER_LIMIT_MAX,
+  ORDER_CREATED_CLASS_ID_BY,
+  ORDER_COLLECTED_CLASS_ID_BY,
   isWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
@@ -39,13 +41,25 @@ const mutations = {
   },
 };
 
+function compareIsWritingNFT(getters, classIdA, classIdB) {
+  const aIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(classIdA));
+  const bIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(classIdB));
+  if (aIsWritingNFT && !bIsWritingNFT) return -1;
+  if (!aIsWritingNFT && bIsWritingNFT) return 1;
+  return 0;
+}
+
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
   getNFTClassIdListByAddress: state => address =>
     state.userClassIdListMap[address],
   getNFTClassPurchaseInfoById: state => id => state.nftClassPurchaseInfo[id],
   getNFTClassMetadataById: state => id => state.nftClassMetadata[id],
-  getNFTClassOwnerInfoById: state => id => state.nftClassOwnerInfo[id],
+  getNFTClassOwnerInfoById: state => id => state.nftClassOwnerInfo[id] || {},
+  getNFTClassOwnerOwnedNFTIds: (_, getters) => (id, address) =>
+    getters.getNFTClassOwnerInfoById(id)[address] || [],
+  getNFTClassOwnerOwnedNFTCount: (_, getters) => (id, address) =>
+    getters.getNFTClassOwnerOwnedNFTIds(id, address).length,
   getNFTClassOwnerCount: state => id =>
     Object.keys(state.nftClassOwnerInfo[id] || {}).length,
   getNFTClassMintedCount: state => id =>
@@ -53,20 +67,54 @@ const getters = {
       (acc, val) => acc + val.length,
       0
     ),
-  getNFTClassIdSorter: (_, getters) => classIds => {
+  getUserLastCollectedTimestampByAddress: state => address =>
+    state.userLastCollectedTimestampMap[address],
+  getCreatedClassSorter: (_, getters) => (classIds, orderBy) => {
     const sorted = [...classIds].sort((a, b) => {
-      const aIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(a));
-      const bIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(b));
-      if (aIsWritingNFT && !bIsWritingNFT) return -1;
-      if (!aIsWritingNFT && bIsWritingNFT) return 1;
-      const priceA = getters.getNFTClassPurchaseInfoById(a)?.price;
-      const priceB = getters.getNFTClassPurchaseInfoById(b)?.price;
-      return priceB - priceA;
+      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
+      if (isWritingNFTCompareResult) return isWritingNFTCompareResult;
+      let A = 0;
+      let B = 0;
+      switch (orderBy) {
+        case ORDER_CREATED_CLASS_ID_BY.PRICE:
+          A = getters.getNFTClassPurchaseInfoById(a)?.price;
+          B = getters.getNFTClassPurchaseInfoById(b)?.price;
+          break;
+        case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
+        default:
+          break;
+      }
+      return B - A;
     });
     return sorted;
   },
-  getLastCollectedTimestampByAddress: state => address =>
-    state.userLastCollectedTimestampMap[address],
+
+  getCollectedClassSorter: (_, getters) => (classIds, address, orderBy) => {
+    const sorted = [...classIds].sort((a, b) => {
+      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
+      if (isWritingNFTCompareResult) return isWritingNFTCompareResult;
+      let A = 0;
+      let B = 0;
+      switch (orderBy) {
+        case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
+          A = getters.getNFTClassPurchaseInfoById(a)?.price;
+          B = getters.getNFTClassPurchaseInfoById(b)?.price;
+          break;
+        case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
+          A = getters.getNFTClassOwnerOwnedNFTCount(a, address);
+          B = getters.getNFTClassOwnerOwnedNFTCount(b, address);
+          break;
+        case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
+          A = getters.getUserLastCollectedTimestampByAddress(address)[a];
+          B = getters.getUserLastCollectedTimestampByAddress(address)[b];
+          break;
+        default:
+          break;
+      }
+      return B - A;
+    });
+    return sorted;
+  },
 };
 
 const actions = {
@@ -116,7 +164,13 @@ const actions = {
         // eslint-disable-next-line no-console
         .catch(err => console.error(err));
       const iscnOwner = iscnRecord?.owner;
-      if (iscnOwner) metadata = { ...metadata, iscn_owner: iscnOwner };
+      const iscnTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
+      if (iscnOwner)
+        metadata = {
+          ...metadata,
+          iscn_owner: iscnOwner,
+          iscn_timestamp: iscnTimestamp,
+        };
     }
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
     return metadata;
@@ -153,7 +207,8 @@ const actions = {
         ({ count } = data.pagination);
         nfts.push(...data.nfts);
       } while (count === NFT_INDEXER_LIMIT_MAX);
-      return nfts.map(formatNFTInfo);
+      // sort by last colleted by default
+      return nfts.map(formatNFTInfo).sort((a, b) => b.timestamp - a.timestamp);
     };
 
     const [nfts, { list: createdIds }] = await Promise.all([
