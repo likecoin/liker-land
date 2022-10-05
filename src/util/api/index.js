@@ -176,6 +176,15 @@ export const getISCNRecord = iscnId => {
   )}`;
 };
 
+export const getNFTs = ({ owner, limit, key }) => {
+  const qsPayload = { owner };
+  if (limit) qsPayload.limit = limit;
+  if (key) qsPayload.key = key;
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/nft?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getNFTOwners = classId => {
   const qsPayload = {
     class_id: classId,

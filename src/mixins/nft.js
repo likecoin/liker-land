@@ -19,6 +19,7 @@ import {
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep } from '~/util/misc';
 import {
+  NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
   signGrant,
   broadcastTx,
@@ -30,8 +31,6 @@ import {
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
-
-const NFT_INDEXER_LIMIT_MAX = 100;
 
 export default {
   mixins: [walletMixin],

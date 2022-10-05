@@ -2,10 +2,11 @@
 import Vue from 'vue';
 import * as api from '@/util/api';
 import {
-  getNFTs,
+  NFT_INDEXER_LIMIT_MAX,
   isWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
+  formatNFTInfo,
 } from '~/util/nft';
 import * as TYPES from '../mutation-types';
 
@@ -125,11 +126,32 @@ const actions = {
     return owners;
   },
   async fetchNFTListByAddress({ commit }, address) {
-    const [{ nfts }, { list: createdIds }] = await Promise.all([
-      getNFTs({ owner: address }),
+    const getNFTAll = async owner => {
+      let data;
+      let nextKey;
+      let count;
+      const nfts = [];
+      do {
+        // eslint-disable-next-line no-await-in-loop
+        ({ data } = await this.$api.get(
+          api.getNFTs({
+            owner,
+            key: nextKey,
+            limit: NFT_INDEXER_LIMIT_MAX,
+          })
+        ));
+        nextKey = data.pagination.next_key;
+        ({ count } = data.pagination);
+        nfts.push(...data.nfts);
+      } while (count === NFT_INDEXER_LIMIT_MAX);
+      return nfts.map(formatNFTInfo);
+    };
+
+    const [nfts, { list: createdIds }] = await Promise.all([
+      getNFTAll(address),
       this.$api.$get(api.getUserSellNFTClasses({ wallet: address })),
     ]);
-    const collectedIds = nfts?.map(n => n?.classId);
+    const collectedIds = [...new Set(nfts.map(nft => nft.classId))];
 
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
