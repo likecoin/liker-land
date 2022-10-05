@@ -1,7 +1,5 @@
 import * as TYPES from '@/store/mutation-types';
 import * as api from '@/util/api';
-import { isValidHttpUrl, formatOwnerInfoFromChain } from '@/util/nft';
-import { LIKECOIN_CHAIN_API } from '@/constant';
 
 const USER_INFO_EXPIRE_TIME = 1000 * 60 * 10; // 10 minutes
 
@@ -67,75 +65,6 @@ export async function lazyGetUserInfoByAddress({ state, dispatch }, address) {
 export async function fetchArticleInfo({ commit }, referrer) {
   const info = await this.$api.$get(api.getArticleDetailAPI(referrer));
   commit(TYPES.STATIC_SET_ARTICLE_INFO, { referrer, info });
-}
-
-export async function fetchNFTPurchaseInfo({ commit }, classId) {
-  const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
-  commit(TYPES.STATIC_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
-  return info;
-}
-
-export async function lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
-  let info = getters.getNFTClassPurchaseInfoById(classId);
-  if (!info) {
-    info = await dispatch('fetchNFTPurchaseInfo', classId);
-  }
-  return info;
-}
-
-export async function fetchNFTMetadata({ commit }, classId) {
-  let metadata;
-  /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
-    which is huge and affects index page performance */
-  // const chainMetadata = await getClassInfo(classId);
-  const { class: chainMetadata } = await this.$api.$get(
-    `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`
-  );
-  const {
-    name,
-    description,
-    uri,
-    data: { parent, metadata: classMetadata = {} } = {},
-  } = chainMetadata || {};
-  const iscnId = parent?.iscnIdPrefix;
-  metadata = {
-    name,
-    description,
-    metadata: classMetadata,
-    parent,
-    iscn_id: iscnId,
-  };
-  if (isValidHttpUrl(uri)) {
-    const apiMetadata = await this.$api
-      .$get(uri)
-      // eslint-disable-next-line no-console
-      .catch(err => console.error(err));
-    if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
-  } else if (iscnId) {
-    const iscnRecord = await this.$api
-      .$get(api.getISCNRecord(iscnId))
-      // eslint-disable-next-line no-console
-      .catch(err => console.error(err));
-    const iscnOwner = iscnRecord?.owner;
-    if (iscnOwner) metadata = { ...metadata, iscn_owner: iscnOwner };
-  }
-  commit(TYPES.STATIC_SET_NFT_CLASS_METADATA, { classId, metadata });
-  return metadata;
-}
-
-export async function fetchNFTOwners({ commit }, classId) {
-  const { owners } = await this.$api.$get(api.getNFTOwners(classId));
-  const info = formatOwnerInfoFromChain(owners);
-  commit(TYPES.STATIC_SET_NFT_CLASS_OWNER_INFO, { classId, info });
-  return info;
-}
-
-export async function lazyGetNFTOwners({ getters, dispatch }, classId) {
-  let owners = getters.getNFTClassOwnerInfoById(classId);
-  if (!owners) {
-    owners = await dispatch('fetchNFTOwners', classId);
-  }
-  return owners;
 }
 
 export async function fetchLIKEPrice({ commit }) {
