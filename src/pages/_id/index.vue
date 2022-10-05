@@ -159,7 +159,10 @@
 
 <script>
 import { getUserMinAPI } from '~/util/api';
-import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
+import {
+  isValidAddress,
+  convertAddressPrefix,
+} from '@likecoin/iscn-js/dist/iscn/addressParsing';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
 
