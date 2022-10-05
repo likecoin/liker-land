@@ -134,18 +134,19 @@ export default {
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
   data() {
-    return { switchWalletCount: 0 };
+    return { hasSwitchedWallet: false };
   },
   watch: {
     getAddress: {
       immediate: true,
       async handler(newAddress) {
         if (newAddress) {
-          this.switchWalletCount += 1;
-          if (this.switchWalletCount < 2) {
+          if (!this.hasSwitchedWallet) {
+            this.hasSwitchedWallet = true;
             this.fetchUserInfo();
             await this.loadNFTListByAddress(this.getAddress);
           } else {
+            // Refresh the page to prevent data overlapping
             this.$router.go();
           }
         }
