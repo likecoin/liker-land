@@ -15,6 +15,7 @@ const state = () => ({
   nftClassMetadata: {},
   nftClassOwnerInfo: {},
   userClassIdListMap: {},
+  userLastCollectedTimestampMap: {},
 });
 
 const mutations = {
@@ -29,6 +30,12 @@ const mutations = {
   },
   [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
     Vue.set(state.userClassIdListMap, address, nfts);
+  },
+  [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
+    state,
+    { address, timestampMap }
+  ) {
+    Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
   },
 };
 
@@ -58,6 +65,8 @@ const getters = {
     });
     return sorted;
   },
+  getLastCollectedTimestampByAddress: state => address =>
+    state.userLastCollectedTimestampMap[address],
 };
 
 const actions = {
@@ -151,6 +160,13 @@ const actions = {
       getNFTAll(address),
       this.$api.$get(api.getUserSellNFTClasses({ wallet: address })),
     ]);
+    const timestampMap = {};
+    nfts.forEach(nft => {
+      const { classId, timestamp } = nft;
+      if (!timestampMap[classId] || timestampMap[classId] < timestamp) {
+        timestampMap[classId] = timestamp;
+      }
+    });
     const collectedIds = [...new Set(nfts.map(nft => nft.classId))];
 
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
@@ -159,6 +175,10 @@ const actions = {
         created: createdIds,
         collected: collectedIds,
       },
+    });
+    commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
+      address,
+      timestampMap,
     });
   },
 };
