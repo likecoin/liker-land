@@ -1,17 +1,15 @@
-const functions = require('firebase-functions');
-
 const config = {};
 
 config.IS_TESTNET = process.env.IS_TESTNET === 'TRUE';
 
-config.FIRESTORE_USER_ROOT = functions.config().db.FIRESTORE_USER_ROOT;
+config.FIRESTORE_USER_ROOT = process.env.FIRESTORE_USER_ROOT;
 
-config.LIKE_CO_CLIENT_ID = functions.config().likeco_oauth.clientid;
-config.LIKE_CO_CLIENT_SECRET = functions.config().likeco_oauth.secret;
+config.LIKE_CO_CLIENT_ID = process.env.LIKE_CO_CLIENT_ID;
+config.LIKE_CO_CLIENT_SECRET = process.env.LIKE_CO_CLIENT_SECRET;
 
-config.COOKIE_SECRET = functions.config().cookie.secret;
+config.COOKIE_SECRET = process.env.COOKIE_SECRET;
 
-config.CRISP_USER_HASH_SECRET = functions.config().crisp.user_hash_secret;
+config.CRISP_USER_HASH_SECRET = process.env.CRISP_USER_HASH_SECRET;
 
 config.EXTERNAL_URL = process.env.EXTERNAL_URL;
 
