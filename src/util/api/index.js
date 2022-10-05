@@ -164,6 +164,9 @@ export const getLIKEPrice = () =>
 export const getChainRawTx = hash =>
   `${LIKECOIN_CHAIN_API}/cosmos/tx/v1beta1/txs/${hash}`;
 
+export const getNFTClassMetadata = classId =>
+  `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`;
+
 export const getISCNRecord = iscnId => {
   const qsPayload = {
     iscn_id: iscnId,
