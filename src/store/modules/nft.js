@@ -14,7 +14,7 @@ const state = () => ({
   nftClassMetadata: {},
   nftClassOwnerInfo: {},
   userCreatedClassIdsMap: {},
-  userCollectedClassInfoMap: {},
+  userCollectedClassIdsMap: {},
 });
 
 const mutations = {
@@ -30,19 +30,16 @@ const mutations = {
   [TYPES.NFT_SET_USER_CREATED_CLASS_IDS_MAP](state, { address, classIds }) {
     Vue.set(state.userCreatedClassIdsMap, address, classIds);
   },
-  [TYPES.NFT_SET_USER_COLLECTED_CLASS_INFOS_MAP](
-    state,
-    { address, classInfos }
-  ) {
-    Vue.set(state.userCollectedClassInfoMap, address, classInfos);
+  [TYPES.NFT_SET_USER_COLLECTED_CLASS_IDS_MAP](state, { address, classIds }) {
+    Vue.set(state.userCollectedClassIdsMap, address, classIds);
   },
 };
 
 const getters = {
   getCreatedClassIdsByAddress: state => address =>
     state.userCreatedClassIdsMap[address],
-  getCollectedClassInfosByAddress: state => address =>
-    state.userCollectedClassInfoMap[address],
+  getCollectedClassIdsByAddress: state => address =>
+    state.userCollectedClassIdsMap[address],
   getNFTClassPurchaseInfoById: state => id => state.nftClassPurchaseInfo[id],
   getNFTClassMetadataById: state => id => state.nftClassMetadata[id],
   getNFTClassOwnerInfoById: state => id => state.nftClassOwnerInfo[id],
@@ -131,22 +128,15 @@ const actions = {
       this.$api.$get(api.getUserSellNFTClasses({ wallet: address })),
     ]);
 
-    const classInfoMap = {};
-    nfts.forEach(nft => {
-      const { classId } = nft;
-      if (!classInfoMap[classId]) {
-        classInfoMap[classId] = { classId };
-      }
-    });
-    const classInfos = Object.values(classInfoMap);
+    const collectedIds = Array.from(new Set(nfts.map(nft => nft.classId)));
 
     commit(TYPES.NFT_SET_USER_CREATED_CLASS_IDS_MAP, {
       address,
       classIds: createdIds,
     });
-    commit(TYPES.NFT_SET_USER_COLLECTED_CLASS_INFOS_MAP, {
+    commit(TYPES.NFT_SET_USER_COLLECTED_CLASS_IDS_MAP, {
       address,
-      classInfos,
+      classIds: collectedIds,
     });
   },
 };
