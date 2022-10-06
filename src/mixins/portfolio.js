@@ -4,6 +4,7 @@ import { ellipsis } from '~/util/ui';
 import {
   ORDER_CREATED_CLASS_ID_BY,
   ORDER_COLLECTED_CLASS_ID_BY,
+  ORDER,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
 
@@ -49,6 +50,10 @@ export default {
         ? this.$route.query.tab
         : 'created',
       isLoading: false,
+      collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
+      collectedOrder: ORDER.DESC,
+      createdOrderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
+      createdOrder: ORDER.DESC,
     };
   },
   computed: {
@@ -80,13 +85,15 @@ export default {
       return this.getCollectedClassSorter(
         this.collectedClassIds,
         this.wallet,
-        ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT
+        this.collectedOrderBy,
+        this.collectedOrder
       );
     },
     sortedCreatedClassIds() {
       return this.getCreatedClassSorter(
         this.createdClassIds,
-        ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP
+        this.createdOrderBy,
+        this.createdOrder
       );
     },
   },

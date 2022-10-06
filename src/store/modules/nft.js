@@ -5,6 +5,7 @@ import {
   NFT_INDEXER_LIMIT_MAX,
   ORDER_CREATED_CLASS_ID_BY,
   ORDER_COLLECTED_CLASS_ID_BY,
+  ORDER,
   isWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
@@ -69,12 +70,16 @@ const getters = {
     ),
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getCreatedClassSorter: (_, getters) => (classIds, orderBy) => {
+  getCreatedClassSorter: (_, getters) => (
+    classIds,
+    orderBy,
+    order = ORDER.DESC
+  ) => {
     const sorted = [...classIds].sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult) return isWritingNFTCompareResult;
-      let A = 0;
-      let B = 0;
+      let A = null;
+      let B = null;
       switch (orderBy) {
         case ORDER_CREATED_CLASS_ID_BY.PRICE:
           A = getters.getNFTClassPurchaseInfoById(a)?.price;
@@ -82,19 +87,34 @@ const getters = {
           break;
         case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
         default:
+          A = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
+          B = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
           break;
       }
-      return B - A;
+      if (A === null) return 1;
+      if (B === null) return -1;
+      switch (order) {
+        case ORDER.ASC:
+          return A - B;
+        case ORDER.DESC:
+        default:
+          return B - A;
+      }
     });
     return sorted;
   },
 
-  getCollectedClassSorter: (_, getters) => (classIds, address, orderBy) => {
+  getCollectedClassSorter: (_, getters) => (
+    classIds,
+    address,
+    orderBy,
+    order = ORDER.DESC
+  ) => {
     const sorted = [...classIds].sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult) return isWritingNFTCompareResult;
-      let A = 0;
-      let B = 0;
+      let A = null;
+      let B = null;
       switch (orderBy) {
         case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
           A = getters.getNFTClassPurchaseInfoById(a)?.price;
@@ -105,13 +125,20 @@ const getters = {
           B = getters.getNFTClassOwnerOwnedNFTCount(b, address);
           break;
         case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
+        default:
           A = getters.getUserLastCollectedTimestampByAddress(address)[a];
           B = getters.getUserLastCollectedTimestampByAddress(address)[b];
           break;
-        default:
-          break;
       }
-      return B - A;
+      if (A === null) return 1;
+      if (B === null) return -1;
+      switch (order) {
+        case ORDER.ASC:
+          return A - B;
+        case ORDER.DESC:
+        default:
+          return B - A;
+      }
     });
     return sorted;
   },
@@ -164,14 +191,18 @@ const actions = {
         // eslint-disable-next-line no-console
         .catch(err => console.error(err));
       const iscnOwner = iscnRecord?.owner;
-      const iscnTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
+      const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
       if (iscnOwner)
         metadata = {
           ...metadata,
           iscn_owner: iscnOwner,
-          iscn_timestamp: iscnTimestamp,
+          iscn_record_timestamp: iscnRecordTimestamp,
         };
     }
+    if (metadata.iscn_record_timestamp)
+      metadata.iscn_record_timestamp = Date.parse(
+        metadata.iscn_record_timestamp
+      );
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
     return metadata;
   },

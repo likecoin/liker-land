@@ -23,6 +23,11 @@ export const ORDER_COLLECTED_CLASS_ID_BY = {
   NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
 };
 
+export const ORDER = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+};
+
 export async function getISCNLib() {
   if (!iscnLib) {
     iscnLib = await import(/* webpackChunkName: "iscn_js" */ '@likecoin/iscn-js');
