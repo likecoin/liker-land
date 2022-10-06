@@ -8,6 +8,7 @@
         class="avatar__image"
         :src="imageSrc"
         :style="imageStyle"
+        :loading="loadingType"
       >
       <div
         v-if="isOutlined"
@@ -60,6 +61,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isLazyLoaded: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     rootClass() {
@@ -82,6 +87,9 @@ export default {
         height: width,
         borderWidth,
       };
+    },
+    loadingType() {
+      return this.isLazyLoaded ? 'lazy' : undefined;
     },
   },
 };

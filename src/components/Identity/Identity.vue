@@ -11,7 +11,7 @@
       :is-outlined="isAvatarOutlined"
       :is-outline-extruded="isAvatarOutlineExtruded"
       :is-disabled="isAvatarDisabled"
-      :loading="loadingType"
+      :is-lazy-loaded="isLazyLoaded"
       @click="onClickAvatar"
     />
     <div>
@@ -75,11 +75,6 @@ export default {
     displayNameClass: {
       type: String,
       default: '',
-    },
-  },
-  computed: {
-    loadingType() {
-      return this.isLazyLoaded ? 'lazy' : undefined;
     },
   },
   methods: {
