@@ -18,7 +18,7 @@
     "rewrites": [
       {
         "source": "/api/**",
-        "function": "apiHttp",
+        "function": "api",
         "region": "us-west1"
       },
       {
