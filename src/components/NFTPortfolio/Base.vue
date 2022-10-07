@@ -7,6 +7,7 @@
       >
         <img
           v-if="imageSrc"
+          loading="lazy"
           class="object-cover w-full h-full max-h-[180px]"
           :src="imageSrc"
         >
@@ -33,6 +34,7 @@
             :avatar-url="userAvatarSrc"
             :avatar-size="40"
             :is-avatar-outlined="isUserCivicLiker"
+            :is-lazy-loaded="true"
           />
           <div class="flex mt-[8px]">
             <Label class="text-medium-gray">by</Label>

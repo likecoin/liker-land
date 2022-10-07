@@ -1,14 +1,16 @@
-const functions = require('firebase-functions');
+const { onSchedule } = require('firebase-functions/v2/scheduler');
 const firestore = require('@google-cloud/firestore');
 
 const client = new firestore.v1.FirestoreAdminClient();
 
-const { bucket } = functions.config().backup;
+const bucket = process.env.BACKUP_BUCKET;
 
-module.exports = functions
-  .region('us-west2')
-  .pubsub.schedule('0 18 * * *')
-  .onRun(() => {
+module.exports = onSchedule(
+  {
+    region: ['us-west1'],
+    schedule: '0 18 * * *',
+  },
+  () => {
     const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT;
     const databaseName = client.databasePath(projectId, '(default)');
 
@@ -26,4 +28,5 @@ module.exports = functions
         console.error(err);
         throw new Error('Export operation failed');
       });
-  });
+  }
+);

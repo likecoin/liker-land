@@ -18,8 +18,8 @@
     "rewrites": [
       {
         "source": "/api/**",
-        "function": "apiHttp",
-        "region": "us-west2"
+        "function": "api",
+        "region": "us-west1"
       },
       {
         "source": "**",

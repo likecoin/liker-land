@@ -13,6 +13,7 @@
           :avatar-url="creatorAvatarSrc"
           :avatar-size="32"
           :is-avatar-outlined="isCivicLiker"
+          :is-lazy-loaded="true"
         />
         <span class="ml-[8px] group-hover:underline">{{ formattedCreatorDisplayName }}</span>
       </NuxtLink>

@@ -16,7 +16,7 @@ import nft from './modules/nft';
 const createStore = () =>
   new Vuex.Store({
     actions: {
-      async nuxtServerInit({ commit }, { req, res }) {
+      async nuxtServerInit({ commit }, { req, res, query }) {
         if (res.timing) {
           res.timing.start('store_init', 'nuxtServerInit Started');
         }
@@ -31,6 +31,9 @@ const createStore = () =>
               console.error(err); // eslint-disable-line no-console
             }
           }
+        }
+        if (query.debug !== undefined) {
+          commit(types.WALLET_SET_COSMOSTATION_APP_WC2_ENABLED, true);
         }
         if (res.timing) res.timing.end('store_init');
       },
