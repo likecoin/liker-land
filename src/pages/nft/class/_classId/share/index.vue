@@ -131,13 +131,13 @@
                 >
                   <div class="flex items-center phone:mb-[18px]">
                     <ToolTips :tool-tip-text="$t('campaign_nft_item_collected_count_label')">
-                      <Label preset="h6" class="mr-[22px] text-medium-gray" :text="collectedCount"><template #prepend><IconMint /></template></Label>
+                      <Label preset="h6" class="mr-[22px] text-medium-gray" :text="`${collectedCount}`"><template #prepend><IconMint /></template></Label>
                     </ToolTips>
                     <ToolTips :tool-tip-text="$t('nft_details_page_title_collector')">
-                      <Label preset="h6" class="mr-[22px] text-medium-gray" :text="ownerCount"><template #prepend><IconPersonMini /></template></Label>
+                      <Label preset="h6" class="mr-[22px] text-medium-gray" :text="`${ownerCount}`"><template #prepend><IconPersonMini /></template></Label>
                     </ToolTips>
                     <ToolTips :tool-tip-text="$t('nft_details_page_label_price')">
-                      <Label preset="h5" class="text-like-green font-600" :text="`${NFTPrice} LIKE`"><template #prepend><IconPrice /></template></Label>
+                      <Label preset="h5" class="text-like-green font-600" :text="formattedNFTPriceInLIKE"><template #prepend><IconPrice /></template></Label>
                     </ToolTips>
                   </div>
                   <div>

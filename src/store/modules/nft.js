@@ -168,7 +168,7 @@ const actions = {
       uri,
       data: { parent, metadata: classMetadata = {} } = {},
     } = chainMetadata || {};
-    const iscnId = parent?.iscnIdPrefix;
+    const iscnId = parent?.iscn_id_prefix;
     metadata = {
       name,
       description,

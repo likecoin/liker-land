@@ -4,13 +4,6 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 
 export default {
-  created() {
-    // Set Keplr Install CTA preset
-    const { name, $activeVariants } = this.$exp;
-    if (name === 'keplr-install-cta' && $activeVariants.length) {
-      this.setKeplrInstallCTAPreset($activeVariants[0].name);
-    }
-  },
   computed: {
     ...mapGetters([
       'getAddress',
@@ -45,7 +38,6 @@ export default {
       'initWallet',
       'initIfNecessary',
       'restoreSession',
-      'setKeplrInstallCTAPreset',
       'walletFetchLIKEBalance',
     ]),
     async connectWallet() {
