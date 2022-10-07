@@ -136,22 +136,6 @@ const apiFetchFollowedUser = req =>
       headers: { Authorization },
     })
   );
-const apiPostFollowedUser = (userId, req) =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.post(
-      `${LIKECOIN_API_BASE}/users/follow/users/${userId}`,
-      {},
-      {
-        headers: { Authorization },
-      }
-    )
-  );
-const apiDeleteFollowedUser = (userId, req) =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.delete(`${LIKECOIN_API_BASE}/users/follow/users/${userId}`, {
-      headers: { Authorization },
-    })
-  );
 const apiFetchBookmarks = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/users/bookmarks`, {
@@ -241,8 +225,6 @@ module.exports = {
   apiPostBookmarks,
   apiDeleteBookmarks,
   apiFetchFollowedUser,
-  apiPostFollowedUser,
-  apiDeleteFollowedUser,
   apiCivicLikerGetStaking,
   apiCivicLikerGetStakingInfo,
   getOAuthURL,

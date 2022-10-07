@@ -14,12 +14,10 @@ const {
 } = require('../../constant');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const { handleRestfulError } = require('../../middleware/error');
-const follow = require('./follow');
 const bookmark = require('./bookmark');
 
 const router = Router();
 
-router.use(follow);
 router.use(bookmark);
 
 function filterSuperLikeList(list) {
