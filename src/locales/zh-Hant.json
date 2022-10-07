@@ -233,13 +233,6 @@
   "CLP.effective.item2.title": "創作基金",
   "CLP.effective.item2.description": "透過按讚，分配每天發放的創作基金予優秀創作者。",
 
-  "CollapsibleView": {
-    "less": "收起",
-    "more": "更多"
-  },
-  "ContentList": {
-    "empty": "沒有文章"
-  },
   "CreatorPitch.Default": "成為我的讚賞公民，每月贊助一杯咖啡，助我走得更遠。",
   "creators_page_redirect_url": "https://docs.like.co/v/zh/user-guide/civic-liker",
   "community_cta_title": "參與我們的社群",
@@ -402,12 +395,6 @@
     "support": "幫助",
     "logout": "登出",
     "openWithApp": "以 Liker.Land App 開啟"
-  },
-  "SmartAppBanner": {
-    "headerTitle": "選擇以方法瀏覽⋯",
-    "appLabel": "Liker.Land App",
-    "appButtonText": "開啟",
-    "dismissButtonText": "繼續使用瀏覽器瀏覽"
   },
   "back": "上一頁",
   "backToHome": "返回首頁",
