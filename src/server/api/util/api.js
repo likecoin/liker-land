@@ -93,26 +93,6 @@ const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
       headers: { Authorization },
     })
   );
-const apiFetchLatestSuperLike = ({ limit, after, before }) =>
-  axios.get(`${LIKECOIN_API_BASE}/like/share/latest`, {
-    params: {
-      limit,
-      after,
-      before,
-    },
-  });
-const apiFetchFollowedSuperLikes = (users, { limit, after, before }) =>
-  axios.post(
-    `${LIKECOIN_API_BASE}/like/share/users/latest`,
-    { users },
-    {
-      params: {
-        limit,
-        after,
-        before,
-      },
-    }
-  );
 const apiFetchUserSuperlike = (user, { limit, after, before, filter }) =>
   axios.get(`${LIKECOIN_API_BASE}/like/share/user/${user}/latest`, {
     params: {
@@ -122,14 +102,6 @@ const apiFetchUserSuperlike = (user, { limit, after, before, filter }) =>
       filter,
     },
   });
-const apiFetchSuggestedArticles = () =>
-  axios.get(`${LIKECOIN_API_BASE}/like/suggest/all`);
-const apiFetchPersonalSuggestedArticles = req =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKECOIN_API_BASE}/like/suggest/personal`, {
-      headers: { Authorization },
-    })
-  );
 const apiFetchFollowedUser = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(`${LIKECOIN_API_BASE}/users/follow/users`, {
@@ -216,11 +188,7 @@ module.exports = {
   apiFetchUserPreferences,
   apiUpdateUserPreferences,
   apiFetchUserSuperLikeStatus,
-  apiFetchLatestSuperLike,
-  apiFetchFollowedSuperLikes,
   apiFetchUserSuperlike,
-  apiFetchSuggestedArticles,
-  apiFetchPersonalSuggestedArticles,
   apiFetchBookmarks,
   apiPostBookmarks,
   apiDeleteBookmarks,
