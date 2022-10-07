@@ -13,10 +13,6 @@ export async function getLikeCoinWalletLib() {
   return likecoinWalletLib;
 }
 
-export function setKeplrInstallCTAPreset({ commit }, preset) {
-  commit(types.WALLET_SET_KEPLR_INSTALL_CTA_PRESET, preset);
-}
-
 export async function initWallet(
   { commit, dispatch },
   { method, accounts, offlineSigner }
