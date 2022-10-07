@@ -74,28 +74,28 @@ const getters = {
   ) => {
     const sorted = [...classIds].sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
-      if (isWritingNFTCompareResult) return isWritingNFTCompareResult;
-      let A;
-      let B;
+      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
+      let X;
+      let Y;
       switch (orderBy) {
         case ORDER_CREATED_CLASS_ID_BY.PRICE:
-          A = getters.getNFTClassPurchaseInfoById(a)?.price;
-          B = getters.getNFTClassPurchaseInfoById(b)?.price;
+          X = getters.getNFTClassPurchaseInfoById(a)?.price;
+          Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           break;
         case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
         default:
-          A = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
-          B = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
+          X = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
+          Y = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
           break;
       }
-      if (A === undefined) return 1;
-      if (B === undefined) return -1;
+      if (X === undefined) return 1;
+      if (Y === undefined) return -1;
       switch (order) {
         case ORDER.ASC:
-          return A - B;
+          return X - Y;
         case ORDER.DESC:
         default:
-          return B - A;
+          return Y - X;
       }
     });
     return sorted;
@@ -103,38 +103,38 @@ const getters = {
 
   getCollectedClassSorter: (_, getters) => (
     classIds,
-    address,
+    nftOwner,
     orderBy,
     order = ORDER.DESC
   ) => {
     const sorted = [...classIds].sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
-      if (isWritingNFTCompareResult) return isWritingNFTCompareResult;
-      let A;
-      let B;
+      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
+      let X;
+      let Y;
       switch (orderBy) {
         case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
-          A = getters.getNFTClassPurchaseInfoById(a)?.price;
-          B = getters.getNFTClassPurchaseInfoById(b)?.price;
+          X = getters.getNFTClassPurchaseInfoById(a)?.price;
+          Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           break;
         case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
-          A = getters.getNFTClassOwnerInfoById(a)?.[address]?.length;
-          B = getters.getNFTClassOwnerInfoById(b)?.[address]?.length;
+          X = getters.getNFTClassOwnerInfoById(a)?.[nftOwner]?.length;
+          Y = getters.getNFTClassOwnerInfoById(b)?.[nftOwner]?.length;
           break;
         case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
         default:
-          A = getters.getUserLastCollectedTimestampByAddress(address)[a];
-          B = getters.getUserLastCollectedTimestampByAddress(address)[b];
+          X = getters.getUserLastCollectedTimestampByAddress(nftOwner)[a];
+          Y = getters.getUserLastCollectedTimestampByAddress(nftOwner)[b];
           break;
       }
-      if (A === undefined) return 1;
-      if (B === undefined) return -1;
+      if (X === undefined) return 1;
+      if (Y === undefined) return -1;
       switch (order) {
         case ORDER.ASC:
-          return A - B;
+          return X - Y;
         case ORDER.DESC:
         default:
-          return B - A;
+          return Y - X;
       }
     });
     return sorted;
