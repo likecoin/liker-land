@@ -1,76 +1,74 @@
-<template lang="pug">
-  Transition(
-    name="error-dialog-"
-    appear
-  )
-    DialogLayout.error-dialog
-      template(
+<template>
+  <Transition name="error-dialog-" appear="appear">
+    <DialogLayout class="error-dialog">
+      <template
         v-if="isLoginErrorFromCivicLikerRegistration"
         #header-content
-      )
-        LikeButtonAnimation(
+      >
+        <LikeButtonAnimation
           class="-mt-32"
           :avatar="referrer ? referrer.avatar : undefined"
-        )
-      template(#body)
-        Transition(
-          name="error-dialog-content-"
-          appear
-        )
-          main.page-content.error-dialog-content
-            i18n.text-24.mt-16.font-600(
+        />
+      </template>
+      <template #body>
+        <Transition name="error-dialog-content-" appear="appear">
+          <main class="page-content error-dialog-content">
+            <i18n
               v-if="isLoginErrorFromCivicLikerRegistration"
+              class="mt-16 text-24 font-600"
               :path="`ERROR.LOGIN_NEEDED_TO_SUPPORT_CREATOR${referrer ? '_WITH_NAME' : ''}`"
               tag="p"
-            )
-              span.whitespace-no-wrap(
+            >
+              <span
                 v-if="referrer"
+                class="whitespace-no-wrap"
                 place="creator"
-              ) {{ referrer.displayName }}
-
-            template(v-else-if="formattedTitle")
-              h1.text-28.mt-16.px-12 {{ formattedTitle }}
-              p.text-16.mt-32.leading-1_5 {{ formattedMessage }}
-
-            p.text-24.mt-16.font-600(v-else) {{ formattedMessage }}
-
-            .mt-32.px-12(class="phone:px-0")
-              div(v-if="isLoginError")
-                a.btn.btn--outlined(
+              >{{ referrer.displayName }}</span>
+            </i18n>
+            <template v-else-if="formattedTitle">
+              <h1 class="px-12 mt-16 text-28">{{ formattedTitle }}</h1>
+              <p class="mt-32 text-16 leading-1_5">{{ formattedMessage }}</p>
+            </template>
+            <p v-else class="mt-16 text-24 font-600">{{ formattedMessage }}</p>
+            <div class="px-12 mt-32 phone:px-0">
+              <div v-if="isLoginError">
+                <a
+                  class="btn btn--outlined"
                   :href="getOAuthRegisterAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignUp', 'RegisterSignUp(error page)', 1)"
-                )
-                  | {{ $t('signUp') }}
-
-              div(v-if=`
-                error.message === 'CIVIC_LIKER_TRIAL_EVENT_JOINED' ||
-                error.message === 'CIVIC_LIKER_ALREADY_PAID'
-              `)
-                NuxtLink.btn.btn--outlined(:to="{ name: 'civic' }") {{ $t('learnMore') }}
-                NuxtLink.btn.btn--outlined(
+                >{{ $t('signUp') }}</a>
+              </div>
+              <div v-if="['CIVIC_LIKER_TRIAL_EVENT_JOINED', 'CIVIC_LIKER_ALREADY_PAID'].includes(error.message)">
+                <NuxtLink
+                  class="btn btn--outlined"
+                  :to="{ name: 'civic' }"
+                >{{ $t('learnMore') }}</NuxtLink>
+                <NuxtLink
                   v-if="error.message === 'CIVIC_LIKER_TRIAL_EVENT_JOINED'"
+                  class="btn btn--outlined"
                   :to="{ name: 'civic-register' }"
-                )
-                  | {{ $t('upgrade') }}
-
-              // - Common action button
-              - const btnClass = 'btn btn--plain btn--auto-size text-14 mx-0'
-
-              template(v-else)
-                a(
+                >{{ $t('upgrade') }}</NuxtLink>
+              </div>
+              <!-- - Common action button-->
+              <template v-else>
+                <a
                   v-if="isLoginError"
-                  class=btnClass
+                  class="mx-0 btn btn--plain btn--auto-size text-14"
                   :href="getOAuthLoginAPI"
                   @click="onClickLogEvent('Register', 'RegisterSignIn', 'RegisterSignIn(error page)', 1)"
-                )
-                  | {{ $t('signIn') }}
-
-                button(
+                >{{ $t('signIn') }}</a>
+                <button
                   v-if="!error.isBackButtonHidden"
-                  class=btnClass
+                  class="mx-0 btn btn--plain btn--auto-size text-14"
                   @click="onClickBackButton"
-                )
-                  | {{ $t('back') }}
+                >{{ $t('back') }}</button>
+              </template>
+            </div>
+          </main>
+        </Transition>
+      </template>
+    </DialogLayout>
+  </Transition>
 </template>
 
 <script>
@@ -86,7 +84,6 @@ import { defaultLocale } from '~/locales';
 import CrispMixin from '~/mixins/crisp';
 
 import DialogLayout from '~/components/DialogLayout';
-import Identity from '~/components/Identity/Identity';
 import LikeButtonAnimation from '~/components/LikeButtonAnimation';
 
 export default {
@@ -101,7 +98,6 @@ export default {
   },
   components: {
     DialogLayout,
-    Identity,
     LikeButtonAnimation,
   },
   mixins: [CrispMixin],
