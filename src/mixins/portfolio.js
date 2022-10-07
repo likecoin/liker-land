@@ -58,8 +58,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getCreatedClassSorter',
-      'getCollectedClassSorter',
+      'getCreatedClassIdSorter',
+      'getCollectedClassIdSorter',
       'getNFTClassIdListByAddress',
     ]),
     userAvatar() {
@@ -82,19 +82,19 @@ export default {
 
     // for NFTCardItems
     sortedCollectedClassIds() {
-      return this.getCollectedClassSorter(
-        this.collectedClassIds,
-        this.wallet,
-        this.collectedOrderBy,
-        this.collectedOrder
-      );
+      return this.getCollectedClassIdSorter({
+        classIds: this.collectedClassIds,
+        nftOwner: this.wallet,
+        orderBy: this.collectedOrderBy,
+        order: this.collectedOrder,
+      });
     },
     sortedCreatedClassIds() {
-      return this.getCreatedClassSorter(
-        this.createdClassIds,
-        this.createdOrderBy,
-        this.createdOrder
-      );
+      return this.getCreatedClassIdSorter({
+        classIds: this.createdClassIds,
+        orderBy: this.createdOrderBy,
+        order: this.createdOrder,
+      });
     },
   },
   methods: {

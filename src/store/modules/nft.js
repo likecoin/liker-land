@@ -67,11 +67,11 @@ const getters = {
     ),
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getCreatedClassSorter: (_, getters) => (
+  getCreatedClassIdSorter: (_, getters) => ({
     classIds,
     orderBy,
-    order = ORDER.DESC
-  ) => {
+    order = ORDER.DESC,
+  }) => {
     const sorted = [...classIds].sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
@@ -101,12 +101,12 @@ const getters = {
     return sorted;
   },
 
-  getCollectedClassSorter: (_, getters) => (
+  getCollectedClassIdSorter: (_, getters) => ({
     classIds,
     nftOwner,
     orderBy,
-    order = ORDER.DESC
-  ) => {
+    order = ORDER.DESC,
+  }) => {
     const sorted = [...classIds].sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
