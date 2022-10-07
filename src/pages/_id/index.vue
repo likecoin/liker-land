@@ -21,6 +21,7 @@
           'desktop:mr-[24px]',
 
           'w-full',
+          'min-w-[280px]',
           'desktop:w-[280px]',
         ]"
       >
@@ -59,8 +60,8 @@
           'flex-col',
           'items-center',
           'w-full',
-          'max-w-[636px]',
-          'desktop:w-[636px]',
+          'max-w-[700px]',
+          'desktop:w-[700px]',
         ]"
       >
         <div :class="['flex','items-center','mb-[48px]','w-full']">
@@ -91,58 +92,28 @@
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
-        <div v-else>
-          <ul
-            v-if="currentTab === 'collected'"
-            :class="[
-              'w-full',
-              'mx-auto',
 
-              'columns-1',
-              'laptop:columns-2',
+        <div v-else class="w-full">
+          <MagicGrid v-show="currentTab === 'collected'" :gap="16" :max-cols="2" :max-col-width="310">
+            <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
+            <div v-for="id in sortedCollectedClassIds" :key="id">
+              <NFTPortfolioItem :class-id="id" class="mb-[12px] w-[310px]" />
+            </div>
+          </MagicGrid>
 
-              'gap-[16px]',
-            ]"
-          >
-            <li>
-              <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
-            </li>
-            <li
-              v-for="id in sortedCollectedClassIds"
-              :key="id"
-            >
-              <NFTPortfolioItem
-                :class-id="id"
-                class="mb-[16px]"
-              />
-            </li>
-          </ul>
-
-          <ul
-            v-if="currentTab === 'created'"
-            :class="[
-              'w-full',
-              'mx-auto',
-
-              'columns-1',
-              'laptop:columns-2',
-
-              'gap-[16px]',
-            ]"
-          >
-            <li>
-              <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
-            </li>
-            <li
+          <MagicGrid v-show="currentTab === 'created'" :gap="16" :max-cols="2" :max-col-width="310">
+            <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
+            <div
               v-for="id in sortedCreatedClassIds"
               :key="id"
             >
               <NFTPortfolioItem
                 :class-id="id"
-                class="mb-[16px]"
+                class="mb-[12px] w-[310px]"
               />
-            </li>
-          </ul>
+            </div>
+          </MagicGrid>
+
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
             <ButtonV2

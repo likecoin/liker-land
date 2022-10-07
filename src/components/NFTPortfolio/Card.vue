@@ -4,7 +4,7 @@
       'flex',
       'flex-col',
       'rounded-[24px]',
-      'w-[310px]',
+      'w-full',
       'overflow-hidden',
       'bg-white',
       'box-border',

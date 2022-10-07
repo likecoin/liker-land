@@ -1,10 +1,10 @@
 <template>
   <NuxtLink
-    class="mx-auto break-inside-avoid"
     :to="{ name: 'nft-class-classId', params: { classId } }"
     @click.native="handleClickViewDetails"
   >
     <NFTPortfolioBase
+      class="w-[310px]"
       :class-id="classId"
       :title="NFTName"
       :price="NFTPrice"
