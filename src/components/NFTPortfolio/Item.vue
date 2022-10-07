@@ -8,7 +8,7 @@
       :class-id="classId"
       :title="NFTName"
       :price="NFTPrice"
-      :collected-count="mintedCount"
+      :collected-count="collectedCount"
       :collector-count="ownerCount"
       :user-display-name="iscnOwnerDisplayName"
       :user-avatar-src="iscnOwnerAvatar"

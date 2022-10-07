@@ -65,7 +65,7 @@ const getters = {
     getters.getNFTClassOwnerCollectedNFTIds(id, address).length,
   getNFTClassOwnerCount: state => id =>
     Object.keys(state.ownerInfoByClassIdMap[id] || {}).length,
-  getNFTClassMintedCount: state => id =>
+  getNFTClassCollectedCount: state => id =>
     Object.values(state.ownerInfoByClassIdMap[id] || {}).reduce(
       (acc, val) => acc + val.length,
       0

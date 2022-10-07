@@ -76,7 +76,7 @@ export default {
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
-      'getNFTClassMintedCount',
+      'getNFTClassCollectedCount',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -168,8 +168,8 @@ export default {
         (a, b) => ownerList[b].length - ownerList[a].length
       );
     },
-    mintedCount() {
-      return this.getNFTClassMintedCount(this.classId);
+    collectedCount() {
+      return this.getNFTClassCollectedCount(this.classId);
     },
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
