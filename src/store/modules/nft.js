@@ -14,22 +14,22 @@ import {
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
-  nftClassPurchaseInfo: {},
-  nftClassMetadata: {},
-  nftClassOwnerInfo: {},
+  purchaseInfoByClassIdMap: {},
+  metadataByClassIdMap: {},
+  ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
   userLastCollectedTimestampMap: {},
 });
 
 const mutations = {
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
-    Vue.set(state.nftClassPurchaseInfo, classId, info);
+    Vue.set(state.purchaseInfoByClassIdMap, classId, info);
   },
   [TYPES.NFT_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
-    Vue.set(state.nftClassMetadata, classId, metadata);
+    Vue.set(state.metadataByClassIdMap, classId, metadata);
   },
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
-    Vue.set(state.nftClassOwnerInfo, classId, info);
+    Vue.set(state.ownerInfoByClassIdMap, classId, info);
   },
   [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
     Vue.set(state.userClassIdListMap, address, nfts);
@@ -54,17 +54,19 @@ const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
   getNFTClassIdListByAddress: state => address =>
     state.userClassIdListMap[address],
-  getNFTClassPurchaseInfoById: state => id => state.nftClassPurchaseInfo[id],
-  getNFTClassMetadataById: state => id => state.nftClassMetadata[id],
-  getNFTClassOwnerInfoById: state => id => state.nftClassOwnerInfo[id] || {},
-  getNFTClassOwnerOwnedNFTIds: (_, getters) => (id, address) =>
+  getNFTClassPurchaseInfoById: state => id =>
+    state.purchaseInfoByClassIdMap[id],
+  getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
+  getNFTClassOwnerInfoById: state => id =>
+    state.ownerInfoByClassIdMap[id] || {},
+  getNFTClassOwnerCollectedNFTIds: (_, getters) => (id, address) =>
     getters.getNFTClassOwnerInfoById(id)[address] || [],
-  getNFTClassOwnerOwnedNFTCount: (_, getters) => (id, address) =>
-    getters.getNFTClassOwnerOwnedNFTIds(id, address).length,
+  getNFTClassOwnerCollectedNFTCount: (_, getters) => (id, address) =>
+    getters.getNFTClassOwnerCollectedNFTIds(id, address).length,
   getNFTClassOwnerCount: state => id =>
-    Object.keys(state.nftClassOwnerInfo[id] || {}).length,
+    Object.keys(state.ownerInfoByClassIdMap[id] || {}).length,
   getNFTClassMintedCount: state => id =>
-    Object.values(state.nftClassOwnerInfo[id] || {}).reduce(
+    Object.values(state.ownerInfoByClassIdMap[id] || {}).reduce(
       (acc, val) => acc + val.length,
       0
     ),
@@ -121,8 +123,8 @@ const getters = {
           B = getters.getNFTClassPurchaseInfoById(b)?.price;
           break;
         case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
-          A = getters.getNFTClassOwnerOwnedNFTCount(a, address);
-          B = getters.getNFTClassOwnerOwnedNFTCount(b, address);
+          A = getters.getNFTClassOwnerCollectedNFTCount(a, address);
+          B = getters.getNFTClassOwnerCollectedNFTCount(b, address);
           break;
         case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
         default:
