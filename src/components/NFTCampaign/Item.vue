@@ -1,36 +1,34 @@
 <template>
-  <lazy-component @show="fetchInfo">
-    <NFTCampaignItemBase
-      :class-id="classId"
-      :title="NFTName"
-      :description="NFTDescription"
-      :url="NFTExternalUrl"
-      :img-src="NFTImageUrl"
-      :img-bg-color="NFTImageBackgroundColor"
-      :price="NFTPrice"
-      :owner-address="iscnOwner"
-      :owner-avatar-src="iscnOwnerAvatar"
-      :owner-count="ownerCount"
-      :owner-name="iscnOwnerDisplayName"
-      :own-count="ownCount"
-      :sold-count="collectedCount"
-      :is-loading="uiIsOpenCollectModal && isCollecting"
-      :view-details-label="$t('campaign_nft_item_view_details_label')"
-      :like-action-label="$t('campaign_nft_item_like_action_label')"
-      :sold-count-label="$t('campaign_nft_item_collected_count_label')"
-      :content-preview-props="{
-        to: {
-          name: 'nft-class-classId',
-          params: { classId: classId },
-        },
-        tag: 'NuxtLink',
-      }"
-      @view-details="handleClickViewDetails"
-      @view-content="handleClickViewContent"
-      @collect="handleClickCollect"
-      @like="handleLike"
-    />
-  </lazy-component>
+  <NFTCampaignItemBase
+    :class-id="classId"
+    :title="NFTName"
+    :description="NFTDescription"
+    :url="NFTExternalUrl"
+    :img-src="NFTImageUrl"
+    :img-bg-color="NFTImageBackgroundColor"
+    :price="NFTPrice"
+    :owner-address="iscnOwner"
+    :owner-avatar-src="iscnOwnerAvatar"
+    :owner-count="ownerCount"
+    :owner-name="iscnOwnerDisplayName"
+    :own-count="ownCount"
+    :sold-count="collectedCount"
+    :is-loading="uiIsOpenCollectModal && isCollecting"
+    :view-details-label="$t('campaign_nft_item_view_details_label')"
+    :like-action-label="$t('campaign_nft_item_like_action_label')"
+    :sold-count-label="$t('campaign_nft_item_collected_count_label')"
+    :content-preview-props="{
+      to: {
+        name: 'nft-class-classId',
+        params: { classId: classId },
+      },
+      tag: 'NuxtLink',
+    }"
+    @view-details="handleClickViewDetails"
+    @view-content="handleClickViewContent"
+    @collect="handleClickCollect"
+    @like="handleLike"
+  />
 </template>
 
 <script>
@@ -54,12 +52,12 @@ export default {
       isCollecting: false,
     };
   },
+  mounted() {
+    this.updateNFTClassMetadata();
+    this.updateNFTPurchaseInfo();
+    this.updateNFTOwners();
+  },
   methods: {
-    fetchInfo() {
-      this.updateNFTClassMetadata();
-      this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
-    },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
       if (!this.getAddress) {
