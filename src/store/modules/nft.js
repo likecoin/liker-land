@@ -50,7 +50,7 @@ function compareIsWritingNFT(getters, classIdA, classIdB) {
   return 0;
 }
 
-function guardValueAndSort(X, Y, order) {
+function compareNumber(X, Y, order) {
   if (Y === undefined) return -1; // keep X in front of Y
   if (X === undefined) return 1; // move Y in front of X
   switch (order) {
@@ -100,7 +100,7 @@ const getters = {
           Y = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
           break;
       }
-      return guardValueAndSort(X, Y, order);
+      return compareNumber(X, Y, order);
     });
     return sorted;
   },
@@ -131,7 +131,7 @@ const getters = {
           Y = getters.getUserLastCollectedTimestampByAddress(nftOwner)[b];
           break;
       }
-      return guardValueAndSort(X, Y, order);
+      return compareNumber(X, Y, order);
     });
     return sorted;
   },
