@@ -13,7 +13,7 @@ jobs:
           key: liker-land-{{ .Environment.CACHE_UUID }}-{{ checksum "functions/package.json" }}-{{ checksum "functions/package-lock.json" }}
       - run:
           name: Dependencies
-          command: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
+          command: npm --prefix src install && npm --prefix functions install && cp -r src/nuxt.config.js src/config src/tailwind.config.js functions/
       - run:
           name: Lint Test
           command: npm --prefix src run lint && npm --prefix functions run lint
@@ -53,7 +53,7 @@ jobs:
           key: liker-land-{{ .Environment.CACHE_UUID }}-{{ checksum "functions/package.json" }}-{{ checksum "functions/package-lock.json" }}
       - run:
           name: Dependencies
-          command: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
+          command: npm --prefix src install && npm --prefix functions install && cp -r src/nuxt.config.js src/config src/tailwind.config.js functions/
       - run:
           name: Add robots.txt
           command: |
@@ -87,7 +87,7 @@ jobs:
           key: liker-land-{{ .Environment.CACHE_UUID }}-{{ checksum "functions/package.json" }}-{{ checksum "functions/package-lock.json" }}
       - run:
           name: Dependencies
-          command: npm --prefix src install && npm --prefix functions install && cp src/nuxt.config.js src/tailwind.config.js functions/
+          command: npm --prefix src install && npm --prefix functions install && cp -r src/nuxt.config.js src/config src/tailwind.config.js functions/
       - deploy:
           name: Deploy
           command: |

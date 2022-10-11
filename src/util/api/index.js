@@ -6,6 +6,7 @@ import {
   LIKECOIN_CHAIN_API,
   LIKE_CO_THUMBNAIL_FN_BASE,
   SUPERLIKE_BASE,
+  LIKECOIN_NFT_API_WALLET,
 } from '../../constant';
 import { normalizeLocaleForLikeCo } from '../../locales';
 
@@ -242,3 +243,6 @@ export const getStripeFiatPrice = ({ classId }) => {
     qsPayload
   )}`;
 };
+
+export const getLatestNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?reverse=true`;
+export const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
