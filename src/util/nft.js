@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BigNumber } from 'bignumber.js';
-import { PageRequest } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import {
   LIKECOIN_CHAIN_NFT_RPC,
@@ -10,6 +9,24 @@ import {
 
 let queryClient = null;
 let iscnLib = null;
+
+export const NFT_INDEXER_LIMIT_MAX = 100;
+
+export const ORDER_CREATED_CLASS_ID_BY = {
+  PRICE: 'PRICE',
+  ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
+};
+
+export const ORDER_COLLECTED_CLASS_ID_BY = {
+  PRICE: 'PRICE',
+  LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
+  NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
+};
+
+export const ORDER = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+};
 
 export async function getISCNLib() {
   if (!iscnLib) {
@@ -42,24 +59,6 @@ export async function getClassInfo(classId) {
   const iscn = await getISCNLib();
   if (nftClass) nftClass = iscn.parseNFTClassDataFields(nftClass);
   return nftClass;
-}
-
-export async function getNFTs({ classId = '', owner = '' }) {
-  const c = await getNFTQueryClient();
-  const client = await c.getQueryClient();
-  let nfts = [];
-  let next = new Uint8Array([0x00]);
-  do {
-    /* eslint-disable no-await-in-loop */
-    const res = await client.nft.NFTs(
-      classId,
-      owner,
-      PageRequest.fromPartial({ key: next })
-    );
-    ({ nextKey: next } = res.pagination);
-    nfts = nfts.concat(res.nfts);
-  } while (next && next.length);
-  return { nfts };
 }
 
 export async function getNFTCountByClassId(classId, owner) {
@@ -154,6 +153,17 @@ export function isWritingNFT(classMetadata) {
   return (
     classMetadata?.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
   );
+}
+
+export function formatNFTInfo(nftInfo) {
+  const {
+    class_id: classId,
+    nft_id: nftId,
+    timestamp: timestampStr,
+    uri,
+  } = nftInfo;
+  const timestamp = Date.parse(timestampStr);
+  return { classId, nftId, timestamp, uri };
 }
 
 function formatNFTEvent(event) {

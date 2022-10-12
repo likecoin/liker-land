@@ -37,7 +37,7 @@
         <!-- Left column -->
         <div class="flex flex-col gap-[24px]">
           <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
-            <NFTGemWrapper :collected-count="mintedCount">
+            <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
                 :image-bg-color="NFTImageBackgroundColor"
                 :image-url="NFTImageUrl"
@@ -85,7 +85,7 @@
             v-if="NFTPrice"
             :nft-price="NFTPrice"
             :nft-price-u-s-d="formattedNFTPriceUSD"
-            :collected-count="mintedCount"
+            :collected-count="collectedCount"
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
             @collect="handleCollectFromPriceSection"
@@ -94,7 +94,7 @@
           />
           <NFTPageSupplySection
             v-if="isWritingNFT && NFTPrice"
-            :collected-count="mintedCount"
+            :collected-count="collectedCount"
             @collect="handleCollectFromSupplySection"
           />
           <NFTPageCollectorList

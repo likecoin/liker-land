@@ -1,6 +1,11 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { ellipsis } from '~/util/ui';
+import {
+  ORDER_CREATED_CLASS_ID_BY,
+  ORDER_COLLECTED_CLASS_ID_BY,
+  ORDER,
+} from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
 
 export default {
@@ -45,10 +50,18 @@ export default {
         ? this.$route.query.tab
         : 'created',
       isLoading: false,
+      collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
+      collectedOrder: ORDER.DESC,
+      createdOrderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
+      createdOrder: ORDER.DESC,
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassIdSorter', 'getNFTClassIdListByAddress']),
+    ...mapGetters([
+      'getCreatedClassIdSorter',
+      'getCollectedClassIdSorter',
+      'getNFTClassIdListByAddress',
+    ]),
     userAvatar() {
       return this.userInfo?.avatar;
     },
@@ -69,11 +82,19 @@ export default {
 
     // for NFTCardItems
     sortedCollectedClassIds() {
-      const collectedClassIds = [...new Set(this.collectedClassIds)];
-      return this.getNFTClassIdSorter(collectedClassIds);
+      return this.getCollectedClassIdSorter({
+        classIds: this.collectedClassIds,
+        nftOwner: this.wallet,
+        orderBy: this.collectedOrderBy,
+        order: this.collectedOrder,
+      });
     },
     sortedCreatedClassIds() {
-      return this.getNFTClassIdSorter(this.createdClassIds);
+      return this.getCreatedClassIdSorter({
+        classIds: this.createdClassIds,
+        orderBy: this.createdOrderBy,
+        order: this.createdOrder,
+      });
     },
   },
   methods: {
