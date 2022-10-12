@@ -15,6 +15,7 @@ import {
   getNFTEvents,
   postNewStripeFiatPayment,
   getStripeFiatPrice,
+  getIdenticonAvatar,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep } from '~/util/misc';
@@ -112,10 +113,7 @@ export default {
       return this.NFTClassMetadata.iscn_owner;
     },
     iscnOwnerAvatar() {
-      return (
-        this.iscnOwnerInfo.avatar ||
-        `https://avatars.dicebear.com/api/identicon/${this.iscnOwner}.svg`
-      );
+      return this.iscnOwnerInfo.avatar || getIdenticonAvatar(this.iscnOwner);
     },
     iscnOwnerDisplayName() {
       return this.iscnOwnerInfo.displayName;
@@ -188,11 +186,17 @@ export default {
       }));
     },
     populatedCollectors() {
-      return this.sortedOwnerListId.map(id => ({
-        id,
-        displayName: this.getUserInfoByAddress(id)?.displayName || id,
-        collectedCount: this.ownerList[id].length,
-      }));
+      return this.sortedOwnerListId.map(id => {
+        const owner = this.getUserInfoByAddress(id);
+        return {
+          id,
+          displayName: owner?.displayName || id,
+          collectedCount: this.ownerList[id].length,
+          avatar: owner?.avatar || getIdenticonAvatar(id),
+          isCivicLiker:
+            owner?.isCivicLikerTrial || owner?.isSubscribedCivicLiker,
+        };
+      });
     },
     ownCount() {
       const arr = this.populatedCollectors.filter(

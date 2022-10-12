@@ -2,7 +2,18 @@
   <ul>
     <li v-for="owner in ownerList" :key="owner.displayName">
       <div class="flex items-center justify-between">
-        <LinkV2 :to="`/${owner.id}`">{{ owner.displayName | ellipsis }}</LinkV2>
+        <LinkV2
+          class="flex items-center gap-[8px]"
+          :to="`/${owner.id}`"
+        >
+          <Identity
+            :avatar-url="owner.avatar"
+            :avatar-size="24"
+            :is-avatar-outlined="owner.isCivicLiker"
+            :is-lazy-loaded="true"
+          />
+          <span>{{ owner.displayName | ellipsis }}</span>
+        </LinkV2>
         <Label preset="p6">{{ owner.collectedCount }}</Label>
       </div>
       <div
