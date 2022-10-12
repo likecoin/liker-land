@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
 const path = require('path');
+const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
 
 const siteName = 'Liker.Land';
@@ -12,6 +13,7 @@ const {
   STRIPE_PUBLIC_KEY,
   GA_TRACKING_ID,
   ADWORDS_TRACKING_ID,
+  EXTERNAL_URL,
 } = process.env;
 
 const nuxtConfig = {
@@ -23,6 +25,7 @@ const nuxtConfig = {
     GA_TRACKING_ID,
     ADWORDS_TRACKING_ID,
     SITE_NAME: siteName,
+    EXTERNAL_URL,
   },
   mode: 'universal',
   server: {
@@ -232,6 +235,7 @@ const nuxtConfig = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/sentry',
+    '@nuxtjs/sitemap',
     ['@nuxtjs/pwa', { icon: false }],
     'portal-vue/nuxt',
     // ['@likecoin/nuxt-google-optimize', {
@@ -313,6 +317,10 @@ const nuxtConfig = {
       /* default integrations will still be added due to deep-merge */
       ReportingObserver: false, // reporting is very noisy on CSP violation.
     },
+  },
+  sitemap: {
+    hostname: EXTERNAL_URL,
+    routes: getSitemapRoutes,
   },
   // googleOptimize: {
   //   useFetch: false,
