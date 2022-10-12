@@ -13,6 +13,7 @@ const {
   STRIPE_PUBLIC_KEY,
   GA_TRACKING_ID,
   ADWORDS_TRACKING_ID,
+  EXTERNAL_URL,
 } = process.env;
 
 const nuxtConfig = {
@@ -24,6 +25,7 @@ const nuxtConfig = {
     GA_TRACKING_ID,
     ADWORDS_TRACKING_ID,
     SITE_NAME: siteName,
+    EXTERNAL_URL,
   },
   mode: 'universal',
   server: {
@@ -317,6 +319,7 @@ const nuxtConfig = {
     },
   },
   sitemap: {
+    hostname: EXTERNAL_URL,
     routes: getSitemapRoutes,
   },
   // googleOptimize: {
