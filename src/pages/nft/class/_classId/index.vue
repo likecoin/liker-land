@@ -52,6 +52,12 @@
                 @collect="handleCollectFromPreviewSection"
               />
             </NFTGemWrapper>
+            <NFTPageCollectorList
+              class="hidden desktop:block"
+              :owner-count="ownerCount"
+              :items="populatedCollectors"
+              :is-narrow="true"
+            />
             <NFTPageMetadataSection
               :content-url="NFTExternalUrl"
               :iscn-id="iscnId"
@@ -59,12 +65,6 @@
               :content-fingerprints="nftISCNContentFingerprints"
             />
           </div>
-          <NFTPageCollectorList
-            class="hidden desktop:block"
-            :owner-count="ownerCount"
-            :items="populatedCollectors"
-            :is-narrow="true"
-          />
         </div>
 
         <!-- Right column -->
