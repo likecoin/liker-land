@@ -1,12 +1,18 @@
 <template>
   <div class="relative w-full">
     <slot />
-    <NFTGem class="translate-y-[-50%] w-[90%]" :level="gemLevel" />
+    <NFTGem
+      class="translate-y-[-50%] w-[90%]"
+      :level="gemLevel"
+      @mouseenter.native.once="onMouseEnterGem"
+      @click.native="onMouseClickGem"
+    />
   </div>
 </template>
 
 <script>
 import { getBatch } from '~/util/writing-nft';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   props: {
@@ -28,6 +34,26 @@ export default {
         default:
           return batch;
       }
+    },
+  },
+  methods: {
+    onMouseClickGem() {
+      logTrackerEvent(
+        this,
+        'NFTGem',
+        'NFTGemClick',
+        `NFTGemLevel${this.gemLevel}`,
+        1
+      );
+    },
+    onMouseEnterGem() {
+      logTrackerEvent(
+        this,
+        'NFTGem',
+        'NFTGemHover',
+        `NFTGemLevel${this.gemLevel}`,
+        1
+      );
     },
   },
 };
