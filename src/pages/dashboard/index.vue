@@ -40,7 +40,7 @@
         >
           <ButtonV2
             preset="tertiary"
-            text="Portfolio View"
+            :text="$t('dashboard_portfolio_button')"
             :class="[
               'block',
               'mb-[12px]',

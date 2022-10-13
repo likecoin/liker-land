@@ -226,6 +226,7 @@
   "Currency": {
     "USD": "美元"
   },
+  "dashboard_portfolio_button": "Public Portfolio",
   "FeaturedPage": {
     "headerLabel": "Today"
   },
