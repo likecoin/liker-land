@@ -84,17 +84,17 @@
             :class="[
               'hidden',
 
-              'laptop:block',
-              'laptop:absolute',
-              'laptop:right-[-50px]',
-              'laptop:m-0',
+              'desktop:block',
+              'desktop:absolute',
+              'desktop:right-[-50px]',
+              'desktop:m-0',
 
               'rounded-[16px]',
             ]"
           >
             <template v-slot:trigger="{ toggle }">
               <ButtonV2
-                :text="`sort ${formattedOrderLabel}`"
+                :text="label.replace('By ', '')"
                 preset="plain"
                 @click="toggle"
               >

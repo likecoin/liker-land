@@ -64,7 +64,7 @@
           'desktop:w-[700px]',
         ]"
       >
-        <div :class="['flex','items-center','mb-[48px]','w-full']">
+        <div :class="['flex','relative','items-center','mb-[48px]','w-full']">
           <div
             :class="[
               'flex',
@@ -88,29 +88,39 @@
               @click="handleGoCreated"
             />
           </div>
-          <Dropdown class="hidden laptop:block">
-            <template v-slot:trigger="{ toggle }">
-              <ButtonV2
-                :text="`sort ${formattedOrderLabel}`"
-                preset="plain"
-                @click="toggle"
-              >
-                <template #append>
-                  <IconASC v-if="currentOrder === 'ASC'" />
-                  <IconDESC v-if="currentOrder === 'DESC'" />
-                </template>
-              </ButtonV2>
-            </template>
-            <Menu
-              :items="currentOrderOptions"
-              :is-show-icon="true"
-              :selected-value="selectedValue"
-              type="order"
-              @select="handleSelectOrder"
-            />
-          </Dropdown>
-          <MenuButtonDivider class="bg-gray-c" />
-          <ShareButton @copy="handleShare" />
+          <div
+            :class="[
+              'flex',
+              'items-center',
+
+              'desktop:absolute',
+              'desktop:right-[10px]',
+            ]"
+          >
+            <Dropdown class="hidden desktop:block">
+              <template v-slot:trigger="{ toggle }">
+                <ButtonV2
+                  :text="label.replace('By ', '')"
+                  preset="plain"
+                  @click="toggle"
+                >
+                  <template #append>
+                    <IconASC v-if="currentOrder === 'ASC'" />
+                    <IconDESC v-if="currentOrder === 'DESC'" />
+                  </template>
+                </ButtonV2>
+              </template>
+              <Menu
+                :items="currentOrderOptions"
+                :is-show-icon="true"
+                :selected-value="selectedValue"
+                type="order"
+                @select="handleSelectOrder"
+              />
+            </Dropdown>
+            <MenuButtonDivider class="hidden bg-gray-c desktop:block" />
+            <ShareButton @copy="handleShare" />
+          </div>
         </div>
 
         <CardV2 v-if="isLoading">Loading</CardV2>
