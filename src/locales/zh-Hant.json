@@ -102,7 +102,7 @@
   "footer_nav_faq": "FAQ",
   "order_menu_price":"by price",
   "order_menu_time":"by time",
-  "order_menu_collected":"own",
+  "order_menu_collected":"by own",
   "tx_modal_quitAlert_content": "Transaction will be cancelled if network confirmations has not completed.\nThe paid gas fee cannot be refunded.",
   "tx_modal_quitAlert_confirm": "Cancel",
   "tx_modal_quitAlert_continue": "Continue",
