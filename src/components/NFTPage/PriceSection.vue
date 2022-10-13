@@ -73,7 +73,7 @@
           :text="$t('nft_details_page_button_sell')"
           preset="tertiary"
           :is-disabled="true"
-          @mouseenter="handleMouseEnterSell"
+          @mouseenter.once="handleMouseEnterSell"
           @click.native="handleClickSell"
         />
       </ToolTips>
