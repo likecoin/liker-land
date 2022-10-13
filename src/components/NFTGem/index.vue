@@ -5,7 +5,7 @@
       v-if="level && level < 13"
       class="w-[24px] h-[24px]"
     >
-      <img :src="levelImgSrc" :alt="`Level ${level}`">
+      <img :src="levelImgSrc" :title="`Level ${level}`" :alt="`Level ${level}`">
     </div>
 
     <!-- Spark background -->
@@ -16,9 +16,9 @@
       <div
         class="absolute w-[24px] h-[24px]"
       >
-        <img :src="levelImgSrc" :alt="`Level ${level}`">
+        <img :src="levelImgSrc" :title="`Level ${level}`" :alt="`Level ${level}`">
       </div>
-      <img :src="sparkImgSrc" :alt="`Level ${level}`">
+      <img :src="sparkImgSrc" :title="`Level ${level}`" :alt="`Level ${level}`">
     </div>
 
     <!-- Gem line -->
