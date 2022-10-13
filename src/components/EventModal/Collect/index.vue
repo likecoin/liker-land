@@ -173,9 +173,13 @@ export default {
       this.fetchNFTPrices(this.classId);
       this.fetchUserCollectedCount();
     },
-    handleSelectPaymentMethod(method) {
+    async handleSelectPaymentMethod(method) {
       switch (method) {
         case 'crypto':
+          if (!this.getAddress) {
+            const isConnected = await this.connectWallet();
+            if (!isConnected) return;
+          }
           logTrackerEvent(
             this,
             'NFT',

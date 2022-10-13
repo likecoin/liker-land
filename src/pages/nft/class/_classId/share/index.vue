@@ -284,13 +284,6 @@ export default {
     ...mapActions(['fetchUserInfoByAddress']),
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(SharePage)', this.classId, 1);
-      if (!this.getAddress) {
-        const isConnected = await this.connectWallet();
-        if (isConnected) {
-          this.handleCollect();
-        }
-        return;
-      }
       try {
         this.isCollecting = true;
         await this.collectNFT();
