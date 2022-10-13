@@ -26,12 +26,12 @@ async function getSitemapRoutes() {
     ...[newClassRes, topClassRes].map(r => (r.data || {}).classes || [])
   );
   const classIds = classes.map(c => c.id);
-  const uniqueClassIdRoutes = [...new Set(classIds)].map(
+  const nftDetailsPageRoutes = [...new Set(classIds)].map(
     id => `/nft/class/${id}`
   );
   const users = ((creatorRes.data || {}).creators || []).map(c => c.account);
-  const userIdRoutes = users.map(id => `/${id}`);
-  return uniqueClassIdRoutes.concat(userIdRoutes);
+  const portfolioPageRoutes = [...new Set(users)].map(id => `/${id}`);
+  return nftDetailsPageRoutes.concat(portfolioPageRoutes);
 }
 
 module.exports = { getSitemapRoutes };
