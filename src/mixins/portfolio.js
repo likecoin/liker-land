@@ -7,6 +7,7 @@ import {
   ORDER,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [clipboardMixin],
@@ -96,6 +97,125 @@ export default {
         order: this.createdOrder,
       });
     },
+    currentOrderBy() {
+      return this.currentTab === 'collected'
+        ? this.collectedOrderBy
+        : this.createdOrderBy;
+    },
+    currentOrder() {
+      return this.currentTab === 'collected'
+        ? this.collectedOrder
+        : this.createdOrder;
+    },
+    currentOrderOptions() {
+      return this.currentTab === 'collected'
+        ? this.collectedOrderOptions
+        : this.createdOrderOptions;
+    },
+    formattedOrderLabel() {
+      let formattedOrderBy = '';
+      switch (this.currentOrderBy) {
+        case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
+        case ORDER_CREATED_CLASS_ID_BY.PRICE:
+          formattedOrderBy = this.$t('order_menu_price');
+          break;
+        case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
+        case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
+          formattedOrderBy = this.$t('order_menu_time');
+          break;
+        case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
+          formattedOrderBy = this.$t('order_menu_collected');
+          break;
+        default:
+          break;
+      }
+      return formattedOrderBy;
+    },
+    collectedOrderOptions() {
+      const options = [
+        {
+          value: {
+            orderBy: ORDER_COLLECTED_CLASS_ID_BY.PRICE,
+            order: ORDER.DESC,
+          },
+          name: this.$t('order_menu_price'),
+          format: ORDER_COLLECTED_CLASS_ID_BY.PRICE + ORDER.DESC,
+        },
+        {
+          value: {
+            orderBy: ORDER_COLLECTED_CLASS_ID_BY.PRICE,
+            order: ORDER.ASC,
+          },
+          name: this.$t('order_menu_price'),
+          format: ORDER_COLLECTED_CLASS_ID_BY.PRICE + ORDER.ASC,
+        },
+        {
+          value: {
+            orderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
+            order: ORDER.DESC,
+          },
+          name: this.$t('order_menu_time'),
+          format: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT + ORDER.DESC,
+        },
+        {
+          value: {
+            orderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
+            order: ORDER.ASC,
+          },
+          name: this.$t('order_menu_time'),
+          format: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT + ORDER.ASC,
+        },
+        {
+          value: {
+            orderBy: ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT,
+            order: ORDER.DESC,
+          },
+          name: this.$t('order_menu_collected'),
+          format: ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT + ORDER.DESC,
+        },
+      ];
+      return options;
+    },
+    createdOrderOptions() {
+      const options = [
+        {
+          value: {
+            orderBy: ORDER_CREATED_CLASS_ID_BY.PRICE,
+            order: ORDER.DESC,
+          },
+          name: this.$t('order_menu_price'),
+          format: ORDER_CREATED_CLASS_ID_BY.PRICE + ORDER.DESC,
+        },
+        {
+          value: {
+            orderBy: ORDER_CREATED_CLASS_ID_BY.PRICE,
+            order: ORDER.ASC,
+          },
+          name: this.$t('order_menu_price'),
+          format: ORDER_CREATED_CLASS_ID_BY.PRICE + ORDER.ASC,
+        },
+        {
+          value: {
+            orderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
+            order: ORDER.DESC,
+          },
+          name: this.$t('order_menu_time'),
+          format: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP + ORDER.DESC,
+        },
+        {
+          value: {
+            orderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
+            order: ORDER.ASC,
+          },
+          name: this.$t('order_menu_time'),
+          format: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP + ORDER.ASC,
+        },
+      ];
+      return options;
+    },
+    selectedValue() {
+      return this.currentOrderBy + this.currentOrder;
+    },
   },
   methods: {
     ...mapActions(['fetchNFTListByAddress']),
@@ -124,6 +244,23 @@ export default {
         path: `/${wallet}?referrer=${referrer}`,
         alertMessage: this.$t('tooltip_share_done'),
       });
+    },
+    handleSelectOrder(value) {
+      logTrackerEvent(
+        this,
+        'sort_order',
+        this.currentTab,
+        `${value.orderBy} + ${value.order}`,
+        1
+      );
+      if (this.currentTab === 'collected') {
+        this.collectedOrderBy = value.orderBy;
+        this.collectedOrder = value.order;
+      }
+      if (this.currentTab === 'created') {
+        this.createdOrderBy = value.orderBy;
+        this.createdOrder = value.order;
+      }
     },
   },
 };
