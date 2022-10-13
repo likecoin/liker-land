@@ -88,7 +88,7 @@
               @click="handleGoCreated"
             />
           </div>
-          <Dropdown>
+          <Dropdown class="hidden laptop:block">
             <template v-slot:trigger="{ toggle }">
               <ButtonV2
                 :text="`sort ${formattedOrderLabel}`"

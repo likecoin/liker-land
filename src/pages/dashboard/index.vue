@@ -82,9 +82,9 @@
           </div>
           <Dropdown
             :class="[
-              'block',
-              'my-[12px]',
+              'hidden',
 
+              'laptop:block',
               'laptop:absolute',
               'laptop:right-[-50px]',
               'laptop:m-0',
