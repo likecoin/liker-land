@@ -66,7 +66,7 @@
           <Label v-else>-</Label>
         </td>
         <td>
-          <LinkV2 class="text-left" :href="getChainRawTx(event.txHash)">
+          <LinkV2 class="text-left" :href="getChainExplorerTx(event.txHash)">
             <TimeAgo
               long
               tooltip
@@ -81,7 +81,7 @@
 <script>
 import { ellipsis, formatNumber } from '~/util/ui';
 import { TimeAgo } from 'vue2-timeago';
-import { getChainRawTx } from '~/util/api';
+import { getChainExplorerTx } from '~/util/api';
 
 export default {
   name: 'EventListTable',
@@ -96,7 +96,7 @@ export default {
       default: undefined,
     },
   },
-  methods: { getChainRawTx },
+  methods: { getChainExplorerTx },
 };
 </script>
 
