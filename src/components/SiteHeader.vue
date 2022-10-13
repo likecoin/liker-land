@@ -73,6 +73,7 @@
         <Menu
           :items="mainMenuItems"
           :is-show-icon="true"
+          type="header"
           @select="handleSelectMenuItem"
         >
           <template

@@ -17,14 +17,14 @@
   >
     <slot name="prepend" />
     <div
-      v-for="item of items"
-      :key="item.value"
+      v-for="(item, i) of items"
+      :key="i"
       :class="[
         'p-[4px]',
         'transition',
         'duration-100',
         'cursor-pointer',
-        {'text-like-green': item.value === selectedValue},
+        {'text-like-green': item.value === selectedValue || item.format === selectedValue},
         'hover:text-medium-gray',
         'active:text-like-green',
       ]"
@@ -34,8 +34,12 @@
         class="py-[16px]"
         :align="isShowIcon ? 'left' : 'center'"
       >
-        <template v-if="isShowIcon" #prepend>
+        <template v-if="type === 'header'" #prepend>
           <MenuIcon :type="item.value" />
+        </template>
+        <template v-else-if="type === 'order'" #append>
+          <IconASC v-if="item.value.order === 'ASC'" />
+          <IconDESC v-if="item.value.order === 'DESC'" />
         </template>
         <span>{{ item.name }}</span>
       </Label>
@@ -56,6 +60,9 @@ export default class Menu extends Vue {
 
   @Prop({ default: false })
   readonly isShowIcon!: boolean;
+
+  @Prop(String)
+  readonly type: string | undefined;
 
   handleSelectItem(value: string) {
     this.$emit('select', value);
