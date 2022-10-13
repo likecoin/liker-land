@@ -14,7 +14,7 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setLoggerUser(vue, { wallet }) {
+export async function setLoggerUser(vue, { wallet, method }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
   try {
     if (vue.$gtag) {
@@ -22,6 +22,7 @@ export async function setLoggerUser(vue, { wallet }) {
       hashedId = hexString(hashedId);
       vue.$gtag.set({ userId: hashedId });
       vue.$gtag.config({ user_id: hashedId });
+      vue.$gtag.event('login', { method });
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console

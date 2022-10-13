@@ -30,7 +30,7 @@ export async function initWallet(
   const walletAddress = bech32Address || address;
   commit(types.WALLET_SET_ADDRESS, walletAddress);
   commit(types.WALLET_SET_SIGNER, offlineSigner);
-  await setLoggerUser(this, walletAddress);
+  await setLoggerUser(this, { wallet: walletAddress, method });
   try {
     const userInfo = await this.$api.$get(
       getUserInfoMinByAddress(walletAddress)
