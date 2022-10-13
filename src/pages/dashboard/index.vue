@@ -80,6 +80,38 @@
               @click="handleGoCreated"
             />
           </div>
+          <Dropdown
+            :class="[
+              'block',
+              'my-[12px]',
+
+              'laptop:absolute',
+              'laptop:right-[-50px]',
+              'laptop:m-0',
+
+              'rounded-[16px]',
+            ]"
+          >
+            <template v-slot:trigger="{ toggle }">
+              <ButtonV2
+                :text="`sort ${formattedOrderLabel}`"
+                preset="plain"
+                @click="toggle"
+              >
+                <template #append>
+                  <IconASC v-if="currentOrder === 'ASC'" />
+                  <IconDESC v-if="currentOrder === 'DESC'" />
+                </template>
+              </ButtonV2>
+            </template>
+            <Menu
+              :items="currentOrderOptions"
+              :is-show-icon="true"
+              :selected-value="selectedValue"
+              type="order"
+              @select="handleSelectOrder"
+            />
+          </Dropdown>
         </div>
 
         <CardV2 v-if="isLoading">{{

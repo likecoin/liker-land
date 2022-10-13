@@ -88,6 +88,28 @@
               @click="handleGoCreated"
             />
           </div>
+          <Dropdown>
+            <template v-slot:trigger="{ toggle }">
+              <ButtonV2
+                :text="`sort ${formattedOrderLabel}`"
+                preset="plain"
+                @click="toggle"
+              >
+                <template #append>
+                  <IconASC v-if="currentOrder === 'ASC'" />
+                  <IconDESC v-if="currentOrder === 'DESC'" />
+                </template>
+              </ButtonV2>
+            </template>
+            <Menu
+              :items="currentOrderOptions"
+              :is-show-icon="true"
+              :selected-value="selectedValue"
+              type="order"
+              @select="handleSelectOrder"
+            />
+          </Dropdown>
+          <MenuButtonDivider class="bg-gray-c" />
           <ShareButton @copy="handleShare" />
         </div>
 
