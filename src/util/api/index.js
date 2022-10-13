@@ -3,6 +3,7 @@ import {
   CIVIC_LIKER_CLASSIC_LIKER_ID,
   IS_TESTNET,
   LIKECOIN_API_BASE,
+  LIKECOIN_CHAIN_VIEW_TX,
   LIKECOIN_CHAIN_API,
   LIKE_CO_THUMBNAIL_FN_BASE,
   SUPERLIKE_BASE,
@@ -161,6 +162,8 @@ export const getUserSellNFTClasses = ({ wallet }) =>
 
 export const getLIKEPrice = () =>
   `https://api.coingecko.com/api/v3/simple/price?ids=likecoin&vs_currencies=usd`;
+
+export const getChainExplorerTx = hash => `${LIKECOIN_CHAIN_VIEW_TX}/${hash}`;
 
 export const getChainRawTx = hash =>
   `${LIKECOIN_CHAIN_API}/cosmos/tx/v1beta1/txs/${hash}`;
