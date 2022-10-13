@@ -10,21 +10,28 @@ const LIKECOIN_NFT_API_WALLET = IS_TESTNET
   : 'like17m4vwrnhjmd20uu7tst7nv0kap6ee7js69jfrs';
 const getLatestNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?reverse=true`;
 const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
+const getCreatorsFromAPIWallet = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?collector=${LIKECOIN_NFT_API_WALLET}`;
 
 /* actual routes logic */
 async function getSitemapRoutes() {
-  const res = await Promise.all(
-    [getLatestNFTClasses, getTopNFTClasses].map(url =>
+  const [newClassRes, topClassRes, creatorRes] = await Promise.all(
+    [getLatestNFTClasses, getTopNFTClasses, getCreatorsFromAPIWallet].map(url =>
       axios.get(url).catch(err => {
         console.error(err);
         return {};
       })
     )
   );
-  const classes = [].concat(...res.map(r => (r.data || {}).classes || []));
-  const ids = classes.map(c => c.id);
-  const uniqueIdRoutes = [...new Set(ids)].map(id => `/nft/class/${id}`);
-  return uniqueIdRoutes;
+  const classes = [].concat(
+    ...[newClassRes, topClassRes].map(r => (r.data || {}).classes || [])
+  );
+  const classIds = classes.map(c => c.id);
+  const nftDetailsPageRoutes = [...new Set(classIds)].map(
+    id => `/nft/class/${id}`
+  );
+  const users = ((creatorRes.data || {}).creators || []).map(c => c.account);
+  const portfolioPageRoutes = [...new Set(users)].map(id => `/${id}`);
+  return nftDetailsPageRoutes.concat(portfolioPageRoutes);
 }
 
 module.exports = { getSitemapRoutes };
