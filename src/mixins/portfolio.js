@@ -112,7 +112,7 @@ export default {
         ? this.collectedOrderOptions
         : this.createdOrderOptions;
     },
-    formattedOrderLabel() {
+    label() {
       let formattedOrderBy = '';
       switch (this.currentOrderBy) {
         case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
