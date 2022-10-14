@@ -3,6 +3,7 @@
     class="w-full"
     preset="outline"
     v-bind="$attrs"
+    :is-disabled="isDisabled"
     @click="handleClick"
   >
     <template #prepend>
@@ -39,6 +40,10 @@ export default {
     price: {
       type: String,
       default: '',
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
