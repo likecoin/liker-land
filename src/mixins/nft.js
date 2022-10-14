@@ -82,7 +82,6 @@ export default {
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
-      'walletLIKEBalance',
     ]),
     iscnOwnerInfo() {
       return this.getUserInfoByAddress(this.iscnOwner) || {};
