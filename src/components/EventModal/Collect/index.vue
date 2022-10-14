@@ -23,8 +23,25 @@
       <Label
         class="text-medium-gray mt-[12px]"
         preset="h6"
-        :text="$t('tx_modal_status_complete_text_collect')"
+        align="center"
+        :text="$t(
+          hasConnectedWallet
+            ? 'tx_modal_status_complete_text_collect'
+            : 'tx_modal_status_complete_text_collect_without_wallet'
+        )"
       />
+      <template v-if="!hasConnectedWallet && paymentId">
+        <Label
+          class="text-like-green mt-[24px]"
+          preset="h5"
+          :text="$t('tx_modal_status_complete_reference_code')"
+        />
+        <Label
+          class="text-like-green mt-[8px] p-[12px] border-[2px] border-shade-gray rounded-[8px]"
+          preset="p5"
+          :text="paymentId"
+        />
+      </template>
     </div>
     <NFTPageOwning
       v-if="hasConnectedWallet"
@@ -150,6 +167,9 @@ export default {
       return this.hasConnectedWallet
         ? this.isInsufficientLIKE || !this.canPayByLIKE
         : !this.canCollectWithoutWallet;
+    },
+    paymentId() {
+      return this.$route.query.payment_id;
     },
   },
   watch: {
