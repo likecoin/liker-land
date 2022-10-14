@@ -104,6 +104,15 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];
 
+// Leave it empty to allow all items
+export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS = IS_TESTNET
+  ? [
+      // NFT Class ID
+    ]
+  : [
+      // NFT Class ID
+    ];
+
 export const TX_STATUS = {
   SIGN: 'sign',
   PROCESSING: 'processing',

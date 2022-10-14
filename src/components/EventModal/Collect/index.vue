@@ -26,7 +26,10 @@
         :text="$t('tx_modal_status_complete_text_collect')"
       />
     </div>
-    <NFTPageOwning :collected-count="userCollectedCount" />
+    <NFTPageOwning
+      v-if="hasConnectedWallet"
+      :collected-count="userCollectedCount"
+    />
     <template v-if="!uiTxNFTStatus">
       <section v-if="paymentMethod === undefined">
         <Label
@@ -38,14 +41,15 @@
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li>
             <EventModalCollectMethodButton
-              class="rounded-b-[0]"
+              :class="{ 'rounded-b-[0]': hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
-              :is-disabled="isInsufficientLIKE || !canPayByLIKE"
+              :is-disabled="isDisabledPayByLIKE"
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
             />
             <i18n
+              v-if="hasConnectedWallet"
               :class="[
                 isInsufficientLIKE || !canPayByLIKE
                   ? 'bg-light-gray border-shade-gray'
@@ -142,6 +146,11 @@ export default {
       }
       return !notSupportedPlatforms.includes(this.walletMethodType);
     },
+    isDisabledPayByLIKE() {
+      return this.hasConnectedWallet
+        ? this.isInsufficientLIKE || !this.canPayByLIKE
+        : !this.canCollectWithoutWallet;
+    },
   },
   watch: {
     isOpen(isOpen) {
@@ -154,6 +163,13 @@ export default {
       if (nftClassId) {
         // Reset state when NFT Class change
         this.resetState();
+      }
+    },
+    getAddress() {
+      if (this.hasConnectedWallet) {
+        // Fetch user collected count when wallet change
+        this.userCollectedCount = undefined;
+        this.fetchUserCollectedCount();
       }
     },
   },

@@ -6,6 +6,7 @@ import {
   APP_LIKE_CO_URL_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
+  LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS,
 } from '~/constant';
 
 import {
@@ -209,6 +210,12 @@ export default {
     },
     nftDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
+    canCollectWithoutWallet() {
+      return (
+        !LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS.length ||
+        LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS.includes(this.classId)
+      );
     },
   },
   watch: {
