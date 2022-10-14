@@ -42,6 +42,25 @@
           :text="paymentId"
         />
       </template>
+
+      <!-- Button for complete of collecting -->
+      <div v-else class="flex items-center justify-center mt-[24px]">
+        <ButtonV2
+          preset="secondary"
+          :text="$t('nft_details_page_button_share')"
+          class="mr-[12px]"
+          @click="$emit('handle-share')"
+        >
+          <template #prepend>
+            <IconShare />
+          </template>
+        </ButtonV2>
+        <ButtonV2
+          preset="outline"
+          :text="$t('nft_details_page_button_portfolio')"
+          @click="$emit('go-portfolio')"
+        />
+      </div>
     </div>
     <NFTPageOwning
       v-if="hasConnectedWallet"

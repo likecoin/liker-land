@@ -15,11 +15,11 @@
     <template v-if="!showConfirm || uiTxNFTStatus === 'processing'">
       <!-- Main -->
 
-      <slot name="default" />
+      <slot v-if="$slots.default" name="default" />
 
       <!-- Message -->
       <div
-        v-if="formattedStatusTitle || formattedStatusText"
+        v-else-if="formattedStatusTitle || formattedStatusText"
         class="flex flex-col items-center justify-center"
       >
         <Label
@@ -75,27 +75,6 @@
         >
           {{ buttonText }}
         </ButtonV2>
-      </div>
-      <!-- Button for complete of collecting -->
-      <div
-        v-else-if="isCollectCompleted"
-        class="flex items-center justify-center mt-[24px]"
-      >
-        <ButtonV2
-          preset="secondary"
-          :text="$t('nft_details_page_button_share')"
-          class="mr-[12px]"
-          @click="$emit('handle-share')"
-        >
-          <template #prepend>
-            <IconShare />
-          </template>
-        </ButtonV2>
-        <ButtonV2
-          preset="outline"
-          :text="$t('nft_details_page_button_portfolio')"
-          @click="$emit('go-portfolio')"
-        />
       </div>
 
       <!-- Attention -->
@@ -186,9 +165,6 @@ export default {
       'uiCollectOwnedCount',
       'walletMethodType',
     ]),
-    isCollectCompleted() {
-      return this.preset === 'collect' && this.uiTxNFTStatus === 'completed';
-    },
     formattedErrorMessage() {
       switch (this.uiTxErrorMessage) {
         case 'INSUFFICIENT_BALANCE':
