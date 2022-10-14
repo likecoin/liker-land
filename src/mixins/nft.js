@@ -392,14 +392,24 @@ export default {
     },
     async collectNFT() {
       try {
-        logPurchaseFlowEvent(this, 'add_to_cart', {
+        const purchaseEventParams = {
           name: this.NFTName,
           price: this.purchaseInfo.price,
           classId: this.classId,
-        });
-        await this.initIfNecessary();
-        this.fetchUserCollectedCount();
-        this.walletFetchLIKEBalance();
+        };
+        logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+        logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+        logPurchaseFlowEvent(this, 'add_shipping_info', purchaseEventParams);
+        if (!this.canCollectWithoutWallet && !this.getAddress) {
+          const isConnected = await this.connectWallet();
+          if (!isConnected) return;
+        } else {
+          await this.initIfNecessary();
+        }
+        if (this.hasConnectedWallet) {
+          this.fetchUserCollectedCount();
+          this.walletFetchLIKEBalance();
+        }
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
