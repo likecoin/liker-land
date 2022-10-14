@@ -15,6 +15,9 @@ export default {
     const name = ellipsis(this.userDisplayName);
     const title = this.$t('portfolio_title', { name });
     const description = this.$t('portfolio_description');
+    const image =
+      this.userAvatar ||
+      `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`;
     return {
       title,
       meta: [
@@ -36,9 +39,21 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content:
-            this.userAvatar ||
-            `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`,
+          content: image,
+        },
+      ],
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify({
+            '@context': 'http://www.schema.org',
+            '@type': 'Person',
+            name,
+            image,
+            identifier: this.wallet,
+          }),
+          type: 'application/ld+json',
+          body: true,
         },
       ],
     };
