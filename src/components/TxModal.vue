@@ -12,28 +12,53 @@
       <slot name="header-prepend" />
     </template>
 
-    <template v-if="!showConfirm || uiTxNFTStatus === 'processing'">
-      <!-- Main -->
+    <slot name="top" />
 
-      <slot v-if="$slots.default" name="default" />
-
-      <!-- Message -->
+    <template v-if="!isShowQuitConfirm || ['processing', 'completed'].includes(uiTxNFTStatus)">
+      <!-- Title & Message -->
       <div
-        v-else-if="formattedStatusTitle || formattedStatusText"
+        v-if="formattedStatusTitle || formattedStatusText || $slots.title || $slots.message"
         class="flex flex-col items-center justify-center"
       >
+        <slot v-if="$slots.title" name="title" />
         <Label
-          v-if="formattedStatusTitle"
+          v-else-if="formattedStatusTitle"
           class="text-like-green font-600"
           preset="h4"
+          align="center"
           :text="formattedStatusTitle"
         />
+        <slot v-if="$slots.message" name="message" />
         <Label
-          v-if="formattedStatusText"
+          v-else-if="formattedStatusText"
           class="text-medium-gray mt-[12px]"
           preset="h6"
+          align="center"
           :text="formattedStatusText"
         />
+      </div>
+
+      <slot name="default" />
+
+      <ProgressIndicator
+        v-if="['sign', 'processing'].includes(uiTxNFTStatus)"
+        class="mt-[32px] mx-auto"
+      />
+
+      <!-- Button -->
+      <div
+        v-if="buttonText || $slots.button"
+        class="flex items-center justify-center w-full mt-[24px]"
+      >
+        <slot v-if="$slots.button" name="button" />
+        <ButtonV2
+          v-else
+          :preset="getButtonState.preset"
+          :is-disabled="getButtonState.isDisable"
+          @click="onClick"
+        >
+          {{ buttonText }}
+        </ButtonV2>
       </div>
 
       <div
@@ -58,25 +83,6 @@
         </Label>
       </div>
 
-      <ProgressIndicator
-        v-if="['sign', 'processing'].includes(uiTxNFTStatus)"
-        class="mt-[32px] mx-auto"
-      />
-
-      <!-- Button -->
-      <div
-        v-if="buttonText"
-        class="flex flex-col items-center justify-center w-full mt-[24px]"
-      >
-        <ButtonV2
-          :preset="getButtonState.preset"
-          :is-disabled="getButtonState.isDisable"
-          @click="onClick"
-        >
-          {{ buttonText }}
-        </ButtonV2>
-      </div>
-
       <!-- Attention -->
       <div
         v-if="uiTxNFTStatus === 'sign' && attentionText"
@@ -95,7 +101,7 @@
       </div>
     </template>
 
-    <!-- Confirm -->
+    <!-- Quit Confirm -->
     <template v-else>
       <div
         v-t="'tx_modal_quitAlert_content'"
@@ -156,7 +162,7 @@ export default {
     },
   },
   data() {
-    return { showConfirm: false };
+    return { isShowQuitConfirm: false };
   },
   computed: {
     ...mapGetters([
@@ -247,7 +253,7 @@ export default {
           return this.$t('tx_modal_button_Close');
 
         case 'completed':
-          if (this.preset === 'collect') {
+          if (this.preset === 'collect' && this.$slots.button) {
             return undefined;
           }
           return this.$t('tx_modal_button_ok');
@@ -269,7 +275,7 @@ export default {
       switch (this.uiTxNFTStatus) {
         case 'sign':
           logTrackerEvent(this, 'NFT', 'ShowCancelModal', this.classId, 1);
-          this.showConfirm = true;
+          this.isShowQuitConfirm = true;
           break;
         case 'insufficient':
         case 'failed':
@@ -277,18 +283,18 @@ export default {
         default:
           logTrackerEvent(this, 'NFT', 'ClickModalClose', this.classId, 1);
           this.$emit('close');
-          this.showConfirm = false;
+          this.isShowQuitConfirm = false;
           break;
       }
     },
     handleContinue() {
       logTrackerEvent(this, 'NFT', 'ClickContinue', this.classId, 1);
-      this.showConfirm = false;
+      this.isShowQuitConfirm = false;
     },
     handleCancel() {
       logTrackerEvent(this, 'NFT', 'Cancel', this.classId, 1);
       this.$emit('close');
-      this.showConfirm = false;
+      this.isShowQuitConfirm = false;
     },
   },
 };

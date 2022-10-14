@@ -11,15 +11,18 @@
     <template #header-prepend>
       <IconPrice />
     </template>
-    <div
-      v-if="uiTxNFTStatus === 'completed'"
-      class="flex flex-col items-center justify-center mb-[12px]"
-    >
-      <Label
-        class="text-like-green font-600"
-        preset="h4"
-        :text="this.$t('tx_modal_status_complete_title')"
+
+    <template #top>
+      <NFTPageOwning
+        v-if="hasConnectedWallet"
+        :collected-count="userCollectedCount"
       />
+    </template>
+
+    <template
+      v-if="isCompleted"
+      #message
+    >
       <Label
         class="text-medium-gray mt-[12px]"
         preset="h6"
@@ -30,42 +33,45 @@
             : 'tx_modal_status_complete_text_collect_without_wallet'
         )"
       />
-      <template v-if="!hasConnectedWallet && paymentId">
-        <Label
-          class="text-like-green mt-[24px]"
-          preset="h5"
-          :text="$t('tx_modal_status_complete_reference_code')"
-        />
-        <Label
-          class="text-like-green mt-[8px] p-[12px] border-[2px] border-shade-gray rounded-[8px]"
-          preset="p5"
-          :text="paymentId"
-        />
-      </template>
+    </template>
 
-      <!-- Button for complete of collecting -->
-      <div v-else class="flex items-center justify-center mt-[24px]">
-        <ButtonV2
-          preset="secondary"
-          :text="$t('nft_details_page_button_share')"
-          class="mr-[12px]"
-          @click="$emit('handle-share')"
-        >
-          <template #prepend>
-            <IconShare />
-          </template>
-        </ButtonV2>
-        <ButtonV2
-          preset="outline"
-          :text="$t('nft_details_page_button_portfolio')"
-          @click="$emit('go-portfolio')"
-        />
-      </div>
-    </div>
-    <NFTPageOwning
-      v-if="hasConnectedWallet"
-      :collected-count="userCollectedCount"
-    />
+    <template v-if="isCompleted && !hasConnectedWallet && paymentId">
+      <Label
+        class="text-like-green mt-[24px]"
+        preset="h5"
+        align="center"
+        :text="$t('tx_modal_status_complete_reference_code')"
+      />
+      <Label
+        class="text-like-green mt-[8px] p-[12px] border-[2px] border-shade-gray rounded-[8px]"
+        preset="p5"
+        align="center"
+        :text="paymentId"
+      />
+    </template>
+
+    <!-- Button for complete of collecting -->
+    <template
+      v-if="isCompleted && hasConnectedWallet"
+      #button
+    >
+      <ButtonV2
+        preset="secondary"
+        :text="$t('nft_details_page_button_share')"
+        class="mr-[12px]"
+        @click="$emit('handle-share')"
+      >
+        <template #prepend>
+          <IconShare />
+        </template>
+      </ButtonV2>
+      <ButtonV2
+        preset="outline"
+        :text="$t('nft_details_page_button_portfolio')"
+        @click="$emit('go-portfolio')"
+      />
+    </template>
+
     <template v-if="!uiTxNFTStatus">
       <section v-if="paymentMethod === undefined">
         <Label
@@ -170,6 +176,9 @@ export default {
       return (
         this.paymentMethod === undefined || this.uiTxNFTStatus === 'completed'
       );
+    },
+    isCompleted() {
+      return this.uiTxNFTStatus === 'completed';
     },
     isInsufficientLIKE() {
       return this.walletLIKEBalance < this.NFTPrice;
