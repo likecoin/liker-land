@@ -100,7 +100,7 @@
             <Dropdown class="hidden desktop:block">
               <template v-slot:trigger="{ toggle }">
                 <ButtonV2
-                  :text="label.replace('By ', '')"
+                  :text="label"
                   preset="plain"
                   @click="toggle"
                 >

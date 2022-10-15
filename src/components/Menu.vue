@@ -24,7 +24,7 @@
         'transition',
         'duration-100',
         'cursor-pointer',
-        {'text-like-green': item.value === selectedValue || item.format === selectedValue},
+        {'text-like-green': item.value === selectedValue},
         'hover:text-medium-gray',
         'active:text-like-green',
       ]"

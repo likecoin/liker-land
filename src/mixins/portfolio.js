@@ -134,44 +134,38 @@ export default {
     collectedOrderOptions() {
       const options = [
         {
-          value: {
-            orderBy: ORDER_COLLECTED_CLASS_ID_BY.PRICE,
-            order: ORDER.DESC,
-          },
-          name: this.$t('order_menu_price'),
-          format: ORDER_COLLECTED_CLASS_ID_BY.PRICE + ORDER.DESC,
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_price')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_COLLECTED_CLASS_ID_BY.PRICE,
-            order: ORDER.ASC,
-          },
-          name: this.$t('order_menu_price'),
-          format: ORDER_COLLECTED_CLASS_ID_BY.PRICE + ORDER.ASC,
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_price')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
-            order: ORDER.DESC,
-          },
-          name: this.$t('order_menu_time'),
-          format: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT + ORDER.DESC,
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
+            ORDER.DESC
+          }`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_time')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
-            order: ORDER.ASC,
-          },
-          name: this.$t('order_menu_time'),
-          format: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT + ORDER.ASC,
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
+            ORDER.ASC
+          }`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_time')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT,
-            order: ORDER.DESC,
-          },
-          name: this.$t('order_menu_collected'),
-          format: ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT + ORDER.DESC,
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT}-${ORDER.DESC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_collected')}`,
+          }),
         },
       ];
       return options;
@@ -179,42 +173,34 @@ export default {
     createdOrderOptions() {
       const options = [
         {
-          value: {
-            orderBy: ORDER_CREATED_CLASS_ID_BY.PRICE,
-            order: ORDER.DESC,
-          },
-          name: this.$t('order_menu_price'),
-          format: ORDER_CREATED_CLASS_ID_BY.PRICE + ORDER.DESC,
+          value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_price')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_CREATED_CLASS_ID_BY.PRICE,
-            order: ORDER.ASC,
-          },
-          name: this.$t('order_menu_price'),
-          format: ORDER_CREATED_CLASS_ID_BY.PRICE + ORDER.ASC,
+          value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_price')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
-            order: ORDER.DESC,
-          },
-          name: this.$t('order_menu_time'),
-          format: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP + ORDER.DESC,
+          value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.DESC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_time')}`,
+          }),
         },
         {
-          value: {
-            orderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
-            order: ORDER.ASC,
-          },
-          name: this.$t('order_menu_time'),
-          format: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP + ORDER.ASC,
+          value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.ASC}`,
+          name: this.$t('order_menu_by', {
+            order: `${this.$t('order_menu_time')}`,
+          }),
         },
       ];
       return options;
     },
     selectedValue() {
-      return this.currentOrderBy + this.currentOrder;
+      return `${this.currentOrderBy}-${this.currentOrder}`;
     },
   },
   methods: {
@@ -246,20 +232,23 @@ export default {
       });
     },
     handleSelectOrder(value) {
+      const splits = value.split('-');
+      const orderBy = splits[0];
+      const order = splits[1];
       logTrackerEvent(
         this,
-        'sort_order',
-        this.currentTab,
-        `${value.orderBy} + ${value.order}`,
+        'portfolio',
+        `portfolio_sort_${orderBy}_${order}`,
+        `Sort portfolio item in ${splits[0]} by ${order} order`,
         1
       );
       if (this.currentTab === 'collected') {
-        this.collectedOrderBy = value.orderBy;
-        this.collectedOrder = value.order;
+        this.collectedOrderBy = orderBy;
+        this.collectedOrder = order;
       }
       if (this.currentTab === 'created') {
-        this.createdOrderBy = value.orderBy;
-        this.createdOrder = value.order;
+        this.createdOrderBy = orderBy;
+        this.createdOrder = order;
       }
     },
   },
