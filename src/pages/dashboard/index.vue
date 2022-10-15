@@ -104,13 +104,19 @@
                 </template>
               </ButtonV2>
             </template>
-            <Menu
-              :items="currentOrderOptions"
-              :is-show-icon="true"
-              :selected-value="selectedValue"
-              type="order"
-              @select="handleSelectOrder"
-            />
+            <MenuList>
+              <MenuItem
+                :items="currentOrderOptions"
+                :is-show-icon="true"
+                :selected-value="selectedValue"
+                @select="handleSelectOrder"
+              >
+                <template v-slot:label-append="state">
+                  <IconASC v-if="state.value.split('-')[1] === 'ASC'" />
+                  <IconDESC v-if="state.value.split('-')[1] === 'DESC'" />
+                </template>
+              </MenuItem>
+            </MenuList>
           </Dropdown>
         </div>
 
