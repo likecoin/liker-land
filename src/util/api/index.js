@@ -184,7 +184,7 @@ export const getNFTs = ({ owner, limit, key }) => {
   const qsPayload = { owner };
   if (limit) qsPayload.limit = limit;
   if (key) qsPayload.key = key;
-  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/nft?${querystring.stringify(
+  return `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/nfts?${querystring.stringify(
     qsPayload
   )}`;
 };
