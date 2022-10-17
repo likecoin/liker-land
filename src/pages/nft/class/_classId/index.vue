@@ -19,13 +19,6 @@
         'pb-[120px]',
       ]"
     >
-      <div class="flex items-center justify-start mb-[8px]">
-        <ButtonV2 preset="plain" text="Back" @click="$router.go(-1)">
-          <template #prepend>
-            <IconArrowLeft />
-          </template>
-        </ButtonV2>
-      </div>
       <section
         :class="[
           'grid',
