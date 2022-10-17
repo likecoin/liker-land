@@ -84,6 +84,23 @@
           <IconPrice />
         </template>
       </ButtonV2>
+      <template v-if="url">
+        <Separator class="my-[16px]" />
+        <ButtonV2
+          preset="outline"
+          :text="$t('campaign_nft_item_view_details_label')"
+          :href="url"
+          target="_blank"
+          @click="handleClickViewContent"
+        >
+          <template #prepend>
+            <IconEye class="w-[16px]" />
+          </template>
+          <template #append>
+            <IconLinkExternal class="w-[16px]" />
+          </template>
+        </ButtonV2>
+      </template>
     </div>
   </CardV2>
 </template>
@@ -99,6 +116,11 @@ export default {
     formatNumberWithLIKE,
   },
   props: {
+    url: {
+      type: String,
+      default: undefined,
+    },
+
     // BackgroundImg
     imageBgColor: {
       type: String,
@@ -155,6 +177,9 @@ export default {
   methods: {
     handleClickCollect() {
       this.$emit('collect');
+    },
+    handleClickViewContent() {
+      this.$emit('view-content');
     },
   },
 };
