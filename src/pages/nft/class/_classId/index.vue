@@ -39,6 +39,7 @@
           <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
             <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
+                :url="NFTExternalUrl"
                 :image-bg-color="NFTImageBackgroundColor"
                 :image-url="NFTImageUrl"
                 :avatar-url="iscnOwnerAvatar"
@@ -50,6 +51,7 @@
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
                 @collect="handleCollectFromPreviewSection"
+                @view-content="handleViewContent"
               />
             </NFTGemWrapper>
             <NFTPageCollectorList
@@ -59,6 +61,7 @@
               :is-narrow="true"
             />
             <NFTPageMetadataSection
+              class="hidden desktop:block"
               :content-url="NFTExternalUrl"
               :iscn-id="iscnId"
               :iscn-url="iscnURL"
@@ -92,15 +95,22 @@
             @click-sell="handleClickSellFromPriceSection"
             @hover-sell="handleHoverSellFromPriceSection"
           />
-          <NFTPageSupplySection
-            v-if="isWritingNFT && NFTPrice"
-            :collected-count="collectedCount"
-            @collect="handleCollectFromSupplySection"
-          />
           <NFTPageCollectorList
             class="desktop:hidden"
             :owner-count="ownerCount"
             :items="populatedCollectors"
+          />
+          <NFTPageMetadataSection
+            class="desktop:hidden"
+            :content-url="NFTExternalUrl"
+            :iscn-id="iscnId"
+            :iscn-url="iscnURL"
+            :content-fingerprints="nftISCNContentFingerprints"
+          />
+          <NFTPageSupplySection
+            v-if="isWritingNFT && NFTPrice"
+            :collected-count="collectedCount"
+            @collect="handleCollectFromSupplySection"
           />
           <NFTPageEventList
             :items="populatedEvents"
@@ -332,6 +342,15 @@ export default {
       } finally {
         this.isCollecting = false;
       }
+    },
+    handleViewContent() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_page_view_content',
+        this.classId,
+        1
+      );
     },
     handleCollectFromPreviewSection() {
       logTrackerEvent(
