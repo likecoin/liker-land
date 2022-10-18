@@ -309,24 +309,7 @@ export default {
       this.isReadyToTransfer = true;
     },
     async handleCollect() {
-      logPurchaseFlowEvent(this, 'begin_checkout', {
-        name: this.NFTName,
-        price: this.purchaseInfo.price,
-        classId: this.classId,
-      });
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
-      if (!this.getAddress) {
-        const isConnected = await this.connectWallet();
-        if (isConnected) {
-          this.handleCollect();
-        }
-        return;
-      }
-      logPurchaseFlowEvent(this, 'add_shipping_info', {
-        name: this.NFTName,
-        price: this.purchaseInfo.price,
-        classId: this.classId,
-      });
       try {
         this.isCollecting = true;
         await this.collectNFT();

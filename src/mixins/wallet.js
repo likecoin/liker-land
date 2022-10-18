@@ -13,6 +13,9 @@ export default {
       'walletMethodType',
       'walletLIKEBalance',
     ]),
+    hasConnectedWallet() {
+      return !!this.getAddress && !!this.walletMethodType;
+    },
     isWalletUserCivicLiker() {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
     },

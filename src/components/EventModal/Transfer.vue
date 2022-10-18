@@ -9,42 +9,47 @@
     <template #header-prepend>
       <IconTransfer />
     </template>
-    <div>
+    <template #top>
       <NFTPageOwning :collected-count="userCollectedCount" />
-      <div v-if="!isTransferring">
-        <Label
-          preset="p6"
-          class="text-medium-gray"
-          :text="$t('nft_details_page_label_transfer')"
-        />
-        <TextField
-          :placeholder="$t('nft_details_page_placeholder_transfer')"
-          :error-message="errorMsg"
-          @input="(value) => $emit('handle-input-addr', value)"
-        />
-        <div class="flex justify-center mt-[24px]">
-          <ButtonV2
-            preset="secondary"
-            :is-disabled="!isReadyToTransfer"
-            :text="$t('nft_details_page_button_transfer')"
-            @click="$emit('on-transfer')"
-          />
-        </div>
-      </div>
-      <div
-        v-else
-        class="
-          flex
-          justify-center
-          w-ful
-          mb-[12px]
-          border-0 border-dashed border-b-[2px] border-b-shade-gray
-        "
-      >
-        <FormField :label="$t('tx_modal_label_send')">{{
-          toAddress
-        }}</FormField>
-      </div>
+    </template>
+    <template v-if="!isTransferring">
+      <Label
+        preset="p6"
+        class="text-medium-gray"
+        :text="$t('nft_details_page_label_transfer')"
+      />
+      <TextField
+        class="mt-[4px]"
+        :placeholder="$t('nft_details_page_placeholder_transfer')"
+        :error-message="errorMsg"
+        @input="(value) => $emit('handle-input-addr', value)"
+      />
+    </template>
+    <template
+      v-if="!isTransferring"
+      #button
+    >
+      <ButtonV2
+        preset="secondary"
+        :is-disabled="!isReadyToTransfer"
+        :text="$t('nft_details_page_button_transfer')"
+        @click="$emit('on-transfer')"
+      />
+    </template>
+    <div
+      v-if="isTransferring"
+      class="
+        flex
+        justify-center
+        w-ful
+        mt-[24px]
+        mb-[12px]
+        border-0 border-dashed border-b-[2px] border-b-shade-gray
+      "
+    >
+      <FormField :label="$t('tx_modal_label_send')">{{
+        toAddress
+      }}</FormField>
     </div>
   </TxModal>
 </template>

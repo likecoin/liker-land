@@ -4,6 +4,7 @@
     :class="rootClasses"
     :to="to || null"
     :target="$attrs.href ? '_blank' : null"
+    v-bind="rootProps"
     v-on="$listeners"
   >
     <Label
@@ -101,6 +102,12 @@ export default class ButtonV2 extends Vue {
     if (this.to) return 'NuxtLink';
     if (this.$attrs.href) return 'a';
     return 'button';
+  }
+
+  get rootProps() {
+    return {
+      disabled: !!this.isDisabled,
+    };
   }
 
   get isCircle(): any {

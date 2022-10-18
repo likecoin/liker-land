@@ -6,6 +6,7 @@ import {
   APP_LIKE_CO_URL_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
+  LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS,
 } from '~/constant';
 
 import {
@@ -82,7 +83,6 @@ export default {
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
-      'walletLIKEBalance',
     ]),
     iscnOwnerInfo() {
       return this.getUserInfoByAddress(this.iscnOwner) || {};
@@ -210,6 +210,12 @@ export default {
     },
     nftDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
+    canCollectWithoutWallet() {
+      return (
+        !LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS.length ||
+        LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS.includes(this.classId)
+      );
     },
   },
   watch: {
@@ -386,14 +392,24 @@ export default {
     },
     async collectNFT() {
       try {
-        logPurchaseFlowEvent(this, 'add_to_cart', {
+        const purchaseEventParams = {
           name: this.NFTName,
           price: this.purchaseInfo.price,
           classId: this.classId,
-        });
-        await this.initIfNecessary();
-        this.fetchUserCollectedCount();
-        this.walletFetchLIKEBalance();
+        };
+        logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+        logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+        if (!this.canCollectWithoutWallet && !this.getAddress) {
+          const isConnected = await this.connectWallet();
+          if (!isConnected) return;
+        } else {
+          await this.initIfNecessary();
+        }
+        if (this.hasConnectedWallet) {
+          logPurchaseFlowEvent(this, 'add_shipping_info', purchaseEventParams);
+          this.fetchUserCollectedCount();
+          this.walletFetchLIKEBalance();
+        }
         this.uiToggleCollectModal({ classId: this.classId });
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
