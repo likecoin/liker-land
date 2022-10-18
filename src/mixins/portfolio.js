@@ -135,37 +135,27 @@ export default {
       const options = [
         {
           value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_price')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_price')),
         },
         {
           value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_price')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_price')),
         },
         {
           value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
             ORDER.DESC
           }`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_time')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_time')),
         },
         {
           value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
             ORDER.ASC
           }`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_time')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_time')),
         },
         {
           value: `${ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT}-${ORDER.DESC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_collected')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_collected')),
         },
       ];
       return options;
@@ -174,27 +164,19 @@ export default {
       const options = [
         {
           value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_price')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_price')),
         },
         {
           value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_price')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_price')),
         },
         {
           value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.DESC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_time')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_time')),
         },
         {
           value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.ASC}`,
-          name: this.$t('order_menu_by', {
-            order: `${this.$t('order_menu_time')}`,
-          }),
+          name: this.formatOrder(this.$t('order_menu_time')),
         },
       ];
       return options;
@@ -250,6 +232,11 @@ export default {
         this.createdOrderBy = orderBy;
         this.createdOrder = order;
       }
+    },
+    formatOrder(order) {
+      return this.$t('order_menu_by', {
+        order,
+      });
     },
   },
 };
