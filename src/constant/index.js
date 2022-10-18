@@ -110,7 +110,10 @@ export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS = IS_TESTNET
       // NFT Class ID
     ]
   : [
-      // NFT Class ID
+      'likenft1k7ppad39v8045qtfq0qgk3vtnp6p3fwekhgycmw6jh7a625rrcuqacacpw',
+      'likenft1ghwaeqyz8kwxyvkcafkfy900q8m7dj2tk8kz7u0p6f0cpum740gqka5ewr',
+      'likenft1qff9d27pfnj0n2e0ac809vhth4jydjgtl0y3gqp569g93m54rspq2wknu7',
+      'likenft1hvad8yxlyqqhyrq3w3ahhw0lk3agaxtucpfw825j9zjyy83a9p0q5edxdz',
     ];
 
 export const TX_STATUS = {
