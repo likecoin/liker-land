@@ -230,7 +230,7 @@ const actions = {
         nextKey = data.pagination.next_key;
         ({ count } = data.pagination);
         nfts.push(...data.nfts);
-      } while (count === NFT_INDEXER_LIMIT_MAX);
+      } while (nextKey);
       // sort by last colleted by default
       return nfts.map(formatNFTInfo).sort((a, b) => b.timestamp - a.timestamp);
     };
