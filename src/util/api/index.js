@@ -182,8 +182,8 @@ export const getISCNRecord = iscnId => {
 
 export const getNFTs = ({ owner, limit, key }) => {
   const qsPayload = { owner };
-  if (limit) qsPayload.limit = limit;
-  if (key) qsPayload.key = key;
+  if (limit) qsPayload['pagination.limit'] = limit;
+  if (key) qsPayload['pagination.key'] = key;
   return `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/nfts?${querystring.stringify(
     qsPayload
   )}`;
