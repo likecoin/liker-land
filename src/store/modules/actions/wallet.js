@@ -51,8 +51,6 @@ export async function getConnector({ state, commit }) {
   const lib = await getLikeCoinWalletLib();
   const connector = new lib.LikeCoinWalletConnector({
     ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
-    keplrInstallCTAPreset: state.keplrInstallCTAPreset,
-    cosmostationAppWC2Enabled: state.cosmostationAppWC2Enabled,
   });
   commit(types.WALLET_SET_CONNECTOR, connector);
   return connector;
