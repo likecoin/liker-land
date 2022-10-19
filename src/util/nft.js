@@ -175,18 +175,8 @@ function formatNFTEvent(event) {
     tx_hash: txHash,
     timestamp,
   } = event;
-  let eventName;
-  switch (event.action) {
-    case '/cosmos.nft.v1beta1.MsgSend':
-      eventName =
-        fromWallet === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
-      break;
-    case 'new_class':
-    case 'mint_nft':
-    default:
-      eventName = event.action;
-      break;
-  }
+  const eventName =
+    fromWallet === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
   return {
     event: eventName,
     classId,
