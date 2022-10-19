@@ -13,7 +13,7 @@
   >
     <Label
       class="py-[16px]"
-      :align="isShowIcon ? 'left' : 'center'"
+      :align="labelAlign"
     >
       <template #prepend>
         <slot name="label-prepend" />
@@ -40,8 +40,8 @@ export default class Menu extends Vue {
   @Prop(String)
   readonly selectedValue: string | undefined;
 
-  @Prop({ default: false })
-  readonly isShowIcon!: boolean;
+  @Prop({ default: 'center' })
+  readonly labelAlign!: string;
 
   handleSelectItem(value: string) {
     this.$emit('select', value);

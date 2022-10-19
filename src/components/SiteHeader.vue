@@ -98,7 +98,7 @@
             :key="i"
             :value="item.value"
             :label="item.name"
-            :is-show-icon="true"
+            label-align="left"
             @select="handleSelectMenuItem"
           >
             <template #label-prepend>

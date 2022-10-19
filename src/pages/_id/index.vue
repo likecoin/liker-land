@@ -116,7 +116,7 @@
                   :key="i"
                   :value="item.value"
                   :label="item.name"
-                  :is-show-icon="true"
+                  label-align="left"
                   :selected-value="selectedValue"
                   @select="handleSelectOrder"
                 >

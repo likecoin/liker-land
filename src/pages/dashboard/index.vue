@@ -111,7 +111,7 @@
                 :value="item.value"
                 :label="item.name"
                 :selected-value="selectedValue"
-                :is-show-icon="true"
+                label-align="left"
                 @select="handleSelectOrder"
               >
                 <template #label-append>
