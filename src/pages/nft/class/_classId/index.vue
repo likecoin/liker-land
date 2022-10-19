@@ -208,7 +208,6 @@ export default {
       toAddress: null,
       isLoading: true,
 
-      currentPrice: 0,
       isOpenTransferModal: false,
       errorMsg: '',
       isReadyToTransfer: false,
