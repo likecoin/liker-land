@@ -7,6 +7,7 @@ import {
   ORDER,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [clipboardMixin],
@@ -96,6 +97,93 @@ export default {
         order: this.createdOrder,
       });
     },
+    currentOrderBy() {
+      return this.currentTab === 'collected'
+        ? this.collectedOrderBy
+        : this.createdOrderBy;
+    },
+    currentOrder() {
+      return this.currentTab === 'collected'
+        ? this.collectedOrder
+        : this.createdOrder;
+    },
+    currentOrderOptions() {
+      return this.currentTab === 'collected'
+        ? this.collectedOrderOptions
+        : this.createdOrderOptions;
+    },
+    label() {
+      let formattedOrderBy = '';
+      switch (this.currentOrderBy) {
+        case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
+        case ORDER_CREATED_CLASS_ID_BY.PRICE:
+          formattedOrderBy = this.$t('order_menu_price');
+          break;
+        case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
+        case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
+          formattedOrderBy = this.$t('order_menu_time');
+          break;
+        case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
+          formattedOrderBy = this.$t('order_menu_collected');
+          break;
+        default:
+          break;
+      }
+      return formattedOrderBy;
+    },
+    collectedOrderOptions() {
+      const options = [
+        {
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
+          name: this.formatOrder(this.$t('order_menu_price')),
+        },
+        {
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
+          name: this.formatOrder(this.$t('order_menu_price')),
+        },
+        {
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
+            ORDER.DESC
+          }`,
+          name: this.formatOrder(this.$t('order_menu_time')),
+        },
+        {
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
+            ORDER.ASC
+          }`,
+          name: this.formatOrder(this.$t('order_menu_time')),
+        },
+        {
+          value: `${ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT}-${ORDER.DESC}`,
+          name: this.formatOrder(this.$t('order_menu_collected')),
+        },
+      ];
+      return options;
+    },
+    createdOrderOptions() {
+      const options = [
+        {
+          value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
+          name: this.formatOrder(this.$t('order_menu_price')),
+        },
+        {
+          value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
+          name: this.formatOrder(this.$t('order_menu_price')),
+        },
+        {
+          value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.DESC}`,
+          name: this.formatOrder(this.$t('order_menu_time')),
+        },
+        {
+          value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.ASC}`,
+          name: this.formatOrder(this.$t('order_menu_time')),
+        },
+      ];
+      return options;
+    },
+    selectedValue() {
+      return `${this.currentOrderBy}-${this.currentOrder}`;
+    },
   },
   methods: {
     ...mapActions(['fetchNFTListByAddress']),
@@ -123,6 +211,31 @@ export default {
         text: this.userDisplayName,
         path: `/${wallet}?referrer=${referrer}`,
         alertMessage: this.$t('tooltip_share_done'),
+      });
+    },
+    handleSelectOrder(value) {
+      const splits = value.split('-');
+      const orderBy = splits[0];
+      const order = splits[1];
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_sort_${orderBy}_${order}`,
+        `Sort portfolio item in ${splits[0]} by ${order} order`,
+        1
+      );
+      if (this.currentTab === 'collected') {
+        this.collectedOrderBy = orderBy;
+        this.collectedOrder = order;
+      }
+      if (this.currentTab === 'created') {
+        this.createdOrderBy = orderBy;
+        this.createdOrder = order;
+      }
+    },
+    formatOrder(order) {
+      return this.$t('order_menu_by', {
+        order,
       });
     },
   },

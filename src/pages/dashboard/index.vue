@@ -80,6 +80,47 @@
               @click="handleGoCreated"
             />
           </div>
+          <Dropdown
+            :class="[
+              'hidden',
+
+              'desktop:block',
+              'desktop:absolute',
+              'desktop:right-[-50px]',
+              'desktop:m-0',
+
+              'rounded-[16px]',
+            ]"
+          >
+            <template v-slot:trigger="{ toggle }">
+              <ButtonV2
+                :text="label.replace('By ', '')"
+                preset="plain"
+                @click="toggle"
+              >
+                <template #append>
+                  <IconASC v-if="currentOrder === 'ASC'" />
+                  <IconDESC v-if="currentOrder === 'DESC'" />
+                </template>
+              </ButtonV2>
+            </template>
+            <MenuList>
+              <MenuItem
+                v-for="(item, i) in currentOrderOptions"
+                :key="i"
+                :value="item.value"
+                :label="item.name"
+                :selected-value="selectedValue"
+                label-align="left"
+                @select="handleSelectOrder"
+              >
+                <template #label-append>
+                  <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
+                  <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
+                </template>
+              </MenuItem>
+            </MenuList>
+          </Dropdown>
         </div>
 
         <CardV2 v-if="isLoading">{{

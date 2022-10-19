@@ -32,11 +32,16 @@
             <GlobeIcon class="w-20 h-20 fill-like-green" />
           </ButtonV2>
         </template>
-        <Menu
-          :items="availableLocales"
-          :selected-value="currentLocale"
-          @select="handleSelectLocale"
-        />
+        <MenuList>
+          <MenuItem
+            v-for="(item, i) in availableLocales"
+            :key="i"
+            :value="item.value"
+            :label="item.name"
+            :selected-value="currentLocale"
+            @select="handleSelectLocale"
+          />
+        </MenuList>
       </Dropdown>
 
       <ButtonV2
@@ -70,14 +75,9 @@
             @click="toggle"
           />
         </template>
-        <Menu
-          :items="mainMenuItems"
-          :is-show-icon="true"
-          @select="handleSelectMenuItem"
-        >
+        <MenuList>
           <template
             v-if="getAddress"
-            #prepend
           >
             <a
               class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer"
@@ -93,7 +93,19 @@
               >{{ $t('header_menu_LIKE') }}</div>
             </a>
           </template>
-        </Menu>
+          <MenuItem
+            v-for="(item, i) in mainMenuItems"
+            :key="i"
+            :value="item.value"
+            :label="item.name"
+            label-align="left"
+            @select="handleSelectMenuItem"
+          >
+            <template #label-prepend>
+              <MenuIcon :type="item.value" />
+            </template>
+          </MenuItem>
+        </MenuList>
       </Dropdown>
     </div>
   </div>
