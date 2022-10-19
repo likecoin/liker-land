@@ -317,13 +317,9 @@ export default {
           );
           const historyInDB = data.list;
           const eventMap = new Map();
-          historyOnChain
-            .filter(
-              e =>
-                !['new_class', 'mint_nft'].includes(e.event) &&
-                e.toWallet !== LIKECOIN_NFT_API_WALLET
-            )
-            .forEach(e => eventMap.set(`${e.txHash}-${e.nftId}`, e));
+          historyOnChain.forEach(e =>
+            eventMap.set(`${e.txHash}-${e.nftId}`, e)
+          );
           historyInDB.forEach(e => {
             const key = `${e.txHash}-${e.nftId}`;
             if (eventMap.has(key)) {
