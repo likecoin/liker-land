@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: "off" */
 
 import {
-  WALLET_SET_COSMOSTATION_APP_WC2_ENABLED,
+  WALLET_SET_IS_DEBUG,
   WALLET_SET_ADDRESS,
   WALLET_SET_SIGNER,
   WALLET_SET_CONNECTOR,
@@ -14,7 +14,7 @@ import * as getters from './getters/wallet';
 import * as actions from './actions/wallet';
 
 const state = () => ({
-  cosmostationAppWC2Enabled: false,
+  isDebug: false,
   address: '',
   signer: null,
   connector: null,
@@ -25,8 +25,8 @@ const state = () => ({
 });
 
 const mutations = {
-  [WALLET_SET_COSMOSTATION_APP_WC2_ENABLED](state, isEnabled) {
-    state.cosmostationAppWC2Enabled = isEnabled;
+  [WALLET_SET_IS_DEBUG](state, isDebug) {
+    state.isDebug = isDebug;
   },
   [WALLET_SET_ADDRESS](state, address) {
     state.address = address;

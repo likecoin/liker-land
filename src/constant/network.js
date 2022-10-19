@@ -31,6 +31,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     'liker-id',
   ],
   keplrInstallCTAPreset: 'fancy-banner',
+  cosmostationDirectSignEnabled: true,
 };
 
 export default LIKECOIN_WALLET_CONNECTOR_CONFIG;

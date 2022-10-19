@@ -135,8 +135,6 @@
 <script>
 import { mapActions } from 'vuex';
 
-import { IS_TESTNET } from '~/constant';
-
 import { logTrackerEvent } from '~/util/EventLogger';
 import { formatNumberWithLIKE } from '~/util/ui';
 
@@ -186,9 +184,6 @@ export default {
     canPayByLIKE() {
       if (this.developerMode) return true;
       const notSupportedPlatforms = ['keplr-mobile'];
-      if (!IS_TESTNET) {
-        notSupportedPlatforms.push('cosmostation-mobile');
-      }
       return !notSupportedPlatforms.includes(this.walletMethodType);
     },
     isDisabledPayByLIKE() {
