@@ -1,7 +1,9 @@
-/* eslint-disable import/prefer-default-export */
+import { MAX_USER_ID_LENGTH } from '~/constant';
 
 export function checkUserNameValid(user) {
-  return user && user.length <= 20 && /^[a-z0-9-_]+$/.test(user);
+  return (
+    user && user.length <= MAX_USER_ID_LENGTH && /^[a-z0-9-_]+$/.test(user)
+  );
 }
 
 export function getAvatarHaloTypeFromUser(userObj = {}) {
