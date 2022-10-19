@@ -8,6 +8,7 @@
       :class-id="classId"
       :title="NFTName"
       :price="NFTPrice"
+      :is-writing-nft="isWritingNFT"
       :collected-count="collectedCount"
       :collector-count="ownerCount"
       :user-display-name="iscnOwnerDisplayName"

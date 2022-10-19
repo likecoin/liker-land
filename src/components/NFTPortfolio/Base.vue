@@ -44,10 +44,7 @@
           </div>
         </div>
         <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
-        <div
-          v-if="price !== undefined"
-          class="z-[500] flex justify-center mt-[16px]"
-        >
+        <div v-if="isWritingNft || (!isWritingNft && price !== undefined)" class="z-[500] flex justify-center mt-[16px]">
           <ProgressIndicator v-if="isCollecting" />
           <ButtonV2
             v-else
@@ -135,6 +132,10 @@ export default {
     ownCount: {
       type: Number,
       default: 0,
+    },
+    isWritingNft: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
