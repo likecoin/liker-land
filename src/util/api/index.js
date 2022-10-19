@@ -198,9 +198,10 @@ export const getNFTOwners = classId => {
   )}`;
 };
 
-export const getNFTEvents = ({ classId, limit, key }) => {
+export const getNFTEvents = ({ classId, limit, key, actionType }) => {
   const qsPayload = {
     class_id: classId,
+    action_type: actionType,
   };
   if (key) qsPayload.key = key;
   if (limit) qsPayload.limit = limit;

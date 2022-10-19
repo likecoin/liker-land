@@ -309,7 +309,8 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const historyOnChain = await this.getNFTEventsAll();
+      const actionType = '/cosmos.nft.v1beta1.MsgSend';
+      const historyOnChain = await this.getNFTEventsAll({ actionType });
       let history = historyOnChain;
 
       if (this.isWritingNFT) {
@@ -346,7 +347,7 @@ export default {
       this.updateDisplayNameList([...new Set(array)]);
       this.isHistoryInfoLoading = false;
     },
-    async getNFTEventsAll() {
+    async getNFTEventsAll({ actionType }) {
       let data;
       let nextKey;
       let count;
@@ -358,6 +359,7 @@ export default {
             classId: this.classId,
             key: nextKey,
             limit: NFT_INDEXER_LIMIT_MAX,
+            actionType,
           })
         ));
         nextKey = data.pagination.next_key;
