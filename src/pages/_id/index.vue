@@ -112,14 +112,17 @@
               </template>
               <MenuList>
                 <MenuItem
-                  :items="currentOrderOptions"
+                  v-for="(item, i) in currentOrderOptions"
+                  :key="i"
+                  :value="item.value"
+                  :label="item.name"
                   :is-show-icon="true"
                   :selected-value="selectedValue"
                   @select="handleSelectOrder"
                 >
-                  <template v-slot:label-append="state">
-                    <IconASC v-if="state.value.split('-')[1] === 'ASC'" />
-                    <IconDESC v-if="state.value.split('-')[1] === 'DESC'" />
+                  <template #label-append>
+                    <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
+                    <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
                   </template>
                 </MenuItem>
               </MenuList>

@@ -34,7 +34,10 @@
         </template>
         <MenuList>
           <MenuItem
-            :items="availableLocales"
+            v-for="(item, i) in availableLocales"
+            :key="i"
+            :value="item.value"
+            :label="item.name"
             :selected-value="currentLocale"
             @select="handleSelectLocale"
           />
@@ -91,12 +94,15 @@
             </a>
           </template>
           <MenuItem
-            :items="mainMenuItems"
+            v-for="(item, i) in mainMenuItems"
+            :key="i"
+            :value="item.value"
+            :label="item.name"
             :is-show-icon="true"
             @select="handleSelectMenuItem"
           >
-            <template v-slot:label-prepend="state">
-              <MenuIcon :type="state.value" />
+            <template #label-prepend>
+              <MenuIcon :type="item.value" />
             </template>
           </MenuItem>
         </MenuList>
