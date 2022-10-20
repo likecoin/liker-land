@@ -12,6 +12,7 @@ export default {
   head() {
     const title = this.$t('civic_page_v3_title');
     const description = this.$t('civic_page_v3_description');
+    const ogImage = 'https://liker.land/images/og/civic-v3.png';
     return {
       title,
       meta: [
@@ -33,10 +34,36 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/civic-v3.png',
+          content: ogImage,
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+
+      script: {
+        hid: 'schema',
+        innerHTML: JSON.stringify([
+          {
+            '@context': 'http://www.schema.org',
+            '@type': 'Product',
+            name: title,
+            image: [ogImage],
+            description,
+            brand: {
+              '@type': 'Brand',
+              name: 'Civic Liker',
+            },
+            url: this.$route.path,
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'USD',
+              availability: 'InStock',
+            },
+          },
+        ]),
+        type: 'application/ld+json',
+        body: true,
+      },
     };
   },
 };

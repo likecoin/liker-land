@@ -348,12 +348,6 @@ const nuxtConfig = {
           component: resolve(__dirname, 'pages/_id/civic/index.vue'),
           name: 'civic-classic',
         },
-        // /civic uses /civic/from template
-        {
-          path: '/civic',
-          component: resolve(__dirname, 'pages/civic/_from.vue'),
-          name: 'civic',
-        }
       );
     }
   },
