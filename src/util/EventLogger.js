@@ -21,7 +21,10 @@ export async function setLoggerUser(vue, { wallet, method }) {
       let hashedId = await digestMessage(wallet);
       hashedId = hexString(hashedId);
       vue.$gtag.set({ userId: hashedId });
-      vue.$gtag.config({ user_id: hashedId });
+      // HACK: use .set to mitigate connected site user_id issue
+      // https://support.google.com/analytics/answer/9973999?hl=en
+      // vue.$gtag.config({ user_id: hashedId });
+      vue.$gtag.set({ user_id: hashedId });
       vue.$gtag.event('login', { method });
     }
   } catch (err) {
