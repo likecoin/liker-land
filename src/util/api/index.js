@@ -180,7 +180,7 @@ export const getISCNRecord = iscnId => {
   )}`;
 };
 
-export const getNFTs = ({ owner, limit, key }) => {
+export const getNFTsPartial = ({ owner, limit, key }) => {
   const qsPayload = { owner };
   if (limit) qsPayload.limit = limit;
   if (key) qsPayload.key = key;

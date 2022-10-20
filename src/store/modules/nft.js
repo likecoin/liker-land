@@ -11,6 +11,7 @@ import {
   formatOwnerInfoFromChain,
   formatNFTInfo,
 } from '~/util/nft';
+import { getAllowedAddresses } from '~/util/cosmos';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -213,7 +214,7 @@ const actions = {
     return owners;
   },
   async fetchNFTListByAddress({ commit }, address) {
-    const getNFTAll = async owner => {
+    const getNFTsAll = async owner => {
       let data;
       let nextKey;
       let count;
@@ -221,7 +222,7 @@ const actions = {
       do {
         // eslint-disable-next-line no-await-in-loop
         ({ data } = await this.$api.get(
-          api.getNFTs({
+          api.getNFTsPartial({
             owner,
             key: nextKey,
             limit: NFT_INDEXER_LIMIT_MAX,
@@ -235,8 +236,14 @@ const actions = {
       return nfts.map(formatNFTInfo).sort((a, b) => b.timestamp - a.timestamp);
     };
 
+    const getNFTsRespectDualPrefix = async owner => {
+      const allowAddresses = getAllowedAddresses(owner);
+      const arraysOfNFTs = await Promise.all(allowAddresses.map(getNFTsAll));
+      return arraysOfNFTs.flat();
+    };
+
     const [nfts, { list: createdIds }] = await Promise.all([
-      getNFTAll(address),
+      getNFTsRespectDualPrefix(address),
       this.$api.$get(api.getUserSellNFTClasses({ wallet: address })),
     ]);
     const timestampMap = {};
