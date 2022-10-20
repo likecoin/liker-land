@@ -307,7 +307,9 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const actionType = '/cosmos.nft.v1beta1.MsgSend';
+      const actionType = this.isWritingNFT
+        ? ['/cosmos.nft.v1beta1.MsgSend']
+        : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'new_class'];
       const historyOnChain = await this.getNFTEventsAll({ actionType });
       let history = historyOnChain;
 
@@ -318,9 +320,11 @@ export default {
           );
           const historyInDB = data.list;
           const eventMap = new Map();
-          historyOnChain.forEach(e =>
-            eventMap.set(`${e.txHash}-${e.nftId}`, e)
-          );
+          historyOnChain
+            .filter(e => e.toWallet !== LIKECOIN_NFT_API_WALLET)
+            .forEach(e => {
+              eventMap.set(`${e.txHash}-${e.nftId}`, e);
+            });
           historyInDB.forEach(e => {
             const key = `${e.txHash}-${e.nftId}`;
             if (eventMap.has(key)) {
