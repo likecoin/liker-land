@@ -94,7 +94,8 @@ const getters = {
         case ORDER_CREATED_CLASS_ID_BY.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
-          break;
+          if (X !== Y) break;
+        // eslint-disable-next-line no-fallthrough
         case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
         default:
           X = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
@@ -121,11 +122,13 @@ const getters = {
         case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
-          break;
+          if (X !== Y) break;
+        // eslint-disable-next-line no-fallthrough
         case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
           X = getters.getNFTClassOwnerInfoById(a)?.[nftOwner]?.length;
           Y = getters.getNFTClassOwnerInfoById(b)?.[nftOwner]?.length;
-          break;
+          if (X !== Y) break;
+        // eslint-disable-next-line no-fallthrough
         case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
         default:
           X = getters.getUserLastCollectedTimestampByAddress(nftOwner)[a];
@@ -233,7 +236,7 @@ const actions = {
         nfts.push(...data.nfts);
       } while (count === NFT_INDEXER_LIMIT_MAX);
       // sort by last colleted by default
-      return nfts.map(formatNFTInfo).sort((a, b) => b.timestamp - a.timestamp);
+      return nfts.map(formatNFTInfo);
     };
 
     const getNFTsRespectDualPrefix = async owner => {
