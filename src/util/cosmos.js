@@ -17,7 +17,7 @@ export function convertAddressPrefix(address, prefix = 'like') {
   return bech32.encode(prefix, words);
 }
 
-export function getAllowedAddresses(address) {
+export function deriveAllPrefixedAddresses(address) {
   if (!isValidAddress(address)) {
     throw new Error('Invalid address');
   }

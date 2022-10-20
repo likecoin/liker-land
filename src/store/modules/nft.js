@@ -11,7 +11,7 @@ import {
   formatOwnerInfoFromChain,
   formatNFTInfo,
 } from '~/util/nft';
-import { getAllowedAddresses } from '~/util/cosmos';
+import { deriveAllPrefixedAddresses } from '~/util/cosmos';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -237,7 +237,7 @@ const actions = {
     };
 
     const getNFTsRespectDualPrefix = async owner => {
-      const allowAddresses = getAllowedAddresses(owner);
+      const allowAddresses = deriveAllPrefixedAddresses(owner);
       const arraysOfNFTs = await Promise.all(allowAddresses.map(getNFTsAll));
       return arraysOfNFTs.flat();
     };
