@@ -55,6 +55,9 @@ export function formatNumber(num, options = {}) {
 }
 
 export function formatNumberWithUnit(num, unit, options = {}) {
+  if (!num) {
+    return '-';
+  }
   return `${formatNumber(num, options)} ${unit}`;
 }
 
