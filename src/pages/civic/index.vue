@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { EXTERNAL_HOST } from '~/constant';
 import CivicPageV3 from '~/components/CivicLikerV3/Page';
 
 export default {
@@ -38,32 +39,33 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-
-      script: {
-        hid: 'schema',
-        innerHTML: JSON.stringify([
-          {
-            '@context': 'http://www.schema.org',
-            '@type': 'Product',
-            name: title,
-            image: [ogImage],
-            description,
-            brand: {
-              '@type': 'Brand',
-              name: 'Civic Liker',
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify([
+            {
+              '@context': 'http://www.schema.org',
+              '@type': 'Product',
+              name: title,
+              image: [ogImage],
+              description,
+              brand: {
+                '@type': 'Brand',
+                name: 'Civic Liker',
+              },
+              url: `${EXTERNAL_HOST}${this.$route.path}`,
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+                availability: 'InStock',
+              },
             },
-            url: this.$route.path,
-            offers: {
-              '@type': 'Offer',
-              price: '0',
-              priceCurrency: 'USD',
-              availability: 'InStock',
-            },
-          },
-        ]),
-        type: 'application/ld+json',
-        body: true,
-      },
+          ]),
+          type: 'application/ld+json',
+          body: true,
+        },
+      ],
     };
   },
 };
