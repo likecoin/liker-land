@@ -204,15 +204,15 @@ export default {
     ...mapActions(['fetchNFTListByAddress']),
     async loadNFTListByAddress(address) {
       this.wallet = address;
+      const fetchPromise = this.fetchNFTListByAddress(address);
       if (!this.getNFTClassIdListByAddress(address)) {
         this.isLoading = true;
-        await this.fetchNFTListByAddress(address);
+        await fetchPromise;
         this.isLoading = false;
       }
       if (!this.sortedCreatedClassIds.length) {
         this.currentTab = 'collected';
       }
-      this.fetchNFTListByAddress(address);
     },
     goCollected() {
       this.currentTab = 'collected';
