@@ -143,7 +143,6 @@
           </MagicGrid>
 
           <MagicGrid v-show="currentTab === 'created'" :gap="16" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
             <div
               v-for="id in sortedCreatedClassIds"
               :key="id"
@@ -154,6 +153,12 @@
               />
             </div>
           </MagicGrid>
+
+          <NFTPortfolioEmptyForm
+            v-if="!isLoading && currentTab === 'created' && !sortedCreatedClassIds.length"
+            :creator-wallet-address="wallet"
+            :creator-display-name="userDisplayName"
+          />
 
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
