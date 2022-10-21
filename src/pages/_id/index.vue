@@ -171,6 +171,7 @@
         </div>
       </div>
     </div>
+    <NuxtChild />
   </Page>
 </template>
 
