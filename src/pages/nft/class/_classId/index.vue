@@ -131,6 +131,7 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
+import { EXTERNAL_HOST } from '~/constant';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -187,7 +188,7 @@ export default {
                   },
                   sku: this.classId,
                   iscn: this.iscnId,
-                  url: this.$route.path,
+                  url: `${EXTERNAL_HOST}${this.$route.path}`,
                   offers: {
                     '@type': 'Offer',
                     price: this.NFTPriceUSD,
@@ -241,7 +242,7 @@ export default {
     await Promise.all([
       store.dispatch('fetchNFTMetadata', classId),
       store
-        .dispatch('fetchNFTPurchaseInfo', classId)
+        .dispatch('lazyGetNFTPurchaseInfo', classId)
         // eslint-disable-next-line no-console
         .catch(err => JSON.stringify(console.error(err))),
     ]);
