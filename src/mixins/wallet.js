@@ -28,7 +28,6 @@ export default {
   },
   watch: {
     getAddress: {
-      immediate: true,
       handler(newAddress) {
         if (newAddress) this.walletFetchLIKEBalance();
       },

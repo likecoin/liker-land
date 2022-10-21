@@ -52,23 +52,5 @@ export default {
       return ownerSet.size;
     },
   },
-  watch: {
-    collectedClassIds() {
-      this.lazyGetAllCollectedPurchaseInfo();
-    },
-    createdClassIds() {
-      this.lazyGetAllCreatedOwners();
-    },
-  },
-  methods: {
-    ...mapActions(['lazyGetNFTPurchaseInfo', 'lazyGetNFTOwners']),
-    lazyGetAllCollectedPurchaseInfo() {
-      const classIdSet = new Set(this.collectedClassIds);
-      classIdSet.forEach(classId => this.lazyGetNFTPurchaseInfo(classId));
-    },
-    lazyGetAllCreatedOwners() {
-      this.createdClassIds.forEach(classId => this.lazyGetNFTOwners(classId));
-    },
-  },
 };
 </script>
