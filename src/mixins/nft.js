@@ -1,5 +1,6 @@
-import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
+
+import { CrispMixinFactory } from '~/mixins/crisp';
 
 import {
   APP_LIKE_CO_VIEW,
@@ -35,7 +36,7 @@ import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 import walletMixin from '~/mixins/wallet';
 
 export default {
-  mixins: [walletMixin],
+  mixins: [walletMixin, CrispMixinFactory({ isBootAtMounted: true })],
   head() {
     // Only load stripe if a wallet is connected
     if (!this.getAddress) return {};
