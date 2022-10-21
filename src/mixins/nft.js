@@ -398,7 +398,8 @@ export default {
       try {
         const purchaseEventParams = {
           name: this.NFTName,
-          price: this.purchaseInfo.price,
+          price: this.NFTPriceUSD,
+          currency: 'USD',
           classId: this.classId,
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
@@ -489,7 +490,8 @@ export default {
           logPurchaseFlowEvent(this, 'purchase', {
             txHash,
             name: this.NFTName,
-            price: this.purchaseInfo.price,
+            price: this.NFTPriceUSD,
+            currency: 'USD',
             classId: this.classId,
           });
           await this.fetchUserCollectedCount();

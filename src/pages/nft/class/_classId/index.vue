@@ -271,7 +271,8 @@ export default {
     } else {
       logPurchaseFlowEvent(this, 'view_item', {
         name: this.NFTName,
-        price: this.purchaseInfo.price,
+        price: this.NFTPriceUSD,
+        currency: 'USD',
         classId: this.classId,
       });
     }
