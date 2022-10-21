@@ -2,38 +2,32 @@ import { mapGetters } from 'vuex';
 
 export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
   computed: {
-    ...mapGetters(['getUserInfo']),
+    ...mapGetters(['getAddress', 'getLikerInfo']),
   },
   mounted() {
-    if (!this.crisp) return;
     if (options.isBootAtMounted) this.$nextTick(() => this.showCrisp());
   },
   beforeDestroy() {
-    if (!this.crisp) return;
     if (options.isBootAtMounted) this.hideCrisp();
   },
   methods: {
     showCrisp() {
-      if (this.$crisp.is('chat:hidden')) {
-        try {
-          const { email, displayName, crispToken } = this.getUserInfo;
+      if (!this.$crisp) return false;
+      try {
+        if (this.$crisp.is('chat:hidden')) {
+          const displayName = this.getLikerInfo?.displayName || this.getAddress;
           const { $crisp } = this;
           if (displayName) $crisp.push(['set', 'user:nickname', [displayName]]);
-          if (email) {
-            const emailPayload = [email];
-            if (crispToken) emailPayload.push(crispToken);
-            $crisp.push(['set', 'user:email', emailPayload]);
-          }
           this.$crisp.push(['do', 'chat:show']);
           return true;
-        } catch (err) {
-          console.error(err); // eslint-disable-line no-console
-          return false;
         }
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
       }
       return false;
     },
     hideCrisp() {
+      if (!this.$crisp) return;
       this.$crisp.push(['do', 'chat:hide']);
     },
   },

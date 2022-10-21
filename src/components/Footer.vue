@@ -45,16 +45,16 @@
     <div
       class="
         bg-like-cyan-light
-        px-[32px]
+        px-[24px] laptop:px-[56px]
         py-[16px]
         grid grid-flow-col
         justify-center
-        laptop:justify-end
+        laptop:justify-start
         gap-x-[48px]
         text-like-green
       "
     >
-      <a class="hover:underline" href="https://help.like.co">{{ $t('footer_nav_help') }}</a>
+      <button class="cursor-pointer hover:underline" @click="handleClickHelp">{{ $t('footer_nav_help') }}</button>
       <a class="hover:underline" href="https://docs.like.co">{{ $t('footer_nav_doc') }}</a>
       <a class="hover:underline" href="https://docs.like.co/faq">{{ $t('footer_nav_faq') }}</a>
     </div>
@@ -93,6 +93,8 @@
 <script>
 import Logo from '~/assets/icons/logo.svg?inline';
 
+import crispMixin from '~/mixins/crisp';
+
 import Dialog from './Dialog';
 
 export default {
@@ -101,10 +103,19 @@ export default {
     Dialog,
     Logo,
   },
+  mixins: [crispMixin],
   data() {
     return {
       isOpenAboutTeam: false,
     };
+  },
+  methods: {
+    handleClickHelp() {
+      if (this.$crisp) {
+        this.showCrisp();
+        this.$crisp.push(['do', 'chat:open']);
+      }
+    },
   },
 };
 </script>
