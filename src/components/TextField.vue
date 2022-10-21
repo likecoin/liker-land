@@ -2,6 +2,7 @@
   <div class="flex flex-col">
     <component
       :is="tag"
+      ref="input"
       v-bind="inputProps"
       @input="$emit('input', $event.target.value)"
       @blur="$emit('delete-empty-field')"
@@ -100,6 +101,13 @@ export default class TextField extends Vue {
 
   get errorMsgClasses(): any {
     return { 'pl-[8px] text-[red] text-[10px]': this.errorMessage };
+  }
+
+  focus() {
+    const { input: inputEl } = this.$refs;
+    if (inputEl) {
+      (inputEl as any).focus();
+    }
   }
 }
 </script>
