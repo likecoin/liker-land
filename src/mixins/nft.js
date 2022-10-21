@@ -312,7 +312,11 @@ export default {
       const actionType = this.isWritingNFT
         ? ['/cosmos.nft.v1beta1.MsgSend']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'new_class'];
-      const historyOnChain = await this.getNFTEventsAll({ actionType });
+      const ignoreToList = this.isWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      const historyOnChain = await this.getNFTEventsAll({
+        actionType,
+        ignoreToList,
+      });
       let history = historyOnChain;
 
       if (this.isWritingNFT) {
@@ -322,11 +326,9 @@ export default {
           );
           const historyInDB = data.list;
           const eventMap = new Map();
-          historyOnChain
-            .filter(e => e.toWallet !== LIKECOIN_NFT_API_WALLET)
-            .forEach(e => {
-              eventMap.set(`${e.txHash}-${e.nftId}`, e);
-            });
+          historyOnChain.forEach(e => {
+            eventMap.set(`${e.txHash}-${e.nftId}`, e);
+          });
           historyInDB.forEach(e => {
             const key = `${e.txHash}-${e.nftId}`;
             if (eventMap.has(key)) {
@@ -351,7 +353,7 @@ export default {
       this.updateDisplayNameList([...new Set(array)]);
       this.isHistoryInfoLoading = false;
     },
-    async getNFTEventsAll({ actionType }) {
+    async getNFTEventsAll({ actionType, ignoreToList }) {
       let data;
       let nextKey;
       let count;
@@ -364,6 +366,7 @@ export default {
             key: nextKey,
             limit: NFT_INDEXER_LIMIT_MAX,
             actionType,
+            ignoreToList,
           })
         ));
         nextKey = data.pagination.next_key;
