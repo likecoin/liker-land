@@ -83,7 +83,7 @@ export function logTrackerEvent(vue, category, action, label, value) {
 export function logPurchaseFlowEvent(
   vue,
   event,
-  { txHash, name, price, currency = 'LIKE', classId }
+  { txHash, name, price, currency, classId }
 ) {
   try {
     if (

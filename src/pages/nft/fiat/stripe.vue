@@ -92,7 +92,8 @@ export default {
             logPurchaseFlowEvent(this, 'purchase', {
               txHash: this.result.transactionHash,
               name: this.NFTName,
-              price: this.result.LIKEPrice,
+              price: this.result.fiatPrice,
+              currency: 'USD',
               classId: this.classId,
             });
           } else if (this.status === 'error') {
