@@ -70,6 +70,7 @@ export default class TextField extends Vue {
   get rootClasses(): any {
     return [
       TextField.presetClasses,
+      'bg-white',
       this.isTextarea ? 'font-600 resize-none' : this.sizeClasses,
       this.errorClasses,
       {
