@@ -102,10 +102,12 @@ export function logPurchaseFlowEvent(
       vue.$gtag.event(event, {
         transaction_id: txHash,
         value: price,
+        currency,
         items: [
           {
             item_id: classId,
             item_name: name,
+            item_brand: 'Writing NFT',
             currency,
             price,
             quantity: 1,
