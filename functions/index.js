@@ -13,3 +13,7 @@ if (!currentFunction || currentFunction === 'api') {
 if (!currentFunction || currentFunction === 'backup') {
   exports.backup = require('./backup');
 }
+
+if (!currentFunction || currentFunction === 'firestore') {
+  exports.firestore = require('./firestore');
+}
