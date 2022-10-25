@@ -1,6 +1,6 @@
 const { firestore, config } = require('firebase-functions');
 
-const { sendEmail } = require('../modules/ses');
+const { sendEmail } = require('../modules/sendgrid');
 
 const { EXTERNAL_URL } = process.env;
 
@@ -12,6 +12,6 @@ module.exports = firestore
     return sendEmail({
       email: subscriberEmail,
       subject: 'Writing NFT - NFT Subscription',
-      body: `Hi you have subscribed ${subscribedWallet}, you can cancel the subscription by ${EXTERNAL_URL}/${subscribedWallet}/unsubscribe/${subscriptionId}`,
+      html: `Hi you have subscribed ${subscribedWallet}, you can cancel the subscription by ${EXTERNAL_URL}/${subscribedWallet}/unsubscribe/${subscriptionId}`,
     });
   });
