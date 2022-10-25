@@ -69,26 +69,6 @@ router.get('/nft/mint-subscription', async (req, res, next) => {
   }
 });
 
-router.get('/nft/mint-subscription/:id', async (req, res, next) => {
-  const { id: subscriptionId } = req.params;
-  try {
-    const subscriptionDoc = await nftMintSubscriptionCollection
-      .doc(subscriptionId)
-      .get();
-    if (!subscriptionDoc.exists) {
-      res.status(404).send('SUBSCRIPTION_NOT_FOUND');
-      return;
-    }
-    const { ts, ...data } = subscriptionDoc.data();
-    res.json({
-      ...data,
-      ts: ts.toMillis(),
-    });
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
-  }
-});
-
 router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
   const { id: subscriptionId } = req.params;
   try {
