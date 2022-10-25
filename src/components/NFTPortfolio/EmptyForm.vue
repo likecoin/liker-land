@@ -14,6 +14,7 @@
     <div class="flex gap-[16px]">
       <TextField
         ref="emailTextField"
+        type="email"
         :text="$t('portfolio_empty_title')"
         :placeholder="$t('portfolio_empty_email_placeholder')"
         :is-disabled="isLoading"
