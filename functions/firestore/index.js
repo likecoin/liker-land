@@ -1,4 +1,5 @@
 const { firestore, config } = require('firebase-functions');
+const { getBasicTemplate } = require('@likecoin/edm');
 
 const { sendEmail } = require('../modules/sendgrid');
 
@@ -9,9 +10,15 @@ module.exports = firestore
   .onCreate(snapshot => {
     const subscriptionId = snapshot.id;
     const { subscriberEmail, subscribedWallet } = snapshot.data();
+    const { body } = getBasicTemplate({
+      title: 'Writing NFT',
+      subtitle: `You have subscribed ${subscribedWallet}`,
+      content: `Hi,\nyou will receive email when ${subscribedWallet} create any NFT. You can cancel the subscription by ${EXTERNAL_URL}/${subscribedWallet}/unsubscribe/${subscriptionId}`,
+      language: 'en',
+    });
     return sendEmail({
       email: subscriberEmail,
       subject: 'Writing NFT - NFT Subscription',
-      html: `Hi you have subscribed ${subscribedWallet}, you can cancel the subscription by ${EXTERNAL_URL}/${subscribedWallet}/unsubscribe/${subscriptionId}`,
+      html: body,
     });
   });
