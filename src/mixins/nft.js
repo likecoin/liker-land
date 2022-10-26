@@ -311,7 +311,7 @@ export default {
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
       const actionType = this.isWritingNFT
-        ? ['/cosmos.nft.v1beta1.MsgSend']
+        ? ['/cosmos.nft.v1beta1.MsgSend', 'new_class']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'new_class'];
       const ignoreToList = this.isWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       const historyOnChain = await this.getNFTEventsAll({

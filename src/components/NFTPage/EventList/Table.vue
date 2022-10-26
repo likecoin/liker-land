@@ -43,14 +43,18 @@
             v-else-if="event.event === 'new_class'"
             class="break-all"
             :text="$t('nft_details_page_activity_list_event_create_class')"
-          />
+          >
+            <template #prepend>
+              <IconFlare />
+            </template>
+          </Label>
         </td>
         <td>
           <Label v-if="event.price" class="break-all" :text="event.price | formatNumber" />
           <Label v-else class="break-all" text="-" />
         </td>
         <td>
-          <LinkV2 v-if="event.event === 'transfer'" :to="`/${event.fromWallet}`">
+          <LinkV2 v-if="event.event === 'new_class' || event.event === 'transfer'" :to="`/${event.fromWallet}`">
             <Label class="break-all">{{
               event.fromDisplayName | ellipsis
             }}</Label>
