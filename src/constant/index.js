@@ -134,4 +134,23 @@ export const TX_STATUS = {
   FAILED: 'failed',
 };
 
+export const NFT_GEM_NAME = [
+  'Dust',
+  'Stone',
+  'Rock',
+  'Boulder',
+  'Moonstone',
+  'Pearl',
+  'Jade',
+  'Emerald',
+  'Sapphire',
+  'Alexandrite',
+  'Amethyst',
+  'Kunzite',
+  'Citrine',
+  'Topaz',
+  'Ruby',
+  'Diamond',
+];
+
 export const ROUGH_LIKE_TO_USD_PRICE = 0.01;
