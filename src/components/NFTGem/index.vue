@@ -5,7 +5,7 @@
       v-if="level && level < 13"
       class="w-[24px] h-[24px]"
     >
-      <img :src="levelImgSrc" :title="`Level ${level}`" :alt="`Level ${level}`">
+      <img :src="levelImgSrc" :title="gemName" :alt="gemName">
     </div>
 
     <!-- Spark background -->
@@ -16,9 +16,9 @@
       <div
         class="absolute w-[24px] h-[24px]"
       >
-        <img :src="levelImgSrc" :title="`Level ${level}`" :alt="`Level ${level}`">
+        <img :src="levelImgSrc" :title="gemName" :alt="gemName">
       </div>
-      <img :src="sparkImgSrc" :title="`Level ${level}`" :alt="`Level ${level}`">
+      <img :src="sparkImgSrc" :title="gemName" :alt="gemName">
     </div>
 
     <!-- Gem line -->
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { NFT_GEM_NAME } from '@/constant';
+
 const getLevelImg = require.context('./level/', false, /\.png$/);
 const getSparkImg = require.context('./spark/', false, /\.png$/);
 
@@ -80,6 +82,9 @@ export default {
         default:
           return [];
       }
+    },
+    gemName() {
+      return NFT_GEM_NAME[this.level];
     },
     filename() {
       return `./${this.level >= 10 ? this.level : `0${this.level}`}.png`;
