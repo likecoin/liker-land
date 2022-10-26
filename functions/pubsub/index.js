@@ -5,7 +5,7 @@ const { db } = require('../modules/firebase');
 const { sendEmail } = require('../modules/sendgrid');
 
 module.exports = onMessagePublished(
-  'projects/civic-liker/topics/wnft',
+  process.env.WNFT_PUBSUB_TOPIC,
   async event => {
     const { message } = event.data;
     try {
