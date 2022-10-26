@@ -17,3 +17,7 @@ if (!currentFunction || currentFunction === 'backup') {
 if (!currentFunction || currentFunction === 'firestore') {
   exports.firestore = require('./firestore');
 }
+
+if (!currentFunction || currentFunction === 'pubsub') {
+  exports.pubsub = require('./pubsub');
+}
