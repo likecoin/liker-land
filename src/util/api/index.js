@@ -182,8 +182,8 @@ export const getISCNRecord = iscnId => {
 
 export const getNFTsPartial = ({ owner, limit, key }) => {
   const qsPayload = { owner };
-  if (limit) qsPayload.limit = limit;
-  if (key) qsPayload.key = key;
+  if (limit) qsPayload['pagination.limit'] = limit;
+  if (key) qsPayload['pagination.key'] = key;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/nft?${querystring.stringify(
     qsPayload
   )}`;
