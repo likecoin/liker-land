@@ -601,14 +601,16 @@ export default {
           this.classId,
           1
         );
-        await this.fetchUserCollectedCount();
+        await Promise.all([
+          this.fetchUserCollectedCount(),
+          this.updateNFTOwners(), // blocking update firstCollectedNFTId
+        ]);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
         this.updateNFTPurchaseInfo();
-        this.updateNFTOwners();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
