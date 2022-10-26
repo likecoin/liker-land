@@ -30,16 +30,20 @@ module.exports = onMessagePublished(
           for (let i = 0; i < query.docs.length; i += 1) {
             const doc = query.docs[i];
             const { subscriberEmail } = doc.data();
-            // eslint-disable-next-line no-await-in-loop
-            await sendEmail({
-              email: subscriberEmail,
-              subject: `Writing NFT - New NFT by ${sellerWallet}`,
-              html: getBasicTemplate({
-                title: `New NFT Created by ${sellerWallet}`,
-                subtitle: `${classId} is now live`,
-                content: `Go to https://liker.land/nft/class/${classId}`,
-              }),
-            });
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              await sendEmail({
+                email: subscriberEmail,
+                subject: `Writing NFT - New NFT by ${sellerWallet}`,
+                html: getBasicTemplate({
+                  title: `New NFT Created by ${sellerWallet}`,
+                  subtitle: `${classId} is now live`,
+                  content: `Go to https://liker.land/nft/class/${classId}`,
+                }),
+              });
+            } catch (err) {
+              console.error(err);
+            }
           }
           break;
         }
