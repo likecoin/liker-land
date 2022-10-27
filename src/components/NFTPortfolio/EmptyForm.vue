@@ -11,7 +11,7 @@
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
-    <div class="flex gap-[16px]">
+    <div class="flex gap-[16px] items-center">
       <TextField
         ref="emailTextField"
         type="email"
@@ -20,12 +20,13 @@
         :is-disabled="isLoading"
         @input="handleEmailInput"
       />
+      <ProgressIndicator v-if="isLoading" />
       <ButtonV2
+        v-else
         :key="subscriptionId"
         class="font-[600]"
         preset="secondary"
         :text="submitButtonText"
-        :is-disabled="isLoading"
         @click="submitEmail"
       >
         <template v-if="!subscriptionId" #prepend>
