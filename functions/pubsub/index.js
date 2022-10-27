@@ -38,7 +38,7 @@ module.exports = onMessagePublished(
                 html: getBasicTemplate({
                   title: `New NFT Created by ${sellerWallet}`,
                   subtitle: `${classId} is now live`,
-                  content: `Go to https://liker.land/nft/class/${classId}`,
+                  content: `Go to ${EXTERNAL_URL}/nft/class/${classId} to find out more`,
                 }),
               });
             } catch (err) {
