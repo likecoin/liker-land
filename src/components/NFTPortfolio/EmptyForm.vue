@@ -21,6 +21,7 @@
         @input="handleEmailInput"
       />
       <ButtonV2
+        :key="subscriptionId"
         class="font-[600]"
         preset="secondary"
         :text="submitButtonText"
@@ -30,7 +31,7 @@
         <template v-if="!subscriptionId" #prepend>
           <IconNotify class="w-[20px]" />
         </template>
-        <template v-if="subscriptionId" #append>
+        <template v-else #append>
           <IconCheck width="20" height="20" />
         </template>
       </ButtonV2>
