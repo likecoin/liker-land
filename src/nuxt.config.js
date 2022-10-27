@@ -338,6 +338,16 @@ const nuxtConfig = {
         name: 'settings-unfollowed',
       });
 
+      route = routes.find(r => r.name === 'id');
+      const [subscribeRoute] = route.children;
+      const replaceToUnsubscribe = s => s.replace('subscribe', 'unsubscribe');
+      route.children.push({
+        name: replaceToUnsubscribe(subscribeRoute.name),
+        path: replaceToUnsubscribe(subscribeRoute.path),
+        component: subscribeRoute.component,
+        chunkName: replaceToUnsubscribe(subscribeRoute.chunkName),
+      });
+
       const civicPageRouteIndex = routes.findIndex(r => r.name === 'civic-from');
       routes.splice(
         civicPageRouteIndex,

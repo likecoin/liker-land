@@ -19,17 +19,17 @@
         preset="p5"
         align="center"
       >
-        <i18n :path="hasConfirmed ? 'portfolio_subscribe_message_success' : 'portfolio_subscribe_message'">
+        <i18n :path="messageI18nPath">
           <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName }}</span>
           <span class="font-[600] text-like-green" place="email">{{ email }}</span>
         </i18n>
       </Label>
       <ProgressIndicator v-if="isLoading" class="mt-[16px] h-[44px]" />
       <ButtonV2
-        v-else-if="!hasConfirmed"
+        v-else-if="!isCompleted"
         class="mt-[16px] font-[600]"
         preset="secondary"
-        :text="$t('portfolio_subscribe_confirm_button')"
+        :text="confirmButtonTitle"
         :is-disabled="isLoading"
         @click="handleClickConfirm"
       />
@@ -52,20 +52,28 @@ import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
 
+function isSubscribePage(route) {
+  return route.name === 'id-index-subscribe-subscriptionId';
+}
+
 export default {
-  name: 'NFTSubscribeCreatorConfirmPage',
+  // Both subscribe page and unsubscribe page share the same component
+  name: 'NFTCreatorSubscriptionPage',
   mixins: [alertMixin],
   data() {
     return {
       // From asyncData
       wallet: '',
-      hasConfirmed: false,
+      isCompleted: false,
 
       isLoading: false,
     };
   },
   computed: {
     ...mapGetters(['getUserInfoByAddress']),
+    isSubscribePage() {
+      return isSubscribePage(this.$route);
+    },
     creatorInfo() {
       return this.getUserInfoByAddress(this.wallet);
     },
@@ -79,15 +87,37 @@ export default {
       );
     },
     headerText() {
-      return this.$t('portfolio_subscribe_title', {
-        creator: this.creatorDisplayName,
-      });
+      return this.$t(
+        this.isSubscribePage
+          ? 'portfolio_subscribe_title'
+          : 'portfolio_unsubscribe_title',
+        {
+          creator: this.creatorDisplayName,
+        }
+      );
+    },
+    messageI18nPath() {
+      if (this.isCompleted) {
+        return this.isSubscribePage
+          ? 'portfolio_subscribe_message_success'
+          : 'portfolio_unsubscribe_message_success';
+      }
+      return this.isSubscribePage
+        ? 'portfolio_subscribe_message'
+        : 'portfolio_unsubscribe_message';
+    },
+    confirmButtonTitle() {
+      return this.$t(
+        this.isSubscribePage
+          ? 'portfolio_subscribe_confirm_button'
+          : 'portfolio_unsubscribe_confirm_button'
+      );
     },
     email() {
       return this.$route.query.email;
     },
   },
-  async asyncData({ $api, params, redirect }) {
+  async asyncData({ $api, route, params, redirect }) {
     const { id: creatorId, subscriptionId } = params;
     try {
       const res = await $api.$get(
@@ -95,7 +125,7 @@ export default {
       );
       return {
         wallet: res.subscribedWallet,
-        hasConfirmed: res.isVerified,
+        isCompleted: isSubscribePage(route) ? res.isVerified : false,
       };
     } catch (err) {
       redirect({ name: 'id', params: { id: creatorId } });
@@ -113,7 +143,12 @@ export default {
         params: { id: this.wallet },
       });
     },
-    async handleClickConfirm() {
+    handleClickConfirm() {
+      return this.isSubscribePage
+        ? this.confirmSubscription()
+        : this.unsubscribe();
+    },
+    async confirmSubscription() {
       try {
         this.isLoading = true;
         await this.$api.$put(
@@ -122,7 +157,7 @@ export default {
             email: this.email,
           })
         );
-        this.hasConfirmed = true;
+        this.isCompleted = true;
         this.alertPromptSuccess(
           this.$t('portfolio_subscribe_success_alert', {
             creator: this.formattedCreatorDisplayName,
@@ -133,6 +168,31 @@ export default {
         console.error(err);
         this.alertPromptError(
           this.$t('portfolio_subscribe_error_alert', {
+            creator: this.formattedCreatorDisplayName,
+            error: err.response.data,
+          })
+        );
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async unsubscribe() {
+      try {
+        this.isLoading = true;
+        await this.$api.$delete(
+          nftMintSubscriptionAPI({ id: this.$route.params.subscriptionId })
+        );
+        this.isCompleted = true;
+        this.alertPromptSuccess(
+          this.$t('portfolio_unsubscribe_success_alert', {
+            creator: this.formattedCreatorDisplayName,
+          })
+        );
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        this.alertPromptError(
+          this.$t('portfolio_unsubscribe_error_alert', {
             creator: this.formattedCreatorDisplayName,
             error: err.response.data,
           })
