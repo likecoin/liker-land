@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     formattedCreatorDisplayName() {
-      return ellipsis(this.creatorWalletAddress);
+      return ellipsis(this.creatorDisplayName || this.creatorWalletAddress);
     },
     submitButtonText() {
       if (this.subscriptionId) {
