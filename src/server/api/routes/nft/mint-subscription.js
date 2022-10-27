@@ -77,7 +77,28 @@ router.get('/nft/mint-subscription', async (req, res, next) => {
   }
 });
 
-router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
+router.get('/nft/mint-subscription/:id', async (req, res, next) => {
+  const { id: subscriptionId } = req.params;
+  try {
+    const subscriptionDoc = await nftMintSubscriptionCollection
+      .doc(subscriptionId)
+      .get();
+    if (!subscriptionDoc.exists) {
+      res.status(404).send('SUBSCRIPTION_NOT_FOUND');
+      return;
+    }
+    const { ts, subscribedWallet, isVerified = false } = subscriptionDoc.data();
+    res.json({
+      subscribedWallet,
+      isVerified,
+      ts: ts.toMillis(),
+    });
+  } catch (err) {
+    handleRestfulError(req, res, next, err);
+  }
+});
+
+router.put('/nft/mint-subscription/:id', async (req, res, next) => {
   try {
     const { email } = req.query;
     if (!email) {
@@ -100,9 +121,19 @@ router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
         return;
       }
 
-      await t.delete(docRef);
+      await t.set(docRef, { isVerified: true }, { merge: true });
       res.sendStatus(200);
     });
+  } catch (err) {
+    handleRestfulError(req, res, next, err);
+  }
+});
+
+router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
+  const { id: subscriptionId } = req.params;
+  try {
+    await nftMintSubscriptionCollection.doc(subscriptionId).delete();
+    res.sendStatus(200);
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }

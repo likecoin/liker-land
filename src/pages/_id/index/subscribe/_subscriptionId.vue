@@ -19,17 +19,17 @@
         preset="p5"
         align="center"
       >
-        <i18n :path="hasUnsubscribed ? 'portfolio_unsubscribe_message_success' : 'portfolio_unsubscribe_message'">
+        <i18n :path="hasConfirmed ? 'portfolio_subscribe_message_success' : 'portfolio_subscribe_message'">
           <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName }}</span>
           <span class="font-[600] text-like-green" place="email">{{ email }}</span>
         </i18n>
       </Label>
       <ProgressIndicator v-if="isLoading" class="mt-[16px] h-[44px]" />
       <ButtonV2
-        v-else-if="!hasUnsubscribed"
+        v-else-if="!hasConfirmed"
         class="mt-[16px] font-[600]"
         preset="secondary"
-        :text="$t('portfolio_unsubscribe_confirm_button')"
+        :text="$t('portfolio_subscribe_confirm_button')"
         :is-disabled="isLoading"
         @click="handleClickConfirm"
       />
@@ -53,15 +53,15 @@ import { ellipsis } from '~/util/ui';
 import alertMixin from '~/mixins/alert';
 
 export default {
-  name: 'NFTUnsubscribeCreatorPage',
+  name: 'NFTSubscribeCreatorConfirmPage',
   mixins: [alertMixin],
   data() {
     return {
       // From asyncData
       wallet: '',
+      hasConfirmed: false,
 
       isLoading: false,
-      hasUnsubscribed: false,
     };
   },
   computed: {
@@ -79,7 +79,7 @@ export default {
       );
     },
     headerText() {
-      return this.$t('portfolio_unsubscribe_title', {
+      return this.$t('portfolio_subscribe_title', {
         creator: this.creatorDisplayName,
       });
     },
@@ -95,6 +95,7 @@ export default {
       );
       return {
         wallet: res.subscribedWallet,
+        hasConfirmed: res.isVerified,
       };
     } catch (err) {
       redirect({ name: 'id', params: { id: creatorId } });
@@ -115,12 +116,15 @@ export default {
     async handleClickConfirm() {
       try {
         this.isLoading = true;
-        await this.$api.$delete(
-          nftMintSubscriptionAPI({ id: this.$route.params.subscriptionId })
+        await this.$api.$put(
+          nftMintSubscriptionAPI({
+            id: this.$route.params.subscriptionId,
+            email: this.email,
+          })
         );
-        this.hasUnsubscribed = true;
+        this.hasConfirmed = true;
         this.alertPromptSuccess(
-          this.$t('portfolio_unsubscribe_success_alert', {
+          this.$t('portfolio_subscribe_success_alert', {
             creator: this.formattedCreatorDisplayName,
           })
         );
@@ -128,7 +132,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(err);
         this.alertPromptError(
-          this.$t('portfolio_unsubscribe_error_alert', {
+          this.$t('portfolio_subscribe_error_alert', {
             creator: this.formattedCreatorDisplayName,
             error: err.response.data,
           })

@@ -6,6 +6,17 @@ const { sendEmail } = require('../modules/sendgrid');
 
 const { EXTERNAL_URL, LIKECOIN_API_BASE } = process.env;
 
+function createSubscriptionConfirmURLFactory({
+  subscriptionId,
+  subscribedWallet,
+  subscriberEmail,
+}) {
+  return (action = 'subscribe') =>
+    `${EXTERNAL_URL}/${subscribedWallet}/${action}/${subscriptionId}?email=${encodeURIComponent(
+      subscriberEmail
+    )}`;
+}
+
 module.exports = firestore
   .document(`${config().db.firestore_nft_mint_subscriptions_root}/{id}`)
   .onCreate(async snapshot => {
@@ -27,13 +38,19 @@ module.exports = firestore
       }
     }
 
-    const unsubscribeLink = `${EXTERNAL_URL}/${subscribedWallet}/unsubscribe/${subscriptionId}`;
+    const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory({
+      subscriptionId,
+      subscribedWallet,
+      subscriberEmail,
+    });
+    const confirmLink = getSubscriptionConfirmURL();
+    const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
     const { body } = getBasicWithAvatarTemplate({
       title: 'Writing NFT',
-      subtitle: `You have subscribed ${displayName}`,
+      subtitle: `Subscribe ${displayName}'s Writing NFT`,
       content: `<p>Hi,</p>
-      <p>You will receive email when <b>${displayName}</b> create any Writing NFT.
-      You can cancel the subscription by <a href="${unsubscribeLink}" target="_blank" rel="noreferrer">${unsubscribeLink}</a>.</p>`,
+      <p>Please <a href="${confirmLink}" target="_blank" rel="noreferrer">click here</a> or the link below to confirm your subscription of ${displayName}'s Writing NFT.</p>
+      <p><a href="${confirmLink}" target="_blank" rel="noreferrer">${confirmLink}</a></p>`,
       avatarURL: avatar,
       isCivicLiker: isSubscribedCivicLiker,
       unsubscribeLink,
