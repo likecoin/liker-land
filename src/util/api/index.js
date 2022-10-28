@@ -2,6 +2,7 @@ import querystring from 'querystring';
 import {
   CIVIC_LIKER_CLASSIC_LIKER_ID,
   IS_TESTNET,
+  EXTERNAL_HOST,
   LIKECOIN_API_BASE,
   LIKECOIN_CHAIN_VIEW_TX,
   LIKECOIN_CHAIN_API,
@@ -268,7 +269,7 @@ export const getIdenticonAvatar = id =>
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet }) => {
   const qsPayload = { email, wallet };
-  return `/api/nft/mint-subscription${
+  return `${EXTERNAL_HOST}/api/nft/mint-subscription${
     id ? `/${id}` : ''
   }?${querystring.stringify(qsPayload)}`;
 };

@@ -5,6 +5,10 @@ export const TEST_MODE =
 
 export const ONE_HOUR_IN_MS = 3600000;
 
+export const EXTERNAL_HOST = IS_TESTNET
+  ? 'https://rinkeby.liker.land'
+  : 'https://liker.land';
+
 export const LIKECOIN_API_BASE = IS_TESTNET
   ? 'https://api.rinkeby.like.co'
   : 'https://api.like.co';
