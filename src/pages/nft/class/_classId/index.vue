@@ -228,7 +228,7 @@ export default {
     const { action } = query;
     return { action };
   },
-  async fetch({ route, store, redirect }) {
+  async fetch({ route, store, redirect, error }) {
     const { classId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
@@ -239,13 +239,29 @@ export default {
       });
       return;
     }
-    await Promise.all([
-      store.dispatch('fetchNFTMetadata', classId),
-      store
-        .dispatch('lazyGetNFTPurchaseInfo', classId)
+    try {
+      await Promise.all([
+        store.dispatch('fetchNFTMetadata', classId),
+        store
+          .dispatch('lazyGetNFTPurchaseInfo', classId)
+          // eslint-disable-next-line no-console
+          .catch(err => console.error(err)),
+      ]);
+    } catch (err) {
+      if (err.response?.data?.code === 3) {
+        error({
+          statusCode: 404,
+          message: 'NFT_NOT_FOUND',
+        });
+      } else {
         // eslint-disable-next-line no-console
-        .catch(err => JSON.stringify(console.error(err))),
-    ]);
+        console.error(err);
+        error({
+          statusCode: 500,
+          message: 'NFT_FETCH_ERROR',
+        });
+      }
+    }
   },
   async mounted() {
     try {
