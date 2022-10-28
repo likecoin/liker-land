@@ -245,7 +245,7 @@ export default {
         store.dispatch('lazyGetNFTPurchaseInfo', classId).catch(err => {
           if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
             // eslint-disable-next-line no-console
-            console.error(err);
+            console.error(JSON.stringify(err));
           }
         }),
       ]);
@@ -257,7 +257,7 @@ export default {
         });
       } else {
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(JSON.stringify(err));
         error({
           statusCode: 500,
           message: 'NFT_FETCH_ERROR',
