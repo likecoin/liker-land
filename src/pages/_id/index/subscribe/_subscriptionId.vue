@@ -48,6 +48,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import { nftMintSubscriptionAPI } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
@@ -149,6 +150,13 @@ export default {
         : this.unsubscribe();
     },
     async confirmSubscription() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_mint_subscription_confirm',
+        this.wallet,
+        1
+      );
       try {
         this.isLoading = true;
         await this.$api.$put(
@@ -177,6 +185,13 @@ export default {
       }
     },
     async unsubscribe() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_mint_subscription_cancel',
+        this.wallet,
+        1
+      );
       try {
         this.isLoading = true;
         await this.$api.$delete(

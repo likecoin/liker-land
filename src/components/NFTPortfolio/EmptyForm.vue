@@ -42,6 +42,7 @@
 
 <script>
 import { nftMintSubscriptionAPI } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
@@ -94,6 +95,14 @@ export default {
         }
         return;
       }
+
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_mint_subscription_submit',
+        this.wallet,
+        1
+      );
 
       this.isLoading = true;
       try {
