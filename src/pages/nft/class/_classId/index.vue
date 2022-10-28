@@ -242,10 +242,12 @@ export default {
     try {
       await Promise.all([
         store.dispatch('fetchNFTMetadata', classId),
-        store
-          .dispatch('lazyGetNFTPurchaseInfo', classId)
-          // eslint-disable-next-line no-console
-          .catch(err => console.error(err)),
+        store.dispatch('lazyGetNFTPurchaseInfo', classId).catch(err => {
+          if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
+            // eslint-disable-next-line no-console
+            console.error(err);
+          }
+        }),
       ]);
     } catch (err) {
       if (err.response?.data?.code === 3) {
