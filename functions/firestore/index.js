@@ -1,4 +1,4 @@
-const { firestore, config } = require('firebase-functions');
+const { runWith, config } = require('firebase-functions');
 const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
@@ -17,8 +17,10 @@ function createSubscriptionConfirmURLFactory({
     )}`;
 }
 
-module.exports = firestore
-  .document(`${config().db.firestore_nft_mint_subscriptions_root}/{id}`)
+module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
+  .firestore.document(
+    `${config().db.firestore_nft_mint_subscriptions_root}/{id}`
+  )
   .onCreate(async snapshot => {
     const subscriptionId = snapshot.id;
     const { subscriberEmail, subscribedWallet } = snapshot.data();
