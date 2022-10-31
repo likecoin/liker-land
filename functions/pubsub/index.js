@@ -11,10 +11,12 @@ const topic = 'wnft';
 
 module.exports = onMessagePublished({ topic }, async event => {
   const { message } = event.data;
-  console.log(event.data);
-  console.log(message);
+  const messageBody = message.data
+    ? Buffer.from(message.data, 'base64').toString()
+    : null;
+  if (!messageBody) return null;
   try {
-    const data = JSON.parse(message.data.toString());
+    const data = JSON.parse(messageBody);
     const { type } = data;
     switch (type) {
       case 'mint': {
