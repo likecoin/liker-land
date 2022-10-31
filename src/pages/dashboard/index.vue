@@ -78,6 +78,11 @@
               @click="handleGoCreated"
             />
           </div>
+
+          <!-- temp for testing -->
+          <ButtonV2 preset="plain" @click="handleSignLogin">sign</ButtonV2>
+          <!-- temp for testing -->
+
           <Dropdown
             :class="[
               'hidden',
@@ -167,11 +172,12 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin from '~/mixins/portfolio';
+import signInMixin from '~/mixins/signIn';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin],
+  mixins: [walletMixin, portfolioMixin, signInMixin],
   data() {
     return { hasSwitchedWallet: false };
   },
@@ -217,6 +223,9 @@ export default {
     handleShare() {
       this.copySharePageURL(this.wallet, this.getAddress);
       logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
+    },
+    async handleSignLogin() {
+      await this.signLogin();
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
