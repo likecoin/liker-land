@@ -11,6 +11,8 @@ const topic = 'wnft';
 
 module.exports = onMessagePublished({ topic }, async event => {
   const { message } = event.data;
+  console.log(event.data);
+  console.log(message);
   try {
     const data = JSON.parse(message.data.toString());
     const { type } = data;
@@ -41,7 +43,9 @@ module.exports = onMessagePublished({ topic }, async event => {
               html: getBasicTemplate({
                 title: `New NFT Created by ${sellerWallet}`,
                 subtitle: `${classId} is now live`,
-                content: `Go to ${EXTERNAL_URL}/nft/class/${classId} to find out more`,
+                content: `Go to ${
+                  process.env.EXTERNAL_URL
+                }/nft/class/${classId} to find out more`,
               }),
             });
           } catch (err) {
