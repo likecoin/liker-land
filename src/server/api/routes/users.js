@@ -19,6 +19,8 @@ const {
 } = require('../constant');
 const { CRISP_USER_HASH_SECRET } = require('../../config/config');
 
+const { isValidAddress, checkCosmosSignPayload } = require('../util/cosmos');
+
 const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
 function getCrispUserHash(email) {
@@ -224,6 +226,30 @@ router.post('/users/logout', (req, res) => {
   if (req.session) req.session = null;
   res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
   res.sendStatus(200);
+});
+
+router.post('/users/signin', (req, res) => {
+  const { from: inputWallet, signature, publicKey, message } = req.body;
+  try {
+    if (isValidAddress(inputWallet)) {
+      if (
+        !checkCosmosSignPayload({
+          signature,
+          publicKey,
+          message,
+          inputWallet,
+        })
+      ) {
+        throw new Error('INVALID_SIGNATURE');
+      }
+      // Handling verified signPayload
+      res.sendStatus(200);
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    next(err);
+  }
 });
 
 module.exports = router;
