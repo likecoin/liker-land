@@ -8,7 +8,7 @@ const {
   LIKE_CO_CLIENT_ID,
   LIKE_CO_CLIENT_SECRET,
 } = require('../../config/config');
-const { userCollection } = require('../util/firebase');
+const { userCollection } = require('../../modules/firebase');
 const { OAUTH_SCOPE_REQUEST } = require('../constant');
 
 const LIKECOIN_API_BASE = IS_TESTNET

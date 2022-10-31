@@ -4,7 +4,10 @@ const { v4: uuidv4 } = require('uuid');
 
 const { handleRestfulError } = require('../../middleware/error');
 
-const { db, nftMintSubscriptionCollection } = require('../../util/firebase');
+const {
+  db,
+  nftMintSubscriptionCollection,
+} = require('../../../modules/firebase');
 
 const router = Router();
 
