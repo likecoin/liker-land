@@ -3,7 +3,7 @@ const { onMessagePublished } = require('firebase-functions/v2/pubsub');
 const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
-const { db } = require('../modules/firebase');
+const { db, nftMintSubscriptionCollection } = require('../modules/firebase');
 const { sendEmail } = require('../modules/sendgrid');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
@@ -47,29 +47,18 @@ module.exports = onMessagePublished(
             sellerWallet,
             // uri,
           } = data;
-          const emailRef = db.collection(
-            process.env.FIRESTORE_NFT_MINT_SUBSCRIPTION_ROOT
-          );
           if (!sellerWallet)
             throw new Error(
               `sellerWallet is not defined for message ${message.messageId}`
             );
-          const query = await emailRef
+          const query = await nftMintSubscriptionCollection
             .where('subscribedWallet', '==', sellerWallet)
+            .where('isVerified', '==', true)
             .get();
           for (let i = 0; i < query.docs.length; i += 1) {
             const doc = query.docs[i];
             const subscriptionId = doc.id;
-            const {
-              isVerified,
-              subscriberEmail,
-              subscribedWallet,
-            } = doc.data();
-            if (!isVerified) {
-              console.info(
-                `${subscriberEmail} is not verified to ${subscribedWallet}`
-              );
-            }
+            const { subscriberEmail, subscribedWallet } = doc.data();
             try {
               let avatar = `https://avatars.dicebear.com/api/identicon/${subscribedWallet}.svg?background=#ffffff`;
               let displayName = subscribedWallet;
