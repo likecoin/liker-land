@@ -60,7 +60,16 @@ module.exports = onMessagePublished(
           for (let i = 0; i < query.docs.length; i += 1) {
             const doc = query.docs[i];
             const subscriptionId = doc.id;
-            const { subscriberEmail, subscribedWallet } = doc.data();
+            const {
+              isVerified,
+              subscriberEmail,
+              subscribedWallet,
+            } = doc.data();
+            if (!isVerified) {
+              console.info(
+                `${subscriberEmail} is not verified to ${subscribedWallet}`
+              );
+            }
             try {
               let avatar = `https://avatars.dicebear.com/api/identicon/${subscribedWallet}.svg?background=#ffffff`;
               let displayName = subscribedWallet;
@@ -85,7 +94,7 @@ module.exports = onMessagePublished(
                 }
               );
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
-              const subject = `Writing NFT - New NFT by ${sellerWallet} is live`;
+              const subject = `Writing NFT - New NFT by ${displayName} is live`;
               const { body } = getBasicWithAvatarTemplate({
                 title: 'Writing NFT',
                 subtitle: `${displayName}'s new NFT ${classId} is now live`,
