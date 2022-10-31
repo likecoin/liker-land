@@ -77,7 +77,10 @@ export default {
       ];
     },
     imageSrc() {
-      return this.url || DEFAULT_AVATAR;
+      return (this.url || DEFAULT_AVATAR).replace(
+        /size=\d+/,
+        `size=${this.size}`
+      );
     },
     imageStyle() {
       const borderWidth = `${this.size * 0.05}px`;
