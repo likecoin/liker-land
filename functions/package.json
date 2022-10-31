@@ -55,6 +55,7 @@
     "swiper": "^4.5.0",
     "tiny-cookie": "^1.0.1",
     "url-parse": "^1.4.7",
+    "uuid": "^8.3.2",
     "v-tooltip": "^2.0.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.6",
