@@ -154,3 +154,5 @@ export const NFT_GEM_NAME = [
 ];
 
 export const ROUGH_LIKE_TO_USD_PRICE = 0.01;
+
+export const LOGIN_MESSAGE = 'Login';
