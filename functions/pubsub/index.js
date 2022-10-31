@@ -1,11 +1,13 @@
 const { onMessagePublished } = require('firebase-functions/v2/pubsub');
-const { defineString } = require('firebase-functions/params');
+// const { defineString } = require('firebase-functions/params');
 const { getBasicTemplate } = require('@likecoin/edm');
 
 const { db } = require('../modules/firebase');
 const { sendEmail } = require('../modules/sendgrid');
 
-const topic = defineString('WNFT_PUBSUB_TOPIC');
+// TODO: firebase param does not support `topic` which sucks, hardcode for now
+// const topic = defineString('WNFT_PUBSUB_TOPIC');
+const topic = 'wnft';
 
 module.exports = onMessagePublished({ topic }, async event => {
   const { message } = event.data;
