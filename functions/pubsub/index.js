@@ -3,7 +3,7 @@ const { onMessagePublished } = require('firebase-functions/v2/pubsub');
 const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
-const { db, nftMintSubscriptionCollection } = require('../modules/firebase');
+const { nftMintSubscriptionCollection } = require('../modules/firebase');
 const { sendEmail } = require('../modules/sendgrid');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
@@ -47,14 +47,25 @@ module.exports = onMessagePublished(
             sellerWallet,
             // uri,
           } = data;
-          if (!sellerWallet)
+          if (!sellerWallet) {
             throw new Error(
               `sellerWallet is not defined for message ${message.messageId}`
             );
+          }
+          const metadataUrl = `${LIKECOIN_API_BASE}/likernft/metadata?class_id=${encodeURIComponent(
+            classId
+          )}`;
+          const { data: metadataData } = await axios.get(metadataUrl);
+          if (!metadataData) {
+            throw new Error(
+              `metadataData is not defined for classId ${classId}`
+            );
+          }
           const query = await nftMintSubscriptionCollection
             .where('subscribedWallet', '==', sellerWallet)
             .where('isVerified', '==', true)
             .get();
+          const { name, image } = metadataData;
           for (let i = 0; i < query.docs.length; i += 1) {
             const doc = query.docs[i];
             const subscriptionId = doc.id;
@@ -86,8 +97,10 @@ module.exports = onMessagePublished(
               const subject = `Writing NFT - New NFT by ${displayName} is live`;
               const { body } = getBasicWithAvatarTemplate({
                 title: 'Writing NFT',
-                subtitle: `${displayName}'s new NFT ${classId} is now live`,
-                content: `<p>Go to ${EXTERNAL_URL}/nft/class/${classId} to view the new NFT!</p>`,
+                subtitle: `${displayName}'s new NFT ${name} is now live`,
+                content: `<p><img style="width: 100%" src="${image}"></p>
+<p>${name} is now live!</p>
+<p>Go to <a href="${EXTERNAL_URL}/nft/class/${classId}" target="_blank" rel="noreferrer">liker.land</a> to view more details</p>`,
                 avatarURL: avatar,
                 isCivicLiker: isSubscribedCivicLiker,
                 unsubscribeLink,
