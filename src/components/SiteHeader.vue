@@ -22,8 +22,8 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
-      <!-- locale -->
-      <Dropdown>
+      <!-- locale (Temporarily hidden) -->
+      <!-- <Dropdown>
         <template v-slot:trigger="{ toggle }">
           <ButtonV2
             preset="tertiary"
@@ -42,7 +42,7 @@
             @select="handleSelectLocale"
           />
         </MenuList>
-      </Dropdown>
+      </Dropdown> -->
 
       <ButtonV2
         v-if="!getAddress"
@@ -119,7 +119,7 @@ import { ellipsis, formatNumber } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import Logo from '~/assets/icons/logo.svg?inline';
-import GlobeIcon from '~/assets/icons/globe.svg?inline';
+// import GlobeIcon from '~/assets/icons/globe.svg?inline';
 
 export default {
   name: 'SiteHeader',
@@ -129,7 +129,7 @@ export default {
   },
   components: {
     Logo,
-    GlobeIcon,
+    // GlobeIcon,
   },
   mixins: [walletMixin],
   computed: {
