@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <template v-if="isOwner && view !== 'created'">
+    <div v-if="isCollector && view !== 'created'" class="flex gap-[12px]">
       <ButtonV2
         size="mini"
         preset="tertiary"
@@ -11,31 +11,31 @@
       <ButtonV2
         size="mini"
         preset="tertiary"
+        :is-disabled="true"
         content-class="!text-[12px]"
-        class="ml-[16px]"
         :text="$t('nft_details_page_button_sell')"
         @mouseenter.once="handleMouseEnterSell"
         @click.native="handleClickSell"
       />
-    </template>
-    <template v-else-if="!isOwner || view === 'created'">
+    </div>
+    <div v-else-if="!isCollector || view === 'created'" class="flex gap-[12px]">
       <Label class="!text-[12px] text-medium-gray" :text="$t('nft_details_page_button_collect_now')" />
-      <ButtonV2 preset="secondary" class="ml-[16px]" @click="handleClickCollect">
+      <ButtonV2 preset="secondary" @click="handleClickCollect">
         {{ price | formatNumberWithLIKE }}
         <template #prepend>
           <IconPrice />
         </template>
       </ButtonV2>
-    </template>
+    </div>
 
-    <template v-if="ownCount">
+    <template v-if="collectedCount">
       <MenuButtonDivider class="bg-medium-gray" />
       <NuxtLink
         :to="{ name: 'nft-id', params: { id } }"
         @click.native="handleClickOwnNFTPage"
       >
         <Label align="middle" class="text-like-green !text-[12px]" :text="$t('nft_details_page_label_owning')">
-          {{ `${$t('nft_details_page_label_owning')}&nbsp;${ownCount}` }}
+          {{ `${$t('nft_details_page_label_owning')} ${collectedCount}` }}
         </Label>
       </NuxtLink>
     </template>
@@ -52,13 +52,13 @@ export default {
   },
   props: {
     // User collected count
-    ownCount: {
+    collectedCount: {
       type: Number,
       default: undefined,
     },
 
     // User-owned NFT IDs
-    ownNftIds: {
+    collectedNftIds: {
       type: Array,
       default: undefined,
     },
@@ -80,8 +80,10 @@ export default {
     },
   },
   computed: {
-    isOwner() {
-      return this.ownCount && this.ownNftIds.includes(this.currentNftId);
+    isCollector() {
+      return (
+        this.collectedCount && this.collectedNftIds.includes(this.currentNftId)
+      );
     },
   },
   methods: {
