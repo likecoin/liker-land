@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { getLikeCoResizedImageUrl } from '~/util/ui';
+
 export default {
   props: {
     imgSrc: {
@@ -55,7 +57,7 @@ export default {
       return 450;
     },
     resizedImageSrc() {
-      return this.imageSrc.replace(/\?size=\d+/, `?size=${this.imageSize}`);
+      return getLikeCoResizedImageUrl(this.imgSrc, this.imageSize);
     },
   },
   methods: {
