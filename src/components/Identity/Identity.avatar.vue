@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { getLikeCoResizedImageUrl } from '@/util/ui';
 import { DEFAULT_AVATAR } from '../../constant';
 
 export default {
@@ -77,10 +78,7 @@ export default {
       ];
     },
     imageSrc() {
-      return (this.url || DEFAULT_AVATAR).replace(
-        /size=\d+/,
-        `size=${this.size}`
-      );
+      return getLikeCoResizedImageUrl(this.url || DEFAULT_AVATAR, this.size);
     },
     imageStyle() {
       const borderWidth = `${this.size * 0.05}px`;

@@ -106,7 +106,12 @@
 </template>
 
 <script>
-import { ellipsis, ellipsisDescription, formatNumberWithLIKE } from '~/util/ui';
+import {
+  ellipsis,
+  ellipsisDescription,
+  formatNumberWithLIKE,
+  getLikeCoResizedImageUrl,
+} from '~/util/ui';
 
 export default {
   name: 'ItemCard',
@@ -177,7 +182,7 @@ export default {
       return 720;
     },
     resizedImageSrc() {
-      return this.imageSrc.replace(/\?size=\d+/, `?size=${this.imageSize}`);
+      return getLikeCoResizedImageUrl(this.imageUrl, this.imageSize);
     },
   },
   methods: {

@@ -77,7 +77,11 @@
 </template>
 
 <script>
-import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
+import {
+  ellipsis,
+  formatNumberWithLIKE,
+  getLikeCoResizedImageUrl,
+} from '~/util/ui';
 
 export default {
   filters: {
@@ -143,7 +147,7 @@ export default {
       return 350;
     },
     resizedImageSrc() {
-      return this.imageSrc.replace(/\?size=\d+/, `?size=${this.imageSize}`);
+      return getLikeCoResizedImageUrl(this.imageSrc, this.imageSize);
     },
   },
   methods: {

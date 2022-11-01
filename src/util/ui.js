@@ -65,4 +65,8 @@ export function formatNumberWithLIKE(num, options = {}) {
   return formatNumberWithUnit(num, 'LIKE', options);
 }
 
+export function getLikeCoResizedImageUrl(url, size) {
+  return url.replace(/\?size=\d+/, `?size=${size}`);
+}
+
 export default ellipsis;
