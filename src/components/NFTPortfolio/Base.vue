@@ -9,7 +9,7 @@
           v-if="imageSrc"
           loading="lazy"
           class="object-cover w-full h-full max-h-[180px]"
-          :src="imageSrc"
+          :src="resizedImageSrc"
         >
         <img
           v-else
@@ -136,6 +136,14 @@ export default {
     isWritingNft: {
       type: Boolean,
       default: true,
+    },
+  },
+  computed: {
+    imageSize() {
+      return 350;
+    },
+    resizedImageSrc() {
+      return this.imageSrc.replace(/\?size=\d+/, `?size=${this.imageSize}`);
     },
   },
   methods: {

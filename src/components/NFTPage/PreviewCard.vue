@@ -18,7 +18,7 @@
     >
       <img
         class="object-cover w-full max-h-[180px]"
-        :src="imageUrl"
+        :src="resizedImageSrc"
       >
     </div>
     <div
@@ -172,6 +172,12 @@ export default {
   computed: {
     formattedNFTPrice() {
       return `${this.nftPrice || '-'} LIKE`;
+    },
+    imageSize() {
+      return 720;
+    },
+    resizedImageSrc() {
+      return this.imageSrc.replace(/\?size=\d+/, `?size=${this.imageSize}`);
     },
   },
   methods: {
