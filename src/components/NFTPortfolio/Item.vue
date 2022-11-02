@@ -5,7 +5,6 @@
   >
     <NFTPortfolioBase
       class="w-[310px]"
-      :class-id="classId"
       :title="NFTName"
       :price="NFTPrice"
       :is-writing-nft="isWritingNFT"
