@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex items-center justify-center mx-auto">
+  <div class="absolute left-[50%] translate-x-[-50%] flex items-center justify-center mx-auto">
     <!-- Square gem -->
     <div
       v-if="level && level < 13"
