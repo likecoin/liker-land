@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { walletUserCollection } = require('../../../util/firebase');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
-const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../..constant');
+const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
 const {
   isValidAddress,
   checkCosmosSignPayload,
@@ -35,41 +35,47 @@ router.get('/users/v2/self', async (req, res, next) => {
 router.post('/users/v2/login', async (req, res, next) => {
   const { from: inputWallet, signature, publicKey, message } = req.body;
   try {
-    if (isValidAddress(inputWallet)) {
-      if (
-        !checkCosmosSignPayload({
-          signature,
-          publicKey,
-          message,
-          inputWallet,
-        })
-      ) {
-        throw new Error('INVALID_SIGNATURE');
-      }
-
-      req.session.user = inputWallet;
-      req.session.version = 2;
-
-      const userId = inputWallet;
-      const userDoc = await walletUserCollection.doc(userId).get();
-      const isNew = !userDoc.exists;
-      const currentTs = Date.now();
-      const payload = {
-        lastLoginTs: currentTs,
-      };
-      if (isNew) {
-        await walletUserCollection.doc(userId).create({
-          ...payload,
-          ts: currentTs,
-        });
-      } else {
-        await walletUserCollection.doc(userId).update(payload);
-      }
-      res.json({
-        user,
-      });
+    if (!inputWallet || !signature || !publicKey || !message) {
+      res.sendStatus(400);
       return;
     }
+    if (!isValidAddress(inputWallet)) {
+      res.sendStatus(400);
+      return;
+    }
+
+    if (
+      !checkCosmosSignPayload({
+        signature,
+        publicKey,
+        message,
+        inputWallet,
+      })
+    ) {
+      res.sendStatus(401);
+      return;
+    }
+
+    req.session.user = inputWallet;
+    req.session.version = 2;
+
+    const userId = inputWallet;
+    const userDoc = await walletUserCollection.doc(userId).get();
+    const isNew = !userDoc.exists;
+    const currentTs = Date.now();
+    const payload = {
+      lastLoginTs: currentTs,
+    };
+    if (isNew) {
+      await walletUserCollection.doc(userId).create({
+        ...payload,
+        ts: currentTs,
+      });
+    } else {
+      await walletUserCollection.doc(userId).update(payload);
+    }
+    res.sendStatus(200);
+    return;
   } catch (error) {
     console.error(error);
     next(err);
