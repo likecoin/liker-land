@@ -209,7 +209,7 @@ export default {
       const ownNFT = this.ownerList[this.getAddress];
       return ownNFT?.[0];
     },
-    nftDetailsPageURL() {
+    nftClassDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
     canCollectWithoutWallet() {

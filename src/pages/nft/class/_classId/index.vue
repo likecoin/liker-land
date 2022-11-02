@@ -399,7 +399,7 @@ export default {
       this.shareURLPath({
         title: this.NFTName,
         text: this.NFTDescription,
-        path: this.nftDetailsPageURL,
+        path: this.nftClassDetailsPageURL,
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);

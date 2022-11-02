@@ -267,7 +267,7 @@ export default {
       this.shareURLPath({
         title: this.NFTName,
         text: this.NFTDescription,
-        path: this.nftDetailsPageURL,
+        path: this.nftClassDetailsPageURL,
       });
       logTrackerEvent(
         this,
