@@ -37,6 +37,10 @@
         </template>
       </ButtonV2>
     </div>
+    <p
+      v-if="subscriptionId"
+      class="text-medium-gray text-[14px] text-center"
+    >{{ $t('portfolio_empty_submitted_hint') }}</p>
   </div>
 </template>
 
