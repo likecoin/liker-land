@@ -9,6 +9,7 @@
       :class="[
         'flex',
         'flex-col',
+        'gap-[48px]',
         'px-[12px]',
         'laptop:px-[24px]',
         'self-stretch',
@@ -43,6 +44,8 @@
                 :nft-name="NFTName"
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
+                :collected-count="collectedCount"
+                :collector-count="ownerCount"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
@@ -53,30 +56,11 @@
               :items="populatedCollectors"
               :is-narrow="true"
             />
-            <NFTPageMetadataSection
-              class="hidden desktop:block"
-              :content-url="NFTExternalUrl"
-              :iscn-id="iscnId"
-              :iscn-url="iscnURL"
-              :content-fingerprints="nftISCNContentFingerprints"
-            />
           </div>
         </div>
 
         <!-- Right column -->
         <div class="flex flex-col gap-[24px] desktop:col-span-2">
-          <div class="flex items-center w-full">
-            <NFTPageOwningSection
-              class="mr-[16px]"
-              :owned-count="userCollectedCount"
-              :is-transfer-disabled="!getAddress || !userCollectedCount"
-              :is-loading="isOwnerInfoLoading"
-              :is-log-in="!!getAddress"
-              :is-transferring="isTransferring"
-              @openTransfer="onToggleTransfer"
-            />
-            <ShareButton @copy="handleCopyURL" />
-          </div>
           <NFTPagePriceSection
             v-if="NFTPrice"
             :nft-price="NFTPrice"
@@ -84,6 +68,7 @@
             :collected-count="collectedCount"
             :collector-count="ownerCount"
             :is-loading="uiIsOpenCollectModal && isCollecting"
+            :url="NFTExternalUrl"
             @collect="handleCollectFromPriceSection"
             @click-sell="handleClickSellFromPriceSection"
             @hover-sell="handleHoverSellFromPriceSection"
@@ -93,28 +78,21 @@
             :owner-count="ownerCount"
             :items="populatedCollectors"
           />
-          <NFTPageMetadataSection
-            class="desktop:hidden"
-            :content-url="NFTExternalUrl"
-            :iscn-id="iscnId"
-            :iscn-url="iscnURL"
-            :content-fingerprints="nftISCNContentFingerprints"
-          />
           <NFTPageSupplySection
             v-if="isWritingNFT && NFTPrice"
             :collected-count="collectedCount"
             @collect="handleCollectFromSupplySection"
           />
-          <NFTPageEventList
-            :items="populatedEvents"
-            :is-loading="isHistoryInfoLoading"
-            :content-url="NFTExternalUrl"
-            :iscn-id="iscnId"
-            :iscn-url="iscnURL"
-            :content-fingerprints="nftISCNContentFingerprints"
-          />
         </div>
       </section>
+      <NFTPageEventList
+        :items="populatedEvents"
+        :is-loading="isHistoryInfoLoading"
+        :content-url="NFTExternalUrl"
+        :iscn-id="iscnId"
+        :iscn-url="iscnURL"
+        :content-fingerprints="nftISCNContentFingerprints"
+      />
     </div>
     <EventModalTransfer
       :is-open="isOpenTransferModal"
