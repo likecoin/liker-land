@@ -1,4 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
+import stringify from 'fast-json-stable-stringify';
 import {
   LOGIN_MESSAGE,
   LIKECOIN_CHAIN_ID,
@@ -41,7 +42,7 @@ export default {
         const data = {
           signature,
           publicKey: publicKey.value,
-          message: JSON.stringify(message),
+          message: stringify(message),
           from: this.getAddress,
         };
         await this.$api.post('/api/users/signin', data);
