@@ -31,11 +31,13 @@
 </template>
 
 <script>
-import {
-  ARWEAVE_ENDPOINT,
-  APP_LIKE_CO_URL_BASE,
-  IPFS_VIEW_GATEWAY_URL,
-} from '~/constant';
+import { ARWEAVE_ENDPOINT, IPFS_VIEW_GATEWAY_URL } from '~/constant';
+
+const sortOrder = {
+  iscn: 1,
+  ipfs: 2,
+  ar: 3,
+};
 
 export default {
   name: 'NFTPageMetadataSection',
@@ -64,29 +66,20 @@ export default {
           label: this.$t('nft_details_page_section_metadata_iscn'),
           href: this.iscnUrl,
           text: this.iscnId,
+          order: this.getProtocolOrder('iscn'),
         },
       ];
-      const array = this.contentFingerprints;
-      const sorted = array.sort((a, b) => {
-        const sortOrder = {
-          ipfs: 1,
-          ar: 2,
-        };
-        if (sortOrder[a.split('://')[0]] < sortOrder[b.split('://')[0]])
-          return -1;
-        if (sortOrder[a.split('://')[0]] > sortOrder[b.split('://')[0]])
-          return 1;
-        return 0;
-      });
 
-      sorted.forEach(fingerprint => {
+      this.contentFingerprints.forEach(fingerprint => {
         const [protocol, text] = fingerprint.split('://');
+        const order = this.getProtocolOrder(protocol);
         switch (protocol) {
           case 'ar':
             records.push({
               label: this.$t('nft_details_page_section_metadata_ar'),
               href: `${ARWEAVE_ENDPOINT}/${text}`,
               text,
+              order,
             });
             break;
           case 'ipfs':
@@ -94,13 +87,19 @@ export default {
               label: this.$t('nft_details_page_section_metadata_ipfs'),
               href: `${IPFS_VIEW_GATEWAY_URL}/${text}`,
               text,
+              order,
             });
             break;
           default:
             break;
         }
       });
-      return records;
+      return records.sort((a, b) => a.order - b.order);
+    },
+  },
+  methods: {
+    getProtocolOrder(protocol) {
+      return sortOrder[protocol];
     },
   },
 };
