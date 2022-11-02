@@ -128,14 +128,14 @@
         }}</CardV2>
 
         <div v-else class="w-full">
-          <MagicGrid v-show="currentTab === 'collected'" :gap="16" :max-cols="2" :max-col-width="310">
+          <MagicGrid v-show="currentTab === 'collected'" :gap="20" :max-cols="2" :max-col-width="310">
             <NFTPortfolioEmpty v-if="!sortedCollectedNFTs.length" preset="collected" />
             <div v-for="nft in sortedCollectedNFTs" :key="nft.id">
               <NFTPortfolioItem :class-id="nft.classId" class="mb-[12px]" />
             </div>
           </MagicGrid>
 
-          <MagicGrid v-show="currentTab === 'created'" :gap="16" :max-cols="2" :max-col-width="310">
+          <MagicGrid v-show="currentTab === 'created'" :gap="20" :max-cols="2" :max-col-width="310">
             <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
             <div
               v-for="id in sortedCreatedClassIds"
