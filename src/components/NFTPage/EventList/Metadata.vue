@@ -11,7 +11,7 @@
         <Label class="!text-[12px] text-medium-gray font-600">
           {{ $t('nft_details_page_section_metadata_url') }}&nbsp;<IconLinkExternal />
         </Label>
-        <a :href="contentUrl" target="_blank" class="block text-medium-gray underline text-[12px]">{{ contentUrl }}</a>
+        <a :href="contentUrl" rel="noreferrer noopener" target="_blank" class="block text-medium-gray underline text-[12px]">{{ contentUrl }}</a>
       </div>
       <div class="flex mt-[12px] gap-[8px] laptop:mt-0">
         <ButtonV2
