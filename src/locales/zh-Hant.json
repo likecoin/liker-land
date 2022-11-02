@@ -325,7 +325,7 @@
   "portfolio_empty_submitted_hint": "Please check your email to confirm",
   "portfolio_empty_email_placeholder": "abc@example.com",
   "portfolio_empty_notify_button": "Notify Me",
-  "portfolio_empty_notify_button_subscribed": "All Set",
+  "portfolio_empty_notify_button_submitted": "Done",
   "portfolio_empty_notify_success_alert": "Successfully subscribed {creator}, please check your email to confirm.",
   "portfolio_empty_notify_duplicated_alert": "Already subscribed {creator}",
   "portfolio_empty_notify_error_alert": "Error occurred when subscribing {creator}: {error}",

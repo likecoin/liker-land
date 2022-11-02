@@ -77,7 +77,7 @@ export default {
     },
     submitButtonText() {
       if (this.subscriptionId) {
-        return this.$t('portfolio_empty_notify_button_subscribed');
+        return this.$t('portfolio_empty_notify_button_submitted');
       }
       return this.$t('portfolio_empty_notify_button');
     },
