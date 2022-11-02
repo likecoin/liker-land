@@ -56,7 +56,7 @@ function checkCosmosSignPayload({
     inputWallet,
   });
   if (!verified) {
-    return false;
+    throw new Error('INVALID_SIGNATURE');
   }
   let actualPayload = {};
   try {

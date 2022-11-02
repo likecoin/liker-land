@@ -44,15 +44,15 @@ router.post('/users/v2/login', async (req, res, next) => {
       return;
     }
 
-    if (
-      !checkCosmosSignPayload({
+    try {
+      checkCosmosSignPayload({
         signature,
         publicKey,
         message,
         inputWallet,
-      })
-    ) {
-      res.sendStatus(401);
+      });
+    } catch (err) {
+      res.status(401).send(err.message);
       return;
     }
 
