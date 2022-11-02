@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="{ name: 'nft-class-classId', params: { classId } }"
+    :to="detailsPageRoute"
     @click.native="handleClickViewDetails"
   >
     <NFTPortfolioBase
@@ -33,12 +33,30 @@ export default {
       type: String,
       required: true,
     },
+    nftId: {
+      type: String,
+      default: undefined,
+    },
   },
 
   data() {
     return {
       isCollecting: false,
     };
+  },
+  computed: {
+    detailsPageRoute() {
+      if (this.nftId) {
+        return {
+          name: 'nft-class-classId-nftId',
+          params: {
+            classId: this.classId,
+            nftId: this.nftId,
+          },
+        };
+      }
+      return { name: 'nft-class-classId', params: { classId: this.classId } };
+    },
   },
   async mounted() {
     await this.updateNFTClassMetadata();

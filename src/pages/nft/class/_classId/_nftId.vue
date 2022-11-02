@@ -138,7 +138,7 @@ import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 
 export default {
-  name: 'NFTClassDetailsPage',
+  name: 'NFTDetailsPage',
   layout: 'default',
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
@@ -220,6 +220,9 @@ export default {
   computed: {
     classId() {
       return this.$route.params.classId;
+    },
+    nftId() {
+      return this.$route.params.nftId;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
