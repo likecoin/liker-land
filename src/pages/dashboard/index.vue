@@ -129,9 +129,9 @@
 
         <div v-else class="w-full">
           <MagicGrid v-show="currentTab === 'collected'" :gap="16" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
-            <div v-for="id in sortedCollectedClassIds" :key="id">
-              <NFTPortfolioItem :class-id="id" class="mb-[12px]" />
+            <NFTPortfolioEmpty v-if="!sortedCollectedNFTs.length" preset="collected" />
+            <div v-for="nft in sortedCollectedNFTs" :key="nft.id">
+              <NFTPortfolioItem :class-id="nft.classId" class="mb-[12px]" />
             </div>
           </MagicGrid>
 

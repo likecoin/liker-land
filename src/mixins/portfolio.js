@@ -75,8 +75,8 @@ export default {
   computed: {
     ...mapGetters([
       'getCreatedClassIdSorter',
-      'getCollectedClassIdSorter',
-      'getNFTClassIdListByAddress',
+      'getCollectedNFTSorter',
+      'getNFTListByAddress',
     ]),
     userAvatar() {
       return this.userInfo?.avatar;
@@ -84,22 +84,25 @@ export default {
     userDisplayName() {
       return this.userInfo?.displayName || this.wallet;
     },
-    nftClassIds() {
-      return this.getNFTClassIdListByAddress(this.wallet);
+    nftList() {
+      return this.getNFTListByAddress(this.wallet);
+    },
+    collectedNFTs() {
+      return this.nftList?.collected || [];
     },
 
     // for userStats
     collectedClassIds() {
-      return this.nftClassIds?.collected || [];
+      return this.collectedNFTs.map(({ classId }) => classId);
     },
     createdClassIds() {
-      return this.nftClassIds?.created || [];
+      return this.nftList?.created.map(({ classId }) => classId) || [];
     },
 
     // for NFTCardItems
-    sortedCollectedClassIds() {
-      return this.getCollectedClassIdSorter({
-        classIds: this.collectedClassIds,
+    sortedCollectedNFTs() {
+      return this.getCollectedNFTSorter({
+        nfts: this.collectedNFTs,
         nftOwner: this.wallet,
         orderBy: this.collectedOrderBy,
         order: this.collectedOrder,
@@ -205,7 +208,7 @@ export default {
     async loadNFTListByAddress(address) {
       this.wallet = address;
       const fetchPromise = this.fetchNFTListByAddress(address);
-      if (!this.getNFTClassIdListByAddress(address)) {
+      if (!this.getNFTListByAddress(address)) {
         this.isLoading = true;
         await fetchPromise;
         this.isLoading = false;
