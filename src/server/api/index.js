@@ -9,6 +9,7 @@ const users = require('./routes/users');
 const civic = require('./routes/civic');
 const reader = require('./routes/reader');
 const nft = require('./routes/nft');
+const v2Users = require('./routes/users/v2/users');
 const { COOKIE_SECRET } = require('../config/config');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('./constant');
 
@@ -73,6 +74,7 @@ router.use(users);
 router.use(civic);
 router.use(reader);
 router.use(nft);
+router.use(v2Users);
 router.get('/healthz', (_, res) => {
   res.sendStatus(200);
 });
