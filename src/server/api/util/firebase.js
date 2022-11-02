@@ -1,5 +1,8 @@
 const admin = require('firebase-admin');
-const { FIRESTORE_USER_ROOT } = require('../../config/config');
+const {
+  FIRESTORE_USER_ROOT,
+  FIRESTORE_WALLET_USER_ROOT,
+} = require('../../config/config');
 
 let database;
 if (!process.env.CI) {
@@ -24,9 +27,11 @@ const getCollectionIfDefined = root =>
   root ? database.collection(root) : null;
 
 const userCollection = getCollectionIfDefined(FIRESTORE_USER_ROOT);
+const walletUserCollection = getCollectionIfDefined(FIRESTORE_WALLET_USER_ROOT);
 
 module.exports = {
   db,
   FieldValue,
   userCollection,
+  walletUserCollection,
 };
