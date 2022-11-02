@@ -75,7 +75,7 @@ export default {
     },
 
     price: {
-      type: String,
+      type: Number,
       default: undefined,
     },
   },
@@ -94,7 +94,7 @@ export default {
       this.$emit('collect');
     },
     handleClickTransfer() {
-      this.$emit('openTransfer');
+      this.$emit('transfer');
     },
     handleClickSell() {
       this.$emit('click-sell');
