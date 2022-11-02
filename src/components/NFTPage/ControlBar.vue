@@ -31,8 +31,8 @@
     <template v-if="collectedCount">
       <MenuButtonDivider class="bg-medium-gray" />
       <NuxtLink
-        :to="{ name: 'nft-id', params: { id } }"
-        @click.native="handleClickOwnNFTPage"
+        :to="detailsPageRoute"
+        @click.native="handleClickOwnDetailsPage"
       >
         <Label align="middle" class="text-like-green !text-[12px]" :text="$t('nft_details_page_label_owning')">
           {{ `${$t('nft_details_page_label_owning')} ${collectedCount}` }}
@@ -68,6 +68,11 @@ export default {
       default: undefined,
     },
 
+    classId: {
+      type: String,
+      default: undefined,
+    },
+
     // Two views of NFT page. collected & created
     view: {
       type: String,
@@ -85,10 +90,19 @@ export default {
         this.collectedCount && this.collectedNftIds.includes(this.currentNftId)
       );
     },
+    detailsPageRoute() {
+      return {
+        name: 'nft-class-classId-nftId',
+        params: {
+          classId: this.classId,
+          nftId: this.collectedNftIds[0],
+        },
+      };
+    },
   },
   methods: {
-    handleClickOwnNFTPage() {
-      logTrackerEvent(this, 'NFT', 'OwnNFTPage', this.currentNftId, 1);
+    handleClickOwnDetailsPage() {
+      logTrackerEvent(this, 'NFT', 'OwnDetailsPage', this.currentNftId[0], 1);
     },
     handleClickCollect() {
       this.$emit('collect');
