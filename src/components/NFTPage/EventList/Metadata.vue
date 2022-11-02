@@ -66,8 +66,20 @@ export default {
           text: this.iscnId,
         },
       ];
+      const array = this.contentFingerprints;
+      const sorted = array.sort((a, b) => {
+        const sortOrder = {
+          ipfs: 1,
+          ar: 2,
+        };
+        if (sortOrder[a.split('://')[0]] < sortOrder[b.split('://')[0]])
+          return -1;
+        if (sortOrder[a.split('://')[0]] > sortOrder[b.split('://')[0]])
+          return 1;
+        return 0;
+      });
 
-      this.contentFingerprints.forEach(fingerprint => {
+      sorted.forEach(fingerprint => {
         const [protocol, text] = fingerprint.split('://');
         switch (protocol) {
           case 'ar':
