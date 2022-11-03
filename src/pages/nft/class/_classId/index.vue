@@ -108,6 +108,10 @@
           <NFTPageEventList
             :items="populatedEvents"
             :is-loading="isHistoryInfoLoading"
+            :content-url="NFTExternalUrl"
+            :iscn-id="iscnId"
+            :iscn-url="iscnURL"
+            :content-fingerprints="nftISCNContentFingerprints"
           />
         </div>
       </section>
