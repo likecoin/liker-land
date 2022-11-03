@@ -74,7 +74,7 @@ router.post('/users/v2/login', async (req, res, next) => {
     } else {
       await walletUserCollection.doc(userId).update(payload);
     }
-    res.sendStatus(200);
+    res.json({ isNew });
     return;
   } catch (error) {
     console.error(error);
