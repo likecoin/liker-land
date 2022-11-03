@@ -11,7 +11,10 @@
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
-    <div class="flex gap-[16px] items-center">
+    <form
+      class="flex gap-[16px] items-center"
+      @submit="submitEmail"
+    >
       <TextField
         ref="emailTextField"
         type="email"
@@ -36,7 +39,7 @@
           <IconCheck width="20" height="20" />
         </template>
       </ButtonV2>
-    </div>
+    </form>
     <p
       v-if="subscriptionId"
       class="text-medium-gray text-[14px] text-center"
@@ -91,7 +94,8 @@ export default {
     handleEmailInput(email) {
       this.email = email;
     },
-    async submitEmail() {
+    async submitEmail(e) {
+      e.preventDefault();
       if (!this.email || this.subscriptionId) {
         const { emailTextField } = this.$refs;
         if (emailTextField) {
