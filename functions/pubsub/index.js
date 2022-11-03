@@ -96,11 +96,11 @@ module.exports = onMessagePublished(
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
               const subject = `Writing NFT - New NFT by ${displayName} is live`;
               const { body } = getBasicWithAvatarTemplate({
-                title: 'Writing NFT',
-                subtitle: `${displayName}'s new NFT ${name} is now live`,
+                title: displayName,
+                subtitle: `My new Writing NFT ${name} is now live`,
                 content: `<p><img style="width: 100%" src="${image}"></p>
-<p>${name} is now live!</p>
-<p>Go to <a href="${EXTERNAL_URL}/nft/class/${classId}" target="_blank" rel="noreferrer">liker.land</a> to view more details</p>`,
+<p><a href="${EXTERNAL_URL}/nft/class/${classId}/share?utm_medium=email&utm_source=email" target="_blank" rel="noreferrer">${name}</a> is now live!</p>
+<p>Collect and discover more <a href="${EXTERNAL_URL}/campaign/writing-nft?utm_medium=email&utm_source=email" target="_blank" rel="noreferrer">Writing NFT</a></p>`,
                 avatarURL: avatar,
                 isCivicLiker: isSubscribedCivicLiker,
                 unsubscribeLink,
