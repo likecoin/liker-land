@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const { handleRestfulError } = require('../../middleware/error');
 const { isValidAddress } = require('../../util/cosmos');
-const { walletUserCollection } = require('../../util/firebase');
+const { FieldValue, walletUserCollection } = require('../../util/firebase');
 
 const router = Router();
 
@@ -29,17 +29,14 @@ router.post('/nft/hidden', async (req, res, next) => {
       res.sendStatus(401);
       return;
     }
-    const { nftClassIds: inputNftClassIds = [] } = req.body;
-    if (!inputNftClassIds.length) {
+    const { nftClassIds = [] } = req.body;
+    if (!nftClassIds.length) {
       res.sendStatus(400);
       return;
     }
-    const userDoc = await walletUserCollection(user).get();
-    const { hiddenNftClassIds = [] } = userDoc.data();
-    const newHiddenNftClassIds = Array.from(
-      new Set([...hiddenNftClassIds, ...inputNftClassIds])
-    );
-    await userDoc.ref.update({ hiddenNftClassIds: newHiddenNftClassIds });
+    await walletUserCollection.doc(user).update({
+      hiddenNftClassIds: FieldValue.arrayUnion(...nftClassIds),
+    });
     res.sendStatus(200);
   } catch (err) {
     handleRestfulError(req, res, next, err);
@@ -54,19 +51,14 @@ router.delete('/nft/hidden', async (req, res, next) => {
       res.sendStatus(401);
       return;
     }
-    const { nftClassIds: inputNftClassIds = [] } = req.body;
-    if (!inputNftClassIds.length) {
+    const { nftClassIds = [] } = req.body;
+    if (!nftClassIds.length) {
       res.sendStatus(400);
       return;
     }
-    const userDoc = await walletUserCollection(user).get();
-    const { hiddenNftClassIds = [] } = userDoc.data();
-    const set = new Set(hiddenNftClassIds);
-    inputNftClassIds.forEach(classId => {
-      if (set.has(classId)) set.delete(classId);
+    await walletUserCollection.doc(user).update({
+      hiddenNftClassIds: FieldValue.arrayRemove(...nftClassIds),
     });
-    const newHiddenNftClassIds = Array.from(set);
-    await userDoc.ref.update({ hiddenNftClassIds: newHiddenNftClassIds });
     res.sendStatus(200);
   } catch (err) {
     handleRestfulError(req, res, next, err);
