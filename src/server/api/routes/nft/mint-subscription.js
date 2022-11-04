@@ -49,37 +49,6 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
   }
 });
 
-router.get('/nft/mint-subscription', async (req, res, next) => {
-  const { wallet: subscribedWallet, email: subscriberEmail } = req.query;
-  if (!subscribedWallet) {
-    res.status(400).send('MISSING_SUBSCRIPTION_WALLET');
-    return;
-  }
-
-  if (!subscriberEmail) {
-    res.status(400).send('MISSING_SUBSCRIBER_EMAIL');
-    return;
-  }
-
-  try {
-    const querySnapshot = await nftMintSubscriptionCollection
-      .where('subscribedWallet', '==', subscribedWallet)
-      .where('subscriberEmail', '==', subscriberEmail)
-      .limit(1)
-      .get();
-    if (querySnapshot.empty) {
-      res.status(404).send('SUBSCRIPTION_NOT_FOUND');
-      return;
-    }
-
-    const [subscriptionDoc] = querySnapshot.docs;
-    const ts = subscriptionDoc.get('ts').toMillis();
-    res.json({ ts });
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
-  }
-});
-
 router.get('/nft/mint-subscription/:id', async (req, res, next) => {
   const { id: subscriptionId } = req.params;
   try {
