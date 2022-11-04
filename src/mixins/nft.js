@@ -132,6 +132,10 @@ export default {
       return this.NFTClassMetadata.description;
     },
     NFTImageUrl() {
+      const { image = '' } = this.NFTClassMetadata;
+      const [schema, path] = image.split('://');
+      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
       return this.NFTClassMetadata.image;
     },
     NFTImageBackgroundColor() {
