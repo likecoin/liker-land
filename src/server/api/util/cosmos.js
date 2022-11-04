@@ -25,7 +25,7 @@ function publicKeyBinaryToAddresses(publicKey) {
   return { likeAddress };
 }
 
-function verifyCosmosSignInPayload({
+function verifyCosmosSignedMessage({
   signature,
   publicKey,
   message,
@@ -49,7 +49,7 @@ function checkCosmosSignPayload({
   message,
   inputWallet,
 }) {
-  const verified = verifyCosmosSignInPayload({
+  const verified = verifyCosmosSignedMessage({
     signature,
     publicKey,
     message,
@@ -78,5 +78,4 @@ function checkCosmosSignPayload({
 module.exports = {
   isValidAddress,
   checkCosmosSignPayload,
-  verifyCosmosSignInPayload,
 };
