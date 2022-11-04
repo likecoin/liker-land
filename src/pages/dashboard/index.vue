@@ -172,12 +172,12 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin from '~/mixins/portfolio';
-import signInMixin from '~/mixins/signIn';
+import authMixin from '~/mixins/auth';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin, signInMixin],
+  mixins: [walletMixin, portfolioMixin, authMixin],
   data() {
     return { hasSwitchedWallet: false };
   },
