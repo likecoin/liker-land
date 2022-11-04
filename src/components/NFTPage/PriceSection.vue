@@ -70,7 +70,7 @@
       <ButtonV2
         preset="primary"
         :text="$t('campaign_nft_item_view_details_label')"
-        class="!border-[2px] !border-like-cyan-light ml-[18px]"
+        class="hidden laptop:block !border-[2px] !border-like-cyan-light ml-[18px]"
         :href="url"
         target="_blank"
         @click="handleClickViewContent"

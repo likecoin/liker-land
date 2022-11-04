@@ -200,6 +200,7 @@ export const getNFTOwners = classId => {
 
 export const getNFTEvents = ({
   classId,
+  nftId,
   limit,
   key,
   actionType,
@@ -207,6 +208,7 @@ export const getNFTEvents = ({
 }) => {
   const qsPayload = {
     class_id: classId,
+    nft_id: nftId,
     action_type: actionType,
     ignore_to_list: ignoreToList,
   };

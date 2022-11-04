@@ -6,31 +6,14 @@
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
       v-else
-      :class="[
-        'flex',
-        'flex-col',
-        'gap-[48px]',
-        'px-[12px]',
-        'laptop:px-[24px]',
-        'self-stretch',
-
-        'w-full',
-        'max-w-[1024px]',
-        'mx-auto',
-        'pb-[120px]',
-      ]"
+      class="px-[12px] laptop:px-[24px] pb-[120px] w-full"
     >
-      <section
-        :class="[
-          'grid',
-          'grid-cols-1',
-          'desktop:grid-cols-3',
-          'gap-[24px]',
-        ]"
-      >
-        <!-- Left column -->
-        <div class="flex flex-col gap-[24px]">
-          <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
+
+      <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
+        <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
+
+          <!-- Left column -->
+          <div class="col-span-1 grid laptop:grid-cols-2 desktop:grid-cols-1 gap-[24px]">
             <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
@@ -51,49 +34,55 @@
               />
             </NFTGemWrapper>
             <NFTPageCollectorList
-              class="hidden desktop:block"
+              class="hidden laptop:block"
               :owner-count="ownerCount"
               :items="populatedCollectors"
               :is-narrow="true"
             />
           </div>
-        </div>
 
-        <!-- Right column -->
-        <div class="flex flex-col gap-[24px] desktop:col-span-2">
-          <NFTPagePriceSection
-            v-if="NFTPrice"
-            :nft-price="NFTPrice"
-            :nft-price-u-s-d="formattedNFTPriceUSD"
-            :collected-count="collectedCount"
-            :collector-count="ownerCount"
-            :is-loading="uiIsOpenCollectModal && isCollecting"
-            :url="NFTExternalUrl"
-            @collect="handleCollectFromPriceSection"
-            @click-sell="handleClickSellFromPriceSection"
-            @hover-sell="handleHoverSellFromPriceSection"
+          <!-- Right column -->
+          <div class="flex flex-col gap-[24px] desktop:col-span-2">
+            <NFTPagePriceSection
+              v-if="NFTPrice"
+              :nft-price="NFTPrice"
+              :nft-price-u-s-d="formattedNFTPriceUSD"
+              :collected-count="collectedCount"
+              :collector-count="ownerCount"
+              :is-loading="uiIsOpenCollectModal && isCollecting"
+              :url="NFTExternalUrl"
+              @collect="handleCollectFromPriceSection"
+              @click-sell="handleClickSellFromPriceSection"
+              @hover-sell="handleHoverSellFromPriceSection"
+            />
+            <NFTPageCollectorList
+              class="laptop:hidden"
+              :owner-count="ownerCount"
+              :items="populatedCollectors"
+            />
+            <NFTPageSupplySection
+              v-if="isWritingNFT && NFTPrice"
+              :collected-count="collectedCount"
+              @collect="handleCollectFromSupplySection"
+            />
+          </div>
+        </section>
+
+        <Separator class="mx-auto" />
+
+        <section>
+          <NFTPageEventList
+            :items="populatedEvents"
+            :is-loading="isHistoryInfoLoading"
+            :content-url="NFTExternalUrl"
+            :iscn-id="iscnId"
+            :iscn-url="iscnURL"
+            :content-fingerprints="nftISCNContentFingerprints"
           />
-          <NFTPageCollectorList
-            class="desktop:hidden"
-            :owner-count="ownerCount"
-            :items="populatedCollectors"
-          />
-          <NFTPageSupplySection
-            v-if="isWritingNFT && NFTPrice"
-            :collected-count="collectedCount"
-            @collect="handleCollectFromSupplySection"
-          />
-        </div>
-      </section>
-      <NFTPageEventList
-        :items="populatedEvents"
-        :is-loading="isHistoryInfoLoading"
-        :content-url="NFTExternalUrl"
-        :iscn-id="iscnId"
-        :iscn-url="iscnURL"
-        :content-fingerprints="nftISCNContentFingerprints"
-      />
+        </section>
+      </div>
     </div>
+
     <EventModalTransfer
       :is-open="isOpenTransferModal"
       :is-transferring="isTransferring"

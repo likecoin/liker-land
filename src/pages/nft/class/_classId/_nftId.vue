@@ -6,30 +6,14 @@
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
       v-else
-      :class="[
-        'flex',
-        'flex-col',
-        'px-[12px]',
-        'laptop:px-[24px]',
-        'self-stretch',
-
-        'w-full',
-        'max-w-[1024px]',
-        'mx-auto',
-        'pb-[120px]',
-      ]"
+      class="px-[12px] laptop:px-[24px] pb-[120px] w-full"
     >
-      <section
-        :class="[
-          'grid',
-          'grid-cols-1',
-          'desktop:grid-cols-3',
-          'gap-[24px]',
-        ]"
-      >
-        <!-- Left column -->
-        <div class="flex flex-col gap-[24px]">
-          <div class="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-1 items-stretch gap-[24px]">
+
+      <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
+        <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
+
+          <!-- Left column -->
+          <div class="flex flex-col items-center col-span-1 desktop:order-2">
             <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
@@ -47,71 +31,78 @@
                 @view-content="handleViewContent"
               />
             </NFTGemWrapper>
-            <NFTPageCollectorList
-              class="hidden desktop:block"
-              :owner-count="ownerCount"
-              :items="populatedCollectors"
-              :is-narrow="true"
-            />
-            <NFTPageMetadataSection
-              class="hidden desktop:block"
-              :content-url="NFTExternalUrl"
-              :iscn-id="iscnId"
-              :iscn-url="iscnURL"
-              :content-fingerprints="nftISCNContentFingerprints"
-            />
+            <ButtonV2
+              class="mt-[24px] text-medium-gray"
+              content-class="text-[12px]"
+              preset="plain"
+              size="mini"
+              :to="{ name: 'nft-class-classId', params: { classId } }"
+            >
+              <template #prepend>
+                <IconEye class="w-[12px] h-[12px]" />
+              </template>
+              {{ $t('nft_details_page_button_view_details') }}
+            </ButtonV2>
           </div>
-        </div>
 
-        <!-- Right column -->
-        <div class="flex flex-col gap-[24px] desktop:col-span-2">
-          <div class="flex items-center w-full">
-            <NFTPageOwningSection
-              class="mr-[16px]"
-              :owned-count="userCollectedCount"
-              :is-transfer-disabled="!getAddress || !userCollectedCount"
-              :is-loading="isOwnerInfoLoading"
-              :is-log-in="!!getAddress"
-              :is-transferring="isTransferring"
-              @openTransfer="onToggleTransfer"
+          <!-- Right column -->
+          <div class="col-span-2 flex flex-col items-center gap-[24px]">
+            <CardV2 class="flex gap-[24px] w-full">
+              <div>
+                <Label
+                  class="text-medium-gray text-[12px]"
+                  preset="h6"
+                  :text="$t('nft_details_page_label_owning')"
+                />
+                <div class="mt-[4px] text-[600]">{{ nftCollectorCollectedCount }}</div>
+              </div>
+              <hr class="w-[2px] bg-shade-gray h-[48px] border-none shrink-0">
+              <div class="min-w-0">
+                <Label
+                  class="text-medium-gray text-[12px]"
+                  preset="h6"
+                  :text="$t('nft_details_page_label_nft_id')"
+                />
+                <div class="mt-[4px] flex items-center relativ gap-[8px]">
+                  <select
+                    v-model="selectedNFTId"
+                    class="absolute opacity-0"
+                    @change="onSelectNFT"
+                  >
+                    <option
+                      v-for="id in nftCollectorCollectedNFTList"
+                      :key="id"
+                      :value="id"
+                    >{{ id }}</option>
+                  </select>
+                  <div class="truncate">{{ selectedNFTId }}</div>
+                  <IconArrowDown class="w-[12px] h-[12px] shrink-0" />
+                </div>
+              </div>
+            </CardV2>
+            <hr class="w-[2px] h-[24px] bg-medium-gray border-none">
+            <MessageIdentity
+              :type="nftCollectorWalletAddress === iscnOwner ? 'creator' : 'collector'"
+              :wallet-address="nftCollectorWalletAddress"
             />
-            <ShareButton @copy="handleCopyURL" />
           </div>
-          <NFTPagePriceSection
-            v-if="NFTPrice"
-            :nft-price="NFTPrice"
-            :nft-price-u-s-d="formattedNFTPriceUSD"
-            :collected-count="collectedCount"
-            :collector-count="ownerCount"
-            :is-loading="uiIsOpenCollectModal && isCollecting"
-            @collect="handleCollectFromPriceSection"
-            @click-sell="handleClickSellFromPriceSection"
-            @hover-sell="handleHoverSellFromPriceSection"
-          />
-          <NFTPageCollectorList
-            class="desktop:hidden"
-            :owner-count="ownerCount"
-            :items="populatedCollectors"
-          />
-          <NFTPageMetadataSection
-            class="desktop:hidden"
+        </section>
+
+        <Separator class="mx-auto" />
+
+        <section>
+          <NFTPageEventList
+            :items="populatedEvents"
+            :is-loading="isHistoryInfoLoading"
             :content-url="NFTExternalUrl"
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
             :content-fingerprints="nftISCNContentFingerprints"
           />
-          <NFTPageSupplySection
-            v-if="isWritingNFT && NFTPrice"
-            :collected-count="collectedCount"
-            @collect="handleCollectFromSupplySection"
-          />
-          <NFTPageEventList
-            :items="populatedEvents"
-            :is-loading="isHistoryInfoLoading"
-          />
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
+
     <EventModalTransfer
       :is-open="isOpenTransferModal"
       :is-transferring="isTransferring"
@@ -129,9 +120,11 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { EXTERNAL_HOST } from '~/constant';
+
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
-import { EXTERNAL_HOST } from '~/constant';
+import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -140,6 +133,9 @@ import navigationListenerMixin from '~/mixins/navigation-listener';
 export default {
   name: 'NFTDetailsPage',
   layout: 'default',
+  filters: {
+    ellipsis,
+  },
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
@@ -207,6 +203,8 @@ export default {
   },
   data() {
     return {
+      // For <select> to change only, please use `this.nftId` instead
+      selectedNFTId: this.$route.params.nftId,
       toAddress: null,
       isLoading: true,
 
@@ -301,6 +299,14 @@ export default {
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice']),
+    onSelectNFT(e) {
+      const { value: nftId } = e.target;
+      logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: this.classId, nftId },
+      });
+    },
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
