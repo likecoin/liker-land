@@ -28,11 +28,10 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
     .where('subscribedWallet', '==', subscribedWallet)
     .limit(1);
   try {
-    await db.runTransaction(async t => {
+    const result = await db.runTransaction(async t => {
       const querySnapshot = await t.get(queryRef);
       if (!querySnapshot.empty) {
-        res.status(409).send('ALREADY_SUBSCRIBED');
-        return;
+        throw new Error('ALREADY_SUBSCRIBED');
       }
 
       const subscriptionId = uuidv4();
@@ -42,10 +41,15 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
         subscribedWallet,
         ts: firestore.FieldValue.serverTimestamp(),
       });
-      res.json({ subscriptionId });
+      return { subscriptionId };
     });
+    res.json(result);
   } catch (err) {
-    handleRestfulError(req, res, next, err);
+    if (err.message === 'ALREADY_SUBSCRIBED') {
+      res.status(409).send(err.message);
+    } else {
+      handleRestfulError(req, res, next, err);
+    }
   }
 });
 
@@ -83,21 +87,22 @@ router.put('/nft/mint-subscription/:id', async (req, res, next) => {
     await db.runTransaction(async t => {
       const doc = await t.get(docRef);
       if (!doc.exists) {
-        res.status(404).send('SUBSCRIPTION_NOT_FOUND');
-        return;
+        throw new Error('SUBSCRIPTION_NOT_FOUND');
       }
 
       const { subscriberEmail } = doc.data();
       if (email !== subscriberEmail) {
-        res.status(404).send('SUBSCRIPTION_NOT_FOUND');
-        return;
+        throw new Error('SUBSCRIPTION_NOT_FOUND');
       }
-
-      await t.set(docRef, { isVerified: true }, { merge: true });
-      res.sendStatus(200);
+      await t.update(docRef, { isVerified: true });
     });
+    res.sendStatus(200);
   } catch (err) {
-    handleRestfulError(req, res, next, err);
+    if (err.message === 'SUBSCRIPTION_NOT_FOUND') {
+      res.status(404).send(err.message);
+    } else {
+      handleRestfulError(req, res, next, err);
+    }
   }
 });
 
