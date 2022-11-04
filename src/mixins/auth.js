@@ -45,7 +45,7 @@ export default {
           message: stringify(message),
           from: this.getAddress,
         };
-        await this.$api.post('/api/users/v2/login', data);
+        await this.$api.post('/api/v2/users/login', data);
       } catch (error) {
         return error;
       }
