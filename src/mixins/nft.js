@@ -111,7 +111,9 @@ export default {
       return this.NFTClassMetadata.iscn_id;
     },
     iscnOwner() {
-      return this.NFTClassMetadata.iscn_owner;
+      return (
+        this.NFTClassMetadata.iscn_owner || this.NFTClassMetadata.account_owner
+      );
     },
     iscnOwnerAvatar() {
       return this.iscnOwnerInfo.avatar || getIdenticonAvatar(this.iscnOwner);
@@ -287,9 +289,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
-      this.updateDisplayNameList(
-        this.getNFTClassMetadataById(this.classId)?.iscn_owner
-      );
+      this.updateDisplayNameList(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
       await this.fetchNFTPurchaseInfo(this.classId);
