@@ -44,27 +44,8 @@ export function updateSentryUser(vue, { user, displayName }) {
   }
 }
 
-export function updateCrispUser(vue, { user, crispToken, displayName, email }) {
-  if (vue.crisp) {
-    const { $crisp } = window;
-    if (displayName) $crisp.push(['set', 'user:nickname', [displayName]]);
-    if (email) {
-      const emailPayload = [email];
-      if (crispToken) emailPayload.push(crispToken);
-      $crisp.push(['set', 'user:email', emailPayload]);
-    }
-  }
-}
-
 export function logTrackerEvent(vue, category, action, label, value) {
   try {
-    if (vue.$crisp) {
-      vue.$crisp.push([
-        'set',
-        'session:event',
-        [[[`liker-land_${action}`, { label }]]],
-      ]);
-    }
     // do not track
     if (window.doNotTrack || navigator.doNotTrack) return;
     if (vue.$gtag) {

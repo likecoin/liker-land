@@ -1,6 +1,6 @@
 import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
-import { updateSentryUser, updateCrispUser } from '@/util/EventLogger';
+import { updateSentryUser } from '@/util/EventLogger';
 import { normalizeLocaleForLikeCo } from '@/locales';
 
 export async function postLoginToken(
@@ -16,7 +16,6 @@ export async function postLoginToken(
     dispatch('setLocale', user.locale);
   }
   if (this.$sentry) updateSentryUser(this, user);
-  if (this.$crisp) updateCrispUser(this, user);
   return user;
 }
 
@@ -29,7 +28,6 @@ export async function fetchLoginStatus({ commit, dispatch }) {
     }
 
     if (this.$sentry) updateSentryUser(this, user);
-    if (this.$crisp) updateCrispUser(this, user);
     return user;
   } catch (err) {
     return false;
