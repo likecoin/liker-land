@@ -5,8 +5,6 @@
     :header-text="headerText"
     preset="collect"
     @close="$emit('close')"
-    @handle-share="handleShare"
-    @go-portfolio="goToPortfolio"
   >
     <template #header-prepend>
       <IconPrice />
@@ -59,7 +57,7 @@
         preset="secondary"
         :text="$t('nft_details_page_button_share')"
         class="mr-[12px]"
-        @click="$emit('handle-share')"
+        @click="handleShare"
       >
         <template #prepend>
           <IconShare />
@@ -68,7 +66,7 @@
       <ButtonV2
         preset="outline"
         :text="$t('nft_details_page_button_portfolio')"
-        @click="$emit('go-portfolio')"
+        @click="goToPortfolio"
       />
     </template>
 
