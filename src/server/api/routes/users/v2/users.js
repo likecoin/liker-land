@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { walletUserCollection } = require('../../../util/firebase');
+const { db, walletUserCollection } = require('../../../util/firebase');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
 const {
@@ -60,21 +60,23 @@ router.post('/v2/users/login', async (req, res, next) => {
     req.session.version = 2;
 
     const userId = inputWallet;
-    const userDoc = await walletUserCollection.doc(userId).get();
-    const isNew = !userDoc.exists;
-    const currentTs = Date.now();
-    const payload = {
-      lastLoginTs: currentTs,
-    };
-    if (isNew) {
-      await walletUserCollection.doc(userId).create({
-        ...payload,
-        ts: currentTs,
-      });
-    } else {
-      await walletUserCollection.doc(userId).update(payload);
-    }
-    res.json({ isNew });
+    await db.runTransaction(async t => {
+      const userDoc = await t.get(walletUserCollection.doc(userId));
+      const isNew = !userDoc.exists;
+      const currentTs = Date.now();
+      const payload = {
+        lastLoginTs: currentTs,
+      };
+      if (isNew) {
+        await t.set(walletUserCollection.doc(userId), {
+          ...payload,
+          ts: currentTs,
+        });
+      } else {
+        await t.update(walletUserCollection.doc(userId), payload);
+      }
+      res.json({ isNew });
+    });
     return;
   } catch (error) {
     console.error(error);
