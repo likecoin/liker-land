@@ -81,10 +81,17 @@
               </div>
             </CardV2>
             <hr class="w-[2px] h-[24px] bg-medium-gray border-none">
-            <MessageIdentity
-              :type="nftCollectorWalletAddress === iscnOwner ? 'creator' : 'collector'"
-              :wallet-address="nftCollectorWalletAddress"
-            />
+            <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
+              <NFTMessage
+                v-for="m in messageList"
+                :key="m.txHash"
+                :type="m.event"
+                :tx-hash="m.txHash"
+                :from-wallet="m.fromWallet"
+                :to-wallet="m.toWallet"
+                tag="li"
+              />
+            </ul>
           </div>
         </section>
 
@@ -224,6 +231,20 @@ export default {
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
+    },
+    messageList() {
+      return [...this.populatedEvents]
+        .filter(e => e.event !== 'new_class')
+        .map(e => {
+          if (e.event === 'purchase') {
+            return {
+              ...e,
+              fromWallet: this.iscnOwner,
+              toWallet: '',
+            };
+          }
+          return e;
+        });
     },
   },
   asyncData({ query }) {
