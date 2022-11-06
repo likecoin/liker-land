@@ -150,9 +150,7 @@ export function isValidHttpUrl(string) {
 }
 
 export function isWritingNFT(classMetadata) {
-  return (
-    classMetadata?.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
-  );
+  return classMetadata?.nft_meta_collection_id === 'likerland_writing_nft';
 }
 
 export function formatNFTInfo(nftInfo) {
