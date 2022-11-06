@@ -8,6 +8,7 @@ import {
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { getUserNFTStats } from '~/util/api';
 
 export default {
   mixins: [clipboardMixin],
@@ -62,6 +63,7 @@ export default {
     return {
       wallet: undefined,
       userInfo: null,
+      userStats: null,
       currentTab: ['collected', 'created'].includes(this.$route.query.tab)
         ? this.$route.query.tab
         : 'created',
@@ -213,6 +215,10 @@ export default {
       if (!this.sortedCreatedClassIds.length) {
         this.currentTab = 'collected';
       }
+    },
+    async updateUserStats(address) {
+      const { data } = await this.$api.get(getUserNFTStats(address));
+      this.userStats = data;
     },
     goCollected() {
       this.currentTab = 'collected';

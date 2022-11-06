@@ -9,47 +9,29 @@
   </component>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
-
 export default {
   props: {
     tag: {
       type: String,
       default: 'div',
     },
-    collectedClassIds: {
-      type: Array,
-      default: () => [],
-    },
-    createdClassIds: {
-      type: Array,
-      default: () => [],
+    userStats: {
+      type: Object,
+      default: () => ({}),
     },
   },
   computed: {
-    ...mapGetters(['getNFTClassPurchaseInfoById', 'getNFTClassOwnerInfoById']),
     collectedCount() {
-      return this.collectedClassIds.length;
+      return this.userStats?.collectedClassCount || 0;
     },
     collectedAmount() {
-      return this.collectedClassIds.reduce(
-        (total, id) =>
-          total + (this.getNFTClassPurchaseInfoById(id)?.price || 0),
-        0
-      );
+      return this.userStats?.collectedNftValue || 0;
     },
     createdCount() {
-      return this.createdClassIds.length;
+      return this.userStats?.createdClassCount || 0;
     },
     createdCollectorCount() {
-      const ownerSet = new Set();
-      this.createdClassIds.forEach(classId => {
-        const ownerInfo = this.getNFTClassOwnerInfoById(classId);
-        if (ownerInfo) {
-          Object.keys(ownerInfo).forEach(owner => ownerSet.add(owner));
-        }
-      });
-      return ownerSet.size;
+      return this.userStats?.createdCollectorCount || 0;
     },
   },
 };

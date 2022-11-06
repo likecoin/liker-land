@@ -51,8 +51,7 @@
             <UserStatsPortfolio
               v-if="isReferrerTheCreator"
               class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-              :collected-class-ids="collectedClassIds"
-              :created-class-ids="createdClassIds"
+              :user-stats="userStats"
               :is-loading="isLoading"
             />
             <ButtonV2
@@ -254,12 +253,12 @@ export default {
     await store.dispatch('fetchNFTMetadata', classId);
   },
   async mounted() {
-    await Promise.all([
+    const promises = [
       this.updateDisplayNameList(this.iscnOwner),
       this.updateNFTPurchaseInfo(),
       this.updateNFTOwners(),
       this.updateReferrerInfo(),
-    ]);
+    ];
     if (
       this.referrer &&
       this.referrer !== this.iscnOwner &&
@@ -276,8 +275,9 @@ export default {
       return;
     }
     if (this.isReferrerTheCreator) {
-      await this.loadNFTListByAddress(this.referrer);
+      promises.push(this.updateUserStats(this.referrer).catch(() => {}));
     }
+    await Promise.all(promises);
     this.isLoading = false;
   },
   methods: {

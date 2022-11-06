@@ -1,8 +1,7 @@
 <template>
   <UserStatsBase
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-    :collected-class-ids="collectedClassIds"
-    :created-class-ids="createdClassIds"
+    :user-stats="userStats"
   >
     <template v-slot="stats">
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_collected')">
@@ -48,13 +47,9 @@ export default {
     formatNumber,
   },
   props: {
-    collectedClassIds: {
-      type: Array,
-      default: () => [],
-    },
-    createdClassIds: {
-      type: Array,
-      default: () => [],
+    userStats: {
+      type: Object,
+      default: () => ({}),
     },
     isLoading: {
       type: Boolean,
