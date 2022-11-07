@@ -11,6 +11,7 @@
 </template>
 <script>
 import portfolio from '~/mixins/portfolio';
+import { getUserNFTStats } from '~/util/api';
 
 export default {
   mixins: [portfolio],
@@ -23,6 +24,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      userStats: null,
+    };
   },
   computed: {
     collectedCount() {
@@ -38,11 +44,17 @@ export default {
       return this.userStats?.createdCollectorCount || 0;
     },
     isLoadingStats() {
-      return this.userStats === null;
+      return !this.userStats;
     },
   },
   mounted() {
     this.updateUserStats(this.statWallet);
+  },
+  methods: {
+    async updateUserStats(address) {
+      const { data } = await this.$api.get(getUserNFTStats(address));
+      this.userStats = data;
+    },
   },
 };
 </script>
