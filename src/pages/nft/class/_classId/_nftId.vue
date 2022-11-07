@@ -13,7 +13,7 @@
         <div class="flex items-center justify-end w-full">
           <NFTPageControlBar
             :collected-count="ownCount"
-            :collected-nft-ids="ownedNFTList"
+            :collected-nft-ids="userCollectedNFTList"
             :class-id="classId"
             :current-nft-id="nftId"
             view="collected"

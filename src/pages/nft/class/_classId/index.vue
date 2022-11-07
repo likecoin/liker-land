@@ -15,7 +15,7 @@
             :collected-count="ownCount"
             :class-id="classId"
             :price="NFTPrice"
-            :collected-nft-ids="ownedNFTList"
+            :collected-nft-ids="userCollectedNFTList"
           />
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">

@@ -171,7 +171,7 @@ export default {
       return this.getNFTClassCollectedCount(this.classId);
     },
 
-    ownedNFTList() {
+    userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
       return collectedList ? Object.values(collectedList) : [];
     },
