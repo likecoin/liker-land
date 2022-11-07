@@ -10,7 +10,12 @@
     >
 
       <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
-        <div class="flex items-center justify-end w-full">
+        <div class="flex items-center justify-between w-full">
+          <NFTMessageIdentity
+            type="collector"
+            :wallet-address="nftCollectorWalletAddress"
+            wrapper-classes="!bg-transparent"
+          />
           <NFTPageControlBar
             :collected-count="ownCount"
             :collected-nft-ids="userCollectedNFTList"

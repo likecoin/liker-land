@@ -1,6 +1,17 @@
 <template>
   <NuxtLink
-    class="flex items-center gap-[16px] pl-[8px] pr-[24px] py-[8px] bg-white rounded-full cursor-pointer"
+    :class="[
+      'flex',
+      'items-center',
+      'gap-[16px]',
+      'pl-[8px]',
+      'pr-[24px]',
+      'py-[8px]',
+      'bg-white',
+      'rounded-full',
+      'cursor-pointer',
+      wrapperClasses
+    ]"
     :to="toRoute"
   >
     <Identity
@@ -35,6 +46,10 @@ export default {
     type: {
       type: String,
       default: 'collector',
+    },
+    wrapperClasses: {
+      type: [String, Array],
+      default: undefined,
     },
   },
   computed: {
