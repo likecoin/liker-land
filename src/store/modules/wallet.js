@@ -23,7 +23,7 @@ const state = () => ({
   isInited: null,
   methodType: null,
   likeBalance: null,
-  likeBalanceFetchPromise: false,
+  likeBalanceFetchPromise: null,
 });
 
 const mutations = {
