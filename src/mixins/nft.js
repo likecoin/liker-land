@@ -171,6 +171,11 @@ export default {
       return this.getNFTClassCollectedCount(this.classId);
     },
 
+    ownedNFTList() {
+      const collectedList = this.collectorMap[this.getAddress];
+      return collectedList ? Object.values(collectedList) : [];
+    },
+
     // Collector Info
     nftCollectorWalletAddress() {
       if (!this.nftId) return undefined;

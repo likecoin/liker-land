@@ -86,6 +86,11 @@ export default {
   },
   computed: {
     isCollector() {
+      // For Class page
+      if (!this.currentNftId) {
+        return !!this.collectedCount;
+      }
+      // For NFT Details page
       return (
         this.collectedCount && this.collectedNftIds.includes(this.currentNftId)
       );
@@ -95,7 +100,7 @@ export default {
         name: 'nft-class-classId-nftId',
         params: {
           classId: this.classId,
-          nftId: this.collectedNftIds[0],
+          nftId: this.collectedNftIds && this.collectedNftIds[0],
         },
       };
     },

@@ -10,8 +10,17 @@
     >
 
       <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
+        <div class="flex items-center justify-end w-full">
+          <NFTPageControlBar
+            :collected-count="ownCount"
+            :collected-nft-ids="ownedNFTList"
+            :class-id="classId"
+            :current-nft-id="nftId"
+            view="collected"
+            :price="NFTPrice"
+          />
+        </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
-
           <!-- Left column -->
           <div class="flex flex-col items-center col-span-1 desktop:order-2">
             <NFTGemWrapper :collected-count="collectedCount">
