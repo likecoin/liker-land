@@ -1,5 +1,5 @@
 <template>
-  <UserStatsBase
+  <UserStatsController
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
     :stat-wallet="statWallet"
   >
@@ -37,7 +37,7 @@
         </Label>
       </ToolTips>
     </template>
-  </UserStatsBase>
+  </UserStatsController>
 </template>
 <script>
 import { formatNumber } from '~/util/ui';

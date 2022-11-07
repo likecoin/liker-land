@@ -1,5 +1,5 @@
 <template>
-  <UserStatsBase
+  <UserStatsController
     class="flex flex-col items-center w-full laptop:flex-row"
     :stat-wallet="statWallet"
   >
@@ -80,7 +80,7 @@
         </UserStatsItem>
       </div>
     </template>
-  </UserStatsBase>
+  </UserStatsController>
 </template>
 <script>
 import { formatNumber } from '~/util/ui';
