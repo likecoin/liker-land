@@ -92,10 +92,15 @@ export async function initIfNecessary({ dispatch }) {
 
 export async function walletFetchLIKEBalance({ commit, state }) {
   const { address } = state;
-  const balanceFetch = getAccountBalance(address);
-  commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
-  const balance = await balanceFetch;
-  commit(types.WALLET_SET_LIKE_BALANCE, balance);
-  commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
-  return balance;
+  try {
+    const balanceFetch = getAccountBalance(address);
+    commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
+    const balance = await balanceFetch;
+    commit(types.WALLET_SET_LIKE_BALANCE, balance);
+    return balance;
+  } catch (error) {
+    throw error;
+  } finally {
+    commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
+  }
 }
