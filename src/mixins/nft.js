@@ -440,11 +440,7 @@ export default {
         1
       );
       try {
-        if (this.walletLIKEBalanceFetchPromise) {
-          await this.walletLIKEBalanceFetchPromise;
-        } else {
-          await this.walletFetchLIKEBalance();
-        }
+        await this.walletFetchLIKEBalance();
         if (
           this.walletLIKEBalance === 0 ||
           this.walletLIKEBalance < this.purchaseInfo.totalPrice
