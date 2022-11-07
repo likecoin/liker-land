@@ -16,6 +16,8 @@
             :class-id="classId"
             :price="NFTPrice"
             :collected-nft-ids="userCollectedNFTList"
+            @transfer="onToggleTransfer"
+            @collect="handleCollectFromControlBar"
           />
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
@@ -343,6 +345,16 @@ export default {
         'NFT',
         'NFTCollect(DetailsPagePriceSection)',
         this.classId,
+        1
+      );
+      return this.handleCollect();
+    },
+    handleCollectFromControlBar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(ClassDetailsPageControlBar)',
+        this.nftId,
         1
       );
       return this.handleCollect();
