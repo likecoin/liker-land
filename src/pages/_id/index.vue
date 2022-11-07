@@ -36,7 +36,7 @@
           </div>
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-            :user-stats="userStats"
+            :stat-wallet="wallet"
           />
         </NFTPortfolioUserInfo>
         <div class="flex justify-center mt-[18px]">
@@ -221,7 +221,6 @@ export default {
   },
   mounted() {
     this.loadNFTListByAddress(this.wallet);
-    this.updateUserStats(this.wallet);
   },
   methods: {
     handleGoCollected() {

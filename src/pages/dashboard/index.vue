@@ -15,7 +15,7 @@
       <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
-          :user-stats="userStats"
+          :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
         />
@@ -183,7 +183,6 @@ export default {
           if (!this.hasSwitchedWallet) {
             this.hasSwitchedWallet = true;
             this.fetchUserInfo();
-            this.updateUserStats(this.getAddress);
             await this.loadNFTListByAddress(this.getAddress);
           } else {
             // Refresh the page to prevent data overlapping

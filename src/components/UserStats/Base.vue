@@ -5,19 +5,23 @@
       :collected-amount="collectedAmount"
       :created-count="createdCount"
       :created-collector-count="createdCollectorCount"
+      :is-loading-stats="isLoadingStats"
     />
   </component>
 </template>
 <script>
+import portfolio from '~/mixins/portfolio';
+
 export default {
+  mixins: [portfolio],
   props: {
     tag: {
       type: String,
       default: 'div',
     },
-    userStats: {
-      type: Object,
-      default: () => ({}),
+    statWallet: {
+      type: String,
+      default: '',
     },
   },
   computed: {
@@ -33,6 +37,12 @@ export default {
     createdCollectorCount() {
       return this.userStats?.createdCollectorCount || 0;
     },
+    isLoadingStats() {
+      return this.userStats === null;
+    },
+  },
+  mounted() {
+    this.updateUserStats(this.statWallet);
   },
 };
 </script>

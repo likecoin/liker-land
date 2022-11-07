@@ -1,7 +1,7 @@
 <template>
   <UserStatsBase
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-    :user-stats="userStats"
+    :stat-wallet="statWallet"
   >
     <template v-slot="stats">
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_collected')">
@@ -25,7 +25,7 @@
           <template #prepend>
             <IconFlare />
           </template>
-          {{ isLoading ? '-' : stats.createdCount }}
+          {{ stats.isLoadingStats ? '-' : stats.createdCount }}
         </Label>
       </ToolTips>
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
@@ -33,7 +33,7 @@
           <template #prepend>
             <IconPersonMini />
           </template>
-          {{ isLoading ? '-' : stats.createdCollectorCount }}
+          {{ stats.isLoadingStats ? '-' : stats.createdCollectorCount }}
         </Label>
       </ToolTips>
     </template>
@@ -47,13 +47,9 @@ export default {
     formatNumber,
   },
   props: {
-    userStats: {
-      type: Object,
-      default: () => ({}),
-    },
-    isLoading: {
-      type: Boolean,
-      default: false,
+    statWallet: {
+      type: String,
+      default: '',
     },
   },
 };

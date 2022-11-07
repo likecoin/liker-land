@@ -51,8 +51,7 @@
             <UserStatsPortfolio
               v-if="isReferrerTheCreator"
               class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-              :user-stats="userStats"
-              :is-loading="isLoading"
+              :stat-wallet="referrer"
             />
             <ButtonV2
               v-else
@@ -253,12 +252,12 @@ export default {
     await store.dispatch('fetchNFTMetadata', classId);
   },
   async mounted() {
-    const promises = [
+    await Promise.all([
       this.updateDisplayNameList(this.iscnOwner),
       this.updateNFTPurchaseInfo(),
       this.updateNFTOwners(),
       this.updateReferrerInfo(),
-    ];
+    ]);
     if (
       this.referrer &&
       this.referrer !== this.iscnOwner &&
@@ -274,10 +273,6 @@ export default {
       this.goNFTDetails(this.classId);
       return;
     }
-    if (this.isReferrerTheCreator) {
-      promises.push(this.updateUserStats(this.referrer).catch(() => {}));
-    }
-    await Promise.all(promises);
     this.isLoading = false;
   },
   methods: {
