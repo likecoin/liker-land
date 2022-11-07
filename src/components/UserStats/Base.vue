@@ -47,6 +47,15 @@ export default {
       return !this.userStats;
     },
   },
+  watch: {
+    statWallet() {
+      if (statWallet) {
+        this.getUserStats();
+      } else {
+        this.userStats = null;
+      }
+    },
+  },
   mounted() {
     this.updateUserStats(this.statWallet);
   },
