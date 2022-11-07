@@ -12,6 +12,7 @@ export default {
       'getLocale',
       'walletMethodType',
       'walletLIKEBalance',
+      'walletLIKEBalanceFetchPromise',
     ]),
     hasConnectedWallet() {
       return !!this.getAddress && !!this.walletMethodType;
