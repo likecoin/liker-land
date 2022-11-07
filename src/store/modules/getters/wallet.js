@@ -4,4 +4,4 @@ export const getConnector = state => state.connector;
 export const getLikerInfo = state => state.likerInfo;
 export const walletMethodType = state => state.methodType;
 export const walletLIKEBalance = state => state.likeBalance;
-export const walletLIKEBalanceFetch = state => state.likeBalanceFetch;
+export const walletLIKEBalanceFetchPromise = state => state.likeBalanceFetch;

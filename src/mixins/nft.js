@@ -440,8 +440,8 @@ export default {
         1
       );
       try {
-        if (this.walletLIKEBalanceFetch) {
-          await this.walletLIKEBalanceFetch;
+        if (this.walletLIKEBalanceFetchPromise) {
+          await this.walletLIKEBalanceFetchPromise;
         }
         if (
           this.walletLIKEBalance === 0 ||
