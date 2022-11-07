@@ -440,6 +440,9 @@ export default {
         1
       );
       try {
+        if (this.walletLIKEBalanceFetch) {
+          await this.walletLIKEBalanceFetch;
+        }
         if (
           this.walletLIKEBalance === 0 ||
           this.walletLIKEBalance < this.purchaseInfo.totalPrice

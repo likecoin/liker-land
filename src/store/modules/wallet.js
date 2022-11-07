@@ -7,7 +7,8 @@ import {
   WALLET_SET_CONNECTOR,
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
-  WALLET_LIKE_BALANCE,
+  WALLET_SET_LIKE_BALANCE,
+  WALLET_SET_LIKE_BALANCE_FETCH,
 } from '../mutation-types';
 
 import * as getters from './getters/wallet';
@@ -22,6 +23,7 @@ const state = () => ({
   isInited: null,
   methodType: null,
   likeBalance: null,
+  likeBalanceFetch: false,
 });
 
 const mutations = {
@@ -43,8 +45,11 @@ const mutations = {
   [WALLET_SET_LIKERINFO](state, likerInfo) {
     state.likerInfo = likerInfo;
   },
-  [WALLET_LIKE_BALANCE](state, likeBalance) {
+  [WALLET_SET_LIKE_BALANCE](state, likeBalance) {
     state.likeBalance = likeBalance;
+  },
+  [WALLET_SET_LIKE_BALANCE_FETCH](state, promise) {
+    state.likeBalanceFetch = promise;
   },
 };
 
