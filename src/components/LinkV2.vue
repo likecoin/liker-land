@@ -33,7 +33,7 @@ export default class Link extends Vue {
   }
 
   get rel() {
-    if (this.href) return 'noopener noreferrer';
+    if (this.href) return 'noopener';
     return null;
   }
 

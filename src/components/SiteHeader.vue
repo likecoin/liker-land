@@ -83,7 +83,7 @@
               class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer"
               href="https://dao.like.co/"
               target="_blank"
-              rel="noreferrer noopener"
+              rel="noopener"
             >
               <div
                 class="text-center text-like-green text-[32px] font-600"
