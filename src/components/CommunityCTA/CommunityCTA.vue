@@ -79,7 +79,7 @@
         class="block transition-colors rounded-full bg-like-cyan-light hover:bg-like-cyan"
         href="https://blog.like.co"
         target="_blank"
-        rel="noreferrer noopener"
+        rel="noopener"
       >
         <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
           <path
