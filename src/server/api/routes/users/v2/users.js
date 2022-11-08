@@ -61,19 +61,20 @@ router.post('/v2/users/login', async (req, res, next) => {
 
     const userId = inputWallet;
     await db.runTransaction(async t => {
-      const userDoc = await t.get(walletUserCollection.doc(userId));
+      const userRef = walletUserCollection.doc(userId);
+      const userDoc = await t.get(userRef);
       const isNew = !userDoc.exists;
       const currentTs = Date.now();
       const payload = {
         lastLoginTs: currentTs,
       };
       if (isNew) {
-        await t.set(walletUserCollection.doc(userId), {
+        await t.create(userRef, {
           ...payload,
           ts: currentTs,
         });
       } else {
-        await t.update(walletUserCollection.doc(userId), payload);
+        await t.update(userRef, payload);
       }
       res.json({ isNew });
     });
