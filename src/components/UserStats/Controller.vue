@@ -22,7 +22,7 @@ export default {
     },
     statWallet: {
       type: String,
-      default: '',
+      required: true,
     },
   },
   data() {
