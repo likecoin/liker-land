@@ -596,13 +596,18 @@ export default {
           1
         );
         if (this.isWritingNFT) {
-          await this.$api.post(
-            postNFTTransfer({
-              txHash,
-              classId: this.classId,
-              nftId: this.firstCollectedNFTId,
-            })
-          );
+          try {
+            await this.$api.post(
+              postNFTTransfer({
+                txHash,
+                classId: this.classId,
+                nftId: this.firstCollectedNFTId,
+              })
+            );
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
         }
         logTrackerEvent(
           this,
