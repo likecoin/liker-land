@@ -79,10 +79,6 @@
             />
           </div>
 
-          <!-- temp for testing -->
-          <ButtonV2 preset="plain" @click="handleSignLogin">sign</ButtonV2>
-          <!-- temp for testing -->
-
           <Dropdown
             :class="[
               'hidden',
