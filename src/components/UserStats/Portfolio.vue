@@ -1,8 +1,7 @@
 <template>
-  <UserStatsBase
+  <UserStatsController
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-    :collected-class-ids="collectedClassIds"
-    :created-class-ids="createdClassIds"
+    :stat-wallet="statWallet"
   >
     <template v-slot="stats">
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_collected')">
@@ -26,7 +25,7 @@
           <template #prepend>
             <IconFlare />
           </template>
-          {{ isLoading ? '-' : stats.createdCount }}
+          {{ stats.isLoadingStats ? '-' : stats.createdCount }}
         </Label>
       </ToolTips>
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
@@ -34,11 +33,11 @@
           <template #prepend>
             <IconPersonMini />
           </template>
-          {{ isLoading ? '-' : stats.createdCollectorCount }}
+          {{ stats.isLoadingStats ? '-' : stats.createdCollectorCount }}
         </Label>
       </ToolTips>
     </template>
-  </UserStatsBase>
+  </UserStatsController>
 </template>
 <script>
 import { formatNumber } from '~/util/ui';
@@ -48,17 +47,9 @@ export default {
     formatNumber,
   },
   props: {
-    collectedClassIds: {
-      type: Array,
-      default: () => [],
-    },
-    createdClassIds: {
-      type: Array,
-      default: () => [],
-    },
-    isLoading: {
-      type: Boolean,
-      default: false,
+    statWallet: {
+      type: String,
+      default: '',
     },
   },
 };

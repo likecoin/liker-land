@@ -36,9 +36,7 @@
           </div>
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-            :collected-class-ids="collectedClassIds"
-            :created-class-ids="createdClassIds"
-            :is-loading="isLoading"
+            :stat-wallet="wallet"
           />
         </NFTPortfolioUserInfo>
         <div class="flex justify-center mt-[18px]">
@@ -227,8 +225,8 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
-  async mounted() {
-    await this.loadNFTListByAddress(this.wallet);
+  mounted() {
+    this.loadNFTListByAddress(this.wallet);
   },
   methods: {
     handleGoCollected() {

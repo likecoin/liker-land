@@ -51,9 +51,7 @@
             <UserStatsPortfolio
               v-if="isReferrerTheCreator"
               class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-              :collected-class-ids="collectedClassIds"
-              :created-class-ids="createdClassIds"
-              :is-loading="isLoading"
+              :stat-wallet="referrer"
             />
             <ButtonV2
               v-else
@@ -274,9 +272,6 @@ export default {
       );
       this.goNFTDetails(this.classId);
       return;
-    }
-    if (this.isReferrerTheCreator) {
-      await this.loadNFTListByAddress(this.referrer);
     }
     this.isLoading = false;
   },

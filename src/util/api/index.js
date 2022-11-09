@@ -161,6 +161,9 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
 
+export const getUserNFTStats = wallet =>
+  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/stats`;
+
 export const getLIKEPrice = () =>
   `https://api.coingecko.com/api/v3/simple/price?ids=likecoin&vs_currencies=usd`;
 
