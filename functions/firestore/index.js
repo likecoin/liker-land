@@ -1,10 +1,10 @@
 const { runWith, config } = require('firebase-functions');
 const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
-const axios = require('axios').default;
 
 const { sendEmail } = require('../modules/sendgrid');
+const { fetchLikerInfoByWallet } = require('../modules/liker');
 
-const { EXTERNAL_URL, LIKECOIN_API_BASE } = process.env;
+const { EXTERNAL_URL } = process.env;
 
 function createSubscriptionConfirmURLFactory({
   subscriptionId,
@@ -25,20 +25,11 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
     const subscriptionId = snapshot.id;
     const { subscriberEmail, subscribedWallet } = snapshot.data();
 
-    let avatar = `https://avatars.dicebear.com/api/identicon/${subscribedWallet}.svg?background=#ffffff`;
-    let displayName = subscribedWallet;
-    let isSubscribedCivicLiker = false;
-    try {
-      const res = await axios.get(
-        `${LIKECOIN_API_BASE}/users/addr/${subscribedWallet}/min`
-      );
-      ({ avatar, displayName, isSubscribedCivicLiker } = res.data);
-    } catch (err) {
-      if (!err.response || err.response.status !== 404) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      }
-    }
+    const {
+      avatar,
+      displayName,
+      isSubscribedCivicLiker,
+    } = await fetchLikerInfoByWallet(subscribedWallet);
 
     const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory({
       subscriptionId,

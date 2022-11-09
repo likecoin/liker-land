@@ -4,6 +4,7 @@ const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
 const { nftMintSubscriptionCollection } = require('../modules/firebase');
+const { fetchLikerInfoByWallet } = require('../modules/liker');
 const { sendEmail } = require('../modules/sendgrid');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
@@ -71,21 +72,13 @@ module.exports = onMessagePublished(
             const subscriptionId = doc.id;
             const { subscriberEmail, subscribedWallet } = doc.data();
             try {
-              let avatar = `https://avatars.dicebear.com/api/identicon/${subscribedWallet}.svg?background=#ffffff`;
-              let displayName = subscribedWallet;
-              let isSubscribedCivicLiker = false;
-              try {
+              const {
+                avatar,
+                displayName,
+                isSubscribedCivicLiker,
                 // eslint-disable-next-line no-await-in-loop
-                const res = await axios.get(
-                  `${LIKECOIN_API_BASE}/users/addr/${subscribedWallet}/min`
-                );
-                ({ avatar, displayName, isSubscribedCivicLiker } = res.data);
-              } catch (err) {
-                if (!err.response || err.response.status !== 404) {
-                  // eslint-disable-next-line no-console
-                  console.error(err);
-                }
-              }
+              } = await fetchLikerInfoByWallet(subscribedWallet);
+
               const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory(
                 {
                   subscriptionId,
