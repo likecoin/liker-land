@@ -3,7 +3,7 @@ const axios = require('axios').default;
 const { LIKECOIN_API_BASE } = process.env;
 
 exports.fetchLikerInfoByWallet = async walletAddress => {
-  let avatar = `https://avatars.dicebear.com/api/identicon/${walletAddress}.svg?background=#ffffff`;
+  let avatar = `https://avatars.dicebear.com/api/identicon/${walletAddress}.svg?background=%23ffffff`;
   let displayName = walletAddress;
   let isSubscribedCivicLiker = false;
   try {
