@@ -6,6 +6,7 @@ const axios = require('axios').default;
 const { nftMintSubscriptionCollection } = require('../modules/firebase');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
 const { sendEmail } = require('../modules/sendgrid');
+const { shortenString } = require('../modules/utils');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
 
@@ -87,10 +88,14 @@ module.exports = onMessagePublished(
                 }
               );
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
-              const subject = `Writing NFT - New NFT by ${displayName} is live`;
+              const shortenDisplayName = shortenString(displayName);
+              const subject = `Writing NFT - New NFT by ${shortenDisplayName} is live`;
               const { body } = getBasicWithAvatarTemplate({
-                title: displayName,
-                subtitle: `My new Writing NFT ${name} is now live`,
+                title:
+                  displayName === subscribedWallet
+                    ? undefined
+                    : shortenDisplayName,
+                subtitle: `${name} is now live`,
                 content: `<p><img style="width: 100%" src="${image}"></p>
 <p><a href="${EXTERNAL_URL}/nft/class/${classId}/share?utm_medium=email&utm_source=email" target="_blank" rel="noreferrer">${name}</a> is now live!</p>
 <p>Collect and discover more <a href="${EXTERNAL_URL}/campaign/writing-nft?utm_medium=email&utm_source=email" target="_blank" rel="noreferrer">Writing NFT</a></p>`,
