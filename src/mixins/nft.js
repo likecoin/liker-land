@@ -505,7 +505,6 @@ export default {
             currency: 'USD',
             classId: this.classId,
           });
-          await this.fetchUserCollectedCount();
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
         }
       } catch (error) {
@@ -616,10 +615,7 @@ export default {
           this.classId,
           1
         );
-        await Promise.all([
-          this.fetchUserCollectedCount(),
-          this.updateNFTOwners(), // blocking update firstCollectedNFTId
-        ]);
+        await this.updateNFTOwners(); // blocking update firstCollectedNFTId
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
