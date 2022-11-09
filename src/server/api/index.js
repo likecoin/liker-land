@@ -4,10 +4,11 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const FirestoreStore = require('firestore-store')(session);
-const { db } = require('./util/firebase');
+const { db } = require('../modules/firebase');
 const users = require('./routes/users');
 const civic = require('./routes/civic');
 const reader = require('./routes/reader');
+const nft = require('./routes/nft');
 const { COOKIE_SECRET } = require('../config/config');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('./constant');
 
@@ -71,6 +72,7 @@ router.use(cookieParser());
 router.use(users);
 router.use(civic);
 router.use(reader);
+router.use(nft);
 router.get('/healthz', (_, res) => {
   res.sendStatus(200);
 });
