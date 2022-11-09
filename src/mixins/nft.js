@@ -595,13 +595,15 @@ export default {
           this.classId,
           1
         );
-        await this.$api.post(
-          postNFTTransfer({
-            txHash,
-            classId: this.classId,
-            nftId: this.firstCollectedNFTId,
-          })
-        );
+        if (this.isWritingNFT) {
+          await this.$api.post(
+            postNFTTransfer({
+              txHash,
+              classId: this.classId,
+              nftId: this.firstCollectedNFTId,
+            })
+          );
+        }
         logTrackerEvent(
           this,
           'NFT',
@@ -618,7 +620,7 @@ export default {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.updateNFTPurchaseInfo();
+        if (this.isWritingNFT) this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
