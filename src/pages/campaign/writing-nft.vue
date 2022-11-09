@@ -80,15 +80,11 @@
         src="~/assets/images/nft/upcoming.jpg"
       >
       <a
-        class="transition-colors cursor-pointer hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]"
+        class="flex items-center justify-center mt-[8px] text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
         href="https://likecoin.github.io/likecoin-nft-dashboard/"
         target="_blank"
         rel="noopener"
-      >
-        <span
-          class="underline ml-[6px] text-[12px] leading-[5/3]"
-        >{{ $t('campaign_nft_view_nft_dashboard') }}</span>
-      </a>
+      >{{ $t('campaign_nft_view_nft_dashboard') }}</a>
     </section>
   </main>
 </template>
