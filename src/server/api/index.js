@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const FirestoreStore = require('firestore-store')(session);
 const { db } = require('../modules/firebase');
 const users = require('./routes/users');
+const usersV2 = require('./routes/users/v2/users');
 const civic = require('./routes/civic');
 const reader = require('./routes/reader');
 const nft = require('./routes/nft');
@@ -70,6 +71,7 @@ router.use((req, res, next) => {
 
 router.use(cookieParser());
 router.use(users);
+router.use(usersV2);
 router.use(civic);
 router.use(reader);
 router.use(nft);

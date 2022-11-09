@@ -78,6 +78,7 @@
               @click="handleGoCreated"
             />
           </div>
+
           <Dropdown
             :class="[
               'hidden',
@@ -167,11 +168,12 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin from '~/mixins/portfolio';
+import authMixin from '~/mixins/auth';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin],
+  mixins: [walletMixin, portfolioMixin, authMixin],
   data() {
     return { hasSwitchedWallet: false };
   },
@@ -217,6 +219,9 @@ export default {
     handleShare() {
       this.copySharePageURL(this.wallet, this.getAddress);
       logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
+    },
+    async handleSignLogin() {
+      await this.signLogin();
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
