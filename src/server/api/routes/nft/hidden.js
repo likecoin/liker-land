@@ -2,7 +2,10 @@ const { Router } = require('express');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const { handleRestfulError } = require('../../middleware/error');
 const { isValidAddress } = require('../../util/cosmos');
-const { FieldValue, walletUserCollection } = require('../../util/firebase');
+const {
+  FieldValue,
+  walletUserCollection,
+} = require('../../../modules/firebase');
 
 const router = Router();
 

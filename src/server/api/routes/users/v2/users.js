@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { db, walletUserCollection } = require('../../../util/firebase');
+const { db, walletUserCollection } = require('../../../../modules/firebase');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
 const {
