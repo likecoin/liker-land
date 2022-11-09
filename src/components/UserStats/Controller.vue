@@ -50,7 +50,7 @@ export default {
   watch: {
     statWallet() {
       if (statWallet) {
-        this.getUserStats();
+        this.updateUserStats();
       } else {
         this.userStats = null;
       }
