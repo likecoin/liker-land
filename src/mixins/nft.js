@@ -551,7 +551,7 @@ export default {
         console.error(error);
       }
     },
-    async transferNFT(nftId = undefined) {
+    async transferNFT(nftId = this.firstCollectedNFTId) {
       try {
         await this.initIfNecessary();
         await this.walletFetchLIKEBalance();
@@ -574,8 +574,6 @@ export default {
           await this.nftCollectorsSync;
         }
 
-        const transferNftId = nftId || this.firstCollectedNFTId;
-
         this.uiSetTxStatus(TX_STATUS.SIGN);
         logTrackerEvent(
           this,
@@ -588,7 +586,7 @@ export default {
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
           classId: this.classId,
-          nftId: transferNftId,
+          nftId,
           signer: this.getSigner,
         });
         logTrackerEvent(
@@ -619,7 +617,7 @@ export default {
           postNFTTransfer({
             txHash,
             classId: this.classId,
-            nftId: transferNftId,
+            nftId,
           })
         );
         logTrackerEvent(
