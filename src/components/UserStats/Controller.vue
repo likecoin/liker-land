@@ -48,9 +48,9 @@ export default {
     },
   },
   watch: {
-    statWallet() {
+    statWallet(statWallet) {
       if (statWallet) {
-        this.updateUserStats();
+        this.updateUserStats(statWallet);
       } else {
         this.userStats = null;
       }
