@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const bech32 = require('bech32');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const createHash = require('create-hash');
 const secp256k1 = require('secp256k1');
 
