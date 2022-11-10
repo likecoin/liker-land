@@ -153,9 +153,11 @@
           </MagicGrid>
 
           <NFTPortfolioSubscriptionForm
-            v-if="!isLoading && currentTab === 'created' && !sortedCreatedClassIds.length"
+            v-if="!isLoading && currentTab === 'created'"
+            :class="{ 'mt-[48px]': sortedCreatedClassIds.length }"
             :creator-wallet-address="wallet"
             :creator-display-name="userDisplayName"
+            :is-empty="!sortedCreatedClassIds.length"
           />
 
           <div class="flex flex-col items-center my-[48px] w-full">

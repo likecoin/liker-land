@@ -1,13 +1,16 @@
 <template>
   <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray rounded-[24px] px-[32px] py-[24px]">
-    <Label preset="h2" :text="$t('portfolio_subscription_title')" />
-    <Label preset="p5" align="center">
-      <i18n path="portfolio_subscription_description">
+    <Label
+      preset="h2"
+      :text="$t(isEmpty ? 'portfolio_subscription_title_empty' : 'portfolio_subscription_title')"
+    />
+    <Label v-if="isEmpty" preset="p5" align="center">
+      <i18n path="portfolio_subscription_description_empty">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
     <Label class="text-dark-gray" preset="p6">
-      <i18n path="portfolio_subscription_hint">
+      <i18n :path="isEmpty ? 'portfolio_subscription_hint_empty' : 'portfolio_subscription_hint'">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
@@ -18,7 +21,6 @@
       <TextField
         ref="emailTextField"
         type="email"
-        :text="$t('portfolio_subscription_title')"
         :placeholder="$t('portfolio_subscription_email_placeholder')"
         :is-disabled="isLoading"
         @input="handleEmailInput"
@@ -65,6 +67,10 @@ export default {
     creatorDisplayName: {
       type: String,
       default: '',
+    },
+    isEmpty: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
