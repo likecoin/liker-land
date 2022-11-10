@@ -10,7 +10,11 @@
       <IconTransfer />
     </template>
     <template #top>
-      <NFTPageOwning :collected-count="userCollectedCount" />
+      <NFTPageOwning v-if="!nftId" :collected-count="userCollectedCount" />
+      <div v-else class="flex-col justify-center py-[24px] px-[8px] my-[24px] border-[2px] border-shade-gray rounded-[16px]">
+        <div class="text-[10px] text-medium-gray">{{ $t('tx_modal_label_nftId') }}</div>
+        <Label preset="h5" class="text-like-green font-600" :text="nftId" />
+      </div>
     </template>
     <template v-if="!isTransferring">
       <Label
@@ -47,7 +51,7 @@
         border-0 border-dashed border-b-[2px] border-b-shade-gray
       "
     >
-      <FormField :label="$t('tx_modal_label_send')">{{
+      <FormField class="mx-[8px]" :label="$t('tx_modal_label_send')">{{
         toAddress
       }}</FormField>
     </div>
@@ -79,6 +83,10 @@ export default {
     },
     userCollectedCount: {
       type: Number,
+      default: undefined,
+    },
+    nftId: {
+      type: String,
       default: undefined,
     },
   },

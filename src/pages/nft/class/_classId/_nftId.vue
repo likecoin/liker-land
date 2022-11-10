@@ -133,6 +133,7 @@
       :error-msg="errorMsg"
       :to-address="toAddress"
       :user-collected-count="userCollectedCount"
+      :nft-id="nftId"
       @close="isOpenTransferModal = false; isTransferring = false"
       @handle-input-addr="handleInputAddr"
       @on-transfer="onTransfer"
@@ -357,7 +358,7 @@ export default {
     async onTransfer() {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
       this.isTransferring = true;
-      await this.transferNFT();
+      await this.transferNFT(this.nftId);
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
