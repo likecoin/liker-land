@@ -10,7 +10,7 @@
       </i18n>
     </Label>
     <Label class="text-dark-gray" preset="p6">
-      <i18n :path="isEmpty ? 'portfolio_subscription_hint_empty' : 'portfolio_subscription_hint'">
+      <i18n path="portfolio_subscription_hint">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
