@@ -99,7 +99,9 @@
       :is-ready-to-transfer="isReadyToTransfer"
       :error-msg="errorMsg"
       :to-address="toAddress"
+      :class-id="classId"
       :user-collected-count="userCollectedCount"
+      :user-collected-nft-ids="userCollectedNFTList"
       @close="isOpenTransferModal = false; isTransferring = false"
       @handle-input-addr="handleInputAddr"
       @on-transfer="onTransfer"
@@ -289,10 +291,10 @@ export default {
       this.uiSetTxStatus('');
       this.fetchUserCollectedCount();
     },
-    async onTransfer() {
-      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
+    async onTransfer(nftId) {
+      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', nftId, 1);
       this.isTransferring = true;
-      await this.transferNFT();
+      await this.transferNFT(nftId);
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {

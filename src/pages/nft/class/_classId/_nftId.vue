@@ -80,7 +80,7 @@
                   preset="h6"
                   :text="$t('nft_details_page_label_nft_id')"
                 />
-                <div class="mt-[4px] flex items-center relativ gap-[8px]">
+                <div class="mt-[4px] flex items-center relative gap-[8px]">
                   <select
                     v-model="selectedNFTId"
                     class="absolute opacity-0"
