@@ -133,8 +133,11 @@ export default {
       return undefined;
     }
   },
-  mounted() {
-    this.lazyGetUserInfoByAddress(this.wallet);
+  async mounted() {
+    await this.lazyGetUserInfoByAddress(this.wallet);
+    if (this.isSubscribePage) {
+      this.confirmSubscription();
+    }
   },
   methods: {
     ...mapActions(['lazyGetUserInfoByAddress']),
