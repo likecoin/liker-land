@@ -25,6 +25,7 @@
             :price="NFTPrice"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
+            @click-user-collected-count="handleClickUserCollectedCount"
           />
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
@@ -461,6 +462,15 @@ export default {
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
+    },
+    handleClickUserCollectedCount() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_click_user_collected_count',
+        this.nftId,
+        1
+      );
     },
   },
 };

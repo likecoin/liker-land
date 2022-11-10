@@ -32,7 +32,7 @@
       <MenuButtonDivider class="bg-medium-gray" />
       <NuxtLink
         :to="detailsPageRoute"
-        @click.native="handleClickOwnDetailsPage"
+        @click.native="handleClickUserCollectedCount"
       >
         <Label align="middle" class="text-like-green !text-[12px]" :text="$t('nft_details_page_label_owning')">
           {{ `${$t('nft_details_page_label_owning')} ${collectedCount}` }}
@@ -106,8 +106,8 @@ export default {
     },
   },
   methods: {
-    handleClickOwnDetailsPage() {
-      logTrackerEvent(this, 'NFT', 'OwnDetailsPage', this.currentNftId[0], 1);
+    handleClickUserCollectedCount() {
+      this.$emit('click-user-collected-count');
     },
     handleClickCollect() {
       this.$emit('collect');
