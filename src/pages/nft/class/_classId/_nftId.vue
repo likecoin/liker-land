@@ -10,8 +10,24 @@
     >
 
       <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
+        <div class="flex items-center justify-between w-full">
+          <NFTMessageIdentity
+            type="collector"
+            :wallet-address="nftCollectorWalletAddress"
+            wrapper-classes="!bg-transparent"
+          />
+          <NFTPageControlBar
+            :collected-count="ownCount"
+            :collected-nft-ids="userCollectedNFTList"
+            :class-id="classId"
+            :current-nft-id="nftId"
+            view="collected"
+            :price="NFTPrice"
+            @transfer="onToggleTransfer"
+            @collect="handleCollectFromControlBar"
+          />
+        </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
-
           <!-- Left column -->
           <div class="flex flex-col items-center col-span-1 desktop:order-2">
             <NFTGemWrapper :collected-count="collectedCount">
@@ -117,6 +133,7 @@
       :error-msg="errorMsg"
       :to-address="toAddress"
       :user-collected-count="userCollectedCount"
+      :nft-id="nftId"
       @close="isOpenTransferModal = false; isTransferring = false"
       @handle-input-addr="handleInputAddr"
       @on-transfer="onTransfer"
@@ -341,7 +358,7 @@ export default {
     async onTransfer() {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
       this.isTransferring = true;
-      await this.transferNFT();
+      await this.transferNFT(this.nftId);
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
@@ -394,6 +411,16 @@ export default {
         'NFT',
         'NFTCollect(DetailsPagePriceSection)',
         this.classId,
+        1
+      );
+      return this.handleCollect();
+    },
+    handleCollectFromControlBar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTCollect(NFTDetailsPageControlBar)',
+        this.nftId,
         1
       );
       return this.handleCollect();

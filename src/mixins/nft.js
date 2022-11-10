@@ -171,6 +171,11 @@ export default {
       return this.getNFTClassCollectedCount(this.classId);
     },
 
+    userCollectedNFTList() {
+      const collectedList = this.collectorMap[this.getAddress];
+      return collectedList ? Object.values(collectedList) : [];
+    },
+
     // Collector Info
     nftCollectorWalletAddress() {
       if (!this.nftId) return undefined;
@@ -546,7 +551,7 @@ export default {
         console.error(error);
       }
     },
-    async transferNFT() {
+    async transferNFT(nftId = this.firstCollectedNFTId) {
       try {
         await this.initIfNecessary();
         await this.walletFetchLIKEBalance();
@@ -581,7 +586,7 @@ export default {
           fromAddress: this.getAddress,
           toAddress: this.toAddress,
           classId: this.classId,
-          nftId: this.firstCollectedNFTId,
+          nftId,
           signer: this.getSigner,
         });
         logTrackerEvent(
@@ -612,7 +617,7 @@ export default {
           postNFTTransfer({
             txHash,
             classId: this.classId,
-            nftId: this.firstCollectedNFTId,
+            nftId,
           })
         );
         logTrackerEvent(
