@@ -12,10 +12,14 @@
     </template>
     <template #content="{ contentPaddingClass }">
       <template v-if="ownerCount">
-        <NFTPageCollectorListItems
-          :class="contentPaddingClass"
-          :owner-list="trimmedItems"
-        />
+        <ul :class="contentPaddingClass">
+          <NFTPageCollectorListItem
+            v-for="owner in trimmedItems"
+            :key="owner.id"
+            :class-id="classId"
+            :owner="owner"
+          />
+        </ul>
         <ShowMore v-if="shouldShowMore">
           <template #header>
             <div class="flex justify-between mb-[12px] min-w-[310px]">
@@ -40,10 +44,17 @@
                 prepend-class="text-like-green"
               />
             </div>
-            <hr class="w-full border-shade-gray mb-[8px]">
+            <hr class="w-full border-shade-gray">
           </template>
           <template #content>
-            <NFTPageCollectorListItems class="min-w-[310px]" :owner-list="items" />
+            <ul class="min-w-[310px]">
+              <NFTPageCollectorListItem
+                v-for="owner in items"
+                :key="owner.id"
+                :class-id="classId"
+                :owner="owner"
+              />
+            </ul>
           </template>
         </ShowMore>
       </template>
@@ -60,7 +71,10 @@
 export default {
   name: 'CollectorList',
   props: {
-    // content
+    classId: {
+      type: String,
+      required: true,
+    },
     ownerCount: {
       type: Number,
       default: undefined,

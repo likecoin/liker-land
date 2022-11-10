@@ -45,6 +45,7 @@
             </NFTGemWrapper>
             <NFTPageCollectorList
               class="hidden laptop:block"
+              :class-id="classId"
               :owner-count="ownerCount"
               :items="populatedCollectors"
               :is-narrow="true"
@@ -67,6 +68,7 @@
             />
             <NFTPageCollectorList
               class="laptop:hidden"
+              :class-id="classId"
               :owner-count="ownerCount"
               :items="populatedCollectors"
             />

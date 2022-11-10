@@ -214,6 +214,7 @@ export default {
           id,
           displayName: owner?.displayName || id,
           collectedCount: this.collectorMap[id].length,
+          collectedFirstNFTId: this.collectorMap[id][0],
           avatar: owner?.avatar || getIdenticonAvatar(id),
           isCivicLiker:
             owner?.isCivicLikerTrial || owner?.isSubscribedCivicLiker,
