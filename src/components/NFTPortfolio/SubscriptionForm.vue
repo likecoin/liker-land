@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray rounded-[24px] px-[32px] py-[24px]">
-    <Label preset="h2" :text="$t('portfolio_empty_title')" />
+    <Label preset="h2" :text="$t('portfolio_subscription_title')" />
     <Label preset="p5" align="center">
-      <i18n path="portfolio_empty_description">
+      <i18n path="portfolio_subscription_description">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
     <Label class="text-dark-gray" preset="p6">
-      <i18n path="portfolio_empty_hint">
+      <i18n path="portfolio_subscription_hint">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
@@ -18,8 +18,8 @@
       <TextField
         ref="emailTextField"
         type="email"
-        :text="$t('portfolio_empty_title')"
-        :placeholder="$t('portfolio_empty_email_placeholder')"
+        :text="$t('portfolio_subscription_title')"
+        :placeholder="$t('portfolio_subscription_email_placeholder')"
         :is-disabled="isLoading"
         @input="handleEmailInput"
       />
@@ -43,7 +43,7 @@
     <p
       v-if="subscriptionId"
       class="text-medium-gray text-[14px] text-center"
-    >{{ $t('portfolio_empty_submitted_hint') }}</p>
+    >{{ $t('portfolio_subscription_submitted_hint') }}</p>
   </div>
 </template>
 
@@ -55,7 +55,7 @@ import { ellipsis } from '~/util/ui';
 import alertMixin from '~/mixins/alert';
 
 export default {
-  name: 'NFTPortfolioEmptyForm',
+  name: 'NFTPortfolioSubscriptionForm',
   mixins: [alertMixin],
   props: {
     creatorWalletAddress: {
@@ -80,9 +80,9 @@ export default {
     },
     submitButtonText() {
       if (this.subscriptionId) {
-        return this.$t('portfolio_empty_notify_button_submitted');
+        return this.$t('portfolio_subscription_notify_button_submitted');
       }
-      return this.$t('portfolio_empty_notify_button');
+      return this.$t('portfolio_subscription_notify_button');
     },
   },
   watch: {
@@ -122,14 +122,14 @@ export default {
         );
         this.subscriptionId = res.data.subscriptionId;
         this.alertPromptSuccess(
-          this.$t('portfolio_empty_notify_success_alert', {
+          this.$t('portfolio_subscription_notify_success_alert', {
             creator: this.formattedCreatorDisplayName,
           })
         );
       } catch (err) {
         if (err.response.data === 'ALREADY_SUBSCRIBED') {
           this.alertPromptError(
-            this.$t('portfolio_empty_notify_duplicated_alert', {
+            this.$t('portfolio_subscription_notify_duplicated_alert', {
               creator: this.formattedCreatorDisplayName,
             })
           );
@@ -137,7 +137,7 @@ export default {
           // eslint-disable-next-line no-console
           console.error(err);
           this.alertPromptError(
-            this.$t('portfolio_empty_notify_error_alert', {
+            this.$t('portfolio_subscription_notify_error_alert', {
               creator: this.formattedCreatorDisplayName,
               error: err.response.data,
             })

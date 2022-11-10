@@ -152,7 +152,7 @@
             </div>
           </MagicGrid>
 
-          <NFTPortfolioEmptyForm
+          <NFTPortfolioSubscriptionForm
             v-if="!isLoading && currentTab === 'created' && !sortedCreatedClassIds.length"
             :creator-wallet-address="wallet"
             :creator-display-name="userDisplayName"
