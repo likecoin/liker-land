@@ -34,7 +34,11 @@
         :to="detailsPageRoute"
         @click.native="handleClickUserCollectedCount"
       >
-        <Label align="middle" class="text-like-green !text-[12px]" :text="$t('nft_details_page_label_owning')">
+        <Label
+          class="text-like-green !text-[12px] font-[600]"
+          align="middle"
+          :text="$t('nft_details_page_label_owning')"
+        >
           {{ `${$t('nft_details_page_label_owning')} ${collectedCount}` }}
         </Label>
       </NuxtLink>
@@ -44,7 +48,6 @@
 
 <script>
 import { formatNumberWithLIKE } from '~/util/ui';
-import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   filters: {

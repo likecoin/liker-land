@@ -10,8 +10,9 @@
     >
 
       <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
-        <div class="flex items-center justify-between w-full">
+        <div class="flex flex-col items-center justify-between w-full tablet:flex-row laptop:flex-row gap-[24px]">
           <NFTMessageIdentity
+            v-if="nftCollectorWalletAddress"
             type="collector"
             :wallet-address="nftCollectorWalletAddress"
             wrapper-classes="!bg-transparent"
