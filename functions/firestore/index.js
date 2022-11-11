@@ -22,9 +22,19 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
   .firestore.document(
     `${config().db.firestore_nft_mint_subscriptions_root}/{id}`
   )
-  .onCreate(async snapshot => {
-    const subscriptionId = snapshot.id;
-    const { subscriberEmail, subscribedWallet } = snapshot.data();
+  .onWrite(async change => {
+    if (!change.after || !change.after.data()) {
+      return Promise.resolve();
+    }
+
+    const {
+      subscriberEmail,
+      subscribedWallet,
+      isVerified,
+    } = change.after.data();
+    if (isVerified) {
+      return Promise.resolve();
+    }
 
     const {
       avatar,
@@ -32,6 +42,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       isSubscribedCivicLiker,
     } = await fetchLikerInfoByWallet(subscribedWallet);
 
+    const subscriptionId = change.after.id;
     const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory({
       subscriptionId,
       subscribedWallet,
