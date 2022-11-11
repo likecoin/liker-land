@@ -40,7 +40,7 @@ const sortOrder = {
 };
 
 export default {
-  name: 'NFTPageMetadataSection',
+  name: 'NFTPageChainDataSectionMetadata',
   props: {
     contentUrl: {
       type: String,

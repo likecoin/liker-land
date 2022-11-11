@@ -8,7 +8,7 @@
     </template>
     <template #content="{ contentPaddingClass }">
       <div class="px-[32px] mb-[28px]">
-        <NFTPageEventListMetadata
+        <NFTPageChainDataSectionMetadata
           :content-url="contentUrl"
           :iscn-id="iscnId"
           :iscn-url="iscnUrl"
