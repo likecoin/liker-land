@@ -172,7 +172,7 @@ const actions = {
     metadata = {
       name,
       description,
-      metadata: classMetadata,
+      ...classMetadata,
       parent,
       iscn_id: iscnId,
     };
@@ -182,19 +182,27 @@ const actions = {
         // eslint-disable-next-line no-console
         .catch(err => console.error(err));
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
-    } else if (iscnId) {
-      const iscnRecord = await this.$api
-        .$get(api.getISCNRecord(iscnId))
-        // eslint-disable-next-line no-console
-        .catch(err => console.error(err));
-      const iscnOwner = iscnRecord?.owner;
-      const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
-      if (iscnOwner)
+    }
+    if (!(metadata.iscn_owner || metadata.account_owner)) {
+      if (iscnId) {
+        const iscnRecord = await this.$api
+          .$get(api.getISCNRecord(iscnId))
+          // eslint-disable-next-line no-console
+          .catch(err => console.error(err));
+        const iscnOwner = iscnRecord?.owner;
+        const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
+        if (iscnOwner)
+          metadata = {
+            ...metadata,
+            iscn_owner: iscnOwner,
+            iscn_record_timestamp: iscnRecordTimestamp,
+          };
+      } else if (parent.account) {
         metadata = {
           ...metadata,
-          iscn_owner: iscnOwner,
-          iscn_record_timestamp: iscnRecordTimestamp,
+          account_owner: parent.account,
         };
+      }
     }
     if (metadata.iscn_record_timestamp)
       metadata.iscn_record_timestamp = Date.parse(

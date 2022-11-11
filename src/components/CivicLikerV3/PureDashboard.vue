@@ -50,7 +50,7 @@
               class="underline text-like-green font-600"
               :href="stakingManagementUrl"
               target="_blank"
-              rel="noreferrer noopener"
+              rel="noopener"
             >{{
               stakingValidatorName
             }}</a>
@@ -152,7 +152,7 @@
               :href="stakingManagementUrl"
               preset="outline"
               target="_blank"
-              rel="noreferrer noopener"
+              rel="noopener"
             >
               <template #prepend>
                 <PlusIcon class="w-20 h-20" />

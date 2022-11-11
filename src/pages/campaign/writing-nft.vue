@@ -79,6 +79,12 @@
         class="mt-[16px] max-w-[696px] w-full max-h-[316px] border-shade-gray border-[2px] rounded-[24px] mx-auto object-cover"
         src="~/assets/images/nft/upcoming.jpg"
       >
+      <a
+        class="flex items-center justify-center mt-[8px] text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
+        href="https://likecoin.github.io/likecoin-nft-dashboard/"
+        target="_blank"
+        rel="noopener"
+      >{{ $t('campaign_nft_view_nft_dashboard') }}</a>
     </section>
   </main>
 </template>

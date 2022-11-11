@@ -134,7 +134,7 @@
               class="group"
               href="https://blog.like.co"
               target="_blank"
-              rel="noreferrer noopener"
+              rel="noopener"
             >
               <svg
                 class="block mx-auto transition-colors bg-white rounded-full group-hover:bg-gray-e6"

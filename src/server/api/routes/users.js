@@ -2,7 +2,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
-const { userCollection } = require('../util/firebase');
+const { userCollection } = require('../../modules/firebase');
 const { setPrivateCacheHeader } = require('../middleware/cache');
 const {
   apiFetchUserProfile,

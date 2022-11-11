@@ -2,6 +2,7 @@ import querystring from 'querystring';
 import {
   CIVIC_LIKER_CLASSIC_LIKER_ID,
   IS_TESTNET,
+  EXTERNAL_HOST,
   LIKECOIN_API_BASE,
   LIKECOIN_CHAIN_VIEW_TX,
   LIKECOIN_CHAIN_API,
@@ -160,6 +161,9 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
 export const getUserSellNFTClasses = ({ wallet }) =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
 
+export const getUserNFTStats = wallet =>
+  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/stats`;
+
 export const getLIKEPrice = () =>
   `https://api.coingecko.com/api/v3/simple/price?ids=likecoin&vs_currencies=usd`;
 
@@ -274,3 +278,10 @@ export const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/rank
 
 export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg`;
+
+export const nftMintSubscriptionAPI = ({ id, email, wallet }) => {
+  const qsPayload = { email, wallet };
+  return `${EXTERNAL_HOST}/api/nft/mint-subscription${
+    id ? `/${id}` : ''
+  }?${querystring.stringify(qsPayload)}`;
+};

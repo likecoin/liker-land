@@ -46,7 +46,7 @@
             :title="$t('civic_liker_web_3_notice_button')"
             content-class="px-16"
             :to="{ name: 'civic' }"
-            rel="noreferrer noopener"
+            rel="noopener"
           >
             <template #prepend>
               <AlertCircle class="w-16" />

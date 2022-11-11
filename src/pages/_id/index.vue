@@ -36,9 +36,7 @@
           </div>
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-            :collected-class-ids="collectedClassIds"
-            :created-class-ids="createdClassIds"
-            :is-loading="isLoading"
+            :stat-wallet="wallet"
           />
         </NFTPortfolioUserInfo>
         <div class="flex justify-center mt-[18px]">
@@ -139,25 +137,36 @@
             <NFTPortfolioEmpty v-if="!sortedCollectedNFTs.length" preset="collected" />
             <div v-for="nft in sortedCollectedNFTs" :key="nft.classId">
               <NFTPortfolioItem
+                v-if="currentTab === 'collected'"
                 class="mb-[12px] w-[310px]"
                 :class-id="nft.classId"
                 :nft-id="nft.id"
               />
+              <NFTPortfolioEmpty v-else preset="collected" />
             </div>
           </MagicGrid>
 
           <MagicGrid v-show="currentTab === 'created'" :gap="20" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
             <div
               v-for="id in sortedCreatedClassIds"
               :key="id"
             >
               <NFTPortfolioItem
+                v-if="currentTab === 'created'"
                 :class-id="id"
                 class="mb-[20px] w-[310px]"
               />
+              <NFTPortfolioEmpty v-else preset="collected" />
             </div>
           </MagicGrid>
+
+          <NFTPortfolioSubscriptionForm
+            v-if="!isLoading && currentTab === 'created'"
+            :class="{ 'mt-[48px]': sortedCreatedClassIds.length }"
+            :creator-wallet-address="wallet"
+            :creator-display-name="userDisplayName"
+            :is-empty="!sortedCreatedClassIds.length"
+          />
 
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
@@ -170,6 +179,7 @@
         </div>
       </div>
     </div>
+    <NuxtChild />
   </Page>
 </template>
 
@@ -225,8 +235,8 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
-  async mounted() {
-    await this.loadNFTListByAddress(this.wallet);
+  mounted() {
+    this.loadNFTListByAddress(this.wallet);
   },
   methods: {
     handleGoCollected() {

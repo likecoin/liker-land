@@ -22,8 +22,8 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
-      <!-- locale -->
-      <Dropdown>
+      <!-- locale (Temporarily hidden) -->
+      <Dropdown v-if="$route.path.includes('civic') || $route.path.includes('settings') ">
         <template v-slot:trigger="{ toggle }">
           <ButtonV2
             preset="tertiary"
@@ -83,7 +83,7 @@
               class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer"
               href="https://dao.like.co/"
               target="_blank"
-              rel="noreferrer noopener"
+              rel="noopener"
             >
               <div
                 class="text-center text-like-green text-[32px] font-600"

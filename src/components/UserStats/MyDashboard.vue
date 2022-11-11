@@ -1,8 +1,7 @@
 <template>
-  <UserStatsBase
+  <UserStatsController
     class="flex flex-col items-center w-full laptop:flex-row"
-    :collected-class-ids="collectedClassIds"
-    :created-class-ids="createdClassIds"
+    :stat-wallet="statWallet"
   >
     <template v-slot="stats">
       <div
@@ -24,7 +23,7 @@
         @click="$emit('go-collected')"
       >
         <UserStatsItem
-          :is-loading="isLoading"
+          :is-loading="stats.isLoadingStats"
           :stats-value="stats.collectedCount.toString()"
           :label-text="$t('nft_portfolio_page_label_collected')"
         >
@@ -33,7 +32,7 @@
           </template>
         </UserStatsItem>
         <UserStatsItem
-          :is-loading="isLoading"
+          :is-loading="stats.isLoadingStats"
           :label-text="$t('nft_portfolio_page_state_value')"
         >
           <template #custom-value>
@@ -62,7 +61,7 @@
         @click="$emit('go-created')"
       >
         <UserStatsItem
-          :is-loading="isLoading"
+          :is-loading="stats.isLoadingStats"
           :stats-value="stats.createdCount.toString()"
           :label-text="$t('nft_portfolio_page_label_created')"
         >
@@ -71,7 +70,7 @@
           </template>
         </UserStatsItem>
         <UserStatsItem
-          :is-loading="isLoading"
+          :is-loading="stats.isLoadingStats"
           :stats-value="stats.createdCollectorCount.toString()"
           :label-text="$t('nft_portfolio_page_state_collectors')"
         >
@@ -81,7 +80,7 @@
         </UserStatsItem>
       </div>
     </template>
-  </UserStatsBase>
+  </UserStatsController>
 </template>
 <script>
 import { formatNumber } from '~/util/ui';
@@ -91,17 +90,9 @@ export default {
     formatNumber,
   },
   props: {
-    collectedClassIds: {
-      type: Array,
-      default: () => [],
-    },
-    createdClassIds: {
-      type: Array,
-      default: () => [],
-    },
-    isLoading: {
-      type: Boolean,
-      default: false,
+    statWallet: {
+      type: String,
+      default: '',
     },
   },
 };

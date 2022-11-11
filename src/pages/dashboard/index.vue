@@ -15,9 +15,7 @@
       <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
-          :collected-class-ids="collectedClassIds"
-          :created-class-ids="createdClassIds"
-          :is-loading="isLoading"
+          :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
         />
@@ -80,6 +78,7 @@
               @click="handleGoCreated"
             />
           </div>
+
           <Dropdown
             :class="[
               'hidden',
@@ -173,11 +172,12 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin from '~/mixins/portfolio';
+import authMixin from '~/mixins/auth';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin],
+  mixins: [walletMixin, portfolioMixin, authMixin],
   data() {
     return { hasSwitchedWallet: false };
   },
@@ -223,6 +223,9 @@ export default {
     handleShare() {
       this.copySharePageURL(this.wallet, this.getAddress);
       logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
+    },
+    async handleSignLogin() {
+      await this.signLogin();
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);

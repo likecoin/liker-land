@@ -84,9 +84,12 @@
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
             />
-            <i18n
+            <div
               v-if="hasConnectedWallet"
               :class="[
+                'flex',
+                'justify-end',
+                'items-center',
                 isInsufficientLIKE || !canPayByLIKE
                   ? 'bg-light-gray border-shade-gray'
                   : 'bg-like-cyan-pale border-medium-gray',
@@ -100,14 +103,21 @@
                 'text-right',
                 'font-[600]',
               ]"
-              tag="div"
-              path="nft_collect_modal_method_like_available_amount"
             >
-              <span
-                class="font-[400]"
-                place="amount"
-              >{{ walletLIKEBalance | formatNumberWithLIKE }}</span>
-            </i18n>
+              <i18n path="nft_collect_modal_method_like_available_amount">
+                <span
+                  v-if="!walletLIKEBalanceFetchPromise"
+                  class="font-[400]"
+                  place="amount"
+                >
+                  {{ walletLIKEBalance | formatNumberWithLIKE }}
+                </span>
+              </i18n>
+              <ProgressIndicator
+                v-if="walletLIKEBalanceFetchPromise"
+                class="ml-[8px] w-[48px] h-[16px]"
+              />
+            </div>
           </li>
           <li>
             <EventModalCollectMethodButton

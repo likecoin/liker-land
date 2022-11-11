@@ -5,6 +5,8 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 import {
   APP_LIKE_CO_VIEW,
   APP_LIKE_CO_URL_BASE,
+  ARWEAVE_ENDPOINT,
+  IPFS_VIEW_GATEWAY_URL,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
@@ -111,7 +113,9 @@ export default {
       return this.NFTClassMetadata.iscn_id;
     },
     iscnOwner() {
-      return this.NFTClassMetadata.iscn_owner;
+      return (
+        this.NFTClassMetadata.iscn_owner || this.NFTClassMetadata.account_owner
+      );
     },
     iscnOwnerAvatar() {
       return this.iscnOwnerInfo.avatar || getIdenticonAvatar(this.iscnOwner);
@@ -130,6 +134,10 @@ export default {
       return this.NFTClassMetadata.description;
     },
     NFTImageUrl() {
+      const { image = '' } = this.NFTClassMetadata;
+      const [schema, path] = image.split('://');
+      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
       return this.NFTClassMetadata.image;
     },
     NFTImageBackgroundColor() {
@@ -309,9 +317,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       await this.fetchNFTMetadata(this.classId);
-      this.updateDisplayNameList(
-        this.getNFTClassMetadataById(this.classId)?.iscn_owner
-      );
+      this.updateDisplayNameList(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
       await this.fetchNFTPurchaseInfo(this.classId);
@@ -460,6 +466,7 @@ export default {
         1
       );
       try {
+        await this.walletFetchLIKEBalance();
         if (
           this.walletLIKEBalance === 0 ||
           this.walletLIKEBalance < this.purchaseInfo.totalPrice
@@ -524,7 +531,6 @@ export default {
             currency: 'USD',
             classId: this.classId,
           });
-          await this.fetchUserCollectedCount();
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
           return result.data;
         }
@@ -616,13 +622,20 @@ export default {
           this.classId,
           1
         );
-        await this.$api.post(
-          postNFTTransfer({
-            txHash,
-            classId: this.classId,
-            nftId,
-          })
-        );
+        if (this.isWritingNFT) {
+          try {
+            await this.$api.post(
+              postNFTTransfer({
+                txHash,
+                classId: this.classId,
+                nftId,
+              })
+            );
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
+        }
         logTrackerEvent(
           this,
           'NFT',
@@ -630,16 +643,13 @@ export default {
           this.classId,
           1
         );
-        await Promise.all([
-          this.fetchUserCollectedCount(),
-          this.updateNFTOwners(), // blocking update firstCollectedNFTId
-        ]);
+        await this.updateNFTOwners(); // blocking update firstCollectedNFTId
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.updateNFTPurchaseInfo();
+        if (this.isWritingNFT) this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
