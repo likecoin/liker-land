@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray rounded-[24px] px-[32px] py-[24px]">
+  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray phone:rounded-none rounded-[24px] px-[32px] py-[24px]">
     <Label
       preset="h2"
       :text="$t(isEmpty ? 'portfolio_subscription_title_empty' : 'portfolio_subscription_title')"
@@ -15,7 +15,7 @@
       </i18n>
     </Label>
     <form
-      class="flex gap-[16px] items-center"
+      class="flex phone:flex-col gap-[16px] items-center"
       @submit="submitEmail"
     >
       <TextField
