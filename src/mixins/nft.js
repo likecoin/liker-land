@@ -250,6 +250,10 @@ export default {
         )
       );
     },
+
+    getWalletIdentityType() {
+      return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
+    },
   },
   watch: {
     getAddress(newAddress) {

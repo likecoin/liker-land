@@ -13,7 +13,7 @@
         <div class="flex flex-col items-center justify-between w-full tablet:flex-row laptop:flex-row gap-[24px]">
           <NFTMessageIdentity
             v-if="nftCollectorWalletAddress"
-            type="collector"
+            :type="getWalletIdentityType(nftCollectorWalletAddress)"
             :wallet-address="nftCollectorWalletAddress"
             wrapper-classes="!bg-transparent"
           />
@@ -104,7 +104,9 @@
                 :key="m.txHash"
                 :type="m.event"
                 :tx-hash="m.txHash"
+                :from-type="m.fromType"
                 :from-wallet="m.fromWallet"
+                :to-type="m.toType"
                 :to-wallet="m.toWallet"
                 :message="m.memo"
                 tag="li"
@@ -263,7 +265,12 @@ export default {
             };
           }
           return e;
-        });
+        })
+        .map(m => ({
+          ...m,
+          fromType: this.getWalletIdentityType(m.fromWallet),
+          toType: this.getWalletIdentityType(m.toWallet),
+        }));
     },
   },
   asyncData({ query }) {

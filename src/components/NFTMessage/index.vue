@@ -21,7 +21,7 @@
     >
       <NFTMessageIdentity
         v-if="fromWallet"
-        :type="isCollect ? 'creator' : 'collector'"
+        :type="fromType"
         :wallet-address="fromWallet"
       />
       <IconArrowLeft
@@ -30,7 +30,7 @@
       />
       <NFTMessageIdentity
         v-if="toWallet"
-        type="collector"
+        :type="toType"
         :wallet-address="toWallet"
       />
     </div>
@@ -50,9 +50,17 @@ export default {
       type: String,
       required: true,
     },
+    fromType: {
+      type: String,
+      default: 'collector',
+    },
     fromWallet: {
       type: String,
       default: '',
+    },
+    toType: {
+      type: String,
+      default: 'collector',
     },
     toWallet: {
       type: String,
@@ -68,9 +76,6 @@ export default {
     },
   },
   computed: {
-    isCollect() {
-      return this.type === 'purchase';
-    },
     messageHint() {
       switch (this.type) {
         case 'purchase':
