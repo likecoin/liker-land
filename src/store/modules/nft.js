@@ -268,7 +268,9 @@ const actions = {
     const createdNFTs = createdClassIds.map(classId => ({ classId }));
     const collectedNFTs = [
       ...new Map(
-        nfts.map(({ classId, nftId }) => [classId, { classId, id: nftId }])
+        [...nfts]
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .map(({ classId, nftId }) => [classId, { classId, id: nftId }])
       ).values(),
     ];
 
