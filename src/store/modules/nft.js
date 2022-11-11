@@ -2,14 +2,14 @@
 import Vue from 'vue';
 import * as api from '@/util/api';
 import {
-  NFT_INDEXER_LIMIT_MAX,
   ORDER_CREATED_CLASS_ID_BY,
   ORDER_COLLECTED_CLASS_ID_BY,
   ORDER,
   isWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
-  formatNFTInfo,
+  getNFTsRespectDualPrefix,
+  getNFTClassesRespectDualPrefix,
 } from '~/util/nft';
 import { deriveAllPrefixedAddresses } from '~/util/cosmos';
 import * as TYPES from '../mutation-types';
@@ -225,37 +225,9 @@ const actions = {
     return owners;
   },
   async fetchNFTListByAddress({ commit }, address) {
-    const getNFTsAll = async owner => {
-      let data;
-      let nextKey;
-      let count;
-      const nfts = [];
-      do {
-        // eslint-disable-next-line no-await-in-loop
-        ({ data } = await this.$api.get(
-          api.getNFTsPartial({
-            owner,
-            key: nextKey,
-            limit: NFT_INDEXER_LIMIT_MAX,
-          })
-        ));
-        nextKey = data.pagination.next_key;
-        ({ count } = data.pagination);
-        nfts.push(...data.nfts);
-      } while (count === NFT_INDEXER_LIMIT_MAX);
-      // sort by last colleted by default
-      return nfts.map(formatNFTInfo);
-    };
-
-    const getNFTsRespectDualPrefix = async owner => {
-      const allowAddresses = deriveAllPrefixedAddresses(owner);
-      const arraysOfNFTs = await Promise.all(allowAddresses.map(getNFTsAll));
-      return arraysOfNFTs.flat();
-    };
-
-    const [nfts, { list: createdIds }] = await Promise.all([
-      getNFTsRespectDualPrefix(address),
-      this.$api.$get(api.getUserSellNFTClasses({ wallet: address })),
+    const [nfts, createdNFTs] = await Promise.all([
+      getNFTsRespectDualPrefix(this.$api, address),
+      getNFTClassesRespectDualPrefix(this.$api, address),
     ]);
     const timestampMap = {};
     nfts.forEach(nft => {
@@ -265,6 +237,7 @@ const actions = {
       }
     });
     const collectedIds = [...new Set(nfts.map(nft => nft.classId))];
+    const createdIds = [...new Set(createdNFTs.map(c => c.classId))];
 
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
