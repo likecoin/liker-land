@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { authenticateLogin } = require('../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../middleware/cache');
 const { handleRestfulError } = require('../../middleware/error');
 const { isValidAddress } = require('../../util/cosmos');
@@ -24,14 +25,10 @@ router.get('/nft/hidden', async (req, res, next) => {
   }
 });
 
-router.post('/nft/hidden', async (req, res, next) => {
+router.post('/nft/hidden', authenticateLogin, async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
-    const { user, version } = req.session;
-    if (!user || version !== 2) {
-      res.sendStatus(401);
-      return;
-    }
+    const { user } = req.session;
     const { nftClassIds = [] } = req.body;
     if (!nftClassIds.length) {
       res.sendStatus(400);
@@ -46,14 +43,10 @@ router.post('/nft/hidden', async (req, res, next) => {
   }
 });
 
-router.delete('/nft/hidden', async (req, res, next) => {
+router.delete('/nft/hidden', authenticateLogin, async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
-    const { user, version } = req.session;
-    if (!user || version !== 2) {
-      res.sendStatus(401);
-      return;
-    }
+    const { user } = req.session;
     const { nftClassIds = [] } = req.body;
     if (!nftClassIds.length) {
       res.sendStatus(400);
