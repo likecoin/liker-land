@@ -106,6 +106,7 @@
                 :tx-hash="m.txHash"
                 :from-wallet="m.fromWallet"
                 :to-wallet="m.toWallet"
+                :message="m.memo"
                 tag="li"
               />
             </ul>

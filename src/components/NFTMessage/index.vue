@@ -39,8 +39,6 @@
 </template>
 
 <script>
-import { getChainRawTx } from '~/util/api';
-
 export default {
   name: 'NFTMessage',
   props: {
@@ -60,15 +58,14 @@ export default {
       type: String,
       default: '',
     },
+    message: {
+      type: String,
+      default: '',
+    },
     tag: {
       type: String,
       default: 'div',
     },
-  },
-  data() {
-    return {
-      message: '',
-    };
   },
   computed: {
     isCollect() {
@@ -84,21 +81,6 @@ export default {
 
         default:
           return this.$t('nft_message_type_generic');
-      }
-    },
-  },
-  mounted() {
-    this.fetchTxMemo();
-  },
-  methods: {
-    async fetchTxMemo() {
-      // FIXME: Should provide message from props
-      try {
-        const res = await this.$api.$get(getChainRawTx(this.txHash));
-        this.message = res.tx.body.memo || '';
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
       }
     },
   },
