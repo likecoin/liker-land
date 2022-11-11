@@ -52,9 +52,9 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
     const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
     const { body } = getBasicWithAvatarTemplate({
       title: 'Writing NFT',
-      subtitle: `Subscribe ${shortenString(displayName)}'s Writing NFT`,
+      subtitle: `Follow ${shortenString(displayName)}'s Writing NFT`,
       content: `<p>Hi,</p>
-      <p>Please <a href="${confirmLink}" target="_blank" rel="noreferrer">click here</a> or the link below to confirm your subscription of ${displayName}'s Writing NFT.</p>
+      <p>Please <a href="${confirmLink}" target="_blank" rel="noreferrer">click here</a> or the link below to confirm following ${displayName}'s Writing NFT.</p>
       <p><a href="${confirmLink}" target="_blank" rel="noreferrer">${confirmLink}</a></p>`,
       avatarURL: avatar,
       isCivicLiker: isSubscribedCivicLiker,
@@ -63,7 +63,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
     });
     return sendEmail({
       email: subscriberEmail,
-      subject: 'Writing NFT - NFT Subscription',
+      subject: `Writing NFT - Follow ${displayName}`,
       html: body,
     });
   });
