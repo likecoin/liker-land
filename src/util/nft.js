@@ -1,6 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BigNumber } from 'bignumber.js';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
+import * as api from '@/util/api';
+import { deriveAllPrefixedAddresses } from './cosmos';
 import {
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
@@ -195,6 +197,62 @@ function formatNFTEvent(event) {
     timestamp: Date.parse(timestamp),
   };
 }
+
+const queryAllDataFromChain = async (axios, api, field, input = {}) => {
+  let data;
+  let nextKey;
+  let count;
+  const result = [];
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    ({ data } = await axios.get(
+      api({
+        ...input,
+        key: nextKey,
+        limit: NFT_INDEXER_LIMIT_MAX,
+      })
+    ));
+    nextKey = data.pagination.next_key;
+    ({ count } = data.pagination);
+    result.push(...data[field]);
+  } while (count === NFT_INDEXER_LIMIT_MAX);
+  return result;
+};
+
+const fetchAllNFTFromChain = async (axios, owner) => {
+  const nfts = await queryAllDataFromChain(axios, api.getNFTsPartial, 'nfts', {
+    owner,
+  });
+  // sort by last colleted by default
+  return nfts.map(formatNFTInfo);
+};
+export const getNFTsRespectDualPrefix = async (axios, owner) => {
+  const allowAddresses = deriveAllPrefixedAddresses(owner);
+  const arraysOfNFTs = await Promise.all(
+    allowAddresses.map(a => fetchAllNFTFromChain(axios, a))
+  );
+  return arraysOfNFTs.flat();
+};
+
+const fetchAllNFTClassFromChain = async (axios, owner) => {
+  const classes = await queryAllDataFromChain(
+    axios,
+    api.getNFTClassesPartial,
+    'classes',
+    { owner }
+  );
+  // TODO: getNFTClasses API already contains chain metadata
+  // should reuse them instead of dropping
+  return classes.map(c => ({ classId: c.id }));
+};
+
+export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
+  const allowAddresses = deriveAllPrefixedAddresses(owner);
+  const arraysOfNFTClasses = await Promise.all(
+    allowAddresses.map(a => fetchAllNFTClassFromChain(axios, a))
+  );
+  return arraysOfNFTClasses.flat();
+};
 
 export function formatNFTEventsToHistory(events) {
   const history = events.map(e => formatNFTEvent(e)).reverse();

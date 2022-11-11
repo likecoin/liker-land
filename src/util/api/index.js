@@ -158,9 +158,6 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
   )}`;
 };
 
-export const getUserSellNFTClasses = ({ wallet }) =>
-  `${LIKECOIN_API_BASE}/likernft/user/${wallet}/sell`;
-
 export const getUserNFTStats = wallet =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/stats`;
 
@@ -180,6 +177,15 @@ export const getISCNRecord = iscnId => {
     iscn_id: iscnId,
   };
   return `${LIKECOIN_CHAIN_API}/iscn/records/id?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTClassesPartial = ({ owner, limit, key }) => {
+  const qsPayload = { iscn_owner: owner }; // TODO: support account based query
+  if (limit) qsPayload['pagination.limit'] = limit;
+  if (key) qsPayload['pagination.key'] = key;
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?${querystring.stringify(
     qsPayload
   )}`;
 };
