@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { firestore } = require('firebase-admin');
 const { v4: uuidv4 } = require('uuid');
 
+const { VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS } = require('../../constant');
 const { handleRestfulError } = require('../../middleware/error');
 
 const {
@@ -30,11 +31,22 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
   try {
     const result = await db.runTransaction(async t => {
       const querySnapshot = await t.get(queryRef);
+      let subscriptionId;
       if (!querySnapshot.empty) {
-        throw new Error('ALREADY_SUBSCRIBED');
+        const [doc] = querySnapshot.docs;
+        const { isVerified, ts } = doc.data();
+        if (
+          isVerified ||
+          Date.now() - ts.toMillis() < VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS
+        ) {
+          throw new Error('ALREADY_SUBSCRIBED');
+        }
+        subscriptionId = doc.id;
       }
 
-      const subscriptionId = uuidv4();
+      if (!subscriptionId) {
+        subscriptionId = uuidv4();
+      }
       const docRef = nftMintSubscriptionCollection.doc(subscriptionId);
       await t.set(docRef, {
         subscriberEmail,
