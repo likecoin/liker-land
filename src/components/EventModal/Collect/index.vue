@@ -239,8 +239,9 @@ export default {
       this.fetchUserCollectedCount();
     },
     async handleSelectPaymentMethod(method) {
+      this.paymentMethod = method;
       switch (method) {
-        case 'crypto':
+        case 'crypto': {
           if (!this.getAddress) {
             const isConnected = await this.connectWallet();
             if (!isConnected) return;
@@ -252,12 +253,12 @@ export default {
             this.classId,
             1
           );
-          this.collectNFTWithLIKE().then(result => {
-            if (result) {
-              this.justCollectedNFTId = result.nftId;
-            }
-          });
+          const result = await this.collectNFTWithLIKE();
+          if (result) {
+            this.justCollectedNFTId = result.nftId;
+          }
           break;
+        }
         case 'stripe':
           logTrackerEvent(
             this,
@@ -266,12 +267,11 @@ export default {
             this.classId,
             1
           );
-          this.collectNFTWithStripe();
+          await this.collectNFTWithStripe();
           break;
         default:
           break;
       }
-      this.paymentMethod = method;
     },
     goToNFTDetails() {
       this.$router.push({
