@@ -1,18 +1,22 @@
 <template>
-  <component :is="tag">
-    <div class="text-[12px] text-medium-gray text-center">{{ messageHint }}</div>
-    <CardV2
-      :class="[
-        'mt-[8px] p-[32px]',
-        { 'text-medium-gray text-center': !message },
-        { 'border-like-cyan border-[2px]': isCollect },
-      ]"
-    >{{ message || $t('nft_message_empty') }}</CardV2>
+  <component :is="tag" class="flex flex-col items-center">
+
+    <hr class="w-[2px] h-[24px] mb-[24px] bg-medium-gray border-none">
+
+    <template v-if="message">
+      <div class="text-[12px] text-medium-gray text-center">{{ messageHint }}</div>
+      <CardV2
+        :class="[
+          'my-[8px] p-[32px] border-[2px] w-full text-dark-gray',
+          isCollect ? 'border-like-cyan' : 'border-shade-gray'
+        ]"
+      >{{ message || $t('nft_message_empty') }}</CardV2>
+    </template>
 
     <div
       :class="[
-        'flex items-center gap-[16px] mt-[8px] px-[8px]',
-        (fromWallet && toWallet) || (fromWallet && message) ? 'justify-end' : 'justify-center',
+        'flex flex-col tablet:flex-row laptop:flex-row items-center gap-[16px] justify-center',
+        { 'bg-white rounded-[24px] tablet:rounded-full laptop:rounded-full': fromWallet && toWallet && !message },
       ]"
     >
       <NFTMessageIdentity
@@ -22,7 +26,7 @@
       />
       <IconArrowLeft
         v-if="fromWallet && toWallet"
-        class="w-[16px] h-[16px] text-like-green rotate-180"
+        class="w-[16px] h-[16px] text-like-green rotate-[-90deg] tablet:rotate-180 laptop:rotate-180"
       />
       <NFTMessageIdentity
         v-if="toWallet"

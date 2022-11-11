@@ -97,7 +97,6 @@
                 </div>
               </div>
             </CardV2>
-            <hr class="w-[2px] h-[24px] bg-medium-gray border-none">
             <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
               <NFTMessage
                 v-for="m in messageList"
