@@ -473,7 +473,7 @@ export default {
           );
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
-          return;
+          return undefined;
         }
 
         this.uiSetTxStatus(TX_STATUS.SIGN);
@@ -507,7 +507,7 @@ export default {
         );
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
-          await this.$api.post(
+          const result = await this.$api.post(
             postNFTPurchase({ txHash, classId: this.classId })
           );
           logTrackerEvent(
@@ -526,6 +526,7 @@ export default {
           });
           await this.fetchUserCollectedCount();
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
+          return result.data;
         }
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
@@ -537,6 +538,7 @@ export default {
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
+      return undefined;
     },
     async collectNFTWithStripe() {
       try {

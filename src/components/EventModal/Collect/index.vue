@@ -5,8 +5,6 @@
     :header-text="headerText"
     preset="collect"
     @close="$emit('close')"
-    @handle-share="handleShare"
-    @go-portfolio="goToPortfolio"
   >
     <template #header-prepend>
       <IconPrice />
@@ -57,18 +55,14 @@
     >
       <ButtonV2
         preset="secondary"
-        :text="$t('nft_details_page_button_share')"
+        :text="$t('nft_details_page_button_view_details')"
         class="mr-[12px]"
-        @click="$emit('handle-share')"
-      >
-        <template #prepend>
-          <IconShare />
-        </template>
-      </ButtonV2>
+        @click="goToNFTDetails"
+      />
       <ButtonV2
         preset="outline"
         :text="$t('nft_details_page_button_portfolio')"
-        @click="$emit('go-portfolio')"
+        @click="goToPortfolio"
       />
     </template>
 
@@ -155,6 +149,7 @@ export default {
   data() {
     return {
       paymentMethod: undefined,
+      justCollectedNFTId: undefined,
     };
   },
   computed: {
@@ -225,6 +220,7 @@ export default {
     ...mapActions(['uiCloseTxModal']),
     resetState() {
       this.paymentMethod = undefined;
+      this.justCollectedNFTId = undefined;
 
       // Mixin
       this.nftPriceInUSD = undefined;
@@ -246,7 +242,11 @@ export default {
             this.classId,
             1
           );
-          this.collectNFTWithLIKE();
+          this.collectNFTWithLIKE().then(result => {
+            if (result) {
+              this.justCollectedNFTId = result.nftId;
+            }
+          });
           break;
         case 'stripe':
           logTrackerEvent(
@@ -263,22 +263,19 @@ export default {
       }
       this.paymentMethod = method;
     },
-    handleShare() {
-      this.shareURLPath({
-        title: this.NFTName,
-        text: this.NFTDescription,
-        path: this.nftClassDetailsPageURL,
+    goToNFTDetails() {
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: this.classId, nftId: this.justCollectedNFTId },
       });
-      logTrackerEvent(
-        this,
-        'NFT',
-        'CopyShareURL(CollectModal)',
-        this.classId,
-        1
-      );
+      this.uiCloseTxModal();
     },
     goToPortfolio() {
-      this.$router.push({ name: 'id', params: { id: this.getAddress } });
+      this.$router.push({
+        name: 'id',
+        params: { id: this.getAddress },
+        query: { tab: 'collected' },
+      });
       this.uiCloseTxModal();
     },
   },
