@@ -52,7 +52,7 @@
 </template>
 <script>
 export default {
-  name: 'EventList',
+  name: 'NFTPageChainDataSection',
   props: {
     items: {
       type: Array,

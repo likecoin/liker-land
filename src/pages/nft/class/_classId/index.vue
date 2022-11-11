@@ -83,7 +83,7 @@
         <Separator class="mx-auto" />
 
         <section>
-          <NFTPageEventList
+          <NFTPageChainDataSection
             :items="populatedEvents"
             :is-loading="isHistoryInfoLoading"
             :content-url="NFTExternalUrl"
