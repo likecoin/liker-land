@@ -6,12 +6,17 @@
       tag="div"
       preset="p6"
     />
-    <div class="flex flex-col laptop:flex-row laptop:items-end laptop:justify-between">
-      <div class="flex-col items-start">
+    <div class="flex flex-col laptop:flex-row laptop:items-end laptop:justify-between gap-x-[32px]">
+      <div class="min-w-0 truncate">
         <Label class="!text-[12px] text-medium-gray font-600">
           {{ $t('nft_details_page_section_metadata_url') }}&nbsp;<IconLinkExternal />
         </Label>
-        <a :href="contentUrl" rel="noreferrer noopener" target="_blank" class="block text-medium-gray underline text-[12px]">{{ contentUrl }}</a>
+        <a
+          class="text-medium-gray underline text-[12px]"
+          :href="contentUrl"
+          rel="noopener"
+          target="_blank"
+        >{{ contentUrl }}</a>
       </div>
       <div class="flex mt-[12px] gap-[8px] laptop:mt-0">
         <ButtonV2
