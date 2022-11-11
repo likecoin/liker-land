@@ -133,7 +133,7 @@ export default {
           })
         );
       } catch (err) {
-        if (err.response.data === 'ALREADY_SUBSCRIBED') {
+        if (err.response?.data === 'ALREADY_SUBSCRIBED') {
           this.alertPromptError(
             this.$t('portfolio_subscription_notify_duplicated_alert', {
               creator: this.formattedCreatorDisplayName,
@@ -145,7 +145,7 @@ export default {
           this.alertPromptError(
             this.$t('portfolio_subscription_notify_error_alert', {
               creator: this.formattedCreatorDisplayName,
-              error: err.response.data,
+              error: err.response?.data || err.toString(),
             })
           );
         }
