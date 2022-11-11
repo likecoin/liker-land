@@ -45,6 +45,7 @@ export default class TextField extends Vue {
     'border-shade-gray',
     'outline-none',
     'text-[16px]',
+    'text-dark-gray',
     'focus:border-like-cyan',
     'hover:border-like-cyan-light',
   ];
