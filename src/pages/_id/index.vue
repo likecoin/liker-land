@@ -157,6 +157,8 @@
 
           <NFTPortfolioSubscriptionForm
             v-if="!isLoading && currentTab === 'created'"
+            :id="creatorFollowSectionId"
+            ref="creatorFollowSection"
             :class="{ 'mt-[48px]': sortedCreatedClassIds.length }"
             :creator-wallet-address="wallet"
             :creator-display-name="userDisplayName"
@@ -191,6 +193,18 @@ export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
+  computed: {
+    creatorFollowSectionId() {
+      return 'creator-follow';
+    },
+  },
+  watch: {
+    isLoading(isLoading) {
+      if (!isLoading) {
+        this.$nextTick(this.snapToCreatorFollowSectionIfNeeded);
+      }
+    },
+  },
   async asyncData({ route, $api, error, store }) {
     let { id } = route.params;
     if (id && isValidAddress(id)) {
@@ -234,6 +248,15 @@ export default {
     this.loadNFTListByAddress(this.wallet);
   },
   methods: {
+    snapToCreatorFollowSectionIfNeeded() {
+      const hash = `#${this.creatorFollowSectionId}`;
+      if (this.$route.hash !== hash || !this.$refs.creatorFollowSection) return;
+      this.$gsap.gsap.to(window, {
+        duration: 1,
+        scrollTo: { y: hash, offsetY: 100 },
+      });
+      this.$router.replace({ ...this.$route, hash: undefined });
+    },
     handleGoCollected() {
       logTrackerEvent(this, 'UserPortfolio', 'GoCollectedTab', this.wallet, 1);
       this.goCollected();
