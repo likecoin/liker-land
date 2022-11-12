@@ -16,6 +16,7 @@
             :class-id="classId"
             :price="NFTPrice"
             :collected-nft-ids="userCollectedNFTList"
+            :is-writing-nft="isWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
           />
@@ -23,7 +24,12 @@
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
 
           <!-- Left column -->
-          <div class="col-span-1 grid laptop:grid-cols-2 desktop:grid-cols-1 gap-[24px]">
+          <div
+            :class="[
+              'col-span-1 grid desktop:grid-cols-1 gap-[24px]',
+              { 'laptop:grid-cols-2': isShowPriceSection }
+            ]"
+          >
             <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
@@ -44,6 +50,7 @@
               />
             </NFTGemWrapper>
             <NFTPageCollectorList
+              v-if="isShowPriceSection"
               class="hidden laptop:block"
               :class-id="classId"
               :owner-count="ownerCount"
@@ -52,10 +59,12 @@
             />
           </div>
 
+          <Separator class="mx-auto desktop:hidden" />
+
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
             <NFTPagePriceSection
-              v-if="NFTPrice"
+              v-if="isShowPriceSection"
               :nft-price="NFTPrice"
               :nft-price-u-s-d="formattedNFTPriceUSD"
               :collected-count="collectedCount"
@@ -67,13 +76,13 @@
               @hover-sell="handleHoverSellFromPriceSection"
             />
             <NFTPageCollectorList
-              class="laptop:hidden"
+              :class="{ 'laptop:hidden': isShowPriceSection }"
               :class-id="classId"
               :owner-count="ownerCount"
               :items="populatedCollectors"
             />
             <NFTPageSupplySection
-              v-if="isWritingNFT && NFTPrice"
+              v-if="isShowPriceSection"
               :collected-count="collectedCount"
               @collect="handleCollectFromSupplySection"
             />
@@ -208,6 +217,9 @@ export default {
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
+    },
+    isShowPriceSection() {
+      return this.isWritingNFT && this.NFTPrice && this.NFTPrice >= 0;
     },
   },
   asyncData({ query }) {

@@ -99,7 +99,7 @@
           <IconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
-        <div class="flex items-center text-like-green">
+        <div v-if="nftPrice && nftPrice >= 0" class="flex items-center text-like-green">
           <IconPrice />
           <div class="ml-[4px]">{{ nftPrice | formatNumberWithLIKE }}</div>
         </div>

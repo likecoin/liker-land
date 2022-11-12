@@ -24,6 +24,7 @@
             :current-nft-id="nftId"
             view="collected"
             :price="NFTPrice"
+            :is-writing-nft="isWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"

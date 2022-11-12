@@ -18,7 +18,7 @@
         @click.native="handleClickSell"
       />
     </div>
-    <div v-else-if="!isCollector || view === 'created'" class="flex gap-[12px]">
+    <div v-else-if="isWritingNFT && !isCollector || view === 'created'" class="flex gap-[12px]">
       <Label class="!text-[12px] text-medium-gray" :text="$t('nft_details_page_button_collect_now')" />
       <ButtonV2 preset="secondary" @click="handleClickCollect">
         {{ price | formatNumberWithLIKE }}
@@ -85,6 +85,11 @@ export default {
     price: {
       type: Number,
       default: undefined,
+    },
+
+    isWritingNFT: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
