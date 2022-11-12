@@ -320,11 +320,25 @@ export default {
       }
     },
     async updateNFTClassMetadata() {
-      await this.fetchNFTMetadata(this.classId);
+      try {
+        await this.fetchNFTMetadata(this.classId);
+      } catch (error) {
+        if (error.response?.status !== 404) {
+          // eslint-disable-next-line no-console
+          console.error(JSON.stringify(error));
+        }
+      }
       this.updateDisplayNameList(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
-      await this.fetchNFTPurchaseInfo(this.classId);
+      try {
+        await this.fetchNFTPurchaseInfo(this.classId);
+      } catch (error) {
+        if (error.response?.status !== 404) {
+          // eslint-disable-next-line no-console
+          console.error(JSON.stringify(error));
+        }
+      }
     },
     async fetchNFTPrices(classId) {
       try {
