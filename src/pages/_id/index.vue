@@ -158,7 +158,6 @@
           <NFTPortfolioSubscriptionForm
             v-if="!isLoading && currentTab === 'created'"
             :id="creatorFollowSectionId"
-            ref="creatorFollowSection"
             :class="{ 'mt-[48px]': sortedCreatedClassIds.length }"
             :creator-wallet-address="wallet"
             :creator-display-name="userDisplayName"
@@ -189,19 +188,32 @@ import { checkUserNameValid } from '~/util/user';
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin from '~/mixins/portfolio';
 
+const CREATOR_FOLLOW_SECTION_ID = 'creator-follow';
+
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
   computed: {
     creatorFollowSectionId() {
-      return 'creator-follow';
+      return CREATOR_FOLLOW_SECTION_ID;
+    },
+    creatorFollowSectionHash() {
+      return `#${this.creatorFollowSectionId}`;
     },
   },
   watch: {
     isLoading(isLoading) {
       if (!isLoading) {
-        this.$nextTick(this.snapToCreatorFollowSectionIfNeeded);
+        if (this.$route.hash === this.creatorFollowSectionHash) {
+          this.$nextTick(this.scrollToCreatorFollowSection);
+        } else if (
+          this.currentTab !== 'created' &&
+          !this.sortedCollectedClassIds.length
+        ) {
+          // Go to created tab if collected tab is empty
+          this.goCreatedTab();
+        }
       }
     },
   },
@@ -244,26 +256,37 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
+  created() {
+    if (
+      this.currentTab !== 'created' &&
+      this.$route.hash === this.creatorFollowSectionHash
+    ) {
+      // NOTE: `route.hash` never sent to server side,
+      // Therefore, it is done in here
+      // Ref: https://www.rfc-editor.org/rfc/rfc2396#section-4
+      this.goCreatedTab();
+    }
+  },
   mounted() {
     this.loadNFTListByAddress(this.wallet);
   },
   methods: {
-    snapToCreatorFollowSectionIfNeeded() {
-      const hash = `#${this.creatorFollowSectionId}`;
-      if (this.$route.hash !== hash || !this.$refs.creatorFollowSection) return;
+    scrollToCreatorFollowSection() {
       this.$gsap.gsap.to(window, {
         duration: 1,
-        scrollTo: { y: hash, offsetY: 100 },
+        scrollTo: {
+          y: this.creatorFollowSectionHash,
+          offsetY: 100,
+        },
       });
-      this.$router.replace({ ...this.$route, hash: undefined });
     },
     handleGoCollected() {
       logTrackerEvent(this, 'UserPortfolio', 'GoCollectedTab', this.wallet, 1);
-      this.goCollected();
+      this.goCollectedTab();
     },
     handleGoCreated() {
       logTrackerEvent(this, 'UserPortfolio', 'GoCreatedTab', this.wallet, 1);
-      this.goCreated();
+      this.goCreatedTab();
     },
     handleShare() {
       this.copySharePageURL(this.wallet, this.getAddress);

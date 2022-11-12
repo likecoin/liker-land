@@ -58,13 +58,18 @@ export default {
       ],
     };
   },
+  fetch({ redirect, query, route }) {
+    if (!query.tab || !['collected', 'created'].includes(query.tab)) {
+      redirect({
+        ...route,
+        query: { ...query, tab: 'collected' },
+      });
+    }
+  },
   data() {
     return {
       wallet: undefined,
       userInfo: null,
-      currentTab: ['collected', 'created'].includes(this.$route.query.tab)
-        ? this.$route.query.tab
-        : 'created',
       isLoading: false,
       collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
       collectedOrder: ORDER.DESC,
@@ -78,6 +83,10 @@ export default {
       'getCollectedClassIdSorter',
       'getNFTClassIdListByAddress',
     ]),
+    currentTab() {
+      return this.$route.query.tab;
+    },
+
     userAvatar() {
       return this.userInfo?.avatar;
     },
@@ -210,15 +219,18 @@ export default {
         await fetchPromise;
         this.isLoading = false;
       }
-      if (!this.sortedCreatedClassIds.length) {
-        this.currentTab = 'collected';
-      }
     },
-    goCollected() {
-      this.currentTab = 'collected';
+    changeTab(tab) {
+      this.$router.push({
+        ...this.$route,
+        query: { ...this.$route.query, tab },
+      });
     },
-    goCreated() {
-      this.currentTab = 'created';
+    goCollectedTab() {
+      this.changeTab('collected');
+    },
+    goCreatedTab() {
+      this.changeTab('created');
     },
     copySharePageURL(wallet, referrer) {
       this.shareURLPath({

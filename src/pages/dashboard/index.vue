@@ -210,11 +210,11 @@ export default {
     },
     handleGoCollected() {
       logTrackerEvent(this, 'MyDashboard', 'GoCollectedTab', this.wallet, 1);
-      this.goCollected();
+      this.goCollectedTab();
     },
     handleGoCreated() {
       logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
-      this.goCreated();
+      this.goCreatedTab();
     },
     handleShare() {
       this.copySharePageURL(this.wallet, this.getAddress);
