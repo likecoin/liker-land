@@ -7,6 +7,7 @@
 
         'flex-col',
         'desktop:flex-row',
+        'gap-[48px]',
 
         'items-center',
         'desktop:items-start',
@@ -17,7 +18,6 @@
     >
       <div
         :class="[
-          'mb-[24px]',
           'desktop:mr-[24px]',
 
           'w-full',
@@ -39,9 +39,11 @@
             :stat-wallet="wallet"
           />
         </NFTPortfolioUserInfo>
-        <div class="flex justify-center mt-[18px]">
+        <div
+          v-if="getAddress === wallet"
+          class="flex justify-center mt-[16px] mb-[24px]"
+        >
           <ButtonV2
-            v-if="getAddress === wallet"
             preset="outline"
             text="My Dashboard"
             @click="goMyDashboard"
@@ -58,11 +60,13 @@
           'flex-col',
           'items-center',
           'w-full',
+          'gap-[48px]',
+          'pb-[48px]',
           'max-w-[700px]',
           'desktop:w-[700px]',
         ]"
       >
-        <div :class="['flex','relative','items-center','mb-[48px]','w-full']">
+        <div :class="['flex', 'relative', 'items-center', 'w-full']">
           <div
             :class="[
               'flex',
@@ -130,6 +134,15 @@
           </div>
         </div>
 
+        <NFTPortfolioSubscriptionForm
+          v-if="!isLoading && currentTab === 'created' && getAddress !== wallet"
+          :id="creatorFollowSectionId"
+          class="w-full desktop:order-1"
+          :creator-wallet-address="wallet"
+          :creator-display-name="userDisplayName"
+          :is-empty="!sortedCreatedClassIds.length"
+        />
+
         <CardV2 v-if="isLoading">Loading</CardV2>
 
         <div v-else class="w-full">
@@ -154,24 +167,15 @@
               <NFTPortfolioEmpty v-else preset="collected" />
             </div>
           </MagicGrid>
+        </div>
 
-          <NFTPortfolioSubscriptionForm
-            v-if="!isLoading && currentTab === 'created'"
-            :id="creatorFollowSectionId"
-            :class="{ 'mt-[48px]': sortedCreatedClassIds.length }"
-            :creator-wallet-address="wallet"
-            :creator-display-name="userDisplayName"
-            :is-empty="!sortedCreatedClassIds.length"
+        <div class="flex flex-col items-center order-2 w-full">
+          <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
+          <ButtonV2
+            preset="outline"
+            :text="$t('portfolio_finding_more_button')"
+            to="/campaign/writing-nft"
           />
-
-          <div class="flex flex-col items-center my-[48px] w-full">
-            <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-            <ButtonV2
-              preset="outline"
-              :text="$t('portfolio_finding_more_button')"
-              to="/campaign/writing-nft"
-            />
-          </div>
         </div>
       </div>
     </div>

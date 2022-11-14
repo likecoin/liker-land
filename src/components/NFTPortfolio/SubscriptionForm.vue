@@ -9,7 +9,7 @@
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
-    <Label class="text-dark-gray" preset="p6">
+    <Label class="text-dark-gray" preset="p6" align="center">
       <i18n path="portfolio_subscription_hint">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
