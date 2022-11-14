@@ -133,21 +133,31 @@ export default {
           })
         );
       } catch (err) {
-        if (err.response?.data === 'ALREADY_SUBSCRIBED') {
-          this.alertPromptError(
-            this.$t('portfolio_subscription_notify_duplicated_alert', {
-              creator: this.formattedCreatorDisplayName,
-            })
-          );
-        } else {
-          // eslint-disable-next-line no-console
-          console.error(err);
-          this.alertPromptError(
-            this.$t('portfolio_subscription_notify_error_alert', {
-              creator: this.formattedCreatorDisplayName,
-              error: err.response?.data || err.toString(),
-            })
-          );
+        const errorMessage = err.response?.data;
+        switch (errorMessage) {
+          case 'ALREADY_SUBSCRIBED':
+          case 'SUBSCRIBE_IN_COOLDOWN':
+            this.alertPromptError(
+              this.$t(
+                errorMessage === 'ALREADY_SUBSCRIBED'
+                  ? 'portfolio_subscription_notify_duplicated_alert'
+                  : 'portfolio_subscription_notify_cooldown_alert',
+                {
+                  creator: this.formattedCreatorDisplayName,
+                }
+              )
+            );
+            break;
+
+          default:
+            // eslint-disable-next-line no-console
+            console.error(err);
+            this.alertPromptError(
+              this.$t('portfolio_subscription_notify_error_alert', {
+                creator: this.formattedCreatorDisplayName,
+                error: errorMessage || err.toString(),
+              })
+            );
         }
       } finally {
         this.isLoading = false;

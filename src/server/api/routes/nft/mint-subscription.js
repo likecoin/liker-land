@@ -35,11 +35,14 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
       if (!querySnapshot.empty) {
         const [doc] = querySnapshot.docs;
         const { isVerified, ts } = doc.data();
-        if (
-          isVerified ||
-          Date.now() - ts.toMillis() < VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS
-        ) {
+        if (isVerified) {
           throw new Error('ALREADY_SUBSCRIBED');
+        }
+        if (
+          Date.now() - ts.toMillis() <
+          VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS
+        ) {
+          throw new Error('SUBSCRIBE_IN_COOLDOWN');
         }
         subscriptionId = doc.id;
       }
@@ -57,10 +60,17 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
     });
     res.json(result);
   } catch (err) {
-    if (err.message === 'ALREADY_SUBSCRIBED') {
-      res.status(409).send(err.message);
-    } else {
-      handleRestfulError(req, res, next, err);
+    switch (err.message) {
+      case 'ALREADY_SUBSCRIBED':
+        res.status(409).send(err.message);
+        break;
+
+      case 'SUBSCRIBE_IN_COOLDOWN':
+        res.status(429).send(err.message);
+        break;
+
+      default:
+        handleRestfulError(req, res, next, err);
     }
   }
 });
