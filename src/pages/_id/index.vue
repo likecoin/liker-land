@@ -256,7 +256,7 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
     return undefined;
   },
-  created() {
+  mounted() {
     if (
       this.currentTab !== 'created' &&
       this.$route.hash === this.creatorFollowSectionHash
@@ -266,8 +266,6 @@ export default {
       // Ref: https://www.rfc-editor.org/rfc/rfc2396#section-4
       this.goCreatedTab();
     }
-  },
-  mounted() {
     this.loadNFTListByAddress(this.wallet);
   },
   methods: {
