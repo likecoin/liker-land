@@ -7,6 +7,17 @@ function authenticateLogin(req, res, next) {
   next();
 }
 
+function checkWalletMatch(req, res, next) {
+  const { user } = req.session;
+  const { wallet } = req.params;
+  if (user !== wallet) {
+    res.sendStatus(400);
+    return;
+  }
+  next();
+}
+
 module.exports = {
   authenticateLogin,
+  checkWalletMatch,
 };
