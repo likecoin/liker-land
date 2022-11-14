@@ -333,7 +333,7 @@
   "portfolio_subscription_notify_error_alert": "Error occurred when following {creator}: {error}",
   "portfolio_subscribe_title": "Follow {creator}",
   "portfolio_subscribe_message": "Are you sure to confirm following {creator}'s Writing NFT updates by {email}?",
-  "portfolio_subscribe_message_success": "You are successfully following {creator}. You will receive email when {creator} create any Writing NFT.",
+  "portfolio_subscribe_message_success": "You are now following {creator}. You will receive email when {creator} create any Writing NFT.",
   "portfolio_subscribe_confirm_button": "Confirm",
   "portfolio_subscribe_success_alert": "Successfully follow {creator}",
   "portfolio_subscribe_error_alert": "Error occurred when following {creator}: {error}",
