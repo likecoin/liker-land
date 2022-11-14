@@ -187,6 +187,7 @@
 import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { ellipsis } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
 
 import walletMixin from '~/mixins/wallet';
@@ -198,7 +199,55 @@ export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
+  head() {
+    const name = ellipsis(this.userDisplayName);
+    const title = this.$t('portfolio_title', { name });
+    const description = this.$t('portfolio_description');
+    const image = this.userAvatar;
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: image,
+        },
+      ],
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify({
+            '@context': 'http://www.schema.org',
+            '@type': 'Person',
+            name,
+            image,
+            identifier: this.wallet,
+          }),
+          type: 'application/ld+json',
+          body: true,
+        },
+      ],
+    };
+  },
   computed: {
+    wallet() {
+      return this.$route.params.id;
+    },
     creatorFollowSectionId() {
       return CREATOR_FOLLOW_SECTION_ID;
     },
@@ -221,7 +270,7 @@ export default {
       }
     },
   },
-  async asyncData({ route, $api, error, store }) {
+  async asyncData({ route, $api, error, store, redirect }) {
     let { id } = route.params;
     if (id && isValidAddress(id)) {
       if (id.startsWith('cosmos1')) {
@@ -229,28 +278,19 @@ export default {
       }
       if (id.startsWith('like1')) {
         try {
-          const userInfo = await store.dispatch('fetchUserInfoByAddress', id);
-          return {
-            userInfo,
-            wallet: id,
-          };
+          await store.dispatch('fetchUserInfoByAddress', id);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         }
-        return {
-          wallet: id,
-          userInfo: undefined,
-        };
+        return;
       }
     }
     if (id && checkUserNameValid(id)) {
       try {
         const userInfo = await $api.$get(getUserMinAPI(id));
-        return {
-          userInfo,
-          wallet: userInfo.likeWallet,
-        };
+        redirect({ ...route, params: { id: userInfo.likeWallet } });
+        return;
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
         // eslint-disable-next-line no-console
@@ -258,7 +298,6 @@ export default {
       }
     }
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
-    return undefined;
   },
   mounted() {
     let tab = this.currentTab;

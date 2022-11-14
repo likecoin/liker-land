@@ -233,6 +233,8 @@
   "Currency": {
     "USD": "美元"
   },
+  "dashboard_title": "My Dashbaord",
+  "dashboard_description": "Connect your wallet to view your NFT dashboard.",
   "dashboard_portfolio_button": "Public Portfolio",
   "FeaturedPage": {
     "headerLabel": "Today"

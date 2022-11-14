@@ -174,8 +174,42 @@ export default {
   name: 'MyDashboardPage',
   layout: 'default',
   mixins: [walletMixin, portfolioMixin, authMixin],
+  head() {
+    const title = this.$t('dashboard_title');
+    const description = this.$t('dashboard_description');
+    return {
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: description,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: 'https://liker.land/images/og/writing-nft.jpg',
+        },
+      ],
+    };
+  },
   data() {
     return { hasSwitchedWallet: false };
+  },
+  computed: {
+    wallet() {
+      return this.getAddress;
+    },
   },
   watch: {
     getAddress: {
@@ -201,14 +235,10 @@ export default {
     ...mapActions(['fetchUserInfoByAddress']),
     async fetchUserInfo() {
       try {
-        const userInfo = await this.fetchUserInfoByAddress(this.getAddress);
-        this.userInfo = userInfo.data;
-        this.wallet = this.getAddress;
+        await this.fetchUserInfoByAddress(this.getAddress);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
-      } finally {
-        this.wallet = this.getAddress;
       }
     },
     handleGoCollected() {

@@ -1,6 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { ellipsis } from '~/util/ui';
 import {
   ORDER_CREATED_CLASS_ID_BY,
   ORDER_COLLECTED_CLASS_ID_BY,
@@ -17,57 +16,8 @@ const tabOptions = {
 export default {
   tabOptions,
   mixins: [clipboardMixin],
-  head() {
-    const name = ellipsis(this.userDisplayName);
-    const title = this.$t('portfolio_title', { name });
-    const description = this.$t('portfolio_description');
-    const image =
-      this.userAvatar ||
-      `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png`;
-    return {
-      title,
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: title,
-        },
-        {
-          hid: 'description',
-          name: 'description',
-          content: description,
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: description,
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: image,
-        },
-      ],
-      script: [
-        {
-          hid: 'schema',
-          innerHTML: JSON.stringify({
-            '@context': 'http://www.schema.org',
-            '@type': 'Person',
-            name,
-            image,
-            identifier: this.wallet,
-          }),
-          type: 'application/ld+json',
-          body: true,
-        },
-      ],
-    };
-  },
   data() {
     return {
-      wallet: undefined,
-      userInfo: null,
       isLoading: false,
       collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
       collectedOrder: ORDER.DESC,
@@ -77,6 +27,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getUserInfoByAddress',
       'getCreatedClassIdSorter',
       'getCollectedClassIdSorter',
       'getNFTClassIdListByAddress',
@@ -85,8 +36,14 @@ export default {
       return this.$route.query.tab || tabOptions.collected;
     },
 
+    userInfo() {
+      return this.getUserInfoByAddress(this.wallet);
+    },
     userAvatar() {
-      return this.userInfo?.avatar;
+      return (
+        this.userInfo?.avatar ||
+        `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png?background=%23ffffff`
+      );
     },
     userDisplayName() {
       return this.userInfo?.displayName || this.wallet;
@@ -219,7 +176,6 @@ export default {
       }
     },
     async loadNFTListByAddress(address) {
-      this.wallet = address;
       const fetchPromise = this.fetchNFTListByAddress(address);
       if (!this.getNFTClassIdListByAddress(address)) {
         this.isLoading = true;
