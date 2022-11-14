@@ -194,6 +194,9 @@ export default {
       },
     },
   },
+  mounted() {
+    this.syncRouteForTab();
+  },
   methods: {
     ...mapActions(['fetchUserInfoByAddress']),
     async fetchUserInfo() {

@@ -212,7 +212,7 @@ export default {
         if (this.$route.hash === this.creatorFollowSectionHash) {
           this.$nextTick(this.scrollToCreatorFollowSection);
         } else if (
-          this.currentTab !== 'created' &&
+          this.currentTab !== portfolioMixin.tabOptions.created &&
           !this.sortedCollectedClassIds.length
         ) {
           // Go to created tab if collected tab is empty
@@ -261,15 +261,12 @@ export default {
     return undefined;
   },
   mounted() {
-    if (
-      this.currentTab !== 'created' &&
-      this.$route.hash === this.creatorFollowSectionHash
-    ) {
-      // NOTE: `route.hash` never sent to server side,
-      // Therefore, it is done in here
-      // Ref: https://www.rfc-editor.org/rfc/rfc2396#section-4
-      this.goCreatedTab();
+    let tab = this.currentTab;
+    if (this.$route.hash === this.creatorFollowSectionHash) {
+      tab = portfolioMixin.tabOptions.created;
     }
+    this.syncRouteForTab(tab);
+
     this.loadNFTListByAddress(this.wallet);
   },
   methods: {
