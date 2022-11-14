@@ -58,7 +58,7 @@ publisher.publish = async (publishTopic, req, obj) => {
   }
 };
 
-module.export = {
+module.exports = {
   publisher,
   PUBSUB_TOPIC_MISC,
 };
