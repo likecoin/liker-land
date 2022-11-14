@@ -98,8 +98,8 @@ router.put('/nft/mint-subscription/:id', async (req, res, next) => {
           throw new Error('SUBSCRIPTION_NOT_FOUND');
         }
         const docData = doc.data();
-        const { subscriberEmail } = docData;
-        if (email !== subscriberEmail) {
+        const { subscriberEmail: docEmail } = docData;
+        if (email !== docEmail) {
           throw new Error('SUBSCRIPTION_NOT_FOUND');
         }
         await t.update(docRef, { isVerified: true });
@@ -107,7 +107,7 @@ router.put('/nft/mint-subscription/:id', async (req, res, next) => {
       }
     );
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
-      logType: 'UserCreatorUnfollow',
+      logType: 'UserCreatorFollow',
       type: 'email',
       email: subscriberEmail,
       creatorWallet: subscribedWallet,
@@ -131,7 +131,7 @@ router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
     const { subscriberEmail, subscribedWallet } = doc.data();
     await docRef.delete();
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
-      logType: 'SubscribeMintNFTRemoved',
+      logType: 'UserCreatorUnfollow',
       type: 'email',
       email: subscriberEmail,
       creatorWallet: subscribedWallet,
