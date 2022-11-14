@@ -24,7 +24,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
   )
   .onWrite(async change => {
     if (!change.after || !change.after.data()) {
-      return Promise.resolve();
+      return;
     }
 
     const {
@@ -33,7 +33,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       isVerified,
     } = change.after.data();
     if (isVerified) {
-      return Promise.resolve();
+      return;
     }
 
     const {
@@ -61,7 +61,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       unsubscribeLink,
       language: 'en',
     });
-    return sendEmail({
+    await sendEmail({
       email: subscriberEmail,
       subject: `Writing NFT - Follow ${displayName}`,
       html: body,
