@@ -8,6 +8,7 @@ const {
   db,
   nftMintSubscriptionCollection,
 } = require('../../../modules/firebase');
+const { publisher, PUBSUB_TOPIC_MISC } = require('../../../modules/pubsub');
 
 const router = Router();
 
@@ -42,6 +43,12 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
         ts: firestore.FieldValue.serverTimestamp(),
       });
       return { subscriptionId };
+    });
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'subscribeMintNFTRequest',
+      type: 'email',
+      subscriberEmail,
+      subscribedWallet,
     });
     res.json(result);
   } catch (err) {
@@ -96,6 +103,12 @@ router.put('/nft/mint-subscription/:id', async (req, res, next) => {
       }
       await t.update(docRef, { isVerified: true });
     });
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'SubscribeMintNFTVerified',
+      type: 'email',
+      subscriberEmail,
+      subscribedWallet,
+    });
     res.sendStatus(200);
   } catch (err) {
     if (err.message === 'SUBSCRIPTION_NOT_FOUND') {
@@ -110,6 +123,12 @@ router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
   const { id: subscriptionId } = req.params;
   try {
     await nftMintSubscriptionCollection.doc(subscriptionId).delete();
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'SubscribeMintNFTRemoved',
+      type: 'email',
+      subscriberEmail,
+      subscribedWallet,
+    });
     res.sendStatus(200);
   } catch (err) {
     handleRestfulError(req, res, next, err);
