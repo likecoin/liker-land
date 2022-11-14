@@ -8,6 +8,7 @@ const {
   db,
   nftMintSubscriptionCollection,
 } = require('../../../modules/firebase');
+const { publisher, PUBSUB_TOPIC_MISC } = require('../../../modules/pubsub');
 
 const router = Router();
 
@@ -42,6 +43,12 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
         ts: firestore.FieldValue.serverTimestamp(),
       });
       return { subscriptionId };
+    });
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'UserCreatorFollowUnverified',
+      type: 'email',
+      email: subscriberEmail,
+      creatorWallet: subscribedWallet,
     });
     res.json(result);
   } catch (err) {
@@ -84,17 +91,26 @@ router.put('/nft/mint-subscription/:id', async (req, res, next) => {
 
     const { id: subscriptionId } = req.params;
     const docRef = nftMintSubscriptionCollection.doc(subscriptionId);
-    await db.runTransaction(async t => {
-      const doc = await t.get(docRef);
-      if (!doc.exists) {
-        throw new Error('SUBSCRIPTION_NOT_FOUND');
+    const { subscribedWallet, subscriberEmail } = await db.runTransaction(
+      async t => {
+        const doc = await t.get(docRef);
+        if (!doc.exists) {
+          throw new Error('SUBSCRIPTION_NOT_FOUND');
+        }
+        const docData = doc.data();
+        const { subscriberEmail: docEmail } = docData;
+        if (email !== docEmail) {
+          throw new Error('SUBSCRIPTION_NOT_FOUND');
+        }
+        await t.update(docRef, { isVerified: true });
+        return docData;
       }
-
-      const { subscriberEmail } = doc.data();
-      if (email !== subscriberEmail) {
-        throw new Error('SUBSCRIPTION_NOT_FOUND');
-      }
-      await t.update(docRef, { isVerified: true });
+    );
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'UserCreatorFollow',
+      type: 'email',
+      email: subscriberEmail,
+      creatorWallet: subscribedWallet,
     });
     res.sendStatus(200);
   } catch (err) {
@@ -109,7 +125,17 @@ router.put('/nft/mint-subscription/:id', async (req, res, next) => {
 router.delete('/nft/mint-subscription/:id', async (req, res, next) => {
   const { id: subscriptionId } = req.params;
   try {
-    await nftMintSubscriptionCollection.doc(subscriptionId).delete();
+    const docRef = nftMintSubscriptionCollection.doc(subscriptionId);
+    const doc = await docRef.get();
+    if (!doc.exists) throw new Error('SUBSCRIPTION_NOT_FOUND');
+    const { subscriberEmail, subscribedWallet } = doc.data();
+    await docRef.delete();
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'UserCreatorUnfollow',
+      type: 'email',
+      email: subscriberEmail,
+      creatorWallet: subscribedWallet,
+    });
     res.sendStatus(200);
   } catch (err) {
     handleRestfulError(req, res, next, err);
