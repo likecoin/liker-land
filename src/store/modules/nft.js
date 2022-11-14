@@ -44,8 +44,16 @@ const mutations = {
 };
 
 function compareIsWritingNFT(getters, classIdA, classIdB) {
-  const aIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(classIdA));
-  const bIsWritingNFT = isWritingNFT(getters.getNFTClassMetadataById(classIdB));
+  const aMetadata = getters.getNFTClassMetadataById(classIdA);
+  const bMetadata = getters.getNFTClassMetadataById(classIdB);
+  const aPurchaseData = getters.getNFTClassPurchaseInfoById(classIdA);
+  const bPurchaseData = getters.getNFTClassPurchaseInfoById(classIdB);
+  const aIsWritingNFT =
+    isWritingNFT(aMetadata) &&
+    (aPurchaseData?.price || aPurchaseData?.lastSoldPrice) !== undefined;
+  const bIsWritingNFT =
+    isWritingNFT(bMetadata) &&
+    (bPurchaseData?.price || bPurchaseData?.lastSoldPrice) !== undefined;
   if (aIsWritingNFT && !bIsWritingNFT) return -1;
   if (!aIsWritingNFT && bIsWritingNFT) return 1;
   return 0;
