@@ -25,10 +25,7 @@
           'desktop:w-[280px]',
         ]"
       >
-        <NFTPortfolioUserInfo
-          :user-info="userInfo"
-          :wallet="wallet"
-        >
+        <NFTPortfolioUserInfo :wallet="wallet">
           <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
             <IconEllipse />
             <IconEllipse />

@@ -20,7 +20,7 @@
         align="center"
       >
         <i18n :path="messageI18nPath">
-          <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName }}</span>
+          <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName | ellipsis }}</span>
           <span class="font-[600] text-like-green" place="email">{{ email }}</span>
         </i18n>
       </Label>
@@ -51,7 +51,10 @@ import { nftMintSubscriptionAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
+import { createUserInfoMixin } from '~/mixins/user-info';
 import alertMixin from '~/mixins/alert';
+
+const creatorInfoMixin = createUserInfoMixin({ propKey: 'Creator' });
 
 function isSubscribePage(route) {
   return route.name === 'id-index-subscribe-subscriptionId';
@@ -60,7 +63,10 @@ function isSubscribePage(route) {
 export default {
   // Both subscribe page and unsubscribe page share the same component
   name: 'NFTCreatorSubscriptionPage',
-  mixins: [alertMixin],
+  filters: {
+    ellipsis,
+  },
+  mixins: [alertMixin, creatorInfoMixin],
   data() {
     return {
       // From asyncData
@@ -75,25 +81,13 @@ export default {
     isSubscribePage() {
       return isSubscribePage(this.$route);
     },
-    creatorInfo() {
-      return this.getUserInfoByAddress(this.wallet);
-    },
-    creatorDisplayName() {
-      return ellipsis(this.creatorInfo?.displayName);
-    },
-    isCreatorCivicLiker() {
-      return !!(
-        this.creatorInfo?.isCivicLikerTrial ||
-        this.creatorInfo?.isSubscribedCivicLiker
-      );
-    },
     headerText() {
       return this.$t(
         this.isSubscribePage
           ? 'portfolio_subscribe_title'
           : 'portfolio_unsubscribe_title',
         {
-          creator: this.creatorDisplayName,
+          creator: ellipsis(this.creatorDisplayName),
         }
       );
     },

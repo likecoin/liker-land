@@ -15,37 +15,18 @@
 </template>
 <script>
 import { ellipsis } from '~/util/ui';
-import { getIdenticonAvatar } from '~/util/api';
+
+import userInfoMixin from '~/mixins/user-info';
 
 export default {
   filters: {
     ellipsis,
   },
+  mixins: [userInfoMixin],
   props: {
-    userInfo: {
-      type: Object,
-      default: null,
-    },
     wallet: {
       type: String,
       default: null,
-    },
-  },
-  computed: {
-    userAvatar() {
-      return this.userInfo?.avatar || getIdenticonAvatar(this.wallet);
-    },
-    isUserCivicLiker() {
-      return !!(
-        this.userInfo?.isCivicLikerTrial ||
-        this.userInfo?.isSubscribedCivicLiker
-      );
-    },
-    userDisplayName() {
-      return this.userInfo?.displayName || this.wallet;
-    },
-    userDescription() {
-      return this.userInfo?.description;
     },
   },
 };
