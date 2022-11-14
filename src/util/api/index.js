@@ -275,7 +275,7 @@ export const getLatestNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/c
 export const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 
 export const getIdenticonAvatar = id =>
-  `https://avatars.dicebear.com/api/identicon/${id}.svg`;
+  `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet }) => {
   const qsPayload = { email, wallet };

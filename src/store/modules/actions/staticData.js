@@ -29,7 +29,7 @@ export async function fetchUserInfo({ commit, state }, opts) {
 export async function fetchUserInfoByAddress({ commit, state }, address) {
   let userInfo = {
     displayName: address,
-    avatar: `https://avatars.dicebear.com/api/identicon/${address}.svg`,
+    avatar: api.getIdenticonAvatar(address),
   };
 
   try {

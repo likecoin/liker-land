@@ -6,6 +6,7 @@ import {
   ORDER,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
+import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const tabOptions = {
@@ -40,10 +41,7 @@ export default {
       return this.getUserInfoByAddress(this.wallet);
     },
     userAvatar() {
-      return (
-        this.userInfo?.avatar ||
-        `https://avatars.dicebear.com/api/identicon/${this.wallet}/600.png?background=%23ffffff`
-      );
+      return this.userInfo?.avatar || getIdenticonAvatar(this.wallet);
     },
     userDisplayName() {
       return this.userInfo?.displayName || this.wallet;

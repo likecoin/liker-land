@@ -1,5 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
+import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 
@@ -23,7 +24,7 @@ export default {
     walletUserAvatar() {
       return (
         (this.getLikerInfo && this.getLikerInfo.avatar) ||
-        `https://avatars.dicebear.com/api/identicon/${this.getAddress}.svg`
+        getIdenticonAvatar(this.getAddress)
       );
     },
   },

@@ -15,6 +15,7 @@
 </template>
 <script>
 import { ellipsis } from '~/util/ui';
+import { getIdenticonAvatar } from '~/util/api';
 
 export default {
   filters: {
@@ -32,10 +33,7 @@ export default {
   },
   computed: {
     userAvatar() {
-      return (
-        this.userInfo?.avatar ||
-        `https://avatars.dicebear.com/api/identicon/${this.wallet}.svg`
-      );
+      return this.userInfo?.avatar || getIdenticonAvatar(this.wallet);
     },
     isUserCivicLiker() {
       return !!(
