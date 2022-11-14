@@ -1,5 +1,8 @@
 const { Router } = require('express');
-const { authenticateLogin } = require('../../../../middleware/auth');
+const {
+  authenticateLogin,
+  checkWalletMatch,
+} = require('../../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../../middleware/cache');
 const { handleRestfulError } = require('../../../../middleware/error');
 const { isValidAddress } = require('../../../../util/cosmos');
@@ -10,14 +13,14 @@ const {
 
 const router = Router();
 
-router.get('/nft/hidden', async (req, res, next) => {
+router.get('/v2/users/:wallet/nfts/hidden', async (req, res, next) => {
   try {
-    const userId = req.query.owner;
-    if (!isValidAddress(userId)) {
+    const { wallet: user } = req.params;
+    if (!isValidAddress(user)) {
       res.sendStatus(400);
       return;
     }
-    const userDoc = await walletUserCollection(userId).get();
+    const userDoc = await walletUserCollection(user).get();
     const { hiddenNftClassIds = [] } = userDoc.data();
     res.json({ hidden: hiddenNftClassIds });
   } catch (err) {
@@ -25,40 +28,50 @@ router.get('/nft/hidden', async (req, res, next) => {
   }
 });
 
-router.post('/nft/hidden', authenticateLogin, async (req, res, next) => {
-  try {
-    setPrivateCacheHeader(res);
-    const { user } = req.session;
-    const { nftClassIds = [] } = req.body;
-    if (!nftClassIds.length) {
-      res.sendStatus(400);
-      return;
+router.post(
+  '/v2/users/:wallet/nfts/hidden',
+  authenticateLogin,
+  checkWalletMatch,
+  async (req, res, next) => {
+    try {
+      setPrivateCacheHeader(res);
+      const { wallet: user } = req.params;
+      const { nftClassIds = [] } = req.body;
+      if (!nftClassIds.length) {
+        res.sendStatus(400);
+        return;
+      }
+      await walletUserCollection.doc(user).update({
+        hiddenNftClassIds: FieldValue.arrayUnion(...nftClassIds),
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
     }
-    await walletUserCollection.doc(user).update({
-      hiddenNftClassIds: FieldValue.arrayUnion(...nftClassIds),
-    });
-    res.sendStatus(200);
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
   }
-});
+);
 
-router.delete('/nft/hidden', authenticateLogin, async (req, res, next) => {
-  try {
-    setPrivateCacheHeader(res);
-    const { user } = req.session;
-    const { nftClassIds = [] } = req.body;
-    if (!nftClassIds.length) {
-      res.sendStatus(400);
-      return;
+router.delete(
+  '/v2/users/:wallet/nfts/hidden',
+  authenticateLogin,
+  checkWalletMatch,
+  async (req, res, next) => {
+    try {
+      setPrivateCacheHeader(res);
+      const { wallet: user } = req.params;
+      const { nftClassIds = [] } = req.body;
+      if (!nftClassIds.length) {
+        res.sendStatus(400);
+        return;
+      }
+      await walletUserCollection.doc(user).update({
+        hiddenNftClassIds: FieldValue.arrayRemove(...nftClassIds),
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
     }
-    await walletUserCollection.doc(user).update({
-      hiddenNftClassIds: FieldValue.arrayRemove(...nftClassIds),
-    });
-    res.sendStatus(200);
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
   }
-});
+);
 
 module.exports = router;
