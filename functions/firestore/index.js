@@ -22,9 +22,19 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
   .firestore.document(
     `${config().db.firestore_nft_mint_subscriptions_root}/{id}`
   )
-  .onCreate(async snapshot => {
-    const subscriptionId = snapshot.id;
-    const { subscriberEmail, subscribedWallet } = snapshot.data();
+  .onWrite(async change => {
+    if (!change.after || !change.after.data()) {
+      return;
+    }
+
+    const {
+      subscriberEmail,
+      subscribedWallet,
+      isVerified,
+    } = change.after.data();
+    if (isVerified) {
+      return;
+    }
 
     const {
       avatar,
@@ -32,6 +42,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       isSubscribedCivicLiker,
     } = await fetchLikerInfoByWallet(subscribedWallet);
 
+    const subscriptionId = change.after.id;
     const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory({
       subscriptionId,
       subscribedWallet,
@@ -41,18 +52,18 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
     const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
     const { body } = getBasicWithAvatarTemplate({
       title: 'Writing NFT',
-      subtitle: `Subscribe ${shortenString(displayName)}'s Writing NFT`,
+      subtitle: `Follow ${shortenString(displayName)}'s Writing NFT`,
       content: `<p>Hi,</p>
-      <p>Please <a href="${confirmLink}" target="_blank" rel="noreferrer">click here</a> or the link below to confirm your subscription of ${displayName}'s Writing NFT.</p>
+      <p>Please <a href="${confirmLink}" target="_blank" rel="noreferrer">click here</a> or the link below to confirm following ${displayName}'s Writing NFT.</p>
       <p><a href="${confirmLink}" target="_blank" rel="noreferrer">${confirmLink}</a></p>`,
       avatarURL: avatar,
       isCivicLiker: isSubscribedCivicLiker,
       unsubscribeLink,
       language: 'en',
     });
-    return sendEmail({
+    await sendEmail({
       email: subscriberEmail,
-      subject: 'Writing NFT - NFT Subscription',
+      subject: `Writing NFT - Follow ${displayName}`,
       html: body,
     });
   });

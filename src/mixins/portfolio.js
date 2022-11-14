@@ -9,7 +9,13 @@ import {
 import clipboardMixin from '~/mixins/clipboard';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+const tabOptions = {
+  collected: 'collected',
+  created: 'created',
+};
+
 export default {
+  tabOptions,
   mixins: [clipboardMixin],
   head() {
     const name = ellipsis(this.userDisplayName);
@@ -62,9 +68,6 @@ export default {
     return {
       wallet: undefined,
       userInfo: null,
-      currentTab: ['collected', 'created'].includes(this.$route.query.tab)
-        ? this.$route.query.tab
-        : 'created',
       isLoading: false,
       collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
       collectedOrder: ORDER.DESC,
@@ -78,6 +81,10 @@ export default {
       'getCollectedClassIdSorter',
       'getNFTClassIdListByAddress',
     ]),
+    currentTab() {
+      return this.$route.query.tab || tabOptions.collected;
+    },
+
     userAvatar() {
       return this.userInfo?.avatar;
     },
@@ -113,17 +120,17 @@ export default {
       });
     },
     currentOrderBy() {
-      return this.currentTab === 'collected'
+      return this.currentTab === tabOptions.collected
         ? this.collectedOrderBy
         : this.createdOrderBy;
     },
     currentOrder() {
-      return this.currentTab === 'collected'
+      return this.currentTab === tabOptions.collected
         ? this.collectedOrder
         : this.createdOrder;
     },
     currentOrderOptions() {
-      return this.currentTab === 'collected'
+      return this.currentTab === tabOptions.collected
         ? this.collectedOrderOptions
         : this.createdOrderOptions;
     },
@@ -202,6 +209,15 @@ export default {
   },
   methods: {
     ...mapActions(['fetchNFTListByAddress']),
+    syncRouteForTab(tab = tabOptions.collected) {
+      const { query } = this.$route;
+      if (!query.tab || !tabOptions[query.tab] || this.currentTab !== tab) {
+        this.$router.replace({
+          ...this.$route,
+          query: { ...query, tab },
+        });
+      }
+    },
     async loadNFTListByAddress(address) {
       this.wallet = address;
       const fetchPromise = this.fetchNFTListByAddress(address);
@@ -210,15 +226,15 @@ export default {
         await fetchPromise;
         this.isLoading = false;
       }
-      if (!this.sortedCreatedClassIds.length) {
-        this.currentTab = 'collected';
-      }
     },
-    goCollected() {
-      this.currentTab = 'collected';
+    changeTab(tab) {
+      this.syncRouteForTab(tab);
     },
-    goCreated() {
-      this.currentTab = 'created';
+    goCollectedTab() {
+      this.changeTab(tabOptions.collected);
+    },
+    goCreatedTab() {
+      this.changeTab(tabOptions.created);
     },
     copySharePageURL(wallet, referrer) {
       this.shareURLPath({
@@ -239,11 +255,11 @@ export default {
         `Sort portfolio item in ${splits[0]} by ${order} order`,
         1
       );
-      if (this.currentTab === 'collected') {
+      if (this.currentTab === tabOptions.collected) {
         this.collectedOrderBy = orderBy;
         this.collectedOrder = order;
       }
-      if (this.currentTab === 'created') {
+      if (this.currentTab === tabOptions.created) {
         this.createdOrderBy = orderBy;
         this.createdOrder = order;
       }

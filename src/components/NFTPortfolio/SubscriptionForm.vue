@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray rounded-[24px] px-[32px] py-[24px]">
+  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray phone:rounded-none rounded-[24px] px-[32px] py-[24px]">
     <Label
       preset="h2"
       :text="$t(isEmpty ? 'portfolio_subscription_title_empty' : 'portfolio_subscription_title')"
@@ -9,13 +9,13 @@
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
-    <Label class="text-dark-gray" preset="p6">
+    <Label class="text-dark-gray" preset="p6" align="center">
       <i18n path="portfolio_subscription_hint">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
     <form
-      class="flex gap-[16px] items-center"
+      class="flex phone:flex-col gap-[16px] items-center"
       @submit="submitEmail"
     >
       <TextField
@@ -133,21 +133,31 @@ export default {
           })
         );
       } catch (err) {
-        if (err.response.data === 'ALREADY_SUBSCRIBED') {
-          this.alertPromptError(
-            this.$t('portfolio_subscription_notify_duplicated_alert', {
-              creator: this.formattedCreatorDisplayName,
-            })
-          );
-        } else {
-          // eslint-disable-next-line no-console
-          console.error(err);
-          this.alertPromptError(
-            this.$t('portfolio_subscription_notify_error_alert', {
-              creator: this.formattedCreatorDisplayName,
-              error: err.response.data,
-            })
-          );
+        const errorMessage = err.response?.data;
+        switch (errorMessage) {
+          case 'ALREADY_SUBSCRIBED':
+          case 'SUBSCRIBE_IN_COOLDOWN':
+            this.alertPromptError(
+              this.$t(
+                errorMessage === 'ALREADY_SUBSCRIBED'
+                  ? 'portfolio_subscription_notify_duplicated_alert'
+                  : 'portfolio_subscription_notify_cooldown_alert',
+                {
+                  creator: this.formattedCreatorDisplayName,
+                }
+              )
+            );
+            break;
+
+          default:
+            // eslint-disable-next-line no-console
+            console.error(err);
+            this.alertPromptError(
+              this.$t('portfolio_subscription_notify_error_alert', {
+                creator: this.formattedCreatorDisplayName,
+                error: errorMessage || err.toString(),
+              })
+            );
         }
       } finally {
         this.isLoading = false;
