@@ -53,6 +53,7 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
       }
       const docRef = nftMintSubscriptionCollection.doc(subscriptionId);
       await t.set(docRef, {
+        isVerified: false,
         subscriberEmail,
         subscribedWallet,
         ts: firestore.FieldValue.serverTimestamp(),
