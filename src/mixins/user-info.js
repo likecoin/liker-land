@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex';
 
 import { getIdenticonAvatar } from '~/util/api';
+import { ellipsis } from '~/util/ui';
 
 export const createUserInfoMixin = ({ propKey = 'User' } = {}) => {
   const getPropName = (label, prefix = '') => {
@@ -26,7 +27,7 @@ export const createUserInfoMixin = ({ propKey = 'User' } = {}) => {
         );
       },
       [getPropName('DisplayName')]() {
-        return this[userInfoPropName]?.displayName || this.wallet;
+        return ellipsis(this[userInfoPropName]?.displayName || this.wallet);
       },
       [getPropName('Description')]() {
         return this[userInfoPropName]?.description;

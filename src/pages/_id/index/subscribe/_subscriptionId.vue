@@ -20,7 +20,7 @@
         align="center"
       >
         <i18n :path="messageI18nPath">
-          <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName | ellipsis }}</span>
+          <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName }}</span>
           <span class="font-[600] text-like-green" place="email">{{ email }}</span>
         </i18n>
       </Label>
@@ -49,7 +49,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { nftMintSubscriptionAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { ellipsis } from '~/util/ui';
 
 import { createUserInfoMixin } from '~/mixins/user-info';
 import alertMixin from '~/mixins/alert';
@@ -63,9 +62,6 @@ function isSubscribePage(route) {
 export default {
   // Both subscribe page and unsubscribe page share the same component
   name: 'NFTCreatorSubscriptionPage',
-  filters: {
-    ellipsis,
-  },
   mixins: [alertMixin, creatorInfoMixin],
   data() {
     return {
@@ -87,7 +83,7 @@ export default {
           ? 'portfolio_subscribe_title'
           : 'portfolio_unsubscribe_title',
         {
-          creator: ellipsis(this.creatorDisplayName),
+          creator: this.creatorDisplayName,
         }
       );
     },

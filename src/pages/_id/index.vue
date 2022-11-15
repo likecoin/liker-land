@@ -189,7 +189,6 @@
 import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { ellipsis } from '~/util/ui';
 import { checkUserNameValid } from '~/util/user';
 
 import walletMixin from '~/mixins/wallet';
@@ -202,7 +201,7 @@ export default {
   layout: 'default',
   mixins: [walletMixin, portfolioMixin],
   head() {
-    const name = ellipsis(this.userDisplayName);
+    const name = this.userDisplayName;
     const title = this.$t('portfolio_title', { name });
     const description = this.$t('portfolio_description');
     const image = this.userAvatar;

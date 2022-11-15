@@ -2,7 +2,7 @@
   <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
     <Identity :avatar-url="userAvatar" :avatar-size="88" :is-avatar-outlined="isUserCivicLiker" />
     <Label preset="h3" :class="['text-like-green', 'mt-[18px]']">
-      {{ userDisplayName | ellipsis }}
+      {{ userDisplayName }}
     </Label>
     <template v-if="userDescription">
       <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
@@ -14,14 +14,9 @@
   </CardV2>
 </template>
 <script>
-import { ellipsis } from '~/util/ui';
-
 import userInfoMixin from '~/mixins/user-info';
 
 export default {
-  filters: {
-    ellipsis,
-  },
   mixins: [userInfoMixin],
   props: {
     wallet: {
