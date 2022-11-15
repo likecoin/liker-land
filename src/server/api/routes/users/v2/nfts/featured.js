@@ -21,8 +21,8 @@ router.get('/v2/users/:wallet/nfts/featured', async (req, res, next) => {
       return;
     }
     const userDoc = await walletUserCollection(user).get();
-    const { featuredNftClassIds = [] } = userDoc.data();
-    res.json({ featured: featuredNftClassIds });
+    const { featuredNFTClassIds = [] } = userDoc.data();
+    res.json({ featured: featuredNFTClassIds });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
@@ -42,7 +42,7 @@ router.post(
         return;
       }
       await walletUserCollection.doc(user).update({
-        featuredNftClassIds: FieldValue.arrayUnion(...nftClassIds),
+        featuredNFTClassIds: FieldValue.arrayUnion(...nftClassIds),
       });
       res.sendStatus(200);
     } catch (err) {
@@ -65,7 +65,7 @@ router.delete(
         return;
       }
       await walletUserCollection.doc(user).update({
-        featuredNftClassIds: FieldValue.arrayRemove(...nftClassIds),
+        featuredNFTClassIds: FieldValue.arrayRemove(...nftClassIds),
       });
       res.sendStatus(200);
     } catch (err) {

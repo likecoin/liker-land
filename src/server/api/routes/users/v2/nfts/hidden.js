@@ -21,8 +21,8 @@ router.get('/v2/users/:wallet/nfts/hidden', async (req, res, next) => {
       return;
     }
     const userDoc = await walletUserCollection(user).get();
-    const { hiddenNftClassIds = [] } = userDoc.data();
-    res.json({ hidden: hiddenNftClassIds });
+    const { hiddenNFTClassIds = [] } = userDoc.data();
+    res.json({ hidden: hiddenNFTClassIds });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
@@ -42,7 +42,7 @@ router.post(
         return;
       }
       await walletUserCollection.doc(user).update({
-        hiddenNftClassIds: FieldValue.arrayUnion(...nftClassIds),
+        hiddenNFTClassIds: FieldValue.arrayUnion(...nftClassIds),
       });
       res.sendStatus(200);
     } catch (err) {
@@ -65,7 +65,7 @@ router.delete(
         return;
       }
       await walletUserCollection.doc(user).update({
-        hiddenNftClassIds: FieldValue.arrayRemove(...nftClassIds),
+        hiddenNFTClassIds: FieldValue.arrayRemove(...nftClassIds),
       });
       res.sendStatus(200);
     } catch (err) {
