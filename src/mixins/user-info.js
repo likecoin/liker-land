@@ -3,7 +3,10 @@ import { mapGetters } from 'vuex';
 import { getIdenticonAvatar } from '~/util/api';
 import { ellipsis } from '~/util/ui';
 
-export const createUserInfoMixin = ({ propKey = 'User' } = {}) => {
+export const createUserInfoMixin = ({
+  propKey = 'User',
+  walletKey = 'wallet',
+} = {}) => {
   const getPropName = propNameTemplate => {
     const propName = propNameTemplate.replace('{key}', propKey);
     return `${propName.charAt(0).toLocaleLowerCase()}${propName.substring(1)}`;
@@ -13,11 +16,11 @@ export const createUserInfoMixin = ({ propKey = 'User' } = {}) => {
     computed: {
       ...mapGetters(['getUserInfoByAddress']),
       [userInfoPropName]() {
-        return this.getUserInfoByAddress(this.wallet);
+        return this.getUserInfoByAddress(this[walletKey]);
       },
       [getPropName('{key}Avatar')]() {
         return (
-          this[userInfoPropName]?.avatar || getIdenticonAvatar(this.wallet)
+          this[userInfoPropName]?.avatar || getIdenticonAvatar(this[walletKey])
         );
       },
       [getPropName('is{key}CivicLiker')]() {
@@ -27,7 +30,7 @@ export const createUserInfoMixin = ({ propKey = 'User' } = {}) => {
         );
       },
       [getPropName('{key}DisplayName')]() {
-        return ellipsis(this[userInfoPropName]?.displayName || this.wallet);
+        return ellipsis(this[userInfoPropName]?.displayName || this[walletKey]);
       },
       [getPropName('{key}Description')]() {
         return this[userInfoPropName]?.description;
