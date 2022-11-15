@@ -1,4 +1,4 @@
-function authenticateLogin(req, res, next) {
+function authenticateV2Login(req, res, next) {
   const { user, version } = req.session;
   if (!user || version !== 2) {
     res.sendStatus(401);
@@ -18,6 +18,6 @@ function checkWalletMatch(req, res, next) {
 }
 
 module.exports = {
-  authenticateLogin,
+  authenticateV2Login,
   checkWalletMatch,
 };

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { db, walletUserCollection } = require('../../../../modules/firebase');
 const {
-  authenticateLogin,
+  authenticateV2Login,
   checkWalletMatch,
 } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
@@ -17,7 +17,7 @@ const router = Router();
 
 router.get(
   '/v2/users/:wallet/self',
-  authenticateLogin,
+  authenticateV2Login,
   checkWalletMatch,
   async (req, res, next) => {
     try {

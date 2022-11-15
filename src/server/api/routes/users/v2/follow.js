@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {
-  authenticateLogin,
+  authenticateV2Login,
   checkWalletMatch,
 } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
@@ -31,7 +31,7 @@ router.get('/v2/users/:wallet/followers', async (req, res, next) => {
 
 router.post(
   '/v2/users/:wallet/followers',
-  authenticateLogin,
+  authenticateV2Login,
   checkWalletMatch,
   async (req, res, next) => {
     try {
@@ -54,7 +54,7 @@ router.post(
 
 router.delete(
   '/v2/users/:wallet/followers',
-  authenticateLogin,
+  authenticateV2Login,
   checkWalletMatch,
   async (req, res, next) => {
     try {
