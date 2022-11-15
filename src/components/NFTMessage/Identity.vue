@@ -15,29 +15,27 @@
     :to="toRoute"
   >
     <Identity
-      :avatar-url="avatarURL"
+      :avatar-url="userAvatar"
       :avatar-size="42"
-      :is-avatar-outlined="isAvatarOutlined"
+      :is-avatar-outlined="isUserCivicLiker"
     />
     <div>
-      <div class="text-[12px] text-medium-gray">{{ identityLabel }}</div>
-      <Label class="text-like-green" preset="h5">{{ displayName | ellipsis }}</Label>
+      <div class="text-[12px] text-medium-gray">{{ userLabel }}</div>
+      <Label class="text-like-green" preset="h5">{{ userDisplayName }}</Label>
     </div>
   </NuxtLink>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
-import { getIdenticonAvatar } from '~/util/api';
+import { createUserInfoMixin } from '~/mixins/user-info';
 
-import { ellipsis } from '~/util/ui';
+const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
   name: 'MessageIdentiy',
-  filters: {
-    ellipsis,
-  },
+  mixins: [userInfoMixin],
   props: {
     walletAddress: {
       type: String,
@@ -53,7 +51,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getUserInfoByAddress']),
     toRoute() {
       return {
         name: 'id',
@@ -61,26 +58,11 @@ export default {
         query: { tab: this.type === 'creator' ? 'created' : 'collected' },
       };
     },
-    identifyInfo() {
-      return this.getUserInfoByAddress(this.walletAddress) || {};
-    },
-    identityLabel() {
+    userLabel() {
       return this.$t(
         this.type === 'creator'
           ? 'identity_type_creator'
           : 'identity_type_collector'
-      );
-    },
-    displayName() {
-      return this.identifyInfo.displayName;
-    },
-    avatarURL() {
-      return this.identifyInfo.avatar || getIdenticonAvatar(this.walletAddress);
-    },
-    isAvatarOutlined() {
-      return !!(
-        this.identifyInfo?.isCivicLikerTrial ||
-        this.identifyInfo?.isSubscribedCivicLiker
       );
     },
   },
