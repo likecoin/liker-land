@@ -7,6 +7,7 @@ const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
 const { isValidAddress } = require('../../../util/cosmos');
 const {
+  db,
   FieldValue,
   walletUserCollection,
 } = require('../../../../modules/firebase');
@@ -46,12 +47,24 @@ router.post(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        followers: FieldValue.arrayUnion(creator),
+      await db.runTransaction(async t => {
+        const userRef = walletUserCollection.doc(user);
+        const userDoc = await t.get(userRef);
+        const { email } = userDoc.data();
+        if (!email) throw new Error('EMAIL_NOT_SET_YET');
+        await t.update(userRef, {
+          followers: FieldValue.arrayUnion(creator),
+        });
       });
       res.sendStatus(200);
     } catch (err) {
-      handleRestfulError(req, res, next, err);
+      switch (err.message) {
+        case 'EMAIL_NOT_SET_YET':
+          res.status(403).send('EMAIL_NOT_SET_YET');
+          break;
+        default:
+          handleRestfulError(req, res, next, err);
+      }
     }
   }
 );
@@ -69,12 +82,24 @@ router.delete(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        followers: FieldValue.arrayRemove(creator),
+      await db.runTransaction(async t => {
+        const userRef = walletUserCollection.doc(user);
+        const userDoc = await t.get(userRef);
+        const { email } = userDoc.data();
+        if (!email) throw new Error('EMAIL_NOT_SET_YET');
+        await t.update(userRef, {
+          followers: FieldValue.arrayRemove(creator),
+        });
       });
       res.sendStatus(200);
     } catch (err) {
-      handleRestfulError(req, res, next, err);
+      switch (err.message) {
+        case 'EMAIL_NOT_SET_YET':
+          res.status(403).send('EMAIL_NOT_SET_YET');
+          break;
+        default:
+          handleRestfulError(req, res, next, err);
+      }
     }
   }
 );
