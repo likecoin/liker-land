@@ -37,7 +37,7 @@ router.post(
     try {
       setPrivateCacheHeader(res);
       const { wallet: user } = req.params;
-      const { creator } = req.body;
+      const { creator } = req.query;
       if (!isValidAddress(creator) || user === creator) {
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
@@ -60,7 +60,7 @@ router.delete(
     try {
       setPrivateCacheHeader(res);
       const { wallet: user } = req.params;
-      const { creator } = req.body;
+      const { creator } = req.query;
       if (!isValidAddress(creator) || user === creator) {
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
