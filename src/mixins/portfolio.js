@@ -1,4 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
+import MagicGrid from 'magic-grid';
 
 import {
   ORDER_CREATED_CLASS_ID_BY,
@@ -165,6 +166,17 @@ export default {
       return `${this.currentOrderBy}-${this.currentOrder}`;
     },
   },
+  watch: {
+    currentTab() {
+      this.$nextTick(this.setupNFTGrid);
+    },
+    sortedCollectedNFTs() {
+      this.$nextTick(this.updateNFTGrid);
+    },
+    sortedCreatedClassIds() {
+      this.$nextTick(this.updateNFTGrid);
+    },
+  },
   methods: {
     ...mapActions(['fetchNFTListByAddress']),
     syncRouteForTab(tab = tabOptions.collected) {
@@ -200,6 +212,28 @@ export default {
         path: `/${wallet}?referrer=${referrer}`,
         alertMessage: this.$t('tooltip_share_done'),
       });
+    },
+    setupNFTGrid() {
+      const { nftGrid } = this.$refs;
+      if (!nftGrid) return;
+      const items =
+        this.currentTab === 'collected'
+          ? this.sortedCollectedNFTs.length
+          : this.sortedCreatedClassIds.length;
+      this.nftGridController = new MagicGrid({
+        container: nftGrid,
+        items: items || 1,
+        gutter: 24,
+        maxColumns: 2,
+        useMin: true,
+        animate: true,
+        center: true,
+      });
+      this.nftGridController.listen();
+    },
+    updateNFTGrid() {
+      if (!this.nftGridController) return;
+      this.nftGridController.positionItems();
     },
     handleSelectOrder(value) {
       const splits = value.split('-');

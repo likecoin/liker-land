@@ -47,6 +47,7 @@
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "lodash.throttle": "^4.1.1",
+    "magic-grid": "^3.2.4",
     "node-fetch": "^2.6.7",
     "nuxt-start": "^2.15.3",
     "portal-vue": "^1.5.1",
