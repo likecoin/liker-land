@@ -39,7 +39,7 @@ router.post(
       const { wallet: user } = req.params;
       const { creator } = req.body;
       if (!isValidAddress(creator) || user === creator) {
-        res.sendStatus(400);
+        res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
       await walletUserCollection.doc(user).update({
@@ -62,7 +62,7 @@ router.delete(
       const { wallet: user } = req.params;
       const { creator } = req.body;
       if (!isValidAddress(creator) || user === creator) {
-        res.sendStatus(400);
+        res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
       await walletUserCollection.doc(user).update({

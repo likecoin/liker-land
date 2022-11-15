@@ -17,7 +17,7 @@ router.get('/v2/users/:wallet/nfts/featured', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     if (!isValidAddress(user)) {
-      res.sendStatus(400);
+      res.status(400).send('INVALID_ADDRESS');
       return;
     }
     const userDoc = await walletUserCollection(user).get();
@@ -38,7 +38,7 @@ router.post(
       const { wallet: user } = req.params;
       const { nftClassIds = [] } = req.body;
       if (!nftClassIds.length) {
-        res.sendStatus(400);
+        res.status(400).send('NFT_CLASS_ID_MISSING');
         return;
       }
       await walletUserCollection.doc(user).update({
@@ -61,7 +61,7 @@ router.delete(
       const { wallet: user } = req.params;
       const { nftClassIds = [] } = req.body;
       if (!nftClassIds.length) {
-        res.sendStatus(400);
+        res.status(400).send('NFT_CLASS_ID_MISSING');
         return;
       }
       await walletUserCollection.doc(user).update({

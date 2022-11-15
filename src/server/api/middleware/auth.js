@@ -11,7 +11,7 @@ function checkWalletMatch(req, res, next) {
   const { user } = req.session;
   const { wallet } = req.params;
   if (user !== wallet) {
-    res.sendStatus(400);
+    res.status(400).send('ADDRESS_MISMATCH');
     return;
   }
   next();
