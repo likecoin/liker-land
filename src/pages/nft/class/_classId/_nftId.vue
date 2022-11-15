@@ -109,7 +109,7 @@
                 :from-wallet="m.fromWallet"
                 :to-type="m.toType"
                 :to-wallet="m.toWallet"
-                :message="m.memo"
+                :message="m.message"
                 :message-type="m.messageType"
                 tag="li"
               />
@@ -274,6 +274,7 @@ export default {
             m.fromWallet === this.iscnOwner ? 'creator' : 'collector',
           fromType: this.getWalletIdentityType(m.fromWallet),
           toType: this.getWalletIdentityType(m.toWallet),
+          message: m.memo === 'like.co NFT API' ? '' : m.memo,
         }));
     },
   },
