@@ -1,5 +1,9 @@
 const { Router } = require('express');
-const { db, walletUserCollection } = require('../../../../modules/firebase');
+const {
+  db,
+  FieldValue,
+  walletUserCollection,
+} = require('../../../../modules/firebase');
 const {
   authenticateV2Login,
   checkParamWalletMatch,
@@ -67,12 +71,12 @@ router.post('/login', async (req, res, next) => {
       const isNew = !userDoc.exists;
       const currentTs = Date.now();
       const payload = {
-        lastLoginTs: currentTs,
+        lastLoginTs: FieldValue.serverTimestamp(),
       };
       if (isNew) {
         await t.create(userRef, {
           ...payload,
-          ts: currentTs,
+          ts: FieldValue.serverTimestamp(),
         });
       } else {
         await t.update(userRef, payload);
