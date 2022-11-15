@@ -60,9 +60,13 @@ export default {
   },
   async mounted() {
     await this.updateNFTClassMetadata();
+    this.$emit('load');
     this.updateNFTOwners();
     // wait for metadata to determine if it is writing NFT
-    if (this.isWritingNFT) this.updateNFTPurchaseInfo();
+    if (this.isWritingNFT) {
+      await this.updateNFTPurchaseInfo();
+      this.$emit('load');
+    }
   },
   methods: {
     async handleClickCollect() {

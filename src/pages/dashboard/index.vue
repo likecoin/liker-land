@@ -127,29 +127,45 @@
         }}</CardV2>
 
         <div v-else class="w-full">
-          <MagicGrid v-show="currentTab === 'collected'" :gap="20" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCollectedNFTs.length" preset="collected" />
-            <div v-for="nft in sortedCollectedNFTs" :key="nft.id">
-              <NFTPortfolioItem
-                class="mb-[12px]"
-                :class-id="nft.classId"
-                :nft-id="nft.id"
-              />
-            </div>
-          </MagicGrid>
-
-          <MagicGrid v-show="currentTab === 'created'" :gap="20" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
-            <div
-              v-for="id in sortedCreatedClassIds"
-              :key="id"
-            >
-              <NFTPortfolioItem
-                :class-id="id"
-                class="mb-[12px]"
-              />
-            </div>
-          </MagicGrid>
+          <ul ref="nftGrid">
+            <template v-if="currentTab === 'collected'">
+              <li
+                v-if="!sortedCollectedNFTs.length"
+                class="w-full"
+              >
+                <NFTPortfolioEmpty preset="collected" />
+              </li>
+              <li
+                v-for="nft in sortedCollectedNFTs"
+                :key="nft.classId"
+                class="w-[310px] pb-[20px]"
+              >
+                <NFTPortfolioItem
+                  :class-id="nft.classId"
+                  :nft-id="nft.id"
+                  @load="updateNFTGrid"
+                />
+              </li>
+            </template>
+            <template v-else>
+              <li
+                v-if="!sortedCreatedClassIds.length"
+                class="w-full"
+              >
+                <NFTPortfolioEmpty preset="created" />
+              </li>
+              <li
+                v-for="id in sortedCreatedClassIds"
+                :key="id"
+                class="w-[310px] pb-[20px]"
+              >
+                <NFTPortfolioItem
+                  :class-id="id"
+                  @load="updateNFTGrid"
+                />
+              </li>
+            </template>
+          </ul>
 
           <div class="flex flex-col items-center my-[48px] w-full">
             <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
@@ -224,12 +240,18 @@ export default {
             this.hasSwitchedWallet = true;
             this.fetchUserInfo();
             await this.loadNFTListByAddress(this.getAddress);
+            this.setupNFTGrid();
           } else {
             // Refresh the page to prevent data overlapping
             this.$router.go();
           }
         }
       },
+    },
+    isLoading(isLoading) {
+      if (!isLoading) {
+        this.$nextTick(this.setupNFTGrid);
+      }
     },
   },
   mounted() {

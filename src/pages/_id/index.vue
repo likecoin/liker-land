@@ -146,32 +146,43 @@
         <CardV2 v-if="isLoading">Loading</CardV2>
 
         <div v-else class="w-full">
-          <MagicGrid v-show="currentTab === 'collected'" :gap="20" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCollectedNFTs.length" preset="collected" />
-            <div v-for="nft in sortedCollectedNFTs" :key="nft.classId">
-              <NFTPortfolioItem
-                v-if="currentTab === 'collected'"
-                class="mb-[12px] w-[310px]"
-                :class-id="nft.classId"
-                :nft-id="nft.id"
-              />
-              <NFTPortfolioEmpty v-else preset="collected" />
-            </div>
-          </MagicGrid>
-
-          <MagicGrid v-show="currentTab === 'created'" :gap="20" :max-cols="2" :max-col-width="310">
-            <div
-              v-for="id in sortedCreatedClassIds"
-              :key="id"
-            >
-              <NFTPortfolioItem
-                v-if="currentTab === 'created'"
-                :class-id="id"
-                class="mb-[20px] w-[310px]"
-              />
-              <NFTPortfolioEmpty v-else preset="collected" />
-            </div>
-          </MagicGrid>
+          <ul
+            v-if="
+              // Show hide grid if empty in created tab for
+              (currentTab === 'created' && sortedCreatedClassIds.length)
+                || currentTab === 'collected'
+            "
+            ref="nftGrid"
+          >
+            <template v-if="currentTab === 'collected'">
+              <li v-if="!sortedCollectedNFTs.length" class="w-full">
+                <NFTPortfolioEmpty preset="collected" />
+              </li>
+              <li
+                v-for="nft in sortedCollectedNFTs"
+                :key="nft.classId"
+                class="w-[310px] pb-[20px]"
+              >
+                <NFTPortfolioItem
+                  :class-id="nft.classId"
+                  :nft-id="nft.id"
+                  @load="updateNFTGrid"
+                />
+              </li>
+            </template>
+            <template v-else>
+              <li
+                v-for="id in sortedCreatedClassIds"
+                :key="id"
+                class="w-[310px] pb-[20px]"
+              >
+                <NFTPortfolioItem
+                  :class-id="id"
+                  @load="updateNFTGrid"
+                />
+              </li>
+            </template>
+          </ul>
         </div>
 
         <div class="flex flex-col items-center order-2 w-full">
@@ -272,6 +283,7 @@ export default {
           // Go to created tab if collected tab is empty
           this.goCreatedTab();
         }
+        this.$nextTick(this.setupNFTGrid);
       }
     },
   },
@@ -305,12 +317,6 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
   },
   mounted() {
-    let tab = this.currentTab;
-    if (this.$route.hash === this.creatorFollowSectionHash) {
-      tab = portfolioMixin.tabOptions.created;
-    }
-    this.syncRouteForTab(tab);
-
     this.loadNFTListByAddress(this.wallet);
   },
   methods: {
