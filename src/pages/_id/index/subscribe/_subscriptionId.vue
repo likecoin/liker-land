@@ -49,9 +49,11 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { nftMintSubscriptionAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { ellipsis } from '~/util/ui';
 
+import { createUserInfoMixin } from '~/mixins/user-info';
 import alertMixin from '~/mixins/alert';
+
+const creatorInfoMixin = createUserInfoMixin({ propKey: 'Creator' });
 
 function isSubscribePage(route) {
   return route.name === 'id-index-subscribe-subscriptionId';
@@ -60,7 +62,7 @@ function isSubscribePage(route) {
 export default {
   // Both subscribe page and unsubscribe page share the same component
   name: 'NFTCreatorSubscriptionPage',
-  mixins: [alertMixin],
+  mixins: [alertMixin, creatorInfoMixin],
   data() {
     return {
       // From asyncData
@@ -74,18 +76,6 @@ export default {
     ...mapGetters(['getUserInfoByAddress']),
     isSubscribePage() {
       return isSubscribePage(this.$route);
-    },
-    creatorInfo() {
-      return this.getUserInfoByAddress(this.wallet);
-    },
-    creatorDisplayName() {
-      return ellipsis(this.creatorInfo?.displayName);
-    },
-    isCreatorCivicLiker() {
-      return !!(
-        this.creatorInfo?.isCivicLikerTrial ||
-        this.creatorInfo?.isSubscribedCivicLiker
-      );
     },
     headerText() {
       return this.$t(

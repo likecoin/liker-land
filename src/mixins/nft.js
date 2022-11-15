@@ -36,9 +36,19 @@ import {
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
+import { createUserInfoMixin } from '~/mixins/user-info';
+
+const creatorInfoMixin = createUserInfoMixin({
+  propKey: 'Creator',
+  walletKey: 'iscnOwner',
+});
 
 export default {
-  mixins: [walletMixin, CrispMixinFactory({ isBootAtMounted: true })],
+  mixins: [
+    walletMixin,
+    creatorInfoMixin,
+    CrispMixinFactory({ isBootAtMounted: true }),
+  ],
   head() {
     // Only load stripe if a wallet is connected
     if (!this.getAddress) return {};
@@ -87,16 +97,6 @@ export default {
       'uiTxTargetClassId',
       'uiTxNFTStatus',
     ]),
-    iscnOwnerInfo() {
-      return this.getUserInfoByAddress(this.iscnOwner) || {};
-    },
-    isCivicLiker() {
-      return !!(
-        this.iscnOwnerInfo &&
-        (this.iscnOwnerInfo.isCivicLikerTrial ||
-          this.iscnOwnerInfo.isSubscribedCivicLiker)
-      );
-    },
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
@@ -116,12 +116,6 @@ export default {
       return (
         this.NFTClassMetadata.iscn_owner || this.NFTClassMetadata.account_owner
       );
-    },
-    iscnOwnerAvatar() {
-      return this.iscnOwnerInfo.avatar || getIdenticonAvatar(this.iscnOwner);
-    },
-    iscnOwnerDisplayName() {
-      return this.iscnOwnerInfo.displayName;
     },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;

@@ -7,7 +7,7 @@ import {
   ORDER,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
-import { getIdenticonAvatar } from '~/util/api';
+import userInfoMixin from '~/mixins/user-info';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const tabOptions = {
@@ -17,7 +17,7 @@ const tabOptions = {
 
 export default {
   tabOptions,
-  mixins: [clipboardMixin],
+  mixins: [clipboardMixin, userInfoMixin],
   data() {
     return {
       isLoading: false,
@@ -29,7 +29,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getUserInfoByAddress',
       'getCreatedClassIdSorter',
       'getCollectedNFTSorter',
       'getNFTListByAddress',
@@ -38,15 +37,6 @@ export default {
       return this.$route.query.tab || tabOptions.collected;
     },
 
-    userInfo() {
-      return this.getUserInfoByAddress(this.wallet);
-    },
-    userAvatar() {
-      return this.userInfo?.avatar || getIdenticonAvatar(this.wallet);
-    },
-    userDisplayName() {
-      return this.userInfo?.displayName || this.wallet;
-    },
     nftList() {
       return this.getNFTListByAddress(this.wallet);
     },
