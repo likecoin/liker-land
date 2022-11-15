@@ -67,16 +67,21 @@
           </ButtonV2>
         </div>
       </div>
-      <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
-        <ButtonV2
-          class="ml-[12px]"
-          :text="$t('nft_details_page_button_sell')"
-          preset="tertiary"
-          :is-disabled="true"
-          @mouseenter.once="handleMouseEnterSell"
-          @click.native="handleClickSell"
-        />
-      </ToolTips>
+      <ButtonV2
+        preset="primary"
+        :text="$t('campaign_nft_item_view_details_label')"
+        class="hidden laptop:block !border-[2px] !border-like-cyan-light ml-[18px]"
+        :href="url"
+        target="_blank"
+        @click="handleClickViewContent"
+      >
+        <template #prepend>
+          <IconArticle />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
     </div>
   </CardV2>
 </template>
@@ -109,6 +114,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    url: {
+      type: String,
+      default: undefined,
+    },
   },
   methods: {
     handleClickCollect() {
@@ -119,6 +128,9 @@ export default {
     },
     handleMouseEnterSell() {
       this.$emit('hover-sell');
+    },
+    handleClickViewContent() {
+      this.$emit('view-content');
     },
   },
 };

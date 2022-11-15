@@ -89,10 +89,6 @@ export default {
     formatNumberWithLIKE,
   },
   props: {
-    classId: {
-      type: String,
-      required: true,
-    },
     title: {
       type: String,
       default: '',

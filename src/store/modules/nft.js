@@ -73,8 +73,7 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
-  getNFTClassIdListByAddress: state => address =>
-    state.userClassIdListMap[address],
+  getNFTListByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
@@ -115,13 +114,14 @@ const getters = {
     return sorted;
   },
 
-  getCollectedClassIdSorter: (_, getters) => ({
-    classIds,
+  getCollectedNFTSorter: (_, getters) => ({
+    nfts,
     nftOwner,
     orderBy,
     order = ORDER.DESC,
   }) => {
-    const sorted = [...classIds].sort((a, b) => {
+    const sorted = [...nfts].sort((nA, nB) => {
+      const [{ classId: a }, { classId: b }] = [nA, nB];
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
@@ -244,14 +244,24 @@ const actions = {
         timestampMap[classId] = timestamp;
       }
     });
-    const collectedIds = [...new Set(nfts.map(nft => nft.classId))];
-    const createdIds = [...new Set(createdNFTs.map(c => c.classId))];
+    const collectedNFTs = [
+      ...new Map(
+        [...nfts]
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .map(({ classId, nftId }) => [classId, { classId, id: nftId }])
+      ).values(),
+    ];
+    const created = [
+      ...new Map(
+        [...createdNFTs].map(({ classId }) => [classId, { classId }])
+      ).values(),
+    ];
 
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
       nfts: {
-        created: createdIds,
-        collected: collectedIds,
+        created,
+        collected: collectedNFTs,
       },
     });
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {

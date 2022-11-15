@@ -9,27 +9,30 @@
       class="px-[12px] laptop:px-[24px] pb-[120px] w-full"
     >
 
-      <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
-        <div class="flex items-center justify-end w-full">
+      <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
+        <div class="flex flex-col items-center justify-between w-full tablet:flex-row laptop:flex-row gap-[24px]">
+          <NFTMessageIdentity
+            v-if="nftCollectorWalletAddress"
+            :type="getWalletIdentityType(nftCollectorWalletAddress)"
+            :wallet-address="nftCollectorWalletAddress"
+            wrapper-classes="!bg-transparent"
+          />
           <NFTPageControlBar
             :collected-count="ownCount"
-            :class-id="classId"
-            :price="NFTPrice"
             :collected-nft-ids="userCollectedNFTList"
+            :class-id="classId"
+            :current-nft-id="nftId"
+            view="collected"
+            :price="NFTPrice"
             :is-writing-nft="isWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
+            @click-user-collected-count="handleClickUserCollectedCount"
           />
         </div>
-        <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
-
+        <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
           <!-- Left column -->
-          <div
-            :class="[
-              'col-span-1 grid desktop:grid-cols-1 gap-[24px]',
-              { 'laptop:grid-cols-2': isShowPriceSection }
-            ]"
-          >
+          <div class="flex flex-col items-center col-span-1 desktop:order-2">
             <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
@@ -43,49 +46,74 @@
                 :nft-name="NFTName"
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
-                :collected-count="collectedCount"
-                :collector-count="ownerCount"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
             </NFTGemWrapper>
-            <NFTPageCollectorList
-              v-if="isShowPriceSection"
-              class="hidden laptop:block"
-              :class-id="classId"
-              :owner-count="ownerCount"
-              :items="populatedCollectors"
-              :is-narrow="true"
-            />
+            <ButtonV2
+              class="mt-[24px] text-medium-gray"
+              content-class="text-[12px]"
+              preset="plain"
+              size="mini"
+              :to="{ name: 'nft-class-classId', params: { classId } }"
+            >
+              <template #prepend>
+                <IconEye class="w-[12px] h-[12px]" />
+              </template>
+              {{ $t('nft_details_page_button_view_details') }}
+            </ButtonV2>
           </div>
 
-          <Separator class="mx-auto desktop:hidden" />
-
           <!-- Right column -->
-          <div class="flex flex-col gap-[24px] desktop:col-span-2">
-            <NFTPagePriceSection
-              v-if="isShowPriceSection"
-              :nft-price="NFTPrice"
-              :nft-price-u-s-d="formattedNFTPriceUSD"
-              :collected-count="collectedCount"
-              :collector-count="ownerCount"
-              :is-loading="uiIsOpenCollectModal && isCollecting"
-              :url="NFTExternalUrl"
-              @collect="handleCollectFromPriceSection"
-              @click-sell="handleClickSellFromPriceSection"
-              @hover-sell="handleHoverSellFromPriceSection"
-            />
-            <NFTPageCollectorList
-              :class="{ 'laptop:hidden': isShowPriceSection }"
-              :class-id="classId"
-              :owner-count="ownerCount"
-              :items="populatedCollectors"
-            />
-            <NFTPageSupplySection
-              v-if="isShowPriceSection"
-              :collected-count="collectedCount"
-              @collect="handleCollectFromSupplySection"
-            />
+          <div class="col-span-2 flex flex-col items-center gap-[24px]">
+            <CardV2 class="flex gap-[24px] w-full">
+              <div>
+                <Label
+                  class="text-medium-gray text-[12px]"
+                  preset="h6"
+                  :text="$t('nft_details_page_label_owning')"
+                />
+                <div class="mt-[4px] text-[600]">{{ nftCollectorCollectedCount }}</div>
+              </div>
+              <hr class="w-[2px] bg-shade-gray h-[48px] border-none shrink-0">
+              <div class="min-w-0">
+                <Label
+                  class="text-medium-gray text-[12px]"
+                  preset="h6"
+                  :text="$t('nft_details_page_label_nft_id')"
+                />
+                <div class="mt-[4px] flex items-center relative gap-[8px]">
+                  <select
+                    v-model="selectedNFTId"
+                    class="absolute opacity-0"
+                    @change="onSelectNFT"
+                  >
+                    <option
+                      v-for="id in nftCollectorCollectedNFTList"
+                      :key="id"
+                      :value="id"
+                    >{{ id }}</option>
+                  </select>
+                  <div class="truncate">{{ selectedNFTId }}</div>
+                  <IconArrowDown class="w-[12px] h-[12px] shrink-0" />
+                </div>
+              </div>
+            </CardV2>
+            <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
+              <NFTMessage
+                v-for="m in messageList"
+                :key="m.txHash"
+                :type="m.event"
+                :tx-hash="m.txHash"
+                :from-type="m.fromType"
+                :from-wallet="m.fromWallet"
+                :to-type="m.toType"
+                :to-wallet="m.toWallet"
+                :message="m.memo"
+                :message-type="m.messageType"
+                tag="li"
+              />
+            </ul>
           </div>
         </section>
 
@@ -110,9 +138,8 @@
       :is-ready-to-transfer="isReadyToTransfer"
       :error-msg="errorMsg"
       :to-address="toAddress"
-      :class-id="classId"
       :user-collected-count="userCollectedCount"
-      :user-collected-nft-ids="userCollectedNFTList"
+      :nft-id="nftId"
       @close="isOpenTransferModal = false; isTransferring = false"
       @handle-input-addr="handleInputAddr"
       @on-transfer="onTransfer"
@@ -123,17 +150,22 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { EXTERNAL_HOST } from '~/constant';
+
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
-import { EXTERNAL_HOST } from '~/constant';
+import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 
 export default {
-  name: 'NFTClassDetailsPage',
+  name: 'NFTDetailsPage',
   layout: 'default',
+  filters: {
+    ellipsis,
+  },
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
@@ -201,6 +233,8 @@ export default {
   },
   data() {
     return {
+      // For <select> to change only, please use `this.nftId` instead
+      selectedNFTId: this.$route.params.nftId,
       toAddress: null,
       isLoading: true,
 
@@ -215,11 +249,32 @@ export default {
     classId() {
       return this.$route.params.classId;
     },
+    nftId() {
+      return this.$route.params.nftId;
+    },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
-    isShowPriceSection() {
-      return this.isWritingNFT && this.NFTPrice && this.NFTPrice >= 0;
+    messageList() {
+      return [...this.populatedEvents]
+        .filter(e => e.event !== 'new_class')
+        .map(e => {
+          if (e.event === 'purchase') {
+            return {
+              ...e,
+              fromWallet: this.iscnOwner,
+              toWallet: '',
+            };
+          }
+          return e;
+        })
+        .map(m => ({
+          ...m,
+          messageType:
+            m.fromWallet === this.iscnOwner ? 'creator' : 'collector',
+          fromType: this.getWalletIdentityType(m.fromWallet),
+          toType: this.getWalletIdentityType(m.toWallet),
+        }));
     },
   },
   asyncData({ query }) {
@@ -295,6 +350,14 @@ export default {
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice']),
+    onSelectNFT(e) {
+      const { value: nftId } = e.target;
+      logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: this.classId, nftId },
+      });
+    },
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
@@ -305,10 +368,10 @@ export default {
       this.uiSetTxStatus('');
       this.fetchUserCollectedCount();
     },
-    async onTransfer(nftId) {
-      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', nftId, 1);
+    async onTransfer() {
+      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
       this.isTransferring = true;
-      await this.transferNFT(nftId);
+      await this.transferNFT(this.nftId);
     },
     handleInputAddr(value) {
       if (!LIKE_ADDRESS_REGEX.test(value)) {
@@ -369,7 +432,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(ClassDetailsPageControlBar)',
+        'NFTCollect(NFTDetailsPageControlBar)',
         this.nftId,
         1
       );
@@ -411,6 +474,15 @@ export default {
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
+    },
+    handleClickUserCollectedCount() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_click_user_collected_count',
+        this.nftId,
+        1
+      );
     },
   },
 };

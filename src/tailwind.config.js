@@ -130,6 +130,7 @@ module.exports = {
     screens: {
       phone: { max: '527px' },
       tablet: { min: '528px', max: '768px' },
+      sm: { min: '528px' },
       laptop: { min: '769px' },
       desktop: { min: '992px' },
     },

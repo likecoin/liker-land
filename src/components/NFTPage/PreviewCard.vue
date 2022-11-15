@@ -73,17 +73,6 @@
         preset="p5"
         :text="nftDescription | ellipsisDescription"
       />
-      <ButtonV2
-        v-if="nftPrice"
-        class="mt-[16px]"
-        :text="nftPrice | formatNumberWithLIKE"
-        preset="secondary"
-        @click="handleClickCollect"
-      >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </ButtonV2>
       <template v-if="url">
         <Separator class="my-[16px]" />
         <ButtonV2
@@ -94,13 +83,27 @@
           @click="handleClickViewContent"
         >
           <template #prepend>
-            <IconEye class="w-[16px]" />
+            <IconArticle />
           </template>
           <template #append>
-            <IconLinkExternal class="w-[16px]" />
+            <IconLinkExternal />
           </template>
         </ButtonV2>
       </template>
+      <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[18px] text-[12px]">
+        <div class="flex items-center text-medium-gray">
+          <IconMint />
+          <div class="ml-[4px]">{{ collectedCount }}</div>
+        </div>
+        <div class="flex items-center text-medium-gray">
+          <IconOwner />
+          <div class="ml-[4px]">{{ collectorCount }}</div>
+        </div>
+        <div v-if="nftPrice && nftPrice >= 0" class="flex items-center text-like-green">
+          <IconPrice />
+          <div class="ml-[4px]">{{ nftPrice | formatNumberWithLIKE }}</div>
+        </div>
+      </div>
     </div>
   </CardV2>
 </template>
@@ -172,6 +175,16 @@ export default {
     nftPrice: {
       type: Number,
       default: undefined,
+    },
+
+    // Mint Info
+    collectedCount: {
+      type: Number,
+      default: 0,
+    },
+    collectorCount: {
+      type: Number,
+      default: 0,
     },
   },
   computed: {

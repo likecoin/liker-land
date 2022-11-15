@@ -174,6 +174,7 @@ function formatNFTEvent(event) {
     receiver: toWallet,
     tx_hash: txHash,
     timestamp,
+    memo,
   } = event;
   let eventName;
   switch (event.action) {
@@ -194,6 +195,7 @@ function formatNFTEvent(event) {
     fromWallet,
     toWallet,
     txHash,
+    memo,
     timestamp: Date.parse(timestamp),
   };
 }

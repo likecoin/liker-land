@@ -146,15 +146,20 @@
         <CardV2 v-if="isLoading">Loading</CardV2>
 
         <div v-else class="w-full">
-          <MagicGrid v-show="currentTab === 'collected'" :gap="16" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
-            <div v-for="id in sortedCollectedClassIds" :key="id">
-              <NFTPortfolioItem v-if="currentTab === 'collected'" :class-id="id" class="mb-[12px] w-[310px]" />
+          <MagicGrid v-show="currentTab === 'collected'" :gap="20" :max-cols="2" :max-col-width="310">
+            <NFTPortfolioEmpty v-if="!sortedCollectedNFTs.length" preset="collected" />
+            <div v-for="nft in sortedCollectedNFTs" :key="nft.classId">
+              <NFTPortfolioItem
+                v-if="currentTab === 'collected'"
+                class="mb-[12px] w-[310px]"
+                :class-id="nft.classId"
+                :nft-id="nft.id"
+              />
               <NFTPortfolioEmpty v-else preset="collected" />
             </div>
           </MagicGrid>
 
-          <MagicGrid v-show="currentTab === 'created'" :gap="16" :max-cols="2" :max-col-width="310">
+          <MagicGrid v-show="currentTab === 'created'" :gap="20" :max-cols="2" :max-col-width="310">
             <div
               v-for="id in sortedCreatedClassIds"
               :key="id"
@@ -162,7 +167,7 @@
               <NFTPortfolioItem
                 v-if="currentTab === 'created'"
                 :class-id="id"
-                class="mb-[12px] w-[310px]"
+                class="mb-[20px] w-[310px]"
               />
               <NFTPortfolioEmpty v-else preset="collected" />
             </div>
@@ -262,7 +267,7 @@ export default {
           this.$nextTick(this.scrollToCreatorFollowSection);
         } else if (
           this.currentTab !== portfolioMixin.tabOptions.created &&
-          !this.sortedCollectedClassIds.length
+          !this.sortedCollectedNFTs.length
         ) {
           // Go to created tab if collected tab is empty
           this.goCreatedTab();

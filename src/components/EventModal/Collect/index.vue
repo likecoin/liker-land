@@ -55,14 +55,10 @@
     >
       <ButtonV2
         preset="secondary"
-        :text="$t('nft_details_page_button_share')"
+        :text="$t('nft_details_page_button_view_details')"
         class="mr-[12px]"
-        @click="handleShare"
-      >
-        <template #prepend>
-          <IconShare />
-        </template>
-      </ButtonV2>
+        @click="goToNFTDetails"
+      />
       <ButtonV2
         preset="outline"
         :text="$t('nft_details_page_button_portfolio')"
@@ -163,6 +159,7 @@ export default {
   data() {
     return {
       paymentMethod: undefined,
+      justCollectedNFTId: undefined,
     };
   },
   computed: {
@@ -233,6 +230,7 @@ export default {
     ...mapActions(['uiCloseTxModal']),
     resetState() {
       this.paymentMethod = undefined;
+      this.justCollectedNFTId = undefined;
 
       // Mixin
       this.nftPriceInUSD = undefined;
@@ -241,8 +239,9 @@ export default {
       this.fetchUserCollectedCount();
     },
     async handleSelectPaymentMethod(method) {
+      this.paymentMethod = method;
       switch (method) {
-        case 'crypto':
+        case 'crypto': {
           if (!this.getAddress) {
             const isConnected = await this.connectWallet();
             if (!isConnected) return;
@@ -254,8 +253,12 @@ export default {
             this.classId,
             1
           );
-          this.collectNFTWithLIKE();
+          const result = await this.collectNFTWithLIKE();
+          if (result) {
+            this.justCollectedNFTId = result.nftId;
+          }
           break;
+        }
         case 'stripe':
           logTrackerEvent(
             this,
@@ -264,29 +267,25 @@ export default {
             this.classId,
             1
           );
-          this.collectNFTWithStripe();
+          await this.collectNFTWithStripe();
           break;
         default:
           break;
       }
-      this.paymentMethod = method;
     },
-    handleShare() {
-      this.shareURLPath({
-        title: this.NFTName,
-        text: this.NFTDescription,
-        path: this.nftDetailsPageURL,
+    goToNFTDetails() {
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: this.classId, nftId: this.justCollectedNFTId },
       });
-      logTrackerEvent(
-        this,
-        'NFT',
-        'CopyShareURL(CollectModal)',
-        this.classId,
-        1
-      );
+      this.uiCloseTxModal();
     },
     goToPortfolio() {
-      this.$router.push({ name: 'id', params: { id: this.getAddress } });
+      this.$router.push({
+        name: 'id',
+        params: { id: this.getAddress },
+        query: { tab: 'collected' },
+      });
       this.uiCloseTxModal();
     },
   },

@@ -7,7 +7,15 @@
       <IconActivity />
     </template>
     <template #content="{ contentPaddingClass }">
-      <template v-if="items.length">
+      <div class="px-[32px] mb-[28px]">
+        <NFTPageChainDataSectionMetadata
+          :content-url="contentUrl"
+          :iscn-id="iscnId"
+          :iscn-url="iscnUrl"
+          :content-fingerprints="contentFingerprints"
+        />
+      </div>
+      <template v-if="items.length && view !== 'created'">
         <div class="overflow-x-scroll scrollbar-custom">
           <div :class="['min-w-[800px]', contentPaddingClass]">
             <NFTPageEventListTable :nft-history="trimmedItems" />
@@ -22,7 +30,10 @@
           </template>
         </ShowMore>
       </template>
-      <div v-else class="flex justify-center items-center min-h-[180px]">
+      <div
+        v-else-if="!items.length && view !== 'created'"
+        class="flex justify-center items-center min-h-[180px]"
+      >
         <Label
           v-if="isLoading"
           preset="p6"
@@ -41,7 +52,7 @@
 </template>
 <script>
 export default {
-  name: 'EventList',
+  name: 'NFTPageChainDataSection',
   props: {
     items: {
       type: Array,
@@ -54,6 +65,26 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+    view: {
+      type: String,
+      default: 'collected',
+    },
+    contentUrl: {
+      type: String,
+      default: '',
+    },
+    iscnId: {
+      type: String,
+      default: '',
+    },
+    iscnUrl: {
+      type: String,
+      default: '',
+    },
+    contentFingerprints: {
+      type: Array,
+      default: () => [],
     },
   },
   computed: {
