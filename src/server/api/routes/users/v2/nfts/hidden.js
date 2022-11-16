@@ -36,13 +36,13 @@ router.post(
     try {
       setPrivateCacheHeader(res);
       const { wallet: user } = req.params;
-      const { nftClassIds = [] } = req.body;
-      if (!nftClassIds.length) {
-        res.sendStatus(400);
+      const { classId } = req.body;
+      if (!classId) {
+        res.status(400).send('CLASS_ID_MISSING');
         return;
       }
       await walletUserCollection.doc(user).update({
-        hiddenNFTClassIds: FieldValue.arrayUnion(...nftClassIds),
+        hiddenNFTClassIds: FieldValue.arrayUnion(classId),
       });
       res.sendStatus(200);
     } catch (err) {
@@ -52,20 +52,19 @@ router.post(
 );
 
 router.delete(
-  '/v2/users/:wallet/nfts/hidden',
+  '/v2/users/:wallet/nfts/hidden/:classId',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
-      const { nftClassIds = [] } = req.query;
-      if (!nftClassIds.length) {
-        res.sendStatus(400);
+      const { wallet: user, classId } = req.params;
+      if (!classId) {
+        res.status(400).send('CLASS_ID_MISSING');
         return;
       }
       await walletUserCollection.doc(user).update({
-        hiddenNFTClassIds: FieldValue.arrayRemove(...nftClassIds),
+        hiddenNFTClassIds: FieldValue.arrayRemove(classId),
       });
       res.sendStatus(200);
     } catch (err) {
