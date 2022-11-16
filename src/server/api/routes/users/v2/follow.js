@@ -50,8 +50,14 @@ router.post(
       await db.runTransaction(async t => {
         const userRef = walletUserCollection.doc(user);
         const userDoc = await t.get(userRef);
-        const { email } = userDoc.data();
-        if (!email) throw new Error('EMAIL_NOT_SET_YET');
+        const { email, emailUnconfirmed } = userDoc.data();
+        if (!email) {
+          if (emailUnconfirmed) {
+            throw new Error('EMAIL_UNCONFIRMED');
+          } else {
+            throw new Error('EMAIL_NOT_SET_YET');
+          }
+        }
         await t.update(userRef, {
           followers: FieldValue.arrayUnion(creator),
         });
@@ -59,6 +65,9 @@ router.post(
       res.sendStatus(200);
     } catch (err) {
       switch (err.message) {
+        case 'EMAIL_UNCONFIRMED':
+          res.status(403).send('EMAIL_UNCONFIRMED');
+          break;
         case 'EMAIL_NOT_SET_YET':
           res.status(403).send('EMAIL_NOT_SET_YET');
           break;
@@ -82,14 +91,8 @@ router.delete(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await db.runTransaction(async t => {
-        const userRef = walletUserCollection.doc(user);
-        const userDoc = await t.get(userRef);
-        const { email } = userDoc.data();
-        if (!email) throw new Error('EMAIL_NOT_SET_YET');
-        await t.update(userRef, {
-          followers: FieldValue.arrayRemove(creator),
-        });
+      await walletUserCollection.doc(user).update({
+        followers: FieldValue.arrayRemove(creator),
       });
       res.sendStatus(200);
     } catch (err) {

@@ -100,7 +100,7 @@ router.get('/:wallet/email', async (req, res) => {
       });
       return emailUnconfirmed;
     });
-    res.json({ email });
+    res.sendStatus(200);
   } catch (error) {
     switch (error.message) {
       case 'USER_NOT_FOUND':
