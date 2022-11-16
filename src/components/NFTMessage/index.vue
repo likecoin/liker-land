@@ -1,10 +1,16 @@
 <template>
   <component :is="tag" class="flex flex-col items-center">
 
-    <hr class="w-[2px] h-[24px] mb-[24px] bg-medium-gray border-none">
+    <hr
+      v-if="isList"
+      class="w-[2px] h-[24px] mb-[24px] bg-medium-gray border-none"
+    >
 
     <template v-if="message">
-      <div class="text-[12px] text-medium-gray text-center">{{ messageHint }}</div>
+      <div
+        v-if="isList"
+        class="text-[12px] text-medium-gray text-center"
+      >{{ messageHint }}</div>
       <CardV2
         :class="[
           'my-[8px] p-[32px] border-[2px] w-full text-dark-gray',
@@ -49,10 +55,6 @@ export default {
       type: String,
       required: true,
     },
-    txHash: {
-      type: String,
-      required: true,
-    },
     fromType: {
       type: String,
       default: 'collector',
@@ -80,6 +82,10 @@ export default {
     tag: {
       type: String,
       default: 'div',
+    },
+    isList: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

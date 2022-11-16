@@ -192,6 +192,14 @@ export default {
     nftCollectorCollectedCount() {
       return this.nftCollectorCollectedNFTList.length || 0;
     },
+    nftIsNew() {
+      return !Object.values(this.collectorMap)
+        .flat()
+        .includes(this.nftId);
+    },
+    nftCreatorMessage() {
+      return this.NFTClassMetadata?.message || '';
+    },
 
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
