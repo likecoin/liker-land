@@ -1,5 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import MagicGrid from 'magic-grid';
+import throat from 'throat';
 
 import {
   ORDER_CREATED_CLASS_ID_BY,
@@ -15,6 +16,10 @@ const tabOptions = {
   created: 'created',
 };
 
+const ITEMS_PER_PAGE = 10;
+
+const fetchNFTInfoLimit = throat(10);
+
 export default {
   tabOptions,
   mixins: [clipboardMixin, userInfoMixin],
@@ -23,8 +28,10 @@ export default {
       isLoading: false,
       collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
       collectedOrder: ORDER.DESC,
+      collectedLimit: ITEMS_PER_PAGE,
       createdOrderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
       createdOrder: ORDER.DESC,
+      createdLimit: ITEMS_PER_PAGE,
     };
   },
   computed: {
@@ -37,6 +44,11 @@ export default {
       return this.$route.query.tab || tabOptions.collected;
     },
 
+    hasMoreNFTs() {
+      return this.currentTab === tabOptions.collected
+        ? this.collectedLimit < this.collectedNFTs?.length
+        : this.createdLimit < this.createdClassIds?.length;
+    },
     nftList() {
       return this.getNFTListByAddress(this.wallet);
     },
@@ -59,14 +71,14 @@ export default {
         nftOwner: this.wallet,
         orderBy: this.collectedOrderBy,
         order: this.collectedOrder,
-      });
+      }).slice(0, this.collectedLimit);
     },
     sortedCreatedClassIds() {
       return this.getCreatedClassIdSorter({
         classIds: this.createdClassIds,
         orderBy: this.createdOrderBy,
         order: this.createdOrder,
-      });
+      }).slice(0, this.createdLimit);
     },
     currentOrderBy() {
       return this.currentTab === tabOptions.collected
@@ -160,15 +172,48 @@ export default {
     currentTab() {
       this.$nextTick(this.setupNFTGrid);
     },
-    sortedCollectedNFTs() {
-      this.$nextTick(this.updateNFTGrid);
+    sortedCollectedNFTs(list, prevList) {
+      this.$nextTick(
+        list?.length !== prevList?.length
+          ? this.setupNFTGrid
+          : this.updateNFTGrid
+      );
     },
-    sortedCreatedClassIds() {
-      this.$nextTick(this.updateNFTGrid);
+    sortedCreatedClassIds(list, prevList) {
+      this.$nextTick(
+        list?.length !== prevList?.length
+          ? this.setupNFTGrid
+          : this.updateNFTGrid
+      );
+    },
+    collectedNFTs(nfts) {
+      nfts.map(({ classId }) =>
+        fetchNFTInfoLimit(() => this.fetchNFTInfo(classId))
+      );
+    },
+    createdClassIds(classIds) {
+      classIds.map(classId =>
+        fetchNFTInfoLimit(() => this.fetchNFTInfo(classId))
+      );
+    },
+    hasMoreNFTs(hasMoreNFTs) {
+      if (hasMoreNFTs) {
+        this.addInfiniteScrollListener();
+      } else {
+        this.removeInfiniteScrollListener();
+      }
     },
   },
+  beforeDestroy() {
+    this.removeInfiniteScrollListener();
+  },
   methods: {
-    ...mapActions(['fetchNFTListByAddress']),
+    ...mapActions([
+      'fetchNFTListByAddress',
+      'fetchNFTMetadata',
+      'fetchNFTPurchaseInfo',
+      'fetchNFTOwners',
+    ]),
     syncRouteForTab(tab = tabOptions.collected) {
       const { query } = this.$route;
       if (!query.tab || !tabOptions[query.tab] || this.currentTab !== tab) {
@@ -178,12 +223,72 @@ export default {
         });
       }
     },
+    addInfiniteScrollListener() {
+      window.addEventListener('scroll', this.handleInfiniteScroll);
+    },
+    removeInfiniteScrollListener() {
+      window.removeEventListener('scroll', this.handleInfiniteScroll);
+    },
+    handleInfiniteScroll() {
+      if (!this.hasMoreNFTs) return;
+
+      const { loadingMore: trigger } = this.$refs;
+      if (
+        !trigger ||
+        window.innerHeight + window.pageYOffset < trigger.offsetTop
+      ) {
+        return;
+      }
+
+      if (this.currentTab === tabOptions.collected) {
+        this.collectedLimit = Math.min(
+          this.collectedLimit + ITEMS_PER_PAGE,
+          this.collectedNFTs.length
+        );
+      } else {
+        this.createdLimit = Math.min(
+          this.createdLimit + ITEMS_PER_PAGE,
+          this.createdClassIds.length
+        );
+      }
+    },
     async loadNFTListByAddress(address) {
       const fetchPromise = this.fetchNFTListByAddress(address);
       if (!this.getNFTListByAddress(address)) {
         this.isLoading = true;
         await fetchPromise;
         this.isLoading = false;
+      }
+    },
+    async fetchNFTInfo(classId) {
+      try {
+        await this.fetchNFTMetadata(classId);
+      } catch (error) {
+        if (error.response?.status !== 404) {
+          // eslint-disable-next-line no-console
+          console.error(JSON.stringify(error));
+        }
+      }
+      this.$nextTick(this.updateNFTGrid);
+
+      this.fetchNFTOwners(classId).catch(error => {
+        if (error.response?.status !== 404) {
+          // eslint-disable-next-line no-console
+          console.error(JSON.stringify(error));
+        }
+      });
+
+      // wait for metadata to determine if it is writing NFT
+      if (this.isWritingNFT) {
+        try {
+          await this.fetchNFTPurchaseInfo(classId);
+        } catch (error) {
+          if (error.response?.status !== 404) {
+            // eslint-disable-next-line no-console
+            console.error(JSON.stringify(error));
+          }
+        }
+        this.$nextTick(this.updateNFTGrid);
       }
     },
     changeTab(tab) {
