@@ -13,20 +13,25 @@ const {
 
 const router = Router();
 
-router.get('/:wallet/followers', async (req, res, next) => {
-  try {
-    const { wallet: user } = req.params;
-    const userDoc = await walletUserCollection.doc(user).get();
-    if (!userDoc.exists) {
-      res.json({ followers: [] });
-      return;
+router.get(
+  '/:wallet/followers',
+  authenticateV2Login,
+  checkParamWalletMatch,
+  async (req, res, next) => {
+    try {
+      const { wallet: user } = req.params;
+      const userDoc = await walletUserCollection.doc(user).get();
+      if (!userDoc.exists) {
+        res.json({ followers: [] });
+        return;
+      }
+      const { followers = [] } = userDoc.data();
+      res.json({ followers });
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
     }
-    const { followers = [] } = userDoc.data();
-    res.json({ followers });
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
   }
-});
+);
 
 router.post(
   '/:wallet/followers',
@@ -74,17 +79,22 @@ router.delete(
   }
 );
 
-router.get('/:wallet/followees', async (req, res, next) => {
-  try {
-    const { wallet: user } = req.params;
-    const followeeDocs = await walletUserCollection
-      .where('followers', 'array-contains', user)
-      .get();
-    const followees = followeeDocs.docs.map(doc => doc.id);
-    res.json({ followees });
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
+router.get(
+  '/:wallet/followees',
+  authenticateV2Login,
+  checkParamWalletMatch,
+  async (req, res, next) => {
+    try {
+      const { wallet: user } = req.params;
+      const followeeDocs = await walletUserCollection
+        .where('followers', 'array-contains', user)
+        .get();
+      const followees = followeeDocs.docs.map(doc => doc.id);
+      res.json({ followees });
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
+    }
   }
-});
+);
 
 module.exports = router;
