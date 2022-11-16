@@ -71,7 +71,7 @@ router.use((req, res, next) => {
 
 router.use(cookieParser());
 router.use(users);
-router.use(usersV2);
+router.use('/v2/users', usersV2);
 router.use(civic);
 router.use(reader);
 router.use(nft);

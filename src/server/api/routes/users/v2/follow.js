@@ -13,7 +13,7 @@ const {
 
 const router = Router();
 
-router.get('/v2/users/:wallet/followers', async (req, res, next) => {
+router.get('/:wallet/followers', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     const userDoc = await walletUserCollection.doc(user).get();
@@ -29,7 +29,7 @@ router.get('/v2/users/:wallet/followers', async (req, res, next) => {
 });
 
 router.post(
-  '/v2/users/:wallet/followers',
+  '/:wallet/followers',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
@@ -52,7 +52,7 @@ router.post(
 );
 
 router.delete(
-  '/v2/users/:wallet/followers',
+  '/:wallet/followers',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
@@ -74,7 +74,7 @@ router.delete(
   }
 );
 
-router.get('/v2/users/:wallet/followees', async (req, res, next) => {
+router.get('/:wallet/followees', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     const followeeDocs = await walletUserCollection

@@ -15,7 +15,7 @@ const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
 const router = Router();
 
-router.get('/v2/users/self', authenticateV2Login, async (req, res, next) => {
+router.get('/self', authenticateV2Login, async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     const { user } = req.session;
@@ -33,7 +33,7 @@ router.get('/v2/users/self', authenticateV2Login, async (req, res, next) => {
   }
 });
 
-router.post('/v2/users/login', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   const { from: inputWallet, signature, publicKey, message } = req.body;
   try {
     if (!inputWallet || !signature || !publicKey || !message) {
@@ -86,7 +86,7 @@ router.post('/v2/users/login', async (req, res, next) => {
   }
 });
 
-router.post('/v2/users/logout', (req, res) => {
+router.post('/logout', (req, res) => {
   if (req.session) req.session = null;
   res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
   res.sendStatus(200);

@@ -13,7 +13,7 @@ const {
 
 const router = Router();
 
-router.get('/v2/users/:wallet/nfts/featured', async (req, res, next) => {
+router.get('/:wallet/nfts/featured', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     if (!isValidAddress(user)) {
@@ -29,7 +29,7 @@ router.get('/v2/users/:wallet/nfts/featured', async (req, res, next) => {
 });
 
 router.post(
-  '/v2/users/:wallet/nfts/featured',
+  '/:wallet/nfts/featured',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
@@ -52,7 +52,7 @@ router.post(
 );
 
 router.delete(
-  '/v2/users/:wallet/nfts/featured/:classId',
+  '/:wallet/nfts/featured/:classId',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
