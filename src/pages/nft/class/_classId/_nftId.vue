@@ -49,6 +49,12 @@
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
+              <NFTFeatured
+                :class-id="classId"
+                :preset="nftCollectorWalletAddress.includes(getAddress) ? 'edit' : 'invisible'"
+                :current-state="state"
+                @state-change="(obj) => (state = obj.state)"
+              />
             </NFTGemWrapper>
             <ButtonV2
               class="mt-[24px] text-medium-gray"
@@ -236,6 +242,9 @@ export default {
       isOpenTransferModal: false,
       isTransferring: false,
       isCollecting: false,
+
+      // Temp for testing UI
+      state: 'featured',
     };
   },
   computed: {

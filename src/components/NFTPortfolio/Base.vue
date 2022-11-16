@@ -1,6 +1,6 @@
 <template>
   <NFTGemWrapper :collected-count="collectedCount">
-    <NFTPortfolioCard>
+    <NFTPortfolioCard :current-state="currentState">
       <div
         class="h-[180px]"
         :style="`background-color: ${imageBgColor}`"
@@ -26,6 +26,7 @@
           'px-[24px]',
           'pt-[48px]',
           'py-[24px]',
+          'bg-white',
           'relative',
         ]"
       >
@@ -136,6 +137,10 @@ export default {
     isWritingNft: {
       type: Boolean,
       default: true,
+    },
+    currentState: {
+      type: String,
+      default: '',
     },
   },
   computed: {
