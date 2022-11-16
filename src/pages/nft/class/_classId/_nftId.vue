@@ -432,7 +432,7 @@ export default {
       this.isReadyToTransfer = true;
     },
     async handleCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+      logTrackerEvent(this, 'NFT', 'nft_details_collect', this.classId, 1);
       try {
         this.isCollecting = true;
         await this.collectNFT();
@@ -455,8 +455,8 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(DetailsPagePreviewSection)',
-        this.classId,
+        'nft_details_page_collect_from_preview',
+        this.nftId,
         1
       );
       return this.handleCollect();
@@ -475,48 +475,11 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(NFTDetailsPageControlBar)',
+        'nft_details_page_collect_from_control_bar',
         this.nftId,
         1
       );
       return this.handleCollect();
-    },
-    handleClickSellFromPriceSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTSellClick(DetailsPagePriceSection)',
-        this.classId,
-        1
-      );
-    },
-    handleHoverSellFromPriceSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTSellHover(DetailsPagePriceSection)',
-        this.classId,
-        1
-      );
-    },
-    handleCollectFromSupplySection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTCollect(DetailsPageSupplySection)',
-        this.classId,
-        1
-      );
-      return this.handleCollect();
-    },
-    handleCopyURL() {
-      this.shareURLPath({
-        title: this.NFTName,
-        text: this.NFTDescription,
-        path: this.nftClassDetailsPageURL,
-        alertMessage: this.$t('tooltip_share_done'),
-      });
-      logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(
