@@ -36,7 +36,7 @@ router.post(
     try {
       setPrivateCacheHeader(res);
       const { wallet: user } = req.params;
-      const { nftClassIds = [] } = req.query;
+      const { nftClassIds = [] } = req.body;
       if (!nftClassIds.length) {
         res.status(400).send('NFT_CLASS_ID_MISSING');
         return;
