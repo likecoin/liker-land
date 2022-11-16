@@ -106,8 +106,8 @@ router.put('/:wallet/email', async (req, res) => {
       case 'USER_NOT_FOUND':
         res.status(404).send('USER_NOT_FOUND');
         break;
-      case 'INVALID_ID':
-        res.status(400).send('INVALID_ID');
+      case 'INVALID_TOKEN':
+        res.status(400).send('INVALID_TOKEN');
         break;
       default:
         handleRestfulError(req, res, next, err);
