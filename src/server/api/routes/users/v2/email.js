@@ -53,7 +53,7 @@ router.post(
           emailLastUpdatedTs: FieldValue.serverTimestamp(),
         });
       });
-      const confirmLink = `${EXTERNAL_URL}/api/v2/users/${user}/email?token=${token}`;
+      const confirmLink = `${EXTERNAL_URL}/${user}/verify-email?token=${token}`;
       await sendEmail({
         email,
         subject: 'Confirm your email in Liker.Land',
@@ -75,7 +75,7 @@ router.post(
   }
 );
 
-router.get('/:wallet/email', async (req, res) => {
+router.put('/:wallet/email', async (req, res) => {
   try {
     const { wallet: user } = req.params;
     const { token } = req.query;
