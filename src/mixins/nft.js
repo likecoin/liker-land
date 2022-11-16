@@ -192,6 +192,19 @@ export default {
     nftCollectorCollectedCount() {
       return this.nftCollectorCollectedNFTList.length || 0;
     },
+    nftIsNew() {
+      return !Object.values(this.collectorMap)
+        .flat()
+        .includes(this.nftId);
+    },
+    nftCreatorMessage() {
+      return this.NFTClassMetadata?.message || '';
+    },
+    nftCreatorMessageWithParsing() {
+      const collector =
+        this.getAddress || this.$t('nft_message_replacer_collector');
+      return this.nftCreatorMessage.replaceAll('{collector}', collector);
+    },
 
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
@@ -235,6 +248,9 @@ export default {
     },
     nftClassDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
+    nextNewNFTId() {
+      return this.purchaseInfo?.metadata?.nextNewNFTId;
     },
     canCollectWithoutWallet() {
       return (
