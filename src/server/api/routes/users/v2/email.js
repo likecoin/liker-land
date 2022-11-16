@@ -20,7 +20,7 @@ const { EXTERNAL_URL } = require('../../../../config/config');
 const router = Router();
 
 router.post(
-  '/v2/users/:wallet/email',
+  '/:wallet/email',
   authenticateV2Login,
   checkWalletMatch,
   async (req, res) => {
@@ -75,7 +75,7 @@ router.post(
   }
 );
 
-router.get('/v2/users/:wallet/email', async (req, res) => {
+router.get('/:wallet/email', async (req, res) => {
   try {
     const { wallet: user } = req.params;
     const { token } = req.query;
