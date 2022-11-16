@@ -7,7 +7,7 @@ function authenticateV2Login(req, res, next) {
   next();
 }
 
-function checkWalletMatch(req, res, next) {
+function checkParamWalletMatch(req, res, next) {
   const { user } = req.session;
   const { wallet } = req.params;
   if (user !== wallet) {
@@ -19,5 +19,5 @@ function checkWalletMatch(req, res, next) {
 
 module.exports = {
   authenticateV2Login,
-  checkWalletMatch,
+  checkParamWalletMatch,
 };
