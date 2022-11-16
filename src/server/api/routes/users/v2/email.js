@@ -7,7 +7,7 @@ const {
 } = require('../../../../modules/firebase');
 const {
   authenticateV2Login,
-  checkWalletMatch,
+  checkParamWalletMatch,
 } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/auth');
 const { sendEmail } = require('../../../../modules/sendgrid');
@@ -22,7 +22,7 @@ const router = Router();
 router.post(
   '/:wallet/email',
   authenticateV2Login,
-  checkWalletMatch,
+  checkParamWalletMatch,
   async (req, res) => {
     try {
       const { wallet: user } = req.params;
@@ -35,22 +35,22 @@ router.post(
       await db.runTransaction(async t => {
         const userRef = walletUserCollection.doc(user);
         const userDoc = await t.get(userRef);
-        const { email: currentEmail, emailSetTs } = userDoc.data();
+        const { email: currentEmail, emailLastUpdatedTs } = userDoc.data();
         if (email === currentEmail) {
-          throw new Error('SAME_EMAIL_ALREADY_SET');
+          throw new Error('EMAIL_ALREADY_UPDATED');
         }
         if (
-          emailSetTs &&
-          Date.now() - emailSetTs.toMillis() <
+          emailLastUpdatedTs &&
+          Date.now() - emailLastUpdatedTs.toMillis() <
             VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS
         ) {
-          throw new Error('EMAIL_SET_IN_COOLDOWN');
+          throw new Error('EMAIL_UPDATE_IN_COOLDOWN');
         }
 
         await t.update(userRef, {
           emailUnconfirmed: email,
           emailVerifyToken: token,
-          emailSetTs: FieldValue.serverTimestamp(),
+          emailLastUpdatedTs: FieldValue.serverTimestamp(),
         });
       });
       const confirmLink = `${EXTERNAL_URL}/api/v2/users/${user}/email?token=${token}`;
@@ -62,11 +62,11 @@ router.post(
       res.sendStatus(200);
     } catch (error) {
       switch (error.message) {
-        case 'SAME_EMAIL_ALREADY_SET':
-          res.status(409).send('SAME_EMAIL_ALREADY_SET');
+        case 'EMAIL_ALREADY_UPDATED':
+          res.status(409).send('EMAIL_ALREADY_UPDATED');
           break;
-        case 'EMAIL_SET_IN_COOLDOWN':
-          res.status(429).send('EMAIL_SET_IN_COOLDOWN');
+        case 'EMAIL_UPDATE_IN_COOLDOWN':
+          res.status(429).send('EMAIL_UPDATE_IN_COOLDOWN');
           break;
         default:
           handleRestfulError(req, res, next, err);
