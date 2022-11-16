@@ -15,28 +15,23 @@ const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
 const router = Router();
 
-router.get(
-  '/v2/users/:wallet/self',
-  authenticateV2Login,
-  checkWalletMatch,
-  async (req, res, next) => {
-    try {
-      setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
-      const userDoc = await walletUserCollection.doc(user).get();
-      const { displayName, followers } = userDoc.data();
-      res.json({
-        user,
-        displayName,
-        followers,
-      });
-    } catch (err) {
-      if (req.session) req.session = null;
-      res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
-      next(err);
-    }
+router.get('/v2/users/self', authenticateV2Login, async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    const { user } = req.session;
+    const userDoc = await walletUserCollection.doc(user).get();
+    const { displayName, followers } = userDoc.data();
+    res.json({
+      user,
+      displayName,
+      followers,
+    });
+  } catch (err) {
+    if (req.session) req.session = null;
+    res.clearCookie(AUTH_COOKIE_NAME, CLEAR_AUTH_COOKIE_OPTION);
+    next(err);
   }
-);
+});
 
 router.post('/v2/users/login', async (req, res, next) => {
   const { from: inputWallet, signature, publicKey, message } = req.body;
