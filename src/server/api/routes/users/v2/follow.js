@@ -17,12 +17,11 @@ router.get('/v2/users/:wallet/followers', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     const userDoc = await walletUserCollection.doc(user).get();
-    let followers = [];
     if (!userDoc.exists) {
-      res.json({ followers });
+      res.json({ followers: [] });
       return;
     }
-    ({ followers } = userDoc.data());
+    const { followers = [] } = userDoc.data();
     res.json({ followers });
   } catch (err) {
     handleRestfulError(req, res, next, err);
