@@ -46,12 +46,12 @@ export default {
   },
   computed: {
     detailsPageRoute() {
-      if (this.nftId) {
+      if (this.nftId || this.nextNewNFTId) {
         return {
           name: 'nft-class-classId-nftId',
           params: {
             classId: this.classId,
-            nftId: this.nftId,
+            nftId: this.nftId || this.nextNewNFTId,
           },
         };
       }

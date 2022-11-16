@@ -236,6 +236,9 @@ export default {
     nftClassDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
+    nextNewNFTId() {
+      return this.purchaseInfo?.metadata?.nextNewNFTId;
+    },
     canCollectWithoutWallet() {
       return (
         !LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS.length ||
