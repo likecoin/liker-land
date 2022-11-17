@@ -74,7 +74,7 @@ const CurrentState = {
 export default {
   props: {
     currentState: {
-      type: CurrentState,
+      type: String,
       default: CurrentState.DEFAULT,
     },
     classId: {
@@ -82,7 +82,7 @@ export default {
       default: undefined,
     },
     preset: {
-      type: Preset,
+      type: String,
       default: Preset.VIEW_ONLY,
     },
   },

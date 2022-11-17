@@ -20,7 +20,7 @@ router.get('/:wallet/nfts/featured', async (req, res, next) => {
       res.status(400).send('INVALID_ADDRESS');
       return;
     }
-    const userDoc = await walletUserCollection(user).get();
+    const userDoc = await walletUserCollection.doc(user).get();
     const { featuredNFTClassIds = [] } = userDoc.data();
     res.json({ featured: featuredNFTClassIds });
   } catch (err) {
