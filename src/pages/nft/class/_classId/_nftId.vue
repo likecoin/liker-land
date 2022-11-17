@@ -133,16 +133,13 @@
     </div>
 
     <EventModalTransfer
+      v-if="classId"
       :is-open="isOpenTransferModal"
       :is-transferring="isTransferring"
-      :is-ready-to-transfer="isReadyToTransfer"
-      :error-msg="errorMsg"
-      :to-address="toAddress"
       :user-collected-count="userCollectedCount"
       :nft-id="nftId"
       @close="isOpenTransferModal = false; isTransferring = false"
-      @handle-input-addr="handleInputAddr"
-      @on-transfer="onTransfer"
+      @submit="handleTransfer"
     />
   </Page>
 </template>
@@ -153,7 +150,6 @@ import { mapActions } from 'vuex';
 import { EXTERNAL_HOST } from '~/constant';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
@@ -235,12 +231,9 @@ export default {
     return {
       // For <select> to change only, please use `this.nftId` instead
       selectedNFTId: this.$route.params.nftId,
-      toAddress: null,
       isLoading: true,
 
       isOpenTransferModal: false,
-      errorMsg: '',
-      isReadyToTransfer: false,
       isTransferring: false,
       isCollecting: false,
     };
@@ -362,32 +355,15 @@ export default {
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
-      this.isReadyToTransfer = false;
-      this.toAddress = null;
 
       this.uiSetTxError('');
       this.uiSetTxStatus('');
       this.fetchUserCollectedCount();
     },
-    async onTransfer() {
-      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.classId, 1);
+    async handleTransfer({ nftId, memo, toWallet }) {
+      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', this.nftId, 1);
       this.isTransferring = true;
-      await this.transferNFT(this.nftId);
-    },
-    handleInputAddr(value) {
-      if (!LIKE_ADDRESS_REGEX.test(value)) {
-        this.errorMsg = this.$t(
-          'nft_details_page_errormessage_transfer_invalid'
-        );
-        return;
-      }
-      if (value === this.getAddress) {
-        this.errorMsg = this.$t('nft_details_page_errormessage_transfer_self');
-        return;
-      }
-      this.errorMsg = '';
-      this.toAddress = value;
-      this.isReadyToTransfer = true;
+      await this.transferNFT({ nftId, memo, toWallet });
     },
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
