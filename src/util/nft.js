@@ -108,6 +108,7 @@ export async function signTransferNFT({
   toAddress,
   classId,
   nftId,
+  memo = '',
   signer,
 }) {
   const client = await createNFTSigningClient(signer);
@@ -116,7 +117,7 @@ export async function signTransferNFT({
     toAddress,
     classId,
     [nftId],
-    { broadcast: false }
+    { broadcast: false, memo }
   );
   return signData;
 }

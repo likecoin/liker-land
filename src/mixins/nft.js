@@ -572,7 +572,11 @@ export default {
         console.error(error);
       }
     },
-    async transferNFT(nftId = this.firstCollectedNFTId) {
+    async transferNFT({
+      toWallet,
+      nftId = this.firstCollectedNFTId,
+      memo = '',
+    } = {}) {
       try {
         await this.initIfNecessary();
         await this.walletFetchLIKEBalance();
@@ -605,9 +609,10 @@ export default {
         );
         const signData = await signTransferNFT({
           fromAddress: this.getAddress,
-          toAddress: this.toAddress,
+          toAddress: toWallet,
           classId: this.classId,
           nftId,
+          memo,
           signer: this.getSigner,
         });
         logTrackerEvent(

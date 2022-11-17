@@ -64,8 +64,23 @@
       <TextField
         class="mt-[4px]"
         :placeholder="$t('nft_details_page_placeholder_transfer')"
-        :error-message="errorMsg"
-        @input="(value) => $emit('handle-input-addr', value)"
+        @input="handleInputToWallet"
+      />
+      <Label
+        preset="p6"
+        class="text-medium-gray mt-[8px]"
+        :text="$t('nft_details_page_label_memo')"
+      />
+      <TextField
+        class="mt-[4px]"
+        placeholder="..."
+        @input="handleInputMemo"
+      />
+      <Label
+        v-if="errorMessage"
+        preset="p6"
+        class="text-danger mt-[8px]"
+        :text="errorMessage"
       />
     </template>
     <div
@@ -81,12 +96,14 @@
         border-0 border-dashed border-b-[2px] border-b-shade-gray
       "
     >
-      <FormField class="mx-[8px]" :label="$t('tx_modal_label_nft_id')">{{
-        selectedNFTId
-      }}</FormField>
-      <FormField class="mx-[8px]" :label="$t('tx_modal_label_receiver')">{{
-        toAddress
-      }}</FormField>
+      <FormField
+        class="mx-[8px]"
+        :label="$t('tx_modal_label_nft_id')"
+      >{{ selectedNFTId }}</FormField>
+      <FormField
+        class="mx-[8px]"
+        :label="$t('tx_modal_label_receiver')"
+      >{{ toWallet }}</FormField>
     </div>
     <template
       v-if="!isTransferring"
@@ -94,7 +111,7 @@
     >
       <ButtonV2
         preset="secondary"
-        :is-disabled="!isReadyToTransfer"
+        :is-disabled="!isReady"
         :text="$t('nft_details_page_button_transfer')"
         @click="handleClickTransfer"
       />
@@ -103,6 +120,8 @@
 </template>
 
 <script>
+import { LIKE_ADDRESS_REGEX } from '~/util/nft';
+
 export default {
   props: {
     classId: {
@@ -116,18 +135,6 @@ export default {
     isTransferring: {
       type: Boolean,
       default: false,
-    },
-    isReadyToTransfer: {
-      type: Boolean,
-      default: false,
-    },
-    errorMsg: {
-      type: String,
-      default: undefined,
-    },
-    toAddress: {
-      type: String,
-      default: undefined,
     },
     userCollectedCount: {
       type: Number,
@@ -145,9 +152,35 @@ export default {
   data() {
     return {
       selectedNFTId: this.userCollectedNftIds[0] || this.nftId,
+      toWallet: '',
+      memo: '',
     };
   },
+  computed: {
+    errorMessage() {
+      if (this.toWallet && !LIKE_ADDRESS_REGEX.test(this.toWallet)) {
+        return this.$t('nft_details_page_errormessage_transfer_invalid');
+      }
+      if (this.toWallet === this.getAddress) {
+        return this.$t('nft_details_page_errormessage_transfer_self');
+      }
+      if (this.memo.length > 256) {
+        return this.$t('nft_details_page_errormessage_memo_limit');
+      }
+      return '';
+    },
+    isReady() {
+      return this.toWallet && !this.errorMessage;
+    },
+  },
   watch: {
+    isOpen(isOpen) {
+      if (isOpen) {
+        this.selectedNFTId = this.userCollectedNftIds[0] || this.nftId;
+        this.toWallet = '';
+        this.memo = '';
+      }
+    },
     userCollectedNftIds(ids) {
       [this.selectedNFTId] = ids;
     },
@@ -156,8 +189,18 @@ export default {
     },
   },
   methods: {
+    handleInputToWallet(value) {
+      this.toWallet = value;
+    },
+    handleInputMemo(value) {
+      this.memo = value;
+    },
     handleClickTransfer() {
-      this.$emit('on-transfer', this.selectedNFTId);
+      this.$emit('submit', {
+        toWallet: this.toWallet,
+        nftId: this.selectedNFTId,
+        memo: this.memo,
+      });
     },
   },
 };

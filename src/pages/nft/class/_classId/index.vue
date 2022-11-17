@@ -107,15 +107,11 @@
     <EventModalTransfer
       :is-open="isOpenTransferModal"
       :is-transferring="isTransferring"
-      :is-ready-to-transfer="isReadyToTransfer"
-      :error-msg="errorMsg"
-      :to-address="toAddress"
       :class-id="classId"
       :user-collected-count="userCollectedCount"
       :user-collected-nft-ids="userCollectedNFTList"
       @close="isOpenTransferModal = false; isTransferring = false"
-      @handle-input-addr="handleInputAddr"
-      @on-transfer="onTransfer"
+      @submit="handleTransfer"
     />
   </Page>
 </template>
@@ -201,12 +197,9 @@ export default {
   },
   data() {
     return {
-      toAddress: null,
       isLoading: true,
 
       isOpenTransferModal: false,
-      errorMsg: '',
-      isReadyToTransfer: false,
       isTransferring: false,
       isCollecting: false,
     };
@@ -298,32 +291,15 @@ export default {
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
-      this.isReadyToTransfer = false;
-      this.toAddress = null;
 
       this.uiSetTxError('');
       this.uiSetTxStatus('');
       this.fetchUserCollectedCount();
     },
-    async onTransfer(nftId) {
+    async handleTransfer({ nftId, memo, toWallet }) {
       logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', nftId, 1);
       this.isTransferring = true;
-      await this.transferNFT(nftId);
-    },
-    handleInputAddr(value) {
-      if (!LIKE_ADDRESS_REGEX.test(value)) {
-        this.errorMsg = this.$t(
-          'nft_details_page_errormessage_transfer_invalid'
-        );
-        return;
-      }
-      if (value === this.getAddress) {
-        this.errorMsg = this.$t('nft_details_page_errormessage_transfer_self');
-        return;
-      }
-      this.errorMsg = '';
-      this.toAddress = value;
-      this.isReadyToTransfer = true;
+      await this.transferNFT({ nftId, memo, toWallet });
     },
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
