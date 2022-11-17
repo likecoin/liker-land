@@ -147,7 +147,7 @@
           v-else-if="
             currentTab === 'collected' ||
               // Show grid if empty in created tab & not user portfolio
-              (currentTab === 'created' && (sortedCreatedClassIds.length || (!sortedCreatedClassIds.length && getAddress === wallet)))
+              (currentTab === 'created' && (sortedCreatedClassIds.length || getAddress === wallet))
           "
           class="w-full"
         >
