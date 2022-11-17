@@ -18,7 +18,9 @@ const tabOptions = {
 
 const ITEMS_PER_PAGE = 10;
 
-const fetchNFTInfoLimit = throat(10);
+const NFT_INFO_FETCH_CONCURRENT_REQUEST_MAX = 10;
+
+const throttleNFTInfoFetch = throat(NFT_INFO_FETCH_CONCURRENT_REQUEST_MAX);
 
 export default {
   tabOptions,
@@ -188,12 +190,12 @@ export default {
     },
     collectedNFTs(nfts) {
       nfts.map(({ classId }) =>
-        fetchNFTInfoLimit(() => this.fetchNFTInfo(classId))
+        throttleNFTInfoFetch(() => this.fetchNFTInfo(classId))
       );
     },
     createdClassIds(classIds) {
       classIds.map(classId =>
-        fetchNFTInfoLimit(() => this.fetchNFTInfo(classId))
+        throttleNFTInfoFetch(() => this.fetchNFTInfo(classId))
       );
     },
     hasMoreNFTs(hasMoreNFTs) {
