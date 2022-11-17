@@ -200,6 +200,11 @@ export default {
     nftCreatorMessage() {
       return this.NFTClassMetadata?.message || '';
     },
+    nftCreatorMessageWithParsing() {
+      const collector =
+        this.getAddress || this.$t('nft_message_replacer_collector');
+      return this.nftCreatorMessage.replaceAll('{collector}', collector);
+    },
 
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(

@@ -134,7 +134,7 @@
                 type="purchase"
                 from-type="creator"
                 :from-wallet="iscnOwner"
-                :message="nftCreatorMessage"
+                :message="nftCreatorMessageWithParsing"
                 :message-type="'collector'"
               />
             </div>

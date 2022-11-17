@@ -87,6 +87,7 @@
   "nft_message_type_collect": "Creator Message",
   "nft_message_type_transfer": "Transfer Message",
   "nft_message_empty": "No message",
+  "nft_message_replacer_collector": "Collector",
   "nft_details_page_section_metadata": "Metadata",
   "nft_details_page_section_metadata_intro": "The content has been permanently stored on-chain and signed by its creator.",
   "nft_details_page_section_metadata_url": "URL",
