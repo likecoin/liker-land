@@ -36,7 +36,7 @@
           />
         </header>
 
-        <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
+        <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
           <!-- NFT Message List -->
           <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px]">
             <CardV2 class="flex gap-[24px] w-full">
@@ -90,7 +90,7 @@
           </div>
 
           <!-- NFT Preview -->
-          <div class="flex flex-col items-center col-span-1">
+          <div class="flex flex-col items-center order-first col-span-1 desktop:order-none">
             <NFTGemWrapper :collected-count="collectedCount">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
