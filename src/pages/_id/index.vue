@@ -140,17 +140,18 @@
           :is-empty="!sortedCreatedClassIds.length"
         />
 
-        <CardV2 v-if="isLoading">Loading</CardV2>
-
-        <div v-else class="w-full">
-          <ul
-            v-if="
-              // Show hide grid if empty in created tab for
-              (currentTab === 'created' && sortedCreatedClassIds.length)
-                || currentTab === 'collected'
-            "
-            ref="nftGrid"
-          >
+        <CardV2
+          v-if="isLoading"
+        >{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
+        <div
+          v-else-if="
+            currentTab === 'collected' ||
+              // Show grid if empty in created tab & not user portfolio
+              (currentTab === 'created' && (sortedCreatedClassIds.length || getAddress === wallet))
+          "
+          class="w-full"
+        >
+          <ul ref="nftGrid">
             <template v-if="currentTab === 'collected'">
               <li v-if="!sortedCollectedNFTs.length" class="w-full">
                 <NFTPortfolioEmpty preset="collected" />
@@ -169,6 +170,12 @@
             </template>
             <template v-else>
               <li
+                v-if="!sortedCreatedClassIds.length && getAddress === wallet"
+                class="w-full"
+              >
+                <NFTPortfolioEmpty preset="created" />
+              </li>
+              <li
                 v-for="id in sortedCreatedClassIds"
                 :key="id"
                 class="w-[310px] pb-[20px]"
@@ -180,6 +187,12 @@
               </li>
             </template>
           </ul>
+
+          <div
+            v-if="hasMoreNFTs"
+            ref="loadingMore"
+            class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
+          >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
         </div>
 
         <div class="flex flex-col items-center order-2 w-full">
@@ -314,6 +327,12 @@ export default {
   },
   mounted() {
     this.loadNFTListByAddress(this.wallet);
+    if (!this.isLoading) {
+      this.setupNFTGrid();
+    }
+    if (this.hasMoreNFTs) {
+      this.addInfiniteScrollListener();
+    }
   },
   methods: {
     scrollToCreatorFollowSection() {

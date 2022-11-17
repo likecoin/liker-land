@@ -58,16 +58,6 @@ export default {
       return { name: 'nft-class-classId', params: { classId: this.classId } };
     },
   },
-  async mounted() {
-    await this.updateNFTClassMetadata();
-    this.$emit('load');
-    this.updateNFTOwners();
-    // wait for metadata to determine if it is writing NFT
-    if (this.isWritingNFT) {
-      await this.updateNFTPurchaseInfo();
-      this.$emit('load');
-    }
-  },
   methods: {
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);

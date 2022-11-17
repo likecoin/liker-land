@@ -122,9 +122,9 @@
           </Dropdown>
         </div>
 
-        <CardV2 v-if="isLoading">{{
-          $t('nft_portfolio_page_label_loading')
-        }}</CardV2>
+        <CardV2
+          v-if="isLoading"
+        >{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
 
         <div v-else class="w-full">
           <ul ref="nftGrid">
@@ -167,14 +167,20 @@
             </template>
           </ul>
 
-          <div class="flex flex-col items-center my-[48px] w-full">
-            <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-            <ButtonV2
-              preset="outline"
-              :text="$t('portfolio_finding_more_button')"
-              to="/campaign/writing-nft"
-            />
-          </div>
+          <div
+            v-if="hasMoreNFTs"
+            ref="loadingMore"
+            class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
+          >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
+        </div>
+
+        <div class="flex flex-col items-center my-[48px] w-full">
+          <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
+          <ButtonV2
+            preset="outline"
+            :text="$t('portfolio_finding_more_button')"
+            to="/campaign/writing-nft"
+          />
         </div>
       </div>
     </div>
@@ -256,6 +262,12 @@ export default {
   },
   mounted() {
     this.syncRouteForTab();
+    if (!this.isLoading) {
+      this.setupNFTGrid();
+    }
+    if (this.hasMoreNFTs) {
+      this.addInfiniteScrollListener();
+    }
   },
   methods: {
     ...mapActions(['fetchUserInfoByAddress']),
