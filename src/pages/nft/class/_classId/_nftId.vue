@@ -128,10 +128,7 @@
             class="flex flex-col items-center col-span-2 py-[40px] gap-[24px]"
           >
             <h2 class="text-[32px] leading-1_5 text-center">{{ $t('nft_share_page_creator_title') }}</h2>
-            <div
-              v-if="nftCreatorMessage"
-              class="py-[40px] px-[24px] w-full"
-            >
+            <div class="py-[40px] px-[24px] w-full">
               <NFTMessage
                 class="w-full"
                 type="purchase"
