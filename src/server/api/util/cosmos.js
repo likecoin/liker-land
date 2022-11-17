@@ -7,8 +7,8 @@ const FIVE_MIN_IN_MS = 300000;
 
 function isValidAddress(address) {
   try {
-    bech32.decode(address);
-    return true;
+    const { prefix } = bech32.decode(address);
+    return ['cosmos', 'like'].includes(prefix);
   } catch (error) {
     return false;
   }
