@@ -326,6 +326,7 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
   },
   mounted() {
+    this.syncRouteForTab();
     this.loadNFTListByAddress(this.wallet);
     if (!this.isLoading) {
       this.setupNFTGrid();
