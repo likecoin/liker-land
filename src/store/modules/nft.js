@@ -11,7 +11,6 @@ import {
   getNFTsRespectDualPrefix,
   getNFTClassesRespectDualPrefix,
 } from '~/util/nft';
-import { deriveAllPrefixedAddresses } from '~/util/cosmos';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -19,6 +18,8 @@ const state = () => ({
   metadataByClassIdMap: {},
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
+  userNFTClassFeaturedSetMap: {},
+  userNFTClassHiddenSetMap: {},
   userLastCollectedTimestampMap: {},
 });
 
@@ -34,6 +35,18 @@ const mutations = {
   },
   [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
     Vue.set(state.userClassIdListMap, address, nfts);
+  },
+  [TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP](
+    state,
+    { address, classIdSet }
+  ) {
+    Vue.set(state.userNFTClassFeaturedSetMap, address, classIdSet);
+  },
+  [TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP](
+    state,
+    { address, classIdSet }
+  ) {
+    Vue.set(state.userNFTClassHiddenSetMap, address, classIdSet);
   },
   [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
     state,
@@ -74,6 +87,12 @@ function compareNumber(X, Y, order) {
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
   getNFTListByAddress: state => address => state.userClassIdListMap[address],
+  getNFTClassFeaturedListByAddress: state => address => [
+    ...state.userNFTClassFeaturedSetMap[address],
+  ],
+  getNFTClassHiddenListByAddress: state => address => [
+    ...state.userNFTClassHiddenSetMap[address],
+  ],
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
@@ -267,6 +286,52 @@ const actions = {
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
       address,
       timestampMap,
+    });
+  },
+  async fetchNFTListFeatured({ commit }, address) {
+    const { data } = await this.$api.get(api.formatFeaturedNFTUrl(address));
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+      address,
+      classIdSet: new Set(data.featured),
+    });
+  },
+  async fetchNFTListHidden({ commit }, address) {
+    const { data } = await this.$api.get(api.formatHiddenNFTUrl(address));
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+      address,
+      classIdSet: new Set(data.hidden),
+    });
+  },
+  addNFTFeatured({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassFeaturedSetMap[address];
+    classIdSet.add(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+      address,
+      classIdSet,
+    });
+  },
+  addNFTHidden({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassHiddenSetMap[address];
+    classIdSet.add(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+      address,
+      classIdSet,
+    });
+  },
+  removeNFTFeatured({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassFeaturedSetMap[address];
+    classIdSet.delete(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+      address,
+      classIdSet,
+    });
+  },
+  removeNFTHidden({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassHiddenSetMap[address];
+    classIdSet.delete(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+      address,
+      classIdSet,
     });
   },
 };
