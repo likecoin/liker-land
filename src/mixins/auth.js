@@ -1,5 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import stringify from 'fast-json-stable-stringify';
+import { postUserV2Login } from '~/util/api';
 import {
   LOGIN_MESSAGE,
   LIKECOIN_CHAIN_ID,
@@ -45,7 +46,7 @@ export default {
           message: stringify(message),
           from: this.getAddress,
         };
-        await this.$api.post('/api/v2/users/login', data);
+        await this.$api.post(postUserV2Login, data);
       } catch (error) {
         return error;
       }

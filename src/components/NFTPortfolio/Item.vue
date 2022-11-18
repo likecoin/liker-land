@@ -23,7 +23,7 @@
       :class-id="classId"
       :preset="$route.path.includes('dashboard') ? 'edit' : 'viewOnly'"
       :current-state="state"
-      @state-change="(obj) => (state = obj.state)"
+      @state-change="newState => state = newState"
     />
   </NuxtLink>
 </template>
@@ -49,9 +49,7 @@ export default {
   data() {
     return {
       isCollecting: false,
-
-      // Temp for testing UI
-      state: 'featured',
+      state: 'default',
     };
   },
   computed: {

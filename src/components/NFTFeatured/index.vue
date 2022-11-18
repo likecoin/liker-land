@@ -59,6 +59,10 @@
 </template>
 
 <script>
+import authMixin from '~/mixins/auth';
+import { formatFeaturedNFTUrl, formatHiddenNFTUrl } from '~/util/api';
+import { AUTH_COOKIE_NAME } from '~/constant';
+
 const Preset = {
   EDIT: 'edit',
   VIEW_ONLY: 'viewOnly',
@@ -72,6 +76,7 @@ const CurrentState = {
 };
 
 export default {
+  mixins: [authMixin],
   props: {
     currentState: {
       type: String,
@@ -128,32 +133,56 @@ export default {
         'translate-y-[-50%]',
       ];
     },
+    hasLogin() {
+      return !!this.$cookie.get(AUTH_COOKIE_NAME);
+    },
+    featuredNFTUrl() {
+      return formatFeaturedNFTUrl(this.getAddress);
+    },
+    hiddenNFTUrl() {
+      return formatHiddenNFTUrl(this.getAddress);
+    },
   },
 
   // mounted() {},
 
   methods: {
-    handleClick(event) {
+    async handleClick(event) {
       event.preventDefault();
       event.stopPropagation();
       if (this.preset !== Preset.EDIT) return;
+
+      if (!this.hasLogin) {
+        await this.signLogin();
+        console.log(this.$cookie.get(AUTH_COOKIE_NAME));
+      }
 
       let newState = '';
       switch (this.currentState) {
         case CurrentState.FEATURED:
           newState = CurrentState.HIDDEN;
+          await Promise.all([
+            this.$api.delete(`${this.featuredNFTUrl}/${this.classId}`),
+            this.$api.post(this.hiddenNFTUrl, {
+              classId: this.classId,
+            }),
+          ]);
           break;
         case CurrentState.HIDDEN:
           newState = CurrentState.DEFAULT;
+          await this.$api.delete(`${this.hiddenNFTUrl}/${this.classId}`);
           break;
         case CurrentState.DEFAULT:
           newState = CurrentState.FEATURED;
+          await this.$api.post(this.featuredNFTUrl, {
+            classId: this.classId,
+          });
           break;
         default:
           break;
       }
 
-      this.$emit('state-change', { state: newState, classId: this.classId });
+      this.$emit('state-change', newState);
     },
   },
 };
