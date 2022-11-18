@@ -16,7 +16,7 @@
             :class-id="classId"
             :price="NFTPrice"
             :collected-nft-ids="userCollectedNFTList"
-            :is-writing-nft="isWritingNFT"
+            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
           />
@@ -49,9 +49,10 @@
                 :nft-name="NFTName"
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
-                :is-primitive="nftIsPrimitive"
                 :collected-count="collectedCount"
                 :collector-count="ownerCount"
+                :class-collection-type="nftClassCollectionType"
+                :class-collection-name="nftClassCollectionName"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
@@ -220,7 +221,7 @@ export default {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
     isShowPriceSection() {
-      return this.isWritingNFT && this.NFTPrice !== undefined;
+      return this.nftIsWritingNFT && this.NFTPrice !== undefined;
     },
   },
   asyncData({ query }) {

@@ -1,16 +1,14 @@
 import { mapGetters } from 'vuex';
 
 import { getIdenticonAvatar } from '~/util/api';
+import { getPropNameGenerator } from '~/util/misc';
 import { ellipsis } from '~/util/ui';
 
 export const createUserInfoMixin = ({
   propKey = 'User',
   walletKey = 'wallet',
 } = {}) => {
-  const getPropName = propNameTemplate => {
-    const propName = propNameTemplate.replace('{key}', propKey);
-    return `${propName.charAt(0).toLocaleLowerCase()}${propName.substring(1)}`;
-  };
+  const getPropName = getPropNameGenerator(propKey);
   const userInfoPropName = getPropName('{key}Info');
   return {
     computed: {

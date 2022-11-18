@@ -1,7 +1,7 @@
 <template>
   <NFTGemWrapper
     :collected-count="collectedCount"
-    :is-writing-nft="isWritingNft"
+    :is-writing-nft="isWritingNFT"
   >
     <NFTPortfolioCard>
       <div
@@ -47,6 +47,7 @@
           </div>
         </div>
         <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
+
         <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
           <ProgressIndicator v-if="isCollecting" />
           <ButtonV2
@@ -62,7 +63,8 @@
             </template>
           </ButtonV2>
         </div>
-        <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+
+        <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
           <div class="flex items-center text-medium-gray">
             <IconMint />
             <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -76,6 +78,11 @@
             <span>{{ ownCount }}</span>
           </div>
         </div>
+        <Label
+          v-else-if="classCollectionName"
+          class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
+          preset="p6"
+        >{{ classCollectionName }}</Label>
       </div>
     </NFTPortfolioCard>
   </NFTGemWrapper>
@@ -88,11 +95,14 @@ import {
   getLikeCoResizedImageUrl,
 } from '~/util/ui';
 
+import nftClassCollectionMixin from '~/mixins/nft-class-collection';
+
 export default {
   filters: {
     ellipsis,
     formatNumberWithLIKE,
   },
+  mixins: [nftClassCollectionMixin],
   props: {
     title: {
       type: String,
@@ -138,17 +148,17 @@ export default {
       type: Number,
       default: 0,
     },
-    isPrimitive: {
-      type: Boolean,
-      default: true,
-    },
-    isWritingNft: {
-      type: Boolean,
-      default: false,
-    },
     isCollectable: {
       type: Boolean,
       default: false,
+    },
+    classCollectionType: {
+      type: String,
+      default: '',
+    },
+    classCollectionName: {
+      type: String,
+      default: '',
     },
   },
   computed: {

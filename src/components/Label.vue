@@ -54,6 +54,7 @@ export enum LabelType {
   H7 = 'h7',
   P5 = 'p5',
   P6 = 'p6',
+  P7 = 'p7',
 }
 
 export enum LabelAlign {
@@ -161,13 +162,14 @@ export default class Label extends Vue {
       case LabelType.P5:
         return 'text-[16px]';
 
+      case LabelType.H6:
       case LabelType.P6:
         return 'text-[14px]';
 
-      case LabelType.H6:
+      case LabelType.H7:
         return 'text-[12px]';
 
-      case LabelType.H7:
+      case LabelType.P7:
         return 'text-[10px]';
 
       default:

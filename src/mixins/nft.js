@@ -30,23 +30,30 @@ import {
   broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
-  isWritingNFT,
+  getNFTClassCollectionType,
   formatNFTEventsToHistory,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
+import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
 const creatorInfoMixin = createUserInfoMixin({
   propKey: 'Creator',
   walletKey: 'iscnOwner',
 });
 
+const nftClassCollectionMixin = createNFTClassCollectionMixin({
+  propKey: 'nft',
+  typeKey: 'nftClassCollectionType',
+});
+
 export default {
   mixins: [
     walletMixin,
     creatorInfoMixin,
+    nftClassCollectionMixin,
     CrispMixinFactory({ isBootAtMounted: true }),
   ],
   head() {
@@ -100,11 +107,11 @@ export default {
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
-    nftIsPrimitive() {
-      return !this.isWritingNFT;
+    nftClassCollectionType() {
+      return getNFTClassCollectionType(this.NFTClassMetadata);
     },
-    isWritingNFT() {
-      return isWritingNFT(this.NFTClassMetadata);
+    nftClassCollectionName() {
+      return this.NFTClassMetadata.nft_meta_collection_name || '';
     },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};

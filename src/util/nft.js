@@ -152,8 +152,30 @@ export function isValidHttpUrl(string) {
   return false;
 }
 
+export const nftClassCollectionType = {
+  WritingNFT: 'writing-nft',
+  BookNFT: 'book-nft',
+  PrimitiveNFT: 'primitive-nft',
+};
+
+export function getNFTClassCollectionType(classMetadata) {
+  switch (classMetadata?.nft_meta_collection_id) {
+    case 'likerland_writing_nft':
+      return nftClassCollectionType.WritingNFT;
+
+    case 'nft_book':
+      return nftClassCollectionType.BookNFT;
+
+    default:
+      return nftClassCollectionType.PrimitiveNFT;
+  }
+}
+
 export function isWritingNFT(classMetadata) {
-  return classMetadata?.nft_meta_collection_id === 'likerland_writing_nft';
+  return (
+    getNFTClassCollectionType(classMetadata) ===
+    nftClassCollectionType.WritingNFT
+  );
 }
 
 export function formatNFTInfo(nftInfo) {

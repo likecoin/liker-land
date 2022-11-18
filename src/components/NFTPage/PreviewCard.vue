@@ -107,7 +107,7 @@
       </ButtonV2>
 
       <div
-        v-if="!isPrimitive"
+        v-if="isWritingNFT"
         class="grid grid-flow-col gap-[16px] items-center justify-center mt-[18px] text-[12px]"
       >
         <div class="flex items-center text-medium-gray">
@@ -123,6 +123,11 @@
           <div class="ml-[4px]">{{ nftPrice | formatNumberWithLIKE }}</div>
         </div>
       </div>
+      <Label
+        v-else-if="classCollectionName"
+        class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
+        preset="p6"
+      >{{ classCollectionName }}</Label>
 
     </div>
   </CardV2>
@@ -136,6 +141,8 @@ import {
   getLikeCoResizedImageUrl,
 } from '~/util/ui';
 
+import nftClassCollectionMixin from '~/mixins/nft-class-collection';
+
 export default {
   name: 'ItemCard',
   filters: {
@@ -143,6 +150,7 @@ export default {
     ellipsisDescription,
     formatNumberWithLIKE,
   },
+  mixins: [nftClassCollectionMixin],
   props: {
     url: {
       type: String,
@@ -200,9 +208,13 @@ export default {
       type: Number,
       default: undefined,
     },
-    isPrimitive: {
-      type: Boolean,
-      default: true,
+    classCollectionType: {
+      type: String,
+      default: '',
+    },
+    classCollectionName: {
+      type: String,
+      default: '',
     },
 
     // Mint Info

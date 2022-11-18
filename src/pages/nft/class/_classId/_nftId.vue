@@ -29,7 +29,7 @@
             :current-nft-id="nftId"
             :view="nftIsNew ? 'created' : 'collected'"
             :price="NFTPrice"
-            :is-writing-nft="isWritingNFT"
+            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
@@ -94,7 +94,7 @@
             <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="w-full" />
             <NFTGemWrapper
               :collected-count="collectedCount"
-              :is-writing-nft="isWritingNFT"
+              :is-writing-nft="nftIsWritingNFT"
             >
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
@@ -109,7 +109,8 @@
                 :nft-name="NFTName"
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
-                :is-primitive="nftIsPrimitive"
+                :class-collection-type="nftClassCollectionType"
+                :class-collection-name="nftClassCollectionName"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
@@ -200,6 +201,7 @@ import { ellipsis } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import { nftClassCollectionType } from '~/util/nft';
 
 export default {
   name: 'NFTDetailsPage',
