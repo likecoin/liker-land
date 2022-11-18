@@ -1,9 +1,18 @@
 /* eslint no-param-reassign: "off" */
-
+import stringify from 'fast-json-stable-stringify';
+import {
+  LOGIN_MESSAGE,
+  LIKECOIN_CHAIN_ID,
+  LIKECOIN_CHAIN_MIN_DENOM,
+} from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
-import { getUserInfoMinByAddress } from '~/util/api';
+import {
+  getUserInfoMinByAddress,
+  getUserV2Self,
+  postUserV2Login,
+} from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 import {
   WALLET_SET_IS_DEBUG,
@@ -22,6 +31,7 @@ const state = () => ({
   isDebug: false,
   address: '',
   signer: null,
+  hasLoggedIn: false,
   connector: null,
   likerInfo: null,
   isInited: null,
@@ -39,6 +49,9 @@ const mutations = {
   },
   [WALLET_SET_SIGNER](state, signer) {
     state.signer = signer;
+  },
+  [types.WALLET_SET_HAS_LOGGED_IN](state, hasLoggedIn) {
+    state.hasLoggedIn = hasLoggedIn;
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
     state.methodType = method;
@@ -60,6 +73,7 @@ const mutations = {
 const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
+  hasLoggedIn: state => state.hasLoggedIn,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletMethodType: state => state.methodType,
@@ -166,6 +180,54 @@ const actions = {
       throw error;
     } finally {
       commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
+    }
+  },
+  async checkLogin({ commit }) {
+    try {
+      await getUserV2Self();
+      commit(types.WALLET_SET_HAS_LOGGED_IN, true);
+    } catch (err) {
+      commit(types.WALLET_SET_HAS_LOGGED_IN, false);
+    }
+  },
+  async signLogin({ state, commit, dispatch }) {
+    if (!state.signer) {
+      await dispatch('initIfNecessary');
+    }
+    const memo = [
+      `${LOGIN_MESSAGE}:`,
+      JSON.stringify({
+        ts: Date.now(),
+        address: state.address,
+      }),
+    ].join(' ');
+    const payload = {
+      chain_id: LIKECOIN_CHAIN_ID,
+      memo,
+      msgs: [],
+      fee: {
+        gas: '0',
+        amount: [{ denom: LIKECOIN_CHAIN_MIN_DENOM, amount: '0' }],
+      },
+      sequence: '0',
+      account_number: '0',
+    };
+    try {
+      const {
+        signed: message,
+        signature: { signature, pub_key: publicKey },
+      } = await state.signer.sign(state.address, payload);
+      const data = {
+        signature,
+        publicKey: publicKey.value,
+        message: stringify(message),
+        from: state.address,
+      };
+      await this.$api.post(postUserV2Login, data);
+      commit(types.WALLET_SET_HAS_LOGGED_IN, true);
+    } catch (error) {
+      commit(types.WALLET_SET_HAS_LOGGED_IN, false);
+      throw error;
     }
   },
 };

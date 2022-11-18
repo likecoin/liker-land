@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import authMixin from '~/mixins/auth';
+import { mapActions, mapGetters } from 'vuex';
 import { formatFeaturedNFTUrl, formatHiddenNFTUrl } from '~/util/api';
 import { AUTH_COOKIE_NAME } from '~/constant';
 
@@ -76,7 +76,6 @@ const CurrentState = {
 };
 
 export default {
-  mixins: [authMixin],
   props: {
     currentState: {
       type: String,
@@ -93,6 +92,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['getAddress', 'hasLoggedIn']),
     formatCurrentState() {
       switch (this.currentState) {
         case CurrentState.FEATURED:
@@ -144,17 +144,15 @@ export default {
     },
   },
 
-  // mounted() {},
-
   methods: {
+    ...mapActions(['signLogin']),
     async handleClick(event) {
       event.preventDefault();
       event.stopPropagation();
       if (this.preset !== Preset.EDIT) return;
 
-      if (!this.hasLogin) {
+      if (!this.hasLoggedIn) {
         await this.signLogin();
-        console.log(this.$cookie.get(AUTH_COOKIE_NAME));
       }
 
       let newState = '';

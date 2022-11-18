@@ -194,12 +194,11 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin from '~/mixins/portfolio';
-import authMixin from '~/mixins/auth';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin, authMixin],
+  mixins: [walletMixin, portfolioMixin],
   head() {
     const title = this.$t('dashboard_title');
     const description = this.$t('dashboard_description');
@@ -290,9 +289,6 @@ export default {
     handleShare() {
       this.copySharePageURL(this.wallet, this.getAddress);
       logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
-    },
-    async handleSignLogin() {
-      await this.signLogin();
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
