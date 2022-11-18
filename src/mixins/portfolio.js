@@ -6,6 +6,7 @@ import {
   ORDER_CREATED_CLASS_ID_BY,
   ORDER_COLLECTED_CLASS_ID_BY,
   ORDER,
+  isWritingNFT,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import userInfoMixin from '~/mixins/user-info';
@@ -263,8 +264,9 @@ export default {
       }
     },
     async fetchNFTInfo(classId) {
+      let metadata;
       try {
-        await this.fetchNFTMetadata(classId);
+        metadata = await this.fetchNFTMetadata(classId);
       } catch (error) {
         if (error.response?.status !== 404) {
           // eslint-disable-next-line no-console
@@ -281,7 +283,7 @@ export default {
       });
 
       // wait for metadata to determine if it is writing NFT
-      if (this.isWritingNFT) {
+      if (isWritingNFT(metadata)) {
         try {
           await this.fetchNFTPurchaseInfo(classId);
         } catch (error) {
