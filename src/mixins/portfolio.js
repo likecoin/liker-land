@@ -16,6 +16,7 @@ const tabOptions = {
   collected: 'collected',
   created: 'created',
 };
+const DEFAULT_TAB = tabOptions.collected;
 
 const ITEMS_PER_PAGE = 10;
 
@@ -44,7 +45,8 @@ export default {
       'getNFTListByAddress',
     ]),
     currentTab() {
-      return this.$route.query.tab || tabOptions.collected;
+      const { tab } = this.$route.query;
+      return tabOptions[tab] ? tab : DEFAULT_TAB;
     },
 
     hasMoreNFTs() {
@@ -217,7 +219,7 @@ export default {
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
     ]),
-    syncRouteForTab(tab = tabOptions.collected) {
+    syncRouteForTab(tab = this.currentTab) {
       const { query } = this.$route;
       if (!query.tab || !tabOptions[query.tab] || this.currentTab !== tab) {
         this.$router.replace({
@@ -296,6 +298,7 @@ export default {
       }
     },
     changeTab(tab) {
+      if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
     },
     goCollectedTab() {
