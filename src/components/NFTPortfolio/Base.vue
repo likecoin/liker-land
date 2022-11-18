@@ -1,5 +1,8 @@
 <template>
-  <NFTGemWrapper :collected-count="collectedCount">
+  <NFTGemWrapper
+    :collected-count="collectedCount"
+    :is-writing-nft="isWritingNft"
+  >
     <NFTPortfolioCard>
       <div
         class="h-[180px]"
@@ -44,15 +47,17 @@
           </div>
         </div>
         <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
-        <div v-if="isWritingNft && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
+        <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
           <ProgressIndicator v-if="isCollecting" />
           <ButtonV2
             v-else
             preset="secondary"
+            :is-disabled="!isCollectable"
             @click.stop.prevent="handleClickCollect"
           >
-            <span>{{ price | formatNumberWithLIKE }}</span>
-            <template #prepend>
+            <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
+            <template v-else>{{ $t('nft_class_uncollectible') }}</template>
+            <template v-if="isCollectable" #prepend>
               <IconPrice />
             </template>
           </ButtonV2>
@@ -133,9 +138,17 @@ export default {
       type: Number,
       default: 0,
     },
-    isWritingNft: {
+    isPrimitive: {
       type: Boolean,
       default: true,
+    },
+    isWritingNft: {
+      type: Boolean,
+      default: false,
+    },
+    isCollectable: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

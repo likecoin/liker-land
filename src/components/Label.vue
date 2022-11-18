@@ -18,11 +18,19 @@
     <div
       v-if="$slots.default"
       :class="contentWrapperClasses"
-    ><slot /></div>
+    >
+      <div v-if="isTruncated" class="truncate">
+        <slot />
+      </div>
+      <slot v-else />
+    </div>
     <div
       v-else
       :class="contentWrapperClasses"
-    >{{ text }}</div>
+    >
+      <div v-if="isTruncated" class="truncate">{{ text }}</div>
+      <template v-else>{{ text }}</template>
+    </div>
     <div
       v-if="$slots.append"
       :class="appendWrapperClasses"
@@ -97,6 +105,10 @@ export default class Label extends Vue {
   // Class of the append wrapper
   @Prop({ default: false })
   readonly isRaw!: boolean;
+
+  // Class of the append wrapper
+  @Prop({ default: false })
+  readonly isTruncated!: boolean;
 
   get isHeader(): boolean {
     return this.preset.startsWith('h');
@@ -202,6 +214,9 @@ export default class Label extends Vue {
       this.valignClass,
       this.alignClass,
       this.contentClass,
+      {
+        truncate: this.isTruncated,
+      },
     ];
   }
 

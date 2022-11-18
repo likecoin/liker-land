@@ -100,6 +100,9 @@ export default {
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
+    nftIsPrimitive() {
+      return !this.isWritingNFT;
+    },
     isWritingNFT() {
       return isWritingNFT(this.NFTClassMetadata);
     },
@@ -142,6 +145,9 @@ export default {
     },
     NFTPrice() {
       return this.purchaseInfo.price;
+    },
+    nftIsCollectable() {
+      return this.NFTPrice !== -1;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';

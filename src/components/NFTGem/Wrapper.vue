@@ -20,9 +20,17 @@ export default {
       type: Number,
       default: undefined,
     },
+    isWritingNft: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     gemLevel() {
+      if (!this.isWritingNft) {
+        return 0;
+      }
+
       const batch = getBatch(this.collectedCount);
       switch (true) {
         case batch >= 14 && batch <= 16:
@@ -57,5 +65,4 @@ export default {
     },
   },
 };
-</script>
 </script>

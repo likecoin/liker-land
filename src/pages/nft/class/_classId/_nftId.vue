@@ -90,8 +90,12 @@
           </div>
 
           <!-- NFT Preview -->
-          <div class="flex flex-col items-center order-first col-span-1 desktop:order-none">
-            <NFTGemWrapper :collected-count="collectedCount">
+          <div class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none">
+            <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="w-full" />
+            <NFTGemWrapper
+              :collected-count="collectedCount"
+              :is-writing-nft="isWritingNFT"
+            >
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
                 :image-bg-color="NFTImageBackgroundColor"
@@ -100,16 +104,18 @@
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :iscn-owner="iscnOwner"
+                :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
                 :nft-name="NFTName"
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
+                :is-primitive="nftIsPrimitive"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
             </NFTGemWrapper>
             <ButtonV2
-              class="mt-[24px] text-medium-gray"
+              class="text-medium-gray"
               content-class="text-[12px]"
               preset="plain"
               size="mini"

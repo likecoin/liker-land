@@ -23,6 +23,11 @@
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
 
+          <NFTPagePrimitiveDisclaimer
+            v-if="nftIsPrimitive"
+            class="w-full desktop:hidden"
+          />
+
           <!-- Left column -->
           <div
             :class="[
@@ -39,10 +44,12 @@
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :iscn-owner="iscnOwner"
+                :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
                 :nft-name="NFTName"
                 :nft-description="NFTDescription"
                 :nft-price="NFTPrice"
+                :is-primitive="nftIsPrimitive"
                 :collected-count="collectedCount"
                 :collector-count="ownerCount"
                 @collect="handleCollectFromPreviewSection"
@@ -50,8 +57,6 @@
               />
             </NFTGemWrapper>
             <NFTPageCollectorList
-              v-if="isShowPriceSection"
-              class="hidden laptop:block"
               :class-id="classId"
               :owner-count="ownerCount"
               :items="populatedCollectors"
@@ -63,29 +68,33 @@
 
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
-            <NFTPagePriceSection
-              v-if="isShowPriceSection"
-              :nft-price="NFTPrice"
-              :nft-price-u-s-d="formattedNFTPriceUSD"
-              :collected-count="collectedCount"
-              :collector-count="ownerCount"
-              :is-loading="uiIsOpenCollectModal && isCollecting"
-              :url="NFTExternalUrl"
-              @collect="handleCollectFromPriceSection"
-              @click-sell="handleClickSellFromPriceSection"
-              @hover-sell="handleHoverSellFromPriceSection"
-            />
-            <NFTPageCollectorList
-              :class="{ 'laptop:hidden': isShowPriceSection }"
-              :class-id="classId"
-              :owner-count="ownerCount"
-              :items="populatedCollectors"
-            />
-            <NFTPageSupplySection
-              v-if="isShowPriceSection"
-              :collected-count="collectedCount"
-              @collect="handleCollectFromSupplySection"
-            />
+            <template v-if="nftIsPrimitive">
+              <NFTPagePrimitiveDisclaimer class="hidden w-full desktop:flex" />
+              <NFTPagePrimitiveClassInfoSection
+                :class-id="classId"
+                :collected-count="collectedCount"
+                :collector-count="ownerCount"
+              />
+            </template>
+            <template v-else-if="isShowPriceSection">
+              <NFTPagePriceSection
+                :nft-price="NFTPrice"
+                :nft-price-u-s-d="formattedNFTPriceUSD"
+                :is-collectable="nftIsCollectable"
+                :collected-count="collectedCount"
+                :collector-count="ownerCount"
+                :is-loading="uiIsOpenCollectModal && isCollecting"
+                :url="NFTExternalUrl"
+                @collect="handleCollectFromPriceSection"
+                @click-sell="handleClickSellFromPriceSection"
+                @hover-sell="handleHoverSellFromPriceSection"
+              />
+              <NFTPageSupplySection
+                v-if="nftIsCollectable"
+                :collected-count="collectedCount"
+                @collect="handleCollectFromSupplySection"
+              />
+            </template>
           </div>
         </section>
 
@@ -120,7 +129,6 @@
 import { mapActions } from 'vuex';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import { EXTERNAL_HOST } from '~/constant';
 
 import nftMixin from '~/mixins/nft';
@@ -212,7 +220,7 @@ export default {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
     isShowPriceSection() {
-      return this.isWritingNFT && this.NFTPrice && this.NFTPrice >= 0;
+      return this.isWritingNFT && this.NFTPrice !== undefined;
     },
   },
   asyncData({ query }) {
