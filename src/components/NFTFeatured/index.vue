@@ -155,10 +155,9 @@ export default {
         await this.signLogin();
       }
 
-      let newState = '';
       switch (this.currentState) {
         case CurrentState.FEATURED:
-          newState = CurrentState.HIDDEN;
+          this.$emit('state-change', CurrentState.HIDDEN);
           await Promise.all([
             this.$api.delete(`${this.featuredNFTUrl}/${this.classId}`),
             this.$api.post(this.hiddenNFTUrl, {
@@ -167,11 +166,11 @@ export default {
           ]);
           break;
         case CurrentState.HIDDEN:
-          newState = CurrentState.DEFAULT;
+          this.$emit('state-change', CurrentState.DEFAULT);
           await this.$api.delete(`${this.hiddenNFTUrl}/${this.classId}`);
           break;
         case CurrentState.DEFAULT:
-          newState = CurrentState.FEATURED;
+          this.$emit('state-change', CurrentState.FEATURED);
           await this.$api.post(this.featuredNFTUrl, {
             classId: this.classId,
           });
@@ -179,8 +178,6 @@ export default {
         default:
           break;
       }
-
-      this.$emit('state-change', newState);
     },
   },
 };
