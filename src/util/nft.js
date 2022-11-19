@@ -151,7 +151,6 @@ export function isValidHttpUrl(string) {
 export const nftClassCollectionType = {
   WritingNFT: 'writing-nft',
   BookNFT: 'book-nft',
-  PrimitiveNFT: 'primitive-nft',
 };
 
 export function getNFTClassCollectionType(classMetadata) {
@@ -160,10 +159,11 @@ export function getNFTClassCollectionType(classMetadata) {
       return nftClassCollectionType.WritingNFT;
 
     case 'nft_book':
+    case 'ckxpress_book_nft':
       return nftClassCollectionType.BookNFT;
 
     default:
-      return nftClassCollectionType.PrimitiveNFT;
+      return '';
   }
 }
 
