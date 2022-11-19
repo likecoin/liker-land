@@ -335,15 +335,12 @@ export default {
           : this.updateNFTGrid
       );
     },
-    nftClassListOfCollected(nfts) {
-      nfts.map(({ classId }) =>
-        throttleNFTInfoFetch(() => this.fetchNFTInfo(classId))
-      );
-    },
-    nftClassListOfCreated(nfts) {
-      nfts.map(({ classId }) =>
-        throttleNFTInfoFetch(() => this.fetchNFTInfo(classId))
-      );
+    nftClassListMap(listMap) {
+      Object.values(listMap)
+        .flat()
+        .forEach(({ classId }) =>
+          throttleNFTInfoFetch(() => this.fetchNFTClassInfo(classId))
+        );
     },
     hasMoreNFTClassListItems(hasMoreNFTClassListItems) {
       if (hasMoreNFTClassListItems) {
@@ -422,7 +419,7 @@ export default {
         this.isLoading = false;
       }
     },
-    async fetchNFTInfo(classId) {
+    async fetchNFTClassInfo(classId) {
       let metadata;
       try {
         metadata = await this.fetchNFTMetadata(classId);
