@@ -7,7 +7,8 @@
 
         'flex-col',
         'desktop:flex-row',
-        'gap-[48px]',
+        'gap-x-[24px]',
+        'gap-y-[48px]',
 
         'items-center',
         'desktop:items-start',
@@ -16,10 +17,9 @@
         'mt-[32px]',
       ]"
     >
+      {{ /* Left Column */ }}
       <div
         :class="[
-          'desktop:mr-[24px]',
-
           'w-full',
           'min-w-[280px]',
           'desktop:w-[280px]',
@@ -37,7 +37,7 @@
           />
         </NFTPortfolioUserInfo>
         <div
-          v-if="getAddress === wallet"
+          v-if="isUserPortfolio"
           class="flex justify-center mt-[16px] mb-[24px]"
         >
           <ButtonV2
@@ -51,73 +51,85 @@
           </ButtonV2>
         </div>
       </div>
+
+      {{ /* Right Column */ }}
       <div
         :class="[
           'flex',
           'flex-col',
           'items-center',
           'w-full',
-          'gap-[48px]',
+          'gap-[32px]',
           'pb-[48px]',
-          'max-w-[700px]',
-          'desktop:w-[700px]',
+          'max-w-[644x]',
+          'desktop:w-[644px]',
         ]"
       >
-        <div :class="['flex', 'relative', 'items-center', 'w-full']">
-          <div
-            :class="[
-              'flex',
-              'justify-center',
-              'items-center',
-              'p-[4px]',
-              'mx-auto',
-              'bg-shade-gray',
-              'rounded-[14px]',
-            ]"
-          >
-            <MenuButton
-              text="Collected"
-              :is-selected="currentTab === 'collected'"
-              @click="handleGoCollected"
-            />
-            <MenuButtonDivider />
-            <MenuButton
-              text="Created"
-              :is-selected="currentTab === 'created'"
-              @click="handleGoCreated"
-            />
-          </div>
-          <div
-            :class="[
-              'flex',
-              'items-center',
+        <CardV2
+          v-if="isLoading"
+        >{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
+        <section
+          v-else
+          class="flex flex-col items-center gap-[32px] w-full"
+        >
+          <nav class="flex items-center justify-center w-full">
+            <div
+              :class="[
+                'flex',
+                'justify-center',
+                'items-center',
+                'p-[4px]',
+                'bg-shade-gray',
+                'rounded-[14px]',
+              ]"
+            >
+              <MenuButton
+                :text="$t('nft_portfolio_page_label_collected')"
+                :is-selected="isCurrentTabCollected"
+                @click="handleGoCollected"
+              />
+              <MenuButtonDivider />
+              <MenuButton
+                :text="$t('nft_portfolio_page_label_created')"
+                :is-selected="isCurrentTabCreated"
+                @click="handleGoCreated"
+              />
+              <MenuButtonDivider v-if="isShowOtherTab" />
+              <MenuButton
+                v-if="isShowOtherTab"
+                :text="$t('nft_portfolio_page_label_other')"
+                :is-selected="isCurrentTabOther"
+                @click="handleGoOther"
+              />
+            </div>
+          </nav>
 
-              'desktop:absolute',
-              'desktop:right-[10px]',
-            ]"
+          <div
+            v-if="currentNFTClassList.length"
+            class="flex justify-end w-full"
           >
             <Dropdown class="hidden desktop:block">
               <template v-slot:trigger="{ toggle }">
                 <ButtonV2
-                  :text="label"
+                  :text="currentNFTClassSortingLabel"
                   preset="plain"
                   @click="toggle"
                 >
                   <template #append>
-                    <IconASC v-if="currentOrder === 'ASC'" />
-                    <IconDESC v-if="currentOrder === 'DESC'" />
+                    <IconASC v-if="currentNFTClassListOrder === 'ASC'" />
+                    <IconDESC v-if="currentNFTClassListOrder === 'DESC'" />
                   </template>
                 </ButtonV2>
               </template>
               <MenuList>
                 <MenuItem
-                  v-for="(item, i) in currentOrderOptions"
+                  v-for="(item, i) in currentNFTClassSortingOptionList"
                   :key="i"
                   :value="item.value"
                   :label="item.name"
                   label-align="left"
-                  :selected-value="selectedValue"
-                  @select="handleSelectOrder"
+                  :selected-value="currentNFTClassListSortingValue"
+                  @select="handleNFTClassListSortingChange"
                 >
                   <template #label-append>
                     <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
@@ -126,85 +138,62 @@
                 </MenuItem>
               </MenuList>
             </Dropdown>
-            <MenuButtonDivider class="hidden bg-gray-c desktop:block" />
-            <ShareButton @copy="handleShare" />
           </div>
-        </div>
 
-        <NFTPortfolioSubscriptionForm
-          v-if="!isLoading && currentTab === 'created' && getAddress !== wallet"
-          :id="creatorFollowSectionId"
-          class="w-full desktop:order-1"
-          :creator-wallet-address="wallet"
-          :creator-display-name="userDisplayName"
-          :is-empty="!sortedCreatedClassIds.length"
-        />
+          <NFTPagePrimitiveDisclaimer
+            v-if="isCurrentTabOther"
+            class="w-full"
+            :is-portfolio="true"
+          />
 
-        <CardV2
-          v-if="isLoading"
-        >{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
-        <div
-          v-else-if="
-            currentTab === 'collected' ||
-              // Show grid if empty in created tab & not user portfolio
-              (currentTab === 'created' && (sortedCreatedClassIds.length || getAddress === wallet))
-          "
-          class="w-full"
-        >
-          <ul ref="nftGrid">
-            <template v-if="currentTab === 'collected'">
-              <li v-if="!sortedCollectedNFTs.length" class="w-full">
-                <NFTPortfolioEmpty preset="collected" />
-              </li>
-              <li
-                v-for="nft in sortedCollectedNFTs"
-                :key="nft.classId"
-                class="w-[310px] pb-[20px]"
-              >
-                <NFTPortfolioItem
-                  :class-id="nft.classId"
-                  :nft-id="nft.id"
-                  @load="updateNFTGrid"
-                />
-              </li>
-            </template>
-            <template v-else>
-              <li
-                v-if="!sortedCreatedClassIds.length && getAddress === wallet"
-                class="w-full"
-              >
-                <NFTPortfolioEmpty preset="created" />
-              </li>
-              <li
-                v-for="id in sortedCreatedClassIds"
-                :key="id"
-                class="w-[310px] pb-[20px]"
-              >
-                <NFTPortfolioItem
-                  :class-id="id"
-                  @load="updateNFTGrid"
-                />
-              </li>
-            </template>
+          <ul
+            v-if="!isCurrentTabCreated || currentNFTClassList.length"
+            ref="nftGrid"
+            class="w-full -mx-[12px] max-w-[668x] desktop:w-[668px] transition-all"
+          >
+            <li v-if="!currentNFTClassList.length" class="w-full">
+              <NFTPortfolioEmpty :preset="currentTab" />
+            </li>
+            <li
+              v-for="nft in currentNFTClassList"
+              :key="nft.classId"
+              class="w-[310px] pb-[20px]"
+            >
+              <NFTPortfolioItem
+                :class-id="nft.classId"
+                :nft-id="nft.id"
+                @load="updateNFTGrid"
+              />
+            </li>
           </ul>
 
           <div
-            v-if="hasMoreNFTs"
+            v-if="hasMoreNFTClassListItems"
             ref="loadingMore"
             class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
           >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
-        </div>
+        </section>
 
-        <div class="flex flex-col items-center order-2 w-full">
-          <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-          <ButtonV2
-            preset="outline"
-            :text="$t('portfolio_finding_more_button')"
-            to="/campaign/writing-nft"
-          />
-        </div>
+        <NFTPortfolioSubscriptionForm
+          v-if="!isLoading && isCurrentTabCreated && !isUserPortfolio"
+          :id="creatorFollowSectionId"
+          class="w-full phone:order-first"
+          :creator-wallet-address="wallet"
+          :creator-display-name="userDisplayName"
+          :is-empty="!nftClassListOfCreatedInOrder.length"
+        />
+
+        <hr class="w-[32px] h-[2px] bg-shade-gray border-none">
+
+        <ButtonV2
+          preset="outline"
+          :text="$t('portfolio_finding_more_button')"
+          to="/campaign/writing-nft"
+        />
       </div>
+
     </div>
+
     <NuxtChild />
   </Page>
 </template>
@@ -273,6 +262,9 @@ export default {
     wallet() {
       return this.$route.params.id;
     },
+    isUserPortfolio() {
+      return this.wallet === this.getAddress;
+    },
     creatorFollowSectionId() {
       return CREATOR_FOLLOW_SECTION_ID;
     },
@@ -287,7 +279,7 @@ export default {
           this.$nextTick(this.scrollToCreatorFollowSection);
         } else if (
           this.currentTab !== portfolioMixin.tabOptions.created &&
-          !this.sortedCollectedNFTs.length
+          !this.nftClassListOfCollectedInOrder.length
         ) {
           // Go to created tab if collected tab is empty
           this.goCreatedTab();
@@ -331,7 +323,7 @@ export default {
     if (!this.isLoading) {
       this.setupNFTGrid();
     }
-    if (this.hasMoreNFTs) {
+    if (this.hasMoreNFTClassListItems) {
       this.addInfiniteScrollListener();
     }
   },
@@ -353,9 +345,9 @@ export default {
       logTrackerEvent(this, 'UserPortfolio', 'GoCreatedTab', this.wallet, 1);
       this.goCreatedTab();
     },
-    handleShare() {
-      this.copySharePageURL(this.wallet, this.getAddress);
-      logTrackerEvent(this, 'UserPortfolio', 'CopyShareURL', this.wallet, 1);
+    handleGoOther() {
+      logTrackerEvent(this, 'UserPortfolio', 'GoOtherTab', this.wallet, 1);
+      this.goOtherTab();
     },
     goMyDashboard() {
       logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);

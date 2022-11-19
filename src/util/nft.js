@@ -14,18 +14,14 @@ let iscnLib = null;
 
 export const NFT_INDEXER_LIMIT_MAX = 100;
 
-export const ORDER_CREATED_CLASS_ID_BY = {
+export const NFT_CLASS_LIST_SORTING = {
   PRICE: 'PRICE',
   ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
-};
-
-export const ORDER_COLLECTED_CLASS_ID_BY = {
-  PRICE: 'PRICE',
   LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
   NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
 };
 
-export const ORDER = {
+export const NFT_CLASS_LIST_SORTING_ORDER = {
   ASC: 'ASC',
   DESC: 'DESC',
 };

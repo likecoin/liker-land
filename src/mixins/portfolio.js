@@ -3,9 +3,8 @@ import MagicGrid from 'magic-grid';
 import throat from 'throat';
 
 import {
-  ORDER_CREATED_CLASS_ID_BY,
-  ORDER_COLLECTED_CLASS_ID_BY,
-  ORDER,
+  NFT_CLASS_LIST_SORTING,
+  NFT_CLASS_LIST_SORTING_ORDER,
   isWritingNFT,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -15,6 +14,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 const tabOptions = {
   collected: 'collected',
   created: 'created',
+  other: 'other',
 };
 const DEFAULT_TAB = tabOptions.collected;
 
@@ -30,179 +30,323 @@ export default {
   data() {
     return {
       isLoading: false,
-      collectedOrderBy: ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT,
-      collectedOrder: ORDER.DESC,
-      collectedLimit: ITEMS_PER_PAGE,
-      createdOrderBy: ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP,
-      createdOrder: ORDER.DESC,
-      createdLimit: ITEMS_PER_PAGE,
+      nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
+      nftClassListOfCollectedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+      nftClassListOfCollectedShowCount: ITEMS_PER_PAGE,
+      nftClassListOfCreatedSorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
+      nftClassListOfCreatedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+      nftClassListOfCreatedShowCount: ITEMS_PER_PAGE,
+      nftClassListOfOtherSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
+      nftClassListOfOtherSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+      nftClassListOfOtherShowCount: ITEMS_PER_PAGE,
     };
   },
   computed: {
     ...mapGetters([
-      'getCreatedClassIdSorter',
-      'getCollectedNFTSorter',
-      'getNFTListByAddress',
+      'getNFTClassIdListSorterForCreated',
+      'getNFTClassListSorterForCollected',
+      'getNFTListMapByAddress',
+      'getNFTClassMetadataById',
     ]),
     currentTab() {
       const { tab } = this.$route.query;
       return tabOptions[tab] ? tab : DEFAULT_TAB;
     },
-
-    hasMoreNFTs() {
-      return this.currentTab === tabOptions.collected
-        ? this.collectedLimit < this.collectedNFTs?.length
-        : this.createdLimit < this.createdClassIds?.length;
+    isCurrentTabCollected() {
+      return this.currentTab === tabOptions.collected;
     },
-    nftList() {
-      return this.getNFTListByAddress(this.wallet);
+    isCurrentTabCreated() {
+      return this.currentTab === tabOptions.created;
     },
-    collectedNFTs() {
-      return this.nftList?.collected || [];
+    isCurrentTabOther() {
+      return this.currentTab === tabOptions.other;
     },
-
-    // for userStats
-    collectedClassIds() {
-      return this.collectedNFTs.map(({ classId }) => classId);
-    },
-    createdClassIds() {
-      return this.nftList?.created.map(({ classId }) => classId) || [];
+    isShowOtherTab() {
+      return this.isCurrentTabOther || this.nftClassListOfOther.length;
     },
 
-    // for NFTCardItems
-    sortedCollectedNFTs() {
-      return this.getCollectedNFTSorter({
-        nfts: this.collectedNFTs,
-        nftOwner: this.wallet,
-        orderBy: this.collectedOrderBy,
-        order: this.collectedOrder,
-      }).slice(0, this.collectedLimit);
+    hasMoreNFTClassListItems() {
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          return (
+            this.nftClassListOfCollectedShowCount <
+            this.nftClassListOfCollected?.length
+          );
+
+        case tabOptions.created:
+          return (
+            this.nftClassListOfCreatedShowCount <
+            this.nftClassListOfCreated?.length
+          );
+
+        case tabOptions.other:
+          return (
+            this.nftClassListOfOtherShowCount < this.nftClassListOfOther?.length
+          );
+
+        default:
+          return false;
+      }
     },
-    sortedCreatedClassIds() {
-      return this.getCreatedClassIdSorter({
-        classIds: this.createdClassIds,
-        orderBy: this.createdOrderBy,
-        order: this.createdOrder,
-      }).slice(0, this.createdLimit);
+    nftClassListMap() {
+      return this.getNFTListMapByAddress(this.wallet);
     },
-    currentOrderBy() {
-      return this.currentTab === tabOptions.collected
-        ? this.collectedOrderBy
-        : this.createdOrderBy;
+    nftClassListOfCollected() {
+      return this.nftClassListMap?.collected || [];
     },
-    currentOrder() {
-      return this.currentTab === tabOptions.collected
-        ? this.collectedOrder
-        : this.createdOrder;
+    nftClassListOfCreated() {
+      return this.nftClassListMap?.created || [];
     },
-    currentOrderOptions() {
-      return this.currentTab === tabOptions.collected
-        ? this.collectedOrderOptions
-        : this.createdOrderOptions;
+    nftClassMapOfOther() {
+      const allNFTClassMap = new Map(
+        [...this.nftClassListOfCreated, ...this.nftClassListOfCollected].map(
+          nft => [nft.classId, nft]
+        )
+      );
+
+      const nftClassMapOfOther = new Map();
+      allNFTClassMap.forEach(nft => {
+        if (!isWritingNFT(this.getNFTClassMetadataById(nft.classId))) {
+          nftClassMapOfOther.set(nft.classId, nft);
+        }
+      });
+
+      return nftClassMapOfOther;
     },
-    label() {
-      let formattedOrderBy = '';
-      switch (this.currentOrderBy) {
-        case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
-        case ORDER_CREATED_CLASS_ID_BY.PRICE:
-          formattedOrderBy = this.$t('order_menu_price');
+    nftClassListOfOther() {
+      return [...this.nftClassMapOfOther.values()];
+    },
+    nftClassListOfCollectedExcludedOther() {
+      return this.nftClassListOfCollected.filter(
+        ({ classId }) => !this.nftClassMapOfOther.has(classId)
+      );
+    },
+    nftClassListOfCreatedExcludedOther() {
+      return this.nftClassListOfCreated.filter(
+        ({ classId }) => !this.nftClassMapOfOther.has(classId)
+      );
+    },
+    nftClassListOfCollectedInOrder() {
+      return this.getNFTClassListSorterForCollected({
+        list: this.nftClassListOfCollectedExcludedOther,
+        collectorWallet: this.wallet,
+        sorting: this.nftClassListOfCollectedSorting,
+        order: this.nftClassListOfCollectedSortingOrder,
+      }).slice(0, this.nftClassListOfCollectedShowCount);
+    },
+    nftClassListOfCreatedInOrder() {
+      return this.getNFTClassIdListSorterForCreated({
+        list: this.nftClassListOfCreatedExcludedOther,
+        sorting: this.nftClassListOfCreatedSorting,
+        order: this.nftClassListOfCreatedSortingOrder,
+      }).slice(0, this.nftClassListOfCreatedShowCount);
+    },
+    nftClassListOfOtherInOrder() {
+      return this.getNFTClassListSorterForCollected({
+        list: this.nftClassListOfOther,
+        collectorWallet: this.wallet,
+        sorting: this.nftClassListOfOtherSorting,
+        order: this.nftClassListOfOtherSortingOrder,
+      }).slice(0, this.nftClassListOfOtherShowCount);
+    },
+    currentNFTClassList() {
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          return this.nftClassListOfCollectedInOrder;
+
+        case tabOptions.created:
+          return this.nftClassListOfCreatedInOrder;
+
+        case tabOptions.other:
+          return this.nftClassListOfOtherInOrder;
+
+        default:
+          return [];
+      }
+    },
+    currentNFTClassListSorting() {
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          return this.nftClassListOfCollectedSorting;
+
+        case tabOptions.created:
+          return this.nftClassListOfCreatedSorting;
+
+        case tabOptions.other:
+          return this.nftClassListOfOtherSorting;
+
+        default:
+          return NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP;
+      }
+    },
+    currentNFTClassListOrder() {
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          return this.nftClassListOfCollectedSortingOrder;
+
+        case tabOptions.created:
+          return this.nftClassListOfCreatedSortingOrder;
+
+        case tabOptions.other:
+          return this.nftClassListOfOtherSortingOrder;
+
+        default:
+          return NFT_CLASS_LIST_SORTING_ORDER.DESC;
+      }
+    },
+    currentNFTClassSortingOptionList() {
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          return this.nftClassOfCollectedSortingOptionList;
+
+        case tabOptions.created:
+          return this.nftClassOfCreatedSortingOptionList;
+
+        case tabOptions.other:
+          return this.nftClassOfOtherSortingOptionList;
+
+        default:
+          return [];
+      }
+    },
+    currentNFTClassSortingLabel() {
+      let label = '';
+      switch (this.currentNFTClassListSorting) {
+        case NFT_CLASS_LIST_SORTING.PRICE:
+          label = this.$t('order_menu_price');
           break;
-        case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
-        case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
-          formattedOrderBy = this.$t('order_menu_time');
+
+        case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
+        case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
+          label = this.$t('order_menu_time');
           break;
-        case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
-          formattedOrderBy = this.$t('order_menu_collected');
+
+        case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
+          label = this.$t('order_menu_collected');
           break;
+
         default:
           break;
       }
-      return formattedOrderBy;
+      return label;
     },
-    collectedOrderOptions() {
-      const options = [
+    nftClassOfCollectedSortingOptionList() {
+      return [
         {
-          value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
-          name: this.formatOrder(this.$t('order_menu_price')),
-        },
-        {
-          value: `${ORDER_COLLECTED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
-          name: this.formatOrder(this.$t('order_menu_price')),
-        },
-        {
-          value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
-            ORDER.DESC
+          value: `${NFT_CLASS_LIST_SORTING.PRICE}-${
+            NFT_CLASS_LIST_SORTING_ORDER.DESC
           }`,
-          name: this.formatOrder(this.$t('order_menu_time')),
+          name: this.formatNFTClassListSortingLabel(
+            this.$t('order_menu_price')
+          ),
         },
         {
-          value: `${ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT}-${
-            ORDER.ASC
+          value: `${NFT_CLASS_LIST_SORTING.PRICE}-${
+            NFT_CLASS_LIST_SORTING_ORDER.ASC
           }`,
-          name: this.formatOrder(this.$t('order_menu_time')),
+          name: this.formatNFTClassListSortingLabel(
+            this.$t('order_menu_price')
+          ),
         },
         {
-          value: `${ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT}-${ORDER.DESC}`,
-          name: this.formatOrder(this.$t('order_menu_collected')),
+          value: `${NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT}-${
+            NFT_CLASS_LIST_SORTING_ORDER.DESC
+          }`,
+          name: this.formatNFTClassListSortingLabel(this.$t('order_menu_time')),
+        },
+        {
+          value: `${NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT}-${
+            NFT_CLASS_LIST_SORTING_ORDER.ASC
+          }`,
+          name: this.formatNFTClassListSortingLabel(this.$t('order_menu_time')),
+        },
+        {
+          value: `${NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT}-${
+            NFT_CLASS_LIST_SORTING_ORDER.DESC
+          }`,
+          name: this.formatNFTClassListSortingLabel(
+            this.$t('order_menu_collected')
+          ),
         },
       ];
-      return options;
     },
-    createdOrderOptions() {
-      const options = [
+    nftClassOfCreatedSortingOptionList() {
+      return [
         {
-          value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.DESC}`,
-          name: this.formatOrder(this.$t('order_menu_price')),
+          value: `${NFT_CLASS_LIST_SORTING.PRICE}-${
+            NFT_CLASS_LIST_SORTING_ORDER.DESC
+          }`,
+          name: this.formatNFTClassListSortingLabel(
+            this.$t('order_menu_price')
+          ),
         },
         {
-          value: `${ORDER_CREATED_CLASS_ID_BY.PRICE}-${ORDER.ASC}`,
-          name: this.formatOrder(this.$t('order_menu_price')),
+          value: `${NFT_CLASS_LIST_SORTING.PRICE}-${
+            NFT_CLASS_LIST_SORTING_ORDER.ASC
+          }`,
+          name: this.formatNFTClassListSortingLabel(
+            this.$t('order_menu_price')
+          ),
         },
         {
-          value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.DESC}`,
-          name: this.formatOrder(this.$t('order_menu_time')),
+          value: `${NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP}-${
+            NFT_CLASS_LIST_SORTING_ORDER.DESC
+          }`,
+          name: this.formatNFTClassListSortingLabel(this.$t('order_menu_time')),
         },
         {
-          value: `${ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP}-${ORDER.ASC}`,
-          name: this.formatOrder(this.$t('order_menu_time')),
+          value: `${NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP}-${
+            NFT_CLASS_LIST_SORTING_ORDER.ASC
+          }`,
+          name: this.formatNFTClassListSortingLabel(this.$t('order_menu_time')),
         },
       ];
-      return options;
     },
-    selectedValue() {
-      return `${this.currentOrderBy}-${this.currentOrder}`;
+    nftClassOfOtherSortingOptionList() {
+      return [
+        {
+          value: `${NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP}-${
+            NFT_CLASS_LIST_SORTING_ORDER.DESC
+          }`,
+          name: this.formatNFTClassListSortingLabel(this.$t('order_menu_time')),
+        },
+        {
+          value: `${NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP}-${
+            NFT_CLASS_LIST_SORTING_ORDER.ASC
+          }`,
+          name: this.formatNFTClassListSortingLabel(this.$t('order_menu_time')),
+        },
+      ];
+    },
+    currentNFTClassListSortingValue() {
+      return `${this.currentNFTClassListSorting}-${
+        this.currentNFTClassListOrder
+      }`;
     },
   },
   watch: {
     currentTab() {
       this.$nextTick(this.setupNFTGrid);
     },
-    sortedCollectedNFTs(list, prevList) {
+    currentNFTClassList(list, prevList) {
       this.$nextTick(
         list?.length !== prevList?.length
           ? this.setupNFTGrid
           : this.updateNFTGrid
       );
     },
-    sortedCreatedClassIds(list, prevList) {
-      this.$nextTick(
-        list?.length !== prevList?.length
-          ? this.setupNFTGrid
-          : this.updateNFTGrid
-      );
-    },
-    collectedNFTs(nfts) {
+    nftClassListOfCollected(nfts) {
       nfts.map(({ classId }) =>
         throttleNFTInfoFetch(() => this.fetchNFTInfo(classId))
       );
     },
-    createdClassIds(classIds) {
-      classIds.map(classId =>
+    nftClassListOfCreated(nfts) {
+      nfts.map(({ classId }) =>
         throttleNFTInfoFetch(() => this.fetchNFTInfo(classId))
       );
     },
-    hasMoreNFTs(hasMoreNFTs) {
-      if (hasMoreNFTs) {
+    hasMoreNFTClassListItems(hasMoreNFTClassListItems) {
+      if (hasMoreNFTClassListItems) {
         this.addInfiniteScrollListener();
       } else {
         this.removeInfiniteScrollListener();
@@ -235,7 +379,7 @@ export default {
       window.removeEventListener('scroll', this.handleInfiniteScroll);
     },
     handleInfiniteScroll() {
-      if (!this.hasMoreNFTs) return;
+      if (!this.hasMoreNFTClassListItems) return;
 
       const { loadingMore: trigger } = this.$refs;
       if (
@@ -245,21 +389,34 @@ export default {
         return;
       }
 
-      if (this.currentTab === tabOptions.collected) {
-        this.collectedLimit = Math.min(
-          this.collectedLimit + ITEMS_PER_PAGE,
-          this.collectedNFTs.length
-        );
-      } else {
-        this.createdLimit = Math.min(
-          this.createdLimit + ITEMS_PER_PAGE,
-          this.createdClassIds.length
-        );
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          this.nftClassListOfCollectedShowCount = Math.min(
+            this.nftClassListOfCollectedShowCount + ITEMS_PER_PAGE,
+            this.nftClassListOfCollected.length
+          );
+          break;
+
+        case tabOptions.created:
+          this.nftClassListOfCreatedShowCount = Math.min(
+            this.nftClassListOfCreatedShowCount + ITEMS_PER_PAGE,
+            this.nftClassListOfCreated.length
+          );
+          break;
+
+        case tabOptions.other:
+          this.nftClassListOfOtherShowCount = Math.min(
+            this.nftClassListOfOtherShowCount + ITEMS_PER_PAGE,
+            this.nftClassListOfOther.length
+          );
+          break;
+
+        default:
       }
     },
     async loadNFTListByAddress(address) {
       const fetchPromise = this.fetchNFTListByAddress(address);
-      if (!this.getNFTListByAddress(address)) {
+      if (!this.getNFTListMapByAddress(address)) {
         this.isLoading = true;
         await fetchPromise;
         this.isLoading = false;
@@ -307,6 +464,9 @@ export default {
     goCreatedTab() {
       this.changeTab(tabOptions.created);
     },
+    goOtherTab() {
+      this.changeTab(tabOptions.other);
+    },
     copySharePageURL(wallet, referrer) {
       this.shareURLPath({
         title: this.userDisplayName,
@@ -318,13 +478,9 @@ export default {
     setupNFTGrid() {
       const { nftGrid } = this.$refs;
       if (!nftGrid) return;
-      const items =
-        this.currentTab === 'collected'
-          ? this.sortedCollectedNFTs.length
-          : this.sortedCreatedClassIds.length;
       this.nftGridController = new MagicGrid({
         container: nftGrid,
-        items: items || 1,
+        items: this.currentNFTClassList.length || 1,
         gutter: 24,
         maxColumns: 2,
         useMin: true,
@@ -337,7 +493,7 @@ export default {
       if (!this.nftGridController) return;
       this.nftGridController.positionItems();
     },
-    handleSelectOrder(value) {
+    handleNFTClassListSortingChange(value) {
       const splits = value.split('-');
       const orderBy = splits[0];
       const order = splits[1];
@@ -348,16 +504,27 @@ export default {
         `Sort portfolio item in ${splits[0]} by ${order} order`,
         1
       );
-      if (this.currentTab === tabOptions.collected) {
-        this.collectedOrderBy = orderBy;
-        this.collectedOrder = order;
-      }
-      if (this.currentTab === tabOptions.created) {
-        this.createdOrderBy = orderBy;
-        this.createdOrder = order;
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          this.nftClassListOfCollectedSorting = orderBy;
+          this.nftClassListOfCollectedSortingOrder = order;
+          break;
+
+        case tabOptions.created:
+          this.nftClassListOfCreatedSorting = orderBy;
+          this.nftClassListOfCreatedSortingOrder = order;
+          break;
+
+        case tabOptions.other:
+          this.nftClassListOfOtherSorting = orderBy;
+          this.nftClassListOfOtherSortingOrder = order;
+          break;
+
+        default:
+          break;
       }
     },
-    formatOrder(order) {
+    formatNFTClassListSortingLabel(order) {
       return this.$t('order_menu_by', {
         order,
       });

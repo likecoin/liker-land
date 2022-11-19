@@ -12,176 +12,165 @@
     </div>
     <div v-else class="flex flex-col items-center mt-[32px]">
       <!-- UserStat -->
-      <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
+      <div class="flex items-center mb-[28px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
         />
-        <ShareButton class="absolute right-0 laptop:right-[-40px]" @copy="handleShare" />
       </div>
+
       <!-- Main -->
       <div
         :class="[
           'flex',
           'flex-col',
-          'relative',
           'items-center',
           'w-full',
-          'max-w-[700px]',
-          'desktop:w-[700px]',
+          'gap-[32px]',
+          'pb-[48px]',
+          'max-w-[644x]',
+          'desktop:w-[644px]',
         ]"
       >
-        <div
-          :class="['flex', 'flex-col', 'items-center', 'mb-[48px]', 'w-full']"
-        >
-          <ButtonV2
-            preset="tertiary"
-            :text="$t('dashboard_portfolio_button')"
-            :class="[
-              'block',
-              'mb-[12px]',
-
-              'laptop:absolute',
-              'laptop:left-[-100px]',
-              'laptop:m-0',
-
-              'rounded-[16px]',
-            ]"
-            @click="goMyPortfolio"
-          >
-            <template #prepend>
-              <IconView />
-            </template>
-          </ButtonV2>
-          <div
-            :class="[
-              'flex',
-              'justify-center',
-              'items-center',
-              'p-[4px]',
-              'mx-auto',
-              'bg-shade-gray',
-              'rounded-[14px]',
-            ]"
-          >
-            <MenuButton
-              :text="$t('nft_portfolio_page_label_collected')"
-              :is-selected="currentTab === 'collected'"
-              @click="handleGoCollected"
-            />
-            <MenuButtonDivider />
-            <MenuButton
-              :text="$t('nft_portfolio_page_label_created')"
-              :is-selected="currentTab === 'created'"
-              @click="handleGoCreated"
-            />
-          </div>
-
-          <Dropdown
-            :class="[
-              'hidden',
-
-              'desktop:block',
-              'desktop:absolute',
-              'desktop:right-[-50px]',
-              'desktop:m-0',
-
-              'rounded-[16px]',
-            ]"
-          >
-            <template v-slot:trigger="{ toggle }">
-              <ButtonV2
-                :text="label.replace('By ', '')"
-                preset="plain"
-                @click="toggle"
-              >
-                <template #append>
-                  <IconASC v-if="currentOrder === 'ASC'" />
-                  <IconDESC v-if="currentOrder === 'DESC'" />
-                </template>
-              </ButtonV2>
-            </template>
-            <MenuList>
-              <MenuItem
-                v-for="(item, i) in currentOrderOptions"
-                :key="i"
-                :value="item.value"
-                :label="item.name"
-                :selected-value="selectedValue"
-                label-align="left"
-                @select="handleSelectOrder"
-              >
-                <template #label-append>
-                  <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
-                  <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
-                </template>
-              </MenuItem>
-            </MenuList>
-          </Dropdown>
-        </div>
-
         <CardV2
           v-if="isLoading"
         >{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
+        <section
+          v-else
+          class="flex flex-col items-center gap-[32px] w-full"
+        >
+          <nav class="flex flex-col items-center justify-center w-full laptop:flex-row gap-[32px]">
+            <ButtonV2
+              preset="tertiary"
+              size="small"
+              :text="$t('dashboard_portfolio_button')"
+              :class="[
+                'block',
 
-        <div v-else class="w-full">
-          <ul ref="nftGrid">
-            <template v-if="currentTab === 'collected'">
-              <li
-                v-if="!sortedCollectedNFTs.length"
-                class="w-full"
-              >
-                <NFTPortfolioEmpty preset="collected" />
-              </li>
-              <li
-                v-for="nft in sortedCollectedNFTs"
-                :key="nft.classId"
-                class="w-[310px] pb-[20px]"
-              >
-                <NFTPortfolioItem
-                  :class-id="nft.classId"
-                  :nft-id="nft.id"
-                  @load="updateNFTGrid"
-                />
-              </li>
-            </template>
-            <template v-else>
-              <li
-                v-if="!sortedCreatedClassIds.length"
-                class="w-full"
-              >
-                <NFTPortfolioEmpty preset="created" />
-              </li>
-              <li
-                v-for="id in sortedCreatedClassIds"
-                :key="id"
-                class="w-[310px] pb-[20px]"
-              >
-                <NFTPortfolioItem
-                  :class-id="id"
-                  @load="updateNFTGrid"
-                />
-              </li>
-            </template>
+                'laptop:absolute',
+                'laptop:left-0',
+                'laptop:ml-[24px]',
+
+                'rounded-full',
+              ]"
+              @click="goMyPortfolio"
+            >
+              <template #prepend>
+                <IconView />
+              </template>
+            </ButtonV2>
+
+            <div
+              :class="[
+                'flex',
+                'justify-center',
+                'items-center',
+                'p-[4px]',
+                'mx-auto',
+                'bg-shade-gray',
+                'rounded-[14px]',
+              ]"
+            >
+              <MenuButton
+                :text="$t('nft_portfolio_page_label_collected')"
+                :is-selected="currentTab === 'collected'"
+                @click="handleGoCollected"
+              />
+              <MenuButtonDivider />
+              <MenuButton
+                :text="$t('nft_portfolio_page_label_created')"
+                :is-selected="currentTab === 'created'"
+                @click="handleGoCreated"
+              />
+              <MenuButtonDivider v-if="isShowOtherTab" />
+              <MenuButton
+                v-if="isShowOtherTab"
+                :text="$t('nft_portfolio_page_label_other')"
+                :is-selected="isCurrentTabOther"
+                @click="handleGoOther"
+              />
+            </div>
+          </nav>
+
+          <div
+            v-if="currentNFTClassList.length"
+            class="justify-end hidden w-full desktop:flex"
+          >
+            <Dropdown>
+              <template v-slot:trigger="{ toggle }">
+                <ButtonV2
+                  :text="currentNFTClassSortingLabel"
+                  preset="plain"
+                  @click="toggle"
+                >
+                  <template #append>
+                    <IconASC v-if="currentNFTClassListOrder === 'ASC'" />
+                    <IconDESC v-if="currentNFTClassListOrder === 'DESC'" />
+                  </template>
+                </ButtonV2>
+              </template>
+              <MenuList>
+                <MenuItem
+                  v-for="(item, i) in currentNFTClassSortingOptionList"
+                  :key="i"
+                  :value="item.value"
+                  :label="item.name"
+                  :selected-value="currentNFTClassListSortingValue"
+                  label-align="left"
+                  @select="handleNFTClassListSortingChange"
+                >
+                  <template #label-append>
+                    <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
+                    <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
+                  </template>
+                </MenuItem>
+              </MenuList>
+            </Dropdown>
+          </div>
+
+          <NFTPagePrimitiveDisclaimer
+            v-if="isCurrentTabOther"
+            class="w-full"
+            :is-portfolio="true"
+          />
+
+          <ul
+            v-if="!isCurrentTabCreated || currentNFTClassList.length"
+            ref="nftGrid"
+            class="w-full -mx-[12px] max-w-[668x] desktop:w-[668px] transition-all"
+          >
+            <li v-if="!currentNFTClassList.length" class="w-full">
+              <NFTPortfolioEmpty :preset="currentTab" />
+            </li>
+            <li
+              v-for="nft in currentNFTClassList"
+              :key="nft.classId"
+              class="w-[310px] pb-[20px]"
+            >
+              <NFTPortfolioItem
+                :class-id="nft.classId"
+                :nft-id="nft.id"
+                @load="updateNFTGrid"
+              />
+            </li>
           </ul>
 
           <div
-            v-if="hasMoreNFTs"
+            v-if="hasMoreNFTClassListItems"
             ref="loadingMore"
             class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
           >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
-        </div>
+        </section>
 
-        <div class="flex flex-col items-center my-[48px] w-full">
-          <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-          <ButtonV2
-            preset="outline"
-            :text="$t('portfolio_finding_more_button')"
-            to="/campaign/writing-nft"
-          />
-        </div>
+        <hr class="w-[32px] h-[2px] bg-shade-gray border-none">
+
+        <ButtonV2
+          preset="outline"
+          :text="$t('portfolio_finding_more_button')"
+          to="/campaign/writing-nft"
+        />
       </div>
     </div>
   </Page>
@@ -265,7 +254,7 @@ export default {
     if (!this.isLoading) {
       this.setupNFTGrid();
     }
-    if (this.hasMoreNFTs) {
+    if (this.hasMoreNFTClassListItems) {
       this.addInfiniteScrollListener();
     }
   },
@@ -287,9 +276,9 @@ export default {
       logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
       this.goCreatedTab();
     },
-    handleShare() {
-      this.copySharePageURL(this.wallet, this.getAddress);
-      logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
+    handleGoOther() {
+      logTrackerEvent(this, 'MyDashboard', 'GoOtherTab', this.wallet, 1);
+      this.goOtherTab();
     },
     async handleSignLogin() {
       await this.signLogin();
