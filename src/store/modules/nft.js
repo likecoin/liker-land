@@ -115,7 +115,7 @@ const getters = {
 
   getNFTClassListSorterForCollected: (_, getters) => ({
     list,
-    collectorWallet,
+    collectorWallet: collector,
     sorting,
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
   }) => {
@@ -132,14 +132,14 @@ const getters = {
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
-          X = getters.getNFTClassOwnerInfoById(a)?.[collectorWallet]?.length;
-          Y = getters.getNFTClassOwnerInfoById(b)?.[collectorWallet]?.length;
+          X = getters.getNFTClassOwnerInfoById(a)?.[collector]?.length;
+          Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
-          X = getters.getUserLastCollectedTimestampByAddress(collectorWallet)[a];
-          Y = getters.getUserLastCollectedTimestampByAddress(collectorWallet)[b];
+          X = getters.getUserLastCollectedTimestampByAddress(collector)[a];
+          Y = getters.getUserLastCollectedTimestampByAddress(collector)[b];
           break;
       }
       return compareNumber(X, Y, order);
