@@ -245,12 +245,23 @@ export default {
     },
   },
   watch: {
-    nftClassListMap(listMap) {
-      Object.values(listMap)
-        .flat()
-        .forEach(({ classId }) =>
-          throttleNFTInfoFetch(() => this.fetchNFTClassInfo(classId))
-        );
+    nftClassListMap(listMap, listMapPrev) {
+      const nftClassIdListSet = new Set(
+        Object.values(listMap)
+          .flat()
+          .map(n => n.classId)
+      );
+      const nftClassListPrev = listMapPrev
+        ? Object.values(listMapPrev).flat()
+        : [];
+
+      nftClassListPrev.forEach(({ classId }) => {
+        nftClassIdListSet.delete(classId);
+      });
+
+      [...nftClassIdListSet].forEach(classId =>
+        throttleNFTInfoFetch(() => this.fetchNFTClassInfo(classId))
+      );
     },
   },
   methods: {
