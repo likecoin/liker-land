@@ -53,144 +53,32 @@
       </div>
 
       {{ /* Right Column */ }}
-      <div
-        :class="[
-          'flex',
-          'flex-col',
-          'items-center',
-          'w-full',
-          'gap-[32px]',
-          'pb-[48px]',
-          'max-w-[644x]',
-          'desktop:w-[644px]',
-        ]"
+      <NFTPortfolioMainView
+        key="portfolio"
+        :portfolio-tab="currentTab"
+        :portfolio-items="currentNFTClassList"
+        :portfolio-items-show-count="currentNFTClassListShowCount"
+        :portfolio-items-sorting="currentNFTClassListSorting"
+        :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
+        :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
+        :is-loading-portfolio-items="isLoading"
+        :is-show-other-tab="isShowOtherTab"
+        :is-narrow="true"
+        @portfolio-change-tab="handleTabChange"
+        @portfolio-change-sorting="handleNFTClassListSortingChange"
+        @infinite-scroll="handleInfiniteScroll"
       >
-        <CardV2
-          v-if="isLoading"
-        >{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
-        <section
-          v-else
-          class="flex flex-col items-center gap-[32px] w-full"
-        >
-          <nav class="flex items-center justify-center w-full">
-            <div
-              :class="[
-                'flex',
-                'justify-center',
-                'items-center',
-                'p-[4px]',
-                'bg-shade-gray',
-                'rounded-[14px]',
-              ]"
-            >
-              <MenuButton
-                :text="$t('nft_portfolio_page_label_collected')"
-                :is-selected="isCurrentTabCollected"
-                @click="handleGoCollected"
-              />
-              <MenuButtonDivider />
-              <MenuButton
-                :text="$t('nft_portfolio_page_label_created')"
-                :is-selected="isCurrentTabCreated"
-                @click="handleGoCreated"
-              />
-              <MenuButtonDivider v-if="isShowOtherTab" />
-              <MenuButton
-                v-if="isShowOtherTab"
-                :text="$t('nft_portfolio_page_label_other')"
-                :is-selected="isCurrentTabOther"
-                @click="handleGoOther"
-              />
-            </div>
-          </nav>
-
-          <div
-            v-if="currentNFTClassList.length"
-            class="flex justify-end w-full"
-          >
-            <Dropdown class="hidden desktop:block">
-              <template v-slot:trigger="{ toggle }">
-                <ButtonV2
-                  :text="currentNFTClassSortingLabel"
-                  preset="plain"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconASC v-if="currentNFTClassListOrder === 'ASC'" />
-                    <IconDESC v-if="currentNFTClassListOrder === 'DESC'" />
-                  </template>
-                </ButtonV2>
-              </template>
-              <MenuList>
-                <MenuItem
-                  v-for="(item, i) in currentNFTClassSortingOptionList"
-                  :key="i"
-                  :value="item.value"
-                  :label="item.name"
-                  label-align="left"
-                  :selected-value="currentNFTClassListSortingValue"
-                  @select="handleNFTClassListSortingChange"
-                >
-                  <template #label-append>
-                    <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
-                    <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
-          </div>
-
-          <NFTPagePrimitiveDisclaimer
-            v-if="isCurrentTabOther"
-            class="w-full"
-            :is-portfolio="true"
+        <template #footer-prepend>
+          <NFTPortfolioSubscriptionForm
+            v-if="!isLoading && isCurrentTabCreated && !isUserPortfolio"
+            :id="creatorFollowSectionId"
+            class="w-full phone:order-first"
+            :creator-wallet-address="wallet"
+            :creator-display-name="userDisplayName"
+            :is-empty="!nftClassListOfCreatedInOrder.length"
           />
-
-          <ul
-            v-if="!isCurrentTabCreated || currentNFTClassList.length"
-            ref="nftGrid"
-            class="w-full -mx-[12px] max-w-[668x] desktop:w-[668px] transition-all"
-          >
-            <li v-if="!currentNFTClassList.length" class="w-full">
-              <NFTPortfolioEmpty :preset="currentTab" />
-            </li>
-            <li
-              v-for="nft in currentNFTClassList"
-              :key="nft.classId"
-              class="w-[310px] pb-[20px]"
-            >
-              <NFTPortfolioItem
-                :class-id="nft.classId"
-                :nft-id="nft.id"
-                @load="updateNFTGrid"
-              />
-            </li>
-          </ul>
-
-          <div
-            v-if="hasMoreNFTClassListItems"
-            ref="loadingMore"
-            class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
-          >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
-        </section>
-
-        <NFTPortfolioSubscriptionForm
-          v-if="!isLoading && isCurrentTabCreated && !isUserPortfolio"
-          :id="creatorFollowSectionId"
-          class="w-full phone:order-first"
-          :creator-wallet-address="wallet"
-          :creator-display-name="userDisplayName"
-          :is-empty="!nftClassListOfCreatedInOrder.length"
-        />
-
-        <hr class="w-[32px] h-[2px] bg-shade-gray border-none">
-
-        <ButtonV2
-          preset="outline"
-          :text="$t('portfolio_finding_more_button')"
-          to="/campaign/writing-nft"
-        />
-      </div>
+        </template>
+      </NFTPortfolioMainView>
 
     </div>
 
@@ -205,7 +93,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
 
 import walletMixin from '~/mixins/wallet';
-import portfolioMixin from '~/mixins/portfolio';
+import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
 
 const CREATOR_FOLLOW_SECTION_ID = 'creator-follow';
 
@@ -278,13 +166,12 @@ export default {
         if (this.$route.hash === this.creatorFollowSectionHash) {
           this.$nextTick(this.scrollToCreatorFollowSection);
         } else if (
-          this.currentTab !== portfolioMixin.tabOptions.created &&
+          !this.isCurrentTabCreated &&
           !this.nftClassListOfCollectedInOrder.length
         ) {
           // Go to created tab if collected tab is empty
-          this.goCreatedTab();
+          this.changeTab(tabOptions.created);
         }
-        this.$nextTick(this.setupNFTGrid);
       }
     },
   },
@@ -320,12 +207,6 @@ export default {
   mounted() {
     this.syncRouteForTab();
     this.loadNFTListByAddress(this.wallet);
-    if (!this.isLoading) {
-      this.setupNFTGrid();
-    }
-    if (this.hasMoreNFTClassListItems) {
-      this.addInfiniteScrollListener();
-    }
   },
   methods: {
     scrollToCreatorFollowSection() {
@@ -337,17 +218,36 @@ export default {
         },
       });
     },
-    handleGoCollected() {
-      logTrackerEvent(this, 'UserPortfolio', 'GoCollectedTab', this.wallet, 1);
-      this.goCollectedTab();
-    },
-    handleGoCreated() {
-      logTrackerEvent(this, 'UserPortfolio', 'GoCreatedTab', this.wallet, 1);
-      this.goCreatedTab();
-    },
-    handleGoOther() {
-      logTrackerEvent(this, 'UserPortfolio', 'GoOtherTab', this.wallet, 1);
-      this.goOtherTab();
+    handleTabChange(tab) {
+      switch (tab) {
+        case tabOptions.collected:
+          logTrackerEvent(
+            this,
+            'UserPortfolio',
+            'GoCollectedTab',
+            this.wallet,
+            1
+          );
+          break;
+
+        case tabOptions.created:
+          logTrackerEvent(
+            this,
+            'UserPortfolio',
+            'GoCreatedTab',
+            this.wallet,
+            1
+          );
+
+          break;
+        case tabOptions.other:
+          logTrackerEvent(this, 'UserPortfolio', 'GoOtherTab', this.wallet, 1);
+          break;
+
+        default:
+          break;
+      }
+      this.changeTab(tab);
     },
     goMyDashboard() {
       logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
