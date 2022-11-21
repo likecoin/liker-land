@@ -1,5 +1,16 @@
 # Changelog
 
+## 2022-11-21
+baf4c166e3ab8ae865812c80524d8590a7f56096
+
+### Added
+- Added individual NFT details page
+- Added transfer message input
+- Added creator follow
+
+### Changed
+- Updated UI for primitive NFT
+
 ## 2022-08-24
 306e74e2a565f7ec352560ca9539cb1e95ff2cfa
 
