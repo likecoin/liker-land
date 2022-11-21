@@ -154,7 +154,7 @@ export default {
       return this.purchaseInfo.price;
     },
     nftIsCollectable() {
-      return this.NFTPrice !== -1;
+      return this.NFTPrice && this.NFTPrice !== -1;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
