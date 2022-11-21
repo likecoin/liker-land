@@ -167,7 +167,8 @@ export default {
           this.$nextTick(this.scrollToCreatorFollowSection);
         } else if (
           !this.isCurrentTabCreated &&
-          !this.nftClassListOfCollectedInOrder.length
+          // NOTE: Seems computed property `this.nftClassListOfCollected` is not reflecting the actual state
+          !this.nftClassListMap?.collected.length
         ) {
           // Go to created tab if collected tab is empty
           this.changeTab(tabOptions.created);
