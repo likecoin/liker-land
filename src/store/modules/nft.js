@@ -87,12 +87,10 @@ function compareNumber(X, Y, order) {
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
   getNFTListByAddress: state => address => state.userClassIdListMap[address],
-  getNFTClassFeaturedListByAddress: state => address => [
-    ...state.userNFTClassFeaturedSetMap[address],
-  ],
-  getNFTClassHiddenListByAddress: state => address => [
-    ...state.userNFTClassHiddenSetMap[address],
-  ],
+  getNFTClassFeaturedSetByAddress: state => address =>
+    state.userNFTClassFeaturedSetMap[address],
+  getNFTClassHiddenSetByAddress: state => address =>
+    state.userNFTClassHiddenSetMap[address],
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
@@ -288,14 +286,14 @@ const actions = {
       timestampMap,
     });
   },
-  async fetchNFTListFeatured({ commit }, address) {
+  async fetchNFTListFeaturedByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.formatFeaturedNFTUrl(address));
     commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
       address,
       classIdSet: new Set(data.featured),
     });
   },
-  async fetchNFTListHidden({ commit }, address) {
+  async fetchNFTListHiddenByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.formatHiddenNFTUrl(address));
     commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
       address,
@@ -307,7 +305,7 @@ const actions = {
     classIdSet.add(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
       address,
-      classIdSet,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
   },
   addNFTHidden({ state, commit }, { address, classId }) {
@@ -315,7 +313,7 @@ const actions = {
     classIdSet.add(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
       address,
-      classIdSet,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
   },
   removeNFTFeatured({ state, commit }, { address, classId }) {
@@ -323,7 +321,7 @@ const actions = {
     classIdSet.delete(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
       address,
-      classIdSet,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
   },
   removeNFTHidden({ state, commit }, { address, classId }) {
@@ -331,7 +329,7 @@ const actions = {
     classIdSet.delete(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
       address,
-      classIdSet,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
   },
 };

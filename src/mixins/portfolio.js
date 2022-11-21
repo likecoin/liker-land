@@ -218,8 +218,8 @@ export default {
       'fetchNFTMetadata',
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
-      'fetchNFTListFeatured',
-      'fetchNFTListHidden',
+      'fetchNFTListFeaturedByAddress',
+      'fetchNFTListHiddenByAddress',
     ]),
     syncRouteForTab(tab = this.currentTab) {
       const { query } = this.$route;
@@ -262,8 +262,8 @@ export default {
     async loadNFTListByAddress(address) {
       const fetchPromises = Promise.all([
         this.fetchNFTListByAddress(address),
-        this.fetchNFTListFeatured(address),
-        this.fetchNFTListHidden(address),
+        this.fetchNFTListFeaturedByAddress(address),
+        this.fetchNFTListHiddenByAddress(address),
       ]);
       if (!this.getNFTListByAddress(address)) {
         this.isLoading = true;

@@ -10,6 +10,7 @@ import {
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
+  NFT_DISPLAY_STATE,
 } from '~/constant';
 
 import {
@@ -87,6 +88,8 @@ export default {
   computed: {
     ...mapGetters([
       'getUserInfoByAddress',
+      'getNFTClassFeaturedSetByAddress',
+      'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
@@ -248,11 +251,26 @@ export default {
     getWalletIdentityType() {
       return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
     },
+    nftDisplayState() {
+      if (
+        this.getNFTClassFeaturedSetByAddress(this.getAddress)?.has(this.classId)
+      ) {
+        return NFT_DISPLAY_STATE.FEATURED;
+      }
+      if (
+        this.getNFTClassHiddenSetByAddress(this.getAddress)?.has(this.classId)
+      ) {
+        return NFT_DISPLAY_STATE.HIDDEN;
+      }
+      return NFT_DISPLAY_STATE.DEFAULT;
+    },
   },
   watch: {
     getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserCollectedCount();
+        this.fetchUserNFTListFeatured();
+        this.fetchUserNFTListHidden();
       }
     },
     uiTxNFTStatus(status) {
@@ -301,6 +319,8 @@ export default {
       'uiSetTxError',
       'walletFetchLIKEBalance',
       'fetchNFTListByAddress',
+      'fetchNFTListFeaturedByAddress',
+      'fetchNFTListHiddenByAddress',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -441,6 +461,12 @@ export default {
     },
     async fetchUserCollectedCount() {
       await this.updateUserCollectedCount(this.classId, this.getAddress);
+    },
+    async fetchUserNFTListFeatured() {
+      await this.fetchNFTListFeaturedByAddress(this.getAddress);
+    },
+    async fetchUserNFTListHidden() {
+      await this.fetchNFTListHiddenByAddress(this.getAddress);
     },
     async collectNFT() {
       try {

@@ -52,8 +52,7 @@
               <NFTFeatured
                 :class-id="classId"
                 :preset="nftCollectorWalletAddress.includes(getAddress) ? 'edit' : 'invisible'"
-                :current-state="state"
-                @state-change="newState => state = newState"
+                :display-state="nftDisplayState"
               />
             </NFTGemWrapper>
             <ButtonV2
@@ -242,8 +241,6 @@ export default {
       isOpenTransferModal: false,
       isTransferring: false,
       isCollecting: false,
-
-      state: 'default',
     };
   },
   computed: {

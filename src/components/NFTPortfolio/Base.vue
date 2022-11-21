@@ -1,6 +1,6 @@
 <template>
   <NFTGemWrapper :collected-count="collectedCount">
-    <NFTPortfolioCard :current-state="currentState">
+    <NFTPortfolioCard :display-state="displayState">
       <div
         class="h-[180px]"
         :style="`background-color: ${imageBgColor}`"
@@ -84,6 +84,8 @@ import {
   getLikeCoResizedImageUrl,
 } from '~/util/ui';
 
+import { NFT_DISPLAY_STATE } from '~/constant';
+
 export default {
   filters: {
     ellipsis,
@@ -138,9 +140,9 @@ export default {
       type: Boolean,
       default: true,
     },
-    currentState: {
+    displayState: {
       type: String,
-      default: '',
+      default: NFT_DISPLAY_STATE.DEFAULT,
     },
   },
   computed: {

@@ -5,8 +5,8 @@
       'w-full',
       'overflow-hidden',
       'bg-white',
-      {'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4]': currentState === 'featured'},
-      {'hover:bg-like-cyan-light': currentState !== 'hidden'},
+      {'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4]': displayState === 'featured'},
+      {'hover:bg-like-cyan-light': displayState !== 'hidden'},
       'transition',
       'ease-in',
       'duration-200',
@@ -23,7 +23,7 @@
         'box-border',
         'border-[2px]',
         'border-transparent',
-        { 'blur-md opacity-75': currentState === 'hidden' },
+        { 'blur-md opacity-75': displayState === 'hidden' },
       ]"
     >
       <slot />
@@ -32,11 +32,13 @@
 </template>
 
 <script>
+import { NFT_DISPLAY_STATE } from '~/constant';
+
 export default {
   props: {
-    currentState: {
+    displayState: {
       type: String,
-      default: 'viewOnly',
+      default: NFT_DISPLAY_STATE.DEFAULT,
     },
   },
 };

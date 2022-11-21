@@ -16,14 +16,13 @@
       :image-src="NFTImageUrl"
       :is-collecting="uiIsOpenCollectModal && isCollecting"
       :own-count="ownCount"
-      :current-state="state"
+      :display-state="nftDisplayState"
       @collect="handleClickCollect"
     />
     <NFTFeatured
       :class-id="classId"
       :preset="$route.path.includes('dashboard') ? 'edit' : 'viewOnly'"
-      :current-state="state"
-      @state-change="newState => state = newState"
+      :display-state="nftDisplayState"
     />
   </NuxtLink>
 </template>
@@ -49,7 +48,6 @@ export default {
   data() {
     return {
       isCollecting: false,
-      state: 'default',
     };
   },
   computed: {

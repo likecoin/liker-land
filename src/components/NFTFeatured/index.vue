@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="preset === 'edit' || (preset === 'viewOnly' && currentState === 'featured')"
+    v-if="preset === 'edit' || (preset === 'viewOnly' && displayState === 'featured')"
     :class="[
       'absolute',
       'group',
@@ -15,7 +15,7 @@
   >
     <div class="flex gap-[8px] items-center">
       <div
-        v-if="preset === 'edit' && formatCurrentState"
+        v-if="preset === 'edit' && formatdisplayState"
         :class="[
           'px-[20px]',
           'py-[4px]',
@@ -28,7 +28,7 @@
           bgColorClasses,
         ]"
       >
-        {{ formatCurrentState }}
+        {{ formatdisplayState }}
       </div>
       <div class="w-[40px] h-[40px] relative">
         <div
@@ -45,14 +45,14 @@
           ]"
         />
         <IconStartFilled
-          v-if="currentState === 'featured'"
+          v-if="displayState === 'featured'"
           :class="iconClasses"
         />
         <IconStartOutlined
-          v-if="currentState === 'default'"
+          v-if="displayState === 'default'"
           :class="[iconClasses, 'opacity-75']"
         />
-        <IconHide v-if="currentState === 'hidden'" :class="iconClasses" />
+        <IconHide v-if="displayState === 'hidden'" :class="iconClasses" />
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { formatFeaturedNFTUrl, formatHiddenNFTUrl } from '~/util/api';
-import { AUTH_COOKIE_NAME } from '~/constant';
+import { AUTH_COOKIE_NAME, NFT_DISPLAY_STATE } from '~/constant';
 
 const Preset = {
   EDIT: 'edit',
@@ -69,17 +69,11 @@ const Preset = {
   INVISIBLE: 'invisible',
 };
 
-const CurrentState = {
-  FEATURED: 'featured',
-  DEFAULT: 'default',
-  HIDDEN: 'hidden',
-};
-
 export default {
   props: {
-    currentState: {
+    displayState: {
       type: String,
-      default: CurrentState.DEFAULT,
+      default: NFT_DISPLAY_STATE.DEFAULT,
     },
     classId: {
       type: String,
@@ -93,34 +87,28 @@ export default {
 
   computed: {
     ...mapGetters(['getAddress', 'hasLoggedIn']),
-    formatCurrentState() {
-      switch (this.currentState) {
-        case CurrentState.FEATURED:
+    formatdisplayState() {
+      switch (this.displayState) {
+        case NFT_DISPLAY_STATE.FEATURED:
           return this.$t('nft_portfolio_page_label_featured');
 
-        case CurrentState.DEFAULT:
-          return undefined;
-
-        case CurrentState.HIDDEN:
+        case NFT_DISPLAY_STATE.HIDDEN:
           return this.$t('nft_portfolio_page_label_hidden');
 
+        case NFT_DISPLAY_STATE.DEFAULT:
         default:
           return undefined;
       }
     },
     bgColorClasses() {
-      switch (this.currentState) {
-        case CurrentState.FEATURED:
+      switch (this.displayState) {
+        case NFT_DISPLAY_STATE.FEATURED:
           return ['bg-white'];
-
-        case CurrentState.DEFAULT:
-          return ['bg-medium-gray'];
-
-        case CurrentState.HIDDEN:
+        case NFT_DISPLAY_STATE.HIDDEN:
           return ['bg-[#9B9B9B]'];
-
+        case NFT_DISPLAY_STATE.DEFAULT:
         default:
-          return [];
+          return ['bg-medium-gray'];
       }
     },
     iconClasses() {
@@ -145,7 +133,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['signLogin']),
+    ...mapActions([
+      'signLogin',
+      'addNFTFeatured',
+      'addNFTHidden',
+      'removeNFTFeatured',
+      'removeNFTHidden',
+    ]),
     async handleClick(event) {
       event.preventDefault();
       event.stopPropagation();
@@ -155,9 +149,16 @@ export default {
         await this.signLogin();
       }
 
-      switch (this.currentState) {
-        case CurrentState.FEATURED:
-          this.$emit('state-change', CurrentState.HIDDEN);
+      switch (this.displayState) {
+        case NFT_DISPLAY_STATE.FEATURED:
+          this.removeNFTFeatured({
+            address: this.getAddress,
+            classId: this.classId,
+          });
+          this.addNFTHidden({
+            address: this.getAddress,
+            classId: this.classId,
+          });
           await Promise.all([
             this.$api.delete(`${this.featuredNFTUrl}/${this.classId}`),
             this.$api.post(this.hiddenNFTUrl, {
@@ -165,12 +166,18 @@ export default {
             }),
           ]);
           break;
-        case CurrentState.HIDDEN:
-          this.$emit('state-change', CurrentState.DEFAULT);
+        case NFT_DISPLAY_STATE.HIDDEN:
+          this.removeNFTHidden({
+            address: this.getAddress,
+            classId: this.classId,
+          });
           await this.$api.delete(`${this.hiddenNFTUrl}/${this.classId}`);
           break;
-        case CurrentState.DEFAULT:
-          this.$emit('state-change', CurrentState.FEATURED);
+        case NFT_DISPLAY_STATE.DEFAULT:
+          this.addNFTFeatured({
+            address: this.getAddress,
+            classId: this.classId,
+          });
           await this.$api.post(this.featuredNFTUrl, {
             classId: this.classId,
           });
