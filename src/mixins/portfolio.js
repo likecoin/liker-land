@@ -70,19 +70,25 @@ export default {
     },
 
     // for NFTCardItems
+    isDashboardPage() {
+      return this.$route.name === 'dashboard';
+    },
     sortedCollectedNFTs() {
       return this.getCollectedNFTSorter({
         nfts: this.collectedNFTs,
         nftOwner: this.wallet,
         orderBy: this.collectedOrderBy,
         order: this.collectedOrder,
+        enableFeaturedAndHidden: !this.isDashboardPage,
       }).slice(0, this.collectedLimit);
     },
     sortedCreatedClassIds() {
       return this.getCreatedClassIdSorter({
+        address: this.wallet,
         classIds: this.createdClassIds,
         orderBy: this.createdOrderBy,
         order: this.createdOrder,
+        enableFeaturedAndHidden: !this.isDashboardPage,
       }).slice(0, this.createdLimit);
     },
     currentOrderBy() {

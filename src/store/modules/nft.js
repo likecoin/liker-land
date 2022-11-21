@@ -72,6 +72,16 @@ function compareIsWritingNFT(getters, classIdA, classIdB) {
   return 0;
 }
 
+function compareIsFeatured(getters, address, classIdA, classIdB) {
+  const featuredSet = getters.getNFTClassFeaturedSetByAddress(address);
+  if (!featuredSet) return 0;
+  const aIsFeatured = featuredSet.has(classIdA);
+  const bIsFeatured = featuredSet.has(classIdB);
+  if (aIsFeatured && !bIsFeatured) return -1;
+  if (!aIsFeatured && bIsFeatured) return 1;
+  return 0;
+}
+
 function compareNumber(X, Y, order) {
   if (Y === undefined) return -1; // keep X in front of Y
   if (X === undefined) return 1; // move Y in front of X
@@ -104,14 +114,30 @@ const getters = {
     ),
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getCreatedClassIdSorter: (_, getters) => ({
+  getCreatedClassIdSorter: (state, getters) => ({
+    address,
     classIds,
     orderBy,
     order = ORDER.DESC,
+    enableFeaturedAndHidden,
   }) => {
-    const sorted = [...classIds].sort((a, b) => {
+    const filtered = enableFeaturedAndHidden
+      ? classIds.filter(
+          classId => !state.userNFTClassHiddenSetMap[address]?.has(classId)
+        )
+      : [...classIds];
+    const sorted = filtered.sort((a, b) => {
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
+      if (enableFeaturedAndHidden) {
+        const isFeaturedCompareResult = compareIsFeatured(
+          getters,
+          address,
+          a,
+          b
+        );
+        if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
+      }
       let X;
       let Y;
       switch (orderBy) {
@@ -131,16 +157,31 @@ const getters = {
     return sorted;
   },
 
-  getCollectedNFTSorter: (_, getters) => ({
+  getCollectedNFTSorter: (state, getters) => ({
     nfts,
     nftOwner,
     orderBy,
     order = ORDER.DESC,
+    enableFeaturedAndHidden,
   }) => {
-    const sorted = [...nfts].sort((nA, nB) => {
+    const filtered = enableFeaturedAndHidden
+      ? nfts.filter(
+          nft => !state.userNFTClassHiddenSetMap[nftOwner]?.has(nft.classId)
+        )
+      : [...nfts];
+    const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
+      if (enableFeaturedAndHidden) {
+        const isFeaturedCompareResult = compareIsFeatured(
+          getters,
+          nftOwner,
+          a,
+          b
+        );
+        if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
+      }
       let X;
       let Y;
       switch (orderBy) {
