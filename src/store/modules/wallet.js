@@ -182,14 +182,6 @@ const actions = {
       commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async checkLogin({ commit }) {
-    try {
-      await getUserV2Self();
-      commit(types.WALLET_SET_HAS_LOGGED_IN, true);
-    } catch (err) {
-      commit(types.WALLET_SET_HAS_LOGGED_IN, false);
-    }
-  },
   async signLogin({ state, commit, dispatch }) {
     if (!state.signer) {
       await dispatch('initIfNecessary');
