@@ -252,12 +252,17 @@ export default {
       return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
     },
     nftDisplayState() {
-      const address =
+      // should use the address in URL as the subject address when browsing other's profile
+      const subjectAddress =
         this.$route.name === 'id' ? this.$route.params.id : this.getAddress;
-      if (this.getNFTClassFeaturedSetByAddress(address)?.has(this.classId)) {
+      if (
+        this.getNFTClassFeaturedSetByAddress(subjectAddress)?.has(this.classId)
+      ) {
         return NFT_DISPLAY_STATE.FEATURED;
       }
-      if (this.getNFTClassHiddenSetByAddress(address)?.has(this.classId)) {
+      if (
+        this.getNFTClassHiddenSetByAddress(subjectAddress)?.has(this.classId)
+      ) {
         return NFT_DISPLAY_STATE.HIDDEN;
       }
       return NFT_DISPLAY_STATE.DEFAULT;
