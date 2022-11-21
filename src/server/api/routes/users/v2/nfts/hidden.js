@@ -21,7 +21,7 @@ router.get('/:wallet/nfts/hidden', async (req, res, next) => {
       return;
     }
     const userDoc = await walletUserCollection.doc(user).get();
-    const { hiddenNFTClassIds = [] } = userDoc.data();
+    const { hiddenNFTClassIds = [] } = userDoc.data() || {};
     res.json({ hidden: hiddenNFTClassIds });
   } catch (err) {
     handleRestfulError(req, res, next, err);
