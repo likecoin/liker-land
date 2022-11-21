@@ -159,7 +159,6 @@ export function getNFTClassCollectionType(classMetadata) {
       return nftClassCollectionType.WritingNFT;
 
     case 'nft_book':
-    case 'ckxpress_book_nft':
       return nftClassCollectionType.BookNFT;
 
     default:
