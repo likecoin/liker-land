@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page class="px-[8px]">
     <div
       v-if="!getAddress"
       class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"

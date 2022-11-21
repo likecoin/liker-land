@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page class="px-[8px]">
 
     <div
       :class="[
