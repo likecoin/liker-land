@@ -243,13 +243,6 @@
   "CLP.suggestedCreators.title": "Keep updated, Keep supporting",
   "CLP.suggestedCreators.description": "You can subscribe creator, likes and share creative works in Liker Land. Your monthly support keep the creator focused.",
 
-  "CollapsibleView": {
-    "less": "Less",
-    "more": "More"
-  },
-  "ContentList": {
-    "empty": "There is no article"
-  },
   "CreatorPitch.Default": "Be my Civic Liker, buy me a coffee for my work every month.",
   "creators_page_redirect_url": "https://docs.like.co/v/en/user-guide/civic-liker",
   "community_cta_title": "Join our community",
@@ -431,12 +424,6 @@
     "support": "Support",
     "logout": "Logout",
     "openWithApp": "Open with Liker.Land app"
-  },
-  "SmartAppBanner": {
-    "headerTitle": "Explorer content in…",
-    "appLabel": "Liker.Land App",
-    "appButtonText": "Open",
-    "dismissButtonText": "Continue with browser"
   },
   "back": "Back",
   "backToHome": "Home",

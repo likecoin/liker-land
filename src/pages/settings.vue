@@ -1,9 +1,10 @@
-<template lang="pug">
-  .settings-page
-    main.page-content.page-content--narrow
-      SettingsPageHeader(:is-show-back="isHeaderShowBack")
-
-      NuxtChild
+<template>
+  <div class="settings-page">
+    <main class="page-content.page-content--narrow">
+      <SettingsPageHeader :is-show-back="isHeaderShowBack" />
+      <NuxtChild />
+    </main>
+  </div>
 </template>
 
 <script>

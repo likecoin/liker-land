@@ -6,7 +6,6 @@ import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 
 import { AUTH_COOKIE_NAME } from '~/constant';
-import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
@@ -39,7 +38,6 @@ const createStore = () =>
       },
     },
     modules: {
-      reader,
       ui,
       user,
       staticData,

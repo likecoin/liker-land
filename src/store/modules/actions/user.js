@@ -37,7 +37,6 @@ export async function fetchLoginStatus({ commit, dispatch }) {
 export async function userLogout({ commit }) {
   await this.$api.$post(api.getLogoutAPI());
   commit(types.USER_SET_USER_INFO, {});
-  commit(types.READER_CLEAR_FOR_LOGOUT);
   if (this.$sentry) updateSentryUser(this, { user: null });
   if (this.$crisp) {
     this.$crisp.push(['do', 'session:reset']);

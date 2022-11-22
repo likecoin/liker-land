@@ -36,12 +36,11 @@
 </template>
 
 <script>
-import slidingMenuMixin from '~/mixins/sliding-menu';
 import alertMixin from '~/mixins/alert';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  mixins: [slidingMenuMixin, alertMixin],
+  mixins: [alertMixin],
   computed: {
     ...mapGetters(['uiIsOpenCollectModal']),
     getTimeoutSec() {
