@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="preset === 'edit' || (preset === 'viewOnly' && displayState === 'featured')"
+    v-if="preset === 'edit' || (preset === 'read-only' && displayState === 'featured')"
     :class="[
       'absolute',
       'group',
@@ -65,8 +65,8 @@ import { AUTH_COOKIE_NAME, NFT_DISPLAY_STATE } from '~/constant';
 
 const Preset = {
   EDIT: 'edit',
-  VIEW_ONLY: 'viewOnly',
-  INVISIBLE: 'invisible',
+  READ_ONLY: 'read-only',
+  HIDDEN: 'hidden',
 };
 
 export default {
@@ -81,7 +81,7 @@ export default {
     },
     preset: {
       type: String,
-      default: Preset.VIEW_ONLY,
+      default: Preset.READ_ONLY,
     },
   },
 
@@ -97,7 +97,7 @@ export default {
 
         case NFT_DISPLAY_STATE.DEFAULT:
         default:
-          return undefined;
+          return '';
       }
     },
     bgColorClasses() {
