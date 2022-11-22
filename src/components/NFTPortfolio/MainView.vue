@@ -242,7 +242,7 @@ export default {
       this.$nextTick(this.setupPortfolioGrid);
     },
     portfolioItemsTrimmed(items, prevItems) {
-      if (items.length === prevItems.length) {
+      if (items.length === prevItems.length && this.portfolioGridController) {
         this.$nextTick(this.updatePortfolioGrid);
       } else {
         this.$nextTick(this.setupPortfolioGrid);
@@ -263,7 +263,6 @@ export default {
     if (!this.isLoadingPortfolioItems) {
       this.setupPortfolioGrid();
     }
-    this.setupPortfolioGrid();
 
     if (this.hasMorePortfolioItems) {
       this.addInfiniteScrollListener();
