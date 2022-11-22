@@ -31,23 +31,30 @@ import {
   broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
-  isWritingNFT,
+  getNFTClassCollectionType,
   formatNFTEventsToHistory,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
+import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
 const creatorInfoMixin = createUserInfoMixin({
   propKey: 'Creator',
   walletKey: 'iscnOwner',
 });
 
+const nftClassCollectionMixin = createNFTClassCollectionMixin({
+  propKey: 'nft',
+  typeKey: 'nftClassCollectionType',
+});
+
 export default {
   mixins: [
     walletMixin,
     creatorInfoMixin,
+    nftClassCollectionMixin,
     CrispMixinFactory({ isBootAtMounted: true }),
   ],
   head() {
@@ -103,8 +110,11 @@ export default {
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
-    isWritingNFT() {
-      return isWritingNFT(this.NFTClassMetadata);
+    nftClassCollectionType() {
+      return getNFTClassCollectionType(this.NFTClassMetadata);
+    },
+    nftClassCollectionName() {
+      return this.NFTClassMetadata.nft_meta_collection_name || '';
     },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
@@ -146,6 +156,9 @@ export default {
     NFTPrice() {
       return this.purchaseInfo.price;
     },
+    nftIsCollectable() {
+      return this.NFTPrice && this.NFTPrice !== -1;
+    },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
     },
@@ -183,7 +196,7 @@ export default {
 
     // Collector Info
     nftCollectorWalletAddress() {
-      if (!this.nftId) return undefined;
+      if (!this.nftId) return '';
       return Object.keys(this.collectorMap).find(collector => {
         const nftIdList = this.collectorMap[collector];
         return nftIdList.find(nftId => this.nftId === nftId);
@@ -194,6 +207,19 @@ export default {
     },
     nftCollectorCollectedCount() {
       return this.nftCollectorCollectedNFTList.length || 0;
+    },
+    nftIsNew() {
+      return !Object.values(this.collectorMap)
+        .flat()
+        .includes(this.nftId);
+    },
+    nftCreatorMessage() {
+      return this.NFTClassMetadata?.message || '';
+    },
+    nftCreatorMessageWithParsing() {
+      const collector =
+        this.getAddress || this.$t('nft_message_replacer_collector');
+      return this.nftCreatorMessage.replaceAll('{collector}', collector);
     },
 
     purchaseURL() {
@@ -238,6 +264,9 @@ export default {
     },
     nftClassDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
+    nextNewNFTId() {
+      return this.purchaseInfo?.metadata?.nextNewNFTId;
     },
     canCollectWithoutWallet() {
       return (

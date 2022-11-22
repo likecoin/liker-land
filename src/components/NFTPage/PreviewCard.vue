@@ -73,24 +73,43 @@
         preset="p5"
         :text="nftDescription | ellipsisDescription"
       />
-      <template v-if="url">
-        <Separator class="my-[16px]" />
-        <ButtonV2
-          preset="outline"
-          :text="$t('campaign_nft_item_view_details_label')"
-          :href="url"
-          target="_blank"
-          @click="handleClickViewContent"
-        >
-          <template #prepend>
-            <IconArticle />
-          </template>
-          <template #append>
-            <IconLinkExternal />
-          </template>
-        </ButtonV2>
-      </template>
-      <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[18px] text-[12px]">
+
+      <Separator v-if="isPrimitive || url" class="my-[16px]" />
+      <ButtonV2
+        v-if="isPrimitive"
+        preset="outline"
+        :text="$t('nft_details_page_section_metadata_iscn')"
+        :href="iscnUrl"
+        target="_blank"
+        @click="handleClickViewContent"
+      >
+        <template #prepend>
+          <IconISCN class="w-[20px] text-dark-gray" />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
+      <ButtonV2
+        v-else-if="url"
+        preset="outline"
+        :text="$t('campaign_nft_item_view_details_label')"
+        :href="url"
+        target="_blank"
+        @click="handleClickViewContent"
+      >
+        <template #prepend>
+          <IconArticle />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
+
+      <div
+        v-if="isWritingNFT"
+        class="grid grid-flow-col gap-[16px] items-center justify-center mt-[18px] text-[12px]"
+      >
         <div class="flex items-center text-medium-gray">
           <IconMint />
           <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -99,11 +118,17 @@
           <IconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
-        <div v-if="nftPrice && nftPrice >= 0" class="flex items-center text-like-green">
+        <div v-if="nftPrice > 0" class="flex items-center text-like-green">
           <IconPrice />
           <div class="ml-[4px]">{{ nftPrice | formatNumberWithLIKE }}</div>
         </div>
       </div>
+      <Label
+        v-else-if="classCollectionName"
+        class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
+        preset="p6"
+      >{{ classCollectionName }}</Label>
+
     </div>
   </CardV2>
 </template>
@@ -116,6 +141,8 @@ import {
   getLikeCoResizedImageUrl,
 } from '~/util/ui';
 
+import nftClassCollectionMixin from '~/mixins/nft-class-collection';
+
 export default {
   name: 'ItemCard',
   filters: {
@@ -123,6 +150,7 @@ export default {
     ellipsisDescription,
     formatNumberWithLIKE,
   },
+  mixins: [nftClassCollectionMixin],
   props: {
     url: {
       type: String,
@@ -158,6 +186,10 @@ export default {
       type: String,
       default: undefined,
     },
+    iscnUrl: {
+      type: String,
+      default: undefined,
+    },
     displayName: {
       type: String,
       default: undefined,
@@ -175,6 +207,14 @@ export default {
     nftPrice: {
       type: Number,
       default: undefined,
+    },
+    classCollectionType: {
+      type: String,
+      default: '',
+    },
+    classCollectionName: {
+      type: String,
+      default: '',
     },
 
     // Mint Info

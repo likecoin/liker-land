@@ -24,8 +24,8 @@
       :sold-count-label="$t('campaign_nft_item_collected_count_label')"
       :content-preview-props="{
         to: {
-          name: 'nft-class-classId',
-          params: { classId: classId },
+          name: 'nft-class-classId-nftId',
+          params: { classId: classId, nftId: nextNewNFTId },
         },
         tag: 'NuxtLink',
       }"

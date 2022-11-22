@@ -2,9 +2,8 @@
 import Vue from 'vue';
 import * as api from '@/util/api';
 import {
-  ORDER_CREATED_CLASS_ID_BY,
-  ORDER_COLLECTED_CLASS_ID_BY,
-  ORDER,
+  NFT_CLASS_LIST_SORTING,
+  NFT_CLASS_LIST_SORTING_ORDER,
   isWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
@@ -86,9 +85,9 @@ function compareNumber(X, Y, order) {
   if (Y === undefined) return -1; // keep X in front of Y
   if (X === undefined) return 1; // move Y in front of X
   switch (order) {
-    case ORDER.ASC:
+    case NFT_CLASS_LIST_SORTING_ORDER.ASC:
       return X - Y;
-    case ORDER.DESC:
+    case NFT_CLASS_LIST_SORTING_ORDER.DESC:
     default:
       return Y - X;
   }
@@ -96,7 +95,7 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
-  getNFTListByAddress: state => address => state.userClassIdListMap[address],
+  getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassFeaturedSetByAddress: state => address =>
     state.userNFTClassFeaturedSetMap[address],
   getNFTClassHiddenSetByAddress: state => address =>
@@ -114,25 +113,27 @@ const getters = {
     ),
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getCreatedClassIdSorter: (state, getters) => ({
-    address,
-    classIds,
-    orderBy,
-    order = ORDER.DESC,
+  getNFTClassIdListSorterForCreated: (state, getters) => ({
+    list,
+    collectorWallet: collector,
+    sorting,
+    order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
     enableFeaturedAndHidden,
   }) => {
     const filtered = enableFeaturedAndHidden
-      ? classIds.filter(
-          classId => !state.userNFTClassHiddenSetMap[address]?.has(classId)
+      ? list.filter(
+          ({ classId }) =>
+            !state.userNFTClassHiddenSetMap[collector]?.has(classId)
         )
-      : [...classIds];
-    const sorted = filtered.sort((a, b) => {
+      : [...list];
+    const sorted = filtered.sort((nA, nB) => {
+      const [{ classId: a }, { classId: b }] = [nA, nB];
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       if (enableFeaturedAndHidden) {
         const isFeaturedCompareResult = compareIsFeatured(
           getters,
-          address,
+          collector,
           a,
           b
         );
@@ -140,13 +141,13 @@ const getters = {
       }
       let X;
       let Y;
-      switch (orderBy) {
-        case ORDER_CREATED_CLASS_ID_BY.PRICE:
+      switch (sorting) {
+        case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
+        case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
           X = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
           Y = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
@@ -156,19 +157,18 @@ const getters = {
     });
     return sorted;
   },
-
-  getCollectedNFTSorter: (state, getters) => ({
-    nfts,
-    nftOwner,
-    orderBy,
-    order = ORDER.DESC,
+  getNFTClassListSorterForCollected: (state, getters) => ({
+    list,
+    collectorWallet: collector,
+    sorting,
+    order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
     enableFeaturedAndHidden,
   }) => {
     const filtered = enableFeaturedAndHidden
-      ? nfts.filter(
-          nft => !state.userNFTClassHiddenSetMap[nftOwner]?.has(nft.classId)
+      ? list.filter(
+          nft => !state.userNFTClassHiddenSetMap[collector]?.has(nft.classId)
         )
-      : [...nfts];
+      : [...list];
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
@@ -176,7 +176,7 @@ const getters = {
       if (enableFeaturedAndHidden) {
         const isFeaturedCompareResult = compareIsFeatured(
           getters,
-          nftOwner,
+          collector,
           a,
           b
         );
@@ -184,21 +184,21 @@ const getters = {
       }
       let X;
       let Y;
-      switch (orderBy) {
-        case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
+      switch (sorting) {
+        case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
-          X = getters.getNFTClassOwnerInfoById(a)?.[nftOwner]?.length;
-          Y = getters.getNFTClassOwnerInfoById(b)?.[nftOwner]?.length;
+        case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
+          X = getters.getNFTClassOwnerInfoById(a)?.[collector]?.length;
+          Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
+        case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
-          X = getters.getUserLastCollectedTimestampByAddress(nftOwner)[a];
-          Y = getters.getUserLastCollectedTimestampByAddress(nftOwner)[b];
+          X = getters.getUserLastCollectedTimestampByAddress(collector)[a];
+          Y = getters.getUserLastCollectedTimestampByAddress(collector)[b];
           break;
       }
       return compareNumber(X, Y, order);
@@ -302,7 +302,7 @@ const actions = {
         timestampMap[classId] = timestamp;
       }
     });
-    const collectedNFTs = [
+    const collected = [
       ...new Map(
         [...nfts]
           .sort((a, b) => b.timestamp - a.timestamp)
@@ -319,7 +319,7 @@ const actions = {
       address,
       nfts: {
         created,
-        collected: collectedNFTs,
+        collected,
       },
     });
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {

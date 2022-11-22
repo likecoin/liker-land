@@ -7,7 +7,9 @@
       class="w-[310px]"
       :title="NFTName"
       :price="NFTPrice"
-      :is-writing-nft="isWritingNFT"
+      :class-collection-type="nftClassCollectionType"
+      :class-collection-name="nftClassCollectionName"
+      :is-collectable="nftIsCollectable"
       :collected-count="collectedCount"
       :collector-count="ownerCount"
       :user-display-name="creatorDisplayName"
@@ -21,7 +23,7 @@
     />
     <NFTFeatured
       :class-id="classId"
-      :preset="$route.path.includes('dashboard') ? 'edit' : 'viewOnly'"
+      :preset="$route.name === 'dashboard' ? 'edit' : 'viewOnly'"
       :display-state="nftDisplayState"
     />
   </NuxtLink>
@@ -52,12 +54,12 @@ export default {
   },
   computed: {
     detailsPageRoute() {
-      if (this.nftId) {
+      if (this.nftId || this.nextNewNFTId) {
         return {
           name: 'nft-class-classId-nftId',
           params: {
             classId: this.classId,
-            nftId: this.nftId,
+            nftId: this.nftId || this.nextNewNFTId,
           },
         };
       }

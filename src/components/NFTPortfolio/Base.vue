@@ -1,5 +1,8 @@
 <template>
-  <NFTGemWrapper :collected-count="collectedCount">
+  <NFTGemWrapper
+    :collected-count="collectedCount"
+    :is-writing-nft="isWritingNFT"
+  >
     <NFTPortfolioCard :display-state="displayState">
       <div
         class="h-[180px]"
@@ -45,20 +48,24 @@
           </div>
         </div>
         <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
-        <div v-if="isWritingNft && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
+
+        <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
           <ProgressIndicator v-if="isCollecting" />
           <ButtonV2
             v-else
             preset="secondary"
+            :is-disabled="!isCollectable"
             @click.stop.prevent="handleClickCollect"
           >
-            <span>{{ price | formatNumberWithLIKE }}</span>
-            <template #prepend>
+            <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
+            <template v-else>{{ $t('nft_class_uncollectible') }}</template>
+            <template v-if="isCollectable" #prepend>
               <IconPrice />
             </template>
           </ButtonV2>
         </div>
-        <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+
+        <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
           <div class="flex items-center text-medium-gray">
             <IconMint />
             <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -72,25 +79,33 @@
             <span>{{ ownCount }}</span>
           </div>
         </div>
+        <Label
+          v-else-if="classCollectionName"
+          class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
+          preset="p6"
+        >{{ classCollectionName }}</Label>
       </div>
     </NFTPortfolioCard>
   </NFTGemWrapper>
 </template>
 
 <script>
+import { NFT_DISPLAY_STATE } from '~/constant';
+
 import {
   ellipsis,
   formatNumberWithLIKE,
   getLikeCoResizedImageUrl,
 } from '~/util/ui';
 
-import { NFT_DISPLAY_STATE } from '~/constant';
+import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
 export default {
   filters: {
     ellipsis,
     formatNumberWithLIKE,
   },
+  mixins: [nftClassCollectionMixin],
   props: {
     title: {
       type: String,
@@ -136,9 +151,17 @@ export default {
       type: Number,
       default: 0,
     },
-    isWritingNft: {
+    isCollectable: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    classCollectionType: {
+      type: String,
+      default: '',
+    },
+    classCollectionName: {
+      type: String,
+      default: '',
     },
     displayState: {
       type: String,

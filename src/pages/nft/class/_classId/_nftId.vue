@@ -10,7 +10,12 @@
     >
 
       <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
-        <div class="flex flex-col items-center justify-between w-full tablet:flex-row laptop:flex-row gap-[24px]">
+        <header
+          :class="[
+            'flex flex-col items-center w-full sm:flex-row gap-[24px]',
+            nftCollectorWalletAddress ? 'justify-between' : 'justify-end',
+          ]"
+        >
           <NFTMessageIdentity
             v-if="nftCollectorWalletAddress"
             :type="getWalletIdentityType(nftCollectorWalletAddress)"
@@ -22,55 +27,18 @@
             :collected-nft-ids="userCollectedNFTList"
             :class-id="classId"
             :current-nft-id="nftId"
-            view="collected"
+            :view="nftIsNew ? 'created' : 'collected'"
             :price="NFTPrice"
-            :is-writing-nft="isWritingNFT"
+            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
-        </div>
-        <section class="flex flex-col desktop:grid grid-cols-3 gap-[16px]">
-          <!-- Left column -->
-          <div class="flex flex-col items-center col-span-1 desktop:order-2">
-            <NFTGemWrapper :collected-count="collectedCount">
-              <NFTPagePreviewCard
-                :url="NFTExternalUrl"
-                :image-bg-color="NFTImageBackgroundColor"
-                :image-url="NFTImageUrl"
-                :avatar-url="creatorAvatar"
-                :avatar-size="40"
-                :is-avatar-outlined="isCreatorCivicLiker"
-                :iscn-owner="iscnOwner"
-                :display-name="creatorDisplayName"
-                :nft-name="NFTName"
-                :nft-description="NFTDescription"
-                :nft-price="NFTPrice"
-                @collect="handleCollectFromPreviewSection"
-                @view-content="handleViewContent"
-              />
-              <NFTFeatured
-                :class-id="classId"
-                :preset="nftCollectorWalletAddress.includes(getAddress) ? 'edit' : 'invisible'"
-                :display-state="nftDisplayState"
-              />
-            </NFTGemWrapper>
-            <ButtonV2
-              class="mt-[24px] text-medium-gray"
-              content-class="text-[12px]"
-              preset="plain"
-              size="mini"
-              :to="{ name: 'nft-class-classId', params: { classId } }"
-            >
-              <template #prepend>
-                <IconEye class="w-[12px] h-[12px]" />
-              </template>
-              {{ $t('nft_details_page_button_view_details') }}
-            </ButtonV2>
-          </div>
+        </header>
 
-          <!-- Right column -->
-          <div class="col-span-2 flex flex-col items-center gap-[24px]">
+        <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
+          <!-- NFT Message List -->
+          <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px]">
             <CardV2 class="flex gap-[24px] w-full">
               <div>
                 <Label
@@ -109,16 +77,94 @@
                 v-for="m in messageList"
                 :key="m.txHash"
                 :type="m.event"
-                :tx-hash="m.txHash"
                 :from-type="m.fromType"
                 :from-wallet="m.fromWallet"
                 :to-type="m.toType"
                 :to-wallet="m.toWallet"
                 :message="m.message"
                 :message-type="m.messageType"
+                :is-list="true"
                 tag="li"
               />
             </ul>
+          </div>
+
+          <!-- NFT Preview -->
+          <div class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none">
+            <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="w-full" />
+            <NFTGemWrapper
+              :collected-count="collectedCount"
+              :is-writing-nft="nftIsWritingNFT"
+            >
+              <NFTPagePreviewCard
+                :url="NFTExternalUrl"
+                :image-bg-color="NFTImageBackgroundColor"
+                :image-url="NFTImageUrl"
+                :avatar-url="creatorAvatar"
+                :avatar-size="40"
+                :is-avatar-outlined="isCreatorCivicLiker"
+                :iscn-owner="iscnOwner"
+                :iscn-url="iscnURL"
+                :display-name="creatorDisplayName"
+                :nft-name="NFTName"
+                :nft-description="NFTDescription"
+                :nft-price="NFTPrice"
+                :class-collection-type="nftClassCollectionType"
+                :class-collection-name="nftClassCollectionName"
+                @collect="handleCollectFromPreviewSection"
+                @view-content="handleViewContent"
+              />
+              <NFTFeatured
+                :class-id="classId"
+                :preset="nftCollectorWalletAddress && nftCollectorWalletAddress.includes(getAddress) ? 'edit' : 'invisible'"
+                :display-state="nftDisplayState"
+              />
+            </NFTGemWrapper>
+            <ButtonV2
+              class="text-medium-gray"
+              content-class="text-[12px]"
+              preset="plain"
+              size="mini"
+              :to="{ name: 'nft-class-classId', params: { classId } }"
+            >
+              <template #prepend>
+                <IconEye class="w-[12px] h-[12px]" />
+              </template>
+              {{ $t('nft_details_page_button_view_details') }}
+            </ButtonV2>
+          </div>
+
+          <!-- NFT Collect CTA -->
+          <div
+            v-if="nftIsNew"
+            class="flex flex-col items-center col-span-2 py-[40px] gap-[24px]"
+          >
+            <h2 class="text-[32px] leading-1_5 text-center">{{ $t('nft_share_page_creator_title') }}</h2>
+            <div class="py-[40px] px-[24px] w-full">
+              <NFTMessage
+                class="w-full"
+                type="purchase"
+                from-type="creator"
+                :from-wallet="iscnOwner"
+                :message="nftCreatorMessageWithParsing"
+                :message-type="'collector'"
+              />
+            </div>
+            <div
+              class="rounded-[18px] p-[2px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
+            >
+              <div class="relative p-[6px] bg-gray-f7 rounded-[16px]">
+                <ButtonV2
+                  :text="$t('nft_details_page_button_collect_now')"
+                  preset="secondary"
+                  @click="handleCollectFromCreatorMessagePreview"
+                >
+                  <template #prepend>
+                    <IconPrice />
+                  </template>
+                </ButtonV2>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -160,6 +206,7 @@ import { ellipsis } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import { nftClassCollectionType } from '~/util/nft';
 
 export default {
   name: 'NFTDetailsPage',
@@ -371,7 +418,7 @@ export default {
       await this.transferNFT({ nftId, memo, toWallet });
     },
     async handleCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+      logTrackerEvent(this, 'NFT', 'nft_details_collect', this.classId, 1);
       try {
         this.isCollecting = true;
         await this.collectNFT();
@@ -394,18 +441,18 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(DetailsPagePreviewSection)',
-        this.classId,
+        'nft_details_page_collect_from_preview',
+        this.nftId,
         1
       );
       return this.handleCollect();
     },
-    handleCollectFromPriceSection() {
+    handleCollectFromCreatorMessagePreview() {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(DetailsPagePriceSection)',
-        this.classId,
+        'nft_details_page_collect_from_creator_message_preview',
+        this.nftId,
         1
       );
       return this.handleCollect();
@@ -414,48 +461,11 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(NFTDetailsPageControlBar)',
+        'nft_details_page_collect_from_control_bar',
         this.nftId,
         1
       );
       return this.handleCollect();
-    },
-    handleClickSellFromPriceSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTSellClick(DetailsPagePriceSection)',
-        this.classId,
-        1
-      );
-    },
-    handleHoverSellFromPriceSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTSellHover(DetailsPagePriceSection)',
-        this.classId,
-        1
-      );
-    },
-    handleCollectFromSupplySection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTCollect(DetailsPageSupplySection)',
-        this.classId,
-        1
-      );
-      return this.handleCollect();
-    },
-    handleCopyURL() {
-      this.shareURLPath({
-        title: this.NFTName,
-        text: this.NFTDescription,
-        path: this.nftClassDetailsPageURL,
-        alertMessage: this.$t('tooltip_share_done'),
-      });
-      logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(

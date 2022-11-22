@@ -14,18 +14,14 @@ let iscnLib = null;
 
 export const NFT_INDEXER_LIMIT_MAX = 100;
 
-export const ORDER_CREATED_CLASS_ID_BY = {
+export const NFT_CLASS_LIST_SORTING = {
   PRICE: 'PRICE',
   ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
-};
-
-export const ORDER_COLLECTED_CLASS_ID_BY = {
-  PRICE: 'PRICE',
   LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
   NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
 };
 
-export const ORDER = {
+export const NFT_CLASS_LIST_SORTING_ORDER = {
   ASC: 'ASC',
   DESC: 'DESC',
 };
@@ -152,8 +148,29 @@ export function isValidHttpUrl(string) {
   return false;
 }
 
+export const nftClassCollectionType = {
+  WritingNFT: 'writing-nft',
+  BookNFT: 'book-nft',
+};
+
+export function getNFTClassCollectionType(classMetadata) {
+  switch (classMetadata?.nft_meta_collection_id) {
+    case 'likerland_writing_nft':
+      return nftClassCollectionType.WritingNFT;
+
+    case 'nft_book':
+      return nftClassCollectionType.BookNFT;
+
+    default:
+      return '';
+  }
+}
+
 export function isWritingNFT(classMetadata) {
-  return classMetadata?.nft_meta_collection_id === 'likerland_writing_nft';
+  return (
+    getNFTClassCollectionType(classMetadata) ===
+    nftClassCollectionType.WritingNFT
+  );
 }
 
 export function formatNFTInfo(nftInfo) {
