@@ -60,7 +60,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { formatFeaturedNFTUrl, formatHiddenNFTUrl } from '~/util/api';
 import { AUTH_COOKIE_NAME, NFT_DISPLAY_STATE } from '~/constant';
 
 const Preset = {
@@ -124,12 +123,6 @@ export default {
     hasLogin() {
       return !!this.$cookie.get(AUTH_COOKIE_NAME);
     },
-    featuredNFTUrl() {
-      return formatFeaturedNFTUrl(this.getAddress);
-    },
-    hiddenNFTUrl() {
-      return formatHiddenNFTUrl(this.getAddress);
-    },
   },
 
   methods: {
@@ -151,34 +144,26 @@ export default {
 
       switch (this.displayState) {
         case NFT_DISPLAY_STATE.FEATURED:
-          this.removeNFTFeatured({
-            address: this.getAddress,
-            classId: this.classId,
-          });
-          this.addNFTHidden({
-            address: this.getAddress,
-            classId: this.classId,
-          });
           await Promise.all([
-            this.$api.delete(`${this.featuredNFTUrl}/${this.classId}`),
-            this.$api.post(this.hiddenNFTUrl, {
+            this.removeNFTFeatured({
+              address: this.getAddress,
+              classId: this.classId,
+            }),
+            this.addNFTHidden({
+              address: this.getAddress,
               classId: this.classId,
             }),
           ]);
           break;
         case NFT_DISPLAY_STATE.HIDDEN:
-          this.removeNFTHidden({
+          await this.removeNFTHidden({
             address: this.getAddress,
             classId: this.classId,
           });
-          await this.$api.delete(`${this.hiddenNFTUrl}/${this.classId}`);
           break;
         case NFT_DISPLAY_STATE.DEFAULT:
-          this.addNFTFeatured({
+          await this.addNFTFeatured({
             address: this.getAddress,
-            classId: this.classId,
-          });
-          await this.$api.post(this.featuredNFTUrl, {
             classId: this.classId,
           });
           break;
