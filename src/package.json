@@ -123,7 +123,7 @@
     "node-sass": "^8.0.0",
     "nodemon": "^1.18.9",
     "prettier": "1.14.3",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-plain-loader": "^1.0.0",
     "react-is": "^16.13.1",
     "require-extension-hooks": "^0.3.3",
