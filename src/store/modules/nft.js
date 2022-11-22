@@ -341,37 +341,41 @@ const actions = {
       classIdSet: new Set(data.hidden),
     });
   },
-  addNFTFeatured({ state, commit }, { address, classId }) {
+  async addNFTFeatured({ state, commit }, { address, classId }) {
     const classIdSet = state.userNFTClassFeaturedSetMap[address];
     classIdSet.add(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
       address,
       classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
+    await this.$api.post(api.formatFeaturedNFTUrl(address), { classId });
   },
-  addNFTHidden({ state, commit }, { address, classId }) {
+  async addNFTHidden({ state, commit }, { address, classId }) {
     const classIdSet = state.userNFTClassHiddenSetMap[address];
     classIdSet.add(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
       address,
       classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
+    await this.$api.post(api.formatHiddenNFTUrl(address), { classId });
   },
-  removeNFTFeatured({ state, commit }, { address, classId }) {
+  async removeNFTFeatured({ state, commit }, { address, classId }) {
     const classIdSet = state.userNFTClassFeaturedSetMap[address];
     classIdSet.delete(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
       address,
       classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
+    await this.$api.delete(`${api.formatFeaturedNFTUrl(address)}/${classId}`);
   },
-  removeNFTHidden({ state, commit }, { address, classId }) {
+  async removeNFTHidden({ state, commit }, { address, classId }) {
     const classIdSet = state.userNFTClassHiddenSetMap[address];
     classIdSet.delete(classId);
     commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
       address,
       classIdSet: new Set(classIdSet), // clone to trigger reactivity
     });
+    await this.$api.delete(`${api.formatHiddenNFTUrl(address)}/${classId}`);
   },
 };
 
