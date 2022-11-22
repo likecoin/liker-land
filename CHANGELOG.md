@@ -5,8 +5,8 @@ baf4c166e3ab8ae865812c80524d8590a7f56096
 
 ### Added
 - Added individual NFT details page
-- Added transfer message input
-- Added creator follow
+- Allow adding custom message when transferring NFT
+- Added follow creator function. Receive email notifications when a new Writing NFT is created by your favourite creator.
 
 ### Changed
 - Updated UI for primitive NFT
