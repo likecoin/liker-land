@@ -113,7 +113,12 @@ const getters = {
     ),
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getNFTClassIdListSorterForCreated: (state, getters) => ({
+  filterNFTClassListWithState: state => (nfts, collectorWallet) =>
+    nfts.filter(
+      ({ classId }) =>
+        !state.userNFTClassHiddenSetMap[collectorWallet]?.has(classId)
+    ),
+  getNFTClassIdListSorterForCreated: (_, getters) => ({
     list,
     collectorWallet: collector,
     sorting,
@@ -121,10 +126,7 @@ const getters = {
     enableFeaturedAndHidden,
   }) => {
     const filtered = enableFeaturedAndHidden
-      ? list.filter(
-          ({ classId }) =>
-            !state.userNFTClassHiddenSetMap[collector]?.has(classId)
-        )
+      ? getters.filterNFTClassListWithState(list, collector)
       : [...list];
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
@@ -157,7 +159,7 @@ const getters = {
     });
     return sorted;
   },
-  getNFTClassListSorterForCollected: (state, getters) => ({
+  getNFTClassListSorterForCollected: (_, getters) => ({
     list,
     collectorWallet: collector,
     sorting,
@@ -165,9 +167,7 @@ const getters = {
     enableFeaturedAndHidden,
   }) => {
     const filtered = enableFeaturedAndHidden
-      ? list.filter(
-          nft => !state.userNFTClassHiddenSetMap[collector]?.has(nft.classId)
-        )
+      ? getters.filterNFTClassListWithState(list, collector)
       : [...list];
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
