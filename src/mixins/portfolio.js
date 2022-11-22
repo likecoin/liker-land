@@ -125,6 +125,7 @@ export default {
         collectorWallet: this.wallet,
         sorting: this.nftClassListOfOtherSorting,
         order: this.nftClassListOfOtherSortingOrder,
+        enableFeaturedAndHidden: !this.isDashboardPage,
       });
     },
     currentNFTClassListShowCount() {
