@@ -116,7 +116,7 @@
               />
               <NFTFeatured
                 :class-id="classId"
-                :preset="nftCollectorWalletAddress && nftCollectorWalletAddress.includes(getAddress) ? 'edit' : 'invisible'"
+                :read-only="!(nftCollectorWalletAddress && nftCollectorWalletAddress.includes(getAddress))"
                 :display-state="nftDisplayState"
               />
             </NFTGemWrapper>

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="preset === 'edit' || (preset === 'read-only' && displayState === 'featured')"
+    v-if="!readOnly || displayState === 'featured'"
     :class="[
       'absolute',
       'group',
@@ -9,13 +9,13 @@
       'transition',
       'ease-in',
       'duration-200',
-      { 'cursor-pointer': preset === 'edit' },
-      { 'cursor-default': preset !== 'edit' }]"
+      { 'cursor-pointer': readOnly },
+      { 'cursor-default': !readOnly }]"
     @click="(e) => handleClick(e)"
   >
     <div class="flex gap-[8px] items-center">
       <div
-        v-if="preset === 'edit' && formatdisplayState"
+        v-if="!readOnly && formatdisplayState"
         :class="[
           'px-[20px]',
           'py-[4px]',
@@ -37,7 +37,7 @@
             'h-[40px]',
             'rounded-[50%]',
             'opacity-75',
-            { 'group-hover:opacity-100': preset === 'edit' },
+            { 'group-hover:opacity-100': !readOnly },
             'transition',
             'ease-in',
             'duration-200',
@@ -62,12 +62,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import { NFT_DISPLAY_STATE } from '~/constant';
 
-const Preset = {
-  EDIT: 'edit',
-  READ_ONLY: 'read-only',
-  HIDDEN: 'hidden',
-};
-
 export default {
   props: {
     displayState: {
@@ -78,9 +72,9 @@ export default {
       type: String,
       default: undefined,
     },
-    preset: {
-      type: String,
-      default: Preset.READ_ONLY,
+    readOnly: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -133,7 +127,7 @@ export default {
     async handleClick(event) {
       event.preventDefault();
       event.stopPropagation();
-      if (this.preset !== Preset.EDIT) return;
+      if (this.readOnly) return;
 
       if (!this.hasLoggedIn) {
         await this.signLogin();

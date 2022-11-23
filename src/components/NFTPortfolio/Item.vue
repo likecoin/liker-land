@@ -23,7 +23,7 @@
     />
     <NFTFeatured
       :class-id="classId"
-      :preset="$route.name === 'dashboard' ? 'edit' : 'read-only'"
+      :read-only="$route.name !== 'dashboard'"
       :display-state="nftDisplayState"
     />
   </NuxtLink>
