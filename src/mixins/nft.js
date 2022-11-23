@@ -514,7 +514,7 @@ export default {
           this.classId,
           1
         );
-        const txHash = await broadcastTx(signData, this.getSigner);
+        const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
           'NFT',
@@ -522,6 +522,7 @@ export default {
           this.classId,
           1
         );
+        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
           const result = await this.$api.post(
@@ -621,7 +622,7 @@ export default {
           1
         );
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
-        const txHash = await broadcastTx(signData, this.getSigner);
+        const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
           'NFT',
@@ -629,6 +630,7 @@ export default {
           this.classId,
           1
         );
+        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
 
         logTrackerEvent(
           this,
