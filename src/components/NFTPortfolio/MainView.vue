@@ -1,12 +1,12 @@
 <template>
   <section
     :class="[
-      'flex flex-col items-center w-full gap-[32px] pb-[48px]',
+      'flex flex-col w-full items-center gap-[32px] pb-[48px]',
       { [narrowClass]: isNarrow },
     ]"
   >
 
-    <nav class="relative flex-col laptop:flex-row flex items-center justify-center w-full gap-[32px]">
+    <nav class="relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]">
       <slot name="tab-bar-prepend" />
       <ul
         :class="[
@@ -41,7 +41,7 @@
 
       <div
         v-if="portfolioItemsTrimmed.length"
-        class="justify-end hidden w-full desktop:flex"
+        class="self-stretch justify-end hidden desktop:flex"
       >
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
@@ -84,7 +84,7 @@
       <ul
         v-if="!isPortfolioTabCreatedActive || portfolioItemsTrimmed.length"
         ref="portfolioGrid"
-        class="w-full -mx-[12px] max-w-[668x] desktop:w-[668px] transition-all"
+        class="self-stretch -mx-[12px] desktop:w-[668px] transition-all"
       >
         <li v-if="!portfolioItemsTrimmed.length" class="w-full">
           <NFTPortfolioEmpty :preset="portfolioTab" />
@@ -171,7 +171,7 @@ export default {
   },
   computed: {
     narrowClass() {
-      return 'max-w-[644x] desktop:w-[644px]';
+      return 'max-w-[644px] desktop:w-[644px]';
     },
 
     // Items

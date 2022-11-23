@@ -14,13 +14,13 @@
         'desktop:items-start',
         'desktop:justify-center',
 
+        'w-full',
         'mt-[32px]',
       ]"
     >
       {{ /* Left Column */ }}
       <div
         :class="[
-          'w-full',
           'min-w-[280px]',
           'desktop:w-[280px]',
         ]"

@@ -1,7 +1,8 @@
 <template>
-  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray phone:rounded-none rounded-[24px] px-[32px] py-[24px]">
+  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray rounded-[24px] px-[32px] py-[24px]">
     <Label
       preset="h2"
+      align="center"
       :text="$t(isEmpty ? 'portfolio_subscription_title_empty' : 'portfolio_subscription_title')"
     />
     <Label v-if="isEmpty" preset="p5" align="center">
