@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
+import { LIKECOIN_NFT_HIDDEN_ITEMS } from '~/constant';
 import * as api from '@/util/api';
 import {
   ORDER_CREATED_CLASS_ID_BY,
@@ -247,13 +248,16 @@ const actions = {
     const collectedNFTs = [
       ...new Map(
         [...nfts]
+          .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
           .sort((a, b) => b.timestamp - a.timestamp)
           .map(({ classId, nftId }) => [classId, { classId, id: nftId }])
       ).values(),
     ];
     const created = [
       ...new Map(
-        [...createdNFTs].map(({ classId }) => [classId, { classId }])
+        [...createdNFTs]
+          .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
+          .map(({ classId }) => [classId, { classId }])
       ).values(),
     ];
 

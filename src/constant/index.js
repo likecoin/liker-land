@@ -112,6 +112,16 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];
 
+export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
+  IS_TESTNET
+    ? []
+    : [
+        // 豆泥
+        'likenft1lzyg3vs502fj9p2pq62wzap7y7l0sd33d5t3twqd8a9ckphl029qdgga54',
+        'likenft10sjyapy7d3ypsj96nlmf95m8elhuhjq38028hua5qfz6f4zxeu4sjqgcpv',
+      ]
+);
+
 // Leave it empty to allow all creators
 export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS = IS_TESTNET
   ? [
