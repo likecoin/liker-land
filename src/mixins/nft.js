@@ -377,8 +377,6 @@ export default {
             const key = `${e.txHash}-${e.nftId}`;
             if (eventMap.has(key)) {
               eventMap.get(key).price = e.price;
-            } else {
-              eventMap.set(key, e);
             }
           });
           history = [...eventMap.values()];
