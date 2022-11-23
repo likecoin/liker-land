@@ -371,10 +371,10 @@ export default {
           const historyInDB = data.list;
           const eventMap = new Map();
           historyOnChain.forEach(e => {
-            eventMap.set(`${e.txHash}-${e.nftId}`, e);
+            eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
           });
           historyInDB.forEach(e => {
-            const key = `${e.txHash}-${e.nftId}`;
+            const key = `${e.txHash}-${e.nftId}-${e.event}`;
             if (eventMap.has(key)) {
               eventMap.get(key).price = e.price;
             }
