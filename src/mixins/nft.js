@@ -400,10 +400,10 @@ export default {
           const historyInDB = data.list;
           const eventMap = new Map();
           historyOnChain.forEach(e => {
-            eventMap.set(`${e.txHash}-${e.nftId}`, e);
+            eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
           });
           historyInDB.forEach(e => {
-            const key = `${e.txHash}-${e.nftId}`;
+            const key = `${e.txHash}-${e.nftId}-${e.event}`;
             if (eventMap.has(key)) {
               eventMap.get(key).price = e.price;
             }
@@ -543,7 +543,7 @@ export default {
           this.classId,
           1
         );
-        const txHash = await broadcastTx(signData, this.getSigner);
+        const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
           'NFT',
@@ -551,6 +551,7 @@ export default {
           this.classId,
           1
         );
+        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
           const result = await this.$api.post(
@@ -650,7 +651,7 @@ export default {
           1
         );
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
-        const txHash = await broadcastTx(signData, this.getSigner);
+        const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
           'NFT',
@@ -658,6 +659,7 @@ export default {
           this.classId,
           1
         );
+        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
 
         logTrackerEvent(
           this,
