@@ -60,7 +60,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { AUTH_COOKIE_NAME, NFT_DISPLAY_STATE } from '~/constant';
+import { NFT_DISPLAY_STATE } from '~/constant';
 
 const Preset = {
   EDIT: 'edit',
@@ -119,9 +119,6 @@ export default {
         'translate-x-[-50%]',
         'translate-y-[-50%]',
       ];
-    },
-    hasLogin() {
-      return !!this.$cookie.get(AUTH_COOKIE_NAME);
     },
   },
 
