@@ -112,6 +112,7 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];
 
+// Note: Please remove this when hide NFT feature is released.
 export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
   IS_TESTNET
     ? []
