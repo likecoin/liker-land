@@ -23,7 +23,7 @@
         'box-border',
         'border-[2px]',
         'border-transparent',
-        { 'blur-md opacity-75': displayState === 'hidden' },
+        { 'opacity-25': displayState === 'hidden' },
       ]"
     >
       <slot />
