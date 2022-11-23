@@ -75,7 +75,7 @@
             <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
               <NFTMessage
                 v-for="m in messageList"
-                :key="m.txHash"
+                :key="`${m.txHash}-${m.event}`"
                 :type="m.event"
                 :from-type="m.fromType"
                 :from-wallet="m.fromWallet"

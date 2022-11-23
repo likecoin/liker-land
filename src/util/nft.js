@@ -95,8 +95,8 @@ export async function broadcastTx(signData, signer) {
   const client = await createNFTSigningClient(signer);
   const senderClient = client.getSigningStargateClient();
   const txBytes = TxRaw.encode(signData).finish();
-  const { transactionHash } = await senderClient.broadcastTx(txBytes);
-  return transactionHash;
+  const { transactionHash, code } = await senderClient.broadcastTx(txBytes);
+  return { txHash: transactionHash, code };
 }
 
 export async function signTransferNFT({
