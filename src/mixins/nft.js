@@ -660,7 +660,10 @@ export default {
           this.classId,
           1
         );
-        await this.updateNFTOwners(); // blocking update firstCollectedNFTId
+        await Promise.all([
+          this.updateNFTOwners(), // blocking update firstCollectedNFTId,
+          this.fetchUserCollectedCount(),
+        ]);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
