@@ -120,7 +120,7 @@ export default {
   },
   mounted() {
     this.syncRouteForTab();
-    this.loadNFTListByAddress(this.getAddress);
+    if (this.getAddress) this.loadNFTListByAddress(this.getAddress);
   },
   methods: {
     ...mapActions(['fetchUserInfoByAddress']),
