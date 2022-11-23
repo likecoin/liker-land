@@ -29,6 +29,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      isInitialTabOther: this.$route.query.tab === tabOptions.other,
       nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
       nftClassListOfCollectedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCollectedShowCount: ITEMS_PER_PAGE,
@@ -58,7 +59,7 @@ export default {
       return this.currentTab === tabOptions.other;
     },
     isShowOtherTab() {
-      return this.isCurrentTabOther || !!this.nftClassListOfOther.length;
+      return this.isInitialTabOther || !!this.nftClassListOfOther.length;
     },
     nftClassListMap() {
       return this.getNFTListMapByAddress(this.wallet);
