@@ -68,7 +68,7 @@
         @portfolio-change-sorting="handleNFTClassListSortingChange"
         @infinite-scroll="handleInfiniteScroll"
       >
-        <template #footer-prepend>
+        <template #grid-append>
           <NFTPortfolioSubscriptionForm
             v-if="!isLoading && isCurrentTabCreated && !isUserPortfolio"
             :id="creatorFollowSectionId"

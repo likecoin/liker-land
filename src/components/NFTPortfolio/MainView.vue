@@ -107,9 +107,9 @@
         ref="infiniteScrollTrigger"
         class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
       >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
-    </div>
 
-    <slot name="footer-prepend" />
+      <slot name="grid-append" />
+    </div>
 
     <template v-if="!isLoadingPortfolioItems">
       <hr class="w-[32px] h-[2px] bg-shade-gray border-none">
