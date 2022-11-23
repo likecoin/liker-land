@@ -103,16 +103,6 @@
         </section>
       </div>
     </div>
-
-    <EventModalTransfer
-      :is-open="isOpenTransferModal"
-      :is-transferring="isTransferring"
-      :class-id="classId"
-      :user-collected-count="userCollectedCount"
-      :user-collected-nft-ids="userCollectedNFTList"
-      @close="isOpenTransferModal = false; isTransferring = false"
-      @submit="handleTransfer"
-    />
   </Page>
 </template>
 
@@ -295,11 +285,6 @@ export default {
       this.uiSetTxError('');
       this.uiSetTxStatus('');
       this.fetchUserCollectedCount();
-    },
-    async handleTransfer({ nftId, memo, toWallet }) {
-      logTrackerEvent(this, 'NFT', 'NFTTransfer(DetailsPage)', nftId, 1);
-      this.isTransferring = true;
-      await this.transferNFT({ nftId, memo, toWallet });
     },
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);

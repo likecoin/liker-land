@@ -2,6 +2,7 @@
   <div class="flex items-center">
     <div v-if="isCollector && view !== 'created'" class="flex gap-[12px]">
       <ButtonV2
+        v-if="currentNftId"
         size="mini"
         preset="tertiary"
         content-class="!text-[12px]"
