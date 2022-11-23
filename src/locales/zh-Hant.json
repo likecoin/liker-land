@@ -83,7 +83,7 @@
   "nft_details_page_errormessage_transfer_self": "You cannot send Writing NFT to yourself.",
   "nft_details_page_errormessage_memo_limit": "Message must be within 256 characters",
   "nft_details_page_label_owning": "Own",
-  "nft_details_page_label_nft_id": "Writing NFT ID",
+  "nft_details_page_label_nft_id": "NFT ID",
   "nft_details_page_label_price": "Current Price",
   "nft_details_page_section_metadata": "Metadata",
   "nft_details_page_section_metadata_intro": "The content has been permanently stored on-chain and signed by its creator.",

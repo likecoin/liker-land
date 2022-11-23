@@ -429,8 +429,6 @@ export default {
             const key = `${e.txHash}-${e.nftId}`;
             if (eventMap.has(key)) {
               eventMap.get(key).price = e.price;
-            } else {
-              eventMap.set(key, e);
             }
           });
           history = [...eventMap.values()];
@@ -718,7 +716,10 @@ export default {
           this.classId,
           1
         );
-        await this.updateNFTOwners(); // blocking update firstCollectedNFTId
+        await Promise.all([
+          this.updateNFTOwners(), // blocking update firstCollectedNFTId,
+          this.fetchUserCollectedCount(),
+        ]);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
