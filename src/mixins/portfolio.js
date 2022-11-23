@@ -54,6 +54,9 @@ export default {
       const { tab } = this.$route.query;
       return tabOptions[tab] ? tab : DEFAULT_TAB;
     },
+    isCurrentTabCollected() {
+      return this.currentTab === tabOptions.collected;
+    },
     isCurrentTabCreated() {
       return this.currentTab === tabOptions.created;
     },

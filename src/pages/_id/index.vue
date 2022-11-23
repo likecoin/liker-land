@@ -164,14 +164,34 @@ export default {
     isLoading(isLoading) {
       if (!isLoading) {
         if (this.$route.hash === this.creatorFollowSectionHash) {
+          if (!this.isCurrentTabCreated) {
+            this.changeTab(tabOptions.created);
+          }
           this.$nextTick(this.scrollToCreatorFollowSection);
         } else if (
-          !this.isCurrentTabCreated &&
-          // NOTE: Seems computed property `this.nftClassListOfCollected` is not reflecting the actual state
-          !this.nftClassListMap?.collected.length
+          // If collected tab is empty
+          this.isCurrentTabCollected &&
+          !this.nftClassListOfCollectedExcludedOther.length
         ) {
-          // Go to created tab if collected tab is empty
-          this.changeTab(tabOptions.created);
+          if (this.nftClassListOfOther.length) {
+            // Go to other tab if not empty
+            this.changeTab(tabOptions.other);
+          } else {
+            // Go to created tab if other tab is empty
+            this.changeTab(tabOptions.created);
+          }
+        } else if (
+          // If other tab is empty
+          this.isCurrentTabOther &&
+          !this.nftClassListOfOther.length
+        ) {
+          if (this.nftClassListOfCollectedExcludedOther.length) {
+            // Go to collected tab if not empty
+            this.changeTab(tabOptions.other);
+          } else {
+            // Go to created tab if collected tab is empty
+            this.changeTab(tabOptions.created);
+          }
         }
       }
     },
