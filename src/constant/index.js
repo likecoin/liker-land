@@ -25,10 +25,6 @@ export const LIKECOIN_BUTTON_BASE = IS_TESTNET
   ? 'https://button.rinkeby.like.co'
   : 'https://button.like.co';
 
-export const SUPERLIKE_BASE = IS_TESTNET
-  ? 'https://s.rinkeby.like.co'
-  : 'https://s.like.co';
-
 export const LIKE_CO_THUMBNAIL_FN_BASE = 'https://static.like.co';
 
 export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET
