@@ -31,7 +31,7 @@ const state = () => ({
   isDebug: false,
   address: '',
   signer: null,
-  hasLoggedIn: false,
+  loginAddress: '',
   connector: null,
   likerInfo: null,
   isInited: null,
@@ -50,8 +50,8 @@ const mutations = {
   [WALLET_SET_SIGNER](state, signer) {
     state.signer = signer;
   },
-  [types.WALLET_SET_HAS_LOGGED_IN](state, hasLoggedIn) {
-    state.hasLoggedIn = hasLoggedIn;
+  [types.WALLET_SET_LOGIN_ADDRESS](state, loginAddress) {
+    state.loginAddress = loginAddress;
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
     state.methodType = method;
@@ -73,7 +73,7 @@ const mutations = {
 const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
-  hasLoggedIn: state => state.hasLoggedIn,
+  loginAddress: state => state.loginAddress,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletMethodType: state => state.methodType,
@@ -143,6 +143,7 @@ const actions = {
     commit(types.WALLET_SET_SIGNER, null);
     commit(types.WALLET_SET_CONNECTOR, null);
     commit(types.WALLET_SET_LIKERINFO, null);
+    commit(types.WALLET_SET_LOGIN_ADDRESS, '');
   },
 
   async restoreSession({ dispatch }) {
@@ -186,11 +187,12 @@ const actions = {
     if (!state.signer) {
       await dispatch('initIfNecessary');
     }
+    const { address } = state;
     const memo = [
       `${LOGIN_MESSAGE}:`,
       JSON.stringify({
         ts: Date.now(),
-        address: state.address,
+        address,
       }),
     ].join(' ');
     const payload = {
@@ -208,17 +210,17 @@ const actions = {
       const {
         signed: message,
         signature: { signature, pub_key: publicKey },
-      } = await state.signer.sign(state.address, payload);
+      } = await state.signer.sign(address, payload);
       const data = {
         signature,
         publicKey: publicKey.value,
         message: stringify(message),
-        from: state.address,
+        from: address,
       };
       await this.$api.post(postUserV2Login, data);
-      commit(types.WALLET_SET_HAS_LOGGED_IN, true);
+      commit(types.WALLET_SET_LOGIN_ADDRESS, address);
     } catch (error) {
-      commit(types.WALLET_SET_HAS_LOGGED_IN, false);
+      commit(types.WALLET_SET_LOGIN_ADDRESS, null);
       throw error;
     }
   },

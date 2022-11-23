@@ -79,7 +79,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getAddress', 'hasLoggedIn']),
+    ...mapGetters(['getAddress', 'loginAddress']),
     formatdisplayState() {
       switch (this.displayState) {
         case NFT_DISPLAY_STATE.FEATURED:
@@ -129,7 +129,7 @@ export default {
       event.stopPropagation();
       if (this.readOnly) return;
 
-      if (!this.hasLoggedIn) {
+      if (!this.loginAddress || this.loginAddress !== this.getAddress) {
         await this.signLogin();
       }
 
