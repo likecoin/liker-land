@@ -166,7 +166,7 @@ export function getNFTClassCollectionType(classMetadata) {
   }
 }
 
-export function isWritingNFT(classMetadata) {
+export function checkIsWritingNFT(classMetadata) {
   return (
     getNFTClassCollectionType(classMetadata) ===
     nftClassCollectionType.WritingNFT
