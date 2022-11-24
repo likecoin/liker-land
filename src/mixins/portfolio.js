@@ -257,6 +257,8 @@ export default {
   },
   watch: {
     nftClassListMap(listMap, listMapPrev) {
+      if (!listMap) return;
+
       const nftClassIdListSet = new Set(
         Object.values(listMap)
           .flat()
