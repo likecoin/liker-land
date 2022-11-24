@@ -319,7 +319,7 @@ export default {
             m.fromWallet === this.iscnOwner ? 'creator' : 'collector',
           fromType: this.getWalletIdentityType(m.fromWallet),
           toType: this.getWalletIdentityType(m.toWallet),
-          message: m.memo === 'like.co NFT API' ? '' : m.memo,
+          message: this.normalizeNFTMessage(m),
         }));
     },
   },
@@ -396,6 +396,11 @@ export default {
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice']),
+    normalizeNFTMessage(m) {
+      if (m.memo === 'like.co NFT API') return '';
+      if (m.event === 'mint_nft') return this.nftClassCreatorMessage;
+      return m.memo;
+    },
     onSelectNFT(e) {
       const { value: nftId } = e.target;
       logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
