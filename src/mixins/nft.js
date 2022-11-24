@@ -118,6 +118,9 @@ export default {
     nftClassCollectionName() {
       return this.NFTClassMetadata.nft_meta_collection_name || '';
     },
+    nftClassCreatorMessage() {
+      return this.NFTClassMetadata.message || '';
+    },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
     },

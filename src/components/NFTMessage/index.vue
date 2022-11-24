@@ -94,6 +94,7 @@ export default {
     messageHint() {
       switch (this.type) {
         case 'purchase':
+        case 'mint_nft':
           return this.$t('nft_message_type_collect');
 
         case 'transfer':
