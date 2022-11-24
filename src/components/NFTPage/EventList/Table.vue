@@ -62,7 +62,7 @@
           <Label v-else class="break-all" text="-" />
         </td>
         <td>
-          <LinkV2 v-if="event.event === 'new_class' || event.event === 'transfer'" :to="`/${event.fromWallet}`">
+          <LinkV2 v-if="['new_class', 'mint_nft' ,'transfer'].includes(event.event)" :to="`/${event.fromWallet}`">
             <Label class="break-all">{{
               event.fromDisplayName | ellipsis
             }}</Label>
