@@ -123,6 +123,7 @@
   "order_menu_price": "Price",
   "order_menu_time": "Time",
   "order_menu_collected": "Own",
+  "order_menu_display_state": "Featured",
   "order_menu_by":" By {order}",
   "tx_modal_quitAlert_content": "Transaction will be cancelled if network confirmations has not completed.\nThe paid gas fee cannot be refunded.",
   "tx_modal_quitAlert_confirm": "Cancel",

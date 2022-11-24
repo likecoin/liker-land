@@ -68,13 +68,16 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
+import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin],
+  mixins: [
+    walletMixin,
+    createPorfolioMixin({ shouldApplyDisplayState: false }),
+  ],
   head() {
     const title = this.$t('dashboard_title');
     const description = this.$t('dashboard_description');

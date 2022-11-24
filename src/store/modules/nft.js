@@ -72,7 +72,7 @@ function compareIsWritingNFT(getters, classIdA, classIdB) {
   return 0;
 }
 
-function compareIsFeatured(getters, address, classIdA, classIdB) {
+function compareNFTByFeatured(getters, address, classIdA, classIdB) {
   const featuredSet = getters.getNFTClassFeaturedSetByAddress(address);
   if (!featuredSet) return 0;
   const aIsFeatured = featuredSet.has(classIdA);
@@ -80,6 +80,23 @@ function compareIsFeatured(getters, address, classIdA, classIdB) {
   if (aIsFeatured && !bIsFeatured) return -1;
   if (!aIsFeatured && bIsFeatured) return 1;
   return 0;
+}
+
+function compareNFTByHidden(getters, address, classIdA, classIdB) {
+  const hiddenSet = getters.getNFTClassHiddenSetByAddress(address);
+  if (!hiddenSet) return 0;
+  const aIsHidden = hiddenSet.has(classIdA);
+  const bIsHidden = hiddenSet.has(classIdB);
+  if (aIsHidden && !bIsHidden) return 1;
+  if (!aIsHidden && bIsHidden) return -1;
+  return 0;
+}
+
+function compareNFTDisplayState(getters, address, classIdA, classIdB) {
+  const result = compareNFTByFeatured(getters, address, classIdA, classIdB);
+  return result === 0
+    ? compareNFTByHidden(getters, address, classIdA, classIdB)
+    : result;
 }
 
 function compareNumber(X, Y, order) {
@@ -124,17 +141,18 @@ const getters = {
     collectorWallet: collector,
     sorting,
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
-    enableFeaturedAndHidden,
+    shouldApplyDisplayState,
   }) => {
-    const filtered = enableFeaturedAndHidden
+    const filtered = shouldApplyDisplayState
       ? getters.filterNFTClassListWithState(list, collector)
       : [...list];
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
-      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
-      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
-      if (enableFeaturedAndHidden) {
-        const isFeaturedCompareResult = compareIsFeatured(
+      if (
+        shouldApplyDisplayState ||
+        sorting === NFT_CLASS_LIST_SORTING.DISPLAY_STATE
+      ) {
+        const isFeaturedCompareResult = compareNFTDisplayState(
           getters,
           collector,
           a,
@@ -142,6 +160,8 @@ const getters = {
         );
         if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
       }
+      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
+      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
       let Y;
       switch (sorting) {
@@ -165,17 +185,18 @@ const getters = {
     collectorWallet: collector,
     sorting,
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
-    enableFeaturedAndHidden,
+    shouldApplyDisplayState,
   }) => {
-    const filtered = enableFeaturedAndHidden
+    const filtered = shouldApplyDisplayState
       ? getters.filterNFTClassListWithState(list, collector)
       : [...list];
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
-      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
-      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
-      if (enableFeaturedAndHidden) {
-        const isFeaturedCompareResult = compareIsFeatured(
+      if (
+        shouldApplyDisplayState ||
+        sorting === NFT_CLASS_LIST_SORTING.DISPLAY_STATE
+      ) {
+        const isFeaturedCompareResult = compareNFTDisplayState(
           getters,
           collector,
           a,
@@ -183,6 +204,8 @@ const getters = {
         );
         if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
       }
+      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
+      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
       let Y;
       switch (sorting) {
