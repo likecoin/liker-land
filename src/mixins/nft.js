@@ -405,17 +405,17 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const actionType = this.isWritingNFT
+      const actionType = this.nftIsWritingNFT
         ? ['/cosmos.nft.v1beta1.MsgSend', 'new_class']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'new_class'];
-      const ignoreToList = this.isWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       const historyOnChain = await this.getNFTEventsAll({
         actionType,
         ignoreToList,
       });
       let history = historyOnChain;
 
-      if (this.isWritingNFT) {
+      if (this.nftIsWritingNFT) {
         try {
           const { data } = await this.$api.get(
             getNFTHistory({
@@ -700,7 +700,7 @@ export default {
           this.classId,
           1
         );
-        if (this.isWritingNFT) {
+        if (this.nftIsWritingNFT) {
           try {
             await this.$api.post(
               postNFTTransfer({
@@ -730,7 +730,7 @@ export default {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        if (this.isWritingNFT) this.updateNFTPurchaseInfo();
+        if (this.nftIsWritingNFT) this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
