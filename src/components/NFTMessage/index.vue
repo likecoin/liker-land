@@ -31,6 +31,7 @@
       <NFTMessageIdentity
         v-if="fromWallet"
         :type="fromType"
+        :is-show-type-label="isShowIdentityTypeLabel"
         :wallet-address="fromWallet"
       />
       <IconArrowLeft
@@ -40,6 +41,7 @@
       <NFTMessageIdentity
         v-if="toWallet"
         :type="toType"
+        :is-show-type-label="isShowIdentityTypeLabel"
         :wallet-address="toWallet"
       />
     </div>
@@ -101,6 +103,9 @@ export default {
         default:
           return this.$t('nft_message_type_generic');
       }
+    },
+    isShowIdentityTypeLabel() {
+      return this.type === 'mint_nft';
     },
   },
 };

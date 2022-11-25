@@ -24,6 +24,7 @@
       <!-- Main -->
       <NFTPortfolioMainView
         key="dashboard"
+        :portfolio-wallet="getAddress"
         :portfolio-tab="currentTab"
         :portfolio-items="currentNFTClassList"
         :portfolio-items-show-count="currentNFTClassListShowCount"

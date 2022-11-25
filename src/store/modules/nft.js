@@ -5,7 +5,7 @@ import * as api from '@/util/api';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
-  isWritingNFT,
+  checkIsWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
   getNFTsRespectDualPrefix,
@@ -62,10 +62,10 @@ function compareIsWritingNFT(getters, classIdA, classIdB) {
   const aPurchaseData = getters.getNFTClassPurchaseInfoById(classIdA);
   const bPurchaseData = getters.getNFTClassPurchaseInfoById(classIdB);
   const aIsWritingNFT =
-    isWritingNFT(aMetadata) &&
+    checkIsWritingNFT(aMetadata) &&
     (aPurchaseData?.price || aPurchaseData?.lastSoldPrice) !== undefined;
   const bIsWritingNFT =
-    isWritingNFT(bMetadata) &&
+    checkIsWritingNFT(bMetadata) &&
     (bPurchaseData?.price || bPurchaseData?.lastSoldPrice) !== undefined;
   if (aIsWritingNFT && !bIsWritingNFT) return -1;
   if (!aIsWritingNFT && bIsWritingNFT) return 1;

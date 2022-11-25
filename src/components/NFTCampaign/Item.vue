@@ -25,7 +25,7 @@
       :content-preview-props="{
         to: {
           name: 'nft-class-classId-nftId',
-          params: { classId: classId, nftId: nextNewNFTId },
+          params: { classId: classId, nftId: nftIdCollectNext },
         },
         tag: 'NuxtLink',
       }"

@@ -4,7 +4,7 @@ import throat from 'throat';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
-  isWritingNFT,
+  checkIsWritingNFT,
 } from '~/util/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import userInfoMixin from '~/mixins/user-info';
@@ -87,7 +87,7 @@ export const createPorfolioMixin = ({
 
       const nftClassMapOfOther = new Map();
       allNFTClassMap.forEach(nft => {
-        if (!isWritingNFT(this.getNFTClassMetadataById(nft.classId))) {
+        if (!checkIsWritingNFT(this.getNFTClassMetadataById(nft.classId))) {
           nftClassMapOfOther.set(nft.classId, nft);
         }
       });
@@ -368,7 +368,7 @@ export const createPorfolioMixin = ({
       });
 
       // wait for metadata to determine if it is writing NFT
-      if (isWritingNFT(metadata)) {
+      if (checkIsWritingNFT(metadata)) {
         try {
           await this.fetchNFTPurchaseInfo(classId);
         } catch (error) {

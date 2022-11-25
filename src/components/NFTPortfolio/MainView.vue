@@ -96,6 +96,7 @@
         >
           <NFTPortfolioItem
             :class-id="nft.classId"
+            :portfolio-wallet="portfolioWallet"
             :nft-id="nft.id"
             @load="updatePortfolioGrid"
           />
@@ -135,6 +136,10 @@ export default {
     isNarrow: {
       type: Boolean,
       default: false,
+    },
+    portfolioWallet: {
+      type: String,
+      required: true,
     },
     portfolioTab: {
       type: String,
