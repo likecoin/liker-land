@@ -185,18 +185,24 @@ const actions = {
       iscn_id: iscnId,
     };
     if (isValidHttpUrl(uri)) {
-      const apiMetadata = await this.$api
-        .$get(uri)
-        // eslint-disable-next-line no-console
-        .catch(err => console.error(err));
+      const apiMetadata = await this.$api.$get(uri).catch(err => {
+        if (!err.response?.status === 404) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
     }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
       if (iscnId) {
         const iscnRecord = await this.$api
           .$get(api.getISCNRecord(iscnId))
-          // eslint-disable-next-line no-console
-          .catch(err => console.error(err));
+          .catch(err => {
+            if (!err.response?.status === 404) {
+              // eslint-disable-next-line no-console
+              console.error(err);
+            }
+          });
         const iscnOwner = iscnRecord?.owner;
         const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
         if (iscnOwner)
