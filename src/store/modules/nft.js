@@ -163,7 +163,7 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTMetadata({ commit }, classId) {
+  async fetchNFTClassMetadata({ commit }, classId) {
     let metadata;
     /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
       which is huge and affects index page performance */
@@ -218,6 +218,29 @@ const actions = {
         metadata.iscn_record_timestamp
       );
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
+    return metadata;
+  },
+  async fetchNFTsMetadata({ state }, { classId, nftId }) {
+    const classData = state.metadataByClassIdMap[classId];
+    const classMetadata = classData.metadata || {};
+    let metadata;
+    const { nft: chainMetadata } = await this.$api.$get(
+      api.getNFTsMetadata(classId, nftId)
+    );
+    const { uri, data: { metadata: nftMetadata = {} } = {} } =
+      chainMetadata || {};
+    metadata = {
+      uri,
+      ...classMetadata,
+      ...nftMetadata,
+    };
+    if (isValidHttpUrl(uri)) {
+      const apiMetadata = await this.$api
+        .$get(uri)
+        // eslint-disable-next-line no-console
+        .catch(err => console.error(err));
+      if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+    }
     return metadata;
   },
   async fetchNFTOwners({ commit }, classId) {
