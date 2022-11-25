@@ -321,7 +321,7 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'fetchNFTPurchaseInfo',
-      'fetchNFTMetadata',
+      'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
       'uiToggleCollectModal',
@@ -344,7 +344,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       try {
-        await this.fetchNFTMetadata(this.classId);
+        await this.fetchNFTClassMetadata(this.classId);
       } catch (error) {
         if (error.response?.status !== 404) {
           // eslint-disable-next-line no-console

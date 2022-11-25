@@ -97,17 +97,17 @@
               :is-writing-nft="nftIsWritingNFT"
             >
               <NFTPagePreviewCard
-                :url="NFTExternalUrl"
-                :image-bg-color="NFTImageBackgroundColor"
-                :image-url="NFTImageUrl"
+                :url="nftExternalURL"
+                :image-bg-color="nftImageBackgroundColor"
+                :image-url="nftImageURL"
                 :avatar-url="creatorAvatar"
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :iscn-owner="iscnOwner"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
-                :nft-name="NFTName"
-                :nft-description="NFTDescription"
+                :nft-name="nftName"
+                :nft-description="nftDescription"
                 :nft-price="NFTPrice"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
@@ -276,6 +276,7 @@ export default {
   },
   data() {
     return {
+      nftMetadata: {},
       // For <select> to change only, please use `this.nftId` instead
       selectedNFTId: this.$route.params.nftId,
       isLoading: true,
@@ -291,6 +292,25 @@ export default {
     },
     nftId() {
       return this.$route.params.nftId;
+    },
+    nftExternalURL() {
+      return this.nftMetadata.external_url || this.NFTExternalUrl;
+    },
+    nftImageBackgroundColor() {
+      return this.nftMetadata.background_color || this.NFTImageBackgroundColor;
+    },
+    nftImageURL() {
+      const image = this.nftMetadata.image || this.NFTImageUrl;
+      const [schema, path] = image.split('://');
+      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
+      return image;
+    },
+    nftName() {
+      return this.nftMetadata.name || this.NFTName;
+    },
+    nftDescription() {
+      return this.nftMetadata.description || this.NFTDescription;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
@@ -318,12 +338,9 @@ export default {
         }));
     },
   },
-  asyncData({ query }) {
+  async asyncData({ route, query, store, redirect, error }) {
     const { action } = query;
-    return { action };
-  },
-  async fetch({ route, store, redirect, error }) {
-    const { classId } = route.params;
+    const { classId, nftId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
       redirect({
@@ -331,11 +348,12 @@ export default {
         params: { classId },
         query: { referrer },
       });
-      return;
+      return undefined;
     }
+    let nftMetadata;
     try {
       await Promise.all([
-        store.dispatch('fetchNFTMetadata', classId),
+        store.dispatch('fetchNFTClassMetadata', classId),
         store.dispatch('lazyGetNFTPurchaseInfo', classId).catch(err => {
           if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
             // eslint-disable-next-line no-console
@@ -343,6 +361,10 @@ export default {
           }
         }),
       ]);
+      nftMetadata = await store.dispatch('fetchNFTMetadata', {
+        classId,
+        nftId,
+      });
     } catch (err) {
       if (err.response?.data?.code === 3) {
         error({
@@ -357,7 +379,9 @@ export default {
           message: 'NFT_FETCH_ERROR',
         });
       }
+      return undefined;
     }
+    return { nftMetadata, action };
   },
   async mounted() {
     try {
@@ -390,7 +414,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyFetchLIKEPrice']),
+    ...mapActions(['lazyFetchLIKEPrice', 'fetchNFTMetadata']),
     onSelectNFT(e) {
       const { value: nftId } = e.target;
       logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
