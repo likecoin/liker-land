@@ -255,14 +255,14 @@ export default {
       );
       return collector?.collectedCount || 0;
     },
-    firstCollectedNFTId() {
-      const ownNFT = this.collectorMap[this.getAddress];
-      return ownNFT?.[0];
-    },
     nftClassDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
-    nextNewNFTId() {
+    nftIdCollectedFirstByUser() {
+      const ownNFT = this.collectorMap[this.getAddress];
+      return ownNFT?.[0];
+    },
+    nftIdCollectNext() {
       return this.purchaseInfo?.metadata?.nextNewNFTId;
     },
     canCollectWithoutWallet() {
@@ -296,15 +296,15 @@ export default {
       if (
         newCount === 1 &&
         oldCount === 0 &&
-        !this.firstCollectedNFTId &&
+        !this.nftIdCollectedFirstByUser &&
         !this.nftCollectorsSync
       ) {
         this.nftCollectorsSync = new Promise(async resolve => {
           // `fetchNFTOwners` might take longer to return the most updated collectors
-          // causing `firstCollectedNFTId` to be undefined or collectors list out-sync
+          // causing `nftIdCollectedFirstByUser` to be undefined or collectors list out-sync
           // Should keep fetching if the user just collected the NFT but not found in the collectors list
           let tries = 0;
-          while (!this.firstCollectedNFTId && tries < 10) {
+          while (!this.nftIdCollectedFirstByUser && tries < 10) {
             // eslint-disable-next-line no-await-in-loop
             await this.updateNFTOwners();
             // eslint-disable-next-line no-await-in-loop
@@ -602,7 +602,7 @@ export default {
     },
     async transferNFT({
       toWallet,
-      nftId = this.firstCollectedNFTId,
+      nftId = this.nftIdCollectedFirstByUser,
       memo = '',
     } = {}) {
       try {
@@ -621,7 +621,7 @@ export default {
           return;
         }
 
-        // Wait for collectors sync for getting `firstCollectedNFTId`
+        // Wait for collectors sync for getting `nftIdCollectedFirstByUser`
         if (this.nftCollectorsSync) {
           this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.nftCollectorsSync;
@@ -690,7 +690,7 @@ export default {
           1
         );
         await Promise.all([
-          this.updateNFTOwners(), // blocking update firstCollectedNFTId,
+          this.updateNFTOwners(), // blocking update nftIdCollectedFirstByUser,
           this.fetchUserCollectedCount(),
         ]);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
