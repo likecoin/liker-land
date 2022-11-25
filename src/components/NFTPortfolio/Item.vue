@@ -35,6 +35,10 @@ export default {
       type: String,
       required: true,
     },
+    portfolioWallet: {
+      type: String,
+      required: true,
+    },
     nftId: {
       type: String,
       default: undefined,
@@ -47,13 +51,23 @@ export default {
     };
   },
   computed: {
+    nftIdCollectedFirstByPortfolio() {
+      return this.collectorMap[this.portfolioWallet]?.[0];
+    },
+    nftIdForDetails() {
+      return (
+        this.nftId ||
+        this.nftIdCollectNext ||
+        this.nftIdCollectedFirstByPortfolio
+      );
+    },
     detailsPageRoute() {
-      if (this.nftId || this.nextNewNFTId) {
+      if (this.nftIdForDetails) {
         return {
           name: 'nft-class-classId-nftId',
           params: {
             classId: this.classId,
-            nftId: this.nftId || this.nextNewNFTId,
+            nftId: this.nftIdForDetails,
           },
         };
       }
