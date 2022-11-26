@@ -16,7 +16,7 @@ import * as TYPES from '../mutation-types';
 const state = () => ({
   purchaseInfoByClassIdMap: {},
   metadataByClassIdMap: {},
-  metadataByNFTIdMap: {},
+  metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
   userLastCollectedTimestampMap: {},
@@ -29,8 +29,12 @@ const mutations = {
   [TYPES.NFT_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
     Vue.set(state.metadataByClassIdMap, classId, metadata);
   },
-  [TYPES.NFT_SET_NFT_METADATA](state, { nftId, metadata }) {
-    Vue.set(state.metadataByNFTIdMap, nftId, metadata);
+  [TYPES.NFT_SET_NFT_METADATA](state, { classId, nftId, metadata }) {
+    Vue.set(
+      state.metadataByNFTClassAndNFTIdMap,
+      `${classId}-${nftId}`,
+      metadata
+    );
   },
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.ownerInfoByClassIdMap, classId, info);
@@ -88,7 +92,8 @@ const getters = {
       (acc, val) => acc + val.length,
       0
     ),
-  getNFTMetadataById: state => id => state.metadataByNFTIdMap[id],
+  getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
+    state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
   getNFTClassIdListSorterForCreated: (_, getters) => ({
@@ -250,7 +255,7 @@ const actions = {
       });
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
     }
-    commit(TYPES.NFT_SET_NFT_METADATA, { nftId, metadata });
+    commit(TYPES.NFT_SET_NFT_METADATA, { classId, nftId, metadata });
     return metadata;
   },
   async fetchNFTOwners({ commit }, classId) {

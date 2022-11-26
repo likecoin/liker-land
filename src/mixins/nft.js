@@ -98,7 +98,7 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
-      'getNFTMetadataById',
+      'getNFTMetadataByNFTClassAndNFTId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -108,7 +108,9 @@ export default {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
     nftMetadata() {
-      return this.getNFTMetadataById(this.nftId) || {};
+      return (
+        this.getNFTMetadataByNFTClassAndNFTId(this.classId, this.nftId) || {}
+      );
     },
     nftClassCollectionType() {
       return getNFTClassCollectionType(this.NFTClassMetadata);
