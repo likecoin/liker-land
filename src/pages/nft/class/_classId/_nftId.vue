@@ -211,11 +211,11 @@ export default {
   },
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
-    const title = this.NFTName || this.$t('nft_details_page_title');
+    const title = this.nftName || this.$t('nft_details_page_title');
     const description =
-      this.NFTDescription || this.$t('nft_details_page_description');
+      this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg';
+      this.nftImageURL || 'https://liker.land/images/og/writing-nft.jpg';
     return {
       title,
       meta: [
@@ -276,7 +276,6 @@ export default {
   },
   data() {
     return {
-      nftMetadata: {},
       // For <select> to change only, please use `this.nftId` instead
       selectedNFTId: this.$route.params.nftId,
       isLoading: true,
@@ -292,25 +291,6 @@ export default {
     },
     nftId() {
       return this.$route.params.nftId;
-    },
-    nftExternalURL() {
-      return this.nftMetadata.external_url || this.NFTExternalUrl;
-    },
-    nftImageBackgroundColor() {
-      return this.nftMetadata.background_color || this.NFTImageBackgroundColor;
-    },
-    nftImageURL() {
-      const image = this.nftMetadata.image || this.NFTImageUrl;
-      const [schema, path] = image.split('://');
-      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
-      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
-      return image;
-    },
-    nftName() {
-      return this.nftMetadata.name || this.NFTName;
-    },
-    nftDescription() {
-      return this.nftMetadata.description || this.NFTDescription;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
@@ -350,10 +330,10 @@ export default {
       });
       return undefined;
     }
-    let nftMetadata;
     try {
       await Promise.all([
         store.dispatch('fetchNFTClassMetadata', classId),
+        store.dispatch('fetchNFTMetadata', { classId, nftId }),
         store.dispatch('lazyGetNFTPurchaseInfo', classId).catch(err => {
           if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
             // eslint-disable-next-line no-console
@@ -361,10 +341,6 @@ export default {
           }
         }),
       ]);
-      nftMetadata = await store.dispatch('fetchNFTMetadata', {
-        classId,
-        nftId,
-      });
     } catch (err) {
       if (err.response?.data?.code === 3) {
         error({
@@ -381,7 +357,7 @@ export default {
       }
       return undefined;
     }
-    return { nftMetadata, action };
+    return { action };
   },
   async mounted() {
     try {
