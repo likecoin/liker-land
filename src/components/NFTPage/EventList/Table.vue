@@ -12,7 +12,7 @@
     <tbody>
       <tr
         v-for="event in nftHistory"
-        :key="`${event.txHash}event`"
+        :key="`${event.txHash}-${event.nftId}-${event.event}`"
         class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray"
       >
         <td>
