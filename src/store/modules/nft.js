@@ -16,6 +16,7 @@ import * as TYPES from '../mutation-types';
 const state = () => ({
   purchaseInfoByClassIdMap: {},
   metadataByClassIdMap: {},
+  metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
   userLastCollectedTimestampMap: {},
@@ -27,6 +28,13 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
     Vue.set(state.metadataByClassIdMap, classId, metadata);
+  },
+  [TYPES.NFT_SET_NFT_METADATA](state, { classId, nftId, metadata }) {
+    Vue.set(
+      state.metadataByNFTClassAndNFTIdMap,
+      `${classId}-${nftId}`,
+      metadata
+    );
   },
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.ownerInfoByClassIdMap, classId, info);
@@ -84,6 +92,8 @@ const getters = {
       (acc, val) => acc + val.length,
       0
     ),
+  getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
+    state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
   getNFTClassIdListSorterForCreated: (_, getters) => ({
@@ -162,13 +172,13 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTMetadata({ commit }, classId) {
+  async fetchNFTClassMetadata({ commit }, classId) {
     let metadata;
     /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
       which is huge and affects index page performance */
     // const chainMetadata = await getClassInfo(classId);
     const { class: chainMetadata } = await this.$api.$get(
-      api.getNFTClassMetadata(classId)
+      api.getChainNFTClassMetadataEndpoint(classId)
     );
     const {
       name,
@@ -185,18 +195,24 @@ const actions = {
       iscn_id: iscnId,
     };
     if (isValidHttpUrl(uri)) {
-      const apiMetadata = await this.$api
-        .$get(uri)
-        // eslint-disable-next-line no-console
-        .catch(err => console.error(err));
+      const apiMetadata = await this.$api.$get(uri).catch(err => {
+        if (!err.response?.status === 404) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
     }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
       if (iscnId) {
         const iscnRecord = await this.$api
           .$get(api.getISCNRecord(iscnId))
-          // eslint-disable-next-line no-console
-          .catch(err => console.error(err));
+          .catch(err => {
+            if (!err.response?.status === 404) {
+              // eslint-disable-next-line no-console
+              console.error(err);
+            }
+          });
         const iscnOwner = iscnRecord?.owner;
         const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
         if (iscnOwner)
@@ -217,6 +233,29 @@ const actions = {
         metadata.iscn_record_timestamp
       );
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
+    return metadata;
+  },
+  async fetchNFTMetadata({ commit }, { classId, nftId }) {
+    let metadata;
+    const { nft: chainMetadata } = await this.$api.$get(
+      api.getChainNFTMetadataEndpoint(classId, nftId)
+    );
+    const { uri, data: { metadata: nftMetadata = {} } = {} } =
+      chainMetadata || {};
+    metadata = {
+      uri,
+      ...nftMetadata,
+    };
+    if (isValidHttpUrl(uri)) {
+      const apiMetadata = await this.$api.$get(uri).catch(err => {
+        if (!err.response?.status === 404) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
+      if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+    }
+    commit(TYPES.NFT_SET_NFT_METADATA, { classId, nftId, metadata });
     return metadata;
   },
   async fetchNFTOwners({ commit }, classId) {

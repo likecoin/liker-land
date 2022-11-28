@@ -4,6 +4,8 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import * as api from '@/util/api';
 import { deriveAllPrefixedAddresses } from './cosmos';
 import {
+  ARWEAVE_ENDPOINT,
+  IPFS_VIEW_GATEWAY_URL,
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
@@ -288,4 +290,11 @@ export function formatOwnerInfoFromChain(owners) {
     }
   });
   return ownerInfo;
+}
+
+export function parseNFTMetadataURL(url) {
+  const [schema, path] = url.split('://');
+  if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+  if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
+  return url;
 }
