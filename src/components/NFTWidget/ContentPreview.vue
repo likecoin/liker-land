@@ -5,13 +5,13 @@
     v-bind="$attrs"
     @click="handleClick"
   >
-    <div
+    <NFTCover
       v-if="imgSrc"
-      class="grow bg-gray-9b"
-      :style="imgStyle"
-    >
-      <img class="block object-contain" loading="lazy" :src="resizedImageSrc" :alt="title">
-    </div>
+      class="grow"
+      :src="imgSrc"
+      :size="450"
+      :alt="title"
+    />
     <div class="p-[16px] shrink-0">
       <div class="text-[16px] leading-[1.25] font-[600] line-clamp-2">{{ title }}</div>
       <div class="text-[16px] leading-[1.25] font-[400] mt-[4px] line-clamp-4">
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import { getLikeCoResizedImageUrl } from '~/util/ui';
-
 export default {
   props: {
     imgSrc: {
@@ -45,19 +43,6 @@ export default {
     tag: {
       type: String,
       default: 'div',
-    },
-  },
-  computed: {
-    imgStyle() {
-      return {
-        backgroundColor: this.imgBgColor,
-      };
-    },
-    imageSize() {
-      return 450;
-    },
-    resizedImageSrc() {
-      return getLikeCoResizedImageUrl(this.imgSrc, this.imageSize);
     },
   },
   methods: {

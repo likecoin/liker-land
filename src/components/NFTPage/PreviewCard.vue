@@ -11,25 +11,10 @@
     ]"
     :has-padding="false"
   >
-    <div
-      v-if="imageUrl"
-      class="h-[180px]"
-      :style="`background-color: ${imageBgColor}`"
-    >
-      <img
-        class="object-cover w-full max-h-[180px]"
-        :src="resizedImageSrc"
-      >
-    </div>
-    <div
-      v-else
-      class="h-[180px]"
-    >
-      <img
-        class="object-cover h-full max-h-[180px]"
-        src="~/assets/images/nft/primitive-nft.png"
-      >
-    </div>
+    <NFTCover
+      :src="imageUrl"
+      :bg-color="imageBgColor"
+    />
     <div
       :class="[
         'flex',
@@ -134,12 +119,7 @@
 </template>
 
 <script>
-import {
-  ellipsis,
-  ellipsisDescription,
-  formatNumberWithLIKE,
-  getLikeCoResizedImageUrl,
-} from '~/util/ui';
+import { ellipsis, ellipsisDescription, formatNumberWithLIKE } from '~/util/ui';
 
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
@@ -230,12 +210,6 @@ export default {
   computed: {
     formattedNFTPrice() {
       return `${this.nftPrice || '-'} LIKE`;
-    },
-    imageSize() {
-      return 720;
-    },
-    resizedImageSrc() {
-      return getLikeCoResizedImageUrl(this.imageUrl, this.imageSize);
     },
   },
   methods: {
