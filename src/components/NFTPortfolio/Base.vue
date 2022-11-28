@@ -4,22 +4,11 @@
     :is-writing-nft="isWritingNFT"
   >
     <NFTPortfolioCard>
-      <div
-        class="h-[180px]"
-        :style="`background-color: ${imageBgColor}`"
-      >
-        <img
-          v-if="imageSrc"
-          loading="lazy"
-          class="object-cover w-full h-full max-h-[180px]"
-          :src="resizedImageSrc"
-        >
-        <img
-          v-else
-          class="object-cover w-full h-full max-h-[180px]"
-          src="~/assets/images/nft/primitive-nft.png"
-        >
-      </div>
+      <NFTCover
+        :src="imageSrc"
+        :size="350"
+        :bg-color="imageBgColor"
+      />
       <div
         :class="[
           'flex',
@@ -89,11 +78,7 @@
 </template>
 
 <script>
-import {
-  ellipsis,
-  formatNumberWithLIKE,
-  getLikeCoResizedImageUrl,
-} from '~/util/ui';
+import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
@@ -159,14 +144,6 @@ export default {
     classCollectionName: {
       type: String,
       default: '',
-    },
-  },
-  computed: {
-    imageSize() {
-      return 350;
-    },
-    resizedImageSrc() {
-      return getLikeCoResizedImageUrl(this.imageSrc, this.imageSize);
     },
   },
   methods: {
