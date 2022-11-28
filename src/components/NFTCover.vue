@@ -4,9 +4,11 @@
     :style="rootStyle"
   >
     <img
-      v-if="src"
+      v-if="src && !isError"
       v-bind="imgProps"
       :src="resizedSrc"
+      @load="handleImageLoad"
+      @error="handleImageError"
     >
     <img
       v-else
@@ -35,6 +37,11 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      isError: false,
+    };
+  },
   computed: {
     rootStyle() {
       return {
@@ -50,6 +57,19 @@ export default {
     },
     resizedSrc() {
       return getLikeCoResizedImageUrl(this.src, this.size);
+    },
+  },
+  watch: {
+    src() {
+      this.isError = false;
+    },
+  },
+  methods: {
+    handleImageLoad(e) {
+      this.$emit('load', e);
+    },
+    handleImageError() {
+      this.isError = true;
     },
   },
 };
