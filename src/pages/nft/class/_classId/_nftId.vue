@@ -97,17 +97,17 @@
               :is-writing-nft="nftIsWritingNFT"
             >
               <NFTPagePreviewCard
-                :url="NFTExternalUrl"
-                :image-bg-color="NFTImageBackgroundColor"
-                :image-url="NFTImageUrl"
+                :url="nftExternalURL"
+                :image-bg-color="nftImageBackgroundColor"
+                :image-url="nftImageURL"
                 :avatar-url="creatorAvatar"
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :iscn-owner="iscnOwner"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
-                :nft-name="NFTName"
-                :nft-description="NFTDescription"
+                :nft-name="nftName"
+                :nft-description="nftDescription"
                 :nft-price="NFTPrice"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
@@ -216,11 +216,11 @@ export default {
   },
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
-    const title = this.NFTName || this.$t('nft_details_page_title');
+    const title = this.nftName || this.$t('nft_details_page_title');
     const description =
-      this.NFTDescription || this.$t('nft_details_page_description');
+      this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg';
+      this.nftImageURL || 'https://liker.land/images/og/writing-nft.jpg';
     return {
       title,
       meta: [
@@ -323,12 +323,9 @@ export default {
         }));
     },
   },
-  asyncData({ query }) {
+  async asyncData({ route, query, store, redirect, error }) {
     const { action } = query;
-    return { action };
-  },
-  async fetch({ route, store, redirect, error }) {
-    const { classId } = route.params;
+    const { classId, nftId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
       redirect({
@@ -336,11 +333,12 @@ export default {
         params: { classId },
         query: { referrer },
       });
-      return;
+      return undefined;
     }
     try {
       await Promise.all([
-        store.dispatch('fetchNFTMetadata', classId),
+        store.dispatch('fetchNFTClassMetadata', classId),
+        store.dispatch('fetchNFTMetadata', { classId, nftId }),
         store.dispatch('lazyGetNFTPurchaseInfo', classId).catch(err => {
           if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
             // eslint-disable-next-line no-console
@@ -362,7 +360,9 @@ export default {
           message: 'NFT_FETCH_ERROR',
         });
       }
+      return undefined;
     }
+    return { action };
   },
   async mounted() {
     try {
@@ -395,7 +395,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyFetchLIKEPrice']),
+    ...mapActions(['lazyFetchLIKEPrice', 'fetchNFTMetadata']),
     normalizeNFTMessage(m) {
       if (m.memo === 'like.co NFT API') return '';
       if (m.event === 'mint_nft') return this.nftClassCreatorMessage;

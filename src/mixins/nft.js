@@ -5,8 +5,6 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 import {
   APP_LIKE_CO_VIEW,
   APP_LIKE_CO_URL_BASE,
-  ARWEAVE_ENDPOINT,
-  IPFS_VIEW_GATEWAY_URL,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
@@ -33,6 +31,7 @@ import {
   getISCNRecord,
   getNFTClassCollectionType,
   formatNFTEventsToHistory,
+  parseNFTMetadataURL,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -102,6 +101,7 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
+      'getNFTMetadataByNFTClassAndNFTId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -109,6 +109,11 @@ export default {
     ]),
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
+    },
+    nftMetadata() {
+      return (
+        this.getNFTMetadataByNFTClassAndNFTId(this.classId, this.nftId) || {}
+      );
     },
     nftClassCollectionType() {
       return getNFTClassCollectionType(this.NFTClassMetadata);
@@ -140,21 +145,34 @@ export default {
     NFTName() {
       return this.NFTClassMetadata.name;
     },
+    nftName() {
+      return this.nftMetadata.name || this.NFTName;
+    },
     NFTDescription() {
       return this.NFTClassMetadata.description;
     },
+    nftDescription() {
+      return this.nftMetadata.description || this.NFTDescription;
+    },
     NFTImageUrl() {
       const { image = '' } = this.NFTClassMetadata;
-      const [schema, path] = image.split('://');
-      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
-      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
-      return this.NFTClassMetadata.image;
+      return parseNFTMetadataURL(image);
+    },
+    nftImageURL() {
+      const image = this.nftMetadata.image || this.NFTImageUrl;
+      return parseNFTMetadataURL(image);
     },
     NFTImageBackgroundColor() {
       return this.NFTClassMetadata.background_color;
     },
+    nftImageBackgroundColor() {
+      return this.nftMetadata.background_color || this.NFTImageBackgroundColor;
+    },
     NFTExternalUrl() {
       return this.NFTClassMetadata.external_url;
+    },
+    nftExternalURL() {
+      return this.nftMetadata.external_url || this.NFTExternalUrl;
     },
     NFTPrice() {
       return this.purchaseInfo.price;
@@ -345,7 +363,7 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'fetchNFTPurchaseInfo',
-      'fetchNFTMetadata',
+      'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
       'uiToggleCollectModal',
@@ -370,7 +388,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       try {
-        await this.fetchNFTMetadata(this.classId);
+        await this.fetchNFTClassMetadata(this.classId);
       } catch (error) {
         if (error.response?.status !== 404) {
           // eslint-disable-next-line no-console

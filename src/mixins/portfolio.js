@@ -295,7 +295,7 @@ export const createPorfolioMixin = ({
   methods: {
     ...mapActions([
       'fetchNFTListByAddress',
-      'fetchNFTMetadata',
+      'fetchNFTClassMetadata',
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
       'fetchNFTListFeaturedByAddress',
@@ -351,7 +351,7 @@ export const createPorfolioMixin = ({
     async fetchNFTClassInfo(classId) {
       let metadata;
       try {
-        metadata = await this.fetchNFTMetadata(classId);
+        metadata = await this.fetchNFTClassMetadata(classId);
       } catch (error) {
         if (error.response?.status !== 404) {
           // eslint-disable-next-line no-console
