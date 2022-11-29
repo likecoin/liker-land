@@ -272,6 +272,11 @@ export default {
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
     ]),
+    updatePortfolioGrid() {
+      const { portfolioMainView } = this.$refs;
+      if (!portfolioMainView) return;
+      portfolioMainView.updatePortfolioGrid();
+    },
     syncRouteForTab(tab = this.currentTab) {
       const { query } = this.$route;
       if (!query.tab || !tabOptions[query.tab] || this.currentTab !== tab) {
@@ -325,7 +330,7 @@ export default {
           console.error(JSON.stringify(error));
         }
       }
-      this.$nextTick(this.updateNFTGrid);
+      this.$nextTick(this.updatePortfolioGrid);
 
       this.fetchNFTOwners(classId).catch(error => {
         if (error.response?.status !== 404) {
@@ -344,7 +349,7 @@ export default {
             console.error(JSON.stringify(error));
           }
         }
-        this.$nextTick(this.updateNFTGrid);
+        this.$nextTick(this.updatePortfolioGrid);
       }
     },
     changeTab(tab) {
