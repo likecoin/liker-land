@@ -20,6 +20,7 @@
       :own-count="ownCount"
       :display-state="nftDisplayState"
       @collect="handleClickCollect"
+      @load-cover="handleCoverLoaded"
     />
     <NFTFeatured
       :class-id="classId"
@@ -100,6 +101,9 @@ export default {
         this.classId,
         1
       );
+    },
+    handleCoverLoaded(e) {
+      this.$emit('load-cover', e);
     },
   },
 };

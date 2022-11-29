@@ -55,6 +55,7 @@
       {{ /* Right Column */ }}
       <NFTPortfolioMainView
         key="portfolio"
+        ref="portfolioMainView"
         :portfolio-wallet="wallet"
         :portfolio-tab="currentTab"
         :portfolio-items="currentNFTClassList"

@@ -98,7 +98,7 @@
             :class-id="nft.classId"
             :portfolio-wallet="portfolioWallet"
             :nft-id="nft.id"
-            @load="updatePortfolioGrid"
+            @load-cover="updatePortfolioGrid"
           />
         </li>
       </ul>
@@ -125,11 +125,21 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
 import MagicGrid from 'magic-grid';
 
 import { NFT_CLASS_LIST_SORTING } from '~/util/nft';
 
 import { tabOptions } from '~/mixins/portfolio';
+
+const portfolioGridDebounceArgs = [
+  60,
+  {
+    maxWait: 300,
+    leading: false,
+    trailing: true,
+  },
+];
 
 export default {
   props: {
@@ -303,7 +313,7 @@ export default {
     handleTabChange(tab) {
       this.$emit('portfolio-change-tab', tab);
     },
-    setupPortfolioGrid() {
+    setupPortfolioGrid: debounce(function setupPortfolioGrid() {
       const container = this.$refs.portfolioGrid;
       if (!container) return;
       this.portfolioGridController = new MagicGrid({
@@ -316,11 +326,11 @@ export default {
         center: true,
       });
       this.portfolioGridController.listen();
-    },
-    updatePortfolioGrid() {
+    }, ...portfolioGridDebounceArgs),
+    updatePortfolioGrid: debounce(function updatePortfolioGrid() {
       if (!this.portfolioGridController) return;
       this.portfolioGridController.positionItems();
-    },
+    }, ...portfolioGridDebounceArgs),
     addInfiniteScrollListener() {
       window.addEventListener('scroll', this.handleInfiniteScroll);
     },

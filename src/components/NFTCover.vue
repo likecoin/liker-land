@@ -1,18 +1,18 @@
 <template>
   <div
-    class="bg-gray-9b"
+    class="relative bg-gray-9b"
     :style="rootStyle"
   >
     <img
-      v-if="src && !isError"
+      v-if="isShowImage"
       v-bind="imgProps"
       :src="resizedSrc"
       @load="handleImageLoad"
       @error="handleImageError"
     >
     <img
-      v-else
-      v-bind="imgProps"
+      v-if="!isShowImage || !isLoaded"
+      v-bind="imgPropsForPlaceholder"
       src="~/assets/images/nft/primitive-nft.png"
     >
   </div>
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       isError: false,
+      isLoaded: false,
     };
   },
   computed: {
@@ -49,8 +50,25 @@ export default {
       };
     },
     imgProps() {
+      const { imgPropsForPlaceholder: props, isLoaded } = this;
       return {
-        class: 'object-contain w-full',
+        ...props,
+        class: [
+          ...props.class,
+          {
+            'absolute inset-x-0 top-0 opacity-0 pointer-events-none': !isLoaded,
+          },
+        ],
+      };
+    },
+    imgPropsForPlaceholder() {
+      return {
+        class: [
+          'object-contain w-full',
+          {
+            'animate-pulse': !this.isLoaded,
+          },
+        ],
         loading: 'lazy',
         ...this.$attrs,
       };
@@ -58,18 +76,30 @@ export default {
     resizedSrc() {
       return getLikeCoResizedImageUrl(this.src, this.size);
     },
+    isShowImage() {
+      return this.src && !this.isError;
+    },
   },
   watch: {
     src() {
       this.isError = false;
+      this.isLoaded = false;
     },
   },
   methods: {
     handleImageLoad(e) {
-      this.$emit('load', e);
+      this.isLoaded = true;
+      this.emitLoadEvent(e);
     },
-    handleImageError() {
+    handleImageError(e) {
       this.isError = true;
+      this.isLoaded = true;
+      this.emitLoadEvent(e);
+    },
+    emitLoadEvent(e) {
+      this.$nextTick(() => {
+        this.$emit('load', e);
+      });
     },
   },
 };

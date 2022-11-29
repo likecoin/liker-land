@@ -53,6 +53,7 @@
     "firestore-store": "^1.0.0",
     "gsap": "^3.10.4",
     "jsonwebtoken": "^8.5.1",
+    "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "magic-grid": "^3.2.4",
     "node-fetch": "^2.6.0",
