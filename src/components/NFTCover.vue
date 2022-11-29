@@ -66,10 +66,16 @@ export default {
   },
   methods: {
     handleImageLoad(e) {
-      this.$emit('load', e);
+      this.emitLoadEvent(e);
     },
-    handleImageError() {
+    handleImageError(e) {
       this.isError = true;
+      this.emitLoadEvent(e);
+    },
+    emitLoadEvent(e) {
+      this.$nextTick(() => {
+        this.$emit('load', e);
+      });
     },
   },
 };

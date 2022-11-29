@@ -19,6 +19,7 @@
       :is-collecting="uiIsOpenCollectModal && isCollecting"
       :own-count="ownCount"
       @collect="handleClickCollect"
+      @load-cover="handleCoverLoaded"
     />
   </NuxtLink>
 </template>
@@ -94,6 +95,9 @@ export default {
         this.classId,
         1
       );
+    },
+    handleCoverLoaded(e) {
+      this.$emit('load-cover', e);
     },
   },
 };

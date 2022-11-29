@@ -8,6 +8,7 @@
         :src="imageSrc"
         :size="350"
         :bg-color="imageBgColor"
+        @load="handleCoverLoaded"
       />
       <div
         :class="[
@@ -149,6 +150,9 @@ export default {
   methods: {
     handleClickCollect(event) {
       this.$emit('collect', event);
+    },
+    handleCoverLoaded(event) {
+      this.$emit('load-cover', event);
     },
   },
 };
