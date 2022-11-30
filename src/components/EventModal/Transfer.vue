@@ -103,7 +103,16 @@
       <FormField
         class="mx-[8px]"
         :label="$t('tx_modal_label_receiver')"
-      >{{ toDisplayName }}</FormField>
+      >
+        <div class="flex items-center gap-[8px]">
+          <Identity
+            v-if="toUserAvatar"
+            :avatar-url="toUserAvatar"
+            :avatar-size="36"
+          />
+          {{ toDisplayName | ellipsis }}
+        </div>
+      </FormField>
     </div>
     <template
       v-if="!isTransferring"
@@ -122,8 +131,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
+import { ellipsis } from '~/util/ui';
 
 export default {
+  filters: {
+    ellipsis,
+  },
   props: {
     classId: {
       type: String,
@@ -178,6 +191,9 @@ export default {
       return (
         this.getUserInfoByAddress(this.toWallet)?.displayName || this.toWallet
       );
+    },
+    toUserAvatar() {
+      return this.getUserInfoByAddress(this.toWallet)?.avatar;
     },
   },
   watch: {
