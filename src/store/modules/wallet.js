@@ -74,6 +74,7 @@ const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
+  walletHasLoggedIn: state => state.address === state.loginAddress,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletMethodType: state => state.methodType,
