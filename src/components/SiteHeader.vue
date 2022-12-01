@@ -22,8 +22,7 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
-      <!-- locale (Temporarily hidden) -->
-      <Dropdown v-if="$route.path.includes('civic') || $route.path.includes('settings') ">
+      <Dropdown>
         <template v-slot:trigger="{ toggle }">
           <ButtonV2
             preset="tertiary"
