@@ -5,8 +5,6 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 import {
   APP_LIKE_CO_VIEW,
   APP_LIKE_CO_URL_BASE,
-  ARWEAVE_ENDPOINT,
-  IPFS_VIEW_GATEWAY_URL,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
@@ -30,23 +28,31 @@ import {
   broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
-  isWritingNFT,
+  getNFTClassCollectionType,
   formatNFTEventsToHistory,
+  parseNFTMetadataURL,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
+import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
 const creatorInfoMixin = createUserInfoMixin({
   propKey: 'Creator',
   walletKey: 'iscnOwner',
 });
 
+const nftClassCollectionMixin = createNFTClassCollectionMixin({
+  propKey: 'nft',
+  typeKey: 'nftClassCollectionType',
+});
+
 export default {
   mixins: [
     walletMixin,
     creatorInfoMixin,
+    nftClassCollectionMixin,
     CrispMixinFactory({ isBootAtMounted: true }),
   ],
   head() {
@@ -92,6 +98,7 @@ export default {
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
+      'getNFTMetadataByNFTClassAndNFTId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -100,8 +107,19 @@ export default {
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
-    isWritingNFT() {
-      return isWritingNFT(this.NFTClassMetadata);
+    nftMetadata() {
+      return (
+        this.getNFTMetadataByNFTClassAndNFTId(this.classId, this.nftId) || {}
+      );
+    },
+    nftClassCollectionType() {
+      return getNFTClassCollectionType(this.NFTClassMetadata);
+    },
+    nftClassCollectionName() {
+      return this.NFTClassMetadata.nft_meta_collection_name || '';
+    },
+    nftClassCreatorMessage() {
+      return this.NFTClassMetadata.message || '';
     },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
@@ -124,24 +142,40 @@ export default {
     NFTName() {
       return this.NFTClassMetadata.name;
     },
+    nftName() {
+      return this.nftMetadata.name || this.NFTName;
+    },
     NFTDescription() {
       return this.NFTClassMetadata.description;
     },
+    nftDescription() {
+      return this.nftMetadata.description || this.NFTDescription;
+    },
     NFTImageUrl() {
       const { image = '' } = this.NFTClassMetadata;
-      const [schema, path] = image.split('://');
-      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
-      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
-      return this.NFTClassMetadata.image;
+      return parseNFTMetadataURL(image);
+    },
+    nftImageURL() {
+      const image = this.nftMetadata.image || this.NFTImageUrl;
+      return parseNFTMetadataURL(image);
     },
     NFTImageBackgroundColor() {
       return this.NFTClassMetadata.background_color;
     },
+    nftImageBackgroundColor() {
+      return this.nftMetadata.background_color || this.NFTImageBackgroundColor;
+    },
     NFTExternalUrl() {
       return this.NFTClassMetadata.external_url;
     },
+    nftExternalURL() {
+      return this.nftMetadata.external_url || this.NFTExternalUrl;
+    },
     NFTPrice() {
       return this.purchaseInfo.price;
+    },
+    nftIsCollectable() {
+      return this.NFTPrice && this.NFTPrice !== -1;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
@@ -192,6 +226,19 @@ export default {
     nftCollectorCollectedCount() {
       return this.nftCollectorCollectedNFTList.length || 0;
     },
+    nftIsNew() {
+      return !Object.values(this.collectorMap)
+        .flat()
+        .includes(this.nftId);
+    },
+    nftCreatorMessage() {
+      return this.NFTClassMetadata?.message || '';
+    },
+    nftCreatorMessageWithParsing() {
+      const collector =
+        this.getAddress || this.$t('nft_message_replacer_collector');
+      return this.nftCreatorMessage.replaceAll('{collector}', collector);
+    },
 
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
@@ -229,12 +276,15 @@ export default {
       );
       return collector?.collectedCount || 0;
     },
-    firstCollectedNFTId() {
+    nftClassDetailsPageURL() {
+      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
+    nftIdCollectedFirstByUser() {
       const ownNFT = this.collectorMap[this.getAddress];
       return ownNFT?.[0];
     },
-    nftClassDetailsPageURL() {
-      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    nftIdCollectNext() {
+      return this.purchaseInfo?.metadata?.nextNewNFTId;
     },
     canCollectWithoutWallet() {
       return (
@@ -267,15 +317,15 @@ export default {
       if (
         newCount === 1 &&
         oldCount === 0 &&
-        !this.firstCollectedNFTId &&
+        !this.nftIdCollectedFirstByUser &&
         !this.nftCollectorsSync
       ) {
         this.nftCollectorsSync = new Promise(async resolve => {
           // `fetchNFTOwners` might take longer to return the most updated collectors
-          // causing `firstCollectedNFTId` to be undefined or collectors list out-sync
+          // causing `nftIdCollectedFirstByUser` to be undefined or collectors list out-sync
           // Should keep fetching if the user just collected the NFT but not found in the collectors list
           let tries = 0;
-          while (!this.firstCollectedNFTId && tries < 10) {
+          while (!this.nftIdCollectedFirstByUser && tries < 10) {
             // eslint-disable-next-line no-await-in-loop
             await this.updateNFTOwners();
             // eslint-disable-next-line no-await-in-loop
@@ -292,7 +342,7 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'fetchNFTPurchaseInfo',
-      'fetchNFTMetadata',
+      'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
       'uiToggleCollectModal',
@@ -315,7 +365,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       try {
-        await this.fetchNFTMetadata(this.classId);
+        await this.fetchNFTClassMetadata(this.classId);
       } catch (error) {
         if (error.response?.status !== 404) {
           // eslint-disable-next-line no-console
@@ -350,17 +400,17 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const actionType = this.isWritingNFT
+      const actionType = this.nftIsWritingNFT
         ? ['/cosmos.nft.v1beta1.MsgSend', 'new_class']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'new_class'];
-      const ignoreToList = this.isWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       const historyOnChain = await this.getNFTEventsAll({
         actionType,
         ignoreToList,
       });
       let history = historyOnChain;
 
-      if (this.isWritingNFT) {
+      if (this.nftIsWritingNFT) {
         try {
           const { data } = await this.$api.get(
             getNFTHistory({
@@ -573,7 +623,7 @@ export default {
     },
     async transferNFT({
       toWallet,
-      nftId = this.firstCollectedNFTId,
+      nftId = this.nftIdCollectedFirstByUser,
       memo = '',
     } = {}) {
       try {
@@ -592,7 +642,7 @@ export default {
           return;
         }
 
-        // Wait for collectors sync for getting `firstCollectedNFTId`
+        // Wait for collectors sync for getting `nftIdCollectedFirstByUser`
         if (this.nftCollectorsSync) {
           this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.nftCollectorsSync;
@@ -639,7 +689,7 @@ export default {
           this.classId,
           1
         );
-        if (this.isWritingNFT) {
+        if (this.nftIsWritingNFT) {
           try {
             await this.$api.post(
               postNFTTransfer({
@@ -661,7 +711,7 @@ export default {
           1
         );
         await Promise.all([
-          this.updateNFTOwners(), // blocking update firstCollectedNFTId,
+          this.updateNFTOwners(), // blocking update nftIdCollectedFirstByUser,
           this.fetchUserCollectedCount(),
         ]);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
@@ -669,7 +719,7 @@ export default {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        if (this.isWritingNFT) this.updateNFTPurchaseInfo();
+        if (this.nftIsWritingNFT) this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }

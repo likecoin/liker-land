@@ -103,7 +103,16 @@
       <FormField
         class="mx-[8px]"
         :label="$t('tx_modal_label_receiver')"
-      >{{ toWallet }}</FormField>
+      >
+        <div class="flex items-center gap-[8px]">
+          <Identity
+            v-if="toUserAvatar"
+            :avatar-url="toUserAvatar"
+            :avatar-size="36"
+          />
+          {{ toDisplayName | ellipsis }}
+        </div>
+      </FormField>
     </div>
     <template
       v-if="!isTransferring"
@@ -120,9 +129,14 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
+import { ellipsis } from '~/util/ui';
 
 export default {
+  filters: {
+    ellipsis,
+  },
   props: {
     classId: {
       type: String,
@@ -157,6 +171,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getUserInfoByAddress']),
     errorMessage() {
       if (this.toWallet && !LIKE_ADDRESS_REGEX.test(this.toWallet)) {
         return this.$t('nft_details_page_errormessage_transfer_invalid');
@@ -171,6 +186,14 @@ export default {
     },
     isReady() {
       return this.toWallet && !this.errorMessage;
+    },
+    toDisplayName() {
+      return (
+        this.getUserInfoByAddress(this.toWallet)?.displayName || this.toWallet
+      );
+    },
+    toUserAvatar() {
+      return this.getUserInfoByAddress(this.toWallet)?.avatar;
     },
   },
   watch: {
@@ -189,6 +212,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['lazyGetUserInfoByAddress']),
     handleInputToWallet(value) {
       this.toWallet = value;
     },
@@ -196,6 +220,7 @@ export default {
       this.memo = value;
     },
     handleClickTransfer() {
+      this.lazyGetUserInfoByAddress(this.toWallet);
       this.$emit('submit', {
         toWallet: this.toWallet,
         nftId: this.selectedNFTId,

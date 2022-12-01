@@ -20,7 +20,10 @@
       :is-avatar-outlined="isUserCivicLiker"
     />
     <div>
-      <div class="text-[12px] text-medium-gray">{{ userLabel }}</div>
+      <div
+        v-if="isShowTypeLabel"
+        class="text-[12px] text-medium-gray"
+      >{{ userLabel }}</div>
       <Label class="text-like-green" preset="h5">{{ userDisplayName }}</Label>
     </div>
   </NuxtLink>
@@ -48,6 +51,10 @@ export default {
     wrapperClasses: {
       type: [String, Array],
       default: undefined,
+    },
+    isShowTypeLabel: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

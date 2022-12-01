@@ -21,11 +21,13 @@
       :is-loading="uiIsOpenCollectModal && isCollecting"
       :view-details-label="$t('campaign_nft_item_view_details_label')"
       :like-action-label="$t('campaign_nft_item_like_action_label')"
+      :owner-count-label="$t('nft_details_page_title_collector')"
       :sold-count-label="$t('campaign_nft_item_collected_count_label')"
+      :own-count-label="$t('nft_details_page_label_owning')"
       :content-preview-props="{
         to: {
-          name: 'nft-class-classId',
-          params: { classId: classId },
+          name: 'nft-class-classId-nftId',
+          params: { classId: classId, nftId: nftIdCollectNext },
         },
         tag: 'NuxtLink',
       }"

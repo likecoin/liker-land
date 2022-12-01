@@ -51,6 +51,9 @@
   "nft_collect_modal_method_like": "Pay by LIKE",
   "nft_collect_modal_method_like_available_amount": "Available {amount}",
   "nft_collect_modal_method_stripe": "Pay by card",
+  "nft_class_details_info_section_title": "Info",
+  "nft_class_details_info_section_nft_class_id_label": "NFT Class ID",
+  "nft_class_uncollectible": "Uncollectible",
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_description": "This content has been published as Writing NFT. Collect now to build your portfolio.",
   "nft_details_page_title_collector": "Collectors",
@@ -75,7 +78,7 @@
   "nft_details_page_collected_count_label": "Collected",
   "nft_details_page_label_no_record": "No record found",
   "nft_details_page_label_owning": "Own",
-  "nft_details_page_label_nft_id": "Writing NFT ID",
+  "nft_details_page_label_nft_id": "NFT ID",
   "nft_details_page_title_transfer": "Transfer Your NFT",
   "nft_details_page_label_transfer_nft_id_select": "Select the NFT to transfer",
   "nft_details_page_label_transfer": "Enter the recipient address",
@@ -89,6 +92,7 @@
   "nft_message_type_collect": "Creator Message",
   "nft_message_type_transfer": "Transfer Message",
   "nft_message_empty": "No message",
+  "nft_message_replacer_collector": "Collector",
   "nft_details_page_section_metadata": "Metadata",
   "nft_details_page_section_metadata_intro": "The content has been permanently stored on-chain and signed by its creator.",
   "nft_details_page_section_metadata_url": "URL",
@@ -96,6 +100,8 @@
   "nft_details_page_section_metadata_ipfs": "IPFS",
   "nft_details_page_section_metadata_ar": "Arweave",
   "nft_details_page_label_loading": "Loading",
+  "nft_primitive_disclaimer": "This is a NFT on the LikeCoin chain that is not a Writing NFT.",
+  "nft_primitive_disclaimer_portfolio": "These are NFTs on the LikeCoin chain that are not Writing NFTs.",
   "nft_share_page_button_portfolio": "View Portfolio",
   "nft_share_page_collector_title": "I am what I read. See my Writing NFT collection.",
   "nft_share_page_creator_title": "Support me by collecting my work.",
@@ -105,9 +111,11 @@
   "nft_portfolio_page_state_collectors": "Collectors",
   "nft_portfolio_page_label_collected": "Collected",
   "nft_portfolio_page_label_created": "Created",
+  "nft_portfolio_page_label_other": "Other",
   "nft_portfolio_page_label_loading": "Loading",
   "nft_portfolio_page_label_loading_more": "Loading more",
   "nft_supply_section_title": "Item Supply",
+  "nft_widget_button_collect": "Collect Now",
   "footer_nav_about_liker_land": "About Liker Land",
   "footer_nav_about_likecoin": "About LikeCoin",
   "footer_nav_civic_liker": "Civic Liker",
@@ -236,13 +244,6 @@
   "CLP.suggestedCreators.title": "Keep updated, Keep supporting",
   "CLP.suggestedCreators.description": "You can subscribe creator, likes and share creative works in Liker Land. Your monthly support keep the creator focused.",
 
-  "CollapsibleView": {
-    "less": "Less",
-    "more": "More"
-  },
-  "ContentList": {
-    "empty": "There is no article"
-  },
   "CreatorPitch.Default": "Be my Civic Liker, buy me a coffee for my work every month.",
   "creators_page_redirect_url": "https://docs.like.co/v/en/user-guide/civic-liker",
   "community_cta_title": "Join our community",
@@ -424,12 +425,6 @@
     "support": "Support",
     "logout": "Logout",
     "openWithApp": "Open with Liker.Land app"
-  },
-  "SmartAppBanner": {
-    "headerTitle": "Explorer content in…",
-    "appLabel": "Liker.Land App",
-    "appButtonText": "Open",
-    "dismissButtonText": "Continue with browser"
   },
   "back": "Back",
   "backToHome": "Home",

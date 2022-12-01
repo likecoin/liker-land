@@ -3,21 +3,20 @@ import Vue from 'vue';
 import { LIKECOIN_NFT_HIDDEN_ITEMS } from '~/constant';
 import * as api from '@/util/api';
 import {
-  ORDER_CREATED_CLASS_ID_BY,
-  ORDER_COLLECTED_CLASS_ID_BY,
-  ORDER,
-  isWritingNFT,
+  NFT_CLASS_LIST_SORTING,
+  NFT_CLASS_LIST_SORTING_ORDER,
+  checkIsWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
   getNFTsRespectDualPrefix,
   getNFTClassesRespectDualPrefix,
 } from '~/util/nft';
-import { deriveAllPrefixedAddresses } from '~/util/cosmos';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
   purchaseInfoByClassIdMap: {},
   metadataByClassIdMap: {},
+  metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
   userLastCollectedTimestampMap: {},
@@ -29,6 +28,13 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
     Vue.set(state.metadataByClassIdMap, classId, metadata);
+  },
+  [TYPES.NFT_SET_NFT_METADATA](state, { classId, nftId, metadata }) {
+    Vue.set(
+      state.metadataByNFTClassAndNFTIdMap,
+      `${classId}-${nftId}`,
+      metadata
+    );
   },
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.ownerInfoByClassIdMap, classId, info);
@@ -50,10 +56,10 @@ function compareIsWritingNFT(getters, classIdA, classIdB) {
   const aPurchaseData = getters.getNFTClassPurchaseInfoById(classIdA);
   const bPurchaseData = getters.getNFTClassPurchaseInfoById(classIdB);
   const aIsWritingNFT =
-    isWritingNFT(aMetadata) &&
+    checkIsWritingNFT(aMetadata) &&
     (aPurchaseData?.price || aPurchaseData?.lastSoldPrice) !== undefined;
   const bIsWritingNFT =
-    isWritingNFT(bMetadata) &&
+    checkIsWritingNFT(bMetadata) &&
     (bPurchaseData?.price || bPurchaseData?.lastSoldPrice) !== undefined;
   if (aIsWritingNFT && !bIsWritingNFT) return -1;
   if (!aIsWritingNFT && bIsWritingNFT) return 1;
@@ -64,9 +70,9 @@ function compareNumber(X, Y, order) {
   if (Y === undefined) return -1; // keep X in front of Y
   if (X === undefined) return 1; // move Y in front of X
   switch (order) {
-    case ORDER.ASC:
+    case NFT_CLASS_LIST_SORTING_ORDER.ASC:
       return X - Y;
-    case ORDER.DESC:
+    case NFT_CLASS_LIST_SORTING_ORDER.DESC:
     default:
       return Y - X;
   }
@@ -74,7 +80,7 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
-  getNFTListByAddress: state => address => state.userClassIdListMap[address],
+  getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
@@ -86,25 +92,28 @@ const getters = {
       (acc, val) => acc + val.length,
       0
     ),
+  getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
+    state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getCreatedClassIdSorter: (_, getters) => ({
-    classIds,
-    orderBy,
-    order = ORDER.DESC,
+  getNFTClassIdListSorterForCreated: (_, getters) => ({
+    list,
+    sorting,
+    order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
   }) => {
-    const sorted = [...classIds].sort((a, b) => {
+    const sorted = [...list].sort((nA, nB) => {
+      const [{ classId: a }, { classId: b }] = [nA, nB];
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
       let Y;
-      switch (orderBy) {
-        case ORDER_CREATED_CLASS_ID_BY.PRICE:
+      switch (sorting) {
+        case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case ORDER_CREATED_CLASS_ID_BY.ISCN_TIMESTAMP:
+        case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
           X = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
           Y = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
@@ -115,33 +124,33 @@ const getters = {
     return sorted;
   },
 
-  getCollectedNFTSorter: (_, getters) => ({
-    nfts,
-    nftOwner,
-    orderBy,
-    order = ORDER.DESC,
+  getNFTClassListSorterForCollected: (_, getters) => ({
+    list,
+    collectorWallet: collector,
+    sorting,
+    order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
   }) => {
-    const sorted = [...nfts].sort((nA, nB) => {
+    const sorted = [...list].sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
       let Y;
-      switch (orderBy) {
-        case ORDER_COLLECTED_CLASS_ID_BY.PRICE:
+      switch (sorting) {
+        case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case ORDER_COLLECTED_CLASS_ID_BY.NFT_OWNED_COUNT:
-          X = getters.getNFTClassOwnerInfoById(a)?.[nftOwner]?.length;
-          Y = getters.getNFTClassOwnerInfoById(b)?.[nftOwner]?.length;
+        case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
+          X = getters.getNFTClassOwnerInfoById(a)?.[collector]?.length;
+          Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case ORDER_COLLECTED_CLASS_ID_BY.LAST_COLLECTED_NFT:
+        case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
-          X = getters.getUserLastCollectedTimestampByAddress(nftOwner)[a];
-          Y = getters.getUserLastCollectedTimestampByAddress(nftOwner)[b];
+          X = getters.getUserLastCollectedTimestampByAddress(collector)[a];
+          Y = getters.getUserLastCollectedTimestampByAddress(collector)[b];
           break;
       }
       return compareNumber(X, Y, order);
@@ -163,13 +172,13 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTMetadata({ commit }, classId) {
+  async fetchNFTClassMetadata({ commit }, classId) {
     let metadata;
     /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
       which is huge and affects index page performance */
     // const chainMetadata = await getClassInfo(classId);
     const { class: chainMetadata } = await this.$api.$get(
-      api.getNFTClassMetadata(classId)
+      api.getChainNFTClassMetadataEndpoint(classId)
     );
     const {
       name,
@@ -186,18 +195,24 @@ const actions = {
       iscn_id: iscnId,
     };
     if (isValidHttpUrl(uri)) {
-      const apiMetadata = await this.$api
-        .$get(uri)
-        // eslint-disable-next-line no-console
-        .catch(err => console.error(err));
+      const apiMetadata = await this.$api.$get(uri).catch(err => {
+        if (!err.response?.status === 404) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
     }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
       if (iscnId) {
         const iscnRecord = await this.$api
           .$get(api.getISCNRecord(iscnId))
-          // eslint-disable-next-line no-console
-          .catch(err => console.error(err));
+          .catch(err => {
+            if (!err.response?.status === 404) {
+              // eslint-disable-next-line no-console
+              console.error(err);
+            }
+          });
         const iscnOwner = iscnRecord?.owner;
         const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
         if (iscnOwner)
@@ -218,6 +233,29 @@ const actions = {
         metadata.iscn_record_timestamp
       );
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
+    return metadata;
+  },
+  async fetchNFTMetadata({ commit }, { classId, nftId }) {
+    let metadata;
+    const { nft: chainMetadata } = await this.$api.$get(
+      api.getChainNFTMetadataEndpoint(classId, nftId)
+    );
+    const { uri, data: { metadata: nftMetadata = {} } = {} } =
+      chainMetadata || {};
+    metadata = {
+      uri,
+      ...nftMetadata,
+    };
+    if (isValidHttpUrl(uri)) {
+      const apiMetadata = await this.$api.$get(uri).catch(err => {
+        if (!err.response?.status === 404) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
+      if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+    }
+    commit(TYPES.NFT_SET_NFT_METADATA, { classId, nftId, metadata });
     return metadata;
   },
   async fetchNFTOwners({ commit }, classId) {
@@ -245,7 +283,7 @@ const actions = {
         timestampMap[classId] = timestamp;
       }
     });
-    const collectedNFTs = [
+    const collected = [
       ...new Map(
         [...nfts]
           .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
@@ -265,7 +303,7 @@ const actions = {
       address,
       nfts: {
         created,
-        collected: collectedNFTs,
+        collected,
       },
     });
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {

@@ -7,7 +7,9 @@
       class="w-[310px]"
       :title="NFTName"
       :price="NFTPrice"
-      :is-writing-nft="isWritingNFT"
+      :class-collection-type="nftClassCollectionType"
+      :class-collection-name="nftClassCollectionName"
+      :is-collectable="nftIsCollectable"
       :collected-count="collectedCount"
       :collector-count="ownerCount"
       :user-display-name="creatorDisplayName"
@@ -17,6 +19,7 @@
       :is-collecting="uiIsOpenCollectModal && isCollecting"
       :own-count="ownCount"
       @collect="handleClickCollect"
+      @load-cover="handleCoverLoaded"
     />
   </NuxtLink>
 </template>
@@ -33,6 +36,10 @@ export default {
       type: String,
       required: true,
     },
+    portfolioWallet: {
+      type: String,
+      required: true,
+    },
     nftId: {
       type: String,
       default: undefined,
@@ -45,13 +52,23 @@ export default {
     };
   },
   computed: {
+    nftIdCollectedFirstByPortfolio() {
+      return this.collectorMap[this.portfolioWallet]?.[0];
+    },
+    nftIdForDetails() {
+      return (
+        this.nftId ||
+        this.nftIdCollectNext ||
+        this.nftIdCollectedFirstByPortfolio
+      );
+    },
     detailsPageRoute() {
-      if (this.nftId) {
+      if (this.nftIdForDetails) {
         return {
           name: 'nft-class-classId-nftId',
           params: {
             classId: this.classId,
-            nftId: this.nftId,
+            nftId: this.nftIdForDetails,
           },
         };
       }
@@ -78,6 +95,9 @@ export default {
         this.classId,
         1
       );
+    },
+    handleCoverLoaded(e) {
+      this.$emit('load-cover', e);
     },
   },
 };

@@ -1,10 +1,12 @@
-<template lang="pug">
-  .getapp-page
-    main.page-content
-      GetAppPage(
+<template>
+  <div class="getapp-page">
+    <main class="page-content">
+      <GetAppPage
         :from="$route.query.from"
         v-bind="getUtmProps()"
-      )
+      />
+    </main>
+  </div>
 </template>
 
 <script>

@@ -4,7 +4,7 @@
     <h1
       class="
         text-[48px] text-center
-        leading-[56px]
+        leading-[72px]
         laptop:text-left laptop:text-[72px]
         font-proxima font-[300]
         text-like-green

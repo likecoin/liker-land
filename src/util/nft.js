@@ -4,6 +4,8 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import * as api from '@/util/api';
 import { deriveAllPrefixedAddresses } from './cosmos';
 import {
+  ARWEAVE_ENDPOINT,
+  IPFS_VIEW_GATEWAY_URL,
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
@@ -14,18 +16,14 @@ let iscnLib = null;
 
 export const NFT_INDEXER_LIMIT_MAX = 100;
 
-export const ORDER_CREATED_CLASS_ID_BY = {
+export const NFT_CLASS_LIST_SORTING = {
   PRICE: 'PRICE',
   ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
-};
-
-export const ORDER_COLLECTED_CLASS_ID_BY = {
-  PRICE: 'PRICE',
   LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
   NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
 };
 
-export const ORDER = {
+export const NFT_CLASS_LIST_SORTING_ORDER = {
   ASC: 'ASC',
   DESC: 'DESC',
 };
@@ -152,8 +150,29 @@ export function isValidHttpUrl(string) {
   return false;
 }
 
-export function isWritingNFT(classMetadata) {
-  return classMetadata?.nft_meta_collection_id === 'likerland_writing_nft';
+export const nftClassCollectionType = {
+  WritingNFT: 'writing-nft',
+  BookNFT: 'book-nft',
+};
+
+export function getNFTClassCollectionType(classMetadata) {
+  switch (classMetadata?.nft_meta_collection_id) {
+    case 'likerland_writing_nft':
+      return nftClassCollectionType.WritingNFT;
+
+    case 'nft_book':
+      return nftClassCollectionType.BookNFT;
+
+    default:
+      return '';
+  }
+}
+
+export function checkIsWritingNFT(classMetadata) {
+  return (
+    getNFTClassCollectionType(classMetadata) ===
+    nftClassCollectionType.WritingNFT
+  );
 }
 
 export function formatNFTInfo(nftInfo) {
@@ -271,4 +290,11 @@ export function formatOwnerInfoFromChain(owners) {
     }
   });
   return ownerInfo;
+}
+
+export function parseNFTMetadataURL(url) {
+  const [schema, path] = url.split('://');
+  if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+  if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
+  return url;
 }

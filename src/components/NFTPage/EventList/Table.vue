@@ -12,13 +12,12 @@
     <tbody>
       <tr
         v-for="event in nftHistory"
-        :key="`${event.txHash}event`"
+        :key="[event.txHash, event.classId, event.nftId, event.event].join('-')"
         class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray"
       >
         <td>
           <Label
             v-if="event.event === 'purchase'"
-            class="break-all"
             :text="$t('nft_details_page_activity_list_event_collect')"
           >
             <template #prepend>
@@ -27,7 +26,6 @@
           </Label>
           <Label
             v-else-if="event.event === 'transfer'"
-            class="break-all"
             :text="$t('nft_details_page_activity_list_event_transfer')"
           >
             <template #prepend>
@@ -36,16 +34,26 @@
           </Label>
           <Label
             v-else-if="event.event === 'mint_nft'"
-            class="break-all"
             :text="$t('nft_details_page_activity_list_event_mint_nft')"
-          />
+          >
+            <template #prepend>
+              <IconFlare />
+            </template>
+          </Label>
           <Label
             v-else-if="event.event === 'new_class'"
-            class="break-all"
             :text="$t('nft_details_page_activity_list_event_create_class')"
           >
             <template #prepend>
               <IconFlare />
+            </template>
+          </Label>
+          <Label
+            v-else
+            :text="event.event"
+          >
+            <template #prepend>
+              <IconCircle />
             </template>
           </Label>
         </td>
@@ -54,7 +62,7 @@
           <Label v-else class="break-all" text="-" />
         </td>
         <td>
-          <LinkV2 v-if="event.event === 'new_class' || event.event === 'transfer'" :to="`/${event.fromWallet}`">
+          <LinkV2 v-if="['new_class', 'mint_nft' ,'transfer'].includes(event.event)" :to="`/${event.fromWallet}`">
             <Label class="break-all">{{
               event.fromDisplayName | ellipsis
             }}</Label>
@@ -72,6 +80,7 @@
         <td>
           <LinkV2 class="text-left" :href="getChainExplorerTx(event.txHash)">
             <TimeAgo
+              class="px-[2px]"
               long
               tooltip
               :datetime="event.timestamp"
