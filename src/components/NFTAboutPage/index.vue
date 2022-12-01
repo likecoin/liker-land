@@ -19,12 +19,14 @@
       <NFTAboutPageWidgetSection
         class="py-[32px] laptop:py-[64px]"
         :class-id="nftClassIds[0]"
+        :widget-collect-button-label="$t('nft_widget_button_collect')"
         @collect="handleCollectFromWidgetSection"
       />
       <NFTAboutPagePortfolioSection class="py-[32px] laptop:py-[64px]" />
       <NFTAboutPagePortalSection
         class="py-[32px] laptop:py-[64px]"
         :class-id="nftClassIds[1]"
+        :widget-collect-button-label="$t('nft_widget_button_collect')"
         @collect="handleCollectFromPortalSection"
       />
       <NFTAboutPagePricingSection class="py-[32px] laptop:py-[64px]" />
