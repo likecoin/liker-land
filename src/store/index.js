@@ -15,9 +15,21 @@ import nft from './modules/nft';
 const createStore = () =>
   new Vuex.Store({
     actions: {
-      nuxtServerInit({ commit }, { req, res, query }) {
+      async nuxtServerInit({ commit }, { req, res, query }) {
         if (res.timing) {
           res.timing.start('store_init', 'nuxtServerInit Started');
+        }
+        try {
+          if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
+            const userInfo = await this.$api.$get(api.getLoginStatus());
+            commit(types.USER_SET_USER_INFO, userInfo);
+          }
+        } catch (err) {
+          if (err.response) {
+            if (err.response.status !== 404 && err.response.status !== 401) {
+              console.error(err); // eslint-disable-line no-console
+            }
+          }
         }
         if (query.debug !== undefined) {
           commit(types.WALLET_SET_IS_DEBUG, true);
