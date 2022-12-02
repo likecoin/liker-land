@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full">
-    <slot />
+    <slot :gemLevel="gemLevel" />
     <NFTGem
       class="translate-y-[-50%] w-[90%]"
       :level="gemLevel"
@@ -43,9 +43,6 @@ export default {
           return batch;
       }
     },
-  },
-  created() {
-    this.$emit('set-gem-level', this.gemLevel);
   },
   methods: {
     onMouseClickGem() {
