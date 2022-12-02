@@ -261,7 +261,7 @@ export const nftMintSubscriptionAPI = ({ id, email, wallet }) => {
   }?${querystring.stringify(qsPayload)}`;
 };
 
-export const getUserV2Self = () => '/v2/users/self';
+export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 
 export const formatFeaturedNFTUrl = wallet =>
