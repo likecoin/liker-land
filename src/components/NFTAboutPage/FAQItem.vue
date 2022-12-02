@@ -15,7 +15,7 @@
         class="
           min-w-[48px]
           text-gray-9b text-[32px]
-          leading-[64px]
+          leading-[72px]
           font-proxima font-[300]
         "
       >

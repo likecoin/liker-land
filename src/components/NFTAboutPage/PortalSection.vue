@@ -15,10 +15,10 @@
         class="
           laptop:mb-[16px]
           text-[48px] text-center
-          leading-[56px]
+          leading-[72px]
           laptop:text-left laptop:text-[72px]
           font-proxima font-[300]
-          laptop:leading-[64px]
+          laptop:leading-[72px]
           text-like-green
         "
       >

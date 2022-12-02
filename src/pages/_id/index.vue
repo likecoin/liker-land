@@ -42,7 +42,7 @@
         >
           <ButtonV2
             preset="outline"
-            text="My Dashboard"
+            :text="$t('main_menu_my_dashboard')"
             @click="goMyDashboard"
           >
             <template #prepend>

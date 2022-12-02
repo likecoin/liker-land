@@ -8,7 +8,7 @@
         z-1
         top-0
         text-[48px]
-        leading-[56px]
+        leading-[72px]
         laptop:text-[72px]
         font-proxima font-[300]
         text-like-green text-center
