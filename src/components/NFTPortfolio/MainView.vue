@@ -84,15 +84,15 @@
       <ul
         v-if="!isPortfolioTabCreatedActive || portfolioItemsTrimmed.length"
         ref="portfolioGrid"
-        class="self-stretch -mx-[12px] desktop:w-[668px] transition-all"
+        class="self-stretch -mx-[12px] desktop:w-[668px] transition-all relative"
       >
-        <li v-if="!portfolioItemsTrimmed.length" class="w-full">
+        <li v-if="!portfolioItemsTrimmed.length" class="w-full mx-[12px]">
           <NFTPortfolioEmpty :preset="portfolioTab" />
         </li>
         <li
           v-for="nft in portfolioItemsTrimmed"
           :key="nft.classId"
-          class="w-[310px] pb-[20px]"
+          class="absolute left-[12px] w-[310px] pb-[20px]"
         >
           <NFTPortfolioItem
             :class-id="nft.classId"
@@ -319,6 +319,8 @@ export default {
         gutter: 24,
         maxColumns: 2,
         useMin: true,
+        // Note: Mitigate the layout issue by disabling transform and use absolute position
+        useTransform: false,
         animate: true,
         center: true,
       });
