@@ -5,7 +5,7 @@
       v-if="level !== undefined && level < 13"
       class="w-[24px] h-[24px]"
     >
-      <img :src="levelImgSrc" :title="gemName" :alt="gemName">
+      <img :src="levelImgSrc" :title="name" :alt="name">
     </div>
 
     <!-- Spark background -->
@@ -16,9 +16,9 @@
       <div
         class="absolute w-[24px] h-[24px]"
       >
-        <img :src="levelImgSrc" :title="gemName" :alt="gemName">
+        <img :src="levelImgSrc" :title="name" :alt="name">
       </div>
-      <img :src="sparkImgSrc" :title="gemName" :alt="gemName">
+      <img :src="sparkImgSrc" :title="name" :alt="name">
     </div>
 
     <!-- Gem line -->
@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { NFT_GEM_NAME } from '@/constant';
-
 const getLevelImg = require.context('./level/', false, /\.png$/);
 const getSparkImg = require.context('./spark/', false, /\.png$/);
 
@@ -37,6 +35,14 @@ export default {
     level: {
       type: Number,
       default: 0,
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+    colorClasses: {
+      type: Array,
+      default: () => [],
     },
   },
   computed: {
@@ -51,40 +57,7 @@ export default {
         'bg-gradient-to-r',
         'from-transparent',
         'to-transparent',
-      ].concat(this.gemColorClasses);
-    },
-    gemColorClasses() {
-      switch (true) {
-        case this.level <= 3:
-          return ['hidden'];
-
-        case this.level <= 5:
-          return ['via-[#D0D0D0]'];
-
-        case this.level <= 7:
-          return ['via-[#50E3C2]'];
-
-        case this.level <= 9:
-          return ['via-[#6CCAFF]'];
-
-        case this.level <= 11:
-          return ['via-[#FDAFFF]'];
-
-        case this.level <= 13:
-          return ['via-[#FFD748]'];
-
-        case this.level === 14:
-          return ['via-[#FF6464]'];
-
-        case this.level === 15:
-          return ['via-[#C0E1FF]'];
-
-        default:
-          return [];
-      }
-    },
-    gemName() {
-      return NFT_GEM_NAME[this.level];
+      ].concat(this.colorClasses);
     },
     filename() {
       return `./${this.level >= 10 ? this.level : `0${this.level}`}.png`;

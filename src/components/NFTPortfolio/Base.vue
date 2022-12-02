@@ -3,79 +3,85 @@
     :collected-count="collectedCount"
     :is-writing-nft="isWritingNFT"
   >
-    <NFTPortfolioCard :display-state="displayState">
-      <NFTCover
-        :src="imageSrc"
-        :size="350"
-        :bg-color="imageBgColor"
-        @load="handleCoverLoaded"
-      />
-      <div
-        :class="[
-          'flex',
-          'flex-col',
-          'text-center',
-          'whitespace-pre-line',
-          'px-[24px]',
-          'pt-[48px]',
-          'py-[24px]',
-          'bg-white',
-          'relative',
-        ]"
+    <template v-slot="gem">
+      <NFTPortfolioCard
+        :gem-level="gem.level"
+        :hover-class="gem.hoverClass"
+        :display-state="displayState"
       >
-        <div class="flex flex-col items-center justify-center mt-[-70px]">
-          <Identity
-            :avatar-url="userAvatarSrc"
-            :avatar-size="40"
-            :is-avatar-outlined="isUserCivicLiker"
-            :is-lazy-loaded="true"
-          />
-          <div class="flex mt-[8px]">
-            <Label class="text-medium-gray">by</Label>
-            <Label
-              class="text-like-green ml-[4px] font-[600]"
-            >{{ userDisplayName | ellipsis }}</Label>
+        <NFTCover
+          :src="imageSrc"
+          :size="350"
+          :bg-color="imageBgColor"
+          @load="handleCoverLoaded"
+        />
+        <div
+          :class="[
+            'flex',
+            'flex-col',
+            'text-center',
+            'whitespace-pre-line',
+            'px-[24px]',
+            'pt-[48px]',
+            'py-[24px]',
+            'bg-white',
+            'relative',
+          ]"
+        >
+          <div class="flex flex-col items-center justify-center mt-[-70px]">
+            <Identity
+              :avatar-url="userAvatarSrc"
+              :avatar-size="40"
+              :is-avatar-outlined="isUserCivicLiker"
+              :is-lazy-loaded="true"
+            />
+            <div class="flex mt-[8px]">
+              <Label class="text-medium-gray">by</Label>
+              <Label
+                class="text-like-green ml-[4px] font-[600]"
+              >{{ userDisplayName | ellipsis }}</Label>
+            </div>
           </div>
-        </div>
-        <Label preset="h5" class="mt-[12px] break-normal" align="center">{{ title }}</Label>
+          <Label preset="h5" class="mt-[12px] break-normal" align="center">{{ title }}</Label>
 
-        <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
-          <ProgressIndicator v-if="isCollecting" />
-          <ButtonV2
-            v-else
-            preset="secondary"
-            :is-disabled="!isCollectable"
-            @click.stop.prevent="handleClickCollect"
-          >
-            <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
-            <template v-else>{{ $t('nft_class_uncollectible') }}</template>
-            <template v-if="isCollectable" #prepend>
-              <IconPrice />
-            </template>
-          </ButtonV2>
-        </div>
+          <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
+            <ProgressIndicator v-if="isCollecting" />
+            <ButtonV2
+              v-else
+              preset="secondary"
+              :is-disabled="!isCollectable"
+              @click.stop.prevent="handleClickCollect"
+            >
+              <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
+              <template v-else>{{ $t('nft_class_uncollectible') }}</template>
+              <template v-if="isCollectable" #prepend>
+                <IconPrice />
+              </template>
+            </ButtonV2>
+          </div>
 
-        <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
-          <div class="flex items-center text-medium-gray">
-            <IconMint />
-            <div class="ml-[4px]">{{ collectedCount }}</div>
+          <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+            <div class="flex items-center text-medium-gray">
+              <IconMint />
+              <div class="ml-[4px]">{{ collectedCount }}</div>
+            </div>
+            <div class="flex items-center text-medium-gray">
+              <IconOwner />
+              <div class="ml-[4px]">{{ collectorCount }}</div>
+            </div>
+            <div v-if="ownCount" class="flex items-center text-like-green">
+              <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
+              <span>{{ ownCount }}</span>
+            </div>
           </div>
-          <div class="flex items-center text-medium-gray">
-            <IconOwner />
-            <div class="ml-[4px]">{{ collectorCount }}</div>
-          </div>
-          <div v-if="ownCount" class="flex items-center text-like-green">
-            <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
-            <span>{{ ownCount }}</span>
-          </div>
+          <Label
+            v-else-if="classCollectionName"
+            class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
+            preset="p6"
+          >{{ classCollectionName }}</Label>
         </div>
-        <Label
-          v-else-if="classCollectionName"
-          class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
-          preset="p6"
-        >{{ classCollectionName }}</Label>
-      </div>
-    </NFTPortfolioCard>
+      </NFTPortfolioCard>
+    </template>
   </NFTGemWrapper>
 </template>
 
