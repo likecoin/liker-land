@@ -8,11 +8,7 @@ import {
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
-import {
-  getUserInfoMinByAddress,
-  getUserV2Self,
-  postUserV2Login,
-} from '~/util/api';
+import { getUserInfoMinByAddress, postUserV2Login } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 import {
   WALLET_SET_IS_DEBUG,
@@ -218,7 +214,7 @@ const actions = {
         message: stringify(message),
         from: address,
       };
-      await this.$api.post(postUserV2Login, data);
+      await this.$api.post(postUserV2Login(), data);
       commit(types.WALLET_SET_LOGIN_ADDRESS, address);
     } catch (error) {
       commit(types.WALLET_SET_LOGIN_ADDRESS, null);
