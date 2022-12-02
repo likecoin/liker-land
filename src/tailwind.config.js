@@ -86,23 +86,6 @@ const colors = {
   'like-cyan-translucent': 'rgba(80, 227, 194, 0.15)',
   'like-cyan-translucent-dark': 'rgba(26, 163, 132, 0.15)',
 
-  'gem-dust': '#f7f7f7',
-  'gem-stone': '#ebebeb',
-  'gem-rock': '#ebebeb',
-  'gem-boulder': '#ebebeb',
-  'gem-moonstone': '#d0d0d0',
-  'gem-pearl': '#d0d0d0',
-  'gem-jade': '#2faf93',
-  'gem-emerald': '#2faf93',
-  'gem-sapphire': '#44abcc',
-  'gem-alexandrite': '#44abcc',
-  'gem-amethyst': '#dc81f2',
-  'gem-kunzite': '#dc81f2',
-  'gem-citrine': '#f6bc4a',
-  'gem-topaz': '#f2c875',
-  'gem-ruby': '#d6204c',
-  'gem-diamond': '#ffffff',
-
   'like-dark-green':'#245b64',
   'like-cyan-extralight': '#D7ECEC',
   'dark-gray': '#4A4A4A',
@@ -747,14 +730,6 @@ module.exports = {
   |
   */
 
-
-  safelist: [
-    // gem bg color for nft hover
-    {
-      pattern: /border-gem-(.)*/,
-      variants: ['hover'],
-    },
-  ],
 
   plugins: [
     ({ addUtilities }) => {

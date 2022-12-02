@@ -1,6 +1,7 @@
 <template>
   <div
     :class="[
+      hoverClass,
       'flex',
       'flex-col',
       'rounded-[24px]',
@@ -10,7 +11,6 @@
       'box-border',
       'border-[2px]',
       'border-transparent',
-      `hover:${hoverClass}`,
       'transition',
       'ease-in',
       'duration-200',
@@ -21,21 +21,11 @@
 </template>
 
 <script>
-import { NFT_GEM_NAME } from '~/constant';
-
 export default {
   props: {
-    gemLevel: {
-      type: Number,
-      default: -1,
-    },
-  },
-  computed: {
-    hoverClass() {
-      if (this.gemLevel < 0 || this.gemLevel > NFT_GEM_NAME.length) {
-        return 'border-like-cyan-light';
-      }
-      return `border-gem-${NFT_GEM_NAME[this.gemLevel].toLowerCase()}`;
+    hoverClass: {
+      type: String,
+      default: 'hover:border-like-cyan-light',
     },
   },
 };

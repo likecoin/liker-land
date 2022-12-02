@@ -3,8 +3,11 @@
     :collected-count="collectedCount"
     :is-writing-nft="isWritingNFT"
   >
-    <template v-slot="card">
-      <NFTPortfolioCard :gem-level="card.gemLevel">
+    <template v-slot="gem">
+      <NFTPortfolioCard
+        :gem-level="gem.level"
+        :hover-class="gem.hoverClass"
+      >
         <NFTCover
           :src="imageSrc"
           :size="350"
