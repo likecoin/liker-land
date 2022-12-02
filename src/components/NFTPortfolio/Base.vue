@@ -2,8 +2,11 @@
   <NFTGemWrapper
     :collected-count="collectedCount"
     :is-writing-nft="isWritingNFT"
+    @set-gem-level="setGemLevel"
   >
-    <NFTPortfolioCard>
+    <NFTPortfolioCard
+      :gem-level="gemLevel"
+    >
       <NFTCover
         :src="imageSrc"
         :size="350"
@@ -147,7 +150,15 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      gemLevel: -1,
+    };
+  },
   methods: {
+    setGemLevel(gemLevel) {
+      this.gemLevel = gemLevel;
+    },
     handleClickCollect(event) {
       this.$emit('collect', event);
     },

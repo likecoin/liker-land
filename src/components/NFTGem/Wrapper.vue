@@ -44,6 +44,9 @@ export default {
       }
     },
   },
+  created() {
+    this.$emit('set-gem-level', this.gemLevel);
+  },
   methods: {
     onMouseClickGem() {
       logTrackerEvent(
