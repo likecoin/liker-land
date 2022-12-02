@@ -60,23 +60,9 @@
       />
 
       <Separator v-if="isPrimitive || url" class="my-[16px]" />
+
       <ButtonV2
-        v-if="isPrimitive"
-        preset="outline"
-        :text="$t('nft_details_page_section_metadata_iscn')"
-        :href="iscnUrl"
-        target="_blank"
-        @click="handleClickViewContent"
-      >
-        <template #prepend>
-          <IconISCN class="w-[20px] text-dark-gray" />
-        </template>
-        <template #append>
-          <IconLinkExternal />
-        </template>
-      </ButtonV2>
-      <ButtonV2
-        v-else-if="url"
+        v-if="url"
         preset="outline"
         :text="$t('campaign_nft_item_view_details_label')"
         :href="url"
@@ -85,6 +71,21 @@
       >
         <template #prepend>
           <IconArticle />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
+      <ButtonV2
+        v-else
+        preset="outline"
+        :text="$t('nft_details_page_section_metadata_iscn')"
+        :href="iscnUrl"
+        target="_blank"
+        @click="handleClickViewContent"
+      >
+        <template #prepend>
+          <IconISCN class="w-[20px] text-dark-gray" />
         </template>
         <template #append>
           <IconLinkExternal />
