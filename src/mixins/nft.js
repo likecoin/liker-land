@@ -221,7 +221,9 @@ export default {
       });
     },
     nftCollectorCollectedNFTList() {
-      return this.collectorMap[this.nftCollectorWalletAddress] || [];
+      return [
+        ...(this.collectorMap[this.nftCollectorWalletAddress] || []),
+      ].sort();
     },
     nftCollectorCollectedCount() {
       return this.nftCollectorCollectedNFTList.length || 0;
