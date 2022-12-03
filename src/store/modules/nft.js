@@ -1,11 +1,11 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
-import { LIKECOIN_NFT_HIDDEN_ITEMS } from '~/constant';
 import * as api from '@/util/api';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
   checkIsWritingNFT,
+  normalizeNFTList,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
   getNFTsRespectDualPrefix,
@@ -272,38 +272,22 @@ const actions = {
     return owners;
   },
   async fetchNFTListByAddress({ commit }, address) {
-    const [nfts, createdNFTs] = await Promise.all([
+    const [collectedNFTs, createdNFTClasses] = await Promise.all([
       getNFTsRespectDualPrefix(this.$api, address),
       getNFTClassesRespectDualPrefix(this.$api, address),
     ]);
     const timestampMap = {};
-    nfts.forEach(nft => {
+    collectedNFTs.forEach(nft => {
       const { classId, timestamp } = nft;
       if (!timestampMap[classId] || timestampMap[classId] < timestamp) {
         timestampMap[classId] = timestamp;
       }
     });
-    const collected = [
-      ...new Map(
-        [...nfts]
-          .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
-          .sort((a, b) => b.timestamp - a.timestamp)
-          .map(({ classId, nftId }) => [classId, { classId, id: nftId }])
-      ).values(),
-    ];
-    const created = [
-      ...new Map(
-        [...createdNFTs]
-          .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
-          .map(({ classId }) => [classId, { classId }])
-      ).values(),
-    ];
-
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
       nfts: {
-        created,
-        collected,
+        created: normalizeNFTList(createdNFTClasses),
+        collected: normalizeNFTList(collectedNFTs),
       },
     });
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
