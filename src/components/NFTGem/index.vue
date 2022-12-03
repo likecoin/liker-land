@@ -27,7 +27,6 @@
 </template>
 
 <script>
-
 const getLevelImg = require.context('./level/', false, /\.png$/);
 const getSparkImg = require.context('./spark/', false, /\.png$/);
 
