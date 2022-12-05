@@ -8,6 +8,7 @@ import {
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
+  NFT_DISPLAY_STATE,
 } from '~/constant';
 
 import {
@@ -93,6 +94,8 @@ export default {
   computed: {
     ...mapGetters([
       'getUserInfoByAddress',
+      'getNFTClassFeaturedSetByAddress',
+      'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
@@ -214,7 +217,7 @@ export default {
 
     // Collector Info
     nftCollectorWalletAddress() {
-      if (!this.nftId) return undefined;
+      if (!this.nftId) return '';
       return Object.keys(this.collectorMap).find(collector => {
         const nftIdList = this.collectorMap[collector];
         return nftIdList.find(nftId => this.nftId === nftId);
@@ -300,11 +303,29 @@ export default {
     getWalletIdentityType() {
       return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
     },
+    nftDisplayState() {
+      // should use the address in URL as the subject address when browsing other's profile
+      const subjectAddress =
+        this.$route.name === 'id' ? this.$route.params.id : this.getAddress;
+      if (
+        this.getNFTClassFeaturedSetByAddress(subjectAddress)?.has(this.classId)
+      ) {
+        return NFT_DISPLAY_STATE.FEATURED;
+      }
+      if (
+        this.getNFTClassHiddenSetByAddress(subjectAddress)?.has(this.classId)
+      ) {
+        return NFT_DISPLAY_STATE.HIDDEN;
+      }
+      return NFT_DISPLAY_STATE.DEFAULT;
+    },
   },
   watch: {
     getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserCollectedCount();
+        this.fetchUserNFTListFeatured();
+        this.fetchUserNFTListHidden();
       }
     },
     uiTxNFTStatus(status) {
@@ -353,6 +374,8 @@ export default {
       'uiSetTxError',
       'walletFetchLIKEBalance',
       'fetchNFTListByAddress',
+      'fetchNFTListFeaturedByAddress',
+      'fetchNFTListHiddenByAddress',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -491,6 +514,12 @@ export default {
     },
     async fetchUserCollectedCount() {
       await this.updateUserCollectedCount(this.classId, this.getAddress);
+    },
+    async fetchUserNFTListFeatured() {
+      await this.fetchNFTListFeaturedByAddress(this.getAddress);
+    },
+    async fetchUserNFTListHidden() {
+      await this.fetchNFTListHiddenByAddress(this.getAddress);
     },
     async collectNFT() {
       try {

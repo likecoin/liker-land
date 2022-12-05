@@ -303,6 +303,9 @@ export default {
         case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
           return this.$t('order_menu_collected');
 
+        case NFT_CLASS_LIST_SORTING.DISPLAY_STATE:
+          return this.$t('order_menu_display_state');
+
         default:
           return '';
       }

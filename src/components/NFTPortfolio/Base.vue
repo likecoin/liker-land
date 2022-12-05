@@ -3,7 +3,7 @@
     :collected-count="collectedCount"
     :is-writing-nft="isWritingNFT"
   >
-    <NFTPortfolioCard>
+    <NFTPortfolioCard :display-state="displayState">
       <NFTCover
         :src="imageSrc"
         :size="350"
@@ -19,6 +19,7 @@
           'px-[24px]',
           'pt-[48px]',
           'py-[24px]',
+          'bg-white',
           'relative',
         ]"
       >
@@ -79,6 +80,8 @@
 </template>
 
 <script>
+import { NFT_DISPLAY_STATE } from '~/constant';
+
 import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
@@ -145,6 +148,10 @@ export default {
     classCollectionName: {
       type: String,
       default: '',
+    },
+    displayState: {
+      type: String,
+      default: NFT_DISPLAY_STATE.DEFAULT,
     },
   },
   methods: {

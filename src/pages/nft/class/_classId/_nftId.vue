@@ -114,6 +114,11 @@
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
+              <NFTFeatured
+                :class-id="classId"
+                :read-only="!(nftCollectorWalletAddress && nftCollectorWalletAddress.includes(getAddress))"
+                :display-state="nftDisplayState"
+              />
             </NFTGemWrapper>
             <ButtonV2
               class="text-medium-gray"

@@ -19,6 +19,8 @@ const state = () => ({
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
+  userNFTClassFeaturedSetMap: {},
+  userNFTClassHiddenSetMap: {},
   userLastCollectedTimestampMap: {},
 });
 
@@ -41,6 +43,18 @@ const mutations = {
   },
   [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
     Vue.set(state.userClassIdListMap, address, nfts);
+  },
+  [TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP](
+    state,
+    { address, classIdSet }
+  ) {
+    Vue.set(state.userNFTClassFeaturedSetMap, address, classIdSet);
+  },
+  [TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP](
+    state,
+    { address, classIdSet }
+  ) {
+    Vue.set(state.userNFTClassHiddenSetMap, address, classIdSet);
   },
   [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
     state,
@@ -66,6 +80,33 @@ function compareIsWritingNFT(getters, classIdA, classIdB) {
   return 0;
 }
 
+function compareNFTByFeatured(getters, address, classIdA, classIdB) {
+  const featuredSet = getters.getNFTClassFeaturedSetByAddress(address);
+  if (!featuredSet) return 0;
+  const aIsFeatured = featuredSet.has(classIdA);
+  const bIsFeatured = featuredSet.has(classIdB);
+  if (aIsFeatured && !bIsFeatured) return -1;
+  if (!aIsFeatured && bIsFeatured) return 1;
+  return 0;
+}
+
+function compareNFTByHidden(getters, address, classIdA, classIdB) {
+  const hiddenSet = getters.getNFTClassHiddenSetByAddress(address);
+  if (!hiddenSet) return 0;
+  const aIsHidden = hiddenSet.has(classIdA);
+  const bIsHidden = hiddenSet.has(classIdB);
+  if (aIsHidden && !bIsHidden) return 1;
+  if (!aIsHidden && bIsHidden) return -1;
+  return 0;
+}
+
+function compareNFTDisplayState(getters, address, classIdA, classIdB) {
+  const result = compareNFTByFeatured(getters, address, classIdA, classIdB);
+  return result === 0
+    ? compareNFTByHidden(getters, address, classIdA, classIdB)
+    : result;
+}
+
 function compareNumber(X, Y, order) {
   if (Y === undefined) return -1; // keep X in front of Y
   if (X === undefined) return 1; // move Y in front of X
@@ -81,6 +122,10 @@ function compareNumber(X, Y, order) {
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
   getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
+  getNFTClassFeaturedSetByAddress: state => address =>
+    state.userNFTClassFeaturedSetMap[address],
+  getNFTClassHiddenSetByAddress: state => address =>
+    state.userNFTClassHiddenSetMap[address],
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
@@ -96,13 +141,35 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
+  filterNFTClassListWithState: state => (nfts, collectorWallet) =>
+    nfts.filter(
+      ({ classId }) =>
+        !state.userNFTClassHiddenSetMap[collectorWallet]?.has(classId)
+    ),
   getNFTClassIdListSorterForCreated: (_, getters) => ({
     list,
+    collectorWallet: collector,
     sorting,
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
+    shouldApplyDisplayState,
   }) => {
-    const sorted = [...list].sort((nA, nB) => {
+    const filtered = shouldApplyDisplayState
+      ? getters.filterNFTClassListWithState(list, collector)
+      : [...list];
+    const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
+      if (
+        shouldApplyDisplayState ||
+        sorting === NFT_CLASS_LIST_SORTING.DISPLAY_STATE
+      ) {
+        const isFeaturedCompareResult = compareNFTDisplayState(
+          getters,
+          collector,
+          a,
+          b
+        );
+        if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
+      }
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
@@ -123,15 +190,30 @@ const getters = {
     });
     return sorted;
   },
-
   getNFTClassListSorterForCollected: (_, getters) => ({
     list,
     collectorWallet: collector,
     sorting,
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
+    shouldApplyDisplayState,
   }) => {
-    const sorted = [...list].sort((nA, nB) => {
+    const filtered = shouldApplyDisplayState
+      ? getters.filterNFTClassListWithState(list, collector)
+      : [...list];
+    const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
+      if (
+        shouldApplyDisplayState ||
+        sorting === NFT_CLASS_LIST_SORTING.DISPLAY_STATE
+      ) {
+        const isFeaturedCompareResult = compareNFTDisplayState(
+          getters,
+          collector,
+          a,
+          b
+        );
+        if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
+      }
       const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
       if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
@@ -294,6 +376,56 @@ const actions = {
       address,
       timestampMap,
     });
+  },
+  async fetchNFTListFeaturedByAddress({ commit }, address) {
+    const { data } = await this.$api.get(api.formatFeaturedNFTUrl(address));
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+      address,
+      classIdSet: new Set(data.featured),
+    });
+  },
+  async fetchNFTListHiddenByAddress({ commit }, address) {
+    const { data } = await this.$api.get(api.formatHiddenNFTUrl(address));
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+      address,
+      classIdSet: new Set(data.hidden),
+    });
+  },
+  async addNFTFeatured({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassFeaturedSetMap[address];
+    classIdSet.add(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+      address,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
+    });
+    await this.$api.post(api.formatFeaturedNFTUrl(address), { classId });
+  },
+  async addNFTHidden({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassHiddenSetMap[address];
+    classIdSet.add(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+      address,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
+    });
+    await this.$api.post(api.formatHiddenNFTUrl(address), { classId });
+  },
+  async removeNFTFeatured({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassFeaturedSetMap[address];
+    classIdSet.delete(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+      address,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
+    });
+    await this.$api.delete(`${api.formatFeaturedNFTUrl(address)}/${classId}`);
+  },
+  async removeNFTHidden({ state, commit }, { address, classId }) {
+    const classIdSet = state.userNFTClassHiddenSetMap[address];
+    classIdSet.delete(classId);
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+      address,
+      classIdSet: new Set(classIdSet), // clone to trigger reactivity
+    });
+    await this.$api.delete(`${api.formatHiddenNFTUrl(address)}/${classId}`);
   },
 };
 

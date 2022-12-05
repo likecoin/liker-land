@@ -70,14 +70,16 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
-import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
-import authMixin from '~/mixins/auth';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin, authMixin],
+  mixins: [
+    walletMixin,
+    createPorfolioMixin({ shouldApplyDisplayState: false }),
+  ],
   head() {
     const title = this.$t('dashboard_title');
     const description = this.$t('dashboard_description');
@@ -164,9 +166,6 @@ export default {
           break;
       }
       this.changeTab(tab);
-    },
-    async handleSignLogin() {
-      await this.signLogin();
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);

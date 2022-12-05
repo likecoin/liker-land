@@ -1,9 +1,6 @@
 const { Router } = require('express');
 const { db, walletUserCollection } = require('../../../../modules/firebase');
-const {
-  authenticateV2Login,
-  checkParamWalletMatch,
-} = require('../../../middleware/auth');
+const { authenticateV2Login } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
 const {
@@ -81,6 +78,7 @@ router.post('/login', async (req, res, next) => {
     });
     return;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
     next(err);
   }
