@@ -90,9 +90,13 @@
           <NFTPortfolioEmpty :preset="portfolioTab" />
         </li>
         <li
-          v-for="nft in portfolioItemsTrimmed"
+          v-for="(nft, i) in portfolioItemsTrimmed"
           :key="nft.classId"
-          class="absolute left-[12px] w-[310px] pb-[20px]"
+          :class="[
+            'absolute left-[12px] w-[310px] pb-[20px]',
+            // Let the first item covers the items not ready to be shown
+            i > 0 ? 'z-0' : 'z-[1]',
+          ]"
         >
           <NFTPortfolioItem
             :class-id="nft.classId"
