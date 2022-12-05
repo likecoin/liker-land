@@ -92,19 +92,17 @@ export default {
         case gemLevel <= 5:
           return 'hover:bg-[#d0d0d0]';
         case gemLevel <= 7:
-          return 'hover:bg-[#2faf93]';
+          return 'hover:bg-[#50e3c2]';
         case gemLevel <= 9:
-          return 'hover:bg-[#44abcc]';
+          return 'hover:bg-[#6ccaff]';
         case gemLevel <= 11:
-          return 'hover:bg-[#dc81f2]';
-        case gemLevel <= 12:
-          return 'hover:bg-[#f6bc4a]';
+          return 'hover:bg-[#fdafff]';
         case gemLevel <= 13:
-          return 'hover:bg-[#f2c875]';
+          return 'hover:bg-[#ffd748]';
         case gemLevel <= 14:
-          return 'hover:bg-[#d6204c]';
+          return 'hover:bg-[#ff6464]';
         case gemLevel <= 15:
-          return 'hover:bg-[#ffffff]';
+          return 'hover:bg-[#c0e1ff]';
         default:
           return 'hover:bg-like-cyan-light';
       }
