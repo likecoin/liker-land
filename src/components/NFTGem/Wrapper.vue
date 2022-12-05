@@ -92,19 +92,17 @@ export default {
         case gemLevel <= 5:
           return 'hover:border-[#d0d0d0]';
         case gemLevel <= 7:
-          return 'hover:border-[#2faf93]';
+          return 'hover:border-[#50e3c2]';
         case gemLevel <= 9:
-          return 'hover:border-[#44abcc]';
+          return 'hover:border-[#6ccaff]';
         case gemLevel <= 11:
-          return 'hover:border-[#dc81f2]';
-        case gemLevel <= 12:
-          return 'hover:border-[#f6bc4a]';
+          return 'hover:border-[#fdafff]';
         case gemLevel <= 13:
-          return 'hover:border-[#f2c875]';
+          return 'hover:border-[#ffd748]';
         case gemLevel <= 14:
-          return 'hover:border-[#d6204c]';
+          return 'hover:border-[#ff6464]';
         case gemLevel <= 15:
-          return 'hover:border-[#ffffff]';
+          return 'hover:border-[#c0e1ff]';
         default:
           return 'hover:border-like-cyan-light';
       }

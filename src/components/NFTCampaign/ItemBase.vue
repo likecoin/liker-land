@@ -202,20 +202,18 @@ export default {
           return 'hover:shadow-[0_0_0_2px_#ebebeb]';
         case '#d0d0d0':
           return 'hover:shadow-[0_0_0_2px_#d0d0d0]';
-        case '#2faf93':
-          return 'hover:shadow-[0_0_0_2px_#2faf93]';
-        case '#44abcc':
-          return 'hover:shadow-[0_0_0_2px_#44abcc]';
-        case '#dc81f2':
-          return 'hover:shadow-[0_0_0_2px_#dc81f2]';
-        case '#f6bc4a':
-          return 'hover:shadow-[0_0_0_2px_#f6bc4a]';
-        case '#f2c875':
-          return 'hover:shadow-[0_0_0_2px_#f2c875]';
-        case '#d6204c':
-          return 'hover:shadow-[0_0_0_2px_#d6204c]';
-        case '#ffffff':
-          return 'hover:shadow-[0_0_0_2px_#ffffff]';
+        case '#50e3c2':
+          return 'hover:shadow-[0_0_0_2px_#50e3c2]';
+        case '#6ccaff':
+          return 'hover:shadow-[0_0_0_2px_#6ccaff]';
+        case '#fdafff':
+          return 'hover:shadow-[0_0_0_2px_#fdafff]';
+        case '#ffd748':
+          return 'hover:shadow-[0_0_0_2px_#ffd748]';
+        case '#ff6464':
+          return 'hover:shadow-[0_0_0_2px_#ff6464]';
+        case '#c0e1ff':
+          return 'hover:shadow-[0_0_0_2px_#c0e1ff]';
         default:
           return 'hover:shadow-[0_0_0_2px_#aaf1e7]';
       }
