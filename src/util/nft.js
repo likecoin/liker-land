@@ -176,6 +176,8 @@ export function checkIsWritingNFT(classMetadata) {
   );
 }
 
+// NOTE: This is a temporary solution to check Writing NFT by NFT ID,
+// should be removed after created NFT list return proper content metadata
 export function checkIsWritingNFTByNFTId(id) {
   return /^writing-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
     id
