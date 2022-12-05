@@ -18,8 +18,14 @@
       :image-src="NFTImageUrl"
       :is-collecting="uiIsOpenCollectModal && isCollecting"
       :own-count="ownCount"
+      :display-state="nftDisplayState"
       @collect="handleClickCollect"
       @load-cover="handleCoverLoaded"
+    />
+    <NFTFeatured
+      :class-id="classId"
+      :read-only="$route.name !== 'dashboard'"
+      :display-state="nftDisplayState"
     />
   </NuxtLink>
 </template>

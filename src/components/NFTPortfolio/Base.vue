@@ -5,6 +5,7 @@
   >
     <template v-slot="gem">
       <NFTPortfolioCard
+        :display-state="displayState"
         :gem-level="gem.level"
         :hover-class="gem.hoverClass"
       >
@@ -23,6 +24,7 @@
             'px-[24px]',
             'pt-[48px]',
             'py-[24px]',
+            'bg-white',
             'relative',
           ]"
         >
@@ -84,6 +86,8 @@
 </template>
 
 <script>
+import { NFT_DISPLAY_STATE } from '~/constant';
+
 import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
@@ -150,6 +154,10 @@ export default {
     classCollectionName: {
       type: String,
       default: '',
+    },
+    displayState: {
+      type: String,
+      default: NFT_DISPLAY_STATE.DEFAULT,
     },
   },
   methods: {

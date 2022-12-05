@@ -20,8 +20,8 @@ router.get('/:wallet/nfts/hidden', async (req, res, next) => {
       res.status(400).send('INVALID_ADDRESS');
       return;
     }
-    const userDoc = await walletUserCollection(user).get();
-    const { hiddenNFTClassIds = [] } = userDoc.data();
+    const userDoc = await walletUserCollection.doc(user).get();
+    const { hiddenNFTClassIds = [] } = userDoc.data() || {};
     res.json({ hidden: hiddenNFTClassIds });
   } catch (err) {
     handleRestfulError(req, res, next, err);

@@ -86,27 +86,27 @@ export default {
       const { gemLevel } = this;
       switch (true) {
         case gemLevel <= 0:
-          return 'hover:border-[#f7f7f7]';
+          return 'hover:bg-[#f7f7f7]';
         case gemLevel <= 3:
-          return 'hover:border-[#ebebeb]';
+          return 'hover:bg-[#ebebeb]';
         case gemLevel <= 5:
-          return 'hover:border-[#d0d0d0]';
+          return 'hover:bg-[#d0d0d0]';
         case gemLevel <= 7:
-          return 'hover:border-[#2faf93]';
+          return 'hover:bg-[#2faf93]';
         case gemLevel <= 9:
-          return 'hover:border-[#44abcc]';
+          return 'hover:bg-[#44abcc]';
         case gemLevel <= 11:
-          return 'hover:border-[#dc81f2]';
+          return 'hover:bg-[#dc81f2]';
         case gemLevel <= 12:
-          return 'hover:border-[#f6bc4a]';
+          return 'hover:bg-[#f6bc4a]';
         case gemLevel <= 13:
-          return 'hover:border-[#f2c875]';
+          return 'hover:bg-[#f2c875]';
         case gemLevel <= 14:
-          return 'hover:border-[#d6204c]';
+          return 'hover:bg-[#d6204c]';
         case gemLevel <= 15:
-          return 'hover:border-[#ffffff]';
+          return 'hover:bg-[#ffffff]';
         default:
-          return 'hover:border-like-cyan-light';
+          return 'hover:bg-like-cyan-light';
       }
     },
   },

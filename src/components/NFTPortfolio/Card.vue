@@ -1,31 +1,48 @@
 <template>
   <div
     :class="[
-      hoverClass,
-      'flex',
-      'flex-col',
       'rounded-[24px]',
       'w-full',
       'overflow-hidden',
       'bg-white',
-      'box-border',
-      'border-[2px]',
-      'border-transparent',
+      { 'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4] hover:bg-none': displayState === 'featured' },
+      { [hoverClass]: displayState !== 'hidden' },
       'transition',
       'ease-in',
       'duration-200',
     ]"
   >
-    <slot />
+    <div
+      :class="[
+        'flex',
+        'flex-col',
+        'rounded-[24px]',
+        'w-full',
+        'h-auto',
+        'overflow-hidden',
+        'box-border',
+        'border-[2px]',
+        'border-transparent',
+        { 'opacity-25': displayState === 'hidden' },
+      ]"
+    >
+      <slot />
+    </div>
   </div>
 </template>
 
 <script>
+import { NFT_DISPLAY_STATE } from '~/constant';
+
 export default {
   props: {
+    displayState: {
+      type: String,
+      default: NFT_DISPLAY_STATE.DEFAULT,
+    },
     hoverClass: {
       type: String,
-      default: 'hover:border-like-cyan-light',
+      default: 'hover:bg-like-cyan-light',
     },
   },
 };

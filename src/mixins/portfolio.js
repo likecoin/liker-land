@@ -23,7 +23,9 @@ const NFT_INFO_FETCH_CONCURRENT_REQUEST_MAX = 10;
 
 const throttleNFTInfoFetch = throat(NFT_INFO_FETCH_CONCURRENT_REQUEST_MAX);
 
-export default {
+export const createPorfolioMixin = ({
+  shouldApplyDisplayState = true,
+} = {}) => ({
   tabOptions,
   mixins: [clipboardMixin, userInfoMixin],
   data() {
@@ -48,9 +50,15 @@ export default {
       'getNFTListMapByAddress',
       'getNFTClassMetadataById',
     ]),
+    isDashboardPage() {
+      return this.$route.name === 'dashboard';
+    },
     currentTab() {
       const { tab } = this.$route.query;
       return tabOptions[tab] ? tab : DEFAULT_TAB;
+    },
+    isCurrentTabCollected() {
+      return this.currentTab === tabOptions.collected;
     },
     isCurrentTabCreated() {
       return this.currentTab === tabOptions.created;
@@ -105,13 +113,16 @@ export default {
         collectorWallet: this.wallet,
         sorting: this.nftClassListOfCollectedSorting,
         order: this.nftClassListOfCollectedSortingOrder,
+        shouldApplyDisplayState,
       });
     },
     nftClassListOfCreatedInOrder() {
       return this.getNFTClassIdListSorterForCreated({
         list: this.nftClassListOfCreatedExcludedOther,
+        collectorWallet: this.wallet,
         sorting: this.nftClassListOfCreatedSorting,
         order: this.nftClassListOfCreatedSortingOrder,
+        shouldApplyDisplayState,
       });
     },
     nftClassListOfOtherInOrder() {
@@ -120,6 +131,7 @@ export default {
         collectorWallet: this.wallet,
         sorting: this.nftClassListOfOtherSorting,
         order: this.nftClassListOfOtherSortingOrder,
+        shouldApplyDisplayState,
       });
     },
     currentNFTClassListShowCount() {
@@ -183,9 +195,11 @@ export default {
       }
     },
     currentNFTClassSortingOptionList() {
+      const options = [];
+
       switch (this.currentTab) {
         case tabOptions.collected:
-          return [
+          options.push(
             {
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
@@ -205,11 +219,12 @@ export default {
             {
               sorting: NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
-            },
-          ];
+            }
+          );
+          break;
 
         case tabOptions.created:
-          return [
+          options.push(
             {
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
@@ -225,11 +240,12 @@ export default {
             {
               sorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
               order: NFT_CLASS_LIST_SORTING_ORDER.ASC,
-            },
-          ];
+            }
+          );
+          break;
 
         case tabOptions.other:
-          return [
+          options.push(
             {
               sorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
@@ -237,12 +253,21 @@ export default {
             {
               sorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
               order: NFT_CLASS_LIST_SORTING_ORDER.ASC,
-            },
-          ];
+            }
+          );
+          break;
 
         default:
-          return [];
       }
+
+      if (!shouldApplyDisplayState) {
+        options.push({
+          sorting: NFT_CLASS_LIST_SORTING.DISPLAY_STATE,
+          order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+        });
+      }
+
+      return options;
     },
   },
   watch: {
@@ -273,6 +298,8 @@ export default {
       'fetchNFTClassMetadata',
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
+      'fetchNFTListFeaturedByAddress',
+      'fetchNFTListHiddenByAddress',
     ]),
     updatePortfolioGrid() {
       const { portfolioMainView } = this.$refs;
@@ -315,7 +342,11 @@ export default {
       }
     },
     async loadNFTListByAddress(address) {
-      const fetchPromise = this.fetchNFTListByAddress(address);
+      const fetchPromise = Promise.all([
+        this.fetchNFTListByAddress(address),
+        this.fetchNFTListFeaturedByAddress(address),
+        this.fetchNFTListHiddenByAddress(address),
+      ]);
       if (!this.getNFTListMapByAddress(address)) {
         this.isLoading = true;
         await fetchPromise;
@@ -387,4 +418,6 @@ export default {
       }
     },
   },
-};
+});
+
+export default createPorfolioMixin();
