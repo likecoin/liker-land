@@ -42,7 +42,7 @@
               >{{ userDisplayName | ellipsis }}</Label>
             </div>
           </div>
-          <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
+          <Label preset="h5" class="mt-[12px] break-normal" align="center">{{ title }}</Label>
 
           <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
