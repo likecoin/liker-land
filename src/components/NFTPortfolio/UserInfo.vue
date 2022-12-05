@@ -30,7 +30,7 @@
     </ToolTips>
     <template v-if="userDescription">
       <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
-      <Label preset="p6" class="break-all font-200 my-[12px]">
+      <Label preset="p6" class="break-normal font-200 my-[12px]">
         {{ userDescription }}
       </Label>
     </template>

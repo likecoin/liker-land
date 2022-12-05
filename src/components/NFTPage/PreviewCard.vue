@@ -22,7 +22,7 @@
         'justify-center',
         'items-center',
         'whitespace-pre-line',
-        'break-all',
+        'break-normal',
         'px-[24px]',
         'pt-[48px]',
         'py-[24px]',
