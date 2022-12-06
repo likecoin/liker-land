@@ -119,16 +119,17 @@ export default class ButtonV2 extends Vue {
   }
 
   get rootClassesForPreset(): any {
+    // NOTE: Add `!` to override the [type=submit] style caused by different versions of Tailwind
     switch (this.preset) {
       case Preset.primary:
-        return ['bg-like-green', 'text-like-cyan-light'];
+        return ['!bg-like-green', 'text-like-cyan-light'];
 
       case Preset.secondary:
-        return ['bg-like-cyan-light', 'text-like-green'];
+        return ['!bg-like-cyan-light', 'text-like-green'];
 
       case Preset.tertiary:
         return [
-          'bg-shade-gray',
+          '!bg-shade-gray',
           this.circle ? 'text-like-green' : 'text-dark-gray',
         ];
 
@@ -138,7 +139,7 @@ export default class ButtonV2 extends Vue {
       case Preset.outline:
         return [
           this.isDisabled
-            ? 'bg-transparent border-shade-gray border-2 text-shade-gray'
+            ? '!bg-transparent border-shade-gray border-2 text-shade-gray'
             : 'border-medium-gray border-2',
           this.circle ? 'text-like-green' : 'text-dark-gray',
           {
@@ -148,7 +149,7 @@ export default class ButtonV2 extends Vue {
         ];
       case Preset.gradient:
         return [
-          'bg-gradient-to-r from-[#D2F0F0] to-[#F0E6B4]',
+          '!bg-gradient-to-r from-[#D2F0F0] to-[#F0E6B4]',
           'text-like-green',
         ];
 

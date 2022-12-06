@@ -22,8 +22,10 @@
       <TextField
         ref="emailTextField"
         type="email"
+        :pattern="emailRegexString"
         :placeholder="$t('portfolio_subscription_email_placeholder')"
         :is-disabled="isLoading"
+        :required="true"
         @input="handleEmailInput"
       />
       <ProgressIndicator v-if="isLoading" />
@@ -32,8 +34,8 @@
         :key="subscriptionId"
         class="font-[600]"
         preset="secondary"
+        type="submit"
         :text="submitButtonText"
-        @click="submitEmail"
       >
         <template v-if="!subscriptionId" #prepend>
           <IconNotify class="w-[20px]" />
@@ -51,6 +53,7 @@
 </template>
 
 <script>
+import { EMAIL_REGEX_STRING } from '~/constant';
 import { nftMintSubscriptionAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
@@ -82,6 +85,12 @@ export default {
     };
   },
   computed: {
+    emailRegexString() {
+      return EMAIL_REGEX_STRING;
+    },
+    emailRegex() {
+      return new RegExp(this.emailRegexString);
+    },
     formattedCreatorDisplayName() {
       return ellipsis(this.creatorDisplayName || this.creatorWalletAddress);
     },
@@ -108,6 +117,13 @@ export default {
         if (emailTextField) {
           emailTextField.focus();
         }
+        return;
+      }
+
+      if (!this.emailRegex.test(this.email)) {
+        this.alertPromptError(
+          this.$t('portfolio_subscription_notify_invalid_email_alert')
+        );
         return;
       }
 
