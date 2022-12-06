@@ -4,19 +4,10 @@ const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
 const { sendEmail } = require('../modules/sendgrid');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
 const { shortenString } = require('../modules/utils');
-
-const { EXTERNAL_URL } = process.env;
-
-function createSubscriptionConfirmURLFactory({
-  subscriptionId,
-  subscribedWallet,
-  subscriberEmail,
-}) {
-  return (action = 'subscribe') =>
-    `${EXTERNAL_URL}/${subscribedWallet}/${action}/${subscriptionId}?email=${encodeURIComponent(
-      subscriberEmail
-    )}`;
-}
+const {
+  convertLanguageCodeForEmailTemplate,
+  createSubscriptionConfirmURLFactory,
+} = require('../modules/misc');
 
 module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
   .firestore.document(
@@ -31,6 +22,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       subscriberEmail,
       subscribedWallet,
       isVerified,
+      language = 'en',
     } = change.after.data();
     if (isVerified) {
       return;
@@ -47,6 +39,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       subscriptionId,
       subscribedWallet,
       subscriberEmail,
+      language,
     });
     const confirmLink = getSubscriptionConfirmURL();
     const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
@@ -59,7 +52,7 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       avatarURL: avatar,
       isCivicLiker: isSubscribedCivicLiker,
       unsubscribeLink,
-      language: 'en',
+      language: convertLanguageCodeForEmailTemplate(language),
     });
     await sendEmail({
       email: subscriberEmail,

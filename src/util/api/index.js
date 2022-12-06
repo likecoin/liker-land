@@ -262,8 +262,8 @@ export const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/rank
 export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
 
-export const nftMintSubscriptionAPI = ({ id, email, wallet }) => {
-  const qsPayload = { email, wallet };
+export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
+  const qsPayload = { email, wallet, language };
   return `${EXTERNAL_HOST}/api/nft/mint-subscription${
     id ? `/${id}` : ''
   }?${querystring.stringify(qsPayload)}`;

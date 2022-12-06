@@ -5,21 +5,14 @@ const axios = require('axios').default;
 
 const { nftMintSubscriptionCollection } = require('../modules/firebase');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
+const {
+  convertLanguageCodeForEmailTemplate,
+  createSubscriptionConfirmURLFactory,
+} = require('../modules/misc');
 const { sendEmail } = require('../modules/sendgrid');
 const { shortenString } = require('../modules/utils');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
-
-function createSubscriptionConfirmURLFactory({
-  subscriptionId,
-  subscribedWallet,
-  subscriberEmail,
-}) {
-  return (action = 'subscribe') =>
-    `${EXTERNAL_URL}/${subscribedWallet}/${action}/${subscriptionId}?email=${encodeURIComponent(
-      subscriberEmail
-    )}`;
-}
 
 // TODO: firebase param does not support `topic` which sucks, hardcode for now
 // const topic = defineString('WNFT_PUBSUB_TOPIC');
@@ -71,7 +64,11 @@ module.exports = onMessagePublished(
           for (let i = 0; i < query.docs.length; i += 1) {
             const doc = query.docs[i];
             const subscriptionId = doc.id;
-            const { subscriberEmail, subscribedWallet } = doc.data();
+            const {
+              subscriberEmail,
+              subscribedWallet,
+              language = 'en',
+            } = doc.data();
             try {
               const {
                 avatar,
@@ -85,6 +82,7 @@ module.exports = onMessagePublished(
                   subscriptionId,
                   subscribedWallet,
                   subscriberEmail,
+                  language,
                 }
               );
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
@@ -102,7 +100,7 @@ module.exports = onMessagePublished(
                 avatarURL: avatar,
                 isCivicLiker: isSubscribedCivicLiker,
                 unsubscribeLink,
-                language: 'en',
+                language: convertLanguageCodeForEmailTemplate(language),
               });
               // eslint-disable-next-line no-await-in-loop
               await sendEmail({

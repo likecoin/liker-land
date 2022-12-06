@@ -141,6 +141,7 @@ export default {
           nftMintSubscriptionAPI({
             email: this.email,
             wallet: this.creatorWalletAddress,
+            language: this.$i18n.locale,
           })
         );
         this.subscriptionId = res.data.subscriptionId;
