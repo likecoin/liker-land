@@ -21,6 +21,9 @@
       {{ /* Left Column */ }}
       <div
         :class="[
+          'flex',
+          'flex-col',
+          'gap-y-[24px]',
           'min-w-[280px]',
           'desktop:w-[280px]',
         ]"
@@ -50,6 +53,14 @@
             </template>
           </ButtonV2>
         </div>
+        <NFTPortfolioSubscriptionForm
+          v-else
+          id="creator-follow"
+          class="w-full"
+          :creator-wallet-address="wallet"
+          :creator-display-name="userDisplayName"
+          :is-empty="!nftClassListOfCreatedInOrder.length"
+        />
       </div>
 
       {{ /* Right Column */ }}
@@ -69,18 +80,7 @@
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
         @infinite-scroll="handleInfiniteScroll"
-      >
-        <template #grid-append>
-          <NFTPortfolioSubscriptionForm
-            v-if="!isLoading && isCurrentTabCreated && !isUserPortfolio"
-            :id="creatorFollowSectionId"
-            class="w-full phone:order-first"
-            :creator-wallet-address="wallet"
-            :creator-display-name="userDisplayName"
-            :is-empty="!nftClassListOfCreatedInOrder.length"
-          />
-        </template>
-      </NFTPortfolioMainView>
+      />
 
     </div>
 
@@ -96,8 +96,6 @@ import { checkUserNameValid } from '~/util/user';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
-
-const CREATOR_FOLLOW_SECTION_ID = 'creator-follow';
 
 export default {
   name: 'NFTPortfolioPage',
@@ -155,22 +153,11 @@ export default {
     isUserPortfolio() {
       return this.wallet === this.getAddress;
     },
-    creatorFollowSectionId() {
-      return CREATOR_FOLLOW_SECTION_ID;
-    },
-    creatorFollowSectionHash() {
-      return `#${this.creatorFollowSectionId}`;
-    },
   },
   watch: {
     isLoading(isLoading) {
       if (!isLoading) {
-        if (this.$route.hash === this.creatorFollowSectionHash) {
-          if (!this.isCurrentTabCreated) {
-            this.changeTab(tabOptions.created);
-          }
-          this.$nextTick(this.scrollToCreatorFollowSection);
-        } else if (
+        if (
           // If collected tab is empty
           this.isCurrentTabCollected &&
           !this.nftClassListOfCollectedExcludedOther.length
@@ -232,15 +219,6 @@ export default {
     this.loadNFTListByAddress(this.wallet);
   },
   methods: {
-    scrollToCreatorFollowSection() {
-      this.$gsap.gsap.to(window, {
-        duration: 1,
-        scrollTo: {
-          y: this.creatorFollowSectionHash,
-          offsetY: 100,
-        },
-      });
-    },
     handleTabChange(tab) {
       switch (tab) {
         case tabOptions.collected:
