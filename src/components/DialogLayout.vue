@@ -1,16 +1,25 @@
-<template lang="pug">
-  .page-layout.page-layout--dialog
-    slot(name="site-logo")
-      .site-logo-wrapper
-        NuxtLink.site-logo(:to="getHomeRoute")
-          LikerLandLogo
-    slot(name="page-wrapper")
-      .page-wrapper
-        slot(name="header")
-          header.page-header
-            slot(name="header-content")
-              LikerLogo.liker-logo
-        slot(name="body")
+<template>
+  <div class="page-layout.page-layout--dialog">
+    <slot name="site-logo">
+      <div class="site-logo-wrapper">
+        <NuxtLink class="site-logo" :to="getHomeRoute">
+          <LikerLandLogo />
+        </NuxtLink>
+      </div>
+    </slot>
+    <slot name="page-wrapper">
+      <div class="page-wrapper">
+        <slot name="header">
+          <header class="page-header">
+            <slot name="header-content">
+              <LikerLogo class="liker-logo" />
+            </slot>
+          </header>
+        </slot>
+        <slot name="body" />
+      </div>
+    </slot>
+  </div>
 </template>
 
 <script>

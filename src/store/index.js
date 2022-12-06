@@ -6,7 +6,6 @@ import * as types from '@/store/mutation-types';
 import * as api from '@/util/api';
 
 import { AUTH_COOKIE_NAME } from '~/constant';
-import reader from './modules/reader';
 import ui from './modules/ui';
 import user from './modules/user';
 import staticData from './modules/staticData';
@@ -22,8 +21,8 @@ const createStore = () =>
         }
         try {
           if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
-            const userInfo = await this.$api.$get(api.getLoginStatus());
-            commit(types.USER_SET_USER_INFO, userInfo);
+            const { user } = await this.$api.$get(api.getUserV2Self());
+            commit(types.WALLET_SET_LOGIN_ADDRESS, user);
           }
         } catch (err) {
           if (err.response) {
@@ -39,7 +38,6 @@ const createStore = () =>
       },
     },
     modules: {
-      reader,
       ui,
       user,
       staticData,

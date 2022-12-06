@@ -1,10 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BigNumber } from 'bignumber.js';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
+import * as api from '@/util/api';
+import { deriveAllPrefixedAddresses } from './cosmos';
 import {
+  ARWEAVE_ENDPOINT,
+  IPFS_VIEW_GATEWAY_URL,
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
+  LIKECOIN_NFT_HIDDEN_ITEMS,
 } from '../constant';
 
 let queryClient = null;
@@ -12,18 +17,15 @@ let iscnLib = null;
 
 export const NFT_INDEXER_LIMIT_MAX = 100;
 
-export const ORDER_CREATED_CLASS_ID_BY = {
+export const NFT_CLASS_LIST_SORTING = {
   PRICE: 'PRICE',
   ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
-};
-
-export const ORDER_COLLECTED_CLASS_ID_BY = {
-  PRICE: 'PRICE',
   LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
   NFT_OWNED_COUNT: 'NFT_OWNED_COUNT',
+  DISPLAY_STATE: 'DISPLAY_STATE',
 };
 
-export const ORDER = {
+export const NFT_CLASS_LIST_SORTING_ORDER = {
   ASC: 'ASC',
   DESC: 'DESC',
 };
@@ -97,8 +99,8 @@ export async function broadcastTx(signData, signer) {
   const client = await createNFTSigningClient(signer);
   const senderClient = client.getSigningStargateClient();
   const txBytes = TxRaw.encode(signData).finish();
-  const { transactionHash } = await senderClient.broadcastTx(txBytes);
-  return transactionHash;
+  const { transactionHash, code } = await senderClient.broadcastTx(txBytes);
+  return { txHash: transactionHash, code };
 }
 
 export async function signTransferNFT({
@@ -106,6 +108,7 @@ export async function signTransferNFT({
   toAddress,
   classId,
   nftId,
+  memo = '',
   signer,
 }) {
   const client = await createNFTSigningClient(signer);
@@ -114,7 +117,7 @@ export async function signTransferNFT({
     toAddress,
     classId,
     [nftId],
-    { broadcast: false }
+    { broadcast: false, memo }
   );
   return signData;
 }
@@ -149,8 +152,37 @@ export function isValidHttpUrl(string) {
   return false;
 }
 
-export function isWritingNFT(classMetadata) {
-  return classMetadata?.nft_meta_collection_id === 'likerland_writing_nft';
+export const nftClassCollectionType = {
+  WritingNFT: 'writing-nft',
+  BookNFT: 'book-nft',
+};
+
+export function getNFTClassCollectionType(classMetadata) {
+  switch (classMetadata?.nft_meta_collection_id) {
+    case 'likerland_writing_nft':
+      return nftClassCollectionType.WritingNFT;
+
+    case 'nft_book':
+      return nftClassCollectionType.BookNFT;
+
+    default:
+      return '';
+  }
+}
+
+export function checkIsWritingNFT(classMetadata) {
+  return (
+    getNFTClassCollectionType(classMetadata) ===
+    nftClassCollectionType.WritingNFT
+  );
+}
+
+// NOTE: This is a temporary solution to check Writing NFT by NFT ID,
+// should be removed after created NFT list return proper content metadata
+export function checkIsWritingNFTByNFTId(id) {
+  return /^writing-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    id
+  );
 }
 
 export function formatNFTInfo(nftInfo) {
@@ -172,6 +204,7 @@ function formatNFTEvent(event) {
     receiver: toWallet,
     tx_hash: txHash,
     timestamp,
+    memo,
   } = event;
   let eventName;
   switch (event.action) {
@@ -192,9 +225,69 @@ function formatNFTEvent(event) {
     fromWallet,
     toWallet,
     txHash,
+    memo,
     timestamp: Date.parse(timestamp),
   };
 }
+
+const queryAllDataFromChain = async (axios, api, field, input = {}) => {
+  let data;
+  let nextKey;
+  let count;
+  const result = [];
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    ({ data } = await axios.get(
+      api({
+        ...input,
+        key: nextKey,
+        limit: NFT_INDEXER_LIMIT_MAX,
+      })
+    ));
+    nextKey = data.pagination.next_key;
+    ({ count } = data.pagination);
+    result.push(...data[field]);
+  } while (count === NFT_INDEXER_LIMIT_MAX);
+  return result;
+};
+
+const fetchAllNFTFromChain = async (axios, owner) => {
+  const nfts = await queryAllDataFromChain(axios, api.getNFTsPartial, 'nfts', {
+    owner,
+  });
+  // sort by last colleted by default
+  return nfts.map(formatNFTInfo);
+};
+export const getNFTsRespectDualPrefix = async (axios, owner) => {
+  const allowAddresses = deriveAllPrefixedAddresses(owner);
+  const arraysOfNFTs = await Promise.all(
+    allowAddresses.map(a => fetchAllNFTFromChain(axios, a))
+  );
+  return arraysOfNFTs.flat();
+};
+
+const fetchAllNFTClassFromChain = async (axios, owner) => {
+  const classes = await queryAllDataFromChain(
+    axios,
+    api.getNFTClassesPartial,
+    'classes',
+    { owner }
+  );
+  // TODO: getNFTClasses API already contains chain metadata
+  // should reuse them instead of dropping
+  return classes.map(c => ({
+    classId: c.id,
+    timestamp: new Date(c.created_at).getTime(),
+  }));
+};
+
+export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
+  const allowAddresses = deriveAllPrefixedAddresses(owner);
+  const arraysOfNFTClasses = await Promise.all(
+    allowAddresses.map(a => fetchAllNFTClassFromChain(axios, a))
+  );
+  return arraysOfNFTClasses.flat();
+};
 
 export function formatNFTEventsToHistory(events) {
   const history = events.map(e => formatNFTEvent(e)).reverse();
@@ -210,4 +303,32 @@ export function formatOwnerInfoFromChain(owners) {
     }
   });
   return ownerInfo;
+}
+
+export function parseNFTMetadataURL(url) {
+  const [schema, path] = url.split('://');
+  if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+  if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
+  return url;
+}
+
+export function normalizeNFTList(list) {
+  return [
+    ...new Map(
+      [...list].map(({ classId, nftId, ...data }) => [
+        classId,
+        { ...data, classId, id: nftId },
+      ])
+    ).values(),
+  ]
+    .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
+    .sort((a, b) => {
+      if (a.id && b.id) {
+        const aIsWritingNFT = checkIsWritingNFTByNFTId(a.id);
+        const bIsWritingNFT = checkIsWritingNFTByNFTId(b.id);
+        if (aIsWritingNFT && !bIsWritingNFT) return -1;
+        if (!aIsWritingNFT && bIsWritingNFT) return 1;
+      }
+      return b.timestamp - a.timestamp;
+    });
 }

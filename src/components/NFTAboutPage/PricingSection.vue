@@ -8,7 +8,7 @@
     <h1
       class="
         text-center text-[48px]
-        leading-[56px]
+        leading-[72px]
         laptop:text-[72px]
         font-proxima font-[300]
         text-like-green

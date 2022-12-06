@@ -35,7 +35,7 @@ export default {
       return this.userStats?.collectedClassCount || 0;
     },
     collectedAmount() {
-      return this.userStats?.collectedNftValue || 0;
+      return this.userStats?.collectedValue || 0;
     },
     createdCount() {
       return this.userStats?.createdClassCount || 0;

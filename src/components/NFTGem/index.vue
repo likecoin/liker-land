@@ -1,8 +1,8 @@
 <template>
-  <div class="relative flex items-center justify-center mx-auto">
+  <div class="absolute left-[50%] translate-x-[-50%] flex items-center justify-center mx-auto">
     <!-- Square gem -->
     <div
-      v-if="level && level < 13"
+      v-if="level !== undefined && level < 13"
       class="w-[24px] h-[24px]"
     >
       <img :src="levelImgSrc" :title="gemName" :alt="gemName">
@@ -10,7 +10,7 @@
 
     <!-- Spark background -->
     <div
-      v-if="level && level >= 13"
+      v-if="level !== undefined && level >= 13"
       class="relative flex items-center justify-center"
     >
       <div
@@ -36,7 +36,7 @@ export default {
   props: {
     level: {
       type: Number,
-      default: undefined,
+      default: 0,
     },
   },
   computed: {

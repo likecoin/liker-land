@@ -1,22 +1,15 @@
 <template>
-  <NFTGemWrapper :collected-count="collectedCount">
-    <NFTPortfolioCard>
-      <div
-        class="h-[180px]"
-        :style="`background-color: ${imageBgColor}`"
-      >
-        <img
-          v-if="imageSrc"
-          loading="lazy"
-          class="object-cover w-full h-full max-h-[180px]"
-          :src="resizedImageSrc"
-        >
-        <img
-          v-else
-          class="object-cover w-full h-full max-h-[180px]"
-          src="~/assets/images/nft/primitive-nft.png"
-        >
-      </div>
+  <NFTGemWrapper
+    :collected-count="collectedCount"
+    :is-writing-nft="isWritingNFT"
+  >
+    <NFTPortfolioCard :display-state="displayState">
+      <NFTCover
+        :src="imageSrc"
+        :size="350"
+        :bg-color="imageBgColor"
+        @load="handleCoverLoaded"
+      />
       <div
         :class="[
           'flex',
@@ -26,6 +19,7 @@
           'px-[24px]',
           'pt-[48px]',
           'py-[24px]',
+          'bg-white',
           'relative',
         ]"
       >
@@ -43,21 +37,25 @@
             >{{ userDisplayName | ellipsis }}</Label>
           </div>
         </div>
-        <Label preset="h5" class="mt-[12px] break-words" align="center">{{ title }}</Label>
-        <div v-if="isWritingNft || (!isWritingNft && price !== undefined)" class="z-[500] flex justify-center mt-[16px]">
+        <Label preset="h5" class="mt-[12px] break-normal" align="center">{{ title }}</Label>
+
+        <div v-if="!isPrimitive && price !== undefined" class="z-[500] flex justify-center mt-[16px]">
           <ProgressIndicator v-if="isCollecting" />
           <ButtonV2
             v-else
             preset="secondary"
+            :is-disabled="!isCollectable"
             @click.stop.prevent="handleClickCollect"
           >
-            <span>{{ price | formatNumberWithLIKE }}</span>
-            <template #prepend>
+            <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
+            <template v-else>{{ $t('nft_class_uncollectible') }}</template>
+            <template v-if="isCollectable" #prepend>
               <IconPrice />
             </template>
           </ButtonV2>
         </div>
-        <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+
+        <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
           <div class="flex items-center text-medium-gray">
             <IconMint />
             <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -71,28 +69,30 @@
             <span>{{ ownCount }}</span>
           </div>
         </div>
+        <Label
+          v-else-if="classCollectionName"
+          class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
+          preset="p6"
+        >{{ classCollectionName }}</Label>
       </div>
     </NFTPortfolioCard>
   </NFTGemWrapper>
 </template>
 
 <script>
-import {
-  ellipsis,
-  formatNumberWithLIKE,
-  getLikeCoResizedImageUrl,
-} from '~/util/ui';
+import { NFT_DISPLAY_STATE } from '~/constant';
+
+import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
+
+import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
 export default {
   filters: {
     ellipsis,
     formatNumberWithLIKE,
   },
+  mixins: [nftClassCollectionMixin],
   props: {
-    classId: {
-      type: String,
-      required: true,
-    },
     title: {
       type: String,
       default: '',
@@ -137,22 +137,29 @@ export default {
       type: Number,
       default: 0,
     },
-    isWritingNft: {
+    isCollectable: {
       type: Boolean,
-      default: true,
+      default: false,
     },
-  },
-  computed: {
-    imageSize() {
-      return 350;
+    classCollectionType: {
+      type: String,
+      default: '',
     },
-    resizedImageSrc() {
-      return getLikeCoResizedImageUrl(this.imageSrc, this.imageSize);
+    classCollectionName: {
+      type: String,
+      default: '',
+    },
+    displayState: {
+      type: String,
+      default: NFT_DISPLAY_STATE.DEFAULT,
     },
   },
   methods: {
     handleClickCollect(event) {
       this.$emit('collect', event);
+    },
+    handleCoverLoaded(event) {
+      this.$emit('load-cover', event);
     },
   },
 };

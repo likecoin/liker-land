@@ -25,10 +25,6 @@ export const LIKECOIN_BUTTON_BASE = IS_TESTNET
   ? 'https://button.rinkeby.like.co'
   : 'https://button.like.co';
 
-export const SUPERLIKE_BASE = IS_TESTNET
-  ? 'https://s.rinkeby.like.co'
-  : 'https://s.like.co';
-
 export const LIKE_CO_THUMBNAIL_FN_BASE = 'https://static.like.co';
 
 export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET
@@ -89,6 +85,8 @@ export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
       'likenft1hajavhgv0zn7fe6j6f6ax82w9ry9jatv4q5jfudn0ws7hfylnv3qj8x70d',
     ]
   : [
+      'likenft1xmcmnq3j5v342ua2uply7xmvppwgy9z6s9kdlgw4e4rx0mxh9a3qcwy25r',
+      'likenft18azk489gkvhevdgwxuxjp4879zdjenmwlrrwnagr8vxk86zcjx4sex9myr',
       'likenft1ghwaeqyz8kwxyvkcafkfy900q8m7dj2tk8kz7u0p6f0cpum740gqka5ewr',
       'likenft1957qy6zk8yd3653qxxtkfusvflxlc846jpnagu46kk37phznncrss2pdd7',
       'likenft1z2274swtcheax9acjuzfhlncgqk8e6pfwc4pt00m8v2yk8zwpz8qf7dn7j',
@@ -110,6 +108,17 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
       'likenft1f9dlnexdt6l4d8u2hh9ccm5g52q46sw2hllk4ntdhf7n6resg00s5hseuj',
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];
+
+// Note: Please remove this when hide NFT feature is released.
+export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
+  IS_TESTNET
+    ? []
+    : [
+        // 豆泥
+        'likenft1lzyg3vs502fj9p2pq62wzap7y7l0sd33d5t3twqd8a9ckphl029qdgga54',
+        'likenft10sjyapy7d3ypsj96nlmf95m8elhuhjq38028hua5qfz6f4zxeu4sjqgcpv',
+      ]
+);
 
 // Leave it empty to allow all creators
 export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS = IS_TESTNET
@@ -156,3 +165,9 @@ export const NFT_GEM_NAME = [
 export const ROUGH_LIKE_TO_USD_PRICE = 0.01;
 
 export const LOGIN_MESSAGE = 'Login';
+
+export const NFT_DISPLAY_STATE = {
+  FEATURED: 'featured',
+  HIDDEN: 'hidden',
+  DEFAULT: 'default',
+};

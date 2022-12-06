@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page class="px-[8px]">
     <div
       v-if="!getAddress"
       class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"
@@ -10,44 +10,47 @@
         @click="connectWallet"
       />
     </div>
-    <div v-else class="flex flex-col items-center mt-[32px]">
+    <template v-else>
       <!-- UserStat -->
-      <div class="relative flex items-center mb-[28px] laptop:mb-[48px] w-full">
+      <div class="flex items-center mb-[24px] laptop:mb-[48px] w-full max-w-[736px]">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
         />
-        <ShareButton class="absolute right-0 laptop:right-[-40px]" @copy="handleShare" />
       </div>
+
       <!-- Main -->
-      <div
-        :class="[
-          'flex',
-          'flex-col',
-          'relative',
-          'items-center',
-          'w-full',
-          'max-w-[700px]',
-          'desktop:w-[700px]',
-        ]"
+      <NFTPortfolioMainView
+        key="dashboard"
+        ref="portfolioMainView"
+        :portfolio-wallet="getAddress"
+        :portfolio-tab="currentTab"
+        :portfolio-items="currentNFTClassList"
+        :portfolio-items-show-count="currentNFTClassListShowCount"
+        :portfolio-items-sorting="currentNFTClassListSorting"
+        :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
+        :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
+        :is-loading-portfolio-items="isLoading"
+        :is-show-other-tab="isShowOtherTab"
+        @portfolio-change-tab="handleTabChange"
+        @portfolio-change-sorting="handleNFTClassListSortingChange"
+        @infinite-scroll="handleInfiniteScroll"
       >
-        <div
-          :class="['flex', 'flex-col', 'items-center', 'mb-[48px]', 'w-full']"
-        >
+        <template #tab-bar-prepend>
           <ButtonV2
             preset="tertiary"
+            size="small"
             :text="$t('dashboard_portfolio_button')"
             :class="[
               'block',
-              'mb-[12px]',
 
               'laptop:absolute',
-              'laptop:left-[-100px]',
-              'laptop:m-0',
+              'laptop:left-0',
+              'laptop:ml-[32px]',
 
-              'rounded-[16px]',
+              'rounded-full',
             ]"
             @click="goMyPortfolio"
           >
@@ -55,109 +58,10 @@
               <IconView />
             </template>
           </ButtonV2>
-          <div
-            :class="[
-              'flex',
-              'justify-center',
-              'items-center',
-              'p-[4px]',
-              'mx-auto',
-              'bg-shade-gray',
-              'rounded-[14px]',
-            ]"
-          >
-            <MenuButton
-              :text="$t('nft_portfolio_page_label_collected')"
-              :is-selected="currentTab === 'collected'"
-              @click="handleGoCollected"
-            />
-            <MenuButtonDivider />
-            <MenuButton
-              :text="$t('nft_portfolio_page_label_created')"
-              :is-selected="currentTab === 'created'"
-              @click="handleGoCreated"
-            />
-          </div>
+        </template>
+      </NFTPortfolioMainView>
 
-          <Dropdown
-            :class="[
-              'hidden',
-
-              'desktop:block',
-              'desktop:absolute',
-              'desktop:right-[-50px]',
-              'desktop:m-0',
-
-              'rounded-[16px]',
-            ]"
-          >
-            <template v-slot:trigger="{ toggle }">
-              <ButtonV2
-                :text="label.replace('By ', '')"
-                preset="plain"
-                @click="toggle"
-              >
-                <template #append>
-                  <IconASC v-if="currentOrder === 'ASC'" />
-                  <IconDESC v-if="currentOrder === 'DESC'" />
-                </template>
-              </ButtonV2>
-            </template>
-            <MenuList>
-              <MenuItem
-                v-for="(item, i) in currentOrderOptions"
-                :key="i"
-                :value="item.value"
-                :label="item.name"
-                :selected-value="selectedValue"
-                label-align="left"
-                @select="handleSelectOrder"
-              >
-                <template #label-append>
-                  <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
-                  <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
-                </template>
-              </MenuItem>
-            </MenuList>
-          </Dropdown>
-        </div>
-
-        <CardV2 v-if="isLoading">{{
-          $t('nft_portfolio_page_label_loading')
-        }}</CardV2>
-
-        <div v-else class="w-full">
-          <MagicGrid v-show="currentTab === 'collected'" :gap="16" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCollectedClassIds.length" preset="collected" />
-            <div v-for="id in sortedCollectedClassIds" :key="id">
-              <NFTPortfolioItem :class-id="id" class="mb-[12px]" />
-            </div>
-          </MagicGrid>
-
-          <MagicGrid v-show="currentTab === 'created'" :gap="16" :max-cols="2" :max-col-width="310">
-            <NFTPortfolioEmpty v-if="!sortedCreatedClassIds.length" preset="created" />
-            <div
-              v-for="id in sortedCreatedClassIds"
-              :key="id"
-            >
-              <NFTPortfolioItem
-                :class-id="id"
-                class="mb-[12px]"
-              />
-            </div>
-          </MagicGrid>
-
-          <div class="flex flex-col items-center my-[48px] w-full">
-            <div class="w-[32px] h-[2px] bg-shade-gray mb-[32px]" />
-            <ButtonV2
-              preset="outline"
-              :text="$t('portfolio_finding_more_button')"
-              to="/campaign/writing-nft"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    </template>
   </Page>
 </template>
 
@@ -166,14 +70,16 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
-import portfolioMixin from '~/mixins/portfolio';
-import authMixin from '~/mixins/auth';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin, authMixin],
+  mixins: [
+    walletMixin,
+    createPorfolioMixin({ shouldApplyDisplayState: false }),
+  ],
   head() {
     const title = this.$t('dashboard_title');
     const description = this.$t('dashboard_description');
@@ -203,33 +109,22 @@ export default {
       ],
     };
   },
-  data() {
-    return { hasSwitchedWallet: false };
-  },
   computed: {
     wallet() {
       return this.getAddress;
     },
   },
   watch: {
-    getAddress: {
-      immediate: true,
-      async handler(newAddress) {
-        if (newAddress) {
-          if (!this.hasSwitchedWallet) {
-            this.hasSwitchedWallet = true;
-            this.fetchUserInfo();
-            await this.loadNFTListByAddress(this.getAddress);
-          } else {
-            // Refresh the page to prevent data overlapping
-            this.$router.go();
-          }
-        }
-      },
+    async getAddress(newAddress) {
+      if (newAddress) {
+        this.fetchUserInfo();
+        await this.loadNFTListByAddress(this.getAddress);
+      }
     },
   },
   mounted() {
     this.syncRouteForTab();
+    if (this.getAddress) this.loadNFTListByAddress(this.getAddress);
   },
   methods: {
     ...mapActions(['fetchUserInfoByAddress']),
@@ -242,19 +137,35 @@ export default {
       }
     },
     handleGoCollected() {
-      logTrackerEvent(this, 'MyDashboard', 'GoCollectedTab', this.wallet, 1);
-      this.goCollectedTab();
+      this.handleTabChange(tabOptions.collected);
     },
     handleGoCreated() {
-      logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
-      this.goCreatedTab();
+      this.handleTabChange(tabOptions.created);
     },
-    handleShare() {
-      this.copySharePageURL(this.wallet, this.getAddress);
-      logTrackerEvent(this, 'MyDashboard', 'CopyShareURL', this.wallet, 1);
-    },
-    async handleSignLogin() {
-      await this.signLogin();
+    handleTabChange(tab) {
+      switch (tab) {
+        case tabOptions.collected:
+          logTrackerEvent(
+            this,
+            'MyDashboard',
+            'GoCollectedTab',
+            this.wallet,
+            1
+          );
+          break;
+
+        case tabOptions.created:
+          logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
+
+          break;
+        case tabOptions.other:
+          logTrackerEvent(this, 'MyDashboard', 'GoOtherTab', this.wallet, 1);
+          break;
+
+        default:
+          break;
+      }
+      this.changeTab(tab);
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);

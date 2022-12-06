@@ -32,19 +32,19 @@ export default {
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  min-width: 120px;
   background-color: #9b9b9b;
   color: #fff;
   font-size: 8px;
   text-align: center;
-  padding: 5px 0;
+  padding: 5px 6px;
   border-radius: 6px;
 
   /* Position the tooltip text */
   position: absolute;
   bottom: 125%;
   left: 50%;
-  margin-left: -60px;
+  transform: translateX(-50%);
 
   /* Fade in tooltip */
   opacity: 0;

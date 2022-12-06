@@ -1,10 +1,14 @@
-<template lang="pug">
-  .settings-page-body
-    ul.settings-menu
-      li
-        NuxtLink.settings-menu__item(:to="{ name: 'settings-language' }")
-          GlobeIcon.settings-menu__item-title-icon
-          span.settings-menu__item-title {{ $t('SettingsPage.language') }}
+<template>
+  <div class="settings-page-body">
+    <ul class="settings-menu">
+      <li>
+        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
+          <GlobeIcon class="settings-menu__item-title-icon" />
+          <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>
+        </NuxtLink>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>

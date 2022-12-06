@@ -13,17 +13,22 @@
         <IconPrice />
       </template>
     </Label>
+
     <div class="flex items-baseline justify-start mt-[40px]">
       <Label
         class="font-[900] text-like-cyan"
         preset="h2"
-      >{{ nftPrice | formatNumberWithLIKE({ isFull: true }) }}</Label>
+      >
+        <template v-if="isCollectable">{{ nftPrice | formatNumberWithLIKE({ isFull: true }) }}</template>
+        <template v-else>{{ $t('nft_class_uncollectible') }}</template>
+      </Label>
       <Label
-        v-if="nftPriceUSD"
+        v-if="isCollectable && nftPriceUSD"
         class="ml-[4px]"
         preset="p5"
       >{{ `(${nftPriceUSD})` }}</Label>
     </div>
+
     <div class="flex items-baseline justify-start">
       <Label
         class="text-[10px] font-[400]"
@@ -49,10 +54,10 @@
       </Label>
     </div>
 
-    <div class="flex items-center justify-start mt-[24px]">
+    <div class="flex items-center justify-start mt-[24px] gap-[16px]">
       <ProgressIndicator v-if="isLoading" />
       <div
-        v-else
+        v-else-if="isCollectable"
         class="rounded-[18px] p-[2px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
       >
         <div class="relative p-[6px] bg-like-green rounded-[16px]">
@@ -67,16 +72,21 @@
           </ButtonV2>
         </div>
       </div>
-      <ToolTips :tool-tip-text="$t('tooltip_coming_soon')">
-        <ButtonV2
-          class="ml-[12px]"
-          :text="$t('nft_details_page_button_sell')"
-          preset="tertiary"
-          :is-disabled="true"
-          @mouseenter.once="handleMouseEnterSell"
-          @click.native="handleClickSell"
-        />
-      </ToolTips>
+      <ButtonV2
+        preset="primary"
+        :text="$t('campaign_nft_item_view_details_label')"
+        class="hidden laptop:block !border-[2px] !border-like-cyan-light"
+        :href="url"
+        target="_blank"
+        @click="handleClickViewContent"
+      >
+        <template #prepend>
+          <IconArticle />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
     </div>
   </CardV2>
 </template>
@@ -109,6 +119,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    url: {
+      type: String,
+      default: undefined,
+    },
+    isCollectable: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     handleClickCollect() {
@@ -119,6 +137,9 @@ export default {
     },
     handleMouseEnterSell() {
       this.$emit('hover-sell');
+    },
+    handleClickViewContent() {
+      this.$emit('view-content');
     },
   },
 };

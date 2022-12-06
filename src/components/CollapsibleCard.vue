@@ -58,7 +58,7 @@
     <Transition @enter="onEnter" @leave="onLeave">
       <div v-if="isOpen">
         <div v-if="isShowSeparator" :class="xPaddingClass">
-          <hr class="w-full mb-[8px] border-[#ebebeb]">
+          <hr class="w-full border-[#ebebeb]">
         </div>
         <div
           :class="{

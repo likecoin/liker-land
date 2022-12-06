@@ -97,8 +97,8 @@ module.exports = onMessagePublished(
                     : shortenDisplayName,
                 subtitle: `${name} is now live`,
                 content: `<p><img style="width: 100%" src="${image}"></p>
-<p><a href="${EXTERNAL_URL}/nft/class/${classId}/share?utm_medium=email&utm_source=email" target="_blank" rel="noreferrer">${name}</a> is now live!</p>
-<p>Collect and discover more <a href="${EXTERNAL_URL}/campaign/writing-nft?utm_medium=email&utm_source=email" target="_blank" rel="noreferrer">Writing NFT</a></p>`,
+<p><a href="${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email" target="_blank" rel="noreferrer">${name}</a> is now live!</p>
+<p>Collect and discover more <a href="${EXTERNAL_URL}/campaign/writing-nft?utm_source=email" target="_blank" rel="noreferrer">Writing NFT</a></p>`,
                 avatarURL: avatar,
                 isCivicLiker: isSubscribedCivicLiker,
                 unsubscribeLink,

@@ -5,11 +5,10 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 import {
   APP_LIKE_CO_VIEW,
   APP_LIKE_CO_URL_BASE,
-  ARWEAVE_ENDPOINT,
-  IPFS_VIEW_GATEWAY_URL,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
+  NFT_DISPLAY_STATE,
 } from '~/constant';
 
 import {
@@ -30,15 +29,33 @@ import {
   broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
-  isWritingNFT,
+  getNFTClassCollectionType,
   formatNFTEventsToHistory,
+  parseNFTMetadataURL,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
+import { createUserInfoMixin } from '~/mixins/user-info';
+import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
+
+const creatorInfoMixin = createUserInfoMixin({
+  propKey: 'Creator',
+  walletKey: 'iscnOwner',
+});
+
+const nftClassCollectionMixin = createNFTClassCollectionMixin({
+  propKey: 'nft',
+  typeKey: 'nftClassCollectionType',
+});
 
 export default {
-  mixins: [walletMixin, CrispMixinFactory({ isBootAtMounted: true })],
+  mixins: [
+    walletMixin,
+    creatorInfoMixin,
+    nftClassCollectionMixin,
+    CrispMixinFactory({ isBootAtMounted: true }),
+  ],
   head() {
     // Only load stripe if a wallet is connected
     if (!this.getAddress) return {};
@@ -77,31 +94,35 @@ export default {
   computed: {
     ...mapGetters([
       'getUserInfoByAddress',
+      'getNFTClassFeaturedSetByAddress',
+      'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
+      'getNFTMetadataByNFTClassAndNFTId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
     ]),
-    iscnOwnerInfo() {
-      return this.getUserInfoByAddress(this.iscnOwner) || {};
-    },
-    isCivicLiker() {
-      return !!(
-        this.iscnOwnerInfo &&
-        (this.iscnOwnerInfo.isCivicLikerTrial ||
-          this.iscnOwnerInfo.isSubscribedCivicLiker)
-      );
-    },
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
     },
-    isWritingNFT() {
-      return isWritingNFT(this.NFTClassMetadata);
+    nftMetadata() {
+      return (
+        this.getNFTMetadataByNFTClassAndNFTId(this.classId, this.nftId) || {}
+      );
+    },
+    nftClassCollectionType() {
+      return getNFTClassCollectionType(this.NFTClassMetadata);
+    },
+    nftClassCollectionName() {
+      return this.NFTClassMetadata.nft_meta_collection_name || '';
+    },
+    nftClassCreatorMessage() {
+      return this.NFTClassMetadata.message || '';
     },
     purchaseInfo() {
       return this.getNFTClassPurchaseInfoById(this.classId) || {};
@@ -117,12 +138,6 @@ export default {
         this.NFTClassMetadata.iscn_owner || this.NFTClassMetadata.account_owner
       );
     },
-    iscnOwnerAvatar() {
-      return this.iscnOwnerInfo.avatar || getIdenticonAvatar(this.iscnOwner);
-    },
-    iscnOwnerDisplayName() {
-      return this.iscnOwnerInfo.displayName;
-    },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },
@@ -130,24 +145,40 @@ export default {
     NFTName() {
       return this.NFTClassMetadata.name;
     },
+    nftName() {
+      return this.nftMetadata.name || this.NFTName;
+    },
     NFTDescription() {
       return this.NFTClassMetadata.description;
     },
+    nftDescription() {
+      return this.nftMetadata.description || this.NFTDescription;
+    },
     NFTImageUrl() {
       const { image = '' } = this.NFTClassMetadata;
-      const [schema, path] = image.split('://');
-      if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
-      if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
-      return this.NFTClassMetadata.image;
+      return parseNFTMetadataURL(image);
+    },
+    nftImageURL() {
+      const image = this.nftMetadata.image || this.NFTImageUrl;
+      return parseNFTMetadataURL(image);
     },
     NFTImageBackgroundColor() {
       return this.NFTClassMetadata.background_color;
     },
+    nftImageBackgroundColor() {
+      return this.nftMetadata.background_color || this.NFTImageBackgroundColor;
+    },
     NFTExternalUrl() {
       return this.NFTClassMetadata.external_url;
     },
+    nftExternalURL() {
+      return this.nftMetadata.external_url || this.NFTExternalUrl;
+    },
     NFTPrice() {
       return this.purchaseInfo.price;
+    },
+    nftIsCollectable() {
+      return this.NFTPrice && this.NFTPrice !== -1;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
@@ -163,21 +194,57 @@ export default {
         ? formatNumberWithUnit(this.nftPriceInUSD, 'USD')
         : '-';
     },
-    ownerList() {
+    collectorMap() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
     ownerCount() {
       return this.getNFTClassOwnerCount(this.classId);
     },
     sortedOwnerListId() {
-      const { ownerList } = this;
-      return Object.keys(ownerList).sort(
-        (a, b) => ownerList[b].length - ownerList[a].length
+      const { collectorMap } = this;
+      return Object.keys(collectorMap).sort(
+        (a, b) => collectorMap[b].length - collectorMap[a].length
       );
     },
     collectedCount() {
       return this.getNFTClassCollectedCount(this.classId);
     },
+
+    userCollectedNFTList() {
+      const collectedList = this.collectorMap[this.getAddress];
+      return collectedList ? Object.values(collectedList) : [];
+    },
+
+    // Collector Info
+    nftCollectorWalletAddress() {
+      if (!this.nftId) return '';
+      return Object.keys(this.collectorMap).find(collector => {
+        const nftIdList = this.collectorMap[collector];
+        return nftIdList.find(nftId => this.nftId === nftId);
+      });
+    },
+    nftCollectorCollectedNFTList() {
+      return [
+        ...(this.collectorMap[this.nftCollectorWalletAddress] || []),
+      ].sort();
+    },
+    nftCollectorCollectedCount() {
+      return this.nftCollectorCollectedNFTList.length || 0;
+    },
+    nftIsNew() {
+      return !Object.values(this.collectorMap)
+        .flat()
+        .includes(this.nftId);
+    },
+    nftCreatorMessage() {
+      return this.NFTClassMetadata?.message || '';
+    },
+    nftCreatorMessageWithParsing() {
+      const collector =
+        this.getAddress || this.$t('nft_message_replacer_collector');
+      return this.nftCreatorMessage.replaceAll('{collector}', collector);
+    },
+
     purchaseURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
         this.iscnId
@@ -200,7 +267,8 @@ export default {
         return {
           id,
           displayName: owner?.displayName || id,
-          collectedCount: this.ownerList[id].length,
+          collectedCount: this.collectorMap[id].length,
+          collectedFirstNFTId: this.collectorMap[id][0],
           avatar: owner?.avatar || getIdenticonAvatar(id),
           isCivicLiker:
             owner?.isCivicLikerTrial || owner?.isSubscribedCivicLiker,
@@ -208,17 +276,20 @@ export default {
       });
     },
     ownCount() {
-      const arr = this.populatedCollectors.filter(
+      const collector = this.populatedCollectors.find(
         ({ id }) => id === this.getAddress
       );
-      return arr[0]?.collectedCount || 0;
+      return collector?.collectedCount || 0;
     },
-    firstCollectedNFTId() {
-      const ownNFT = this.ownerList[this.getAddress];
+    nftClassDetailsPageURL() {
+      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    },
+    nftIdCollectedFirstByUser() {
+      const ownNFT = this.collectorMap[this.getAddress];
       return ownNFT?.[0];
     },
-    nftDetailsPageURL() {
-      return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
+    nftIdCollectNext() {
+      return this.purchaseInfo?.metadata?.nextNewNFTId;
     },
     canCollectWithoutWallet() {
       return (
@@ -228,11 +299,33 @@ export default {
         )
       );
     },
+
+    getWalletIdentityType() {
+      return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
+    },
+    nftDisplayState() {
+      // should use the address in URL as the subject address when browsing other's profile
+      const subjectAddress =
+        this.$route.name === 'id' ? this.$route.params.id : this.getAddress;
+      if (
+        this.getNFTClassFeaturedSetByAddress(subjectAddress)?.has(this.classId)
+      ) {
+        return NFT_DISPLAY_STATE.FEATURED;
+      }
+      if (
+        this.getNFTClassHiddenSetByAddress(subjectAddress)?.has(this.classId)
+      ) {
+        return NFT_DISPLAY_STATE.HIDDEN;
+      }
+      return NFT_DISPLAY_STATE.DEFAULT;
+    },
   },
   watch: {
     getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserCollectedCount();
+        this.fetchUserNFTListFeatured();
+        this.fetchUserNFTListHidden();
       }
     },
     uiTxNFTStatus(status) {
@@ -247,15 +340,15 @@ export default {
       if (
         newCount === 1 &&
         oldCount === 0 &&
-        !this.firstCollectedNFTId &&
+        !this.nftIdCollectedFirstByUser &&
         !this.nftCollectorsSync
       ) {
         this.nftCollectorsSync = new Promise(async resolve => {
           // `fetchNFTOwners` might take longer to return the most updated collectors
-          // causing `firstCollectedNFTId` to be undefined or collectors list out-sync
+          // causing `nftIdCollectedFirstByUser` to be undefined or collectors list out-sync
           // Should keep fetching if the user just collected the NFT but not found in the collectors list
           let tries = 0;
-          while (!this.firstCollectedNFTId && tries < 10) {
+          while (!this.nftIdCollectedFirstByUser && tries < 10) {
             // eslint-disable-next-line no-await-in-loop
             await this.updateNFTOwners();
             // eslint-disable-next-line no-await-in-loop
@@ -272,7 +365,7 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'fetchNFTPurchaseInfo',
-      'fetchNFTMetadata',
+      'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
       'uiToggleCollectModal',
@@ -281,6 +374,8 @@ export default {
       'uiSetTxError',
       'walletFetchLIKEBalance',
       'fetchNFTListByAddress',
+      'fetchNFTListFeaturedByAddress',
+      'fetchNFTListHiddenByAddress',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -294,11 +389,25 @@ export default {
       }
     },
     async updateNFTClassMetadata() {
-      await this.fetchNFTMetadata(this.classId);
+      try {
+        await this.fetchNFTClassMetadata(this.classId);
+      } catch (error) {
+        if (error.response?.status !== 404) {
+          // eslint-disable-next-line no-console
+          console.error(JSON.stringify(error));
+        }
+      }
       this.updateDisplayNameList(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
-      await this.fetchNFTPurchaseInfo(this.classId);
+      try {
+        await this.fetchNFTPurchaseInfo(this.classId);
+      } catch (error) {
+        if (error.response?.status !== 404) {
+          // eslint-disable-next-line no-console
+          console.error(JSON.stringify(error));
+        }
+      }
     },
     async fetchNFTPrices(classId) {
       try {
@@ -316,32 +425,33 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const actionType = this.isWritingNFT
+      const actionType = this.nftIsWritingNFT
         ? ['/cosmos.nft.v1beta1.MsgSend', 'new_class']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'new_class'];
-      const ignoreToList = this.isWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       const historyOnChain = await this.getNFTEventsAll({
         actionType,
         ignoreToList,
       });
       let history = historyOnChain;
 
-      if (this.isWritingNFT) {
+      if (this.nftIsWritingNFT) {
         try {
           const { data } = await this.$api.get(
-            getNFTHistory({ classId: this.classId })
+            getNFTHistory({
+              classId: this.classId,
+              nftId: this.nftId,
+            })
           );
           const historyInDB = data.list;
           const eventMap = new Map();
           historyOnChain.forEach(e => {
-            eventMap.set(`${e.txHash}-${e.nftId}`, e);
+            eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
           });
           historyInDB.forEach(e => {
-            const key = `${e.txHash}-${e.nftId}`;
+            const key = `${e.txHash}-${e.nftId}-${e.event}`;
             if (eventMap.has(key)) {
               eventMap.get(key).price = e.price;
-            } else {
-              eventMap.set(key, e);
             }
           });
           history = [...eventMap.values()];
@@ -352,12 +462,12 @@ export default {
       }
       this.NFTHistory = history;
 
-      const array = [];
+      const addresses = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const list of this.NFTHistory) {
-        array.push(list.fromWallet, list.toWallet);
+        addresses.push(list.fromWallet, list.toWallet);
       }
-      this.updateDisplayNameList([...new Set(array)]);
+      this.updateDisplayNameList([...new Set(addresses)]);
       this.isHistoryInfoLoading = false;
     },
     async getNFTEventsAll({ actionType, ignoreToList }) {
@@ -370,6 +480,7 @@ export default {
         ({ data } = await this.$api.get(
           getNFTEvents({
             classId: this.classId,
+            nftId: this.nftId,
             key: nextKey,
             limit: NFT_INDEXER_LIMIT_MAX,
             actionType,
@@ -388,7 +499,7 @@ export default {
         return this.lazyGetUserInfoByAddress(addresses);
       }
       return Promise.all(
-        addresses.map(address => this.lazyGetUserInfoByAddress(address))
+        addresses.filter(a => !!a).map(a => this.lazyGetUserInfoByAddress(a))
       );
     },
     async updateUserCollectedCount(classId, address) {
@@ -403,6 +514,12 @@ export default {
     },
     async fetchUserCollectedCount() {
       await this.updateUserCollectedCount(this.classId, this.getAddress);
+    },
+    async fetchUserNFTListFeatured() {
+      await this.fetchNFTListFeaturedByAddress(this.getAddress);
+    },
+    async fetchUserNFTListHidden() {
+      await this.fetchNFTListHiddenByAddress(this.getAddress);
     },
     async collectNFT() {
       try {
@@ -454,7 +571,7 @@ export default {
           );
           this.uiSetTxError('INSUFFICIENT_BALANCE');
           this.uiSetTxStatus(TX_STATUS.INSUFFICIENT);
-          return;
+          return undefined;
         }
 
         this.uiSetTxStatus(TX_STATUS.SIGN);
@@ -478,7 +595,7 @@ export default {
           this.classId,
           1
         );
-        const txHash = await broadcastTx(signData, this.getSigner);
+        const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
           'NFT',
@@ -486,9 +603,10 @@ export default {
           this.classId,
           1
         );
+        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
-          await this.$api.post(
+          const result = await this.$api.post(
             postNFTPurchase({ txHash, classId: this.classId })
           );
           logTrackerEvent(
@@ -506,6 +624,7 @@ export default {
             classId: this.classId,
           });
           this.uiSetTxStatus(TX_STATUS.COMPLETED);
+          return result.data;
         }
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
@@ -517,6 +636,7 @@ export default {
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
+      return undefined;
     },
     async collectNFTWithStripe() {
       try {
@@ -532,7 +652,11 @@ export default {
         console.error(error);
       }
     },
-    async transferNFT() {
+    async transferNFT({
+      toWallet,
+      nftId = this.nftIdCollectedFirstByUser,
+      memo = '',
+    } = {}) {
       try {
         await this.initIfNecessary();
         await this.walletFetchLIKEBalance();
@@ -549,7 +673,7 @@ export default {
           return;
         }
 
-        // Wait for collectors sync for getting `firstCollectedNFTId`
+        // Wait for collectors sync for getting `nftIdCollectedFirstByUser`
         if (this.nftCollectorsSync) {
           this.uiSetTxStatus(TX_STATUS.PROCESSING);
           await this.nftCollectorsSync;
@@ -565,9 +689,10 @@ export default {
         );
         const signData = await signTransferNFT({
           fromAddress: this.getAddress,
-          toAddress: this.toAddress,
+          toAddress: toWallet,
           classId: this.classId,
-          nftId: this.firstCollectedNFTId,
+          nftId,
+          memo,
           signer: this.getSigner,
         });
         logTrackerEvent(
@@ -578,7 +703,7 @@ export default {
           1
         );
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
-        const txHash = await broadcastTx(signData, this.getSigner);
+        const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
           'NFT',
@@ -586,6 +711,7 @@ export default {
           this.classId,
           1
         );
+        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
 
         logTrackerEvent(
           this,
@@ -594,13 +720,13 @@ export default {
           this.classId,
           1
         );
-        if (this.isWritingNFT) {
+        if (this.nftIsWritingNFT) {
           try {
             await this.$api.post(
               postNFTTransfer({
                 txHash,
                 classId: this.classId,
-                nftId: this.firstCollectedNFTId,
+                nftId,
               })
             );
           } catch (error) {
@@ -615,13 +741,16 @@ export default {
           this.classId,
           1
         );
-        await this.updateNFTOwners(); // blocking update firstCollectedNFTId
+        await Promise.all([
+          this.updateNFTOwners(), // blocking update nftIdCollectedFirstByUser,
+          this.fetchUserCollectedCount(),
+        ]);
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        if (this.isWritingNFT) this.updateNFTPurchaseInfo();
+        if (this.nftIsWritingNFT) this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
