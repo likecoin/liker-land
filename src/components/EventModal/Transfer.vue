@@ -75,6 +75,7 @@
         class="mt-[4px]"
         placeholder="..."
         @input="handleInputMemo"
+        @input.once="handleInputMemoOnce"
       />
       <Label
         v-if="errorMessage"
@@ -132,6 +133,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { LIKE_ADDRESS_REGEX } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   filters: {
@@ -218,6 +220,9 @@ export default {
     },
     handleInputMemo(value) {
       this.memo = value;
+    },
+    handleInputMemoOnce() {
+      logTrackerEvent(this, 'NFT', 'NFTTransferAddMemo', '', 1);
     },
     handleClickTransfer() {
       this.lazyGetUserInfoByAddress(this.toWallet);
