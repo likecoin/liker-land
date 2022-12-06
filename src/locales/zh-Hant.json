@@ -348,6 +348,7 @@
   "portfolio_subscription_notify_duplicated_alert": "你正在追蹤 {creator}",
   "portfolio_subscription_notify_cooldown_alert": "請檢查郵箱，並完成追蹤 {creator} 的驗證流程。若沒收到電郵，可稍後請求重發驗證電郵。",
   "portfolio_subscription_notify_error_alert": "追蹤 {creator} 時遇到錯誤： {error}",
+  "portfolio_subscription_notify_invalid_email_alert": "電郵地址錯誤",
   "portfolio_subscribe_title": "追蹤 {creator}",
   "portfolio_subscribe_message": "確認登記 {email} 追蹤 {creator} 的 Writing NFT 更新？",
   "portfolio_subscribe_message_success": "你正在追蹤 {creator}。當作者發行了新的作品，你將收到電郵通知。",

@@ -349,6 +349,7 @@
   "portfolio_subscription_notify_duplicated_alert": "You are following {creator}",
   "portfolio_subscription_notify_cooldown_alert": "Please check your mailbox to confirm following {creator}, or try again later to resend confirmation email.",
   "portfolio_subscription_notify_error_alert": "Error occurred when following {creator}: {error}",
+  "portfolio_subscription_notify_invalid_email_alert": "Invalid email",
   "portfolio_subscribe_title": "Follow {creator}",
   "portfolio_subscribe_message": "Are you sure to confirm following {creator}'s Writing NFT updates by {email}?",
   "portfolio_subscribe_message_success": "You are now following {creator}. You will receive email when {creator} create any Writing NFT.",
