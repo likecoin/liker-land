@@ -1,6 +1,13 @@
 const { Router } = require('express');
-const { db, walletUserCollection } = require('../../../../modules/firebase');
-const { authenticateV2Login } = require('../../../middleware/auth');
+const {
+  db,
+  FieldValue,
+  walletUserCollection,
+} = require('../../../../modules/firebase');
+const {
+  authenticateV2Login,
+  checkParamWalletMatch,
+} = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
 const {
@@ -17,10 +24,11 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
     setPrivateCacheHeader(res);
     const { user } = req.session;
     const userDoc = await walletUserCollection.doc(user).get();
-    const { displayName, followers } = userDoc.data();
+    const { displayName, email, followers } = userDoc.data();
     res.json({
       user,
       displayName,
+      email,
       followers,
     });
   } catch (err) {
@@ -64,12 +72,12 @@ router.post('/login', async (req, res, next) => {
       const isNew = !userDoc.exists;
       const currentTs = Date.now();
       const payload = {
-        lastLoginTs: currentTs,
+        lastLoginTs: FieldValue.serverTimestamp(),
       };
       if (isNew) {
         await t.create(userRef, {
           ...payload,
-          ts: currentTs,
+          ts: FieldValue.serverTimestamp(),
         });
       } else {
         await t.update(userRef, payload);

@@ -34,6 +34,7 @@
     "@nuxtjs/pwa": "^2.6.0",
     "@nuxtjs/sentry": "^5.1.7",
     "@nuxtjs/sitemap": "^2.4.0",
+    "@sendgrid/mail": "^7.7.0",
     "@typeform/embed": "^0.9.3",
     "@walletconnect/browser-utils": "^1.8.0",
     "agentkeepalive": "^4.1.3",
