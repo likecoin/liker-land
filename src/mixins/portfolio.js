@@ -271,25 +271,9 @@ export const createPorfolioMixin = ({
     },
   },
   watch: {
-    nftClassListMap(listMap, listMapPrev) {
+    nftClassListMap(listMap) {
       if (!listMap) return;
-
-      const nftClassIdListSet = new Set(
-        Object.values(listMap)
-          .flat()
-          .map(n => n.classId)
-      );
-      const nftClassListPrev = listMapPrev
-        ? Object.values(listMapPrev).flat()
-        : [];
-
-      nftClassListPrev.forEach(({ classId }) => {
-        nftClassIdListSet.delete(classId);
-      });
-
-      [...nftClassIdListSet].forEach(classId =>
-        throttleNFTInfoFetch(() => this.fetchNFTClassInfo(classId))
-      );
+      this.$nextTick(this.setupPortfolioGrid);
     },
   },
   methods: {
@@ -301,10 +285,10 @@ export const createPorfolioMixin = ({
       'fetchNFTListFeaturedByAddress',
       'fetchNFTListHiddenByAddress',
     ]),
-    updatePortfolioGrid() {
+    setupPortfolioGrid() {
       const { portfolioMainView } = this.$refs;
       if (!portfolioMainView) return;
-      portfolioMainView.updatePortfolioGrid();
+      portfolioMainView.setupPortfolioGrid();
     },
     syncRouteForTab(tab = this.currentTab) {
       const { query } = this.$route;
@@ -352,38 +336,6 @@ export const createPorfolioMixin = ({
         await fetchPromise;
       }
       this.isLoading = false;
-    },
-    async fetchNFTClassInfo(classId) {
-      try {
-        await this.fetchNFTClassMetadata(classId);
-      } catch (error) {
-        if (error.response?.status !== 404) {
-          // eslint-disable-next-line no-console
-          console.error(JSON.stringify(error));
-        }
-      }
-      this.$nextTick(this.updatePortfolioGrid);
-
-      this.fetchNFTOwners(classId).catch(error => {
-        if (error.response?.status !== 404) {
-          // eslint-disable-next-line no-console
-          console.error(JSON.stringify(error));
-        }
-      });
-
-      // wait for metadata to determine if it is writing NFT
-      const metadata = this.getNFTClassMetadataById(classId);
-      if (checkIsWritingNFT(metadata)) {
-        try {
-          await this.fetchNFTPurchaseInfo(classId);
-        } catch (error) {
-          if (error.response?.status !== 404) {
-            // eslint-disable-next-line no-console
-            console.error(JSON.stringify(error));
-          }
-        }
-        this.$nextTick(this.updatePortfolioGrid);
-      }
     },
     changeTab(tab) {
       if (!tabOptions[tab]) return;
