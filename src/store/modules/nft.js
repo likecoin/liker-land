@@ -397,31 +397,35 @@ const actions = {
       timestampMap,
     });
 
+    const nftClassIds = Array.from(nftClassIdDataMap.keys());
     await Promise.all(
-      Array.from(nftClassIdDataMap.keys()).map(async classId => {
-        await dispatch('decorateNFTClassMetadataByURIAndISCN', classId).catch(
-          e => {
+      nftClassIds.map(classId => {
+        const promises = [
+          dispatch('decorateNFTClassMetadataByURIAndISCN', classId).catch(e => {
             if (e.response?.status !== 404) {
               // eslint-disable-next-line no-console
               console.error(JSON.stringify(e));
             }
-          }
-        );
-        await dispatch('fetchNFTOwners', classId).catch(e => {
-          if (e.response?.status !== 404) {
-            // eslint-disable-next-line no-console
-            console.error(JSON.stringify(e));
-          }
-        });
+          }),
+          dispatch('fetchNFTOwners', classId).catch(e => {
+            if (e.response?.status !== 404) {
+              // eslint-disable-next-line no-console
+              console.error(JSON.stringify(e));
+            }
+          }),
+        ];
         const classData = nftClassIdDataMap.get(classId);
         if (checkIsWritingNFT(classData.metadata)) {
-          await dispatch('fetchNFTPurchaseInfo', classId).catch(e => {
-            if (e.response?.status !== 404) {
-              // eslint-disable-next-line no-console
-              console.error(JSON.stringify(e));
-            }
-          });
+          promises.push(
+            dispatch('fetchNFTPurchaseInfo', classId).catch(e => {
+              if (e.response?.status !== 404) {
+                // eslint-disable-next-line no-console
+                console.error(JSON.stringify(e));
+              }
+            })
+          );
         }
+        return Promise.all(promises);
       })
     );
   },
