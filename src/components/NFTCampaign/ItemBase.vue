@@ -8,7 +8,13 @@
       <div>
         <NFTWidgetBaseCard class="flex flex-col items-center w-full">
           <NFTWidgetContentPreview
-            class="transition-shadow cursor-pointer hover:shadow-[0_0_0_2px_#aaf1e7] min-h-[300px] w-full"
+            :class="[
+              hoverClass,
+              'transition-shadow',
+              'cursor-pointer',
+              'min-h-[300px]',
+              'w-full',
+            ]"
             :title="title"
             :description="description"
             :img-src="imgSrc"
@@ -182,6 +188,35 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    hoverClass() {
+      // HACK: avoid handling gem level logic by directly mapping imgBgColor
+      // Hardcode hover color class list for tailwind
+      const color = this.imgBgColor.toLowerCase();
+      switch (color) {
+        case '#f7f7f7':
+          return 'hover:shadow-[0_0_0_2px_#f7f7f7]';
+        case '#ebebeb':
+          return 'hover:shadow-[0_0_0_2px_#ebebeb]';
+        case '#d0d0d0':
+          return 'hover:shadow-[0_0_0_2px_#d0d0d0]';
+        case '#50e3c2':
+          return 'hover:shadow-[0_0_0_2px_#50e3c2]';
+        case '#6ccaff':
+          return 'hover:shadow-[0_0_0_2px_#6ccaff]';
+        case '#fdafff':
+          return 'hover:shadow-[0_0_0_2px_#fdafff]';
+        case '#ffd748':
+          return 'hover:shadow-[0_0_0_2px_#ffd748]';
+        case '#ff6464':
+          return 'hover:shadow-[0_0_0_2px_#ff6464]';
+        case '#c0e1ff':
+          return 'hover:shadow-[0_0_0_2px_#c0e1ff]';
+        default:
+          return 'hover:shadow-[0_0_0_2px_#aaf1e7]';
+      }
     },
   },
   methods: {

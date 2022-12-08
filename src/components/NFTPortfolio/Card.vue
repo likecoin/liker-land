@@ -4,9 +4,8 @@
       'rounded-[24px]',
       'w-full',
       'overflow-hidden',
-      'bg-white',
-      {'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4]': displayState === 'featured'},
-      {'hover:bg-like-cyan-light': displayState !== 'hidden'},
+      { 'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4] hover:bg-none': displayState === 'featured' },
+      { [hoverClass]: displayState !== 'hidden' },
       'transition',
       'ease-in',
       'duration-200',
@@ -39,6 +38,10 @@ export default {
     displayState: {
       type: String,
       default: NFT_DISPLAY_STATE.DEFAULT,
+    },
+    hoverClass: {
+      type: String,
+      default: 'hover:bg-like-cyan-light',
     },
   },
 };
