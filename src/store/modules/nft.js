@@ -182,8 +182,12 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
-          X = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
-          Y = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
+          X = Date.parse(
+            getters.getNFTClassMetadataById(a)?.iscn_record_timestamp
+          );
+          Y = Date.parse(
+            getters.getNFTClassMetadataById(b)?.iscn_record_timestamp
+          );
           break;
       }
       return compareNumber(X, Y, order);
@@ -254,28 +258,41 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTClassMetadata({ commit }, classId) {
-    let metadata;
+  async fetchNFTClassMetadata({ dispatch }, classId) {
     /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
       which is huge and affects index page performance */
     // const chainMetadata = await getClassInfo(classId);
     const { class: chainMetadata } = await this.$api.$get(
       api.getChainNFTClassMetadataEndpoint(classId)
     );
+    const { data, ...info } = chainMetadata;
+    const classData = { ...data, ...info };
+    dispatch('formatAndSetNFTClassMetadata', { classId, classData });
+    await dispatch('decorateNFTClassMetadataByURIAndISCN', classId);
+  },
+  formatAndSetNFTClassMetadata({ commit }, { classId, classData = {} }) {
     const {
       name,
       description,
       uri,
-      data: { parent, metadata: classMetadata = {} } = {},
-    } = chainMetadata || {};
-    const iscnId = parent?.iscn_id_prefix;
-    metadata = {
+      parent,
+      metadata: classMetadata = {},
+    } = classData;
+    const formattedMetadata = {
       name,
       description,
+      uri,
       ...classMetadata,
       parent,
-      iscn_id: iscnId,
     };
+    commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+      classId,
+      metadata: formattedMetadata,
+    });
+  },
+  async decorateNFTClassMetadataByURIAndISCN({ commit, getters }, classId) {
+    let metadata = getters.getNFTClassMetadataById(classId);
+    const { uri, parent } = metadata;
     if (isValidHttpUrl(uri)) {
       const apiMetadata = await this.$api.$get(uri).catch(err => {
         if (!err.response?.status === 404) {
@@ -286,6 +303,7 @@ const actions = {
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
     }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
+      const iscnId = parent?.iscn_id_prefix;
       if (iscnId) {
         const iscnRecord = await this.$api
           .$get(api.getISCNRecord(iscnId))
@@ -295,27 +313,16 @@ const actions = {
               console.error(err);
             }
           });
-        const iscnOwner = iscnRecord?.owner;
-        const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
-        if (iscnOwner)
-          metadata = {
-            ...metadata,
-            iscn_owner: iscnOwner,
-            iscn_record_timestamp: iscnRecordTimestamp,
-          };
+        if (iscnRecord) {
+          metadata.iscn_owner = iscnRecord.owenr;
+          metadata.iscn_record_timestamp =
+            iscnRecord?.records?.[0]?.recordTimestamp;
+        }
       } else if (parent.account) {
-        metadata = {
-          ...metadata,
-          account_owner: parent.account,
-        };
+        metadata.account_owner = parent.account;
       }
     }
-    if (metadata.iscn_record_timestamp)
-      metadata.iscn_record_timestamp = Date.parse(
-        metadata.iscn_record_timestamp
-      );
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
-    return metadata;
   },
   async fetchNFTMetadata({ commit }, { classId, nftId }) {
     let metadata;

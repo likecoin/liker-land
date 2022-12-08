@@ -354,9 +354,8 @@ export const createPorfolioMixin = ({
       this.isLoading = false;
     },
     async fetchNFTClassInfo(classId) {
-      let metadata;
       try {
-        metadata = await this.fetchNFTClassMetadata(classId);
+        await this.fetchNFTClassMetadata(classId);
       } catch (error) {
         if (error.response?.status !== 404) {
           // eslint-disable-next-line no-console
@@ -373,6 +372,7 @@ export const createPorfolioMixin = ({
       });
 
       // wait for metadata to determine if it is writing NFT
+      const metadata = this.getNFTClassMetadataById(classId);
       if (checkIsWritingNFT(metadata)) {
         try {
           await this.fetchNFTPurchaseInfo(classId);
