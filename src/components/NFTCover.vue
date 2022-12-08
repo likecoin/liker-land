@@ -13,7 +13,7 @@
     <img
       v-if="!isShowImage || !isLoaded"
       v-bind="imgPropsForPlaceholder"
-      src="~/assets/images/nft/primitive-nft.png"
+      src="~/assets/images/nft/primitive-nft.jpg"
     >
   </div>
 </template>
