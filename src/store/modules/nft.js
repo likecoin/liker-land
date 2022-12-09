@@ -249,7 +249,7 @@ const getters = {
   normalizeNFTList: (_, getters) => list =>
     [
       ...new Map(
-        [...list].map(({ classId, nftId, ...data }) => [
+        list.map(({ classId, nftId, ...data }) => [
           classId,
           { ...data, classId, id: nftId },
         ])
