@@ -338,7 +338,7 @@ const actions = {
             }
           });
         if (iscnRecord) {
-          metadata.iscn_owner = iscnRecord.owenr;
+          metadata.iscn_owner = iscnRecord.owner;
           metadata.iscn_record_timestamp =
             iscnRecord?.records?.[0]?.recordTimestamp;
         }
