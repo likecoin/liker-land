@@ -5,12 +5,15 @@ import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
   checkIsWritingNFT,
-  normalizeNFTList,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
   getNFTsRespectDualPrefix,
   getNFTClassesRespectDualPrefix,
+  formatNFTInfo,
+  formatNFTClassInfo,
 } from '~/util/nft';
+import { catchAxiosError } from '~/util/misc';
+import { LIKECOIN_NFT_HIDDEN_ITEMS } from '~/constant';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -182,8 +185,12 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
-          X = getters.getNFTClassMetadataById(a)?.iscn_record_timestamp;
-          Y = getters.getNFTClassMetadataById(b)?.iscn_record_timestamp;
+          X = Date.parse(
+            getters.getNFTClassMetadataById(a)?.iscn_record_timestamp
+          );
+          Y = Date.parse(
+            getters.getNFTClassMetadataById(b)?.iscn_record_timestamp
+          );
           break;
       }
       return compareNumber(X, Y, order);
@@ -239,6 +246,27 @@ const getters = {
     });
     return sorted;
   },
+  normalizeNFTList: (_, getters) => list =>
+    [
+      ...new Map(
+        list.map(({ classId, nftId, ...data }) => [
+          classId,
+          { ...data, classId, id: nftId },
+        ])
+      ).values(),
+    ]
+      .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
+      .sort((a, b) => {
+        const aIsWritingNFT = checkIsWritingNFT(
+          getters.getNFTClassMetadataById(a.classId)
+        );
+        const bIsWritingNFT = checkIsWritingNFT(
+          getters.getNFTClassMetadataById(b.classId)
+        );
+        if (aIsWritingNFT && !bIsWritingNFT) return -1;
+        if (!aIsWritingNFT && bIsWritingNFT) return 1;
+        return b.timestamp - a.timestamp;
+      }),
 };
 
 const actions = {
@@ -254,28 +282,41 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTClassMetadata({ commit }, classId) {
-    let metadata;
+  async fetchNFTClassMetadata({ dispatch }, classId) {
     /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
       which is huge and affects index page performance */
     // const chainMetadata = await getClassInfo(classId);
     const { class: chainMetadata } = await this.$api.$get(
       api.getChainNFTClassMetadataEndpoint(classId)
     );
+    const { data, ...info } = chainMetadata;
+    const classData = { ...data, ...info };
+    dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
+    await dispatch('populateNFTClassMetadataFromURIAndISCN', classId);
+  },
+  parseAndStoreNFTClassMetadata({ commit }, { classId, classData = {} }) {
     const {
       name,
       description,
       uri,
-      data: { parent, metadata: classMetadata = {} } = {},
-    } = chainMetadata || {};
-    const iscnId = parent?.iscn_id_prefix;
-    metadata = {
+      parent,
+      metadata: classMetadata = {},
+    } = classData;
+    const formattedMetadata = {
       name,
       description,
+      uri,
       ...classMetadata,
       parent,
-      iscn_id: iscnId,
     };
+    commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+      classId,
+      metadata: formattedMetadata,
+    });
+  },
+  async populateNFTClassMetadataFromURIAndISCN({ commit, getters }, classId) {
+    let metadata = getters.getNFTClassMetadataById(classId);
+    const { uri, parent } = metadata;
     if (isValidHttpUrl(uri)) {
       const apiMetadata = await this.$api.$get(uri).catch(err => {
         if (!err.response?.status === 404) {
@@ -286,6 +327,7 @@ const actions = {
       if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
     }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
+      const iscnId = parent?.iscn_id_prefix;
       if (iscnId) {
         const iscnRecord = await this.$api
           .$get(api.getISCNRecord(iscnId))
@@ -295,27 +337,16 @@ const actions = {
               console.error(err);
             }
           });
-        const iscnOwner = iscnRecord?.owner;
-        const iscnRecordTimestamp = iscnRecord?.records?.[0]?.recordTimestamp;
-        if (iscnOwner)
-          metadata = {
-            ...metadata,
-            iscn_owner: iscnOwner,
-            iscn_record_timestamp: iscnRecordTimestamp,
-          };
+        if (iscnRecord) {
+          metadata.iscn_owner = iscnRecord.owner;
+          metadata.iscn_record_timestamp =
+            iscnRecord?.records?.[0]?.recordTimestamp;
+        }
       } else if (parent.account) {
-        metadata = {
-          ...metadata,
-          account_owner: parent.account,
-        };
+        metadata.account_owner = parent.account;
       }
     }
-    if (metadata.iscn_record_timestamp)
-      metadata.iscn_record_timestamp = Date.parse(
-        metadata.iscn_record_timestamp
-      );
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
-    return metadata;
   },
   async fetchNFTMetadata({ commit }, { classId, nftId }) {
     let metadata;
@@ -353,29 +384,61 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress({ commit }, address) {
+  async fetchNFTListByAddress({ commit, getters, dispatch }, address) {
     const [collectedNFTs, createdNFTClasses] = await Promise.all([
       getNFTsRespectDualPrefix(this.$api, address),
       getNFTClassesRespectDualPrefix(this.$api, address),
     ]);
+
+    const nftClassIdDataMap = new Map();
+    collectedNFTs.forEach(n => nftClassIdDataMap.set(n.class_id, n.class_data));
+    createdNFTClasses.forEach(c => nftClassIdDataMap.set(c.id, c));
+    nftClassIdDataMap.forEach((classData, classId) => {
+      dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
+    });
+
+    const formattedCreatedNFTClasses = createdNFTClasses.map(
+      formatNFTClassInfo
+    );
+    const formattedCollectedNFTs = collectedNFTs.map(formatNFTInfo);
+    commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
+      address,
+      nfts: {
+        created: getters.normalizeNFTList(formattedCreatedNFTClasses),
+        collected: getters.normalizeNFTList(formattedCollectedNFTs),
+      },
+    });
+
     const timestampMap = {};
-    collectedNFTs.forEach(nft => {
+    formattedCollectedNFTs.forEach(nft => {
       const { classId, timestamp } = nft;
       if (!timestampMap[classId] || timestampMap[classId] < timestamp) {
         timestampMap[classId] = timestamp;
       }
     });
-    commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
-      address,
-      nfts: {
-        created: normalizeNFTList(createdNFTClasses),
-        collected: normalizeNFTList(collectedNFTs),
-      },
-    });
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
       address,
       timestampMap,
     });
+
+    const nftClassIds = Array.from(nftClassIdDataMap.keys());
+    await Promise.all(
+      nftClassIds.map(classId => {
+        const promises = [
+          catchAxiosError(
+            dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
+          ),
+          catchAxiosError(dispatch('fetchNFTOwners', classId)),
+        ];
+        const classData = nftClassIdDataMap.get(classId);
+        if (checkIsWritingNFT(classData.metadata)) {
+          promises.push(
+            catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
+          );
+        }
+        return Promise.all(promises);
+      })
+    );
   },
   async fetchNFTListFeaturedByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.formatFeaturedNFTUrl(address));

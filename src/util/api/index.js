@@ -159,8 +159,9 @@ export const getNFTClassesPartial = ({ owner, limit, key }) => {
   )}`;
 };
 
-export const getNFTsPartial = ({ owner, limit, key }) => {
+export const getNFTsPartial = ({ owner, expandClasses, limit, key }) => {
   const qsPayload = { owner };
+  if (expandClasses) qsPayload.expand_classes = 1;
   if (limit) qsPayload['pagination.limit'] = limit;
   if (key) qsPayload['pagination.key'] = key;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/nft?${querystring.stringify(
