@@ -9,4 +9,13 @@ export function getPropNameGenerator(propKey) {
   };
 }
 
+export function catchAxiosError(res) {
+  return res.catch(e => {
+    if (e.response?.status !== 404) {
+      // eslint-disable-next-line no-console
+      console.error(JSON.stringify(e));
+    }
+  });
+}
+
 export default sleep;

@@ -13,6 +13,7 @@ import {
   formatNFTInfo,
   formatNFTClassInfo,
 } from '~/util/nft';
+import { catchAxiosError } from '~/util/misc';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -403,30 +404,15 @@ const actions = {
     await Promise.all(
       nftClassIds.map(classId => {
         const promises = [
-          dispatch('populateNFTClassMetadataFromURIAndISCN', classId).catch(
-            e => {
-              if (e.response?.status !== 404) {
-                // eslint-disable-next-line no-console
-                console.error(JSON.stringify(e));
-              }
-            }
+          catchAxiosError(
+            dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
           ),
-          dispatch('fetchNFTOwners', classId).catch(e => {
-            if (e.response?.status !== 404) {
-              // eslint-disable-next-line no-console
-              console.error(JSON.stringify(e));
-            }
-          }),
+          catchAxiosError(dispatch('fetchNFTOwners', classId)),
         ];
         const classData = nftClassIdDataMap.get(classId);
         if (checkIsWritingNFT(classData.metadata)) {
           promises.push(
-            dispatch('fetchNFTPurchaseInfo', classId).catch(e => {
-              if (e.response?.status !== 404) {
-                // eslint-disable-next-line no-console
-                console.error(JSON.stringify(e));
-              }
-            })
+            catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
           );
         }
         return Promise.all(promises);

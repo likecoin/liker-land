@@ -21,7 +21,7 @@ import {
   getIdenticonAvatar,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { sleep } from '~/util/misc';
+import { sleep, catchAxiosError } from '~/util/misc';
 import {
   NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
@@ -389,25 +389,11 @@ export default {
       }
     },
     async updateNFTClassMetadata() {
-      try {
-        await this.fetchNFTClassMetadata(this.classId);
-      } catch (error) {
-        if (error.response?.status !== 404) {
-          // eslint-disable-next-line no-console
-          console.error(JSON.stringify(error));
-        }
-      }
+      await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
       this.updateDisplayNameList(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
-      try {
-        await this.fetchNFTPurchaseInfo(this.classId);
-      } catch (error) {
-        if (error.response?.status !== 404) {
-          // eslint-disable-next-line no-console
-          console.error(JSON.stringify(error));
-        }
-      }
+      await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
     },
     async fetchNFTPrices(classId) {
       try {
