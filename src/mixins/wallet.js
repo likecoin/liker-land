@@ -45,7 +45,9 @@ export default {
       'walletFetchLIKEBalance',
     ]),
     async connectWallet() {
-      const connection = await this.openConnectWalletModal();
+      const connection = await this.openConnectWalletModal({
+        language: this.$i18n.locale.split('-')[0],
+      });
       if (!connection) return false;
       const { method } = connection;
       logTrackerEvent(
