@@ -5,7 +5,6 @@ import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
   checkIsWritingNFT,
-  normalizeNFTList,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
   getNFTsRespectDualPrefix,
@@ -14,6 +13,7 @@ import {
   formatNFTClassInfo,
 } from '~/util/nft';
 import { catchAxiosError } from '~/util/misc';
+import { LIKECOIN_NFT_HIDDEN_ITEMS } from '~/constant';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -246,6 +246,27 @@ const getters = {
     });
     return sorted;
   },
+  normalizeNFTList: (_, getters) => list =>
+    [
+      ...new Map(
+        [...list].map(({ classId, nftId, ...data }) => [
+          classId,
+          { ...data, classId, id: nftId },
+        ])
+      ).values(),
+    ]
+      .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
+      .sort((a, b) => {
+        const aIsWritingNFT = checkIsWritingNFT(
+          getters.getNFTClassMetadataById(a.classId)
+        );
+        const bIsWritingNFT = checkIsWritingNFT(
+          getters.getNFTClassMetadataById(b.classId)
+        );
+        if (aIsWritingNFT && !bIsWritingNFT) return -1;
+        if (!aIsWritingNFT && bIsWritingNFT) return 1;
+        return b.timestamp - a.timestamp;
+      }),
 };
 
 const actions = {
@@ -363,7 +384,7 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress({ commit, dispatch }, address) {
+  async fetchNFTListByAddress({ commit, getters, dispatch }, address) {
     const [collectedNFTs, createdNFTClasses] = await Promise.all([
       getNFTsRespectDualPrefix(this.$api, address),
       getNFTClassesRespectDualPrefix(this.$api, address),
@@ -383,8 +404,8 @@ const actions = {
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
       nfts: {
-        created: normalizeNFTList(formattedCreatedNFTClasses, getters),
-        collected: normalizeNFTList(formattedCollectedNFTs, getters),
+        created: getters.normalizeNFTList(formattedCreatedNFTClasses),
+        collected: getters.normalizeNFTList(formattedCollectedNFTs),
       },
     });
 

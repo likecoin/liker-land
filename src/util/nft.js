@@ -9,7 +9,6 @@ import {
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
-  LIKECOIN_NFT_HIDDEN_ITEMS,
 } from '../constant';
 
 let queryClient = null;
@@ -305,27 +304,4 @@ export function parseNFTMetadataURL(url) {
   if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
   if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
   return url;
-}
-
-export function normalizeNFTList(list, getters) {
-  return [
-    ...new Map(
-      [...list].map(({ classId, nftId, ...data }) => [
-        classId,
-        { ...data, classId, id: nftId },
-      ])
-    ).values(),
-  ]
-    .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
-    .sort((a, b) => {
-      const aIsWritingNFT = checkIsWritingNFT(
-        getters.getNFTClassMetadataById(a.classId)
-      );
-      const bIsWritingNFT = checkIsWritingNFT(
-        getters.getNFTClassMetadataById(b.classId)
-      );
-      if (aIsWritingNFT && !bIsWritingNFT) return -1;
-      if (!aIsWritingNFT && bIsWritingNFT) return 1;
-      return b.timestamp - a.timestamp;
-    });
 }
