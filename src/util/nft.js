@@ -318,16 +318,14 @@ export function normalizeNFTList(list, getters) {
   ]
     .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
     .sort((a, b) => {
-      if (a.id && b.id) {
-        const aIsWritingNFT = checkIsWritingNFT(
-          getters.getNFTClassMetadataById(a.id)
-        );
-        const bIsWritingNFT = checkIsWritingNFT(
-          getters.getNFTClassMetadataById(b.id)
-        );
-        if (aIsWritingNFT && !bIsWritingNFT) return -1;
-        if (!aIsWritingNFT && bIsWritingNFT) return 1;
-      }
+      const aIsWritingNFT = checkIsWritingNFT(
+        getters.getNFTClassMetadataById(a.classId)
+      );
+      const bIsWritingNFT = checkIsWritingNFT(
+        getters.getNFTClassMetadataById(b.classId)
+      );
+      if (aIsWritingNFT && !bIsWritingNFT) return -1;
+      if (!aIsWritingNFT && bIsWritingNFT) return 1;
       return b.timestamp - a.timestamp;
     });
 }
