@@ -1,8 +1,7 @@
 const { EXTERNAL_URL } = process.env;
 
 exports.convertLanguageCodeForEmailTemplate = (languageCode = 'en') => {
-  const code = languageCode.split('-')[0];
-  switch (code) {
+  switch (languageCode) {
     case 'zh-Hant':
       return 'zh';
     default:
