@@ -126,9 +126,11 @@ const actions = {
     return connector;
   },
 
-  async openConnectWalletModal({ dispatch }) {
+  async openConnectWalletModal({ dispatch }, { language } = {}) {
     const connector = await dispatch('getConnector');
-    const connection = await connector.openConnectWalletModal();
+    const connection = await connector.openConnectionMethodSelectionDialog({
+      language,
+    });
     return connection;
   },
 
