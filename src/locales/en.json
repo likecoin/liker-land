@@ -72,6 +72,7 @@
   "nft_details_page_button_transfer": "Transfer",
   "nft_details_page_button_view": "View Content",
   "nft_details_page_button_view_details": "View Details",
+  "nft_details_page_button_view_message": "View {num} messages",
   "nft_details_page_button_show_more": "show more",
   "nft_details_page_button_share": "Share",
   "nft_details_page_button_portfolio": "Portfolio",

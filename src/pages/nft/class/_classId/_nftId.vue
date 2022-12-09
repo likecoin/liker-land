@@ -1,15 +1,15 @@
 <template>
-  <Page>
+  <Page class="overflow-x-hidden">
     <CardV2
       v-if="isLoading"
       class="absolute top-[40%]"
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
       v-else
-      class="px-[12px] laptop:px-[24px] pb-[120px] w-full"
+      class="px-[12px] laptop:px-[24px] phone:px-[32px] pb-[120px] w-full"
     >
 
-      <div class="flex flex-col gap-[32px] w-full max-w-[962px] mx-auto">
+      <div class="flex flex-col gap-[32px] phone:gap-[16px] w-full max-w-[962px] mx-auto">
         <header
           :class="[
             'flex flex-col items-center w-full sm:flex-row gap-[24px]',
@@ -18,11 +18,13 @@
         >
           <NFTMessageIdentity
             v-if="nftCollectorWalletAddress"
+            class="phone:order-3 phone:self-start"
             :type="getWalletIdentityType(nftCollectorWalletAddress)"
             :wallet-address="nftCollectorWalletAddress"
             wrapper-classes="!bg-transparent"
           />
           <NFTPageControlBar
+            class="phone:order-1"
             :collected-count="ownCount"
             :collected-nft-ids="userCollectedNFTList"
             :class-id="classId"
@@ -34,44 +36,27 @@
             @collect="handleCollectFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
+          <hr
+            :class="[
+              'hidden',
+              'phone:block',
+              'phone:order-2',
+              'h-[2px]',
+              'w-full',
+              'border-shade-gray',
+            ]"
+          >
         </header>
 
         <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
           <!-- NFT Message List -->
-          <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px]">
-            <CardV2 class="flex gap-[24px] w-full">
-              <div>
-                <Label
-                  class="text-medium-gray text-[12px]"
-                  preset="h6"
-                  :text="$t('nft_details_page_label_owning')"
-                />
-                <div class="mt-[4px] text-[600]">{{ nftCollectorCollectedCount }}</div>
-              </div>
-              <hr class="w-[2px] bg-shade-gray h-[48px] border-none shrink-0">
-              <div class="min-w-0">
-                <Label
-                  class="text-medium-gray text-[12px]"
-                  preset="h6"
-                  :text="$t('nft_details_page_label_nft_id')"
-                />
-                <div class="mt-[4px] flex items-center relative gap-[8px]">
-                  <select
-                    v-model="selectedNFTId"
-                    class="absolute opacity-0"
-                    @change="onSelectNFT"
-                  >
-                    <option
-                      v-for="id in nftCollectorCollectedNFTList"
-                      :key="id"
-                      :value="id"
-                    >{{ id }}</option>
-                  </select>
-                  <div class="truncate">{{ selectedNFTId }}</div>
-                  <IconArrowDown class="w-[12px] h-[12px] shrink-0" />
-                </div>
-              </div>
-            </CardV2>
+          <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px] phone:hidden">
+            <NFTPageCollectedList
+              :nft-collector-collected-count="nftCollectorCollectedCount"
+              :selected-nft-id="selectedNFTId"
+              :nft-collector-collected-n-f-t-list="nftCollectorCollectedNFTList"
+              @onSelectNFT="onSelectNFT"
+            />
             <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
               <NFTMessage
                 v-for="m in messageList"
@@ -87,6 +72,37 @@
                 tag="li"
               />
             </ul>
+          </div>
+
+          <!-- phone: NFT Message List -->
+          <div v-if="!nftIsNew" class="hidden col-span-2 flex-col items-center gap-[24px] phone:flex">
+            <div
+              v-if="messageList.length && messageList[0].message"
+              class="flex flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px]"
+            >
+              <Label :text="$t('nft_message_type_generic')" class="text-medium-gray" />
+              <ButtonV2
+                preset="outline"
+                class="my-[8px]"
+                :text="$t('nft_details_page_button_view_message',{
+                  num:messageList.length
+                })"
+                @click="isOpenMessageModal = true"
+              >
+                <template #prepend>
+                  <IconView />
+                </template>
+                <template #append>
+                  <IconArrowLeft class="rotate-[180deg]" />
+                </template>
+              </ButtonV2>
+            </div>
+            <NFTPageCollectedList
+              :nft-collector-collected-count="nftCollectorCollectedCount"
+              :selected-nft-id="selectedNFTId"
+              :nft-collector-collected-n-f-t-list="nftCollectorCollectedNFTList"
+              @onSelectNFT="onSelectNFT"
+            />
           </div>
 
           <!-- NFT Preview -->
@@ -121,7 +137,7 @@
               />
             </NFTGemWrapper>
             <ButtonV2
-              class="text-medium-gray"
+              class="text-medium-gray phone:hidden"
               content-class="text-[12px]"
               preset="plain"
               size="mini"
@@ -168,7 +184,7 @@
           </div>
         </section>
 
-        <Separator class="mx-auto" />
+        <Separator class="mx-auto phone:hidden" />
 
         <section>
           <NFTPageChainDataSection
@@ -178,6 +194,44 @@
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
             :content-fingerprints="nftISCNContentFingerprints"
+          />
+        </section>
+
+        <!-- phone: footer -->
+        <section class="flex-col items-center hidden phone:flex">
+          <ButtonV2
+            class="text-medium-gray"
+            content-class="text-[12px]"
+            preset="plain"
+            size="mini"
+            :to="{ name: 'nft-class-classId', params: { classId } }"
+          >
+            <template #prepend>
+              <IconEye class="w-[12px] h-[12px]" />
+            </template>
+            {{ $t('nft_details_page_button_view_details') }}
+          </ButtonV2>
+          <hr
+            :class="[
+              'hidden',
+              'phone:block',
+              'h-[2px]',
+              'w-full',
+              'my-[24px]',
+              'border-shade-gray',
+            ]"
+          >
+          <NFTPageControlBar
+            :collected-count="ownCount"
+            :collected-nft-ids="userCollectedNFTList"
+            :class-id="classId"
+            :current-nft-id="nftId"
+            :view="nftIsNew ? 'created' : 'collected'"
+            :price="NFTPrice"
+            :is-writing-nft="nftIsWritingNFT"
+            @transfer="onToggleTransfer"
+            @collect="handleCollectFromControlBar"
+            @click-user-collected-count="handleClickUserCollectedCount"
           />
         </section>
       </div>
@@ -191,6 +245,12 @@
       :nft-id="nftId"
       @close="isOpenTransferModal = false; isTransferring = false"
       @submit="handleTransfer"
+    />
+    <NFTMessageDialog
+      :is-open="isOpenMessageModal"
+      :message-list="messageList"
+      :nft-collector-wallet-address="nftCollectorWalletAddress"
+      @close="isOpenMessageModal = false"
     />
   </Page>
 </template>
@@ -206,7 +266,6 @@ import { ellipsis } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
-import { nftClassCollectionType } from '~/util/nft';
 
 export default {
   name: 'NFTDetailsPage',
@@ -286,6 +345,7 @@ export default {
       isLoading: true,
 
       isOpenTransferModal: false,
+      isOpenMessageModal: false,
       isTransferring: false,
       isCollecting: false,
     };
