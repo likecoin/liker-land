@@ -87,7 +87,11 @@
                 :text="$t('nft_details_page_button_view_message',{
                   num:messageList.length
                 })"
-                @click="isOpenMessageModal = true"
+                :to="{
+                  name: 'nft-class-classId-nftId-message',
+                  params: { classId, nftId: selectedNFTId }
+                }"
+                target="_blank"
               >
                 <template #prepend>
                   <IconView />
@@ -245,12 +249,6 @@
       :nft-id="nftId"
       @close="isOpenTransferModal = false; isTransferring = false"
       @submit="handleTransfer"
-    />
-    <NFTMessageDialog
-      :is-open="isOpenMessageModal"
-      :message-list="messageList"
-      :nft-collector-wallet-address="nftCollectorWalletAddress"
-      @close="isOpenMessageModal = false"
     />
   </Page>
 </template>
