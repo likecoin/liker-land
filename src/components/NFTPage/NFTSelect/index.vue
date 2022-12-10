@@ -22,7 +22,7 @@
           @change="onSelectNFT"
         >
           <option
-            v-for="id in nftCollectorCollectedNFTList"
+            v-for="id in nftCollectorCollectedNftList"
             :key="id"
             :value="id"
           >{{ id }}</option>
@@ -44,14 +44,14 @@ export default {
       type: String,
       default: undefined,
     },
-    nftCollectorCollectedNFTList: {
+    nftCollectorCollectedNftList: {
       type: Array,
       default: undefined,
     },
   },
   methods: {
-    onSelectNFT() {
-      this.$emit('onSelectNFT');
+    onSelectNFT(value) {
+      this.$emit('selectNFT', value);
     },
   },
 };

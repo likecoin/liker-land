@@ -51,11 +51,11 @@
         <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
           <!-- NFT Message List -->
           <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px] phone:hidden">
-            <NFTPageCollectedList
+            <NFTPageNFTSelect
               :nft-collector-collected-count="nftCollectorCollectedCount"
               :selected-nft-id="selectedNFTId"
-              :nft-collector-collected-n-f-t-list="nftCollectorCollectedNFTList"
-              @onSelectNFT="onSelectNFT"
+              :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
+              @selectNFT="onSelectNFT"
             />
             <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
               <NFTMessage
@@ -84,8 +84,8 @@
               <ButtonV2
                 preset="outline"
                 class="my-[8px]"
-                :text="$t('nft_details_page_button_view_message',{
-                  num:messageList.length
+                :text="$t('nft_details_page_button_view_message', {
+                  num: messageList.length
                 })"
                 :to="{
                   name: 'nft-class-classId-nftId-message',
@@ -101,11 +101,11 @@
                 </template>
               </ButtonV2>
             </div>
-            <NFTPageCollectedList
+            <NFTPageNFTSelect
               :nft-collector-collected-count="nftCollectorCollectedCount"
               :selected-nft-id="selectedNFTId"
-              :nft-collector-collected-n-f-t-list="nftCollectorCollectedNFTList"
-              @onSelectNFT="onSelectNFT"
+              :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
+              @selectNFT="onSelectNFT"
             />
           </div>
 
