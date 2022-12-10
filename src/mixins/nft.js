@@ -522,6 +522,7 @@ export default {
       await this.fetchNFTListHiddenByAddress(this.getAddress);
     },
     async collectNFT() {
+      this.$router.push({ query: { ...this.$route.query, action: 'collect' } });
       try {
         const purchaseEventParams = {
           name: this.NFTName,
@@ -546,6 +547,10 @@ export default {
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
+      } finally {
+        this.$router.push({
+          query: { ...this.$route.query, action: undefined },
+        });
       }
     },
     async collectNFTWithLIKE() {
