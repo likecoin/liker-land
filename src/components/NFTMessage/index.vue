@@ -30,16 +30,18 @@
     >
       <NFTMessageIdentity
         v-if="fromWallet"
+        class="phone:order-3"
         :type="fromType"
         :is-show-type-label="isShowIdentityTypeLabel"
         :wallet-address="fromWallet"
       />
       <IconArrowLeft
         v-if="fromWallet && toWallet"
-        class="w-[16px] h-[16px] text-like-green rotate-[-90deg] sm:rotate-180"
+        class="w-[16px] h-[16px] text-like-green rotate-[180deg] phone:order-2 phone:rotate-[90deg]"
       />
       <NFTMessageIdentity
         v-if="toWallet"
+        class="phone:order-1"
         :type="toType"
         :is-show-type-label="isShowIdentityTypeLabel"
         :wallet-address="toWallet"
