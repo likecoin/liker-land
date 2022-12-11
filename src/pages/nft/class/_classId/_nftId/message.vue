@@ -34,12 +34,6 @@ import nftMixin from '~/mixins/nft';
 export default {
   mixins: [nftMixin],
   computed: {
-    nftId() {
-      return this.$route.params.nftId;
-    },
-    classId() {
-      return this.$route.params.classId;
-    },
     messageList() {
       return [...this.populatedEvents]
         .filter(e => e.event !== 'new_class')

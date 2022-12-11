@@ -5,7 +5,7 @@
       class="absolute top-[40%]"
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
-      v-else
+      v-else-if="!isLoading && !isMessagePage"
       class="px-[12px] laptop:px-[24px] phone:px-[32px] pb-[120px] w-full"
     >
 
@@ -91,7 +91,6 @@
                   name: 'nft-class-classId-nftId-message',
                   params: { classId, nftId: selectedNFTId }
                 }"
-                target="_blank"
               >
                 <template #prepend>
                   <IconView />
@@ -240,7 +239,7 @@
         </section>
       </div>
     </div>
-
+    <NuxtChild v-else-if="!isLoading && isMessagePage"/>
     <EventModalTransfer
       v-if="classId"
       :is-open="isOpenTransferModal"
@@ -379,6 +378,9 @@ export default {
           toType: this.getWalletIdentityType(m.toWallet),
           message: this.normalizeNFTMessage(m),
         }));
+    },
+    isMessagePage() {
+      return this.$route.name === 'nft-class-classId-nftId-message';
     },
   },
   async asyncData({ route, query, store, redirect, error }) {
