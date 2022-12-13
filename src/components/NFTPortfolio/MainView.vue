@@ -82,7 +82,6 @@
       />
 
       <ul
-        v-if="!isPortfolioTabCreatedActive || portfolioItemsTrimmed.length"
         ref="portfolioGrid"
         class="self-stretch -mx-[12px] desktop:w-[668px] transition-all relative"
       >
@@ -261,6 +260,8 @@ export default {
       this.$nextTick(this.setupPortfolioGrid);
     },
     portfolioItemsTrimmed(items, prevItems) {
+      if (this.isLoadingPortfolioItems) return;
+
       if (items.length === prevItems.length && this.portfolioGridController) {
         this.$nextTick(this.updatePortfolioGrid);
       } else {
@@ -268,6 +269,8 @@ export default {
       }
     },
     portfolioItemsSortingValue() {
+      if (this.isLoadingPortfolioItems) return;
+
       this.$nextTick(this.updatePortfolioGrid);
     },
     hasMorePortfolioItems(hasMorePortfolioItems) {
@@ -275,6 +278,11 @@ export default {
         this.addInfiniteScrollListener();
       } else {
         this.removeInfiniteScrollListener();
+      }
+    },
+    isLoadingPortfolioItems(isLoading) {
+      if (!isLoading) {
+        this.$nextTick(this.setupPortfolioGrid);
       }
     },
   },
