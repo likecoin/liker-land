@@ -141,7 +141,7 @@ export default {
             this,
             'NFT',
             'dashboard_nft_display_state_hide',
-            this.getAddress,
+            this.classId,
             1
           );
           await Promise.all([
@@ -160,7 +160,7 @@ export default {
             this,
             'NFT',
             'dashboard_nft_display_state_unhide',
-            this.getAddress,
+            this.classId,
             1
           );
           await this.removeNFTHidden({
@@ -173,7 +173,7 @@ export default {
             this,
             'NFT',
             'dashboard_nft_display_state_feature',
-            this.getAddress,
+            this.classId,
             1
           );
           await this.addNFTFeatured({
