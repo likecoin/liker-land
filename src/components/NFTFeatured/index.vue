@@ -62,6 +62,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import { NFT_DISPLAY_STATE } from '~/constant';
 
+import { logTrackerEvent } from '~/util/EventLogger';
+
 export default {
   props: {
     displayState: {
@@ -135,6 +137,13 @@ export default {
 
       switch (this.displayState) {
         case NFT_DISPLAY_STATE.FEATURED:
+          logTrackerEvent(
+            this,
+            'NFT',
+            'dashboard_nft_display_state_hide',
+            this.classId,
+            1
+          );
           await Promise.all([
             this.removeNFTFeatured({
               address: this.getAddress,
@@ -147,12 +156,26 @@ export default {
           ]);
           break;
         case NFT_DISPLAY_STATE.HIDDEN:
+          logTrackerEvent(
+            this,
+            'NFT',
+            'dashboard_nft_display_state_unhide',
+            this.classId,
+            1
+          );
           await this.removeNFTHidden({
             address: this.getAddress,
             classId: this.classId,
           });
           break;
         case NFT_DISPLAY_STATE.DEFAULT:
+          logTrackerEvent(
+            this,
+            'NFT',
+            'dashboard_nft_display_state_feature',
+            this.classId,
+            1
+          );
           await this.addNFTFeatured({
             address: this.getAddress,
             classId: this.classId,
