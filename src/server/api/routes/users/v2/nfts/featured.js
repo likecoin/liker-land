@@ -28,6 +28,21 @@ router.get('/:wallet/nfts/featured', async (req, res, next) => {
   }
 });
 
+router.get('/:wallet/nfts/hidden', async (req, res, next) => {
+  try {
+    const { wallet: user } = req.params;
+    if (!isValidAddress(user)) {
+      res.status(400).send('INVALID_ADDRESS');
+      return;
+    }
+    const userDoc = await walletUserCollection.doc(user).get();
+    const { hiddenNFTClassIds = [] } = userDoc.data() || {};
+    res.json({ hidden: hiddenNFTClassIds });
+  } catch (err) {
+    handleRestfulError(req, res, next, err);
+  }
+});
+
 router.post(
   '/:wallet/nfts/featured',
   authenticateV2Login,
@@ -43,6 +58,53 @@ router.post(
       }
       await walletUserCollection.doc(user).update({
         featuredNFTClassIds: FieldValue.arrayUnion(classId),
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
+    }
+  }
+);
+
+router.post(
+  '/:wallet/nfts/hidden',
+  authenticateV2Login,
+  checkParamWalletMatch,
+  async (req, res, next) => {
+    try {
+      setPrivateCacheHeader(res);
+      const { wallet: user } = req.params;
+      const { classId } = req.body;
+      if (!classId) {
+        res.status(400).send('CLASS_ID_MISSING');
+        return;
+      }
+      await walletUserCollection.doc(user).update({
+        featuredNFTClassIds: FieldValue.arrayRemove(classId),
+        hiddenNFTClassIds: FieldValue.arrayUnion(classId),
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
+    }
+  }
+);
+
+router.post(
+  '/:wallet/nfts/unhidden',
+  authenticateV2Login,
+  checkParamWalletMatch,
+  async (req, res, next) => {
+    try {
+      setPrivateCacheHeader(res);
+      const { wallet: user } = req.params;
+      const { classId } = req.body;
+      if (!classId) {
+        res.status(400).send('CLASS_ID_MISSING');
+        return;
+      }
+      await walletUserCollection.doc(user).update({
+        hiddenNFTClassIds: FieldValue.arrayRemove(classId),
       });
       res.sendStatus(200);
     } catch (err) {
