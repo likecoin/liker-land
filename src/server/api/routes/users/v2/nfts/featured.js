@@ -64,7 +64,7 @@ router.post(
         featuredNFTClassIds: FieldValue.arrayUnion(classId),
       });
       publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'UserNFTClassFeatured',
+        logType: 'dashboard_nft_display_state_feature',
         user,
         classId,
       });
@@ -93,7 +93,7 @@ router.post(
         hiddenNFTClassIds: FieldValue.arrayUnion(classId),
       });
       publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'UserNFTClassHidden',
+        logType: 'dashboard_nft_display_state_hide',
         user,
         classId,
       });
@@ -121,7 +121,7 @@ router.post(
         hiddenNFTClassIds: FieldValue.arrayRemove(classId),
       });
       publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'UserNFTClassUnhidden',
+        logType: 'dashboard_nft_display_state_unhide',
         user,
         classId,
       });
