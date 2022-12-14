@@ -15,6 +15,12 @@ const {
   PUBSUB_TOPIC_MISC,
 } = require('../../../../../modules/pubsub');
 
+const STATES = {
+  featured: 'featured',
+  hidden: 'hidden',
+  normal: 'normal',
+};
+
 const router = Router();
 
 router.get('/:wallet/nfts/featured', async (req, res, next) => {
@@ -48,80 +54,45 @@ router.get('/:wallet/nfts/hidden', async (req, res, next) => {
 });
 
 router.post(
-  '/:wallet/nfts/featured',
+  '/:wallet/nfts/:state',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
+      const { wallet: user, state } = req.params;
       const { classId } = req.body;
       if (!classId) {
         res.status(400).send('CLASS_ID_MISSING');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        featuredNFTClassIds: FieldValue.arrayUnion(classId),
-      });
-      publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'dashboard_nft_display_state_feature',
-        user,
-        classId,
-      });
-      res.sendStatus(200);
-    } catch (err) {
-      handleRestfulError(req, res, next, err);
-    }
-  }
-);
-
-router.post(
-  '/:wallet/nfts/hidden',
-  authenticateV2Login,
-  checkParamWalletMatch,
-  async (req, res, next) => {
-    try {
-      setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
-      const { classId } = req.body;
-      if (!classId) {
-        res.status(400).send('CLASS_ID_MISSING');
+      if (!STATES[state]) {
+        res.status(400).send('INVALID_STATE');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        featuredNFTClassIds: FieldValue.arrayRemove(classId),
-        hiddenNFTClassIds: FieldValue.arrayUnion(classId),
-      });
-      publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'dashboard_nft_display_state_hide',
-        user,
-        classId,
-      });
-      res.sendStatus(200);
-    } catch (err) {
-      handleRestfulError(req, res, next, err);
-    }
-  }
-);
-
-router.post(
-  '/:wallet/nfts/unhidden',
-  authenticateV2Login,
-  checkParamWalletMatch,
-  async (req, res, next) => {
-    try {
-      setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
-      const { classId } = req.body;
-      if (!classId) {
-        res.status(400).send('CLASS_ID_MISSING');
-        return;
+      const payload = {};
+      let logType;
+      switch (state) {
+        case STATES.featured:
+          payload.featuredNFTClassIds = FieldValue.arrayUnion(classId);
+          payload.hiddenNFTClassIds = FieldValue.arrayRemove(classId);
+          logType = 'dashboard_nft_display_state_feature';
+          break;
+        case STATES.hidden:
+          payload.featuredNFTClassIds = FieldValue.arrayRemove(classId);
+          payload.hiddenNFTClassIds = FieldValue.arrayUnion(classId);
+          logType = 'dashboard_nft_display_state_hide';
+          break;
+        case STATES.normal:
+        default:
+          payload.featuredNFTClassIds = FieldValue.arrayRemove(classId);
+          payload.hiddenNFTClassIds = FieldValue.arrayRemove(classId);
+          logType = 'dashboard_nft_display_state_unhide';
+          break;
       }
-      await walletUserCollection.doc(user).update({
-        hiddenNFTClassIds: FieldValue.arrayRemove(classId),
-      });
+      await walletUserCollection.doc(user).update(payload);
       publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'dashboard_nft_display_state_unhide',
+        logType,
         user,
         classId,
       });
