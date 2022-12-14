@@ -51,26 +51,4 @@ router.post(
   }
 );
 
-router.delete(
-  '/:wallet/nfts/featured/:classId',
-  authenticateV2Login,
-  checkParamWalletMatch,
-  async (req, res, next) => {
-    try {
-      setPrivateCacheHeader(res);
-      const { wallet: user, classId } = req.params;
-      if (!classId) {
-        res.status(400).send('CLASS_ID_MISSING');
-        return;
-      }
-      await walletUserCollection.doc(user).update({
-        featuredNFTClassIds: FieldValue.arrayRemove(classId),
-      });
-      res.sendStatus(200);
-    } catch (err) {
-      handleRestfulError(req, res, next, err);
-    }
-  }
-);
-
 module.exports = router;

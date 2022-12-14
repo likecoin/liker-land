@@ -42,6 +42,7 @@ router.post(
         return;
       }
       await walletUserCollection.doc(user).update({
+        featuredNFTClassIds: FieldValue.arrayRemove(classId),
         hiddenNFTClassIds: FieldValue.arrayUnion(classId),
       });
       res.sendStatus(200);
@@ -51,14 +52,15 @@ router.post(
   }
 );
 
-router.delete(
-  '/:wallet/nfts/hidden/:classId',
+router.post(
+  '/:wallet/nfts/unhidden',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
-      const { wallet: user, classId } = req.params;
+      const { wallet: user } = req.params;
+      const { classId } = req.body;
       if (!classId) {
         res.status(400).send('CLASS_ID_MISSING');
         return;

@@ -269,3 +269,6 @@ export const formatFeaturedNFTUrl = wallet =>
 
 export const formatHiddenNFTUrl = wallet =>
   `/api/v2/users/${wallet}/nfts/hidden`;
+
+export const formatUnhiddenNFTUrl = wallet =>
+  `/api/v2/users/${wallet}/nfts/unhidden`;

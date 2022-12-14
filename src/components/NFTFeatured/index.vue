@@ -121,10 +121,9 @@ export default {
   methods: {
     ...mapActions([
       'signLogin',
-      'addNFTFeatured',
-      'addNFTHidden',
-      'removeNFTFeatured',
-      'removeNFTHidden',
+      'setNFTFeatured',
+      'setNFTHidden',
+      'setNFTUnhidden',
     ]),
     async handleClick(event) {
       event.preventDefault();
@@ -144,16 +143,10 @@ export default {
             this.classId,
             1
           );
-          await Promise.all([
-            this.removeNFTFeatured({
-              address: this.getAddress,
-              classId: this.classId,
-            }),
-            this.addNFTHidden({
-              address: this.getAddress,
-              classId: this.classId,
-            }),
-          ]);
+          await this.setNFTHidden({
+            address: this.getAddress,
+            classId: this.classId,
+          });
           break;
         case NFT_DISPLAY_STATE.HIDDEN:
           logTrackerEvent(
@@ -163,7 +156,7 @@ export default {
             this.classId,
             1
           );
-          await this.removeNFTHidden({
+          await this.setNFTUnhidden({
             address: this.getAddress,
             classId: this.classId,
           });
@@ -176,7 +169,7 @@ export default {
             this.classId,
             1
           );
-          await this.addNFTFeatured({
+          await this.setNFTFeatured({
             address: this.getAddress,
             classId: this.classId,
           });
