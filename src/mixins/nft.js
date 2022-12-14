@@ -607,7 +607,11 @@ export default {
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
           const result = await this.$api.post(
-            postNFTPurchase({ txHash, classId: this.classId })
+            postNFTPurchase({
+              txHash,
+              classId: this.classId,
+              ts: Date.now(),
+            })
           );
           logTrackerEvent(
             this,

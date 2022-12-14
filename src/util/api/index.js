@@ -198,11 +198,12 @@ export const getNFTEvents = ({
   )}`;
 };
 
-export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
+export const postNFTPurchase = ({ txHash, iscnId, classId, ts }) => {
   const qsPayload = {
     tx_hash: txHash,
     iscn_id: iscnId,
     class_id: classId,
+    ts,
   };
   return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(
     qsPayload
