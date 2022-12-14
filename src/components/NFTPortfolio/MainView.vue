@@ -33,15 +33,16 @@
       </ul>
     </nav>
 
-    <CardV2 v-if="isLoadingPortfolioItems">{{ $t('nft_portfolio_page_label_loading') }}</CardV2>
-    <div
-      v-else
-      :class="['flex flex-col items-center gap-[32px] w-full', narrowClass]"
-    >
+    <div :class="['flex flex-col items-center gap-[32px] w-full', narrowClass]">
 
       <div
-        v-if="portfolioItemsTrimmed.length"
-        class="self-stretch justify-end hidden desktop:flex"
+        v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
+        :class="[
+          'self-stretch justify-end hidden desktop:flex',
+          {
+            'opacity-0 pointer-events-none': isLoadingPortfolioItems
+          }
+        ]"
       >
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
@@ -81,9 +82,29 @@
         :is-portfolio="true"
       />
 
+      <div
+        v-if="isLoadingPortfolioItems"
+        class="grid grid-cols-1 laptop:grid-cols-2 gap-[24px] w-full"
+      >
+        <div class="flex flex-col gap-[24px]">
+          <NFTPortfolioItemPlaceholder />
+          <NFTPortfolioItemPlaceholder />
+          <NFTPortfolioItemPlaceholder />
+        </div>
+        <div class="flex flex-col gap-[24px]">
+          <NFTPortfolioItemPlaceholder />
+          <NFTPortfolioItemPlaceholder />
+          <NFTPortfolioItemPlaceholder />
+        </div>
+      </div>
       <ul
         ref="portfolioGrid"
-        class="self-stretch -mx-[12px] desktop:w-[668px] transition-all relative"
+        :class="[
+          'self-stretch -mx-[12px] desktop:w-[668px] transition-all relative',
+          {
+            'opacity-0 pointer-events-none': isLoadingPortfolioItems
+          }
+        ]"
       >
         <li v-if="!portfolioItemsTrimmed.length" class="w-full mx-[12px]">
           <NFTPortfolioEmpty :preset="portfolioTab" />
@@ -107,7 +128,7 @@
       </ul>
 
       <div
-        v-if="hasMorePortfolioItems"
+        v-if="!isLoadingPortfolioItems && hasMorePortfolioItems"
         ref="infiniteScrollTrigger"
         class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
       >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
