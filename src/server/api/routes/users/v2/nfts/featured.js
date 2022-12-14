@@ -10,6 +10,10 @@ const {
   FieldValue,
   walletUserCollection,
 } = require('../../../../../modules/firebase');
+const {
+  publisher,
+  PUBSUB_TOPIC_MISC,
+} = require('../../../../../modules/pubsub');
 
 const router = Router();
 
@@ -59,6 +63,11 @@ router.post(
       await walletUserCollection.doc(user).update({
         featuredNFTClassIds: FieldValue.arrayUnion(classId),
       });
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserNFTClassFeatured',
+        user,
+        classId,
+      });
       res.sendStatus(200);
     } catch (err) {
       handleRestfulError(req, res, next, err);
@@ -83,6 +92,11 @@ router.post(
         featuredNFTClassIds: FieldValue.arrayRemove(classId),
         hiddenNFTClassIds: FieldValue.arrayUnion(classId),
       });
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserNFTClassHidden',
+        user,
+        classId,
+      });
       res.sendStatus(200);
     } catch (err) {
       handleRestfulError(req, res, next, err);
@@ -105,6 +119,11 @@ router.post(
       }
       await walletUserCollection.doc(user).update({
         hiddenNFTClassIds: FieldValue.arrayRemove(classId),
+      });
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserNFTClassUnhidden',
+        user,
+        classId,
       });
       res.sendStatus(200);
     } catch (err) {
