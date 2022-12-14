@@ -130,7 +130,7 @@
       <div
         v-if="!isLoadingPortfolioItems && hasMorePortfolioItems"
         ref="infiniteScrollTrigger"
-        class="animate-pulse flex items-center justify-center font-[600] text-gray-9b min-h-[240px]"
+        class="animate-pulse flex justify-center font-[600] px-[24px] py-[128px] text-gray-9b min-h-screen"
       >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
 
       <slot name="grid-append" />
@@ -159,7 +159,7 @@ import { tabOptions } from '~/mixins/portfolio';
 const portfolioGridDebounceArgs = [
   60,
   {
-    maxWait: 300,
+    maxWait: 60,
     leading: false,
     trailing: true,
   },
