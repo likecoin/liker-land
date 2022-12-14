@@ -126,14 +126,7 @@ export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS = IS_TESTNET
       // Wallet address
       'like1qv66yzpgg9f8w46zj7gkuk9wd2nrpqmca3huxf', // Aurora
     ]
-  : [
-      'like128l3t64trehh8jnr8klqaj8c2sug6wlg4jxqf8', // 許明恩
-      'like1axrhn76rhdp709ckwper5rt65w2kuvlh62ccj0', // 黃牛山人
-      'like13f4glvg80zvfrrs7utft5p68pct4mcq7t5atf6', // ckxpress
-      'like1y95wh6qrxv8l6xftak272rvjxxyscqgrewal3v', // 鄒頌華
-      'like1fph6p38zvhhdgp7sm8zc258vk2p52ganzck5tr', // Pazu
-      'like17qvxp9p5ejxvk5z0ru0epvxjkca98s5zx44tr6', // Sally
-    ];
+  : [];
 
 export const TX_STATUS = {
   SIGN: 'sign',
