@@ -15,15 +15,15 @@ const {
   PUBSUB_TOPIC_MISC,
 } = require('../../../../../modules/pubsub');
 
-const STATES = {
-  featured: 'featured',
-  hidden: 'hidden',
-  normal: 'normal',
+const NFT_DISPLAY_STATE = {
+  FEATURED: 'featured',
+  HIDDEN: 'hidden',
+  DEFAULT: 'default',
 };
 
 const router = Router();
 
-router.get('/:wallet/nfts/featured', async (req, res, next) => {
+router.get('/:wallet/nfts/display-state', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     if (!isValidAddress(user)) {
@@ -31,64 +31,49 @@ router.get('/:wallet/nfts/featured', async (req, res, next) => {
       return;
     }
     const userDoc = await walletUserCollection.doc(user).get();
-    const { featuredNFTClassIds = [] } = userDoc.data() || {};
-    res.json({ featured: featuredNFTClassIds });
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
-  }
-});
-
-router.get('/:wallet/nfts/hidden', async (req, res, next) => {
-  try {
-    const { wallet: user } = req.params;
-    if (!isValidAddress(user)) {
-      res.status(400).send('INVALID_ADDRESS');
-      return;
-    }
-    const userDoc = await walletUserCollection.doc(user).get();
-    const { hiddenNFTClassIds = [] } = userDoc.data() || {};
-    res.json({ hidden: hiddenNFTClassIds });
+    const { featuredNFTClassIds = [], hiddenNFTClassIds = [] } =
+      userDoc.data() || {};
+    res.json({ featured: featuredNFTClassIds, hidden: hiddenNFTClassIds });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
 });
 
 router.post(
-  '/:wallet/nfts/:state',
+  '/:wallet/nfts/display-state',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
-      const { wallet: user, state } = req.params;
-      const { classId } = req.body;
+      const { wallet: user } = req.params;
+      const { classId, displayState } = req.body;
       if (!classId) {
         res.status(400).send('CLASS_ID_MISSING');
         return;
       }
-      if (!STATES[state]) {
-        res.status(400).send('INVALID_STATE');
-        return;
-      }
+
       const payload = {};
       let logType;
-      switch (state) {
-        case STATES.featured:
+      switch (displayState) {
+        case NFT_DISPLAY_STATE.FEATURED:
           payload.featuredNFTClassIds = FieldValue.arrayUnion(classId);
           payload.hiddenNFTClassIds = FieldValue.arrayRemove(classId);
           logType = 'dashboard_nft_display_state_feature';
           break;
-        case STATES.hidden:
+        case NFT_DISPLAY_STATE.HIDDEN:
           payload.featuredNFTClassIds = FieldValue.arrayRemove(classId);
           payload.hiddenNFTClassIds = FieldValue.arrayUnion(classId);
           logType = 'dashboard_nft_display_state_hide';
           break;
-        case STATES.normal:
-        default:
+        case NFT_DISPLAY_STATE.DEFAULT:
           payload.featuredNFTClassIds = FieldValue.arrayRemove(classId);
           payload.hiddenNFTClassIds = FieldValue.arrayRemove(classId);
           logType = 'dashboard_nft_display_state_unhide';
           break;
+        default:
+          res.status(400).send('INVALID_STATE');
+          return;
       }
       await walletUserCollection.doc(user).update(payload);
       publisher.publish(PUBSUB_TOPIC_MISC, req, {

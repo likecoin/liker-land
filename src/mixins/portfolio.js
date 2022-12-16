@@ -298,8 +298,7 @@ export const createPorfolioMixin = ({
       'fetchNFTClassMetadata',
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
-      'fetchNFTListFeaturedByAddress',
-      'fetchNFTListHiddenByAddress',
+      'fetchNFTDisplayStateListByAddress',
     ]),
     updatePortfolioGrid() {
       const { portfolioMainView } = this.$refs;
@@ -344,8 +343,7 @@ export const createPorfolioMixin = ({
     async loadNFTListByAddress(address) {
       const fetchPromise = Promise.all([
         this.fetchNFTListByAddress(address),
-        this.fetchNFTListFeaturedByAddress(address),
-        this.fetchNFTListHiddenByAddress(address),
+        this.fetchNFTDisplayStateListByAddress(address),
       ]);
       if (!this.getNFTListMapByAddress(address)) {
         this.isLoading = true;
