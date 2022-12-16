@@ -144,7 +144,8 @@ const getters = {
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
     nfts.filter(
       ({ classId }) =>
-        !state.userNFTClassHiddenSetMap[collectorWallet]?.has(classId)
+        // eslint-disable-next-line prettier/prettier
+        !state.userNFTClassDisplayStateSetsMap[collectorWallet]?.hiddenClassIdSet?.has(classId)
     ),
   getNFTClassIdListSorterForCreated: (_, getters) => ({
     list,
