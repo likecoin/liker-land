@@ -1,9 +1,9 @@
 const { Router } = require('express');
 
-const featured = require('./featured');
+const displayState = require('./display-state');
 
 const router = Router();
 
-router.use(featured);
+router.use(displayState);
 
 module.exports = router;
