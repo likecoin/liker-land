@@ -159,8 +159,9 @@ export const getNFTClassesPartial = ({ owner, limit, key }) => {
   )}`;
 };
 
-export const getNFTsPartial = ({ owner, limit, key }) => {
+export const getNFTsPartial = ({ owner, expandClasses, limit, key }) => {
   const qsPayload = { owner };
+  if (expandClasses) qsPayload.expand_classes = 1;
   if (limit) qsPayload['pagination.limit'] = limit;
   if (key) qsPayload['pagination.key'] = key;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/nft?${querystring.stringify(
@@ -198,11 +199,12 @@ export const getNFTEvents = ({
   )}`;
 };
 
-export const postNFTPurchase = ({ txHash, iscnId, classId }) => {
+export const postNFTPurchase = ({ txHash, iscnId, classId, ts }) => {
   const qsPayload = {
     tx_hash: txHash,
     iscn_id: iscnId,
     class_id: classId,
+    ts,
   };
   return `${LIKECOIN_API_BASE}/likernft/purchase?${querystring.stringify(
     qsPayload

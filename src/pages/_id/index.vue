@@ -59,7 +59,7 @@
           class="w-full"
           :creator-wallet-address="wallet"
           :creator-display-name="userDisplayName"
-          :is-empty="!nftClassListOfCreatedInOrder.length"
+          :is-empty="false"
         />
       </div>
 
