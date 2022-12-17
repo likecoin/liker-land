@@ -3,7 +3,14 @@
 
     <hr
       v-if="isList"
-      class="w-[2px] h-[24px] mb-[24px] bg-medium-gray border-none"
+      :class="[
+        'w-[2px]',
+        'h-[24px]',
+        'mb-[24px]',
+        'bg-medium-gray',
+        'border-none',
+        { 'phone:hidden': index === 0 },
+      ]"
     >
 
     <template v-if="message">
@@ -21,7 +28,7 @@
 
     <div
       :class="[
-        'flex flex-col tablet:flex-row laptop:flex-row items-center gap-[16px] justify-center',
+        'flex items-center gap-[16px] justify-center',
         {
           'sm:bg-white rounded-[24px] sm:rounded-full':
             fromWallet && toWallet && !message
@@ -30,21 +37,21 @@
     >
       <NFTMessageIdentity
         v-if="fromWallet"
-        class="phone:order-3"
         :type="fromType"
         :is-show-type-label="isShowIdentityTypeLabel"
         :wallet-address="fromWallet"
+        :avatar-size="avatarSize"
       />
       <IconArrowLeft
         v-if="fromWallet && toWallet"
-        class="w-[16px] h-[16px] text-like-green rotate-[180deg] phone:order-2 phone:rotate-[90deg]"
+        class="w-[16px] h-[16px] text-like-green rotate-180"
       />
       <NFTMessageIdentity
         v-if="toWallet"
-        class="phone:order-1"
         :type="toType"
         :is-show-type-label="isShowIdentityTypeLabel"
         :wallet-address="toWallet"
+        :avatar-size="avatarSize"
       />
     </div>
 
@@ -52,6 +59,8 @@
 </template>
 
 <script>
+import { isMobile } from '@walletconnect/browser-utils';
+
 export default {
   name: 'NFTMessage',
   props: {
@@ -91,6 +100,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    index: {
+      type: Number,
+      default: undefined,
+    },
   },
   computed: {
     messageHint() {
@@ -108,6 +121,9 @@ export default {
     },
     isShowIdentityTypeLabel() {
       return this.type === 'mint_nft';
+    },
+    avatarSize() {
+      return isMobile() ? 32 : 42;
     },
   },
 };

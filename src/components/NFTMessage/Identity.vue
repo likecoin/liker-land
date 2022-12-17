@@ -3,20 +3,28 @@
     :class="[
       'flex',
       'items-center',
+
       'gap-[16px]',
+      'phone:gap-[8px]',
+
       'pl-[8px]',
       'pr-[24px]',
       'py-[8px]',
+      'phone:pr-[12px]',
+
+
       'bg-white',
       'rounded-full',
       'cursor-pointer',
+
+
       wrapperClasses
     ]"
     :to="toRoute"
   >
     <Identity
       :avatar-url="userAvatar"
-      :avatar-size="42"
+      :avatar-size="avatarSize"
       :is-avatar-outlined="isUserCivicLiker"
     />
     <div>
@@ -24,7 +32,7 @@
         v-if="isShowTypeLabel"
         class="text-[12px] text-medium-gray"
       >{{ userLabel }}</div>
-      <Label class="text-like-green" preset="h5">{{ userDisplayName }}</Label>
+      <Label class="text-like-green" :preset="userLabelSize">{{ userDisplayName }}</Label>
     </div>
   </NuxtLink>
 </template>
@@ -56,6 +64,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    avatarSize: {
+      type: Number,
+      default: 42,
+    },
   },
   computed: {
     toRoute() {
@@ -71,6 +83,15 @@ export default {
           ? 'identity_type_creator'
           : 'identity_type_collector'
       );
+    },
+    userLabelSize() {
+      switch (this.avatarSize) {
+        case 32:
+          return 'p6';
+        case 48:
+        default:
+          return 'h5';
+      }
     },
   },
   watch: {
