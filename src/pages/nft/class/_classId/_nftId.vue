@@ -55,7 +55,7 @@
               :nft-collector-collected-count="nftCollectorCollectedCount"
               :selected-nft-id="selectedNFTId"
               :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
-              @selectNFT="onSelectNFT"
+              @select="onSelectNFT"
             />
             <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
               <NFTMessage
@@ -104,7 +104,7 @@
               :nft-collector-collected-count="nftCollectorCollectedCount"
               :selected-nft-id="selectedNFTId"
               :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
-              @selectNFT="onSelectNFT"
+              @select="onSelectNFT"
             />
           </div>
 
@@ -239,7 +239,7 @@
         </section>
       </div>
     </div>
-    <NuxtChild v-else-if="!isLoading && isMessagePage"/>
+    <NuxtChild />
     <EventModalTransfer
       v-if="classId"
       :is-open="isOpenTransferModal"
@@ -342,7 +342,6 @@ export default {
       isLoading: true,
 
       isOpenTransferModal: false,
-      isOpenMessageModal: false,
       isTransferring: false,
       isCollecting: false,
     };

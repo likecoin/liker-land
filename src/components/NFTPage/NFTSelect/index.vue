@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     onSelectNFT(value) {
-      this.$emit('selectNFT', value);
+      this.$emit('select', value);
     },
   },
 };
