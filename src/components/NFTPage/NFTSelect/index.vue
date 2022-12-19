@@ -33,6 +33,7 @@
     </div>
   </CardV2>
 </template>
+
 <script>
 export default {
   props: {

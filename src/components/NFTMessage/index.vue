@@ -9,7 +9,7 @@
         'mb-[24px]',
         'bg-medium-gray',
         'border-none',
-        { 'phone:hidden': index === 0 },
+        { 'phone:hidden': !hasSeparator },
       ]"
     >
 
@@ -100,9 +100,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    index: {
-      type: Number,
-      default: undefined,
+    hasSeparator: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

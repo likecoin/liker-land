@@ -12,11 +12,9 @@
       'py-[8px]',
       'phone:pr-[12px]',
 
-
       'bg-white',
       'rounded-full',
       'cursor-pointer',
-
 
       wrapperClasses
     ]"
