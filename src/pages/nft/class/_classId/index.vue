@@ -159,6 +159,11 @@ export default {
           property: 'og:image',
           content: ogImage,
         },
+        {
+          hid: 'likecoin:wallet',
+          name: 'likecoin:wallet',
+          content: this.iscnOwner,
+        },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
       script: this.purchaseInfo.price

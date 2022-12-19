@@ -93,6 +93,7 @@ import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
+import { EXTERNAL_HOST } from '~/constant';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
@@ -129,6 +130,11 @@ export default {
           property: 'og:image',
           content: image,
         },
+        {
+          hid: 'likecoin:wallet',
+          name: 'likecoin:wallet',
+          content: this.wallet,
+        },
       ],
       script: [
         {
@@ -144,6 +150,7 @@ export default {
           body: true,
         },
       ],
+      link: [{ rel: 'canonical', href: `${EXTERNAL_HOST}/${this.wallet}` }],
     };
   },
   computed: {
