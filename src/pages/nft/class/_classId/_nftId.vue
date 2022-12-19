@@ -50,14 +50,15 @@
 
         <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
           <!-- NFT Message List -->
-          <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px] phone:hidden">
+          <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px]">
             <NFTPageNFTSelect
+              class="phone:order-2"
               :nft-collector-collected-count="nftCollectorCollectedCount"
               :selected-nft-id="selectedNFTId"
               :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
               @select="onSelectNFT"
             />
-            <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
+            <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px] phone:hidden">
               <NFTMessage
                 v-for="m in messageList"
                 :key="`${m.txHash}-${m.event}`"
@@ -72,16 +73,14 @@
                 tag="li"
               />
             </ul>
-          </div>
 
-          <!-- phone: NFT Message List -->
-          <div v-if="!nftIsNew" class="hidden col-span-2 flex-col items-center gap-[24px] phone:flex">
+            <!-- phone: NFT Message List -->
             <div
               v-if="messageList.length && messageList[0].message"
-              class="flex flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px]"
+              class="hidden flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px] phone:flex phone:order-1"
             >
               <Label :text="$t('nft_message_type_generic')" class="text-medium-gray" />
-              <ul v-if="creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[24px]">
+              <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[24px]">
                 <NFTMessage
                   :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
                   :type="creatorMessage.event"
@@ -116,28 +115,24 @@
                 </template>
               </ButtonV2>
             </div>
-            <NFTPageNFTSelect
-              :nft-collector-collected-count="nftCollectorCollectedCount"
-              :selected-nft-id="selectedNFTId"
-              :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
-              @select="onSelectNFT"
-            />
-            <div v-if="messageList.length === 1 && !creatorMessage.message">
-              <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px]">
-                <NFTMessage
-                  :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
-                  :type="creatorMessage.event"
-                  :from-type="creatorMessage.fromType"
-                  :from-wallet="creatorMessage.fromWallet"
-                  :to-type="creatorMessage.toType"
-                  :to-wallet="creatorMessage.toWallet"
-                  :message="creatorMessage.message"
-                  :message-type="creatorMessage.messageType"
-                  :is-list="true"
-                  tag="li"
-                />
-              </ul>
-            </div>
+            <ul
+              v-if="
+                messageList.length === 1 && creatorMessage && !creatorMessage.message"
+              class="hidden flex-col gap-[24px] w-full px-[24px] phone:flex phone:order-3"
+            >
+              <NFTMessage
+                :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
+                :type="creatorMessage.event"
+                :from-type="creatorMessage.fromType"
+                :from-wallet="creatorMessage.fromWallet"
+                :to-type="creatorMessage.toType"
+                :to-wallet="creatorMessage.toWallet"
+                :message="creatorMessage.message"
+                :message-type="creatorMessage.messageType"
+                :is-list="true"
+                tag="li"
+              />
+            </ul>
           </div>
 
           <!-- NFT Preview -->
@@ -273,9 +268,6 @@
     </div>
     <NuxtChild
       keep-alive
-      :message-list="messageList"
-      :class-id="classId"
-      :nft-id="nftId"
     />
     <EventModalTransfer
       v-if="classId"
@@ -393,49 +385,28 @@ export default {
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
-    messageList() {
-      return [...this.populatedEvents]
-        .filter(e => e.event !== 'new_class')
-        .map(e => {
-          if (e.event === 'purchase') {
-            return {
-              ...e,
-              fromWallet: this.iscnOwner,
-              toWallet: '',
-            };
-          }
-          return e;
-        })
-        .map(m => ({
-          ...m,
-          messageType:
-            m.fromWallet === this.iscnOwner ? 'creator' : 'collector',
-          fromType: this.getWalletIdentityType(m.fromWallet),
-          toType: this.getWalletIdentityType(m.toWallet),
-          message: this.normalizeNFTMessage(m),
-        }));
-    },
     isMessagePage() {
       return this.$route.name === 'nft-class-classId-nftId-message';
     },
     shouldShowMessageButton() {
-      const transfer = msg => msg.message && msg.messageType !== 'creator';
-      if (this.messageList.length === 1 && !this.messageList[0].message) {
+      const checkIsTransferMessage = msg =>
+        msg.message && msg.messageType !== 'creator';
+      if (this.messageList.length === 1 && this.creatorMessage?.message) {
         return false;
       }
-      if (this.messageList.length === 1 && this.creatorMessage.message) {
-        return false;
-      }
-      if (this.messageList.length > 1 && this.creatorMessage.message) {
+      if (this.messageList.length > 1 && this.creatorMessage?.message) {
         return true;
       }
-      if (this.messageList.length > 1 && this.messageList.some(transfer)) {
+      if (
+        this.messageList.length > 1 &&
+        this.messageList.some(checkIsTransferMessage)
+      ) {
         return true;
       }
       return false;
     },
     creatorMessage() {
-      return this.messageList[this.messageList.length - 1];
+      return this.messageList.find(element => element.fromType === 'creator');
     },
   },
   async asyncData({ route, query, store, redirect, error }) {
@@ -511,11 +482,6 @@ export default {
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice', 'fetchNFTMetadata']),
-    normalizeNFTMessage(m) {
-      if (m.memo === 'like.co NFT API') return '';
-      if (m.event === 'mint_nft') return this.nftClassCreatorMessage;
-      return m.memo;
-    },
     onSelectNFT(e) {
       const { value: nftId } = e.target;
       logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);

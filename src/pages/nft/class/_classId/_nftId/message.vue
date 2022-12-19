@@ -22,7 +22,7 @@
         :message="m.message"
         :message-type="m.messageType"
         :is-list="true"
-        :index="index"
+        :has-separator="index !== 0"
         tag="li"
       />
     </ul>
@@ -34,19 +34,16 @@ import nftMixin from '~/mixins/nft';
 
 export default {
   mixins: [nftMixin],
-  props: {
-    messageList: {
-      type: Array,
-      default: undefined,
+  computed: {
+    classId() {
+      return this.$route.params.classId;
     },
-    classId: {
-      type: String,
-      default: undefined,
+    nftId() {
+      return this.$route.params.nftId;
     },
-    nftId: {
-      type: String,
-      default: undefined,
-    },
+  },
+  mounted() {
+    this.updateNFTHistory();
   },
 };
 </script>
