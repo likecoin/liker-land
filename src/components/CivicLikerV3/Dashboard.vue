@@ -1,27 +1,29 @@
 <template>
-  <Transition name="fade" mode="out-in">
-    <div
-      v-if="!validatorAddress"
-      key="loading"
-      class="flex items-center justify-center min-h-[180px]"
-    >
-      <Spinner class="mx-auto" />
-    </div>
-    <CivicLikerV3PureDashboard
-      v-else
-      key="dashboard"
-      :status="status"
-      :is-signed-in="!!getAddress"
-      :avatar-src="walletUserAvatar"
-      :staking-validator-name="validatorName"
-      :staking-management-url="stakingManagementURL"
-      :staking-amount="stakingAmount"
-      :staking-amount-target="stakingAmountTarget"
-      :active-since="activeSince"
-      @register="handleRegister"
-      @sign-in="handleSignIn"
-    />
-  </Transition>
+  <div class="min-h-[720px]">
+    <Transition name="fade" mode="out-in">
+      <div
+        v-if="!validatorAddress"
+        key="loading"
+        class="flex items-center justify-center min-h-[180px]"
+      >
+        <Spinner class="mx-auto" />
+      </div>
+      <CivicLikerV3PureDashboard
+        v-else
+        key="dashboard"
+        :status="status"
+        :is-signed-in="!!getAddress"
+        :avatar-src="walletUserAvatar"
+        :staking-validator-name="validatorName"
+        :staking-management-url="stakingManagementURL"
+        :staking-amount="stakingAmount"
+        :staking-amount-target="stakingAmountTarget"
+        :active-since="activeSince"
+        @register="handleRegister"
+        @sign-in="handleSignIn"
+      />
+    </Transition>
+  </div>
 </template>
 
 <script>

@@ -9,7 +9,6 @@ import {
   LIKECOIN_CHAIN_NFT_RPC,
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
-  LIKECOIN_NFT_HIDDEN_ITEMS,
 } from '../constant';
 
 let queryClient = null;
@@ -177,14 +176,6 @@ export function checkIsWritingNFT(classMetadata) {
   );
 }
 
-// NOTE: This is a temporary solution to check Writing NFT by NFT ID,
-// should be removed after created NFT list return proper content metadata
-export function checkIsWritingNFTByNFTId(id) {
-  return /^writing-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    id
-  );
-}
-
 export function formatNFTInfo(nftInfo) {
   const {
     class_id: classId,
@@ -253,10 +244,11 @@ const queryAllDataFromChain = async (axios, api, field, input = {}) => {
 
 const fetchAllNFTFromChain = async (axios, owner) => {
   const nfts = await queryAllDataFromChain(axios, api.getNFTsPartial, 'nfts', {
+    expandClasses: true,
     owner,
   });
   // sort by last colleted by default
-  return nfts.map(formatNFTInfo);
+  return nfts;
 };
 export const getNFTsRespectDualPrefix = async (axios, owner) => {
   const allowAddresses = deriveAllPrefixedAddresses(owner);
@@ -266,6 +258,13 @@ export const getNFTsRespectDualPrefix = async (axios, owner) => {
   return arraysOfNFTs.flat();
 };
 
+export function formatNFTClassInfo(classData) {
+  return {
+    classId: classData.id,
+    timestamp: new Date(classData.created_at).getTime(),
+  };
+}
+
 const fetchAllNFTClassFromChain = async (axios, owner) => {
   const classes = await queryAllDataFromChain(
     axios,
@@ -273,12 +272,7 @@ const fetchAllNFTClassFromChain = async (axios, owner) => {
     'classes',
     { owner }
   );
-  // TODO: getNFTClasses API already contains chain metadata
-  // should reuse them instead of dropping
-  return classes.map(c => ({
-    classId: c.id,
-    timestamp: new Date(c.created_at).getTime(),
-  }));
+  return classes;
 };
 
 export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
@@ -310,25 +304,4 @@ export function parseNFTMetadataURL(url) {
   if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
   if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
   return url;
-}
-
-export function normalizeNFTList(list) {
-  return [
-    ...new Map(
-      [...list].map(({ classId, nftId, ...data }) => [
-        classId,
-        { ...data, classId, id: nftId },
-      ])
-    ).values(),
-  ]
-    .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
-    .sort((a, b) => {
-      if (a.id && b.id) {
-        const aIsWritingNFT = checkIsWritingNFTByNFTId(a.id);
-        const bIsWritingNFT = checkIsWritingNFTByNFTId(b.id);
-        if (aIsWritingNFT && !bIsWritingNFT) return -1;
-        if (!aIsWritingNFT && bIsWritingNFT) return 1;
-      }
-      return b.timestamp - a.timestamp;
-    });
 }
