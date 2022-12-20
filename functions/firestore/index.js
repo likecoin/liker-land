@@ -1,5 +1,5 @@
 const { runWith, config } = require('firebase-functions');
-const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
+const { getCreatorFollowConfirmationTemplate } = require('@likecoin/edm');
 
 const { sendEmail } = require('../modules/sendgrid');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
@@ -41,22 +41,21 @@ module.exports = runWith({ secrets: ['SENDGRID_API_KEY'] })
       subscriberEmail,
       language,
     });
-    const confirmLink = getSubscriptionConfirmURL();
+    const confirmationLink = getSubscriptionConfirmURL();
     const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
-    const { body } = getBasicWithAvatarTemplate({
-      title: 'Writing NFT',
-      subtitle: `Follow ${shortenString(displayName)}'s Writing NFT`,
-      content: `<p>Hi,</p>
-      <p>Please <a href="${confirmLink}" target="_blank" rel="noreferrer">click here</a> or the link below to confirm following ${displayName}'s Writing NFT.</p>
-      <p><a href="${confirmLink}" target="_blank" rel="noreferrer">${confirmLink}</a></p>`,
-      avatarURL: avatar,
-      isCivicLiker: isSubscribedCivicLiker,
+    const { subject, body } = getCreatorFollowConfirmationTemplate({
+      followerDisplayName: subscriberEmail,
+      creatorLikerId: subscribedWallet,
+      creatorDisplayName: shortenString(displayName),
+      creatorAvatarURL: avatar,
+      creatorIsCivicLiker: isSubscribedCivicLiker,
+      confirmationLink,
       unsubscribeLink,
       language: convertLanguageCodeForEmailTemplate(language),
     });
     await sendEmail({
       email: subscriberEmail,
-      subject: `Writing NFT - Follow ${displayName}`,
+      subject,
       html: body,
     });
   });

@@ -1,6 +1,6 @@
 const { onMessagePublished } = require('firebase-functions/v2/pubsub');
 // const { defineString } = require('firebase-functions/params');
-const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
+const { getCreatorFollowPublishNewTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
 const { nftMintSubscriptionCollection } = require('../modules/firebase');
@@ -86,19 +86,15 @@ module.exports = onMessagePublished(
                 }
               );
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
-              const shortenDisplayName = shortenString(displayName);
-              const subject = `Writing NFT - New NFT by ${shortenDisplayName} is live`;
-              const { body } = getBasicWithAvatarTemplate({
-                title:
-                  displayName === subscribedWallet
-                    ? undefined
-                    : shortenDisplayName,
-                subtitle: `${name} is now live`,
-                content: `<p><img style="width: 100%" src="${image}"></p>
-<p><a href="${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email" target="_blank" rel="noreferrer">${name}</a> is now live!</p>
-<p>Collect and discover more <a href="${EXTERNAL_URL}/campaign/writing-nft?utm_source=email" target="_blank" rel="noreferrer">Writing NFT</a></p>`,
-                avatarURL: avatar,
-                isCivicLiker: isSubscribedCivicLiker,
+              const { subject, body } = getCreatorFollowPublishNewTemplate({
+                creatorLikerId: subscribedWallet,
+                creatorDisplayName: shortenString(displayName),
+                creatorAvatarSrc: avatar,
+                creatorIsCivicLiker: isSubscribedCivicLiker,
+                followerDisplayName: shortenString(name),
+                nftTitle: name,
+                nftCoverImageSrc: image,
+                nftURL: `${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email`,
                 unsubscribeLink,
                 language: convertLanguageCodeForEmailTemplate(language),
               });
