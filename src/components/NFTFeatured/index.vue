@@ -148,7 +148,7 @@ export default {
           logTrackerEvent(
             this,
             'NFT',
-            'dashboard_nft_display_state_unhide',
+            'dashboard_nft_display_state_reset',
             this.classId,
             1
           );
