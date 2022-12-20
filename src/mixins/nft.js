@@ -324,8 +324,7 @@ export default {
     getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserCollectedCount();
-        this.fetchUserNFTListFeatured();
-        this.fetchUserNFTListHidden();
+        this.fetchUserNFTDisplayStateList();
       }
     },
     uiTxNFTStatus(status) {
@@ -374,8 +373,7 @@ export default {
       'uiSetTxError',
       'walletFetchLIKEBalance',
       'fetchNFTListByAddress',
-      'fetchNFTListFeaturedByAddress',
-      'fetchNFTListHiddenByAddress',
+      'fetchNFTDisplayStateListByAddress',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -501,11 +499,8 @@ export default {
     async fetchUserCollectedCount() {
       await this.updateUserCollectedCount(this.classId, this.getAddress);
     },
-    async fetchUserNFTListFeatured() {
-      await this.fetchNFTListFeaturedByAddress(this.getAddress);
-    },
-    async fetchUserNFTListHidden() {
-      await this.fetchNFTListHiddenByAddress(this.getAddress);
+    async fetchUserNFTDisplayStateList() {
+      await this.fetchNFTDisplayStateListByAddress(this.getAddress);
     },
     async collectNFT() {
       this.$router.push({ query: { ...this.$route.query, action: 'collect' } });

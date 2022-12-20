@@ -119,13 +119,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'signLogin',
-      'addNFTFeatured',
-      'addNFTHidden',
-      'removeNFTFeatured',
-      'removeNFTHidden',
-    ]),
+    ...mapActions(['signLogin', 'setNFTDisplayState']),
     async handleClick(event) {
       event.preventDefault();
       event.stopPropagation();
@@ -144,28 +138,24 @@ export default {
             this.classId,
             1
           );
-          await Promise.all([
-            this.removeNFTFeatured({
-              address: this.getAddress,
-              classId: this.classId,
-            }),
-            this.addNFTHidden({
-              address: this.getAddress,
-              classId: this.classId,
-            }),
-          ]);
+          await this.setNFTDisplayState({
+            address: this.getAddress,
+            classId: this.classId,
+            displayState: NFT_DISPLAY_STATE.HIDDEN,
+          });
           break;
         case NFT_DISPLAY_STATE.HIDDEN:
           logTrackerEvent(
             this,
             'NFT',
-            'dashboard_nft_display_state_unhide',
+            'dashboard_nft_display_state_reset',
             this.classId,
             1
           );
-          await this.removeNFTHidden({
+          await this.setNFTDisplayState({
             address: this.getAddress,
             classId: this.classId,
+            displayState: NFT_DISPLAY_STATE.DEFAULT,
           });
           break;
         case NFT_DISPLAY_STATE.DEFAULT:
@@ -176,9 +166,10 @@ export default {
             this.classId,
             1
           );
-          await this.addNFTFeatured({
+          await this.setNFTDisplayState({
             address: this.getAddress,
             classId: this.classId,
+            displayState: NFT_DISPLAY_STATE.FEATURED,
           });
           break;
         default:

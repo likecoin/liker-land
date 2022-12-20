@@ -13,7 +13,7 @@ import {
   formatNFTClassInfo,
 } from '~/util/nft';
 import { catchAxiosError } from '~/util/misc';
-import { LIKECOIN_NFT_HIDDEN_ITEMS } from '~/constant';
+import { LIKECOIN_NFT_HIDDEN_ITEMS, NFT_DISPLAY_STATE } from '~/constant';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -22,8 +22,7 @@ const state = () => ({
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
-  userNFTClassFeaturedSetMap: {},
-  userNFTClassHiddenSetMap: {},
+  userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
 });
 
@@ -47,17 +46,14 @@ const mutations = {
   [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
     Vue.set(state.userClassIdListMap, address, nfts);
   },
-  [TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP](
+  [TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP](
     state,
-    { address, classIdSet }
+    { address, featuredClassIdSet, hiddenClassIdSet }
   ) {
-    Vue.set(state.userNFTClassFeaturedSetMap, address, classIdSet);
-  },
-  [TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP](
-    state,
-    { address, classIdSet }
-  ) {
-    Vue.set(state.userNFTClassHiddenSetMap, address, classIdSet);
+    Vue.set(state.userNFTClassDisplayStateSetsMap, address, {
+      featuredClassIdSet,
+      hiddenClassIdSet,
+    });
   },
   [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
     state,
@@ -126,9 +122,9 @@ const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
   getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassFeaturedSetByAddress: state => address =>
-    state.userNFTClassFeaturedSetMap[address],
+    (state.userNFTClassDisplayStateSetsMap[address] || {}).featuredClassIdSet,
   getNFTClassHiddenSetByAddress: state => address =>
-    state.userNFTClassHiddenSetMap[address],
+    (state.userNFTClassDisplayStateSetsMap[address] || {}).hiddenClassIdSet,
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
@@ -147,7 +143,8 @@ const getters = {
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
     nfts.filter(
       ({ classId }) =>
-        !state.userNFTClassHiddenSetMap[collectorWallet]?.has(classId)
+        // eslint-disable-next-line prettier/prettier
+        !state.userNFTClassDisplayStateSetsMap[collectorWallet]?.hiddenClassIdSet?.has(classId)
     ),
   getNFTClassIdListSorterForCreated: (_, getters) => ({
     list,
@@ -440,55 +437,46 @@ const actions = {
       })
     );
   },
-  async fetchNFTListFeaturedByAddress({ commit }, address) {
-    const { data } = await this.$api.get(api.formatFeaturedNFTUrl(address));
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
+  async fetchNFTDisplayStateListByAddress({ commit }, address) {
+    const { data } = await this.$api.get(api.getNFTDisplayStateURL(address));
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
       address,
-      classIdSet: new Set(data.featured),
+      featuredClassIdSet: new Set(data.featured),
+      hiddenClassIdSet: new Set(data.hidden),
     });
   },
-  async fetchNFTListHiddenByAddress({ commit }, address) {
-    const { data } = await this.$api.get(api.formatHiddenNFTUrl(address));
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
+  async setNFTDisplayState(
+    { state, commit },
+    { displayState, address, classId }
+  ) {
+    const {
+      featuredClassIdSet,
+      hiddenClassIdSet,
+    } = state.userNFTClassDisplayStateSetsMap[address];
+    switch (displayState) {
+      case NFT_DISPLAY_STATE.FEATURED:
+        featuredClassIdSet.add(classId);
+        hiddenClassIdSet.delete(classId);
+        break;
+      case NFT_DISPLAY_STATE.HIDDEN:
+        featuredClassIdSet.delete(classId);
+        hiddenClassIdSet.add(classId);
+        break;
+      case NFT_DISPLAY_STATE.DEFAULT:
+      default:
+        featuredClassIdSet.delete(classId);
+        hiddenClassIdSet.delete(classId);
+        break;
+    }
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
       address,
-      classIdSet: new Set(data.hidden),
+      featuredClassIdSet,
+      hiddenClassIdSet,
     });
-  },
-  async addNFTFeatured({ state, commit }, { address, classId }) {
-    const classIdSet = state.userNFTClassFeaturedSetMap[address];
-    classIdSet.add(classId);
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
-      address,
-      classIdSet: new Set(classIdSet), // clone to trigger reactivity
+    await this.$api.post(api.getNFTDisplayStateURL(address), {
+      classId,
+      displayState,
     });
-    await this.$api.post(api.formatFeaturedNFTUrl(address), { classId });
-  },
-  async addNFTHidden({ state, commit }, { address, classId }) {
-    const classIdSet = state.userNFTClassHiddenSetMap[address];
-    classIdSet.add(classId);
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
-      address,
-      classIdSet: new Set(classIdSet), // clone to trigger reactivity
-    });
-    await this.$api.post(api.formatHiddenNFTUrl(address), { classId });
-  },
-  async removeNFTFeatured({ state, commit }, { address, classId }) {
-    const classIdSet = state.userNFTClassFeaturedSetMap[address];
-    classIdSet.delete(classId);
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_FEATURED_SET_MAP, {
-      address,
-      classIdSet: new Set(classIdSet), // clone to trigger reactivity
-    });
-    await this.$api.delete(`${api.formatFeaturedNFTUrl(address)}/${classId}`);
-  },
-  async removeNFTHidden({ state, commit }, { address, classId }) {
-    const classIdSet = state.userNFTClassHiddenSetMap[address];
-    classIdSet.delete(classId);
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_HIDDEN_SET_MAP, {
-      address,
-      classIdSet: new Set(classIdSet), // clone to trigger reactivity
-    });
-    await this.$api.delete(`${api.formatHiddenNFTUrl(address)}/${classId}`);
   },
 };
 
