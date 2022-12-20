@@ -48,13 +48,12 @@ const mutations = {
   },
   [TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP](
     state,
-    { address, nftDisplayStateSets }
+    { address, featuredClassIdSet, hiddenClassIdSet }
   ) {
-    Vue.set(
-      state.userNFTClassDisplayStateSetsMap,
-      address,
-      nftDisplayStateSets
-    );
+    Vue.set(state.userNFTClassDisplayStateSetsMap, address, {
+      featuredClassIdSet,
+      hiddenClassIdSet,
+    });
   },
   [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
     state,
@@ -442,18 +441,18 @@ const actions = {
     const { data } = await this.$api.get(api.getNFTDisplayStateURL(address));
     commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
       address,
-      nftDisplayStateSets: {
-        featuredClassIdSet: new Set(data.featured),
-        hiddenClassIdSet: new Set(data.hidden),
-      },
+      featuredClassIdSet: new Set(data.featured),
+      hiddenClassIdSet: new Set(data.hidden),
     });
   },
   async setNFTDisplayState(
     { state, commit },
     { displayState, address, classId }
   ) {
-    const nftDisplayStateSets = state.userNFTClassDisplayStateSetsMap[address];
-    const { featuredClassIdSet, hiddenClassIdSet } = nftDisplayStateSets;
+    const {
+      featuredClassIdSet,
+      hiddenClassIdSet,
+    } = state.userNFTClassDisplayStateSetsMap[address];
     switch (displayState) {
       case NFT_DISPLAY_STATE.FEATURED:
         featuredClassIdSet.add(classId);
@@ -471,7 +470,8 @@ const actions = {
     }
     commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
       address,
-      nftDisplayStateSets: { featuredClassIdSet, hiddenClassIdSet }, // declare new object to trigger reactivity
+      featuredClassIdSet,
+      hiddenClassIdSet,
     });
     await this.$api.post(api.getNFTDisplayStateURL(address), {
       classId,
