@@ -7,6 +7,7 @@
     <Avatar
       class="identity__avatar"
       :url="avatarUrl"
+      :display-name="displayName"
       :size="avatarSize"
       :is-outlined="isAvatarOutlined"
       :is-outline-extruded="isAvatarOutlineExtruded"
