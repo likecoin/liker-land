@@ -1,5 +1,4 @@
 import { mapActions, mapGetters } from 'vuex';
-import throat from 'throat';
 
 import {
   NFT_CLASS_LIST_SORTING,
@@ -18,10 +17,6 @@ export const tabOptions = {
 const DEFAULT_TAB = tabOptions.collected;
 
 const ITEMS_PER_PAGE = 10;
-
-const NFT_INFO_FETCH_CONCURRENT_REQUEST_MAX = 10;
-
-const throttleNFTInfoFetch = throat(NFT_INFO_FETCH_CONCURRENT_REQUEST_MAX);
 
 export const createPorfolioMixin = ({
   shouldApplyDisplayState = true,
