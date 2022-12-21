@@ -39,6 +39,11 @@
             :stat-wallet="wallet"
           />
         </NFTPortfolioUserInfo>
+        <NFTPortfolioTopUsersList
+          v-if="userTopCreators.length && (isCurrentTabCollected || isCurrentTabCreated)"
+          :label="isCurrentTabCollected ? $t('nft_portfolio_page_label_top_creators') : $t('nft_portfolio_page_label_top_collector')"
+          :user-list="isCurrentTabCollected ? userTopCreators : userTopCollectors"
+        />
         <div
           v-if="isUserPortfolio"
           class="flex justify-center mt-[16px] mb-[24px]"
@@ -224,6 +229,7 @@ export default {
   mounted() {
     this.syncRouteForTab();
     this.loadNFTListByAddress(this.wallet);
+    this.loadTopUserListByAddress(this.wallet);
   },
   methods: {
     handleTabChange(tab) {
