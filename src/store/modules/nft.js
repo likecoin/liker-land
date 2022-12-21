@@ -311,7 +311,10 @@ const actions = {
       metadata: formattedMetadata,
     });
   },
-  async populateNFTClassMetadataFromURIAndISCN({ commit, getters }, classId) {
+  async populateNFTClassMetadataFromURIAndISCN(
+    { commit, dispatch, getters },
+    classId
+  ) {
     let metadata = getters.getNFTClassMetadataById(classId);
     const { uri, parent } = metadata;
     if (isValidHttpUrl(uri)) {
@@ -342,6 +345,9 @@ const actions = {
       } else if (parent.account) {
         metadata.account_owner = parent.account;
       }
+    }
+    if (metadata.iscn_owner) {
+      dispatch('lazyGetUserInfoByAddress', metadata.iscn_owner);
     }
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
   },
