@@ -25,6 +25,14 @@
             </template>
           </Label>
           <Label
+            v-else-if="event.event === 'buy_nft'"
+            :text="$t('nft_details_page_activity_list_event_buy_nft')"
+          >
+            <template #prepend>
+              <IconCircle />
+            </template>
+          </Label>
+          <Label
             v-else-if="event.event === 'transfer'"
             :text="$t('nft_details_page_activity_list_event_transfer')"
           >
@@ -62,7 +70,7 @@
           <Label v-else class="break-all" text="-" />
         </td>
         <td>
-          <LinkV2 v-if="['new_class', 'mint_nft' ,'transfer'].includes(event.event)" :to="`/${event.fromWallet}`">
+          <LinkV2 v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft'].includes(event.event)" :to="`/${event.fromWallet}`">
             <Label class="break-all">{{
               event.fromDisplayName | ellipsis
             }}</Label>
@@ -70,7 +78,7 @@
           <Label v-else>-</Label>
         </td>
         <td>
-          <LinkV2 v-if="event.event === 'transfer' || event.event === 'purchase'" :to="`/${event.toWallet}`">
+          <LinkV2 v-if="['purchase' ,'transfer', 'buy_nft'].includes(event.event)" :to="`/${event.toWallet}`">
             <Label class="break-all">{{
               event.toDisplayName | ellipsis
             }}</Label>

@@ -60,6 +60,7 @@
   "nft_details_page_activity_list_event_create_class": "Create",
   "nft_details_page_activity_list_event_mint_nft": "Mint",
   "nft_details_page_activity_list_event_collect": "Collect",
+  "nft_details_page_activity_list_event_buy_nft": "Purchase",
   "nft_details_page_activity_list_event_transfer": "Transfer",
   "nft_details_page_activity_list_event_date": "Date",
   "nft_details_page_activity_list_event_from": "From",
