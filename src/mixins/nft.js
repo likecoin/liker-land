@@ -324,7 +324,6 @@ export default {
     getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserCollectedCount();
-        this.fetchUserNFTDisplayStateList();
       }
     },
     uiTxNFTStatus(status) {
