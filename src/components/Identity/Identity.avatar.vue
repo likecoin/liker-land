@@ -87,7 +87,7 @@ export default {
       return getLikeCoResizedImageUrl(this.url || DEFAULT_AVATAR, this.size);
     },
     imageStyle() {
-      const borderWidth = `${this.size * 0.05}px`;
+      const borderWidth = `${Math.floor(this.size * 0.05)}px`;
       const width = `${this.size}px`;
       return {
         width,
