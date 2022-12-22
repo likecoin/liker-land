@@ -5,14 +5,13 @@
     :is-narrow="true"
   >
     <Label
-      class="w-min font-600"
+      class="w-min font-600 text-like-green"
       :text="label"
       preset="h5"
+      align="center"
       valign="middle"
-      content-class="whitespace-nowrap text-like-green "
-      prepend-class="text-like-green"
     />
-    <ul class="flex flex-row-reverse justify-end items-center mt-[18px] px-[4px]">
+    <ul class="flex flex-row-reverse justify-center items-center mt-[18px] px-[4px]">
       <li
         v-for="user in users"
         :key="user.id"
