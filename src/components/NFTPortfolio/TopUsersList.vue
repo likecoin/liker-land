@@ -12,16 +12,19 @@
       content-class="whitespace-nowrap text-like-green "
       prepend-class="text-like-green"
     />
-    <div class="flex items-center mt-[12px]">
-      <span v-for="user, i in userList" :key="user.id">
-        <ToolTips @mouseenter.native.once="onHover(i)" :tool-tip-text="user.displayName">
+    <div class="flex items-center mt-[18px]">
+      <div v-for="user, i in userList" :key="user.id">
+        <ToolTips
+           :tool-tip-text="user.displayName"
+           @mouseenter.native.once="onHover(i)" 
+           >
           <LinkV2
             class="flex items-center gap-[8px]"
-            @click.native.once="onClick(i)"
             :to="{
               name: 'id',
               params: { id: user.id }
             }"
+            @click.native.once="onClick(i)"
           >
             <IdentityAvatar
               :url="user.avatar"
@@ -32,7 +35,7 @@
             />
           </LinkV2>
         </ToolTips>
-      </span>
+      </div>
     </div>
   </CardV2>
 </template>
@@ -45,12 +48,6 @@ export default {
   name: 'NFTPortfolioTopUsersList',
   filters: {
     ellipsis,
-  },
-  data() {
-    return {
-      isHoverTriggered: false,
-      isClickTriggered: false,
-    };
   },
   props: {
     type: {
@@ -65,6 +62,12 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      isHoverTriggered: false,
+      isClickTriggered: false,
+    };
   },
   watch: {
     type() {
