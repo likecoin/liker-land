@@ -59,17 +59,17 @@ router.post(
         case NFT_DISPLAY_STATE.FEATURED:
           payload.featuredNFTClassIds = FieldValue.arrayUnion(classId);
           payload.hiddenNFTClassIds = FieldValue.arrayRemove(classId);
-          logType = 'dashboard_nft_display_state_feature';
+          logType = 'DashboardNFTDisplayStateFeature';
           break;
         case NFT_DISPLAY_STATE.HIDDEN:
           payload.featuredNFTClassIds = FieldValue.arrayRemove(classId);
           payload.hiddenNFTClassIds = FieldValue.arrayUnion(classId);
-          logType = 'dashboard_nft_display_state_hide';
+          logType = 'DashboardNFTDisplayStateHide';
           break;
         case NFT_DISPLAY_STATE.DEFAULT:
           payload.featuredNFTClassIds = FieldValue.arrayRemove(classId);
           payload.hiddenNFTClassIds = FieldValue.arrayRemove(classId);
-          logType = 'dashboard_nft_display_state_reset';
+          logType = 'DashboardNFTDisplayStateReset';
           break;
         default:
           res.status(400).send('INVALID_STATE');
