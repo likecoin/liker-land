@@ -41,6 +41,7 @@
         </NFTPortfolioUserInfo>
         <NFTPortfolioTopUsersList
           v-if="userTopCreators.length && (isCurrentTabCollected || isCurrentTabCreated)"
+          :type="isCurrentTabCollected ? 'creator' : 'collector'"
           :label="isCurrentTabCollected ? $t('nft_portfolio_page_label_top_creators') : $t('nft_portfolio_page_label_top_collector')"
           :user-list="isCurrentTabCollected ? userTopCreators : userTopCollectors"
         />

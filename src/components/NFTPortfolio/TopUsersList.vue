@@ -13,10 +13,11 @@
       prepend-class="text-like-green"
     />
     <div class="flex items-center mt-[12px]">
-      <span v-for="user in userList" :key="user.id">
-        <ToolTips :tool-tip-text="user.displayName">
+      <span v-for="user, i in userList" :key="user.id">
+        <ToolTips @mouseenter.native.once="onHover(i)" :tool-tip-text="user.displayName">
           <LinkV2
             class="flex items-center gap-[8px]"
+            @click.native.once="onClick(i)"
             :to="{
               name: 'id',
               params: { id: user.id }
@@ -38,13 +39,24 @@
 
 <script>
 import { ellipsis } from '~/util/ui';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'NFTPortfolioTopUsersList',
   filters: {
     ellipsis,
   },
+  data() {
+    return {
+      isHoverTriggered: false,
+      isClickTriggered: false,
+    };
+  },
   props: {
+    type: {
+      type: String,
+      required: true,
+    },
     label: {
       type: String,
       required: true,
@@ -54,5 +66,35 @@ export default {
       required: true,
     },
   },
+  watch: {
+    type() {
+      this.isHoverTriggered = false;
+      this.isClickTriggered = false;
+    },
+  },
+  methods: {
+    onHover(i) {
+      if (this.isHoverTriggered) return;
+      this.isHoverTriggered = true;
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_top_${this.type}_hover`,
+        i,
+        1
+      );
+    },
+    onClick(i) {
+      if (this.isClickTriggered) return;
+      this.isClickTriggered = true;
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_top_${this.type}_click`,
+        i,
+        1
+      );
+    },
+  }
 };
 </script>
