@@ -347,7 +347,9 @@ const actions = {
       }
     }
     if (metadata.iscn_owner) {
-      dispatch('lazyGetUserInfoByAddress', metadata.iscn_owner);
+      const promise = dispatch('lazyGetUserInfoByAddress', metadata.iscn_owner);
+      // Need to await if the action fires in during SSR
+      if (!process.client) await promise;
     }
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
   },
