@@ -348,7 +348,7 @@ export const createPorfolioMixin = ({
       );
       const creators = (creatorRes.data.creators || []).map(c => c.account);
       await Promise.all(
-        [...new Set(...collectors, ...creators)].map(a =>
+        [...new Set([].concat(...collectors, ...creators))].map(a =>
           this.lazyGetUserInfoByAddress(a)
         )
       );
