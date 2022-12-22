@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-light-gray px-[32px] pt-[24px] pb-[48px]">
+  <div class="bg-light-gray px-[32px] pt-[24px] pb-[48px] phone:px-[8px]">
     <NFTMessageIdentity
       v-if="nftCollectorWalletAddress"
       class="self-start"
