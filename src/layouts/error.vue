@@ -1,7 +1,8 @@
 <template>
   <div
     class="
-      flex flex-col
+      flex
+      flex-col
       laptop:flex-row
       items-center
       justify-center
@@ -17,7 +18,7 @@
       :title="$t('error_page_not_found_title_widget')"
       :description="$t('error_page_not_found_description_widget')"
       :price="404"
-      img-src="/images/error/pageNotFound.svg"
+      :img-src="errorImg"
       :collect-button-label="$t('error_page_not_found_return_back')"
       @collect="() => $router.go(-1)"
     />
@@ -57,7 +58,14 @@
 </template>
 
 <script>
+import pageNotFound from '~/assets/images/error/pageNotFound.png';
+
 export default {
   layout: 'empty',
+  data() {
+    return {
+      errorImg: pageNotFound,
+    };
+  },
 };
 </script>
