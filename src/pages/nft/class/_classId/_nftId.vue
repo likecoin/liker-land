@@ -109,6 +109,8 @@
                 :nft-name="nftName"
                 :nft-description="nftDescription"
                 :nft-price="NFTPrice"
+                :collected-count="collectedCount"
+                :collector-count="ownerCount"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
                 @collect="handleCollectFromPreviewSection"
