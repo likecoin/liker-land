@@ -50,7 +50,7 @@
         <ButtonV2
           :text="$t('error_page_not_found_report_problem')"
           preset="outline"
-          href="https://discord.com/channels/763001015712350231/814761730349596712"
+          @click="handleClickReport"
         />
       </div>
     </div>
@@ -59,13 +59,27 @@
 
 <script>
 import pageNotFound from '~/assets/images/error/pageNotFound.png';
+import crispMixin from '~/mixins/crisp';
 
 export default {
   layout: 'empty',
+  mixins: [crispMixin],
   data() {
     return {
       errorImg: pageNotFound,
     };
+  },
+  methods: {
+    handleClickReport() {
+      if (this.$crisp) {
+        this.showCrisp();
+        this.$crisp.push(['do', 'chat:open']);
+      } else {
+        window.open(
+          'https://discord.com/channels/763001015712350231/814761730349596712'
+        );
+      }
+    },
   },
 };
 </script>
