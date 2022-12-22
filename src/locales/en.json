@@ -29,13 +29,13 @@
   "dashboard_title": "My Dashboard",
   "dashboard_description": "Connect your wallet to view your NFT dashboard.",
   "dashboard_portfolio_button": "Public Portfolio",
-  "error_page_not_found_return_back":"Return Back",
+  "error_page_not_found_return_back":"Go Back",
   "error_page_not_found_return_home":"Return Home",
-  "error_page_not_found_report_problem":"Report Problem",
+  "error_page_not_found_report_problem":"Report Issue",
   "error_page_not_found_title":"Sorry, we could not find that page",
   "error_page_not_found_title_widget":"You have found a page that does not exist",
-  "error_page_not_found_description":"If you think something is broken, report a problem.",
-  "error_page_not_found_description_widget":"Breathe in, and on the out breathe, go back and try again.",
+  "error_page_not_found_description":"If you think something is broken, report an issue.",
+  "error_page_not_found_description_widget":"Breathe in, and on the out breath, go back and try again.",
   "faq_list": [
     {
       "q": "Why publish articles as Writing NFT?",
