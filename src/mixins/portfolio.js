@@ -343,8 +343,10 @@ export const createPorfolioMixin = ({
         this.$api.get(getTopCollectorOfUser(address)),
         this.$api.get(getTopCreatorOfUser(address)),
       ]);
-      const collectors = collectorRes.data.collectors.map(c => c.account);
-      const creators = creatorRes.data.creators.map(c => c.account);
+      const collectors = (collectorRes.data.collectors || []).map(
+        c => c.account
+      );
+      const creators = (creatorRes.data.creators || []).map(c => c.account);
       await Promise.all(
         [...new Set(...collectors, ...creators)].map(a =>
           this.lazyGetUserInfoByAddress(a)
