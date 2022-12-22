@@ -5,7 +5,9 @@
       v-if="level !== undefined && level < 13"
       class="w-[24px] h-[24px]"
     >
-      <img :src="levelImgSrc" :title="name" :alt="name">
+      <ToolTips :tool-tip-text="name">
+        <img :src="levelImgSrc" :title="name" :alt="name">
+      </ToolTips>
     </div>
 
     <!-- Spark background -->
@@ -16,7 +18,9 @@
       <div
         class="absolute w-[24px] h-[24px]"
       >
-        <img :src="levelImgSrc" :title="name" :alt="name">
+        <ToolTips :tool-tip-text="name">
+          <img :src="levelImgSrc" :title="name" :alt="name">
+        </ToolTips>
       </div>
       <img :src="sparkImgSrc" :title="name" :alt="name">
     </div>
