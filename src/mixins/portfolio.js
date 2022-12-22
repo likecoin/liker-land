@@ -5,6 +5,11 @@ import {
   NFT_CLASS_LIST_SORTING_ORDER,
   checkIsWritingNFT,
 } from '~/util/nft';
+import {
+  getTopCollectorOfUser,
+  getTopCreatorOfUser,
+  getIdenticonAvatar,
+} from '~/util/api';
 import clipboardMixin from '~/mixins/clipboard';
 import userInfoMixin from '~/mixins/user-info';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -36,6 +41,8 @@ export const createPorfolioMixin = ({
       nftClassListOfOtherSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
       nftClassListOfOtherSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfOtherShowCount: ITEMS_PER_PAGE,
+      userTopCollectors: [],
+      userTopCreators: [],
     };
   },
   computed: {
@@ -278,6 +285,7 @@ export const createPorfolioMixin = ({
       'fetchNFTPurchaseInfo',
       'fetchNFTOwners',
       'fetchNFTDisplayStateListByAddress',
+      'lazyGetUserInfoByAddress',
     ]),
     setupPortfolioGrid() {
       const { portfolioMainView } = this.$refs;
@@ -329,6 +337,37 @@ export const createPorfolioMixin = ({
         await fetchPromise;
       }
       this.isLoading = false;
+    },
+    async loadTopUserListByAddress(address) {
+      const [collectorRes, creatorRes] = await Promise.all([
+        this.$api.get(getTopCollectorOfUser(address)),
+        this.$api.get(getTopCreatorOfUser(address)),
+      ]);
+      const collectors = collectorRes.data.collectors.map(c => c.account);
+      const creators = creatorRes.data.creators.map(c => c.account);
+      await Promise.all(
+        [...new Set(...collectors, ...creators)].map(a =>
+          this.lazyGetUserInfoByAddress(a)
+        )
+      );
+      this.userTopCollectors = collectors.map(id => {
+        const user = this.getUserInfoByAddress(id);
+        return {
+          id,
+          displayName: user?.displayName || id,
+          avatar: user?.avatar || getIdenticonAvatar(id),
+          isCivicLiker: user?.isSubscribedCivicLiker,
+        };
+      });
+      this.userTopCreators = creators.map(id => {
+        const user = this.getUserInfoByAddress(id);
+        return {
+          id,
+          displayName: user?.displayName || id,
+          avatar: user?.avatar || getIdenticonAvatar(id),
+          isCivicLiker: user?.isSubscribedCivicLiker,
+        };
+      });
     },
     changeTab(tab) {
       if (!tabOptions[tab]) return;

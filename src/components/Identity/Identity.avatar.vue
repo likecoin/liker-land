@@ -7,6 +7,8 @@
       <img
         class="avatar__image"
         :src="imageSrc"
+        :title="displayName"
+        :alt="displayName"
         :style="imageStyle"
         :loading="loadingType"
       >
@@ -49,6 +51,10 @@ export default {
     url: {
       type: String,
       default: DEFAULT_AVATAR,
+    },
+    displayName: {
+      type: String,
+      default: '',
     },
     isOutlined: {
       type: Boolean,
