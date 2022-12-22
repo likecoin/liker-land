@@ -105,7 +105,6 @@
                   name: 'nft-class-classId-nftId-message',
                   params: { classId, nftId: selectedNFTId }
                 }"
-                @click.native="handleClickViewMessage"
               >
                 <template #prepend>
                   <IconView />
@@ -116,8 +115,7 @@
               </ButtonV2>
             </div>
             <ul
-              v-if="
-                messageList.length === 1 && creatorMessage && !creatorMessage.message"
+              v-if="messageList.length === 1 && creatorMessage && !creatorMessage.message"
               class="hidden flex-col gap-[24px] w-full px-[24px] phone:flex phone:order-3"
             >
               <NFTMessage
@@ -287,7 +285,7 @@ import { mapActions } from 'vuex';
 import { EXTERNAL_HOST } from '~/constant';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { ellipsis, scrollToTop } from '~/util/ui';
+import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -561,9 +559,6 @@ export default {
         this.nftId,
         1
       );
-    },
-    handleClickViewMessage() {
-      scrollToTop();
     },
   },
 };

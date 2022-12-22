@@ -34,6 +34,7 @@ import nftMixin from '~/mixins/nft';
 
 export default {
   mixins: [nftMixin],
+  scrollToTop: true,
   computed: {
     classId() {
       return this.$route.params.classId;
