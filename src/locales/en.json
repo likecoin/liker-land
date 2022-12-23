@@ -32,9 +32,11 @@
   "error_page_not_found_return_back":"Go Back",
   "error_page_not_found_return_home":"Return Home",
   "error_page_not_found_report_problem":"Report Issue",
-  "error_page_not_found_title":"Sorry, we could not find that page",
+  "error_page_not_found_title_404":"Sorry, we could not find that page",
+  "error_page_not_found_title_500":"Well, this is unexpected",
   "error_page_not_found_title_widget":"You have found a page that does not exist",
-  "error_page_not_found_description":"If you think something is broken, report an issue.",
+  "error_page_not_found_description_404":"If you think something is broken, report an issue.",
+  "error_page_not_found_description_500":"Things are a little unstable here. We will be up and running shortly.",
   "error_page_not_found_description_widget":"Breathe in, and on the out breath, go back and try again.",
   "faq_list": [
     {

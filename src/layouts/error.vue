@@ -18,7 +18,7 @@
       :title="error.message || $t('error_page_not_found_title_widget')"
       :description="$t('error_page_not_found_description_widget')"
       :price="error.statusCode || 404"
-      :img-src="errorImg"
+      :img-src="errorInfo.image"
       :collect-button-label="$t('error_page_not_found_return_back')"
       @collect="() => $router.go(-1)"
     />
@@ -26,11 +26,11 @@
       <Label
         preset="h2"
         class="text-like-green"
-        :text="$t('error_page_not_found_title')"
+        :text="errorInfo.title"
       />
       <Label
         class="text-medium-gray text-[18px] my-[18px]"
-        :text="$t('error_page_not_found_description')"
+        :text="errorInfo.description"
       />
       <div
         class="
@@ -72,17 +72,27 @@ export default {
     },
   },
   computed: {
-    errorImg() {
+    errorInfo() {
+      const errorObj = {};
       switch (String(this.error.statusCode)[0]) {
-        case '4':
-          return pageNotFound;
-
         case '5':
-          return severError;
+          errorObj.image = severError;
+          errorObj.title = this.$t('error_page_not_found_title_500');
+          errorObj.description = this.$t(
+            'error_page_not_found_description_500'
+          );
+          break;
 
+        case '4':
         default:
-          return pageNotFound;
+          errorObj.image = pageNotFound;
+          errorObj.title = this.$t('error_page_not_found_title_404');
+          errorObj.description = this.$t(
+            'error_page_not_found_description_404'
+          );
+          break;
       }
+      return errorObj;
     },
   },
   methods: {
