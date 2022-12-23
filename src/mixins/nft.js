@@ -319,6 +319,28 @@ export default {
       }
       return NFT_DISPLAY_STATE.DEFAULT;
     },
+    messageList() {
+      return [...this.populatedEvents]
+        .filter(e => e.event !== 'new_class')
+        .map(e => {
+          if (e.event === 'purchase') {
+            return {
+              ...e,
+              fromWallet: this.iscnOwner,
+              toWallet: '',
+            };
+          }
+          return e;
+        })
+        .map(m => ({
+          ...m,
+          messageType:
+            m.fromWallet === this.iscnOwner ? 'creator' : 'collector',
+          fromType: this.getWalletIdentityType(m.fromWallet),
+          toType: this.getWalletIdentityType(m.toWallet),
+          message: this.normalizeNFTMessage(m),
+        }));
+    },
   },
   watch: {
     getAddress(newAddress) {
@@ -749,6 +771,11 @@ export default {
         name: 'nft-class-classId',
         params: { classId: this.classId },
       });
+    },
+    normalizeNFTMessage(m) {
+      if (m.memo === 'like.co NFT API') return '';
+      if (m.event === 'mint_nft') return this.nftClassCreatorMessage;
+      return m.memo;
     },
   },
 };

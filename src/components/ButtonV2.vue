@@ -3,7 +3,7 @@
     :is="tag"
     :class="rootClasses"
     :to="to || null"
-    :target="$attrs.href ? '_blank' : null"
+    :target="$attrs.href && !$attrs.target ? '_blank' : $attrs.target"
     v-bind="rootProps"
     v-on="$listeners"
   >
