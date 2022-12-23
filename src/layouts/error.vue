@@ -15,9 +15,9 @@
   >
     <NFTWidget
       class="shadow-lg w-full max-w-[400px]"
-      :title="$t('error_page_not_found_title_widget')"
+      :title="error.message || $t('error_page_not_found_title_widget')"
       :description="$t('error_page_not_found_description_widget')"
-      :price="404"
+      :price="error.statusCode || 404"
       :img-src="errorImg"
       :collect-button-label="$t('error_page_not_found_return_back')"
       @collect="() => $router.go(-1)"
@@ -64,6 +64,12 @@ import crispMixin from '~/mixins/crisp';
 export default {
   layout: 'empty',
   mixins: [crispMixin],
+  props: {
+    error: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       errorImg: pageNotFound,
