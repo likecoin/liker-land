@@ -21,7 +21,7 @@
       <CardV2
         :class="[
           'my-[8px] p-[32px] border-[2px] w-full text-dark-gray',
-          messageType === 'creator' ? 'border-like-cyan' : 'border-shade-gray'
+          type !== 'transfer' ? 'border-like-cyan' : 'border-shade-gray'
         ]"
       >{{ message || $t('nft_message_empty') }}</CardV2>
     </template>

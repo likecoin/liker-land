@@ -79,7 +79,7 @@
               v-if="messageList.length && messageList[0].message"
               class="hidden flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px] phone:flex phone:order-1"
             >
-              <Label :text="$t('nft_message_type_generic')" class="text-medium-gray" />
+              <Label :text="$t('nft_message_type_collect')" class="text-medium-gray" />
               <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[24px]">
                 <NFTMessage
                   :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
@@ -99,7 +99,7 @@
                 preset="outline"
                 class="mt-[16px] mb-[8px]"
                 :text="$t('nft_details_page_button_view_message', {
-                  num: messageList.length
+                  num: validMessageCount
                 })"
                 :to="{
                   name: 'nft-class-classId-nftId-message',
@@ -404,7 +404,12 @@ export default {
       return false;
     },
     creatorMessage() {
-      return this.messageList.find(element => element.fromType === 'creator');
+      return this.messageList.find(
+        element => element.event === 'mint_nft' || element.event === 'purchase'
+      );
+    },
+    validMessageCount() {
+      return this.messageList.filter(element => element.message).length;
     },
   },
   async asyncData({ route, query, store, redirect, error }) {
