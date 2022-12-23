@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import pageNotFound from '~/assets/images/error/pageNotFound.png';
+import pageNotFound from '~/assets/images/error/404.svg';
+import severError from '~/assets/images/error/500.svg';
 import crispMixin from '~/mixins/crisp';
 
 export default {
@@ -70,10 +71,19 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      errorImg: pageNotFound,
-    };
+  computed: {
+    errorImg() {
+      switch (String(this.error.statusCode)[0]) {
+        case '4':
+          return pageNotFound;
+
+        case '5':
+          return severError;
+
+        default:
+          return pageNotFound;
+      }
+    },
   },
   methods: {
     handleClickReport() {
