@@ -69,8 +69,4 @@ export function getLikeCoResizedImageUrl(url, size) {
   return url.replace(/\?size=\d+/, `?size=${size}`);
 }
 
-export function scrollToTop() {
-  window.scrollTo(0, 0);
-}
-
 export default ellipsis;
