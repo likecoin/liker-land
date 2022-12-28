@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
+import { BigNumber } from 'bignumber.js';
 import * as api from '@/util/api';
 import {
   NFT_CLASS_LIST_SORTING,
@@ -18,6 +19,7 @@ import * as TYPES from '../mutation-types';
 
 const state = () => ({
   purchaseInfoByClassIdMap: {},
+  listingInfoByClassIdMap: {},
   metadataByClassIdMap: {},
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
@@ -29,6 +31,9 @@ const state = () => ({
 const mutations = {
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
     Vue.set(state.purchaseInfoByClassIdMap, classId, info);
+  },
+  [TYPES.NFT_SET_NFT_CLASS_LISTING_INFO](state, { classId, info }) {
+    Vue.set(state.listingInfoByClassIdMap, classId, info);
   },
   [TYPES.NFT_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
     Vue.set(state.metadataByClassIdMap, classId, metadata);
@@ -127,6 +132,7 @@ const getters = {
     (state.userNFTClassDisplayStateSetsMap[address] || {}).hiddenClassIdSet,
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
+  getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
   getNFTClassOwnerCount: state => id =>
@@ -272,11 +278,38 @@ const actions = {
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
     return info;
   },
+  async fetchNFTListingInfo({ commit }, classId) {
+    const res = await this.$api.$get(
+      api.getChainNFTClassListingEndpoint(classId)
+    );
+    const info = res.listings
+      .map(l => {
+        const {
+          class_id: classId,
+          nft_id: nftId,
+          seller,
+          price,
+          expiration,
+        } = l;
+        return {
+          classId,
+          nftId,
+          seller,
+          price: new BigNumber(price).shiftedBy(-9).toNumber(),
+          expiration: new Date(expiration),
+        };
+      })
+      .sort((a, b) => a - b)[0];
+    commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
+    return info;
+  },
   async lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
     let info = getters.getNFTClassPurchaseInfoById(classId);
+    const listingInfo = getters.getNFTClassListingInfoById(classId);
     if (!info) {
       info = await dispatch('fetchNFTPurchaseInfo', classId);
     }
+    if (!listingInfo) dispatch('fetchNFTListingInfo', classId);
     return info;
   },
   async fetchNFTClassMetadata({ dispatch }, classId) {
@@ -441,6 +474,7 @@ const actions = {
             catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
           );
         }
+        promises.push(dispatch('fetchNFTPurchaseInfo', classId));
         return Promise.all(promises);
       })
     );
