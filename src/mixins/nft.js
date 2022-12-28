@@ -448,7 +448,12 @@ export default {
       if (this.nftIsWritingNFT) {
         await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
       }
-      this.fetchNFTListingInfo(this.classId);
+      try {
+        this.fetchNFTListingInfo(this.classId);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(JSON.stringify(err));
+      }
     },
     async fetchNFTPrices(classId) {
       try {
