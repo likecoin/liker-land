@@ -70,7 +70,11 @@
           <Label v-else class="break-all" text="-" />
         </td>
         <td>
-          <LinkV2 v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft'].includes(event.event)" :to="`/${event.fromWallet}`">
+          <LinkV2
+            v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft'].includes(event.event)"
+            :to="`/${event.fromWallet}`"
+            :is-inline="true"
+          >
             <Label class="break-all">{{
               event.fromDisplayName | ellipsis
             }}</Label>
@@ -78,7 +82,11 @@
           <Label v-else>-</Label>
         </td>
         <td>
-          <LinkV2 v-if="['purchase' ,'transfer', 'buy_nft'].includes(event.event)" :to="`/${event.toWallet}`">
+          <LinkV2
+            v-if="['purchase' ,'transfer', 'buy_nft'].includes(event.event)"
+            :to="`/${event.toWallet}`"
+            :is-inline="true"
+          >
             <Label class="break-all">{{
               event.toDisplayName | ellipsis
             }}</Label>
@@ -86,7 +94,11 @@
           <Label v-else>-</Label>
         </td>
         <td>
-          <LinkV2 class="text-left" :href="getChainExplorerTx(event.txHash)">
+          <LinkV2
+            class="text-left"
+            :href="getChainExplorerTx(event.txHash)"
+            :is-inline="true"
+          >
             <TimeAgo
               class="px-[2px]"
               long
