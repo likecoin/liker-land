@@ -13,7 +13,8 @@
       <tr
         v-for="event in nftHistory"
         :key="[event.txHash, event.classId, event.nftId, event.event].join('-')"
-        class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray"
+        class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray cursor-pointer hover:bg-light-gray transition-colors"
+        @click="handleRowClick(event)"
       >
         <td>
           <Label
@@ -83,6 +84,7 @@
               class="overflow-hidden"
               :to="{ name: 'id', params: { id: event.fromWallet } }"
               :is-inline="true"
+              @click.native.stop
             >
               <span class="truncate">{{ event.fromDisplayName }}</span>
             </LinkV2>
@@ -98,6 +100,7 @@
               class="overflow-hidden"
               :to="{ name: 'id', params: { id: event.toWallet } }"
               :is-inline="true"
+              @click.native.stop
             >
               <span class="truncate">{{ event.toDisplayName }}</span>
             </LinkV2>
@@ -109,6 +112,7 @@
             class="text-left"
             :href="getChainExplorerTx(event.txHash)"
             :is-inline="true"
+            @click.native.stop
           >
             <TimeAgo
               class="px-[2px]"
@@ -139,7 +143,15 @@ export default {
       default: undefined,
     },
   },
-  methods: { getChainExplorerTx },
+  methods: {
+    getChainExplorerTx,
+    handleRowClick(event) {
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: event.classId, nftId: event.nftId },
+      });
+    },
+  },
 };
 </script>
 

@@ -1,12 +1,16 @@
 <template>
-  <li class="border-shade-gray border-[0] border-b-[1px] py-[12px]">
+  <li
+    class="border-shade-gray border-[0] border-b-[1px] py-[12px] cursor-pointer hover:bg-light-gray transition-colors px-[8px]"
+    @click="handleRowClick"
+  >
     <div class="flex items-center justify-between">
       <LinkV2
         class="flex items-center gap-[8px]"
         :to="{
-          name: 'nft-class-classId-nftId',
-          params: { classId, nftId: owner.collectedFirstNFTId }
+          name: 'id',
+          params: { id: owner.id }
         }"
+        @click.native.stop
       >
         <Identity
           :avatar-url="owner.avatar"
@@ -37,6 +41,17 @@ export default {
     owner: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    handleRowClick() {
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: {
+          classId: this.classId,
+          nftId: this.owner.collectedFirstNFTId,
+        },
+      });
     },
   },
 };

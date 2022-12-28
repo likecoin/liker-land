@@ -6,6 +6,7 @@
     :href="href || null"
     :target="href ? '_blank' : null"
     :rel="rel"
+    v-on="$listeners"
   >
     <slot />
     <IconNorthEast v-if="href" class="ml-[4px] self-center shrink-0" />
