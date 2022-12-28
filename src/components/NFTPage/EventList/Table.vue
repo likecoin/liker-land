@@ -66,32 +66,43 @@
           </Label>
         </td>
         <td>
-          <Label v-if="event.price" class="break-all" :text="event.price | formatNumber" />
-          <Label v-else class="break-all" text="-" />
+          <Label
+            v-if="event.price"
+            content-class="overflow-hidden"
+          >
+            <span class="truncate">{{ event.price | formatNumber }}</span>
+          </Label>
+          <Label v-else text="-" />
         </td>
         <td>
-          <LinkV2
+          <Label
             v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft'].includes(event.event)"
-            :to="`/${event.fromWallet}`"
-            :is-inline="true"
+            content-class="overflow-hidden"
           >
-            <Label class="break-all">{{
-              event.fromDisplayName | ellipsis
-            }}</Label>
-          </LinkV2>
-          <Label v-else>-</Label>
+            <LinkV2
+              class="overflow-hidden"
+              :to="{ name: 'id', params: { id: event.fromWallet } }"
+              :is-inline="true"
+            >
+              <span class="truncate">{{ event.fromDisplayName }}</span>
+            </LinkV2>
+          </Label>
+          <Label v-else text="-" />
         </td>
         <td>
-          <LinkV2
+          <Label
             v-if="['purchase' ,'transfer', 'buy_nft'].includes(event.event)"
-            :to="`/${event.toWallet}`"
-            :is-inline="true"
+            content-class="overflow-hidden"
           >
-            <Label class="break-all">{{
-              event.toDisplayName | ellipsis
-            }}</Label>
-          </LinkV2>
-          <Label v-else>-</Label>
+            <LinkV2
+              class="overflow-hidden"
+              :to="{ name: 'id', params: { id: event.toWallet } }"
+              :is-inline="true"
+            >
+              <span class="truncate">{{ event.toDisplayName }}</span>
+            </LinkV2>
+          </Label>
+          <Label v-else text="-" />
         </td>
         <td>
           <LinkV2
@@ -112,14 +123,13 @@
   </table>
 </template>
 <script>
-import { ellipsis, formatNumber } from '~/util/ui';
+import { formatNumber } from '~/util/ui';
 import { TimeAgo } from 'vue2-timeago';
 import { getChainExplorerTx } from '~/util/api';
 
 export default {
   name: 'EventListTable',
   filters: {
-    ellipsis,
     formatNumber,
   },
   components: { TimeAgo },
