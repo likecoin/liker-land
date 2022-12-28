@@ -95,7 +95,7 @@ export default {
         this,
         'portfolio',
         `portfolio_top_${this.type}_hover`,
-        i,
+        `${i}`,
         1
       );
     },
@@ -106,7 +106,7 @@ export default {
         this,
         'portfolio',
         `portfolio_top_${this.type}_click`,
-        i,
+        `${i}`,
         1
       );
     },
