@@ -1,25 +1,18 @@
 const { onMessagePublished } = require('firebase-functions/v2/pubsub');
 // const { defineString } = require('firebase-functions/params');
-const { getBasicWithAvatarTemplate } = require('@likecoin/edm');
+const { getCreatorFollowPublishNewTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
 const { nftMintSubscriptionCollection } = require('../modules/firebase');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
+const {
+  convertLanguageCodeForEmailTemplate,
+  createSubscriptionConfirmURLFactory,
+} = require('../modules/misc');
 const { sendEmail } = require('../modules/sendgrid');
 const { shortenString } = require('../modules/utils');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
-
-function createSubscriptionConfirmURLFactory({
-  subscriptionId,
-  subscribedWallet,
-  subscriberEmail,
-}) {
-  return (action = 'subscribe') =>
-    `${EXTERNAL_URL}/${subscribedWallet}/${action}/${subscriptionId}?email=${encodeURIComponent(
-      subscriberEmail
-    )}`;
-}
 
 // TODO: firebase param does not support `topic` which sucks, hardcode for now
 // const topic = defineString('WNFT_PUBSUB_TOPIC');
@@ -71,7 +64,11 @@ module.exports = onMessagePublished(
           for (let i = 0; i < query.docs.length; i += 1) {
             const doc = query.docs[i];
             const subscriptionId = doc.id;
-            const { subscriberEmail, subscribedWallet } = doc.data();
+            const {
+              subscriberEmail,
+              subscribedWallet,
+              language = 'en',
+            } = doc.data();
             try {
               const {
                 avatar,
@@ -85,24 +82,21 @@ module.exports = onMessagePublished(
                   subscriptionId,
                   subscribedWallet,
                   subscriberEmail,
+                  language,
                 }
               );
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
-              const shortenDisplayName = shortenString(displayName);
-              const subject = `Writing NFT - New NFT by ${shortenDisplayName} is live`;
-              const { body } = getBasicWithAvatarTemplate({
-                title:
-                  displayName === subscribedWallet
-                    ? undefined
-                    : shortenDisplayName,
-                subtitle: `${name} is now live`,
-                content: `<p><img style="width: 100%" src="${image}"></p>
-<p><a href="${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email" target="_blank" rel="noreferrer">${name}</a> is now live!</p>
-<p>Collect and discover more <a href="${EXTERNAL_URL}/campaign/writing-nft?utm_source=email" target="_blank" rel="noreferrer">Writing NFT</a></p>`,
-                avatarURL: avatar,
-                isCivicLiker: isSubscribedCivicLiker,
+              const { subject, body } = getCreatorFollowPublishNewTemplate({
+                creatorLikerId: subscribedWallet,
+                creatorDisplayName: shortenString(displayName),
+                creatorAvatarSrc: avatar,
+                creatorIsCivicLiker: isSubscribedCivicLiker,
+                followerDisplayName: shortenString(name),
+                nftTitle: name,
+                nftCoverImageSrc: image,
+                nftURL: `${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email`,
                 unsubscribeLink,
-                language: 'en',
+                language: convertLanguageCodeForEmailTemplate(language),
               });
               // eslint-disable-next-line no-await-in-loop
               await sendEmail({

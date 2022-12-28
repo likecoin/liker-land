@@ -14,7 +14,11 @@ const { publisher, PUBSUB_TOPIC_MISC } = require('../../../modules/pubsub');
 const router = Router();
 
 router.post('/nft/mint-subscription', async (req, res, next) => {
-  const { wallet: subscribedWallet, email: subscriberEmail } = req.query;
+  const {
+    wallet: subscribedWallet,
+    email: subscriberEmail,
+    language,
+  } = req.query;
   if (!subscribedWallet) {
     res.status(400).send('MISSING_SUBSCRIPTION_WALLET');
     return;
@@ -56,6 +60,7 @@ router.post('/nft/mint-subscription', async (req, res, next) => {
         isVerified: false,
         subscriberEmail,
         subscribedWallet,
+        language: language || 'en',
         ts: firestore.FieldValue.serverTimestamp(),
       });
       return { subscriptionId };
