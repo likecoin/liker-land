@@ -281,9 +281,6 @@ export const createPorfolioMixin = ({
   methods: {
     ...mapActions([
       'fetchNFTListByAddress',
-      'fetchNFTClassMetadata',
-      'fetchNFTPurchaseInfo',
-      'fetchNFTOwners',
       'fetchNFTDisplayStateListByAddress',
       'lazyGetUserInfoByAddress',
     ]),
