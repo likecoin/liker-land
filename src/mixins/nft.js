@@ -131,7 +131,10 @@ export default {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
     iscnId() {
-      return this.NFTClassMetadata.parent?.iscnIdPrefix;
+      return (
+        this.NFTClassMetadata.parent?.iscnIdPrefix ||
+        this.NFTClassMetadata.parent?.iscn_id_prefix
+      );
     },
     iscnOwner() {
       return (
