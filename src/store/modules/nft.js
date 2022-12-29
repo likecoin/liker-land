@@ -299,11 +299,11 @@ const actions = {
           expiration: new Date(expiration),
         };
       })
-      .sort((a, b) => a - b)[0];
+      .sort((a, b) => a.price - b.price)[0];
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
     return info;
   },
-  async lazyGetNFTPurchaseInfo({ getters, dispatch }, classId) {
+  async lazyGetNFTPurchaseAndListingInfo({ getters, dispatch }, classId) {
     let info = getters.getNFTClassPurchaseInfoById(classId);
     const listingInfo = getters.getNFTClassListingInfoById(classId);
     if (!info) {
@@ -467,6 +467,7 @@ const actions = {
             dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
           ),
           catchAxiosError(dispatch('fetchNFTOwners', classId)),
+          catchAxiosError(dispatch('fetchNFTListingInfo', classId)),
         ];
         const classData = nftClassIdDataMap.get(classId);
         if (checkIsWritingNFT(classData.metadata)) {
@@ -474,7 +475,6 @@ const actions = {
             catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
           );
         }
-        promises.push(dispatch('fetchNFTPurchaseInfo', classId));
         return Promise.all(promises);
       })
     );
