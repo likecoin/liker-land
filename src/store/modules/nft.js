@@ -306,10 +306,10 @@ const actions = {
   async lazyGetNFTPurchaseAndListingInfo({ getters, dispatch }, classId) {
     let info = getters.getNFTClassPurchaseInfoById(classId);
     const listingInfo = getters.getNFTClassListingInfoById(classId);
+    if (!listingInfo) dispatch('fetchNFTListingInfo', classId);
     if (!info) {
       info = await dispatch('fetchNFTPurchaseInfo', classId);
     }
-    if (!listingInfo) dispatch('fetchNFTListingInfo', classId);
     return info;
   },
   async fetchNFTClassMetadata({ dispatch }, classId) {
