@@ -445,9 +445,7 @@ export default {
       this.updateDisplayNameList(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
-      if (this.nftIsWritingNFT) {
-        await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
-      }
+      await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
       catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
     async fetchNFTPrices(classId) {
