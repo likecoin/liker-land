@@ -32,6 +32,7 @@ import {
   getNFTClassCollectionType,
   formatNFTEventsToHistory,
   parseNFTMetadataURL,
+  getPurchasePrice,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -441,7 +442,22 @@ export default {
         actionType,
         ignoreToList,
       });
-      let history = historyOnChain;
+
+      const eventMap = new Map();
+      historyOnChain.forEach(e => {
+        eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
+      });
+
+      const purchaseEvents = historyOnChain.filter(e => e.event === 'buy_nft');
+      const purchasePrices = await Promise.all(
+        purchaseEvents.map(e => getPurchasePrice(this.$api, e.nftId, e.txHash))
+      );
+      purchaseEvents.forEach((e, i) => {
+        const key = `${e.txHash}-${e.nftId}-${e.event}`;
+        if (eventMap.has(key)) {
+          eventMap.get(key).price = purchasePrices[i];
+        }
+      });
 
       if (this.nftIsWritingNFT) {
         try {
@@ -452,23 +468,18 @@ export default {
             })
           );
           const historyInDB = data.list;
-          const eventMap = new Map();
-          historyOnChain.forEach(e => {
-            eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
-          });
           historyInDB.forEach(e => {
             const key = `${e.txHash}-${e.nftId}-${e.event}`;
             if (eventMap.has(key)) {
               eventMap.get(key).price = e.price;
             }
           });
-          history = [...eventMap.values()];
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         }
       }
-      this.NFTHistory = history;
+      this.NFTHistory = historyOnChain;
 
       const addresses = [];
       // eslint-disable-next-line no-restricted-syntax

@@ -194,19 +194,21 @@ function formatNFTEvent(event) {
     sender: fromWallet,
     receiver: toWallet,
     tx_hash: txHash,
+    action,
     timestamp,
     memo,
   } = event;
   let eventName;
-  switch (event.action) {
+  switch (action) {
     case '/cosmos.nft.v1beta1.MsgSend':
       eventName =
         fromWallet === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
       break;
+    case 'buy_nft':
     case 'new_class':
     case 'mint_nft':
     default:
-      eventName = event.action;
+      eventName = action;
       break;
   }
   return {
@@ -281,6 +283,21 @@ export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
     allowAddresses.map(a => fetchAllNFTClassFromChain(axios, a))
   );
   return arraysOfNFTClasses.flat();
+};
+
+export const getPurchasePrice = async (axios, nftId, txHash) => {
+  try {
+    const { data } = await axios.get(api.getChainRawTx(txHash));
+    const { price } = data.tx.body.messages.find(
+      m =>
+        m['@type'] === '/likechain.likenft.v1.MsgBuyNFT' && m.nft_id === nftId
+    );
+    return new BigNumber(price).shiftedBy(-9).toNumber();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return null;
+  }
 };
 
 export function formatNFTEventsToHistory(events) {
