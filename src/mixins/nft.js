@@ -12,7 +12,6 @@ import {
 } from '~/constant';
 
 import {
-  getNFTHistory,
   postNFTPurchase,
   postNFTTransfer,
   getNFTEvents,
@@ -32,7 +31,8 @@ import {
   getNFTClassCollectionType,
   formatNFTEventsToHistory,
   parseNFTMetadataURL,
-  getPurchasePrice,
+  populatePurchasePriceFromChain,
+  populateCollectPriceFromDB,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -438,48 +438,25 @@ export default {
         ? ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'new_class']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'buy_nft', 'new_class'];
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
-      const historyOnChain = await this.getNFTEventsAll({
+      const history = await this.getNFTEventsAll({
         actionType,
         ignoreToList,
       });
 
-      const eventMap = new Map();
-      historyOnChain.forEach(e => {
-        eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
-      });
-
-      const purchaseEvents = historyOnChain.filter(e => e.event === 'buy_nft');
-      const purchasePrices = await Promise.all(
-        purchaseEvents.map(e => getPurchasePrice(this.$api, e.nftId, e.txHash))
-      );
-      purchaseEvents.forEach((e, i) => {
-        const key = `${e.txHash}-${e.nftId}-${e.event}`;
-        if (eventMap.has(key)) {
-          eventMap.get(key).price = purchasePrices[i];
-        }
-      });
+      const promises = [populatePurchasePriceFromChain(this.$api, history)];
 
       if (this.nftIsWritingNFT) {
-        try {
-          const { data } = await this.$api.get(
-            getNFTHistory({
-              classId: this.classId,
-              nftId: this.nftId,
-            })
-          );
-          const historyInDB = data.list;
-          historyInDB.forEach(e => {
-            const key = `${e.txHash}-${e.nftId}-${e.event}`;
-            if (eventMap.has(key)) {
-              eventMap.get(key).price = e.price;
-            }
-          });
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
+        promises.push(
+          populateCollectPriceFromDB({
+            axios: this.$api,
+            history,
+            classId: this.classId,
+            nftId: this.nftId,
+          })
+        );
       }
-      this.NFTHistory = historyOnChain;
+      await Promise.all(promises);
+      this.NFTHistory = history;
 
       const addresses = [];
       // eslint-disable-next-line no-restricted-syntax

@@ -285,12 +285,14 @@ export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
   return arraysOfNFTClasses.flat();
 };
 
-export const getPurchasePrice = async (axios, nftId, txHash) => {
+async function getPurchasePrice(axios, nftId, classId, txHash) {
   try {
     const { data } = await axios.get(api.getChainRawTx(txHash));
     const { price } = data.tx.body.messages.find(
       m =>
-        m['@type'] === '/likechain.likenft.v1.MsgBuyNFT' && m.nft_id === nftId
+        m['@type'] === '/likechain.likenft.v1.MsgBuyNFT' &&
+        m.class_id === classId &&
+        m.nft_id === nftId
     );
     return new BigNumber(price).shiftedBy(-9).toNumber();
   } catch (error) {
@@ -298,7 +300,52 @@ export const getPurchasePrice = async (axios, nftId, txHash) => {
     console.error(error);
     return null;
   }
-};
+}
+
+export async function populatePurchasePriceFromChain(axios, history) {
+  const historyWithPrice = await Promise.all(
+    history.map(async e => {
+      const { event, txHash, classId, nftId } = e;
+      if (event === 'buy_nft') {
+        e.price = await getPurchasePrice(axios, nftId, classId, txHash);
+      }
+      return e;
+    })
+  );
+  return historyWithPrice;
+}
+
+export async function populateCollectPriceFromDB({
+  axios,
+  history,
+  classId,
+  nftId,
+}) {
+  try {
+    const eventMap = new Map();
+    history.forEach(e => {
+      eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
+    });
+
+    const { data } = await axios.get(
+      api.getNFTHistory({
+        classId,
+        nftId,
+      })
+    );
+
+    const historyInDB = data.list;
+    historyInDB.forEach(e => {
+      const key = `${e.txHash}-${e.nftId}-${e.event}`;
+      if (eventMap.has(key)) {
+        eventMap.get(key).price = e.price;
+      }
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
+}
 
 export function formatNFTEventsToHistory(events) {
   const history = events.map(e => formatNFTEvent(e)).reverse();
