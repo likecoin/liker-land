@@ -285,6 +285,11 @@ export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
   return arraysOfNFTClasses.flat();
 };
 
+export function getEventKey(event) {
+  const { classId, nftId, txHash } = event;
+  return `${classId}-${nftId}-${txHash}`;
+}
+
 async function getPurchasePrice(axios, nftId, classId, txHash) {
   try {
     const { data } = await axios.get(api.getChainRawTx(txHash));
@@ -302,49 +307,35 @@ async function getPurchasePrice(axios, nftId, classId, txHash) {
   }
 }
 
-export async function populatePurchasePriceFromChain(axios, history) {
-  const historyWithPrice = await Promise.all(
+export async function getPurchasePriceMap(axios, history) {
+  const priceMap = new Map();
+  await Promise.all(
     history.map(async e => {
       const { event, txHash, classId, nftId } = e;
       if (event === 'buy_nft') {
-        e.price = await getPurchasePrice(axios, nftId, classId, txHash);
+        const price = await getPurchasePrice(axios, nftId, classId, txHash);
+        const key = getEventKey(e);
+        priceMap.set(key, price);
       }
-      return e;
     })
   );
-  return historyWithPrice;
+  return priceMap;
 }
 
-export async function populateCollectPriceFromDB({
-  axios,
-  history,
-  classId,
-  nftId,
-}) {
+export async function getCollectPriceMap({ axios, classId, nftId }) {
+  const priceMap = new Map();
   try {
-    const eventMap = new Map();
-    history.forEach(e => {
-      eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
-    });
-
-    const { data } = await axios.get(
-      api.getNFTHistory({
-        classId,
-        nftId,
-      })
-    );
-
-    const historyInDB = data.list;
-    historyInDB.forEach(e => {
-      const key = `${e.txHash}-${e.nftId}-${e.event}`;
-      if (eventMap.has(key)) {
-        eventMap.get(key).price = e.price;
-      }
+    const { data } = await axios.get(api.getNFTHistory({ classId, nftId }));
+    const { list } = data;
+    list.forEach(e => {
+      const key = getEventKey(e);
+      priceMap.set(key, e.price);
     });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
   }
+  return priceMap;
 }
 
 export function formatNFTEventsToHistory(events) {

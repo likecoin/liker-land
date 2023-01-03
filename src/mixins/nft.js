@@ -31,8 +31,9 @@ import {
   getNFTClassCollectionType,
   formatNFTEventsToHistory,
   parseNFTMetadataURL,
-  populatePurchasePriceFromChain,
-  populateCollectPriceFromDB,
+  getEventKey,
+  getPurchasePriceMap,
+  getCollectPriceMap,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -443,19 +444,32 @@ export default {
         ignoreToList,
       });
 
-      const promises = [populatePurchasePriceFromChain(this.$api, history)];
+      const promises = [getPurchasePriceMap(this.$api, history)];
 
       if (this.nftIsWritingNFT) {
         promises.push(
-          populateCollectPriceFromDB({
+          getCollectPriceMap({
             axios: this.$api,
-            history,
             classId: this.classId,
             nftId: this.nftId,
           })
         );
       }
-      await Promise.all(promises);
+
+      const eventMap = new Map();
+      history.forEach(event => {
+        eventMap.set(getEventKey(event), event);
+      });
+
+      const priceMaps = await Promise.all(promises);
+      priceMaps.forEach(priceMap => {
+        priceMap.forEach((price, key) => {
+          if (eventMap.has(key)) {
+            eventMap.get(key).price = price;
+          }
+        });
+      });
+
       this.NFTHistory = history;
 
       const addresses = [];
