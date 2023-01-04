@@ -308,18 +308,16 @@ async function getPurchasePrice(axios, nftId, classId, txHash) {
 }
 
 export async function getPurchasePriceMap(axios, history) {
-  const priceMap = new Map();
-  await Promise.all(
-    history.map(async e => {
-      const { event, txHash, classId, nftId } = e;
-      if (event === 'buy_nft') {
+  return new Map(
+    await Promise.all(
+      history.filter(e => e.event === 'buy_nft').map(async e => {
+        const { txHash, classId, nftId } = e;
         const price = await getPurchasePrice(axios, nftId, classId, txHash);
         const key = getEventKey(e);
-        priceMap.set(key, price);
-      }
-    })
+        return [key, price];
+      })
+    )
   );
-  return priceMap;
 }
 
 export async function getCollectPriceMap({ axios, classId, nftId }) {
