@@ -214,19 +214,21 @@ function formatNFTEvent(event) {
     sender: fromWallet,
     receiver: toWallet,
     tx_hash: txHash,
+    action,
     timestamp,
     memo,
   } = event;
   let eventName;
-  switch (event.action) {
+  switch (action) {
     case '/cosmos.nft.v1beta1.MsgSend':
       eventName =
         fromWallet === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
       break;
+    case 'buy_nft':
     case 'new_class':
     case 'mint_nft':
     default:
-      eventName = event.action;
+      eventName = action;
       break;
   }
   return {
@@ -302,6 +304,57 @@ export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
   );
   return arraysOfNFTClasses.flat();
 };
+
+export function getEventKey(event) {
+  const { classId, nftId, txHash } = event;
+  return `${classId}-${nftId}-${txHash}`;
+}
+
+async function getPurchasePrice(axios, nftId, classId, txHash) {
+  try {
+    const { data } = await axios.get(api.getChainRawTx(txHash));
+    const { price } = data.tx.body.messages.find(
+      m =>
+        m['@type'] === '/likechain.likenft.v1.MsgBuyNFT' &&
+        m.class_id === classId &&
+        m.nft_id === nftId
+    );
+    return new BigNumber(price).shiftedBy(-9).toNumber();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getPurchasePriceMap(axios, history) {
+  return new Map(
+    await Promise.all(
+      history.filter(e => e.event === 'buy_nft').map(async e => {
+        const { txHash, classId, nftId } = e;
+        const price = await getPurchasePrice(axios, nftId, classId, txHash);
+        const key = getEventKey(e);
+        return [key, price];
+      })
+    )
+  );
+}
+
+export async function getCollectPriceMap({ axios, classId, nftId }) {
+  const priceMap = new Map();
+  try {
+    const { data } = await axios.get(api.getNFTHistory({ classId, nftId }));
+    const { list } = data;
+    list.forEach(e => {
+      const key = getEventKey(e);
+      priceMap.set(key, e.price);
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
+  return priceMap;
+}
 
 export function formatNFTEventsToHistory(events) {
   const history = events.map(e => formatNFTEvent(e)).reverse();

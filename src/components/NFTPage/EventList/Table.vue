@@ -30,7 +30,7 @@
             :text="$t('nft_details_page_activity_list_event_buy_nft')"
           >
             <template #prepend>
-              <IconCircle />
+              <IconExchange />
             </template>
           </Label>
           <Label

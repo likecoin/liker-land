@@ -12,7 +12,6 @@ import {
 } from '~/constant';
 
 import {
-  getNFTHistory,
   postNFTPurchase,
   postNFTTransfer,
   getNFTEvents,
@@ -33,6 +32,9 @@ import {
   getNFTClassCollectionType,
   formatNFTEventsToHistory,
   parseNFTMetadataURL,
+  getEventKey,
+  getPurchasePriceMap,
+  getCollectPriceMap,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -471,37 +473,37 @@ export default {
         ? ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'new_class']
         : ['/cosmos.nft.v1beta1.MsgSend', 'mint_nft', 'buy_nft', 'new_class'];
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
-      const historyOnChain = await this.getNFTEventsAll({
+      const history = await this.getNFTEventsAll({
         actionType,
         ignoreToList,
       });
-      let history = historyOnChain;
+
+      const promises = [getPurchasePriceMap(this.$api, history)];
 
       if (this.nftIsWritingNFT) {
-        try {
-          const { data } = await this.$api.get(
-            getNFTHistory({
-              classId: this.classId,
-              nftId: this.nftId,
-            })
-          );
-          const historyInDB = data.list;
-          const eventMap = new Map();
-          historyOnChain.forEach(e => {
-            eventMap.set(`${e.txHash}-${e.nftId}-${e.event}`, e);
-          });
-          historyInDB.forEach(e => {
-            const key = `${e.txHash}-${e.nftId}-${e.event}`;
-            if (eventMap.has(key)) {
-              eventMap.get(key).price = e.price;
-            }
-          });
-          history = [...eventMap.values()];
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
+        promises.push(
+          getCollectPriceMap({
+            axios: this.$api,
+            classId: this.classId,
+            nftId: this.nftId,
+          })
+        );
       }
+
+      const eventMap = new Map();
+      history.forEach(event => {
+        eventMap.set(getEventKey(event), event);
+      });
+
+      const priceMaps = await Promise.all(promises);
+      priceMaps.forEach(priceMap => {
+        priceMap.forEach((price, key) => {
+          if (eventMap.has(key)) {
+            eventMap.get(key).price = price;
+          }
+        });
+      });
+
       this.NFTHistory = history;
 
       const addresses = [];
