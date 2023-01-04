@@ -147,6 +147,9 @@ export const getTopCollectorOfUser = (creator, count = 6) =>
 export const getTopCreatorOfUser = (collector, count = 6) =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?pagination.limit=${count}&reverse=true&collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
+export const getChainNFTClassListingEndpoint = classId =>
+  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`;
+
 export const getISCNRecord = iscnId => {
   const qsPayload = {
     iscn_id: iscnId,

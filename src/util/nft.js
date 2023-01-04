@@ -94,6 +94,26 @@ export async function signGrant({ senderAddress, amountInLIKE, signer }) {
   return signData;
 }
 
+export async function signBuyNFT({
+  senderAddress,
+  classId,
+  nftId,
+  seller,
+  priceInLIKE,
+  signer,
+}) {
+  const client = await createNFTSigningClient(signer);
+  const signData = await client.buyNFT(
+    senderAddress,
+    classId,
+    nftId,
+    seller,
+    priceInLIKE,
+    { broadcast: false }
+  );
+  return signData;
+}
+
 export async function broadcastTx(signData, signer) {
   const client = await createNFTSigningClient(signer);
   const senderClient = client.getSigningStargateClient();

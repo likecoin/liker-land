@@ -26,6 +26,7 @@ import {
   NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
   signGrant,
+  signBuyNFT,
   broadcastTx,
   getNFTCountByClassId,
   getISCNRecord,
@@ -97,6 +98,7 @@ export default {
       'getNFTClassFeaturedSetByAddress',
       'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
+      'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
       'getNFTClassOwnerCount',
@@ -125,7 +127,26 @@ export default {
       return this.NFTClassMetadata.message || '';
     },
     purchaseInfo() {
-      return this.getNFTClassPurchaseInfoById(this.classId) || {};
+      const info = this.getNFTClassPurchaseInfoById(this.classId) || {};
+      const { price, totalPrice, metadata: { nextNewNFTId } = {} } = info;
+      return {
+        price,
+        totalPrice,
+        classId: this.classId,
+        nftId: nextNewNFTId,
+        seller: LIKECOIN_NFT_API_WALLET,
+      };
+    },
+    listingInfo() {
+      const list = this.getNFTClassListingInfoById(this.classId) || {};
+      const { price, nftId, seller } = list;
+      return {
+        price,
+        totalPrice: price,
+        classId: this.classId,
+        nftId,
+        seller,
+      };
     },
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -174,8 +195,17 @@ export default {
     nftExternalURL() {
       return this.nftMetadata.external_url || this.NFTExternalUrl;
     },
+    nftIsUseListingPrice() {
+      return (
+        this.listingInfo &&
+        this.listingInfo.price &&
+        (!this.purchaseInfo || this.listingInfo.price < this.purchaseInfo.price)
+      );
+    },
     NFTPrice() {
-      return this.purchaseInfo.price;
+      return this.nftIsUseListingPrice
+        ? this.listingInfo.price
+        : this.purchaseInfo.price;
     },
     nftIsCollectable() {
       return this.NFTPrice && this.NFTPrice !== -1;
@@ -289,7 +319,9 @@ export default {
       return ownNFT?.[0];
     },
     nftIdCollectNext() {
-      return this.purchaseInfo?.metadata?.nextNewNFTId;
+      return this.nftIsUseListingPrice
+        ? this.listingInfo.nftId
+        : this.purchaseInfo?.nftId;
     },
     canCollectWithoutWallet() {
       return (
@@ -385,6 +417,7 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'fetchNFTPurchaseInfo',
+      'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'initIfNecessary',
@@ -413,6 +446,7 @@ export default {
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
+      catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
     async fetchNFTPrices(classId) {
       try {
@@ -567,7 +601,7 @@ export default {
         await this.walletFetchLIKEBalance();
         if (
           this.walletLIKEBalance === 0 ||
-          this.walletLIKEBalance < this.purchaseInfo.totalPrice
+          this.walletLIKEBalance < this.NFTPrice
         ) {
           logTrackerEvent(
             this,
@@ -581,24 +615,42 @@ export default {
           return undefined;
         }
 
+        const { nftIsUseListingPrice } = this;
         this.uiSetTxStatus(TX_STATUS.SIGN);
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectSignGrantRequested',
+          nftIsUseListingPrice
+            ? 'NFTCollectSignBuyRequested'
+            : 'NFTCollectSignGrantRequested',
           this.classId,
           1
         );
-        const signData = await signGrant({
-          senderAddress: this.getAddress,
-          amountInLIKE: this.purchaseInfo.totalPrice,
-          signer: this.getSigner,
-        });
+        let signData;
+        if (nftIsUseListingPrice) {
+          const { price, nftId, seller } = this.listingInfo;
+          signData = await signBuyNFT({
+            senderAddress: this.getAddress,
+            classId: this.classId,
+            nftId,
+            seller,
+            priceInLIKE: price,
+            signer: this.getSigner,
+          });
+        } else {
+          signData = await signGrant({
+            senderAddress: this.getAddress,
+            amountInLIKE: this.purchaseInfo.totalPrice,
+            signer: this.getSigner,
+          });
+        }
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
         logTrackerEvent(
           this,
           'NFT',
-          'NFTCollectSignGrantApproved',
+          nftIsUseListingPrice
+            ? 'NFTCollectSignBuyApproved'
+            : 'NFTCollectSignGrantApproved',
           this.classId,
           1
         );
@@ -613,13 +665,18 @@ export default {
         if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
-          const result = await this.$api.post(
-            postNFTPurchase({
-              txHash,
-              classId: this.classId,
-              ts: Date.now(),
-            })
-          );
+          let result;
+          if (nftIsUseListingPrice) {
+            result = { data: this.listingInfo.nftId };
+          } else {
+            result = await this.$api.post(
+              postNFTPurchase({
+                txHash,
+                classId: this.classId,
+                ts: Date.now(),
+              })
+            );
+          }
           logTrackerEvent(
             this,
             'NFT',
@@ -761,7 +818,7 @@ export default {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        if (this.nftIsWritingNFT) this.updateNFTPurchaseInfo();
+        this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }
