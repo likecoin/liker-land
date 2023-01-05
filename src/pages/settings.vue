@@ -1,10 +1,8 @@
 <template>
-  <div class="settings-page">
-    <main class="page-content.page-content--narrow">
-      <SettingsPageHeader :is-show-back="isHeaderShowBack" />
-      <NuxtChild />
-    </main>
-  </div>
+  <main class="max-w-[640px] w-full mx-auto mb-[48px]">
+    <SettingsPageHeader :is-show-back="isHeaderShowBack" />
+    <NuxtChild />
+  </main>
 </template>
 
 <script>
