@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-page-body">
+  <div>
     <ul class="settings-menu">
       <li>
         <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
@@ -22,10 +22,6 @@ export default {
 </script>
 
 <style lang="scss">
-.settings-page-body {
-  @apply mb-48;
-}
-
 .settings-menu {
   @apply px-16;
   @apply list-none;
