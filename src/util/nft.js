@@ -340,20 +340,20 @@ export async function getPurchasePriceMap(axios, history) {
   );
 }
 
-export async function getCollectPriceMap({ axios, classId, nftId }) {
-  const priceMap = new Map();
+export async function getNFTHistoryDataMap({ axios, classId, nftId }) {
+  const historyMap = new Map();
   try {
     const { data } = await axios.get(api.getNFTHistory({ classId, nftId }));
     const { list } = data;
     list.forEach(e => {
       const key = getEventKey(e);
-      priceMap.set(key, e.price);
+      historyMap.set(key, e);
     });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
   }
-  return priceMap;
+  return historyMap;
 }
 
 export function formatNFTEventsToHistory(events) {

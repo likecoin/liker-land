@@ -34,7 +34,7 @@ import {
   parseNFTMetadataURL,
   getEventKey,
   getPurchasePriceMap,
-  getCollectPriceMap,
+  getNFTHistoryDataMap,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -482,7 +482,7 @@ export default {
 
       if (this.nftIsWritingNFT) {
         promises.push(
-          getCollectPriceMap({
+          getNFTHistoryDataMap({
             axios: this.$api,
             classId: this.classId,
             nftId: this.nftId,
@@ -495,14 +495,42 @@ export default {
         eventMap.set(getEventKey(event), event);
       });
 
-      const priceMaps = await Promise.all(promises);
-      priceMaps.forEach(priceMap => {
-        priceMap.forEach((price, key) => {
+      const [priceMap, historyMap] = await Promise.all(promises);
+      priceMap.forEach((price, key) => {
+        if (eventMap.has(key)) {
+          eventMap.get(key).price = price;
+        }
+      });
+      if (historyMap) {
+        historyMap.forEach((data, key) => {
           if (eventMap.has(key)) {
+            const {
+              classId,
+              nftId,
+              grantTxHash,
+              granterMemo,
+              granterWallet,
+              price,
+              timestamp,
+            } = data;
+            if (grantTxHash && granterMemo) {
+              const e = {
+                classId,
+                nftId,
+                fromWallet: granterWallet,
+                event: 'grant',
+                memo: granterMemo,
+                txHash: grantTxHash,
+                timestamp: timestamp + 1,
+              };
+              history.push(e);
+              history.sort((a, b) => b.timestamp - a.timestamp);
+              eventMap.set(grantTxHash, e);
+            }
             eventMap.get(key).price = price;
           }
         });
-      });
+      }
 
       this.NFTHistory = history;
 
