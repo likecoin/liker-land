@@ -75,18 +75,36 @@
               />
             </i18n>
             <div class="border border-shade-gray rounded-[8px] mx-auto mt-[24px] p-[12px] flex justify-center items-center">
-              <i18n
-                :class="[isUnregistered ? 'text-medium-gray' : 'text-like-green' ,'font-600']"
-                tag="span"
-                :path="isUnregistered
-                  ? 'civic_dashboard_v3_summary_liker_id_unregistered'
-                  : 'civic_dashboard_v3_summary_liker_id_registered'
-                "
-              />
-              <TickIcon
-                v-if="!isUnregistered"
-                class="w-16 h-16 ml-8 fill-current text-success"
-              />
+              <ButtonV2
+                v-if="!isSignedIn"
+                :text="buttonTitle"
+                preset="secondary"
+                @click="$emit('sign-in')"
+              >
+                <template #prepend>
+                  <LoginIcon class="w-20 h-20" />
+                </template>
+              </ButtonV2>
+              <ButtonV2
+                v-else-if="isUnregistered"
+                :text="$t('civic_dashboard_v3_summary_action_button_register')"
+                preset="secondary"
+                @click="$emit('register')"
+              >
+                <template #prepend>
+                  <LoginIcon class="w-20 h-20" />
+                </template>
+              </ButtonV2>
+              <template v-else>
+                <i18n
+                  :class="['text-like-green' ,'font-600']"
+                  tag="span"
+                  path="civic_dashboard_v3_summary_liker_id_registered"
+                />
+                <TickIcon
+                  class="w-16 h-16 ml-8 fill-current text-success"
+                />
+              </template>
             </div>
           </CivicLikerV3StepSection>
 
@@ -127,27 +145,7 @@
 
           <footer class="flex flex-col items-center mt-32">
             <ButtonV2
-              v-if="!isSignedIn"
-              :text="buttonTitle"
-              preset="secondary"
-              @click="$emit('sign-in')"
-            >
-              <template #prepend>
-                <LoginIcon class="w-20 h-20" />
-              </template>
-            </ButtonV2>
-            <ButtonV2
-              v-else-if="isUnregistered"
-              :text="$t('civic_dashboard_v3_summary_action_button_register')"
-              preset="secondary"
-              @click="$emit('register')"
-            >
-              <template #prepend>
-                <LoginIcon class="w-20 h-20" />
-              </template>
-            </ButtonV2>
-            <ButtonV2
-              v-else
+              v-if="isSignedIn && !isUnregistered"
               :text="buttonTitle"
               :href="stakingManagementUrl"
               preset="outline"
