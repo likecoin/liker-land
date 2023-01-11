@@ -625,7 +625,7 @@ export default {
         });
       }
     },
-    async collectNFTWithLIKE() {
+    async collectNFTWithLIKE({ memo = '' }) {
       logTrackerEvent(
         this,
         'NFT',
@@ -670,6 +670,7 @@ export default {
             classId: this.classId,
             nftId,
             seller,
+            memo,
             priceInLIKE: price,
             signer: this.getSigner,
           });
@@ -678,6 +679,7 @@ export default {
             senderAddress: this.getAddress,
             amountInLIKE: this.purchaseInfo.totalPrice,
             signer: this.getSigner,
+            memo,
           });
         }
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
@@ -742,12 +744,13 @@ export default {
       }
       return undefined;
     },
-    async collectNFTWithStripe() {
+    async collectNFTWithStripe({ memo = '' }) {
       try {
         const { url } = await this.$api.$post(
           postNewStripeFiatPayment({
             classId: this.classId,
             wallet: this.getAddress,
+            memo,
           })
         );
         if (url) window.location.href = url;

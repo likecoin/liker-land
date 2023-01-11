@@ -4,7 +4,10 @@
     :has-close-button="isShowCloseButton"
     :header-text="headerText"
     preset="collect"
-    @close="$emit('close')"
+    @close="
+      () => {
+        $emit('close'), (shouldShowMessageInput = false);
+      }"
   >
     <template #header-prepend>
       <IconPrice />
@@ -128,6 +131,39 @@
             />
           </li>
         </ul>
+        <div v-if="memo || shouldShowMessageInput" class="flex flex-col mt-[32px]">
+          <Separator />
+          <Label
+            preset="p6"
+            class="text-medium-gray mt-[8px]"
+            :text="$t('nft_collect_modal_leave_message')"
+          />
+          <div class="flex flex-col items-start gap-[8px] w-full">
+            <TextField
+              :value="memo"
+              class="mt-[4px] w-full"
+              placeholder="..."
+              @input="onInputCollectMessage"
+            />
+            <Label class="text-[10px] text-medium-gray" :text="$t('nft_collect_modal_leave_message_not_support')">
+              <template #prepend>
+                <IconAttention class="w-[10px]" />
+              </template>
+            </Label>
+          </div>
+        </div>
+        <div
+          v-else
+          class="flex justify-center text-like-green gap-[12px] mt-[18px] cursor-pointer"
+          @click="handleShowInput"
+        >
+          <IconEdit class="w-[12px]" />
+          <Label
+            preset="p6"
+            class="underline"
+            :text="$t('nft_collect_modal_leave_message')"
+          />
+        </div>
       </section>
       <section v-else>
         <ProgressIndicator class="mx-auto" />
@@ -160,6 +196,8 @@ export default {
     return {
       paymentMethod: undefined,
       justCollectedNFTId: undefined,
+      shouldShowMessageInput: false,
+      memo: undefined,
     };
   },
   computed: {
@@ -225,6 +263,9 @@ export default {
     if (this.classId) {
       this.resetState();
     }
+    if (window.sessionStorage) {
+      this.memo = window.sessionStorage.getItem('COLLECT_MESSAGE');
+    }
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
@@ -240,6 +281,7 @@ export default {
     },
     async handleSelectPaymentMethod(method) {
       this.paymentMethod = method;
+      window.sessionStorage.setItem('COLLECT_MESSAGE', this.memo);
       switch (method) {
         case 'crypto': {
           if (!this.getAddress) {
@@ -253,9 +295,10 @@ export default {
             this.classId,
             1
           );
-          const result = await this.collectNFTWithLIKE();
+          const result = await this.collectNFTWithLIKE({ memo: this.memo });
           if (result) {
             this.justCollectedNFTId = result.nftId;
+            window.sessionStorage.removeItem('COLLECT_MESSAGE');
           }
           break;
         }
@@ -267,7 +310,7 @@ export default {
             this.classId,
             1
           );
-          await this.collectNFTWithStripe();
+          await this.collectNFTWithStripe({ memo: this.memo });
           break;
         default:
           break;
@@ -287,6 +330,12 @@ export default {
         query: { tab: 'collected' },
       });
       this.uiCloseTxModal();
+    },
+    handleShowInput() {
+      this.shouldShowMessageInput = true;
+    },
+    onInputCollectMessage(value) {
+      this.memo = value;
     },
   },
 };

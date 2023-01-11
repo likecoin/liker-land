@@ -240,6 +240,8 @@
   "nft_class_details_info_section_nft_class_id_label": "NFT Class ID",
   "nft_class_details_info_section_title": "Info",
   "nft_class_uncollectible": "Uncollectible",
+  "nft_collect_modal_leave_message": "Leave message with creator",
+  "nft_collect_modal_leave_message_not_support": "Leaving message is temporarily unavailable for credit card users",
   "nft_collect_modal_method_like": "Pay by LIKE",
   "nft_collect_modal_method_like_available_amount": "Available {amount}",
   "nft_collect_modal_method_stripe": "Pay by card",
