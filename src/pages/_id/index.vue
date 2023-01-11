@@ -29,10 +29,8 @@
         ]"
       >
         <NFTPortfolioUserInfo :wallet="wallet">
-          <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
-            <IconEllipse />
-            <IconEllipse />
-            <IconEllipse />
+          <div class="mx-auto mt-[16px] mb-[24px]">
+            <UserStatsGem :wallet="wallet" :type="isCurrentTabCreated ? 'created' : 'collected'" />
           </div>
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"

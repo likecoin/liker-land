@@ -1,3 +1,5 @@
+import { NFT_GEM_NAME } from '~/constant';
+
 const STARTING_PRICE = 8;
 const PRICE_GROWTH_POWER = 2;
 const PRICE_GROWTH_POWER_DEGRADE_BATCH_BEGIN = 13;
@@ -49,4 +51,8 @@ export function getGemLevelBySoldCount(soldCount) {
     default:
       return batch;
   }
+}
+
+export function getGemName(gemLevel) {
+  return NFT_GEM_NAME[gemLevel];
 }
