@@ -225,6 +225,7 @@ function formatNFTEvent(event) {
         fromWallet === LIKECOIN_NFT_API_WALLET ? 'purchase' : 'transfer';
       break;
     case 'buy_nft':
+    case 'sell_nft':
     case 'new_class':
     case 'mint_nft':
     default:
@@ -315,7 +316,8 @@ async function getPurchasePrice(axios, nftId, classId, txHash) {
     const { data } = await axios.get(api.getChainRawTx(txHash));
     const { price } = data.tx.body.messages.find(
       m =>
-        m['@type'] === '/likechain.likenft.v1.MsgBuyNFT' &&
+        (m['@type'] === '/likechain.likenft.v1.MsgBuyNFT' ||
+          m['@type'] === '/likechain.likenft.v1.MsgSellNFT') &&
         m.class_id === classId &&
         m.nft_id === nftId
     );
@@ -330,12 +332,14 @@ async function getPurchasePrice(axios, nftId, classId, txHash) {
 export async function getPurchasePriceMap(axios, history) {
   return new Map(
     await Promise.all(
-      history.filter(e => e.event === 'buy_nft').map(async e => {
-        const { txHash, classId, nftId } = e;
-        const price = await getPurchasePrice(axios, nftId, classId, txHash);
-        const key = getEventKey(e);
-        return [key, price];
-      })
+      history
+        .filter(e => e.event === 'buy_nft' || e.event === 'sell_nft')
+        .map(async e => {
+          const { txHash, classId, nftId } = e;
+          const price = await getPurchasePrice(axios, nftId, classId, txHash);
+          const key = getEventKey(e);
+          return [key, price];
+        })
     )
   );
 }

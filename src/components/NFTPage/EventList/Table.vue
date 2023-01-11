@@ -26,7 +26,7 @@
             </template>
           </Label>
           <Label
-            v-else-if="event.event === 'buy_nft'"
+            v-else-if="event.event === 'buy_nft' || event.event === 'sell_nft'"
             :text="$t('nft_details_page_activity_list_event_buy_nft')"
           >
             <template #prepend>
@@ -77,7 +77,7 @@
         </td>
         <td>
           <Label
-            v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft'].includes(event.event)"
+            v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft', 'sell_nft'].includes(event.event)"
             content-class="overflow-hidden"
           >
             <LinkV2
@@ -93,7 +93,7 @@
         </td>
         <td>
           <Label
-            v-if="['purchase' ,'transfer', 'buy_nft'].includes(event.event)"
+            v-if="['purchase' ,'transfer', 'buy_nft', 'sell_nft'].includes(event.event)"
             content-class="overflow-hidden"
           >
             <LinkV2
