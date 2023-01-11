@@ -254,6 +254,7 @@
   "nft_details_page_activity_list_event_from": "From",
   "nft_details_page_activity_list_event_mint_nft": "Mint",
   "nft_details_page_activity_list_event_price": "Price (LIKE)",
+  "nft_details_page_activity_list_event_sell_nft": "Sell",
   "nft_details_page_activity_list_event_to": "To",
   "nft_details_page_activity_list_event_transfer": "Transfer",
   "nft_details_page_activity_list_title": "Chain Data",
