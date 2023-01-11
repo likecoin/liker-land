@@ -4,10 +4,7 @@
     :has-close-button="isShowCloseButton"
     :header-text="headerText"
     preset="collect"
-    @close="
-      () => {
-        $emit('close'), (shouldShowMessageInput = false);
-      }"
+    @close="handleClose"
   >
     <template #header-prepend>
       <IconPrice />
@@ -131,7 +128,7 @@
             />
           </li>
         </ul>
-        <div v-if="memo || shouldShowMessageInput" class="flex flex-col mt-[32px]">
+        <div v-if="shouldShowMessageInput" class="flex flex-col mt-[32px]">
           <Separator />
           <Label
             preset="p6"
@@ -157,12 +154,16 @@
           class="flex justify-center text-like-green gap-[12px] mt-[18px] cursor-pointer"
           @click="handleShowInput"
         >
-          <IconEdit class="w-[12px]" />
-          <Label
-            preset="p6"
-            class="underline"
+          <ButtonV2
+            preset="plain"
             :text="$t('nft_collect_modal_leave_message')"
-          />
+            content-class="underline"
+            prepend-class="mr-[4px]"
+          >
+            <template #prepend>
+              <IconInput class="w-[20px] h-[20px]" />
+            </template>
+          </ButtonV2>
         </div>
       </section>
       <section v-else>
@@ -197,7 +198,7 @@ export default {
       paymentMethod: undefined,
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
-      memo: undefined,
+      memo: '',
     };
   },
   computed: {
@@ -263,9 +264,6 @@ export default {
     if (this.classId) {
       this.resetState();
     }
-    if (window.sessionStorage) {
-      this.memo = window.sessionStorage.getItem('COLLECT_MESSAGE');
-    }
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
@@ -281,7 +279,6 @@ export default {
     },
     async handleSelectPaymentMethod(method) {
       this.paymentMethod = method;
-      window.sessionStorage.setItem('COLLECT_MESSAGE', this.memo);
       switch (method) {
         case 'crypto': {
           if (!this.getAddress) {
@@ -298,7 +295,6 @@ export default {
           const result = await this.collectNFTWithLIKE({ memo: this.memo });
           if (result) {
             this.justCollectedNFTId = result.nftId;
-            window.sessionStorage.removeItem('COLLECT_MESSAGE');
           }
           break;
         }
@@ -330,6 +326,10 @@ export default {
         query: { tab: 'collected' },
       });
       this.uiCloseTxModal();
+    },
+    handleClose() {
+      this.$emit('close');
+      this.shouldShowMessageInput = false;
     },
     handleShowInput() {
       this.shouldShowMessageInput = true;
