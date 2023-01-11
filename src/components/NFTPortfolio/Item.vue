@@ -7,6 +7,7 @@
       class="w-[310px]"
       :title="NFTName"
       :price="NFTPrice"
+      :class-id="classId"
       :class-collection-type="nftClassCollectionType"
       :class-collection-name="nftClassCollectionName"
       :is-collectable="nftIsCollectable"

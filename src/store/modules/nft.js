@@ -14,6 +14,7 @@ import {
   formatNFTClassInfo,
 } from '~/util/nft';
 import { catchAxiosError } from '~/util/misc';
+import { getGemLevelBySoldCount } from '~/util/writing-nft';
 import { LIKECOIN_NFT_HIDDEN_ITEMS, NFT_DISPLAY_STATE } from '~/constant';
 import * as TYPES from '../mutation-types';
 
@@ -141,6 +142,10 @@ const getters = {
     Object.values(state.ownerInfoByClassIdMap[id] || {}).reduce(
       (acc, val) => acc + val.length,
       0
+    ),
+  getNFTClassGemLevel: state => id =>
+    getGemLevelBySoldCount(
+      state.purchaseInfoByClassIdMap[id]?.metadata?.soldCount || 0
     ),
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
