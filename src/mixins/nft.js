@@ -524,13 +524,13 @@ export default {
                 timestamp: timestamp + 1,
               };
               history.push(e);
-              history.sort((a, b) => b.timestamp - a.timestamp);
               eventMap.set(grantTxHash, e);
             }
             eventMap.get(key).price = price;
           }
         });
       }
+      history.sort((a, b) => b.timestamp - a.timestamp);
 
       this.NFTHistory = history;
 
