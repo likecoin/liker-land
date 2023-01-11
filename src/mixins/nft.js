@@ -296,6 +296,9 @@ export default {
           event.fromWallet,
       }));
     },
+    populatedDisplayEvents() {
+      return this.populatedEvents.filter(e => e.event !== 'grant');
+    },
     populatedCollectors() {
       return this.sortedOwnerListId.map(id => {
         const owner = this.getUserInfoByAddress(id);

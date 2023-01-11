@@ -115,6 +115,9 @@ export default {
         case 'transfer':
           return this.$t('nft_message_type_transfer');
 
+        case 'grant':
+          return this.$t('nft_message_type_purchase');
+
         default:
           return this.$t('nft_message_type_generic');
       }
