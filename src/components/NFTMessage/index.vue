@@ -15,7 +15,6 @@
 
     <template v-if="message">
       <div
-        v-if="isList"
         class="text-[12px] text-medium-gray text-center"
       >{{ messageHint }}</div>
       <CardV2
