@@ -35,7 +35,7 @@
               { 'laptop:grid-cols-2': isShowPriceSection }
             ]"
           >
-            <NFTGemWrapper :collected-count="collectedCount">
+            <NFTGemWrapper :class-id="classId">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
                 :image-bg-color="NFTImageBackgroundColor"

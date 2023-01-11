@@ -1,8 +1,5 @@
 <template>
-  <NFTGemWrapper
-    :collected-count="collectedCount"
-    :is-writing-nft="isWritingNFT"
-  >
+  <NFTGemWrapper :class-id="classId">
     <template v-slot="gem">
       <NFTPortfolioCard
         :gem-level="gem.level"
@@ -99,6 +96,10 @@ export default {
   },
   mixins: [nftClassCollectionMixin],
   props: {
+    classId: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       default: '',

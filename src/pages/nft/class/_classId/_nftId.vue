@@ -136,10 +136,7 @@
           <!-- NFT Preview -->
           <div class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none">
             <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="w-full" />
-            <NFTGemWrapper
-              :collected-count="collectedCount"
-              :is-writing-nft="nftIsWritingNFT"
-            >
+            <NFTGemWrapper :class-id="classId">
               <NFTPagePreviewCard
                 :url="nftExternalURL"
                 :image-bg-color="nftImageBackgroundColor"

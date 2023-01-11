@@ -16,41 +16,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { NFT_GEM_NAME } from '@/constant';
-import { getBatch } from '~/util/writing-nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   props: {
-    collectedCount: {
-      type: Number,
-      default: undefined,
-    },
-    isWritingNft: {
-      type: Boolean,
-      default: false,
+    classId: {
+      type: String,
+      required: true,
     },
   },
   computed: {
-    gemLevel() {
-      if (!this.isWritingNft) {
-        return 0;
-      }
-
-      const batch = getBatch(this.collectedCount);
-      switch (true) {
-        case batch >= 14 && batch <= 16:
-          return 14;
-
-        case batch >= 17:
-          return 15;
-
-        default:
-          return batch;
-      }
-    },
+    ...mapGetters(['getNFTClassGemLevel']),
     gemName() {
       return NFT_GEM_NAME[this.gemLevel];
+    },
+    gemLevel() {
+      return this.getNFTClassGemLevel(this.classId);
     },
     gemColorClasses() {
       switch (true) {

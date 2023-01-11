@@ -36,3 +36,17 @@ export function getPrice(n) {
   const prevPrice = getPrice(n - 1);
   return prevPrice + (getBatch(n) - getBatch(n - 1)) * prevPrice * getPower(n);
 }
+
+export function getGemLevelBySoldCount(soldCount) {
+  const batch = getBatch(soldCount);
+  switch (true) {
+    case batch >= 14 && batch <= 16:
+      return 14;
+
+    case batch >= 17:
+      return 15;
+
+    default:
+      return batch;
+  }
+}
