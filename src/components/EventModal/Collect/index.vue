@@ -279,6 +279,9 @@ export default {
     },
     async handleSelectPaymentMethod(method) {
       this.paymentMethod = method;
+      if (this.memo) {
+        logTrackerEvent(this, 'NFT', 'NFTCollectorMessage', this.classId, 1);
+      }
       switch (method) {
         case 'crypto': {
           if (!this.getAddress) {
