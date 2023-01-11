@@ -2,13 +2,23 @@
   <div>
     <div v-if="gemList.length" class="flex">
       <span
-        v-for="gemLevel, i in gemList"
+        v-for="gem, i in gemList"
         :key="i"
         class="w-[20px] h-[20px] mx-[3px]"
       >
-        <ToolTips :tool-tip-text="getGemName(gemLevel)">
-          <img :src="getLevelImageSrc(gemLevel)" :title="getGemName(gemLevel)" :alt="getGemName(gemLevel)">
-        </ToolTips>
+        <NuxtLink
+          :to="{
+            name: 'nft-class-classId-nftId',
+            params: {
+              classId: gem.classId,
+              nftId: gem.nftId,
+            },
+          }"
+          @mouseenter.native.once="onHoverGemLink(gem)"
+          @click.native="onClickGemLink(gem)"
+        >
+          <img :src="getLevelImageSrc(gem.level)" :title="getGemName(gem.level)" :alt="getGemName(gem.level)">
+        </NuxtLink>
       </span>
     </div>
     <div v-else class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
@@ -21,6 +31,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getGemName } from '~/util/writing-nft';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 const getLevelImg = require.context('../NFTGem/level/', false, /\.png$/);
 
@@ -43,8 +54,12 @@ export default {
       const data = list[this.type];
       if (!data) return [];
       return data
-        .map(d => this.getNFTClassGemLevel(d.classId))
-        .sort((a, b) => b - a)
+        .map(d => ({
+          classId: d.classId,
+          nftId: d.id,
+          level: this.getNFTClassGemLevel(d.classId),
+        }))
+        .sort((a, b) => b.level - a.level)
         .slice(0, 5);
     },
   },
@@ -53,6 +68,24 @@ export default {
     getLevelImageSrc(level) {
       const filename = `./${level >= 10 ? level : `0${level}`}.png`;
       return getLevelImg(filename);
+    },
+    onClickGemLink(gem) {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_user_gem_click`,
+        `level${gem.level}`,
+        1
+      );
+    },
+    onHoverGemLink(gem) {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_user_gem_hover`,
+        `level${gem.level}`,
+        1
+      );
     },
   },
 };
