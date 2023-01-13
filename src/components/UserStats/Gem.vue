@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-if="gemList.length" class="flex">
-      <span
+    <ul v-if="gemList.length" class="flex flex-wrap gap-[6px]">
+      <li
         v-for="gem, i in gemList"
         :key="i"
-        class="w-[20px] h-[20px] mx-[3px]"
+        class="w-[20px] h-[20px]"
       >
         <NuxtLink
           :to="{
@@ -19,9 +19,9 @@
         >
           <img :src="getLevelImageSrc(gem.level)" :title="getGemName(gem.level)" :alt="getGemName(gem.level)">
         </NuxtLink>
-      </span>
-    </div>
-    <div v-else class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
+      </li>
+    </ul>
+    <div v-else class="flex justify-between w-[44px] text-shade-gray">
       <IconEllipse />
       <IconEllipse />
       <IconEllipse />
