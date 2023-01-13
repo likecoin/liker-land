@@ -2,6 +2,11 @@
   <div>
     <ul class="settings-menu">
       <li>
+        <a class="settings-menu__item" :href="likerIdSettingsURL" target="_blank" rel="noreferrer noopener">
+          <span class="settings-menu__item-title"> {{ $t('settings_liker_id') }}</span>
+        </a>
+      </li>
+      <li>
         <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
           <GlobeIcon class="settings-menu__item-title-icon" />
           <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>
@@ -12,12 +17,15 @@
 </template>
 
 <script>
+import walletMixin from '~/mixins/wallet';
+
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
 
 export default {
   components: {
     GlobeIcon,
   },
+  mixins: [walletMixin],
 };
 </script>
 
