@@ -29,11 +29,11 @@
         ]"
       >
         <NFTPortfolioUserInfo :wallet="wallet">
-          <div class="flex justify-between w-[44px] mx-auto mt-[16px] mb-[24px] text-shade-gray">
-            <IconEllipse />
-            <IconEllipse />
-            <IconEllipse />
-          </div>
+          <UserStatsGem
+            class="mx-auto mt-[16px] mb-[24px]"
+            :wallet="wallet"
+            :type="isCurrentTabCreated ? 'created' : 'collected'"
+          />
           <UserStatsPortfolio
             class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
             :stat-wallet="wallet"
