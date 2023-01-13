@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <ul v-if="gemList.length" class="flex flex-wrap gap-[6px]">
-      <li
-        v-for="gem, i in gemList"
-        :key="i"
-        class="w-[20px] h-[20px]"
+  <ul v-if="gemList.length" class="flex flex-wrap gap-[6px]">
+    <li
+      v-for="gem, i in gemList"
+      :key="i"
+      class="w-[20px] h-[20px]"
+    >
+      <NuxtLink
+        :to="{
+          name: 'nft-class-classId-nftId',
+          params: {
+            classId: gem.classId,
+            nftId: gem.nftId,
+          },
+        }"
+        @mouseenter.native.once="onHoverGemLink(gem)"
+        @click.native="onClickGemLink(gem)"
       >
-        <NuxtLink
-          :to="{
-            name: 'nft-class-classId-nftId',
-            params: {
-              classId: gem.classId,
-              nftId: gem.nftId,
-            },
-          }"
-          @mouseenter.native.once="onHoverGemLink(gem)"
-          @click.native="onClickGemLink(gem)"
-        >
-          <img :src="getLevelImageSrc(gem.level)" :title="getGemName(gem.level)" :alt="getGemName(gem.level)">
-        </NuxtLink>
-      </li>
-    </ul>
-    <div v-else class="flex justify-between w-[44px] text-shade-gray">
-      <IconEllipse />
-      <IconEllipse />
-      <IconEllipse />
-    </div>
+        <img :src="getLevelImageSrc(gem.level)" :title="getGemName(gem.level)" :alt="getGemName(gem.level)">
+      </NuxtLink>
+    </li>
+  </ul>
+  <div v-else class="flex justify-between w-[44px] text-shade-gray">
+    <IconEllipse />
+    <IconEllipse />
+    <IconEllipse />
   </div>
 </template>
 <script>
