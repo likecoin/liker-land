@@ -9,11 +9,15 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
 import {
+ 
   getUserInfoMinByAddress,
+ 
   getUserV2Self,
   postUserV2Login,
+ ,
   postUserV2Logout,
-  apiUserV2WalletEmail,
+  getUserFollowers,
+apiUserV2WalletEmail,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 import {
@@ -25,6 +29,7 @@ import {
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
+  WALLET_SET_FOLLOWERS,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
 } from '../mutation-types';
@@ -37,6 +42,7 @@ const state = () => ({
   signer: null,
   connector: null,
   likerInfo: null,
+  followers: null,
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -95,6 +101,9 @@ const mutations = {
   [WALLET_SET_LIKE_BALANCE_FETCH_PROMISE](state, promise) {
     state.likeBalanceFetchPromise = promise;
   },
+  [WALLET_SET_FOLLOWERS](state, followers) {
+    state.followers = followers;
+  },
 };
 
 const getters = {
@@ -106,6 +115,7 @@ const getters = {
     getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
+  getFollowers: state => state.followers,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -146,6 +156,7 @@ const actions = {
         getUserInfoMinByAddress(walletAddress)
       );
       commit(types.WALLET_SET_LIKERINFO, userInfo);
+      await dispatch('fetchFollowers', address);
       if (!getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
@@ -312,6 +323,17 @@ const actions = {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
+      throw error;
+    }
+  },
+  async fetchFollowers({ commit, dispatch }, address) {
+    try {
+      const { followers } = await this.$axios.$get(getUserFollowers(address));
+      commit(types.WALLET_SET_FOLLOWERS, followers);
+      if (followers.length) {
+        dispatch('updateDisplayNameList', followers);
+      }
+    } catch (error) {
       throw error;
     }
   },

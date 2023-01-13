@@ -434,6 +434,7 @@ export default {
       'uiSetTxStatus',
       'uiSetTxError',
       'walletFetchLIKEBalance',
+      'updateDisplayNameList',
       'fetchNFTListByAddress',
       'fetchNFTDisplayStateListByAddress',
     ]),
@@ -573,15 +574,6 @@ export default {
         events.push(...data.events);
       } while (count === NFT_INDEXER_LIMIT_MAX);
       return formatNFTEventsToHistory(events);
-    },
-    updateDisplayNameList(addresses) {
-      if (!addresses) return null;
-      if (typeof addresses === 'string') {
-        return this.lazyGetUserInfoByAddress(addresses);
-      }
-      return Promise.all(
-        addresses.filter(a => !!a).map(a => this.lazyGetUserInfoByAddress(a))
-      );
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {

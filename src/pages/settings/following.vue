@@ -7,12 +7,11 @@
     </div>
 
     <CardV2 class="my-[12px] text-center">
-      <div v-if="followers === null">{{ $t('settings_follow_loading') }}</div>
-      <div v-else-if="followers === 0">
+      <div v-if="getFollowers === null">
         {{ $t('settings_follow_noFollower') }}
       </div>
       <div
-        v-else-if="followers.length"
+        v-else-if="getFollowers && getFollowers.length"
         class="flex flex-col gap-[4px] px-[16px] my-[6px]"
       >
         <div
@@ -66,7 +65,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import nftMixin from '~/mixins/nft';
+import wallet from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 import { EXTERNAL_HOST } from '~/constant';
 import { ellipsis } from '~/util/ui';
@@ -75,19 +74,18 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin, alertMixin],
+  mixins: [wallet, alertMixin],
   data() {
     return {
-      followers: null,
       unfollowList: [],
     };
   },
   computed: {
-    ...mapGetters(['getAddress', 'walletHasLoggedIn']),
+    ...mapGetters(['getAddress', 'walletHasLoggedIn', 'getUserInfoByAddress']),
     populatedFollowings() {
       let lis;
-      if (this.followers) {
-        lis = this.followers.map(follower => ({
+      if (this.getFollowers) {
+        lis = this.getFollowers.map(follower => ({
           displayName:
             this.getUserInfoByAddress(follower)?.displayName || follower,
           wallet: follower,
@@ -97,52 +95,29 @@ export default {
       return lis;
     },
   },
-  watch: {
-    async getAddress(address) {
-      if (address) {
-        await this.getFollowers(address);
-      }
-    },
-  },
   async mounted() {
     if (this.getAddress) {
-      await this.getFollowers(this.getAddress);
+      await this.fetchFollowers(this.getAddress);
     }
   },
   methods: {
-    ...mapActions(['signLogin', 'fetchUserInfoByAddress']),
+    ...mapActions(['signLogin', 'updateDisplayNameList']),
     handleClickIdentity(wallet) {
       window.open(`${EXTERNAL_HOST}/${wallet}`);
     },
-    async getFollowers(wallet) {
-      if (!this.walletHasLoggedIn) {
-        await this.signLogin();
-      }
-      const { followers } = await this.$axios.$get(
-        `/api/v2/users/${wallet}/followers`
-      );
-      this.followers = followers;
-      if (followers.length) {
-        this.updateDisplayNameList(followers);
-      } else {
-        this.followers = 0;
-      }
-    },
-
     async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {
-          await this.$axios.$post(
-            `/api/v2/users/${this.getAddress}/followers?creator=${creator}`
-          );
+          if (!this.walletHasLoggedIn) {
+            await this.signLogin();
+          }
+          await this.followCreator({ wallet: this.getAddress, creator });
           const index = this.unfollowList.indexOf(creator);
           if (index !== -1) {
             this.unfollowList.splice(index, 1);
           }
         } else {
-          await this.$axios.$delete(
-            `/api/v2/users/${this.getAddress}/followers?creator=${creator}`
-          );
+          await this.unfollowCreator({ wallet: this.getAddress, creator });
           this.unfollowList.push(creator);
         }
       } catch (error) {
