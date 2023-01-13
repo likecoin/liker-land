@@ -7,7 +7,7 @@
     >
       <NuxtLink
         :to="{
-          name: 'nft-class-classId-nftId',
+          name: gem.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
           params: {
             classId: gem.classId,
             nftId: gem.nftId,
