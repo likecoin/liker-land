@@ -135,6 +135,7 @@
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持創作者",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}"
   },
+  "error_page_not_found_title_404": "抱歉，查無此頁",
   "faq_list": [
     {
       "a": "讓讀者藉購買作者的 Writing NFT 支持創作。個人的創作軌跡可被視為 Web3 「去中心化身份」的一部分，是個人的創作履歷。發行 Writing NFT 確保作品原封不動地保存於分散式網絡，日後可用以驗證產權。",
@@ -303,6 +304,7 @@
   "portfolio_created_tab_no_item": "已創作的作品將在此展示",
   "portfolio_description": "我的閱讀清單，構成我的精神面貌。歡迎以文會友。",
   "portfolio_finding_more_button": "發現更多佳作",
+  "portfolio_follow_hint": "追蹤作者以便我們通知你有關 {creator} 的更新。",
   "portfolio_subscribe_confirm_button": "確認",
   "portfolio_subscribe_error_alert": "追蹤 {creator} 時遇到錯誤： {error}",
   "portfolio_subscribe_message": "確認登記 {email} 追蹤 {creator} 的 Writing NFT 更新？",
@@ -375,6 +377,11 @@
   "settings_email_verify_verified_back_button": "返回",
   "settings_email_verify_verifying": "驗證電郵中",
   "settings_liker_id": "Liker ID",
+  "settings_follow_follow": "追蹤",
+  "settings_follow_loading": "載入中",
+  "settings_follow_noFollower": "尚無追蹤中作者",
+  "settings_follow_title": "追蹤中作者",
+  "settings_follow_unfollow": "取消追蹤",
   "SettingsPage": {
     "language": "介面語言",
     "title": "設定"
