@@ -4,7 +4,7 @@
     :has-close-button="isShowCloseButton"
     :header-text="headerText"
     preset="collect"
-    @close="$emit('close')"
+    @close="handleClose"
   >
     <template #header-prepend>
       <IconPrice />
@@ -128,6 +128,43 @@
             />
           </li>
         </ul>
+        <div v-if="shouldShowMessageInput" class="flex flex-col mt-[32px]">
+          <Separator />
+          <Label
+            preset="p6"
+            class="text-medium-gray mt-[8px]"
+            :text="$t('nft_collect_modal_leave_message')"
+          />
+          <div class="flex flex-col items-start gap-[8px] w-full">
+            <TextField
+              :value="memo"
+              class="mt-[4px] w-full"
+              placeholder="..."
+              @input="onInputCollectMessage"
+            />
+            <Label class="text-[10px] text-medium-gray" :text="$t('nft_collect_modal_leave_message_not_support')">
+              <template #prepend>
+                <IconAttention class="w-[10px]" />
+              </template>
+            </Label>
+          </div>
+        </div>
+        <div
+          v-else
+          class="flex justify-center text-like-green gap-[12px] mt-[18px] cursor-pointer"
+          @click="handleShowInput"
+        >
+          <ButtonV2
+            preset="plain"
+            :text="$t('nft_collect_modal_leave_message')"
+            content-class="underline"
+            prepend-class="mr-[4px]"
+          >
+            <template #prepend>
+              <IconInput class="w-[20px] h-[20px]" />
+            </template>
+          </ButtonV2>
+        </div>
       </section>
       <section v-else>
         <ProgressIndicator class="mx-auto" />
@@ -160,6 +197,8 @@ export default {
     return {
       paymentMethod: undefined,
       justCollectedNFTId: undefined,
+      shouldShowMessageInput: false,
+      memo: '',
     };
   },
   computed: {
@@ -240,6 +279,9 @@ export default {
     },
     async handleSelectPaymentMethod(method) {
       this.paymentMethod = method;
+      if (this.memo) {
+        logTrackerEvent(this, 'NFT', 'NFTCollectorMessage', this.classId, 1);
+      }
       switch (method) {
         case 'crypto': {
           if (!this.getAddress) {
@@ -253,7 +295,7 @@ export default {
             this.classId,
             1
           );
-          const result = await this.collectNFTWithLIKE();
+          const result = await this.collectNFTWithLIKE({ memo: this.memo });
           if (result) {
             this.justCollectedNFTId = result.nftId;
           }
@@ -267,7 +309,7 @@ export default {
             this.classId,
             1
           );
-          await this.collectNFTWithStripe();
+          await this.collectNFTWithStripe({ memo: this.memo });
           break;
         default:
           break;
@@ -287,6 +329,16 @@ export default {
         query: { tab: 'collected' },
       });
       this.uiCloseTxModal();
+    },
+    handleClose() {
+      this.$emit('close');
+      this.shouldShowMessageInput = false;
+    },
+    handleShowInput() {
+      this.shouldShowMessageInput = true;
+    },
+    onInputCollectMessage(value) {
+      this.memo = value;
     },
   },
 };

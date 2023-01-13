@@ -75,7 +75,12 @@ export async function getISCNRecord(iscnId) {
   return res;
 }
 
-export async function signGrant({ senderAddress, amountInLIKE, signer }) {
+export async function signGrant({
+  senderAddress,
+  amountInLIKE,
+  signer,
+  memo = '',
+}) {
   const client = await createNFTSigningClient(signer);
   const spendLimit = [
     {
@@ -89,7 +94,7 @@ export async function signGrant({ senderAddress, amountInLIKE, signer }) {
     LIKECOIN_NFT_API_WALLET,
     spendLimit,
     expirationInMs,
-    { broadcast: false }
+    { broadcast: false, memo }
   );
   return signData;
 }
@@ -101,6 +106,7 @@ export async function signBuyNFT({
   seller,
   priceInLIKE,
   signer,
+  memo = '',
 }) {
   const client = await createNFTSigningClient(signer);
   const signData = await client.buyNFT(
@@ -109,7 +115,7 @@ export async function signBuyNFT({
     nftId,
     seller,
     priceInLIKE,
-    { broadcast: false }
+    { broadcast: false, memo }
   );
   return signData;
 }
