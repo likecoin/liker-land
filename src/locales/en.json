@@ -387,6 +387,7 @@
   "register": "Register",
   "registered": "Registered",
   "renew": "Renew",
+  "settings_liker_id": "Liker ID",
   "SettingsFollowingPage": {
     "follow": "@:follow",
     "following": "@:following",

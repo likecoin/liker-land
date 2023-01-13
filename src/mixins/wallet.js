@@ -27,6 +27,12 @@ export default {
         getIdenticonAvatar(this.getAddress)
       );
     },
+    likerIdSettingsURL() {
+      return getLikerIdSettingsURL({
+        wallet: this.getAddress || '',
+        language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
+      });
+    },
   },
   watch: {
     getAddress: {
@@ -73,10 +79,7 @@ export default {
     },
     navigateToSettings() {
       window.open(
-        getLikerIdSettingsURL({
-          wallet: this.getAddress || '',
-          language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
-        }),
+        this.likerIdSettingsURL,
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
