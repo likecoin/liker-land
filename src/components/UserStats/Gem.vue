@@ -57,6 +57,7 @@ export default {
           nftId: d.id,
           level: this.getNFTClassGemLevel(d.classId),
         }))
+        .filter(a => a.level >= 4) // below 4 are dots not gems
         .sort((a, b) => b.level - a.level)
         .slice(0, 5);
     },
