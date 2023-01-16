@@ -9,7 +9,7 @@ const {
   authenticateV2Login,
   checkParamWalletMatch,
 } = require('../../../middleware/auth');
-const { handleRestfulError } = require('../../../middleware/auth');
+const { handleRestfulError } = require('../../../middleware/error');
 const { sendEmail } = require('../../../../modules/sendgrid');
 
 const {
