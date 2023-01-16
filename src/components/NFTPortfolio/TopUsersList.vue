@@ -29,7 +29,7 @@
               name: 'id',
               params: { id: user.id }
             }"
-            @click.native.once="onClick(user.index)"
+            @click.native="onClick(user.index)"
           >
             <IdentityAvatar
               class="group-hover:scale-[1.2] transition-transform duration-300 ease-in-out"
@@ -70,27 +70,13 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      isHoverTriggered: false,
-      isClickTriggered: false,
-    };
-  },
   computed: {
     users() {
       return this.userList.map((u, i) => ({ ...u, index: i })).reverse();
     },
   },
-  watch: {
-    type() {
-      this.isHoverTriggered = false;
-      this.isClickTriggered = false;
-    },
-  },
   methods: {
     onHover(i) {
-      if (this.isHoverTriggered) return;
-      this.isHoverTriggered = true;
       logTrackerEvent(
         this,
         'portfolio',
@@ -100,8 +86,6 @@ export default {
       );
     },
     onClick(i) {
-      if (this.isClickTriggered) return;
-      this.isClickTriggered = true;
       logTrackerEvent(
         this,
         'portfolio',
