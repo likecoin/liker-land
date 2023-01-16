@@ -23,7 +23,7 @@ router.post(
   '/:wallet/email',
   authenticateV2Login,
   checkParamWalletMatch,
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { wallet: user } = req.params;
       const { email } = req.query;
@@ -69,13 +69,13 @@ router.post(
           res.status(429).send('EMAIL_UPDATE_IN_COOLDOWN');
           break;
         default:
-          handleRestfulError(req, res, next, err);
+          handleRestfulError(req, res, next, error);
       }
     }
   }
 );
 
-router.put('/:wallet/email', async (req, res) => {
+router.put('/:wallet/email', async (req, res, next) => {
   try {
     const { wallet: user } = req.params;
     const { token } = req.query;
@@ -110,7 +110,7 @@ router.put('/:wallet/email', async (req, res) => {
         res.status(400).send('INVALID_TOKEN');
         break;
       default:
-        handleRestfulError(req, res, next, err);
+        handleRestfulError(req, res, next, error);
     }
   }
 });
