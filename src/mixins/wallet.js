@@ -57,6 +57,7 @@ export default {
       'walletFetchLIKEBalance',
       'signLogin',
       'fetchFollowers',
+      'signLogin',
     ]),
     async connectWallet() {
       const connection = await this.openConnectWalletModal({

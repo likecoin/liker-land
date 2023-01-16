@@ -314,6 +314,7 @@
   "portfolio_subscription_back_button": "返回我的書架",
   "portfolio_subscription_description_empty": "讀者對 {creator} 的作品都引頸以待！",
   "portfolio_subscription_email_placeholder": "you@yourdomain.com",
+  "portfolio_subscription_follow": "追蹤",
   "portfolio_subscription_hint": "請填寫你的電郵，以便我們通知你有關 {creator} 的更新。",
   "portfolio_subscription_notify_button": "通知我",
   "portfolio_subscription_notify_button_submitted": "完成",
@@ -325,7 +326,9 @@
   "portfolio_subscription_submitted_hint": "請檢查你的郵箱並驗證電郵地址",
   "portfolio_subscription_title": "追蹤作者",
   "portfolio_subscription_title_empty": "書架是空的",
+  "portfolio_subscription_unfollow": "取消追蹤",
   "portfolio_title": "{name} 的 Writing NFT",
+  "portfolio_unfollow_hint": "你已經追蹤了 {creator}",
   "portfolio_unsubscribe_confirm_button": "取消追蹤",
   "portfolio_unsubscribe_error_alert": "取消追蹤 {creator} 時遇到錯誤： {error}",
   "portfolio_unsubscribe_message": "確定取消以 {email} 追蹤 {creator} 的 Writing NFT 更新？",
@@ -382,6 +385,7 @@
   "settings_follow_noFollower": "尚無追蹤中作者",
   "settings_follow_title": "追蹤中作者",
   "settings_follow_unfollow": "取消追蹤",
+  "settings_liker_id": "Liker ID",
   "SettingsPage": {
     "language": "介面語言",
     "title": "設定"

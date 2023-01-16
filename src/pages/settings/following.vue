@@ -35,6 +35,7 @@
           <NuxtLink
             class="flex items-center text-like-green"
             :to="`/${follower.wallet}`"
+            target="_blank"
           >
             <Identity
               :avatar-url="follower.avatar"
@@ -65,16 +66,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import wallet from '~/mixins/wallet';
+import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
-import { EXTERNAL_HOST } from '~/constant';
 import { ellipsis } from '~/util/ui';
 
 export default {
   filters: {
     ellipsis,
   },
-  mixins: [wallet, alertMixin],
+  mixins: [walletMixin, alertMixin],
   data() {
     return {
       unfollowList: [],
@@ -101,16 +101,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['signLogin', 'updateDisplayNameList']),
-    handleClickIdentity(wallet) {
-      window.open(`${EXTERNAL_HOST}/${wallet}`);
-    },
+    ...mapActions(['updateDisplayNameList']),
     async handleClickUnfollow(creator) {
+      if (!this.walletHasLoggedIn) {
+        await this.signLogin();
+      }
       try {
         if (this.unfollowList.includes(creator)) {
-          if (!this.walletHasLoggedIn) {
-            await this.signLogin();
-          }
+          // if (!this.isValidEmail) {
+          //   Wait to handle verify email
+          // }
           await this.followCreator({ wallet: this.getAddress, creator });
           const index = this.unfollowList.indexOf(creator);
           if (index !== -1) {

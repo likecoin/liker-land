@@ -11,11 +11,12 @@
       </i18n>
     </Label>
     <Label class="text-dark-gray" preset="p6" align="center">
-      <i18n path="portfolio_subscription_hint">
+      <i18n :path="labelText">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
     <form
+      v-if="!isConnectWallet"
       class="flex phone:flex-col gap-[16px] items-center justify-center flex-wrap"
       @submit="submitEmail"
     >
@@ -45,6 +46,14 @@
         </template>
       </ButtonV2>
     </form>
+    <ButtonV2
+      v-else-if="isConnectWallet && !isLoading"
+      :preset="isFollowed ? 'outline' : 'primary'"
+      @click="handleClickFollow"
+    >
+      {{ isFollowed ? $t('portfolio_subscription_unfollow') : $t('portfolio_subscription_follow') }}
+    </ButtonV2>
+    <ProgressIndicator v-if="isConnectWallet && isLoading" />
     <p
       v-if="subscriptionId"
       class="text-medium-gray text-[14px] text-center"
@@ -59,10 +68,11 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'NFTPortfolioSubscriptionForm',
-  mixins: [alertMixin],
+  mixins: [alertMixin, walletMixin],
   props: {
     creatorWalletAddress: {
       type: String,
@@ -71,6 +81,18 @@ export default {
     creatorDisplayName: {
       type: String,
       default: '',
+    },
+    isConnectWallet: {
+      type: Boolean,
+      default: false,
+    },
+    isWalletLoggedIn: {
+      type: Boolean,
+      default: false,
+    },
+    isFollowed: {
+      type: Boolean,
+      default: false,
     },
     isEmpty: {
       type: Boolean,
@@ -99,6 +121,15 @@ export default {
         return this.$t('portfolio_subscription_notify_button_submitted');
       }
       return this.$t('portfolio_subscription_notify_button');
+    },
+    labelText() {
+      if (!this.isConnectWallet) {
+        return 'portfolio_subscription_hint';
+      }
+      if (this.isFollowed) {
+        return 'portfolio_unfollow_hint';
+      }
+      return 'portfolio_follow_hint';
     },
   },
   watch: {
@@ -178,6 +209,33 @@ export default {
             );
         }
       } finally {
+        this.isLoading = false;
+      }
+    },
+    async handleClickFollow() {
+      this.isLoading = true;
+      try {
+        if (this.isWalletLoggedIn) {
+          await this.signLogin();
+        }
+        if (this.isFollowed) {
+          await this.unfollowCreator({
+            wallet: this.getAddress,
+            creator: this.creatorWalletAddress,
+          });
+        } else {
+          // if (!this.isValidEmail) {
+          //   Wait to handle verify email
+          // }
+          this.followCreator({
+            wallet: this.getAddress,
+            creator: this.creatorWalletAddress,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        await this.fetchFollowers(this.getAddress);
         this.isLoading = false;
       }
     },
