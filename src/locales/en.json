@@ -243,6 +243,7 @@
   "nft_class_uncollectible": "Uncollectible",
   "nft_collect_modal_leave_message": "Leave a message to creator",
   "nft_collect_modal_leave_message_not_support": "Leaving message is temporarily unavailable for credit card users",
+  "nft_collect_modal_leave_message_to_name": "leave message to {name}",
   "nft_collect_modal_method_like": "Pay by LIKE",
   "nft_collect_modal_method_like_available_amount": "Available {amount}",
   "nft_collect_modal_method_stripe": "Pay by card",

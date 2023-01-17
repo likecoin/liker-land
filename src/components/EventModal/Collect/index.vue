@@ -13,6 +13,7 @@
     <template #top>
       <NFTPageOwning
         v-if="hasConnectedWallet"
+        class="mb-[10px]"
         :collected-count="userCollectedCount"
       />
     </template>
@@ -67,6 +68,38 @@
     </template>
 
     <template v-if="!uiTxNFTStatus">
+      <div class="flex flex-col items-start mb-[28px]">
+        <Separator class="h-[2px] bg-shade-gray self-center" />
+        <Label
+          preset="p6"
+          align="left"
+          class="text-medium-gray mt-[12px] mb-[6px]"
+          :text="$t('nft_collect_modal_leave_message')"
+        />
+        <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+          <IconMessage class="text-dark-gray" />
+          <input
+            id="name"
+            ref="input"
+            type="input"
+            class="w-full bg-transparent border-0 focus-visible:outline-none"
+            :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
+            name="name"
+            @input="onInputCollectMessage"
+          >
+        </div>
+        <Label
+          preset="p6"
+          align="left"
+          prepend-class="mr-[4px]"
+          class="text-medium-gray mt-[8px] font-400 text-[10px]"
+          :text="$t('nft_collect_modal_leave_message_not_support')"
+        >
+          <template #prepend>
+            <IconAttention class="w-[10px]" />
+          </template>
+        </Label>
+      </div>
       <section v-if="paymentMethod === undefined">
         <Label
           class="text-like-green"
@@ -128,43 +161,6 @@
             />
           </li>
         </ul>
-        <div v-if="shouldShowMessageInput" class="flex flex-col mt-[32px]">
-          <Separator />
-          <Label
-            preset="p6"
-            class="text-medium-gray mt-[8px]"
-            :text="$t('nft_collect_modal_leave_message')"
-          />
-          <div class="flex flex-col items-start gap-[8px] w-full">
-            <TextField
-              :value="memo"
-              class="mt-[4px] w-full"
-              placeholder="..."
-              @input="onInputCollectMessage"
-            />
-            <Label class="text-[10px] text-medium-gray" :text="$t('nft_collect_modal_leave_message_not_support')">
-              <template #prepend>
-                <IconAttention class="w-[10px]" />
-              </template>
-            </Label>
-          </div>
-        </div>
-        <div
-          v-else
-          class="flex justify-center text-like-green gap-[12px] mt-[18px] cursor-pointer"
-          @click="handleShowInput"
-        >
-          <ButtonV2
-            preset="plain"
-            :text="$t('nft_collect_modal_leave_message')"
-            content-class="underline"
-            prepend-class="mr-[4px]"
-          >
-            <template #prepend>
-              <IconInput class="w-[20px] h-[20px]" />
-            </template>
-          </ButtonV2>
-        </div>
       </section>
       <section v-else>
         <ProgressIndicator class="mx-auto" />
@@ -237,6 +233,11 @@ export default {
     },
     paymentId() {
       return this.$route.query.payment_id;
+    },
+    creatorDisplayName() {
+      return (
+        this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
+      );
     },
   },
   watch: {
@@ -337,8 +338,8 @@ export default {
     handleShowInput() {
       this.shouldShowMessageInput = true;
     },
-    onInputCollectMessage(value) {
-      this.memo = value;
+    onInputCollectMessage(e) {
+      this.memo = e.target.value;
     },
   },
 };
