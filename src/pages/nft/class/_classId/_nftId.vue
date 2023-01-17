@@ -456,7 +456,7 @@ export default {
   },
   async mounted() {
     try {
-      this.updateDisplayNameList(this.iscnOwner);
+      this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
       this.updateNFTHistory();
       this.lazyFetchLIKEPrice();

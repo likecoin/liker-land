@@ -215,7 +215,7 @@ export default {
     async handleClickFollow() {
       this.isLoading = true;
       try {
-        if (this.isWalletLoggedIn) {
+        if (!this.isWalletLoggedIn) {
           await this.signLogin();
         }
         if (this.isFollowed) {

@@ -434,7 +434,7 @@ export default {
       'uiSetTxStatus',
       'uiSetTxError',
       'walletFetchLIKEBalance',
-      'updateDisplayNameList',
+      'lazyGetUserInfoByAddresses',
       'fetchNFTListByAddress',
       'fetchNFTDisplayStateListByAddress',
     ]),
@@ -451,7 +451,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
-      this.updateDisplayNameList(this.iscnOwner);
+      this.lazyGetUserInfoByAddresses(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
@@ -549,7 +549,7 @@ export default {
       for (const list of this.NFTHistory) {
         addresses.push(list.fromWallet, list.toWallet);
       }
-      this.updateDisplayNameList([...new Set(addresses)]);
+      this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
       this.isHistoryInfoLoading = false;
     },
     async getNFTEventsAll({ actionType, ignoreToList }) {

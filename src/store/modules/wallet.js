@@ -9,15 +9,12 @@ import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
 import {
- 
   getUserInfoMinByAddress,
- 
   getUserV2Self,
   postUserV2Login,
- ,
   postUserV2Logout,
   getUserFollowers,
-apiUserV2WalletEmail,
+  apiUserV2WalletEmail,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 import {
@@ -42,7 +39,7 @@ const state = () => ({
   signer: null,
   connector: null,
   likerInfo: null,
-  followers: null,
+  followers: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -331,7 +328,7 @@ const actions = {
       const { followers } = await this.$axios.$get(getUserFollowers(address));
       commit(types.WALLET_SET_FOLLOWERS, followers);
       if (followers.length) {
-        dispatch('updateDisplayNameList', followers);
+        dispatch('lazyGetUserInfoByAddresses', followers);
       }
     } catch (error) {
       throw error;

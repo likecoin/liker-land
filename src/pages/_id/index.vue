@@ -206,7 +206,10 @@ export default {
       }
     },
     async getAddress() {
-      if (this.getFollowers === null && this.getAddress) {
+      if (!this.getFollowers.length && this.getAddress) {
+        if (!this.walletHasLoggedIn) {
+          await this.signLogin();
+        }
         await this.fetchFollowers(this.getAddress);
       }
     },

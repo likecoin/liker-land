@@ -62,13 +62,13 @@ export async function lazyGetUserInfoByAddress({ state, dispatch }, address) {
   return userInfo;
 }
 
-export function updateDisplayNameList({ dispatch }, addresses) {
+export function lazyGetUserInfoByAddresses({ dispatch }, addresses) {
   if (!addresses) return null;
   if (typeof addresses === 'string') {
     return this.lazyGetUserInfoByAddress(addresses);
   }
   return Promise.all(
-    addresses.filter(a => !!a).map(a => dispatch('fetchUserInfoByAddress', a))
+    addresses.filter(a => !!a).map(a => dispatch('lazyGetUserInfoByAddress', a))
   );
 }
 

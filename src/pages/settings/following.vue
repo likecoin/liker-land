@@ -7,11 +7,14 @@
     </div>
 
     <CardV2 class="my-[12px] text-center">
-      <div v-if="getFollowers === null">
+      <div v-if="isLoading">
+        {{ $t('settings_follow_loading') }}
+      </div>
+      <div v-else-if="!getFollowers.length">
         {{ $t('settings_follow_noFollower') }}
       </div>
       <div
-        v-else-if="getFollowers && getFollowers.length"
+        v-else-if="getFollowers.length"
         class="flex flex-col gap-[4px] px-[16px] my-[6px]"
       >
         <div
@@ -77,35 +80,46 @@ export default {
   mixins: [walletMixin, alertMixin],
   data() {
     return {
+      isLoading: false,
       unfollowList: [],
     };
   },
   computed: {
-    ...mapGetters(['getAddress', 'walletHasLoggedIn', 'getUserInfoByAddress']),
+    ...mapGetters(['getUserInfoByAddress']),
     populatedFollowings() {
-      let lis;
-      if (this.getFollowers) {
-        lis = this.getFollowers.map(follower => ({
-          displayName:
-            this.getUserInfoByAddress(follower)?.displayName || follower,
-          wallet: follower,
-          avatar: this.getUserInfoByAddress(follower)?.avatar,
-        }));
+      return this.getFollowers.map(follower => ({
+        displayName:
+          this.getUserInfoByAddress(follower)?.displayName || follower,
+        wallet: follower,
+        avatar: this.getUserInfoByAddress(follower)?.avatar,
+      }));
+    },
+  },
+  watch: {
+    async getAddress() {
+      if (this.getAddress) {
+        await this.fetchFollowerList();
+      } else {
+        this.$router.push({ name: 'index' });
       }
-      return lis;
     },
   },
   async mounted() {
     if (this.getAddress) {
-      await this.fetchFollowers(this.getAddress);
+      await this.fetchFollowerList();
     }
   },
   methods: {
-    ...mapActions(['updateDisplayNameList']),
-    async handleClickUnfollow(creator) {
+    ...mapActions(['lazyGetUserInfoByAddresses']),
+    async fetchFollowerList() {
       if (!this.walletHasLoggedIn) {
         await this.signLogin();
       }
+      this.isLoading = true;
+      await this.fetchFollowers(this.getAddress);
+      this.isLoading = false;
+    },
+    async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {
           // if (!this.isValidEmail) {
