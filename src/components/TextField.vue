@@ -76,7 +76,7 @@ export default class TextField extends Vue {
       this.isTextarea ? 'font-600 resize-none' : this.sizeClasses,
       this.errorClasses,
       {
-        'pointer-events-none': this.isDisabled,
+        'pointer-events-none opacity-50': this.isDisabled,
       },
     ];
   }

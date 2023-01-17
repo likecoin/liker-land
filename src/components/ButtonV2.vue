@@ -120,6 +120,9 @@ export default class ButtonV2 extends Vue {
 
   get rootClassesForPreset(): any {
     // NOTE: Add `!` to override the [type=submit] style caused by different versions of Tailwind
+    if (this.isDisabled && this.preset !== Preset.outline) {
+      return ['!bg-shade-gray', 'text-medium-gray'];
+    }
     switch (this.preset) {
       case Preset.primary:
         return ['!bg-like-green', 'text-like-cyan-light'];
