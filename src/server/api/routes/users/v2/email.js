@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { v4: uuidv4 } = require('uuid');
+const { getBasicTemplate } = require('@likecoin/edm');
 const {
   db,
   FieldValue,
@@ -53,11 +54,15 @@ router.post(
           emailLastUpdatedTs: FieldValue.serverTimestamp(),
         });
       });
-      const confirmLink = `${EXTERNAL_URL}/${user}/verify-email?token=${token}`;
+      const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}`;
+      const { subject, body } = getBasicTemplate({
+        subject: 'Verify your email',
+        content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
+      });
       await sendEmail({
         email,
-        subject: 'Confirm your email in Liker.Land',
-        html: `Please click the link to confirm your email: ${confirmLink}`,
+        subject,
+        html: body,
       });
       res.sendStatus(200);
     } catch (error) {
@@ -83,7 +88,7 @@ router.put('/:wallet/email', async (req, res, next) => {
       res.status(400).send('MISSING_TOKEN');
       return;
     }
-    const email = await db.runTransaction(async t => {
+    await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(user);
       const userDoc = await t.get(userRef);
       if (!userDoc.exists) {
@@ -98,7 +103,6 @@ router.put('/:wallet/email', async (req, res, next) => {
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
       });
-      return emailUnconfirmed;
     });
     res.sendStatus(200);
   } catch (error) {
