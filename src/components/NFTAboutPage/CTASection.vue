@@ -4,7 +4,7 @@
       to="/campaign/writing-nft"
       preset="secondary"
       @click.native="handleClickCampaignPageButton"
-    >{{ $t('about_nft_page_nav_campaign') }}</ButtonV2>
+    >{{ aboutNFTNavCampaignText }}</ButtonV2>
     <ButtonV2
       preset="tertiary"
       @click="handleClickMyDashboardButton"
@@ -16,10 +16,22 @@
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import walletMixin from '~/mixins/wallet';
+import experimentMixin from '~/mixins/experiment';
 
 export default {
   name: 'NFTCTASection',
-  mixins: [walletMixin],
+  mixins: [
+    walletMixin,
+    experimentMixin('isExperimenting', 'index-to-campaign-cta', 'variant'),
+  ],
+  computed: {
+    aboutNFTNavCampaignText() {
+      if (this.isExperimenting) {
+        return this.$t('about_nft_page_nav_campaign_exp');
+      }
+      return this.$t('about_nft_page_nav_campaign');
+    },
+  },
   methods: {
     handleClickCampaignPageButton() {
       // Legacy event
