@@ -71,14 +71,6 @@ export default {
       );
       return this.initWallet(connection);
     },
-    async walletSignIn() {
-      try {
-        await this.signLogin();
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    },
     async navigateToMyDashboard() {
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();

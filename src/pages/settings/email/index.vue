@@ -50,7 +50,7 @@
         v-else
         :text="$t('settings_email_login_in_button')"
         preset="secondary"
-        @click="signIn"
+        @click="connectWallet"
       />
     </div>
   </div>
@@ -77,21 +77,8 @@ export default {
   computed: {
     ...mapGetters(['walletEmailUnverified']),
   },
-  mounted() {
-    if (!this.walletHasLoggedIn) {
-      this.signIn();
-    }
-  },
   methods: {
     ...mapActions(['walletUpdateEmail']),
-    async signIn() {
-      try {
-        await this.walletSignIn();
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    },
     async handleClickResend() {
       logTrackerEvent(
         this,
