@@ -37,7 +37,7 @@ export default {
     try {
       this.isLoading = true;
       if (!this.walletHasLoggedIn) {
-        await this.walletSignIn();
+        await this.connectWallet();
       }
       if (!this.walletIsEmailVerified) {
         await this.walletVerifyEmail(this.token);
