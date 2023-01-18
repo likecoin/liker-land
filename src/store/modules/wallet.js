@@ -8,7 +8,12 @@ import {
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
 import { getAccountBalance } from '~/util/nft';
-import { getUserInfoMinByAddress, postUserV2Login } from '~/util/api';
+import {
+  getUserInfoMinByAddress,
+  getUserV2Self,
+  postUserV2Login,
+  apiUserV2WalletEmail,
+} from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 import {
   WALLET_SET_IS_DEBUG,
@@ -19,6 +24,8 @@ import {
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
+  WALLET_SET_USER_INFO,
+  WALLET_SET_IS_LOGGING_IN,
 } from '../mutation-types';
 
 let likecoinWalletLib = null;
@@ -27,13 +34,18 @@ const state = () => ({
   isDebug: false,
   address: '',
   signer: null,
-  loginAddress: '',
   connector: null,
   likerInfo: null,
   isInited: null,
   methodType: null,
   likeBalance: null,
   likeBalanceFetchPromise: null,
+
+  // Note: Suggest to rename to sessionAddress
+  loginAddress: '',
+  email: '',
+  emailUnverified: '',
+  isLoggingIn: false,
 });
 
 const mutations = {
@@ -46,8 +58,26 @@ const mutations = {
   [WALLET_SET_SIGNER](state, signer) {
     state.signer = signer;
   },
-  [types.WALLET_SET_LOGIN_ADDRESS](state, loginAddress) {
-    state.loginAddress = loginAddress;
+  [WALLET_SET_IS_LOGGING_IN](state, isLoggingIn) {
+    state.isLoggingIn = isLoggingIn;
+  },
+  [WALLET_SET_USER_INFO](state, userInfo) {
+    if (userInfo) {
+      const { user, email, emailUnconfirmed } = userInfo;
+      if (user !== undefined) {
+        state.loginAddress = user;
+      }
+      if (email !== undefined) {
+        state.email = email;
+      }
+      if (emailUnconfirmed !== undefined) {
+        state.emailUnverified = emailUnconfirmed;
+      }
+    } else {
+      state.loginAddress = '';
+      state.email = '';
+      state.emailUnverified = '';
+    }
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
     state.methodType = method;
@@ -70,10 +100,16 @@ const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
-  walletHasLoggedIn: state => state.address === state.loginAddress,
+  walletHasLoggedIn: state => !!state.loginAddress,
+  walletIsMatchedSession: (state, getters) =>
+    getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletMethodType: state => state.methodType,
+  walletEmail: state => state.email,
+  walletEmailUnverified: state => state.emailUnverified,
+  walletIsEmailVerified: state => !!state.email && !state.emailUnverified,
+  walletIsLoggingIn: state => state.isLoggingIn,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
 };
@@ -142,7 +178,7 @@ const actions = {
     commit(types.WALLET_SET_SIGNER, null);
     commit(types.WALLET_SET_CONNECTOR, null);
     commit(types.WALLET_SET_LIKERINFO, null);
-    commit(types.WALLET_SET_LOGIN_ADDRESS, '');
+    commit(types.WALLET_SET_USER_INFO, null);
   },
 
   async restoreSession({ dispatch }) {
@@ -182,6 +218,15 @@ const actions = {
       commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
+  async walletFetchSessionUserInfo({ commit }) {
+    try {
+      const userInfo = await this.$api.$get(getUserV2Self());
+      commit(WALLET_SET_USER_INFO, userInfo);
+      return userInfo;
+    } catch (error) {
+      throw error;
+    }
+  },
   async signLogin({ state, commit, dispatch }) {
     if (!state.signer) {
       await dispatch('initIfNecessary');
@@ -206,6 +251,7 @@ const actions = {
       account_number: '0',
     };
     try {
+      commit(WALLET_SET_IS_LOGGING_IN, true);
       const {
         signed: message,
         signature: { signature, pub_key: publicKey },
@@ -217,9 +263,39 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      commit(types.WALLET_SET_LOGIN_ADDRESS, address);
+      await dispatch('walletFetchSessionUserInfo');
     } catch (error) {
-      commit(types.WALLET_SET_LOGIN_ADDRESS, null);
+      commit(WALLET_SET_USER_INFO, null);
+      throw error;
+    } finally {
+      commit(WALLET_SET_IS_LOGGING_IN, false);
+    }
+  },
+
+  async walletUpdateEmail({ state, commit }, email) {
+    try {
+      await this.$api.$post(
+        apiUserV2WalletEmail({ wallet: state.loginAddress, email })
+      );
+      commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      throw error;
+    }
+  },
+  async walletVerifyEmail({ state, commit }, token) {
+    try {
+      await this.$api.$put(
+        apiUserV2WalletEmail({ wallet: state.loginAddress, token })
+      );
+      commit(WALLET_SET_USER_INFO, {
+        email: state.emailUnconfirmed,
+        emailUnconfirmed: '',
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
       throw error;
     }
   },

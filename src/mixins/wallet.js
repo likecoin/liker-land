@@ -12,8 +12,13 @@ export default {
       'getLikerInfo',
       'getLocale',
       'walletMethodType',
+      'walletEmail',
       'walletLIKEBalance',
       'walletLIKEBalanceFetchPromise',
+      'walletHasLoggedIn',
+      'walletIsMatchedSession',
+      'walletIsLoggingIn',
+      'loginAddress',
     ]),
     hasConnectedWallet() {
       return !!this.getAddress && !!this.walletMethodType;
@@ -49,6 +54,7 @@ export default {
       'initIfNecessary',
       'restoreSession',
       'walletFetchLIKEBalance',
+      'signLogin',
     ]),
     async connectWallet() {
       const connection = await this.openConnectWalletModal({
@@ -64,6 +70,14 @@ export default {
         1
       );
       return this.initWallet(connection);
+    },
+    async walletSignIn() {
+      try {
+        await this.signLogin();
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
     async navigateToMyDashboard() {
       if (!this.getAddress) {
