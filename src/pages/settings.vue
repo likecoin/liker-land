@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-[640px] w-full mx-auto mb-[48px]">
+  <main class="max-w-[640px] w-full mx-auto mb-[48px] flex flex-col">
     <SettingsPageHeader :is-show-back="isHeaderShowBack" />
     <NuxtChild />
   </main>

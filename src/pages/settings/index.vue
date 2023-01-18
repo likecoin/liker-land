@@ -7,6 +7,11 @@
         </a>
       </li>
       <li>
+        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-email' }">
+          <span class="settings-menu__item-title"> {{ $t('settings_email') }}</span>
+        </NuxtLink>
+      </li>
+      <li>
         <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
           <GlobeIcon class="settings-menu__item-title-icon" />
           <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>
