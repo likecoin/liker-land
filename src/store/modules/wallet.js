@@ -12,6 +12,7 @@ import {
   getUserInfoMinByAddress,
   getUserV2Self,
   postUserV2Login,
+  postUserV2Logout,
   apiUserV2WalletEmail,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -122,7 +123,10 @@ const actions = {
     return likecoinWalletLib;
   },
 
-  async initWallet({ commit, dispatch }, { method, accounts, offlineSigner }) {
+  async initWallet(
+    { commit, dispatch, getters },
+    { method, accounts, offlineSigner }
+  ) {
     if (!accounts[0]) return false;
     const connector = await dispatch('getConnector');
     // Listen once per account
@@ -142,6 +146,9 @@ const actions = {
         getUserInfoMinByAddress(walletAddress)
       );
       commit(types.WALLET_SET_LIKERINFO, userInfo);
+      if (!getters.walletIsMatchedSession) {
+        await dispatch('signLogin');
+      }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
@@ -170,7 +177,7 @@ const actions = {
     return connection;
   },
 
-  disconnectWallet({ state, commit }) {
+  async disconnectWallet({ state, commit, dispatch }) {
     if (state.connector) {
       state.connector.disconnect();
     }
@@ -179,6 +186,7 @@ const actions = {
     commit(types.WALLET_SET_CONNECTOR, null);
     commit(types.WALLET_SET_LIKERINFO, null);
     commit(types.WALLET_SET_USER_INFO, null);
+    await dispatch('walletLogout');
   },
 
   async restoreSession({ dispatch }) {
@@ -272,6 +280,14 @@ const actions = {
     }
   },
 
+  async walletLogout({ commit }) {
+    try {
+      await this.$api.post(postUserV2Logout());
+      commit(WALLET_SET_USER_INFO, null);
+    } catch (error) {
+      throw error;
+    }
+  },
   async walletUpdateEmail({ state, commit }, email) {
     try {
       await this.$api.$post(
