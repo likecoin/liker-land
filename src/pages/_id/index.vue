@@ -29,15 +29,19 @@
         ]"
       >
         <NFTPortfolioUserInfo :wallet="wallet">
-          <UserStatsGem
-            class="mx-auto mt-[16px] mb-[24px]"
-            :wallet="wallet"
-            :type="isCurrentTabCreated ? 'created' : 'collected'"
-          />
-          <UserStatsPortfolio
-            class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-            :stat-wallet="wallet"
-          />
+          <template #gem>
+            <UserStatsGem
+              class="mx-auto mt-[16px] mb-[24px]"
+              :wallet="wallet"
+              :type="isCurrentTabCreated ? 'created' : 'collected'"
+            />
+          </template>
+          <template #stats>
+            <UserStatsPortfolio
+              class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
+              :stat-wallet="wallet"
+            />
+          </template>
         </NFTPortfolioUserInfo>
         <NFTPortfolioTopUsersList
           v-if="(isCurrentTabCollected ? userTopCreators : userTopCollectors).length && (isCurrentTabCollected || isCurrentTabCreated)"
