@@ -756,8 +756,8 @@ export default {
           postNewStripeFiatPayment({
             classId: this.classId,
             wallet: this.getAddress,
-            memo,
-          })
+          }),
+          { memo }
         );
         if (url) window.location.href = url;
       } catch (error) {
