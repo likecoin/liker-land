@@ -88,17 +88,6 @@
             @input="onInputCollectMessage"
           >
         </div>
-        <Label
-          preset="p6"
-          align="left"
-          prepend-class="mr-[4px]"
-          class="text-medium-gray mt-[8px] font-400 text-[10px]"
-          :text="$t('nft_collect_modal_leave_message_not_support')"
-        >
-          <template #prepend>
-            <IconAttention class="w-[10px]" />
-          </template>
-        </Label>
       </div>
       <section v-if="paymentMethod === undefined">
         <Label

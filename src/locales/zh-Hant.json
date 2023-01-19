@@ -219,7 +219,6 @@
   "nft_class_details_info_section_title": "資訊",
   "nft_class_uncollectible": "不能收集",
   "nft_collect_modal_leave_message": "留言給創作者",
-  "nft_collect_modal_leave_message_not_support": "暫時不支援信用卡用戶留言",
   "nft_collect_modal_leave_message_to_name": "留言給 {name}",
   "nft_collect_modal_method_like": "用 LIKE 購買",
   "nft_collect_modal_method_like_available_amount": "可用額 {amount}",
