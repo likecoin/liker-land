@@ -28,13 +28,13 @@
         {{ wallet | ellipsis }}
       </div>
     </ToolTips>
+    <slot name="gem" />
     <template v-if="userDescription">
-      <hr :class="['w-full', 'border-shade-gray', 'my-[16px]']">
-      <Label preset="p6" class="break-normal font-200 my-[12px]">
+      <Label preset="p6" class="break-normal font-200 mb-[24px]">
         {{ userDescription }}
       </Label>
     </template>
-    <slot />
+    <slot name="stats" />
   </CardV2>
 </template>
 <script>
