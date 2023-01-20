@@ -324,6 +324,9 @@
   "order_menu_display_state": "Featured",
   "order_menu_price": "Price",
   "order_menu_time": "Time",
+  "portfolio_subscription_verify": "Email verification link has been sent to the email address you provided: {email}",
+  "portfolio_subscription_verify_title": "Verify your email address",
+  "portfolio_subscription_verify_sendAgain": "Didn't get the mail? Send it again",
   "portfolio_collected_tab_no_item": "Collected NFT will be shown here",
   "portfolio_created_tab_no_item": "Created NFT will be shown here",
   "portfolio_description": "I am what I read. Explore my collection.",
@@ -409,6 +412,7 @@
   "settings_follow_noFollower": "No Follower",
   "settings_follow_title": "Following List",
   "settings_follow_unfollow": "Unfollow",
+  "settings_following": "Following",
   "settings_liker_id": "Liker ID",
   "SettingsFollowingPage": {
     "follow": "@:follow",

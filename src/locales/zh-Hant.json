@@ -300,6 +300,9 @@
   "order_menu_collected": "擁有",
   "order_menu_price": "價格",
   "order_menu_time": "時間",
+  "portfolio_subscription_verify": "信箱驗證信，已經寄到以下地址：{email}",
+  "portfolio_subscription_verify_title": "驗證你的信箱",
+  "portfolio_subscription_verify_sendAgain": "沒收到驗證信？再寄一次",
   "portfolio_collected_tab_no_item": "已收藏的作品將在此展示",
   "portfolio_created_tab_no_item": "已創作的作品將在此展示",
   "portfolio_description": "我的閱讀清單，構成我的精神面貌。歡迎以文會友。",
@@ -385,6 +388,7 @@
   "settings_follow_noFollower": "尚無追蹤中作者",
   "settings_follow_title": "追蹤中作者",
   "settings_follow_unfollow": "取消追蹤",
+  "settings_following": "追蹤名單",
   "settings_liker_id": "Liker ID",
   "SettingsPage": {
     "language": "介面語言",

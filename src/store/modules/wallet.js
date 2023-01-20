@@ -153,10 +153,10 @@ const actions = {
         getUserInfoMinByAddress(walletAddress)
       );
       commit(types.WALLET_SET_LIKERINFO, userInfo);
-      await dispatch('fetchFollowers', address);
       if (!getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
+      await dispatch('fetchFollowers', address);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console

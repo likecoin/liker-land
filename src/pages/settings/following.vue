@@ -122,9 +122,6 @@ export default {
     async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {
-          // if (!this.isValidEmail) {
-          //   Wait to handle verify email
-          // }
           await this.followCreator({ wallet: this.getAddress, creator });
           const index = this.unfollowList.indexOf(creator);
           if (index !== -1) {
