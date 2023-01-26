@@ -4,6 +4,7 @@ import {
   LOGIN_MESSAGE,
   LIKECOIN_CHAIN_ID,
   LIKECOIN_CHAIN_MIN_DENOM,
+  LIKECOIN_NFT_API_WALLET,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 
@@ -16,6 +17,7 @@ import {
   getUserFollowees,
   postFollowCreator,
   apiUserV2WalletEmail,
+  getNFTEvents,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -26,6 +28,7 @@ import {
   WALLET_SET_CONNECTOR,
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
+  WALLET_SET_EVENTS,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
@@ -33,6 +36,8 @@ import {
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
 } from '../mutation-types';
+
+const WALLET_EVENT_LIMIT = 100;
 
 let likecoinWalletLib = null;
 
@@ -44,6 +49,7 @@ const state = () => ({
   likerInfo: null,
   followees: [],
   isFetchingFollowees: false,
+  events: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -100,6 +106,9 @@ const mutations = {
   [WALLET_SET_LIKERINFO](state, likerInfo) {
     state.likerInfo = likerInfo;
   },
+  [WALLET_SET_EVENTS](state, events) {
+    state.events = events;
+  },
   [WALLET_SET_LIKE_BALANCE](state, likeBalance) {
     state.likeBalance = likeBalance;
   },
@@ -125,6 +134,7 @@ const getters = {
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
+  getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -174,6 +184,7 @@ const actions = {
       // eslint-disable-next-line no-console
       console.error(msg);
     }
+    dispatch('fetchWalletEvents');
     return true;
   },
 
@@ -224,6 +235,38 @@ const actions = {
       const { accounts, offlineSigner, method } = connection;
       await dispatch('initWallet', { accounts, offlineSigner, method });
     }
+  },
+
+  async fetchWalletEvents({ state, commit }) {
+    const { address } = state;
+    const [senderRes, receiverRes, purchaseRes] = await Promise.all([
+      this.$api.$get(
+        getNFTEvents({ sender: address, limit: WALLET_EVENT_LIMIT })
+      ),
+      this.$api.$get(
+        getNFTEvents({ receiver: address, limit: WALLET_EVENT_LIMIT })
+      ),
+      // purchase events are sent by LIKECOIN_NFT_API_WALLET
+      this.$api.$get(
+        getNFTEvents({
+          creator: address,
+          sender: LIKECOIN_NFT_API_WALLET,
+          limit: WALLET_EVENT_LIMIT,
+        })
+      ),
+    ]);
+    const events = senderRes.events
+      .concat(receiverRes.events)
+      .concat(purchaseRes.events);
+    commit(
+      WALLET_SET_EVENTS,
+      events
+        .map(e => {
+          e.timestamp = new Date(e.timestamp);
+          return e;
+        })
+        .sort((a, b) => b.timestamp - a.timestamp)
+    );
   },
 
   async walletFetchLIKEBalance({ commit, state }) {
@@ -312,6 +355,7 @@ const actions = {
     try {
       commit(WALLET_SET_USER_INFO, null);
       commit(WALLET_SET_FOLLOWEES, []);
+      commit(WALLET_SET_EVENTS, []);
       await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
