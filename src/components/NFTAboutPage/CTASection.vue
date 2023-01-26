@@ -20,15 +20,9 @@ import experimentMixin from '~/mixins/experiment';
 
 export default {
   name: 'NFTCTASection',
-  mixins: [
-    walletMixin,
-    experimentMixin('isExperimenting', 'index-to-campaign-cta', 'variant'),
-  ],
+  mixins: [walletMixin],
   computed: {
     aboutNFTNavCampaignText() {
-      if (this.isExperimenting) {
-        return this.$t('about_nft_page_nav_campaign_exp');
-      }
       return this.$t('about_nft_page_nav_campaign');
     },
   },
