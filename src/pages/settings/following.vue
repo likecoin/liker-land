@@ -11,7 +11,7 @@
         {{ $t('settings_follow_loading') }}
       </div>
       <div v-else-if="!getFollowers.length">
-        {{ $t('settings_follow_noFollower') }}
+        {{ $t('settings_follow_no_follower') }}
       </div>
       <div
         v-else-if="getFollowers.length"
