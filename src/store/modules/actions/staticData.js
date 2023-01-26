@@ -65,7 +65,7 @@ export async function lazyGetUserInfoByAddress({ state, dispatch }, address) {
 export function lazyGetUserInfoByAddresses({ dispatch }, addresses) {
   if (!addresses) return null;
   if (typeof addresses === 'string') {
-    return this.lazyGetUserInfoByAddress(addresses);
+    return dispatch('lazyGetUserInfoByAddress', addresses);
   }
   return Promise.all(
     addresses.filter(a => !!a).map(a => dispatch('lazyGetUserInfoByAddress', a))
