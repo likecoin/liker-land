@@ -16,7 +16,7 @@
       </i18n>
     </Label>
     <form
-      v-if="!isConnectWallet || (!walletEmailUnverified && !walletEmail)"
+      v-if="!isWalletConnected || (!walletEmailUnverified && !walletEmail)"
       class="flex phone:flex-col gap-[16px] items-center justify-center flex-wrap"
       @submit="submitEmail"
     >
@@ -37,12 +37,12 @@
           'font-[600]',
           { 'border-2 border-medium-gray': !email },
         ]"
-        :preset="isConnectWallet ? 'primary' : 'secondary'"
+        :preset="isWalletConnected ? 'primary' : 'secondary'"
         type="submit"
         :is-disabled="!email"
         :text="submitButtonText"
       >
-        <template v-if="!subscriptionId && !isConnectWallet" #prepend>
+        <template v-if="!subscriptionId && !isWalletConnected" #prepend>
           <IconNotify class="w-[20px]" />
         </template>
         <template v-else-if="subscriptionId" #append>
@@ -54,7 +54,7 @@
       <ProgressIndicator v-if="isLoading" />
       <ButtonV2 v-else preset="primary" :text="$t('portfolio_subscription_follow')" @click="handleClickVerify" />
     </div>
-    <div v-else-if="isConnectWallet && walletEmail">
+    <div v-else-if="isWalletConnected && walletEmail">
       <ProgressIndicator v-if="isLoading" />
       <ButtonV2
         v-else
@@ -112,7 +112,7 @@ export default {
       type: String,
       default: '',
     },
-    isConnectWallet: {
+    isWalletConnected: {
       type: Boolean,
       default: false,
     },
@@ -152,13 +152,13 @@ export default {
       if (this.subscriptionId) {
         return this.$t('portfolio_subscription_notify_button_submitted');
       }
-      if (!this.isConnectWallet) {
+      if (!this.isWalletConnected) {
         return this.$t('portfolio_subscription_notify_button');
       }
       return this.$t('portfolio_subscription_follow');
     },
     labelText() {
-      if (!this.isConnectWallet) {
+      if (!this.isWalletConnected) {
         return 'portfolio_subscription_hint';
       }
       if (this.isFollowed) {
@@ -196,7 +196,7 @@ export default {
 
       this.isLoading = true;
 
-      if (!this.isConnectWallet) {
+      if (!this.isWalletConnected) {
         await this.handleSubscriptCreator();
       } else {
         await this.updateWalletEmail();

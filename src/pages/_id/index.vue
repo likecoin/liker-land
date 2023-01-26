@@ -65,7 +65,7 @@
           class="w-full"
           :creator-wallet-address="wallet"
           :creator-display-name="userDisplayName"
-          :is-connect-wallet="!!getAddress"
+          :is-wallet-connected="!!getAddress"
           :is-wallet-logged-in="walletHasLoggedIn"
           :is-followed="isFollowed"
           :is-empty="false"
