@@ -132,7 +132,8 @@ const actions = {
     // Listen once per account
     connector.once('account_change', async currentMethod => {
       const connection = await connector.init(currentMethod);
-      dispatch('initWallet', connection);
+      dispatch('walletLogout');
+      await dispatch('initWallet', connection);
     });
     commit(types.WALLET_SET_METHOD_TYPE, method);
     commit(types.WALLET_SET_LIKERINFO, null);
@@ -185,7 +186,6 @@ const actions = {
     commit(types.WALLET_SET_SIGNER, null);
     commit(types.WALLET_SET_CONNECTOR, null);
     commit(types.WALLET_SET_LIKERINFO, null);
-    commit(types.WALLET_SET_USER_INFO, null);
     await dispatch('walletLogout');
   },
 
@@ -282,8 +282,8 @@ const actions = {
 
   async walletLogout({ commit }) {
     try {
-      await this.$api.post(postUserV2Logout());
       commit(WALLET_SET_USER_INFO, null);
+      await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
     }
