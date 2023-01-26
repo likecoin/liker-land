@@ -1,10 +1,8 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex justify-center">
-      <Label class="w-min text-like-green" preset="h5">{{
-        $t('settings_follow_title')
-      }}</Label>
-    </div>
+    <Label class="text-like-green" preset="h5" align="center">{{
+      $t('settings_follow_title')
+    }}</Label>
 
     <CardV2 class="my-[12px] text-center">
       <div v-if="isLoading">

@@ -76,7 +76,7 @@
     >
       <div class="flex justify-center my-[24px]">
         <div class="bg-like-cyan-light rounded-[50%] p-[12px]">
-          <IconEmail class="w-[32px]" />
+          <IconEmail class="w-[32px] text-like-green" />
         </div>
       </div>
       <Label preset="h4" align="center" class="mb-[8px]" :text="$t('portfolio_subscription_verify_title')" />
