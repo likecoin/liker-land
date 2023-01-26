@@ -190,16 +190,21 @@ export const getNFTOwners = classId => {
 export const getNFTEvents = ({
   classId,
   nftId,
+  sender,
+  receiver,
+  creator,
   limit,
   key,
   actionType,
   ignoreToList,
 }) => {
-  const qsPayload = {
-    class_id: classId,
-    nft_id: nftId,
-    action_type: actionType,
-  };
+  const qsPayload = {};
+  if (classId) qsPayload.class_id = classId;
+  if (nftId) qsPayload.nft_id = nftId;
+  if (sender) qsPayload.sender = sender;
+  if (creator) qsPayload.creator = creator;
+  if (receiver) qsPayload.receiver = receiver;
+  if (actionType) qsPayload.action_type = actionType;
   if (ignoreToList) qsPayload.ignore_to_list = ignoreToList;
   if (key) qsPayload.key = key;
   if (limit) qsPayload.limit = limit;
