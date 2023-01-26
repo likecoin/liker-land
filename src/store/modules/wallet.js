@@ -182,16 +182,25 @@ const actions = {
     const { address } = state;
     const [senderRes, receiverRes, purchaseRes] = await Promise.all([
       this.$api.$get(
-        getNFTEvents({ sender: address, limit: WALLET_EVENT_LIMIT })
+        getNFTEvents({
+          sender: address,
+          limit: WALLET_EVENT_LIMIT,
+          actionType: '/cosmos.nft.v1beta1.MsgSend',
+        })
       ),
       this.$api.$get(
-        getNFTEvents({ receiver: address, limit: WALLET_EVENT_LIMIT })
+        getNFTEvents({
+          receiver: address,
+          actionType: '/cosmos.nft.v1beta1.MsgSend',
+          limit: WALLET_EVENT_LIMIT,
+        })
       ),
       // purchase events are sent by LIKECOIN_NFT_API_WALLET
       this.$api.$get(
         getNFTEvents({
           creator: address,
           sender: LIKECOIN_NFT_API_WALLET,
+          actionType: '/cosmos.nft.v1beta1.MsgSend',
           limit: WALLET_EVENT_LIMIT,
         })
       ),
