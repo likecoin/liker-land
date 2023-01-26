@@ -237,7 +237,7 @@ const actions = {
     }
   },
 
-  async fetchWalletEvents({ state, commit }) {
+  async fetchWalletEvents({ state, commit, dispatch }) {
     const { address } = state;
     const [senderRes, receiverRes, purchaseRes] = await Promise.all([
       this.$api.$get(
@@ -258,6 +258,7 @@ const actions = {
     const events = senderRes.events
       .concat(receiverRes.events)
       .concat(purchaseRes.events);
+    const classIds = Array.from(new Set(events.map(e => e.class_id)));
     commit(
       WALLET_SET_EVENTS,
       events
@@ -267,6 +268,7 @@ const actions = {
         })
         .sort((a, b) => b.timestamp - a.timestamp)
     );
+    classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
   },
 
   async walletFetchLIKEBalance({ commit, state }) {

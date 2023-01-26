@@ -327,7 +327,18 @@ const actions = {
     const { data, ...info } = chainMetadata;
     const classData = { ...data, ...info };
     dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
-    await dispatch('populateNFTClassMetadataFromURIAndISCN', classId);
+    const metadata = await dispatch(
+      'populateNFTClassMetadataFromURIAndISCN',
+      classId
+    );
+    return metadata;
+  },
+  async lazyGetNFTClassMetadata({ getters, dispatch }, classId) {
+    let info = getters.getNFTClassMetadataById(classId);
+    if (!info) {
+      info = await dispatch('fetchNFTClassMetadata', classId);
+    }
+    return info;
   },
   parseAndStoreNFTClassMetadata({ commit }, { classId, classData = {} }) {
     const {
@@ -348,6 +359,7 @@ const actions = {
       classId,
       metadata: formattedMetadata,
     });
+    return formattedMetadata;
   },
   async populateNFTClassMetadataFromURIAndISCN(
     { commit, dispatch, getters },
@@ -390,6 +402,7 @@ const actions = {
       if (!process.client) await promise;
     }
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata });
+    return metadata;
   },
   async fetchNFTMetadata({ commit }, { classId, nftId }) {
     let metadata;
@@ -413,6 +426,13 @@ const actions = {
     }
     commit(TYPES.NFT_SET_NFT_METADATA, { classId, nftId, metadata });
     return metadata;
+  },
+  async lazyGetNFTMetadata({ getters, dispatch }, { classId, nftId }) {
+    let info = getters.getNFTMetadataByNFTClassAndNFTId(classId, nftId);
+    if (!info) {
+      info = await dispatch('fetchNFTMetadata', { classId, nftId });
+    }
+    return info;
   },
   async fetchNFTOwners({ commit }, classId) {
     const { owners } = await this.$api.$get(api.getNFTOwners(classId));
