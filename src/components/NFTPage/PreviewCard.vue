@@ -37,7 +37,11 @@
         />
         <NuxtLink
           class="flex mt-[8px]"
-          :to="`/${iscnOwner}`"
+          :to="{
+            name: 'id',
+            params: { id: iscnOwner },
+            query: { tab: 'created' },
+          }"
         >
           <Label class="text-medium-gray" text="by" />
           <Label class="text-like-green ml-[4px] font-600">{{

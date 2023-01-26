@@ -27,7 +27,8 @@
           <LinkV2
             :to="{
               name: 'id',
-              params: { id: user.id }
+              params: { id: user.id },
+              query: { tab: type === 'creator' ? 'created' : 'collected' },
             }"
             @click.native="onClick(user.index)"
           >
