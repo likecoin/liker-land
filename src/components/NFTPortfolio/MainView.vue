@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'flex flex-col w-full items-center gap-[32px] pb-[48px]',
+      'flex flex-col w-full items-center gap-[32px]',
       { [narrowClass]: isNarrow },
     ]"
   >

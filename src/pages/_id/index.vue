@@ -15,7 +15,8 @@
         'desktop:justify-center',
 
         'w-full',
-        'mt-[32px]',
+        'pt-[32px]',
+        'pb-[120px]'
       ]"
     >
       {{ /* Left Column */ }}
