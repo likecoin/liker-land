@@ -14,18 +14,12 @@
         class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray cursor-pointer hover:bg-light-gray transition-colors"
       >
         <td>
-          <Label
-            content-class="overflow-hidden"
-          >
+          <Label content-class="overflow-hidden">
             {{ event.eventType }}
           </Label>
         </td>
         <td>
-          <LinkV2
-            :to="event.targetRoute"
-            :is-inline="true"
-            @click.native.stop
-          >
+          <LinkV2 :to="event.targetRoute" :is-inline="true" @click.native.stop>
             <span>{{ event.text }}</span>
           </LinkV2>
         </td>
@@ -48,24 +42,59 @@ export default {
   name: 'WalletEventsPage',
   components: { TimeAgo },
   computed: {
-    ...mapGetters(['getEvents', 'getAddress']),
+    ...mapGetters([
+      'getEvents',
+      'getAddress',
+      'getUserInfoByAddress',
+      'getNFTClassMetadataById',
+    ]),
     populatedEvents() {
       return this.getEvents.map(e => {
         let eventType = 'unknown';
-        // TODO: parse as i18n message
-        const text = e;
+        let text = e;
+        let memo = e.memo === 'like.co NFT API' ? '' : e.memo;
         if (e.action === '/cosmos.nft.v1beta1.MsgSend') {
+          const nftName = this.getNFTClassMetadataById(e.class_id)?.name;
           if (e.sender === LIKECOIN_NFT_API_WALLET) {
             if (e.receiver === this.getAddress) {
               eventType = 'purchase_nft';
+              const creator = this.getNFTClassMetadataById(e.class_id)
+                ?.iscn_owner;
+              text = this.$t('event_list_page_event_message_purchase_nft', {
+                nftName,
+                creator:
+                  this.getUserInfoByAddress(creator)?.displayName || creator,
+              });
+              memo = ''; // TODO: Get grant memo from api
             } else {
               eventType = 'nft_sale';
+              text = this.$t('event_list_page_event_message_nft_sale', {
+                nftName,
+                buyer:
+                  this.getUserInfoByAddress(e.receiver)?.displayName ||
+                  e.receiver,
+              });
             }
           } else if (e.receiver === this.getAddress) {
             eventType = 'receive_nft';
+            text = this.$t('event_list_page_event_message_receive_nft', {
+              nftName,
+              sender:
+                this.getUserInfoByAddress(e.sender)?.displayName || e.sender,
+            });
           } else {
             eventType = 'send_nft';
+            text = this.$t('event_list_page_event_message_send_nft', {
+              nftName,
+              receiver:
+                this.getUserInfoByAddress(e.receiver)?.displayName ||
+                e.receiver,
+            });
           }
+          if (memo)
+            text += ` ${this.$t(
+              'event_list_page_event_message_nft_memo'
+            )}${memo}`;
         }
         return {
           eventType,
