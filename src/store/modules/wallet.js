@@ -6,16 +6,18 @@ import {
   LIKECOIN_CHAIN_MIN_DENOM,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
-import * as types from '@/store/mutation-types';
+
 import { getAccountBalance } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
   postUserV2Login,
   postUserV2Logout,
+  getUserFollowers,
   apiUserV2WalletEmail,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
+
 import {
   WALLET_SET_IS_DEBUG,
   WALLET_SET_ADDRESS,
@@ -25,6 +27,7 @@ import {
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
+  WALLET_SET_FOLLOWERS,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
 } from '../mutation-types';
@@ -37,6 +40,7 @@ const state = () => ({
   signer: null,
   connector: null,
   likerInfo: null,
+  followers: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -95,6 +99,9 @@ const mutations = {
   [WALLET_SET_LIKE_BALANCE_FETCH_PROMISE](state, promise) {
     state.likeBalanceFetchPromise = promise;
   },
+  [WALLET_SET_FOLLOWERS](state, followers) {
+    state.followers = followers;
+  },
 };
 
 const getters = {
@@ -106,6 +113,7 @@ const getters = {
     getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
+  getFollowers: state => state.followers,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -135,21 +143,22 @@ const actions = {
       dispatch('walletLogout');
       await dispatch('initWallet', connection);
     });
-    commit(types.WALLET_SET_METHOD_TYPE, method);
-    commit(types.WALLET_SET_LIKERINFO, null);
+    commit(WALLET_SET_METHOD_TYPE, method);
+    commit(WALLET_SET_LIKERINFO, null);
     const { address, bech32Address } = accounts[0];
     const walletAddress = bech32Address || address;
-    commit(types.WALLET_SET_ADDRESS, walletAddress);
-    commit(types.WALLET_SET_SIGNER, offlineSigner);
+    commit(WALLET_SET_ADDRESS, walletAddress);
+    commit(WALLET_SET_SIGNER, offlineSigner);
     await setLoggerUser(this, { wallet: walletAddress, method });
     try {
       const userInfo = await this.$api.$get(
         getUserInfoMinByAddress(walletAddress)
       );
-      commit(types.WALLET_SET_LIKERINFO, userInfo);
+      commit(WALLET_SET_LIKERINFO, userInfo);
       if (!getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
+      await dispatch('fetchFollowers', address);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
@@ -166,7 +175,7 @@ const actions = {
     const connector = new lib.LikeCoinWalletConnector({
       ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
     });
-    commit(types.WALLET_SET_CONNECTOR, connector);
+    commit(WALLET_SET_CONNECTOR, connector);
     return connector;
   },
 
@@ -182,10 +191,10 @@ const actions = {
     if (state.connector) {
       state.connector.disconnect();
     }
-    commit(types.WALLET_SET_ADDRESS, '');
-    commit(types.WALLET_SET_SIGNER, null);
-    commit(types.WALLET_SET_CONNECTOR, null);
-    commit(types.WALLET_SET_LIKERINFO, null);
+    commit(WALLET_SET_ADDRESS, '');
+    commit(WALLET_SET_SIGNER, null);
+    commit(WALLET_SET_CONNECTOR, null);
+    commit(WALLET_SET_LIKERINFO, null);
     await dispatch('walletLogout');
   },
 
@@ -215,21 +224,21 @@ const actions = {
         balanceFetch = state.likeBalanceFetchPromise;
       } else {
         balanceFetch = getAccountBalance(address);
-        commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
+        commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
       }
       const balance = await balanceFetch;
-      commit(types.WALLET_SET_LIKE_BALANCE, balance);
+      commit(WALLET_SET_LIKE_BALANCE, balance);
       return balance;
     } catch (error) {
       throw error;
     } finally {
-      commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
+      commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ commit }) {
+  async walletFetchSessionUserInfo({ commit }, address) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
-      commit(WALLET_SET_USER_INFO, userInfo);
+      commit(WALLET_SET_USER_INFO, userInfo || { user: address });
       return userInfo;
     } catch (error) {
       throw error;
@@ -271,7 +280,7 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      await dispatch('walletFetchSessionUserInfo');
+      await dispatch('walletFetchSessionUserInfo', address);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       throw error;
@@ -283,6 +292,7 @@ const actions = {
   async walletLogout({ commit }) {
     try {
       commit(WALLET_SET_USER_INFO, null);
+      commit(WALLET_SET_FOLLOWERS, []);
       await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
@@ -312,6 +322,17 @@ const actions = {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
+      throw error;
+    }
+  },
+  async fetchFollowers({ commit, dispatch }, address) {
+    try {
+      const { followers } = await this.$axios.$get(getUserFollowers(address));
+      commit(WALLET_SET_FOLLOWERS, followers);
+      if (followers.length) {
+        dispatch('lazyGetUserInfoByAddresses', followers);
+      }
+    } catch (error) {
       throw error;
     }
   },

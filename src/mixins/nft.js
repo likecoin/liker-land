@@ -434,6 +434,7 @@ export default {
       'uiSetTxStatus',
       'uiSetTxError',
       'walletFetchLIKEBalance',
+      'lazyGetUserInfoByAddresses',
       'fetchNFTListByAddress',
       'fetchNFTDisplayStateListByAddress',
     ]),
@@ -450,7 +451,7 @@ export default {
     },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
-      this.updateDisplayNameList(this.iscnOwner);
+      this.lazyGetUserInfoByAddresses(this.iscnOwner);
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
@@ -548,7 +549,7 @@ export default {
       for (const list of this.NFTHistory) {
         addresses.push(list.fromWallet, list.toWallet);
       }
-      this.updateDisplayNameList([...new Set(addresses)]);
+      this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
       this.isHistoryInfoLoading = false;
     },
     async getNFTEventsAll({ actionType, ignoreToList }) {
@@ -573,15 +574,6 @@ export default {
         events.push(...data.events);
       } while (count === NFT_INDEXER_LIMIT_MAX);
       return formatNFTEventsToHistory(events);
-    },
-    updateDisplayNameList(addresses) {
-      if (!addresses) return null;
-      if (typeof addresses === 'string') {
-        return this.lazyGetUserInfoByAddress(addresses);
-      }
-      return Promise.all(
-        addresses.filter(a => !!a).map(a => this.lazyGetUserInfoByAddress(a))
-      );
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {

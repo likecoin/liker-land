@@ -12,6 +12,11 @@
         </NuxtLink>
       </li>
       <li>
+        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-following' }">
+          <span class="settings-menu__item-title"> {{ $t('settings_following') }}</span>
+        </NuxtLink>
+      </li>
+      <li>
         <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
           <GlobeIcon class="settings-menu__item-title-icon" />
           <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>

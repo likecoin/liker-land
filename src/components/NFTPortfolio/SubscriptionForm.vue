@@ -11,11 +11,12 @@
       </i18n>
     </Label>
     <Label class="text-dark-gray" preset="p6" align="center">
-      <i18n path="portfolio_subscription_hint">
+      <i18n :path="labelText">
         <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
       </i18n>
     </Label>
     <form
+      v-if="!isWalletConnected || (!walletEmailUnverified && !walletEmail)"
       class="flex phone:flex-col gap-[16px] items-center justify-center flex-wrap"
       @submit="submitEmail"
     >
@@ -32,37 +33,76 @@
       <ButtonV2
         v-else
         :key="subscriptionId"
-        class="font-[600]"
-        preset="secondary"
+        :class="[
+          'font-[600]',
+          { 'border-2 border-medium-gray': !email },
+        ]"
+        :preset="isWalletConnected ? 'primary' : 'secondary'"
         type="submit"
+        :is-disabled="!email"
         :text="submitButtonText"
       >
-        <template v-if="!subscriptionId" #prepend>
+        <template v-if="!subscriptionId && !isWalletConnected" #prepend>
           <IconNotify class="w-[20px]" />
         </template>
-        <template v-else #append>
+        <template v-else-if="subscriptionId" #append>
           <IconCheck width="20" height="20" />
         </template>
       </ButtonV2>
     </form>
+    <div v-else-if="walletEmailUnverified">
+      <ProgressIndicator v-if="isLoading" />
+      <ButtonV2 v-else preset="primary" :text="$t('portfolio_subscription_follow')" @click="handleClickVerify" />
+    </div>
+    <div v-else-if="isWalletConnected && walletEmail">
+      <ProgressIndicator v-if="isLoading" />
+      <ButtonV2
+        v-else
+        :preset="isFollowed ? 'outline' : 'primary'"
+        @click="handleClickFollow"
+      >
+        {{ isFollowed ? $t('portfolio_subscription_unfollow') : $t('portfolio_subscription_follow') }}
+      </ButtonV2>
+    </div>
     <p
       v-if="subscriptionId"
       class="text-medium-gray text-[14px] text-center"
     >{{ $t('portfolio_subscription_submitted_hint') }}</p>
+    <Dialog
+      v-model="shouldShowAlertDialog"
+      preset="custom"
+      panel-container-class="phone:max-w-[520px] laptop:w-[520px]"
+      panel-component="CardV2"
+    >
+      <div class="flex justify-center my-[24px]">
+        <div class="bg-like-cyan-light rounded-[50%] p-[12px]">
+          <IconEmail class="w-[32px] text-like-green" />
+        </div>
+      </div>
+      <Label preset="h4" align="center" class="mb-[8px]" :text="$t('portfolio_subscription_verify_title')" />
+      <Label class="text-dark-gray" preset="p5" align="center">
+        <i18n path="portfolio_subscription_verify">
+          <span class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</span>
+        </i18n>
+      </Label>
+      <p class="text-center underline text-[10px] text-medium-gray mt-[32px] cursor-pointer" @click="handleClickResend">{{ $t('portfolio_subscription_verify_sendAgain') }}</p>
+    </Dialog>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { EMAIL_REGEX_STRING } from '~/constant';
 import { nftMintSubscriptionAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'NFTPortfolioSubscriptionForm',
-  mixins: [alertMixin],
+  mixins: [alertMixin, walletMixin],
   props: {
     creatorWalletAddress: {
       type: String,
@@ -71,6 +111,18 @@ export default {
     creatorDisplayName: {
       type: String,
       default: '',
+    },
+    isWalletConnected: {
+      type: Boolean,
+      default: false,
+    },
+    isWalletLoggedIn: {
+      type: Boolean,
+      default: false,
+    },
+    isFollowed: {
+      type: Boolean,
+      default: false,
     },
     isEmpty: {
       type: Boolean,
@@ -82,9 +134,11 @@ export default {
       email: '',
       isLoading: false,
       subscriptionId: '',
+      shouldShowAlertDialog: false,
     };
   },
   computed: {
+    ...mapGetters(['walletEmailUnverified']),
     emailRegexString() {
       return EMAIL_REGEX_STRING;
     },
@@ -98,7 +152,19 @@ export default {
       if (this.subscriptionId) {
         return this.$t('portfolio_subscription_notify_button_submitted');
       }
-      return this.$t('portfolio_subscription_notify_button');
+      if (!this.isWalletConnected) {
+        return this.$t('portfolio_subscription_notify_button');
+      }
+      return this.$t('portfolio_subscription_follow');
+    },
+    labelText() {
+      if (!this.isWalletConnected) {
+        return 'portfolio_subscription_hint';
+      }
+      if (this.isFollowed) {
+        return 'portfolio_unfollow_hint';
+      }
+      return 'portfolio_follow_hint';
     },
   },
   watch: {
@@ -107,6 +173,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['walletUpdateEmail']),
     handleEmailInput(email) {
       this.email = email;
     },
@@ -127,6 +194,15 @@ export default {
         return;
       }
 
+      this.isLoading = true;
+
+      if (!this.isWalletConnected) {
+        await this.handleSubscriptCreator();
+      } else {
+        await this.updateWalletEmail();
+      }
+    },
+    async handleSubscriptCreator() {
       logTrackerEvent(
         this,
         'NFT',
@@ -134,8 +210,6 @@ export default {
         this.wallet,
         1
       );
-
-      this.isLoading = true;
       try {
         const res = await this.$api.post(
           nftMintSubscriptionAPI({
@@ -179,6 +253,86 @@ export default {
         }
       } finally {
         this.isLoading = false;
+      }
+    },
+    async updateWalletEmail() {
+      logTrackerEvent(this, 'NFT', 'nft_portfolio_update_email', this.email, 1);
+      try {
+        await this.walletUpdateEmail(this.email);
+        this.alertPromptSuccess(
+          this.$t('settings_email_changing_email_submitted')
+        );
+        this.email = '';
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+        this.shouldShowAlertDialog = true;
+      }
+    },
+    async handleClickFollow() {
+      this.isLoading = true;
+      try {
+        if (!this.isWalletLoggedIn) {
+          await this.signLogin();
+          return;
+        }
+        if (this.isFollowed) {
+          await this.unfollowCreator({
+            wallet: this.getAddress,
+            creator: this.creatorWalletAddress,
+          });
+          return;
+        }
+        if (this.walletEmail) {
+          this.followCreator({
+            wallet: this.getAddress,
+            creator: this.creatorWalletAddress,
+          });
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        await this.fetchFollowers(this.getAddress);
+        this.isLoading = false;
+      }
+    },
+    async handleClickVerify() {
+      this.shouldShowAlertDialog = true;
+      try {
+        this.loading = true;
+        await this.walletUpdateEmail(this.walletEmailUnverified);
+        this.alertPromptSuccess(
+          this.$t('settings_email_changing_email_submitted')
+        );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async handleClickResend() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'portfolio_email_resend_verification_email',
+        this.loginAddress,
+        1
+      );
+      try {
+        this.loading = true;
+        await this.walletUpdateEmail(this.walletEmailUnverified);
+        this.alertPromptSuccess(
+          this.$t('settings_email_changing_email_submitted')
+        );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
   },

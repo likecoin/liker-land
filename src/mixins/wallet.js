@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { getIdenticonAvatar } from '~/util/api';
+import { getIdenticonAvatar, postFollowCreator } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 
@@ -11,6 +11,7 @@ export default {
       'getSigner',
       'getLikerInfo',
       'getLocale',
+      'getFollowers',
       'walletMethodType',
       'walletEmail',
       'walletLIKEBalance',
@@ -55,6 +56,8 @@ export default {
       'restoreSession',
       'walletFetchLIKEBalance',
       'signLogin',
+      'fetchFollowers',
+      'signLogin',
     ]),
     async connectWallet() {
       const connection = await this.openConnectWalletModal({
@@ -89,6 +92,20 @@ export default {
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
+    },
+    async followCreator({ wallet, creator }) {
+      try {
+        await this.$axios.$post(postFollowCreator(wallet, creator));
+      } catch (error) {
+        throw error;
+      }
+    },
+    async unfollowCreator({ wallet, creator }) {
+      try {
+        await this.$axios.$delete(postFollowCreator(wallet, creator));
+      } catch (error) {
+        throw error;
+      }
     },
   },
 };

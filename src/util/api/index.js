@@ -282,3 +282,7 @@ export const apiUserV2WalletEmail = ({ wallet, email, token }) => {
 
 export const getNFTDisplayStateURL = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
+
+export const getUserFollowers = wallet => `/api/v2/users/${wallet}/followers`;
+export const postFollowCreator = (wallet, creator) =>
+  `/api/v2/users/${wallet}/followers?creator=${creator}`;
