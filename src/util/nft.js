@@ -350,10 +350,12 @@ export async function getPurchasePriceMap(axios, history) {
   );
 }
 
-export async function getNFTHistoryDataMap({ axios, classId, nftId }) {
+export async function getNFTHistoryDataMap({ axios, classId, nftId, txHash }) {
   const historyMap = new Map();
   try {
-    const { data } = await axios.get(api.getNFTHistory({ classId, nftId }));
+    const { data } = await axios.get(
+      api.getNFTHistory({ classId, nftId, txHash })
+    );
     const { list } = data;
     list.forEach(e => {
       const key = getEventKey(e);

@@ -102,11 +102,12 @@ export const getNFTPurchaseInfo = ({ iscnId, classId }) => {
   )}`;
 };
 
-export const getNFTHistory = ({ iscnId, classId, nftId }) => {
+export const getNFTHistory = ({ iscnId, classId, nftId, txHash }) => {
   const qsPayload = {
     iscn_id: iscnId,
     class_id: classId,
     nft_id: nftId,
+    tx_hash: txHash,
   };
   return `${LIKECOIN_API_BASE}/likernft/history?${querystring.stringify(
     qsPayload
@@ -197,6 +198,7 @@ export const getNFTEvents = ({
   key,
   actionType,
   ignoreToList,
+  ignoreFromList,
 }) => {
   const qsPayload = {};
   if (classId) qsPayload.class_id = classId;
@@ -206,6 +208,7 @@ export const getNFTEvents = ({
   if (receiver) qsPayload.receiver = receiver;
   if (actionType) qsPayload.action_type = actionType;
   if (ignoreToList) qsPayload.ignore_to_list = ignoreToList;
+  if (ignoreFromList) qsPayload.ignore_from_list = ignoreFromList;
   if (key) qsPayload.key = key;
   if (limit) qsPayload.limit = limit;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
