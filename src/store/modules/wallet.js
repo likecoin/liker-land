@@ -6,7 +6,7 @@ import {
   LIKECOIN_CHAIN_MIN_DENOM,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
-import * as types from '@/store/mutation-types';
+
 import { getAccountBalance } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
@@ -17,6 +17,7 @@ import {
   apiUserV2WalletEmail,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
+
 import {
   WALLET_SET_IS_DEBUG,
   WALLET_SET_ADDRESS,
@@ -139,20 +140,21 @@ const actions = {
     // Listen once per account
     connector.once('account_change', async currentMethod => {
       const connection = await connector.init(currentMethod);
+      dispatch('walletLogout');
       dispatch('initWallet', connection);
     });
-    commit(types.WALLET_SET_METHOD_TYPE, method);
-    commit(types.WALLET_SET_LIKERINFO, null);
+    commit(WALLET_SET_METHOD_TYPE, method);
+    commit(WALLET_SET_LIKERINFO, null);
     const { address, bech32Address } = accounts[0];
     const walletAddress = bech32Address || address;
-    commit(types.WALLET_SET_ADDRESS, walletAddress);
-    commit(types.WALLET_SET_SIGNER, offlineSigner);
+    commit(WALLET_SET_ADDRESS, walletAddress);
+    commit(WALLET_SET_SIGNER, offlineSigner);
     await setLoggerUser(this, { wallet: walletAddress, method });
     try {
       const userInfo = await this.$api.$get(
         getUserInfoMinByAddress(walletAddress)
       );
-      commit(types.WALLET_SET_LIKERINFO, userInfo);
+      commit(WALLET_SET_LIKERINFO, userInfo);
       if (!getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
@@ -173,7 +175,7 @@ const actions = {
     const connector = new lib.LikeCoinWalletConnector({
       ...LIKECOIN_WALLET_CONNECTOR_CONFIG,
     });
-    commit(types.WALLET_SET_CONNECTOR, connector);
+    commit(WALLET_SET_CONNECTOR, connector);
     return connector;
   },
 
@@ -189,11 +191,10 @@ const actions = {
     if (state.connector) {
       state.connector.disconnect();
     }
-    commit(types.WALLET_SET_ADDRESS, '');
-    commit(types.WALLET_SET_SIGNER, null);
-    commit(types.WALLET_SET_CONNECTOR, null);
-    commit(types.WALLET_SET_LIKERINFO, null);
-    commit(types.WALLET_SET_USER_INFO, null);
+    commit(WALLET_SET_ADDRESS, '');
+    commit(WALLET_SET_SIGNER, null);
+    commit(WALLET_SET_CONNECTOR, null);
+    commit(WALLET_SET_LIKERINFO, null);
     await dispatch('walletLogout');
   },
 
@@ -223,21 +224,21 @@ const actions = {
         balanceFetch = state.likeBalanceFetchPromise;
       } else {
         balanceFetch = getAccountBalance(address);
-        commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
+        commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
       }
       const balance = await balanceFetch;
-      commit(types.WALLET_SET_LIKE_BALANCE, balance);
+      commit(WALLET_SET_LIKE_BALANCE, balance);
       return balance;
     } catch (error) {
       throw error;
     } finally {
-      commit(types.WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
+      commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ commit }) {
+  async walletFetchSessionUserInfo({ commit }, address) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
-      commit(WALLET_SET_USER_INFO, userInfo);
+      commit(WALLET_SET_USER_INFO, userInfo || { user: address });
       return userInfo;
     } catch (error) {
       throw error;
@@ -279,7 +280,7 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      await dispatch('walletFetchSessionUserInfo');
+      await dispatch('walletFetchSessionUserInfo', address);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       throw error;
@@ -290,8 +291,9 @@ const actions = {
 
   async walletLogout({ commit }) {
     try {
-      await this.$api.post(postUserV2Logout());
       commit(WALLET_SET_USER_INFO, null);
+      commit(WALLET_SET_FOLLOWERS, []);
+      await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
     }
@@ -326,7 +328,7 @@ const actions = {
   async fetchFollowers({ commit, dispatch }, address) {
     try {
       const { followers } = await this.$axios.$get(getUserFollowers(address));
-      commit(types.WALLET_SET_FOLLOWERS, followers);
+      commit(WALLET_SET_FOLLOWERS, followers);
       if (followers.length) {
         dispatch('lazyGetUserInfoByAddresses', followers);
       }

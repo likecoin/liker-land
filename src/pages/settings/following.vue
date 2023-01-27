@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div v-if="walletHasLoggedIn" class="flex flex-col">
     <Label class="text-like-green" preset="h5" align="center">{{
       $t('settings_follow_title')
     }}</Label>
@@ -16,7 +16,7 @@
         class="flex flex-col gap-[4px] px-[16px] my-[6px]"
       >
         <div
-          v-for="follower in populatedFollowings"
+          v-for="follower in populatedFollowers"
           :key="follower.wallet"
           :class="[
             'flex',
@@ -63,6 +63,18 @@
       </div>
     </CardV2>
   </div>
+  <div v-else class="flex flex-col justify-center flex-grow">
+    <Label class="text-medium-gray" align="center" :text="$t('settings_following_login_in_label')" />
+    <div class="flex justify-center mt-[24px]">
+      <ProgressIndicator v-if="walletIsLoggingIn" />
+      <ButtonV2
+        v-else
+        :text="$t('settings_following_login_in_button')"
+        preset="secondary"
+        @click="connectWallet"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -84,7 +96,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfoByAddress']),
-    populatedFollowings() {
+    populatedFollowers() {
       return this.getFollowers.map(follower => ({
         displayName:
           this.getUserInfoByAddress(follower)?.displayName || follower,
@@ -94,42 +106,41 @@ export default {
     },
   },
   watch: {
-    async getAddress() {
-      if (this.getAddress) {
-        await this.fetchFollowerList();
-      } else {
-        this.$router.push({ name: 'index' });
+    walletHasLoggedIn() {
+      if (this.walletHasLoggedIn) {
+        this.fetchFollowerList();
       }
     },
   },
   async mounted() {
-    if (this.getAddress) {
+    if (this.walletHasLoggedIn) {
       await this.fetchFollowerList();
     }
   },
   methods: {
     ...mapActions(['lazyGetUserInfoByAddresses']),
     async fetchFollowerList() {
-      if (!this.walletHasLoggedIn) {
-        await this.signLogin();
+      if (this.isLoading) {
+        return;
       }
       this.isLoading = true;
-      await this.fetchFollowers(this.getAddress);
+      await this.fetchFollowers(this.loginAddress);
       this.isLoading = false;
     },
     async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {
-          await this.followCreator({ wallet: this.getAddress, creator });
+          await this.followCreator({ wallet: this.loginAddress, creator });
           const index = this.unfollowList.indexOf(creator);
           if (index !== -1) {
             this.unfollowList.splice(index, 1);
           }
         } else {
-          await this.unfollowCreator({ wallet: this.getAddress, creator });
+          await this.unfollowCreator({ wallet: this.loginAddress, creator });
           this.unfollowList.push(creator);
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
         this.alertPromptError(error.toString());
       }
