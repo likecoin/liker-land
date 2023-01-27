@@ -1,34 +1,39 @@
 <template>
 
   <div v-if="walletHasLoggedIn">
-    <div class="grid sm:grid-cols-2 gap-[16px]">
-      <div>
-        <Label class="text-medium-gray" :text="$t('settings_email_current_email')" />
-        <Label :text="walletEmail" />
+    <template v-if="hasEmail">
+      <div class="grid sm:grid-cols-2 gap-[16px]">
+        <div v-if="walletEmail">
+          <Label class="text-medium-gray" :text="$t('settings_email_current_email')" />
+          <Label :text="walletEmail" />
+        </div>
+
+        <div v-if="walletEmailUnverified">
+          <Label class="text-medium-gray" :text="$t('settings_email_unverified_email')" />
+          <Label :text="walletEmailUnverified" />
+          <ButtonV2
+            class="mt-[8px]"
+            :text="$t('settings_email_resend_verification_email')"
+            :is-disabled="isSubmitting"
+            preset="outline"
+            size="mini"
+            @click="handleClickResend"
+          />
+        </div>
       </div>
 
-      <div v-if="walletEmailUnverified">
-        <Label class="text-medium-gray" :text="$t('settings_email_unverified_email')" />
-        <Label :text="walletEmailUnverified" />
-        <ButtonV2
-          class="mt-[8px]"
-          :text="$t('settings_email_resend_verification_email')"
-          :is-disabled="isSubmitting"
-          preset="outline"
-          size="mini"
-          @click="handleClickResend"
-        />
-      </div>
-    </div>
+      <Separator class="my-[24px]" />
+    </template>
 
-    <Separator class="my-[24px]" />
-
-    <Label class="text-medium-gray" :text="$t('settings_email_change_email')" />
+    <Label
+      class="text-medium-gray"
+      :text="$t(hasEmail ? 'settings_email_change_email' : 'settings_email_new_email')"
+    />
     <TextField
       v-model="newEmail"
       class="mt-[4px]"
       :is-disabled="isSubmitting"
-      placeholder="Enter new email"
+      :placeholder="$t('settings_email_input_email_placeholder')"
     />
     <div class="flex justify-end mt-[8px]">
       <ProgressIndicator v-if="isSubmitting" />
@@ -76,6 +81,9 @@ export default {
   },
   computed: {
     ...mapGetters(['walletEmailUnverified']),
+    hasEmail() {
+      return this.walletEmail || this.walletEmailUnverified;
+    },
   },
   methods: {
     ...mapActions(['walletUpdateEmail']),

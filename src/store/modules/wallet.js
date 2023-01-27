@@ -141,7 +141,7 @@ const actions = {
     connector.once('account_change', async currentMethod => {
       const connection = await connector.init(currentMethod);
       dispatch('walletLogout');
-      dispatch('initWallet', connection);
+      await dispatch('initWallet', connection);
     });
     commit(WALLET_SET_METHOD_TYPE, method);
     commit(WALLET_SET_LIKERINFO, null);

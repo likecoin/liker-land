@@ -4,7 +4,7 @@
       <Label :text="$t('settings_email_verify_verifying')" align="center" />
       <ProgressIndicator class="self-center mt-[16px]" />
     </template>
-    <Label v-else-if="walletIsEmailVerified" :text="$t('settings_email_verify_verified')" />
+    <Label v-else-if="walletIsEmailVerified" :text="$t('settings_email_verify_verified')" align="center" />
     <ButtonV2
       class="self-center mt-[16px]"
       :text="$t('settings_email_verify_verified_back_button')"
