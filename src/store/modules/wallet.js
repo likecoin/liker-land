@@ -7,8 +7,10 @@ import {
   LIKECOIN_NFT_API_WALLET,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
-
-import { getAccountBalance } from '~/util/nft';
+import {
+  getAccountBalance,
+  getNFTHistoryDataMap,
+} from '~/util/nft';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
@@ -249,6 +251,7 @@ const actions = {
       ),
       this.$api.$get(
         getNFTEvents({
+          ignoreFromList: LIKECOIN_NFT_API_WALLET,
           receiver: address,
           actionType: '/cosmos.nft.v1beta1.MsgSend',
           limit: WALLET_EVENT_LIMIT,
@@ -277,6 +280,32 @@ const actions = {
     [...new Set(addresses)]
       .filter(a => !!a)
       .map(a => dispatch('lazyGetUserInfoByAddress', a));
+
+    const promises = events.map(e => {
+      if (
+        e.action === '/cosmos.nft.v1beta1.MsgSend' &&
+        e.sender === LIKECOIN_NFT_API_WALLET
+      ) {
+        return getNFTHistoryDataMap({
+          axios: this.$api,
+          classId: e.class_id,
+          txHash: e.tx_hash,
+        });
+      }
+      return new Map();
+    });
+
+    const historyDatas = await Promise.all(promises);
+    historyDatas.forEach((m, index) => {
+      if (m) {
+        // m is a Map
+        m.forEach(data => {
+          const { granterMemo, price } = data;
+          events[index].price = price;
+          events[index].granterMemo = granterMemo;
+        });
+      }
+    });
 
     commit(
       WALLET_SET_EVENTS,
