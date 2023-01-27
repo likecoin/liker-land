@@ -7,10 +7,7 @@ import {
   LIKECOIN_NFT_API_WALLET,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
-import {
-  getAccountBalance,
-  getNFTHistoryDataMap,
-} from '~/util/nft';
+import { getAccountBalance, getNFTHistoryDataMap } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
@@ -137,6 +134,7 @@ const getters = {
   walletFollowees: state => state.followees,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
+  getLatestEventTimestamp: state => state.events[0]?.timestamp,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
