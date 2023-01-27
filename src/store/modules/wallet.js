@@ -268,6 +268,16 @@ const actions = {
       .concat(receiverRes.events)
       .concat(purchaseRes.events);
     const classIds = Array.from(new Set(events.map(e => e.class_id)));
+
+    const addresses = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const list of events) {
+      addresses.push(list.sender, list.receiver);
+    }
+    [...new Set(addresses)]
+      .filter(a => !!a)
+      .map(a => dispatch('lazyGetUserInfoByAddress', a));
+
     commit(
       WALLET_SET_EVENTS,
       events
