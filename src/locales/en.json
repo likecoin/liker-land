@@ -146,6 +146,7 @@
   "event_list_page_event_header_type": "Type",
   "event_list_page_event_header_details": "Event",
   "event_list_page_event_header_time": "Time",
+  "event_list_page_event_refresh": "Refresh",
   "event_list_page_event_purchase_nft": "Purchase",
   "event_list_page_event_nft_sale": "Sale",
   "event_list_page_event_receive_nft": "Received",

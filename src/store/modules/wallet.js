@@ -8,11 +8,7 @@ import {
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import * as types from '@/store/mutation-types';
-import {
-  getAccountBalance,
-  getEventKey,
-  getNFTHistoryDataMap,
-} from '~/util/nft';
+import { getAccountBalance, getNFTHistoryDataMap } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
   postUserV2Login,
@@ -90,6 +86,7 @@ const getters = {
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
+  getLatestEventTimestamp: state => state.events[0]?.timestamp,
   walletMethodType: state => state.methodType,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,

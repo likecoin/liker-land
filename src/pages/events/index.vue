@@ -1,36 +1,41 @@
 <template>
-  <table class="w-full table-fixed text-[10px]">
-    <thead class="border-b-shade-gray border-b-[2px]">
-      <tr class="text-medium-gray py-[12px]">
-        <th><Label :text="$t('event_list_page_event_header_type')" /></th>
-        <th><Label class="break-normal" :text="$t('event_list_page_event_header_details')" /></th>
-        <th><Label :text="$t('event_list_page_event_header_time')" /></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="event in populatedEvents"
-        :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
-        class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray cursor-pointer hover:bg-light-gray transition-colors"
-      >
-        <td>
-          <Label content-class="overflow-hidden">
-            {{ event.eventType }}
-          </Label>
-        </td>
-        <td>
-          <LinkV2 :to="event.targetRoute" :is-inline="true" @click.native.stop>
-            <span>{{ event.text }}</span>
-          </LinkV2>
-        </td>
-        <td>
-          <LinkV2 class="text-left" :href="getChainExplorerTx(event.tx_hash)" :is-inline="true" @click.native.stop>
-            <TimeAgo class="px-[2px]" long tooltip :datetime="event.timestamp" />
-          </LinkV2>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <Page class="px-[8px]">
+    <div>
+      <ButtonV2 @click="handleRefresh()">{{ $t('event_list_page_event_refresh') }}</ButtonV2>
+      <table class="w-full table-fixed text-[10px]">
+        <thead class="border-b-shade-gray border-b-[2px]">
+          <tr class="text-medium-gray py-[12px]">
+            <th><Label :text="$t('event_list_page_event_header_type')" /></th>
+            <th><Label class="break-normal" :text="$t('event_list_page_event_header_details')" /></th>
+            <th><Label :text="$t('event_list_page_event_header_time')" /></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="event in populatedEvents"
+            :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
+            class="py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray cursor-pointer hover:bg-light-gray transition-colors"
+          >
+            <td>
+              <Label content-class="overflow-hidden">
+                {{ event.eventType }}
+              </Label>
+            </td>
+            <td>
+              <LinkV2 :to="event.targetRoute" :is-inline="true" @click.native.stop>
+                <span>{{ event.text }}</span>
+              </LinkV2>
+            </td>
+            <td>
+              <LinkV2 class="text-left" :href="getChainExplorerTx(event.tx_hash)" :is-inline="true" @click.native.stop>
+                <TimeAgo class="px-[2px]" long tooltip :datetime="event.timestamp" />
+              </LinkV2>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </Page>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
