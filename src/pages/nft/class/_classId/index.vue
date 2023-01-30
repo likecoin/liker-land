@@ -16,7 +16,6 @@
             :class-id="classId"
             :price="NFTPrice"
             :collected-nft-ids="userCollectedNFTList"
-            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @click-sell="handleClickSellFromControlBar"
             @collect="handleCollectFromControlBar"
@@ -78,7 +77,7 @@
                 :collector-count="ownerCount"
               />
             </template>
-            <template v-else-if="isShowPriceSection">
+            <template v-if="isShowPriceSection">
               <NFTPagePriceSection
                 :nft-price="NFTPrice"
                 :nft-price-u-s-d="formattedNFTPriceUSD"
@@ -92,7 +91,7 @@
                 @hover-sell="handleHoverSellFromPriceSection"
               />
               <NFTPageSupplySection
-                v-if="nftIsCollectable"
+                v-if="nftIsWritingNFT && nftIsCollectable"
                 :collected-count="collectedCount"
                 @collect="handleCollectFromSupplySection"
               />
@@ -217,7 +216,7 @@ export default {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
     isShowPriceSection() {
-      return this.nftIsWritingNFT && this.NFTPrice !== undefined;
+      return this.NFTPrice !== undefined && this.NFTPrice > 0;
     },
   },
   asyncData({ query }) {

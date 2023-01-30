@@ -145,6 +145,7 @@
             <EventModalCollectMethodButton
               :title="$t('nft_collect_modal_method_stripe')"
               type="stripe"
+              :is-disabled="!canPayByFiat"
               :price="formattedNFTPriceInUSD"
               @click="handleSelectPaymentMethod"
             />
@@ -209,6 +210,9 @@ export default {
     },
     isInsufficientLIKE() {
       return this.walletLIKEBalance < this.NFTPrice;
+    },
+    canPayByFiat() {
+      return this.formattedNFTPriceInUSD && this.formattedNFTPriceInUSD !== '-';
     },
     canPayByLIKE() {
       if (this.developerMode) return true;
