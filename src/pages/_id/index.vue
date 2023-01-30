@@ -33,7 +33,7 @@
             <UserStatsGem
               class="mx-auto mt-[16px] mb-[24px]"
               :wallet="wallet"
-              :type="isCurrentTabCreated ? 'created' : 'collected'"
+              type="collected"
             />
           </template>
           <template #stats>
