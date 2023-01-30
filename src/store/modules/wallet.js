@@ -14,6 +14,7 @@ import {
   postUserV2Login,
   postUserV2Logout,
   getUserFollowers,
+  postFollowCreator,
   apiUserV2WalletEmail,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -333,6 +334,35 @@ const actions = {
         dispatch('lazyGetUserInfoByAddresses', followers);
       }
     } catch (error) {
+      throw error;
+    }
+  },
+  async walletCreatorFollow({ state, commit }, creator) {
+    const prevFollowers = state.followers;
+    try {
+      commit(WALLET_SET_FOLLOWERS, [...state.followers, creator].sort());
+      await this.$api.$post(
+        postFollowCreator({ wallet: state.loginAddress, creator })
+      );
+    } catch (error) {
+      commit(WALLET_SET_FOLLOWERS, prevFollowers);
+      throw error;
+    }
+  },
+  async walletCreatorUnfollow({ state, commit }, creator) {
+    const prevFollowers = state.followers;
+    try {
+      await this.$api.$delete(
+        postFollowCreator({ wallet: state.loginAddress, creator })
+      );
+      const index = state.followers.indexOf(creator);
+      if (index > -1) {
+        const newFollowers = [...state.followers];
+        newFollowers.splice(index, 1);
+        commit(WALLET_SET_FOLLOWERS, newFollowers);
+      }
+    } catch (error) {
+      commit(WALLET_SET_FOLLOWERS, prevFollowers);
       throw error;
     }
   },

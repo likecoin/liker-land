@@ -138,7 +138,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletHasVerifiedEmail', 'walletEmailUnverified']),
+    ...mapGetters(['walletEmailUnverified']),
     emailRegexString() {
       return EMAIL_REGEX_STRING;
     },
@@ -173,7 +173,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['walletUpdateEmail']),
+    ...mapActions([
+      'walletUpdateEmail',
+      'walletCreatorFollow',
+      'walletCreatorUnfollow',
+    ]),
     handleEmailInput(email) {
       this.email = email;
     },
@@ -279,23 +283,16 @@ export default {
           return;
         }
         if (this.isFollowed) {
-          await this.unfollowCreator({
-            wallet: this.getAddress,
-            creator: this.creatorWalletAddress,
-          });
+          await this.walletCreatorUnfollow(this.creatorWalletAddress);
           return;
         }
-        if (this.walletEmail) {
-          this.followCreator({
-            wallet: this.getAddress,
-            creator: this.creatorWalletAddress,
-          });
+        if (this.walletHasVerifiedEmail) {
+          this.walletCreatorFollow(this.creatorWalletAddress);
         }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        await this.fetchFollowers(this.getAddress);
         this.isLoading = false;
       }
     },

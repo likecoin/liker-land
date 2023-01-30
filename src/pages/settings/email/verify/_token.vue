@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 import walletMixin from '~/mixins/wallet';
 
@@ -28,7 +28,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletHasVerifiedEmail']),
     token() {
       return this.$route.params.token;
     },

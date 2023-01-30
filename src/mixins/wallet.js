@@ -14,6 +14,7 @@ export default {
       'getFollowers',
       'walletMethodType',
       'walletEmail',
+      'walletHasVerifiedEmail',
       'walletLIKEBalance',
       'walletLIKEBalanceFetchPromise',
       'walletHasLoggedIn',
@@ -92,20 +93,6 @@ export default {
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
-    },
-    async followCreator({ wallet, creator }) {
-      try {
-        await this.$axios.$post(postFollowCreator(wallet, creator));
-      } catch (error) {
-        throw error;
-      }
-    },
-    async unfollowCreator({ wallet, creator }) {
-      try {
-        await this.$axios.$delete(postFollowCreator(wallet, creator));
-      } catch (error) {
-        throw error;
-      }
     },
   },
 };

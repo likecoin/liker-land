@@ -118,7 +118,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyGetUserInfoByAddresses']),
+    ...mapActions([
+      'lazyGetUserInfoByAddresses',
+      'walletCreatorFollow',
+      'walletCreatorUnfollow',
+    ]),
     async fetchFollowerList() {
       if (this.isLoading) {
         return;
@@ -130,13 +134,13 @@ export default {
     async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {
-          await this.followCreator({ wallet: this.loginAddress, creator });
+          await this.walletCreatorFollow(creator);
           const index = this.unfollowList.indexOf(creator);
           if (index !== -1) {
             this.unfollowList.splice(index, 1);
           }
         } else {
-          await this.unfollowCreator({ wallet: this.loginAddress, creator });
+          await this.walletCreatorUnfollow(creator);
           this.unfollowList.push(creator);
         }
       } catch (error) {

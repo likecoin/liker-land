@@ -173,7 +173,7 @@ export default {
       return this.$route.params.id;
     },
     isFollowed() {
-      return this.getFollowers?.includes(this.wallet);
+      return this.getFollowers?.includes(this.wallet) || false;
     },
     isUserPortfolio() {
       return this.wallet === this.getAddress;
@@ -209,12 +209,12 @@ export default {
         }
       }
     },
-    async getAddress() {
-      if (!this.getFollowers.length && this.getAddress) {
+    async loginAddress() {
+      if (!this.getFollowers.length && this.loginAddress) {
         if (!this.walletHasLoggedIn) {
           await this.signLogin();
         }
-        await this.fetchFollowers(this.getAddress);
+        await this.fetchFollowers(this.loginAddress);
       }
     },
   },
