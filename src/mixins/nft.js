@@ -711,7 +711,7 @@ export default {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
           let result;
           if (nftIsUseListingPrice) {
-            result = { data: this.listingInfo.nftId };
+            result = { data: { nftId: this.listingInfo.nftId } };
           } else {
             result = await this.$api.post(
               postNFTPurchase({
