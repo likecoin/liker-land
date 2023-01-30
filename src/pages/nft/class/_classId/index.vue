@@ -69,33 +69,31 @@
 
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
-            <template v-if="nftIsPrimitive">
-              <NFTPagePrimitiveDisclaimer class="hidden w-full desktop:flex" />
-              <NFTPagePrimitiveClassInfoSection
-                :class-id="classId"
-                :collected-count="collectedCount"
-                :collector-count="ownerCount"
-              />
-            </template>
-            <template v-if="isShowPriceSection">
-              <NFTPagePriceSection
-                :nft-price="NFTPrice"
-                :nft-price-u-s-d="formattedNFTPriceUSD"
-                :is-collectable="nftIsCollectable"
-                :collected-count="collectedCount"
-                :collector-count="ownerCount"
-                :is-loading="uiIsOpenCollectModal && isCollecting"
-                :url="NFTExternalUrl"
-                @collect="handleCollectFromPriceSection"
-                @click-sell="handleClickSellFromPriceSection"
-                @hover-sell="handleHoverSellFromPriceSection"
-              />
-              <NFTPageSupplySection
-                v-if="nftIsWritingNFT && nftIsCollectable"
-                :collected-count="collectedCount"
-                @collect="handleCollectFromSupplySection"
-              />
-            </template>
+            <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="hidden w-full desktop:flex" />
+            <NFTPagePriceSection
+              v-if="isShowPriceSection"
+              :nft-price="NFTPrice"
+              :nft-price-u-s-d="formattedNFTPriceUSD"
+              :is-collectable="nftIsCollectable"
+              :collected-count="collectedCount"
+              :collector-count="ownerCount"
+              :is-loading="uiIsOpenCollectModal && isCollecting"
+              :url="NFTExternalUrl"
+              @collect="handleCollectFromPriceSection"
+              @click-sell="handleClickSellFromPriceSection"
+              @hover-sell="handleHoverSellFromPriceSection"
+            />
+            <NFTPagePrimitiveClassInfoSection
+              v-if="nftIsPrimitive"
+              :class-id="classId"
+              :collected-count="collectedCount"
+              :collector-count="ownerCount"
+            />
+            <NFTPageSupplySection
+              v-else-if="isShowPriceSection && nftIsWritingNFT && nftIsCollectable"
+              :collected-count="collectedCount"
+              @collect="handleCollectFromSupplySection"
+            />
           </div>
         </section>
 
