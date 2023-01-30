@@ -50,7 +50,7 @@
         </template>
       </ButtonV2>
     </form>
-    <div v-else-if="walletEmailUnverified">
+    <div v-else-if="!walletHasVerifiedEmail">
       <ProgressIndicator v-if="isLoading" />
       <ButtonV2 v-else preset="primary" :text="$t('portfolio_subscription_follow')" @click="handleClickVerify" />
     </div>
@@ -138,7 +138,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletEmailUnverified']),
+    ...mapGetters(['walletHasVerifiedEmail', 'walletEmailUnverified']),
     emailRegexString() {
       return EMAIL_REGEX_STRING;
     },

@@ -4,7 +4,7 @@
       <Label :text="$t('settings_email_verify_verifying')" align="center" />
       <ProgressIndicator class="self-center mt-[16px]" />
     </template>
-    <Label v-else-if="walletIsEmailVerified" :text="$t('settings_email_verify_verified')" align="center" />
+    <Label v-else-if="walletHasVerifiedEmail" :text="$t('settings_email_verify_verified')" align="center" />
     <ButtonV2
       class="self-center mt-[16px]"
       :text="$t('settings_email_verify_verified_back_button')"
@@ -28,7 +28,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletIsEmailVerified']),
+    ...mapGetters(['walletHasVerifiedEmail']),
     token() {
       return this.$route.params.token;
     },
@@ -39,7 +39,7 @@ export default {
       if (!this.walletHasLoggedIn) {
         await this.connectWallet();
       }
-      if (!this.walletIsEmailVerified) {
+      if (!this.walletHasVerifiedEmail) {
         await this.walletVerifyEmail(this.token);
       }
     } finally {
