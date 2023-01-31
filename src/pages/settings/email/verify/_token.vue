@@ -17,11 +17,12 @@
 <script>
 import { mapActions } from 'vuex';
 
+import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'SettingsEmailVerifyPage',
-  mixins: [walletMixin],
+  mixins: [alertMixin, walletMixin],
   data() {
     return {
       isLoading: true,
@@ -41,6 +42,14 @@ export default {
       if (!this.walletHasVerifiedEmail) {
         await this.walletVerifyEmail(this.token);
       }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      this.alertPromptError(
+        this.$t('settings_email_verify_error_message', {
+          error: error.response?.data || error.message,
+        })
+      );
     } finally {
       this.isLoading = false;
     }

@@ -381,6 +381,7 @@
   "settings_email_new_email": "輸入新電郵",
   "settings_email_resend_verification_email": "重發認證電郵",
   "settings_email_unverified_email": "未認證電郵",
+  "settings_email_verify_error_message": "驗證電郵時出現錯誤：{error}",
   "settings_email_verify_verified": "電郵已驗證",
   "settings_email_verify_verified_back_button": "返回",
   "settings_email_verify_verifying": "驗證電郵中",
