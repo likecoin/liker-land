@@ -22,7 +22,7 @@
       />
     </div>
     <div v-else-if="price && !isCollector" class="flex gap-[12px]">
-      <Label class="!text-[12px] text-medium-gray" :text="$t('nft_details_page_button_collect_now')" />
+      <Label class="!text-[12px] text-medium-gray" :text="$t('nft_details_page_button_collect_class_now')" />
       <ButtonV2 preset="secondary" @click="handleClickCollect">
         {{ price | formatNumberWithLIKE }}
         <template #prepend>
