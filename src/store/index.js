@@ -21,8 +21,13 @@ const createStore = () =>
         }
         try {
           if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
-            const { user } = await this.$api.$get(api.getUserV2Self());
+            const { user, eventLastSeenTs } = await this.$api.$get(
+              api.getUserV2Self()
+            );
             commit(types.WALLET_SET_LOGIN_ADDRESS, user);
+            if (eventLastSeenTs) {
+              commit(types.WALLET_SET_EVENT_LAST_SEEN_TS, eventLastSeenTs);
+            }
           }
         } catch (err) {
           if (err.response) {

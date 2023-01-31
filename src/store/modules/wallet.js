@@ -23,6 +23,7 @@ import {
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_EVENTS,
+  WALLET_SET_EVENT_LAST_SEEN_TS,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
 } from '../mutation-types';
@@ -38,6 +39,7 @@ const state = () => ({
   loginAddress: '',
   connector: null,
   likerInfo: null,
+  eventLastSeenTs: 0,
   events: [],
   isInited: null,
   methodType: null,
@@ -70,6 +72,9 @@ const mutations = {
   [WALLET_SET_EVENTS](state, events) {
     state.events = events;
   },
+  [WALLET_SET_EVENT_LAST_SEEN_TS](state, eventLastSeenTs) {
+    state.eventLastSeenTs = eventLastSeenTs;
+  },
   [WALLET_SET_LIKE_BALANCE](state, likeBalance) {
     state.likeBalance = likeBalance;
   },
@@ -86,7 +91,13 @@ const getters = {
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
-  getLatestEventTimestamp: state => state.events[0]?.timestamp,
+  getLatestEventTimestamp: state =>
+    state.events[0]?.timestamp &&
+    new Date(state.events[0]?.timestamp).getTime(),
+  getHasUnseenEvents: state =>
+    state.eventLastSeenTs &&
+    state.events[0]?.timestamp &&
+    state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
   walletMethodType: state => state.methodType,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
@@ -159,6 +170,7 @@ const actions = {
     commit(types.WALLET_SET_LIKERINFO, null);
     commit(types.WALLET_SET_LOGIN_ADDRESS, '');
     commit(types.WALLET_SET_EVENTS, []);
+    commit(types.WALLET_SET_EVENT_LAST_SEEN_TS, 0);
   },
 
   async restoreSession({ dispatch }) {
@@ -259,6 +271,11 @@ const actions = {
     classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
   },
 
+  async updateEventLastSeenTs({ commit }) {
+    await this.$api.$post(updateEventLastSeen());
+    commit(WALLET_SET_EVENT_LAST_SEEN_TS, Date.now());
+  },
+
   async walletFetchLIKEBalance({ commit, state }) {
     const { address } = state;
     try {
@@ -314,6 +331,13 @@ const actions = {
       };
       await this.$api.post(postUserV2Login(), data);
       commit(types.WALLET_SET_LOGIN_ADDRESS, address);
+      const { user, eventLastSeenTs } = await this.$api.$get(
+        api.getUserV2Self()
+      );
+      commit(types.WALLET_SET_LOGIN_ADDRESS, user);
+      if (eventLastSeenTs) {
+        commit(types.WALLET_SET_EVENT_LAST_SEEN_TS, eventLastSeenTs);
+      }
     } catch (error) {
       commit(types.WALLET_SET_LOGIN_ADDRESS, null);
       throw error;

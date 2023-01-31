@@ -22,6 +22,16 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
+
+      <ButtonV2
+        :preset="getHasUnseenEvents ? 'primary' : 'tertiary'"
+        :text="$t('event_list_page_event_button')"
+        :to="{ name: 'events' }"
+      >
+        <template #append>
+          <IconNotify v-if="getHasUnseenEvents" class="w-[20px]" />
+        </template>
+      </ButtonV2>
       <Dropdown>
         <template v-slot:trigger="{ toggle }">
           <ButtonV2
@@ -137,6 +147,7 @@ export default {
       'getAvailableLocales',
       'getLocale',
       'getUserId',
+      'getHasUnseenEvents',
     ]),
     currentLocale() {
       return this.getLocale;

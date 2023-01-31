@@ -52,6 +52,7 @@ export default {
       'getAddress',
       'getUserInfoByAddress',
       'getNFTClassMetadataById',
+      'getHasUnseenEvents',
     ]),
     populatedEvents() {
       return this.getEvents.map(e => {
@@ -118,8 +119,13 @@ export default {
       });
     },
   },
+  mounted() {
+    if (this.getHasUnseenEvents) {
+      this.updateEventLastSeenTs();
+    }
+  },
   methods: {
-    ...mapActions(['fetchWalletEvents']),
+    ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     getChainExplorerTx,
     handleRefresh() {
       this.fetchWalletEvents();
