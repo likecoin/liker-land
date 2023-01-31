@@ -198,8 +198,6 @@ export default {
         return;
       }
 
-      this.isLoading = true;
-
       if (!this.isWalletConnected) {
         await this.handleSubscribeCreator();
       } else {
@@ -214,6 +212,8 @@ export default {
         this.wallet,
         1
       );
+
+      this.isLoading = true;
       try {
         const res = await this.$api.post(
           nftMintSubscriptionAPI({
@@ -261,6 +261,8 @@ export default {
     },
     async updateWalletEmail() {
       logTrackerEvent(this, 'NFT', 'nft_portfolio_update_email', this.email, 1);
+
+      this.isLoading = true;
       try {
         await this.walletUpdateEmail(this.email);
         this.alertPromptSuccess(
