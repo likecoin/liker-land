@@ -4,8 +4,9 @@ let sendgrid;
 
 function getSendGrid() {
   if (sendgrid) return sendgrid;
-  sendgrid = new MailService();
-  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+  const service = new MailService();
+  service.setApiKey(process.env.SENDGRID_API_KEY);
+  sendgrid = service;
   return sendgrid;
 }
 
