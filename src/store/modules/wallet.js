@@ -28,6 +28,7 @@ import {
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_EVENTS,
+  WALLET_SET_EVENT_LAST_SEEN_TS,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
@@ -48,6 +49,7 @@ const state = () => ({
   likerInfo: null,
   followees: [],
   isFetchingFollowees: false,
+  eventLastSeenTs: 0,
   events: [],
   isInited: null,
   methodType: null,
@@ -76,7 +78,13 @@ const mutations = {
   },
   [WALLET_SET_USER_INFO](state, userInfo) {
     if (userInfo) {
-      const { user, email, emailUnconfirmed, followees } = userInfo;
+      const {
+        user,
+        email,
+        emailUnconfirmed,
+        followees,
+        eventLastSeenTs,
+      } = userInfo;
       if (user !== undefined) {
         state.loginAddress = user;
       }
@@ -89,11 +97,15 @@ const mutations = {
       if (Array.isArray(followees)) {
         state.followees = followees;
       }
+      if (eventLastSeenTs) {
+        state.eventLastSeenTs = eventLastSeenTs;
+      }
     } else {
       state.loginAddress = '';
       state.email = '';
       state.emailUnverified = '';
       state.followees = [];
+      state.eventLastSeenTs = 0;
     }
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
@@ -107,6 +119,9 @@ const mutations = {
   },
   [WALLET_SET_EVENTS](state, events) {
     state.events = events;
+  },
+  [WALLET_SET_EVENT_LAST_SEEN_TS](state, eventLastSeenTs) {
+    state.eventLastSeenTs = eventLastSeenTs;
   },
   [WALLET_SET_LIKE_BALANCE](state, likeBalance) {
     state.likeBalance = likeBalance;
@@ -134,7 +149,13 @@ const getters = {
   walletFollowees: state => state.followees,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
-  getLatestEventTimestamp: state => state.events[0]?.timestamp,
+  getLatestEventTimestamp: state =>
+    state.events[0]?.timestamp &&
+    new Date(state.events[0]?.timestamp).getTime(),
+  getHasUnseenEvents: state =>
+    state.eventLastSeenTs &&
+    state.events[0]?.timestamp &&
+    state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -317,6 +338,11 @@ const actions = {
     classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
   },
 
+  async updateEventLastSeenTs({ commit }) {
+    await this.$api.$post(updateEventLastSeen());
+    commit(WALLET_SET_EVENT_LAST_SEEN_TS, Date.now());
+  },
+
   async walletFetchLIKEBalance({ commit, state }) {
     const { address } = state;
     try {
@@ -404,6 +430,7 @@ const actions = {
       commit(WALLET_SET_USER_INFO, null);
       commit(WALLET_SET_FOLLOWEES, []);
       commit(WALLET_SET_EVENTS, []);
+      commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
       await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;

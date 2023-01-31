@@ -143,6 +143,7 @@
   "error_page_not_found_title_404": "Sorry, we could not find that page",
   "error_page_not_found_title_500": "Well, this is unexpected",
   "error_page_not_found_title_widget": "You have found a page that does not exist",
+  "event_list_page_event_button": "Events",
   "event_list_page_event_header_type": "Type",
   "event_list_page_event_header_details": "Event",
   "event_list_page_event_header_time": "Time",
