@@ -171,8 +171,7 @@ export async function handlePurchaseEvent(message, data) {
 
       const { subject, body } = getBasicTemplate({
         subject: `${buyerDisplayName} just bought your Writing NFT ${name}`,
-        title: `${buyerDisplayName} just bought your Writing NFT ${name}`,
-        body: `Hi ${sellerDisplayName},
+        content: `Hi ${sellerDisplayName},
 ${buyerDisplayName} just bought your Writing NFT ${name} just sold for ${nftPrice}.
 ${buyerMemo ? `Buyer also left a message : ${buyerMemo}` : ''}
 View details: ${nftURL}`,
@@ -245,8 +244,7 @@ export async function handleTransferEvent(message, data) {
 
       const { subject, body } = getBasicTemplate({
         subject: `${fromDisplayName} just sent you a Writing NFT ${name}`,
-        title: `${fromDisplayName} just sent you a Writing NFT ${name}`,
-        body: `Hi ${toDisplayName},
+        content: `Hi ${toDisplayName},
 ${fromDisplayName} just sent you a Writing NFT ${name}.
 ${memo ? `Sender also left a message : ${memo}` : ''}
 View details: ${nftURL}`,
