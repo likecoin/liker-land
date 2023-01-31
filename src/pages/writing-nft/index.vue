@@ -36,8 +36,7 @@
         />
       </div>
 
-      <nav class="mt-[24px] relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]">
-        <slot name="tab-bar-prepend" />
+      <nav class="mt-[48px] relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]">
         <ul
           :class="[
             'flex',
@@ -137,12 +136,14 @@ export default {
   },
   data() {
     return {
-      currentTab: this.$route.query.tab || 'featured',
       trendingClassIds: [],
       latestClassIds: [],
     };
   },
   computed: {
+    currentTab() {
+      return this.$route.query.tab || 'featured';
+    },
     nfts() {
       switch (this.currentTab) {
         case 'trending': {
@@ -206,7 +207,6 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      this.currentTab = tab;
       const { query } = this.$route;
       this.$router.replace({
         ...this.$route,
