@@ -36,6 +36,9 @@
     },
     "headerLabel": "Your Bookmark List"
   },
+  "nft_index_page_label_featured": "Featured",
+  "nft_index_page_label_trending": "Trending",
+  "nft_index_page_label_latest": "Latest",
   "campaign_nft_item_collected_count_label": "Collected",
   "campaign_nft_item_header_hint": "Collect this content as NFT",
   "campaign_nft_item_like_action_label": "Like",

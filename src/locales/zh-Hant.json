@@ -36,6 +36,9 @@
     },
     "headerLabel": "你的收藏列表"
   },
+  "nft_index_page_label_featured": "精選",
+  "nft_index_page_label_trending": "熱門",
+  "nft_index_page_label_latest": "最新",
   "campaign_nft_item_collected_count_label": "已收藏",
   "campaign_nft_item_header_hint": "收集此 Writing NFT",
   "campaign_nft_item_like_action_label": "按讚",
