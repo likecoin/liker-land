@@ -299,7 +299,7 @@ export default {
     async handleClickVerify() {
       this.shouldShowAlertDialog = true;
       try {
-        this.loading = true;
+        this.isLoading = true;
         await this.walletUpdateEmail(this.walletEmailUnverified);
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
@@ -308,7 +308,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        this.loading = false;
+        this.isLoading = false;
       }
     },
     async handleClickResend() {
@@ -320,7 +320,7 @@ export default {
         1
       );
       try {
-        this.loading = true;
+        this.isLoading = true;
         await this.walletUpdateEmail(this.walletEmailUnverified);
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
@@ -329,7 +329,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        this.loading = false;
+        this.isLoading = false;
       }
     },
   },
