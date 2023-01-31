@@ -117,9 +117,12 @@ export default {
       };
     },
     marketPlaceSellUrl() {
-      return `${LIKECOIN_NFT_MARKETPLACE_BASE}/sell/${this.classId}/${
-        this.nftId
-      }`;
+      if (this.currentNftId) {
+        return `${LIKECOIN_NFT_MARKETPLACE_BASE}/sell/${this.classId}/${
+          this.currentNftId
+        }`;
+      }
+      return `${LIKECOIN_NFT_MARKETPLACE_BASE}/owned`;
     },
   },
   methods: {
