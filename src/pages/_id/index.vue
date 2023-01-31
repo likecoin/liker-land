@@ -211,9 +211,6 @@ export default {
     },
     async loginAddress() {
       if (!this.getFollowers.length && this.loginAddress) {
-        if (!this.walletHasLoggedIn) {
-          await this.signLogin();
-        }
         await this.fetchFollowers(this.loginAddress);
       }
     },
