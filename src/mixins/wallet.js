@@ -11,7 +11,7 @@ export default {
       'getSigner',
       'getLikerInfo',
       'getLocale',
-      'getFollowers',
+      'walletFollowees',
       'walletMethodType',
       'walletEmail',
       'walletHasVerifiedEmail',
@@ -57,7 +57,7 @@ export default {
       'restoreSession',
       'walletFetchLIKEBalance',
       'signLogin',
-      'fetchFollowers',
+      'walletFetchFollowees',
     ]),
     async connectWallet() {
       const connection = await this.openConnectWalletModal({

@@ -58,8 +58,9 @@ router.post(
             throw new Error('EMAIL_NOT_SET_YET');
           }
         }
-        await t.update(userRef, {
-          followers: FieldValue.arrayUnion(creator),
+        const creatorRef = walletUserCollection.doc(creator);
+        await t.update(creatorRef, {
+          followers: FieldValue.arrayUnion(user),
         });
       });
       res.sendStatus(200);
@@ -91,8 +92,8 @@ router.delete(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        followers: FieldValue.arrayRemove(creator),
+      await walletUserCollection.doc(creator).update({
+        followers: FieldValue.arrayRemove(user),
       });
       res.sendStatus(200);
     } catch (err) {

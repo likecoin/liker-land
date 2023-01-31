@@ -8,15 +8,15 @@
       <div v-if="isLoading">
         {{ $t('settings_follow_loading') }}
       </div>
-      <div v-else-if="!getFollowers.length">
-        {{ $t('settings_follow_no_follower') }}
+      <div v-else-if="!walletFollowees.length">
+        {{ $t('settings_follow_no_followee') }}
       </div>
       <div
-        v-else-if="getFollowers.length"
+        v-else-if="walletFollowees.length"
         class="flex flex-col gap-[4px] px-[16px] my-[6px]"
       >
         <div
-          v-for="follower in populatedFollowers"
+          v-for="follower in populatedFollowees"
           :key="follower.wallet"
           :class="[
             'flex',
@@ -64,7 +64,7 @@
     </CardV2>
   </div>
   <div v-else class="flex flex-col justify-center flex-grow">
-    <Label class="text-medium-gray" align="center" :text="$t('settings_following_login_in_label')" />
+    <Label class="text-medium-gray" align="center" :text="$t('settings_following_login_label')" />
     <div class="flex justify-center mt-[24px]">
       <ProgressIndicator v-if="walletIsLoggingIn" />
       <ButtonV2
@@ -96,8 +96,8 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfoByAddress']),
-    populatedFollowers() {
-      return this.getFollowers.map(follower => ({
+    populatedFollowees() {
+      return this.walletFollowees.map(follower => ({
         displayName:
           this.getUserInfoByAddress(follower)?.displayName || follower,
         wallet: follower,
@@ -105,42 +105,35 @@ export default {
       }));
     },
   },
-  watch: {
-    walletHasLoggedIn() {
-      if (this.walletHasLoggedIn) {
-        this.fetchFollowerList();
-      }
-    },
-  },
   async mounted() {
     if (this.walletHasLoggedIn) {
-      await this.fetchFollowerList();
+      await this.fetchFolloweeList();
     }
   },
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddresses',
-      'walletCreatorFollow',
-      'walletCreatorUnfollow',
+      'walletFollowCreator',
+      'walletUnfollowCreator',
     ]),
-    async fetchFollowerList() {
+    async fetchFolloweeList() {
       if (this.isLoading) {
         return;
       }
       this.isLoading = true;
-      await this.fetchFollowers(this.loginAddress);
+      await this.walletFetchFollowees(this.loginAddress);
       this.isLoading = false;
     },
     async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {
-          await this.walletCreatorFollow(creator);
+          await this.walletFollowCreator(creator);
           const index = this.unfollowList.indexOf(creator);
           if (index !== -1) {
             this.unfollowList.splice(index, 1);
           }
         } else {
-          await this.walletCreatorUnfollow(creator);
+          await this.walletUnfollowCreator(creator);
           this.unfollowList.push(creator);
         }
       } catch (error) {

@@ -13,7 +13,7 @@ import {
   getUserV2Self,
   postUserV2Login,
   postUserV2Logout,
-  getUserFollowers,
+  getUserFollowees,
   postFollowCreator,
   apiUserV2WalletEmail,
 } from '~/util/api';
@@ -28,7 +28,7 @@ import {
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
-  WALLET_SET_FOLLOWERS,
+  WALLET_SET_FOLLOWEES,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
 } from '../mutation-types';
@@ -41,7 +41,7 @@ const state = () => ({
   signer: null,
   connector: null,
   likerInfo: null,
-  followers: [],
+  followees: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -100,8 +100,8 @@ const mutations = {
   [WALLET_SET_LIKE_BALANCE_FETCH_PROMISE](state, promise) {
     state.likeBalanceFetchPromise = promise;
   },
-  [WALLET_SET_FOLLOWERS](state, followers) {
-    state.followers = followers;
+  [WALLET_SET_FOLLOWEES](state, followees) {
+    state.followees = followees;
   },
 };
 
@@ -114,7 +114,7 @@ const getters = {
     getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
-  getFollowers: state => state.followers,
+  walletFollowees: state => state.followees,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -159,7 +159,7 @@ const actions = {
       if (!getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
-      await dispatch('fetchFollowers', address);
+      await dispatch('walletFetchFollowees', address);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
@@ -293,7 +293,7 @@ const actions = {
   async walletLogout({ commit }) {
     try {
       commit(WALLET_SET_USER_INFO, null);
-      commit(WALLET_SET_FOLLOWERS, []);
+      commit(WALLET_SET_FOLLOWEES, []);
       await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
@@ -326,43 +326,41 @@ const actions = {
       throw error;
     }
   },
-  async fetchFollowers({ commit, dispatch }, address) {
+  async walletFetchFollowees({ commit, dispatch }, address) {
     try {
-      const { followers } = await this.$axios.$get(getUserFollowers(address));
-      commit(WALLET_SET_FOLLOWERS, followers);
-      if (followers.length) {
-        dispatch('lazyGetUserInfoByAddresses', followers);
+      const { followees } = await this.$axios.$get(getUserFollowees(address));
+      commit(WALLET_SET_FOLLOWEES, followees);
+      if (followees.length) {
+        dispatch('lazyGetUserInfoByAddresses', followees);
       }
     } catch (error) {
       throw error;
     }
   },
-  async walletCreatorFollow({ state, commit }, creator) {
-    const prevFollowers = state.followers;
+  async walletFollowCreator({ state, commit }, creator) {
+    const prevFollowees = state.followees;
     try {
-      commit(WALLET_SET_FOLLOWERS, [...state.followers, creator].sort());
+      commit(WALLET_SET_FOLLOWEES, [...state.followees, creator].sort());
       await this.$api.$post(
         postFollowCreator({ wallet: state.loginAddress, creator })
       );
     } catch (error) {
-      commit(WALLET_SET_FOLLOWERS, prevFollowers);
+      commit(WALLET_SET_FOLLOWEES, prevFollowees);
       throw error;
     }
   },
-  async walletCreatorUnfollow({ state, commit }, creator) {
-    const prevFollowers = state.followers;
+  async walletUnfollowCreator({ state, commit }, creator) {
+    const prevFollowees = state.followees;
     try {
       await this.$api.$delete(
         postFollowCreator({ wallet: state.loginAddress, creator })
       );
-      const index = state.followers.indexOf(creator);
-      if (index > -1) {
-        const newFollowers = [...state.followers];
-        newFollowers.splice(index, 1);
-        commit(WALLET_SET_FOLLOWERS, newFollowers);
-      }
+      commit(
+        WALLET_SET_FOLLOWEES,
+        [...state.followees].filter(followee => followee !== creator)
+      );
     } catch (error) {
-      commit(WALLET_SET_FOLLOWERS, prevFollowers);
+      commit(WALLET_SET_FOLLOWEES, prevFollowees);
       throw error;
     }
   },

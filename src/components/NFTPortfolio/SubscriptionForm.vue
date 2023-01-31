@@ -175,8 +175,8 @@ export default {
   methods: {
     ...mapActions([
       'walletUpdateEmail',
-      'walletCreatorFollow',
-      'walletCreatorUnfollow',
+      'walletFollowCreator',
+      'walletUnfollowCreator',
     ]),
     handleEmailInput(email) {
       this.email = email;
@@ -285,11 +285,11 @@ export default {
           return;
         }
         if (this.isFollowed) {
-          await this.walletCreatorUnfollow(this.creatorWalletAddress);
+          await this.walletUnfollowCreator(this.creatorWalletAddress);
           return;
         }
         if (this.walletHasVerifiedEmail) {
-          this.walletCreatorFollow(this.creatorWalletAddress);
+          this.walletFollowCreator(this.creatorWalletAddress);
         }
       } catch (error) {
         // eslint-disable-next-line no-console
