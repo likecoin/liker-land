@@ -201,12 +201,12 @@ export default {
       this.isLoading = true;
 
       if (!this.isWalletConnected) {
-        await this.handleSubscriptCreator();
+        await this.handleSubscribeCreator();
       } else {
         await this.updateWalletEmail();
       }
     },
-    async handleSubscriptCreator() {
+    async handleSubscribeCreator() {
       logTrackerEvent(
         this,
         'NFT',
