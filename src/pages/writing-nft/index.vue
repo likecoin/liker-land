@@ -138,7 +138,7 @@ export default {
   data() {
     return {
       currentTab: this.$route.query.tab || 'featured',
-      trenidngClassIds: [],
+      trendingClassIds: [],
       latestClassIds: [],
     };
   },
@@ -146,7 +146,7 @@ export default {
     nfts() {
       switch (this.currentTab) {
         case 'trending': {
-          return this.trenidngClassIds;
+          return this.trendingClassIds;
         }
         case 'latest': {
           return this.latestClassIds;
@@ -194,7 +194,7 @@ export default {
       this.$axios.$get(getTopNFTClasses()),
       this.$axios.$get(getLatestNFTClasses()),
     ]);
-    [this.trenidngClassIds, this.latestClassIds] = [trendingRes, latestRes].map(
+    [this.trendingClassIds, this.latestClassIds] = [trendingRes, latestRes].map(
       res =>
         (res.classes || [])
           .filter(
