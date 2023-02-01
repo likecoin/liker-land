@@ -18,6 +18,7 @@
             :collected-nft-ids="userCollectedNFTList"
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
+            @click-sell="handleClickSellFromControlBar"
             @collect="handleCollectFromControlBar"
           />
         </div>
@@ -341,6 +342,15 @@ export default {
         1
       );
       return this.handleCollect();
+    },
+    handleClickSellFromControlBar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_sell_from_control_bar',
+        this.classId,
+        1
+      );
     },
     handleCollectFromControlBar() {
       logTrackerEvent(

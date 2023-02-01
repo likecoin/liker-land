@@ -34,6 +34,7 @@
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
+            @click-sell="handleClickSellFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
           <hr
@@ -258,6 +259,7 @@
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
+            @click-sell="handleClickSellFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
         </section>
@@ -556,6 +558,15 @@ export default {
         1
       );
       return this.handleCollect();
+    },
+    handleClickSellFromControlBar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_sell_from_control_bar',
+        this.classId,
+        1
+      );
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(

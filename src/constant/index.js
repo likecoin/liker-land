@@ -25,6 +25,10 @@ export const LIKECOIN_BUTTON_BASE = IS_TESTNET
   ? 'https://button.rinkeby.like.co'
   : 'https://button.like.co';
 
+export const LIKECOIN_NFT_MARKETPLACE_BASE = IS_TESTNET
+  ? 'https://likecoin-nft-marketplace-testnet.netlify.app'
+  : 'https://likecoin.github.io/likecoin-nft-marketplace';
+
 export const LIKE_CO_THUMBNAIL_FN_BASE = 'https://static.like.co';
 
 export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET

@@ -97,7 +97,6 @@
     "registerForFree": "免費登記",
     "title": "@:civicLiker"
   },
-  "CL1VsCL2": "讚賞公民新舊計劃的比較",
   "clipboard_copied": "已複製",
   "CLP.betterWorld.description": "每位讚賞公民的付出，都在貢獻創作生態。按讚的意義不只令創作者獲得創作基金的奬勵，同時也是一份肯定和關注。目前已有 7,000 多名創作者加入了讚賞公民計劃，讓每位的一點一滴匯聚成為涓流，滋養出更健康的創作生態吧！",
   "CLP.betterWorld.title": "共創一個生態",
@@ -135,7 +134,15 @@
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持創作者",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}"
   },
+  "error_page_not_found_description_404": "If you think something is broken, report an issue.",
+  "error_page_not_found_description_500": "Things are a little unstable here. We will be up and running shortly.",
+  "error_page_not_found_description_widget": "Breathe in, and on the out breath, go back and try again.",
+  "error_page_not_found_report_problem": "Report Issue",
+  "error_page_not_found_return_back": "Go Back",
+  "error_page_not_found_return_home": "Return Home",
   "error_page_not_found_title_404": "抱歉，查無此頁",
+  "error_page_not_found_title_500": "Well, this is unexpected",
+  "error_page_not_found_title_widget": "You have found a page that does not exist",
   "faq_list": [
     {
       "a": "讓讀者藉購買作者的 Writing NFT 支持創作。個人的創作軌跡可被視為 Web3 「去中心化身份」的一部分，是個人的創作履歷。發行 Writing NFT 確保作品原封不動地保存於分散式網絡，日後可用以驗證產權。",
@@ -246,6 +253,7 @@
   "nft_details_page_button_transfer": "轉贈",
   "nft_details_page_button_view": "瀏覽內容",
   "nft_details_page_button_view_details": "檢視類別資訊",
+  "nft_details_page_button_view_message": "檢視 {num} 留言",
   "nft_details_page_collected_count_label": "藏品",
   "nft_details_page_description": "此內容以 Writing NFT 方式出版。收集它以建立你的閱讀履歷。",
   "nft_details_page_errormessage_memo_limit": "字數超過 256 位元。",
@@ -269,6 +277,9 @@
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_title_collector": "收藏者",
   "nft_details_page_title_transfer": "轉贈你的 NFT",
+  "nft_index_page_label_featured": "精選",
+  "nft_index_page_label_latest": "最新",
+  "nft_index_page_label_trending": "熱門",
   "nft_message_empty": "沒有留言",
   "nft_message_replacer_collector": "收藏者",
   "nft_message_type_collect": "作者留言",
@@ -298,6 +309,7 @@
   "ok": "OK",
   "order_menu_by": "按{order}",
   "order_menu_collected": "擁有",
+  "order_menu_display_state": "精選",
   "order_menu_price": "價格",
   "order_menu_time": "時間",
   "portfolio_collected_tab_no_item": "已收藏的作品將在此展示",
@@ -401,9 +413,6 @@
   "signIn": "登入",
   "signInOrSignUp": "註冊/登入",
   "signUp": "註冊",
-  "SignUpSignInCTA": {
-    "slogan": "成為 Liker 以訂閱內容"
-  },
   "SlidingMenu": {
     "about": "關於",
     "civic": "@:CivicPage.title",
@@ -451,22 +460,5 @@
   "tx_modal_status_sign_title_likerId": "請在 Liker Land 手機應用程式簽署確認",
   "unfollow": "取消追蹤",
   "unfollowed": "已取消追蹤",
-  "upgrade": "升級",
-  "WelcomeDialog": {
-    "becomeCreator": "成為創作者",
-    "comparisonCard": {
-      "civic": {
-        "button": "付費支持",
-        "buttonFootnote": "扣除手續費後將全數支持創作者",
-        "header": "成為讚賞公民 以實際金錢支持創作"
-      },
-      "general": {
-        "button": "免費支持",
-        "header": "或 免費成為 Liker"
-      }
-    },
-    "headerSlogan": "歡迎你加入{br}成為支持創作的一分子",
-    "pickSubscription": "請選擇支持方案",
-    "skip": "略過"
-  }
+  "upgrade": "升級"
 }

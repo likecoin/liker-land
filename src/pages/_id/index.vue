@@ -15,7 +15,8 @@
         'desktop:justify-center',
 
         'w-full',
-        'mt-[32px]',
+        'pt-[32px]',
+        'pb-[120px]'
       ]"
     >
       {{ /* Left Column */ }}
@@ -33,7 +34,7 @@
             <UserStatsGem
               class="mx-auto mt-[16px] mb-[24px]"
               :wallet="wallet"
-              :type="isCurrentTabCreated ? 'created' : 'collected'"
+              type="collected"
             />
           </template>
           <template #stats>

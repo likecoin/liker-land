@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'flex flex-col w-full items-center gap-[32px] pb-[48px]',
+      'flex flex-col w-full items-center gap-[32px]',
       { [narrowClass]: isNarrow },
     ]"
   >
@@ -142,7 +142,7 @@
       <ButtonV2
         preset="outline"
         :text="$t('portfolio_finding_more_button')"
-        to="/campaign/writing-nft"
+        :to="{ name: 'writing-nft' }"
       />
     </template>
   </section>

@@ -205,21 +205,6 @@
   "identity_type_collector": "Collector",
   "identity_type_creator": "Creator",
   "learnMore": "Learn More",
-  "LikerFeature": {
-    "bonusContent": "Receive bonus contents, ebook and coupons",
-    "detailedReport": "Detailed report on reward distribution. Know where you spend",
-    "distributeFund": {
-      "civic": "Help distribute Creators Fund with your Like. Enjoy a higher weight",
-      "general": "Help distribute Creators Fund with your Like"
-    },
-    "distributeOwnFee": "Distribute your own monthly fee in full amount with your Like",
-    "offlineEvents": "Prioritized participation of offline events",
-    "participateInCommunity": "Participate in community decision making process and referenda"
-  },
-  "LikerType": {
-    "civic": "@:civicLiker",
-    "general": "General Liker"
-  },
   "Locale": {
     "en": "English",
     "zh-Hant": "繁體中文"
@@ -292,6 +277,9 @@
   "nft_details_page_title": "Writing NFT",
   "nft_details_page_title_collector": "Collectors",
   "nft_details_page_title_transfer": "Transfer Your NFT",
+  "nft_index_page_label_featured": "Featured",
+  "nft_index_page_label_latest": "Latest",
+  "nft_index_page_label_trending": "Trending",
   "nft_message_empty": "No message",
   "nft_message_replacer_collector": "Collector",
   "nft_message_type_collect": "Creator's Message",
@@ -418,40 +406,13 @@
   "settings_following_login_in_button": "Login",
   "settings_following_login_label": "Login to view following list",
   "settings_liker_id": "Liker ID",
-  "SettingsFollowingPage": {
-    "follow": "@:follow",
-    "following": "@:following",
-    "noFollowing": "Your have no following authors",
-    "noUnfollowed": "Your have no unfollowed authors",
-    "title": "@:SettingsPage.title > Follow / Unfollow",
-    "unfollow": "@:unfollow",
-    "unfollowed": "@:unfollowed"
-  },
   "SettingsPage": {
-    "civicLiker": {
-      "subscribing": "Subscribing",
-      "title": "@:civicLiker"
-    },
-    "creator": {
-      "register": "Register now",
-      "registered": "Registered",
-      "title": "Creator"
-    },
     "language": "Language",
-    "likerId": "Liker ID",
-    "subscription": "Follow / Unfollow",
-    "Supporters": {
-      "Count": "1 supporter | {count} supporters",
-      "Title": "Creator Settings"
-    },
     "title": "Settings"
   },
   "signIn": "Sign in",
   "signInOrSignUp": "Sign up / Sign in",
   "signUp": "Sign up",
-  "SignUpSignInCTA": {
-    "slogan": "Be a Liker to customise stories"
-  },
   "SlidingMenu": {
     "about": "About",
     "civic": "@:CivicPage.title",

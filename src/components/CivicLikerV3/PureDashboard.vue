@@ -190,7 +190,7 @@
           <ButtonV2
             :text="$t('about_nft_page_title')"
             preset="secondary"
-            :to="{ name: 'campaign-writing-nft' }"
+            :to="{ name: 'writing-nft' }"
             @click.native="handleClickCTAButton"
           />
         </div>

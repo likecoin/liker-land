@@ -12,9 +12,11 @@
       <ButtonV2
         size="mini"
         preset="tertiary"
-        :is-disabled="true"
         content-class="!text-[12px]"
         :text="$t('nft_details_page_button_sell')"
+        :href="marketPlaceSellUrl"
+        target="_blank"
+        rel="noopener"
         @mouseenter.once="handleMouseEnterSell"
         @click.native="handleClickSell"
       />
@@ -48,6 +50,7 @@
 </template>
 
 <script>
+import { LIKECOIN_NFT_MARKETPLACE_BASE } from '~/constant';
 import { formatNumberWithLIKE } from '~/util/ui';
 
 export default {
@@ -112,6 +115,14 @@ export default {
           nftId: this.collectedNftIds && this.collectedNftIds[0],
         },
       };
+    },
+    marketPlaceSellUrl() {
+      if (this.currentNftId) {
+        return `${LIKECOIN_NFT_MARKETPLACE_BASE}/sell/${this.classId}/${
+          this.currentNftId
+        }`;
+      }
+      return `${LIKECOIN_NFT_MARKETPLACE_BASE}/owned`;
     },
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <nav class="grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
     <ButtonV2
-      to="/campaign/writing-nft"
+      :to="{ name: 'writing-nft' }"
       preset="secondary"
       @click.native="handleClickCampaignPageButton"
     >{{ aboutNFTNavCampaignText }}</ButtonV2>
