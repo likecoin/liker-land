@@ -1,47 +1,47 @@
 <template>
   <main
     class="
-      about-page
-      page-content
+      laptop:-mt-[120px]
       text-gray-4a
-      leading-[1.25]
       max-w-[1024px]
       w-full
       mx-auto
       pb-[132px]
     "
   >
-    <section class="relative py-[32px] px-[24px]">
-      <NFTCampaignHero class="absolute inset-0" />
-      <div class="relative mx-auto">
-        <h1
-          class="
-            font-proxima font-[300]
-            text-like-green text-[32px]
-            laptop:text-[64px]
-            leading-[1.25]
-            text-center
-          "
-        >
-          <span class="whitespace-nowrap">{{
-            $t('campaign_nft_page_tagline_1')
-          }}</span>
-          <span class="whitespace-nowrap">{{
-            $t('campaign_nft_page_tagline_2')
-          }}</span>
-        </h1>
-        <p
-          v-t="'campaign_nft_page_description'"
-          class="mt-[16px] max-w-[536px] mx-auto"
-        />
-      </div>
+    <NFTAboutPageHeroSection class="w-full" />
+    <section
+      class="
+        w-full
+        max-w-[416px]
+        laptop:max-w-full
+        mx-auto
+        px-[24px]
+        laptop:px-[40px]
+      "
+    >
 
-      <nav class="mt-[48px] relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]">
+      <nav class="flex flex-col items-center justify-center self-stretch gap-[32px]">
+        <div class="grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
+          <ButtonV2
+            preset="secondary"
+            :text="$t('home_button_about_writing_nft')"
+            :to="{ name: 'writing-nft-about' }"
+            @click.native="handleClickAboutWritingNFTButton"
+          />
+          <ButtonV2
+            preset="tertiary"
+            :text="$t('about_nft_page_nav_collection')"
+            @click="handleClickMyDashboardButton"
+          />
+        </div>
+
         <ul
           :class="[
             'flex',
             'justify-center',
             'items-center',
+            'mt-[48px]',
             'p-[4px]',
             'bg-shade-gray',
             'rounded-[14px]',
@@ -61,17 +61,6 @@
           </li>
         </ul>
       </nav>
-    </section>
-    <section
-      class="
-        w-full
-        max-w-[416px]
-        laptop:max-w-full
-        mx-auto
-        px-[24px]
-        laptop:px-[40px]
-      "
-    >
       <ul>
         <li
           v-for="(nftClassId, index) in nfts"
@@ -91,19 +80,22 @@
         rel="noopener"
       >{{ $t('campaign_nft_view_nft_dashboard') }}</a>
     </section>
-
   </main>
 </template>
 
 <script>
 import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
+
 import { getLatestNFTClasses, getTopNFTClasses } from '~/util/api';
+import { logTrackerEvent } from '~/util/EventLogger';
+
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import walletMixin from '~/mixins/wallet';
 
 export default {
-  name: 'CampaignWritingNFTPage',
+  name: 'WritingNFTPage',
   layout: 'default',
-  mixins: [navigationListenerMixin],
+  mixins: [navigationListenerMixin, walletMixin],
   head() {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');
@@ -212,6 +204,25 @@ export default {
         ...this.$route,
         query: { ...query, tab },
       });
+    },
+    handleClickAboutWritingNFTButton() {
+      logTrackerEvent(
+        this,
+        'WritingNFTPage',
+        'writing_nft_page_click_about_button',
+        '',
+        1
+      );
+    },
+    handleClickMyDashboardButton() {
+      logTrackerEvent(
+        this,
+        'WritingNFTPage',
+        'writing_nft_page_click_about_button',
+        '',
+        1
+      );
+      this.navigateToMyDashboard();
     },
   },
 };

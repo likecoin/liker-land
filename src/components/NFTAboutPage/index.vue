@@ -10,11 +10,34 @@
         laptop:block
       "
     >
-      <NFTAboutPageHeroSection class="w-full" />
+      <section class="relative py-[32px] px-[24px]">
+        <NFTCampaignHero class="absolute inset-0" />
+        <div class="relative mx-auto">
+          <h1
+            class="
+              font-proxima font-[300]
+              text-like-green text-[32px]
+              laptop:text-[64px]
+              leading-[1.25]
+              text-center
+            "
+          >
+            <span class="whitespace-nowrap">{{
+              $t('campaign_nft_page_tagline_1')
+            }}</span>
+            <span class="whitespace-nowrap">{{
+              $t('campaign_nft_page_tagline_2')
+            }}</span>
+          </h1>
+          <p
+            v-t="'campaign_nft_page_description'"
+            class="mt-[16px] max-w-[536px] mx-auto"
+          />
+        </div>
+      </section>
       <NFTAboutPageCTASection
         class="pb-[32px] laptop:pb-[64px]"
         @go-campaign="handleClickTopCTACampaignButton"
-        @go-dashboard="handleClickTopCTADashboardButton"
       />
       <NFTAboutPageWidgetSection
         class="py-[32px] laptop:py-[64px]"
@@ -33,7 +56,6 @@
       <NFTAboutPageCTASection
         class="py-[32px] laptop:py-[64px]"
         @go-campaign="handleClickBottomCTACampaignButton"
-        @go-dashboard="handleClickBottomCTADashboardButton"
       />
       <NFTAboutPageFAQSection id="faq" class="py-[32px] laptop:py-[64px]" />
 
@@ -174,15 +196,6 @@ export default {
   methods: {
     handleClickTopCTACampaignButton() {
       logTrackerEvent(this, 'NFTAboutPage', 'ClickCTA(Top)', 'GoToCampaign', 1);
-    },
-    handleClickTopCTADashboardButton() {
-      logTrackerEvent(
-        this,
-        'NFTAboutPage',
-        'ClickCTA(Top)',
-        'GoToMyDashboard',
-        1
-      );
     },
     handleClickBottomCTACampaignButton() {
       logTrackerEvent(
