@@ -177,6 +177,8 @@
   "footer_nav_doc": "Doc",
   "footer_nav_faq": "FAQ",
   "footer_nav_help": "Help",
+  "footer_nav_mint_nft": "Mint NFT",
+  "footer_nav_writing_nft": "Writing NFT",
   "GetAppPage": {
     "Og": {
       "Description": "Writing NFT: Publish as you write. Collect as you read.",
@@ -229,6 +231,7 @@
   },
   "main_menu_civic_liker": "Civic Liker",
   "main_menu_my_dashboard": "My Dashboard",
+  "main_menu_mint_nft": "Mint NFT",
   "main_menu_settings": "Settings",
   "main_menu_sign_out": "Sign Out",
   "mainVPs": [
