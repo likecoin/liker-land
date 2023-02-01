@@ -147,7 +147,7 @@ export default {
     getChainExplorerTx,
     handleRowClick(event) {
       this.$router.push({
-        name: 'nft-class-classId-nftId',
+        name: event.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
         params: { classId: event.classId, nftId: event.nftId },
       });
     },
