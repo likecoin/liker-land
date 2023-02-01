@@ -204,7 +204,9 @@ export default {
       return (
         this.listingInfo &&
         this.listingInfo.price &&
-        (!this.purchaseInfo || this.listingInfo.price < this.purchaseInfo.price)
+        (!this.purchaseInfo ||
+          !this.purchaseInfo.price ||
+          this.listingInfo.price < this.purchaseInfo.price)
       );
     },
     NFTPrice() {
