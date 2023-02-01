@@ -2,7 +2,7 @@
 export default {
   fetch({ redirect, params, query }) {
     redirect(302, {
-      name: 'writing-nft',
+      name: 'index',
       params,
       query,
     });
