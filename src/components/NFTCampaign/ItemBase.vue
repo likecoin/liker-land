@@ -79,10 +79,7 @@
           </ul>
           <ProgressIndicator v-if="isLoading" />
           <ButtonV2 v-else preset="secondary" @click="handleClickCollect">
-            <template #prepend>
-              <NFTWidgetIconInsertCoin />
-            </template>
-            {{ price | formatNumberWithLIKE }}
+            {{ $t('nft_widget_button_collect') }}
           </ButtonV2>
         </div>
       </div>
