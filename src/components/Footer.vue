@@ -35,10 +35,18 @@
             @click="isOpenAboutTeam = !isOpenAboutTeam"
           >{{ $t('footer_nav_about_liker_land') }}</a>
           <hr class="w-[32px] border-white border-opacity-[0.2]">
-          <a class="hover:underline" href="https://like.co">{{ $t('footer_nav_about_likecoin') }}</a>
+          <a class="hover:underline" target="_blank" href="https://like.co">{{ $t('footer_nav_about_likecoin') }}</a>
         </div>
         <div class="grid grid-flow-row gap-y-[16px]">
-          <NuxtLink class="hover:underline" to="/civic">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
+          <NuxtLink class="hover:underline" :to="{ name: 'writing-nft' }">{{ $t('footer_nav_writing_nft') }}</NuxtLink>
+        </div>
+        <div class="grid grid-flow-row gap-y-[16px]">
+          <a class="hover:underline" target="_blank" :href="mintNftURL">
+            {{ $t('footer_nav_mint_nft') }}
+          </a>
+        </div>
+        <div class="grid grid-flow-row gap-y-[16px]">
+          <NuxtLink class="hover:underline" :to="{ name: 'civic-liker' }">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
         </div>
       </div>
     </div>
@@ -94,6 +102,7 @@
 import Logo from '~/assets/icons/logo.svg?inline';
 
 import crispMixin from '~/mixins/crisp';
+import { APP_LIKE_CO_URL_BASE } from '~/constant';
 
 import Dialog from './Dialog';
 
@@ -108,6 +117,11 @@ export default {
     return {
       isOpenAboutTeam: false,
     };
+  },
+  computed: {
+    mintNftURL() {
+      return `${APP_LIKE_CO_URL_BASE}/nft`;
+    },
   },
   methods: {
     handleClickHelp() {
