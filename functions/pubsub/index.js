@@ -91,7 +91,7 @@ module.exports = onMessagePublished(
                 creatorDisplayName: shortenString(displayName),
                 creatorAvatarSrc: avatar,
                 creatorIsCivicLiker: isSubscribedCivicLiker,
-                followerDisplayName: shortenString(name),
+                followerDisplayName: subscriberEmail,
                 nftTitle: name,
                 nftCoverImageSrc: image,
                 nftURL: `${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email`,
