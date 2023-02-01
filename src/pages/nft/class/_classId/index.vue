@@ -16,9 +16,12 @@
             :class-id="classId"
             :price="NFTPrice"
             :collected-nft-ids="userCollectedNFTList"
+            :next-nft-id="nftIdCollectNext"
+            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @click-sell="handleClickSellFromControlBar"
             @collect="handleCollectFromControlBar"
+            @go-to-collect="handleGotoCollectFromControlBar"
           />
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
@@ -358,6 +361,19 @@ export default {
         1
       );
       return this.handleCollect();
+    },
+    handleGotoCollectFromControlBar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'NFTGotoCollect(ClassDetailsPageControlBar)',
+        this.nftId,
+        1
+      );
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: this.classId, nftId: this.nftIdCollectNext },
+      });
     },
     handleClickSellFromPriceSection() {
       logTrackerEvent(

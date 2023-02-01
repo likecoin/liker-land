@@ -22,8 +22,14 @@
       />
     </div>
     <div v-else-if="price && !isCollector" class="flex gap-[12px]">
-      <Label class="!text-[12px] text-medium-gray" :text="$t('nft_details_page_button_collect_class_now')" />
-      <ButtonV2 preset="secondary" @click="handleClickCollect">
+      <Label
+        class="!text-[12px] text-medium-gray"
+        :text="collectButtonText"
+      />
+      <ButtonV2
+        :preset="isCollectible ? 'secondary': 'tertiary'"
+        @click="handleClickCollect"
+      >
         {{ price | formatNumberWithLIKE }}
         <template #prepend>
           <IconPrice />
@@ -75,6 +81,11 @@ export default {
       default: undefined,
     },
 
+    nextNftId: {
+      type: String,
+      default: undefined,
+    },
+
     classId: {
       type: String,
       default: undefined,
@@ -89,6 +100,11 @@ export default {
     price: {
       type: Number,
       default: undefined,
+    },
+
+    isWritingNft: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -119,13 +135,21 @@ export default {
       }
       return `${LIKECOIN_NFT_MARKETPLACE_BASE}/owned`;
     },
+    isCollectible() {
+      return this.isWritingNft || this.currentNftId === this.nextNftId;
+    },
+    collectButtonText() {
+      return this.isCollectible
+        ? this.$t('nft_details_page_button_collect_now')
+        : this.$t('nft_details_page_button_collect_class_now');
+    },
   },
   methods: {
     handleClickUserCollectedCount() {
       this.$emit('click-user-collected-count');
     },
     handleClickCollect() {
-      this.$emit('collect');
+      this.isCollectible ? this.$emit('collect') : this.$emit('go-to-collect');
     },
     handleClickTransfer() {
       this.$emit('transfer');

@@ -29,10 +29,13 @@
             :collected-nft-ids="userCollectedNFTList"
             :class-id="classId"
             :current-nft-id="nftId"
+            :next-nft-id="nftIdCollectNext"
             :view="nftIsNew ? 'created' : 'collected'"
             :price="NFTPrice"
+            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
+            @go-to-collect="handleGotoCollectFromControlBar"
             @click-sell="handleClickSellFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
@@ -253,10 +256,13 @@
             :collected-nft-ids="userCollectedNFTList"
             :class-id="classId"
             :current-nft-id="nftId"
+            :next-nft-id="nftIdCollectNext"
             :view="nftIsNew ? 'created' : 'collected'"
             :price="NFTPrice"
+            :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
+            @go-to-collect="handleGotoCollectFromControlBar"
             @click-sell="handleClickSellFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
@@ -565,6 +571,19 @@ export default {
         this.classId,
         1
       );
+    },
+    handleGotoCollectFromControlBar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_page_go_to_collect_from_control_bar',
+        this.nftId,
+        1
+      );
+      this.$router.push({
+        name: 'nft-class-classId-nftId',
+        params: { classId: this.classId, nftId: this.nftIdCollectNext },
+      });
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(
