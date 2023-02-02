@@ -164,6 +164,8 @@ const actions = {
       commit(WALLET_SET_LIKERINFO, userInfo);
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
+      } else {
+        dispatch('walletFetchFollowees', address);
       }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
