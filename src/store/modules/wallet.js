@@ -71,7 +71,7 @@ const mutations = {
   },
   [WALLET_SET_USER_INFO](state, userInfo) {
     if (userInfo) {
-      const { user, email, emailUnconfirmed } = userInfo;
+      const { user, email, emailUnconfirmed, followees } = userInfo;
       if (user !== undefined) {
         state.loginAddress = user;
       }
@@ -81,10 +81,14 @@ const mutations = {
       if (emailUnconfirmed !== undefined) {
         state.emailUnverified = emailUnconfirmed;
       }
+      if (Array.isArray(followees)) {
+        state.followees = followees;
+      }
     } else {
       state.loginAddress = '';
       state.email = '';
       state.emailUnverified = '';
+      state.followees = [];
     }
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
@@ -164,8 +168,6 @@ const actions = {
       commit(WALLET_SET_LIKERINFO, userInfo);
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
-      } else {
-        dispatch('walletFetchFollowees', address);
       }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
@@ -245,11 +247,14 @@ const actions = {
   },
   async walletFetchSessionUserInfo({ commit }, address) {
     try {
+      commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
       const userInfo = await this.$api.$get(getUserV2Self());
       commit(WALLET_SET_USER_INFO, userInfo || { user: address });
       return userInfo;
     } catch (error) {
       throw error;
+    } finally {
+      commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, false);
     }
   },
   async signLogin({ state, commit, dispatch }) {
@@ -289,7 +294,6 @@ const actions = {
       };
       await this.$api.post(postUserV2Login(), data);
       await dispatch('walletFetchSessionUserInfo', address);
-      dispatch('walletFetchFollowees', address);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
@@ -340,6 +344,7 @@ const actions = {
       throw error;
     }
   },
+  // Since we can get followees from user info, we don't need to fetch followees separately
   async walletFetchFollowees({ state, commit, dispatch }, address) {
     try {
       if (state.isFetchingFollowees) return;

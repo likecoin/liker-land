@@ -24,13 +24,13 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
     setPrivateCacheHeader(res);
     const { user } = req.session;
     const userDoc = await walletUserCollection.doc(user).get();
-    const { displayName, email, emailUnconfirmed, followers } = userDoc.data();
+    const { displayName, email, emailUnconfirmed, followees } = userDoc.data();
     res.json({
       user,
       displayName,
       email,
       emailUnconfirmed,
-      followers,
+      followees,
     });
   } catch (err) {
     if (req.session) req.session = null;
