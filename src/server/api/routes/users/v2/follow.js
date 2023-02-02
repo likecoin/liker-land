@@ -15,7 +15,7 @@ const {
 const router = Router();
 
 router.get(
-  '/:wallet/followers',
+  '/:wallet/followees',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
@@ -23,11 +23,11 @@ router.get(
       const { wallet: user } = req.params;
       const userDoc = await walletUserCollection.doc(user).get();
       if (!userDoc.exists) {
-        res.json({ followers: [] });
+        res.json({ followees: [] });
         return;
       }
-      const { followers = [] } = userDoc.data();
-      res.json({ followers });
+      const { followees = [] } = userDoc.data();
+      res.json({ followees });
     } catch (err) {
       handleRestfulError(req, res, next, err);
     }
@@ -58,9 +58,9 @@ router.post(
             throw new Error('EMAIL_NOT_SET_YET');
           }
         }
-        const creatorRef = walletUserCollection.doc(creator);
+        const creatorRef = walletUserCollection.doc(user);
         await t.update(creatorRef, {
-          followers: FieldValue.arrayUnion(user),
+          followees: FieldValue.arrayUnion(creator),
         });
       });
       res.sendStatus(200);
@@ -92,8 +92,8 @@ router.delete(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(creator).update({
-        followers: FieldValue.arrayRemove(user),
+      await walletUserCollection.doc(user).update({
+        followees: FieldValue.arrayRemove(creator),
       });
       res.sendStatus(200);
     } catch (err) {
@@ -109,17 +109,17 @@ router.delete(
 );
 
 router.get(
-  '/:wallet/followees',
+  '/:wallet/followers',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
     try {
       const { wallet: user } = req.params;
-      const followeeDocs = await walletUserCollection
-        .where('followers', 'array-contains', user)
+      const followerDocs = await walletUserCollection
+        .where('followees', 'array-contains', user)
         .get();
-      const followees = followeeDocs.docs.map(doc => doc.id);
-      res.json({ followees });
+      const followers = followerDocs.docs.map(doc => doc.id);
+      res.json({ followers });
     } catch (err) {
       handleRestfulError(req, res, next, err);
     }
