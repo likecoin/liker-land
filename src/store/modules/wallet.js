@@ -199,14 +199,16 @@ const actions = {
           sender: address,
           limit: WALLET_EVENT_LIMIT,
           actionType: '/cosmos.nft.v1beta1.MsgSend',
+          ignoreToList: LIKECOIN_NFT_API_WALLET,
+          reverse: true,
         })
       ),
       this.$api.$get(
         getNFTEvents({
-          ignoreFromList: LIKECOIN_NFT_API_WALLET,
           receiver: address,
           actionType: '/cosmos.nft.v1beta1.MsgSend',
           limit: WALLET_EVENT_LIMIT,
+          reverse: true,
         })
       ),
       // purchase events are sent by LIKECOIN_NFT_API_WALLET
@@ -216,6 +218,7 @@ const actions = {
           sender: LIKECOIN_NFT_API_WALLET,
           actionType: '/cosmos.nft.v1beta1.MsgSend',
           limit: WALLET_EVENT_LIMIT,
+          reverse: true,
         })
       ),
     ]);
