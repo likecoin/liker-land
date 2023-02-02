@@ -328,12 +328,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-th,
-td {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  font-weight: 400;
-}
-</style>
