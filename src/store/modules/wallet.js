@@ -139,7 +139,7 @@ const actions = {
   },
 
   async initWallet(
-    { commit, dispatch, getters },
+    { commit, dispatch, getters, state },
     { method, accounts, offlineSigner }
   ) {
     if (!accounts[0]) return false;
@@ -162,10 +162,9 @@ const actions = {
         getUserInfoMinByAddress(walletAddress)
       );
       commit(WALLET_SET_LIKERINFO, userInfo);
-      if (!getters.walletIsMatchedSession) {
+      if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
-      await dispatch('walletFetchFollowees', address);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
@@ -288,9 +287,16 @@ const actions = {
       };
       await this.$api.post(postUserV2Login(), data);
       await dispatch('walletFetchSessionUserInfo', address);
+      dispatch('walletFetchFollowees', address);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
-      throw error;
+      if (error.message === 'Request rejected') {
+        // User rejected login request
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        throw error;
+      }
     } finally {
       commit(WALLET_SET_IS_LOGGING_IN, false);
     }

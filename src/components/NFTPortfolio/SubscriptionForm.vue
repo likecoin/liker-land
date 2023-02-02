@@ -281,8 +281,14 @@ export default {
       this.isLoading = true;
       try {
         if (!this.isWalletLoggedIn) {
-          await this.signLogin();
-          return;
+          try {
+            await this.signLogin();
+          } catch {
+            // No-op
+          }
+          if (!this.isWalletLoggedIn) {
+            return;
+          }
         }
         if (this.isFollowed) {
           await this.walletUnfollowCreator(this.creatorWalletAddress);
