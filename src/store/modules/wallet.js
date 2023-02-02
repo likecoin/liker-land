@@ -152,6 +152,7 @@ const getters = {
   getLatestEventTimestamp: state =>
     state.events[0]?.timestamp &&
     new Date(state.events[0]?.timestamp).getTime(),
+  getEventLastSeenTs: state => state.eventLastSeenTs,
   getHasUnseenEvents: state =>
     state.eventLastSeenTs &&
     state.events[0]?.timestamp &&

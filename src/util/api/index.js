@@ -200,6 +200,7 @@ export const getNFTEvents = ({
   actionType,
   ignoreToList,
   ignoreFromList,
+  reverse,
 }) => {
   const qsPayload = {};
   if (classId) qsPayload.class_id = classId;
@@ -212,6 +213,7 @@ export const getNFTEvents = ({
   if (ignoreFromList) qsPayload.ignore_from_list = ignoreFromList;
   if (key) qsPayload.key = key;
   if (limit) qsPayload.limit = limit;
+  if (reverse) qsPayload['pagination.reverse'] = reverse;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
     qsPayload
   )}`;
