@@ -159,7 +159,7 @@ import { getChainExplorerTx } from '~/util/api';
 import { ellipsis } from '~/util/ui';
 
 export default {
-  name: 'WalletEventsPage',
+  name: 'NotificationPage',
   layout: 'default',
   filters: {
     ellipsis,
