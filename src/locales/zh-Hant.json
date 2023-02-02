@@ -177,6 +177,8 @@
   "footer_nav_doc": "參考文檔",
   "footer_nav_faq": "常見問題",
   "footer_nav_help": "幫助",
+  "footer_nav_mint_nft": "發行 NFT",
+  "footer_nav_writing_nft": "Writing NFT",
   "GetAppPage": {
     "Og": {
       "Description": "Writing NFT：隨心收藏，輕鬆出版。",
@@ -202,6 +204,7 @@
   "header_button_connect_to_wallet": "連接錢包",
   "header_menu_LIKE": "LIKE",
   "here": "這裏",
+  "home_button_about_writing_nft": "了解更多",
   "identity_type_collector": "收藏者",
   "identity_type_creator": "創作者",
   "learnMore": "了解更多",
@@ -245,6 +248,7 @@
   "nft_details_page_activity_list_event_to": "致",
   "nft_details_page_activity_list_event_transfer": "轉贈",
   "nft_details_page_activity_list_title": "區塊鏈資料",
+  "nft_details_page_button_collect_class_now": "收藏同系列 NFT",
   "nft_details_page_button_collect_now": "立即收藏",
   "nft_details_page_button_portfolio": "書架",
   "nft_details_page_button_sell": "賣出",

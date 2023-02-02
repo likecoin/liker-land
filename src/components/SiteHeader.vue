@@ -116,6 +116,7 @@ import { mapActions, mapGetters } from 'vuex';
 import walletMixin from '~/mixins/wallet';
 import { ellipsis, formatNumber } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { APP_LIKE_CO_URL_BASE } from '~/constant';
 
 import Logo from '~/assets/icons/logo.svg?inline';
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
@@ -151,6 +152,7 @@ export default {
       const options = [
         { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
         { value: 'civic', name: this.$t('main_menu_civic_liker') },
+        { value: 'mintNft', name: this.$t('main_menu_mint_nft') },
       ];
 
       if (this.getAddress || this.getUserId) {
@@ -183,6 +185,11 @@ export default {
         case 'civic':
           logTrackerEvent(this, 'site_menu', 'site_menu_click_civic', '', 1);
           this.$router.push({ name: 'civic' });
+          break;
+
+        case 'mintNft':
+          logTrackerEvent(this, 'site_menu', 'site_menu_click_mint_nft', '', 1);
+          window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
           break;
 
         case 'setting':

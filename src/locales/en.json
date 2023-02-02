@@ -177,6 +177,8 @@
   "footer_nav_doc": "Doc",
   "footer_nav_faq": "FAQ",
   "footer_nav_help": "Help",
+  "footer_nav_mint_nft": "Mint NFT",
+  "footer_nav_writing_nft": "Writing NFT",
   "GetAppPage": {
     "Og": {
       "Description": "Writing NFT: Publish as you write. Collect as you read.",
@@ -202,6 +204,7 @@
   "header_button_connect_to_wallet": "Connect Wallet",
   "header_menu_LIKE": "LIKE",
   "here": "Here",
+  "home_button_about_writing_nft": "What is Writing NFT",
   "identity_type_collector": "Collector",
   "identity_type_creator": "Creator",
   "learnMore": "Learn More",
@@ -213,6 +216,7 @@
     "loggingOut": "Logging out"
   },
   "main_menu_civic_liker": "Civic Liker",
+  "main_menu_mint_nft": "Mint NFT",
   "main_menu_my_dashboard": "My Dashboard",
   "main_menu_settings": "Settings",
   "main_menu_sign_out": "Sign Out",
@@ -245,6 +249,7 @@
   "nft_details_page_activity_list_event_to": "To",
   "nft_details_page_activity_list_event_transfer": "Transfer",
   "nft_details_page_activity_list_title": "Chain Data",
+  "nft_details_page_button_collect_class_now": "Collect a NFT of this content",
   "nft_details_page_button_collect_now": "Collect Now",
   "nft_details_page_button_portfolio": "Portfolio",
   "nft_details_page_button_sell": "Sell",

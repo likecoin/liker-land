@@ -35,15 +35,18 @@
             >{{ viewDetailsLabel }}</span>
           </a>
         </NFTWidgetBaseCard>
-        <NFTWidgetLikeActionBar
-          class="mt-[8px]"
-          :creator-display-name="ownerName"
-          :creator-avatar-src="ownerAvatarSrc"
-          :is-civic-liker="isCivicLiker"
-          :creator-address="ownerAddress"
-          :like-action-label="likeActionLabel"
-          @like="handleClickLike"
-        />
+        <NuxtLink
+          class="mt-[8px] flex items-center text-like-green group -my-[8px]"
+          :to="`/${ownerAddress}`"
+        >
+          <Identity
+            :avatar-url="ownerAvatarSrc"
+            :avatar-size="32"
+            :is-avatar-outlined="isCivicLiker"
+            :is-lazy-loaded="true"
+          />
+          <span class="ml-[8px] group-hover:underline font-[600]">{{ ownerName | ellipsis }}</span>
+        </NuxtLink>
       </div>
       <div>
         <NFTSupplyTable
@@ -82,7 +85,7 @@
             <template #prepend>
               <NFTWidgetIconInsertCoin />
             </template>
-            {{ price | formatNumberWithLIKE }}
+            {{ $t('nft_widget_button_collect') }}
           </ButtonV2>
         </div>
       </div>
@@ -91,11 +94,11 @@
 </template>
 
 <script>
-import { formatNumberWithLIKE } from '~/util/ui';
+import { ellipsis } from '~/util/ui';
 
 export default {
   filters: {
-    formatNumberWithLIKE,
+    ellipsis,
   },
   props: {
     // UI
