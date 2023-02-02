@@ -198,7 +198,8 @@ export default {
               eventType = 'purchase_nft';
               const creator = this.getNFTClassMetadataById(e.class_id)
                 ?.iscn_owner;
-              displayAvatar = this.getUserInfoByAddress(creator)?.avatar;
+              displayAvatar = this.getUserInfoByAddress(this.getAddress)
+                ?.avatar;
               i18nPath = 'event_list_page_event_message_purchase_nft';
               fromName = this.$t('event_list_page_event_self');
               toName =
