@@ -210,11 +210,6 @@ export default {
         }
       }
     },
-    async loginAddress() {
-      if (!this.walletFollowees.length && this.loginAddress) {
-        await this.walletFetchFollowees(this.loginAddress);
-      }
-    },
   },
   async asyncData({ route, $api, error, store, redirect }) {
     let { id } = route.params;

@@ -5,7 +5,7 @@
     }}</Label>
 
     <CardV2 class="my-[12px] text-center">
-      <div v-if="isLoading">
+      <div v-if="walletIsFetchingFollowees">
         {{ $t('settings_follow_loading') }}
       </div>
       <div v-else-if="!walletFollowees.length">
@@ -90,12 +90,11 @@ export default {
   mixins: [walletMixin, alertMixin],
   data() {
     return {
-      isLoading: false,
       unfollowList: [],
     };
   },
   computed: {
-    ...mapGetters(['getUserInfoByAddress']),
+    ...mapGetters(['getUserInfoByAddress', 'walletIsFetchingFollowees']),
     populatedFollowees() {
       return this.walletFollowees.map(follower => ({
         displayName:
@@ -105,25 +104,12 @@ export default {
       }));
     },
   },
-  async mounted() {
-    if (this.walletHasLoggedIn) {
-      await this.fetchFolloweeList();
-    }
-  },
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddresses',
       'walletFollowCreator',
       'walletUnfollowCreator',
     ]),
-    async fetchFolloweeList() {
-      if (this.isLoading) {
-        return;
-      }
-      this.isLoading = true;
-      await this.walletFetchFollowees(this.loginAddress);
-      this.isLoading = false;
-    },
     async handleClickUnfollow(creator) {
       try {
         if (this.unfollowList.includes(creator)) {

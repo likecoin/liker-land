@@ -29,6 +29,7 @@ import {
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
+  WALLET_SET_FOLLOWEES_FETCHING_STATE,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
 } from '../mutation-types';
@@ -42,6 +43,7 @@ const state = () => ({
   connector: null,
   likerInfo: null,
   followees: [],
+  isFetchingFollowees: false,
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -103,6 +105,9 @@ const mutations = {
   [WALLET_SET_FOLLOWEES](state, followees) {
     state.followees = followees;
   },
+  [WALLET_SET_FOLLOWEES_FETCHING_STATE](state, isFetching) {
+    state.isFetchingFollowees = isFetching;
+  },
 };
 
 const getters = {
@@ -115,6 +120,7 @@ const getters = {
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
+  walletIsFetchingFollowees: state => state.isFetchingFollowees,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -326,8 +332,10 @@ const actions = {
       throw error;
     }
   },
-  async walletFetchFollowees({ commit, dispatch }, address) {
+  async walletFetchFollowees({ state, commit, dispatch }, address) {
     try {
+      if (state.isFetchingFollowees) return;
+      commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
       const { followees } = await this.$axios.$get(getUserFollowees(address));
       commit(WALLET_SET_FOLLOWEES, followees);
       if (followees.length) {
@@ -335,6 +343,8 @@ const actions = {
       }
     } catch (error) {
       throw error;
+    } finally {
+      commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, false);
     }
   },
   async walletFollowCreator({ state, commit }, creator) {
