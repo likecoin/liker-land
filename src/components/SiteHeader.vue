@@ -26,7 +26,7 @@
       <ButtonV2
         :preset="getHasUnseenEvents ? 'primary' : 'tertiary'"
         :text="$t('event_list_page_event_button')"
-        :to="{ name: 'events' }"
+        :to="{ name: 'notification' }"
       >
         <template #append>
           <IconNotify v-if="getHasUnseenEvents" class="w-[20px]" />
