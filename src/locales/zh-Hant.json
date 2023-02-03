@@ -264,6 +264,7 @@
   "nft_details_page_label_price": "當前價格",
   "nft_details_page_label_transfer": "輸入接收者錢包地址",
   "nft_details_page_label_transfer_nft_id_select": "選擇要轉贈的 NFT",
+  "nft_details_page_label_ar_view_in_mobile": "將你的 NFT 帶到現實",
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_section_metadata": "元資料",
   "nft_details_page_section_metadata_ar": "Arweave",
