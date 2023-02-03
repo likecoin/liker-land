@@ -3,7 +3,7 @@
     <div class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]">
       <Label
         class="text-like-green mb-[8px]"
-        :text="$t('event_list_page_notifications', { number: notificationCount })"
+        :text="$t('event_list_page_notifications', { number: getNotificationCount })"
       >
         <template #append>
           <ButtonV2 preset="tertiary" @click="handleRefresh">
@@ -174,7 +174,7 @@ export default {
       'getUserInfoByAddress',
       'getNFTClassMetadataById',
       'getHasUnseenEvents',
-      'getEventLastSeenTs',
+      'getNotificationCount',
     ]),
     processedEvents() {
       return this.getEvents.map(e => {
@@ -185,62 +185,52 @@ export default {
         let fromName;
         let toName;
         let price;
-        let nftName;
-        const eventHasSeen =
-          this.getEventLastSeenTs &&
-          this.getEventLastSeenTs > new Date(e.timestamp).getTime();
 
         let memo = e.memo === 'like.co NFT API' ? '' : e.memo;
-        if (e.action === '/cosmos.nft.v1beta1.MsgSend') {
-          nftName = this.getNFTClassMetadataById(e.class_id)?.name;
-          if (e.sender === LIKECOIN_NFT_API_WALLET) {
-            if (e.receiver === this.getAddress) {
-              eventType = 'purchase_nft';
-              const creator = this.getNFTClassMetadataById(e.class_id)
-                ?.iscn_owner;
-              displayAvatar = this.getUserInfoByAddress(this.getAddress)
-                ?.avatar;
-              i18nPath = 'event_list_page_event_message_purchase_nft';
-              fromName = this.$t('event_list_page_event_self');
-              toName =
-                this.getUserInfoByAddress(creator)?.displayName || creator;
-              // eslint-disable-next-line prefer-destructuring
-              price = e.price;
-              memo = e.granterMemo || '';
-            } else {
-              eventType = 'nft_sale';
-              fromName =
-                this.getUserInfoByAddress(e.receiver)?.displayName ||
-                e.receiver;
-              // eslint-disable-next-line prefer-destructuring
-              price = e.price;
-              i18nPath = 'event_list_page_event_message_nft_sale';
-              displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
-              memo = e.granterMemo || '';
-            }
-          } else if (e.receiver === this.getAddress) {
-            eventType = 'receive_nft';
-            fromName =
-              this.getUserInfoByAddress(e.sender)?.displayName || e.sender;
-            i18nPath = 'event_list_page_event_message_receive_nft';
-            displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
-          } else {
-            eventType = 'send_nft';
+        const nftName = this.getNFTClassMetadataById(e.class_id)?.name;
+        if (e.sender === LIKECOIN_NFT_API_WALLET) {
+          if (e.receiver === this.getAddress) {
+            eventType = 'purchase_nft';
+            const creator = this.getNFTClassMetadataById(e.class_id)
+              ?.iscn_owner;
+            displayAvatar = this.getUserInfoByAddress(this.getAddress)?.avatar;
+            i18nPath = 'event_list_page_event_message_purchase_nft';
             fromName = this.$t('event_list_page_event_self');
-            toName =
+            toName = this.getUserInfoByAddress(creator)?.displayName || creator;
+            // eslint-disable-next-line prefer-destructuring
+            price = e.price;
+            memo = e.granterMemo || '';
+          } else {
+            eventType = 'nft_sale';
+            fromName =
               this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
-            i18nPath = 'event_list_page_event_message_send_nft';
+            // eslint-disable-next-line prefer-destructuring
+            price = e.price;
+            i18nPath = 'event_list_page_event_message_nft_sale';
             displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
+            memo = e.granterMemo || '';
           }
-          if (memo) {
-            message = memo;
-          }
+        } else if (e.receiver === this.getAddress) {
+          eventType = 'receive_nft';
+          fromName =
+            this.getUserInfoByAddress(e.sender)?.displayName || e.sender;
+          i18nPath = 'event_list_page_event_message_receive_nft';
+          displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
+        } else {
+          eventType = 'send_nft';
+          fromName = this.$t('event_list_page_event_self');
+          toName =
+            this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
+          i18nPath = 'event_list_page_event_message_send_nft';
+          displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
+        }
+        if (memo) {
+          message = memo;
         }
 
         return {
           eventType,
           displayAvatar,
-          eventHasSeen,
           message,
           fromName,
           toName,
@@ -260,9 +250,6 @@ export default {
     },
     groupedEventsByTime() {
       return this.convertToGroupedEvents(this.processedEvents);
-    },
-    notificationCount() {
-      return this.processedEvents.filter(event => !event.eventHasSeen).length;
     },
   },
   mounted() {
@@ -319,12 +306,6 @@ export default {
           ? timestamp.getMinutes()
           : `0${timestamp.getMinutes()}`;
       return `${hour}:${minutes}`;
-    },
-    checkHasSeenEvent(timestamp) {
-      return (
-        this.getEventLastSeenTs &&
-        this.getEventLastSeenTs < new Date(timestamp).getTime()
-      );
     },
   },
 };
