@@ -22,16 +22,6 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
-
-      <ButtonV2
-        :preset="getHasUnseenEvents ? 'primary' : 'tertiary'"
-        :text="$t('event_list_page_event_button')"
-        :to="{ name: 'notification' }"
-      >
-        <template #append>
-          <IconNotify v-if="getHasUnseenEvents" class="w-[20px]" />
-        </template>
-      </ButtonV2>
       <Dropdown>
         <template v-slot:trigger="{ toggle }">
           <ButtonV2
@@ -75,14 +65,19 @@
           >
             <IconNav />
           </ButtonV2>
-          <Identity
-            v-else
-            class="cursor-pointer"
-            :avatar-url="walletUserAvatar"
-            :avatar-size="42"
-            :is-avatar-outlined="isWalletUserCivicLiker"
-            @click="toggle"
-          />
+          <div v-else class="relative">
+            <Identity
+              class="cursor-pointer"
+              :avatar-url="walletUserAvatar"
+              :avatar-size="42"
+              :is-avatar-outlined="isWalletUserCivicLiker"
+              @click="toggle"
+            />
+            <div
+              v-if="getNotificationCount"
+              class="absolute top-0 right-0 bg-danger rounded-[50%] w-[8px] h-[8px]"
+            />
+          </div>
         </template>
         <MenuList>
           <template
@@ -112,6 +107,23 @@
           >
             <template #label-prepend>
               <MenuIcon :type="item.value" />
+            </template>
+            <template #label-append>
+              <div
+                v-if="item.value === 'notification'"
+                :class="[
+                  'flex',
+                  'justify-center',
+                  'items-center',
+                  'bg-shade-gray',
+                  {'bg-danger':getNotificationCount},
+                  'text-white',
+                  'text-[6px]',
+                  'rounded-[50%]',
+                  'w-[24px]',
+                  'h-[24px]'
+                ]"
+              >{{ getNotificationCount }}</div>
             </template>
           </MenuItem>
         </MenuList>
@@ -148,7 +160,7 @@ export default {
       'getAvailableLocales',
       'getLocale',
       'getUserId',
-      'getHasUnseenEvents',
+      'getNotificationCount',
     ]),
     currentLocale() {
       return this.getLocale;
@@ -168,6 +180,7 @@ export default {
 
       if (this.getAddress || this.getUserId) {
         options.push(
+          { value: 'notification', name: this.$t('main_menu_notification') },
           { value: 'setting', name: this.$t('main_menu_settings') },
           { value: 'signOut', name: this.$t('main_menu_sign_out') }
         );
@@ -201,6 +214,17 @@ export default {
         case 'mintNft':
           logTrackerEvent(this, 'site_menu', 'site_menu_click_mint_nft', '', 1);
           window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
+          break;
+
+        case 'notification':
+          logTrackerEvent(
+            this,
+            'site_menu',
+            'site_menu_click_notification',
+            '',
+            1
+          );
+          this.$router.push({ name: 'notification' });
           break;
 
         case 'setting':
