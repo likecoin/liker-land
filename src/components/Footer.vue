@@ -46,7 +46,7 @@
           </a>
         </div>
         <div class="grid grid-flow-row gap-y-[16px]">
-          <NuxtLink class="hover:underline" :to="{ name: 'civic-liker' }">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
+          <NuxtLink class="hover:underline" :to="{ name: 'civic' }">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
         </div>
       </div>
     </div>
