@@ -347,6 +347,44 @@ export default {
       this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
       this.nftImageURL || 'https://liker.land/images/og/writing-nft.jpg';
+    const schemas = [];
+    if (this.purchaseInfo.price) {
+      schemas.push({
+        '@context': 'http://www.schema.org',
+        '@type': 'Product',
+        name: title,
+        image: [ogImage],
+        description,
+        brand: {
+          '@type': 'Brand',
+          name: 'Writing NFT',
+        },
+        sku: this.classId,
+        iscn: this.iscnId,
+        url: `${EXTERNAL_HOST}${this.$route.path}`,
+        offers: {
+          '@type': 'Offer',
+          price: this.NFTPriceUSD,
+          priceCurrency: 'USD',
+          availability: 'LimitedAvailability',
+        },
+      });
+    }
+    if (this.nftModelURL) {
+      schemas.push({
+        '@context': 'http://schema.org/',
+        '@type': '3DModel',
+        image: ogImage,
+        name: title,
+        encoding: [
+          {
+            '@type': 'MediaObject',
+            contentUrl: this.nftModelURL,
+            encodingFormat: 'model/gltf-json',
+          },
+        ],
+      });
+    }
     return {
       title,
       meta: [
@@ -372,32 +410,11 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-      script: this.purchaseInfo.price
+      script: schemas.length
         ? [
             {
               hid: 'schema',
-              innerHTML: JSON.stringify([
-                {
-                  '@context': 'http://www.schema.org',
-                  '@type': 'Product',
-                  name: title,
-                  image: [ogImage],
-                  description,
-                  brand: {
-                    '@type': 'Brand',
-                    name: 'Writing NFT',
-                  },
-                  sku: this.classId,
-                  iscn: this.iscnId,
-                  url: `${EXTERNAL_HOST}${this.$route.path}`,
-                  offers: {
-                    '@type': 'Offer',
-                    price: this.NFTPriceUSD,
-                    priceCurrency: 'USD',
-                    availability: 'LimitedAvailability',
-                  },
-                },
-              ]),
+              innerHTML: JSON.stringify(schemas),
               type: 'application/ld+json',
               body: true,
             },

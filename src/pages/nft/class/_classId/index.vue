@@ -1,13 +1,7 @@
 <template>
   <Page>
-    <CardV2
-      v-if="isLoading"
-      class="absolute top-[40%]"
-    >{{ $t('nft_details_page_label_loading') }}</CardV2>
-    <div
-      v-else
-      class="px-[12px] laptop:px-[24px] pb-[120px] w-full"
-    >
+    <CardV2 v-if="isLoading" class="absolute top-[40%]">{{ $t('nft_details_page_label_loading') }}</CardV2>
+    <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
 
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
         <div class="flex items-center justify-end w-full">
@@ -26,10 +20,7 @@
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
 
-          <NFTPagePrimitiveDisclaimer
-            v-if="nftIsPrimitive"
-            class="w-full desktop:hidden"
-          />
+          <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="w-full desktop:hidden" />
 
           <!-- Left column -->
           <div
@@ -138,6 +129,44 @@ export default {
       this.NFTDescription || this.$t('nft_details_page_description');
     const ogImage =
       this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg';
+    const schemas = [];
+    if (this.purchaseInfo.price) {
+      schemas.push({
+        '@context': 'http://www.schema.org',
+        '@type': 'Product',
+        name: title,
+        image: [ogImage],
+        description,
+        brand: {
+          '@type': 'Brand',
+          name: 'Writing NFT',
+        },
+        sku: this.classId,
+        iscn: this.iscnId,
+        url: `${EXTERNAL_HOST}${this.$route.path}`,
+        offers: {
+          '@type': 'Offer',
+          price: this.NFTPriceUSD,
+          priceCurrency: 'USD',
+          availability: 'LimitedAvailability',
+        },
+      });
+    }
+    if (this.nftModelURL) {
+      schemas.push({
+        '@context': 'http://schema.org/',
+        '@type': '3DModel',
+        image: ogImage,
+        name: title,
+        encoding: [
+          {
+            '@type': 'MediaObject',
+            contentUrl: this.nftModelURL,
+            encodingFormat: 'model/gltf-json',
+          },
+        ],
+      });
+    }
     return {
       title,
       meta: [
@@ -168,32 +197,11 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-      script: this.purchaseInfo.price
+      script: schemas.length
         ? [
             {
               hid: 'schema',
-              innerHTML: JSON.stringify([
-                {
-                  '@context': 'http://www.schema.org',
-                  '@type': 'Product',
-                  name: title,
-                  image: [ogImage],
-                  description,
-                  brand: {
-                    '@type': 'Brand',
-                    name: 'Writing NFT',
-                  },
-                  sku: this.classId,
-                  iscn: this.iscnId,
-                  url: `${EXTERNAL_HOST}${this.$route.path}`,
-                  offers: {
-                    '@type': 'Offer',
-                    price: this.NFTPriceUSD,
-                    priceCurrency: 'USD',
-                    availability: 'LimitedAvailability',
-                  },
-                },
-              ]),
+              innerHTML: JSON.stringify(schemas),
               type: 'application/ld+json',
               body: true,
             },
