@@ -288,6 +288,7 @@
   "nft_details_page_label_price": "Current Price",
   "nft_details_page_label_transfer": "Enter the recipient address",
   "nft_details_page_label_transfer_nft_id_select": "Select the NFT to transfer",
+  "nft_details_page_label_ar_view_in_mobile": "Experience your NFT live",
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_section_metadata": "Metadata",
   "nft_details_page_section_metadata_ar": "Arweave",

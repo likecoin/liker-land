@@ -22,6 +22,21 @@
       v-if="isCompleted"
       #message
     >
+      <client-only>
+        <model-viewer
+          v-if="nftModelURL"
+          id="book"
+          :alt="nftClassCollectionName"
+          :src="nftModelURL"
+          ar
+          auto-rotate
+          auto-rotate-delay="500"
+          xr-environment
+          shadow-intensity="1"
+          camera-controls
+          camera-orbit="225deg 55deg 100m"
+        />
+      </client-only>
       <Label
         class="text-medium-gray mt-[12px]"
         preset="h6"
