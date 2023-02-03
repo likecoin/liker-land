@@ -7,6 +7,7 @@
         <th><Label :text="$t('nft_details_page_activity_list_event_from')" /></th>
         <th><Label :text="$t('nft_details_page_activity_list_event_to')" /></th>
         <th><Label :text="$t('nft_details_page_activity_list_event_date')" /></th>
+        <th v-if="showMemo"><Label :text="$t('nft_details_page_activity_list_event_memo')" /></th>
       </tr>
     </thead>
     <tbody>
@@ -122,6 +123,16 @@
             />
           </LinkV2>
         </td>
+        <td v-if="showMemo">
+          <Label content-class="overflow-hidden">
+            <span v-if="event.event === 'purchase'">
+              {{ event.granterMemo }}
+            </span>
+            <span v-else>
+              {{ event.memo }}
+            </span>
+          </Label>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -141,6 +152,10 @@ export default {
     nftHistory: {
       type: Array,
       default: undefined,
+    },
+    showMemo: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

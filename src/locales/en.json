@@ -259,6 +259,7 @@
   "nft_details_page_activity_list_event_create_class": "Create",
   "nft_details_page_activity_list_event_date": "Date",
   "nft_details_page_activity_list_event_from": "From",
+  "nft_details_page_activity_list_event_memo": "Message",
   "nft_details_page_activity_list_event_mint_nft": "Mint",
   "nft_details_page_activity_list_event_price": "Price (LIKE)",
   "nft_details_page_activity_list_event_sell_nft": "Sell",

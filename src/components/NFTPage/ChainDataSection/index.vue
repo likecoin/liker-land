@@ -18,7 +18,7 @@
       <template v-if="items.length && view !== 'created'">
         <div class="overflow-x-scroll scrollbar-custom">
           <div :class="['min-w-[800px]', contentPaddingClass]">
-            <NFTPageEventListTable :nft-history="trimmedItems" />
+            <NFTPageEventListTable :nft-history="trimmedItems" :show-memo="showMemo" />
           </div>
         </div>
         <ShowMore v-if="shouldShowMore">
@@ -26,6 +26,7 @@
             <NFTPageEventListTable
               class="min-w-[800px]"
               :nft-history="items"
+              :show-memo="showMemo"
             />
           </template>
         </ShowMore>
@@ -61,6 +62,10 @@ export default {
     trimmedCount: {
       type: Number,
       default: 10,
+    },
+    showMemo: {
+      type: Boolean,
+      default: false,
     },
     isLoading: {
       type: Boolean,
