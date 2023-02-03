@@ -193,10 +193,8 @@
                   'border-[1px]',
                   'border-shade-gray',
                 ]"
-                :has-padding="false"
               >
                 <model-viewer
-                  id="book"
                   class="w-full h-[300px]"
                   :alt="nftClassCollectionName"
                   :src="nftModelURL"

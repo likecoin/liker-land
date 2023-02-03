@@ -25,9 +25,9 @@
       <client-only>
         <model-viewer
           v-if="nftModelURL"
-          id="book"
           :alt="nftClassCollectionName"
           :src="nftModelURL"
+          class="mt-[12px]"
           ar
           auto-rotate
           auto-rotate-delay="500"
