@@ -290,9 +290,17 @@ const actions = {
         })
       ),
     ]);
-    const events = senderRes.events
+    let events = senderRes.events
       .concat(receiverRes.events)
       .concat(purchaseRes.events);
+    events = [
+      ...new Map(
+        events.map(e => [
+          [e.tx_hash, e.class_id, e.nft_id, e.eventType].join('-'),
+          e,
+        ])
+      ).values(),
+    ];
     const classIds = Array.from(new Set(events.map(e => e.class_id)));
 
     const addresses = [];
