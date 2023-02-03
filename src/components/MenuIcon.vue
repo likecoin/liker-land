@@ -3,7 +3,8 @@
   <IconLikeEvent v-else-if="type === 'civic'" />
   <IconSetting v-else-if="type === 'setting'" />
   <IconLogOut v-else-if="type === 'signOut'" />
-  <IconMint v-else-if="type === 'mintNft'" class="w-[20px]"/>
+  <IconMint v-else-if="type === 'mintNft'" class="w-[20px]" />
+  <IconBell v-else-if="type === 'notification'" />
 </template>
 
 
