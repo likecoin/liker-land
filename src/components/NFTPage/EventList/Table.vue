@@ -125,11 +125,8 @@
         </td>
         <td v-if="showMemo">
           <Label content-class="overflow-hidden">
-            <span v-if="event.event === 'purchase'">
-              {{ event.granterMemo }}
-            </span>
-            <span v-else>
-              {{ event.memo }}
+            <span class="truncate">
+              {{ event.event === 'purchase' ? event.granterMemo : event.memo }}
             </span>
           </Label>
         </td>
