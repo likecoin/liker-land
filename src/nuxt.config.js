@@ -54,7 +54,7 @@ const nuxtConfig = {
       { rel: 'preconnect', href: 'https://p.typekit.net' },
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
-
+      { rel: 'preload', href: 'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js', as: 'script' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
       { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
@@ -80,6 +80,7 @@ const nuxtConfig = {
     ],
     script: [
       { src: '/vendor/typekit.js', type: 'text/javascript' },
+      { type: 'module', src: 'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js', asyc: 'true' },
       {
         hid: 'schema',
         innerHTML: JSON.stringify([
@@ -177,6 +178,7 @@ const nuxtConfig = {
           'use.typekit.net',
           'https://js.stripe.com',
           'https://admin.typeform.com',
+          'https://unpkg.com/@google/model-viewer/',
           '*.crisp.chat',
         ],
         'frame-src': [

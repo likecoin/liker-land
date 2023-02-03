@@ -124,6 +124,9 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
   )}`;
 };
 
+export const getNFTModel = ({ classId }) =>
+  `${LIKECOIN_API_BASE}/likernft/metadata/model/class_${classId}.gltf`;
+
 export const getUserNFTStats = wallet =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/stats`;
 
