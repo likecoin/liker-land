@@ -157,6 +157,9 @@ const getters = {
     state.eventLastSeenTs &&
     state.events[0]?.timestamp &&
     state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
+  getNotificationCount: state =>
+    state.events.slice(0, WALLET_EVENT_LIMIT).filter(e => !e.eventHasSeen)
+      ?.length,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -343,8 +346,12 @@ const actions = {
       events
         .map(e => {
           e.timestamp = new Date(e.timestamp);
+          e.eventHasSeen =
+            state.eventLastSeenTs &&
+            state.eventLastSeenTs > new Date(e.timestamp).getTime();
           return e;
         })
+        .filter(e => e.action === '/cosmos.nft.v1beta1.MsgSend')
         .sort((a, b) => b.timestamp - a.timestamp)
     );
     classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
