@@ -100,17 +100,19 @@
                 :path="event.i18nPath"
               >
                 <p
-                  class="inline font-600 text-16"
+                  class="inline text-black font-600 text-16"
                   place="fromName"
                 >{{ event.fromName }}</p>
                 <p
-                  class="inline font-600 text-16"
+                  class="inline text-black font-600 text-16"
                   place="toName"
                 >{{ event.toName }}</p>
                 <p
-                  class="inline"
+                  class="inline italic text-black font-600"
                   place="nftName"
-                >{{ event.nftName }}</p>
+                >
+                  {{ event.nftName }}
+                </p>
                 <p
                   class="inline text-like-green font-600"
                   place="price"
