@@ -2,16 +2,20 @@
   <Page class="overflow-x-hidden">
     <div class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]">
       <Label
+        preset="h5"
         class="text-like-green mb-[8px]"
         :text="$t('event_list_page_notifications', { number: getNotificationCount })"
       >
+        <template #prepend>
+          <IconBell />
+        </template>
         <template #append>
           <ButtonV2 preset="tertiary" @click="handleRefresh">
             <IconRefresh />
           </ButtonV2>
         </template>
       </Label>
-      <hr class="border-medium-gray">
+      <hr class="border-shade-gray border-[1px]">
       <div v-if="isLoading || !processedEvents.length" class="flex items-center justify-center">
         <CardV2 class="flex p-[8px] my-[48px]">
           <Label preset="h5" class="text-like-green" :text="$t('nft_portfolio_page_label_loading')" />
@@ -21,7 +25,7 @@
         v-for="group in groupedEventsByTime"
         v-else
         :key="group.date"
-        class="flex flex-col items-start my-[18px]"
+        class="flex flex-col items-start my-[12px]"
       >
         <!-- date group -->
         <div
@@ -30,8 +34,9 @@
             'px-[8px]',
             'mt-[12px]',
             'mb-[8px]',
-            'bg-shade-gray',
-            'rounded-[4px]',
+            'text-medium-gray',
+            'font-600',
+            'text-[14px]',
             'w-auto',
           ]"
         >
@@ -42,7 +47,6 @@
           v-for="event in group.events"
           :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
           :to="event.targetRoute"
-          :is-inline="true"
           :class="[
             'flex',
             'justify-between',
@@ -51,7 +55,6 @@
             'px-[16px]',
             'py-[20px]',
             'my-[4px]',
-            'ml-[4px]',
             'bg-white',
             'shadow-sm',
             'rounded-[4px]',
@@ -277,9 +280,9 @@ export default {
         const yesterday = today - 86400000;
         const eventDate = new Date(event.timestamp).setHours(0, 0, 0, 0);
         if (eventDate === today) {
-          date = 'Today';
+          date = this.$t('event_list_page_today');
         } else if (eventDate === yesterday) {
-          date = 'Yesterday';
+          date = this.$t('event_list_page_yesterday');
         } else {
           date = event.timestamp.toLocaleDateString('en-US');
         }
