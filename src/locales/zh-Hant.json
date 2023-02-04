@@ -149,6 +149,8 @@
   "event_list_page_event_message_send_nft": "{fromName} 贈送了 {nftName} 給 {toName}。",
   "event_list_page_event_self": "你",
   "event_list_page_notifications": "新通知 ({number})",
+  "event_list_page_today": "今天",
+  "event_list_page_yesterday": "昨天",
   "faq_list": [
     {
       "a": "讓讀者藉購買作者的 Writing NFT 支持創作。個人的創作軌跡可被視為 Web3 「去中心化身份」的一部分，是個人的創作履歷。發行 Writing NFT 確保作品原封不動地保存於分散式網絡，日後可用以驗證產權。",
@@ -223,7 +225,7 @@
   },
   "main_menu_civic_liker": "讚賞公民",
   "main_menu_my_dashboard": "我的書架",
-  "main_menu_notification": "新通知",
+  "main_menu_notification": "通知",
   "main_menu_settings": "設定",
   "main_menu_sign_out": "登出",
   "mainVPs": [

@@ -75,7 +75,7 @@
             />
             <div
               v-if="getNotificationCount"
-              class="absolute top-0 right-0 bg-danger rounded-[50%] w-[8px] h-[8px]"
+              class="absolute top-0 right-0 bg-danger rounded-full w-[8px] h-[8px]"
             />
           </div>
         </template>
@@ -117,13 +117,15 @@
                   'items-center',
                   'bg-shade-gray',
                   {'bg-danger':getNotificationCount},
-                  'text-white',
-                  'text-[6px]',
-                  'rounded-[50%]',
-                  'w-[24px]',
-                  'h-[24px]'
+                  'rounded-full',
+                  'min-w-[24px]',
+                  'p-[4px]'
                 ]"
-              >{{ getNotificationCount }}</div>
+              >
+                <div class="text-white text-[6px]">
+                  {{ getNotificationCount }}
+                </div>
+              </div>
             </template>
           </MenuItem>
         </MenuList>

@@ -159,6 +159,8 @@
   "event_list_page_event_self": "You",
   "event_list_page_event_send_nft": "Sent",
   "event_list_page_notifications": "Notifications ({number})",
+  "event_list_page_today": "Today",
+  "event_list_page_yesterday": "Yesterday",
   "faq_list": [
     {
       "a": "An individual’s content portfolio can be viewed as part of a reliable decentralized identity in Web3. It’s a record of individual authorship. Writing NFT can guarantee the immutability of content and later verifiable with proof of ownership and property rights.",
