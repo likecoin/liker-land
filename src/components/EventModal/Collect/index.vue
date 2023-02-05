@@ -35,6 +35,7 @@
           shadow-intensity="1"
           camera-controls
           camera-orbit="225deg 55deg 100m"
+          @click.native.once="onClickModelViewer"
         />
       </client-only>
       <Label
@@ -338,6 +339,15 @@ export default {
         query: { tab: 'collected' },
       });
       this.uiCloseTxModal();
+    },
+    onClickModelViewer() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collect_modal_click_model_viewer',
+        this.classId,
+        1
+      );
     },
     handleClose() {
       this.$emit('close');
