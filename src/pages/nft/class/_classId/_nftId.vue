@@ -205,6 +205,7 @@
                   shadow-intensity="1"
                   camera-controls
                   camera-orbit="225deg 55deg 100m"
+                  @click.native.once="onClickModelViewer"
                 />
                 <Label
                   class="text-medium-gray text-[12px]"
@@ -583,6 +584,15 @@ export default {
         this,
         'NFT',
         'nft_details_page_view_content',
+        this.classId,
+        1
+      );
+    },
+    onClickModelViewer() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_page_click_model_viewer',
         this.classId,
         1
       );
