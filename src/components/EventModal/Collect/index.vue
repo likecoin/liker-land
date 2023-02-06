@@ -28,7 +28,6 @@
           :alt="nftClassCollectionName"
           :src="nftModelURL"
           class="mt-[12px]"
-          ar
           auto-rotate
           auto-rotate-delay="500"
           xr-environment

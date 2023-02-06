@@ -179,7 +179,8 @@
               {{ $t('nft_details_page_button_view_details') }}
             </ButtonV2>
 
-            <client-only>
+            <!-- Do not show  3d model in detail page, pending product design-->
+            <!-- <client-only>
               <CardV2
                 v-if="isMobile() && nftCollectorWalletAddress === getAddress"
                 :class="[
@@ -214,7 +215,7 @@
                   preset="p6"
                 />
               </CardV2>
-            </client-only>
+            </client-only> -->
           </div>
           <!-- NFT Collect CTA -->
           <div
