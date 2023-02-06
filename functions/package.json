@@ -62,7 +62,7 @@
     "stripe": "^8.111.0",
     "swiper": "^4.5.0",
     "tiny-cookie": "^1.0.1",
-    "url-parse": "^1.4.7",
+    "url-parse": "^1.5.9",
     "uuid": "^8.3.2",
     "v-tooltip": "^2.0.2",
     "vue": "^2.6.11",
