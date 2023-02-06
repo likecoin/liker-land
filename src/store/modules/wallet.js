@@ -158,8 +158,9 @@ const getters = {
     state.events[0]?.timestamp &&
     state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
   getNotificationCount: state =>
-    state.events.slice(0, WALLET_EVENT_LIMIT).filter(e => !e.eventHasSeen)
-      ?.length,
+    state.events.findIndex(e => e.eventHasSeen) === -1
+      ? WALLET_EVENT_LIMIT
+      : state.events.findIndex(e => e.eventHasSeen),
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
