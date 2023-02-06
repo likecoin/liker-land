@@ -105,6 +105,7 @@
         <section>
           <NFTPageChainDataSection
             :items="populatedDisplayEvents"
+            :show-memo="true"
             :is-loading="isHistoryInfoLoading"
             :content-url="NFTExternalUrl"
             :iscn-id="iscnId"

@@ -536,6 +536,7 @@ export default {
               };
               history.push(e);
               eventMap.set(grantTxHash, e);
+              eventMap.get(key).granterMemo = granterMemo;
             }
             eventMap.get(key).price = price;
           }
