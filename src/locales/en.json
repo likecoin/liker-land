@@ -411,6 +411,11 @@
   "settings_following_login_in_button": "Verify",
   "settings_following_login_label": "Verify wallet to view following list",
   "settings_liker_id": "Liker ID",
+  "settings_notification": "Notification",
+  "settings_notification_title": "Notification Settings",
+  "settings_notification_tx_purchase": "Collect",
+  "settings_notification_tx_section_title": "Transaction",
+  "settings_notification_tx_transfer": "Transfer",
   "SettingsPage": {
     "language": "Language",
     "title": "Settings"
