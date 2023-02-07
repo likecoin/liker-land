@@ -116,10 +116,11 @@
                   'justify-center',
                   'items-center',
                   'bg-shade-gray',
-                  {'bg-danger':getNotificationCount},
+                  { 'bg-danger': getNotificationCount },
                   'rounded-full',
                   'min-w-[24px]',
-                  'p-[4px]'
+                  'px-[8px]',
+                  'py-[4px]'
                 ]"
               >
                 <div class="text-white text-[6px]">
