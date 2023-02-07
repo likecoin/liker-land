@@ -1,6 +1,16 @@
 <template>
   <Page class="overflow-x-hidden">
-    <div class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]">
+    <div
+      v-if="!getAddress || !walletHasLoggedIn"
+      class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"
+    >
+      <ButtonV2
+        preset="tertiary"
+        :text="$t('header_button_connect_to_wallet')"
+        @click="connectWallet"
+      />
+    </div>
+    <div v-else class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]">
       <Label
         preset="h5"
         class="text-like-green mb-[8px]"
@@ -162,6 +172,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { LIKECOIN_NFT_API_WALLET } from '~/constant';
 import { getChainExplorerTx } from '~/util/api';
 import { ellipsis } from '~/util/ui';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'NotificationPage',
@@ -169,13 +180,13 @@ export default {
   filters: {
     ellipsis,
   },
+  mixins: [walletMixin],
   data() {
     return { isLoading: false };
   },
   computed: {
     ...mapGetters([
       'getEvents',
-      'getAddress',
       'getUserInfoByAddress',
       'getNFTClassMetadataById',
       'getNotificationCount',
@@ -258,6 +269,15 @@ export default {
     groupedEventsByTime() {
       return this.convertToGroupedEvents(this.processedEvents);
     },
+  },
+  async mounted() {
+    if (this.getAddress && !this.walletHasLoggedIn) {
+      try {
+        await this.signLogin();
+      } catch {
+        // No-op
+      }
+    }
   },
   beforeRouteLeave(to, form, next) {
     this.updateEventLastSeenTs();
