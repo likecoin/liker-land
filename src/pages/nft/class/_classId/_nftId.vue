@@ -206,7 +206,7 @@
                   shadow-intensity="1"
                   camera-controls
                   camera-orbit="225deg 55deg 100m"
-                  @click.native.once="onClickModelViewer"
+                  @click.once="onClickModelViewer"
                 />
                 <Label
                   class="text-medium-gray text-[12px]"
