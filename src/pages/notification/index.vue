@@ -178,8 +178,8 @@ export default {
       'getAddress',
       'getUserInfoByAddress',
       'getNFTClassMetadataById',
-      'getHasUnseenEvents',
       'getNotificationCount',
+      'getEventLastSeenTs',
     ]),
     processedEvents() {
       return this.getEvents.map(e => {
@@ -190,6 +190,7 @@ export default {
         let fromName;
         let toName;
         let price;
+        const eventHasSeen = this.checkHasSeenEvent(e.timestamp);
 
         let memo = e.memo === 'like.co NFT API' ? '' : e.memo;
         const nftName = this.getNFTClassMetadataById(e.class_id)?.name;
@@ -236,6 +237,7 @@ export default {
         return {
           eventType,
           displayAvatar,
+          eventHasSeen,
           message,
           fromName,
           toName,
@@ -257,10 +259,9 @@ export default {
       return this.convertToGroupedEvents(this.processedEvents);
     },
   },
-  mounted() {
-    if (this.getHasUnseenEvents) {
-      this.updateEventLastSeenTs();
-    }
+  beforeRouteLeave(to, form, next) {
+    this.updateEventLastSeenTs();
+    next();
   },
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
@@ -298,7 +299,6 @@ export default {
           events: groupedEvents[date],
         });
       });
-
       return result;
     },
     formatLocalTime(timestamp) {
@@ -311,6 +311,12 @@ export default {
           ? timestamp.getMinutes()
           : `0${timestamp.getMinutes()}`;
       return `${hour}:${minutes}`;
+    },
+    checkHasSeenEvent(timestamp) {
+      return (
+        this.getEventLastSeenTs &&
+        this.getEventLastSeenTs > new Date(timestamp).getTime()
+      );
     },
   },
 };

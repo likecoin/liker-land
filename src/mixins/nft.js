@@ -439,6 +439,7 @@ export default {
       'lazyGetUserInfoByAddresses',
       'fetchNFTListByAddress',
       'fetchNFTDisplayStateListByAddress',
+      'fetchWalletEvents',
     ]),
     async fetchISCNMetadata() {
       if (!this.iscnId) return;
@@ -553,6 +554,7 @@ export default {
       }
       this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
       this.isHistoryInfoLoading = false;
+      this.fetchWalletEvents();
     },
     async getNFTEventsAll({ actionType, ignoreToList }) {
       let data;
