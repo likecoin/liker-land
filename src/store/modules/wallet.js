@@ -17,6 +17,7 @@ import {
   postFollowCreator,
   apiUserV2WalletEmail,
   getNFTEvents,
+  updateEventLastSeen,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -105,7 +106,7 @@ const mutations = {
       state.email = '';
       state.emailUnverified = '';
       state.followees = [];
-      state.eventLastSeenTs = 0;
+      state.eventLastSeenTs = 1;
     }
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
@@ -157,10 +158,15 @@ const getters = {
     state.eventLastSeenTs &&
     state.events[0]?.timestamp &&
     state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
-  getNotificationCount: state =>
-    state.events.findIndex(e => e.eventHasSeen) === -1
-      ? WALLET_EVENT_LIMIT
-      : state.events.findIndex(e => e.eventHasSeen),
+  getNotificationCount: (state, getters) => {
+    const count = state.events.findIndex(
+      e => state.eventLastSeenTs > new Date(e.timestamp).getTime()
+    );
+    if (count === -1) {
+      return getters.getEvents.length;
+    }
+    return count;
+  },
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -347,9 +353,6 @@ const actions = {
       events
         .map(e => {
           e.timestamp = new Date(e.timestamp);
-          e.eventHasSeen =
-            state.eventLastSeenTs &&
-            state.eventLastSeenTs > new Date(e.timestamp).getTime();
           return e;
         })
         .filter(e => e.action === '/cosmos.nft.v1beta1.MsgSend')
