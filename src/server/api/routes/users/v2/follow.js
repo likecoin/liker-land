@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
   authenticateV2Login,
   checkParamWalletMatch,
+  checkEmailHasVerified,
 } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
@@ -38,6 +39,7 @@ router.post(
   '/:wallet/followers',
   authenticateV2Login,
   checkParamWalletMatch,
+  checkEmailHasVerified,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
@@ -47,34 +49,12 @@ router.post(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await db.runTransaction(async t => {
-        const userRef = walletUserCollection.doc(user);
-        const userDoc = await t.get(userRef);
-        const { email, emailUnconfirmed } = userDoc.data();
-        if (!email) {
-          if (emailUnconfirmed) {
-            throw new Error('EMAIL_UNCONFIRMED');
-          } else {
-            throw new Error('EMAIL_NOT_SET_YET');
-          }
-        }
-        const creatorRef = walletUserCollection.doc(user);
-        await t.update(creatorRef, {
-          followees: FieldValue.arrayUnion(creator),
-        });
+      await walletUserCollection.doc(user).update({
+        followees: FieldValue.arrayUnion(creator),
       });
       res.sendStatus(200);
     } catch (err) {
-      switch (err.message) {
-        case 'EMAIL_UNCONFIRMED':
-          res.status(403).send('EMAIL_UNCONFIRMED');
-          break;
-        case 'EMAIL_NOT_SET_YET':
-          res.status(403).send('EMAIL_NOT_SET_YET');
-          break;
-        default:
-          handleRestfulError(req, res, next, err);
-      }
+      handleRestfulError(req, res, next, err);
     }
   }
 );
@@ -83,6 +63,7 @@ router.delete(
   '/:wallet/followers',
   authenticateV2Login,
   checkParamWalletMatch,
+  checkEmailHasVerified,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
@@ -97,13 +78,7 @@ router.delete(
       });
       res.sendStatus(200);
     } catch (err) {
-      switch (err.message) {
-        case 'EMAIL_NOT_SET_YET':
-          res.status(403).send('EMAIL_NOT_SET_YET');
-          break;
-        default:
-          handleRestfulError(req, res, next, err);
-      }
+      handleRestfulError(req, res, next, err);
     }
   }
 );

@@ -17,7 +17,23 @@ function checkParamWalletMatch(req, res, next) {
   next();
 }
 
+async function checkEmailHasVerified(req, res, next) {
+  const { wallet } = req.params;
+  const userDoc = await walletUserCollection.doc(wallet).get();
+  const { email, emailUnconfirmed } = userDoc.data();
+  if (!email) {
+    if (emailUnconfirmed) {
+      res.status(403).send('EMAIL_UNCONFIRMED');
+    } else {
+      res.status(403).send('EMAIL_NOT_SET_YET');
+    }
+    return;
+  }
+  next();
+}
+
 module.exports = {
   authenticateV2Login,
   checkParamWalletMatch,
+  checkEmailHasVerified,
 };
