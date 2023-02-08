@@ -375,7 +375,6 @@ export default {
             return {
               ...e,
               fromWallet: this.iscnOwner,
-              toWallet: '',
             };
           }
           return e;
