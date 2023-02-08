@@ -144,10 +144,10 @@ export const getChainNFTClassMetadataEndpoint = classId =>
 export const getChainNFTMetadataEndpoint = (classId, nftId) =>
   `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/nfts/${classId}/${nftId}`;
 
-export const getTopCollectorOfUser = (creator, count = 6) =>
+export const getTopCollectorOfUser = (creator, count = 5) =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?pagination.limit=${count}&reverse=true&creator=${creator}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
-export const getTopCreatorOfUser = (collector, count = 6) =>
+export const getTopCreatorOfUser = (collector, count = 5) =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?pagination.limit=${count}&reverse=true&collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
 export const getChainNFTClassListingEndpoint = classId =>
