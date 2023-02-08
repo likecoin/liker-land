@@ -279,6 +279,7 @@ export default {
     resetState() {
       this.paymentMethod = undefined;
       this.justCollectedNFTId = undefined;
+      this.memo = '';
 
       // Mixin
       this.nftPriceInUSD = undefined;
