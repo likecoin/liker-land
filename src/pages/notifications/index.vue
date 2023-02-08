@@ -290,10 +290,16 @@ export default {
         // No-op
       }
     }
+    window.addEventListener('beforeunload', () => {
+      this.updateEventLastSeenTs();
+    });
   },
   beforeDestroy() {
-    this.updateEventLastSeenTs();
+    window.removeEventListener('beforeunload', () => {
+      this.updateEventLastSeenTs();
+    });
   },
+
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     getChainExplorerTx,
