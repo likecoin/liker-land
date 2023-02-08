@@ -169,7 +169,6 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { LIKECOIN_NFT_API_WALLET } from '~/constant';
 import { getChainExplorerTx } from '~/util/api';
 import { ellipsis } from '~/util/ui';
 import walletMixin from '~/mixins/wallet';
@@ -194,22 +193,19 @@ export default {
     ]),
     processedEvents() {
       return this.getEvents.map(e => {
-        let eventType = 'unknown';
         let displayAvatar;
         let i18nPath;
         let message;
         let fromName;
         let toName;
         let price;
-        const eventHasSeen = this.checkHasSeenEvent(e.timestamp);
+        const eventHasSeen = this.checkHasSeenEvent(e);
 
         let memo = e.memo === 'like.co NFT API' ? '' : e.memo;
         const nftName = this.getNFTClassMetadataById(e.class_id)?.name;
-        if (e.sender === LIKECOIN_NFT_API_WALLET) {
-          if (e.receiver === this.getAddress) {
-            eventType = 'purchase_nft';
-            const creator = this.getNFTClassMetadataById(e.class_id)
-              ?.iscn_owner;
+        const creator = this.getNFTClassMetadataById(e.class_id)?.iscn_owner;
+        switch (e.eventType) {
+          case 'purchase_nft':
             displayAvatar = this.getUserInfoByAddress(this.getAddress)?.avatar;
             i18nPath = 'event_list_page_event_message_purchase_nft';
             fromName = this.$t('event_list_page_event_self');
@@ -217,8 +213,9 @@ export default {
             // eslint-disable-next-line prefer-destructuring
             price = e.price;
             memo = e.granterMemo || '';
-          } else {
-            eventType = 'nft_sale';
+            break;
+
+          case 'nft_sale':
             fromName =
               this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
             // eslint-disable-next-line prefer-destructuring
@@ -226,27 +223,31 @@ export default {
             i18nPath = 'event_list_page_event_message_nft_sale';
             displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
             memo = e.granterMemo || '';
-          }
-        } else if (e.receiver === this.getAddress) {
-          eventType = 'receive_nft';
-          fromName =
-            this.getUserInfoByAddress(e.sender)?.displayName || e.sender;
-          i18nPath = 'event_list_page_event_message_receive_nft';
-          displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
-        } else {
-          eventType = 'send_nft';
-          fromName = this.$t('event_list_page_event_self');
-          toName =
-            this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
-          i18nPath = 'event_list_page_event_message_send_nft';
-          displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
+            break;
+
+          case 'receive_nft':
+            fromName =
+              this.getUserInfoByAddress(e.sender)?.displayName || e.sender;
+            i18nPath = 'event_list_page_event_message_receive_nft';
+            displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
+            break;
+
+          case 'send_nft':
+            fromName = this.$t('event_list_page_event_self');
+            toName =
+              this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
+            i18nPath = 'event_list_page_event_message_send_nft';
+            displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
+            break;
+
+          default:
+            break;
         }
         if (memo) {
           message = memo;
         }
 
         return {
-          eventType,
           displayAvatar,
           eventHasSeen,
           message,
@@ -331,10 +332,16 @@ export default {
           : `0${timestamp.getMinutes()}`;
       return `${hour}:${minutes}`;
     },
-    checkHasSeenEvent(timestamp) {
+    checkHasSeenEvent(event) {
+      if (
+        event.eventType === 'purchase_nft' ||
+        event.eventType === 'send_nft'
+      ) {
+        return true;
+      }
       return (
         this.getEventLastSeenTs &&
-        this.getEventLastSeenTs > new Date(timestamp).getTime()
+        this.getEventLastSeenTs > new Date(event.timestamp).getTime()
       );
     },
   },
