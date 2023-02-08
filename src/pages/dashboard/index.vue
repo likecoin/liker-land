@@ -172,10 +172,12 @@ export default {
       if (res.creators) {
         this.topRankedUsers = (await Promise.all(
           res.creators.map(c => this.lazyGetUserInfoByAddress(c))
-        )).map((c, i) => ({
-          id: res.creators[i],
-          ...c,
-        }));
+        ))
+          .map((c, i) => ({
+            id: res.creators[i],
+            ...c,
+          }))
+          .slice(0, 10);
       } else {
         this.topRankedUsers = res.creators;
       }
