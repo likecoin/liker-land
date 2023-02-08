@@ -279,9 +279,8 @@ export default {
       }
     }
   },
-  beforeRouteLeave(to, form, next) {
+  beforeDestroy() {
     this.updateEventLastSeenTs();
-    next();
   },
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
