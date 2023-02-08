@@ -101,6 +101,7 @@
               class="self-start flex-shrink-0"
               :avatar-url="event.displayAvatar"
               :avatar-size="38"
+              :is-avatar-outlined="event.isCivicLiker"
             />
             <!-- info -->
             <div class="flex flex-col items-start justify-center">
@@ -199,6 +200,7 @@ export default {
         let fromName;
         let toName;
         let price;
+        let isCivicLiker;
         const eventHasSeen = this.checkHasSeenEvent(e);
 
         let memo = e.memo === 'like.co NFT API' ? '' : e.memo;
@@ -207,6 +209,8 @@ export default {
         switch (e.eventType) {
           case 'purchase_nft':
             displayAvatar = this.getUserInfoByAddress(this.getAddress)?.avatar;
+            isCivicLiker = this.getUserInfoByAddress(this.getAddress)
+              ?.isSubscribedCivicLiker;
             i18nPath = 'event_list_page_event_message_purchase_nft';
             fromName = this.$t('event_list_page_event_self');
             toName = this.getUserInfoByAddress(creator)?.displayName || creator;
@@ -222,6 +226,8 @@ export default {
             price = e.price;
             i18nPath = 'event_list_page_event_message_nft_sale';
             displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
+            isCivicLiker = this.getUserInfoByAddress(e.receiver)
+              ?.isSubscribedCivicLiker;
             memo = e.granterMemo || '';
             break;
 
@@ -230,6 +236,8 @@ export default {
               this.getUserInfoByAddress(e.sender)?.displayName || e.sender;
             i18nPath = 'event_list_page_event_message_receive_nft';
             displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
+            isCivicLiker = this.getUserInfoByAddress(e.sender)
+              ?.isSubscribedCivicLiker;
             break;
 
           case 'send_nft':
@@ -238,6 +246,8 @@ export default {
               this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
             i18nPath = 'event_list_page_event_message_send_nft';
             displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
+            isCivicLiker = this.getUserInfoByAddress(e.sender)
+              ?.isSubscribedCivicLiker;
             break;
 
           default:
@@ -249,6 +259,7 @@ export default {
 
         return {
           displayAvatar,
+          isCivicLiker,
           eventHasSeen,
           message,
           fromName,
