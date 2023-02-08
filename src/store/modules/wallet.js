@@ -106,7 +106,7 @@ const mutations = {
       state.email = '';
       state.emailUnverified = '';
       state.followees = [];
-      state.eventLastSeenTs = 1;
+      state.eventLastSeenTs = -1;
     }
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
@@ -159,13 +159,14 @@ const getters = {
     state.events[0]?.timestamp &&
     state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
   getNotificationCount: (state, getters) => {
-    const count = state.events.findIndex(
-      e => state.eventLastSeenTs > new Date(e.timestamp).getTime()
-    );
-    if (count === -1) {
-      return getters.getEvents.length;
+    if (!state.eventLastSeenTs || !getters.getEvents || !getters.loginAddress) {
+      return 0;
     }
-    return count;
+    return getters.getEvents.filter(
+      e =>
+        state.eventLastSeenTs < new Date(e.timestamp).getTime() &&
+        (e.eventType === 'nft_sale' || e.eventType === 'receive_nft')
+    ).length;
   },
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
@@ -175,6 +176,22 @@ const getters = {
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
 };
+
+function formatEventType(e, loginAddress) {
+  let eventType;
+  if (e.sender === LIKECOIN_NFT_API_WALLET) {
+    if (e.receiver === loginAddress) {
+      eventType = 'purchase_nft';
+    } else {
+      eventType = 'nft_sale';
+    }
+  } else if (e.receiver === loginAddress) {
+    eventType = 'receive_nft';
+  } else {
+    eventType = 'send_nft';
+  }
+  return eventType;
+}
 
 const actions = {
   async getLikeCoinWalletLib() {
@@ -353,9 +370,9 @@ const actions = {
       events
         .map(e => {
           e.timestamp = new Date(e.timestamp);
+          e.eventType = formatEventType(e, address);
           return e;
         })
-        .filter(e => e.action === '/cosmos.nft.v1beta1.MsgSend')
         .sort((a, b) => b.timestamp - a.timestamp)
     );
     classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
