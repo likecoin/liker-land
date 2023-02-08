@@ -92,6 +92,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
+import { fisherShuffle } from '~/util/misc';
 
 export default {
   name: 'MyDashboardPage',
@@ -170,14 +171,17 @@ export default {
         getCollectorTopRankedCreators(this.getAddress)
       );
       if (res.creators) {
-        this.topRankedUsers = (await Promise.all(
+        let users = (await Promise.all(
           res.creators.map(c => this.lazyGetUserInfoByAddress(c))
-        ))
-          .map((c, i) => ({
-            id: res.creators[i],
-            ...c,
-          }))
-          .slice(0, 10);
+        )).map((c, i) => ({
+          id: res.creators[i],
+          ...c,
+        }));
+        if (users && users.length > 10) {
+          users = fisherShuffle(users);
+          users = users.slice(0, 10);
+        }
+        this.topRankedUsers = users;
       } else {
         this.topRankedUsers = res.creators;
       }
