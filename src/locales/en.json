@@ -310,6 +310,7 @@
   "nft_message_type_purchase": "Collector's Message",
   "nft_message_type_transfer": "Transfer Message",
   "nft_portfolio_page_label_collected": "Collected",
+  "nft_portfolio_page_label_collector_top_ranked_creators": "Top fan of the above creators",
   "nft_portfolio_page_label_created": "Created",
   "nft_portfolio_page_label_featured": "Featured",
   "nft_portfolio_page_label_hidden": "Hidden",

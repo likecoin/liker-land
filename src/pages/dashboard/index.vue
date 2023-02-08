@@ -12,13 +12,32 @@
     </div>
     <template v-else>
       <!-- UserStat -->
-      <div class="flex items-center mb-[24px] laptop:mb-[48px] w-full max-w-[736px]">
+      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full max-w-[736px]">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
         />
+        <NFTPortfolioTopUsersList
+          v-if="topRankedUsers && topRankedUsers.length"
+          class="mt-[12px]"
+          type="creator"
+          :is-card="false"
+          :user-list="topRankedUsers"
+          @hover="handleTopUserHover"
+          @click="handleTopUserClick"
+        >
+          <template #append>
+            <Label
+              class="w-min font-600 text-medium-gray mt-[4px]"
+              :text="$t('nft_portfolio_page_label_collector_top_ranked_creators')"
+              preset="h6"
+              align="center"
+              valign="middle"
+            />
+          </template>
+        </NFTPortfolioTopUsersList>
       </div>
 
       <!-- Main -->
@@ -72,6 +91,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
+import { getCollectorTopRankedCreators } from '~/util/api';
 
 export default {
   name: 'MyDashboardPage',
@@ -109,22 +129,31 @@ export default {
       ],
     };
   },
+  data() {
+    return {
+      topRankedUsers: [],
+    };
+  },
   computed: {
     wallet() {
       return this.getAddress;
     },
   },
   watch: {
-    async getAddress(newAddress) {
+    getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserInfo();
-        await this.loadNFTListByAddress(this.getAddress);
+        this.loadNFTListByAddress(this.getAddress);
+        this.updateTopRankedCreators();
       }
     },
   },
   mounted() {
     this.syncRouteForTab();
-    if (this.getAddress) this.loadNFTListByAddress(this.getAddress);
+    if (this.getAddress) {
+      this.loadNFTListByAddress(this.getAddress);
+      this.updateTopRankedCreators();
+    }
   },
   methods: {
     ...mapActions(['fetchUserInfoByAddress']),
@@ -135,6 +164,39 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       }
+    },
+    async updateTopRankedCreators() {
+      const res = await this.$axios.$get(
+        getCollectorTopRankedCreators(this.getAddress)
+      );
+      if (res.creators) {
+        this.topRankedUsers = (await Promise.all(
+          res.creators.map(c => this.lazyGetUserInfoByAddress(c))
+        )).map((c, i) => ({
+          id: res.creators[i],
+          ...c,
+        }));
+      } else {
+        this.topRankedUsers = res.creators;
+      }
+    },
+    handleTopUserHover(i) {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        `dashboard_top_faned_creators_hover`,
+        `${i}`,
+        1
+      );
+    },
+    handleTopUserClick(i) {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        `dashboard_top_faned_creators_hover`,
+        `${i}`,
+        1
+      );
     },
     handleGoCollected() {
       this.handleTabChange(tabOptions.collected);
