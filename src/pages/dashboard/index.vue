@@ -172,9 +172,10 @@ export default {
       );
       if (res.creators) {
         let users = (await Promise.all(
-          res.creators.map(c => this.lazyGetUserInfoByAddress(c))
+          // res.creators can be array of address, or array of { creator: address }
+          res.creators.map(c => this.lazyGetUserInfoByAddress(c.creator || c))
         )).map((c, i) => ({
-          id: res.creators[i],
+          id: res.creators[i].creator || res.creators[i],
           ...c,
         }));
         if (users && users.length > 10) {
