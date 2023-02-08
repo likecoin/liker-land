@@ -37,7 +37,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletHasLoggedIn', 'walletNotificationSettings']),
+    ...mapGetters([
+      'walletHasLoggedIn',
+      'walletHasVerifiedEmail',
+      'walletNotificationSettings',
+    ]),
   },
   async mounted() {
     if (!this.walletHasLoggedIn) {
@@ -49,6 +53,10 @@ export default {
       if (!this.walletHasLoggedIn) {
         return;
       }
+    }
+    if (!this.walletHasVerifiedEmail) {
+      this.$router.push({ name: 'settings-email' });
+      return;
     }
     if (!this.walletNotificationSettings) {
       await this.walletFetchNotificationSettings();
