@@ -98,8 +98,8 @@ module.exports = onMessagePublished(
             });
           });
 
-          for (let i = 0; i < recipients.docs.length; i += 1) {
-            const { email, language, subscriptionId } = recipients;
+          for (let i = 0; i < recipients.length; i += 1) {
+            const { email, language, subscriptionId } = recipients[i];
             try {
               const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory(
                 {
