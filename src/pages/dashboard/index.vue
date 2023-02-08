@@ -25,6 +25,8 @@
           type="creator"
           :is-card="false"
           :user-list="topRankedUsers"
+          @hover="handleTopUserHover"
+          @click="handleTopUserClick"
         >
           <template #append>
             <Label
@@ -174,6 +176,24 @@ export default {
       } else {
         this.topRankedUsers = res.creators;
       }
+    },
+    handleTopUserHover(i) {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        `dashboard_top_faned_creators_hover`,
+        `${i}`,
+        1
+      );
+    },
+    handleTopUserClick(i) {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        `dashboard_top_faned_creators_hover`,
+        `${i}`,
+        1
+      );
     },
     handleGoCollected() {
       this.handleTabChange(tabOptions.collected);

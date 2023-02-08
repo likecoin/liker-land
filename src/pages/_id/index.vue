@@ -48,6 +48,8 @@
           v-if="(isCurrentTabCollected ? userTopCreators : userTopCollectors).length && (isCurrentTabCollected || isCurrentTabCreated)"
           :type="isCurrentTabCollected ? 'creator' : 'collector'"
           :user-list="isCurrentTabCollected ? userTopCreators : userTopCollectors"
+          @hover="handleTopUserHover"
+          @click="handleTopUserClick"
         >
           <template #prepend>
             <Label
@@ -247,6 +249,24 @@ export default {
     this.loadTopUserListByAddress(this.wallet);
   },
   methods: {
+    handleTopUserHover(i) {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_top_${this.type}_hover`,
+        `${i}`,
+        1
+      );
+    },
+    handleTopUserClick(i) {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_top_${this.type}_click`,
+        `${i}`,
+        1
+      );
+    },
     handleTabChange(tab) {
       switch (tab) {
         case tabOptions.collected:

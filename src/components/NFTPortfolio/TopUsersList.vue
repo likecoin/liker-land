@@ -46,7 +46,6 @@
 
 <script>
 import { ellipsis } from '~/util/ui';
-import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'NFTPortfolioTopUsersList',
@@ -74,22 +73,10 @@ export default {
   },
   methods: {
     onHover(i) {
-      logTrackerEvent(
-        this,
-        'portfolio',
-        `portfolio_top_${this.type}_hover`,
-        `${i}`,
-        1
-      );
+      this.$emit('hover', i);
     },
     onClick(i) {
-      logTrackerEvent(
-        this,
-        'portfolio',
-        `portfolio_top_${this.type}_click`,
-        `${i}`,
-        1
-      );
+      this.$emit('click', i);
     },
   },
 };
