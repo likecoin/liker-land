@@ -102,6 +102,9 @@ router.put('/:wallet/email', async (req, res, next) => {
         email: emailUnconfirmed,
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
+        notification: {
+          transfer: true,
+        },
       });
     });
     res.sendStatus(200);

@@ -19,7 +19,7 @@ router.get(
       const { wallet: user } = req.params;
       const userDoc = await walletUserCollection.doc(user).get();
       const { notification = {} } = userDoc.data();
-      const { transfer = false } = notification;
+      const { transfer = true } = notification;
       res.json({
         notification: {
           transfer,
