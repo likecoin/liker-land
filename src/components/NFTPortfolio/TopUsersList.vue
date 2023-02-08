@@ -1,16 +1,11 @@
 <template>
-  <CardV2
+  <component
+    :is="isCard ? 'CardV2' : 'div'"
     class="w-full"
     :has-content-padding="true"
     :is-narrow="true"
   >
-    <Label
-      class="w-min font-600 text-like-green"
-      :text="label"
-      preset="h5"
-      align="center"
-      valign="middle"
-    />
+    <slot name="prepend" />
     <ul class="flex flex-row-reverse justify-center items-center mt-[18px] px-[4px]">
       <li
         v-for="user in users"
@@ -45,7 +40,8 @@
         </ToolTips>
       </li>
     </ul>
-  </CardV2>
+    <slot name="append" />
+  </component>
 </template>
 
 <script>
@@ -62,9 +58,9 @@ export default {
       type: String,
       required: true,
     },
-    label: {
-      type: String,
-      required: true,
+    isCard: {
+      type: Boolean,
+      default: true,
     },
     userList: {
       type: Array,
