@@ -1,3 +1,5 @@
+const { walletUserCollection } = require('../../modules/firebase');
+
 function authenticateV2Login(req, res, next) {
   const { user, version } = req.session;
   if (!user || version !== 2) {
