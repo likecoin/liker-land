@@ -110,7 +110,7 @@
             </template>
             <template #label-append>
               <div
-                v-if="item.value === 'notification'"
+                v-if="item.value === 'notifications'"
                 :class="[
                   'flex',
                   'justify-center',
@@ -183,7 +183,7 @@ export default {
 
       if (this.getAddress || this.getUserId) {
         options.push(
-          { value: 'notification', name: this.$t('main_menu_notification') },
+          { value: 'notifications', name: this.$t('main_menu_notification') },
           { value: 'setting', name: this.$t('main_menu_settings') },
           { value: 'signOut', name: this.$t('main_menu_sign_out') }
         );
@@ -219,15 +219,15 @@ export default {
           window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
           break;
 
-        case 'notification':
+        case 'notifications':
           logTrackerEvent(
             this,
             'site_menu',
-            'site_menu_click_notification',
+            'site_menu_click_notifications',
             '',
             1
           );
-          this.$router.push({ name: 'notification' });
+          this.$router.push({ name: 'notifications' });
           break;
 
         case 'setting':
