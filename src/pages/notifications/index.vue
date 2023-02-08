@@ -175,7 +175,7 @@ import { ellipsis } from '~/util/ui';
 import walletMixin from '~/mixins/wallet';
 
 export default {
-  name: 'NotificationPage',
+  name: 'NotificationsPage',
   layout: 'default',
   filters: {
     ellipsis,
