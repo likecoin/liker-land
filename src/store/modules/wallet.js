@@ -16,6 +16,7 @@ import {
   getUserFollowees,
   postFollowCreator,
   apiUserV2WalletEmail,
+  getUserNotificationSettingsUrl,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -32,6 +33,7 @@ import {
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
+  WALLET_SET_NOTIFICATION_SETTINGS,
 } from '../mutation-types';
 
 let likecoinWalletLib = null;
@@ -48,6 +50,7 @@ const state = () => ({
   methodType: null,
   likeBalance: null,
   likeBalanceFetchPromise: null,
+  notificationSettings: null,
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -112,6 +115,9 @@ const mutations = {
   [WALLET_SET_FOLLOWEES_FETCHING_STATE](state, isFetching) {
     state.isFetchingFollowees = isFetching;
   },
+  [WALLET_SET_NOTIFICATION_SETTINGS](state, notificationSettings) {
+    state.notificationSettings = notificationSettings;
+  },
 };
 
 const getters = {
@@ -132,6 +138,7 @@ const getters = {
   walletIsLoggingIn: state => state.isLoggingIn,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
+  walletNotificationSettings: state => state.notificationSettings,
 };
 
 const actions = {
@@ -384,6 +391,30 @@ const actions = {
       );
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
+      throw error;
+    }
+  },
+  async walletFetchNotificationSettings({ state, commit }) {
+    try {
+      const { notification: notificationSettings } = await this.$api.$get(
+        getUserNotificationSettingsUrl(state.loginAddress)
+      );
+      commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletUpdateNotificationSettings(
+    { state, commit },
+    notificationSettings
+  ) {
+    try {
+      await this.$api.$post(
+        getUserNotificationSettingsUrl(state.loginAddress),
+        notificationSettings
+      );
+      commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
+    } catch (error) {
       throw error;
     }
   },

@@ -8,7 +8,7 @@
           <SettingsListItem :is-clickable="false">
             {{ $t('settings_notification_tx_transfer') }}
             <template #accessory>
-              <CheckBox v-model="isTransferNotificationEnabled" />
+              <CheckBox v-model="isTransferNotificationEnabled" @input="postNotificationSettings" />
             </template>
           </SettingsListItem>
         </li>
@@ -27,26 +27,17 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { getUserNotification } from '~/util/api';
 
 export default {
   name: 'NotificationSettingsPage',
   data() {
     return {
-      isReady: false,
-      isTransferNotificationEnabled: false,
+      isTransferNotificationEnabled: true,
       isPurchaseNotificationEnabled: false,
     };
   },
   computed: {
-    ...mapGetters(['loginAddress', 'walletHasLoggedIn']),
-  },
-  watch: {
-    isTransferNotificationEnabled() {
-      if (this.isReady) {
-        this.handleToggle();
-      }
-    },
+    ...mapGetters(['walletHasLoggedIn', 'walletNotificationSettings']),
   },
   async mounted() {
     if (!this.walletHasLoggedIn) {
@@ -59,24 +50,20 @@ export default {
         return;
       }
     }
-    await this.fetchNotification();
-    this.isReady = true;
+    if (!this.walletNotificationSettings) {
+      await this.walletFetchNotificationSettings();
+    }
+    this.isTransferNotificationEnabled = this.walletNotificationSettings.transfer;
   },
   methods: {
-    ...mapActions(['signLogin']),
-    async fetchNotification() {
-      const { data } = await this.$api.get(
-        getUserNotification(this.loginAddress)
-      );
-      const { notification } = data;
-      const { transfer } = notification;
-      this.isTransferNotificationEnabled = transfer;
-    },
-    handleToggle() {
-      this.$api.post(getUserNotification(this.loginAddress), {
-        notification: {
-          transfer: this.isTransferNotificationEnabled,
-        },
+    ...mapActions([
+      'signLogin',
+      'walletFetchNotificationSettings',
+      'walletUpdateNotificationSettings',
+    ]),
+    postNotificationSettings() {
+      this.walletUpdateNotificationSettings({
+        transfer: this.isTransferNotificationEnabled,
       });
     },
   },

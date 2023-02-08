@@ -288,5 +288,5 @@ export const getNFTDisplayStateURL = wallet =>
 export const getUserFollowees = wallet => `/api/v2/users/${wallet}/followees`;
 export const postFollowCreator = ({ wallet, creator }) =>
   `/api/v2/users/${wallet}/followers?creator=${creator}`;
-export const getUserNotification = wallet =>
+export const getUserNotificationSettingsUrl = wallet =>
   `/api/v2/users/${wallet}/notification`;

@@ -40,12 +40,7 @@ router.post(
     try {
       setPrivateCacheHeader(res);
       const { wallet: user } = req.params;
-      const { notification } = req.body;
-      if (!notification) {
-        res.status(400).send('MISSING_NOTIFICATION_SETTING');
-        return;
-      }
-      const { transfer } = notification;
+      const { transfer } = req.body;
       if (typeof transfer !== 'boolean') {
         res.status(400).send('INVALID_NOTIFICATION_SETTING');
         return;
