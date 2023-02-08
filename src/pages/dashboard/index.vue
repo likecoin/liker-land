@@ -170,9 +170,12 @@ export default {
         getCollectorTopRankedCreators(this.getAddress)
       );
       if (res.creators) {
-        this.topRankedUsers = await Promise.all(
+        this.topRankedUsers = (await Promise.all(
           res.creators.map(c => this.lazyGetUserInfoByAddress(c))
-        );
+        )).map((c, i) => ({
+          id: res.creators[i],
+          ...c,
+        }));
       } else {
         this.topRankedUsers = res.creators;
       }
