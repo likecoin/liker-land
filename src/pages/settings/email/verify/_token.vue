@@ -30,6 +30,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { logTrackerEvent } from '~/util/EventLogger';
+
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
 
@@ -84,9 +86,23 @@ export default {
       }
     },
     handleClickBack() {
+      logTrackerEvent(
+        this,
+        'Settings',
+        'settings_email_verify_back_button_clicked',
+        '',
+        1
+      );
       this.$router.push({ name: 'settings' });
     },
     handleClickRetry() {
+      logTrackerEvent(
+        this,
+        'Settings',
+        'settings_email_verify_retry_button_clicked',
+        '',
+        1
+      );
       this.verify();
     },
   },
