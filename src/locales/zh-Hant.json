@@ -216,8 +216,8 @@
     "loggingOut": "登出中"
   },
   "main_menu_civic_liker": "讚賞公民",
-  "main_menu_my_dashboard": "我的書架",
   "main_menu_mint_nft": "發行 NFT",
+  "main_menu_my_dashboard": "我的書架",
   "main_menu_settings": "設定",
   "main_menu_sign_out": "登出",
   "mainVPs": [
@@ -265,6 +265,7 @@
   "nft_details_page_errormessage_memo_limit": "字數超過 256 位元。",
   "nft_details_page_errormessage_transfer_invalid": "你輸入了錯誤的錢包地址，請重試。",
   "nft_details_page_errormessage_transfer_self": "不能轉贈給自己",
+  "nft_details_page_label_ar_view_in_mobile": "將你的 NFT 帶到現實",
   "nft_details_page_label_loading": "進行中，請稍候⋯⋯",
   "nft_details_page_label_memo": "附加留言",
   "nft_details_page_label_nft_id": "NFT ID",
@@ -273,7 +274,6 @@
   "nft_details_page_label_price": "當前價格",
   "nft_details_page_label_transfer": "輸入接收者錢包地址",
   "nft_details_page_label_transfer_nft_id_select": "選擇要轉贈的 NFT",
-  "nft_details_page_label_ar_view_in_mobile": "將你的 NFT 帶到現實",
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_section_metadata": "元資料",
   "nft_details_page_section_metadata_ar": "Arweave",
@@ -402,6 +402,7 @@
   "settings_email_resend_verification_email": "重發認證電郵",
   "settings_email_unverified_email": "未認證電郵",
   "settings_email_verify_error_message": "驗證電郵時出現錯誤：{error}",
+  "settings_email_verify_error_message_unknown": "驗證電郵時出現不明錯誤",
   "settings_email_verify_verified": "電郵已驗證",
   "settings_email_verify_verified_back_button": "返回",
   "settings_email_verify_verifying": "驗證電郵中",

@@ -5,6 +5,12 @@
       <ProgressIndicator class="self-center mt-[16px]" />
     </template>
     <Label v-else-if="walletHasVerifiedEmail" :text="$t('settings_email_verify_verified')" align="center" />
+    <Label v-else-if="error" align="center">
+      {{ $t('settings_email_verify_error_message', { error }) }}
+    </Label>
+    <Label v-else align="center">
+      {{ $t('settings_email_verify_error_message_unknown') }}
+    </Label>
     <ButtonV2
       class="self-center mt-[16px]"
       :text="$t('settings_email_verify_verified_back_button')"
@@ -26,6 +32,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      error: '',
     };
   },
   computed: {
@@ -45,9 +52,10 @@ export default {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
+      this.error = error.response?.data || error.message;
       this.alertPromptError(
         this.$t('settings_email_verify_error_message', {
-          error: error.response?.data || error.message,
+          error: this.error,
         })
       );
     } finally {
