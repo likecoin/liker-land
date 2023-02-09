@@ -81,7 +81,7 @@ module.exports = onMessagePublished(
             // eslint-disable-next-line no-await-in-loop
           } = await fetchLikerInfoByWallet(sellerWallet);
 
-          const recipients = [];
+          let recipients = [];
           anonymousUserQuerySnapshot.forEach(doc => {
             const { subscriberEmail, language = 'en' } = doc.data();
             recipients.push({
@@ -97,6 +97,9 @@ module.exports = onMessagePublished(
               language,
             });
           });
+
+          // dedup
+          recipients = [...new Map(recipients.map(r => [r.email, r])).values()];
 
           for (let i = 0; i < recipients.length; i += 1) {
             const { email, language, subscriptionId } = recipients[i];
