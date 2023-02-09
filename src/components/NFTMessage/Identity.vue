@@ -2,6 +2,7 @@
   <NuxtLink
     :class="[
       'flex',
+      'phone:flex-col',
       'items-center',
 
       'gap-[16px]',
@@ -13,6 +14,7 @@
       'phone:pr-[12px]',
 
       'bg-white',
+      'phone:rounded-[14px]',
       'rounded-full',
       'cursor-pointer',
 
@@ -21,6 +23,7 @@
     :to="toRoute"
   >
     <Identity
+      class="flex-shrink-0"
       :avatar-url="userAvatar"
       :avatar-size="avatarSize"
       :is-avatar-outlined="isUserCivicLiker"
@@ -28,9 +31,9 @@
     <div>
       <div
         v-if="isShowTypeLabel"
-        class="text-[12px] text-medium-gray"
+        class="text-[12px] text-medium-gray phone:text-center"
       >{{ userLabel }}</div>
-      <Label class="text-like-green" :preset="userLabelSize">{{ userDisplayName }}</Label>
+      <Label class="text-like-green" :preset="userLabelSize" align="center">{{ userDisplayName }}</Label>
     </div>
   </NuxtLink>
 </template>

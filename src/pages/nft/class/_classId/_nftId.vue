@@ -6,7 +6,7 @@
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
       v-else-if="!isLoading && !isMessagePage"
-      class="px-[12px] laptop:px-[24px] phone:px-[32px] pb-[120px] w-full"
+      class="px-[12px] laptop:px-[24px] phone:px-[12px] pb-[120px] w-full"
     >
 
       <div class="flex flex-col gap-[32px] phone:gap-[16px] w-full max-w-[962px] mx-auto">
@@ -82,7 +82,7 @@
               v-if="messageList.length && messageList[0].message"
               class="hidden flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px] phone:flex phone:order-1"
             >
-              <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[24px]">
+              <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[16px]">
                 <NFTMessage
                   :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
                   :type="creatorMessage.event"
@@ -118,7 +118,7 @@
             </div>
             <ul
               v-if="messageList.length === 1 && creatorMessage && !creatorMessage.message"
-              class="hidden flex-col gap-[24px] w-full px-[24px] phone:flex phone:order-3"
+              class="hidden flex-col gap-[24px] w-full px-[16px] phone:flex phone:order-3"
             >
               <NFTMessage
                 :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
