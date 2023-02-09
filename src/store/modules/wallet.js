@@ -7,6 +7,7 @@ import {
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 
+import { catchAxiosError } from '~/util/misc';
 import { getAccountBalance } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
@@ -161,11 +162,12 @@ const actions = {
     commit(WALLET_SET_ADDRESS, walletAddress);
     commit(WALLET_SET_SIGNER, offlineSigner);
     await setLoggerUser(this, { wallet: walletAddress, method });
+    catchAxiosError(
+      this.$api.$get(getUserInfoMinByAddress(walletAddress)).then(userInfo => {
+        commit(WALLET_SET_LIKERINFO, userInfo);
+      })
+    );
     try {
-      const userInfo = await this.$api.$get(
-        getUserInfoMinByAddress(walletAddress)
-      );
-      commit(WALLET_SET_LIKERINFO, userInfo);
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
