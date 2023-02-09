@@ -194,7 +194,7 @@ export default {
 
         case 'setting':
           logTrackerEvent(this, 'site_menu', 'site_menu_click_settings', '', 1);
-          this.navigateToSettings();
+          this.$router.push({ name: 'settings' });
           break;
 
         case 'signOut':

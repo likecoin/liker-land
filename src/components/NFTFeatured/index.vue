@@ -126,7 +126,14 @@ export default {
       if (this.readOnly) return;
 
       if (!this.walletHasLoggedIn) {
-        await this.signLogin();
+        try {
+          await this.signLogin();
+        } catch {
+          // No-op
+        }
+        if (!this.walletHasLoggedIn) {
+          return;
+        }
       }
 
       switch (this.displayState) {

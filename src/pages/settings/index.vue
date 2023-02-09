@@ -1,6 +1,16 @@
 <template>
-  <div class="settings-page-body">
+  <div>
     <ul class="settings-menu">
+      <li>
+        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-email' }">
+          <span class="settings-menu__item-title"> {{ $t('settings_email') }}</span>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-following' }">
+          <span class="settings-menu__item-title"> {{ $t('settings_following') }}</span>
+        </NuxtLink>
+      </li>
       <li>
         <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
           <GlobeIcon class="settings-menu__item-title-icon" />
@@ -8,24 +18,31 @@
         </NuxtLink>
       </li>
     </ul>
+
+    <ul class="settings-menu !mt-[24px]">
+      <li>
+        <a class="settings-menu__item" :href="likerIdSettingsURL" target="_blank" rel="noreferrer noopener">
+          <span class="settings-menu__item-title"> {{ $t('settings_liker_id') }}</span>
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import walletMixin from '~/mixins/wallet';
+
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
 
 export default {
   components: {
     GlobeIcon,
   },
+  mixins: [walletMixin],
 };
 </script>
 
 <style lang="scss">
-.settings-page-body {
-  @apply mb-48;
-}
-
 .settings-menu {
   @apply px-16;
   @apply list-none;

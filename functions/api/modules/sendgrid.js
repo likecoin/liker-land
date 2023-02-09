@@ -10,11 +10,15 @@ function getSendGrid() {
   return sendgrid;
 }
 
-exports.sendEmail = ({ email, subject, html }) => {
+function sendEmail({ email, subject, html }) {
   return getSendGrid().send({
     from: 'Liker Land <noreply@liker.land>',
     to: email,
     subject,
     html,
   });
+}
+
+module.exports = {
+  sendEmail,
 };

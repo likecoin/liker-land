@@ -7,6 +7,7 @@ const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
 const { isValidAddress } = require('../../../util/cosmos');
 const {
+  db,
   FieldValue,
   walletUserCollection,
 } = require('../../../../modules/firebase');
@@ -14,7 +15,7 @@ const {
 const router = Router();
 
 router.get(
-  '/:wallet/followers',
+  '/:wallet/followees',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
@@ -22,11 +23,11 @@ router.get(
       const { wallet: user } = req.params;
       const userDoc = await walletUserCollection.doc(user).get();
       if (!userDoc.exists) {
-        res.json({ followers: [] });
+        res.json({ followees: [] });
         return;
       }
-      const { followers = [] } = userDoc.data();
-      res.json({ followers });
+      const { followees = [] } = userDoc.data();
+      res.json({ followees });
     } catch (err) {
       handleRestfulError(req, res, next, err);
     }
@@ -46,12 +47,34 @@ router.post(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        followers: FieldValue.arrayUnion(creator),
+      await db.runTransaction(async t => {
+        const userRef = walletUserCollection.doc(user);
+        const userDoc = await t.get(userRef);
+        const { email, emailUnconfirmed } = userDoc.data();
+        if (!email) {
+          if (emailUnconfirmed) {
+            throw new Error('EMAIL_UNCONFIRMED');
+          } else {
+            throw new Error('EMAIL_NOT_SET_YET');
+          }
+        }
+        const creatorRef = walletUserCollection.doc(user);
+        await t.update(creatorRef, {
+          followees: FieldValue.arrayUnion(creator),
+        });
       });
       res.sendStatus(200);
     } catch (err) {
-      handleRestfulError(req, res, next, err);
+      switch (err.message) {
+        case 'EMAIL_UNCONFIRMED':
+          res.status(403).send('EMAIL_UNCONFIRMED');
+          break;
+        case 'EMAIL_NOT_SET_YET':
+          res.status(403).send('EMAIL_NOT_SET_YET');
+          break;
+        default:
+          handleRestfulError(req, res, next, err);
+      }
     }
   }
 );
@@ -70,27 +93,33 @@ router.delete(
         return;
       }
       await walletUserCollection.doc(user).update({
-        followers: FieldValue.arrayRemove(creator),
+        followees: FieldValue.arrayRemove(creator),
       });
       res.sendStatus(200);
     } catch (err) {
-      handleRestfulError(req, res, next, err);
+      switch (err.message) {
+        case 'EMAIL_NOT_SET_YET':
+          res.status(403).send('EMAIL_NOT_SET_YET');
+          break;
+        default:
+          handleRestfulError(req, res, next, err);
+      }
     }
   }
 );
 
 router.get(
-  '/:wallet/followees',
+  '/:wallet/followers',
   authenticateV2Login,
   checkParamWalletMatch,
   async (req, res, next) => {
     try {
       const { wallet: user } = req.params;
-      const followeeDocs = await walletUserCollection
-        .where('followers', 'array-contains', user)
+      const followerDocs = await walletUserCollection
+        .where('followees', 'array-contains', user)
         .get();
-      const followees = followeeDocs.docs.map(doc => doc.id);
-      res.json({ followees });
+      const followers = followerDocs.docs.map(doc => doc.id);
+      res.json({ followers });
     } catch (err) {
       handleRestfulError(req, res, next, err);
     }

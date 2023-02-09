@@ -62,6 +62,16 @@ export async function lazyGetUserInfoByAddress({ state, dispatch }, address) {
   return userInfo;
 }
 
+export function lazyGetUserInfoByAddresses({ dispatch }, addresses) {
+  if (!addresses) return null;
+  if (typeof addresses === 'string') {
+    return dispatch('lazyGetUserInfoByAddress', addresses);
+  }
+  return Promise.all(
+    addresses.filter(a => !!a).map(a => dispatch('lazyGetUserInfoByAddress', a))
+  );
+}
+
 export async function fetchArticleInfo({ commit }, referrer) {
   const info = await this.$api.$get(api.getArticleDetailAPI(referrer));
   commit(TYPES.STATIC_SET_ARTICLE_INFO, { referrer, info });

@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { getIdenticonAvatar } from '~/util/api';
+import { getIdenticonAvatar, postFollowCreator } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 
@@ -11,9 +11,16 @@ export default {
       'getSigner',
       'getLikerInfo',
       'getLocale',
+      'walletFollowees',
       'walletMethodType',
+      'walletEmail',
+      'walletHasVerifiedEmail',
       'walletLIKEBalance',
       'walletLIKEBalanceFetchPromise',
+      'walletHasLoggedIn',
+      'walletIsMatchedSession',
+      'walletIsLoggingIn',
+      'loginAddress',
     ]),
     hasConnectedWallet() {
       return !!this.getAddress && !!this.walletMethodType;
@@ -26,6 +33,12 @@ export default {
         (this.getLikerInfo && this.getLikerInfo.avatar) ||
         getIdenticonAvatar(this.getAddress)
       );
+    },
+    likerIdSettingsURL() {
+      return getLikerIdSettingsURL({
+        wallet: this.getAddress || '',
+        language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
+      });
     },
   },
   watch: {
@@ -43,6 +56,8 @@ export default {
       'initIfNecessary',
       'restoreSession',
       'walletFetchLIKEBalance',
+      'signLogin',
+      'walletFetchFollowees',
     ]),
     async connectWallet() {
       const connection = await this.openConnectWalletModal({
@@ -73,10 +88,7 @@ export default {
     },
     navigateToSettings() {
       window.open(
-        getLikerIdSettingsURL({
-          wallet: this.getAddress || '',
-          language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
-        }),
+        this.likerIdSettingsURL,
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );

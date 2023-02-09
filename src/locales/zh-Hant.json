@@ -97,7 +97,6 @@
     "registerForFree": "免費登記",
     "title": "@:civicLiker"
   },
-  "CL1VsCL2": "讚賞公民新舊計劃的比較",
   "clipboard_copied": "已複製",
   "CLP.betterWorld.description": "每位讚賞公民的付出，都在貢獻創作生態。按讚的意義不只令創作者獲得創作基金的奬勵，同時也是一份肯定和關注。目前已有 7,000 多名創作者加入了讚賞公民計劃，讓每位的一點一滴匯聚成為涓流，滋養出更健康的創作生態吧！",
   "CLP.betterWorld.title": "共創一個生態",
@@ -135,6 +134,15 @@
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR": "請登入支持創作者",
     "LOGIN_NEEDED_TO_SUPPORT_CREATOR_WITH_NAME": "請登入支持 {creator}"
   },
+  "error_page_not_found_description_404": "If you think something is broken, report an issue.",
+  "error_page_not_found_description_500": "Things are a little unstable here. We will be up and running shortly.",
+  "error_page_not_found_description_widget": "Breathe in, and on the out breath, go back and try again.",
+  "error_page_not_found_report_problem": "Report Issue",
+  "error_page_not_found_return_back": "Go Back",
+  "error_page_not_found_return_home": "Return Home",
+  "error_page_not_found_title_404": "抱歉，查無此頁",
+  "error_page_not_found_title_500": "Well, this is unexpected",
+  "error_page_not_found_title_widget": "You have found a page that does not exist",
   "faq_list": [
     {
       "a": "讓讀者藉購買作者的 Writing NFT 支持創作。個人的創作軌跡可被視為 Web3 「去中心化身份」的一部分，是個人的創作履歷。發行 Writing NFT 確保作品原封不動地保存於分散式網絡，日後可用以驗證產權。",
@@ -197,7 +205,6 @@
   "header_menu_LIKE": "LIKE",
   "here": "這裏",
   "home_button_about_writing_nft": "了解更多",
-
   "identity_type_collector": "收藏者",
   "identity_type_creator": "創作者",
   "learnMore": "了解更多",
@@ -209,8 +216,8 @@
     "loggingOut": "登出中"
   },
   "main_menu_civic_liker": "讚賞公民",
-  "main_menu_my_dashboard": "我的書架",
   "main_menu_mint_nft": "發行 NFT",
+  "main_menu_my_dashboard": "我的書架",
   "main_menu_settings": "設定",
   "main_menu_sign_out": "登出",
   "mainVPs": [
@@ -252,11 +259,13 @@
   "nft_details_page_button_transfer": "轉贈",
   "nft_details_page_button_view": "瀏覽內容",
   "nft_details_page_button_view_details": "檢視類別資訊",
+  "nft_details_page_button_view_message": "檢視 {num} 留言",
   "nft_details_page_collected_count_label": "藏品",
   "nft_details_page_description": "此內容以 Writing NFT 方式出版。收集它以建立你的閱讀履歷。",
   "nft_details_page_errormessage_memo_limit": "字數超過 256 位元。",
   "nft_details_page_errormessage_transfer_invalid": "你輸入了錯誤的錢包地址，請重試。",
   "nft_details_page_errormessage_transfer_self": "不能轉贈給自己",
+  "nft_details_page_label_ar_view_in_mobile": "將你的 NFT 帶到現實",
   "nft_details_page_label_loading": "進行中，請稍候⋯⋯",
   "nft_details_page_label_memo": "附加留言",
   "nft_details_page_label_nft_id": "NFT ID",
@@ -265,7 +274,6 @@
   "nft_details_page_label_price": "當前價格",
   "nft_details_page_label_transfer": "輸入接收者錢包地址",
   "nft_details_page_label_transfer_nft_id_select": "選擇要轉贈的 NFT",
-  "nft_details_page_label_ar_view_in_mobile": "將你的 NFT 帶到現實",
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_section_metadata": "元資料",
   "nft_details_page_section_metadata_ar": "Arweave",
@@ -309,12 +317,14 @@
   "ok": "OK",
   "order_menu_by": "按{order}",
   "order_menu_collected": "擁有",
+  "order_menu_display_state": "精選",
   "order_menu_price": "價格",
   "order_menu_time": "時間",
   "portfolio_collected_tab_no_item": "已收藏的作品將在此展示",
   "portfolio_created_tab_no_item": "已創作的作品將在此展示",
   "portfolio_description": "我的閱讀清單，構成我的精神面貌。歡迎以文會友。",
   "portfolio_finding_more_button": "發現更多佳作",
+  "portfolio_follow_hint": "追蹤作者以收到有關 {creator} 的更新通知。",
   "portfolio_subscribe_confirm_button": "確認",
   "portfolio_subscribe_error_alert": "追蹤 {creator} 時遇到錯誤： {error}",
   "portfolio_subscribe_message": "確認登記 {email} 追蹤 {creator} 的 Writing NFT 更新？",
@@ -324,6 +334,7 @@
   "portfolio_subscription_back_button": "返回我的書架",
   "portfolio_subscription_description_empty": "讀者對 {creator} 的作品都引頸以待！",
   "portfolio_subscription_email_placeholder": "you@yourdomain.com",
+  "portfolio_subscription_follow": "追蹤",
   "portfolio_subscription_hint": "請填寫你的電郵，以便我們通知你有關 {creator} 的更新。",
   "portfolio_subscription_notify_button": "通知我",
   "portfolio_subscription_notify_button_submitted": "完成",
@@ -335,7 +346,12 @@
   "portfolio_subscription_submitted_hint": "請檢查你的郵箱並驗證電郵地址",
   "portfolio_subscription_title": "追蹤作者",
   "portfolio_subscription_title_empty": "書架是空的",
+  "portfolio_subscription_unfollow": "取消追蹤",
+  "portfolio_subscription_verify": "驗證信已發到以下地址：{email}",
+  "portfolio_subscription_verify_sendAgain": "沒收到驗證信？按此重試",
+  "portfolio_subscription_verify_title": "驗證你的信箱",
   "portfolio_title": "{name} 的 Writing NFT",
+  "portfolio_unfollow_hint": "你已經追蹤了 {creator}",
   "portfolio_unsubscribe_confirm_button": "取消追蹤",
   "portfolio_unsubscribe_error_alert": "取消追蹤 {creator} 時遇到錯誤： {error}",
   "portfolio_unsubscribe_message": "確定取消以 {email} 追蹤 {creator} 的 Writing NFT 更新？",
@@ -374,6 +390,31 @@
   "register": "登記",
   "registered": "已登記",
   "renew": "續訂",
+  "settings_email": "電郵",
+  "settings_email_change_email": "更改電郵",
+  "settings_email_changing_email_submitted": "已發出確認電郵郵件，請查看。",
+  "settings_email_confirm": "確認",
+  "settings_email_current_email": "目前電郵",
+  "settings_email_input_email_placeholder": "輸入新電郵",
+  "settings_email_login_in": "驗證錢包以更改電郵",
+  "settings_email_login_in_button": "驗證",
+  "settings_email_new_email": "輸入新電郵",
+  "settings_email_resend_verification_email": "重發認證電郵",
+  "settings_email_unverified_email": "未認證電郵",
+  "settings_email_verify_error_message": "驗證電郵時出現錯誤：{error}",
+  "settings_email_verify_error_message_unknown": "驗證電郵時出現不明錯誤",
+  "settings_email_verify_verified": "電郵已驗證",
+  "settings_email_verify_verified_back_button": "返回",
+  "settings_email_verify_verifying": "驗證電郵中",
+  "settings_follow_follow": "追蹤",
+  "settings_follow_loading": "載入中",
+  "settings_follow_no_followee": "尚無追蹤中作者",
+  "settings_follow_title": "追蹤中作者",
+  "settings_follow_unfollow": "取消追蹤",
+  "settings_following": "追蹤名單",
+  "settings_following_login_in_button": "驗證",
+  "settings_following_login_label": "驗證錢包以查看追蹤列表",
+  "settings_liker_id": "Liker ID",
   "SettingsPage": {
     "language": "介面語言",
     "title": "設定"
@@ -381,9 +422,6 @@
   "signIn": "登入",
   "signInOrSignUp": "註冊/登入",
   "signUp": "註冊",
-  "SignUpSignInCTA": {
-    "slogan": "成為 Liker 以訂閱內容"
-  },
   "SlidingMenu": {
     "about": "關於",
     "civic": "@:CivicPage.title",
@@ -431,22 +469,5 @@
   "tx_modal_status_sign_title_likerId": "請在 Liker Land 手機應用程式簽署確認",
   "unfollow": "取消追蹤",
   "unfollowed": "已取消追蹤",
-  "upgrade": "升級",
-  "WelcomeDialog": {
-    "becomeCreator": "成為創作者",
-    "comparisonCard": {
-      "civic": {
-        "button": "付費支持",
-        "buttonFootnote": "扣除手續費後將全數支持創作者",
-        "header": "成為讚賞公民 以實際金錢支持創作"
-      },
-      "general": {
-        "button": "免費支持",
-        "header": "或 免費成為 Liker"
-      }
-    },
-    "headerSlogan": "歡迎你加入{br}成為支持創作的一分子",
-    "pickSubscription": "請選擇支持方案",
-    "skip": "略過"
-  }
+  "upgrade": "升級"
 }

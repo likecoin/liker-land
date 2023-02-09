@@ -17,6 +17,7 @@ module.exports = onRequest(
       'LIKE_CO_CLIENT_SECRET',
       'COOKIE_SECRET',
       'CRISP_USER_HASH_SECRET',
+      'SENDGRID_API_KEY',
     ],
     region: ['us-west1'],
   },

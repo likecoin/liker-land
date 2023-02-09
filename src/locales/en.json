@@ -205,25 +205,9 @@
   "header_menu_LIKE": "LIKE",
   "here": "Here",
   "home_button_about_writing_nft": "What is Writing NFT",
-
   "identity_type_collector": "Collector",
   "identity_type_creator": "Creator",
   "learnMore": "Learn More",
-  "LikerFeature": {
-    "bonusContent": "Receive bonus contents, ebook and coupons",
-    "detailedReport": "Detailed report on reward distribution. Know where you spend",
-    "distributeFund": {
-      "civic": "Help distribute Creators Fund with your Like. Enjoy a higher weight",
-      "general": "Help distribute Creators Fund with your Like"
-    },
-    "distributeOwnFee": "Distribute your own monthly fee in full amount with your Like",
-    "offlineEvents": "Prioritized participation of offline events",
-    "participateInCommunity": "Participate in community decision making process and referenda"
-  },
-  "LikerType": {
-    "civic": "@:civicLiker",
-    "general": "General Liker"
-  },
   "Locale": {
     "en": "English",
     "zh-Hant": "繁體中文"
@@ -232,8 +216,8 @@
     "loggingOut": "Logging out"
   },
   "main_menu_civic_liker": "Civic Liker",
-  "main_menu_my_dashboard": "My Dashboard",
   "main_menu_mint_nft": "Mint NFT",
+  "main_menu_my_dashboard": "My Dashboard",
   "main_menu_settings": "Settings",
   "main_menu_sign_out": "Sign Out",
   "mainVPs": [
@@ -281,6 +265,7 @@
   "nft_details_page_errormessage_memo_limit": "Message must be within 256 characters",
   "nft_details_page_errormessage_transfer_invalid": "You have entered an invalid wallet address. Please try again.",
   "nft_details_page_errormessage_transfer_self": "You cannot send Writing NFT to yourself.",
+  "nft_details_page_label_ar_view_in_mobile": "Experience your NFT live",
   "nft_details_page_label_loading": "Loading",
   "nft_details_page_label_memo": "Enter transfer message",
   "nft_details_page_label_nft_id": "NFT ID",
@@ -289,7 +274,6 @@
   "nft_details_page_label_price": "Current Price",
   "nft_details_page_label_transfer": "Enter the recipient address",
   "nft_details_page_label_transfer_nft_id_select": "Select the NFT to transfer",
-  "nft_details_page_label_ar_view_in_mobile": "Experience your NFT live",
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_section_metadata": "Metadata",
   "nft_details_page_section_metadata_ar": "Arweave",
@@ -340,6 +324,7 @@
   "portfolio_created_tab_no_item": "Created NFT will be shown here",
   "portfolio_description": "I am what I read. Explore my collection.",
   "portfolio_finding_more_button": "Find more Writing NFT",
+  "portfolio_follow_hint": "Follow this creator to get informed first about {creator}’s updates.",
   "portfolio_subscribe_confirm_button": "Confirm",
   "portfolio_subscribe_error_alert": "Error occurred when following {creator}: {error}",
   "portfolio_subscribe_message": "Are you sure to confirm following {creator}'s Writing NFT updates by {email}?",
@@ -349,6 +334,7 @@
   "portfolio_subscription_back_button": "Back to Portfolio",
   "portfolio_subscription_description_empty": "Readers are all on tiptoe waiting for {creator}'s publication.",
   "portfolio_subscription_email_placeholder": "you@yourdomain.com",
+  "portfolio_subscription_follow": "Follow",
   "portfolio_subscription_hint": "Leave your email to get informed ASAP about {creator}’s updates.",
   "portfolio_subscription_notify_button": "Notify Me",
   "portfolio_subscription_notify_button_submitted": "Done",
@@ -360,7 +346,12 @@
   "portfolio_subscription_submitted_hint": "Please check your email to confirm",
   "portfolio_subscription_title": "Follow Creator",
   "portfolio_subscription_title_empty": "Shelf is empty",
+  "portfolio_subscription_unfollow": "Unfollow",
+  "portfolio_subscription_verify": "Email verification link has been sent to the following email address: {email}",
+  "portfolio_subscription_verify_sendAgain": "Didn't get the mail? Send it again",
+  "portfolio_subscription_verify_title": "Verify your email address",
   "portfolio_title": "{name}'s Writing NFT",
+  "portfolio_unfollow_hint": "You've already followed {creator}",
   "portfolio_unsubscribe_confirm_button": "Unfollow",
   "portfolio_unsubscribe_error_alert": "Error occurred when unfollowing {creator}: {error}",
   "portfolio_unsubscribe_message": "Are you sure to unfollow {creator}'s Writing NFT updates by {email}?",
@@ -399,40 +390,38 @@
   "register": "Register",
   "registered": "Registered",
   "renew": "Renew",
-  "SettingsFollowingPage": {
-    "follow": "@:follow",
-    "following": "@:following",
-    "noFollowing": "Your have no following authors",
-    "noUnfollowed": "Your have no unfollowed authors",
-    "title": "@:SettingsPage.title > Follow / Unfollow",
-    "unfollow": "@:unfollow",
-    "unfollowed": "@:unfollowed"
-  },
+  "settings_email": "Email",
+  "settings_email_change_email": "Change email",
+  "settings_email_changing_email_submitted": "An verification email has been sent, please check your inbox.",
+  "settings_email_confirm": "Confirm",
+  "settings_email_current_email": "Current email",
+  "settings_email_input_email_placeholder": "Enter new email",
+  "settings_email_login_in": "Verify wallet to update email",
+  "settings_email_login_in_button": "Verify",
+  "settings_email_new_email": "Input new email",
+  "settings_email_resend_verification_email": "Resend Verification Email",
+  "settings_email_unverified_email": "Unverified Email",
+  "settings_email_verify_error_message": "Error occurs when verifying email: {error}",
+  "settings_email_verify_error_message_unknown": "An unknown error occurs when verifying email",
+  "settings_email_verify_verified": "Email is verified",
+  "settings_email_verify_verified_back_button": "Back",
+  "settings_email_verify_verifying": "Verifying email",
+  "settings_follow_follow": "Follow",
+  "settings_follow_loading": "Loading",
+  "settings_follow_no_followee": "No Following creators",
+  "settings_follow_title": "Following List",
+  "settings_follow_unfollow": "Unfollow",
+  "settings_following": "Following",
+  "settings_following_login_in_button": "Verify",
+  "settings_following_login_label": "Verify wallet to view following list",
+  "settings_liker_id": "Liker ID",
   "SettingsPage": {
-    "civicLiker": {
-      "subscribing": "Subscribing",
-      "title": "@:civicLiker"
-    },
-    "creator": {
-      "register": "Register now",
-      "registered": "Registered",
-      "title": "Creator"
-    },
     "language": "Language",
-    "likerId": "Liker ID",
-    "subscription": "Follow / Unfollow",
-    "Supporters": {
-      "Count": "1 supporter | {count} supporters",
-      "Title": "Creator Settings"
-    },
     "title": "Settings"
   },
   "signIn": "Sign in",
   "signInOrSignUp": "Sign up / Sign in",
   "signUp": "Sign up",
-  "SignUpSignInCTA": {
-    "slogan": "Be a Liker to customise stories"
-  },
   "SlidingMenu": {
     "about": "About",
     "civic": "@:CivicPage.title",

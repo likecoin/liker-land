@@ -282,6 +282,15 @@ export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
 
 export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
+export const postUserV2Logout = () => '/api/v2/users/logout';
+export const apiUserV2WalletEmail = ({ wallet, email, token }) => {
+  const qsPayload = { email, token };
+  return `/api/v2/users/${wallet}/email?${querystring.stringify(qsPayload)}`;
+};
 
 export const getNFTDisplayStateURL = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
+
+export const getUserFollowees = wallet => `/api/v2/users/${wallet}/followees`;
+export const postFollowCreator = ({ wallet, creator }) =>
+  `/api/v2/users/${wallet}/followers?creator=${creator}`;

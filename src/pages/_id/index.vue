@@ -81,6 +81,9 @@
           class="w-full"
           :creator-wallet-address="wallet"
           :creator-display-name="userDisplayName"
+          :is-wallet-connected="!!getAddress"
+          :is-wallet-logged-in="walletHasLoggedIn"
+          :is-followed="isFollowed"
           :is-empty="false"
         />
       </div>
@@ -111,6 +114,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -176,8 +180,12 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['walletHasLoggedIn']),
     wallet() {
       return this.$route.params.id;
+    },
+    isFollowed() {
+      return this.walletFollowees?.includes(this.wallet) || false;
     },
     isUserPortfolio() {
       return this.wallet === this.getAddress;
