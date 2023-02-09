@@ -331,15 +331,15 @@ const actions = {
       throw error;
     }
   },
-  async walletVerifyEmail({ state, commit }, token) {
+  async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
     try {
-      await this.$api.$put(
-        apiUserV2WalletEmail({ wallet: state.loginAddress, token })
-      );
-      commit(WALLET_SET_USER_INFO, {
-        email: state.emailUnverified,
-        emailUnconfirmed: '',
-      });
+      await this.$api.$put(apiUserV2WalletEmail({ wallet, token }));
+      if (getters.walletIsMatchedSession) {
+        commit(WALLET_SET_USER_INFO, {
+          email: state.emailUnverified,
+          emailUnconfirmed: '',
+        });
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
