@@ -82,7 +82,6 @@
               v-if="messageList.length && messageList[0].message"
               class="hidden flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px] phone:flex phone:order-1"
             >
-              <Label :text="$t('nft_message_type_collect')" class="text-medium-gray" />
               <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[24px]">
                 <NFTMessage
                   :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
