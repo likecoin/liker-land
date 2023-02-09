@@ -36,7 +36,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletUnverifiedEmail']),
+    ...mapGetters(['walletEmailUnverified']),
     token() {
       return this.$route.params.token;
     },
@@ -47,7 +47,7 @@ export default {
       if (!this.walletHasLoggedIn) {
         await this.connectWallet();
       }
-      if (this.walletUnverifiedEmail) {
+      if (this.walletEmailUnverified) {
         await this.walletVerifyEmail(this.token);
       }
     } catch (error) {
