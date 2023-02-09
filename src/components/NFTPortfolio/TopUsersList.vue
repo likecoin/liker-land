@@ -1,16 +1,11 @@
 <template>
-  <CardV2
+  <component
+    :is="isCard ? 'CardV2' : 'div'"
     class="w-full"
     :has-content-padding="true"
     :is-narrow="true"
   >
-    <Label
-      class="w-min font-600 text-like-green"
-      :text="label"
-      preset="h5"
-      align="center"
-      valign="middle"
-    />
+    <slot name="prepend" />
     <ul class="flex flex-row-reverse justify-center items-center mt-[18px] px-[4px]">
       <li
         v-for="user in users"
@@ -45,12 +40,12 @@
         </ToolTips>
       </li>
     </ul>
-  </CardV2>
+    <slot name="append" />
+  </component>
 </template>
 
 <script>
 import { ellipsis } from '~/util/ui';
-import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'NFTPortfolioTopUsersList',
@@ -62,9 +57,9 @@ export default {
       type: String,
       required: true,
     },
-    label: {
-      type: String,
-      required: true,
+    isCard: {
+      type: Boolean,
+      default: true,
     },
     userList: {
       type: Array,
@@ -78,22 +73,10 @@ export default {
   },
   methods: {
     onHover(i) {
-      logTrackerEvent(
-        this,
-        'portfolio',
-        `portfolio_top_${this.type}_hover`,
-        `${i}`,
-        1
-      );
+      this.$emit('hover', i);
     },
     onClick(i) {
-      logTrackerEvent(
-        this,
-        'portfolio',
-        `portfolio_top_${this.type}_click`,
-        `${i}`,
-        1
-      );
+      this.$emit('click', i);
     },
   },
 };
