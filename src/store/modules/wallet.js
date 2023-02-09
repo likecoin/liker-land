@@ -335,7 +335,7 @@ const actions = {
         apiUserV2WalletEmail({ wallet: state.loginAddress, token })
       );
       commit(WALLET_SET_USER_INFO, {
-        email: state.emailUnconfirmed,
+        email: state.emailUnverified,
         emailUnconfirmed: '',
       });
     } catch (error) {
