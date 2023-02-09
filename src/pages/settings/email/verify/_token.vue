@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
@@ -36,6 +36,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['walletUnverifiedEmail']),
     token() {
       return this.$route.params.token;
     },
@@ -46,7 +47,7 @@ export default {
       if (!this.walletHasLoggedIn) {
         await this.connectWallet();
       }
-      if (!this.walletHasVerifiedEmail) {
+      if (this.walletUnverifiedEmail) {
         await this.walletVerifyEmail(this.token);
       }
     } catch (error) {
