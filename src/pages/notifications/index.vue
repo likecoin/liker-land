@@ -84,6 +84,7 @@
             <div
               :class="[
                 'flex',
+                'relative',
                 'justify-center',
                 'items-start',
                 'pl-[8px]',
@@ -93,7 +94,15 @@
             >
               <div
                 v-if="!event.eventHasSeen"
-                class="bg-danger rounded-[50%] w-[8px] h-[8px]"
+                :class="[
+                  'absolute',
+                  'top-0',
+                  'right-0',
+                  'bg-danger',
+                  'rounded-[50%]',
+                  'w-[8px]',
+                  'h-[8px]'
+                ]"
               />
             </div>
             <!-- avatar -->
