@@ -54,7 +54,7 @@ router.post(
           emailLastUpdatedTs: FieldValue.serverTimestamp(),
         });
       });
-      const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}`;
+      const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?wallet=${user}`;
       const { subject, body } = getBasicTemplate({
         subject: 'Verify your email',
         content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,

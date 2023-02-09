@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -41,21 +41,16 @@ export default {
   data() {
     return {
       isLoading: true,
+      isVerifiedEmail: false,
       error: '',
     };
   },
   computed: {
-    ...mapGetters(['walletEmailUnverified']),
     token() {
       return this.$route.params.token;
     },
-    isVerifiedEmail() {
-      return this.walletHasVerifiedEmail && !this.walletEmailUnverified;
-    },
-  },
-  watch: {
-    walletHasLoggedIn() {
-      this.verify();
+    verificationWallet() {
+      return this.$route.query.wallet;
     },
   },
   mounted() {
@@ -66,12 +61,11 @@ export default {
     async verify() {
       try {
         this.isLoading = true;
-        if (!this.walletHasLoggedIn) {
-          await this.connectWallet();
-        }
-        if (this.walletEmailUnverified) {
-          await this.walletVerifyEmail(this.token);
-        }
+        await this.walletVerifyEmail({
+          wallet: this.verificationWallet,
+          token: this.token,
+        });
+        this.isVerifiedEmail = true;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
