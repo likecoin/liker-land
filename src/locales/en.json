@@ -403,6 +403,7 @@
   "settings_email_unverified_email": "Unverified Email",
   "settings_email_verify_error_message": "Error occurs when verifying email: {error}",
   "settings_email_verify_error_message_unknown": "An unknown error occurs when verifying email",
+  "settings_email_verify_retry_button": "Retry",
   "settings_email_verify_verified": "Email is verified",
   "settings_email_verify_verified_back_button": "Back",
   "settings_email_verify_verifying": "Verifying email",

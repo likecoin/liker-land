@@ -4,19 +4,26 @@
       <Label :text="$t('settings_email_verify_verifying')" align="center" />
       <ProgressIndicator class="self-center mt-[16px]" />
     </template>
-    <Label v-else-if="walletHasVerifiedEmail && !walletEmailUnverified" :text="$t('settings_email_verify_verified')" align="center" />
+    <Label v-else-if="isVerifiedEmail" :text="$t('settings_email_verify_verified')" align="center" />
     <Label v-else-if="error" align="center">
       {{ $t('settings_email_verify_error_message', { error }) }}
     </Label>
     <Label v-else align="center">
       {{ $t('settings_email_verify_error_message_unknown') }}
     </Label>
-    <ButtonV2
-      class="self-center mt-[16px]"
-      :text="$t('settings_email_verify_verified_back_button')"
-      preset="secondary"
-      @click="handleClickBack"
-    />
+    <div class="flex justify-center gap-[16px] mt-[16px]">
+      <ButtonV2
+        v-if="!isLoading && !isVerifiedEmail"
+        :text="$t('settings_email_verify_retry_button')"
+        preset="outline"
+        @click="handleClickRetry"
+      />
+      <ButtonV2
+        :text="$t('settings_email_verify_verified_back_button')"
+        preset="secondary"
+        @click="handleClickBack"
+      />
+    </div>
   </div>
 </template>
 
@@ -39,6 +46,9 @@ export default {
     ...mapGetters(['walletEmailUnverified']),
     token() {
       return this.$route.params.token;
+    },
+    isVerifiedEmail() {
+      return this.walletHasVerifiedEmail && !this.walletEmailUnverified;
     },
   },
   watch: {
@@ -75,6 +85,9 @@ export default {
     },
     handleClickBack() {
       this.$router.push({ name: 'settings' });
+    },
+    handleClickRetry() {
+      this.verify();
     },
   },
 };
