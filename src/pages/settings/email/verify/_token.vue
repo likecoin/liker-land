@@ -41,30 +41,38 @@ export default {
       return this.$route.params.token;
     },
   },
-  async mounted() {
-    try {
-      this.isLoading = true;
-      if (!this.walletHasLoggedIn) {
-        await this.connectWallet();
-      }
-      if (this.walletEmailUnverified) {
-        await this.walletVerifyEmail(this.token);
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      this.error = error.response?.data || error.message;
-      this.alertPromptError(
-        this.$t('settings_email_verify_error_message', {
-          error: this.error,
-        })
-      );
-    } finally {
-      this.isLoading = false;
-    }
+  watch: {
+    walletHasLoggedIn() {
+      this.verify();
+    },
+  },
+  mounted() {
+    this.verify();
   },
   methods: {
     ...mapActions(['walletVerifyEmail']),
+    async verify() {
+      try {
+        this.isLoading = true;
+        if (!this.walletHasLoggedIn) {
+          await this.connectWallet();
+        }
+        if (this.walletEmailUnverified) {
+          await this.walletVerifyEmail(this.token);
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.error = error.response?.data || error.message;
+        this.alertPromptError(
+          this.$t('settings_email_verify_error_message', {
+            error: this.error,
+          })
+        );
+      } finally {
+        this.isLoading = false;
+      }
+    },
     handleClickBack() {
       this.$router.push({ name: 'settings' });
     },
