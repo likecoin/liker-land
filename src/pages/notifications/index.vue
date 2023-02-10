@@ -299,14 +299,16 @@ export default {
         // No-op
       }
     }
-    window.addEventListener('beforeunload', () => {
-      this.updateEventLastSeenTs();
-    });
+    window.addEventListener('beforeunload', this.updateEventLastSeenTs);
   },
+  // For SPA navigation
+  beforeRouteLeave(to, from, next) {
+    this.updateEventLastSeenTs();
+    next();
+  },
+  // For closing tab/browser
   beforeDestroy() {
-    window.removeEventListener('beforeunload', () => {
-      this.updateEventLastSeenTs();
-    });
+    window.removeEventListener('beforeunload', this.updateEventLastSeenTs);
   },
 
   methods: {
