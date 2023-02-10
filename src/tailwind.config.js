@@ -157,7 +157,7 @@ module.exports = {
     fontFamily: {
       'proxima': ['proxima-nova', 'sans-serif'],
       'sans': ['open-sans', 'sans-serif'],
-      'serif': ['serif'],
+      'serif': ['source-han-serif-tc', 'serif'],
       'mono': ['monospace'],
       'emoji': ['emoji'],
     },
