@@ -333,7 +333,13 @@ export default {
         } else if (eventDate === yesterday) {
           date = this.$t('event_list_page_yesterday');
         } else {
-          date = event.timestamp.toLocaleDateString('en-US');
+          const dateString = new Date(event.timestamp);
+          date = `${dateString.getFullYear()}-${(dateString.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${dateString
+            .getDate()
+            .toString()
+            .padStart(2, '0')}`;
         }
         if (!groupedEvents[date]) {
           groupedEvents[date] = [];
