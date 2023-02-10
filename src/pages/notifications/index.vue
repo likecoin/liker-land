@@ -77,6 +77,7 @@
             'duration-100',
             'transition-colors',
           ]"
+          @click.native="handleClickEvent"
           @click.native.stop
         >
           <div class="flex items-center justify-start gap-[24px] mr-[12px]">
@@ -179,6 +180,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { logTrackerEvent } from '~/util/EventLogger';
 import { getChainExplorerTx } from '~/util/api';
 import { ellipsis } from '~/util/ui';
 import walletMixin from '~/mixins/wallet';
@@ -318,6 +320,15 @@ export default {
       this.isLoading = true;
       await this.fetchWalletEvents();
       this.isLoading = false;
+    },
+    handleClickEvent() {
+      logTrackerEvent(
+        this,
+        'notifications',
+        'notifications_event_clicked',
+        this.getAddress,
+        1
+      );
     },
     convertToGroupedEvents(events) {
       const result = [];
