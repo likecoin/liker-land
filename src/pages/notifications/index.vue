@@ -306,6 +306,7 @@ export default {
   // For SPA navigation
   beforeRouteLeave(to, from, next) {
     this.updateEventLastSeenTs();
+    window.removeEventListener('beforeunload', this.updateEventLastSeenTs);
     next();
   },
   // For closing tab/browser
