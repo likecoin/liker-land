@@ -43,6 +43,9 @@ export default {
     createdCollectorCount() {
       return this.userStats?.createdCollectorCount || 0;
     },
+    createdTotalSales() {
+      return this.userStats?.createdTotalSales || 0;
+    },
     isLoadingStats() {
       return !this.userStats;
     },
