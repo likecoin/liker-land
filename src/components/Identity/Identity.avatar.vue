@@ -1,5 +1,6 @@
 <template>
-  <a
+  <component
+    :is="isDisabled ? 'div' : 'a'"
     :class="rootClass"
     v-bind="$attrs"
   >
@@ -34,7 +35,7 @@
         </svg>
       </div>
     </div>
-  </a>
+  </component>
 </template>
 
 <script>

@@ -43,6 +43,7 @@
           <Identity
             :avatar-url="ownerAvatarSrc"
             :avatar-size="32"
+            :is-avatar-disabled="true"
             :is-avatar-outlined="isCivicLiker"
             :is-lazy-loaded="true"
           />
@@ -59,6 +60,7 @@
             <Identity
               :avatar-url="ownerAvatarSrc"
               :avatar-size="32"
+              :is-avatar-disabled="true"
               :is-avatar-outlined="isCivicLiker"
               :is-lazy-loaded="true"
             />
