@@ -61,14 +61,18 @@
           </li>
         </ul>
       </nav>
-      <ul>
+      <ul class="mt-[48px]">
         <li
-          v-for="(nftClassId, index) in nfts"
-          :id="nftClassId"
-          :key="nftClassId"
+          v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
+          :id="classId"
+          :key="classId"
           :class="{ 'mt-[88px]': index > 0 }"
         >
-          <NFTCampaignItem :class-id="nftClassId" />
+          <NFTCampaignItem
+            :class-id="classId"
+            :story-title="storyTitle"
+            :story-description="storyDescription"
+          />
         </li>
       </ul>
     </section>
@@ -136,7 +140,7 @@ export default {
     currentTab() {
       return this.$route.query.tab || 'featured';
     },
-    nfts() {
+    nftClassIds() {
       switch (this.currentTab) {
         case 'trending': {
           return this.trendingClassIds;
@@ -148,6 +152,28 @@ export default {
         default:
           return LIKECOIN_NFT_CAMPAIGN_ITEMS;
       }
+    },
+    nfts() {
+      return this.nftClassIds
+        .map(classId => {
+          const nft = { classId };
+          if (this.currentTab === 'featured') {
+            const storyTitleI18nKey = `nft_featured_${classId}_title`;
+            const hasStory = this.$te(storyTitleI18nKey);
+            if (hasStory) {
+              nft.storyTitle = this.$t(storyTitleI18nKey);
+              nft.storyDescription = this.$t(
+                `nft_featured_${classId}_description`
+              );
+            }
+          }
+          return nft;
+        })
+        .sort((a, b) => {
+          if (a.storyTitle && !b.storyTitle) return -1;
+          if (!a.storyTitle && b.storyTitle) return 1;
+          return 0;
+        });
     },
     tabMenuItemList() {
       const items = [

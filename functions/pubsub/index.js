@@ -3,7 +3,10 @@ const { onMessagePublished } = require('firebase-functions/v2/pubsub');
 const { getCreatorFollowPublishNewTemplate } = require('@likecoin/edm');
 const axios = require('axios').default;
 
-const { nftMintSubscriptionCollection } = require('../modules/firebase');
+const {
+  nftMintSubscriptionCollection,
+  walletUserCollection,
+} = require('../modules/firebase');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
 const {
   convertLanguageCodeForEmailTemplate,
@@ -56,51 +59,75 @@ module.exports = onMessagePublished(
               `metadataData is not defined for classId ${classId}`
             );
           }
-          const query = await nftMintSubscriptionCollection
-            .where('subscribedWallet', '==', sellerWallet)
-            .where('isVerified', '==', true)
-            .get();
           const { name, image } = metadataData;
-          for (let i = 0; i < query.docs.length; i += 1) {
-            const doc = query.docs[i];
-            const subscriptionId = doc.id;
-            const {
-              subscriberEmail,
-              subscribedWallet,
-              language = 'en',
-            } = doc.data();
-            try {
-              const {
-                avatar,
-                displayName,
-                isSubscribedCivicLiker,
-                // eslint-disable-next-line no-await-in-loop
-              } = await fetchLikerInfoByWallet(subscribedWallet);
 
+          const [
+            anonymousUserQuerySnapshot,
+            walletUserQuerySnapshot,
+          ] = await Promise.all([
+            nftMintSubscriptionCollection
+              .where('subscribedWallet', '==', sellerWallet)
+              .where('isVerified', '==', true)
+              .get(),
+            walletUserCollection
+              .where('followees', 'array-contains', sellerWallet)
+              .where('email', '>', '')
+              .get(),
+          ]);
+          const {
+            avatar,
+            displayName,
+            isSubscribedCivicLiker,
+            // eslint-disable-next-line no-await-in-loop
+          } = await fetchLikerInfoByWallet(sellerWallet);
+
+          let recipients = [];
+          anonymousUserQuerySnapshot.forEach(doc => {
+            const { subscriberEmail, language = 'en' } = doc.data();
+            recipients.push({
+              email: subscriberEmail,
+              language,
+              subscriptionId: doc.id,
+            });
+          });
+          walletUserQuerySnapshot.forEach(async doc => {
+            const { email, language = 'en' } = doc.data();
+            recipients.push({
+              email,
+              language,
+            });
+          });
+
+          // dedup
+          recipients = [...new Map(recipients.map(r => [r.email, r])).values()];
+
+          for (let i = 0; i < recipients.length; i += 1) {
+            const { email, language, subscriptionId } = recipients[i];
+            try {
               const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory(
                 {
                   subscriptionId,
-                  subscribedWallet,
-                  subscriberEmail,
+                  subscribedWallet: sellerWallet,
+                  subscriberEmail: email,
                   language,
                 }
               );
               const unsubscribeLink = getSubscriptionConfirmURL('unsubscribe');
               const { subject, body } = getCreatorFollowPublishNewTemplate({
-                creatorLikerId: subscribedWallet,
+                creatorLikerId: sellerWallet,
                 creatorDisplayName: shortenString(displayName),
                 creatorAvatarSrc: avatar,
                 creatorIsCivicLiker: isSubscribedCivicLiker,
-                followerDisplayName: subscriberEmail,
+                followerDisplayName: email,
                 nftTitle: name,
                 nftCoverImageSrc: image,
-                nftURL: `${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${subscribedWallet}&utm_source=email`,
+                nftURL: `${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${sellerWallet}&utm_source=email`,
                 unsubscribeLink,
                 language: convertLanguageCodeForEmailTemplate(language),
               });
               // eslint-disable-next-line no-await-in-loop
               await sendEmail({
-                email: subscriberEmail,
+                email,
                 subject,
                 html: body,
               });

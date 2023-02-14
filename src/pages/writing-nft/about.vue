@@ -47,6 +47,27 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify({
+            '@context': 'http://www.schema.org',
+            '@type': 'FAQPage',
+            mainEntity: this.$t('faq_list').map(
+              ({ q: question, a: answer }) => ({
+                '@type': 'Question',
+                name: question,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: answer,
+                },
+              })
+            ),
+          }),
+          type: 'application/ld+json',
+          body: true,
+        },
+      ],
     };
   },
 };

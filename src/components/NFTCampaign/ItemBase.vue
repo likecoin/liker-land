@@ -5,7 +5,7 @@
       class="text-black text-[12px] leading-[5/3]"
     />
     <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
-      <div>
+      <div :class="{ 'order-2': !!storyTitle }">
         <NFTWidgetBaseCard class="flex flex-col items-center w-full">
           <NFTWidgetContentPreview
             :class="[
@@ -36,12 +36,14 @@
           </a>
         </NFTWidgetBaseCard>
         <NuxtLink
+          v-if="!storyTitle"
           class="mt-[8px] flex items-center text-like-green group -my-[8px]"
           :to="`/${ownerAddress}`"
         >
           <Identity
             :avatar-url="ownerAvatarSrc"
             :avatar-size="32"
+            :is-avatar-disabled="true"
             :is-avatar-outlined="isCivicLiker"
             :is-lazy-loaded="true"
           />
@@ -49,7 +51,25 @@
         </NuxtLink>
       </div>
       <div>
+        <template v-if="storyTitle">
+          <h3 class="text-[24px] leading-[1.3] font-[700] text-like-green font-serif">{{ storyTitle }}</h3>
+          <NuxtLink
+            class="mt-[16px] flex items-center text-like-green group -my-[8px]"
+            :to="`/${ownerAddress}`"
+          >
+            <Identity
+              :avatar-url="ownerAvatarSrc"
+              :avatar-size="32"
+              :is-avatar-disabled="true"
+              :is-avatar-outlined="isCivicLiker"
+              :is-lazy-loaded="true"
+            />
+            <span class="ml-[8px] group-hover:underline font-[600]">{{ ownerName | ellipsis }}</span>
+          </NuxtLink>
+          <p class="mt-[24px] text-[20px] leading-[1.5] text-gray-4a font-serif">{{ storyDescription }}</p>
+        </template>
         <NFTSupplyTable
+          v-else
           class="laptop:mt-[8px] w-full laptop:pr-[8px]"
           :collected-count="soldCount"
           :should-collapse-in-mobile="true"
@@ -191,6 +211,15 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+
+    storyTitle: {
+      type: String,
+      default: '',
+    },
+    storyDescription: {
+      type: String,
+      default: '',
     },
   },
   computed: {

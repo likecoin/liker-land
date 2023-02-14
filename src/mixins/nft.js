@@ -15,6 +15,7 @@ import {
   postNFTPurchase,
   postNFTTransfer,
   getNFTEvents,
+  getNFTModel,
   postNewStripeFiatPayment,
   getStripeFiatPrice,
   getIdenticonAvatar,
@@ -187,6 +188,11 @@ export default {
     nftImageURL() {
       const image = this.nftMetadata.image || this.NFTImageUrl;
       return parseNFTMetadataURL(image);
+    },
+    nftModelURL() {
+      return this.nftIsWritingNFT
+        ? getNFTModel({ classId: this.classId })
+        : undefined;
     },
     NFTImageBackgroundColor() {
       return this.NFTClassMetadata.background_color;
@@ -369,7 +375,6 @@ export default {
             return {
               ...e,
               fromWallet: this.iscnOwner,
-              toWallet: '',
             };
           }
           return e;
@@ -537,6 +542,7 @@ export default {
               };
               history.push(e);
               eventMap.set(grantTxHash, e);
+              eventMap.get(key).granterMemo = granterMemo;
             }
             eventMap.get(key).price = price;
           }

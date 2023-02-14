@@ -11,7 +11,7 @@
       "
     >
       <section class="relative py-[32px] px-[24px]">
-        <NFTCampaignHero class="absolute inset-0" />
+        <NFTCampaignHero class="absolute inset-0 pointer-events-none" />
         <div class="relative mx-auto">
           <h1
             class="

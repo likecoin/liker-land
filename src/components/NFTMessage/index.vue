@@ -27,7 +27,7 @@
 
     <div
       :class="[
-        'flex items-center gap-[16px] justify-center',
+        'flex items-center gap-[8px] justify-center',
         {
           'sm:bg-white rounded-[24px] sm:rounded-full':
             fromWallet && toWallet && !message
@@ -43,7 +43,7 @@
       />
       <IconArrowLeft
         v-if="fromWallet && toWallet"
-        class="w-[16px] h-[16px] text-like-green rotate-180"
+        class="w-[16px] h-[16px] text-like-green rotate-180 flex-shrink-0"
       />
       <NFTMessageIdentity
         v-if="toWallet"

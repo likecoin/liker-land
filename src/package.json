@@ -26,7 +26,7 @@
   "dependencies": {
     "@cosmjs/stargate": "^0.28.7",
     "@google-cloud/pubsub": "^3.2.1",
-    "@likecoin/edm": "^6.0.0",
+    "@likecoin/edm": "^6.0.2",
     "@likecoin/iscn-js": "^0.5.2",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",

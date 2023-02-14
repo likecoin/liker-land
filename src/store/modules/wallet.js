@@ -7,6 +7,7 @@ import {
   LIKECOIN_NFT_API_WALLET,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
+import { catchAxiosError } from '~/util/misc';
 import { getAccountBalance, getNFTHistoryDataMap } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
@@ -220,11 +221,12 @@ const actions = {
     commit(WALLET_SET_ADDRESS, walletAddress);
     commit(WALLET_SET_SIGNER, offlineSigner);
     await setLoggerUser(this, { wallet: walletAddress, method });
+    catchAxiosError(
+      this.$api.$get(getUserInfoMinByAddress(walletAddress)).then(userInfo => {
+        commit(WALLET_SET_LIKERINFO, userInfo);
+      })
+    );
     try {
-      const userInfo = await this.$api.$get(
-        getUserInfoMinByAddress(walletAddress)
-      );
-      commit(WALLET_SET_LIKERINFO, userInfo);
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
@@ -488,15 +490,15 @@ const actions = {
       throw error;
     }
   },
-  async walletVerifyEmail({ state, commit }, token) {
+  async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
     try {
-      await this.$api.$put(
-        apiUserV2WalletEmail({ wallet: state.loginAddress, token })
-      );
-      commit(WALLET_SET_USER_INFO, {
-        email: state.emailUnconfirmed,
-        emailUnconfirmed: '',
-      });
+      await this.$api.$put(apiUserV2WalletEmail({ wallet, token }));
+      if (getters.walletIsMatchedSession) {
+        commit(WALLET_SET_USER_INFO, {
+          email: state.emailUnverified,
+          emailUnconfirmed: '',
+        });
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);

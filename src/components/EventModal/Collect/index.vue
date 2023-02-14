@@ -22,6 +22,21 @@
       v-if="isCompleted"
       #message
     >
+      <client-only>
+        <model-viewer
+          v-if="nftModelURL"
+          :alt="nftClassCollectionName"
+          :src="nftModelURL"
+          class="mt-[12px]"
+          auto-rotate
+          auto-rotate-delay="500"
+          xr-environment
+          shadow-intensity="1"
+          camera-controls
+          camera-orbit="225deg 55deg 100m"
+          @click.once="onClickModelViewer"
+        />
+      </client-only>
       <Label
         class="text-medium-gray mt-[12px]"
         preset="h6"
@@ -264,6 +279,7 @@ export default {
     resetState() {
       this.paymentMethod = undefined;
       this.justCollectedNFTId = undefined;
+      this.memo = '';
 
       // Mixin
       this.nftPriceInUSD = undefined;
@@ -323,6 +339,15 @@ export default {
         query: { tab: 'collected' },
       });
       this.uiCloseTxModal();
+    },
+    onClickModelViewer() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collect_modal_click_model_viewer',
+        this.classId,
+        1
+      );
     },
     handleClose() {
       this.$emit('close');
