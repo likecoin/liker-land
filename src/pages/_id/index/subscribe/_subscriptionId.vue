@@ -108,7 +108,7 @@ export default {
       return this.$route.query.email;
     },
   },
-  async asyncData({ $api, route, params, redirect }) {
+  async asyncData({ $api, route, params, redirect, localeLocation }) {
     const { id: creatorId, subscriptionId } = params;
     try {
       const res = await $api.$get(
@@ -119,7 +119,7 @@ export default {
         isCompleted: isSubscribePage(route) ? res.isVerified : false,
       };
     } catch (err) {
-      redirect({ name: 'id', params: { id: creatorId } });
+      redirect(localeLocation({ name: 'id', params: { id: creatorId } }));
       return undefined;
     }
   },

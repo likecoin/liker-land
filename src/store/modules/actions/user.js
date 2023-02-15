@@ -52,17 +52,13 @@ export function setUserCivicLiker({ commit }, { civicLikerVersion = 1 } = {}) {
 }
 
 export async function updatePreferences(
-  { dispatch, commit, getters },
-  { locale, creatorPitch } = {}
+  { dispatch, getters },
+  { locale } = {}
 ) {
   const preferences = {};
   if (locale) {
     dispatch('setLocale', locale);
     preferences.locale = normalizeLocaleForLikeCo(locale);
-  }
-  if (creatorPitch !== undefined && typeof creatorPitch === 'string') {
-    preferences.creatorPitch = creatorPitch;
-    commit(types.USER_UPDATE_USER_INFO, { creatorPitch });
   }
   if (Object.keys(preferences).length) {
     if (getters.getUserId)

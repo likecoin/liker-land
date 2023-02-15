@@ -222,7 +222,6 @@ const nuxtConfig = {
     '~/plugins/axios.js',
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
-    '~/plugins/vue-i18n.js',
     { src: '~/plugins/gtag.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
@@ -236,6 +235,7 @@ const nuxtConfig = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/i18n',
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
     ['@nuxtjs/pwa', { icon: false }],
@@ -268,6 +268,29 @@ const nuxtConfig = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
+  },
+
+  /**
+   * Nuxt I18n module configuration
+   */
+  i18n: {
+    locales: [
+    {
+        code: 'en',
+        file: 'en.json',
+      },
+      {
+        code: 'zh-Hant',
+        file: 'zh-Hant.json',
+      },
+    ],
+    defaultLocale: 'zh-Hant',
+    langDir: '~/locales/',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'liker-land-i18n',
+      redirectOn: 'root',
+    },
   },
 
   /**

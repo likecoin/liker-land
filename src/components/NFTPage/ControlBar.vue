@@ -119,13 +119,13 @@ export default {
       );
     },
     detailsPageRoute() {
-      return {
+      return this.localeLocation({
         name: 'nft-class-classId-nftId',
         params: {
           classId: this.classId,
           nftId: this.collectedNftIds && this.collectedNftIds[0],
         },
-      };
+      });
     },
     marketPlaceSellUrl() {
       if (this.currentNftId) {

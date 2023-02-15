@@ -6,13 +6,13 @@
       class="w-[20px] h-[20px]"
     >
       <NuxtLink
-        :to="{
+        :to="localeLocation({
           name: gem.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
           params: {
             classId: gem.classId,
             nftId: gem.nftId,
           },
-        }"
+        })"
         @mouseenter.native.once="onHoverGemLink(gem)"
         @click.native="onClickGemLink(gem)"
       >

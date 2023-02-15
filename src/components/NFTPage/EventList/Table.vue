@@ -83,7 +83,7 @@
           >
             <LinkV2
               class="overflow-hidden"
-              :to="{ name: 'id', params: { id: event.fromWallet } }"
+              :to="localeLocation({ name: 'id', params: { id: event.fromWallet } })"
               :is-inline="true"
               @click.native.stop
             >
@@ -99,7 +99,7 @@
           >
             <LinkV2
               class="overflow-hidden"
-              :to="{ name: 'id', params: { id: event.toWallet } }"
+              :to="localeLocation({ name: 'id', params: { id: event.toWallet } })"
               :is-inline="true"
               @click.native.stop
             >

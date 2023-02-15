@@ -38,7 +38,7 @@
         v-if="$route.name === 'settings-support'"
         preset="primary-outline"
         :title="$t('civicLiker.about')"
-        :to="{ name: 'civic' }"
+        :to="localeLocation({ name: 'civic' })"
       />
     </div>
   </header>

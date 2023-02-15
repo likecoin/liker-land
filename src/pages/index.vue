@@ -1,7 +1,7 @@
 <script>
 export default {
-  fetch({ redirect }) {
-    redirect(302, { name: 'writing-nft' });
+  fetch({ redirect, localeLocation }) {
+    redirect(302, localeLocation({ name: 'writing-nft' }));
   },
 };
 </script>

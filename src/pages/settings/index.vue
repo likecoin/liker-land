@@ -2,17 +2,17 @@
   <div>
     <ul class="settings-menu">
       <li>
-        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-email' }">
+        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-email' })">
           <span class="settings-menu__item-title"> {{ $t('settings_email') }}</span>
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-following' }">
+        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-following' })">
           <span class="settings-menu__item-title"> {{ $t('settings_following') }}</span>
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink class="settings-menu__item" :to="{ name: 'settings-language' }">
+        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-language' })">
           <GlobeIcon class="settings-menu__item-title-icon" />
           <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>
         </NuxtLink>

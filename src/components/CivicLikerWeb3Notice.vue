@@ -45,7 +45,7 @@
           <Button
             :title="$t('civic_liker_web_3_notice_button')"
             content-class="px-16"
-            :to="{ name: 'civic' }"
+            :to="localeLocation({ name: 'civic' })"
             rel="noopener"
           >
             <template #prepend>

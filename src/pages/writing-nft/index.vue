@@ -26,7 +26,7 @@
           <ButtonV2
             preset="secondary"
             :text="$t('home_button_about_writing_nft')"
-            :to="{ name: 'writing-nft-about' }"
+            :to="localeLocation({ name: 'writing-nft-about' })"
             @click.native="handleClickAboutWritingNFTButton"
           />
           <ButtonV2

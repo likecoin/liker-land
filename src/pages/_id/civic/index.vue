@@ -1,7 +1,7 @@
 <script>
 export default {
-  fetch({ redirect }) {
-    redirect({ name: 'civic' });
+  fetch({ redirect, localeLocation }) {
+    redirect(localeLocation({ name: 'civic' }));
   },
 };
 </script>

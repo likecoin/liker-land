@@ -38,7 +38,6 @@ export default {
     ...mapActions(['updatePreferences']),
 
     onClickLocale(locale) {
-      this.$i18n.locale = locale;
       this.updatePreferences({ locale });
     },
   },

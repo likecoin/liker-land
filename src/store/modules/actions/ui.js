@@ -3,6 +3,7 @@ import * as types from '@/store/mutation-types';
 import { convertLikerCoinLocale } from '@/locales';
 
 export function setLocale({ commit }, locale) {
+  this.$i18n.setLocale(locale);
   commit(types.UI_SET_LOCALE, convertLikerCoinLocale(locale));
 }
 

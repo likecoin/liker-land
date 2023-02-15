@@ -87,7 +87,7 @@ export default {
         '',
         1
       );
-      this.$router.push({ name: 'settings' });
+      this.$router.push(this.localeLocation({ name: 'settings' }));
     },
     handleClickRetry() {
       logTrackerEvent(

@@ -16,7 +16,7 @@
     <NuxtLink
       class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
       :disabled="getHomeRoute.name === $route.name"
-      :to="getHomeRoute"
+      :to="localeLocation(getHomeRoute)"
     >
       <Logo class="fill-current" />
     </NuxtLink>
@@ -158,20 +158,14 @@ export default {
   },
   mixins: [walletMixin],
   computed: {
-    ...mapGetters([
-      'getHomeRoute',
-      'getAvailableLocales',
-      'getLocale',
-      'getUserId',
-      'getNotificationCount',
-    ]),
+    ...mapGetters(['getHomeRoute', 'getUserId', 'getNotificationCount']),
     currentLocale() {
-      return this.getLocale;
+      return this.$i18n.locale;
     },
     availableLocales() {
-      return this.getAvailableLocales.map(locale => ({
-        value: locale,
-        name: this.$t(`Locale.${locale}`),
+      return this.$i18n.locales.map(locale => ({
+        value: locale.code,
+        name: this.$t(`Locale.${locale.code}`),
       }));
     },
     mainMenuItems() {
@@ -198,7 +192,6 @@ export default {
   methods: {
     ...mapActions(['updatePreferences', 'userLogout']),
     handleSelectLocale(value) {
-      this.$i18n.locale = value;
       this.updatePreferences({ locale: value });
     },
     async handleSelectMenuItem(value) {
@@ -211,7 +204,7 @@ export default {
 
         case 'civic':
           logTrackerEvent(this, 'site_menu', 'site_menu_click_civic', '', 1);
-          this.$router.push({ name: 'civic' });
+          this.$router.push(this.localeLocation({ name: 'civic' }));
           break;
 
         case 'mintNft':
@@ -227,12 +220,12 @@ export default {
             '',
             1
           );
-          this.$router.push({ name: 'notifications' });
+          this.$router.push(this.localeLocation({ name: 'notifications' }));
           break;
 
         case 'setting':
           logTrackerEvent(this, 'site_menu', 'site_menu_click_settings', '', 1);
-          this.$router.push({ name: 'settings' });
+          this.$router.push(this.localeLocation({ name: 'settings' }));
           break;
 
         case 'signOut':
