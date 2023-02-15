@@ -100,19 +100,25 @@ router.delete(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        followees: FieldValue.arrayRemove(creator),
+      await db.runTransaction(async t => {
+        const promises = [
+          t.update(walletUserCollection.doc(user), {
+            followees: FieldValue.arrayRemove(creator),
+          }),
+        ];
+        const userDoc = await t.get(walletUserCollection.doc(user));
+        const { email } = userDoc.data();
+        const snapshot = await t.get(
+          nftMintSubscriptionCollection
+            .where('subscriberEmail', '==', email)
+            .where('subscribedWallet', '==', creator)
+            .limit(1)
+        );
+        if (snapshot.docs.length > 0) {
+          promises.push(t.delete(snapshot.docs[0].ref));
+        }
+        await Promise.all(promises);
       });
-      const userDoc = await walletUserCollection.doc(user).get();
-      const { email } = userDoc.data();
-      const snapshot = await nftMintSubscriptionCollection
-        .where('subscriberEmail', '==', email)
-        .where('subscribedWallet', '==', creator)
-        .limit(1)
-        .get();
-      if (snapshot.docs.length > 0) {
-        await snapshot.docs[0].ref.delete();
-      }
       res.sendStatus(200);
     } catch (err) {
       handleRestfulError(req, res, next, err);
