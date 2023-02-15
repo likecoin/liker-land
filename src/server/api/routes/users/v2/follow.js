@@ -10,6 +10,7 @@ const {
   db,
   FieldValue,
   walletUserCollection,
+  nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 
 const router = Router();
@@ -26,7 +27,15 @@ router.get(
         res.json({ followees: [] });
         return;
       }
-      const { followees = [] } = userDoc.data();
+      const { followees: walletFollowees = [], email } = userDoc.data();
+      const snapshot = await nftMintSubscriptionCollection
+        .where('subscriberEmail', '==', email)
+        .get();
+      const emailFollowees = snapshot.docs.map(doc => {
+        const { subscribedWallet } = doc.data();
+        return subscribedWallet;
+      });
+      const followees = [...walletFollowees, ...emailFollowees];
       res.json({ followees });
     } catch (err) {
       handleRestfulError(req, res, next, err);
