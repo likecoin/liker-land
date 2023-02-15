@@ -104,15 +104,19 @@ router.delete(
       await walletUserCollection.doc(user).update({
         followees: FieldValue.arrayRemove(creator),
       });
+      const userDoc = await walletUserCollection.doc(user).get();
+      const { email } = userDoc.data();
+      const snapshot = await nftMintSubscriptionCollection
+        .where('subscriberEmail', '==', email)
+        .where('subscribedWallet', '==', creator)
+        .limit(1)
+        .get();
+      if (snapshot.docs.length > 0) {
+        await snapshot.docs[0].ref.delete();
+      }
       res.sendStatus(200);
     } catch (err) {
-      switch (err.message) {
-        case 'EMAIL_NOT_SET_YET':
-          res.status(403).send('EMAIL_NOT_SET_YET');
-          break;
-        default:
-          handleRestfulError(req, res, next, err);
-      }
+      handleRestfulError(req, res, next, err);
     }
   }
 );
