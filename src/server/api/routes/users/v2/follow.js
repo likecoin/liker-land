@@ -67,8 +67,7 @@ router.post(
             throw new Error('EMAIL_NOT_SET_YET');
           }
         }
-        const creatorRef = walletUserCollection.doc(user);
-        await t.update(creatorRef, {
+        await t.update(userRef, {
           followees: FieldValue.arrayUnion(creator),
         });
       });
