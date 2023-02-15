@@ -5,6 +5,7 @@ const {
   db,
   FieldValue,
   walletUserCollection,
+  nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 const {
   authenticateV2Login,
@@ -98,11 +99,23 @@ router.put('/:wallet/email', async (req, res, next) => {
       if (emailVerifyToken !== token) {
         throw new Error('INVALID_TOKEN');
       }
-      await t.update(userRef, {
-        email: emailUnconfirmed,
-        emailUnconfirmed: FieldValue.delete(),
-        emailVerifyToken: FieldValue.delete(),
+      const snapshot = await nftMintSubscriptionCollection
+        .where('subscriberEmail', '==', emailUnconfirmed)
+        .get();
+      const emailFollowees = snapshot.docs.map(doc => {
+        const { subscribedWallet } = doc.data();
+        return subscribedWallet;
       });
+      const promises = snapshot.docs.map(doc => t.delete(doc.ref));
+      promises.push(
+        t.update(userRef, {
+          email: emailUnconfirmed,
+          emailUnconfirmed: FieldValue.delete(),
+          emailVerifyToken: FieldValue.delete(),
+          followees: FieldValue.arrayUnion(...emailFollowees),
+        })
+      );
+      await Promise.all(promises);
     });
     res.sendStatus(200);
   } catch (error) {
