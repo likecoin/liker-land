@@ -275,7 +275,7 @@ const nuxtConfig = {
    */
   i18n: {
     locales: [
-    {
+      {
         code: 'en',
         file: 'en.json',
       },
