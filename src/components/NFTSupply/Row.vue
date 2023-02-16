@@ -11,15 +11,16 @@
       <div :class="priceLabelClass">
         <hr
           v-if="isActive && shouldShowIndicator"
-          class="
-            absolute
-            top-1/2
-            inset-x-0
-            border-[1px] border-like-cyan-light
-            -mr-[12px]
-            laptop:-ml-[18px]
-            translate-y-[-50%]
-          "
+          :class="[
+            'absolute',
+            'top-1/2',
+            'inset-x-0',
+            'border-[1px]',
+            !isDisabled ? 'border-like-cyan-light' : 'border-shade-gray',
+            '-mr-[12px]',
+            'laptop:-ml-[18px]',
+            'translate-y-[-50%]',
+          ]"
         >
         <span class="relative">{{ priceLabel }}</span>&nbsp;
         <span class="relative text-[0.8em] leading-[1.5]">LIKE</span>
@@ -132,10 +133,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     isActive() {
-      return this.type === 'active';
+      return this.type === 'active' && !this.isDisabled;
     },
     isPast() {
       return this.type === 'past';
@@ -165,7 +170,10 @@ export default {
         case 'past':
           return ['text-medium-gray'];
         case 'active':
-          return ['text-like-green', 'bg-like-cyan-light'];
+          if (!this.isDisabled) {
+            return ['text-like-green', 'bg-like-cyan-light'];
+          }
+        // eslint-disable-next-line no-fallthrough
         case 'future':
           return ['text-dark-gray'];
         default:
@@ -232,6 +240,9 @@ export default {
   },
   methods: {
     getSlotType(i) {
+      if (this.isDisabled) {
+        return 'future';
+      }
       if (this.isActive) {
         return this.total - this.available + 1 <= i ? 'active' : 'past';
       }

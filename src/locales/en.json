@@ -38,6 +38,7 @@
   },
   "campaign_nft_item_collected_count_label": "Collected",
   "campaign_nft_item_header_hint": "Collect this content as NFT",
+  "campaign_nft_item_header_hint_uncollectable": "This content cannot be collected as NFT for now",
   "campaign_nft_item_like_action_label": "Like",
   "campaign_nft_item_view_details_label": "View Content",
   "campaign_nft_page_description": "Writing carries one's soul. You are what you read and write. Writing NFT brings together unique pieces of stories in the Metaverse. Collect words that touch your soul.",
