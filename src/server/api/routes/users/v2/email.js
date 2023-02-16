@@ -102,20 +102,17 @@ router.put('/:wallet/email', async (req, res, next) => {
       const snapshot = await nftMintSubscriptionCollection
         .where('subscriberEmail', '==', emailUnconfirmed)
         .get();
-      const emailFollowees = snapshot.docs.map(doc => {
+      const legacyFollowees = snapshot.docs.map(doc => {
         const { subscribedWallet } = doc.data();
         return subscribedWallet;
       });
-      const promises = snapshot.docs.map(doc => t.delete(doc.ref));
-      promises.push(
-        t.update(userRef, {
-          email: emailUnconfirmed,
-          emailUnconfirmed: FieldValue.delete(),
-          emailVerifyToken: FieldValue.delete(),
-          followees: FieldValue.arrayUnion(...emailFollowees),
-        })
-      );
-      await Promise.all(promises);
+      snapshot.docs.foreach(doc => t.delete(doc.ref));
+      t.update(userRef, {
+        email: emailUnconfirmed,
+        emailUnconfirmed: FieldValue.delete(),
+        emailVerifyToken: FieldValue.delete(),
+        followees: FieldValue.arrayUnion(...legacyFollowees),
+      });
     });
     res.sendStatus(200);
   } catch (error) {

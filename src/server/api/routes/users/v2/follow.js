@@ -31,11 +31,14 @@ router.get(
       const snapshot = await nftMintSubscriptionCollection
         .where('subscriberEmail', '==', email)
         .get();
-      const emailFollowees = snapshot.docs.map(doc => {
+      const legacyFollowees = snapshot.docs.map(doc => {
         const { subscribedWallet } = doc.data();
         return subscribedWallet;
       });
-      const followees = [...walletFollowees, ...emailFollowees];
+      const followees = new Set([
+        ...walletFollowees,
+        ...legacyFollowees,
+      ]).values();
       res.json({ followees });
     } catch (err) {
       handleRestfulError(req, res, next, err);
@@ -101,11 +104,6 @@ router.delete(
         return;
       }
       await db.runTransaction(async t => {
-        const promises = [
-          t.update(walletUserCollection.doc(user), {
-            followees: FieldValue.arrayRemove(creator),
-          }),
-        ];
         const userDoc = await t.get(walletUserCollection.doc(user));
         const { email } = userDoc.data();
         const snapshot = await t.get(
@@ -114,10 +112,12 @@ router.delete(
             .where('subscribedWallet', '==', creator)
             .limit(1)
         );
+        t.update(walletUserCollection.doc(user), {
+          followees: FieldValue.arrayRemove(creator),
+        });
         if (snapshot.docs.length > 0) {
-          promises.push(t.delete(snapshot.docs[0].ref));
+          t.delete(snapshot.docs[0].ref);
         }
-        await Promise.all(promises);
       });
       res.sendStatus(200);
     } catch (err) {
