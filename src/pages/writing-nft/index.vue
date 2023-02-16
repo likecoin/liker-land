@@ -90,7 +90,11 @@
 <script>
 import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
 
-import { getLatestNFTClasses, getTopNFTClasses } from '~/util/api';
+import {
+  getLatestNFTClasses,
+  getTopNFTClasses,
+  getISCNRecord,
+} from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import navigationListenerMixin from '~/mixins/navigation-listener';
@@ -227,27 +231,24 @@ export default {
     this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
-    async getOwnerFromUri(uri) {
+    async getClassOwner(classData) {
       try {
-        const data = await this.$axios.$get(uri);
-        return data.iscn_owner;
+        const iscnPrefix = classData.parent.iscn_id_prefix;
+        const data = await this.$axios.$get(getISCNRecord(iscnPrefix));
+        return data.owner;
       } catch (err) {
-        console.error(`Failed to fetch uri ${uri}`);
+        console.error(`Failed to fetch owner of ${classData.id}`);
         return null;
       }
     },
     async filterNFTClassesByOwner(nftClasses) {
       const ownerList = await Promise.all(
-        nftClasses
-          .slice(0, NFT_CLASS_DISPLAY_COUNT * 3)
-          .map(c => this.getOwnerFromUri(c.uri))
+        nftClasses.slice(0, NFT_CLASS_DISPLAY_COUNT * 3).map(this.getClassOwner)
       );
       const filteredNFTClasses = [];
       const ownerToNFTClassCountMap = {};
       for (let i = 0; i < ownerList.length; i += 1) {
         const owner = ownerList[i];
-        // eslint-disable-next-line no-continue
-        if (!owner) continue;
         if (!ownerToNFTClassCountMap[owner]) {
           ownerToNFTClassCountMap[owner] = 0;
         }
