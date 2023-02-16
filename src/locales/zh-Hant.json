@@ -38,6 +38,7 @@
   },
   "campaign_nft_item_collected_count_label": "已收藏",
   "campaign_nft_item_header_hint": "收集此 Writing NFT",
+  "campaign_nft_item_header_hint_uncollectable": "此 Writing NFT 暫未可供收集",
   "campaign_nft_item_like_action_label": "按讚",
   "campaign_nft_item_view_details_label": "瀏覽內容",
   "campaign_nft_page_description": "文字是靈魂深處的表述。讀什麼、寫什麼，構成你的精神面貌。Writing NFT 併湊元宇宙的故事碎片，收藏那曾觸動你的文字吧。",
