@@ -89,31 +89,44 @@ router.put('/:wallet/email', async (req, res, next) => {
       res.status(400).send('MISSING_TOKEN');
       return;
     }
-    await db.runTransaction(async t => {
-      const userRef = walletUserCollection.doc(user);
+
+    const userRef = walletUserCollection.doc(user);
+    const email = await db.runTransaction(async t => {
       const userDoc = await t.get(userRef);
       if (!userDoc.exists) {
         throw new Error('USER_NOT_FOUND');
       }
-      const { emailUnconfirmed, emailVerifyToken } = userDoc.data();
+      const { emailUnconfirmed: email, emailVerifyToken } = userDoc.data();
       if (emailVerifyToken !== token) {
         throw new Error('INVALID_TOKEN');
       }
-      const snapshot = await nftMintSubscriptionCollection
-        .where('subscriberEmail', '==', emailUnconfirmed)
-        .get();
-      const legacyFollowees = snapshot.docs.map(doc => {
-        const { subscribedWallet } = doc.data();
-        return subscribedWallet;
-      });
-      snapshot.docs.foreach(doc => t.delete(doc.ref));
       t.update(userRef, {
-        email: emailUnconfirmed,
+        email,
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
+      });
+      return email;
+    });
+
+    const legacyQuery = nftMintSubscriptionCollection
+      .where('subscriberEmail', '==', email)
+      .limit(499);
+    let querySnapshot = await legacyQuery.get();
+    while (querySnapshot.size) {
+      const batch = db.batch();
+      const legacyFollowees = querySnapshot.docs.map(
+        doc => doc.data().subscribedWallet
+      );
+      batch.update(userRef, {
         followees: FieldValue.arrayUnion(...legacyFollowees),
       });
-    });
+      querySnapshot.docs.forEach(doc => batch.delete(doc.ref));
+      // eslint-disable-next-line no-await-in-loop
+      await batch.commit();
+      // eslint-disable-next-line no-await-in-loop
+      querySnapshot = await legacyQuery.get();
+    }
+
     res.sendStatus(200);
   } catch (error) {
     switch (error.message) {
