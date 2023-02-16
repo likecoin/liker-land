@@ -96,6 +96,9 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import walletMixin from '~/mixins/wallet';
 
+const MAX_NFT_CLASS_COUNT_PER_OWNER = 2;
+const NFT_CLASS_DISPLAY_COUNT = 10;
+
 export default {
   name: 'WritingNFTPage',
   layout: 'default',
@@ -213,17 +216,49 @@ export default {
       this.$axios.$get(getTopNFTClasses()),
       this.$axios.$get(getLatestNFTClasses()),
     ]);
-    [this.trendingClassIds, this.latestClassIds] = [trendingRes, latestRes].map(
-      res =>
-        (res.classes || [])
-          .filter(
-            c => c.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
-          )
-          .map(c => c.id)
-          .slice(0, 10)
+    const [trendingClasses, latestClasses] = [trendingRes, latestRes].map(res =>
+      (res.classes || []).filter(
+        c => c.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
+      )
     );
+    this.latestClassIds = latestClasses
+      .slice(0, NFT_CLASS_DISPLAY_COUNT)
+      .map(c => c.id);
+    this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
+    async getOwnerFromUri(uri) {
+      try {
+        const data = await this.$axios.$get(uri);
+        return data.iscn_owner;
+      } catch (err) {
+        console.error(`Failed to fetch uri ${uri}`);
+        return null;
+      }
+    },
+    async filterNFTClassesByOwner(nftClasses) {
+      const ownerList = await Promise.all(
+        nftClasses
+          .slice(0, NFT_CLASS_DISPLAY_COUNT * 3)
+          .map(c => this.getOwnerFromUri(c.uri))
+      );
+      const filteredNFTClasses = [];
+      const ownerToNFTClassCountMap = {};
+      for (let i = 0; i < ownerList.length; i += 1) {
+        const owner = ownerList[i];
+        // eslint-disable-next-line no-continue
+        if (!owner) continue;
+        if (!ownerToNFTClassCountMap[owner]) {
+          ownerToNFTClassCountMap[owner] = 0;
+        }
+        if (ownerToNFTClassCountMap[owner] < MAX_NFT_CLASS_COUNT_PER_OWNER) {
+          filteredNFTClasses.push(nftClasses[i].id);
+          ownerToNFTClassCountMap[owner] += 1;
+        }
+        if (filteredNFTClasses.length >= NFT_CLASS_DISPLAY_COUNT) break;
+      }
+      return filteredNFTClasses;
+    },
     handleTabClick(tab) {
       const { query } = this.$route;
       this.$router.replace({
