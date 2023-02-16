@@ -158,6 +158,7 @@
   "event_list_page_event_refresh": "Refresh",
   "event_list_page_event_self": "You",
   "event_list_page_event_send_nft": "Sent",
+  "event_list_page_no_event": "No notifications",
   "event_list_page_notifications": "Notifications ({number})",
   "event_list_page_today": "Today",
   "event_list_page_yesterday": "Yesterday",

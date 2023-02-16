@@ -26,10 +26,13 @@
         </template>
       </Label>
       <hr class="border-shade-gray border-[1px]">
-      <div v-if="isLoading || !processedEvents.length" class="flex items-center justify-center">
+      <div v-if="getIsFetchingEvent" class="flex items-center justify-center">
         <CardV2 class="flex p-[8px] my-[48px]">
           <Label preset="h5" class="text-like-green" :text="$t('nft_portfolio_page_label_loading')" />
         </CardV2>
+      </div>
+      <div v-else-if="!processedEvents.length" class="text-center text-medium-gray mt-[24px]">
+        {{ $t('event_list_page_no_event') }}
       </div>
       <div
         v-for="group in groupedEventsByTime"
@@ -192,12 +195,10 @@ export default {
     ellipsis,
   },
   mixins: [walletMixin],
-  data() {
-    return { isLoading: false };
-  },
   computed: {
     ...mapGetters([
       'getEvents',
+      'getIsFetchingEvent',
       'getUserInfoByAddress',
       'getNFTClassMetadataById',
       'getNotificationCount',
@@ -318,9 +319,7 @@ export default {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     getChainExplorerTx,
     async handleRefresh() {
-      this.isLoading = true;
       await this.fetchWalletEvents();
-      this.isLoading = false;
     },
     handleClickEvent() {
       logTrackerEvent(
