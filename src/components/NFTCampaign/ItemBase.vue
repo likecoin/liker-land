@@ -70,7 +70,12 @@
         </template>
         <NFTSupplyTable
           v-else
-          class="laptop:mt-[8px] w-full laptop:pr-[8px]"
+          :class="[
+            'laptop:mt-[8px]',
+            'w-full',
+            'laptop:pr-[8px]',
+            { 'pointer-events-none grayscale': !isCollectable }
+          ]"
           :collected-count="soldCount"
           :should-collapse-in-mobile="true"
           :should-show-indicator="true"
@@ -101,7 +106,12 @@
             </li>
           </ul>
           <ProgressIndicator v-if="isLoading" />
-          <ButtonV2 v-else preset="secondary" @click="handleClickCollect">
+          <ButtonV2
+            v-else
+            preset="secondary"
+            :is-disabled="!isCollectable"
+            @click="handleClickCollect"
+          >
             <template #prepend>
               <NFTWidgetIconInsertCoin />
             </template>
@@ -209,6 +219,10 @@ export default {
       default: 0,
     },
     isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isCollectable: {
       type: Boolean,
       default: false,
     },
