@@ -142,7 +142,7 @@
       <ButtonV2
         preset="outline"
         :text="$t('portfolio_finding_more_button')"
-        :to="{ name: 'writing-nft' }"
+        :to="localeLocation({ name: 'writing-nft' })"
       />
     </template>
   </section>

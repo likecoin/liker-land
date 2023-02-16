@@ -46,10 +46,10 @@
             class="shrink-0"
             preset="outline"
             :text="$t('nft_details_page_button_view_details')"
-            :to="{
+            :to="localeLocation({
               name: 'nft-class-classId-nftId',
               params: { classId, nftId: selectedNFTId }
-            }"
+            })"
             size="mini"
             target="_blank"
             rel="noopener"

@@ -7,7 +7,7 @@
     <div class="flex items-center text-dark-gray ml-[8px]">
       <NuxtLink
         class="flex items-center text-like-green group -my-[8px]"
-        :to="`/${creatorAddress}`"
+        :to="localeLocation({ name: 'id', params: { id: creatorAddress } })"
       >
         <Identity
           :avatar-url="creatorAvatarSrc"

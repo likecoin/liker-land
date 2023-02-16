@@ -38,7 +38,7 @@
         <NuxtLink
           v-if="!storyTitle"
           class="mt-[8px] flex items-center text-like-green group -my-[8px]"
-          :to="`/${ownerAddress}`"
+          :to="localeLocation({ name: 'id', params: { id: ownerAddress } })"
         >
           <Identity
             :avatar-url="ownerAvatarSrc"
@@ -55,7 +55,7 @@
           <h3 class="text-[24px] leading-[1.3] font-[700] text-like-green font-serif">{{ storyTitle }}</h3>
           <NuxtLink
             class="mt-[16px] flex items-center text-like-green group -my-[8px]"
-            :to="`/${ownerAddress}`"
+            :to="localeLocation({ name: 'id', params: { id: ownerAddress } })"
           >
             <Identity
               :avatar-url="ownerAvatarSrc"

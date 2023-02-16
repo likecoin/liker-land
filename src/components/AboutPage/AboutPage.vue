@@ -2,7 +2,7 @@
   <article>
     <header class="bg-like-green">
       <div class="about-page-column">
-        <p class="my-0 pt-48 text-white">
+        <p class="pt-48 my-0 text-white">
           <span class="text-24">LikeCoin Foundation</span><br>is a section-88 non-profit organization registered in Hong Kong.
           The foundation has been promoting the Civic Liker movement, which encourages readers
           to contribute USD5 per month to support creativity. We also develop an open-source
@@ -10,7 +10,7 @@
           documented in <a class="text-like-cyan" href="https://github.com/likecoin/likecoin" target="_blank" alt="GitHub">Github</a>,
           open for volunteers and contributors to participate in the project.
         </p>
-        <p class="cta-section mt-8 pb-24">
+        <p class="pb-24 mt-8 cta-section">
           <a
             class="btn btn--outlined btn--dark"
             href="https://github.com/likecoin/likecoin"
@@ -25,7 +25,7 @@
         The foundation has a mission to empower content creators and publishers through the
         formation of Liker Land. Content creators are able to receive actual rewards from
         readers through the reinvented Like button in Liker Land. The foundation supports
-        the <nuxt-link :to="{ name: 'civic' }" alt="Civic Liker Movement">Civic Liker Movement</nuxt-link>
+        the <nuxt-link :to="localeLocation({ name: 'civic' })" alt="Civic Liker Movement">Civic Liker Movement</nuxt-link>
         in a form of matching funds, which distribute rewards to content creators on a daily
         basis by the “like” they receive every day.
       </p>

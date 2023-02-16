@@ -6,12 +6,14 @@
 import { getNFTMintInfo } from '~/util/api';
 
 export default {
-  async asyncData({ route, redirect, $api, error }) {
+  async asyncData({ route, redirect, $api, error, localeLocation }) {
     const { iscnId } = route.params;
     try {
       const { classId } = await $api.$get(getNFTMintInfo({ iscnId }));
       if (classId) {
-        return redirect({ name: 'nft-class-classId', params: { classId } });
+        return redirect(
+          localeLocation({ name: 'nft-class-classId', params: { classId } })
+        );
       }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;

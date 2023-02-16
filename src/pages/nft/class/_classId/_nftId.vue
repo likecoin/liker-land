@@ -103,10 +103,10 @@
                 :text="$t('nft_details_page_button_view_message', {
                   num: validMessageCount
                 })"
-                :to="{
+                :to="localeLocation({
                   name: 'nft-class-classId-nftId-message',
                   params: { classId, nftId: selectedNFTId }
-                }"
+                })"
               >
                 <template #prepend>
                   <IconView />
@@ -170,7 +170,7 @@
               content-class="text-[12px]"
               preset="plain"
               size="mini"
-              :to="{ name: 'nft-class-classId', params: { classId } }"
+              :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
             >
               <template #prepend>
                 <IconEye class="w-[12px] h-[12px]" />
@@ -270,7 +270,7 @@
             content-class="text-[12px]"
             preset="plain"
             size="mini"
-            :to="{ name: 'nft-class-classId', params: { classId } }"
+            :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
           >
             <template #prepend>
               <IconEye class="w-[12px] h-[12px]" />

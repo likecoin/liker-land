@@ -2,7 +2,7 @@
   <div class="page-layout.page-layout--dialog">
     <slot name="site-logo">
       <div class="site-logo-wrapper">
-        <NuxtLink class="site-logo" :to="getHomeRoute">
+        <NuxtLink class="site-logo" :to="localeLocation(getHomeRoute)">
           <LikerLandLogo />
         </NuxtLink>
       </div>

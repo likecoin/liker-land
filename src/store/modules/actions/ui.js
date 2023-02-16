@@ -1,9 +1,10 @@
 /* eslint import/prefer-default-export: "off" */
 import * as types from '@/store/mutation-types';
-import { convertLikerCoinLocale } from '@/locales';
+import { convertLikeCoLocale } from '@/locales';
 
 export function setLocale({ commit }, locale) {
-  commit(types.UI_SET_LOCALE, convertLikerCoinLocale(locale));
+  this.$i18n.setLocale(locale);
+  commit(types.UI_SET_LOCALE, convertLikeCoLocale(locale));
 }
 
 export function setIsHK({ commit }, isHK) {

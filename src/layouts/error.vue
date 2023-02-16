@@ -45,7 +45,7 @@
         <ButtonV2
           :text="$t('error_page_not_found_return_home')"
           preset="primary"
-          :to="{ name: 'index' }"
+          :to="localeLocation({ name: 'index' })"
         />
         <ButtonV2
           :text="$t('error_page_not_found_report_problem')"

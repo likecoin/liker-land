@@ -56,7 +56,7 @@
         <LinkV2
           v-for="event in group.events"
           :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
-          :to="event.targetRoute"
+          :to="localeLocation(event.targetRoute)"
           :class="[
             'flex',
             'justify-between',

@@ -20,11 +20,11 @@
           @mouseenter.native.once="onHover(user.index)"
         >
           <LinkV2
-            :to="{
+            :to="localeLocation({
               name: 'id',
               params: { id: user.id },
               query: { tab: type === 'creator' ? 'created' : 'collected' },
-            }"
+            })"
             @click.native="onClick(user.index)"
           >
             <IdentityAvatar
