@@ -391,9 +391,8 @@ const actions = {
     commit(WALLET_SET_EVENT_FETCHING, false);
   },
 
-  async updateEventLastSeenTs({ commit }) {
-    await this.$api.$post(updateEventLastSeen());
-    commit(WALLET_SET_EVENT_LAST_SEEN_TS, Date.now());
+  updateEventLastSeenTs({ commit }, timestamp) {
+    commit(WALLET_SET_EVENT_LAST_SEEN_TS, timestamp);
   },
 
   async walletFetchLIKEBalance({ commit, state }) {

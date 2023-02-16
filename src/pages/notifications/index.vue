@@ -184,7 +184,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getChainExplorerTx } from '~/util/api';
+import { updateEventLastSeen } from '~/util/api';
 import { ellipsis } from '~/util/ui';
 import walletMixin from '~/mixins/wallet';
 
@@ -195,6 +195,9 @@ export default {
     ellipsis,
   },
   mixins: [walletMixin],
+  data() {
+    return { postTimeStamp: undefined };
+  },
   computed: {
     ...mapGetters([
       'getEvents',
@@ -302,24 +305,28 @@ export default {
         // No-op
       }
     }
+    this.$api.$post(updateEventLastSeen());
+    this.postTimeStamp = Date.now();
     window.addEventListener('beforeunload', this.updateEventLastSeenTs);
   },
   // For SPA navigation
   beforeRouteLeave(to, from, next) {
-    this.updateEventLastSeenTs();
-    window.removeEventListener('beforeunload', this.updateEventLastSeenTs);
+    this.handleRouteLeave();
+    window.removeEventListener('beforeunload', this.handleRouteLeave);
     next();
   },
   // For closing tab/browser
   beforeDestroy() {
-    window.removeEventListener('beforeunload', this.updateEventLastSeenTs);
+    window.removeEventListener('beforeunload', this.handleRouteLeave);
   },
 
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
-    getChainExplorerTx,
     async handleRefresh() {
       await this.fetchWalletEvents();
+    },
+    handleRouteLeave() {
+      this.updateEventLastSeenTs(this.postTimeStamp || Date.now());
     },
     handleClickEvent() {
       logTrackerEvent(
