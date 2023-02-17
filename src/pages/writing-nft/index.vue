@@ -243,6 +243,7 @@ export default {
     },
     async filterNFTClassesByOwner(nftClasses) {
       const ownerList = await Promise.all(
+        // use 3 times of display count to ensure enough classes
         nftClasses.slice(0, NFT_CLASS_DISPLAY_COUNT * 3).map(this.getClassOwner)
       );
       const filteredNFTClasses = [];
