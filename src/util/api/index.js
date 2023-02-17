@@ -331,3 +331,8 @@ export const deleteUserV2Followees = creator => {
   const qsPayload = { creator };
   return `/api/v2/users/followees?${querystring.stringify(qsPayload)}`;
 };
+export const getUserFollowees = wallet => `/api/v2/users/${wallet}/followees`;
+export const postFollowCreator = ({ wallet, creator }) =>
+  `/api/v2/users/${wallet}/followers?creator=${creator}`;
+export const getUserNotificationSettingsUrl = wallet =>
+  `/api/v2/users/${wallet}/notification`;

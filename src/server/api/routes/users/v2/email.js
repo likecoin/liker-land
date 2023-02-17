@@ -108,6 +108,9 @@ router.put('/email', async (req, res, next) => {
         email,
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
+        notification: {
+          transfer: true,
+        },
       };
       if (isValidFollowee(user, followee)) {
         payload.followees = FieldValue.arrayUnion(followee);
