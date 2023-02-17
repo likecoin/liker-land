@@ -45,13 +45,15 @@ export default {
   },
   methods: {
     handleRowClick() {
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: {
-          classId: this.classId,
-          nftId: this.owner.collectedFirstNFTId,
-        },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: {
+            classId: this.classId,
+            nftId: this.owner.collectedFirstNFTId,
+          },
+        })
+      );
     },
   },
 };

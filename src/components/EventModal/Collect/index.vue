@@ -326,18 +326,22 @@ export default {
       }
     },
     goToNFTDetails() {
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId: this.justCollectedNFTId },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId: this.justCollectedNFTId },
+        })
+      );
       this.uiCloseTxModal();
     },
     goToPortfolio() {
-      this.$router.push({
-        name: 'id',
-        params: { id: this.getAddress },
-        query: { tab: 'collected' },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'id',
+          params: { id: this.getAddress },
+          query: { tab: 'collected' },
+        })
+      );
       this.uiCloseTxModal();
     },
     onClickModelViewer() {

@@ -132,10 +132,12 @@ export default {
   methods: {
     ...mapActions(['lazyGetUserInfoByAddress']),
     handleClickClose() {
-      this.$router.replace({
-        name: 'id',
-        params: { id: this.wallet },
-      });
+      this.$router.replace(
+        this.localeLocation({
+          name: 'id',
+          params: { id: this.wallet },
+        })
+      );
     },
     handleClickConfirm() {
       return this.isSubscribePage

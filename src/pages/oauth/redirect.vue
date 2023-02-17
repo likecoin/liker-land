@@ -66,7 +66,7 @@ export default {
         if (postAuthRoute) {
           this.$router.replace(postAuthRoute);
         } else {
-          this.$router.replace(this.getHomeRoute);
+          this.$router.replace(this.localeLocation(this.getHomeRoute));
         }
       } catch (err) {
         const errData = err.response || err;

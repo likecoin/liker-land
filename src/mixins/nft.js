@@ -880,10 +880,12 @@ export default {
       }
     },
     goNFTDetails() {
-      this.$router.push({
-        name: 'nft-class-classId',
-        params: { classId: this.classId },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.classId },
+        })
+      );
     },
     normalizeNFTMessage(m) {
       if (m.memo === 'like.co NFT API') return '';

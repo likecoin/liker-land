@@ -81,9 +81,11 @@ export default {
           this.navigateToMyDashboard();
         }
       } else {
-        this.$router.push({
-          name: 'dashboard',
-        });
+        this.$router.push(
+          this.localeLocation({
+            name: 'dashboard',
+          })
+        );
       }
     },
     navigateToSettings() {

@@ -238,10 +238,12 @@ export default {
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
-      this.$router.push({
-        name: 'id',
-        params: { id: this.wallet },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'id',
+          params: { id: this.wallet },
+        })
+      );
     },
   },
 };

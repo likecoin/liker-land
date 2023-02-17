@@ -20,7 +20,7 @@ export default {
         event.data.type === 'navigate' &&
         event.data.route
       ) {
-        this.$router.push(event.data.route);
+        this.$router.push(this.localeLocation(event.data.route));
       }
     },
   },
