@@ -1,7 +1,7 @@
 <template>
   <div>
     <header
-      v-t="'campaign_nft_item_header_hint'"
+      v-t="isCollectable ? 'campaign_nft_item_header_hint' : 'campaign_nft_item_header_hint_uncollectable'"
       class="text-black text-[12px] leading-[5/3]"
     />
     <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
@@ -70,10 +70,11 @@
         </template>
         <NFTSupplyTable
           v-else
-          class="laptop:mt-[8px] w-full laptop:pr-[8px]"
+          class="w-full laptop:mt-[8px] laptop:pr-[8px]"
           :collected-count="soldCount"
           :should-collapse-in-mobile="true"
           :should-show-indicator="true"
+          :is-disabled="!isCollectable"
           @collect="handleClickCollect"
         />
         <div class="mt-[16px] flex items-center justify-between">
@@ -101,7 +102,11 @@
             </li>
           </ul>
           <ProgressIndicator v-if="isLoading" />
-          <ButtonV2 v-else preset="secondary" @click="handleClickCollect">
+          <ButtonV2
+            v-else-if="isCollectable"
+            preset="secondary"
+            @click="handleClickCollect"
+          >
             <template #prepend>
               <NFTWidgetIconInsertCoin />
             </template>
@@ -209,6 +214,10 @@ export default {
       default: 0,
     },
     isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isCollectable: {
       type: Boolean,
       default: false,
     },

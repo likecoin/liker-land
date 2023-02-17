@@ -26,11 +26,9 @@
       :own-count-label="$t('nft_details_page_label_owning')"
       :story-title="storyTitle"
       :story-description="storyDescription"
+      :is-collectable="nftIsCollectable"
       :content-preview-props="{
-        to: {
-          name: 'nft-class-classId-nftId',
-          params: { classId: classId, nftId: nftIdCollectNext },
-        },
+        to: nftCollectRoute,
         tag: 'NuxtLink',
       }"
       @view-details="handleClickViewDetails"

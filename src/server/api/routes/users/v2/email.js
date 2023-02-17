@@ -36,11 +36,16 @@ router.post(
       await db.runTransaction(async t => {
         const userRef = walletUserCollection.doc(user);
         const userDoc = await t.get(userRef);
-        const { email: currentEmail, emailLastUpdatedTs } = userDoc.data();
+        const {
+          email: currentEmail,
+          emailUnconfirmed,
+          emailLastUpdatedTs,
+        } = userDoc.data();
         if (email === currentEmail) {
           throw new Error('EMAIL_ALREADY_UPDATED');
         }
         if (
+          emailUnconfirmed === email &&
           emailLastUpdatedTs &&
           Date.now() - emailLastUpdatedTs.toMillis() <
             VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS

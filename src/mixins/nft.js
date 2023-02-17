@@ -339,6 +339,17 @@ export default {
         ? this.listingInfo.nftId
         : this.purchaseInfo?.nftId;
     },
+    nftCollectRoute() {
+      return this.nftIsCollectable && this.nftIdCollectNext
+        ? {
+            name: 'nft-class-classId-nftId',
+            params: { classId: this.classId, nftId: this.nftIdCollectNext },
+          }
+        : {
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          };
+    },
     canCollectWithoutWallet() {
       return (
         !LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS.length ||

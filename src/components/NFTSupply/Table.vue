@@ -5,6 +5,7 @@
       shouldCollapseInMobile ? 'laptop:border-y-[2px]' : 'border-y-[2px]',
       'border-shade-gray',
       {
+        'pointer-events-none': isDisabled,
         'laptop:border-b-0': shouldHideLowerBound,
       },
     ]"
@@ -24,6 +25,7 @@
         v-bind="d"
         :should-collapse-in-mobile="shouldCollapseInMobile"
         :should-show-indicator="shouldShowIndicator"
+        :is-disabled="isDisabled"
         @collect="handleCollect"
       />
     </table>
@@ -62,6 +64,10 @@ export default {
       default: undefined,
     },
     shouldCollapseInMobile: {
+      type: Boolean,
+      default: false,
+    },
+    isDisabled: {
       type: Boolean,
       default: false,
     },
