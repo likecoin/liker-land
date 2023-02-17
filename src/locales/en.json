@@ -179,6 +179,8 @@
   "FeaturedPage": {
     "headerLabel": "Today"
   },
+  "filter_menu_creator": "Filter",
+  "filter_menu_reset": "Clear filter",
   "finish": "Finish",
   "follow": "Follow",
   "following": "Following",
