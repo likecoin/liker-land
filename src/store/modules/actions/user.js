@@ -59,6 +59,9 @@ export async function updatePreferences(
   if (locale) {
     dispatch('setLocale', locale);
     preferences.locale = normalizeLocaleForLikeCo(locale);
+    if (getters.walletHasLoggedIn) {
+      await this.$api.$post(api.getUserV2LocaleURL(), { locale });
+    }
   }
   if (Object.keys(preferences).length) {
     if (getters.getUserId)

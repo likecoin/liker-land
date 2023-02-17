@@ -404,11 +404,12 @@ const actions = {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ commit }, address) {
+  async walletFetchSessionUserInfo({ commit, dispatch }, address) {
     try {
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
       const userInfo = await this.$api.$get(getUserV2Self());
       commit(WALLET_SET_USER_INFO, userInfo || { user: address });
+      dispatch('setLocale', userInfo.locale);
       return userInfo;
     } catch (error) {
       throw error;
