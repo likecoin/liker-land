@@ -196,7 +196,7 @@ export default {
   },
   mixins: [walletMixin],
   data() {
-    return { postTimeStamp: undefined };
+    return { lastEntryTs: undefined };
   },
   computed: {
     ...mapGetters([
@@ -306,7 +306,7 @@ export default {
       }
     }
     this.$api.$post(updateEventLastSeen());
-    this.postTimeStamp = Date.now();
+    this.lastEntryTs = Date.now();
     window.addEventListener('beforeunload', this.updateEventLastSeenTs);
   },
   // For SPA navigation
@@ -326,7 +326,7 @@ export default {
       await this.fetchWalletEvents();
     },
     handleRouteLeave() {
-      this.updateEventLastSeenTs(this.postTimeStamp || Date.now());
+      this.updateEventLastSeenTs(this.lastEntryTs || Date.now());
     },
     handleClickEvent() {
       logTrackerEvent(
