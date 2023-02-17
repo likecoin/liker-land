@@ -18,7 +18,6 @@ import {
   postFollowCreator,
   apiUserV2WalletEmail,
   getNFTEvents,
-  updateEventLastSeen,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 

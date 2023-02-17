@@ -307,26 +307,17 @@ export default {
     }
     this.$api.$post(updateEventLastSeen());
     this.lastEntryTs = Date.now();
-    window.addEventListener('beforeunload', this.updateEventLastSeenTs);
   },
   // For SPA navigation
   beforeRouteLeave(to, from, next) {
-    this.handleRouteLeave();
-    window.removeEventListener('beforeunload', this.handleRouteLeave);
+    this.updateEventLastSeenTs(this.lastEntryTs || Date.now());
     next();
-  },
-  // For closing tab/browser
-  beforeDestroy() {
-    window.removeEventListener('beforeunload', this.handleRouteLeave);
   },
 
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     async handleRefresh() {
       await this.fetchWalletEvents();
-    },
-    handleRouteLeave() {
-      this.updateEventLastSeenTs(this.lastEntryTs || Date.now());
     },
     handleClickEvent() {
       logTrackerEvent(
