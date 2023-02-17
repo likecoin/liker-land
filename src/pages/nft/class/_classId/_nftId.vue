@@ -550,10 +550,12 @@ export default {
     onSelectNFT(e) {
       const { value: nftId } = e.target;
       logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId },
+        })
+      );
     },
     onToggleTransfer() {
       this.isOpenTransferModal = true;
@@ -644,10 +646,12 @@ export default {
         this.nftId,
         1
       );
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId: this.nftIdCollectNext },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId: this.nftIdCollectNext },
+        })
+      );
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(

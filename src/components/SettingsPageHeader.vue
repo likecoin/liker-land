@@ -73,7 +73,9 @@ export default {
         .split('-')
         .slice(0, -1)
         .join('-');
-      if (backRouteName) this.$router.push({ name: backRouteName });
+      if (backRouteName) {
+        this.$router.push(this.localeLocation({ name: backRouteName }));
+      }
     },
   },
 };

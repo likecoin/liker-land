@@ -216,7 +216,9 @@ export default {
       );
     },
     handleCollect(classId) {
-      this.$router.push({ name: 'writing-nft', hash: `#${classId}` });
+      this.$router.push(
+        this.localeLocation({ name: 'writing-nft', hash: `#${classId}` })
+      );
     },
     handleCollectFromWidgetSection(classId) {
       logTrackerEvent(this, 'NFTAboutPage', 'GoToCampaign(Widget)', classId, 1);

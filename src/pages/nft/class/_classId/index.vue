@@ -379,10 +379,12 @@ export default {
         this.nftId,
         1
       );
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId: this.nftIdCollectNext },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId: this.nftIdCollectNext },
+        })
+      );
     },
     handleClickSellFromPriceSection() {
       logTrackerEvent(
