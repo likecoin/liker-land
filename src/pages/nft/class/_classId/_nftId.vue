@@ -6,7 +6,7 @@
     >{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div
       v-else-if="!isLoading && !isMessagePage"
-      class="px-[12px] laptop:px-[24px] phone:px-[32px] pb-[120px] w-full"
+      class="px-[12px] laptop:px-[24px] phone:px-[12px] pb-[120px] w-full"
     >
 
       <div class="flex flex-col gap-[32px] phone:gap-[16px] w-full max-w-[962px] mx-auto">
@@ -18,7 +18,7 @@
         >
           <NFTMessageIdentity
             v-if="nftCollectorWalletAddress"
-            class="phone:order-3 phone:self-start"
+            class="phone:order-3 phone:self-center"
             :type="getWalletIdentityType(nftCollectorWalletAddress)"
             :wallet-address="nftCollectorWalletAddress"
             wrapper-classes="!bg-transparent"
@@ -82,8 +82,7 @@
               v-if="messageList.length && messageList[0].message"
               class="hidden flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px] phone:flex phone:order-1"
             >
-              <Label :text="$t('nft_message_type_collect')" class="text-medium-gray" />
-              <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[24px]">
+              <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[16px]">
                 <NFTMessage
                   :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
                   :type="creatorMessage.event"
@@ -119,7 +118,7 @@
             </div>
             <ul
               v-if="messageList.length === 1 && creatorMessage && !creatorMessage.message"
-              class="hidden flex-col gap-[24px] w-full px-[24px] phone:flex phone:order-3"
+              class="hidden flex-col gap-[24px] w-full px-[16px] phone:flex phone:order-3"
             >
               <NFTMessage
                 :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
@@ -178,8 +177,45 @@
               </template>
               {{ $t('nft_details_page_button_view_details') }}
             </ButtonV2>
-          </div>
 
+            <!-- Do not show  3d model in detail page, pending product design-->
+            <!-- <client-only>
+              <CardV2
+                v-if="isMobile() && nftCollectorWalletAddress === getAddress"
+                :class="[
+                  'relative',
+                  'w-full',
+                  'flex',
+                  'flex-col',
+
+                  'overflow-hidden',
+
+                  'border-[1px]',
+                  'border-shade-gray',
+                ]"
+              >
+                <model-viewer
+                  class="w-full h-[300px]"
+                  :alt="nftClassCollectionName"
+                  :src="nftModelURL"
+                  ar
+                  auto-rotate
+                  auto-rotate-delay="500"
+                  xr-environment
+                  shadow-intensity="1"
+                  camera-controls
+                  camera-orbit="225deg 55deg 100m"
+                  @click.once="onClickModelViewer"
+                />
+                <Label
+                  class="text-medium-gray text-[12px]"
+                  align="center"
+                  :text="$t('nft_details_page_label_ar_view_in_mobile')"
+                  preset="p6"
+                />
+              </CardV2>
+            </client-only> -->
+          </div>
           <!-- NFT Collect CTA -->
           <div
             v-if="nftIsNew"
@@ -286,6 +322,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { isMobile } from '@walletconnect/browser-utils';
 
 import { EXTERNAL_HOST } from '~/constant';
 
@@ -309,6 +346,44 @@ export default {
       this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
       this.nftImageURL || 'https://liker.land/images/og/writing-nft.jpg';
+    const schemas = [];
+    if (this.purchaseInfo.price) {
+      schemas.push({
+        '@context': 'http://www.schema.org',
+        '@type': 'Product',
+        name: title,
+        image: [ogImage],
+        description,
+        brand: {
+          '@type': 'Brand',
+          name: 'Writing NFT',
+        },
+        sku: this.classId,
+        iscn: this.iscnId,
+        url: `${EXTERNAL_HOST}${this.$route.path}`,
+        offers: {
+          '@type': 'Offer',
+          price: this.NFTPriceUSD,
+          priceCurrency: 'USD',
+          availability: 'LimitedAvailability',
+        },
+      });
+    }
+    if (this.nftModelURL) {
+      schemas.push({
+        '@context': 'http://schema.org/',
+        '@type': '3DModel',
+        image: ogImage,
+        name: title,
+        encoding: [
+          {
+            '@type': 'MediaObject',
+            contentUrl: this.nftModelURL,
+            encodingFormat: 'model/gltf-json',
+          },
+        ],
+      });
+    }
     return {
       title,
       meta: [
@@ -334,32 +409,11 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-      script: this.purchaseInfo.price
+      script: schemas.length
         ? [
             {
               hid: 'schema',
-              innerHTML: JSON.stringify([
-                {
-                  '@context': 'http://www.schema.org',
-                  '@type': 'Product',
-                  name: title,
-                  image: [ogImage],
-                  description,
-                  brand: {
-                    '@type': 'Brand',
-                    name: 'Writing NFT',
-                  },
-                  sku: this.classId,
-                  iscn: this.iscnId,
-                  url: `${EXTERNAL_HOST}${this.$route.path}`,
-                  offers: {
-                    '@type': 'Offer',
-                    price: this.NFTPriceUSD,
-                    priceCurrency: 'USD',
-                    availability: 'LimitedAvailability',
-                  },
-                },
-              ]),
+              innerHTML: JSON.stringify(schemas),
               type: 'application/ld+json',
               body: true,
             },
@@ -431,8 +485,8 @@ export default {
     }
     try {
       await Promise.all([
-        store.dispatch('fetchNFTClassMetadata', classId),
-        store.dispatch('fetchNFTMetadata', { classId, nftId }),
+        store.dispatch('lazyGetNFTClassMetadata', classId),
+        store.dispatch('lazyGetNFTMetadata', { classId, nftId }),
         store
           .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
           .catch(err => {
@@ -492,6 +546,7 @@ export default {
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice', 'fetchNFTMetadata']),
+    isMobile,
     onSelectNFT(e) {
       const { value: nftId } = e.target;
       logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
@@ -529,6 +584,15 @@ export default {
         this,
         'NFT',
         'nft_details_page_view_content',
+        this.classId,
+        1
+      );
+    },
+    onClickModelViewer() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_page_click_model_viewer',
         this.classId,
         1
       );

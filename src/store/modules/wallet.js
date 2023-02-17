@@ -4,10 +4,11 @@ import {
   LOGIN_MESSAGE,
   LIKECOIN_CHAIN_ID,
   LIKECOIN_CHAIN_MIN_DENOM,
+  LIKECOIN_NFT_API_WALLET,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
-
-import { getAccountBalance } from '~/util/nft';
+import { catchAxiosError } from '~/util/misc';
+import { getAccountBalance, getNFTHistoryDataMap } from '~/util/nft';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
@@ -17,6 +18,8 @@ import {
   postFollowCreator,
   apiUserV2WalletEmail,
   getUserNotificationSettingsUrl,
+  getNFTEvents,
+  updateEventLastSeen,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -27,6 +30,8 @@ import {
   WALLET_SET_CONNECTOR,
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
+  WALLET_SET_EVENTS,
+  WALLET_SET_EVENT_LAST_SEEN_TS,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
@@ -35,6 +40,8 @@ import {
   WALLET_SET_IS_LOGGING_IN,
   WALLET_SET_NOTIFICATION_SETTINGS,
 } from '../mutation-types';
+
+const WALLET_EVENT_LIMIT = 100;
 
 let likecoinWalletLib = null;
 
@@ -46,6 +53,8 @@ const state = () => ({
   likerInfo: null,
   followees: [],
   isFetchingFollowees: false,
+  eventLastSeenTs: 0,
+  events: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -74,7 +83,13 @@ const mutations = {
   },
   [WALLET_SET_USER_INFO](state, userInfo) {
     if (userInfo) {
-      const { user, email, emailUnconfirmed, followees } = userInfo;
+      const {
+        user,
+        email,
+        emailUnconfirmed,
+        followees,
+        eventLastSeenTs,
+      } = userInfo;
       if (user !== undefined) {
         state.loginAddress = user;
       }
@@ -87,11 +102,15 @@ const mutations = {
       if (Array.isArray(followees)) {
         state.followees = followees;
       }
+      if (eventLastSeenTs) {
+        state.eventLastSeenTs = eventLastSeenTs;
+      }
     } else {
       state.loginAddress = '';
       state.email = '';
       state.emailUnverified = '';
       state.followees = [];
+      state.eventLastSeenTs = -1;
     }
   },
   [WALLET_SET_METHOD_TYPE](state, method) {
@@ -102,6 +121,12 @@ const mutations = {
   },
   [WALLET_SET_LIKERINFO](state, likerInfo) {
     state.likerInfo = likerInfo;
+  },
+  [WALLET_SET_EVENTS](state, events) {
+    state.events = events;
+  },
+  [WALLET_SET_EVENT_LAST_SEEN_TS](state, eventLastSeenTs) {
+    state.eventLastSeenTs = eventLastSeenTs;
   },
   [WALLET_SET_LIKE_BALANCE](state, likeBalance) {
     state.likeBalance = likeBalance;
@@ -131,6 +156,25 @@ const getters = {
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
+  getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
+  getLatestEventTimestamp: state =>
+    state.events[0]?.timestamp &&
+    new Date(state.events[0]?.timestamp).getTime(),
+  getEventLastSeenTs: state => state.eventLastSeenTs,
+  getHasUnseenEvents: state =>
+    state.eventLastSeenTs &&
+    state.events[0]?.timestamp &&
+    state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
+  getNotificationCount: (state, getters) => {
+    if (!state.eventLastSeenTs || !getters.getEvents || !getters.loginAddress) {
+      return 0;
+    }
+    return getters.getEvents.filter(
+      e =>
+        state.eventLastSeenTs < new Date(e.timestamp).getTime() &&
+        (e.eventType === 'nft_sale' || e.eventType === 'receive_nft')
+    ).length;
+  },
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -140,6 +184,22 @@ const getters = {
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
   walletNotificationSettings: state => state.notificationSettings,
 };
+
+function formatEventType(e, loginAddress) {
+  let eventType;
+  if (e.sender === LIKECOIN_NFT_API_WALLET) {
+    if (e.receiver === loginAddress) {
+      eventType = 'purchase_nft';
+    } else {
+      eventType = 'nft_sale';
+    }
+  } else if (e.receiver === loginAddress) {
+    eventType = 'receive_nft';
+  } else {
+    eventType = 'send_nft';
+  }
+  return eventType;
+}
 
 const actions = {
   async getLikeCoinWalletLib() {
@@ -168,11 +228,12 @@ const actions = {
     commit(WALLET_SET_ADDRESS, walletAddress);
     commit(WALLET_SET_SIGNER, offlineSigner);
     await setLoggerUser(this, { wallet: walletAddress, method });
+    catchAxiosError(
+      this.$api.$get(getUserInfoMinByAddress(walletAddress)).then(userInfo => {
+        commit(WALLET_SET_LIKERINFO, userInfo);
+      })
+    );
     try {
-      const userInfo = await this.$api.$get(
-        getUserInfoMinByAddress(walletAddress)
-      );
-      commit(WALLET_SET_LIKERINFO, userInfo);
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
@@ -181,6 +242,7 @@ const actions = {
       // eslint-disable-next-line no-console
       console.error(msg);
     }
+    dispatch('fetchWalletEvents');
     return true;
   },
 
@@ -231,6 +293,103 @@ const actions = {
       const { accounts, offlineSigner, method } = connection;
       await dispatch('initWallet', { accounts, offlineSigner, method });
     }
+  },
+
+  async fetchWalletEvents({ state, commit, dispatch }) {
+    const { address } = state;
+    const [senderRes, receiverRes, purchaseRes] = await Promise.all([
+      this.$api.$get(
+        getNFTEvents({
+          sender: address,
+          limit: WALLET_EVENT_LIMIT,
+          actionType: '/cosmos.nft.v1beta1.MsgSend',
+          ignoreToList: LIKECOIN_NFT_API_WALLET,
+          reverse: true,
+        })
+      ),
+      this.$api.$get(
+        getNFTEvents({
+          receiver: address,
+          actionType: '/cosmos.nft.v1beta1.MsgSend',
+          limit: WALLET_EVENT_LIMIT,
+          reverse: true,
+        })
+      ),
+      // purchase events are sent by LIKECOIN_NFT_API_WALLET
+      this.$api.$get(
+        getNFTEvents({
+          creator: address,
+          sender: LIKECOIN_NFT_API_WALLET,
+          actionType: '/cosmos.nft.v1beta1.MsgSend',
+          limit: WALLET_EVENT_LIMIT,
+          reverse: true,
+        })
+      ),
+    ]);
+    let events = senderRes.events
+      .concat(receiverRes.events)
+      .concat(purchaseRes.events);
+    events = [
+      ...new Map(
+        events.map(e => [
+          [e.tx_hash, e.class_id, e.nft_id, e.eventType].join('-'),
+          e,
+        ])
+      ).values(),
+    ];
+    const classIds = Array.from(new Set(events.map(e => e.class_id)));
+
+    const addresses = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const list of events) {
+      addresses.push(list.sender, list.receiver);
+    }
+    [...new Set(addresses)]
+      .filter(a => !!a)
+      .map(a => dispatch('lazyGetUserInfoByAddress', a));
+
+    const promises = events.map(e => {
+      if (
+        e.action === '/cosmos.nft.v1beta1.MsgSend' &&
+        e.sender === LIKECOIN_NFT_API_WALLET
+      ) {
+        return getNFTHistoryDataMap({
+          axios: this.$api,
+          classId: e.class_id,
+          txHash: e.tx_hash,
+        });
+      }
+      return new Map();
+    });
+
+    const historyDatas = await Promise.all(promises);
+    historyDatas.forEach((m, index) => {
+      if (m) {
+        // m is a Map
+        m.forEach(data => {
+          const { granterMemo, price } = data;
+          events[index].price = price;
+          events[index].granterMemo = granterMemo;
+        });
+      }
+    });
+
+    commit(
+      WALLET_SET_EVENTS,
+      events
+        .map(e => {
+          e.timestamp = new Date(e.timestamp);
+          e.eventType = formatEventType(e, address);
+          return e;
+        })
+        .sort((a, b) => b.timestamp - a.timestamp)
+    );
+    classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
+  },
+
+  async updateEventLastSeenTs({ commit }) {
+    await this.$api.$post(updateEventLastSeen());
+    commit(WALLET_SET_EVENT_LAST_SEEN_TS, Date.now());
   },
 
   async walletFetchLIKEBalance({ commit, state }) {
@@ -319,6 +478,8 @@ const actions = {
     try {
       commit(WALLET_SET_USER_INFO, null);
       commit(WALLET_SET_FOLLOWEES, []);
+      commit(WALLET_SET_EVENTS, []);
+      commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
       await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
@@ -336,15 +497,15 @@ const actions = {
       throw error;
     }
   },
-  async walletVerifyEmail({ state, commit }, token) {
+  async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
     try {
-      await this.$api.$put(
-        apiUserV2WalletEmail({ wallet: state.loginAddress, token })
-      );
-      commit(WALLET_SET_USER_INFO, {
-        email: state.emailUnconfirmed,
-        emailUnconfirmed: '',
-      });
+      await this.$api.$put(apiUserV2WalletEmail({ wallet, token }));
+      if (getters.walletIsMatchedSession) {
+        commit(WALLET_SET_USER_INFO, {
+          email: state.emailUnverified,
+          emailUnconfirmed: '',
+        });
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);

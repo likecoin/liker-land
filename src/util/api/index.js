@@ -102,11 +102,12 @@ export const getNFTPurchaseInfo = ({ iscnId, classId }) => {
   )}`;
 };
 
-export const getNFTHistory = ({ iscnId, classId, nftId }) => {
+export const getNFTHistory = ({ iscnId, classId, nftId, txHash }) => {
   const qsPayload = {
     iscn_id: iscnId,
     class_id: classId,
     nft_id: nftId,
+    tx_hash: txHash,
   };
   return `${LIKECOIN_API_BASE}/likernft/history?${querystring.stringify(
     qsPayload
@@ -123,6 +124,9 @@ export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
     qsPayload
   )}`;
 };
+
+export const getNFTModel = ({ classId }) =>
+  `${LIKECOIN_API_BASE}/likernft/metadata/model/class_${classId}.gltf`;
 
 export const getUserNFTStats = wallet =>
   `${LIKECOIN_API_BASE}/likernft/user/${wallet}/stats`;
@@ -141,14 +145,17 @@ export const getChainNFTClassMetadataEndpoint = classId =>
 export const getChainNFTMetadataEndpoint = (classId, nftId) =>
   `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/nfts/${classId}/${nftId}`;
 
-export const getTopCollectorOfUser = (creator, count = 6) =>
+export const getTopCollectorOfUser = (creator, count = 5) =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?pagination.limit=${count}&reverse=true&creator=${creator}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
-export const getTopCreatorOfUser = (collector, count = 6) =>
+export const getTopCreatorOfUser = (collector, count = 5) =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?pagination.limit=${count}&reverse=true&collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
 export const getChainNFTClassListingEndpoint = classId =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`;
+
+export const getCollectorTopRankedCreators = (collector, top = 5) =>
+  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector-top-ranked-creators?collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false&top=${top}`;
 
 export const getISCNRecord = iscnId => {
   const qsPayload = {
@@ -190,19 +197,28 @@ export const getNFTOwners = classId => {
 export const getNFTEvents = ({
   classId,
   nftId,
+  sender,
+  receiver,
+  creator,
   limit,
   key,
   actionType,
   ignoreToList,
+  ignoreFromList,
+  reverse,
 }) => {
-  const qsPayload = {
-    class_id: classId,
-    nft_id: nftId,
-    action_type: actionType,
-  };
+  const qsPayload = {};
+  if (classId) qsPayload.class_id = classId;
+  if (nftId) qsPayload.nft_id = nftId;
+  if (sender) qsPayload.sender = sender;
+  if (creator) qsPayload.creator = creator;
+  if (receiver) qsPayload.receiver = receiver;
+  if (actionType) qsPayload.action_type = actionType;
   if (ignoreToList) qsPayload.ignore_to_list = ignoreToList;
+  if (ignoreFromList) qsPayload.ignore_from_list = ignoreFromList;
   if (key) qsPayload.key = key;
   if (limit) qsPayload.limit = limit;
+  if (reverse) qsPayload['pagination.reverse'] = reverse;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
     qsPayload
   )}`;
@@ -282,6 +298,7 @@ export const apiUserV2WalletEmail = ({ wallet, email, token }) => {
   return `/api/v2/users/${wallet}/email?${querystring.stringify(qsPayload)}`;
 };
 
+export const updateEventLastSeen = () => `/api/v2/users/event/seen`;
 export const getNFTDisplayStateURL = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
 

@@ -24,6 +24,8 @@
       :owner-count-label="$t('nft_details_page_title_collector')"
       :sold-count-label="$t('campaign_nft_item_collected_count_label')"
       :own-count-label="$t('nft_details_page_label_owning')"
+      :story-title="storyTitle"
+      :story-description="storyDescription"
       :content-preview-props="{
         to: {
           name: 'nft-class-classId-nftId',
@@ -53,6 +55,14 @@ export default {
     classId: {
       type: String,
       required: true,
+    },
+    storyTitle: {
+      type: String,
+      default: '',
+    },
+    storyDescription: {
+      type: String,
+      default: '',
     },
   },
   data() {

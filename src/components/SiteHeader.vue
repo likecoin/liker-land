@@ -65,14 +65,19 @@
           >
             <IconNav />
           </ButtonV2>
-          <Identity
-            v-else
-            class="cursor-pointer"
-            :avatar-url="walletUserAvatar"
-            :avatar-size="42"
-            :is-avatar-outlined="isWalletUserCivicLiker"
-            @click="toggle"
-          />
+          <div v-else class="relative">
+            <Identity
+              class="cursor-pointer"
+              :avatar-url="walletUserAvatar"
+              :avatar-size="42"
+              :is-avatar-outlined="isWalletUserCivicLiker"
+              @click="toggle"
+            />
+            <div
+              v-if="getNotificationCount"
+              class="absolute top-0 right-0 bg-danger rounded-full w-[8px] h-[8px]"
+            />
+          </div>
         </template>
         <MenuList>
           <template
@@ -102,6 +107,26 @@
           >
             <template #label-prepend>
               <MenuIcon :type="item.value" />
+            </template>
+            <template #label-append>
+              <div
+                v-if="item.value === 'notifications'"
+                :class="[
+                  'flex',
+                  'justify-center',
+                  'items-center',
+                  'bg-shade-gray',
+                  { 'bg-danger': getNotificationCount },
+                  'rounded-full',
+                  'min-w-[24px]',
+                  'px-[8px]',
+                  'py-[4px]'
+                ]"
+              >
+                <div class="text-white text-[6px]">
+                  {{ getNotificationCount }}
+                </div>
+              </div>
             </template>
           </MenuItem>
         </MenuList>
@@ -138,6 +163,7 @@ export default {
       'getAvailableLocales',
       'getLocale',
       'getUserId',
+      'getNotificationCount',
     ]),
     currentLocale() {
       return this.getLocale;
@@ -157,6 +183,7 @@ export default {
 
       if (this.getAddress || this.getUserId) {
         options.push(
+          { value: 'notifications', name: this.$t('main_menu_notification') },
           { value: 'setting', name: this.$t('main_menu_settings') },
           { value: 'signOut', name: this.$t('main_menu_sign_out') }
         );
@@ -190,6 +217,17 @@ export default {
         case 'mintNft':
           logTrackerEvent(this, 'site_menu', 'site_menu_click_mint_nft', '', 1);
           window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
+          break;
+
+        case 'notifications':
+          logTrackerEvent(
+            this,
+            'site_menu',
+            'site_menu_click_notifications',
+            '',
+            1
+          );
+          this.$router.push({ name: 'notifications' });
           break;
 
         case 'setting':
