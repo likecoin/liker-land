@@ -10,6 +10,7 @@ const {
   db,
   FieldValue,
   walletUserCollection,
+  nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 
 const router = Router();
@@ -26,7 +27,18 @@ router.get(
         res.json({ followees: [] });
         return;
       }
-      const { followees = [] } = userDoc.data();
+      const { followees: walletFollowees = [], email } = userDoc.data();
+      const snapshot = await nftMintSubscriptionCollection
+        .where('subscriberEmail', '==', email)
+        .get();
+      const legacyFollowees = snapshot.docs.map(doc => {
+        const { subscribedWallet } = doc.data();
+        return subscribedWallet;
+      });
+      const followees = new Set([
+        ...walletFollowees,
+        ...legacyFollowees,
+      ]).values();
       res.json({ followees });
     } catch (err) {
       handleRestfulError(req, res, next, err);
@@ -58,8 +70,7 @@ router.post(
             throw new Error('EMAIL_NOT_SET_YET');
           }
         }
-        const creatorRef = walletUserCollection.doc(user);
-        await t.update(creatorRef, {
+        await t.update(userRef, {
           followees: FieldValue.arrayUnion(creator),
         });
       });
@@ -92,18 +103,25 @@ router.delete(
         res.status(400).send('INVALID_CREATOR_ADDRESS');
         return;
       }
-      await walletUserCollection.doc(user).update({
-        followees: FieldValue.arrayRemove(creator),
+      await db.runTransaction(async t => {
+        const userDoc = await t.get(walletUserCollection.doc(user));
+        const { email } = userDoc.data();
+        const snapshot = await t.get(
+          nftMintSubscriptionCollection
+            .where('subscriberEmail', '==', email)
+            .where('subscribedWallet', '==', creator)
+            .limit(1)
+        );
+        t.update(walletUserCollection.doc(user), {
+          followees: FieldValue.arrayRemove(creator),
+        });
+        if (snapshot.docs.length > 0) {
+          t.delete(snapshot.docs[0].ref);
+        }
       });
       res.sendStatus(200);
     } catch (err) {
-      switch (err.message) {
-        case 'EMAIL_NOT_SET_YET':
-          res.status(403).send('EMAIL_NOT_SET_YET');
-          break;
-        default:
-          handleRestfulError(req, res, next, err);
-      }
+      handleRestfulError(req, res, next, err);
     }
   }
 );
