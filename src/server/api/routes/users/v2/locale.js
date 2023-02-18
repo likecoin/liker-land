@@ -4,7 +4,10 @@ const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
 const { walletUserCollection } = require('../../../../modules/firebase');
 
-const { DEFAULT_LOCALE, AVAILABLE_LOCALES } = require('../../../constant');
+const config = require('../../../../../nuxt.config');
+
+const DEFAULT_LOCALE = config.i18n.defaultLocale;
+const AVAILABLE_LOCALES = config.i18n.locales.map(l => l.code);
 
 const router = Router();
 
