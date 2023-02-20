@@ -150,7 +150,7 @@ export const createPorfolioMixin = ({
     nftCreatorAddressListOfCollected() {
       return [
         ...new Set(
-          this.nftClassListOfCollected
+          this.nftClassListOfCollectedExcludedOther
             .map(
               ({ classId }) => this.getNFTClassMetadataById(classId).iscn_owner
             )

@@ -38,7 +38,7 @@
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
-          'self-stretch justify-end hidden desktop:flex',
+          'self-stretch justify-end gap-[8px] hidden desktop:flex',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems
           }
@@ -56,7 +56,7 @@
             <MenuItem
               value=""
               :label="$t('filter_menu_reset')"
-              label-align="left"
+              label-align="center"
               :selected-value="''"
               @select="handlePortfolioFilteringChange"
             />
