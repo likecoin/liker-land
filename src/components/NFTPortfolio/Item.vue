@@ -79,7 +79,10 @@ export default {
           },
         });
       }
-      return { name: 'nft-class-classId', params: { classId: this.classId } };
+      return this.localeLocation({
+        name: 'nft-class-classId',
+        params: { classId: this.classId },
+      });
     },
   },
   methods: {
