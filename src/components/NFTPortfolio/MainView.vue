@@ -38,12 +38,50 @@
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
-          'self-stretch justify-end hidden desktop:flex',
+          'self-stretch justify-end gap-[8px] hidden desktop:flex',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems
           }
         ]"
       >
+        <Dropdown v-if="isPortfolioTabCollectedActive">
+          <template v-slot:trigger="{ toggle }">
+            <ButtonV2
+              :text="$t('filter_menu_creator')"
+              preset="plain"
+              @click="toggle"
+            />
+          </template>
+          <MenuList>
+            <MenuItem
+              value=""
+              :label="$t('filter_menu_reset')"
+              label-align="center"
+              :selected-value="''"
+              @select="handlePortfolioFilteringChange"
+            />
+            <MenuItem
+              v-for="user in portfolioCollectedCreatorList"
+              :key="user.id"
+              :value="user.id"
+              :label="ellipsis(user.displayName)"
+              label-align="left"
+              :selected-value="portfolioItemsFiltering.creator[0]"
+              @select="handlePortfolioFilteringChange"
+            >
+              <template #label-prepend>
+                <IdentityAvatar
+                  :url="user.avatar"
+                  :display-name="user.displayName"
+                  :size="36"
+                  :is-outlined="user.isCivicLiker"
+                  :is-outline-extruded="false"
+                  :is-lazy-loaded="true"
+                />
+              </template>
+            </MenuItem>
+          </MenuList>
+        </Dropdown>
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
@@ -153,6 +191,7 @@ import debounce from 'lodash.debounce';
 import MagicGrid from 'magic-grid';
 
 import { NFT_CLASS_LIST_SORTING } from '~/util/nft';
+import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
 
@@ -199,6 +238,14 @@ export default {
       type: String,
       required: true,
     },
+    portfolioCollectedCreatorList: {
+      type: Array,
+      default: () => [],
+    },
+    portfolioItemsFiltering: {
+      type: Object,
+      default: () => ({}),
+    },
     isLoadingPortfolioItems: {
       type: Boolean,
       default: false,
@@ -225,6 +272,9 @@ export default {
     },
 
     // Tab
+    isPortfolioTabCollectedActive() {
+      return this.portfolioTab === tabOptions.collected;
+    },
     isPortfolioTabCreatedActive() {
       return this.portfolioTab === tabOptions.created;
     },
@@ -320,6 +370,7 @@ export default {
     this.removeInfiniteScrollListener();
   },
   methods: {
+    ellipsis,
     getPortfolioItemsSortingLabel(sorting) {
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
@@ -342,6 +393,9 @@ export default {
     handlePortfolioSortingChange(value) {
       const [sorting, order] = value.split('-');
       this.$emit('portfolio-change-sorting', { sorting, order });
+    },
+    handlePortfolioFilteringChange(value) {
+      this.$emit('portfolio-change-filtering', { type: 'creator', value });
     },
     handleTabChange(tab) {
       this.$emit('portfolio-change-tab', tab);
