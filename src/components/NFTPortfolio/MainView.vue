@@ -52,7 +52,7 @@
               @click="toggle"
             />
           </template>
-          <MenuList>
+          <MenuList :has-padding="false">
             <MenuItem
               value=""
               :label="$t('filter_menu_reset')"
@@ -60,26 +60,31 @@
               :selected-value="''"
               @select="handlePortfolioFilteringChange"
             />
-            <MenuItem
-              v-for="user in portfolioCollectedCreatorList"
-              :key="user.id"
-              :value="user.id"
-              :label="ellipsis(user.displayName)"
-              label-align="left"
-              :selected-value="portfolioItemsFiltering.creator[0]"
-              @select="handlePortfolioFilteringChange"
+            <MenuList
+              class="max-h-[270px] overflow-y-auto"
+              :is-flat="true"
             >
-              <template #label-prepend>
-                <IdentityAvatar
-                  :url="user.avatar"
-                  :display-name="user.displayName"
-                  :size="36"
-                  :is-outlined="user.isCivicLiker"
-                  :is-outline-extruded="false"
-                  :is-lazy-loaded="true"
-                />
-              </template>
-            </MenuItem>
+              <MenuItem
+                v-for="user in portfolioCollectedCreatorList"
+                :key="user.id"
+                :value="user.id"
+                :label="ellipsis(user.displayName)"
+                label-align="left"
+                :selected-value="portfolioItemsFiltering.creator[0]"
+                @select="handlePortfolioFilteringChange"
+              >
+                <template #label-prepend>
+                  <IdentityAvatar
+                    :url="user.avatar"
+                    :display-name="user.displayName"
+                    :size="36"
+                    :is-outlined="user.isCivicLiker"
+                    :is-outline-extruded="false"
+                    :is-lazy-loaded="true"
+                  />
+                </template>
+              </MenuItem>
+            </MenuList>
           </MenuList>
         </Dropdown>
         <Dropdown>
