@@ -340,15 +340,17 @@ export default {
         : this.purchaseInfo?.nftId;
     },
     nftCollectRoute() {
-      return this.nftIsCollectable && this.nftIdCollectNext
-        ? {
-            name: 'nft-class-classId-nftId',
-            params: { classId: this.classId, nftId: this.nftIdCollectNext },
-          }
-        : {
-            name: 'nft-class-classId',
-            params: { classId: this.classId },
-          };
+      return this.localeLocation(
+        this.nftIsCollectable && this.nftIdCollectNext
+          ? {
+              name: 'nft-class-classId-nftId',
+              params: { classId: this.classId, nftId: this.nftIdCollectNext },
+            }
+          : {
+              name: 'nft-class-classId',
+              params: { classId: this.classId },
+            }
+      );
     },
     canCollectWithoutWallet() {
       return (
