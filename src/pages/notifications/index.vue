@@ -320,9 +320,13 @@ export default {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     async handleRefresh() {
       this.updateEventLastSeenTs(this.lastUpdatedTime);
+      const oldCount = this.getNotificationCount;
       await this.fetchWalletEvents();
-      this.$api.$post(updateEventLastSeen());
-      this.lastUpdatedTime = Date.now();
+      const newCount = this.getNotificationCount;
+      if (oldCount !== newCount) {
+        this.$api.$post(updateEventLastSeen());
+        this.lastUpdatedTime = Date.now();
+      }
     },
     handleClickEvent() {
       logTrackerEvent(
