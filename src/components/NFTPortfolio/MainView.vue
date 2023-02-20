@@ -65,12 +65,14 @@
               :is-flat="true"
             >
               <MenuItem
-                v-for="user in portfolioCollectedCreatorList"
+                v-for="user in portfolioCollectedCreatorListWithSorting"
                 :key="user.id"
                 :value="user.id"
-                :label="ellipsis(user.displayName)"
+                :label="user.label"
+                :label-class="{
+                  'font-600 text-like-green': user.isSelected,
+                }"
                 label-align="left"
-                :selected-value="portfolioItemsFiltering.creator[0]"
                 @select="handlePortfolioFilteringChange"
               >
                 <template #label-prepend>
@@ -82,6 +84,12 @@
                     :is-outline-extruded="false"
                     :is-lazy-loaded="true"
                   />
+                </template>
+                <template
+                  v-if="user.isSelected"
+                  #label-append
+                >
+                  <TickIcon class="w-[20px] fill-like-cyan" />
                 </template>
               </MenuItem>
             </MenuList>
@@ -200,6 +208,8 @@ import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
 
+import TickIcon from '~/assets/icons/tick.svg?inline';
+
 const portfolioGridDebounceArgs = [
   60,
   {
@@ -210,6 +220,9 @@ const portfolioGridDebounceArgs = [
 ];
 
 export default {
+  components: {
+    TickIcon,
+  },
   props: {
     isNarrow: {
       type: Boolean,
@@ -285,6 +298,30 @@ export default {
     },
     isPortfolioTabOtherActive() {
       return this.portfolioTab === tabOptions.other;
+    },
+
+    // Filtering
+    portfolioCollectedCreatorListWithSorting() {
+      return this.portfolioCollectedCreatorList
+        .map(creator => {
+          const isSelected = this.portfolioItemsFiltering.creator.includes(
+            creator.id
+          );
+          return {
+            ...creator,
+            label: ellipsis(creator.displayName),
+            isSelected,
+          };
+        })
+        .sort((a, b) => {
+          if (a.isSelected && !b.isSelected) {
+            return -1;
+          }
+          if (!a.isSelected && b.isSelected) {
+            return 1;
+          }
+          return 0;
+        });
     },
 
     // Sorting
@@ -375,7 +412,6 @@ export default {
     this.removeInfiniteScrollListener();
   },
   methods: {
-    ellipsis,
     getPortfolioItemsSortingLabel(sorting) {
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:

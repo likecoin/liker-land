@@ -416,7 +416,16 @@ export const createPorfolioMixin = ({
       );
       switch (type) {
         case 'creator':
-          this.nftCreatorFilter = value ? [value] : [];
+          if (!value) {
+            this.nftCreatorFilter = [];
+          } else {
+            const index = this.nftCreatorFilter.indexOf(value);
+            if (index > -1) {
+              this.nftCreatorFilter.splice(index, 1);
+            } else {
+              this.nftCreatorFilter.push(value);
+            }
+          }
           break;
 
         default:
