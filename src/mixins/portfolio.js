@@ -148,15 +148,16 @@ export const createPorfolioMixin = ({
       });
     },
     nftCreatorAddressListOfCollected() {
-      return [
-        ...new Set(
-          this.nftClassListOfCollectedExcludedOther
-            .map(
-              ({ classId }) => this.getNFTClassMetadataById(classId).iscn_owner
-            )
-            .filter(owner => !!owner)
-        ),
-      ];
+      const ownerMap = this.nftClassListOfCollectedExcludedOther.reduce(
+        (acc, { classId }) => {
+          const owner = this.getNFTClassMetadataById(classId).iscn_owner;
+          acc[owner] = acc[owner] || 0;
+          acc[owner] += 1;
+          return acc;
+        },
+        {}
+      );
+      return Object.keys(ownerMap).sort((a, b) => ownerMap[b] - ownerMap[a]);
     },
     nftCreatorInfoListOfCollected() {
       return this.nftCreatorAddressListOfCollected.map(id => {
