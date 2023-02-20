@@ -196,7 +196,7 @@ export default {
   },
   mixins: [walletMixin],
   data() {
-    return { lastEntryTs: undefined };
+    return { lastUpdatedTime: undefined };
   },
   computed: {
     ...mapGetters([
@@ -306,18 +306,23 @@ export default {
       }
     }
     this.$api.$post(updateEventLastSeen());
-    this.lastEntryTs = Date.now();
+    this.lastUpdatedTime = Date.now();
   },
   // For SPA navigation
   beforeRouteLeave(to, from, next) {
-    this.updateEventLastSeenTs(this.lastEntryTs || Date.now());
+    if (this.lastUpdatedTime) {
+      this.updateEventLastSeenTs(this.lastUpdatedTime);
+    }
     next();
   },
 
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     async handleRefresh() {
+      this.updateEventLastSeenTs(this.lastUpdatedTime);
       await this.fetchWalletEvents();
+      this.$api.$post(updateEventLastSeen());
+      this.lastUpdatedTime = Date.now();
     },
     handleClickEvent() {
       logTrackerEvent(
