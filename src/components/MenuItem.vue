@@ -6,6 +6,7 @@
       'duration-100',
       'cursor-pointer',
       {'text-like-green': value === selectedValue},
+      {'font-[600]': value === selectedValue},
       'hover:text-medium-gray',
       'active:text-like-green',
     ]"

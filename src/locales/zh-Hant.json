@@ -169,6 +169,8 @@
   "FeaturedPage": {
     "headerLabel": "今天"
   },
+  "filter_menu_creator": "篩選",
+  "filter_menu_reset": "重設",
   "finish": "完成",
   "follow": "追蹤",
   "following": "追蹤中",

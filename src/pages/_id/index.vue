@@ -99,11 +99,14 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
+        :portfolio-items-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
         :is-show-other-tab="isShowOtherTab"
         :is-narrow="true"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
+        @portfolio-change-filtering="handleNFTClassListFilteringChange"
         @infinite-scroll="handleInfiniteScroll"
       />
 
