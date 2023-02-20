@@ -71,15 +71,18 @@ export default {
     },
     detailsPageRoute() {
       if (this.nftIdForDetails) {
-        return {
+        return this.localeLocation({
           name: 'nft-class-classId-nftId',
           params: {
             classId: this.classId,
             nftId: this.nftIdForDetails,
           },
-        };
+        });
       }
-      return { name: 'nft-class-classId', params: { classId: this.classId } };
+      return this.localeLocation({
+        name: 'nft-class-classId',
+        params: { classId: this.classId },
+      });
     },
   },
   methods: {
