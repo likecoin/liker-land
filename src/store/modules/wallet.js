@@ -417,6 +417,8 @@ const actions = {
     }
   },
   async signLogin({ state, commit, dispatch }) {
+    // Do not trigger login if the window is not focused
+    if (document.hidden) return;
     if (!state.signer) {
       await dispatch('initIfNecessary');
     }
