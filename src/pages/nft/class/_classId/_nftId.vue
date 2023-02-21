@@ -254,11 +254,14 @@
 
         <section>
           <NFTPageChainDataSection
+            id="chain-data"
             :items="populatedDisplayEvents"
             :is-loading="isHistoryInfoLoading"
             :content-url="NFTExternalUrl"
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
+            :class-id="classId"
+            :nft-id="nftId"
             :content-fingerprints="nftISCNContentFingerprints"
           />
         </section>
