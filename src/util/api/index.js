@@ -298,7 +298,8 @@ export const apiUserV2WalletEmail = ({ wallet, email, token }) => {
   return `/api/v2/users/${wallet}/email?${querystring.stringify(qsPayload)}`;
 };
 
-export const updateEventLastSeen = () => `/api/v2/users/event/seen`;
+export const updateEventLastSeen = ts => `/api/v2/users/event/seen?ts=${ts}`;
+
 export const getNFTDisplayStateURL = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
 
