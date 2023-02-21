@@ -175,7 +175,7 @@
               <template #prepend>
                 <IconEye class="w-[12px] h-[12px]" />
               </template>
-              {{ $t('nft_details_page_button_view_details') }}
+              {{ $t('nft_details_page_button_view_class_page') }}
             </ButtonV2>
 
             <!-- Do not show  3d model in detail page, pending product design-->
@@ -275,7 +275,7 @@
             <template #prepend>
               <IconEye class="w-[12px] h-[12px]" />
             </template>
-            {{ $t('nft_details_page_button_view_details') }}
+            {{ $t('nft_details_page_button_view_class_page') }}
           </ButtonV2>
           <hr
             :class="[
