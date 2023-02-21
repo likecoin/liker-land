@@ -206,6 +206,7 @@ export default {
       'getNFTClassMetadataById',
       'getNotificationCount',
       'getEventLastSeenTs',
+      'getLatestEventTimestamp',
     ]),
     processedEvents() {
       return this.getEvents.map(e => {
@@ -297,6 +298,23 @@ export default {
       return this.convertToGroupedEvents(this.processedEvents);
     },
   },
+  watch: {
+    getLatestEventTimestamp: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          try {
+            this.$api.$post(updateEventLastSeen(), {
+              ts: Number(newVal),
+            });
+            this.lastUpdatedTime = newVal;
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      },
+    },
+  },
   async mounted() {
     if (this.getAddress && !this.walletHasLoggedIn) {
       try {
@@ -305,8 +323,6 @@ export default {
         // No-op
       }
     }
-    this.$api.$post(updateEventLastSeen());
-    this.lastUpdatedTime = Date.now();
   },
   // For SPA navigation
   beforeRouteLeave(to, from, next) {
@@ -320,13 +336,7 @@ export default {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     async handleRefresh() {
       this.updateEventLastSeenTs(this.lastUpdatedTime);
-      const oldCount = this.getNotificationCount;
       await this.fetchWalletEvents();
-      const newCount = this.getNotificationCount;
-      if (oldCount !== newCount) {
-        this.$api.$post(updateEventLastSeen());
-        this.lastUpdatedTime = Date.now();
-      }
     },
     handleClickEvent() {
       logTrackerEvent(
@@ -393,7 +403,7 @@ export default {
       }
       return (
         this.getEventLastSeenTs &&
-        this.getEventLastSeenTs > new Date(event.timestamp).getTime()
+        this.getEventLastSeenTs >= new Date(event.timestamp).getTime()
       );
     },
   },
