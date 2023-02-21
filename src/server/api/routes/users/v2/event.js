@@ -28,10 +28,9 @@ router.post('/event/seen', authenticateV2Login, async (req, res, next) => {
       const userDoc = await t.get(userRef);
       const { eventLastSeenTs = 1000 } = userDoc.data();
       if (!isValidTs(ts, eventLastSeenTs)) {
-        res.status(400).send('INVALID_TIMESTAMP_PROVIDED');
-        return;
+        throw new Error('INVALID_TIMESTAMP_PROVIDED');
       }
-      await t.update(userRef, {
+      t.update(userRef, {
         eventLastSeenTs: Timestamp.fromMillis(Math.floor(ts / 1000) * 1000),
       });
     });
@@ -42,7 +41,13 @@ router.post('/event/seen', authenticateV2Login, async (req, res, next) => {
     });
     res.sendStatus(200);
   } catch (err) {
-    next(err);
+    switch (err.message) {
+      case 'INVALID_TIMESTAMP_PROVIDED':
+        res.status(400).send('INVALID_TIMESTAMP_PROVIDED');
+        break;
+      default:
+        next(err);
+    }
   }
 });
 
