@@ -149,6 +149,7 @@
   "event_list_page_event_message_receive_nft": "{fromName} 贈送你一個 {nftName}.",
   "event_list_page_event_message_send_nft": "{fromName} 贈送了 {nftName} 給 {toName}。",
   "event_list_page_event_self": "你",
+  "event_list_page_no_event": "沒有通知",
   "event_list_page_notifications": "通知 ({number})",
   "event_list_page_today": "今天",
   "event_list_page_yesterday": "昨天",

@@ -26,10 +26,13 @@
         </template>
       </Label>
       <hr class="border-shade-gray border-[1px]">
-      <div v-if="isLoading || !processedEvents.length" class="flex items-center justify-center">
+      <div v-if="getIsFetchingEvent" class="flex items-center justify-center">
         <CardV2 class="flex p-[8px] my-[48px]">
           <Label preset="h5" class="text-like-green" :text="$t('nft_portfolio_page_label_loading')" />
         </CardV2>
+      </div>
+      <div v-else-if="!processedEvents.length" class="text-center text-medium-gray mt-[24px]">
+        {{ $t('event_list_page_no_event') }}
       </div>
       <div
         v-for="group in groupedEventsByTime"
@@ -181,7 +184,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getChainExplorerTx } from '~/util/api';
+import { updateEventLastSeen } from '~/util/api';
 import { ellipsis } from '~/util/ui';
 import walletMixin from '~/mixins/wallet';
 
@@ -193,11 +196,12 @@ export default {
   },
   mixins: [walletMixin],
   data() {
-    return { isLoading: false };
+    return { lastUpdatedTime: undefined };
   },
   computed: {
     ...mapGetters([
       'getEvents',
+      'getIsFetchingEvent',
       'getUserInfoByAddress',
       'getNFTClassMetadataById',
       'getNotificationCount',
@@ -301,26 +305,28 @@ export default {
         // No-op
       }
     }
-    window.addEventListener('beforeunload', this.updateEventLastSeenTs);
+    this.$api.$post(updateEventLastSeen());
+    this.lastUpdatedTime = Date.now();
   },
   // For SPA navigation
   beforeRouteLeave(to, from, next) {
-    this.updateEventLastSeenTs();
-    window.removeEventListener('beforeunload', this.updateEventLastSeenTs);
+    if (this.lastUpdatedTime) {
+      this.updateEventLastSeenTs(this.lastUpdatedTime);
+    }
     next();
-  },
-  // For closing tab/browser
-  beforeDestroy() {
-    window.removeEventListener('beforeunload', this.updateEventLastSeenTs);
   },
 
   methods: {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
-    getChainExplorerTx,
     async handleRefresh() {
-      this.isLoading = true;
+      this.updateEventLastSeenTs(this.lastUpdatedTime);
+      const oldCount = this.getNotificationCount;
       await this.fetchWalletEvents();
-      this.isLoading = false;
+      const newCount = this.getNotificationCount;
+      if (oldCount !== newCount) {
+        this.$api.$post(updateEventLastSeen());
+        this.lastUpdatedTime = Date.now();
+      }
     },
     handleClickEvent() {
       logTrackerEvent(
