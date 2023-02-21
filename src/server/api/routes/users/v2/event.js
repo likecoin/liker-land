@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const {
+  db,
   walletUserCollection,
   Timestamp,
 } = require('../../../../modules/firebase');
@@ -10,17 +11,11 @@ const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 const router = Router();
 
 function isValidTs(ts, lastSeenTs) {
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(ts) || ts % 1000 !== 0) {
-    return false;
-  }
-  if (ts < lastSeenTs) {
-    return false;
-  }
-  if (ts > Date.now() + 5 * 60 * 1000) {
-    return false;
-  }
-  return true;
+  return (
+    !(Number.isNaN(ts) || ts % 1000 !== 0) &&
+    ts > lastSeenTs &&
+    ts < Date.now() + 5 * 60 * 1000
+  );
 }
 
 router.post('/event/seen', authenticateV2Login, async (req, res, next) => {
@@ -28,15 +23,19 @@ router.post('/event/seen', authenticateV2Login, async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     const { user } = req.session;
-    const userDoc = await walletUserCollection.doc(user).get();
-    const { eventLastSeenTs } = userDoc.data();
-    if (!isValidTs(ts, eventLastSeenTs)) {
-      res.status(400).send('INVALID_TIMESTAMP_PROVIDED');
-      return;
-    }
-    await walletUserCollection.doc(user).update({
-      eventLastSeenTs: Timestamp.fromMillis(Math.floor(ts / 1000) * 1000),
+    await db.runTransaction(async t => {
+      const userRef = walletUserCollection.doc(user);
+      const userDoc = await t.get(userRef);
+      const { eventLastSeenTs = 1000 } = userDoc.data();
+      if (!isValidTs(ts, eventLastSeenTs)) {
+        res.status(400).send('INVALID_TIMESTAMP_PROVIDED');
+        return;
+      }
+      await t.update(userRef, {
+        eventLastSeenTs: Timestamp.fromMillis(Math.floor(ts / 1000) * 1000),
+      });
     });
+
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
       logType: 'UserSeenLikerLandNotificationsPage',
       user,
