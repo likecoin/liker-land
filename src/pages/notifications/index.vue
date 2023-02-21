@@ -303,8 +303,14 @@ export default {
       immediate: true,
       handler(newVal) {
         if (newVal) {
-          this.$api.$post(updateEventLastSeen(newVal));
-          this.lastUpdatedTime = newVal;
+          try {
+            this.$api.$post(updateEventLastSeen(), {
+              ts: Number(newVal),
+            });
+            this.lastUpdatedTime = newVal;
+          } catch (error) {
+            console.error(error);
+          }
         }
       },
     },
