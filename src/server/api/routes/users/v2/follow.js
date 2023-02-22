@@ -12,6 +12,7 @@ const {
   walletUserCollection,
   nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
+const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 
 const router = Router();
 
@@ -74,6 +75,12 @@ router.post(
           followees: FieldValue.arrayUnion(creator),
         });
       });
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserCreatorFollow',
+        type: 'wallet',
+        user,
+        creatorWallet: creator,
+      });
       res.sendStatus(200);
     } catch (err) {
       switch (err.message) {
@@ -118,6 +125,12 @@ router.delete(
         if (snapshot.docs.length > 0) {
           t.delete(snapshot.docs[0].ref);
         }
+      });
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserCreatorUnfollow',
+        type: 'wallet',
+        user,
+        creatorWallet: creator,
       });
       res.sendStatus(200);
     } catch (err) {
