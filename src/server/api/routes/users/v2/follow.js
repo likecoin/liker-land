@@ -36,10 +36,9 @@ router.get(
         const { subscribedWallet } = doc.data();
         return subscribedWallet;
       });
-      const followees = new Set([
-        ...walletFollowees,
-        ...legacyFollowees,
-      ]).values();
+      const followees = [
+        ...new Set([...walletFollowees, ...legacyFollowees]).values(),
+      ];
       res.json({ followees });
     } catch (err) {
       handleRestfulError(req, res, next, err);

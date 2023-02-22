@@ -28,7 +28,6 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       displayName,
       email,
       emailUnconfirmed,
-      followees,
       eventLastSeenTs,
     } = userDoc.data();
     res.json({
@@ -36,7 +35,6 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       displayName,
       email,
       emailUnconfirmed,
-      followees,
       eventLastSeenTs: eventLastSeenTs ? eventLastSeenTs.toMillis() : 1000,
     });
   } catch (err) {
