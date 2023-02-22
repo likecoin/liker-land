@@ -18,6 +18,14 @@
           target="_blank"
         >{{ contentUrl }}</a>
       </div>
+      <div class="min-w-0 truncate">
+        <Label class="!text-[12px] text-medium-gray font-600">
+          {{ $t('nft_details_page_section_metadata_nft_id') }}
+        </Label>
+        <Label class="!text-[12px] text-medium-gray">
+          {{ nftId }}
+        </Label>
+      </div>
       <div class="flex mt-[12px] gap-[8px] laptop:mt-0">
         <ButtonV2
           v-for="record in records"
@@ -56,6 +64,14 @@ export default {
       default: '',
     },
     iscnUrl: {
+      type: String,
+      default: '',
+    },
+    classId: {
+      type: String,
+      default: '',
+    },
+    nftId: {
       type: String,
       default: '',
     },

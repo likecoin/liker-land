@@ -52,7 +52,7 @@
               @click="toggle"
             />
           </template>
-          <MenuList>
+          <MenuList :has-padding="false">
             <MenuItem
               value=""
               :label="$t('filter_menu_reset')"
@@ -60,26 +60,39 @@
               :selected-value="''"
               @select="handlePortfolioFilteringChange"
             />
-            <MenuItem
-              v-for="user in portfolioCollectedCreatorList"
-              :key="user.id"
-              :value="user.id"
-              :label="ellipsis(user.displayName)"
-              label-align="left"
-              :selected-value="portfolioItemsFiltering.creator[0]"
-              @select="handlePortfolioFilteringChange"
+            <MenuList
+              class="max-h-[270px] overflow-y-auto"
+              :is-flat="true"
             >
-              <template #label-prepend>
-                <IdentityAvatar
-                  :url="user.avatar"
-                  :display-name="user.displayName"
-                  :size="36"
-                  :is-outlined="user.isCivicLiker"
-                  :is-outline-extruded="false"
-                  :is-lazy-loaded="true"
-                />
-              </template>
-            </MenuItem>
+              <MenuItem
+                v-for="user in portfolioCollectedCreatorListWithSorting"
+                :key="user.id"
+                :value="user.id"
+                :label="user.label"
+                :label-class="{
+                  'font-600 text-like-green': user.isSelected,
+                }"
+                label-align="left"
+                @select="handlePortfolioFilteringChange"
+              >
+                <template #label-prepend>
+                  <IdentityAvatar
+                    :url="user.avatar"
+                    :display-name="user.displayName"
+                    :size="36"
+                    :is-outlined="user.isCivicLiker"
+                    :is-outline-extruded="false"
+                    :is-lazy-loaded="true"
+                  />
+                </template>
+                <template
+                  v-if="user.isSelected"
+                  #label-append
+                >
+                  <TickIcon class="w-[20px] fill-like-cyan" />
+                </template>
+              </MenuItem>
+            </MenuList>
           </MenuList>
         </Dropdown>
         <Dropdown>
@@ -195,6 +208,8 @@ import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
 
+import TickIcon from '~/assets/icons/tick.svg?inline';
+
 const portfolioGridDebounceArgs = [
   60,
   {
@@ -205,6 +220,9 @@ const portfolioGridDebounceArgs = [
 ];
 
 export default {
+  components: {
+    TickIcon,
+  },
   props: {
     isNarrow: {
       type: Boolean,
@@ -280,6 +298,30 @@ export default {
     },
     isPortfolioTabOtherActive() {
       return this.portfolioTab === tabOptions.other;
+    },
+
+    // Filtering
+    portfolioCollectedCreatorListWithSorting() {
+      return this.portfolioCollectedCreatorList
+        .map(creator => {
+          const isSelected = this.portfolioItemsFiltering.creator.includes(
+            creator.id
+          );
+          return {
+            ...creator,
+            label: ellipsis(creator.displayName),
+            isSelected,
+          };
+        })
+        .sort((a, b) => {
+          if (a.isSelected && !b.isSelected) {
+            return -1;
+          }
+          if (!a.isSelected && b.isSelected) {
+            return 1;
+          }
+          return 0;
+        });
     },
 
     // Sorting
@@ -370,7 +412,6 @@ export default {
     this.removeInfiniteScrollListener();
   },
   methods: {
-    ellipsis,
     getPortfolioItemsSortingLabel(sorting) {
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
