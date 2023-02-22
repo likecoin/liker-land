@@ -1,5 +1,9 @@
 <template>
-  <div v-if="walletHasLoggedIn" class="flex flex-col">
+  <SettingsPageContentWithAuth
+    class="flex flex-col"
+    :login-label="$t('settings_following_login_label')"
+    :login-button-label="$t('settings_following_login_in_button')"
+  >
     <Label class="text-like-green" preset="h5" align="center">{{
       $t('settings_follow_title')
     }}</Label>
@@ -62,24 +66,11 @@
         </div>
       </div>
     </CardV2>
-  </div>
-  <div v-else class="flex flex-col justify-center flex-grow">
-    <Label class="text-medium-gray" align="center" :text="$t('settings_following_login_label')" />
-    <div class="flex justify-center mt-[24px]">
-      <ProgressIndicator v-if="walletIsLoggingIn" />
-      <ButtonV2
-        v-else
-        :text="$t('settings_following_login_in_button')"
-        preset="secondary"
-        @click="connectWallet"
-      />
-    </div>
-  </div>
+  </SettingsPageContentWithAuth>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 import { ellipsis } from '~/util/ui';
 
@@ -87,14 +78,18 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin, alertMixin],
+  mixins: [alertMixin],
   data() {
     return {
       unfollowList: [],
     };
   },
   computed: {
-    ...mapGetters(['getUserInfoByAddress', 'walletIsFetchingFollowees']),
+    ...mapGetters([
+      'getUserInfoByAddress',
+      'walletFollowees',
+      'walletIsFetchingFollowees',
+    ]),
     populatedFollowees() {
       return this.walletFollowees.map(follower => ({
         displayName:

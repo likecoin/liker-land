@@ -1,6 +1,9 @@
 <template>
-
-  <div v-if="walletHasLoggedIn">
+  <SettingsPageContentWithAuth
+    class="flex flex-col"
+    :login-label="$t('settings_email_login_in')"
+    :login-button-label="$t('settings_email_login_in_button')"
+  >
     <template v-if="hasEmail">
       <div class="grid sm:grid-cols-2 gap-[16px]">
         <div v-if="walletEmail">
@@ -45,21 +48,7 @@
         @click="handleClickConfirm"
       />
     </div>
-  </div>
-
-  <div v-else class="flex flex-col justify-center flex-grow">
-    <Label class="text-medium-gray" align="center" :text="$t('settings_email_login_in')" />
-    <div class="flex justify-center mt-[24px]">
-      <ProgressIndicator v-if="walletIsLoggingIn" />
-      <ButtonV2
-        v-else
-        :text="$t('settings_email_login_in_button')"
-        preset="secondary"
-        @click="connectWallet"
-      />
-    </div>
-  </div>
-
+  </SettingsPageContentWithAuth>
 </template>
 
 <script>
@@ -68,11 +57,10 @@ import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import alertMixin from '~/mixins/alert';
-import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'SettingsEmailPage',
-  mixins: [alertMixin, walletMixin],
+  mixins: [alertMixin],
   data() {
     return {
       newEmail: '',

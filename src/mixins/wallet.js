@@ -11,7 +11,6 @@ export default {
       'getSigner',
       'getLikerInfo',
       'getLocale',
-      'walletFollowees',
       'walletMethodType',
       'walletEmail',
       'walletHasVerifiedEmail',

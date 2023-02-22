@@ -308,15 +308,10 @@
   "nft_featured_likenft1m990psscyulzgjyxk0k55yp07zt67lf68gdxxd3c2evdt4ujhr4qssv3ux_title": "A reflection in life: From conservative to risk taking 💭",
   "nft_featured_likenft1s7xk7wt5q03lsa2a87fnqfc0uny28f46s4gtnakc08qdguxlua4qxrxk7m_description": "We are all content creators in this modern digital era. However, there isn't a place where words can be bought and sold freely beyond platform restrictions. Blocktrend, the most subscribed Chinese Blockchain media recorded the story of the first Web3 bookstore that restored freedom and ownership to readers and writers. The world's first bookstore where you can read freely and create independently. Please enter the \"Unmanned Bookstore\".",
   "nft_featured_likenft1s7xk7wt5q03lsa2a87fnqfc0uny28f46s4gtnakc08qdguxlua4qxrxk7m_title": "Welcome to the first \"Web3 Bookstore\" in the world 🔮",
-
   "nft_featured_likenft1w8p8uwkj909ts6v78n0cn9czfrnz5g43e3w06xtgc2q4z26u2yaslvrmvs_description": "It's 5 am in an early summer day in 2022, at the long bench under the church in SF sits Mr K. When the first glimpse of sunlight shines through the arcaded windows, Mr.K jotted down a few words to his distant friends. It is a unique postcard now waiting for you to collect.",
-
   "nft_featured_likenft1w8p8uwkj909ts6v78n0cn9czfrnz5g43e3w06xtgc2q4z26u2yaslvrmvs_title": "You have a new mail 📩",
   "nft_featured_likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc_description": "All you need is a laptop and an internet connection to become a digital nomads. Explore the world while creating content for a living. Let's get started here.",
-
   "nft_featured_likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc_title": "Your digital nomad guide 👾",
-
-
   "nft_index_page_label_featured": "Featured",
   "nft_index_page_label_latest": "Latest",
   "nft_index_page_label_trending": "Trending",
@@ -449,6 +444,8 @@
   "settings_following_login_in_button": "Verify",
   "settings_following_login_label": "Verify wallet to view following list",
   "settings_liker_id": "Liker ID",
+  "settings_page_content_with_auth_login_button": "Login",
+  "settings_page_content_with_auth_login_label": "Please login to change the settings",
   "SettingsPage": {
     "language": "Language",
     "title": "Settings"
