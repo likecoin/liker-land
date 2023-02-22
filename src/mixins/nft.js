@@ -774,12 +774,17 @@ export default {
     },
     async collectNFTWithStripe({ memo = '' }) {
       try {
+        const body = { memo };
+        if (this.nftIsUseListingPrice) {
+          body.nftId = this.listingInfo.nftId;
+          body.seller = this.listingInfo.seller;
+        }
         const { url } = await this.$api.$post(
           postNewStripeFiatPayment({
             classId: this.classId,
             wallet: this.getAddress,
           }),
-          { memo }
+          body
         );
         if (url) window.location.href = url;
       } catch (error) {
