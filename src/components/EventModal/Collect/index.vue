@@ -194,6 +194,31 @@ export default {
       default: false,
     },
   },
+  head() {
+    return {
+      link: [
+        {
+          rel: 'modulepreload',
+          href:
+            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+          as: 'script',
+        },
+        {
+          rel: 'prefetch',
+          crossorigin: 'anonymous',
+          href: this.nftModelURL,
+        },
+      ],
+      script: [
+        {
+          type: 'module',
+          src:
+            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+          asyc: 'true',
+        },
+      ],
+    };
+  },
   data() {
     return {
       paymentMethod: undefined,
