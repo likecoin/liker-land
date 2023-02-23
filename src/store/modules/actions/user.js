@@ -13,7 +13,7 @@ export async function postLoginToken(
   });
   commit(types.USER_SET_USER_INFO, user);
   if (user && user.locale) {
-    dispatch('setLocale', user.locale);
+    await dispatch('setLocale', user.locale);
   }
   if (this.$sentry) updateSentryUser(this, user);
   return user;
@@ -24,7 +24,7 @@ export async function fetchLoginStatus({ commit, dispatch }) {
     const user = await this.$api.$get(api.getLoginStatus());
     commit(types.USER_SET_USER_INFO, user);
     if (user && user.locale) {
-      dispatch('setLocale', user.locale);
+      await dispatch('setLocale', user.locale);
     }
 
     if (this.$sentry) updateSentryUser(this, user);
@@ -57,7 +57,7 @@ export async function updatePreferences(
 ) {
   const preferences = {};
   if (locale) {
-    dispatch('setLocale', locale);
+    await dispatch('setLocale', locale);
     preferences.locale = normalizeLocaleForLikeCo(locale);
     if (getters.walletHasLoggedIn) {
       await this.$api.$post(api.getUserV2LocaleURL(), { locale });

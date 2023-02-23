@@ -409,7 +409,7 @@ const actions = {
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
       const userInfo = await this.$api.$get(getUserV2Self());
       commit(WALLET_SET_USER_INFO, userInfo || { user: address });
-      dispatch('setLocale', userInfo.locale);
+      await dispatch('setLocale', userInfo.locale);
       return userInfo;
     } catch (error) {
       throw error;

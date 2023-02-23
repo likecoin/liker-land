@@ -2,13 +2,14 @@
 import * as types from '@/store/mutation-types';
 import { convertLikeCoLocale } from '@/locales';
 
-export function setLocale({ commit }, inputLocale) {
+export async function setLocale({ commit }, inputLocale) {
   let locale = inputLocale;
   if (!locale || !this.$i18n.locales.some(l => l.code === locale)) {
     locale = this.$i18n.defaultLocale;
   }
   this.$i18n.setLocale(locale);
   commit(types.UI_SET_LOCALE, convertLikeCoLocale(locale));
+  await this.$i18n.waitForPendingLocaleChange();
 }
 
 export function setIsHK({ commit }, isHK) {
