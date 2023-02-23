@@ -104,6 +104,23 @@ export default {
       }));
     },
   },
+  watch: {
+    walletHasLoggedIn: {
+      immediate: true,
+      async handler(hasLoggedIn) {
+        // Only fetch followees in client side
+        if (process.client && hasLoggedIn) {
+          try {
+            await this.walletFetchFollowees(this.loginAddress);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            this.alertPromptError(error.toString());
+          }
+        }
+      },
+    },
+  },
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddresses',
