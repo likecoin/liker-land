@@ -261,19 +261,21 @@ export default {
   },
   methods: {
     handleTopUserHover(i) {
+      const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(
         this,
         'portfolio',
-        `portfolio_top_${this.type}_hover`,
+        `portfolio_top_${type}_hover`,
         `${i}`,
         1
       );
     },
     handleTopUserClick(i) {
+      const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(
         this,
         'portfolio',
-        `portfolio_top_${this.type}_click`,
+        `portfolio_top_${type}_click`,
         `${i}`,
         1
       );
