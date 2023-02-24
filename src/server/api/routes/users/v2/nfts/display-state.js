@@ -1,8 +1,5 @@
 const { Router } = require('express');
-const {
-  authenticateV2Login,
-  checkParamWalletMatch,
-} = require('../../../../middleware/auth');
+const { authenticateV2Login } = require('../../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../../middleware/cache');
 const { handleRestfulError } = require('../../../../middleware/error');
 const { isValidAddress } = require('../../../../util/cosmos');
@@ -23,9 +20,9 @@ const NFT_DISPLAY_STATE = {
 
 const router = Router();
 
-router.get('/:wallet/nfts/display-state', async (req, res, next) => {
+router.get('/nfts/display-state', async (req, res, next) => {
   try {
-    const { wallet: user } = req.params;
+    const { wallet: user } = req.query;
     if (!isValidAddress(user)) {
       res.status(400).send('INVALID_ADDRESS');
       return;
@@ -40,13 +37,12 @@ router.get('/:wallet/nfts/display-state', async (req, res, next) => {
 });
 
 router.post(
-  '/:wallet/nfts/display-state',
+  '/nfts/display-state',
   authenticateV2Login,
-  checkParamWalletMatch,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
+      const { user } = req.session;
       const { classId, displayState } = req.body;
       if (!classId) {
         res.status(400).send('CLASS_ID_MISSING');

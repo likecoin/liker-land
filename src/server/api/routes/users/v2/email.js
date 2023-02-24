@@ -7,10 +7,7 @@ const {
   walletUserCollection,
   nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
-const {
-  authenticateV2Login,
-  checkParamWalletMatch,
-} = require('../../../middleware/auth');
+const { authenticateV2Login } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/error');
 const { sendEmail } = require('../../../../modules/sendgrid');
 
@@ -21,75 +18,70 @@ const { EXTERNAL_URL } = require('../../../../config/config');
 
 const router = Router();
 
-router.post(
-  '/:wallet/email',
-  authenticateV2Login,
-  checkParamWalletMatch,
-  async (req, res, next) => {
-    try {
-      const { wallet: user } = req.params;
-      const { email } = req.query;
-      if (!email) {
-        res.status(400).send('MISSING_EMAIL');
-        return;
+router.post('/email', authenticateV2Login, async (req, res, next) => {
+  try {
+    const { user } = req.session;
+    const { email } = req.query;
+    if (!email) {
+      res.status(400).send('MISSING_EMAIL');
+      return;
+    }
+    console.log(user, email);
+    const token = uuidv4();
+    await db.runTransaction(async t => {
+      const userRef = walletUserCollection.doc(user);
+      const userDoc = await t.get(userRef);
+      const {
+        email: currentEmail,
+        emailUnconfirmed,
+        emailLastUpdatedTs,
+      } = userDoc.data();
+      if (email === currentEmail) {
+        throw new Error('EMAIL_ALREADY_UPDATED');
       }
-      const token = uuidv4();
-      await db.runTransaction(async t => {
-        const userRef = walletUserCollection.doc(user);
-        const userDoc = await t.get(userRef);
-        const {
-          email: currentEmail,
-          emailUnconfirmed,
-          emailLastUpdatedTs,
-        } = userDoc.data();
-        if (email === currentEmail) {
-          throw new Error('EMAIL_ALREADY_UPDATED');
-        }
-        if (
-          emailUnconfirmed === email &&
-          emailLastUpdatedTs &&
-          Date.now() - emailLastUpdatedTs.toMillis() <
-            VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS
-        ) {
-          throw new Error('EMAIL_UPDATE_IN_COOLDOWN');
-        }
+      if (
+        emailUnconfirmed === email &&
+        emailLastUpdatedTs &&
+        Date.now() - emailLastUpdatedTs.toMillis() <
+          VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS
+      ) {
+        throw new Error('EMAIL_UPDATE_IN_COOLDOWN');
+      }
 
-        await t.update(userRef, {
-          emailUnconfirmed: email,
-          emailVerifyToken: token,
-          emailLastUpdatedTs: FieldValue.serverTimestamp(),
-        });
+      await t.update(userRef, {
+        emailUnconfirmed: email,
+        emailVerifyToken: token,
+        emailLastUpdatedTs: FieldValue.serverTimestamp(),
       });
-      const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?wallet=${user}`;
-      const { subject, body } = getBasicTemplate({
-        subject: 'Verify your email',
-        content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
-      });
-      await sendEmail({
-        email,
-        subject,
-        html: body,
-      });
-      res.sendStatus(200);
-    } catch (error) {
-      switch (error.message) {
-        case 'EMAIL_ALREADY_UPDATED':
-          res.status(409).send('EMAIL_ALREADY_UPDATED');
-          break;
-        case 'EMAIL_UPDATE_IN_COOLDOWN':
-          res.status(429).send('EMAIL_UPDATE_IN_COOLDOWN');
-          break;
-        default:
-          handleRestfulError(req, res, next, error);
-      }
+    });
+    const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?wallet=${user}`;
+    const { subject, body } = getBasicTemplate({
+      subject: 'Verify your email',
+      content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
+    });
+    await sendEmail({
+      email,
+      subject,
+      html: body,
+    });
+    res.sendStatus(200);
+  } catch (error) {
+    switch (error.message) {
+      case 'EMAIL_ALREADY_UPDATED':
+        res.status(409).send('EMAIL_ALREADY_UPDATED');
+        break;
+      case 'EMAIL_UPDATE_IN_COOLDOWN':
+        res.status(429).send('EMAIL_UPDATE_IN_COOLDOWN');
+        break;
+      default:
+        handleRestfulError(req, res, next, error);
     }
   }
-);
+});
 
-router.put('/:wallet/email', async (req, res, next) => {
+router.put('/email', async (req, res, next) => {
   try {
-    const { wallet: user } = req.params;
-    const { token } = req.query;
+    const { wallet: user, token } = req.query;
     if (!token) {
       res.status(400).send('MISSING_TOKEN');
       return;
