@@ -114,7 +114,7 @@
           fy="-867.03"
           r="1"
           gradientTransform="translate(-54385.62 -581507.97) rotate(-44.66) scale(298.03 -522.05)"
-          xlink:href="#b"
+          xlink:href="#nft-hero-graph__circle-gradient-2"
         />
         <radialGradient
           id="nft-hero-f"
@@ -124,7 +124,7 @@
           fy="-858.2"
           r="1"
           gradientTransform="translate(-26853.86 502655.27) rotate(138.52) scale(285.26 -417.22)"
-          xlink:href="#c"
+          xlink:href="#nft-hero-graph__circle-gradient-3"
         />
         <radialGradient
           id="nft-hero-g"
@@ -134,7 +134,7 @@
           fy="-871.09"
           r="1"
           gradientTransform="translate(181110.52 -161646.56) rotate(2.4) scale(140.86 -194.4)"
-          xlink:href="#d"
+          xlink:href="#nft-hero-graph__circle-gradient-4"
         />
         <radialGradient
           id="nft-hero-h"
@@ -170,7 +170,7 @@
           fy="-854.62"
           r="1"
           gradientTransform="translate(-419484.4 302574.18) rotate(164.01) scale(392.16 -204.66)"
-          xlink:href="#d"
+          xlink:href="#nft-hero-graph__circle-gradient-4"
         />
         <radialGradient
           id="nft-hero-k"
@@ -180,7 +180,7 @@
           fy="-865.97"
           r="1"
           gradientTransform="translate(-69239.69 -735538.03) rotate(-44.69) scale(377.21 -660.75)"
-          xlink:href="#b"
+          xlink:href="#nft-hero-graph__circle-gradient-2"
         />
         <radialGradient
           id="nft-hero-l"
@@ -190,7 +190,7 @@
           fy="-859.53"
           r="1"
           gradientTransform="translate(-33628.81 636634.72) rotate(138.49) scale(361.02 -528.09)"
-          xlink:href="#c"
+          xlink:href="#nft-hero-graph__circle-gradient-3"
         />
         <radialGradient
           id="nft-hero-m"
@@ -200,7 +200,7 @@
           fy="-868.85"
           r="1"
           gradientTransform="translate(229107.94 -204274.91) rotate(2.4) scale(178.19 -246.18)"
-          xlink:href="#d"
+          xlink:href="#nft-hero-graph__circle-gradient-4"
         />
         <radialGradient
           id="nft-hero-n"
@@ -210,7 +210,7 @@
           fy="-872.79"
           r="1"
           gradientTransform="translate(-21124.55 -218006.25) rotate(-44.67) scale(111.41 -195.15)"
-          xlink:href="#b"
+          xlink:href="#nft-hero-graph__circle-gradient-2"
         />
         <radialGradient
           id="nft-hero-o"
@@ -220,7 +220,7 @@
           fy="-850.97"
           r="1"
           gradientTransform="translate(-10739.71 187273.01) rotate(138.5) scale(106.63 -155.97)"
-          xlink:href="#c"
+          xlink:href="#nft-hero-graph__circle-gradient-3"
         />
         <radialGradient
           id="nft-hero-p"
@@ -230,7 +230,7 @@
           fy="-882.52"
           r="1"
           gradientTransform="translate(66944.09 -61070.79) rotate(2.4) scale(52.65 -72.69)"
-          xlink:href="#d"
+          xlink:href="#nft-hero-graph__circle-gradient-4"
         />
         <radialGradient
           id="nft-hero-q"
@@ -240,7 +240,7 @@
           fy="-869.01"
           r="1"
           gradientTransform="translate(-32897.28 -357390.03) rotate(-44.57) scale(183.01 -320.55)"
-          xlink:href="#b"
+          xlink:href="#nft-hero-graph__circle-gradient-2"
         />
         <radialGradient
           id="nft-hero-r"
@@ -250,7 +250,7 @@
           fy="-855.72"
           r="1"
           gradientTransform="translate(-17101.84 308341.34) rotate(138.6) scale(175.19 -256.13)"
-          xlink:href="#c"
+          xlink:href="#nft-hero-graph__circle-gradient-3"
         />
         <radialGradient
           id="nft-hero-s"
@@ -260,7 +260,7 @@
           fy="-874.95"
           r="1"
           gradientTransform="translate(111284.78 -99376.54) rotate(2.39) scale(86.63 -119.18)"
-          xlink:href="#d"
+          xlink:href="#nft-hero-graph__circle-gradient-4"
         />
         <radialGradient
           id="nft-hero-t"
@@ -283,7 +283,7 @@
           fy="-835.17"
           r="1"
           gradientTransform="translate(-5893.43 80726.09) rotate(139.25) scale(46.55 -67.84)"
-          xlink:href="#c"
+          xlink:href="#nft-hero-graph__circle-gradient-3"
         />
         <radialGradient
           id="nft-hero-v"
@@ -293,7 +293,56 @@
           fy="-908.29"
           r="1"
           gradientTransform="translate(29496.57 -27075.95) rotate(2.34) scale(23.24 -31.26)"
-          xlink:href="#d"
+          xlink:href="#nft-hero-graph__circle-gradient-4"
+        />
+        <radialGradient
+          id="nft-hero-graph__circle-gradient-1"
+          cx="-1074.62"
+          cy="799.95"
+          fx="-1074.62"
+          fy="799.95"
+          r="1"
+          gradientTransform="translate(235368.94 52612.4) rotate(-8.69) scale(209.1 -109.37)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset=".36" stop-color="#8af5e9" />
+          <stop offset="1" stop-color="#33d875" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient
+          id="nft-hero-graph__circle-gradient-2"
+          cx="-1085.11"
+          cy="801.78"
+          fx="-1085.11"
+          fy="801.78"
+          r="1"
+          gradientTransform="translate(-232315.17 33802.82) rotate(157.14) scale(209.58 -73.8)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stop-color="#deff15" />
+          <stop offset=".73" stop-color="#71a988" stop-opacity=".24" />
+        </radialGradient>
+        <radialGradient
+          id="nft-hero-graph__circle-gradient-3"
+          cx="-1069.78"
+          cy="809.27"
+          fx="-1069.78"
+          fy="809.27"
+          r="1"
+          gradientTransform="translate(99405.85 54175.53) rotate(10.41) scale(100.46 -43.63)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset=".22" stop-color="#a5f0e7" />
+          <stop offset="1" stop-color="#f7c7c7" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient
+          id="nft-hero-graph__circle-gradient-4"
+          cx="-1075.04"
+          cy="801.27"
+          fx="-1075.04"
+          fy="801.27"
+          r="1"
+          gradientTransform="translate(101743.74 296548.9) rotate(21.37) scale(188.44 -298.45)"
+          xlink:href="#nft-hero-graph__circle-gradient-1"
         />
       </defs>
       <g filter="url(#nft-hero-graph-blur)">
