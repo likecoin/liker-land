@@ -29,13 +29,16 @@ router.get(
         return;
       }
       const { followees: walletFollowees = [], email } = userDoc.data();
-      const snapshot = await nftMintSubscriptionCollection
-        .where('subscriberEmail', '==', email)
-        .get();
-      const legacyFollowees = snapshot.docs.map(doc => {
-        const { subscribedWallet } = doc.data();
-        return subscribedWallet;
-      });
+      let legacyFollowees = [];
+      if (email) {
+        const snapshot = await nftMintSubscriptionCollection
+          .where('subscriberEmail', '==', email)
+          .get();
+        legacyFollowees = snapshot.docs.map(doc => {
+          const { subscribedWallet } = doc.data();
+          return subscribedWallet;
+        });
+      }
       const followees = [
         ...new Set([...walletFollowees, ...legacyFollowees]).values(),
       ];
