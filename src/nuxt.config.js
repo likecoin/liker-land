@@ -176,7 +176,7 @@ const nuxtConfig = {
           'use.typekit.net',
           'https://js.stripe.com',
           'https://admin.typeform.com',
-          'https://unpkg.com/@google/model-viewer/',
+          'https://unpkg.com/@google/model-viewer@3.0.2/',
           '*.crisp.chat',
         ],
         'frame-src': [
