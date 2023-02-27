@@ -279,11 +279,11 @@ export const getLatestNFTClasses = () =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?reverse=true`;
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
-    before,
-    after,
     ignore_list: LIKECOIN_NFT_API_WALLET,
   };
-  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking??${querystring.stringify(
+  if (after !== undefined) qsPayload.after = after;
+  if (before !== undefined) qsPayload.before = before;
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?${querystring.stringify(
     qsPayload
   )}`;
 };
