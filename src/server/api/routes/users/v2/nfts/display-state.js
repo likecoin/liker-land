@@ -20,9 +20,9 @@ const NFT_DISPLAY_STATE = {
 
 const router = Router();
 
-router.get('/nfts/display-state', async (req, res, next) => {
+router.get('/:wallet/nfts/display-state', async (req, res, next) => {
   try {
-    const { wallet: user } = req.query;
+    const { wallet: user } = req.params;
     if (!isValidAddress(user)) {
       res.status(400).send('INVALID_ADDRESS');
       return;
@@ -37,12 +37,17 @@ router.get('/nfts/display-state', async (req, res, next) => {
 });
 
 router.post(
-  '/nfts/display-state',
+  '/:wallet/nfts/display-state',
   authenticateV2Login,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
       const { user } = req.session;
+      const { wallet } = req.params;
+      if (user !== wallet) {
+        res.status(400).send('ADDRESS_MISMATCH');
+        return;
+      }
       const { classId, displayState } = req.body;
       if (!classId) {
         res.status(400).send('CLASS_ID_MISSING');

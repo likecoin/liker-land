@@ -305,18 +305,11 @@ export const putUserV2WalletEmail = (wallet, token) => {
 
 export const updateEventLastSeen = () => `/api/v2/users/event/seen`;
 
-export const getUserV2DisplayState = wallet => {
-  const qsPayload = { wallet };
-  return `/api/v2/users/nfts/display-state?${querystring.stringify(
-    qsPayload
-  )}}`;
-};
-export const postUserV2DisplayState = wallet => {
-  const qsPayload = { wallet };
-  return `/api/v2/users/nfts/display-state?${querystring.stringify(
-    qsPayload
-  )}}`;
-};
+export const getUserV2DisplayState = wallet =>
+  `/api/v2/users/${wallet}/nfts/display-state`;
+
+export const postUserV2DisplayState = wallet =>
+  `/api/v2/users/${wallet}/nfts/display-state`;
 
 export const getUserV2Followees = () => `/api/v2/users/followees`;
 export const postUserV2Followees = creator => {

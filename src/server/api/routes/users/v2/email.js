@@ -26,7 +26,6 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       res.status(400).send('MISSING_EMAIL');
       return;
     }
-    console.log(user, email);
     const token = uuidv4();
     await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(user);
