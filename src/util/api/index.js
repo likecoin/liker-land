@@ -277,8 +277,16 @@ export const getStripeFiatPrice = ({ classId }) => {
 
 export const getLatestNFTClasses = () =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?reverse=true`;
-export const getTopNFTClasses = () =>
-  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
+export const getTopNFTClasses = ({ before, after }) => {
+  const qsPayload = {
+    before,
+    after,
+    ignore_list: LIKECOIN_NFT_API_WALLET,
+  };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking??${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
