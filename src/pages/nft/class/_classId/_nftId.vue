@@ -204,7 +204,7 @@
                   xr-environment
                   shadow-intensity="1"
                   camera-controls
-                  camera-orbit="225deg 55deg 100m"
+                  camera-orbit="315deg 60deg 100m"
                   @click.once="onClickModelViewer"
                 />
                 <Label

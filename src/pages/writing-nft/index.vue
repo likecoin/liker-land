@@ -216,8 +216,15 @@ export default {
         // No-op
       }
     }
+    const trendingDate = new Date();
+    trendingDate.setDate(trendingDate.getDate() - 14);
+    const trendingDayString = trendingDate.toISOString().split('T')[0];
     const [trendingRes, latestRes] = await Promise.all([
-      this.$axios.$get(getTopNFTClasses()),
+      this.$axios.$get(
+        getTopNFTClasses({
+          after: new Date(trendingDayString).getTime() / 1000,
+        })
+      ),
       this.$axios.$get(getLatestNFTClasses()),
     ]);
     const [trendingClasses, latestClasses] = [trendingRes, latestRes].map(res =>
