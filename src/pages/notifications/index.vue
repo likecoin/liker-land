@@ -265,7 +265,16 @@ export default {
             isCivicLiker = this.getUserInfoByAddress(e.sender)
               ?.isSubscribedCivicLiker;
             break;
-
+          case 'transfer_nft':
+            fromName =
+              this.getUserInfoByAddress(e.sender)?.displayName || e.sender;
+            toName =
+              this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
+            i18nPath = 'event_list_page_event_message_send_nft';
+            displayAvatar = this.getUserInfoByAddress(e.sender)?.avatar;
+            isCivicLiker = this.getUserInfoByAddress(e.sender)
+              ?.isSubscribedCivicLiker;
+            break;
           default:
             break;
         }
