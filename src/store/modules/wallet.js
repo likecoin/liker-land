@@ -185,8 +185,10 @@ function formatEventType(e, loginAddress) {
     }
   } else if (e.receiver === loginAddress) {
     eventType = 'receive_nft';
-  } else {
+  } else if (e.sender === loginAddress) {
     eventType = 'send_nft';
+  } else {
+    eventType = 'transfer_nft';
   }
   return eventType;
 }
