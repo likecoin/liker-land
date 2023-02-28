@@ -4,10 +4,7 @@ const {
   FieldValue,
   walletUserCollection,
 } = require('../../../../modules/firebase');
-const {
-  authenticateV2Login,
-  checkParamWalletMatch,
-} = require('../../../middleware/auth');
+const { authenticateV2Login } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
 const {

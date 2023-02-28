@@ -1,8 +1,5 @@
 const { Router } = require('express');
-const {
-  authenticateV2Login,
-  checkParamWalletMatch,
-} = require('../../../../middleware/auth');
+const { authenticateV2Login } = require('../../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../../middleware/cache');
 const { handleRestfulError } = require('../../../../middleware/error');
 const { isValidAddress } = require('../../../../util/cosmos');
@@ -42,11 +39,15 @@ router.get('/:wallet/nfts/display-state', async (req, res, next) => {
 router.post(
   '/:wallet/nfts/display-state',
   authenticateV2Login,
-  checkParamWalletMatch,
   async (req, res, next) => {
     try {
       setPrivateCacheHeader(res);
-      const { wallet: user } = req.params;
+      const { user } = req.session;
+      const { wallet } = req.params;
+      if (user !== wallet) {
+        res.status(400).send('ADDRESS_MISMATCH');
+        return;
+      }
       const { classId, displayState } = req.body;
       if (!classId) {
         res.status(400).send('CLASS_ID_MISSING');

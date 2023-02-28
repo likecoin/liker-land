@@ -14,9 +14,11 @@ import {
   getUserV2Self,
   postUserV2Login,
   postUserV2Logout,
-  getUserFollowees,
-  postFollowCreator,
-  apiUserV2WalletEmail,
+  getUserV2Followees,
+  postUserV2Followees,
+  deleteUserV2Followees,
+  postUserV2WalletEmail,
+  putUserV2WalletEmail,
   getNFTEvents,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -478,9 +480,7 @@ const actions = {
   },
   async walletUpdateEmail({ state, commit }, email) {
     try {
-      await this.$api.$post(
-        apiUserV2WalletEmail({ wallet: state.loginAddress, email })
-      );
+      await this.$api.$post(postUserV2WalletEmail(email));
       commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -490,7 +490,7 @@ const actions = {
   },
   async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
     try {
-      await this.$api.$put(apiUserV2WalletEmail({ wallet, token }));
+      await this.$api.$put(putUserV2WalletEmail(wallet, token));
       if (getters.walletIsMatchedSession) {
         commit(WALLET_SET_USER_INFO, {
           email: state.emailUnverified,
@@ -503,11 +503,11 @@ const actions = {
       throw error;
     }
   },
-  async walletFetchFollowees({ state, commit, dispatch }, address) {
+  async walletFetchFollowees({ state, commit, dispatch }) {
     try {
       if (state.isFetchingFollowees) return;
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
-      const { followees } = await this.$axios.$get(getUserFollowees(address));
+      const { followees } = await this.$axios.$get(getUserV2Followees());
       commit(WALLET_SET_FOLLOWEES, followees);
       if (followees.length) {
         dispatch('lazyGetUserInfoByAddresses', followees);
@@ -522,9 +522,7 @@ const actions = {
     const prevFollowees = state.followees;
     try {
       commit(WALLET_SET_FOLLOWEES, [...state.followees, creator].sort());
-      await this.$api.$post(
-        postFollowCreator({ wallet: state.loginAddress, creator })
-      );
+      await this.$api.$post(postUserV2Followees(creator));
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
       throw error;
@@ -533,9 +531,7 @@ const actions = {
   async walletUnfollowCreator({ state, commit }, creator) {
     const prevFollowees = state.followees;
     try {
-      await this.$api.$delete(
-        postFollowCreator({ wallet: state.loginAddress, creator })
-      );
+      await this.$api.$delete(deleteUserV2Followees(creator));
       commit(
         WALLET_SET_FOLLOWEES,
         [...state.followees].filter(followee => followee !== creator)
