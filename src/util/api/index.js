@@ -200,6 +200,7 @@ export const getNFTEvents = ({
   sender,
   receiver,
   creator,
+  involver,
   limit,
   key,
   actionType,
@@ -213,6 +214,7 @@ export const getNFTEvents = ({
   if (sender) qsPayload.sender = sender;
   if (creator) qsPayload.creator = creator;
   if (receiver) qsPayload.receiver = receiver;
+  if (involver) qsPayload.involver = involver;
   if (actionType) qsPayload.action_type = actionType;
   if (ignoreToList) qsPayload.ignore_to_list = ignoreToList;
   if (ignoreFromList) qsPayload.ignore_from_list = ignoreFromList;
