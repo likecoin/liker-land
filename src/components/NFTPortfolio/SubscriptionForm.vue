@@ -266,7 +266,7 @@ export default {
       try {
         await this.walletUpdateEmail({
           email: this.email,
-          newFollowee: this.creatorWalletAddress,
+          followee: this.creatorWalletAddress,
         });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
@@ -313,7 +313,7 @@ export default {
         this.isLoading = true;
         await this.walletUpdateEmail({
           email: this.walletEmailUnverified,
-          newFollowee: this.creatorWalletAddress,
+          followee: this.creatorWalletAddress,
         });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
@@ -337,7 +337,7 @@ export default {
         this.isLoading = true;
         await this.walletUpdateEmail({
           email: this.walletEmailUnverified,
-          newFollowee: this.creatorWalletAddress,
+          followee: this.creatorWalletAddress,
         });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')

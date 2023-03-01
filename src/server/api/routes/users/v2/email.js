@@ -23,7 +23,7 @@ const router = Router();
 router.post('/email', authenticateV2Login, async (req, res, next) => {
   try {
     const { user } = req.session;
-    const { email, new_followee: newFollowee } = req.query;
+    const { email, followee } = req.query;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
       return;
@@ -56,8 +56,8 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       });
     });
     const qsPayload = { wallet: user };
-    if (isValidFollowee(user, newFollowee)) {
-      qsPayload.new_followee = newFollowee;
+    if (isValidFollowee(user, followee)) {
+      qsPayload.followee = followee;
     }
     const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
       qsPayload
@@ -88,7 +88,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
 
 router.put('/email', async (req, res, next) => {
   try {
-    const { wallet: user, token, new_followee: newFollowee } = req.query;
+    const { wallet: user, token, followee } = req.query;
     if (!token) {
       res.status(400).send('MISSING_TOKEN');
       return;
@@ -109,8 +109,8 @@ router.put('/email', async (req, res, next) => {
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
       };
-      if (isValidFollowee(user, newFollowee)) {
-        payload.followees = FieldValue.arrayUnion(newFollowee);
+      if (isValidFollowee(user, followee)) {
+        payload.followees = FieldValue.arrayUnion(followee);
       }
       t.update(userRef, payload);
       return email;
