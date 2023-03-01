@@ -4,7 +4,7 @@ admin.initializeApp();
 
 const database = admin.firestore();
 const db = database;
-const { FieldValue } = admin.firestore;
+const { FieldValue, Timestamp } = admin.firestore;
 
 const getCollectionIfDefined = root =>
   root ? database.collection(root) : null;
@@ -20,6 +20,7 @@ const nftMintSubscriptionCollection = getCollectionIfDefined(
 module.exports = {
   db,
   FieldValue,
+  Timestamp,
   userCollection,
   walletUserCollection,
   nftMintSubscriptionCollection,
