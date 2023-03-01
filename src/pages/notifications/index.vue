@@ -350,6 +350,7 @@ export default {
     ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
     async handleRefresh() {
       this.updateEventLastSeenTs(this.lastUpdatedTime);
+      await this.walletFetchFollowees();
       await this.fetchWalletEvents();
     },
     handleClickEvent() {
