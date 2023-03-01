@@ -230,17 +230,14 @@ const actions = {
     try {
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
+      } else if (getters.walletHasLoggedIn) {
+        await dispatch('walletFetchSessionUserData', { isExtraOnly: true });
       }
-      await Promise.all([
-        dispatch('walletFetchSessionUserInfo', address),
-        dispatch('walletFetchFollowees'),
-      ]);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
       console.error(msg);
     }
-    dispatch('fetchWalletEvents');
     return true;
   },
 
@@ -403,11 +400,24 @@ const actions = {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ commit }, address) {
+  async walletFetchSessionUserInfo({ state, commit }) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
-      commit(WALLET_SET_USER_INFO, userInfo || { user: address });
+      commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
       return userInfo;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletFetchSessionUserData({ dispatch }, { isExtraOnly = false } = {}) {
+    try {
+      const promises = [];
+      if (!isExtraOnly) {
+        promises.push(dispatch('walletFetchSessionUserInfo'));
+      }
+      promises.push(dispatch('walletFetchFollowees'));
+      await Promise.all(promises);
+      await dispatch('fetchWalletEvents');
     } catch (error) {
       throw error;
     }
@@ -450,6 +460,7 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
+      await dispatch('walletFetchSessionUserData');
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
