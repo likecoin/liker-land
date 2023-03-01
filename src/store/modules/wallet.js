@@ -177,7 +177,9 @@ const getters = {
 
 function formatEventType(e, loginAddress) {
   let eventType;
-  if (e.sender === LIKECOIN_NFT_API_WALLET) {
+  if (e.action === 'new_class') {
+    eventType = 'mint_nft';
+  } else if (e.sender === LIKECOIN_NFT_API_WALLET) {
     if (e.receiver === loginAddress) {
       eventType = 'purchase_nft';
     } else {
@@ -288,12 +290,12 @@ const actions = {
   },
 
   async fetchWalletEvents({ state, commit, dispatch }) {
-    const { address } = state;
+    const { address, followees } = state;
     if (!address) {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const [involverRes] = await Promise.all([
+    const [involverRes, mintRes] = await Promise.all([
       this.$api.$get(
         getNFTEvents({
           involver: address,
@@ -303,8 +305,18 @@ const actions = {
           reverse: true,
         })
       ),
+      Array.isArray(followees) && followees.length
+        ? this.$api.$get(
+            getNFTEvents({
+              sender: followees,
+              actionType: 'new_class',
+              limit: WALLET_EVENT_LIMIT,
+              reverse: true,
+            })
+          )
+        : Promise.resolve({ events: [] }),
     ]);
-    let { events } = involverRes;
+    let events = involverRes.events.concat(mintRes.events);
     events = [
       ...new Map(
         events.map(e => [

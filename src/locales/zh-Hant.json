@@ -148,6 +148,7 @@
   "event_list_page_event_message_purchase_nft": "{fromName} 收藏了 {toName} 的 {nftName} at {price} LIKE",
   "event_list_page_event_message_receive_nft": "{fromName} 贈送你一個 {nftName}.",
   "event_list_page_event_message_send_nft": "{fromName} 贈送了 {nftName} 給 {toName}。",
+  "event_list_page_event_message_mint_nft": "{fromName} 出版了新的 {nftName}。",
   "event_list_page_event_self": "你",
   "event_list_page_no_event": "沒有通知",
   "event_list_page_notifications": "通知 ({number})",
