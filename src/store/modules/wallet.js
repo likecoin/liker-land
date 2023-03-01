@@ -231,6 +231,10 @@ const actions = {
       if (state.signer && !getters.walletIsMatchedSession) {
         await dispatch('signLogin');
       }
+      await Promise.all([
+        dispatch('walletFetchSessionUserInfo', address),
+        dispatch('walletFetchFollowees'),
+      ]);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
@@ -446,10 +450,6 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      await Promise.all([
-        dispatch('walletFetchSessionUserInfo', address),
-        dispatch('walletFetchFollowees'),
-      ]);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
