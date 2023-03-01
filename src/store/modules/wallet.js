@@ -446,7 +446,10 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      await dispatch('walletFetchSessionUserInfo', address);
+      await Promise.all([
+        dispatch('walletFetchSessionUserInfo', address),
+        dispatch('walletFetchFollowees'),
+      ]);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
