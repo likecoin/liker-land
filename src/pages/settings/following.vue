@@ -111,7 +111,7 @@ export default {
         // Only fetch followees in client side
         if (process.client && hasLoggedIn) {
           try {
-            await this.walletFetchFollowees(this.loginAddress);
+            await this.walletFetchFollowees();
           } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);

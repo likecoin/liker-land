@@ -14,9 +14,11 @@ import {
   getUserV2Self,
   postUserV2Login,
   postUserV2Logout,
-  getUserFollowees,
-  postFollowCreator,
-  apiUserV2WalletEmail,
+  getUserV2Followees,
+  postUserV2Followees,
+  deleteUserV2Followees,
+  postUserV2WalletEmail,
+  putUserV2WalletEmail,
   getNFTEvents,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -175,7 +177,9 @@ const getters = {
 
 function formatEventType(e, loginAddress) {
   let eventType;
-  if (e.sender === LIKECOIN_NFT_API_WALLET) {
+  if (e.action === 'new_class') {
+    eventType = 'mint_nft';
+  } else if (e.sender === LIKECOIN_NFT_API_WALLET) {
     if (e.receiver === loginAddress) {
       eventType = 'purchase_nft';
     } else {
@@ -183,8 +187,10 @@ function formatEventType(e, loginAddress) {
     }
   } else if (e.receiver === loginAddress) {
     eventType = 'receive_nft';
-  } else {
+  } else if (e.sender === loginAddress) {
     eventType = 'send_nft';
+  } else {
+    eventType = 'transfer_nft';
   }
   return eventType;
 }
@@ -284,43 +290,33 @@ const actions = {
   },
 
   async fetchWalletEvents({ state, commit, dispatch }) {
-    const { address } = state;
+    const { address, followees } = state;
     if (!address) {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const [senderRes, receiverRes, purchaseRes] = await Promise.all([
+    const [involverRes, mintRes] = await Promise.all([
       this.$api.$get(
         getNFTEvents({
-          sender: address,
+          involver: address,
           limit: WALLET_EVENT_LIMIT,
           actionType: '/cosmos.nft.v1beta1.MsgSend',
           ignoreToList: LIKECOIN_NFT_API_WALLET,
           reverse: true,
         })
       ),
-      this.$api.$get(
-        getNFTEvents({
-          receiver: address,
-          actionType: '/cosmos.nft.v1beta1.MsgSend',
-          limit: WALLET_EVENT_LIMIT,
-          reverse: true,
-        })
-      ),
-      // purchase events are sent by LIKECOIN_NFT_API_WALLET
-      this.$api.$get(
-        getNFTEvents({
-          creator: address,
-          sender: LIKECOIN_NFT_API_WALLET,
-          actionType: '/cosmos.nft.v1beta1.MsgSend',
-          limit: WALLET_EVENT_LIMIT,
-          reverse: true,
-        })
-      ),
+      Array.isArray(followees) && followees.length
+        ? this.$api.$get(
+            getNFTEvents({
+              sender: followees,
+              actionType: 'new_class',
+              limit: WALLET_EVENT_LIMIT,
+              reverse: true,
+            })
+          )
+        : Promise.resolve({ events: [] }),
     ]);
-    let events = senderRes.events
-      .concat(receiverRes.events)
-      .concat(purchaseRes.events);
+    let events = involverRes.events.concat(mintRes.events);
     events = [
       ...new Map(
         events.map(e => [
@@ -450,7 +446,10 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      await dispatch('walletFetchSessionUserInfo', address);
+      await Promise.all([
+        dispatch('walletFetchSessionUserInfo', address),
+        dispatch('walletFetchFollowees'),
+      ]);
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
@@ -478,9 +477,7 @@ const actions = {
   },
   async walletUpdateEmail({ state, commit }, email) {
     try {
-      await this.$api.$post(
-        apiUserV2WalletEmail({ wallet: state.loginAddress, email })
-      );
+      await this.$api.$post(postUserV2WalletEmail(email));
       commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -490,7 +487,7 @@ const actions = {
   },
   async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
     try {
-      await this.$api.$put(apiUserV2WalletEmail({ wallet, token }));
+      await this.$api.$put(putUserV2WalletEmail(wallet, token));
       if (getters.walletIsMatchedSession) {
         commit(WALLET_SET_USER_INFO, {
           email: state.emailUnverified,
@@ -503,11 +500,11 @@ const actions = {
       throw error;
     }
   },
-  async walletFetchFollowees({ state, commit, dispatch }, address) {
+  async walletFetchFollowees({ state, commit, dispatch }) {
     try {
       if (state.isFetchingFollowees) return;
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
-      const { followees } = await this.$axios.$get(getUserFollowees(address));
+      const { followees } = await this.$axios.$get(getUserV2Followees());
       commit(WALLET_SET_FOLLOWEES, followees);
       if (followees.length) {
         dispatch('lazyGetUserInfoByAddresses', followees);
@@ -522,9 +519,7 @@ const actions = {
     const prevFollowees = state.followees;
     try {
       commit(WALLET_SET_FOLLOWEES, [...state.followees, creator].sort());
-      await this.$api.$post(
-        postFollowCreator({ wallet: state.loginAddress, creator })
-      );
+      await this.$api.$post(postUserV2Followees(creator));
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
       throw error;
@@ -533,9 +528,7 @@ const actions = {
   async walletUnfollowCreator({ state, commit }, creator) {
     const prevFollowees = state.followees;
     try {
-      await this.$api.$delete(
-        postFollowCreator({ wallet: state.loginAddress, creator })
-      );
+      await this.$api.$delete(deleteUserV2Followees(creator));
       commit(
         WALLET_SET_FOLLOWEES,
         [...state.followees].filter(followee => followee !== creator)

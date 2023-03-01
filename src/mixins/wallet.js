@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { getIdenticonAvatar, postFollowCreator } from '~/util/api';
+import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 
