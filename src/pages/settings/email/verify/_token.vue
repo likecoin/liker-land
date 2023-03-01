@@ -52,6 +52,9 @@ export default {
     verificationWallet() {
       return this.$route.query.wallet;
     },
+    newFollowee() {
+      return this.$route.query.new_followee;
+    },
   },
   mounted() {
     this.verify();
@@ -64,6 +67,7 @@ export default {
         await this.walletVerifyEmail({
           wallet: this.verificationWallet,
           token: this.token,
+          newFollowee: this.newFollowee,
         });
         this.isVerifiedEmail = true;
       } catch (error) {

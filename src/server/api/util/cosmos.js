@@ -14,6 +14,10 @@ function isValidAddress(address) {
   }
 }
 
+function isValidFollowee(follower, followee) {
+  return isValidAddress(followee) && follower !== followee;
+}
+
 function publicKeyBinaryToAddresses(publicKey) {
   const sha256 = createHash('sha256');
   const ripemd = createHash('ripemd160');
@@ -76,5 +80,6 @@ function checkCosmosSignPayload({
 
 module.exports = {
   isValidAddress,
+  isValidFollowee,
   checkCosmosSignPayload,
 };

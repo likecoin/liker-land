@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 const { Router } = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { getBasicTemplate } = require('@likecoin/edm');
@@ -10,6 +11,7 @@ const {
 const { authenticateV2Login } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/error');
 const { sendEmail } = require('../../../../modules/sendgrid');
+const { isValidFollowee } = require('../../../util/cosmos');
 
 const {
   VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS,
@@ -21,7 +23,7 @@ const router = Router();
 router.post('/email', authenticateV2Login, async (req, res, next) => {
   try {
     const { user } = req.session;
-    const { email } = req.query;
+    const { email, new_followee: newFollowee } = req.query;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
       return;
@@ -53,7 +55,13 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
         emailLastUpdatedTs: FieldValue.serverTimestamp(),
       });
     });
-    const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?wallet=${user}`;
+    const qsPayload = { wallet: user };
+    if (isValidFollowee(user, newFollowee)) {
+      qsPayload.new_followee = newFollowee;
+    }
+    const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
+      qsPayload
+    )}`;
     const { subject, body } = getBasicTemplate({
       subject: 'Verify your email',
       content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
@@ -80,7 +88,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
 
 router.put('/email', async (req, res, next) => {
   try {
-    const { wallet: user, token } = req.query;
+    const { wallet: user, token, new_followee: newFollowee } = req.query;
     if (!token) {
       res.status(400).send('MISSING_TOKEN');
       return;
@@ -96,11 +104,15 @@ router.put('/email', async (req, res, next) => {
       if (emailVerifyToken !== token) {
         throw new Error('INVALID_TOKEN');
       }
-      t.update(userRef, {
+      const payload = {
         email,
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
-      });
+      };
+      if (isValidFollowee(user, newFollowee)) {
+        payload.followees = FieldValue.arrayUnion(newFollowee);
+      }
+      t.update(userRef, payload);
       return email;
     });
 

@@ -304,12 +304,12 @@ export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';
 
-export const postUserV2WalletEmail = email => {
-  const qsPayload = { email };
+export const postUserV2WalletEmail = ({ email, newFollowee }) => {
+  const qsPayload = { email, new_followee: newFollowee };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };
-export const putUserV2WalletEmail = (wallet, token) => {
-  const qsPayload = { wallet, token };
+export const putUserV2WalletEmail = ({ wallet, token, newFollowee }) => {
+  const qsPayload = { wallet, token, new_followee: newFollowee };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };
 

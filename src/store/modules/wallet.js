@@ -472,9 +472,9 @@ const actions = {
       throw error;
     }
   },
-  async walletUpdateEmail({ state, commit }, email) {
+  async walletUpdateEmail({ commit }, { email, newFollowee }) {
     try {
-      await this.$api.$post(postUserV2WalletEmail(email));
+      await this.$api.$post(postUserV2WalletEmail({ email, newFollowee }));
       commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -482,9 +482,14 @@ const actions = {
       throw error;
     }
   },
-  async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
+  async walletVerifyEmail(
+    { state, commit, getters },
+    { wallet, token, newFollowee }
+  ) {
     try {
-      await this.$api.$put(putUserV2WalletEmail(wallet, token));
+      await this.$api.$put(
+        putUserV2WalletEmail({ wallet, token, newFollowee })
+      );
       if (getters.walletIsMatchedSession) {
         commit(WALLET_SET_USER_INFO, {
           email: state.emailUnverified,
