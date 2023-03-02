@@ -52,6 +52,7 @@ export default {
     ...mapActions([
       'openConnectWalletModal',
       'disconnectWallet',
+      'initWallet',
       'initWalletAndLogin',
       'initIfNecessary',
       'restoreSession',
@@ -59,7 +60,7 @@ export default {
       'signLogin',
       'walletFetchFollowees',
     ]),
-    async connectWallet() {
+    async connectWallet({ isSkippedLogin = false } = {}) {
       const connection = await this.openConnectWalletModal({
         language: this.$i18n.locale.split('-')[0],
       });
@@ -72,7 +73,9 @@ export default {
         'connected_wallet',
         1
       );
-      return this.initWalletAndLogin(connection);
+      return isSkippedLogin
+        ? this.initWallet(connection)
+        : this.initWalletAndLogin(connection);
     },
     async navigateToMyDashboard() {
       if (!this.getAddress) {

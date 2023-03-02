@@ -320,7 +320,9 @@ export default {
       switch (method) {
         case 'crypto': {
           if (!this.getAddress) {
-            const isConnected = await this.connectWallet();
+            const isConnected = await this.connectWallet({
+              isSkippedLogin: true,
+            });
             if (!isConnected) return;
           }
           logTrackerEvent(

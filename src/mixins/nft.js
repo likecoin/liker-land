@@ -622,7 +622,9 @@ export default {
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         if (!this.canCollectWithoutWallet && !this.getAddress) {
-          const isConnected = await this.connectWallet();
+          const isConnected = await this.connectWallet({
+            isSkippedLogin: true,
+          });
           if (!isConnected) return;
         } else {
           await this.initIfNecessary();
