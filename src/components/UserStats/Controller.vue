@@ -5,6 +5,7 @@
       :collected-amount="collectedAmount"
       :created-count="createdCount"
       :created-collector-count="createdCollectorCount"
+      :created-total-sales="createdTotalSales"
       :is-loading-stats="isLoadingStats"
     />
   </component>
@@ -12,6 +13,7 @@
 <script>
 import portfolio from '~/mixins/portfolio';
 import { getUserNFTStats } from '~/util/api';
+import { formatNumber } from '~/util/ui';
 
 export default {
   mixins: [portfolio],
@@ -35,7 +37,7 @@ export default {
       return this.userStats?.collectedClassCount || 0;
     },
     collectedAmount() {
-      return this.userStats?.collectedValue || 0;
+      return formatNumber(this.userStats?.collectedValue) || 0;
     },
     createdCount() {
       return this.userStats?.createdClassCount || 0;
@@ -44,7 +46,7 @@ export default {
       return this.userStats?.createdCollectorCount || 0;
     },
     createdTotalSales() {
-      return this.userStats?.createdTotalSales || 0;
+      return formatNumber(Math.floor(this.userStats?.createdTotalSales)) || 0;
     },
     isLoadingStats() {
       return !this.userStats;

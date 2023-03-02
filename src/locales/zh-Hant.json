@@ -338,6 +338,7 @@
   "nft_portfolio_page_state_collections": "藏品",
   "nft_portfolio_page_state_collectors": "收藏者",
   "nft_portfolio_page_state_creations": "作品",
+  "nft_portfolio_page_state_sales": "銷售額 (LIKE)",
   "nft_portfolio_page_state_value": "資產值 (LIKE)",
   "nft_primitive_disclaimer": "以下 NFT 由第三方發行，不適用於 Liker Land 的 Writing NFT 交易機制。",
   "nft_primitive_disclaimer_portfolio": "以下 NFT 由第三方發行，不適用於 Liker Land 的 Writing NFT 交易機制。",

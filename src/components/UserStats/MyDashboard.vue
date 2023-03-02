@@ -33,11 +33,9 @@
         </UserStatsItem>
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
+          :stats-value="stats.collectedAmount"
           :label-text="$t('nft_portfolio_page_state_value')"
         >
-          <template #custom-value>
-            <span>{{ stats.collectedAmount | formatNumber }}</span>
-          </template>
           <template #label-icon>
             <IconPriceMini />
           </template>
@@ -78,17 +76,21 @@
             <IconPersonMini />
           </template>
         </UserStatsItem>
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.createdTotalSales.toString()"
+          :label-text="$t('nft_portfolio_page_state_sales')"
+        >
+          <template #label-icon>
+            <IconPriceMini />
+          </template>
+        </UserStatsItem>
       </div>
     </template>
   </UserStatsController>
 </template>
 <script>
-import { formatNumber } from '~/util/ui';
-
 export default {
-  filters: {
-    formatNumber,
-  },
   props: {
     statWallet: {
       type: String,
