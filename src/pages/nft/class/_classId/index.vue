@@ -106,6 +106,37 @@
             :content-fingerprints="nftISCNContentFingerprints"
           />
         </section>
+        <section>
+          <ul class="flex flex-row gap-[8px] items-center justify-end text-medium-gray underline text-[8px]">
+            <li>
+              <a
+                class="hover:underline "
+                target="_blank"
+                :href="rawDataURL"
+              >
+                {{ $t('nft_class_footer_raw') }}
+              </a>
+            </li>
+            <li>
+              <a
+                class="hover:underline"
+                target="_blank"
+                :href="nftWidgetURL"
+              >
+                {{ $t('nft_class_footer_widget') }}
+              </a>
+            </li>
+            <li>
+              <a
+                class="hover:underline"
+                target="_blank"
+                :href="nftWidgetImageURL"
+              >
+                {{ $t('nft_class_footer_image') }}
+              </a>
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
   </Page>

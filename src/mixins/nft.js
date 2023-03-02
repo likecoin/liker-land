@@ -4,7 +4,8 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 
 import {
   APP_LIKE_CO_VIEW,
-  APP_LIKE_CO_URL_BASE,
+  LIKECOIN_CHAIN_API,
+  LIKECOIN_BUTTON_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
@@ -288,11 +289,6 @@ export default {
       return this.nftCreatorMessage.replaceAll('{collector}', collector);
     },
 
-    purchaseURL() {
-      return `${APP_LIKE_CO_URL_BASE}/nft/purchase/${encodeURIComponent(
-        this.iscnId
-      )}%2F1`;
-    },
     populatedEvents() {
       return this.NFTHistory.map(event => ({
         ...event,
@@ -349,6 +345,19 @@ export default {
             name: 'nft-class-classId',
             params: { classId: this.classId },
           };
+    },
+    rawDataURL() {
+      return `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${this.classId}`;
+    },
+    nftWidgetURL() {
+      return `${LIKECOIN_BUTTON_BASE}/in/like/iscn/?iscn_id=${encodeURIComponent(
+        this.iscnId
+      )}`;
+    },
+    nftWidgetImageURL() {
+      return `${LIKECOIN_BUTTON_BASE}/in/embed/nft/image?class_id=${encodeURIComponent(
+        this.classId
+      )}`;
     },
     canCollectWithoutWallet() {
       return (
