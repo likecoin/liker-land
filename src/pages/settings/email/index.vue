@@ -102,7 +102,7 @@ export default {
       );
       try {
         this.isSubmitting = true;
-        await this.walletUpdateEmail(this.walletEmailUnverified);
+        await this.walletUpdateEmail({ email: this.walletEmailUnverified });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );
@@ -124,7 +124,7 @@ export default {
       );
       try {
         this.isSubmitting = true;
-        await this.walletUpdateEmail(this.newEmail);
+        await this.walletUpdateEmail({ email: this.newEmail });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );
