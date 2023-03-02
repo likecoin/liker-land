@@ -203,10 +203,7 @@ const actions = {
     return likecoinWalletLib;
   },
 
-  async initWallet(
-    { commit, dispatch, getters, state },
-    { method, accounts, offlineSigner }
-  ) {
+  async initWallet({ commit, dispatch }, { method, accounts, offlineSigner }) {
     if (!accounts[0]) return false;
     const connector = await dispatch('getConnector');
     // Listen once per account
@@ -227,11 +224,20 @@ const actions = {
         commit(WALLET_SET_LIKERINFO, userInfo);
       })
     );
+    return true;
+  },
+
+  async initWalletAndLogin({ dispatch, getters }, connection) {
+    const isInited = await dispatch('initWallet', connection);
+    if (!isInited) return false;
+
     try {
-      if (state.signer && !getters.walletIsMatchedSession) {
+      if (getters.walletHasLoggedIn) {
+        // Do not await here to prevent blocking
+        dispatch('walletFetchSessionUserData', { isExtraOnly: true });
+      } else if (!getters.walletIsMatchedSession) {
+        // Re-login if the wallet address is different from session
         await dispatch('signLogin');
-      } else if (getters.walletHasLoggedIn) {
-        await dispatch('walletFetchSessionUserData', { isExtraOnly: true });
       }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
@@ -286,7 +292,11 @@ const actions = {
     const connection = await connector.initIfNecessary();
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWallet', { accounts, offlineSigner, method });
+      await dispatch('initWalletAndLogin', {
+        accounts,
+        offlineSigner,
+        method,
+      });
     }
   },
 

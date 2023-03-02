@@ -52,7 +52,7 @@ export default {
     ...mapActions([
       'openConnectWalletModal',
       'disconnectWallet',
-      'initWallet',
+      'initWalletAndLogin',
       'initIfNecessary',
       'restoreSession',
       'walletFetchLIKEBalance',
@@ -72,7 +72,7 @@ export default {
         'connected_wallet',
         1
       );
-      return this.initWallet(connection);
+      return this.initWalletAndLogin(connection);
     },
     async navigateToMyDashboard() {
       if (!this.getAddress) {
