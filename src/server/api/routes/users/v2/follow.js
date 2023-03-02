@@ -91,7 +91,7 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
     setPrivateCacheHeader(res);
     const { user } = req.session;
     const { creator } = req.query;
-    if (!isValidFollowee(creator)) {
+    if (!isValidFollowee(user, creator)) {
       res.status(400).send('INVALID_CREATOR_ADDRESS');
       return;
     }
