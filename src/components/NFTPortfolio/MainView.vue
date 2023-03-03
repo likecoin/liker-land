@@ -38,20 +38,26 @@
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
-          'self-stretch justify-end gap-[8px] hidden desktop:flex',
+          'self-stretch justify-end gap-[8px] items-center hidden desktop:flex',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems
           }
         ]"
       >
+        <div class="text-[8] text-medium-gray font-500">Filter by</div>
         <!-- NFT Type Filter -->
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
               :text="portfolioItemsTypeFiltering"
-              preset="plain"
+              preset="tertiary"
+              size="mini"
               @click="toggle"
-            />
+            >
+              <template #append>
+                <IconArrowDown class="w-[12px]" />
+              </template>
+            </ButtonV2>
           </template>
           <MenuList>
             <MenuItem
@@ -70,9 +76,14 @@
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
               :text="creatorFilterLabelText"
-              preset="plain"
+              preset="tertiary"
+              size="mini"
               @click="toggle"
-            />
+            >
+              <template #append>
+                <IconArrowDown class="w-[12px]" />
+              </template>
+            </ButtonV2>
           </template>
           <MenuList :has-padding="false">
             <MenuItem
@@ -117,11 +128,13 @@
             </MenuList>
           </MenuList>
         </Dropdown>
+        <div class="text-[8] text-medium-gray font-500">Sort by</div>
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
               :text="portfolioItemsSortingLabel"
-              preset="plain"
+              preset="tertiary"
+              size="mini"
               @click="toggle"
             >
               <template #append>
