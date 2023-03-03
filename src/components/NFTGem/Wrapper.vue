@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { NFT_GEM_NAME } from '@/constant';
+import { NFT_GEM_NAME, LIKECOIN_CHAIN_NFT_BOOK } from '@/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -33,7 +33,9 @@ export default {
       return NFT_GEM_NAME[this.gemLevel];
     },
     gemLevel() {
-      return this.getNFTClassGemLevel(this.classId);
+      return LIKECOIN_CHAIN_NFT_BOOK.includes(this.classId)
+        ? 16
+        : this.getNFTClassGemLevel(this.classId);
     },
     gemColorClasses() {
       switch (true) {
@@ -59,6 +61,7 @@ export default {
           return ['via-[#FF6464]'];
 
         case this.gemLevel === 15:
+        case this.gemLevel === 16:
           return ['via-[#C0E1FF]'];
 
         default:
@@ -84,7 +87,7 @@ export default {
           return 'hover:bg-[#ffd748]';
         case gemLevel <= 14:
           return 'hover:bg-[#ff6464]';
-        case gemLevel <= 15:
+        case gemLevel <= 16:
           return 'hover:bg-[#c0e1ff]';
         default:
           return 'hover:bg-like-cyan-light';

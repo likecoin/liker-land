@@ -2,17 +2,7 @@
   <div class="absolute left-[50%] translate-x-[-50%] flex items-center justify-center mx-auto">
     <!-- Square gem -->
     <div
-      v-if="level !== undefined && level < 13"
-      class="w-[24px] h-[24px]"
-    >
-      <ToolTips :tool-tip-text="name">
-        <img :src="levelImgSrc" :title="name" :alt="name">
-      </ToolTips>
-    </div>
-
-    <!-- Spark background -->
-    <div
-      v-if="level !== undefined && level >= 13"
+      v-if="level !== undefined"
       class="relative flex items-center justify-center"
     >
       <div
@@ -22,7 +12,13 @@
           <img :src="levelImgSrc" :title="name" :alt="name">
         </ToolTips>
       </div>
-      <img :src="sparkImgSrc" :title="name" :alt="name">
+      <!-- Spark background -->
+      <img
+        v-if="[13, 14, 15].includes(level)"
+        :src="sparkImgSrc"
+        :title="name"
+        :alt="name"
+      >
     </div>
 
     <!-- Gem line -->
