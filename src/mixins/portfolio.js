@@ -494,8 +494,10 @@ export const createPorfolioMixin = ({
     changeTab(tab) {
       if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
+      this.nftTypeFilter = NFT_TYPE_OPTIONS.ALL;
+      this.nftCreatorFilter = [];
     },
-    handleNFTClassListFilteringChange({ type, value }) {
+    handleNFTClassListCreatorChange({ type, value }) {
       logTrackerEvent(
         this,
         'portfolio',
@@ -530,6 +532,7 @@ export const createPorfolioMixin = ({
         1
       );
       this.nftTypeFilter = value;
+      this.nftCreatorFilter = [];
     },
     handleNFTClassListSortingChange({ sorting, order }) {
       logTrackerEvent(

@@ -51,7 +51,7 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
-        :portfolio-items-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-items-creator-filtering="{ creator: nftCreatorFilter }"
         :portfolio-items-type-filtering="nftTypeFilter"
         :portfolio-items-type-options="validNftTypeOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
@@ -59,7 +59,7 @@
         :is-show-other-tab="isShowOtherTab"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
-        @portfolio-change-filtering="handleNFTClassListFilteringChange"
+        @portfolio-change-creator="handleNFTClassListCreatorChange"
         @portfolio-change-type="handleNFTClassListTypeChange"
         @infinite-scroll="handleInfiniteScroll"
       >

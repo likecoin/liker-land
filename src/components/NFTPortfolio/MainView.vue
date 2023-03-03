@@ -69,7 +69,7 @@
         <Dropdown v-if="isPortfolioTabCollectedActive">
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
-              :text="$t('filter_menu_creator')"
+              :text="creatorFilterLabelText"
               preset="plain"
               @click="toggle"
             />
@@ -80,7 +80,7 @@
               :label="$t('filter_menu_reset')"
               label-align="center"
               :selected-value="''"
-              @select="handlePortfolioFilteringChange"
+              @select="handlePortfolioCreatorChange"
             />
             <MenuList
               class="max-h-[270px] overflow-y-auto"
@@ -95,7 +95,7 @@
                   'font-600 text-like-green': user.isSelected,
                 }"
                 label-align="left"
-                @select="handlePortfolioFilteringChange"
+                @select="handlePortfolioCreatorChange"
               >
                 <template #label-prepend>
                   <IdentityAvatar
@@ -282,7 +282,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    portfolioItemsFiltering: {
+    portfolioItemsCreatorFiltering: {
       type: Object,
       default: () => ({}),
     },
@@ -334,7 +334,7 @@ export default {
     portfolioCollectedCreatorListWithSorting() {
       return this.portfolioCollectedCreatorList
         .map(creator => {
-          const isSelected = this.portfolioItemsFiltering.creator.includes(
+          const isSelected = this.portfolioItemsCreatorFiltering.creator.includes(
             creator.id
           );
           return {
@@ -353,6 +353,17 @@ export default {
           return 0;
         });
     },
+    creatorFilterLabelText() {
+      const isSelected = this.portfolioCollectedCreatorListWithSorting.filter(
+        creator => creator.isSelected
+      );
+      return isSelected.length
+        ? this.$t('filter_menu_creator_selected', { num: isSelected.length })
+        : this.$t('filter_menu_creator');
+    },
+    nftTypeOptions() {
+      return Object.values(this.portfolioItemsTypeOptions);
+    },
 
     // Sorting
     portfolioItemsSortingOptionListWithLabel() {
@@ -368,9 +379,6 @@ export default {
     },
     portfolioItemsSortingLabel() {
       return this.getPortfolioItemsSortingLabel(this.portfolioItemsSorting);
-    },
-    nftTypeOptions() {
-      return Object.values(this.portfolioItemsTypeOptions);
     },
 
     // Tab bar
@@ -468,8 +476,8 @@ export default {
       const [sorting, order] = value.split('-');
       this.$emit('portfolio-change-sorting', { sorting, order });
     },
-    handlePortfolioFilteringChange(value) {
-      this.$emit('portfolio-change-filtering', { type: 'creator', value });
+    handlePortfolioCreatorChange(value) {
+      this.$emit('portfolio-change-creator', { type: 'creator', value });
     },
     handlePortfolioTypeChange(value) {
       this.$emit('portfolio-change-type', { value });

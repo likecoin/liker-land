@@ -172,6 +172,7 @@
     "headerLabel": "今天"
   },
   "filter_menu_creator": "所有創作者",
+  "filter_menu_creator_selected": "{num} 個創作者",
   "filter_menu_reset": "重設",
   "filter_menu_type": "所有類型",
   "finish": "完成",
