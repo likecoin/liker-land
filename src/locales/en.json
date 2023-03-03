@@ -181,8 +181,9 @@
   "FeaturedPage": {
     "headerLabel": "Today"
   },
-  "filter_menu_creator": "Filter",
+  "filter_menu_creator": "All Creators",
   "filter_menu_reset": "Clear filter",
+  "filter_menu_type": "All NFTs",
   "finish": "Finish",
   "follow": "Follow",
   "following": "Following",

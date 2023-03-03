@@ -29,6 +29,13 @@ export const NFT_CLASS_LIST_SORTING_ORDER = {
   DESC: 'DESC',
 };
 
+export const NFT_TYPE_OPTIONS = {
+  ALL: 'All NFTs',
+  WNFT: 'Writing NFT',
+  BOOK: 'NFT Book',
+  OTHER: 'Other NFT',
+};
+
 export async function getISCNLib() {
   if (!iscnLib) {
     iscnLib = await import(/* webpackChunkName: "iscn_js" */ '@likecoin/iscn-js');

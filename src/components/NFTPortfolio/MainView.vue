@@ -44,6 +44,28 @@
           }
         ]"
       >
+        <!-- NFT Type Filter -->
+        <Dropdown>
+          <template v-slot:trigger="{ toggle }">
+            <ButtonV2
+              :text="portfolioItemsTypeFiltering"
+              preset="plain"
+              @click="toggle"
+            />
+          </template>
+          <MenuList>
+            <MenuItem
+              v-for="(item) in nftTypeOptions"
+              :key="item"
+              :value="item"
+              :label="item"
+              label-align="left"
+              :selected-value="portfolioItemsTypeFiltering"
+              @select="handlePortfolioTypeChange"
+            />
+          </MenuList>
+        </Dropdown>
+        <!-- Creator Filter -->
         <Dropdown v-if="isPortfolioTabCollectedActive">
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
@@ -264,6 +286,14 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    portfolioItemsTypeFiltering: {
+      type: String,
+      required: true,
+    },
+    portfolioItemsTypeOptions: {
+      type: Object,
+      default: () => ({}),
+    },
     isLoadingPortfolioItems: {
       type: Boolean,
       default: false,
@@ -338,6 +368,9 @@ export default {
     },
     portfolioItemsSortingLabel() {
       return this.getPortfolioItemsSortingLabel(this.portfolioItemsSorting);
+    },
+    nftTypeOptions() {
+      return Object.values(this.portfolioItemsTypeOptions);
     },
 
     // Tab bar
@@ -437,6 +470,9 @@ export default {
     },
     handlePortfolioFilteringChange(value) {
       this.$emit('portfolio-change-filtering', { type: 'creator', value });
+    },
+    handlePortfolioTypeChange(value) {
+      this.$emit('portfolio-change-type', { value });
     },
     handleTabChange(tab) {
       this.$emit('portfolio-change-tab', tab);

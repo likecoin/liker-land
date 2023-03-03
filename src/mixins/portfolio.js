@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
+  NFT_TYPE_OPTIONS,
   checkIsWritingNFT,
 } from '~/util/nft';
 import {
@@ -46,6 +47,7 @@ export const createPorfolioMixin = ({
       nftCreatorFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
+      nftTypeFilter: NFT_TYPE_OPTIONS.ALL,
     };
   },
   computed: {
@@ -105,15 +107,97 @@ export const createPorfolioMixin = ({
     nftClassListOfOther() {
       return [...this.nftClassMapOfOther.values()];
     },
+    validNftTypeOptions() {
+      const currentClassList =
+        this.currentTab === tabOptions.collected
+          ? this.nftClassListOfCollected
+          : this.nftClassListOfCreated;
+
+      const filteredOptions = Object.entries(NFT_TYPE_OPTIONS)
+        .filter(([key]) => {
+          switch (key) {
+            case 'WNFT':
+              return currentClassList.some(
+                ({ classId }) =>
+                  !this.nftClassMapOfOther.has(classId) &&
+                  !LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+              );
+            case 'BOOK':
+              return currentClassList.some(({ classId }) =>
+                LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+              );
+            case 'OTHER':
+              return currentClassList.some(({ classId }) =>
+                this.nftClassMapOfOther.has(classId)
+              );
+            case 'ALL':
+              return true;
+            default:
+              return false;
+          }
+        })
+        .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+      return filteredOptions;
+    },
     nftClassListOfCollectedExcludedOther() {
-      return this.nftClassListOfCollected.filter(
-        ({ classId }) => !this.nftClassMapOfOther.has(classId)
-      );
+      let filteredCollectedList;
+      switch (this.nftTypeFilter) {
+        case NFT_TYPE_OPTIONS.ALL:
+          filteredCollectedList = this.nftClassListOfCollected;
+          break;
+
+        case NFT_TYPE_OPTIONS.WNFT:
+          filteredCollectedList = this.nftClassListOfCollected.filter(
+            ({ classId }) =>
+              !this.nftClassMapOfOther.has(classId) &&
+              !LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+          );
+          break;
+        case NFT_TYPE_OPTIONS.BOOK:
+          filteredCollectedList = this.nftClassListOfCollected.filter(
+            ({ classId }) => LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+          );
+          break;
+        case NFT_TYPE_OPTIONS.OTHER:
+          filteredCollectedList = this.nftClassListOfCollected.filter(
+            ({ classId }) => this.nftClassMapOfOther.has(classId)
+          );
+          break;
+
+        default:
+          break;
+      }
+      return filteredCollectedList;
     },
     nftClassListOfCreatedExcludedOther() {
-      return this.nftClassListOfCreated.filter(
-        ({ classId }) => !this.nftClassMapOfOther.has(classId)
-      );
+      let filteredCreatedList;
+      switch (this.nftTypeFilter) {
+        case NFT_TYPE_OPTIONS.ALL:
+          filteredCreatedList = this.nftClassListOfCreated;
+          break;
+
+        case NFT_TYPE_OPTIONS.WNFT:
+          filteredCreatedList = this.nftClassListOfCreated.filter(
+            ({ classId }) =>
+              !this.nftClassMapOfOther.has(classId) &&
+              !LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+          );
+          break;
+        case NFT_TYPE_OPTIONS.BOOK:
+          filteredCreatedList = this.nftClassListOfCreated.filter(
+            ({ classId }) => LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+          );
+          break;
+        case NFT_TYPE_OPTIONS.OTHER:
+          filteredCreatedList = this.nftClassListOfCreated.filter(
+            ({ classId }) => this.nftClassMapOfOther.has(classId)
+          );
+          break;
+
+        default:
+          break;
+      }
+      return filteredCreatedList;
     },
     nftClassListOfFilteredCollectedExcludedOther() {
       let list = this.nftClassListOfCollectedExcludedOther;
@@ -436,6 +520,16 @@ export const createPorfolioMixin = ({
         default:
           break;
       }
+    },
+    handleNFTClassListTypeChange({ value }) {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_filter_type`,
+        `Filter portfolio item by ${value}`,
+        1
+      );
+      this.nftTypeFilter = value;
     },
     handleNFTClassListSortingChange({ sorting, order }) {
       logTrackerEvent(
