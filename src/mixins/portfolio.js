@@ -10,6 +10,8 @@ import {
   getTopCreatorOfUser,
   getIdenticonAvatar,
 } from '~/util/api';
+
+import { LIKECOIN_CHAIN_NFT_BOOK } from '~/constant';
 import clipboardMixin from '~/mixins/clipboard';
 import userInfoMixin from '~/mixins/user-info';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -88,13 +90,16 @@ export const createPorfolioMixin = ({
         )
       );
 
-      const nftClassMapOfOther = new Map();
-      allNFTClassMap.forEach(nft => {
-        if (!checkIsWritingNFT(this.getNFTClassMetadataById(nft.classId))) {
-          nftClassMapOfOther.set(nft.classId, nft);
-        }
-      });
-
+      const nftClassMapOfOther = Array.from(allNFTClassMap.values())
+        .filter(nft => {
+          const classMetadata = this.getNFTClassMetadataById(nft.classId);
+          const isWritingNFT = checkIsWritingNFT(classMetadata);
+          const isLikecoinChainNFTBook = LIKECOIN_CHAIN_NFT_BOOK.includes(
+            nft.classId
+          );
+          return !isWritingNFT && !isLikecoinChainNFTBook;
+        })
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfOther;
     },
     nftClassListOfOther() {
