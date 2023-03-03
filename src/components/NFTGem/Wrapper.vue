@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { NFT_GEM_NAME, LIKECOIN_CHAIN_NFT_BOOK } from '@/constant';
+import { NFT_GEM_NAME } from '@/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -26,6 +26,10 @@ export default {
       type: String,
       required: true,
     },
+    isNftBook: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapGetters(['getNFTClassGemLevel']),
@@ -33,9 +37,7 @@ export default {
       return NFT_GEM_NAME[this.gemLevel];
     },
     gemLevel() {
-      return LIKECOIN_CHAIN_NFT_BOOK.includes(this.classId)
-        ? 16
-        : this.getNFTClassGemLevel(this.classId);
+      return this.isNftBook ? 16 : this.getNFTClassGemLevel(this.classId);
     },
     gemColorClasses() {
       switch (true) {

@@ -135,15 +135,6 @@ export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS = IS_TESTNET
     ]
   : [];
 
-export const LIKECOIN_CHAIN_NFT_BOOK = IS_TESTNET
-  ? []
-  : [
-      // 《所謂「我不投資」，就是 all in 在法定貨幣》
-      'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
-      // 角醒兩周年紀念 NFT
-      'likenft1e8vqa86k7dj4vdepf5zz33mf9m2zg0ft46h7aves5s5e7wx0222s9kqlp0',
-    ];
-
 export const TX_STATUS = {
   SIGN: 'sign',
   PROCESSING: 'processing',

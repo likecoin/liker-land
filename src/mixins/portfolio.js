@@ -5,6 +5,7 @@ import {
   NFT_CLASS_LIST_SORTING_ORDER,
   NFT_TYPE_OPTIONS,
   checkIsWritingNFT,
+  checkIsNftBook,
 } from '~/util/nft';
 import {
   getTopCollectorOfUser,
@@ -12,7 +13,6 @@ import {
   getIdenticonAvatar,
 } from '~/util/api';
 
-import { LIKECOIN_CHAIN_NFT_BOOK } from '~/constant';
 import clipboardMixin from '~/mixins/clipboard';
 import userInfoMixin from '~/mixins/user-info';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -96,13 +96,27 @@ export const createPorfolioMixin = ({
         .filter(nft => {
           const classMetadata = this.getNFTClassMetadataById(nft.classId);
           const isWritingNFT = checkIsWritingNFT(classMetadata);
-          const isLikecoinChainNFTBook = LIKECOIN_CHAIN_NFT_BOOK.includes(
-            nft.classId
-          );
+          const isLikecoinChainNFTBook = checkIsNftBook(classMetadata);
           return !isWritingNFT && !isLikecoinChainNFTBook;
         })
         .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfOther;
+    },
+    nftClassMapOfNftBook() {
+      const allNFTClassMap = new Map(
+        [...this.nftClassListOfCreated, ...this.nftClassListOfCollected].map(
+          nft => [nft.classId, nft]
+        )
+      );
+
+      const nftClassMapOfNftBook = Array.from(allNFTClassMap.values())
+        .filter(nft => {
+          const classMetadata = this.getNFTClassMetadataById(nft.classId);
+          const isLikecoinChainNFTBook = checkIsNftBook(classMetadata);
+          return isLikecoinChainNFTBook;
+        })
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
+      return nftClassMapOfNftBook;
     },
     nftClassListOfOther() {
       return [...this.nftClassMapOfOther.values()];
@@ -120,11 +134,11 @@ export const createPorfolioMixin = ({
               return currentClassList.some(
                 ({ classId }) =>
                   !this.nftClassMapOfOther.has(classId) &&
-                  !LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+                  !this.nftClassMapOfNftBook.has(classId)
               );
             case 'BOOK':
               return currentClassList.some(({ classId }) =>
-                LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+                this.nftClassMapOfNftBook.has(classId)
               );
             case 'OTHER':
               return currentClassList.some(({ classId }) =>
@@ -150,12 +164,12 @@ export const createPorfolioMixin = ({
           filteredCollectedList = this.nftClassListOfCollected.filter(
             ({ classId }) =>
               !this.nftClassMapOfOther.has(classId) &&
-              !LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+              !this.nftClassMapOfNftBook.has(classId)
           );
           break;
         case NFT_TYPE_OPTIONS.BOOK:
           filteredCollectedList = this.nftClassListOfCollected.filter(
-            ({ classId }) => LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+            ({ classId }) => this.nftClassMapOfNftBook.has(classId)
           );
           break;
         case NFT_TYPE_OPTIONS.OTHER:
@@ -180,12 +194,12 @@ export const createPorfolioMixin = ({
           filteredCreatedList = this.nftClassListOfCreated.filter(
             ({ classId }) =>
               !this.nftClassMapOfOther.has(classId) &&
-              !LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+              !this.nftClassMapOfNftBook.has(classId)
           );
           break;
         case NFT_TYPE_OPTIONS.BOOK:
           filteredCreatedList = this.nftClassListOfCreated.filter(
-            ({ classId }) => LIKECOIN_CHAIN_NFT_BOOK.includes(classId)
+            ({ classId }) => this.nftClassMapOfNftBook.has(classId)
           );
           break;
         case NFT_TYPE_OPTIONS.OTHER:

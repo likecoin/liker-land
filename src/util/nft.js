@@ -209,6 +209,12 @@ export function checkIsWritingNFT(classMetadata) {
   );
 }
 
+export function checkIsNftBook(classMetadata) {
+  return (
+    getNFTClassCollectionType(classMetadata) === nftClassCollectionType.BookNFT
+  );
+}
+
 export function formatNFTInfo(nftInfo) {
   const {
     class_id: classId,

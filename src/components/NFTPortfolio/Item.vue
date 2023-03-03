@@ -20,6 +20,7 @@
       :is-collecting="uiIsOpenCollectModal && isCollecting"
       :own-count="ownCount"
       :display-state="nftDisplayState"
+      :is-nft-book="nftIsBookNFT"
       @collect="handleClickCollect"
       @load-cover="handleCoverLoaded"
     />

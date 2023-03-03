@@ -29,7 +29,7 @@
               { 'laptop:grid-cols-2': isShowPriceSection }
             ]"
           >
-            <NFTGemWrapper :class-id="classId">
+            <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsBookNFT">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
                 :image-bg-color="NFTImageBackgroundColor"
