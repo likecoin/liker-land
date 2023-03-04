@@ -76,10 +76,10 @@ export const createPorfolioMixin = ({
       return this.getNFTListMapByAddress(this.wallet);
     },
     nftClassListOfCollected() {
-      return this.nftClassListMap?.collected || [];
+      return this.isLoading ? [] : this.nftClassListMap?.collected || [];
     },
     nftClassListOfCreated() {
-      return this.nftClassListMap?.created || [];
+      return this.isLoading ? [] : this.nftClassListMap?.created || [];
     },
     nftClassMapOfOther() {
       const allNFTClassMap = new Map(
