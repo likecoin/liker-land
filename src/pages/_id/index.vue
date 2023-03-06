@@ -99,7 +99,7 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
-        :portfolio-items-creator-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-items-creator-filtering="nftCreatorFilter"
         :portfolio-items-type-filtering="nftTypeFilter"
         :portfolio-items-type-options="validNftTypeOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"

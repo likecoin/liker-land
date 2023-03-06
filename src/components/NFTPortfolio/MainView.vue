@@ -49,7 +49,7 @@
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
-              :text="portfolioItemsTypeFiltering"
+              :text="typeFilterLabelText"
               preset="tertiary"
               size="mini"
               @click="toggle"
@@ -64,7 +64,7 @@
               v-for="(item) in nftTypeOptions"
               :key="item"
               :value="item"
-              :label="item"
+              :label="getPortfolioTypeFilteringLabel(item)"
               label-align="left"
               :selected-value="portfolioItemsTypeFiltering"
               @select="handlePortfolioTypeChange"
@@ -238,7 +238,7 @@
 import debounce from 'lodash.debounce';
 import MagicGrid from 'magic-grid';
 
-import { NFT_CLASS_LIST_SORTING } from '~/util/nft';
+import { NFT_CLASS_LIST_SORTING, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
@@ -296,8 +296,8 @@ export default {
       default: () => [],
     },
     portfolioItemsCreatorFiltering: {
-      type: Object,
-      default: () => ({}),
+      type: Array,
+      default: () => [],
     },
     portfolioItemsTypeFiltering: {
       type: String,
@@ -347,7 +347,7 @@ export default {
     portfolioCollectedCreatorListWithSorting() {
       return this.portfolioCollectedCreatorList
         .map(creator => {
-          const isSelected = this.portfolioItemsCreatorFiltering.creator.includes(
+          const isSelected = this.portfolioItemsCreatorFiltering.includes(
             creator.id
           );
           return {
@@ -376,6 +376,11 @@ export default {
     },
     nftTypeOptions() {
       return Object.values(this.portfolioItemsTypeOptions);
+    },
+    typeFilterLabelText() {
+      return this.getPortfolioTypeFilteringLabel(
+        this.portfolioItemsTypeFiltering
+      );
     },
 
     // Sorting
@@ -473,6 +478,24 @@ export default {
 
         case NFT_CLASS_LIST_SORTING.DISPLAY_STATE:
           return this.$t('order_menu_display_state');
+
+        default:
+          return '';
+      }
+    },
+    getPortfolioTypeFilteringLabel(typeFiltering) {
+      switch (typeFiltering) {
+        case NFT_TYPE_FILTER_OPTIONS.ALL:
+          return this.$t('nft_type_all_NFTs');
+
+        case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
+          return this.$t('nft_type_writing_NFT');
+
+        case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
+          return this.$t('nft_type_book');
+
+        case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
+          return this.$t('nft_type_other');
 
         default:
           return '';

@@ -3,7 +3,7 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
-  NFT_TYPE_OPTIONS,
+  NFT_TYPE_FILTER_OPTIONS,
   checkIsWritingNFT,
   checkIsNftBook,
 } from '~/util/nft';
@@ -26,7 +26,7 @@ const DEFAULT_TAB = tabOptions.collected;
 
 const ITEMS_PER_PAGE = 10;
 
-export const createPorfolioMixin = ({
+export const createPortfolioMixin = ({
   shouldApplyDisplayState = true,
 } = {}) => ({
   tabOptions,
@@ -47,7 +47,7 @@ export const createPorfolioMixin = ({
       nftCreatorFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
-      nftTypeFilter: NFT_TYPE_OPTIONS.ALL,
+      nftTypeFilter: NFT_TYPE_FILTER_OPTIONS.ALL,
     };
   },
   computed: {
@@ -127,24 +127,24 @@ export const createPorfolioMixin = ({
           ? this.nftClassListOfCollected
           : this.nftClassListOfCreated;
 
-      const filteredOptions = Object.entries(NFT_TYPE_OPTIONS)
+      const filteredOptions = Object.entries(NFT_TYPE_FILTER_OPTIONS)
         .filter(([key]) => {
           switch (key) {
-            case 'WNFT':
+            case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
               return currentClassList.some(
                 ({ classId }) =>
                   !this.nftClassMapOfOther.has(classId) &&
                   !this.nftClassMapOfNftBook.has(classId)
               );
-            case 'BOOK':
+            case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
               return currentClassList.some(({ classId }) =>
                 this.nftClassMapOfNftBook.has(classId)
               );
-            case 'OTHER':
+            case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
               return currentClassList.some(({ classId }) =>
                 this.nftClassMapOfOther.has(classId)
               );
-            case 'ALL':
+            case NFT_TYPE_FILTER_OPTIONS.ALL:
               return true;
             default:
               return false;
@@ -156,23 +156,23 @@ export const createPorfolioMixin = ({
     nftClassListOfCollectedExcludedOther() {
       let filteredCollectedList;
       switch (this.nftTypeFilter) {
-        case NFT_TYPE_OPTIONS.ALL:
+        case NFT_TYPE_FILTER_OPTIONS.ALL:
           filteredCollectedList = this.nftClassListOfCollected;
           break;
 
-        case NFT_TYPE_OPTIONS.WNFT:
+        case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
           filteredCollectedList = this.nftClassListOfCollected.filter(
             ({ classId }) =>
               !this.nftClassMapOfOther.has(classId) &&
               !this.nftClassMapOfNftBook.has(classId)
           );
           break;
-        case NFT_TYPE_OPTIONS.BOOK:
+        case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
           filteredCollectedList = this.nftClassListOfCollected.filter(
             ({ classId }) => this.nftClassMapOfNftBook.has(classId)
           );
           break;
-        case NFT_TYPE_OPTIONS.OTHER:
+        case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
           filteredCollectedList = this.nftClassListOfCollected.filter(
             ({ classId }) => this.nftClassMapOfOther.has(classId)
           );
@@ -186,23 +186,23 @@ export const createPorfolioMixin = ({
     nftClassListOfCreatedExcludedOther() {
       let filteredCreatedList;
       switch (this.nftTypeFilter) {
-        case NFT_TYPE_OPTIONS.ALL:
+        case NFT_TYPE_FILTER_OPTIONS.ALL:
           filteredCreatedList = this.nftClassListOfCreated;
           break;
 
-        case NFT_TYPE_OPTIONS.WNFT:
+        case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
           filteredCreatedList = this.nftClassListOfCreated.filter(
             ({ classId }) =>
               !this.nftClassMapOfOther.has(classId) &&
               !this.nftClassMapOfNftBook.has(classId)
           );
           break;
-        case NFT_TYPE_OPTIONS.BOOK:
+        case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
           filteredCreatedList = this.nftClassListOfCreated.filter(
             ({ classId }) => this.nftClassMapOfNftBook.has(classId)
           );
           break;
-        case NFT_TYPE_OPTIONS.OTHER:
+        case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
           filteredCreatedList = this.nftClassListOfCreated.filter(
             ({ classId }) => this.nftClassMapOfOther.has(classId)
           );
@@ -508,7 +508,7 @@ export const createPorfolioMixin = ({
     changeTab(tab) {
       if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
-      this.nftTypeFilter = NFT_TYPE_OPTIONS.ALL;
+      this.nftTypeFilter = NFT_TYPE_FILTER_OPTIONS.ALL;
       this.nftCreatorFilter = [];
     },
     handleNFTClassListCreatorChange({ type, value }) {
@@ -579,4 +579,4 @@ export const createPorfolioMixin = ({
   },
 });
 
-export default createPorfolioMixin();
+export default createPortfolioMixin();

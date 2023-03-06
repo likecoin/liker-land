@@ -51,7 +51,7 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
-        :portfolio-items-creator-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-items-creator-filtering="nftCreatorFilter"
         :portfolio-items-type-filtering="nftTypeFilter"
         :portfolio-items-type-options="validNftTypeOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
@@ -95,7 +95,7 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
+import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
@@ -105,7 +105,7 @@ export default {
   layout: 'default',
   mixins: [
     walletMixin,
-    createPorfolioMixin({ shouldApplyDisplayState: false }),
+    createPortfolioMixin({ shouldApplyDisplayState: false }),
   ],
   head() {
     const title = this.$t('dashboard_title');

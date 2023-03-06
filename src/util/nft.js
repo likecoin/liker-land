@@ -29,11 +29,11 @@ export const NFT_CLASS_LIST_SORTING_ORDER = {
   DESC: 'DESC',
 };
 
-export const NFT_TYPE_OPTIONS = {
-  ALL: 'All NFTs',
-  WNFT: 'Writing NFT',
-  BOOK: 'NFT Book',
-  OTHER: 'Other NFT',
+export const NFT_TYPE_FILTER_OPTIONS = {
+  ALL: 'ALL',
+  WRITING_NFT: 'WRITING_NFT',
+  NFT_BOOK: 'NFT_BOOK',
+  OTHER_NFT: 'OTHER_NFT',
 };
 
 export async function getISCNLib() {
