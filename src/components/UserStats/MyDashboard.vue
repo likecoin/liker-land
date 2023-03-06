@@ -47,13 +47,17 @@
       <div
         :class=" [
           'flex',
-          'justify-around',
+          'justify-center',
+          'gap-[12px]',
           'rounded-[12px]',
           'w-full',
-          'p-[12px]',
+          'p-[4px]',
           'cursor-pointer',
           'transition',
           'duration-200',
+          'laptop:p-[12px]',
+          'laptop:justify-around',
+          'laptop:gap-0',
           'hover:bg-shade-gray',
         ]"
         @click="$emit('go-created')"
