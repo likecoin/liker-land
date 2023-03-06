@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { NFT_BOOK } from '@/constant';
+
 const getLevelImg = require.context('./level/', false, /\.png$/);
 const getSparkImg = require.context('./spark/', false, /\.png$/);
 
@@ -60,7 +62,7 @@ export default {
       ].concat(this.colorClasses);
     },
     filename() {
-      if (this.level === 'book') {
+      if (this.level === NFT_BOOK) {
         return './book.png';
       }
       return `./${this.level >= 10 ? this.level : `0${this.level}`}.png`;

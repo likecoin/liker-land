@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { NFT_GEM_NAME } from '@/constant';
+import { NFT_GEM_NAME, NFT_GEM_NAME_BOOK, NFT_BOOK } from '@/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -34,38 +34,39 @@ export default {
   computed: {
     ...mapGetters(['getNFTClassGemLevel']),
     gemName() {
-      return this.gemLevel === 'book'
-        ? 'NFT-Book'
+      return this.gemLevel === NFT_BOOK
+        ? NFT_GEM_NAME_BOOK
         : NFT_GEM_NAME[this.gemLevel];
     },
     gemLevel() {
-      return this.isNftBook ? 'book' : this.getNFTClassGemLevel(this.classId);
+      return this.isNftBook ? NFT_BOOK : this.getNFTClassGemLevel(this.classId);
     },
     gemColorClasses() {
+      const { gemLevel } = this;
       switch (true) {
-        case this.gemLevel <= 3:
+        case gemLevel <= 3:
           return ['hidden'];
 
-        case this.gemLevel <= 5:
+        case gemLevel <= 5:
           return ['via-[#D0D0D0]'];
 
-        case this.gemLevel <= 7:
+        case gemLevel <= 7:
           return ['via-[#50E3C2]'];
 
-        case this.gemLevel <= 9:
+        case gemLevel <= 9:
           return ['via-[#6CCAFF]'];
 
-        case this.gemLevel <= 11:
+        case gemLevel <= 11:
           return ['via-[#FDAFFF]'];
 
-        case this.gemLevel <= 13:
+        case gemLevel <= 13:
           return ['via-[#FFD748]'];
 
-        case this.gemLevel === 14:
+        case gemLevel === 14:
           return ['via-[#FF6464]'];
 
-        case this.gemLevel === 15:
-        case this.gemLevel === 'book':
+        case gemLevel === 15:
+        case gemLevel === NFT_BOOK:
           return ['via-[#C0E1FF]'];
 
         default:
@@ -91,7 +92,8 @@ export default {
           return 'hover:bg-[#ffd748]';
         case gemLevel <= 14:
           return 'hover:bg-[#ff6464]';
-        case gemLevel <= 16:
+        case gemLevel <= 15:
+        case gemLevel === NFT_BOOK:
           return 'hover:bg-[#c0e1ff]';
         default:
           return 'hover:bg-like-cyan-light';
