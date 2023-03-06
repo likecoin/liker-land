@@ -24,7 +24,7 @@
       >
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.collectedCount.toString()"
+          :stats-value="stats.collectedCount"
           :label-text="$t('nft_portfolio_page_label_collected')"
         >
           <template #label-icon>
@@ -33,11 +33,9 @@
         </UserStatsItem>
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
+          :stats-value="stats.collectedAmount"
           :label-text="$t('nft_portfolio_page_state_value')"
         >
-          <template #custom-value>
-            <span>{{ stats.collectedAmount | formatNumber }}</span>
-          </template>
           <template #label-icon>
             <IconPriceMini />
           </template>
@@ -49,20 +47,24 @@
       <div
         :class=" [
           'flex',
-          'justify-around',
+          'justify-center',
+          'gap-[12px]',
           'rounded-[12px]',
           'w-full',
-          'p-[12px]',
+          'p-[4px]',
           'cursor-pointer',
           'transition',
           'duration-200',
+          'laptop:p-[12px]',
+          'laptop:justify-around',
+          'laptop:gap-0',
           'hover:bg-shade-gray',
         ]"
         @click="$emit('go-created')"
       >
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdCount.toString()"
+          :stats-value="stats.createdCount"
           :label-text="$t('nft_portfolio_page_label_created')"
         >
           <template #label-icon>
@@ -71,11 +73,20 @@
         </UserStatsItem>
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdCollectorCount.toString()"
+          :stats-value="stats.createdCollectorCount"
           :label-text="$t('nft_portfolio_page_state_collectors')"
         >
           <template #label-icon>
             <IconPersonMini />
+          </template>
+        </UserStatsItem>
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.createdTotalSales"
+          :label-text="$t('nft_portfolio_page_state_sales')"
+        >
+          <template #label-icon>
+            <IconPriceMini />
           </template>
         </UserStatsItem>
       </div>
@@ -83,12 +94,7 @@
   </UserStatsController>
 </template>
 <script>
-import { formatNumber } from '~/util/ui';
-
 export default {
-  filters: {
-    formatNumber,
-  },
   props: {
     statWallet: {
       type: String,

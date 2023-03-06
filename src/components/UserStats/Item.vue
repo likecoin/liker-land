@@ -4,7 +4,7 @@
       preset="h3"
       class="text-like-green"
       valign="bottom"
-      :text="isLoading ? '-' : statsValue"
+      :text="isLoading ? '-' : statsValue.toString()"
     >
       <slot v-if="!isLoading" name="custom-value" />
     </Label>
@@ -28,12 +28,12 @@ export default {
       default: false,
     },
     statsValue: {
-      type: String,
-      default: undefined,
+      type: [String, Number],
+      default: 0,
     },
     labelText: {
       type: String,
-      default: 'undefined',
+      default: undefined,
     },
   },
 };

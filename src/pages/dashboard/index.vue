@@ -12,7 +12,7 @@
     </div>
     <template v-else>
       <!-- UserStat -->
-      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full max-w-[736px]">
+      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full max-w-[860px]">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
