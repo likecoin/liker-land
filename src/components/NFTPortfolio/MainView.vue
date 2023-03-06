@@ -407,13 +407,6 @@ export default {
         },
       ];
 
-      if (this.isShowOtherTab) {
-        items.push({
-          text: this.$t('nft_portfolio_page_label_other'),
-          value: tabOptions.other,
-        });
-      }
-
       return items.map(item => ({
         type: 'item',
         ...item,
