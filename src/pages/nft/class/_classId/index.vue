@@ -107,7 +107,7 @@
           />
         </section>
         <section>
-          <ul class="flex flex-row gap-[8px] items-center justify-end text-medium-gray underline text-[8px]">
+          <ul class="flex flex-row gap-[8px] items-center justify-center text-medium-gray underline text-[8px]">
             <li>
               <a
                 class="hover:underline "
