@@ -361,7 +361,7 @@ export const createPorfolioMixin = ({
     async loadNFTListByAddress(address) {
       const fetchPromise = Promise.all([
         this.fetchNFTListByAddress(address),
-        // this.fetchNFTDisplayStateListByAddress(address),
+        this.fetchNFTDisplayStateListByAddress(address),
       ]);
       if (!this.getNFTListMapByAddress(address)) {
         this.isLoading = true;
