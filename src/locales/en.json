@@ -363,6 +363,8 @@
   "order_menu_display_state": "Featured",
   "order_menu_price": "Price",
   "order_menu_time": "Time",
+  "order_menu_filter_by": "Filter by",
+  "order_menu_sort_by": "Sort by",
   "portfolio_collected_tab_no_item": "Collected NFT will be shown here",
   "portfolio_created_tab_no_item": "Created NFT will be shown here",
   "portfolio_description": "I am what I read. Explore my collection.",

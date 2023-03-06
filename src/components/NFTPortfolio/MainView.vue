@@ -44,7 +44,7 @@
           }
         ]"
       >
-        <div class="text-[8] text-medium-gray font-500">Filter by</div>
+        <div class="text-[8] text-medium-gray font-500">{{ $t('order_menu_filter_by') }}</div>
         <!-- NFT Type Filter -->
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
@@ -128,7 +128,7 @@
             </MenuList>
           </MenuList>
         </Dropdown>
-        <div class="text-[8] text-medium-gray font-500">Sort by</div>
+        <div class="text-[8] text-medium-gray font-500">{{ $t('order_menu_sort_by') }}</div>
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
