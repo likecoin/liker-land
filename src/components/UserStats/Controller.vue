@@ -37,7 +37,7 @@ export default {
       return this.userStats?.collectedClassCount || 0;
     },
     collectedAmount() {
-      return formatNumber(this.userStats?.collectedValue) || 0;
+      return formatNumber(this.userStats?.collectedValue || 0);
     },
     createdCount() {
       return this.userStats?.createdClassCount || 0;
@@ -46,7 +46,7 @@ export default {
       return this.userStats?.createdCollectorCount || 0;
     },
     createdTotalSales() {
-      return formatNumber(Math.floor(this.userStats?.createdTotalSales)) || 0;
+      return formatNumber(Math.floor(this.userStats?.createdTotalSales) || 0);
     },
     isLoadingStats() {
       return !this.userStats;

@@ -24,7 +24,7 @@
       >
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.collectedCount.toString()"
+          :stats-value="stats.collectedCount"
           :label-text="$t('nft_portfolio_page_label_collected')"
         >
           <template #label-icon>
@@ -64,7 +64,7 @@
       >
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdCount.toString()"
+          :stats-value="stats.createdCount"
           :label-text="$t('nft_portfolio_page_label_created')"
         >
           <template #label-icon>
@@ -73,7 +73,7 @@
         </UserStatsItem>
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdCollectorCount.toString()"
+          :stats-value="stats.createdCollectorCount"
           :label-text="$t('nft_portfolio_page_state_collectors')"
         >
           <template #label-icon>
@@ -82,7 +82,7 @@
         </UserStatsItem>
         <UserStatsItem
           :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdTotalSales.toString()"
+          :stats-value="stats.createdTotalSales"
           :label-text="$t('nft_portfolio_page_state_sales')"
         >
           <template #label-icon>
