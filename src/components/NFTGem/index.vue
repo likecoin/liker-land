@@ -14,7 +14,7 @@
       </div>
       <!-- Spark background -->
       <img
-        v-if="[13, 14, 15].includes(level)"
+        v-if="level >= 13"
         :src="sparkImgSrc"
         :title="name"
         :alt="name"
@@ -33,7 +33,7 @@ const getSparkImg = require.context('./spark/', false, /\.png$/);
 export default {
   props: {
     level: {
-      type: Number,
+      type: [Number, String],
       default: 0,
     },
     name: {
@@ -60,6 +60,9 @@ export default {
       ].concat(this.colorClasses);
     },
     filename() {
+      if (this.level === 'book') {
+        return './book.png';
+      }
       return `./${this.level >= 10 ? this.level : `0${this.level}`}.png`;
     },
     levelImgSrc() {

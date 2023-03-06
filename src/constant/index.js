@@ -160,7 +160,6 @@ export const NFT_GEM_NAME = [
   'Topaz',
   'Ruby',
   'Diamond',
-  'NFT-Book',
 ];
 
 export const ROUGH_LIKE_TO_USD_PRICE = 0.01;

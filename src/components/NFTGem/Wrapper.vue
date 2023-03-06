@@ -34,10 +34,12 @@ export default {
   computed: {
     ...mapGetters(['getNFTClassGemLevel']),
     gemName() {
-      return NFT_GEM_NAME[this.gemLevel];
+      return this.gemLevel === 'book'
+        ? 'NFT-Book'
+        : NFT_GEM_NAME[this.gemLevel];
     },
     gemLevel() {
-      return this.isNftBook ? 16 : this.getNFTClassGemLevel(this.classId);
+      return this.isNftBook ? 'book' : this.getNFTClassGemLevel(this.classId);
     },
     gemColorClasses() {
       switch (true) {
@@ -63,7 +65,7 @@ export default {
           return ['via-[#FF6464]'];
 
         case this.gemLevel === 15:
-        case this.gemLevel === 16:
+        case this.gemLevel === 'book':
           return ['via-[#C0E1FF]'];
 
         default:
