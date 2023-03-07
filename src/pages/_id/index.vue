@@ -74,11 +74,11 @@
         />
 
         <!-- Follower List -->
-        <div class="flex items-center justify-center">
+        <div v-if="walletHasLoggedIn" class="flex items-center justify-center">
           <div
             class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
             @click="handleClickFollowers"
-          >{{ $t(' portfolio_follower_export') }}</div>
+          >{{ $t('portfolio_follower_title') }}</div>
         </div>
 
         <!-- goMyDashboard btn -->
@@ -154,11 +154,12 @@ import { EXTERNAL_HOST } from '~/constant';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin],
+  mixins: [walletMixin, portfolioMixin, alertMixin],
   head() {
     const name = this.userDisplayName;
     const title = this.$t('portfolio_title', { name });
@@ -356,7 +357,7 @@ export default {
       this.isOpenFollowersDialog = true;
       await this.fetchFollowers();
     },
-    handleClickExportFollowerList() {
+    async handleClickExportFollowerList() {
       logTrackerEvent(
         this,
         'portfolio',
@@ -364,6 +365,14 @@ export default {
         `${this.wallet}`,
         1
       );
+      try {
+        await this.exportFollowerList();
+        this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.alertPromptError(error.toString());
+      }
     },
   },
 };

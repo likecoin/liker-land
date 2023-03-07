@@ -1,4 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { stringify } from 'csv-stringify';
 
 import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -116,7 +118,39 @@ export default {
       }
     },
     exportFollowerList() {
-      // exportFollowerList
+      // Convert list to CSV string
+      const csvHeader = [
+        this.$t('portfolio_follower_export_ID'),
+        this.$t('portfolio_follower_export_wallet'),
+      ];
+      const csvData = this.populatedFollowers.map(({ displayName, wallet }) => [
+        displayName,
+        wallet,
+      ]);
+      const csvRows = [csvHeader, ...csvData];
+
+      return new Promise((resolve, reject) => {
+        stringify(csvRows, (err, csvString) => {
+          if (err) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+            reject(err);
+          }
+
+          const csvBlob = new Blob([csvString], {
+            type: 'text/csv;charset=utf-8;',
+          });
+          // // Download CSV file
+          const csvUrl = URL.createObjectURL(csvBlob);
+          const hiddenLink = document.createElement('a');
+          hiddenLink.href = csvUrl;
+          hiddenLink.target = '_blank';
+          hiddenLink.download = 'my-followers.csv';
+          hiddenLink.click();
+
+          resolve();
+        });
+      });
     },
   },
 };
