@@ -401,6 +401,8 @@
   "portfolio_unsubscribe_message_success": "You have successfully unfollowed {creator}.",
   "portfolio_unsubscribe_success_alert": "Successfully unfollowed {creator}",
   "portfolio_unsubscribe_title": "Unfollow {creator}",
+  "portfolio_follower_title": "Who's following me?",
+  "portfolio_follower_export": "Export my follower list",
   "PortfolioEmptyView.Button": "Become a Civic Liker ",
   "PortfolioEmptyView.SuperLiked.Label": "Share your favorite readings",
   "PortfolioEmptyView.SuperLiked.Step1": "{button} to get 2 Super Likes daily",

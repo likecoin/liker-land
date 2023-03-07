@@ -159,6 +159,7 @@ const getters = {
   walletFollowees: state => state.followees,
   walletFollowers: state => state.followers,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
+  walletIsFetchingFollowers: state => state.isFetchingFollowers,
   getIsFetchingEvent: state => state.isFetchingEvent,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
   getLatestEventTimestamp: state =>
@@ -577,6 +578,9 @@ const actions = {
     }
   },
   async walletFetchFollowers({ state, commit, dispatch }) {
+    if (!state.loginAddress) {
+      await dispatch('signLogin');
+    }
     try {
       if (state.isFetchingFollowers) return;
       commit(WALLET_SET_FOLLOWERS_FETCHING_STATE, true);

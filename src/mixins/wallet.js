@@ -12,6 +12,8 @@ export default {
       'getLikerInfo',
       'getLocale',
       'walletFollowees',
+      'walletFollowers',
+      'walletIsFetchingFollowers',
       'walletMethodType',
       'walletEmail',
       'walletHasVerifiedEmail',
@@ -40,6 +42,14 @@ export default {
         language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
       });
     },
+    populatedFollowers() {
+      return this.walletFollowers.map(follower => ({
+        displayName:
+          this.getUserInfoByAddress(follower)?.displayName || follower,
+        wallet: follower,
+        avatar: this.getUserInfoByAddress(follower)?.avatar,
+      }));
+    },
   },
   watch: {
     getAddress: {
@@ -59,6 +69,7 @@ export default {
       'walletFetchLIKEBalance',
       'signLogin',
       'walletFetchFollowees',
+      'walletFetchFollowers',
     ]),
     async connectWallet({ shouldSkipLogin = false } = {}) {
       const connection = await this.openConnectWalletModal({
@@ -95,6 +106,17 @@ export default {
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
+    },
+    async fetchFollowers() {
+      try {
+        await this.walletFetchFollowers();
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    },
+    exportFollowerList() {
+      // exportFollowerList
     },
   },
 };

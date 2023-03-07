@@ -391,6 +391,8 @@
   "portfolio_unsubscribe_message_success": "已取消追蹤 {creator}。",
   "portfolio_unsubscribe_success_alert": "已取消追蹤 {creator}",
   "portfolio_unsubscribe_title": "取消追蹤 {creator}",
+  "portfolio_follower_title": "誰在追蹤我?",
+  "portfolio_follower_export": "匯出我的追蹤者名單",
   "PortfolioEmptyView.Button": "成為讚賞公民",
   "PortfolioEmptyView.SuperLiked.Label": "分享最愛的內容",
   "PortfolioEmptyView.SuperLiked.Step1": "{button}，獲得每天兩次 Super Like 的機會",
