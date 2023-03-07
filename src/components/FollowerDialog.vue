@@ -1,14 +1,22 @@
 <template>
   <Dialog
-    v-model="isOpenFollowersDialog"
+    :open="isOpenFollowersDialog"
     panel-container-class="phone:max-w-[520px] laptop:w-[520px]"
     panel-component="CardV2"
     panel-class="overflow-y-scroll shadow-lg"
     @close="$emit('close')"
   >
-    <Label preset="h5" class="mt-[-24px] mb-[12px] text-like-green" :text="$t(' portfolio_follower_export')" />
-    <ProgressIndicator v-if="!populatedFollowers.length && walletIsFetchingFollowers" />
-    <div v-if="populatedFollowers.length" class="flex flex-col mt-0">
+    <Label preset="h5" class="mt-[-24px] mb-[12px] text-like-green" :text="$t('portfolio_follower_title')" />
+    <div v-if="!populatedFollowers.length" class="flex justify-center my-[48px]">
+      <ProgressIndicator v-if="walletIsFetchingFollowers" />
+      <Label
+        v-else
+        align="center"
+        class="text-medium-gray"
+        :text="$t('portfolio_follower_no_follower')"
+      />
+    </div>
+    <div v-else class="flex flex-col mt-0">
       <div
         v-for="follower in populatedFollowers"
         :key="follower.wallet"
@@ -50,7 +58,6 @@
         </ButtonV2>
       </div>
     </div>
-    <div v-else-if="!walletIsFetchingFollowers">no follower</div>
   </Dialog>
 </template>
 
