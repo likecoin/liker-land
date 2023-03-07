@@ -121,7 +121,7 @@ export const createPortfolioMixin = ({
     nftClassListOfOther() {
       return [...this.nftClassMapOfOther.values()];
     },
-    validNftTypeOptions() {
+    nftTypeFilteringOptions() {
       const currentClassList =
         this.currentTab === tabOptions.collected
           ? this.nftClassListOfCollected

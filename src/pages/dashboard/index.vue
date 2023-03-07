@@ -53,7 +53,7 @@
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
         :portfolio-items-creator-filtering="nftCreatorFilter"
         :portfolio-items-type-filtering="nftTypeFilter"
-        :portfolio-items-type-options="validNftTypeOptions"
+        :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
         :is-show-other-tab="isShowOtherTab"

@@ -61,10 +61,10 @@
           </template>
           <MenuList>
             <MenuItem
-              v-for="(item) in nftTypeOptions"
-              :key="item"
-              :value="item"
-              :label="getPortfolioTypeFilteringLabel(item)"
+              v-for="{ value, label } in nftTypeOptions"
+              :key="value"
+              :value="value"
+              :label="label"
               label-align="left"
               :selected-value="portfolioItemsTypeFiltering"
               @select="handlePortfolioTypeChange"
@@ -303,7 +303,7 @@ export default {
       type: String,
       required: true,
     },
-    portfolioItemsTypeOptions: {
+    portfolioItemsTypeFilteringOptions: {
       type: Object,
       default: () => ({}),
     },
@@ -375,7 +375,9 @@ export default {
         : this.$t('filter_menu_creator');
     },
     nftTypeOptions() {
-      return Object.values(this.portfolioItemsTypeOptions);
+      return Object.values(this.portfolioItemsTypeFilteringOptions).map(
+        value => ({ value, label: this.getPortfolioTypeFilteringLabel(value) })
+      );
     },
     typeFilterLabelText() {
       return this.getPortfolioTypeFilteringLabel(
