@@ -72,11 +72,11 @@ export default {
   },
   computed: {
     toRoute() {
-      return {
+      return this.localeLocation({
         name: 'id',
         params: { id: this.walletAddress },
         query: { tab: this.type === 'creator' ? 'created' : 'collected' },
-      };
+      });
     },
     userLabel() {
       return this.$t(

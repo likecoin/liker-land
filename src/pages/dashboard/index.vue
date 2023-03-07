@@ -51,10 +51,13 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
+        :portfolio-items-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
         :is-show-other-tab="isShowOtherTab"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
+        @portfolio-change-filtering="handleNFTClassListFilteringChange"
         @infinite-scroll="handleInfiniteScroll"
       >
         <template #tab-bar-prepend>
@@ -238,10 +241,12 @@ export default {
     },
     goMyPortfolio() {
       logTrackerEvent(this, 'MyDashboard', 'GoToMyPortfolio', this.wallet, 1);
-      this.$router.push({
-        name: 'id',
-        params: { id: this.wallet },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'id',
+          params: { id: this.wallet },
+        })
+      );
     },
   },
 };

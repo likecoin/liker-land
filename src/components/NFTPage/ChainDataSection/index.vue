@@ -10,6 +10,8 @@
       <div class="px-[32px] mb-[28px]">
         <NFTPageChainDataSectionMetadata
           :content-url="contentUrl"
+          :class-id="classId"
+          :nft-id="nftId"
           :iscn-id="iscnId"
           :iscn-url="iscnUrl"
           :content-fingerprints="contentFingerprints"
@@ -48,6 +50,21 @@
           :text="$t('nft_details_page_label_no_record')"
         />
       </div>
+      <div
+        v-if="nftId && !shouldShowMore"
+        class="flex justify-center items-center mb-[24px]"
+      >
+        <NuxtLink
+          :to="{
+            name: 'nft-class-classId',
+            params: { classId },
+            hash: '#chain-data',
+          }"
+          class="text-medium-gray underline text-[14px]"
+        >
+          {{ $t('nft_details_page_label_class_page') }}
+        </NuxtLink>
+      </div>
     </template>
   </CollapsibleCard>
 </template>
@@ -84,6 +101,14 @@ export default {
       default: '',
     },
     iscnUrl: {
+      type: String,
+      default: '',
+    },
+    classId: {
+      type: String,
+      default: '',
+    },
+    nftId: {
       type: String,
       default: '',
     },

@@ -175,7 +175,7 @@
               <template #prepend>
                 <IconEye class="w-[12px] h-[12px]" />
               </template>
-              {{ $t('nft_details_page_button_view_details') }}
+              {{ $t('nft_details_page_button_view_class_page') }}
             </ButtonV2>
 
             <!-- Do not show  3d model in detail page, pending product design-->
@@ -204,7 +204,7 @@
                   xr-environment
                   shadow-intensity="1"
                   camera-controls
-                  camera-orbit="225deg 55deg 100m"
+                  camera-orbit="315deg 60deg 100m"
                   @click.once="onClickModelViewer"
                 />
                 <Label
@@ -254,11 +254,14 @@
 
         <section>
           <NFTPageChainDataSection
+            id="chain-data"
             :items="populatedDisplayEvents"
             :is-loading="isHistoryInfoLoading"
             :content-url="NFTExternalUrl"
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
+            :class-id="classId"
+            :nft-id="nftId"
             :content-fingerprints="nftISCNContentFingerprints"
           />
         </section>
@@ -275,7 +278,7 @@
             <template #prepend>
               <IconEye class="w-[12px] h-[12px]" />
             </template>
-            {{ $t('nft_details_page_button_view_details') }}
+            {{ $t('nft_details_page_button_view_class_page') }}
           </ButtonV2>
           <hr
             :class="[
@@ -550,10 +553,12 @@ export default {
     onSelectNFT(e) {
       const { value: nftId } = e.target;
       logTrackerEvent(this, 'NFT', 'nft_details_select_nft', nftId, 1);
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId },
+        })
+      );
     },
     onToggleTransfer() {
       this.isOpenTransferModal = true;
@@ -644,10 +649,12 @@ export default {
         this.nftId,
         1
       );
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId: this.nftIdCollectNext },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId: this.nftIdCollectNext },
+        })
+      );
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(

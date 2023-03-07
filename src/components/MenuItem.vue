@@ -6,13 +6,14 @@
       'duration-100',
       'cursor-pointer',
       {'text-like-green': value === selectedValue},
+      {'font-[600]': value === selectedValue},
       'hover:text-medium-gray',
       'active:text-like-green',
     ]"
     @click="handleSelectItem(value)"
   >
     <Label
-      class="py-[16px]"
+      :class="['py-[16px]', labelClass]"
       :align="labelAlign"
     >
       <template #prepend>
@@ -36,6 +37,9 @@ export default class Menu extends Vue {
 
   @Prop(String)
   readonly label: string | undefined;
+
+  @Prop([Object, String])
+  readonly labelClass: object | string | undefined;
 
   @Prop(String)
   readonly selectedValue: string | undefined;

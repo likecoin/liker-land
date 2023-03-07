@@ -340,15 +340,17 @@ export default {
         : this.purchaseInfo?.nftId;
     },
     nftCollectRoute() {
-      return this.nftIsCollectable && this.nftIdCollectNext
-        ? {
-            name: 'nft-class-classId-nftId',
-            params: { classId: this.classId, nftId: this.nftIdCollectNext },
-          }
-        : {
-            name: 'nft-class-classId',
-            params: { classId: this.classId },
-          };
+      return this.localeLocation(
+        this.nftIsCollectable && this.nftIdCollectNext
+          ? {
+              name: 'nft-class-classId-nftId',
+              params: { classId: this.classId, nftId: this.nftIdCollectNext },
+            }
+          : {
+              name: 'nft-class-classId',
+              params: { classId: this.classId },
+            }
+      );
     },
     canCollectWithoutWallet() {
       return (
@@ -880,10 +882,12 @@ export default {
       }
     },
     goNFTDetails() {
-      this.$router.push({
-        name: 'nft-class-classId',
-        params: { classId: this.classId },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.classId },
+        })
+      );
     },
     normalizeNFTMessage(m) {
       if (m.memo === 'like.co NFT API') return '';

@@ -15,7 +15,7 @@
   >
     <NuxtLink
       class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
-      :disabled="getHomeRoute.name === $route.name"
+      :disabled="localeLocation(getHomeRoute).name === $route.name"
       :to="localeLocation(getHomeRoute)"
     >
       <Logo class="fill-current" />

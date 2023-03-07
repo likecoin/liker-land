@@ -95,12 +95,14 @@
 
         <section>
           <NFTPageChainDataSection
+            id="chain-data"
             :items="populatedDisplayEvents"
             :show-memo="true"
             :is-loading="isHistoryInfoLoading"
             :content-url="NFTExternalUrl"
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
+            :class-id="classId"
             :content-fingerprints="nftISCNContentFingerprints"
           />
         </section>
@@ -290,6 +292,19 @@ export default {
       this.isLoading = false;
     }
 
+    const { hash } = this.$route;
+    if (hash) {
+      this.$nextTick(() => {
+        try {
+          const el = document.querySelector(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } catch {
+          // No-op
+        }
+      });
+    }
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
       this.handleCollect();
@@ -379,10 +394,12 @@ export default {
         this.nftId,
         1
       );
-      this.$router.push({
-        name: 'nft-class-classId-nftId',
-        params: { classId: this.classId, nftId: this.nftIdCollectNext },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId: this.nftIdCollectNext },
+        })
+      );
     },
     handleClickSellFromPriceSection() {
       logTrackerEvent(

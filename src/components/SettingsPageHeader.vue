@@ -69,11 +69,13 @@ export default {
   },
   methods: {
     onClickBackButton() {
-      const backRouteName = this.$route.name
+      const backRouteName = this.getRouteBaseName(this.$route)
         .split('-')
         .slice(0, -1)
         .join('-');
-      if (backRouteName) this.$router.push({ name: backRouteName });
+      if (backRouteName) {
+        this.$router.push(this.localeLocation({ name: backRouteName }));
+      }
     },
   },
 };

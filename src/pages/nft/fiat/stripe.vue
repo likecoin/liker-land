@@ -29,12 +29,14 @@ export default {
     uiIsOpenCollectModal(isOpen) {
       if (!isOpen) {
         if (this.classId) {
-          this.$router.replace({
-            name: 'nft-class-classId',
-            params: { classId: this.classId },
-          });
+          this.$router.replace(
+            this.localeLocation({
+              name: 'nft-class-classId',
+              params: { classId: this.classId },
+            })
+          );
         } else {
-          this.$router.replace('/');
+          this.$router.replace(this.localeLocation({ name: 'index' }));
         }
       }
     },

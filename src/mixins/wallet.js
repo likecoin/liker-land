@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { getIdenticonAvatar, postFollowCreator } from '~/util/api';
+import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 
@@ -80,9 +80,11 @@ export default {
           this.navigateToMyDashboard();
         }
       } else {
-        this.$router.push({
-          name: 'dashboard',
-        });
+        this.$router.push(
+          this.localeLocation({
+            name: 'dashboard',
+          })
+        );
       }
     },
     navigateToSettings() {

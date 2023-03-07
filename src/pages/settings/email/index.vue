@@ -28,26 +28,28 @@
       <Separator class="my-[24px]" />
     </template>
 
-    <Label
-      class="text-medium-gray"
-      :text="$t(hasEmail ? 'settings_email_change_email' : 'settings_email_new_email')"
-    />
-    <TextField
-      v-model="newEmail"
-      class="mt-[4px]"
-      :is-disabled="isSubmitting"
-      :placeholder="$t('settings_email_input_email_placeholder')"
-    />
-    <div class="flex justify-end mt-[8px]">
-      <ProgressIndicator v-if="isSubmitting" />
-      <ButtonV2
-        v-else
-        :text="$t('settings_email_confirm')"
-        preset="secondary"
-        :is-disabled="!newEmail || newEmail === walletEmailUnverified"
-        @click="handleClickConfirm"
+    <form @submit.prevent="handleClickConfirm">
+      <Label
+        class="text-medium-gray"
+        :text="$t(hasEmail ? 'settings_email_change_email' : 'settings_email_new_email')"
       />
-    </div>
+      <TextField
+        v-model="newEmail"
+        class="mt-[4px]"
+        :is-disabled="isSubmitting"
+        :placeholder="$t('settings_email_input_email_placeholder')"
+      />
+      <div class="flex justify-end mt-[8px]">
+        <ProgressIndicator v-if="isSubmitting" />
+        <ButtonV2
+          v-else
+          :text="$t('settings_email_confirm')"
+          preset="secondary"
+          :is-disabled="isDisabledChangingEmail"
+          type="submit"
+        />
+      </div>
+    </form>
   </SettingsPageContentWithAuth>
 </template>
 
@@ -71,6 +73,9 @@ export default {
     ...mapGetters(['walletEmailUnverified']),
     hasEmail() {
       return this.walletEmail || this.walletEmailUnverified;
+    },
+    isDisabledChangingEmail() {
+      return !this.newEmail || this.newEmail === this.walletEmailUnverified;
     },
   },
   methods: {
@@ -97,6 +102,7 @@ export default {
       }
     },
     async handleClickConfirm() {
+      if (this.isDisabledChangingEmail) return;
       logTrackerEvent(
         this,
         'settings',

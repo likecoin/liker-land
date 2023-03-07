@@ -20,7 +20,7 @@ export default {
   async mounted() {
     window.open(LIKECOIN_LOGOUT_POPUP_URL);
     await this.userLogout();
-    this.$router.replace(this.getHomeRoute);
+    this.$router.replace(this.localeLocation(this.getHomeRoute));
   },
   methods: {
     ...mapActions(['userLogout']),

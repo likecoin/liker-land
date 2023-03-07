@@ -158,10 +158,12 @@ export default {
   methods: {
     getChainExplorerTx,
     handleRowClick(event) {
-      this.$router.push({
-        name: event.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
-        params: { classId: event.classId, nftId: event.nftId },
-      });
+      this.$router.push(
+        this.localeLocation({
+          name: event.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
+          params: { classId: event.classId, nftId: event.nftId },
+        })
+      );
     },
   },
 };

@@ -505,7 +505,7 @@ const actions = {
     );
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
-    const { data } = await this.$api.get(api.getNFTDisplayStateURL(address));
+    const { data } = await this.$api.get(api.getUserV2DisplayState(address));
     commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
       address,
       featuredClassIdSet: new Set(data.featured),
@@ -540,7 +540,7 @@ const actions = {
       featuredClassIdSet,
       hiddenClassIdSet,
     });
-    await this.$api.post(api.getNFTDisplayStateURL(address), {
+    await this.$api.post(api.postUserV2DisplayState(address), {
       classId,
       displayState,
     });

@@ -99,11 +99,14 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
+        :portfolio-items-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
         :is-show-other-tab="isShowOtherTab"
         :is-narrow="true"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
+        @portfolio-change-filtering="handleNFTClassListFilteringChange"
         @infinite-scroll="handleInfiniteScroll"
       />
 
@@ -258,19 +261,21 @@ export default {
   },
   methods: {
     handleTopUserHover(i) {
+      const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(
         this,
         'portfolio',
-        `portfolio_top_${this.type}_hover`,
+        `portfolio_top_${type}_hover`,
         `${i}`,
         1
       );
     },
     handleTopUserClick(i) {
+      const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(
         this,
         'portfolio',
-        `portfolio_top_${this.type}_click`,
+        `portfolio_top_${type}_click`,
         `${i}`,
         1
       );

@@ -29,7 +29,6 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       displayName,
       email,
       emailUnconfirmed,
-      followees,
       eventLastSeenTs,
       locale = DEFAULT_LOCALE,
     } = userDoc.data();
@@ -38,7 +37,6 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       displayName,
       email,
       emailUnconfirmed,
-      followees,
       eventLastSeenTs: eventLastSeenTs ? eventLastSeenTs.toMillis() : 1000,
       locale,
     });
