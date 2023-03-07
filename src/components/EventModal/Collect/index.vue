@@ -321,7 +321,7 @@ export default {
         case 'crypto': {
           if (!this.getAddress) {
             const isConnected = await this.connectWallet({
-              isSkippedLogin: true,
+              shouldSkipLogin: true,
             });
             if (!isConnected) return;
           }

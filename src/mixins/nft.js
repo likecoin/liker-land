@@ -623,7 +623,7 @@ export default {
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         if (!this.canCollectWithoutWallet && !this.getAddress) {
           const isConnected = await this.connectWallet({
-            isSkippedLogin: true,
+            shouldSkipLogin: true,
           });
           if (!isConnected) return;
         } else {

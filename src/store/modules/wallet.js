@@ -234,7 +234,7 @@ const actions = {
     try {
       if (getters.walletHasLoggedIn) {
         // Do not await here to prevent blocking
-        dispatch('walletFetchSessionUserData', { isExtraOnly: true });
+        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
       } else if (!getters.walletIsMatchedSession) {
         // Re-login if the wallet address is different from session
         await dispatch('signLogin');
@@ -419,10 +419,13 @@ const actions = {
       throw error;
     }
   },
-  async walletFetchSessionUserData({ dispatch }, { isExtraOnly = false } = {}) {
+  async walletFetchSessionUserData(
+    { dispatch },
+    { shouldSkipUserInfo = false } = {}
+  ) {
     try {
       const promises = [];
-      if (!isExtraOnly) {
+      if (!shouldSkipUserInfo) {
         promises.push(dispatch('walletFetchSessionUserInfo'));
       }
       promises.push(dispatch('walletFetchFollowees'));

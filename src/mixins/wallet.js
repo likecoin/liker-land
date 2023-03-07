@@ -60,7 +60,7 @@ export default {
       'signLogin',
       'walletFetchFollowees',
     ]),
-    async connectWallet({ isSkippedLogin = false } = {}) {
+    async connectWallet({ shouldSkipLogin = false } = {}) {
       const connection = await this.openConnectWalletModal({
         language: this.$i18n.locale.split('-')[0],
       });
@@ -73,7 +73,7 @@ export default {
         'connected_wallet',
         1
       );
-      return isSkippedLogin
+      return shouldSkipLogin
         ? this.initWallet(connection)
         : this.initWalletAndLogin(connection);
     },
