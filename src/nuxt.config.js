@@ -282,12 +282,12 @@ const nuxtConfig = {
         file: 'zh-Hant.json',
       },
     ],
+    strategy: 'prefix',
     defaultLocale: 'zh-Hant',
     langDir: '~/locales/',
     detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'liker-land-i18n',
       redirectOn: 'root',
+      alwaysRedirect: true
     },
   },
 

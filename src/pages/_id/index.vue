@@ -183,7 +183,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletHasLoggedIn']),
+    ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
     wallet() {
       return this.$route.params.id;
     },

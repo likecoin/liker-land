@@ -320,7 +320,7 @@ export const getUserV2DisplayState = wallet =>
 
 export const postUserV2DisplayState = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
-
+export const getUserV2LocaleURL = () => `/api/v2/users/locale`;
 export const getUserV2Followees = () => `/api/v2/users/followees`;
 export const postUserV2Followees = creator => {
   const qsPayload = { creator };

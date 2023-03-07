@@ -6,7 +6,11 @@ const {
 } = require('../../../../modules/firebase');
 const { authenticateV2Login } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
-const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('../../../constant');
+const {
+  AUTH_COOKIE_NAME,
+  AUTH_COOKIE_OPTION,
+  DEFAULT_LOCALE,
+} = require('../../../constant');
 const {
   isValidAddress,
   checkCosmosSignPayload,
@@ -26,6 +30,7 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       email,
       emailUnconfirmed,
       eventLastSeenTs,
+      locale = DEFAULT_LOCALE,
     } = userDoc.data();
     res.json({
       user,
@@ -33,6 +38,7 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       email,
       emailUnconfirmed,
       eventLastSeenTs: eventLastSeenTs ? eventLastSeenTs.toMillis() : 1000,
+      locale,
     });
   } catch (err) {
     if (req.session) req.session = null;
@@ -73,7 +79,6 @@ router.post('/login', async (req, res, next) => {
       const userRef = walletUserCollection.doc(userId);
       const userDoc = await t.get(userRef);
       const isNew = !userDoc.exists;
-      const currentTs = Date.now();
       const payload = {
         lastLoginTs: FieldValue.serverTimestamp(),
       };
