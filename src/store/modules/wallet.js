@@ -157,14 +157,19 @@ const getters = {
     state.events[0]?.timestamp &&
     state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
   getNotificationCount: (state, getters) => {
-    if (!state.eventLastSeenTs || !getters.getEvents || !getters.loginAddress) {
+    const { getEvents } = getters;
+    if (!state.eventLastSeenTs || !getEvents || !getters.loginAddress) {
       return 0;
     }
-    return getters.getEvents.filter(
-      e =>
+    return getEvents.reduce((count, e) => {
+      if (
         state.eventLastSeenTs < new Date(e.timestamp).getTime() &&
-        (e.eventType === 'nft_sale' || e.eventType === 'receive_nft')
-    ).length;
+        ['nft_sale', 'receive_nft', 'mint_nft'].includes(e.eventType)
+      ) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
   },
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
