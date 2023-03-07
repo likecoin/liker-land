@@ -322,6 +322,7 @@ export const postUserV2DisplayState = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
 
 export const getUserV2Followees = () => `/api/v2/users/followees`;
+export const getUserV2Followers = () => `/api/v2/users/followers`;
 export const postUserV2Followees = creator => {
   const qsPayload = { creator };
   return `/api/v2/users/followees?${querystring.stringify(qsPayload)}`;
