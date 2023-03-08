@@ -73,7 +73,26 @@
           </li>
         </ul>
       </nav>
-
+      <div
+        v-if="currentTab === 'trending'"
+        class="hidden desktop:flex flex-wrap mt-[24px]"
+      >
+        <client-only>
+          <model-viewer
+            v-for="({ classId }, index) in nfts"
+            :key="classId"
+            :src="getNFTModel({ classId })"
+            class="width-[100px] height-[150px]"
+            auto-rotate
+            auto-rotate-delay="500"
+            xr-environment
+            shadow-intensity="1"
+            :camera-orbit="`${315 * index}deg 60deg 100m`"
+            @click="handleNFTModelClick(classId)"
+          />
+        </client-only>
+        <hr>
+      </div>
       <ul class="mt-[48px]">
         <li
           v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
@@ -82,6 +101,7 @@
           :class="{ 'mt-[88px]': index > 0 }"
         >
           <NFTCampaignItem
+            :id="classId"
             :class-id="classId"
             :story-title="storyTitle"
             :story-description="storyDescription"
@@ -111,6 +131,7 @@ import {
   getNFTClassesPartial,
   getTopNFTClasses,
   getISCNRecord,
+  getNFTModel,
 } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -152,7 +173,23 @@ export default {
           content: 'https://liker.land/images/og/writing-nft.jpg',
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      link: [
+        { rel: 'canonical', href: `${this.$route.path}` },
+        {
+          rel: 'modulepreload',
+          href:
+            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+          as: 'script',
+        },
+      ],
+      script: [
+        {
+          type: 'module',
+          src:
+            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+          asyc: 'true',
+        },
+      ],
     };
   },
   data() {
@@ -256,6 +293,19 @@ export default {
     this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
+    getNFTModel,
+    handleNFTModelClick(classId) {
+      this.$nextTick(() => {
+        try {
+          const el = document.querySelector(`#${classId}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        } catch {
+          // No-op
+        }
+      });
+    },
     async getClassOwner(classData) {
       try {
         const iscnPrefix = classData.parent.iscn_id_prefix;
