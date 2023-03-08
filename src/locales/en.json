@@ -401,7 +401,7 @@
   "portfolio_unsubscribe_message_success": "You have successfully unfollowed {creator}.",
   "portfolio_unsubscribe_success_alert": "Successfully unfollowed {creator}",
   "portfolio_unsubscribe_title": "Unfollow {creator}",
-  "portfolio_follower_title": "Who's following me?",
+  "portfolio_follower_title": "My followers",
   "portfolio_follower_export": "Export my follower list",
   "portfolio_follower_no_follower": "There are no followers yet",
   "portfolio_follower_export_success": "Export completed!",
