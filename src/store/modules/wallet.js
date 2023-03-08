@@ -244,10 +244,10 @@ const actions = {
     if (!isInited) return false;
 
     try {
-      if (getters.walletHasLoggedIn) {
+      if (getters.walletIsMatchedSession) {
         // Do not await here to prevent blocking
         dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
-      } else if (!getters.walletIsMatchedSession) {
+      } else if (getters.getAddress) {
         // Re-login if the wallet address is different from session
         await dispatch('signLogin');
       }
@@ -296,7 +296,7 @@ const actions = {
     if (session) {
       const { accounts, method } = session;
       await dispatch('initWallet', { accounts, method });
-      if (getters.walletHasLoggedIn) {
+      if (getters.walletIsMatchedSession) {
         dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
       }
     }

@@ -82,7 +82,7 @@
           :creator-wallet-address="wallet"
           :creator-display-name="userDisplayName"
           :is-wallet-connected="!!getAddress"
-          :is-wallet-logged-in="walletHasLoggedIn"
+          :is-wallet-logged-in="walletIsMatchedSession"
           :is-followed="isFollowed"
           :is-empty="false"
         />
@@ -183,7 +183,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['walletHasLoggedIn']),
     wallet() {
       return this.$route.params.id;
     },

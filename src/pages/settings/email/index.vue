@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="walletHasLoggedIn">
+  <div v-if="walletIsMatchedSession">
     <template v-if="hasEmail">
       <div class="grid sm:grid-cols-2 gap-[16px]">
         <div v-if="walletEmail">
