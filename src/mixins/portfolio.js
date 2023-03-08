@@ -94,17 +94,6 @@ export const createPortfolioMixin = ({
         .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfWritingNft;
     },
-    nftClassMapOfOther() {
-      const nftClassMapOfOther = Array.from(this.allNFTClassMap.values())
-        .filter(nft => {
-          const classMetadata = this.getNFTClassMetadataById(nft.classId);
-          const isWritingNFT = checkIsWritingNFT(classMetadata);
-          const isLikecoinChainNFTBook = checkIsNFTBook(classMetadata);
-          return !isWritingNFT && !isLikecoinChainNFTBook;
-        })
-        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
-      return nftClassMapOfOther;
-    },
     nftClassMapOfNFTBook() {
       const nftClassMapOfNFTBook = Array.from(this.allNFTClassMap.values())
         .filter(nft => {
@@ -114,6 +103,16 @@ export const createPortfolioMixin = ({
         })
         .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfNFTBook;
+    },
+    nftClassMapOfOther() {
+      const nftClassMapOfOther = Array.from(this.allNFTClassMap.values())
+        .filter(
+          nft =>
+            !this.nftClassMapOfWritingNft.has(nft.classId) &&
+            !this.nftClassMapOfNFTBook.has(nft.classId)
+        )
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
+      return nftClassMapOfOther;
     },
     nftTypeFilteringOptions() {
       const currentClassList =
