@@ -35,13 +35,14 @@
       >
         <NuxtLink
           class="flex items-center text-like-green"
-          :to="`/${follower.wallet}`"
+          :to="{ name: 'id', params: { id: follower.wallet } }"
           target="_blank"
         >
           <Identity
             :avatar-url="follower.avatar"
             :avatar-size="32"
             :is-lazy-loaded="true"
+            :is-avatar-outlined="follower.isCivicLiker"
           />
           <span class="ml-[8px] group-hover:underline">{{
             follower.displayName | ellipsis

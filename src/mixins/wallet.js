@@ -49,6 +49,8 @@ export default {
           this.getUserInfoByAddress(follower)?.displayName || follower,
         wallet: follower,
         avatar: this.getUserInfoByAddress(follower)?.avatar,
+        isCivicLiker: this.getUserInfoByAddress(follower)
+          ?.isSubscribedCivicLiker,
       }));
     },
   },
