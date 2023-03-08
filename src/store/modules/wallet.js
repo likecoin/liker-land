@@ -590,7 +590,7 @@ const actions = {
         dispatch('lazyGetUserInfoByAddresses', followers);
       }
     } catch (error) {
-      throw error;
+      commit(WALLET_SET_FOLLOWERS, []);
     } finally {
       commit(WALLET_SET_FOLLOWERS_FETCHING_STATE, false);
     }

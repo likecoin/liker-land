@@ -272,7 +272,12 @@ export default {
         1
       );
       this.isOpenFollowersDialog = true;
-      await this.fetchFollowers();
+      try {
+        await this.walletFetchFollowers();
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
     async handleClickExportFollowerList() {
       logTrackerEvent(

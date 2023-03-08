@@ -110,14 +110,6 @@ export default {
         'menubar=no,location=no,width=576,height=768'
       );
     },
-    async fetchFollowers() {
-      try {
-        await this.walletFetchFollowers();
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    },
     exportFollowerList() {
       // Convert list to CSV string
       const csvHeader = [
