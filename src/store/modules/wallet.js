@@ -208,10 +208,7 @@ const actions = {
     return likecoinWalletLib;
   },
 
-  async initWallet(
-    { commit, dispatch, getters, state },
-    { method, accounts, offlineSigner }
-  ) {
+  async initWallet({ commit, dispatch }, { method, accounts, offlineSigner }) {
     if (!accounts[0]) return false;
     const connector = await dispatch('getConnector');
     // Listen once per account
@@ -232,20 +229,26 @@ const actions = {
         commit(WALLET_SET_LIKERINFO, userInfo);
       })
     );
+    return true;
+  },
+
+  async initWalletAndLogin({ dispatch, getters }, connection) {
+    const isInited = await dispatch('initWallet', connection);
+    if (!isInited) return false;
+
     try {
-      if (state.signer && !getters.walletIsMatchedSession) {
+      if (getters.walletHasLoggedIn) {
+        // Do not await here to prevent blocking
+        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+      } else if (!getters.walletIsMatchedSession) {
+        // Re-login if the wallet address is different from session
         await dispatch('signLogin');
       }
-      await Promise.all([
-        dispatch('walletFetchSessionUserInfo', address),
-        dispatch('walletFetchFollowees'),
-      ]);
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
       console.error(msg);
     }
-    dispatch('fetchWalletEvents');
     return true;
   },
 
@@ -294,7 +297,11 @@ const actions = {
     const connection = await connector.initIfNecessary();
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWallet', { accounts, offlineSigner, method });
+      await dispatch('initWalletAndLogin', {
+        accounts,
+        offlineSigner,
+        method,
+      });
     }
   },
 
@@ -408,11 +415,27 @@ const actions = {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ commit }, address) {
+  async walletFetchSessionUserInfo({ state, commit }) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
-      commit(WALLET_SET_USER_INFO, userInfo || { user: address });
+      commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
       return userInfo;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletFetchSessionUserData(
+    { dispatch },
+    { shouldSkipUserInfo = false } = {}
+  ) {
+    try {
+      const promises = [];
+      if (!shouldSkipUserInfo) {
+        promises.push(dispatch('walletFetchSessionUserInfo'));
+      }
+      promises.push(dispatch('walletFetchFollowees'));
+      await Promise.all(promises);
+      await dispatch('fetchWalletEvents');
     } catch (error) {
       throw error;
     }
@@ -455,6 +478,7 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
+      await dispatch('walletFetchSessionUserData');
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
