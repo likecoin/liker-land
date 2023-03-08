@@ -108,9 +108,11 @@
             <template #label-prepend>
               <MenuIcon :type="item.value" />
             </template>
-            <template #label-append>
+            <template
+              v-if="item.value === 'notifications' && getNotificationCount > 0"
+              #label-append
+            >
               <div
-                v-if="item.value === 'notifications'"
                 :class="[
                   'flex',
                   'justify-center',
