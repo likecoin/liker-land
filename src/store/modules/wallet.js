@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: "off" */
 import stringify from 'fast-json-stable-stringify';
+import BigNumber from 'bignumber.js';
 import {
   LOGIN_MESSAGE,
   LIKECOIN_CHAIN_ID,
@@ -184,6 +185,12 @@ function formatEventType(e, loginAddress) {
   let eventType;
   if (e.action === 'new_class') {
     eventType = 'mint_nft';
+  } else if (e.action === 'buy_nft' || e.action === 'sell_nft') {
+    if (e.receiver === loginAddress) {
+      eventType = 'purchase_nft';
+    } else {
+      eventType = 'nft_sale';
+    }
   } else if (e.sender === LIKECOIN_NFT_API_WALLET) {
     if (e.receiver === loginAddress) {
       eventType = 'purchase_nft';
@@ -316,7 +323,7 @@ const actions = {
         getNFTEvents({
           involver: address,
           limit: WALLET_EVENT_LIMIT,
-          actionType: '/cosmos.nft.v1beta1.MsgSend',
+          actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
           ignoreToList: LIKECOIN_NFT_API_WALLET,
           reverse: true,
         })
@@ -366,6 +373,12 @@ const actions = {
       return new Map();
     });
 
+    events.map(e => {
+      if (e.price) {
+        e.price = new BigNumber(e.price).shiftedBy(-9).toNumber();
+      }
+      return e;
+    });
     const historyDatas = await Promise.all(promises);
     historyDatas.forEach((m, index) => {
       if (m) {
