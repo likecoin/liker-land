@@ -1,7 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { stringify } from 'csv-stringify';
 
+import { stringify } from 'csv-stringify/lib/sync';
 import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
@@ -129,28 +128,18 @@ export default {
       ]);
       const csvRows = [csvHeader, ...csvData];
 
-      return new Promise((resolve, reject) => {
-        stringify(csvRows, (err, csvString) => {
-          if (err) {
-            // eslint-disable-next-line no-console
-            console.error(err);
-            reject(err);
-          }
+      const csvString = stringify(csvRows);
 
-          const csvBlob = new Blob([csvString], {
-            type: 'text/csv;charset=utf-8;',
-          });
-          // // Download CSV file
-          const csvUrl = URL.createObjectURL(csvBlob);
-          const hiddenLink = document.createElement('a');
-          hiddenLink.href = csvUrl;
-          hiddenLink.target = '_blank';
-          hiddenLink.download = 'my-followers.csv';
-          hiddenLink.click();
-
-          resolve();
-        });
+      const csvBlob = new Blob([csvString], {
+        type: 'text/csv;charset=utf-8;',
       });
+      // Download CSV file
+      const csvUrl = URL.createObjectURL(csvBlob);
+      const hiddenLink = document.createElement('a');
+      hiddenLink.href = csvUrl;
+      hiddenLink.target = '_blank';
+      hiddenLink.download = 'my-followers.csv';
+      hiddenLink.click();
     },
   },
 };

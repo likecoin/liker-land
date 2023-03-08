@@ -357,7 +357,7 @@ export default {
       this.isOpenFollowersDialog = true;
       await this.fetchFollowers();
     },
-    async handleClickExportFollowerList() {
+    handleClickExportFollowerList() {
       logTrackerEvent(
         this,
         'portfolio',
@@ -365,14 +365,8 @@ export default {
         `${this.wallet}`,
         1
       );
-      try {
-        await this.exportFollowerList();
-        this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        this.alertPromptError(error.toString());
-      }
+      this.exportFollowerList();
+      this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
     },
   },
 };
