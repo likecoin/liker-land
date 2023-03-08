@@ -5,7 +5,7 @@ import {
   NFT_CLASS_LIST_SORTING_ORDER,
   NFT_TYPE_FILTER_OPTIONS,
   checkIsWritingNFT,
-  checkIsNftBook,
+  checkIsNFTBook,
 } from '~/util/nft';
 import {
   getTopCollectorOfUser,
@@ -84,12 +84,22 @@ export const createPortfolioMixin = ({
     nftClassListOfCreated() {
       return this.nftClassListMap?.created || [];
     },
+    nftClassMapOfWritingNft() {
+      const nftClassMapOfWritingNft = Array.from(this.allNFTClassMap.values())
+        .filter(nft => {
+          const classMetadata = this.getNFTClassMetadataById(nft.classId);
+          const isWritingNFT = checkIsWritingNFT(classMetadata);
+          return isWritingNFT;
+        })
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
+      return nftClassMapOfWritingNft;
+    },
     nftClassMapOfOther() {
       const nftClassMapOfOther = Array.from(this.allNFTClassMap.values())
         .filter(nft => {
           const classMetadata = this.getNFTClassMetadataById(nft.classId);
           const isWritingNFT = checkIsWritingNFT(classMetadata);
-          const isLikecoinChainNFTBook = checkIsNftBook(classMetadata);
+          const isLikecoinChainNFTBook = checkIsNFTBook(classMetadata);
           return !isWritingNFT && !isLikecoinChainNFTBook;
         })
         .reduce((map, nft) => map.set(nft.classId, nft), new Map());
@@ -99,14 +109,11 @@ export const createPortfolioMixin = ({
       const nftClassMapOfNFTBook = Array.from(this.allNFTClassMap.values())
         .filter(nft => {
           const classMetadata = this.getNFTClassMetadataById(nft.classId);
-          const isLikecoinChainNFTBook = checkIsNftBook(classMetadata);
+          const isLikecoinChainNFTBook = checkIsNFTBook(classMetadata);
           return isLikecoinChainNFTBook;
         })
         .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfNFTBook;
-    },
-    nftClassListOfOther() {
-      return [...this.nftClassMapOfOther.values()];
     },
     nftTypeFilteringOptions() {
       const currentClassList =
@@ -118,10 +125,8 @@ export const createPortfolioMixin = ({
         .filter(([key]) => {
           switch (key) {
             case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
-              return currentClassList.some(
-                ({ classId }) =>
-                  !this.nftClassMapOfOther.has(classId) &&
-                  !this.nftClassMapOfNFTBook.has(classId)
+              return currentClassList.some(({ classId }) =>
+                this.nftClassMapOfWritingNft.has(classId)
               );
             case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
               return currentClassList.some(({ classId }) =>
@@ -149,9 +154,7 @@ export const createPortfolioMixin = ({
 
         case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
           filteredCollectedList = this.nftClassListOfCollected.filter(
-            ({ classId }) =>
-              !this.nftClassMapOfOther.has(classId) &&
-              !this.nftClassMapOfNFTBook.has(classId)
+            ({ classId }) => this.nftClassMapOfWritingNft.has(classId)
           );
           break;
         case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
@@ -179,9 +182,7 @@ export const createPortfolioMixin = ({
 
         case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
           filteredCreatedList = this.nftClassListOfCreated.filter(
-            ({ classId }) =>
-              !this.nftClassMapOfOther.has(classId) &&
-              !this.nftClassMapOfNFTBook.has(classId)
+            ({ classId }) => this.nftClassMapOfWritingNft.has(classId)
           );
           break;
         case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:

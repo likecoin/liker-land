@@ -209,7 +209,7 @@ export function checkIsWritingNFT(classMetadata) {
   );
 }
 
-export function checkIsNftBook(classMetadata) {
+export function checkIsNFTBook(classMetadata) {
   return (
     getNFTClassCollectionType(classMetadata) === nftClassCollectionType.NFTBook
   );
