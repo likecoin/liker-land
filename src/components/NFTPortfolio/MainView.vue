@@ -163,7 +163,7 @@
       </div>
 
       <NFTPagePrimitiveDisclaimer
-        v-if="isPortfolioTabOtherActive"
+        v-if="isPortfolioOtherFilterActive"
         class="w-full"
         :is-portfolio="true"
       />
@@ -339,9 +339,6 @@ export default {
     isPortfolioTabCreatedActive() {
       return this.portfolioTab === tabOptions.created;
     },
-    isPortfolioTabOtherActive() {
-      return this.portfolioTab === tabOptions.other;
-    },
 
     // Filtering
     portfolioCollectedCreatorListWithSorting() {
@@ -383,6 +380,9 @@ export default {
       return this.getPortfolioTypeFilteringLabel(
         this.portfolioItemsTypeFiltering
       );
+    },
+    isPortfolioOtherFilterActive() {
+      return this.portfolioItemsTypeFiltering === 'OTHER_NFT';
     },
 
     // Sorting

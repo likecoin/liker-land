@@ -205,25 +205,7 @@ export default {
           this.isCurrentTabCollected &&
           !this.nftClassListOfCollectedExcludedOther.length
         ) {
-          if (this.nftClassListOfOther.length) {
-            // Go to other tab if not empty
-            this.changeTab(tabOptions.other);
-          } else {
-            // Go to created tab if other tab is empty
-            this.changeTab(tabOptions.created);
-          }
-        } else if (
-          // If other tab is empty
-          this.isCurrentTabOther &&
-          !this.nftClassListOfOther.length
-        ) {
-          if (this.nftClassListOfCollectedExcludedOther.length) {
-            // Go to collected tab if not empty
-            this.changeTab(tabOptions.other);
-          } else {
-            // Go to created tab if collected tab is empty
-            this.changeTab(tabOptions.created);
-          }
+          this.changeTab(tabOptions.created);
         }
       }
     },
@@ -304,9 +286,6 @@ export default {
             1
           );
 
-          break;
-        case tabOptions.other:
-          logTrackerEvent(this, 'UserPortfolio', 'GoOtherTab', this.wallet, 1);
           break;
 
         default:

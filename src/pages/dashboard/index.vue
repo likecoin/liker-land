@@ -233,9 +233,6 @@ export default {
           logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
 
           break;
-        case tabOptions.other:
-          logTrackerEvent(this, 'MyDashboard', 'GoOtherTab', this.wallet, 1);
-          break;
 
         default:
           break;
