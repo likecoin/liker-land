@@ -508,7 +508,7 @@ export default {
       this.$emit('portfolio-change-sorting', { sorting, order });
     },
     handlePortfolioCreatorChange(value) {
-      this.$emit('portfolio-change-creator', { type: 'creator', value });
+      this.$emit('portfolio-change-creator', { value });
     },
     handlePortfolioTypeChange(value) {
       this.$emit('portfolio-change-type', { value });

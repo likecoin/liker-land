@@ -458,30 +458,23 @@ export const createPortfolioMixin = ({
       this.nftTypeFilter = NFT_TYPE_FILTER_OPTIONS.ALL;
       this.nftCreatorFilter = [];
     },
-    handleNFTClassListCreatorChange({ type, value }) {
+    handleNFTClassListCreatorChange({ value }) {
       logTrackerEvent(
         this,
         'portfolio',
-        `portfolio_filter_${type}`,
-        `Filter portfolio item by ${type}`,
+        `portfolio_filter_creator`,
+        `Filter portfolio item by creator`,
         1
       );
-      switch (type) {
-        case 'creator':
-          if (!value) {
-            this.nftCreatorFilter = [];
-          } else {
-            const index = this.nftCreatorFilter.indexOf(value);
-            if (index > -1) {
-              this.nftCreatorFilter.splice(index, 1);
-            } else {
-              this.nftCreatorFilter.push(value);
-            }
-          }
-          break;
-
-        default:
-          break;
+      if (!value) {
+        this.nftCreatorFilter = [];
+      } else {
+        const index = this.nftCreatorFilter.indexOf(value);
+        if (index > -1) {
+          this.nftCreatorFilter.splice(index, 1);
+        } else {
+          this.nftCreatorFilter.push(value);
+        }
       }
     },
     handleNFTClassListTypeChange({ value }) {
