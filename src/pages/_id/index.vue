@@ -203,7 +203,7 @@ export default {
         if (
           // If collected tab is empty
           this.isCurrentTabCollected &&
-          !this.nftClassListOfCollectedExcludedOther.length
+          !this.nftClassListOfFilteredCollectedByType.length
         ) {
           this.changeTab(tabOptions.created);
         }

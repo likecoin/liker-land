@@ -12,8 +12,8 @@ export const createNFTClassCollectionMixin = ({
       [isWritingNFTPropName]() {
         return this[typeKey] === nftClassCollectionType.WritingNFT;
       },
-      [getPropName('{key}IsBookNFT')]() {
-        return this[typeKey] === nftClassCollectionType.BookNFT;
+      [getPropName('{key}IsNFTBook')]() {
+        return this[typeKey] === nftClassCollectionType.NFTBook;
       },
       [getPropName('{key}IsPrimitive')]() {
         return !this[isWritingNFTPropName];

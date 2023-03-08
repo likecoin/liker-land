@@ -186,7 +186,7 @@ export function isValidHttpUrl(string) {
 
 export const nftClassCollectionType = {
   WritingNFT: 'writing-nft',
-  BookNFT: 'book-nft',
+  NFTBook: 'nft_book',
 };
 
 export function getNFTClassCollectionType(classMetadata) {
@@ -195,7 +195,7 @@ export function getNFTClassCollectionType(classMetadata) {
       return nftClassCollectionType.WritingNFT;
 
     case 'nft_book':
-      return nftClassCollectionType.BookNFT;
+      return nftClassCollectionType.NFTBook;
 
     default:
       return '';
@@ -211,7 +211,7 @@ export function checkIsWritingNFT(classMetadata) {
 
 export function checkIsNftBook(classMetadata) {
   return (
-    getNFTClassCollectionType(classMetadata) === nftClassCollectionType.BookNFT
+    getNFTClassCollectionType(classMetadata) === nftClassCollectionType.NFTBook
   );
 }
 
