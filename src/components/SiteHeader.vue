@@ -125,8 +125,8 @@
                   'py-[4px]'
                 ]"
               >
-                <div class="text-white text-[6px]">
-                  {{ getNotificationCount }}
+                <div class="text-white text-[10px]">
+                  {{ formattedNotificationCount }}
                 </div>
               </div>
             </template>
@@ -192,6 +192,10 @@ export default {
       }
 
       return options;
+    },
+    formattedNotificationCount() {
+      const { getNotificationCount: count } = this;
+      return `${Math.min(count, 99)}${count > 99 ? '+' : ''}`;
     },
   },
   async mounted() {
