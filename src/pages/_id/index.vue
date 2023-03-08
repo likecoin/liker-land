@@ -74,7 +74,7 @@
         />
 
         <!-- Follower List -->
-        <div v-if="walletHasLoggedIn" class="flex items-center justify-center">
+        <div v-if="walletHasLoggedIn && isUserPortfolio" class="flex items-center justify-center">
           <div
             class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
             @click="handleClickFollowers"
