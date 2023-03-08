@@ -296,6 +296,9 @@ const actions = {
     if (session) {
       const { accounts, method } = session;
       await dispatch('initWallet', { accounts, method });
+      if (getters.walletHasLoggedIn) {
+        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+      }
     }
   },
 
