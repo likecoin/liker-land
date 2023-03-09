@@ -55,7 +55,7 @@ export default {
       }
     }
     if (!this.walletHasVerifiedEmail) {
-      this.$router.push({ name: 'settings-email' });
+      this.$router.push(this.localeLocation({ name: 'settings-email' }));
       return;
     }
     if (!this.walletNotificationSettings) {
