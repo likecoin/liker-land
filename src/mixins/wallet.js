@@ -114,7 +114,7 @@ export default {
         this.$t('portfolio_follower_export_wallet'),
       ];
       const contents = this.populatedFollowers.map(
-        ({ displayName, wallet }) => [displayName, wallet]
+        ({ displayName, wallet }) => [this.escapeCSVField(displayName), wallet]
       );
 
       // Convert list to CSV string
@@ -132,6 +132,13 @@ export default {
       hiddenLink.target = '_blank';
       hiddenLink.download = 'my-followers.csv';
       hiddenLink.click();
+    },
+
+    escapeCSVField(field) {
+      if (field.includes('"') || field.includes(',')) {
+        return `"${field.replace(/"/g, '""')}"`;
+      }
+      return field;
     },
   },
 };
