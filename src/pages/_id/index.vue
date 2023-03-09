@@ -355,12 +355,7 @@ export default {
         1
       );
       this.isOpenFollowersDialog = true;
-      try {
-        await this.walletFetchFollowers();
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
+      await this.walletFetchFollowers();
     },
     handleClickExportFollowerList() {
       logTrackerEvent(
