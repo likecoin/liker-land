@@ -182,7 +182,7 @@
     "headerLabel": "Today"
   },
   "filter_menu_creator": "All Creators",
-  "filter_menu_creator_selected": "{num} Creator(s)",
+  "filter_menu_creator_selected": "{num} Creator | {num} Creators",
   "filter_menu_reset": "Clear filter",
   "filter_menu_type": "All NFTs",
   "finish": "Finish",

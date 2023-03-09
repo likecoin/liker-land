@@ -368,7 +368,9 @@ export default {
         creator => creator.isSelected
       );
       return isSelected.length
-        ? this.$t('filter_menu_creator_selected', { num: isSelected.length })
+        ? this.$tc('filter_menu_creator_selected', isSelected.length, {
+            num: isSelected.length,
+          })
         : this.$t('filter_menu_creator');
     },
     nftTypeOptions() {
