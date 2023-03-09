@@ -61,18 +61,6 @@
             />
           </template>
         </NFTPortfolioTopUsersList>
-        <NFTPortfolioSubscriptionForm
-          v-if="!isUserPortfolio"
-          id="creator-follow"
-          class="w-full"
-          :creator-wallet-address="wallet"
-          :creator-display-name="userDisplayName"
-          :is-wallet-connected="!!getAddress"
-          :is-wallet-logged-in="walletHasLoggedIn"
-          :is-followed="isFollowed"
-          :is-empty="false"
-        />
-
         <!-- Follower List -->
         <div v-if="walletHasLoggedIn && isUserPortfolio" class="flex items-center justify-center">
           <div
