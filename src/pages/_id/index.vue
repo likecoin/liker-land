@@ -61,6 +61,27 @@
             />
           </template>
         </NFTPortfolioTopUsersList>
+        <NFTPortfolioSubscriptionForm
+          v-if="!isUserPortfolio"
+          id="creator-follow"
+          class="w-full"
+          :creator-wallet-address="wallet"
+          :creator-display-name="userDisplayName"
+          :is-wallet-connected="!!getAddress"
+          :is-wallet-logged-in="walletHasLoggedIn"
+          :is-followed="isFollowed"
+          :is-empty="false"
+        />
+
+        <!-- Follower List -->
+        <div v-if="walletHasLoggedIn && isUserPortfolio" class="flex items-center justify-center">
+          <div
+            class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
+            @click="handleClickFollowers"
+          >{{ $t('portfolio_follower_title') }}</div>
+        </div>
+
+        <!-- goMyDashboard btn -->
         <div
           v-if="isUserPortfolio"
           class="flex justify-center mt-[16px] mb-[24px]"
@@ -82,7 +103,7 @@
           :creator-wallet-address="wallet"
           :creator-display-name="userDisplayName"
           :is-wallet-connected="!!getAddress"
-          :is-wallet-logged-in="walletIsMatchedSession"
+          :is-wallet-logged-in="walletHasLoggedIn"
           :is-followed="isFollowed"
           :is-empty="false"
         />
@@ -113,6 +134,13 @@
     </div>
 
     <NuxtChild />
+    <FollowerDialog
+      :is-open-followers-dialog="isOpenFollowersDialog"
+      :wallet-is-fetching-followers="walletIsFetchingFollowers"
+      :populated-followers="populatedFollowers"
+      @close="isOpenFollowersDialog = false"
+      @on-export-followers="handleClickExportFollowerList"
+    />
   </Page>
 </template>
 
@@ -126,11 +154,12 @@ import { EXTERNAL_HOST } from '~/constant';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTPortfolioPage',
   layout: 'default',
-  mixins: [walletMixin, portfolioMixin],
+  mixins: [walletMixin, portfolioMixin, alertMixin],
   head() {
     const name = this.userDisplayName;
     const title = this.$t('portfolio_title', { name });
@@ -181,6 +210,9 @@ export default {
       ],
       link: [{ rel: 'canonical', href: `${EXTERNAL_HOST}/${this.wallet}` }],
     };
+  },
+  data() {
+    return { isOpenFollowersDialog: false };
   },
   computed: {
     wallet() {
@@ -313,6 +345,28 @@ export default {
     goMyDashboard() {
       logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
       this.$router.push({ name: 'dashboard' });
+    },
+    async handleClickFollowers() {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        'portfolio_followers_click',
+        `${this.wallet}`,
+        1
+      );
+      this.isOpenFollowersDialog = true;
+      await this.walletFetchFollowers();
+    },
+    handleClickExportFollowerList() {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        'portfolio_followers_export_click',
+        `${this.wallet}`,
+        1
+      );
+      this.exportFollowerList();
+      this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
     },
   },
 };

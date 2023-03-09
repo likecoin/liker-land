@@ -1,8 +1,8 @@
 import { mapActions, mapGetters } from 'vuex';
-
 import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
+import { escapeCSVField, downloadCSV } from '~/util/misc';
 
 export default {
   computed: {
@@ -12,6 +12,8 @@ export default {
       'getLikerInfo',
       'getLocale',
       'walletFollowees',
+      'walletFollowers',
+      'walletIsFetchingFollowers',
       'walletMethodType',
       'walletEmail',
       'walletHasVerifiedEmail',
@@ -40,6 +42,16 @@ export default {
         language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
       });
     },
+    populatedFollowers() {
+      return this.walletFollowers.map(follower => ({
+        displayName:
+          this.getUserInfoByAddress(follower)?.displayName || follower,
+        wallet: follower,
+        avatar: this.getUserInfoByAddress(follower)?.avatar,
+        isCivicLiker: this.getUserInfoByAddress(follower)
+          ?.isSubscribedCivicLiker,
+      }));
+    },
   },
   watch: {
     getAddress: {
@@ -59,6 +71,7 @@ export default {
       'walletFetchLIKEBalance',
       'signLogin',
       'walletFetchFollowees',
+      'walletFetchFollowers',
     ]),
     async connectWallet({ shouldSkipLogin = false } = {}) {
       const connection = await this.openConnectWalletModal({
@@ -95,6 +108,22 @@ export default {
         'settings',
         'menubar=no,location=no,width=576,height=768'
       );
+    },
+    exportFollowerList() {
+      const header = [
+        this.$t('portfolio_follower_export_ID'),
+        this.$t('portfolio_follower_export_wallet'),
+      ];
+      const contents = this.populatedFollowers.map(
+        ({ displayName, wallet }) => [escapeCSVField(displayName), wallet]
+      );
+
+      // Convert list to CSV string
+      const csvString = `${header.join(',')}\n${contents
+        .map(row => row.join(','))
+        .join('\n')}`;
+
+      downloadCSV(csvString, 'my-followers.csv');
     },
   },
 };

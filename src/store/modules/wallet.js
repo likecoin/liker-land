@@ -18,6 +18,7 @@ import {
   getUserV2Followees,
   postUserV2Followees,
   deleteUserV2Followees,
+  getUserV2Followers,
   postUserV2WalletEmail,
   putUserV2WalletEmail,
   getNFTEvents,
@@ -37,6 +38,8 @@ import {
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
+  WALLET_SET_FOLLOWERS,
+  WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
   WALLET_SET_EVENT_FETCHING,
@@ -53,7 +56,9 @@ const state = () => ({
   connector: null,
   likerInfo: null,
   followees: [],
+  followers: [],
   isFetchingFollowees: false,
+  isFetchingFollowers: false,
   eventLastSeenTs: 0,
   events: [],
   isInited: null,
@@ -128,8 +133,14 @@ const mutations = {
   [WALLET_SET_FOLLOWEES](state, followees) {
     state.followees = followees;
   },
+  [WALLET_SET_FOLLOWERS](state, followers) {
+    state.followers = followers;
+  },
   [WALLET_SET_FOLLOWEES_FETCHING_STATE](state, isFetching) {
     state.isFetchingFollowees = isFetching;
+  },
+  [WALLET_SET_FOLLOWERS_FETCHING_STATE](state, isFetching) {
+    state.isFetchingFollowers = isFetching;
   },
   [WALLET_SET_EVENT_FETCHING](state, isFetching) {
     state.isFetchingEvent = isFetching;
@@ -146,7 +157,9 @@ const getters = {
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
+  walletFollowers: state => state.followers,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
+  walletIsFetchingFollowers: state => state.isFetchingFollowers,
   getIsFetchingEvent: state => state.isFetchingEvent,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
   getLatestEventTimestamp: state =>
@@ -513,6 +526,7 @@ const actions = {
     try {
       commit(WALLET_SET_USER_INFO, null);
       commit(WALLET_SET_FOLLOWEES, []);
+      commit(WALLET_SET_FOLLOWERS, []);
       commit(WALLET_SET_EVENTS, []);
       commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
       await this.$api.post(postUserV2Logout());
@@ -561,6 +575,24 @@ const actions = {
       throw error;
     } finally {
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, false);
+    }
+  },
+  async walletFetchFollowers({ state, commit, dispatch }) {
+    if (!state.loginAddress) {
+      await dispatch('signLogin');
+    }
+    try {
+      if (state.isFetchingFollowers) return;
+      commit(WALLET_SET_FOLLOWERS_FETCHING_STATE, true);
+      const { followers } = await this.$axios.$get(getUserV2Followers());
+      commit(WALLET_SET_FOLLOWERS, followers);
+      if (followers.length) {
+        dispatch('lazyGetUserInfoByAddresses', followers);
+      }
+    } catch (error) {
+      commit(WALLET_SET_FOLLOWERS, []);
+    } finally {
+      commit(WALLET_SET_FOLLOWERS_FETCHING_STATE, false);
     }
   },
   async walletFollowCreator({ state, commit }, creator) {
