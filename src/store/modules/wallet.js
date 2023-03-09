@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: "off" */
 import stringify from 'fast-json-stable-stringify';
+import BigNumber from 'bignumber.js';
 import {
   LOGIN_MESSAGE,
   LIKECOIN_CHAIN_ID,
@@ -17,6 +18,7 @@ import {
   getUserV2Followees,
   postUserV2Followees,
   deleteUserV2Followees,
+  getUserV2Followers,
   postUserV2WalletEmail,
   putUserV2WalletEmail,
   getNFTEvents,
@@ -36,6 +38,8 @@ import {
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
+  WALLET_SET_FOLLOWERS,
+  WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
   WALLET_SET_EVENT_FETCHING,
@@ -52,7 +56,9 @@ const state = () => ({
   connector: null,
   likerInfo: null,
   followees: [],
+  followers: [],
   isFetchingFollowees: false,
+  isFetchingFollowers: false,
   eventLastSeenTs: 0,
   events: [],
   isInited: null,
@@ -127,8 +133,14 @@ const mutations = {
   [WALLET_SET_FOLLOWEES](state, followees) {
     state.followees = followees;
   },
+  [WALLET_SET_FOLLOWERS](state, followers) {
+    state.followers = followers;
+  },
   [WALLET_SET_FOLLOWEES_FETCHING_STATE](state, isFetching) {
     state.isFetchingFollowees = isFetching;
+  },
+  [WALLET_SET_FOLLOWERS_FETCHING_STATE](state, isFetching) {
+    state.isFetchingFollowers = isFetching;
   },
   [WALLET_SET_EVENT_FETCHING](state, isFetching) {
     state.isFetchingEvent = isFetching;
@@ -145,7 +157,9 @@ const getters = {
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
+  walletFollowers: state => state.followers,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
+  walletIsFetchingFollowers: state => state.isFetchingFollowers,
   getIsFetchingEvent: state => state.isFetchingEvent,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
   getLatestEventTimestamp: state =>
@@ -157,14 +171,19 @@ const getters = {
     state.events[0]?.timestamp &&
     state.eventLastSeenTs < new Date(state.events[0]?.timestamp).getTime(),
   getNotificationCount: (state, getters) => {
-    if (!state.eventLastSeenTs || !getters.getEvents || !getters.loginAddress) {
+    const { getEvents } = getters;
+    if (!state.eventLastSeenTs || !getEvents || !getters.loginAddress) {
       return 0;
     }
-    return getters.getEvents.filter(
-      e =>
+    return getEvents.reduce((count, e) => {
+      if (
         state.eventLastSeenTs < new Date(e.timestamp).getTime() &&
-        (e.eventType === 'nft_sale' || e.eventType === 'receive_nft')
-    ).length;
+        ['nft_sale', 'receive_nft', 'mint_nft'].includes(e.eventType)
+      ) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
   },
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
@@ -179,6 +198,12 @@ function formatEventType(e, loginAddress) {
   let eventType;
   if (e.action === 'new_class') {
     eventType = 'mint_nft';
+  } else if (e.action === 'buy_nft' || e.action === 'sell_nft') {
+    if (e.receiver === loginAddress) {
+      eventType = 'purchase_nft';
+    } else {
+      eventType = 'nft_sale';
+    }
   } else if (e.sender === LIKECOIN_NFT_API_WALLET) {
     if (e.receiver === loginAddress) {
       eventType = 'purchase_nft';
@@ -203,10 +228,7 @@ const actions = {
     return likecoinWalletLib;
   },
 
-  async initWallet(
-    { commit, dispatch, getters, state },
-    { method, accounts, offlineSigner }
-  ) {
+  async initWallet({ commit, dispatch }, { method, accounts, offlineSigner }) {
     if (!accounts[0]) return false;
     const connector = await dispatch('getConnector');
     // Listen once per account
@@ -227,8 +249,19 @@ const actions = {
         commit(WALLET_SET_LIKERINFO, userInfo);
       })
     );
+    return true;
+  },
+
+  async initWalletAndLogin({ dispatch, getters }, connection) {
+    const isInited = await dispatch('initWallet', connection);
+    if (!isInited) return false;
+
     try {
-      if (state.signer && !getters.walletIsMatchedSession) {
+      if (getters.walletIsMatchedSession) {
+        // Do not await here to prevent blocking
+        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+      } else if (getters.getAddress) {
+        // Re-login if the wallet address is different from session
         await dispatch('signLogin');
       }
     } catch (err) {
@@ -236,7 +269,6 @@ const actions = {
       // eslint-disable-next-line no-console
       console.error(msg);
     }
-    dispatch('fetchWalletEvents');
     return true;
   },
 
@@ -277,6 +309,9 @@ const actions = {
     if (session) {
       const { accounts, method } = session;
       await dispatch('initWallet', { accounts, method });
+      if (getters.walletIsMatchedSession) {
+        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+      }
     }
   },
 
@@ -285,7 +320,11 @@ const actions = {
     const connection = await connector.initIfNecessary();
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWallet', { accounts, offlineSigner, method });
+      await dispatch('initWalletAndLogin', {
+        accounts,
+        offlineSigner,
+        method,
+      });
     }
   },
 
@@ -300,7 +339,7 @@ const actions = {
         getNFTEvents({
           involver: address,
           limit: WALLET_EVENT_LIMIT,
-          actionType: '/cosmos.nft.v1beta1.MsgSend',
+          actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
           ignoreToList: LIKECOIN_NFT_API_WALLET,
           reverse: true,
         })
@@ -350,6 +389,12 @@ const actions = {
       return new Map();
     });
 
+    events.map(e => {
+      if (e.price) {
+        e.price = new BigNumber(e.price).shiftedBy(-9).toNumber();
+      }
+      return e;
+    });
     const historyDatas = await Promise.all(promises);
     historyDatas.forEach((m, index) => {
       if (m) {
@@ -399,12 +444,28 @@ const actions = {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ commit, dispatch }, address) {
+  async walletFetchSessionUserInfo({ state, commit }) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
-      commit(WALLET_SET_USER_INFO, userInfo || { user: address });
+      commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
       await dispatch('setLocale', userInfo.locale);
       return userInfo;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletFetchSessionUserData(
+    { dispatch },
+    { shouldSkipUserInfo = false } = {}
+  ) {
+    try {
+      const promises = [];
+      if (!shouldSkipUserInfo) {
+        promises.push(dispatch('walletFetchSessionUserInfo'));
+      }
+      promises.push(dispatch('walletFetchFollowees'));
+      await Promise.all(promises);
+      await dispatch('fetchWalletEvents');
     } catch (error) {
       throw error;
     }
@@ -447,10 +508,7 @@ const actions = {
         from: address,
       };
       await this.$api.post(postUserV2Login(), data);
-      await Promise.all([
-        dispatch('walletFetchSessionUserInfo', address),
-        dispatch('walletFetchFollowees'),
-      ]);
+      await dispatch('walletFetchSessionUserData');
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
@@ -469,6 +527,7 @@ const actions = {
     try {
       commit(WALLET_SET_USER_INFO, null);
       commit(WALLET_SET_FOLLOWEES, []);
+      commit(WALLET_SET_FOLLOWERS, []);
       commit(WALLET_SET_EVENTS, []);
       commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
       await this.$api.post(postUserV2Logout());
@@ -476,9 +535,9 @@ const actions = {
       throw error;
     }
   },
-  async walletUpdateEmail({ state, commit }, email) {
+  async walletUpdateEmail({ commit }, { email, followee }) {
     try {
-      await this.$api.$post(postUserV2WalletEmail(email));
+      await this.$api.$post(postUserV2WalletEmail({ email, followee }));
       commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -486,9 +545,12 @@ const actions = {
       throw error;
     }
   },
-  async walletVerifyEmail({ state, commit, getters }, { wallet, token }) {
+  async walletVerifyEmail(
+    { state, commit, getters },
+    { wallet, token, followee }
+  ) {
     try {
-      await this.$api.$put(putUserV2WalletEmail(wallet, token));
+      await this.$api.$put(putUserV2WalletEmail({ wallet, token, followee }));
       if (getters.walletIsMatchedSession) {
         commit(WALLET_SET_USER_INFO, {
           email: state.emailUnverified,
@@ -514,6 +576,24 @@ const actions = {
       throw error;
     } finally {
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, false);
+    }
+  },
+  async walletFetchFollowers({ state, commit, dispatch }) {
+    if (!state.loginAddress) {
+      await dispatch('signLogin');
+    }
+    try {
+      if (state.isFetchingFollowers) return;
+      commit(WALLET_SET_FOLLOWERS_FETCHING_STATE, true);
+      const { followers } = await this.$axios.$get(getUserV2Followers());
+      commit(WALLET_SET_FOLLOWERS, followers);
+      if (followers.length) {
+        dispatch('lazyGetUserInfoByAddresses', followers);
+      }
+    } catch (error) {
+      commit(WALLET_SET_FOLLOWERS, []);
+    } finally {
+      commit(WALLET_SET_FOLLOWERS_FETCHING_STATE, false);
     }
   },
   async walletFollowCreator({ state, commit }, creator) {

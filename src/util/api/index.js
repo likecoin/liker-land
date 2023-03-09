@@ -146,10 +146,10 @@ export const getChainNFTMetadataEndpoint = (classId, nftId) =>
   `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/nfts/${classId}/${nftId}`;
 
 export const getTopCollectorOfUser = (creator, count = 5) =>
-  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?pagination.limit=${count}&reverse=true&creator=${creator}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
+  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?pagination.limit=${count}&price_by=class&creator=${creator}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
 export const getTopCreatorOfUser = (collector, count = 5) =>
-  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?pagination.limit=${count}&reverse=true&collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
+  `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?pagination.limit=${count}&price_by=class&collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false`;
 
 export const getChainNFTClassListingEndpoint = classId =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`;
@@ -304,12 +304,12 @@ export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';
 
-export const postUserV2WalletEmail = email => {
-  const qsPayload = { email };
+export const postUserV2WalletEmail = ({ email, followee }) => {
+  const qsPayload = { email, followee };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };
-export const putUserV2WalletEmail = (wallet, token) => {
-  const qsPayload = { wallet, token };
+export const putUserV2WalletEmail = ({ wallet, token, followee }) => {
+  const qsPayload = { wallet, token, followee };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };
 
@@ -322,6 +322,7 @@ export const postUserV2DisplayState = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
 export const getUserV2LocaleURL = () => `/api/v2/users/locale`;
 export const getUserV2Followees = () => `/api/v2/users/followees`;
+export const getUserV2Followers = () => `/api/v2/users/followers`;
 export const postUserV2Followees = creator => {
   const qsPayload = { creator };
   return `/api/v2/users/followees?${querystring.stringify(qsPayload)}`;

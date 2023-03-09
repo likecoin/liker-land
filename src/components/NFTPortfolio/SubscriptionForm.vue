@@ -264,7 +264,10 @@ export default {
 
       this.isLoading = true;
       try {
-        await this.walletUpdateEmail(this.email);
+        await this.walletUpdateEmail({
+          email: this.email,
+          followee: this.creatorWalletAddress,
+        });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );
@@ -308,7 +311,10 @@ export default {
       this.shouldShowAlertDialog = true;
       try {
         this.isLoading = true;
-        await this.walletUpdateEmail(this.walletEmailUnverified);
+        await this.walletUpdateEmail({
+          email: this.walletEmailUnverified,
+          followee: this.creatorWalletAddress,
+        });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );
@@ -329,7 +335,10 @@ export default {
       );
       try {
         this.isLoading = true;
-        await this.walletUpdateEmail(this.walletEmailUnverified);
+        await this.walletUpdateEmail({
+          email: this.walletEmailUnverified,
+          followee: this.creatorWalletAddress,
+        });
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );

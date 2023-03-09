@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { authenticateV2Login } = require('../../../middleware/auth');
 const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
-const { isValidAddress } = require('../../../util/cosmos');
+const { isValidFollowee } = require('../../../util/cosmos');
 const {
   db,
   FieldValue,
@@ -46,7 +46,7 @@ router.post('/followees', authenticateV2Login, async (req, res, next) => {
     setPrivateCacheHeader(res);
     const { user } = req.session;
     const { creator } = req.query;
-    if (!isValidAddress(creator) || user === creator) {
+    if (!isValidFollowee(user, creator)) {
       res.status(400).send('INVALID_CREATOR_ADDRESS');
       return;
     }
@@ -91,7 +91,7 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
     setPrivateCacheHeader(res);
     const { user } = req.session;
     const { creator } = req.query;
-    if (!isValidAddress(creator) || user === creator) {
+    if (!isValidFollowee(user, creator)) {
       res.status(400).send('INVALID_CREATOR_ADDRESS');
       return;
     }

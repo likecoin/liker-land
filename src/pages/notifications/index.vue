@@ -14,7 +14,7 @@
       <Label
         preset="h5"
         class="text-like-green mb-[8px]"
-        :text="$t('event_list_page_notifications', { number: getNotificationCount })"
+        :text="$tc('event_list_page_notifications', getNotificationCount, { number: getNotificationCount })"
       >
         <template #prepend>
           <IconBell />

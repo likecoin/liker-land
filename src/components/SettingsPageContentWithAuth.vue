@@ -1,5 +1,5 @@
 <template>
-  <div v-if="walletHasLoggedIn">
+  <div v-if="walletIsMatchedSession">
     <slot />
   </div>
   <div v-else class="flex flex-col justify-center flex-grow">

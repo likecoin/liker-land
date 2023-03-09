@@ -27,4 +27,24 @@ export function fisherShuffle(arr) {
   return arr;
 }
 
+export function escapeCSVField(field) {
+  if (field.includes('"') || field.includes(',')) {
+    return `"${field.replace(/"/g, '""')}"`;
+  }
+  return field;
+}
+
+export function downloadCSV(csvString, filename) {
+  const csvBlob = new Blob([csvString], {
+    type: 'text/csv;charset=utf-8;',
+  });
+
+  const csvUrl = URL.createObjectURL(csvBlob);
+  const hiddenLink = document.createElement('a');
+  hiddenLink.href = csvUrl;
+  hiddenLink.target = '_blank';
+  hiddenLink.download = filename;
+  hiddenLink.click();
+}
+
 export default sleep;

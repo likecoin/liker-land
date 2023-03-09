@@ -27,7 +27,7 @@
           v-if="nftModelURL"
           :alt="nftClassCollectionName"
           :src="nftModelURL"
-          class="mt-[12px]"
+          class="mt-[12px] w-full h-[300px] max-h-[30vh]"
           auto-rotate
           auto-rotate-delay="500"
           xr-environment
@@ -320,7 +320,9 @@ export default {
       switch (method) {
         case 'crypto': {
           if (!this.getAddress) {
-            const isConnected = await this.connectWallet();
+            const isConnected = await this.connectWallet({
+              shouldSkipLogin: true,
+            });
             if (!isConnected) return;
           }
           logTrackerEvent(

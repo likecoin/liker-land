@@ -12,7 +12,7 @@
     </div>
     <template v-else>
       <!-- UserStat -->
-      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full max-w-[736px]">
+      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full max-w-[860px]">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
@@ -38,6 +38,12 @@
             />
           </template>
         </NFTPortfolioTopUsersList>
+        <div v-if="walletHasLoggedIn" class="flex items-center justify-center mt-[16px]">
+          <div
+            class="underline transition-all duration-75 cursor-pointer text-[14px] font-600 text-dark-gray hover:text-medium-gray"
+            @click="handleClickFollowers"
+          >{{ $t('portfolio_follower_title') }}</div>
+        </div>
       </div>
 
       <!-- Main -->
@@ -87,6 +93,14 @@
       </NFTPortfolioMainView>
 
     </template>
+
+    <FollowerDialog
+      :is-open-followers-dialog="isOpenFollowersDialog"
+      :wallet-is-fetching-followers="walletIsFetchingFollowers"
+      :populated-followers="populatedFollowers"
+      @close="isOpenFollowersDialog = false"
+      @on-export-followers="handleClickExportFollowerList"
+    />
   </Page>
 </template>
 
@@ -99,6 +113,7 @@ import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'MyDashboardPage',
@@ -106,6 +121,7 @@ export default {
   mixins: [
     walletMixin,
     createPortfolioMixin({ shouldApplyDisplayState: false }),
+    alertMixin,
   ],
   head() {
     const title = this.$t('dashboard_title');
@@ -139,6 +155,7 @@ export default {
   data() {
     return {
       topRankedUsers: [],
+      isOpenFollowersDialog: false,
     };
   },
   computed: {
@@ -247,6 +264,34 @@ export default {
           params: { id: this.wallet },
         })
       );
+    },
+    async handleClickFollowers() {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        'MyDashboard_followers_click',
+        `${this.wallet}`,
+        1
+      );
+      this.isOpenFollowersDialog = true;
+      await this.walletFetchFollowers();
+    },
+    async handleClickExportFollowerList() {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        'MyDashboard_followers_export_click',
+        `${this.wallet}`,
+        1
+      );
+      try {
+        await this.exportFollowerList();
+        this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.alertPromptError(error.toString());
+      }
     },
   },
 };

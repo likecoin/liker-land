@@ -79,10 +79,10 @@ export const createPortfolioMixin = ({
       return this.getNFTListMapByAddress(this.wallet);
     },
     nftClassListOfCollected() {
-      return this.nftClassListMap?.collected || [];
+      return this.isLoading ? [] : this.nftClassListMap?.collected || [];
     },
     nftClassListOfCreated() {
-      return this.nftClassListMap?.created || [];
+      return this.isLoading ? [] : this.nftClassListMap?.created || [];
     },
     nftClassMapOfWritingNft() {
       const nftClassMapOfWritingNft = Array.from(this.allNFTClassMap.values())
@@ -410,7 +410,7 @@ export const createPortfolioMixin = ({
     async loadNFTListByAddress(address) {
       const fetchPromise = Promise.all([
         this.fetchNFTListByAddress(address),
-        // this.fetchNFTDisplayStateListByAddress(address),
+        this.fetchNFTDisplayStateListByAddress(address),
       ]);
       if (!this.getNFTListMapByAddress(address)) {
         this.isLoading = true;
