@@ -2,17 +2,7 @@
   <div class="absolute left-[50%] translate-x-[-50%] flex items-center justify-center mx-auto">
     <!-- Square gem -->
     <div
-      v-if="level !== undefined && level < 13"
-      class="w-[24px] h-[24px]"
-    >
-      <ToolTips :tool-tip-text="name">
-        <img :src="levelImgSrc" :title="name" :alt="name">
-      </ToolTips>
-    </div>
-
-    <!-- Spark background -->
-    <div
-      v-if="level !== undefined && level >= 13"
+      v-if="level !== undefined"
       class="relative flex items-center justify-center"
     >
       <div
@@ -22,7 +12,13 @@
           <img :src="levelImgSrc" :title="name" :alt="name">
         </ToolTips>
       </div>
-      <img :src="sparkImgSrc" :title="name" :alt="name">
+      <!-- Spark background -->
+      <img
+        v-if="level >= 13"
+        :src="sparkImgSrc"
+        :title="name"
+        :alt="name"
+      >
     </div>
 
     <!-- Gem line -->
@@ -31,13 +27,15 @@
 </template>
 
 <script>
+import { NFT_BOOK } from '@/constant';
+
 const getLevelImg = require.context('./level/', false, /\.png$/);
 const getSparkImg = require.context('./spark/', false, /\.png$/);
 
 export default {
   props: {
     level: {
-      type: Number,
+      type: [Number, String],
       default: 0,
     },
     name: {
@@ -64,6 +62,9 @@ export default {
       ].concat(this.colorClasses);
     },
     filename() {
+      if (this.level === NFT_BOOK) {
+        return './book.png';
+      }
       return `./${this.level >= 10 ? this.level : `0${this.level}`}.png`;
     },
     levelImgSrc() {

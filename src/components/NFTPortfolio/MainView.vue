@@ -38,19 +38,52 @@
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
-          'self-stretch justify-end gap-[8px] hidden desktop:flex',
+          'self-stretch justify-end gap-[8px] items-center hidden desktop:flex',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems
           }
         ]"
       >
+        <div class="text-[8] text-medium-gray font-500">{{ $t('order_menu_filter_by') }}</div>
+        <!-- NFT Type Filter -->
+        <Dropdown>
+          <template v-slot:trigger="{ toggle }">
+            <ButtonV2
+              :text="typeFilterLabelText"
+              preset="tertiary"
+              size="mini"
+              @click="toggle"
+            >
+              <template #append>
+                <IconArrowDown class="w-[12px]" />
+              </template>
+            </ButtonV2>
+          </template>
+          <MenuList>
+            <MenuItem
+              v-for="{ value, label } in nftTypeOptions"
+              :key="value"
+              :value="value"
+              :label="label"
+              label-align="left"
+              :selected-value="portfolioItemsTypeFiltering"
+              @select="handlePortfolioTypeChange"
+            />
+          </MenuList>
+        </Dropdown>
+        <!-- Creator Filter -->
         <Dropdown v-if="isPortfolioTabCollectedActive">
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
-              :text="$t('filter_menu_creator')"
-              preset="plain"
+              :text="creatorFilterLabelText"
+              preset="tertiary"
+              size="mini"
               @click="toggle"
-            />
+            >
+              <template #append>
+                <IconArrowDown class="w-[12px]" />
+              </template>
+            </ButtonV2>
           </template>
           <MenuList :has-padding="false">
             <MenuItem
@@ -58,7 +91,7 @@
               :label="$t('filter_menu_reset')"
               label-align="center"
               :selected-value="''"
-              @select="handlePortfolioFilteringChange"
+              @select="handlePortfolioCreatorChange"
             />
             <MenuList
               class="max-h-[270px] overflow-y-auto"
@@ -73,7 +106,7 @@
                   'font-600 text-like-green': user.isSelected,
                 }"
                 label-align="left"
-                @select="handlePortfolioFilteringChange"
+                @select="handlePortfolioCreatorChange"
               >
                 <template #label-prepend>
                   <IdentityAvatar
@@ -95,11 +128,13 @@
             </MenuList>
           </MenuList>
         </Dropdown>
+        <div class="text-[8] text-medium-gray font-500">{{ $t('order_menu_sort_by') }}</div>
         <Dropdown>
           <template v-slot:trigger="{ toggle }">
             <ButtonV2
               :text="portfolioItemsSortingLabel"
-              preset="plain"
+              preset="tertiary"
+              size="mini"
               @click="toggle"
             >
               <template #append>
@@ -128,7 +163,7 @@
       </div>
 
       <NFTPagePrimitiveDisclaimer
-        v-if="isPortfolioTabOtherActive"
+        v-if="isPortfolioOtherFilterActive"
         class="w-full"
         :is-portfolio="true"
       />
@@ -203,7 +238,7 @@
 import debounce from 'lodash.debounce';
 import MagicGrid from 'magic-grid';
 
-import { NFT_CLASS_LIST_SORTING } from '~/util/nft';
+import { NFT_CLASS_LIST_SORTING, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
@@ -260,7 +295,15 @@ export default {
       type: Array,
       default: () => [],
     },
-    portfolioItemsFiltering: {
+    portfolioItemsCreatorFiltering: {
+      type: Array,
+      default: () => [],
+    },
+    portfolioItemsTypeFiltering: {
+      type: String,
+      required: true,
+    },
+    portfolioItemsTypeFilteringOptions: {
       type: Object,
       default: () => ({}),
     },
@@ -296,15 +339,12 @@ export default {
     isPortfolioTabCreatedActive() {
       return this.portfolioTab === tabOptions.created;
     },
-    isPortfolioTabOtherActive() {
-      return this.portfolioTab === tabOptions.other;
-    },
 
     // Filtering
     portfolioCollectedCreatorListWithSorting() {
       return this.portfolioCollectedCreatorList
         .map(creator => {
-          const isSelected = this.portfolioItemsFiltering.creator.includes(
+          const isSelected = this.portfolioItemsCreatorFiltering.includes(
             creator.id
           );
           return {
@@ -322,6 +362,29 @@ export default {
           }
           return 0;
         });
+    },
+    creatorFilterLabelText() {
+      const isSelected = this.portfolioCollectedCreatorListWithSorting.filter(
+        creator => creator.isSelected
+      );
+      return isSelected.length
+        ? this.$tc('filter_menu_creator_selected', isSelected.length, {
+            num: isSelected.length,
+          })
+        : this.$t('filter_menu_creator');
+    },
+    nftTypeOptions() {
+      return Object.values(this.portfolioItemsTypeFilteringOptions).map(
+        value => ({ value, label: this.getPortfolioTypeFilteringLabel(value) })
+      );
+    },
+    typeFilterLabelText() {
+      return this.getPortfolioTypeFilteringLabel(
+        this.portfolioItemsTypeFiltering
+      );
+    },
+    isPortfolioOtherFilterActive() {
+      return this.portfolioItemsTypeFiltering === 'OTHER_NFT';
     },
 
     // Sorting
@@ -352,13 +415,6 @@ export default {
           value: tabOptions.created,
         },
       ];
-
-      if (this.isShowOtherTab) {
-        items.push({
-          text: this.$t('nft_portfolio_page_label_other'),
-          value: tabOptions.other,
-        });
-      }
 
       return items.map(item => ({
         type: 'item',
@@ -431,12 +487,33 @@ export default {
           return '';
       }
     },
+    getPortfolioTypeFilteringLabel(typeFiltering) {
+      switch (typeFiltering) {
+        case NFT_TYPE_FILTER_OPTIONS.ALL:
+          return this.$t('nft_type_all_NFTs');
+
+        case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
+          return this.$t('nft_type_writing_NFT');
+
+        case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
+          return this.$t('nft_type_book');
+
+        case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
+          return this.$t('nft_type_other');
+
+        default:
+          return '';
+      }
+    },
     handlePortfolioSortingChange(value) {
       const [sorting, order] = value.split('-');
       this.$emit('portfolio-change-sorting', { sorting, order });
     },
-    handlePortfolioFilteringChange(value) {
-      this.$emit('portfolio-change-filtering', { type: 'creator', value });
+    handlePortfolioCreatorChange(value) {
+      this.$emit('portfolio-change-creator', { value });
+    },
+    handlePortfolioTypeChange(value) {
+      this.$emit('portfolio-change-type', { value });
     },
     handleTabChange(tab) {
       this.$emit('portfolio-change-tab', tab);

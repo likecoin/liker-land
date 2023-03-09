@@ -1,5 +1,5 @@
 <template>
-  <NFTGemWrapper :class-id="classId">
+  <NFTGemWrapper :is-nft-book="isNftBook" :class-id="classId">
     <template v-slot="gem">
       <NFTPortfolioCard
         :gem-level="gem.level"
@@ -159,6 +159,10 @@ export default {
     displayState: {
       type: String,
       default: NFT_DISPLAY_STATE.DEFAULT,
+    },
+    isNftBook: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

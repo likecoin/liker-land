@@ -99,14 +99,17 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
-        :portfolio-items-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-items-creator-filtering="nftCreatorFilter"
+        :portfolio-items-type-filtering="nftTypeFilter"
+        :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
         :is-show-other-tab="isShowOtherTab"
         :is-narrow="true"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
-        @portfolio-change-filtering="handleNFTClassListFilteringChange"
+        @portfolio-change-creator="handleNFTClassListCreatorChange"
+        @portfolio-change-type="handleNFTClassListTypeChange"
         @infinite-scroll="handleInfiniteScroll"
       />
 
@@ -200,27 +203,9 @@ export default {
         if (
           // If collected tab is empty
           this.isCurrentTabCollected &&
-          !this.nftClassListOfCollectedExcludedOther.length
+          !this.nftClassListOfFilteredCollectedByType.length
         ) {
-          if (this.nftClassListOfOther.length) {
-            // Go to other tab if not empty
-            this.changeTab(tabOptions.other);
-          } else {
-            // Go to created tab if other tab is empty
-            this.changeTab(tabOptions.created);
-          }
-        } else if (
-          // If other tab is empty
-          this.isCurrentTabOther &&
-          !this.nftClassListOfOther.length
-        ) {
-          if (this.nftClassListOfCollectedExcludedOther.length) {
-            // Go to collected tab if not empty
-            this.changeTab(tabOptions.other);
-          } else {
-            // Go to created tab if collected tab is empty
-            this.changeTab(tabOptions.created);
-          }
+          this.changeTab(tabOptions.created);
         }
       }
     },
@@ -301,9 +286,6 @@ export default {
             1
           );
 
-          break;
-        case tabOptions.other:
-          logTrackerEvent(this, 'UserPortfolio', 'GoOtherTab', this.wallet, 1);
           break;
 
         default:

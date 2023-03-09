@@ -162,6 +162,10 @@ export const NFT_GEM_NAME = [
   'Diamond',
 ];
 
+export const NFT_BOOK = 'NFT_BOOK';
+
+export const NFT_GEM_NAME_BOOK = 'NFT-Book';
+
 export const ROUGH_LIKE_TO_USD_PRICE = 0.01;
 
 export const LOGIN_MESSAGE = 'Login';

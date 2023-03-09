@@ -3,13 +3,16 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
+  NFT_TYPE_FILTER_OPTIONS,
   checkIsWritingNFT,
+  checkIsNFTBook,
 } from '~/util/nft';
 import {
   getTopCollectorOfUser,
   getTopCreatorOfUser,
   getIdenticonAvatar,
 } from '~/util/api';
+
 import clipboardMixin from '~/mixins/clipboard';
 import userInfoMixin from '~/mixins/user-info';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -17,13 +20,12 @@ import { logTrackerEvent } from '~/util/EventLogger';
 export const tabOptions = {
   collected: 'collected',
   created: 'created',
-  other: 'other',
 };
 const DEFAULT_TAB = tabOptions.collected;
 
 const ITEMS_PER_PAGE = 10;
 
-export const createPorfolioMixin = ({
+export const createPortfolioMixin = ({
   shouldApplyDisplayState = true,
 } = {}) => ({
   tabOptions,
@@ -31,7 +33,6 @@ export const createPorfolioMixin = ({
   data() {
     return {
       isLoading: true,
-      isInitialTabOther: this.$route.query.tab === tabOptions.other,
       nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
       nftClassListOfCollectedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCollectedShowCount: ITEMS_PER_PAGE,
@@ -44,6 +45,7 @@ export const createPorfolioMixin = ({
       nftCreatorFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
+      nftTypeFilter: NFT_TYPE_FILTER_OPTIONS.ALL,
     };
   },
   computed: {
@@ -66,11 +68,12 @@ export const createPorfolioMixin = ({
     isCurrentTabCreated() {
       return this.currentTab === tabOptions.created;
     },
-    isCurrentTabOther() {
-      return this.currentTab === tabOptions.other;
-    },
-    isShowOtherTab() {
-      return this.isInitialTabOther || !!this.nftClassListOfOther.length;
+    allNFTClassMap() {
+      return new Map(
+        [...this.nftClassListOfCreated, ...this.nftClassListOfCollected].map(
+          nft => [nft.classId, nft]
+        )
+      );
     },
     nftClassListMap() {
       return this.getNFTListMapByAddress(this.wallet);
@@ -81,37 +84,124 @@ export const createPorfolioMixin = ({
     nftClassListOfCreated() {
       return this.nftClassListMap?.created || [];
     },
+    nftClassMapOfWritingNft() {
+      const nftClassMapOfWritingNft = Array.from(this.allNFTClassMap.values())
+        .filter(nft => {
+          const classMetadata = this.getNFTClassMetadataById(nft.classId);
+          const isWritingNFT = checkIsWritingNFT(classMetadata);
+          return isWritingNFT;
+        })
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
+      return nftClassMapOfWritingNft;
+    },
+    nftClassMapOfNFTBook() {
+      const nftClassMapOfNFTBook = Array.from(this.allNFTClassMap.values())
+        .filter(nft => {
+          const classMetadata = this.getNFTClassMetadataById(nft.classId);
+          const isLikecoinChainNFTBook = checkIsNFTBook(classMetadata);
+          return isLikecoinChainNFTBook;
+        })
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
+      return nftClassMapOfNFTBook;
+    },
     nftClassMapOfOther() {
-      const allNFTClassMap = new Map(
-        [...this.nftClassListOfCreated, ...this.nftClassListOfCollected].map(
-          nft => [nft.classId, nft]
+      const nftClassMapOfOther = Array.from(this.allNFTClassMap.values())
+        .filter(
+          nft =>
+            !this.nftClassMapOfWritingNft.has(nft.classId) &&
+            !this.nftClassMapOfNFTBook.has(nft.classId)
         )
-      );
-
-      const nftClassMapOfOther = new Map();
-      allNFTClassMap.forEach(nft => {
-        if (!checkIsWritingNFT(this.getNFTClassMetadataById(nft.classId))) {
-          nftClassMapOfOther.set(nft.classId, nft);
-        }
-      });
-
+        .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfOther;
     },
-    nftClassListOfOther() {
-      return [...this.nftClassMapOfOther.values()];
+    nftTypeFilteringOptions() {
+      const currentClassList =
+        this.currentTab === tabOptions.collected
+          ? this.nftClassListOfCollected
+          : this.nftClassListOfCreated;
+
+      const filteredOptions = Object.entries(NFT_TYPE_FILTER_OPTIONS)
+        .filter(([key]) => {
+          switch (key) {
+            case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
+              return currentClassList.some(({ classId }) =>
+                this.nftClassMapOfWritingNft.has(classId)
+              );
+            case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
+              return currentClassList.some(({ classId }) =>
+                this.nftClassMapOfNFTBook.has(classId)
+              );
+            case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
+              return currentClassList.some(({ classId }) =>
+                this.nftClassMapOfOther.has(classId)
+              );
+            case NFT_TYPE_FILTER_OPTIONS.ALL:
+              return true;
+            default:
+              return false;
+          }
+        })
+        .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+      return filteredOptions;
     },
-    nftClassListOfCollectedExcludedOther() {
-      return this.nftClassListOfCollected.filter(
-        ({ classId }) => !this.nftClassMapOfOther.has(classId)
-      );
+    nftClassListOfFilteredCollectedByType() {
+      let filteredCollectedList;
+      switch (this.nftTypeFilter) {
+        case NFT_TYPE_FILTER_OPTIONS.ALL:
+          filteredCollectedList = this.nftClassListOfCollected;
+          break;
+
+        case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
+          filteredCollectedList = this.nftClassListOfCollected.filter(
+            ({ classId }) => this.nftClassMapOfWritingNft.has(classId)
+          );
+          break;
+        case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
+          filteredCollectedList = this.nftClassListOfCollected.filter(
+            ({ classId }) => this.nftClassMapOfNFTBook.has(classId)
+          );
+          break;
+        case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
+          filteredCollectedList = this.nftClassListOfCollected.filter(
+            ({ classId }) => this.nftClassMapOfOther.has(classId)
+          );
+          break;
+
+        default:
+          break;
+      }
+      return filteredCollectedList;
     },
-    nftClassListOfCreatedExcludedOther() {
-      return this.nftClassListOfCreated.filter(
-        ({ classId }) => !this.nftClassMapOfOther.has(classId)
-      );
+    nftClassListOfFilteredCreatedByType() {
+      let filteredCreatedList;
+      switch (this.nftTypeFilter) {
+        case NFT_TYPE_FILTER_OPTIONS.ALL:
+          filteredCreatedList = this.nftClassListOfCreated;
+          break;
+
+        case NFT_TYPE_FILTER_OPTIONS.WRITING_NFT:
+          filteredCreatedList = this.nftClassListOfCreated.filter(
+            ({ classId }) => this.nftClassMapOfWritingNft.has(classId)
+          );
+          break;
+        case NFT_TYPE_FILTER_OPTIONS.NFT_BOOK:
+          filteredCreatedList = this.nftClassListOfCreated.filter(
+            ({ classId }) => this.nftClassMapOfNFTBook.has(classId)
+          );
+          break;
+        case NFT_TYPE_FILTER_OPTIONS.OTHER_NFT:
+          filteredCreatedList = this.nftClassListOfCreated.filter(
+            ({ classId }) => this.nftClassMapOfOther.has(classId)
+          );
+          break;
+
+        default:
+          break;
+      }
+      return filteredCreatedList;
     },
-    nftClassListOfFilteredCollectedExcludedOther() {
-      let list = this.nftClassListOfCollectedExcludedOther;
+    nftClassListOfFilteredCollectedByCreator() {
+      let list = this.nftClassListOfFilteredCollectedByType;
       if (this.nftCreatorFilter.length) {
         list = list.filter(({ classId }) => {
           const owner = this.getNFTClassMetadataById(classId).iscn_owner;
@@ -122,7 +212,7 @@ export const createPorfolioMixin = ({
     },
     nftClassListOfCollectedInOrder() {
       return this.getNFTClassListSorterForCollected({
-        list: this.nftClassListOfFilteredCollectedExcludedOther,
+        list: this.nftClassListOfFilteredCollectedByCreator,
         collectorWallet: this.wallet,
         sorting: this.nftClassListOfCollectedSorting,
         order: this.nftClassListOfCollectedSortingOrder,
@@ -131,24 +221,15 @@ export const createPorfolioMixin = ({
     },
     nftClassListOfCreatedInOrder() {
       return this.getNFTClassIdListSorterForCreated({
-        list: this.nftClassListOfCreatedExcludedOther,
+        list: this.nftClassListOfFilteredCreatedByType,
         collectorWallet: this.wallet,
         sorting: this.nftClassListOfCreatedSorting,
         order: this.nftClassListOfCreatedSortingOrder,
         shouldApplyDisplayState,
       });
     },
-    nftClassListOfOtherInOrder() {
-      return this.getNFTClassListSorterForCollected({
-        list: this.nftClassListOfOther,
-        collectorWallet: this.wallet,
-        sorting: this.nftClassListOfOtherSorting,
-        order: this.nftClassListOfOtherSortingOrder,
-        shouldApplyDisplayState,
-      });
-    },
     nftCreatorAddressListOfCollected() {
-      const ownerMap = this.nftClassListOfCollectedExcludedOther.reduce(
+      const ownerMap = this.nftClassListOfFilteredCollectedByType.reduce(
         (acc, { classId }) => {
           const owner = this.getNFTClassMetadataById(classId).iscn_owner;
           acc[owner] = acc[owner] || 0;
@@ -178,9 +259,6 @@ export const createPorfolioMixin = ({
         case tabOptions.created:
           return this.nftClassListOfCreatedShowCount;
 
-        case tabOptions.other:
-          return this.nftClassListOfOtherShowCount;
-
         default:
           return 0;
       }
@@ -192,9 +270,6 @@ export const createPorfolioMixin = ({
 
         case tabOptions.created:
           return this.nftClassListOfCreatedInOrder;
-
-        case tabOptions.other:
-          return this.nftClassListOfOtherInOrder;
 
         default:
           return [];
@@ -208,9 +283,6 @@ export const createPorfolioMixin = ({
         case tabOptions.created:
           return this.nftClassListOfCreatedSorting;
 
-        case tabOptions.other:
-          return this.nftClassListOfOtherSorting;
-
         default:
           return NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP;
       }
@@ -222,9 +294,6 @@ export const createPorfolioMixin = ({
 
         case tabOptions.created:
           return this.nftClassListOfCreatedSortingOrder;
-
-        case tabOptions.other:
-          return this.nftClassListOfOtherSortingOrder;
 
         default:
           return NFT_CLASS_LIST_SORTING_ORDER.DESC;
@@ -269,19 +338,6 @@ export const createPorfolioMixin = ({
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.ASC,
             },
-            {
-              sorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
-              order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
-            },
-            {
-              sorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
-              order: NFT_CLASS_LIST_SORTING_ORDER.ASC,
-            }
-          );
-          break;
-
-        case tabOptions.other:
-          options.push(
             {
               sorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
@@ -348,13 +404,6 @@ export const createPorfolioMixin = ({
           );
           break;
 
-        case tabOptions.other:
-          this.nftClassListOfOtherShowCount = Math.min(
-            this.nftClassListOfOtherShowCount + ITEMS_PER_PAGE,
-            this.nftClassListOfOther.length
-          );
-          break;
-
         default:
       }
     },
@@ -405,32 +454,38 @@ export const createPorfolioMixin = ({
     changeTab(tab) {
       if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
+      this.nftTypeFilter = NFT_TYPE_FILTER_OPTIONS.ALL;
+      this.nftCreatorFilter = [];
     },
-    handleNFTClassListFilteringChange({ type, value }) {
+    handleNFTClassListCreatorChange({ value }) {
       logTrackerEvent(
         this,
         'portfolio',
-        `portfolio_filter_${type}`,
-        `Filter portfolio item by ${type}`,
+        `portfolio_filter_creator`,
+        `Filter portfolio item by creator`,
         1
       );
-      switch (type) {
-        case 'creator':
-          if (!value) {
-            this.nftCreatorFilter = [];
-          } else {
-            const index = this.nftCreatorFilter.indexOf(value);
-            if (index > -1) {
-              this.nftCreatorFilter.splice(index, 1);
-            } else {
-              this.nftCreatorFilter.push(value);
-            }
-          }
-          break;
-
-        default:
-          break;
+      if (!value) {
+        this.nftCreatorFilter = [];
+      } else {
+        const index = this.nftCreatorFilter.indexOf(value);
+        if (index > -1) {
+          this.nftCreatorFilter.splice(index, 1);
+        } else {
+          this.nftCreatorFilter.push(value);
+        }
       }
+    },
+    handleNFTClassListTypeChange({ value }) {
+      logTrackerEvent(
+        this,
+        'portfolio',
+        `portfolio_filter_type`,
+        `Filter portfolio item by ${value}`,
+        1
+      );
+      this.nftTypeFilter = value;
+      this.nftCreatorFilter = [];
     },
     handleNFTClassListSortingChange({ sorting, order }) {
       logTrackerEvent(
@@ -451,11 +506,6 @@ export const createPorfolioMixin = ({
           this.nftClassListOfCreatedSortingOrder = order;
           break;
 
-        case tabOptions.other:
-          this.nftClassListOfOtherSorting = sorting;
-          this.nftClassListOfOtherSortingOrder = order;
-          break;
-
         default:
           break;
       }
@@ -463,4 +513,4 @@ export const createPorfolioMixin = ({
   },
 });
 
-export default createPorfolioMixin();
+export default createPortfolioMixin();

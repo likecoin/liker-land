@@ -20,7 +20,7 @@
         </div>
         <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
 
-          <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="w-full desktop:hidden" />
+          <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="w-full desktop:hidden" />
 
           <!-- Left column -->
           <div
@@ -29,7 +29,7 @@
               { 'laptop:grid-cols-2': isShowPriceSection }
             ]"
           >
-            <NFTGemWrapper :class-id="classId">
+            <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsNFTBook">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
                 :image-bg-color="NFTImageBackgroundColor"
@@ -63,7 +63,7 @@
 
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
-            <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" class="hidden w-full desktop:flex" />
+            <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="hidden w-full desktop:flex" />
             <NFTPagePriceSection
               v-if="isShowPriceSection"
               :nft-price="NFTPrice"

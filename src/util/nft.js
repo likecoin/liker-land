@@ -29,6 +29,13 @@ export const NFT_CLASS_LIST_SORTING_ORDER = {
   DESC: 'DESC',
 };
 
+export const NFT_TYPE_FILTER_OPTIONS = {
+  ALL: 'ALL',
+  WRITING_NFT: 'WRITING_NFT',
+  NFT_BOOK: 'NFT_BOOK',
+  OTHER_NFT: 'OTHER_NFT',
+};
+
 export async function getISCNLib() {
   if (!iscnLib) {
     iscnLib = await import(/* webpackChunkName: "iscn_js" */ '@likecoin/iscn-js');
@@ -179,7 +186,7 @@ export function isValidHttpUrl(string) {
 
 export const nftClassCollectionType = {
   WritingNFT: 'writing-nft',
-  BookNFT: 'book-nft',
+  NFTBook: 'nft_book',
 };
 
 export function getNFTClassCollectionType(classMetadata) {
@@ -188,7 +195,7 @@ export function getNFTClassCollectionType(classMetadata) {
       return nftClassCollectionType.WritingNFT;
 
     case 'nft_book':
-      return nftClassCollectionType.BookNFT;
+      return nftClassCollectionType.NFTBook;
 
     default:
       return '';
@@ -199,6 +206,12 @@ export function checkIsWritingNFT(classMetadata) {
   return (
     getNFTClassCollectionType(classMetadata) ===
     nftClassCollectionType.WritingNFT
+  );
+}
+
+export function checkIsNFTBook(classMetadata) {
+  return (
+    getNFTClassCollectionType(classMetadata) === nftClassCollectionType.NFTBook
   );
 }
 

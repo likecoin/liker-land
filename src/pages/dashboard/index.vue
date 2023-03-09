@@ -51,13 +51,16 @@
         :portfolio-items-sorting="currentNFTClassListSorting"
         :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
         :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
-        :portfolio-items-filtering="{ creator: nftCreatorFilter }"
+        :portfolio-items-creator-filtering="nftCreatorFilter"
+        :portfolio-items-type-filtering="nftTypeFilter"
+        :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
         :is-show-other-tab="isShowOtherTab"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
-        @portfolio-change-filtering="handleNFTClassListFilteringChange"
+        @portfolio-change-creator="handleNFTClassListCreatorChange"
+        @portfolio-change-type="handleNFTClassListTypeChange"
         @infinite-scroll="handleInfiniteScroll"
       >
         <template #tab-bar-prepend>
@@ -92,7 +95,7 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import { createPorfolioMixin, tabOptions } from '~/mixins/portfolio';
+import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
@@ -102,7 +105,7 @@ export default {
   layout: 'default',
   mixins: [
     walletMixin,
-    createPorfolioMixin({ shouldApplyDisplayState: false }),
+    createPortfolioMixin({ shouldApplyDisplayState: false }),
   ],
   head() {
     const title = this.$t('dashboard_title');
@@ -229,9 +232,6 @@ export default {
         case tabOptions.created:
           logTrackerEvent(this, 'MyDashboard', 'GoCreatedTab', this.wallet, 1);
 
-          break;
-        case tabOptions.other:
-          logTrackerEvent(this, 'MyDashboard', 'GoOtherTab', this.wallet, 1);
           break;
 
         default:
