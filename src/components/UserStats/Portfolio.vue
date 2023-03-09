@@ -17,7 +17,7 @@
           <template #prepend>
             <IconPriceMini />
           </template>
-          {{ stats.collectedAmount | formatNumber }}
+          {{ stats.collectedAmount }}
         </Label>
       </ToolTips>
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_created')">
@@ -40,12 +40,7 @@
   </UserStatsController>
 </template>
 <script>
-import { formatNumber } from '~/util/ui';
-
 export default {
-  filters: {
-    formatNumber,
-  },
   props: {
     statWallet: {
       type: String,
