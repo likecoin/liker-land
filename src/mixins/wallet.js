@@ -2,6 +2,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
+import { escapeCSVField, downloadCSV } from '~/util/misc';
 
 export default {
   computed: {
@@ -114,7 +115,7 @@ export default {
         this.$t('portfolio_follower_export_wallet'),
       ];
       const contents = this.populatedFollowers.map(
-        ({ displayName, wallet }) => [this.escapeCSVField(displayName), wallet]
+        ({ displayName, wallet }) => [escapeCSVField(displayName), wallet]
       );
 
       // Convert list to CSV string
@@ -122,23 +123,7 @@ export default {
         .map(row => row.join(','))
         .join('\n')}`;
 
-      const csvBlob = new Blob([csvString], {
-        type: 'text/csv;charset=utf-8;',
-      });
-      // Download CSV file
-      const csvUrl = URL.createObjectURL(csvBlob);
-      const hiddenLink = document.createElement('a');
-      hiddenLink.href = csvUrl;
-      hiddenLink.target = '_blank';
-      hiddenLink.download = 'my-followers.csv';
-      hiddenLink.click();
-    },
-
-    escapeCSVField(field) {
-      if (field.includes('"') || field.includes(',')) {
-        return `"${field.replace(/"/g, '""')}"`;
-      }
-      return field;
+      downloadCSV(csvString, 'my-followers.csv');
     },
   },
 };
