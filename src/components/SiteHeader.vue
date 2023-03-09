@@ -108,9 +108,11 @@
             <template #label-prepend>
               <MenuIcon :type="item.value" />
             </template>
-            <template #label-append>
+            <template
+              v-if="item.value === 'notifications' && getNotificationCount > 0"
+              #label-append
+            >
               <div
-                v-if="item.value === 'notifications'"
                 :class="[
                   'flex',
                   'justify-center',
@@ -123,8 +125,8 @@
                   'py-[4px]'
                 ]"
               >
-                <div class="text-white text-[6px]">
-                  {{ getNotificationCount }}
+                <div class="text-white text-[10px]">
+                  {{ formattedNotificationCount }}
                 </div>
               </div>
             </template>
@@ -190,6 +192,10 @@ export default {
       }
 
       return options;
+    },
+    formattedNotificationCount() {
+      const { getNotificationCount: count } = this;
+      return `${Math.min(count, 99)}${count > 99 ? '+' : ''}`;
     },
   },
   async mounted() {
