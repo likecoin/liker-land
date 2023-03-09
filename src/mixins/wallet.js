@@ -1,6 +1,4 @@
 import { mapActions, mapGetters } from 'vuex';
-
-import { stringify } from 'csv-stringify/lib/sync';
 import { getIdenticonAvatar } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
@@ -111,18 +109,18 @@ export default {
       );
     },
     exportFollowerList() {
-      // Convert list to CSV string
-      const csvHeader = [
+      const header = [
         this.$t('portfolio_follower_export_ID'),
         this.$t('portfolio_follower_export_wallet'),
       ];
-      const csvData = this.populatedFollowers.map(({ displayName, wallet }) => [
-        displayName,
-        wallet,
-      ]);
-      const csvRows = [csvHeader, ...csvData];
+      const contents = this.populatedFollowers.map(
+        ({ displayName, wallet }) => [displayName, wallet]
+      );
 
-      const csvString = stringify(csvRows);
+      // Convert list to CSV string
+      const csvString = `${header.join(',')}\n${contents
+        .map(row => row.join(','))
+        .join('\n')}`;
 
       const csvBlob = new Blob([csvString], {
         type: 'text/csv;charset=utf-8;',
