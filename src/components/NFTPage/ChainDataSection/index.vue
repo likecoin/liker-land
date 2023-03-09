@@ -55,11 +55,11 @@
         class="flex justify-center items-center mb-[24px]"
       >
         <NuxtLink
-          :to="{
+          :to="localeLocation({
             name: 'nft-class-classId',
             params: { classId },
             hash: '#chain-data',
-          }"
+          })"
           class="text-medium-gray underline text-[14px]"
         >
           {{ $t('nft_details_page_label_class_page') }}
