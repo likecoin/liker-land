@@ -311,10 +311,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isShowOtherTab: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     narrowClass() {
