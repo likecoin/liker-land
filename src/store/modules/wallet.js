@@ -444,7 +444,7 @@ const actions = {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ state, commit }) {
+  async walletFetchSessionUserInfo({ state, commit, dispatch }) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
       commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
