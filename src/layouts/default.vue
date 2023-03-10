@@ -1,8 +1,11 @@
 <template>
   <div class="flex flex-col items-stretch min-h-screen">
-    <SiteHeader class="text-like-green" />
+    <SiteHeader
+      v-if="!isInInAppBrowser"
+      class="text-like-green"
+    />
     <nuxt class="flex-grow" />
-    <Footer />
+    <Footer v-if="!isInInAppBrowser" />
     <PortalTarget
       name="dialog"
       multiple
@@ -36,11 +39,13 @@
 </template>
 
 <script>
-import alertMixin from '~/mixins/alert';
 import { mapActions, mapGetters } from 'vuex';
 
+import alertMixin from '~/mixins/alert';
+import inAppMixin from '~/mixins/in-app';
+
 export default {
-  mixins: [alertMixin],
+  mixins: [alertMixin, inAppMixin],
   computed: {
     ...mapGetters(['uiIsOpenCollectModal']),
     getTimeoutSec() {

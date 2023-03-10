@@ -1,10 +1,17 @@
 <template>
-  <Page class="px-[8px]">
+  <Page
+    :class="[
+      'px-[8px]',
+      { 'pt-[32px]': isInInAppBrowser }
+    ]"
+  >
     <div
       v-if="!getAddress"
       class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"
     >
+      <ProgressIndicator v-if="walletIsLoggingIn" />
       <ButtonV2
+        v-else
         preset="tertiary"
         :text="$t('header_button_connect_to_wallet')"
         @click="connectWallet"
@@ -109,19 +116,21 @@ import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import alertMixin from '~/mixins/alert';
+import inAppMixin from '~/mixins/in-app';
 import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
-import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'MyDashboardPage',
   layout: 'default',
   mixins: [
-    walletMixin,
-    createPortfolioMixin({ shouldApplyDisplayState: false }),
     alertMixin,
+    createPortfolioMixin({ shouldApplyDisplayState: false }),
+    inAppMixin,
+    walletMixin,
   ],
   head() {
     const title = this.$t('dashboard_title');

@@ -42,6 +42,7 @@ import {
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
+  WALLET_SET_IS_CONNECTING_WALLET,
   WALLET_SET_EVENT_FETCHING,
 } from '../mutation-types';
 
@@ -52,6 +53,7 @@ let likecoinWalletLib = null;
 const state = () => ({
   isDebug: false,
   address: '',
+  isConnectingWallet: false,
   signer: null,
   connector: null,
   likerInfo: null,
@@ -83,6 +85,9 @@ const mutations = {
   },
   [WALLET_SET_SIGNER](state, signer) {
     state.signer = signer;
+  },
+  [WALLET_SET_IS_CONNECTING_WALLET](state, isConnecting) {
+    state.isConnectingWallet = isConnecting;
   },
   [WALLET_SET_IS_LOGGING_IN](state, isLoggingIn) {
     state.isLoggingIn = isLoggingIn;
@@ -151,7 +156,7 @@ const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
-  walletHasLoggedIn: state => !!state.loginAddress,
+  walletHasLoggedIn: state => !!state.getAddress && !!state.loginAddress,
   walletIsMatchedSession: (state, getters) =>
     getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
@@ -189,7 +194,7 @@ const getters = {
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
   walletHasVerifiedEmail: state => !!state.email,
-  walletIsLoggingIn: state => state.isLoggingIn,
+  walletIsLoggingIn: state => state.isConnectingWallet || state.isLoggingIn,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
 };
@@ -230,6 +235,7 @@ const actions = {
 
   async initWallet({ commit, dispatch }, { method, accounts, offlineSigner }) {
     if (!accounts[0]) return false;
+    commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
     // Listen once per account
     connector.once('account_change', async currentMethod => {
@@ -243,6 +249,7 @@ const actions = {
     const walletAddress = bech32Address || address;
     commit(WALLET_SET_ADDRESS, walletAddress);
     commit(WALLET_SET_SIGNER, offlineSigner);
+    commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     await setLoggerUser(this, { wallet: walletAddress, method });
     catchAxiosError(
       this.$api.$get(getUserInfoMinByAddress(walletAddress)).then(userInfo => {
@@ -284,11 +291,13 @@ const actions = {
     return connector;
   },
 
-  async openConnectWalletModal({ dispatch }, { language } = {}) {
+  async openConnectWalletModal({ commit, dispatch }, { language } = {}) {
+    commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
     const connection = await connector.openConnectionMethodSelectionDialog({
       language,
     });
+    commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     return connection;
   },
 
@@ -318,6 +327,7 @@ const actions = {
   async initIfNecessary({ dispatch }) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
+    console.log('initIfNecessary', connection);
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
       await dispatch('initWalletAndLogin', {
@@ -444,7 +454,7 @@ const actions = {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
-  async walletFetchSessionUserInfo({ state, commit }) {
+  async walletFetchSessionUserInfo({ state, commit, dispatch }) {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
       commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });

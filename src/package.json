@@ -30,7 +30,7 @@
     "@likecoin/iscn-js": "^0.5.2",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",
-    "@likecoin/wallet-connector": "^0.17.3",
+    "@likecoin/wallet-connector": "^0.18.0-alpha.0",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/i18n": "^7.3.1",
     "@nuxtjs/pwa": "^2.6.0",

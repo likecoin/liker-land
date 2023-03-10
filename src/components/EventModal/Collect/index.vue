@@ -13,7 +13,7 @@
     <template #top>
       <NFTPageOwning
         v-if="hasConnectedWallet"
-        class="mb-[10px]"
+        class="mb-[10px] phone:mt-0"
         :collected-count="userCollectedCount"
       />
     </template>
@@ -84,7 +84,7 @@
 
     <template v-if="!uiTxNFTStatus">
       <div class="flex flex-col items-start mb-[28px]">
-        <Separator class="h-[2px] bg-shade-gray self-center" />
+        <Separator class="h-[2px] bg-shade-gray self-center phone:hidden" />
         <Label
           preset="p6"
           align="left"
