@@ -1,5 +1,6 @@
 <template>
-  <NuxtLink
+  <component
+    :is="walletAddress ? 'NuxtLink' : 'div'"
     :class="[
       'flex',
       'phone:flex-col',
@@ -35,7 +36,7 @@
       >{{ userLabel }}</div>
       <Label class="text-like-green" :preset="userLabelSize" align="center">{{ userDisplayName }}</Label>
     </div>
-  </NuxtLink>
+  </component>
 </template>
 
 <script>
@@ -72,6 +73,10 @@ export default {
   },
   computed: {
     toRoute() {
+      if (!this.walletAddress) {
+        return '';
+      }
+
       return this.localeLocation({
         name: 'id',
         params: { id: this.walletAddress },
