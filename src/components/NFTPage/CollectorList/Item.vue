@@ -6,10 +6,10 @@
     <div class="flex items-center justify-between">
       <LinkV2
         class="flex items-center gap-[8px]"
-        :to="localeLocation({
+        :to="owner.id ? localeLocation({
           name: 'id',
           params: { id: owner.id }
-        })"
+        }) : ''"
         @click.native.stop
       >
         <Identity

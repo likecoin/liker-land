@@ -35,7 +35,7 @@
       >
         <NuxtLink
           class="flex items-center text-like-green"
-          :to="localeLocation({ name: 'id', params: { id: follower.wallet } })"
+          :to="follower.wallet ? localeLocation({ name: 'id', params: { id: follower.wallet } }) : ''"
           target="_blank"
         >
           <Identity
