@@ -12,11 +12,6 @@
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-notification' })">
-          <span class="settings-menu__item-title"> {{ $t('settings_notification') }}</span>
-        </NuxtLink>
-      </li>
-      <li>
         <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-language' })">
           <GlobeIcon class="settings-menu__item-title-icon" />
           <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>

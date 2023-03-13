@@ -50,6 +50,8 @@
         />
       </div>
     </form>
+
+    <SettingsNotificationConfig />
   </SettingsPageContentWithAuth>
 </template>
 
@@ -73,7 +75,7 @@ export default {
   computed: {
     ...mapGetters(['walletEmailUnverified']),
     hasEmail() {
-      return this.walletEmail || this.walletEmailUnverified;
+      return !!this.walletEmail || !!this.walletEmailUnverified;
     },
     isDisabledChangingEmail() {
       return !this.newEmail || this.newEmail === this.walletEmailUnverified;
