@@ -59,10 +59,11 @@ import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import alertMixin from '~/mixins/alert';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'SettingsEmailPage',
-  mixins: [alertMixin],
+  mixins: [alertMixin, walletMixin],
   data() {
     return {
       newEmail: '',
