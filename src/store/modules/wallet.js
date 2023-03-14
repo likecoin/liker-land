@@ -499,7 +499,7 @@ const actions = {
       const {
         signed: message,
         signature: { signature, pub_key: publicKey },
-      } = await (state.signer.sign || state.signer.signAmino)(address, payload);
+      } = await state.signer.signAmino(address, payload);
       const data = {
         signature,
         publicKey: publicKey.value,
