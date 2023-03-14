@@ -30,7 +30,7 @@
             :class-id="classId"
             :current-nft-id="nftId"
             :next-nft-id="nftIdCollectNext"
-            :view="nftIsNew ? 'created' : 'collected'"
+            view="collected"
             :price="NFTPrice"
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
@@ -53,7 +53,7 @@
 
         <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
           <!-- NFT Message List -->
-          <div v-if="!nftIsNew" class="col-span-2 flex flex-col items-center gap-[24px]">
+          <div class="col-span-2 flex flex-col items-center gap-[24px]">
             <NFTPageNFTSelect
               class="phone:order-2"
               :nft-collector-collected-count="nftCollectorCollectedCount"
@@ -216,38 +216,6 @@
               </CardV2>
             </client-only> -->
           </div>
-          <!-- NFT Collect CTA -->
-          <div
-            v-if="nftIsNew"
-            class="flex flex-col items-center col-span-2 py-[40px] gap-[24px]"
-          >
-            <h2 class="text-[32px] leading-1_5 text-center">{{ $t('nft_share_page_creator_title') }}</h2>
-            <div class="py-[40px] px-[24px] w-full">
-              <NFTMessage
-                class="w-full"
-                type="purchase"
-                from-type="creator"
-                :from-wallet="iscnOwner"
-                :message="nftCreatorMessageWithParsing"
-                :message-type="'collector'"
-              />
-            </div>
-            <div
-              class="rounded-[18px] p-[2px] bg-cover bg-[url('/images/gradient/like-gradient-lighter-blur.svg')]"
-            >
-              <div class="relative p-[6px] bg-gray-f7 rounded-[16px]">
-                <ButtonV2
-                  :text="$t('nft_details_page_button_collect_now')"
-                  preset="secondary"
-                  @click="handleCollectFromCreatorMessagePreview"
-                >
-                  <template #prepend>
-                    <IconPrice />
-                  </template>
-                </ButtonV2>
-              </div>
-            </div>
-          </div>
         </section>
 
         <Separator class="mx-auto phone:hidden" />
@@ -296,7 +264,7 @@
             :class-id="classId"
             :current-nft-id="nftId"
             :next-nft-id="nftIdCollectNext"
-            :view="nftIsNew ? 'created' : 'collected'"
+            view="collected"
             :price="NFTPrice"
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
@@ -545,6 +513,16 @@ export default {
         currency: 'USD',
         classId: this.classId,
       });
+    }
+  },
+  created() {
+    if (this.nftIsNew && this.isWritingNft) {
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.classId },
+        })
+      );
     }
   },
   methods: {
