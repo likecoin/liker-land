@@ -497,10 +497,13 @@ const actions = {
     };
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
+      const signer = (state.signer.sign || state.signer.signAmino).bind(
+        state.signer
+      );
       const {
         signed: message,
         signature: { signature, pub_key: publicKey },
-      } = await (state.signer.sign || state.signer.signAmino)(address, payload);
+      } = await signer(address, payload);
       const data = {
         signature,
         publicKey: publicKey.value,
