@@ -13,12 +13,6 @@ export default {
     isInInAppBrowser: {
       immediate: true,
       async handler(isInInAppBrowser) {
-        console.log(
-          'openConnectWalletModal',
-          process.server,
-          !isInInAppBrowser,
-          this.walletHasLoggedIn
-        );
         if (process.server || !isInInAppBrowser || this.walletHasLoggedIn) {
           return;
         }
@@ -26,7 +20,6 @@ export default {
           const connection = await this.openConnectWalletModal({
             language: this.$i18n.locale.split('-')[0],
           });
-          console.log('openConnectWalletModal', connection);
           await this.initWalletAndLogin(connection);
         } catch {
           // No-op

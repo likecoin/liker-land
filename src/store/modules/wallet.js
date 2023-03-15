@@ -327,7 +327,6 @@ const actions = {
   async initIfNecessary({ dispatch }) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
-    console.log('initIfNecessary', connection);
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
       await dispatch('initWalletAndLogin', {
