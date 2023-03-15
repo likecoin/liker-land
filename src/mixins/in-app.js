@@ -2,7 +2,10 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { checkIsLikeCoinApp } from '~/util/client';
 
+import walletLoginMixin from '~/mixins/wallet-login';
+
 export default {
+  mixins: [walletLoginMixin],
   computed: {
     ...mapGetters(['walletHasLoggedIn']),
     isInInAppBrowser() {
@@ -16,14 +19,7 @@ export default {
         if (process.server || !isInInAppBrowser || this.walletHasLoggedIn) {
           return;
         }
-        try {
-          const connection = await this.openConnectWalletModal({
-            language: this.$i18n.locale.split('-')[0],
-          });
-          await this.initWalletAndLogin(connection);
-        } catch {
-          // No-op
-        }
+        await this.connectWallet();
       },
     },
   },

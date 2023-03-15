@@ -4,7 +4,10 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 import { escapeCSVField, downloadCSV } from '~/util/misc';
 
+import walletLoginMixin from './wallet-login';
+
 export default {
+  mixins: [walletLoginMixin],
   computed: {
     ...mapGetters([
       'getAddress',
@@ -62,34 +65,10 @@ export default {
   },
   methods: {
     ...mapActions([
-      'openConnectWalletModal',
-      'disconnectWallet',
-      'initWallet',
-      'initWalletAndLogin',
-      'initIfNecessary',
-      'restoreSession',
       'walletFetchLIKEBalance',
-      'signLogin',
       'walletFetchFollowees',
       'walletFetchFollowers',
     ]),
-    async connectWallet({ shouldSkipLogin = false } = {}) {
-      const connection = await this.openConnectWalletModal({
-        language: this.$i18n.locale.split('-')[0],
-      });
-      if (!connection) return false;
-      const { method } = connection;
-      logTrackerEvent(
-        this,
-        'user',
-        `connected_wallet_${method}`,
-        'connected_wallet',
-        1
-      );
-      return shouldSkipLogin
-        ? this.initWallet(connection)
-        : this.initWalletAndLogin(connection);
-    },
     async navigateToMyDashboard() {
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
