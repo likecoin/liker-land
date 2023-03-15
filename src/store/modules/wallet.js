@@ -320,7 +320,7 @@ const actions = {
     const connection = await connector.initIfNecessary();
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWalletAndLogin', {
+      await dispatch('initWallet', {
         accounts,
         offlineSigner,
         method,
