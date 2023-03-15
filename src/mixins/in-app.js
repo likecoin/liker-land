@@ -6,7 +6,7 @@ export default {
   computed: {
     ...mapGetters(['walletHasLoggedIn']),
     isInInAppBrowser() {
-      return this.$route.query['in-app'] !== undefined || checkIsLikeCoinApp();
+      return this.$route.query.in_app !== undefined || checkIsLikeCoinApp();
     },
   },
   watch: {
