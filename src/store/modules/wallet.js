@@ -156,7 +156,7 @@ const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
-  walletHasLoggedIn: state => !!state.getAddress && !!state.loginAddress,
+  walletHasLoggedIn: state => !!state.address && !!state.loginAddress,
   walletIsMatchedSession: (state, getters) =>
     getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
