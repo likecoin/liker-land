@@ -114,7 +114,7 @@
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li>
             <EventModalCollectMethodButton
-              :class="{ 'border-like-cyan': !hasConnectedWallet }"
+              :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_stripe')"
               type="stripe"
               :is-disabled="!canPayByFiat"
