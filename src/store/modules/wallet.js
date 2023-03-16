@@ -22,6 +22,7 @@ import {
   postUserV2WalletEmail,
   putUserV2WalletEmail,
   getNFTEvents,
+  getNFTClassesPartial,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -334,7 +335,7 @@ const actions = {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const [involverRes, mintRes] = await Promise.all([
+    const [involverRes, mockedMintEvents] = await Promise.all([
       this.$api.$get(
         getNFTEvents({
           involver: address,
@@ -345,17 +346,28 @@ const actions = {
         })
       ),
       Array.isArray(followees) && followees.length
-        ? this.$api.$get(
-            getNFTEvents({
-              sender: followees,
-              actionType: 'new_class',
-              limit: WALLET_EVENT_LIMIT,
-              reverse: true,
-            })
-          )
+        ? this.$api
+            .$get(
+              getNFTClassesPartial({
+                owner: followees,
+                limit: WALLET_EVENT_LIMIT,
+                reverse: true,
+              })
+            )
+            .then(({ classes }) =>
+              classes.map(({ id, created_at: timestamp }) => ({
+                // empty strings as placeholders for map key
+                action: 'new_class',
+                class_id: id,
+                nft_id: '',
+                sender: followee,
+                timestamp,
+                tx_hash: '',
+              }))
+            )
         : Promise.resolve({ events: [] }),
     ]);
-    let events = involverRes.events.concat(mintRes.events);
+    let events = involverRes.events.concat(mockedMintEvents);
     events = [
       ...new Map(
         events.map(e => [
