@@ -91,7 +91,7 @@
 import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
 
 import {
-  getLatestNFTClasses,
+  getNFTClassesPartial,
   getTopNFTClasses,
   getISCNRecord,
 } from '~/util/api';
@@ -225,7 +225,7 @@ export default {
           after: new Date(trendingDayString).getTime() / 1000,
         })
       ),
-      this.$axios.$get(getLatestNFTClasses()),
+      this.$axios.$get(getNFTClassesPartial({ reverse: true })),
     ]);
     const [trendingClasses, latestClasses] = [trendingRes, latestRes].map(res =>
       (res.classes || []).filter(
