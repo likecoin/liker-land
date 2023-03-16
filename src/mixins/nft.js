@@ -94,6 +94,7 @@ export default {
       nftISCNContentFingerprints: [],
 
       nftPriceInUSD: undefined,
+      nftPriceInUSDisListingInfo: undefined,
     };
   },
   computed: {
@@ -486,10 +487,11 @@ export default {
     },
     async fetchNFTPrices(classId) {
       try {
-        const { fiatPrice } = await this.$axios.$get(
+        const { fiatPrice, listingInfo } = await this.$axios.$get(
           getStripeFiatPrice({ classId })
         );
         this.nftPriceInUSD = fiatPrice;
+        this.nftPriceInUSDisListingInfo = listingInfo;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -775,7 +777,7 @@ export default {
     async collectNFTWithStripe({ memo = '' }) {
       try {
         const body = { memo };
-        if (this.nftIsUseListingPrice) {
+        if (this.nftPriceInUSDisListingInfo) {
           body.nftId = this.listingInfo.nftId;
           body.seller = this.listingInfo.seller;
         }
