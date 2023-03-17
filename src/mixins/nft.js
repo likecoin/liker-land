@@ -376,7 +376,9 @@ export default {
     nftDisplayState() {
       // should use the address in URL as the subject address when browsing other's profile
       const subjectAddress =
-        this.$route.name === 'id' ? this.$route.params.id : this.getAddress;
+        this.getRouteBaseName(this.$route) === 'id'
+          ? this.$route.params.id
+          : this.getAddress;
       if (
         this.getNFTClassFeaturedSetByAddress(subjectAddress)?.has(this.classId)
       ) {

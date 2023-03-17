@@ -446,7 +446,9 @@ export default {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
     isMessagePage() {
-      return this.$route.name === 'nft-class-classId-nftId-message';
+      return (
+        this.getRouteBaseName(this.$route) === 'nft-class-classId-nftId-message'
+      );
     },
     shouldShowMessageButton() {
       const checkIsTransferMessage = msg =>

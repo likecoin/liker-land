@@ -26,7 +26,7 @@
     />
     <NFTFeatured
       :class-id="classId"
-      :read-only="$route.name !== 'dashboard'"
+      :read-only="getRouteBaseName($route) !== 'dashboard'"
       :display-state="nftDisplayState"
     />
   </NuxtLink>

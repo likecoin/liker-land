@@ -35,7 +35,7 @@
       </div>
 
       <Button
-        v-if="$route.name === 'settings-support'"
+        v-if="getRouteBaseName($route) === 'settings-support'"
         preset="primary-outline"
         :title="$t('civicLiker.about')"
         :to="localeLocation({ name: 'civic' })"
