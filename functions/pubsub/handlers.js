@@ -145,7 +145,7 @@ export async function handlePurchaseEvent(message, data) {
   // TODO: confirm notification preference format in db.
   const {
     email,
-    nofitication: { purchasePrice = false } = {},
+    notification: { purchasePrice = false } = {},
     // language = 'en',
   } = userDocData;
   if (email && purchasePrice && nftPrice >= purchasePrice) {
@@ -218,7 +218,7 @@ export async function handleTransferEvent(message, data) {
   // TODO: confirm notification preference format in db.
   const {
     email,
-    nofitication: { transfer = false } = {},
+    notification: { transfer = false } = {},
     // language = 'en',
   } = userDocData;
   if (email && transfer) {
