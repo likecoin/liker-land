@@ -161,7 +161,7 @@ export default {
       if (!this.isWalletConnected) {
         return 'portfolio_subscription_hint';
       }
-      if (this.isFollowed) {
+      if (!this.isLoading && this.isFollowed) {
         return 'portfolio_unfollow_hint';
       }
       return 'portfolio_follow_hint';
@@ -201,6 +201,32 @@ export default {
       if (!this.isWalletConnected) {
         await this.handleSubscribeCreator();
       } else {
+        // Guard login
+        if (!this.isWalletLoggedIn) {
+          try {
+            this.isLoading = true;
+            await this.signLogin();
+          } catch {
+            // No-op
+          } finally {
+            this.isLoading = false;
+          }
+          if (!this.isWalletLoggedIn) {
+            return;
+          }
+        }
+
+        // If user is following the creator, do nothing
+        if (this.isFollowed) {
+          return;
+        }
+
+        // If user has verified email, follow the creator without updating email
+        if (this.walletHasVerifiedEmail) {
+          this.walletFollowCreator(this.creatorWalletAddress);
+          return;
+        }
+
         await this.updateWalletEmail();
       }
     },
