@@ -114,6 +114,16 @@
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li>
             <EventModalCollectMethodButton
+              :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
+              :title="$t('nft_collect_modal_method_stripe')"
+              type="stripe"
+              :is-disabled="!canPayByFiat"
+              :price="formattedNFTPriceInUSD"
+              @click="handleSelectPaymentMethod"
+            />
+          </li>
+          <li>
+            <EventModalCollectMethodButton
               :class="{ 'rounded-b-[0]': hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
@@ -155,15 +165,6 @@
                 class="ml-[8px] w-[48px] h-[16px]"
               />
             </div>
-          </li>
-          <li>
-            <EventModalCollectMethodButton
-              :title="$t('nft_collect_modal_method_stripe')"
-              type="stripe"
-              :is-disabled="!canPayByFiat"
-              :price="formattedNFTPriceInUSD"
-              @click="handleSelectPaymentMethod"
-            />
           </li>
         </ul>
       </section>
@@ -308,6 +309,7 @@ export default {
 
       // Mixin
       this.nftPriceInUSD = undefined;
+      this.nftPriceInUSDisListingInfo = undefined;
       this.userCollectedCount = undefined;
       this.fetchNFTPrices(this.classId);
       this.fetchUserCollectedCount();

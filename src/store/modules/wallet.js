@@ -22,6 +22,7 @@ import {
   postUserV2WalletEmail,
   putUserV2WalletEmail,
   getNFTEvents,
+  getNFTClassesPartial,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -334,28 +335,44 @@ const actions = {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const [involverRes, mintRes] = await Promise.all([
-      this.$api.$get(
-        getNFTEvents({
-          involver: address,
-          limit: WALLET_EVENT_LIMIT,
-          actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
-          ignoreToList: LIKECOIN_NFT_API_WALLET,
-          reverse: true,
-        })
-      ),
-      Array.isArray(followees) && followees.length
-        ? this.$api.$get(
-            getNFTEvents({
-              sender: followees,
-              actionType: 'new_class',
-              limit: WALLET_EVENT_LIMIT,
-              reverse: true,
-            })
-          )
-        : Promise.resolve({ events: [] }),
-    ]);
-    let events = involverRes.events.concat(mintRes.events);
+    const getFolloweeNewClassEvents = followee =>
+      this.$api
+        .$get(
+          getNFTClassesPartial({
+            owner: followee,
+            reverse: true,
+          })
+        )
+        .then(({ classes }) =>
+          classes.map(({ id, created_at: timestamp }) => ({
+            // empty strings as placeholders for map key
+            action: 'new_class',
+            class_id: id,
+            nft_id: '',
+            sender: followee,
+            timestamp,
+            tx_hash: '',
+          }))
+        )
+        .catch(() => []);
+    const eventPromises = [
+      this.$api
+        .$get(
+          getNFTEvents({
+            involver: address,
+            limit: WALLET_EVENT_LIMIT,
+            actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
+            ignoreToList: LIKECOIN_NFT_API_WALLET,
+            reverse: true,
+          })
+        )
+        .then(res => res.events),
+    ];
+    if (Array.isArray(followees) && followees.length) {
+      eventPromises.push(...followees.map(getFolloweeNewClassEvents));
+    }
+    const responses = await Promise.all(eventPromises);
+    let events = responses.flat();
     events = [
       ...new Map(
         events.map(e => [
