@@ -55,8 +55,8 @@ import alertMixin from '~/mixins/alert';
 
 const creatorInfoMixin = createUserInfoMixin({ propKey: 'Creator' });
 
-function isSubscribePage(route) {
-  return route.name === 'id-index-subscribe-subscriptionId';
+function isSubscribePage(routeName) {
+  return routeName === 'id-index-subscribe-subscriptionId';
 }
 
 export default {
@@ -75,7 +75,7 @@ export default {
   computed: {
     ...mapGetters(['getUserInfoByAddress']),
     isSubscribePage() {
-      return isSubscribePage(this.$route);
+      return isSubscribePage(this.getRouteBaseName(this.$route));
     },
     headerText() {
       return this.$t(
@@ -108,7 +108,14 @@ export default {
       return this.$route.query.email;
     },
   },
-  async asyncData({ $api, route, params, redirect, localeLocation }) {
+  async asyncData({
+    $api,
+    route,
+    params,
+    redirect,
+    localeLocation,
+    getRouteBaseName,
+  }) {
     const { id: creatorId, subscriptionId } = params;
     try {
       const res = await $api.$get(
@@ -116,7 +123,9 @@ export default {
       );
       return {
         wallet: res.subscribedWallet,
-        isCompleted: isSubscribePage(route) ? res.isVerified : false,
+        isCompleted: isSubscribePage(getRouteBaseName(route))
+          ? res.isVerified
+          : false,
       };
     } catch (err) {
       redirect(localeLocation({ name: 'id', params: { id: creatorId } }));

@@ -56,7 +56,7 @@ export const createPortfolioMixin = ({
       'getNFTClassMetadataById',
     ]),
     isDashboardPage() {
-      return this.$route.name === 'dashboard';
+      return this.getRouteBaseName(this.$route) === 'dashboard';
     },
     currentTab() {
       const { tab } = this.$route.query;
