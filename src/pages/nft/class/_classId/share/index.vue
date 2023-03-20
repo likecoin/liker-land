@@ -13,8 +13,8 @@ export default {
             params: { classId, nftId: ownerCollectedNFTIds[0] },
           })
         );
+        return;
       }
-      return;
     }
     redirect(
       localeLocation({
