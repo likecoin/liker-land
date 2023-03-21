@@ -516,7 +516,7 @@ export default {
     }
   },
   created() {
-    if (this.nftIsNew && this.isWritingNft) {
+    if (this.nftIsNew && this.nftIsWritingNFT) {
       this.$router.push(
         this.localeLocation({
           name: 'nft-class-classId',
