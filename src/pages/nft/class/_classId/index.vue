@@ -111,6 +111,19 @@
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
             <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="hidden w-full desktop:flex" />
+            <NFTPagePriceSection
+              v-if="isShowPriceSection && nftIsPrimitive"
+              :nft-price="NFTPrice"
+              :nft-price-u-s-d="formattedNFTPriceUSD"
+              :is-collectable="nftIsCollectable"
+              :collected-count="collectedCount"
+              :collector-count="ownerCount"
+              :is-loading="uiIsOpenCollectModal && isCollecting"
+              :url="NFTExternalUrl"
+              @collect="handleCollectFromPriceSection"
+              @click-sell="handleClickSellFromPriceSection"
+              @hover-sell="handleHoverSellFromPriceSection"
+            />
             <NFTPageCollectorList
               :class-id="classId"
               :owner-count="ownerCount"
