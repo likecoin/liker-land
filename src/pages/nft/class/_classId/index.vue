@@ -53,7 +53,13 @@
               </template>
             </ButtonV2>
           </div>
-          <div v-else class="flex justify-center mt-[60px] order-1 sm:order-2 sm:mt-[32px]">
+          <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
+            <NFTMessageIdentity
+              type="creator"
+              class="flex-shrink-0"
+              :wallet-address="iscnOwner"
+              :avatar-size="40"
+            />
             <ButtonV2
               preset="secondary"
               :text="$t('nft_details_page_activity_list_event_collect')"
