@@ -1,6 +1,7 @@
 const {
-  getBasicTemplate,
   getCreatorFollowPublishNewTemplate,
+  getNFTNotificationTransferTemplate,
+  getNFTNotificationPurchaseTemplate,
 } = require('@likecoin/edm');
 const axios = require('axios').default;
 
@@ -18,6 +19,23 @@ const { shortenString } = require('../modules/utils');
 
 const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
 
+const TX_UNSUBSCRIBE_LINK = `${EXTERNAL_URL}/settings/email?utm_source=email`;
+
+async function fetchNFTMetadata(classId) {
+  const metadataUrl = `${LIKECOIN_API_BASE}/likernft/metadata?class_id=${encodeURIComponent(
+    classId
+  )}`;
+  const { data: metadataData } = await axios.get(metadataUrl);
+  if (!metadataData) {
+    throw new Error(`metadataData is not defined for classId ${classId}`);
+  }
+  return metadataData;
+}
+
+function getNFTURL(classId, nftId = '') {
+  return `${EXTERNAL_URL}/nft/class/${classId}/${nftId}?utm_source=email`;
+}
+
 export async function handleMintEvent(message, data) {
   const {
     classId,
@@ -32,14 +50,8 @@ export async function handleMintEvent(message, data) {
       `sellerWallet is not defined for message ${message.messageId}`
     );
   }
-  const metadataUrl = `${LIKECOIN_API_BASE}/likernft/metadata?class_id=${encodeURIComponent(
-    classId
-  )}`;
-  const { data: metadataData } = await axios.get(metadataUrl);
-  if (!metadataData) {
-    throw new Error(`metadataData is not defined for classId ${classId}`);
-  }
-  const { name, image } = metadataData;
+
+  const { name, image } = await fetchNFTMetadata(classId);
 
   const [
     anonymousUserQuerySnapshot,
@@ -99,7 +111,7 @@ export async function handleMintEvent(message, data) {
         followerDisplayName: email,
         nftTitle: name,
         nftCoverImageSrc: image,
-        nftURL: `${EXTERNAL_URL}/nft/class/${classId}/share?referrer=${sellerWallet}&utm_source=email`,
+        nftURL: getNFTURL(classId),
         unsubscribeLink,
         language: convertLanguageCodeForEmailTemplate(language),
       });
@@ -131,51 +143,50 @@ export async function handlePurchaseEvent(message, data) {
       `sellerWallet is not defined for message ${message.messageId}`
     );
   }
-  const metadataUrl = `${LIKECOIN_API_BASE}/likernft/metadata?class_id=${encodeURIComponent(
-    classId
-  )}`;
-  const { data: metadataData } = await axios.get(metadataUrl);
-  if (!metadataData) {
-    throw new Error(`metadataData is not defined for classId ${classId}`);
-  }
-  const { name } = metadataData;
+
+  const { name, image } = await fetchNFTMetadata(classId);
+
   const userDoc = await walletUserCollection.doc(sellerWallet).get();
   const userDocData = userDoc.data();
   if (!userDocData) return;
-  // TODO: confirm notification preference format in db.
+
   const {
     email,
-    notification: { purchasePrice = false } = {},
-    // language = 'en',
+    notification: { purchasePrice = 0 } = {},
+    locale = 'en',
   } = userDocData;
-  if (email && purchasePrice && nftPrice >= purchasePrice) {
+
+  if (email && purchasePrice >= 0 && nftPrice >= purchasePrice) {
     try {
       const [
         {
-          // avatar: buyerAvatar,
+          likerId: buyerLikerId,
+          avatar: buyerAvatarSrc,
           displayName: buyerDisplayName,
-          // isSubscribedCivicLiker: buyerIsSubscribedCivicLiker,
+          isSubscribedCivicLiker: buyerIsCivicLiker,
         },
-        {
-          // avatar: sellerAvatar,
-          displayName: sellerDisplayName,
-          // isSubscribedCivicLiker: sellerIsSubscribedCivicLiker,
-        },
+        { displayName: sellerDisplayName },
         // eslint-disable-next-line no-await-in-loop
       ] = await Promise.all([
         fetchLikerInfoByWallet(buyerWallet),
         fetchLikerInfoByWallet(sellerWallet),
       ]);
 
-      const nftURL = `${EXTERNAL_URL}/nft/class/${classId}/${nftId}?utm_source=email`;
-
-      const { subject, body } = getBasicTemplate({
-        subject: `${buyerDisplayName} just bought your Writing NFT ${name}`,
-        content: `Hi ${sellerDisplayName},
-${buyerDisplayName} just bought your Writing NFT ${name} just sold for ${nftPrice}.
-${buyerMemo ? `Buyer also left a message : ${buyerMemo}` : ''}
-View details: ${nftURL}`,
+      const { subject, body } = getNFTNotificationPurchaseTemplate({
+        followerDisplayName: sellerDisplayName,
+        unsubscribeLink: TX_UNSUBSCRIBE_LINK,
+        buyerLikerId,
+        buyerDisplayName,
+        buyerAvatarSrc,
+        buyerIsCivicLiker,
+        priceInLIKE: nftPrice,
+        message: buyerMemo,
+        nftTitle: name,
+        nftCoverImageSrc: image,
+        nftURL: getNFTURL(classId, nftId),
+        language: convertLanguageCodeForEmailTemplate(locale),
       });
+
       // eslint-disable-next-line no-await-in-loop
       await sendEmail({
         email,
@@ -204,35 +215,28 @@ export async function handleTransferEvent(message, data) {
       `toAddress is not defined for message ${message.messageId}`
     );
   }
-  const metadataUrl = `${LIKECOIN_API_BASE}/likernft/metadata?class_id=${encodeURIComponent(
-    classId
-  )}`;
-  const { data: metadataData } = await axios.get(metadataUrl);
-  if (!metadataData) {
-    throw new Error(`metadataData is not defined for classId ${classId}`);
-  }
-  const { name } = metadataData;
+
+  const { name, image } = await fetchNFTMetadata(classId);
+
   const userDoc = await walletUserCollection.doc(toAddress).get();
   const userDocData = userDoc.data();
   if (!userDocData) return;
-  // TODO: confirm notification preference format in db.
+
   const {
     email,
     notification: { transfer = false } = {},
-    // language = 'en',
+    locale = 'en',
   } = userDocData;
+
   if (email && transfer) {
     try {
       const [
+        { displayName: toDisplayName },
         {
-          // avatar: toAvatar,
-          displayName: toDisplayName,
-          // isSubscribedCivicLiker: toIsSubscribedCivicLiker,
-        },
-        {
-          // avatar: fromAvatar,
+          likerId: fromLikerId,
+          avatar: fromAvatar,
           displayName: fromDisplayName,
-          // isSubscribedCivicLiker: fromIsSubscribedCivicLiker,
+          isSubscribedCivicLiker: fromIsSubscribedCivicLiker,
         },
         // eslint-disable-next-line no-await-in-loop
       ] = await Promise.all([
@@ -240,15 +244,20 @@ export async function handleTransferEvent(message, data) {
         fetchLikerInfoByWallet(fromAddress),
       ]);
 
-      const nftURL = `${EXTERNAL_URL}/nft/class/${classId}/${nftId}?utm_source=email`;
-
-      const { subject, body } = getBasicTemplate({
-        subject: `${fromDisplayName} just sent you a Writing NFT ${name}`,
-        content: `Hi ${toDisplayName},
-${fromDisplayName} just sent you a Writing NFT ${name}.
-${memo ? `Sender also left a message : ${memo}` : ''}
-View details: ${nftURL}`,
+      const { subject, body } = getNFTNotificationTransferTemplate({
+        followerDisplayName: toDisplayName,
+        unsubscribeLink: TX_UNSUBSCRIBE_LINK,
+        senderLikerId: fromLikerId,
+        senderDisplayName: fromDisplayName,
+        senderAvatarSrc: fromAvatar,
+        senderIsCivicLiker: fromIsSubscribedCivicLiker,
+        message: memo,
+        nftTitle: name,
+        nftCoverImageSrc: image,
+        nftURL: getNFTURL(classId, nftId),
+        language: convertLanguageCodeForEmailTemplate(locale),
       });
+
       // eslint-disable-next-line no-await-in-loop
       await sendEmail({
         email,
