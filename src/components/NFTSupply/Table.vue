@@ -47,7 +47,7 @@ export default {
     NFTSupplyRow,
   },
   props: {
-    collectedCount: {
+    soldCount: {
       type: Number,
       default: 0,
     },
@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     activeBatch() {
-      return getBatch(this.collectedCount);
+      return getBatch(this.soldCount);
     },
     shouldHideLowerBound() {
       return this.activeBatch < this.visibleBatchesBehind;
@@ -84,7 +84,7 @@ export default {
     },
     data() {
       const start = Math.max(
-        getBatch(this.collectedCount) - this.visibleBatchesBehind,
+        getBatch(this.soldCount) - this.visibleBatchesBehind,
         0
       );
       const end = start + this.visibleBatches;
@@ -95,7 +95,7 @@ export default {
           total: batch + 1,
           available:
             this.activeBatch === batch
-              ? getAvailable(this.collectedCount, batch)
+              ? getAvailable(this.soldCount, batch)
               : 0,
           price: getPrice(batchStart),
           type: this.getRowType(batch),

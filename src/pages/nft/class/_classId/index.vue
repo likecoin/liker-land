@@ -85,7 +85,7 @@
             />
             <NFTPageSupplySection
               v-else-if="isShowPriceSection && nftIsWritingNFT && nftIsCollectable"
-              :collected-count="collectedCount"
+              :sold-count="nftSoldCount"
               @collect="handleCollectFromSupplySection"
             />
           </div>
