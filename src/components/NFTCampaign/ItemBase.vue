@@ -71,7 +71,7 @@
         <NFTSupplyTable
           v-else
           class="w-full laptop:mt-[8px] laptop:pr-[8px]"
-          :collected-count="soldCount"
+          :sold-count="soldCount"
           :should-collapse-in-mobile="true"
           :should-show-indicator="true"
           :is-disabled="!isCollectable"

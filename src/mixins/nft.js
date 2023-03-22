@@ -133,10 +133,15 @@ export default {
     },
     purchaseInfo() {
       const info = this.getNFTClassPurchaseInfoById(this.classId) || {};
-      const { price, totalPrice, metadata: { nextNewNFTId } = {} } = info;
+      const {
+        price,
+        totalPrice,
+        metadata: { nextNewNFTId, soldCount } = {},
+      } = info;
       return {
         price,
         totalPrice,
+        soldCount,
         classId: this.classId,
         nftId: nextNewNFTId,
         seller: LIKECOIN_NFT_API_WALLET,
@@ -253,6 +258,9 @@ export default {
     },
     collectedCount() {
       return this.getNFTClassCollectedCount(this.classId);
+    },
+    nftSoldCount() {
+      return this.purchaseInfo.soldCount || 0;
     },
 
     userCollectedNFTList() {

@@ -10,7 +10,7 @@
     <template #content>
       <NFTSupplyTable
         class="laptop:px-[32px]"
-        :collected-count="collectedCount"
+        :sold-count="soldCount"
         :visible-batches-ahead="4"
         @collect="handleClickCollect"
       />
@@ -21,7 +21,7 @@
 export default {
   name: 'NFTPageSupplySection',
   props: {
-    collectedCount: {
+    soldCount: {
       type: Number,
       default: undefined,
     },
