@@ -486,14 +486,6 @@ export default {
     return { action };
   },
   async mounted() {
-    if (this.nftIsNew && this.nftIsWritingNFT) {
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: { classId: this.classId },
-        })
-      );
-    }
     try {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
