@@ -629,23 +629,20 @@ const actions = {
       throw error;
     }
   },
-  async walletFetchNotificationSettings({ state, commit }) {
+  async walletFetchNotificationSettings({ commit }) {
     try {
       const { notification: notificationSettings } = await this.$api.$get(
-        getUserNotificationSettingsUrl(state.loginAddress)
+        getUserNotificationSettingsUrl()
       );
       commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
     } catch (error) {
       throw error;
     }
   },
-  async walletUpdateNotificationSettings(
-    { state, commit },
-    notificationSettings
-  ) {
+  async walletUpdateNotificationSettings({ commit }, notificationSettings) {
     try {
       await this.$api.$post(
-        getUserNotificationSettingsUrl(state.loginAddress),
+        getUserNotificationSettingsUrl(),
         notificationSettings
       );
       commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);

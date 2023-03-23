@@ -334,5 +334,5 @@ export const deleteUserV2Followees = creator => {
 export const getUserFollowees = wallet => `/api/v2/users/${wallet}/followees`;
 export const postFollowCreator = ({ wallet, creator }) =>
   `/api/v2/users/${wallet}/followers?creator=${creator}`;
-export const getUserNotificationSettingsUrl = wallet =>
-  `/api/v2/users/${wallet}/notification`;
+export const getUserNotificationSettingsUrl = () =>
+  `/api/v2/users/notification`;
