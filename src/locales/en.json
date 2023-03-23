@@ -478,6 +478,7 @@
   "settings_notification_fetch_error_message": "Error occurred while loading notification settings: {error}",
   "settings_notification_title": "Notification Settings",
   "settings_notification_tx_purchase": "Collect",
+  "settings_notification_tx_purchase_price_threshold": "We will notify you when the purchasing price is greater than the above value",
   "settings_notification_tx_section_title": "Transaction",
   "settings_notification_tx_transfer": "Transfer",
   "settings_notification_update_error_message": "We have encountered an error while attempting to update the notification settings: {error}",

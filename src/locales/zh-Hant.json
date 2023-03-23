@@ -468,6 +468,7 @@
   "settings_notification_fetch_error_message": "載入通知設定時出現錯誤：{error}",
   "settings_notification_title": "通知設定",
   "settings_notification_tx_purchase": "收藏",
+  "settings_notification_tx_purchase_price_threshold": "當價格大於上述設定值時便會發出通知",
   "settings_notification_tx_section_title": "交易",
   "settings_notification_tx_transfer": "轉贈",
   "settings_notification_update_error_message": "更新通知設定時出現錯誤：{error}",

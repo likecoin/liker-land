@@ -26,14 +26,36 @@
           </template>
         </SettingsListItem>
       </li>
-      <!-- <li>
-        <SettingsListItem :is-clickable="false">
+      <li>
+        <SettingsListItem
+          :is-clickable="false"
+          accessory-class="flex flex-col items-end"
+        >
           {{ $t('settings_notification_tx_purchase') }}
           <template #accessory>
-            <CheckBox v-model="isPurchaseNotificationEnabled" />
+            <CheckBox
+              v-model="isPurchaseNotificationEnabled"
+              :is-disabled="isSettingsDisabled"
+              @input="updateNotificationSettings"
+            />
+            <template v-if="isPurchaseNotificationEnabled">
+              <div class="flex items-center gap-[4px] mt-[8px]">
+                <TextField
+                  v-model="purchaseNotificationPriceThreshold"
+                  input-class="!min-w-0 !w-[100px] text-right"
+                  type="number"
+                  @input="updateNotificationSettings"
+                />
+                <span class="text-like-green font-[600] ml-[8px]">LIKE</span>
+              </div>
+              <label
+                v-t="'settings_notification_tx_purchase_price_threshold'"
+                class="text-[12px] leading-[1.5] font-600 text-medium-gray mt-[8px]"
+              />
+            </template>
           </template>
         </SettingsListItem>
-      </li> -->
+      </li>
     </ul>
   </section>
 </template>
@@ -51,6 +73,7 @@ export default {
       isFetchingSettings: false,
       isTransferNotificationEnabled: false,
       isPurchaseNotificationEnabled: false,
+      purchaseNotificationPriceThreshold: 0,
     };
   },
   computed: {
@@ -90,7 +113,10 @@ export default {
           await this.walletFetchNotificationSettings();
         }
         if (this.walletNotificationSettings) {
-          this.isTransferNotificationEnabled = this.walletNotificationSettings.transfer;
+          const { transfer, purchasePrice } = this.walletNotificationSettings;
+          this.isTransferNotificationEnabled = transfer;
+          this.isPurchaseNotificationEnabled = purchasePrice >= 0;
+          this.purchaseNotificationPriceThreshold = purchasePrice;
         }
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -110,6 +136,9 @@ export default {
       try {
         await this.walletUpdateNotificationSettings({
           transfer: this.isTransferNotificationEnabled,
+          purchasePrice: this.isPurchaseNotificationEnabled
+            ? this.purchaseNotificationPriceThreshold
+            : -1,
         });
         this.alertPromptSuccess(
           this.$t('settings_notification_update_success_message')

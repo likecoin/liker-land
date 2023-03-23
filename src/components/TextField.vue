@@ -4,7 +4,7 @@
       :is="tag"
       ref="input"
       v-bind="inputProps"
-      @input="$emit('input', $event.target.value)"
+      @input="handleInput"
       @blur="$emit('delete-empty-field')"
     ><template v-if="isTextarea && value">{{ value }}</template></component>
     <span :class="errorMsgClasses">{{ errorMessage }}</span>
@@ -16,8 +16,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class TextField extends Vue {
-  @Prop(String)
-  readonly value!: string | undefined;
+  @Prop([String, Number])
+  readonly value!: string | number | undefined;
 
   @Prop(String)
   readonly placeholder!: string | undefined;
@@ -27,6 +27,9 @@ export default class TextField extends Vue {
 
   @Prop(String)
   readonly errorMessage!: string | undefined;
+
+  @Prop(String)
+  readonly inputClass!: string | undefined;
 
   @Prop({ default: false })
   readonly isDisabled!: boolean;
@@ -78,6 +81,7 @@ export default class TextField extends Vue {
       {
         'pointer-events-none opacity-50': this.isDisabled,
       },
+      this.inputClass,
     ];
   }
 
@@ -109,6 +113,12 @@ export default class TextField extends Vue {
     if (inputEl) {
       (inputEl as any).focus();
     }
+  }
+
+  handleInput(event: Event) {
+    if (!event.target) return;
+    const { value } = event.target as HTMLInputElement;
+    this.$emit('input', this.$attrs.type === 'number' ? Number(value) : value);
   }
 }
 </script>

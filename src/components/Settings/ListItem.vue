@@ -5,7 +5,7 @@
         Title
       </slot>
     </div>
-    <div>
+    <div :class="accessoryClass">
       <slot name="accessory">
         <IconArrowLeft class="w-[20px] rotate-180" />
       </slot>
@@ -20,6 +20,10 @@ export default {
     isClickable: {
       type: Boolean,
       default: true,
+    },
+    accessoryClass: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {
