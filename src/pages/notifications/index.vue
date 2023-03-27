@@ -1,16 +1,15 @@
 <template>
-  <Page class="overflow-x-hidden">
-    <div
-      v-if="!getAddress || !walletHasLoggedIn"
-      class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"
+  <Page
+    :class="[
+      'overflow-x-hidden',
+      { 'p-[16px]': isInInAppBrowser }
+    ]"
+  >
+    <SettingsPageContentWithAuth
+      class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
+      :login-label="$t('notification_login_in')"
+      :login-button-label="$t('notification_login_in_button')"
     >
-      <ButtonV2
-        preset="tertiary"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="connectWallet"
-      />
-    </div>
-    <div v-else class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]">
       <Label
         preset="h5"
         class="text-like-green mb-[8px]"
@@ -178,7 +177,7 @@
           </div>
         </LinkV2>
       </div>
-    </div>
+    </SettingsPageContentWithAuth>
   </Page>
 </template>
 <script>
@@ -186,6 +185,8 @@ import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { updateEventLastSeen } from '~/util/api';
 import { ellipsis } from '~/util/ui';
+
+import inAppMixin from '~/mixins/in-app';
 import walletMixin from '~/mixins/wallet';
 
 export default {
@@ -194,7 +195,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [walletMixin],
+  mixins: [inAppMixin, walletMixin],
   data() {
     return { lastUpdatedTime: undefined };
   },
