@@ -208,6 +208,7 @@
             :class-id="nft.classId"
             :portfolio-wallet="portfolioWallet"
             :nft-id="nft.id"
+            :portfolio-tab="portfolioTab"
             @load-cover="updatePortfolioGrid"
           />
         </li>

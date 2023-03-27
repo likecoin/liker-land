@@ -52,6 +52,10 @@ export default {
       type: String,
       default: undefined,
     },
+    portfolioTab: {
+      type: String,
+      default: undefined,
+    },
   },
 
   data() {
@@ -60,15 +64,8 @@ export default {
     };
   },
   computed: {
-    nftIdCollectedFirstByPortfolio() {
-      return this.collectorMap[this.portfolioWallet]?.[0];
-    },
     nftIdForDetails() {
-      return (
-        this.nftId ||
-        this.nftIdCollectNext ||
-        this.nftIdCollectedFirstByPortfolio
-      );
+      return this.portfolioTab === 'collected' && this.nftId;
     },
     detailsPageRoute() {
       if (this.nftIdForDetails) {
