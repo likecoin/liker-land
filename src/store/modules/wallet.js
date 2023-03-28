@@ -23,6 +23,7 @@ import {
   putUserV2WalletEmail,
   getUserNotificationSettingsUrl,
   getNFTEvents,
+  getNFTClassesPartial,
 } from '~/util/api';
 import { setLoggerUser } from '~/util/EventLogger';
 
@@ -43,6 +44,7 @@ import {
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
   WALLET_SET_IS_LOGGING_IN,
+  WALLET_SET_IS_CONNECTING_WALLET,
   WALLET_SET_EVENT_FETCHING,
   WALLET_SET_NOTIFICATION_SETTINGS,
 } from '../mutation-types';
@@ -54,6 +56,7 @@ let likecoinWalletLib = null;
 const state = () => ({
   isDebug: false,
   address: '',
+  isConnectingWallet: false,
   signer: null,
   connector: null,
   likerInfo: null,
@@ -86,6 +89,9 @@ const mutations = {
   },
   [WALLET_SET_SIGNER](state, signer) {
     state.signer = signer;
+  },
+  [WALLET_SET_IS_CONNECTING_WALLET](state, isConnecting) {
+    state.isConnectingWallet = isConnecting;
   },
   [WALLET_SET_IS_LOGGING_IN](state, isLoggingIn) {
     state.isLoggingIn = isLoggingIn;
@@ -157,7 +163,7 @@ const getters = {
   getAddress: state => state.address,
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
-  walletHasLoggedIn: state => !!state.loginAddress,
+  walletHasLoggedIn: state => !!state.address && !!state.loginAddress,
   walletIsMatchedSession: (state, getters) =>
     getters.walletHasLoggedIn && state.address === state.loginAddress,
   getConnector: state => state.connector,
@@ -195,7 +201,7 @@ const getters = {
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
   walletHasVerifiedEmail: state => !!state.email,
-  walletIsLoggingIn: state => state.isLoggingIn,
+  walletIsLoggingIn: state => state.isConnectingWallet || state.isLoggingIn,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
   walletNotificationSettings: state => state.notificationSettings,
@@ -237,6 +243,7 @@ const actions = {
 
   async initWallet({ commit, dispatch }, { method, accounts, offlineSigner }) {
     if (!accounts[0]) return false;
+    commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
     // Listen once per account
     connector.once('account_change', async currentMethod => {
@@ -250,6 +257,7 @@ const actions = {
     const walletAddress = bech32Address || address;
     commit(WALLET_SET_ADDRESS, walletAddress);
     commit(WALLET_SET_SIGNER, offlineSigner);
+    commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     await setLoggerUser(this, { wallet: walletAddress, method });
     catchAxiosError(
       this.$api.$get(getUserInfoMinByAddress(walletAddress)).then(userInfo => {
@@ -291,11 +299,13 @@ const actions = {
     return connector;
   },
 
-  async openConnectWalletModal({ dispatch }, { language } = {}) {
+  async openConnectWalletModal({ commit, dispatch }, { language } = {}) {
+    commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
     const connection = await connector.openConnectionMethodSelectionDialog({
       language,
     });
+    commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     return connection;
   },
 
@@ -327,7 +337,7 @@ const actions = {
     const connection = await connector.initIfNecessary();
     if (connection) {
       const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWalletAndLogin', {
+      await dispatch('initWallet', {
         accounts,
         offlineSigner,
         method,
@@ -341,28 +351,44 @@ const actions = {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const [involverRes, mintRes] = await Promise.all([
-      this.$api.$get(
-        getNFTEvents({
-          involver: address,
-          limit: WALLET_EVENT_LIMIT,
-          actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
-          ignoreToList: LIKECOIN_NFT_API_WALLET,
-          reverse: true,
-        })
-      ),
-      Array.isArray(followees) && followees.length
-        ? this.$api.$get(
-            getNFTEvents({
-              sender: followees,
-              actionType: 'new_class',
-              limit: WALLET_EVENT_LIMIT,
-              reverse: true,
-            })
-          )
-        : Promise.resolve({ events: [] }),
-    ]);
-    let events = involverRes.events.concat(mintRes.events);
+    const getFolloweeNewClassEvents = followee =>
+      this.$api
+        .$get(
+          getNFTClassesPartial({
+            owner: followee,
+            reverse: true,
+          })
+        )
+        .then(({ classes }) =>
+          classes.map(({ id, created_at: timestamp }) => ({
+            // empty strings as placeholders for map key
+            action: 'new_class',
+            class_id: id,
+            nft_id: '',
+            sender: followee,
+            timestamp,
+            tx_hash: '',
+          }))
+        )
+        .catch(() => []);
+    const eventPromises = [
+      this.$api
+        .$get(
+          getNFTEvents({
+            involver: address,
+            limit: WALLET_EVENT_LIMIT,
+            actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
+            ignoreToList: LIKECOIN_NFT_API_WALLET,
+            reverse: true,
+          })
+        )
+        .then(res => res.events),
+    ];
+    if (Array.isArray(followees) && followees.length) {
+      eventPromises.push(...followees.map(getFolloweeNewClassEvents));
+    }
+    const responses = await Promise.all(eventPromises);
+    let events = responses.flat();
     events = [
       ...new Map(
         events.map(e => [

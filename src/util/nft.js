@@ -190,16 +190,14 @@ export const nftClassCollectionType = {
 };
 
 export function getNFTClassCollectionType(classMetadata) {
-  switch (classMetadata?.nft_meta_collection_id) {
-    case 'likerland_writing_nft':
-      return nftClassCollectionType.WritingNFT;
-
-    case 'nft_book':
-      return nftClassCollectionType.NFTBook;
-
-    default:
-      return '';
+  const collectionId = classMetadata?.nft_meta_collection_id || '';
+  if (collectionId === 'likerland_writing_nft') {
+    return nftClassCollectionType.WritingNFT;
   }
+  if (collectionId.includes('nft_book') || collectionId.includes('book_nft')) {
+    return nftClassCollectionType.NFTBook;
+  }
+  return '';
 }
 
 export function checkIsWritingNFT(classMetadata) {

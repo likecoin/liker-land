@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     isHeaderShowBack() {
-      return /^settings-.+$/.test(this.$route.name);
+      return /^settings-.+$/.test(this.getRouteBaseName(this.$route));
     },
   },
   head() {

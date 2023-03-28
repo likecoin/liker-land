@@ -94,6 +94,7 @@ export default {
       nftISCNContentFingerprints: [],
 
       nftPriceInUSD: undefined,
+      nftPriceInUSDisListingInfo: undefined,
     };
   },
   computed: {
@@ -132,10 +133,15 @@ export default {
     },
     purchaseInfo() {
       const info = this.getNFTClassPurchaseInfoById(this.classId) || {};
-      const { price, totalPrice, metadata: { nextNewNFTId } = {} } = info;
+      const {
+        price,
+        totalPrice,
+        metadata: { nextNewNFTId, soldCount } = {},
+      } = info;
       return {
         price,
         totalPrice,
+        soldCount,
         classId: this.classId,
         nftId: nextNewNFTId,
         seller: LIKECOIN_NFT_API_WALLET,
@@ -253,6 +259,9 @@ export default {
     collectedCount() {
       return this.getNFTClassCollectedCount(this.classId);
     },
+    nftSoldCount() {
+      return this.purchaseInfo.soldCount || 0;
+    },
 
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
@@ -336,17 +345,10 @@ export default {
         : this.purchaseInfo?.nftId;
     },
     nftCollectRoute() {
-      return this.localeLocation(
-        this.nftIsCollectable && this.nftIdCollectNext
-          ? {
-              name: 'nft-class-classId-nftId',
-              params: { classId: this.classId, nftId: this.nftIdCollectNext },
-            }
-          : {
-              name: 'nft-class-classId',
-              params: { classId: this.classId },
-            }
-      );
+      return this.localeLocation({
+        name: 'nft-class-classId',
+        params: { classId: this.classId },
+      });
     },
     rawDataURL() {
       return `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${this.classId}`;
@@ -376,7 +378,9 @@ export default {
     nftDisplayState() {
       // should use the address in URL as the subject address when browsing other's profile
       const subjectAddress =
-        this.$route.name === 'id' ? this.$route.params.id : this.getAddress;
+        this.getRouteBaseName(this.$route) === 'id'
+          ? this.$route.params.id
+          : this.getAddress;
       if (
         this.getNFTClassFeaturedSetByAddress(subjectAddress)?.has(this.classId)
       ) {
@@ -488,10 +492,11 @@ export default {
     },
     async fetchNFTPrices(classId) {
       try {
-        const { fiatPrice } = await this.$axios.$get(
+        const { fiatPrice, listingInfo } = await this.$axios.$get(
           getStripeFiatPrice({ classId })
         );
         this.nftPriceInUSD = fiatPrice;
+        this.nftPriceInUSDisListingInfo = listingInfo;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -776,12 +781,17 @@ export default {
     },
     async collectNFTWithStripe({ memo = '' }) {
       try {
+        const body = { memo };
+        if (this.nftPriceInUSDisListingInfo) {
+          body.nftId = this.listingInfo.nftId;
+          body.seller = this.listingInfo.seller;
+        }
         const { url } = await this.$api.$post(
           postNewStripeFiatPayment({
             classId: this.classId,
             wallet: this.getAddress,
           }),
-          { memo }
+          body
         );
         if (url) window.location.href = url;
       } catch (error) {
