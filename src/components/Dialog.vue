@@ -12,7 +12,7 @@
         ]"
         @click="handleBackdropClick"
       />
-      <div :class="['fixed w-full max-w-[1920px] mx-auto p-[12px]', panelContainerClass]">
+      <div :class="['fixed w-full max-w-[1920px] mx-auto p-[12px] phone:mt-[84px]', panelContainerClass]">
         <ButtonV2
           v-if="hasCloseButton"
           :class="[

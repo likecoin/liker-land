@@ -9,39 +9,51 @@
       pb-[132px]
     "
   >
-    <NFTAboutPageHeroSection class="w-full" />
+    <template v-if="!isInInAppBrowser">
+      <NFTAboutPageHeroSection class="w-full" />
+
+      <nav
+        :class="[
+          'grid',
+          'items-center',
+          'justify-center',
+          'grid-flow-row',
+          'laptop:grid-flow-col',
+          'gap-[16px]',
+          'mb-[80px]',
+        ]"
+      >
+        <ButtonV2
+          preset="secondary"
+          :text="$t('home_button_about_writing_nft')"
+          :to="localeLocation({ name: 'writing-nft-about' })"
+          @click.native="handleClickAboutWritingNFTButton"
+        />
+        <ButtonV2
+          preset="tertiary"
+          :text="$t('about_nft_page_nav_collection')"
+          @click="handleClickMyDashboardButton"
+        />
+      </nav>
+    </template>
+
     <section
-      class="
-        w-full
-        max-w-[416px]
-        laptop:max-w-full
-        mx-auto
-        px-[24px]
-        laptop:px-[40px]
-      "
+      :class="[
+        'w-full',
+        'max-w-[416px]',
+        'laptop:max-w-full',
+        'mx-auto',
+        'px-[24px]',
+        { 'pt-[32px]': isInInAppBrowser },
+        'laptop:px-[40px]',
+      ]"
     >
-
-      <nav class="flex flex-col items-center justify-center self-stretch gap-[32px]">
-        <div class="grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
-          <ButtonV2
-            preset="secondary"
-            :text="$t('home_button_about_writing_nft')"
-            :to="localeLocation({ name: 'writing-nft-about' })"
-            @click.native="handleClickAboutWritingNFTButton"
-          />
-          <ButtonV2
-            preset="tertiary"
-            :text="$t('about_nft_page_nav_collection')"
-            @click="handleClickMyDashboardButton"
-          />
-        </div>
-
+      <nav class="flex items-center justify-center">
         <ul
           :class="[
             'flex',
             'justify-center',
             'items-center',
-            'mt-[48px]',
             'p-[4px]',
             'bg-shade-gray',
             'rounded-[14px]',
@@ -61,6 +73,7 @@
           </li>
         </ul>
       </nav>
+
       <ul class="mt-[48px]">
         <li
           v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
@@ -76,7 +89,11 @@
         </li>
       </ul>
     </section>
-    <section class="mt-[88px] px-[24px]">
+
+    <section
+      v-if="!isInInAppBrowser"
+      class="mt-[88px] px-[24px]"
+    >
       <a
         class="flex items-center justify-center mt-[8px] text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
         href="https://likecoin.github.io/likecoin-nft-dashboard/"
@@ -97,6 +114,7 @@ import {
 } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import inAppMixin from '~/mixins/in-app';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import walletMixin from '~/mixins/wallet';
 
@@ -106,7 +124,7 @@ const NFT_CLASS_DISPLAY_COUNT = 10;
 export default {
   name: 'WritingNFTPage',
   layout: 'default',
-  mixins: [navigationListenerMixin, walletMixin],
+  mixins: [inAppMixin, navigationListenerMixin, walletMixin],
   head() {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');

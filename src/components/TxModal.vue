@@ -4,7 +4,7 @@
     :has-close-button="hasCloseButton"
     :header-text="headerText"
     panel-container-class="phone:max-w-[520px] laptop:w-[520px]"
-    panel-class="shadow-lg bg-white w-full p-[48px] phone:px-[18px] rounded-[24px]"
+    panel-class="shadow-lg bg-white w-full p-[48px] phone:p-[18px] rounded-[24px]"
     :is-disabled-backdrop-click="true"
     @close="$emit('close')"
   >
