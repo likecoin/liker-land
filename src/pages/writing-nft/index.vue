@@ -10,7 +10,43 @@
     "
   >
     <template v-if="!isInInAppBrowser">
-      <NFTAboutPageHeroSection class="w-full" />
+      <NFTAboutPageHeroSection
+        :is3DPrintDay="is3DPrintDay"
+        class="w-full"
+      />
+      <div
+        v-if="is3DPrintDay"
+        class="mt-[-36px] mb-[48px] desktop:mt-[-64px]"
+      >
+        <div class="flex flex-grow items-center justify-center text-center p-[32px]">
+          {{ $t('about_nft_page_hero_3d_print_mobile') }}
+        </div>
+        <div
+          class="grid grid-cols-5 overflow-x-hidden"
+        >
+          <client-only>
+            <div
+              v-for="(classId, index) in trendingClassIds.slice(0, 10)"
+              :key="classId"
+            >
+              <model-viewer
+                style="width: 20vw; aspect-ratio: 4/3; max-width: 200px; max-height: 150px;"
+                :src="getNFTModel({ classId })"
+                ar
+                auto-rotate
+                auto-rotate-delay="500"
+                xr-environment
+                shadow-intensity="1"
+                :camera-orbit="`${315 * index}deg 60deg 100m`"
+                @click="e => handleNFTModelClick(e, classId)"
+              >
+                <button slot="ar-button" style="display:none" />
+              </model-viewer>
+            </div>
+          </client-only>
+          <hr>
+        </div>
+      </div>
 
       <nav
         :class="[
@@ -73,7 +109,6 @@
           </li>
         </ul>
       </nav>
-
       <ul class="mt-[48px]">
         <li
           v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
@@ -82,6 +117,7 @@
           :class="{ 'mt-[88px]': index > 0 }"
         >
           <NFTCampaignItem
+            :id="classId"
             :class-id="classId"
             :story-title="storyTitle"
             :story-description="storyDescription"
@@ -111,6 +147,7 @@ import {
   getNFTClassesPartial,
   getTopNFTClasses,
   getISCNRecord,
+  getNFTModel,
 } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -152,11 +189,28 @@ export default {
           content: 'https://liker.land/images/og/writing-nft.jpg',
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      link: [
+        { rel: 'canonical', href: `${this.$route.path}` },
+        {
+          rel: 'modulepreload',
+          href:
+            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+          as: 'script',
+        },
+      ],
+      script: [
+        {
+          type: 'module',
+          src:
+            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+          asyc: 'true',
+        },
+      ],
     };
   },
   data() {
     return {
+      is3DPrintDay: new Date().getMonth() === 3 && new Date().getDate() === 1,
       trendingClassIds: [],
       latestClassIds: [],
     };
@@ -256,6 +310,23 @@ export default {
     this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
+    getNFTModel,
+    handleNFTModelClick(e, classId) {
+      if (e.target.canActivateAR) {
+        e.target.activateAR();
+        return;
+      }
+      this.$nextTick(() => {
+        try {
+          const el = document.querySelector(`#${classId}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        } catch {
+          // No-op
+        }
+      });
+    },
     async getClassOwner(classData) {
       try {
         const iscnPrefix = classData.parent.iscn_id_prefix;
