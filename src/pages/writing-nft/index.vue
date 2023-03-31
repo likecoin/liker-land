@@ -10,7 +10,43 @@
     "
   >
     <template v-if="!isInInAppBrowser">
-      <NFTAboutPageHeroSection class="w-full" />
+      <NFTAboutPageHeroSection
+        :is3DPrintDay="is3DPrintDay"
+        class="w-full"
+      />
+      <div
+        v-if="is3DPrintDay"
+        class="mt-[-36px] mb-[48px] desktop:mt-[-64px]"
+      >
+        <div class="flex flex-grow items-center justify-center text-center p-[32px]">
+          {{ $t('about_nft_page_hero_3d_print_mobile') }}
+        </div>
+        <div
+          class="grid grid-cols-5 overflow-x-hidden"
+        >
+          <client-only>
+            <div
+              v-for="(classId, index) in trendingClassIds.slice(0, 10)"
+              :key="classId"
+            >
+              <model-viewer
+                style="width: 20vw; aspect-ratio: 4/3; max-width: 200px; max-height: 150px;"
+                :src="getNFTModel({ classId })"
+                ar
+                auto-rotate
+                auto-rotate-delay="500"
+                xr-environment
+                shadow-intensity="1"
+                :camera-orbit="`${315 * index}deg 60deg 100m`"
+                @click="e => handleNFTModelClick(e, classId)"
+              >
+                <button slot="ar-button" style="display:none" />
+              </model-viewer>
+            </div>
+          </client-only>
+          <hr>
+        </div>
+      </div>
 
       <nav
         :class="[
@@ -73,26 +109,6 @@
           </li>
         </ul>
       </nav>
-      <div
-        v-if="currentTab === 'trending'"
-        class="hidden desktop:flex flex-wrap mt-[24px]"
-      >
-        <client-only>
-          <model-viewer
-            v-for="({ classId }, index) in nfts"
-            :key="classId"
-            :src="getNFTModel({ classId })"
-            class="width-[100px] height-[150px]"
-            auto-rotate
-            auto-rotate-delay="500"
-            xr-environment
-            shadow-intensity="1"
-            :camera-orbit="`${315 * index}deg 60deg 100m`"
-            @click="handleNFTModelClick(classId)"
-          />
-        </client-only>
-        <hr>
-      </div>
       <ul class="mt-[48px]">
         <li
           v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
@@ -194,6 +210,7 @@ export default {
   },
   data() {
     return {
+      is3DPrintDay: new Date().getMonth() === 3 && new Date().getDate() === 1,
       trendingClassIds: [],
       latestClassIds: [],
     };
@@ -294,7 +311,11 @@ export default {
   },
   methods: {
     getNFTModel,
-    handleNFTModelClick(classId) {
+    handleNFTModelClick(e, classId) {
+      if (e.target.canActivateAR) {
+        e.target.activateAR();
+        return;
+      }
       this.$nextTick(() => {
         try {
           const el = document.querySelector(`#${classId}`);
