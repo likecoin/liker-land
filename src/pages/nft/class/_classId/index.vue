@@ -100,6 +100,7 @@
                 :collector-count="ownerCount"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
+                :is-content-viewable="!(nftIsNFTBook && !ownCount)"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
               />
@@ -118,6 +119,7 @@
               :is-collectable="nftIsCollectable"
               :collected-count="collectedCount"
               :collector-count="ownerCount"
+              :is-content-viewable="!(nftIsNFTBook && !ownCount)"
               :is-loading="uiIsOpenCollectModal && isCollecting"
               :url="NFTExternalUrl"
               @collect="handleCollectFromPriceSection"

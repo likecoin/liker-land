@@ -74,10 +74,11 @@
       </div>
       <ButtonV2
         preset="primary"
-        :text="$t('campaign_nft_item_view_details_label')"
+        :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
         class="hidden laptop:block !border-[2px] !border-like-cyan-light"
-        :href="url"
+        :href="isContentViewable ? url : ''"
         target="_blank"
+        :is-disabled="isContentViewable"
         @click="handleClickViewContent"
       >
         <template #prepend>
@@ -123,6 +124,10 @@ export default {
       type: String,
       default: undefined,
     },
+    isContentViewable: {
+      type: Boolean,
+      default: true,
+    },
     isCollectable: {
       type: Boolean,
       default: false,
@@ -139,7 +144,9 @@ export default {
       this.$emit('hover-sell');
     },
     handleClickViewContent() {
-      this.$emit('view-content');
+      if (this.isContentViewable) {
+        this.$emit('view-content');
+      }
     },
   },
 };

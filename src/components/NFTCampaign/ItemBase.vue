@@ -24,7 +24,7 @@
           />
           <a
             class="transition-colors cursor-pointer hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]"
-            :href="url"
+            :href="isContentViewable ? url : ''"
             target="_blank"
             rel="noopener"
             @click="handleClickViewContent"
@@ -217,6 +217,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isContentViewable: {
+      type: Boolean,
+      default: true,
+    },
     isCollectable: {
       type: Boolean,
       default: false,
@@ -265,7 +269,9 @@ export default {
       this.$emit('view-details');
     },
     handleClickViewContent() {
-      this.$emit('view-content');
+      if (this.isContentViewable) {
+        this.$emit('view-content');
+      }
     },
     handleClickCollect() {
       this.$emit('collect');

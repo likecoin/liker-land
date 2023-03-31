@@ -68,9 +68,10 @@
       <ButtonV2
         v-if="url"
         preset="outline"
-        :text="$t('campaign_nft_item_view_details_label')"
-        :href="url"
+        :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
+        :href="isContentViewable ? url : ''"
         target="_blank"
+        :is-disabled="!isContentViewable"
         @click="handleClickViewContent"
       >
         <template #prepend>
@@ -211,6 +212,11 @@ export default {
       type: Number,
       default: 0,
     },
+
+    isContentViewable: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     formattedNFTPrice() {
@@ -222,7 +228,10 @@ export default {
       this.$emit('collect');
     },
     handleClickViewContent() {
-      this.$emit('view-content');
+      // Allow viewing iscn url if no url exists
+      if (!this.url || this.isContentViewable) {
+        this.$emit('view-content');
+      }
     },
   },
 };
