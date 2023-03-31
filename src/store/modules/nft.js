@@ -374,7 +374,9 @@ const actions = {
           console.error(err);
         }
       });
-      if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+      if (apiMetadata && typeof apiMetadata === 'object') {
+        metadata = { ...metadata, ...apiMetadata };
+      }
     }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
       const iscnId = parent?.iscn_id_prefix;
@@ -422,7 +424,9 @@ const actions = {
           console.error(err);
         }
       });
-      if (apiMetadata) metadata = { ...metadata, ...apiMetadata };
+      if (apiMetadata && typeof apiMetadata === 'object') {
+        metadata = { ...metadata, ...apiMetadata };
+      }
     }
     commit(TYPES.NFT_SET_NFT_METADATA, { classId, nftId, metadata });
     return metadata;
