@@ -210,7 +210,7 @@ export default {
   },
   data() {
     return {
-      is3DPrintDay: new Date().getMonth() === 3 && new Date().getDate() === 1,
+      is3DPrintDay: false,
       trendingClassIds: [],
       latestClassIds: [],
     };
@@ -277,6 +277,8 @@ export default {
     },
   },
   async mounted() {
+    this.is3DPrintDay =
+      new Date().getMonth() === 3 && new Date().getDate() === 1;
     const { hash } = this.$route;
     if (hash) {
       try {
