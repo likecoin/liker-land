@@ -91,6 +91,7 @@ export default {
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
 
+      iscnData: null,
       nftISCNContentFingerprints: [],
 
       nftPriceInUSD: undefined,
@@ -212,6 +213,9 @@ export default {
     },
     nftExternalURL() {
       return this.nftMetadata.external_url || this.NFTExternalUrl;
+    },
+    iscnContentUrls() {
+      return this.iscnData?.sameAs || [];
     },
     nftIsUseListingPrice() {
       return (
@@ -475,8 +479,9 @@ export default {
       if (!this.iscnId) return;
       try {
         const res = await getISCNRecord(this.iscnId);
-        const [{ data: { contentFingerprints } = {} } = {}] = res?.records;
-        this.nftISCNContentFingerprints = contentFingerprints;
+        const [{ data } = {}] = res?.records;
+        this.iscnData = data;
+        this.nftISCNContentFingerprints = data?.contentFingerprints;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

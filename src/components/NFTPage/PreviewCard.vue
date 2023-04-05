@@ -97,6 +97,26 @@
         </template>
       </ButtonV2>
 
+      <template v-if="isContentViewable">
+        <ButtonV2
+          v-for="contentUrl in contentUrls"
+          :key="contentUrl"
+          class="mt-[12px]"
+          preset="outline"
+          :text="$t(`nft_details_page_button_view_${getContentUrlType(contentUrl)}`)"
+          :href="contentUrl"
+          target="_blank"
+          @click="handleClickViewContentUrls(getContentUrlType(contentUrl))"
+        >
+          <template #prepend>
+            <IconArticle />
+          </template>
+          <template #append>
+            <IconLinkExternal />
+          </template>
+        </ButtonV2>
+      </template>
+
       <div
         v-if="isWritingNFT"
         class="grid grid-flow-col gap-[16px] items-center justify-center mt-[18px] text-[12px]"
@@ -141,6 +161,10 @@ export default {
     url: {
       type: String,
       default: undefined,
+    },
+    contentUrls: {
+      type: Array,
+      default: () => [],
     },
 
     // BackgroundImg
@@ -224,6 +248,11 @@ export default {
     },
   },
   methods: {
+    getContentUrlType(url) {
+      if (url.includes('epub')) return 'epub';
+      if (url.includes('pdf')) return 'pdf';
+      return 'unknown';
+    },
     handleClickCollect() {
       this.$emit('collect');
     },
@@ -232,6 +261,9 @@ export default {
       if (!this.url || this.isContentViewable) {
         this.$emit('view-content');
       }
+    },
+    handleClickViewContentUrls(type) {
+      this.$emit('view-content-urls', type);
     },
   },
 };
