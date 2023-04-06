@@ -76,7 +76,7 @@
         preset="primary"
         :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
         class="hidden laptop:block !border-[2px] !border-like-cyan-light"
-        :href="isContentViewable ? url : ''"
+        :href="url"
         target="_blank"
         :is-disabled="isContentViewable"
         @click="handleClickViewContent"
@@ -144,9 +144,7 @@ export default {
       this.$emit('hover-sell');
     },
     handleClickViewContent() {
-      if (this.isContentViewable) {
-        this.$emit('view-content');
-      }
+      this.$emit('view-content');
     },
   },
 };

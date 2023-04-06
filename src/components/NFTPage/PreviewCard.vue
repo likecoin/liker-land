@@ -69,7 +69,7 @@
         v-if="url"
         preset="outline"
         :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
-        :href="isContentViewable ? url : ''"
+        :href="url"
         target="_blank"
         :is-disabled="!isContentViewable"
         @click="handleClickViewContent"
@@ -101,9 +101,9 @@
         <ButtonV2
           v-for="contentUrl in contentUrls"
           :key="contentUrl"
-          class="mt-[12px]"
+          class="mt-[12px] w-full"
           preset="outline"
-          :text="$t(`nft_details_page_button_view_${getContentUrlType(contentUrl)}`)"
+          :text="getContentUrlButtonText(contentUrl)"
           :href="contentUrl"
           target="_blank"
           @click="handleClickViewContentUrls(getContentUrlType(contentUrl))"
@@ -253,14 +253,22 @@ export default {
       if (url.includes('pdf')) return 'pdf';
       return 'unknown';
     },
+    getContentUrlButtonText(url) {
+      const type = getContentUrlType(url);
+      switch (type) {
+        case 'epub':
+          return this.$t('nft_details_page_button_view_epub');
+        case 'pdf':
+          return this.$t('nft_details_page_button_view_pdf');
+        default:
+          return this.$t('nft_details_page_button_view_unknown');
+      }
+    },
     handleClickCollect() {
       this.$emit('collect');
     },
     handleClickViewContent() {
-      // Allow viewing iscn url if no url exists
-      if (!this.url || this.isContentViewable) {
-        this.$emit('view-content');
-      }
+      this.$emit('view-content');
     },
     handleClickViewContentUrls(type) {
       this.$emit('view-content-urls', type);
