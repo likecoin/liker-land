@@ -85,6 +85,7 @@
             <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsNFTBook">
               <NFTPagePreviewCard
                 :url="NFTExternalUrl"
+                :content-urls="iscnContentUrls"
                 :image-bg-color="NFTImageBackgroundColor"
                 :image-url="NFTImageUrl"
                 :avatar-url="creatorAvatar"
@@ -100,8 +101,10 @@
                 :collector-count="ownerCount"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
+                :is-content-viewable="!(nftIsNFTBook && !ownCount)"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
+                @view-content-urls="handleViewContentUrls"
               />
             </NFTGemWrapper>
           </div>
@@ -118,6 +121,7 @@
               :is-collectable="nftIsCollectable"
               :collected-count="collectedCount"
               :collector-count="ownerCount"
+              :is-content-viewable="!(nftIsNFTBook && !ownCount)"
               :is-loading="uiIsOpenCollectModal && isCollecting"
               :url="NFTExternalUrl"
               @collect="handleCollectFromPriceSection"
@@ -433,6 +437,15 @@ export default {
         'NFT',
         'nft_details_page_view_content',
         this.classId,
+        1
+      );
+    },
+    handleViewContentUrls(type) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_page_view_content_url',
+        type,
         1
       );
     },

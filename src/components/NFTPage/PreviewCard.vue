@@ -68,9 +68,10 @@
       <ButtonV2
         v-if="url"
         preset="outline"
-        :text="$t('campaign_nft_item_view_details_label')"
+        :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
         :href="url"
         target="_blank"
+        :is-disabled="!isContentViewable"
         @click="handleClickViewContent"
       >
         <template #prepend>
@@ -95,6 +96,26 @@
           <IconLinkExternal />
         </template>
       </ButtonV2>
+
+      <template v-if="isContentViewable">
+        <ButtonV2
+          v-for="contentUrl in contentUrls"
+          :key="contentUrl"
+          class="mt-[12px] w-full"
+          preset="outline"
+          :text="getContentUrlButtonText(contentUrl)"
+          :href="contentUrl"
+          target="_blank"
+          @click="handleClickViewContentUrls(getContentUrlType(contentUrl))"
+        >
+          <template #prepend>
+            <IconArticle />
+          </template>
+          <template #append>
+            <IconLinkExternal />
+          </template>
+        </ButtonV2>
+      </template>
 
       <div
         v-if="isWritingNFT"
@@ -140,6 +161,10 @@ export default {
     url: {
       type: String,
       default: undefined,
+    },
+    contentUrls: {
+      type: Array,
+      default: () => [],
     },
 
     // BackgroundImg
@@ -211,6 +236,11 @@ export default {
       type: Number,
       default: 0,
     },
+
+    isContentViewable: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     formattedNFTPrice() {
@@ -218,11 +248,30 @@ export default {
     },
   },
   methods: {
+    getContentUrlType(url) {
+      if (url.includes('epub')) return 'epub';
+      if (url.includes('pdf')) return 'pdf';
+      return 'unknown';
+    },
+    getContentUrlButtonText(url) {
+      const type = getContentUrlType(url);
+      switch (type) {
+        case 'epub':
+          return this.$t('nft_details_page_button_view_epub');
+        case 'pdf':
+          return this.$t('nft_details_page_button_view_pdf');
+        default:
+          return this.$t('nft_details_page_button_view_unknown');
+      }
+    },
     handleClickCollect() {
       this.$emit('collect');
     },
     handleClickViewContent() {
       this.$emit('view-content');
+    },
+    handleClickViewContentUrls(type) {
+      this.$emit('view-content-urls', type);
     },
   },
 };
