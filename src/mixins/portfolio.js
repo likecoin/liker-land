@@ -382,16 +382,21 @@ export const createPortfolioMixin = ({
       if (!portfolioMainView) return;
       portfolioMainView.setupPortfolioGrid();
     },
-    syncRouteQuery({ tab = this.currentTab, type = this.nftTypeFilter } = {}) {
+    syncRouteQuery({
+      tab = this.currentTab,
+      type: inputType = this.nftTypeFilter,
+    } = {}) {
       const { query } = this.$route;
       const queryTab = query.tab;
-      let queryType = query.type?.toUpperCase();
+      const queryType = query.type?.toUpperCase();
+
+      let type = inputType;
 
       const newQuery = {};
 
       if (!queryTab || !tabOptions[queryTab] || this.currentTab !== tab) {
         newQuery.tab = tab;
-        queryType = NFT_TYPE_FILTER_OPTIONS.ALL;
+        type = NFT_TYPE_FILTER_OPTIONS.ALL;
       }
 
       if (
