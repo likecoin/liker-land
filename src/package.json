@@ -57,7 +57,7 @@
     "firebase-admin": "^11.2.0",
     "firestore-store": "^1.0.0",
     "gsap": "^3.10.4",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "magic-grid": "^3.2.4",

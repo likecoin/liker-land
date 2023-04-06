@@ -45,7 +45,6 @@ export const createPortfolioMixin = ({
       nftCreatorFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
-      nftTypeFilter: NFT_TYPE_FILTER_OPTIONS.ALL,
     };
   },
   computed: {
@@ -61,6 +60,10 @@ export const createPortfolioMixin = ({
     currentTab() {
       const { tab } = this.$route.query;
       return tabOptions[tab] ? tab : DEFAULT_TAB;
+    },
+    nftTypeFilter() {
+      const type = this.$route.query.type?.toUpperCase();
+      return NFT_TYPE_FILTER_OPTIONS[type] ? type : NFT_TYPE_FILTER_OPTIONS.ALL;
     },
     isCurrentTabCollected() {
       return this.currentTab === tabOptions.collected;
@@ -379,14 +382,44 @@ export const createPortfolioMixin = ({
       if (!portfolioMainView) return;
       portfolioMainView.setupPortfolioGrid();
     },
-    syncRouteForTab(tab = this.currentTab) {
+    syncRouteQuery({
+      tab = this.currentTab,
+      type: inputType = this.nftTypeFilter,
+    } = {}) {
       const { query } = this.$route;
-      if (!query.tab || !tabOptions[query.tab] || this.currentTab !== tab) {
+      const queryTab = query.tab;
+      const queryType = query.type?.toUpperCase();
+
+      let type = inputType;
+
+      const newQuery = {};
+
+      if (!queryTab || !tabOptions[queryTab] || this.currentTab !== tab) {
+        newQuery.tab = tab;
+        type = NFT_TYPE_FILTER_OPTIONS.ALL;
+      }
+
+      if (
+        !queryType ||
+        !NFT_TYPE_FILTER_OPTIONS[queryType] ||
+        this.nftTypeFilter !== type
+      ) {
+        newQuery.type =
+          type === NFT_TYPE_FILTER_OPTIONS.ALL ? undefined : type.toLowerCase();
+      }
+
+      if (Object.keys(newQuery).length) {
         this.$router.replace({
           ...this.$route,
-          query: { ...query, tab },
+          query: { ...query, ...newQuery },
         });
       }
+    },
+    syncRouteForTab(tab) {
+      this.syncRouteQuery({ tab });
+    },
+    syncRouteForTypeFilter(type) {
+      this.syncRouteQuery({ type });
     },
     handleInfiniteScroll(tab) {
       switch (tab) {
@@ -454,7 +487,6 @@ export const createPortfolioMixin = ({
     changeTab(tab) {
       if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
-      this.nftTypeFilter = NFT_TYPE_FILTER_OPTIONS.ALL;
       this.nftCreatorFilter = [];
     },
     handleNFTClassListCreatorChange({ value }) {
@@ -484,7 +516,7 @@ export const createPortfolioMixin = ({
         `Filter portfolio item by ${value}`,
         1
       );
-      this.nftTypeFilter = value;
+      this.syncRouteForTypeFilter(value);
       this.nftCreatorFilter = [];
     },
     handleNFTClassListSortingChange({ sorting, order }) {
