@@ -286,8 +286,8 @@ const nuxtConfig = {
     defaultLocale: 'zh-Hant',
     langDir: '~/locales/',
     detectBrowserLanguage: {
-      redirectOn: 'root',
-      alwaysRedirect: true
+      useCookie: false,
+      redirectOn: 'no prefix',
     },
   },
 
