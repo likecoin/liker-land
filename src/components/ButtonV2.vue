@@ -99,8 +99,10 @@ export default class ButtonV2 extends Vue {
   readonly labelTag!: string | undefined;
 
   get tag() {
-    if (this.to) return 'NuxtLink';
-    if (this.$attrs.href) return 'a';
+    if (!this.isDisabled) {
+      if (this.to) return 'NuxtLink';
+      if (this.$attrs.href) return 'a';
+    }
     return 'button';
   }
 
@@ -189,12 +191,11 @@ export default class ButtonV2 extends Vue {
       'box-border',
       'overflow-hidden',
       'items-center',
-      'cursor-pointer',
       'transition',
       'duration-200',
+      this.isDisabled ? 'cursor-default' : 'cursor-pointer',
       {
         'justify-center': this.isCircle,
-        'cursor-default bg-shade-gray text-medium-gray': this.isDisabled,
       },
     ];
   }
