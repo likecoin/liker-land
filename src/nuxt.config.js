@@ -275,10 +275,12 @@ const nuxtConfig = {
     locales: [
       {
         code: 'en',
+        iso: 'en',
         file: 'en.json',
       },
       {
         code: 'zh-Hant',
+        iso: 'zh-Hant',
         file: 'zh-Hant.json',
       },
     ],
@@ -289,6 +291,7 @@ const nuxtConfig = {
       useCookie: false,
       redirectOn: 'no prefix',
     },
+    baseUrl: IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land',
   },
 
   /**
