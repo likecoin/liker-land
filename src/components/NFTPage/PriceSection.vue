@@ -78,7 +78,7 @@
         class="hidden laptop:block !border-[2px] !border-like-cyan-light"
         :href="url"
         target="_blank"
-        :is-disabled="isContentViewable"
+        :is-disabled="!isContentViewable"
         @click="handleClickViewContent"
       >
         <template #prepend>
