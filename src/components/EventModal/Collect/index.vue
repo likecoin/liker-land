@@ -261,9 +261,11 @@ export default {
       return !notSupportedPlatforms.includes(this.walletMethodType);
     },
     isDisabledPayByLIKE() {
-      return this.hasConnectedWallet
-        ? this.isInsufficientLIKE || !this.canPayByLIKE
-        : !this.canCollectWithoutWallet;
+      return (
+        !this.hasConnectedWallet ||
+        this.isInsufficientLIKE ||
+        !this.canPayByLIKE
+      );
     },
     paymentId() {
       return this.$route.query.payment_id;
