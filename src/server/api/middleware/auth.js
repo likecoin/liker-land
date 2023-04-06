@@ -1,4 +1,5 @@
 const { walletUserCollection } = require('../../modules/firebase');
+const { setPrivateCacheHeader } = require('../middleware/cache');
 
 function authenticateV2Login(req, res, next) {
   const { user, version } = req.session;
@@ -6,6 +7,7 @@ function authenticateV2Login(req, res, next) {
     res.sendStatus(401);
     return;
   }
+  setPrivateCacheHeader(res);
   next();
 }
 

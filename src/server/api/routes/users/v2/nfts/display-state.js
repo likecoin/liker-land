@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const { authenticateV2Login } = require('../../../../middleware/auth');
-const { setPrivateCacheHeader } = require('../../../../middleware/cache');
 const { handleRestfulError } = require('../../../../middleware/error');
 const { isValidAddress } = require('../../../../util/cosmos');
 const {
@@ -41,7 +40,6 @@ router.post(
   authenticateV2Login,
   async (req, res, next) => {
     try {
-      setPrivateCacheHeader(res);
       const { user } = req.session;
       const { wallet } = req.params;
       if (user !== wallet) {

@@ -5,7 +5,6 @@ const {
   Timestamp,
 } = require('../../../../modules/firebase');
 const { authenticateV2Login } = require('../../../middleware/auth');
-const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 
 const router = Router();
@@ -21,7 +20,6 @@ function isValidTs(ts, lastSeenTs) {
 router.post('/event/seen', authenticateV2Login, async (req, res, next) => {
   const { ts } = req.body;
   try {
-    setPrivateCacheHeader(res);
     const { user } = req.session;
     await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(user);

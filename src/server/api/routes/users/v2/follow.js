@@ -3,7 +3,6 @@ const {
   authenticateV2Login,
   checkEmailHasVerified,
 } = require('../../../middleware/auth');
-const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
 const { isValidFollowee } = require('../../../util/cosmos');
 const {
@@ -50,7 +49,6 @@ router.post(
   checkEmailHasVerified,
   async (req, res, next) => {
     try {
-      setPrivateCacheHeader(res);
       const { user } = req.session;
       const { creator } = req.query;
       if (!isValidFollowee(user, creator)) {
@@ -87,7 +85,6 @@ router.post(
 
 router.delete('/followees', authenticateV2Login, async (req, res, next) => {
   try {
-    setPrivateCacheHeader(res);
     const { user } = req.session;
     const { creator } = req.query;
     if (!isValidFollowee(user, creator)) {

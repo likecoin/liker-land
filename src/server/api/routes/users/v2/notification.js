@@ -3,7 +3,6 @@ const {
   authenticateV2Login,
   checkEmailHasVerified,
 } = require('../../../middleware/auth');
-const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
 const { walletUserCollection } = require('../../../../modules/firebase');
 
@@ -32,7 +31,6 @@ router.post(
   checkEmailHasVerified,
   async (req, res, next) => {
     try {
-      setPrivateCacheHeader(res);
       const { user } = req.session;
       const { transfer, purchasePrice } = req.body;
 
