@@ -224,7 +224,7 @@ export async function handleTransferEvent(message, data) {
 
   const {
     email,
-    notification: { transfer = false } = {},
+    notification: { transfer = true } = {},
     locale = 'en',
   } = userDocData;
 
