@@ -597,10 +597,10 @@
           />
         </g>
         <text class="nft-hero-graph__tagline laptop:hidden" x="27%" y="360" font-size="24px" alignment-baseline="middle" text-anchor="middle">
-          {{ is3DPrintDay ? $t('about_nft_page_hero_tagline_3d_print') : $t('about_nft_page_hero_tagline') }}
+          {{ $t('about_nft_page_hero_tagline') }}
         </text>
         <text class="hidden nft-hero-graph__tagline laptop:block" x="500" y="280" font-size="24px">
-          {{ is3DPrintDay ? $t('about_nft_page_hero_tagline_3d_print') : $t('about_nft_page_hero_tagline') }}
+          {{ $t('about_nft_page_hero_tagline') }}
         </text>
       </g>
     </svg>
@@ -610,12 +610,6 @@
 <script>
 export default {
   name: 'NFTHeroGraph',
-  props: {
-    is3DPrintDay: {
-      type: Boolean,
-      default: false,
-    },
-  },
   mounted() {
     this.initAnimation();
   },
