@@ -200,32 +200,17 @@ export default class ButtonV2 extends Vue {
     ];
   }
 
-  get activeClassesForPreset(): any {
-    switch (this.preset) {
-      case 'primary':
-        return 'active:bg-black';
-
-      case 'secondary':
-        return 'active:bg-like-green';
-
-      default:
-        return 'active:bg-dark-gray';
-    }
-  }
-
   get labelClass(): any {
     return [
       this.isCircle ? 'justify-center' : 'justify-between',
       'h-full',
       'text-center',
       'whitespace-nowrap',
-      'hover:bg-white',
-      { 'hover:bg-like-cyan-pale': this.preset === 'secondary' },
-      'hover:bg-opacity-30',
-      'active:bg-opacity-20',
+      'hover:bg-dark-gray',
+      'hover:bg-opacity-[0.2] hover:opacity-[0.8]',
+      'active:bg-opacity-[0.3]',
       'transition',
       'duration-200',
-      this.activeClassesForPreset,
       {
         'px-[12px] sm:px-[20px]': this.isMini,
         'py-[6px]': this.isMini,
