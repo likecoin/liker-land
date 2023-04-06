@@ -4,7 +4,7 @@
       :class="[
         'relative',
         'flex',
-        'cursor-pointer',
+        isDisabled ? 'opacity-50' : 'cursor-pointer',
       ]"
     >
       <input
@@ -15,6 +15,7 @@
           'opacity-0',
           'inset',
         ]"
+        :disabled="isDisabled"
         type="checkbox"
         :checked="value"
         @change="handleChange"
@@ -38,6 +39,8 @@ import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
 @Component
 export default class CheckBox extends Vue {
   @Prop({ default: false }) readonly value!: boolean
+
+  @Prop({ default: false }) readonly isDisabled!: boolean
 
   get iconClass() {
     return [
