@@ -44,14 +44,14 @@ export function updateSentryUser(vue, { user, displayName }) {
   }
 }
 
-export function logTrackerEvent(vue, category, action, label, value) {
+export function logTrackerEvent(vue, category, action, label = '', value = 1) {
   try {
     // do not track
     if (window.doNotTrack || navigator.doNotTrack) return;
     if (vue.$gtag) {
       vue.$gtag.event(action, {
         event_category: category,
-        event_label: label.substring(0, 499),
+        event_label: label && label.substring(0, 499),
         value,
       });
     }
