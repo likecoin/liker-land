@@ -16,10 +16,13 @@ import {
   postUserV2Login,
   postUserV2Logout,
   getUserV2Followees,
+  getUserV2PromptedList,
   postUserV2Followees,
   deleteUserV2Followees,
+  deleteUserV2PromptedList,
   getUserV2Followers,
   postUserV2WalletEmail,
+  postUserV2PromptedList,
   putUserV2WalletEmail,
   getUserNotificationSettingsUrl,
   getNFTEvents,
@@ -46,6 +49,7 @@ import {
   WALLET_SET_IS_LOGGING_IN,
   WALLET_SET_IS_CONNECTING_WALLET,
   WALLET_SET_EVENT_FETCHING,
+  WALLET_SET_PROMPTED_LIST,
   WALLET_SET_NOTIFICATION_SETTINGS,
 } from '../mutation-types';
 
@@ -62,6 +66,7 @@ const state = () => ({
   likerInfo: null,
   followees: [],
   followers: [],
+  promptedList: [],
   isFetchingFollowees: false,
   isFetchingFollowers: false,
   eventLastSeenTs: 0,
@@ -145,6 +150,9 @@ const mutations = {
   [WALLET_SET_FOLLOWERS](state, followers) {
     state.followers = followers;
   },
+  [WALLET_SET_PROMPTED_LIST](state, promptedList) {
+    state.promptedList = promptedList;
+  },
   [WALLET_SET_FOLLOWEES_FETCHING_STATE](state, isFetching) {
     state.isFetchingFollowees = isFetching;
   },
@@ -170,6 +178,7 @@ const getters = {
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
   walletFollowers: state => state.followers,
+  walletPromptedList: state => state.promptedList,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
   walletIsFetchingFollowers: state => state.isFetchingFollowers,
   getIsFetchingEvent: state => state.isFetchingEvent,
@@ -564,6 +573,7 @@ const actions = {
       commit(WALLET_SET_USER_INFO, null);
       commit(WALLET_SET_FOLLOWEES, []);
       commit(WALLET_SET_FOLLOWERS, []);
+      commit(WALLET_SET_PROMPTED_LIST, []);
       commit(WALLET_SET_EVENTS, []);
       commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
       await this.$api.post(postUserV2Logout());
@@ -605,8 +615,11 @@ const actions = {
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
       const { followees } = await this.$axios.$get(getUserV2Followees());
       commit(WALLET_SET_FOLLOWEES, followees);
-      if (followees.length) {
-        dispatch('lazyGetUserInfoByAddresses', followees);
+      const { promptedList } = await this.$axios.$get(getUserV2PromptedList());
+      commit(WALLET_SET_PROMPTED_LIST, promptedList);
+
+      if (followees.length || promptedList.length) {
+        dispatch('lazyGetUserInfoByAddresses', [...followees, ...promptedList]);
       }
     } catch (error) {
       throw error;
@@ -639,6 +652,29 @@ const actions = {
       await this.$api.$post(postUserV2Followees(creator));
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
+      throw error;
+    }
+  },
+  async walletAddPromptCreator({ state, commit }, creator) {
+    const prevPromptedList = state.promptedList;
+    try {
+      await this.$api.$post(postUserV2PromptedList(creator));
+      commit(WALLET_SET_PROMPTED_LIST, [...state.promptedList, creator]);
+    } catch (error) {
+      commit(WALLET_SET_PROMPTED_LIST, prevPromptedList);
+      throw error;
+    }
+  },
+  async walletRemovePromptCreator({ state, commit }, creator) {
+    const prevPromptedList = state.promptedList;
+    try {
+      await this.$api.$delete(deleteUserV2PromptedList(creator));
+      commit(
+        WALLET_SET_PROMPTED_LIST,
+        [...state.promptedList].filter(followee => followee !== creator)
+      );
+    } catch (error) {
+      commit(WALLET_SET_PROMPTED_LIST, prevPromptedList);
       throw error;
     }
   },

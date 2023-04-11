@@ -43,6 +43,21 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
   }
 });
 
+router.get('/prompted', authenticateV2Login, async (req, res, next) => {
+  try {
+    const { user } = req.session;
+    const userDoc = await walletUserCollection.doc(user).get();
+    if (!userDoc.exists) {
+      res.json({ followees: [] });
+      return;
+    }
+    const { promptedList = [] } = userDoc.data();
+    res.json({ promptedList });
+  } catch (err) {
+    handleRestfulError(req, res, next, err);
+  }
+});
+
 router.post(
   '/followees',
   authenticateV2Login,
@@ -57,15 +72,15 @@ router.post(
       }
       await db.runTransaction(async t => {
         const userRef = walletUserCollection.doc(user);
-        const userDoc = await t.get(userRef);
-        const { email, emailUnconfirmed } = userDoc.data();
-        if (!email) {
-          if (emailUnconfirmed) {
-            throw new Error('EMAIL_UNCONFIRMED');
-          } else {
-            throw new Error('EMAIL_NOT_SET_YET');
-          }
-        }
+        // const userDoc = await t.get(userRef);
+        // const { email, emailUnconfirmed } = userDoc.data();
+        // if (!email) {
+        //   if (emailUnconfirmed) {
+        //     throw new Error('EMAIL_UNCONFIRMED');
+        //   } else {
+        //     throw new Error('EMAIL_NOT_SET_YET');
+        //   }
+        // }
         await t.update(userRef, {
           followees: FieldValue.arrayUnion(creator),
         });
@@ -82,6 +97,27 @@ router.post(
     }
   }
 );
+
+router.post('/prompted', authenticateV2Login, async (req, res, next) => {
+  try {
+    setPrivateCacheHeader(res);
+    const { user } = req.session;
+    const { creator } = req.query;
+    if (!isValidFollowee(user, creator)) {
+      res.status(400).send('INVALID_CREATOR_ADDRESS');
+      return;
+    }
+    await db.runTransaction(async t => {
+      const userRef = walletUserCollection.doc(user);
+      await t.update(userRef, {
+        promptedList: FieldValue.arrayUnion(creator),
+      });
+    });
+    res.sendStatus(200);
+  } catch (err) {
+    handleRestfulError(req, res, next, err);
+  }
+});
 
 router.delete('/followees', authenticateV2Login, async (req, res, next) => {
   try {
