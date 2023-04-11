@@ -628,14 +628,7 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        if (!this.getAddress) {
-          const isConnected = await this.connectWallet({
-            shouldSkipLogin: true,
-          });
-          if (!isConnected) return;
-        } else {
-          await this.initIfNecessary();
-        }
+        await this.initIfNecessary();
         if (this.hasConnectedWallet) {
           logPurchaseFlowEvent(this, 'add_shipping_info', purchaseEventParams);
           this.fetchUserCollectedCount();
