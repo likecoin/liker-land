@@ -6,6 +6,7 @@ const event = require('./event');
 const follow = require('./follow');
 const locale = require('./locale');
 const nfts = require('./nfts');
+const notification = require('./notification');
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.use(event);
 router.use(follow);
 router.use(locale);
 router.use(nfts);
+router.use(notification);
 
 module.exports = router;

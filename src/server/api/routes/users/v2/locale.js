@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const { authenticateV2Login } = require('../../../middleware/auth');
-const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const { handleRestfulError } = require('../../../middleware/error');
 const { walletUserCollection } = require('../../../../modules/firebase');
 
@@ -28,7 +27,6 @@ router.get('/locale', authenticateV2Login, async (req, res, next) => {
 
 router.post('/locale', authenticateV2Login, async (req, res, next) => {
   try {
-    setPrivateCacheHeader(res);
     const { user } = req.session;
     const { locale } = req.body;
     if (!locale || !AVAILABLE_LOCALES.includes(locale)) {

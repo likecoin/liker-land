@@ -5,7 +5,6 @@ const {
   walletUserCollection,
 } = require('../../../../modules/firebase');
 const { authenticateV2Login } = require('../../../middleware/auth');
-const { setPrivateCacheHeader } = require('../../../middleware/cache');
 const {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
@@ -22,7 +21,6 @@ const router = Router();
 
 router.get('/self', authenticateV2Login, async (req, res, next) => {
   try {
-    setPrivateCacheHeader(res);
     const { user } = req.session;
     const userDoc = await walletUserCollection.doc(user).get();
     const {

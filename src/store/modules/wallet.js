@@ -21,6 +21,7 @@ import {
   getUserV2Followers,
   postUserV2WalletEmail,
   putUserV2WalletEmail,
+  getUserNotificationSettingsUrl,
   getNFTEvents,
   getNFTClassesPartial,
 } from '~/util/api';
@@ -45,6 +46,7 @@ import {
   WALLET_SET_IS_LOGGING_IN,
   WALLET_SET_IS_CONNECTING_WALLET,
   WALLET_SET_EVENT_FETCHING,
+  WALLET_SET_NOTIFICATION_SETTINGS,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -69,6 +71,7 @@ const state = () => ({
   likeBalance: null,
   likeBalanceFetchPromise: null,
   isFetchingEvent: false,
+  notificationSettings: null,
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -151,6 +154,9 @@ const mutations = {
   [WALLET_SET_EVENT_FETCHING](state, isFetching) {
     state.isFetchingEvent = isFetching;
   },
+  [WALLET_SET_NOTIFICATION_SETTINGS](state, notificationSettings) {
+    state.notificationSettings = notificationSettings;
+  },
 };
 
 const getters = {
@@ -198,6 +204,7 @@ const getters = {
   walletIsLoggingIn: state => state.isConnectingWallet || state.isLoggingIn,
   walletLIKEBalance: state => state.likeBalance,
   walletLIKEBalanceFetchPromise: state => state.likeBalanceFetchPromise,
+  walletNotificationSettings: state => state.notificationSettings,
 };
 
 function formatEventType(e, loginAddress) {
@@ -645,6 +652,27 @@ const actions = {
       );
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
+      throw error;
+    }
+  },
+  async walletFetchNotificationSettings({ commit }) {
+    try {
+      const { notification: notificationSettings } = await this.$api.$get(
+        getUserNotificationSettingsUrl()
+      );
+      commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletUpdateNotificationSettings({ commit }, notificationSettings) {
+    try {
+      await this.$api.$post(
+        getUserNotificationSettingsUrl(),
+        notificationSettings
+      );
+      commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
+    } catch (error) {
       throw error;
     }
   },
