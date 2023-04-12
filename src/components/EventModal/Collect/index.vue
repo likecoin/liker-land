@@ -261,7 +261,7 @@ export default {
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
       memo: '',
-      followStatus: FOLLOW_STATUS.UNFOLLOW,
+      followStatus: FOLLOW_STATUS.FOLLOWED,
       isFollowStatusChanging: false,
     };
   },
@@ -347,18 +347,18 @@ export default {
       }
     },
     uiTxNFTStatus() {
-      if (this.uiTxNFTStatus === 'processing') {
-        if (this.walletHasLoggedIn) {
-          const creator = this.getNFTClassMetadataById(this.classId)
-            ?.iscn_owner;
-          if (this.walletFollowees?.includes(creator)) {
-            this.followStatus = FOLLOW_STATUS.FOLLOWED;
-          } else if (this.walletPromptedList?.includes(creator)) {
-            this.followStatus = FOLLOW_STATUS.UNFOLLOW;
-          } else {
-            this.followStatus = FOLLOW_STATUS.PROMPT;
-            this.walletFollowCreator(creator);
-          }
+      if (this.uiTxNFTStatus === 'processing' && this.walletHasLoggedIn) {
+        const creator = this.getNFTClassMetadataById(this.classId)?.iscn_owner;
+        if (
+          this.walletFollowees?.includes(creator) ||
+          creator === this.getAddress
+        ) {
+          this.followStatus = FOLLOW_STATUS.FOLLOWED;
+        } else if (this.walletPromptedList?.includes(creator)) {
+          this.followStatus = FOLLOW_STATUS.UNFOLLOW;
+        } else {
+          this.followStatus = FOLLOW_STATUS.PROMPT;
+          this.walletFollowCreator(creator);
         }
       }
     },
