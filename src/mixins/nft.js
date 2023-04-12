@@ -8,7 +8,6 @@ import {
   LIKECOIN_BUTTON_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
-  LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS,
   NFT_DISPLAY_STATE,
 } from '~/constant';
 
@@ -367,14 +366,6 @@ export default {
         this.classId
       )}`;
     },
-    canCollectWithoutWallet() {
-      return (
-        !LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS.length ||
-        LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS.includes(
-          this.iscnOwner
-        )
-      );
-    },
 
     getWalletIdentityType() {
       return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
@@ -642,14 +633,7 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        if (!this.canCollectWithoutWallet && !this.getAddress) {
-          const isConnected = await this.connectWallet({
-            shouldSkipLogin: true,
-          });
-          if (!isConnected) return;
-        } else {
-          await this.initIfNecessary();
-        }
+        await this.initIfNecessary();
         if (this.hasConnectedWallet) {
           logPurchaseFlowEvent(this, 'add_shipping_info', purchaseEventParams);
           this.fetchUserCollectedCount();
