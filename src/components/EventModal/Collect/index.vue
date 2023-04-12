@@ -63,12 +63,7 @@
           :wallet-address="iscnOwner"
           :avatar-size="40"
         />
-        <ButtonV2
-          v-if="isFollowStatusChanging"
-          preset="outline"
-          size="small"
-          :text="followButtonText"
-        />
+        <ProgressIndicator v-if="isFollowStatusChanging" preset="thin" />
         <ButtonV2
           v-else
           class="flex-shrink-0"
