@@ -22,8 +22,8 @@ function checkParamWalletMatch(req, res, next) {
 }
 
 async function checkEmailHasVerified(req, res, next) {
-  const { wallet } = req.params;
-  const userDoc = await walletUserCollection.doc(wallet).get();
+  const { user } = req.session;
+  const userDoc = await walletUserCollection.doc(user).get();
   const { email, emailUnconfirmed } = userDoc.data();
   if (!email) {
     if (emailUnconfirmed) {
