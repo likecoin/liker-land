@@ -158,6 +158,7 @@
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
                 :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+                :is-nft-book="nftIsNFTBook"
                 @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
                 @view-content-urls="handleViewContentUrls"
