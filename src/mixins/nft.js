@@ -213,8 +213,14 @@ export default {
     nftExternalURL() {
       return this.nftMetadata.external_url || this.NFTExternalUrl;
     },
+    externalUrl() {
+      return this.iscnUrl || this.nftExternalURL;
+    },
+    iscnUrl() {
+      return this.iscnData?.contentMetadata?.url;
+    },
     iscnContentUrls() {
-      return this.iscnData?.sameAs || [];
+      return this.iscnData?.contentMetadata?.sameAs || [];
     },
     nftIsUseListingPrice() {
       return (
