@@ -379,7 +379,6 @@ export default {
       'walletFollowCreator',
       'walletAddPromptCreator',
       'walletUnfollowCreator',
-      'walletRemovePromptCreator',
     ]),
     resetState() {
       this.paymentMethod = undefined;
@@ -475,10 +474,7 @@ export default {
           case FOLLOW_STATUS.UNFOLLOW:
           default:
             this.followStatus = FOLLOW_STATUS.PROMPT;
-            await Promise.all([
-              await this.walletFollowCreator(this.iscnOwner),
-              await this.walletRemovePromptCreator(this.iscnOwner),
-            ]);
+            await this.walletFollowCreator(this.iscnOwner);
             break;
         }
       } catch (error) {

@@ -1,8 +1,5 @@
 const { Router } = require('express');
-const {
-  authenticateV2Login,
-  checkEmailHasVerified,
-} = require('../../../middleware/auth');
+const { authenticateV2Login } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/error');
 const { isValidFollowee } = require('../../../util/cosmos');
 const {
@@ -12,6 +9,7 @@ const {
   nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
+const { setPrivateCacheHeader } = require('../../../middleware/cache');
 
 const router = Router();
 
@@ -58,45 +56,31 @@ router.get('/prompted', authenticateV2Login, async (req, res, next) => {
   }
 });
 
-router.post(
-  '/followees',
-  authenticateV2Login,
-  checkEmailHasVerified,
-  async (req, res, next) => {
-    try {
-      const { user } = req.session;
-      const { creator } = req.query;
-      if (!isValidFollowee(user, creator)) {
-        res.status(400).send('INVALID_CREATOR_ADDRESS');
-        return;
-      }
-      await db.runTransaction(async t => {
-        const userRef = walletUserCollection.doc(user);
-        // const userDoc = await t.get(userRef);
-        // const { email, emailUnconfirmed } = userDoc.data();
-        // if (!email) {
-        //   if (emailUnconfirmed) {
-        //     throw new Error('EMAIL_UNCONFIRMED');
-        //   } else {
-        //     throw new Error('EMAIL_NOT_SET_YET');
-        //   }
-        // }
-        await t.update(userRef, {
-          followees: FieldValue.arrayUnion(creator),
-        });
-      });
-      publisher.publish(PUBSUB_TOPIC_MISC, req, {
-        logType: 'UserCreatorFollow',
-        type: 'wallet',
-        user,
-        creatorWallet: creator,
-      });
-      res.sendStatus(200);
-    } catch (err) {
-      handleRestfulError(req, res, next, err);
+router.post('/followees', authenticateV2Login, async (req, res, next) => {
+  try {
+    const { user } = req.session;
+    const { creator } = req.query;
+    if (!isValidFollowee(user, creator)) {
+      res.status(400).send('INVALID_CREATOR_ADDRESS');
+      return;
     }
+    await db.runTransaction(async t => {
+      const userRef = walletUserCollection.doc(user);
+      await t.update(userRef, {
+        followees: FieldValue.arrayUnion(creator),
+      });
+    });
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'UserCreatorFollow',
+      type: 'wallet',
+      user,
+      creatorWallet: creator,
+    });
+    res.sendStatus(200);
+  } catch (err) {
+    handleRestfulError(req, res, next, err);
   }
-);
+});
 
 router.post('/prompted', authenticateV2Login, async (req, res, next) => {
   try {
@@ -130,18 +114,20 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
     await db.runTransaction(async t => {
       const userDoc = await t.get(walletUserCollection.doc(user));
       const { email } = userDoc.data();
-      const snapshot = await t.get(
-        nftMintSubscriptionCollection
-          .where('subscriberEmail', '==', email)
-          .where('subscribedWallet', '==', creator)
-          .limit(1)
-      );
+      if (email) {
+        const snapshot = await t.get(
+          nftMintSubscriptionCollection
+            .where('subscriberEmail', '==', email)
+            .where('subscribedWallet', '==', creator)
+            .limit(1)
+        );
+        if (snapshot.docs.length > 0) {
+          t.delete(snapshot.docs[0].ref);
+        }
+      }
       t.update(walletUserCollection.doc(user), {
         followees: FieldValue.arrayRemove(creator),
       });
-      if (snapshot.docs.length > 0) {
-        t.delete(snapshot.docs[0].ref);
-      }
     });
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
       logType: 'UserCreatorUnfollow',

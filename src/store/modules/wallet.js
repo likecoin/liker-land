@@ -19,7 +19,6 @@ import {
   getUserV2PromptedList,
   postUserV2Followees,
   deleteUserV2Followees,
-  deleteUserV2PromptedList,
   getUserV2Followers,
   postUserV2WalletEmail,
   postUserV2PromptedList,
@@ -660,19 +659,6 @@ const actions = {
     try {
       await this.$api.$post(postUserV2PromptedList(creator));
       commit(WALLET_SET_PROMPTED_LIST, [...state.promptedList, creator]);
-    } catch (error) {
-      commit(WALLET_SET_PROMPTED_LIST, prevPromptedList);
-      throw error;
-    }
-  },
-  async walletRemovePromptCreator({ state, commit }, creator) {
-    const prevPromptedList = state.promptedList;
-    try {
-      await this.$api.$delete(deleteUserV2PromptedList(creator));
-      commit(
-        WALLET_SET_PROMPTED_LIST,
-        [...state.promptedList].filter(followee => followee !== creator)
-      );
     } catch (error) {
       commit(WALLET_SET_PROMPTED_LIST, prevPromptedList);
       throw error;
