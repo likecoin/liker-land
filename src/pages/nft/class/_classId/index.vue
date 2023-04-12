@@ -84,7 +84,7 @@
           >
             <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsNFTBook">
               <NFTPagePreviewCard
-                :url="NFTExternalUrl"
+                :url="externalUrl"
                 :content-urls="iscnContentUrls"
                 :image-bg-color="NFTImageBackgroundColor"
                 :image-url="NFTImageUrl"
@@ -123,7 +123,7 @@
               :collector-count="ownerCount"
               :is-content-viewable="!(nftIsNFTBook && !ownCount)"
               :is-loading="uiIsOpenCollectModal && isCollecting"
-              :url="NFTExternalUrl"
+              :url="externalUrl"
               @collect="handleCollectFromPriceSection"
               @click-sell="handleClickSellFromPriceSection"
               @hover-sell="handleHoverSellFromPriceSection"
@@ -156,7 +156,7 @@
             :items="populatedDisplayEvents"
             :show-memo="true"
             :is-loading="isHistoryInfoLoading"
-            :content-url="NFTExternalUrl"
+            :content-url="externalUrl"
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
             :class-id="classId"
