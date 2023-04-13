@@ -67,18 +67,38 @@
           :avatar-size="40"
         />
         <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
-        <ButtonV2
-          v-else
-          class="flex-shrink-0"
-          size="small"
-          :preset="isFollowPromptStateAuto ? 'secondary' : 'tertiary'"
-          :text="followPromptButtonText"
-          @click="handleClickFollow"
-        >
-          <template #prepend>
-            <IconCheck v-if="isFollowPromptStateAuto" />
-          </template>
-        </ButtonV2>
+        <div v-else class="relative flex flex-shrink-0 group w-[138px]" @click="handleClickFollow">
+          <div
+            :class="[
+              ...getDefaultClass,
+              isFollowPromptStateAuto
+                ? '!bg-like-cyan-light text-like-green'
+                : '!bg-shade-gray text-dark-gray',
+            ]"
+          >
+            <Label align="center" :text="followPromptButtonText">
+              <template v-if="isFollowPromptStateAuto" #prepend>
+                <IconCheck />
+              </template>
+            </Label>
+          </div>
+          <div
+            :class="[
+              ...getDefaultClass,
+              'group-hover:opacity-[100]',
+              'group-active:!bg-medium-gray',
+              'opacity-0',
+              'transition-all',
+              'absolute',
+              'inset-0',
+              isFollowPromptStateAuto
+                ? '!bg-shade-gray text-dark-gray'
+                : '!bg-like-cyan-light text-like-green',
+            ]"
+          >
+            <Label align="center" :text="followPromptButtonHoverText" />
+          </div>
+        </div>
       </div>
     </template>
 
@@ -330,11 +350,36 @@ export default {
       }
       return this.$t('settings_follow_follow');
     },
+    followPromptButtonHoverText() {
+      if (this.isFollowPromptStateAuto) {
+        return this.$t('settings_follow_unfollow');
+      }
+      return this.$t('settings_follow_follow');
+    },
     isFollowPromptStateFollowed() {
       return this.followPromptState === FOLLOW_PROMPT_STATE.FOLLOWED;
     },
     isFollowPromptStateAuto() {
       return this.followPromptState === FOLLOW_PROMPT_STATE.AUTO;
+    },
+    getDefaultClass() {
+      return [
+        'flex',
+        'gap-[16px]',
+        'box-border',
+        'overflow-hidden',
+        'justify-center',
+        'items-center',
+        'transition',
+        'duration-200',
+        'h-40px',
+        'w-full',
+        'font-600',
+        'px-[16px]',
+        'py-[8px]',
+        'rounded-[10px]',
+        'cursor-pointer',
+      ];
     },
   },
   watch: {
