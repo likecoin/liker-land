@@ -41,7 +41,7 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
   }
 });
 
-router.get('/prompted', authenticateV2Login, async (req, res, next) => {
+router.get('/interacted', authenticateV2Login, async (req, res, next) => {
   try {
     const { user } = req.session;
     const userDoc = await walletUserCollection.doc(user).get();
@@ -49,8 +49,8 @@ router.get('/prompted', authenticateV2Login, async (req, res, next) => {
       res.json({ followees: [] });
       return;
     }
-    const { promptedList = [] } = userDoc.data();
-    res.json({ promptedList });
+    const { interactedCreators = [] } = userDoc.data();
+    res.json({ interactedCreators });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
@@ -82,7 +82,7 @@ router.post('/followees', authenticateV2Login, async (req, res, next) => {
   }
 });
 
-router.post('/prompted', authenticateV2Login, async (req, res, next) => {
+router.post('/interacted', authenticateV2Login, async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
     const { user } = req.session;
@@ -94,7 +94,7 @@ router.post('/prompted', authenticateV2Login, async (req, res, next) => {
     await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(user);
       await t.update(userRef, {
-        promptedList: FieldValue.arrayUnion(creator),
+        interactedCreators: FieldValue.arrayUnion(creator),
       });
     });
     res.sendStatus(200);

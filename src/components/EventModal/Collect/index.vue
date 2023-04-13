@@ -10,7 +10,7 @@
       <IconPrice />
     </template>
 
-    <template v-if="!uiTxNFTStatus || ['insufficient','failed'].includes(uiTxNFTStatus)" #top>
+    <template v-if="!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus)" #top>
       <NFTPageOwning
         v-if="hasConnectedWallet"
         class="mb-[10px] phone:mt-0"
@@ -44,17 +44,20 @@
               ? 'tx_modal_status_complete_text_collect'
               : 'tx_modal_status_complete_text_collect_without_wallet'"
         >
-          <a
+          <NuxtLink
             class="font-[600] underline"
             place="portfolio"
-            :href="`/${getAddress}`"
+            :to="localeLocation({
+              name: 'id___en',
+              params: { id: getAddress }
+            })"
           >
             {{ $t('tx_modal_status_complete_text_collect_portfolio') }}
-          </a>
+          </NuxtLink>
         </i18n>
       </Label>
       <div
-        v-if="followStatus !== 'followed'"
+        v-if="!isFollowPromptStateFollowed"
         class="flex justify-center items-center mt-[16px] px-[12px] py-[8px] rounded-[48px] border-[1px] border-dark-gray"
       >
         <NFTMessageIdentity
@@ -63,17 +66,17 @@
           :wallet-address="iscnOwner"
           :avatar-size="40"
         />
-        <ProgressIndicator v-if="isFollowStatusChanging" preset="thin" />
+        <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
         <ButtonV2
           v-else
           class="flex-shrink-0"
           size="small"
-          :preset="followStatus === 'prompt' ? 'secondary' : 'tertiary'"
-          :text="followButtonText"
+          :preset="isFollowPromptStateAuto ? 'secondary' : 'tertiary'"
+          :text="followPromptButtonText"
           @click="handleClickFollow"
         >
           <template #prepend>
-            <IconCheck v-if="followStatus === 'prompt'" />
+            <IconCheck v-if="isFollowPromptStateAuto" />
           </template>
         </ButtonV2>
       </div>
@@ -213,10 +216,10 @@ import { formatNumberWithLIKE } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
 
-const FOLLOW_STATUS = {
+const FOLLOW_PROMPT_STATE = {
   FOLLOWED: 'followed', // No need to show any follow UI.
-  UNFOLLOW: 'unFollow', // Show a switch button to toggle follow status.
-  PROMPT: 'prompt', // Show auto-followed UI.
+  UNFOLLOW: 'unfollow', // Show a switch button to toggle follow status.
+  AUTO: 'auto', // Show auto-followed UI.
 };
 
 export default {
@@ -261,8 +264,8 @@ export default {
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
       memo: '',
-      followStatus: FOLLOW_STATUS.FOLLOWED,
-      isFollowStatusChanging: false,
+      followPromptState: FOLLOW_PROMPT_STATE.FOLLOWED,
+      isFollowPromptUpdating: false,
     };
   },
   computed: {
@@ -270,7 +273,7 @@ export default {
       'getAddress',
       'walletFollowees',
       'walletIsLoggingIn',
-      'walletPromptedList',
+      'walletInteractedCreators',
     ]),
     developerMode() {
       return !!this.$route.query.debug;
@@ -316,14 +319,20 @@ export default {
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
       );
     },
-    followButtonText() {
-      if (this.isFollowStatusChanging) {
+    followPromptButtonText() {
+      if (this.isFollowPromptUpdating) {
         return this.$t('nft_details_page_label_loading');
       }
-      if (this.followStatus === FOLLOW_STATUS.PROMPT) {
+      if (this.isFollowPromptStateAuto) {
         return this.$t('settings_following');
       }
       return this.$t('settings_follow_follow');
+    },
+    isFollowPromptStateFollowed() {
+      return this.followPromptState === FOLLOW_PROMPT_STATE.FOLLOWED;
+    },
+    isFollowPromptStateAuto() {
+      return this.followPromptState === FOLLOW_PROMPT_STATE.AUTO;
     },
   },
   watch: {
@@ -353,11 +362,11 @@ export default {
           this.walletFollowees?.includes(creator) ||
           creator === this.getAddress
         ) {
-          this.followStatus = FOLLOW_STATUS.FOLLOWED;
-        } else if (this.walletPromptedList?.includes(creator)) {
-          this.followStatus = FOLLOW_STATUS.UNFOLLOW;
+          this.followPromptState = FOLLOW_PROMPT_STATE.FOLLOWED;
+        } else if (this.walletInteractedCreators?.includes(creator)) {
+          this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
         } else {
-          this.followStatus = FOLLOW_STATUS.PROMPT;
+          this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
           this.walletFollowCreator(creator);
         }
       }
@@ -372,7 +381,7 @@ export default {
     ...mapActions([
       'uiCloseTxModal',
       'walletFollowCreator',
-      'walletAddPromptCreator',
+      'walletAddInteractedCreator',
       'walletUnfollowCreator',
     ]),
     resetState() {
@@ -457,18 +466,18 @@ export default {
     },
     async handleClickFollow() {
       try {
-        this.isFollowStatusChanging = true;
-        switch (this.followStatus) {
-          case FOLLOW_STATUS.PROMPT:
-            this.followStatus = FOLLOW_STATUS.UNFOLLOW;
+        this.isFollowPromptUpdating = true;
+        switch (this.followPromptState) {
+          case FOLLOW_PROMPT_STATE.AUTO:
+            this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
             await Promise.all([
               this.walletUnfollowCreator(this.iscnOwner),
-              this.walletAddPromptCreator(this.iscnOwner),
+              this.walletAddInteractedCreator(this.iscnOwner),
             ]);
             break;
-          case FOLLOW_STATUS.UNFOLLOW:
+          case FOLLOW_PROMPT_STATE.UNFOLLOW:
           default:
-            this.followStatus = FOLLOW_STATUS.PROMPT;
+            this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
             await this.walletFollowCreator(this.iscnOwner);
             break;
         }
@@ -476,7 +485,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        this.isFollowStatusChanging = false;
+        this.isFollowPromptUpdating = false;
       }
     },
   },
