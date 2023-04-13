@@ -621,8 +621,7 @@ const actions = {
 
       if (followees.length || interactedCreators.length) {
         dispatch('lazyGetUserInfoByAddresses', [
-          ...followees,
-          ...interactedCreators,
+          ...new Set([...followees, ...interactedCreators]),
         ]);
       }
     } catch (error) {

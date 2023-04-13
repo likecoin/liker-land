@@ -46,7 +46,7 @@ router.get('/interacted', authenticateV2Login, async (req, res, next) => {
     const { user } = req.session;
     const userDoc = await walletUserCollection.doc(user).get();
     if (!userDoc.exists) {
-      res.json({ followees: [] });
+      res.json({ interactedCreators: [] });
       return;
     }
     const { interactedCreators = [] } = userDoc.data();
