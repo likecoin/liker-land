@@ -61,6 +61,21 @@
             />
           </template>
         </NFTPortfolioTopUsersList>
+        <CardV2>
+          <Label
+            class="w-min font-600 text-like-green"
+            :text="$t('collections')"
+            preset="h5"
+            align="center"
+            valign="middle"
+          />
+          <Label
+            v-for="collectionId in nftListOfCollectedCollectionId"
+            :key="collectionId"
+          >
+            {{ (getNFTCollectionById(collectionId) || {}).displayName }} @{{ getUserInfoByAddress((getNFTCollectionById(collectionId) || {}).owner).displayName || (getNFTCollectionById(collectionId) || {}).owner}}
+          </Label>
+        </CardV2>
         <!-- Follower List -->
         <div v-if="walletHasLoggedIn && isUserPortfolio" class="flex items-center justify-center">
           <div
@@ -205,7 +220,12 @@ export default {
     return { isOpenFollowersDialog: false };
   },
   computed: {
-    ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
+    ...mapGetters([
+      'walletHasLoggedIn',
+      'walletFollowees',
+      'getUserInfoByAddress',
+      'getNFTCollectionById',
+    ]),
     wallet() {
       return this.$route.params.id;
     },
