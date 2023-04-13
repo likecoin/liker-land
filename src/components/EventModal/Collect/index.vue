@@ -521,11 +521,25 @@ export default {
               this.walletUnfollowCreator(this.iscnOwner),
               this.walletAddInteractedCreator(this.iscnOwner),
             ]);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTAutoFollow',
+              FOLLOW_PROMPT_STATE.AUTO,
+              1
+            );
             break;
           case FOLLOW_PROMPT_STATE.UNFOLLOW:
           default:
             this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
             await this.walletFollowCreator(this.iscnOwner);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTAutoFollow',
+              FOLLOW_PROMPT_STATE.UNFOLLOW,
+              1
+            );
             break;
         }
       } catch (error) {
