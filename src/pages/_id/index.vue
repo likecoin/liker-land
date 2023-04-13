@@ -262,6 +262,7 @@ export default {
     this.syncRouteForTab();
     this.loadNFTListByAddress(this.wallet);
     this.loadTopUserListByAddress(this.wallet);
+    this.loadNFTCollectionsCreatedByAddress(this.wallet);
   },
   methods: {
     handleTopUserHover(i) {

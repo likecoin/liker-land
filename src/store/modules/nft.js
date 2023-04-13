@@ -27,6 +27,7 @@ const state = () => ({
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
+  nftCollectionsMap: {},
 });
 
 const mutations = {
@@ -66,6 +67,9 @@ const mutations = {
     { address, timestampMap }
   ) {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
+  },
+  [TYPES.NFT_SET_NFT_COLLECTION_INFO](state, { collectionId, collection }) {
+    Vue.set(state.nftCollectionsMap, collectionId, collection);
   },
 };
 
@@ -275,6 +279,14 @@ const getters = {
         if (!aIsWritingNFT && bIsWritingNFT) return 1;
         return b.timestamp - a.timestamp;
       }),
+  getNFTCollectionById: state => collectionId =>
+    state.nftCollectionsMap[collectionId],
+
+  getNFTCollectionByAddress: state => address => {
+    const entries = Object.entries(state.nftCollectionsMap);
+    const filtered = entries.filter(([value]) => value.owner === address);
+    return Object.fromEntries(filtered);
+  },
 };
 
 const actions = {
@@ -547,6 +559,14 @@ const actions = {
     await this.$api.post(api.postUserV2DisplayState(address), {
       classId,
       displayState,
+    });
+  },
+  setNFTCollectionInfo({ commit }, { collections }) {
+    Object.entries(collections).forEach(([collectionId, collection]) => {
+      commit(TYPES.NFT_SET_NFT_COLLECTION_INFO, {
+        collectionId,
+        collection,
+      });
     });
   },
 };

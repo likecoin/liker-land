@@ -11,6 +11,7 @@ import {
   getTopCollectorOfUser,
   getTopCreatorOfUser,
   getIdenticonAvatar,
+  getNFTCollections,
 } from '~/util/api';
 
 import clipboardMixin from '~/mixins/clipboard';
@@ -45,6 +46,7 @@ export const createPortfolioMixin = ({
       nftCreatorFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
+      nftCollectionsCreated: {},
     };
   },
   computed: {
@@ -53,6 +55,7 @@ export const createPortfolioMixin = ({
       'getNFTClassListSorterForCollected',
       'getNFTListMapByAddress',
       'getNFTClassMetadataById',
+      'getNFTCollectionById',
     ]),
     isDashboardPage() {
       return this.getRouteBaseName(this.$route) === 'dashboard';
@@ -116,6 +119,27 @@ export const createPortfolioMixin = ({
         )
         .reduce((map, nft) => map.set(nft.classId, nft), new Map());
       return nftClassMapOfOther;
+    },
+    nftListOfCollectionId() {
+      const collectionIdSet = new Set();
+      const nftClassMapOfWritingNft = Array.from(
+        this.nftClassMapOfWritingNft.values()
+      );
+      nftClassMapOfWritingNft.forEach(nft => {
+        const classMetadata = this.getNFTClassMetadataById(nft.classId);
+        if (classMetadata.collections) {
+          Object.keys(classMetadata.collections).forEach(c => {
+            collectionIdSet.add(c);
+          });
+        }
+      });
+      return Array.from(collectionIdSet);
+    },
+    nftListOfCollectedCollectionId() {
+      return this.nftListOfCollectionId.filter(id => {
+        const { nfts = [] } = this.getNFTCollectionById(id);
+        return nfts.every(classId => this.nftClassMapOfWritingNft.has(classId));
+      });
     },
     nftTypeFilteringOptions() {
       const currentClassList =
@@ -376,6 +400,7 @@ export const createPortfolioMixin = ({
       'fetchNFTListByAddress',
       'fetchNFTDisplayStateListByAddress',
       'lazyGetUserInfoByAddress',
+      'setNFTCollectionInfo',
     ]),
     setupPortfolioGrid() {
       const { portfolioMainView } = this.$refs;
@@ -440,6 +465,14 @@ export const createPortfolioMixin = ({
         default:
       }
     },
+    setNFTCollectionInfoFromMetadata() {
+      this.nftClassListOfCollected.forEach(c => {
+        const classMetadata = this.getNFTClassMetadataById(c.classId);
+        if (classMetadata.collections) {
+          this.setNFTCollectionInfo({ collections: classMetadata.collections });
+        }
+      });
+    },
     async loadNFTListByAddress(address) {
       const fetchPromise = Promise.all([
         this.fetchNFTListByAddress(address),
@@ -450,6 +483,13 @@ export const createPortfolioMixin = ({
         await fetchPromise;
       }
       this.isLoading = false;
+      this.setNFTCollectionInfoFromMetadata();
+    },
+    async loadNFTCollectionsCreatedByAddress(address) {
+      const { data } = await this.$api.get(
+        getNFTCollections({ creator: address })
+      );
+      this.nftCollectionsCreated = data;
     },
     async loadTopUserListByAddress(address) {
       const [collectorRes, creatorRes] = await Promise.all([

@@ -176,6 +176,7 @@ export default {
       if (newAddress) {
         this.fetchUserInfo();
         this.loadNFTListByAddress(this.getAddress);
+        this.loadNFTCollectionsCreatedByAddress(this.wallet);
         this.updateTopRankedCreators();
       }
     },
@@ -184,6 +185,7 @@ export default {
     this.syncRouteForTab();
     if (this.getAddress) {
       this.loadNFTListByAddress(this.getAddress);
+      this.loadNFTCollectionsCreatedByAddress(this.wallet);
       this.updateTopRankedCreators();
     }
   },
