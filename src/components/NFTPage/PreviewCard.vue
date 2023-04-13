@@ -67,11 +67,11 @@
 
       <ButtonV2
         v-if="url"
+        class="w-full"
         preset="outline"
-        :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
+        :text="$t(isNftBook ? 'nft_details_page_button_view_nft_book' : 'nft_details_page_button_view')"
         :href="url"
         target="_blank"
-        :is-disabled="!isContentViewable"
         @click="handleClickViewContent"
       >
         <template #prepend>
@@ -83,6 +83,7 @@
       </ButtonV2>
       <ButtonV2
         v-else
+        class="w-full"
         preset="outline"
         :text="$t('nft_details_page_section_metadata_iscn')"
         :href="iscnUrl"
@@ -97,25 +98,29 @@
         </template>
       </ButtonV2>
 
-      <template v-if="isContentViewable">
-        <ButtonV2
-          v-for="contentUrl in contentUrls"
-          :key="contentUrl"
-          class="mt-[12px] w-full"
-          preset="outline"
-          :text="getContentUrlButtonText(contentUrl)"
-          :href="contentUrl"
-          target="_blank"
-          @click="handleClickViewContentUrls(getContentUrlType(contentUrl))"
-        >
-          <template #prepend>
-            <IconArticle />
-          </template>
-          <template #append>
-            <IconLinkExternal />
-          </template>
-        </ButtonV2>
-      </template>
+      <p
+        v-if="contentUrls.length && !isContentViewable"
+        class="text-[14px] text-medium-gray text-center mt-[16px]"
+      >{{ $t('nft_details_page_button_collect_to_view') }}</p>
+
+      <ButtonV2
+        v-for="contentUrl in contentUrls"
+        :key="contentUrl"
+        class="mt-[12px] w-full"
+        preset="outline"
+        :text="getContentUrlButtonText(contentUrl)"
+        :href="contentUrl"
+        :is-disabled="!isContentViewable"
+        target="_blank"
+        @click="handleClickViewContentUrls(getContentUrlType(contentUrl))"
+      >
+        <template #prepend>
+          <IconArticle />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
 
       <div
         v-if="isWritingNFT"
@@ -241,6 +246,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isNftBook: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     formattedNFTPrice() {
@@ -254,7 +263,7 @@ export default {
       return 'unknown';
     },
     getContentUrlButtonText(url) {
-      const type = getContentUrlType(url);
+      const type = this.getContentUrlType(url);
       switch (type) {
         case 'epub':
           return this.$t('nft_details_page_button_view_epub');

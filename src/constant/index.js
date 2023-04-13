@@ -130,14 +130,6 @@ export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
       ]
 );
 
-// Leave it empty to allow all creators
-export const LIKECOIN_NFT_COLLECT_WITHOUT_WALLET_ITEMS_BY_CREATORS = IS_TESTNET
-  ? [
-      // Wallet address
-      'like1qv66yzpgg9f8w46zj7gkuk9wd2nrpqmca3huxf', // Aurora
-    ]
-  : [];
-
 export const TX_STATUS = {
   SIGN: 'sign',
   PROCESSING: 'processing',
