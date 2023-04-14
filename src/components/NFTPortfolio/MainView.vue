@@ -467,6 +467,9 @@ export default {
   methods: {
     getPortfolioItemsSortingLabel(sorting) {
       switch (sorting) {
+        case NFT_CLASS_LIST_SORTING.TYPE:
+          return this.$t('order_menu_type');
+
         case NFT_CLASS_LIST_SORTING.PRICE:
           return this.$t('order_menu_price');
 

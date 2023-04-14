@@ -368,6 +368,7 @@
   "notification_login_in_button": "驗證",
   "ok": "OK",
   "order_menu_by": "按{order}",
+  "order_menu_type": "類型",
   "order_menu_collected": "擁有",
   "order_menu_display_state": "精選",
   "order_menu_filter_by": "篩選",

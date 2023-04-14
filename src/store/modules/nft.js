@@ -10,6 +10,8 @@ import {
   formatOwnerInfoFromChain,
   getNFTsRespectDualPrefix,
   getNFTClassesRespectDualPrefix,
+  getNFTClassCollectionType,
+  nftClassCollectionType,
   formatNFTInfo,
   formatNFTClassInfo,
 } from '~/util/nft';
@@ -17,6 +19,12 @@ import { catchAxiosError } from '~/util/misc';
 import { getGemLevelBySoldCount } from '~/util/writing-nft';
 import { LIKECOIN_NFT_HIDDEN_ITEMS, NFT_DISPLAY_STATE } from '~/constant';
 import * as TYPES from '../mutation-types';
+
+const typeOrder = {
+  [nftClassCollectionType.NFTBook]: 2,
+  [nftClassCollectionType.WritingNFT]: 1,
+  [nftClassCollectionType.Other]: 0,
+};
 
 const state = () => ({
   purchaseInfoByClassIdMap: {},
@@ -68,22 +76,6 @@ const mutations = {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
   },
 };
-
-function compareIsWritingNFT(getters, classIdA, classIdB) {
-  const aMetadata = getters.getNFTClassMetadataById(classIdA);
-  const bMetadata = getters.getNFTClassMetadataById(classIdB);
-  const aPurchaseData = getters.getNFTClassPurchaseInfoById(classIdA);
-  const bPurchaseData = getters.getNFTClassPurchaseInfoById(classIdB);
-  const aIsWritingNFT =
-    checkIsWritingNFT(aMetadata) &&
-    (aPurchaseData?.price || aPurchaseData?.lastSoldPrice) !== undefined;
-  const bIsWritingNFT =
-    checkIsWritingNFT(bMetadata) &&
-    (bPurchaseData?.price || bPurchaseData?.lastSoldPrice) !== undefined;
-  if (aIsWritingNFT && !bIsWritingNFT) return -1;
-  if (!aIsWritingNFT && bIsWritingNFT) return 1;
-  return 0;
-}
 
 function compareNFTByFeatured(getters, address, classIdA, classIdB) {
   const featuredSet = getters.getNFTClassFeaturedSetByAddress(address);
@@ -181,14 +173,21 @@ const getters = {
         );
         if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
       }
-      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
-      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
       let Y;
+      let XMetaData;
+      let YMetaData;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
+          if (X !== Y) break;
+        // eslint-disable-next-line no-fallthrough
+        case NFT_CLASS_LIST_SORTING.TYPE:
+          XMetaData = getters.getNFTClassMetadataById(a);
+          YMetaData = getters.getNFTClassMetadataById(b);
+          X = typeOrder[getNFTClassCollectionType(XMetaData)];
+          Y = typeOrder[getNFTClassCollectionType(YMetaData)];
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
@@ -229,10 +228,10 @@ const getters = {
         );
         if (isFeaturedCompareResult !== 0) return isFeaturedCompareResult;
       }
-      const isWritingNFTCompareResult = compareIsWritingNFT(getters, a, b);
-      if (isWritingNFTCompareResult !== 0) return isWritingNFTCompareResult;
       let X;
       let Y;
+      let XMetaData;
+      let YMetaData;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
@@ -242,6 +241,13 @@ const getters = {
         case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
           X = getters.getNFTClassOwnerInfoById(a)?.[collector]?.length;
           Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
+          if (X !== Y) break;
+        // eslint-disable-next-line no-fallthrough
+        case NFT_CLASS_LIST_SORTING.TYPE:
+          XMetaData = getters.getNFTClassMetadataById(a);
+          YMetaData = getters.getNFTClassMetadataById(b);
+          X = typeOrder[getNFTClassCollectionType(XMetaData)];
+          Y = typeOrder[getNFTClassCollectionType(YMetaData)];
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:

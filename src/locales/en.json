@@ -378,6 +378,7 @@
   "notification_login_in_button": "Verify",
   "ok": "OK",
   "order_menu_by": " By {order}",
+  "order_menu_type": "Type",
   "order_menu_collected": "Own",
   "order_menu_display_state": "Featured",
   "order_menu_filter_by": "Filter by",

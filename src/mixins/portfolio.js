@@ -33,10 +33,10 @@ export const createPortfolioMixin = ({
   data() {
     return {
       isLoading: true,
-      nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
+      nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.TYPE,
       nftClassListOfCollectedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCollectedShowCount: ITEMS_PER_PAGE,
-      nftClassListOfCreatedSorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
+      nftClassListOfCreatedSorting: NFT_CLASS_LIST_SORTING.TYPE,
       nftClassListOfCreatedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCreatedShowCount: ITEMS_PER_PAGE,
       nftClassListOfOtherSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
@@ -309,6 +309,10 @@ export const createPortfolioMixin = ({
         case tabOptions.collected:
           options.push(
             {
+              sorting: NFT_CLASS_LIST_SORTING.TYPE,
+              order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+            },
+            {
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
             },
@@ -333,6 +337,10 @@ export const createPortfolioMixin = ({
 
         case tabOptions.created:
           options.push(
+            {
+              sorting: NFT_CLASS_LIST_SORTING.TYPE,
+              order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+            },
             {
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
