@@ -1,15 +1,10 @@
 /* eslint no-param-reassign: "off" */
-import stringify from 'fast-json-stable-stringify';
 import BigNumber from 'bignumber.js';
-import {
-  LOGIN_MESSAGE,
-  LIKECOIN_CHAIN_ID,
-  LIKECOIN_CHAIN_MIN_DENOM,
-  LIKECOIN_NFT_API_WALLET,
-} from '@/constant/index';
+import { LIKECOIN_NFT_API_WALLET } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
 import { getAccountBalance, getNFTHistoryDataMap } from '~/util/nft';
+import { signLoginMessage } from '~/util/cosmos';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
@@ -510,39 +505,10 @@ const actions = {
       await dispatch('initIfNecessary');
     }
     const { address } = state;
-    const memo = [
-      `${LOGIN_MESSAGE}:`,
-      JSON.stringify({
-        ts: Date.now(),
-        address,
-      }),
-    ].join(' ');
-    const payload = {
-      chain_id: LIKECOIN_CHAIN_ID,
-      memo,
-      msgs: [],
-      fee: {
-        gas: '0',
-        amount: [{ denom: LIKECOIN_CHAIN_MIN_DENOM, amount: '0' }],
-      },
-      sequence: '0',
-      account_number: '0',
-    };
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
-      const signer = (state.signer.sign || state.signer.signAmino).bind(
-        state.signer
-      );
-      const {
-        signed: message,
-        signature: { signature, pub_key: publicKey },
-      } = await signer(address, payload);
-      const data = {
-        signature,
-        publicKey: publicKey.value,
-        message: stringify(message),
-        from: address,
-      };
+      const { signer, methodType } = state;
+      const data = await signLoginMessage(signer, address, { methodType });
       await this.$api.post(postUserV2Login(), data);
       await dispatch('walletFetchSessionUserData');
     } catch (error) {

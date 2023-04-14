@@ -46,7 +46,13 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
 });
 
 router.post('/login', async (req, res, next) => {
-  const { from: inputWallet, signature, publicKey, message } = req.body;
+  const {
+    from: inputWallet,
+    signature,
+    publicKey,
+    message,
+    signMethod,
+  } = req.body;
   try {
     if (!inputWallet || !signature || !publicKey || !message) {
       res.sendStatus(400);
@@ -63,6 +69,7 @@ router.post('/login', async (req, res, next) => {
         publicKey,
         message,
         inputWallet,
+        signMethod,
       });
     } catch (err) {
       res.status(401).send(err.message);
