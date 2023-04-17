@@ -48,7 +48,7 @@
             class="font-[600] underline"
             place="portfolio"
             :to="localeLocation({
-              name: 'id___en',
+              name: 'id',
               params: { id: getAddress }
             })"
           >
