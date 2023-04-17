@@ -648,8 +648,8 @@ const actions = {
   async walletFollowCreator({ state, commit }, creator) {
     const prevFollowees = state.followees;
     try {
-      commit(WALLET_SET_FOLLOWEES, [...state.followees, creator].sort());
       await this.$api.$post(postUserV2Followees(creator));
+      commit(WALLET_SET_FOLLOWEES, prevFollowees.concat(creator).sort());
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
       throw error;
@@ -664,7 +664,7 @@ const actions = {
         WALLET_SET_FOLLOWEES,
         [...state.followees].filter(followee => followee !== creator)
       );
-      commit(WALLET_SET_PAST_FOLLOWEES, [...state.pastFollowees, creator]);
+      commit(WALLET_SET_PAST_FOLLOWEES, prevInteractedCreators.concat(creator));
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
       commit(WALLET_SET_PAST_FOLLOWEES, prevInteractedCreators);
