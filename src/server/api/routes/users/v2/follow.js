@@ -23,7 +23,7 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
     const {
       followees: walletFollowees = [],
       email,
-      interactedCreators = [],
+      pastFollowees = [],
     } = userDoc.data();
     let legacyFollowees = [];
     if (email) {
@@ -38,7 +38,7 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
     const followees = [
       ...new Set([...walletFollowees, ...legacyFollowees]).values(),
     ];
-    res.json({ followees, interactedCreators });
+    res.json({ followees, pastFollowees });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
@@ -96,7 +96,7 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
         followees: FieldValue.arrayRemove(creator),
       });
       await t.update(walletUserCollection.doc(user), {
-        interactedCreators: FieldValue.arrayUnion(creator),
+        pastFollowees: FieldValue.arrayUnion(creator),
       });
     });
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
