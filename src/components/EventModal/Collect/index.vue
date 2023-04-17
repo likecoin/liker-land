@@ -57,7 +57,7 @@
         </i18n>
       </Label>
       <div
-        v-if="!isFollowPromptStateFollowed"
+        v-if="!isFollowPromptStateDefault"
         class="flex justify-center items-center mt-[16px] px-[12px] py-[8px] rounded-[48px] border-[1px] border-dark-gray"
       >
         <NFTMessageIdentity
@@ -237,7 +237,7 @@ import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
 
 const FOLLOW_PROMPT_STATE = {
-  FOLLOWED: 'followed', // No need to show any follow UI.
+  DEFAULT: 'default', // No need to show any follow UI.
   UNFOLLOW: 'unfollow', // Show a switch button to toggle follow status.
   AUTO: 'auto', // Show auto-followed UI.
 };
@@ -284,7 +284,7 @@ export default {
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
       memo: '',
-      followPromptState: FOLLOW_PROMPT_STATE.FOLLOWED,
+      followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
       isFollowPromptUpdating: false,
     };
   },
@@ -356,8 +356,8 @@ export default {
       }
       return this.$t('settings_follow_follow');
     },
-    isFollowPromptStateFollowed() {
-      return this.followPromptState === FOLLOW_PROMPT_STATE.FOLLOWED;
+    isFollowPromptStateDefault() {
+      return this.followPromptState === FOLLOW_PROMPT_STATE.DEFAULT;
     },
     isFollowPromptStateAuto() {
       return this.followPromptState === FOLLOW_PROMPT_STATE.AUTO;
@@ -409,7 +409,7 @@ export default {
           this.walletFollowees?.includes(creator) ||
           creator === this.getAddress
         ) {
-          this.followPromptState = FOLLOW_PROMPT_STATE.FOLLOWED;
+          this.followPromptState = FOLLOW_PROMPT_STATE.DEFAULT;
         } else if (this.walletInteractedCreators?.includes(creator)) {
           this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
         } else {
