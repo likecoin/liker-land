@@ -16,12 +16,10 @@ import {
   postUserV2Login,
   postUserV2Logout,
   getUserV2Followees,
-  getUserV2InteractedCreators,
   postUserV2Followees,
   deleteUserV2Followees,
   getUserV2Followers,
   postUserV2WalletEmail,
-  postUserV2InteractedCreators,
   putUserV2WalletEmail,
   getUserNotificationSettingsUrl,
   getNFTEvents,
@@ -612,11 +610,10 @@ const actions = {
     try {
       if (state.isFetchingFollowees) return;
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, true);
-      const { followees } = await this.$axios.$get(getUserV2Followees());
-      commit(WALLET_SET_FOLLOWEES, followees);
-      const { interactedCreators } = await this.$axios.$get(
-        getUserV2InteractedCreators()
+      const { followees, interactedCreators } = await this.$axios.$get(
+        getUserV2Followees()
       );
+      commit(WALLET_SET_FOLLOWEES, followees);
       commit(WALLET_SET_INTERACTED_CREATORS, interactedCreators);
 
       if (followees.length || interactedCreators.length) {
@@ -658,29 +655,35 @@ const actions = {
       throw error;
     }
   },
-  async walletAddInteractedCreator({ state, commit }, creator) {
-    const prevInteractedCreators = state.interactedCreators;
-    try {
-      await this.$api.$post(postUserV2InteractedCreators(creator));
-      commit(WALLET_SET_INTERACTED_CREATORS, [
-        ...state.interactedCreators,
-        creator,
-      ]);
-    } catch (error) {
-      commit(WALLET_SET_INTERACTED_CREATORS, prevInteractedCreators);
-      throw error;
-    }
-  },
+  // async walletAddInteractedCreator({ state, commit }, creator) {
+  //   const prevInteractedCreators = state.interactedCreators;
+  //   try {
+  //     await this.$api.$post(postUserV2InteractedCreators(creator));
+  //     commit(WALLET_SET_INTERACTED_CREATORS, [
+  //       ...state.interactedCreators,
+  //       creator,
+  //     ]);
+  //   } catch (error) {
+  //     commit(WALLET_SET_INTERACTED_CREATORS, prevInteractedCreators);
+  //     throw error;
+  //   }
+  // },
   async walletUnfollowCreator({ state, commit }, creator) {
     const prevFollowees = state.followees;
+    const prevInteractedCreators = state.interactedCreators;
     try {
       await this.$api.$delete(deleteUserV2Followees(creator));
       commit(
         WALLET_SET_FOLLOWEES,
         [...state.followees].filter(followee => followee !== creator)
       );
+      commit(WALLET_SET_INTERACTED_CREATORS, [
+        ...state.interactedCreators,
+        creator,
+      ]);
     } catch (error) {
       commit(WALLET_SET_FOLLOWEES, prevFollowees);
+      commit(WALLET_SET_INTERACTED_CREATORS, prevInteractedCreators);
       throw error;
     }
   },

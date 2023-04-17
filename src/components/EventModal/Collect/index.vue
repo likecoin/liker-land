@@ -517,15 +517,12 @@ export default {
         switch (this.followPromptState) {
           case FOLLOW_PROMPT_STATE.AUTO:
             this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
-            await Promise.all([
-              this.walletUnfollowCreator(this.iscnOwner),
-              this.walletAddInteractedCreator(this.iscnOwner),
-            ]);
+            await [this.walletUnfollowCreator(this.iscnOwner)];
             logTrackerEvent(
               this,
               'NFT',
               'NFTAutoFollow',
-              FOLLOW_PROMPT_STATE.AUTO,
+              FOLLOW_PROMPT_STATE.UNFOLLOW,
               1
             );
             break;
@@ -537,7 +534,7 @@ export default {
               this,
               'NFT',
               'NFTAutoFollow',
-              FOLLOW_PROMPT_STATE.UNFOLLOW,
+              FOLLOW_PROMPT_STATE.AUTO,
               1
             );
             break;

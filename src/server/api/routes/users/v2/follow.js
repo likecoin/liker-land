@@ -9,7 +9,6 @@ const {
   nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
-const { setPrivateCacheHeader } = require('../../../middleware/cache');
 
 const router = Router();
 
@@ -21,7 +20,11 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
       res.json({ followees: [] });
       return;
     }
-    const { followees: walletFollowees = [], email } = userDoc.data();
+    const {
+      followees: walletFollowees = [],
+      email,
+      interactedCreators = [],
+    } = userDoc.data();
     let legacyFollowees = [];
     if (email) {
       const snapshot = await nftMintSubscriptionCollection
@@ -35,22 +38,7 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
     const followees = [
       ...new Set([...walletFollowees, ...legacyFollowees]).values(),
     ];
-    res.json({ followees });
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
-  }
-});
-
-router.get('/interacted', authenticateV2Login, async (req, res, next) => {
-  try {
-    const { user } = req.session;
-    const userDoc = await walletUserCollection.doc(user).get();
-    if (!userDoc.exists) {
-      res.json({ interactedCreators: [] });
-      return;
-    }
-    const { interactedCreators = [] } = userDoc.data();
-    res.json({ interactedCreators });
+    res.json({ followees, interactedCreators });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
@@ -82,27 +70,6 @@ router.post('/followees', authenticateV2Login, async (req, res, next) => {
   }
 });
 
-router.post('/interacted', authenticateV2Login, async (req, res, next) => {
-  try {
-    setPrivateCacheHeader(res);
-    const { user } = req.session;
-    const { creator } = req.query;
-    if (!isValidFollowee(user, creator)) {
-      res.status(400).send('INVALID_CREATOR_ADDRESS');
-      return;
-    }
-    await db.runTransaction(async t => {
-      const userRef = walletUserCollection.doc(user);
-      await t.update(userRef, {
-        interactedCreators: FieldValue.arrayUnion(creator),
-      });
-    });
-    res.sendStatus(200);
-  } catch (err) {
-    handleRestfulError(req, res, next, err);
-  }
-});
-
 router.delete('/followees', authenticateV2Login, async (req, res, next) => {
   try {
     const { user } = req.session;
@@ -125,8 +92,11 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
           t.delete(snapshot.docs[0].ref);
         }
       }
-      t.update(walletUserCollection.doc(user), {
+      await t.update(walletUserCollection.doc(user), {
         followees: FieldValue.arrayRemove(creator),
+      });
+      await t.update(walletUserCollection.doc(user), {
+        interactedCreators: FieldValue.arrayUnion(creator),
       });
     });
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
@@ -135,6 +105,7 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
       user,
       creatorWallet: creator,
     });
+    res.sendStatus(200);
     res.sendStatus(200);
   } catch (err) {
     handleRestfulError(req, res, next, err);
