@@ -33,10 +33,10 @@ export const createPortfolioMixin = ({
   data() {
     return {
       isLoading: true,
-      nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.TYPE,
+      nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
       nftClassListOfCollectedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCollectedShowCount: ITEMS_PER_PAGE,
-      nftClassListOfCreatedSorting: NFT_CLASS_LIST_SORTING.TYPE,
+      nftClassListOfCreatedSorting: NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP,
       nftClassListOfCreatedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCreatedShowCount: ITEMS_PER_PAGE,
       nftClassListOfOtherSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
@@ -305,13 +305,30 @@ export const createPortfolioMixin = ({
     currentNFTClassSortingOptionList() {
       const options = [];
 
+      const currentClassList =
+        this.currentTab === tabOptions.collected
+          ? this.nftClassListOfCollected
+          : this.nftClassListOfCreated;
+
+      if (
+        currentClassList.some(({ classId }) =>
+          this.nftClassMapOfNFTBook.has(classId)
+        ) ||
+        currentClassList.some(({ classId }) =>
+          this.nftClassMapOfOther.has(classId)
+        )
+      ) {
+        this.nftClassListOfCollectedSorting = NFT_CLASS_LIST_SORTING.TYPE;
+        this.nftClassListOfCreatedSorting = NFT_CLASS_LIST_SORTING.TYPE;
+        options.push({
+          sorting: NFT_CLASS_LIST_SORTING.TYPE,
+          order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
+        });
+      }
+
       switch (this.currentTab) {
         case tabOptions.collected:
           options.push(
-            {
-              sorting: NFT_CLASS_LIST_SORTING.TYPE,
-              order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
-            },
             {
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
@@ -337,10 +354,6 @@ export const createPortfolioMixin = ({
 
         case tabOptions.created:
           options.push(
-            {
-              sorting: NFT_CLASS_LIST_SORTING.TYPE,
-              order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
-            },
             {
               sorting: NFT_CLASS_LIST_SORTING.PRICE,
               order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
