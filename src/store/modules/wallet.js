@@ -655,19 +655,6 @@ const actions = {
       throw error;
     }
   },
-  // async walletAddInteractedCreator({ state, commit }, creator) {
-  //   const prevInteractedCreators = state.interactedCreators;
-  //   try {
-  //     await this.$api.$post(postUserV2InteractedCreators(creator));
-  //     commit(WALLET_SET_INTERACTED_CREATORS, [
-  //       ...state.interactedCreators,
-  //       creator,
-  //     ]);
-  //   } catch (error) {
-  //     commit(WALLET_SET_INTERACTED_CREATORS, prevInteractedCreators);
-  //     throw error;
-  //   }
-  // },
   async walletUnfollowCreator({ state, commit }, creator) {
     const prevFollowees = state.followees;
     const prevInteractedCreators = state.pastFollowees;
