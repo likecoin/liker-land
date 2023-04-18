@@ -302,24 +302,26 @@ export const createPortfolioMixin = ({
           return NFT_CLASS_LIST_SORTING_ORDER.DESC;
       }
     },
-    currentNFTClassSortingOptionList() {
-      const options = [];
-
+    shouldCurrentSortingShowType() {
       const currentClassList =
         this.currentTab === tabOptions.collected
-          ? this.nftClassListOfCollected
-          : this.nftClassListOfCreated;
+          ? this.nftClassListOfCollectedInOrder
+          : this.nftClassListOfCreatedInOrder;
 
-      if (
-        currentClassList.some(({ classId }) =>
-          this.nftClassMapOfNFTBook.has(classId)
-        ) ||
+      return (
+        (this.nftTypeFilter === 'ALL' &&
+          currentClassList.some(({ classId }) =>
+            this.nftClassMapOfNFTBook.has(classId)
+          )) ||
         currentClassList.some(({ classId }) =>
           this.nftClassMapOfOther.has(classId)
         )
-      ) {
-        this.nftClassListOfCollectedSorting = NFT_CLASS_LIST_SORTING.TYPE;
-        this.nftClassListOfCreatedSorting = NFT_CLASS_LIST_SORTING.TYPE;
+      );
+    },
+    currentNFTClassSortingOptionList() {
+      const options = [];
+
+      if (this.shouldCurrentSortingShowType) {
         options.push({
           sorting: NFT_CLASS_LIST_SORTING.TYPE,
           order: NFT_CLASS_LIST_SORTING_ORDER.DESC,
@@ -390,6 +392,17 @@ export const createPortfolioMixin = ({
     nftClassListMap(listMap) {
       if (!listMap) return;
       this.$nextTick(this.setupPortfolioGrid);
+    },
+    shouldCurrentSortingShowType() {
+      if (this.shouldCurrentSortingShowType) {
+        this.nftClassListOfCollectedSorting = NFT_CLASS_LIST_SORTING.TYPE;
+        this.nftClassListOfCreatedSorting = NFT_CLASS_LIST_SORTING.TYPE;
+      } else {
+        this.nftClassListOfCollectedSorting =
+          NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT;
+        this.nftClassListOfCreatedSorting =
+          NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP;
+      }
     },
   },
   methods: {
