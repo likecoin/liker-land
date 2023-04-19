@@ -8,20 +8,22 @@
       autoplay
       muted
       loop
+      playsinline
       v-bind="imgProps"
+      :poster="resizedSrc"
       :src="videoSrc"
-      @play="handleImageLoad"
-      @error="handleImageError"
+      @play="handleMediaLoad"
+      @error="handleVideoError"
     />
     <img
       v-else-if="isShowImage"
       v-bind="imgProps"
       :src="resizedSrc"
-      @load="handleImageLoad"
+      @load="handleMediaLoad"
       @error="handleImageError"
     >
     <img
-      v-if="(!isShowVideo && !isShowImage) || !isLoaded"
+      v-if="!isShowVideo && (!isShowImage || !isLoaded)"
       v-bind="imgPropsForPlaceholder"
       src="~/assets/images/nft/primitive-nft.jpg"
     >
@@ -55,6 +57,7 @@ export default {
     return {
       isError: false,
       isLoaded: false,
+      isVideoError: false,
     };
   },
   computed: {
@@ -70,7 +73,9 @@ export default {
         class: [
           ...props.class,
           {
-            'absolute inset-x-0 top-0 opacity-0 pointer-events-none': !isLoaded,
+            'pointer-events-none': !isLoaded,
+            'absolute inset-x-0 top-0 opacity-0':
+              !isLoaded && !this.isShowVideo,
           },
         ],
       };
@@ -91,7 +96,7 @@ export default {
       return getLikeCoResizedImageUrl(this.src, this.size);
     },
     isShowVideo() {
-      return this.videoSrc && !this.isError;
+      return this.videoSrc && !this.isVideoError && !this.isError;
     },
     isShowImage() {
       return this.src && !this.isError;
@@ -104,9 +109,12 @@ export default {
     },
   },
   methods: {
-    handleImageLoad(e) {
+    handleMediaLoad(e) {
       this.isLoaded = true;
       this.emitLoadEvent(e);
+    },
+    handleVideoError() {
+      this.isVideoError = true;
     },
     handleImageError(e) {
       this.isError = true;
