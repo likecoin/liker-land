@@ -8,7 +8,9 @@
       autoplay
       muted
       loop
+      plays-inline
       v-bind="imgProps"
+      :poster="resizedSrc"
       :src="videoSrc"
       @play="handleImageLoad"
       @error="handleImageError"
