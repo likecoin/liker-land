@@ -20,59 +20,15 @@
         </div>
 
         <!-- CTA -->
-        <div v-if="nftIsWritingNFT" class="flex flex-col w-full rounded-[32px] bg-like-green p-[32px] relative mt-[24px] sm:mt-0">
-          <NFTImageGraphic class="absolute top-0 left-[50%] translate-x-[-50%] translate-y-[-50%]" :href="NFTImageUrl" />
-          <div class="mt-[30px] order-2 sm:order-1 sm:mt-[60px]">
-            <Label preset="h3" align="center" class="text-transparent bg-gradient-to-r from-[#d2f0f0] to-[#f0e6b4] bg-clip-text" :text="$t('nft_details_page_title_CTA')" />
-          </div>
-          <!-- Creator's Message -->
-          <div
-            v-if="creatorMessage && creatorMessage.message"
-            class="flex flex-col items-center justify-center border-2 border-like-cyan rounded-[24px] px-[24px] py-[32px] mt-[60px] order-1 sm:order-2 sm:p-[32px] sm:mt-[32px] desktop:flex-row desktop:justify-between"
-          >
-            <div class="flex flex-col gap-[24px] items-center sm:flex-row sm:mr-[24px]">
-              <NFTMessageIdentity
-                type="creator"
-                class="flex-shrink-0"
-                :wallet-address="iscnOwner"
-                :avatar-size="40"
-              />
-              <div class="flex-col  justify-start mt-[8px]">
-                <div class="text-[14px] text-like-cyan text-center sm:text-left">{{ $t('nft_message_type_collect') }}</div>
-                <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage.message }}</div>
-              </div>
-            </div>
-            <ButtonV2
-              preset="secondary"
-              class="mt-[24px] flex-shrink-0 desktop:mt-0"
-              :text="$t('nft_details_page_activity_list_event_collect')"
-              @click="handleCollectFromCTA"
-            >
-              <template #prepend>
-                <IconPrice />
-              </template>
-            </ButtonV2>
-          </div>
-          <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
-            <NFTMessageIdentity
-              type="creator"
-              class="flex-shrink-0"
-              :wallet-address="iscnOwner"
-              :avatar-size="40"
-            />
-            <ButtonV2
-              preset="secondary"
-              :text="$t('nft_details_page_activity_list_event_collect')"
-              @click="handleCollectFromCTA"
-            >
-              <template #prepend>
-                <IconPrice />
-              </template>
-            </ButtonV2>
-          </div>
-        </div>
-        <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
+        <NFTPageCollectCTA
+          v-if="!isExperimenting && nftIsWritingNFT"
+          :nft-image-url="NFTImageUrl"
+          :creator-message="creatorMessage"
+          :iscn-owner="iscnOwner"
+          @click-collect-from-cta="handleCollectFromCTA"
+        />
 
+        <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
           <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="w-full desktop:hidden" />
 
           <!-- Left column -->
@@ -115,6 +71,13 @@
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
             <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="hidden w-full desktop:flex" />
+            <NFTPageCollectCTA
+              v-if="isExperimenting && nftIsWritingNFT"
+              :nft-image-url="NFTImageUrl"
+              :creator-message="creatorMessage"
+              :iscn-owner="iscnOwner"
+              @click-collect-from-cta="handleCollectFromCTA"
+            />
             <NFTPagePriceSection
               v-if="isShowPriceSection && nftIsPrimitive"
               :nft-price="NFTPrice"
@@ -209,11 +172,17 @@ import { EXTERNAL_HOST } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import experimentMixin from '~/mixins/experiment';
 
 export default {
   name: 'NFTClassDetailsPage',
   layout: 'default',
-  mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
+  mixins: [
+    clipboardMixin,
+    nftMixin,
+    navigationListenerMixin,
+    experimentMixin('isExperimenting', 'class-collect-cta', 'variant'),
+  ],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
@@ -454,7 +423,9 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'NFTCollect(DetailsPageCTA)',
+        `NFTCollect(DetailsPageCTA_${
+          this.isExperimenting ? 'variant' : 'origin'
+        })`,
         this.classId,
         1
       );
