@@ -144,6 +144,7 @@
                 :content-urls="iscnContentUrls"
                 :image-bg-color="nftImageBackgroundColor"
                 :image-url="nftImageURL"
+                :animation-url="nftAnimationURL"
                 :avatar-url="creatorAvatar"
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
