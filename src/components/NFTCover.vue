@@ -73,7 +73,9 @@ export default {
         class: [
           ...props.class,
           {
-            'absolute inset-x-0 top-0 opacity-0 pointer-events-none': !isLoaded,
+            'pointer-events-none': !isLoaded,
+            'absolute inset-x-0 top-0 opacity-0':
+              !isLoaded && !this.isShowVideo,
           },
         ],
       };
