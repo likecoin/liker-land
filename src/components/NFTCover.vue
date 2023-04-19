@@ -8,7 +8,7 @@
       autoplay
       muted
       loop
-      plays-inline
+      playsinline
       v-bind="imgProps"
       :poster="resizedSrc"
       :src="videoSrc"
