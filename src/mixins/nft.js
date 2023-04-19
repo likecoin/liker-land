@@ -196,6 +196,14 @@ export default {
       const image = this.nftMetadata.image || this.NFTImageUrl;
       return parseNFTMetadataURL(image);
     },
+    NFTAnimationUrl() {
+      const { animation_url: video = '' } = this.NFTClassMetadata;
+      return parseNFTMetadataURL(video);
+    },
+    nftAnimationURL() {
+      const video = this.nftMetadata.animation_url || this.NFTAnimationUrl;
+      return parseNFTMetadataURL(video);
+    },
     nftModelURL() {
       return this.nftIsWritingNFT
         ? getNFTModel({ classId: this.classId })

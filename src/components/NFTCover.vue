@@ -3,15 +3,25 @@
     class="relative bg-gray-9b"
     :style="rootStyle"
   >
+    <video
+      v-if="isShowVideo"
+      autoplay
+      muted
+      loop
+      v-bind="imgProps"
+      :src="videoSrc"
+      @play="handleImageLoad"
+      @error="handleImageError"
+    />
     <img
-      v-if="isShowImage"
+      v-else-if="isShowImage"
       v-bind="imgProps"
       :src="resizedSrc"
       @load="handleImageLoad"
       @error="handleImageError"
     >
     <img
-      v-if="!isShowImage || !isLoaded"
+      v-if="(!isShowVideo && !isShowImage) || !isLoaded"
       v-bind="imgPropsForPlaceholder"
       src="~/assets/images/nft/primitive-nft.jpg"
     >
@@ -25,6 +35,10 @@ export default {
   name: 'NFTCover',
   props: {
     src: {
+      type: String,
+      default: '',
+    },
+    videoSrc: {
       type: String,
       default: '',
     },
@@ -75,6 +89,9 @@ export default {
     },
     resizedSrc() {
       return getLikeCoResizedImageUrl(this.src, this.size);
+    },
+    isShowVideo() {
+      return this.videoSrc && !this.isError;
     },
     isShowImage() {
       return this.src && !this.isError;

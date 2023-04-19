@@ -13,6 +13,7 @@
   >
     <NFTCover
       :src="imageUrl"
+      :video-src="animationUrl"
       :bg-color="imageBgColor"
     />
     <div
@@ -178,6 +179,10 @@ export default {
       default: undefined,
     },
     imageUrl: {
+      type: String,
+      default: undefined,
+    },
+    animationUrl: {
       type: String,
       default: undefined,
     },
