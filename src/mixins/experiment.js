@@ -1,6 +1,6 @@
 export default function experimentsMixin(
   propName,
-  experiemntName,
+  experimentName,
   variantName,
   isEligible = () => true
 ) {
@@ -16,7 +16,7 @@ export default function experimentsMixin(
           return false;
         }
         return (
-          name === experiemntName &&
+          name === experimentName &&
           !!$activeVariants.find(variant => variant.name === variantName)
         );
       },
