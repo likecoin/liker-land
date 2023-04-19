@@ -58,47 +58,50 @@
       </Label>
       <div
         v-if="!isFollowPromptStateDefault"
-        class="flex justify-center items-center mt-[16px] px-[12px] py-[8px] rounded-[48px] border-[1px] border-dark-gray"
+        class="flex justify-center items-center mt-[16px] px-[12px] rounded-[48px] border-[1px] border-medium-gray"
       >
         <NFTMessageIdentity
           type="creator"
-          class="flex-shrink-0"
+          class="flex-shrink-0 !px-0"
           :wallet-address="iscnOwner"
           :avatar-size="40"
         />
-        <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
-        <div v-else class="relative flex flex-shrink-0 group w-[138px]" @click="handleClickFollow">
-          <div
-            :class="[
-              ...getDefaultClass,
-              isFollowPromptStateAuto
-                ? '!bg-like-cyan-light text-like-green'
-                : '!bg-shade-gray text-dark-gray',
-            ]"
-          >
-            <Label align="center" :text="followPromptButtonText">
-              <template v-if="isFollowPromptStateAuto" #prepend>
-                <IconCheck />
-              </template>
-            </Label>
-          </div>
-          <div
-            :class="[
-              ...getDefaultClass,
-              'group-hover:opacity-[100]',
-              'group-active:!bg-medium-gray',
-              'opacity-0',
-              'transition-all',
-              'absolute',
-              'inset-0',
-              isFollowPromptStateAuto
-                ? '!bg-shade-gray text-dark-gray'
-                : '!bg-like-cyan-light text-like-green',
-            ]"
-          >
-            <Label align="center" :text="followPromptButtonHoverText" />
+        <div class="ml-[24px]">
+          <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
+          <div v-else class="relative flex group w-[138px]" @click="handleClickFollow">
+            <div
+              :class="[
+                ...getDefaultClass,
+                isFollowPromptStateAuto
+                  ? '!bg-like-cyan-light text-like-green'
+                  : '!bg-shade-gray text-dark-gray',
+              ]"
+            >
+              <Label align="center" :text="followPromptButtonText">
+                <template v-if="isFollowPromptStateAuto" #prepend>
+                  <IconCheck />
+                </template>
+              </Label>
+            </div>
+            <div
+              :class="[
+                ...getDefaultClass,
+                'group-hover:opacity-[100]',
+                'group-active:!bg-medium-gray',
+                'opacity-0',
+                'transition-all',
+                'absolute',
+                'inset-0',
+                isFollowPromptStateAuto
+                  ? '!bg-shade-gray text-dark-gray'
+                  : '!bg-like-cyan-light text-like-green',
+              ]"
+            >
+              <Label align="center" :text="followPromptButtonHoverText" />
+            </div>
           </div>
         </div>
+        
       </div>
     </template>
 
@@ -129,7 +132,7 @@
         @click="goToNFTDetails"
       >
         <template #prepend>
-          <IconEye />
+          <IconEye class="w-[20px]" />
         </template>
       </ButtonV2>
     </template>
@@ -377,7 +380,7 @@ export default {
         'font-600',
         'px-[16px]',
         'py-[8px]',
-        'rounded-[10px]',
+        'rounded-[20px]',
         'cursor-pointer',
       ];
     },
