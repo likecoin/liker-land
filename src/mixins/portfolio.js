@@ -309,7 +309,7 @@ export const createPortfolioMixin = ({
           : this.nftClassListOfCreatedInOrder;
 
       return (
-        (this.nftTypeFilter === 'ALL' &&
+        (this.nftTypeFilter === NFT_TYPE_FILTER_OPTIONS.ALL &&
           currentClassList.some(({ classId }) =>
             this.nftClassMapOfNFTBook.has(classId)
           )) ||

@@ -175,20 +175,19 @@ const getters = {
       }
       let X;
       let Y;
-      let XMetaData;
-      let YMetaData;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
           Y = getters.getNFTClassPurchaseInfoById(b)?.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case NFT_CLASS_LIST_SORTING.TYPE:
-          XMetaData = getters.getNFTClassMetadataById(a);
-          YMetaData = getters.getNFTClassMetadataById(b);
+        case NFT_CLASS_LIST_SORTING.TYPE: {
+          const XMetaData = getters.getNFTClassMetadataById(a);
+          const YMetaData = getters.getNFTClassMetadataById(b);
           X = typeOrder[getNFTClassCollectionType(XMetaData)];
           Y = typeOrder[getNFTClassCollectionType(YMetaData)];
           if (X !== Y) break;
+        }
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
@@ -230,8 +229,6 @@ const getters = {
       }
       let X;
       let Y;
-      let XMetaData;
-      let YMetaData;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
           X = getters.getNFTClassPurchaseInfoById(a)?.price;
@@ -243,12 +240,13 @@ const getters = {
           Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
-        case NFT_CLASS_LIST_SORTING.TYPE:
-          XMetaData = getters.getNFTClassMetadataById(a);
-          YMetaData = getters.getNFTClassMetadataById(b);
+        case NFT_CLASS_LIST_SORTING.TYPE: {
+          const XMetaData = getters.getNFTClassMetadataById(a);
+          const YMetaData = getters.getNFTClassMetadataById(b);
           X = typeOrder[getNFTClassCollectionType(XMetaData)];
           Y = typeOrder[getNFTClassCollectionType(YMetaData)];
           if (X !== Y) break;
+        }
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
