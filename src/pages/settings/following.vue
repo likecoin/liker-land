@@ -1,5 +1,5 @@
 <template>
-  <SettingsPageContentWithAuth
+  <AuthRequiredView
     class="flex flex-col"
     :login-label="$t('settings_following_login_label')"
     :login-button-label="$t('settings_following_login_in_button')"
@@ -66,7 +66,7 @@
         </div>
       </div>
     </CardV2>
-  </SettingsPageContentWithAuth>
+  </AuthRequiredView>
 </template>
 
 <script>
