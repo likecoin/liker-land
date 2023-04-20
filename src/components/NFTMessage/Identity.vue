@@ -47,7 +47,7 @@ import { createUserInfoMixin } from '~/mixins/user-info';
 const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
-  name: 'MessageIdentiy',
+  name: 'MessageIdentity',
   mixins: [userInfoMixin],
   props: {
     walletAddress: {
