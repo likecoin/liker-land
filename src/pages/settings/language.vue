@@ -1,5 +1,5 @@
 <template>
-  <SettingsPageContentWithAuth>
+  <AuthRequiredView>
     <ul class="language-list-view list-view list-view--rounded">
       <li
         v-for="locale in getAvailableLocales"
@@ -21,7 +21,7 @@
         </div>
       </li>
     </ul>
-  </SettingsPageContentWithAuth>
+  </AuthRequiredView>
 </template>
 
 <script>

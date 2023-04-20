@@ -1,5 +1,5 @@
 <template>
-  <SettingsPageContentWithAuth
+  <AuthRequiredView
     class="flex flex-col"
     :login-label="$t('settings_email_login_in')"
     :login-button-label="$t('settings_email_login_in_button')"
@@ -52,7 +52,7 @@
     </form>
 
     <SettingsNotificationConfig />
-  </SettingsPageContentWithAuth>
+  </AuthRequiredView>
 </template>
 
 <script>

@@ -6,7 +6,7 @@
       'pb-[120px]',
     ]"
   >
-    <SettingsPageContentWithAuth
+    <AuthRequiredView
       class="w-full max-w-[960px] mx-auto"
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
@@ -91,7 +91,7 @@
         </template>
       </NFTPortfolioMainView>
 
-    </SettingsPageContentWithAuth>
+    </AuthRequiredView>
 
     <FollowerDialog
       :is-open-followers-dialog="isOpenFollowersDialog"
