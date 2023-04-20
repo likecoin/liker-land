@@ -31,15 +31,17 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     const token = uuidv4();
     await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(user);
-      const userDoc = await t.get(userRef);
-      const {
-        email: currentEmail,
-        emailUnconfirmed,
-        emailLastUpdatedTs,
-      } = userDoc.data();
-      if (email === currentEmail) {
-        throw new Error('EMAIL_ALREADY_UPDATED');
+      const [userDoc, userDocWithSameEmail] = await Promise.all([
+        t.get(userRef),
+        t.get(walletUserCollection.where('email', '==', email).limit(1)),
+      ]);
+      if (!userDocWithSameEmail.empty) {
+        if (userDocWithSameEmail.docs[0].id === user) {
+          throw new Error('EMAIL_ALREADY_UPDATED');
+        }
+        throw new Error('EMAIL_ALREADY_BEEN_USED_BY_OTHER_USER');
       }
+      const { emailUnconfirmed, emailLastUpdatedTs } = userDoc.data();
       if (
         emailUnconfirmed === email &&
         emailLastUpdatedTs &&
@@ -74,6 +76,9 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     res.sendStatus(200);
   } catch (error) {
     switch (error.message) {
+      case 'EMAIL_ALREADY_BEEN_USED_BY_OTHER_USER':
+        res.status(409).send('EMAIL_ALREADY_BEEN_USED_BY_OTHER_USER');
+        break;
       case 'EMAIL_ALREADY_UPDATED':
         res.status(409).send('EMAIL_ALREADY_UPDATED');
         break;
