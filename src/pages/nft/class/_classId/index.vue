@@ -76,7 +76,7 @@
               :nft-image-url="NFTImageUrl"
               :creator-message="creatorMessage"
               :iscn-owner="iscnOwner"
-              @click-collect-from-cta="handleCollectFromCTA_exp"
+              @click-collect-from-cta="handleCollectFromCTA"
             />
             <NFTPagePriceSection
               v-if="isShowPriceSection && nftIsPrimitive"
@@ -429,17 +429,6 @@ export default {
       );
       return this.handleCollect();
     },
-    handleCollectFromCTA_exp() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTCollect(DetailsPageCTA_exp)',
-        this.classId,
-        1
-      );
-      return this.handleCollect();
-    },
-
     handleCollectFromPriceSection() {
       logTrackerEvent(
         this,

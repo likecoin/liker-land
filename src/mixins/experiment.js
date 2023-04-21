@@ -11,7 +11,12 @@ export default function experimentsMixin(
         const { name, $activeVariants } = this.$exp;
         if (
           this.$exp.isEligible &&
-          !this.$exp.isEligible({ route: this.getRouteBaseName(this.$route) })
+          !this.$exp.isEligible({
+            route: {
+              ...this.$route,
+              name: this.getRouteBaseName(this.$route),
+            },
+          })
         ) {
           return false;
         }
