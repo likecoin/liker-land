@@ -2,24 +2,17 @@
   <Page
     :class="[
       'px-[8px]',
-      { 'pt-[32px]': isInInAppBrowser }
+      { 'pt-[32px]': isInInAppBrowser },
+      'pb-[120px]',
     ]"
   >
-    <div
-      v-if="!getAddress"
-      class="flex flex-col items-center justify-center h-[80vh] mt-[-80px]"
+    <AuthRequiredView
+      class="w-full max-w-[960px] mx-auto"
+      :login-label="$t('dashboard_login_in')"
+      :login-button-label="$t('header_button_connect_to_wallet')"
     >
-      <ProgressIndicator v-if="walletIsLoggingIn" />
-      <ButtonV2
-        v-else
-        preset="tertiary"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="connectWallet"
-      />
-    </div>
-    <template v-else>
       <!-- UserStat -->
-      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full max-w-[860px]">
+      <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
           class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
@@ -98,7 +91,7 @@
         </template>
       </NFTPortfolioMainView>
 
-    </template>
+    </AuthRequiredView>
 
     <FollowerDialog
       :is-open-followers-dialog="isOpenFollowersDialog"

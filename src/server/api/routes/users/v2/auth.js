@@ -80,7 +80,7 @@ router.post('/login', async (req, res, next) => {
     req.session.version = 2;
 
     const userId = inputWallet;
-    await db.runTransaction(async t => {
+    const result = await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(userId);
       const userDoc = await t.get(userRef);
       const isNew = !userDoc.exists;
@@ -95,8 +95,9 @@ router.post('/login', async (req, res, next) => {
       } else {
         await t.update(userRef, payload);
       }
-      res.json({ isNew });
+      return { isNew };
     });
+    res.json(result);
     return;
   } catch (error) {
     // eslint-disable-next-line no-console

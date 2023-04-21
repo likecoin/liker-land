@@ -5,7 +5,7 @@
       { 'p-[16px]': isInInAppBrowser }
     ]"
   >
-    <SettingsPageContentWithAuth
+    <AuthRequiredView
       class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
       :login-label="$t('notification_login_in')"
       :login-button-label="$t('notification_login_in_button')"
@@ -177,7 +177,7 @@
           </div>
         </LinkV2>
       </div>
-    </SettingsPageContentWithAuth>
+    </AuthRequiredView>
   </Page>
 </template>
 <script>

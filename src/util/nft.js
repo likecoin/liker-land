@@ -17,6 +17,7 @@ let iscnLib = null;
 export const NFT_INDEXER_LIMIT_MAX = 100;
 
 export const NFT_CLASS_LIST_SORTING = {
+  TYPE: 'TYPE',
   PRICE: 'PRICE',
   ISCN_TIMESTAMP: 'ISCN_TIMESTAMP',
   LAST_COLLECTED_NFT: 'LAST_COLLECTED_NFT',
@@ -187,6 +188,7 @@ export function isValidHttpUrl(string) {
 export const nftClassCollectionType = {
   WritingNFT: 'writing-nft',
   NFTBook: 'nft_book',
+  Other: 'other',
 };
 
 export function getNFTClassCollectionType(classMetadata) {
@@ -197,7 +199,7 @@ export function getNFTClassCollectionType(classMetadata) {
   if (collectionId.includes('nft_book') || collectionId.includes('book_nft')) {
     return nftClassCollectionType.NFTBook;
   }
-  return '';
+  return nftClassCollectionType.Other;
 }
 
 export function checkIsWritingNFT(classMetadata) {
