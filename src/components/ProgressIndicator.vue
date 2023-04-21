@@ -15,7 +15,7 @@
         />
       </clipPath>
     </defs>
-    <rect v-bind="progressContainer" />
+    <rect :class="progressContainerClasses" v-bind="progressContainer" />
     <g :clip-path="`url(#${clipPathID})`">
       <rect v-bind="progressProps">
         <template v-if="isIntermediate">
@@ -150,7 +150,7 @@ export default class ProgressIndicator extends Vue {
 
   get progressProps() {
     return {
-      class: ['text-like-cyan', 'fill-like-cyan'],
+      class: 'text-like-cyan fill-like-cyan',
       x: -this.measurement.height,
       width: this.progressWidth,
       height: this.measurement.height,
@@ -158,13 +158,16 @@ export default class ProgressIndicator extends Vue {
     };
   }
 
+  get progressContainerClasses() {
+    return [
+      'text-like-cyan-light',
+      { 'text-shade-gray': this.preset === ProgressIndicatorPreset.Thin },
+      'fill-like-cyan-light',
+    ];
+  }
+
   get progressContainer() {
     return {
-      class: [
-        'text-like-cyan-light',
-        { 'text-shade-gray': this.preset === ProgressIndicatorPreset.Thin },
-        'fill-like-cyan-light',
-      ],
       width: this.measurement.width,
       height: this.measurement.height,
       rx: this.rx,
