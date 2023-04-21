@@ -6,12 +6,13 @@ const router = Router();
 
 router.get('/wallet', async (req, res, next) => {
   try {
-    const { email, key } = req.query;
+    const { key } = req.headers['X-LIKERLAND-API-KEY'];
+    const { email } = req.query;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
       return;
     }
-    if (key !== GET_WALLET_API_SECRET) {
+    if (!key || key !== GET_WALLET_API_SECRET) {
       res.status(403).send('INVALID_KEY');
       return;
     }
