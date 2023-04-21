@@ -29,6 +29,9 @@
     </template>
 
     <form @submit.prevent="handleClickConfirm">
+      <Label v-if="isClaimingPendingNftMode" class="justify-center mb-[12px]" align="center">
+        {{ $t('settings_email_claim_pending_nft') }}
+      </Label>
       <Label
         class="text-medium-gray"
         :text="$t(hasEmail ? 'settings_email_change_email' : 'settings_email_new_email')"
@@ -36,7 +39,7 @@
       <TextField
         v-model="newEmail"
         class="mt-[4px]"
-        :is-disabled="isSubmitting"
+        :is-disabled="isClaimingPendingNftMode || isSubmitting"
         :placeholder="$t('settings_email_input_email_placeholder')"
       />
       <div class="flex justify-end mt-[8px]">
@@ -77,9 +80,17 @@ export default {
     hasEmail() {
       return !!this.walletEmail || !!this.walletEmailUnverified;
     },
+    isClaimingPendingNftMode() {
+      return !!this.$route.query.claim_pending_nft && !this.hasEmail;
+    },
     isDisabledChangingEmail() {
       return !this.newEmail || this.newEmail === this.walletEmailUnverified;
     },
+  },
+  mounted() {
+    if (this.isClaimingPendingNftMode) {
+      this.newEmail = this.$route.query.email;
+    }
   },
   methods: {
     ...mapActions(['walletUpdateEmail']),

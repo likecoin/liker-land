@@ -475,6 +475,7 @@
   "settings_email": "Email",
   "settings_email_change_email": "Change email",
   "settings_email_changing_email_submitted": "An verification email has been sent, please check your inbox.",
+  "settings_email_claim_pending_nft": "We will verify wallet with the email you provided on the previous credit card payment page.",
   "settings_email_confirm": "Confirm",
   "settings_email_current_email": "Current email",
   "settings_email_input_email_placeholder": "Enter new email",
