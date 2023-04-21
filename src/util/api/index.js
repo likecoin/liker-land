@@ -252,6 +252,15 @@ export const postNFTTransfer = ({ txHash, classId, nftId }) => {
   )}`;
 };
 
+export const getNFTCollections = ({ collectionId, creator }) => {
+  const qsPayload = {
+    wallet: creator,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/collections/${
+    collectionId ? `${collectionId}/` : ''
+  }?${querystring.stringify(qsPayload)}`;
+};
+
 export const postNewStripeFiatPayment = ({ classId, wallet }) => {
   const qsPayload = {
     class_id: classId,
