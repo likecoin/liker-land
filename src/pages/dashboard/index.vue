@@ -91,15 +91,14 @@
         </template>
       </NFTPortfolioMainView>
 
+      <FollowerDialog
+        :is-open-followers-dialog="isOpenFollowersDialog"
+        :wallet-is-fetching-followers="walletIsFetchingFollowers"
+        :populated-followers="populatedFollowers"
+        @close="isOpenFollowersDialog = false"
+        @on-export-followers="handleClickExportFollowerList"
+      />
     </AuthRequiredView>
-
-    <FollowerDialog
-      :is-open-followers-dialog="isOpenFollowersDialog"
-      :wallet-is-fetching-followers="walletIsFetchingFollowers"
-      :populated-followers="populatedFollowers"
-      @close="isOpenFollowersDialog = false"
-      @on-export-followers="handleClickExportFollowerList"
-    />
   </Page>
 </template>
 
