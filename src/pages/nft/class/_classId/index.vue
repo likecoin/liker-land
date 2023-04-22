@@ -92,6 +92,7 @@
                 :avatar-url="creatorAvatar"
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
+                :is-nft-book="nftIsNFTBook"
                 :iscn-owner="iscnOwner"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
