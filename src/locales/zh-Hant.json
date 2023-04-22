@@ -285,7 +285,7 @@
   "nft_details_page_button_view_message": "檢視 {num} 留言",
   "nft_details_page_button_view_nft_book": "瀏覽書訊",
   "nft_details_page_button_view_pdf": "以 PDF 打開",
-  "nft_details_page_button_view_unknown": "瀏覽其他內容",
+  "nft_details_page_button_view_unknown": "以其他方式打開",
   "nft_details_page_collected_count_label": "藏品",
   "nft_details_page_description": "此內容以 Writing NFT 方式出版。收集它以建立你的閱讀履歷。",
   "nft_details_page_errormessage_memo_limit": "字數超過 256 位元。",
