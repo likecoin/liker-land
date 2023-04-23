@@ -7,6 +7,7 @@
   >
     <AuthRequiredView
       class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
+      :is-loading-start-immediately="isInInAppBrowser"
       :login-label="$t('notification_login_in')"
       :login-button-label="$t('notification_login_in_button')"
     >

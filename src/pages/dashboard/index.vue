@@ -8,6 +8,7 @@
   >
     <AuthRequiredView
       class="w-full max-w-[960px] mx-auto"
+      :is-loading-start-immediately="isInInAppBrowser"
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
@@ -91,15 +92,14 @@
         </template>
       </NFTPortfolioMainView>
 
+      <FollowerDialog
+        :is-open-followers-dialog="isOpenFollowersDialog"
+        :wallet-is-fetching-followers="walletIsFetchingFollowers"
+        :populated-followers="populatedFollowers"
+        @close="isOpenFollowersDialog = false"
+        @on-export-followers="handleClickExportFollowerList"
+      />
     </AuthRequiredView>
-
-    <FollowerDialog
-      :is-open-followers-dialog="isOpenFollowersDialog"
-      :wallet-is-fetching-followers="walletIsFetchingFollowers"
-      :populated-followers="populatedFollowers"
-      @close="isOpenFollowersDialog = false"
-      @on-export-followers="handleClickExportFollowerList"
-    />
   </Page>
 </template>
 

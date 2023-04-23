@@ -8,8 +8,16 @@
       align="center"
       :text="loginLabel || $t('settings_page_content_with_auth_login_label')"
     />
-    <div class="flex justify-center mt-[24px]">
-      <ProgressIndicator v-if="walletIsLoggingIn" />
+    <div class="flex flex-col items-center mt-[24px]">
+      <template v-if="isLoadingStartImmediately || walletIsLoggingIn">
+        <ProgressIndicator />
+        <Label
+          class="text-medium-gray w-full mt-[4px]"
+          align="center"
+          preset="p6"
+          :text="$t('auth_required_view_hint_label_loading')"
+        />
+      </template>
       <ButtonV2
         v-else
         :text="loginButtonLabel || $t('settings_page_content_with_auth_login_button')"
@@ -33,6 +41,10 @@ export default {
     loginButtonLabel: {
       type: String,
       default: '',
+    },
+    isLoadingStartImmediately: {
+      type: Boolean,
+      default: false,
     },
   },
 };
