@@ -331,9 +331,8 @@ export default {
     },
     isDisabledPayByLIKE() {
       return (
-        !this.hasConnectedWallet ||
-        this.isInsufficientLIKE ||
-        !this.canPayByLIKE
+        this.hasConnectedWallet &&
+        (this.isInsufficientLIKE || !this.canPayByLIKE)
       );
     },
     paymentId() {
