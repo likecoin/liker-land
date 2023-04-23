@@ -134,10 +134,11 @@ import { mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import alertMixin from '~/mixins/alert';
+import inAppMixin from '~/mixins/in-app';
 import nftMixin from '~/mixins/nft';
 
 export default {
-  mixins: [alertMixin, nftMixin],
+  mixins: [alertMixin, inAppMixin, nftMixin],
   props: {
     isOpen: {
       type: Boolean,
@@ -236,6 +237,7 @@ export default {
           return this.$t('attention_keplrMobile_openApp');
 
         case 'liker-id':
+          if (this.isInInAppBrowser) return undefined;
           return this.$t('attention_likerland_openApp');
 
         case 'cosmostation':
