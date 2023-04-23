@@ -101,7 +101,7 @@
             </div>
           </div>
         </div>
-        
+
       </div>
     </template>
 
@@ -450,39 +450,43 @@ export default {
       if (this.memo) {
         logTrackerEvent(this, 'NFT', 'NFTCollectorMessage', this.classId, 1);
       }
-      switch (method) {
-        case 'crypto': {
-          if (!this.getAddress) {
-            const isConnected = await this.connectWallet({
-              shouldSkipLogin: true,
-            });
-            if (!isConnected) return;
+      try {
+        switch (method) {
+          case 'crypto': {
+            if (!this.getAddress) {
+              const isConnected = await this.connectWallet({
+                shouldSkipLogin: true,
+              });
+              if (!isConnected) return;
+            }
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTCollectPaymentMethod(LIKE)',
+              this.classId,
+              1
+            );
+            const result = await this.collectNFTWithLIKE({ memo: this.memo });
+            if (result) {
+              this.justCollectedNFTId = result.nftId;
+            }
+            break;
           }
-          logTrackerEvent(
-            this,
-            'NFT',
-            'NFTCollectPaymentMethod(LIKE)',
-            this.classId,
-            1
-          );
-          const result = await this.collectNFTWithLIKE({ memo: this.memo });
-          if (result) {
-            this.justCollectedNFTId = result.nftId;
-          }
-          break;
+          case 'stripe':
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTCollectPaymentMethod(Stripe)',
+              this.classId,
+              1
+            );
+            await this.collectNFTWithStripe({ memo: this.memo });
+            break;
+          default:
+            break;
         }
-        case 'stripe':
-          logTrackerEvent(
-            this,
-            'NFT',
-            'NFTCollectPaymentMethod(Stripe)',
-            this.classId,
-            1
-          );
-          await this.collectNFTWithStripe({ memo: this.memo });
-          break;
-        default:
-          break;
+      } finally {
+        this.paymentMethod = undefined;
       }
     },
     goToNFTDetails() {
