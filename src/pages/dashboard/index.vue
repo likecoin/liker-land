@@ -8,7 +8,7 @@
   >
     <AuthRequiredView
       class="w-full max-w-[960px] mx-auto"
-      :is-loading-at-start="isInInAppBrowser"
+      :is-loading-start-immediately="isInInAppBrowser"
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >

@@ -9,7 +9,7 @@
       :text="loginLabel || $t('settings_page_content_with_auth_login_label')"
     />
     <div class="flex flex-col items-center mt-[24px]">
-      <template v-if="isLoadingAtStart || walletIsLoggingIn">
+      <template v-if="isLoadingStartImmediately || walletIsLoggingIn">
         <ProgressIndicator />
         <Label
           class="text-medium-gray w-full mt-[4px]"
@@ -42,7 +42,7 @@ export default {
       type: String,
       default: '',
     },
-    isLoadingAtStart: {
+    isLoadingStartImmediately: {
       type: Boolean,
       default: false,
     },
