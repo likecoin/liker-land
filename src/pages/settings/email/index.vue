@@ -87,10 +87,15 @@ export default {
       return !this.newEmail || this.newEmail === this.walletEmailUnverified;
     },
   },
-  mounted() {
-    if (this.isClaimingPendingNftMode) {
-      this.newEmail = this.$route.query.email;
-    }
+  watch: {
+    isClaimingPendingNftMode: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          this.newEmail = this.$route.query.email;
+        }
+      },
+    },
   },
   methods: {
     ...mapActions(['walletUpdateEmail']),
