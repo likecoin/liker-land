@@ -43,8 +43,10 @@ export const createPortfolioMixin = ({
       nftClassListOfOtherSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfOtherShowCount: ITEMS_PER_PAGE,
       nftCreatorFilter: [],
+      nftKeywordsFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
+      resetFilter: false,
     };
   },
   computed: {
@@ -53,6 +55,7 @@ export const createPortfolioMixin = ({
       'getNFTClassListSorterForCollected',
       'getNFTListMapByAddress',
       'getNFTClassMetadataById',
+      'getNFTIscnRecordsById',
     ]),
     isDashboardPage() {
       return this.getRouteBaseName(this.$route) === 'dashboard';
@@ -63,6 +66,7 @@ export const createPortfolioMixin = ({
     },
     nftTypeFilter() {
       const type = this.$route.query.type?.toUpperCase();
+      if (this.resetFilter) return NFT_TYPE_FILTER_OPTIONS.ALL;
       return NFT_TYPE_FILTER_OPTIONS[type] ? type : NFT_TYPE_FILTER_OPTIONS.ALL;
     },
     isCurrentTabCollected() {
@@ -254,6 +258,59 @@ export const createPortfolioMixin = ({
         };
       });
     },
+    nftKeywordList() {
+      const keywords = [];
+      const currentClassList =
+        this.currentTab === tabOptions.collected
+          ? this.nftClassListOfCollectedInOrder
+          : this.nftClassListOfCreatedInOrder;
+
+      currentClassList.forEach(({ classId }) => {
+        const record = this.getNFTIscnRecordsById(classId);
+        const keyword = record?.contentMetadata?.keywords?.split(',');
+        if (keyword) {
+          keywords.push(keyword.map(k => k.trim()));
+        }
+      });
+      return [...new Set(keywords.flat().filter(Boolean))];
+    },
+    nftClassListOfFilteredByKeywords() {
+      const currentClassList =
+        this.currentTab === tabOptions.collected
+          ? this.nftClassListOfCollectedInOrder
+          : this.nftClassListOfCreatedInOrder;
+
+      let list = currentClassList;
+      if (this.nftKeywordsFilter.length) {
+        list = list.filter(({ classId }) => {
+          const record = this.getNFTIscnRecordsById(classId);
+          const keywords = record?.contentMetadata?.keywords?.split(',') || [];
+          return keywords.some(keyword =>
+            this.nftKeywordsFilter.includes(keyword.trim())
+          );
+        });
+      }
+      return list;
+    },
+    currentNFTClassList() {
+      const sortedList =
+        this.currentTab === tabOptions.collected
+          ? this.getNFTClassListSorterForCollected({
+              list: this.nftClassListOfFilteredByKeywords,
+              collectorWallet: this.wallet,
+              sorting: this.nftClassListOfCollectedSorting,
+              order: this.nftClassListOfCollectedSortingOrder,
+              shouldApplyDisplayState,
+            })
+          : this.getNFTClassIdListSorterForCreated({
+              list: this.nftClassListOfFilteredByKeywords,
+              collectorWallet: this.wallet,
+              sorting: this.nftClassListOfCreatedSorting,
+              order: this.nftClassListOfCreatedSortingOrder,
+              shouldApplyDisplayState,
+            });
+      return sortedList;
+    },
     currentNFTClassListShowCount() {
       switch (this.currentTab) {
         case tabOptions.collected:
@@ -264,18 +321,6 @@ export const createPortfolioMixin = ({
 
         default:
           return 0;
-      }
-    },
-    currentNFTClassList() {
-      switch (this.currentTab) {
-        case tabOptions.collected:
-          return this.nftClassListOfCollectedInOrder;
-
-        case tabOptions.created:
-          return this.nftClassListOfCreatedInOrder;
-
-        default:
-          return [];
       }
     },
     currentNFTClassListSorting() {
@@ -522,6 +567,7 @@ export const createPortfolioMixin = ({
       if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
       this.nftCreatorFilter = [];
+      this.nftKeywordsFilter = [];
     },
     handleNFTClassListCreatorChange({ value }) {
       logTrackerEvent(
@@ -541,6 +587,7 @@ export const createPortfolioMixin = ({
           this.nftCreatorFilter.push(value);
         }
       }
+      this.nftKeywordsFilter = [];
     },
     handleNFTClassListTypeChange({ value }) {
       logTrackerEvent(
@@ -552,6 +599,7 @@ export const createPortfolioMixin = ({
       );
       this.syncRouteForTypeFilter(value);
       this.nftCreatorFilter = [];
+      this.nftKeywordsFilter = [];
     },
     handleNFTClassListSortingChange({ sorting, order }) {
       logTrackerEvent(
@@ -575,6 +623,34 @@ export const createPortfolioMixin = ({
         default:
           break;
       }
+    },
+    handleNFTKeywordsChange(value) {
+      const index = this.nftKeywordsFilter.indexOf(value);
+      if (index !== -1) {
+        this.nftKeywordsFilter.splice(index, 1);
+        logTrackerEvent(
+          this,
+          'portfolio',
+          `portfolio_filter_keywords`,
+          `Filter portfolio item by ${value}`,
+          1
+        );
+      } else {
+        this.nftKeywordsFilter.push(value);
+        logTrackerEvent(
+          this,
+          'portfolio',
+          `portfolio_filter_keywords`,
+          `Filter portfolio item by ${value}`,
+          1
+        );
+      }
+    },
+    handleCleanFilter() {
+      this.resetFilter = true;
+      this.nftKeywordsFilter = [];
+      this.nftCreatorFilter = [];
+      this.resetFilter = false;
     },
   },
 });
