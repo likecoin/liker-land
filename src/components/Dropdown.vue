@@ -14,7 +14,7 @@
         v-if="isOpen"
         ref="dropdown"
         class="absolute right-0 top-full mt-[8px] z-10"
-        @click="close"
+        @click="handleDropdownClick"
       >
         <slot />
       </div>
@@ -24,6 +24,12 @@
 
 <script>
 export default {
+  props: {
+    closeOnChildClick: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       isOpen: false,
@@ -49,6 +55,11 @@ export default {
         !dropdown ||
         !(dropdown === event.target || dropdown.contains(event.target))
       ) {
+        this.close();
+      }
+    },
+    handleDropdownClick() {
+      if (this.closeOnChildClick) {
         this.close();
       }
     },
