@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/wallet', async (req, res, next) => {
   try {
-    const key = req.headers['X-LIKERLAND-API-KEY'];
+    const key = req.headers['x-likerland-api-key'];
     const { email } = req.query;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
