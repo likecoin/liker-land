@@ -1,5 +1,23 @@
 <template>
   <div class="flex flex-col items-stretch min-h-screen">
+    <AlertBanner
+      :primary-button-text="$t('alert_banner_actions_purchase')"
+      primary-button-href="https://buy.stripe.com/14kaGxd21fuE1e8bIX"
+      :secondary-button-text="$t('alert_banner_actions_about')"
+      secondary-button-href="https://nowherebookstore.io/"
+    >
+      <i18n path="alert_banner_content_heavenly_creations_life_like">
+        <span
+          class="text-like-green font-[600]"
+          place="creator"
+        >{{ $t('alert_banner_content_heavenly_creations_life_like_creator') }}</span>
+        <span
+          class="text-like-green font-[600]"
+          place="book"
+        >{{ $t('alert_banner_content_heavenly_creations_life_like_name') }}</span>
+      </i18n>
+    </AlertBanner>
+
     <SiteHeader
       v-if="!isInInAppBrowser"
       class="text-like-green"

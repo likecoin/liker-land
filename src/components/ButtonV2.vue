@@ -166,17 +166,13 @@ export default class ButtonV2 extends Vue {
   get classForSize(): any {
     switch (this.size) {
       case Size.large:
-        return this.circle
-          ? 'h-64px w-[64px] rounded-[50%]'
-          : 'h-44px rounded-[10px]';
+        return this.circle ? 'h-64px w-[64px]' : 'h-44px rounded-[10px]';
 
       case Size.small:
-        return this.circle
-          ? 'h-48px w-[48px] rounded-[50%]'
-          : 'h-40px rounded-[10px]';
+        return this.circle ? 'h-48px w-[48px]' : 'h-40px rounded-[10px]';
 
       case Size.mini:
-        return this.circle ? '' : 'h-30px w-min rounded-[16px]';
+        return this.circle ? 'h-32px w-[32px]' : 'h-30px w-min rounded-[16px]';
 
       default:
         return null;
@@ -195,7 +191,7 @@ export default class ButtonV2 extends Vue {
       'duration-200',
       this.isDisabled ? 'cursor-default' : 'cursor-pointer',
       {
-        'justify-center': this.isCircle,
+        'justify-center rounded-[50%]': this.isCircle,
       },
     ];
   }
@@ -212,7 +208,7 @@ export default class ButtonV2 extends Vue {
       'transition',
       'duration-200',
       {
-        'px-[12px] sm:px-[20px]': this.isMini,
+        'px-[12px]': this.isMini,
         'py-[6px]': this.isMini,
         'font-600': this.isMini,
       },
