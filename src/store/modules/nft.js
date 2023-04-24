@@ -35,6 +35,7 @@ const state = () => ({
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
+  iscnRecordsByClassIdMap: {},
 });
 
 const mutations = {
@@ -74,6 +75,9 @@ const mutations = {
     { address, timestampMap }
   ) {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
+  },
+  [TYPES.NFT_SET_ISCN_RECORDS](state, { classId, records }) {
+    Vue.set(state.iscnRecordsByClassIdMap, classId, records);
   },
 };
 
@@ -128,6 +132,7 @@ const getters = {
   getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
+  getNFTIscnRecordsById: state => id => state.iscnRecordsByClassIdMap[id],
   getNFTClassOwnerCount: state => id =>
     Object.keys(state.ownerInfoByClassIdMap[id] || {}).length,
   getNFTClassCollectedCount: state => id =>
@@ -365,6 +370,26 @@ const actions = {
     });
     return formattedMetadata;
   },
+  async fetchIscnRecords({ commit, getters }, classId) {
+    const metadata = getters.getNFTClassMetadataById(classId);
+    const { parent } = metadata;
+    const iscnId = parent?.iscn_id_prefix;
+    const iscnRecord = await this.$api
+      .$get(api.getISCNRecord(iscnId))
+      .catch(err => {
+        if (!err.response?.status === 404) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
+    if (iscnRecord) {
+      commit(TYPES.NFT_SET_ISCN_RECORDS, {
+        classId,
+        records: iscnRecord?.records?.[0]?.data,
+      });
+    }
+    return iscnRecord;
+  },
   async populateNFTClassMetadataFromURIAndISCN(
     { commit, dispatch, getters },
     classId
@@ -493,12 +518,21 @@ const actions = {
     });
 
     const nftClassIds = Array.from(nftClassIdDataMap.keys());
+    const currentClassIds = [
+      ...new Set(
+        [...collectedNFTs, ...createdNFTClasses]
+          .map(item => item.class_id)
+          .filter(classId => classId !== undefined)
+      ),
+    ];
+    const mergedClassIds = [...new Set([...currentClassIds, ...nftClassIds])];
     await Promise.all(
-      nftClassIds.map(classId => {
+      mergedClassIds.map(classId => {
         const promises = [
           catchAxiosError(
             dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
           ),
+          catchAxiosError(dispatch('fetchIscnRecords', classId)),
           catchAxiosError(dispatch('fetchNFTOwners', classId)),
           catchAxiosError(dispatch('fetchNFTListingInfo', classId)),
         ];
