@@ -339,15 +339,17 @@ export default {
       return this.portfolioItemsTypeFiltering === 'OTHER_NFT';
     },
     getTypeButtonPreset() {
-      return this.selectedFilter === 'type' ? 'primary' : 'cyan';
+      return this.selectedFilter === SELECTED_FILTER.NFT_TYPE
+        ? 'primary'
+        : 'cyan';
     },
     getCreatorsButtonPreset() {
-      if (this.selectedFilter === 'creators') return 'primary';
+      if (this.selectedFilter === SELECTED_FILTER.CREATORS) return 'primary';
       if (this.portfolioItemsCreatorFiltering.length) return 'cyan';
       return 'tertiary';
     },
     getKeywordsButtonPreset() {
-      if (this.selectedFilter === 'keywords') return 'primary';
+      if (this.selectedFilter === SELECTED_FILTER.KEYWORDS) return 'primary';
       if (this.nftKeywordFiltering.length) return 'cyan';
       return 'tertiary';
     },
