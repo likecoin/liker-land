@@ -19,4 +19,6 @@ config.LIKEPAY_HOOK = process.env.LIKEPAY_HOOK;
 
 config.EXTERNAL_URL = process.env.EXTERNAL_URL;
 
+config.GET_WALLET_API_SECRET = process.env.GET_WALLET_API_SECRET;
+
 module.exports = config;

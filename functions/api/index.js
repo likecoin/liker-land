@@ -18,6 +18,7 @@ module.exports = onRequest(
       'COOKIE_SECRET',
       'CRISP_USER_HASH_SECRET',
       'SENDGRID_API_KEY',
+      'GET_WALLET_API_SECRET',
     ],
     region: ['us-west1'],
   },
