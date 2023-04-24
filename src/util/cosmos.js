@@ -58,15 +58,12 @@ async function signLoginMessageMemo(signer, address, payload) {
   };
 }
 
-async function signLoginMessageADR036(_, address, message) {
-  const signature = await window.cosmostation.cosmos.request({
-    method: 'cos_signMessage',
-    params: {
-      chainName: 'likecoin', // TODO: remove hardcode
-      signer: address,
-      message,
-    },
-  });
+async function signLoginMessageADR036(signer, address, message) {
+  if (!signer.signArbitrary) {
+    throw new Error('Signer does not support signArbitrary');
+  }
+  const chainId = LIKECOIN_CHAIN_ID;
+  const signature = await signer.signArbitrary(chainId, address, message);
   const signDoc = {
     msgs: [
       {
@@ -93,7 +90,7 @@ async function signLoginMessageADR036(_, address, message) {
   };
 }
 
-export async function signLoginMessage(signer, address, { methodType }) {
+export async function signLoginMessage(signer, address) {
   const payload = [
     `${LOGIN_MESSAGE}:`,
     JSON.stringify({
@@ -101,10 +98,9 @@ export async function signLoginMessage(signer, address, { methodType }) {
       address,
     }),
   ].join(' ');
-  const sign =
-    methodType === 'cosmostation'
-      ? signLoginMessageADR036
-      : signLoginMessageMemo;
+  const sign = signer.signArbitrary
+    ? signLoginMessageADR036
+    : signLoginMessageMemo;
   const {
     signed: message,
     signature: { signature, pub_key: publicKey },
