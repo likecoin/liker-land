@@ -91,7 +91,7 @@ export default {
     isClaimingPendingNftMode: {
       immediate: true,
       handler(newVal) {
-        if (newVal) {
+        if (newVal && this.$route.query.email) {
           this.newEmail = this.$route.query.email;
         }
       },
