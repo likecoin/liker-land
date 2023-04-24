@@ -513,8 +513,8 @@ const actions = {
     const { address } = state;
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
-      const { signer, methodType } = state;
-      const data = await signLoginMessage(signer, address, { methodType });
+      const { signer } = state;
+      const data = await signLoginMessage(signer, address);
       await this.$api.post(postUserV2Login(), data);
       await dispatch('walletFetchSessionUserData');
     } catch (error) {
