@@ -18,6 +18,11 @@
   "about_the_team_description": "Liker Land 是一家致力開發和推廣 Web3 技術給普羅大眾的區塊鏈公司，曾獲 Google News Innovation Challenge 奬項，是 AppWorks 加速器畢業生，也曾贏得數個 hackathons 奬項。Liker Land 是 LikeCoin 生態的主要營運者，也是 Osmosis 及 Desmos 的驗證人。",
   "about_the_team_title": "Liker Land 團隊",
   "about_the_team_top_label": "關於",
+  "alert_banner_actions_about": "簡介",
+  "alert_banner_actions_purchase": "購買",
+  "alert_banner_content_heavenly_creations_life_like": "在18年前初版、如今已經絕版的香港小說家{creator}經典名作——《{book}》NFT版，4/23 限量面市！  NFT書限量1000本，售完即止，欲購從速！",
+  "alert_banner_content_heavenly_creations_life_like_creator": "董啟章",
+  "alert_banner_content_heavenly_creations_life_like_name": "天工開物 · 栩栩如真",
   "AppDownloadBadges": {
     "Download": "下載 Liker Land",
     "Start": "開始"

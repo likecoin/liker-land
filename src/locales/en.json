@@ -18,6 +18,11 @@
   "about_the_team_description": "Liker Land is an award-winning blockchain company that builds user-centric protocols and applications in Web3. The awardee of the Google News Innovation Challenge, AppWorks incubatee, and several hackathons winners. Liker Land is currently the maintainer of LikeCoin to provide infrastructure support. Validators of Cosmos, Osmosis, and Desmos.",
   "about_the_team_title": "Liker Land Team",
   "about_the_team_top_label": "About",
+  "alert_banner_actions_about": "About",
+  "alert_banner_actions_purchase": "Buy Now",
+  "alert_banner_content_heavenly_creations_life_like": "The classic masterpiece of Hong Kong novelist {creator}, \"{book}\" . The NFT version is now available in a limited supply of 1,000 copies.",
+  "alert_banner_content_heavenly_creations_life_like_creator": "Kai-cheung, Dung",
+  "alert_banner_content_heavenly_creations_life_like_name": "Heavenly Creations, Lifelike",
   "AppDownloadBadges": {
     "Download": "Download Liker Land",
     "Start": "Start"
