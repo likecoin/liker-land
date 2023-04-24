@@ -1,6 +1,6 @@
 export default function experimentsMixin(
   propName,
-  experiemntName,
+  experimentName,
   variantName,
   isEligible = () => true
 ) {
@@ -11,12 +11,17 @@ export default function experimentsMixin(
         const { name, $activeVariants } = this.$exp;
         if (
           this.$exp.isEligible &&
-          !this.$exp.isEligible({ route: this.$route })
+          !this.$exp.isEligible({
+            route: {
+              ...this.$route,
+              name: this.getRouteBaseName(this.$route),
+            },
+          })
         ) {
           return false;
         }
         return (
-          name === experiemntName &&
+          name === experimentName &&
           !!$activeVariants.find(variant => variant.name === variantName)
         );
       },
