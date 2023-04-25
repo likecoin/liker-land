@@ -517,15 +517,12 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const actionType = this.nftIsWritingNFT
-        ? ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'sell_nft', 'new_class']
-        : [
-            '/cosmos.nft.v1beta1.MsgSend',
-            'mint_nft',
-            'buy_nft',
-            'sell_nft',
-            'new_class',
-          ];
+      const actionType = [
+        '/cosmos.nft.v1beta1.MsgSend',
+        'buy_nft',
+        'sell_nft',
+        'new_class',
+      ];
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       const history = await this.getNFTEventsAll({
         actionType,
