@@ -559,7 +559,6 @@ export default {
                 timestamp: timestamp + 1,
               };
               history.push(e);
-              eventMap.set(grantTxHash, e);
               eventMap.get(key).granterMemo = granterMemo;
             }
           }
