@@ -327,6 +327,37 @@ export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
   return arraysOfNFTClasses.flat();
 };
 
+export async function getAllNFTEvents({
+  axios,
+  classId,
+  nftId,
+  actionType,
+  ignoreToList,
+}) {
+  let data;
+  let nextKey;
+  let count;
+  const events = [];
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    ({ data } = await axios.get(
+      api.getNFTEvents({
+        classId,
+        nftId,
+        key: nextKey,
+        limit: NFT_INDEXER_LIMIT_MAX,
+        actionType,
+        ignoreToList,
+        reverse: true,
+      })
+    ));
+    nextKey = data.pagination.next_key;
+    ({ count } = data.pagination);
+    events.push(...data.events);
+  } while (count === NFT_INDEXER_LIMIT_MAX);
+  return events.map(formatNFTEvent);
+}
+
 export function getEventKey(event) {
   const { classId, nftId, txHash } = event;
   return `${classId}-${nftId}-${txHash}`;

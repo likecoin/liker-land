@@ -14,7 +14,6 @@ import {
 import {
   postNFTPurchase,
   postNFTTransfer,
-  getNFTEvents,
   getNFTModel,
   postNewStripeFiatPayment,
   getStripeFiatPrice,
@@ -23,7 +22,6 @@ import {
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
 import {
-  NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
   signGrant,
   signBuyNFT,
@@ -31,7 +29,7 @@ import {
   getNFTCountByClassId,
   getISCNRecord,
   getNFTClassCollectionType,
-  formatNFTEvent,
+  getAllNFTEvents,
   parseNFTMetadataURL,
   getEventKey,
   getNFTHistoryDataMap,
@@ -523,7 +521,10 @@ export default {
         'new_class',
       ];
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
-      const history = await this.getNFTEventsAll({
+      const history = await getAllNFTEvents({
+        axios: this.$api,
+        classId: this.classId,
+        nftId: this.nftId,
         actionType,
         ignoreToList,
       });
@@ -577,30 +578,6 @@ export default {
       }
       this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
       this.isHistoryInfoLoading = false;
-    },
-    async getNFTEventsAll({ actionType, ignoreToList }) {
-      let data;
-      let nextKey;
-      let count;
-      const events = [];
-      do {
-        // eslint-disable-next-line no-await-in-loop
-        ({ data } = await this.$api.get(
-          getNFTEvents({
-            classId: this.classId,
-            nftId: this.nftId,
-            key: nextKey,
-            limit: NFT_INDEXER_LIMIT_MAX,
-            actionType,
-            ignoreToList,
-            reverse: true,
-          })
-        ));
-        nextKey = data.pagination.next_key;
-        ({ count } = data.pagination);
-        events.push(...data.events);
-      } while (count === NFT_INDEXER_LIMIT_MAX);
-      return events.map(formatNFTEvent);
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {
