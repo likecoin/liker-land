@@ -31,7 +31,7 @@ import {
   getNFTCountByClassId,
   getISCNRecord,
   getNFTClassCollectionType,
-  formatNFTEventsToHistory,
+  formatNFTEvent,
   parseNFTMetadataURL,
   getEventKey,
   getPurchasePriceMap,
@@ -585,7 +585,6 @@ export default {
           }
         });
       }
-      history.sort((a, b) => b.timestamp - a.timestamp);
 
       this.NFTHistory = history;
 
@@ -612,13 +611,14 @@ export default {
             limit: NFT_INDEXER_LIMIT_MAX,
             actionType,
             ignoreToList,
+            reverse: true,
           })
         ));
         nextKey = data.pagination.next_key;
         ({ count } = data.pagination);
         events.push(...data.events);
       } while (count === NFT_INDEXER_LIMIT_MAX);
-      return formatNFTEventsToHistory(events);
+      return events.map(formatNFTEvent);
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {

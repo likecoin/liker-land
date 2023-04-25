@@ -221,8 +221,8 @@ export const getNFTEvents = ({
   if (actionType) qsPayload.action_type = actionType;
   if (ignoreToList) qsPayload.ignore_to_list = ignoreToList;
   if (ignoreFromList) qsPayload.ignore_from_list = ignoreFromList;
-  if (key) qsPayload.key = key;
-  if (limit) qsPayload.limit = limit;
+  if (key) qsPayload['pagination.key'] = key;
+  if (limit) qsPayload['pagination.limit'] = limit;
   if (reverse) qsPayload['pagination.reverse'] = reverse;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/event?${querystring.stringify(
     qsPayload
