@@ -528,10 +528,6 @@ export default {
         actionType,
         ignoreToList,
       });
-      const eventMap = new Map();
-      history.forEach(event => {
-        eventMap.set(getEventKey(event), event);
-      });
 
       if (this.nftIsWritingNFT) {
         const historyMap = await getNFTHistoryDataMap({
@@ -539,8 +535,10 @@ export default {
           classId: this.classId,
           nftId: this.nftId,
         });
-        historyMap.forEach((data, key) => {
-          if (eventMap.has(key)) {
+        const historyWithGrant = [];
+        history.forEach(event => {
+          const key = getEventKey(event);
+          if (historyMap.has(key)) {
             const {
               classId,
               nftId,
@@ -548,7 +546,7 @@ export default {
               granterMemo,
               granterWallet,
               timestamp,
-            } = data;
+            } = historyMap.get(key);
             if (grantTxHash && granterMemo) {
               const e = {
                 classId,
@@ -559,17 +557,19 @@ export default {
                 txHash: grantTxHash,
                 timestamp: timestamp + 1,
               };
-              history.push(e);
-              eventMap.get(key).granterMemo = granterMemo;
+              historyWithGrant.push(e);
+              // eslint-disable-next-line no-param-reassign
+              event.granterMemo = granterMemo;
             }
           }
+          // add original event after grant event for time reverse order
+          historyWithGrant.push(event);
         });
+        this.NFTHistory = historyWithGrant;
+      } else {
+        this.NFTHistory = history;
       }
       history.sort((a, b) => b.timestamp - a.timestamp);
-
-      history.sort((a, b) => b.timestamp - a.timestamp);
-
-      this.NFTHistory = history;
 
       const addresses = [];
       // eslint-disable-next-line no-restricted-syntax
