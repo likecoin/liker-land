@@ -566,6 +566,8 @@ export default {
       }
       history.sort((a, b) => b.timestamp - a.timestamp);
 
+      history.sort((a, b) => b.timestamp - a.timestamp);
+
       this.NFTHistory = history;
 
       const addresses = [];
