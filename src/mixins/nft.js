@@ -22,6 +22,7 @@ import {
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
 import {
+  NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
   signGrant,
   signBuyNFT,
@@ -29,6 +30,7 @@ import {
   getNFTCountByClassId,
   getISCNRecord,
   getNFTClassCollectionType,
+  getLatestNFTEvents,
   getAllNFTEvents,
   parseNFTMetadataURL,
   getEventKey,
@@ -521,63 +523,80 @@ export default {
         'new_class',
       ];
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
-      const history = await getAllNFTEvents({
+      let historyMap = null;
+      if (this.nftIsWritingNFT) {
+        historyMap = await getNFTHistoryDataMap({
+          axios: this.$api,
+          classId: this.classId,
+          nftId: this.nftId,
+        });
+      }
+
+      const addGrantEventForWNFTAndUpdateUserInfo = history => {
+        if (this.nftIsWritingNFT) {
+          const historyWithGrant = [];
+          history.forEach(event => {
+            const key = getEventKey(event);
+            if (historyMap.has(key)) {
+              const {
+                classId,
+                nftId,
+                grantTxHash,
+                granterMemo,
+                granterWallet,
+                timestamp,
+              } = historyMap.get(key);
+              if (grantTxHash && granterMemo) {
+                const e = {
+                  classId,
+                  nftId,
+                  fromWallet: granterWallet,
+                  event: 'grant',
+                  memo: granterMemo,
+                  txHash: grantTxHash,
+                  timestamp: timestamp + 1,
+                };
+                historyWithGrant.push(e);
+                // eslint-disable-next-line no-param-reassign
+                event.granterMemo = granterMemo;
+              }
+            }
+            // add original event after grant event for time reverse order
+            historyWithGrant.push(event);
+          });
+          this.NFTHistory = historyWithGrant;
+        } else {
+          this.NFTHistory = history;
+        }
+
+        const addresses = [];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const list of this.NFTHistory) {
+          addresses.push(list.fromWallet, list.toWallet);
+        }
+        this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
+      };
+
+      const latestBatchEvents = await getLatestNFTEvents({
         axios: this.$api,
         classId: this.classId,
         nftId: this.nftId,
         actionType,
         ignoreToList,
       });
+      addGrantEventForWNFTAndUpdateUserInfo(latestBatchEvents);
+      this.isHistoryInfoLoading = false;
 
-      if (this.nftIsWritingNFT) {
-        const historyMap = await getNFTHistoryDataMap({
+      if (latestBatchEvents.length === NFT_INDEXER_LIMIT_MAX) {
+        const allEvents = await getAllNFTEvents({
           axios: this.$api,
           classId: this.classId,
           nftId: this.nftId,
+          actionType,
+          ignoreToList,
         });
-        const historyWithGrant = [];
-        history.forEach(event => {
-          const key = getEventKey(event);
-          if (historyMap.has(key)) {
-            const {
-              classId,
-              nftId,
-              grantTxHash,
-              granterMemo,
-              granterWallet,
-              timestamp,
-            } = historyMap.get(key);
-            if (grantTxHash && granterMemo) {
-              const e = {
-                classId,
-                nftId,
-                fromWallet: granterWallet,
-                event: 'grant',
-                memo: granterMemo,
-                txHash: grantTxHash,
-                timestamp: timestamp + 1,
-              };
-              historyWithGrant.push(e);
-              // eslint-disable-next-line no-param-reassign
-              event.granterMemo = granterMemo;
-            }
-          }
-          // add original event after grant event for time reverse order
-          historyWithGrant.push(event);
-        });
-        this.NFTHistory = historyWithGrant;
-      } else {
-        this.NFTHistory = history;
+        addGrantEventForWNFTAndUpdateUserInfo(allEvents);
       }
-      history.sort((a, b) => b.timestamp - a.timestamp);
-
-      const addresses = [];
-      // eslint-disable-next-line no-restricted-syntax
-      for (const list of this.NFTHistory) {
-        addresses.push(list.fromWallet, list.toWallet);
-      }
-      this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
-      this.isHistoryInfoLoading = false;
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {
