@@ -226,7 +226,7 @@ export function formatNFTInfo(nftInfo) {
   return { classId, nftId, timestamp, uri };
 }
 
-function formatNFTEvent(event) {
+export function formatNFTEvent(event) {
   const {
     class_id: classId,
     nft_id: nftId,
@@ -379,11 +379,6 @@ export async function getNFTHistoryDataMap({ axios, classId, nftId, txHash }) {
     console.error(error);
   }
   return historyMap;
-}
-
-export function formatNFTEventsToHistory(events) {
-  const history = events.map(e => formatNFTEvent(e)).reverse();
-  return history;
 }
 
 export function formatOwnerInfoFromChain(owners) {
