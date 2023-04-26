@@ -151,7 +151,7 @@ router.put('/email', async (req, res, next) => {
         res.status(404).send('USER_NOT_FOUND');
         break;
       case 'INVALID_TOKEN':
-        res.status(400).send('INVALID_TOKEN');
+        res.status(401).send('LINK_IS_INVALID_OR_HAS_EXPIRED');
         break;
       default:
         handleRestfulError(req, res, next, error);
