@@ -522,6 +522,9 @@ export default {
         'sell_nft',
         'new_class',
       ];
+      if (!this.nftIsWritingNFT && !this.nftIsNFTBook) {
+        actionType.push('mint_nft');
+      }
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       let historyMap = null;
       if (this.nftIsWritingNFT) {
