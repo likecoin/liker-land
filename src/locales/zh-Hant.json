@@ -465,6 +465,7 @@
   "settings_email": "電郵",
   "settings_email_change_email": "更改電郵",
   "settings_email_changing_email_submitted": "已發出確認電郵郵件，請查看。",
+  "settings_email_claim_pending_nft": "我們將以你先前在信用卡付款頁面所提供的電郵進行認證。",
   "settings_email_confirm": "確認",
   "settings_email_current_email": "目前電郵",
   "settings_email_input_email_placeholder": "輸入新電郵",
