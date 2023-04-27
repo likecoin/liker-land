@@ -17,6 +17,7 @@
           preset="outline"
           :text="secondaryButtonText"
           :href="secondaryButtonHref"
+          :to="secondaryButtonTo"
           @click="$emit('click-secondary-button', $event)"
         />
         <ButtonV2
@@ -24,6 +25,7 @@
           preset="secondary"
           :text="primaryButtonText"
           :href="primaryButtonHref"
+          :to="primaryButtonTo"
           @click="$emit('click-primary-button', $event)"
         />
       </div>
@@ -53,6 +55,10 @@ export default {
       type: String,
       default: '',
     },
+    primaryButtonTo: {
+      type: Object,
+      default: undefined,
+    },
     secondaryButtonText: {
       type: String,
       default: '',
@@ -60,6 +66,10 @@ export default {
     secondaryButtonHref: {
       type: String,
       default: '',
+    },
+    secondaryButtonTo: {
+      type: Object,
+      default: undefined,
     },
   },
   data() {
