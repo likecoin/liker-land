@@ -71,7 +71,7 @@ export default {
   mixins: [alertMixin, walletMixin],
   data() {
     return {
-      newEmail: '',
+      newEmail: this.$route.query.email,
       isSubmitting: false,
     };
   },
@@ -85,16 +85,6 @@ export default {
     },
     isDisabledChangingEmail() {
       return !this.newEmail || this.newEmail === this.walletEmailUnverified;
-    },
-  },
-  watch: {
-    isClaimingPendingNftMode: {
-      immediate: true,
-      handler(newVal) {
-        if (newVal && this.$route.query.email) {
-          this.newEmail = this.$route.query.email;
-        }
-      },
     },
   },
   methods: {
