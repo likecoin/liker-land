@@ -160,14 +160,14 @@
         </div>
       </div>
       <section v-if="paymentMethod === undefined">
-        <Label
+        <!-- <Label
           class="text-like-green"
           preset="h5"
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
-        />
+        /> -->
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
-          <li>
+          <!-- <li>
             <EventModalCollectMethodButton
               :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_stripe')"
@@ -176,7 +176,7 @@
               :price="formattedNFTPriceInUSD"
               @click="handleSelectPaymentMethod"
             />
-          </li>
+          </li> -->
           <li>
             <EventModalCollectMethodButton
               :class="{ 'rounded-b-[0]': hasConnectedWallet }"
