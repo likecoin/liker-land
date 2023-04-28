@@ -138,7 +138,10 @@
     </template>
 
     <template v-if="!uiTxNFTStatus">
-      <div class="flex flex-col items-start mb-[28px]">
+      <section
+        v-if="paymentMethod === undefined"
+        class="flex flex-col items-start mb-[28px]"
+      >
         <Separator class="h-[2px] bg-shade-gray self-center phone:hidden" />
         <Label
           preset="p6"
@@ -158,7 +161,8 @@
             @input="onInputCollectMessage"
           >
         </div>
-      </div>
+      </section>
+
       <section v-if="paymentMethod === undefined">
         <!-- <Label
           class="text-like-green"
