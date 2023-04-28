@@ -53,6 +53,7 @@ export default {
     walletAddress: {
       type: String,
       required: true,
+      default: '',
     },
     type: {
       type: String,

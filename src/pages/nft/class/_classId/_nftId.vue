@@ -160,7 +160,6 @@
                 :class-collection-name="nftClassCollectionName"
                 :is-content-viewable="!(nftIsNFTBook && !ownCount)"
                 :is-nft-book="nftIsNFTBook"
-                @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
                 @view-content-urls="handleViewContentUrls"
               />
@@ -278,6 +277,31 @@
             @click-sell="handleClickSellFromControlBar"
             @click-user-collected-count="handleClickUserCollectedCount"
           />
+        </section>
+
+        <!-- recommend -->
+        <section>
+          <div class="flex flex-col gap-[8px] bg-like-green rounded-[24px] py-[32px] overflow-hidden">
+            <div class="flex items-center justify-between px-[32px]">
+              <NFTMessageIdentity
+                type="creator"
+                class="flex-shrink-0"
+                :wallet-address="iscnOwner"
+                :avatar-size="40"
+              />
+              <ButtonV2 preset="tertiary" size="mini">
+                {{ $t('follow') }}
+              </ButtonV2>
+            </div>
+            <ul class="relative pl-[32px] py-[12px] flex justify-start items-start gap-[24px] w-full overflow-x-scroll overflow-y-auto scrollbar-custom">
+              <li v-for="(nft, index) in recommendedList" :key="index">
+                <NFTPortfolioItem
+                  :class-id="nft.classId"
+                  :portfolio-wallet="iscnOwner"
+                />
+              </li>
+            </ul>
+          </div>
         </section>
       </div>
     </div>
@@ -499,7 +523,12 @@ export default {
       this.updateNFTHistory();
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
-      const blockingPromises = [this.fetchISCNMetadata()];
+      const blockingPromises = [
+        this.fetchISCNMetadata(),
+        this.fetchNFTListByAddress(this.iscnOwner),
+        this.fetchNFTListByAddress(this.getAddress),
+        this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
+      ];
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
@@ -585,16 +614,6 @@ export default {
         this.classId,
         1
       );
-    },
-    handleCollectFromPreviewSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_details_page_collect_from_preview',
-        this.nftId,
-        1
-      );
-      return this.handleCollect();
     },
     handleCollectFromCreatorMessagePreview() {
       logTrackerEvent(

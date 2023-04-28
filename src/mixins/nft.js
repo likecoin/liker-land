@@ -109,6 +109,7 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
+      'getNFTListMapByAddress',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -422,6 +423,46 @@ export default {
           toType: this.getWalletIdentityType(m.toWallet),
           message: this.normalizeNFTMessage(m),
         }));
+    },
+    recommendedList() {
+      const featuredSet = this.getNFTClassFeaturedSetByAddress(this.iscnOwner);
+      const hiddenSet = this.getNFTClassHiddenSetByAddress(this.iscnOwner);
+
+      let recommendedList =
+        this.getNFTListMapByAddress(this.iscnOwner)?.created || [];
+      const userCollected =
+        this.getNFTListMapByAddress(this.getAddress)?.collected || [];
+
+      if (hiddenSet) {
+        recommendedList = recommendedList.filter(
+          item =>
+            !userCollected.some(
+              collectedItem => collectedItem.classId === item.classId
+            ) &&
+            !hiddenSet.has(item.classId) &&
+            item.classId !== this.classId
+        );
+      } else {
+        recommendedList = recommendedList.filter(
+          item =>
+            !userCollected.some(
+              collectedItem => collectedItem.classId === item.classId
+            )
+        );
+      }
+
+      if (featuredSet) {
+        const featuredItems = recommendedList.filter(item =>
+          featuredSet.has(item.classId)
+        );
+        recommendedList = featuredItems
+          .concat(
+            recommendedList.filter(item => !featuredSet.has(item.classId))
+          )
+          .slice(0, 5);
+      }
+
+      return recommendedList;
     },
   },
   watch: {
