@@ -10,6 +10,8 @@
         })"
       :secondary-button-text="$t('alert_banner_actions_about')"
       secondary-button-href="https://nowherebookstore.io/"
+      @click-primary-button="onClickAlertBanner('primary')"
+      @click-secondary-button="onClickAlertBanner('secondary')"
     >
       <i18n path="alert_banner_content_heavenly_creations_life_like">
         <span
@@ -66,6 +68,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import alertMixin from '~/mixins/alert';
 import inAppMixin from '~/mixins/in-app';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [alertMixin, inAppMixin],
@@ -80,6 +83,15 @@ export default {
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
+    onClickAlertBanner(type = 'primary') {
+      logTrackerEvent(
+        this,
+        'alert_banner',
+        `alert_banner_click_${type}`,
+        '',
+        1
+      );
+    },
   },
   head() {
     const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true });

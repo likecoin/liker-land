@@ -18,7 +18,7 @@
           :text="secondaryButtonText"
           :href="secondaryButtonHref"
           :to="secondaryButtonTo"
-          @click="$emit('click-secondary-button', $event)"
+          @click.native="$emit('click-secondary-button', $event)"
         />
         <ButtonV2
           v-if="primaryButtonText"
@@ -26,7 +26,7 @@
           :text="primaryButtonText"
           :href="primaryButtonHref"
           :to="primaryButtonTo"
-          @click="$emit('click-primary-button', $event)"
+          @click.native="$emit('click-primary-button', $event)"
         />
       </div>
     </div>
