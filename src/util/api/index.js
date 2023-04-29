@@ -277,6 +277,13 @@ export const getStripeFiatPrice = ({ classId }) => {
   )}`;
 };
 
+export const postStripeFiatClaim = ({ wallet, paymentId, token }) => {
+  const qsPayload = { wallet, payment_id: paymentId, token };
+  return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/claim?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
     ignore_list: LIKECOIN_NFT_API_WALLET,
