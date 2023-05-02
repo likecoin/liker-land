@@ -164,15 +164,17 @@
       </section>
 
       <section v-if="paymentMethod === undefined">
-        <!-- <Label
+        <Label
+          v-if="enableStripe"
           class="text-like-green"
           preset="h5"
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
-        /> -->
+        />
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
-          <!-- <li>
+          <li>
             <EventModalCollectMethodButton
+              v-if="enableStripe"
               :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_stripe')"
               type="stripe"
@@ -180,7 +182,7 @@
               :price="formattedNFTPriceInUSD"
               @click="handleSelectPaymentMethod"
             />
-          </li> -->
+          </li>
           <li>
             <EventModalCollectMethodButton
               :class="{ 'rounded-b-[0]': hasConnectedWallet }"
@@ -243,6 +245,8 @@ import { formatNumberWithLIKE } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
 
+import { IS_TESTNET } from '~/constant';
+
 const FOLLOW_PROMPT_STATE = {
   DEFAULT: 'default', // No need to show any follow UI.
   UNFOLLOW: 'unfollow', // Show a switch button to toggle follow status.
@@ -302,6 +306,9 @@ export default {
       'walletIsLoggingIn',
       'walletInteractedCreators',
     ]),
+    enableStripe() {
+      return !!IS_TESTNET;
+    },
     developerMode() {
       return !!this.$route.query.debug;
     },
