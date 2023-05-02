@@ -327,35 +327,17 @@ export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
   return arraysOfNFTClasses.flat();
 };
 
-export async function getLatestNFTEvents({
+export async function getFormattedNFTEvents({
   axios,
   classId,
   nftId,
+  key = null,
   actionType,
   ignoreToList,
-}) {
-  const { data } = await axios.get(
-    api.getNFTEvents({
-      classId,
-      nftId,
-      limit: NFT_INDEXER_LIMIT_MAX,
-      actionType,
-      ignoreToList,
-      reverse: true,
-    })
-  );
-  return data.events.map(formatNFTEvent);
-}
-
-export async function getAllNFTEvents({
-  axios,
-  classId,
-  nftId,
-  actionType,
-  ignoreToList,
+  getAll = false,
 }) {
   let data;
-  let nextKey;
+  let nextKey = key;
   let count;
   const events = [];
   do {
@@ -373,9 +355,10 @@ export async function getAllNFTEvents({
     ));
     nextKey = data.pagination.next_key;
     ({ count } = data.pagination);
-    events.push(...data.events);
-  } while (count === NFT_INDEXER_LIMIT_MAX);
-  return events.map(formatNFTEvent);
+    events.push(...data.events.map(formatNFTEvent));
+    // eslint-disable-next-line no-unmodified-loop-condition
+  } while (count === NFT_INDEXER_LIMIT_MAX && getAll);
+  return { nextKey, events };
 }
 
 export function getEventKey(event) {

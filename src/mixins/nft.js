@@ -30,8 +30,7 @@ import {
   getNFTCountByClassId,
   getISCNRecord,
   getNFTClassCollectionType,
-  getLatestNFTEvents,
-  getAllNFTEvents,
+  getFormattedNFTEvents,
   parseNFTMetadataURL,
   getEventKey,
   getNFTHistoryDataMap,
@@ -567,9 +566,9 @@ export default {
             // add original event after grant event for time reverse order
             historyWithGrant.push(event);
           });
-          this.NFTHistory = historyWithGrant;
+          this.NFTHistory.push(...historyWithGrant);
         } else {
-          this.NFTHistory = history;
+          this.NFTHistory.push(...history);
         }
 
         const addresses = [];
@@ -580,7 +579,10 @@ export default {
         this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
       };
 
-      const latestBatchEvents = await getLatestNFTEvents({
+      const {
+        nextKey,
+        events: latestBatchEvents,
+      } = await getFormattedNFTEvents({
         axios: this.$api,
         classId: this.classId,
         nftId: this.nftId,
@@ -591,12 +593,14 @@ export default {
       this.isHistoryInfoLoading = false;
 
       if (latestBatchEvents.length === NFT_INDEXER_LIMIT_MAX) {
-        const allEvents = await getAllNFTEvents({
+        const { events: allEvents } = await getFormattedNFTEvents({
           axios: this.$api,
           classId: this.classId,
           nftId: this.nftId,
+          key: nextKey,
           actionType,
           ignoreToList,
+          getAll: true,
         });
         addGrantEventForWNFTAndUpdateUserInfo(allEvents);
       }
