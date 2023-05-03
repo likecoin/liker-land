@@ -32,8 +32,9 @@ import {
   getNFTClassCollectionType,
   getFormattedNFTEvents,
   parseNFTMetadataURL,
-  getEventKey,
   getNFTHistoryDataMap,
+  populateGrantEvent,
+  getUniqueAddressesFromEvent,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -525,60 +526,14 @@ export default {
         actionType.push('mint_nft');
       }
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
-      let historyMap = null;
+      let dbEventMap = null;
       if (this.nftIsWritingNFT) {
-        historyMap = await getNFTHistoryDataMap({
+        dbEventMap = await getNFTHistoryDataMap({
           axios: this.$api,
           classId: this.classId,
           nftId: this.nftId,
         });
       }
-
-      const addGrantEventForWNFTAndUpdateUserInfo = history => {
-        if (this.nftIsWritingNFT) {
-          const historyWithGrant = [];
-          history.forEach(event => {
-            const key = getEventKey(event);
-            if (historyMap.has(key)) {
-              const {
-                classId,
-                nftId,
-                grantTxHash,
-                granterMemo,
-                granterWallet,
-                timestamp,
-              } = historyMap.get(key);
-              if (grantTxHash && granterMemo) {
-                const e = {
-                  classId,
-                  nftId,
-                  fromWallet: granterWallet,
-                  event: 'grant',
-                  memo: granterMemo,
-                  txHash: grantTxHash,
-                  timestamp: timestamp + 1,
-                };
-                historyWithGrant.push(e);
-                // eslint-disable-next-line no-param-reassign
-                event.granterMemo = granterMemo;
-              }
-            }
-            // add original event after grant event for time reverse order
-            historyWithGrant.push(event);
-          });
-          this.NFTHistory.push(...historyWithGrant);
-        } else {
-          this.NFTHistory.push(...history);
-        }
-
-        const addresses = [];
-        // eslint-disable-next-line no-restricted-syntax
-        for (const list of this.NFTHistory) {
-          addresses.push(list.fromWallet, list.toWallet);
-        }
-        this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
-      };
-
       const {
         nextKey,
         events: latestBatchEvents,
@@ -589,12 +544,16 @@ export default {
         actionType,
         ignoreToList,
       });
-      this.NFTHistory = [];
-      addGrantEventForWNFTAndUpdateUserInfo(latestBatchEvents);
+      this.NFTHistory = this.nftIsWritingNFT
+        ? populateGrantEvent(latestBatchEvents, dbEventMap)
+        : latestBatchEvents;
+      this.lazyGetUserInfoByAddresses(
+        getUniqueAddressesFromEvent(this.NFTHistory)
+      );
       this.isHistoryInfoLoading = false;
 
       if (latestBatchEvents.length === NFT_INDEXER_LIMIT_MAX) {
-        const { events: allEvents } = await getFormattedNFTEvents({
+        let { events: remainEvents } = await getFormattedNFTEvents({
           axios: this.$api,
           classId: this.classId,
           nftId: this.nftId,
@@ -603,7 +562,13 @@ export default {
           ignoreToList,
           getAll: true,
         });
-        addGrantEventForWNFTAndUpdateUserInfo(allEvents);
+        if (this.nftIsWritingNFT) {
+          remainEvents = populateGrantEvent(remainEvents, dbEventMap);
+        }
+        this.lazyGetUserInfoByAddresses(
+          getUniqueAddressesFromEvent(remainEvents)
+        );
+        this.NFTHistory.push(...remainEvents);
       }
     },
     async updateUserCollectedCount(classId, address) {

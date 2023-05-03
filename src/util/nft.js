@@ -384,6 +384,49 @@ export async function getNFTHistoryDataMap({ axios, classId, nftId, txHash }) {
   return historyMap;
 }
 
+export function populateGrantEvent(onChainEvents, dbEventMap) {
+  const eventsWithGrant = [];
+  onChainEvents.forEach(event => {
+    const key = getEventKey(event);
+    if (dbEventMap.has(key)) {
+      const {
+        classId,
+        nftId,
+        grantTxHash,
+        granterMemo,
+        granterWallet,
+        timestamp,
+      } = dbEventMap.get(key);
+      if (grantTxHash && granterMemo) {
+        const e = {
+          classId,
+          nftId,
+          fromWallet: granterWallet,
+          event: 'grant',
+          memo: granterMemo,
+          txHash: grantTxHash,
+          timestamp: timestamp + 1,
+        };
+        eventsWithGrant.push(e);
+        // eslint-disable-next-line no-param-reassign
+        event.granterMemo = granterMemo;
+      }
+    }
+    // add original event after grant event for time reverse order
+    eventsWithGrant.push(event);
+  });
+  return eventsWithGrant;
+}
+
+export function getUniqueAddressesFromEvent(events) {
+  const addressSet = new Set();
+  events.forEach(e => {
+    addressSet.add(e.fromWallet);
+    addressSet.add(e.toWallet);
+  });
+  return [...addressSet];
+}
+
 export function formatOwnerInfoFromChain(owners) {
   const ownerInfo = {};
   owners.forEach(o => {
