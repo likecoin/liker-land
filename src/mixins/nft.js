@@ -589,6 +589,7 @@ export default {
         actionType,
         ignoreToList,
       });
+      this.NFTHistory = [];
       addGrantEventForWNFTAndUpdateUserInfo(latestBatchEvents);
       this.isHistoryInfoLoading = false;
 
