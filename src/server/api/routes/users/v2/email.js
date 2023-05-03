@@ -23,7 +23,13 @@ const router = Router();
 router.post('/email', authenticateV2Login, async (req, res, next) => {
   try {
     const { user } = req.session;
-    const { email, followee } = req.query;
+    const {
+      email,
+      followee,
+      claiming_class_name: claimingClassName,
+      payment_id: paymentId,
+      claiming_token: claimingToken,
+    } = req.query;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
       return;
@@ -60,6 +66,11 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     const qsPayload = { wallet: user };
     if (isValidFollowee(user, followee)) {
       qsPayload.followee = followee;
+    }
+    if (claimingClassName && paymentId && claimingToken) {
+      qsPayload.claiming_class_name = claimingClassName;
+      qsPayload.payment_id = paymentId;
+      qsPayload.claiming_token = claimingToken;
     }
     const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
       qsPayload

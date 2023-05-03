@@ -81,10 +81,19 @@ export default {
       return !!this.walletEmail || !!this.walletEmailUnverified;
     },
     isClaimingPendingNftMode() {
-      return !!this.$route.query.claim_pending_nft && !this.hasEmail;
+      return !!this.$route.query.claim_pending_nft && !this.walletEmail;
     },
     isDisabledChangingEmail() {
       return !this.newEmail || this.newEmail === this.walletEmailUnverified;
+    },
+    claimingClassName() {
+      return this.$route.query.claiming_class_name;
+    },
+    paymentId() {
+      return this.$route.query.payment_id;
+    },
+    claimingToken() {
+      return this.$route.query.claiming_token;
     },
   },
   methods: {
@@ -99,7 +108,13 @@ export default {
       );
       try {
         this.isSubmitting = true;
-        await this.walletUpdateEmail({ email: this.walletEmailUnverified });
+        const payload = { email: this.walletEmailUnverified };
+        if (this.claimingClassName && this.paymentId && this.claimingToken) {
+          payload.claimingClassName = this.claimingClassName;
+          payload.paymentId = this.paymentId;
+          payload.claimingToken = this.claimingToken;
+        }
+        await this.walletUpdateEmail(payload);
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );
@@ -121,7 +136,13 @@ export default {
       );
       try {
         this.isSubmitting = true;
-        await this.walletUpdateEmail({ email: this.newEmail });
+        const payload = { email: this.newEmail };
+        if (this.claimingClassName && this.paymentId && this.claimingToken) {
+          payload.claimingClassName = this.claimingClassName;
+          payload.paymentId = this.paymentId;
+          payload.claimingToken = this.claimingToken;
+        }
+        await this.walletUpdateEmail(payload);
         this.alertPromptSuccess(
           this.$t('settings_email_changing_email_submitted')
         );

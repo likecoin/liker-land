@@ -55,6 +55,15 @@ export default {
     followee() {
       return this.$route.query.followee;
     },
+    claimingClassName() {
+      return this.$route.query.claiming_class_name;
+    },
+    paymentId() {
+      return this.$route.query.payment_id;
+    },
+    claimingToken() {
+      return this.$route.query.claiming_token;
+    },
   },
   mounted() {
     this.verify();
@@ -77,6 +86,18 @@ export default {
           this.alertPromptSuccess(
             this.$t('portfolio_subscription_success_alert', {
               creator,
+            })
+          );
+        }
+        if (this.claimingToken && this.paymentId) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-claim',
+              query: {
+                claiming_class_name: this.claimingClassName,
+                claiming_token: this.claimingToken,
+                payment_id: this.paymentId,
+              },
             })
           );
         }

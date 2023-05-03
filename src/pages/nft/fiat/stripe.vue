@@ -82,7 +82,7 @@ export default {
           await sleep(3000);
         } else {
           this.result = res;
-          if (this.status === 'done') {
+          if (this.status === 'pendingClaim') {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);
             logTrackerEvent(
               this,

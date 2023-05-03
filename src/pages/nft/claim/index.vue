@@ -2,22 +2,22 @@
   <div class="flex flex-col justify-center flex-grow">
     <AuthRequiredView
       class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
-      :login-label="$t('nft_claim_login_in', { className })"
+      :login-label="$t('nft_claim_login_in', { nftName })"
       :login-button-label="$t('nft_claim_login_in_button')"
     >
       <div
         v-if="!isLoading && !isClaimed"
         class="flex flex-col justify-center gap-[16px] mt-[16px]"
       >
-        <Label :text="$t('nft_claim_claim', { className, wallet: getAddress })" align="center" />
+        <Label :text="$t('nft_claim_claim', { nftName, wallet: getAddress })" align="center" />
         <ButtonV2 :text="$t('nft_claim_claim_button')" preset="secondary" @click="claim" />
       </div>
       <div v-else-if="isLoading">
-        <Label :text="$t('nft_claim_claiming', { className })" align="center" />
+        <Label :text="$t('nft_claim_claiming', { nftName })" align="center" />
         <ProgressIndicator class="self-center mt-[16px]" />
       </div>
       <div v-else-if="isClaimed">
-        <Label :text="$t('nft_claim_claimed', { className })" align="center" />
+        <Label :text="$t('nft_claim_claimed', { nftName })" align="center" />
         <ButtonV2 :text="$t('nft_claim_claimed_view_button')" preset="secondary" @click="handleClickView" />
       </div>
       <Label v-else-if="error" align="center">
@@ -57,14 +57,15 @@ export default {
     };
   },
   computed: {
-    className() {
-      return decodeURIComponent(this.$route.query.name);
+    nftName() {
+      const name = this.$route.query.claiming_class_name;
+      return `Writing NFT${name ? ` - ${decodeURIComponent(name)}` : ''}`;
     },
     paymentId() {
-      return this.$route.query.id;
+      return this.$route.query.payment_id;
     },
     token() {
-      return this.$route.query.token;
+      return this.$route.query.claiming_token;
     },
     isClaimed() {
       return this.classId && this.nftId;
