@@ -9,7 +9,7 @@
         v-if="!isLoading && !isClaimed"
         class="flex flex-col justify-center gap-[16px] mt-[16px]"
       >
-        <Label :text="$t('nft_claim_claim', { className })" align="center" />
+        <Label :text="$t('nft_claim_claim', { className, wallet: getAddress })" align="center" />
         <ButtonV2 :text="$t('nft_claim_claim_button')" preset="secondary" @click="claim" />
       </div>
       <div v-else-if="isLoading">
@@ -74,6 +74,12 @@ export default {
     async claim() {
       try {
         this.isLoading = true;
+        if (!this.paymentId) {
+          throw new Error('id is required');
+        }
+        if (!this.token) {
+          throw new Error('token is required');
+        }
         const { data } = await this.$api.post(
           postStripeFiatClaim({
             wallet: this.getAddress,

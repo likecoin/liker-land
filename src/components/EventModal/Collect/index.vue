@@ -172,9 +172,8 @@
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
         />
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
-          <li>
+          <li v-if="enableStripe">
             <EventModalCollectMethodButton
-              v-if="enableStripe"
               :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_stripe')"
               type="stripe"
