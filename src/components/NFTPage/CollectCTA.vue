@@ -7,7 +7,24 @@
     <!-- Creator's Message -->
     <div
       v-if="creatorMessage && creatorMessage.message"
-      class="flex flex-col items-center justify-center border-2 border-like-cyan rounded-[24px] px-[24px] py-[32px] mt-[60px] order-1 sm:order-2 sm:p-[32px] sm:mt-[32px] desktop:flex-row desktop:justify-between"
+      :class="[
+        'flex',
+        'flex-col',
+        'gap-[24px]',
+        'items-center',
+        'justify-center',
+        'border-2',
+        'border-like-cyan',
+        'rounded-[24px]',
+        'px-[24px]',
+        'py-[32px]',
+        'mt-[60px]',
+        'order-1',
+        'sm:order-2',
+        'sm:p-[32px]',
+        'sm:mt-[32px]',
+        { 'desktop:flex-row desktop:justify-between': !isColumn },
+      ]"
     >
       <div class="flex flex-col gap-[24px] items-center sm:flex-row sm:mr-[24px]">
         <NFTMessageIdentity
@@ -23,7 +40,7 @@
       </div>
       <ButtonV2
         preset="secondary"
-        class="mt-[24px] flex-shrink-0 desktop:mt-0"
+        class="flex-shrink-0"
         :text="$t('nft_details_page_activity_list_event_collect')"
         @click="handleCollectFromCTA"
       >
@@ -66,6 +83,10 @@ export default {
     iscnOwner: {
       type: String,
       default: undefined,
+    },
+    isColumn: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
