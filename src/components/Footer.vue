@@ -65,6 +65,7 @@
       <button class="cursor-pointer hover:underline" @click="handleClickHelp">{{ $t('footer_nav_help') }}</button>
       <a class="hover:underline" href="https://docs.like.co">{{ $t('footer_nav_doc') }}</a>
       <a class="hover:underline" href="https://docs.like.co/faq">{{ $t('footer_nav_faq') }}</a>
+      <NuxtLink class="hover:underline" :to="localeLocation({ name: 'terms' })">{{ $t('terms_of_service_title') }}</NuxtLink>
     </div>
     <Dialog
       v-model="isOpenAboutTeam"

@@ -28,6 +28,7 @@
     },
     "types": [
       "@nuxt/types",
+      "@nuxt/content",
       "@nuxtjs/axios",
       "@nuxtjs/sentry",
       "@types/node",

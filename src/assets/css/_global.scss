@@ -65,3 +65,34 @@ button {
 * {
   box-sizing: border-box;
 }
+
+.nuxt-content {
+  h2 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  h3 {
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  p {
+    margin-bottom: 24px;
+  }
+
+  ul {
+    list-style: disc;
+    margin-top: 8px;
+    margin-left: 24px;
+    margin-bottom: 16px;
+
+    li {
+      margin-bottom: 8px;
+    }
+  }
+}

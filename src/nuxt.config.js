@@ -237,6 +237,7 @@ const nuxtConfig = {
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
     ['@nuxtjs/pwa', { icon: false }],
+    '@nuxt/content',
     'portal-vue/nuxt',
     ['@likecoin/nuxt-google-optimize', {
       plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
