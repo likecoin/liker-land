@@ -14,7 +14,6 @@ import {
 import {
   postNFTPurchase,
   postNFTTransfer,
-  getNFTEvents,
   getNFTModel,
   postNewStripeFiatPayment,
   getStripeFiatPrice,
@@ -31,11 +30,11 @@ import {
   getNFTCountByClassId,
   getISCNRecord,
   getNFTClassCollectionType,
-  formatNFTEvent,
+  getFormattedNFTEvents,
   parseNFTMetadataURL,
-  getEventKey,
-  getPurchasePriceMap,
   getNFTHistoryDataMap,
+  populateGrantEvent,
+  getUniqueAddressesFromEvent,
 } from '~/util/nft';
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
@@ -517,109 +516,60 @@ export default {
     },
     async updateNFTHistory() {
       this.isHistoryInfoLoading = true;
-      const actionType = this.nftIsWritingNFT
-        ? ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'sell_nft', 'new_class']
-        : [
-            '/cosmos.nft.v1beta1.MsgSend',
-            'mint_nft',
-            'buy_nft',
-            'sell_nft',
-            'new_class',
-          ];
+      const actionType = [
+        '/cosmos.nft.v1beta1.MsgSend',
+        'buy_nft',
+        'sell_nft',
+        'new_class',
+      ];
+      if (!this.nftIsWritingNFT && !this.nftIsNFTBook) {
+        actionType.push('mint_nft');
+      }
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
-      const history = await this.getNFTEventsAll({
+      let dbEventMap = null;
+      if (this.nftIsWritingNFT) {
+        dbEventMap = await getNFTHistoryDataMap({
+          axios: this.$api,
+          classId: this.classId,
+          nftId: this.nftId,
+        });
+      }
+      const {
+        nextKey,
+        events: latestBatchEvents,
+      } = await getFormattedNFTEvents({
+        axios: this.$api,
+        classId: this.classId,
+        nftId: this.nftId,
         actionType,
         ignoreToList,
       });
-
-      const promises = [getPurchasePriceMap(this.$api, history)];
-
-      if (this.nftIsWritingNFT) {
-        promises.push(
-          getNFTHistoryDataMap({
-            axios: this.$api,
-            classId: this.classId,
-            nftId: this.nftId,
-          })
-        );
-      }
-
-      const eventMap = new Map();
-      history.forEach(event => {
-        eventMap.set(getEventKey(event), event);
-      });
-
-      const [priceMap, historyMap] = await Promise.all(promises);
-      priceMap.forEach((price, key) => {
-        if (eventMap.has(key)) {
-          eventMap.get(key).price = price;
-        }
-      });
-      if (historyMap) {
-        historyMap.forEach((data, key) => {
-          if (eventMap.has(key)) {
-            const {
-              classId,
-              nftId,
-              grantTxHash,
-              granterMemo,
-              granterWallet,
-              price,
-              timestamp,
-            } = data;
-            if (grantTxHash && granterMemo) {
-              const e = {
-                classId,
-                nftId,
-                fromWallet: granterWallet,
-                event: 'grant',
-                memo: granterMemo,
-                txHash: grantTxHash,
-                timestamp: timestamp + 1,
-              };
-              history.push(e);
-              eventMap.set(grantTxHash, e);
-              eventMap.get(key).granterMemo = granterMemo;
-            }
-            eventMap.get(key).price = price;
-          }
-        });
-      }
-      history.sort((a, b) => b.timestamp - a.timestamp);
-
-      this.NFTHistory = history;
-
-      const addresses = [];
-      // eslint-disable-next-line no-restricted-syntax
-      for (const list of this.NFTHistory) {
-        addresses.push(list.fromWallet, list.toWallet);
-      }
-      this.lazyGetUserInfoByAddresses([...new Set(addresses)]);
+      this.NFTHistory = this.nftIsWritingNFT
+        ? populateGrantEvent(latestBatchEvents, dbEventMap)
+        : latestBatchEvents;
+      this.lazyGetUserInfoByAddresses(
+        getUniqueAddressesFromEvent(this.NFTHistory)
+      );
       this.isHistoryInfoLoading = false;
-    },
-    async getNFTEventsAll({ actionType, ignoreToList }) {
-      let data;
-      let nextKey;
-      let count;
-      const events = [];
-      do {
-        // eslint-disable-next-line no-await-in-loop
-        ({ data } = await this.$api.get(
-          getNFTEvents({
-            classId: this.classId,
-            nftId: this.nftId,
-            key: nextKey,
-            limit: NFT_INDEXER_LIMIT_MAX,
-            actionType,
-            ignoreToList,
-            reverse: true,
-          })
-        ));
-        nextKey = data.pagination.next_key;
-        ({ count } = data.pagination);
-        events.push(...data.events);
-      } while (count === NFT_INDEXER_LIMIT_MAX);
-      return events.map(formatNFTEvent);
+
+      if (latestBatchEvents.length === NFT_INDEXER_LIMIT_MAX) {
+        let { events: remainEvents } = await getFormattedNFTEvents({
+          axios: this.$api,
+          classId: this.classId,
+          nftId: this.nftId,
+          key: nextKey,
+          actionType,
+          ignoreToList,
+          getAll: true,
+        });
+        if (this.nftIsWritingNFT) {
+          remainEvents = populateGrantEvent(remainEvents, dbEventMap);
+        }
+        this.lazyGetUserInfoByAddresses(
+          getUniqueAddressesFromEvent(remainEvents)
+        );
+        this.NFTHistory.push(...remainEvents);
+      }
     },
     async updateUserCollectedCount(classId, address) {
       if (!address || !classId) {
