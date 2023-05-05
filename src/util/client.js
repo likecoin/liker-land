@@ -12,3 +12,7 @@ export function checkIsLikeCoinApp() {
   const { userAgent = '' } = global.window.navigator;
   return userAgent.includes('LikeCoinApp');
 }
+
+export function checkIsLikeCoinAppInAppBrowser(route) {
+  return route?.query?.in_app !== undefined || checkIsLikeCoinApp();
+}

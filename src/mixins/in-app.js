@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { checkIsLikeCoinApp } from '~/util/client';
+import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 
 import walletLoginMixin from '~/mixins/wallet-login';
 
@@ -9,7 +9,7 @@ export default {
   computed: {
     ...mapGetters(['walletHasLoggedIn']),
     isInInAppBrowser() {
-      return this.$route.query.in_app !== undefined || checkIsLikeCoinApp();
+      return checkIsLikeCoinAppInAppBrowser(this.$route);
     },
   },
   watch: {

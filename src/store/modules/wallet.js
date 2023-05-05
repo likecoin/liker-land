@@ -20,6 +20,7 @@ import {
   getNFTEvents,
   getNFTClassesPartial,
 } from '~/util/api';
+import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
 
 import {
@@ -482,7 +483,10 @@ const actions = {
     try {
       const userInfo = await this.$api.$get(getUserV2Self());
       commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
-      await dispatch('setLocale', userInfo.locale);
+      // Let locale follows Liker Land app language setting through path prefix
+      if (!checkIsLikeCoinAppInAppBrowser(this.$router.app.$route)) {
+        await dispatch('setLocale', userInfo.locale);
+      }
       return userInfo;
     } catch (error) {
       throw error;
