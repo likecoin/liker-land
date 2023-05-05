@@ -44,7 +44,6 @@
         'laptop:max-w-full',
         'mx-auto',
         'px-[24px]',
-        { 'pt-[32px]': isInInAppBrowser },
         'laptop:px-[40px]',
       ]"
     >

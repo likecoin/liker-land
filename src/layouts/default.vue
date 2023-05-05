@@ -29,7 +29,7 @@
       v-if="!isInInAppBrowser"
       class="text-like-green"
     />
-    <nuxt class="flex-grow" />
+    <nuxt :class="['flex-grow', { 'pt-[32px]': isInInAppBrowser }]" />
     <Footer v-if="!isInInAppBrowser" />
     <PortalTarget
       name="dialog"
