@@ -2,7 +2,6 @@
   <Page
     :class="[
       'px-[8px]',
-      { 'pt-[32px]': isInInAppBrowser },
       'pb-[120px]',
     ]"
   >
