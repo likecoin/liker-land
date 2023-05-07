@@ -518,16 +518,8 @@ const actions = {
     });
 
     const nftClassIds = Array.from(nftClassIdDataMap.keys());
-    const currentClassIds = [
-      ...new Set(
-        [...collectedNFTs, ...createdNFTClasses]
-          .map(item => item.class_id)
-          .filter(classId => classId !== undefined)
-      ),
-    ];
-    const mergedClassIds = [...new Set([...currentClassIds, ...nftClassIds])];
     await Promise.all(
-      mergedClassIds.map(classId => {
+      nftClassIds.map(classId => {
         const promises = [
           catchAxiosError(
             dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
