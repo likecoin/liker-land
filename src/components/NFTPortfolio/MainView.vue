@@ -63,7 +63,7 @@
             @filter-click-type-filter="selectedFilter = 'type'"
             @filter-click-creator-filter="selectedFilter = 'creators'"
             @filter-click-keyword-filter="selectedFilter = 'keywords'"
-            @filter-click-clean-filter="handleResetFilter"
+            @filter-click-clear-filter="handleResetFilter"
             @filter-change-type="handlePortfolioTypeChange"
             @filter-change-creator="handlePortfolioCreatorChange"
             @filter-change-keyword="handleChangeKeywords"

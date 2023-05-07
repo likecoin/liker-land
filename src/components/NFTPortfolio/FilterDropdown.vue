@@ -167,7 +167,7 @@ export default {
       this.$emit('filter-click-keyword-filter');
     },
     handleResetFilter() {
-      this.$emit('filter-click-clean-filter');
+      this.$emit('filter-click-clear-filter');
     },
     handlePortfolioTypeChange(value) {
       this.$emit('filter-change-type', value);
