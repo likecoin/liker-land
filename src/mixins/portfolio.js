@@ -46,7 +46,6 @@ export const createPortfolioMixin = ({
       nftKeywordsFilter: [],
       userTopCollectors: [],
       userTopCreators: [],
-      resetFilter: false,
     };
   },
   computed: {
@@ -66,7 +65,6 @@ export const createPortfolioMixin = ({
     },
     nftTypeFilter() {
       const type = this.$route.query.type?.toUpperCase();
-      if (this.resetFilter) return NFT_TYPE_FILTER_OPTIONS.ALL;
       return NFT_TYPE_FILTER_OPTIONS[type] ? type : NFT_TYPE_FILTER_OPTIONS.ALL;
     },
     isCurrentTabCollected() {
@@ -646,11 +644,10 @@ export const createPortfolioMixin = ({
         );
       }
     },
-    handleCleanFilter() {
-      this.resetFilter = true;
+    handleClearFilter() {
+      this.syncRouteForTypeFilter(NFT_TYPE_FILTER_OPTIONS.ALL);
       this.nftKeywordsFilter = [];
       this.nftCreatorFilter = [];
-      this.resetFilter = false;
     },
   },
 });

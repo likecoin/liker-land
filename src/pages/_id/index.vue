@@ -122,7 +122,7 @@
         @portfolio-change-type="handleNFTClassListTypeChange"
         @portfolio-change-keywords="handleNFTKeywordsChange"
         @infinite-scroll="handleInfiniteScroll"
-        @portfolio-reset-filter="handleCleanFilter"
+        @portfolio-reset-filter="handleClearFilter"
       />
 
     </div>
