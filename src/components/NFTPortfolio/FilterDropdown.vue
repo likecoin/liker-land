@@ -3,7 +3,7 @@
     <template v-slot:trigger="{ toggle }">
       <ButtonV2
         :text="$t('order_menu_filter_by')"
-        preset="primary"
+        :preset="getFilterButtonPreset"
         size="mini"
         @click="toggle"
       />
@@ -27,6 +27,7 @@
             @click="handleClickCreators"
           />
           <ButtonV2
+            v-if="nftKeywordList.length"
             :preset="getKeywordsButtonPreset"
             size="mini"
             :text="$t('order_menu_filter_by_keywords')"
@@ -114,6 +115,10 @@ export default {
     TickIcon,
   },
   props: {
+    getFilterButtonPreset: {
+      type: String,
+      default: undefined,
+    },
     getTypeButtonPreset: {
       type: String,
       default: undefined,

@@ -47,6 +47,7 @@
         <div class="flex justify-center items-center gap-[16px]">
           <!-- filter -->
           <NFTPortfolioFilterDropdown
+            :get-filter-button-preset="getFilterButtonPreset"
             :get-type-button-preset="getTypeButtonPreset"
             :get-creators-button-preset="getCreatorsButtonPreset"
             :get-keywords-button-preset="getKeywordsButtonPreset"
@@ -338,10 +339,23 @@ export default {
     isPortfolioOtherFilterActive() {
       return this.portfolioItemsTypeFiltering === 'OTHER_NFT';
     },
+    getFilterButtonPreset() {
+      if (
+        this.portfolioItemsTypeFiltering !== NFT_TYPE_FILTER_OPTIONS.ALL ||
+        this.portfolioItemsCreatorFiltering.length ||
+        this.nftKeywordFiltering.length
+      )
+        return 'primary';
+      return 'tertiary';
+    },
     getTypeButtonPreset() {
-      return this.selectedFilter === SELECTED_FILTER.NFT_TYPE
-        ? 'primary'
-        : 'cyan';
+      if (this.selectedFilter === SELECTED_FILTER.NFT_TYPE) return 'primary';
+      if (
+        this.portfolioItemsTypeFiltering &&
+        this.portfolioItemsTypeFiltering !== NFT_TYPE_FILTER_OPTIONS.ALL
+      )
+        return 'cyan';
+      return 'tertiary';
     },
     getCreatorsButtonPreset() {
       if (this.selectedFilter === SELECTED_FILTER.CREATORS) return 'primary';
