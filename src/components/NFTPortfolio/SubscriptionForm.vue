@@ -82,7 +82,8 @@
       <Label preset="h4" align="center" class="mb-[8px]" :text="$t('portfolio_subscription_verify_title')" />
       <Label class="text-dark-gray" preset="p5" align="center">
         <i18n path="portfolio_subscription_verify">
-          <span class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</span>
+          <span v-if="!unverifiedEmailLink" class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</span>
+          <a v-else :href="unverifiedEmailLink" target="_blank" class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</a>
         </i18n>
       </Label>
       <p class="text-center underline text-[10px] text-medium-gray mt-[32px] cursor-pointer" @click="handleClickResend">{{ $t('portfolio_subscription_verify_sendAgain') }}</p>
@@ -165,6 +166,25 @@ export default {
         return 'portfolio_unfollow_hint';
       }
       return 'portfolio_follow_hint';
+    },
+    unverifiedEmailLink() {
+      let link;
+      const email = this.walletEmailUnverified;
+      switch (true) {
+        case email.includes('gmail'):
+          link = 'https://mail.google.com/';
+          break;
+        case email.includes('yahoo'):
+          link = 'https://mail.yahoo.com/';
+          break;
+        case email.includes('icloud'):
+          link = 'https://www.icloud.com/';
+          break;
+        default:
+          link = undefined;
+          break;
+      }
+      return link;
     },
   },
   watch: {
