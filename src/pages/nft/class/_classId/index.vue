@@ -137,8 +137,12 @@
                 :wallet-address="iscnOwner"
                 :avatar-size="40"
               />
-              <ButtonV2 preset="tertiary" size="mini">
-                {{ $t('follow') }}
+              <ButtonV2
+                :preset="isFollowed ? 'tertiary' : 'secondary'"
+                size="mini"
+                @click="handleClickFollow"
+              >
+                {{ isFollowed ? $t('unfollow') : $t('follow') }}
               </ButtonV2>
             </div>
             <ul class="relative pl-[32px] py-[12px] flex justify-start items-start gap-[24px] w-full overflow-x-scroll overflow-y-auto scrollbar-custom">
@@ -317,6 +321,9 @@ export default {
       return this.messageList.find(
         element => element.event === 'mint_nft' || element.event === 'purchase'
       );
+    },
+    isFollowed() {
+      return this.walletFollowees?.includes(this.iscnOwner) || false;
     },
   },
   asyncData({ query }) {
@@ -539,6 +546,36 @@ export default {
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
+    },
+    async handleClickFollow() {
+      try {
+        if (!this.walletHasLoggedIn) {
+          try {
+            await this.signLogin();
+          } catch {
+            // No-op
+          }
+          if (!this.walletHasLoggedIn) {
+            return;
+          }
+        }
+        if (this.isFollowed) {
+          await this.walletUnfollowCreator(this.iscnOwner);
+          logTrackerEvent(
+            this,
+            'NFT',
+            'nft_details_click_unfollow',
+            this.nftId,
+            1
+          );
+          return;
+        }
+        this.walletFollowCreator(this.iscnOwner);
+        logTrackerEvent(this, 'NFT', 'nft_details_click_follow', this.nftId, 1);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
   },
 };

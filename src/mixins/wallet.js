@@ -68,6 +68,9 @@ export default {
       'walletFetchLIKEBalance',
       'walletFetchFollowees',
       'walletFetchFollowers',
+      'walletUnfollowCreator',
+      'walletFollowCreator',
+      'signLogin',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {
