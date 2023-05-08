@@ -128,33 +128,12 @@
           />
         </section>
         <!-- recommend -->
-        <section>
-          <div class="flex flex-col gap-[8px] bg-like-green rounded-[24px] py-[32px] overflow-hidden">
-            <div class="flex items-center justify-between px-[32px]">
-              <NFTMessageIdentity
-                type="creator"
-                class="flex-shrink-0"
-                :wallet-address="iscnOwner"
-                :avatar-size="40"
-              />
-              <ButtonV2
-                :preset="isFollowed ? 'tertiary' : 'secondary'"
-                size="mini"
-                @click="handleClickFollow"
-              >
-                {{ isFollowed ? $t('unfollow') : $t('follow') }}
-              </ButtonV2>
-            </div>
-            <ul class="relative pl-[32px] py-[12px] flex justify-start items-start gap-[24px] w-full overflow-x-scroll overflow-y-auto scrollbar-custom">
-              <li v-for="(nft, index) in recommendedList" :key="index">
-                <NFTPortfolioItem
-                  :class-id="nft.classId"
-                  :portfolio-wallet="iscnOwner"
-                />
-              </li>
-            </ul>
-          </div>
-        </section>
+        <NFTPageRecommendation
+          :iscn-owner="iscnOwner"
+          :is-followed="isFollowed"
+          :recommended-list="recommendedList"
+          @on-follow-button-click="handleFollowButtonClick"
+        />
         <!-- useful links -->
         <section>
           <ul class="flex flex-row gap-[8px] items-center justify-center text-medium-gray underline text-[8px]">
@@ -547,34 +526,26 @@ export default {
       });
       logTrackerEvent(this, 'NFT', 'CopyShareURL(Details)', this.classId, 1);
     },
-    async handleClickFollow() {
-      try {
-        if (!this.walletHasLoggedIn) {
-          try {
-            await this.signLogin();
-          } catch {
-            // No-op
-          }
-          if (!this.walletHasLoggedIn) {
-            return;
-          }
-        }
-        if (this.isFollowed) {
-          await this.walletUnfollowCreator(this.iscnOwner);
-          logTrackerEvent(
-            this,
-            'NFT',
-            'nft_details_click_unfollow',
-            this.nftId,
-            1
-          );
-          return;
-        }
-        this.walletFollowCreator(this.iscnOwner);
-        logTrackerEvent(this, 'NFT', 'nft_details_click_follow', this.nftId, 1);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    async handleFollowButtonClick() {
+      await this.handleClickFollow({
+        followOwner: this.iscnOwner,
+      });
+      if (this.isFollowed) {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_class_details_click_unfollow',
+          this.nftId,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_class_details_click_follow',
+          this.nftId,
+          1
+        );
       }
     },
   },
