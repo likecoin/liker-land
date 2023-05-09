@@ -70,6 +70,16 @@ export default {
           followee: this.followee,
         });
         this.isVerifiedEmail = true;
+        if (this.isVerifiedEmail && this.followee) {
+          const creator =
+            this.getUserInfoByAddress(this.followee)?.displayName ||
+            this.followee;
+          this.alertPromptSuccess(
+            this.$t('portfolio_subscription_success_alert', {
+              creator,
+            })
+          );
+        }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

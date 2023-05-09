@@ -417,6 +417,7 @@
   "portfolio_subscription_notify_error_alert": "追蹤 {creator} 時遇到錯誤： {error}",
   "portfolio_subscription_notify_invalid_email_alert": "電郵地址錯誤",
   "portfolio_subscription_notify_success_alert": "追蹤 {creator}，請檢查你的郵箱並驗證電郵地址。",
+  "portfolio_subscription_success_alert": "已成功追蹤 {creator}.",
   "portfolio_subscription_submitted_hint": "請檢查你的郵箱並驗證電郵地址",
   "portfolio_subscription_title": "追蹤作者",
   "portfolio_subscription_title_empty": "書架是空的",

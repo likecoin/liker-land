@@ -14,6 +14,7 @@ export default {
       'getSigner',
       'getLikerInfo',
       'getLocale',
+      'getUserInfoByAddress',
       'walletFollowees',
       'walletFollowers',
       'walletIsFetchingFollowers',

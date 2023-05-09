@@ -427,6 +427,7 @@
   "portfolio_subscription_notify_error_alert": "Error occurred when following {creator}: {error}",
   "portfolio_subscription_notify_invalid_email_alert": "Invalid email",
   "portfolio_subscription_notify_success_alert": "Successfully follow {creator}, please check your mailbox to confirm.",
+  "portfolio_subscription_success_alert": "Successfully follow {creator}.",
   "portfolio_subscription_submitted_hint": "Please check your email to confirm",
   "portfolio_subscription_title": "Follow Creator",
   "portfolio_subscription_title_empty": "Shelf is empty",
