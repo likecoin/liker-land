@@ -70,7 +70,7 @@ export default {
           followee: this.followee,
         });
         this.isVerifiedEmail = true;
-        if (this.isVerifiedEmail && this.followee) {
+        if (this.followee) {
           const creator =
             this.getUserInfoByAddress(this.followee)?.displayName ||
             this.followee;
