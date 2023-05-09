@@ -372,6 +372,7 @@ const actions = {
     classId
   ) {
     let metadata = getters.getNFTClassMetadataById(classId);
+    let iscnRecord;
     const { uri, parent } = metadata;
     if (isValidHttpUrl(uri)) {
       const apiMetadata = await this.$api.$get(uri).catch(err => {
@@ -384,23 +385,25 @@ const actions = {
         metadata = { ...metadata, ...apiMetadata };
       }
     }
+    const iscnId = parent?.iscn_id_prefix;
+    if (iscnId) {
+      iscnRecord = await this.$api
+        .$get(api.getISCNRecord(iscnId))
+        .catch(err => {
+          if (!err.response?.status === 404) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+          }
+        });
+      if (iscnRecord) {
+        metadata.iscn_record = iscnRecord?.records?.[0]?.data;
+      }
+    }
     if (!(metadata.iscn_owner || metadata.account_owner)) {
-      const iscnId = parent?.iscn_id_prefix;
-      if (iscnId) {
-        const iscnRecord = await this.$api
-          .$get(api.getISCNRecord(iscnId))
-          .catch(err => {
-            if (!err.response?.status === 404) {
-              // eslint-disable-next-line no-console
-              console.error(err);
-            }
-          });
-        if (iscnRecord) {
-          metadata.iscn_owner = iscnRecord.owner;
-          metadata.iscn_record_timestamp =
-            iscnRecord?.records?.[0]?.recordTimestamp;
-          metadata.iscn_record = iscnRecord?.records?.[0]?.data;
-        }
+      if (iscnRecord) {
+        metadata.iscn_owner = iscnRecord.owner;
+        metadata.iscn_record_timestamp =
+          iscnRecord?.records?.[0]?.recordTimestamp;
       } else if (parent.account) {
         metadata.account_owner = parent.account;
       }
