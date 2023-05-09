@@ -269,6 +269,7 @@
   "nft_claim_error_message_unknown": "An unknown error occurs when claiming Writing NFT",
   "nft_claim_login_in": "Verify wallet to claim {nftName}",
   "nft_claim_login_in_button": "Verify",
+  "nft_claim_missing_qs": "Please find the notification email and click the link to claim your Writing NFT.",
   "nft_class_details_info_section_nft_class_id_label": "NFT Class ID",
   "nft_class_details_info_section_title": "Info",
   "nft_class_footer_image": "NFT Widget Image",

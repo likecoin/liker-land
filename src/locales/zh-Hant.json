@@ -259,6 +259,7 @@
   "nft_claim_error_message_unknown": "領取時出現不明錯誤",
   "nft_claim_login_in": "驗證錢包以領取 {nftName}",
   "nft_claim_login_in_button": "驗證",
+  "nft_claim_missing_qs": "請點選通知郵件中的連結以領取你的 Writing NFT",
   "nft_class_details_info_section_nft_class_id_label": "NFT Class ID",
   "nft_class_details_info_section_title": "資訊",
   "nft_class_footer_image": "NFT 小部件圖片版",

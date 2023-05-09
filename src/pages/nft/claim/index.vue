@@ -5,8 +5,11 @@
       :login-label="$t('nft_claim_login_in', { nftName })"
       :login-button-label="$t('nft_claim_login_in_button')"
     >
+      <div v-if="missingQs">
+        <Label :text="$t('nft_claim_missing_qs')" align="center" />
+      </div>
       <div
-        v-if="!isLoading && !isClaimed"
+        v-else-if="!isLoading && !isClaimed"
         class="flex flex-col justify-center gap-[16px] mt-[16px]"
       >
         <Label :text="$t('nft_claim_claim', { nftName, wallet: getAddress })" align="center" />
@@ -67,6 +70,9 @@ export default {
     token() {
       return this.$route.query.claiming_token;
     },
+    missingQs() {
+      return !this.token || !this.paymentId;
+    },
     isClaimed() {
       return this.classId && this.nftId;
     },
@@ -75,12 +81,6 @@ export default {
     async claim() {
       try {
         this.isLoading = true;
-        if (!this.paymentId) {
-          throw new Error('id is required');
-        }
-        if (!this.token) {
-          throw new Error('token is required');
-        }
         const { data } = await this.$api.post(
           postStripeFiatClaim({
             wallet: this.getAddress,
