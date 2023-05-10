@@ -112,13 +112,17 @@
         :portfolio-items-type-filtering="nftTypeFilter"
         :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
+        :nft-keyword-list="nftKeywordList"
+        :nft-keyword-filtering="nftKeywordsFilter"
         :is-loading-portfolio-items="isLoading"
         :is-narrow="true"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
         @portfolio-change-creator="handleNFTClassListCreatorChange"
         @portfolio-change-type="handleNFTClassListTypeChange"
+        @portfolio-change-keywords="handleNFTKeywordsChange"
         @infinite-scroll="handleInfiniteScroll"
+        @portfolio-reset-filter="handleClearFilter"
       />
 
     </div>

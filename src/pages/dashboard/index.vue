@@ -62,11 +62,15 @@
         :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
         :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
         :is-loading-portfolio-items="isLoading"
+        :nft-keyword-list="nftKeywordList"
+        :nft-keyword-filtering="nftKeywordsFilter"
         @portfolio-change-tab="handleTabChange"
         @portfolio-change-sorting="handleNFTClassListSortingChange"
         @portfolio-change-creator="handleNFTClassListCreatorChange"
         @portfolio-change-type="handleNFTClassListTypeChange"
+        @portfolio-change-keywords="handleNFTKeywordsChange"
         @infinite-scroll="handleInfiniteScroll"
+        @portfolio-reset-filter="handleClearFilter"
       >
         <template #tab-bar-prepend>
           <ButtonV2

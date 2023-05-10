@@ -44,6 +44,7 @@ export enum Preset {
   plain = 'plain',
   outline = 'outline',
   gradient = 'gradient',
+  cyan = 'cyan',
 }
 
 export enum Size {
@@ -157,6 +158,9 @@ export default class ButtonV2 extends Vue {
           '!bg-gradient-to-r from-[#D2F0F0] to-[#F0E6B4]',
           'text-like-green',
         ];
+
+      case Preset.cyan:
+        return ['!bg-like-cyan-pale', 'text-dark-gray'];
 
       default:
         return '';
