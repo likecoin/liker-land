@@ -217,7 +217,7 @@ export default {
     },
     handleCollect(classId) {
       this.$router.push(
-        this.localeLocation({ name: 'writing-nft', hash: `#${classId}` })
+        this.localeLocation({ name: 'index', hash: `#${classId}` })
       );
     },
     handleCollectFromWidgetSection(classId) {

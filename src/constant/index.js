@@ -78,6 +78,20 @@ export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
   ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
   : 'like17m4vwrnhjmd20uu7tst7nv0kap6ee7js69jfrs';
 
+export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
+  ? [
+      'likenft1fsf4x0tsm8gj8x0adkcce68es2xt5gwk9y7zjf06wwh92t27s99q3ktwpn',
+      'likenft1wyk82qhawxh5q27ruc0dj0053unmddk3mswwvuhf6ste6v93e7rqtvl0fy',
+      'likenft1yycuh6458s9045xvy6205xp2uhpl7r4lukfdclhg0phwjlfytq3skmuq8j',
+      'likenft1j3azrgn736esh3sm0y03l93pecmy8mkuf43n0w3j22zeqn3r6uwsz40spa',
+    ]
+  : [
+      'likenft1rax0ns09sr80yz8q6x9t8tp7khaedut5j0pnjjzlcjwtl78686cqprmu2x',
+      'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg',
+      'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
+      'likenft1uxjuhufvem4ccvwmquvt0uecfgcnn7wqpasyctn3glsq3q7kpxusnk7jaf',
+    ];
+
 export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
   ? [
       'likenft1qehd8pcp33ds3myxpmpanag2aqz4ygzmrukgtn8a69qyhswa5uqs952yjn',
