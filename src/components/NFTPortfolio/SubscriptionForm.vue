@@ -82,7 +82,7 @@
       <Label preset="h4" align="center" class="mb-[8px]" :text="$t('portfolio_subscription_verify_title')" />
       <Label class="text-dark-gray" preset="p5" align="center">
         <i18n path="portfolio_subscription_verify">
-          <a v-if="!!unverifiedEmailLink" :href="unverifiedEmailLink" target="_blank" class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</a>
+          <a v-if="!!checkEmailLink" :href="checkEmailLink" target="_blank" class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</a>
           <span v-else class="font-[600] text-like-green" place="email">{{ walletEmailUnverified }}</span>
         </i18n>
       </Label>
@@ -167,7 +167,7 @@ export default {
       }
       return 'portfolio_follow_hint';
     },
-    unverifiedEmailLink() {
+    checkEmailLink() {
       let link;
       const email = this.walletEmailUnverified;
       switch (true) {
