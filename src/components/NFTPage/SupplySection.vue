@@ -10,6 +10,7 @@
     <template #content>
       <NFTSupplyTable
         class="laptop:px-[32px]"
+        :current-price="currentPrice"
         :sold-count="soldCount"
         :visible-batches-ahead="4"
         @collect="handleClickCollect"
@@ -23,7 +24,11 @@ export default {
   props: {
     soldCount: {
       type: Number,
-      default: undefined,
+      default: 0,
+    },
+    currentPrice: {
+      type: Number,
+      default: 0,
     },
   },
   methods: {
