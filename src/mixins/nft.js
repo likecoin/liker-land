@@ -433,21 +433,15 @@ export default {
       const userCollected =
         this.getNFTListMapByAddress(this.getAddress)?.collected || [];
 
+      recommendedList = recommendedList.filter(
+        item =>
+          !userCollected.some(
+            collectedItem => collectedItem.classId === item.classId
+          ) && item.classId !== this.classId
+      );
       if (hiddenSet) {
         recommendedList = recommendedList.filter(
-          item =>
-            !userCollected.some(
-              collectedItem => collectedItem.classId === item.classId
-            ) &&
-            !hiddenSet.has(item.classId) &&
-            item.classId !== this.classId
-        );
-      } else {
-        recommendedList = recommendedList.filter(
-          item =>
-            !userCollected.some(
-              collectedItem => collectedItem.classId === item.classId
-            )
+          item => !hiddenSet.has(item.classId)
         );
       }
 
@@ -455,14 +449,12 @@ export default {
         const featuredItems = recommendedList.filter(item =>
           featuredSet.has(item.classId)
         );
-        recommendedList = featuredItems
-          .concat(
-            recommendedList.filter(item => !featuredSet.has(item.classId))
-          )
-          .slice(0, 5);
+        recommendedList = featuredItems.concat(
+          recommendedList.filter(item => !featuredSet.has(item.classId))
+        );
       }
 
-      return recommendedList;
+      return recommendedList.slice(0, 5);
     },
   },
   watch: {
