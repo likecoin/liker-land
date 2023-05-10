@@ -960,5 +960,17 @@ export default {
       if (m.event === 'mint_nft') return this.nftClassCreatorMessage;
       return m.memo;
     },
+    async fetchRecommendInfo() {
+      try {
+        await Promise.all([
+          this.fetchNFTListByAddress(this.iscnOwner),
+          this.fetchNFTListByAddress(this.getAddress),
+          this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
+        ]);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    },
   },
 };

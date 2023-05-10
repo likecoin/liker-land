@@ -128,7 +128,11 @@
           />
         </section>
         <!-- recommend -->
+        <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
+          <ProgressIndicator />
+        </div>
         <NFTPageRecommendation
+          v-else
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
@@ -280,6 +284,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      isRecommendationLoading: false,
 
       isOpenTransferModal: false,
       isTransferring: false,
@@ -349,18 +354,14 @@ export default {
     }
   },
   async mounted() {
+    this.isRecommendationLoading = true;
     try {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
       this.updateNFTHistory();
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
-      const blockingPromises = [
-        this.fetchISCNMetadata(),
-        this.fetchNFTListByAddress(this.iscnOwner),
-        this.fetchNFTListByAddress(this.getAddress),
-        this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
-      ];
+      const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
@@ -369,6 +370,8 @@ export default {
       }
     } finally {
       this.isLoading = false;
+      await this.fetchRecommendInfo();
+      this.isRecommendationLoading = false;
     }
 
     const { hash } = this.$route;
