@@ -523,9 +523,10 @@ export default {
       }
     } finally {
       this.isLoading = false;
-      await this.fetchRecommendInfo();
-      this.isRecommendationLoading = false;
     }
+
+    await this.fetchRecommendInfo();
+    this.isRecommendationLoading = false;
 
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
