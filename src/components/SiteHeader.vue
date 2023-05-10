@@ -173,7 +173,6 @@ export default {
     mainMenuItems() {
       const options = [
         { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
-        { value: 'civic', name: this.$t('main_menu_civic_liker') },
         { value: 'mintNft', name: this.$t('main_menu_mint_nft') },
       ];
 
