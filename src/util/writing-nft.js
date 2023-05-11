@@ -1,4 +1,4 @@
-import { NFT_GEM_NAME } from '~/constant';
+import { NFT_GEM_NAME } from '../constant';
 
 const STARTING_PRICE = 8;
 const PRICE_GROWTH_POWER = 2;
