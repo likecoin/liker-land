@@ -1,42 +1,50 @@
 <template>
   <div class="flex flex-col justify-center flex-grow">
     <AuthRequiredView
-      class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
-      :login-label="$t('nft_claim_login_in', { nftName })"
+      class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto mb-[48px]"
+      :login-label="$t('nft_claim_login_in')"
       :login-button-label="$t('nft_claim_login_in_button')"
     >
-      <div v-if="missingQs">
-        <Label :text="$t('nft_claim_missing_qs')" align="center" />
-      </div>
-      <div
-        v-else-if="!isLoading && !isClaimed"
-        class="flex flex-col justify-center gap-[16px] mt-[16px]"
-      >
-        <Label :text="$t('nft_claim_claim', { nftName, wallet: getAddress })" align="center" />
-        <ButtonV2 :text="$t('nft_claim_claim_button')" preset="secondary" @click="claim" />
-      </div>
-      <div v-else-if="isLoading">
-        <Label :text="$t('nft_claim_claiming', { nftName })" align="center" />
-        <ProgressIndicator class="self-center mt-[16px]" />
-      </div>
-      <div v-else-if="isClaimed">
-        <Label :text="$t('nft_claim_claimed', { nftName })" align="center" />
-        <ButtonV2 :text="$t('nft_claim_claimed_view_button')" preset="secondary" @click="handleClickView" />
-      </div>
-      <Label v-else-if="error" align="center">
-        {{ $t('nft_claim_error_message', { error }) }}
-      </Label>
-      <Label v-else align="center">
-        {{ $t('nft_claim_error_message_unknown') }}
-      </Label>
-      <div class="flex justify-center gap-[16px] mt-[16px]">
-        <ButtonV2
-          v-if="!isLoading && !isClaimed && error"
-          :text="$t('nft_claim_claimed_retry_button')"
-          preset="outline"
-          @click="handleClickRetry"
-        />
-      </div>
+      <NFTWidgetBaseCard class="flex justify-center items-center max-w-[400px]">
+        <NuxtLink
+          :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
+          target="_blank"
+        >
+          <NFTWidgetContentPreview
+            :class="[
+              'transition-shadow',
+              'cursor-pointer',
+              'min-h-[300px]',
+              'w-full',
+            ]"
+            :title="NFTName"
+            :description="NFTDescription"
+            :img-src="NFTImageUrl"
+            @click="handleClickNFTDetails"
+          />  
+        </NuxtLink>
+      </NFTWidgetBaseCard>
+      <Label class="my-[16px]" :text="text" align="center" />
+      <ButtonV2 
+        v-if="state === 'READY'" 
+        class="w-[100px]" 
+        :text="$t('nft_claim_claim_button')" 
+        preset="secondary" 
+        @click="claim"
+      />
+      <ProgressIndicator v-else-if="state === 'CLAIMING'" class="self-center" />
+      <ButtonV2 
+        v-else-if="state === 'CLAIMED'"
+        :text="$t('nft_claim_claimed_view_button')" 
+        preset="secondary" 
+        @click="handleClickView"
+      />
+      <ButtonV2
+        v-else-if="state === 'ERROR'"
+        :text="$t('nft_claim_claimed_retry_button')"
+        preset="outline"
+        @click="handleClickRetry"
+      />
     </AuthRequiredView>
   </div>
 </template>
@@ -46,23 +54,33 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import { postStripeFiatClaim } from '~/util/api';
 
 import alertMixin from '~/mixins/alert';
+import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+
+const NFT_CLAIM_STATE = {
+  MISSING_QS: 'MISSING_QS',
+  READY: 'READY',
+  CLAIMING: 'CLAIMING',
+  CLAIMED: 'CLAIMED',
+  ERROR: 'ERROR',
+};
 
 export default {
   name: 'NFTClaimPage',
-  mixins: [alertMixin, walletMixin],
+  mixins: [alertMixin, nftMixin, walletMixin],
   data() {
     return {
-      classId: '',
       nftId: '',
-      isLoading: false,
+      state:
+        this.classId && this.token && !this.paymentId
+          ? NFT_CLAIM_STATE.READY
+          : NFT_CLAIM_STATE.MISSING_QS,
       error: '',
     };
   },
   computed: {
-    nftName() {
-      const name = this.$route.query.claiming_class_name;
-      return `Writing NFT${name ? ` - ${decodeURIComponent(name)}` : ''}`;
+    classId() {
+      return this.$route.query.class_id;
     },
     paymentId() {
       return this.$route.query.payment_id;
@@ -70,17 +88,37 @@ export default {
     token() {
       return this.$route.query.claiming_token;
     },
-    missingQs() {
-      return !this.token || !this.paymentId;
+    text() {
+      switch (this.state) {
+        case NFT_CLAIM_STATE.MISSING_QS:
+          return this.$t('nft_claim_missing_qs');
+        case NFT_CLAIM_STATE.READY:
+          return this.$t('nft_claim_claim', { wallet: this.getAddress });
+        case NFT_CLAIM_STATE.CLAIMING:
+          return this.$t('nft_claim_claiming');
+        case NFT_CLAIM_STATE.CLAIMED:
+          return this.$t('nft_claim_claimed');
+        case NFT_CLAIM_STATE.ERROR:
+          return this.error
+            ? this.$t('nft_claim_error_message', { error: this.error })
+            : this.$t('nft_claim_error_message_unknown');
+        default:
+          return '';
+      }
     },
-    isClaimed() {
-      return this.classId && this.nftId;
-    },
+  },
+  async asyncData({ query, store, error }) {
+    try {
+      const { class_id: classId } = query;
+      await store.dispatch('lazyGetNFTClassMetadata', classId);
+    } catch (err) {
+      error({ statusCode: 404, message: 'NFT Class Not Found' });
+    }
   },
   methods: {
     async claim() {
       try {
-        this.isLoading = true;
+        this.state = NFT_CLAIM_STATE.CLAIMING;
         const { data } = await this.$api.post(
           postStripeFiatClaim({
             wallet: this.getAddress,
@@ -88,8 +126,8 @@ export default {
             token: this.token,
           })
         );
-        this.classId = data.classId;
         this.nftId = data.nftId;
+        this.state = NFT_CLAIM_STATE.CLAIMED;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -99,9 +137,17 @@ export default {
             error: this.error,
           })
         );
-      } finally {
-        this.isLoading = false;
+        this.state = NFT_CLAIM_STATE.ERROR;
       }
+    },
+    handleClickViewDetails() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_view_details_clicked',
+        this.classId,
+        1
+      );
     },
     handleClickView() {
       logTrackerEvent(this, 'NFT', 'nft_claim_view_button_clicked', '', 1);
