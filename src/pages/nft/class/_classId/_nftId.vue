@@ -396,7 +396,6 @@ export default {
           content: ogImage,
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
       script: schemas.length
         ? [
             {

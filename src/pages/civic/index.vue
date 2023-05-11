@@ -38,7 +38,6 @@ export default {
           content: ogImage,
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
       script: [
         {
           hid: 'schema',
