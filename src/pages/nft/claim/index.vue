@@ -25,14 +25,7 @@
         </NuxtLink>
       </NFTWidgetBaseCard>
       <Label class="my-[16px]" :text="text" align="center" />
-      <ButtonV2 
-        v-if="state === 'READY'" 
-        class="w-[100px]" 
-        :text="$t('nft_claim_claim_button')" 
-        preset="secondary" 
-        @click="claim"
-      />
-      <ProgressIndicator v-else-if="state === 'CLAIMING'" class="self-center" />
+      <ProgressIndicator v-if="state === 'CLAIMING'" class="self-center" />
       <ButtonV2 
         v-else-if="state === 'CLAIMED'"
         :text="$t('nft_claim_claimed_view_button')" 
@@ -59,7 +52,6 @@ import walletMixin from '~/mixins/wallet';
 
 const NFT_CLAIM_STATE = {
   MISSING_QS: 'MISSING_QS',
-  READY: 'READY',
   CLAIMING: 'CLAIMING',
   CLAIMED: 'CLAIMED',
   ERROR: 'ERROR',
@@ -72,8 +64,8 @@ export default {
     return {
       nftId: '',
       state:
-        this.classId && this.token && !this.paymentId
-          ? NFT_CLAIM_STATE.READY
+        this.classId && this.token && this.paymentId
+          ? NFT_CLAIM_STATE.CLAIMING
           : NFT_CLAIM_STATE.MISSING_QS,
       error: '',
     };
@@ -92,8 +84,6 @@ export default {
       switch (this.state) {
         case NFT_CLAIM_STATE.MISSING_QS:
           return this.$t('nft_claim_missing_qs');
-        case NFT_CLAIM_STATE.READY:
-          return this.$t('nft_claim_claim', { wallet: this.getAddress });
         case NFT_CLAIM_STATE.CLAIMING:
           return this.$t('nft_claim_claiming');
         case NFT_CLAIM_STATE.CLAIMED:
@@ -115,10 +105,14 @@ export default {
       error({ statusCode: 404, message: 'NFT Class Not Found' });
     }
   },
+  mounted() {
+    if (this.state !== NFT_CLAIM_STATE.MISSING_QS) {
+      this.claim();
+    }
+  },
   methods: {
     async claim() {
       try {
-        this.state = NFT_CLAIM_STATE.CLAIMING;
         const { data } = await this.$api.post(
           postStripeFiatClaim({
             wallet: this.getAddress,

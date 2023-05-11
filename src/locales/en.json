@@ -259,7 +259,6 @@
     "LikeCoin staking"
   ],
   "month": "month",
-  "nft_claim_claim": "Claim Writing NFT to your wallet {wallet}",
   "nft_claim_claim_button": "Claim",
   "nft_claim_claimed": "Writing NFT is claimed",
   "nft_claim_claimed_retry_button": "Retry",

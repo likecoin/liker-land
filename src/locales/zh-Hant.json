@@ -249,7 +249,6 @@
     "委託 LikeCoin"
   ],
   "month": "月",
-  "nft_claim_claim": "領取 Writing NFT 至你的錢包 {wallet}",
   "nft_claim_claim_button": "領取",
   "nft_claim_claimed": "已領取 Writing NFT",
   "nft_claim_claimed_retry_button": "重試",
