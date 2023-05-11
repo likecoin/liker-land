@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="!shouldHideTable"
     :class="[
       'overflow-y-hidden',
       shouldCollapseInMobile ? 'laptop:border-y-[2px]' : 'border-y-[2px]',
@@ -52,10 +51,6 @@ export default {
       type: Number,
       default: 0,
     },
-    currentPrice: {
-      type: Number,
-      default: 0,
-    },
     visibleBatchesAhead: {
       type: Number,
       default: 3,
@@ -78,13 +73,6 @@ export default {
     },
   },
   computed: {
-    // TODO: calculate batch according to batch/current price...
-    shouldHideTable() {
-      return (
-        this.currentPrice &&
-        this.currentPrice > getPrice(getBatchStart(this.activeBatch))
-      );
-    },
     activeBatch() {
       return getBatch(this.soldCount);
     },

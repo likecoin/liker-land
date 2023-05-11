@@ -1,5 +1,6 @@
 <template>
   <CollapsibleCard
+    v-if="!shouldHideSupplySection"
     class="w-full"
     :title="$t('nft_supply_section_title')"
     :is-show-separator="false"
@@ -19,6 +20,8 @@
   </CollapsibleCard>
 </template>
 <script>
+import { getBatch, getBatchStart, getPrice } from '../../util/writing-nft';
+
 export default {
   name: 'NFTPageSupplySection',
   props: {
@@ -29,6 +32,16 @@ export default {
     currentPrice: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    // TODO: calculate batch according to batch/current price...
+    shouldHideSupplySection() {
+      const activeBatch = getBatch(this.soldCount);
+      return (
+        this.currentPrice &&
+        this.currentPrice > getPrice(getBatchStart(activeBatch))
+      );
     },
   },
   methods: {
