@@ -507,7 +507,6 @@ export default {
     return { action };
   },
   async mounted() {
-    this.isRecommendationLoading = true;
     try {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
@@ -526,7 +525,6 @@ export default {
     }
 
     await this.fetchRecommendInfo();
-    this.isRecommendationLoading = false;
 
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);

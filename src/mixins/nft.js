@@ -89,6 +89,7 @@ export default {
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
+      isRecommendationLoading: false,
 
       iscnData: null,
       nftISCNContentFingerprints: [],
@@ -953,6 +954,7 @@ export default {
       return m.memo;
     },
     async fetchRecommendInfo() {
+      this.isRecommendationLoading = true;
       try {
         await Promise.all([
           this.fetchNFTListByAddress(this.iscnOwner),
@@ -963,6 +965,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       }
+      this.isRecommendationLoading = false;
     },
   },
 };

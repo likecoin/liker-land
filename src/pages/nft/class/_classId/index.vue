@@ -284,7 +284,6 @@ export default {
   data() {
     return {
       isLoading: true,
-      isRecommendationLoading: false,
 
       isOpenTransferModal: false,
       isTransferring: false,
@@ -354,7 +353,6 @@ export default {
     }
   },
   async mounted() {
-    this.isRecommendationLoading = true;
     try {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
@@ -373,7 +371,6 @@ export default {
     }
 
     await this.fetchRecommendInfo();
-    this.isRecommendationLoading = false;
 
     const { hash } = this.$route;
     if (hash) {
