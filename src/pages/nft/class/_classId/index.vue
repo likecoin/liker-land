@@ -537,7 +537,7 @@ export default {
           this,
           'NFT',
           'nft_class_details_click_unfollow',
-          this.nftId,
+          this.classId,
           1
         );
       } else {
@@ -545,7 +545,7 @@ export default {
           this,
           'NFT',
           'nft_class_details_click_follow',
-          this.nftId,
+          this.classId,
           1
         );
       }
@@ -555,7 +555,7 @@ export default {
         this,
         'NFT',
         'nft_class_details_click_recommended_nft',
-        this.nftId,
+        this.classId,
         1
       );
     },

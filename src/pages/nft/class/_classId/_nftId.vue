@@ -665,11 +665,11 @@ export default {
           this,
           'NFT',
           'nft_details_click_unfollow',
-          this.nftId,
+          this.classId,
           1
         );
       } else {
-        logTrackerEvent(this, 'NFT', 'nft_details_click_follow', this.nftId, 1);
+        logTrackerEvent(this, 'NFT', 'nft_details_click_follow', this.classId, 1);
       }
     },
     handleRecommendedItemClick() {
@@ -677,7 +677,7 @@ export default {
         this,
         'NFT',
         'nft_details_click_recommended_nft',
-        this.nftId,
+        this.classId,
         1
       );
     },
