@@ -271,7 +271,6 @@ export default {
           content: this.iscnOwner,
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
       script: schemas.length
         ? [
             {

@@ -202,7 +202,6 @@ export default {
           body: true,
         },
       ],
-      link: [{ rel: 'canonical', href: `${EXTERNAL_HOST}/${this.wallet}` }],
     };
   },
   data() {
