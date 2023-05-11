@@ -312,14 +312,14 @@ export const postUserV2Logout = () => '/api/v2/users/logout';
 export const postUserV2WalletEmail = ({
   email,
   followee,
-  claimingClassName,
+  classId,
   paymentId,
   claimingToken,
 }) => {
   const qsPayload = {
     email,
     followee,
-    claiming_class_name: claimingClassName,
+    class_id: classId,
     payment_id: paymentId,
     claiming_token: claimingToken,
   };

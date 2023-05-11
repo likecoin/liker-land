@@ -86,8 +86,8 @@ export default {
     isDisabledChangingEmail() {
       return !this.newEmail || this.newEmail === this.walletEmailUnverified;
     },
-    claimingClassName() {
-      return this.$route.query.claiming_class_name;
+    classId() {
+      return this.$route.query.class_id;
     },
     paymentId() {
       return this.$route.query.payment_id;
@@ -109,8 +109,8 @@ export default {
       try {
         this.isSubmitting = true;
         const payload = { email: this.walletEmailUnverified };
-        if (this.claimingClassName && this.paymentId && this.claimingToken) {
-          payload.claimingClassName = this.claimingClassName;
+        if (this.classId && this.paymentId && this.claimingToken) {
+          payload.classId = this.classId;
           payload.paymentId = this.paymentId;
           payload.claimingToken = this.claimingToken;
         }
@@ -137,8 +137,8 @@ export default {
       try {
         this.isSubmitting = true;
         const payload = { email: this.newEmail };
-        if (this.claimingClassName && this.paymentId && this.claimingToken) {
-          payload.claimingClassName = this.claimingClassName;
+        if (this.classId && this.paymentId && this.claimingToken) {
+          payload.classId = this.classId;
           payload.paymentId = this.paymentId;
           payload.claimingToken = this.claimingToken;
         }

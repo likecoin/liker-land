@@ -26,7 +26,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     const {
       email,
       followee,
-      claiming_class_name: claimingClassName,
+      class_id: classId,
       payment_id: paymentId,
       claiming_token: claimingToken,
     } = req.query;
@@ -67,8 +67,8 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     if (isValidFollowee(user, followee)) {
       qsPayload.followee = followee;
     }
-    if (claimingClassName && paymentId && claimingToken) {
-      qsPayload.claiming_class_name = claimingClassName;
+    if (classId && paymentId && claimingToken) {
+      qsPayload.class_id = classId;
       qsPayload.payment_id = paymentId;
       qsPayload.claiming_token = claimingToken;
     }

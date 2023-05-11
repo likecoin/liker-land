@@ -550,14 +550,14 @@ const actions = {
   },
   async walletUpdateEmail(
     { commit },
-    { email, followee, claimingClassName, paymentId, claimingToken }
+    { email, followee, classId, paymentId, claimingToken }
   ) {
     try {
       await this.$api.$post(
         postUserV2WalletEmail({
           email,
           followee,
-          claimingClassName,
+          classId,
           paymentId,
           claimingToken,
         })

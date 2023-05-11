@@ -55,8 +55,8 @@ export default {
     followee() {
       return this.$route.query.followee;
     },
-    claimingClassName() {
-      return this.$route.query.claiming_class_name;
+    classId() {
+      return this.$route.query.class_id;
     },
     paymentId() {
       return this.$route.query.payment_id;
@@ -94,7 +94,7 @@ export default {
             this.localeLocation({
               name: 'nft-claim',
               query: {
-                claiming_class_name: this.claimingClassName,
+                class_id: this.classId,
                 claiming_token: this.claimingToken,
                 payment_id: this.paymentId,
               },
