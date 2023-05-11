@@ -69,6 +69,9 @@ export default {
       'walletFetchLIKEBalance',
       'walletFetchFollowees',
       'walletFetchFollowers',
+      'walletUnfollowCreator',
+      'walletFollowCreator',
+      'signLogin',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {
@@ -106,6 +109,29 @@ export default {
         .join('\n')}`;
 
       downloadCSV(csvString, 'my-followers.csv');
+    },
+    async handleClickFollow({ followOwner }) {
+      const isFollowed = this.walletFollowees?.includes(followOwner) || false;
+      try {
+        if (!this.walletHasLoggedIn) {
+          try {
+            await this.signLogin();
+          } catch {
+            // No-op
+          }
+          if (!this.walletHasLoggedIn) {
+            return;
+          }
+        }
+        if (isFollowed) {
+          await this.walletUnfollowCreator(followOwner);
+          return;
+        }
+        this.walletFollowCreator(followOwner);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
   },
 };

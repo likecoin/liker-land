@@ -52,7 +52,7 @@ export default {
   props: {
     walletAddress: {
       type: String,
-      required: true,
+      default: '',
     },
     type: {
       type: String,

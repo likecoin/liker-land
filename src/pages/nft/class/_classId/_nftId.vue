@@ -160,7 +160,6 @@
                 :class-collection-name="nftClassCollectionName"
                 :is-content-viewable="!(nftIsNFTBook && !ownCount)"
                 :is-nft-book="nftIsNFTBook"
-                @collect="handleCollectFromPreviewSection"
                 @view-content="handleViewContent"
                 @view-content-urls="handleViewContentUrls"
               />
@@ -279,6 +278,19 @@
             @click-user-collected-count="handleClickUserCollectedCount"
           />
         </section>
+
+        <!-- recommend -->
+        <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
+          <ProgressIndicator />
+        </div>
+        <NFTPageRecommendation
+          v-else
+          :iscn-owner="iscnOwner"
+          :is-followed="isFollowed"
+          :recommended-list="recommendedList"
+          @on-follow-button-click="handleFollowButtonClick"
+          @on-nft-item-click="handleRecommendedItemClick"
+        />
       </div>
     </div>
     <NuxtChild
@@ -448,6 +460,9 @@ export default {
     validMessageCount() {
       return this.messageList.filter(element => element.message).length;
     },
+    isFollowed() {
+      return this.walletFollowees?.includes(this.iscnOwner) || false;
+    },
   },
   async asyncData({ route, query, store, redirect, error }) {
     const { action } = query;
@@ -509,6 +524,8 @@ export default {
     } finally {
       this.isLoading = false;
     }
+
+    await this.fetchRecommendInfo();
 
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
@@ -586,16 +603,6 @@ export default {
         1
       );
     },
-    handleCollectFromPreviewSection() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_details_page_collect_from_preview',
-        this.nftId,
-        1
-      );
-      return this.handleCollect();
-    },
     handleCollectFromCreatorMessagePreview() {
       logTrackerEvent(
         this,
@@ -646,6 +653,37 @@ export default {
         'NFT',
         'nft_details_click_user_collected_count',
         this.nftId,
+        1
+      );
+    },
+    async handleFollowButtonClick() {
+      await this.handleClickFollow({
+        followOwner: this.iscnOwner,
+      });
+      if (this.isFollowed) {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_details_click_unfollow',
+          this.classId,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_details_click_follow',
+          this.classId,
+          1
+        );
+      }
+    },
+    handleRecommendedItemClick() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_click_recommended_nft',
+        this.classId,
         1
       );
     },

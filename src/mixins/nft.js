@@ -88,6 +88,7 @@ export default {
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
+      isRecommendationLoading: false,
 
       iscnData: null,
       nftISCNContentFingerprints: [],
@@ -108,6 +109,7 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
+      'getNFTListMapByAddress',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -421,6 +423,38 @@ export default {
           toType: this.getWalletIdentityType(m.toWallet),
           message: this.normalizeNFTMessage(m),
         }));
+    },
+    recommendedList() {
+      const featuredSet = this.getNFTClassFeaturedSetByAddress(this.iscnOwner);
+      const hiddenSet = this.getNFTClassHiddenSetByAddress(this.iscnOwner);
+
+      let recommendedList =
+        this.getNFTListMapByAddress(this.iscnOwner)?.created || [];
+      const userCollected =
+        this.getNFTListMapByAddress(this.getAddress)?.collected || [];
+
+      recommendedList = recommendedList.filter(
+        item =>
+          !userCollected.some(
+            collectedItem => collectedItem.classId === item.classId
+          ) && item.classId !== this.classId
+      );
+      if (hiddenSet) {
+        recommendedList = recommendedList.filter(
+          item => !hiddenSet.has(item.classId)
+        );
+      }
+
+      if (featuredSet) {
+        const featuredItems = recommendedList.filter(item =>
+          featuredSet.has(item.classId)
+        );
+        recommendedList = featuredItems.concat(
+          recommendedList.filter(item => !featuredSet.has(item.classId))
+        );
+      }
+
+      return recommendedList.slice(0, 5);
     },
   },
   watch: {
@@ -868,6 +902,20 @@ export default {
       if (m.memo === 'like.co NFT API') return '';
       if (m.event === 'mint_nft') return this.nftClassCreatorMessage;
       return m.memo;
+    },
+    async fetchRecommendInfo() {
+      this.isRecommendationLoading = true;
+      try {
+        await Promise.all([
+          this.fetchNFTListByAddress(this.iscnOwner),
+          this.fetchNFTListByAddress(this.getAddress),
+          this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
+        ]);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+      this.isRecommendationLoading = false;
     },
   },
 };
