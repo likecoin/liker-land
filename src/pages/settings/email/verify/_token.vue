@@ -89,7 +89,7 @@ export default {
             })
           );
         }
-        if (this.claimingToken && this.paymentId) {
+        if (this.classId && this.claimingToken && this.paymentId) {
           this.$router.push(
             this.localeLocation({
               name: 'nft-claim',
