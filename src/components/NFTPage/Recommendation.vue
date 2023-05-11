@@ -16,7 +16,7 @@
       </ButtonV2>
     </div>
     <ul class="relative pl-[32px] py-[12px] flex justify-start items-start gap-[24px] w-full overflow-x-scroll overflow-y-auto scrollbar-custom">
-      <li v-for="(nft, index) in recommendedList" :key="index">
+      <li v-for="(nft, index) in recommendedList" :key="index" @click="handleItemClick">
         <NFTPortfolioItem
           :class-id="nft.classId"
           :portfolio-wallet="iscnOwner"
@@ -46,6 +46,9 @@ export default {
   methods: {
     handleFollowButtonClick() {
       this.$emit('on-follow-button-click');
+    },
+    handleItemClick() {
+      this.$emit('on-nft-item-click');
     },
   },
 };

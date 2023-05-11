@@ -137,6 +137,7 @@
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
           @on-follow-button-click="handleFollowButtonClick"
+          @on-nft-item-click="handleRecommendedItemClick"
         />
         <!-- useful links -->
         <section>
@@ -548,6 +549,15 @@ export default {
           1
         );
       }
+    },
+    handleRecommendedItemClick() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_click_recommended_nft',
+        this.nftId,
+        1
+      );
     },
   },
 };
