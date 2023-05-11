@@ -487,7 +487,7 @@
   "settings_email_current_email": "目前電郵",
   "settings_email_input_email_placeholder": "輸入新電郵",
   "settings_email_login_in": "驗證錢包以更改電郵",
-  "settings_email_login_in_button": "驗證",
+  "settings_email_login_in_button": "連接錢包",
   "settings_email_new_email": "輸入新電郵",
   "settings_email_resend_verification_email": "重發認證電郵",
   "settings_email_unverified_email": "未認證電郵",

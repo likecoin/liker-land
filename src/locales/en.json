@@ -497,7 +497,7 @@
   "settings_email_current_email": "Current email",
   "settings_email_input_email_placeholder": "Enter new email",
   "settings_email_login_in": "Verify wallet to update email",
-  "settings_email_login_in_button": "Verify",
+  "settings_email_login_in_button": "Connect Wallet",
   "settings_email_new_email": "Input new email",
   "settings_email_resend_verification_email": "Resend Verification Email",
   "settings_email_unverified_email": "Unverified Email",
