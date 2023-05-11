@@ -20,7 +20,7 @@
             :title="NFTName"
             :description="NFTDescription"
             :img-src="NFTImageUrl"
-            @click="handleClickNFTDetails"
+            @click="handleClickViewDetails"
           />  
         </NuxtLink>
       </NFTWidgetBaseCard>
@@ -63,10 +63,7 @@ export default {
   data() {
     return {
       nftId: '',
-      state:
-        this.classId && this.token && this.paymentId
-          ? NFT_CLAIM_STATE.CLAIMING
-          : NFT_CLAIM_STATE.MISSING_QS,
+      state: NFT_CLAIM_STATE.CLAIMING,
       error: '',
     };
   },
@@ -106,9 +103,11 @@ export default {
     }
   },
   mounted() {
-    if (this.state !== NFT_CLAIM_STATE.MISSING_QS) {
-      this.claim();
+    if (!this.classId || !this.token || !this.paymentId) {
+      this.state = NFT_CLAIM_STATE.MISSING_QS;
+      return;
     }
+    this.claim();
   },
   methods: {
     async claim() {
