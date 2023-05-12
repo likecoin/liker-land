@@ -321,6 +321,7 @@
   "nft_details_page_label_nft_id": "NFT ID",
   "nft_details_page_label_no_record": "No record found",
   "nft_details_page_label_owning": "Own",
+  "nft_details_page_label_sold_out": "Sold out",
   "nft_details_page_label_price": "Current Price",
   "nft_details_page_label_transfer": "Enter the recipient address",
   "nft_details_page_label_transfer_nft_id_select": "Select the NFT to transfer",

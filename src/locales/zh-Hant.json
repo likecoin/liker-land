@@ -311,6 +311,7 @@
   "nft_details_page_label_nft_id": "NFT ID",
   "nft_details_page_label_no_record": "沒有記錄",
   "nft_details_page_label_owning": "擁有",
+  "nft_details_page_label_sold_out": "銷售一空",
   "nft_details_page_label_price": "當前價格",
   "nft_details_page_label_transfer": "輸入接收者錢包地址",
   "nft_details_page_label_transfer_nft_id_select": "選擇要發送的 NFT",

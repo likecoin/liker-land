@@ -92,6 +92,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import {
   LIKECOIN_NFT_CAMPAIGN_ITEMS,
   LIKECOIN_NFT_BOOK_ITEMS,
@@ -227,6 +229,7 @@ export default {
         // No-op
       }
     }
+    this.lazyFetchLIKEPrice();
     const trendingDate = new Date();
     trendingDate.setDate(trendingDate.getDate() - 14);
     const trendingDayString = trendingDate.toISOString().split('T')[0];
@@ -249,6 +252,7 @@ export default {
     this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
+    ...mapActions(['lazyFetchLIKEPrice']),
     async getClassOwner(classData) {
       try {
         const iscnPrefix = classData.parent.iscn_id_prefix;

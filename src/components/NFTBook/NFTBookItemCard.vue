@@ -80,11 +80,24 @@
     <!-- Footer -->
     <div class="flex justify-between px-[24px] mt-[20px]">
       <NFTBookTypeTags :content-types="contentTypes" />
+      <div v-if="nftIsCollectable">
+        <Label
+          preset="p5"
+          class="text-like-green-dark"
+          :text="formattedNFTPriceUSD"
+        />
+      </div>
+      <Label
+        v-else
+        preset="p5"
+        class="text-medium-gray"
+        :text="$t('nft_details_page_label_sold_out')"
+      />
     </div>
   </div>
 </template>
 <script>
-import { ellipsis } from '~/util/ui';
+import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
 import nftMixin from '~/mixins/nft';
@@ -98,6 +111,7 @@ const PRESET_TYPE = {
 export default {
   filters: {
     ellipsis,
+    formatNumberWithLIKE,
   },
   mixins: [alertMixin, nftMixin],
   props: {
