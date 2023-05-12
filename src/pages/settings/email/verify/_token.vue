@@ -11,6 +11,12 @@
     <Label v-else align="center">
       {{ $t('settings_email_verify_error_message_unknown') }}
     </Label>
+    <Label 
+      v-if="pendingClaimCount" 
+      class="mt-[16px]"
+      :text="$t('settings_email_verify_has_pending_claim', { count: pendingClaimCount })" 
+      align="center" 
+    />
     <div class="flex justify-center gap-[16px] mt-[16px]">
       <ButtonV2
         v-if="!isLoading && !isVerifiedEmail"
@@ -31,6 +37,7 @@
 import { mapActions } from 'vuex';
 
 import { logTrackerEvent } from '~/util/EventLogger';
+import { getStripeFiatPendingClaimCount } from '~/util/api';
 
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
@@ -43,6 +50,7 @@ export default {
       isLoading: true,
       isVerifiedEmail: false,
       error: '',
+      pendingClaimCount: 0,
     };
   },
   computed: {
@@ -100,6 +108,11 @@ export default {
               },
             })
           );
+        } else if (this.walletEmail) {
+          const { data } = await this.$api.get(
+            getStripeFiatPendingClaimCount(this.walletEmail)
+          );
+          this.pendingClaimCount = data.count;
         }
       } catch (error) {
         // eslint-disable-next-line no-console

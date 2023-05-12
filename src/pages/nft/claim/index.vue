@@ -44,7 +44,7 @@
 
 <script>
 import { logTrackerEvent } from '~/util/EventLogger';
-import { postStripeFiatClaim } from '~/util/api';
+import { postStripeFiatPendingClaim } from '~/util/api';
 
 import alertMixin from '~/mixins/alert';
 import nftMixin from '~/mixins/nft';
@@ -113,7 +113,7 @@ export default {
     async claim() {
       try {
         const { data } = await this.$api.post(
-          postStripeFiatClaim({
+          postStripeFiatPendingClaim({
             wallet: this.getAddress,
             paymentId: this.paymentId,
             token: this.token,

@@ -155,7 +155,7 @@ router.put('/email', async (req, res, next) => {
       querySnapshot = await legacyQuery.get();
     }
 
-    res.sendStatus(200);
+    res.json({ email });
   } catch (error) {
     switch (error.message) {
       case 'USER_NOT_FOUND':

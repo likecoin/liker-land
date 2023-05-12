@@ -495,6 +495,7 @@
   "settings_email_unverified_email": "未認證電郵",
   "settings_email_verify_error_message": "驗證電郵時出現錯誤：{error}",
   "settings_email_verify_error_message_unknown": "驗證電郵時出現不明錯誤",
+  "settings_email_verify_has_pending_claim": "你有 {count} 個 Writing NFT 尚未領取，請點擊購買電郵中的領取連結。",
   "settings_email_verify_retry_button": "重試",
   "settings_email_verify_verified": "電郵已驗證",
   "settings_email_verify_verified_back_button": "返回",
