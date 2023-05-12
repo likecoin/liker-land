@@ -19,9 +19,9 @@
           v-for="({ classId }, index) in nftBooks"
           :id="classId"
           :key="classId"
-          :class="{ 'mt-[88px]': index > 0 }"
+          :class="{ 'mt-[50px]': index > 0 }"
         >
-          <NFTCampaignItem :class-id="classId" />
+          <NFTBookItemCard :class-id="classId" preset="campaign" />
         </li>
       </ul>
     </section>
