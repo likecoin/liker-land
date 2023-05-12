@@ -277,7 +277,15 @@ export const getStripeFiatPrice = ({ classId }) => {
   )}`;
 };
 
-export const postStripeFiatClaim = ({ wallet, paymentId, token }) => {
+export const getStripeFiatPendingClaimCount = email => {
+  const url = new URL(
+    `${LIKECOIN_API_BASE}/likernft/fiat/stripe/pending/count`
+  );
+  url.searchParams.append('email', email);
+  return url.toString();
+};
+
+export const postStripeFiatPendingClaim = ({ wallet, paymentId, token }) => {
   const qsPayload = { wallet, payment_id: paymentId, token };
   return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/pending/claim?${querystring.stringify(
     qsPayload

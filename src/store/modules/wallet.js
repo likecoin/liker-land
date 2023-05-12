@@ -574,13 +574,13 @@ const actions = {
     { wallet, token, followee }
   ) {
     try {
-      await this.$api.$put(putUserV2WalletEmail({ wallet, token, followee }));
-      if (getters.walletIsMatchedSession) {
-        commit(WALLET_SET_USER_INFO, {
-          email: state.emailUnverified,
-          emailUnconfirmed: '',
-        });
-      }
+      const { email } = await this.$api.$put(
+        putUserV2WalletEmail({ wallet, token, followee })
+      );
+      commit(WALLET_SET_USER_INFO, {
+        email,
+        emailUnconfirmed: '',
+      });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
