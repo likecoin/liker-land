@@ -29,7 +29,7 @@
         src="~/assets/images/nft/primitive-nft.jpg"
       >
     </div>
-    <div v-if="isNftBook" :class="['h-auto', 'w-[16px]', bookSpineStyle]" />
+    <div v-if="isNftBook" :class="['h-auto', 'w-[16px]']" :style="`background: linear-gradient(to bottom, ${color1}, ${color2});`" />
   </div>
 </template>
 
@@ -118,14 +118,13 @@ export default {
     isShowImage() {
       return this.src && !this.isError;
     },
-    bookSpineStyle() {
-      if (this.spineColor1 && this.spineColor2)
-        return [
-          'bg-gradient-to-b',
-          `from-[${this.spineColor1}]`,
-          `to-[${this.spineColor2}]`,
-        ];
-      return ['bg-gradient-to-b', 'from-shade-gray', 'to-medium-gray'];
+    color1() {
+      if (this.spineColor1 && this.spineColor2) return this.spineColor1;
+      return '#EBEBEB';
+    },
+    color2() {
+      if (this.spineColor1 && this.spineColor2) return this.spineColor2;
+      return '#9B9B9B';
     },
   },
   watch: {
