@@ -50,7 +50,7 @@
           <span class="ml-[8px] group-hover:underline font-[600]">{{ ownerName | ellipsis }}</span>
         </NuxtLink>
       </div>
-      <div>
+      <div :class="{ 'flex items-center': shouldHideSupplySection }">
         <template v-if="storyTitle">
           <h3 class="text-[24px] leading-[1.3] font-[700] text-like-green font-serif">{{ storyTitle }}</h3>
           <NuxtLink
@@ -69,7 +69,7 @@
           <p class="mt-[24px] text-[20px] leading-[1.5] text-gray-4a font-serif">{{ storyDescription }}</p>
         </template>
         <NFTSupplyTable
-          v-else
+          v-else-if="!shouldHideSupplySection"
           class="w-full laptop:mt-[8px] laptop:pr-[8px]"
           :sold-count="soldCount"
           :should-collapse-in-mobile="true"
@@ -120,6 +120,7 @@
 
 <script>
 import { ellipsis } from '~/util/ui';
+import { getBatch, getBatchStart, getPrice } from '~/util/writing-nft';
 
 export default {
   filters: {
@@ -262,6 +263,11 @@ export default {
         default:
           return 'hover:shadow-[0_0_0_2px_#aaf1e7]';
       }
+    },
+    // TODO: calculate batch according to batch/current price...
+    shouldHideSupplySection() {
+      const activeBatch = getBatch(this.soldCount);
+      return this.price && this.price > getPrice(getBatchStart(activeBatch));
     },
   },
   methods: {
