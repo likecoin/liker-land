@@ -277,6 +277,13 @@ export const getStripeFiatPrice = ({ classId }) => {
   )}`;
 };
 
+export const postStripeFiatClaim = ({ wallet, paymentId, token }) => {
+  const qsPayload = { wallet, payment_id: paymentId, token };
+  return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/pending/claim?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
     ignore_list: LIKECOIN_NFT_API_WALLET,
@@ -302,8 +309,20 @@ export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';
 
-export const postUserV2WalletEmail = ({ email, followee }) => {
-  const qsPayload = { email, followee };
+export const postUserV2WalletEmail = ({
+  email,
+  followee,
+  classId,
+  paymentId,
+  claimingToken,
+}) => {
+  const qsPayload = {
+    email,
+    followee,
+    class_id: classId,
+    payment_id: paymentId,
+    claiming_token: claimingToken,
+  };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };
 export const putUserV2WalletEmail = ({ wallet, token, followee }) => {

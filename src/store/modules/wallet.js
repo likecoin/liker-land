@@ -548,9 +548,20 @@ const actions = {
       throw error;
     }
   },
-  async walletUpdateEmail({ commit }, { email, followee }) {
+  async walletUpdateEmail(
+    { commit },
+    { email, followee, classId, paymentId, claimingToken }
+  ) {
     try {
-      await this.$api.$post(postUserV2WalletEmail({ email, followee }));
+      await this.$api.$post(
+        postUserV2WalletEmail({
+          email,
+          followee,
+          classId,
+          paymentId,
+          claimingToken,
+        })
+      );
       commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
     } catch (error) {
       // eslint-disable-next-line no-console
