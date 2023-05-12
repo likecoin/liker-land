@@ -1,32 +1,35 @@
 <template>
-  <div
-    class="relative bg-gray-9b"
-    :style="rootStyle"
-  >
-    <video
-      v-if="isShowVideo"
-      autoplay
-      muted
-      loop
-      playsinline
-      v-bind="imgProps"
-      :poster="resizedSrc"
-      :src="videoSrc"
-      @play="handleMediaLoad"
-      @error="handleVideoError"
-    />
-    <img
-      v-else-if="isShowImage"
-      v-bind="imgProps"
-      :src="resizedSrc"
-      @load="handleMediaLoad"
-      @error="handleImageError"
+  <div class="flex items-stretch justify-center">
+    <div
+      class="relative bg-gray-9b"
+      :style="rootStyle"
     >
-    <img
-      v-if="!isShowVideo && (!isShowImage || !isLoaded)"
-      v-bind="imgPropsForPlaceholder"
-      src="~/assets/images/nft/primitive-nft.jpg"
-    >
+      <video
+        v-if="isShowVideo"
+        autoplay
+        muted
+        loop
+        playsinline
+        v-bind="imgProps"
+        :poster="resizedSrc"
+        :src="videoSrc"
+        @play="handleMediaLoad"
+        @error="handleVideoError"
+      />
+      <img
+        v-else-if="isShowImage"
+        v-bind="imgProps"
+        :src="resizedSrc"
+        @load="handleMediaLoad"
+        @error="handleImageError"
+      >
+      <img
+        v-if="!isShowVideo && (!isShowImage || !isLoaded)"
+        v-bind="imgPropsForPlaceholder"
+        src="~/assets/images/nft/primitive-nft.jpg"
+      >
+    </div>
+    <div v-if="isNftBook" :class="['h-auto', 'w-[16px]', bookSpineStyle]" />
   </div>
 </template>
 
@@ -49,6 +52,18 @@ export default {
       default: 720,
     },
     bgColor: {
+      type: String,
+      default: '',
+    },
+    isNftBook: {
+      type: Boolean,
+      default: false,
+    },
+    spineColor1: {
+      type: String,
+      default: '',
+    },
+    spineColor2: {
       type: String,
       default: '',
     },
@@ -76,6 +91,8 @@ export default {
             'pointer-events-none': !isLoaded,
             'absolute inset-x-0 top-0 opacity-0':
               !isLoaded && !this.isShowVideo,
+            'h-full min-h-[290px] w-full max-w-[200px] object-cover': this
+              .isNftBook,
           },
         ],
       };
@@ -100,6 +117,15 @@ export default {
     },
     isShowImage() {
       return this.src && !this.isError;
+    },
+    bookSpineStyle() {
+      if (this.spineColor1 && this.spineColor2)
+        return [
+          'bg-gradient-to-b',
+          `from-[${this.spineColor1}]`,
+          `to-[${this.spineColor2}]`,
+        ];
+      return ['bg-gradient-to-b', 'from-shade-gray', 'to-medium-gray'];
     },
   },
   watch: {
