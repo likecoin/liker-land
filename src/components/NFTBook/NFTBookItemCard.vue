@@ -99,7 +99,6 @@
 <script>
 import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
-import alertMixin from '~/mixins/alert';
 import nftMixin from '~/mixins/nft';
 
 const PRESET_TYPE = {
@@ -113,7 +112,7 @@ export default {
     ellipsis,
     formatNumberWithLIKE,
   },
-  mixins: [alertMixin, nftMixin],
+  mixins: [nftMixin],
   props: {
     classId: {
       type: String,
@@ -124,15 +123,7 @@ export default {
       default: PRESET_TYPE.DEFAULT,
     },
   },
-  data() {
-    return {
-      isCollecting: false,
-    };
-  },
   computed: {
-    isContentViewable() {
-      return !(this.nftIsNFTBook && !this.ownCount);
-    },
     creatorDisplayName() {
       return (
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || this.iscnOwner
