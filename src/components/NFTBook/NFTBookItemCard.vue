@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col justify-center">
-    <NuxtLink class="flex items-end h-[290px]" :to="nftCollectRoute">
+    <component
+      :is="componentTag"
+      :class="['flex', 'items-end', rootStyle]"
+      :to="nftCollectRoute"
+    >
       <div
         :class="[
           'flex',
@@ -9,8 +13,9 @@
           'w-full',
           'rounded-[32px]',
           'px-[32px]',
-          'bg-white',
-          { '!bg-like-green': `${preset}` === 'campaign' },
+          'transition-all',
+          'duration-200',
+          bgStyle
         ]"
       >
         <lazy-component
@@ -42,12 +47,12 @@
             class="text-like-cyan"
             :text="$t('campaign_nft_book_just_arrived')"
           />
-          <Label preset="h4" class="text-white" :text="NFTName" />
-          <p class="text-14 text-like-cyan-pale font-200 line-clamp-2">
+          <Label preset="h4" :class="titleStyle" :text="NFTName" />
+          <p :class="['text-14', descriptionStyle]">
             {{ NFTDescription }}
           </p>
           <NuxtLink
-            class="mt-[8px] flex items-center text-like-green group my-[8px]"
+            class="mt-[12px] flex items-center text-like-green group my-[8px]"
             :to="
               iscnOwner
                 ? localeLocation({
@@ -68,14 +73,18 @@
               <span class="text-like-cyan-gray text-10 group-hover:underline">{{
                 $t('identity_type_creator')
               }}</span>
-              <span class="group-hover:underline font-[600] text-white">{{
-                creatorDisplayName | ellipsis
-              }}</span>
+              <span
+                :class="[
+                  'group-hover:underline',
+                  'font-[600]',
+                  displayNameStyle,
+                ]"
+              >{{ creatorDisplayName | ellipsis }}</span>
             </div>
           </NuxtLink>
         </div>
       </div>
-    </NuxtLink>
+    </component>
 
     <!-- Footer -->
     <div class="flex justify-between px-[24px] mt-[20px]">
@@ -137,9 +146,49 @@ export default {
       types.push('nft');
       return types.filter(type => type !== 'unknown');
     },
+    componentTag() {
+      if (this.preset === PRESET_TYPE.DETAILS) return 'div';
+      return 'NuxtLink';
+    },
+    rootStyle() {
+      if (this.preset === PRESET_TYPE.DETAILS) return 'h-auto';
+      return 'h-[290px]';
+    },
+    bgStyle() {
+      switch (this.preset) {
+        case PRESET_TYPE.CAMPAIGN:
+          return 'bg-like-green hover:shadow-lg';
+        case PRESET_TYPE.DEFAULT:
+          return 'bg-white hover:shadow-md';
+        case PRESET_TYPE.DETAILS:
+          return 'bg-white';
+        default:
+          return '';
+      }
+    },
     coverStyle() {
-      if (this.preset === 'details') return 'top-[40px]';
+      if (this.preset === PRESET_TYPE.DETAILS) return 'top-[-40px]';
       return 'bottom-[-1px]';
+    },
+    titleStyle() {
+      if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';
+      return 'text-dark-gray';
+    },
+    descriptionStyle() {
+      switch (this.preset) {
+        case PRESET_TYPE.CAMPAIGN:
+          return 'text-like-cyan-pale line-clamp-2';
+        case PRESET_TYPE.DEFAULT:
+          return 'text-dark-gray line-clamp-2';
+        case PRESET_TYPE.DETAILS:
+          return 'text-dark-gray';
+        default:
+          return '';
+      }
+    },
+    displayNameStyle() {
+      if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';
+      return 'text-dark-gray';
     },
   },
   methods: {
