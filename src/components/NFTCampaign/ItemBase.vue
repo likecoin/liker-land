@@ -50,7 +50,7 @@
           <span class="ml-[8px] group-hover:underline font-[600]">{{ ownerName | ellipsis }}</span>
         </NuxtLink>
       </div>
-      <div :class="{ 'flex items-center': shouldHideSupplySection }">
+      <div>
         <template v-if="storyTitle">
           <h3 class="text-[24px] leading-[1.3] font-[700] text-like-green font-serif">{{ storyTitle }}</h3>
           <NuxtLink
@@ -69,12 +69,12 @@
           <p class="mt-[24px] text-[20px] leading-[1.5] text-gray-4a font-serif">{{ storyDescription }}</p>
         </template>
         <NFTSupplyTable
-          v-else-if="!shouldHideSupplySection"
+          v-else
           class="w-full laptop:mt-[8px] laptop:pr-[8px]"
-          :sold-count="soldCount"
+          :sold-count="shouldHideSupplySection ? 0 : soldCount"
           :should-collapse-in-mobile="true"
           :should-show-indicator="true"
-          :is-disabled="!isCollectable"
+          :is-disabled="!isCollectable || shouldHideSupplySection"
           @collect="handleClickCollect"
         />
         <div class="mt-[16px] flex items-center justify-between">

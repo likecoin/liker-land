@@ -7,7 +7,7 @@
       }
     ]"
   >
-    <td class="w-[64px]">
+    <td v-if="!isDisabled" class="w-[64px]">
       <div :class="priceLabelClass">
         <hr
           v-if="isActive && shouldShowIndicator"
