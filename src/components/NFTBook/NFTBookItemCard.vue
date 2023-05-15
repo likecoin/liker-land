@@ -42,7 +42,7 @@
           </div>
         </div>
         <!-- Info column -->
-        <div class="flex flex-col justify-start py-[32px] gap-[12px]">
+        <div class="flex flex-col justify-start py-[32px] gap-[12px] w-min">
           <Label
             class="text-like-cyan"
             :text="$t('campaign_nft_book_just_arrived')"
@@ -51,37 +51,39 @@
           <p :class="['text-14', descriptionStyle]">
             {{ NFTDescription }}
           </p>
-          <NuxtLink
-            class="mt-[12px] flex items-center text-like-green group my-[8px]"
-            :to="
-              iscnOwner
-                ? localeLocation({
-                  name: 'id',
-                  params: { id: iscnOwner },
-                  query: { tab: 'created' },
-                })
-                : ''"
-            @click.native.stop
-          >
-            <Identity
-              :avatar-url="creatorAvatar"
-              :avatar-size="42"
-              :is-avatar-disabled="true"
-              :is-lazy-loaded="true"
-            />
-            <div class="flex flex-col justify-start ml-[8px]">
-              <span class="text-like-cyan-gray text-10 group-hover:underline">{{
-                $t('identity_type_creator')
-              }}</span>
-              <span
-                :class="[
-                  'group-hover:underline',
-                  'font-[600]',
-                  displayNameStyle,
-                ]"
-              >{{ creatorDisplayName | ellipsis }}</span>
-            </div>
-          </NuxtLink>
+          <div class="flex w-min">
+            <NuxtLink
+              class="mt-[12px] flex items-center text-like-green group my-[8px]"
+              :to="
+                iscnOwner
+                  ? localeLocation({
+                    name: 'id',
+                    params: { id: iscnOwner },
+                    query: { tab: 'created' },
+                  })
+                  : ''"
+              @click.native.stop
+            >
+              <Identity
+                :avatar-url="creatorAvatar"
+                :avatar-size="42"
+                :is-avatar-disabled="true"
+                :is-lazy-loaded="true"
+              />
+              <div class="flex flex-col justify-start ml-[8px]">
+                <span class="text-like-cyan-gray text-10 group-hover:underline">{{
+                  $t('identity_type_creator')
+                }}</span>
+                <span
+                  :class="[
+                    'group-hover:underline',
+                    'font-[600]',
+                    displayNameStyle,
+                  ]"
+                >{{ creatorDisplayName | ellipsis }}</span>
+              </div>
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </component>
