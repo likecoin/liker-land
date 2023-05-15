@@ -346,7 +346,7 @@ export default {
         });
       } else {
         // eslint-disable-next-line no-console
-        console.error(JSON.stringify(err));
+        console.error(err);
         error({
           statusCode: 500,
           message: 'NFT_FETCH_ERROR',
