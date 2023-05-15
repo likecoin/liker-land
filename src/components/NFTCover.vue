@@ -91,8 +91,6 @@ export default {
             'pointer-events-none': !isLoaded,
             'absolute inset-x-0 top-0 opacity-0':
               !isLoaded && !this.isShowVideo,
-            'h-full min-h-[290px] w-full max-w-[200px] object-cover': this
-              .isNftBook,
           },
         ],
       };
@@ -100,11 +98,10 @@ export default {
     imgPropsForPlaceholder() {
       return {
         class: [
-          'object-contain w-full',
+          'object-cover w-full',
           {
             'animate-pulse': !this.isLoaded,
-            'h-full min-h-[290px] w-full max-w-[200px] object-cover': this
-              .isNftBook,
+            'h-full min-h-[290px] max-w-[200px]': this.isNftBook,
           },
         ],
         loading: 'lazy',
