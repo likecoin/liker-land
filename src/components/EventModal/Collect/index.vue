@@ -184,7 +184,7 @@
           </li>
           <li>
             <EventModalCollectMethodButton
-              :class="{ 'rounded-b-[0]': hasConnectedWallet }"
+              class="rounded-b-[0]"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
               :is-disabled="isDisabledPayByLIKE"
@@ -192,7 +192,6 @@
               @click="handleSelectPaymentMethod"
             />
             <div
-              v-if="hasConnectedWallet"
               :class="[
                 'flex',
                 'justify-end',
@@ -205,13 +204,16 @@
                 'rounded-b-[8px]',
                 'px-[16px]',
                 'py-[4px]',
-                isInsufficientLIKE ? 'text-danger' : 'text-like-green',
+                hasConnectedWallet && isInsufficientLIKE ? 'text-danger' : 'text-like-green',
                 'text-[12px]',
                 'text-right',
                 'font-[600]',
               ]"
             >
-              <i18n path="nft_collect_modal_method_like_available_amount">
+              <i18n
+                v-if="hasConnectedWallet"
+                path="nft_collect_modal_method_like_available_amount"
+              >
                 <span
                   v-if="!walletLIKEBalanceFetchPromise"
                   class="font-[400]"
@@ -224,6 +226,15 @@
                 v-if="walletLIKEBalanceFetchPromise"
                 class="ml-[8px] w-[48px] h-[16px]"
               />
+              <a
+                v-else-if="!hasConnectedWallet || isInsufficientLIKE"
+                class="ml-[16px] underline font-[400]"
+                :href="purchaseLIKELink"
+                target="_blank"
+                rel="noopener"
+              >
+                {{ $t('nft_collect_modal_method_like_purchase_like') }}
+              </a>
             </div>
           </li>
         </ul>
@@ -392,6 +403,9 @@ export default {
         'rounded-[20px]',
         'cursor-pointer',
       ];
+    },
+    purchaseLIKELink() {
+      return 'https://faucet.like.co/purchase';
     },
   },
   watch: {
