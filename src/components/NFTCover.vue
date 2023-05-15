@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getLikeCoResizedImageUrl } from '~/util/ui';
+import { getImageResizeAPI } from '~/util/api';
 
 export default {
   name: 'NFTCover',
@@ -109,7 +109,7 @@ export default {
       };
     },
     resizedSrc() {
-      return getLikeCoResizedImageUrl(this.src, this.size);
+      return getImageResizeAPI(this.src, { width: this.size });
     },
     isShowVideo() {
       return this.videoSrc && !this.isVideoError && !this.isError;
