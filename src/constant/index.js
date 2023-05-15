@@ -86,10 +86,14 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
       'likenft1j3azrgn736esh3sm0y03l93pecmy8mkuf43n0w3j22zeqn3r6uwsz40spa',
     ]
   : [
-      'likenft1rax0ns09sr80yz8q6x9t8tp7khaedut5j0pnjjzlcjwtl78686cqprmu2x',
+      // 天工開物・栩栩如真
       'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg',
-      'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
+      // 崩潰與重建：ChatGPT衝擊下的人類未來
+      'likenft1rax0ns09sr80yz8q6x9t8tp7khaedut5j0pnjjzlcjwtl78686cqprmu2x',
+      // Craft Your World
       'likenft1uxjuhufvem4ccvwmquvt0uecfgcnn7wqpasyctn3glsq3q7kpxusnk7jaf',
+      // 所謂「我不投資」，就是 all in 在法定貨幣
+      'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
     ];
 
 export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
