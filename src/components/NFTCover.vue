@@ -103,6 +103,8 @@ export default {
           'object-contain w-full',
           {
             'animate-pulse': !this.isLoaded,
+            'h-full min-h-[290px] w-full max-w-[200px] object-cover': this
+              .isNftBook,
           },
         ],
         loading: 'lazy',
