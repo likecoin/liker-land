@@ -1,11 +1,11 @@
 <template>
-  <ul class="flex gap-[8px]">
+  <ul class="flex gap-[4px] sm:gap-[8px]">
     <li
       v-for="(type, index) in contentTypes"
       :key="type"
-      class="flex gap-[8px] items-center"
+      class="flex gap-[4px] sm:gap-[8px] items-center"
     >
-      <div class="py-[6px] px-[24px] bg-shade-gray rounded-[16px] text-10">
+      <div class="py-[6px] px-[12px] sm:px-[24px] bg-shade-gray rounded-[16px] text-10">
         {{ getContentType(type) }}
       </div>
       <IconAdd v-if="index !== contentTypes.length - 1" class="text-medium-gray" />

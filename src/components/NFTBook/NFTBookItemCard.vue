@@ -7,9 +7,10 @@
     >
       <div
         :class="[
-          'flex',
-          'flex-row',
-          'gap-[38px]',
+          'relative',
+          'flex sm:items-end',
+          'flex-col sm:flex-row',
+          'sm:gap-[36px]',
           'w-full',
           'rounded-[32px]',
           'px-[32px]',
@@ -24,11 +25,10 @@
             @show="fetchInfo"
           />
         </client-only>
-        <div class="relative w-full max-w-[220px] shrink-0">
+        <div class="w-full max-w-[220px] shrink-0 self-center sm:self-end">
           <div
             :class="[
-              'absolute',
-              'left-0',
+              'mt-[-48px]',
               'shadow-xl',
               coverStyle,
             ]"
@@ -93,7 +93,7 @@
     </component>
 
     <!-- Footer -->
-    <div class="flex justify-between px-[24px] mt-[20px]">
+    <div class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]">
       <NFTBookTypeTags :content-types="contentTypes" />
       <div v-if="nftIsCollectable">
         <Label
@@ -158,7 +158,7 @@ export default {
     },
     rootStyle() {
       if (this.preset === PRESET_TYPE.DETAILS) return 'h-auto';
-      return 'h-[290px]';
+      return 'min-h-[290px]';
     },
     bgStyle() {
       switch (this.preset) {

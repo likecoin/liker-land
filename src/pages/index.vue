@@ -14,12 +14,12 @@
       ]"
     >
       <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
-      <ul class="mt-[48px]">
+      <ul class="mt-[88px] sm:mt-[48px]">
         <li
           v-for="({ classId }, index) in nftBooks"
           :id="classId"
           :key="classId"
-          :class="{ 'mt-[50px]': index > 0 }"
+          :class="{ 'mt-[88px] sm:mt-[48px]': index > 0 }"
         >
           <NFTBookItemCard :class-id="classId" preset="campaign" />
         </li>
