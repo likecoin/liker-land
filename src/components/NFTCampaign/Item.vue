@@ -1,9 +1,11 @@
 <template>
   <div class="relative">
-    <lazy-component
-      class="absolute inset-0 pointer-events-none"
-      @show="fetchInfo"
-    />
+    <client-only>
+      <lazy-component
+        class="absolute inset-0 pointer-events-none"
+        @show="fetchInfo"
+      />
+    </client-only>
     <NFTCampaignItemBase
       :class-id="classId"
       :title="NFTName"

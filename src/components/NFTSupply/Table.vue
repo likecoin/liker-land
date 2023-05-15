@@ -19,15 +19,17 @@
         },
       ]"
     >
-      <NFTSupplyRow
-        v-for="(d, n) in data"
-        :key="n"
-        v-bind="d"
-        :should-collapse-in-mobile="shouldCollapseInMobile"
-        :should-show-indicator="shouldShowIndicator"
-        :is-disabled="isDisabled"
-        @collect="handleCollect"
-      />
+      <tbody>
+        <NFTSupplyRow
+          v-for="(d, n) in data"
+          :key="n"
+          v-bind="d"
+          :should-collapse-in-mobile="shouldCollapseInMobile"
+          :should-show-indicator="shouldShowIndicator"
+          :is-disabled="isDisabled"
+          @collect="handleCollect"
+        />
+      </tbody>
     </table>
   </div>
 </template>
