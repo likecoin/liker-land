@@ -69,4 +69,11 @@ export function getLikeCoResizedImageUrl(url, size) {
   return url.replace(/\?size=\d+/, `?size=${size}`);
 }
 
+export function oscillate(min, max, period, time) {
+  const mag = max - min;
+  return (
+    Math.cos(Math.PI + (2 * Math.PI * time) / period) * (min + mag / 2.0) +
+    mag / 2.0
+  );
+}
 export default ellipsis;
