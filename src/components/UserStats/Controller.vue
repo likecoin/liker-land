@@ -6,14 +6,17 @@
       :created-count="createdCount"
       :created-collector-count="createdCollectorCount"
       :created-total-sales="createdTotalSales"
+      :stakeholder-income="stakeholderIncome"
       :is-loading-stats="isLoadingStats"
     />
   </component>
 </template>
 <script>
 import portfolio from '~/mixins/portfolio';
-import { getUserNFTStats } from '~/util/api';
+import { getUserNFTStats, getStakeholderIncome } from '~/util/api';
 import { formatNumber } from '~/util/ui';
+
+const nanolike = 0.000000001;
 
 export default {
   mixins: [portfolio],
@@ -30,6 +33,7 @@ export default {
   data() {
     return {
       userStats: null,
+      stakeholderDetails: null,
     };
   },
   computed: {
@@ -48,6 +52,11 @@ export default {
     createdTotalSales() {
       return formatNumber(Math.floor(this.userStats?.createdTotalSales) || 0);
     },
+    stakeholderIncome() {
+      return formatNumber(
+        Math.floor(this.stakeholderDetails?.total_amount * nanolike) || 0
+      );
+    },
     isLoadingStats() {
       return !this.userStats;
     },
@@ -56,6 +65,7 @@ export default {
     statWallet(statWallet) {
       if (statWallet) {
         this.updateUserStats(statWallet);
+        this.fetchStakeholderIncome(statWallet);
       } else {
         this.userStats = null;
       }
@@ -63,11 +73,16 @@ export default {
   },
   mounted() {
     this.updateUserStats(this.statWallet);
+    this.fetchStakeholderIncome(this.statWallet);
   },
   methods: {
     async updateUserStats(address) {
       const { data } = await this.$api.get(getUserNFTStats(address));
       this.userStats = data;
+    },
+    async fetchStakeholderIncome(address) {
+      const { data } = await this.$api.get(getStakeholderIncome(address));
+      this.stakeholderDetails = data;
     },
   },
 };

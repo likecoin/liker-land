@@ -7,7 +7,8 @@
       <div
         :class="[
           'flex',
-          'justify-around',
+          'justify-center',
+          'gap-[12px]',
           'rounded-[12px]',
           'w-full',
           'p-[12px]',
@@ -17,6 +18,8 @@
 
           'cursor-pointer',
           'transition',
+          'laptop:justify-around',
+          'laptop:gap-0',
           'duration-200',
           'hover:bg-shade-gray',
         ]"
@@ -35,6 +38,15 @@
           :is-loading="stats.isLoadingStats"
           :stats-value="stats.collectedAmount"
           :label-text="$t('nft_portfolio_page_state_value')"
+        >
+          <template #label-icon>
+            <IconPriceMini />
+          </template>
+        </UserStatsItem>
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.stakeholderIncome"
+          :label-text="$t('nft_portfolio_page_state_stakeholder')"
         >
           <template #label-icon>
             <IconPriceMini />

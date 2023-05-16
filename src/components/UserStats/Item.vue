@@ -1,16 +1,15 @@
 <template>
   <div class="flex flex-col items-center justify-center">
     <Label
-      preset="h3"
-      class="text-like-green"
+      class="text-like-green text-[14px] font-600 laptop:text-[24px]"
       valign="bottom"
       :text="isLoading ? '-' : statsValue.toString()"
     >
       <slot v-if="!isLoading" name="custom-value" />
     </Label>
     <Label
-      preset="h6"
-      class="text-medium-gray mt-[4px]"
+      class="text-medium-gray mt-[4px] text-[10px] font-400 laptop:text-[14px] laptop:font-600"
+      content-class="text-center whitespace-pre"
       :text="labelText"
       valign="middle"
     >

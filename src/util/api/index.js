@@ -361,3 +361,10 @@ export const postFollowCreator = ({ wallet, creator }) =>
   `/api/v2/users/${wallet}/followers?creator=${creator}`;
 export const getUserNotificationSettingsUrl = () =>
   `/api/v2/users/notification`;
+
+export const getStakeholderIncome = address => {
+  const qsPayload = { address };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
+    qsPayload
+  )}`;
+};
