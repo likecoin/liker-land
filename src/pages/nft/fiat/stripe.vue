@@ -24,6 +24,9 @@ export default {
     isPolling() {
       return ['new', 'processing'].includes(this.status);
     },
+    isCompleted() {
+      return ['pendingClaim', 'done'].includes(this.status);
+    },
   },
   watch: {
     uiIsOpenCollectModal(isOpen) {
@@ -82,7 +85,7 @@ export default {
           await sleep(3000);
         } else {
           this.result = res;
-          if (this.status === 'pendingClaim') {
+          if (this.isCompleted) {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);
             logTrackerEvent(
               this,
