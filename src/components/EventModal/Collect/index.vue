@@ -299,7 +299,7 @@ export default {
           type: 'module',
           src:
             'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
-          asyc: 'true',
+          async: 'true',
         },
       ],
     };
