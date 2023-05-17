@@ -1,8 +1,74 @@
 <template>
-  <div class="flex flex-col justify-center">
+  <div
+    v-if="isShelfPreset"
+    class="relative flex flex-col items-start"
+  >
+    <client-only>
+      <lazy-component
+        class="absolute inset-0 pointer-events-none"
+        @show="fetchInfo"
+      />
+    </client-only>
+    <div class="flex relative mt-[48px]">
+      <div
+        :class="[
+          'absolute',
+          'z-[0]',
+          'inset-x-[-38px] sm:inset-x-[-48px]',
+          'inset-y-0',
+          'bg-like-cyan-pale',
+          'rounded-[32px]',
+          shelfClass,
+        ]"
+      />
+      <component
+        :is="componentTag"
+        :class="[coverClasses, 'mt-[-48px]', 'z-[1]']"
+        :to="nftCollectRoute"
+      >
+        <NFTCover
+          :is-nft-book="true"
+          :src="NFTImageUrl"
+          :size="450"
+          :alt="NFTName"
+        />
+      </component>
+    </div>
+    <Label
+      :class="[titleStyle, 'mt-[20px]']"
+      preset="p5"
+      :text="NFTName"
+    />
+    <Label
+      class="text-medium-gray mt-[6px] mb-[12px]"
+      preset="p6"
+      :text="creatorDisplayName | ellipsis"
+    />
+    <Label
+      v-if="nftIsCollectable"
+      class="text-like-green-dark"
+      preset="p5"
+      :text="formattedNFTPriceUSD"
+    />
+    <Label
+      v-else
+      class="text-medium-gray"
+      preset="p5"
+      :text="$t('nft_details_page_label_sold_out')"
+    />
+  </div>
+  <div
+    v-else
+    :class="[
+      'flex',
+      'flex-col',
+      'justify-center',
+      'pt-[48px] sm:pt-0',
+    ]"
+  >
     <component
       :is="componentTag"
-      :class="['flex', 'items-end', rootStyle]"
+      :class="['flex', 'items-end', 'group', rootStyle]"
       :to="nftCollectRoute"
     >
       <div
@@ -13,7 +79,7 @@
           'sm:gap-[36px]',
           'w-full',
           'rounded-[32px]',
-          'px-[32px]',
+          'px-[32px] sm:px-[48px]',
           'transition-all',
           'duration-200',
           bgStyle
@@ -25,17 +91,15 @@
             @show="fetchInfo"
           />
         </client-only>
-        <div class="w-full max-w-[220px] shrink-0 self-center sm:self-end">
+        <div class="shrink-0 self-center sm:self-end">
           <div
             :class="[
               'mt-[-48px]',
-              'shadow-xl',
-              coverStyle,
+              coverClasses,
             ]"
           >
             <NFTCover
               v-if="NFTImageUrl"
-              class="grow"
               :is-nft-book="true"
               :src="NFTImageUrl"
               :size="450"
@@ -117,6 +181,7 @@ import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 
 const PRESET_TYPE = {
+  SHELF: 'shelf', // (Landing page) shelf style
   CAMPAIGN: 'campaign', // (Landing page) like-green bg
   DEFAULT: 'default', // (All books page) white bg
   DETAILS: 'details', // (Class details page) Expand all information
@@ -137,12 +202,19 @@ export default {
       type: String,
       default: PRESET_TYPE.DEFAULT,
     },
+    shelfClass: {
+      type: [Array, String],
+      default: () => [],
+    },
   },
   computed: {
     creatorDisplayName() {
       return (
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || this.iscnOwner
       );
+    },
+    isShelfPreset() {
+      return this.preset === PRESET_TYPE.SHELF;
     },
     contentTypes() {
       const types = [];
@@ -172,9 +244,14 @@ export default {
           return '';
       }
     },
-    coverStyle() {
-      if (this.preset === PRESET_TYPE.DETAILS) return 'top-[-40px]';
-      return 'bottom-[-1px]';
+    coverClasses() {
+      return [
+        'shadow-lg',
+        this.isShelfPreset ? 'hover:shadow-2xl' : 'group-hover:shadow-2xl',
+        this.isShelfPreset ? 'hover:scale-105' : 'group-hover:scale-105',
+        'active:scale-100',
+        'transition-all',
+      ];
     },
     titleStyle() {
       if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';

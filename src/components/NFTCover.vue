@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-stretch justify-center">
+  <div class="flex items-stretch justify-center shrink-0">
     <div
       class="relative bg-gray-9b"
       :style="rootStyle"
@@ -29,7 +29,11 @@
         src="~/assets/images/nft/primitive-nft.jpg"
       >
     </div>
-    <div v-if="isNftBook" :class="['h-auto', 'w-[16px]']" :style="`background: linear-gradient(to bottom, ${color1}, ${color2});`" />
+    <div
+      v-if="isNftBook"
+      :class="['h-auto', 'w-[16px]', 'shrink-0']"
+      :style="`background: linear-gradient(to bottom, ${color1}, ${color2});`"
+    />
   </div>
 </template>
 
@@ -101,7 +105,7 @@ export default {
           'object-cover w-full',
           {
             'animate-pulse': !this.isLoaded,
-            'h-full min-h-[290px] max-w-[200px]': this.isNftBook,
+            'h-[290px] w-[204px]': this.isNftBook,
           },
         ],
         loading: 'lazy',

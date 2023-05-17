@@ -2,35 +2,79 @@
   <Page
     :class="[
       'w-full',
+      'max-w-[960px]',
+      'mx-auto',
       'laptop:px-[32px]',
       'px-[12px]',
       'pb-[132px]',
     ]"
   >
-    <section
-      :class="[
-        'w-full',
-        'max-w-[960px]',
-      ]"
-    >
+    <section class="w-full">
       <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
-      <ul class="mt-[88px] sm:mt-[48px]">
-        <li
-          v-for="({ classId }, index) in nftBooks"
-          :id="classId"
-          :key="classId"
-          :class="{ 'mt-[88px] sm:mt-[48px]': index > 0 }"
-        >
-          <NFTBookItemCard :class-id="classId" preset="campaign" />
-        </li>
-      </ul>
+      <div class="w-full max-w-[840px] mx-auto mt-[48px]">
+        <NFTBookItemCard
+          v-if="nftBooks.length > 0"
+          :class-id="nftBooks[0].classId"
+          preset="campaign"
+        />
+        <div class="flex flex-col items-center mt-[48px]">
+          <ul
+            :class="[
+              'grid',
+              'grid-cols-1 sm:grid-cols-2 desktop:grid-cols-3',
+              'justify-center',
+              'gap-[48px]',
+              'sm:px-[48px]',
+            ]"
+          >
+            <li
+              v-for="({ classId }, index) in nftBooksOnShelf"
+              :id="classId"
+              :key="classId"
+              class="max-w-[220px]"
+            >
+              <NFTBookItemCard
+                :class-id="classId"
+                preset="shelf"
+                :shelf-class="[
+                  // NOTE: Make the shelf appear to be continuous.
+                  { 'sm:rounded-l-[0px]': index % 3 === 1 },
+                  { 'desktop:rounded-l-[0px]': index % 3 === 2 },
+                ]"
+              />
+            </li>
+            {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
+            <li
+              v-if="nftBooksOnShelf.length % 2 === 1"
+              :class="[
+                'hidden sm:block desktop:hidden',
+                'relative',
+                'w-full',
+                'max-w-[220px]',
+                'h-[290px]',
+              ]"
+            >
+              <div
+                :class="[
+                  'absolute',
+                  'inset-x-[-48px]',
+                  'inset-y-0',
+                  'mt-[48px]',
+                  'bg-like-cyan-pale',
+                  'rounded-r-[32px]',
+                ]"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <section
       :class="[
         'w-full',
         'max-w-[416px]',
-        'laptop:max-w-[960px]',
+        'laptop:max-w-full',
         'mt-[96px]',
       ]"
     >
@@ -194,6 +238,9 @@ export default {
     },
     nftBooks() {
       return LIKECOIN_NFT_BOOK_ITEMS.map(classId => ({ classId }));
+    },
+    nftBooksOnShelf() {
+      return this.nftBooks.slice(1);
     },
     tabMenuItemList() {
       const items = [
