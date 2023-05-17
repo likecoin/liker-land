@@ -3,6 +3,8 @@
     :is-open="isOpen"
     :has-close-button="!isTransferring"
     :header-text="$t('nft_details_page_title_transfer')"
+    :processing-title="$t('transfer_modal_processing_title')"
+    :complete-title="$t('transfer_modal_complete_title')"
     :complete-text="$t('tx_modal_status_complete_text_transfer')"
     @close="$emit('close')"
   >

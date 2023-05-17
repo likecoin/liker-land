@@ -4,6 +4,8 @@
     :has-close-button="isShowCloseButton"
     :header-text="headerText"
     preset="collect"
+    :processing-title="$t('collect_modal_processing_title')"
+    :complete-title="$t('collect_modal_complete_title')"
     @close="handleClose"
   >
     <template #header-prepend>

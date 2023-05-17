@@ -161,6 +161,14 @@ export default {
       type: String,
       default: undefined,
     },
+    processingTitle: {
+      type: String,
+      default: '',
+    },
+    completeTitle: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return { isShowQuitConfirm: false };
@@ -201,9 +209,13 @@ export default {
               return undefined;
           }
         case 'processing':
-          return this.$t('tx_modal_status_processing_title');
+          return (
+            this.processingTitle || this.$t('tx_modal_status_processing_title')
+          );
         case 'completed':
-          return this.$t('tx_modal_status_complete_title');
+          return (
+            this.completeTitle || this.$t('tx_modal_status_complete_title')
+          );
         default:
           return undefined;
       }
