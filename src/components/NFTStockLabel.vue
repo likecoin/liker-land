@@ -3,6 +3,8 @@
 </template>
 
 <script>
+const LIMITED_STOCK = 10;
+
 export default {
   name: 'NFTStockLabel',
   props: {
@@ -16,7 +18,7 @@ export default {
       return this.stock <= 0;
     },
     isLimitedStock() {
-      return !this.isSoldOut && this.stock <= 10;
+      return !this.isSoldOut && this.stock <= LIMITED_STOCK;
     },
     stockLabel() {
       if (this.isSoldOut) {
