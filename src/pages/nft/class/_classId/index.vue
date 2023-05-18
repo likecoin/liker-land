@@ -109,6 +109,7 @@
               v-else-if="isShowPriceSection && nftIsWritingNFT && nftIsCollectable"
               :sold-count="nftSoldCount"
               :current-price="NFTPrice"
+              :base-price="nftBasePrice"
               @collect="handleCollectFromSupplySection"
             />
           </div>

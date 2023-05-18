@@ -71,10 +71,11 @@
         <NFTSupplyTable
           v-else
           class="w-full laptop:mt-[8px] laptop:pr-[8px]"
-          :sold-count="shouldHideSupplySection ? 0 : soldCount"
+          :sold-count="soldCount"
+          :base-price="basePrice"
           :should-collapse-in-mobile="true"
           :should-show-indicator="true"
-          :is-disabled="!isCollectable || shouldHideSupplySection"
+          :is-disabled="!isCollectable"
           @collect="handleClickCollect"
         />
         <div class="mt-[16px] flex items-center justify-between">
@@ -120,7 +121,6 @@
 
 <script>
 import { ellipsis } from '~/util/ui';
-import { getBatch, getBatchStart, getPrice } from '~/util/writing-nft';
 
 export default {
   filters: {
@@ -202,6 +202,11 @@ export default {
       type: Number,
       default: 0,
     },
+    basePrice: {
+      type: Number,
+      // NOTE: Let child component handle default value
+      default: undefined,
+    },
     ownerCount: {
       type: Number,
       default: 0,
@@ -263,11 +268,6 @@ export default {
         default:
           return 'hover:shadow-[0_0_0_2px_#aaf1e7]';
       }
-    },
-    // TODO: calculate batch according to batch/current price...
-    shouldHideSupplySection() {
-      const activeBatch = getBatch(this.soldCount);
-      return this.price && this.price > getPrice(getBatchStart(activeBatch));
     },
   },
   methods: {
