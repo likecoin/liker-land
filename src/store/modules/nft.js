@@ -289,11 +289,12 @@ const actions = {
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
     return info;
   },
-  async fetchNFTListingInfo({ commit }, classId) {
-    const res = await this.$api.$get(
-      api.getChainNFTClassListingEndpoint(classId)
-    );
-    const info = res.listings
+  async fetchNFTListingInfo({ commit, dispatch }, classId) {
+    const [{ listings }, ownerInfo] = await Promise.all([
+      this.$api.$get(api.getChainNFTClassListingEndpoint(classId)),
+      dispatch('lazyGetNFTOwners', classId),
+    ]);
+    const info = listings
       .map(l => {
         const {
           class_id: classId,
@@ -310,6 +311,7 @@ const actions = {
           expiration: new Date(expiration),
         };
       })
+      .filter(l => ownerInfo[l.seller].includes(l.nftId)) // guard listing then sent case
       .sort((a, b) => a.price - b.price)[0];
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
     return info;
