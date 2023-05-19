@@ -63,6 +63,7 @@
               <NFTEditionSelect
                 class="self-stretch"
                 :items="nftEditions"
+                :should-show-notify-button="false"
                 @click-collect="handleCollectFromEdition"
               />
             </template>

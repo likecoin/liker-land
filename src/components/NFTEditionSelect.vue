@@ -48,23 +48,23 @@
       </template>
 
       <ButtonV2
-        v-if="isSoldAllOut"
-        preset="outline"
-        :text="$t('nft_edition_select_notify_button_text')"
-        @click="handleClickNotifyButton"
-      >
-        <template #prepend>
-          <NotifyIcon class="w-[16px]" />
-        </template>
-      </ButtonV2>
-      <ButtonV2
-        v-else
+        v-if="!isSoldAllOut"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text')"
         @click="handleClickCollectButton"
       >
         <template #prepend>
           <NFTWidgetIconInsertCoin class="w-[16px]" />
+        </template>
+      </ButtonV2>
+      <ButtonV2
+        v-else-if="shouldShowNotifyButton"
+        preset="outline"
+        :text="$t('nft_edition_select_notify_button_text')"
+        @click="handleClickNotifyButton"
+      >
+        <template #prepend>
+          <NotifyIcon class="w-[16px]" />
         </template>
       </ButtonV2>
     </div>
@@ -106,6 +106,10 @@ export default {
     value: {
       type: String,
       default: '',
+    },
+    shouldShowNotifyButton: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
