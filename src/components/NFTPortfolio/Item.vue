@@ -1,8 +1,15 @@
 <template>
   <NuxtLink
+    class="relative"
     :to="detailsPageRoute"
     @click.native="handleClickViewDetails"
   >
+    <client-only v-if="shouldFetchWhenVisible">
+      <lazy-component
+        class="absolute inset-0 pointer-events-none"
+        @show="fetchInfo"
+      />
+    </client-only>
     <NFTPortfolioBase
       class="w-[310px]"
       :title="NFTName"
@@ -56,6 +63,10 @@ export default {
       type: String,
       default: undefined,
     },
+    shouldFetchWhenVisible: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -84,6 +95,11 @@ export default {
     },
   },
   methods: {
+    fetchInfo() {
+      this.updateNFTClassMetadata();
+      this.updateNFTPurchaseInfo();
+      this.updateNFTOwners();
+    },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
       try {
