@@ -22,94 +22,92 @@
 
     <template #message>
       <transition name="fade">
-        <template v-if="isCompleted || isProcessing">
-          <client-only>
-            <model-viewer
-              v-if="nftModelURL"
-              :alt="nftClassCollectionName"
-              :src="nftModelURL"
-              class="mt-[12px] w-full h-[300px] max-h-[30vh]"
-              auto-rotate
-              auto-rotate-delay="0"
-              :poster="modelLoadingImage"
-              :exposure="modelExposure"
-              :rotation-per-second="isCompleted ? '10deg' : '90deg'"
-              :shadow-intensity="isCompleted ? 1 : 0"
-              :camera-controls="isCompleted ? true : undefined"
-              camera-orbit="90deg 60deg 100m"
-              @click.once="onClickModelViewer"
-            />
-          </client-only>
-          <template v-if="isCompleted">
-            <Label class="text-medium-gray mt-[12px] flex-nowrap" preset="h6" align="center">
-              <i18n
-                :path="
-                  hasConnectedWallet
-                    ? 'tx_modal_status_complete_text_collect'
-                    : 'tx_modal_status_complete_text_collect_without_wallet'"
-              >
-                <NuxtLink
-                  class="font-[600] underline"
-                  place="portfolio"
-                  :to="localeLocation({
-                    name: 'id',
-                    params: { id: getAddress }
-                  })"
-                >
-                  {{ $t('tx_modal_status_complete_text_collect_portfolio') }}
-                </NuxtLink>
-              </i18n>
-            </Label>
-            <div
-              v-if="!isFollowPromptStateDefault"
-              class="flex justify-center items-center mt-[16px] px-[12px] rounded-[48px] border-[1px] border-medium-gray"
-            >
-              <NFTMessageIdentity
-                type="creator"
-                class="flex-shrink-0 !px-0"
-                :wallet-address="iscnOwner"
-                :avatar-size="40"
-              />
-              <div class="ml-[24px]">
-                <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
-                <div v-else class="relative flex group w-[138px]" @click="handleClickFollow">
-                  <div
-                    :class="[
-                      ...getDefaultClass,
-                      isFollowPromptStateAuto
-                        ? '!bg-like-cyan-light text-like-green'
-                        : '!bg-shade-gray text-dark-gray',
-                    ]"
-                  >
-                    <Label align="center" :text="followPromptButtonText">
-                      <template v-if="isFollowPromptStateAuto" #prepend>
-                        <IconCheck />
-                      </template>
-                    </Label>
-                  </div>
-                  <div
-                    :class="[
-                      ...getDefaultClass,
-                      'group-hover:opacity-[100]',
-                      'group-active:!bg-medium-gray',
-                      'opacity-0',
-                      'transition-all',
-                      'absolute',
-                      'inset-0',
-                      isFollowPromptStateAuto
-                        ? '!bg-shade-gray text-dark-gray'
-                        : '!bg-like-cyan-light text-like-green',
-                    ]"
-                  >
-                    <Label align="center" :text="followPromptButtonHoverText" />
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </template>
-        </template>
+        <client-only v-if="isCompleted || isProcessing">
+          <model-viewer
+            v-if="nftModelURL"
+            :alt="nftClassCollectionName"
+            :src="nftModelURL"
+            class="mt-[12px] w-full h-[300px] max-h-[30vh]"
+            auto-rotate
+            auto-rotate-delay="0"
+            :poster="modelLoadingImage"
+            :exposure="modelExposure"
+            :rotation-per-second="isCompleted ? '10deg' : '90deg'"
+            :shadow-intensity="isCompleted ? 1 : 0"
+            :camera-controls="isCompleted ? true : undefined"
+            camera-orbit="90deg 60deg 100m"
+            @click.once="onClickModelViewer"
+          />
+        </client-only>
       </transition>
+      <template v-if="isCompleted">
+        <Label class="text-medium-gray mt-[12px] flex-nowrap" preset="h6" align="center">
+          <i18n
+            :path="
+              hasConnectedWallet
+                ? 'tx_modal_status_complete_text_collect'
+                : 'tx_modal_status_complete_text_collect_without_wallet'"
+          >
+            <NuxtLink
+              class="font-[600] underline"
+              place="portfolio"
+              :to="localeLocation({
+                name: 'id',
+                params: { id: getAddress }
+              })"
+            >
+              {{ $t('tx_modal_status_complete_text_collect_portfolio') }}
+            </NuxtLink>
+          </i18n>
+        </Label>
+        <div
+          v-if="!isFollowPromptStateDefault"
+          class="flex justify-center items-center mt-[16px] px-[12px] rounded-[48px] border-[1px] border-medium-gray"
+        >
+          <NFTMessageIdentity
+            type="creator"
+            class="flex-shrink-0 !px-0"
+            :wallet-address="iscnOwner"
+            :avatar-size="40"
+          />
+          <div class="ml-[24px]">
+            <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
+            <div v-else class="relative flex group w-[138px]" @click="handleClickFollow">
+              <div
+                :class="[
+                  ...getDefaultClass,
+                  isFollowPromptStateAuto
+                    ? '!bg-like-cyan-light text-like-green'
+                    : '!bg-shade-gray text-dark-gray',
+                ]"
+              >
+                <Label align="center" :text="followPromptButtonText">
+                  <template v-if="isFollowPromptStateAuto" #prepend>
+                    <IconCheck />
+                  </template>
+                </Label>
+              </div>
+              <div
+                :class="[
+                  ...getDefaultClass,
+                  'group-hover:opacity-[100]',
+                  'group-active:!bg-medium-gray',
+                  'opacity-0',
+                  'transition-all',
+                  'absolute',
+                  'inset-0',
+                  isFollowPromptStateAuto
+                    ? '!bg-shade-gray text-dark-gray'
+                    : '!bg-like-cyan-light text-like-green',
+                ]"
+              >
+                <Label align="center" :text="followPromptButtonHoverText" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </template>
     </template>
 
     <template v-if="isCompleted && !hasConnectedWallet && paymentId">
