@@ -1,15 +1,27 @@
+import { getPrice, getBatchStart } from '../../util/writing-nft';
+
 import NFTSupplyTable from './Table';
 import NFTSupplyRow from './Row';
 import NFTSupplySlot from './Slot';
 
+const basePrices = [...new Array(9)].map((_, index) =>
+  getPrice(getBatchStart(index))
+);
+
 export default {
   title: 'NFTSupplyTable',
   args: {
-    collectedCount: 0,
+    soldCount: 0,
+    basePrice: basePrices[0],
   },
   argTypes: {
-    collectedCount: {
+    soldCount: {
       type: { name: 'number', required: false },
+    },
+    basePrice: {
+      type: { name: 'number', required: false },
+      options: basePrices,
+      control: { type: 'select' },
     },
   },
 };

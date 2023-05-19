@@ -137,12 +137,13 @@ export default {
       const {
         price,
         totalPrice,
-        metadata: { nextNewNFTId, soldCount } = {},
+        metadata: { nextNewNFTId, soldCount, basePrice } = {},
       } = info;
       return {
         price,
         totalPrice,
         soldCount,
+        basePrice,
         classId: this.classId,
         nftId: nextNewNFTId,
         seller: LIKECOIN_NFT_API_WALLET,
@@ -279,6 +280,10 @@ export default {
     },
     nftSoldCount() {
       return this.purchaseInfo.soldCount || 0;
+    },
+    // For W.NFT
+    nftBasePrice() {
+      return this.purchaseInfo.basePrice || 0;
     },
 
     userCollectedNFTList() {
