@@ -26,7 +26,7 @@
     <div
       :class="[
         'flex',
-        'justify-between',
+        'justify-end',
         'items-center',
         'gap-[12px] sm:gap-x-[24px]',
         'flex-col sm:flex-row',
@@ -79,7 +79,7 @@ import NFTStockLabel from './NFTStockLabel';
 import NFTWidgetIconInsertCoin from './NFTWidget/Icon/InsertCoin';
 
 export default {
-  name: 'NFTPriceSelect',
+  name: 'NFTEditionSelect',
   components: {
     ButtonV2,
     NotifyIcon,
@@ -118,7 +118,7 @@ export default {
       return this.items.length === 1;
     },
     selectedItem() {
-      return this.items.find(item => item.value === this.value);
+      return this.items.find(item => item.value === this.selectedValue);
     },
     stock() {
       return this.selectedItem?.stock;

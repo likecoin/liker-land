@@ -63,18 +63,18 @@
       'flex',
       'flex-col',
       'justify-center',
-      'pt-[48px] sm:pt-0',
     ]"
   >
     <component
       :is="componentTag"
-      :class="['flex', 'items-end', 'group', rootStyle]"
-      :to="nftCollectRoute"
+      :class="['flex', 'items-end', 'group', 'mt-[48px]']"
+      :to="isDetailsPreset ? undefined : nftCollectRoute"
     >
       <div
         :class="[
           'relative',
-          'flex sm:items-end',
+          'flex',
+          isDetailsPreset ? 'sm:items-start' : 'sm:items-end',
           'flex-col sm:flex-row',
           'sm:gap-[36px]',
           'w-full',
@@ -85,30 +85,29 @@
           bgStyle
         ]"
       >
-        <client-only>
+        <client-only v-if="!isDetailsPreset">
           <lazy-component
             class="absolute inset-0 pointer-events-none"
             @show="fetchInfo"
           />
         </client-only>
-        <div class="shrink-0 self-center sm:self-end">
-          <div
+        <div class="flex flex-col items-center shrink-0">
+          <NFTCover
+            v-if="NFTImageUrl"
             :class="[
               'mt-[-48px]',
               coverClasses,
             ]"
-          >
-            <NFTCover
-              v-if="NFTImageUrl"
-              :is-nft-book="true"
-              :src="NFTImageUrl"
-              :size="450"
-              :alt="NFTName"
-            />
-          </div>
+            :is-nft-book="true"
+            :src="NFTImageUrl"
+            :size="450"
+            :alt="NFTName"
+          />
+
+          <slot name="column-left" />
         </div>
         <!-- Info column -->
-        <div class="flex flex-col justify-start py-[32px] gap-[12px] w-min">
+        <div class="flex flex-col justify-start py-[32px] gap-[12px] grow">
           <Label
             class="text-like-cyan"
             :text="$t('campaign_nft_book_just_arrived')"
@@ -117,7 +116,7 @@
           <p :class="['text-14', descriptionStyle]">
             {{ NFTDescription }}
           </p>
-          <div class="flex w-min">
+          <div class="flex">
             <client-only>
               <NuxtLink
                 class="mt-[12px] flex items-center text-like-green group my-[8px]"
@@ -152,6 +151,8 @@
               </NuxtLink>
             </client-only>
           </div>
+
+          <slot name="column-right" />
         </div>
       </div>
     </component>
@@ -159,19 +160,21 @@
     <!-- Footer -->
     <div class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]">
       <NFTBookTypeTags :content-types="contentTypes" />
-      <div v-if="nftIsCollectable">
+      <template v-if="!isDetailsPreset">
+        <div v-if="nftIsCollectable">
+          <Label
+            preset="p5"
+            class="text-like-green-dark"
+            :text="formattedNFTPriceUSD"
+          />
+        </div>
         <Label
+          v-else
           preset="p5"
-          class="text-like-green-dark"
-          :text="formattedNFTPriceUSD"
+          class="text-medium-gray"
+          :text="$t('nft_details_page_label_sold_out')"
         />
-      </div>
-      <Label
-        v-else
-        preset="p5"
-        class="text-medium-gray"
-        :text="$t('nft_details_page_label_sold_out')"
-      />
+      </template>
     </div>
   </div>
 </template>
@@ -216,6 +219,9 @@ export default {
     isShelfPreset() {
       return this.preset === PRESET_TYPE.SHELF;
     },
+    isDetailsPreset() {
+      return this.preset === PRESET_TYPE.DETAILS;
+    },
     contentTypes() {
       const types = [];
       this.iscnContentUrls.forEach(url => {
@@ -225,12 +231,8 @@ export default {
       return types.filter(type => type !== 'unknown');
     },
     componentTag() {
-      if (this.preset === PRESET_TYPE.DETAILS) return 'div';
+      if (this.isDetailsPreset) return 'div';
       return 'NuxtLink';
-    },
-    rootStyle() {
-      if (this.preset === PRESET_TYPE.DETAILS) return 'h-auto';
-      return 'min-h-[290px]';
     },
     bgStyle() {
       switch (this.preset) {
@@ -245,13 +247,16 @@ export default {
       }
     },
     coverClasses() {
-      return [
-        'shadow-lg',
-        this.isShelfPreset ? 'hover:shadow-2xl' : 'group-hover:shadow-2xl',
-        this.isShelfPreset ? 'hover:scale-105' : 'group-hover:scale-105',
-        'active:scale-100',
-        'transition-all',
-      ];
+      const classes = ['shadow-lg'];
+      if (!this.isDetailsPreset) {
+        classes.push(
+          this.isShelfPreset ? 'hover:shadow-2xl' : 'group-hover:shadow-2xl',
+          this.isShelfPreset ? 'hover:scale-105' : 'group-hover:scale-105',
+          'active:scale-100',
+          'transition-all'
+        );
+      }
+      return classes;
     },
     titleStyle() {
       if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';

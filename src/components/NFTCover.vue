@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-stretch justify-center shrink-0">
+  <div class="flex items-stretch shrink-0 w-min">
     <div
       class="relative bg-gray-9b"
       :style="rootStyle"

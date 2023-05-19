@@ -286,6 +286,18 @@ export default {
       return this.purchaseInfo.basePrice || 0;
     },
 
+    nftEditions() {
+      // TODO: Use real stock from API
+      return [
+        {
+          name: 'Standard Edition',
+          priceLabel: this.formattedNFTPriceUSD,
+          value: 'standard',
+          stock: this.nftIsCollectable ? 500 : 0,
+        },
+      ];
+    },
+
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
       return collectedList ? Object.values(collectedList) : [];
