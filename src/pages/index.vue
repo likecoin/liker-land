@@ -9,8 +9,20 @@
       'pb-[132px]',
     ]"
   >
-    <section class="w-full">
-      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
+    <h1
+      v-t="$t('home_title')"
+      :class="[
+        'bg-clip-text',
+        'bg-gradient-to-r from-like-cyan to-nft-green',
+        'font-proxima font-[300]',
+        'text-transparent',
+        'text-[48px] laptop:text-[64px]',
+        'text-center',
+        'leading-[1.25]',
+      ]"
+    />
+    <section class="w-full mt-[32px]">
+      <h2 class="text-nft-green text-[32px] laptop:text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
       <div class="w-full max-w-[840px] mx-auto mt-[48px]">
         <NFTBookItemCard
           v-if="nftBooks.length > 0"
@@ -78,7 +90,7 @@
         'mt-[96px]',
       ]"
     >
-      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_articles_title') }}</h2>
+      <h2 class="text-nft-green text-[32px] laptop:text-[48px] font-proxima font-[600]">{{ $t('home_section_articles_title') }}</h2>
       <nav class="flex items-center justify-center mt-[48px]">
         <ul
           :class="[

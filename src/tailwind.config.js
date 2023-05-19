@@ -88,6 +88,7 @@ const colors = {
 
   'like-dark-green':'#245b64',
   'like-cyan-extralight': '#D7ECEC',
+  'nft-green': '#3ab7a2',
   'dark-gray': '#4A4A4A',
   'medium-gray': '#9B9B9B',
   'shade-gray': '#EBEBEB',

@@ -242,6 +242,7 @@
   "home_button_about_writing_nft": "What is Writing NFT",
   "home_section_articles_title": "Articles",
   "home_section_book_title": "Books",
+  "home_title": "NFT Bookstore",
   "identity_type_collector": "Collector",
   "identity_type_creator": "Creator",
   "learnMore": "Learn More",
@@ -523,7 +524,6 @@
   "settings_email_verify_error_message": "Error occurs when verifying email: {error}",
   "settings_email_verify_error_message_unknown": "An unknown error occurs when verifying email",
   "settings_email_verify_has_pending_claim": "You have {count} unclaimed Writing NFT. To claim these Writing NFT, please follow the steps in the purchase confirmation emails sent previously.",
-
   "settings_email_verify_retry_button": "Retry",
   "settings_email_verify_verified": "Email is verified",
   "settings_email_verify_verified_back_button": "Back",
