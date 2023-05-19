@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getLikeCoResizedImageUrl } from '@/util/ui';
+import { getLikeCoResizedImageUrl } from '../../util/ui';
 import { DEFAULT_AVATAR } from '../../constant';
 
 export default {
