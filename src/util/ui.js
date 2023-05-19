@@ -1,3 +1,5 @@
+import { getImageResizeAPI } from '~/util/api';
+
 const smallNumFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 });
@@ -66,7 +68,10 @@ export function formatNumberWithLIKE(num, options = {}) {
 }
 
 export function getLikeCoResizedImageUrl(url, size) {
-  return url.replace(/\?size=\d+/, `?size=${size}`);
+  if (url.includes('like.co')) {
+    return url.replace(/\?size=\d+/, `?size=${size}`);
+  }
+  return getImageResizeAPI(url, { width: size });
 }
 
 export function oscillate(min, max, period, time) {

@@ -1,37 +1,44 @@
 <template>
-  <div
-    class="relative bg-gray-9b"
-    :style="rootStyle"
-  >
-    <video
-      v-if="isShowVideo"
-      autoplay
-      muted
-      loop
-      playsinline
-      v-bind="imgProps"
-      :poster="resizedSrc"
-      :src="videoSrc"
-      @play="handleMediaLoad"
-      @error="handleVideoError"
+  <div class="flex items-stretch justify-center shrink-0">
+    <div
+      class="relative bg-gray-9b"
+      :style="rootStyle"
+    >
+      <video
+        v-if="isShowVideo"
+        autoplay
+        muted
+        loop
+        playsinline
+        v-bind="imgProps"
+        :poster="resizedSrc"
+        :src="videoSrc"
+        @play="handleMediaLoad"
+        @error="handleVideoError"
+      />
+      <img
+        v-else-if="isShowImage"
+        v-bind="imgProps"
+        :src="resizedSrc"
+        @load="handleMediaLoad"
+        @error="handleImageError"
+      >
+      <img
+        v-if="!isShowVideo && (!isShowImage || !isLoaded)"
+        v-bind="imgPropsForPlaceholder"
+        src="~/assets/images/nft/primitive-nft.jpg"
+      >
+    </div>
+    <div
+      v-if="isNftBook"
+      :class="['h-auto', 'w-[16px]', 'shrink-0']"
+      :style="`background: linear-gradient(to bottom, ${color1}, ${color2});`"
     />
-    <img
-      v-else-if="isShowImage"
-      v-bind="imgProps"
-      :src="resizedSrc"
-      @load="handleMediaLoad"
-      @error="handleImageError"
-    >
-    <img
-      v-if="!isShowVideo && (!isShowImage || !isLoaded)"
-      v-bind="imgPropsForPlaceholder"
-      src="~/assets/images/nft/primitive-nft.jpg"
-    >
   </div>
 </template>
 
 <script>
-import { getLikeCoResizedImageUrl } from '~/util/ui';
+import { getImageResizeAPI } from '~/util/api';
 
 export default {
   name: 'NFTCover',
@@ -49,6 +56,18 @@ export default {
       default: 720,
     },
     bgColor: {
+      type: String,
+      default: '',
+    },
+    isNftBook: {
+      type: Boolean,
+      default: false,
+    },
+    spineColor1: {
+      type: String,
+      default: '',
+    },
+    spineColor2: {
       type: String,
       default: '',
     },
@@ -83,9 +102,10 @@ export default {
     imgPropsForPlaceholder() {
       return {
         class: [
-          'object-contain w-full',
+          'object-cover w-full',
           {
             'animate-pulse': !this.isLoaded,
+            'h-[290px] w-[204px]': this.isNftBook,
           },
         ],
         loading: 'lazy',
@@ -93,13 +113,21 @@ export default {
       };
     },
     resizedSrc() {
-      return getLikeCoResizedImageUrl(this.src, this.size);
+      return getImageResizeAPI(this.src, { width: this.size });
     },
     isShowVideo() {
       return this.videoSrc && !this.isVideoError && !this.isError;
     },
     isShowImage() {
       return this.src && !this.isError;
+    },
+    color1() {
+      if (this.spineColor1 && this.spineColor2) return this.spineColor1;
+      return '#EBEBEB';
+    },
+    color2() {
+      if (this.spineColor1 && this.spineColor2) return this.spineColor2;
+      return '#9B9B9B';
     },
   },
   watch: {

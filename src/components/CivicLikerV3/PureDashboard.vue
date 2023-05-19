@@ -190,7 +190,7 @@
           <ButtonV2
             :text="$t('about_nft_page_title')"
             preset="secondary"
-            :to="localeLocation({ name: 'writing-nft' })"
+            :to="localeLocation({ name: 'index' })"
             @click.native="handleClickCTAButton"
           />
         </div>

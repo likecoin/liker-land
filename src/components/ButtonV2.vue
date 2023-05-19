@@ -37,6 +37,9 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
+// eslint-disable-next-line import/extensions
+import Label from './Label.vue';
+
 export enum Preset {
   primary = 'primary',
   secondary = 'secondary',
@@ -53,7 +56,9 @@ export enum Size {
   mini = 'mini',
 }
 
-@Component
+@Component({
+  components: { Label },
+})
 export default class ButtonV2 extends Vue {
   // Preset of the button
   @Prop({ default: 'primary' })
