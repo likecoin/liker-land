@@ -463,7 +463,10 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress({ commit, getters, dispatch }, address) {
+  async fetchNFTListByAddress(
+    { commit, getters, dispatch },
+    { address, shouldFetchDetails = true } = {}
+  ) {
     const [collectedNFTs, createdNFTClasses] = await Promise.all([
       getNFTsRespectDualPrefix(this.$api, address),
       getNFTClassesRespectDualPrefix(this.$api, address),
@@ -472,9 +475,11 @@ const actions = {
     const nftClassIdDataMap = new Map();
     collectedNFTs.forEach(n => nftClassIdDataMap.set(n.class_id, n.class_data));
     createdNFTClasses.forEach(c => nftClassIdDataMap.set(c.id, c));
-    nftClassIdDataMap.forEach((classData, classId) => {
-      dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
-    });
+    if (shouldFetchDetails) {
+      nftClassIdDataMap.forEach((classData, classId) => {
+        dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
+      });
+    }
 
     const formattedCreatedNFTClasses = createdNFTClasses.map(
       formatNFTClassInfo
@@ -500,25 +505,27 @@ const actions = {
       timestampMap,
     });
 
-    const nftClassIds = Array.from(nftClassIdDataMap.keys());
-    await Promise.all(
-      nftClassIds.map(classId => {
-        const promises = [
-          catchAxiosError(
-            dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
-          ),
-          catchAxiosError(dispatch('fetchNFTOwners', classId)),
-          catchAxiosError(dispatch('fetchNFTListingInfo', classId)),
-        ];
-        const classData = nftClassIdDataMap.get(classId);
-        if (checkIsWritingNFT(classData.metadata)) {
-          promises.push(
-            catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
-          );
-        }
-        return Promise.all(promises);
-      })
-    );
+    if (shouldFetchDetails) {
+      const nftClassIds = Array.from(nftClassIdDataMap.keys());
+      await Promise.all(
+        nftClassIds.map(classId => {
+          const promises = [
+            catchAxiosError(
+              dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
+            ),
+            catchAxiosError(dispatch('fetchNFTOwners', classId)),
+            catchAxiosError(dispatch('fetchNFTListingInfo', classId)),
+          ];
+          const classData = nftClassIdDataMap.get(classId);
+          if (checkIsWritingNFT(classData.metadata)) {
+            promises.push(
+              catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
+            );
+          }
+          return Promise.all(promises);
+        })
+      );
+    }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.getUserV2DisplayState(address));

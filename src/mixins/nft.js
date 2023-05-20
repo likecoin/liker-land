@@ -764,7 +764,7 @@ export default {
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
-        this.fetchNFTListByAddress(this.getAddress);
+        this.fetchNFTListByAddress({ address: this.getAddress });
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
@@ -911,11 +911,22 @@ export default {
     async fetchRecommendInfo() {
       this.isRecommendationLoading = true;
       try {
-        await Promise.all([
-          this.fetchNFTListByAddress(this.iscnOwner),
-          this.fetchNFTListByAddress(this.getAddress),
+        const promises = [
+          this.fetchNFTListByAddress({
+            address: this.iscnOwner,
+            shouldFetchDetails: false,
+          }),
           this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
-        ]);
+        ];
+        if (this.getAddress) {
+          promises.push(
+            this.fetchNFTListByAddress({
+              address: this.getAddress,
+              shouldFetchDetails: false,
+            })
+          );
+        }
+        await Promise.all(promises);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

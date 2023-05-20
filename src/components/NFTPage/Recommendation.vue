@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-[8px] bg-like-green rounded-[24px] py-[32px] overflow-hidden">
-    <div class="flex items-center justify-between px-[32px]">
+  <div class="bg-like-green rounded-[24px] overflow-hidden">
+    <div class="flex items-center justify-between pt-[32px] px-[32px] pb-[12px]">
       <NFTMessageIdentity
         type="creator"
         class="flex-shrink-0"
@@ -15,11 +15,12 @@
         {{ isFollowed ? $t('unfollow') : $t('follow') }}
       </ButtonV2>
     </div>
-    <ul class="relative pl-[32px] py-[12px] flex justify-start items-start gap-[24px] w-full overflow-x-scroll overflow-y-auto scrollbar-custom">
+    <ul class="relative flex justify-start items-start gap-[24px] w-full p-[32px] pt-[12px] overflow-x-scroll overflow-y-auto scrollbar-custom">
       <li v-for="(nft, index) in recommendedList" :key="index" @click="handleItemClick">
         <NFTPortfolioItem
           :class-id="nft.classId"
           :portfolio-wallet="iscnOwner"
+          :should-fetch-when-visible="true"
         />
       </li>
     </ul>
