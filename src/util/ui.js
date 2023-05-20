@@ -71,6 +71,9 @@ export function getLikeCoResizedImageUrl(url, size) {
   if (url.includes('like.co')) {
     return url.replace(/\?size=\d+/, `?size=${size}`);
   }
+  if (url.includes('avatars.dicebear.com')) {
+    return url;
+  }
   return getImageResizeAPI(url, { width: size });
 }
 
