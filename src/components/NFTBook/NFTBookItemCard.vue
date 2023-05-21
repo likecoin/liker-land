@@ -48,7 +48,7 @@
       v-if="nftIsCollectable"
       class="text-like-green-dark"
       preset="p5"
-      :text="formattedNFTPriceUSD"
+      :text="formattedNFTPriceInLIKE"
     />
     <Label
       v-else
@@ -165,7 +165,7 @@
           <Label
             preset="p5"
             class="text-like-green-dark"
-            :text="formattedNFTPriceUSD"
+            :text="formattedNFTPriceInLIKE"
           />
         </div>
         <Label

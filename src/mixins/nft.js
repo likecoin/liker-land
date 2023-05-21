@@ -291,7 +291,7 @@ export default {
       return [
         {
           name: 'Standard Edition',
-          priceLabel: this.formattedNFTPriceUSD,
+          priceLabel: this.formattedNFTPriceInLIKE,
           value: 'standard',
           stock: this.nftIsCollectable ? 500 : 0,
         },
