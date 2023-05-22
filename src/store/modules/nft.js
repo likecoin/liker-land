@@ -10,6 +10,7 @@ import {
   formatOwnerInfoFromChain,
   fetchAllNFTFromChain,
   fetchAllNFTClassFromChain,
+  getISCNRecord,
   getNFTClassCollectionType,
   nftClassCollectionType,
   formatNFTInfo,
@@ -27,6 +28,7 @@ const typeOrder = {
 };
 
 const state = () => ({
+  iscnMetadataByIdMap: {},
   purchaseInfoByClassIdMap: {},
   listingInfoByClassIdMap: {},
   metadataByClassIdMap: {},
@@ -38,6 +40,9 @@ const state = () => ({
 });
 
 const mutations = {
+  [TYPES.NFT_SET_ISCN_METADATA](state, { iscnId, data }) {
+    Vue.set(state.iscnMetadataByIdMap, iscnId, data);
+  },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
     Vue.set(state.purchaseInfoByClassIdMap, classId, info);
   },
@@ -118,6 +123,7 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   NFTClassIdList: state => state.userClassIdListMap,
+  getISCNMetadataById: state => iscnId => state.iscnMetadataByIdMap[iscnId],
   getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassFeaturedSetByAddress: state => address =>
     (state.userNFTClassDisplayStateSetsMap[address] || {}).featuredClassIdSet,
@@ -284,6 +290,19 @@ const getters = {
 };
 
 const actions = {
+  async fetchISCNMetadataById({ commit }, iscnId) {
+    if (!iscnId) return undefined;
+    try {
+      const res = await getISCNRecord(iscnId);
+      const [{ data } = {}] = res?.records;
+      commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data });
+      return data;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return undefined;
+    }
+  },
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });

@@ -28,7 +28,6 @@ import {
   signBuyNFT,
   broadcastTx,
   getNFTCountByClassId,
-  getISCNRecord,
   getNFTClassCollectionType,
   getFormattedNFTEvents,
   parseNFTMetadataURL,
@@ -90,9 +89,6 @@ export default {
       isHistoryInfoLoading: false,
       isRecommendationLoading: false,
 
-      iscnData: null,
-      nftISCNContentFingerprints: [],
-
       nftPriceInUSD: undefined,
       nftPriceInUSDisListingInfo: undefined,
     };
@@ -100,6 +96,7 @@ export default {
   computed: {
     ...mapGetters([
       'getUserInfoByAddress',
+      'getISCNMetadataById',
       'getNFTClassFeaturedSetByAddress',
       'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
@@ -226,11 +223,17 @@ export default {
     externalUrl() {
       return this.iscnUrl || this.nftExternalURL;
     },
+    iscnData() {
+      return this.getISCNMetadataById(this.iscnId);
+    },
     iscnUrl() {
       return this.iscnData?.contentMetadata?.url;
     },
     iscnContentUrls() {
       return this.iscnData?.contentMetadata?.sameAs || [];
+    },
+    nftISCNContentFingerprints() {
+      return this.iscnData?.contentFingerprints || [];
     },
     nftIsUseListingPrice() {
       return (
@@ -516,6 +519,7 @@ export default {
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddress',
+      'fetchISCNMetadataById',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
@@ -531,16 +535,7 @@ export default {
       'fetchNFTDisplayStateListByAddress',
     ]),
     async fetchISCNMetadata() {
-      if (!this.iscnId) return;
-      try {
-        const res = await getISCNRecord(this.iscnId);
-        const [{ data } = {}] = res?.records;
-        this.iscnData = data;
-        this.nftISCNContentFingerprints = data?.contentFingerprints;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
+      await this.fetchISCNMetadataById(this.iscnId);
     },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
