@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    class="relative"
+    class="relative block w-[310px]"
     :to="detailsPageRoute"
     @click.native="handleClickViewDetails"
   >
@@ -11,7 +11,6 @@
       />
     </client-only>
     <NFTPortfolioBase
-      class="w-[310px]"
       :title="NFTName"
       :price="NFTPrice"
       :class-id="classId"
