@@ -1,106 +1,124 @@
 <template>
   <UserStatsController
-    class="flex flex-col items-center w-full laptop:flex-row"
     :stat-wallet="statWallet"
   >
     <template v-slot="stats">
-      <div
-        :class="[
-          'flex',
-          'justify-center',
-          'gap-[12px]',
-          'rounded-[12px]',
-          'w-full',
-          'p-[12px]',
+      <div class="flex flex-col items-center w-full mb-[18px] laptop:flex-row laptop:justify-center laptop:m-0">
+        <!-- Collect section -->
+        <div
+          :class="[
+            'flex',
+            'justify-center',
+            'items-center',
+            'w-full',
 
-          'mb-[18px]',
-          'laptop:m-0',
+            'laptop:justify-end',
+          ]"
+        >
+          <div
+            :class="[
+              itemStyle,
+              'justify-center',
+              'gap-[24px]',
+            ]"
+            @click="$emit('go-collected')"
+          >
+            <UserStatsItem
+              :is-loading="stats.isLoadingStats"
+              :stats-value="stats.collectedCount"
+              :label-text="$t('nft_portfolio_page_label_collected')"
+            >
+              <template #label-icon>
+                <IconMint />
+              </template>
+            </UserStatsItem>
+            <UserStatsItem
+              :is-loading="stats.isLoadingStats"
+              :stats-value="stats.collectedAmount"
+              :label-text="$t('nft_portfolio_page_state_value')"
+            >
+              <template #label-icon>
+                <IconPriceMini />
+              </template>
+            </UserStatsItem>
+          </div>
+          <div
+            :class="[
+              itemStyle,
+              'justify-center',
+              'gap-[24px]',
+            ]"
+            @click="$emit('on-click-stakeholder-income')"
+          >
+            <UserStatsItem
+              :is-loading="stats.isLoadingStats"
+              :stats-value="stats.stakeholderIncome"
+              :label-text="$t('nft_portfolio_page_state_stakeholder')"
+            >
+              <template #label-icon>
+                <IconPriceMini />
+              </template>
+            </UserStatsItem>
+          </div>
+        </div>
 
-          'cursor-pointer',
-          'transition',
-          'laptop:justify-around',
-          'laptop:gap-0',
-          'duration-200',
-          'hover:bg-shade-gray',
-        ]"
-        @click="$emit('go-collected')"
-      >
-        <UserStatsItem
-          :is-loading="stats.isLoadingStats"
-          :stats-value="stats.collectedCount"
-          :label-text="$t('nft_portfolio_page_label_collected')"
+        <hr
+          class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
         >
-          <template #label-icon>
-            <IconMint />
-          </template>
-        </UserStatsItem>
-        <UserStatsItem
-          :is-loading="stats.isLoadingStats"
-          :stats-value="stats.collectedAmount"
-          :label-text="$t('nft_portfolio_page_state_value')"
+
+        <!-- Created section -->
+        <div
+          :class="[
+            'flex',
+            'justify-center',
+            'items-center',
+            'w-full',
+
+            'laptop:justify-start',
+          ]"
         >
-          <template #label-icon>
-            <IconPriceMini />
-          </template>
-        </UserStatsItem>
-        <UserStatsItem
-          :is-loading="stats.isLoadingStats"
-          :stats-value="stats.stakeholderIncome"
-          :label-text="$t('nft_portfolio_page_state_stakeholder')"
-        >
-          <template #label-icon>
-            <IconPriceMini />
-          </template>
-        </UserStatsItem>
-      </div>
-      <hr
-        class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
-      >
-      <div
-        :class=" [
-          'flex',
-          'justify-center',
-          'gap-[12px]',
-          'rounded-[12px]',
-          'w-full',
-          'p-[4px]',
-          'cursor-pointer',
-          'transition',
-          'duration-200',
-          'laptop:p-[12px]',
-          'laptop:justify-around',
-          'laptop:gap-0',
-          'hover:bg-shade-gray',
-        ]"
-        @click="$emit('go-created')"
-      >
-        <UserStatsItem
-          :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdCount"
-          :label-text="$t('nft_portfolio_page_label_created')"
-        >
-          <template #label-icon>
-            <IconFlare />
-          </template>
-        </UserStatsItem>
-        <UserStatsItem
-          :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdCollectorCount"
-          :label-text="$t('nft_portfolio_page_state_collectors')"
-        >
-          <template #label-icon>
-            <IconPersonMini />
-          </template>
-        </UserStatsItem>
-        <UserStatsItem
-          :is-loading="stats.isLoadingStats"
-          :stats-value="stats.createdTotalSales"
-          :label-text="$t('nft_portfolio_page_state_sales')"
-        >
-          <template #label-icon>
-            <IconPriceMini />
-          </template>
-        </UserStatsItem>
+          <div
+            :class="[
+              itemStyle,
+              'justify-center',
+              'gap-[24px]',
+            ]"
+            @click="$emit('go-created')"
+          >
+            <UserStatsItem
+              :is-loading="stats.isLoadingStats"
+              :stats-value="stats.createdCount"
+              :label-text="$t('nft_portfolio_page_label_created')"
+            >
+              <template #label-icon>
+                <IconFlare />
+              </template>
+            </UserStatsItem>
+            <UserStatsItem
+              :is-loading="stats.isLoadingStats"
+              :stats-value="stats.createdCollectorCount"
+              :label-text="$t('nft_portfolio_page_state_collectors')"
+            >
+              <template #label-icon>
+                <IconPersonMini />
+              </template>
+            </UserStatsItem>
+          </div>
+          <div
+            :class="itemStyle"
+            @click="$emit('on-click-total-sales')"
+          >
+            <UserStatsItem
+              :is-loading="stats.isLoadingStats"
+              :stats-value="stats.createdTotalSales"
+              :label-text="$t('nft_portfolio_page_state_sales')"
+            >
+              <template #label-icon>
+                <IconPriceMini />
+              </template>
+            </UserStatsItem>
+          </div>
+        </div>
       </div>
     </template>
   </UserStatsController>
@@ -111,6 +129,21 @@ export default {
     statWallet: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    itemStyle() {
+      return [
+        'flex',
+        'rounded-[12px]',
+        'p-[8px]',
+
+        'cursor-pointer',
+        'transition',
+        'laptop:justify-around',
+        'duration-200',
+        'hover:bg-shade-gray',
+      ];
     },
   },
 };
