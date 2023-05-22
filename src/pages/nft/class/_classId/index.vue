@@ -52,6 +52,7 @@
                 :iscn-url="iscnUrl"
                 :is-nft-book="nftIsNFTBook"
                 :is-content-viewable="isContentViewable"
+                :should-show-content-url-buttons="false"
                 @view-content="handleViewContent"
                 @view-content-url="handleViewContentURL"
               />

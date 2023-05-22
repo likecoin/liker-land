@@ -38,24 +38,26 @@
       class="text-[14px] text-medium-gray text-center mt-[16px]"
     >{{ $t('nft_details_page_button_collect_to_view') }}</p>
 
-    <ButtonV2
-      v-for="contentUrl in contentUrls"
-      :key="contentUrl"
-      class="mt-[12px] w-full"
-      preset="outline"
-      :text="getContentUrlButtonText(contentUrl)"
-      :href="contentUrl"
-      :is-disabled="!isContentViewable"
-      target="_blank"
-      @click="handleClickViewContentURL(getContentUrlType(contentUrl))"
-    >
-      <template #prepend>
-        <IconArticle />
-      </template>
-      <template #append>
-        <IconLinkExternal />
-      </template>
-    </ButtonV2>
+    <template v-if="shouldShowContentUrlButtons">
+      <ButtonV2
+        v-for="contentUrl in contentUrls"
+        :key="contentUrl"
+        class="mt-[12px] w-full"
+        preset="outline"
+        :text="getContentUrlButtonText(contentUrl)"
+        :href="contentUrl"
+        :is-disabled="!isContentViewable"
+        target="_blank"
+        @click="handleClickViewContentURL(getContentUrlType(contentUrl))"
+      >
+        <template #prepend>
+          <IconArticle />
+        </template>
+        <template #append>
+          <IconLinkExternal />
+        </template>
+      </ButtonV2>
+    </template>
   </div>
 </template>
 
@@ -79,6 +81,10 @@ export default {
       default: false,
     },
     isContentViewable: {
+      type: Boolean,
+      default: true,
+    },
+    shouldShowContentUrlButtons: {
       type: Boolean,
       default: true,
     },
