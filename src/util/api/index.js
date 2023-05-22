@@ -368,3 +368,17 @@ export const getStakeholderIncome = address => {
     qsPayload
   )}`;
 };
+
+export const getStakeholderIncomeDetails = address => {
+  const qsPayload = { address };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income/detail?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getSalesDetails = owner => {
+  const qsPayload = { owner };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income/detail?${querystring.stringify(
+    qsPayload
+  )}`;
+};

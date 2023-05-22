@@ -19,6 +19,8 @@ import {
   getUserNotificationSettingsUrl,
   getNFTEvents,
   getNFTClassesPartial,
+  getStakeholderIncomeDetails,
+  getSalesDetails,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -44,6 +46,8 @@ import {
   WALLET_SET_EVENT_FETCHING,
   WALLET_SET_PAST_FOLLOWEES,
   WALLET_SET_NOTIFICATION_SETTINGS,
+  WALLET_SET_STAKEHOLDER_INCOME_DETAILS,
+  WALLET_SET_SALES_DETAILS,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -70,6 +74,9 @@ const state = () => ({
   likeBalanceFetchPromise: null,
   isFetchingEvent: false,
   notificationSettings: null,
+
+  stakeholderIncomeDetails: [],
+  salesDetails: [],
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -158,6 +165,12 @@ const mutations = {
   [WALLET_SET_NOTIFICATION_SETTINGS](state, notificationSettings) {
     state.notificationSettings = notificationSettings;
   },
+  [WALLET_SET_STAKEHOLDER_INCOME_DETAILS](state, incomeDetails) {
+    state.stakeholderIncomeDetails = incomeDetails;
+  },
+  [WALLET_SET_SALES_DETAILS](state, salesDetails) {
+    state.salesDetails = salesDetails;
+  },
 };
 
 const getters = {
@@ -199,6 +212,8 @@ const getters = {
       return count;
     }, 0);
   },
+  getStakeholderIncomeDetails: state => state.stakeholderIncomeDetails,
+  getSalesDetails: state => state.salesDetails,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -669,6 +684,26 @@ const actions = {
         notificationSettings
       );
       commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletFetchStakeholderIncomeDetails({ commit }, address) {
+    try {
+      const { income_details: incomeDetails } = await this.$api.$get(
+        getStakeholderIncomeDetails(address)
+      );
+      commit(WALLET_SET_STAKEHOLDER_INCOME_DETAILS, incomeDetails);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletFetchSalesDetails({ commit }, owner) {
+    try {
+      const { income_details: incomeDetails } = await this.$api.$get(
+        getSalesDetails(owner)
+      );
+      commit(WALLET_SET_SALES_DETAILS, incomeDetails);
     } catch (error) {
       throw error;
     }
