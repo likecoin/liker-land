@@ -281,20 +281,23 @@ export default {
     },
   },
   head() {
+    const linkList = [
+      {
+        rel: 'modulepreload',
+        href:
+          'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
+        as: 'script',
+      },
+    ];
+    if (this.nftModelURL) {
+      linkList.push({
+        rel: 'prefetch',
+        crossorigin: 'anonymous',
+        href: this.nftModelURL,
+      });
+    }
     return {
-      link: [
-        {
-          rel: 'modulepreload',
-          href:
-            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
-          as: 'script',
-        },
-        {
-          rel: 'prefetch',
-          crossorigin: 'anonymous',
-          href: this.nftModelURL,
-        },
-      ],
+      link: linkList,
       script: [
         {
           type: 'module',
