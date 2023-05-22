@@ -20,26 +20,26 @@
       />
     </template>
 
-    <template
-      v-if="isCompleted || isProcessing"
-      #message
-    >
-      <client-only>
-        <model-viewer
-          v-if="nftModelURL"
-          :alt="nftClassCollectionName"
-          :src="nftModelURL"
-          class="mt-[12px] w-full h-[300px] max-h-[30vh]"
-          auto-rotate
-          auto-rotate-delay="0"
-          :exposure="modelExposure"
-          :rotation-per-second="isCompleted ? '10deg' : '90deg'"
-          :shadow-intensity="isCompleted ? 1 : 0"
-          :camera-controls="isCompleted ? true : undefined"
-          camera-orbit="315deg 60deg 100m"
-          @click.once="onClickModelViewer"
-        />
-      </client-only>
+    <template #message>
+      <transition name="fade">
+        <client-only v-if="isCompleted || isProcessing">
+          <model-viewer
+            v-if="nftModelURL"
+            :alt="nftClassCollectionName"
+            :src="nftModelURL"
+            class="mt-[12px] w-full h-[300px] max-h-[30vh]"
+            auto-rotate
+            auto-rotate-delay="0"
+            :poster="modelLoadingImage"
+            :exposure="modelExposure"
+            :rotation-per-second="isCompleted ? '10deg' : '90deg'"
+            :shadow-intensity="isCompleted ? 1 : 0"
+            :camera-controls="isCompleted ? true : undefined"
+            camera-orbit="90deg 60deg 100m"
+            @click.once="onClickModelViewer"
+          />
+        </client-only>
+      </transition>
       <template v-if="isCompleted">
         <Label class="text-medium-gray mt-[12px] flex-nowrap" preset="h6" align="center">
           <i18n
@@ -254,6 +254,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import modelLoadingImage from '~/assets/images/nft/model-loading.png';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
@@ -306,6 +307,7 @@ export default {
   },
   data() {
     return {
+      modelLoadingImage,
       paymentMethod: undefined,
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
@@ -476,7 +478,7 @@ export default {
     ]),
     startExposureAnimation(time = performance.now(), lastTime = time) {
       if (this.isProcessing) {
-        this.modelExposure = oscillate(0.2, 0.3, 4000, time);
+        this.modelExposure = oscillate(0.1, 0.2, 4000, time);
       } else if (this.isCompleted) {
         if (this.modelExposure <= 1) {
           this.modelExposure += (time - lastTime) / 1000;
