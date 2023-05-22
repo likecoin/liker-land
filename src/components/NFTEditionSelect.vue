@@ -1,11 +1,5 @@
 <template>
-  <div
-    :class="[
-      isSoldAllOut ? 'bg-white' : 'bg-like-green',
-      'rounded-[24px]',
-      isSingleItem || isSoldAllOut ? 'px-[20px] py-[8px]' : 'p-[12px] sm:p-[24px] pt-[4px] sm:pt-[16px] pb-[14px]',
-    ]"
-  >
+  <div :class="rootClasses">
     <table
       v-if="!isSingleItem && !isSoldAllOut"
       class="border-separate border-spacing-y-[8px] mb-[8px]"
@@ -26,6 +20,7 @@
     <div
       :class="[
         'flex',
+        'flex-wrap',
         'justify-end',
         'items-center',
         'gap-[12px] sm:gap-x-[24px]',
@@ -44,7 +39,10 @@
           v-if="!isSoldAllOut"
           class="text-white"
         >{{ priceLabel }}</span>
-        <NFTStockLabel :stock="stock" />
+        <NFTStockLabel
+          :stock="stock"
+          :is-dark="!isSoldAllOut"
+        />
       </template>
 
       <ButtonV2
@@ -118,6 +116,24 @@ export default {
     };
   },
   computed: {
+    rootClasses() {
+      const classes = [
+        this.isSoldAllOut ? 'bg-gray-f7' : 'bg-like-green',
+        'rounded-[16px]',
+      ];
+      if (this.isSoldAllOut) {
+        classes.push('p-[24px]');
+      } else if (this.isSingleItem) {
+        classes.push('px-[20px]', 'py-[20px] sm:py-[8px]');
+      } else {
+        classes.push(
+          'p-[12px] sm:p-[24px]',
+          'pt-[4px] sm:pt-[16px]',
+          'pb-[14px]'
+        );
+      }
+      return classes;
+    },
     isSingleItem() {
       return this.items.length === 1;
     },

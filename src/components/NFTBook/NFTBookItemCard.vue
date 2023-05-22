@@ -74,12 +74,12 @@
         :class="[
           'relative',
           'flex',
-          isDetailsPreset ? 'sm:items-start' : 'sm:items-end',
-          'flex-col sm:flex-row',
-          'sm:gap-[36px]',
+          isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
+          'flex-col laptop:flex-row',
+          'laptop:gap-[36px]',
           'w-full',
           'rounded-[32px]',
-          'px-[32px] sm:px-[48px]',
+          'px-[32px] laptop:px-[48px]',
           'transition-all',
           'duration-200',
           bgStyle
