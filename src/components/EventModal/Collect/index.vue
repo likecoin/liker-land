@@ -504,10 +504,9 @@ export default {
       this.memo = '';
 
       // Mixin
-      this.nftPriceInUSD = undefined;
-      this.nftPriceInUSDisListingInfo = undefined;
       this.userCollectedCount = undefined;
-      this.fetchNFTPrices(this.classId);
+      this.removeNFTFiatPriceInfoByClassId(this.classId);
+      this.fetchNFTPrices();
       this.fetchUserCollectedCount();
     },
     async handleSelectPaymentMethod(method) {

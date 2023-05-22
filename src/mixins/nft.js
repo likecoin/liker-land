@@ -16,7 +16,6 @@ import {
   postNFTTransfer,
   getNFTModel,
   postNewStripeFiatPayment,
-  getStripeFiatPrice,
   getIdenticonAvatar,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
@@ -88,9 +87,6 @@ export default {
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
       isRecommendationLoading: false,
-
-      nftPriceInUSD: undefined,
-      nftPriceInUSDisListingInfo: undefined,
     };
   },
   computed: {
@@ -103,6 +99,7 @@ export default {
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
+      'getNFTClassFiatPriceInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
@@ -254,6 +251,12 @@ export default {
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
+    },
+    nftPriceInUSD() {
+      return this.getNFTClassFiatPriceInfoById(this.classId)?.fiatPrice;
+    },
+    nftPriceInUSDisListingInfo() {
+      return this.getNFTClassFiatPriceInfoById(this.classId)?.listingInfo;
     },
     NFTPriceUSD() {
       return this.LIKEPriceInUSD * this.NFTPrice;
@@ -524,6 +527,8 @@ export default {
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
+      'fetchNFTFiatPriceInfoByClassId',
+      'removeNFTFiatPriceInfoByClassId',
       'initIfNecessary',
       'uiToggleCollectModal',
       'uiSetCollectedCount',
@@ -545,17 +550,8 @@ export default {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
       catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
-    async fetchNFTPrices(classId) {
-      try {
-        const { fiatPrice, listingInfo } = await this.$axios.$get(
-          getStripeFiatPrice({ classId })
-        );
-        this.nftPriceInUSD = fiatPrice;
-        this.nftPriceInUSDisListingInfo = listingInfo;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
+    async fetchNFTPrices() {
+      await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
     },
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);

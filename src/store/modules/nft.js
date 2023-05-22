@@ -29,6 +29,7 @@ const typeOrder = {
 
 const state = () => ({
   iscnMetadataByIdMap: {},
+  fiatPriceInfoByClassIdMap: {},
   purchaseInfoByClassIdMap: {},
   listingInfoByClassIdMap: {},
   metadataByClassIdMap: {},
@@ -42,6 +43,17 @@ const state = () => ({
 const mutations = {
   [TYPES.NFT_SET_ISCN_METADATA](state, { iscnId, data }) {
     Vue.set(state.iscnMetadataByIdMap, iscnId, data);
+  },
+  [TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO](state, { classId, data }) {
+    if (data) {
+      const { fiatPrice, listingInfo } = data;
+      Vue.set(state.fiatPriceInfoByClassIdMap, classId, {
+        fiatPrice,
+        listingInfo,
+      });
+    } else {
+      Vue.delete(state.fiatPriceInfoByClassIdMap, classId);
+    }
   },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
     Vue.set(state.purchaseInfoByClassIdMap, classId, info);
@@ -134,6 +146,8 @@ const getters = {
   getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
+  getNFTClassFiatPriceInfoById: state => id =>
+    state.fiatPriceInfoByClassIdMap[id],
   getNFTIscnRecordsById: state => id =>
     state.metadataByClassIdMap[id]?.iscn_record,
   getNFTClassOwnerCount: state => id =>
@@ -302,6 +316,21 @@ const actions = {
       console.error(error);
       return undefined;
     }
+  },
+  removeNFTFiatPriceInfoByClassId({ commit }, classId) {
+    commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, {
+      classId,
+      data: undefined,
+    });
+  },
+  async fetchNFTFiatPriceInfoByClassId({ commit }, classId) {
+    if (!classId) return undefined;
+    const { fiatPrice, listingInfo } = await this.$api.$get(
+      api.getStripeFiatPrice({ classId })
+    );
+    const data = { fiatPrice, listingInfo };
+    commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, data });
+    return data;
   },
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
