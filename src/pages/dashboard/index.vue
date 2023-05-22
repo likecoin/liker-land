@@ -18,6 +18,8 @@
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
+          @on-click-total-sales="() => handleClickIncomeDetails('sales')"
+          @on-click-stakeholder-income="() => handleClickIncomeDetails('income')"
         />
         <NFTPortfolioTopUsersList
           v-if="topRankedUsers && topRankedUsers.length"
@@ -102,6 +104,15 @@
         @close="isOpenFollowersDialog = false"
         @on-export-followers="handleClickExportFollowerList"
       />
+      <UserStatsIncomeDetailsDialog
+        :address="getAddress"
+        :is-open-dialog="isOpenIncomeDetailsDialog"
+        :is-loading="isIncomeDetailsLoading"
+        :stakeholder-income-details="getStakeholderIncomeDetails"
+        :sales-details="getSalesDetails"
+        :target-type="targetType"
+        @close="isOpenIncomeDetailsDialog = false"
+      />
     </AuthRequiredView>
   </Page>
 </template>
@@ -117,6 +128,11 @@ import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
+
+const DETAILS_TYPE = {
+  STAKEHOLDER_INCOME: 'income',
+  SALES: 'sales',
+};
 
 export default {
   name: 'MyDashboardPage',
@@ -159,7 +175,10 @@ export default {
   data() {
     return {
       topRankedUsers: [],
+      targetType: DETAILS_TYPE.SALES,
       isOpenFollowersDialog: false,
+      isOpenIncomeDetailsDialog: false,
+      isIncomeDetailsLoading: false,
     };
   },
   computed: {
@@ -268,6 +287,33 @@ export default {
           params: { id: this.wallet },
         })
       );
+    },
+    async handleClickIncomeDetails(type) {
+      if (type === DETAILS_TYPE.SALES) {
+        this.targetType = DETAILS_TYPE.SALES;
+        logTrackerEvent(
+          this,
+          'MyDashboard',
+          'MyDashboard_sales_click',
+          `${this.wallet}`,
+          1
+        );
+      } else {
+        this.targetType = DETAILS_TYPE.STAKEHOLDER_INCOME;
+        logTrackerEvent(
+          this,
+          'MyDashboard',
+          'MyDashboard_stakeholder_click',
+          `${this.wallet}`,
+          1
+        );
+      }
+
+      this.isIncomeDetailsLoading = true;
+      this.isOpenIncomeDetailsDialog = true;
+      await this.walletFetchStakeholderIncomeDetails(this.wallet);
+      await this.walletFetchSalesDetails(this.wallet);
+      this.isIncomeDetailsLoading = false;
     },
     async handleClickFollowers() {
       logTrackerEvent(

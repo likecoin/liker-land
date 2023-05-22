@@ -136,6 +136,12 @@
   "dashboard_login_in": "Verify wallet to view your dashboard",
   "dashboard_portfolio_button": "Public Portfolio",
   "dashboard_title": "My Dashboard",
+  "dashboard_button_type_sales": "Total Sales",
+  "dashboard_button_type_stakeholder_income": "Commission",
+  "dashboard_table_class_name": "NFT Name",
+  "dashboard_table_class_price": "Item Sales",
+  "dashboard_table_class_stake_percentage": "Commission Percentage",
+  "dashboard_table_class_stake_income": "Commission Income",
   "edit": "Edit",
   "ERROR": {
     "LOGIN_NEEDED": "Please sign in to view this content",

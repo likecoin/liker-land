@@ -136,6 +136,12 @@
   "dashboard_login_in": "驗證錢包以瀏覽書架",
   "dashboard_portfolio_button": "展示櫃",
   "dashboard_title": "我的書架",
+  "dashboard_button_type_sales": "銷售額",
+  "dashboard_button_type_stakeholder_income": "分潤",
+  "dashboard_table_class_name": "NFT Name",
+  "dashboard_table_class_price": "銷售額",
+  "dashboard_table_class_stake_percentage": "分潤比例",
+  "dashboard_table_class_stake_income": "分潤後收益",
   "edit": "編輯",
   "ERROR": {
     "LOGIN_NEEDED": "請登入以觀看內容",
