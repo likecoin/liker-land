@@ -286,20 +286,13 @@ const queryAllDataFromChain = async (axios, api, field, input = {}) => {
   return result;
 };
 
-const fetchAllNFTFromChain = async (axios, owner) => {
+export const fetchAllNFTFromChain = async (axios, owner) => {
   const nfts = await queryAllDataFromChain(axios, api.getNFTsPartial, 'nfts', {
     expandClasses: true,
     owner,
   });
   // sort by last colleted by default
   return nfts;
-};
-export const getNFTsRespectDualPrefix = async (axios, owner) => {
-  const allowAddresses = deriveAllPrefixedAddresses(owner);
-  const arraysOfNFTs = await Promise.all(
-    allowAddresses.map(a => fetchAllNFTFromChain(axios, a))
-  );
-  return arraysOfNFTs.flat();
 };
 
 export function formatNFTClassInfo(classData) {
@@ -309,7 +302,7 @@ export function formatNFTClassInfo(classData) {
   };
 }
 
-const fetchAllNFTClassFromChain = async (axios, owner) => {
+export const fetchAllNFTClassFromChain = async (axios, owner) => {
   const classes = await queryAllDataFromChain(
     axios,
     api.getNFTClassesPartial,
@@ -317,14 +310,6 @@ const fetchAllNFTClassFromChain = async (axios, owner) => {
     { owner }
   );
   return classes;
-};
-
-export const getNFTClassesRespectDualPrefix = async (axios, owner) => {
-  const allowAddresses = deriveAllPrefixedAddresses(owner);
-  const arraysOfNFTClasses = await Promise.all(
-    allowAddresses.map(a => fetchAllNFTClassFromChain(axios, a))
-  );
-  return arraysOfNFTClasses.flat();
 };
 
 export async function getFormattedNFTEvents({

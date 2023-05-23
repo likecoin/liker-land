@@ -8,8 +8,8 @@ import {
   checkIsWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
-  getNFTsRespectDualPrefix,
-  getNFTClassesRespectDualPrefix,
+  fetchAllNFTFromChain,
+  fetchAllNFTClassFromChain,
   getNFTClassCollectionType,
   nftClassCollectionType,
   formatNFTInfo,
@@ -468,8 +468,8 @@ const actions = {
     { address, shouldFetchDetails = true } = {}
   ) {
     const [collectedNFTs, createdNFTClasses] = await Promise.all([
-      getNFTsRespectDualPrefix(this.$api, address),
-      getNFTClassesRespectDualPrefix(this.$api, address),
+      fetchAllNFTFromChain(this.$api, address),
+      fetchAllNFTClassFromChain(this.$api, address),
     ]);
 
     const nftClassIdDataMap = new Map();
