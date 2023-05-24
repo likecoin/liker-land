@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-stretch min-h-screen">
-    <AlertBanner
+    <!-- <AlertBanner
       v-if="getRouteBaseName($route) !== 'nft-class-classId' && $route.params.classId !== alertBannerNFTClassId"
       :primary-button-text="$t('alert_banner_actions_purchase')"
       :primary-button-to="
@@ -23,7 +23,7 @@
           place="book"
         >{{ $t('alert_banner_content_heavenly_creations_life_like_name') }}</span>
       </i18n>
-    </AlertBanner>
+    </AlertBanner> -->
 
     <SiteHeader
       v-if="!isInInAppBrowser"
