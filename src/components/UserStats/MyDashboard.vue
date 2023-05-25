@@ -3,16 +3,13 @@
     :stat-wallet="statWallet"
   >
     <template v-slot="stats">
-      <div class="flex flex-col items-center w-full mb-[18px] laptop:flex-row laptop:justify-center laptop:m-0">
+      <div class="flex flex-col justify-center items-center w-full mb-[18px] laptop:flex-row laptop:justify-center laptop:m-0">
         <!-- Collect section -->
         <div
           :class="[
             'flex',
             'justify-center',
             'items-center',
-            'w-full',
-
-            'laptop:justify-end',
           ]"
         >
           <div
@@ -42,24 +39,6 @@
               </template>
             </UserStatsItem>
           </div>
-          <div
-            :class="[
-              itemStyle,
-              'justify-center',
-              'gap-[24px]',
-            ]"
-            @click="$emit('on-click-stakeholder-income')"
-          >
-            <UserStatsItem
-              :is-loading="stats.isLoadingStats"
-              :stats-value="stats.stakeholderIncome"
-              :label-text="$t('nft_portfolio_page_state_stakeholder')"
-            >
-              <template #label-icon>
-                <IconPriceMini />
-              </template>
-            </UserStatsItem>
-          </div>
         </div>
 
         <hr
@@ -72,9 +51,6 @@
             'flex',
             'justify-center',
             'items-center',
-            'w-full',
-
-            'laptop:justify-start',
           ]"
         >
           <div
@@ -104,11 +80,15 @@
               </template>
             </UserStatsItem>
           </div>
+          <hr
+            class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
+          >
           <div
             :class="itemStyle"
             @click="$emit('on-click-total-sales')"
           >
             <UserStatsItem
+              class="!text-airdrop-gold"
               :is-loading="stats.isLoadingStats"
               :stats-value="stats.createdTotalSales"
               :label-text="$t('nft_portfolio_page_state_sales')"

@@ -37,22 +37,27 @@
         @click="$emit('on-type-click',item.value)"
       >
         <Label preset="h5" :text="item.text" align="center" />
-        <!-- <p
+        <p
           :class="[
             'text-center',
             'text-10',
             'text-medium-gray',
-            { ' text-light-gray': item.isSelected },
+            { 'text-light-gray': item.isSelected },
           ]"
         >
-          {{ amount }}
-        </p> -->
+          {{ item.amount | formatNumberWithLIKE }}
+        </p>
       </div>
     </li>
   </ul>
 </template>
 <script>
+import { formatNumberWithLIKE } from '~/util/ui';
+
 export default {
+  filters: {
+    formatNumberWithLIKE,
+  },
   props: {
     typeMenuItemList: {
       type: Array,

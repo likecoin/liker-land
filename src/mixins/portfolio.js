@@ -209,7 +209,7 @@ export const createPortfolioMixin = ({
       let list = this.nftClassListOfFilteredCollectedByType;
       if (this.nftCreatorFilter.length) {
         list = list.filter(({ classId }) => {
-          const owner = this.getNFTClassMetadataById(classId).iscn_owner;
+          const owner = this.getNFTClassMetadataById(classId)?.iscn_owner;
           return this.nftCreatorFilter.includes(owner);
         });
       }
@@ -236,7 +236,7 @@ export const createPortfolioMixin = ({
     nftCreatorAddressListOfCollected() {
       const ownerMap = this.nftClassListOfFilteredCollectedByType.reduce(
         (acc, { classId }) => {
-          const owner = this.getNFTClassMetadataById(classId).iscn_owner;
+          const owner = this.getNFTClassMetadataById(classId)?.iscn_owner;
           acc[owner] = acc[owner] || 0;
           acc[owner] += 1;
           return acc;

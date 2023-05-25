@@ -19,8 +19,8 @@ import {
   getUserNotificationSettingsUrl,
   getNFTEvents,
   getNFTClassesPartial,
-  getStakeholderIncomeDetails,
-  getSalesDetails,
+  getTotalSalesByAddress,
+  getTotalCommissionByAddress,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -46,8 +46,10 @@ import {
   WALLET_SET_EVENT_FETCHING,
   WALLET_SET_PAST_FOLLOWEES,
   WALLET_SET_NOTIFICATION_SETTINGS,
-  WALLET_SET_STAKEHOLDER_INCOME_DETAILS,
+  WALLET_SET_TOTAL_SALES,
+  WALLET_SET_TOTAL_COMMISSION,
   WALLET_SET_SALES_DETAILS,
+  WALLET_SET_COMMISSION_DETAILS,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -75,8 +77,10 @@ const state = () => ({
   isFetchingEvent: false,
   notificationSettings: null,
 
-  stakeholderIncomeDetails: [],
+  totalSales: 0,
+  totalCommission: 0,
   salesDetails: [],
+  commissionDetails: [],
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -165,11 +169,17 @@ const mutations = {
   [WALLET_SET_NOTIFICATION_SETTINGS](state, notificationSettings) {
     state.notificationSettings = notificationSettings;
   },
-  [WALLET_SET_STAKEHOLDER_INCOME_DETAILS](state, incomeDetails) {
-    state.stakeholderIncomeDetails = incomeDetails;
+  [WALLET_SET_TOTAL_SALES](state, totalSales) {
+    state.totalSales = totalSales;
   },
-  [WALLET_SET_SALES_DETAILS](state, salesDetails) {
-    state.salesDetails = salesDetails;
+  [WALLET_SET_TOTAL_COMMISSION](state, commission) {
+    state.totalCommission = commission;
+  },
+  [WALLET_SET_SALES_DETAILS](state, list) {
+    state.salesDetails = list;
+  },
+  [WALLET_SET_COMMISSION_DETAILS](state, list) {
+    state.commissionDetails = list;
   },
 };
 
@@ -212,8 +222,10 @@ const getters = {
       return count;
     }, 0);
   },
-  getStakeholderIncomeDetails: state => state.stakeholderIncomeDetails,
+  getTotalSales: state => state.totalSales,
+  getTotalCommission: state => state.totalCommission,
   getSalesDetails: state => state.salesDetails,
+  getCommissionDetails: state => state.commissionDetails,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -558,6 +570,10 @@ const actions = {
       commit(WALLET_SET_PAST_FOLLOWEES, []);
       commit(WALLET_SET_EVENTS, []);
       commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
+      commit(WALLET_SET_TOTAL_COMMISSION, 0);
+      commit(WALLET_SET_COMMISSION_DETAILS, []);
+      commit(WALLET_SET_TOTAL_SALES, 0);
+      commit(WALLET_SET_SALES_DETAILS, []);
       await this.$api.post(postUserV2Logout());
     } catch (error) {
       throw error;
@@ -688,22 +704,26 @@ const actions = {
       throw error;
     }
   },
-  async walletFetchStakeholderIncomeDetails({ commit }, address) {
+  async walletFetchTotalCommission({ commit }, address) {
     try {
-      const { income_details: incomeDetails } = await this.$api.$get(
-        getStakeholderIncomeDetails(address)
-      );
-      commit(WALLET_SET_STAKEHOLDER_INCOME_DETAILS, incomeDetails);
+      const {
+        total_amount: totalCommission,
+        class_incomes: list,
+      } = await this.$api.$get(getTotalCommissionByAddress(address));
+      commit(WALLET_SET_TOTAL_COMMISSION, totalCommission);
+      commit(WALLET_SET_COMMISSION_DETAILS, list);
     } catch (error) {
       throw error;
     }
   },
-  async walletFetchSalesDetails({ commit }, owner) {
+  async walletFetchTotalSales({ commit }, owner) {
     try {
-      const { income_details: incomeDetails } = await this.$api.$get(
-        getSalesDetails(owner)
-      );
-      commit(WALLET_SET_SALES_DETAILS, incomeDetails);
+      const {
+        total_amount: totalSales,
+        class_incomes: list,
+      } = await this.$api.$get(getTotalSalesByAddress(owner));
+      commit(WALLET_SET_TOTAL_SALES, totalSales);
+      commit(WALLET_SET_SALES_DETAILS, list);
     } catch (error) {
       throw error;
     }

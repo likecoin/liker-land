@@ -15,8 +15,10 @@ export default {
       'getLikerInfo',
       'getLocale',
       'getUserInfoByAddress',
-      'getStakeholderIncomeDetails',
+      'getTotalSales',
+      'getTotalCommission',
       'getSalesDetails',
+      'getCommissionDetails',
       'walletFollowees',
       'walletFollowers',
       'walletIsFetchingFollowers',
@@ -74,8 +76,8 @@ export default {
       'walletUnfollowCreator',
       'walletFollowCreator',
       'signLogin',
-      'walletFetchStakeholderIncomeDetails',
-      'walletFetchSalesDetails',
+      'walletFetchTotalCommission',
+      'walletFetchTotalSales',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {

@@ -18,8 +18,7 @@
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
-          @on-click-total-sales="() => handleClickIncomeDetails('sales')"
-          @on-click-stakeholder-income="() => handleClickIncomeDetails('income')"
+          @on-click-total-sales="handleClickTotalSales"
         />
         <NFTPortfolioTopUsersList
           v-if="topRankedUsers && topRankedUsers.length"
@@ -108,8 +107,10 @@
         :address="getAddress"
         :is-open-dialog="isOpenIncomeDetailsDialog"
         :is-loading="isIncomeDetailsLoading"
-        :stakeholder-income-details="getStakeholderIncomeDetails"
+        :total-sales="getTotalSales"
+        :total-commission="getTotalCommission"
         :sales-details="getSalesDetails"
+        :commission-details="getCommissionDetails"
         :target-type="targetType"
         @close="isOpenIncomeDetailsDialog = false"
       />
@@ -130,7 +131,7 @@ import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
 
 const DETAILS_TYPE = {
-  STAKEHOLDER_INCOME: 'income',
+  COMMISSION: 'commission',
   SALES: 'sales',
 };
 
@@ -288,31 +289,23 @@ export default {
         })
       );
     },
-    async handleClickIncomeDetails(type) {
-      if (type === DETAILS_TYPE.SALES) {
-        this.targetType = DETAILS_TYPE.SALES;
-        logTrackerEvent(
-          this,
-          'MyDashboard',
-          'MyDashboard_sales_click',
-          `${this.wallet}`,
-          1
-        );
-      } else {
-        this.targetType = DETAILS_TYPE.STAKEHOLDER_INCOME;
-        logTrackerEvent(
-          this,
-          'MyDashboard',
-          'MyDashboard_stakeholder_click',
-          `${this.wallet}`,
-          1
-        );
-      }
+    async handleClickTotalSales() {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        'MyDashboard_sales_click',
+        `${this.wallet}`,
+        1
+      );
 
       this.isIncomeDetailsLoading = true;
       this.isOpenIncomeDetailsDialog = true;
-      await this.walletFetchStakeholderIncomeDetails(this.wallet);
-      await this.walletFetchSalesDetails(this.wallet);
+      if (!this.getTotalSales && !this.getTotalCommission) {
+        await Promise.all([
+          this.walletFetchTotalSales(this.wallet),
+          this.walletFetchTotalCommission(this.wallet),
+        ]);
+      }
       this.isIncomeDetailsLoading = false;
     },
     async handleClickFollowers() {

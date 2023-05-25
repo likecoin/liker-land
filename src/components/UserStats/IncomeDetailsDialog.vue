@@ -6,14 +6,8 @@
     panel-class="overflow-y-scroll shadow-lg"
     @close="$emit('close')"
   >
-    <div v-if="!currentList.length" class="flex justify-center my-[48px]">
+    <div v-if="isLoading" class="flex justify-center my-[48px]">
       <ProgressIndicator v-if="isLoading" />
-      <Label
-        v-else
-        align="center"
-        class="text-medium-gray"
-        :text="$t('portfolio_follower_no_follower')"
-      />
     </div>
     <div v-else class="flex flex-col gap-[16px]">
       <UserStatsIncomeMenuItem
@@ -35,7 +29,7 @@ import nftMixin from '~/mixins/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const DETAILS_TYPE = {
-  STAKEHOLDER_INCOME: 'income',
+  COMMISSION: 'commission',
   SALES: 'sales',
 };
 
@@ -63,11 +57,19 @@ export default {
       type: Boolean,
       default: false,
     },
-    stakeholderIncomeDetails: {
+    totalSales: {
+      type: [Number, String],
+      default: undefined,
+    },
+    totalCommission: {
+      type: [Number, String],
+      default: undefined,
+    },
+    salesDetails: {
       type: Array,
       default: () => [],
     },
-    salesDetails: {
+    commissionDetails: {
       type: Array,
       default: () => [],
     },
@@ -81,10 +83,12 @@ export default {
         {
           text: this.$t('dashboard_button_type_sales'),
           value: DETAILS_TYPE.SALES,
+          amount: Math.floor(this.totalSales * nanolike),
         },
         {
-          text: this.$t('dashboard_button_type_stakeholder_income'),
-          value: DETAILS_TYPE.STAKEHOLDER_INCOME,
+          text: this.$t('dashboard_button_type_commissions'),
+          value: DETAILS_TYPE.COMMISSION,
+          amount: Math.floor(this.totalCommission * nanolike),
         },
       ];
 
@@ -93,8 +97,8 @@ export default {
         isSelected: item.value === this.currentTargetType,
       }));
     },
-    populatedIncomeList() {
-      return this.populateDetails(this.stakeholderIncomeDetails);
+    populatedCommissionDetails() {
+      return this.populateDetails(this.commissionDetails);
     },
     populatedSalesList() {
       return this.populateDetails(this.salesDetails);
@@ -104,9 +108,9 @@ export default {
         case DETAILS_TYPE.SALES:
           return this.populatedSalesList;
 
-        case DETAILS_TYPE.STAKEHOLDER_INCOME:
+        case DETAILS_TYPE.COMMISSION:
         default:
-          return this.populatedIncomeList;
+          return this.populatedCommissionDetails;
       }
     },
     salesButtonPreset() {
@@ -114,7 +118,7 @@ export default {
         case DETAILS_TYPE.SALES:
           return 'primary';
 
-        case DETAILS_TYPE.STAKEHOLDER_INCOME:
+        case DETAILS_TYPE.COMMISSION:
         default:
           return 'plain';
       }
@@ -124,7 +128,7 @@ export default {
         case DETAILS_TYPE.SALES:
           return 'plain';
 
-        case DETAILS_TYPE.STAKEHOLDER_INCOME:
+        case DETAILS_TYPE.COMMISSION:
         default:
           return 'primary';
       }
@@ -138,24 +142,20 @@ export default {
     },
   },
   methods: {
-    populateDetails(details) {
-      return details.reduce((result, item) => {
-        const existingItem = result.find(i => i.classId === item.class_id);
-        if (existingItem) {
-          existingItem.amount += item.amount;
-          existingItem.price += item.price;
-        } else {
-          result.push({
-            classId: item.class_id,
-            nftName: this.getNFTClassMetadataById(item.class_id)?.name,
-            itemSales: Math.floor(item.price * nanolike),
-            commissionIncome: Math.floor(item.amount * nanolike),
-            commissionPercentage: Math.floor((item.amount / item.price) * 100),
-            ...item,
-          });
-        }
-        return result;
-      }, []);
+    populateDetails(list) {
+      return list.map(item => {
+        const itemSales = Math.floor(item.sales * nanolike);
+        const salesEarnings = Math.floor(item.total_amount * nanolike);
+
+        return {
+          classId: item.class_id,
+          nftName: this.getNFTClassMetadataById(item.class_id)?.name,
+          itemSales,
+          salesEarnings,
+          commissionPercentage: Math.floor((salesEarnings / itemSales) * 100),
+          ...item,
+        };
+      });
     },
     handleTypeClick(type) {
       this.currentTargetType = type;
@@ -170,12 +170,12 @@ export default {
           );
           break;
 
-        case DETAILS_TYPE.STAKEHOLDER_INCOME:
+        case DETAILS_TYPE.COMMISSION:
         default:
           logTrackerEvent(
             this,
             'MyDashboard',
-            'MyDashboard_stakeholder_income_click',
+            'MyDashboard_commission_click',
             `${this.address}`,
             1
           );
