@@ -113,7 +113,7 @@
         :href="contentUrl"
         :is-disabled="!isContentViewable"
         target="_blank"
-        @click="handleClickViewContentUrls(getContentUrlType(contentUrl))"
+        @click="event => handleClickViewContentUrls(event, contentUrl)"
       >
         <template #prepend>
           <IconArticle />
@@ -284,7 +284,14 @@ export default {
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    handleClickViewContentUrls(type) {
+    handleClickViewContentUrls(e, contentUrl) {
+      const type = this.getContentUrlType(contentUrl);
+      if (type === 'pdf') {
+        e.preventDefault();
+        this.$router.push(
+          this.localeLocation({ name: 'reader', query: { src: contentUrl } })
+        );
+      }
       this.$emit('view-content-urls', type);
     },
   },

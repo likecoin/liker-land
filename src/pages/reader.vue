@@ -1,0 +1,47 @@
+<template>
+  <div class="h-screen">
+    <ProgressIndicator v-if="!isMounted" class="self-center mt-[16px]" />
+    <iframe
+      v-else
+      :src="iframeSrc"
+      width="100%"
+      height="100%"
+      style="border:none"
+    />
+  </div>
+</template>
+
+<script>
+import { isMobile } from '@walletconnect/browser-utils';
+
+export default {
+  layout: 'empty',
+  data() {
+    return {
+      isMounted: false,
+      isMobile: false,
+    };
+  },
+  computed: {
+    iframeSrc() {
+      if (this.isMobile) {
+        const encodedUrl = encodeURIComponent(this.$route.query.src);
+        const encodedCorsUrl = encodeURIComponent(
+          `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`
+        );
+        // TODO: host our own instance of pdf.js instead of using mozilla.github.io
+        return `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodedCorsUrl}`;
+      }
+      return this.$route.query.src;
+    },
+  },
+  mounted() {
+    if (!this.$route.query.src) {
+      this.$router.replace(this.localeLocation(this.getHomeRoute));
+      return;
+    }
+    this.isMobile = isMobile();
+    this.isMounted = true;
+  },
+};
+</script>

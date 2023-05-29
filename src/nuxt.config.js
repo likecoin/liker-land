@@ -189,6 +189,7 @@ const nuxtConfig = {
           'admin.typeform.com',
           'civicliker.typeform.com',
           'bid.g.doubleclick.net',
+          'https://mozilla.github.io',
         ],
         'connect-src': [
           "'self'",
