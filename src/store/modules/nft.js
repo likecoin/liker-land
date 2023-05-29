@@ -311,7 +311,7 @@ const actions = {
           expiration: new Date(expiration),
         };
       })
-      .filter(l => ownerInfo[l.seller].includes(l.nftId)) // guard listing then sent case
+      .filter(l => ownerInfo[l.seller]?.includes(l.nftId)) // guard listing then sent case
       .sort((a, b) => a.price - b.price)[0];
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
     return info;
