@@ -22,6 +22,9 @@ export default {
       isMobile: false,
     };
   },
+  head: {
+    bodyAttrs: { class: 'overflow-hidden' },
+  },
   computed: {
     iframeSrc() {
       if (this.isMobile) {
