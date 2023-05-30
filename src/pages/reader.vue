@@ -29,8 +29,8 @@ export default {
         const encodedCorsUrl = encodeURIComponent(
           `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`
         );
-        // TODO: host our own instance of pdf.js instead of using mozilla.github.io
-        return `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodedCorsUrl}`;
+        // TODO: customize pdf.js instead of using default build
+        return `https://likecoin.github.io/pdf.js/web/viewer.html?file=${encodedCorsUrl}`;
       }
       return this.$route.query.src;
     },
