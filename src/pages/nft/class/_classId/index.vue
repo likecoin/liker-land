@@ -235,6 +235,7 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { getNftBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { EXTERNAL_HOST } from '~/constant';
 
@@ -580,9 +581,13 @@ export default {
       );
       return this.handleCollect();
     },
-    handleCollectFromEdition() {
-      // TODO: Collect different edition
-      this.handleCollectFromPriceSection();
+    handleCollectFromEdition(selectedValue) {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
+      const link = getNftBookPurchaseLink({
+        classId: this.classId,
+        priceIndex: selectedValue,
+      });
+      window.open(link, '_blank');
     },
     handleCopyURL() {
       this.shareURLPath({

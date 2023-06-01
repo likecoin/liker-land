@@ -7,6 +7,7 @@ import {
   LIKECOIN_CHAIN_API,
   LIKE_CO_THUMBNAIL_FN_BASE,
   LIKECOIN_NFT_API_WALLET,
+  NFT_BOOK_PLATFORM_LIKER_LAND,
 } from '../../constant';
 import { normalizeLocaleForLikeCo } from '../../locales';
 
@@ -367,6 +368,16 @@ export const getNftBookStoreList = wallet => {
     wallet,
   };
   return `${LIKECOIN_API_BASE}/likernft/book/store/list?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNftBookPurchaseLink = ({ classId, priceIndex }) => {
+  const qsPayload = {
+    form: NFT_BOOK_PLATFORM_LIKER_LAND,
+    price_index: priceIndex,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new?${querystring.stringify(
     qsPayload
   )}`;
 };
