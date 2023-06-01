@@ -383,6 +383,14 @@ export default {
       });
       return;
     }
+    // check classId contains only valid characters
+    if (!/^likenft1[ac-hj-np-z02-9]{58}$/.test(classId)) {
+      error({
+        statusCode: 400,
+        message: 'INVALID_NFT_CLASS_ID',
+      });
+      return;
+    }
     try {
       await Promise.all([
         store.dispatch('fetchNFTClassMetadata', classId),
