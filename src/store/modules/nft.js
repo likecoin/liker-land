@@ -38,6 +38,7 @@ const state = () => ({
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
+  nftBookStoreByWalletMap: {},
 });
 
 const mutations = {
@@ -91,6 +92,9 @@ const mutations = {
     { address, timestampMap }
   ) {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
+  },
+  [TYPES.NFT_BOOK_STORE_MAP](state, { address, list }) {
+    Vue.set(state.nftBookStoreByWalletMap, address, list);
   },
 };
 
@@ -165,6 +169,16 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
+  getNFTBookStoreListByAddressMap: state => address =>
+    state.nftBookStoreByWalletMap[address],
+  getNFTBookStoreListByClassId: state => classId => {
+    const arrays = Object.values(state.nftBookStoreByWalletMap);
+    const list = arrays
+      .map(array => array.find(item => item.classId === classId))
+      .find(Boolean);
+
+    return list || null;
+  },
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
     nfts.filter(
       ({ classId }) =>
@@ -614,6 +628,13 @@ const actions = {
     await this.$api.post(api.postUserV2DisplayState(address), {
       classId,
       displayState,
+    });
+  },
+  async fetchNftBookListByAddress({ commit }, address) {
+    const { data } = await this.$api.get(api.getNftBookStoreList(address));
+    commit(TYPES.NFT_BOOK_STORE_MAP, {
+      address,
+      list: data.list,
     });
   },
 };

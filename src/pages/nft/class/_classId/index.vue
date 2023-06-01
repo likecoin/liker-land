@@ -418,7 +418,10 @@ export default {
       this.updateNFTHistory();
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
-      const blockingPromises = [this.fetchISCNMetadata()];
+      const blockingPromises = [
+        this.fetchISCNMetadata(),
+        this.fetchNftBookListByAddress(this.iscnOwner),
+      ];
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {

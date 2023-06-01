@@ -361,3 +361,12 @@ export const postFollowCreator = ({ wallet, creator }) =>
   `/api/v2/users/${wallet}/followers?creator=${creator}`;
 export const getUserNotificationSettingsUrl = () =>
   `/api/v2/users/notification`;
+
+export const getNftBookStoreList = wallet => {
+  const qsPayload = {
+    wallet,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/store/list?${querystring.stringify(
+    qsPayload
+  )}`;
+};
