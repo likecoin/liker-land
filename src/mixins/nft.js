@@ -299,10 +299,7 @@ export default {
       return editionInfo
         ? editionInfo.map((edition, index) => ({
             name: edition.name,
-            priceLabel: formatNumberWithUnit(
-              edition.price / edition.priceInDecimal,
-              'USD'
-            ),
+            priceLabel: formatNumberWithUnit(edition.price, 'USD'),
             value: index,
             stock: edition.stock,
           }))
