@@ -201,6 +201,7 @@ const nuxtConfig = {
           "'self'",
           "'unsafe-inline'",
           'client.crisp.chat',
+          'fonts.googleapis.com',
         ],
       },
     },
