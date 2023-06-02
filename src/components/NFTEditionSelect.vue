@@ -27,14 +27,14 @@
         'flex-col sm:flex-row',
       ]"
     >
-      <ButtonV2
+      <!-- <ButtonV2
         v-if="!isSingleItem && !isSoldAllOut"
         preset="plain"
         class="text-white underline"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
-      />
-      <template v-else>
+      /> -->
+      <template v-if="isSingleItem || isSoldAllOut">
         <span
           v-if="!isSoldAllOut"
           class="text-white"
