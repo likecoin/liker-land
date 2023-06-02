@@ -583,11 +583,15 @@ export default {
     },
     handleCollectFromEdition(selectedValue) {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
-      const link = getNFTBookPurchaseLink({
-        classId: this.classId,
-        priceIndex: selectedValue,
-      });
-      window.open(link, '_blank');
+      if (this.getNFTBookStorePricesByClassId(this.classId)) {
+        const link = getNFTBookPurchaseLink({
+          classId: this.classId,
+          priceIndex: selectedValue,
+        });
+        window.open(link, '_blank');
+      } else if (this.nftIsCollectable) {
+        this.handleGotoCollectFromControlBar();
+      }
     },
     handleCopyURL() {
       this.shareURLPath({

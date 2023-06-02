@@ -295,14 +295,21 @@ export default {
 
     nftEditions() {
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
-      return prices.length
+      return prices
         ? prices.map((edition, index) => ({
             name: edition.name,
             priceLabel: formatNumberWithUnit(edition.price, 'USD'),
             value: index,
             stock: edition.stock,
           }))
-        : [];
+        : [
+            {
+              name: 'Standard Edition',
+              priceLabel: this.formattedNFTPriceInLIKE,
+              value: 'standard',
+              stock: this.nftIsCollectable ? 500 : 0,
+            },
+          ];
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
