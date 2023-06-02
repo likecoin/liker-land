@@ -34,6 +34,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     'leap',
   ],
   keplrInstallCTAPreset: 'fancy-banner',
+  likerLandAppWCBridge: 'https://wc-bridge-1.like.co',
   cosmostationDirectSignEnabled: true,
 };
 

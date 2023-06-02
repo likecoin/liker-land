@@ -28,7 +28,60 @@
           @click-collect-from-cta="handleCollectFromCTA"
         />
 
-        <section class="flex flex-col desktop:grid grid-cols-3 gap-[24px]">
+        <template v-if="nftIsNFTBook">
+          <NFTBookItemCard
+            :class-id="classId"
+            preset="details"
+          >
+            <template #column-left>
+              <ul class="flex gap-[16px] justify-center items-center mt-[24px] text-medium-gray text-[12px]">
+                <li class="flex items-center">
+                  <IconMint />
+                  <span class="ml-[4px]">{{ collectedCount }}</span>
+                </li>
+                <li class="flex items-center">
+                  <IconOwner />
+                  <span class="ml-[4px]">{{ ownerCount }}</span>
+                </li>
+              </ul>
+
+              <NFTViewOptionList
+                class="mt-[24px] mb-[48px]"
+                :url="externalUrl"
+                :content-urls="iscnContentUrls"
+                :iscn-url="iscnUrl"
+                :is-nft-book="nftIsNFTBook"
+                :is-content-viewable="isContentViewable"
+                :should-show-content-url-buttons="false"
+                @view-content="handleViewContent"
+                @view-content-url="handleViewContentURL"
+              />
+            </template>
+
+            <template #column-right>
+              <Separator />
+
+              <NFTEditionSelect
+                class="self-stretch"
+                :items="nftEditions"
+                :should-show-notify-button="false"
+                @click-collect="handleCollectFromEdition"
+              />
+            </template>
+          </NFTBookItemCard>
+
+          <Separator class="mx-auto" />
+
+          <NFTPageCollectorList
+            :class-id="classId"
+            :owner-count="ownerCount"
+            :items="populatedCollectors"
+          />
+        </template>
+        <section
+          v-else
+          class="flex flex-col desktop:grid grid-cols-3 gap-[24px]"
+        >
           <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="w-full desktop:hidden" />
 
           <!-- Left column -->
@@ -59,9 +112,9 @@
                 :collector-count="ownerCount"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
-                :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+                :is-content-viewable="isContentViewable"
                 @view-content="handleViewContent"
-                @view-content-urls="handleViewContentUrls"
+                @view-content-url="handleViewContentURL"
               />
             </NFTGemWrapper>
           </div>
@@ -311,6 +364,9 @@ export default {
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
     },
+    isContentViewable() {
+      return !(this.nftIsNFTBook && !this.ownCount);
+    },
   },
   asyncData({ query }) {
     const { action } = query;
@@ -324,6 +380,14 @@ export default {
         name: 'nft-class-classId-share',
         params: { classId },
         query: { referrer },
+      });
+      return;
+    }
+    // check classId contains only valid characters
+    if (!/^likenft1[ac-hj-np-z02-9]{58}$/.test(classId)) {
+      error({
+        statusCode: 400,
+        message: 'INVALID_NFT_CLASS_ID',
       });
       return;
     }
@@ -430,7 +494,7 @@ export default {
         1
       );
     },
-    handleViewContentUrls(type) {
+    handleViewContentURL(type) {
       logTrackerEvent(
         this,
         'NFT',
@@ -520,6 +584,10 @@ export default {
         1
       );
       return this.handleCollect();
+    },
+    handleCollectFromEdition() {
+      // TODO: Collect different edition
+      this.handleCollectFromPriceSection();
     },
     handleCopyURL() {
       this.shareURLPath({

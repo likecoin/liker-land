@@ -12,6 +12,10 @@ export default {
       type: Number,
       default: 0,
     },
+    isDark: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     isSoldOut() {
@@ -32,15 +36,23 @@ export default {
     stockLabelClasses() {
       const classes = ['whitespace-nowrap'];
       if (this.isSoldOut || this.isLimitedStock) {
-        classes.push(
-          'inline-block',
-          'px-[16px]',
-          'py-[4px]',
-          'rounded-full',
-          'text-[12px]'
-        );
+        if (this.isDark) {
+          classes.push(
+            'inline-block',
+            'px-[16px]',
+            'py-[4px]',
+            'rounded-full',
+            'text-[12px]'
+          );
+        } else {
+          classes.push('text-[16px]');
+        }
         if (this.isSoldOut) {
-          classes.push('text-white', 'bg-danger');
+          if (this.isDark) {
+            classes.push('text-white', 'bg-danger');
+          } else {
+            classes.push('text-danger');
+          }
         } else {
           classes.push('text-danger', 'bg-white');
         }

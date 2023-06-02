@@ -16,7 +16,6 @@ import {
   postNFTTransfer,
   getNFTModel,
   postNewStripeFiatPayment,
-  getStripeFiatPrice,
   getIdenticonAvatar,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
@@ -28,7 +27,6 @@ import {
   signBuyNFT,
   broadcastTx,
   getNFTCountByClassId,
-  getISCNRecord,
   getNFTClassCollectionType,
   getFormattedNFTEvents,
   parseNFTMetadataURL,
@@ -89,23 +87,19 @@ export default {
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
       isRecommendationLoading: false,
-
-      iscnData: null,
-      nftISCNContentFingerprints: [],
-
-      nftPriceInUSD: undefined,
-      nftPriceInUSDisListingInfo: undefined,
     };
   },
   computed: {
     ...mapGetters([
       'getUserInfoByAddress',
+      'getISCNMetadataById',
       'getNFTClassFeaturedSetByAddress',
       'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
+      'getNFTClassFiatPriceInfoById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
@@ -226,11 +220,17 @@ export default {
     externalUrl() {
       return this.iscnUrl || this.nftExternalURL;
     },
+    iscnData() {
+      return this.getISCNMetadataById(this.iscnId);
+    },
     iscnUrl() {
       return this.iscnData?.contentMetadata?.url;
     },
     iscnContentUrls() {
       return this.iscnData?.contentMetadata?.sameAs || [];
+    },
+    nftISCNContentFingerprints() {
+      return this.iscnData?.contentFingerprints || [];
     },
     nftIsUseListingPrice() {
       return (
@@ -251,6 +251,12 @@ export default {
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
+    },
+    nftPriceInUSD() {
+      return this.getNFTClassFiatPriceInfoById(this.classId)?.fiatPrice;
+    },
+    nftPriceInUSDisListingInfo() {
+      return this.getNFTClassFiatPriceInfoById(this.classId)?.listingInfo;
     },
     NFTPriceUSD() {
       return this.LIKEPriceInUSD * this.NFTPrice;
@@ -284,6 +290,18 @@ export default {
     // For W.NFT
     nftBasePrice() {
       return this.purchaseInfo.basePrice || 0;
+    },
+
+    nftEditions() {
+      // TODO: Use real stock from API
+      return [
+        {
+          name: 'Standard Edition',
+          priceLabel: this.formattedNFTPriceInLIKE,
+          value: 'standard',
+          stock: this.nftIsCollectable ? 500 : 0,
+        },
+      ];
     },
 
     userCollectedNFTList() {
@@ -504,10 +522,13 @@ export default {
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddress',
+      'fetchISCNMetadataById',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
+      'fetchNFTFiatPriceInfoByClassId',
+      'removeNFTFiatPriceInfoByClassId',
       'initIfNecessary',
       'uiToggleCollectModal',
       'uiSetCollectedCount',
@@ -519,16 +540,7 @@ export default {
       'fetchNFTDisplayStateListByAddress',
     ]),
     async fetchISCNMetadata() {
-      if (!this.iscnId) return;
-      try {
-        const res = await getISCNRecord(this.iscnId);
-        const [{ data } = {}] = res?.records;
-        this.iscnData = data;
-        this.nftISCNContentFingerprints = data?.contentFingerprints;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
+      await this.fetchISCNMetadataById(this.iscnId);
     },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
@@ -538,17 +550,8 @@ export default {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
       catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
-    async fetchNFTPrices(classId) {
-      try {
-        const { fiatPrice, listingInfo } = await this.$axios.$get(
-          getStripeFiatPrice({ classId })
-        );
-        this.nftPriceInUSD = fiatPrice;
-        this.nftPriceInUSDisListingInfo = listingInfo;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
+    async fetchNFTPrices() {
+      await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
     },
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);
