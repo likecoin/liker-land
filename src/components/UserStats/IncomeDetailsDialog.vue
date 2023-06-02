@@ -25,6 +25,7 @@
 
 <script>
 import { ellipsis } from '~/util/ui';
+import { convertToLIKEPrice } from '~/util/nft';
 import nftMixin from '~/mixins/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -32,8 +33,6 @@ const DETAILS_TYPE = {
   ROYALTY: 'royalty',
   SALES: 'sales',
 };
-
-const nanolike = 0.000000001;
 
 export default {
   filters: {
@@ -83,12 +82,12 @@ export default {
         {
           text: this.$t('dashboard_button_type_sales'),
           value: DETAILS_TYPE.SALES,
-          amount: Math.floor(this.totalSales * nanolike),
+          amount: convertToLIKEPrice(this.totalSales),
         },
         {
           text: this.$t('dashboard_button_type_royalties'),
           value: DETAILS_TYPE.ROYALTY,
-          amount: Math.floor(this.totalRoyalty * nanolike),
+          amount: convertToLIKEPrice(this.totalRoyalty),
         },
       ];
 
@@ -144,8 +143,8 @@ export default {
   methods: {
     populateDetails(list) {
       return list.map(item => {
-        const itemSales = Math.floor(item.sales * nanolike);
-        const salesEarnings = Math.floor(item.total_amount * nanolike);
+        const itemSales = convertToLIKEPrice(item.sales);
+        const salesEarnings = convertToLIKEPrice(item.total_amount);
 
         return {
           classId: item.class_id,
