@@ -41,7 +41,7 @@
               <div class="py-[4px] px-[8px] rounded-[6px] bg-shade-gray text-10 cursor-default">{{ item.itemSales | formatNumberWithLIKE }}</div>
             </ToolTips>
             <ToolTips :tool-tip-text="$t('dashboard_table_class_stake_percentage')">
-              <div class="py-[4px] px-[8px] rounded-[6px] bg-like-cyan-pale text-10 cursor-default">{{ item.commissionPercentage }}%</div>
+              <div class="py-[4px] px-[8px] rounded-[6px] bg-like-cyan-pale text-10 cursor-default">{{ item.royaltyPercentage }}%</div>
             </ToolTips>
           </div>
         </div>
@@ -62,7 +62,7 @@
 import { formatNumberWithLIKE } from '~/util/ui';
 
 const DETAILS_TYPE = {
-  COMMISSION: 'commission',
+  ROYALTY: 'royalty',
   SALES: 'sales',
 };
 

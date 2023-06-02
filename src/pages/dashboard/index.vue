@@ -108,9 +108,9 @@
         :is-open-dialog="isOpenIncomeDetailsDialog"
         :is-loading="isIncomeDetailsLoading"
         :total-sales="getTotalSales"
-        :total-commission="getTotalCommission"
+        :total-royalty="getTotalRoyalty"
         :sales-details="getSalesDetails"
-        :commission-details="getCommissionDetails"
+        :royalty-details="getRoyaltyDetails"
         :target-type="targetType"
         @close="isOpenIncomeDetailsDialog = false"
       />
@@ -131,7 +131,7 @@ import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
 
 const DETAILS_TYPE = {
-  COMMISSION: 'commission',
+  ROYALTY: 'royalty',
   SALES: 'sales',
 };
 
@@ -300,10 +300,10 @@ export default {
 
       this.isIncomeDetailsLoading = true;
       this.isOpenIncomeDetailsDialog = true;
-      if (!this.getTotalSales && !this.getTotalCommission) {
+      if (!this.getTotalSales && !this.getTotalRoyalty) {
         await Promise.all([
           this.walletFetchTotalSales(this.wallet),
-          this.walletFetchTotalCommission(this.wallet),
+          this.walletFetchTotalRoyalty(this.wallet),
         ]);
       }
       this.isIncomeDetailsLoading = false;

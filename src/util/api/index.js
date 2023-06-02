@@ -376,7 +376,7 @@ export const getTotalSalesByAddress = address => {
   )}`;
 };
 
-export const getTotalCommissionByAddress = address => {
+export const getTotalRoyaltyByAddress = address => {
   const qsPayload = { address, iscn_ownership: 'not_owned' };
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
     qsPayload

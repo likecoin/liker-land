@@ -29,7 +29,7 @@ import nftMixin from '~/mixins/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const DETAILS_TYPE = {
-  COMMISSION: 'commission',
+  ROYALTY: 'royalty',
   SALES: 'sales',
 };
 
@@ -61,7 +61,7 @@ export default {
       type: [Number, String],
       default: undefined,
     },
-    totalCommission: {
+    totalRoyalty: {
       type: [Number, String],
       default: undefined,
     },
@@ -69,7 +69,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    commissionDetails: {
+    royaltyDetails: {
       type: Array,
       default: () => [],
     },
@@ -86,9 +86,9 @@ export default {
           amount: Math.floor(this.totalSales * nanolike),
         },
         {
-          text: this.$t('dashboard_button_type_commissions'),
-          value: DETAILS_TYPE.COMMISSION,
-          amount: Math.floor(this.totalCommission * nanolike),
+          text: this.$t('dashboard_button_type_royalties'),
+          value: DETAILS_TYPE.ROYALTY,
+          amount: Math.floor(this.totalRoyalty * nanolike),
         },
       ];
 
@@ -97,8 +97,8 @@ export default {
         isSelected: item.value === this.currentTargetType,
       }));
     },
-    populatedCommissionDetails() {
-      return this.populateDetails(this.commissionDetails);
+    populatedRoyaltyDetails() {
+      return this.populateDetails(this.royaltyDetails);
     },
     populatedSalesList() {
       return this.populateDetails(this.salesDetails);
@@ -108,9 +108,9 @@ export default {
         case DETAILS_TYPE.SALES:
           return this.populatedSalesList;
 
-        case DETAILS_TYPE.COMMISSION:
+        case DETAILS_TYPE.ROYALTY:
         default:
-          return this.populatedCommissionDetails;
+          return this.populatedRoyaltyDetails;
       }
     },
     salesButtonPreset() {
@@ -118,7 +118,7 @@ export default {
         case DETAILS_TYPE.SALES:
           return 'primary';
 
-        case DETAILS_TYPE.COMMISSION:
+        case DETAILS_TYPE.ROYALTY:
         default:
           return 'plain';
       }
@@ -128,7 +128,7 @@ export default {
         case DETAILS_TYPE.SALES:
           return 'plain';
 
-        case DETAILS_TYPE.COMMISSION:
+        case DETAILS_TYPE.ROYALTY:
         default:
           return 'primary';
       }
@@ -152,7 +152,7 @@ export default {
           nftName: this.getNFTClassMetadataById(item.class_id)?.name,
           itemSales,
           salesEarnings,
-          commissionPercentage: Math.floor((salesEarnings / itemSales) * 100),
+          royaltyPercentage: Math.floor((salesEarnings / itemSales) * 100),
           ...item,
         };
       });
@@ -170,12 +170,12 @@ export default {
           );
           break;
 
-        case DETAILS_TYPE.COMMISSION:
+        case DETAILS_TYPE.ROYALTY:
         default:
           logTrackerEvent(
             this,
             'MyDashboard',
-            'MyDashboard_commission_click',
+            'MyDashboard_royalty_click',
             `${this.address}`,
             1
           );
