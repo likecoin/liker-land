@@ -220,6 +220,13 @@ module.exports = {
       '600': 600,
     },
 
+    /* use dvh for h-screen with fallback. */
+    extend: {
+      height: {
+        screen: ['100vh', '100dvh'],
+      },
+    },
+
     /*
     |-----------------------------------------------------------------------------
     | Leading (line height)              https://tailwindcss.com/docs/line-height

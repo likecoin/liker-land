@@ -161,7 +161,7 @@
                 :is-content-viewable="!(nftIsNFTBook && !ownCount)"
                 :is-nft-book="nftIsNFTBook"
                 @view-content="handleViewContent"
-                @view-content-urls="handleViewContentUrls"
+                @view-content-url="handleViewContentUrl"
               />
               <NFTFeatured
                 :class-id="classId"
@@ -584,7 +584,7 @@ export default {
         1
       );
     },
-    handleViewContentUrls(type) {
+    handleViewContentUrl(type) {
       logTrackerEvent(
         this,
         'NFT',

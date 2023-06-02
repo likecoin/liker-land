@@ -48,7 +48,7 @@
         :href="contentUrl"
         :is-disabled="!isContentViewable"
         target="_blank"
-        @click="handleClickViewContentURL(getContentUrlType(contentUrl))"
+        @click="e => handleClickViewContentURL(e, contentUrl)"
       >
         <template #prepend>
           <IconArticle />
@@ -109,8 +109,9 @@ export default {
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    handleClickViewContentURL(type) {
-      this.$emit('view-content-url', type);
+    handleClickViewContentURL(e, contentUrl) {
+      const type = this.getContentUrlType(contentUrl);
+      this.$emit('view-content-url', e, contentUrl, type);
     },
   },
 };
