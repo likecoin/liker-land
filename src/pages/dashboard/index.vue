@@ -300,13 +300,18 @@ export default {
 
       this.isIncomeDetailsLoading = true;
       this.isOpenIncomeDetailsDialog = true;
-      if (!this.getTotalSales && !this.getTotalRoyalty) {
-        await Promise.all([
-          this.walletFetchTotalSales(this.wallet),
-          this.walletFetchTotalRoyalty(this.wallet),
-        ]);
+      try {
+        if (!this.getTotalSales && !this.getTotalRoyalty) {
+          await Promise.all([
+            this.walletFetchTotalSales(this.wallet),
+            this.walletFetchTotalRoyalty(this.wallet),
+          ]);
+        }
+      } catch (error) {
+        // no-op
+      } finally {
+        this.isIncomeDetailsLoading = false;
       }
-      this.isIncomeDetailsLoading = false;
     },
     async handleClickFollowers() {
       logTrackerEvent(
