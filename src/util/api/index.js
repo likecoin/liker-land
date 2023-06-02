@@ -363,16 +363,10 @@ export const postFollowCreator = ({ wallet, creator }) =>
 export const getUserNotificationSettingsUrl = () =>
   `/api/v2/users/notification`;
 
-export const getNftBookStoreList = wallet => {
-  const qsPayload = {
-    wallet,
-  };
-  return `${LIKECOIN_API_BASE}/likernft/book/store/list?${querystring.stringify(
-    qsPayload
-  )}`;
-};
+export const getNFTBookStorePricesByClassId = classId =>
+  `${LIKECOIN_API_BASE}/likernft/book/store/${classId}`;
 
-export const getNftBookPurchaseLink = ({ classId, priceIndex }) => {
+export const getNFTBookPurchaseLink = ({ classId, priceIndex }) => {
   const qsPayload = {
     form: NFT_BOOK_PLATFORM_LIKER_LAND,
     price_index: priceIndex,

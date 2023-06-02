@@ -235,7 +235,7 @@
 <script>
 import { mapActions } from 'vuex';
 
-import { getNftBookPurchaseLink } from '~/util/api';
+import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { EXTERNAL_HOST } from '~/constant';
 
@@ -421,7 +421,7 @@ export default {
       this.fetchUserCollectedCount();
       const blockingPromises = [
         this.fetchISCNMetadata(),
-        this.fetchNftBookListByAddress(this.iscnOwner),
+        this.fetchNFTBookPriceByClassId(this.classId),
       ];
       await Promise.all(blockingPromises);
     } catch (error) {
@@ -583,7 +583,7 @@ export default {
     },
     handleCollectFromEdition(selectedValue) {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
-      const link = getNftBookPurchaseLink({
+      const link = getNFTBookPurchaseLink({
         classId: this.classId,
         priceIndex: selectedValue,
       });

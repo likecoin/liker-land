@@ -38,7 +38,7 @@ const state = () => ({
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
-  nftBookStoreByWalletMap: {},
+  nftBookStorePricesByClassIdMap: {},
 });
 
 const mutations = {
@@ -93,8 +93,11 @@ const mutations = {
   ) {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
   },
-  [TYPES.NFT_BOOK_STORE_MAP](state, { address, list }) {
-    Vue.set(state.nftBookStoreByWalletMap, address, list);
+  [TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET](
+    state,
+    { classId, prices }
+  ) {
+    Vue.set(state.nftBookStorePricesByClassIdMap, classId, prices);
   },
 };
 
@@ -169,16 +172,8 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
-  getNFTBookStoreListByAddressMap: state => address =>
-    state.nftBookStoreByWalletMap[address],
-  getNFTBookStoreListByClassId: state => classId => {
-    const arrays = Object.values(state.nftBookStoreByWalletMap);
-    const list = arrays
-      .map(array => array.find(item => item.classId === classId))
-      .find(Boolean);
-
-    return list || null;
-  },
+  getNFTBookStorePricesByClassId: state => classId =>
+    state.nftBookStorePricesByClassIdMap[classId],
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
     nfts.filter(
       ({ classId }) =>
@@ -630,11 +625,13 @@ const actions = {
       displayState,
     });
   },
-  async fetchNftBookListByAddress({ commit }, address) {
-    const { data } = await this.$api.get(api.getNftBookStoreList(address));
-    commit(TYPES.NFT_BOOK_STORE_MAP, {
-      address,
-      list: data.list,
+  async fetchNFTBookPriceByClassId({ commit }, classId) {
+    const { data } = await this.$api.get(
+      api.getNFTBookStorePricesByClassId(classId)
+    );
+    commit(TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET, {
+      classId,
+      prices: data.prices,
     });
   },
 };
