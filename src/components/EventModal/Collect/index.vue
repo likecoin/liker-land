@@ -445,6 +445,7 @@ export default {
     },
     uiTxNFTStatus() {
       if (this.isProcessing) {
+        this.modelExposure = 0;
         this.startExposureAnimation();
         if (this.walletHasLoggedIn) {
           const creator = this.getNFTClassMetadataById(this.classId)
@@ -485,6 +486,7 @@ export default {
       } else if (this.isCompleted) {
         if (this.modelExposure <= 1) {
           this.modelExposure += (time - lastTime) / 1000;
+          this.modelExposure = Math.min(this.modelExposure, 1);
         } else {
           return;
         }
