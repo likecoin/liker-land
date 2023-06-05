@@ -150,17 +150,19 @@ const getters = {
     state.fiatPriceInfoByClassIdMap[id],
   getNFTIscnRecordsById: state => id =>
     state.metadataByClassIdMap[id]?.iscn_record,
-  getNFTClassOwnerCount: state => id => {
-    const iscnOwner = state.metadataByClassIdMap[id]?.iscn_owner;
+  getNFTClassISCNOwnerByClassId: state => id =>
+    state.metadataByClassIdMap[id]?.iscn_owner,
+  getNFTClassOwnerCount: (state, getters) => id => {
+    const iscnOwner = getters.getNFTClassISCNOwnerByClassId(id);
     return Object.keys(state.ownerInfoByClassIdMap[id] || {}).filter(
       owner => owner !== iscnOwner
     ).length;
   },
-  getNFTClassCollectedCount: state => id => {
-    const iscnOwner = state.metadataByClassIdMap[id]?.iscn_owner;
+  getNFTClassCollectedCount: (state, getters) => id => {
+    const iscnOwner = getters.getNFTClassISCNOwnerByClassId(id);
     return Object.entries(state.ownerInfoByClassIdMap[id] || {})
       .filter(([owner]) => owner !== iscnOwner)
-      .reduce((acc, [, val]) => acc + val.length, 0);
+      .reduce((totalCount, [, nftIds]) => totalCount + nftIds.length, 0);
   },
   getNFTClassGemLevel: state => id =>
     getGemLevelBySoldCount(
