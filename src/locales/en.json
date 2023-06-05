@@ -418,6 +418,7 @@
   "nft_type_other": "Other NFT",
   "nft_type_writing_NFT": "Writing NFT",
   "nft_widget_button_collect": "Collect Now",
+  "notice_chain_upgrading": "LikeCoin chain is currently undergoing an upgrade, and as a result, all chain activities are now suspended.",
   "notification_login_in": "Verify wallet to view notifications",
   "notification_login_in_button": "Verify",
   "ok": "OK",

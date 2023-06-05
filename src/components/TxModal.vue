@@ -1,10 +1,14 @@
 <template>
   <Dialog
-    :open="isOpen"
-    :has-close-button="hasCloseButton"
-    :header-text="headerText"
-    panel-container-class="phone:max-w-[520px] laptop:w-[520px]"
-    panel-class="shadow-lg bg-white w-full p-[48px] phone:p-[18px] rounded-[24px]"
+    v-if="uiIsChainUpgrading"
+    v-bind="dialogProps"
+    @close="$emit('close')"
+  >
+    <div>{{ $t('notice_chain_upgrading') }}</div>
+  </Dialog>
+  <Dialog
+    v-else
+    v-bind="dialogProps"
     :is-disabled-backdrop-click="true"
     @close="$emit('close')"
   >
@@ -175,11 +179,22 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'uiIsChainUpgrading',
       'uiTxNFTStatus',
       'uiTxErrorMessage',
       'uiCollectOwnedCount',
       'walletMethodType',
     ]),
+    dialogProps() {
+      return {
+        panelContainerClass: 'phone:max-w-[520px] laptop:w-[520px]',
+        panelClass:
+          'shadow-lg bg-white w-full p-[48px] phone:p-[18px] rounded-[24px]',
+        open: this.isOpen,
+        hasCloseButton: this.hasCloseButton,
+        headerText: this.headerText,
+      };
+    },
     formattedErrorMessage() {
       switch (this.uiTxErrorMessage) {
         case 'INSUFFICIENT_BALANCE':
