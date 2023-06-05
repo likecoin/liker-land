@@ -13,4 +13,4 @@ export const uiTxTargetClassId = state => state.txTargetClassId;
 export const uiTxNFTStatus = state => state.txStatus;
 export const uiTxErrorMessage = state => state.txErrorMessage;
 
-export const uiIsChainUpgrading = () => true;
+export const uiIsChainUpgrading = () => false;
