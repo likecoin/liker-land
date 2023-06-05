@@ -307,8 +307,6 @@ export default {
             this.walletFetchTotalRoyalty(this.wallet),
           ]);
         }
-      } catch (error) {
-        // no-op
       } finally {
         this.isIncomeDetailsLoading = false;
       }

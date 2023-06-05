@@ -84,19 +84,27 @@
             class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
           >
           <div
-            :class="itemStyle"
+            :class="[itemStyle, 'items-center', 'gap-[8px]']"
             @click="$emit('on-click-total-sales')"
           >
-            <UserStatsItem
-              class="!text-airdrop-gold"
-              :is-loading="stats.isLoadingStats"
-              :stats-value="stats.createdTotalSales"
-              :label-text="$t('nft_portfolio_page_state_sales')"
-            >
-              <template #label-icon>
-                <IconPriceMini />
-              </template>
-            </UserStatsItem>
+            <div class="flex flex-col items-center justify-center">
+              <Label
+                class="text-airdrop-gold text-[14px] font-600 laptop:text-[24px]"
+                valign="bottom"
+                :text="isLoading ? '-' : stats.createdTotalSales"
+              />
+              <Label
+                class="text-medium-gray mt-[4px] text-[10px] font-400 laptop:text-[14px] laptop:font-600"
+                content-class="text-center whitespace-pre"
+                :text="$t('nft_portfolio_page_state_sales')"
+                valign="middle"
+              >
+                <template #prepend>
+                  <IconPriceMini />
+                </template>
+              </Label>
+            </div>
+            <IconPopup class="text-medium-gray" />
           </div>
         </div>
       </div>
