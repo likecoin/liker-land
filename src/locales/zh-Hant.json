@@ -408,6 +408,7 @@
   "nft_type_other": "其他 NFT",
   "nft_type_writing_NFT": "Writing NFT",
   "nft_widget_button_collect": "立即收藏",
+  "notice_chain_upgrading": "LikeCoin chain 正進行升級，交易現已暫停。",
   "notification_login_in": "驗證錢包以讀取通知",
   "notification_login_in_button": "驗證",
   "ok": "OK",
