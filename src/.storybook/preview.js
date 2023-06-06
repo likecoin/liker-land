@@ -17,7 +17,7 @@ export const parameters = {
 
 export const decorators = [
   () => ({
-    template: '<story />',
+    template: '<div style="width:calc(100vw - 2rem);height:calc(100vh - 2rem);display:flex;flex-direction:flex-col;justify-content:center;align-items:center"><story /></div>',
     i18n: new VueI18n({
       locale: 'en',
       messages: { en }

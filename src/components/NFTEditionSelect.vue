@@ -2,7 +2,7 @@
   <div :class="rootClasses">
     <table
       v-if="!isSingleItem && !isSoldAllOut"
-      class="border-separate border-spacing-y-[8px] mb-[8px]"
+      class="border-separate border-spacing-y-[8px] mb-[8px] w-full"
     >
       <tbody>
         <NFTEditionSelectItem

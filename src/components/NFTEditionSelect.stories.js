@@ -123,3 +123,15 @@ MultipleSoldOut.args = {
   ],
   value: 'standard',
 };
+
+export const FullWidth = (_, { argTypes }) => ({
+  components: {
+    NFTEditionSelect,
+  },
+  props: Object.keys(argTypes),
+  template: `
+    <NFTEditionSelect class="w-full" v-bind="$props" />
+  `,
+});
+
+FullWidth.args = Multiple.args;
