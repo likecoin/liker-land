@@ -104,7 +104,7 @@
                 </template>
               </Label>
             </div>
-            <IconPopup class="text-medium-gray" />
+            <IconOpenInNew class="text-medium-gray" />
           </div>
         </div>
       </div>
