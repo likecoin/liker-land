@@ -23,31 +23,39 @@
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
 
-      <ButtonV2
-        v-if="getAddress"
-        preset="tertiary"
-        :to="localeLocation({ name: 'notifications' })"
-      >
-        <IconBell class="w-20 h-20 text-like-green" />
+      <div class="relative">
+        <ButtonV2
+          v-if="loginAddress"
+          preset="tertiary"
+          :to="localeLocation({ name: 'notifications' })"
+        >
+          <IconBell class="w-20 h-20 text-like-green" />
+        </ButtonV2>
         <div
           v-if="getNotificationCount > 0"
           :class="[
+            'absolute',
+            'bottom-full',
+            'left-full',
             'flex',
             'justify-center',
             'items-center',
             'bg-danger',
             'rounded-full',
-            'min-w-[24px]',
-            'ml-[8px]',
-            'px-[8px]',
-            'py-[4px]'
+            'min-w-[20px]',
+            'min-h-[20px]',
+            'ml-[-10px]',
+            'mb-[-10px]',
+            'px-[4px]',
+            'py-[5px]',
+            'pointer-events-none',
           ]"
         >
-          <div class="text-white text-[10px]">
+          <span class="text-white text-[10px] leading-[1em]">
             {{ formattedNotificationCount }}
-          </div>
+          </span>
         </div>
-      </ButtonV2>
+      </div>
 
       <Dropdown>
         <template v-slot:trigger="{ toggle }">
