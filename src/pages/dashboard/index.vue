@@ -18,6 +18,7 @@
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
+          @click-total-sales="handleClickTotalSales"
         />
         <NFTPortfolioTopUsersList
           v-if="topRankedUsers && topRankedUsers.length"
@@ -102,6 +103,17 @@
         @close="isOpenFollowersDialog = false"
         @on-export-followers="handleClickExportFollowerList"
       />
+      <UserStatsIncomeDetailsDialog
+        :address="getAddress"
+        :is-open-dialog="isOpenIncomeDetailsDialog"
+        :is-loading="isIncomeDetailsLoading"
+        :total-sales="walletTotalSales"
+        :total-royalty="walletTotalRoyalty"
+        :sales-details="walletSalesDetails"
+        :royalty-details="walletRoyaltyDetails"
+        :target-type="targetType"
+        @close="isOpenIncomeDetailsDialog = false"
+      />
     </AuthRequiredView>
   </Page>
 </template>
@@ -117,6 +129,11 @@ import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import walletMixin from '~/mixins/wallet';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
+
+const DETAILS_TYPE = {
+  ROYALTY: 'royalty',
+  SALES: 'sales',
+};
 
 export default {
   name: 'MyDashboardPage',
@@ -159,7 +176,10 @@ export default {
   data() {
     return {
       topRankedUsers: [],
+      targetType: DETAILS_TYPE.SALES,
       isOpenFollowersDialog: false,
+      isOpenIncomeDetailsDialog: false,
+      isIncomeDetailsLoading: false,
     };
   },
   computed: {
@@ -268,6 +288,28 @@ export default {
           params: { id: this.wallet },
         })
       );
+    },
+    async handleClickTotalSales() {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        'MyDashboard_sales_click',
+        `${this.wallet}`,
+        1
+      );
+
+      this.isIncomeDetailsLoading = true;
+      this.isOpenIncomeDetailsDialog = true;
+      try {
+        if (!this.walletTotalSales && !this.walletTotalRoyalty) {
+          await Promise.all([
+            this.walletFetchTotalSales(this.wallet),
+            this.walletFetchTotalRoyalty(this.wallet),
+          ]);
+        }
+      } finally {
+        this.isIncomeDetailsLoading = false;
+      }
     },
     async handleClickFollowers() {
       logTrackerEvent(
