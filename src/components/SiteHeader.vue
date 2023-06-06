@@ -22,6 +22,41 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
+
+      <div class="relative">
+        <ButtonV2
+          v-if="loginAddress"
+          preset="tertiary"
+          :to="localeLocation({ name: 'notifications' })"
+        >
+          <IconBell class="w-20 h-20 text-like-green" />
+        </ButtonV2>
+        <div
+          v-if="getNotificationCount > 0"
+          :class="[
+            'absolute',
+            'bottom-full',
+            'left-full',
+            'flex',
+            'justify-center',
+            'items-center',
+            'bg-danger',
+            'rounded-full',
+            'min-w-[20px]',
+            'min-h-[20px]',
+            'ml-[-10px]',
+            'mb-[-10px]',
+            'px-[4px]',
+            'py-[5px]',
+            'pointer-events-none',
+          ]"
+        >
+          <span class="text-white text-[10px] leading-[1em]">
+            {{ formattedNotificationCount }}
+          </span>
+        </div>
+      </div>
+
       <Dropdown>
         <template v-slot:trigger="{ toggle }">
           <ButtonV2
@@ -72,10 +107,6 @@
               :avatar-size="42"
               :is-avatar-outlined="isWalletUserCivicLiker"
               @click="toggle"
-            />
-            <div
-              v-if="getNotificationCount"
-              class="absolute top-0 right-0 bg-danger rounded-full w-[8px] h-[8px]"
             />
           </div>
         </template>
