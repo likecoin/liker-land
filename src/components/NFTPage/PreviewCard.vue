@@ -213,7 +213,13 @@ export default {
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    handleClickViewContentURL(type) {
+    handleClickViewContentURL(e, contentUrl, type) {
+      if (type === 'pdf') {
+        e.preventDefault();
+        this.$router.push(
+          this.localeLocation({ name: 'reader', query: { src: contentUrl } })
+        );
+      }
       this.$emit('view-content-url', type);
     },
   },

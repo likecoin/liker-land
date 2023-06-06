@@ -379,3 +379,17 @@ export const getNFTBookPurchaseLink = ({
     qsPayload
   )}`;
 };
+
+export const getTotalSalesByAddress = address => {
+  const qsPayload = { address, iscn_ownership: 'owned' };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getTotalRoyaltyByAddress = address => {
+  const qsPayload = { address, iscn_ownership: 'not_owned' };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
+    qsPayload
+  )}`;
+};

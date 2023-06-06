@@ -429,3 +429,7 @@ export function parseNFTMetadataURL(url) {
   if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
   return url;
 }
+
+export function convertToLIKEPrice(price) {
+  return new BigNumber(price).shiftedBy(-9).toFixed(0);
+}

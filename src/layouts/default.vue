@@ -25,6 +25,8 @@
       </i18n>
     </AlertBanner> -->
 
+    <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
+
     <SiteHeader
       v-if="!isInInAppBrowser"
       class="text-like-green"
@@ -73,7 +75,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 export default {
   mixins: [alertMixin, inAppMixin],
   computed: {
-    ...mapGetters(['uiIsOpenCollectModal']),
+    ...mapGetters(['uiIsOpenCollectModal', 'uiIsChainUpgrading']),
     getTimeoutSec() {
       return this.alertPreset === 'success' ? 2000 : null;
     },

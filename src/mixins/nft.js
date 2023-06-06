@@ -166,7 +166,7 @@ export default {
     },
     iscnOwner() {
       return (
-        this.NFTClassMetadata.iscn_owner || this.NFTClassMetadata.account_owner
+        this.NFTClassMetadata?.iscn_owner || this.NFTClassMetadata.account_owner
       );
     },
     iscnURL() {

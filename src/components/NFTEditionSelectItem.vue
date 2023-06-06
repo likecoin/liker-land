@@ -11,6 +11,7 @@
   >
     <td
       :class="[
+        'w-[64px]',
         'pl-[8px] sm:pl-[14px]',
         'pr-[8px] sm:pr-[24px]',
         'py-[14px]',

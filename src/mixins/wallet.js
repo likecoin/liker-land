@@ -15,6 +15,10 @@ export default {
       'getLikerInfo',
       'getLocale',
       'getUserInfoByAddress',
+      'walletTotalSales',
+      'walletTotalRoyalty',
+      'walletSalesDetails',
+      'walletRoyaltyDetails',
       'walletFollowees',
       'walletFollowers',
       'walletIsFetchingFollowers',
@@ -72,6 +76,8 @@ export default {
       'walletUnfollowCreator',
       'walletFollowCreator',
       'signLogin',
+      'walletFetchTotalRoyalty',
+      'walletFetchTotalSales',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {

@@ -189,6 +189,7 @@ const nuxtConfig = {
           'admin.typeform.com',
           'civicliker.typeform.com',
           'bid.g.doubleclick.net',
+          'https://likecoin.github.io',
         ],
         'connect-src': [
           "'self'",
@@ -200,6 +201,7 @@ const nuxtConfig = {
           "'self'",
           "'unsafe-inline'",
           'client.crisp.chat',
+          'fonts.googleapis.com',
         ],
       },
     },

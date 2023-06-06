@@ -2,7 +2,7 @@
   <div :class="rootClasses">
     <table
       v-if="!isSingleItem && !isAllSoldOut"
-      class="border-separate border-spacing-y-[8px] mb-[8px]"
+      class="border-separate border-spacing-y-[8px] mb-[8px] w-full"
     >
       <tbody>
         <NFTEditionSelectItem
@@ -111,8 +111,17 @@ export default {
     },
   },
   data() {
+    // NOTE: If the selected item is out of stock, select another item.
+    const items = [...this.items];
+    let selectedItem = items.find(item => item.value === this.value);
+    if (!selectedItem || selectedItem.stock <= 0) {
+      selectedItem = items.find(
+        item =>
+          (selectedItem && item.value !== selectedItem.value) || item.stock > 0
+      );
+    }
     return {
-      selectedValue: this.value || this.items[0]?.value,
+      selectedValue: selectedItem.value || this.value,
     };
   },
   computed: {
@@ -151,6 +160,11 @@ export default {
         item => item.stock === 0 || item.priceLabel === undefined
       );
     },
+  },
+  mounted() {
+    if (this.selectedValue !== this.value) {
+      this.$emit('update:value', this.selectedValue);
+    }
   },
   methods: {
     handleClickPriceSelectItem({ value }) {
