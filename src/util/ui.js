@@ -1,4 +1,4 @@
-import { getImageResizeAPI } from '~/util/api';
+import { getImageResizeAPI } from './api';
 
 const smallNumFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
