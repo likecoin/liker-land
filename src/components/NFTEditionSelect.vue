@@ -1,7 +1,7 @@
 <template>
   <div :class="rootClasses">
     <table
-      v-if="!isSingleItem && !isSoldAllOut"
+      v-if="!isSingleItem && !isAllSoldOut"
       class="border-separate border-spacing-y-[8px] mb-[8px]"
     >
       <tbody>
@@ -28,25 +28,25 @@
       ]"
     >
       <!-- <ButtonV2
-        v-if="!isSingleItem && !isSoldAllOut"
+        v-if="!isSingleItem && !isAllSoldOut"
         preset="plain"
         class="text-white underline"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
       /> -->
-      <template v-if="isSingleItem || isSoldAllOut">
+      <template v-if="isSingleItem || isAllSoldOut">
         <span
-          v-if="!isSoldAllOut"
+          v-if="!isAllSoldOut"
           class="text-white"
         >{{ priceLabel }}</span>
         <NFTStockLabel
           :stock="stock"
-          :is-dark="!isSoldAllOut"
+          :is-dark="!isAllSoldOut"
         />
       </template>
 
       <ButtonV2
-        v-if="!isSoldAllOut"
+        v-if="!isAllSoldOut"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text')"
         @click="handleClickCollectButton"
@@ -118,10 +118,10 @@ export default {
   computed: {
     rootClasses() {
       const classes = [
-        this.isSoldAllOut ? 'bg-gray-f7' : 'bg-like-green',
+        this.isAllSoldOut ? 'bg-gray-f7' : 'bg-like-green',
         'rounded-[16px]',
       ];
-      if (this.isSoldAllOut) {
+      if (this.isAllSoldOut) {
         classes.push('p-[24px]');
       } else if (this.isSingleItem) {
         classes.push('px-[20px]', 'py-[20px] sm:py-[8px]');
@@ -146,8 +146,10 @@ export default {
     priceLabel() {
       return this.selectedItem?.priceLabel;
     },
-    isSoldAllOut() {
-      return this.items.every(item => item.stock === 0);
+    isAllSoldOut() {
+      return this.items.every(
+        item => item.stock === 0 || item.priceLabel === undefined
+      );
     },
   },
   methods: {
