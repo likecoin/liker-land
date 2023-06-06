@@ -18,7 +18,7 @@
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
-          @on-click-total-sales="handleClickTotalSales"
+          @click-total-sales="handleClickTotalSales"
         />
         <NFTPortfolioTopUsersList
           v-if="topRankedUsers && topRankedUsers.length"
@@ -107,10 +107,10 @@
         :address="getAddress"
         :is-open-dialog="isOpenIncomeDetailsDialog"
         :is-loading="isIncomeDetailsLoading"
-        :total-sales="getTotalSales"
-        :total-royalty="getTotalRoyalty"
-        :sales-details="getSalesDetails"
-        :royalty-details="getRoyaltyDetails"
+        :total-sales="walletTotalSales"
+        :total-royalty="walletTotalRoyalty"
+        :sales-details="walletSalesDetails"
+        :royalty-details="walletRoyaltyDetails"
         :target-type="targetType"
         @close="isOpenIncomeDetailsDialog = false"
       />
@@ -301,7 +301,7 @@ export default {
       this.isIncomeDetailsLoading = true;
       this.isOpenIncomeDetailsDialog = true;
       try {
-        if (!this.getTotalSales && !this.getTotalRoyalty) {
+        if (!this.walletTotalSales && !this.walletTotalRoyalty) {
           await Promise.all([
             this.walletFetchTotalSales(this.wallet),
             this.walletFetchTotalRoyalty(this.wallet),

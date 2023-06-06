@@ -14,7 +14,7 @@
         >
           <div
             :class="[
-              itemStyle,
+              itemClasses,
               'justify-center',
               'gap-[24px]',
             ]"
@@ -55,7 +55,7 @@
         >
           <div
             :class="[
-              itemStyle,
+              itemClasses,
               'justify-center',
               'gap-[24px]',
             ]"
@@ -84,8 +84,8 @@
             class="hidden laptop:block h-[32px] w-[2px] bg-medium-gray mx-[12px]"
           >
           <div
-            :class="[itemStyle, 'items-center', 'gap-[8px]']"
-            @click="$emit('on-click-total-sales')"
+            :class="[itemClasses, 'items-center', 'gap-[8px]']"
+            @click="$emit('click-total-sales')"
           >
             <div class="flex flex-col items-center justify-center">
               <Label
@@ -120,7 +120,7 @@ export default {
     },
   },
   computed: {
-    itemStyle() {
+    itemClasses() {
       return [
         'flex',
         'rounded-[12px]',

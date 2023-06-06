@@ -34,7 +34,7 @@
           { '!bg-like-green text-shade-gray shadow-sm hover:text-like-cyan-gray': item.isSelected },
 
         ]"
-        @click="$emit('on-type-click',item.value)"
+        @click="$emit('type-click',item.value)"
       >
         <Label preset="h5" :text="item.text" align="center" />
         <p

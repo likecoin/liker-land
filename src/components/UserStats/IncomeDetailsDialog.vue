@@ -13,7 +13,7 @@
       <UserStatsIncomeMenuItem
         :current-target-type="currentTargetType"
         :type-menu-item-list="typeMenuItemList"
-        @on-type-click="handleTypeClick"
+        @type-click="handleTypeClick"
       />
       <UserStatsIncomeTable
         :current-target-type="currentTargetType"
@@ -24,9 +24,10 @@
 </template>
 
 <script>
+import nftMixin from '~/mixins/nft';
+
 import { ellipsis } from '~/util/ui';
 import { convertToLIKEPrice } from '~/util/nft';
-import nftMixin from '~/mixins/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const DETAILS_TYPE = {

@@ -222,10 +222,10 @@ const getters = {
       return count;
     }, 0);
   },
-  getTotalSales: state => state.totalSales,
-  getTotalRoyalty: state => state.totalRoyalty,
-  getSalesDetails: state => state.salesDetails,
-  getRoyaltyDetails: state => state.royaltyDetails,
+  walletTotalSales: state => state.totalSales,
+  walletTotalRoyalty: state => state.totalRoyalty,
+  walletSalesDetails: state => state.salesDetails,
+  walletRoyaltyDetails: state => state.royaltyDetails,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
