@@ -366,9 +366,13 @@ export const getUserNotificationSettingsUrl = () =>
 export const getNFTBookStorePricesByClassId = classId =>
   `${LIKECOIN_API_BASE}/likernft/book/store/${classId}`;
 
-export const getNFTBookPurchaseLink = ({ classId, priceIndex }) => {
+export const getNFTBookPurchaseLink = ({
+  classId,
+  priceIndex,
+  platform = NFT_BOOK_PLATFORM_LIKER_LAND,
+}) => {
   const qsPayload = {
-    form: NFT_BOOK_PLATFORM_LIKER_LAND,
+    from: platform,
     price_index: priceIndex,
   };
   return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new?${querystring.stringify(
