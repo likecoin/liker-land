@@ -87,7 +87,35 @@ Multiple.args = {
       stock: 0,
     },
   ],
-  value: 'premium',
+  value: 'deluxe',
+};
+
+export const Multiple2 = (_, { argTypes }) => ({
+  components: {
+    NFTEditionSelect,
+  },
+  props: Object.keys(argTypes),
+  template: `
+    <NFTEditionSelect v-bind="$props" />
+  `,
+});
+
+Multiple2.args = {
+  items: [
+    {
+      name: 'Standard Edition',
+      priceLabel: 'US$ 32',
+      value: 'standard',
+      stock: 0,
+    },
+    {
+      name: 'Premium Edition',
+      priceLabel: 'US$ 48',
+      value: 'premium',
+      stock: 10,
+    },
+  ],
+  value: 'standard',
 };
 
 export const MultipleSoldOut = (_, { argTypes }) => ({
