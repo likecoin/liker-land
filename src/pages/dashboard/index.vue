@@ -14,7 +14,6 @@
       <!-- UserStat -->
       <div class="flex flex-col justify-center items-center mb-[24px] laptop:mb-[48px] w-full">
         <UserStatsMyDashboard
-          class="flex flex-col items-center w-full laptop:flex-row"
           :stat-wallet="getAddress"
           @go-created="handleGoCreated"
           @go-collected="handleGoCollected"
