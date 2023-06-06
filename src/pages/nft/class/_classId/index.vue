@@ -237,7 +237,7 @@ import { mapActions } from 'vuex';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { EXTERNAL_HOST } from '~/constant';
+import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -350,6 +350,9 @@ export default {
   computed: {
     classId() {
       return this.$route.params.classId;
+    },
+    platform() {
+      return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
@@ -598,6 +601,7 @@ export default {
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
           priceIndex: selectedValue,
+          platform: this.platform,
         });
         window.open(link, '_blank', 'noopener');
       } else if (this.nftIsCollectable) {
