@@ -419,10 +419,10 @@ export default {
       this.updateNFTHistory();
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
-      const blockingPromises = [
-        this.fetchISCNMetadata(),
-        this.fetchNFTBookPriceByClassId(this.classId),
-      ];
+      const blockingPromises = [this.fetchISCNMetadata()];
+      if (this.nftIsNFTBook) {
+        blockingPromises.push(this.fetchNFTBookPriceByClassId(this.classId));
+      }
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
