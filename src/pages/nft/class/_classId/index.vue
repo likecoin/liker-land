@@ -582,16 +582,20 @@ export default {
       return this.handleCollect();
     },
     handleCollectFromEdition(selectedValue) {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
-      if (this.getNFTBookStorePricesByClassId(this.classId)) {
+      const bookStorePrices =
+        this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const hasStock = bookStorePrices[selectedValue]?.stock;
+      if (!hasStock && !this.nftIsCollectable) return;
+      if (hasStock) {
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
           priceIndex: selectedValue,
         });
-        window.open(link, '_blank');
+        window.open(link, '_blank', 'noopener');
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
+      logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
     },
     handleCopyURL() {
       this.shareURLPath({
