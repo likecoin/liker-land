@@ -53,7 +53,6 @@ import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 
 const NFT_CLAIM_STATE = {
-  MISSING_QS: 'MISSING_QS',
   CLAIMING: 'CLAIMING',
   CLAIMED: 'CLAIMED',
   ERROR: 'ERROR',
@@ -81,8 +80,6 @@ export default {
     },
     text() {
       switch (this.state) {
-        case NFT_CLAIM_STATE.MISSING_QS:
-          return this.$t('nft_claim_missing_qs');
         case NFT_CLAIM_STATE.CLAIMING:
           return this.$t('nft_claim_claiming');
         case NFT_CLAIM_STATE.CLAIMED:
@@ -100,29 +97,35 @@ export default {
     loginAddress: {
       immediate: true,
       handler() {
-        if (!this.classId || !this.token || !this.paymentId) {
-          this.state = NFT_CLAIM_STATE.MISSING_QS;
+        if (this.state !== NFT_CLAIM_STATE.CLAIMING || !this.loginAddress) {
           return;
         }
-        if (this.loginAddress) {
-          logTrackerEvent(
-            this,
-            'NFT',
-            'nft_claim_auto_start_claim_triggered',
-            this.classId,
-            1
-          );
-          this.claim();
-        }
+
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_claim_auto_start_claim_triggered',
+          this.classId,
+          1
+        );
+        this.claim();
       },
     },
   },
-  async asyncData({ query, store, error }) {
+  async asyncData({ query, store, error, i18n }) {
+    const {
+      class_id: classId,
+      payment_id: paymentId,
+      claiming_token: token,
+    } = query;
+    if (!classId || !token || !paymentId) {
+      error({ statusCode: 400, message: i18n.t('nft_claim_missing_qs') });
+      return;
+    }
     try {
-      const { class_id: classId } = query;
       await store.dispatch('lazyGetNFTClassMetadata', classId);
     } catch (err) {
-      error({ statusCode: 404, message: 'NFT Class Not Found' });
+      error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
     }
   },
   methods: {
