@@ -314,6 +314,10 @@ export default {
           break;
         case 'insufficient':
         case 'failed':
+          logTrackerEvent(this, 'NFT', 'ClickRetry', this.classId, 1);
+          this.$emit('close');
+          window.location.reload();
+          break;
         case 'completed':
         default:
           logTrackerEvent(this, 'NFT', 'ClickModalClose', this.classId, 1);
