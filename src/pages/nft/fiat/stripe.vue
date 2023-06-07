@@ -30,20 +30,35 @@ export default {
   },
   watch: {
     uiIsOpenCollectModal(isOpen) {
-      if (!isOpen) {
-        if (this.classId) {
-          if (!(this.claimToken && this.isCompleted)) {
-            this.$router.replace(
-              this.localeLocation({
-                name: 'nft-class-classId',
-                params: { classId: this.classId },
-              })
-            );
-          }
-        } else {
-          this.$router.replace(this.localeLocation({ name: 'index' }));
-        }
+      if (isOpen) return;
+
+      if (!this.classId) {
+        this.$router.replace(this.localeLocation({ name: 'index' }));
+        return;
       }
+
+      if (!this.isCompleted) return;
+
+      if (this.claimToken) {
+        this.$router.replace(
+          this.localeLocation({
+            name: 'nft-claim',
+            query: {
+              class_id: this.classId,
+              payment_id: this.paymentId,
+              claiming_token: this.claimToken,
+            },
+          })
+        );
+        return;
+      }
+
+      this.$router.replace(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.classId },
+        })
+      );
     },
   },
   asyncData({ error, query }) {
@@ -94,16 +109,7 @@ export default {
           this.result = res;
           if (this.isCompleted) {
             if (this.claimToken) {
-              this.$router.push(
-                this.localeLocation({
-                  name: 'nft-claim',
-                  query: {
-                    class_id: this.classId,
-                    payment_id: this.paymentId,
-                    claiming_token: this.claimToken,
-                  },
-                })
-              );
+              // NOTE: Close modal to trigger redirect to claim page
               this.uiCloseTxModal();
             } else {
               this.uiSetTxStatus(TX_STATUS.COMPLETED);
