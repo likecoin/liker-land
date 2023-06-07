@@ -664,6 +664,17 @@ export default {
         this.classId,
         1
       );
+      const errorHandlingByCode = {
+        38: {
+          message: 'NFT_IS_ALREADY_BOUGHT',
+          action: () => {
+            this.updateNFTPurchaseInfo();
+          },
+        },
+        13: {
+          message: 'INSUFFICIENT_GAS_FEE',
+        },
+      };
       try {
         await this.walletFetchLIKEBalance();
         if (
@@ -731,7 +742,17 @@ export default {
           this.classId,
           1
         );
-        if (code !== 0) throw new Error(`TX_FAILED_WITH_CODE_${code}`);
+        if (code !== 0) {
+          if (errorHandlingByCode[code]) {
+            this.uiSetTxError(errorHandlingByCode[code].message);
+            this.uiSetTxStatus(TX_STATUS.FAILED);
+            if (typeof errorHandlingByCode[code]?.action === 'function') {
+              errorHandlingByCode[code].action();
+            }
+            return undefined;
+          }
+          throw new Error(`TX_FAILED_WITH_CODE_${code}`);
+        }
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
           let result;
