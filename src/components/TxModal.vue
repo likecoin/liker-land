@@ -74,7 +74,7 @@
             <IconError />
           </template>
           <template
-            v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE'"
+            v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE' || uiTxErrorMessage === 'INSUFFICIENT_GAS_FEE'"
             #append
           >
             <LinkV2
@@ -200,6 +200,12 @@ export default {
         case 'INSUFFICIENT_BALANCE':
           return this.$t('snackbar_error_insufficient');
 
+        case 'NFT_IS_ALREADY_BOUGHT':
+          return this.$t('snackbar_error_nft_is_already_bought');
+
+        case 'INSUFFICIENT_GAS_FEE':
+          return this.$t('snackbar_error_out_of_gas');
+
         default:
           return this.uiTxErrorMessage;
       }
@@ -279,7 +285,7 @@ export default {
 
         case 'insufficient':
         case 'failed':
-          return this.$t('tx_modal_button_Close');
+          return this.$t('tx_modal_button_retry');
 
         case 'completed':
           if (this.preset === 'collect' && this.$slots.button) {
