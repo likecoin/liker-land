@@ -734,11 +734,7 @@ export default {
         if (code !== 0) {
           const errorHandler = this.getErrorHandlerByCode(code);
           if (errorHandler) {
-            this.uiSetTxError(errorHandler.message);
-            this.uiSetTxStatus(TX_STATUS.FAILED);
-            if (typeof errorHandler?.runAction === 'function') {
-              errorHandler.runAction();
-            }
+            this.handleError(errorHandler);
             return undefined;
           }
           throw new Error(`TX_FAILED_WITH_CODE_${code}`);
@@ -775,6 +771,11 @@ export default {
           return result.data;
         }
       } catch (error) {
+        if (error.toString().includes('code 32')) {
+          const errorHandler = this.getErrorHandlerByCode(32);
+          this.handleError(errorHandler);
+          return undefined;
+        }
         this.uiSetTxError(error.response?.data || error.toString());
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
@@ -785,6 +786,13 @@ export default {
         this.walletFetchLIKEBalance();
       }
       return undefined;
+    },
+    handleError(error) {
+      this.uiSetTxError(error.message);
+      this.uiSetTxStatus(TX_STATUS.FAILED);
+      if (typeof error?.runAction === 'function') {
+        error.runAction();
+      }
     },
     getErrorHandlerByCode(code) {
       switch (code) {
@@ -797,6 +805,11 @@ export default {
         case 13:
           return {
             message: 'INSUFFICIENT_GAS_FEE',
+          };
+
+        case 32:
+          return {
+            message: 'SEQ_MISMATCH',
           };
 
         default:

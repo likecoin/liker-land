@@ -571,6 +571,7 @@
   "snackbar_error_insufficient": "噢，餘額不足！",
   "snackbar_error_nft_is_already_bought": "此 NFT 剛被收藏了，請再重試購買",
   "snackbar_error_out_of_gas": "噢，瓦斯費不足!",
+  "snackbar_error_seq_mismatch": "交易序列錯誤，請稍等一段時間等帳戶狀態同步後，再重試購買",
   "snackbar_success_collect": "完成收藏 \"{NFT}\".",
   "snackbar_success_transfer": "已完成發送作品",
   "subVPs": [

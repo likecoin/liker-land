@@ -581,6 +581,7 @@
   "snackbar_error_insufficient": "Oops, Insufficient Balance.",
   "snackbar_error_nft_is_already_bought": "This NFT has just been collected. Please try purchasing again",
   "snackbar_error_out_of_gas": "Oops, Out of gas!",
+  "snackbar_error_seq_mismatch": "Transaction sequence error. Please wait for a moment until the account status matches, and then try purchasing again.",
   "snackbar_success_collect": "Complete the collect of \"{NFT}\".",
   "snackbar_success_transfer": "Complete the transfer of NFT.",
   "subVPs": [

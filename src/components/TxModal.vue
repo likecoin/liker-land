@@ -206,6 +206,9 @@ export default {
         case 'INSUFFICIENT_GAS_FEE':
           return this.$t('snackbar_error_out_of_gas');
 
+        case 'SEQ_MISMATCH':
+          return this.$t('snackbar_error_seq_mismatch');
+
         default:
           return this.uiTxErrorMessage;
       }
