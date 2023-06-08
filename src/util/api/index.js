@@ -292,6 +292,13 @@ export const postStripeFiatPendingClaim = ({ wallet, paymentId, token }) => {
   )}`;
 };
 
+export const getNFTBookClaimEndpoint = ({ classId, paymentId, token }) => {
+  const qsPayload = { token };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/claim/${paymentId}?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
     ignore_list: LIKECOIN_NFT_API_WALLET,
