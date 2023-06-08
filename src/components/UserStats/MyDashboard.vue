@@ -13,67 +13,63 @@
   >
     <template v-slot="stats">
       <!-- Collect section -->
-      <div class="relative flex items-center col-span-2">
-        <div
-          :class="[
-            itemClasses,
-            'grid-cols-2',
-            'w-full',
-          ]"
-          @click="$emit('go-collected')"
+      <div
+        :class="[
+          itemClasses,
+          'grid-cols-2',
+          'col-span-2',
+          'w-full',
+        ]"
+        @click="$emit('go-collected')"
+      >
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.collectedCount"
+          :label-text="$t('nft_portfolio_page_label_collected')"
         >
-          <UserStatsItem
-            :is-loading="stats.isLoadingStats"
-            :stats-value="stats.collectedCount"
-            :label-text="$t('nft_portfolio_page_label_collected')"
-          >
-            <template #icon>
-              <IconMint class="w-[16px] h-[16px]" />
-            </template>
-          </UserStatsItem>
-          <UserStatsItem
-            :is-loading="stats.isLoadingStats"
-            :stats-value="stats.collectedAmount"
-            :label-text="$t('nft_portfolio_page_state_value')"
-          >
-            <template #icon>
-              <IconPriceMini />
-            </template>
-          </UserStatsItem>
-        </div>
-        <hr :class="separatorClasses">
+          <template #icon>
+            <IconMint class="w-[16px] h-[16px]" />
+          </template>
+        </UserStatsItem>
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.collectedAmount"
+          :label-text="$t('nft_portfolio_page_state_value')"
+        >
+          <template #icon>
+            <IconPriceMini />
+          </template>
+        </UserStatsItem>
       </div>
 
       <!-- Created section -->
-      <div class="relative flex items-center col-span-2">
-        <div
-          :class="[
-            itemClasses,
-            'grid-cols-2',
-            'w-full',
-          ]"
-          @click="$emit('go-created')"
+      <div
+        :class="[
+          itemClasses,
+          'grid-cols-2',
+          'col-span-2',
+          'w-full',
+        ]"
+        @click="$emit('go-created')"
+      >
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.createdCount"
+          :label-text="$t('nft_portfolio_page_label_created')"
         >
-          <UserStatsItem
-            :is-loading="stats.isLoadingStats"
-            :stats-value="stats.createdCount"
-            :label-text="$t('nft_portfolio_page_label_created')"
-          >
-            <template #icon>
-              <IconFlare class="w-[16px] h-[16px]" />
-            </template>
-          </UserStatsItem>
-          <UserStatsItem
-            :is-loading="stats.isLoadingStats"
-            :stats-value="stats.createdCollectorCount"
-            :label-text="$t('nft_portfolio_page_state_collectors')"
-          >
-            <template #icon>
-              <IconPersonMini />
-            </template>
-          </UserStatsItem>
-        </div>
-        <hr :class="separatorClasses">
+          <template #icon>
+            <IconFlare class="w-[16px] h-[16px]" />
+          </template>
+        </UserStatsItem>
+        <UserStatsItem
+          :is-loading="stats.isLoadingStats"
+          :stats-value="stats.createdCollectorCount"
+          :label-text="$t('nft_portfolio_page_state_collectors')"
+        >
+          <template #icon>
+            <IconPersonMini />
+          </template>
+        </UserStatsItem>
       </div>
 
       <div
@@ -120,18 +116,6 @@ export default {
         'transition',
         'duration-200',
         'hover:bg-shade-gray',
-      ];
-    },
-    separatorClasses() {
-      return [
-        'absolute',
-        'right-0',
-        'hidden laptop:block',
-        'h-[32px]',
-        'w-[1px]',
-        'mr-[-8px]',
-        'bg-medium-gray',
-        'border-0',
       ];
     },
   },
