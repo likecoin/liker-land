@@ -263,9 +263,11 @@
     "委託 LikeCoin"
   ],
   "month": "月",
-  "nft_claim_claimed": "已領取 Writing NFT",
+  "nft_claim_claimed": "已領取 NFT",
+  "nft_claim_claimed_nft_book": "已領取 NFT Book，請等待創作者發送。",
   "nft_claim_claimed_retry_button": "再試一次",
   "nft_claim_claimed_view_button": "檢視 NFT",
+  "nft_claim_claimed_view_class_button": "前往 NFT Class",
   "nft_claim_claiming": "正在領取 Writing NFT",
   "nft_claim_class_not_found": "找不到 NFT Class",
   "nft_claim_error_message": "領取時出現錯誤：{error}",

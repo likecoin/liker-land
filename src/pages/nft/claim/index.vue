@@ -28,12 +28,21 @@
       </template>
       <Label class="mb-[16px]" :text="text" align="center" />
       <ProgressIndicator v-if="state === 'CLAIMING'" class="self-center" />
-      <ButtonV2
-        v-else-if="state === 'CLAIMED'"
-        :text="$t('nft_claim_claimed_view_button')"
-        preset="tertiary"
-        @click="handleClickView"
-      />
+      <template v-else-if="state === 'CLAIMED'">
+        <ButtonV2
+          v-if="nftId"
+          :text="$t('nft_claim_claimed_view_button')"
+          preset="tertiary"
+          @click="handleClickView"
+        />
+        <ButtonV2
+          v-else
+          :text="$t('nft_claim_claimed_view_class_button')"
+          preset="tertiary"
+          @click="handleClickViewClass"
+        />
+      </template>
+
       <ButtonV2
         v-else-if="state === 'ERROR'"
         :text="$t('nft_claim_claimed_retry_button')"
@@ -46,13 +55,17 @@
 
 <script>
 import { logTrackerEvent } from '~/util/EventLogger';
-import { postStripeFiatPendingClaim } from '~/util/api';
+import {
+  postStripeFiatPendingClaim,
+  getNFTBookClaimEndpoint,
+} from '~/util/api';
 
 import alertMixin from '~/mixins/alert';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 
 const NFT_CLAIM_STATE = {
+  INITIAL: 'INITIAL',
   CLAIMING: 'CLAIMING',
   CLAIMED: 'CLAIMED',
   ERROR: 'ERROR',
@@ -64,7 +77,7 @@ export default {
   data() {
     return {
       nftId: '',
-      state: NFT_CLAIM_STATE.CLAIMING,
+      state: NFT_CLAIM_STATE.INITIAL,
       error: '',
     };
   },
@@ -78,11 +91,17 @@ export default {
     token() {
       return this.$route.query.claiming_token;
     },
+    isNFTBook() {
+      return this.$route.query.type === 'nft_book';
+    },
     text() {
       switch (this.state) {
         case NFT_CLAIM_STATE.CLAIMING:
           return this.$t('nft_claim_claiming');
         case NFT_CLAIM_STATE.CLAIMED:
+          if (this.isNFTBook && !this.nftId) {
+            return this.$t('nft_claim_claimed_nft_book');
+          }
           return this.$t('nft_claim_claimed');
         case NFT_CLAIM_STATE.ERROR:
           return this.error
@@ -92,12 +111,22 @@ export default {
           return '';
       }
     },
+    shouldBlockClaim() {
+      return (
+        !this.loginAddress ||
+        [NFT_CLAIM_STATE.CLAIMING, NFT_CLAIM_STATE.CLAIMED].includes(this.state)
+      );
+    },
   },
   watch: {
     loginAddress: {
       immediate: true,
-      handler() {
-        if (this.state !== NFT_CLAIM_STATE.CLAIMING || !this.loginAddress) {
+      handler(newAddress, oldAddress) {
+        if (
+          process.server ||
+          (newAddress && oldAddress && newAddress === oldAddress) ||
+          this.shouldBlockClaim
+        ) {
           return;
         }
 
@@ -130,15 +159,60 @@ export default {
   },
   methods: {
     async claim() {
+      if (this.shouldBlockClaim) {
+        return;
+      }
+
+      if (this.isNFTBook) {
+        await this.claimNFTBookPurchase();
+      } else {
+        await this.claimFiatPurchase();
+      }
+    },
+    async claimFiatPurchase() {
       try {
-        const { data } = await this.$api.post(
+        if (this.claimPromise) return;
+        this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.claimPromise = this.$api.post(
           postStripeFiatPendingClaim({
             wallet: this.loginAddress,
             paymentId: this.paymentId,
             token: this.token,
           })
         );
+        const { data } = await this.claimPromise;
+        this.claimPromise = undefined;
         this.nftId = data.nftId;
+        this.state = NFT_CLAIM_STATE.CLAIMED;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.error = error.response?.data || error.message;
+        this.alertPromptError(
+          this.$t('settings_email_verify_error_message', {
+            error: this.error,
+          })
+        );
+        this.state = NFT_CLAIM_STATE.ERROR;
+      }
+    },
+    async claimNFTBookPurchase() {
+      try {
+        if (this.claimPromise) return;
+        this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.claimPromise = this.$api.post(
+          getNFTBookClaimEndpoint({
+            classId: this.classId,
+            paymentId: this.paymentId,
+            token: this.token,
+          }),
+          {
+            paymentId: this.paymentId,
+            wallet: this.loginAddress,
+          }
+        );
+        await this.claimPromise;
+        this.claimPromise = undefined;
         this.state = NFT_CLAIM_STATE.CLAIMED;
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -169,6 +243,23 @@ export default {
           params: {
             classId: this.classId,
             nftId: this.nftId,
+          },
+        })
+      );
+    },
+    handleClickViewClass() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_view_class_button_clicked',
+        '',
+        1
+      );
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: {
+            classId: this.classId,
           },
         })
       );

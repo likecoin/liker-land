@@ -273,9 +273,11 @@
     "LikeCoin staking"
   ],
   "month": "month",
-  "nft_claim_claimed": "Writing NFT is claimed",
+  "nft_claim_claimed": "NFT is claimed",
+  "nft_claim_claimed_nft_book": "NFT Book is claimed, please wait for creator to send.",
   "nft_claim_claimed_retry_button": "Try Again",
   "nft_claim_claimed_view_button": "View NFT",
+  "nft_claim_claimed_view_class_button": "View NFT Class",
   "nft_claim_claiming": "Claiming Writing NFT",
   "nft_claim_class_not_found": "NFT Class not found",
   "nft_claim_error_message": "Error occurs when claiming Writing NFT {error}",
