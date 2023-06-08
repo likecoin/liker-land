@@ -664,17 +664,6 @@ export default {
         this.classId,
         1
       );
-      const errorHandlingByCode = {
-        38: {
-          message: 'NFT_IS_ALREADY_BOUGHT',
-          action: () => {
-            this.updateNFTPurchaseInfo();
-          },
-        },
-        13: {
-          message: 'INSUFFICIENT_GAS_FEE',
-        },
-      };
       try {
         await this.walletFetchLIKEBalance();
         if (
@@ -743,11 +732,12 @@ export default {
           1
         );
         if (code !== 0) {
-          if (errorHandlingByCode[code]) {
-            this.uiSetTxError(errorHandlingByCode[code].message);
+          const errorHandler = this.getErrorHandlerByCode(code);
+          if (errorHandler) {
+            this.uiSetTxError(errorHandler.message);
             this.uiSetTxStatus(TX_STATUS.FAILED);
-            if (typeof errorHandlingByCode[code]?.action === 'function') {
-              errorHandlingByCode[code].action();
+            if (typeof errorHandler?.runAction === 'function') {
+              errorHandler.runAction();
             }
             return undefined;
           }
@@ -795,6 +785,23 @@ export default {
         this.walletFetchLIKEBalance();
       }
       return undefined;
+    },
+    getErrorHandlerByCode(code) {
+      switch (code) {
+        case 38:
+          return {
+            message: 'NFT_IS_ALREADY_BOUGHT',
+            runAction: () => this.updateNFTPurchaseInfo(),
+          };
+
+        case 13:
+          return {
+            message: 'INSUFFICIENT_GAS_FEE',
+          };
+
+        default:
+          return {};
+      }
     },
     async collectNFTWithStripe({ memo = '' }) {
       try {
