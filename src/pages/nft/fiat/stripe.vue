@@ -30,22 +30,43 @@ export default {
   },
   watch: {
     uiIsOpenCollectModal(isOpen) {
-      if (!isOpen) {
-        if (this.classId) {
-          this.$router.replace(
-            this.localeLocation({
-              name: 'nft-class-classId',
-              params: { classId: this.classId },
-            })
-          );
-        } else {
-          this.$router.replace(this.localeLocation({ name: 'index' }));
-        }
+      if (isOpen) return;
+
+      if (!this.classId) {
+        this.$router.replace(this.localeLocation({ name: 'index' }));
+        return;
       }
+
+      if (!this.isCompleted) return;
+
+      if (this.claimToken) {
+        this.$router.replace(
+          this.localeLocation({
+            name: 'nft-claim',
+            query: {
+              class_id: this.classId,
+              payment_id: this.paymentId,
+              claiming_token: this.claimToken,
+            },
+          })
+        );
+        return;
+      }
+
+      this.$router.replace(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.classId },
+        })
+      );
     },
   },
   asyncData({ error, query }) {
-    const { class_id: classId, payment_id: paymentId } = query;
+    const {
+      class_id: classId,
+      payment_id: paymentId,
+      claiming_token: claimToken,
+    } = query;
     if (!paymentId) {
       error({
         statusCode: 400,
@@ -63,6 +84,7 @@ export default {
     return {
       classId,
       paymentId,
+      claimToken,
     };
   },
   mounted() {
@@ -86,7 +108,12 @@ export default {
         } else {
           this.result = res;
           if (this.isCompleted) {
-            this.uiSetTxStatus(TX_STATUS.COMPLETED);
+            if (this.claimToken) {
+              // NOTE: Close modal to trigger redirect to claim page
+              this.uiCloseTxModal();
+            } else {
+              this.uiSetTxStatus(TX_STATUS.COMPLETED);
+            }
             logTrackerEvent(
               this,
               'NFT',

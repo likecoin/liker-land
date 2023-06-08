@@ -534,6 +534,7 @@ export default {
       'uiSetCollectedCount',
       'uiSetTxStatus',
       'uiSetTxError',
+      'uiCloseTxModal',
       'walletFetchLIKEBalance',
       'lazyGetUserInfoByAddresses',
       'fetchNFTListByAddress',

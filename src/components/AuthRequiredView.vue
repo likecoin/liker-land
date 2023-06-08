@@ -1,8 +1,11 @@
 <template>
   <div v-if="walletIsMatchedSession">
+    <slot name="prepend" />
     <slot />
+    <slot name="append" />
   </div>
   <div v-else class="flex flex-col justify-center flex-grow">
+    <slot name="prepend" />
     <Label
       class="text-medium-gray"
       align="center"
@@ -25,6 +28,7 @@
         @click="connectWallet"
       />
     </div>
+    <slot name="append" />
   </div>
 </template>
 
