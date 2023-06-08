@@ -309,18 +309,36 @@ export default {
     onClick() {
       switch (this.uiTxNFTStatus) {
         case 'sign':
-          logTrackerEvent(this, 'NFT', 'ShowCancelModal', this.classId, 1);
+          logTrackerEvent(
+            this,
+            'NFT',
+            'tx_modal_quit_button_clicked',
+            this.classId,
+            1
+          );
           this.isShowQuitConfirm = true;
           break;
         case 'insufficient':
         case 'failed':
-          logTrackerEvent(this, 'NFT', 'ClickRetry', this.classId, 1);
+          logTrackerEvent(
+            this,
+            'NFT',
+            'tx_modal_retry_button_clicked',
+            this.classId,
+            1
+          );
           this.$emit('close');
           window.location.reload();
           break;
         case 'completed':
         default:
-          logTrackerEvent(this, 'NFT', 'ClickModalClose', this.classId, 1);
+          logTrackerEvent(
+            this,
+            'NFT',
+            'tx_modal_close_button_clicked',
+            this.classId,
+            1
+          );
           this.$emit('close');
           this.isShowQuitConfirm = false;
           break;
