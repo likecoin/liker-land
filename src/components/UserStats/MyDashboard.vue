@@ -91,7 +91,7 @@
               <Label
                 class="text-airdrop-gold text-[14px] font-600 laptop:text-[24px]"
                 valign="bottom"
-                :text="isLoading ? '-' : stats.createdTotalSales"
+                :text="stats.createdTotalSales"
               />
               <Label
                 class="text-medium-gray mt-[4px] text-[10px] font-400 laptop:text-[14px] laptop:font-600"

@@ -149,7 +149,9 @@ export default {
 
         return {
           classId: item.class_id,
-          nftName: this.getNFTClassMetadataById(item.class_id)?.name,
+          nftName:
+            this.getNFTClassMetadataById(item.class_id)?.name ||
+            this.$t('dashboard_table_untitled'),
           itemSales,
           salesEarnings,
           royaltyPercentage: Math.floor((salesEarnings / itemSales) * 100),
