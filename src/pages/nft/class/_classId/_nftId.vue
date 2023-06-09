@@ -289,6 +289,9 @@
           :recommended-list="recommendedList"
           @on-follow-button-click="handleFollowButtonClick"
           @on-nft-item-click="handleRecommendedItemClick"
+          @slide-next.once="handleRecommendationSlideNext"
+          @slide-prev.once="handleRecommendationSlidePrev"
+          @slider-move.once="handleRecommendationSliderMove"
         />
       </div>
     </div>
@@ -681,6 +684,33 @@ export default {
         this,
         'NFT',
         'nft_details_click_recommended_nft',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSlideNext() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_recommendation_clicked_next',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSlidePrev() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_recommendation_clicked_prev',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSliderMove() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_recommendation_moved_slider',
         this.classId,
         1
       );
