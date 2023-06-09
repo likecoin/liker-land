@@ -1,21 +1,21 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center justify-start p-[8px]">
+    <div :class="['flex flex-col items-center text-like-green', statsClass]">
+      <div class="my-[4px]"><slot name="icon" /></div>
+      <Label
+        class="text-[20px] laptop:text-[24px] font-600"
+        valign="bottom"
+        :text="isLoading ? '-' : statsValue.toString()"
+      >
+        <slot v-if="!isLoading" name="custom-value" />
+      </Label>
+    </div>
     <Label
-      class="text-like-green text-[14px] font-600 laptop:text-[24px]"
-      valign="bottom"
-      :text="isLoading ? '-' : statsValue.toString()"
-    >
-      <slot v-if="!isLoading" name="custom-value" />
-    </Label>
-    <Label
-      class="text-medium-gray mt-[4px] text-[10px] font-400 laptop:text-[14px] laptop:font-600"
+      class="text-medium-gray mt-[4px] text-[11px] font-400 laptop:text-[12px] laptop:font-600"
       content-class="text-center whitespace-pre"
       :text="labelText"
-      valign="middle"
     >
-      <template #prepend>
-        <slot name="label-icon" />
-      </template>
+      <slot name="label" />
     </Label>
   </div>
 </template>
@@ -29,6 +29,10 @@ export default {
     statsValue: {
       type: [String, Number],
       default: 0,
+    },
+    statsClass: {
+      type: String,
+      default: '',
     },
     labelText: {
       type: String,
