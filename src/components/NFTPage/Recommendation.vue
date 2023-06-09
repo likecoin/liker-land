@@ -23,6 +23,7 @@
       <Swiper
         ref="recommendationSwiper"
         :options="swiperOptions"
+        @slider-move="handleSliderMove"
       >
         <SwiperSlide
           v-for="nft in recommendedList"
@@ -107,6 +108,9 @@ export default {
     handleClickNext() {
       this.$emit('slide-next');
       this.swiper.slideNext();
+    },
+    handleSliderMove() {
+      this.$emit('slider-move');
     },
   },
 };
