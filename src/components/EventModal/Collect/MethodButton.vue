@@ -1,7 +1,7 @@
 <template>
   <ButtonV2
     class="w-full border-like-cyan"
-    :preset="getButtonPreset"
+    :preset="buttonPreset"
     v-bind="$attrs"
     :is-disabled="isDisabled"
     @click="handleClick"
@@ -47,7 +47,7 @@ export default {
     },
   },
   computed: {
-    getButtonPreset() {
+    buttonPreset() {
       return this.type === 'stripe' ? 'secondary' : 'outline';
     },
   },

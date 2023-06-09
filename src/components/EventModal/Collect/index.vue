@@ -13,17 +13,15 @@
       <IconPrice />
     </template>
 
-    <template v-if="hasConnectedWallet && (!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus))" #top>
-      <div class="absolute top-[50px] right-[50px] phone:top-[20px] phone:right-[20px]">
-        <Label :text="$t('nft_details_page_label_owning')" class="text-like-cyan">
-          <template #prepend>
-            <IconCreativeWork />
-          </template>
-          <template #append>
-            {{ userCollectedCount }}
-          </template>
-        </Label>
-      </div>
+    <template v-if="hasConnectedWallet && (!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus))" #header-append>
+      <Label :text="$t('nft_details_page_label_owning')" class="text-like-cyan">
+        <template #prepend>
+          <IconCreativeWork />
+        </template>
+        <template #append>
+          {{ userCollectedCount }}
+        </template>
+      </Label>
     </template>
 
     <template #message>
