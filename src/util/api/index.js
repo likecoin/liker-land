@@ -363,14 +363,32 @@ export const getUserNotificationSettingsUrl = () =>
   `/api/v2/users/notification`;
 
 export const getTotalSalesByAddress = address => {
-  const qsPayload = { address, iscn_ownership: 'owned' };
+  const qsPayload = {
+    address,
+    iscn_ownership: 'owned',
+    action_type: '/cosmos.nft.v1beta1.MsgSend',
+  };
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
     qsPayload
   )}`;
 };
 
 export const getTotalRoyaltyByAddress = address => {
-  const qsPayload = { address, iscn_ownership: 'not_owned' };
+  const qsPayload = {
+    address,
+    iscn_ownership: 'not_owned',
+    action_type: '/cosmos.nft.v1beta1.MsgSend',
+  };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getTotalResalesByAddress = address => {
+  const qsPayload = {
+    address,
+    action_type: 'buy_nft',
+  };
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
     qsPayload
   )}`;

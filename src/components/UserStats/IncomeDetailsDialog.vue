@@ -30,6 +30,8 @@ import { ellipsis } from '~/util/ui';
 import { convertToLIKEPrice } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import { IS_TESTNET } from '~/constant';
+
 const DETAILS_TYPE = {
   ROYALTY: 'royalty',
   SALES: 'sales',
@@ -78,6 +80,9 @@ export default {
     return { currentTargetType: DETAILS_TYPE.SALES };
   },
   computed: {
+    shouldShowRoyaltyInfo() {
+      return !!this.$route.query.show_royalty;
+    },
     typeMenuItemList() {
       const items = [
         {
@@ -85,12 +90,14 @@ export default {
           value: DETAILS_TYPE.SALES,
           amount: convertToLIKEPrice(this.totalSales),
         },
-        {
+      ];
+      if (this.shouldShowRoyaltyInfo || IS_TESTNET) {
+        items.push({
           text: this.$t('dashboard_button_type_royalties'),
           value: DETAILS_TYPE.ROYALTY,
           amount: convertToLIKEPrice(this.totalRoyalty),
-        },
-      ];
+        });
+      }
 
       return items.map(item => ({
         ...item,
