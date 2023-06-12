@@ -383,3 +383,13 @@ export const getTotalRoyaltyByAddress = address => {
     qsPayload
   )}`;
 };
+
+export const getTotalResalesByAddress = address => {
+  const qsPayload = {
+    address,
+    action_type: 'buy_nft',
+  };
+  return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/income?${querystring.stringify(
+    qsPayload
+  )}`;
+};
