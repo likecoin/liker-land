@@ -21,6 +21,7 @@ import {
   getNFTClassesPartial,
   getTotalSalesByAddress,
   getTotalRoyaltyByAddress,
+  getTotalResalesByAddress,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -50,6 +51,8 @@ import {
   WALLET_SET_TOTAL_ROYALTY,
   WALLET_SET_SALES_DETAILS,
   WALLET_SET_ROYALTY_DETAILS,
+  WALLET_SET_TOTAL_RESALES,
+  WALLET_SET_RESALE_DETAILS,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -79,8 +82,10 @@ const state = () => ({
 
   totalSales: 0,
   totalRoyalty: 0,
+  totalResales: 0,
   salesDetails: [],
   royaltyDetails: [],
+  resalesDetails: [],
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -175,11 +180,17 @@ const mutations = {
   [WALLET_SET_TOTAL_ROYALTY](state, royalty) {
     state.totalRoyalty = royalty;
   },
+  [WALLET_SET_TOTAL_RESALES](state, resales) {
+    state.totalResales = resales;
+  },
   [WALLET_SET_SALES_DETAILS](state, list) {
     state.salesDetails = list;
   },
   [WALLET_SET_ROYALTY_DETAILS](state, list) {
     state.royaltyDetails = list;
+  },
+  [WALLET_SET_RESALE_DETAILS](state, list) {
+    state.resalesDetails = list;
   },
 };
 
@@ -224,8 +235,10 @@ const getters = {
   },
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
+  walletTotalResales: state => state.totalResales,
   walletSalesDetails: state => state.salesDetails,
   walletRoyaltyDetails: state => state.royaltyDetails,
+  walletResalesDetails: state => state.resalesDetails,
   walletMethodType: state => state.methodType,
   walletEmail: state => state.email,
   walletEmailUnverified: state => state.emailUnverified,
@@ -724,6 +737,18 @@ const actions = {
       } = await this.$api.$get(getTotalSalesByAddress(owner));
       commit(WALLET_SET_TOTAL_SALES, totalSales);
       commit(WALLET_SET_SALES_DETAILS, list);
+    } catch (error) {
+      throw error;
+    }
+  },
+  async walletFetchTotalResales({ commit }, address) {
+    try {
+      const {
+        total_amount: totalResales,
+        class_incomes: list,
+      } = await this.$api.$get(getTotalResalesByAddress(address));
+      commit(WALLET_SET_TOTAL_RESALES, totalResales);
+      commit(WALLET_SET_RESALE_DETAILS, list);
     } catch (error) {
       throw error;
     }
