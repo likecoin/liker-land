@@ -62,6 +62,7 @@ import { formatNumberWithLIKE } from '~/util/ui';
 const DETAILS_TYPE = {
   ROYALTY: 'royalty',
   SALES: 'sales',
+  RESALES: 'resales',
 };
 
 export default {

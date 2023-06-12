@@ -132,6 +132,7 @@
   "Currency": {
     "USD": "美元"
   },
+  "dashboard_button_type_resales": "二手銷售",
   "dashboard_button_type_royalties": "分潤",
   "dashboard_button_type_sales": "銷售收入",
   "dashboard_description": "請連結錢包以整理你旳書架。",

@@ -108,8 +108,10 @@
         :is-loading="isIncomeDetailsLoading"
         :total-sales="walletTotalSales"
         :total-royalty="walletTotalRoyalty"
+        :total-resales="walletTotalResales"
         :sales-details="walletSalesDetails"
         :royalty-details="walletRoyaltyDetails"
+        :resales-details="walletResalesDetails"
         :target-type="targetType"
         @close="isOpenIncomeDetailsDialog = false"
       />
@@ -132,6 +134,7 @@ import { fisherShuffle } from '~/util/misc';
 const DETAILS_TYPE = {
   ROYALTY: 'royalty',
   SALES: 'sales',
+  RESALES: 'resales',
 };
 
 export default {
@@ -304,6 +307,7 @@ export default {
           await Promise.all([
             this.walletFetchTotalSales(this.wallet),
             this.walletFetchTotalRoyalty(this.wallet),
+            this.walletFetchTotalResales(this.wallet),
           ]);
         }
       } finally {
