@@ -580,6 +580,9 @@
   },
   "snackbar_error_buyLIKE": "Buy LIKE",
   "snackbar_error_insufficient": "Oops, Insufficient Balance.",
+  "snackbar_error_nft_is_already_bought": "This NFT has just been collected by someone else. Please try purchasing again",
+  "snackbar_error_out_of_gas": "Oops, Out of gas! please increase gas limit",
+  "snackbar_error_seq_mismatch": "Transaction sequence error. Please wait for a moment until the account status matches, and then try purchasing again.",
   "snackbar_success_collect": "Complete the collect of \"{NFT}\".",
   "snackbar_success_transfer": "Complete the transfer of NFT.",
   "subVPs": [
@@ -596,6 +599,7 @@
   "transfer_modal_processing_title": "Transferring",
   "tx_modal_button_cancel": "Cancel",
   "tx_modal_button_Close": "Close",
+  "tx_modal_button_retry": "Retry",
   "tx_modal_button_ok": "OK",
   "tx_modal_label_nft_id": "NFT ID",
   "tx_modal_label_receiver": "Receiver",

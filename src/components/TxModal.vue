@@ -200,6 +200,15 @@ export default {
         case 'INSUFFICIENT_BALANCE':
           return this.$t('snackbar_error_insufficient');
 
+        case 'NFT_IS_ALREADY_BOUGHT':
+          return this.$t('snackbar_error_nft_is_already_bought');
+
+        case 'INSUFFICIENT_GAS_FEE':
+          return this.$t('snackbar_error_out_of_gas');
+
+        case 'SEQ_MISMATCH':
+          return this.$t('snackbar_error_seq_mismatch');
+
         default:
           return this.uiTxErrorMessage;
       }
@@ -279,7 +288,7 @@ export default {
 
         case 'insufficient':
         case 'failed':
-          return this.$t('tx_modal_button_Close');
+          return this.$t('tx_modal_button_retry');
 
         case 'completed':
           if (this.preset === 'collect' && this.$slots.button) {
@@ -303,14 +312,36 @@ export default {
     onClick() {
       switch (this.uiTxNFTStatus) {
         case 'sign':
-          logTrackerEvent(this, 'NFT', 'ShowCancelModal', this.classId, 1);
+          logTrackerEvent(
+            this,
+            'NFT',
+            'tx_modal_quit_button_clicked',
+            this.classId,
+            1
+          );
           this.isShowQuitConfirm = true;
           break;
         case 'insufficient':
         case 'failed':
+          logTrackerEvent(
+            this,
+            'NFT',
+            'tx_modal_retry_button_clicked',
+            this.classId,
+            1
+          );
+          this.$emit('close');
+          window.location.reload();
+          break;
         case 'completed':
         default:
-          logTrackerEvent(this, 'NFT', 'ClickModalClose', this.classId, 1);
+          logTrackerEvent(
+            this,
+            'NFT',
+            'tx_modal_close_button_clicked',
+            this.classId,
+            1
+          );
           this.$emit('close');
           this.isShowQuitConfirm = false;
           break;
