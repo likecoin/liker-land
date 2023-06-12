@@ -74,7 +74,7 @@
             <IconError />
           </template>
           <template
-            v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE' || uiTxErrorMessage === 'INSUFFICIENT_GAS_FEE'"
+            v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE'"
             #append
           >
             <LinkV2
