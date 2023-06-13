@@ -241,9 +241,9 @@ const nuxtConfig = {
     '@nuxtjs/sitemap',
     ['@nuxtjs/pwa', { icon: false }],
     'portal-vue/nuxt',
-    ['@likecoin/nuxt-google-optimize', {
-      plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
-    }],
+    // ['@likecoin/nuxt-google-optimize', {
+    //   plugins: [{ src: '~/plugins/experiment.client.js', mode: 'client' }],
+    // }],
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -351,10 +351,10 @@ const nuxtConfig = {
     hostname: EXTERNAL_URL,
     routes: getSitemapRoutes,
   },
-  googleOptimize: {
-    useFetch: false,
-    maxAge: 86400, // 1 day
-  },
+  // googleOptimize: {
+  //   useFetch: false,
+  //   maxAge: 86400, // 1 day
+  // },
   router: {
     extendRoutes(routes, resolve) {
       const route = routes.find(r => r.name === 'id');

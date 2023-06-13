@@ -21,7 +21,7 @@
 
         <!-- CTA -->
         <NFTPageCollectCTA
-          v-if="!isExperimenting && nftIsWritingNFT"
+          v-if="nftIsWritingNFT"
           :nft-image-url="NFTImageUrl"
           :creator-message="creatorMessage"
           :iscn-owner="iscnOwner"
@@ -124,14 +124,6 @@
           <!-- Right column -->
           <div class="flex flex-col gap-[24px] desktop:col-span-2">
             <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="hidden w-full desktop:flex" />
-            <NFTPageCollectCTA
-              v-if="isExperimenting && nftIsWritingNFT"
-              :nft-image-url="NFTImageUrl"
-              :creator-message="creatorMessage"
-              :iscn-owner="iscnOwner"
-              :is-column="true"
-              @click-collect-from-cta="handleCollectFromCTA"
-            />
             <NFTPagePriceSection
               v-if="isShowPriceSection && nftIsPrimitive"
               :nft-price="NFTPrice"
@@ -244,17 +236,11 @@ import { EXTERNAL_HOST } from '~/constant';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
-import experimentMixin from '~/mixins/experiment';
 
 export default {
   name: 'NFTClassDetailsPage',
   layout: 'default',
-  mixins: [
-    clipboardMixin,
-    nftMixin,
-    navigationListenerMixin,
-    experimentMixin('isExperimenting', 'class-collect-cta', 'variant'),
-  ],
+  mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   head() {
     const title = this.NFTName || this.$t('nft_details_page_title');
     const description =
