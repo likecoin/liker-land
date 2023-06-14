@@ -104,6 +104,7 @@ export default {
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
       'getNFTListMapByAddress',
+      'getNFTBookStorePricesByClassId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
@@ -293,17 +294,23 @@ export default {
     },
 
     nftEditions() {
-      // TODO: Use real stock from API
-      return [
-        {
-          name: 'Standard Edition',
-          priceLabel: this.formattedNFTPriceInLIKE,
-          value: 'standard',
-          stock: this.nftIsCollectable ? 500 : 0,
-        },
-      ];
+      const prices = this.getNFTBookStorePricesByClassId(this.classId);
+      return prices
+        ? prices.map((edition, index) => ({
+            name: edition.name,
+            priceLabel: formatNumberWithUnit(edition.price, 'USD'),
+            value: index,
+            stock: edition.stock,
+          }))
+        : [
+            {
+              name: 'Standard Edition',
+              priceLabel: this.formattedNFTPriceInLIKE,
+              value: 'standard',
+              stock: this.nftIsCollectable ? 500 : 0,
+            },
+          ];
     },
-
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
       return collectedList ? Object.values(collectedList) : [];
@@ -539,6 +546,7 @@ export default {
       'lazyGetUserInfoByAddresses',
       'fetchNFTListByAddress',
       'fetchNFTDisplayStateListByAddress',
+      'fetchNFTBookPriceByClassId',
     ]),
     async fetchISCNMetadata() {
       await this.fetchISCNMetadataById(this.iscnId);

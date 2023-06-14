@@ -67,7 +67,7 @@
   >
     <component
       :is="componentTag"
-      :class="['flex', 'items-end', 'group', 'mt-[48px]']"
+      :class="['flex', 'items-end', { group: !isDetailsPreset }, 'mt-[48px]']"
       :to="isDetailsPreset ? undefined : nftCollectRoute"
     >
       <div

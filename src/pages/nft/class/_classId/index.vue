@@ -230,8 +230,9 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { EXTERNAL_HOST } from '~/constant';
+import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -339,6 +340,9 @@ export default {
     classId() {
       return this.$route.params.classId;
     },
+    platform() {
+      return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
+    },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
@@ -416,6 +420,9 @@ export default {
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
+      if (this.nftIsNFTBook) {
+        blockingPromises.push(this.fetchNFTBookPriceByClassId(this.classId));
+      }
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
@@ -574,9 +581,22 @@ export default {
       );
       return this.handleCollect();
     },
-    handleCollectFromEdition() {
-      // TODO: Collect different edition
-      this.handleCollectFromPriceSection();
+    handleCollectFromEdition(selectedValue) {
+      const bookStorePrices =
+        this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const hasStock = bookStorePrices[selectedValue]?.stock;
+      if (!hasStock && !this.nftIsCollectable) return;
+      if (hasStock) {
+        const link = getNFTBookPurchaseLink({
+          classId: this.classId,
+          priceIndex: selectedValue,
+          platform: this.platform,
+        });
+        window.open(link, '_blank', 'noopener');
+      } else if (this.nftIsCollectable) {
+        this.handleGotoCollectFromControlBar();
+      }
+      logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
     },
     handleCopyURL() {
       this.shareURLPath({
