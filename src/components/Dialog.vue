@@ -55,17 +55,20 @@
           ]"
         >
           <template v-if="isBasic">
-            <Label
-              class="font-bold text-like-green"
-              tag="header"
-              preset="h5"
-              align="left"
-              :text="headerText"
-            >
-              <template v-if="$slots['header-prepend']" #prepend>
-                <slot name="header-prepend" />
-              </template>
-            </Label>
+            <div class="flex items-center justify-between">
+              <Label
+                class="font-bold text-like-green"
+                tag="header"
+                preset="h5"
+                align="left"
+                :text="headerText"
+              >
+                <template v-if="$slots['header-prepend']" #prepend>
+                  <slot name="header-prepend" />
+                </template>
+              </Label>
+              <slot name="header-append" />
+            </div>
             <div class="mt-[24px]">
               <template v-if="text">{{ text }}</template>
               <slot v-else />

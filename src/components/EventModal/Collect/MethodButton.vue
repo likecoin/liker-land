@@ -1,7 +1,7 @@
 <template>
   <ButtonV2
-    class="w-full"
-    preset="outline"
+    class="w-full border-like-cyan"
+    :preset="buttonPreset"
     v-bind="$attrs"
     :is-disabled="isDisabled"
     @click="handleClick"
@@ -15,7 +15,7 @@
     <span class="w-full text-left font-600">{{ title }}</span>
     <template v-if="price" #append>
       <div class="flex items-center justify-end gap-[4px]">
-        <span class="text-medium-gray font-400 text-[12px] text-right">
+        <span class="text-like-green font-600 text-[12px] text-right">
           <!-- This value is from formattedNFTPriceInLIKE -->
           {{ price }}
         </span>
@@ -44,6 +44,11 @@ export default {
     isDisabled: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    buttonPreset() {
+      return this.type === 'stripe' ? 'secondary' : 'outline';
     },
   },
   methods: {
