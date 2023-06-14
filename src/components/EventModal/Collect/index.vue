@@ -4,6 +4,7 @@
     :has-close-button="isShowCloseButton"
     :header-text="headerText"
     preset="collect"
+    class="relative"
     :processing-title="$t('collect_modal_processing_title')"
     :complete-title="$t('collect_modal_complete_title')"
     @close="handleClose"
@@ -12,12 +13,15 @@
       <IconPrice />
     </template>
 
-    <template v-if="!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus)" #top>
-      <NFTPageOwning
-        v-if="hasConnectedWallet"
-        class="mb-[10px] phone:mt-0"
-        :collected-count="userCollectedCount"
-      />
+    <template v-if="hasConnectedWallet && (!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus))" #header-append>
+      <Label :text="$t('nft_details_page_label_owning')" class="text-like-cyan">
+        <template #prepend>
+          <IconCreativeWork />
+        </template>
+        <template #append>
+          {{ userCollectedCount }}
+        </template>
+      </Label>
     </template>
 
     <template #message>
@@ -179,7 +183,6 @@
         <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li v-if="enableStripe">
             <EventModalCollectMethodButton
-              :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
               :title="$t('nft_collect_modal_method_stripe')"
               type="stripe"
               :is-disabled="!canPayByFiat"
@@ -187,9 +190,9 @@
               @click="handleSelectPaymentMethod"
             />
           </li>
-          <li>
+          <li v-if="hasConnectedWallet">
             <EventModalCollectMethodButton
-              class="rounded-b-[0]"
+              :class="[{ 'rounded-b-[0]': isInsufficientLIKE }]"
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
               :is-disabled="isDisabledPayByLIKE"
@@ -197,6 +200,7 @@
               @click="handleSelectPaymentMethod"
             />
             <div
+              v-if="isInsufficientLIKE"
               :class="[
                 'flex',
                 'justify-end',
@@ -232,7 +236,7 @@
                 class="ml-[8px] w-[48px] h-[16px]"
               />
               <a
-                v-else-if="!hasConnectedWallet || isInsufficientLIKE"
+                v-else-if="isInsufficientLIKE"
                 class="ml-[16px] underline font-[400]"
                 :href="purchaseLIKELink"
                 target="_blank"
@@ -243,6 +247,9 @@
             </div>
           </li>
         </ul>
+        <div v-if="!hasConnectedWallet" class="flex justify-center mt-[12px]">
+          <div class="underline cursor-pointer text-medium-gray text-[12px]" @click="connectWallet">{{ $t('nft_collect_modal_login') }}</div>
+        </div>
       </section>
       <section v-else>
         <ProgressIndicator class="mx-auto" />
