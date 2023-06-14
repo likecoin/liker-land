@@ -4,6 +4,7 @@
       class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto mb-[48px]"
       :login-label="$t('nft_claim_login_in')"
       :login-button-label="$t('nft_claim_login_in_button')"
+      @login="claim"
     >
       <template #prepend>
         <NFTWidgetBaseCard class="flex justify-center items-center max-w-[400px] mb-[16px]">
@@ -118,29 +119,6 @@ export default {
       );
     },
   },
-  watch: {
-    loginAddress: {
-      immediate: true,
-      handler(newAddress, oldAddress) {
-        if (
-          process.server ||
-          (newAddress && oldAddress && newAddress === oldAddress) ||
-          this.shouldBlockClaim
-        ) {
-          return;
-        }
-
-        logTrackerEvent(
-          this,
-          'NFT',
-          'nft_claim_auto_start_claim_triggered',
-          this.classId,
-          1
-        );
-        this.claim();
-      },
-    },
-  },
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
@@ -155,6 +133,11 @@ export default {
       await store.dispatch('lazyGetNFTClassMetadata', classId);
     } catch (err) {
       error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
+    }
+  },
+  mounted() {
+    if (this.loginAddress) {
+      this.claim();
     }
   },
   methods: {

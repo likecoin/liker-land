@@ -25,7 +25,7 @@
         v-else
         :text="loginButtonLabel || $t('settings_page_content_with_auth_login_button')"
         preset="secondary"
-        @click="connectWallet"
+        @click="onClickLogin"
       />
     </div>
     <slot name="append" />
@@ -49,6 +49,13 @@ export default {
     isLoadingStartImmediately: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    async onClickLogin() {
+      this.$emit('click-login');
+      await this.connectWallet();
+      this.$emit('login');
     },
   },
 };
