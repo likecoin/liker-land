@@ -17,7 +17,7 @@
     "@google-cloud/firestore": "^4.2.0",
     "@google-cloud/pubsub": "^3.2.1",
     "@likecoin/edm": "^7.1.0",
-    "@likecoin/iscn-js": "^0.6.0",
+    "@likecoin/iscn-js": "^0.6.2",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",
     "@likecoin/wallet-connector": "^0.20.1",
