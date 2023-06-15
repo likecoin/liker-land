@@ -362,7 +362,7 @@ export default {
     },
     canPayByLIKE() {
       if (this.developerMode) return true;
-      const notSupportedPlatforms = ['keplr-mobile'];
+      const notSupportedPlatforms = [];
       return !notSupportedPlatforms.includes(this.walletMethodType);
     },
     isDisabledPayByLIKE() {
