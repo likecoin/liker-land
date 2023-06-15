@@ -397,7 +397,12 @@ const nuxtConfig = {
         ],
       ],
     },
-    transpile: ['gsap'],
+    transpile: [
+      'gsap',
+      'cosmjs-type',
+      '@cosmjs',
+      '@likecoin/iscn-js',
+    ],
 
     /*
     ** You can extend webpack config here
