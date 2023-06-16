@@ -132,7 +132,7 @@
   "Currency": {
     "USD": "USD"
   },
-  "dashboard_button_type_resales": "Resales",
+  "dashboard_button_type_resales": "Resales Earnings",
   "dashboard_button_type_royalties": "Royalties",
   "dashboard_button_type_sales": "Sales Earnings",
   "dashboard_description": "Connect your wallet to view your NFT dashboard.",
@@ -145,6 +145,9 @@
   "dashboard_table_no_data": "No Data",
   "dashboard_table_untitled": "Untitled",
   "dashboard_title": "My Dashboard",
+  "dashboard_tooltips_resales": "The sales revenue and actual earnings from NFTs in the secondary market",
+  "dashboard_tooltips_royalty": "The actual earnings as a stakeholder",
+  "dashboard_tooltips_sales": "The sales revenue and actual earnings from NFTs",
 
   "edit": "Edit",
   "ERROR": {

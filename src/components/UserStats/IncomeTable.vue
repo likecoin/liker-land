@@ -34,7 +34,7 @@
           <div class="flex flex-col justify-start mr-[12px] text-dark-gray">
             <Label preset="h5" class="text-like-green">{{ item.nftName }}</Label>
             <div class="flex justify-start gap-[6px] mt-[6px]">
-              <ToolTips v-if="isTypeTotalSales" :tool-tip-text="$t('dashboard_table_class_price')">
+              <ToolTips :tool-tip-text="$t('dashboard_table_class_price')">
                 <div class="py-[4px] px-[8px] rounded-[6px] bg-shade-gray text-10 cursor-default">{{ item.itemSales | formatNumberWithLIKE }}</div>
               </ToolTips>
               <ToolTips :tool-tip-text="$t('dashboard_table_class_stake_percentage')">

@@ -92,17 +92,20 @@ export default {
         {
           text: this.$t('dashboard_button_type_sales'),
           value: DETAILS_TYPE.SALES,
+          tooltips: this.$t('dashboard_tooltips_sales'),
           amount: convertToLIKEPrice(this.totalSales),
-        },
-        {
-          text: this.$t('dashboard_button_type_royalties'),
-          value: DETAILS_TYPE.ROYALTY,
-          amount: convertToLIKEPrice(this.totalRoyalty),
         },
         {
           text: this.$t('dashboard_button_type_resales'),
           value: DETAILS_TYPE.RESALES,
+          tooltips: this.$t('dashboard_tooltips_resales'),
           amount: convertToLIKEPrice(this.totalResales),
+        },
+        {
+          text: this.$t('dashboard_button_type_royalties'),
+          value: DETAILS_TYPE.ROYALTY,
+          tooltips: this.$t('dashboard_tooltips_royalty'),
+          amount: convertToLIKEPrice(this.totalRoyalty),
         },
       ];
 

@@ -8,7 +8,6 @@
 
       'rounded-[58px]',
       'p-[4px]',
-      'overflow-hidden',
     ]"
   >
     <li
@@ -16,38 +15,40 @@
       :key="item.value"
       class="flex items-center justify-center w-full"
     >
-      <div
-        :class="[
-          'flex',
-          'flex-col',
-          'justify-center',
-          'items-center',
-
-          'w-full',
-          'py-[8px]',
-          'rounded-[58px]',
-          'cursor-pointer',
-          'transition-all',
-          'duration-200',
-
-          'text-dark-gray bg-shade-gray hover:text-medium-gray',
-          { '!bg-like-green text-shade-gray shadow-sm hover:text-like-cyan-gray': item.isSelected },
-
-        ]"
-        @click="$emit('type-click',item.value)"
-      >
-        <Label preset="h5" :text="item.text" align="center" />
-        <p
+      <ToolTips :tool-tip-text="item.tooltips" class="flex items-center justify-center w-full">
+        <div
           :class="[
-            'text-center',
-            'text-10',
-            'text-medium-gray',
-            { 'text-light-gray': item.isSelected },
+            'flex',
+            'flex-col',
+            'justify-center',
+            'items-center',
+
+            'w-full',
+            'py-[8px]',
+            'rounded-[58px]',
+            'cursor-pointer',
+            'transition-all',
+            'duration-200',
+
+            'text-dark-gray bg-shade-gray hover:text-medium-gray',
+            { '!bg-like-green text-shade-gray shadow-sm hover:text-like-cyan-gray': item.isSelected },
+
           ]"
+          @click="$emit('type-click',item.value)"
         >
-          {{ item.amount | formatNumberWithLIKE }}
-        </p>
-      </div>
+          <Label preset="h5" :text="item.text" align="center" />
+          <p
+            :class="[
+              'text-center',
+              'text-10',
+              'text-medium-gray',
+              { 'text-light-gray': item.isSelected },
+            ]"
+          >
+            {{ item.amount | formatNumberWithLIKE }}
+          </p>
+        </div>
+      </ToolTips>
     </li>
   </ul>
 </template>

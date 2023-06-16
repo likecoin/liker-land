@@ -145,6 +145,9 @@
   "dashboard_table_no_data": "沒有資料",
   "dashboard_table_untitled": "無標題",
   "dashboard_title": "我的書架",
+  "dashboard_tooltips_resales": "二手市場 NFT 的銷售額及實際收益",
+  "dashboard_tooltips_royalty": "身為 stakeholder 的實際收益",
+  "dashboard_tooltips_sales": "NFT 的銷售額及實際收益",
 
   "edit": "編輯",
   "ERROR": {
