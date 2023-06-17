@@ -266,9 +266,6 @@ export default {
     },
     attentionText() {
       switch (this.walletMethodType) {
-        case 'keplr':
-          return this.$t('attention_ledger_not_support');
-
         case 'keplr-mobile':
           return this.$t('attention_keplrMobile_openApp');
 
