@@ -28,7 +28,6 @@
     "Start": "Start"
   },
   "attention_keplrMobile_openApp": "Open your Keplr mobile app and you should find a dialog box pending your approval.\nIf you cannot find the dialog box, kill the app instance and retry all over again.",
-  "attention_ledger_not_support": "Ledger is not supported",
   "attention_likerland_openApp": "Open your Liker Land app and you should find a dialog box pending your approval.\nIf you cannot find the dialog box, delete the Wallet Connect session in the “app setting” and retry all over again.",
   "auth_required_view_hint_label_loading": "Verifying wallet",
   "back": "Back",
