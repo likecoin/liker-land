@@ -11,11 +11,17 @@
     ]"
     :has-padding="false"
   >
-    <NFTCover
-      :src="imageUrl"
-      :video-src="animationUrl"
-      :bg-color="imageBgColor"
-    />
+    <a
+      :href="url || iscnUrl"
+      target="_blank"
+      rel="noopener"
+    >
+      <NFTCover
+        :src="imageUrl"
+        :video-src="animationUrl"
+        :bg-color="imageBgColor"
+      />
+    </a>
     <div
       :class="[
         'flex',
