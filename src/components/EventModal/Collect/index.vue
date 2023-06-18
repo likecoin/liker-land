@@ -40,7 +40,12 @@
           />
         </client-only>
       </transition>
-      <template v-if="isCompleted">
+      <Label
+        v-if="isAddedToShoppingCart"
+        preset="p5"
+        align="center"
+      >{{ $t('nft_collect_modal_added_to_shopping_cart_description', { nft: NFTName }) }}</Label>
+      <template v-else-if="isCompleted">
         <Label class="text-medium-gray mt-[12px] flex-nowrap" preset="h6" align="center">
           <i18n
             :path="
@@ -61,7 +66,7 @@
           </i18n>
         </Label>
         <div
-          v-if="!isFollowPromptStateDefault"
+          v-if="!isFollowPromptStateDefault && !isBatchCollect"
           class="flex justify-center items-center mt-[16px] px-[12px] rounded-[48px] border-[1px] border-medium-gray"
         >
           <NFTMessageIdentity
@@ -131,9 +136,20 @@
       #button
     >
       <ButtonV2
+        v-if="isBatchCollect"
+        preset="outline"
+        :text="$t('nft_details_page_button_view_portfolio')"
+        :to="localeLocation({ name: 'id', params: { id: getAddress }, query: { tab: 'collected' } })"
+        @click.native="handleClose"
+      >
+        <template #prepend>
+          <IconEye class="w-[20px]" />
+        </template>
+      </ButtonV2>
+      <ButtonV2
+        v-else
         preset="outline"
         :text="$t('nft_details_page_button_view_details')"
-        class="mr-[12px]"
         @click="goToNFTDetails"
       >
         <template #prepend>
@@ -142,7 +158,20 @@
       </ButtonV2>
     </template>
 
-    <template v-if="!uiTxNFTStatus">
+    <template v-else-if="isAddedToShoppingCart" #button>
+      <ButtonV2
+        preset="secondary"
+        :text="$t('nft_collect_modal_go_to_shopping_cart_button')"
+        :to="localeLocation({ name: 'shopping-cart' })"
+        @click.native="handleClose"
+      >
+        <template #prepend>
+          <LocalMallIcon class="w-[20px]" />
+        </template>
+      </ButtonV2>
+    </template>
+
+    <template v-if="!isAddedToShoppingCart && !uiTxNFTStatus">
       <section
         v-if="paymentMethod === undefined"
         class="flex flex-col items-start mb-[28px]"
@@ -242,6 +271,24 @@
               </a>
             </div>
           </li>
+          <li v-if="isShowAddToShoppingCartButton">
+            <Separator class="mx-auto" />
+            <EventModalCollectMethodButton
+              :title="(
+                hasAddedToShoppingCart
+                  ? $t('nft_collect_modal_added_to_cart')
+                  : $tc('nft_collect_modal_add_to_cart', shoppingCartQuantity, { count: shoppingCartQuantity })
+              )"
+              type="crypto"
+              :price="formattedNFTPriceInLIKE"
+              :is-disabled="hasAddedToShoppingCart"
+              @click="handleAddToCart"
+            >
+              <template #prepend>
+                <LocalMallIcon :class="['w-[24px]', { 'text-like-green': !hasAddedToShoppingCart }]" />
+              </template>
+            </EventModalCollectMethodButton>
+          </li>
         </ul>
       </section>
       <section v-else>
@@ -255,6 +302,8 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import modelLoadingImage from '~/assets/images/nft/model-loading.png';
+import LocalMallIcon from '~/assets/icons/local-mall.svg?inline';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
@@ -270,6 +319,9 @@ const FOLLOW_PROMPT_STATE = {
 export default {
   filters: {
     formatNumberWithLIKE,
+  },
+  components: {
+    LocalMallIcon,
   },
   mixins: [clipboardMixin, nftMixin],
   props: {
@@ -317,11 +369,13 @@ export default {
       isFollowPromptUpdating: false,
       modelExposure: 0,
       animationTimer: null,
+      isAddedToShoppingCart: false,
     };
   },
   computed: {
     ...mapGetters([
       'getAddress',
+      'getShoppingCartNFTClassQuantity',
       'walletFollowees',
       'walletIsLoggingIn',
       'walletInteractedCreators',
@@ -332,9 +386,14 @@ export default {
     developerMode() {
       return !!this.$route.query.debug;
     },
+    isBatchCollect() {
+      return Array.isArray(this.uiTxTargetClassId);
+    },
     classId() {
       // Alias for NFT mixin
-      return this.uiTxTargetClassId;
+      return this.isBatchCollect
+        ? this.uiTxTargetClassId[0]
+        : this.uiTxTargetClassId;
     },
     headerText() {
       return this.paymentMethod === undefined ||
@@ -426,6 +485,15 @@ export default {
     purchaseLIKELink() {
       return 'https://faucet.like.co/purchase';
     },
+    isShowAddToShoppingCartButton() {
+      return this.canPayByLIKE && !this.nftIsUseListingPrice;
+    },
+    shoppingCartQuantity() {
+      return this.getShoppingCartNFTClassQuantity(this.classId);
+    },
+    hasAddedToShoppingCart() {
+      return this.shoppingCartQuantity > 0;
+    },
   },
   watch: {
     isOpen(isOpen) {
@@ -483,6 +551,7 @@ export default {
       'walletFollowCreator',
       'walletAddInteractedCreator',
       'walletUnfollowCreator',
+      'addNFTClassToShoppingCart',
     ]),
     startExposureAnimation(time = performance.now(), lastTime = time) {
       if (this.isProcessing) {
@@ -508,6 +577,7 @@ export default {
       this.paymentMethod = undefined;
       this.justCollectedNFTId = undefined;
       this.memo = '';
+      this.isAddedToShoppingCart = false;
 
       // Mixin
       this.userCollectedCount = undefined;
@@ -563,6 +633,17 @@ export default {
           this.paymentMethod = undefined;
         }
       }
+    },
+    handleAddToCart() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collect_modal_click_add_to_cart',
+        this.classId,
+        1
+      );
+      this.addNFTClassToShoppingCart({ classId: this.classId });
+      this.isAddedToShoppingCart = true;
     },
     goToNFTDetails() {
       this.$router.push(

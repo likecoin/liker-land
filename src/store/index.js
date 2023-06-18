@@ -34,6 +34,9 @@ const createStore = () =>
         }
         if (res.timing) res.timing.end('store_init');
       },
+      nuxtClientInit({ dispatch }) {
+        dispatch('loadShoppingCart');
+      },
     },
     modules: {
       ui,
