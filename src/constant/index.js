@@ -194,5 +194,8 @@ export const NFT_DISPLAY_STATE = {
   DEFAULT: 'default',
 };
 
+// NOTE: Limitation of LikeCoin API for batch collect
+export const BATCH_COLLECT_MAX = 100;
+
 export const EMAIL_REGEX_STRING =
   '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$';

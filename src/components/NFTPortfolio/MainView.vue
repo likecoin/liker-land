@@ -104,6 +104,8 @@
         </div>
       </div>
 
+      <slot name="before-grid" />
+
       <NFTPagePrimitiveDisclaimer
         v-if="isPortfolioOtherFilterActive"
         class="w-full"

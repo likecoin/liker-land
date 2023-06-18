@@ -17,8 +17,16 @@ import {
   formatNFTClassInfo,
 } from '~/util/nft';
 import { catchAxiosError } from '~/util/misc';
+import {
+  loadShoppingCartFromStorage,
+  saveShoppingCartToStorage,
+} from '~/util/shopping-cart';
 import { getGemLevelBySoldCount } from '~/util/writing-nft';
-import { LIKECOIN_NFT_HIDDEN_ITEMS, NFT_DISPLAY_STATE } from '~/constant';
+import {
+  BATCH_COLLECT_MAX,
+  LIKECOIN_NFT_HIDDEN_ITEMS,
+  NFT_DISPLAY_STATE,
+} from '~/constant';
 import * as TYPES from '../mutation-types';
 
 const typeOrder = {
@@ -38,6 +46,7 @@ const state = () => ({
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
+  shoppingCartNFTClassByIdMap: {},
 });
 
 const mutations = {
@@ -91,6 +100,27 @@ const mutations = {
     { address, timestampMap }
   ) {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
+  },
+  [TYPES.SHOPPING_CART_ADD_NFT_CLASS](state, { classId }) {
+    let item = state.shoppingCartNFTClassByIdMap[classId];
+    if (!item) {
+      item = {
+        timestamp: Date.now(),
+        quantity: 1,
+      };
+    } else {
+      item = {
+        ...item,
+        quantity: item.quantity + 1,
+      };
+    }
+    Vue.set(state.shoppingCartNFTClassByIdMap, classId, item);
+  },
+  [TYPES.SHOPPING_CART_REMOVE_NFT_CLASS](state, { classId }) {
+    Vue.delete(state.shoppingCartNFTClassByIdMap, classId);
+  },
+  [TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS](state, map) {
+    state.shoppingCartNFTClassByIdMap = map;
   },
 };
 
@@ -308,6 +338,15 @@ const getters = {
         if (!aIsWritingNFT && bIsWritingNFT) return 1;
         return b.timestamp - a.timestamp;
       }),
+  shoppingCartNFTClassList: state => {
+    const list = [...Object.entries(state.shoppingCartNFTClassByIdMap)].map(
+      ([classId, data]) => ({ classId, ...data })
+    );
+    list.sort((a, b) => a.timestamp - b.timestamp);
+    return list;
+  },
+  getShoppingCartNFTClassQuantity: state => classId =>
+    state.shoppingCartNFTClassByIdMap[classId]?.quantity || 0,
 };
 
 const actions = {
@@ -622,6 +661,37 @@ const actions = {
       classId,
       displayState,
     });
+  },
+  addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
+    if (getters.shoppingCartNFTClassList.length >= BATCH_COLLECT_MAX) {
+      return;
+    }
+    commit(TYPES.SHOPPING_CART_ADD_NFT_CLASS, { classId });
+    dispatch('saveShoppingCart');
+  },
+  addNFTClassesToShoppingCart({ commit, dispatch }, { classIds }) {
+    commit(TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS, {});
+    classIds.slice(0, BATCH_COLLECT_MAX).forEach(classId => {
+      commit(TYPES.SHOPPING_CART_ADD_NFT_CLASS, { classId });
+    });
+    dispatch('saveShoppingCart');
+  },
+  removeNFTClassFromShoppingCart({ commit, dispatch }, { classId }) {
+    commit(TYPES.SHOPPING_CART_REMOVE_NFT_CLASS, { classId });
+    dispatch('saveShoppingCart');
+  },
+  clearShoppingCart({ commit, dispatch }) {
+    commit(TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS, {});
+    dispatch('saveShoppingCart');
+  },
+  saveShoppingCart({ state }) {
+    saveShoppingCartToStorage(state.shoppingCartNFTClassByIdMap);
+  },
+  loadShoppingCart({ commit }) {
+    commit(
+      TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS,
+      loadShoppingCartFromStorage()
+    );
   },
 };
 
