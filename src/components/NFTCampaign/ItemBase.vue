@@ -52,7 +52,9 @@
       </div>
       <div>
         <template v-if="storyTitle">
-          <h3 class="text-[24px] leading-[1.3] font-[700] text-like-green font-serif">{{ storyTitle }}</h3>
+          <NuxtLink :to="localeLocation({ name: 'nft-class-classId', params: { classId }})">
+            <h3 class="text-[24px] leading-[1.3] font-[700] text-like-green font-serif">{{ storyTitle }}</h3>
+          </NuxtLink>
           <NuxtLink
             class="mt-[16px] flex items-center text-like-green group -my-[8px]"
             :to="ownerAddress ? localeLocation({ name: 'id', params: { id: ownerAddress }, query: { tab: 'created' } }) : ''"
@@ -66,7 +68,9 @@
             />
             <span class="ml-[8px] group-hover:underline font-[600]">{{ ownerName | ellipsis }}</span>
           </NuxtLink>
-          <p class="mt-[24px] text-[20px] leading-[1.5] text-gray-4a font-serif">{{ storyDescription }}</p>
+          <NuxtLink :to="localeLocation({ name: 'nft-class-classId', params: { classId }})">
+            <p class="mt-[24px] text-[20px] leading-[1.5] text-gray-4a font-serif">{{ storyDescription }}</p>
+          </NuxtLink>
         </template>
         <NFTSupplyTable
           v-else
