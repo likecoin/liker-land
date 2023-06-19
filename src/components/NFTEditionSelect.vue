@@ -47,6 +47,7 @@
 
       <ButtonV2
         v-if="!isAllSoldOut"
+        :is-disabled="!selectedItem"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text')"
         @click="handleClickCollectButton"
@@ -121,7 +122,7 @@ export default {
       );
     }
     return {
-      selectedValue: selectedItem.value || this.value,
+      selectedValue: selectedItem?.value || this.value,
     };
   },
   computed: {
