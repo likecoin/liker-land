@@ -38,8 +38,13 @@
         ]"
       >
         <div class="col-start-1 col-end-8">{{ $t('shopping_cart_list_header_item') }}</div>
+        <!--
         <div class="col-start-8 col-end-10 text-center">{{ $t('shopping_cart_list_header_price') }}</div>
+        -->
+        <div class="col-start-10 col-end-12 text-center">{{ $t('shopping_cart_list_header_price') }}</div>
+        <!--
         <div class="col-start-10 col-end-12 text-center">{{ $t('shopping_cart_list_header_quantity') }}</div>
+        -->
       </header>
       <ul
         :class="[

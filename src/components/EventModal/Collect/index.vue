@@ -271,6 +271,7 @@
               </a>
             </div>
           </li>
+          <!--
           <li v-if="isShowAddToShoppingCartButton">
             <Separator class="mx-auto" />
             <EventModalCollectMethodButton
@@ -289,6 +290,7 @@
               </template>
             </EventModalCollectMethodButton>
           </li>
+          -->
         </ul>
       </section>
       <section v-else>
