@@ -414,7 +414,7 @@
   "nft_share_page_collector_title": "來看看我的收藏品，令人動容的文字，值得以 Writing NFT 永誌留存。",
   "nft_share_page_creator_title": "收集我作品的 Writing NFT 到你的 Web3 書架，支持創作，也令內容永續。",
   "nft_sold_out": "售罄",
-  "nft_stock_left": "還有 {left} 個",
+  "nft_stock_left": "還有 {stock} 個",
   "nft_supply_section_title": "供應量",
   "nft_type_all_NFTs": "所有 NFT",
   "nft_type_book": "NFT 書",
