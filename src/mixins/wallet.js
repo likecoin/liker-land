@@ -17,8 +17,10 @@ export default {
       'getUserInfoByAddress',
       'walletTotalSales',
       'walletTotalRoyalty',
+      'walletTotalResales',
       'walletSalesDetails',
       'walletRoyaltyDetails',
+      'walletResalesDetails',
       'walletFollowees',
       'walletFollowers',
       'walletIsFetchingFollowers',
@@ -78,6 +80,7 @@ export default {
       'signLogin',
       'walletFetchTotalRoyalty',
       'walletFetchTotalSales',
+      'walletFetchTotalResales',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {

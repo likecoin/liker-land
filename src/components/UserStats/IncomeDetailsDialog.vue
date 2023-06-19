@@ -30,11 +30,10 @@ import { ellipsis } from '~/util/ui';
 import { convertToLIKEPrice } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import { IS_TESTNET } from '~/constant';
-
 const DETAILS_TYPE = {
   ROYALTY: 'royalty',
   SALES: 'sales',
+  RESALES: 'resales',
 };
 
 export default {
@@ -67,6 +66,10 @@ export default {
       type: [Number, String],
       default: undefined,
     },
+    totalResales: {
+      type: [Number, String],
+      default: undefined,
+    },
     salesDetails: {
       type: Array,
       default: () => [],
@@ -75,29 +78,36 @@ export default {
       type: Array,
       default: () => [],
     },
+    resalesDetails: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return { currentTargetType: DETAILS_TYPE.SALES };
   },
   computed: {
-    shouldShowRoyaltyInfo() {
-      return !!this.$route.query.show_royalty;
-    },
     typeMenuItemList() {
       const items = [
         {
           text: this.$t('dashboard_button_type_sales'),
           value: DETAILS_TYPE.SALES,
+          tooltips: this.$t('dashboard_tooltips_sales'),
           amount: convertToLIKEPrice(this.totalSales),
         },
-      ];
-      if (this.shouldShowRoyaltyInfo || IS_TESTNET) {
-        items.push({
+        {
+          text: this.$t('dashboard_button_type_resales'),
+          value: DETAILS_TYPE.RESALES,
+          tooltips: this.$t('dashboard_tooltips_resales'),
+          amount: convertToLIKEPrice(this.totalResales),
+        },
+        {
           text: this.$t('dashboard_button_type_royalties'),
           value: DETAILS_TYPE.ROYALTY,
+          tooltips: this.$t('dashboard_tooltips_royalty'),
           amount: convertToLIKEPrice(this.totalRoyalty),
-        });
-      }
+        },
+      ];
 
       return items.map(item => ({
         ...item,
@@ -110,14 +120,20 @@ export default {
     populatedSalesList() {
       return this.populateDetails(this.salesDetails);
     },
+    populatedResaleList() {
+      return this.populateDetails(this.resalesDetails);
+    },
     currentList() {
       switch (this.currentTargetType) {
-        case DETAILS_TYPE.SALES:
-          return this.populatedSalesList;
-
         case DETAILS_TYPE.ROYALTY:
-        default:
           return this.populatedRoyaltyDetails;
+
+        case DETAILS_TYPE.RESALES:
+          return this.populatedResaleList;
+
+        case DETAILS_TYPE.SALES:
+        default:
+          return this.populatedSalesList;
       }
     },
     salesButtonPreset() {
@@ -149,7 +165,7 @@ export default {
     },
   },
   methods: {
-    populateDetails(list) {
+    populateDetails(list, address = '') {
       return list.map(item => {
         const itemSales = convertToLIKEPrice(item.sales);
         const salesEarnings = convertToLIKEPrice(item.total_amount);
