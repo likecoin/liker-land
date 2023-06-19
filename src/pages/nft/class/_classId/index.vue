@@ -65,10 +65,29 @@
                 class="self-stretch"
                 :items="nftEditions"
                 :should-show-notify-button="false"
-                @click-collect="handleCollectFromEdition"
+                @click-collect="
+                  (selectedValue) =>
+                    handleCollectFromEdition(selectedValue, 'EditionSelector')"
               />
             </template>
           </NFTBookItemCard>
+
+          <ul
+            v-if="nftEditions.length > 1"
+            class="flex flex-wrap items-center justify-center gap-[24px] w-full max-w-[962px] mx-auto"
+          >
+            <li v-for="editionConfig in nftEditions" :key="editionConfig.name">
+              <NFTBookEditionCover
+                class="w-[280px]"
+                :src="NFTImageUrl"
+                :edition-config="editionConfig"
+                :class-id="classId"
+                @click-collect="
+                  (selectedValue) =>
+                    handleCollectFromEdition(selectedValue, 'Edition')"
+              />
+            </li>
+          </ul>
 
           <Separator class="mx-auto" />
 
@@ -581,11 +600,13 @@ export default {
       );
       return this.handleCollect();
     },
-    handleCollectFromEdition(selectedValue) {
+
+    handleCollectFromEdition(selectedValue, actionType) {
       const bookStorePrices =
         this.getNFTBookStorePricesByClassId(this.classId) || {};
       const hasStock = bookStorePrices[selectedValue]?.stock;
       if (!hasStock && !this.nftIsCollectable) return;
+
       if (hasStock) {
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
@@ -596,8 +617,16 @@ export default {
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
-      logTrackerEvent(this, 'NFT', 'NFTCollect(Edition)', this.classId, 1);
+
+      logTrackerEvent(
+        this,
+        'NFT',
+        `NFTCollect(${actionType})`,
+        this.classId,
+        1
+      );
     },
+
     handleCopyURL() {
       this.shareURLPath({
         title: this.NFTName,

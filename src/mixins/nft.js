@@ -50,6 +50,8 @@ const nftClassCollectionMixin = createNFTClassCollectionMixin({
   typeKey: 'nftClassCollectionType',
 });
 
+const defaultThemeColor = ['', '#FFC123', '#ECBDF3'];
+
 export default {
   mixins: [
     walletMixin,
@@ -294,22 +296,45 @@ export default {
     },
 
     nftEditions() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
+      const defaultEdition = {
+        name: 'Standard Edition',
+        description: 'Content of standard edition',
+        priceLabel: this.formattedNFTPriceInLIKE,
+        value: 'standard',
+        stock: this.nftIsCollectable ? 500 : 0,
+      };
       return prices
-        ? prices.map((edition, index) => ({
-            name: edition.name,
-            priceLabel: formatNumberWithUnit(edition.price, 'USD'),
-            value: index,
-            stock: edition.stock,
-          }))
-        : [
-            {
-              name: 'Standard Edition',
-              priceLabel: this.formattedNFTPriceInLIKE,
-              value: 'standard',
-              stock: this.nftIsCollectable ? 500 : 0,
-            },
-          ];
+        ? prices.map((edition, index) => {
+            let { name } = edition;
+            if (typeof name === 'object') {
+              name = name[locale];
+            }
+            const description = edition.description
+              ? edition.description[locale]
+              : '';
+            const priceLabel = formatNumberWithUnit(edition.price, 'USD');
+            const { stock } = edition;
+            const style = {
+              spineColor1: edition.spineColor1 || '#EBEBEB',
+              spineColor2: edition.spineColor2 || '#9B9B9B',
+              themeColor: edition.themeColor || defaultThemeColor[index],
+            };
+
+            return {
+              name,
+              description,
+              priceLabel,
+              value: index,
+              stock,
+              style,
+            };
+          })
+        : [defaultEdition];
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
