@@ -27,7 +27,10 @@
         />
       </NuxtLink>
     </div>
+    <!--
     <div class="col-span-6 laptop:col-span-5">
+    -->
+    <div class="col-span-8 laptop:col-span-7">
       <NuxtLink class="block laptop:hidden mb-[.75em]" :to="nftCollectRoute">
         <NFTCover
           class="rounded-[4px] overflow-hidden shrink"
@@ -55,7 +58,9 @@
       </NuxtLink>
     </div>
     <div class="col-span-2 text-center text-like-green font-proxima font-[600]">{{ NFTPrice | formatNumberWithLIKE }}</div>
+    <!--
     <div class="col-span-2 text-center">{{ quantity }}</div>
+    -->
     <div class="col-span-1 flex justify-end mt-[-.25em]">
       <ButtonV2
         preset="plain"
