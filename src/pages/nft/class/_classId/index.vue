@@ -68,26 +68,28 @@
                 @click-collect="
                   (selectedValue) =>
                     handleCollectFromEdition(selectedValue, 'EditionSelector')"
+                @click-compare="handleClickCompareItemsButton"
               />
             </template>
           </NFTBookItemCard>
-
-          <ul
-            v-if="nftEditions.length > 1"
-            class="flex flex-wrap items-center justify-center gap-[24px] w-full max-w-[962px] mx-auto"
-          >
-            <li v-for="editionConfig in nftEditions" :key="editionConfig.name">
-              <NFTBookEditionCover
-                class="w-[280px]"
-                :src="NFTImageUrl"
-                :edition-config="editionConfig"
-                :class-id="classId"
-                @click-collect="
-                  (selectedValue) =>
-                    handleCollectFromEdition(selectedValue, 'Edition')"
-              />
-            </li>
-          </ul>
+          <div v-if="nftEditions.length > 1" ref="compareSection" class="max-w-[962px] mx-auto flex flex-col justify-center">
+            <Label :text="$t('nft_edition_label')" preset="h3" align="center" class="text-like-green mt-[38px] mb-[24px]" />
+            <ul
+              class="flex flex-wrap items-start justify-center gap-[24px] w-full"
+            >
+              <li v-for="editionConfig in nftEditions" :key="editionConfig.name">
+                <NFTBookEditionCover
+                  class="w-[280px]"
+                  :src="NFTImageUrl"
+                  :edition-config="editionConfig"
+                  :class-id="classId"
+                  @click-collect="
+                    (selectedValue) =>
+                      handleCollectFromEdition(selectedValue, 'CompareEdition')"
+                />
+              </li>
+            </ul>
+          </div>
 
           <Separator class="mx-auto" />
 
@@ -690,6 +692,18 @@ export default {
         this,
         'NFT',
         'nft_class_details_recommendation_moved_slider',
+        this.classId,
+        1
+      );
+    },
+    handleClickCompareItemsButton() {
+      this.$nextTick(() =>
+        this.$refs.compareSection.scrollIntoView({ behavior: 'smooth' })
+      );
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_compare_button_clicked',
         this.classId,
         1
       );
