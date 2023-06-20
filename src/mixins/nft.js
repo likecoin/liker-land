@@ -50,7 +50,7 @@ const nftClassCollectionMixin = createNFTClassCollectionMixin({
   typeKey: 'nftClassCollectionType',
 });
 
-const defaultThemeColor = ['', '#FFC123', '#ECBDF3'];
+const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
 
 export default {
   mixins: [
