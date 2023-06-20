@@ -65,6 +65,7 @@
                 class="self-stretch"
                 :items="nftEditions"
                 :should-show-notify-button="false"
+                :value="nftEditions[0].value"
                 @click-collect="
                   (selectedValue) =>
                     handleCollectFromEdition(selectedValue, 'EditionSelector')"
