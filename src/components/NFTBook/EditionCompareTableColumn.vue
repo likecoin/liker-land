@@ -12,7 +12,7 @@
           <div
             class="absolute inset-0 w-full h-full"
             :style="{
-              backgroundColor: getThemeColor || 'none',
+              backgroundColor: themeColor || 'none',
               opacity: 0.3
             }"
           />
@@ -22,8 +22,8 @@
               :size="450"
               :is-nft-book="true"
               :alt="alt"
-              :spine-color1="getSpineColor1"
-              :spine-color2="getSpineColor2"
+              :spine-color1="spineColor1"
+              :spine-color2="spineColor2"
             />
           </div>
         </div>
@@ -40,10 +40,10 @@
             'relative',
           ]"
         >
-          <Label align="center" :text="getNftName" class="text-like-green" />
-          <div class="my-[24px] text-center text-[14px] text-dark-gray">{{ getNftDescription }}</div>
+          <Label align="center" :text="nftName" class="text-like-green" />
+          <div class="my-[24px] text-center text-[14px] text-dark-gray">{{ nftDescription }}</div>
           <div class="flex items-center justify-center">
-            <ButtonV2 preset="secondary" :text="getPriceLabel" @click="$emit('click-collect',getNftValue)">
+            <ButtonV2 preset="secondary" :text="priceLabel" @click="$emit('click-collect', nftValue)">
               <template #prepend>
                 <NFTWidgetIconInsertCoin class="w-[16px]" />
               </template>
@@ -56,6 +56,7 @@
 </template>
 <script>
 export default {
+  name: 'NFTBookEditionCompareTableColumn',
   props: {
     src: {
       type: String,
@@ -79,25 +80,25 @@ export default {
     },
   },
   computed: {
-    getThemeColor() {
+    themeColor() {
       return this.editionConfig?.style?.themeColor;
     },
-    getSpineColor1() {
+    spineColor1() {
       return this.editionConfig?.style?.spineColor1;
     },
-    getSpineColor2() {
+    spineColor2() {
       return this.editionConfig?.style?.spineColor2;
     },
-    getNftName() {
+    nftName() {
       return this.editionConfig?.name;
     },
-    getNftDescription() {
+    nftDescription() {
       return this.editionConfig?.description;
     },
-    getNftValue() {
+    nftValue() {
       return this.editionConfig?.value;
     },
-    getPriceLabel() {
+    priceLabel() {
       return this.editionConfig?.priceLabel;
     },
   },
