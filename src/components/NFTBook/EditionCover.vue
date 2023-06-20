@@ -1,5 +1,5 @@
 <template>
-  <NFTGemWrapper :is-nft-book="true" :edition-color="themeColor" :class-id="classId">
+  <NFTGemWrapper :is-nft-book="true" :class-id="classId">
     <template v-slot="gem">
       <NFTPortfolioCard
         :gem-level="gem.level"
