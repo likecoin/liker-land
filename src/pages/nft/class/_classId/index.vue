@@ -65,7 +65,7 @@
                 class="self-stretch"
                 :items="nftEditions"
                 :should-show-notify-button="false"
-                :value="nftEditions[0].value"
+                :value="defaultSelectedValue"
                 @click-collect="handleCollectFromEditionTable"
                 @click-compare="handleClickCompareItemsButton"
               />
@@ -377,6 +377,9 @@ export default {
     },
     isContentViewable() {
       return !(this.nftIsNFTBook && !this.ownCount);
+    },
+    defaultSelectedValue() {
+      return this.nftEditions[0]?.value;
     },
   },
   asyncData({ query }) {
