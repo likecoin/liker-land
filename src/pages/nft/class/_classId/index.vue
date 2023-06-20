@@ -66,9 +66,7 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="nftEditions[0].value"
-                @click-collect="
-                  (selectedValue) =>
-                    handleCollectFromEdition(selectedValue, 'EditionSelector')"
+                @click-collect="handleCollectFromEditionTable"
                 @click-compare="handleClickCompareItemsButton"
               />
             </template>
@@ -79,14 +77,12 @@
               class="flex flex-wrap items-start justify-center gap-[24px] w-full"
             >
               <li v-for="editionConfig in nftEditions" :key="editionConfig.name">
-                <NFTBookEditionCover
+                <NFTBookEditionCompareTableColumn
                   class="w-[280px]"
                   :src="NFTImageUrl"
                   :edition-config="editionConfig"
                   :class-id="classId"
-                  @click-collect="
-                    (selectedValue) =>
-                      handleCollectFromEdition(selectedValue, 'CompareEdition')"
+                  @click-collect="handleCollectFromEditionSelector"
                 />
               </li>
             </ul>
@@ -603,8 +599,7 @@ export default {
       );
       return this.handleCollect();
     },
-
-    handleCollectFromEdition(selectedValue, actionType) {
+    handleCollectFromEdition(selectedValue) {
       const bookStorePrices =
         this.getNFTBookStorePricesByClassId(this.classId) || {};
       const hasStock = bookStorePrices[selectedValue]?.stock;
@@ -620,16 +615,27 @@ export default {
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
-
+    },
+    handleCollectFromEditionTable(selectedValue) {
+      this.handleCollectFromEdition(selectedValue);
       logTrackerEvent(
         this,
         'NFT',
-        `NFTCollect(${actionType})`,
+        'nft_class_details_edition_table_clicked',
         this.classId,
         1
       );
     },
-
+    handleCollectFromEditionSelector(selectedValue) {
+      this.handleCollectFromEdition(selectedValue);
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_class_details_edition_selector_clicked`,
+        this.classId,
+        1
+      );
+    },
     handleCopyURL() {
       this.shareURLPath({
         title: this.NFTName,
