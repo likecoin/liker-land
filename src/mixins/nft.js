@@ -158,7 +158,7 @@ export default {
           seller,
         };
       }
-      return undefined;
+      return {};
     },
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
