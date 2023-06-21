@@ -303,6 +303,7 @@ export default {
       if (locale === 'zh-Hant') {
         locale = 'zh';
       }
+      const defaultLocale = 'en';
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
       const defaultEdition = {
         name: '',
@@ -315,13 +316,15 @@ export default {
       };
       return prices
         ? prices.map((edition, index) => {
-            let { name } = edition;
+            let { name, description } = edition;
+
             if (typeof name === 'object') {
-              name = name[locale];
+              name = name[locale] || name[defaultLocale] || '';
             }
-            const description = edition.description
-              ? edition.description[locale]
-              : '';
+            if (typeof description === 'object') {
+              description =
+                description[locale] || description[defaultLocale] || '';
+            }
             const priceLabel = formatNumberWithUnit(edition.price, 'USD');
             const { stock } = edition;
             const style = {
