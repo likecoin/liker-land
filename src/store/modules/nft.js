@@ -376,7 +376,7 @@ const actions = {
         };
       })
       .filter(l => ownerInfo[l.seller]?.includes(l.nftId)) // guard listing then sent case
-      .sort((a, b) => a.price - b.price)[0];
+      .sort((a, b) => a.price - b.price);
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
     return info;
   },

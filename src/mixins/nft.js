@@ -147,15 +147,18 @@ export default {
       };
     },
     listingInfo() {
-      const list = this.getNFTClassListingInfoById(this.classId) || {};
-      const { price, nftId, seller } = list;
-      return {
-        price,
-        totalPrice: price,
-        classId: this.classId,
-        nftId,
-        seller,
-      };
+      const list = this.getNFTClassListingInfoById(this.classId) || [];
+      if (list.length) {
+        const { price, nftId, seller } = list[0];
+        return {
+          price,
+          totalPrice: price,
+          classId: this.classId,
+          nftId,
+          seller,
+        };
+      }
+      return undefined;
     },
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -302,11 +305,13 @@ export default {
       }
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
       const defaultEdition = {
-        name: 'Standard Edition',
-        description: 'Content of standard edition',
+        name: '',
+        description: '',
         priceLabel: this.formattedNFTPriceInLIKE,
-        value: 'standard',
-        stock: this.nftIsCollectable ? 500 : 0,
+        value: '',
+        stock: this.nftIsCollectable
+          ? this.getNFTClassListingInfoById(this.classId)?.length
+          : 0,
       };
       return prices
         ? prices.map((edition, index) => {
@@ -322,7 +327,9 @@ export default {
             const style = {
               spineColor1: edition.spineColor1 || '#EBEBEB',
               spineColor2: edition.spineColor2 || '#9B9B9B',
-              themeColor: edition.themeColor || defaultThemeColor[index],
+              themeColor:
+                edition.themeColor ||
+                defaultThemeColor[index % defaultThemeColor.length],
             };
 
             return {
