@@ -27,13 +27,13 @@
         'flex-col sm:flex-row',
       ]"
     >
-      <!-- <ButtonV2
+      <ButtonV2
         v-if="!isSingleItem && !isAllSoldOut"
         preset="plain"
         class="text-white underline"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
-      /> -->
+      />
       <template v-if="isSingleItem || isAllSoldOut">
         <span
           v-if="!isAllSoldOut"
@@ -47,6 +47,7 @@
 
       <ButtonV2
         v-if="!isAllSoldOut"
+        :is-disabled="!selectedItem"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text')"
         @click="handleClickCollectButton"
@@ -121,7 +122,7 @@ export default {
       );
     }
     return {
-      selectedValue: selectedItem.value || this.value,
+      selectedValue: selectedItem?.value || this.value,
     };
   },
   computed: {

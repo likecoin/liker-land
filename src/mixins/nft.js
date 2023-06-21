@@ -50,6 +50,8 @@ const nftClassCollectionMixin = createNFTClassCollectionMixin({
   typeKey: 'nftClassCollectionType',
 });
 
+const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
+
 export default {
   mixins: [
     walletMixin,
@@ -145,15 +147,18 @@ export default {
       };
     },
     listingInfo() {
-      const list = this.getNFTClassListingInfoById(this.classId) || {};
-      const { price, nftId, seller } = list;
-      return {
-        price,
-        totalPrice: price,
-        classId: this.classId,
-        nftId,
-        seller,
-      };
+      const list = this.getNFTClassListingInfoById(this.classId) || [];
+      if (list.length) {
+        const { price, nftId, seller } = list[0];
+        return {
+          price,
+          totalPrice: price,
+          classId: this.classId,
+          nftId,
+          seller,
+        };
+      }
+      return {};
     },
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -294,22 +299,52 @@ export default {
     },
 
     nftEditions() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
+      const defaultLocale = 'en';
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
+      const defaultEdition = {
+        name: '',
+        description: '',
+        priceLabel: this.formattedNFTPriceInLIKE,
+        value: '',
+        stock: this.nftIsCollectable
+          ? this.getNFTClassListingInfoById(this.classId)?.length
+          : 0,
+      };
       return prices
-        ? prices.map((edition, index) => ({
-            name: edition.name,
-            priceLabel: formatNumberWithUnit(edition.price, 'USD'),
-            value: index,
-            stock: edition.stock,
-          }))
-        : [
-            {
-              name: 'Standard Edition',
-              priceLabel: this.formattedNFTPriceInLIKE,
-              value: 'standard',
-              stock: this.nftIsCollectable ? 500 : 0,
-            },
-          ];
+        ? prices.map((edition, index) => {
+            let { name, description } = edition;
+
+            if (typeof name === 'object') {
+              name = name[locale] || name[defaultLocale] || '';
+            }
+            if (typeof description === 'object') {
+              description =
+                description[locale] || description[defaultLocale] || '';
+            }
+            const priceLabel = formatNumberWithUnit(edition.price, 'USD');
+            const { stock } = edition;
+            const style = {
+              spineColor1: edition.spineColor1 || '#EBEBEB',
+              spineColor2: edition.spineColor2 || '#9B9B9B',
+              themeColor:
+                edition.themeColor ||
+                defaultThemeColor[index % defaultThemeColor.length],
+            };
+
+            return {
+              name,
+              description,
+              priceLabel,
+              value: index,
+              stock,
+              style,
+            };
+          })
+        : [defaultEdition];
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
