@@ -44,7 +44,7 @@
           <div v-if="(!isPrimitive && price !== undefined) || price > 0" class="z-[500] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
             <ButtonV2
-              v-else
+              v-else-if="!isCollectedTab"
               preset="secondary"
               :is-disabled="!isCollectable"
               @click.stop.prevent="handleClickCollect"
@@ -55,6 +55,13 @@
                 <IconPrice />
               </template>
             </ButtonV2>
+            <NFTViewOptionList
+              v-else
+              :url="externalUrl"
+              :iscn-url="iscnUrl"
+              :is-nft-book="isNftBook"
+              @view-content="handleClickViewContent"
+            />
           </div>
 
           <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
@@ -65,6 +72,10 @@
             <div class="flex items-center text-medium-gray">
               <IconOwner />
               <div class="ml-[4px]">{{ collectorCount }}</div>
+            </div>
+            <div v-if="isCollectedTab && isCollectable" class="flex items-center text-like-green">
+              <IconPrice />
+              <div class="ml-[4px]">{{ price | formatNumberWithLIKE }}</div>
             </div>
             <div v-if="ownCount" class="flex items-center text-like-green">
               <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
@@ -164,6 +175,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    isCollectedTab: {
+      type: Boolean,
+      default: false,
+    },
+    externalUrl: {
+      type: String,
+      default: '',
+    },
+    iscnUrl: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     handleClickCollect(event) {
@@ -171,6 +194,9 @@ export default {
     },
     handleCoverLoaded(event) {
       this.$emit('load-cover', event);
+    },
+    handleClickViewContent() {
+      this.$emit('view-content');
     },
   },
 };

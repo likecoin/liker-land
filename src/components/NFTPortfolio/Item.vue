@@ -16,6 +16,8 @@
       :class-id="classId"
       :class-collection-type="nftClassCollectionType"
       :class-collection-name="nftClassCollectionName"
+      :external-url="externalUrl"
+      :iscn-url="iscnURL"
       :is-collectable="nftIsCollectable"
       :collected-count="collectedCount"
       :collector-count="ownerCount"
@@ -27,6 +29,7 @@
       :own-count="ownCount"
       :display-state="nftDisplayState"
       :is-nft-book="nftIsNFTBook"
+      :is-collected-tab="isCollectedTab"
       @collect="handleClickCollect"
       @load-cover="handleCoverLoaded"
     />
@@ -74,8 +77,11 @@ export default {
     };
   },
   computed: {
+    isCollectedTab() {
+      return this.portfolioTab === 'collected';
+    },
     nftIdForDetails() {
-      return this.portfolioTab === 'collected' && this.nftId;
+      return this.isCollectedTab && this.nftId;
     },
     detailsPageRoute() {
       if (this.nftIdForDetails) {
