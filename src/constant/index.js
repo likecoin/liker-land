@@ -156,6 +156,7 @@ export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
 export const TX_STATUS = {
   SIGN: 'sign',
   PROCESSING: 'processing',
+  PROCESSING_NON_BLOCKING: 'processing_non_blocking',
   COMPLETED: 'completed',
   INSUFFICIENT: 'insufficient',
   FAILED: 'failed',

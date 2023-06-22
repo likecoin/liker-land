@@ -700,12 +700,12 @@ export default {
         });
       }
     },
-    async collectNFTWithLIKE({ memo = '' }) {
+    async collectNFTWithLIKE(classId, { memo = '' }) {
       logTrackerEvent(
         this,
         'NFT',
         `NFTCollectNFTWithLIKE(${this.walletMethodType})`,
-        this.classId,
+        classId,
         1
       );
       try {
@@ -734,7 +734,7 @@ export default {
           nftIsUseListingPrice
             ? 'NFTCollectSignBuyRequested'
             : 'NFTCollectSignGrantRequested',
-          this.classId,
+          classId,
           1
         );
         let signData;
@@ -742,7 +742,7 @@ export default {
           const { price, nftId, seller } = this.listingInfo;
           signData = await signBuyNFT({
             senderAddress: this.getAddress,
-            classId: this.classId,
+            classId,
             nftId,
             seller,
             memo,
@@ -764,7 +764,7 @@ export default {
           nftIsUseListingPrice
             ? 'NFTCollectSignBuyApproved'
             : 'NFTCollectSignGrantApproved',
-          this.classId,
+          classId,
           1
         );
         const { txHash, code } = await broadcastTx(signData, this.getSigner);
@@ -772,7 +772,7 @@ export default {
           this,
           'NFT',
           'NFTCollectBroadcastTxComplete',
-          this.classId,
+          classId,
           1
         );
         if (code !== 0) {
@@ -784,15 +784,16 @@ export default {
           throw new Error(`TX_FAILED_WITH_CODE_${code}`);
         }
         if (txHash && this.uiIsOpenCollectModal) {
-          logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', this.classId, 1);
+          logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', classId, 1);
           let result;
           if (nftIsUseListingPrice) {
             result = { data: { nftId: this.listingInfo.nftId } };
           } else {
+            this.uiSetTxStatus(TX_STATUS.PROCESSING_NON_BLOCKING);
             result = await this.$api.post(
               postNFTPurchase({
                 txHash,
-                classId: this.classId,
+                classId,
                 ts: Date.now(),
               })
             );
@@ -801,7 +802,7 @@ export default {
             this,
             'NFT',
             'NFTCollectPurchaseCompleted',
-            this.classId,
+            classId,
             1
           );
           logPurchaseFlowEvent(this, 'purchase', {
@@ -809,9 +810,11 @@ export default {
             name: this.NFTName,
             price: this.NFTPriceUSD,
             currency: 'USD',
-            classId: this.classId,
+            classId,
           });
-          this.uiSetTxStatus(TX_STATUS.COMPLETED);
+          if (this.uiTxTargetClassId === classId) {
+            this.uiSetTxStatus(TX_STATUS.COMPLETED);
+          }
           return result.data;
         }
       } catch (error) {
@@ -821,7 +824,9 @@ export default {
           return undefined;
         }
         this.uiSetTxError(error.response?.data || error.toString());
-        this.uiSetTxStatus(TX_STATUS.FAILED);
+        if (this.uiTxTargetClassId === classId) {
+          this.uiSetTxStatus(TX_STATUS.FAILED);
+        }
       } finally {
         this.fetchNFTListByAddress({ address: this.getAddress });
         this.updateNFTOwners();
@@ -860,7 +865,7 @@ export default {
           return {};
       }
     },
-    async collectNFTWithStripe({ memo = '' }) {
+    async collectNFTWithStripe(classId, { memo = '' }) {
       try {
         const body = { memo };
         if (this.nftPriceInUSDisListingInfo) {
@@ -869,7 +874,7 @@ export default {
         }
         const { url } = await this.$api.$post(
           postNewStripeFiatPayment({
-            classId: this.classId,
+            classId,
             wallet: this.getAddress,
           }),
           body

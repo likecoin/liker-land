@@ -18,7 +18,7 @@
 
     <slot name="top" />
 
-    <template v-if="!isShowQuitConfirm || ['processing', 'completed'].includes(uiTxNFTStatus)">
+    <template v-if="!isShowQuitConfirm || ['processing', 'processing_non_blocking', 'completed'].includes(uiTxNFTStatus)">
       <!-- Title & Message -->
       <div
         v-if="formattedStatusTitle || formattedStatusText || $slots.title || $slots.message"
@@ -45,7 +45,7 @@
       <slot name="default" />
 
       <ProgressIndicator
-        v-if="['sign', 'processing'].includes(uiTxNFTStatus)"
+        v-if="['sign', 'processing', 'processing_non_blocking'].includes(uiTxNFTStatus)"
         class="mt-[32px] mx-auto"
       />
 
@@ -233,6 +233,7 @@ export default {
               return undefined;
           }
         case 'processing':
+        case 'processing_non_blocking':
           return (
             this.processingTitle || this.$t('tx_modal_status_processing_title')
           );
@@ -256,6 +257,7 @@ export default {
           return undefined;
 
         case 'processing':
+        case 'processing_non_blocking':
           return this.$t('tx_modal_status_processing_text');
 
         case 'completed':
@@ -294,6 +296,7 @@ export default {
           return this.$t('tx_modal_button_ok');
 
         case 'processing':
+        case 'processing_non_blocking':
         default:
           return undefined;
       }

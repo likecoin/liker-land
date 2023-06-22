@@ -337,17 +337,23 @@ export default {
       return this.uiTxTargetClassId;
     },
     headerText() {
-      return this.isShowCloseButton
+      return this.paymentMethod === undefined ||
+        this.uiTxNFTStatus === 'completed'
         ? this.$t('nft_collect_modal_title_collect')
         : this.$t('nft_collect_modal_title_collecting');
     },
     isShowCloseButton() {
       return (
-        this.paymentMethod === undefined || this.uiTxNFTStatus === 'completed'
+        this.paymentMethod === undefined ||
+        this.uiTxNFTStatus === 'completed' ||
+        this.uiTxNFTStatus === 'processing_non_blocking'
       );
     },
     isProcessing() {
-      return this.uiTxNFTStatus === 'processing';
+      return (
+        this.uiTxNFTStatus === 'processing' ||
+        this.uiTxNFTStatus === 'processing_non_blocking'
+      );
     },
     isCompleted() {
       return this.uiTxNFTStatus === 'completed';
@@ -510,9 +516,10 @@ export default {
       this.fetchUserCollectedCount();
     },
     async handleSelectPaymentMethod(method) {
+      const { classId } = this;
       this.paymentMethod = method;
       if (this.memo) {
-        logTrackerEvent(this, 'NFT', 'NFTCollectorMessage', this.classId, 1);
+        logTrackerEvent(this, 'NFT', 'NFTCollectorMessage', classId, 1);
       }
       try {
         switch (method) {
@@ -527,10 +534,12 @@ export default {
               this,
               'NFT',
               'NFTCollectPaymentMethod(LIKE)',
-              this.classId,
+              classId,
               1
             );
-            const result = await this.collectNFTWithLIKE({ memo: this.memo });
+            const result = await this.collectNFTWithLIKE(classId, {
+              memo: this.memo,
+            });
             if (result) {
               this.justCollectedNFTId = result.nftId;
             }
@@ -541,16 +550,18 @@ export default {
               this,
               'NFT',
               'NFTCollectPaymentMethod(Stripe)',
-              this.classId,
+              classId,
               1
             );
-            await this.collectNFTWithStripe({ memo: this.memo });
+            await this.collectNFTWithStripe(classId, { memo: this.memo });
             break;
           default:
             break;
         }
       } finally {
-        this.paymentMethod = undefined;
+        if (classId === this.uiTxTargetClassId) {
+          this.paymentMethod = undefined;
+        }
       }
     },
     goToNFTDetails() {

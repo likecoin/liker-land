@@ -22,7 +22,9 @@ export default {
   },
   computed: {
     isPolling() {
-      return ['new', 'processing'].includes(this.status);
+      return ['new', 'processing', 'processing_non_blocking'].includes(
+        this.status
+      );
     },
     isCompleted() {
       return ['pendingClaim', 'done'].includes(this.status);
