@@ -65,7 +65,7 @@
     "lodash.throttle": "^4.1.1",
     "magic-grid": "^3.2.4",
     "node-fetch": "^2.6.0",
-    "nuxt": "^2.15.7",
+    "nuxt": "^3.4.3",
     "portal-vue": "^1.5.1",
     "postcss": "^8.4.14",
     "react": "^18.2.0",
