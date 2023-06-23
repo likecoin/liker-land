@@ -28,6 +28,33 @@
         </NFTWidgetBaseCard>
       </template>
       <Label class="mb-[16px]" :text="text" align="center" />
+      <template v-if="getAddress && state === 'INITIAL'">
+        <div class="flex flex-col justify-center w-full max-w-[680px] px-[12px] mt-[-12px]">
+          <Label
+            preset="p6"
+            class="text-medium-gray mt-[12px] mb-[6px]"
+            :text="$t('nft_collect_modal_leave_message')"
+          />
+          <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+            <IconMessage class="text-dark-gray" />
+            <input
+              id="name"
+              ref="input"
+              type="input"
+              class="w-full bg-transparent border-0 focus-visible:outline-none"
+              :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
+              name="name"
+              @input="onInputCollectMessage"
+            >
+          </div>
+          <ButtonV2
+            class="self-center mt-[24px]"
+            :text="$t('nft_claim_claim')"
+            preset="secondary"
+            @click="claim"
+          />
+        </div>
+      </template>
       <ProgressIndicator v-if="state === 'CLAIMING'" class="self-center" />
       <template v-else-if="state === 'CLAIMED'">
         <ButtonV2
@@ -80,6 +107,7 @@ export default {
       nftId: '',
       state: NFT_CLAIM_STATE.INITIAL,
       error: '',
+      collectorMessage: '',
     };
   },
   computed: {
@@ -118,6 +146,11 @@ export default {
         [NFT_CLAIM_STATE.CLAIMING, NFT_CLAIM_STATE.CLAIMED].includes(this.state)
       );
     },
+    creatorDisplayName() {
+      return (
+        this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
+      );
+    },
   },
   async asyncData({ query, store, error, i18n }) {
     const {
@@ -133,11 +166,6 @@ export default {
       await store.dispatch('lazyGetNFTClassMetadata', classId);
     } catch (err) {
       error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
-    }
-  },
-  mounted() {
-    if (this.loginAddress) {
-      this.claim();
     }
   },
   methods: {
@@ -188,6 +216,7 @@ export default {
             classId: this.classId,
             paymentId: this.paymentId,
             token: this.token,
+            message: this.collectorMessage,
           }),
           {
             paymentId: this.paymentId,
@@ -250,6 +279,9 @@ export default {
     handleClickRetry() {
       logTrackerEvent(this, 'NFT', 'nft_claim_retry_button_clicked', '', 1);
       this.claim();
+    },
+    onInputCollectMessage(e) {
+      this.collectorMessage = e.target.value;
     },
   },
 };

@@ -266,6 +266,7 @@
     "委託 LikeCoin"
   ],
   "month": "月",
+  "nft_claim_claim": "領取 NFT",
   "nft_claim_claimed": "已領取 NFT",
   "nft_claim_claimed_nft_book": "已完成驗證。請候作者簽署發送 NFT 書，大約需 1-3 天時間。感謝支持！",
   "nft_claim_claimed_retry_button": "再試一次",
