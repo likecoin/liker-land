@@ -179,6 +179,7 @@
 
 <script>
 import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import MagicGrid from 'magic-grid';
 
 import { NFT_CLASS_LIST_SORTING, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
@@ -534,7 +535,7 @@ export default {
     removeInfiniteScrollListener() {
       window.removeEventListener('scroll', this.handleInfiniteScroll);
     },
-    handleInfiniteScroll() {
+    handleInfiniteScroll: throttle(function handleInfiniteScroll() {
       if (!this.hasMorePortfolioItems) return;
 
       const { infiniteScrollTrigger: trigger } = this.$refs;
@@ -545,7 +546,7 @@ export default {
         return;
       }
       this.$emit('infinite-scroll', this.portfolioTab);
-    },
+    }, 2000),
   },
 };
 </script>
