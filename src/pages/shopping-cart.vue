@@ -121,7 +121,7 @@ import { TX_STATUS } from '~/constant';
 
 import { postNFTPurchase } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { signGrant, broadcastTx } from '~/util/nft';
+import { signGrant, broadcastTx, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
@@ -233,7 +233,12 @@ export default {
         );
 
         this.$router.replace(
-          this.localeLocation({ name: 'id', params: { id: this.getAddress } })
+          this.localeLocation({
+            name: 'id',
+            params: { id: this.getAddress },
+            // NOTE: Filter Writing NFTs for users to see the NFTs they just purchased
+            query: { type: NFT_TYPE_FILTER_OPTIONS.WRITING_NFT },
+          })
         );
         this.clearShoppingCart();
         this.uiSetTxStatus(TX_STATUS.COMPLETED);
