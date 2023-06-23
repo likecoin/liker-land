@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col items-center gap-[24px] text-medium-gray bg-shade-gray rounded-[24px] px-[32px] py-[24px]">
+  <CardV2
+    class="flex flex-col items-center gap-[24px] text-medium-gray"
+    :is-outline="true"
+  >
     <Label
       preset="h4"
       align="center"
@@ -88,7 +91,7 @@
       </Label>
       <p class="text-center underline text-[10px] text-medium-gray mt-[32px] cursor-pointer" @click="handleClickResend">{{ $t('portfolio_subscription_verify_sendAgain') }}</p>
     </Dialog>
-  </div>
+  </CardV2>
 </template>
 
 <script>

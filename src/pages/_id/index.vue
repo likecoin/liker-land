@@ -84,17 +84,46 @@
             </template>
           </ButtonV2>
         </div>
-        <NFTPortfolioSubscriptionForm
-          v-else
-          id="creator-follow"
-          class="w-full"
-          :creator-wallet-address="wallet"
-          :creator-display-name="userDisplayName"
-          :is-wallet-connected="!!getAddress"
-          :is-wallet-logged-in="walletHasLoggedIn"
-          :is-followed="isFollowed"
-          :is-empty="false"
-        />
+        <template v-else>
+          <CardV2
+            v-show="isCurrentTabCreated"
+            :is-outline="true"
+            :class="[
+              'flex',
+              'flex-col',
+              'items-center',
+              'gap-[1rem]',
+              'w-full',
+              'py-[1rem]',
+              'text-[.875rem]',
+            ]"
+          >
+            <span
+              v-t="'portfolio_collect_all_description'"
+              class="text-center"
+            />
+            <ButtonV2
+              class="shrink-0"
+              :text="$t('portfolio_collect_all_button')"
+              preset="secondary"
+              @click="handleClickCollectAllButton"
+            >
+              <template #prepend>
+                <IconPrice />
+              </template>
+            </ButtonV2>
+          </CardV2>
+          <NFTPortfolioSubscriptionForm
+            id="creator-follow"
+            class="w-full"
+            :creator-wallet-address="wallet"
+            :creator-display-name="userDisplayName"
+            :is-wallet-connected="!!getAddress"
+            :is-wallet-logged-in="walletHasLoggedIn"
+            :is-followed="isFollowed"
+            :is-empty="false"
+          />
+        </template>
       </div>
 
       {{ /* Right Column */ }}
@@ -123,42 +152,7 @@
         @portfolio-change-keywords="handleNFTKeywordsChange"
         @infinite-scroll="handleInfiniteScroll"
         @portfolio-reset-filter="handleClearFilter"
-      >
-        <template #before-grid>
-          <CardV2
-            v-show="isCurrentTabCreated"
-            :is-outline="true"
-            :class="[
-              'flex',
-              'flex-col laptop:flex-row',
-              'laptop:justify-between',
-              'items-center',
-              'gap-[1rem]',
-              'w-full',
-              'py-[1rem]',
-              'laptop:p-[.5rem]',
-              'laptop:pl-[1.5rem]',
-              'text-[.875rem]',
-            ]"
-          >
-            <span
-              v-t="'portfolio_collect_all_description'"
-              class="text-center"
-            />
-            <ButtonV2
-              class="shrink-0"
-              :text="$t('portfolio_collect_all_button')"
-              size="mini"
-              preset="secondary"
-              @click="handleClickCollectAllButton"
-            >
-              <template #prepend>
-                <IconPrice />
-              </template>
-            </ButtonV2>
-          </CardV2>
-        </template>
-      </NFTPortfolioMainView>
+      />
 
     </div>
 
