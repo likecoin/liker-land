@@ -106,6 +106,7 @@
               class="shrink-0"
               :text="$t('portfolio_collect_all_button')"
               preset="secondary"
+              :is-disabled="isLoading"
               @click="handleClickCollectAllButton"
             >
               <template #prepend>
@@ -377,6 +378,8 @@ export default {
       this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
     },
     handleClickCollectAllButton() {
+      if (this.isLoading) return;
+
       logTrackerEvent(
         this,
         'portfolio',
