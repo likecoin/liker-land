@@ -37,6 +37,7 @@ import {
 import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
+import alertMixin from '~/mixins/alert';
 import { createUserInfoMixin } from '~/mixins/user-info';
 import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
@@ -55,6 +56,7 @@ const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
 export default {
   mixins: [
     walletMixin,
+    alertMixin,
     creatorInfoMixin,
     nftClassCollectionMixin,
     CrispMixinFactory({ isBootAtMounted: true }),
@@ -814,6 +816,12 @@ export default {
           });
           if (this.uiTxTargetClassId === classId) {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);
+          } else {
+            this.alertPromptSuccess(
+              this.$t('nft_collect_modal_alert_success', {
+                name: this.NFTName,
+              })
+            );
           }
           return result.data;
         }
@@ -823,9 +831,17 @@ export default {
           this.handleError(errorHandler);
           return undefined;
         }
-        this.uiSetTxError(error.response?.data || error.toString());
+        const errMsg = error.response?.data || error.toString();
+        this.uiSetTxError(errMsg);
         if (this.uiTxTargetClassId === classId) {
           this.uiSetTxStatus(TX_STATUS.FAILED);
+        } else {
+          this.alertPromptError(
+            this.$t('nft_collect_modal_alert_fail', {
+              name: this.NFTName,
+              error: errMsg,
+            })
+          );
         }
       } finally {
         this.fetchNFTListByAddress({ address: this.getAddress });

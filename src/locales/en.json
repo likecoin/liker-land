@@ -303,6 +303,8 @@
   "nft_collect_modal_subtitle_select_collect_method": "Select a collect method",
   "nft_collect_modal_title_collect": "Collect NFT",
   "nft_collect_modal_title_collecting": "Collecting NFT",
+  "nft_collect_modal_alert_success": "{name} was collected successfully",
+  "nft_collect_modal_alert_fail": "Collect {name} fail: {error}",
   "nft_details_page_activity_list_event": "Event",
   "nft_details_page_activity_list_event_buy_nft": "Purchase",
   "nft_details_page_activity_list_event_collect": "Collect",
