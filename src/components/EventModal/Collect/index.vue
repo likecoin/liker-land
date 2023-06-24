@@ -261,8 +261,6 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
 
-import { IS_TESTNET } from '~/constant';
-
 const FOLLOW_PROMPT_STATE = {
   DEFAULT: 'default', // No need to show any follow UI.
   UNFOLLOW: 'unfollow', // Show a switch button to toggle follow status.
@@ -329,7 +327,7 @@ export default {
       'walletInteractedCreators',
     ]),
     enableStripe() {
-      return !!IS_TESTNET;
+      return true;
     },
     developerMode() {
       return !!this.$route.query.debug;
