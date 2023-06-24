@@ -38,6 +38,7 @@ const state = () => ({
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
   userLastCollectedTimestampMap: {},
+  nftBookStorePricesByClassIdMap: {},
 });
 
 const mutations = {
@@ -91,6 +92,12 @@ const mutations = {
     { address, timestampMap }
   ) {
     Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
+  },
+  [TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET](
+    state,
+    { classId, prices }
+  ) {
+    Vue.set(state.nftBookStorePricesByClassIdMap, classId, prices);
   },
 };
 
@@ -172,6 +179,8 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getUserLastCollectedTimestampByAddress: state => address =>
     state.userLastCollectedTimestampMap[address],
+  getNFTBookStorePricesByClassId: state => classId =>
+    state.nftBookStorePricesByClassIdMap[classId],
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
     nfts.filter(
       ({ classId }) =>
@@ -367,7 +376,7 @@ const actions = {
         };
       })
       .filter(l => ownerInfo[l.seller]?.includes(l.nftId)) // guard listing then sent case
-      .sort((a, b) => a.price - b.price)[0];
+      .sort((a, b) => a.price - b.price);
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
     return info;
   },
@@ -621,6 +630,15 @@ const actions = {
     await this.$api.post(api.postUserV2DisplayState(address), {
       classId,
       displayState,
+    });
+  },
+  async fetchNFTBookPriceByClassId({ commit }, classId) {
+    const { data } = await this.$api.get(
+      api.getNFTBookStorePricesByClassId(classId)
+    );
+    commit(TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET, {
+      classId,
+      prices: data.prices,
     });
   },
 };

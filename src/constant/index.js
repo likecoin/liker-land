@@ -196,3 +196,5 @@ export const NFT_DISPLAY_STATE = {
 
 export const EMAIL_REGEX_STRING =
   '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$';
+
+export const NFT_BOOK_PLATFORM_LIKER_LAND = 'liker_land';

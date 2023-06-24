@@ -65,10 +65,28 @@
                 class="self-stretch"
                 :items="nftEditions"
                 :should-show-notify-button="false"
-                @click-collect="handleCollectFromEdition"
+                :value="defaultSelectedValue"
+                @click-collect="handleCollectFromEditionTable"
+                @click-compare="handleClickCompareItemsButton"
               />
             </template>
           </NFTBookItemCard>
+          <div v-if="nftEditions.length > 1" ref="compareSection" class="max-w-[962px] mx-auto flex flex-col justify-center">
+            <Label :text="$t('nft_edition_label')" preset="h3" align="center" class="text-like-green mt-[38px] mb-[24px]" />
+            <ul
+              class="flex flex-wrap items-start justify-center gap-[24px] w-full"
+            >
+              <li v-for="editionConfig in nftEditions" :key="editionConfig.name">
+                <NFTBookEditionCompareTableColumn
+                  class="w-[280px]"
+                  :src="NFTImageUrl"
+                  :edition-config="editionConfig"
+                  :class-id="classId"
+                  @click-collect="handleCollectFromEditionSelector"
+                />
+              </li>
+            </ul>
+          </div>
 
           <Separator class="mx-auto" />
 
@@ -230,8 +248,9 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { EXTERNAL_HOST } from '~/constant';
+import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -339,6 +358,9 @@ export default {
     classId() {
       return this.$route.params.classId;
     },
+    platform() {
+      return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
+    },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
@@ -355,6 +377,9 @@ export default {
     },
     isContentViewable() {
       return !(this.nftIsNFTBook && !this.ownCount);
+    },
+    defaultSelectedValue() {
+      return this.nftEditions[0]?.value;
     },
   },
   asyncData({ query }) {
@@ -416,6 +441,9 @@ export default {
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
+      if (this.nftIsNFTBook) {
+        blockingPromises.push(this.fetchNFTBookPriceByClassId(this.classId));
+      }
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
@@ -574,9 +602,42 @@ export default {
       );
       return this.handleCollect();
     },
-    handleCollectFromEdition() {
-      // TODO: Collect different edition
-      this.handleCollectFromPriceSection();
+    handleCollectFromEdition(selectedValue) {
+      const bookStorePrices =
+        this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const hasStock = bookStorePrices[selectedValue]?.stock;
+      if (!hasStock && !this.nftIsCollectable) return;
+
+      if (hasStock) {
+        const link = getNFTBookPurchaseLink({
+          classId: this.classId,
+          priceIndex: selectedValue,
+          platform: this.platform,
+        });
+        window.open(link, '_blank', 'noopener');
+      } else if (this.nftIsCollectable) {
+        this.handleGotoCollectFromControlBar();
+      }
+    },
+    handleCollectFromEditionTable(selectedValue) {
+      this.handleCollectFromEdition(selectedValue);
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_edition_table_clicked',
+        this.classId,
+        1
+      );
+    },
+    handleCollectFromEditionSelector(selectedValue) {
+      this.handleCollectFromEdition(selectedValue);
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_class_details_edition_selector_clicked`,
+        this.classId,
+        1
+      );
     },
     handleCopyURL() {
       this.shareURLPath({
@@ -641,6 +702,18 @@ export default {
         this,
         'NFT',
         'nft_class_details_recommendation_moved_slider',
+        this.classId,
+        1
+      );
+    },
+    handleClickCompareItemsButton() {
+      this.$nextTick(() =>
+        this.$refs.compareSection.scrollIntoView({ behavior: 'smooth' })
+      );
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_compare_button_clicked',
         this.classId,
         1
       );
