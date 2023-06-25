@@ -293,6 +293,8 @@
   "nft_collect_modal_subtitle_select_collect_method": "請選擇收藏方法",
   "nft_collect_modal_title_collect": "收藏作品",
   "nft_collect_modal_title_collecting": "正在收藏作品",
+  "nft_collect_modal_alert_success": "{name} 已成功收藏",
+  "nft_collect_modal_alert_fail": "收藏 {name} 失敗： {error}",
   "nft_details_page_activity_list_event": "事件",
   "nft_details_page_activity_list_event_buy_nft": "購買",
   "nft_details_page_activity_list_event_collect": "收集",
