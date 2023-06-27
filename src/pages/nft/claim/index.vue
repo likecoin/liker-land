@@ -4,7 +4,6 @@
       class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto mb-[48px]"
       :login-label="$t('nft_claim_login_in')"
       :login-button-label="$t('nft_claim_login_in_button')"
-      @login="claim"
     >
       <template #prepend>
         <NFTWidgetBaseCard class="flex justify-center items-center max-w-[400px] mb-[16px]">
@@ -171,13 +170,6 @@ export default {
         return;
       }
 
-      if (this.getAddress) {
-        await this.signLogin();
-        if (!this.getAddress) {
-          return;
-        }
-      }
-
       if (this.isNFTBook) {
         await this.claimNFTBookPurchase();
       } else {
@@ -220,11 +212,11 @@ export default {
             classId: this.classId,
             paymentId: this.paymentId,
             token: this.token,
-            message: this.collectorMessage,
           }),
           {
             paymentId: this.paymentId,
             wallet: this.loginAddress,
+            message: this.collectorMessage,
           }
         );
         await this.claimPromise;
