@@ -190,6 +190,7 @@ const nuxtConfig = {
           'civicliker.typeform.com',
           'bid.g.doubleclick.net',
           'https://likecoin.github.io',
+          'verify.walletconnect.com',
         ],
         'connect-src': [
           "'self'",
