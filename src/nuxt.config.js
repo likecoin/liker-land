@@ -402,6 +402,8 @@ const nuxtConfig = {
       'cosmjs-type',
       '@cosmjs',
       '@likecoin/iscn-js',
+      '@likecoin/wallet-connector',
+      '@walletconnect',
     ],
 
     /*
