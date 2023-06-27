@@ -33,9 +33,17 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     'cosmostation-mobile',
     'liker-id',
     'leap',
+    'walletconnect-v2',
   ],
   keplrInstallCTAPreset: 'fancy-banner',
   likerLandAppWCBridge: 'https://wc-bridge-1.like.co',
+  walletConnectProjectId: 'e110ac49451fee41d5bcda1b0dfdb94e',
+  walletConnectMetadata: {
+    description: 'Turn stories into collectibles',
+    url: 'https://liker.land',
+    icons: ['https://liker.land/logo.png'],
+    name: 'Liker Land',
+  },
   cosmostationDirectSignEnabled: true,
 };
 
