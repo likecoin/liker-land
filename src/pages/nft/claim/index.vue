@@ -28,7 +28,7 @@
         </NFTWidgetBaseCard>
       </template>
       <Label class="mb-[16px]" :text="text" align="center" />
-      <template v-if="getAddress && state === 'INITIAL'">
+      <template v-if="state === 'INITIAL'">
         <div class="flex flex-col justify-center w-full max-w-[680px] px-[12px] mt-[-12px]">
           <Label
             preset="p6"
@@ -38,13 +38,10 @@
           <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
             <IconMessage class="text-dark-gray" />
             <input
-              id="name"
-              ref="input"
+              v-model="collectorMessage"
               type="input"
               class="w-full bg-transparent border-0 focus-visible:outline-none"
               :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
-              name="name"
-              @input="onInputCollectMessage"
             >
           </div>
           <ButtonV2
@@ -174,6 +171,13 @@ export default {
         return;
       }
 
+      if (this.getAddress) {
+        await this.signLogin();
+        if (!this.getAddress) {
+          return;
+        }
+      }
+
       if (this.isNFTBook) {
         await this.claimNFTBookPurchase();
       } else {
@@ -279,9 +283,6 @@ export default {
     handleClickRetry() {
       logTrackerEvent(this, 'NFT', 'nft_claim_retry_button_clicked', '', 1);
       this.claim();
-    },
-    onInputCollectMessage(e) {
-      this.collectorMessage = e.target.value;
     },
   },
 };
