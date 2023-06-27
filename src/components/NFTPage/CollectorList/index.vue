@@ -11,7 +11,7 @@
       <IconPerson />
     </template>
     <template #content="{ contentPaddingClass }">
-      <template v-if="ownerCount">
+      <template v-if="trimmedItems.length">
         <ul :class="contentPaddingClass">
           <NFTPageCollectorListItem
             v-for="owner in trimmedItems"
