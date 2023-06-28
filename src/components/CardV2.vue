@@ -25,17 +25,30 @@ export default class Card extends Vue {
   @Prop({ default: false })
   readonly isDark!: boolean;
 
+  @Prop({ default: false })
+  readonly isOutline!: boolean;
+
   get rootClasses() {
-    return [
-      this.isDark
-        ? 'bg-like-green bg-gradient-to-r from-transparent to-like-cyan-translucent'
-        : 'bg-white',
+    const classes = [
       'rounded-[24px]',
-      {
-        'text-like-cyan-pale': this.isDark,
-        'px-[24px] py-[32px]': this.hasPadding,
-      },
+      { 'px-[24px] py-[32px]': this.hasPadding },
     ];
+    if (this.isOutline) {
+      classes.push('border');
+      if (this.isDark) {
+        classes.push('border-like-cyan-pale');
+      } else {
+        classes.push('border-gray-d8');
+      }
+    } else if (this.isDark) {
+      classes.push(
+        'bg-like-green bg-gradient-to-r from-transparent to-like-cyan-translucent',
+        'text-like-cyan-pale'
+      );
+    } else {
+      classes.push('bg-white');
+    }
+    return classes;
   }
 }
 </script>

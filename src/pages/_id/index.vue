@@ -84,17 +84,47 @@
             </template>
           </ButtonV2>
         </div>
-        <NFTPortfolioSubscriptionForm
-          v-else
-          id="creator-follow"
-          class="w-full"
-          :creator-wallet-address="wallet"
-          :creator-display-name="userDisplayName"
-          :is-wallet-connected="!!getAddress"
-          :is-wallet-logged-in="walletHasLoggedIn"
-          :is-followed="isFollowed"
-          :is-empty="false"
-        />
+        <template v-else>
+          <CardV2
+            v-show="isCurrentTabCreated"
+            :is-outline="true"
+            :class="[
+              'flex',
+              'flex-col',
+              'items-center',
+              'gap-[1rem]',
+              'w-full',
+              'py-[1rem]',
+              'text-[.875rem]',
+            ]"
+          >
+            <span
+              v-t="'portfolio_collect_all_description'"
+              class="text-center"
+            />
+            <ButtonV2
+              class="shrink-0"
+              :text="$t('portfolio_collect_all_button')"
+              preset="secondary"
+              :is-disabled="isLoading"
+              @click="handleClickCollectAllButton"
+            >
+              <template #prepend>
+                <IconPrice />
+              </template>
+            </ButtonV2>
+          </CardV2>
+          <NFTPortfolioSubscriptionForm
+            id="creator-follow"
+            class="w-full"
+            :creator-wallet-address="wallet"
+            :creator-display-name="userDisplayName"
+            :is-wallet-connected="!!getAddress"
+            :is-wallet-logged-in="walletHasLoggedIn"
+            :is-followed="isFollowed"
+            :is-empty="false"
+          />
+        </template>
       </div>
 
       {{ /* Right Column */ }}
@@ -139,7 +169,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -208,7 +238,12 @@ export default {
     return { isOpenFollowersDialog: false };
   },
   computed: {
-    ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
+    ...mapGetters([
+      'getNFTClassPurchaseInfoById',
+      'getNFTClassOwnerInfoById',
+      'walletHasLoggedIn',
+      'walletFollowees',
+    ]),
     wallet() {
       return this.$route.params.id;
     },
@@ -267,6 +302,7 @@ export default {
     this.loadTopUserListByAddress(this.wallet);
   },
   methods: {
+    ...mapActions(['addNFTClassesToShoppingCart', 'clearShoppingCart']),
     handleTopUserHover(i) {
       const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(
@@ -340,6 +376,29 @@ export default {
       );
       this.exportFollowerList();
       this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
+    },
+    handleClickCollectAllButton() {
+      if (this.isLoading) return;
+
+      logTrackerEvent(
+        this,
+        'portfolio',
+        'portfolio_collect_all_button_click',
+        `${this.wallet}`,
+        1
+      );
+      const classIds = this.nftClassListOfCreatedInOrder
+        .map(n => n.classId)
+        .filter(classId => {
+          const isCollectable =
+            this.getNFTClassPurchaseInfoById(classId)?.totalPrice > 0;
+          const hasCollected =
+            this.wallet &&
+            this.getNFTClassOwnerInfoById(classId)?.[this.wallet];
+          return isCollectable && !hasCollected;
+        });
+      this.addNFTClassesToShoppingCart({ classIds });
+      this.$router.push(this.localeLocation({ name: 'shopping-cart' }));
     },
   },
 };

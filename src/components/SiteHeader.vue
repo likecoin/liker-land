@@ -4,13 +4,11 @@
       'flex',
       'items-center',
       'justify-between',
-      'gap-x-[24px]',
+      'gap-x-[1.5em]',
       'w-full',
-      'pl-[32px]',
-      'pr-[24px]',
-      'py-[40px]',
-      'laptop:pr-[32px]',
-      'laptop:pl-[56px]',
+      'pl-[1em] sm:pl-[3.5em]',
+      'pr-[.75em] sm:pr-[2em]',
+      'py-[2.5em]',
     ]"
   >
     <NuxtLink
@@ -21,11 +19,14 @@
       <Logo class="fill-current" />
     </NuxtLink>
 
-    <div class="relative flex items-center gap-x-[16px] laptop:gap-x-[24px]">
+    <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
 
-      <div class="relative">
+      <!--
+      <ShoppingCartSiteButton />
+      -->
+
+      <div v-if="loginAddress" class="relative">
         <ButtonV2
-          v-if="loginAddress"
           preset="tertiary"
           :to="localeLocation({ name: 'notifications' })"
         >
