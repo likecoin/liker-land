@@ -68,15 +68,6 @@
         <div class="grid grid-cols-6 items-center gap-[1em]">
           <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">{{ $t('shopping_cart_list_total_price') }}</div>
           <div class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]">{{ totalNFTPrice | formatNumberWithLIKE }}</div>
-          <template v-if="getAddress">
-            <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">{{ $t('shopping_cart_list_wallet_balance') }}</div>
-            <div
-              :class="[
-                'col-span-4 sm:col-span-2 font-proxima font-[600] leading-1',
-                isInsufficientAmount ? 'text-danger' : 'text-like-green',
-              ]"
-            >{{ walletLIKEBalance | formatNumberWithLIKE }}</div>
-          </template>
         </div>
       </footer>
 
@@ -89,6 +80,14 @@
           />
         </div>
       </div>
+      <i18n
+        v-if="getAddress && isInsufficientAmount"
+        :class="['mt-[1rem]', 'font-proxima', 'text-danger', 'text-right']"
+        tag="div"
+        path="shopping_cart_error_insufficient_balance"
+      >
+        <span class="font-[600]" place="balance">{{ walletLIKEBalance | formatNumberWithLIKE }}</span>
+      </i18n>
     </CardV2>
 
     <CardV2
@@ -155,7 +154,9 @@ export default {
       }, 0);
     },
     isInsufficientAmount() {
-      return this.walletLIKEBalance < this.grantAmount;
+      return (
+        this.walletLIKEBalance && this.walletLIKEBalance < this.grantAmount
+      );
     },
   },
   methods: {
