@@ -1,9 +1,17 @@
-export default function({ req, res, route, store, error, redirect }) {
+export default function({
+  req,
+  res,
+  route,
+  store,
+  error,
+  redirect,
+  localeLocation,
+}) {
   if (!store.getters.getUserId) {
     let message;
     switch (route.name) {
       case 'creators-dashboard':
-        redirect({ name: 'creators' });
+        redirect(localeLocation({ name: 'creators' }));
         return;
 
       case 'civic-dashboard':

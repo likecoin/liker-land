@@ -465,16 +465,18 @@ export default {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
     },
   },
-  async asyncData({ route, query, store, redirect, error }) {
+  async asyncData({ route, query, store, redirect, error, localeLocation }) {
     const { action } = query;
     const { classId, nftId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
-      redirect({
-        name: 'nft-class-classId-share',
-        params: { classId },
-        query: { referrer },
-      });
+      redirect(
+        localeLocation({
+          name: 'nft-class-classId-share',
+          params: { classId },
+          query: { referrer },
+        })
+      );
       return undefined;
     }
     try {

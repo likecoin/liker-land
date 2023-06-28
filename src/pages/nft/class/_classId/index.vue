@@ -386,15 +386,17 @@ export default {
     const { action } = query;
     return { action };
   },
-  async fetch({ route, store, redirect, error }) {
+  async fetch({ route, store, redirect, error, localeLocation }) {
     const { classId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
-      redirect({
-        name: 'nft-class-classId-share',
-        params: { classId },
-        query: { referrer },
-      });
+      redirect(
+        localeLocation({
+          name: 'nft-class-classId-share',
+          params: { classId },
+          query: { referrer },
+        })
+      );
       return;
     }
     // check classId contains only valid characters
