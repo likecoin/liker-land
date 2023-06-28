@@ -313,7 +313,7 @@ export default {
         name: '',
         description: '',
         priceLabel: this.formattedNFTPriceInLIKE,
-        value: '',
+        value: 0,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
           : 0,
