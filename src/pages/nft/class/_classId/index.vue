@@ -390,11 +390,13 @@ export default {
     const { classId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
-      redirect({
-        name: 'nft-class-classId-share',
-        params: { classId },
-        query: { referrer },
-      });
+      redirect(
+        localeLocation({
+          name: 'nft-class-classId-share',
+          params: { classId },
+          query: { referrer },
+        })
+      );
       return;
     }
     // check classId contains only valid characters

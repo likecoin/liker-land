@@ -470,11 +470,13 @@ export default {
     const { classId, nftId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
-      redirect({
-        name: 'nft-class-classId-share',
-        params: { classId },
-        query: { referrer },
-      });
+      redirect(
+        localeLocation({
+          name: 'nft-class-classId-share',
+          params: { classId },
+          query: { referrer },
+        })
+      );
       return undefined;
     }
     try {

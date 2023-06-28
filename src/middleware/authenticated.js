@@ -3,7 +3,7 @@ export default function({ req, res, route, store, error, redirect }) {
     let message;
     switch (route.name) {
       case 'creators-dashboard':
-        redirect({ name: 'creators' });
+        redirect(localeLocation({ name: 'creators' }));
         return;
 
       case 'civic-dashboard':
