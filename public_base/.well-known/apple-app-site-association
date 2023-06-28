@@ -6,7 +6,8 @@
         "appID": "6VG4638588.com.oice",
         "paths": [
           "getapp",
-          "*/getapp"
+          "*/getapp",
+          "*/getapp/*"
         ]
       }
     ]
