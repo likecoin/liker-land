@@ -393,8 +393,8 @@ export default {
           const isCollectable =
             this.getNFTClassPurchaseInfoById(classId)?.totalPrice > 0;
           const hasCollected =
-            this.wallet &&
-            this.getNFTClassOwnerInfoById(classId)?.[this.wallet];
+            this.getAddress &&
+            this.getNFTClassOwnerInfoById(classId)?.[this.getAddress];
           return isCollectable && !hasCollected;
         });
       this.addNFTClassesToShoppingCart({ classIds });
