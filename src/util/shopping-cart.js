@@ -10,11 +10,12 @@ export function saveShoppingCartToStorage(items) {
 }
 
 export function loadShoppingCartFromStorage() {
+  let cart;
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    cart = JSON.parse(localStorage.getItem(STORAGE_KEY));
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('Failed to load shopping cart from local storage', e);
-    return {};
   }
+  return cart || {};
 }
