@@ -202,3 +202,6 @@ export const EMAIL_REGEX_STRING =
   '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$';
 
 export const NFT_BOOK_PLATFORM_LIKER_LAND = 'liker_land';
+
+export const NFT_LEGACY_DEFAULT_MESSSAGE = 'like.co NFT API';
+export const NFT_BATCH_COLLECT_MESSSAGE = '(multiple purchases)';

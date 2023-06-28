@@ -9,6 +9,8 @@ import {
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   NFT_DISPLAY_STATE,
+  NFT_BATCH_COLLECT_MESSSAGE,
+  NFT_LEGACY_DEFAULT_MESSSAGE,
 } from '~/constant';
 
 import {
@@ -1013,8 +1015,12 @@ export default {
       );
     },
     normalizeNFTMessage(m) {
-      if (m.memo === 'like.co NFT API') return '';
-      if (m.event === 'mint_nft') return this.nftClassCreatorMessage;
+      if (m.memo === NFT_LEGACY_DEFAULT_MESSSAGE) {
+        return '';
+      }
+      if (m.event === 'mint_nft' || m.memo === NFT_BATCH_COLLECT_MESSSAGE) {
+        return this.nftClassCreatorMessage;
+      }
       return m.memo;
     },
     async fetchRecommendInfo() {
