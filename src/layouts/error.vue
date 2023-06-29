@@ -63,8 +63,8 @@ import severError from '~/assets/images/error/500.svg';
 import crispMixin from '~/mixins/crisp';
 
 export default {
-  layout: 'empty',
   mixins: [crispMixin],
+  layout: 'empty',
   props: {
     error: {
       type: Object,

@@ -146,6 +146,15 @@ export default {
     inAppMixin,
     walletMixin,
   ],
+  data() {
+    return {
+      topRankedUsers: [],
+      targetType: DETAILS_TYPE.SALES,
+      isOpenFollowersDialog: false,
+      isOpenIncomeDetailsDialog: false,
+      isIncomeDetailsLoading: false,
+    };
+  },
   head() {
     const title = this.$t('dashboard_title');
     const description = this.$t('dashboard_description');
@@ -173,15 +182,6 @@ export default {
           content: 'https://liker.land/images/og/writing-nft.jpg',
         },
       ],
-    };
-  },
-  data() {
-    return {
-      topRankedUsers: [],
-      targetType: DETAILS_TYPE.SALES,
-      isOpenFollowersDialog: false,
-      isOpenIncomeDetailsDialog: false,
-      isIncomeDetailsLoading: false,
     };
   },
   computed: {

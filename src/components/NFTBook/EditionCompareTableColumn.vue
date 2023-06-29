@@ -1,6 +1,6 @@
 <template>
   <NFTGemWrapper :is-nft-book="true" :class-id="classId">
-    <template v-slot="gem">
+    <template #default="gem">
       <NFTPortfolioCard
         :gem-level="gem.level"
         :hover-class="gem.hoverClass"

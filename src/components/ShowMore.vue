@@ -28,7 +28,7 @@
         preset="plain"
         size="small"
         @click="isOpenDialog = true"
-      >{{ this.$t('nft_details_page_button_show_more') }}
+      >{{ $t('nft_details_page_button_show_more') }}
       </ButtonV2>
     </div>
     <Dialog

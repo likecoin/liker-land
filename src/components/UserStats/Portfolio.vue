@@ -3,7 +3,7 @@
     class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
     :stat-wallet="statWallet"
   >
-    <template v-slot="stats">
+    <template #default="stats">
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_collected')">
         <Label preset="p6" class="font-200">
           <template #prepend>

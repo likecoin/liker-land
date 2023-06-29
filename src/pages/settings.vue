@@ -10,19 +10,19 @@ import SettingsPageHeader from '~/components/SettingsPageHeader';
 
 export default {
   name: 'SettingsPage',
-  layout: 'default',
   components: {
     SettingsPageHeader,
+  },
+  layout: 'default',
+  head() {
+    return {
+      title: this.$t('SettingsPage.title'),
+    };
   },
   computed: {
     isHeaderShowBack() {
       return /^settings-.+$/.test(this.getRouteBaseName(this.$route));
     },
-  },
-  head() {
-    return {
-      title: this.$t('SettingsPage.title'),
-    };
   },
 };
 </script>
