@@ -275,6 +275,7 @@
     "LikeCoin staking"
   ],
   "month": "month",
+  "nft_claim_claim": "Claim NFT",
   "nft_claim_claimed": "NFT is claimed",
   "nft_claim_claimed_nft_book": "You have successfully completed the required verification to claim your book. Kindly await the creator's delivery of the NFT book to you. Thank you for your valued support!",
   "nft_claim_claimed_retry_button": "Try Again",
