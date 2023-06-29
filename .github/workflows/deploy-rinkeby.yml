@@ -19,7 +19,7 @@ jobs:
       - name: Setup node env 🏗
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
           cache: 'npm'
           cache-dependency-path: |
             src/package-lock.json
@@ -32,7 +32,6 @@ jobs:
           echo 'Disallow: /' >> public_base/robots.txt
       - uses: w9jds/setup-firebase@main
         with:
-          tools-version: 11.30.0
           firebase_token: ${{ secrets.FIREBASE_TOKEN }}
       - run: firebase deploy --project civic-liker-develop -f
         env:
