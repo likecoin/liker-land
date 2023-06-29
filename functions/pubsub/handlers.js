@@ -2,6 +2,7 @@ const {
   getCreatorFollowPublishNewTemplate,
   getNFTNotificationTransferTemplate,
   getNFTNotificationPurchaseTemplate,
+  getNFTNotificationPurchaseMultipleTemplate,
 } = require('@likecoin/edm');
 const axios = require('axios').default;
 
@@ -197,6 +198,157 @@ export async function handlePurchaseEvent(message, data) {
       console.error(err);
     }
   }
+}
+
+export async function handlePurchaseMultipleEvent(message, data) {
+  const {
+    // txHash,
+    buyerWallet,
+    buyerMemo: buyerMessage,
+    items,
+  } = data;
+
+  const txDataMapBySeller = {};
+  items.forEach(itemData => {
+    const { sellerWallet } = itemData;
+    if (!sellerWallet) return;
+
+    if (!txDataMapBySeller[sellerWallet]) {
+      txDataMapBySeller[sellerWallet] = {
+        items: [],
+        totalNFTPrice: 0,
+      };
+    }
+    txDataMapBySeller[sellerWallet].items.push(itemData);
+    txDataMapBySeller[sellerWallet].totalNFTPrice += itemData.nftPrice;
+  });
+
+  // Gather all sellers need to be notified
+  const sellerList = await Promise.all(
+    Object.keys(txDataMapBySeller).map(sellerWallet => {
+      try {
+        const userDoc = walletUserCollection.doc(sellerWallet).get();
+        const sellerUserData = userDoc.data();
+        return [sellerWallet, sellerUserData];
+      } catch {
+        return [sellerWallet];
+      }
+    })
+  );
+  let sellerListToNotify = sellerList.filter(
+    ([sellerWallet, sellerUserData]) => {
+      if (!sellerUserData) return false;
+      const {
+        email,
+        notification: { purchasePrice = 0 } = {},
+      } = sellerUserData;
+      return (
+        email &&
+        purchasePrice >= 0 &&
+        txDataMapBySeller[sellerWallet].totalNFTPrice >= purchasePrice
+      );
+    }
+  );
+  if (sellerListToNotify.length === 0) return;
+
+  // Fetch liker info of buyer and sellers
+  const fetchSellerLikerInfoPromises = sellerListToNotify.map(
+    async ([sellerWallet, sellerUserData]) => {
+      const sellerData = {
+        txData: txDataMapBySeller[sellerWallet],
+        userData: sellerUserData,
+      };
+      try {
+        sellerData.likerInfo = await fetchLikerInfoByWallet(sellerWallet);
+      } catch {
+        // No-op
+      }
+      return [sellerWallet, sellerData];
+    }
+  );
+  const [
+    {
+      likerId: buyerLikerID,
+      avatar: buyerAvatarSrc,
+      displayName: buyerDisplayName,
+      isSubscribedCivicLiker: buyerIsCivicLiker,
+    },
+    ...fetchSellerLikerInfoResults
+  ] = await Promise.all([
+    fetchLikerInfoByWallet(buyerWallet).catch(() => {}),
+    ...fetchSellerLikerInfoPromises,
+  ]);
+  sellerListToNotify = fetchSellerLikerInfoResults;
+
+  // Fetch NFT class data
+  const nftClassIds = new Set();
+  sellerListToNotify.forEach(([sellerWallet]) => {
+    txDataMapBySeller[sellerWallet].items.forEach(itemData => {
+      nftClassIds.add(itemData.classId);
+    });
+  });
+  const fetchNFTClassPromises = [...nftClassIds].map(async classId => {
+    try {
+      const nftClassData = fetchNFTMetadata(classId);
+      return [classId, nftClassData];
+    } catch {
+      return [classId];
+    }
+  });
+  const nftClassDataList = await Promise.all(fetchNFTClassPromises);
+  const nftClassDataMap = new Map(nftClassDataList);
+
+  await Promise.all(
+    sellerListToNotify.map(async ([, sellerData]) => {
+      try {
+        const {
+          txData: { items: nftItems, totalNFTPrice } = {},
+          userData: { email, locale = 'en' } = {},
+          likerInfo: {
+            likerId: sellerLikerID,
+            avatar: sellerAvatarSrc,
+            displayName: sellerDisplayName,
+            isSubscribedCivicLiker: sellerIsCivicLiker,
+          } = {},
+        } = sellerData;
+
+        const purchasedItems = nftItems.map(({ classId, nftId, nftPrice }) => {
+          const { name, image } = nftClassDataMap.get(classId) || {};
+          return {
+            title: name,
+            coverImageSrc: image,
+            url: getNFTURL(classId, nftId),
+            priceInLIKE: nftPrice,
+          };
+        });
+
+        const { subject, body } = getNFTNotificationPurchaseMultipleTemplate({
+          language: convertLanguageCodeForEmailTemplate(locale),
+          unsubscribeLink: TX_UNSUBSCRIBE_LINK,
+          sellerLikerID,
+          sellerAvatarSrc,
+          sellerDisplayName,
+          sellerIsCivicLiker,
+          buyerLikerID,
+          buyerDisplayName,
+          buyerAvatarSrc,
+          buyerIsCivicLiker,
+          buyerMessage,
+          purchasedItems,
+          totalPriceInLIKE: totalNFTPrice,
+        });
+
+        // eslint-disable-next-line no-await-in-loop
+        await sendEmail({
+          email,
+          subject,
+          html: body,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    })
+  );
 }
 
 export async function handleTransferEvent(message, data) {
