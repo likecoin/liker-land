@@ -363,6 +363,19 @@ const actions = {
   },
 
   async restoreSession({ dispatch }) {
+    // HACK: check for localStorage session before init-ing wallet connector lib
+    // wallet connector lib is a huge js
+    let hasSession = false;
+    try {
+      if (window.localStorage) {
+        hasSession = !!window.localStorage.getItem(
+          'likecoin_wallet_connector_session'
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    if (!hasSession) return;
     const connector = await dispatch('getConnector');
     const session = connector.restoreSession();
     if (session) {
