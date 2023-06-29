@@ -10,7 +10,6 @@ import {
   formatOwnerInfoFromChain,
   fetchAllNFTFromChain,
   fetchAllNFTClassFromChain,
-  getISCNRecord,
   getNFTClassCollectionType,
   nftClassCollectionType,
   formatNFTInfo,
@@ -362,8 +361,11 @@ const actions = {
   async fetchISCNMetadataById({ commit }, iscnId) {
     if (!iscnId) return undefined;
     try {
-      const res = await getISCNRecord(iscnId);
-      const [{ data } = {}] = res?.records;
+      /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
+        which is huge and affects index page performance */
+      // const res = await getISCNRecord(iscnId);
+      const res = await this.$axios.$get(api.getISCNRecord(iscnId));
+      const [{ data } = {}] = res.records || [];
       commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data });
       return data;
     } catch (error) {
