@@ -547,7 +547,7 @@ export default {
         !this.nftIdCollectedFirstByUser &&
         !this.nftCollectorsSync
       ) {
-        this.nftCollectorsSync = new Promise(async resolve => {
+        const syncFunction = async () => {
           // `fetchNFTOwners` might take longer to return the most updated collectors
           // causing `nftIdCollectedFirstByUser` to be undefined or collectors list out-sync
           // Should keep fetching if the user just collected the NFT but not found in the collectors list
@@ -560,8 +560,8 @@ export default {
             tries += 1;
           }
           this.nftCollectorsSync = undefined;
-          resolve();
-        });
+        };
+        this.nftCollectorsSync = syncFunction();
       }
     },
   },
