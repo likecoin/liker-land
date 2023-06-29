@@ -890,6 +890,9 @@ export default {
           body.nftId = this.listingInfo.nftId;
           body.seller = this.listingInfo.seller;
         }
+        if (this.walletEmail) {
+          body.email = this.walletEmail;
+        }
         const { url } = await this.$api.$post(
           postNewStripeFiatPayment({
             classId,
