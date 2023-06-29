@@ -181,8 +181,6 @@ const nuxtConfig = {
         ],
         'frame-src': [
           'www.google.com',
-          'vimeo.com',
-          'player.vimeo.com',
           'button.like.co',
           'https://js.stripe.com',
           'https://hooks.stripe.com',
