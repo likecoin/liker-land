@@ -1,7 +1,10 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const http = require('http');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const https = require('https');
-const Axios = require('axios');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const querystring = require('querystring');
+const Axios = require('axios');
 const {
   IS_TESTNET,
   EXTERNAL_URL: CONFIG_EXTERNAL_URL,

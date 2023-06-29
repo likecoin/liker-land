@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-
+// eslint-disable-next-line import/no-extraneous-dependencies
 const path = require('path');
 
 function getLineClamp(value = 1) {

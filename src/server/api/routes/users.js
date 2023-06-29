@@ -1,4 +1,5 @@
 const axios = require('axios');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const crypto = require('crypto');
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
