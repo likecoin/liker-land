@@ -1,20 +1,9 @@
 {
   "presets": [
-    [
-      "@babel/env",
-      {
-        "targets": {
-          "node": "8.11.1"
-        }
+    ["@babel/env", {
+      "targets": {
+        "node": "current"
       }
-    ]
-  ],
-  "env": {
-    "production": {
-      "presets": ["minify"]
-    }
-  },
-  "plugins": [
-    "@babel/plugin-proposal-object-rest-spread"
+    }]
   ]
 }
