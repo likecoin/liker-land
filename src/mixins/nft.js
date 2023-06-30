@@ -568,7 +568,7 @@ export default {
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddress',
-      'fetchISCNMetadataById',
+      'lazyGetISCNMetadataById',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
@@ -588,7 +588,7 @@ export default {
       'fetchNFTBookPriceByClassId',
     ]),
     async fetchISCNMetadata() {
-      await this.fetchISCNMetadataById(this.iscnId);
+      await this.lazyGetISCNMetadataById(this.iscnId);
     },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));

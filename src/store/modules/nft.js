@@ -374,6 +374,13 @@ const actions = {
       return undefined;
     }
   },
+  async lazyGetISCNMetadataById({ getters, dispatch }, iscnId) {
+    let info = getters.getISCNMetadataById(iscnId);
+    if (!info) {
+      info = await dispatch('fetchISCNMetadataById', iscnId);
+    }
+    return info;
+  },
   removeNFTFiatPriceInfoByClassId({ commit }, classId) {
     commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, {
       classId,
