@@ -65,8 +65,14 @@
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+
 export default {
   name: 'NFTPageRecommendation',
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   props: {
     iscnOwner: {
       type: String,
@@ -115,3 +121,6 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+@import 'swiper/swiper.scss';
+</style>
