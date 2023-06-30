@@ -1,7 +1,7 @@
 <template>
   <div :class="rootClasses">
     <table
-      v-if="!isSingleItem || (isSingleItem && items[0].name) && !isAllSoldOut"
+      v-if="(!isSingleItem || (isSingleItem && items[0].name)) && !isAllSoldOut"
       class="border-separate border-spacing-y-[8px] mb-[8px] w-full"
     >
       <tbody>
