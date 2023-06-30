@@ -38,6 +38,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, ModelSync, Watch } from 'vue-property-decorator';
 
+// eslint-disable-next-line import/prefer-default-export
 export enum Preset {
   warn = 'warn',
   success = 'success',
