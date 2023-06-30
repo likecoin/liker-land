@@ -332,6 +332,20 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      modelLoadingImage,
+      paymentMethod: undefined,
+      justCollectedNFTId: undefined,
+      shouldShowMessageInput: false,
+      memo: '',
+      followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
+      isFollowPromptUpdating: false,
+      modelExposure: 0,
+      animationTimer: null,
+      isAddedToShoppingCart: false,
+    };
+  },
   head() {
     const linkList = [
       {
@@ -359,20 +373,6 @@ export default {
     return {
       link: linkList,
       script,
-    };
-  },
-  data() {
-    return {
-      modelLoadingImage,
-      paymentMethod: undefined,
-      justCollectedNFTId: undefined,
-      shouldShowMessageInput: false,
-      memo: '',
-      followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
-      isFollowPromptUpdating: false,
-      modelExposure: 0,
-      animationTimer: null,
-      isAddedToShoppingCart: false,
     };
   },
   computed: {

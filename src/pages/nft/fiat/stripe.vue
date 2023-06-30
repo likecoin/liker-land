@@ -12,8 +12,34 @@ import { logPurchaseFlowEvent, logTrackerEvent } from '~/util/EventLogger';
 import nftMixin from '~/mixins/nft';
 
 export default {
-  layout: 'default',
   mixins: [nftMixin],
+  layout: 'default',
+  asyncData({ error, query }) {
+    const {
+      class_id: classId,
+      payment_id: paymentId,
+      claiming_token: claimToken,
+    } = query;
+    if (!paymentId) {
+      error({
+        statusCode: 400,
+        message: 'MISSING_PAYMENT_ID',
+      });
+      return undefined;
+    }
+    if (!classId) {
+      error({
+        statusCode: 400,
+        message: 'MISSING_NFT_CLASS_ID',
+      });
+      return undefined;
+    }
+    return {
+      classId,
+      paymentId,
+      claimToken,
+    };
+  },
   data() {
     return {
       result: {},
@@ -62,32 +88,6 @@ export default {
         })
       );
     },
-  },
-  asyncData({ error, query }) {
-    const {
-      class_id: classId,
-      payment_id: paymentId,
-      claiming_token: claimToken,
-    } = query;
-    if (!paymentId) {
-      error({
-        statusCode: 400,
-        message: 'MISSING_PAYMENT_ID',
-      });
-      return undefined;
-    }
-    if (!classId) {
-      error({
-        statusCode: 400,
-        message: 'MISSING_NFT_CLASS_ID',
-      });
-      return undefined;
-    }
-    return {
-      classId,
-      paymentId,
-      claimToken,
-    };
   },
   mounted() {
     this.uiToggleCollectModal({

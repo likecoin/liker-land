@@ -1,6 +1,6 @@
 <template>
   <Dropdown :close-on-child-click="false">
-    <template v-slot:trigger="{ toggle }">
+    <template #trigger="{ toggle }">
       <ButtonV2
         :text="$t('order_menu_filter_by')"
         :preset="getFilterButtonPreset"

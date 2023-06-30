@@ -535,40 +535,30 @@ const actions = {
       const balance = await balanceFetch;
       commit(WALLET_SET_LIKE_BALANCE, balance);
       return balance;
-    } catch (error) {
-      throw error;
     } finally {
       commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, undefined);
     }
   },
   async walletFetchSessionUserInfo({ state, commit, dispatch }) {
-    try {
-      const userInfo = await this.$api.$get(getUserV2Self());
-      commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
-      // Let locale follows Liker Land app language setting through path prefix
-      if (!checkIsLikeCoinAppInAppBrowser(this.$router.app.$route)) {
-        await dispatch('setLocale', userInfo.locale);
-      }
-      return userInfo;
-    } catch (error) {
-      throw error;
+    const userInfo = await this.$api.$get(getUserV2Self());
+    commit(WALLET_SET_USER_INFO, userInfo || { user: state.address });
+    // Let locale follows Liker Land app language setting through path prefix
+    if (!checkIsLikeCoinAppInAppBrowser(this.$router.app.$route)) {
+      await dispatch('setLocale', userInfo.locale);
     }
+    return userInfo;
   },
   async walletFetchSessionUserData(
     { dispatch },
     { shouldSkipUserInfo = false } = {}
   ) {
-    try {
-      const promises = [];
-      if (!shouldSkipUserInfo) {
-        promises.push(dispatch('walletFetchSessionUserInfo'));
-      }
-      promises.push(dispatch('walletFetchFollowees'));
-      await Promise.all(promises);
-      await dispatch('fetchWalletEvents');
-    } catch (error) {
-      throw error;
+    const promises = [];
+    if (!shouldSkipUserInfo) {
+      promises.push(dispatch('walletFetchSessionUserInfo'));
     }
+    promises.push(dispatch('walletFetchFollowees'));
+    await Promise.all(promises);
+    await dispatch('fetchWalletEvents');
   },
   async signLogin({ state, commit, dispatch }) {
     // Do not trigger login if the window is not focused
@@ -598,21 +588,17 @@ const actions = {
   },
 
   async walletLogout({ commit }) {
-    try {
-      commit(WALLET_SET_USER_INFO, null);
-      commit(WALLET_SET_FOLLOWEES, []);
-      commit(WALLET_SET_FOLLOWERS, []);
-      commit(WALLET_SET_PAST_FOLLOWEES, []);
-      commit(WALLET_SET_EVENTS, []);
-      commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
-      commit(WALLET_SET_TOTAL_ROYALTY, 0);
-      commit(WALLET_SET_ROYALTY_DETAILS, []);
-      commit(WALLET_SET_TOTAL_SALES, 0);
-      commit(WALLET_SET_SALES_DETAILS, []);
-      await this.$api.post(postUserV2Logout());
-    } catch (error) {
-      throw error;
-    }
+    commit(WALLET_SET_USER_INFO, null);
+    commit(WALLET_SET_FOLLOWEES, []);
+    commit(WALLET_SET_FOLLOWERS, []);
+    commit(WALLET_SET_PAST_FOLLOWEES, []);
+    commit(WALLET_SET_EVENTS, []);
+    commit(WALLET_SET_EVENT_LAST_SEEN_TS, 0);
+    commit(WALLET_SET_TOTAL_ROYALTY, 0);
+    commit(WALLET_SET_ROYALTY_DETAILS, []);
+    commit(WALLET_SET_TOTAL_SALES, 0);
+    commit(WALLET_SET_SALES_DETAILS, []);
+    await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(
     { commit },
@@ -668,8 +654,6 @@ const actions = {
           ...new Set([...followees, ...pastFollowees]),
         ]);
       }
-    } catch (error) {
-      throw error;
     } finally {
       commit(WALLET_SET_FOLLOWEES_FETCHING_STATE, false);
     }
@@ -719,61 +703,41 @@ const actions = {
     }
   },
   async walletFetchNotificationSettings({ commit }) {
-    try {
-      const { notification: notificationSettings } = await this.$api.$get(
-        getUserNotificationSettingsUrl()
-      );
-      commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
-    } catch (error) {
-      throw error;
-    }
+    const { notification: notificationSettings } = await this.$api.$get(
+      getUserNotificationSettingsUrl()
+    );
+    commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
   },
   async walletUpdateNotificationSettings({ commit }, notificationSettings) {
-    try {
-      await this.$api.$post(
-        getUserNotificationSettingsUrl(),
-        notificationSettings
-      );
-      commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
-    } catch (error) {
-      throw error;
-    }
+    await this.$api.$post(
+      getUserNotificationSettingsUrl(),
+      notificationSettings
+    );
+    commit(WALLET_SET_NOTIFICATION_SETTINGS, notificationSettings);
   },
   async walletFetchTotalRoyalty({ commit }, address) {
-    try {
-      const {
-        total_amount: totalRoyalty,
-        class_incomes: list,
-      } = await this.$api.$get(getTotalRoyaltyByAddress(address));
-      commit(WALLET_SET_TOTAL_ROYALTY, totalRoyalty);
-      commit(WALLET_SET_ROYALTY_DETAILS, list);
-    } catch (error) {
-      throw error;
-    }
+    const {
+      total_amount: totalRoyalty,
+      class_incomes: list,
+    } = await this.$api.$get(getTotalRoyaltyByAddress(address));
+    commit(WALLET_SET_TOTAL_ROYALTY, totalRoyalty);
+    commit(WALLET_SET_ROYALTY_DETAILS, list);
   },
   async walletFetchTotalSales({ commit }, owner) {
-    try {
-      const {
-        total_amount: totalSales,
-        class_incomes: list,
-      } = await this.$api.$get(getTotalSalesByAddress(owner));
-      commit(WALLET_SET_TOTAL_SALES, totalSales);
-      commit(WALLET_SET_SALES_DETAILS, list);
-    } catch (error) {
-      throw error;
-    }
+    const {
+      total_amount: totalSales,
+      class_incomes: list,
+    } = await this.$api.$get(getTotalSalesByAddress(owner));
+    commit(WALLET_SET_TOTAL_SALES, totalSales);
+    commit(WALLET_SET_SALES_DETAILS, list);
   },
   async walletFetchTotalResales({ commit }, address) {
-    try {
-      const {
-        total_amount: totalResales,
-        class_incomes: list,
-      } = await this.$api.$get(getTotalResalesByAddress(address));
-      commit(WALLET_SET_TOTAL_RESALES, totalResales);
-      commit(WALLET_SET_RESALE_DETAILS, list);
-    } catch (error) {
-      throw error;
-    }
+    const {
+      total_amount: totalResales,
+      class_incomes: list,
+    } = await this.$api.$get(getTotalResalesByAddress(address));
+    commit(WALLET_SET_TOTAL_RESALES, totalResales);
+    commit(WALLET_SET_RESALE_DETAILS, list);
   },
 };
 

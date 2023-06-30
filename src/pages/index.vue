@@ -159,8 +159,14 @@ const NFT_CLASS_DISPLAY_COUNT = 10;
 
 export default {
   name: 'WritingNFTPage',
-  layout: 'default',
   mixins: [inAppMixin, navigationListenerMixin, walletMixin],
+  layout: 'default',
+  data() {
+    return {
+      trendingClassIds: [],
+      latestClassIds: [],
+    };
+  },
   head() {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');
@@ -189,12 +195,6 @@ export default {
         },
       ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
-    };
-  },
-  data() {
-    return {
-      trendingClassIds: [],
-      latestClassIds: [],
     };
   },
   computed: {

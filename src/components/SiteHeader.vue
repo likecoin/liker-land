@@ -59,7 +59,7 @@
       </div>
 
       <Dropdown>
-        <template v-slot:trigger="{ toggle }">
+        <template #trigger="{ toggle }">
           <ButtonV2
             preset="tertiary"
             @click="toggle"
@@ -92,7 +92,7 @@
       </ButtonV2>
 
       <Dropdown>
-        <template v-slot:trigger="{ toggle }">
+        <template #trigger="{ toggle }">
           <ButtonV2
             v-if="!getAddress"
             class="-mr-[8px]"

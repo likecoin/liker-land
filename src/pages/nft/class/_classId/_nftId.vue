@@ -325,11 +325,67 @@ import navigationListenerMixin from '~/mixins/navigation-listener';
 
 export default {
   name: 'NFTDetailsPage',
-  layout: 'default',
   filters: {
     ellipsis,
   },
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
+  layout: 'default',
+  async asyncData({ route, query, store, redirect, error, localeLocation }) {
+    const { action } = query;
+    const { classId, nftId } = route.params;
+    const { referrer } = route.query;
+    if (referrer) {
+      redirect(
+        localeLocation({
+          name: 'nft-class-classId-share',
+          params: { classId },
+          query: { referrer },
+        })
+      );
+      return undefined;
+    }
+    try {
+      await Promise.all([
+        store.dispatch('lazyGetNFTClassMetadata', classId),
+        store.dispatch('lazyGetNFTMetadata', { classId, nftId }),
+        store
+          .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
+          .catch(err => {
+            if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
+              // eslint-disable-next-line no-console
+              console.error(JSON.stringify(err));
+            }
+          }),
+      ]);
+    } catch (err) {
+      if (err.response?.data?.code === 3) {
+        error({
+          statusCode: 404,
+          message: 'NFT_NOT_FOUND',
+        });
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        error({
+          statusCode: 500,
+          message: 'NFT_FETCH_ERROR',
+        });
+      }
+      return undefined;
+    }
+    return { action };
+  },
+  data() {
+    return {
+      // For <select> to change only, please use `this.nftId` instead
+      selectedNFTId: this.$route.params.nftId,
+      isLoading: true,
+
+      isOpenTransferModal: false,
+      isTransferring: false,
+      isCollecting: false,
+    };
+  },
   head() {
     const title = this.nftName || this.$t('nft_details_page_title');
     const description =
@@ -410,17 +466,6 @@ export default {
         : [],
     };
   },
-  data() {
-    return {
-      // For <select> to change only, please use `this.nftId` instead
-      selectedNFTId: this.$route.params.nftId,
-      isLoading: true,
-
-      isOpenTransferModal: false,
-      isTransferring: false,
-      isCollecting: false,
-    };
-  },
   computed: {
     classId() {
       return this.$route.params.classId;
@@ -464,51 +509,6 @@ export default {
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
     },
-  },
-  async asyncData({ route, query, store, redirect, error, localeLocation }) {
-    const { action } = query;
-    const { classId, nftId } = route.params;
-    const { referrer } = route.query;
-    if (referrer) {
-      redirect(
-        localeLocation({
-          name: 'nft-class-classId-share',
-          params: { classId },
-          query: { referrer },
-        })
-      );
-      return undefined;
-    }
-    try {
-      await Promise.all([
-        store.dispatch('lazyGetNFTClassMetadata', classId),
-        store.dispatch('lazyGetNFTMetadata', { classId, nftId }),
-        store
-          .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
-          .catch(err => {
-            if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
-              // eslint-disable-next-line no-console
-              console.error(JSON.stringify(err));
-            }
-          }),
-      ]);
-    } catch (err) {
-      if (err.response?.data?.code === 3) {
-        error({
-          statusCode: 404,
-          message: 'NFT_NOT_FOUND',
-        });
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(err);
-        error({
-          statusCode: 500,
-          message: 'NFT_FETCH_ERROR',
-        });
-      }
-      return undefined;
-    }
-    return { action };
   },
   async mounted() {
     try {

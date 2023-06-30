@@ -16,10 +16,10 @@ import { CrispMixinFactory } from '~/mixins/crisp';
 import utmMixin from '~/mixins/utm';
 
 export default {
-  layout: 'default',
   components: {
     GetAppPage,
   },
+  layout: 'default',
   mixins: [CrispMixinFactory(), utmMixin],
   head() {
     return {

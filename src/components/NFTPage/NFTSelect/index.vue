@@ -17,7 +17,6 @@
       />
       <div class="mt-[4px] flex items-center relative gap-[8px]">
         <select
-          v-model="selectedNftId"
           class="absolute opacity-0"
           @change="onSelectNFT"
         >
@@ -25,6 +24,7 @@
             v-for="id in nftCollectorCollectedNftList"
             :key="id"
             :value="id"
+            :selected="selectedNftId === id"
           >{{ id }}</option>
         </select>
         <div class="truncate">{{ selectedNftId }}</div>

@@ -192,11 +192,11 @@ import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'NotificationsPage',
-  layout: 'default',
   filters: {
     ellipsis,
   },
   mixins: [inAppMixin, walletMixin],
+  layout: 'default',
   data() {
     return { lastUpdatedTime: undefined };
   },

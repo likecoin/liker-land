@@ -71,7 +71,7 @@
           />
           <!-- sorting -->
           <Dropdown>
-            <template v-slot:trigger="{ toggle }">
+            <template #trigger="{ toggle }">
               <ButtonV2
                 :text="portfolioItemsSortingLabel"
                 preset="tertiary"

@@ -41,12 +41,12 @@ import Button from '../LegacyButton/Button';
 import CivicDashboardV3 from './Dashboard';
 
 export default {
-  layout: 'default',
   components: {
     AlertCircle,
     ExternalLink,
     Button,
     CivicDashboardV3,
   },
+  layout: 'default',
 };
 </script>

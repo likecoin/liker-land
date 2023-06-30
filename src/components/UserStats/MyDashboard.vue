@@ -11,7 +11,7 @@
     ]"
     :stat-wallet="statWallet"
   >
-    <template v-slot="stats">
+    <template #default="stats">
       <!-- Collect section -->
       <div
         :class="[

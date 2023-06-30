@@ -98,6 +98,22 @@ const NFT_CLAIM_STATE = {
 export default {
   name: 'NFTClaimPage',
   mixins: [alertMixin, nftMixin, walletMixin],
+  async asyncData({ query, store, error, i18n }) {
+    const {
+      class_id: classId,
+      payment_id: paymentId,
+      claiming_token: token,
+    } = query;
+    if (!classId || !token || !paymentId) {
+      error({ statusCode: 400, message: i18n.t('nft_claim_missing_qs') });
+      return;
+    }
+    try {
+      await store.dispatch('lazyGetNFTClassMetadata', classId);
+    } catch (err) {
+      error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
+    }
+  },
   data() {
     return {
       nftId: '',
@@ -147,22 +163,6 @@ export default {
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
       );
     },
-  },
-  async asyncData({ query, store, error, i18n }) {
-    const {
-      class_id: classId,
-      payment_id: paymentId,
-      claiming_token: token,
-    } = query;
-    if (!classId || !token || !paymentId) {
-      error({ statusCode: 400, message: i18n.t('nft_claim_missing_qs') });
-      return;
-    }
-    try {
-      await store.dispatch('lazyGetNFTClassMetadata', classId);
-    } catch (err) {
-      error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
-    }
   },
   methods: {
     async claim() {

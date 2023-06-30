@@ -182,8 +182,11 @@ import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTPortfolioPage',
-  layout: 'default',
   mixins: [walletMixin, portfolioMixin, alertMixin],
+  layout: 'default',
+  data() {
+    return { isOpenFollowersDialog: false };
+  },
   head() {
     const name = this.userDisplayName;
     const title = this.$t('portfolio_title', { name });
@@ -233,9 +236,6 @@ export default {
         },
       ],
     };
-  },
-  data() {
-    return { isOpenFollowersDialog: false };
   },
   computed: {
     ...mapGetters([
