@@ -406,7 +406,7 @@ export default {
     isShowCloseButton() {
       return (
         (this.paymentMethod === undefined &&
-          !this.getRouteBaseName(this.$route) === 'shopping-cart') ||
+          this.getRouteBaseName(this.$route) !== 'shopping-cart') ||
         this.uiTxNFTStatus === 'completed' ||
         this.uiTxNFTStatus === 'processing_non_blocking'
       );
