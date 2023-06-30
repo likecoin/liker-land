@@ -29,7 +29,7 @@
         <NFTCover
           :is-nft-book="true"
           :src="NFTImageUrl"
-          :size="450"
+          :size="300"
           :alt="NFTName"
         />
       </component>
@@ -100,7 +100,7 @@
             ]"
             :is-nft-book="true"
             :src="NFTImageUrl"
-            :size="450"
+            :size="300"
             :alt="NFTName"
           />
 
