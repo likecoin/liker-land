@@ -456,8 +456,7 @@ export default {
   },
   mounted() {
     this.initAnimation();
-    this.updateNFTClassMetadata();
-    this.updateNFTPurchaseInfo();
+    this.updateNFTClassAggregatedInfo();
   },
   methods: {
     initAnimation() {

@@ -101,9 +101,7 @@ export default {
   },
   methods: {
     fetchInfo() {
-      this.updateNFTClassMetadata();
-      this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
+      this.updateNFTClassAggregatedInfo();
     },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);

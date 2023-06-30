@@ -115,17 +115,6 @@ export const getNFTHistory = ({ iscnId, classId, nftId, txHash }) => {
   )}`;
 };
 
-export const getNFTMetadata = ({ iscnId, classId, nftId }) => {
-  const qsPayload = {
-    iscn_id: iscnId,
-    class_id: classId,
-    nft_id: nftId,
-  };
-  return `${LIKECOIN_API_BASE}/likernft/metadata?${querystring.stringify(
-    qsPayload
-  )}`;
-};
-
 export const getNFTModel = ({ classId }) =>
   `${LIKECOIN_API_BASE}/likernft/metadata/model/class_${classId}.gltf`;
 
@@ -321,6 +310,9 @@ export const getTopNFTClasses = ({ before, after }) => {
 
 export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
+
+export const getNftClassMetadata = classId =>
+  `/api/nft/metadata?class_id=${classId}`;
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   const qsPayload = { email, wallet, language };
