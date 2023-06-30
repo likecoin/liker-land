@@ -71,7 +71,13 @@
               />
             </template>
           </NFTBookItemCard>
-          <div v-if="nftEditions.length > 1" ref="compareSection" class="max-w-[962px] mx-auto flex flex-col justify-center">
+          <div
+            v-if="
+              nftEditions.length > 1 ||
+                (nftEditions.length === 1 && nftEditions[0].description)"
+            ref="compareSection"
+            class="max-w-[962px] mx-auto flex flex-col justify-center"
+          >
             <Label :text="$t('nft_edition_label')" preset="h3" align="center" class="text-like-green mt-[38px] mb-[24px]" />
             <ul
               class="flex flex-wrap items-start justify-center gap-[24px] w-full"

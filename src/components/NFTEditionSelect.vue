@@ -1,7 +1,7 @@
 <template>
   <div :class="rootClasses">
     <table
-      v-if="!isSingleItem && !isAllSoldOut"
+      v-if="(!isSingleItem || (isSingleItem && items[0].name)) && !isAllSoldOut"
       class="border-separate border-spacing-y-[8px] mb-[8px] w-full"
     >
       <tbody>
@@ -36,10 +36,11 @@
       />
       <template v-if="isSingleItem || isAllSoldOut">
         <span
-          v-if="!isAllSoldOut"
+          v-if="(isSingleItem && !items[0].name)"
           class="text-white"
         >{{ priceLabel }}</span>
         <NFTStockLabel
+          v-if="items.length > 1 || isAllSoldOut"
           :stock="stock"
           :is-dark="!isAllSoldOut"
         />
@@ -103,8 +104,8 @@ export default {
       default: () => [],
     },
     value: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 0,
     },
     shouldShowNotifyButton: {
       type: Boolean,
