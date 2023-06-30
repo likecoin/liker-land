@@ -302,7 +302,7 @@ export default {
     }
     try {
       await Promise.all([
-        store.dispatch('fetchNFTClassMetadata', classId),
+        store.dispatch('lazyGetNFTClassMetadata', classId),
         store
           .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
           .catch(err => {
