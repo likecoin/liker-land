@@ -175,7 +175,7 @@ const nuxtConfig = {
           'www.googleadservices.com',
           'use.typekit.net',
           'https://js.stripe.com',
-          'https://unpkg.com/@google/model-viewer@3.0.2/',
+          'https://unpkg.com/@google/model-viewer@3.1.1/',
           '*.crisp.chat',
         ],
         'frame-src': [

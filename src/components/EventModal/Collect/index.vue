@@ -335,10 +335,9 @@ export default {
   head() {
     const linkList = [
       {
-        rel: 'modulepreload',
+        rel: 'prefetch',
         href:
-          'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
-        as: 'script',
+          'https://unpkg.com/@google/model-viewer@3.1.1/dist/model-viewer.min.js',
       },
     ];
     if (this.nftModelURL) {
@@ -348,16 +347,18 @@ export default {
         href: this.nftModelURL,
       });
     }
+    const script = [];
+    if (this.nftModelURL && this.isOpen) {
+      script.push({
+        type: 'module',
+        src:
+          'https://unpkg.com/@google/model-viewer@3.1.1/dist/model-viewer.min.js',
+        async: 'true',
+      });
+    }
     return {
       link: linkList,
-      script: [
-        {
-          type: 'module',
-          src:
-            'https://unpkg.com/@google/model-viewer@3.0.2/dist/model-viewer.min.js',
-          async: 'true',
-        },
-      ],
+      script,
     };
   },
   data() {
