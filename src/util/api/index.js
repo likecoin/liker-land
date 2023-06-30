@@ -155,6 +155,14 @@ export const getChainNFTClassListingEndpoint = classId =>
 export const getCollectorTopRankedCreators = (collector, top = 5) =>
   `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector-top-ranked-creators?collector=${collector}&ignore_list=${LIKECOIN_NFT_API_WALLET}&include_owner=false&top=${top}`;
 
+export const getAccountBalance = (account, denom) =>
+  `${LIKECOIN_CHAIN_API}/cosmos/bank/v1beta1/balances/${account}/by_denom?denom=${encodeURIComponent(
+    denom
+  )}`;
+
+export const getNFTCountByClassId = (classId, owner) =>
+  `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/balance/${owner}/${classId}`;
+
 export const getISCNRecord = iscnId => {
   const qsPayload = {
     iscn_id: iscnId,

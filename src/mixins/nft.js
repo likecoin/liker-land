@@ -19,6 +19,7 @@ import {
   getNFTModel,
   postNewStripeFiatPayment,
   getIdenticonAvatar,
+  getNFTCountByClassId,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
@@ -28,7 +29,6 @@ import {
   signGrant,
   signBuyNFT,
   broadcastTx,
-  getNFTCountByClassId,
   getNFTClassCollectionType,
   getFormattedNFTEvents,
   parseNFTMetadataURL,
@@ -667,8 +667,13 @@ export default {
         return;
       }
       this.isOwnerInfoLoading = true;
-      const { amount } = await getNFTCountByClassId(classId, address);
-      this.userCollectedCount = amount.low;
+      /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
+        which is huge and affects index page performance */
+      // const { amount } = await getNFTCountByClassId(classId, address);
+      const { amount } = await this.$api.$get(
+        getNFTCountByClassId(classId, address)
+      );
+      this.userCollectedCount = Number(amount);
       this.isOwnerInfoLoading = false;
     },
     async fetchUserCollectedCount() {

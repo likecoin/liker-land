@@ -1,9 +1,12 @@
 /* eslint no-param-reassign: "off" */
 import BigNumber from 'bignumber.js';
-import { LIKECOIN_NFT_API_WALLET } from '@/constant/index';
+import {
+  LIKECOIN_CHAIN_MIN_DENOM,
+  LIKECOIN_NFT_API_WALLET,
+} from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
-import { getAccountBalance, getNFTHistoryDataMap } from '~/util/nft';
+import { amountToLIKE, getNFTHistoryDataMap } from '~/util/nft';
 import { signLoginMessage } from '~/util/cosmos';
 import {
   getUserInfoMinByAddress,
@@ -22,6 +25,7 @@ import {
   getTotalSalesByAddress,
   getTotalRoyaltyByAddress,
   getTotalResalesByAddress,
+  getAccountBalance,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -520,7 +524,12 @@ const actions = {
       if (state.likeBalanceFetchPromise) {
         balanceFetch = state.likeBalanceFetchPromise;
       } else {
-        balanceFetch = getAccountBalance(address);
+        /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
+          which is huge and affects index page performance */
+        // balanceFetch = getAccountBalance(address);
+        balanceFetch = this.$api
+          .$get(getAccountBalance(address, LIKECOIN_CHAIN_MIN_DENOM))
+          .then(data => amountToLIKE(data?.balance));
         commit(WALLET_SET_LIKE_BALANCE_FETCH_PROMISE, balanceFetch);
       }
       const balance = await balanceFetch;
