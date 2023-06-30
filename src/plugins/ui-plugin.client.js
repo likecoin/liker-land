@@ -1,6 +1,5 @@
 import Vue from 'vue'; // eslint-disable-line import/no-extraneous-dependencies
 import VueLazyLoad from 'vue-lazyload';
-import VueAwesomeSwiper from 'vue-awesome-swiper';
 
 import {
   TweenLite,
@@ -37,5 +36,3 @@ Vue.prototype.$gsap = {
   // To make tree-shake happy
   CSSPlugin,
 };
-
-Vue.use(VueAwesomeSwiper);
