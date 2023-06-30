@@ -231,7 +231,9 @@ export default {
       return this.iscnUrl || this.nftExternalURL;
     },
     iscnData() {
-      return this.getISCNMetadataById(this.iscnId);
+      const data = this.getISCNMetadataById(this.iscnId);
+      if (data instanceof Promise) return undefined;
+      return data;
     },
     iscnUrl() {
       return this.iscnData?.contentMetadata?.url;

@@ -364,7 +364,9 @@ const actions = {
       /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
         which is huge and affects index page performance */
       // const res = await getISCNRecord(iscnId);
-      const res = await this.$axios.$get(api.getISCNRecord(iscnId));
+      const req = this.$axios.$get(api.getISCNRecord(iscnId));
+      commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: req });
+      const res = await req;
       const [{ data } = {}] = res.records || [];
       commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data });
       return data;
@@ -375,7 +377,8 @@ const actions = {
     }
   },
   async lazyGetISCNMetadataById({ getters, dispatch }, iscnId) {
-    let info = getters.getISCNMetadataById(iscnId);
+    // HACK: await due to possible pending promise in getter
+    let info = await getters.getISCNMetadataById(iscnId);
     if (!info) {
       info = await dispatch('fetchISCNMetadataById', iscnId);
     }

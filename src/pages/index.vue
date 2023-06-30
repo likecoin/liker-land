@@ -303,7 +303,7 @@ export default {
     async getClassOwner(classData) {
       try {
         const iscnPrefix = classData.parent.iscn_id_prefix;
-        const data = await this.lazyGetISCNMetadataById(iscnPrefix)
+        const data = await this.lazyGetISCNMetadataById(iscnPrefix);
         return data.owner;
       } catch (err) {
         console.error(`Failed to fetch owner of ${classData.id}`);
