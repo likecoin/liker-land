@@ -231,7 +231,9 @@ export default {
       return this.iscnUrl || this.nftExternalURL;
     },
     iscnData() {
-      return this.getISCNMetadataById(this.iscnId);
+      const data = this.getISCNMetadataById(this.iscnId);
+      if (data instanceof Promise) return undefined;
+      return data;
     },
     iscnUrl() {
       return this.iscnData?.contentMetadata?.url;
@@ -568,7 +570,7 @@ export default {
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddress',
-      'fetchISCNMetadataById',
+      'lazyGetISCNMetadataById',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
@@ -588,7 +590,7 @@ export default {
       'fetchNFTBookPriceByClassId',
     ]),
     async fetchISCNMetadata() {
-      await this.fetchISCNMetadataById(this.iscnId);
+      await this.lazyGetISCNMetadataById(this.iscnId);
     },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));

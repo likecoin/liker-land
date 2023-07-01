@@ -364,7 +364,9 @@ const actions = {
       /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
         which is huge and affects index page performance */
       // const res = await getISCNRecord(iscnId);
-      const res = await this.$axios.$get(api.getISCNRecord(iscnId));
+      const req = this.$axios.$get(api.getISCNRecord(iscnId));
+      commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: req });
+      const res = await req;
       const [{ data } = {}] = res.records || [];
       commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data });
       return data;
@@ -373,6 +375,14 @@ const actions = {
       console.error(error);
       return undefined;
     }
+  },
+  async lazyGetISCNMetadataById({ getters, dispatch }, iscnId) {
+    // HACK: await due to possible pending promise in getter
+    let info = await getters.getISCNMetadataById(iscnId);
+    if (!info) {
+      info = await dispatch('fetchISCNMetadataById', iscnId);
+    }
+    return info;
   },
   removeNFTFiatPriceInfoByClassId({ commit }, classId) {
     commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, {

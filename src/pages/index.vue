@@ -299,11 +299,11 @@ export default {
     this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
-    ...mapActions(['lazyFetchLIKEPrice']),
+    ...mapActions(['lazyFetchLIKEPrice', 'lazyGetISCNMetadataById']),
     async getClassOwner(classData) {
       try {
         const iscnPrefix = classData.parent.iscn_id_prefix;
-        const data = await this.$axios.$get(getISCNRecord(iscnPrefix));
+        const data = await this.lazyGetISCNMetadataById(iscnPrefix);
         return data.owner;
       } catch (err) {
         console.error(`Failed to fetch owner of ${classData.id}`);
