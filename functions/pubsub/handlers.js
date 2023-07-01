@@ -225,9 +225,9 @@ export async function handlePurchaseMultipleEvent(message, data) {
 
   // Gather all sellers need to be notified
   const sellerList = await Promise.all(
-    Object.keys(txDataMapBySeller).map(sellerWallet => {
+    Object.keys(txDataMapBySeller).map(async sellerWallet => {
       try {
-        const userDoc = walletUserCollection.doc(sellerWallet).get();
+        const userDoc = await walletUserCollection.doc(sellerWallet).get();
         const sellerUserData = userDoc.data();
         return [sellerWallet, sellerUserData];
       } catch {
@@ -289,7 +289,7 @@ export async function handlePurchaseMultipleEvent(message, data) {
   });
   const fetchNFTClassPromises = [...nftClassIds].map(async classId => {
     try {
-      const nftClassData = fetchNFTMetadata(classId);
+      const nftClassData = await fetchNFTMetadata(classId);
       return [classId, nftClassData];
     } catch {
       return [classId];
