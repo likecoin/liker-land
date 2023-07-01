@@ -283,6 +283,7 @@ const nuxtConfig = {
         file: 'zh-Hant.json',
       },
     ],
+    lazy: true,
     strategy: 'prefix',
     defaultLocale: 'zh-Hant',
     langDir: '~/locales/',
