@@ -49,7 +49,7 @@
           :circle="true"
           @click="handleClickPrev"
         >
-          <IconArrowLeft class="w-[20px]" />
+          <LazyIconArrowLeft class="w-[20px]" />
         </ButtonV2>
         <ButtonV2
           class="relative pointer-events-auto shadow-lg"
@@ -57,7 +57,7 @@
           :circle="true"
           @click="handleClickNext"
         >
-          <IconArrowLeft class="w-[20px] rotate-180" />
+          <LazyIconArrowLeft class="w-[20px] rotate-180" />
         </ButtonV2>
       </div>
     </div>

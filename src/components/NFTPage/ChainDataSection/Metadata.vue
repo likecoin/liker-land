@@ -9,7 +9,7 @@
     <div class="flex flex-col laptop:flex-row laptop:items-end laptop:justify-between gap-x-[32px]">
       <div class="min-w-0 truncate">
         <Label class="!text-[12px] text-medium-gray font-600">
-          {{ $t('nft_details_page_section_metadata_url') }}&nbsp;<IconLinkExternal />
+          {{ $t('nft_details_page_section_metadata_url') }}&nbsp;<LazyIconLinkExternal />
         </Label>
         <a
           class="text-medium-gray underline text-[12px]"
@@ -36,7 +36,7 @@
           class="text-medium-gray"
           content-class="text-[12px]"
         >
-          {{ record.label }}&nbsp;<IconLinkExternal />
+          {{ record.label }}&nbsp;<LazyIconLinkExternal />
         </ButtonV2>
       </div>
     </div>

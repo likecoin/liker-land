@@ -11,7 +11,7 @@
   >
     <Label preset="h5" :text="$t('nft_details_page_label_owning')" class="text-like-green font-600">
       <template #prepend>
-        <IconCreativeWork />
+        <LazyIconCreativeWork />
       </template>
       <template #default>
         <ProgressIndicator v-if="isLoading" preset="thin" />

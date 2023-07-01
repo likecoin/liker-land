@@ -8,7 +8,7 @@
       <div class="py-[6px] px-[12px] sm:px-[24px] bg-shade-gray rounded-[16px] text-10">
         {{ getContentType(type) }}
       </div>
-      <IconAdd v-if="index !== contentTypes.length - 1" class="text-medium-gray" />
+      <LazyIconAdd v-if="index !== contentTypes.length - 1" class="text-medium-gray" />
     </li>
   </ul>
 </template>

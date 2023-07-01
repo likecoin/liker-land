@@ -41,7 +41,7 @@
         :wallet-address="fromWallet"
         :avatar-size="avatarSize"
       />
-      <IconArrowLeft
+      <LazyIconArrowLeft
         v-if="fromWallet && toWallet"
         class="w-[16px] h-[16px] text-like-green rotate-180 flex-shrink-0"
       />

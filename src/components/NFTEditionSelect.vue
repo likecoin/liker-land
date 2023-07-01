@@ -54,7 +54,7 @@
         @click="handleClickCollectButton"
       >
         <template #prepend>
-          <NFTWidgetIconInsertCoin class="w-[16px]" />
+          <LazyNFTWidgetIconInsertCoin class="w-[16px]" />
         </template>
       </ButtonV2>
       <ButtonV2
@@ -64,7 +64,7 @@
         @click="handleClickNotifyButton"
       >
         <template #prepend>
-          <NotifyIcon class="w-[16px]" />
+          <LazyIconNotify class="w-[16px]" />
         </template>
       </ButtonV2>
     </div>
@@ -73,19 +73,15 @@
 
 <script>
 import ButtonV2 from './ButtonV2';
-import NotifyIcon from './Icon/Notify';
 import NFTEditionSelectItem from './NFTEditionSelectItem';
 import NFTStockLabel from './NFTStockLabel';
-import NFTWidgetIconInsertCoin from './NFTWidget/Icon/InsertCoin';
 
 export default {
   name: 'NFTEditionSelect',
   components: {
     ButtonV2,
-    NotifyIcon,
     NFTEditionSelectItem,
     NFTStockLabel,
-    NFTWidgetIconInsertCoin,
   },
   props: {
     items: {

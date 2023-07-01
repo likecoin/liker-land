@@ -9,7 +9,7 @@
     @close="$emit('close')"
   >
     <template #header-prepend>
-      <IconTransfer />
+      <LazyIconTransfer />
     </template>
     <template #top>
       <NFTPageOwning v-if="!nftId" :collected-count="userCollectedCount" />
@@ -42,7 +42,7 @@
               >{{ id }}</option>
             </select>
             <div class="truncate">{{ selectedNFTId }}</div>
-            <IconArrowDown class="w-[12px] h-[12px] shrink-0" />
+            <LazyIconArrowDown class="w-[12px] h-[12px] shrink-0" />
           </div>
           <ButtonV2
             class="shrink-0"

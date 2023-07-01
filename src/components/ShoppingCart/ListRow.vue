@@ -68,7 +68,7 @@
         :circle="true"
         @click="handleClickRemoveButton"
       >
-        <IconClose class="w-[20px] text-gray-4a" />
+        <LazyIconClose class="w-[20px] text-gray-4a" />
       </ButtonV2>
     </div>
   </div>

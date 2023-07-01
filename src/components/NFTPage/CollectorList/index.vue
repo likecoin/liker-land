@@ -8,7 +8,7 @@
     :is-narrow="isNarrow"
   >
     <template #titleIcon>
-      <IconPerson />
+      <LazyIconPerson />
     </template>
     <template #content="{ contentPaddingClass }">
       <template v-if="trimmedItems.length">
@@ -32,7 +32,7 @@
                 prepend-class="text-like-green"
               >
                 <template #prepend>
-                  <IconPerson />
+                  <LazyIconPerson />
                 </template>
               </Label>
               <Label

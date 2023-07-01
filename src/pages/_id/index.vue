@@ -80,7 +80,7 @@
             @click="goMyDashboard"
           >
             <template #prepend>
-              <IconPerson />
+              <LazyIconPerson />
             </template>
           </ButtonV2>
         </div>
@@ -110,7 +110,7 @@
               @click="handleClickCollectAllButton"
             >
               <template #prepend>
-                <IconPrice />
+                <LazyIconPrice />
               </template>
             </ButtonV2>
           </CardV2>

@@ -89,7 +89,7 @@
             @click="goMyPortfolio"
           >
             <template #prepend>
-              <IconView />
+              <LazyIconView />
             </template>
           </ButtonV2>
         </template>

@@ -9,7 +9,7 @@
     v-on="$listeners"
   >
     <slot />
-    <IconNorthEast v-if="href" class="ml-[4px] self-center shrink-0" />
+    <LazyIconNorthEast v-if="href" class="ml-[4px] self-center shrink-0" />
   </component>
 </template>
 

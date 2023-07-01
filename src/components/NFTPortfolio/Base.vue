@@ -52,7 +52,7 @@
               <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
               <template v-else>{{ $t('nft_class_uncollectible') }}</template>
               <template v-if="isCollectable" #prepend>
-                <IconPrice />
+                <LazyIconPrice />
               </template>
             </ButtonV2>
             <NFTViewOptionList
@@ -66,15 +66,15 @@
 
           <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
             <div class="flex items-center text-medium-gray">
-              <IconMint />
+              <LazyIconMint />
               <div class="ml-[4px]">{{ collectedCount }}</div>
             </div>
             <div class="flex items-center text-medium-gray">
-              <IconOwner />
+              <LazyIconOwner />
               <div class="ml-[4px]">{{ collectorCount }}</div>
             </div>
             <div v-if="isCollectedTab && isCollectable" class="flex items-center text-like-green">
-              <IconPrice />
+              <LazyIconPrice />
               <div class="ml-[4px]">{{ price | formatNumberWithLIKE }}</div>
             </div>
             <div v-if="ownCount" class="flex items-center text-like-green">

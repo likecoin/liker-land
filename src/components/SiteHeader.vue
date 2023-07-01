@@ -30,7 +30,7 @@
           preset="tertiary"
           :to="localeLocation({ name: 'notifications' })"
         >
-          <IconBell class="w-20 h-20 text-like-green" />
+          <LazyIconBell class="w-20 h-20 text-like-green" />
         </ButtonV2>
         <div
           v-if="getNotificationCount > 0"
@@ -87,7 +87,7 @@
         @click="connectWallet"
       >
         <template #prepend>
-          <IconLogin />
+          <LazyIconLogin />
         </template>
       </ButtonV2>
 
@@ -99,7 +99,7 @@
             preset="plain"
             @click="toggle"
           >
-            <IconNav />
+            <LazyIconNav />
           </ButtonV2>
           <div v-else class="relative">
             <Identity

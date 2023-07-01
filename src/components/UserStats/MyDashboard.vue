@@ -28,7 +28,7 @@
           :label-text="$t('nft_portfolio_page_label_collected')"
         >
           <template #icon>
-            <IconMint class="w-[16px] h-[16px]" />
+            <LazyIconMint class="w-[16px] h-[16px]" />
           </template>
         </UserStatsItem>
         <UserStatsItem
@@ -37,7 +37,7 @@
           :label-text="$t('nft_portfolio_page_state_value')"
         >
           <template #icon>
-            <IconPriceMini />
+            <LazyIconPriceMini />
           </template>
         </UserStatsItem>
       </div>
@@ -58,7 +58,7 @@
           :label-text="$t('nft_portfolio_page_label_created')"
         >
           <template #icon>
-            <IconFlare class="w-[16px] h-[16px]" />
+            <LazyIconFlare class="w-[16px] h-[16px]" />
           </template>
         </UserStatsItem>
         <UserStatsItem
@@ -67,7 +67,7 @@
           :label-text="$t('nft_portfolio_page_state_collectors')"
         >
           <template #icon>
-            <IconPersonMini />
+            <LazyIconPersonMini />
           </template>
         </UserStatsItem>
       </div>
@@ -84,10 +84,10 @@
           stats-class="text-airdrop-gold"
         >
           <template #icon>
-            <IconPriceMini />
+            <LazyIconPriceMini />
           </template>
           <template #label>
-            <span>{{ $t('nft_portfolio_page_state_sales') }} <IconOpenInNew class="inline-block text-medium-gray" /></span>
+            <span>{{ $t('nft_portfolio_page_state_sales') }} <LazyIconOpenInNew class="inline-block text-medium-gray" /></span>
           </template>
         </UserStatsItem>
       </div>

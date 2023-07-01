@@ -28,11 +28,11 @@
 
       <div class="flex gap-[16px] items-center mt-[24px] text-[12px] text-medium-gray">
         <div class="flex items-center">
-          <IconMint />
+          <LazyIconMint />
           <div class="ml-[4px]">{{ collectedCount }}</div>
         </div>
         <div class="flex items-center">
-          <IconOwner />
+          <LazyIconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
       </div>

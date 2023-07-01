@@ -45,7 +45,7 @@
           <div class="flex items-center justify-center">
             <ButtonV2 preset="secondary" :text="priceLabel" @click="$emit('click-collect', nftValue)">
               <template #prepend>
-                <NFTWidgetIconInsertCoin class="w-[16px]" />
+                <LazyNFTWidgetIconInsertCoin class="w-[16px]" />
               </template>
             </ButtonV2>
           </div>

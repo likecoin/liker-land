@@ -5,7 +5,7 @@
     :is-show-separator="false"
   >
     <template #titleIcon>
-      <IconSupply />
+      <LazyIconSupply />
     </template>
     <template #content>
       <NFTSupplyTable
