@@ -23,7 +23,7 @@
             :text="$t('nft_details_page_activity_list_event_collect')"
           >
             <template #prepend>
-              <IconCircle />
+              <LazyIconCircle />
             </template>
           </Label>
           <Label
@@ -31,7 +31,7 @@
             :text="$t('nft_details_page_activity_list_event_buy_nft')"
           >
             <template #prepend>
-              <IconExchange />
+              <LazyIconExchange />
             </template>
           </Label>
           <Label
@@ -39,7 +39,7 @@
             :text="$t('nft_details_page_activity_list_event_transfer')"
           >
             <template #prepend>
-              <IconTransferMini />
+              <LazyIconTransferMini />
             </template>
           </Label>
           <Label
@@ -47,7 +47,7 @@
             :text="$t('nft_details_page_activity_list_event_mint_nft')"
           >
             <template #prepend>
-              <IconFlare />
+              <LazyIconFlare />
             </template>
           </Label>
           <Label
@@ -55,7 +55,7 @@
             :text="$t('nft_details_page_activity_list_event_create_class')"
           >
             <template #prepend>
-              <IconFlare />
+              <LazyIconFlare />
             </template>
           </Label>
           <Label
@@ -63,7 +63,7 @@
             :text="event.event"
           >
             <template #prepend>
-              <IconCircle />
+              <LazyIconCircle />
             </template>
           </Label>
         </td>

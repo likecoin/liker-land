@@ -17,11 +17,11 @@
         :text="$tc('event_list_page_notifications', getNotificationCount, { number: getNotificationCount })"
       >
         <template #prepend>
-          <IconBell />
+          <LazyIconBell />
         </template>
         <template #append>
           <ButtonV2 preset="tertiary" @click="handleRefresh">
-            <IconRefresh />
+            <LazyIconRefresh />
           </ButtonV2>
         </template>
       </Label>

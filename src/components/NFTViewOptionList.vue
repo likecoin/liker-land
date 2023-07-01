@@ -10,10 +10,10 @@
       @click="handleClickViewContent"
     >
       <template #prepend>
-        <IconArticle />
+        <LazyIconArticle />
       </template>
       <template #append>
-        <IconLinkExternal />
+        <LazyIconLinkExternal />
       </template>
     </ButtonV2>
     <ButtonV2
@@ -26,10 +26,10 @@
       @click="handleClickViewContent"
     >
       <template #prepend>
-        <IconISCN class="w-[20px] text-dark-gray" />
+        <LazyIconISCN class="w-[20px] text-dark-gray" />
       </template>
       <template #append>
-        <IconLinkExternal />
+        <LazyIconLinkExternal />
       </template>
     </ButtonV2>
 
@@ -51,10 +51,10 @@
         @click="e => handleClickViewContentURL(e, contentUrl)"
       >
         <template #prepend>
-          <IconArticle />
+          <LazyIconArticle />
         </template>
         <template #append>
-          <IconLinkExternal />
+          <LazyIconLinkExternal />
         </template>
       </ButtonV2>
     </template>

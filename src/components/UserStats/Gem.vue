@@ -21,9 +21,9 @@
     </li>
   </ul>
   <div v-else class="flex justify-between w-[44px] text-shade-gray">
-    <IconEllipse />
-    <IconEllipse />
-    <IconEllipse />
+    <LazyIconEllipse />
+    <LazyIconEllipse />
+    <LazyIconEllipse />
   </div>
 </template>
 <script>

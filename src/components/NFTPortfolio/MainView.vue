@@ -79,8 +79,8 @@
                 @click="toggle"
               >
                 <template #append>
-                  <IconASC v-if="portfolioItemsSortingOrder === 'ASC'" />
-                  <IconDESC v-if="portfolioItemsSortingOrder === 'DESC'" />
+                  <LazyIconASC v-if="portfolioItemsSortingOrder === 'ASC'" />
+                  <LazyIconDESC v-if="portfolioItemsSortingOrder === 'DESC'" />
                 </template>
               </ButtonV2>
             </template>
@@ -95,8 +95,8 @@
                 @select="handlePortfolioSortingChange"
               >
                 <template #label-append>
-                  <IconASC v-if="item.value.split('-')[1] === 'ASC'" />
-                  <IconDESC v-if="item.value.split('-')[1] === 'DESC'" />
+                  <LazyIconASC v-if="item.value.split('-')[1] === 'ASC'" />
+                  <LazyIconDESC v-if="item.value.split('-')[1] === 'DESC'" />
                 </template>
               </MenuItem>
             </MenuList>

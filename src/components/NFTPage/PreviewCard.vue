@@ -87,15 +87,15 @@
         class="grid grid-flow-col gap-[16px] items-center justify-center mt-[18px] text-[12px]"
       >
         <div class="flex items-center text-medium-gray">
-          <IconMint />
+          <LazyIconMint />
           <div class="ml-[4px]">{{ collectedCount }}</div>
         </div>
         <div class="flex items-center text-medium-gray">
-          <IconOwner />
+          <LazyIconOwner />
           <div class="ml-[4px]">{{ collectorCount }}</div>
         </div>
         <div v-if="nftPrice > 0" class="flex items-center text-like-green">
-          <IconPrice />
+          <LazyIconPrice />
           <div class="ml-[4px]">{{ nftPrice | formatNumberWithLIKE }}</div>
         </div>
       </div>

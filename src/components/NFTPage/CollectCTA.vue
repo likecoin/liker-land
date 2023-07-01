@@ -45,7 +45,7 @@
         @click="handleCollectFromCTA"
       >
         <template #prepend>
-          <IconPrice />
+          <LazyIconPrice />
         </template>
       </ButtonV2>
     </div>
@@ -62,7 +62,7 @@
         @click="handleCollectFromCTA"
       >
         <template #prepend>
-          <IconPrice />
+          <LazyIconPrice />
         </template>
       </ButtonV2>
     </div>

@@ -46,10 +46,10 @@
         :text="submitButtonText"
       >
         <template v-if="!subscriptionId && !isWalletConnected" #prepend>
-          <IconNotify class="w-[20px]" />
+          <LazyIconNotify class="w-[20px]" />
         </template>
         <template v-else-if="subscriptionId" #append>
-          <IconCheck width="20" height="20" />
+          <LazyIconCheck width="20" height="20" />
         </template>
       </ButtonV2>
     </form>
@@ -79,7 +79,7 @@
     >
       <div class="flex justify-center my-[24px]">
         <div class="bg-like-cyan-light rounded-[50%] p-[12px]">
-          <IconEmail class="w-[32px] text-like-green" />
+          <LazyIconEmail class="w-[32px] text-like-green" />
         </div>
       </div>
       <Label preset="h4" align="center" class="mb-[8px]" :text="$t('portfolio_subscription_verify_title')" />

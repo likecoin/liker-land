@@ -13,7 +13,7 @@
     ]"
   >
     <div class="flex items-center">
-      <IconAttention class="mr-[12px]" />
+      <LazyIconAttention class="mr-[12px]" />
       <slot name="icon" />
     </div>
     <Label class="whitespace-pre-line text-medium-gray mt-[12px]" :text="attentionText" />

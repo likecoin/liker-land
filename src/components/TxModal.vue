@@ -71,7 +71,7 @@
       >
         <Label class="text-danger" :text="formattedErrorMessage" preset="p6">
           <template #prepend>
-            <IconError />
+            <LazyIconError />
           </template>
           <template
             v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE'"
@@ -97,9 +97,9 @@
           :attention-text="attentionText"
         >
           <template #icon>
-            <IconLedger v-if="walletMethodType === 'keplr'" />
-            <IconLikerLandApp v-if="walletMethodType === 'liker-id'" />
-            <IconKeplrMobile v-if="walletMethodType === 'keplr-mobile'" />
+            <LazyIconLedger v-if="walletMethodType === 'keplr'" />
+            <LazyIconLikerLandApp v-if="walletMethodType === 'liker-id'" />
+            <LazyIconKeplrMobile v-if="walletMethodType === 'keplr-mobile'" />
           </template>
         </AttentionSign>
       </div>
@@ -119,7 +119,7 @@
           @click="handleCancel"
         >
           <template #prepend>
-            <IconBin class="w-[20px]" />
+            <LazyIconBin class="w-[20px]" />
           </template>
         </ButtonV2>
         <ButtonV2

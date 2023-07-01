@@ -21,7 +21,7 @@
           <!-- This value is from formattedNFTPriceInLIKE -->
           {{ price }}
         </span>
-        <IconArrowLeft class="w-[16px] h-[16px] rotate-180" />
+        <LazyIconArrowLeft class="w-[16px] h-[16px] rotate-180" />
       </div>
     </template>
   </ButtonV2>

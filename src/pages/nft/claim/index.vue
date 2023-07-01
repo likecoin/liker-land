@@ -35,7 +35,7 @@
             :text="$t('nft_collect_modal_leave_message')"
           />
           <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
-            <IconMessage class="text-dark-gray" />
+            <LazyIconMessage class="text-dark-gray" />
             <input
               v-model="collectorMessage"
               type="input"

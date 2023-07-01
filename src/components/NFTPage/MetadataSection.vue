@@ -10,7 +10,7 @@
       prepend-class="text-like-green"
     >
       <template #prepend>
-        <IconCreativeWork />
+        <LazyIconCreativeWork />
       </template>
     </Label>
 

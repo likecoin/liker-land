@@ -19,7 +19,7 @@
       class="text-like-green font-600"
     >
       <template #prepend>
-        <IconCreativeWork />
+        <LazyIconCreativeWork />
       </template>
       <template #default>
         <div class="flex items-center">

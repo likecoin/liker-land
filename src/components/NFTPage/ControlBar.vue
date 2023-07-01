@@ -32,7 +32,7 @@
       >
         {{ price | formatNumberWithLIKE }}
         <template #prepend>
-          <IconPrice />
+          <LazyIconPrice />
         </template>
       </ButtonV2>
     </div>

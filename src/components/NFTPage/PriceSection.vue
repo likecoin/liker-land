@@ -10,7 +10,7 @@
       prepend-class="text-like-cyan"
     >
       <template #prepend>
-        <IconPrice />
+        <LazyIconPrice />
       </template>
     </Label>
 
@@ -35,7 +35,7 @@
         :text="$t('nft_details_page_collected_count_label')"
       >
         <template #prepend>
-          <IconMint />
+          <LazyIconMint />
         </template>
         <template #append>
           {{ collectedCount }}
@@ -46,7 +46,7 @@
         :text="$t('nft_details_page_title_collector')"
       >
         <template #prepend>
-          <IconPersonMini />
+          <LazyIconPersonMini />
         </template>
         <template #append>
           {{ collectorCount }}
@@ -67,7 +67,7 @@
             @click="handleClickCollect"
           >
             <template #prepend>
-              <IconPrice />
+              <LazyIconPrice />
             </template>
           </ButtonV2>
         </div>
@@ -82,10 +82,10 @@
         @click="handleClickViewContent"
       >
         <template #prepend>
-          <IconArticle />
+          <LazyIconArticle />
         </template>
         <template #append>
-          <IconLinkExternal />
+          <LazyIconLinkExternal />
         </template>
       </ButtonV2>
     </div>
