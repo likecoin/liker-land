@@ -93,7 +93,6 @@
         </client-only>
         <div class="flex flex-col items-center shrink-0">
           <NFTCover
-            v-if="NFTImageUrl"
             :class="[
               'mt-[-48px]',
               coverClasses,
