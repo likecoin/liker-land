@@ -450,6 +450,7 @@
   "order_menu_display_state": "Featured",
   "order_menu_filter_by": "Filter",
   "order_menu_filter_by_creators": "Creators",
+  "order_menu_filter_by_input": "Enter filtering content",
   "order_menu_filter_by_keywords": "Keywords",
   "order_menu_filter_by_type": "NFT type",
   "order_menu_filter_clean": "Clear Filter",
