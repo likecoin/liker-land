@@ -18,7 +18,12 @@ const {
 const { sendEmail } = require('../modules/sendgrid');
 const { shortenString } = require('../modules/utils');
 
-const { LIKECOIN_API_BASE, EXTERNAL_URL } = process.env;
+const {
+  LIKECOIN_API_BASE,
+  EXTERNAL_URL,
+  ARWEAVE_ENDPOINT,
+  IPFS_VIEW_GATEWAY_URL,
+} = process.env;
 
 const TX_UNSUBSCRIBE_LINK = `${EXTERNAL_URL}/settings/email?utm_source=email`;
 
@@ -35,6 +40,13 @@ async function fetchNFTMetadata(classId) {
 
 function getNFTURL(classId, nftId = '') {
   return `${EXTERNAL_URL}/nft/class/${classId}/${nftId}?utm_source=email`;
+}
+
+function normalizeURLToHTTP(url) {
+  const [schema, path] = url.split('://');
+  if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
+  if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
+  return url;
 }
 
 export async function handleMintEvent(message, data) {
@@ -111,7 +123,7 @@ export async function handleMintEvent(message, data) {
         creatorIsCivicLiker: isSubscribedCivicLiker,
         followerDisplayName: email,
         nftTitle: name,
-        nftCoverImageSrc: image,
+        nftCoverImageSrc: normalizeURLToHTTP(image),
         nftURL: getNFTURL(classId),
         unsubscribeLink,
         language: convertLanguageCodeForEmailTemplate(language),
@@ -183,7 +195,7 @@ export async function handlePurchaseEvent(message, data) {
         priceInLIKE: nftPrice,
         message: buyerMemo,
         nftTitle: name,
-        nftCoverImageSrc: image,
+        nftCoverImageSrc: normalizeURLToHTTP(image),
         nftURL: getNFTURL(classId, nftId),
         language: convertLanguageCodeForEmailTemplate(locale),
       });
@@ -316,7 +328,7 @@ export async function handlePurchaseMultipleEvent(message, data) {
           const { name, image } = nftClassDataMap.get(classId) || {};
           return {
             title: name,
-            coverImageSrc: image,
+            coverImageSrc: normalizeURLToHTTP(image),
             url: getNFTURL(classId, nftId),
             priceInLIKE: nftPrice,
           };
@@ -405,7 +417,7 @@ export async function handleTransferEvent(message, data) {
         senderIsCivicLiker: fromIsSubscribedCivicLiker,
         message: memo,
         nftTitle: name,
-        nftCoverImageSrc: image,
+        nftCoverImageSrc: normalizeURLToHTTP(image),
         nftURL: getNFTURL(classId, nftId),
         language: convertLanguageCodeForEmailTemplate(locale),
       });
