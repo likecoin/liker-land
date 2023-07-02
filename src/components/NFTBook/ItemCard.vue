@@ -45,10 +45,10 @@
       :text="creatorDisplayName | ellipsis"
     />
     <Label
-      v-if="nftIsCollectable"
+      v-if="nftBookFeaturedPrice"
       class="text-like-green-dark"
       preset="p5"
-      :text="formattedNFTPriceInLIKE"
+      :text="nftBookFeaturedPrice"
     />
     <Label
       v-else
@@ -161,11 +161,11 @@
     <div class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]">
       <NFTBookTypeTags :content-types="contentTypes" />
       <template v-if="!isDetailsPreset">
-        <div v-if="nftIsCollectable">
+        <div v-if="nftBookFeaturedPrice">
           <Label
             preset="p5"
             class="text-like-green-dark"
-            :text="formattedNFTPriceInLIKE"
+            :text="nftBookFeaturedPrice"
           />
         </div>
         <Label
@@ -179,7 +179,7 @@
   </div>
 </template>
 <script>
-import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
+import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 
@@ -193,7 +193,6 @@ const PRESET_TYPE = {
 export default {
   filters: {
     ellipsis,
-    formatNumberWithLIKE,
   },
   mixins: [nftMixin],
   props: {
@@ -286,6 +285,9 @@ export default {
       this.updateNFTOwners();
       try {
         const blockingPromises = [this.fetchISCNMetadata()];
+        if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {
+          blockingPromises.push(this.fetchNFTBookPriceByClassId(this.classId));
+        }
         await Promise.all(blockingPromises);
       } catch (error) {
         if (!error.response?.status === 404) {
