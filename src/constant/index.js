@@ -82,7 +82,6 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
   ? [
       'likenft1fsf4x0tsm8gj8x0adkcce68es2xt5gwk9y7zjf06wwh92t27s99q3ktwpn',
       'likenft1xj9jkxcernd2fzd6597tee3v57hzy8r4tzpmr7hu5mqvzah7ztaqua9yvh',
-      // 'likenft1wyk82qhawxh5q27ruc0dj0053unmddk3mswwvuhf6ste6v93e7rqtvl0fy',
       'likenft1yycuh6458s9045xvy6205xp2uhpl7r4lukfdclhg0phwjlfytq3skmuq8j',
       'likenft1j3azrgn736esh3sm0y03l93pecmy8mkuf43n0w3j22zeqn3r6uwsz40spa',
     ]
