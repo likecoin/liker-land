@@ -312,7 +312,7 @@ export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
 
 export const getNftClassMetadata = classId =>
-  `/api/nft/metadata?class_id=${classId}`;
+  `${EXTERNAL_HOST}/api/nft/metadata?class_id=${classId}`;
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   const qsPayload = { email, wallet, language };
@@ -321,9 +321,9 @@ export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   }?${querystring.stringify(qsPayload)}`;
 };
 
-export const getUserV2Self = () => '/api/v2/users/self';
-export const postUserV2Login = () => '/api/v2/users/login';
-export const postUserV2Logout = () => '/api/v2/users/logout';
+export const getUserV2Self = () => `${EXTERNAL_HOST}/api/v2/users/self`;
+export const postUserV2Login = () => `${EXTERNAL_HOST}/api/v2/users/login`;
+export const postUserV2Logout = () => `${EXTERNAL_HOST}/api/v2/users/logout`;
 
 export const postUserV2WalletEmail = ({
   email,
@@ -339,36 +339,47 @@ export const postUserV2WalletEmail = ({
     payment_id: paymentId,
     claiming_token: claimingToken,
   };
-  return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
+  return `${EXTERNAL_HOST}/api/v2/users/email?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 export const putUserV2WalletEmail = ({ wallet, token, followee }) => {
   const qsPayload = { wallet, token, followee };
-  return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
+  return `${EXTERNAL_HOST}/api/v2/users/email?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 
 export const updateEventLastSeen = () => `/api/v2/users/event/seen`;
 
 export const getUserV2DisplayState = wallet =>
-  `/api/v2/users/${wallet}/nfts/display-state`;
+  `${EXTERNAL_HOST}/api/v2/users/${wallet}/nfts/display-state`;
 
 export const postUserV2DisplayState = wallet =>
-  `/api/v2/users/${wallet}/nfts/display-state`;
-export const getUserV2LocaleURL = () => `/api/v2/users/locale`;
-export const getUserV2Followees = () => `/api/v2/users/followees`;
-export const getUserV2Followers = () => `/api/v2/users/followers`;
+  `${EXTERNAL_HOST}/api/v2/users/${wallet}/nfts/display-state`;
+export const getUserV2LocaleURL = () => `${EXTERNAL_HOST}/api/v2/users/locale`;
+export const getUserV2Followees = () =>
+  `${EXTERNAL_HOST}/api/v2/users/followees`;
+export const getUserV2Followers = () =>
+  `${EXTERNAL_HOST}/api/v2/users/followers`;
 export const postUserV2Followees = creator => {
   const qsPayload = { creator };
-  return `/api/v2/users/followees?${querystring.stringify(qsPayload)}`;
+  return `${EXTERNAL_HOST}/api/v2/users/followees?${querystring.stringify(
+    qsPayload
+  )}`;
 };
 export const deleteUserV2Followees = creator => {
   const qsPayload = { creator };
-  return `/api/v2/users/followees?${querystring.stringify(qsPayload)}`;
+  return `${EXTERNAL_HOST}/api/v2/users/followees?${querystring.stringify(
+    qsPayload
+  )}`;
 };
-export const getUserFollowees = wallet => `/api/v2/users/${wallet}/followees`;
+export const getUserFollowees = wallet =>
+  `${EXTERNAL_HOST}/api/v2/users/${wallet}/followees`;
 export const postFollowCreator = ({ wallet, creator }) =>
-  `/api/v2/users/${wallet}/followers?creator=${creator}`;
+  `${EXTERNAL_HOST}/api/v2/users/${wallet}/followers?creator=${creator}`;
 export const getUserNotificationSettingsUrl = () =>
-  `/api/v2/users/notification`;
+  `${EXTERNAL_HOST}/api/v2/users/notification`;
 
 export const getNFTBookStorePricesByClassId = classId =>
   `${LIKECOIN_API_BASE}/likernft/book/store/${classId}`;
