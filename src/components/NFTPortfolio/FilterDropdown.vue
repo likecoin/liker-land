@@ -59,11 +59,14 @@
         <MenuList v-else-if="selectedFilter === 'creators'" class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom" :has-padding="false">
           <div class="flex w-full py-[10px] px-[16px] gap-[12px]">
             <input
-              v-model="filterInputCreator"
               type="input"
               class="w-full bg-transparent border-0 focus-visible:outline-none"
               :placeholder="$t('order_menu_filter_by_input')"
               name="creator"
+              @input="
+                (e) => {
+                  $emit('input-filter-change-creator', e.target.value);
+                }"
             >
             <IconSearch class="text-dark-gray" />
           </div>
@@ -100,11 +103,14 @@
         <MenuList v-else-if="selectedFilter === 'keywords'" class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom" :has-padding="false">
           <div class="flex w-full py-[10px] px-[16px] gap-[12px]">
             <input
-              v-model="filterInputKeywords"
               type="input"
               class="w-full bg-transparent border-0 focus-visible:outline-none"
               :placeholder="$t('order_menu_filter_by_input')"
               name="keywords"
+              @input="
+                (e) => {
+                  $emit('input-filter-change-keyword', e.target.value);
+                }"
             >
             <IconSearch class="text-dark-gray" />
           </div>
@@ -180,20 +186,6 @@ export default {
       default: () => [],
     },
   },
-  data() {
-    return {
-      filterInputCreator: '',
-      filterInputKeywords: '',
-    };
-  },
-  watch: {
-    filterInputCreator(creator) {
-      this.$emit('input-filter-change-creator', creator);
-    },
-    filterInputKeywords(keywords) {
-      this.$emit('input-filter-change-keyword', keywords);
-    },
-  },
   methods: {
     handleClickType() {
       this.$emit('filter-click-type-filter');
@@ -205,8 +197,6 @@ export default {
       this.$emit('filter-click-keyword-filter');
     },
     handleResetFilter() {
-      this.filterInputCreator = '';
-      this.filterInputKeywords = '';
       this.$emit('filter-click-clear-filter');
       this.$emit('input-filter-change-creator', '');
     },
@@ -214,12 +204,10 @@ export default {
       this.$emit('filter-change-type', value);
     },
     handlePortfolioCreatorChange(value) {
-      this.filterInputCreator = '';
       this.$emit('filter-change-creator', value);
       this.$emit('input-filter-change-creator', '');
     },
     handleChangeKeywords(value) {
-      this.filterInputKeywords = '';
       this.$emit('filter-change-keyword', value);
       this.$emit('input-filter-change-keyword', '');
     },
