@@ -31,7 +31,7 @@
             :current-nft-id="nftId"
             :next-nft-id="nftIdCollectNext"
             view="collected"
-            :price="NFTPrice"
+            :price="controlBarPriceLabel"
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
@@ -317,7 +317,7 @@ import { isMobile } from '@walletconnect/browser-utils';
 import { EXTERNAL_HOST } from '~/constant';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { ellipsis } from '~/util/ui';
+import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -508,6 +508,11 @@ export default {
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
+    },
+    controlBarPriceLabel() {
+      return this.nftIsNFTBook
+        ? this.nftBookFeaturedPrice
+        : formatNumberWithLIKE(this.NFTPrice);
     },
   },
   async mounted() {
