@@ -2,7 +2,7 @@ const config = {};
 
 const { IS_TESTNET } = process.env;
 
-config.IS_TESTNET = IS_TESTNET;
+config.IS_TESTNET = IS_TESTNET === 'TRUE';
 
 config.FIRESTORE_USER_ROOT = process.env.FIRESTORE_USER_ROOT;
 config.FIRESTORE_NFT_MINT_SUBSCRIPTION_ROOT =
