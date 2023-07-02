@@ -251,11 +251,14 @@ export const createPortfolioMixin = ({
       return this.nftCreatorAddressListOfCollected
         .filter(id => {
           const user = this.getUserInfoByAddress(id);
+          const likerId = user?.user || id;
           const displayName = user?.displayName || id;
           const lowerCaseInputFilter =
             this.nftCreatorInputFilter?.toLowerCase() || '';
           return lowerCaseInputFilter
-            ? displayName.toLowerCase().includes(lowerCaseInputFilter)
+            ? displayName.toLowerCase().includes(lowerCaseInputFilter) ||
+                likerId.toLowerCase().includes(lowerCaseInputFilter) ||
+                id.includes(lowerCaseInputFilter)
             : true;
         })
         .map(id => {
