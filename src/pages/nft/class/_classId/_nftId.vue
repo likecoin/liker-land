@@ -510,9 +510,9 @@ export default {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
     },
     controlBarPriceLabel() {
-      return this.nftIsNFTBook
-        ? this.nftBookFeaturedPrice
-        : formatNumberWithLIKE(this.NFTPrice);
+      return this.nftBookAvailablePrice
+        ? this.nftBookAvailablePrice
+        : this.NFTPrice && formatNumberWithLIKE(this.NFTPrice);
     },
   },
   async mounted() {

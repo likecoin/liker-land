@@ -355,13 +355,11 @@ export default {
           })
         : [defaultEdition];
     },
-    nftBookFeaturedPrice() {
-      if (this.nftEditions.length) {
-        const purchasePrice = this.nftEditions.find(item => item.stock > 0)
-          ?.priceLabel;
-        if (purchasePrice) {
-          return purchasePrice;
-        }
+    nftBookAvailablePrice() {
+      const purchasePrice = this.nftEditions.find(item => item.stock > 0)
+        ?.priceLabel;
+      if (purchasePrice) {
+        return purchasePrice;
       }
       return undefined;
     },

@@ -45,10 +45,10 @@
       :text="creatorDisplayName | ellipsis"
     />
     <Label
-      v-if="nftBookFeaturedPrice"
+      v-if="nftBookAvailablePrice"
       class="text-like-green-dark"
       preset="p5"
-      :text="nftBookFeaturedPrice"
+      :text="nftBookAvailablePrice"
     />
     <Label
       v-else
@@ -161,11 +161,11 @@
     <div class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]">
       <NFTBookTypeTags :content-types="contentTypes" />
       <template v-if="!isDetailsPreset">
-        <div v-if="nftBookFeaturedPrice">
+        <div v-if="nftBookAvailablePrice">
           <Label
             preset="p5"
             class="text-like-green-dark"
-            :text="nftBookFeaturedPrice"
+            :text="nftBookAvailablePrice"
           />
         </div>
         <Label
