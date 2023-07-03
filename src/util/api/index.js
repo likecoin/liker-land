@@ -311,7 +311,7 @@ export const getTopNFTClasses = ({ before, after }) => {
 export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
 
-export const getNftClassMetadata = classId =>
+export const getNFTClassMetadata = classId =>
   `/api/nft/metadata?class_id=${classId}`;
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {

@@ -406,7 +406,7 @@ const actions = {
       ownerInfo,
       listings,
       purchaseInfo,
-    } = await this.$api.$get(api.getNftClassMetadata(classId));
+    } = await this.$api.$get(api.getNFTClassMetadata(classId));
     const iscnId = classData.parent.iscn_id_prefix;
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
     commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
