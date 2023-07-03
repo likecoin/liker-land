@@ -91,48 +91,38 @@ async function getNFTClassAndISCNMetadata(classId) {
     parent,
   };
 
-  if (isValidHttpUrl(uri)) {
-    const apiMetadataRes = await axios.get(uri).catch(err => {
+  const iscnId = parent?.iscn_id_prefix;
+  const getISCNPromise = axios
+    .get(`${LIKECOIN_CHAIN_API}/iscn/records/id?iscn_id=${iscnId}`)
+    .catch(err => {
       if (err.response?.status !== 404) {
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(`Failed to get ISCN data for ${iscnId}`);
+        throw err;
       }
     });
+  const promises = [getISCNPromise];
+
+  if (isValidHttpUrl(uri)) {
+    const getApiMetadataPromise = axios.get(uri).catch(err => {
+      if (err.response?.status !== 404) {
+        // eslint-disable-next-line no-console
+        console.error(`Failed to get API metadata of ${classId} for ${uri}`);
+      }
+    });
+    promises.push(getApiMetadataPromise);
+  }
+
+  const [iscnRes, apiMetadataRes] = await Promise.all(promises);
+  const iscnData = iscnRes.data?.records?.[0]?.data;
+
+  if (apiMetadataRes) {
     const apiMetadata = apiMetadataRes?.data;
     if (apiMetadata && typeof apiMetadata === 'object') {
       classData = { ...classData, ...apiMetadata };
     }
   }
 
-  let iscnRecord;
-  let iscnData;
-  const iscnId = parent?.iscn_id_prefix;
-  if (iscnId) {
-    const { data } = await axios
-      .get(`${LIKECOIN_CHAIN_API}/iscn/records/id?iscn_id=${iscnId}`)
-      .catch(err => {
-        if (!err.response?.status === 404) {
-          // eslint-disable-next-line no-console
-          console.error(err);
-        }
-      });
-    iscnRecord = data;
-    if (iscnRecord) {
-      iscnData = iscnRecord?.records?.[0]?.data;
-      classData.iscn_record = iscnData;
-    }
-  }
-
-  // in case nft chain metadata was not properly parsed
-  if (!(classData.iscn_owner || classData.account_owner)) {
-    if (iscnRecord) {
-      classData.iscn_owner = iscnRecord.owner;
-      classData.iscn_record_timestamp =
-        iscnRecord?.records?.[0]?.recordTimestamp;
-    } else if (parent.account) {
-      classData.account_owner = parent.account;
-    }
-  }
   return [classData, iscnData];
 }
 
