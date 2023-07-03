@@ -48,6 +48,7 @@ router.get('/nft/metadata', async (req, res, next) => {
     const listings = formatAndFilterListing(listingInput, owners);
     const purchaseInfo = purchaseInfoRes?.data;
 
+    res.set('Cache-Control', 'public, max-age=1');
     res.json({
       classData,
       iscnData,
