@@ -403,14 +403,14 @@ const actions = {
     const {
       classData,
       iscnData,
-      owners,
+      ownerInfo,
       listings,
       purchaseInfo,
     } = await this.$api.$get(api.getNftClassMetadata(classId));
     const iscnId = classData.parent.iscn_id_prefix;
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
     commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
-    commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: owners });
+    commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
     // skip for non Writing NFT
     if (purchaseInfo) {

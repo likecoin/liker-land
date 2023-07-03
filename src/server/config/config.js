@@ -23,4 +23,6 @@ config.EXTERNAL_URL = process.env.EXTERNAL_URL;
 
 config.GET_WALLET_API_SECRET = process.env.GET_WALLET_API_SECRET;
 
+config.LIKECOIN_NFT_API_WALLET = process.env.LIKECOIN_NFT_API_WALLET;
+
 module.exports = config;

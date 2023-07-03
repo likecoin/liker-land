@@ -7,6 +7,7 @@ const { handleRestfulError } = require('../../middleware/error');
 const {
   LIKECOIN_CHAIN_API,
   LIKECOIN_API_BASE,
+  LIKECOIN_NFT_API_WALLET,
 } = require('../../../config/config');
 
 const router = Router();
@@ -44,6 +45,7 @@ router.get('/nft/metadata', async (req, res, next) => {
     ]);
 
     const owners = ownerInfoRes.data?.owners || [];
+    const ownerInfo = formatOwnerInfo(owners);
     const listingInput = listingInfoRes.data?.listing || [];
     const listings = formatAndFilterListing(listingInput, owners);
     const purchaseInfo = purchaseInfoRes?.data;
@@ -52,7 +54,7 @@ router.get('/nft/metadata', async (req, res, next) => {
     res.json({
       classData,
       iscnData,
-      owners,
+      ownerInfo,
       listings,
       purchaseInfo,
     });
@@ -134,6 +136,17 @@ function isValidHttpUrl(string) {
     // no op
   }
   return false;
+}
+
+function formatOwnerInfo(owners) {
+  const ownerInfo = {};
+  owners.forEach(o => {
+    const { owner, nfts } = o;
+    if (owner !== LIKECOIN_NFT_API_WALLET) {
+      ownerInfo[owner] = nfts;
+    }
+  });
+  return ownerInfo;
 }
 
 function formatAndFilterListing(listings, owners) {
