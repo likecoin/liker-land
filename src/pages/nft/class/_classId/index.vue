@@ -442,9 +442,10 @@ export default {
       return this.nftEditions[0]?.value;
     },
     controlBarPriceLabel() {
-      return this.nftBookAvailablePrice
-        ? this.nftBookAvailablePrice
-        : this.NFTPrice && formatNumberWithLIKE(this.NFTPrice);
+      return (
+        this.nftBookAvailablePrice ||
+        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
+      );
     },
   },
   async mounted() {
