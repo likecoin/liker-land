@@ -289,7 +289,9 @@ export const createPortfolioMixin = ({
         ...new Set(
           keywords
             .flat()
-            .filter(k => k.toLowerCase().includes(lowerCaseInputFilter))
+            .filter(
+              k => Boolean(k) && k.toLowerCase().includes(lowerCaseInputFilter)
+            )
         ),
       ];
     },
