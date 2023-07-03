@@ -412,10 +412,13 @@ const actions = {
     commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
     commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: owners });
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
-    commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
-      classId,
-      info: purchaseInfo,
-    });
+    // skip for non Writing NFT
+    if (purchaseInfo) {
+      commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
+        classId,
+        info: purchaseInfo,
+      });
+    }
     if (classData.iscn_owner) {
       const promise = dispatch(
         'lazyGetUserInfoByAddress',

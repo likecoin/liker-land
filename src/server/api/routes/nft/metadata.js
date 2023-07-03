@@ -25,26 +25,35 @@ router.get('/nft/metadata', async (req, res, next) => {
       listingInfoRes,
       purchaseInfoRes,
     ] = await Promise.all([
-      getClassMetadata(classId),
+      getNFTClassAndISCNMetadata(classId),
       axios.get(
         `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
       ),
       axios.get(
         `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`
       ),
-      axios.get(`${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`),
+      axios
+        .get(`${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`)
+        .catch(err => {
+          // skip 404 error for non Writing NFT
+          if (err.response?.status === 404) {
+            return null;
+          }
+          throw err;
+        }),
     ]);
 
     const owners = ownerInfoRes.data?.owners || [];
     const listingInput = listingInfoRes.data?.listing || [];
     const listings = formatAndFilterListing(listingInput, owners);
+    const purchaseInfo = purchaseInfoRes?.data;
 
     res.json({
       classData,
       iscnData,
       owners,
       listings,
-      purchaseInfo: purchaseInfoRes.data,
+      purchaseInfo,
     });
   } catch (err) {
     if (err.message === 'NFT_CLASS_NOT_FOUND') {
@@ -55,7 +64,7 @@ router.get('/nft/metadata', async (req, res, next) => {
   }
 });
 
-async function getClassMetadata(classId) {
+async function getNFTClassAndISCNMetadata(classId) {
   const {
     data: { class: chainMetadata },
   } = await axios
