@@ -57,19 +57,10 @@
         </MenuList>
         <!-- creators -->
         <MenuList v-else-if="selectedFilter === 'creators'" class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom" :has-padding="false">
-          <div class="flex w-full py-[10px] px-[16px] gap-[12px]">
-            <input
-              type="input"
-              class="w-full bg-transparent border-0 focus-visible:outline-none"
-              :placeholder="$t('order_menu_filter_by_input')"
-              name="creator"
-              @input="
-                (e) => {
-                  $emit('input-filter-change-creator', e.target.value);
-                }"
-            >
-            <IconSearch class="text-dark-gray" />
-          </div>
+          <NFTPortfolioFilterInput
+            @handle-input-change="
+              (value) => $emit('input-filter-change-creator', value)"
+          />
           <MenuItem
             v-for="user in portfolioCollectedCreatorListWithSorting"
             :key="user.id"
@@ -101,19 +92,10 @@
         </MenuList>
         <!-- keywords -->
         <MenuList v-else-if="selectedFilter === 'keywords'" class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom" :has-padding="false">
-          <div class="flex w-full py-[10px] px-[16px] gap-[12px]">
-            <input
-              type="input"
-              class="w-full bg-transparent border-0 focus-visible:outline-none"
-              :placeholder="$t('order_menu_filter_by_input')"
-              name="keywords"
-              @input="
-                (e) => {
-                  $emit('input-filter-change-keyword', e.target.value);
-                }"
-            >
-            <IconSearch class="text-dark-gray" />
-          </div>
+          <NFTPortfolioFilterInput
+            @handle-input-change="
+              (value) => $emit('input-filter-change-keyword', value)"
+          />
           <div class="flex flex-row flex-wrap items-center gap-[6px] py-[12px]">
             <ButtonV2
               v-for="keyword in nftKeywordList"
