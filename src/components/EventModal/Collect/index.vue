@@ -615,7 +615,8 @@ export default {
               memo: this.memo,
             });
             if (result) {
-              this.justCollectedNFTId = result.nftId;
+              this.justCollectedNFTId =
+                result.nftId || result.purchased?.[0]?.nftId;
             }
             break;
           }
@@ -652,7 +653,9 @@ export default {
     goToNFTDetails() {
       this.$router.push(
         this.localeLocation({
-          name: 'nft-class-classId-nftId',
+          name: this.justCollectedNFTId
+            ? 'nft-class-classId-nftId'
+            : 'nft-class-classId',
           params: { classId: this.classId, nftId: this.justCollectedNFTId },
         })
       );
