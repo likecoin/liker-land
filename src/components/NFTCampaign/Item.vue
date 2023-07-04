@@ -3,7 +3,7 @@
     <client-only>
       <lazy-component
         class="absolute inset-0 pointer-events-none"
-        @show="fetchInfo"
+        @show.once="fetchInfo"
       />
     </client-only>
     <NFTCampaignItemBase

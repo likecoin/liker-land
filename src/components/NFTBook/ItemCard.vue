@@ -6,7 +6,7 @@
     <client-only>
       <lazy-component
         class="absolute inset-0 pointer-events-none"
-        @show="fetchInfo"
+        @show.once="fetchInfo"
       />
     </client-only>
     <div class="flex relative mt-[48px]">
@@ -88,7 +88,7 @@
         <client-only v-if="!isDetailsPreset">
           <lazy-component
             class="absolute inset-0 pointer-events-none"
-            @show="fetchInfo"
+            @show.once="fetchInfo"
           />
         </client-only>
         <div class="flex flex-col items-center shrink-0">
