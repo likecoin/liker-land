@@ -251,21 +251,20 @@ export const createPortfolioMixin = ({
       return this.nftCreatorAddressListOfCollected
         .map(id => {
           const user = this.getUserInfoByAddress(id);
+          const likerId = user?.user || id;
           const displayName = user?.displayName || id;
           const avatar = user?.avatar || getIdenticonAvatar(id);
           const isCivicLiker = user?.isSubscribedCivicLiker;
-          return { id, displayName, avatar, isCivicLiker };
+          return { id, likerId, displayName, avatar, isCivicLiker };
         })
         .filter(item => {
-          const user = this.getUserInfoByAddress(item.id);
-          const likerId = user?.user || item.id;
-          const lowerCaseInputFilter =
-            this.nftCreatorInputFilter?.toLowerCase() || '';
-          return lowerCaseInputFilter
-            ? item.displayName.toLowerCase().includes(lowerCaseInputFilter) ||
-                likerId.toLowerCase().includes(lowerCaseInputFilter) ||
-                item.id.includes(lowerCaseInputFilter)
-            : true;
+          if (!this.nftCreatorInputFilter) return true;
+          const lowerCaseInputFilter = this.nftCreatorInputFilter.toLowerCase();
+          return (
+            item.displayName.toLowerCase().includes(lowerCaseInputFilter) ||
+            item.likerId.toLowerCase().includes(lowerCaseInputFilter) ||
+            item.id.includes(lowerCaseInputFilter)
+          );
         });
     },
     nftKeywordList() {
