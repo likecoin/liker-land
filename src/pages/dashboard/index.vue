@@ -179,7 +179,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/writing-nft.jpg',
+          content: 'https://liker.land/images/og/default.jpg',
         },
       ],
     };
