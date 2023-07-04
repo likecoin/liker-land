@@ -333,7 +333,7 @@ export default {
     const description =
       this.NFTDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.NFTImageUrl || 'https://liker.land/images/og/writing-nft.jpg';
+      this.NFTImageUrl || 'https://liker.land/images/og/default.jpg';
     const schemas = [];
     if (this.purchaseInfo.price) {
       schemas.push({
