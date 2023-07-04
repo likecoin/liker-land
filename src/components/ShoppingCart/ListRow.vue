@@ -113,7 +113,7 @@ export default {
       try {
         this.isFetching = true;
         await Promise.all([
-          this.updateNFTClassMetadata(),
+          this.lazyFetchNFTClassMetadata(),
           this.updateNFTPurchaseInfo(),
         ]);
       } finally {

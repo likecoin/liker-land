@@ -279,9 +279,9 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.updateNFTClassMetadata();
+      await this.lazyFetchNFTClassMetadata();
       this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
+      this.lazyFetchNFTOwners();
       try {
         const blockingPromises = [this.fetchISCNMetadata()];
         if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {

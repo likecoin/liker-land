@@ -79,9 +79,9 @@ export default {
   },
   methods: {
     fetchInfo() {
-      this.updateNFTClassMetadata();
+      this.lazyFetchNFTClassMetadata();
       this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
+      this.lazyFetchNFTOwners();
     },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);

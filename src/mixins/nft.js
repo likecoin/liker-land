@@ -579,6 +579,8 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'lazyGetISCNMetadataById',
+      'lazyGetNFTClassMetadata',
+      'lazyGetNFTOwners',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
@@ -600,6 +602,10 @@ export default {
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
     },
+    async lazyFetchNFTClassMetadata() {
+      await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
+      this.lazyGetUserInfoByAddresses(this.iscnOwner);
+    },
     async updateNFTClassMetadata() {
       await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
@@ -610,6 +616,9 @@ export default {
     },
     async fetchNFTPrices() {
       await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
+    },
+    lazyFetchNFTOwners() {
+      return this.lazyGetNFTOwners(this.classId);
     },
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);
