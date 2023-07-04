@@ -71,6 +71,8 @@
         @portfolio-change-keywords="handleNFTKeywordsChange"
         @infinite-scroll="handleInfiniteScroll"
         @portfolio-reset-filter="handleClearFilter"
+        @portfolio-input-filter-change-creator="handleCreatorInputFilterChange"
+        @portfolio-input-filter-change-keyword="handleKeywordInputFilterChange"
       >
         <template #tab-bar-prepend>
           <ButtonV2

@@ -67,7 +67,9 @@
             @filter-click-clear-filter="handleResetFilter"
             @filter-change-type="handlePortfolioTypeChange"
             @filter-change-creator="handlePortfolioCreatorChange"
+            @input-filter-change-creator="handleCreatorInputFilter"
             @filter-change-keyword="handleChangeKeywords"
+            @input-filter-change-keyword="handleKeywordInputFilter"
           />
           <!-- sorting -->
           <Dropdown>
@@ -510,6 +512,12 @@ export default {
     },
     handleResetFilter() {
       this.$emit('portfolio-reset-filter');
+    },
+    handleCreatorInputFilter(value) {
+      this.$emit('portfolio-input-filter-change-creator', value);
+    },
+    handleKeywordInputFilter(value) {
+      this.$emit('portfolio-input-filter-change-keyword', value);
     },
     setupPortfolioGrid: debounce(function setupPortfolioGrid() {
       const container = this.$refs.portfolioGrid;
