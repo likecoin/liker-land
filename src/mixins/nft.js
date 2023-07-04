@@ -853,7 +853,10 @@ export default {
           );
         }
       } finally {
-        this.fetchNFTListByAddress({ address: this.getAddress });
+        this.fetchNFTListByAddress({
+          address: this.getAddress,
+          shouldFetchDetails: false,
+        });
         this.updateNFTOwners();
         this.updateNFTPurchaseInfo();
         this.updateNFTHistory();
