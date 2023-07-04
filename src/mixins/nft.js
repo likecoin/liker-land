@@ -314,7 +314,10 @@ export default {
       const defaultEdition = {
         name: '',
         description: '',
-        priceLabel: this.formattedNFTPriceInLIKE,
+        priceLabel: formatNumberWithUnit(
+          this.LIKEPriceInUSD * this.NFTPrice,
+          'USD'
+        ),
         value: 0,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
@@ -351,6 +354,11 @@ export default {
             };
           })
         : [defaultEdition];
+    },
+    nftBookAvailablePriceLabel() {
+      const purchasePrice = this.nftEditions.find(item => item.stock > 0)
+        ?.priceLabel;
+      return purchasePrice;
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
