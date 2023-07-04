@@ -288,7 +288,7 @@ export default {
             } else {
               return Promise.resolve();
             }
-          })
+          });
         }
         await Promise.all(blockingPromises);
       } catch (error) {
