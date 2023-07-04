@@ -27,7 +27,11 @@
           <MenuButton
             :text="item.text"
             :is-selected="item.isSelected"
-            @click="item.handleClick"
+            @click="
+              () => {
+                item.handleClick();
+                selectedFilter = 'type';
+              }"
           />
         </li>
       </ul>
