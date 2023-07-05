@@ -170,6 +170,13 @@ export default {
   head() {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');
+    const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
+    LIKECOIN_NFT_BOOK_ITEMS.forEach(item => {
+      link.push({
+        rel: 'prefetch',
+        href: `/api/nft/metadata?class_id=${item}`,
+      });
+    });
     return {
       title,
       meta: [
@@ -194,7 +201,7 @@ export default {
           content: 'https://liker.land/images/og/default.jpg',
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
+      link,
     };
   },
   computed: {
