@@ -44,15 +44,15 @@
             bgColorClasses,
           ]"
         />
-        <LazyIconStartFilled
+        <IconStartFilled
           v-if="displayState === 'featured'"
           :class="iconClasses"
         />
-        <LazyIconStartOutlined
+        <IconStartOutlined
           v-if="displayState === 'default'"
           :class="[iconClasses, 'opacity-75']"
         />
-        <LazyIconHide v-if="displayState === 'hidden'" :class="iconClasses" />
+        <IconHide v-if="displayState === 'hidden'" :class="iconClasses" />
       </div>
     </div>
   </div>

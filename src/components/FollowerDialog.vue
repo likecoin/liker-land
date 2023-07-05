@@ -53,7 +53,7 @@
         <div class="h-[2px] w-[24px] bg-shade-gray my-[12px]" />
         <ButtonV2 size="mini" preset="tertiary" @click="$emit('on-export-followers')">
           <template #prepend>
-            <LazyIconShare />
+            <IconShare />
           </template>
           {{ $t('portfolio_follower_export') }}
         </ButtonV2>

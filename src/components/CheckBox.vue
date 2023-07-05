@@ -20,11 +20,11 @@
         :checked="value"
         @change="handleChange"
       >
-      <LazyIconCheckBoxOn
+      <IconCheckBoxOn
         v-if="value"
         :class="iconClass"
       />
-      <LazyIconCheckBoxOff
+      <IconCheckBoxOff
         v-else
         :class="iconClass"
       />

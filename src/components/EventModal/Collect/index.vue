@@ -9,7 +9,7 @@
     @close="handleClose"
   >
     <template #header-prepend>
-      <LazyIconPrice />
+      <IconPrice />
     </template>
 
     <template v-if="!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus)" #top>
@@ -88,7 +88,7 @@
               >
                 <Label align="center" :text="followPromptButtonText">
                   <template v-if="isFollowPromptStateAuto" #prepend>
-                    <LazyIconCheck />
+                    <IconCheck />
                   </template>
                 </Label>
               </div>
@@ -143,7 +143,7 @@
         @click.native="handleClose"
       >
         <template #prepend>
-          <LazyIconEye class="w-[20px]" />
+          <IconEye class="w-[20px]" />
         </template>
       </ButtonV2>
       <ButtonV2
@@ -153,7 +153,7 @@
         @click="goToNFTDetails"
       >
         <template #prepend>
-          <LazyIconEye class="w-[20px]" />
+          <IconEye class="w-[20px]" />
         </template>
       </ButtonV2>
     </template>
@@ -184,7 +184,7 @@
           :text="$t('nft_collect_modal_leave_message')"
         />
         <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
-          <LazyIconMessage class="text-dark-gray" />
+          <IconMessage class="text-dark-gray" />
           <input
             id="name"
             ref="input"

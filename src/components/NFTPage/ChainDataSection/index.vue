@@ -4,7 +4,7 @@
     :has-content-padding="false"
   >
     <template #titleIcon>
-      <LazyIconActivity />
+      <IconActivity />
     </template>
     <template #content="{ contentPaddingClass }">
       <div class="px-[32px] mb-[28px]">

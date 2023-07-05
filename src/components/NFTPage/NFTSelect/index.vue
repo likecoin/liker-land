@@ -28,7 +28,7 @@
           >{{ id }}</option>
         </select>
         <div class="truncate">{{ selectedNftId }}</div>
-        <LazyIconArrowDown class="w-[12px] h-[12px] shrink-0" />
+        <IconArrowDown class="w-[12px] h-[12px] shrink-0" />
       </div>
     </div>
   </CardV2>

@@ -18,7 +18,7 @@
           :preset="textPreset"
         >
           <template #prepend>
-            <LazyIconError v-if="isError" class="w-[24px]" />
+            <IconError v-if="isError" class="w-[24px]" />
             <slot v-else name="prepend" />
           </template>
           <template #default>
@@ -26,7 +26,7 @@
           </template>
           <template #append>
             <div @click="close">
-              <LazyIconClose class="w-[24px]" />
+              <IconClose class="w-[24px]" />
             </div>
           </template>
         </Label>

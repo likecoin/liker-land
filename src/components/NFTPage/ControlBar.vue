@@ -32,7 +32,7 @@
       >
         {{ price }}
         <template #prepend>
-          <LazyIconPrice />
+          <IconPrice />
         </template>
       </ButtonV2>
     </div>

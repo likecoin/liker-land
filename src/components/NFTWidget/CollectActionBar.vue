@@ -3,7 +3,7 @@
     class="grid items-center justify-between grid-flow-col py-[8px] pl-[16px]"
   >
     <div class="flex text-[16px] leading-[1.25] text-like-green font-600">
-      <LazyNFTWidgetIconInsertCoin class="mr-[6px]" />
+      <NFTWidgetIconInsertCoin class="mr-[6px]" />
       {{ price | formatNumberWithLIKE }}
     </div>
     <button
@@ -22,7 +22,7 @@
       "
       @click="onClickCollectButton"
     >
-      <LazyNFTWidgetIconInsertCoin class="mr-[12px]" />
+      <NFTWidgetIconInsertCoin class="mr-[12px]" />
       {{ collectButtonTitle }}
     </button>
   </div>
