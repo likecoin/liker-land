@@ -505,14 +505,7 @@ const actions = {
     }
     const iscnId = parent?.iscn_id_prefix;
     if (iscnId) {
-      iscnRecord = await this.$api
-        .$get(api.getISCNRecord(iscnId))
-        .catch(err => {
-          if (!err.response?.status === 404) {
-            // eslint-disable-next-line no-console
-            console.error(err);
-          }
-        });
+      iscnRecord = await dispatch('lazyGetISCNMetadataById', iscnId);
       if (iscnRecord) {
         metadata.iscn_record = iscnRecord?.records?.[0]?.data;
       }
