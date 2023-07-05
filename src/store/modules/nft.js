@@ -400,6 +400,35 @@ const actions = {
     commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, data });
     return data;
   },
+  async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
+    const {
+      classData,
+      iscnData,
+      ownerInfo,
+      listings,
+      purchaseInfo,
+    } = await this.$api.$get(api.getNFTClassMetadata(classId));
+    const iscnId = classData.parent.iscn_id_prefix;
+    commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
+    commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
+    commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
+    commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
+    // skip for non Writing NFT
+    if (purchaseInfo) {
+      commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
+        classId,
+        info: purchaseInfo,
+      });
+    }
+    if (classData.iscn_owner) {
+      const promise = dispatch(
+        'lazyGetUserInfoByAddress',
+        classData.iscn_owner
+      );
+      // Need to await if the action fires in during SSR
+      if (!process.client) await promise;
+    }
+  },
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
@@ -494,7 +523,7 @@ const actions = {
     const { uri, parent } = metadata;
     if (isValidHttpUrl(uri)) {
       const apiMetadata = await this.$api.$get(uri).catch(err => {
-        if (!err.response?.status === 404) {
+        if (err.response?.status !== 404) {
           // eslint-disable-next-line no-console
           console.error(err);
         }
@@ -617,22 +646,9 @@ const actions = {
     if (shouldFetchDetails) {
       const nftClassIds = Array.from(nftClassIdDataMap.keys());
       await Promise.all(
-        nftClassIds.map(classId => {
-          const promises = [
-            catchAxiosError(
-              dispatch('populateNFTClassMetadataFromURIAndISCN', classId)
-            ),
-            catchAxiosError(dispatch('fetchNFTOwners', classId)),
-            catchAxiosError(dispatch('fetchNFTListingInfo', classId)),
-          ];
-          const classData = nftClassIdDataMap.get(classId);
-          if (checkIsWritingNFT(classData.metadata)) {
-            promises.push(
-              catchAxiosError(dispatch('fetchNFTPurchaseInfo', classId))
-            );
-          }
-          return Promise.all(promises);
-        })
+        nftClassIds.map(classId =>
+          catchAxiosError(dispatch('fetchNFTClassAggregatedInfo', classId))
+        )
       );
     }
   },

@@ -14,8 +14,12 @@ config.COOKIE_SECRET = process.env.COOKIE_SECRET;
 
 config.CRISP_USER_HASH_SECRET = process.env.CRISP_USER_HASH_SECRET;
 
+config.LIKECOIN_CHAIN_API = process.env.LIKECOIN_CHAIN_API;
+config.LIKECOIN_API_BASE = process.env.LIKECOIN_API_BASE;
 config.EXTERNAL_URL = process.env.EXTERNAL_URL;
 
 config.GET_WALLET_API_SECRET = process.env.GET_WALLET_API_SECRET;
+
+config.LIKECOIN_NFT_API_WALLET = process.env.LIKECOIN_NFT_API_WALLET;
 
 module.exports = config;

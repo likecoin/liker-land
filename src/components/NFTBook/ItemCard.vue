@@ -279,21 +279,16 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.lazyFetchNFTClassMetadata();
-      this.updateNFTPurchaseInfo();
-      this.lazyFetchNFTOwners();
+      await this.updateNFTClassAggregatedInfo();
       try {
-        const blockingPromises = [this.fetchISCNMetadata()];
         if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {
-          blockingPromises.push(
-            this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
-              if (error.response?.status !== 400) {
-                throw error;
-              } else {
-                return Promise.resolve();
-              }
-            })
-          );
+          await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
+            if (error.response?.status !== 400) {
+              throw error;
+            } else {
+              return Promise.resolve();
+            }
+          });
         }
         await Promise.all(blockingPromises);
       } catch (error) {
