@@ -6,7 +6,7 @@
   >
     <client-only v-if="shouldFetchWhenVisible">
       <lazy-component
-        class="absolute inset-0 pointer-events-none"
+        class="absolute inset-0 pointer-events-none -top-full"
         @show.once="fetchInfo"
       />
     </client-only>
