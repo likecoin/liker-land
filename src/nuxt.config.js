@@ -53,6 +53,7 @@ const nuxtConfig = {
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
       { rel: 'preconnect', href: 'https://p.typekit.net' },
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
+      { rel: 'preload', href: '/vendor/fbq.js', as: 'script' },
       { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
@@ -79,6 +80,7 @@ const nuxtConfig = {
     ],
     script: [
       { src: '/vendor/typekit.js', type: 'text/javascript' },
+      { src: '/vendor/fbq.js', type: 'text/javascript', defer: true },
       {
         hid: 'schema',
         innerHTML: JSON.stringify([
@@ -177,6 +179,7 @@ const nuxtConfig = {
           'https://js.stripe.com',
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           '*.crisp.chat',
+          'connect.facebook.net'
         ],
         'frame-src': [
           'www.google.com',
@@ -186,6 +189,7 @@ const nuxtConfig = {
           'bid.g.doubleclick.net',
           'https://likecoin.github.io',
           'verify.walletconnect.com',
+          'www.facebook.com',
         ],
         'connect-src': [
           "'self'",
