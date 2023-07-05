@@ -38,7 +38,7 @@
       :circle="true"
       @click="handleClickCloseButton"
     >
-      <LazyIconClose />
+      <IconClose />
     </ButtonV2>
 
   </div>

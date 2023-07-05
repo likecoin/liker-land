@@ -7,7 +7,7 @@
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_collected')">
         <Label preset="p6" class="font-200">
           <template #prepend>
-            <LazyIconMint />
+            <IconMint />
           </template>
           {{ stats.collectedCount }}
         </Label>
@@ -15,7 +15,7 @@
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_value')">
         <Label preset="p6" class="font-200">
           <template #prepend>
-            <LazyIconPriceMini />
+            <IconPriceMini />
           </template>
           {{ stats.collectedAmount }}
         </Label>
@@ -23,7 +23,7 @@
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_label_created')">
         <Label preset="p6" class="font-200">
           <template #prepend>
-            <LazyIconFlare />
+            <IconFlare />
           </template>
           {{ stats.isLoadingStats ? '-' : stats.createdCount }}
         </Label>
@@ -31,7 +31,7 @@
       <ToolTips :tool-tip-text="$t('nft_portfolio_page_state_collectors')">
         <Label preset="p6" class="font-200">
           <template #prepend>
-            <LazyIconPersonMini />
+            <IconPersonMini />
           </template>
           {{ stats.isLoadingStats ? '-' : stats.createdCollectorCount }}
         </Label>

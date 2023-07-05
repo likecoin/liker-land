@@ -7,7 +7,7 @@
     </div>
     <div :class="accessoryClass">
       <slot name="accessory">
-        <LazyIconArrowLeft class="w-[20px] rotate-180" />
+        <IconArrowLeft class="w-[20px] rotate-180" />
       </slot>
     </div>
   </div>

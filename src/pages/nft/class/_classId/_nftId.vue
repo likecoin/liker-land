@@ -109,10 +109,10 @@
                 })"
               >
                 <template #prepend>
-                  <LazyIconView />
+                  <IconView />
                 </template>
                 <template #append>
-                  <LazyIconArrowLeft class="rotate-[180deg]" />
+                  <IconArrowLeft class="rotate-[180deg]" />
                 </template>
               </ButtonV2>
             </div>
@@ -176,7 +176,7 @@
               :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
             >
               <template #prepend>
-                <LazyIconEye class="w-[12px] h-[12px]" />
+                <IconEye class="w-[12px] h-[12px]" />
               </template>
               {{ $t('nft_details_page_button_view_class_page') }}
             </ButtonV2>
@@ -247,7 +247,7 @@
             :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
           >
             <template #prepend>
-              <LazyIconEye class="w-[12px] h-[12px]" />
+              <IconEye class="w-[12px] h-[12px]" />
             </template>
             {{ $t('nft_details_page_button_view_class_page') }}
           </ButtonV2>

@@ -101,7 +101,7 @@
             <li v-if="ownCount" class="laptop:min-w-[80px]">
               <div class="text-[24px] leading-[1.5] font-600 text-like-green">{{ ownCount }}</div>
               <div class="mt-[4px] flex items-center text-[12px] leading-[5/3] font-600 text-like-green">
-                <LazyIconCheck class="w-[16px] hidden laptop:block" />
+                <IconCheck class="w-[16px] hidden laptop:block" />
                 <span class="laptop:ml-[8px]">{{ ownCountLabel }}</span>
               </div>
             </li>
@@ -113,7 +113,7 @@
             @click="handleClickCollect"
           >
             <template #prepend>
-              <LazyNFTWidgetIconInsertCoin />
+              <NFTWidgetIconInsertCoin />
             </template>
             {{ $t('nft_widget_button_collect') }}
           </ButtonV2>

@@ -18,7 +18,7 @@
       ]"
       @click="$emit('copy')"
     >
-      <LazyIconShare />
+      <IconShare />
     </div>
   </ToolTips>
 </template>

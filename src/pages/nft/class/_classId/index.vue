@@ -36,11 +36,11 @@
             <template #column-left>
               <ul class="flex gap-[16px] justify-center items-center mt-[24px] text-medium-gray text-[12px]">
                 <li class="flex items-center">
-                  <LazyIconMint />
+                  <IconMint />
                   <span class="ml-[4px]">{{ collectedCount }}</span>
                 </li>
                 <li class="flex items-center">
-                  <LazyIconOwner />
+                  <IconOwner />
                   <span class="ml-[4px]">{{ ownerCount }}</span>
                 </li>
               </ul>
