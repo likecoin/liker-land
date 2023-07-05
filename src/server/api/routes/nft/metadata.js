@@ -46,8 +46,8 @@ router.get('/nft/metadata', async (req, res, next) => {
 
     const { owners = [] } = ownerInfoRes.data;
     const ownerInfo = formatOwnerInfo(owners);
-    const listingInput = listingInfoRes.data.listing || [];
-    const listings = formatAndFilterListing(listingInput, owners);
+    const listingInput = listingInfoRes.data.listings || [];
+    const listings = formatAndFilterListing(listingInput, ownerInfo);
     const purchaseInfo = purchaseInfoRes ? purchaseInfoRes.data : null;
 
     res.set('Cache-Control', 'public, max-age=1');
@@ -151,7 +151,7 @@ function formatOwnerInfo(owners) {
   return ownerInfo;
 }
 
-function formatAndFilterListing(listings, owners) {
+function formatAndFilterListing(listings, ownerInfo) {
   const result = listings
     .map(l => {
       const { class_id: classId, nft_id: nftId, seller, price, expiration } = l;
@@ -163,7 +163,7 @@ function formatAndFilterListing(listings, owners) {
         expiration: new Date(expiration),
       };
     })
-    .filter(l => owners[l.seller] && owners[l.seller].includes(l.nftId)) // guard listing then sent case
+    .filter(l => ownerInfo[l.seller] && ownerInfo[l.seller].includes(l.nftId)) // guard listing then sent case
     .sort((a, b) => a.price - b.price);
   return result;
 }
