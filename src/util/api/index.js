@@ -312,7 +312,7 @@ export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
 
 export const getNFTClassMetadata = classId =>
-  `${LIKECOIN_API_BASE}/likernft/metadata/aggregate?class_id=${classId}`;
+  `/api/nft/metadata?class_id=${classId}`;
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   const qsPayload = { email, wallet, language };
