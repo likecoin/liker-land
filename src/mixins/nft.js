@@ -580,6 +580,8 @@ export default {
       'lazyGetUserInfoByAddress',
       'lazyGetISCNMetadataById',
       'fetchNFTClassAggregatedInfo',
+      'lazyGetNFTClassMetadata',
+      'lazyGetNFTOwners',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
@@ -601,6 +603,10 @@ export default {
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
     },
+    async lazyFetchNFTClassMetadata() {
+      await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
+      this.lazyGetUserInfoByAddresses(this.iscnOwner);
+    },
     async updateNFTClassAggregatedInfo() {
       await catchAxiosError(this.fetchNFTClassAggregatedInfo(this.classId));
     },
@@ -610,6 +616,9 @@ export default {
     },
     async fetchNFTPrices() {
       await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
+    },
+    lazyFetchNFTOwners() {
+      return this.lazyGetNFTOwners(this.classId);
     },
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);

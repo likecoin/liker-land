@@ -368,6 +368,7 @@ const actions = {
       commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: req });
       const res = await req;
       const [{ data } = {}] = res.records || [];
+      data.owner = res.owner;
       commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data });
       return data;
     } catch (error) {
