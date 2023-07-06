@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
 import { BigNumber } from 'bignumber.js';
+import chunk from 'lodash.chunk';
 import * as api from '@/util/api';
 import {
   NFT_CLASS_LIST_SORTING,
@@ -414,6 +415,82 @@ const actions = {
   },
   async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
     const promise = this.$api.$get(api.getNFTClassMetadata(classId));
+    if (Array.isArray(classId)) {
+      const classesData = await promise;
+      const userPromises = [];
+      Object.entries(classesData).forEach(([classId, data]) => {
+        commit(TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE, {
+          classId,
+          promise,
+        });
+        const { classData, iscnData, ownerInfo, listings, purchaseInfo } = data;
+        const iscnId = classData.parent.iscn_id_prefix;
+        commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+          classId,
+          metadata: classData,
+        });
+        commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
+        commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, {
+          classId,
+          info: ownerInfo,
+        });
+        commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, {
+          classId,
+          info: listings,
+        });
+        // skip for non Writing NFT
+        if (purchaseInfo) {
+          commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
+            classId,
+            info: purchaseInfo,
+          });
+        }
+        if (classData.iscn_owner) {
+          const userPromise = dispatch(
+            'lazyGetUserInfoByAddress',
+            classData.iscn_owner
+          );
+          userPromises.push(userPromise);
+        }
+      });
+      // Need to await if the action fires in during SSR
+      if (!process.client) await userPromise;
+    } else {
+      commit(TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE, { classId, promise });
+      const {
+        classData,
+        iscnData,
+        ownerInfo,
+        listings,
+        purchaseInfo,
+      } = await promise;
+      const iscnId = classData.parent.iscn_id_prefix;
+      commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+        classId,
+        metadata: classData,
+      });
+      commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
+      commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
+      commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
+      // skip for non Writing NFT
+      if (purchaseInfo) {
+        commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
+          classId,
+          info: purchaseInfo,
+        });
+      }
+      if (classData.iscn_owner) {
+        const userPromise = dispatch(
+          'lazyGetUserInfoByAddress',
+          classData.iscn_owner
+        );
+        // Need to await if the action fires in during SSR
+        if (!process.client) await userPromise;
+      }
+    }
+  },
+  async fetchNFTClassesAggregatedInfo({ commit, dispatch }, classId) {
+    const promise = this.$api.$get(api.getNFTClassMetadata(classId));
     commit(TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE, { classId, promise });
     const {
       classData,
@@ -658,21 +735,22 @@ const actions = {
     });
 
     if (shouldFetchDetails) {
+      const CHUNK_CLASS_DATA_SIZE = 20;
       const nftClassIds = Array.from(nftClassIdDataMap.keys());
       await Promise.all(
-        nftClassIds.map(classId =>
-          catchAxiosError(dispatch('lazyFetchNFTClassAggregatedInfo', classId))
+        chunk(nftClassIds, CHUNK_CLASS_DATA_SIZE).map(classIds =>
+          catchAxiosError(dispatch('fetchNFTClassAggregatedInfo', classIds))
         )
       );
     }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
-    const { data } = await this.$api.get(api.getUserV2DisplayState(address));
-    commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
-      address,
-      featuredClassIdSet: new Set(data.featured),
-      hiddenClassIdSet: new Set(data.hidden),
-    });
+    // const { data } = await this.$api.get(api.getUserV2DisplayState(address));
+    // commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
+    //   address,
+    //   featuredClassIdSet: new Set(data.featured),
+    //   hiddenClassIdSet: new Set(data.hidden),
+    // });
   },
   async setNFTDisplayState(
     { state, commit },

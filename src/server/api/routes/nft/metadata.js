@@ -19,45 +19,19 @@ router.get('/nft/metadata', async (req, res, next) => {
       res.status(400).send('MISSING_CLASS_ID');
       return;
     }
-
-    const [
-      [classData, iscnData],
-      ownerInfoRes,
-      listingInfoRes,
-      purchaseInfoRes,
-    ] = await Promise.all([
-      getNFTClassAndISCNMetadata(classId),
-      axios.get(
-        `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
-      ),
-      axios.get(
-        `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`
-      ),
-      axios
-        .get(`${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`)
-        .catch(err => {
-          // skip 404 error for non Writing NFT
-          if (err.response && err.response.status === 404) {
-            return null;
-          }
-          throw err;
-        }),
-    ]);
-
-    const { owners = [] } = ownerInfoRes.data;
-    const ownerInfo = formatOwnerInfo(owners);
-    const listingInput = listingInfoRes.data.listings || [];
-    const listings = formatAndFilterListing(listingInput, ownerInfo);
-    const purchaseInfo = purchaseInfoRes ? purchaseInfoRes.data : null;
-
-    res.set('Cache-Control', 'public, max-age=1');
-    res.json({
-      classData,
-      iscnData,
-      ownerInfo,
-      listings,
-      purchaseInfo,
-    });
+    if (Array.isArray(classId)) {
+      const data = await Promise.all(classId.map(id => getNFTClassData(id)));
+      const payload = classId.reduce((acc, id, index) => {
+        acc[id] = data[index];
+        return acc;
+      }, {});
+      res.set('Cache-Control', 'public, max-age=10');
+      res.json(payload);
+    } else {
+      const payload = await getNFTClassData(classId);
+      res.set('Cache-Control', 'public, max-age=10');
+      res.json(payload);
+    }
   } catch (err) {
     if (err.message === 'NFT_CLASS_NOT_FOUND') {
       res.status(404).send(err.message);
@@ -66,6 +40,43 @@ router.get('/nft/metadata', async (req, res, next) => {
     }
   }
 });
+
+async function getNFTClassData(classId) {
+  const [
+    [classData, iscnData],
+    ownerInfoRes,
+    listingInfoRes,
+    purchaseInfoRes,
+  ] = await Promise.all([
+    getNFTClassAndISCNMetadata(classId),
+    axios.get(
+      `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
+    ),
+    axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`),
+    axios
+      .get(`${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`)
+      .catch(err => {
+        // skip 404 error for non Writing NFT
+        if (err.response && err.response.status === 404) {
+          return null;
+        }
+        throw err;
+      }),
+  ]);
+
+  const { owners = [] } = ownerInfoRes.data;
+  const ownerInfo = formatOwnerInfo(owners);
+  const listingInput = listingInfoRes.data.listings || [];
+  const listings = formatAndFilterListing(listingInput, ownerInfo);
+  const purchaseInfo = purchaseInfoRes ? purchaseInfoRes.data : null;
+  return {
+    classData,
+    iscnData,
+    ownerInfo,
+    listings,
+    purchaseInfo,
+  };
+}
 
 async function getNFTClassAndISCNMetadata(classId) {
   const {
