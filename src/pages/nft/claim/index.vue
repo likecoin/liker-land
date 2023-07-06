@@ -78,7 +78,11 @@
 </template>
 
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
+import {
+  logTrackerEvent,
+  logPurchaseFlowEvent,
+  logPurchaseNFTBookEvent,
+} from '~/util/EventLogger';
 import {
   postStripeFiatPendingClaim,
   getNFTBookClaimEndpoint,
@@ -163,6 +167,27 @@ export default {
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
       );
     },
+  },
+  mounted() {
+    const { redirect, ...query } = this.$route.query;
+    if (redirect) {
+      // TODO: get price from payment_id
+      logPurchaseFlowEvent(this, 'purchase', {
+        name: this.NFTName,
+        currency: 'USD',
+        classId: this.classId,
+        isNFTBook: true,
+      });
+      logPurchaseNFTBookEvent(this, {
+        name: this.NFTName,
+        currency: 'USD',
+        classId: this.classId,
+      });
+      this.$router.replace({
+        ...this.$route,
+        query,
+      });
+    }
   },
   methods: {
     async claim() {

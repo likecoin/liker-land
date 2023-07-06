@@ -64,7 +64,7 @@ export function logTrackerEvent(vue, category, action, label = '', value = 1) {
 export function logPurchaseFlowEvent(
   vue,
   event,
-  { txHash, name, price, currency, classId }
+  { txHash, name, price, currency, classId, isNFTBook }
 ) {
   try {
     if (
@@ -88,12 +88,61 @@ export function logPurchaseFlowEvent(
           {
             item_id: classId,
             item_name: name,
-            item_brand: 'Writing NFT',
+            item_brand: isNFTBook ? 'Book NFT' : 'Writing NFT',
             currency,
             price,
             quantity: 1,
           },
         ],
+      });
+    }
+    if (window.fbq) {
+      const eventNameMapping = {
+        view_item: 'ViewContent',
+        begin_checkout: 'InitiateCheckout',
+        add_to_cart: 'AddToCart',
+        purchase: 'Purchase',
+      };
+      if (eventNameMapping[event]) {
+        window.fbq('track', eventNameMapping[event], {
+          currency,
+          value: price,
+          content_ids: [classId],
+        });
+      }
+    }
+  } catch (err) {
+    console.error('logging error:'); // eslint-disable-line no-console
+    console.error(err); // eslint-disable-line no-console
+  }
+}
+
+export function logPurchaseNFTBookEvent(
+  vue,
+  { name, price, currency, classId }
+) {
+  try {
+    if (vue.$gtag) {
+      vue.$gtag.event('purchase_nft_book', {
+        value: price,
+        currency,
+        items: [
+          {
+            item_id: classId,
+            item_name: name,
+            item_brand: 'NFT Book',
+            currency,
+            price,
+            quantity: 1,
+          },
+        ],
+      });
+    }
+    if (window.fbq) {
+      window.fbq('trackCustom', 'PurchaseNFTBook', {
+        currency,
+        value: price,
+        content_ids: [classId],
       });
     }
   } catch (err) {
