@@ -6,7 +6,7 @@
       'border-shade-gray',
       {
         'pointer-events-none': isDisabled,
-        'border-b-0': shouldHideLowerBound,
+        'border-b-0 laptop:border-b-0': shouldHideLowerBound,
       },
     ]"
   >
@@ -15,7 +15,7 @@
         'w-full',
         shouldCollapseInMobile ? 'laptop:-my-[21px]' : '-my-[21px]',
         {
-          'mb-[0]': shouldHideLowerBound
+          'mb-[0] laptop:mb-[0]': shouldHideLowerBound
         },
       ]"
     >

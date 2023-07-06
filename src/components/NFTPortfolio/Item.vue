@@ -6,8 +6,8 @@
   >
     <client-only v-if="shouldFetchWhenVisible">
       <lazy-component
-        class="absolute inset-0 pointer-events-none"
-        @show="fetchInfo"
+        class="absolute inset-0 pointer-events-none -top-full"
+        @show.once="fetchInfo"
       />
     </client-only>
     <NFTPortfolioBase
@@ -101,9 +101,7 @@ export default {
   },
   methods: {
     fetchInfo() {
-      this.updateNFTClassMetadata();
-      this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
+      this.updateNFTClassAggregatedInfo();
     },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);

@@ -2,8 +2,8 @@
   <div class="relative">
     <client-only>
       <lazy-component
-        class="absolute inset-0 pointer-events-none"
-        @show="fetchInfo"
+        class="absolute inset-0 pointer-events-none -top-full"
+        @show.once="fetchInfo"
       />
     </client-only>
     <NFTCampaignItemBase
@@ -79,9 +79,7 @@ export default {
   },
   methods: {
     fetchInfo() {
-      this.updateNFTClassMetadata();
-      this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
+      this.updateNFTClassAggregatedInfo();
     },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);

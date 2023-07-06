@@ -30,7 +30,7 @@
         :preset="isCollectible ? 'secondary': 'tertiary'"
         @click="handleClickCollect"
       >
-        {{ price | formatNumberWithLIKE }}
+        {{ price }}
         <template #prepend>
           <IconPrice />
         </template>
@@ -57,12 +57,8 @@
 
 <script>
 import { LIKECOIN_NFT_MARKETPLACE_BASE } from '~/constant';
-import { formatNumberWithLIKE } from '~/util/ui';
 
 export default {
-  filters: {
-    formatNumberWithLIKE,
-  },
   props: {
     // User collected count
     collectedCount: {

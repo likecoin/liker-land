@@ -314,7 +314,10 @@ export default {
       const defaultEdition = {
         name: '',
         description: '',
-        priceLabel: this.formattedNFTPriceInLIKE,
+        priceLabel: formatNumberWithUnit(
+          this.LIKEPriceInUSD * this.NFTPrice,
+          'USD'
+        ),
         value: 0,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
@@ -351,6 +354,11 @@ export default {
             };
           })
         : [defaultEdition];
+    },
+    nftBookAvailablePriceLabel() {
+      const purchasePrice = this.nftEditions.find(item => item.stock > 0)
+        ?.priceLabel;
+      return purchasePrice;
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
@@ -571,6 +579,9 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'lazyGetISCNMetadataById',
+      'fetchNFTClassAggregatedInfo',
+      'lazyGetNFTClassMetadata',
+      'lazyGetNFTOwners',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
@@ -592,9 +603,12 @@ export default {
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
     },
-    async updateNFTClassMetadata() {
-      await catchAxiosError(this.fetchNFTClassMetadata(this.classId));
+    async lazyFetchNFTClassMetadata() {
+      await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
+    },
+    async updateNFTClassAggregatedInfo() {
+      await catchAxiosError(this.fetchNFTClassAggregatedInfo(this.classId));
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
@@ -602,6 +616,9 @@ export default {
     },
     async fetchNFTPrices() {
       await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
+    },
+    lazyFetchNFTOwners() {
+      return this.lazyGetNFTOwners(this.classId);
     },
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);
@@ -853,9 +870,11 @@ export default {
           );
         }
       } finally {
-        this.fetchNFTListByAddress({ address: this.getAddress });
-        this.updateNFTOwners();
-        this.updateNFTPurchaseInfo();
+        this.fetchNFTListByAddress({
+          address: this.getAddress,
+          shouldFetchDetails: false,
+        });
+        this.updateNFTClassAggregatedInfo();
         this.updateNFTHistory();
         this.walletFetchLIKEBalance();
       }

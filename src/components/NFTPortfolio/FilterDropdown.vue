@@ -57,6 +57,10 @@
         </MenuList>
         <!-- creators -->
         <MenuList v-else-if="selectedFilter === 'creators'" class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom" :has-padding="false">
+          <NFTPortfolioFilterInput
+            @handle-input-change="
+              (value) => $emit('input-filter-change-creator', value)"
+          />
           <MenuItem
             v-for="user in portfolioCollectedCreatorListWithSorting"
             :key="user.id"
@@ -88,7 +92,11 @@
         </MenuList>
         <!-- keywords -->
         <MenuList v-else-if="selectedFilter === 'keywords'" class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom" :has-padding="false">
-          <div class="flex flex-row flex-wrap items-center gap-[6px] my-[12px]">
+          <NFTPortfolioFilterInput
+            @handle-input-change="
+              (value) => $emit('input-filter-change-keyword', value)"
+          />
+          <div class="flex flex-row flex-wrap items-center gap-[6px] py-[12px]">
             <ButtonV2
               v-for="keyword in nftKeywordList"
               :key="keyword"
@@ -160,7 +168,6 @@ export default {
       default: () => [],
     },
   },
-  computed: {},
   methods: {
     handleClickType() {
       this.$emit('filter-click-type-filter');
@@ -173,15 +180,18 @@ export default {
     },
     handleResetFilter() {
       this.$emit('filter-click-clear-filter');
+      this.$emit('input-filter-change-creator', '');
     },
     handlePortfolioTypeChange(value) {
       this.$emit('filter-change-type', value);
     },
     handlePortfolioCreatorChange(value) {
       this.$emit('filter-change-creator', value);
+      this.$emit('input-filter-change-creator', '');
     },
     handleChangeKeywords(value) {
       this.$emit('filter-change-keyword', value);
+      this.$emit('input-filter-change-keyword', '');
     },
   },
 };

@@ -5,8 +5,8 @@
   >
     <client-only>
       <lazy-component
-        class="absolute inset-0 pointer-events-none"
-        @show="fetchInfo"
+        class="absolute inset-0 pointer-events-none -top-full"
+        @show.once="fetchInfo"
       />
     </client-only>
     <div class="flex relative mt-[48px]">
@@ -45,10 +45,10 @@
       :text="creatorDisplayName | ellipsis"
     />
     <Label
-      v-if="nftIsCollectable"
+      v-if="nftBookAvailablePriceLabel"
       class="text-like-green-dark"
       preset="p5"
-      :text="formattedNFTPriceInLIKE"
+      :text="nftBookAvailablePriceLabel"
     />
     <Label
       v-else
@@ -87,13 +87,12 @@
       >
         <client-only v-if="!isDetailsPreset">
           <lazy-component
-            class="absolute inset-0 pointer-events-none"
-            @show="fetchInfo"
+            class="absolute inset-0 pointer-events-none -top-full"
+            @show.once="fetchInfo"
           />
         </client-only>
         <div class="flex flex-col items-center shrink-0">
           <NFTCover
-            v-if="NFTImageUrl"
             :class="[
               'mt-[-48px]',
               coverClasses,
@@ -161,11 +160,11 @@
     <div class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]">
       <NFTBookTypeTags :content-types="contentTypes" />
       <template v-if="!isDetailsPreset">
-        <div v-if="nftIsCollectable">
+        <div v-if="nftBookAvailablePriceLabel">
           <Label
             preset="p5"
             class="text-like-green-dark"
-            :text="formattedNFTPriceInLIKE"
+            :text="nftBookAvailablePriceLabel"
           />
         </div>
         <Label
@@ -179,7 +178,7 @@
   </div>
 </template>
 <script>
-import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
+import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 
@@ -193,7 +192,6 @@ const PRESET_TYPE = {
 export default {
   filters: {
     ellipsis,
-    formatNumberWithLIKE,
   },
   mixins: [nftMixin],
   props: {
@@ -281,11 +279,17 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.updateNFTClassMetadata();
-      this.updateNFTPurchaseInfo();
-      this.updateNFTOwners();
+      await this.updateNFTClassAggregatedInfo();
       try {
-        const blockingPromises = [this.fetchISCNMetadata()];
+        if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {
+          await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
+            if (error.response?.status !== 400) {
+              throw error;
+            } else {
+              return Promise.resolve();
+            }
+          });
+        }
         await Promise.all(blockingPromises);
       } catch (error) {
         if (!error.response?.status === 404) {

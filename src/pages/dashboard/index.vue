@@ -71,6 +71,8 @@
         @portfolio-change-keywords="handleNFTKeywordsChange"
         @infinite-scroll="handleInfiniteScroll"
         @portfolio-reset-filter="handleClearFilter"
+        @portfolio-input-filter-change-creator="handleCreatorInputFilterChange"
+        @portfolio-input-filter-change-keyword="handleKeywordInputFilterChange"
       >
         <template #tab-bar-prepend>
           <ButtonV2
@@ -179,7 +181,7 @@ export default {
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://liker.land/images/og/writing-nft.jpg',
+          content: 'https://liker.land/images/og/default.jpg',
         },
       ],
     };

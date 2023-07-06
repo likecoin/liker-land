@@ -207,8 +207,7 @@ export default {
   },
   mounted() {
     this.scrollAnimation();
-    this.updateNFTClassMetadata();
-    this.updateNFTPurchaseInfo();
+    this.updateNFTClassAggregatedInfo();
   },
   methods: {
     scrollAnimation() {

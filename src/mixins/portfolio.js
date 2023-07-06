@@ -43,7 +43,9 @@ export const createPortfolioMixin = ({
       nftClassListOfOtherSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfOtherShowCount: ITEMS_PER_PAGE,
       nftCreatorFilter: [],
+      nftCreatorInputFilter: '',
       nftKeywordsFilter: [],
+      nftKeywordsInputFilter: '',
       userTopCollectors: [],
       userTopCreators: [],
     };
@@ -246,15 +248,24 @@ export const createPortfolioMixin = ({
       return Object.keys(ownerMap).sort((a, b) => ownerMap[b] - ownerMap[a]);
     },
     nftCreatorInfoListOfCollected() {
-      return this.nftCreatorAddressListOfCollected.map(id => {
-        const user = this.getUserInfoByAddress(id);
-        return {
-          id,
-          displayName: user?.displayName || id,
-          avatar: user?.avatar || getIdenticonAvatar(id),
-          isCivicLiker: user?.isSubscribedCivicLiker,
-        };
-      });
+      return this.nftCreatorAddressListOfCollected
+        .map(id => {
+          const user = this.getUserInfoByAddress(id);
+          const likerId = user?.user || id;
+          const displayName = user?.displayName || id;
+          const avatar = user?.avatar || getIdenticonAvatar(id);
+          const isCivicLiker = user?.isSubscribedCivicLiker;
+          return { id, likerId, displayName, avatar, isCivicLiker };
+        })
+        .filter(item => {
+          if (!this.nftCreatorInputFilter) return true;
+          const lowerCaseInputFilter = this.nftCreatorInputFilter.toLowerCase();
+          return (
+            item.displayName.toLowerCase().includes(lowerCaseInputFilter) ||
+            item.likerId.toLowerCase().includes(lowerCaseInputFilter) ||
+            item.id.includes(lowerCaseInputFilter)
+          );
+        });
     },
     nftKeywordList() {
       const keywords = [];
@@ -270,7 +281,18 @@ export const createPortfolioMixin = ({
           keywords.push(keyword.map(k => k.trim()));
         }
       });
-      return [...new Set(keywords.flat().filter(Boolean))];
+
+      const lowerCaseInputFilter =
+        this.nftKeywordsInputFilter?.toLowerCase() || '';
+      return [
+        ...new Set(
+          keywords
+            .flat()
+            .filter(
+              k => Boolean(k) && k.toLowerCase().includes(lowerCaseInputFilter)
+            )
+        ),
+      ];
     },
     nftClassListOfFilteredByKeywords() {
       const currentClassList =
@@ -566,6 +588,12 @@ export const createPortfolioMixin = ({
       this.syncRouteForTab(tab);
       this.nftCreatorFilter = [];
       this.nftKeywordsFilter = [];
+    },
+    handleCreatorInputFilterChange(creator) {
+      this.nftCreatorInputFilter = creator;
+    },
+    handleKeywordInputFilterChange(keyword) {
+      this.nftKeywordsInputFilter = keyword;
     },
     handleNFTClassListCreatorChange({ value }) {
       logTrackerEvent(

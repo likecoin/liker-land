@@ -31,7 +31,7 @@
             :current-nft-id="nftId"
             :next-nft-id="nftIdCollectNext"
             view="collected"
-            :price="NFTPrice"
+            :price="controlBarPriceLabel"
             :is-writing-nft="nftIsWritingNFT"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
@@ -317,7 +317,7 @@ import { isMobile } from '@walletconnect/browser-utils';
 import { EXTERNAL_HOST } from '~/constant';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { ellipsis } from '~/util/ui';
+import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -391,7 +391,7 @@ export default {
     const description =
       this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.nftImageURL || 'https://liker.land/images/og/writing-nft.jpg';
+      this.nftImageURL || 'https://liker.land/images/og/default.jpg';
     const schemas = [];
     if (this.purchaseInfo.price) {
       schemas.push({
@@ -508,6 +508,12 @@ export default {
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
+    },
+    controlBarPriceLabel() {
+      return (
+        this.nftBookAvailablePrice ||
+        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
+      );
     },
   },
   async mounted() {

@@ -11,6 +11,7 @@
         loop
         playsinline
         v-bind="imgProps"
+        :class="imgClassName"
         :poster="resizedSrc"
         :src="videoSrc"
         @play="handleMediaLoad"
@@ -19,13 +20,15 @@
       <img
         v-else-if="isShowImage"
         v-bind="imgProps"
+        :class="imgClassName"
         :src="resizedSrc"
         @load="handleMediaLoad"
         @error="handleImageError"
       >
       <img
         v-if="!isShowVideo && (!isShowImage || !isLoaded)"
-        v-bind="imgPropsForPlaceholder"
+        v-bind="imgProps"
+        :class="imgClassNameForPlaceholder"
         src="~/assets/images/nft/primitive-nft.jpg"
       >
     </div>
@@ -86,31 +89,31 @@ export default {
       };
     },
     imgProps() {
-      const { imgPropsForPlaceholder: props, isLoaded } = this;
       return {
-        ...props,
-        class: [
-          ...props.class,
-          {
-            'pointer-events-none': !isLoaded,
-            'absolute inset-x-0 top-0 opacity-0':
-              !isLoaded && !this.isShowVideo,
-          },
-        ],
-      };
-    },
-    imgPropsForPlaceholder() {
-      return {
-        class: [
-          'object-cover w-full',
-          {
-            'animate-pulse': !this.isLoaded,
-            'h-[290px] w-[204px]': this.isNftBook,
-          },
-        ],
         loading: 'lazy',
+        // NOTE: Mitigate image deform before Tailwind CSS is loaded
+        style: 'object-fit: cover;',
         ...this.$attrs,
       };
+    },
+    imgClassName() {
+      return [
+        ...this.imgClassNameForPlaceholder,
+        {
+          'pointer-events-none': !this.isLoaded,
+          'absolute inset-x-0 top-0 opacity-0':
+            !this.isLoaded && !this.isShowVideo,
+        },
+      ];
+    },
+    imgClassNameForPlaceholder() {
+      return [
+        'w-full',
+        {
+          'animate-pulse': !this.isLoaded,
+          'h-[290px] w-[204px]': this.isNftBook,
+        },
+      ];
     },
     resizedSrc() {
       return getImageResizeAPI(this.src, { width: this.size });

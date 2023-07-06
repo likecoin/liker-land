@@ -47,7 +47,7 @@ const nuxtConfig = {
       { name: 'msapplication-config', content: '/browserconfig.xml' },
       { hid: 'description', name: 'description', content: 'Publish as you write. Collect as you read.' },
       { hid: 'og:description', property: 'og:description', content: 'Publish as you write. Collect as you read.' },
-      { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.png' },
+      { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.jpg' },
     ],
     link: [
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
@@ -283,6 +283,7 @@ const nuxtConfig = {
         file: 'zh-Hant.json',
       },
     ],
+    lazy: true,
     strategy: 'prefix',
     defaultLocale: 'zh-Hant',
     langDir: '~/locales/',
