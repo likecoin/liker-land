@@ -20,6 +20,10 @@ router.get('/nft/metadata', async (req, res, next) => {
       return;
     }
     if (Array.isArray(classId)) {
+      if (classId.length > 100) {
+        res.status(400).send('TOO_MANY_CLASS_ID');
+        return;
+      }
       const data = await Promise.all(classId.map(id => getNFTClassData(id)));
       const payload = classId.reduce((acc, id, index) => {
         acc[id] = data[index];
