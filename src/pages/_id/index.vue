@@ -399,8 +399,12 @@ export default {
             this.getNFTClassOwnerInfoById(classId)?.[this.getAddress];
           return isCollectable && !hasCollected;
         });
-      this.addNFTClassesToShoppingCart({ classIds });
-      this.$router.push(this.localeLocation({ name: 'shopping-cart' }));
+      if (classIds.length) {
+        this.addNFTClassesToShoppingCart({ classIds });
+        this.$router.push(this.localeLocation({ name: 'shopping-cart' }));
+      } else {
+        this.alertPromptSuccess(this.$t('portfolio_collect_all_already_alert'));
+      }
     },
   },
 };
