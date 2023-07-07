@@ -1,7 +1,7 @@
-const axios = require('axios');
 const BigNumber = require('bignumber.js');
 const { Router } = require('express');
 
+const axios = require('../../../modules/axios');
 const { handleRestfulError } = require('../../middleware/error');
 
 const {
