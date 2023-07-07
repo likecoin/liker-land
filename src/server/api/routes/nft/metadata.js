@@ -120,6 +120,7 @@ async function getNFTClassAndISCNMetadata(classId) {
     ? iscnRes.data.records[0].data
     : null;
   const iscnOwner = iscnRes.data.owner;
+  if (iscnData) iscnData.owner = iscnOwner;
 
   if (apiMetadataRes) {
     const apiMetadata = apiMetadataRes ? apiMetadataRes.data : null;
@@ -129,7 +130,8 @@ async function getNFTClassAndISCNMetadata(classId) {
   }
   if (iscnOwner) {
     classData.iscn_owner = iscnOwner;
-    classData.iscn_record_timestamp = iscnData?.records?.[0]?.recordTimestamp;
+    classData.iscn_record_timestamp =
+      iscnRes?.data.records?.[0]?.recordTimestamp;
   } else if (parent.account) {
     classData.account_owner = parent.account;
   }
