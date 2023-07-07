@@ -48,7 +48,6 @@ const state = () => ({
   userLastCollectedTimestampMap: {},
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
-  aggregatedPromisesByClassIdMap: {},
 });
 
 const mutations = {
@@ -129,9 +128,6 @@ const mutations = {
   },
   [TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS](state, map) {
     state.shoppingCartNFTClassByIdMap = map;
-  },
-  [TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE](state, { classId, promise }) {
-    Vue.set(state.aggregatedPromisesByClassIdMap, classId, promise);
   },
 };
 
@@ -405,14 +401,6 @@ const actions = {
     commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, data });
     return data;
   },
-  async lazyFetchNFTClassAggregatedInfo({ state, dispatch }, classId) {
-    const promise = state.aggregatedPromisesByClassIdMap[classId];
-    if (promise) {
-      await promise;
-    } else {
-      await dispatch('fetchNFTClassAggregatedInfo', classId);
-    }
-  },
   async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
     commitClassData = (classId, data) => {
       const { classData, iscnData, ownerInfo, listings, purchaseInfo } = data;
@@ -438,11 +426,10 @@ const actions = {
         });
       }
     };
-    const promise = this.$api.$get(api.getNFTClassMetadata(classId));
+    const data = await this.$api.$get(api.getNFTClassMetadata(classId));
     if (Array.isArray(classId)) {
-      const classesData = await promise;
       const userPromises = [];
-      Object.entries(classesData).forEach(([classId, data]) => {
+      Object.entries(data).forEach(([classId, data]) => {
         commitClassData(classId, data);
         const { classData } = data;
         if (classData.iscn_owner) {
@@ -454,10 +441,8 @@ const actions = {
         }
       });
       // Need to await if the action fires in during SSR
-      if (!process.client) await userPromise;
+      if (!process.client) await userPromises;
     } else {
-      commit(TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE, { classId, promise });
-      const data = await promise;
       commitClassData(classId, data);
       const { classData } = data;
       if (classData.iscn_owner) {

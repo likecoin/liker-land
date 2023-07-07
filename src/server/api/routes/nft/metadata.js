@@ -1,7 +1,7 @@
-const axios = require('axios');
 const BigNumber = require('bignumber.js');
 const { Router } = require('express');
 
+const axios = require('../../../modules/axios');
 const { handleRestfulError } = require('../../middleware/error');
 
 const {
@@ -134,12 +134,21 @@ async function getNFTClassAndISCNMetadata(classId) {
   const iscnData = iscnRes.data.records.length
     ? iscnRes.data.records[0].data
     : null;
+  const iscnOwner = iscnRes.data.owner;
+  if (iscnData) iscnData.owner = iscnOwner;
 
   if (apiMetadataRes) {
     const apiMetadata = apiMetadataRes ? apiMetadataRes.data : null;
     if (apiMetadata && typeof apiMetadata === 'object') {
       classData = { ...classData, ...apiMetadata };
     }
+  }
+  if (iscnOwner) {
+    classData.iscn_owner = iscnOwner;
+    classData.iscn_record_timestamp =
+      iscnRes?.data.records?.[0]?.recordTimestamp;
+  } else if (parent.account) {
+    classData.account_owner = parent.account;
   }
 
   return [classData, iscnData];

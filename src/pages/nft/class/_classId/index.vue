@@ -624,6 +624,15 @@ export default {
       if (!hasStock && !this.nftIsCollectable) return;
 
       if (hasStock) {
+        const purchaseEventParams = {
+          name: this.NFTName,
+          price: bookStorePrices[selectedValue].price,
+          currency: 'USD',
+          classId: this.classId,
+          isNFTBook: true,
+        };
+        logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+        logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
           priceIndex: selectedValue,
