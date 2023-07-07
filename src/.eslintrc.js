@@ -29,6 +29,7 @@ module.exports = {
       },
     ],
     'no-shadow': 'off',
+    'no-undef': 'error',
     '@typescript-eslint/no-unused-vars': 'off',
   },
   settings: {

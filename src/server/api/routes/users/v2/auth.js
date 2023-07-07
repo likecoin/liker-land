@@ -102,7 +102,7 @@ router.post('/login', async (req, res, next) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
-    next(err);
+    next(error);
   }
 });
 
