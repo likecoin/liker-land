@@ -14,7 +14,7 @@ import nft from './modules/nft';
 const createStore = () =>
   new Vuex.Store({
     actions: {
-      async nuxtServerInit({ dispatch }, { req, res, query }) {
+      async nuxtServerInit({ dispatch, commit }, { req, res, query }) {
         if (res.timing) {
           res.timing.start('store_init', 'nuxtServerInit Started');
         }
