@@ -2,6 +2,7 @@ const { onMessagePublished } = require('firebase-functions/v2/pubsub');
 const {
   handleMintEvent,
   handlePurchaseEvent,
+  handlePurchaseMultipleEvent,
   handleTransferEvent,
 } = require('./handlers');
 // const { defineString } = require('firebase-functions/params');
@@ -31,6 +32,10 @@ module.exports = onMessagePublished(
         }
         case 'purchase': {
           await handlePurchaseEvent(message, data);
+          break;
+        }
+        case 'purchase_multiple': {
+          await handlePurchaseMultipleEvent(message, data);
           break;
         }
         case 'transfer': {
