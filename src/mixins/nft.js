@@ -705,10 +705,15 @@ export default {
       this.$router.push({ query: { ...this.$route.query, action: 'collect' } });
       try {
         const purchaseEventParams = {
-          name: this.NFTName,
           price: this.NFTPriceUSD,
           currency: 'USD',
-          classId: this.classId,
+          items: [
+            {
+              classId: this.classId,
+              price: this.NFTPriceUSD,
+              name: this.NFTName,
+            },
+          ],
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
@@ -835,10 +840,13 @@ export default {
           );
           logPurchaseFlowEvent(this, 'purchase', {
             txHash,
-            name: this.NFTName,
+            items: {
+              name: this.NFTName,
+              price: this.NFTPriceUSD,
+              classId,
+            },
             price: this.NFTPriceUSD,
             currency: 'USD',
-            classId,
           });
           if (this.uiTxTargetClassId === classId) {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);

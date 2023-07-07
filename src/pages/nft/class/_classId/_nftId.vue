@@ -541,10 +541,15 @@ export default {
       this.handleCollect();
     } else {
       logPurchaseFlowEvent(this, 'view_item', {
-        name: this.NFTName,
+        items: [
+          {
+            name: this.NFTName,
+            price: this.NFTPriceUSD,
+            classId: this.classId,
+          },
+        ],
         price: this.NFTPriceUSD,
         currency: 'USD',
-        classId: this.classId,
       });
     }
   },

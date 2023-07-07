@@ -64,7 +64,7 @@ export function logTrackerEvent(vue, category, action, label = '', value = 1) {
 export function logPurchaseFlowEvent(
   vue,
   event,
-  { txHash, name, price, currency, classId, isNFTBook }
+  { txHash, price, currency, items, isNFTBook }
 ) {
   try {
     if (
@@ -84,16 +84,14 @@ export function logPurchaseFlowEvent(
         transaction_id: txHash,
         value: price,
         currency,
-        items: [
-          {
-            item_id: classId,
-            item_name: name,
-            item_brand: isNFTBook ? 'Book NFT' : 'Writing NFT',
-            currency,
-            price,
-            quantity: 1,
-          },
-        ],
+        items: items.map(i => ({
+          item_id: i.classId,
+          item_name: i.name,
+          item_brand: isNFTBook ? 'Book NFT' : 'Writing NFT',
+          currency,
+          price: i.price,
+          quantity: 1,
+        })),
       });
     }
     if (window.fbq) {
@@ -107,7 +105,7 @@ export function logPurchaseFlowEvent(
         window.fbq('track', eventNameMapping[event], {
           currency,
           value: price,
-          content_ids: [classId],
+          content_ids: items.map(i => i.classId),
         });
       }
     }
