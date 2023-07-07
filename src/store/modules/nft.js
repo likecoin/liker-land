@@ -402,7 +402,7 @@ const actions = {
     return data;
   },
   async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
-    commitClassData = (classId, data) => {
+    const commitClassData = (classId, data) => {
       const { classData, iscnData, ownerInfo, listings, purchaseInfo } = data;
       const iscnId = classData.parent.iscn_id_prefix;
       commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
