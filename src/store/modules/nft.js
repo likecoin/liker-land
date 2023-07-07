@@ -47,7 +47,6 @@ const state = () => ({
   userLastCollectedTimestampMap: {},
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
-  aggregatedPromisesByClassIdMap: {},
 });
 
 const mutations = {
@@ -128,9 +127,6 @@ const mutations = {
   },
   [TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS](state, map) {
     state.shoppingCartNFTClassByIdMap = map;
-  },
-  [TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE](state, { classId, promise }) {
-    Vue.set(state.aggregatedPromisesByClassIdMap, classId, promise);
   },
 };
 
@@ -404,24 +400,14 @@ const actions = {
     commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, data });
     return data;
   },
-  async lazyFetchNFTClassAggregatedInfo({ state, dispatch }, classId) {
-    const promise = state.aggregatedPromisesByClassIdMap[classId];
-    if (promise) {
-      await promise;
-    } else {
-      await dispatch('fetchNFTClassAggregatedInfo', classId);
-    }
-  },
   async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
-    const promise = this.$api.$get(api.getNFTClassMetadata(classId));
-    commit(TYPES.NFT_SET_NFT_CLASS_AGGREGATED_PROMISE, { classId, promise });
     const {
       classData,
       iscnData,
       ownerInfo,
       listings,
       purchaseInfo,
-    } = await promise;
+    } = await this.$api.$get(api.getNFTClassMetadata(classId));
     const iscnId = classData.parent.iscn_id_prefix;
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
     commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
@@ -435,12 +421,12 @@ const actions = {
       });
     }
     if (classData.iscn_owner) {
-      const userPromise = dispatch(
+      const promise = dispatch(
         'lazyGetUserInfoByAddress',
         classData.iscn_owner
       );
       // Need to await if the action fires in during SSR
-      if (!process.client) await userPromise;
+      if (!process.client) await promise;
     }
   },
   async fetchNFTPurchaseInfo({ commit }, classId) {
@@ -661,7 +647,7 @@ const actions = {
       const nftClassIds = Array.from(nftClassIdDataMap.keys());
       await Promise.all(
         nftClassIds.map(classId =>
-          catchAxiosError(dispatch('lazyFetchNFTClassAggregatedInfo', classId))
+          catchAxiosError(dispatch('fetchNFTClassAggregatedInfo', classId))
         )
       );
     }
