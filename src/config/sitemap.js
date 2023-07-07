@@ -1,4 +1,14 @@
-const axios = require('axios');
+const Axios = require('axios');
+const HttpAgent = require('agentkeepalive');
+
+const { HttpsAgent } = HttpAgent;
+const axios = Axios.create({
+  timeout: 60000,
+  httpAgent: new HttpAgent(),
+  httpsAgent: new HttpsAgent(),
+  maxRedirects: 10,
+  maxContentLength: 50 * 1000 * 1000,
+});
 
 /* Copied from constant due to nuxt.config.js is not es6 import syntax */
 const { IS_TESTNET } = process.env;

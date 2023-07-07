@@ -1,10 +1,10 @@
-const axios = require('axios');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const crypto = require('crypto');
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const { userCollection } = require('../../modules/firebase');
 const { setPrivateCacheHeader } = require('../middleware/cache');
+const axios = require('../../modules/axios');
 const {
   apiFetchUserProfile,
   apiFetchUserSuperLikeStatus,
