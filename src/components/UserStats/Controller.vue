@@ -56,7 +56,6 @@ export default {
     statWallet(statWallet) {
       if (statWallet) {
         this.updateUserStats(statWallet);
-        this.fetchStakeholderIncome(statWallet);
       } else {
         this.userStats = null;
       }
