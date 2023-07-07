@@ -119,7 +119,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { TX_STATUS } from '~/constant';
 
 import { postNFTPurchase } from '~/util/api';
-import { logTrackerEvent } from '~/util/EventLogger';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { signGrant, broadcastTx, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { formatNumberWithLIKE } from '~/util/ui';
 
@@ -136,15 +136,34 @@ export default {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
       'getNFTClassListingInfoById',
+      'getNFTClassMetadataById',
+      'LIKEPriceInUSD',
       'shoppingCartNFTClassList',
     ]),
+    purchaseEventParams() {
+      return {
+        price: this.totalNFTPrice * this.LIKEPriceInUSD,
+        currency: 'USD',
+        items: [
+          {
+            classId: this.classIdList,
+            price: this.classIdList
+              .map(classId => this.getNFTClassPurchaseInfoById(classId)?.price)
+              .map(p => p && p * this.LIKEPriceInUSD),
+            name: this.classIdList.map(
+              classId => this.getNFTClassMetadataById(classId)?.name
+            ),
+          },
+        ],
+      };
+    },
     classIdList() {
       return this.shoppingCartNFTClassList.map(item => item.classId);
     },
     totalNFTPrice() {
       return this.shoppingCartNFTClassList.reduce((totalPrice, item) => {
         const purchaseInfo = this.getNFTClassPurchaseInfoById(item.classId);
-        return totalPrice + purchaseInfo?.price * item.quantity;
+        return totalPrice + (purchaseInfo?.price * item.quantity || 0);
       }, 0);
     },
     grantAmount() {
@@ -159,6 +178,10 @@ export default {
       );
     },
   },
+  async mounted() {
+    await this.lazyFetchLIKEPrice();
+    logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
+  },
   methods: {
     ...mapActions([
       'clearShoppingCart',
@@ -167,6 +190,7 @@ export default {
       'uiSetTxError',
       'uiSetTxStatus',
       'uiToggleCollectModal',
+      'lazyFetchLIKEPrice',
     ]),
     handleClickRemoveButton(classId) {
       logTrackerEvent(
@@ -194,6 +218,11 @@ export default {
           if (!isConnected) return;
         }
 
+        logPurchaseFlowEvent(
+          this,
+          'add_shipping_info',
+          this.purchaseEventParams
+        );
         await this.walletFetchLIKEBalance();
         if (this.isInsufficientAmount) {
           this.uiToggleCollectModal({
@@ -208,6 +237,7 @@ export default {
           classId: this.classIdList,
           status: TX_STATUS.SIGN,
         });
+        logPurchaseFlowEvent(this, 'begin_checkout', this.purchaseEventParams);
 
         const signData = await signGrant({
           senderAddress: this.getAddress,
@@ -232,7 +262,7 @@ export default {
             ts: Date.now(),
           })
         );
-
+        logPurchaseFlowEvent(this, 'purchase', this.purchaseEventParams);
         this.$router.replace(
           this.localeLocation({
             name: 'id',
