@@ -680,12 +680,12 @@ const actions = {
     }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
-    // const { data } = await this.$api.get(api.getUserV2DisplayState(address));
-    // commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
-    //   address,
-    //   featuredClassIdSet: new Set(data.featured),
-    //   hiddenClassIdSet: new Set(data.hidden),
-    // });
+    const { data } = await this.$api.get(api.getUserV2DisplayState(address));
+    commit(TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP, {
+      address,
+      featuredClassIdSet: new Set(data.featured),
+      hiddenClassIdSet: new Set(data.hidden),
+    });
   },
   async setNFTDisplayState(
     { state, commit },
