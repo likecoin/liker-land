@@ -173,9 +173,13 @@ export default {
     if (redirect) {
       // TODO: get price from payment_id
       logPurchaseFlowEvent(this, 'purchase', {
-        name: this.NFTName,
+        items: [
+          {
+            name: this.NFTName,
+            classId: this.classId,
+          },
+        ],
         currency: 'USD',
-        classId: this.classId,
         isNFTBook: true,
       });
       logPurchaseNFTBookEvent(this, {

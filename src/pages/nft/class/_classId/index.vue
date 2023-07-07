@@ -489,10 +489,15 @@ export default {
       this.handleCollect();
     } else {
       logPurchaseFlowEvent(this, 'view_item', {
-        name: this.NFTName,
+        items: [
+          {
+            name: this.NFTName,
+            classId: this.classId,
+            price: this.NFTPriceUSD,
+          },
+        ],
         price: this.NFTPriceUSD,
         currency: 'USD',
-        classId: this.classId,
       });
     }
   },
@@ -625,10 +630,15 @@ export default {
 
       if (hasStock) {
         const purchaseEventParams = {
-          name: this.NFTName,
+          items: [
+            {
+              name: this.NFTName,
+              price: bookStorePrices[selectedValue].price,
+              classId: this.classId,
+            },
+          ],
           price: bookStorePrices[selectedValue].price,
           currency: 'USD',
-          classId: this.classId,
           isNFTBook: true,
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
