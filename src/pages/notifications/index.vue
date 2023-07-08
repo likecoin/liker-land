@@ -83,6 +83,12 @@
           @click.native="handleClickEvent"
           @click.native.stop
         >
+          <client-only>
+            <lazy-component
+              class="absolute inset-0 pointer-events-none -top-full"
+              @show.once="fetchInfo(event)"
+            />
+          </client-only>
           <div class="flex items-center justify-start gap-[24px] mr-[12px]">
             <!-- dot -->
             <div
@@ -349,11 +355,21 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchWalletEvents', 'updateEventLastSeenTs']),
+    ...mapActions([
+      'lazyGetNFTClassMetadata',
+      'lazyGetUserInfoByAddress',
+      'fetchWalletEvents',
+      'updateEventLastSeenTs',
+    ]),
     async handleRefresh() {
       this.updateEventLastSeenTs(this.lastUpdatedTime);
       await this.walletFetchFollowees();
-      await this.fetchWalletEvents();
+      await this.fetchWalletEvents({ shouldFetchDetails: false });
+    },
+    fetchInfo(event) {
+      this.lazyGetNFTClassMetadata(event.class_id);
+      this.lazyGetUserInfoByAddress(event.receiver);
+      this.lazyGetUserInfoByAddress(event.sender);
     },
     handleClickEvent() {
       logTrackerEvent(
