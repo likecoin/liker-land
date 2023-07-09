@@ -27,8 +27,17 @@
 
     <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
 
+    <NFTBookHero v-if="isHomePage">
+      <template #prepend>
+        <SiteHeader
+          v-if="!isInInAppBrowser"
+          class="text-like-green"
+          :is-plain="true"
+        />
+      </template>
+    </NFTBookHero>
     <SiteHeader
-      v-if="!isInInAppBrowser"
+      v-else-if="!isInInAppBrowser"
       class="text-like-green"
     />
     <nuxt :class="['flex-grow', { 'pt-[32px]': isInInAppBrowser }]" />
@@ -94,6 +103,9 @@ export default {
     },
     alertBannerNFTClassId() {
       return 'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg';
+    },
+    isHomePage() {
+      return this.getRouteBaseName(this.$route) === 'index';
     },
   },
   methods: {
