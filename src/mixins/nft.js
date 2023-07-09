@@ -840,11 +840,13 @@ export default {
           );
           logPurchaseFlowEvent(this, 'purchase', {
             txHash,
-            items: {
-              name: this.NFTName,
-              price: this.NFTPriceUSD,
-              classId,
-            },
+            items: [
+              {
+                name: this.NFTName,
+                price: this.NFTPriceUSD,
+                classId,
+              },
+            ],
             price: this.NFTPriceUSD,
             currency: 'USD',
           });
