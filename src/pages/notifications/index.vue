@@ -61,6 +61,7 @@
           :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
           :to="localeLocation(event.targetRoute)"
           :class="[
+            'relative',
             'flex',
             'justify-between',
             'items-center',
