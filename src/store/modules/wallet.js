@@ -1,4 +1,5 @@
 /* eslint no-param-reassign: "off" */
+import Vue from 'vue';
 import BigNumber from 'bignumber.js';
 import {
   LIKECOIN_CHAIN_MIN_DENOM,
@@ -38,6 +39,7 @@ import {
   WALLET_SET_LIKERINFO,
   WALLET_SET_METHOD_TYPE,
   WALLET_SET_EVENTS,
+  WALLET_UPDATE_EVENT,
   WALLET_SET_EVENT_LAST_SEEN_TS,
   WALLET_SET_LIKE_BALANCE,
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
@@ -147,6 +149,12 @@ const mutations = {
   },
   [WALLET_SET_EVENTS](state, events) {
     state.events = events;
+  },
+  [WALLET_UPDATE_EVENT](state, { id, event }) {
+    const index = state.events.findIndex(e => e.id === id);
+    if (index > -1) {
+      Vue.set(state.events, index, { ...state.events[index], ...event });
+    }
   },
   [WALLET_SET_EVENT_LAST_SEEN_TS](state, eventLastSeenTs) {
     state.eventLastSeenTs = eventLastSeenTs;
@@ -453,10 +461,10 @@ const actions = {
     let events = responses.flat();
     events = [
       ...new Map(
-        events.map(e => [
-          [e.tx_hash, e.class_id, e.nft_id, e.eventType].join('-'),
-          e,
-        ])
+        events.map(e => {
+          const id = [e.tx_hash, e.class_id, e.nft_id, e.eventType].join('-');
+          return [id, { ...e, id }];
+        })
       ).values(),
     ];
     const classIds = Array.from(new Set(events.map(e => e.class_id)));
@@ -472,37 +480,53 @@ const actions = {
         .map(a => dispatch('lazyGetUserInfoByAddress', a));
     }
 
-    const promises = events.map(e => {
-      if (
-        e.action === '/cosmos.nft.v1beta1.MsgSend' &&
-        e.sender === LIKECOIN_NFT_API_WALLET
-      ) {
-        return getNFTHistoryDataMap({
-          axios: this.$api,
-          classId: e.class_id,
-          txHash: e.tx_hash,
-        });
-      }
-      return new Map();
-    });
-
     events.map(e => {
       if (e.price) {
         e.price = new BigNumber(e.price).shiftedBy(-9).toNumber();
       }
       return e;
     });
-    const historyDatas = await Promise.all(promises);
-    historyDatas.forEach((m, index) => {
-      if (m) {
-        // m is a Map
-        m.forEach(data => {
-          const { granterMemo, price } = data;
-          events[index].price = price;
-          events[index].granterMemo = granterMemo;
-        });
-      }
-    });
+
+    if (shouldFetchDetails) {
+      const promises = events.map(e => {
+        if (
+          e.action === '/cosmos.nft.v1beta1.MsgSend' &&
+          e.sender === LIKECOIN_NFT_API_WALLET
+        ) {
+          return getNFTHistoryDataMap({
+            axios: this.$api,
+            classId: e.class_id,
+            txHash: e.tx_hash,
+          });
+        }
+        return new Map();
+      });
+
+      const historyDatas = await Promise.all(promises);
+      historyDatas.forEach((m, index) => {
+        if (m) {
+          // m is a Map
+          m.forEach(data => {
+            const { granterMemo, price } = data;
+            events[index].price = price;
+            events[index].granterMemo = granterMemo;
+          });
+        }
+      });
+    } else {
+      events = events.map(e => {
+        if (
+          e.action === '/cosmos.nft.v1beta1.MsgSend' &&
+          e.sender === LIKECOIN_NFT_API_WALLET
+        ) {
+          return {
+            ...e,
+            shouldFetchHistory: true,
+          };
+        }
+        return e;
+      });
+    }
 
     commit(
       WALLET_SET_EVENTS,
@@ -519,7 +543,26 @@ const actions = {
     }
     commit(WALLET_SET_EVENT_FETCHING, false);
   },
-
+  async fetchWalletEventHistory({ state, commit }, { id }) {
+    const event = state.events.find(e => e.id === id);
+    if (!event) return;
+    const map = await getNFTHistoryDataMap({
+      axios: this.$api,
+      classId: event.class_id,
+      txHash: event.tx_hash,
+    });
+    map.forEach(data => {
+      const { granterMemo, price } = data;
+      commit(WALLET_UPDATE_EVENT, {
+        id,
+        event: {
+          granterMemo,
+          price,
+          shouldFetchHistory: false,
+        },
+      });
+    });
+  },
   updateEventLastSeenTs({ commit }, timestamp) {
     commit(WALLET_SET_EVENT_LAST_SEEN_TS, timestamp);
   },
