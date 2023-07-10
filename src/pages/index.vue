@@ -16,6 +16,8 @@
           v-if="nftBooks.length > 0"
           :class-id="nftBooks[0].classId"
           preset="campaign"
+          @click.native="() => onClickCampaignItem(nftBooks[0].classId)"
+          @click-avatar="() => onClickCampaignItemAvatar(nftBooks[0].classId)"
         />
         <div class="flex flex-col items-center mt-[48px]">
           <ul
@@ -41,6 +43,8 @@
                   { 'sm:rounded-l-[0px]': index % 3 === 1 },
                   { 'desktop:rounded-l-[0px]': index % 3 === 2 },
                 ]"
+                @click.native="() => onClickShelfItem(classId)"
+                @click-avatar="() => onClickShelfItemAvatar(classId)"
               />
             </li>
             {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
@@ -362,6 +366,42 @@ export default {
         1
       );
       this.navigateToMyDashboard();
+    },
+    onClickCampaignItem(classId) {
+      logTrackerEvent(
+        this,
+        'nft_book_featured',
+        'nft_book_campaign_click_book',
+        classId,
+        1
+      );
+    },
+    onClickCampaignItemAvatar(classId) {
+      logTrackerEvent(
+        this,
+        'nft_book_featured',
+        'nft_book_campaign_click_avatar',
+        classId,
+        1
+      );
+    },
+    onClickShelfItem(classId) {
+      logTrackerEvent(
+        this,
+        'nft_book_featured',
+        'nft_book_shelf_click_book',
+        classId,
+        1
+      );
+    },
+    onClickShelfItemAvatar(classId) {
+      logTrackerEvent(
+        this,
+        'nft_book_featured',
+        'nft_book_shelf_click_avatar',
+        classId,
+        1
+      );
     },
   },
 };

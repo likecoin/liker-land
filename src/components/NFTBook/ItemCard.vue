@@ -127,7 +127,7 @@
                       query: { tab: 'created' },
                     })
                     : ''"
-                @click.native.stop
+                @click.native.stop="onClickAvatar"
               >
                 <Identity
                   :avatar-url="creatorAvatar"
@@ -301,6 +301,9 @@ export default {
       if (url.includes('epub')) return 'epub';
       if (url.includes('pdf')) return 'pdf';
       return 'unknown';
+    },
+    onClickAvatar() {
+      this.$emit('click-avatar', this.iscnOwner);
     },
   },
 };
