@@ -1,4 +1,5 @@
 export default function({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   req,
   res,
   route,

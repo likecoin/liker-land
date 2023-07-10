@@ -165,7 +165,7 @@ export default {
     },
   },
   methods: {
-    populateDetails(list, address = '') {
+    populateDetails(list) {
       return list.map(item => {
         const itemSales = convertToLIKEPrice(item.sales);
         const salesEarnings = convertToLIKEPrice(item.total_amount);

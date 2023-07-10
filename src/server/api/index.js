@@ -50,7 +50,7 @@ router.use(
     unset: 'destroy',
   })
 );
-router.use((req, res, next) => {
+router.use((req, _res, next) => {
   // HACK: mitigate issue that express-session set-cookie Expires contains comma
   // which makes firebase hosting wrongly split the set-cookie header into 2
   // mitigate by overide cookie serialize function and use MaxAge instead of Expires
@@ -79,7 +79,7 @@ router.use(nft);
 router.get('/healthz', (_, res) => {
   res.sendStatus(200);
 });
-router.use((err, req, res, next) => {
+router.use((err, _req, res, next) => {
   // return error format as per API
   if (err.response && err.response.status) {
     const { status, data, statusText } = err.response;

@@ -307,7 +307,7 @@ export default {
           { x: randomBox2X(), y: randomBox2Y() },
         ])
         .concat([[{ x: 0, y: 0 }, { x: 0, y: 0 }]])
-        .map((params, i) =>
+        .map(params =>
           params.map(param => ({
             x: param.x * 47.335,
             y: param.y * 34.1219,
