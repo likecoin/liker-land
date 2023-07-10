@@ -34,157 +34,158 @@
       <div v-else-if="!processedEvents.length" class="text-center text-medium-gray mt-[24px]">
         {{ $t('event_list_page_no_event') }}
       </div>
-      <div
-        v-for="group in groupedEventsByTime"
-        v-else
-        :key="group.date"
-        class="flex flex-col items-start my-[12px]"
-      >
-        <!-- date group -->
+      <template v-else>
         <div
-          :class="[
-            'py-[4px]',
-            'px-[8px]',
-            'mt-[12px]',
-            'mb-[8px]',
-            'text-medium-gray',
-            'font-600',
-            'text-[14px]',
-            'w-auto',
-          ]"
+          v-for="group in groupedEventsByTime"
+          :key="group.date"
+          class="flex flex-col items-start my-[12px]"
         >
-          {{ group.date }}
-        </div>
-        <!-- events -->
-        <LinkV2
-          v-for="event in group.events"
-          :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
-          :to="localeLocation(event.targetRoute)"
-          :class="[
-            'relative',
-            'flex',
-            'justify-between',
-            'items-center',
+          <!-- date group -->
+          <div
+            :class="[
+              'py-[4px]',
+              'px-[8px]',
+              'mt-[12px]',
+              'mb-[8px]',
+              'text-medium-gray',
+              'font-600',
+              'text-[14px]',
+              'w-auto',
+            ]"
+          >
+            {{ group.date }}
+          </div>
+          <!-- events -->
+          <LinkV2
+            v-for="event in group.events"
+            :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
+            :to="localeLocation(event.targetRoute)"
+            :class="[
+              'relative',
+              'flex',
+              'justify-between',
+              'items-center',
 
-            'px-[16px]',
-            'py-[20px]',
-            'my-[4px]',
-            'bg-white',
-            'shadow-sm',
-            'rounded-[4px]',
-            'w-full',
+              'px-[16px]',
+              'py-[20px]',
+              'my-[4px]',
+              'bg-white',
+              'shadow-sm',
+              'rounded-[4px]',
+              'w-full',
 
-            'group',
-            'no-underline',
-            'cursor-pointer',
-            'hover:bg-shade-gray',
-            'duration-100',
-            'transition-colors',
-          ]"
-          @click.native="handleClickEvent"
-          @click.native.stop
-        >
-          <client-only>
-            <lazy-component
-              class="absolute inset-0 pointer-events-none -top-full"
-              @show.once="fetchInfo(event)"
-            />
-          </client-only>
-          <div class="flex items-center justify-start gap-[24px] mr-[12px]">
-            <!-- dot -->
-            <div
-              :class="[
-                'flex',
-                'relative',
-                'justify-center',
-                'items-start',
-                'pl-[8px]',
-                'pt-[12px]',
-                'self-start',
-              ]"
-            >
-              <div
-                v-if="!event.eventHasSeen"
-                :class="[
-                  'absolute',
-                  'top-0',
-                  'right-0',
-                  'bg-danger',
-                  'rounded-[50%]',
-                  'w-[8px]',
-                  'h-[8px]'
-                ]"
+              'group',
+              'no-underline',
+              'cursor-pointer',
+              'hover:bg-shade-gray',
+              'duration-100',
+              'transition-colors',
+            ]"
+            @click.native="handleClickEvent"
+            @click.native.stop
+          >
+            <client-only>
+              <lazy-component
+                class="absolute inset-0 pointer-events-none -top-full"
+                @show.once="fetchInfo(event)"
               />
-            </div>
-            <!-- avatar -->
-            <Identity
-              class="self-start flex-shrink-0"
-              :avatar-url="event.displayAvatar"
-              :avatar-size="38"
-              :is-avatar-outlined="event.isCivicLiker"
-            />
-            <!-- info -->
-            <div class="flex flex-col items-start justify-center">
-              <i18n
-                :class="[
-                  'text-dark-gray',
-                  'text-14',
-                  { 'text-medium-gray': event.eventHasSeen },
-                ]"
-                :path="event.i18nPath"
-              >
-                <p
-                  class="inline text-black font-600 text-16"
-                  place="fromName"
-                >{{ event.fromName }}</p>
-                <p
-                  class="inline text-black font-600 text-16"
-                  place="toName"
-                >{{ event.toName }}</p>
-                <p
-                  class="inline italic text-black font-600"
-                  place="nftName"
-                >
-                  {{ event.nftName }}
-                </p>
-                <p
-                  class="inline text-like-green font-600"
-                  place="price"
-                >{{ event.price }}</p>
-
-              </i18n>
+            </client-only>
+            <div class="flex items-center justify-start gap-[24px] mr-[12px]">
+              <!-- dot -->
               <div
-                v-if="event.message"
                 :class="[
                   'flex',
-                  'items-center',
-                  'px-[12px]',
-                  'py-[6px]',
-                  'mt-[4px]',
-                  'border-[2px]',
-                  'border-shade-gray',
-                  'rounded-[4px]',
-
-                  'group-hover:border-light-gray',
-                  'duration-75',
-                  'transition-all'
+                  'relative',
+                  'justify-center',
+                  'items-start',
+                  'pl-[8px]',
+                  'pt-[12px]',
+                  'self-start',
                 ]"
               >
-                <Label
-                  preset="p6"
-                  align="middle"
-                  class="text-medium-gray"
-                  :text="event.message"
+                <div
+                  v-if="!event.eventHasSeen"
+                  :class="[
+                    'absolute',
+                    'top-0',
+                    'right-0',
+                    'bg-danger',
+                    'rounded-[50%]',
+                    'w-[8px]',
+                    'h-[8px]'
+                  ]"
                 />
               </div>
+              <!-- avatar -->
+              <Identity
+                class="self-start flex-shrink-0"
+                :avatar-url="event.displayAvatar"
+                :avatar-size="38"
+                :is-avatar-outlined="event.isCivicLiker"
+              />
+              <!-- info -->
+              <div class="flex flex-col items-start justify-center">
+                <i18n
+                  :class="[
+                    'text-dark-gray',
+                    'text-14',
+                    { 'text-medium-gray': event.eventHasSeen },
+                  ]"
+                  :path="event.i18nPath"
+                >
+                  <p
+                    class="inline text-black font-600 text-16"
+                    place="fromName"
+                  >{{ event.fromName }}</p>
+                  <p
+                    class="inline text-black font-600 text-16"
+                    place="toName"
+                  >{{ event.toName }}</p>
+                  <p
+                    class="inline italic text-black font-600"
+                    place="nftName"
+                  >
+                    {{ event.nftName }}
+                  </p>
+                  <p
+                    class="inline text-like-green font-600"
+                    place="price"
+                  >{{ event.price }}</p>
+
+                </i18n>
+                <div
+                  v-if="event.message"
+                  :class="[
+                    'flex',
+                    'items-center',
+                    'px-[12px]',
+                    'py-[6px]',
+                    'mt-[4px]',
+                    'border-[2px]',
+                    'border-shade-gray',
+                    'rounded-[4px]',
+
+                    'group-hover:border-light-gray',
+                    'duration-75',
+                    'transition-all'
+                  ]"
+                >
+                  <Label
+                    preset="p6"
+                    align="middle"
+                    class="text-medium-gray"
+                    :text="event.message"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          <!-- timestamp-hour -->
-          <div class="text-medium-gray text-10">
-            {{ formatLocalTime(event.timestamp) }}
-          </div>
-        </LinkV2>
-      </div>
+            <!-- timestamp-hour -->
+            <div class="text-medium-gray text-10">
+              {{ formatLocalTime(event.timestamp) }}
+            </div>
+          </LinkV2>
+        </div>
+      </template>
     </AuthRequiredView>
   </Page>
 </template>
