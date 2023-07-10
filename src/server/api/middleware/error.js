@@ -1,4 +1,4 @@
-function handleRestfulError(req, res, next, err) {
+function handleRestfulError(_req, res, next, err) {
   if (
     err.response &&
     err.response.status >= 400 &&

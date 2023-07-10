@@ -176,7 +176,6 @@ import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
-import { EXTERNAL_HOST } from '~/constant';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';

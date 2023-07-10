@@ -7,6 +7,7 @@ export default {
       localeLocation({
         name: 'civic',
         params,
+        query,
       })
     );
   },

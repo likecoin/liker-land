@@ -1,6 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
 import { getIdenticonAvatar } from '~/util/api';
-import { logTrackerEvent } from '~/util/EventLogger';
 import { getLikerIdSettingsURL } from '~/util/links';
 import { escapeCSVField, downloadCSV } from '~/util/misc';
 

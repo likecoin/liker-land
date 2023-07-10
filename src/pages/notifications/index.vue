@@ -348,7 +348,7 @@ export default {
     }
   },
   // For SPA navigation
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(_to, _from, next) {
     if (this.lastUpdatedTime) {
       this.updateEventLastSeenTs(this.lastUpdatedTime);
     }

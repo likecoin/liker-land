@@ -671,10 +671,7 @@ const actions = {
       throw error;
     }
   },
-  async walletVerifyEmail(
-    { state, commit, getters },
-    { wallet, token, followee }
-  ) {
+  async walletVerifyEmail({ commit }, { wallet, token, followee }) {
     try {
       const { email } = await this.$api.$put(
         putUserV2WalletEmail({ wallet, token, followee })

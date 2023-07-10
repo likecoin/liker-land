@@ -2,7 +2,6 @@
 import { BigNumber } from 'bignumber.js';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import * as api from '@/util/api';
-import { deriveAllPrefixedAddresses } from './cosmos';
 import {
   ARWEAVE_ENDPOINT,
   IPFS_VIEW_GATEWAY_URL,

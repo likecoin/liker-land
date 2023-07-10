@@ -1,8 +1,4 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const http = require('http');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const https = require('https');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const querystring = require('querystring');
 const axios = require('../../modules/axios');
 const {

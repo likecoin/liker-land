@@ -147,11 +147,7 @@ import {
   LIKECOIN_NFT_BOOK_ITEMS,
 } from '~/constant';
 
-import {
-  getNFTClassesPartial,
-  getTopNFTClasses,
-  getISCNRecord,
-} from '~/util/api';
+import { getNFTClassesPartial, getTopNFTClasses } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import inAppMixin from '~/mixins/in-app';

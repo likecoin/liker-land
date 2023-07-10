@@ -24,7 +24,6 @@ export function ellipsis(value) {
 
 export function ellipsisDescription(value) {
   if (value) {
-    const len = value.length;
     const dots = '...';
     if (!value) return '';
     if (value.length > 200) {
