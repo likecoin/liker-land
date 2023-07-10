@@ -404,7 +404,10 @@ const actions = {
     }
   },
 
-  async fetchWalletEvents({ state, commit, dispatch }) {
+  async fetchWalletEvents(
+    { state, commit, dispatch },
+    { shouldFetchDetails = true }
+  ) {
     const { address, followees } = state;
     if (!address) {
       return;
@@ -463,9 +466,11 @@ const actions = {
     for (const list of events) {
       addresses.push(list.sender, list.receiver);
     }
-    [...new Set(addresses)]
-      .filter(a => !!a)
-      .map(a => dispatch('lazyGetUserInfoByAddress', a));
+    if (shouldFetchDetails) {
+      [...new Set(addresses)]
+        .filter(a => !!a)
+        .map(a => dispatch('lazyGetUserInfoByAddress', a));
+    }
 
     const promises = events.map(e => {
       if (
@@ -509,7 +514,9 @@ const actions = {
         })
         .sort((a, b) => b.timestamp - a.timestamp)
     );
-    classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
+    if (shouldFetchDetails) {
+      classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
+    }
     commit(WALLET_SET_EVENT_FETCHING, false);
   },
 
@@ -558,7 +565,7 @@ const actions = {
     }
     promises.push(dispatch('walletFetchFollowees'));
     await Promise.all(promises);
-    await dispatch('fetchWalletEvents');
+    await dispatch('fetchWalletEvents', { shouldFetchDetails: false });
   },
   async signLogin({ state, commit, dispatch }) {
     // Do not trigger login if the window is not focused
