@@ -19,8 +19,8 @@ export default {
   components: {
     GetAppPage,
   },
-  layout: 'default',
   mixins: [CrispMixinFactory(), utmMixin],
+  layout: 'default',
   head() {
     return {
       title: this.$t('GetAppPage.Title'),

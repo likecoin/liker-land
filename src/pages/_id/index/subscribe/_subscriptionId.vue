@@ -63,6 +63,31 @@ export default {
   // Both subscribe page and unsubscribe page share the same component
   name: 'NFTCreatorSubscriptionPage',
   mixins: [alertMixin, creatorInfoMixin],
+
+  async asyncData({
+    $api,
+    route,
+    params,
+    redirect,
+    localeLocation,
+    getRouteBaseName,
+  }) {
+    const { id: creatorId, subscriptionId } = params;
+    try {
+      const res = await $api.$get(
+        nftMintSubscriptionAPI({ id: subscriptionId })
+      );
+      return {
+        wallet: res.subscribedWallet,
+        isCompleted: isSubscribePage(getRouteBaseName(route))
+          ? res.isVerified
+          : false,
+      };
+    } catch (err) {
+      redirect(localeLocation({ name: 'id', params: { id: creatorId } }));
+      return undefined;
+    }
+  },
   data() {
     return {
       // From asyncData
@@ -107,30 +132,6 @@ export default {
     email() {
       return this.$route.query.email;
     },
-  },
-  async asyncData({
-    $api,
-    route,
-    params,
-    redirect,
-    localeLocation,
-    getRouteBaseName,
-  }) {
-    const { id: creatorId, subscriptionId } = params;
-    try {
-      const res = await $api.$get(
-        nftMintSubscriptionAPI({ id: subscriptionId })
-      );
-      return {
-        wallet: res.subscribedWallet,
-        isCompleted: isSubscribePage(getRouteBaseName(route))
-          ? res.isVerified
-          : false,
-      };
-    } catch (err) {
-      redirect(localeLocation({ name: 'id', params: { id: creatorId } }));
-      return undefined;
-    }
   },
   async mounted() {
     await this.lazyGetUserInfoByAddress(this.wallet);

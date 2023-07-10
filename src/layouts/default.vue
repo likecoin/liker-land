@@ -74,6 +74,19 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [alertMixin, inAppMixin],
+  head() {
+    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true });
+    return {
+      htmlAttrs: {
+        ...i18nHead.htmlAttrs,
+      },
+      bodyAttrs: {
+        class: ['bg-gray-f7'],
+      },
+      meta: [...i18nHead.meta],
+      link: [...i18nHead.link],
+    };
+  },
   computed: {
     ...mapGetters(['uiIsOpenCollectModal', 'uiIsChainUpgrading']),
     getTimeoutSec() {
@@ -94,19 +107,6 @@ export default {
         1
       );
     },
-  },
-  head() {
-    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true });
-    return {
-      htmlAttrs: {
-        ...i18nHead.htmlAttrs,
-      },
-      bodyAttrs: {
-        class: ['bg-gray-f7'],
-      },
-      meta: [...i18nHead.meta],
-      link: [...i18nHead.link],
-    };
   },
 };
 </script>

@@ -141,13 +141,13 @@ const DETAILS_TYPE = {
 
 export default {
   name: 'MyDashboardPage',
-  layout: 'default',
   mixins: [
     alertMixin,
     createPortfolioMixin({ shouldApplyDisplayState: false }),
     inAppMixin,
     walletMixin,
   ],
+  layout: 'default',
   data() {
     return {
       topRankedUsers: [],

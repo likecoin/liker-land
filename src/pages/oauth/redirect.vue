@@ -15,13 +15,13 @@ import { ONE_HOUR_IN_MS } from '~/constant';
 export default {
   name: 'Redirect',
   layout: 'dialog',
-  computed: {
-    ...mapGetters(['getHomeRoute']),
-  },
   head() {
     return {
       title: this.$t('RedirectPage.title'),
     };
+  },
+  computed: {
+    ...mapGetters(['getHomeRoute']),
   },
   async mounted() {
     const { error, state, code: authCode } = this.$route.query;

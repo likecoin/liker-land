@@ -204,6 +204,13 @@ export default {
     ellipsis,
   },
   mixins: [inAppMixin, walletMixin],
+  // For SPA navigation
+  beforeRouteLeave(_to, _from, next) {
+    if (this.lastUpdatedTime) {
+      this.updateEventLastSeenTs(this.lastUpdatedTime);
+    }
+    next();
+  },
   layout: 'default',
   data() {
     return { lastUpdatedTime: undefined };
@@ -333,6 +340,7 @@ export default {
             });
             this.lastUpdatedTime = newVal;
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error(error);
           }
         }
@@ -347,13 +355,6 @@ export default {
         // No-op
       }
     }
-  },
-  // For SPA navigation
-  beforeRouteLeave(_to, _from, next) {
-    if (this.lastUpdatedTime) {
-      this.updateEventLastSeenTs(this.lastUpdatedTime);
-    }
-    next();
   },
 
   methods: {
