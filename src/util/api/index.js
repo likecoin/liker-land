@@ -164,8 +164,8 @@ export const getISCNRecord = iscnId => {
 export const getNFTClassesPartial = ({ owner, reverse, limit, key }) => {
   const qsPayload = {
     iscn_owner: owner,
-    reverse,
   }; // TODO: support account based query
+  if (reverse) qsPayload['pagination.reverse'] = reverse;
   if (limit) qsPayload['pagination.limit'] = limit;
   if (key) qsPayload['pagination.key'] = key;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?${querystring.stringify(
