@@ -39,7 +39,6 @@ export default {
         'text-like-green',
         'text-[16px]',
         {
-          // eslint-disable-next-line standard/computed-property-even-spacing
           [[
             'hover:bg-[#fcfcfc]',
             'active:bg-[#fafafa]',
