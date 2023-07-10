@@ -32,6 +32,7 @@
           <NFTBookItemCard
             :class-id="classId"
             preset="details"
+            @click-avatar="handleNFTCardClickAvatar"
           >
             <template #column-left>
               <ul class="flex gap-[16px] justify-center items-center mt-[24px] text-medium-gray text-[12px]">
@@ -139,6 +140,7 @@
                 :is-content-viewable="isContentViewable"
                 @view-content="handleViewContent"
                 @view-content-url="handleViewContentURL"
+                @click-avatar="handleNFTCardClickAvatar"
               />
             </NFTGemWrapper>
           </div>
@@ -521,6 +523,15 @@ export default {
       } finally {
         this.isCollecting = false;
       }
+    },
+    handleNFTCardClickAvatar() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_card_avatar_clicked',
+        this.classId,
+        1
+      );
     },
     handleViewContent() {
       logTrackerEvent(

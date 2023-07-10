@@ -49,6 +49,7 @@
             params: { id: iscnOwner },
             query: { tab: 'created' },
           }) : ''"
+          @click.native="onClickAvatar"
         >
           <Label class="text-medium-gray" text="by" />
           <Label class="text-like-green ml-[4px] font-600">{{
@@ -227,6 +228,9 @@ export default {
         );
       }
       this.$emit('view-content-url', type);
+    },
+    onClickAvatar(e) {
+      this.$emit('click-avatar', e);
     },
   },
 };
