@@ -360,6 +360,7 @@ export default {
       'lazyGetNFTClassMetadata',
       'lazyGetUserInfoByAddress',
       'fetchWalletEvents',
+      'fetchWalletEventHistory',
       'updateEventLastSeenTs',
     ]),
     async handleRefresh() {
@@ -371,6 +372,7 @@ export default {
       this.lazyGetNFTClassMetadata(event.class_id);
       this.lazyGetUserInfoByAddress(event.receiver);
       this.lazyGetUserInfoByAddress(event.sender);
+      if (event.shouldFetchHistory) this.fetchWalletEventHistory(event);
     },
     handleClickEvent() {
       logTrackerEvent(
