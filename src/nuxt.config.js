@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable prettier/prettier */
 const path = require('path');
 const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
@@ -29,9 +28,11 @@ const nuxtConfig = {
   },
   mode: 'universal',
   server: {
-    timing: IS_TESTNET ? {
-      total: true
-    } : false,
+    timing: IS_TESTNET
+      ? {
+          total: true,
+        }
+      : false,
   },
   telemetry: false,
 
@@ -39,26 +40,63 @@ const nuxtConfig = {
   ** Headers of the page
   */
   head: {
-    titleTemplate: (titleChunk) => titleChunk ?
-      `${titleChunk} - ${process.env.SITE_NAME}` : process.env.SITE_NAME,
+    titleTemplate: titleChunk =>
+      titleChunk
+        ? `${titleChunk} - ${process.env.SITE_NAME}`
+        : process.env.SITE_NAME,
     meta: [
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
-      { hid: 'description', name: 'description', content: 'Publish as you write. Collect as you read.' },
-      { hid: 'og:description', property: 'og:description', content: 'Publish as you write. Collect as you read.' },
-      { hid: 'og:image', name: 'og:image', property: 'og:image', content: '/images/og/default.jpg' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Publish as you write. Collect as you read.',
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: 'Publish as you write. Collect as you read.',
+      },
+      {
+        hid: 'og:image',
+        name: 'og:image',
+        property: 'og:image',
+        content: '/images/og/default.jpg',
+      },
     ],
     link: [
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
       { rel: 'preconnect', href: 'https://p.typekit.net' },
       { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
       { rel: 'preload', href: '/vendor/fbq.js', as: 'script' },
-      { rel: 'preload', href: 'https://use.typekit.net/rul4lrs.js', as: 'script' },
-      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
-      { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
-      { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
-      { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: theme.colors['like-green'] },
+      {
+        rel: 'preload',
+        href: 'https://use.typekit.net/rul4lrs.js',
+        as: 'script',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'mask-icon',
+        href: '/safari-pinned-tab.svg',
+        color: theme.colors['like-green'],
+      },
 
       ...[
         { width: 320, height: 568, pixelRatio: 2, fileName: 'iphone5.png' },
@@ -74,8 +112,7 @@ const nuxtConfig = {
       ].map(({ width, height, pixelRatio, fileName }) => ({
         rel: 'apple-touch-startup-image',
         href: `/images/splash/${fileName}`,
-        media:
-          `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${pixelRatio})`,
+        media: `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${pixelRatio})`,
       })),
     ],
     script: [
@@ -90,7 +127,7 @@ const nuxtConfig = {
             name: 'Liker Land',
             url: 'https://liker.land',
             logo: 'https://liker.land/logo.png',
-            sameAs:['https://www.facebook.com/Liker.Land'],
+            sameAs: ['https://www.facebook.com/Liker.Land'],
           },
           {
             '@context': 'http://www.schema.org',
@@ -160,12 +197,7 @@ const nuxtConfig = {
       unsafeInlineCompatibility: true,
       hashAlgorithm: 'sha256',
       policies: {
-        'default-src': [
-          "'self'",
-          'data:',
-          'blob:',
-          '*',
-        ],
+        'default-src': ["'self'", 'data:', 'blob:', '*'],
         'script-src': [
           "'self'",
           "'unsafe-inline'", // ignored by browser with sha support
@@ -179,7 +211,7 @@ const nuxtConfig = {
           'https://js.stripe.com',
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           '*.crisp.chat',
-          'connect.facebook.net'
+          'connect.facebook.net',
         ],
         'frame-src': [
           'www.google.com',
@@ -304,10 +336,14 @@ const nuxtConfig = {
   workbox: {
     runtimeCaching: [
       {
-        urlPattern: `https://api\\.${IS_TESTNET ? 'rinkeby\\.' : '' }like\\.co/.*`,
+        urlPattern: `https://api\\.${
+          IS_TESTNET ? 'rinkeby\\.' : ''
+        }like\\.co/.*`,
       },
       {
-        urlPattern: `https://us-central1-civic-liker${IS_TESTNET ? '-develop' : '' }\\.cloudfunctions\\.net/.*`,
+        urlPattern: `https://us-central1-civic-liker${
+          IS_TESTNET ? '-develop' : ''
+        }\\.cloudfunctions\\.net/.*`,
       },
     ],
   },
@@ -341,7 +377,7 @@ const nuxtConfig = {
   },
   sentry: {
     config: {
-      ignoreErrors: ["WebAssembly.instantiate"],
+      ignoreErrors: ['WebAssembly.instantiate'],
     },
     clientIntegrations: {
       /* default integrations will still be added due to deep-merge */
@@ -368,7 +404,9 @@ const nuxtConfig = {
         chunkName: replaceToUnsubscribe(subscribeRoute.chunkName),
       });
 
-      const civicPageRouteIndex = routes.findIndex(r => r.name === 'civic-from');
+      const civicPageRouteIndex = routes.findIndex(
+        r => r.name === 'civic-from'
+      );
       routes.splice(
         civicPageRouteIndex,
         0,
@@ -377,9 +415,9 @@ const nuxtConfig = {
           path: '/civic/classic',
           component: resolve(__dirname, 'pages/_id/civic/index.vue'),
           name: 'civic-classic',
-        },
+        }
       );
-    }
+    },
   },
 
   /*
@@ -416,7 +454,10 @@ const nuxtConfig = {
         config.devtool = 'source-map';
       }
       if (!ctx.isDev) {
-        config.resolve.alias['bn.js'] = path.join(__dirname, './node_modules/bn.js');
+        config.resolve.alias['bn.js'] = path.join(
+          __dirname,
+          './node_modules/bn.js'
+        );
       }
       /* eslint-enable no-param-reassign */
     },
