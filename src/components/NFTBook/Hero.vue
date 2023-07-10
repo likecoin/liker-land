@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full pb-[84px] overflow-x-hidden">
+  <div class="w-full overflow-x-hidden">
     <div
       ref="hero"
       :class="[
