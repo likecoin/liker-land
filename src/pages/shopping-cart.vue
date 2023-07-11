@@ -211,11 +211,13 @@ export default {
         1
       );
       try {
-        if (!this.getAddress || !this.getSigner) {
+        if (!this.getAddress) {
           const isConnected = await this.connectWallet({
             shouldSkipLogin: true,
           });
           if (!isConnected) return;
+        } else {
+          await this.initIfNecessary();
         }
 
         logPurchaseFlowEvent(
