@@ -163,7 +163,6 @@ function compareNumber(X, Y, order) {
 }
 
 const getters = {
-  NFTClassIdList: state => state.userClassIdListMap,
   getISCNMetadataById: state => iscnId => state.iscnMetadataByIdMap[iscnId],
   getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassFeaturedSetByAddress: state => address =>
