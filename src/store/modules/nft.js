@@ -592,10 +592,7 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress(
-    { commit, getters, dispatch },
-    { address, shouldFetchDetails = true } = {}
-  ) {
+  async fetchNFTListByAddress({ commit, getters }, address) {
     const [collectedNFTs, createdNFTClasses] = await Promise.all([
       fetchAllNFTFromChain(this.$api, address),
       fetchAllNFTClassFromChain(this.$api, address),
@@ -604,11 +601,6 @@ const actions = {
     const nftClassIdDataMap = new Map();
     collectedNFTs.forEach(n => nftClassIdDataMap.set(n.class_id, n.class_data));
     createdNFTClasses.forEach(c => nftClassIdDataMap.set(c.id, c));
-    if (shouldFetchDetails) {
-      nftClassIdDataMap.forEach((classData, classId) => {
-        dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
-      });
-    }
 
     const formattedCreatedNFTClasses = createdNFTClasses.map(
       formatNFTClassInfo
@@ -621,15 +613,6 @@ const actions = {
         collected: getters.normalizeNFTList(formattedCollectedNFTs),
       },
     });
-
-    if (shouldFetchDetails) {
-      const nftClassIds = Array.from(nftClassIdDataMap.keys());
-      await Promise.all(
-        nftClassIds.map(classId =>
-          catchAxiosError(dispatch('fetchNFTClassAggregatedInfo', classId))
-        )
-      );
-    }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.getUserV2DisplayState(address));
