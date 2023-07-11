@@ -290,6 +290,9 @@ export const postStripeFiatPendingClaim = ({ wallet, paymentId, token }) => {
   )}`;
 };
 
+export const getNFTBookPaymentStatusEndpoint = ({ classId, paymentId }) =>
+  `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/status/${paymentId}`;
+
 export const getNFTBookClaimEndpoint = ({ classId, paymentId, token }) => {
   const qsPayload = { token };
   return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/claim/${paymentId}?${querystring.stringify(
