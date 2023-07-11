@@ -44,7 +44,6 @@ const state = () => ({
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
-  userLastCollectedTimestampMap: {},
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
 });
@@ -94,12 +93,6 @@ const mutations = {
       featuredClassIdSet,
       hiddenClassIdSet,
     });
-  },
-  [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
-    state,
-    { address, timestampMap }
-  ) {
-    Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
   },
   [TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET](
     state,
@@ -206,8 +199,6 @@ const getters = {
     ),
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
-  getUserLastCollectedTimestampByAddress: state => address =>
-    state.userLastCollectedTimestampMap[address],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStorePricesByClassIdMap[classId],
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
@@ -630,18 +621,6 @@ const actions = {
         created: getters.normalizeNFTList(formattedCreatedNFTClasses),
         collected: getters.normalizeNFTList(formattedCollectedNFTs),
       },
-    });
-
-    const timestampMap = {};
-    formattedCollectedNFTs.forEach(nft => {
-      const { classId, timestamp } = nft;
-      if (!timestampMap[classId] || timestampMap[classId] < timestamp) {
-        timestampMap[classId] = timestamp;
-      }
-    });
-    commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
-      address,
-      timestampMap,
     });
 
     if (shouldFetchDetails) {
