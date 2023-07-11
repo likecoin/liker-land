@@ -671,7 +671,7 @@ const actions = {
     });
 
     if (shouldFetchDetails) {
-      const CHUNK_CLASS_DATA_SIZE = 10;
+      const CHUNK_CLASS_DATA_SIZE = 20;
       const nftClassIds = Array.from(nftClassIdDataMap.keys());
       await Promise.all(
         chunk(nftClassIds, CHUNK_CLASS_DATA_SIZE).map(classIds =>
