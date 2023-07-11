@@ -21,6 +21,7 @@ module.exports = onRequest(
       'GET_WALLET_API_SECRET',
     ],
     region: ['us-west1'],
+    memory: '512MiB',
   },
   app
 );
