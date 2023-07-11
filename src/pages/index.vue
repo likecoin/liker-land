@@ -313,6 +313,7 @@ export default {
         const data = await this.lazyGetISCNMetadataById(iscnPrefix);
         return data.owner;
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(`Failed to fetch owner of ${classData.id}`);
         return null;
       }

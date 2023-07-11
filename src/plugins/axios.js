@@ -1,6 +1,6 @@
 import HttpAgent, { HttpsAgent } from 'agentkeepalive';
 
-export default function(ctx, inject) {
+export default (ctx, inject) => {
   let options = {
     timeout: 60000,
   };
@@ -14,4 +14,4 @@ export default function(ctx, inject) {
   const instance = ctx.$axios.create(options);
   ctx.$api = instance;
   inject('api', instance);
-}
+};

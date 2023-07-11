@@ -1,4 +1,4 @@
-export default function({
+export default ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   req,
   res,
@@ -7,7 +7,7 @@ export default function({
   error,
   redirect,
   localeLocation,
-}) {
+}) => {
   if (!store.getters.getUserId) {
     let message;
     switch (route.name) {
@@ -34,4 +34,4 @@ export default function({
     res.set('Cache-Control', 'private');
     res.set('Vary', 'Cookie');
   }
-}
+};

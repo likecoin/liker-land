@@ -185,6 +185,35 @@ export default {
   name: 'NFTPortfolioPage',
   mixins: [walletMixin, portfolioMixin, alertMixin],
   layout: 'default',
+  async asyncData({ route, $api, error, store, redirect }) {
+    let { id } = route.params;
+    if (id && isValidAddress(id)) {
+      if (id.startsWith('cosmos1')) {
+        id = convertAddressPrefix(id, 'like');
+      }
+      if (id.startsWith('like1')) {
+        try {
+          await store.dispatch('fetchUserInfoByAddress', id);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
+        return;
+      }
+    }
+    if (id && checkUserNameValid(id)) {
+      try {
+        const userInfo = await $api.$get(getUserMinAPI(id));
+        redirect({ ...route, params: { id: userInfo.likeWallet } });
+        return;
+      } catch (err) {
+        const msg = (err.response && err.response.data) || err;
+        // eslint-disable-next-line no-console
+        console.error(msg);
+      }
+    }
+    error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
+  },
   data() {
     return { isOpenFollowersDialog: false };
   },
@@ -267,35 +296,6 @@ export default {
         }
       }
     },
-  },
-  async asyncData({ route, $api, error, store, redirect }) {
-    let { id } = route.params;
-    if (id && isValidAddress(id)) {
-      if (id.startsWith('cosmos1')) {
-        id = convertAddressPrefix(id, 'like');
-      }
-      if (id.startsWith('like1')) {
-        try {
-          await store.dispatch('fetchUserInfoByAddress', id);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
-        return;
-      }
-    }
-    if (id && checkUserNameValid(id)) {
-      try {
-        const userInfo = await $api.$get(getUserMinAPI(id));
-        redirect({ ...route, params: { id: userInfo.likeWallet } });
-        return;
-      } catch (err) {
-        const msg = (err.response && err.response.data) || err;
-        // eslint-disable-next-line no-console
-        console.error(msg);
-      }
-    }
-    error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
   },
   mounted() {
     this.syncRouteForTab();

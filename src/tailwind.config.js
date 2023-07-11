@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/no-extraneous-dependencies
 const path = require('path');
 
@@ -8,7 +7,7 @@ function getLineClamp(value = 1) {
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
     '-webkit-line-clamp': `${value}`,
-  }
+  };
 }
 
 /*
@@ -70,8 +69,8 @@ const colors = {
   white: '#ffffff',
   current: 'currentColor',
 
-  'danger': '#e35050',
-  'success': '#36de00',
+  danger: '#e35050',
+  success: '#36de00',
 
   'like-green': '#28646e',
   'like-green-dark': '#235760',
@@ -86,14 +85,14 @@ const colors = {
   'like-cyan-translucent': 'rgba(80, 227, 194, 0.15)',
   'like-cyan-translucent-dark': 'rgba(26, 163, 132, 0.15)',
 
-  'like-dark-green':'#245b64',
+  'like-dark-green': '#245b64',
   'like-cyan-extralight': '#D7ECEC',
   'dark-gray': '#4A4A4A',
   'medium-gray': '#9B9B9B',
   'shade-gray': '#EBEBEB',
   'light-gray': '#F7F7F7',
-  'airdrop-gold':'#D1AB79',
-  'twitter-blue':'#4696F1',
+  'airdrop-gold': '#D1AB79',
+  'twitter-blue': '#4696F1',
 };
 
 module.exports = {
@@ -155,11 +154,11 @@ module.exports = {
     */
 
     fontFamily: {
-      'proxima': ['proxima-nova', 'sans-serif'],
-      'sans': ['open-sans', 'sans-serif'],
-      'serif': ['source-han-serif-tc', 'serif'],
-      'mono': ['monospace'],
-      'emoji': ['emoji'],
+      proxima: ['proxima-nova', 'sans-serif'],
+      sans: ['open-sans', 'sans-serif'],
+      serif: ['source-han-serif-tc', 'serif'],
+      mono: ['monospace'],
+      emoji: ['emoji'],
     },
 
     /*
@@ -603,7 +602,7 @@ module.exports = {
       '128': '8rem',
     },
 
-      /*
+    /*
     |-----------------------------------------------------------------------------
     | Margin                                  https://tailwindcss.com/docs/margin
     |-----------------------------------------------------------------------------
@@ -641,7 +640,7 @@ module.exports = {
       '128': '8rem',
     },
 
-      /*
+    /*
     |-----------------------------------------------------------------------------
     | Negative margin                https://tailwindcss.com/docs/negative-margin
     |-----------------------------------------------------------------------------
@@ -737,7 +736,6 @@ module.exports = {
   |
   */
 
-
   plugins: [
     ({ addUtilities }) => {
       addUtilities({
@@ -750,14 +748,14 @@ module.exports = {
           'background-image': 'linear-gradient(78deg, #f0d2d2, #f0e6b4)',
         },
         '.scrollbar-custom': {
-          'scrollbar-width': '5px', /* Firefox */
-          'scrollbar-height': '5px', /* Firefox */
+          'scrollbar-width': '5px' /* Firefox */,
+          'scrollbar-height': '5px' /* Firefox */,
           '&::-webkit-scrollbar': {
-            width: '5px', /* Chrome */
-            height: '5px' /* Chrome */
+            width: '5px' /* Chrome */,
+            height: '5px' /* Chrome */,
           },
           '&::-webkit-scrollbar-track': {
-            background: 'transparent'
+            background: 'transparent',
           },
           '&::-webkit-scrollbar-thumb': {
             borderRadius: '4px',
@@ -765,7 +763,7 @@ module.exports = {
           },
           '&::-webkit-scrollbar-thumb:hover': {
             background: '#9B9B9B',
-          }
+          },
         },
       });
     },
