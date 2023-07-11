@@ -133,6 +133,9 @@ export default {
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
+    handleNFTBookHeroAnimateComplete() {
+      this.isNFTBookHeroAnimationComplete = true;
+    },
     onClickAlertBanner(type = 'primary') {
       logTrackerEvent(
         this,

@@ -11,7 +11,7 @@
         'h-full',
         'min-h-[320px] laptop:min-h-[420px] desktop:min-h-[544px]',
       ]"
-      style="background-color: #cee3e3"
+      style="background-color: #cee3e3; opacity: 0"
     >
       <div class="absolute inset-0 overflow-hidden pointer-events-none flex justify-center items-center">
         <svg
@@ -288,6 +288,8 @@ import keyArtImage from '~/assets/images/nft/hero/key-art-graphic.jpg';
 // NOTE: Control key art speed
 const KEY_ART_SPEED = 0.5;
 
+const SESSION_STORAGE_KEY = 'nft_book_hero_animation';
+
 export default {
   name: 'NFTBookHero',
   computed: {
@@ -434,11 +436,6 @@ export default {
         },
       });
 
-      timeline.from(hero, {
-        opacity: 0.2,
-        delay: 0.5,
-      });
-
       const boxesPaths = [...bgOutlinedBoxes.childNodes]
         .map(el => el.childNodes[0])
         .filter(el => el?.tagName === 'path');
@@ -452,6 +449,20 @@ export default {
         },
         ease: 'power1.inOut',
         transformOrigin: 'center center',
+      });
+
+      const hasAnimatedInThisSession = this.getHasAnimatedInThisSession();
+      if (hasAnimatedInThisSession) {
+        timeline.set(hero, { opacity: 1 });
+        this.startScrollingAnimation();
+        this.notifyAnimationComplete();
+        return;
+      }
+      this.setHasAnimatedInThisSession();
+
+      timeline.to(hero, {
+        opacity: 1,
+        delay: 0.5,
       });
 
       const dotTimeline = this.$gsap.gsap.timeline();
@@ -597,23 +608,7 @@ export default {
           stagger: 0.25,
           transformOrigin: 'center center',
           onComplete: () => {
-            const scrollAnimation = this.$gsap.gsap.timeline({
-              scrollTrigger: {
-                trigger: hero,
-                start: 'top top',
-                end: 'bottom+=25% top',
-                scrub: true,
-              },
-            });
-            const boxesInReverseOrder = [...boxes];
-            boxesInReverseOrder.reverse();
-            scrollAnimation.to(boxesInReverseOrder, {
-              duration: 1,
-              stagger: 0.1,
-              rotation: 50,
-              ease: 'power1.in',
-              transformOrigin: 'center center',
-            });
+            this.startScrollingAnimation();
           },
         },
         'keyArtMorphingStart'
@@ -803,7 +798,7 @@ export default {
           opacity: 0,
           duration: 1,
           onComplete: () => {
-            this.$emit('animate-complete');
+            this.notifyAnimationComplete();
           },
         },
         '-=0.8'
@@ -871,6 +866,44 @@ export default {
         ease: 'power2.out',
         transformOrigin: 'center center',
       });
+    },
+    startScrollingAnimation() {
+      const { hero, bgOutlinedBoxes } = this.$refs;
+      const boxes = [...bgOutlinedBoxes.childNodes].filter(
+        el => el.tagName === 'g'
+      );
+      boxes.reverse();
+      const scrollAnimation = this.$gsap.gsap.timeline({
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom+=25% top',
+          scrub: true,
+        },
+      });
+      scrollAnimation.to(boxes, {
+        duration: 1,
+        stagger: 0.1,
+        rotation: 50,
+        ease: 'power1.in',
+        transformOrigin: 'center center',
+      });
+    },
+    getHasAnimatedInThisSession() {
+      let shouldStopAnimation = false;
+      try {
+        shouldStopAnimation =
+          sessionStorage.getItem(SESSION_STORAGE_KEY) === '1';
+      } catch {}
+      return shouldStopAnimation;
+    },
+    setHasAnimatedInThisSession() {
+      try {
+        sessionStorage.setItem(SESSION_STORAGE_KEY, '1');
+      } catch {}
+    },
+    notifyAnimationComplete() {
+      this.$emit('animate-complete');
     },
     handleResize() {
       this.cx = window.innerWidth / 2;
