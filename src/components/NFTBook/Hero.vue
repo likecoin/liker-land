@@ -464,6 +464,7 @@ export default {
       const hasAnimatedInThisSession = this.getHasPreviouslyAnimated();
       if (hasAnimatedInThisSession) {
         this.$gsap.gsap.set(hero, { opacity: 1 });
+        this.isAnimationCompleted = true;
         this.startScrollingAnimation();
         this.notifyAnimationComplete();
         return;
