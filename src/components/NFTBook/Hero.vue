@@ -451,14 +451,14 @@ export default {
         transformOrigin: 'center center',
       });
 
-      const hasAnimatedInThisSession = this.getHasAnimatedInThisSession();
+      const hasAnimatedInThisSession = this.getHasPreviouslyAnimated();
       if (hasAnimatedInThisSession) {
         timeline.set(hero, { opacity: 1 });
         this.startScrollingAnimation();
         this.notifyAnimationComplete();
         return;
       }
-      this.setHasAnimatedInThisSession();
+      this.setHasPreviouslyAnimated();
 
       timeline.to(hero, {
         opacity: 1,
@@ -889,17 +889,16 @@ export default {
         transformOrigin: 'center center',
       });
     },
-    getHasAnimatedInThisSession() {
+    getHasPreviouslyAnimated() {
       let shouldStopAnimation = false;
       try {
-        shouldStopAnimation =
-          sessionStorage.getItem(SESSION_STORAGE_KEY) === '1';
+        shouldStopAnimation = localStorage.getItem(SESSION_STORAGE_KEY) === '1';
       } catch {}
       return shouldStopAnimation;
     },
-    setHasAnimatedInThisSession() {
+    setHasPreviouslyAnimated() {
       try {
-        sessionStorage.setItem(SESSION_STORAGE_KEY, '1');
+        localStorage.setItem(SESSION_STORAGE_KEY, '1');
       } catch {}
     },
     notifyAnimationComplete() {
