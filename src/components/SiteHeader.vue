@@ -27,7 +27,7 @@
 
       <div v-if="loginAddress" class="relative">
         <ButtonV2
-          preset="tertiary"
+          :preset="isPlain ? 'plain' : 'tertiary'"
           :to="localeLocation({ name: 'notifications' })"
         >
           <IconBell class="w-20 h-20 text-like-green" />
@@ -61,7 +61,7 @@
       <Dropdown>
         <template #trigger="{ toggle }">
           <ButtonV2
-            preset="tertiary"
+            :preset="isPlain ? 'plain' : 'tertiary'"
             @click="toggle"
           >
             <GlobeIcon class="w-20 h-20 fill-like-green" />
@@ -82,7 +82,7 @@
       <ButtonV2
         v-if="!getAddress"
         class="hidden laptop:flex"
-        preset="secondary"
+        :preset="isPlain ? 'outline' : 'secondary'"
         :text="$t('header_button_connect_to_wallet')"
         @click="connectWallet"
       >
@@ -185,6 +185,12 @@ export default {
   filters: {
     ellipsis,
     formatNumber,
+  },
+  props: {
+    isPlain: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     Logo,
