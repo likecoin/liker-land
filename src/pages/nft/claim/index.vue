@@ -86,6 +86,7 @@ import {
 import {
   postStripeFiatPendingClaim,
   getNFTBookClaimEndpoint,
+  getNFTBookPaymentStatusEndpoint,
 } from '~/util/api';
 
 import alertMixin from '~/mixins/alert';
@@ -168,17 +169,30 @@ export default {
       );
     },
   },
-  mounted() {
+  async mounted() {
     const { redirect, ...query } = this.$route.query;
-    if (redirect) {
-      // TODO: get price from payment_id
+    if (redirect && query.type === 'nft_book') {
+      let price;
+      try {
+        const { data } = await this.$api.get(
+          getNFTBookPaymentStatusEndpoint({
+            classId: this.classId,
+            paymentId: this.paymentId,
+          })
+        );
+        ({ price } = data);
+      } catch (err) {
+        console.error(err);
+      }
       logPurchaseFlowEvent(this, 'purchase', {
         items: [
           {
             name: this.NFTName,
             classId: this.classId,
+            price,
           },
         ],
+        price,
         currency: 'USD',
         isNFTBook: true,
       });
@@ -186,6 +200,7 @@ export default {
         name: this.NFTName,
         currency: 'USD',
         classId: this.classId,
+        price,
       });
       this.$router.replace({
         ...this.$route,
