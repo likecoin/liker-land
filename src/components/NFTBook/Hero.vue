@@ -273,11 +273,22 @@
         </svg>
       </div>
     </div>
+
+    <Transition name="fade">
+      <ButtonV2
+        v-if="isShowSkipButton"
+        class="fixed bottom-0 right-0 m-[1.5rem] z-1"
+        preset="outline"
+        :text="$t('nft_book_hero_skip_animation_button')"
+        @click="skipAnimation"
+      />
+    </Transition>
   </div>
 </template>
 
 <script>
 import { checkIsMobileClient } from '~/util/client';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import titleLeftImageEn from '~/assets/images/nft/hero/title-left-en.png';
 import titleLeftImageZh from '~/assets/images/nft/hero/title-left-zh.png';
@@ -292,6 +303,11 @@ const SESSION_STORAGE_KEY = 'nft_book_hero_animation';
 
 export default {
   name: 'NFTBookHero',
+  data() {
+    return {
+      isShowSkipButton: false,
+    };
+  },
   computed: {
     isEnglish() {
       return this.$i18n.locale === 'en';
@@ -430,12 +446,6 @@ export default {
         titleRightDotsGroup,
       } = this.$refs;
 
-      const timeline = this.$gsap.gsap.timeline({
-        onComplete: () => {
-          this.isAnimationCompleted = true;
-        },
-      });
-
       const boxesPaths = [...bgOutlinedBoxes.childNodes]
         .map(el => el.childNodes[0])
         .filter(el => el?.tagName === 'path');
@@ -453,14 +463,21 @@ export default {
 
       const hasAnimatedInThisSession = this.getHasPreviouslyAnimated();
       if (hasAnimatedInThisSession) {
-        timeline.set(hero, { opacity: 1 });
+        this.$gsap.gsap.set(hero, { opacity: 1 });
         this.startScrollingAnimation();
         this.notifyAnimationComplete();
         return;
       }
+      this.isShowSkipButton = true;
       this.setHasPreviouslyAnimated();
 
-      timeline.to(hero, {
+      this.animation = this.$gsap.gsap.timeline({
+        onComplete: () => {
+          this.isAnimationCompleted = true;
+        },
+      });
+
+      this.animation.to(hero, {
         opacity: 1,
         delay: 0.5,
       });
@@ -590,14 +607,14 @@ export default {
         'openBook'
       );
 
-      timeline.add(dotTimeline);
+      this.animation.add(dotTimeline);
 
-      timeline.addLabel('keyArtMorphingStart');
+      this.animation.addLabel('keyArtMorphingStart');
 
       const boxes = [...bgOutlinedBoxes.childNodes].filter(
         el => el.tagName === 'g'
       );
-      timeline.from(
+      this.animation.from(
         boxes,
         {
           scale: 0.5,
@@ -614,7 +631,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         [bookCoverGroup, bookBindGroup],
         {
           rotation: -360,
@@ -625,7 +642,7 @@ export default {
         },
         'keyArtMorphingStart'
       );
-      timeline.from(
+      this.animation.from(
         keyArtGroup,
         {
           opacity: 0,
@@ -637,7 +654,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtTopRight,
         {
           keyframes: {
@@ -651,7 +668,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtTopRightQuarterTopRight,
         {
           keyframes: {
@@ -663,7 +680,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtTopRightQuarterTopLeft,
         {
           keyframes: {
@@ -676,7 +693,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.fromTo(
+      this.animation.fromTo(
         keyArtTopRightCircle,
         {
           y: 60,
@@ -694,7 +711,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtBottomRight,
         {
           keyframes: {
@@ -708,7 +725,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.fromTo(
+      this.animation.fromTo(
         keyArtBottomRightCircle,
         {
           y: -60,
@@ -726,7 +743,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtTopLeftQuarterBottomRight,
         {
           keyframes: {
@@ -738,7 +755,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtTopLeft,
         {
           keyframes: {
@@ -752,7 +769,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.to(
+      this.animation.to(
         keyArtBottomLeft,
         {
           keyframes: {
@@ -766,7 +783,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.fromTo(
+      this.animation.fromTo(
         keyArtBottomLeftCircle,
         {
           y: -60,
@@ -784,7 +801,7 @@ export default {
         'keyArtMorphingStart'
       );
 
-      timeline.from(
+      this.animation.from(
         titleLeft,
         {
           opacity: 0,
@@ -792,21 +809,22 @@ export default {
         },
         '-=0.8'
       );
-      timeline.from(
+      this.animation.from(
         [titleRight, titleRightDotsGroup],
         {
           opacity: 0,
           duration: 1,
           onComplete: () => {
+            this.isShowSkipButton = false;
             this.notifyAnimationComplete();
           },
         },
         '-=0.8'
       );
 
-      timeline.addLabel('keyArtAnimationEnd');
+      this.animation.addLabel('keyArtAnimationEnd');
 
-      timeline.from(
+      this.animation.from(
         prepend,
         {
           y: '-100%',
@@ -817,7 +835,7 @@ export default {
         'keyArtAnimationEnd'
       );
 
-      timeline.from(
+      this.animation.from(
         banner,
         {
           y: `${-prepend.clientHeight / 2}px`,
@@ -828,7 +846,7 @@ export default {
         'keyArtAnimationEnd'
       );
 
-      timeline.to(
+      this.animation.to(
         bgOutlinedBoxes,
         {
           y: `+=${prepend.clientHeight / 2}px`,
@@ -839,7 +857,7 @@ export default {
         'keyArtAnimationEnd'
       );
 
-      timeline.from(
+      this.animation.from(
         hero,
         {
           height: window.innerHeight,
@@ -851,7 +869,7 @@ export default {
       );
 
       // NOTE: Uncomment to pause timeline for debugging
-      // timeline.pause('keyArtMorphingStart+=0.1');
+      // this.animation.pause('keyArtMorphingStart+=0.1');
     },
     animateKeyArtTransform() {
       const dx = this.mouse.x - this.cx;
@@ -903,6 +921,22 @@ export default {
     },
     notifyAnimationComplete() {
       this.$emit('animate-complete');
+    },
+    skipAnimation() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_book_skip_animation_button_clicked',
+        '',
+        1
+      );
+      this.isShowSkipButton = false;
+      if (!this.animation) return;
+      this.$gsap.gsap.to(this.animation, {
+        progress: 1,
+        duration: 1,
+        ease: 'power1.out',
+      });
     },
     handleResize() {
       this.cx = window.innerWidth / 2;
