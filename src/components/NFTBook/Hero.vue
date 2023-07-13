@@ -940,12 +940,16 @@ export default {
       });
     },
     handleResize() {
-      this.cx = window.innerWidth / 2;
-      this.cy = window.innerHeight / 2;
+      const { hero } = this.$refs;
+      if (!hero) return;
+      this.cx = hero.clientWidth / 2;
+      this.cy = hero.clientHeight / 2;
     },
     handleMouseMove(event) {
+      const { hero } = this.$refs;
+      if (!hero) return;
       this.mouse.x = event.pageX;
-      this.mouse.y = event.pageY;
+      this.mouse.y = Math.min(event.pageY, hero.clientHeight);
 
       if (!this.isAnimationCompleted) return;
 
