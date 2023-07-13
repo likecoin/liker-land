@@ -269,10 +269,6 @@ export default {
   name: 'NFTClassDetailsPage',
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   layout: 'default',
-  asyncData({ query }) {
-    const { action } = query;
-    return { action };
-  },
   data() {
     return {
       isLoading: true,
@@ -281,6 +277,44 @@ export default {
       isTransferring: false,
       isCollecting: false,
     };
+  },
+  computed: {
+    classId() {
+      return this.$route.params.classId;
+    },
+    platform() {
+      return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
+    },
+    isTransferDisabled() {
+      return this.isOwnerInfoLoading || !this.userCollectedCount;
+    },
+    isShowPriceSection() {
+      return this.NFTPrice !== undefined && this.NFTPrice > 0;
+    },
+    creatorMessage() {
+      return this.messageList.find(
+        element => element.event === 'mint_nft' || element.event === 'purchase'
+      );
+    },
+    isFollowed() {
+      return this.walletFollowees?.includes(this.iscnOwner) || false;
+    },
+    isContentViewable() {
+      return !(this.nftIsNFTBook && !this.ownCount);
+    },
+    defaultSelectedValue() {
+      return this.nftEditions[0]?.value;
+    },
+    controlBarPriceLabel() {
+      return (
+        this.nftBookAvailablePrice ||
+        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
+      );
+    },
+  },
+  asyncData({ query }) {
+    const { action } = query;
+    return { action };
   },
   async fetch({ route, store, redirect, error, localeLocation }) {
     const { classId } = route.params;
@@ -415,40 +449,6 @@ export default {
           ]
         : [],
     };
-  },
-  computed: {
-    classId() {
-      return this.$route.params.classId;
-    },
-    platform() {
-      return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
-    },
-    isTransferDisabled() {
-      return this.isOwnerInfoLoading || !this.userCollectedCount;
-    },
-    isShowPriceSection() {
-      return this.NFTPrice !== undefined && this.NFTPrice > 0;
-    },
-    creatorMessage() {
-      return this.messageList.find(
-        element => element.event === 'mint_nft' || element.event === 'purchase'
-      );
-    },
-    isFollowed() {
-      return this.walletFollowees?.includes(this.iscnOwner) || false;
-    },
-    isContentViewable() {
-      return !(this.nftIsNFTBook && !this.ownCount);
-    },
-    defaultSelectedValue() {
-      return this.nftEditions[0]?.value;
-    },
-    controlBarPriceLabel() {
-      return (
-        this.nftBookAvailablePrice ||
-        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
-      );
-    },
   },
   async mounted() {
     try {
