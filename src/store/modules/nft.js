@@ -246,12 +246,8 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
-          X = Date.parse(
-            getters.getNFTClassMetadataById(a)?.iscn_record_timestamp
-          );
-          Y = Date.parse(
-            getters.getNFTClassMetadataById(b)?.iscn_record_timestamp
-          );
+          X = nA.createdAt;
+          Y = nB.createdAt;
           break;
       }
       return compareNumber(X, Y, order);
@@ -530,8 +526,6 @@ const actions = {
     if (!(metadata.iscn_owner || metadata.account_owner)) {
       if (iscnRecord) {
         metadata.iscn_owner = iscnRecord.owner;
-        metadata.iscn_record_timestamp =
-          iscnRecord?.records?.[0]?.recordTimestamp;
       } else if (parent.account) {
         metadata.account_owner = parent.account;
       }
