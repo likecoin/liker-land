@@ -306,6 +306,7 @@ import { mapActions, mapGetters } from 'vuex';
 import modelLoadingImage from '~/assets/images/nft/model-loading.png';
 import LocalMallIcon from '~/assets/icons/local-mall.svg?inline';
 
+import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
@@ -384,7 +385,7 @@ export default {
       'walletInteractedCreators',
     ]),
     enableStripe() {
-      return true;
+      return !checkIsLikeCoinAppInAppBrowser(this.$route);
     },
     developerMode() {
       return !!this.$route.query.debug;
