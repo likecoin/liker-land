@@ -23,12 +23,27 @@
             "
           >
             <span class="whitespace-nowrap">{{
+              $t('about_nft_page_title')
+            }}</span>
+            <br/>
+          </h1>
+
+          <h2
+            class="
+              font-proxima font-[300]
+              text-like-green text-[20px]
+              laptop:text-[38px]
+              leading-[1.25]
+              text-center
+            "
+          >
+            <span class="whitespace-nowrap">{{
               $t('campaign_nft_page_tagline_1')
             }}</span>
             <span class="whitespace-nowrap">{{
               $t('campaign_nft_page_tagline_2')
             }}</span>
-          </h1>
+          </h2>
           <p
             v-t="'campaign_nft_page_description'"
             class="mt-[16px] max-w-[536px] mx-auto"
