@@ -161,9 +161,18 @@ export const getISCNRecord = iscnId => {
   )}`;
 };
 
-export const getNFTClassesPartial = ({ owner, reverse, limit, key }) => {
+export const getNFTClassesPartial = ({
+  iscnOwner,
+  nftOwner,
+  expand,
+  reverse,
+  limit,
+  key,
+}) => {
   const qsPayload = {
-    iscn_owner: owner,
+    iscn_owner: iscnOwner,
+    owner: nftOwner,
+    expand,
   }; // TODO: support account based query
   if (reverse) qsPayload['pagination.reverse'] = reverse;
   if (limit) qsPayload['pagination.limit'] = limit;

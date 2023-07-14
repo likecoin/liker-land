@@ -214,17 +214,6 @@ export function checkIsNFTBook(classMetadata) {
   );
 }
 
-export function formatNFTInfo(nftInfo) {
-  const {
-    class_id: classId,
-    nft_id: nftId,
-    timestamp: timestampStr,
-    uri,
-  } = nftInfo;
-  const timestamp = Date.parse(timestampStr);
-  return { classId, nftId, timestamp, uri };
-}
-
 export function formatNFTEvent(event) {
   const {
     class_id: classId,
@@ -285,28 +274,31 @@ const queryAllDataFromChain = async (axios, api, field, input = {}) => {
   return result;
 };
 
-export const fetchAllNFTFromChain = async (axios, owner) => {
-  const nfts = await queryAllDataFromChain(axios, api.getNFTsPartial, 'nfts', {
-    expandClasses: true,
-    owner,
-  });
-  // sort by last colleted by default
-  return nfts;
-};
-
 export function formatNFTClassInfo(classData) {
-  return {
+  const result = {
     classId: classData.id,
-    timestamp: new Date(classData.created_at).getTime(),
+    classCreatedAt: new Date(classData.created_at).getTime(),
+    price: classData.latest_price, // rough price
   };
+  // for collected
+  if (classData.nfts) {
+    result.nfts = classData.nfts.map(nft => ({
+      nftId: nft.nft_id,
+      timestamp: nft.price_updated_at ? Date.parse(nft.price_updated_at) : 0,
+    }));
+  }
+  return result;
 }
 
-export const fetchAllNFTClassFromChain = async (axios, owner) => {
+export const fetchAllNFTClassFromChain = async (
+  axios,
+  { iscnOwner, nftOwner, expand }
+) => {
   const classes = await queryAllDataFromChain(
     axios,
     api.getNFTClassesPartial,
     'classes',
-    { owner }
+    { iscnOwner, nftOwner, expand }
   );
   return classes;
 };

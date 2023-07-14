@@ -8,14 +8,11 @@ import {
   checkIsWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
-  fetchAllNFTFromChain,
   fetchAllNFTClassFromChain,
   getNFTClassCollectionType,
   nftClassCollectionType,
-  formatNFTInfo,
   formatNFTClassInfo,
 } from '~/util/nft';
-import { catchAxiosError } from '~/util/misc';
 import {
   loadShoppingCartFromStorage,
   saveShoppingCartToStorage,
@@ -592,26 +589,27 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress({ commit, getters }, address) {
-    const [collectedNFTs, createdNFTClasses] = await Promise.all([
-      fetchAllNFTFromChain(this.$api, address),
-      fetchAllNFTClassFromChain(this.$api, address),
+  async fetchNFTListByAddress({ commit, dispatch }, address) {
+    const [collected, created] = await Promise.all([
+      fetchAllNFTClassFromChain(this.$api, { nftOwner: address, expand: true }),
+      fetchAllNFTClassFromChain(this.$api, { iscnOwner: address }),
     ]);
 
-    const nftClassIdDataMap = new Map();
-    collectedNFTs.forEach(n => nftClassIdDataMap.set(n.class_id, n.class_data));
-    createdNFTClasses.forEach(c => nftClassIdDataMap.set(c.id, c));
-
-    const formattedCreatedNFTClasses = createdNFTClasses.map(
-      formatNFTClassInfo
-    );
-    const formattedCollectedNFTs = collectedNFTs.map(formatNFTInfo);
+    const formattedCreated = created.map(formatNFTClassInfo);
+    const formattedCollected = collected.map(formatNFTClassInfo);
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
       nfts: {
-        created: getters.normalizeNFTList(formattedCreatedNFTClasses),
-        collected: getters.normalizeNFTList(formattedCollectedNFTs),
+        created: formattedCreated,
+        collected: formattedCollected,
       },
+    });
+
+    const nftClassIdDataMap = new Map();
+    collected.forEach(c => nftClassIdDataMap.set(c.id, c));
+    created.forEach(c => nftClassIdDataMap.set(c.id, c));
+    nftClassIdDataMap.forEach((classData, classId) => {
+      dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
     });
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
