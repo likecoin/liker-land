@@ -309,27 +309,6 @@ const getters = {
     });
     return sorted;
   },
-  normalizeNFTList: (_, getters) => list =>
-    [
-      ...new Map(
-        list.map(({ classId, nftId, ...data }) => [
-          classId,
-          { ...data, classId, id: nftId },
-        ])
-      ).values(),
-    ]
-      .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
-      .sort((a, b) => {
-        const aIsWritingNFT = checkIsWritingNFT(
-          getters.getNFTClassMetadataById(a.classId)
-        );
-        const bIsWritingNFT = checkIsWritingNFT(
-          getters.getNFTClassMetadataById(b.classId)
-        );
-        if (aIsWritingNFT && !bIsWritingNFT) return -1;
-        if (!aIsWritingNFT && bIsWritingNFT) return 1;
-        return b.timestamp - a.timestamp;
-      }),
   shoppingCartNFTClassList: state => {
     const list = [...Object.entries(state.shoppingCartNFTClassByIdMap)].map(
       ([classId, data]) => ({ classId, ...data })
