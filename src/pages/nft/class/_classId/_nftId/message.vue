@@ -44,7 +44,7 @@ export default {
     },
   },
   mounted() {
-    this.updateNFTHistory();
+    this.updateNFTHistory({ getAllUserInfo: false });
   },
 };
 </script>

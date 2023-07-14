@@ -623,7 +623,7 @@ export default {
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);
     },
-    async updateNFTHistory() {
+    async updateNFTHistory({ getAllUserInfo = false }) {
       this.isHistoryInfoLoading = true;
       const actionType = [
         '/cosmos.nft.v1beta1.MsgSend',
@@ -656,8 +656,9 @@ export default {
       this.NFTHistory = this.nftIsWritingNFT
         ? populateGrantEvent(latestBatchEvents, dbEventMap)
         : latestBatchEvents;
+      const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
       this.lazyGetUserInfoByAddresses(
-        getUniqueAddressesFromEvent(this.NFTHistory)
+        getAllUserInfo ? uniqueAddresses : uniqueAddresses.slice(0, 10)
       );
       this.isHistoryInfoLoading = false;
 
@@ -674,8 +675,9 @@ export default {
         if (this.nftIsWritingNFT) {
           remainEvents = populateGrantEvent(remainEvents, dbEventMap);
         }
+        const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
         this.lazyGetUserInfoByAddresses(
-          getUniqueAddressesFromEvent(remainEvents)
+          getAllUserInfo ? uniqueAddresses : uniqueAddresses.slice(0, 10)
         );
         this.NFTHistory.push(...remainEvents);
       }
@@ -885,7 +887,7 @@ export default {
           shouldFetchDetails: false,
         });
         this.updateNFTClassAggregatedInfo();
-        this.updateNFTHistory();
+        this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
       }
       return undefined;
@@ -1041,7 +1043,7 @@ export default {
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
         this.updateNFTPurchaseInfo();
-        this.updateNFTHistory();
+        this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
       }
     },

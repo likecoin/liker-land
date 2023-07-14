@@ -23,7 +23,10 @@
             <NFTPageEventListTable :nft-history="trimmedItems" :show-memo="showMemo" />
           </div>
         </div>
-        <ShowMore v-if="shouldShowMore">
+        <ShowMore
+          v-if="shouldShowMore"
+          @click-show-more="$emit('click-show-more-history')"
+        >
           <template #content>
             <NFTPageEventListTable
               class="min-w-[800px]"

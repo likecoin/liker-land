@@ -20,7 +20,10 @@
             :owner="owner"
           />
         </ul>
-        <ShowMore v-if="shouldShowMore">
+        <ShowMore
+          v-if="shouldShowMore"
+          @click-show-more="$emit('click-show-more-collector')"
+        >
           <template #header>
             <div class="flex justify-between mb-[12px] min-w-[310px]">
               <Label

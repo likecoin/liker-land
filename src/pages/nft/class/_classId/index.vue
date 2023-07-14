@@ -74,8 +74,8 @@
           </NFTBookItemCard>
           <div
             v-if="
-              nftEditions.length > 1 ||
-                (nftEditions.length === 1 && nftEditions[0].description)"
+              nftBookAvailablePriceLabel &&
+                (nftEditions.length > 1 || (nftEditions.length === 1 && nftEditions[0].description))"
             ref="compareSection"
             class="max-w-[962px] mx-auto flex flex-col justify-center"
           >
@@ -96,11 +96,18 @@
           </div>
 
           <Separator class="mx-auto" />
-
+          <client-only>
+            <lazy-component
+              class="pointer-events-none"
+              @show.once="fetchTrimmedCollectorsInfo"
+            />
+          </client-only>
           <NFTPageCollectorList
             :class-id="classId"
             :owner-count="ownerCount"
             :items="populatedCollectors"
+            :trimmed-count="trimmedCount"
+            @click-show-more-collector="handleClickMoreCollector"
           />
         </template>
         <section
@@ -168,7 +175,9 @@
               :class-id="classId"
               :owner-count="ownerCount"
               :items="populatedCollectors"
+              :trimmed-count="trimmedCount"
               :is-narrow="true"
+              @click-show-more-collector="handleClickMoreCollector"
             />
             <NFTPagePrimitiveClassInfoSection
               v-if="nftIsPrimitive"
@@ -187,8 +196,13 @@
         </section>
 
         <Separator class="mx-auto" />
-
         <section>
+          <client-only>
+            <lazy-component
+              class="pointer-events-none"
+              @show.once="updateNFTHistory({ getAllUserInfo: false })"
+            />
+          </client-only>
           <NFTPageChainDataSection
             id="chain-data"
             :items="populatedDisplayEvents"
@@ -199,6 +213,7 @@
             :iscn-url="iscnURL"
             :class-id="classId"
             :content-fingerprints="nftISCNContentFingerprints"
+            @click-show-more-history="handleClickMoreHistory"
           />
         </section>
         <!-- recommend -->
@@ -276,6 +291,8 @@ export default {
       isOpenTransferModal: false,
       isTransferring: false,
       isCollecting: false,
+
+      trimmedCount: 10,
     };
   },
   computed: {
@@ -452,9 +469,8 @@ export default {
   },
   async mounted() {
     try {
-      this.lazyGetUserInfoByAddresses(this.iscnOwner);
+      this.lazyGetUserInfoByAddress(this.iscnOwner);
       this.updateNFTOwners();
-      this.updateNFTHistory();
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
@@ -505,6 +521,33 @@ export default {
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice']),
+    async fetchTrimmedCollectorsInfo() {
+      const trimmedCollectors = this.sortedOwnerListId.slice(
+        0,
+        this.trimmedCount
+      );
+      await this.lazyGetUserInfoByAddresses(trimmedCollectors);
+    },
+    async handleClickMoreCollector() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'class_details_show_more_collector_clicked',
+        this.classId,
+        1
+      );
+      await this.lazyGetUserInfoByAddresses(this.sortedOwnerListId);
+    },
+    async handleClickMoreHistory() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'class_details_show_more_history_clicked',
+        this.classId,
+        1
+      );
+      await this.updateNFTHistory({ getAllUserInfo: true });
+    },
     onToggleTransfer() {
       this.isOpenTransferModal = true;
       this.isTransferring = false;
