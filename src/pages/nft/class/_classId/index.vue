@@ -155,7 +155,7 @@
           <Separator class="mx-auto desktop:hidden" />
 
           <!-- Right column -->
-          <div class="flex flex-col gap-[24px] desktop:col-span-2">
+          <div class="relative flex flex-col gap-[24px] desktop:col-span-2">
             <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="hidden w-full desktop:flex" />
             <NFTPagePriceSection
               v-if="isShowPriceSection && nftIsPrimitive"
@@ -171,6 +171,12 @@
               @click-sell="handleClickSellFromPriceSection"
               @hover-sell="handleHoverSellFromPriceSection"
             />
+            <client-only>
+              <lazy-component
+                class="absolute inset-0 pointer-events-none -top-full"
+                @show.once="fetchTrimmedCollectorsInfo"
+              />
+            </client-only>
             <NFTPageCollectorList
               :class-id="classId"
               :owner-count="ownerCount"
