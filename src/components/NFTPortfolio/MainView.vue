@@ -159,6 +159,7 @@
             :portfolio-wallet="portfolioWallet"
             :nft-id="nft.id"
             :portfolio-tab="portfolioTab"
+            :should-fetch-when-visible="true"
             @load-cover="updatePortfolioGrid"
           />
         </li>
