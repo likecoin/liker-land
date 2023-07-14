@@ -623,7 +623,7 @@ export default {
     updateNFTOwners() {
       return this.fetchNFTOwners(this.classId);
     },
-    async updateNFTHistory({ getAllUserInfo = false }) {
+    async updateNFTHistory({ getAllUserInfo = false, trimmedCount = 10 }) {
       this.isHistoryInfoLoading = true;
       const actionType = [
         '/cosmos.nft.v1beta1.MsgSend',
@@ -658,7 +658,9 @@ export default {
         : latestBatchEvents;
       const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
       this.lazyGetUserInfoByAddresses(
-        getAllUserInfo ? uniqueAddresses : uniqueAddresses.slice(0, 10)
+        getAllUserInfo
+          ? uniqueAddresses
+          : uniqueAddresses.slice(0, trimmedCount)
       );
       this.isHistoryInfoLoading = false;
 
@@ -677,7 +679,9 @@ export default {
         }
         const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
         this.lazyGetUserInfoByAddresses(
-          getAllUserInfo ? uniqueAddresses : uniqueAddresses.slice(0, 10)
+          getAllUserInfo
+            ? uniqueAddresses
+            : uniqueAddresses.slice(0, trimmedCount)
         );
         this.NFTHistory.push(...remainEvents);
       }
