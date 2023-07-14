@@ -112,12 +112,6 @@
 
       <slot name="before-grid" />
 
-      <NFTPagePrimitiveDisclaimer
-        v-if="isPortfolioOtherFilterActive"
-        class="w-full"
-        :is-portfolio="true"
-      />
-
       <div
         v-if="isLoadingPortfolioItems"
         class="grid grid-cols-1 laptop:grid-cols-2 gap-[24px] w-full"
