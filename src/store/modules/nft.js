@@ -241,8 +241,8 @@ const getters = {
       let Y;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
-          X = getters.getNFTClassPurchaseInfoById(a)?.price;
-          Y = getters.getNFTClassPurchaseInfoById(b)?.price;
+          X = getters.getNFTClassPurchaseInfoById(a)?.price || nA.price;
+          Y = getters.getNFTClassPurchaseInfoById(b)?.price || nB.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.TYPE: {
@@ -295,13 +295,13 @@ const getters = {
       let Y;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
-          X = getters.getNFTClassPurchaseInfoById(a)?.price;
-          Y = getters.getNFTClassPurchaseInfoById(b)?.price;
+          X = getters.getNFTClassPurchaseInfoById(a)?.price || nA.price;
+          Y = getters.getNFTClassPurchaseInfoById(b)?.price || nB.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
-          X = getters.getNFTClassOwnerInfoById(a)?.[collector]?.length;
-          Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
+          X = nA.nfts.length;
+          Y = nB.nfts.length;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.TYPE: {
@@ -314,8 +314,8 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
-          X = getters.getUserLastCollectedTimestampByAddress(collector)[a];
-          Y = getters.getUserLastCollectedTimestampByAddress(collector)[b];
+          X = nA.nfts[0].collectedAt;
+          Y = nB.nfts[0].collectedAt;
           break;
       }
       return compareNumber(X, Y, order);
