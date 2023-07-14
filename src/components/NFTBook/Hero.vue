@@ -132,7 +132,7 @@
                   <line
                     ref="line1"
                     x1="240"
-                    y1="152"
+                    y1="144"
                     x2="240"
                     y2="240"
                     stroke="currentColor"
@@ -276,9 +276,18 @@
 
     <Transition name="fade">
       <ButtonV2
-        v-if="isShowSkipButton"
+        v-if="isAnimationCompleted"
+        class="absolute right-0 m-[1.5rem] mt-[1rem] z-1"
+        preset="outline"
+        size="mini"
+        :text="$t('nft_book_hero_replay_animation_button')"
+        @click="replayAnimation"
+      />
+      <ButtonV2
+        v-else-if="isShowSkipButton"
         class="fixed bottom-0 right-0 m-[1.5rem] z-1"
         preset="outline"
+        size="mini"
         :text="$t('nft_book_hero_skip_animation_button')"
         @click="skipAnimation"
       />
@@ -305,6 +314,7 @@ export default {
   name: 'NFTBookHero',
   data() {
     return {
+      isAnimationCompleted: false,
       isShowSkipButton: false,
     };
   },
@@ -392,24 +402,9 @@ export default {
     },
   },
   beforeUnmount() {
-    window.removeEventListener('mousemove', this.handleMouseMove);
-    window.removeEventListener('resize', this.handleResize);
+    this.stopMouseAnimation();
   },
   mounted() {
-    const isMobile = checkIsMobileClient();
-    if (!isMobile) {
-      // NOTE: These are not reactive, so we need to set them here
-      this.isAnimationCompleted = false;
-      this.request = null;
-      this.mouse = { x: 0, y: 0 };
-      this.cx = 0;
-      this.cy = 0;
-
-      window.addEventListener('mousemove', this.handleMouseMove);
-      this.handleResize();
-      window.addEventListener('resize', this.handleResize);
-    }
-
     this.animate();
   },
   methods: {
@@ -429,6 +424,7 @@ export default {
         bookCoverRight,
         bookCoverGroup,
         keyArtWrapper,
+        keyArtSVG,
         keyArtGroup,
         keyArtTopRight,
         keyArtTopRightCircle,
@@ -465,10 +461,12 @@ export default {
       if (hasAnimatedInThisSession) {
         this.$gsap.gsap.set(hero, { opacity: 1 });
         this.isAnimationCompleted = true;
+        this.startMouseAnimation();
         this.startScrollingAnimation();
         this.notifyAnimationComplete();
         return;
       }
+      this.isAnimationCompleted = false;
       this.isShowSkipButton = true;
       this.setHasPreviouslyAnimated();
 
@@ -478,21 +476,43 @@ export default {
         },
       });
 
-      this.animation.to(hero, {
-        opacity: 1,
-        delay: 0.5,
-      });
+      this.animation.set(bgOutlinedBoxes, { y: 0 });
+
+      this.animation.fromTo(
+        hero,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          delay: 0.5,
+        }
+      );
 
       const dotTimeline = this.$gsap.gsap.timeline();
-
+      // Reset elements transform
+      dotTimeline.set(keyArtSVG, { transform: 'rotate3d(0, 0, 0, 0deg)' });
+      dotTimeline.set([dot1, dot2], { transform: '' });
       dotTimeline.set([dot1, dot2], {
         scale: 0.1,
         svgOrigin: '240px 240px',
       });
-      dotTimeline.set([bookCoverGroup, bookBindGroup], {
-        opacity: 1,
-      });
       dotTimeline.set([line1, line2], { opacity: 0 });
+      dotTimeline.set(
+        [bookCoverGroup, bookBindGroup, bookCoverLeft, bookCoverRight],
+        {
+          opacity: 1,
+          y: 0,
+          rotation: 0,
+          scale: 1,
+          clearProps: 'transform',
+          svgOrigin: '240px 240px',
+        }
+      );
+      dotTimeline.set([bookBindLeft, bookBindRight], {
+        rotation: 0,
+        scale: 1,
+        svgOrigin: '240px 336px',
+      });
+      dotTimeline.set(bookBindRight, { opacity: 0 });
 
       dotTimeline.addLabel('dotAnimationStart');
 
@@ -524,14 +544,18 @@ export default {
         'dotAnimationStart'
       );
 
-      dotTimeline.set([line1, line2], { opacity: 1, clearProps: 'opacity' });
+      dotTimeline.set([line1, line2], {
+        opacity: 1,
+        attr: { y2: 240 },
+        clearProps: 'opacity',
+      });
 
       dotTimeline.addLabel('dotAnimationEnd');
 
       dotTimeline.from(
         line1,
         {
-          attr: { y2: 152 },
+          attr: { y2: 144 },
           duration: 0.5,
           ease: 'power1.out',
         },
@@ -626,6 +650,7 @@ export default {
           stagger: 0.25,
           transformOrigin: 'center center',
           onComplete: () => {
+            this.startMouseAnimation();
             this.startScrollingAnimation();
           },
         },
@@ -873,6 +898,8 @@ export default {
       // this.animation.pause('keyArtMorphingStart+=0.1');
     },
     animateKeyArtTransform() {
+      if (!this.isAnimationCompleted) return;
+
       const dx = this.mouse.x - this.cx;
       const dy = this.mouse.y - this.cy;
       const tiltX = dy / this.cy;
@@ -885,6 +912,23 @@ export default {
         ease: 'power2.out',
         transformOrigin: 'center center',
       });
+    },
+    startMouseAnimation() {
+      const isMobile = checkIsMobileClient();
+      if (isMobile) return;
+
+      // NOTE: These are not reactive, so we need to set them here
+      this.mouse = { x: 0, y: 0 };
+      this.cx = 0;
+      this.cy = 0;
+
+      window.addEventListener('mousemove', this.handleMouseMove);
+      this.setCenterForMouseAnimation();
+      window.addEventListener('resize', this.setCenterForMouseAnimation);
+    },
+    stopMouseAnimation() {
+      window.removeEventListener('mousemove', this.handleMouseMove);
+      window.removeEventListener('resize', this.setCenterForMouseAnimation);
     },
     startScrollingAnimation() {
       const { hero, bgOutlinedBoxes } = this.$refs;
@@ -920,6 +964,11 @@ export default {
         localStorage.setItem(SESSION_STORAGE_KEY, '1');
       } catch {}
     },
+    removeHasPreviouslyAnimated() {
+      try {
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+      } catch {}
+    },
     notifyAnimationComplete() {
       this.$emit('animate-complete');
     },
@@ -939,7 +988,19 @@ export default {
         ease: 'power1.out',
       });
     },
-    handleResize() {
+    replayAnimation() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_book_restart_animation_button_clicked',
+        '',
+        1
+      );
+      this.removeHasPreviouslyAnimated();
+      this.stopMouseAnimation();
+      this.animate();
+    },
+    setCenterForMouseAnimation() {
       const { hero } = this.$refs;
       if (!hero) return;
       this.cx = hero.clientWidth / 2;
@@ -947,11 +1008,9 @@ export default {
     },
     handleMouseMove(event) {
       const { hero } = this.$refs;
-      if (!hero) return;
+      if (!hero || !this.isAnimationCompleted) return;
       this.mouse.x = event.pageX;
       this.mouse.y = Math.min(event.pageY, hero.clientHeight);
-
-      if (!this.isAnimationCompleted) return;
 
       cancelAnimationFrame(this.animateKeyArtTransformRequest);
       this.animateKeyArtTransformRequest = requestAnimationFrame(
