@@ -7,7 +7,7 @@
       >
         <div class="relative flex items-center justify-center py-[16px]">
           <div class="absolute inset-0 w-full h-full">
-            <img :src="src" :alt="alt" class="h-auto max-w-full blur-sm">
+            <img :src="resizedSrc" :alt="alt" class="h-auto max-w-full blur-sm">
           </div>
           <div
             class="absolute inset-0 w-full h-full"
@@ -55,6 +55,8 @@
   </NFTGemWrapper>
 </template>
 <script>
+import { getImageResizeAPI } from '~/util/api';
+
 export default {
   name: 'NFTBookEditionCompareTableColumn',
   props: {
@@ -80,6 +82,9 @@ export default {
     },
   },
   computed: {
+    resizedSrc() {
+      return getImageResizeAPI(this.src, { width: 450 });
+    },
     themeColor() {
       return this.editionConfig?.style?.themeColor;
     },
