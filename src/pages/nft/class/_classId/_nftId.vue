@@ -520,7 +520,7 @@ export default {
     try {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
-      this.updateNFTHistory();
+      this.updateNFTHistory({ getAllUserInfo: false });
       this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];

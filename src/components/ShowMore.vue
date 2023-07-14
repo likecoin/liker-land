@@ -21,13 +21,13 @@
 
         'rounded-b-[24px]',
       ]"
-      @click="isOpenDialog = true"
+      @click="handleClickShowMore"
     >
       <ButtonV2
         class="pointer-events-auto"
         preset="plain"
         size="small"
-        @click="isOpenDialog = true"
+        @click="handleClickShowMore"
       >{{ $t('nft_details_page_button_show_more') }}
       </ButtonV2>
     </div>
@@ -48,6 +48,12 @@ export default {
   name: 'ShowMore',
   data() {
     return { isOpenDialog: false };
+  },
+  methods: {
+    handleClickShowMore() {
+      this.isOpenDialog = true;
+      this.$emit('click-show-more');
+    },
   },
 };
 </script>
