@@ -277,15 +277,16 @@ const queryAllDataFromChain = async (axios, api, field, input = {}) => {
 export function formatNFTClassInfo(classData) {
   const result = {
     classId: classData.id,
-    classCreatedAt: new Date(classData.created_at).getTime(),
-    price: classData.latest_price, // rough price
+    createdAt: Date.parse(classData.created_at),
+    price: new BigNumber(classData.price).shiftedBy(-9).toNumber(),
   };
   // for collected
   if (classData.nfts) {
     result.nfts = classData.nfts.map(nft => ({
       nftId: nft.nft_id,
-      timestamp: nft.price_updated_at ? Date.parse(nft.price_updated_at) : 0,
+      collectedAt: nft.price_updated_at ? Date.parse(nft.price_updated_at) : 0,
     }));
+    result.nfts.sort((a, b) => b.collectedAt - a.collectedAt);
   }
   return result;
 }

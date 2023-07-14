@@ -624,11 +624,7 @@ const actions = {
     const timestampMap = {};
     formattedCollected.forEach(c => {
       const { classId, nfts } = c;
-      nfts.forEach(({ timestamp }) => {
-        if (!timestampMap[classId] || timestampMap[classId] < timestamp) {
-          timestampMap[classId] = timestamp;
-        }
-      });
+      timestampMap[classId] = nfts[0].collectedAt;
     });
     commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
       address,
