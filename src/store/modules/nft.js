@@ -584,6 +584,13 @@ const actions = {
     nftClassIdDataMap.forEach((classData, classId) => {
       dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
     });
+
+    // load class metadata for top 5 gems
+    collected
+      .filter(c => c.symbol === 'WRITING')
+      .sort((a, b) => b.latest_price - a.latest_price)
+      .slice(0, 5)
+      .forEach(c => dispatch('fetchNFTClassAggregatedInfo', c.id));
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.getUserV2DisplayState(address));
