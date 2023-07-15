@@ -275,22 +275,30 @@
     </div>
 
     <Transition name="fade">
-      <ButtonV2
-        v-if="isAnimationCompleted"
-        class="absolute right-0 m-[1.5rem] mt-[1rem] z-1"
-        preset="outline"
-        size="mini"
-        :text="$t('nft_book_hero_replay_animation_button')"
-        @click="replayAnimation"
-      />
-      <ButtonV2
-        v-else-if="isShowSkipButton"
-        class="fixed bottom-0 right-0 m-[1.5rem] z-1"
-        preset="outline"
-        size="mini"
-        :text="$t('nft_book_hero_skip_animation_button')"
-        @click="skipAnimation"
-      />
+      <div v-if="isAnimationCompleted" class="absolute right-0 m-[1.5rem] mt-[1rem] z-1">
+        <ToolTips :tool-tip-text="$t('nft_book_hero_replay_animation_button')">
+          <ButtonV2
+            preset="outline"
+            size="mini"
+            :circle="true"
+            @click="replayAnimation"
+          >
+            <IconRefresh class="w-[16px]" />
+          </ButtonV2>
+        </ToolTips>
+      </div>
+      <div v-else-if="isShowSkipButton" class="fixed bottom-0 right-0 m-[1.5rem] z-1">
+        <ToolTips :tool-tip-text="$t('nft_book_hero_skip_animation_button')">
+          <ButtonV2
+            preset="outline"
+            size="mini"
+            :circle="true"
+            @click="skipAnimation"
+          >
+            <IconSkipNext class="w-[16px]" />
+          </ButtonV2>
+        </ToolTips>
+      </div>
     </Transition>
   </div>
 </template>
