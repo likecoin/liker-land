@@ -25,7 +25,6 @@
             <span class="whitespace-nowrap">{{
               $t('about_nft_page_title')
             }}</span>
-            <br/>
           </h1>
 
           <h2

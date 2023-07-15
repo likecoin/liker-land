@@ -84,10 +84,10 @@
     >
       <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600] inline">{{ $t('home_section_articles_title') }}</h2>
       <NuxtLink
-        class="mx-[6px] align-text-top text-medium-gray hover:text-like-cyan-dark text-[12px] cursor-pointer"
+        class="mx-[6px] align-text-top text-medium-gray hover:text-like-cyan-dark text-[12px] cursor-pointer inline-block"
         :to="localeLocation({ name: 'writing-nft-about' })"
       >
-        ?
+        <IconHelp />
       </NuxtLink>
       <nav class="flex items-center justify-center mt-[48px]">
         <ul
@@ -132,17 +132,17 @@
     </section>
 
     <section
-      class="mt-[88px] px-[24px] flex gap-[16px]"
+      class="mt-[88px] px-[24px] flex flex-wrap justify-center gap-[16px]"
     >
       <NuxtLink
-        class="flex items-center justify-center mt-[8px] text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
+        class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
         :to="localeLocation({ name: 'writing-nft-about' })"
       >
         {{ $t('home_button_about_writing_nft') }}
       </NuxtLink>
       <a
         v-if="!isInInAppBrowser"
-        class="flex items-center justify-center mt-[8px] text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
+        class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
         href="https://likecoin.github.io/likecoin-nft-dashboard/"
         target="_blank"
         rel="noopener"
