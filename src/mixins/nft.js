@@ -886,10 +886,7 @@ export default {
           );
         }
       } finally {
-        this.fetchNFTListByAddress({
-          address: this.getAddress,
-          shouldFetchDetails: false,
-        });
+        this.fetchNFTListByAddress(this.getAddress);
         this.updateNFTClassAggregatedInfo();
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
@@ -1072,19 +1069,11 @@ export default {
       this.isRecommendationLoading = true;
       try {
         const promises = [
-          this.fetchNFTListByAddress({
-            address: this.iscnOwner,
-            shouldFetchDetails: false,
-          }),
+          this.fetchNFTListByAddress(this.iscnOwner),
           this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
         ];
         if (this.getAddress) {
-          promises.push(
-            this.fetchNFTListByAddress({
-              address: this.getAddress,
-              shouldFetchDetails: false,
-            })
-          );
+          promises.push(this.fetchNFTListByAddress(this.getAddress));
         }
         await Promise.all(promises);
       } catch (error) {

@@ -8,14 +8,11 @@ import {
   checkIsWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
-  fetchAllNFTFromChain,
   fetchAllNFTClassFromChain,
   getNFTClassCollectionType,
   nftClassCollectionType,
-  formatNFTInfo,
   formatNFTClassInfo,
 } from '~/util/nft';
-import { catchAxiosError } from '~/util/misc';
 import {
   loadShoppingCartFromStorage,
   saveShoppingCartToStorage,
@@ -44,7 +41,6 @@ const state = () => ({
   ownerInfoByClassIdMap: {},
   userClassIdListMap: {},
   userNFTClassDisplayStateSetsMap: {},
-  userLastCollectedTimestampMap: {},
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
 });
@@ -94,12 +90,6 @@ const mutations = {
       featuredClassIdSet,
       hiddenClassIdSet,
     });
-  },
-  [TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP](
-    state,
-    { address, timestampMap }
-  ) {
-    Vue.set(state.userLastCollectedTimestampMap, address, timestampMap);
   },
   [TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET](
     state,
@@ -170,7 +160,6 @@ function compareNumber(X, Y, order) {
 }
 
 const getters = {
-  NFTClassIdList: state => state.userClassIdListMap,
   getISCNMetadataById: state => iscnId => state.iscnMetadataByIdMap[iscnId],
   getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getNFTClassFeaturedSetByAddress: state => address =>
@@ -206,8 +195,6 @@ const getters = {
     ),
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
-  getUserLastCollectedTimestampByAddress: state => address =>
-    state.userLastCollectedTimestampMap[address],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStorePricesByClassIdMap[classId],
   filterNFTClassListWithState: state => (nfts, collectorWallet) =>
@@ -245,8 +232,8 @@ const getters = {
       let Y;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
-          X = getters.getNFTClassPurchaseInfoById(a)?.price;
-          Y = getters.getNFTClassPurchaseInfoById(b)?.price;
+          X = getters.getNFTClassPurchaseInfoById(a)?.price || nA.price;
+          Y = getters.getNFTClassPurchaseInfoById(b)?.price || nB.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.TYPE: {
@@ -259,12 +246,8 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.ISCN_TIMESTAMP:
         default:
-          X = Date.parse(
-            getters.getNFTClassMetadataById(a)?.iscn_record_timestamp
-          );
-          Y = Date.parse(
-            getters.getNFTClassMetadataById(b)?.iscn_record_timestamp
-          );
+          X = nA.createdAt;
+          Y = nB.createdAt;
           break;
       }
       return compareNumber(X, Y, order);
@@ -299,13 +282,13 @@ const getters = {
       let Y;
       switch (sorting) {
         case NFT_CLASS_LIST_SORTING.PRICE:
-          X = getters.getNFTClassPurchaseInfoById(a)?.price;
-          Y = getters.getNFTClassPurchaseInfoById(b)?.price;
+          X = getters.getNFTClassPurchaseInfoById(a)?.price || nA.price;
+          Y = getters.getNFTClassPurchaseInfoById(b)?.price || nB.price;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
-          X = getters.getNFTClassOwnerInfoById(a)?.[collector]?.length;
-          Y = getters.getNFTClassOwnerInfoById(b)?.[collector]?.length;
+          X = nA.nfts.length;
+          Y = nB.nfts.length;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.TYPE: {
@@ -318,35 +301,14 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
-          X = getters.getUserLastCollectedTimestampByAddress(collector)[a];
-          Y = getters.getUserLastCollectedTimestampByAddress(collector)[b];
+          X = nA.nfts[0].collectedAt;
+          Y = nB.nfts[0].collectedAt;
           break;
       }
       return compareNumber(X, Y, order);
     });
     return sorted;
   },
-  normalizeNFTList: (_, getters) => list =>
-    [
-      ...new Map(
-        list.map(({ classId, nftId, ...data }) => [
-          classId,
-          { ...data, classId, id: nftId },
-        ])
-      ).values(),
-    ]
-      .filter(({ classId }) => !LIKECOIN_NFT_HIDDEN_ITEMS.has(classId))
-      .sort((a, b) => {
-        const aIsWritingNFT = checkIsWritingNFT(
-          getters.getNFTClassMetadataById(a.classId)
-        );
-        const bIsWritingNFT = checkIsWritingNFT(
-          getters.getNFTClassMetadataById(b.classId)
-        );
-        if (aIsWritingNFT && !bIsWritingNFT) return -1;
-        if (!aIsWritingNFT && bIsWritingNFT) return 1;
-        return b.timestamp - a.timestamp;
-      }),
   shoppingCartNFTClassList: state => {
     const list = [...Object.entries(state.shoppingCartNFTClassByIdMap)].map(
       ([classId, data]) => ({ classId, ...data })
@@ -543,8 +505,6 @@ const actions = {
     if (!(metadata.iscn_owner || metadata.account_owner)) {
       if (iscnRecord) {
         metadata.iscn_owner = iscnRecord.owner;
-        metadata.iscn_record_timestamp =
-          iscnRecord?.records?.[0]?.recordTimestamp;
       } else if (parent.account) {
         metadata.account_owner = parent.account;
       }
@@ -602,56 +562,35 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress(
-    { commit, getters, dispatch },
-    { address, shouldFetchDetails = true } = {}
-  ) {
-    const [collectedNFTs, createdNFTClasses] = await Promise.all([
-      fetchAllNFTFromChain(this.$api, address),
-      fetchAllNFTClassFromChain(this.$api, address),
+  async fetchNFTListByAddress({ commit, dispatch }, address) {
+    const [collected, created] = await Promise.all([
+      fetchAllNFTClassFromChain(this.$api, { nftOwner: address, expand: true }),
+      fetchAllNFTClassFromChain(this.$api, { iscnOwner: address }),
     ]);
 
-    const nftClassIdDataMap = new Map();
-    collectedNFTs.forEach(n => nftClassIdDataMap.set(n.class_id, n.class_data));
-    createdNFTClasses.forEach(c => nftClassIdDataMap.set(c.id, c));
-    if (shouldFetchDetails) {
-      nftClassIdDataMap.forEach((classData, classId) => {
-        dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
-      });
-    }
-
-    const formattedCreatedNFTClasses = createdNFTClasses.map(
-      formatNFTClassInfo
-    );
-    const formattedCollectedNFTs = collectedNFTs.map(formatNFTInfo);
+    const formattedCreated = created.map(formatNFTClassInfo);
+    const formattedCollected = collected.map(formatNFTClassInfo);
     commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
       address,
       nfts: {
-        created: getters.normalizeNFTList(formattedCreatedNFTClasses),
-        collected: getters.normalizeNFTList(formattedCollectedNFTs),
+        created: formattedCreated,
+        collected: formattedCollected,
       },
     });
 
-    const timestampMap = {};
-    formattedCollectedNFTs.forEach(nft => {
-      const { classId, timestamp } = nft;
-      if (!timestampMap[classId] || timestampMap[classId] < timestamp) {
-        timestampMap[classId] = timestamp;
-      }
-    });
-    commit(TYPES.NFT_SET_USER_LAST_COLLECTED_TIMESTAMP_MAP, {
-      address,
-      timestampMap,
+    const nftClassIdDataMap = new Map();
+    collected.forEach(c => nftClassIdDataMap.set(c.id, c));
+    created.forEach(c => nftClassIdDataMap.set(c.id, c));
+    nftClassIdDataMap.forEach((classData, classId) => {
+      dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
     });
 
-    if (shouldFetchDetails) {
-      const nftClassIds = Array.from(nftClassIdDataMap.keys());
-      await Promise.all(
-        nftClassIds.map(classId =>
-          catchAxiosError(dispatch('fetchNFTClassAggregatedInfo', classId))
-        )
-      );
-    }
+    // load class metadata for top 5 gems
+    collected
+      .filter(c => c.symbol === 'WRITING')
+      .sort((a, b) => b.latest_price - a.latest_price)
+      .slice(0, 5)
+      .forEach(c => dispatch('fetchNFTClassAggregatedInfo', c.id));
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.getUserV2DisplayState(address));

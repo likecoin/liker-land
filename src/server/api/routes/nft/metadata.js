@@ -130,8 +130,6 @@ async function getNFTClassAndISCNMetadata(classId) {
   }
   if (iscnOwner) {
     classData.iscn_owner = iscnOwner;
-    classData.iscn_record_timestamp =
-      iscnRes?.data.records?.[0]?.recordTimestamp;
   } else if (parent.account) {
     classData.account_owner = parent.account;
   }
