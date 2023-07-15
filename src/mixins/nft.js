@@ -175,7 +175,10 @@ export default {
     },
     iscnOwner() {
       return (
-        this.NFTClassMetadata?.iscn_owner || this.NFTClassMetadata.account_owner
+        // TODO: refactor iscn owner data location
+        this.iscnData?.owner ||
+        this.NFTClassMetadata?.iscn_owner ||
+        this.NFTClassMetadata.account_owner
       );
     },
     iscnURL() {
