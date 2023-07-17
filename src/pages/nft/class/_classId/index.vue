@@ -6,6 +6,7 @@
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
         <div class="flex items-center justify-end w-full">
           <NFTPageControlBar
+            v-if="!nftIsNFTBook"
             :collected-count="ownCount"
             :class-id="classId"
             :price="controlBarPriceLabel"
