@@ -9,7 +9,7 @@
       'pb-[132px]',
     ]"
   >
-    <section class="w-full">
+    <section v-if="shouldShowNFTBookSection" class="w-full">
       <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
       <div class="w-full max-w-[840px] mx-auto mt-[48px]">
         <NFTBookItemCard
@@ -160,6 +160,7 @@ import {
 } from '~/constant';
 
 import { getNFTClassesPartial, getTopNFTClasses } from '~/util/api';
+import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import inAppMixin from '~/mixins/in-app';
@@ -281,6 +282,9 @@ export default {
         ...item,
         isSelected: item.value === this.currentTab,
       }));
+    },
+    shouldShowNFTBookSection() {
+      return !checkIsLikeCoinAppInAppBrowser(this.$route);
     },
   },
   async mounted() {

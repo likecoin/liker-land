@@ -28,7 +28,7 @@
     <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
 
     <NFTBookHero
-      v-if="isHomePage"
+      v-if="isHomePage && shouldShowNFTBookHero"
       :class="{ 'pb-[84px]': isNFTBookHeroAnimationComplete }"
       @animate-complete="handleNFTBookHeroAnimateComplete"
     >
@@ -93,6 +93,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import alertMixin from '~/mixins/alert';
+import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import inAppMixin from '~/mixins/in-app';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -129,6 +130,9 @@ export default {
     },
     isNFTBookHeroAnimating() {
       return this.isHomePage && !this.isNFTBookHeroAnimationComplete;
+    },
+    shouldShowNFTBookHero() {
+      return !checkIsLikeCoinAppInAppBrowser(this.$route);
     },
   },
   methods: {
