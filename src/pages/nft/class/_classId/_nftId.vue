@@ -330,67 +330,6 @@ export default {
   },
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
   layout: 'default',
-  data() {
-    return {
-      // For <select> to change only, please use `this.nftId` instead
-      selectedNFTId: this.$route.params.nftId,
-      isLoading: true,
-
-      isOpenTransferModal: false,
-      isTransferring: false,
-      isCollecting: false,
-    };
-  },
-  computed: {
-    classId() {
-      return this.$route.params.classId;
-    },
-    nftId() {
-      return this.$route.params.nftId;
-    },
-    isTransferDisabled() {
-      return this.isOwnerInfoLoading || !this.userCollectedCount;
-    },
-    isMessagePage() {
-      return (
-        this.getRouteBaseName(this.$route) === 'nft-class-classId-nftId-message'
-      );
-    },
-    shouldShowMessageButton() {
-      const checkIsTransferMessage = msg =>
-        msg.message && msg.messageType !== 'creator';
-      if (this.messageList.length === 1 && this.creatorMessage?.message) {
-        return false;
-      }
-      if (this.messageList.length > 1 && this.creatorMessage?.message) {
-        return true;
-      }
-      if (
-        this.messageList.length > 1 &&
-        this.messageList.some(checkIsTransferMessage)
-      ) {
-        return true;
-      }
-      return false;
-    },
-    creatorMessage() {
-      return this.messageList.find(
-        element => element.event === 'mint_nft' || element.event === 'purchase'
-      );
-    },
-    validMessageCount() {
-      return this.messageList.filter(element => element.message).length;
-    },
-    isFollowed() {
-      return this.walletFollowees?.includes(this.iscnOwner) || false;
-    },
-    controlBarPriceLabel() {
-      return (
-        this.nftBookAvailablePrice ||
-        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
-      );
-    },
-  },
   async asyncData({ route, query, store, redirect, error, localeLocation }) {
     const { action } = query;
     const { classId, nftId } = route.params;
@@ -435,6 +374,17 @@ export default {
       return undefined;
     }
     return { action };
+  },
+  data() {
+    return {
+      // For <select> to change only, please use `this.nftId` instead
+      selectedNFTId: this.$route.params.nftId,
+      isLoading: true,
+
+      isOpenTransferModal: false,
+      isTransferring: false,
+      isCollecting: false,
+    };
   },
   head() {
     const title = this.nftName || this.$t('nft_details_page_title');
@@ -515,6 +465,56 @@ export default {
           ]
         : [],
     };
+  },
+  computed: {
+    classId() {
+      return this.$route.params.classId;
+    },
+    nftId() {
+      return this.$route.params.nftId;
+    },
+    isTransferDisabled() {
+      return this.isOwnerInfoLoading || !this.userCollectedCount;
+    },
+    isMessagePage() {
+      return (
+        this.getRouteBaseName(this.$route) === 'nft-class-classId-nftId-message'
+      );
+    },
+    shouldShowMessageButton() {
+      const checkIsTransferMessage = msg =>
+        msg.message && msg.messageType !== 'creator';
+      if (this.messageList.length === 1 && this.creatorMessage?.message) {
+        return false;
+      }
+      if (this.messageList.length > 1 && this.creatorMessage?.message) {
+        return true;
+      }
+      if (
+        this.messageList.length > 1 &&
+        this.messageList.some(checkIsTransferMessage)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    creatorMessage() {
+      return this.messageList.find(
+        element => element.event === 'mint_nft' || element.event === 'purchase'
+      );
+    },
+    validMessageCount() {
+      return this.messageList.filter(element => element.message).length;
+    },
+    isFollowed() {
+      return this.walletFollowees?.includes(this.iscnOwner) || false;
+    },
+    controlBarPriceLabel() {
+      return (
+        this.nftBookAvailablePrice ||
+        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
+      );
+    },
   },
   async mounted() {
     try {

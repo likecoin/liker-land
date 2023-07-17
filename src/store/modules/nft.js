@@ -197,12 +197,12 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStorePricesByClassIdMap[classId],
-  filterNFTClassListWithState: state => (nfts, collectorWallet) =>
+  filterNFTClassListWithState: state => (nfts, wallet) =>
     nfts.filter(
       ({ classId }) =>
-        !state.userNFTClassDisplayStateSetsMap[
-          collectorWallet
-        ]?.hiddenClassIdSet?.has(classId)
+        !state.userNFTClassDisplayStateSetsMap[wallet]?.hiddenClassIdSet?.has(
+          classId
+        )
     ),
   getNFTClassIdListSorterForCreated: (_, getters) => ({
     list,

@@ -186,17 +186,17 @@ export default {
     ellipsis,
     formatNumber,
   },
+  components: {
+    Logo,
+    GlobeIcon,
+  },
+  mixins: [walletMixin],
   props: {
     isPlain: {
       type: Boolean,
       default: false,
     },
   },
-  components: {
-    Logo,
-    GlobeIcon,
-  },
-  mixins: [walletMixin],
   computed: {
     ...mapGetters(['getHomeRoute', 'getUserId', 'getNotificationCount']),
     currentLocale() {

@@ -182,6 +182,7 @@ export default {
         );
         ({ price } = data);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
       }
       logPurchaseFlowEvent(this, 'purchase', {

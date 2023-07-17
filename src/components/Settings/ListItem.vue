@@ -28,6 +28,12 @@ export default {
   },
   computed: {
     rootClasses() {
+      const clickableClasses = [
+        'hover:bg-[#fcfcfc]',
+        'active:bg-[#fafafa]',
+        'cursor-pointer',
+        'transition-colors',
+      ].join(' ');
       return [
         'flex',
         'justify-between',
@@ -39,12 +45,7 @@ export default {
         'text-like-green',
         'text-[16px]',
         {
-          [[
-            'hover:bg-[#fcfcfc]',
-            'active:bg-[#fafafa]',
-            'cursor-pointer',
-            'transition-colors',
-          ].join(' ')]: this.isClickable,
+          [clickableClasses]: this.isClickable,
         },
       ];
     },
