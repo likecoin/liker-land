@@ -114,8 +114,6 @@
           v-else
           class="flex flex-col desktop:grid grid-cols-3 gap-[24px]"
         >
-          <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="w-full desktop:hidden" />
-
           <!-- Left column -->
           <div
             :class="[
@@ -156,7 +154,6 @@
 
           <!-- Right column -->
           <div class="relative flex flex-col gap-[24px] desktop:col-span-2">
-            <NFTPagePrimitiveDisclaimer v-if="nftIsPrimitive" :is-nft-book="nftIsNFTBook" class="hidden w-full desktop:flex" />
             <NFTPagePriceSection
               v-if="isShowPriceSection && nftIsPrimitive"
               :nft-price="NFTPrice"
