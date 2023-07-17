@@ -21,6 +21,7 @@
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue .",
+    "lint:fix": "eslint --ext .js,.vue --fix .",
     "precommit": "npm run lint",
     "test": "ava",
     "storybook": "start-storybook -p 6006",
