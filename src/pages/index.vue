@@ -40,7 +40,7 @@
                 preset="shelf"
                 :shelf-class="[
                   // NOTE: Make the shelf appear to be continuous.
-                  { 'sm:rounded-l-[0px]': index % 3 === 1 },
+                  { 'sm:rounded-l-[0px]': index % 2 !== 0 && index % 3 === 1 },
                   { 'desktop:rounded-l-[0px]': index % 3 === 2 },
                 ]"
                 @click.native="() => onClickShelfItem(classId)"
@@ -49,9 +49,12 @@
             </li>
             {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
             <li
-              v-if="nftBooksOnShelf.length % 2 === 1"
+              v-for="i in 2"
+              :key="`dummy-${i}`"
               :class="[
-                'hidden sm:block desktop:hidden',
+                'hidden',
+                { 'sm:block desktop:!hidden': i === 1 && nftBooksOnShelf.length % 2 > 0 },
+                { 'desktop:block': nftBooksOnShelf.length % 3 > 0 },
                 'relative',
                 'w-full',
                 'max-w-[220px]',
