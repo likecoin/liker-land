@@ -54,7 +54,8 @@ export const createPortfolioMixin = ({
     ...mapGetters([
       'getNFTClassIdListSorterForCreated',
       'getNFTClassListSorterForCollected',
-      'getNFTListMapByAddress',
+      'getCollectedNFTClassesByAddress',
+      'getCreatedNFTClassesByAddress',
       'getNFTClassMetadataById',
       'getNFTIscnRecordsById',
     ]),
@@ -82,14 +83,15 @@ export const createPortfolioMixin = ({
         )
       );
     },
-    nftClassListMap() {
-      return this.getNFTListMapByAddress(this.wallet);
-    },
     nftClassListOfCollected() {
-      return this.isLoading ? [] : this.nftClassListMap?.collected || [];
+      return this.isLoading
+        ? []
+        : this.getCollectedNFTClassesByAddress(this.wallet) || [];
     },
     nftClassListOfCreated() {
-      return this.isLoading ? [] : this.nftClassListMap?.created || [];
+      return this.isLoading
+        ? []
+        : this.getCreatedNFTClassesByAddress(this.wallet) || [];
     },
     nftClassMapOfWritingNft() {
       const nftClassMapOfWritingNft = Array.from(this.allNFTClassMap.values())
@@ -454,8 +456,12 @@ export const createPortfolioMixin = ({
     },
   },
   watch: {
-    nftClassListMap(listMap) {
-      if (!listMap) return;
+    nftClassListOfCollected(list) {
+      if (!list) return;
+      this.$nextTick(this.setupPortfolioGrid);
+    },
+    nftClassListOfCreated(list) {
+      if (!list) return;
       this.$nextTick(this.setupPortfolioGrid);
     },
     shouldCurrentSortingShowType() {
@@ -472,7 +478,8 @@ export const createPortfolioMixin = ({
   },
   methods: {
     ...mapActions([
-      'fetchNFTListByAddress',
+      'fetchCollectedNFTClassesByAddress',
+      'fetchCreatedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
       'lazyGetUserInfoByAddress',
     ]),
@@ -540,13 +547,25 @@ export const createPortfolioMixin = ({
       }
     },
     async loadNFTListByAddress(address) {
-      const fetchPromise = Promise.all([
-        this.fetchNFTListByAddress(address),
+      const blockingPromises = [
         this.fetchNFTDisplayStateListByAddress(address),
-      ]);
-      if (!this.getNFTListMapByAddress(address)) {
+      ];
+      if (this.isCurrentTabCollected) {
+        blockingPromises.push(this.fetchCollectedNFTClassesByAddress(address));
+        this.fetchCreatedNFTClassesByAddress(address);
+      } else if (this.isCurrentTabCreated) {
+        blockingPromises.push(this.fetchCreatedNFTClassesByAddress(address));
+        this.fetchCollectedNFTClassesByAddress(address);
+      }
+
+      if (
+        (this.isCurrentTabCollected &&
+          !this.getCollectedNFTClassesByAddress(address)) ||
+        (this.isCurrentTabCreated &&
+          !this.getCreatedNFTClassesByAddress(address))
+      ) {
         this.isLoading = true;
-        await fetchPromise;
+        await Promise.all(blockingPromises);
       }
       this.isLoading = false;
     },

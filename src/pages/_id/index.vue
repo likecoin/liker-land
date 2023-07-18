@@ -34,7 +34,6 @@
             <UserStatsGem
               class="mx-auto mt-[16px] mb-[24px]"
               :wallet="wallet"
-              type="collected"
             />
           </template>
           <template #stats>
