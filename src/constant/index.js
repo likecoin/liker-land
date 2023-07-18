@@ -88,8 +88,8 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
   : [
       // 天工開物・栩栩如真
       'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg',
-      // 崩潰與重建：ChatGPT衝擊下的人類未來
-      'likenft1rax0ns09sr80yz8q6x9t8tp7khaedut5j0pnjjzlcjwtl78686cqprmu2x',
+      // 從新浪潮到新本土：48部電影裡的香港城誌
+      'likenft15ayw5nv7yxrlv6vvrxk0fvwdzsweqqyyw6we50dq2zaq2rk60pcs6ufhd7',
       // Craft Your World
       'likenft1uxjuhufvem4ccvwmquvt0uecfgcnn7wqpasyctn3glsq3q7kpxusnk7jaf',
       // 所謂「我不投資」，就是 all in 在法定貨幣
