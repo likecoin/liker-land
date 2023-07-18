@@ -34,7 +34,6 @@ const state = () => ({
   metadataByClassIdMap: {},
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
-  userClassIdListMap: {},
   collectedNFTClassesByAddressMap: {},
   createdNFTClassesByAddressMap: {},
   userNFTClassDisplayStateSetsMap: {},
@@ -75,9 +74,6 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.ownerInfoByClassIdMap, classId, info);
-  },
-  [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
-    Vue.set(state.userClassIdListMap, address, nfts);
   },
   [TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP](state, { address, classes }) {
     Vue.set(state.collectedNFTClassesByAddressMap, address, classes);
@@ -164,7 +160,6 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   getISCNMetadataById: state => iscnId => state.iscnMetadataByIdMap[iscnId],
-  getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
   getCollectedNFTClassesByAddress: state => address =>
     state.collectedNFTClassesByAddressMap[address],
   getCreatedNFTClassesByAddress: state => address =>
@@ -606,36 +601,6 @@ const actions = {
 
     // load class metadata for top 5 gems
     classes
-      .filter(c => c.symbol === 'WRITING')
-      .sort((a, b) => b.latest_price - a.latest_price)
-      .slice(0, 5)
-      .forEach(c => dispatch('fetchNFTClassAggregatedInfo', c.id));
-  },
-  async fetchNFTListByAddress({ commit, dispatch }, address) {
-    const [collected, created] = await Promise.all([
-      fetchAllNFTClassFromChain(this.$api, { nftOwner: address, expand: true }),
-      fetchAllNFTClassFromChain(this.$api, { iscnOwner: address }),
-    ]);
-
-    const formattedCreated = created.map(formatNFTClassInfo);
-    const formattedCollected = collected.map(formatNFTClassInfo);
-    commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
-      address,
-      nfts: {
-        created: formattedCreated,
-        collected: formattedCollected,
-      },
-    });
-
-    const nftClassIdDataMap = new Map();
-    collected.forEach(c => nftClassIdDataMap.set(c.id, c));
-    created.forEach(c => nftClassIdDataMap.set(c.id, c));
-    nftClassIdDataMap.forEach((classData, classId) => {
-      dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
-    });
-
-    // load class metadata for top 5 gems
-    collected
       .filter(c => c.symbol === 'WRITING')
       .sort((a, b) => b.latest_price - a.latest_price)
       .slice(0, 5)
