@@ -129,7 +129,11 @@ export default {
       return this.getRouteBaseName(this.$route) === 'index';
     },
     isNFTBookHeroAnimating() {
-      return this.isHomePage && !this.isNFTBookHeroAnimationComplete;
+      return (
+        this.shouldShowNFTBookHero &&
+        this.isHomePage &&
+        !this.isNFTBookHeroAnimationComplete
+      );
     },
     shouldShowNFTBookHero() {
       return !checkIsLikeCoinAppInAppBrowser(this.$route);
