@@ -40,6 +40,20 @@
         <slot name="prepend" />
       </div>
       <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#cee3e3] from-25% h-[60px]" />
+      <div
+        ref="keyArtShadow"
+        :class="[
+          'absolute',
+          'inset-x-0',
+          'top-full',
+          'h-[84px]',
+          'bg-[length:350px_50%] laptop:bg-[length:420px_85%] desktop:bg-[length:768px_100%]',
+          'bg-no-repeat',
+          'bg-[center_top]',
+          'pointer-events-none',
+        ]"
+        :style="shadowStyle"
+      />
 
       <div
         ref="banner"
@@ -312,6 +326,7 @@ import titleLeftImageZh from '~/assets/images/nft/hero/title-left-zh.png';
 import titleRightImageEn from '~/assets/images/nft/hero/title-right-en.png';
 import titleRightImageZh from '~/assets/images/nft/hero/title-right-zh.png';
 import keyArtImage from '~/assets/images/nft/hero/key-art-graphic.jpg';
+import shadowImage from '~/assets/images/nft/hero/key-art-shadow.png';
 
 // NOTE: Control key art speed
 const KEY_ART_SPEED = 0.5;
@@ -329,6 +344,11 @@ export default {
   computed: {
     isEnglish() {
       return this.$i18n.locale === 'en';
+    },
+    shadowStyle() {
+      return {
+        backgroundImage: `url(${shadowImage})`,
+      };
     },
     titleRightImage() {
       return this.isEnglish ? titleRightImageEn : titleRightImageZh;
@@ -444,6 +464,7 @@ export default {
         keyArtTopLeftQuarterBottomRight,
         keyArtBottomLeft,
         keyArtBottomLeftCircle,
+        keyArtShadow,
         prepend,
         titleLeft,
         titleRight,
@@ -900,6 +921,16 @@ export default {
           ease: 'power1.inOut',
         },
         'keyArtAnimationEnd'
+      );
+
+      this.animation.from(
+        keyArtShadow,
+        {
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power1.out',
+        },
+        '-=0.7'
       );
 
       // NOTE: Uncomment to pause timeline for debugging
