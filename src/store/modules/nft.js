@@ -629,9 +629,7 @@ const actions = {
   async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
     const classesOrPromise = state.createdNFTClassesByAddressMap[address];
     if (classesOrPromise) {
-      if (classesOrPromise instanceof Promise) {
-        await classesOrPromise;
-      }
+      await classesOrPromise;
     } else {
       await dispatch('fetchCreatedNFTClassesByAddress', address);
     }
@@ -639,9 +637,7 @@ const actions = {
   async lazyFetchCollectedNFTClassesByAddress({ state, dispatch }, address) {
     const classesOrPromise = state.collectedNFTClassesByAddressMap[address];
     if (classesOrPromise) {
-      if (classesOrPromise instanceof Promise) {
-        await classesOrPromise;
-      }
+      await classesOrPromise;
     } else {
       await dispatch('fetchCollectedNFTClassesByAddress', address);
     }
