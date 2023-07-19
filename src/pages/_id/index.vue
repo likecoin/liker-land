@@ -34,7 +34,6 @@
             <UserStatsGem
               class="mx-auto mt-[16px] mb-[24px]"
               :wallet="wallet"
-              type="collected"
             />
           </template>
           <template #stats>
@@ -299,11 +298,16 @@ export default {
   },
   mounted() {
     this.syncRouteForTab();
-    this.loadNFTListByAddress(this.wallet);
+    this.loadNFTClassesForCurrentTabByAddress(this.wallet);
+    this.fetchNFTDisplayStateListByAddress(this.wallet);
     this.loadTopUserListByAddress(this.wallet);
   },
   methods: {
-    ...mapActions(['addNFTClassesToShoppingCart', 'clearShoppingCart']),
+    ...mapActions([
+      'addNFTClassesToShoppingCart',
+      'clearShoppingCart',
+      'fetchNFTDisplayStateListByAddress',
+    ]),
     handleTopUserHover(i) {
       const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(
