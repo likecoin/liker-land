@@ -298,11 +298,16 @@ export default {
   },
   mounted() {
     this.syncRouteForTab();
-    this.loadNFTListByAddress(this.wallet);
+    this.loadNFTClassesForCurrentTabByAddress(this.wallet);
+    this.fetchNFTDisplayStateListByAddress(this.wallet);
     this.loadTopUserListByAddress(this.wallet);
   },
   methods: {
-    ...mapActions(['addNFTClassesToShoppingCart', 'clearShoppingCart']),
+    ...mapActions([
+      'addNFTClassesToShoppingCart',
+      'clearShoppingCart',
+      'fetchNFTDisplayStateListByAddress',
+    ]),
     handleTopUserHover(i) {
       const type = this.isCurrentTabCollected ? 'creator' : 'collector';
       logTrackerEvent(

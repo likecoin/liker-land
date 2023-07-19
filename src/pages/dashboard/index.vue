@@ -195,7 +195,8 @@ export default {
     getAddress(newAddress) {
       if (newAddress) {
         this.fetchUserInfo();
-        this.loadNFTListByAddress(this.getAddress);
+        this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
+        this.fetchNFTDisplayStateListByAddress(this.getAddress);
         this.updateTopRankedCreators();
       }
     },
@@ -203,12 +204,16 @@ export default {
   mounted() {
     this.syncRouteForTab();
     if (this.getAddress) {
-      this.loadNFTListByAddress(this.getAddress);
+      this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
+      this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
     }
   },
   methods: {
-    ...mapActions(['fetchUserInfoByAddress']),
+    ...mapActions([
+      'fetchUserInfoByAddress',
+      'fetchNFTDisplayStateListByAddress',
+    ]),
     async fetchUserInfo() {
       try {
         await this.fetchUserInfoByAddress(this.getAddress);

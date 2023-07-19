@@ -75,11 +75,17 @@ const mutations = {
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.ownerInfoByClassIdMap, classId, info);
   },
-  [TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP](state, { address, classes }) {
-    Vue.set(state.collectedNFTClassesByAddressMap, address, classes);
+  [TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP](
+    state,
+    { address, classesOrPromise }
+  ) {
+    Vue.set(state.collectedNFTClassesByAddressMap, address, classesOrPromise);
   },
-  [TYPES.NFT_SET_USER_CREATED_CLASSES_MAP](state, { address, classes }) {
-    Vue.set(state.createdNFTClassesByAddressMap, address, classes);
+  [TYPES.NFT_SET_USER_CREATED_CLASSES_MAP](
+    state,
+    { address, classesOrPromise }
+  ) {
+    Vue.set(state.createdNFTClassesByAddressMap, address, classesOrPromise);
   },
   [TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP](
     state,
@@ -160,10 +166,14 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   getISCNMetadataById: state => iscnId => state.iscnMetadataByIdMap[iscnId],
-  getCollectedNFTClassesByAddress: state => address =>
-    state.collectedNFTClassesByAddressMap[address],
-  getCreatedNFTClassesByAddress: state => address =>
-    state.createdNFTClassesByAddressMap[address],
+  getCollectedNFTClassesByAddress: state => address => {
+    const classesOrPromise = state.collectedNFTClassesByAddressMap[address];
+    return classesOrPromise instanceof Promise ? undefined : classesOrPromise;
+  },
+  getCreatedNFTClassesByAddress: state => address => {
+    const classesOrPromise = state.createdNFTClassesByAddressMap[address];
+    return classesOrPromise instanceof Promise ? undefined : classesOrPromise;
+  },
   getNFTClassFeaturedSetByAddress: state => address =>
     (state.userNFTClassDisplayStateSetsMap[address] || {}).featuredClassIdSet,
   getNFTClassHiddenSetByAddress: state => address =>
@@ -565,13 +575,18 @@ const actions = {
     return owners;
   },
   async fetchCreatedNFTClassesByAddress({ commit, dispatch }, address) {
-    const classes = await fetchAllNFTClassFromChain(this.$api, {
+    const promise = fetchAllNFTClassFromChain(this.$api, {
       iscnOwner: address,
     });
+    commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
+      address,
+      classesOrPromise: promise,
+    });
+    const classes = await promise;
     const formatted = classes.map(formatNFTClassInfo);
     commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
       address,
-      classes: formatted,
+      classesOrPromise: formatted,
     });
 
     classes.forEach(c => {
@@ -582,14 +597,19 @@ const actions = {
     });
   },
   async fetchCollectedNFTClassesByAddress({ commit, dispatch }, address) {
-    const classes = await fetchAllNFTClassFromChain(this.$api, {
+    const promise = fetchAllNFTClassFromChain(this.$api, {
       nftOwner: address,
       expand: true,
     });
+    commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
+      address,
+      classesOrPromise: promise,
+    });
+    const classes = await promise;
     const formatted = classes.map(formatNFTClassInfo);
     commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
       address,
-      classes: formatted,
+      classesOrPromise: formatted,
     });
 
     classes.forEach(c => {
@@ -605,6 +625,26 @@ const actions = {
       .sort((a, b) => b.latest_price - a.latest_price)
       .slice(0, 5)
       .forEach(c => dispatch('fetchNFTClassAggregatedInfo', c.id));
+  },
+  async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
+    const classesOrPromise = state.createdNFTClassesByAddressMap[address];
+    if (classesOrPromise) {
+      if (classesOrPromise instanceof Promise) {
+        await classesOrPromise;
+      }
+    } else {
+      await dispatch('fetchCreatedNFTClassesByAddress', address);
+    }
+  },
+  async lazyFetchCollectedNFTClassesByAddress({ state, dispatch }, address) {
+    const classesOrPromise = state.collectedNFTClassesByAddressMap[address];
+    if (classesOrPromise) {
+      if (classesOrPromise instanceof Promise) {
+        await classesOrPromise;
+      }
+    } else {
+      await dispatch('fetchCollectedNFTClassesByAddress', address);
+    }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.getUserV2DisplayState(address));
