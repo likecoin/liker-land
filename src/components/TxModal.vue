@@ -15,6 +15,9 @@
     <template #header-prepend>
       <slot name="header-prepend" />
     </template>
+    <template #header-append>
+      <slot name="header-append" />
+    </template>
 
     <slot name="top" />
 
