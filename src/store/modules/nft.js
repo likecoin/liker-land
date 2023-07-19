@@ -471,7 +471,12 @@ const actions = {
     }
     return info;
   },
-  parseAndStoreNFTClassMetadata({ commit }, { classId, classData = {} }) {
+  parseAndStoreNFTClassMetadata(
+    { commit, getters },
+    { classId, classData = {} }
+  ) {
+    // Do not overwrite aggregated metadata
+    if (getters.getNFTClassMetadataById(classId)) return;
     const {
       name,
       description,
@@ -490,7 +495,6 @@ const actions = {
       classId,
       metadata: formattedMetadata,
     });
-    return formattedMetadata;
   },
   async populateNFTClassMetadataFromURIAndISCN(
     { commit, dispatch, getters },
