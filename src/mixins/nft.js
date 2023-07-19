@@ -610,7 +610,7 @@ export default {
       await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
     },
-    async updateNFTClassAggregatedInfo() {
+    async lazyFetchNFTClassAggregatedData() {
       await catchAxiosError(this.lazyFetchNFTClassAggregatedInfo(this.classId));
     },
     async updateNFTPurchaseInfo() {
@@ -890,7 +890,7 @@ export default {
         }
       } finally {
         this.fetchNFTListByAddress(this.getAddress);
-        this.updateNFTClassAggregatedInfo();
+        this.lazyFetchNFTClassAggregatedData();
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
       }

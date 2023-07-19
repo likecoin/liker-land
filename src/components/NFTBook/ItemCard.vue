@@ -279,7 +279,7 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.updateNFTClassAggregatedInfo();
+      await this.lazyFetchNFTClassAggregatedData();
       try {
         if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {
           await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
