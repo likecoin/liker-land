@@ -404,8 +404,6 @@ const actions = {
     if (fieldsToCheck.some(value => !value)) {
       await dispatch('fetchNFTClassAggregatedInfo', classId);
     }
-
-    return true;
   },
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
