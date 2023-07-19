@@ -5,7 +5,6 @@ import * as api from '@/util/api';
 import {
   NFT_CLASS_LIST_SORTING,
   NFT_CLASS_LIST_SORTING_ORDER,
-  checkIsWritingNFT,
   isValidHttpUrl,
   formatOwnerInfoFromChain,
   fetchAllNFTClassFromChain,
@@ -18,11 +17,7 @@ import {
   saveShoppingCartToStorage,
 } from '~/util/shopping-cart';
 import { getGemLevelBySoldCount } from '~/util/writing-nft';
-import {
-  BATCH_COLLECT_MAX,
-  LIKECOIN_NFT_HIDDEN_ITEMS,
-  NFT_DISPLAY_STATE,
-} from '~/constant';
+import { BATCH_COLLECT_MAX, NFT_DISPLAY_STATE } from '~/constant';
 import * as TYPES from '../mutation-types';
 
 const typeOrder = {
@@ -39,7 +34,8 @@ const state = () => ({
   metadataByClassIdMap: {},
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
-  userClassIdListMap: {},
+  collectedNFTClassesByAddressMap: {},
+  createdNFTClassesByAddressMap: {},
   userNFTClassDisplayStateSetsMap: {},
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
@@ -79,8 +75,17 @@ const mutations = {
   [TYPES.NFT_SET_NFT_CLASS_OWNER_INFO](state, { classId, info }) {
     Vue.set(state.ownerInfoByClassIdMap, classId, info);
   },
-  [TYPES.NFT_SET_USER_CLASSID_LIST_MAP](state, { address, nfts }) {
-    Vue.set(state.userClassIdListMap, address, nfts);
+  [TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP](
+    state,
+    { address, classesOrPromise }
+  ) {
+    Vue.set(state.collectedNFTClassesByAddressMap, address, classesOrPromise);
+  },
+  [TYPES.NFT_SET_USER_CREATED_CLASSES_MAP](
+    state,
+    { address, classesOrPromise }
+  ) {
+    Vue.set(state.createdNFTClassesByAddressMap, address, classesOrPromise);
   },
   [TYPES.NFT_SET_USER_NFT_CLASS_DISPLAY_STATE_SETS_MAP](
     state,
@@ -161,7 +166,14 @@ function compareNumber(X, Y, order) {
 
 const getters = {
   getISCNMetadataById: state => iscnId => state.iscnMetadataByIdMap[iscnId],
-  getNFTListMapByAddress: state => address => state.userClassIdListMap[address],
+  getCollectedNFTClassesByAddress: state => address => {
+    const classesOrPromise = state.collectedNFTClassesByAddressMap[address];
+    return classesOrPromise instanceof Promise ? undefined : classesOrPromise;
+  },
+  getCreatedNFTClassesByAddress: state => address => {
+    const classesOrPromise = state.createdNFTClassesByAddressMap[address];
+    return classesOrPromise instanceof Promise ? undefined : classesOrPromise;
+  },
   getNFTClassFeaturedSetByAddress: state => address =>
     (state.userNFTClassDisplayStateSetsMap[address] || {}).featuredClassIdSet,
   getNFTClassHiddenSetByAddress: state => address =>
@@ -562,35 +574,73 @@ const actions = {
     }
     return owners;
   },
-  async fetchNFTListByAddress({ commit, dispatch }, address) {
-    const [collected, created] = await Promise.all([
-      fetchAllNFTClassFromChain(this.$api, { nftOwner: address, expand: true }),
-      fetchAllNFTClassFromChain(this.$api, { iscnOwner: address }),
-    ]);
-
-    const formattedCreated = created.map(formatNFTClassInfo);
-    const formattedCollected = collected.map(formatNFTClassInfo);
-    commit(TYPES.NFT_SET_USER_CLASSID_LIST_MAP, {
+  async fetchCreatedNFTClassesByAddress({ commit, dispatch }, address) {
+    const promise = fetchAllNFTClassFromChain(this.$api, {
+      iscnOwner: address,
+    });
+    commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
       address,
-      nfts: {
-        created: formattedCreated,
-        collected: formattedCollected,
-      },
+      classesOrPromise: promise,
+    });
+    const classes = await promise;
+    const formatted = classes.map(formatNFTClassInfo);
+    commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
+      address,
+      classesOrPromise: formatted,
     });
 
-    const nftClassIdDataMap = new Map();
-    collected.forEach(c => nftClassIdDataMap.set(c.id, c));
-    created.forEach(c => nftClassIdDataMap.set(c.id, c));
-    nftClassIdDataMap.forEach((classData, classId) => {
-      dispatch('parseAndStoreNFTClassMetadata', { classId, classData });
+    classes.forEach(c => {
+      dispatch('parseAndStoreNFTClassMetadata', {
+        classId: c.id,
+        classData: c,
+      });
+    });
+  },
+  async fetchCollectedNFTClassesByAddress({ commit, dispatch }, address) {
+    const promise = fetchAllNFTClassFromChain(this.$api, {
+      nftOwner: address,
+      expand: true,
+    });
+    commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
+      address,
+      classesOrPromise: promise,
+    });
+    const classes = await promise;
+    const formatted = classes.map(formatNFTClassInfo);
+    commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
+      address,
+      classesOrPromise: formatted,
+    });
+
+    classes.forEach(c => {
+      dispatch('parseAndStoreNFTClassMetadata', {
+        classId: c.id,
+        classData: c,
+      });
     });
 
     // load class metadata for top 5 gems
-    collected
+    classes
       .filter(c => c.symbol === 'WRITING')
       .sort((a, b) => b.latest_price - a.latest_price)
       .slice(0, 5)
       .forEach(c => dispatch('fetchNFTClassAggregatedInfo', c.id));
+  },
+  async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
+    const classesOrPromise = state.createdNFTClassesByAddressMap[address];
+    if (classesOrPromise) {
+      await classesOrPromise;
+    } else {
+      await dispatch('fetchCreatedNFTClassesByAddress', address);
+    }
+  },
+  async lazyFetchCollectedNFTClassesByAddress({ state, dispatch }, address) {
+    const classesOrPromise = state.collectedNFTClassesByAddressMap[address];
+    if (classesOrPromise) {
+      await classesOrPromise;
+    } else {
+      await dispatch('fetchCollectedNFTClassesByAddress', address);
+    }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {
     const { data } = await this.$api.get(api.getUserV2DisplayState(address));

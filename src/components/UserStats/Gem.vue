@@ -39,17 +39,11 @@ export default {
       type: String,
       default: '',
     },
-    type: {
-      type: String,
-      default: 'collected',
-    },
   },
   computed: {
-    ...mapGetters(['getNFTListMapByAddress', 'getNFTClassGemLevel']),
+    ...mapGetters(['getCollectedNFTClassesByAddress', 'getNFTClassGemLevel']),
     gemList() {
-      const list = this.getNFTListMapByAddress(this.wallet);
-      if (!list) return [];
-      const data = list[this.type];
+      const data = this.getCollectedNFTClassesByAddress(this.wallet);
       if (!data) return [];
       return data
         .map(d => ({

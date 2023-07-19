@@ -169,11 +169,10 @@ export const getNFTClassesPartial = ({
   limit,
   key,
 }) => {
-  const qsPayload = {
-    iscn_owner: iscnOwner,
-    owner: nftOwner,
-    expand,
-  }; // TODO: support account based query
+  const qsPayload = {}; // TODO: support account based query
+  if (iscnOwner) qsPayload.iscn_owner = iscnOwner;
+  if (nftOwner) qsPayload.owner = nftOwner;
+  if (expand) qsPayload.expand = expand;
   if (reverse) qsPayload['pagination.reverse'] = reverse;
   if (limit) qsPayload['pagination.limit'] = limit;
   if (key) qsPayload['pagination.key'] = key;

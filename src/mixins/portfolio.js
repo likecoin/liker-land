@@ -32,7 +32,6 @@ export const createPortfolioMixin = ({
   mixins: [clipboardMixin, userInfoMixin],
   data() {
     return {
-      isLoading: true,
       nftClassListOfCollectedSorting: NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT,
       nftClassListOfCollectedSortingOrder: NFT_CLASS_LIST_SORTING_ORDER.DESC,
       nftClassListOfCollectedShowCount: ITEMS_PER_PAGE,
@@ -54,7 +53,8 @@ export const createPortfolioMixin = ({
     ...mapGetters([
       'getNFTClassIdListSorterForCreated',
       'getNFTClassListSorterForCollected',
-      'getNFTListMapByAddress',
+      'getCollectedNFTClassesByAddress',
+      'getCreatedNFTClassesByAddress',
       'getNFTClassMetadataById',
       'getNFTIscnRecordsById',
     ]),
@@ -75,6 +75,16 @@ export const createPortfolioMixin = ({
     isCurrentTabCreated() {
       return this.currentTab === tabOptions.created;
     },
+    isLoading() {
+      switch (this.currentTab) {
+        case tabOptions.collected:
+          return !this.getCollectedNFTClassesByAddress(this.wallet);
+        case tabOptions.created:
+          return !this.getCreatedNFTClassesByAddress(this.wallet);
+        default:
+          return true;
+      }
+    },
     allNFTClassMap() {
       return new Map(
         [...this.nftClassListOfCreated, ...this.nftClassListOfCollected].map(
@@ -82,14 +92,11 @@ export const createPortfolioMixin = ({
         )
       );
     },
-    nftClassListMap() {
-      return this.getNFTListMapByAddress(this.wallet);
-    },
     nftClassListOfCollected() {
-      return this.isLoading ? [] : this.nftClassListMap?.collected || [];
+      return this.getCollectedNFTClassesByAddress(this.wallet) || [];
     },
     nftClassListOfCreated() {
-      return this.isLoading ? [] : this.nftClassListMap?.created || [];
+      return this.getCreatedNFTClassesByAddress(this.wallet) || [];
     },
     nftClassMapOfWritingNft() {
       const nftClassMapOfWritingNft = Array.from(this.allNFTClassMap.values())
@@ -454,8 +461,12 @@ export const createPortfolioMixin = ({
     },
   },
   watch: {
-    nftClassListMap(listMap) {
-      if (!listMap) return;
+    nftClassListOfCollected(list) {
+      if (!list || !this.isCurrentTabCollected) return;
+      this.$nextTick(this.setupPortfolioGrid);
+    },
+    nftClassListOfCreated(list) {
+      if (!list || !this.isCurrentTabCreated) return;
       this.$nextTick(this.setupPortfolioGrid);
     },
     shouldCurrentSortingShowType() {
@@ -472,7 +483,8 @@ export const createPortfolioMixin = ({
   },
   methods: {
     ...mapActions([
-      'fetchNFTListByAddress',
+      'lazyFetchCollectedNFTClassesByAddress',
+      'lazyFetchCreatedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
       'lazyGetUserInfoByAddress',
     ]),
@@ -539,16 +551,18 @@ export const createPortfolioMixin = ({
         default:
       }
     },
-    async loadNFTListByAddress(address) {
-      const fetchPromise = Promise.all([
-        this.fetchNFTListByAddress(address),
-        this.fetchNFTDisplayStateListByAddress(address),
-      ]);
-      if (!this.getNFTListMapByAddress(address)) {
-        this.isLoading = true;
-        await fetchPromise;
+
+    loadNFTClassesForCurrentTabByAddress(address, tab = this.currentTab) {
+      switch (tab) {
+        case tabOptions.collected:
+          this.lazyFetchCollectedNFTClassesByAddress(address);
+          break;
+        case tabOptions.created:
+          this.lazyFetchCreatedNFTClassesByAddress(address);
+          break;
+        default:
+          break;
       }
-      this.isLoading = false;
     },
     async loadTopUserListByAddress(address) {
       const [collectorRes, creatorRes] = await Promise.all([
@@ -586,6 +600,8 @@ export const createPortfolioMixin = ({
     changeTab(tab) {
       if (!tabOptions[tab]) return;
       this.syncRouteForTab(tab);
+      // HACK: this.currentTab is not updated yet, should manually pass tab
+      this.loadNFTClassesForCurrentTabByAddress(this.wallet, tab);
       this.nftCreatorFilter = [];
       this.nftKeywordsFilter = [];
     },

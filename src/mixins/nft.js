@@ -109,7 +109,8 @@ export default {
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
-      'getNFTListMapByAddress',
+      'getCollectedNFTClassesByAddress',
+      'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
@@ -511,9 +512,9 @@ export default {
       const hiddenSet = this.getNFTClassHiddenSetByAddress(this.iscnOwner);
 
       let recommendedList =
-        this.getNFTListMapByAddress(this.iscnOwner)?.created || [];
+        this.getCreatedNFTClassesByAddress(this.iscnOwner) || [];
       const userCollected =
-        this.getNFTListMapByAddress(this.getAddress)?.collected || [];
+        this.getCollectedNFTClassesByAddress(this.getAddress) || [];
 
       recommendedList = recommendedList.filter(
         item =>
@@ -599,7 +600,8 @@ export default {
       'uiCloseTxModal',
       'walletFetchLIKEBalance',
       'lazyGetUserInfoByAddresses',
-      'fetchNFTListByAddress',
+      'fetchCreatedNFTClassesByAddress',
+      'fetchCollectedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
       'fetchNFTBookPriceByClassId',
     ]),
@@ -889,7 +891,7 @@ export default {
           );
         }
       } finally {
-        this.fetchNFTListByAddress(this.getAddress);
+        this.fetchCollectedNFTClassesByAddress(this.getAddress);
         this.updateNFTClassAggregatedInfo();
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
@@ -1072,11 +1074,13 @@ export default {
       this.isRecommendationLoading = true;
       try {
         const promises = [
-          this.fetchNFTListByAddress(this.iscnOwner),
+          this.fetchCreatedNFTClassesByAddress(this.iscnOwner),
           this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
         ];
         if (this.getAddress) {
-          promises.push(this.fetchNFTListByAddress(this.getAddress));
+          promises.push(
+            this.fetchCollectedNFTClassesByAddress(this.getAddress)
+          );
         }
         await Promise.all(promises);
       } catch (error) {
