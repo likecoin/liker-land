@@ -474,7 +474,8 @@ const actions = {
     { classId, classData = {} }
   ) {
     // Do not overwrite aggregated metadata
-    if (getters.getNFTClassMetadataById(classId)) return;
+    if (getters.getNFTClassMetadataById(classId))
+      return getters.getNFTClassMetadataById(classId);
     const {
       name,
       description,
@@ -493,6 +494,7 @@ const actions = {
       classId,
       metadata: formattedMetadata,
     });
+    return formattedMetadata;
   },
   async populateNFTClassMetadataFromURIAndISCN(
     { commit, dispatch, getters },
