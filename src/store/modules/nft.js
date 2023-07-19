@@ -404,6 +404,19 @@ const actions = {
       if (!process.client) await promise;
     }
   },
+  async lazyFetchNFTClassAggregatedInfo({ getters, dispatch }, classId) {
+    const metadata = getters.getNFTClassMetadataById(classId);
+    const fieldsToCheck = [
+      metadata,
+      getters.getISCNMetadataById(metadata?.parent?.iscn_id_prefix),
+      getters.getNFTClassOwnerInfoById(classId),
+      getters.getNFTClassListingInfoById(classId),
+    ];
+
+    if (fieldsToCheck.some(value => !value)) {
+      await dispatch('fetchNFTClassAggregatedInfo', classId);
+    }
+  },
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
@@ -468,7 +481,13 @@ const actions = {
     }
     return info;
   },
-  parseAndStoreNFTClassMetadata({ commit }, { classId, classData = {} }) {
+  parseAndStoreNFTClassMetadata(
+    { commit, getters },
+    { classId, classData = {} }
+  ) {
+    // Do not overwrite aggregated metadata
+    if (getters.getNFTClassMetadataById(classId))
+      return getters.getNFTClassMetadataById(classId);
     const {
       name,
       description,
@@ -624,7 +643,7 @@ const actions = {
       .filter(c => c.symbol === 'WRITING')
       .sort((a, b) => b.latest_price - a.latest_price)
       .slice(0, 5)
-      .forEach(c => dispatch('fetchNFTClassAggregatedInfo', c.id));
+      .forEach(c => dispatch('lazyFetchNFTClassAggregatedInfo', c.id));
   },
   async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
     const classesOrPromise = state.createdNFTClassesByAddressMap[address];

@@ -456,7 +456,7 @@ export default {
   },
   mounted() {
     this.initAnimation();
-    this.updateNFTClassAggregatedInfo();
+    this.lazyFetchNFTClassAggregatedData();
   },
   methods: {
     initAnimation() {

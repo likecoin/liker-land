@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     fetchInfo() {
-      this.updateNFTClassAggregatedInfo();
+      this.lazyFetchNFTClassAggregatedData();
     },
     async handleClickCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Campaign)', this.classId, 1);
