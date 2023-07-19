@@ -433,6 +433,7 @@
   "notice_chain_upgrading": "LikeCoin chain 正進行升級，交易現已暫停。",
   "notification_login_in": "驗證錢包以讀取通知",
   "notification_login_in_button": "驗證",
+  "notification_view_more_button": "顯示更多",
   "ok": "OK",
   "order_menu_by": "按{order}",
   "order_menu_collected": "擁有",
