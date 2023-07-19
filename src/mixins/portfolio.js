@@ -468,11 +468,11 @@ export const createPortfolioMixin = ({
   },
   watch: {
     nftClassListOfCollected(list) {
-      if (!list) return;
+      if (!list || !this.isCurrentTabCollected) return;
       this.$nextTick(this.setupPortfolioGrid);
     },
     nftClassListOfCreated(list) {
-      if (!list) return;
+      if (!list || !this.isCurrentTabCreated) return;
       this.$nextTick(this.setupPortfolioGrid);
     },
     shouldCurrentSortingShowType() {
