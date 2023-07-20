@@ -68,7 +68,7 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
-                @click-collect="handleCollectFromEditionTable"
+                @click-collect="handleCollectFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
             </template>
@@ -90,7 +90,7 @@
                   :src="NFTImageUrl"
                   :edition-config="editionConfig"
                   :class-id="classId"
-                  @click-collect="handleCollectFromEditionSelector"
+                  @click-collect="handleCollectFromEditionCompareTable"
                 />
               </li>
             </ul>
@@ -711,22 +711,22 @@ export default {
         this.handleGotoCollectFromControlBar();
       }
     },
-    handleCollectFromEditionTable(selectedValue) {
-      this.handleCollectFromEdition(selectedValue);
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_class_details_edition_table_clicked',
-        this.classId,
-        1
-      );
-    },
     handleCollectFromEditionSelector(selectedValue) {
       this.handleCollectFromEdition(selectedValue);
       logTrackerEvent(
         this,
         'NFT',
-        `nft_class_details_edition_selector_clicked`,
+        'nft_class_details_edition_selector_collect',
+        this.classId,
+        1
+      );
+    },
+    handleCollectFromEditionCompareTable(selectedValue) {
+      this.handleCollectFromEdition(selectedValue);
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_class_details_edition_compare_table_collect`,
         this.classId,
         1
       );
