@@ -283,12 +283,11 @@ export function formatNFTClassInfo(classData) {
       : 0,
   };
   // for collected
-  if (classData.nfts) {
-    result.nfts = classData.nfts.map(nft => ({
-      nftId: nft.nft_id,
-      collectedAt: nft.price_updated_at ? Date.parse(nft.price_updated_at) : 0,
-    }));
-    result.nfts.sort((a, b) => b.collectedAt - a.collectedAt);
+  if (classData.nft_owned_count) {
+    result.nftOwnedCount = classData.nft_owned_count;
+  }
+  if (classData.nft_last_owned_at) {
+    result.nftLastOwnedAt = Date.parse(classData.nft_last_owned_at);
   }
   return result;
 }

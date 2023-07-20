@@ -299,8 +299,8 @@ const getters = {
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.NFT_OWNED_COUNT:
-          X = nA.nfts.length;
-          Y = nB.nfts.length;
+          X = nA.nftOwnedCount;
+          Y = nB.nftOwnedCount;
           if (X !== Y) break;
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.TYPE: {
@@ -313,8 +313,8 @@ const getters = {
         // eslint-disable-next-line no-fallthrough
         case NFT_CLASS_LIST_SORTING.LAST_COLLECTED_NFT:
         default:
-          X = nA.nfts[0].collectedAt;
-          Y = nB.nfts[0].collectedAt;
+          X = nA.nftLastOwnedAt;
+          Y = nB.nftLastOwnedAt;
           break;
       }
       return compareNumber(X, Y, order);
