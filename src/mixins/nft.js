@@ -285,6 +285,13 @@ export default {
         ? formatNumberWithUnit(this.nftPriceInUSD, 'USD')
         : '-';
     },
+    controlBarPriceLabel() {
+      if (this.nftIsNFTBook && this.nftBookAvailablePriceLabel) {
+        // Do not show the second-hand price if there is stock left
+        return '';
+      }
+      return this.NFTPrice && formatNumberWithLIKE(this.NFTPrice);
+    },
     collectorMap() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
