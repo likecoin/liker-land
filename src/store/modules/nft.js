@@ -618,7 +618,6 @@ const actions = {
   async fetchCollectedNFTClassesByAddress({ commit, dispatch }, address) {
     const promise = fetchAllNFTClassFromChain(this.$api, {
       nftOwner: address,
-      expand: true,
     });
     commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
       address,
