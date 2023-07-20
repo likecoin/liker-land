@@ -322,7 +322,7 @@ export default {
     this.latestClassIds = latestClasses
       .slice(0, NFT_CLASS_DISPLAY_COUNT)
       .map(c => c.id);
-    this.trendingClassIds = await this.filterNFTClassesByOwner(trendingClasses);
+    this.trendingClassIds = this.filterNFTClassesByOwner(trendingClasses);
   },
   methods: {
     ...mapActions(['lazyFetchLIKEPrice', 'lazyGetISCNMetadataById']),
@@ -337,15 +337,11 @@ export default {
         return null;
       }
     },
-    async filterNFTClassesByOwner(nftClasses) {
-      const ownerList = await Promise.all(
-        // use 3 times of display count to ensure enough classes
-        nftClasses.slice(0, NFT_CLASS_DISPLAY_COUNT * 3).map(this.getClassOwner)
-      );
+    filterNFTClassesByOwner(nftClasses) {
       const filteredNFTClasses = [];
       const ownerToNFTClassCountMap = {};
-      for (let i = 0; i < ownerList.length; i += 1) {
-        const owner = ownerList[i];
+      for (let i = 0; i < nftClasses.length; i += 1) {
+        const { owner } = nftClasses[i];
         if (!ownerToNFTClassCountMap[owner]) {
           ownerToNFTClassCountMap[owner] = 0;
         }
