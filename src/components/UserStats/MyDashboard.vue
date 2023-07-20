@@ -1,13 +1,15 @@
 <template>
   <UserStatsController
     :class="[
+      'bg-white',
+      'p-[24px]',
+      'rounded-[24px]',
       'grid',
-      'grid-cols-2 laptop:grid-cols-5',
+      'grid-cols-2',
       'auto-rows-[1fr]',
       'justify-center',
       'items-stretch',
-      'gap-[16px]',
-      'mb-[18px] laptop:m-0',
+      'mb-[18px]',
     ]"
     :stat-wallet="statWallet"
   >
@@ -75,7 +77,7 @@
       <div
         :class="[
           itemClasses,
-          'col-span-2 laptop:col-span-1',
+          'col-span-2',
         ]"
         @click="$emit('click-total-sales')"
       >
