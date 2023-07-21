@@ -41,6 +41,7 @@
               type="input"
               class="w-full bg-transparent border-0 focus-visible:outline-none"
               :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
+              @input.once="onInputCollectorMessage"
             >
           </div>
           <ButtonV2
@@ -215,6 +216,8 @@ export default {
         return;
       }
 
+      logTrackerEvent(this, 'NFT', 'nft_claim_claim_button_clicked', '', 1);
+
       if (this.isNFTBook) {
         await this.claimNFTBookPurchase();
       } else {
@@ -236,10 +239,22 @@ export default {
         this.claimPromise = undefined;
         this.nftId = data.nftId;
         this.state = NFT_CLAIM_STATE.CLAIMED;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_claim_fiat_purchase_claimed',
+          this.classId
+        );
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
         this.error = error.response?.data || error.message;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_claim_fiat_purchase_claim_error',
+          this.classId
+        );
         this.alertPromptError(
           this.$t('settings_email_verify_error_message', {
             error: this.error,
@@ -267,10 +282,22 @@ export default {
         await this.claimPromise;
         this.claimPromise = undefined;
         this.state = NFT_CLAIM_STATE.CLAIMED;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_claim_nft_book_claimed',
+          this.classId
+        );
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
         this.error = error.response?.data || error.message;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_claim_nft_book_claim_error',
+          this.classId
+        );
         this.alertPromptError(
           this.$t('settings_email_verify_error_message', {
             error: this.error,
@@ -278,6 +305,14 @@ export default {
         );
         this.state = NFT_CLAIM_STATE.ERROR;
       }
+    },
+    onInputCollectorMessage() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_collector_message_input',
+        this.classId
+      );
     },
     handleClickViewDetails() {
       logTrackerEvent(
