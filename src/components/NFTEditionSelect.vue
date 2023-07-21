@@ -171,6 +171,7 @@ export default {
   methods: {
     handleClickPriceSelectItem({ value }) {
       this.selectedValue = value;
+      this.$emit('change', value);
       this.$emit('update:value', value);
     },
     handleClickCollectButton() {

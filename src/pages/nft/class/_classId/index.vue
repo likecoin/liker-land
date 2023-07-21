@@ -68,6 +68,7 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
+                @change.once="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
@@ -229,8 +230,10 @@
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
-          @on-follow-button-click="handleFollowButtonClick"
-          @on-nft-item-click="handleRecommendedItemClick"
+          @header-avatar-click="handleRecommendationHeaderAvatarClick"
+          @follow-button-click="handleFollowButtonClick"
+          @item-click="handleRecommendedItemClick"
+          @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"
           @slide-prev.once="handleRecommendationSlidePrev"
           @slider-move.once="handleRecommendationSliderMove"
@@ -731,6 +734,15 @@ export default {
         1
       );
     },
+    handleEditionSelectChange() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_edition_selector_change',
+        this.classId,
+        1
+      );
+    },
     handleCopyURL() {
       this.shareURLPath({
         title: this.NFTName,
@@ -762,12 +774,30 @@ export default {
         );
       }
     },
-    handleRecommendedItemClick() {
+    handleRecommendationHeaderAvatarClick() {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_class_details_click_recommended_nft',
+        'nft_class_details_recommend_header_avatar_click',
         this.classId,
+        1
+      );
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_recommend_item_click',
+        classId,
+        1
+      );
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_recommend_item_collect',
+        classId,
         1
       );
     },

@@ -154,6 +154,8 @@
         @portfolio-reset-filter="handleClearFilter"
         @portfolio-input-filter-change-creator="handleCreatorInputFilterChange"
         @portfolio-input-filter-change-keyword="handleKeywordInputFilterChange"
+        @item-click="handlePortfolioItemClick"
+        @item-collect="handlePortfolioItemCollect"
       />
 
     </div>
@@ -408,6 +410,12 @@ export default {
       } else {
         this.alertPromptSuccess(this.$t('portfolio_collect_all_already_alert'));
       }
+    },
+    handlePortfolioItemClick(classId) {
+      logTrackerEvent(this, 'NFT', 'NFTViewDetails(Portfolio)', classId, 1);
+    },
+    handlePortfolioItemCollect(classId) {
+      logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', classId, 1);
     },
   },
 };
