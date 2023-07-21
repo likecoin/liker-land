@@ -475,12 +475,22 @@ export default {
       );
     },
     bumpVisibleGroups() {
+      if (this.maxVisibleGroupIndex >= this.groupedEventsByTime.length - 1) {
+        return;
+      }
+
       let groupIndex = this.maxVisibleGroupIndex;
       let eventCount = 0;
       for (; groupIndex < this.groupedEventsByTime.length; groupIndex += 1) {
         eventCount += this.groupedEventsByTime[groupIndex].events.length;
-        if (eventCount >= MAX_EVENTS_PER_PAGE) break;
+        if (eventCount > MAX_EVENTS_PER_PAGE) break;
       }
+
+      // Show the group even the events count in that group exceeding the max events per page
+      if (groupIndex === this.maxVisibleGroupIndex) {
+        groupIndex += 1;
+      }
+
       this.maxVisibleGroupIndex = groupIndex;
     },
     handleViewMoreButtonClick() {
