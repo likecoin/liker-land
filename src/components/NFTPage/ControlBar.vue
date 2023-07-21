@@ -94,7 +94,7 @@ export default {
     },
 
     price: {
-      type: Number,
+      type: String,
       default: undefined,
     },
 

@@ -6,7 +6,6 @@
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
         <div class="flex items-center justify-end w-full">
           <NFTPageControlBar
-            v-if="!nftIsNFTBook"
             :collected-count="ownCount"
             :class-id="classId"
             :price="controlBarPriceLabel"
@@ -278,7 +277,6 @@ import { mapActions } from 'vuex';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
-import { formatNumberWithLIKE } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -463,12 +461,6 @@ export default {
     },
     defaultSelectedValue() {
       return this.nftEditions[0]?.value;
-    },
-    controlBarPriceLabel() {
-      return (
-        this.nftBookAvailablePrice ||
-        (this.NFTPrice && formatNumberWithLIKE(this.NFTPrice))
-      );
     },
   },
   async mounted() {
