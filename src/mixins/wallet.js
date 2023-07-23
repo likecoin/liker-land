@@ -93,7 +93,7 @@ export default {
       } else {
         this.$router.push(
           this.localeLocation({
-            name: 'dashboard',
+            name: 'social-feeds',
           })
         );
       }

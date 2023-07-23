@@ -259,7 +259,7 @@ const TAB_OPTIONS = {
   USER_STATS: 'userStats',
 };
 export default {
-  name: 'SocialFeedTown',
+  name: 'SocialFeeds',
   layout: 'default',
   mixins: [
     alertMixin,
