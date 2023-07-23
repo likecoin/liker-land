@@ -45,6 +45,8 @@ import {
   WALLET_SET_LIKE_BALANCE_FETCH_PROMISE,
   WALLET_SET_FOLLOWEES,
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
+  WALLET_SET_FOLLOWEE_EVENTS,
+  WALLET_SET_FOLLOWEE_EVENT_FETCHING,
   WALLET_SET_FOLLOWERS,
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
@@ -79,11 +81,13 @@ const state = () => ({
   isFetchingFollowers: false,
   eventLastSeenTs: 0,
   events: [],
+  followeeEvents: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
   likeBalanceFetchPromise: null,
   isFetchingEvent: false,
+  isFetchingFolloweeEvent: false,
   notificationSettings: null,
 
   totalSales: 0,
@@ -204,6 +208,12 @@ const mutations = {
   [WALLET_SET_RESALE_DETAILS](state, list) {
     state.resalesDetails = list;
   },
+  [WALLET_SET_FOLLOWEE_EVENT_FETCHING](state, isFetching) {
+    state.isFetchingFolloweeEvent = isFetching;
+  },
+  [WALLET_SET_FOLLOWEE_EVENTS](state, events) {
+    state.followeeEvents = events;
+  },
 };
 
 const getters = {
@@ -220,8 +230,10 @@ const getters = {
   walletInteractedCreators: state => state.pastFollowees,
   walletIsFetchingFollowees: state => state.isFetchingFollowees,
   walletIsFetchingFollowers: state => state.isFetchingFollowers,
+  walletIsFetchingFolloweeEvents: state => state.isFetchingFolloweeEvent,
   getIsFetchingEvent: state => state.isFetchingEvent,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
+  getFolloweeEvents: state => state.followeeEvents.slice(0, 30),
   getLatestEventTimestamp: state =>
     state.events[0]?.timestamp &&
     new Date(state.events[0]?.timestamp).getTime(),
@@ -411,6 +423,122 @@ const actions = {
         method,
       });
     }
+  },
+
+  async fetchFolloweeWalletEvent({ state, commit, dispatch }) {
+    const { address, followees } = state;
+    if (!followees.length) return;
+    commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, true);
+
+    // get followee wallet events
+    const getFolloweeEvents = followee =>
+      this.$api
+        .$get(
+          getNFTEvents({
+            involver: followee,
+            limit: WALLET_EVENT_LIMIT,
+            actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'new_class'],
+            ignoreToList: LIKECOIN_NFT_API_WALLET,
+            reverse: true,
+          })
+        )
+        .then(res => res.events)
+        .catch(() => []);
+    const eventPromises = followees.map(getFolloweeEvents);
+    const responses = await Promise.all(eventPromises);
+    const events = responses.flat();
+    events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const categorizeEvent = event => {
+      switch (event.action) {
+        case '/cosmos.nft.v1beta1.MsgSend':
+          event.type =
+            event.sender === LIKECOIN_NFT_API_WALLET ? 'collect' : 'send';
+          break;
+        case 'new_class':
+          event.type = 'publish';
+          break;
+        case 'buy_nft':
+          event.type = 'purchase';
+          break;
+        default:
+          break;
+      }
+      return event;
+    };
+    const categorizedEvents = events.map(categorizeEvent);
+
+    // get creator message for 'publish' events
+    const publishEvents = categorizedEvents.filter(
+      event => event.type === 'publish'
+    );
+    await Promise.all(
+      publishEvents.map(async event => {
+        const metadata = await dispatch(
+          'lazyGetNFTClassMetadata',
+          event.class_id
+        );
+        if (metadata.message) {
+          event.memo = metadata.message;
+        }
+      })
+    );
+    publishEvents.forEach(publishEvent => {
+      const index = categorizedEvents.findIndex(
+        event => event === publishEvent
+      );
+      if (index !== -1) {
+        categorizedEvents[index] = publishEvent;
+      }
+    });
+
+    // get collector message for 'collect' events
+    const collectEvents = categorizedEvents.filter(
+      event => event.type === 'collect'
+    );
+    const promises = collectEvents.map(e =>
+      getNFTHistoryDataMap({
+        axios: this.$api,
+        classId: e.class_id,
+        txHash: e.tx_hash,
+      })
+    );
+    const historyDatas = await Promise.all(promises);
+    historyDatas.forEach((m, index) => {
+      m.forEach(data => {
+        const { granterMemo, price, sellerWallet } = data;
+        collectEvents[index].price = price;
+        collectEvents[index].granterMemo = granterMemo;
+        collectEvents[index].sender = sellerWallet;
+      });
+    });
+    categorizedEvents.forEach(event => {
+      if (event.type === 'collect') {
+        Object.assign(
+          event,
+          collectEvents.find(collectEvent => collectEvent === event)
+        );
+      }
+    });
+
+    // filter available events
+    const filteredEvents = categorizedEvents.filter(event => {
+      if (event.sender === address || event.receiver === address) {
+        return false;
+      }
+      if (event.type === 'send') {
+        return !!event.memo;
+      }
+      if (event.type === 'collect' || event.type === 'purchase') {
+        return !!event.granterMemo;
+      }
+      if (event.type === 'publish') {
+        return true;
+      }
+      return false;
+    });
+
+    commit(WALLET_SET_FOLLOWEE_EVENTS, filteredEvents);
+    commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, false);
   },
 
   async fetchWalletEvents(
