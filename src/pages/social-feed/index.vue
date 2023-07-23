@@ -16,7 +16,7 @@
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
       {{ /* Tabs */ }}
-      <div class="flex justify-center">
+      <div class="flex justify-center mb-[24px] desktop:mb-[48px]">
         <ul
           :class="[
             'flex',
@@ -87,46 +87,28 @@
           :class="[
             'w-full',
             'flex',
+            'justify-center'
           ]"
         >
-          <ul class="w-full">
-            <li class="flex flex-col justify-start gap-[12px]">
-              <div class="flex justify-start items-center gap-[8px]">
-                <Identity
-                  class="self-start flex-shrink-0"
-                  avatar-url="https://api.rinkeby.like.co/users/id/aurora-test/avatar?size=50"
-                  :avatar-size="50"
-                  :is-avatar-outlined="false"
-                />
-                <div class="flex flex-col gap-[4px] justify-start">
-                  <p class="text-[16px] font-600 text-dark-gray">
-                    <span class="text-like-green">aurora-test</span>
-                    collected
-                  </p>
-                  <p class="text-[12px] font-400 text-medium-gray">14:20 5/5</p>
-                </div>
-              </div>
-              <div class="flex justify-start gap-[8px] items-center text-like-green pl-[12px]">
-                <IconFlare class="text-dark-gray" />
-                <IconCreativeWork />
-                <p class="text-[14px]">Writing NFT - Abstract Leaf in 2023 | Living room design decor...</p>
-              </div>
-              <div class="flex flex-col justify-start gap-[12px] py-[24px] px-[32px] bg-white border-2 border-shade-gray rounded-[24px] text-dark-gray">
-                <IconMessage />
-                <p class="text-[16px]"> love this !! 📷🎨🖼️🌺🌿</p>
-                <div class="flex items-center justify-start gap-[6px]">
-                  <IconTransfer class="text-medium-gray" />
-                  <Identity
-                    class="self-start flex-shrink-0"
-                    avatar-url="https://api.rinkeby.like.co/users/id/aurora22/avatar?size=32"
-                    :avatar-size="32"
-                    :is-avatar-outlined="false"
-                  />
-                  <p class="text-[14px] font-600 text-like-green">aurora22</p>
-                </div>
-              </div>
+          <div v-if="walletIsFetchingFolloweeEvents">
+            <Label align="center" class="text-medium-gray" :text="$t('settings_follow_loading')" />
+            <ProgressIndicator class="self-center " />
+          </div>
+          <ul v-else-if="getFolloweeEvents.length" class="w-full">
+            <li v-for="e in getFolloweeEvents" :key="e.tx_hash" class="mb-[48px]">
+              <SocialFeedItem
+                :type="e.type"
+                :sender-address="e.sender"
+                :receiver-address="e.receiver"
+                :memo="e.memo"
+                :granter-memo="e.granterMemo"
+                :timestamp="e.timestamp"
+                :class-id="e.class_id"
+                :nft-id="e.nft_id"
+              />
             </li>
           </ul>
+          <div v-if="!walletIsFetchingFolloweeEvents && !getFolloweeEvents.length">{{ $t('dashboard_table_no_data') }}</div>
         </div>
 
         {{ /* Main View -- collectibles */ }}
@@ -227,15 +209,6 @@
             </ButtonV2>
           </div>
         </div>
-
-
-
-
-
-
-
-
-
       </div>
 
       <FollowerDialog
@@ -337,23 +310,22 @@ export default {
         this.updateTopRankedCreators();
       }
     },
+    walletFollowees(walletFollowees) {
+      if (walletFollowees) {
+        this.fetchFolloweeWalletEvent();
+      }
+    },
   },
   mounted() {
     this.syncRouteForTab();
     if (this.getAddress) {
-      this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
       this.updateTopRankedCreators();
     }
   },
   methods: {
-    ...mapActions(['fetchUserInfoByAddress', 'lazyGetUserInfoByAddress']),
-    async fetchUserInfo() {
-      try {
-        await this.fetchUserInfoByAddress(this.getAddress);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
+    ...mapActions(['lazyGetUserInfoByAddress']),
+    fetchUserInfo() {
+      this.lazyGetUserInfoByAddress(this.getAddress);
     },
     async updateTopRankedCreators() {
       const res = await this.$axios.$get(
@@ -399,6 +371,7 @@ export default {
     },
     handleGoCollectibles() {
       this.handleCurrentTabChange(TAB_OPTIONS.COLLECTIBLES);
+      this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
     },
     handleGoUserStats() {
       this.handleCurrentTabChange(TAB_OPTIONS.USER_STATS);
