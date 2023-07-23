@@ -525,14 +525,11 @@ const actions = {
       if (event.sender === address || event.receiver === address) {
         return false;
       }
-      if (event.type === 'send') {
+      if (event.type === 'send' || event.type === 'publish') {
         return !!event.memo;
       }
       if (event.type === 'collect' || event.type === 'purchase') {
         return !!event.granterMemo;
-      }
-      if (event.type === 'publish') {
-        return true;
       }
       return false;
     });
