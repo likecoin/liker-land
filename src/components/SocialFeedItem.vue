@@ -48,7 +48,7 @@
     <NuxtLink
       :to="
         classId
-          ? localeLocation({ name: 'nft-class-classId', params: { classId } })
+          ? localeLocation({ name: 'nft-class-classId-nftId', params: { classId, nftId } })
           : ''"
       target="_blank"
     >
