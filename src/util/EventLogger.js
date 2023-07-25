@@ -1,3 +1,5 @@
+import { IS_TESTNET } from '../constant';
+
 function hexString(buffer) {
   const byteArray = new Uint8Array(buffer);
   const hexCodes = [...byteArray].map(value => {
@@ -94,7 +96,7 @@ export function logPurchaseFlowEvent(
         })),
       });
     }
-    if (window.fbq) {
+    if (window.fbq && !IS_TESTNET) {
       const eventNameMapping = {
         view_item: 'ViewContent',
         begin_checkout: 'InitiateCheckout',
@@ -136,7 +138,7 @@ export function logPurchaseNFTBookEvent(
         ],
       });
     }
-    if (window.fbq) {
+    if (window.fbq && !IS_TESTNET) {
       window.fbq('trackCustom', 'PurchaseNFTBook', {
         currency,
         value: price,
