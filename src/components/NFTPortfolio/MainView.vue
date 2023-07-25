@@ -155,6 +155,8 @@
             :portfolio-tab="portfolioTab"
             :should-fetch-when-visible="true"
             @load-cover="updatePortfolioGrid"
+            @click.native="handleItemClick(nft.classId)"
+            @collect="handleItemCollect(nft.classId)"
           />
         </li>
       </ul>
@@ -556,6 +558,12 @@ export default {
       }
       this.$emit('infinite-scroll', this.portfolioTab);
     }, 2000),
+    handleItemClick(classId) {
+      this.$emit('item-click', classId);
+    },
+    handleItemCollect(classId) {
+      this.$emit('item-collect', classId);
+    },
   },
 };
 </script>

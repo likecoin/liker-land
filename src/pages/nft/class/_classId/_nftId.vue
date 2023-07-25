@@ -287,8 +287,10 @@
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
-          @on-follow-button-click="handleFollowButtonClick"
-          @on-nft-item-click="handleRecommendedItemClick"
+          @header-avatar-click="handleRecommendationHeaderAvatarClick"
+          @follow-button-click="handleFollowButtonClick"
+          @item-click="handleRecommendedItemClick"
+          @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"
           @slide-prev.once="handleRecommendationSlidePrev"
           @slider-move.once="handleRecommendationSliderMove"
@@ -686,12 +688,30 @@ export default {
         );
       }
     },
-    handleRecommendedItemClick() {
+    handleRecommendationHeaderAvatarClick() {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_details_click_recommended_nft',
+        'nft_details_recommend_header_avatar_click',
         this.classId,
+        1
+      );
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_recommend_item_click',
+        classId,
+        1
+      );
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_details_recommend_item_collect',
+        classId,
         1
       );
     },

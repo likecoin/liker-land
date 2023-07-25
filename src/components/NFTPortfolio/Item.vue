@@ -2,7 +2,6 @@
   <NuxtLink
     class="relative block w-[310px]"
     :to="detailsPageRoute"
-    @click.native="handleClickViewDetails"
   >
     <client-only v-if="shouldFetchWhenVisible">
       <lazy-component
@@ -104,7 +103,7 @@ export default {
       this.lazyFetchNFTClassAggregatedData();
     },
     async handleClickCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', this.classId, 1);
+      this.$emit('collect');
       try {
         this.isCollecting = true;
         await this.collectNFT();
@@ -113,15 +112,6 @@ export default {
       } finally {
         this.isCollecting = false;
       }
-    },
-    handleClickViewDetails() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'NFTViewDetails(Portfolio)',
-        this.classId,
-        1
-      );
     },
     handleCoverLoaded(e) {
       this.$emit('load-cover', e);

@@ -6,6 +6,7 @@
         class="flex-shrink-0"
         :wallet-address="iscnOwner"
         :avatar-size="40"
+        @click.native="handleHeaderAvatarClick"
       />
       <ButtonV2
         :preset="isFollowed ? 'tertiary' : 'secondary'"
@@ -35,7 +36,8 @@
             :class-id="nft.classId"
             :portfolio-wallet="iscnOwner"
             :should-fetch-when-visible="true"
-            @click="handleItemClick"
+            @click.native="handleItemClick(nft.classId)"
+            @collect="handleItemCollect(nft.classId)"
           />
         </SwiperSlide>
       </Swiper>
@@ -101,11 +103,17 @@ export default {
     },
   },
   methods: {
-    handleFollowButtonClick() {
-      this.$emit('on-follow-button-click');
+    handleHeaderAvatarClick() {
+      this.$emit('header-avatar-click');
     },
-    handleItemClick() {
-      this.$emit('on-nft-item-click');
+    handleFollowButtonClick() {
+      this.$emit('follow-button-click');
+    },
+    handleItemClick(classId) {
+      this.$emit('item-click', classId);
+    },
+    handleItemCollect(classId) {
+      this.$emit('item-collect', classId);
     },
     handleClickPrev() {
       this.$emit('slide-prev');
