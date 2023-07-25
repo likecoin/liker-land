@@ -50,7 +50,7 @@
         v-if="!isAllSoldOut"
         :is-disabled="!selectedItem"
         preset="secondary"
-        :text="$t('nft_edition_select_confirm_button_text')"
+        :text="currentCTAText"
         @click="handleClickCollectButton"
       >
         <template #prepend>
@@ -72,6 +72,8 @@
 </template>
 
 <script>
+import experimentMixin from '~/mixins/experiment';
+
 import ButtonV2 from './ButtonV2';
 import NotifyIcon from './Icon/Notify';
 import NFTEditionSelectItem from './NFTEditionSelectItem';
@@ -80,6 +82,7 @@ import NFTWidgetIconInsertCoin from './NFTWidget/Icon/InsertCoin';
 
 export default {
   name: 'NFTEditionSelect',
+  mixins: [experimentMixin('isExperimenting', 'nft-book-cta-text', 'variant')],
   components: {
     ButtonV2,
     NotifyIcon,
@@ -161,6 +164,11 @@ export default {
       return this.items.every(
         item => item.stock === 0 || item.priceLabel === undefined
       );
+    },
+    currentCTAText() {
+      return this.isExperimenting
+        ? this.$t('nft_edition_select_confirm_button_text_purchase')
+        : this.$t('nft_edition_select_confirm_button_text_collect');
     },
   },
   mounted() {
