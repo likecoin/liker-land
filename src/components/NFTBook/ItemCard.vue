@@ -67,92 +67,96 @@
   >
     <component
       :is="componentTag"
-      :class="['flex', 'items-end', { group: !isDetailsPreset }, 'mt-[48px]']"
+      :class="[
+        'relative',
+        'flex',
+        isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
+        'flex-col laptop:flex-row',
+        'laptop:gap-[36px]',
+        'w-full',
+        'rounded-[32px]',
+        'px-[16px] sm:px-[32px] laptop:px-[48px]',
+        'transition-all',
+        'duration-200',
+        bgStyle,
+        'mt-[48px]',
+        { group: !isDetailsPreset },
+      ]"
       :to="isDetailsPreset ? undefined : nftCollectRoute"
     >
-      <div
-        :class="[
-          'relative',
-          'flex',
-          isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
-          'flex-col laptop:flex-row',
-          'laptop:gap-[36px]',
-          'w-full',
-          'rounded-[32px]',
-          'px-[32px] laptop:px-[48px]',
-          'transition-all',
-          'duration-200',
-          bgStyle
-        ]"
-      >
-        <client-only v-if="!isDetailsPreset">
-          <lazy-component
-            class="absolute inset-0 pointer-events-none -top-full"
-            @show.once="fetchInfo"
-          />
-        </client-only>
-        <div class="flex flex-col items-center shrink-0">
-          <NFTCover
-            :class="[
-              'mt-[-48px]',
-              coverClasses,
-            ]"
-            :is-nft-book="true"
-            :src="NFTImageUrl"
-            :size="300"
-            :alt="NFTName"
-          />
+      <client-only v-if="!isDetailsPreset">
+        <lazy-component
+          class="absolute inset-0 pointer-events-none -top-full"
+          @show.once="fetchInfo"
+        />
+      </client-only>
+      <div class="flex flex-col items-center shrink-0">
+        <NFTCover
+          :class="[
+            'mt-[-48px]',
+            coverClasses,
+          ]"
+          :is-nft-book="true"
+          :src="NFTImageUrl"
+          :size="300"
+          :alt="NFTName"
+        />
 
+        <div class="hidden laptop:block">
           <slot name="column-left" />
         </div>
-        <!-- Info column -->
-        <div class="flex flex-col justify-start py-[32px] gap-[12px] grow">
-          <Label
-            class="text-like-cyan"
-            :text="$t('campaign_nft_book_just_arrived')"
-          />
-          <Label preset="h4" :class="titleStyle" :text="NFTName" />
-          <p :class="['text-14', descriptionStyle]">
-            {{ NFTDescription }}
-          </p>
-          <div class="flex">
-            <client-only>
-              <NuxtLink
-                class="mt-[12px] flex items-center text-like-green group my-[8px]"
-                :to="
-                  iscnOwner
-                    ? localeLocation({
-                      name: 'id',
-                      params: { id: iscnOwner },
-                      query: { tab: 'created' },
-                    })
-                    : ''"
-                @click.native.stop="onClickAvatar"
-              >
-                <Identity
-                  :avatar-url="creatorAvatar"
-                  :avatar-size="42"
-                  :is-avatar-disabled="true"
-                  :is-lazy-loaded="true"
-                />
-                <div class="flex flex-col justify-start ml-[8px]">
-                  <span class="text-like-cyan-gray text-10 group-hover:underline">{{
-                    $t('identity_type_creator')
-                  }}</span>
-                  <span
-                    :class="[
-                      'group-hover:underline',
-                      'font-[600]',
-                      displayNameStyle,
-                    ]"
-                  >{{ creatorDisplayName | ellipsis }}</span>
-                </div>
-              </NuxtLink>
-            </client-only>
-          </div>
-
-          <slot name="column-right" />
+      </div>
+      <!-- Info column -->
+      <div class="flex flex-col items-center laptop:items-start justify-start py-[32px] gap-[12px] grow">
+        <Label
+          class="text-like-cyan"
+          :text="$t('campaign_nft_book_just_arrived')"
+        />
+        <Label preset="h4" :class="titleStyle" :text="NFTName" />
+        <p :class="['text-14', descriptionStyle]">
+          {{ NFTDescription }}
+        </p>
+        <div class="flex">
+          <client-only>
+            <NuxtLink
+              class="mt-[12px] flex items-center text-like-green group my-[8px]"
+              :to="
+                iscnOwner
+                  ? localeLocation({
+                    name: 'id',
+                    params: { id: iscnOwner },
+                    query: { tab: 'created' },
+                  })
+                  : ''"
+              @click.native.stop="onClickAvatar"
+            >
+              <Identity
+                :avatar-url="creatorAvatar"
+                :avatar-size="42"
+                :is-avatar-disabled="true"
+                :is-lazy-loaded="true"
+              />
+              <div class="flex flex-col justify-start ml-[8px]">
+                <span class="text-like-cyan-gray text-10 group-hover:underline">{{
+                  $t('identity_type_creator')
+                }}</span>
+                <span
+                  :class="[
+                    'group-hover:underline',
+                    'font-[600]',
+                    displayNameStyle,
+                  ]"
+                >{{ creatorDisplayName | ellipsis }}</span>
+              </div>
+            </NuxtLink>
+          </client-only>
         </div>
+
+        <slot name="column-right" />
+
+      </div>
+      <div class="laptop:hidden flex flex-col items-center">
+        <slot name="column-left" />
       </div>
     </component>
 

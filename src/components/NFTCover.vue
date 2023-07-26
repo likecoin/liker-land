@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-stretch shrink-0 w-min">
     <div
-      class="relative bg-gray-9b"
+      class="relative bg-gray-9b w-full"
       :style="rootStyle"
     >
       <video
