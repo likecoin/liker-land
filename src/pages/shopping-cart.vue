@@ -158,7 +158,11 @@ export default {
       };
     },
     classIdList() {
-      return this.shoppingCartNFTClassList.map(item => item.classId);
+      return this.shoppingCartNFTClassList
+        .filter(
+          item => this.getNFTClassPurchaseInfoById(item.classId)?.totalPrice > 0
+        )
+        .map(item => item.classId);
     },
     totalNFTPrice() {
       return this.shoppingCartNFTClassList.reduce((totalPrice, item) => {

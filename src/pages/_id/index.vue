@@ -177,6 +177,7 @@ import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
+import { fetchAllNFTClassFromChain } from '~/util/nft';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
@@ -271,7 +272,6 @@ export default {
   computed: {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
-      'getNFTClassOwnerInfoById',
       'walletHasLoggedIn',
       'walletFollowees',
     ]),
@@ -384,7 +384,7 @@ export default {
       this.exportFollowerList();
       this.alertPromptSuccess(this.$t('portfolio_follower_export_success'));
     },
-    handleClickCollectAllButton() {
+    async handleClickCollectAllButton() {
       if (this.isLoading) return;
 
       logTrackerEvent(
@@ -394,16 +394,24 @@ export default {
         `${this.wallet}`,
         1
       );
+
+      // TODO: store partial collected classes into collectedNFTClassesByAddressMap
+      const collected = await fetchAllNFTClassFromChain(this.$api, {
+        iscnOwner: this.wallet,
+        nftOwner: this.getAddress,
+      });
+      const collectedSet = new Set(collected.map(n => n.id));
+
       const classIds = this.nftClassListOfCreatedInOrder
+        // HACK: c.price is latest_price (has been) from chain, not actual price (to be) from Firestore.
+        // Classes haven't been collected by anyone will not have price
+        .filter(
+          c =>
+            c.price > 0 ||
+            this.getNFTClassPurchaseInfoById(c.classId)?.totalPrice > 0
+        )
         .map(n => n.classId)
-        .filter(classId => {
-          const isCollectable =
-            this.getNFTClassPurchaseInfoById(classId)?.totalPrice > 0;
-          const hasCollected =
-            this.getAddress &&
-            this.getNFTClassOwnerInfoById(classId)?.[this.getAddress];
-          return isCollectable && !hasCollected;
-        });
+        .filter(classId => !collectedSet.has(classId));
       if (classIds.length) {
         this.addNFTClassesToShoppingCart({ classIds });
         this.$router.push(this.localeLocation({ name: 'shopping-cart' }));
