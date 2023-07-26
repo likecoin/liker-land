@@ -75,7 +75,7 @@
         'laptop:gap-[36px]',
         'w-full',
         'rounded-[32px]',
-        'px-[32px] laptop:px-[48px]',
+        'px-[16px] sm:px-[32px] laptop:px-[48px]',
         'transition-all',
         'duration-200',
         bgStyle,
@@ -102,10 +102,12 @@
           :alt="NFTName"
         />
 
-        <slot name="column-left" />
+        <div class="hidden laptop:block">
+          <slot name="column-left" />
+        </div>
       </div>
       <!-- Info column -->
-      <div class="flex flex-col justify-start py-[32px] gap-[12px] grow">
+      <div class="flex flex-col items-center laptop:items-start justify-start py-[32px] gap-[12px] grow">
         <Label
           class="text-like-cyan"
           :text="$t('campaign_nft_book_just_arrived')"
@@ -151,6 +153,10 @@
         </div>
 
         <slot name="column-right" />
+
+      </div>
+      <div class="laptop:hidden flex flex-col items-center">
+        <slot name="column-left" />
       </div>
     </component>
 

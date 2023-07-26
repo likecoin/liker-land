@@ -30,7 +30,7 @@
       <ButtonV2
         v-if="!isSingleItem && !isAllSoldOut"
         preset="plain"
-        class="text-white underline"
+        class="text-white underline phone:order-1"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
       />
