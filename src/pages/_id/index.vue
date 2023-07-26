@@ -177,7 +177,7 @@ import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
-import { fetchAllNFTClassFromChain } from '~/util/nft';
+import { fetchAllNFTClassFromChain, checkIsWritingNFT } from '~/util/nft';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
@@ -271,6 +271,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getNFTClassMetadataById',
       'getNFTClassPurchaseInfoById',
       'walletHasLoggedIn',
       'walletFollowees',
@@ -407,8 +408,9 @@ export default {
         // Classes haven't been collected by anyone will not have price
         .filter(
           c =>
-            c.price > 0 ||
-            this.getNFTClassPurchaseInfoById(c.classId)?.totalPrice > 0
+            checkIsWritingNFT(this.getNFTClassMetadataById(c.classId)) &&
+            (c.price > 0 ||
+              this.getNFTClassPurchaseInfoById(c.classId)?.totalPrice > 0)
         )
         .map(n => n.classId)
         .filter(classId => !collectedSet.has(classId));
