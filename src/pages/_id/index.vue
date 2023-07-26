@@ -272,7 +272,6 @@ export default {
   computed: {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
-      'getNFTClassOwnerInfoById',
       'walletHasLoggedIn',
       'walletFollowees',
     ]),
@@ -396,6 +395,7 @@ export default {
         1
       );
 
+      // TODO: store partial collected classes into collectedNFTClassesByAddressMap
       const collected = await fetchAllNFTClassFromChain(this.$api, {
         iscnOwner: this.wallet,
         nftOwner: this.getAddress,
@@ -403,9 +403,13 @@ export default {
       const collectedSet = new Set(collected.map(n => n.id));
 
       const classIds = this.nftClassListOfCreatedInOrder
-        // HACK: c.price is latest_price (has been) from chain, not actual price (to be) from Firestore
-        // TODO: store partial classes into collectedNFTClassesByAddressMap
-        .filter(c => c.price > 0)
+        // HACK: c.price is latest_price (has been) from chain, not actual price (to be) from Firestore.
+        // Classes haven't been collected by anyone will not have price
+        .filter(
+          c =>
+            c.price > 0 ||
+            this.getNFTClassPurchaseInfoById(c.classId)?.totalPrice > 0
+        )
         .map(n => n.classId)
         .filter(classId => !collectedSet.has(classId));
       if (classIds.length) {
