@@ -22,7 +22,7 @@
           'my-[8px] p-[32px] border-[2px] w-full text-dark-gray',
           type === 'mint_nft' || type === 'purchase' ? 'border-like-cyan' : 'border-shade-gray'
         ]"
-      >{{ message || $t('nft_message_empty') }}</CardV2>
+      ><NFTMessageText :value="message" /></CardV2>
     </template>
 
     <div

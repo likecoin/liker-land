@@ -174,8 +174,9 @@
                     preset="p6"
                     align="middle"
                     class="text-medium-gray"
-                    :text="event.message"
-                  />
+                  >
+                    <NFTMessageText :value="event.message" />
+                  </Label>
                 </div>
               </div>
             </div>
