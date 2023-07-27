@@ -193,9 +193,15 @@ export default {
       return this.nftMetadata.name || this.NFTName;
     },
     NFTDescription() {
+      const overrideKey = `nft_override_${this.classId}_description`;
+      const hasOverride = this.$te(overrideKey);
+      if (hasOverride) return this.$t(overrideKey);
       return this.NFTClassMetadata.description;
     },
     nftDescription() {
+      const overrideKey = `nft_override_${this.classId}_description`;
+      const hasOverride = this.$te(overrideKey);
+      if (hasOverride) return this.$t(overrideKey);
       return this.nftMetadata.description || this.NFTDescription;
     },
     NFTImageUrl() {
