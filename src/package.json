@@ -64,6 +64,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "magic-grid": "^3.2.4",
+    "marked": "^5.1.2",
     "node-fetch": "^2.6.0",
     "nuxt": "^2.15.7",
     "portal-vue": "^1.5.1",
