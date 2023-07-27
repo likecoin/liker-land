@@ -21,7 +21,7 @@
 
         <!-- CTA -->
         <NFTPageCollectCTA
-          v-if="nftIsWritingNFT"
+          v-if="nftIsWritingNFT && nftIsCollectable"
           :nft-image-url="NFTImageUrl"
           :creator-message="creatorMessage"
           :iscn-owner="iscnOwner"
