@@ -41,7 +41,7 @@
           ]"
         >
           <Label align="center" :text="nftName" class="text-like-green" />
-          <Markdown :mdString="nftDescription" />
+          <Markdown :md-string="nftDescription" />
           <div class="flex items-center justify-center">
             <ButtonV2 preset="secondary" :text="priceLabel" @click="$emit('click-collect', nftValue)">
               <template #prepend>
