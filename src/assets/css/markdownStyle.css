@@ -1,83 +1,88 @@
-h1 {
+.markdown-container h1 {
   font-size: 34px;
   font-weight: bold;
 }
 
-h2 {
+.markdown-container h2 {
   font-size: 28px;
   font-weight: bold;
 }
 
-h3 {
+.markdown-container h3 {
   font-size: 24px;
   font-weight: bold;
 }
 
 
-ul ul {
+.markdown-container ul {
   list-style-type: disc;
   margin-left: 0.5em;
 }
 
-ul ul ul {
+.markdown-container ul ul {
   list-style-type: circle;
   margin-left: 1em;
 }
 
-ol {
+.markdown-container ol {
   list-style-type: decimal;
 }
 
-li {
+.markdown-container li {
   text-align: left;
 }
 
-a:hover {
+.markdown-container a{
+  color: '#1e4a51';
+}
+
+.markdown-container a:hover {
+  color: '#1e4a51';
   text-decoration: underline;
 }
 
 
-blockquote {
+.markdown-container blockquote {
   margin: 1em 0;
   padding: 0.5em 1em;
   border-left: 4px solid #ccc;
 }
 
 
-strong {
+.markdown-container strong {
   font-weight: bold;
 }
 
-em {
+.markdown-container em {
   font-style: italic;
 }
 
 
-pre {
+.markdown-container pre {
   background-color: #f0f0f0;
   padding: 1em;
   overflow: auto;
   font-family: 'Courier New', Courier, monospace;
 }
 
-code {
+.markdown-container code {
   font-family: 'Courier New', Courier, monospace;
 }
 
 
-img {
+.markdown-container img {
   max-width: 100%;
   height: auto;
 }
 
 
-hr {
+.markdown-container hr {
   border: none;
   border-bottom: 1px solid #ccc;
   margin: 1em 0;
 }
 
-p {
+.markdown-container p {
   font-size: 14px;
   font-weight: lighter;
   text-align: left;

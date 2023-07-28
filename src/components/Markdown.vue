@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div v-html="markdownToHtml" />
+  <div class="markdown-container" v-html="markdownToHtml" />
 </template>
 
 <script>
