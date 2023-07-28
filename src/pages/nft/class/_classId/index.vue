@@ -21,11 +21,12 @@
 
         <!-- CTA -->
         <NFTPageCollectCTA
-          v-if="nftIsWritingNFT && nftIsCollectable"
+          v-if="nftIsWritingNFT"
           :nft-image-url="NFTImageUrl"
           :creator-message="creatorMessage"
           :iscn-owner="iscnOwner"
-          @click-collect-from-cta="handleCollectFromCTA"
+          :is-collectable="nftIsCollectable"
+          @click-cta-button="handleCollectFromCTA"
         />
 
         <template v-if="nftIsNFTBook">
