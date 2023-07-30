@@ -677,9 +677,9 @@ export default {
       return this.handleCollect();
     },
     handleCollectFromEdition(selectedValue) {
-      const bookStorePrices =
-        this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const hasStock = bookStorePrices[selectedValue]?.stock;
+      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const edition = editions[selectedValue];
+      const hasStock = edition?.stock;
       if (!hasStock && !this.nftIsCollectable) return;
 
       if (hasStock) {
@@ -687,11 +687,11 @@ export default {
           items: [
             {
               name: this.NFTName,
-              price: bookStorePrices[selectedValue].price,
+              price: edition.price,
               classId: this.classId,
             },
           ],
-          price: bookStorePrices[selectedValue].price,
+          price: edition.price,
           currency: 'USD',
           isNFTBook: true,
         };
@@ -699,7 +699,7 @@ export default {
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
-          priceIndex: selectedValue,
+          priceIndex: edition.index,
           platform: this.platform,
         });
         window.open(link, '_blank', 'noopener');
