@@ -82,7 +82,6 @@ import NFTWidgetIconInsertCoin from './NFTWidget/Icon/InsertCoin';
 
 export default {
   name: 'NFTEditionSelect',
-  mixins: [experimentMixin('isExperimenting', 'nft-book-cta-text', 'variant')],
   components: {
     ButtonV2,
     NotifyIcon,
@@ -90,6 +89,7 @@ export default {
     NFTStockLabel,
     NFTWidgetIconInsertCoin,
   },
+  mixins: [experimentMixin('isExperimenting', 'nft-book-cta-text', 'variant')],
   props: {
     items: {
       type: Array,
