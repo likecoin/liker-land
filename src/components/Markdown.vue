@@ -5,6 +5,7 @@
 
 <script>
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 export default {
   name: 'Markdown',
@@ -16,7 +17,8 @@ export default {
   },
   computed: {
     markdownToHtml() {
-      return marked(this.mdString);
+      const rawHtml = marked(this.mdString);
+      return DOMPurify.sanitize(rawHtml);
     },
   },
 };
