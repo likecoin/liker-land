@@ -67,6 +67,64 @@ router.get('/nft/metadata', async (req, res, next) => {
   }
 });
 
+async function getNFTClassChainMetadata(classId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`
+    );
+    const {
+      name,
+      description,
+      uri,
+      data: { metadata, parent },
+    } = data.class;
+    const result = {
+      name,
+      description,
+      uri,
+      ...metadata,
+      parent,
+    };
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.code === 2) {
+      // eslint-disable-next-line no-console
+      throw new Error('NFT_CLASS_NOT_FOUND');
+    }
+    throw error;
+  }
+}
+
+async function getNFTClassAPIMetadata(uri) {
+  try {
+    const { data } = await axios.get(uri);
+    return data;
+  } catch (err) {
+    if (err.response && err.response.status !== 404) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to get API metadata from ${uri}`);
+    }
+    return null;
+  }
+}
+
+async function getISCNMetadata(iscnId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_CHAIN_API}/iscn/records/id?iscn_id=${iscnId}`
+    );
+    const result = data.records[0].data;
+    result.owner = data.owner;
+    return result;
+  } catch (err) {
+    if (err.response && err.response.status !== 404) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to get ISCN data for ${iscnId}`);
+    }
+    return null;
+  }
+}
+
 async function getNFTClassAndISCNMetadata(classId) {
   const {
     data: { class: chainMetadata },
