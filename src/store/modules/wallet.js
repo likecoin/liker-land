@@ -468,7 +468,6 @@ const actions = {
         })
       ).values(),
     ];
-    const classIds = Array.from(new Set(events.map(e => e.class_id)));
 
     const addresses = [];
     // eslint-disable-next-line no-restricted-syntax
@@ -539,6 +538,7 @@ const actions = {
         .sort((a, b) => b.timestamp - a.timestamp)
     );
     if (shouldFetchDetails) {
+      const classIds = Array.from(new Set(events.map(e => e.class_id)));
       classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
     }
     commit(WALLET_SET_EVENT_FETCHING, false);
