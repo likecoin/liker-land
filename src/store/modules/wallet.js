@@ -431,12 +431,12 @@ const actions = {
           })
         )
         .then(({ classes }) =>
-          classes.map(({ id, created_at: timestamp }) => ({
+          classes.map(({ id, created_at: timestamp, owner }) => ({
             // empty strings as placeholders for map key
             action: 'new_class',
             class_id: id,
             nft_id: '',
-            sender: followee,
+            sender: owner,
             timestamp,
             tx_hash: '',
           }))
