@@ -47,4 +47,12 @@ export function downloadCSV(csvString, filename) {
   hiddenLink.click();
 }
 
+export function esacpeHtml(text = '') {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 export default sleep;
