@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/nft/metadata', async (req, res, next) => {
   try {
-    const { class_id: classId } = req.query;
+    const { class_id: classId, data } = req.query;
     if (!classId) {
       res.status(400).send('MISSING_CLASS_ID');
       return;
@@ -22,33 +22,13 @@ router.get('/nft/metadata', async (req, res, next) => {
 
     const [
       [classData, iscnData],
-      ownerInfoRes,
-      listingInfoRes,
-      purchaseInfoRes,
+      [ownerInfo, listings],
+      purchaseInfo,
     ] = await Promise.all([
       getNFTClassAndISCNMetadata(classId),
-      axios.get(
-        `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
-      ),
-      axios.get(
-        `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`
-      ),
-      axios
-        .get(`${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`)
-        .catch(err => {
-          // skip 404 error for non Writing NFT
-          if (err.response && err.response.status === 404) {
-            return null;
-          }
-          throw err;
-        }),
+      getNFTClassOwnerInfoAndListingInfo(classId),
+      getNFTClassPurchaseInfo(classId),
     ]);
-
-    const { owners = [] } = ownerInfoRes.data;
-    const ownerInfo = formatOwnerInfo(owners);
-    const listingInput = listingInfoRes.data.listings || [];
-    const listings = formatAndFilterListing(listingInput, ownerInfo);
-    const purchaseInfo = purchaseInfoRes ? purchaseInfoRes.data : null;
 
     res.set('Cache-Control', 'public, max-age=1');
     res.json({
@@ -172,6 +152,15 @@ function formatOwnerInfo(owners) {
   return ownerInfo;
 }
 
+async function getNFTClassOwnerInfo(classId) {
+  const { data } = await axios.get(
+    `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
+  );
+  const { owners = [] } = data;
+  const result = formatOwnerInfo(owners);
+  return result;
+}
+
 function formatAndFilterListing(listings, ownerInfo) {
   const result = listings
     .map(l => {
@@ -187,6 +176,30 @@ function formatAndFilterListing(listings, ownerInfo) {
     .filter(l => ownerInfo[l.seller] && ownerInfo[l.seller].includes(l.nftId)) // guard listing then sent case
     .sort((a, b) => a.price - b.price);
   return result;
+}
+
+async function getNFTClassOwnerInfoAndListingInfo(classId) {
+  const [ownerInfo, listingInfo] = await Promise.all([
+    getNFTClassOwnerInfo(classId),
+    axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`),
+  ]);
+  const listingInput = listingInfo.data.listings || [];
+  const listings = formatAndFilterListing(listingInput, ownerInfo);
+  return [ownerInfo, listings];
+}
+
+async function getNFTClassPurchaseInfo(classId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`
+    );
+    return data || null;
+  } catch (err) {
+    if (err.response && err.response.status === 404) {
+      return null;
+    }
+    throw err;
+  }
 }
 
 module.exports = router;
