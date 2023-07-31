@@ -481,11 +481,10 @@ const actions = {
         .map(a => dispatch('lazyGetUserInfoByAddress', a));
     }
 
-    events.map(e => {
+    events.forEach(e => {
       if (e.price) {
         e.price = new BigNumber(e.price).shiftedBy(-9).toNumber();
       }
-      return e;
     });
 
     if (shouldFetchDetails) {
