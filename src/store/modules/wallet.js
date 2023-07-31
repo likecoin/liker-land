@@ -422,11 +422,11 @@ const actions = {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const getFolloweeNewClassEvents = followee =>
+    const getFolloweesNewClassEvents = followees =>
       this.$api
         .$get(
           getNFTClassesPartial({
-            iscnOwner: followee,
+            iscnOwner: followees,
             reverse: true,
           })
         )
@@ -456,7 +456,7 @@ const actions = {
         .then(res => res.events),
     ];
     if (Array.isArray(followees) && followees.length) {
-      eventPromises.push(...followees.map(getFolloweeNewClassEvents));
+      eventPromises.push(getFolloweesNewClassEvents(followees));
     }
     const responses = await Promise.all(eventPromises);
     let events = responses.flat();
