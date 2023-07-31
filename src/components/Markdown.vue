@@ -7,7 +7,7 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-import { esacpeHtml } from '@/util/misc';
+import { escapeHtml, unescapeHtml } from '@/util/misc';
 
 export default {
   name: 'Markdown',
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     markdownToHtml() {
-      const text = esacpeHtml(this.mdString);
+      const text = escapeHtml(unescapeHtml(this.mdString));
       const rawHtml = marked(text);
       return DOMPurify.sanitize(rawHtml);
     },

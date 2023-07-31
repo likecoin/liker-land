@@ -47,7 +47,15 @@ export function downloadCSV(csvString, filename) {
   hiddenLink.click();
 }
 
-export function esacpeHtml(text = '') {
+export function unescapeHtml(text = '') {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"');
+}
+
+export function escapeHtml(text = '') {
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
