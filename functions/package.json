@@ -93,7 +93,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "2.6.2",
-    "node-sass": "^6.0.1",
+    "node-sass": "^9.0.0",
     "prettier": "1.14.3",
     "sass-loader": "^10.2.0",
     "tailwindcss": "^3.1.6",
