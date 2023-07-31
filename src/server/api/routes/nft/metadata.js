@@ -126,70 +126,26 @@ async function getISCNMetadata(iscnId) {
 }
 
 async function getNFTClassAndISCNMetadata(classId) {
-  const {
-    data: { class: chainMetadata },
-  } = await axios
-    .get(`${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`)
-    .catch(err => {
-      if (err.response && err.response.data && err.response.data.code === 2) {
-        // eslint-disable-next-line no-console
-        throw new Error('NFT_CLASS_NOT_FOUND');
-      }
-      throw err;
-    });
-  const {
-    name,
-    description,
-    uri,
-    data: { metadata, parent },
-  } = chainMetadata;
-  let classData = {
-    name,
-    description,
-    uri,
-    ...metadata,
-    parent,
-  };
+  const chainMetadata = await getNFTClassChainMetadata(classId);
 
-  const iscnId = parent.iscn_id_prefix;
-  const getISCNPromise = axios
-    .get(`${LIKECOIN_CHAIN_API}/iscn/records/id?iscn_id=${iscnId}`)
-    .catch(err => {
-      if (err.response && err.response.status !== 404) {
-        // eslint-disable-next-line no-console
-        console.error(`Failed to get ISCN data for ${iscnId}`);
-        throw err;
-      }
-    });
-  const promises = [getISCNPromise];
+  const iscnId = chainMetadata.parent.iscn_id_prefix;
+  const promises = [getISCNMetadata(iscnId)];
 
+  const { uri } = chainMetadata;
   if (isValidHttpUrl(uri)) {
-    const getApiMetadataPromise = axios.get(uri).catch(err => {
-      if (err.response && err.response.status !== 404) {
-        // eslint-disable-next-line no-console
-        console.error(`Failed to get API metadata of ${classId} for ${uri}`);
-      }
-    });
-    promises.push(getApiMetadataPromise);
+    promises.push(getNFTClassAPIMetadata(uri));
   }
+  const [iscnData, apiMetadata] = await Promise.all(promises);
 
-  const [iscnRes, apiMetadataRes] = await Promise.all(promises);
-  const iscnData = iscnRes.data.records.length
-    ? iscnRes.data.records[0].data
-    : null;
-  const iscnOwner = iscnRes.data.owner;
-  if (iscnData) iscnData.owner = iscnOwner;
-
-  if (apiMetadataRes) {
-    const apiMetadata = apiMetadataRes ? apiMetadataRes.data : null;
-    if (apiMetadata && typeof apiMetadata === 'object') {
-      classData = { ...classData, ...apiMetadata };
-    }
-  }
+  const classData = apiMetadata
+    ? { ...chainMetadata, ...apiMetadata }
+    : chainMetadata;
+  const iscnOwner = iscnData.owner;
+  const accountOwner = chainMetadata.parent.account;
   if (iscnOwner) {
     classData.iscn_owner = iscnOwner;
-  } else if (parent.account) {
-    classData.account_owner = parent.account;
+  } else if (accountOwner) {
+    classData.account_owner = accountOwner;
   }
 
   return [classData, iscnData];
