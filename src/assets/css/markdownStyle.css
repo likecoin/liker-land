@@ -1,0 +1,92 @@
+.markdown-container h1 {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.markdown-container h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.markdown-container h3 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+.markdown-container ul {
+  list-style-type: disc;
+  margin-left: 0.5em;
+}
+
+.markdown-container ul ul {
+  list-style-type: circle;
+  margin-left: 1em;
+}
+
+.markdown-container ol {
+  list-style-type: decimal;
+}
+
+.markdown-container li {
+  text-align: left;
+}
+
+.markdown-container a{
+  color: '#1e4a51';
+}
+
+.markdown-container a:hover {
+  color: '#1e4a51';
+  text-decoration: underline;
+}
+
+
+.markdown-container blockquote {
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  border-left: 4px solid #ccc;
+}
+
+
+.markdown-container strong {
+  font-weight: bold;
+}
+
+.markdown-container em {
+  font-style: italic;
+}
+
+
+.markdown-container pre {
+  background-color: #f0f0f0;
+  padding: 1em;
+  overflow: auto;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.markdown-container code {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+
+.markdown-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.markdown-container hr {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin: 1em 0;
+}
+
+.markdown-container p {
+  font-size: 14px;
+  font-weight: lighter;
+  text-align: left;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
