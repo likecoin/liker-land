@@ -233,7 +233,7 @@ const getters = {
   walletIsFetchingFolloweeEvents: state => state.isFetchingFolloweeEvent,
   getIsFetchingEvent: state => state.isFetchingEvent,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
-  getFolloweeEvents: state => state.followeeEvents.slice(0, 30),
+  getFolloweeEvents: state => state.followeeEvents,
   getLatestEventTimestamp: state =>
     state.events[0]?.timestamp &&
     new Date(state.events[0]?.timestamp).getTime(),

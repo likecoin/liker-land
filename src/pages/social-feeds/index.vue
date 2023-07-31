@@ -94,8 +94,8 @@
             <Label align="center" class="text-medium-gray" :text="$t('settings_follow_loading')" />
             <ProgressIndicator class="self-center " />
           </div>
-          <ul v-else-if="getFolloweeEvents.length" class="w-full">
-            <li v-for="e in getFolloweeEvents" :key="e.tx_hash" class="mb-[48px]">
+          <ul v-else-if="displayedEvents.length" class="w-full">
+            <li v-for="e in displayedEvents" :key="e.tx_hash" class="mb-[48px]">
               <SocialFeedItem
                 :type="e.type"
                 :sender-address="e.sender"
@@ -108,7 +108,7 @@
               />
             </li>
           </ul>
-          <div v-if="!walletIsFetchingFolloweeEvents && !getFolloweeEvents.length">{{ $t('dashboard_table_no_data') }}</div>
+          <div v-if="!walletIsFetchingFolloweeEvents && !displayedEvents.length">{{ $t('dashboard_table_no_data') }}</div>
         </div>
 
         {{ /* Main View -- collectibles */ }}
@@ -275,6 +275,7 @@ export default {
       isOpenIncomeDetailsDialog: false,
       isIncomeDetailsLoading: false,
       currentMainTab: TAB_OPTIONS.TOWN,
+      eventsToShow: 30,
     };
   },
   computed: {
@@ -299,6 +300,9 @@ export default {
         isSelected: item.value === this.portfolioTab,
         handleClick: () => this.handleCollectiblesTabChange(item.value),
       }));
+    },
+    displayedEvents() {
+      return this.getFolloweeEvents.slice(0, this.eventsToShow);
     },
   },
 
