@@ -94,6 +94,7 @@ export default {
         this.$router.push(
           this.localeLocation({
             name: 'social-feeds',
+            query: { view: 'town' },
           })
         );
       }

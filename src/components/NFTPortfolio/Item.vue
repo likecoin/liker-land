@@ -35,7 +35,7 @@
     />
     <NFTFeatured
       :class-id="classId"
-      :read-only="getRouteBaseName($route) !== 'dashboard'"
+      :read-only="!isSocialFeedsWithCollectiblesView"
       :display-state="nftDisplayState"
     />
   </NuxtLink>
@@ -97,6 +97,12 @@ export default {
         name: 'nft-class-classId',
         params: { classId: this.classId },
       });
+    },
+    isSocialFeedsWithCollectiblesView() {
+      return (
+        this.getRouteBaseName(this.$route) === 'social-feeds' &&
+        this.$route.query.view === 'collectibles'
+      );
     },
   },
   methods: {

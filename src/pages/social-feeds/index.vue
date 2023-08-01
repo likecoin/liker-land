@@ -304,6 +304,9 @@ export default {
     displayedEvents() {
       return this.getFolloweeEvents.slice(0, this.eventsToShow);
     },
+    currentView() {
+      return this.$route.query.view;
+    },
   },
 
   watch: {
@@ -311,6 +314,7 @@ export default {
       if (newAddress) {
         this.fetchUserInfo();
         this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
+        this.fetchNFTDisplayStateListByAddress(this.getAddress);
         this.updateTopRankedCreators();
       }
     },
@@ -321,8 +325,9 @@ export default {
     },
   },
   mounted() {
-    this.syncRouteForTab();
+    this.currentMainTab = this.currentView;
     if (this.getAddress) {
+      this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
     }
   },
@@ -371,13 +376,25 @@ export default {
       );
     },
     handleGoTown() {
+      this.$router.replace({
+        ...this.$route,
+        query: { view: TAB_OPTIONS.TOWN, tab: undefined },
+      });
       this.handleCurrentTabChange(TAB_OPTIONS.TOWN);
     },
     handleGoCollectibles() {
+      this.$router.replace({
+        ...this.$route,
+        query: { view: TAB_OPTIONS.COLLECTIBLES, tab: 'collected' },
+      });
       this.handleCurrentTabChange(TAB_OPTIONS.COLLECTIBLES);
       this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
     },
     handleGoUserStats() {
+      this.$router.replace({
+        ...this.$route,
+        query: { view: TAB_OPTIONS.USER_STATS, tab: undefined },
+      });
       this.handleCurrentTabChange(TAB_OPTIONS.USER_STATS);
     },
     handleGoCollected() {
