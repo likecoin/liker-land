@@ -456,7 +456,12 @@ const actions = {
         .then(res => res.events),
     ];
     if (Array.isArray(followees) && followees.length) {
-      eventPromises.push(getFolloweesNewClassEvents(followees));
+      // NOTE: max URL length is 2000
+      const batchSizes = 30;
+      for (let i = 0; i < followees.length; i += batchSizes) {
+        const followeeBatch = followees.slice(i, i + batchSizes);
+        eventPromises.push(getFolloweesNewClassEvents(followeeBatch));
+      }
     }
     const responses = await Promise.all(eventPromises);
     let events = responses.flat();
