@@ -230,7 +230,7 @@ export default {
         types.push(this.getContentUrlType(url));
       });
       types.push('nft');
-      return types.filter(type => type !== 'unknown');
+      return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     componentTag() {
       if (this.isDetailsPreset) return 'div';
