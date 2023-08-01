@@ -1,6 +1,7 @@
 <template>
   <IconLike v-if="type === 'crypto'" />
   <IconCreditCard v-else-if="type === 'stripe'" />
+  <IconPrice v-else-if="type === 'free'" />
   <div v-else />
 </template>
 <script>

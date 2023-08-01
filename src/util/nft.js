@@ -375,7 +375,7 @@ export function populateGrantEvent(onChainEvents, dbEventMap) {
         granterWallet,
         timestamp,
       } = dbEventMap.get(key);
-      if (grantTxHash && granterMemo) {
+      if (granterMemo) {
         const e = {
           classId,
           nftId,

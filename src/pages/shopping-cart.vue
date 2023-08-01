@@ -263,6 +263,7 @@ export default {
 
         await this.$api.post(
           postNFTPurchase({
+            wallet: this.getAddress,
             txHash,
             classId: this.classIdList,
             ts: Date.now(),

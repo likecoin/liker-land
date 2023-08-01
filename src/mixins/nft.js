@@ -269,7 +269,7 @@ export default {
         : this.purchaseInfo.price;
     },
     nftIsCollectable() {
-      return this.NFTPrice && this.NFTPrice !== -1;
+      return this.NFTPrice !== undefined && this.NFTPrice !== -1;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
@@ -318,7 +318,7 @@ export default {
     },
     // For W.NFT
     nftBasePrice() {
-      return this.purchaseInfo.basePrice || 0;
+      return this.purchaseInfo.basePrice;
     },
 
     nftEditions() {
@@ -962,6 +962,47 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       }
+    },
+    async collectFreeNFT(classId, { memo = '' }) {
+      logTrackerEvent(this, 'NFT', 'NFTCollectFreeNFT', classId, 1);
+      try {
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        const result = await this.$api.post(
+          postNFTPurchase({
+            wallet: this.getAddress,
+            classId,
+            ts: Date.now(),
+          }),
+          { memo }
+        );
+        logTrackerEvent(this, 'NFT', 'NFTCollectFreeNFTCompleted', classId, 1);
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
+        return result.data;
+      } catch (error) {
+        if (error.toString().includes('code 32')) {
+          const errorHandler = this.getErrorHandlerByCode(32);
+          this.handleError(errorHandler);
+          return undefined;
+        }
+        const errMsg = error.response?.data || error.toString();
+        this.uiSetTxError(errMsg);
+        if (this.uiTxTargetClassId === classId) {
+          this.uiSetTxStatus(TX_STATUS.FAILED);
+        } else {
+          this.alertPromptError(
+            this.$t('nft_collect_modal_alert_fail', {
+              name: this.NFTName,
+              error: errMsg,
+            })
+          );
+        }
+      } finally {
+        this.fetchCollectedNFTClassesByAddress(this.getAddress);
+        this.lazyFetchNFTClassAggregatedData();
+        this.updateNFTHistory({ getAllUserInfo: false });
+        this.walletFetchLIKEBalance();
+      }
+      return undefined;
     },
     async transferNFT({
       toWallet,
