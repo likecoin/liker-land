@@ -422,21 +422,21 @@ const actions = {
       return;
     }
     commit(WALLET_SET_EVENT_FETCHING, true);
-    const getFolloweeNewClassEvents = followee =>
+    const getFolloweesNewClassEvents = followees =>
       this.$api
         .$get(
           getNFTClassesPartial({
-            iscnOwner: followee,
+            iscnOwner: followees,
             reverse: true,
           })
         )
         .then(({ classes }) =>
-          classes.map(({ id, created_at: timestamp }) => ({
+          classes.map(({ id, created_at: timestamp, owner }) => ({
             // empty strings as placeholders for map key
             action: 'new_class',
             class_id: id,
             nft_id: '',
-            sender: followee,
+            sender: owner,
             timestamp,
             tx_hash: '',
           }))
@@ -456,7 +456,12 @@ const actions = {
         .then(res => res.events),
     ];
     if (Array.isArray(followees) && followees.length) {
-      eventPromises.push(...followees.map(getFolloweeNewClassEvents));
+      // NOTE: max URL length is 2000
+      const batchSizes = 30;
+      for (let i = 0; i < followees.length; i += batchSizes) {
+        const followeeBatch = followees.slice(i, i + batchSizes);
+        eventPromises.push(getFolloweesNewClassEvents(followeeBatch));
+      }
     }
     const responses = await Promise.all(eventPromises);
     let events = responses.flat();
@@ -468,7 +473,6 @@ const actions = {
         })
       ).values(),
     ];
-    const classIds = Array.from(new Set(events.map(e => e.class_id)));
 
     const addresses = [];
     // eslint-disable-next-line no-restricted-syntax
@@ -481,11 +485,10 @@ const actions = {
         .map(a => dispatch('lazyGetUserInfoByAddress', a));
     }
 
-    events.map(e => {
+    events.forEach(e => {
       if (e.price) {
         e.price = new BigNumber(e.price).shiftedBy(-9).toNumber();
       }
-      return e;
     });
 
     if (shouldFetchDetails) {
@@ -540,6 +543,7 @@ const actions = {
         .sort((a, b) => b.timestamp - a.timestamp)
     );
     if (shouldFetchDetails) {
+      const classIds = Array.from(new Set(events.map(e => e.class_id)));
       classIds.map(id => dispatch('lazyGetNFTClassMetadata', id));
     }
     commit(WALLET_SET_EVENT_FETCHING, false);
