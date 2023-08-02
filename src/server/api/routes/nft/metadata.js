@@ -14,21 +14,57 @@ const router = Router();
 
 router.get('/nft/metadata', async (req, res, next) => {
   try {
-    const { class_id: classId, data } = req.query;
+    const { class_id: classId, data: inputSelected } = req.query;
     if (!classId) {
       res.status(400).send('MISSING_CLASS_ID');
       return;
+    }
+
+    const selectedSet = new Set(
+      typeof inputSelected === 'string' ? [inputSelected] : inputSelected
+    );
+    if (
+      ![
+        'class_chain',
+        'class_api',
+        'iscn',
+        'owner',
+        'listing',
+        'purchase',
+      ].some(s => selectedSet.has(s))
+    ) {
+      selectedSet.add('all');
+    }
+
+    const promises = [];
+
+    if (['all', 'class_api', 'iscn'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassAndISCNMetadata(classId));
+    } else if (selectedSet.has('class_chain')) {
+      promises.push(Promise.all([getNFTClassChainMetadata(classId), null]));
+    } else {
+      promises.push([null, null]);
+    }
+
+    if (['all', 'listing'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassOwnerInfoAndListingInfo(classId));
+    } else if (selectedSet.has('owner')) {
+      promises.push(Promise.all([getNFTClassOwnerInfo(classId), null]));
+    } else {
+      promises.push([null, null]);
+    }
+
+    if (['all', 'purchase'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassPurchaseInfo(classId));
+    } else {
+      promises.push(null);
     }
 
     const [
       [classData, iscnData],
       [ownerInfo, listings],
       purchaseInfo,
-    ] = await Promise.all([
-      getNFTClassAndISCNMetadata(classId),
-      getNFTClassOwnerInfoAndListingInfo(classId),
-      getNFTClassPurchaseInfo(classId),
-    ]);
+    ] = await Promise.all(promises);
 
     res.set('Cache-Control', 'public, max-age=1');
     res.json({
