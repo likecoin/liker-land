@@ -64,7 +64,7 @@
           </Dropdown>
 
           <ButtonV2
-            v-else
+            v-else-if="records.length"
             :href="records[0].href"
             size="mini"
             preset="tertiary"
@@ -151,7 +151,7 @@ export default {
       return CONTENT_FINGERPRINT_TYPES.map(type => ({
         type,
         label: this.getRecordLabel(type),
-        records: recordMap[type],
+        records: recordMap[type] || [],
       }));
     },
   },
