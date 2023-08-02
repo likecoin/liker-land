@@ -396,6 +396,14 @@ export default {
         1
       );
 
+      if (!this.getAddress) {
+        const isConnected = await this.connectWallet({
+          shouldSkipLogin: true,
+        });
+        if (!isConnected) return;
+        this.walletFetchLIKEBalance();
+      }
+
       // TODO: store partial collected classes into collectedNFTClassesByAddressMap
       const collected = await fetchAllNFTClassFromChain(this.$api, {
         iscnOwner: this.wallet,
