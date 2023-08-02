@@ -1,5 +1,6 @@
 const BigNumber = require('bignumber.js');
 const { Router } = require('express');
+const { LRUCache } = require('lru-cache');
 
 const axios = require('../../../modules/axios');
 const { handleRestfulError } = require('../../middleware/error');
@@ -9,6 +10,11 @@ const {
   LIKECOIN_API_BASE,
   LIKECOIN_NFT_API_WALLET,
 } = require('../../../config/config');
+
+const classChainMetadataCache = new LRUCache({
+  max: 1000,
+  ttl: 1000 * 60 * 60 * 24, // 1 day
+});
 
 const router = Router();
 
@@ -85,6 +91,9 @@ router.get('/nft/metadata', async (req, res, next) => {
 
 async function getNFTClassChainMetadata(classId) {
   try {
+    if (classChainMetadataCache.has(classId)) {
+      return classChainMetadataCache.get(classId);
+    }
     const { data } = await axios.get(
       `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`
     );
@@ -101,6 +110,7 @@ async function getNFTClassChainMetadata(classId) {
       ...metadata,
       parent,
     };
+    classChainMetadataCache.set(classId, result);
     return result;
   } catch (error) {
     if (error.response && error.response.data.code === 2) {
