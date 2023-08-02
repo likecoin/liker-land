@@ -31,7 +31,7 @@
           v-for="{ type, label, records } in recordMap"
           :key="type"
         >
-          <Dropdown v-if="records.length > 1">
+          <Dropdown v-if="records && records.length > 1">
             <template #trigger="{ toggle }">
               <ButtonV2
                 size="mini"
@@ -65,7 +65,7 @@
 
           <ButtonV2
             v-else
-            :href="records[0].href"
+            :href="records && records[0].href"
             size="mini"
             preset="tertiary"
             class="text-medium-gray"
