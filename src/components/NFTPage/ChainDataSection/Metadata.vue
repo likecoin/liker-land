@@ -56,7 +56,7 @@
                     class="text-medium-gray"
                     content-class="text-[12px]"
                   >
-                    {{ record.text }}&nbsp;<IconLinkExternal />
+                    {{ record.text | ellipsis }}&nbsp;<IconLinkExternal />
                   </ButtonV2>
                 </li>
               </ul>
@@ -81,11 +81,15 @@
 
 <script>
 import { ARWEAVE_ENDPOINT, IPFS_VIEW_GATEWAY_URL } from '~/constant';
+import { ellipsis } from '~/util/ui';
 
 const CONTENT_FINGERPRINT_TYPES = ['iscn', 'ipfs', 'ar'];
 
 export default {
   name: 'NFTPageChainDataSectionMetadata',
+  filters: {
+    ellipsis,
+  },
   props: {
     contentUrl: {
       type: String,
