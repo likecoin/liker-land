@@ -16,22 +16,6 @@
         <IconLinkExternal />
       </template>
     </ButtonV2>
-    <ButtonV2
-      v-else
-      class="w-full"
-      preset="outline"
-      :text="$t('nft_details_page_section_metadata_iscn')"
-      :href="iscnUrl"
-      target="_blank"
-      @click="handleClickViewContent"
-    >
-      <template #prepend>
-        <IconISCN class="w-[20px] text-dark-gray" />
-      </template>
-      <template #append>
-        <IconLinkExternal />
-      </template>
-    </ButtonV2>
 
     <p
       v-if="contentUrls.length && !isContentViewable"

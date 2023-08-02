@@ -238,7 +238,10 @@ export default {
       return this.nftMetadata.external_url || this.NFTExternalUrl;
     },
     externalUrl() {
-      return this.iscnUrl || this.nftExternalURL;
+      // The link to the NFT Book info may come from the iscn.json.
+      return this.nftIsNFTBook
+        ? this.iscnUrl || this.nftExternalURL
+        : this.nftExternalURL;
     },
     iscnData() {
       const data = this.getISCNMetadataById(this.iscnId);
