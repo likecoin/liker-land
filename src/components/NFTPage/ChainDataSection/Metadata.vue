@@ -31,7 +31,7 @@
           v-for="{ type, label, records } in recordMap"
           :key="type"
         >
-          <Dropdown v-if="records && records.length > 1">
+          <Dropdown v-if="records.length > 1">
             <template #trigger="{ toggle }">
               <ButtonV2
                 size="mini"
@@ -64,8 +64,8 @@
           </Dropdown>
 
           <ButtonV2
-            v-else
-            :href="records && records[0].href"
+            v-else-if="records.length"
+            :href="records[0].href"
             size="mini"
             preset="tertiary"
             class="text-medium-gray"
@@ -151,7 +151,7 @@ export default {
       return CONTENT_FINGERPRINT_TYPES.map(type => ({
         type,
         label: this.getRecordLabel(type),
-        records: recordMap[type],
+        records: recordMap[type] || [],
       }));
     },
   },
