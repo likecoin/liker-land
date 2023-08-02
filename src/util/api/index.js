@@ -333,6 +333,20 @@ export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   }?${querystring.stringify(qsPayload)}`;
 };
 
+export const nftGetCreatorSubscriptionPlans = wallet =>
+  `${LIKECOIN_API_BASE}/likernft/subscription/creators/${wallet}/plans`;
+
+export const nftSubscribeToCreator = ({ wallet, planId, creatorWallet }) => {
+  const qsPayload = {
+    plan: planId,
+    wallet,
+    creator_wallet: creatorWallet,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/subscription/stripe/new?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';
