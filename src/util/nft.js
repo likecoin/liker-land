@@ -289,6 +289,9 @@ export function formatNFTClassInfo(classData) {
   if (classData.nft_last_owned_at) {
     result.nftLastOwnedAt = Date.parse(classData.nft_last_owned_at);
   }
+  if (classData.last_owned_nft_id) {
+    result.lastOwnedNFTId = classData.last_owned_nft_id;
+  }
   return result;
 }
 

@@ -151,7 +151,7 @@
           <NFTPortfolioItem
             :class-id="nft.classId"
             :portfolio-wallet="portfolioWallet"
-            :nft-id="nft.id"
+            :nft-id="nft.lastOwnedNFTId"
             :portfolio-tab="portfolioTab"
             :should-fetch-when-visible="true"
             @load-cover="updatePortfolioGrid"
