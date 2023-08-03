@@ -72,14 +72,25 @@ router.get('/nft/metadata', async (req, res, next) => {
       purchaseInfo,
     ] = await Promise.all(promises);
 
+    const result = {};
+    if (['all', 'class_chain', 'class_api'].some(s => selectedSet.has(s))) {
+      result.classData = classData;
+    }
+    if (['all', 'iscn'].some(s => selectedSet.has(s))) {
+      result.iscnData = iscnData;
+    }
+    if (['all', 'owner'].some(s => selectedSet.has(s))) {
+      result.ownerInfo = ownerInfo;
+    }
+    if (['all', 'listing'].some(s => selectedSet.has(s))) {
+      result.listings = listings;
+    }
+    if (['all', 'purchase'].some(s => selectedSet.has(s))) {
+      result.purchaseInfo = purchaseInfo;
+    }
+
     res.set('Cache-Control', 'public, max-age=1');
-    res.json({
-      classData,
-      iscnData,
-      ownerInfo,
-      listings,
-      purchaseInfo,
-    });
+    res.json(result);
   } catch (err) {
     if (err.message === 'NFT_CLASS_NOT_FOUND') {
       res.status(404).send(err.message);
