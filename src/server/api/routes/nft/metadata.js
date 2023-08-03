@@ -14,41 +14,57 @@ const router = Router();
 
 router.get('/nft/metadata', async (req, res, next) => {
   try {
-    const { class_id: classId } = req.query;
+    const { class_id: classId, data: inputSelected } = req.query;
     if (!classId) {
       res.status(400).send('MISSING_CLASS_ID');
       return;
     }
 
+    const selectedSet = new Set(
+      typeof inputSelected === 'string' ? [inputSelected] : inputSelected
+    );
+    if (
+      ![
+        'class_chain',
+        'class_api',
+        'iscn',
+        'owner',
+        'listing',
+        'purchase',
+      ].some(s => selectedSet.has(s))
+    ) {
+      selectedSet.add('all');
+    }
+
+    const promises = [];
+
+    if (['all', 'class_api', 'iscn'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassAndISCNMetadata(classId));
+    } else if (selectedSet.has('class_chain')) {
+      promises.push(Promise.all([getNFTClassChainMetadata(classId), null]));
+    } else {
+      promises.push([null, null]);
+    }
+
+    if (['all', 'listing'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassOwnerInfoAndListingInfo(classId));
+    } else if (selectedSet.has('owner')) {
+      promises.push(Promise.all([getNFTClassOwnerInfo(classId), null]));
+    } else {
+      promises.push([null, null]);
+    }
+
+    if (['all', 'purchase'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassPurchaseInfo(classId));
+    } else {
+      promises.push(null);
+    }
+
     const [
       [classData, iscnData],
-      ownerInfoRes,
-      listingInfoRes,
-      purchaseInfoRes,
-    ] = await Promise.all([
-      getNFTClassAndISCNMetadata(classId),
-      axios.get(
-        `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
-      ),
-      axios.get(
-        `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`
-      ),
-      axios
-        .get(`${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`)
-        .catch(err => {
-          // skip 404 error for non Writing NFT
-          if (err.response && err.response.status === 404) {
-            return null;
-          }
-          throw err;
-        }),
-    ]);
-
-    const { owners = [] } = ownerInfoRes.data;
-    const ownerInfo = formatOwnerInfo(owners);
-    const listingInput = listingInfoRes.data.listings || [];
-    const listings = formatAndFilterListing(listingInput, ownerInfo);
-    const purchaseInfo = purchaseInfoRes ? purchaseInfoRes.data : null;
+      [ownerInfo, listings],
+      purchaseInfo,
+    ] = await Promise.all(promises);
 
     res.set('Cache-Control', 'public, max-age=1');
     res.json({
@@ -67,71 +83,85 @@ router.get('/nft/metadata', async (req, res, next) => {
   }
 });
 
-async function getNFTClassAndISCNMetadata(classId) {
-  const {
-    data: { class: chainMetadata },
-  } = await axios
-    .get(`${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`)
-    .catch(err => {
-      if (err.response && err.response.data && err.response.data.code === 2) {
-        // eslint-disable-next-line no-console
-        throw new Error('NFT_CLASS_NOT_FOUND');
-      }
-      throw err;
-    });
-  const {
-    name,
-    description,
-    uri,
-    data: { metadata, parent },
-  } = chainMetadata;
-  let classData = {
-    name,
-    description,
-    uri,
-    ...metadata,
-    parent,
-  };
-
-  const iscnId = parent.iscn_id_prefix;
-  const getISCNPromise = axios
-    .get(`${LIKECOIN_CHAIN_API}/iscn/records/id?iscn_id=${iscnId}`)
-    .catch(err => {
-      if (err.response && err.response.status !== 404) {
-        // eslint-disable-next-line no-console
-        console.error(`Failed to get ISCN data for ${iscnId}`);
-        throw err;
-      }
-    });
-  const promises = [getISCNPromise];
-
-  if (isValidHttpUrl(uri)) {
-    const getApiMetadataPromise = axios.get(uri).catch(err => {
-      if (err.response && err.response.status !== 404) {
-        // eslint-disable-next-line no-console
-        console.error(`Failed to get API metadata of ${classId} for ${uri}`);
-      }
-    });
-    promises.push(getApiMetadataPromise);
-  }
-
-  const [iscnRes, apiMetadataRes] = await Promise.all(promises);
-  const iscnData = iscnRes.data.records.length
-    ? iscnRes.data.records[0].data
-    : null;
-  const iscnOwner = iscnRes.data.owner;
-  if (iscnData) iscnData.owner = iscnOwner;
-
-  if (apiMetadataRes) {
-    const apiMetadata = apiMetadataRes ? apiMetadataRes.data : null;
-    if (apiMetadata && typeof apiMetadata === 'object') {
-      classData = { ...classData, ...apiMetadata };
+async function getNFTClassChainMetadata(classId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${classId}`
+    );
+    const {
+      name,
+      description,
+      uri,
+      data: { metadata, parent },
+    } = data.class;
+    const result = {
+      name,
+      description,
+      uri,
+      ...metadata,
+      parent,
+    };
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.code === 2) {
+      // eslint-disable-next-line no-console
+      throw new Error('NFT_CLASS_NOT_FOUND');
     }
+    throw error;
   }
+}
+
+async function getNFTClassAPIMetadata(uri) {
+  try {
+    const { data } = await axios.get(uri);
+    return data;
+  } catch (err) {
+    if (err.response && err.response.status !== 404) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to get API metadata from ${uri}`);
+    }
+    return null;
+  }
+}
+
+async function getISCNMetadata(iscnId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_CHAIN_API}/iscn/records/id?iscn_id=${iscnId}`
+    );
+    const result = data.records[0].data;
+    result.owner = data.owner;
+    return result;
+  } catch (err) {
+    if (err.response && err.response.status !== 404) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to get ISCN data for ${iscnId}`);
+    }
+    return null;
+  }
+}
+
+async function getNFTClassAndISCNMetadata(classId) {
+  const chainMetadata = await getNFTClassChainMetadata(classId);
+
+  const iscnId = chainMetadata.parent.iscn_id_prefix;
+  const promises = [getISCNMetadata(iscnId)];
+
+  const { uri } = chainMetadata;
+  if (isValidHttpUrl(uri)) {
+    promises.push(getNFTClassAPIMetadata(uri));
+  }
+  const [iscnData, apiMetadata] = await Promise.all(promises);
+
+  const classData = apiMetadata
+    ? { ...chainMetadata, ...apiMetadata }
+    : chainMetadata;
+  const iscnOwner = iscnData.owner;
+  const accountOwner = chainMetadata.parent.account;
   if (iscnOwner) {
     classData.iscn_owner = iscnOwner;
-  } else if (parent.account) {
-    classData.account_owner = parent.account;
+  } else if (accountOwner) {
+    classData.account_owner = accountOwner;
   }
 
   return [classData, iscnData];
@@ -158,6 +188,15 @@ function formatOwnerInfo(owners) {
   return ownerInfo;
 }
 
+async function getNFTClassOwnerInfo(classId) {
+  const { data } = await axios.get(
+    `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?class_id=${classId}`
+  );
+  const { owners = [] } = data;
+  const result = formatOwnerInfo(owners);
+  return result;
+}
+
 function formatAndFilterListing(listings, ownerInfo) {
   const result = listings
     .map(l => {
@@ -173,6 +212,30 @@ function formatAndFilterListing(listings, ownerInfo) {
     .filter(l => ownerInfo[l.seller] && ownerInfo[l.seller].includes(l.nftId)) // guard listing then sent case
     .sort((a, b) => a.price - b.price);
   return result;
+}
+
+async function getNFTClassOwnerInfoAndListingInfo(classId) {
+  const [ownerInfo, listingInfo] = await Promise.all([
+    getNFTClassOwnerInfo(classId),
+    axios.get(`${LIKECOIN_CHAIN_API}/likechain/likenft/v1/listings/${classId}`),
+  ]);
+  const listingInput = listingInfo.data.listings || [];
+  const listings = formatAndFilterListing(listingInput, ownerInfo);
+  return [ownerInfo, listings];
+}
+
+async function getNFTClassPurchaseInfo(classId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_API_BASE}/likernft/purchase?class_id=${classId}`
+    );
+    return data || null;
+  } catch (err) {
+    if (err.response && err.response.status === 404) {
+      return null;
+    }
+    throw err;
+  }
 }
 
 module.exports = router;
