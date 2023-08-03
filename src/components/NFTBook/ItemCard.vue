@@ -113,7 +113,7 @@
           :text="$t('campaign_nft_book_just_arrived')"
         />
         <Label preset="h4" :class="titleStyle" :text="NFTName" />
-        <p :class="['text-14', descriptionStyle]">
+        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
           {{ NFTDescription }}
         </p>
         <div class="flex">
@@ -155,7 +155,7 @@
         <slot name="column-right" />
 
       </div>
-      <div class="laptop:hidden flex flex-col items-center">
+      <div class="flex flex-col items-center laptop:hidden">
         <slot name="column-left" />
       </div>
     </component>
