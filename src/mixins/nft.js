@@ -238,7 +238,7 @@ export default {
       return this.nftMetadata.external_url || this.NFTExternalUrl;
     },
     externalUrl() {
-      // The link to the NFT Book info may come from the iscn.json.
+      // Prioritize iscn url for nft book since book info might be in iscn
       return this.nftIsNFTBook
         ? this.iscnUrl || this.nftExternalURL
         : this.nftExternalURL;
