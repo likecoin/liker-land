@@ -163,6 +163,25 @@
               </template>
             </ButtonV2>
           </CardV2>
+          <CardV2
+            :is-outline="true"
+            :class="[
+              'flex',
+              'flex-col',
+              'items-center',
+              'gap-[1rem]',
+              'w-full',
+              'py-[1rem]',
+              'text-[.875rem]',
+            ]"
+          >
+            <ButtonV2
+              class="shrink-0"
+              :text="$t('portfolio_subscribe_to_readership')"
+              preset="secondary"
+              :to="localeLocation({ name: 'id-readership', params: { id: wallet } })"
+            />
+          </CardV2>
           <NFTPortfolioSubscriptionForm
             v-if="!walletHasLoggedIn"
             id="creator-follow"

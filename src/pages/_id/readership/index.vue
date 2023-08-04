@@ -18,6 +18,10 @@
         'pb-[120px]'
       ]"
     >
+      <div v-if="plans.length === 0">
+        This creator have no readership subscription plans yet!
+        <NuxtLink :to="localeLocation({ name: 'id', params: { id: this.wallet }}) ">Go Back</NuxtLink>
+      </div>
       <div v-for="p in plans" :key="p.id">
         <ul>
           <li>{{ p.name.zh }}</li>
