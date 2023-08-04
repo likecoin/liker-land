@@ -222,6 +222,12 @@
           />
         </section>
         <!-- recommend -->
+        <client-only>
+            <lazy-component
+              class="pointer-events-none"
+              @show.once="handleFetchRecommendInfo"
+            />
+          </client-only>
         <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
           <ProgressIndicator />
         </div>
@@ -487,8 +493,6 @@ export default {
       this.isLoading = false;
     }
 
-    await this.fetchRecommendInfo();
-
     const { hash } = this.$route;
     if (hash) {
       this.$nextTick(() => {
@@ -527,6 +531,9 @@ export default {
         this.trimmedCount
       );
       await this.lazyGetUserInfoByAddresses(trimmedCollectors);
+    },
+    async handleFetchRecommendInfo() {
+      await this.fetchRecommendInfo();
     },
     async handleClickMoreCollector() {
       logTrackerEvent(
