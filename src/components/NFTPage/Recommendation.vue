@@ -17,8 +17,11 @@
       </ButtonV2>
     </div>
 
+    <div v-if="isLoading" class="flex justify-center items-center my-[24px]">
+      <ProgressIndicator />
+    </div>
     <div
-      v-if="recommendedList.length > 0"
+      v-else-if="recommendedList.length > 0"
       class="relative mt-[24px]"
     >
       <Swiper
@@ -46,7 +49,7 @@
         <div class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0" />
         <div class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0" />
         <ButtonV2
-          class="relative pointer-events-auto shadow-lg"
+          class="relative shadow-lg pointer-events-auto"
           preset="tertiary"
           :circle="true"
           @click="handleClickPrev"
@@ -54,7 +57,7 @@
           <IconArrowLeft class="w-[20px]" />
         </ButtonV2>
         <ButtonV2
-          class="relative pointer-events-auto shadow-lg"
+          class="relative shadow-lg pointer-events-auto"
           preset="tertiary"
           :circle="true"
           @click="handleClickNext"
@@ -87,6 +90,10 @@ export default {
     recommendedList: {
       type: Array,
       default: () => [],
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

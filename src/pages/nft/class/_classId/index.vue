@@ -228,14 +228,11 @@
               @show.once="handleFetchRecommendInfo"
             />
           </client-only>
-        <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
-          <ProgressIndicator />
-        </div>
         <NFTPageRecommendation
-          v-else
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
+          :is-loading="isRecommendationLoading"
           @header-avatar-click="handleRecommendationHeaderAvatarClick"
           @follow-button-click="handleFollowButtonClick"
           @item-click="handleRecommendedItemClick"
