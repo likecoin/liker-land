@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
 import BigNumber from 'bignumber.js';
+import jwt from 'jsonwebtoken';
 import {
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
@@ -8,7 +9,7 @@ import {
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
 import { amountToLIKE, getNFTHistoryDataMap } from '~/util/nft';
-import { signLoginMessage } from '~/util/cosmos';
+import { signLoginMessage, signWalletActionMessage } from '~/util/cosmos';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
@@ -27,6 +28,7 @@ import {
   getTotalRoyaltyByAddress,
   getTotalResalesByAddress,
   getAccountBalance,
+  getWalletAuthorizeAPI,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -62,6 +64,7 @@ import {
   WALLET_SET_ROYALTY_DETAILS,
   WALLET_SET_TOTAL_RESALES,
   WALLET_SET_RESALE_DETAILS,
+  WALLET_SET_LIKECOIN_API_ACCESS_TOKEN,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -98,6 +101,8 @@ const state = () => ({
   salesDetails: [],
   royaltyDetails: [],
   resalesDetails: [],
+
+  likecoinApiAccessToken: '',
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -219,6 +224,9 @@ const mutations = {
   [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
     Vue.set(state.feedEventMemoByTxMap, txHash, event);
   },
+  [WALLET_SET_LIKECOIN_API_ACCESS_TOKEN](state, likecoinApiAccessToken) {
+    state.likecoinApiAccessToken = likecoinApiAccessToken;
+  },
 };
 
 const getters = {
@@ -268,6 +276,13 @@ const getters = {
     Object.keys(state.feedEventMemoByTxMap).filter(
       txHash => state.feedEventMemoByTxMap[txHash]?.memo
     ),
+  walletHasLikeCoinApiAuthorization: state => {
+    if (!state.likecoinApiAccessToken) return false;
+    const decoded = jwt.decode(state.likecoinApiAccessToken);
+    if (!decoded) return false;
+    return decoded.exp && decoded.exp > Date.now() / 1000;
+  },
+  walletLikeCoinApiToken: state => state.likecoinApiAccessToken,
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
   walletTotalResales: state => state.totalResales,
@@ -859,6 +874,21 @@ const actions = {
     }
   },
 
+  async signLikeCoinApiAuthorize({ state, commit, dispatch }) {
+    if (!state.signer) {
+      await dispatch('initIfNecessary');
+    }
+    const { address, signer } = state;
+    const signature = await signWalletActionMessage(
+      signer,
+      address,
+      'authorize',
+      ['read:nft_reader', 'write:nft_reader']
+    );
+    const { data } = await this.$api.post(getWalletAuthorizeAPI(), signature);
+    commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, data.token);
+  },
+
   async walletLogout({ commit }) {
     commit(WALLET_SET_USER_INFO, null);
     commit(WALLET_SET_FOLLOWEES, []);
@@ -872,6 +902,7 @@ const actions = {
     commit(WALLET_SET_SALES_DETAILS, []);
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
+    commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, '');
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(

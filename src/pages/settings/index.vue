@@ -17,6 +17,11 @@
           <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>
         </NuxtLink>
       </li>
+      <li>
+        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-readership' })">
+          <span class="settings-menu__item-title"> {{ $t('SettingsPage.readership') }}</span>
+        </NuxtLink>
+      </li>
     </ul>
 
     <ul class="settings-menu !mt-[24px]">

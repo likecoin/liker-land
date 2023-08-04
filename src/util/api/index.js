@@ -336,6 +336,9 @@ export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
 export const nftGetCreatorSubscriptionPlans = wallet =>
   `${LIKECOIN_API_BASE}/likernft/subscription/creators/${wallet}/plans`;
 
+export const nftGetCreatorSubscriptionPlanById = (wallet, planId) =>
+  `${LIKECOIN_API_BASE}/likernft/subscription/creators/${wallet}/plans/${planId}`;
+
 export const nftSubscribeToCreator = ({ wallet, planId, creatorWallet }) => {
   const qsPayload = {
     plan: planId,
@@ -346,6 +349,12 @@ export const nftSubscribeToCreator = ({ wallet, planId, creatorWallet }) => {
     qsPayload
   )}`;
 };
+
+export const nftGetUserActiveSubscription = () =>
+  `${LIKECOIN_API_BASE}/likernft/subscription/readers/plans`;
+
+export const nftStripeSubscriptionPortal = () =>
+  `${LIKECOIN_API_BASE}/likernft/subscription/stripe/portal`;
 
 export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
@@ -412,6 +421,9 @@ export const getNFTBookPurchaseLink = ({
     qsPayload
   )}`;
 };
+
+export const getWalletAuthorizeAPI = () =>
+  `${LIKECOIN_API_BASE}/wallet/authorize`;
 
 export const getTotalSalesByAddress = address => {
   const qsPayload = {
