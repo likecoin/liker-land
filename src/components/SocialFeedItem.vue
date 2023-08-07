@@ -40,7 +40,7 @@
           preset="tertiary"
           size="mini"
           :text="$t('follow')"
-          @click="() => clickFollow(senderWallet)"
+          @click="() => clickFollow(senderWallet, senderId)"
         />
       </div>
     </div>
@@ -268,12 +268,12 @@ export default {
         this.receiverAddress,
       ]);
     },
-    async clickFollow(followOwner) {
+    async clickFollow(followOwnerWallet, followOwnerDisplayName) {
       this.isFollowLoading = true;
-      await this.handleClickFollow({ followOwner });
+      await this.handleClickFollow({ followOwnerWallet });
       this.alertPromptSuccess(
         this.$t('portfolio_subscription_success_alert', {
-          creator: followOwner,
+          creator: followOwnerDisplayName,
         })
       );
       this.isFollowLoading = false;
