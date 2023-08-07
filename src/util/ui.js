@@ -75,6 +75,7 @@ export function formatNumberWithUnit(num, unit, options = {}) {
 }
 
 export function formatNumberWithLIKE(num, options = {}) {
+  if (num === 0) return 'FREE';
   return formatNumberWithUnit(num, 'LIKE', options);
 }
 

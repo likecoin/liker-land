@@ -1,3 +1,5 @@
+import { IS_TESTNET } from '../constant';
+
 function hexString(buffer) {
   const byteArray = new Uint8Array(buffer);
   const hexCodes = [...byteArray].map(value => {
@@ -49,9 +51,9 @@ export function logTrackerEvent(vue, category, action, label = '', value = 1) {
     // do not track
     if (window.doNotTrack || navigator.doNotTrack) return;
     if (vue.$gtag) {
-      vue.$gtag.event(action, {
-        event_category: category,
-        event_label: label && label.substring(0, 499),
+      vue.$gtag.event(action?.substring(0, 40), {
+        event_category: category?.substring(0, 100),
+        event_label: label?.substring(0, 100),
         value,
       });
     }
@@ -86,7 +88,7 @@ export function logPurchaseFlowEvent(
         currency,
         items: items.map(i => ({
           item_id: i.classId,
-          item_name: i.name,
+          item_name: i.name?.substring(0, 100),
           item_brand: isNFTBook ? 'Book NFT' : 'Writing NFT',
           currency,
           price: i.price,
@@ -94,7 +96,7 @@ export function logPurchaseFlowEvent(
         })),
       });
     }
-    if (window.fbq) {
+    if (window.fbq && !IS_TESTNET) {
       const eventNameMapping = {
         view_item: 'ViewContent',
         begin_checkout: 'InitiateCheckout',
@@ -127,7 +129,7 @@ export function logPurchaseNFTBookEvent(
         items: [
           {
             item_id: classId,
-            item_name: name,
+            item_name: name?.substring(0, 100),
             item_brand: 'NFT Book',
             currency,
             price,
@@ -136,7 +138,7 @@ export function logPurchaseNFTBookEvent(
         ],
       });
     }
-    if (window.fbq) {
+    if (window.fbq && !IS_TESTNET) {
       window.fbq('trackCustom', 'PurchaseNFTBook', {
         currency,
         value: price,

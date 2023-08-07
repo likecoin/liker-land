@@ -193,9 +193,15 @@ export default {
       return this.nftMetadata.name || this.NFTName;
     },
     NFTDescription() {
+      const overrideKey = `nft_override_${this.classId}_description`;
+      const hasOverride = this.$te(overrideKey);
+      if (hasOverride) return this.$t(overrideKey);
       return this.NFTClassMetadata.description;
     },
     nftDescription() {
+      const overrideKey = `nft_override_${this.classId}_description`;
+      const hasOverride = this.$te(overrideKey);
+      if (hasOverride) return this.$t(overrideKey);
       return this.nftMetadata.description || this.NFTDescription;
     },
     NFTImageUrl() {
@@ -232,7 +238,10 @@ export default {
       return this.nftMetadata.external_url || this.NFTExternalUrl;
     },
     externalUrl() {
-      return this.iscnUrl || this.nftExternalURL;
+      // Prioritize iscn url for nft book since book info might be in iscn
+      return this.nftIsNFTBook
+        ? this.iscnUrl || this.nftExternalURL
+        : this.nftExternalURL;
     },
     iscnData() {
       const data = this.getISCNMetadataById(this.iscnId);
@@ -263,7 +272,7 @@ export default {
         : this.purchaseInfo.price;
     },
     nftIsCollectable() {
-      return this.NFTPrice && this.NFTPrice !== -1;
+      return this.NFTPrice !== undefined && this.NFTPrice !== -1;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
@@ -312,7 +321,7 @@ export default {
     },
     // For W.NFT
     nftBasePrice() {
-      return this.purchaseInfo.basePrice || 0;
+      return this.purchaseInfo.basePrice;
     },
 
     nftEditions() {
@@ -956,6 +965,47 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       }
+    },
+    async collectFreeNFT(classId, { memo = '' }) {
+      logTrackerEvent(this, 'NFT', 'NFTCollectFreeNFT', classId, 1);
+      try {
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        const result = await this.$api.post(
+          postNFTPurchase({
+            wallet: this.getAddress,
+            classId,
+            ts: Date.now(),
+          }),
+          { memo }
+        );
+        logTrackerEvent(this, 'NFT', 'NFTCollectFreeNFTCompleted', classId, 1);
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
+        return result.data;
+      } catch (error) {
+        if (error.toString().includes('code 32')) {
+          const errorHandler = this.getErrorHandlerByCode(32);
+          this.handleError(errorHandler);
+          return undefined;
+        }
+        const errMsg = error.response?.data || error.toString();
+        this.uiSetTxError(errMsg);
+        if (this.uiTxTargetClassId === classId) {
+          this.uiSetTxStatus(TX_STATUS.FAILED);
+        } else {
+          this.alertPromptError(
+            this.$t('nft_collect_modal_alert_fail', {
+              name: this.NFTName,
+              error: errMsg,
+            })
+          );
+        }
+      } finally {
+        this.fetchCollectedNFTClassesByAddress(this.getAddress);
+        this.lazyFetchNFTClassAggregatedData();
+        this.updateNFTHistory({ getAllUserInfo: false });
+        this.walletFetchLIKEBalance();
+      }
+      return undefined;
     },
     async transferNFT({
       toWallet,

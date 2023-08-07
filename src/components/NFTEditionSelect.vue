@@ -30,7 +30,7 @@
       <ButtonV2
         v-if="!isSingleItem && !isAllSoldOut"
         preset="plain"
-        class="text-white underline"
+        class="text-white underline phone:order-1"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
       />
@@ -50,7 +50,7 @@
         v-if="!isAllSoldOut"
         :is-disabled="!selectedItem"
         preset="secondary"
-        :text="$t('nft_edition_select_confirm_button_text')"
+        :text="currentCTAText"
         @click="handleClickCollectButton"
       >
         <template #prepend>
@@ -72,6 +72,8 @@
 </template>
 
 <script>
+import experimentMixin from '~/mixins/experiment';
+
 import ButtonV2 from './ButtonV2';
 import NotifyIcon from './Icon/Notify';
 import NFTEditionSelectItem from './NFTEditionSelectItem';
@@ -87,6 +89,7 @@ export default {
     NFTStockLabel,
     NFTWidgetIconInsertCoin,
   },
+  mixins: [experimentMixin('isExperimenting', 'nft-book-cta-text', 'variant')],
   props: {
     items: {
       type: Array,
@@ -162,6 +165,11 @@ export default {
         item => item.stock === 0 || item.priceLabel === undefined
       );
     },
+    currentCTAText() {
+      return this.isExperimenting
+        ? this.$t('nft_edition_select_confirm_button_text_purchase')
+        : this.$t('nft_edition_select_confirm_button_text_collect');
+    },
   },
   mounted() {
     if (this.selectedValue !== this.value) {
@@ -171,6 +179,7 @@ export default {
   methods: {
     handleClickPriceSelectItem({ value }) {
       this.selectedValue = value;
+      this.$emit('change', value);
       this.$emit('update:value', value);
     },
     handleClickCollectButton() {

@@ -36,7 +36,7 @@
       </div>
       <template v-else>
         <div
-          v-for="group in groupedEventsByTime"
+          v-for="group in paginatedGroupedEventsByTime"
           :key="group.date"
           class="flex flex-col items-start my-[12px]"
         >
@@ -174,8 +174,9 @@
                     preset="p6"
                     align="middle"
                     class="text-medium-gray"
-                    :text="event.message"
-                  />
+                  >
+                    <NFTMessageText :value="event.message" />
+                  </Label>
                 </div>
               </div>
             </div>
@@ -185,6 +186,14 @@
             </div>
           </LinkV2>
         </div>
+
+        <ButtonV2
+          v-if="shouldShowViewMoreButton"
+          class="mx-auto mt-[1rem]"
+          preset="outline"
+          :text="$t('notification_view_more_button')"
+          @click="handleViewMoreButtonClick"
+        />
       </template>
     </AuthRequiredView>
   </Page>
@@ -197,6 +206,8 @@ import { ellipsis } from '~/util/ui';
 
 import inAppMixin from '~/mixins/in-app';
 import walletMixin from '~/mixins/wallet';
+
+const MAX_EVENTS_PER_PAGE = 10;
 
 export default {
   name: 'NotificationsPage',
@@ -213,7 +224,10 @@ export default {
   },
   layout: 'default',
   data() {
-    return { lastUpdatedTime: undefined };
+    return {
+      lastUpdatedTime: undefined,
+      maxVisibleGroupIndex: 0,
+    };
   },
   computed: {
     ...mapGetters([
@@ -328,6 +342,12 @@ export default {
     groupedEventsByTime() {
       return this.convertToGroupedEvents(this.processedEvents);
     },
+    paginatedGroupedEventsByTime() {
+      return this.groupedEventsByTime.slice(0, this.maxVisibleGroupIndex);
+    },
+    shouldShowViewMoreButton() {
+      return this.maxVisibleGroupIndex < this.groupedEventsByTime.length - 1;
+    },
   },
   watch: {
     getLatestEventTimestamp: {
@@ -345,6 +365,17 @@ export default {
           }
         }
       },
+    },
+    groupedEventsByTime: {
+      immediate: true,
+      handler(newGroups, oldGroups) {
+        if (newGroups?.length !== oldGroups?.length) {
+          this.bumpVisibleGroups();
+        }
+      },
+    },
+    getAddress() {
+      this.maxVisibleGroupIndex = 0;
     },
   },
   async mounted() {
@@ -442,6 +473,35 @@ export default {
       return (
         this.getEventLastSeenTs &&
         this.getEventLastSeenTs >= new Date(event.timestamp).getTime()
+      );
+    },
+    bumpVisibleGroups() {
+      if (this.maxVisibleGroupIndex >= this.groupedEventsByTime.length - 1) {
+        return;
+      }
+
+      let groupIndex = this.maxVisibleGroupIndex;
+      let eventCount = 0;
+      for (; groupIndex < this.groupedEventsByTime.length; groupIndex += 1) {
+        eventCount += this.groupedEventsByTime[groupIndex].events.length;
+        if (eventCount > MAX_EVENTS_PER_PAGE) break;
+      }
+
+      // Show the group even the events count in that group exceeding the max events per page
+      if (groupIndex === this.maxVisibleGroupIndex) {
+        groupIndex += 1;
+      }
+
+      this.maxVisibleGroupIndex = groupIndex;
+    },
+    handleViewMoreButtonClick() {
+      this.bumpVisibleGroups();
+      logTrackerEvent(
+        this,
+        'notifications',
+        'notifications_view_more_button_clicked',
+        this.getAddress,
+        1
       );
     },
   },

@@ -18,7 +18,7 @@
           target="_blank"
         >{{ contentUrl }}</a>
       </div>
-      <div class="min-w-0 truncate">
+      <div v-if="nftId" class="min-w-0 truncate">
         <Label class="!text-[12px] text-medium-gray font-600">
           {{ $t('nft_details_page_section_metadata_nft_id') }}
         </Label>
@@ -26,34 +26,70 @@
           {{ nftId }}
         </Label>
       </div>
-      <div class="flex mt-[12px] gap-[8px] laptop:mt-0">
-        <ButtonV2
-          v-for="record in records"
-          :key="record.text"
-          :href="record.href"
-          size="mini"
-          preset="tertiary"
-          class="text-medium-gray"
-          content-class="text-[12px]"
+      <ul class="flex mt-[12px] gap-[8px] laptop:mt-0">
+        <li
+          v-for="{ type, label, records } in recordMap"
+          :key="type"
         >
-          {{ record.label }}&nbsp;<IconLinkExternal />
-        </ButtonV2>
-      </div>
+          <Dropdown v-if="records.length > 1">
+            <template #trigger="{ toggle }">
+              <ButtonV2
+                size="mini"
+                preset="tertiary"
+                class="text-medium-gray"
+                content-class="text-[12px]"
+                @click="toggle"
+              >
+                {{ label }}
+              </ButtonV2>
+            </template>
+            <MenuList>
+              <ul>
+                <li
+                  v-for="record in records"
+                  :key="record.href"
+                >
+                  <ButtonV2
+                    :href="record.href"
+                    size="mini"
+                    preset="plain"
+                    class="text-medium-gray"
+                    content-class="text-[12px]"
+                  >
+                    {{ record.text | ellipsis }}&nbsp;<IconLinkExternal />
+                  </ButtonV2>
+                </li>
+              </ul>
+            </MenuList>
+          </Dropdown>
+
+          <ButtonV2
+            v-else-if="records.length"
+            :href="records[0].href"
+            size="mini"
+            preset="tertiary"
+            class="text-medium-gray"
+            content-class="text-[12px]"
+          >
+            {{ label }}&nbsp;<IconLinkExternal />
+          </ButtonV2>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
 import { ARWEAVE_ENDPOINT, IPFS_VIEW_GATEWAY_URL } from '~/constant';
+import { ellipsis } from '~/util/ui';
 
-const sortOrder = {
-  iscn: 1,
-  ipfs: 2,
-  ar: 3,
-};
+const CONTENT_FINGERPRINT_TYPES = ['iscn', 'ipfs', 'ar'];
 
 export default {
   name: 'NFTPageChainDataSectionMetadata',
+  filters: {
+    ellipsis,
+  },
   props: {
     contentUrl: {
       type: String,
@@ -81,46 +117,56 @@ export default {
     },
   },
   computed: {
-    records() {
-      const records = [
-        {
-          label: this.$t('nft_details_page_section_metadata_iscn'),
-          href: this.iscnUrl,
-          text: this.iscnId,
-          order: this.getProtocolOrder('iscn'),
-        },
-      ];
+    recordMap() {
+      const recordMap = {
+        iscn: [
+          {
+            href: this.iscnUrl,
+            text: this.iscnId,
+          },
+        ],
+      };
 
       this.contentFingerprints.forEach(fingerprint => {
         const [protocol, text] = fingerprint.split('://');
-        const order = this.getProtocolOrder(protocol);
+        if (!recordMap[protocol]) recordMap[protocol] = [];
         switch (protocol) {
           case 'ar':
-            records.push({
-              label: this.$t('nft_details_page_section_metadata_ar'),
+            recordMap[protocol].push({
               href: `${ARWEAVE_ENDPOINT}/${text}`,
               text,
-              order,
             });
             break;
           case 'ipfs':
-            records.push({
-              label: this.$t('nft_details_page_section_metadata_ipfs'),
+            recordMap[protocol].push({
               href: `${IPFS_VIEW_GATEWAY_URL}/${text}`,
               text,
-              order,
             });
             break;
           default:
             break;
         }
       });
-      return records.sort((a, b) => a.order - b.order);
+
+      return CONTENT_FINGERPRINT_TYPES.map(type => ({
+        type,
+        label: this.getRecordLabel(type),
+        records: recordMap[type] || [],
+      }));
     },
   },
   methods: {
-    getProtocolOrder(protocol) {
-      return sortOrder[protocol];
+    getRecordLabel(type) {
+      switch (type) {
+        case 'iscn':
+          return this.$t('nft_details_page_section_metadata_iscn');
+        case 'ipfs':
+          return this.$t('nft_details_page_section_metadata_ipfs');
+        case 'ar':
+          return this.$t('nft_details_page_section_metadata_ar');
+        default:
+          return '';
+      }
     },
   },
 };

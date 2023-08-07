@@ -205,7 +205,19 @@
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
         />
-        <ul class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
+        <ul v-if="isFreeNFT" class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
+          <li >
+            <EventModalCollectMethodButton
+              :class="{ 'border-like-cyan': !mintedFreeNFT }"
+              :title="$t('nft_collect_modal_method_free')"
+              type="free"
+              :is-disabled="mintedFreeNFT"
+              :price="$t('nft_collect_modal_free')"
+              @click="handleSelectPaymentMethod"
+            />
+          </li>
+        </ul>
+        <ul v-else class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li v-if="enableStripe">
             <EventModalCollectMethodButton
               :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
@@ -426,12 +438,21 @@ export default {
       return this.walletLIKEBalance < this.NFTPrice;
     },
     canPayByFiat() {
-      return this.formattedNFTPriceInUSD && this.formattedNFTPriceInUSD !== '-';
+      return this.nftPriceInUSD !== undefined && this.nftPriceInUSD > 0;
     },
     canPayByLIKE() {
       if (this.developerMode) return true;
       const notSupportedPlatforms = [];
-      return !notSupportedPlatforms.includes(this.walletMethodType);
+      return (
+        this.NFTPrice > 0 &&
+        !notSupportedPlatforms.includes(this.walletMethodType)
+      );
+    },
+    isFreeNFT() {
+      return this.NFTPrice !== undefined && this.NFTPrice === 0;
+    },
+    mintedFreeNFT() {
+      return this.purchaseInfo?.canFreeCollect === false;
     },
     isDisabledPayByLIKE() {
       return (
@@ -631,6 +652,29 @@ export default {
             );
             await this.collectNFTWithStripe(classId, { memo: this.memo });
             break;
+          case 'free': {
+            if (!this.getAddress) {
+              const isConnected = await this.connectWallet({
+                shouldSkipLogin: true,
+              });
+              if (!isConnected) return;
+            }
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTCollectPaymentMethod(Free)',
+              classId,
+              1
+            );
+            const result = await this.collectFreeNFT(classId, {
+              memo: this.memo,
+            });
+            if (result) {
+              this.justCollectedNFTId =
+                result.nftId || result.purchased?.[0]?.nftId;
+            }
+            break;
+          }
           default:
             break;
         }

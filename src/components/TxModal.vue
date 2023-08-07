@@ -191,7 +191,7 @@ export default {
         panelClass:
           'shadow-lg bg-white w-full p-[48px] phone:p-[18px] rounded-[24px]',
         open: this.isOpen,
-        hasCloseButton: this.hasCloseButton,
+        hasCloseButton: this.hasCloseButton || !!this.uiTxErrorMessage,
         headerText: this.headerText,
       };
     },

@@ -25,7 +25,8 @@
           :nft-image-url="NFTImageUrl"
           :creator-message="creatorMessage"
           :iscn-owner="iscnOwner"
-          @click-collect-from-cta="handleCollectFromCTA"
+          :is-collectable="nftIsCollectable"
+          @click-cta-button="handleCollectFromCTA"
         />
 
         <template v-if="nftIsNFTBook">
@@ -67,6 +68,7 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
+                @change.once="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
@@ -228,8 +230,10 @@
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
-          @on-follow-button-click="handleFollowButtonClick"
-          @on-nft-item-click="handleRecommendedItemClick"
+          @header-avatar-click="handleRecommendationHeaderAvatarClick"
+          @follow-button-click="handleFollowButtonClick"
+          @item-click="handleRecommendedItemClick"
+          @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"
           @slide-prev.once="handleRecommendationSlidePrev"
           @slider-move.once="handleRecommendationSliderMove"
@@ -673,9 +677,9 @@ export default {
       return this.handleCollect();
     },
     handleCollectFromEdition(selectedValue) {
-      const bookStorePrices =
-        this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const hasStock = bookStorePrices[selectedValue]?.stock;
+      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const edition = editions[selectedValue];
+      const hasStock = edition?.stock;
       if (!hasStock && !this.nftIsCollectable) return;
 
       if (hasStock) {
@@ -683,11 +687,11 @@ export default {
           items: [
             {
               name: this.NFTName,
-              price: bookStorePrices[selectedValue].price,
+              price: edition.price,
               classId: this.classId,
             },
           ],
-          price: bookStorePrices[selectedValue].price,
+          price: edition.price,
           currency: 'USD',
           isNFTBook: true,
         };
@@ -695,7 +699,7 @@ export default {
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
-          priceIndex: selectedValue,
+          priceIndex: edition.index,
           platform: this.platform,
         });
         window.open(link, '_blank', 'noopener');
@@ -719,6 +723,15 @@ export default {
         this,
         'NFT',
         `nft_class_details_edition_compare_table_collect`,
+        this.classId,
+        1
+      );
+    },
+    handleEditionSelectChange() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_edition_selector_change',
         this.classId,
         1
       );
@@ -754,12 +767,30 @@ export default {
         );
       }
     },
-    handleRecommendedItemClick() {
+    handleRecommendationHeaderAvatarClick() {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_class_details_click_recommended_nft',
+        'nft_class_details_recommend_header_avatar_click',
         this.classId,
+        1
+      );
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_recommend_item_click',
+        classId,
+        1
+      );
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_recommend_item_collect',
+        classId,
         1
       );
     },

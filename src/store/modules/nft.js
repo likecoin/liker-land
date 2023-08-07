@@ -494,6 +494,11 @@ const actions = {
       uri,
       parent,
       metadata: classMetadata = {},
+      // HACK: owner field only exists in /likechain/likenft/v1/class endpoint,
+      // not in /cosmos/nft/v1beta1/classes/:classId endpoint.
+      // Should be removed after ISCN data refactor
+      // eslint-disable-next-line camelcase
+      owner: iscn_owner,
     } = classData;
     const formattedMetadata = {
       name,
@@ -501,6 +506,7 @@ const actions = {
       uri,
       ...classMetadata,
       parent,
+      iscn_owner, // overwrite iscn_owner field of classMetadata
     };
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
       classId,

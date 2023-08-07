@@ -88,6 +88,8 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
   : [
       // 天工開物・栩栩如真
       'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg',
+      // 試酸號《當不再有愛 友愛就不復存》
+      'likenft1r5me9g3kln40mfgufmcnkn5hhl8tuucjtkgtf7xfcf57nmd4985q2dau37',
       // 從新浪潮到新本土：48部電影裡的香港城誌
       'likenft15ayw5nv7yxrlv6vvrxk0fvwdzsweqqyyw6we50dq2zaq2rk60pcs6ufhd7',
       // 崩潰與重建：ChatGPT衝擊下的人類未來

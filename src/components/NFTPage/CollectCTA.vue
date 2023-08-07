@@ -2,7 +2,12 @@
   <div class="flex flex-col w-full rounded-[32px] bg-like-green p-[32px] relative mt-[24px] sm:mt-0">
     <NFTImageGraphic class="absolute top-0 left-[50%] translate-x-[-50%] translate-y-[-50%]" :href="nftImageUrl" />
     <div class="mt-[30px] order-2 sm:order-1 sm:mt-[60px]">
-      <Label preset="h3" align="center" class="text-transparent bg-gradient-to-r from-[#d2f0f0] to-[#f0e6b4] bg-clip-text" :text="$t('nft_details_page_title_CTA')" />
+      <Label
+        class="text-transparent bg-gradient-to-r from-[#d2f0f0] to-[#f0e6b4] bg-clip-text"
+        preset="h3"
+        align="center"
+        :text="ctaTitle"
+      />
     </div>
     <!-- Creator's Message -->
     <div
@@ -41,8 +46,9 @@
       <ButtonV2
         preset="secondary"
         class="flex-shrink-0"
-        :text="$t('nft_details_page_activity_list_event_collect')"
-        @click="handleCollectFromCTA"
+        :text="ctaButtonText"
+        :is-disabled="!isCollectable"
+        @click="handleClickCTAButton"
       >
         <template #prepend>
           <IconPrice />
@@ -58,8 +64,9 @@
       />
       <ButtonV2
         preset="secondary"
-        :text="$t('nft_details_page_activity_list_event_collect')"
-        @click="handleCollectFromCTA"
+        :text="ctaButtonText"
+        :is-disabled="!isCollectable"
+        @click="handleClickCTAButton"
       >
         <template #prepend>
           <IconPrice />
@@ -84,14 +91,29 @@ export default {
       type: String,
       default: undefined,
     },
+    isCollectable: {
+      type: Boolean,
+      default: false,
+    },
     isColumn: {
       type: Boolean,
       default: false,
     },
   },
+  computed: {
+    ctaTitle() {
+      if (this.isCollectable) {
+        return this.$t('nft_page_collect_cta_title');
+      }
+      return this.$t('nft_page_collect_cta_title_sold_out');
+    },
+    ctaButtonText() {
+      return this.$t('nft_page_collect_cta_button_text');
+    },
+  },
   methods: {
-    handleCollectFromCTA() {
-      this.$emit('click-collect-from-cta');
+    handleClickCTAButton() {
+      this.$emit('click-cta-button');
     },
   },
 };
