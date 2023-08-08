@@ -42,7 +42,18 @@
     </NFTBookHero>
     <SiteHeader
       v-else-if="!isInInAppBrowser"
-      class="text-like-green"
+      :class="[
+        'text-like-green',
+        { [
+          ['bg-opacity-75',
+          'bg-gray-f7',
+          'backdrop-blur-sm',
+          'fixed',
+          'inset-x-0',
+          'top-0',
+          'z-1'].join(' ')
+        ]: getRouteBaseName($route) === 'revamp' },
+      ]"
     />
     <nuxt
       :class="[

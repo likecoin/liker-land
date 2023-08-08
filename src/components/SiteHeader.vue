@@ -1,6 +1,7 @@
 <template>
   <div
     :class="[
+      'site-header',
       'flex',
       'items-center',
       'justify-between',
