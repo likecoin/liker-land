@@ -56,7 +56,12 @@
         v-if="shouldShowNftTitle"
         class="flex justify-start gap-[8px] items-center text-like-green pl-[12px]"
       >
+      <div v-if="isEventTypeSend">
+        <IconTransferMini class="text-dark-gray" />
+      </div>
+      <div v-else-if="isEventTypeCollect">
         <IconFlare class="text-dark-gray" />
+      </div>
         <IconCreativeWork />
         <p class="text-[14px]">{{ nftTitle | ellipsisNFTName }}</p>
       </div>
@@ -258,6 +263,12 @@ export default {
     },
     shouldShowFollow() {
       return !this.walletFollowees.includes(this.senderWallet);
+    },
+    isEventTypeSend() {
+      return this.type === EVENT_TYPE.SEND;
+    },
+    isEventTypeCollect() {
+      return this.type === EVENT_TYPE.COLLECT;
     },
   },
   methods: {
