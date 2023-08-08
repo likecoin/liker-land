@@ -1644,7 +1644,6 @@ export default {
             end: `bottom bottom-=128`,
             pin: heroSectionMobileKeyArt,
             scrub: 0.1,
-            markers: true,
             snap: 'labelsDirectional',
           },
         });
@@ -1888,7 +1887,6 @@ export default {
           start: `top center+=15%`,
           end: `bottom center+=15%`,
           fastScrollEnd: true,
-          markers: true,
           toggleActions: 'play none none none',
         },
       });
