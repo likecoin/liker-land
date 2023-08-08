@@ -247,9 +247,11 @@
             <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
               preset="secondary"
+              @click.native="handleTryCollectButtonClick"
             />
             <ButtonV2
               :text="$t('index_page_hero_publish_story_button')"
+              :href="publishStoryURL"
               preset="tertiary"
             />
           </nav>
@@ -426,9 +428,11 @@
                   <ButtonV2
                     :text="$t('index_page_hero_try_collect_button')"
                     preset="secondary"
+                    @click.native="handleTryCollectButtonClick"
                   />
                   <ButtonV2
                     :text="$t('index_page_hero_publish_story_button')"
+                    :href="publishStoryURL"
                     preset="tertiary"
                   />
                 </nav>
@@ -752,11 +756,13 @@
           :author-title="$t('index_page_nft_book_quote_author_title')"
         />
 
-        <ButtonV2
-          class="mx-auto mt-[3rem] mb-[6rem]"
-          :text="$t('index_page_nft_book_cta_button')"
-          preset="tertiary"
-        />
+        <footer class="flex flex-col items-center gap-[1rem] mt-[3rem] mb-[6rem]">
+          <ButtonV2
+            :text="$t('index_page_nft_book_cta_button')"
+            :to="localeLocation({ name: 'store' })"
+            preset="tertiary"
+          />
+        </footer>
 
       </div>
     </section>
@@ -913,6 +919,7 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_1_cta_button')"
               preset="tertiary"
+              @click.native="handleAboutWritingNFTClick"
             />
           </template>
         </IndexPageHeadingContentWithCTA>
@@ -932,6 +939,7 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_2_cta_button')"
               preset="tertiary"
+              @click.native="handleTryCollectClickInNewCultureSection"
             />
           </template>
         </IndexPageHeadingContentWithCTA>
@@ -1027,6 +1035,7 @@
           <template #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_3_cta_button')"
+              :href="publishStoryURL"
               preset="tertiary"
             />
           </template>
@@ -1099,11 +1108,13 @@
           :is-small="true"
         />
 
-        <ButtonV2
-          class="mx-auto mt-[3rem]"
-          :text="$t('index_page_all_story_matters_cta_button')"
-          preset="secondary"
-        />
+        <footer class="flex flex-col items-center gap-[1rem] mt-[3rem]">
+          <ButtonV2
+            :text="$t('index_page_all_story_matters_cta_button')"
+            :href="publishStoryURL"
+            preset="secondary"
+          />
+        </footer>
       </div>
     </section>
 
@@ -1114,7 +1125,7 @@
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
 
-import { LIKECOIN_NFT_BOOK_ITEMS } from '~/constant';
+import { APP_LIKE_CO_URL_BASE, LIKECOIN_NFT_BOOK_ITEMS } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -1129,6 +1140,9 @@ export default {
     };
   },
   computed: {
+    publishStoryURL() {
+      return APP_LIKE_CO_URL_BASE;
+    },
     heroSectionStyle() {
       return {
         backgroundImage: `url(${heroSectionBgImage})`,
@@ -2008,6 +2022,18 @@ export default {
         this.featuredNFTBookClassId,
         1
       );
+    },
+    handleTryCollectButtonClick() {
+      // eslint-disable-next-line no-alert
+      alert('Not implemented yet');
+    },
+    handleTryCollectClickInNewCultureSection() {
+      // eslint-disable-next-line no-alert
+      alert('Not implemented yet');
+    },
+    handleAboutWritingNFTClick() {
+      // eslint-disable-next-line no-alert
+      alert('Not implemented yet');
     },
   },
 };
