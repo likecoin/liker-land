@@ -302,8 +302,18 @@ export default {
       }));
     },
     displayedEvents() {
-      return this.getFolloweeEvents.slice(0, this.eventsToShow);
+      const uniqueTxHashes = new Set();
+      return this.getFolloweeEvents
+        .reduce((filteredEvents, event) => {
+          if (!uniqueTxHashes.has(event.tx_hash)) {
+            uniqueTxHashes.add(event.tx_hash);
+            filteredEvents.push(event);
+          }
+          return filteredEvents;
+        }, [])
+        .slice(0, this.eventsToShow);
     },
+
     currentView() {
       return this.$route.query.view;
     },
