@@ -28,7 +28,7 @@
     <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
 
     <NFTBookHero
-      v-if="isHomePage && shouldShowNFTBookHero"
+      v-if="isStorePage && shouldShowNFTBookHero"
       :class="{ 'pb-[84px]': isNFTBookHeroAnimationComplete }"
       @animate-complete="handleNFTBookHeroAnimateComplete"
     >
@@ -52,7 +52,7 @@
           'inset-x-0',
           'top-0',
           'z-1'].join(' ')
-        ]: getRouteBaseName($route) === 'revamp' },
+        ]: isHomePage },
       ]"
     />
     <nuxt
@@ -139,10 +139,13 @@ export default {
     isHomePage() {
       return this.getRouteBaseName(this.$route) === 'index';
     },
+    isStorePage() {
+      return this.getRouteBaseName(this.$route) === 'store';
+    },
     isNFTBookHeroAnimating() {
       return (
         this.shouldShowNFTBookHero &&
-        this.isHomePage &&
+        this.isStorePage &&
         !this.isNFTBookHeroAnimationComplete
       );
     },
