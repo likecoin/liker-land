@@ -209,8 +209,8 @@
               'pr-[2.5rem]',
             ]"
           >
-            <h2 class="text-[1rem] font-[600]">{{ $t('index_page_hero_all_story_matters_heading') }}</h2>
-            <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_all_story_matters_content') }}</p>
+            <h2 class="text-[1rem] font-[600]">{{ $t('index_page_hero_all_stories_matter_heading') }}</h2>
+            <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_all_stories_matter_content') }}</p>
           </div>
           <div
             ref="heroSectionWritingNFTDescription"
@@ -358,8 +358,8 @@
                 'mb-[2.5rem]',
               ]"
             >
-              <h2 class="text-[1rem] font-[600]">{{ $t('index_page_hero_all_story_matters_heading') }}</h2>
-              <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_all_story_matters_content') }}</p>
+              <h2 class="text-[1rem] font-[600]">{{ $t('index_page_hero_all_stories_matter_heading') }}</h2>
+              <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_all_stories_matter_content') }}</p>
             </div>
             <svg
               ref="heroSectionMobileAllStoryMattersIndicator"
@@ -1048,7 +1048,7 @@
     </section>
 
     <section id="all-story-matters">
-      <IndexPageHeading :text="$t('index_page_all_story_matters_heading')" />
+      <IndexPageHeading :text="$t('index_page_all_stories_matter_heading')" />
 
       <div :class="sectionContentClassWithPadding">
         <p
@@ -1061,16 +1061,16 @@
             'font-proxima',
             'font-[300]',
           ]"
-        >{{ $t('index_page_hero_all_story_matters_content') }}</p>
+        >{{ $t('index_page_hero_all_stories_matter_content') }}</p>
 
         <ul class="grid laptop:grid-cols-2 gap-[4rem] mt-[3rem]">
           <li>
-            <h3 class="text-like-green">{{ $t('index_page_all_story_matters_blog_heading') }}</h3>
-            <p class="mt-[8px] ">{{ $t('index_page_all_story_matters_blog_content') }}</p>
+            <h3 class="text-like-green">{{ $t('index_page_all_stories_matter_blog_heading') }}</h3>
+            <p class="mt-[8px] ">{{ $t('index_page_all_stories_matter_blog_content') }}</p>
           </li>
           <li>
-            <h3 class="text-like-green">{{ $t('index_page_all_story_matters_ebook_heading') }}</h3>
-            <p class="mt-[8px]">{{ $t('index_page_all_story_matters_ebook_content') }}</p>
+            <h3 class="text-like-green">{{ $t('index_page_all_stories_matter_ebook_heading') }}</h3>
+            <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_ebook_content') }}</p>
           </li>
         </ul>
 
@@ -1079,42 +1079,42 @@
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~assets/images/index/reader-insights.png"
-              :alt="$t('index_page_all_story_matters_reader_insights_heading')"
+              :alt="$t('index_page_all_stories_matter_reader_insights_heading')"
             />
-            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_story_matters_reader_insights_heading') }}</h3>
-            <p class="mt-[8px] ">{{ $t('index_page_all_story_matters_reader_insights_content') }}</p>
+            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_reader_insights_heading') }}</h3>
+            <p class="mt-[8px] ">{{ $t('index_page_all_stories_matter_reader_insights_content') }}</p>
           </li>
           <li>
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~assets/images/index/payment-systems.png"
-              :alt="$t('index_page_all_story_matters_social_interaction_heading')"
+              :alt="$t('index_page_all_stories_matter_social_interaction_heading')"
             />
-            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_story_matters_payment_systems_heading') }}</h3>
-            <p class="mt-[8px]">{{ $t('index_page_all_story_matters_payment_systems_content') }}</p>
+            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_payment_systems_heading') }}</h3>
+            <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_payment_systems_content') }}</p>
           </li>
           <li>
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~/assets/images/index/social-interaction.png"
-              :alt="$t('index_page_all_story_matters_social_interaction_heading')"
+              :alt="$t('index_page_all_stories_matter_social_interaction_heading')"
             />
-            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_story_matters_social_interaction_heading') }}</h3>
-            <p class="mt-[8px]">{{ $t('index_page_all_story_matters_social_interaction_content') }}</p>
+            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_social_interaction_heading') }}</h3>
+            <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_social_interaction_content') }}</p>
           </li>
         </ul>
 
         <IndexPageQuote
           class="text-black max-w-[650px] mt-[5rem] mx-auto"
-          :text="$t('index_page_all_story_matters_quote')"
-          :author="$t('index_page_all_story_matters_quote_author')"
-          :author-title="$t('index_page_all_story_matters_quote_author_title')"
+          :text="$t('index_page_all_stories_matter_quote')"
+          :author="$t('index_page_all_stories_matter_quote_author')"
+          :author-title="$t('index_page_all_stories_matter_quote_author_title')"
           :is-small="true"
         />
 
         <footer class="flex flex-col items-center gap-[1rem] mt-[3rem]">
           <ButtonV2
-            :text="$t('index_page_all_story_matters_cta_button')"
+            :text="$t('index_page_all_stories_matter_cta_button')"
             :href="publishStoryURL"
             preset="secondary"
             @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
