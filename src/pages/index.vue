@@ -247,12 +247,13 @@
             <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
               preset="secondary"
-              @click.native="handleTryCollectButtonClick"
+              @click.native="handleTryCollectButtonClickInHeroSection"
             />
             <ButtonV2
               :text="$t('index_page_hero_publish_story_button')"
               :href="publishStoryURL"
               preset="tertiary"
+              @click.native="handlePublishStoryButtonClickInHeroSection"
             />
           </nav>
 
@@ -428,12 +429,13 @@
                   <ButtonV2
                     :text="$t('index_page_hero_try_collect_button')"
                     preset="secondary"
-                    @click.native="handleTryCollectButtonClick"
+                    @click.native="handleTryCollectButtonClickInHeroSection"
                   />
                   <ButtonV2
                     :text="$t('index_page_hero_publish_story_button')"
                     :href="publishStoryURL"
                     preset="tertiary"
+                    @click.native="handlePublishStoryButtonClickInHeroSection"
                   />
                 </nav>
               </div>
@@ -745,8 +747,8 @@
         <NFTBookItemCard
           :class-id="featuredNFTBookClassId"
           preset="campaign"
-          @click.native="handleFeaturedNFTBookItemClick"
-          @click-avatar="handleFeaturedNFTBookItemAvatarClick"
+          @click.native="handleBookItemCardClickInNFTBookSection"
+          @click-avatar="handleAuthorClickInNFTBookSection"
         />
 
         <IndexPageQuote
@@ -761,6 +763,7 @@
             :text="$t('index_page_nft_book_cta_button')"
             :to="localeLocation({ name: 'store' })"
             preset="tertiary"
+            @click.native="handleCTAClickInNFTBookSection"
           />
         </footer>
 
@@ -919,7 +922,7 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_1_cta_button')"
               preset="tertiary"
-              @click.native="handleAboutWritingNFTClick"
+              @click.native="handleAboutWritingNFTButtonClickInNewCultureSection"
             />
           </template>
         </IndexPageHeadingContentWithCTA>
@@ -939,7 +942,7 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_2_cta_button')"
               preset="tertiary"
-              @click.native="handleTryCollectClickInNewCultureSection"
+              @click.native="handleTryCollectButtonClickInNewCultureSection"
             />
           </template>
         </IndexPageHeadingContentWithCTA>
@@ -1037,6 +1040,7 @@
               :text="$t('index_page_new_culture_section_3_cta_button')"
               :href="publishStoryURL"
               preset="tertiary"
+              @click.native="handlePublishStoryButtonClickInNewCultureSection"
             />
           </template>
         </IndexPageHeadingContentWithCTA>
@@ -1113,6 +1117,7 @@
             :text="$t('index_page_all_story_matters_cta_button')"
             :href="publishStoryURL"
             preset="secondary"
+            @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
           />
         </footer>
       </div>
@@ -2003,35 +2008,74 @@ export default {
         this.isDesktop = window.innerWidth > 768;
       });
     },
-    handleFeaturedNFTBookItemClick() {
+    handleTryCollectButtonClickInHeroSection() {
+      // eslint-disable-next-line no-alert
+      alert('Not implemented yet');
+      logTrackerEvent(this, 'IndexPage', 'IndexHeroTryCollectClick', '', 1);
+    },
+    handlePublishStoryButtonClickInHeroSection() {
+      logTrackerEvent(this, 'IndexPage', 'IndexHeroPublishStoryClick', '', 1);
+    },
+    handleBookItemCardClickInNFTBookSection() {
       logTrackerEvent(
         this,
-        'index_page',
-        'index_page_featured_nft_book_click',
+        'IndexPage',
+        'IndexNFTBookItemCardClick',
         this.featuredNFTBookClassId,
         1
       );
     },
-    handleFeaturedNFTBookItemAvatarClick() {
+    handleAuthorClickInNFTBookSection() {
       logTrackerEvent(
         this,
-        'index_page',
-        'index_page_featured_nft_book_avatar_click',
+        'IndexPage',
+        'IndexNFTBookAuthorClick',
         this.featuredNFTBookClassId,
         1
       );
     },
-    handleTryCollectButtonClick() {
-      // eslint-disable-next-line no-alert
-      alert('Not implemented yet');
+    handleCTAClickInNFTBookSection() {
+      logTrackerEvent(this, 'IndexPage', 'IndexNFTBookCTAClick', '', 1);
     },
-    handleTryCollectClickInNewCultureSection() {
+    handleAboutWritingNFTButtonClickInNewCultureSection() {
       // eslint-disable-next-line no-alert
       alert('Not implemented yet');
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexNewCultureAboutWNFTClick',
+        '',
+        1
+      );
     },
-    handleAboutWritingNFTClick() {
+    handleTryCollectButtonClickInNewCultureSection() {
       // eslint-disable-next-line no-alert
       alert('Not implemented yet');
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexNewCultureTryCollectClick',
+        '',
+        1
+      );
+    },
+    handlePublishStoryButtonClickInNewCultureSection() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexNewCulturePublishStoryClick',
+        '',
+        1
+      );
+    },
+    handlePublishStoryButtonClickInAllStoriesMatterSection() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexAllStoriesMatterPublishStoryClick',
+        '',
+        1
+      );
     },
   },
 };
