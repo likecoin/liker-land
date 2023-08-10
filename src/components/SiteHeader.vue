@@ -81,16 +81,13 @@
       </Dropdown>
 
       <ButtonV2
-        v-if="!getAddress"
+        v-if="getRouteBaseName($route) !== 'store'"
         class="hidden laptop:flex"
-        :preset="isPlain ? 'outline' : 'secondary'"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="connectWallet"
-      >
-        <template #prepend>
-          <IconLogin />
-        </template>
-      </ButtonV2>
+        preset="secondary"
+        :to="localeLocation({ name: 'store' })"
+        :text="$t('header_button_try_collect')"
+        @click.native="handleClickTryCollect"
+      />
 
       <Dropdown>
         <template #trigger="{ toggle }">
@@ -283,6 +280,9 @@ export default {
         default:
           break;
       }
+    },
+    handleClickTryCollect() {
+      logTrackerEvent(this, 'site_menu', 'SiteMenuTryCollectingClick', '', 1);
     },
   },
 };

@@ -247,6 +247,7 @@
             <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
               preset="secondary"
+              :to="localeLocation({ name: 'store' })"
               @click.native="handleTryCollectButtonClickInHeroSection"
             />
             <ButtonV2
@@ -429,6 +430,7 @@
                   <ButtonV2
                     :text="$t('index_page_hero_try_collect_button')"
                     preset="secondary"
+                    :to="localeLocation({ name: 'store' })"
                     @click.native="handleTryCollectButtonClickInHeroSection"
                   />
                   <ButtonV2
@@ -922,6 +924,7 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_1_cta_button')"
               preset="tertiary"
+              :to="localeLocation({ name: 'writing-nft-about' })"
               @click.native="handleAboutWritingNFTButtonClickInNewCultureSection"
             />
           </template>
@@ -942,6 +945,7 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_2_cta_button')"
               preset="tertiary"
+              :to="localeLocation({ name: 'store' })"
               @click.native="handleTryCollectButtonClickInNewCultureSection"
             />
           </template>
@@ -2009,8 +2013,6 @@ export default {
       });
     },
     handleTryCollectButtonClickInHeroSection() {
-      // eslint-disable-next-line no-alert
-      alert('Not implemented yet');
       logTrackerEvent(this, 'IndexPage', 'IndexHeroTryCollectClick', '', 1);
     },
     handlePublishStoryButtonClickInHeroSection() {
@@ -2038,8 +2040,6 @@ export default {
       logTrackerEvent(this, 'IndexPage', 'IndexNFTBookCTAClick', '', 1);
     },
     handleAboutWritingNFTButtonClickInNewCultureSection() {
-      // eslint-disable-next-line no-alert
-      alert('Not implemented yet');
       logTrackerEvent(
         this,
         'IndexPage',
@@ -2049,8 +2049,6 @@ export default {
       );
     },
     handleTryCollectButtonClickInNewCultureSection() {
-      // eslint-disable-next-line no-alert
-      alert('Not implemented yet');
       logTrackerEvent(
         this,
         'IndexPage',

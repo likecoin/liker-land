@@ -176,7 +176,7 @@
       <ButtonV2
         preset="outline"
         :text="$t('portfolio_finding_more_button')"
-        :to="localeLocation({ name: 'index' })"
+        :to="localeLocation({ name: 'store' })"
       />
     </template>
   </section>

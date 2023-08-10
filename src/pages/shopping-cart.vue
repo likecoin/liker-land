@@ -106,7 +106,7 @@
         class="mt-[2em]"
         preset="secondary"
         :text="$t('shopping_cart_empty_notice_button')"
-        :to="localeLocation({ name: 'index' })"
+        :to="localeLocation({ name: 'store' })"
         @click="handleClickEmptyNoticeButton"
       />
     </CardV2>
