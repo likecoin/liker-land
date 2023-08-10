@@ -235,7 +235,7 @@
               'absolute',
               'inset-x-0',
               'bottom-0',
-              'mt-[3.5rem]',
+              'mb-[3.5rem]',
               'flex',
               'flex-wrap',
               'flex-col laptop:flex-row',
