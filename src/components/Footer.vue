@@ -38,9 +38,6 @@
           <a class="hover:underline" target="_blank" href="https://like.co">{{ $t('footer_nav_about_likecoin') }}</a>
         </div>
         <div class="grid grid-flow-row gap-y-[16px]">
-          <NuxtLink class="hover:underline" :to="localeLocation({ name: 'writing-nft-about' })">{{ $t('footer_nav_writing_nft') }}</NuxtLink>
-        </div>
-        <div class="grid grid-flow-row gap-y-[16px]">
           <a class="hover:underline" target="_blank" :href="mintNftURL">
             {{ $t('footer_nav_mint_nft') }}
           </a>
