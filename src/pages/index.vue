@@ -250,12 +250,14 @@
               :to="localeLocation({ name: 'store' })"
               @click.native="handleTryCollectButtonClickInHeroSection"
             />
+            <!--
             <ButtonV2
               :text="$t('index_page_hero_publish_story_button')"
               :href="publishStoryURL"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInHeroSection"
             />
+            -->
           </nav>
 
         </div>
@@ -433,12 +435,14 @@
                     :to="localeLocation({ name: 'store' })"
                     @click.native="handleTryCollectButtonClickInHeroSection"
                   />
+                  <!--
                   <ButtonV2
                     :text="$t('index_page_hero_publish_story_button')"
                     :href="publishStoryURL"
                     preset="tertiary"
                     @click.native="handlePublishStoryButtonClickInHeroSection"
                   />
+                  -->
                 </nav>
               </div>
             </div>
@@ -1039,6 +1043,7 @@
               src="~assets/images/index/we-handle-the-tech-for-you.png"
             />
           </template>
+          <!--
           <template #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_3_cta_button')"
@@ -1047,6 +1052,7 @@
               @click.native="handlePublishStoryButtonClickInNewCultureSection"
             />
           </template>
+          -->
         </IndexPageHeadingContentWithCTA>
       </div>
     </section>
@@ -1116,6 +1122,7 @@
           :is-small="true"
         />
 
+        <!--
         <footer class="flex flex-col items-center gap-[1rem] mt-[3rem]">
           <ButtonV2
             :text="$t('index_page_all_stories_matter_cta_button')"
@@ -1124,6 +1131,7 @@
             @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
           />
         </footer>
+        -->
       </div>
     </section>
 
