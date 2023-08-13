@@ -15,22 +15,30 @@
 
         'w-full',
         'pt-[32px]',
-        'pb-[120px]'
+        'pb-[120px]',
       ]"
     >
-      <div v-if="plans.length === 0">
+      <div v-if="plans.length === 0" class="mt-[10vh] bg-shade-gray rounded-[12px] text-dark-gray py-[8px] px-[12px]" >
         This creator have no readership subscription plans yet!
-        <NuxtLink :to="localeLocation({ name: 'id', params: { id: this.wallet }}) ">Go Back</NuxtLink>
+        <NuxtLink class="ml-[8px] text-like-green" :to="localeLocation({ name: 'id', params: { id: wallet } })"
+          >Go Back</NuxtLink
+        >
       </div>
-      <div v-for="p in plans" :key="p.id">
-        <ul>
-          <li>{{ p.name.zh }}</li>
-          <li>{{ p.name.en }}</li>
-          <li>{{ p.description.zh }}</li>
-          <li>{{ p.description.en }}</li>
-          <li v-if="p.canFreeCollectWNFT">Can collect free WNFT</li>
-          <li>Price: {{ p.priceInDecimal / 100 }}</li>
-          <li><button @click="onClickSubscribe(p.stripePriceId)">Join</button></li>
+      <div v-else>
+        <Label align="center" preset="h2" class="mb-[32px]">Choose the plan</Label>
+        <ul class="flex justify-center items-stretch gap-[12px] flex-wrap laptop:gap-[24px]">
+          <div
+            v-for="p in formattedPlans"
+            :key="p.id"
+          >
+            <SubscriptionPlan
+              :name="p.name"
+              :description="p.description"
+              :price="p.price"
+              :can-free-collect="p.canFreeCollectWNFT"
+              @click-subscription="onClickSubscribe"
+            />
+          </div>
         </ul>
       </div>
     </div>
@@ -60,12 +68,31 @@ export default {
     wallet() {
       return this.$route.params.id;
     },
+    formattedPlans() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
+      const defaultLocale = 'en';
+
+      const sortedPlans = this.plans
+        .map(plan => ({
+          ...plan,
+          name: plan.name[locale] || plan.name[defaultLocale],
+          description:
+            plan.description[locale] || plan.description[defaultLocale],
+          price: plan.priceInDecimal / 100,
+        }))
+        .sort((a, b) => a.price - b.price);
+
+      return sortedPlans;
+    },
   },
   async mounted() {
     const data = await this.$axios.$get(
       nftGetCreatorSubscriptionPlans(this.wallet)
     );
-    this.plans = data.plans || [];
+    this.plans = data?.plans || [];
   },
   methods: {
     async onClickSubscribe(planId) {
@@ -76,7 +103,7 @@ export default {
           plan: planId,
         })
       );
-      window.open(data.url);
+      window.open(data?.url);
     },
   },
 };
