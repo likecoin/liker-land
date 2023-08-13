@@ -6,25 +6,42 @@
     }}</Label>
 
     <CardV2 class="my-[12px] text-center">
-      <div>
-        <div v-if="walletHasLikeCoinApiAuthorization">
-          <ul v-for="[creator, data] in Object.entries(activeSubscriptions)" :key="getPlanDataKey(creator, data.productId)">
-            <li>Creator:
-              <NuxtLink :to="localeLocation({ name: 'id', params: { id: creator } })">{{ creator }}</NuxtLink>
+      <div v-if="walletHasLikeCoinApiAuthorization">
+        <ul
+          v-for="s in formattedSubscriptions"
+          :key="getPlanDataKey(s.creator, s.productId)"
+        >
+          <li>
+            Creator:
+            <NuxtLink
+              :to="localeLocation({ name: 'id', params: { id: s.creator } })"
+              >{{ s.creator }}</NuxtLink
+            >
+          </li>
+          <li>Active until: {{ s.currentPeriodEnd }}</li>
+          <ul v-if="planData[getPlanDataKey(s.creator, s.productId)]">
+            <li>
+              Plan Name:
+              {{ s.planName }}
             </li>
-            <li>Active until: {{ new Date(data.currentPeriodEnd * 1000) }}</li>
-            <ul v-if="planData[getPlanDataKey(creator, data.productId)]">
-              <li>Plan Name: {{ planData[getPlanDataKey(creator, data.productId)].name.en }}</li>
-              <li>Price: {{ planData[getPlanDataKey(creator, data.productId)].price }}</li>
-              <li>{{ planData[getPlanDataKey(creator, data.productId)].description.en }}</li>
-            </ul>
+            <li>
+              Price:
+              {{ s.price }}
+            </li>
+            <li>
+              <Markdown
+                :md-string="s.description"
+              />
+            </li>
           </ul>
-          <hr>
-          <button @click="onClickPortal">Click to manage your payment method and subscription</button>
-        </div>
-        <div v-else>
-          <button @click="onClickAuth">Please sign to access subscription</button>
-        </div>
+        </ul>
+        <hr />
+        <button @click="onClickPortal">
+          Click to manage your payment method and subscription
+        </button>
+      </div>
+      <div v-else>
+        <button @click="onClickAuth">Please sign to access subscription</button>
       </div>
     </CardV2>
   </AuthRequiredView>
@@ -54,6 +71,35 @@ export default {
       'walletHasLikeCoinApiAuthorization',
       'walletLikeCoinApiToken',
     ]),
+    formattedSubscriptions() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
+      const defaultLocale = 'en';
+
+      return Object.entries(this.activeSubscriptions).map(
+        ([creator, data]) => ({
+          creator,
+          currentPeriodEnd: data.currentPeriodEnd * 1000,
+          productId: data.productId,
+          planName:
+            this.planData[this.getPlanDataKey(creator, data.productId)]?.name[
+              locale
+            ] ||
+            this.planData[this.getPlanDataKey(creator, data.productId)]?.name[
+              defaultLocale
+            ],
+          price: this.planData[this.getPlanDataKey(creator, data.productId)]
+            ?.price,
+          description:
+            this.planData[this.getPlanDataKey(creator, data.productId)]
+              ?.description[locale] ||
+            this.planData[this.getPlanDataKey(creator, data.productId)]
+              ?.description[defaultLocale],
+        })
+      );
+    },
   },
   watch: {
     walletHasLoggedIn: {
@@ -107,7 +153,7 @@ export default {
           },
         }
       );
-      window.open(data.url);
+      window.open(data?.url);
     },
     async refreshSubscriptions() {
       const { data } = await this.$axios.get(nftGetUserActiveSubscription(), {
@@ -115,7 +161,7 @@ export default {
           Authorization: `Bearer ${this.walletLikeCoinApiToken}`,
         },
       });
-      this.activeSubscriptions = data.plans || [];
+      this.activeSubscriptions = data?.plans || [];
       Object.entries(this.activeSubscriptions).forEach(([wallet, data]) => {
         this.fetchPlanData(wallet, data.productId);
       });
