@@ -150,7 +150,7 @@ export default class ButtonV2 extends Vue {
       case Preset.outline:
         return [
           this.isDisabled
-            ? '!bg-transparent border-shade-gray border-2 text-gray-c'
+            ? '!bg-transparent border-shade-gray border-2 !text-gray-c'
             : 'border-medium-gray/75 border-2',
           this.circle ? 'text-like-green' : 'text-current',
           {
