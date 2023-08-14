@@ -223,11 +223,11 @@
         </section>
         <!-- recommend -->
         <client-only>
-            <lazy-component
-              class="pointer-events-none"
-              @show.once="handleFetchRecommendInfo"
-            />
-          </client-only>
+          <lazy-component
+            class="pointer-events-none"
+            @show.once="handleFetchRecommendInfo"
+          />
+        </client-only>
         <NFTPageRecommendation
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
