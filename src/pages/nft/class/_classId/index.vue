@@ -222,14 +222,17 @@
           />
         </section>
         <!-- recommend -->
-        <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
-          <ProgressIndicator />
-        </div>
+        <client-only>
+          <lazy-component
+            class="pointer-events-none"
+            @show.once="handleFetchRecommendInfo"
+          />
+        </client-only>
         <NFTPageRecommendation
-          v-else
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
+          :is-loading="isRecommendationLoading"
           @header-avatar-click="handleRecommendationHeaderAvatarClick"
           @follow-button-click="handleFollowButtonClick"
           @item-click="handleRecommendedItemClick"
@@ -487,8 +490,6 @@ export default {
       this.isLoading = false;
     }
 
-    await this.fetchRecommendInfo();
-
     const { hash } = this.$route;
     if (hash) {
       this.$nextTick(() => {
@@ -527,6 +528,9 @@ export default {
         this.trimmedCount
       );
       await this.lazyGetUserInfoByAddresses(trimmedCollectors);
+    },
+    async handleFetchRecommendInfo() {
+      await this.fetchRecommendInfo();
     },
     async handleClickMoreCollector() {
       logTrackerEvent(
