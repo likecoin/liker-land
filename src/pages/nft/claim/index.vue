@@ -1,9 +1,10 @@
 <template>
   <div class="flex flex-col justify-center flex-grow">
     <AuthRequiredView
-      class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto mb-[48px]"
+      class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto"
       :login-label="$t('nft_claim_login_in')"
       :login-button-label="$t('nft_claim_login_in_button')"
+      :is-stick-to-bottom-at-mobile="true"
     >
       <template #prepend>
         <NFTWidgetBaseCard class="flex justify-center items-center max-w-[400px] mb-[16px]">
