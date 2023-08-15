@@ -456,9 +456,7 @@ export default {
       return this.NFTPrice !== undefined && this.NFTPrice > 0;
     },
     creatorMessage() {
-      return this.messageList.find(
-        element => element.event === 'mint_nft' || element.event === 'purchase'
-      );
+      return this.NFTClassMetadata?.message;
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
