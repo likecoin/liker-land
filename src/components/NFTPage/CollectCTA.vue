@@ -11,7 +11,7 @@
     </div>
     <!-- Creator's Message -->
     <div
-      v-if="creatorMessage && creatorMessage.message"
+      v-if="creatorMessage"
       :class="[
         'flex',
         'flex-col',
@@ -40,7 +40,7 @@
         />
         <div class="flex-col  justify-start mt-[8px]">
           <div class="text-[14px] text-like-cyan text-center sm:text-left">{{ $t('nft_message_type_collect') }}</div>
-          <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage.message }}</div>
+          <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage }}</div>
         </div>
       </div>
       <ButtonV2
@@ -84,8 +84,8 @@ export default {
       default: undefined,
     },
     creatorMessage: {
-      type: Object,
-      default: null,
+      type: String,
+      default: undefined,
     },
     iscnOwner: {
       type: String,
