@@ -25,11 +25,11 @@
             'p-[4px]',
             'bg-shade-gray',
             'rounded-[14px]',
-            'w-auto',
           ]"
         >
-          <li class="flex items-center">
+          <li class="flex justify-center items-center desktop:w-[118px]">
             <MenuButton
+              class="w-full"
               :is-selected="currentMainTab === 'town'"
               @click="handleGoTown"
             >
@@ -39,9 +39,10 @@
               <IconTown class="desktop:hidden" />
             </MenuButton>
           </li>
-          <li class="flex items-center">
-            <MenuButtonDivider />
+          <li><MenuButtonDivider /></li>
+          <li class="flex items-center desktop:w-[118px]">
             <MenuButton
+              class="w-full"
               :is-selected="currentMainTab === 'collectibles'"
               @click="handleGoCollectibles"
             >
@@ -51,8 +52,8 @@
               <IconCreativeWork class="desktop:hidden" />
             </MenuButton>
           </li>
+          <li><MenuButtonDivider class="desktop:hidden"/></li>
           <li class="flex items-center desktop:hidden">
-            <MenuButtonDivider />
             <MenuButton
               :is-selected="currentMainTab === 'userStats'"
               @click="handleGoUserStats"
