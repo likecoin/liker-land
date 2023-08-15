@@ -277,6 +277,8 @@ export default {
       isIncomeDetailsLoading: false,
       currentMainTab: TAB_OPTIONS.TOWN,
       eventsToShow: 30,
+
+      hasFetchedFollowees: false,
     };
   },
   computed: {
@@ -329,10 +331,14 @@ export default {
         this.updateTopRankedCreators();
       }
     },
-    walletFollowees(walletFollowees) {
-      if (walletFollowees) {
-        this.fetchFolloweeWalletEvent();
-      }
+    walletFollowees: {
+      immediate: true,
+      handler(walletFollowees) {
+        if (walletFollowees.length && !this.hasFetchedFollowees) {
+          this.fetchFolloweeWalletEvent();
+          this.hasFetchedFollowees = true;
+        }
+      },
     },
   },
   mounted() {

@@ -33,15 +33,47 @@
           </div>
         </div>
       </NuxtLink>
-      <div v-if="shouldShowFollow">
-        <ProgressIndicator v-if="isFollowLoading" preset="thin" />
-        <ButtonV2
-          v-else
-          preset="tertiary"
-          size="mini"
-          :text="$t('follow')"
-          @click="() => clickFollow(senderWallet, senderId)"
-        />
+
+      <div v-if="shouldShowFollow" class="flex items-center justify-center">
+        <div class="ml-[24px]">
+          <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
+          <div
+            v-else
+            class="relative flex group w-[138px]"
+            @click="clickFollow(senderWallet, senderId)"
+          >
+            <div
+              :class="[
+                ...getDefaultClass,
+                isFollowPromptStateAuto
+                  ? '!bg-like-cyan-light text-like-green'
+                  : '!bg-shade-gray text-dark-gray',
+              ]"
+            >
+              <Label align="center" :text="followPromptButtonText">
+                <template v-if="isFollowPromptStateAuto" #prepend>
+                  <IconCheck />
+                </template>
+              </Label>
+            </div>
+            <div
+              :class="[
+                ...getDefaultClass,
+                'group-hover:opacity-[100]',
+                'group-active:!bg-medium-gray',
+                'opacity-0',
+                'transition-all',
+                'absolute',
+                'inset-0',
+                isFollowPromptStateAuto
+                  ? '!bg-shade-gray text-dark-gray'
+                  : '!bg-like-cyan-light text-like-green',
+              ]"
+            >
+              <Label align="center" :text="followPromptButtonHoverText" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -56,12 +88,12 @@
         v-if="shouldShowNftTitle"
         class="flex justify-start gap-[8px] items-center text-like-green pl-[12px]"
       >
-      <div v-if="isEventTypeSend">
-        <IconTransferMini class="text-dark-gray" />
-      </div>
-      <div v-else-if="isEventTypeCollect">
-        <IconFlare class="text-dark-gray" />
-      </div>
+        <div v-if="isEventTypeSend">
+          <IconTransferMini class="text-dark-gray" />
+        </div>
+        <div v-else-if="isEventTypeCollect">
+          <IconFlare class="text-dark-gray" />
+        </div>
         <IconCreativeWork />
         <p class="text-[14px]">{{ nftTitle | ellipsisNFTName }}</p>
       </div>
@@ -110,6 +142,8 @@
   </div>
 </template>
 <script>
+import { logTrackerEvent } from '~/util/EventLogger';
+
 import walletMixin from '~/mixins/wallet';
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
@@ -120,6 +154,12 @@ const EVENT_TYPE = {
   PUBLISH: 'publish',
   SEND: 'send',
   PURCHASE: 'purchase',
+};
+
+const FOLLOW_PROMPT_STATE = {
+  DEFAULT: 'default', // No need to show any follow UI.
+  UNFOLLOW: 'unfollow', // Show a switch button to toggle follow status.
+  AUTO: 'auto', // Show auto-followed UI.
 };
 
 export default {
@@ -163,7 +203,10 @@ export default {
     },
   },
   data() {
-    return { isFollowLoading: false };
+    return {
+      followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
+      isFollowPromptUpdating: false,
+    };
   },
   computed: {
     senderWallet() {
@@ -270,6 +313,45 @@ export default {
     isEventTypeCollect() {
       return this.type === EVENT_TYPE.COLLECT;
     },
+
+    // Follow
+    followPromptButtonText() {
+      if (this.isFollowPromptUpdating) {
+        return this.$t('nft_details_page_label_loading');
+      }
+      if (this.isFollowPromptStateAuto) {
+        return this.$t('settings_following');
+      }
+      return this.$t('settings_follow_follow');
+    },
+    followPromptButtonHoverText() {
+      if (this.isFollowPromptStateAuto) {
+        return this.$t('settings_follow_unfollow');
+      }
+      return this.$t('settings_follow_follow');
+    },
+    isFollowPromptStateAuto() {
+      return this.followPromptState === FOLLOW_PROMPT_STATE.AUTO;
+    },
+    getDefaultClass() {
+      return [
+        'flex',
+        'gap-[16px]',
+        'box-border',
+        'overflow-hidden',
+        'justify-center',
+        'items-center',
+        'transition',
+        'duration-200',
+        'h-40px',
+        'w-full',
+        'font-600',
+        'px-[16px]',
+        'py-[8px]',
+        'rounded-[20px]',
+        'cursor-pointer',
+      ];
+    },
   },
   methods: {
     fetchInfo() {
@@ -280,14 +362,45 @@ export default {
       ]);
     },
     async clickFollow(followOwnerWallet, followOwnerDisplayName) {
-      this.isFollowLoading = true;
-      await this.handleClickFollow({ followOwnerWallet });
-      this.alertPromptSuccess(
-        this.$t('portfolio_subscription_success_alert', {
-          creator: followOwnerDisplayName,
-        })
-      );
-      this.isFollowLoading = false;
+      try {
+        this.isFollowPromptUpdating = true;
+        switch (this.followPromptState) {
+          case FOLLOW_PROMPT_STATE.AUTO:
+            this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
+            await this.walletUnfollowCreator(followOwnerWallet);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'social_feed_click_unfollow',
+              FOLLOW_PROMPT_STATE.UNFOLLOW,
+              1
+            );
+            break;
+          case FOLLOW_PROMPT_STATE.UNFOLLOW:
+          default:
+            this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
+            await this.walletFollowCreator(followOwnerWallet);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'social_feed_click_follow',
+              FOLLOW_PROMPT_STATE.AUTO,
+              1
+            );
+            this.alertPromptSuccess(
+              this.$t('portfolio_subscription_success_alert', {
+                creator: followOwnerDisplayName,
+              })
+            );
+            break;
+        }
+      } catch (error) {
+        this.alertPromptError(error.toString());
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.isFollowPromptUpdating = false;
+      }
     },
   },
 };
