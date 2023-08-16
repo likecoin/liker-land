@@ -1120,8 +1120,8 @@
           ]"
         >{{ $t('index_page_all_stories_matter_sub_heading') }}</p>
 
-        <ul class="grid laptop:grid-cols-3 gap-[2rem] mt-[3rem]">
-          <li>
+        <ul class="grid laptop:grid-cols-3 gap-[2.5rem] mt-[3rem]">
+          <li class="text-center">
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~assets/images/index/reader-insights.png"
@@ -1130,7 +1130,7 @@
             <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_reader_insights_heading') }}</h3>
             <p class="mt-[8px] ">{{ $t('index_page_all_stories_matter_reader_insights_content') }}</p>
           </li>
-          <li>
+          <li class="text-center">
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~assets/images/index/payment-systems.png"
@@ -1139,7 +1139,7 @@
             <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_payment_systems_heading') }}</h3>
             <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_payment_systems_content') }}</p>
           </li>
-          <li>
+          <li class="text-center">
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~/assets/images/index/social-interaction.png"
