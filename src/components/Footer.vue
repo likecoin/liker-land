@@ -17,34 +17,42 @@
         </NuxtLink>
         <CommunityCTA class="mt-[24px] laptop:mt-0 !justify-start" />
       </div>
-      <div
-        class="
-          pl-[56px]
-          pr-[32px]
-          pt-[24px]
-          pb-[48px]
-          grid
-          laptop:grid-flow-col
-          justify-start
-          gap-[64px]
-        "
-      >
-        <div class="grid grid-flow-row gap-y-[16px]">
-          <a
-            class="cursor-pointer hover:underline"
-            @click="isOpenAboutTeam = !isOpenAboutTeam"
-          >{{ $t('footer_nav_about_liker_land') }}</a>
-          <hr class="w-[32px] border-white border-opacity-[0.2]">
-          <a class="hover:underline" target="_blank" href="https://like.co">{{ $t('footer_nav_about_likecoin') }}</a>
+
+      <div class="flex flex-col-reverse desktop:flex-row pl-[56px] pr-[32px] pt-[24px] pb-[48px] gap-[3rem]">
+
+        <div
+          class="
+            flex-grow
+            grid
+            laptop:grid-flow-col
+            justify-start
+            gap-x-[4rem]
+            gap-y-[1rem]
+            mt-[0.75rem]
+          "
+        >
+          <div class="grid grid-flow-row gap-y-[16px]">
+            <a
+              class="cursor-pointer hover:underline"
+              @click="isOpenAboutTeam = !isOpenAboutTeam"
+            >{{ $t('footer_nav_about_liker_land') }}</a>
+            <hr class="w-[32px] border-white border-opacity-[0.2]">
+            <a class="hover:underline" target="_blank" href="https://like.co">{{ $t('footer_nav_about_likecoin') }}</a>
+          </div>
+
+          <div class="grid grid-flow-row gap-y-[16px]">
+            <a class="hover:underline" target="_blank" :href="mintNftURL">
+              {{ $t('footer_nav_mint_nft') }}
+            </a>
+          </div>
+
+          <div class="grid grid-flow-row gap-y-[16px]">
+            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'civic' })">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
+          </div>
         </div>
-        <div class="grid grid-flow-row gap-y-[16px]">
-          <a class="hover:underline" target="_blank" :href="mintNftURL">
-            {{ $t('footer_nav_mint_nft') }}
-          </a>
-        </div>
-        <div class="grid grid-flow-row gap-y-[16px]">
-          <NuxtLink class="hover:underline" :to="localeLocation({ name: 'civic' })">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
-        </div>
+
+        <div id="custom-substack-embed" />
+
       </div>
     </div>
     <div
@@ -115,10 +123,35 @@ export default {
       isOpenAboutTeam: false,
     };
   },
+  head() {
+    return {
+      script: [
+        {
+          hid: 'substack-js-script',
+          src: 'https://substackapi.com/widget.js',
+          async: 'true',
+        },
+      ],
+    };
+  },
   computed: {
     mintNftURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft`;
     },
+  },
+  mounted() {
+    window.CustomSubstackWidget = {
+      substackUrl: 'newsletter.like.co',
+      placeholder: 'example@gmail.com',
+      buttonText: this.$t('footer_subscribe_newsletter_button'),
+      theme: 'custom',
+      colors: {
+        primary: '#AAF1E7',
+        input: '#00000000',
+        email: '#AAF1E7',
+        text: '#28646E',
+      },
+    };
   },
   methods: {
     handleClickHelp() {
@@ -130,3 +163,20 @@ export default {
   },
 };
 </script>
+
+<style>
+#custom-substack-embed .custom-substack-widget {
+  border-radius: 14px;
+}
+#custom-substack-embed .custom-substack-widget + .success {
+  color: #d7ecec;
+}
+@media screen and (min-width: 992px) {
+  .custom-substack-widget {
+    margin-left: auto;
+  }
+  .custom-substack-widget + .success {
+    text-align: right;
+  }
+}
+</style>
