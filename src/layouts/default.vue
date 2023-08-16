@@ -27,21 +27,8 @@
 
     <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
 
-    <NFTBookHero
-      v-if="isStorePage && shouldShowNFTBookHero"
-      :class="{ 'pb-[84px]': isNFTBookHeroAnimationComplete }"
-      @animate-complete="handleNFTBookHeroAnimateComplete"
-    >
-      <template #prepend>
-        <SiteHeader
-          v-if="!isInInAppBrowser"
-          class="text-like-green"
-          :is-plain="true"
-        />
-      </template>
-    </NFTBookHero>
     <SiteHeader
-      v-else-if="!isInInAppBrowser"
+      v-if="!isInInAppBrowser"
       :class="[
         'text-like-green',
         { [
@@ -60,14 +47,10 @@
         'flex-grow',
         {
           'pt-[32px]': isInInAppBrowser,
-          'fixed opacity-0': isNFTBookHeroAnimating,
         }
       ]"
     />
-    <Footer
-      v-if="!isInInAppBrowser"
-      :class="{ 'fixed opacity-0': isNFTBookHeroAnimating }"
-    />
+    <Footer v-if="!isInInAppBrowser" />
     <PortalTarget
       name="dialog"
       multiple
@@ -104,17 +87,11 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import alertMixin from '~/mixins/alert';
-import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import inAppMixin from '~/mixins/in-app';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [alertMixin, inAppMixin],
-  data() {
-    return {
-      isNFTBookHeroAnimationComplete: false,
-    };
-  },
   head() {
     const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true });
     return {
@@ -139,25 +116,9 @@ export default {
     isHomePage() {
       return this.getRouteBaseName(this.$route) === 'index';
     },
-    isStorePage() {
-      return this.getRouteBaseName(this.$route) === 'store';
-    },
-    isNFTBookHeroAnimating() {
-      return (
-        this.shouldShowNFTBookHero &&
-        this.isStorePage &&
-        !this.isNFTBookHeroAnimationComplete
-      );
-    },
-    shouldShowNFTBookHero() {
-      return !checkIsLikeCoinAppInAppBrowser(this.$route);
-    },
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
-    handleNFTBookHeroAnimateComplete() {
-      this.isNFTBookHeroAnimationComplete = true;
-    },
     onClickAlertBanner(type = 'primary') {
       logTrackerEvent(
         this,
