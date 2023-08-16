@@ -28,7 +28,9 @@
       >
         <NFTCover
           :is-nft-book="true"
-          :src="NFTImageUrl"
+          :src="imageSrc || NFTImageUrl"
+          :video-src="videoSrc"
+          :should-resize-src="shouldResizeSrc"
           :size="300"
           :alt="NFTName"
         />
@@ -97,7 +99,9 @@
             coverClasses,
           ]"
           :is-nft-book="true"
-          :src="NFTImageUrl"
+          :src="imageSrc || NFTImageUrl"
+          :should-resize-src="shouldResizeSrc"
+          :video-src="videoSrc"
           :size="300"
           :alt="NFTName"
         />
@@ -210,6 +214,18 @@ export default {
     shelfClass: {
       type: [Array, String],
       default: () => [],
+    },
+    imageSrc: {
+      type: String,
+      default: '',
+    },
+    videoSrc: {
+      type: String,
+      default: '',
+    },
+    shouldResizeSrc: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

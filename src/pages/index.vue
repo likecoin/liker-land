@@ -781,7 +781,7 @@
                 </g>
               </g>
               <g ref="nftBookSectionBook">
-                <image width="158" height="228" transform="translate(44.99 75)" xlink:href="~assets/images/index/nft-book-cover.jpg"/>
+                <image width="158" height="228" transform="translate(44.99 75)" xlink:href="~assets/images/index/nft-book-cover-old.jpg"/>
                 <path fill="none" stroke="#000" stroke-miterlimit="10" d="m196.82,80.2H39.8v227.92h157.01V80.2Z" />
                 <path fill="none" stroke="#000" stroke-miterlimit="10" d="m29.44,90.61v227.92h157.01" />
                 <path fill="none" stroke="#000" stroke-miterlimit="10" d="m186.46,80.2v227.92" />
@@ -796,6 +796,9 @@
         <NFTBookItemCard
           :class-id="featuredNFTBookClassId"
           preset="campaign"
+          :image-src="staticBookCoverSrc"
+          :video-src="animatedBookCoverSrc"
+          :should-resize-src="false"
           @click.native="handleBookItemCardClickInNFTBookSection"
           @click-avatar="handleAuthorClickInNFTBookSection"
         />
@@ -1188,6 +1191,8 @@
 <script>
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
+import staticBookCover from '~/assets/images/index/nft-book-cover.jpg';
+import animatedBookCover from '~/assets/images/index/nft-book-cover.mp4';
 
 import {
   APP_LIKE_CO_URL_BASE,
@@ -1278,6 +1283,12 @@ export default {
     },
     featuredNFTBookClassId() {
       return LIKECOIN_NFT_BOOK_ITEMS[0];
+    },
+    animatedBookCoverSrc() {
+      return animatedBookCover;
+    },
+    staticBookCoverSrc() {
+      return staticBookCover;
     },
     sectionContentClass() {
       return ['max-w-[1024px]', 'w-full', 'mx-auto'];

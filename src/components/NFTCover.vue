@@ -74,6 +74,10 @@ export default {
       type: String,
       default: '',
     },
+    shouldResizeSrc: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -116,7 +120,9 @@ export default {
       ];
     },
     resizedSrc() {
-      return getImageResizeAPI(this.src, { width: this.size });
+      return this.shouldResizeSrc
+        ? getImageResizeAPI(this.src, { width: this.size })
+        : this.src;
     },
     isShowVideo() {
       return this.videoSrc && !this.isVideoError && !this.isError;
