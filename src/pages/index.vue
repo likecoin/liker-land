@@ -246,7 +246,11 @@
             <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
               preset="secondary"
-              :to="localeLocation({ name: 'store' })"
+              :to="localeLocation({
+                name: 'nft-class-classId',
+                params: { classId: freeMintNFTClassId },
+                query: { action: 'collect' },
+              })"
               @click.native="handleTryCollectButtonClickInHeroSection"
             />
             <!--
@@ -431,7 +435,11 @@
                   <ButtonV2
                     :text="$t('index_page_hero_try_collect_button')"
                     preset="secondary"
-                    :to="localeLocation({ name: 'store' })"
+                    :to="localeLocation({
+                      name: 'nft-class-classId',
+                      params: { classId: freeMintNFTClassId },
+                      query: { action: 'collect' },
+                    })"
                     @click.native="handleTryCollectButtonClickInHeroSection"
                   />
                   <!--
@@ -615,6 +623,7 @@
           <div
             ref="nftBookSectionContent"
             :class="[
+              'gap-[0.5rem]',
               'laptop:max-w-[328px]',
               'laptop:-ml-[12rem]',
               'mt-[3.5rem] laptop:mt-[5rem]',
@@ -625,10 +634,44 @@
                 'text-[1rem]',
                 'font-[600]',
                 'text-like-green',
+                'text-center laptop:text-left',
                 'whitespace-pre-line',
               ]"
             >{{ $t('index_page_nft_book_heading').replaceAll(/\\n/g, '\n') }}</h2>
-            <p class="text-[1rem] mt-[0.5rem]">{{ $t('index_page_nft_book_content') }}</p>
+            <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_nft_book_content') }}</p>
+
+            <footer
+              :class="[
+                'flex',
+                'flex-row',
+                'flex-wrap',
+                'justify-center laptop:justify-start',
+                'gap-[1rem]',
+                'mt-[1rem]',
+              ]"
+            >
+              <ButtonV2
+                :text="$t('index_page_nft_book_free_mint_button')"
+                preset="secondary"
+                :to="localeLocation({
+                  name: 'nft-class-classId',
+                  params: { classId: freeMintNFTClassId },
+                  query: { action: 'collect' },
+                })"
+                @click.native="handleTryCollectButtonClickInNFTBookSection"
+              />
+              <ButtonV2
+                :text="$t('index_page_nft_book_paid_mint_button')"
+                preset="tertiary"
+                :to="localeLocation({
+                  name: 'nft-class-classId',
+                  params: { classId: featuredNFTBookClassId },
+                  query: { action: 'collect' },
+                })"
+                @click.native="handleBuyFullVersionButtonInNFTBookSection"
+              />
+            </footer>
+
           </div>
 
           <div
@@ -640,6 +683,7 @@
               'mt-[3rem] laptop:mt-0',
               'mx-auto',
               '-mb-[5rem] laptop:-mb-[12rem]',
+              'pointer-events-none',
             ]"
           >
             <svg
@@ -948,7 +992,11 @@
             <ButtonV2
               :text="$t('index_page_new_culture_section_2_cta_button')"
               preset="tertiary"
-              :to="localeLocation({ name: 'store' })"
+              :to="localeLocation({
+                name: 'nft-class-classId',
+                params: { classId: freeMintNFTClassId },
+                query: { action: 'collect' },
+              })"
               @click.native="handleTryCollectButtonClickInNewCultureSection"
             />
           </template>
@@ -1141,7 +1189,11 @@
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
 
-import { APP_LIKE_CO_URL_BASE, LIKECOIN_NFT_BOOK_ITEMS } from '~/constant';
+import {
+  APP_LIKE_CO_URL_BASE,
+  LIKECOIN_NFT_CLASS_FREE_MINT,
+  LIKECOIN_NFT_BOOK_ITEMS,
+} from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -1220,6 +1272,9 @@ export default {
         'm1280,184.25c545.44,0,987.6,442.16,987.6,987.6v456.29c0,545.44-442.16,987.6-987.6,987.6h0c-545.44,0-987.6-442.16-987.6-987.6v-456.29c0-545.44,442.16-987.6,987.6-987.6h0Z',
         'm1280,9.11h0c625.66,0,1132.85,507.2,1132.85,1132.85v516.07c0,625.66-507.2,1132.85-1132.85,1132.85h0c-625.66,0-1132.85-507.2-1132.85-1132.85v-516.07C147.15,516.31,654.34,9.11,1280,9.11Z',
       ];
+    },
+    freeMintNFTClassId() {
+      return LIKECOIN_NFT_CLASS_FREE_MINT;
     },
     featuredNFTBookClassId() {
       return LIKECOIN_NFT_BOOK_ITEMS[0];
@@ -1927,7 +1982,7 @@ export default {
       });
 
       const contentEls = [...nftBookSectionContent.childNodes].filter(node =>
-        /h2|p/i.test(node.tagName)
+        /h2|p|footer/i.test(node.tagName)
       );
       timeline.from(
         contentEls,
@@ -2042,6 +2097,24 @@ export default {
         this,
         'IndexPage',
         'IndexNFTBookAuthorClick',
+        this.featuredNFTBookClassId,
+        1
+      );
+    },
+    handleTryCollectButtonClickInNFTBookSection() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexNFTBookTryCollectClick',
+        this.featuredNFTBookClassId,
+        1
+      );
+    },
+    handleBuyFullVersionButtonInNFTBookSection() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexNFTBookBuyFullVersionClick',
         this.featuredNFTBookClassId,
         1
       );

@@ -78,6 +78,10 @@ export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
   ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
   : 'like17m4vwrnhjmd20uu7tst7nv0kap6ee7js69jfrs';
 
+export const LIKECOIN_NFT_CLASS_FREE_MINT = IS_TESTNET
+  ? 'likenft1t2a7n9px9y5mhayjpk4s7m40zwjr3wvyg4ucg32w77jxmsw7889qg6ky8d'
+  : 'likenft1wtq5cqjw9vhpjqq6g8l55jhez6dpn78nxmna4dz235wrlwa203qs7j234q';
+
 export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
   ? [
       'likenft1fsf4x0tsm8gj8x0adkcce68es2xt5gwk9y7zjf06wwh92t27s99q3ktwpn',
