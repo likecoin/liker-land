@@ -81,13 +81,24 @@
       </Dropdown>
 
       <ButtonV2
-        v-if="getRouteBaseName($route) !== 'store'"
-        class="hidden laptop:flex"
+        v-if="getRouteBaseName($route) === 'index'"
         preset="secondary"
         :to="localeLocation({ name: 'store' })"
         :text="$t('header_button_try_collect')"
         @click.native="handleClickTryCollect"
       />
+      <ButtonV2
+        v-else-if="!getAddress"
+        class="hidden laptop:flex"
+        :preset="isPlain ? 'outline' : 'secondary'"
+        :text="$t('header_button_connect_to_wallet')"
+        @click="connectWallet"
+      >
+        <template #prepend>
+          <IconLogin />
+        </template>
+      </ButtonV2>
+
 
       <Dropdown>
         <template #trigger="{ toggle }">
@@ -208,6 +219,7 @@ export default {
     },
     mainMenuItems() {
       const options = [
+        { value: 'store', name: this.$t('main_menu_store') },
         { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
         { value: 'mintNft', name: this.$t('main_menu_mint_nft') },
       ];
@@ -237,6 +249,12 @@ export default {
     },
     async handleSelectMenuItem(value) {
       switch (value) {
+        case 'store': {
+          logTrackerEvent(this, 'site_menu', 'SiteMenuStoreClick', '', 1);
+          this.$router.push(this.localeLocation({ name: 'store' }));
+          break;
+        }
+
         case 'dashboard': {
           logTrackerEvent(this, 'site_menu', 'site_menu_click_dashboad', '', 1);
           await this.navigateToMyDashboard();
