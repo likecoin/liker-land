@@ -260,7 +260,7 @@ const TAB_OPTIONS = {
   USER_STATS: 'userStats',
 };
 export default {
-  name: 'SocialFeeds',
+  name: 'Feed',
   layout: 'default',
   mixins: [
     alertMixin,

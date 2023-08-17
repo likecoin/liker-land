@@ -99,7 +99,7 @@ export default {
     },
     isSocialFeedsWithCollectiblesView() {
       return (
-        this.getRouteBaseName(this.$route) === 'social-feeds' &&
+        this.getRouteBaseName(this.$route) === 'feed' &&
         this.$route.query.view === 'collectibles'
       );
     },

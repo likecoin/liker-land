@@ -462,7 +462,7 @@ export default {
     goMyDashboard() {
       logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
       this.$router.push(
-        this.localeLocation({ name: 'social-feeds', query: { view: 'town' } })
+        this.localeLocation({ name: 'feed', query: { view: 'town' } })
       );
     },
     async handleClickFollowers() {
