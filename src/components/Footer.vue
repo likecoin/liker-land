@@ -141,7 +141,7 @@ export default {
   },
   mounted() {
     window.CustomSubstackWidget = {
-      substackUrl: 'newsletter.like.co',
+      substackUrl: 'likerland.substack.com',
       placeholder: 'example@gmail.com',
       buttonText: this.$t('footer_subscribe_newsletter_button'),
       theme: 'custom',
