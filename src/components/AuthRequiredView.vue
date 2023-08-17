@@ -1,34 +1,40 @@
 <template>
   <div v-if="walletIsMatchedSession">
     <slot name="prepend" />
-    <slot />
-    <slot name="append" />
+
+    <div :class="stickyContentClass">
+      <slot />
+      <slot name="append" />
+    </div>
   </div>
   <div v-else class="flex flex-col justify-center flex-grow">
     <slot name="prepend" />
-    <Label
-      class="text-medium-gray"
-      align="center"
-      :text="loginLabel || $t('settings_page_content_with_auth_login_label')"
-    />
-    <div class="flex flex-col items-center mt-[24px]">
-      <template v-if="isLoadingStartImmediately || walletIsLoggingIn">
-        <ProgressIndicator />
-        <Label
-          class="text-medium-gray w-full mt-[4px]"
-          align="center"
-          preset="p6"
-          :text="$t('auth_required_view_hint_label_loading')"
-        />
-      </template>
-      <ButtonV2
-        v-else
-        :text="loginButtonLabel || $t('settings_page_content_with_auth_login_button')"
-        preset="secondary"
-        @click="onClickLogin"
+
+    <div :class="stickyContentClass">
+      <Label
+        class="text-medium-gray"
+        align="center"
+        :text="loginLabel || $t('settings_page_content_with_auth_login_label')"
       />
+      <div class="flex flex-col items-center mt-[24px]">
+        <template v-if="isLoadingStartImmediately || walletIsLoggingIn">
+          <ProgressIndicator />
+          <Label
+            class="text-medium-gray w-full mt-[4px]"
+            align="center"
+            preset="p6"
+            :text="$t('auth_required_view_hint_label_loading')"
+          />
+        </template>
+        <ButtonV2
+          v-else
+          :text="loginButtonLabel || $t('settings_page_content_with_auth_login_button')"
+          preset="secondary"
+          @click="onClickLogin"
+        />
+      </div>
+      <slot name="append" />
     </div>
-    <slot name="append" />
   </div>
 </template>
 
@@ -49,6 +55,27 @@ export default {
     isLoadingStartImmediately: {
       type: Boolean,
       default: false,
+    },
+    isStickToBottomAtMobile: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    stickyContentClass() {
+      if (!this.isStickToBottomAtMobile) {
+        return null;
+      }
+      return [
+        'sticky laptop:relative',
+        'bottom-0',
+        'w-full',
+        'mt-[4px]',
+        'px-[1rem]',
+        'py-[1.5rem]',
+        'shadow-[0_-4px_10px_0_rgba(0,0,0,0.1)] laptop:shadow-none',
+        'bg-white laptop:bg-transparent',
+      ];
     },
   },
   methods: {

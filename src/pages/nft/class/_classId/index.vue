@@ -222,14 +222,17 @@
           />
         </section>
         <!-- recommend -->
-        <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
-          <ProgressIndicator />
-        </div>
+        <client-only>
+          <lazy-component
+            class="pointer-events-none"
+            @show.once="handleFetchRecommendInfo"
+          />
+        </client-only>
         <NFTPageRecommendation
-          v-else
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
+          :is-loading="isRecommendationLoading"
           @header-avatar-click="handleRecommendationHeaderAvatarClick"
           @follow-button-click="handleFollowButtonClick"
           @item-click="handleRecommendedItemClick"
@@ -453,9 +456,7 @@ export default {
       return this.NFTPrice !== undefined && this.NFTPrice > 0;
     },
     creatorMessage() {
-      return this.messageList.find(
-        element => element.event === 'mint_nft' || element.event === 'purchase'
-      );
+      return this.NFTClassMetadata?.message;
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
@@ -486,8 +487,6 @@ export default {
     } finally {
       this.isLoading = false;
     }
-
-    await this.fetchRecommendInfo();
 
     const { hash } = this.$route;
     if (hash) {
@@ -527,6 +526,9 @@ export default {
         this.trimmedCount
       );
       await this.lazyGetUserInfoByAddresses(trimmedCollectors);
+    },
+    async handleFetchRecommendInfo() {
+      await this.fetchRecommendInfo();
     },
     async handleClickMoreCollector() {
       logTrackerEvent(

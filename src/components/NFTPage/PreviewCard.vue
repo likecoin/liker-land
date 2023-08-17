@@ -4,14 +4,13 @@
       'flex',
       'flex-col',
 
-      'overflow-hidden',
-
       'border-[1px]',
       'border-shade-gray',
     ]"
     :has-padding="false"
   >
     <a
+      class="rounded-t-[inherit] overflow-hidden"
       :href="url || iscnUrl"
       target="_blank"
       rel="noopener"
@@ -116,7 +115,7 @@ import { ellipsis, ellipsisDescription, formatNumberWithLIKE } from '~/util/ui';
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
 export default {
-  name: 'ItemCard',
+  name: 'NFTPagePreviewCard',
   filters: {
     ellipsis,
     ellipsisDescription,

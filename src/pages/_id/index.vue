@@ -1,6 +1,5 @@
 <template>
   <Page class="px-[8px]">
-
     <div
       :class="[
         'flex',
@@ -16,7 +15,7 @@
 
         'w-full',
         'pt-[32px]',
-        'pb-[120px]'
+        'pb-[120px]',
       ]"
     >
       {{ /* Left Column */ }}
@@ -42,11 +41,62 @@
               :stat-wallet="wallet"
             />
           </template>
+          <!-- In App Follow -->
+          <template #follow>
+            <div
+              v-if="walletHasLoggedIn && !isFollowed"
+              class="flex items-center justify-center"
+            >
+              <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
+              <div
+                v-else
+                class="relative flex group w-[138px]"
+                @click="clickFollow(wallet, userDisplayName)"
+              >
+                <div
+                  :class="[
+                    ...getDefaultClass,
+                    isFollowPromptStateAuto
+                      ? '!bg-like-cyan-light text-like-green'
+                      : '!bg-shade-gray text-dark-gray',
+                  ]"
+                >
+                  <Label align="center" :text="followPromptButtonText">
+                    <template v-if="isFollowPromptStateAuto" #prepend>
+                      <IconCheck />
+                    </template>
+                  </Label>
+                </div>
+                <div
+                  :class="[
+                    ...getDefaultClass,
+                    'group-hover:opacity-[100]',
+                    'group-active:!bg-medium-gray',
+                    'opacity-0',
+                    'transition-all',
+                    'absolute',
+                    'inset-0',
+                    isFollowPromptStateAuto
+                      ? '!bg-shade-gray text-dark-gray'
+                      : '!bg-like-cyan-light text-like-green',
+                  ]"
+                >
+                  <Label align="center" :text="followPromptButtonHoverText" />
+                </div>
+              </div>
+            </div>
+          </template>
         </NFTPortfolioUserInfo>
         <NFTPortfolioTopUsersList
-          v-if="(isCurrentTabCollected ? userTopCreators : userTopCollectors).length && (isCurrentTabCollected || isCurrentTabCreated)"
+          v-if="
+            (isCurrentTabCollected ? userTopCreators : userTopCollectors)
+              .length &&
+            (isCurrentTabCollected || isCurrentTabCreated)
+          "
           :type="isCurrentTabCollected ? 'creator' : 'collector'"
-          :user-list="isCurrentTabCollected ? userTopCreators : userTopCollectors"
+          :user-list="
+            isCurrentTabCollected ? userTopCreators : userTopCollectors
+          "
           @hover="handleTopUserHover"
           @click="handleTopUserClick"
         >
@@ -114,6 +164,7 @@
             </ButtonV2>
           </CardV2>
           <NFTPortfolioSubscriptionForm
+            v-if="!walletHasLoggedIn"
             id="creator-follow"
             class="w-full"
             :creator-wallet-address="wallet"
@@ -183,6 +234,12 @@ import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
 import alertMixin from '~/mixins/alert';
 
+const FOLLOW_PROMPT_STATE = {
+  DEFAULT: 'default', // No need to show any follow UI.
+  UNFOLLOW: 'unfollow', // Show a switch button to toggle follow status.
+  AUTO: 'auto', // Show auto-followed UI.
+};
+
 export default {
   name: 'NFTPortfolioPage',
   mixins: [walletMixin, portfolioMixin, alertMixin],
@@ -217,7 +274,11 @@ export default {
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
   },
   data() {
-    return { isOpenFollowersDialog: false };
+    return {
+      isOpenFollowersDialog: false,
+      isFollowPromptUpdating: false,
+      followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
+    };
   },
   head() {
     const name = this.userDisplayName;
@@ -284,6 +345,45 @@ export default {
     },
     isUserPortfolio() {
       return this.wallet === this.getAddress;
+    },
+
+    // Follow
+    followPromptButtonText() {
+      if (this.isFollowPromptUpdating) {
+        return this.$t('nft_details_page_label_loading');
+      }
+      if (this.isFollowPromptStateAuto) {
+        return this.$t('settings_following');
+      }
+      return this.$t('settings_follow_follow');
+    },
+    followPromptButtonHoverText() {
+      if (this.isFollowPromptStateAuto) {
+        return this.$t('settings_follow_unfollow');
+      }
+      return this.$t('settings_follow_follow');
+    },
+    isFollowPromptStateAuto() {
+      return this.followPromptState === FOLLOW_PROMPT_STATE.AUTO;
+    },
+    getDefaultClass() {
+      return [
+        'flex',
+        'gap-[16px]',
+        'box-border',
+        'overflow-hidden',
+        'justify-center',
+        'items-center',
+        'transition',
+        'duration-200',
+        'h-40px',
+        'w-full',
+        'font-600',
+        'px-[16px]',
+        'py-[8px]',
+        'rounded-[20px]',
+        'cursor-pointer',
+      ];
     },
   },
   watch: {
@@ -361,7 +461,9 @@ export default {
     },
     goMyDashboard() {
       logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
-      this.$router.push(this.localeLocation({ name: 'dashboard' }));
+      this.$router.push(
+        this.localeLocation({ name: 'feed', query: { view: 'town' } })
+      );
     },
     async handleClickFollowers() {
       logTrackerEvent(
@@ -434,6 +536,47 @@ export default {
     },
     handlePortfolioItemCollect(classId) {
       logTrackerEvent(this, 'NFT', 'NFTCollect(Portfolio)', classId, 1);
+    },
+    async clickFollow(followOwnerWallet, followOwnerDisplayName) {
+      try {
+        this.isFollowPromptUpdating = true;
+        switch (this.followPromptState) {
+          case FOLLOW_PROMPT_STATE.AUTO:
+            this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
+            await this.walletUnfollowCreator(followOwnerWallet);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'FeedUnfollowClick',
+              FOLLOW_PROMPT_STATE.UNFOLLOW,
+              1
+            );
+            break;
+          case FOLLOW_PROMPT_STATE.UNFOLLOW:
+          default:
+            this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
+            await this.walletFollowCreator(followOwnerWallet);
+            logTrackerEvent(
+              this,
+              'NFT',
+              'FeedFollowClick',
+              FOLLOW_PROMPT_STATE.AUTO,
+              1
+            );
+            this.alertPromptSuccess(
+              this.$t('portfolio_subscription_success_alert', {
+                creator: followOwnerDisplayName,
+              })
+            );
+            break;
+        }
+      } catch (error) {
+        this.alertPromptError(error.toString());
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.isFollowPromptUpdating = false;
+      }
     },
   },
 };
