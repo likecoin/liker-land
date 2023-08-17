@@ -2,8 +2,6 @@
   <Page
     :class="[
       'w-full',
-      'max-w-[960px]',
-      'mx-auto',
       'px-[.75em] laptop:px-[2em]',
       'pb-[8em]',
       'text-[0.75em] sm:text-[1em]',
@@ -83,7 +81,7 @@
         ]"
       >
         {{ /* Main View -- Town */ }}
-        <div
+        <section
           v-if="currentMainTab === 'town'"
           :class="[
             'w-full',
@@ -144,7 +142,7 @@
               >{{ $t('feed_empty_action') }}</NuxtLink>
             </i18n>
           </CardV2>
-        </div>
+        </section>
 
         {{ /* Main View -- collectibles */ }}
         <NFTPortfolioMainView
@@ -177,7 +175,7 @@
         />
 
         {{ /* Main View -- UserStats */ }}
-        <div
+        <section
           :class="[
             'hidden',
             { '!flex': currentMainTab === 'userStats' },
@@ -243,7 +241,7 @@
               </template>
             </ButtonV2>
           </div>
-        </div>
+        </section>
       </div>
 
       <FollowerDialog
