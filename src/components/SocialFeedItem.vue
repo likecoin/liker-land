@@ -25,10 +25,10 @@
           <div class="flex flex-col gap-[4px] justify-start">
             <p class="text-[16px] font-600 text-dark-gray">
               <span class="text-like-green">{{ senderId }}</span>
-              {{ formatType }}
+              {{ formattedType }}
             </p>
             <p class="text-[12px] font-400 text-medium-gray">
-              {{ formatTime }}
+              {{ formattedTime }}
             </p>
           </div>
         </div>
@@ -251,7 +251,7 @@ export default {
     receiverAvatar() {
       return this.receiverInfo?.avatar;
     },
-    formatType() {
+    formattedType() {
       switch (this.type) {
         case EVENT_TYPE.COLLECT:
         case EVENT_TYPE.PURCHASE:
@@ -267,7 +267,7 @@ export default {
           return undefined;
       }
     },
-    formatTime() {
+    formattedTime() {
       const date = new Date(this.timestamp);
       const formattedDate = new Intl.DateTimeFormat('en-US', {
         hour: 'numeric',
@@ -371,7 +371,7 @@ export default {
             logTrackerEvent(
               this,
               'NFT',
-              'social_feed_click_unfollow',
+              'FeedUnfollowClick',
               FOLLOW_PROMPT_STATE.UNFOLLOW,
               1
             );
@@ -383,7 +383,7 @@ export default {
             logTrackerEvent(
               this,
               'NFT',
-              'social_feed_click_follow',
+              'FeedFollowClick',
               FOLLOW_PROMPT_STATE.AUTO,
               1
             );

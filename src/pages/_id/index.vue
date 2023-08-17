@@ -547,7 +547,7 @@ export default {
             logTrackerEvent(
               this,
               'NFT',
-              'social_feed_click_unfollow',
+              'FeedUnfollowClick',
               FOLLOW_PROMPT_STATE.UNFOLLOW,
               1
             );
@@ -559,7 +559,7 @@ export default {
             logTrackerEvent(
               this,
               'NFT',
-              'social_feed_click_follow',
+              'FeedFollowClick',
               FOLLOW_PROMPT_STATE.AUTO,
               1
             );

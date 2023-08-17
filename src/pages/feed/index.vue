@@ -426,7 +426,7 @@ export default {
           logTrackerEvent(
             this,
             'SocialFeed',
-            'go_town_tab_clicked',
+            'FeedTabTownClick',
             this.wallet,
             1
           );
@@ -436,7 +436,7 @@ export default {
           logTrackerEvent(
             this,
             'SocialFeed',
-            'go_collectibles_tab_clicked',
+            'FeedTabCollectiblesClick',
             this.wallet,
             1
           );
@@ -447,7 +447,7 @@ export default {
           logTrackerEvent(
             this,
             'SocialFeed',
-            'go_user_stats_tab_clicked',
+            'FeedTabStatsClick',
             this.wallet,
             1
           );
