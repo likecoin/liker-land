@@ -88,13 +88,31 @@
           :class="[
             'w-full',
             'flex',
-            'justify-center'
+            'flex-col',
+            'items-stretch',
+            'gap-[3rem]',
           ]"
         >
-          <div v-if="walletIsFetchingFolloweeEvents">
-            <Label align="center" class="text-medium-gray" :text="$t('settings_follow_loading')" />
-            <ProgressIndicator class="self-center " />
-          </div>
+          <template v-if="walletIsFetchingFolloweeEvents">
+            <div
+              v-for="[nameWidthClass, cardHeightClass] in [
+                ['w-[180px]', 'min-h-[10vh]'],
+                ['w-[140px]', 'min-h-[20vh]'],
+                ['w-[120px]', 'min-h-[15vh]'],
+              ]"
+              :key="cardHeightClass"
+              class="animate-pulse"
+            >
+              <div class="flex items-start gap-[0.5rem]">
+                <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
+                <div>
+                  <div :class="[nameWidthClass, 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
+                  <div class="mt-[0.5rem] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
+                </div>
+              </div>
+              <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
+            </div>
+          </template>
           <ul v-else-if="displayedEvents.length" class="w-full">
             <li v-for="e in displayedEvents" :key="e.tx_hash" class="mb-[48px]">
               <SocialFeedItem
@@ -109,7 +127,23 @@
               />
             </li>
           </ul>
-          <div v-if="!walletIsFetchingFolloweeEvents && !displayedEvents.length">{{ $t('dashboard_table_no_data') }}</div>
+          <CardV2
+            v-else-if="!displayedEvents.length"
+            class="flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
+            :is-outline="true"
+          >
+            <i18n
+              class="text-[0.9em] text-medium-gray text-center p-[3rem]"
+              path="feed_empty_description"
+            >
+              <NuxtLink
+                class="text-like-green hover:text-like-green-dark underline"
+                :to="localeLocation({ name: 'index' })"
+                place="action"
+                @click.native="handleEmptyFeedActionClick"
+              >{{ $t('feed_empty_action') }}</NuxtLink>
+            </i18n>
+          </CardV2>
         </div>
 
         {{ /* Main View -- collectibles */ }}
@@ -538,6 +572,15 @@ export default {
           name: 'id',
           params: { id: this.wallet },
         })
+      );
+    },
+    handleEmptyFeedActionClick() {
+      logTrackerEvent(
+        this,
+        'SocialFeed',
+        'FeedEmptyActionClick',
+        this.wallet,
+        1
       );
     },
   },

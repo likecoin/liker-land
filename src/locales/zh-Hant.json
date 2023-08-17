@@ -192,6 +192,8 @@
   "FeaturedPage": {
     "headerLabel": "今天"
   },
+  "feed_empty_action": "關注",
+  "feed_empty_description": "很靜呢！試試{action}一些作者和朋友，令廣場熱鬧起來吧！",
   "filter_menu_creator": "所有創作者",
   "filter_menu_creator_selected": "{num} 個創作者",
   "filter_menu_reset": "重設",

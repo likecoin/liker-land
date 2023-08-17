@@ -202,6 +202,8 @@
   "FeaturedPage": {
     "headerLabel": "Today"
   },
+  "feed_empty_action": "follow",
+  "feed_empty_description": "It is quiet here! Try to {action} some creators to make this plaza lively!",
   "filter_menu_creator": "All Creators",
   "filter_menu_creator_selected": "{num} Creator | {num} Creators",
   "filter_menu_reset": "Clear filter",
