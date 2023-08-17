@@ -17,6 +17,8 @@ export default {
       try {
         const connection = await this.openConnectWalletModal({
           language: this.$i18n.locale.split('-')[0],
+          connectWalletTitle: this.$t('connect_wallet_title'),
+          connectWalletMobileWarning: this.$t('connect_wallet_mobile_warning'),
         });
         if (!connection) return false;
         const { method } = connection;
