@@ -32,6 +32,8 @@ export default {
       'walletIsMatchedSession',
       'walletIsLoggingIn',
       'loginAddress',
+      'getFolloweeEvents',
+      'walletIsFetchingFolloweeEvents',
     ]),
     hasConnectedWallet() {
       return !!this.getAddress && !!this.walletMethodType;
@@ -80,6 +82,7 @@ export default {
       'walletFetchTotalRoyalty',
       'walletFetchTotalSales',
       'walletFetchTotalResales',
+      'fetchFolloweeWalletEvent',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {
@@ -90,7 +93,8 @@ export default {
       } else {
         this.$router.push(
           this.localeLocation({
-            name: 'dashboard',
+            name: 'feed',
+            query: { view: 'town' },
           })
         );
       }

@@ -1,6 +1,7 @@
 <template>
   <div class="flex justify-center">
     <ButtonV2
+      class="w-full"
       v-bind="$attrs"
       :preset="buttonPreset"
       :to="to"

@@ -35,6 +35,9 @@
       </Label>
     </template>
     <slot name="stats" />
+    <div v-if="$slots.follow" class="mt-[24px]">
+      <slot name="follow" />
+    </div>
   </CardV2>
 </template>
 <script>
