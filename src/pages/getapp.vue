@@ -40,11 +40,6 @@ export default {
           property: 'og:description',
           content: this.$t('GetAppPage.Og.Description'),
         },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: 'https://liker.land/images/og/default.png',
-        },
       ],
     };
   },

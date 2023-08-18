@@ -393,7 +393,10 @@ export default {
     const description =
       this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.nftImageURL || 'https://liker.land/images/og/default.png';
+      this.NFTImageUrl ||
+      `${EXTERNAL_HOST}/images/og/${
+        this.$i18n.locale === 'en' ? 'default-en.png' : 'default.png'
+      }`;
     const schemas = [];
     if (this.purchaseInfo.price) {
       schemas.push({

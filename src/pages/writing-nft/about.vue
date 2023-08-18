@@ -40,11 +40,6 @@ export default {
           property: 'og:description',
           content: description,
         },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: 'https://liker.land/images/og/default.png',
-        },
       ],
       script: [
         {

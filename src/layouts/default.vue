@@ -86,6 +86,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { EXTERNAL_HOST } from '~/constant';
+
 import alertMixin from '~/mixins/alert';
 import inAppMixin from '~/mixins/in-app';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -101,7 +103,16 @@ export default {
       bodyAttrs: {
         class: ['bg-gray-f7'],
       },
-      meta: [...i18nHead.meta],
+      meta: [
+        ...i18nHead.meta,
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `${EXTERNAL_HOST}/images/og/${
+            this.$i18n.locale === 'en' ? 'default-en.png' : 'default.png'
+          }`,
+        },
+      ],
       link: [...i18nHead.link],
     };
   },
