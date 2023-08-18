@@ -106,6 +106,16 @@ export default {
       meta: [
         ...i18nHead.meta,
         {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('og_description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('og_description'),
+        },
+        {
           hid: 'og:image',
           property: 'og:image',
           content: `${EXTERNAL_HOST}/images/og/${

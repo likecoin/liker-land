@@ -51,12 +51,12 @@ const nuxtConfig = {
       {
         hid: 'description',
         name: 'description',
-        content: 'Publish as you write. Collect as you read.',
+        content: 'Turn your stories into collectibles',
       },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: 'Publish as you write. Collect as you read.',
+        content: 'Turn your stories into collectibles',
       },
       {
         hid: 'og:image',
