@@ -210,6 +210,7 @@ const nuxtConfig = {
           'use.typekit.net',
           'https://js.stripe.com',
           'https://unpkg.com/@google/model-viewer@3.1.1/',
+          'https://substackapi.com',
           '*.crisp.chat',
           'connect.facebook.net',
         ],
