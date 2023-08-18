@@ -326,10 +326,7 @@ const nuxtConfig = {
     strategy: 'prefix',
     defaultLocale: 'zh-Hant',
     langDir: '~/locales/',
-    detectBrowserLanguage: {
-      useCookie: false,
-      redirectOn: 'no prefix',
-    },
+    detectBrowserLanguage: false, // Detect language based on IP with Cloudflare
     baseUrl: IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land',
   },
 
