@@ -1457,9 +1457,14 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('resize', this.handleResize);
+    this.resizeListener = window.addEventListener('resize', this.handleResize);
     this.handleResize();
     this.animate();
+  },
+  beforeDestroy() {
+    if (this.resizeListener) {
+      window.removeEventListener(this.resizeListener);
+    }
   },
   methods: {
     animate() {
