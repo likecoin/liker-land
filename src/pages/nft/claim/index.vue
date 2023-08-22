@@ -1,81 +1,76 @@
 <template>
   <div class="flex flex-col justify-center flex-grow">
-    <AuthRequiredView
-      class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto"
-      :login-label="$t('nft_claim_login_in')"
-      :login-button-label="$t('nft_claim_login_in_button')"
-      :is-stick-to-bottom-at-mobile="true"
-    >
-      <template #prepend>
-        <NFTWidgetBaseCard class="flex justify-center items-center max-w-[400px] mb-[16px]">
-          <NuxtLink
-            :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
-            target="_blank"
-          >
-            <NFTWidgetContentPreview
-              :class="[
-                'transition-shadow',
-                'cursor-pointer',
-                'min-h-[300px]',
-                'w-full',
-              ]"
-              :title="NFTName"
-              :description="NFTDescription"
-              :img-src="NFTImageUrl"
-              @click="handleClickViewDetails"
-            />
-          </NuxtLink>
-        </NFTWidgetBaseCard>
-      </template>
-      <Label class="mb-[16px]" :text="text" align="center" />
-      <template v-if="state === 'INITIAL'">
+    <div class="relative flex flex-col justify-center items-center w-full max-w-[962px] mx-auto mt-[4px] px-[1rem] py-[1.5rem]">
+      <NFTWidgetBaseCard class="flex justify-center items-center max-w-[400px] mb-[16px]">
+        <NuxtLink :to="localeLocation({ name: 'nft-class-classId', params: { classId } })" target="_blank">
+          <NFTWidgetContentPreview :class="[
+            'transition-shadow',
+            'cursor-pointer',
+            'min-h-[300px]',
+            'w-full',
+          ]" :title="NFTName" :description="NFTDescription" :img-src="NFTImageUrl" @click="handleClickViewDetails" />
+        </NuxtLink>
+      </NFTWidgetBaseCard>
+      <template v-if="!claimingAddress">
         <div class="flex flex-col justify-center w-full max-w-[680px] px-[12px] mt-[-12px]">
-          <Label
-            preset="p6"
-            class="text-medium-gray mt-[12px] mb-[6px]"
-            :text="$t('nft_collect_modal_leave_message')"
-          />
-          <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
-            <IconMessage class="text-dark-gray" />
-            <input
-              v-model="collectorMessage"
-              type="input"
-              class="w-full bg-transparent border-0 focus-visible:outline-none"
-              :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
-              @input.once="onInputCollectorMessage"
-            >
-          </div>
-          <ButtonV2
-            class="self-center mt-[24px]"
-            :text="$t('nft_claim_claim')"
-            preset="secondary"
-            @click="claim"
-          />
+          <template v-if="walletIsLoggingIn">
+            <ProgressIndicator />
+            <Label class="text-medium-gray w-full mt-[4px]" align="center" preset="p6"
+              :text="$t('auth_required_view_hint_label_loading')" />
+          </template>
+          <template v-else>
+            <div class="flex flex-col justify-center w-full px-[12px] mt-[12px]">
+              <Label preset="p6" class="text-medium-gray mt-[12px] mb-[6px]" :text="$t('nft_claim_enter_address_label')" />
+              <div class="flex justify-center w-full gap-[12px]">
+                <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px] w-[300px]">
+                  <input v-model="claimingAddressInput" type="input"
+                    class="w-full bg-transparent border-0 focus-visible:outline-none"
+                    :placeholder="$t('nft_claim_enter_address_placeholder')"
+                  >
+                </div>
+                <ButtonV2 v-if="!claimingAddressInput"
+                  :text="$t('settings_page_content_with_auth_login_button')"
+                  preset="secondary"
+                  @click="onClickLogin"
+                />
+              </div>
+              <ButtonV2
+                class="self-center mt-[24px]"
+                :text="$t('nft_claim_claim')"
+                preset="secondary"
+                :is-disabled="!claimingAddressInput || !isValidAddress(claimingAddressInput)"
+                @click="onEnterClaimingAddress"
+              />
+            </div>
+          </template>
         </div>
       </template>
-      <ProgressIndicator v-if="state === 'CLAIMING'" class="self-center" />
-      <template v-else-if="state === 'CLAIMED'">
-        <ButtonV2
-          v-if="nftId"
-          :text="$t('nft_claim_claimed_view_button')"
-          preset="tertiary"
-          @click="handleClickView"
-        />
-        <ButtonV2
-          v-else
-          :text="$t('nft_claim_claimed_view_class_button')"
-          preset="tertiary"
-          @click="handleClickViewClass"
-        />
-      </template>
+      <template v-else>
+        <Label class="mb-[16px]" :text="text" align="center" />
+        <template v-if="state === 'INITIAL'">
+          <div class="flex flex-col justify-center w-full max-w-[680px] px-[12px] mt-[-12px]">
+            <Label preset="p6" class="text-medium-gray mt-[12px] mb-[6px]" :text="$t('nft_collect_modal_leave_message')" />
+            <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+              <IconMessage class="text-dark-gray" />
+              <input v-model="collectorMessage" type="input"
+                class="w-full bg-transparent border-0 focus-visible:outline-none"
+                :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
+                @input.once="onInputCollectorMessage">
+            </div>
+            <ButtonV2 class="self-center mt-[24px]" :text="$t('nft_claim_claim')" preset="secondary" @click="claim" />
+          </div>
+        </template>
+        <ProgressIndicator v-if="state === 'CLAIMING'" class="self-center" />
+        <template v-else-if="state === 'CLAIMED'">
+          <ButtonV2 v-if="nftId" :text="$t('nft_claim_claimed_view_button')" preset="tertiary" @click="handleClickView" />
+          <ButtonV2 v-else :text="$t('nft_claim_claimed_view_class_button')" preset="tertiary"
+            @click="handleClickViewClass" />
+        </template>
 
-      <ButtonV2
-        v-else-if="state === 'ERROR'"
-        :text="$t('nft_claim_claimed_retry_button')"
-        preset="outline"
-        @click="handleClickRetry"
-      />
-    </AuthRequiredView>
+        <ButtonV2 v-else-if="state === 'ERROR'" :text="$t('nft_claim_claimed_retry_button')" preset="outline"
+          @click="handleClickRetry" />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -90,6 +85,7 @@ import {
   getNFTBookClaimEndpoint,
   getNFTBookPaymentStatusEndpoint,
 } from '~/util/api';
+import { isValidAddress } from '~/util/cosmos';
 
 import alertMixin from '~/mixins/alert';
 import nftMixin from '~/mixins/nft';
@@ -127,6 +123,8 @@ export default {
       state: NFT_CLAIM_STATE.INITIAL,
       error: '',
       collectorMessage: '',
+      claimingAddressInput: this.loginAddress || this.getAddress,
+      claimingAddress: '',
     };
   },
   computed: {
@@ -161,7 +159,7 @@ export default {
     },
     shouldBlockClaim() {
       return (
-        !this.loginAddress ||
+        !this.claimingAddress ||
         [NFT_CLAIM_STATE.CLAIMING, NFT_CLAIM_STATE.CLAIMED].includes(this.state)
       );
     },
@@ -169,6 +167,15 @@ export default {
       return (
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
       );
+    },
+  },
+  watch: {
+    getAddress() {
+      this.claimingAddressInput = this.getAddress;
+    },
+    loginAddress() {
+      this.claimingAddressInput = this.loginAddress;
+      this.onEnterClaimingAddress();
     },
   },
   async mounted() {
@@ -212,6 +219,25 @@ export default {
     }
   },
   methods: {
+    isValidAddress,
+    onEnterClaimingAddress() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_nft_book_on_address_entered',
+        this.classId
+      );
+      this.claimingAddress = this.claimingAddressInput;
+    },
+    async onClickLogin() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_nft_book_on_login_clicked',
+        this.classId
+      );
+      await this.connectWallet();
+    },
     async claim() {
       if (this.shouldBlockClaim) {
         return;
@@ -231,7 +257,7 @@ export default {
         this.state = NFT_CLAIM_STATE.CLAIMING;
         this.claimPromise = this.$api.post(
           postStripeFiatPendingClaim({
-            wallet: this.loginAddress,
+            wallet: this.claimingAddress,
             paymentId: this.paymentId,
             token: this.token,
           })
@@ -276,7 +302,7 @@ export default {
           }),
           {
             paymentId: this.paymentId,
-            wallet: this.loginAddress,
+            wallet: this.claimingAddress,
             message: this.collectorMessage,
           }
         );

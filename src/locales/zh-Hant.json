@@ -327,6 +327,8 @@
   "nft_claim_claimed_view_class_button": "檢視 NFT 詳情",
   "nft_claim_claiming": "正在領取 Writing NFT",
   "nft_claim_class_not_found": "找不到 NFT Class",
+  "nft_claim_enter_address_label": "輸入地址以領取 NFT",
+  "nft_claim_enter_address_placeholder": "like1.... 或登入以獲取地址",
   "nft_claim_error_message": "領取時出現錯誤：{error}",
   "nft_claim_error_message_unknown": "領取時出現不明錯誤",
   "nft_claim_login_in": "驗證錢包以領取 NFT",
