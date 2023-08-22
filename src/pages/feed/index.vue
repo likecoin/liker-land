@@ -136,7 +136,7 @@
             >
               <NuxtLink
                 class="text-like-green hover:text-like-green-dark underline"
-                :to="localeLocation({ name: 'index' })"
+                :to="localeLocation({ name: 'store' })"
                 place="action"
                 @click.native="handleEmptyFeedActionClick"
               >{{ $t('feed_empty_action') }}</NuxtLink>

@@ -51,18 +51,18 @@ const nuxtConfig = {
       {
         hid: 'description',
         name: 'description',
-        content: 'Publish as you write. Collect as you read.',
+        content: 'Turn your stories into collectibles',
       },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: 'Publish as you write. Collect as you read.',
+        content: 'Turn your stories into collectibles',
       },
       {
         hid: 'og:image',
         name: 'og:image',
         property: 'og:image',
-        content: '/images/og/default.jpg',
+        content: `${EXTERNAL_URL}/images/og/default.png`,
       },
     ],
     link: [
@@ -327,10 +327,7 @@ const nuxtConfig = {
     strategy: 'prefix',
     defaultLocale: 'zh-Hant',
     langDir: '~/locales/',
-    detectBrowserLanguage: {
-      useCookie: false,
-      redirectOn: 'no prefix',
-    },
+    detectBrowserLanguage: false, // Detect language based on IP with Cloudflare
     baseUrl: IS_TESTNET ? 'https://rinkeby.liker.land' : 'https://liker.land',
   },
 

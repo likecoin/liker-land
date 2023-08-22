@@ -27,36 +27,30 @@
 
     <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
 
-    <NFTBookHero
-      v-if="isHomePage && shouldShowNFTBookHero"
-      :class="{ 'pb-[84px]': isNFTBookHeroAnimationComplete }"
-      @animate-complete="handleNFTBookHeroAnimateComplete"
-    >
-      <template #prepend>
-        <SiteHeader
-          v-if="!isInInAppBrowser"
-          class="text-like-green"
-          :is-plain="true"
-        />
-      </template>
-    </NFTBookHero>
     <SiteHeader
-      v-else-if="!isInInAppBrowser"
-      class="text-like-green"
+      v-if="!isInInAppBrowser"
+      :class="[
+        'text-like-green',
+        { [
+          ['bg-opacity-75',
+          'bg-gray-f7',
+          'backdrop-blur-sm',
+          'fixed',
+          'inset-x-0',
+          'top-0',
+          'z-1'].join(' ')
+        ]: isHomePage },
+      ]"
     />
     <nuxt
       :class="[
         'flex-grow',
         {
           'pt-[32px]': isInInAppBrowser,
-          'fixed opacity-0': isNFTBookHeroAnimating,
         }
       ]"
     />
-    <Footer
-      v-if="!isInInAppBrowser"
-      :class="{ 'fixed opacity-0': isNFTBookHeroAnimating }"
-    />
+    <Footer v-if="!isInInAppBrowser" />
     <PortalTarget
       name="dialog"
       multiple
@@ -92,18 +86,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { EXTERNAL_HOST } from '~/constant';
+
 import alertMixin from '~/mixins/alert';
-import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import inAppMixin from '~/mixins/in-app';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [alertMixin, inAppMixin],
-  data() {
-    return {
-      isNFTBookHeroAnimationComplete: false,
-    };
-  },
   head() {
     const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true });
     return {
@@ -113,7 +103,26 @@ export default {
       bodyAttrs: {
         class: ['bg-gray-f7'],
       },
-      meta: [...i18nHead.meta],
+      meta: [
+        ...i18nHead.meta,
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('og_description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('og_description'),
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `${EXTERNAL_HOST}/images/og/${
+            this.$i18n.locale === 'zh-Hant' ? 'default-zh.png' : 'default.png'
+          }`,
+        },
+      ],
       link: [...i18nHead.link],
     };
   },
@@ -128,22 +137,9 @@ export default {
     isHomePage() {
       return this.getRouteBaseName(this.$route) === 'index';
     },
-    isNFTBookHeroAnimating() {
-      return (
-        this.shouldShowNFTBookHero &&
-        this.isHomePage &&
-        !this.isNFTBookHeroAnimationComplete
-      );
-    },
-    shouldShowNFTBookHero() {
-      return !checkIsLikeCoinAppInAppBrowser(this.$route);
-    },
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
-    handleNFTBookHeroAnimateComplete() {
-      this.isNFTBookHeroAnimationComplete = true;
-    },
     onClickAlertBanner(type = 'primary') {
       logTrackerEvent(
         this,
