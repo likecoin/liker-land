@@ -1227,6 +1227,8 @@ export default {
     Logo,
   },
   resizeListener: null,
+  heroSectionTimeline: null,
+  heroSectionScrollAnimation: null,
   data() {
     return {
       isDesktop: true,
@@ -1470,6 +1472,16 @@ export default {
       window.removeEventListener(this.$options.resizeListener);
       this.$options.resizeListener = null;
     }
+
+    if (this.$options.heroSectionTimeline) {
+      this.$options.heroSectionTimeline.kill();
+      this.$options.heroSectionTimeline = null;
+    }
+
+    if (this.$options.heroSectionScrollAnimation) {
+      this.$options.heroSectionScrollAnimation.kill();
+      this.$options.heroSectionScrollAnimation = null;
+    }
   },
   methods: {
     animate() {
@@ -1515,25 +1527,25 @@ export default {
         el => /path|g/.test(el?.tagName)
       );
 
-      if (this.heroSectionTimeline) {
-        this.heroSectionTimeline.revert();
+      if (this.$options.heroSectionTimeline) {
+        this.$options.heroSectionTimeline.revert();
       }
-      if (this.heroSectionScrollAnimation) {
-        this.heroSectionScrollAnimation.revert();
+      if (this.$options.heroSectionScrollAnimation) {
+        this.$options.heroSectionScrollAnimation.revert();
       }
 
-      this.heroSectionTimeline = this.$gsap.gsap.timeline();
+      this.$options.heroSectionTimeline = this.$gsap.gsap.timeline();
 
-      this.heroSectionTimeline.to(page, {
+      this.$options.heroSectionTimeline.to(page, {
         duration: 2,
         opacity: 1,
         ease: 'power2.out',
         clearProps: 'opacity',
       });
 
-      this.heroSectionTimeline.addLabel('slide1', '-=0.5');
+      this.$options.heroSectionTimeline.addLabel('slide1', '-=0.5');
 
-      this.heroSectionTimeline.from(
+      this.$options.heroSectionTimeline.from(
         [heroSectionPortalFill, heroSectionMobilePortalFill],
         {
           opacity: 0,
@@ -1544,7 +1556,7 @@ export default {
         },
         'slide1'
       );
-      this.heroSectionTimeline.from(
+      this.$options.heroSectionTimeline.from(
         [heroSectionPortalBorder, heroSectionMobilePortalBorder],
         {
           x: '+=8',
@@ -1555,7 +1567,7 @@ export default {
         'slide1'
       );
 
-      this.heroSectionTimeline.from(
+      this.$options.heroSectionTimeline.from(
         heroSectionBgWavePathLayers,
         {
           opacity: 0,
@@ -1569,7 +1581,7 @@ export default {
       );
 
       if (this.isDesktop) {
-        this.heroSectionTimeline.fromTo(
+        this.$options.heroSectionTimeline.fromTo(
           heroSectionTaglineLeftText,
           {
             x: '-=50',
@@ -1585,7 +1597,7 @@ export default {
           'slide1+=0.2'
         );
 
-        this.heroSectionTimeline.fromTo(
+        this.$options.heroSectionTimeline.fromTo(
           heroSectionTaglineCenterText,
           {
             x: '+=20',
@@ -1601,7 +1613,7 @@ export default {
           'slide1+=0.3'
         );
 
-        this.heroSectionTimeline.fromTo(
+        this.$options.heroSectionTimeline.fromTo(
           heroSectionTaglineRightText,
           {
             x: '-=50',
@@ -1617,7 +1629,7 @@ export default {
           'slide1+=0.4'
         );
       } else {
-        this.heroSectionTimeline.fromTo(
+        this.$options.heroSectionTimeline.fromTo(
           taglineParts,
           {
             y: '-=20px',
@@ -1637,7 +1649,7 @@ export default {
       }
 
       if (this.isDesktop) {
-        this.heroSectionScrollAnimation = this.$gsap.gsap.timeline({
+        this.$options.heroSectionScrollAnimation = this.$gsap.gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
             start: `top top`,
@@ -1648,9 +1660,9 @@ export default {
           },
         });
 
-        this.heroSectionScrollAnimation.addLabel('slide2');
+        this.$options.heroSectionScrollAnimation.addLabel('slide2');
 
-        this.heroSectionScrollAnimation.fromTo(
+        this.$options.heroSectionScrollAnimation.fromTo(
           [heroSectionTaglineCenterAndLeft, heroSectionTaglineRight],
           {
             opacity: 1,
@@ -1663,7 +1675,7 @@ export default {
           'slide2'
         );
 
-        this.heroSectionScrollAnimation.from(
+        this.$options.heroSectionScrollAnimation.from(
           heroSectionIndicator,
           {
             scaleX: 0,
@@ -1675,7 +1687,7 @@ export default {
           'slide2+=1'
         );
 
-        this.heroSectionScrollAnimation.from(
+        this.$options.heroSectionScrollAnimation.from(
           heroSectionAllStoryMattersDescription,
           {
             x: '+=40',
@@ -1686,9 +1698,9 @@ export default {
           'slide2+=1'
         );
 
-        this.heroSectionScrollAnimation.addLabel('slide3');
+        this.$options.heroSectionScrollAnimation.addLabel('slide3');
 
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           heroSectionAllStoryMattersDescription,
           {
             delay: 0.5,
@@ -1698,7 +1710,7 @@ export default {
           }
         );
 
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           heroSectionIndicator,
           {
             scaleX: 0.25,
@@ -1709,14 +1721,17 @@ export default {
           '-=0.5'
         );
 
-        this.heroSectionScrollAnimation.from(heroSectionWritingNFTText, {
-          x: '+=50',
-          duration: 1,
-          opacity: 0,
-          ease: 'power2.out',
-        });
+        this.$options.heroSectionScrollAnimation.from(
+          heroSectionWritingNFTText,
+          {
+            x: '+=50',
+            duration: 1,
+            opacity: 0,
+            ease: 'power2.out',
+          }
+        );
 
-        this.heroSectionScrollAnimation.from(
+        this.$options.heroSectionScrollAnimation.from(
           heroSectionWritingNFTDescription,
           {
             x: '-=40',
@@ -1727,7 +1742,7 @@ export default {
           '-=1'
         );
 
-        this.heroSectionScrollAnimation.fromTo(
+        this.$options.heroSectionScrollAnimation.fromTo(
           [...heroSectionBgWavePathLayers]
             .map(layer => layer.childNodes[0])
             .reverse(),
@@ -1746,7 +1761,7 @@ export default {
           'slide2'
         );
       } else {
-        this.heroSectionScrollAnimation = this.$gsap.gsap.timeline({
+        this.$options.heroSectionScrollAnimation = this.$gsap.gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
             start: `top top`,
@@ -1757,9 +1772,9 @@ export default {
           },
         });
 
-        this.heroSectionScrollAnimation.addLabel('slide2');
+        this.$options.heroSectionScrollAnimation.addLabel('slide2');
 
-        this.heroSectionScrollAnimation.fromTo(
+        this.$options.heroSectionScrollAnimation.fromTo(
           heroSectionMobileTagline,
           {
             opacity: 1,
@@ -1771,7 +1786,7 @@ export default {
           }
         );
 
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           [
             heroSectionMobilePortalFillLayer,
             heroSectionMobilePortalBorderLayer,
@@ -1784,7 +1799,7 @@ export default {
           }
         );
 
-        this.heroSectionScrollAnimation.from(
+        this.$options.heroSectionScrollAnimation.from(
           heroSectionMobileAllStoryMattersIndicator,
           {
             scaleX: 0,
@@ -1796,7 +1811,7 @@ export default {
           '-=0.5'
         );
 
-        this.heroSectionScrollAnimation.from(
+        this.$options.heroSectionScrollAnimation.from(
           heroSectionMobileAllStoryMattersDescription,
           {
             x: 32,
@@ -1807,9 +1822,9 @@ export default {
           '-=0.5'
         );
 
-        this.heroSectionScrollAnimation.addLabel('slide3', '+=0.5');
+        this.$options.heroSectionScrollAnimation.addLabel('slide3', '+=0.5');
 
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           heroSectionMobileAllStoryMattersDescription,
           {
             duration: 1,
@@ -1818,7 +1833,7 @@ export default {
           },
           'slide3'
         );
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           heroSectionMobileAllStoryMattersIndicator,
           {
             x: '-=10%',
@@ -1830,7 +1845,7 @@ export default {
           'slide3'
         );
 
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           [
             heroSectionMobilePortalFillLayer,
             heroSectionMobilePortalBorderLayer,
@@ -1843,14 +1858,14 @@ export default {
           'slide3'
         );
 
-        this.heroSectionScrollAnimation.set(
+        this.$options.heroSectionScrollAnimation.set(
           heroSectionMobileAllStoryMattersIndicator,
           {
             y: '+=10%',
           }
         );
 
-        this.heroSectionScrollAnimation.to(
+        this.$options.heroSectionScrollAnimation.to(
           heroSectionMobileAllStoryMattersIndicator,
           {
             x: '+=5%',
@@ -1860,7 +1875,7 @@ export default {
           }
         );
 
-        this.heroSectionScrollAnimation.from(
+        this.$options.heroSectionScrollAnimation.from(
           heroSectionMobileWritingNFTDescription,
           {
             x: '+=50',
@@ -1871,7 +1886,7 @@ export default {
         );
       }
 
-      this.heroSectionScrollAnimation.from(
+      this.$options.heroSectionScrollAnimation.from(
         [heroSectionCTA, heroSectionMobileCTA],
         {
           opacity: 0,
@@ -1881,15 +1896,15 @@ export default {
         '-=0.5'
       );
 
-      this.heroSectionScrollAnimation.addLabel('end');
+      this.$options.heroSectionScrollAnimation.addLabel('end');
 
-      this.heroSectionScrollAnimation.to(heroSectionScrollHint, {
+      this.$options.heroSectionScrollAnimation.to(heroSectionScrollHint, {
         opacity: 0,
         duration: 1,
         ease: 'power2.in',
       });
 
-      this.heroSectionScrollAnimation.from(
+      this.$options.heroSectionScrollAnimation.from(
         document.querySelector('.site-header'),
         {
           backdropFilter: 'blur(0px)',
@@ -1900,7 +1915,9 @@ export default {
         'end'
       );
 
-      this.heroSectionTimeline.add(this.heroSectionScrollAnimation);
+      this.$options.heroSectionTimeline.add(
+        this.$options.heroSectionScrollAnimation
+      );
     },
     animateLikerLandSection() {
       const {
