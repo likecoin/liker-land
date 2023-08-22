@@ -95,7 +95,7 @@
           <IconFlare class="text-dark-gray" />
         </div>
         <IconCreativeWork />
-        <p class="text-[14px]">{{ nftTitle | ellipsisNFTName }}</p>
+        <p class="text-[12px]">{{ nftTitle | ellipsisNFTName }}</p>
       </div>
     </NuxtLink>
 
@@ -103,7 +103,7 @@
       class="flex flex-col justify-start gap-[12px] py-[24px] px-[32px] bg-white border-2 border-shade-gray rounded-[24px] text-dark-gray"
     >
       <IconMessage v-if="shouldShowMessageIcon" />
-      <p class="text-[14px] font-400 text-dark-gray">{{ formatMessage }}</p>
+      <p class="text-[16px] font-400 text-dark-gray">{{ formatMessage }}</p>
       <div v-if="shouldShowItemCard" class="flex items-center justify-center">
         <NFTPortfolioItem
           class="border-2 border-shade-gray rounded-[24px] -p-[2px]"
