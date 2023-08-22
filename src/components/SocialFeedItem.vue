@@ -147,7 +147,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import walletMixin from '~/mixins/wallet';
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
-import { ellipsisNFTName } from '~/util/ui';
+import { ellipsisNFTName, ellipsis } from '~/util/ui';
 
 const EVENT_TYPE = {
   COLLECT: 'collect',
@@ -240,10 +240,10 @@ export default {
       return this.getUserInfoByAddress(this.receiverWallet);
     },
     senderId() {
-      return this.senderInfo?.displayName;
+      return ellipsis(this.senderInfo?.displayName);
     },
     receiverId() {
-      return this.receiverInfo?.displayName;
+      return ellipsis(this.receiverInfo?.displayName);
     },
     senderAvatar() {
       return this.senderInfo?.avatar;
