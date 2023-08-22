@@ -1226,6 +1226,7 @@ export default {
   components: {
     Logo,
   },
+  resizeListener: null,
   data() {
     return {
       isDesktop: true,
@@ -1457,14 +1458,17 @@ export default {
     },
   },
   mounted() {
-    this.resizeListener = window.addEventListener('resize', this.handleResize);
+    this.$options.resizeListener = window.addEventListener(
+      'resize',
+      this.handleResize
+    );
     this.handleResize();
     this.animate();
   },
   beforeDestroy() {
-    if (this.resizeListener) {
-      window.removeEventListener(this.resizeListener);
-      this.resizeListener = null;
+    if (this.$options.resizeListener) {
+      window.removeEventListener(this.$options.resizeListener);
+      this.$options.resizeListener = null;
     }
   },
   methods: {
