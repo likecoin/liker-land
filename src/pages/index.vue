@@ -1464,6 +1464,7 @@ export default {
   beforeDestroy() {
     if (this.resizeListener) {
       window.removeEventListener(this.resizeListener);
+      this.resizeListener = null;
     }
   },
   methods: {
