@@ -231,7 +231,7 @@ export default {
     },
     handleCollect(classId) {
       this.$router.push(
-        this.localeLocation({ name: 'index', hash: `#${classId}` })
+        this.localeLocation({ name: 'store', hash: `#${classId}` })
       );
     },
     handleCollectFromWidgetSection(classId) {

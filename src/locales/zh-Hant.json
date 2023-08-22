@@ -124,6 +124,8 @@
   "collect_modal_processing_title": "正預備運送作品",
   "community_cta_title": "參與我們的社群",
   "confirm": "確認",
+  "connect_wallet_mobile_warning": "這個帳户是讓你用來鑄造和收藏數位讀物的鑰匙。如果你是首次打造鑰匙，會需要多花幾分鐘來完成流程。謝謝你的耐性。",
+  "connect_wallet_title": "登入",
   "copied": "已複製",
   "copy": "複製",
   "CreatorPitch.Default": "成為我的讚賞公民，每月贊助一杯咖啡，助我走得更遠。",
@@ -219,6 +221,7 @@
   "footer_nav_help": "幫助",
   "footer_nav_mint_nft": "發行 NFT",
   "footer_nav_writing_nft": "Writing NFT",
+  "footer_subscribe_newsletter_button": "訂閱電子報",
   "GetAppPage": {
     "Og": {
       "Description": "Writing NFT：隨心收藏，輕鬆出版。",

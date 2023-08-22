@@ -365,11 +365,16 @@ const actions = {
     return connector;
   },
 
-  async openConnectWalletModal({ commit, dispatch }, { language } = {}) {
+  async openConnectWalletModal(
+    { commit, dispatch },
+    { language, connectWalletTitle, connectWalletMobileWarning } = {}
+  ) {
     commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
     const connection = await connector.openConnectionMethodSelectionDialog({
       language,
+      connectWalletTitle,
+      connectWalletMobileWarning,
     });
     commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     return connection;
