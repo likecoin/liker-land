@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col justify-start gap-[12px]">
+  <component
+    :is="tag"
+    class="flex flex-col justify-start gap-[12px]"
+  >
     <client-only>
       <lazy-component
         class="absolute inset-0 pointer-events-none -top-full"
@@ -7,139 +10,135 @@
       />
     </client-only>
 
-    <div class="flex items-center justify-between">
+    <header class="flex items-center justify-between gap-[1.5rem]">
       <NuxtLink
-        class="flex items-center text-like-green"
+        class="flex justify-start items-center gap-[8px] text-like-green group"
         :to="
           senderWallet
             ? localeLocation({ name: 'id', params: { id: senderWallet } })
             : ''"
         target="_blank"
       >
-        <div class="flex justify-start items-center gap-[8px]">
-          <Identity
-            class="self-start flex-shrink-0"
-            :avatar-url="senderAvatar"
-            :is-avatar-outlined="false"
-          />
-          <div class="flex flex-col gap-[4px] justify-start">
-            <p class="text-[16px] font-600 text-dark-gray">
-              <span class="text-like-green">{{ senderId }}</span>
-              {{ formattedType }}
-            </p>
-            <p class="text-[12px] font-400 text-medium-gray">
-              {{ formattedTime }}
-            </p>
-          </div>
+        <Identity
+          class="flex-shrink-0"
+          :avatar-url="senderAvatar"
+          :is-avatar-outlined="false"
+        />
+        <div class="flex flex-col justify-start">
+          <p class="text-[1rem] leading-[1.5] font-600 text-dark-gray">
+            <span class="text-like-green group-hover:underline">{{ senderId }}</span>
+            {{ formattedType }}
+          </p>
+          <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
+            {{ formattedTime }}
+          </p>
         </div>
       </NuxtLink>
 
       <div v-if="shouldShowFollow" class="flex items-center justify-center">
-        <div class="ml-[24px]">
-          <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
+        <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
+        <div
+          v-else
+          class="relative flex group w-[138px]"
+          @click="clickFollow(senderWallet, senderId)"
+        >
           <div
-            v-else
-            class="relative flex group w-[138px]"
-            @click="clickFollow(senderWallet, senderId)"
+            :class="[
+              ...getDefaultClass,
+              isFollowPromptStateAuto
+                ? '!bg-like-cyan-light text-like-green'
+                : '!bg-shade-gray text-dark-gray',
+            ]"
           >
-            <div
-              :class="[
-                ...getDefaultClass,
-                isFollowPromptStateAuto
-                  ? '!bg-like-cyan-light text-like-green'
-                  : '!bg-shade-gray text-dark-gray',
-              ]"
-            >
-              <Label align="center" :text="followPromptButtonText">
-                <template v-if="isFollowPromptStateAuto" #prepend>
-                  <IconCheck />
-                </template>
-              </Label>
-            </div>
-            <div
-              :class="[
-                ...getDefaultClass,
-                'group-hover:opacity-[100]',
-                'group-active:!bg-medium-gray',
-                'opacity-0',
-                'transition-all',
-                'absolute',
-                'inset-0',
-                isFollowPromptStateAuto
-                  ? '!bg-shade-gray text-dark-gray'
-                  : '!bg-like-cyan-light text-like-green',
-              ]"
-            >
-              <Label align="center" :text="followPromptButtonHoverText" />
-            </div>
+            <Label align="center" :text="followPromptButtonText">
+              <template v-if="isFollowPromptStateAuto" #prepend>
+                <IconCheck />
+              </template>
+            </Label>
+          </div>
+          <div
+            :class="[
+              ...getDefaultClass,
+              'group-hover:opacity-[100]',
+              'group-active:!bg-medium-gray',
+              'opacity-0',
+              'transition-all',
+              'absolute',
+              'inset-0',
+              isFollowPromptStateAuto
+                ? '!bg-shade-gray text-dark-gray'
+                : '!bg-like-cyan-light text-like-green',
+            ]"
+          >
+            <Label align="center" :text="followPromptButtonHoverText" />
           </div>
         </div>
       </div>
-    </div>
-
-    <NuxtLink
-      :to="
-        classId
-          ? localeLocation({ name: 'nft-class-classId-nftId', params: { classId, nftId } })
-          : ''"
-      target="_blank"
-    >
-      <div
-        v-if="shouldShowNftTitle"
-        class="flex justify-start gap-[8px] items-center text-like-green pl-[12px]"
-      >
-        <div v-if="isEventTypeSend">
-          <IconTransferMini class="text-dark-gray" />
-        </div>
-        <div v-else-if="isEventTypeCollect">
-          <IconFlare class="text-dark-gray" />
-        </div>
-        <IconCreativeWork />
-        <p class="text-[12px]">{{ nftTitle | ellipsisNFTName }}</p>
-      </div>
-    </NuxtLink>
+    </header>
 
     <div
-      class="flex flex-col justify-start gap-[12px] py-[24px] px-[32px] bg-white border-2 border-shade-gray rounded-[24px] text-dark-gray"
+      v-if="shouldShowNftTitle"
+      class="flex justify-start gap-[8px] items-center text-like-green pl-[12px]"
     >
-      <IconMessage v-if="shouldShowMessageIcon" />
-      <p class="text-[16px] font-400 text-dark-gray">{{ formatMessage }}</p>
-      <div v-if="shouldShowItemCard" class="flex items-center justify-center">
-        <NFTPortfolioItem
-          class="border-2 border-shade-gray rounded-[24px] -p-[2px]"
-          :class-id="classId"
-          :portfolio-wallet="senderWallet"
-          :nft-id="nftId"
-          portfolio-tab="created"
-          :should-fetch-when-visible="true"
-        />
-      </div>
+      <IconTransferMini v-if="isEventTypeSend" class="text-dark-gray" />
+      <IconFlare v-else-if="isEventTypeCollect" class="text-dark-gray" />
+
+      <IconCreativeWork />
+
+      <NuxtLink
+        :to="
+          classId
+            ? localeLocation({ name: 'nft-class-classId-nftId', params: { classId, nftId } })
+            : ''
+        "
+        class="text-[12px] hover:underline"
+        target="_blank"
+      >{{ nftTitle | ellipsisNFTName }}</NuxtLink>
+    </div>
+
+    <CardV2 class="flex flex-col justify-start gap-[12px] border-2 border-shade-gray text-dark-gray">
+
+      <template v-if="formatMessage">
+        <IconMessage />
+        <p class="text-[16px] font-400 text-dark-gray">{{ formatMessage }}</p>
+      </template>
+
+      <NFTPortfolioItem
+        v-if="shouldShowItemCard"
+        class="border-2 border-shade-gray rounded-[24px] -p-[2px] self-center"
+        :class-id="classId"
+        :portfolio-wallet="senderWallet"
+        :nft-id="nftId"
+        portfolio-tab="created"
+        :should-fetch-when-visible="true"
+      />
+
       <div
         v-if="shouldShowReceiverInfo"
         class="flex items-center justify-start gap-[6px]"
       >
         <IconTransfer class="text-medium-gray" />
         <NuxtLink
-          class="flex items-center text-like-green"
+          class="flex items-center justify-center gap-[8px] text-like-green group"
           :to="
             receiverWallet
               ? localeLocation({ name: 'id', params: { id: receiverWallet } })
               : ''"
           target="_blank"
         >
-          <div class="flex gap-[8px]">
-            <Identity
-              class="self-start flex-shrink-0"
-              :avatar-url="receiverAvatar"
-              :avatar-size="32"
-              :is-avatar-outlined="false"
-            />
-            <p class="text-[14px] font-600 text-like-green">{{ receiverId }}</p>
-          </div>
+          <Identity
+            class="self-start flex-shrink-0"
+            :avatar-url="receiverAvatar"
+            :avatar-size="32"
+            :is-avatar-outlined="false"
+          />
+          <p class="text-[14px] font-600 text-like-green group-hover:underline">{{ receiverId }}</p>
         </NuxtLink>
       </div>
-    </div>
-  </div>
+
+    </CardV2>
+
+  </component>
 </template>
 <script>
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -164,11 +163,15 @@ const FOLLOW_PROMPT_STATE = {
 
 export default {
   name: 'SocialFeedItem',
-  mixins: [walletMixin, nftMixin, alertMixin],
   filters: {
     ellipsisNFTName,
   },
+  mixins: [walletMixin, nftMixin, alertMixin],
   props: {
+    tag: {
+      type: String,
+      default: 'div',
+    },
     type: {
       type: String,
       default: undefined,
@@ -294,9 +297,6 @@ export default {
     },
     shouldShowNftTitle() {
       return this.type !== EVENT_TYPE.PUBLISH;
-    },
-    shouldShowMessageIcon() {
-      return this.memo || this.granterMemo;
     },
     shouldShowItemCard() {
       return this.type === EVENT_TYPE.PUBLISH;

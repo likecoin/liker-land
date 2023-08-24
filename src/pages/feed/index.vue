@@ -13,8 +13,8 @@
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
-      {{ /* Tabs */ }}
-      <div class="flex justify-center mb-[24px] desktop:mb-[48px]">
+      {{ /* Tab Bar */ }}
+      <nav class="flex justify-center mb-[24px] desktop:mb-[48px]">
         <ul
           :class="[
             'flex',
@@ -60,7 +60,7 @@
             </MenuButton>
           </li>
         </ul>
-      </div>
+      </nav>
 
       {{ /* Main View */ }}
       <div
@@ -76,8 +76,6 @@
           'desktop:justify-center',
 
           'w-full',
-          'pt-[32px]',
-          'pb-[120px]',
         ]"
       >
         {{ /* Main View -- Town */ }}
@@ -105,25 +103,26 @@
                 <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
                 <div>
                   <div :class="[nameWidthClass, 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
-                  <div class="mt-[0.5rem] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
+                  <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
                 </div>
               </div>
               <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
             </div>
           </template>
-          <ul v-else-if="displayedEvents.length" class="w-full">
-            <li v-for="e in displayedEvents" :key="e.tx_hash" class="mb-[48px]">
-              <SocialFeedItem
-                :type="e.type"
-                :sender-address="e.sender"
-                :receiver-address="e.receiver"
-                :memo="e.memo"
-                :granter-memo="e.granterMemo"
-                :timestamp="e.timestamp"
-                :class-id="e.class_id"
-                :nft-id="e.nft_id"
-              />
-            </li>
+          <ul v-else-if="displayedEvents.length" class="flex flex-col gap-[3rem] w-full">
+            <SocialFeedItem
+              v-for="e in displayedEvents"
+              :key="e.tx_hash"
+              tag="li"
+              :type="e.type"
+              :sender-address="e.sender"
+              :receiver-address="e.receiver"
+              :memo="e.memo"
+              :granter-memo="e.granterMemo"
+              :timestamp="e.timestamp"
+              :class-id="e.class_id"
+              :nft-id="e.nft_id"
+            />
           </ul>
           <CardV2
             v-else-if="!displayedEvents.length"
