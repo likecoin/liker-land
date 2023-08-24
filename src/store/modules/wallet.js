@@ -430,41 +430,59 @@ const actions = {
     }
   },
 
-  async fetchFolloweeWalletEvent({ state, commit, dispatch }) {
+  fetchFolloweeWalletEvent({ state, commit, dispatch }) {
     const { address, followees } = state;
     if (!followees.length) return;
     commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, true);
 
-    // get followee wallet events
-    const getFolloweeEvents = followee =>
+    // Get gift events
+    try {
       this.$api
         .$get(
           getNFTEvents({
-            involver: followee,
+            involver: address,
             limit: WALLET_EVENT_LIMIT,
-            actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'new_class'],
+            actionType: ['/cosmos.nft.v1beta1.MsgSend'],
             ignoreToList: LIKECOIN_NFT_API_WALLET,
             reverse: true,
           })
         )
-        .then(res => res.events)
-        .catch(() => []);
-    // get gift events
-    const getGiftEvents = this.$api
-      .$get(
-        getNFTEvents({
-          involver: address,
-          limit: WALLET_EVENT_LIMIT,
-          actionType: ['/cosmos.nft.v1beta1.MsgSend'],
-          ignoreToList: LIKECOIN_NFT_API_WALLET,
-          reverse: true,
-        })
-      )
-      .then(res => res.events)
-      .catch(() => []);
-    const eventPromises = followees.map(getFolloweeEvents);
-    const responses = await Promise.all([...eventPromises, getGiftEvents]);
-    const events = responses.flat();
+        .then(res =>
+          dispatch('processEvents', { events: res.events, address })
+        );
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+
+    // Get followees events
+    followees.forEach(followee => {
+      try {
+        this.$api
+          .$get(
+            getNFTEvents({
+              involver: followee,
+              limit: WALLET_EVENT_LIMIT,
+              actionType: [
+                '/cosmos.nft.v1beta1.MsgSend',
+                'buy_nft',
+                'new_class',
+              ],
+              ignoreToList: LIKECOIN_NFT_API_WALLET,
+              reverse: true,
+            })
+          )
+          .then(res =>
+            dispatch('processEvents', { events: res.events, address })
+          );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    });
+  },
+
+  async processEvents({ state, commit, dispatch }, { events, address }) {
     events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const categorizeEvent = event => {
       switch (event.action) {
@@ -540,10 +558,10 @@ const actions = {
 
     // filter available events
     const filteredEvents = categorizedEvents.filter(event => {
-      if (
-        event.sender === address ||
-        (event.type !== 'send' && event.receiver === address)
-      ) {
+      if (event.sender === address) {
+        return false;
+      }
+      if (event.type !== 'send' && event.receiver === address) {
         return false;
       }
       if (event.type === 'send' || event.type === 'publish') {
@@ -555,8 +573,15 @@ const actions = {
       return false;
     });
 
-    commit(WALLET_SET_FOLLOWEE_EVENTS, filteredEvents);
-    commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, false);
+    if (filteredEvents?.length) {
+      const existingEvents = state.followeeEvents || [];
+      const updatedEvents = [...existingEvents, ...filteredEvents];
+      commit(WALLET_SET_FOLLOWEE_EVENTS, updatedEvents);
+      if (!state.walletIsFetchingFolloweeEvents) {
+        commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, false);
+      }
+    }
+    return filteredEvents;
   },
 
   async fetchWalletEvents(

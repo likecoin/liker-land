@@ -32,8 +32,6 @@ export default {
       'walletIsMatchedSession',
       'walletIsLoggingIn',
       'loginAddress',
-      'getFolloweeEvents',
-      'walletIsFetchingFolloweeEvents',
     ]),
     hasConnectedWallet() {
       return !!this.getAddress && !!this.walletMethodType;

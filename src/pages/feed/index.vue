@@ -135,7 +135,7 @@
               path="feed_empty_description"
             >
               <NuxtLink
-                class="text-like-green hover:text-like-green-dark underline"
+                class="underline text-like-green hover:text-like-green-dark"
                 :to="localeLocation({ name: 'store' })"
                 place="action"
                 @click.native="handleEmptyFeedActionClick"
@@ -269,7 +269,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
@@ -314,6 +314,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getFolloweeEvents', 'walletIsFetchingFolloweeEvents']),
     wallet() {
       return this.getAddress;
     },
@@ -337,16 +338,10 @@ export default {
       }));
     },
     displayedEvents() {
-      const uniqueTxHashes = new Set();
-      return this.getFolloweeEvents
-        .reduce((filteredEvents, event) => {
-          if (!uniqueTxHashes.has(event.tx_hash)) {
-            uniqueTxHashes.add(event.tx_hash);
-            filteredEvents.push(event);
-          }
-          return filteredEvents;
-        }, [])
-        .slice(0, this.eventsToShow);
+      return this.sortAndFilterEvents(this.getFolloweeEvents).slice(
+        0,
+        this.eventsToShow
+      );
     },
 
     currentView() {
@@ -580,6 +575,18 @@ export default {
         this.wallet,
         1
       );
+    },
+    sortAndFilterEvents(events) {
+      const uniqueTxHashes = new Set();
+      return events
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .filter(event => {
+          if (!uniqueTxHashes.has(event.tx_hash)) {
+            uniqueTxHashes.add(event.tx_hash);
+            return true;
+          }
+          return false;
+        });
     },
   },
 };
