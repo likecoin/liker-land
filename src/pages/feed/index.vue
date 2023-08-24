@@ -125,6 +125,7 @@
               @sender-click="handleClickFeedSender"
               @receiver-click="handleClickFeedReceiver"
               @follow="handleFollowFeed"
+              @nft-title-click="handleClickFeedNFTTitle"
               @nft-click="handleClickFeedNFT"
               @nft-collect="handleCollectFeedNFT"
             />
@@ -594,6 +595,9 @@ export default {
   },
   handleClickFeedReceiver(receiver) {
     logTrackerEvent(this, 'SocialFeed', 'FeedReceiverClick', receiver, 1);
+  },
+  handleClickFeedNFTTitle({ classId } = {}) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedNFTTitleClick', classId, 1);
   },
   handleClickFeedNFT(classId) {
     logTrackerEvent(this, 'SocialFeed', 'FeedNFTClick', classId, 1);

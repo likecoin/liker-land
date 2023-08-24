@@ -65,6 +65,7 @@
         "
         class="text-[12px] hover:underline"
         target="_blank"
+        @click.native="$emit('nft-title-click', { classId, nftId})"
       >{{ nftTitle | ellipsisNFTName }}</NuxtLink>
     </div>
 
