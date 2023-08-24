@@ -125,7 +125,6 @@
               @sender-click="handleClickFeedSender"
               @receiver-click="handleClickFeedReceiver"
               @follow="handleFollowFeed"
-              @unfollow="handleUnfollowFeed"
               @nft-click="handleClickFeedNFT"
               @nft-collect="handleCollectFeedNFT"
             />
@@ -589,9 +588,6 @@ export default {
   },
   handleFollowFeed(followee) {
     logTrackerEvent(this, 'SocialFeed', 'FeedFollowClick', followee, 1);
-  },
-  handleUnfollowFeed(followee) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedUnfollowClick', followee, 1);
   },
   handleClickFeedSender(sender) {
     logTrackerEvent(this, 'SocialFeed', 'FeedSenderClick', sender, 1);
