@@ -18,6 +18,7 @@
             ? localeLocation({ name: 'id', params: { id: senderWallet } })
             : ''"
         target="_blank"
+        @click.native="$emit('sender-click', senderWallet)"
       >
         <Identity
           class="flex-shrink-0"
@@ -111,6 +112,8 @@
         :nft-id="nftId"
         portfolio-tab="created"
         :should-fetch-when-visible="true"
+        @collect="$emit('nft-collect', classId)"
+        @click.native="$emit('nft-click', classId)"
       />
 
       <div
@@ -125,6 +128,7 @@
               ? localeLocation({ name: 'id', params: { id: receiverWallet } })
               : ''"
           target="_blank"
+          @click.native="$emit('receiver-click', receiverWallet)"
         >
           <Identity
             class="self-start flex-shrink-0"
