@@ -449,8 +449,21 @@ const actions = {
         )
         .then(res => res.events)
         .catch(() => []);
+    // get gift events
+    const getGiftEvents = this.$api
+      .$get(
+        getNFTEvents({
+          involver: address,
+          limit: WALLET_EVENT_LIMIT,
+          actionType: ['/cosmos.nft.v1beta1.MsgSend'],
+          ignoreToList: LIKECOIN_NFT_API_WALLET,
+          reverse: true,
+        })
+      )
+      .then(res => res.events)
+      .catch(() => []);
     const eventPromises = followees.map(getFolloweeEvents);
-    const responses = await Promise.all(eventPromises);
+    const responses = await Promise.all([...eventPromises, getGiftEvents]);
     const events = responses.flat();
     events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const categorizeEvent = event => {
@@ -527,7 +540,10 @@ const actions = {
 
     // filter available events
     const filteredEvents = categorizedEvents.filter(event => {
-      if (event.sender === address || event.receiver === address) {
+      if (
+        event.sender === address ||
+        (event.type !== 'send' && event.receiver === address)
+      ) {
         return false;
       }
       if (event.type === 'send' || event.type === 'publish') {
