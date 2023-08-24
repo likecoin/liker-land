@@ -122,6 +122,12 @@
               :timestamp="e.timestamp"
               :class-id="e.class_id"
               :nft-id="e.nft_id"
+              @sender-click="handleClickFeedSender"
+              @receiver-click="handleClickFeedReceiver"
+              @follow="handleFollowFeed"
+              @nft-title-click="handleClickFeedNFTTitle"
+              @nft-click="handleClickFeedNFT"
+              @nft-collect="handleCollectFeedNFT"
             />
           </ul>
           <CardV2
@@ -580,6 +586,24 @@ export default {
         1
       );
     },
+  },
+  handleFollowFeed(followee) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedFollowClick', followee, 1);
+  },
+  handleClickFeedSender(sender) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedSenderClick', sender, 1);
+  },
+  handleClickFeedReceiver(receiver) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedReceiverClick', receiver, 1);
+  },
+  handleClickFeedNFTTitle({ classId } = {}) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedNFTTitleClick', classId, 1);
+  },
+  handleClickFeedNFT(classId) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedNFTClick', classId, 1);
+  },
+  handleCollectFeedNFT(classId) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedNFTCollect', classId, 1);
   },
 };
 </script>
