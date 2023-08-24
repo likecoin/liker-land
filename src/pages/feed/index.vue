@@ -122,6 +122,8 @@
               :timestamp="e.timestamp"
               :class-id="e.class_id"
               :nft-id="e.nft_id"
+              @follow="handleFollowFeed"
+              @unfollow="handleUnfollowFeed"
             />
           </ul>
           <CardV2
@@ -580,6 +582,12 @@ export default {
         1
       );
     },
+  },
+  handleFollowFeed(followee) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedFollowClick', followee, 1);
+  },
+  handleUnfollowFeed(followee) {
+    logTrackerEvent(this, 'SocialFeed', 'FeedUnfollowClick', followee, 1);
   },
 };
 </script>

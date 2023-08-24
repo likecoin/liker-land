@@ -40,7 +40,7 @@
         <div
           v-else
           class="relative flex group w-[138px]"
-          @click="clickFollow(senderWallet, senderId)"
+          @click="clickFollow"
         >
           <div
             :class="[
@@ -141,8 +141,6 @@
   </component>
 </template>
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
-
 import walletMixin from '~/mixins/wallet';
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
@@ -361,35 +359,23 @@ export default {
         this.receiverAddress,
       ]);
     },
-    async clickFollow(followOwnerWallet, followOwnerDisplayName) {
+    async clickFollow() {
       try {
         this.isFollowPromptUpdating = true;
         switch (this.followPromptState) {
           case FOLLOW_PROMPT_STATE.AUTO:
+            this.$emit('unfollow', this.senderWallet);
             this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
-            await this.walletUnfollowCreator(followOwnerWallet);
-            logTrackerEvent(
-              this,
-              'NFT',
-              'FeedUnfollowClick',
-              FOLLOW_PROMPT_STATE.UNFOLLOW,
-              1
-            );
+            await this.walletUnfollowCreator(this.senderWallet);
             break;
           case FOLLOW_PROMPT_STATE.UNFOLLOW:
           default:
+            this.$emit('follow', this.senderWallet);
             this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
-            await this.walletFollowCreator(followOwnerWallet);
-            logTrackerEvent(
-              this,
-              'NFT',
-              'FeedFollowClick',
-              FOLLOW_PROMPT_STATE.AUTO,
-              1
-            );
+            await this.walletFollowCreator(this.senderWallet);
             this.alertPromptSuccess(
               this.$t('portfolio_subscription_success_alert', {
-                creator: followOwnerDisplayName,
+                creator: this.senderId,
               })
             );
             break;
