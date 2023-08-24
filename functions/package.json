@@ -52,6 +52,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "lru-cache": "^10.0.0",
+    "luxon": "^3.4.1",
     "magic-grid": "^3.2.4",
     "marked": "^5.1.2",
     "node-fetch": "^2.6.7",
