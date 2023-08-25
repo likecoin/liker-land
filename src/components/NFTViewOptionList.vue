@@ -113,6 +113,7 @@ export default {
   },
   computed: {
     normalizedContentURLs() {
+      // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
       return this.contentUrls.length ? this.contentUrls : [this.url];
     },
     shouldShowViewContentButton() {
