@@ -89,46 +89,36 @@
             'gap-[3rem]',
           ]"
         >
-          <template v-if="walletIsFetchingFolloweeEvents">
-            <div
-              v-for="[nameWidthClass, cardHeightClass] in [
-                ['w-[180px]', 'min-h-[10vh]'],
-                ['w-[140px]', 'min-h-[20vh]'],
-                ['w-[120px]', 'min-h-[15vh]'],
-              ]"
-              :key="cardHeightClass"
-              class="animate-pulse"
-            >
-              <div class="flex items-start gap-[0.5rem]">
-                <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
-                <div>
-                  <div :class="[nameWidthClass, 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
-                  <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
+          <ul v-if="displayedEvents.length" class="flex flex-col w-full">
+            <li v-for="e in displayedEvents" :key="e.tx_hash">
+              <client-only>
+                <lazy-component
+                  @show.once="fetchInfo({txHash:e.tx_hash, event:e})"
+                >
+                </lazy-component>
+              </client-only>
+              <div v-if="!getHasFetchMemo(e.tx_hash)" class="animate-pulse mb-[48px]">
+                <div class="flex items-start gap-[0.5rem]">
+                  <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
+                  <div>
+                    <div :class="['w-[180px]', 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
+                    <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
+                  </div>
                 </div>
+                <CardV2 :class="['min-h-[10vh]', 'mt-[1rem]', 'bg-shade-gray']" />
               </div>
-              <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
-            </div>
-          </template>
-          <ul v-else-if="displayedEvents.length" class="flex flex-col gap-[3rem] w-full">
-            <SocialFeedItem
-              v-for="e in displayedEvents"
-              :key="e.tx_hash"
-              tag="li"
-              :type="e.type"
-              :sender-address="e.sender"
-              :receiver-address="e.receiver"
-              :memo="e.memo"
-              :granter-memo="e.granterMemo"
-              :timestamp="e.timestamp"
-              :class-id="e.class_id"
-              :nft-id="e.nft_id"
-              @sender-click="handleClickFeedSender"
-              @receiver-click="handleClickFeedReceiver"
-              @follow="handleFollowFeed"
-              @nft-title-click="handleClickFeedNFTTitle"
-              @nft-click="handleClickFeedNFT"
-              @nft-collect="handleCollectFeedNFT"
-            />
+              <SocialFeedItem
+                v-else-if="getEventMemo(e.tx_hash)"
+                class="mb-[48px]"
+                :type="e.type"
+                :sender-address="e.sender"
+                :receiver-address="e.receiver"
+                :memo="getEventMemo(e.tx_hash)"
+                :timestamp="e.timestamp"
+                :class-id="e.class_id"
+                :nft-id="e.nft_id"
+              />
+            </li>
           </ul>
           <CardV2
             v-else-if="!displayedEvents.length"
@@ -319,7 +309,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getFolloweeEvents', 'walletIsFetchingFolloweeEvents']),
+    ...mapGetters(['getFolloweeEvents', 'getHasFetchMemo', 'getEventMemo']),
     wallet() {
       return this.getAddress;
     },
@@ -381,9 +371,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyGetUserInfoByAddress']),
+    ...mapActions(['lazyGetUserInfoByAddress', 'lazyFetchEventsMemo']),
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
+    },
+    async fetchInfo({ txHash, event }) {
+      await this.lazyFetchEventsMemo(event);
+      if (this.getEventMemo(txHash)) {
+        this.lazyGetUserInfoByAddress([
+          this.senderAddress,
+          this.receiverAddress,
+        ]);
+      }
     },
     async updateTopRankedCreators() {
       const res = await this.$axios.$get(

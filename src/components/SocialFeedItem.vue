@@ -3,12 +3,6 @@
     :is="tag"
     class="flex flex-col justify-start gap-[12px]"
   >
-    <client-only>
-      <lazy-component
-        class="absolute inset-0 pointer-events-none -top-full"
-        @show.once="fetchInfo"
-      />
-    </client-only>
 
     <header class="flex items-center justify-between gap-[1.5rem]">
       <NuxtLink
@@ -71,9 +65,9 @@
 
     <CardV2 class="flex flex-col justify-start gap-[12px] border-2 border-shade-gray text-dark-gray">
 
-      <template v-if="formatMessage">
+      <template v-if="memo">
         <IconMessage />
-        <p class="text-[16px] font-400 text-dark-gray">{{ formatMessage }}</p>
+        <p class="text-[16px] font-400 text-dark-gray">{{ memo }}</p>
       </template>
 
       <NFTPortfolioItem
@@ -168,10 +162,6 @@ export default {
       type: String,
       default: undefined,
     },
-    granterMemo: {
-      type: String,
-      default: undefined,
-    },
   },
   data() {
     return {
@@ -247,18 +237,6 @@ export default {
       }).format(date);
       return formattedDate;
     },
-    formatMessage() {
-      switch (this.type) {
-        case EVENT_TYPE.COLLECT:
-        case EVENT_TYPE.PURCHASE:
-          return this.granterMemo;
-
-        case EVENT_TYPE.PUBLISH:
-        case EVENT_TYPE.SEND:
-        default:
-          return this.memo;
-      }
-    },
     nftTitle() {
       return this.nftName || this.classId;
     },
@@ -282,13 +260,6 @@ export default {
     },
   },
   methods: {
-    fetchInfo() {
-      this.lazyFetchNFTClassMetadata();
-      this.lazyGetUserInfoByAddresses([
-        this.senderAddress,
-        this.receiverAddress,
-      ]);
-    },
     async clickFollow() {
       if (this.isFollowPromptUpdating) return;
 

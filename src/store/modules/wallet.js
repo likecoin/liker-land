@@ -47,6 +47,7 @@ import {
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
   WALLET_SET_FOLLOWEE_EVENTS,
   WALLET_SET_FOLLOWEE_EVENT_FETCHING,
+  WALLET_SET_EVENT_MEMO,
   WALLET_SET_FOLLOWERS,
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
@@ -82,6 +83,7 @@ const state = () => ({
   eventLastSeenTs: 0,
   events: [],
   followeeEvents: [],
+  eventMemoByTxMap: {},
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -214,6 +216,9 @@ const mutations = {
   [WALLET_SET_FOLLOWEE_EVENTS](state, events) {
     state.followeeEvents = events;
   },
+  [WALLET_SET_EVENT_MEMO](state, { txHash, event }) {
+    Vue.set(state.eventMemoByTxMap, txHash, event);
+  },
 };
 
 const getters = {
@@ -257,6 +262,8 @@ const getters = {
       return count;
     }, 0);
   },
+  getHasFetchMemo: state => tx => tx in (state.eventMemoByTxMap || {}),
+  getEventMemo: state => tx => (state.eventMemoByTxMap[tx] || {}).memo,
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
   walletTotalResales: state => state.totalResales,
@@ -482,7 +489,7 @@ const actions = {
     });
   },
 
-  async processEvents({ state, commit, dispatch }, { events, address }) {
+  processEvents({ state, commit, dispatch, getters }, { events, address }) {
     events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const categorizeEvent = event => {
       switch (event.action) {
@@ -503,59 +510,6 @@ const actions = {
     };
     const categorizedEvents = events.map(categorizeEvent);
 
-    // get creator message for 'publish' events
-    const publishEvents = categorizedEvents.filter(
-      event => event.type === 'publish'
-    );
-    await Promise.all(
-      publishEvents.map(async event => {
-        const metadata = await dispatch(
-          'lazyGetNFTClassMetadata',
-          event.class_id
-        );
-        if (metadata.message) {
-          event.memo = metadata.message;
-        }
-      })
-    );
-    publishEvents.forEach(publishEvent => {
-      const index = categorizedEvents.findIndex(
-        event => event === publishEvent
-      );
-      if (index !== -1) {
-        categorizedEvents[index] = publishEvent;
-      }
-    });
-
-    // get collector message for 'collect' events
-    const collectEvents = categorizedEvents.filter(
-      event => event.type === 'collect'
-    );
-    const promises = collectEvents.map(e =>
-      getNFTHistoryDataMap({
-        axios: this.$api,
-        classId: e.class_id,
-        txHash: e.tx_hash,
-      })
-    );
-    const historyDatas = await Promise.all(promises);
-    historyDatas.forEach((m, index) => {
-      m.forEach(data => {
-        const { granterMemo, price, sellerWallet } = data;
-        collectEvents[index].price = price;
-        collectEvents[index].granterMemo = granterMemo;
-        collectEvents[index].sender = sellerWallet;
-      });
-    });
-    categorizedEvents.forEach(event => {
-      if (event.type === 'collect') {
-        Object.assign(
-          event,
-          collectEvents.find(collectEvent => collectEvent === event)
-        );
-      }
-    });
-
     // filter available events
     const filteredEvents = categorizedEvents.filter(event => {
       if (event.sender === address) {
@@ -564,24 +518,88 @@ const actions = {
       if (event.type !== 'send' && event.receiver === address) {
         return false;
       }
-      if (event.type === 'send' || event.type === 'publish') {
+      if (event.type === 'send') {
         return !!event.memo;
       }
-      if (event.type === 'collect' || event.type === 'purchase') {
-        return !!event.granterMemo;
-      }
-      return false;
+      return true;
     });
 
     if (filteredEvents?.length) {
       const existingEvents = state.followeeEvents || [];
       const updatedEvents = [...existingEvents, ...filteredEvents];
       commit(WALLET_SET_FOLLOWEE_EVENTS, updatedEvents);
-      if (!state.walletIsFetchingFolloweeEvents) {
-        commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, false);
-      }
     }
     return filteredEvents;
+  },
+
+  async lazyFetchEventsMemo({ commit, dispatch, getters }, categorizedEvent) {
+    if (getters.getHasFetchMemo(categorizedEvent.tx_hash)) return;
+
+    const txHash = categorizedEvent.tx_hash;
+    const event = { ...categorizedEvent };
+
+    // set sender message for 'send' events
+    if (event.type === 'send') {
+      commit(WALLET_SET_EVENT_MEMO, {
+        txHash,
+        event,
+      });
+      return;
+    }
+
+    // get creator message for 'publish' events
+    if (event.type === 'publish') {
+      try {
+        const metadata = await dispatch(
+          'lazyGetNFTClassMetadata',
+          event.class_id
+        );
+        const { message } = metadata;
+        commit(WALLET_SET_EVENT_MEMO, {
+          txHash,
+          event: {
+            ...event,
+            memo: message,
+          },
+        });
+      } catch (error) {
+        commit(WALLET_SET_EVENT_MEMO, {
+          txHash,
+          event,
+        });
+      }
+      return;
+    }
+
+    // get collector message for 'collect' events
+    if (event.type === 'collect') {
+      try {
+        const map = await getNFTHistoryDataMap({
+          axios: this.$api,
+          classId: event.class_id,
+          txHash,
+        });
+        if (!map.length) {
+          throw new Error('Empty Map');
+        }
+        map.forEach(data => {
+          const { granterMemo, price } = data;
+          commit(WALLET_SET_EVENT_MEMO, {
+            txHash,
+            event: {
+              ...event,
+              memo: granterMemo,
+              price,
+            },
+          });
+        });
+      } catch (error) {
+        commit(WALLET_SET_EVENT_MEMO, {
+          txHash,
+          event,
+        });
+      }
+    }
   },
 
   async fetchWalletEvents(
