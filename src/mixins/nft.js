@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { mapActions, mapGetters } from 'vuex';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
@@ -139,11 +140,13 @@ export default {
       const {
         price,
         totalPrice,
+        collectExpiryAt,
         metadata: { nextNewNFTId, soldCount, basePrice } = {},
       } = info;
       return {
         price,
         totalPrice,
+        collectExpiryAt,
         soldCount,
         basePrice,
         classId: this.classId,
@@ -270,6 +273,35 @@ export default {
       return this.nftIsUseListingPrice
         ? this.listingInfo.price
         : this.purchaseInfo.price;
+    },
+    isCollectExpiryTimeInComing() {
+      const { collectExpiryAt } = this.purchaseInfo;
+      if (!collectExpiryAt) return false;
+
+      const timeLeft = collectExpiryAt - Date.now();
+      const threshold = 4 * 7 * 24 * 60 * 60 * 1000; // 4 weeks
+      return timeLeft > 0 && timeLeft < threshold;
+    },
+    collectExpiryTime() {
+      const { collectExpiryAt } = this.purchaseInfo;
+      if (!collectExpiryAt) return '';
+
+      const timeLeft = collectExpiryAt - Date.now();
+      if (timeLeft <= 0) return '';
+
+      const dateTime = DateTime.fromMillis(collectExpiryAt).setLocale(
+        this.$i18n.locale
+      );
+      if (this.isCollectExpiryTimeInComing) {
+        return dateTime
+          .toRelative()
+          .replace('in ', '')
+          .concat(' left');
+      }
+      return `Until ${dateTime.toFormat('yyyy-MM-dd')}`;
+    },
+    collectExpiryTimeForInComing() {
+      return this.isCollectExpiryTimeInComing ? this.collectExpiryTime : '';
     },
     nftIsCollectable() {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;
