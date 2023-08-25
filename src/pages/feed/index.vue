@@ -140,7 +140,7 @@
               path="feed_empty_description"
             >
               <NuxtLink
-                class="text-like-green hover:text-like-green-dark underline"
+                class="underline text-like-green hover:text-like-green-dark"
                 :to="localeLocation({ name: 'store' })"
                 place="action"
                 @click.native="handleEmptyFeedActionClick"
@@ -586,24 +586,24 @@ export default {
         1
       );
     },
-  },
-  handleFollowFeed(followee) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedFollowClick', followee, 1);
-  },
-  handleClickFeedSender(sender) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedSenderClick', sender, 1);
-  },
-  handleClickFeedReceiver(receiver) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedReceiverClick', receiver, 1);
-  },
-  handleClickFeedNFTTitle({ classId } = {}) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedNFTTitleClick', classId, 1);
-  },
-  handleClickFeedNFT(classId) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedNFTClick', classId, 1);
-  },
-  handleCollectFeedNFT(classId) {
-    logTrackerEvent(this, 'SocialFeed', 'FeedNFTCollect', classId, 1);
+    handleFollowFeed(followee) {
+      logTrackerEvent(this, 'SocialFeed', 'FeedFollowClick', followee, 1);
+    },
+    handleClickFeedSender(sender) {
+      logTrackerEvent(this, 'SocialFeed', 'FeedSenderClick', sender, 1);
+    },
+    handleClickFeedReceiver(receiver) {
+      logTrackerEvent(this, 'SocialFeed', 'FeedReceiverClick', receiver, 1);
+    },
+    handleClickFeedNFTTitle({ classId } = {}) {
+      logTrackerEvent(this, 'SocialFeed', 'FeedNFTTitleClick', classId, 1);
+    },
+    handleClickFeedNFT(classId) {
+      logTrackerEvent(this, 'SocialFeed', 'FeedNFTClick', classId, 1);
+    },
+    handleCollectFeedNFT(classId) {
+      logTrackerEvent(this, 'SocialFeed', 'FeedNFTCollect', classId, 1);
+    },
   },
 };
 </script>
