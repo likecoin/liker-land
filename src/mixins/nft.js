@@ -289,16 +289,16 @@ export default {
       const timeLeft = collectExpiryAt - Date.now();
       if (timeLeft <= 0) return '';
 
-      const dateTime = DateTime.fromMillis(collectExpiryAt).setLocale(
-        this.$i18n.locale
-      );
+      const dateTime = DateTime.fromMillis(collectExpiryAt);
       if (this.isCollectExpiryTimeInComing) {
-        return dateTime
-          .toRelative()
-          .replace('in ', '')
-          .concat(' left');
+        const duration = dateTime
+          .toRelative({ locale: this.$i18n.locale })
+          .replace('in ', '') // en
+          .replace('後', ''); // zh
+        return this.$t('nft_collect_expiry_time_near', { duration });
       }
-      return `Until ${dateTime.toFormat('yyyy-MM-dd')}`;
+      const date = dateTime.toFormat('yyyy-MM-dd');
+      return this.$t('nft_collect_expiry_time_far', { date });
     },
     collectExpiryTimeForInComing() {
       return this.isCollectExpiryTimeInComing ? this.collectExpiryTime : '';

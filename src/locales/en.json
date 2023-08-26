@@ -348,6 +348,8 @@
   "nft_class_footer_raw": "Raw NFT data",
   "nft_class_footer_widget": "NFT Widget",
   "nft_class_uncollectible": "Uncollectible",
+  "nft_collect_expiry_time_far": "Until {date}",
+  "nft_collect_expiry_time_near": "{duration} left",
   "nft_collect_modal_add_to_cart": "Add to backpack | Add to backpack ({count}) | Add to backpack ({count})",
   "nft_collect_modal_added_to_cart": "Added to backpack",
   "nft_collect_modal_added_to_shopping_cart_description": "You added \"{nft}\" to backpack",

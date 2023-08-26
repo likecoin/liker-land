@@ -338,6 +338,8 @@
   "nft_class_footer_raw": "原始數據",
   "nft_class_footer_widget": "NFT 小部件",
   "nft_class_uncollectible": "不能收集",
+  "nft_collect_expiry_time_far": "{date} 截止",
+  "nft_collect_expiry_time_near": "倒數 {duration}",
   "nft_collect_modal_add_to_cart": "加到背包 | 加到背包 ({count}) | 加到背包 ({count})",
   "nft_collect_modal_added_to_cart": "已加至背包",
   "nft_collect_modal_added_to_shopping_cart_description": "你已把《{nft}》加到背包",
