@@ -119,6 +119,21 @@
                 :nft-id="e.nft_id"
               />
             </li>
+            <div
+              v-if="shouldShowMore"
+              ref="infiniteScrollTrigger"
+              class="animate-pulse flex justify-center font-[600] px-[24px] py-[128px] text-gray-9b min-h-screen"
+            >
+              {{ $t('nft_portfolio_page_label_loading_more') }}
+            </div>
+            <template v-else>
+              <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
+              <div
+                class="flex justify-center font-[600] py-[24px] text-gray-9b"
+              >
+                {{ $t('feed_end_of_items') }}
+              </div>
+            </template>
           </ul>
           <CardV2
             v-else-if="!displayedEvents.length"
@@ -265,13 +280,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { logTrackerEvent } from '~/util/EventLogger';
+import throttle from 'lodash.throttle';
 
 import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import inAppMixin from '~/mixins/in-app';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 
+import { logTrackerEvent } from '~/util/EventLogger';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
 
@@ -306,6 +322,7 @@ export default {
       eventsToShow: 30,
 
       hasFetchedFollowees: false,
+      shouldShowMore: true,
     };
   },
   computed: {
@@ -332,13 +349,12 @@ export default {
         handleClick: () => this.handleCollectiblesTabChange(item.value),
       }));
     },
-    displayedEvents() {
-      return this.sortAndFilterEvents(this.getFolloweeEvents).slice(
-        0,
-        this.eventsToShow
-      );
+    formattedEvents() {
+      return this.sortAndFilterEvents(this.getFolloweeEvents);
     },
-
+    displayedEvents() {
+      return this.formattedEvents.slice(0, this.eventsToShow);
+    },
     currentView() {
       return this.$route.query.view;
     },
@@ -362,6 +378,15 @@ export default {
         }
       },
     },
+    formattedEvents(formattedEvents) {
+      if (formattedEvents.length > this.eventsToShow) {
+        this.shouldShowMore = true;
+        this.addInfiniteScrollListener();
+      } else {
+        this.shouldShowMore = false;
+        this.removeInfiniteScrollListener();
+      }
+    },
   },
   mounted() {
     this.currentMainTab = this.currentView;
@@ -369,6 +394,10 @@ export default {
       this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
     }
+    this.addInfiniteScrollListener();
+  },
+  beforeDestroy() {
+    this.removeInfiniteScrollListener();
   },
   methods: {
     ...mapActions(['lazyGetUserInfoByAddress', 'lazyFetchEventsMemo']),
@@ -592,6 +621,31 @@ export default {
           return false;
         });
     },
+    addDisplayEvents() {
+      const newEventsToShow = Math.min(
+        this.eventsToShow + 30,
+        this.formattedEvents.length
+      );
+      this.eventsToShow = newEventsToShow;
+    },
+    addInfiniteScrollListener() {
+      window.addEventListener('scroll', this.handleInfiniteScroll);
+    },
+    removeInfiniteScrollListener() {
+      window.removeEventListener('scroll', this.handleInfiniteScroll);
+    },
+    handleInfiniteScroll: throttle(function handleInfiniteScroll() {
+      if (!this.shouldShowMore) return;
+
+      const { infiniteScrollTrigger: trigger } = this.$refs;
+      if (
+        !trigger ||
+        window.innerHeight + window.pageYOffset < trigger.offsetTop
+      ) {
+        return;
+      }
+      this.addDisplayEvents();
+    }, 2000),
   },
   handleFollowFeed(followee) {
     logTrackerEvent(this, 'SocialFeed', 'FeedFollowClick', followee, 1);
