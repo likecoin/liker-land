@@ -274,7 +274,7 @@ export default {
         ? this.listingInfo.price
         : this.purchaseInfo.price;
     },
-    isCollectExpiryTimeInComing() {
+    isCollectExpiryTimeNear() {
       const { collectExpiryAt } = this.purchaseInfo;
       if (!collectExpiryAt) return false;
 
@@ -290,7 +290,7 @@ export default {
       if (timeLeft <= 0) return '';
 
       const dateTime = DateTime.fromMillis(collectExpiryAt);
-      if (this.isCollectExpiryTimeInComing) {
+      if (this.isCollectExpiryTimeNear) {
         const duration = dateTime
           .toRelative({ locale: this.$i18n.locale })
           .replace('in ', '') // en
@@ -300,8 +300,8 @@ export default {
       const date = dateTime.toFormat('yyyy-MM-dd');
       return this.$t('nft_collect_expiry_time_far', { date });
     },
-    collectExpiryTimeForInComing() {
-      return this.isCollectExpiryTimeInComing ? this.collectExpiryTime : '';
+    collectExpiryTimeForNear() {
+      return this.isCollectExpiryTimeNear ? this.collectExpiryTime : '';
     },
     nftIsCollectable() {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;

@@ -26,7 +26,7 @@
           :creator-message="creatorMessage"
           :iscn-owner="iscnOwner"
           :is-collectable="nftIsCollectable"
-          :is-collect-expiry-time-in-coming="isCollectExpiryTimeInComing"
+          :is-collect-expiry-time-near="isCollectExpiryTimeNear"
           :collect-expiry-time="collectExpiryTime"
           @click-cta-button="handleCollectFromCTA"
         />

@@ -59,8 +59,8 @@
           v-if="collectExpiryTime" 
           class="flex gap-[4px] justify-center items-center" 
           :class="{
-            'text-pending-orange': isCollectExpiryTimeInComing, 
-            'text-white': !isCollectExpiryTimeInComing, 
+            'text-pending-orange': isCollectExpiryTimeNear, 
+            'text-white': !isCollectExpiryTimeNear, 
             }"
         >
           <IconClock />
@@ -90,8 +90,8 @@
           v-if="collectExpiryTime" 
           class="flex gap-[4px] justify-center items-center" 
           :class="{
-            'text-pending-orange': isCollectExpiryTimeInComing, 
-            'text-white': !isCollectExpiryTimeInComing, 
+            'text-pending-orange': isCollectExpiryTimeNear, 
+            'text-white': !isCollectExpiryTimeNear, 
             }"
         >
           <IconClock />
@@ -125,7 +125,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isCollectExpiryTimeInComing: {
+    isCollectExpiryTimeNear: {
       type: Boolean,
       default: false,
     },
