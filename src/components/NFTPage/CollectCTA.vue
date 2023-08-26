@@ -58,10 +58,7 @@
         <div 
           v-if="collectExpiryTime" 
           class="flex gap-[4px] justify-center items-center" 
-          :class="{
-            'text-pending-orange': isCollectExpiryTimeNear, 
-            'text-white': !isCollectExpiryTimeNear, 
-            }"
+          :class="expiryTimeClass"
         >
           <IconClock />
           <div class="ml-[4px]">{{ collectExpiryTime }}</div>
@@ -89,10 +86,7 @@
         <div 
           v-if="collectExpiryTime" 
           class="flex gap-[4px] justify-center items-center" 
-          :class="{
-            'text-pending-orange': isCollectExpiryTimeNear, 
-            'text-white': !isCollectExpiryTimeNear, 
-            }"
+          :class="expiryTimeClass"
         >
           <IconClock />
           <div class="ml-[4px]">{{ collectExpiryTime }}</div>
@@ -143,6 +137,12 @@ export default {
     },
     ctaButtonText() {
       return this.$t('nft_page_collect_cta_button_text');
+    },
+    expiryTimeClass() {
+      if (this.isCollectExpiryTimeNear) {
+        return 'text-pending-orange';
+      }
+      return 'text-white';
     },
   },
   methods: {
