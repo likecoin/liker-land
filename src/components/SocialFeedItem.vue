@@ -55,8 +55,7 @@
         :to="
           classId
             ? localeLocation({ name: 'nft-class-classId-nftId', params: { classId, nftId } })
-            : ''
-        "
+            : ''"
         class="text-[12px] hover:underline"
         target="_blank"
         @click.native="$emit('nft-title-click', { classId, nftId})"
@@ -185,7 +184,7 @@ export default {
       switch (this.type) {
         case EVENT_TYPE.COLLECT:
         case EVENT_TYPE.PURCHASE:
-          return this.senderAddress;
+          return this.iscnOwner;
 
         case EVENT_TYPE.SEND:
         case EVENT_TYPE.PUBLISH:
@@ -200,10 +199,10 @@ export default {
       return this.getUserInfoByAddress(this.receiverWallet);
     },
     senderId() {
-      return ellipsis(this.senderInfo?.displayName);
+      return ellipsis(this.senderInfo?.displayName || this.senderWallet);
     },
     receiverId() {
-      return ellipsis(this.receiverInfo?.displayName);
+      return ellipsis(this.receiverInfo?.displayName || this.receiverWallet);
     },
     senderAvatar() {
       return this.senderInfo?.avatar;

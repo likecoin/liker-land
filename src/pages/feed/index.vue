@@ -93,7 +93,7 @@
             <li v-for="e in displayedEvents" :key="e.tx_hash">
               <client-only>
                 <lazy-component
-                  @show.once="fetchInfo({txHash:e.tx_hash, event:e})"
+                  @show.once="fetchInfo({ txHash: e.tx_hash, event: e })"
                 >
                 </lazy-component>
               </client-only>
@@ -406,17 +406,20 @@ export default {
     this.removeInfiniteScrollListener();
   },
   methods: {
-    ...mapActions(['lazyGetUserInfoByAddress', 'lazyFetchEventsMemo']),
+    ...mapActions([
+      'lazyGetUserInfoByAddress',
+      'lazyGetUserInfoByAddresses',
+      'lazyFetchEventsMemo',
+      'lazyGetNFTClassMetadata',
+    ]),
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
     async fetchInfo({ txHash, event }) {
       await this.lazyFetchEventsMemo(event);
       if (this.getEventMemo(txHash)) {
-        this.lazyGetUserInfoByAddress([
-          this.senderAddress,
-          this.receiverAddress,
-        ]);
+        this.lazyGetNFTClassMetadata(event.class_id);
+        this.lazyGetUserInfoByAddresses([event.sender, event.receiver]);
       }
     },
     async updateTopRankedCreators() {
