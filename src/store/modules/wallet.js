@@ -537,69 +537,55 @@ const actions = {
 
     const txHash = categorizedEvent.tx_hash;
     const event = { ...categorizedEvent };
+    let memo;
 
-    // set sender message for 'send' events
-    if (event.type === 'send') {
-      commit(WALLET_SET_EVENT_MEMO, {
-        txHash,
-        event,
-      });
-      return;
-    }
+    switch (event.type) {
+      case 'send':
+        memo = event.memo;
+        break;
 
-    // get creator message for 'publish' events
-    if (event.type === 'publish') {
-      try {
-        const metadata = await dispatch(
-          'lazyGetNFTClassMetadata',
-          event.class_id
-        );
-        const { message } = metadata;
-        commit(WALLET_SET_EVENT_MEMO, {
-          txHash,
-          event: {
-            ...event,
-            memo: message,
-          },
-        });
-      } catch (error) {
-        commit(WALLET_SET_EVENT_MEMO, {
-          txHash,
-          event,
-        });
-      }
-      return;
-    }
-
-    // get collector message for 'collect' events
-    if (event.type === 'collect') {
-      try {
-        const map = await getNFTHistoryDataMap({
-          axios: this.$api,
-          classId: event.class_id,
-          txHash,
-        });
-        if (!map.length) {
-          throw new Error('Empty Map');
+      case 'publish':
+        try {
+          const metadata = await dispatch(
+            'lazyGetNFTClassMetadata',
+            event.class_id
+          );
+          memo = metadata.message;
+        } catch (error) {
+          memo = '';
         }
-        map.forEach(data => {
-          const { granterMemo, price } = data;
-          commit(WALLET_SET_EVENT_MEMO, {
+        break;
+
+      case 'collect':
+      case 'purchase':
+        try {
+          const map = await getNFTHistoryDataMap({
+            axios: this.$api,
+            classId: event.class_id,
             txHash,
-            event: {
-              ...event,
-              memo: granterMemo,
-              price,
-            },
           });
-        });
-      } catch (error) {
-        commit(WALLET_SET_EVENT_MEMO, {
-          txHash,
-          event,
-        });
-      }
+          if (map.size) {
+            map.forEach(data => {
+              const { granterMemo } = data;
+              memo = granterMemo;
+            });
+          } else {
+            memo = '';
+          }
+        } catch (error) {
+          memo = '';
+        }
+        break;
+
+      default:
+        memo = '';
+        break;
     }
+
+    commit(WALLET_SET_EVENT_MEMO, {
+      txHash,
+      event: { memo },
+    });
   },
 
   async fetchWalletEvents(
@@ -842,6 +828,8 @@ const actions = {
     commit(WALLET_SET_ROYALTY_DETAILS, []);
     commit(WALLET_SET_TOTAL_SALES, 0);
     commit(WALLET_SET_SALES_DETAILS, []);
+    commit(WALLET_SET_FOLLOWEE_EVENTS, []);
+    commit(WALLET_SET_EVENT_MEMO, {});
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(
