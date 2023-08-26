@@ -43,18 +43,23 @@
 
           <div v-if="(!isPrimitive && price !== undefined) || price > 0" class="z-[48] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
-            <ButtonV2
-              v-else-if="!isCollectedTab"
-              preset="secondary"
-              :is-disabled="!isCollectable"
-              @click.stop.prevent="handleClickCollect"
-            >
-              <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
-              <template v-else>{{ $t('nft_class_uncollectible') }}</template>
-              <template v-if="isCollectable" #prepend>
-                <IconPrice />
-              </template>
-            </ButtonV2>
+            <div v-else-if="!isCollectedTab" class="flex flex-col gap-[8px] justify-center items-center">
+              <ButtonV2
+                preset="secondary"
+                :is-disabled="!isCollectable"
+                @click.stop.prevent="handleClickCollect"
+              >
+                <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
+                <template v-else>{{ $t('nft_class_uncollectible') }}</template>
+                <template v-if="isCollectable" #prepend>
+                  <IconPrice />
+                </template>
+              </ButtonV2>
+              <div v-if="collectExpiryTime" class="flex gap-[4px] justify-center items-center text-pending-orange">
+                <IconClock/>
+                <div class="ml-[4px]">{{ collectExpiryTime }}</div>
+              </div>
+            </div>
             <NFTViewOptionList
               v-else
               :url="externalUrl"
@@ -184,6 +189,10 @@ export default {
       default: '',
     },
     iscnUrl: {
+      type: String,
+      default: '',
+    },
+    collectExpiryTime: {
       type: String,
       default: '',
     },

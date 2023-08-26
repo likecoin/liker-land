@@ -107,16 +107,21 @@
             </li>
           </ul>
           <ProgressIndicator v-if="isLoading" />
-          <ButtonV2
-            v-else-if="isCollectable"
-            preset="secondary"
-            @click="handleClickCollect"
-          >
-            <template #prepend>
-              <NFTWidgetIconInsertCoin />
-            </template>
-            {{ $t('nft_widget_button_collect') }}
-          </ButtonV2>
+          <div v-else-if="isCollectable" class="flex flex-col gap-[8px] justify-center items-center">
+            <ButtonV2
+              preset="secondary"
+              @click="handleClickCollect"
+            >
+              <template #prepend>
+                <NFTWidgetIconInsertCoin />
+              </template>
+              {{ $t('nft_widget_button_collect') }}
+            </ButtonV2>
+            <div v-if="collectExpiryTime" class="flex gap-[4px] justify-center items-center text-pending-orange">
+              <IconClock/>
+              <div class="ml-[4px]">{{ collectExpiryTime }}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -234,6 +239,10 @@ export default {
     isCollectable: {
       type: Boolean,
       default: false,
+    },
+    collectExpiryTime: {
+      type: String,
+      default: '',
     },
 
     storyTitle: {

@@ -43,17 +43,30 @@
           <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage }}</div>
         </div>
       </div>
-      <ButtonV2
-        preset="secondary"
-        class="flex-shrink-0"
-        :text="ctaButtonText"
-        :is-disabled="!isCollectable"
-        @click="handleClickCTAButton"
-      >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </ButtonV2>
+      <div class="flex flex-col gap-[8px] justify-center items-center">
+        <ButtonV2
+          preset="secondary"
+          class="flex-shrink-0"
+          :text="ctaButtonText"
+          :is-disabled="!isCollectable"
+          @click="handleClickCTAButton"
+        >
+          <template #prepend>
+            <IconPrice />
+          </template>
+        </ButtonV2>
+        <div 
+          v-if="collectExpiryTime" 
+          class="flex gap-[4px] justify-center items-center" 
+          :class="{
+            'text-pending-orange': isCollectExpiryTimeInComing, 
+            'text-white': !isCollectExpiryTimeInComing, 
+            }"
+        >
+          <IconClock />
+          <div class="ml-[4px]">{{ collectExpiryTime }}</div>
+        </div>
+      </div>
     </div>
     <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
       <NFTMessageIdentity
@@ -62,16 +75,29 @@
         :wallet-address="iscnOwner"
         :avatar-size="40"
       />
-      <ButtonV2
-        preset="secondary"
-        :text="ctaButtonText"
-        :is-disabled="!isCollectable"
-        @click="handleClickCTAButton"
-      >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </ButtonV2>
+      <div class="flex flex-col gap-[8px] justify-center items-center">
+        <ButtonV2
+          preset="secondary"
+          :text="ctaButtonText"
+          :is-disabled="!isCollectable"
+          @click="handleClickCTAButton"
+        >
+          <template #prepend>
+            <IconPrice />
+          </template>
+        </ButtonV2>
+        <div 
+          v-if="collectExpiryTime" 
+          class="flex gap-[4px] justify-center items-center" 
+          :class="{
+            'text-pending-orange': isCollectExpiryTimeInComing, 
+            'text-white': !isCollectExpiryTimeInComing, 
+            }"
+        >
+          <IconClock />
+          <div class="ml-[4px]">{{ collectExpiryTime }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -98,6 +124,14 @@ export default {
     isColumn: {
       type: Boolean,
       default: false,
+    },
+    isCollectExpiryTimeInComing: {
+      type: Boolean,
+      default: false,
+    },
+    collectExpiryTime: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {
