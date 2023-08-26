@@ -1,7 +1,7 @@
 <template>
   <div>
     <ButtonV2
-      v-if="url"
+      v-if="url && shouldShowViewContentButton"
       class="w-full"
       preset="outline"
       :text="$t(isNftBook ? 'nft_details_page_button_view_nft_book' : 'nft_details_page_button_view')"
@@ -18,7 +18,7 @@
     </ButtonV2>
 
     <p
-      v-if="contentUrls.length && !isContentViewable"
+      v-if="normalizedContentURLs.length && !isContentViewable"
       class="text-[14px] text-medium-gray text-center mt-[16px]"
     >{{ $t(isNftBook ? 'nft_details_page_button_collect_to_view_nft_book' : 'nft_details_page_button_collect_to_view') }}</p>
 
@@ -44,7 +44,7 @@
           <MenuList>
             <ul>
               <li
-                v-for="contentUrl in contentUrls"
+                v-for="contentUrl in normalizedContentURLs"
                 :key="contentUrl"
               >
                 <ButtonV2
@@ -59,7 +59,7 @@
       </template>
       <template v-else>
         <ButtonV2
-          v-for="contentUrl in contentUrls"
+          v-for="contentUrl in normalizedContentURLs"
           :key="contentUrl"
           class="mt-[12px] w-full"
           preset="outline"
@@ -112,11 +112,20 @@ export default {
     },
   },
   computed: {
+    normalizedContentURLs() {
+      // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
+      return this.contentUrls.length ? this.contentUrls : [this.url];
+    },
+    shouldShowViewContentButton() {
+      return !this.normalizedContentURLs.includes(this.url);
+    },
     hasDuplicatedContentTypes() {
       const set = new Set(
-        this.contentUrls.map(url => url === this.getContentUrlType(url))
+        this.normalizedContentURLs.map(
+          url => url === this.getContentUrlType(url)
+        )
       );
-      return set.size !== this.contentUrls.length;
+      return set.size !== this.normalizedContentURLs.length;
     },
   },
   methods: {
