@@ -89,26 +89,35 @@
             'gap-[3rem]',
           ]"
         >
-          <ul v-if="displayedEvents.length" class="flex flex-col w-full">
+          <template v-if="shouldShowLoading">
+            <div
+              v-for="[nameWidthClass, cardHeightClass] in [
+                ['w-[180px]', 'min-h-[10vh]'],
+                ['w-[140px]', 'min-h-[20vh]'],
+                ['w-[120px]', 'min-h-[15vh]'],
+              ]"
+              :key="cardHeightClass"
+              class="animate-pulse"
+            >
+              <div class="flex items-start gap-[0.5rem]">
+                <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
+                <div>
+                  <div :class="[nameWidthClass, 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
+                  <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
+                </div>
+              </div>
+              <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
+            </div>
+          </template>
+          <ul class="flex flex-col w-full">
             <li v-for="e in displayedEvents" :key="e.tx_hash">
               <client-only>
                 <lazy-component
-                  @show.once="fetchInfo({ txHash: e.tx_hash, event: e })"
+                  @show.once="fetchInfo({ event: e })"
                 >
                 </lazy-component>
               </client-only>
-              <div v-if="!getHasFetchMemo(e.tx_hash)" class="animate-pulse mb-[48px]">
-                <div class="flex items-start gap-[0.5rem]">
-                  <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
-                  <div>
-                    <div :class="['w-[180px]', 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
-                    <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
-                  </div>
-                </div>
-                <CardV2 :class="['min-h-[10vh]', 'mt-[1rem]', 'bg-shade-gray']" />
-              </div>
               <SocialFeedItem
-                v-else-if="getEventMemo(e.tx_hash)"
                 class="mb-[48px]"
                 :type="e.type"
                 :sender-address="e.sender"
@@ -132,7 +141,7 @@
             >
               {{ $t('nft_portfolio_page_label_loading_more') }}
             </div>
-            <template v-else>
+            <template v-if="shouldShowEnd">
               <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
               <div
                 class="flex justify-center font-[600] py-[24px] text-gray-9b"
@@ -142,7 +151,7 @@
             </template>
           </ul>
           <CardV2
-            v-else-if="!displayedEvents.length"
+            v-if="shouldShowEmpty"
             class="flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
             :is-outline="true"
           >
@@ -325,14 +334,20 @@ export default {
       isOpenIncomeDetailsDialog: false,
       isIncomeDetailsLoading: false,
       currentMainTab: TAB_OPTIONS.TOWN,
-      eventsToShow: 30,
+      eventsToFetch: 30,
 
-      hasFetchedFollowees: false,
-      shouldShowMore: true,
+      hasFetchedFolloweeEvents: false,
+      hasFetchedFirstBatch: false,
+      allowFetch: true,
     };
   },
   computed: {
-    ...mapGetters(['getFolloweeEvents', 'getHasFetchMemo', 'getEventMemo']),
+    ...mapGetters([
+      'getFolloweeEvents',
+      'getHasFetchMemo',
+      'getEventMemo',
+      'getAvailableFeedTxList',
+    ]),
     wallet() {
       return this.getAddress;
     },
@@ -358,40 +373,68 @@ export default {
     formattedEvents() {
       return this.sortAndFilterEvents(this.getFolloweeEvents);
     },
+    pendingMemoFetchList() {
+      return this.formattedEvents.filter(e => !this.getHasFetchMemo(e.tx_hash));
+    },
     displayedEvents() {
-      return this.formattedEvents.slice(0, this.eventsToShow);
+      if (this.getAvailableFeedTxList) {
+        return this.formattedEvents.filter(e =>
+          this.getAvailableFeedTxList.includes(e.tx_hash)
+        );
+      }
+      return [];
     },
     currentView() {
       return this.$route.query.view;
     },
+    shouldShowLoading() {
+      return this.walletFollowees.length && !this.displayedEvents.length;
+    },
+    shouldShowMore() {
+      return this.pendingMemoFetchList.length;
+    },
+    shouldShowEnd() {
+      return this.displayedEvents.length && !this.pendingMemoFetchList.length;
+    },
+    shouldShowEmpty() {
+      return (
+        !this.walletFollowees.length ||
+        (!this.pendingMemoFetchList.length && !this.displayedEvents.length)
+      );
+    },
   },
 
   watch: {
-    getAddress(newAddress) {
-      if (newAddress) {
-        this.fetchUserInfo();
-        this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
-        this.fetchNFTDisplayStateListByAddress(this.getAddress);
-        this.updateTopRankedCreators();
-      }
+    loginAddress: {
+      immediate: true,
+      handler(loginAddress) {
+        if (this.getAddress && loginAddress) {
+          this.fetchUserInfo();
+          this.loadNFTClassesForCurrentTabByAddress(loginAddress);
+          this.fetchNFTDisplayStateListByAddress(loginAddress);
+          this.updateTopRankedCreators();
+          this.hasFetchedFirstBatch = false;
+          this.hasFetchedFolloweeEvents = false;
+        }
+      },
     },
     walletFollowees: {
       immediate: true,
       handler(walletFollowees) {
         if (walletFollowees.length && !this.hasFetchedFollowees) {
           this.fetchFolloweeWalletEvent();
-          this.hasFetchedFollowees = true;
+          this.hasFetchedFolloweeEvents = true;
         }
       },
     },
-    formattedEvents(formattedEvents) {
-      if (formattedEvents.length > this.eventsToShow) {
-        this.shouldShowMore = true;
-        this.addInfiniteScrollListener();
-      } else {
-        this.shouldShowMore = false;
-        this.removeInfiniteScrollListener();
-      }
+    formattedEvents: {
+      immediate: true,
+      handler(formattedEvents) {
+        if (formattedEvents.length && !this.hasFetchedFirstBatch) {
+          this.batchFetchInfo();
+          this.hasFetchedFirstBatch = true;
+        }
+      },
     },
   },
   mounted() {
@@ -411,16 +454,30 @@ export default {
       'lazyGetUserInfoByAddresses',
       'lazyFetchEventsMemo',
       'lazyGetNFTClassMetadata',
+      'fetchFolloweeWalletEvent',
     ]),
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
-    async fetchInfo({ txHash, event }) {
-      await this.lazyFetchEventsMemo(event);
-      if (this.getEventMemo(txHash)) {
-        this.lazyGetNFTClassMetadata(event.class_id);
-        this.lazyGetUserInfoByAddresses([event.sender, event.receiver]);
-      }
+    async batchFetchInfo() {
+      const consistentPendingMemoFetchList = this.pendingMemoFetchList;
+      const currentEventToFetch = Math.min(
+        this.eventsToFetch,
+        consistentPendingMemoFetchList.length
+      );
+      const fetchList = consistentPendingMemoFetchList.slice(
+        0,
+        currentEventToFetch
+      );
+
+      const fetchPromises = fetchList.map(event =>
+        this.lazyFetchEventsMemo(event)
+      );
+      await Promise.all(fetchPromises);
+    },
+    fetchInfo({ event }) {
+      this.lazyGetNFTClassMetadata(event.class_id);
+      this.lazyGetUserInfoByAddresses([event.sender, event.receiver]);
     },
     async updateTopRankedCreators() {
       const res = await this.$axios.$get(
@@ -648,13 +705,6 @@ export default {
           return false;
         });
     },
-    addDisplayEvents() {
-      const newEventsToShow = Math.min(
-        this.eventsToShow + 30,
-        this.formattedEvents.length
-      );
-      this.eventsToShow = newEventsToShow;
-    },
     addInfiniteScrollListener() {
       window.addEventListener('scroll', this.handleInfiniteScroll);
     },
@@ -662,7 +712,7 @@ export default {
       window.removeEventListener('scroll', this.handleInfiniteScroll);
     },
     handleInfiniteScroll: throttle(function handleInfiniteScroll() {
-      if (!this.shouldShowMore) return;
+      if (!this.pendingMemoFetchList.length) return;
 
       const { infiniteScrollTrigger: trigger } = this.$refs;
       if (
@@ -671,7 +721,14 @@ export default {
       ) {
         return;
       }
-      this.addDisplayEvents();
+      if (this.allowFetch) {
+        this.allowFetch = false;
+        this.batchFetchInfo();
+
+        setTimeout(() => {
+          this.allowFetch = true;
+        }, 2000);
+      }
     }, 2000),
   },
 };

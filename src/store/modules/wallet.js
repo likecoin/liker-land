@@ -264,6 +264,10 @@ const getters = {
   },
   getHasFetchMemo: state => tx => tx in (state.eventMemoByTxMap || {}),
   getEventMemo: state => tx => (state.eventMemoByTxMap[tx] || {}).memo,
+  getAvailableFeedTxList: state =>
+    Object.keys(state.eventMemoByTxMap).filter(
+      txHash => state.eventMemoByTxMap[txHash]?.memo
+    ),
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
   walletTotalResales: state => state.totalResales,
@@ -437,10 +441,9 @@ const actions = {
     }
   },
 
-  fetchFolloweeWalletEvent({ state, commit, dispatch }) {
-    const { address, followees } = state;
+  fetchFolloweeWalletEvent({ state, dispatch }) {
+    const { loginAddress: address, followees } = state;
     if (!followees.length) return;
-    commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, true);
 
     // Get gift events
     try {
@@ -489,7 +492,7 @@ const actions = {
     });
   },
 
-  processEvents({ state, commit, dispatch, getters }, { events, address }) {
+  processEvents({ state, commit }, { events, address }) {
     events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const categorizeEvent = event => {
       switch (event.action) {

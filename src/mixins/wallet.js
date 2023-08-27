@@ -80,7 +80,6 @@ export default {
       'walletFetchTotalRoyalty',
       'walletFetchTotalSales',
       'walletFetchTotalResales',
-      'fetchFolloweeWalletEvent',
     ]),
     async navigateToMyDashboard() {
       if (!this.getAddress) {
