@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import dayjs from 'dayjs';
 import { mapActions, mapGetters } from 'vuex';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
@@ -43,6 +43,8 @@ import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 import { createUserInfoMixin } from '~/mixins/user-info';
 import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
+
+import { normalizeLocaleForDayjs } from '~/locales';
 
 const creatorInfoMixin = createUserInfoMixin({
   propKey: 'Creator',
@@ -289,15 +291,14 @@ export default {
       const timeLeft = collectExpiryAt - Date.now();
       if (timeLeft <= 0) return '';
 
-      const dateTime = DateTime.fromMillis(collectExpiryAt);
+      const dateTime = dayjs(collectExpiryAt);
       if (this.shouldHighlightCollectExpiryTime) {
         const duration = dateTime
-          .toRelative({ locale: this.$i18n.locale })
-          .replace('in ', '') // en
-          .replace('後', ''); // zh
+          .locale(normalizeLocaleForDayjs(this.$i18n.locale))
+          .fromNow(true);
         return this.$t('nft_collect_expiry_time_near', { duration });
       }
-      const date = dateTime.toFormat('yyyy-MM-dd');
+      const date = dateTime.format('YYYY-MM-DD');
       return this.$t('nft_collect_expiry_time_far', { date });
     },
     collectExpiryTimeForHighlight() {
