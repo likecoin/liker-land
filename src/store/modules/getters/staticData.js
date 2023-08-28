@@ -12,3 +12,6 @@ export const getArticleInfoByURL = state => url =>
 
 export const LIKEPriceInUSD = state =>
   state.LIKEPriceInUSD || ROUGH_LIKE_TO_USD_PRICE;
+
+export const getSubscriptionPlanData = state => (creatorWallet, planId) =>
+  state.subscriptionPlans[`${creatorWallet}_${planId}`];

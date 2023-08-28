@@ -10,6 +10,7 @@ import {
   STATIC_SET_ARTICLE_INFO,
   STATIC_SET_USER_FETCHING,
   STATIC_SET_LIKE_PRICE_IN_USD,
+  STATIC_SET_SUBSCRIPTION_PLAN_DATA,
 } from '../mutation-types';
 import * as getters from './getters/staticData';
 import * as actions from './actions/staticData';
@@ -20,6 +21,7 @@ const state = () => ({
   userInfoLastQueryTimestampMap: {},
   articleInfos: {},
   LIKEPriceInUSD: 0,
+  subscriptionPlans: {},
   fetching: {
     user: {},
     userInfo: {},
@@ -48,6 +50,9 @@ const mutations = {
   },
   [STATIC_SET_LIKE_PRICE_IN_USD](state, LIKEPriceInUSD) {
     state.LIKEPriceInUSD = LIKEPriceInUSD;
+  },
+  [STATIC_SET_SUBSCRIPTION_PLAN_DATA](state, { creatorWallet, planId, data }) {
+    Vue.set(state.subscriptionPlans, `${creatorWallet}_${planId}`, data);
   },
 };
 

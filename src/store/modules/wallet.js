@@ -29,6 +29,7 @@ import {
   getTotalResalesByAddress,
   getAccountBalance,
   getWalletAuthorizeAPI,
+  nftGetUserActiveSubscription,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { setLoggerUser } from '~/util/EventLogger';
@@ -65,6 +66,7 @@ import {
   WALLET_SET_TOTAL_RESALES,
   WALLET_SET_RESALE_DETAILS,
   WALLET_SET_LIKECOIN_API_ACCESS_TOKEN,
+  WALLET_SET_SUBSCRIPTION_STATUS,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -103,6 +105,7 @@ const state = () => ({
   resalesDetails: [],
 
   likecoinApiAccessToken: '',
+  subscriptionStatus: {},
 
   // Note: Suggest to rename to sessionAddress
   loginAddress: '',
@@ -224,6 +227,9 @@ const mutations = {
   [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
     Vue.set(state.feedEventMemoByTxMap, txHash, event);
   },
+  [WALLET_SET_SUBSCRIPTION_STATUS](state, subscriptionStatus) {
+    state.subscriptionStatus = subscriptionStatus;
+  },
   [WALLET_SET_LIKECOIN_API_ACCESS_TOKEN](state, likecoinApiAccessToken) {
     state.likecoinApiAccessToken = likecoinApiAccessToken;
   },
@@ -276,6 +282,9 @@ const getters = {
     Object.keys(state.feedEventMemoByTxMap).filter(
       txHash => state.feedEventMemoByTxMap[txHash]?.memo
     ),
+  getActiveSubscriptionStatus: state => state.subscriptionStatus,
+  getIsSubscribedToCreator: state => creator =>
+    !!state.subscriptionStatus[creator],
   walletHasLikeCoinApiAuthorization: state => {
     if (!state.likecoinApiAccessToken) return false;
     const decoded = jwt.decode(state.likecoinApiAccessToken);
@@ -860,6 +869,7 @@ const actions = {
       const data = await signLoginMessage(signer, address);
       await this.$api.post(postUserV2Login(), data);
       await dispatch('walletFetchSessionUserData');
+      await dispatch('updateWalletSubscriptionStatus');
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       if (error.message === 'Request rejected') {
@@ -903,6 +913,7 @@ const actions = {
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
     commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, '');
+    commit(WALLET_SET_SUBSCRIPTION_STATUS, {});
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(
@@ -1040,6 +1051,24 @@ const actions = {
     } = await this.$api.$get(getTotalResalesByAddress(address));
     commit(WALLET_SET_TOTAL_RESALES, totalResales);
     commit(WALLET_SET_RESALE_DETAILS, list);
+  },
+  async updateWalletSubscriptionStatus({ commit, state, dispatch }) {
+    if (!state.likecoinApiAccessToken) {
+      await dispatch('signLikeCoinApiAuthorize');
+    }
+    const { data } = await this.$api.get(nftGetUserActiveSubscription(), {
+      headers: {
+        Authorization: `Bearer ${state.likecoinApiAccessToken}`,
+      },
+    });
+    const plans = data?.plans || {};
+    commit(WALLET_SET_SUBSCRIPTION_STATUS, plans);
+    Object.entries(plans).forEach(([creatorWallet, { productId }]) => {
+      dispatch('fetchSubscriptionPlanData', {
+        creatorWallet,
+        planId: productId,
+      });
+    });
   },
 };
 

@@ -19,18 +19,18 @@
             >
           </li>
           <li>Active until: {{ s.currentPeriodEnd }}</li>
-          <ul v-if="planData[getPlanDataKey(s.creator, s.productId)]">
+          <ul v-if="getSubscriptionPlanData(s.creator, s.productId)">
             <li>
               Plan Name:
-              {{ s.planName }}
+              {{ getSubscriptionPlanData(s.creator, s.productId).name }}
             </li>
             <li>
               Price:
-              {{ s.price }}
+              {{ getSubscriptionPlanData(s.creator, s.productId).price }}
             </li>
             <li>
               <Markdown
-                :md-string="s.description"
+                :md-string="getSubscriptionPlanData(s.creator, s.productId).description.en"
               />
             </li>
           </ul>
@@ -48,15 +48,10 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 import walletMixin from '~/mixins/wallet';
 
-import {
-  nftGetUserActiveSubscription,
-  nftGetCreatorSubscriptionPlanById,
-  nftStripeSubscriptionPortal,
-} from '~/util/api';
+import { nftStripeSubscriptionPortal } from '~/util/api';
 
 export default {
   mixins: [walletMixin],
@@ -70,6 +65,8 @@ export default {
     ...mapGetters([
       'walletHasLikeCoinApiAuthorization',
       'walletLikeCoinApiToken',
+      'getActiveSubscriptionStatus',
+      'getSubscriptionPlanData',
     ]),
     formattedSubscriptions() {
       let { locale } = this.$i18n;
@@ -78,7 +75,7 @@ export default {
       }
       const defaultLocale = 'en';
 
-      return Object.entries(this.activeSubscriptions).map(
+      return Object.entries(this.getActiveSubscriptionStatus).map(
         ([creator, data]) => ({
           creator,
           currentPeriodEnd: data.currentPeriodEnd * 1000,
@@ -101,34 +98,14 @@ export default {
       );
     },
   },
-  watch: {
-    walletHasLoggedIn: {
-      immediate: true,
-      handler(hasLoggedIn) {
-        if (hasLoggedIn) {
-          if (!this.walletHasLikeCoinApiAuthorization) {
-            this.initWalletAndSignLikeCoinApiToken();
-          } else {
-            this.refreshSubscriptions();
-          }
-        }
-      },
-    },
-    walletHasLikeCoinApiAuthorization: {
-      handler(hasAuthorization) {
-        if (hasAuthorization) this.refreshSubscriptions();
-      },
-    },
+  mounted() {
+    this.updateWalletSubscriptionStatus();
   },
   methods: {
-    ...mapActions(['signLikeCoinApiAuthorize']),
-    async fetchPlanData(creator, productId) {
-      const key = this.getPlanDataKey(creator, productId);
-      const { data } = await this.$axios.get(
-        nftGetCreatorSubscriptionPlanById(creator, productId)
-      );
-      Vue.set(this.planData, key, data);
-    },
+    ...mapActions([
+      'updateWalletSubscriptionStatus',
+      'signLikeCoinApiAuthorize',
+    ]),
     getPlanDataKey(creator, productId) {
       return `${creator}_${productId}`;
     },
@@ -154,17 +131,6 @@ export default {
         }
       );
       window.open(data?.url);
-    },
-    async refreshSubscriptions() {
-      const { data } = await this.$axios.get(nftGetUserActiveSubscription(), {
-        headers: {
-          Authorization: `Bearer ${this.walletLikeCoinApiToken}`,
-        },
-      });
-      this.activeSubscriptions = data?.plans || [];
-      Object.entries(this.activeSubscriptions).forEach(([wallet, data]) => {
-        this.fetchPlanData(wallet, data.productId);
-      });
     },
   },
 };

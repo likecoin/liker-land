@@ -93,3 +93,17 @@ export async function fetchLIKEPrice({ commit }) {
 export function lazyFetchLIKEPrice({ state, dispatch }) {
   return state.likePriceInUSD || dispatch('fetchLIKEPrice');
 }
+
+export async function fetchSubscriptionPlanData(
+  { commit },
+  { creatorWallet, planId }
+) {
+  const { data } = await this.$axios.get(
+    api.nftGetCreatorSubscriptionPlanById(creatorWallet, planId)
+  );
+  commit(TYPES.STATIC_SET_SUBSCRIPTION_PLAN_DATA, {
+    creatorWallet,
+    planId,
+    data,
+  });
+}
