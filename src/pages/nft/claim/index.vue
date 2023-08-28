@@ -155,7 +155,7 @@ export default {
       state: NFT_CLAIM_STATE.INITIAL,
       error: '',
       collectorMessage: '',
-      claimingAddressInput: this.loginAddress || this.getAddress,
+      claimingAddressInput: '',
       claimingAddress: '',
     };
   },
@@ -249,6 +249,7 @@ export default {
         query,
       });
     }
+    this.claimingAddressInput = this.loginAddress || this.getAddress;
   },
   methods: {
     isValidAddress,
