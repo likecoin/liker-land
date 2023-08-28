@@ -119,7 +119,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isCollectExpiryTimeNear: {
+    shouldHighlightCollectExpiryTime: {
       type: Boolean,
       default: false,
     },
@@ -139,10 +139,9 @@ export default {
       return this.$t('nft_page_collect_cta_button_text');
     },
     expiryTimeClass() {
-      if (this.isCollectExpiryTimeNear) {
-        return 'text-pending-orange';
-      }
-      return 'text-white';
+      return this.shouldHighlightCollectExpiryTime
+        ? 'text-pending-orange'
+        : 'text-white';
     },
   },
   methods: {

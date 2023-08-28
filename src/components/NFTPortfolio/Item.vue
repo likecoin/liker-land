@@ -29,7 +29,7 @@
       :display-state="nftDisplayState"
       :is-nft-book="nftIsNFTBook"
       :is-collected-tab="isCollectedTab"
-      :collect-expiry-time="collectExpiryTimeForNear"
+      :collect-expiry-time="collectExpiryTimeForHighlight"
       @collect="handleClickCollect"
       @load-cover="handleCoverLoaded"
     />
