@@ -2,15 +2,15 @@
   <div v-if="walletIsMatchedSession">
     <slot name="prepend" />
 
-    <div :class="stickyContentClass">
+    <MobileStickyCard :is-sticky="isStickToBottomAtMobile">
       <slot />
       <slot name="append" />
-    </div>
+    </MobileStickyCard>
   </div>
   <div v-else class="flex flex-col justify-center flex-grow">
     <slot name="prepend" />
 
-    <div :class="stickyContentClass">
+    <MobileStickyCard :is-sticky="isStickToBottomAtMobile">
       <Label
         class="text-medium-gray"
         align="center"
@@ -34,7 +34,7 @@
         />
       </div>
       <slot name="append" />
-    </div>
+    </MobileStickyCard>
   </div>
 </template>
 
@@ -59,23 +59,6 @@ export default {
     isStickToBottomAtMobile: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    stickyContentClass() {
-      if (!this.isStickToBottomAtMobile) {
-        return null;
-      }
-      return [
-        'sticky laptop:relative',
-        'bottom-0',
-        'w-full',
-        'mt-[4px]',
-        'px-[1rem]',
-        'py-[1.5rem]',
-        'shadow-[0_-4px_10px_0_rgba(0,0,0,0.1)] laptop:shadow-none',
-        'bg-white laptop:bg-transparent',
-      ];
     },
   },
   methods: {
