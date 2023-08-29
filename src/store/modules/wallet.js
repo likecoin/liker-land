@@ -9,7 +9,7 @@ import {
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
 import { amountToLIKE, getNFTHistoryDataMap } from '~/util/nft';
-import { signLoginMessage, signWalletActionMessage } from '~/util/cosmos';
+import { signLoginMessage } from '~/util/cosmos';
 import {
   getUserInfoMinByAddress,
   getUserV2Self,
@@ -862,12 +862,19 @@ const actions = {
     if (!state.signer) {
       await dispatch('initIfNecessary');
     }
-    const { address } = state;
+    const { address, signer } = state;
+    if (!signer) return;
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
-      const { signer } = state;
-      const data = await signLoginMessage(signer, address);
-      await this.$api.post(postUserV2Login(), data);
+      const signature = await signLoginMessage(signer, address, 'authorize', [
+        'read:nft_reader',
+        'write:nft_reader',
+      ]);
+      const [, { data }] = await Promise.all([
+        this.$api.post(postUserV2Login(), signature),
+        this.$api.post(getWalletAuthorizeAPI(), signature),
+      ]);
+      commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, data.token);
       await dispatch('walletFetchSessionUserData');
       await dispatch('updateWalletSubscriptionStatus');
     } catch (error) {
@@ -889,12 +896,11 @@ const actions = {
       await dispatch('initIfNecessary');
     }
     const { address, signer } = state;
-    const signature = await signWalletActionMessage(
-      signer,
-      address,
-      'authorize',
-      ['read:nft_reader', 'write:nft_reader']
-    );
+    if (!signer) return;
+    const signature = await signLoginMessage(signer, address, 'authorize', [
+      'read:nft_reader',
+      'write:nft_reader',
+    ]);
     const { data } = await this.$api.post(getWalletAuthorizeAPI(), signature);
     commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, data.token);
   },

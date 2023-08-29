@@ -90,12 +90,21 @@ async function signLoginMessageADR036(signer, address, message) {
   };
 }
 
-export async function signLoginMessage(signer, address) {
+export async function signLoginMessage(
+  signer,
+  address,
+  action = '',
+  permissions
+) {
+  const ts = Date.now();
   const payload = [
     `${LOGIN_MESSAGE}:`,
     JSON.stringify({
-      ts: Date.now(),
+      action,
+      permissions,
+      likeWallet: address,
       address,
+      ts,
     }),
   ].join(' ');
   const sign = signer.signArbitrary
@@ -111,35 +120,6 @@ export async function signLoginMessage(signer, address) {
     publicKey: publicKey.value,
     message,
     from: address,
-    signMethod,
-  };
-  return data;
-}
-
-export async function signWalletActionMessage(
-  signer,
-  address,
-  action,
-  permissions
-) {
-  const ts = Date.now();
-  const payload = JSON.stringify({
-    action,
-    permissions,
-    likeWallet: address,
-    ts,
-  });
-  const sign = signLoginMessageMemo;
-  const {
-    signed: message,
-    signature: { signature, pub_key: publicKey },
-    signMethod,
-  } = await sign(signer, address, payload);
-  const data = {
-    signature,
-    publicKey: publicKey.value,
-    message,
-    wallet: address,
     signMethod,
   };
   return data;
