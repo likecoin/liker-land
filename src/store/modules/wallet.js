@@ -441,50 +441,47 @@ const actions = {
     }
   },
 
-  fetchFolloweeWalletEvent({ state, dispatch }) {
+  async fetchFolloweeWalletEvent({ state, dispatch }) {
     const { loginAddress: address, followees } = state;
     if (!followees.length) return;
 
     // Get gift events
     try {
-      this.$api
-        .$get(
-          getNFTEvents({
-            involver: address,
-            limit: WALLET_EVENT_LIMIT,
-            actionType: ['/cosmos.nft.v1beta1.MsgSend'],
-            ignoreToList: LIKECOIN_NFT_API_WALLET,
-            reverse: true,
-          })
-        )
-        .then(res =>
-          dispatch('processEvents', { events: res.events, address })
-        );
+      const sendEvent = await this.$api.$get(
+        getNFTEvents({
+          involver: address,
+          limit: WALLET_EVENT_LIMIT,
+          actionType: ['/cosmos.nft.v1beta1.MsgSend'],
+          ignoreToList: LIKECOIN_NFT_API_WALLET,
+          reverse: true,
+        })
+      );
+      dispatch('processEvents', {
+        events: sendEvent.events,
+        address: sendEvent.address,
+      });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
     }
 
     // Get followees events
-    followees.forEach(followee => {
+    followees.forEach(async followee => {
       try {
-        this.$api
-          .$get(
-            getNFTEvents({
-              involver: followee,
-              limit: WALLET_EVENT_LIMIT,
-              actionType: [
-                '/cosmos.nft.v1beta1.MsgSend',
-                'buy_nft',
-                'new_class',
-              ],
-              ignoreToList: LIKECOIN_NFT_API_WALLET,
-              reverse: true,
-            })
-          )
-          .then(res =>
-            dispatch('processEvents', { events: res.events, address })
-          );
+        const followeeEvents = await this.$api.$get(
+          getNFTEvents({
+            involver: followee,
+            limit: WALLET_EVENT_LIMIT,
+            actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'new_class'],
+            ignoreToList: LIKECOIN_NFT_API_WALLET,
+            reverse: true,
+          })
+        );
+
+        dispatch('processEvents', {
+          events: followeeEvents.events,
+          address: followeeEvents.address,
+        });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
