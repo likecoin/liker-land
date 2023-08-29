@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { mapActions, mapGetters } from 'vuex';
 
 import { CrispMixinFactory } from '~/mixins/crisp';
@@ -43,8 +42,6 @@ import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 import { createUserInfoMixin } from '~/mixins/user-info';
 import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
-
-import { normalizeLocaleForDayjs } from '~/locales';
 
 const creatorInfoMixin = createUserInfoMixin({
   propKey: 'Creator',
@@ -276,35 +273,8 @@ export default {
         ? this.listingInfo.price
         : this.purchaseInfo.price;
     },
-    shouldHighlightCollectExpiryTime() {
-      const { collectExpiryAt } = this.purchaseInfo;
-      if (!collectExpiryAt) return false;
-
-      const timeLeft = collectExpiryAt - Date.now();
-      const threshold = 4 * 7 * 24 * 60 * 60 * 1000; // 4 weeks
-      return timeLeft > 0 && timeLeft < threshold;
-    },
     collectExpiryTime() {
-      const { collectExpiryAt } = this.purchaseInfo;
-      if (!collectExpiryAt) return '';
-
-      const timeLeft = collectExpiryAt - Date.now();
-      if (timeLeft <= 0) return '';
-
-      const dateTime = dayjs(collectExpiryAt);
-      if (this.shouldHighlightCollectExpiryTime) {
-        const duration = dateTime
-          .locale(normalizeLocaleForDayjs(this.$i18n.locale))
-          .fromNow(true);
-        return this.$t('nft_collect_expiry_time_near', { duration });
-      }
-      const date = dateTime.format('YYYY-MM-DD');
-      return this.$t('nft_collect_expiry_time_far', { date });
-    },
-    collectExpiryTimeForHighlight() {
-      return this.shouldHighlightCollectExpiryTime
-        ? this.collectExpiryTime
-        : '';
+      return this.purchaseInfo.collectExpiryAt;
     },
     nftIsCollectable() {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;

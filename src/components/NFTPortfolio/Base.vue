@@ -43,23 +43,13 @@
 
           <div v-if="(!isPrimitive && price !== undefined) || price > 0" class="z-[48] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
-            <div v-else-if="!isCollectedTab" class="flex flex-col gap-[8px] justify-center items-center">
-              <ButtonV2
-                preset="secondary"
-                :is-disabled="!isCollectable"
-                @click.stop.prevent="handleClickCollect"
-              >
-                <template v-if="isCollectable">{{ price | formatNumberWithLIKE }}</template>
-                <template v-else>{{ $t('nft_class_uncollectible') }}</template>
-                <template v-if="isCollectable" #prepend>
-                  <IconPrice />
-                </template>
-              </ButtonV2>
-              <div v-if="collectExpiryTime" class="flex gap-[4px] justify-center items-center text-pending-orange">
-                <IconClock/>
-                <div class="ml-[4px]">{{ collectExpiryTime }}</div>
-              </div>
-            </div>
+            <CollectExpiryButton
+              v-else-if="!isCollectedTab"
+              :button-text="collectButtonText"
+              :is-collectable="isCollectable"
+              :collect-expiry-time="collectExpiryTime"
+              @click-collect-button="handleClickCollect"
+            />
             <NFTViewOptionList
               v-else
               :url="externalUrl"
@@ -193,8 +183,15 @@ export default {
       default: '',
     },
     collectExpiryTime: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 0,
+    },
+  },
+  computed: {
+    collectButtonText() {
+      return this.isCollectable
+        ? formatNumberWithLIKE(this.price)
+        : this.$t('nft_class_uncollectible');
     },
   },
   methods: {

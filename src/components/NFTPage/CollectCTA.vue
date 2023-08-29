@@ -43,27 +43,14 @@
           <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage }}</div>
         </div>
       </div>
-      <div class="flex flex-col gap-[8px] justify-center items-center">
-        <ButtonV2
-          preset="secondary"
-          class="flex-shrink-0"
-          :text="ctaButtonText"
-          :is-disabled="!isCollectable"
-          @click="handleClickCTAButton"
-        >
-          <template #prepend>
-            <IconPrice />
-          </template>
-        </ButtonV2>
-        <div 
-          v-if="collectExpiryTime" 
-          class="flex gap-[4px] justify-center items-center" 
-          :class="expiryTimeClass"
-        >
-          <IconClock />
-          <div class="ml-[4px]">{{ collectExpiryTime }}</div>
-        </div>
-      </div>
+      <CollectExpiryButton 
+        :button-text="ctaButtonText"
+        :is-collectable="isCollectable"
+        :collect-expiry-time="collectExpiryTime" 
+        :expiry-time-class="expiryTimeClass"
+        :display-non-highlighted-expiry-time="true"
+        @click-collect-button="handleClickCTAButton"
+      />
     </div>
     <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
       <NFTMessageIdentity
@@ -72,26 +59,14 @@
         :wallet-address="iscnOwner"
         :avatar-size="40"
       />
-      <div class="flex flex-col gap-[8px] justify-center items-center">
-        <ButtonV2
-          preset="secondary"
-          :text="ctaButtonText"
-          :is-disabled="!isCollectable"
-          @click="handleClickCTAButton"
-        >
-          <template #prepend>
-            <IconPrice />
-          </template>
-        </ButtonV2>
-        <div 
-          v-if="collectExpiryTime" 
-          class="flex gap-[4px] justify-center items-center" 
-          :class="expiryTimeClass"
-        >
-          <IconClock />
-          <div class="ml-[4px]">{{ collectExpiryTime }}</div>
-        </div>
-      </div>
+      <CollectExpiryButton 
+        :button-text="ctaButtonText"
+        :is-collectable="isCollectable"
+        :collect-expiry-time="collectExpiryTime" 
+        :expiry-time-class="expiryTimeClass"
+        :display-non-highlighted-expiry-time="true"
+        @click-collect-button="handleClickCTAButton"
+      />
     </div>
   </div>
 </template>
@@ -119,13 +94,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    shouldHighlightCollectExpiryTime: {
-      type: Boolean,
-      default: false,
-    },
     collectExpiryTime: {
-      type: String,
-      default: undefined,
+      type: Number,
+      default: 0,
     },
   },
   computed: {
@@ -137,11 +108,6 @@ export default {
     },
     ctaButtonText() {
       return this.$t('nft_page_collect_cta_button_text');
-    },
-    expiryTimeClass() {
-      return this.shouldHighlightCollectExpiryTime
-        ? 'text-pending-orange'
-        : 'text-white';
     },
   },
   methods: {
