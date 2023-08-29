@@ -107,7 +107,10 @@ export default {
       return this.$t('nft_page_collect_cta_title_sold_out');
     },
     ctaButtonText() {
-      return this.$t('nft_page_collect_cta_button_text');
+      if (this.isCollectable) {
+        return this.$t('nft_page_collect_cta_button_text');
+      }
+      return this.$t('nft_page_collect_cta_button_text_ended');
     },
   },
   methods: {

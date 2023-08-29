@@ -473,6 +473,7 @@
   "nft_message_type_purchase": "Collector's Message",
   "nft_message_type_transfer": "Transfer Message",
   "nft_page_collect_cta_button_text": "Collect",
+  "nft_page_collect_cta_button_text_ended": "Ended",
   "nft_page_collect_cta_title": "Collect this awesome work, support the creator.",
   "nft_page_collect_cta_title_sold_out": "The work has been sold out. Thank you for your support.",
   "nft_portfolio_page_label_collected": "Collected",
