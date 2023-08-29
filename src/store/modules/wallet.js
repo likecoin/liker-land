@@ -533,7 +533,8 @@ const actions = {
   },
 
   async lazyFetchEventsMemo({ commit, dispatch, getters }, categorizedEvent) {
-    if (getters.getHasFetchMemo(categorizedEvent.tx_hash)) return;
+    if (getters.getHasFetchMemo(categorizedEvent.tx_hash))
+      return getters.getFeedEventMemo(categorizedEvent.tx_hash);
 
     const txHash = categorizedEvent.tx_hash;
     const event = { ...categorizedEvent };
@@ -552,6 +553,8 @@ const actions = {
           );
           memo = metadata.message;
         } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
           memo = '';
         }
         break;
@@ -573,6 +576,8 @@ const actions = {
             memo = '';
           }
         } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
           memo = '';
         }
         break;
@@ -586,6 +591,7 @@ const actions = {
       txHash,
       event: { memo },
     });
+    return memo;
   },
 
   async fetchWalletEvents(
