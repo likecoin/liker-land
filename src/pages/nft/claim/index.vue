@@ -66,7 +66,7 @@
       <template v-else>
         <Label v-if="text" class="mb-[16px]" :text="text" align="center" />
         <template v-if="state === 'INITIAL'">
-          <Label preset="p6" class="text-medium-gray mt-[12px] mb-[6px]" :text="$t('nft_collect_modal_leave_message')" />
+          <Label preset="p6" class="text-medium-gray mb-[6px]" :text="$t('nft_collect_modal_leave_message')" />
           <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
             <IconMessage class="text-dark-gray" />
             <input
