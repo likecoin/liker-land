@@ -47,7 +47,7 @@ import {
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
   WALLET_SET_FOLLOWEE_EVENTS,
   WALLET_SET_FOLLOWEE_EVENT_FETCHING,
-  WALLET_SET_EVENT_MEMO,
+  WALLET_SET_FEED_EVENT_MEMO,
   WALLET_SET_FOLLOWERS,
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
@@ -83,7 +83,7 @@ const state = () => ({
   eventLastSeenTs: 0,
   events: [],
   followeeEvents: [],
-  eventMemoByTxMap: {},
+  feedEventMemoByTxMap: {},
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -216,8 +216,8 @@ const mutations = {
   [WALLET_SET_FOLLOWEE_EVENTS](state, events) {
     state.followeeEvents = events;
   },
-  [WALLET_SET_EVENT_MEMO](state, { txHash, event }) {
-    Vue.set(state.eventMemoByTxMap, txHash, event);
+  [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
+    Vue.set(state.feedEventMemoByTxMap, txHash, event);
   },
 };
 
@@ -262,11 +262,11 @@ const getters = {
       return count;
     }, 0);
   },
-  getHasFetchMemo: state => tx => tx in (state.eventMemoByTxMap || {}),
-  getEventMemo: state => tx => (state.eventMemoByTxMap[tx] || {}).memo,
+  getHasFetchMemo: state => tx => tx in state.feedEventMemoByTxMap,
+  getFeedEventMemo: state => tx => (state.feedEventMemoByTxMap[tx] || {}).memo,
   getAvailableFeedTxList: state =>
-    Object.keys(state.eventMemoByTxMap).filter(
-      txHash => state.eventMemoByTxMap[txHash]?.memo
+    Object.keys(state.feedEventMemoByTxMap).filter(
+      txHash => state.feedEventMemoByTxMap[txHash]?.memo
     ),
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
@@ -585,7 +585,7 @@ const actions = {
         break;
     }
 
-    commit(WALLET_SET_EVENT_MEMO, {
+    commit(WALLET_SET_FEED_EVENT_MEMO, {
       txHash,
       event: { memo },
     });
@@ -832,7 +832,7 @@ const actions = {
     commit(WALLET_SET_TOTAL_SALES, 0);
     commit(WALLET_SET_SALES_DETAILS, []);
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
-    commit(WALLET_SET_EVENT_MEMO, {});
+    commit(WALLET_SET_FEED_EVENT_MEMO, {});
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(

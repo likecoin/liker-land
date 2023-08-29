@@ -122,7 +122,7 @@
                 :type="e.type"
                 :sender-address="e.sender"
                 :receiver-address="e.receiver"
-                :memo="getEventMemo(e.tx_hash)"
+                :memo="getFeedEventMemo(e.tx_hash)"
                 :timestamp="e.timestamp"
                 :class-id="e.class_id"
                 :nft-id="e.nft_id"
@@ -345,7 +345,7 @@ export default {
     ...mapGetters([
       'getFolloweeEvents',
       'getHasFetchMemo',
-      'getEventMemo',
+      'getFeedEventMemo',
       'getAvailableFeedTxList',
     ]),
     wallet() {
@@ -431,7 +431,7 @@ export default {
       immediate: true,
       handler(formattedEvents) {
         if (formattedEvents.length && !this.hasFetchedFirstBatch) {
-          this.batchFetchInfo();
+          this.batchFetchMemo();
           this.hasFetchedFirstBatch = true;
         }
       },
@@ -459,7 +459,7 @@ export default {
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
-    async batchFetchInfo() {
+    async batchFetchMemo() {
       const consistentPendingMemoFetchList = this.pendingMemoFetchList;
       const currentEventToFetch = Math.min(
         this.eventsToFetch,
@@ -723,7 +723,7 @@ export default {
       }
       if (this.allowFetch) {
         this.allowFetch = false;
-        this.batchFetchInfo();
+        this.batchFetchMemo();
 
         setTimeout(() => {
           this.allowFetch = true;
