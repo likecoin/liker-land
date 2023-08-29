@@ -397,10 +397,7 @@ export default {
       return this.displayedEvents.length && !this.pendingMemoFetchList.length;
     },
     shouldShowEmpty() {
-      return (
-        !this.walletFollowees.length ||
-        (!this.pendingMemoFetchList.length && !this.displayedEvents.length)
-      );
+      return !this.pendingMemoFetchList.length && !this.displayedEvents.length;
     },
   },
 
@@ -460,20 +457,18 @@ export default {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
     async batchFetchMemo() {
-      const consistentPendingMemoFetchList = this.pendingMemoFetchList;
+      this.allowFetch = false;
       const currentEventToFetch = Math.min(
         this.eventsToFetch,
-        consistentPendingMemoFetchList.length
+        this.pendingMemoFetchList.length
       );
-      const fetchList = consistentPendingMemoFetchList.slice(
-        0,
-        currentEventToFetch
-      );
+      const fetchList = this.pendingMemoFetchList.slice(0, currentEventToFetch);
 
       const fetchPromises = fetchList.map(event =>
         this.lazyFetchEventsMemo(event)
       );
       await Promise.all(fetchPromises);
+      this.allowFetch = true;
     },
     fetchInfo({ event }) {
       this.lazyGetNFTClassMetadata(event.class_id);
@@ -722,12 +717,7 @@ export default {
         return;
       }
       if (this.allowFetch) {
-        this.allowFetch = false;
         this.batchFetchMemo();
-
-        setTimeout(() => {
-          this.allowFetch = true;
-        }, 2000);
       }
     }, 2000),
   },
