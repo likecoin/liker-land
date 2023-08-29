@@ -205,6 +205,17 @@
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
         />
+        <ul v-if="canCollectSubscriberFreeNFT" class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
+          <li >
+            <EventModalCollectMethodButton
+              class="border-like-cyan"
+              :title="$t('nft_collect_modal_method_subscription')"
+              type="subscription"
+              :price="$t('nft_collect_modal_free')"
+              @click="handleSelectPaymentMethod"
+            />
+          </li>
+        </ul>
         <ul v-if="isFreeNFT" class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li >
             <EventModalCollectMethodButton
@@ -454,6 +465,9 @@ export default {
     mintedFreeNFT() {
       return this.purchaseInfo?.canFreeCollect === false;
     },
+    canCollectSubscriberFreeNFT() {
+      return this.subscriberNFTInfo?.canFreeCollect;
+    },
     isDisabledPayByLIKE() {
       return (
         this.hasConnectedWallet &&
@@ -667,6 +681,29 @@ export default {
               1
             );
             const result = await this.collectFreeNFT(classId, {
+              memo: this.memo,
+            });
+            if (result) {
+              this.justCollectedNFTId =
+                result.nftId || result.purchased?.[0]?.nftId;
+            }
+            break;
+          }
+          case 'subscription': {
+            if (!this.getAddress) {
+              const isConnected = await this.connectWallet({
+                shouldSkipLogin: true,
+              });
+              if (!isConnected) return;
+            }
+            logTrackerEvent(
+              this,
+              'NFT',
+              'NFTCollectPaymentMethod(Subscription)',
+              classId,
+              1
+            );
+            const result = await this.collectSubscriberNFT(classId, {
               memo: this.memo,
             });
             if (result) {

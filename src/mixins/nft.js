@@ -20,6 +20,7 @@ import {
   postNewStripeFiatPayment,
   getIdenticonAvatar,
   getNFTCountByClassId,
+  nftPostSubscriberFreeCollect,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
@@ -116,6 +117,8 @@ export default {
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
+      'walletLikeCoinApiToken',
+      'getNFTClassSubscriberInfoById',
     ]),
     NFTClassMetadata() {
       return this.getNFTClassMetadataById(this.classId) || {};
@@ -151,6 +154,15 @@ export default {
         classId: this.classId,
         nftId: nextNewNFTId,
         seller: LIKECOIN_NFT_API_WALLET,
+      };
+    },
+    subscriberNFTInfo() {
+      const info = this.getNFTClassSubscriberInfoById(this.classId);
+      if (!info) return null;
+      const { collectExpiryAt, canFreeCollect } = info;
+      return {
+        collectExpiryAt,
+        canFreeCollect,
       };
     },
     listingInfo() {
@@ -609,6 +621,7 @@ export default {
       'lazyGetNFTOwners',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
+      'fetchNFTSubscriberInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'fetchNFTFiatPriceInfoByClassId',
@@ -625,6 +638,7 @@ export default {
       'fetchCollectedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
       'fetchNFTBookPriceByClassId',
+      'signLikeCoinApiAuthorize',
     ]),
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
@@ -639,6 +653,15 @@ export default {
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
       catchAxiosError(this.fetchNFTListingInfo(this.classId));
+    },
+    async lazyUpdateNFTSubscriberInfo() {
+      if (this.getNFTClassSubscriberInfoById(this.classId) !== undefined) {
+        return;
+      }
+      await catchAxiosError(this.fetchNFTSubscriberInfo(this.classId));
+    },
+    async updateNFTSubscriberInfo() {
+      await catchAxiosError(this.fetchNFTSubscriberInfo(this.classId));
     },
     async fetchNFTPrices() {
       await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
@@ -1009,6 +1032,51 @@ export default {
         this.lazyFetchNFTClassAggregatedData();
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
+      }
+      return undefined;
+    },
+    async collectSubscriberNFT(classId, { memo = '' }) {
+      if (!this.walletLikeCoinApiToken) {
+        await this.signLikeCoinApiAuthorize();
+      }
+      logTrackerEvent(this, 'NFT', 'NFTCollectSubscriberNFT', classId, 1);
+      try {
+        this.uiSetTxStatus(TX_STATUS.PROCESSING);
+        const result = await this.$api.post(
+          nftPostSubscriberFreeCollect(classId),
+          { memo },
+          {
+            headers: {
+              Authorization: `Bearer ${this.walletLikeCoinApiToken}`,
+            },
+          }
+        );
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectSubscriberNFTCompleted',
+          classId,
+          1
+        );
+        this.uiSetTxStatus(TX_STATUS.COMPLETED);
+        return result.data;
+      } catch (error) {
+        const errMsg = error.response?.data || error.toString();
+        this.uiSetTxError(errMsg);
+        if (this.uiTxTargetClassId === classId) {
+          this.uiSetTxStatus(TX_STATUS.FAILED);
+        } else {
+          this.alertPromptError(
+            this.$t('nft_collect_modal_alert_fail', {
+              name: this.NFTName,
+              error: errMsg,
+            })
+          );
+        }
+      } finally {
+        this.fetchCollectedNFTClassesByAddress(this.getAddress);
+        this.lazyFetchNFTClassAggregatedData();
+        this.updateNFTHistory({ getAllUserInfo: false });
       }
       return undefined;
     },

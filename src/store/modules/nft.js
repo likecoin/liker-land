@@ -34,6 +34,7 @@ const state = () => ({
   metadataByClassIdMap: {},
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
+  subscriberInfoByClassIdMap: {},
   collectedNFTClassesByAddressMap: {},
   createdNFTClassesByAddressMap: {},
   userNFTClassDisplayStateSetsMap: {},
@@ -58,6 +59,12 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
     Vue.set(state.purchaseInfoByClassIdMap, classId, info);
+  },
+  [TYPES.NFT_CLEAR_NFT_CLASS_SUBSCRIBER_INFO](state) {
+    state.subscriberInfoByClassIdMap = {};
+  },
+  [TYPES.NFT_SET_NFT_CLASS_SUBSCRIBER_INFO](state, { classId, info }) {
+    Vue.set(state.subscriberInfoByClassIdMap, classId, info);
   },
   [TYPES.NFT_SET_NFT_CLASS_LISTING_INFO](state, { classId, info }) {
     Vue.set(state.listingInfoByClassIdMap, classId, info);
@@ -180,6 +187,8 @@ const getters = {
     (state.userNFTClassDisplayStateSetsMap[address] || {}).hiddenClassIdSet,
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
+  getNFTClassSubscriberInfoById: state => id =>
+    state.subscriberInfoByClassIdMap[id],
   getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
@@ -420,6 +429,21 @@ const actions = {
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
+    return info;
+  },
+  async fetchNFTSubscriberInfo({ commit, getters }, classId) {
+    let info = null;
+    try {
+      info = await this.$api.$get(api.nftGetSubscriberCanCollect(classId), {
+        headers: {
+          Authorization: `Bearer ${getters.walletLikeCoinApiToken}`,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      commit(TYPES.NFT_SET_NFT_CLASS_SUBSCRIBER_INFO, { classId, info });
+    }
     return info;
   },
   async fetchNFTListingInfo({ commit, dispatch }, classId) {
@@ -746,6 +770,9 @@ const actions = {
       TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS,
       loadShoppingCartFromStorage()
     );
+  },
+  clearSubscriberInfo({ commit }) {
+    commit(TYPES.NFT_CLEAR_NFT_CLASS_SUBSCRIBER_INFO, {});
   },
 };
 

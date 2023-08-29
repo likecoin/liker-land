@@ -905,7 +905,7 @@ const actions = {
     commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, data.token);
   },
 
-  async walletLogout({ commit }) {
+  async walletLogout({ commit, dispatch }) {
     commit(WALLET_SET_USER_INFO, null);
     commit(WALLET_SET_FOLLOWEES, []);
     commit(WALLET_SET_FOLLOWERS, []);
@@ -920,6 +920,7 @@ const actions = {
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
     commit(WALLET_SET_LIKECOIN_API_ACCESS_TOKEN, '');
     commit(WALLET_SET_SUBSCRIPTION_STATUS, {});
+    dispatch('clearSubscriberInfo');
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(

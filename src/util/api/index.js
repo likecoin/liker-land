@@ -356,6 +356,11 @@ export const nftGetUserActiveSubscription = () =>
 export const nftStripeSubscriptionPortal = () =>
   `${LIKECOIN_API_BASE}/likernft/subscription/stripe/portal`;
 
+export const nftGetSubscriberCanCollect = classId =>
+  `${LIKECOIN_API_BASE}/likernft/subscription/readers/nft/purchase?class_id=${classId}`;
+export const nftPostSubscriberFreeCollect = classId =>
+  `${LIKECOIN_API_BASE}/likernft/subscription/readers/nft/purchase?class_id=${classId}`;
+
 export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';

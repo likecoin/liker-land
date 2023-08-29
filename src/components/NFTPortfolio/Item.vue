@@ -11,7 +11,7 @@
     </client-only>
     <NFTPortfolioBase
       :title="NFTName"
-      :price="NFTPrice"
+      :price="subscriberNFTInfo && subscriberNFTInfo.canFreeCollect ? 0 : NFTPrice"
       :class-id="classId"
       :class-collection-type="nftClassCollectionType"
       :class-collection-name="nftClassCollectionName"
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
@@ -77,6 +78,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getIsSubscribedToCreator']),
     isCollectedTab() {
       return this.portfolioTab === 'collected';
     },
@@ -108,6 +110,9 @@ export default {
   methods: {
     fetchInfo() {
       this.lazyFetchNFTClassAggregatedData();
+      if (this.getIsSubscribedToCreator(this.portfolioWallet)) {
+        this.lazyUpdateNFTSubscriberInfo();
+      }
     },
     async handleClickCollect() {
       this.$emit('collect');
