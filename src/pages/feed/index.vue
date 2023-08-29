@@ -421,7 +421,7 @@ export default {
     walletFollowees: {
       immediate: true,
       handler(walletFollowees) {
-        if (walletFollowees.length && !this.hasFetchedFollowees) {
+        if (walletFollowees.length && !this.hasFetchedFolloweeEvents) {
           this.fetchFolloweeWalletEvent();
           this.hasFetchedFolloweeEvents = true;
         }
