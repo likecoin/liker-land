@@ -441,13 +441,13 @@ const actions = {
     }
   },
 
-  async fetchFolloweeWalletEvent({ state, dispatch }) {
+  fetchFolloweeWalletEvent({ state, dispatch }) {
     const { loginAddress: address, followees } = state;
     if (!followees.length) return;
 
     // Get gift events
-    try {
-      const sendEvent = await this.$api.$get(
+    this.$api
+      .$get(
         getNFTEvents({
           involver: address,
           limit: WALLET_EVENT_LIMIT,
@@ -455,15 +455,16 @@ const actions = {
           ignoreToList: LIKECOIN_NFT_API_WALLET,
           reverse: true,
         })
-      );
-      dispatch('processEvents', {
-        events: sendEvent.events,
-        address: sendEvent.address,
+      )
+      .then(res =>
+        dispatch('processEvents', {
+          events: res.events,
+          address,
+        })
+      )
+      .catch(error => {
+        console.error(error);
       });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
 
     // Get followees events
     followees.forEach(async followee => {
@@ -480,7 +481,7 @@ const actions = {
 
         dispatch('processEvents', {
           events: followeeEvents.events,
-          address: followeeEvents.address,
+          address,
         });
       } catch (error) {
         // eslint-disable-next-line no-console
