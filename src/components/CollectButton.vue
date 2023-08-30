@@ -11,8 +11,7 @@
       {{ buttonText }}
     </ButtonV2>
     <div 
-      v-if="collectExpiryTimeForDisplay 
-        && (isCollectExpiryTimeNear || displayNonHighlightedExpiryTime)" 
+      v-if="shouldShowExpiryTime" 
       class="flex gap-[4px] justify-center items-center" 
       :class="expiryTimeClass"
     >
@@ -74,6 +73,12 @@ export default {
       return this.isCollectExpiryTimeNear
         ? 'text-pending-orange'
         : 'text-white';
+    },
+    shouldShowExpiryTime() {
+      return (
+        this.collectExpiryTimeForDisplay &&
+        (this.isCollectExpiryTimeNear || this.displayNonHighlightedExpiryTime)
+      );
     },
   },
   methods: {
