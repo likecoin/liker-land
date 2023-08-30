@@ -458,17 +458,28 @@ export default {
     },
     async batchFetchMemo() {
       this.allowFetch = false;
-      const currentEventToFetch = Math.min(
-        this.eventsToFetch,
-        this.pendingMemoFetchList.length
-      );
-      const fetchList = this.pendingMemoFetchList.slice(0, currentEventToFetch);
 
-      const fetchPromises = fetchList.map(event =>
-        this.lazyFetchEventsMemo(event)
-      );
-      await Promise.all(fetchPromises);
-      this.allowFetch = true;
+      try {
+        const currentEventToFetch = Math.min(
+          this.eventsToFetch,
+          this.pendingMemoFetchList.length
+        );
+        const fetchList = this.pendingMemoFetchList.slice(
+          0,
+          currentEventToFetch
+        );
+
+        const fetchPromises = fetchList.map(event =>
+          this.lazyFetchEventsMemo(event)
+        );
+
+        await Promise.all(fetchPromises);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.allowFetch = true;
+      }
     },
     fetchInfo({ event }) {
       this.lazyGetNFTClassMetadata(event.class_id);
