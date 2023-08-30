@@ -46,7 +46,7 @@ export default {
     },
   },
   computed: {
-    isCollectExpiryTimeNear() {
+    isCollectExpiringSoon() {
       if (!this.collectExpiryTime) return false;
 
       const timeLeft = this.collectExpiryTime - Date.now();
@@ -60,7 +60,7 @@ export default {
       if (timeLeft <= 0) return '';
 
       const dateTime = dayjs(this.collectExpiryTime);
-      if (this.isCollectExpiryTimeNear) {
+      if (this.isCollectExpiringSoon) {
         const duration = dateTime
           .locale(normalizeLocaleForDayjs(this.$i18n.locale))
           .fromNow(true);
@@ -70,14 +70,12 @@ export default {
       return this.$t('nft_collect_expiry_time_far', { date });
     },
     expiryTimeTextClass() {
-      return this.isCollectExpiryTimeNear
-        ? 'text-pending-orange'
-        : 'text-white';
+      return this.isCollectExpiringSoon ? 'text-pending-orange' : 'text-white';
     },
     shouldShowExpiryTime() {
       return (
         this.collectExpiryTimeForDisplay &&
-        (this.isCollectExpiryTimeNear || this.shouldShowExpiryTimeBeforeExpired)
+        (this.isCollectExpiringSoon || this.shouldShowExpiryTimeBeforeExpired)
       );
     },
   },
