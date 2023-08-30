@@ -332,9 +332,9 @@ export default {
       currentMainTab: TAB_OPTIONS.TOWN,
       eventsToFetch: 30,
 
-      hasFetchedFolloweeEvents: false,
-      hasFetchedFirstBatch: false,
-      allowFetch: true,
+      hasStartedFetchingFolloweeEvents: false,
+      hasStartedFetchingFirstBatch: false,
+      isBatchFetchingMemo: false,
     };
   },
   computed: {
@@ -406,26 +406,26 @@ export default {
           this.loadNFTClassesForCurrentTabByAddress(loginAddress);
           this.fetchNFTDisplayStateListByAddress(loginAddress);
           this.updateTopRankedCreators();
-          this.hasFetchedFirstBatch = false;
-          this.hasFetchedFolloweeEvents = false;
+          this.hasStartedFetchingFirstBatch = false;
+          this.hasStartedFetchingFolloweeEvents = false;
         }
       },
     },
     walletFollowees: {
       immediate: true,
       handler(walletFollowees) {
-        if (walletFollowees.length && !this.hasFetchedFolloweeEvents) {
+        if (walletFollowees.length && !this.hasStartedFetchingFolloweeEvents) {
           this.fetchFolloweeWalletEvent();
-          this.hasFetchedFolloweeEvents = true;
+          this.hasStartedFetchingFolloweeEvents = true;
         }
       },
     },
     formattedEvents: {
       immediate: true,
       handler(formattedEvents) {
-        if (formattedEvents.length && !this.hasFetchedFirstBatch) {
+        if (formattedEvents.length && !this.hasStartedFetchingFirstBatch) {
           this.batchFetchMemo();
-          this.hasFetchedFirstBatch = true;
+          this.hasStartedFetchingFirstBatch = true;
         }
       },
     },
@@ -453,7 +453,7 @@ export default {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
     async batchFetchMemo() {
-      this.allowFetch = false;
+      this.isBatchFetchingMemo = true;
 
       try {
         const currentEventToFetch = Math.min(
@@ -474,7 +474,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        this.allowFetch = true;
+        this.isBatchFetchingMemo = false;
       }
     },
     fetchInfo({ event }) {
@@ -723,7 +723,7 @@ export default {
       ) {
         return;
       }
-      if (this.allowFetch) {
+      if (!this.isBatchFetchingMemo) {
         this.batchFetchMemo();
       }
     }, 2000),
