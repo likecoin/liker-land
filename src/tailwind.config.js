@@ -93,6 +93,7 @@ const colors = {
   'light-gray': '#F7F7F7',
   'airdrop-gold': '#D1AB79',
   'twitter-blue': '#4696F1',
+  'pending-orange': '#FFBF44',
 };
 
 module.exports = {

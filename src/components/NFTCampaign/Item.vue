@@ -31,6 +31,7 @@
       :story-title="storyTitle"
       :story-description="storyDescription"
       :is-collectable="nftIsCollectable"
+      :collect-expiry-time="collectExpiryTime"
       :content-preview-props="{
         to: nftCollectRoute,
         tag: 'NuxtLink',

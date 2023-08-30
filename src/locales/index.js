@@ -1,3 +1,11 @@
+import dayjs from 'dayjs';
+import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
+import dayjsRelativeTime from 'dayjs/plugin/relativeTime';
+import _ from 'dayjs/locale/zh-tw';
+
+dayjs.extend(dayjsAdvancedFormat);
+dayjs.extend(dayjsRelativeTime);
+
 export const defaultLocale = 'en';
 export const availableLocales = [
   // List of available locales
@@ -24,6 +32,15 @@ export function normalizeLocaleForLikeCo(locale) {
   switch (locale) {
     case 'zh-Hant':
       return 'zh';
+    default:
+      return locale;
+  }
+}
+
+export function normalizeLocaleForDayjs(locale) {
+  switch (locale) {
+    case 'zh-Hant':
+      return 'zh-tw';
     default:
       return locale;
   }

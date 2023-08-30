@@ -139,11 +139,13 @@ export default {
       const {
         price,
         totalPrice,
+        collectExpiryAt,
         metadata: { nextNewNFTId, soldCount, basePrice } = {},
       } = info;
       return {
         price,
         totalPrice,
+        collectExpiryAt,
         soldCount,
         basePrice,
         classId: this.classId,
@@ -270,6 +272,9 @@ export default {
       return this.nftIsUseListingPrice
         ? this.listingInfo.price
         : this.purchaseInfo.price;
+    },
+    collectExpiryTime() {
+      return this.purchaseInfo.collectExpiryAt;
     },
     nftIsCollectable() {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;

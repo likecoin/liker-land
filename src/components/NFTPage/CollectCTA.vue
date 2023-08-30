@@ -43,17 +43,13 @@
           <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage }}</div>
         </div>
       </div>
-      <ButtonV2
-        preset="secondary"
-        class="flex-shrink-0"
-        :text="ctaButtonText"
-        :is-disabled="!isCollectable"
-        @click="handleClickCTAButton"
-      >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </ButtonV2>
+      <CollectButton 
+        :button-text="ctaButtonText"
+        :is-collectable="isCollectable"
+        :collect-expiry-time="collectExpiryTime" 
+        :should-show-expiry-time-before-expired="true"
+        @click-collect-button="handleClickCTAButton"
+      />
     </div>
     <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
       <NFTMessageIdentity
@@ -62,16 +58,13 @@
         :wallet-address="iscnOwner"
         :avatar-size="40"
       />
-      <ButtonV2
-        preset="secondary"
-        :text="ctaButtonText"
-        :is-disabled="!isCollectable"
-        @click="handleClickCTAButton"
-      >
-        <template #prepend>
-          <IconPrice />
-        </template>
-      </ButtonV2>
+      <CollectButton 
+        :button-text="ctaButtonText"
+        :is-collectable="isCollectable"
+        :collect-expiry-time="collectExpiryTime" 
+        :should-show-expiry-time-before-expired="true"
+        @click-collect-button="handleClickCTAButton"
+      />
     </div>
   </div>
 </template>
@@ -99,6 +92,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    collectExpiryTime: {
+      type: Number,
+      default: 0,
+    },
   },
   computed: {
     ctaTitle() {
@@ -108,7 +105,10 @@ export default {
       return this.$t('nft_page_collect_cta_title_sold_out');
     },
     ctaButtonText() {
-      return this.$t('nft_page_collect_cta_button_text');
+      if (this.isCollectable) {
+        return this.$t('nft_page_collect_cta_button_text');
+      }
+      return this.$t('nft_page_collect_cta_button_text_ended');
     },
   },
   methods: {
