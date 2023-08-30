@@ -43,7 +43,7 @@
           <div class="text-[16px] text-white font-600 text-center mt-[4px] sm:text-left">{{ creatorMessage }}</div>
         </div>
       </div>
-      <CollectExpiryButton 
+      <CollectButton 
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
         :collect-expiry-time="collectExpiryTime" 
@@ -59,7 +59,7 @@
         :wallet-address="iscnOwner"
         :avatar-size="40"
       />
-      <CollectExpiryButton 
+      <CollectButton 
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
         :collect-expiry-time="collectExpiryTime" 

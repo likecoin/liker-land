@@ -43,7 +43,7 @@
 
           <div v-if="(!isPrimitive && price !== undefined) || price > 0" class="z-[48] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
-            <CollectExpiryButton
+            <CollectButton
               v-else-if="!isCollectedTab"
               :button-text="collectButtonText"
               :is-collectable="isCollectable"
