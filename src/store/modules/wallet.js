@@ -47,6 +47,7 @@ import {
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
   WALLET_SET_FOLLOWEE_EVENTS,
   WALLET_SET_FOLLOWEE_EVENT_FETCHING,
+  WALLET_SET_FEED_EVENT_MEMO,
   WALLET_SET_FOLLOWERS,
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
@@ -82,6 +83,7 @@ const state = () => ({
   eventLastSeenTs: 0,
   events: [],
   followeeEvents: [],
+  feedEventMemoByTxMap: {},
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -214,6 +216,9 @@ const mutations = {
   [WALLET_SET_FOLLOWEE_EVENTS](state, events) {
     state.followeeEvents = events;
   },
+  [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
+    Vue.set(state.feedEventMemoByTxMap, txHash, event);
+  },
 };
 
 const getters = {
@@ -257,6 +262,12 @@ const getters = {
       return count;
     }, 0);
   },
+  getHasFetchMemo: state => tx => tx in state.feedEventMemoByTxMap,
+  getFeedEventMemo: state => tx => (state.feedEventMemoByTxMap[tx] || {}).memo,
+  getAvailableFeedTxList: state =>
+    Object.keys(state.feedEventMemoByTxMap).filter(
+      txHash => state.feedEventMemoByTxMap[txHash]?.memo
+    ),
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
   walletTotalResales: state => state.totalResales,
@@ -430,15 +441,35 @@ const actions = {
     }
   },
 
-  async fetchFolloweeWalletEvent({ state, commit, dispatch }) {
-    const { address, followees } = state;
+  fetchFolloweeWalletEvent({ state, dispatch }) {
+    const { loginAddress: address, followees } = state;
     if (!followees.length) return;
-    commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, true);
 
-    // get followee wallet events
-    const getFolloweeEvents = followee =>
-      this.$api
-        .$get(
+    // Get gift events
+    this.$api
+      .$get(
+        getNFTEvents({
+          involver: address,
+          limit: WALLET_EVENT_LIMIT,
+          actionType: ['/cosmos.nft.v1beta1.MsgSend'],
+          ignoreToList: LIKECOIN_NFT_API_WALLET,
+          reverse: true,
+        })
+      )
+      .then(res =>
+        dispatch('processEvents', {
+          events: res.events,
+          address,
+        })
+      )
+      .catch(error => {
+        console.error(error);
+      });
+
+    // Get followees events
+    followees.forEach(async followee => {
+      try {
+        const followeeEvents = await this.$api.$get(
           getNFTEvents({
             involver: followee,
             limit: WALLET_EVENT_LIMIT,
@@ -446,12 +477,20 @@ const actions = {
             ignoreToList: LIKECOIN_NFT_API_WALLET,
             reverse: true,
           })
-        )
-        .then(res => res.events)
-        .catch(() => []);
-    const eventPromises = followees.map(getFolloweeEvents);
-    const responses = await Promise.all(eventPromises);
-    const events = responses.flat();
+        );
+
+        dispatch('processEvents', {
+          events: followeeEvents.events,
+          address,
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    });
+  },
+
+  processEvents({ state, commit }, { events, address }) {
     events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const categorizeEvent = event => {
       switch (event.action) {
@@ -472,75 +511,88 @@ const actions = {
     };
     const categorizedEvents = events.map(categorizeEvent);
 
-    // get creator message for 'publish' events
-    const publishEvents = categorizedEvents.filter(
-      event => event.type === 'publish'
-    );
-    await Promise.all(
-      publishEvents.map(async event => {
-        const metadata = await dispatch(
-          'lazyGetNFTClassMetadata',
-          event.class_id
-        );
-        if (metadata.message) {
-          event.memo = metadata.message;
-        }
-      })
-    );
-    publishEvents.forEach(publishEvent => {
-      const index = categorizedEvents.findIndex(
-        event => event === publishEvent
-      );
-      if (index !== -1) {
-        categorizedEvents[index] = publishEvent;
-      }
-    });
-
-    // get collector message for 'collect' events
-    const collectEvents = categorizedEvents.filter(
-      event => event.type === 'collect'
-    );
-    const promises = collectEvents.map(e =>
-      getNFTHistoryDataMap({
-        axios: this.$api,
-        classId: e.class_id,
-        txHash: e.tx_hash,
-      })
-    );
-    const historyDatas = await Promise.all(promises);
-    historyDatas.forEach((m, index) => {
-      m.forEach(data => {
-        const { granterMemo, price, sellerWallet } = data;
-        collectEvents[index].price = price;
-        collectEvents[index].granterMemo = granterMemo;
-        collectEvents[index].sender = sellerWallet;
-      });
-    });
-    categorizedEvents.forEach(event => {
-      if (event.type === 'collect') {
-        Object.assign(
-          event,
-          collectEvents.find(collectEvent => collectEvent === event)
-        );
-      }
-    });
-
     // filter available events
     const filteredEvents = categorizedEvents.filter(event => {
-      if (event.sender === address || event.receiver === address) {
+      if (event.sender === address) {
         return false;
       }
-      if (event.type === 'send' || event.type === 'publish') {
+      if (event.type !== 'send' && event.receiver === address) {
+        return false;
+      }
+      if (event.type === 'send') {
         return !!event.memo;
       }
-      if (event.type === 'collect' || event.type === 'purchase') {
-        return !!event.granterMemo;
-      }
-      return false;
+      return true;
     });
 
-    commit(WALLET_SET_FOLLOWEE_EVENTS, filteredEvents);
-    commit(WALLET_SET_FOLLOWEE_EVENT_FETCHING, false);
+    if (filteredEvents?.length) {
+      const existingEvents = state.followeeEvents || [];
+      const updatedEvents = [...existingEvents, ...filteredEvents];
+      commit(WALLET_SET_FOLLOWEE_EVENTS, updatedEvents);
+    }
+    return filteredEvents;
+  },
+
+  async lazyFetchEventsMemo({ commit, dispatch, getters }, categorizedEvent) {
+    if (getters.getHasFetchMemo(categorizedEvent.tx_hash))
+      return getters.getFeedEventMemo(categorizedEvent.tx_hash);
+
+    const txHash = categorizedEvent.tx_hash;
+    const event = { ...categorizedEvent };
+    let memo;
+
+    switch (event.type) {
+      case 'send':
+        memo = event.memo;
+        break;
+
+      case 'publish':
+        try {
+          const metadata = await dispatch(
+            'lazyGetNFTClassMetadata',
+            event.class_id
+          );
+          memo = metadata.message;
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          memo = '';
+        }
+        break;
+
+      case 'collect':
+      case 'purchase':
+        try {
+          const map = await getNFTHistoryDataMap({
+            axios: this.$api,
+            classId: event.class_id,
+            txHash,
+          });
+          if (map.size) {
+            map.forEach(data => {
+              const { granterMemo } = data;
+              memo = granterMemo;
+            });
+          } else {
+            memo = '';
+          }
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          memo = '';
+        }
+        break;
+
+      default:
+        memo = '';
+        break;
+    }
+
+    commit(WALLET_SET_FEED_EVENT_MEMO, {
+      txHash,
+      event: { memo },
+    });
+    return memo;
   },
 
   async fetchWalletEvents(
@@ -783,6 +835,8 @@ const actions = {
     commit(WALLET_SET_ROYALTY_DETAILS, []);
     commit(WALLET_SET_TOTAL_SALES, 0);
     commit(WALLET_SET_SALES_DETAILS, []);
+    commit(WALLET_SET_FOLLOWEE_EVENTS, []);
+    commit(WALLET_SET_FEED_EVENT_MEMO, {});
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(

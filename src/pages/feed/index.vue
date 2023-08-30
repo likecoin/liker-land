@@ -89,49 +89,52 @@
             'gap-[3rem]',
           ]"
         >
-          <template v-if="walletIsFetchingFolloweeEvents">
+          <template v-if="shouldShowLoading">
+            <SocialFeedPlaceholder />
+          </template>
+          <ul v-if="displayedEvents.length" class="flex flex-col w-full gap-[48px]">
+            <li v-for="e in displayedEvents" :key="e.tx_hash">
+              <client-only>
+                <lazy-component @show.once="fetchInfo({ event: e })" />
+              </client-only>
+              <SocialFeedItem
+                :type="e.type"
+                :sender-address="e.sender"
+                :receiver-address="e.receiver"
+                :memo="getFeedEventMemo(e.tx_hash)"
+                :timestamp="e.timestamp"
+                :class-id="e.class_id"
+                :nft-id="e.nft_id"
+                @sender-click="handleClickFeedSender"
+                @receiver-click="handleClickFeedReceiver"
+                @follow="handleFollowFeed"
+                @nft-title-click="handleClickFeedNFTTitle"
+                @nft-click="handleClickFeedNFT"
+                @nft-collect="handleCollectFeedNFT"
+              />
+            </li>
+          </ul>
+          <template v-if="shouldShowMore">
             <div
-              v-for="[nameWidthClass, cardHeightClass] in [
-                ['w-[180px]', 'min-h-[10vh]'],
-                ['w-[140px]', 'min-h-[20vh]'],
-                ['w-[120px]', 'min-h-[15vh]'],
-              ]"
-              :key="cardHeightClass"
-              class="animate-pulse"
+              v-if="!isFetchingEventsWithMemo"
+              class="py-[128px] text-gray-9b"
             >
-              <div class="flex items-start gap-[0.5rem]">
-                <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
-                <div>
-                  <div :class="[nameWidthClass, 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
-                  <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
-                </div>
-              </div>
-              <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
+              <client-only>
+                <lazy-component @show.once="handleInfiniteScrollFeed" />
+              </client-only>
+            </div>
+            <SocialFeedPlaceholder v-if="isFetchingEventsWithMemo"/>
+          </template>
+          <template v-if="shouldShowEnd">
+            <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
+            <div
+              class="flex justify-center font-[600] py-[24px] text-gray-9b"
+            >
+              {{ $t('feed_end_of_items') }}
             </div>
           </template>
-          <ul v-else-if="displayedEvents.length" class="flex flex-col gap-[3rem] w-full">
-            <SocialFeedItem
-              v-for="e in displayedEvents"
-              :key="e.tx_hash"
-              tag="li"
-              :type="e.type"
-              :sender-address="e.sender"
-              :receiver-address="e.receiver"
-              :memo="e.memo"
-              :granter-memo="e.granterMemo"
-              :timestamp="e.timestamp"
-              :class-id="e.class_id"
-              :nft-id="e.nft_id"
-              @sender-click="handleClickFeedSender"
-              @receiver-click="handleClickFeedReceiver"
-              @follow="handleFollowFeed"
-              @nft-title-click="handleClickFeedNFTTitle"
-              @nft-click="handleClickFeedNFT"
-              @nft-collect="handleCollectFeedNFT"
-            />
-          </ul>
           <CardV2
-            v-else-if="!displayedEvents.length"
+            v-if="shouldShowEmpty"
             class="flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
             :is-outline="true"
           >
@@ -274,14 +277,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { logTrackerEvent } from '~/util/EventLogger';
+import { mapActions, mapGetters } from 'vuex';
 
 import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import inAppMixin from '~/mixins/in-app';
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 
+import { logTrackerEvent } from '~/util/EventLogger';
 import { getCollectorTopRankedCreators } from '~/util/api';
 import { fisherShuffle } from '~/util/misc';
 
@@ -313,12 +316,20 @@ export default {
       isOpenIncomeDetailsDialog: false,
       isIncomeDetailsLoading: false,
       currentMainTab: TAB_OPTIONS.TOWN,
-      eventsToShow: 30,
+      eventsToFetch: 30,
 
-      hasFetchedFollowees: false,
+      hasStartedFetchingFolloweeEvents: false,
+      hasStartedFetchingFirstBatch: false,
+      isFetchingEventsWithMemo: false,
     };
   },
   computed: {
+    ...mapGetters([
+      'getFolloweeEvents',
+      'getHasFetchMemo',
+      'getFeedEventMemo',
+      'getAvailableFeedTxList',
+    ]),
     wallet() {
       return this.getAddress;
     },
@@ -341,39 +352,66 @@ export default {
         handleClick: () => this.handleCollectiblesTabChange(item.value),
       }));
     },
-    displayedEvents() {
-      const uniqueTxHashes = new Set();
-      return this.getFolloweeEvents
-        .reduce((filteredEvents, event) => {
-          if (!uniqueTxHashes.has(event.tx_hash)) {
-            uniqueTxHashes.add(event.tx_hash);
-            filteredEvents.push(event);
-          }
-          return filteredEvents;
-        }, [])
-        .slice(0, this.eventsToShow);
+    formattedEvents() {
+      return this.sortAndFilterEvents(this.getFolloweeEvents);
     },
-
+    pendingMemoFetchList() {
+      return this.formattedEvents.filter(e => !this.getHasFetchMemo(e.tx_hash));
+    },
+    displayedEvents() {
+      if (this.getAvailableFeedTxList) {
+        return this.formattedEvents.filter(e =>
+          this.getAvailableFeedTxList.includes(e.tx_hash)
+        );
+      }
+      return [];
+    },
     currentView() {
       return this.$route.query.view;
+    },
+    shouldShowLoading() {
+      return this.walletFollowees.length && !this.displayedEvents.length;
+    },
+    shouldShowMore() {
+      return !!this.pendingMemoFetchList.length;
+    },
+    shouldShowEnd() {
+      return this.displayedEvents.length && !this.pendingMemoFetchList.length;
+    },
+    shouldShowEmpty() {
+      return !this.pendingMemoFetchList.length && !this.displayedEvents.length;
     },
   },
 
   watch: {
-    getAddress(newAddress) {
-      if (newAddress) {
-        this.fetchUserInfo();
-        this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
-        this.fetchNFTDisplayStateListByAddress(this.getAddress);
-        this.updateTopRankedCreators();
-      }
+    loginAddress: {
+      immediate: true,
+      handler(loginAddress) {
+        if (this.getAddress && loginAddress) {
+          this.fetchUserInfo();
+          this.loadNFTClassesForCurrentTabByAddress(loginAddress);
+          this.fetchNFTDisplayStateListByAddress(loginAddress);
+          this.updateTopRankedCreators();
+          this.hasStartedFetchingFirstBatch = false;
+          this.hasStartedFetchingFolloweeEvents = false;
+        }
+      },
     },
     walletFollowees: {
       immediate: true,
       handler(walletFollowees) {
-        if (walletFollowees.length && !this.hasFetchedFollowees) {
+        if (walletFollowees.length && !this.hasStartedFetchingFolloweeEvents) {
           this.fetchFolloweeWalletEvent();
-          this.hasFetchedFollowees = true;
+          this.hasStartedFetchingFolloweeEvents = true;
+        }
+      },
+    },
+    formattedEvents: {
+      immediate: true,
+      handler(formattedEvents) {
+        if (formattedEvents.length && !this.hasStartedFetchingFirstBatch) {
+          this.fetchEventsWithMemo();
+          this.hasStartedFetchingFirstBatch = true;
         }
       },
     },
@@ -386,9 +424,44 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyGetUserInfoByAddress']),
+    ...mapActions([
+      'lazyGetUserInfoByAddress',
+      'lazyGetUserInfoByAddresses',
+      'lazyFetchEventsMemo',
+      'lazyGetNFTClassMetadata',
+      'fetchFolloweeWalletEvent',
+    ]),
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
+    },
+    async fetchEventsWithMemo() {
+      this.isFetchingEventsWithMemo = true;
+
+      try {
+        const currentEventToFetch = Math.min(
+          this.eventsToFetch,
+          this.pendingMemoFetchList.length
+        );
+        const fetchList = this.pendingMemoFetchList.slice(
+          0,
+          currentEventToFetch
+        );
+
+        const fetchPromises = fetchList.map(event =>
+          this.lazyFetchEventsMemo(event)
+        );
+
+        await Promise.all(fetchPromises);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      } finally {
+        this.isFetchingEventsWithMemo = false;
+      }
+    },
+    fetchInfo({ event }) {
+      this.lazyGetNFTClassMetadata(event.class_id);
+      this.lazyGetUserInfoByAddresses([event.sender, event.receiver]);
     },
     async updateTopRankedCreators() {
       const res = await this.$axios.$get(
@@ -603,6 +676,25 @@ export default {
     },
     handleCollectFeedNFT(classId) {
       logTrackerEvent(this, 'SocialFeed', 'FeedNFTCollect', classId, 1);
+    },
+    sortAndFilterEvents(events) {
+      const uniqueTxHashes = new Set();
+      return events
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .filter(event => {
+          if (!uniqueTxHashes.has(event.tx_hash)) {
+            uniqueTxHashes.add(event.tx_hash);
+            return true;
+          }
+          return false;
+        });
+    },
+    handleInfiniteScrollFeed() {
+      if (!this.pendingMemoFetchList.length) return;
+
+      if (!this.isFetchingEventsWithMemo) {
+        this.fetchEventsWithMemo();
+      }
     },
   },
 };
