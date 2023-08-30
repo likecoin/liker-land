@@ -109,16 +109,12 @@
               <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
             </div>
           </template>
-          <ul class="flex flex-col w-full">
+          <ul class="flex flex-col w-full gep-[48px]">
             <li v-for="e in displayedEvents" :key="e.tx_hash">
               <client-only>
-                <lazy-component
-                  @show.once="fetchInfo({ event: e })"
-                >
-                </lazy-component>
+                <lazy-component @show.once="fetchInfo({ event: e })" />
               </client-only>
               <SocialFeedItem
-                class="mb-[48px]"
                 :type="e.type"
                 :sender-address="e.sender"
                 :receiver-address="e.receiver"
@@ -134,22 +130,22 @@
                 @nft-collect="handleCollectFeedNFT"
               />
             </li>
-            <div
-              v-if="shouldShowMore"
-              ref="infiniteScrollTrigger"
-              class="animate-pulse flex justify-center font-[600] px-[24px] py-[128px] text-gray-9b min-h-screen"
-            >
-              {{ $t('nft_portfolio_page_label_loading_more') }}
-            </div>
-            <template v-if="shouldShowEnd">
-              <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
-              <div
-                class="flex justify-center font-[600] py-[24px] text-gray-9b"
-              >
-                {{ $t('feed_end_of_items') }}
-              </div>
-            </template>
           </ul>
+          <div
+            v-if="shouldShowMore"
+            ref="infiniteScrollTrigger"
+            class="animate-pulse flex justify-center font-[600] px-[24px] py-[128px] text-gray-9b min-h-screen"
+          >
+            {{ $t('nft_portfolio_page_label_loading_more') }}
+          </div>
+          <template v-if="shouldShowEnd">
+            <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
+            <div
+              class="flex justify-center font-[600] py-[24px] text-gray-9b"
+            >
+              {{ $t('feed_end_of_items') }}
+            </div>
+          </template>
           <CardV2
             v-if="shouldShowEmpty"
             class="flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
@@ -391,7 +387,7 @@ export default {
       return this.walletFollowees.length && !this.displayedEvents.length;
     },
     shouldShowMore() {
-      return this.pendingMemoFetchList.length;
+      return !!this.pendingMemoFetchList.length;
     },
     shouldShowEnd() {
       return this.displayedEvents.length && !this.pendingMemoFetchList.length;
