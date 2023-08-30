@@ -40,7 +40,7 @@ export default {
       type: Number,
       default: 0,
     },
-    displayNonHighlightedExpiryTime: {
+    shouldShowExpiryTimeBeforeExpired: {
       type: Boolean,
       default: false,
     },
@@ -77,7 +77,7 @@ export default {
     shouldShowExpiryTime() {
       return (
         this.collectExpiryTimeForDisplay &&
-        (this.isCollectExpiryTimeNear || this.displayNonHighlightedExpiryTime)
+        (this.isCollectExpiryTimeNear || this.shouldShowExpiryTimeBeforeExpired)
       );
     },
   },

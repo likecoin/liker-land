@@ -47,7 +47,7 @@
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
         :collect-expiry-time="collectExpiryTime" 
-        :display-non-highlighted-expiry-time="true"
+        :should-show-expiry-time-before-expired="true"
         @click-collect-button="handleClickCTAButton"
       />
     </div>
@@ -62,7 +62,7 @@
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
         :collect-expiry-time="collectExpiryTime" 
-        :display-non-highlighted-expiry-time="true"
+        :should-show-expiry-time-before-expired="true"
         @click-collect-button="handleClickCTAButton"
       />
     </div>
