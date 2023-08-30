@@ -109,7 +109,7 @@
               <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
             </div>
           </template>
-          <ul class="flex flex-col w-full gep-[48px]">
+          <ul class="flex flex-col w-full gap-[48px]">
             <li v-for="e in displayedEvents" :key="e.tx_hash">
               <client-only>
                 <lazy-component @show.once="fetchInfo({ event: e })" />
