@@ -1,4 +1,3 @@
-
 <template>
   <div :class="['w-full', 'flex', 'flex-col', 'items-stretch', 'gap-[3rem]']">
     <div

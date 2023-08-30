@@ -278,7 +278,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import throttle from 'lodash.throttle';
 
 import { createPortfolioMixin, tabOptions } from '~/mixins/portfolio';
 import inAppMixin from '~/mixins/in-app';
@@ -411,7 +410,7 @@ export default {
       immediate: true,
       handler(formattedEvents) {
         if (formattedEvents.length && !this.hasStartedFetchingFirstBatch) {
-          this.batchFetchEventsWithMemo();
+          this.fetchEventsWithMemo();
           this.hasStartedFetchingFirstBatch = true;
         }
       },
@@ -435,7 +434,7 @@ export default {
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
-    async batchFetchEventsWithMemo() {
+    async fetchEventsWithMemo() {
       this.isFetchingEventsWithMemo = true;
 
       try {
@@ -694,7 +693,7 @@ export default {
       if (!this.pendingMemoFetchList.length) return;
 
       if (!this.isFetchingEventsWithMemo) {
-        this.batchFetchEventsWithMemo();
+        this.fetchEventsWithMemo();
       }
     },
   },
