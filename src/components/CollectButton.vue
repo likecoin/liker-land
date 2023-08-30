@@ -13,7 +13,7 @@
     <div 
       v-if="shouldShowExpiryTime" 
       class="flex gap-[4px] justify-center items-center" 
-      :class="expiryTimeClass"
+      :class="expiryTimeTextClass"
     >
       <IconClock />
       <div>{{ collectExpiryTimeForDisplay }}</div>
@@ -69,7 +69,7 @@ export default {
       const date = dateTime.format('YYYY-MM-DD');
       return this.$t('nft_collect_expiry_time_far', { date });
     },
-    expiryTimeClass() {
+    expiryTimeTextClass() {
       return this.isCollectExpiryTimeNear
         ? 'text-pending-orange'
         : 'text-white';
