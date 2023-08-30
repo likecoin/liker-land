@@ -90,26 +90,9 @@
           ]"
         >
           <template v-if="shouldShowLoading">
-            <div
-              v-for="[nameWidthClass, cardHeightClass] in [
-                ['w-[180px]', 'min-h-[10vh]'],
-                ['w-[140px]', 'min-h-[20vh]'],
-                ['w-[120px]', 'min-h-[15vh]'],
-              ]"
-              :key="cardHeightClass"
-              class="animate-pulse"
-            >
-              <div class="flex items-start gap-[0.5rem]">
-                <div class="rounded-full w-[40px] h-[40px] bg-shade-gray"/>
-                <div>
-                  <div :class="[nameWidthClass, 'rounded-[4px]', 'h-[24px]', 'bg-shade-gray']"/>
-                  <div class="mt-[2px] rounded-[4px] w-[80px] h-[20px] bg-shade-gray"/>
-                </div>
-              </div>
-              <CardV2 :class="[cardHeightClass, 'mt-[1rem]', 'bg-shade-gray']" />
-            </div>
+            <SocialFeedPlaceholder />
           </template>
-          <ul class="flex flex-col w-full gap-[48px]">
+          <ul v-if="displayedEvents.length" class="flex flex-col w-full gap-[48px]">
             <li v-for="e in displayedEvents" :key="e.tx_hash">
               <client-only>
                 <lazy-component @show.once="fetchInfo({ event: e })" />
@@ -131,13 +114,17 @@
               />
             </li>
           </ul>
-          <div
-            v-if="shouldShowMore"
-            ref="infiniteScrollTrigger"
-            class="animate-pulse flex justify-center font-[600] px-[24px] py-[128px] text-gray-9b min-h-screen"
-          >
-            {{ $t('nft_portfolio_page_label_loading_more') }}
-          </div>
+          <template v-if="shouldShowMore">
+            <div
+              v-if="!isFetchingEventsWithMemo"
+              class="py-[128px] text-gray-9b"
+            >
+              <client-only>
+                <lazy-component @show.once="handleInfiniteScrollFeed" />
+              </client-only>
+            </div>
+            <SocialFeedPlaceholder v-if="isFetchingEventsWithMemo"/>
+          </template>
           <template v-if="shouldShowEnd">
             <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
             <div
@@ -334,7 +321,7 @@ export default {
 
       hasStartedFetchingFolloweeEvents: false,
       hasStartedFetchingFirstBatch: false,
-      isBatchFetchingMemo: false,
+      isFetchingEventsWithMemo: false,
     };
   },
   computed: {
@@ -424,7 +411,7 @@ export default {
       immediate: true,
       handler(formattedEvents) {
         if (formattedEvents.length && !this.hasStartedFetchingFirstBatch) {
-          this.batchFetchMemo();
+          this.batchFetchEventsWithMemo();
           this.hasStartedFetchingFirstBatch = true;
         }
       },
@@ -436,10 +423,6 @@ export default {
       this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
     }
-    this.addInfiniteScrollListener();
-  },
-  beforeDestroy() {
-    this.removeInfiniteScrollListener();
   },
   methods: {
     ...mapActions([
@@ -452,8 +435,8 @@ export default {
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
     },
-    async batchFetchMemo() {
-      this.isBatchFetchingMemo = true;
+    async batchFetchEventsWithMemo() {
+      this.isFetchingEventsWithMemo = true;
 
       try {
         const currentEventToFetch = Math.min(
@@ -474,7 +457,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       } finally {
-        this.isBatchFetchingMemo = false;
+        this.isFetchingEventsWithMemo = false;
       }
     },
     fetchInfo({ event }) {
@@ -707,26 +690,13 @@ export default {
           return false;
         });
     },
-    addInfiniteScrollListener() {
-      window.addEventListener('scroll', this.handleInfiniteScroll);
-    },
-    removeInfiniteScrollListener() {
-      window.removeEventListener('scroll', this.handleInfiniteScroll);
-    },
-    handleInfiniteScroll: throttle(function handleInfiniteScroll() {
+    handleInfiniteScrollFeed() {
       if (!this.pendingMemoFetchList.length) return;
 
-      const { infiniteScrollTrigger: trigger } = this.$refs;
-      if (
-        !trigger ||
-        window.innerHeight + window.pageYOffset < trigger.offsetTop
-      ) {
-        return;
+      if (!this.isFetchingEventsWithMemo) {
+        this.batchFetchEventsWithMemo();
       }
-      if (!this.isBatchFetchingMemo) {
-        this.batchFetchMemo();
-      }
-    }, 2000),
+    },
   },
 };
 </script>
