@@ -16,7 +16,7 @@
       :class="expiryTimeClass"
     >
       <IconClock />
-      <div class="ml-[4px]">{{ collectExpiryTimeForDisplay }}</div>
+      <div>{{ collectExpiryTimeForDisplay }}</div>
     </div>
   </div>
 </template>
