@@ -378,14 +378,32 @@ const actions = {
 
   async openConnectWalletModal(
     { commit, dispatch },
-    { language, connectWalletTitle, connectWalletMobileWarning } = {}
+    {
+      language,
+      connectWalletTitle,
+      connectWalletMobileWarning,
+      shouldRecommendConnectionMethod = false,
+      onEvent,
+    } = {}
   ) {
     commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
+    if (shouldRecommendConnectionMethod) {
+      connector.options.availableMethods = [
+        'keplr',
+        ['keplr-mobile', { tier: 1, isRecommended: true }],
+        'cosmostation',
+        'cosmostation-mobile',
+        'liker-id',
+        'leap',
+        'walletconnect-v2',
+      ];
+    }
     const connection = await connector.openConnectionMethodSelectionDialog({
       language,
       connectWalletTitle,
       connectWalletMobileWarning,
+      onEvent,
     });
     commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     return connection;
