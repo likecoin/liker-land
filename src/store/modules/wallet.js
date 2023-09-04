@@ -467,10 +467,10 @@ const actions = {
     this.$api
       .$get(
         getNFTEvents({
-          involver: address,
+          receiver: address,
           limit: WALLET_EVENT_LIMIT,
           actionType: ['/cosmos.nft.v1beta1.MsgSend'],
-          ignoreToList: LIKECOIN_NFT_API_WALLET,
+          ignoreFromList: LIKECOIN_NFT_API_WALLET,
           reverse: true,
         })
       )
@@ -487,18 +487,35 @@ const actions = {
     // Get followees events
     followees.forEach(async followee => {
       try {
-        const followeeEvents = await this.$api.$get(
-          getNFTEvents({
-            involver: followee,
-            limit: WALLET_EVENT_LIMIT,
-            actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft', 'new_class'],
-            ignoreToList: LIKECOIN_NFT_API_WALLET,
-            reverse: true,
-          })
-        );
+        const [followeeSentEvents, followeeReceivedEvents] = await Promise.all([
+          this.$api.$get(
+            getNFTEvents({
+              sender: followee,
+              limit: WALLET_EVENT_LIMIT,
+              actionType: [
+                '/cosmos.nft.v1beta1.MsgSend',
+                'buy_nft',
+                'new_class',
+              ],
+              ignoreToList: LIKECOIN_NFT_API_WALLET,
+              reverse: true,
+            })
+          ),
+          this.$api.$get(
+            getNFTEvents({
+              receiver: followee,
+              limit: WALLET_EVENT_LIMIT,
+              actionType: ['/cosmos.nft.v1beta1.MsgSend', 'buy_nft'],
+              reverse: true,
+            })
+          ),
+        ]);
+        const followeeEvents = []
+          .concat(followeeSentEvents.events)
+          .concat(followeeReceivedEvents.events);
 
         dispatch('processEvents', {
-          events: followeeEvents.events,
+          events: followeeEvents,
           address,
         });
       } catch (error) {
