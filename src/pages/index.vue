@@ -273,14 +273,13 @@
               })"
               @click.native="handleTryCollectButtonClickInHeroSection"
             />
-            <!--
             <ButtonV2
+              v-if="publishStoryURL"
               :text="$t('index_page_hero_publish_story_button')"
               :href="publishStoryURL"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInHeroSection"
             />
-            -->
           </nav>
 
         </div>
@@ -462,14 +461,13 @@
                     })"
                     @click.native="handleTryCollectButtonClickInHeroSection"
                   />
-                  <!--
                   <ButtonV2
+                    v-if="publishStoryURL"
                     :text="$t('index_page_hero_publish_story_button')"
                     :href="publishStoryURL"
                     preset="tertiary"
                     @click.native="handlePublishStoryButtonClickInHeroSection"
                   />
-                  -->
                 </nav>
               </div>
             </div>
@@ -1113,8 +1111,7 @@
               src="~assets/images/index/we-handle-the-tech-for-you.png"
             />
           </template>
-          <!--
-          <template #append>
+          <template v-if="publishStoryURL" #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_3_cta_button')"
               :href="publishStoryURL"
@@ -1122,7 +1119,6 @@
               @click.native="handlePublishStoryButtonClickInNewCultureSection"
             />
           </template>
-          -->
         </IndexPageHeadingContentWithCTA>
       </div>
     </section>
@@ -1192,8 +1188,7 @@
           :is-small="true"
         />
 
-        <!--
-        <footer class="flex flex-col items-center gap-[1rem] mt-[3rem]">
+        <footer v-if="publishStoryURL" class="flex flex-col items-center gap-[1rem] mt-[3rem]">
           <ButtonV2
             :text="$t('index_page_all_stories_matter_cta_button')"
             :href="publishStoryURL"
@@ -1201,7 +1196,6 @@
             @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
           />
         </footer>
-        -->
       </div>
     </section>
 
@@ -1215,7 +1209,6 @@ import staticBookCover from '~/assets/images/index/nft-book-cover.jpg';
 import animatedBookCover from '~/assets/images/index/nft-book-cover.mp4';
 
 import {
-  APP_LIKE_CO_URL_BASE,
   LIKECOIN_NFT_CLASS_FREE_MINT,
   LIKECOIN_NFT_BOOK_ITEMS,
 } from '~/constant';
@@ -1237,7 +1230,9 @@ export default {
   },
   computed: {
     publishStoryURL() {
-      return APP_LIKE_CO_URL_BASE;
+      return this.$i18n.locale === 'zh-Hant'
+        ? 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm'
+        : '';
     },
     heroSectionStyle() {
       return {
