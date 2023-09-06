@@ -136,11 +136,11 @@
                   <p
                     class="inline text-black font-600 text-16"
                     place="fromName"
-                  >{{ event.fromName }}</p>
+                  >{{ event.fromName | ellipsis }}</p>
                   <p
                     class="inline text-black font-600 text-16"
                     place="toName"
-                  >{{ event.toName }}</p>
+                  >{{ event.toName | ellipsis }}</p>
                   <p
                     class="inline italic text-black font-600"
                     place="nftName"
