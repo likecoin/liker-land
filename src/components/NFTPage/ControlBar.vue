@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center">
-    <div v-if="isCollector && view !== 'created'" class="flex gap-[12px]">
+  <div v-if="shouldShowControlBar" class="flex items-center justify-end w-full gap-[12px]">
+    <template v-if="isCollectorButNotCreator">
       <ButtonV2
         v-if="currentNftId"
         size="mini"
@@ -20,8 +20,8 @@
         @mouseenter.once="handleMouseEnterSell"
         @click.native="handleClickSell"
       />
-    </div>
-    <div v-else-if="price && !isCollector" class="flex gap-[12px]">
+    </template>
+    <template v-else-if="isPotentialCollector">
       <Label
         class="!text-[12px] text-medium-gray"
         :text="collectButtonText"
@@ -35,10 +35,10 @@
           <IconPrice />
         </template>
       </ButtonV2>
-    </div>
+    </template>
 
     <template v-if="collectedCount">
-      <MenuButtonDivider class="bg-medium-gray" />
+      <MenuButtonDivider class="bg-medium-gray !mx-[4px]" />
       <NuxtLink
         :to="detailsPageRoute"
         @click.native="handleClickUserCollectedCount"
@@ -112,6 +112,19 @@ export default {
       // For NFT Details page
       return (
         this.collectedCount && this.collectedNftIds.includes(this.currentNftId)
+      );
+    },
+    isCollectorButNotCreator() {
+      return this.isCollector && this.view !== 'created';
+    },
+    isPotentialCollector() {
+      return !!this.price && !this.isCollector;
+    },
+    shouldShowControlBar() {
+      return (
+        !!this.collectedCount ||
+        this.isCollectorButNotCreator ||
+        this.isPotentialCollector
       );
     },
     detailsPageRoute() {
