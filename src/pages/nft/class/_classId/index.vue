@@ -4,20 +4,18 @@
     <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
 
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
-        <div class="flex items-center justify-end w-full">
-          <NFTPageControlBar
-            :collected-count="ownCount"
-            :class-id="classId"
-            :price="controlBarPriceLabel"
-            :collected-nft-ids="userCollectedNFTList"
-            :next-nft-id="nftIdCollectNext"
-            :is-writing-nft="nftIsWritingNFT"
-            @transfer="onToggleTransfer"
-            @click-sell="handleClickSellFromControlBar"
-            @collect="handleCollectFromControlBar"
-            @go-to-collect="handleGotoCollectFromControlBar"
-          />
-        </div>
+        <NFTPageControlBar
+          :collected-count="ownCount"
+          :class-id="classId"
+          :price="controlBarPriceLabel"
+          :collected-nft-ids="userCollectedNFTList"
+          :next-nft-id="nftIdCollectNext"
+          :is-writing-nft="nftIsWritingNFT"
+          @transfer="onToggleTransfer"
+          @click-sell="handleClickSellFromControlBar"
+          @collect="handleCollectFromControlBar"
+          @go-to-collect="handleGotoCollectFromControlBar"
+        />
 
         <!-- CTA -->
         <NFTPageCollectCTA
