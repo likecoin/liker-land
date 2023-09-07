@@ -105,6 +105,7 @@
                 :timestamp="e.timestamp"
                 :class-id="e.class_id"
                 :nft-id="e.nft_id"
+                :batch-send-list="getFeedEventBatchSendList(e.tx_hash)"
                 @sender-click="handleClickFeedSender"
                 @receiver-click="handleClickFeedReceiver"
                 @follow="handleFollowFeed"
@@ -329,6 +330,7 @@ export default {
       'getHasFetchMemo',
       'getFeedEventMemo',
       'getAvailableFeedTxList',
+      'getFeedEventBatchSendList',
     ]),
     wallet() {
       return this.getAddress;

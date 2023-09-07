@@ -10,6 +10,7 @@ import { catchAxiosError } from '~/util/misc';
 import { amountToLIKE, getNFTHistoryDataMap } from '~/util/nft';
 import { signLoginMessage } from '~/util/cosmos';
 import {
+  getChainExplorerTx,
   getUserInfoMinByAddress,
   getUserV2Self,
   postUserV2Login,
@@ -264,6 +265,8 @@ const getters = {
   },
   getHasFetchMemo: state => tx => tx in state.feedEventMemoByTxMap,
   getFeedEventMemo: state => tx => (state.feedEventMemoByTxMap[tx] || {}).memo,
+  getFeedEventBatchSendList: state => tx =>
+    (state.feedEventMemoByTxMap[tx] || {}).batchSendList,
   getAvailableFeedTxList: state =>
     Object.keys(state.feedEventMemoByTxMap).filter(
       txHash => state.feedEventMemoByTxMap[txHash]?.memo
@@ -575,10 +578,21 @@ const actions = {
     const txHash = categorizedEvent.tx_hash;
     const event = { ...categorizedEvent };
     let memo;
+    let batchSendList = null;
 
     switch (event.type) {
       case 'send':
-        memo = event.memo;
+        try {
+          const { tx } = await this.$api.$get(getChainExplorerTx(txHash));
+          if (tx.body.messages?.length > 1) {
+            const receiverList = tx.body.messages.map(
+              message => message.receiver
+            );
+            dispatch('lazyGetUserInfoByAddresses', receiverList);
+            batchSendList = receiverList;
+          }
+          memo = event.memo;
+        } catch (error) {}
         break;
 
       case 'publish':
@@ -625,7 +639,7 @@ const actions = {
 
     commit(WALLET_SET_FEED_EVENT_MEMO, {
       txHash,
-      event: { memo },
+      event: { memo, batchSendList },
     });
     return memo;
   },
