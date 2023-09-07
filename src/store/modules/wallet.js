@@ -83,7 +83,7 @@ const state = () => ({
   isFetchingFollowers: false,
   eventLastSeenTs: 0,
   events: [],
-  followeeEvents: [],
+  followeeEventsMap: {},
   feedEventMemoByTxMap: {},
   isInited: null,
   methodType: null,
@@ -214,8 +214,8 @@ const mutations = {
   [WALLET_SET_FOLLOWEE_EVENT_FETCHING](state, isFetching) {
     state.isFetchingFolloweeEvent = isFetching;
   },
-  [WALLET_SET_FOLLOWEE_EVENTS](state, events) {
-    state.followeeEvents = events;
+  [WALLET_SET_FOLLOWEE_EVENTS](state, { txHash, event }) {
+    Vue.set(state.followeeEventsMap, txHash, event);
   },
   [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
     Vue.set(state.feedEventMemoByTxMap, txHash, event);
@@ -239,7 +239,7 @@ const getters = {
   walletIsFetchingFolloweeEvents: state => state.isFetchingFolloweeEvent,
   getIsFetchingEvent: state => state.isFetchingEvent,
   getEvents: state => state.events.slice(0, WALLET_EVENT_LIMIT),
-  getFolloweeEvents: state => state.followeeEvents,
+  getFolloweeEvents: state => Object.values(state.followeeEventsMap),
   getLatestEventTimestamp: state =>
     state.events[0]?.timestamp &&
     new Date(state.events[0]?.timestamp).getTime(),
@@ -265,8 +265,6 @@ const getters = {
   },
   getHasFetchMemo: state => tx => tx in state.feedEventMemoByTxMap,
   getFeedEventMemo: state => tx => (state.feedEventMemoByTxMap[tx] || {}).memo,
-  getFeedEventBatchSendList: state => tx =>
-    (state.feedEventMemoByTxMap[tx] || {}).batchSendList,
   getAvailableFeedTxList: state =>
     Object.keys(state.feedEventMemoByTxMap).filter(
       txHash => state.feedEventMemoByTxMap[txHash]?.memo
@@ -529,7 +527,12 @@ const actions = {
   },
 
   processEvents({ state, commit }, { events, address }) {
+    const { followees } = state;
+
+    // 1. sort events
     events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    // 2. category events
     const categorizeEvent = event => {
       switch (event.action) {
         case '/cosmos.nft.v1beta1.MsgSend':
@@ -549,12 +552,12 @@ const actions = {
     };
     const categorizedEvents = events.map(categorizeEvent);
 
-    // filter available events
+    // 3. filter available events
     const filteredEvents = categorizedEvents.filter(event => {
-      if (event.sender === address) {
-        return false;
-      }
-      if (event.type !== 'send' && event.receiver === address) {
+      if (
+        event.sender === address ||
+        (event.type !== 'send' && event.receiver === address)
+      ) {
         return false;
       }
       if (event.type === 'send') {
@@ -563,11 +566,59 @@ const actions = {
       return true;
     });
 
-    if (filteredEvents?.length) {
-      const existingEvents = state.followeeEvents || [];
-      const updatedEvents = [...existingEvents, ...filteredEvents];
-      commit(WALLET_SET_FOLLOWEE_EVENTS, updatedEvents);
+    // 4. group batch send events
+    const batchSendEventsMap = new Map();
+
+    const isPotentialBatchSendEvent = ({ type, sender, txHash }) =>
+      type === 'send' &&
+      followees.includes(sender) &&
+      !batchSendEventsMap.has(txHash);
+
+    const isBatchSendEvent = ({ type, sender, txHash }) =>
+      type === 'send' &&
+      followees.includes(sender) &&
+      batchSendEventsMap.has(txHash);
+
+    filteredEvents.forEach(event => {
+      const { type, sender, tx_hash: txHash, receiver } = event;
+      if (isPotentialBatchSendEvent({ type, sender, txHash })) {
+        batchSendEventsMap.set(txHash, { ...event, batchSendList: [receiver] });
+      } else if (isBatchSendEvent({ type, sender, txHash })) {
+        const storedBatchSendEvent = batchSendEventsMap.get(txHash);
+        if (!storedBatchSendEvent.batchSendList.includes(receiver)) {
+          storedBatchSendEvent.batchSendList.push(receiver);
+        }
+      }
+      if (filteredEvents?.length) {
+        filteredEvents.forEach(event => {
+          const existingEvents = state.followeeEventsMap[event.tx_hash];
+          commit(WALLET_SET_FOLLOWEE_EVENTS, {
+            txHash: event.tx_hash,
+            event: { ...existingEvents, ...event },
+          });
+        });
+      }
+    });
+
+    // 5. update batchSendList to store
+    if (batchSendEventsMap.size) {
+      const eventsMap = Array.from(batchSendEventsMap.values());
+      eventsMap.forEach(value => {
+        if (value.batchSendList.length > 1) {
+          const index = filteredEvents.findIndex(
+            event => event.tx_hash === value.tx_hash
+          );
+          if (index !== -1) {
+            filteredEvents[index] = value;
+            commit(WALLET_SET_FOLLOWEE_EVENTS, {
+              txHash: value.tx_hash,
+              event: value,
+            });
+          }
+        }
+      });
     }
+
     return filteredEvents;
   },
 
@@ -578,21 +629,10 @@ const actions = {
     const txHash = categorizedEvent.tx_hash;
     const event = { ...categorizedEvent };
     let memo;
-    let batchSendList = null;
 
     switch (event.type) {
       case 'send':
-        try {
-          const { tx } = await this.$api.$get(getChainExplorerTx(txHash));
-          if (tx.body.messages?.length > 1) {
-            const receiverList = tx.body.messages.map(
-              message => message.receiver
-            );
-            dispatch('lazyGetUserInfoByAddresses', receiverList);
-            batchSendList = receiverList;
-          }
-          memo = event.memo;
-        } catch (error) {}
+        memo = event.memo;
         break;
 
       case 'publish':
@@ -639,7 +679,7 @@ const actions = {
 
     commit(WALLET_SET_FEED_EVENT_MEMO, {
       txHash,
-      event: { memo, batchSendList },
+      event: { memo },
     });
     return memo;
   },
