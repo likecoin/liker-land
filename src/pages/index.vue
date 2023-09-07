@@ -1199,6 +1199,9 @@
       </div>
     </section>
 
+    <client-only>
+      <lazy-component @show.once="handleScrollHitBottom" />
+    </client-only>
   </main>
 </template>
 
@@ -1653,6 +1656,9 @@ export default {
             scrub: 0.1,
             snap: 'labelsDirectional',
           },
+          onComplete: () => {
+            logTrackerEvent(this, 'IndexPage', 'IndexScrollPassHero', '', 1);
+          },
         });
 
         this.$options.heroSectionScrollAnimation.addLabel('slide2');
@@ -1933,6 +1939,15 @@ export default {
           fastScrollEnd: true,
           toggleActions: 'play none none reset',
         },
+        onComplete: () => {
+          logTrackerEvent(
+            this,
+            'IndexPage',
+            'IndexScrollHitAboutLikerLand',
+            '',
+            1
+          );
+        },
       });
 
       timeline.addLabel('start');
@@ -2010,6 +2025,9 @@ export default {
           fastScrollEnd: true,
           toggleActions: 'play none none none',
         },
+        onComplete: () => {
+          logTrackerEvent(this, 'IndexPage', 'IndexScrollHitNFTBook', '', 1);
+        },
       });
 
       timeline.addLabel('start');
@@ -2062,6 +2080,9 @@ export default {
           end: `bottom center+=5%`,
           pin: fansKeyArt,
           scrub: 0.5,
+        },
+        onComplete: () => {
+          logTrackerEvent(this, 'IndexPage', 'IndexScrollHitNewCulture', '', 1);
         },
       });
 
@@ -2204,6 +2225,9 @@ export default {
         '',
         1
       );
+    },
+    handleScrollHitBottom() {
+      logTrackerEvent(this, 'IndexPage', 'IndexScrollHitBottom', '', 1);
     },
   },
 };
