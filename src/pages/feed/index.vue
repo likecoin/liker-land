@@ -693,6 +693,7 @@ export default {
       if (!this.pendingMemoFetchList.length) return;
 
       if (!this.isFetchingEventsWithMemo) {
+        logTrackerEvent(this, 'SocialFeed', 'FeedLoadMore', this.wallet, 1);
         this.fetchEventsWithMemo();
       }
     },
