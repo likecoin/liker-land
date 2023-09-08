@@ -110,7 +110,7 @@
       <div v-if="isBatchSendEvent" class="flex flex-col gap-[12px]">
         <div class="flex gap-[8px]">
           <IconTransfer class="flex-shrink-0 text-medium-gray" />
-          <ul class="flex gap-[8px] flex-wrap">
+          <ul class="flex gap-[8px] flex-wrap items-center">
             <li
               v-for="receiver of formattedBatchSendList"
               :key="receiver.wallet"
@@ -124,8 +124,7 @@
                         name: 'id',
                         params: { id: receiver.wallet },
                       })
-                    : ''
-                "
+                    : ''"
                 target="_blank"
                 @click.native="$emit('receiver-click', receiver.wallet)"
               >

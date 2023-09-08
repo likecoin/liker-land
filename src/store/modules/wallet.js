@@ -569,55 +569,52 @@ const actions = {
     // 4. group batch send events
     const batchSendEventsMap = new Map();
 
-    const isPotentialBatchSendEvent = ({ type, sender, txHash }) =>
+    const isEligibleForBatchSendMap = ({ type, sender, txHash }) =>
       type === 'send' &&
       followees.includes(sender) &&
       !batchSendEventsMap.has(txHash);
 
-    const isBatchSendEvent = ({ type, sender, txHash }) =>
+    const isAlreadyInBatchSendMap = ({ type, sender, txHash }) =>
       type === 'send' &&
       followees.includes(sender) &&
       batchSendEventsMap.has(txHash);
 
     filteredEvents.forEach(event => {
       const { type, sender, tx_hash: txHash, receiver } = event;
-      if (isPotentialBatchSendEvent({ type, sender, txHash })) {
+      const storedBatchSendEvent = batchSendEventsMap.get(txHash);
+
+      if (isEligibleForBatchSendMap({ type, sender, txHash })) {
         batchSendEventsMap.set(txHash, { ...event, batchSendList: [receiver] });
-      } else if (isBatchSendEvent({ type, sender, txHash })) {
-        const storedBatchSendEvent = batchSendEventsMap.get(txHash);
+      } else if (isAlreadyInBatchSendMap({ type, sender, txHash })) {
         if (!storedBatchSendEvent.batchSendList.includes(receiver)) {
           storedBatchSendEvent.batchSendList.push(receiver);
         }
       }
-      if (filteredEvents?.length) {
-        filteredEvents.forEach(event => {
-          const existingEvents = state.followeeEventsMap[event.tx_hash];
-          commit(WALLET_SET_FOLLOWEE_EVENTS, {
-            txHash: event.tx_hash,
-            event: { ...existingEvents, ...event },
-          });
+
+      // 5.commit batch send events
+      const isBatchSendEvent =
+        storedBatchSendEvent && storedBatchSendEvent.batchSendList?.length > 1;
+      if (isBatchSendEvent) {
+        commit(WALLET_SET_FOLLOWEE_EVENTS, {
+          txHash,
+          event: {
+            ...event,
+            batchSendList: storedBatchSendEvent.batchSendList,
+          },
+        });
+      }
+      // 6.commit non-send || non-batch events
+      else {
+        const existingEvents = state.followeeEventsMap[txHash] || {};
+        commit(WALLET_SET_FOLLOWEE_EVENTS, {
+          txHash,
+          event: {
+            ...existingEvents,
+            ...event,
+          },
         });
       }
     });
-
-    // 5. update batchSendList to store
-    if (batchSendEventsMap.size) {
-      const eventsMap = Array.from(batchSendEventsMap.values());
-      eventsMap.forEach(value => {
-        if (value.batchSendList.length > 1) {
-          const index = filteredEvents.findIndex(
-            event => event.tx_hash === value.tx_hash
-          );
-          if (index !== -1) {
-            filteredEvents[index] = value;
-            commit(WALLET_SET_FOLLOWEE_EVENTS, {
-              txHash: value.tx_hash,
-              event: value,
-            });
-          }
-        }
-      });
-    }
 
     return filteredEvents;
   },
