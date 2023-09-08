@@ -496,6 +496,20 @@
       </div>
     </section>
 
+    <section :class="sectionContentClassWithPadding">
+      <IndexPageFreeCollectCTA
+        :class-id="freeMintNFTClassId"
+        @collect="handleClickCollectForFreeButton"
+        @click-collect-button="handleCollectForFreeButtonClickBelowHeroSection"
+      >
+        <Label
+          class="max-w-[560px] mx-auto mt-[1.5rem] text-[2rem] laptop:text-[2.75rem] font-proxima font-[600]"
+          :text="$t('index_page_free_collect_cta_tagline')"
+          align="center"
+        />
+      </IndexPageFreeCollectCTA>
+    </section>
+
     <section
       id="about-liker-land"
       ref="likerLandSection"
@@ -825,6 +839,13 @@
           :should-resize-src="false"
           @click.native="handleBookItemCardClickInNFTBookSection"
           @click-avatar="handleAuthorClickInNFTBookSection"
+        />
+
+        <IndexPageFreeCollectCTA
+          class="mt-[6rem]"
+          :class-id="freeMintNFTClassId"
+          @collect="handleClickCollectForFreeButton"
+          @click-collect-button="handleCollectForFreeButtonClickInNFTBookSection"
         />
 
         <IndexPageQuote
@@ -1224,13 +1245,21 @@
           :is-small="true"
         />
 
-        <footer v-if="publishStoryURL" class="flex flex-col items-center gap-[1rem] mt-[3rem]">
+        <footer class="flex flex-col items-center gap-[1rem] mt-[3rem]">
           <ButtonV2
+            v-if="publishStoryURL"
             :text="$t('index_page_all_stories_matter_cta_button')"
             :href="publishStoryURL"
             theme="glow"
             preset="secondary"
             @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
+          />
+
+          <IndexPageFreeCollectCTA
+            class="mt-[6rem]"
+            :class-id="freeMintNFTClassId"
+            @collect="handleClickCollectForFreeButton"
+            @click-collect-button="handleCollectForFreeButtonClickInAllStoriesMatterSection"
           />
         </footer>
       </div>
@@ -2197,11 +2226,29 @@ export default {
         this.isDesktop = window.innerWidth > 768;
       });
     },
+    handleClickCollectForFreeButton() {
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.freeMintNFTClassId },
+          query: { action: 'collect' },
+        })
+      );
+    },
     handleTryCollectButtonClickInHeroSection() {
       logTrackerEvent(this, 'IndexPage', 'IndexHeroTryCollectClick', '', 1);
     },
     handlePublishStoryButtonClickInHeroSection() {
       logTrackerEvent(this, 'IndexPage', 'IndexHeroPublishStoryClick', '', 1);
+    },
+    handleCollectForFreeButtonClickBelowHeroSection() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexHeroSectionBelowFreeCollectClick',
+        '',
+        1
+      );
     },
     handleBookItemCardClickInNFTBookSection() {
       logTrackerEvent(
@@ -2241,6 +2288,9 @@ export default {
     },
     handleCTAClickInNFTBookSection() {
       logTrackerEvent(this, 'IndexPage', 'IndexNFTBookCTAClick', '', 1);
+    },
+    handleCollectForFreeButtonClickInNFTBookSection() {
+      logTrackerEvent(this, 'IndexPage', 'IndexNFTBookFreeCollectClick', '', 1);
     },
     handleAboutWritingNFTButtonClickInNewCultureSection() {
       logTrackerEvent(
@@ -2286,6 +2336,15 @@ export default {
     },
     handleMoveTrendingNFT() {
       logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTMove', '', 1);
+    },
+    handleCollectForFreeButtonClickInAllStoriesMatterSection() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexAllStoriesMatterFreeCollectClick',
+        '',
+        1
+      );
     },
     handleScrollHitBottom() {
       logTrackerEvent(this, 'IndexPage', 'IndexScrollHitBottom', '', 1);

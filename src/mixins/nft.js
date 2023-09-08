@@ -282,6 +282,9 @@ export default {
     nftPriceInLIKE() {
       return this.paymentInfo?.LIKEPrice;
     },
+    nftIsFree() {
+      return this.NFTPrice !== undefined && this.NFTPrice === 0;
+    },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.nftPriceInLIKE) : '-';
     },
@@ -601,6 +604,7 @@ export default {
       'lazyGetISCNMetadataById',
       'lazyFetchNFTClassAggregatedInfo',
       'lazyGetNFTClassMetadata',
+      'lazyGetNFTPurchaseAndListingInfo',
       'lazyGetNFTOwners',
       'fetchNFTPurchaseInfo',
       'fetchNFTListingInfo',
@@ -626,7 +630,9 @@ export default {
     },
     async lazyFetchNFTClassMetadata() {
       await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
-      this.lazyGetUserInfoByAddresses(this.iscnOwner);
+      if (this.iscnOwner) {
+        this.lazyGetUserInfoByAddresses(this.iscnOwner);
+      }
     },
     async lazyFetchNFTClassAggregatedData() {
       await catchAxiosError(this.lazyFetchNFTClassAggregatedInfo(this.classId));
