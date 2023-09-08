@@ -12,6 +12,10 @@
     :is-disabled-backdrop-click="true"
     @close="$emit('close')"
   >
+    <template #prepend>
+      <slot name="prepend" />
+    </template>
+
     <template #header-prepend>
       <slot name="header-prepend" />
     </template>
@@ -27,7 +31,7 @@
         <slot v-if="$slots.title" name="title" />
         <Label
           v-else-if="formattedStatusTitle"
-          class="text-like-green font-600"
+          :class="[isMidAutumnStyle ? 'text-like-cyan-light' : 'text-like-green', 'font-600']"
           preset="h4"
           align="center"
           :text="formattedStatusTitle"
@@ -35,7 +39,7 @@
         <slot v-if="$slots.message" name="message" />
         <Label
           v-else-if="formattedStatusText"
-          class="text-medium-gray mt-[12px]"
+          :class="[isMidAutumnStyle ? 'text-white' : 'text-medium-gray', 'mt-[12px]']"
           preset="h6"
           align="center"
           :text="formattedStatusText"
@@ -135,6 +139,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import MidAutumnBg from '~/assets/images/mid-autumn/bg.jpg';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import alertMixin from '~/mixins/alert';
@@ -173,6 +179,10 @@ export default {
       type: String,
       default: '',
     },
+    isMidAutumnStyle: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return { isShowQuitConfirm: false };
@@ -186,14 +196,22 @@ export default {
       'walletMethodType',
     ]),
     dialogProps() {
-      return {
-        panelContainerClass: 'phone:max-w-[520px] laptop:w-[520px]',
-        panelClass:
-          'shadow-lg bg-white w-full p-[48px] phone:p-[18px] rounded-[24px]',
+      const props = {
+        panelContainerClass: this.isMidAutumnStyle
+          ? 'max-w-[380px] w-full'
+          : 'max-w-[520px] w-full',
+        panelClass: this.isMidAutumnStyle
+          ? 'shadow-lg text-white bg-[#184158] bg-cover bg-no-repeat bg-center w-full min-h-[380px] pt-[10.5rem] p-[48px] phone:px-[32px] rounded-[380px]'
+          : 'shadow-lg bg-white w-full p-[48px] phone:p-[16px] rounded-[24px]',
         open: this.isOpen,
         hasCloseButton: this.hasCloseButton || !!this.uiTxErrorMessage,
         headerText: this.headerText,
+        preset: this.isMidAutumnStyle ? 'custom' : 'basic',
       };
+      if (this.isMidAutumnStyle) {
+        props.panelStyle = `background-blend-mode: multiply; background-image: url(${MidAutumnBg})`;
+      }
+      return props;
     },
     formattedErrorMessage() {
       switch (this.uiTxErrorMessage) {

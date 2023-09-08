@@ -371,6 +371,8 @@
   "nft_collect_modal_method_like_available_amount": "Available {amount}",
   "nft_collect_modal_method_like_purchase_like": "Not enough LIKE?",
   "nft_collect_modal_method_stripe": "Pay by card",
+  "nft_collect_modal_mid_autumn_description_content": "「天覆地載，物數號萬。從石器到陶瓷，從日晷到鐘錶，從毛筆到鉛筆字，從算盤到電腦，從書本到 NFT，人和物自古也是一體。我們都是『人物』，而『人物』都有故事。」",
+  "nft_collect_modal_mid_autumn_description_heading": "Collect for Mid-autmn Featival",
   "nft_collect_modal_subtitle_select_collect_method": "Select a collect method",
   "nft_collect_modal_title_collect": "Collect NFT",
   "nft_collect_modal_title_collecting": "Collecting NFT",
