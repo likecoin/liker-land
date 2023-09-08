@@ -20,11 +20,12 @@
         <!-- CTA -->
         <NFTPageCollectCTA
           v-if="nftIsWritingNFT"
+          :class-id="classId"
           :nft-image-url="NFTImageUrl"
           :creator-message="creatorMessage"
           :iscn-owner="iscnOwner"
           :is-collectable="nftIsCollectable"
-          :should-highlight-collect-expiry-time="shouldHighlightCollectExpiryTime"
+          :is-free="nftIsFree"
           :collect-expiry-time="collectExpiryTime"
           @click-cta-button="handleCollectFromCTA"
         />
