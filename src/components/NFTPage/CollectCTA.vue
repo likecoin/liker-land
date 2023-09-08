@@ -2,6 +2,33 @@
   <div :class="rootClasses">
 
     <div
+      v-if="isMidAutumnStyle"
+      :class="[
+        'flex',
+        'flex-row',
+        'flex-wrap',
+        'justify-center',
+        'items-center laptop:items-start',
+        'gap-[20px] laptop:gap-[40px]',
+      ]"
+    >
+      <div class="laptop:order-3 mx-[100%] laptop:mx-0 mb-[60px] ">
+        <NFTMidAutumnMoonGraphic class="mt-[-61%]" />
+      </div>
+      <MidAutumnSloganText class="hidden" />
+      <svg
+        v-for="index in 4"
+        :key="`text-${index}`"
+        class="mt-[-48px]"
+        width="26"
+        height="38"
+        :style="`order: ${index >= 3 ? index + 1 : index};`"
+      >
+        <use :xlink:href="`#mid-autumn-slogan-text-${index}`" fill="#184158" />
+      </svg>
+    </div>
+    <div
+      v-else
       :class="[
         'flex',
         'flex-col laptop:flex-row',
@@ -121,7 +148,12 @@
 </template>
 
 <script>
+import MidAutumnSloganText from '~/assets/images/mid-autumn/slogan-text.svg?inline';
+
 export default {
+  components: {
+    MidAutumnSloganText,
+  },
   props: {
     classId: {
       type: String,
@@ -154,6 +186,10 @@ export default {
     collectExpiryTime: {
       type: Number,
       default: 0,
+    },
+    isMidAutumnStyle: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

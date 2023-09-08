@@ -8,6 +8,7 @@ import {
   LIKECOIN_BUTTON_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
+  LIKECOIN_NFT_CLASS_FREE_MINT,
   NFT_DISPLAY_STATE,
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
@@ -562,6 +563,9 @@ export default {
       }
 
       return recommendedList.slice(0, 5);
+    },
+    nftIsMidAutumnStyle() {
+      return this.classId === LIKECOIN_NFT_CLASS_FREE_MINT;
     },
   },
   watch: {

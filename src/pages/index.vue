@@ -1,7 +1,7 @@
 <template>
   <main
     ref="page"
-    class="pb-[10rem]"
+    class="pb-[10rem] overflow-hidden"
     style="opacity: 0"
   >
 
