@@ -205,7 +205,7 @@
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
         />
-        <ul v-if="isFreeNFT" class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
+        <ul v-if="nftIsFree" class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
           <li >
             <EventModalCollectMethodButton
               :class="{ 'border-like-cyan': !mintedFreeNFT }"
@@ -447,9 +447,6 @@ export default {
         this.NFTPrice > 0 &&
         !notSupportedPlatforms.includes(this.walletMethodType)
       );
-    },
-    isFreeNFT() {
-      return this.NFTPrice !== undefined && this.NFTPrice === 0;
     },
     mintedFreeNFT() {
       return this.purchaseInfo?.canFreeCollect === false;

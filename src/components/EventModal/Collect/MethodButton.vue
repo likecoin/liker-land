@@ -10,7 +10,7 @@
       <slot v-if="$slots.prepend" name="prepend" />
       <EventModalCollectMethodIcon
         v-else
-        class="w-[24px] h-[24px] text-like-green"
+        :class="[{ 'w-[24px] h-[24px]': type !== 'free' }, 'text-like-green']"
         :type="type"
       />
     </template>
