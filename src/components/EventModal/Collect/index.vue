@@ -406,6 +406,7 @@ export default {
       'walletFollowees',
       'walletIsLoggingIn',
       'walletInteractedCreators',
+      'getIsSubscribedToCreator',
     ]),
     enableStripe() {
       return !checkIsLikeCoinAppInAppBrowser(this.$route);
@@ -592,6 +593,7 @@ export default {
       'walletAddInteractedCreator',
       'walletUnfollowCreator',
       'addNFTClassToShoppingCart',
+      'lazyUpdateNFTSubscriberInfo',
     ]),
     startExposureAnimation(time = performance.now(), lastTime = time) {
       if (this.isProcessing) {
@@ -624,6 +626,9 @@ export default {
       this.removeNFTFiatPriceInfoByClassId(this.classId);
       this.fetchNFTPrices();
       this.fetchUserCollectedCount();
+      if (this.getIsSubscribedToCreator(this.iscnOwner)) {
+        this.lazyUpdateNFTSubscriberInfo();
+      }
     },
     async handleSelectPaymentMethod(method) {
       const { classId } = this;
