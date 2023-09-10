@@ -10,7 +10,6 @@ import { catchAxiosError } from '~/util/misc';
 import { amountToLIKE, getNFTHistoryDataMap } from '~/util/nft';
 import { signLoginMessage } from '~/util/cosmos';
 import {
-  getChainExplorerTx,
   getUserInfoMinByAddress,
   getUserV2Self,
   postUserV2Login,
@@ -63,6 +62,7 @@ import {
   WALLET_SET_ROYALTY_DETAILS,
   WALLET_SET_TOTAL_RESALES,
   WALLET_SET_RESALE_DETAILS,
+  WALLET_SET_BATCH_SEND_EVENT_MAP,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -85,6 +85,7 @@ const state = () => ({
   events: [],
   followeeEventsMap: {},
   feedEventMemoByTxMap: {},
+  batchSendEventsMap: {},
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -219,6 +220,9 @@ const mutations = {
   },
   [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
     Vue.set(state.feedEventMemoByTxMap, txHash, event);
+  },
+  [WALLET_SET_BATCH_SEND_EVENT_MAP](state, { txHash, event }) {
+    Vue.set(state.batchSendEventsMap, txHash, event);
   },
 };
 
@@ -567,55 +571,65 @@ const actions = {
     });
 
     // 4. group batch send events
-    const batchSendEventsMap = new Map();
-
     const isEligibleForBatchSendMap = ({ type, sender, txHash }) =>
       type === 'send' &&
       followees.includes(sender) &&
-      !batchSendEventsMap.has(txHash);
+      !state.batchSendEventsMap[txHash];
 
     const isAlreadyInBatchSendMap = ({ type, sender, txHash }) =>
       type === 'send' &&
       followees.includes(sender) &&
-      batchSendEventsMap.has(txHash);
+      state.batchSendEventsMap[txHash];
 
     filteredEvents.forEach(event => {
       const { type, sender, tx_hash: txHash, receiver } = event;
-      const storedBatchSendEvent = batchSendEventsMap.get(txHash);
+      const storedBatchSendEvent = state.batchSendEventsMap[txHash];
 
       if (isEligibleForBatchSendMap({ type, sender, txHash })) {
-        batchSendEventsMap.set(txHash, { ...event, batchSendList: [receiver] });
+        commit('WALLET_SET_BATCH_SEND_EVENT_MAP', {
+          txHash,
+          event: { ...event, batchSendList: [receiver] },
+        });
       } else if (isAlreadyInBatchSendMap({ type, sender, txHash })) {
         if (!storedBatchSendEvent.batchSendList.includes(receiver)) {
-          storedBatchSendEvent.batchSendList.push(receiver);
+          const { batchSendList } = storedBatchSendEvent;
+          commit('WALLET_SET_BATCH_SEND_EVENT_MAP', {
+            txHash,
+            event: { ...event, batchSendList: [...batchSendList, receiver] },
+          });
         }
       }
+    });
 
-      // 5.commit batch send events
+    // 5. commit events
+    filteredEvents.forEach(event => {
+      const { type, tx_hash: txHash } = event;
+      const storedBatchSendEvent = state.batchSendEventsMap[txHash];
+
       const isBatchSendEvent =
         storedBatchSendEvent && storedBatchSendEvent.batchSendList?.length > 1;
+      const key = `${type}-${txHash}`;
       if (isBatchSendEvent) {
         commit(WALLET_SET_FOLLOWEE_EVENTS, {
           txHash,
           event: {
             ...event,
             batchSendList: storedBatchSendEvent.batchSendList,
+            key,
           },
         });
-      }
-      // 6.commit non-send || non-batch events
-      else {
-        const existingEvents = state.followeeEventsMap[txHash] || {};
+      } else {
+        const existingEvents = state.followeeEventsMap[key] || {};
         commit(WALLET_SET_FOLLOWEE_EVENTS, {
           txHash,
           event: {
             ...existingEvents,
             ...event,
+            key,
           },
         });
       }
     });
-
     return filteredEvents;
   },
 
