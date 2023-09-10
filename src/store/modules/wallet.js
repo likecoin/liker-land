@@ -215,11 +215,11 @@ const mutations = {
   [WALLET_SET_FOLLOWEE_EVENT_FETCHING](state, isFetching) {
     state.isFetchingFolloweeEvent = isFetching;
   },
-  [WALLET_SET_FOLLOWEE_EVENTS](state, { txHash, event }) {
-    Vue.set(state.followeeEventsMap, txHash, event);
+  [WALLET_SET_FOLLOWEE_EVENTS](state, { key, event }) {
+    Vue.set(state.followeeEventsMap, key, event);
   },
-  [WALLET_SET_FEED_EVENT_MEMO](state, { txHash, event }) {
-    Vue.set(state.feedEventMemoByTxMap, txHash, event);
+  [WALLET_SET_FEED_EVENT_MEMO](state, { key, event }) {
+    Vue.set(state.feedEventMemoByTxMap, key, event);
   },
   [WALLET_SET_BATCH_SEND_EVENT_MAP](state, { txHash, event }) {
     Vue.set(state.batchSendEventsMap, txHash, event);
@@ -267,11 +267,12 @@ const getters = {
       return count;
     }, 0);
   },
-  getHasFetchMemo: state => tx => tx in state.feedEventMemoByTxMap,
-  getFeedEventMemo: state => tx => (state.feedEventMemoByTxMap[tx] || {}).memo,
+  getHasFetchMemo: state => key => key in state.feedEventMemoByTxMap,
+  getFeedEventMemo: state => key =>
+    (state.feedEventMemoByTxMap[key] || {}).memo,
   getAvailableFeedTxList: state =>
     Object.keys(state.feedEventMemoByTxMap).filter(
-      txHash => state.feedEventMemoByTxMap[txHash]?.memo
+      key => state.feedEventMemoByTxMap[key]?.memo
     ),
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
@@ -611,7 +612,7 @@ const actions = {
       const key = `${type}-${txHash}`;
       if (isBatchSendEvent) {
         commit(WALLET_SET_FOLLOWEE_EVENTS, {
-          txHash,
+          key,
           event: {
             ...event,
             batchSendList: storedBatchSendEvent.batchSendList,
@@ -621,7 +622,7 @@ const actions = {
       } else {
         const existingEvents = state.followeeEventsMap[key] || {};
         commit(WALLET_SET_FOLLOWEE_EVENTS, {
-          txHash,
+          key,
           event: {
             ...existingEvents,
             ...event,
@@ -634,8 +635,8 @@ const actions = {
   },
 
   async lazyFetchEventsMemo({ commit, dispatch, getters }, categorizedEvent) {
-    if (getters.getHasFetchMemo(categorizedEvent.tx_hash))
-      return getters.getFeedEventMemo(categorizedEvent.tx_hash);
+    if (getters.getHasFetchMemo(categorizedEvent.key))
+      return getters.getFeedEventMemo(categorizedEvent.key);
 
     const txHash = categorizedEvent.tx_hash;
     const event = { ...categorizedEvent };
@@ -687,9 +688,10 @@ const actions = {
         memo = '';
         break;
     }
+    const key = `${categorizedEvent.type}-${categorizedEvent.tx_hash}`;
 
     commit(WALLET_SET_FEED_EVENT_MEMO, {
-      txHash,
+      key,
       event: { memo },
     });
     return memo;
@@ -937,6 +939,7 @@ const actions = {
     commit(WALLET_SET_SALES_DETAILS, []);
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
+    commit(WALLET_SET_BATCH_SEND_EVENT_MAP, {});
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(
