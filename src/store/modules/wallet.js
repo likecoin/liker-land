@@ -62,7 +62,6 @@ import {
   WALLET_SET_ROYALTY_DETAILS,
   WALLET_SET_TOTAL_RESALES,
   WALLET_SET_RESALE_DETAILS,
-  WALLET_SET_BATCH_SEND_EVENT_MAP,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -85,7 +84,6 @@ const state = () => ({
   events: [],
   followeeEventsMap: {},
   feedEventMemoByTxMap: {},
-  batchSendEventsMap: {},
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -220,9 +218,6 @@ const mutations = {
   },
   [WALLET_SET_FEED_EVENT_MEMO](state, { key, event }) {
     Vue.set(state.feedEventMemoByTxMap, key, event);
-  },
-  [WALLET_SET_BATCH_SEND_EVENT_MAP](state, { txHash, event }) {
-    Vue.set(state.batchSendEventsMap, txHash, event);
   },
 };
 
@@ -571,65 +566,45 @@ const actions = {
       return true;
     });
 
+    const batchSendListMap = new Map();
+
     // 4. group batch send events
-    const isEligibleForBatchSendMap = ({ type, sender, txHash }) =>
-      type === 'send' &&
-      followees.includes(sender) &&
-      !state.batchSendEventsMap[txHash];
-
-    const isAlreadyInBatchSendMap = ({ type, sender, txHash }) =>
-      type === 'send' &&
-      followees.includes(sender) &&
-      state.batchSendEventsMap[txHash];
-
+    const isPotentialBatchSendEvent = ({ type, sender }) =>
+      type === 'send' && followees.includes(sender);
     filteredEvents.forEach(event => {
       const { type, sender, tx_hash: txHash, receiver } = event;
-      const storedBatchSendEvent = state.batchSendEventsMap[txHash];
 
-      if (isEligibleForBatchSendMap({ type, sender, txHash })) {
-        commit('WALLET_SET_BATCH_SEND_EVENT_MAP', {
-          txHash,
-          event: { ...event, batchSendList: [receiver] },
-        });
-      } else if (isAlreadyInBatchSendMap({ type, sender, txHash })) {
-        if (!storedBatchSendEvent.batchSendList.includes(receiver)) {
-          const { batchSendList } = storedBatchSendEvent;
-          commit('WALLET_SET_BATCH_SEND_EVENT_MAP', {
-            txHash,
-            event: { ...event, batchSendList: [...batchSendList, receiver] },
-          });
+      if (isPotentialBatchSendEvent({ type, sender, txHash })) {
+        if (!batchSendListMap[txHash]) {
+          batchSendListMap[txHash] = [];
+        }
+        if (!batchSendListMap[txHash].includes(receiver)) {
+          batchSendListMap[txHash].push(receiver);
         }
       }
     });
 
     // 5. commit events
     filteredEvents.forEach(event => {
-      const { type, tx_hash: txHash } = event;
-      const storedBatchSendEvent = state.batchSendEventsMap[txHash];
-
+      const { type, sender, tx_hash: txHash } = event;
       const isBatchSendEvent =
-        storedBatchSendEvent && storedBatchSendEvent.batchSendList?.length > 1;
+        isPotentialBatchSendEvent({ type, sender }) &&
+        batchSendListMap[txHash]?.length > 1;
       const key = `${type}-${txHash}`;
-      if (isBatchSendEvent) {
-        commit(WALLET_SET_FOLLOWEE_EVENTS, {
-          key,
-          event: {
-            ...event,
-            batchSendList: storedBatchSendEvent.batchSendList,
-            key,
-          },
-        });
-      } else {
-        const existingEvents = state.followeeEventsMap[key] || {};
-        commit(WALLET_SET_FOLLOWEE_EVENTS, {
-          key,
-          event: {
-            ...existingEvents,
-            ...event,
-            key,
-          },
-        });
-      }
+      const existingEvents = state.followeeEventsMap[key] || {};
+      commit(WALLET_SET_FOLLOWEE_EVENTS, {
+        key,
+        event: {
+          ...existingEvents,
+          ...event,
+          key: existingEvents.key || key,
+          batchSendList:
+            existingEvents.batchSendList ||
+            (isBatchSendEvent
+              ? batchSendListMap[txHash]
+              : existingEvents.batchSendList),
+        },
+      });
     });
     return filteredEvents;
   },
@@ -939,7 +914,6 @@ const actions = {
     commit(WALLET_SET_SALES_DETAILS, []);
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
-    commit(WALLET_SET_BATCH_SEND_EVENT_MAP, {});
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(
