@@ -361,12 +361,12 @@ export default {
       return [];
     },
     pendingMemoFetchList() {
-      return this.formattedEvents.filter(e => !this.getHasFetchMemo(e.key));
+      return this.formattedEvents.filter(e => !this.getHasFetchMemo(e?.key));
     },
     displayedEvents() {
       if (this.getAvailableFeedTxList) {
         return this.formattedEvents.filter(e =>
-          this.getAvailableFeedTxList.includes(e.key)
+          this.getAvailableFeedTxList.includes(e?.key)
         );
       }
       return [];
@@ -414,7 +414,7 @@ export default {
     formattedEvents: {
       immediate: true,
       handler(formattedEvents) {
-        if (formattedEvents.length && !this.hasStartedFetchingFirstBatch) {
+        if (formattedEvents?.length && !this.hasStartedFetchingFirstBatch) {
           this.fetchEventsWithMemo();
           this.hasStartedFetchingFirstBatch = true;
         }
@@ -687,8 +687,8 @@ export default {
       return events
         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
         .filter(event => {
-          if (!uniqueTxHashes.has(event.key)) {
-            uniqueTxHashes.add(event.key);
+          if (!uniqueTxHashes.has(event?.key)) {
+            uniqueTxHashes.add(event?.key);
             return true;
           }
           return false;
