@@ -141,7 +141,7 @@
             </li>
             <li v-if="numberOfAlsoSendTo">
               <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
-                {{ $t('feed_also_send_to', { num: numberOfAlsoSendTo }) }}
+                {{ $tc('feed_also_send_to', numberOfAlsoSendTo, { num: numberOfAlsoSendTo }) }}
               </p>
             </li>
           </ul>
