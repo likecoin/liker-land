@@ -203,6 +203,9 @@ export const NFT_DISPLAY_STATE = {
   DEFAULT: 'default',
 };
 
+export const NFT_CLASS_LATEST_DISPLAY_COUNT = 10;
+export const NFT_CLASS_TRENDING_MAX_OWNER = 2;
+
 // NOTE: Limitation of LikeCoin API for batch collect
 export const BATCH_COLLECT_MAX = 100;
 
