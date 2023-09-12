@@ -36,6 +36,7 @@
         to: nftCollectRoute,
         tag: 'NuxtLink',
       }"
+      :is-single-column="isSingleColumn"
       @view-details="handleClickViewDetails"
       @view-content="handleClickViewContent"
       @collect="handleClickCollect"
@@ -66,6 +67,10 @@ export default {
     storyDescription: {
       type: String,
       default: '',
+    },
+    isSingleColumn: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

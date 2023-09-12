@@ -1,10 +1,18 @@
 <template>
   <div>
     <header
+      v-if="!isSingleColumn"
       v-t="isCollectable ? 'campaign_nft_item_header_hint' : 'campaign_nft_item_header_hint_uncollectable'"
-      class="text-black text-[12px] leading-[5/3]"
+      class="text-black text-[12px] leading-[5/3] mb-[8px]"
     />
-    <div class="mt-[8px] grid laptop:grid-cols-2 grid-cols-row gap-[16px]">
+    <div
+      :class="[
+        { 'grid': !isSingleColumn },
+        'laptop:grid-cols-2',
+        'grid-cols-row',
+        'gap-[16px]',
+      ]"
+    >
       <div :class="{ 'order-2': !!storyTitle }">
         <NFTWidgetBaseCard class="flex flex-col items-center w-full">
           <NFTWidgetContentPreview
@@ -12,13 +20,14 @@
               hoverClass,
               'transition-shadow',
               'cursor-pointer',
-              'min-h-[300px]',
               'w-full',
+              isSingleColumn ? 'min-h-[245px]' : 'min-h-[300px]',
             ]"
             :title="title"
             :description="description"
             :img-src="imgSrc"
             :img-bg-color="imgBgColor"
+            :is-fixed-height="isSingleColumn"
             v-bind="contentPreviewProps"
             @click="handleClickNFTDetails"
           />
@@ -73,7 +82,7 @@
           </NuxtLink>
         </template>
         <NFTSupplyTable
-          v-else
+          v-else-if="!isSingleColumn"
           class="w-full laptop:mt-[8px] laptop:pr-[8px]"
           :sold-count="soldCount"
           :base-price="basePrice"
@@ -107,11 +116,11 @@
             </li>
           </ul>
           <ProgressIndicator v-if="isLoading" />
-          <CollectButton 
-            v-else-if="isCollectable" 
+          <CollectButton
+            v-else-if="isCollectable"
             :button-text="$t('nft_widget_button_collect')"
             :is-collectable="isCollectable"
-            :collect-expiry-time="collectExpiryTime" 
+            :collect-expiry-time="collectExpiryTime"
             @click-collect-button="handleClickCollect"
           />
         </div>
@@ -244,6 +253,11 @@ export default {
     storyDescription: {
       type: String,
       default: '',
+    },
+
+    isSingleColumn: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

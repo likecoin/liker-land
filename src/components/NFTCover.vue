@@ -1,7 +1,12 @@
 <template>
   <div class="flex items-stretch shrink-0 w-min">
     <div
-      class="relative bg-gray-9b w-full"
+      :class="[
+        'relative',
+        'bg-gray-9b',
+        'w-full',
+        { 'aspect-[1200/630]': isFixedHeight },
+      ]"
       :style="rootStyle"
     >
       <video
@@ -57,6 +62,10 @@ export default {
     size: {
       type: Number,
       default: 720,
+    },
+    isFixedHeight: {
+      type: Boolean,
+      default: false,
     },
     bgColor: {
       type: String,
@@ -116,6 +125,7 @@ export default {
         {
           'animate-pulse': !this.isLoaded,
           'h-[290px] w-[204px]': this.isNftBook,
+          'aspect-[inherit]': !this.isNftBook && this.isFixedHeight,
         },
       ];
     },

@@ -1126,11 +1126,27 @@
     <section id="all-story-matters">
       <IndexPageHeading :text="$t('index_page_all_stories_matter_heading')" />
 
+      <div class="relative pt-[5rem] pb-[4rem]">
+        <client-only>
+          <lazy-component
+            class="absolute inset-0 -top-full pointer-events-none"
+            @show.once="fetchTrendingNFTList"
+          />
+        </client-only>
+        <IndexPageTrendingNFTList
+          :class-ids="trendingNFTList"
+          @slide-prev="handleClickPrevTrendingNFT"
+          @slide-next="handleClickNextTrendingNFT"
+          @slider-move="handleMoveTrendingNFT"
+        />
+      </div>
+
+      <hr class="max-w-[1024px] h-[2px] mx-auto border-t-[2px] border-shade-gray rounded-full"/>
+
       <div :class="sectionContentClassWithPadding">
         <p
           :class="[
             'mx-auto',
-            'mt-[2rem]',
             'max-w-[700px]',
             'text-[2rem]',
             'text-center',
@@ -1206,6 +1222,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
 import staticBookCover from '~/assets/images/index/nft-book-cover.jpg';
@@ -1232,6 +1250,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['nftClassIdListInTrending']),
+    trendingNFTList() {
+      return this.nftClassIdListInTrending.slice(0, 5);
+    },
     publishStoryURL() {
       return this.$i18n.locale === 'zh-Hant'
         ? 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm'
@@ -1482,6 +1504,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['lazyFetchLatestAndTrendingNFTClassIdList']),
     animate() {
       this.animateHeroSection();
       this.animateLikerLandSection();
@@ -2140,6 +2163,14 @@ export default {
         'transform'
       );
     },
+    async fetchTrendingNFTList() {
+      try {
+        await this.lazyFetchLatestAndTrendingNFTClassIdList();
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error occurred when fetching trending NFTs', error);
+      }
+    },
     handleResize() {
       window.requestAnimationFrame(() => {
         this.isDesktop = window.innerWidth > 768;
@@ -2225,6 +2256,15 @@ export default {
         '',
         1
       );
+    },
+    handleClickPrevTrendingNFT() {
+      logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTClickPrev', '', 1);
+    },
+    handleClickNextTrendingNFT() {
+      logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTClickNext', '', 1);
+    },
+    handleMoveTrendingNFT() {
+      logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTMove', '', 1);
     },
     handleScrollHitBottom() {
       logTrackerEvent(this, 'IndexPage', 'IndexScrollHitBottom', '', 1);
