@@ -204,7 +204,7 @@
   "FeaturedPage": {
     "headerLabel": "Today"
   },
-  "feed_also_send_to": "also send to {num} people",
+  "feed_also_send_to": "also sent to {num} people",
   "feed_empty_action": "follow",
   "feed_empty_description": "It is quiet here! Try to {action} some creators to make this plaza lively!",
   "feed_end_of_items": "End of feed",

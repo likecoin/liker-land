@@ -52,7 +52,7 @@
       <IconCreativeWork />
 
       <NuxtLink
-        :to="nftLink"
+        :to="nftTitleRoute"
         class="text-[12px] hover:underline"
         target="_blank"
         @click.native="$emit('nft-title-click', { classId, nftId})"
@@ -83,7 +83,7 @@
 
       <!-- send & collect receiver Info -->
       <div
-        v-if="shouldShowSendOrCollectReceiverInfo"
+        v-if="shouldShowReceiverInfoForSendOrCollect"
         class="flex items-center justify-start gap-[6px]"
       >
         <IconTransfer class="text-medium-gray" />
@@ -285,7 +285,7 @@ export default {
     nftTitle() {
       return this.nftName || this.classId;
     },
-    nftLink() {
+    nftTitleRoute() {
       let link = '';
       if (this.isBatchSendEvent) {
         link = this.localeLocation({
@@ -306,7 +306,7 @@ export default {
     shouldShowItemCard() {
       return this.type === EVENT_TYPE.PUBLISH;
     },
-    shouldShowSendOrCollectReceiverInfo() {
+    shouldShowReceiverInfoForSendOrCollect() {
       return this.type !== EVENT_TYPE.PUBLISH && !this.isBatchSendEvent;
     },
     shouldShowFollow() {
@@ -322,6 +322,9 @@ export default {
       return this.type === 'send' && this.batchSendList?.length;
     },
     formattedBatchSendList() {
+      if (!this.isBatchSendEvent) {
+        return [];
+      }
       const filteredBatchSendList = this.batchSendList
         .filter(
           receiver =>
@@ -349,7 +352,7 @@ export default {
       if (this.batchSendList?.length > this.formattedBatchSendList.length) {
         num = this.batchSendList.length - this.formattedBatchSendList.length;
       }
-      return this.isBatchSendEvent && num;
+      return num;
     },
   },
   methods: {
