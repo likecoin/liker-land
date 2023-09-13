@@ -86,9 +86,7 @@
                 name: 'id',
                 params: { id: getAddress }
               })"
-            >
-              {{ $t('tx_modal_status_complete_text_collect_portfolio') }}
-            </NuxtLink>
+            >{{ $t('tx_modal_status_complete_text_collect_portfolio') }}</NuxtLink>
           </i18n>
         </Label>
         <div
