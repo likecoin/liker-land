@@ -194,6 +194,7 @@
   "FeaturedPage": {
     "headerLabel": "今天"
   },
+  "feed_also_send_to": "同時也發送給了其他 {num} 個讀者",
   "feed_empty_action": "關注",
   "feed_empty_description": "很靜呢！試試{action}一些作者和朋友，令廣場熱鬧起來吧！",
   "feed_end_of_items": "已經到底囉",
