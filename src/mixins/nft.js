@@ -105,7 +105,7 @@ export default {
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
-      'getNFTClassFiatPriceInfoById',
+      'getNFTClassFiatPriceById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
@@ -283,7 +283,7 @@ export default {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
     },
     nftPriceInUSD() {
-      return this.getNFTClassFiatPriceInfoById(this.classId)?.fiatPrice;
+      return this.getNFTClassFiatPriceById(this.classId);
     },
     NFTPriceUSD() {
       return this.LIKEPriceInUSD * this.NFTPrice;
