@@ -1123,7 +1123,7 @@
       </div>
     </section>
 
-    <section id="all-story-matters">
+    <section id="all-story-matters" class="overflow-hidden">
       <IndexPageHeading :text="$t('index_page_all_stories_matter_heading')" />
 
       <div
