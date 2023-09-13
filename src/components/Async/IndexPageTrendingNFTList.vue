@@ -94,9 +94,7 @@ export default {
           (width - 1024) / 2
         );
         this.swiper.params.slidesOffsetBefore = slidesOffset + 64;
-        this.swiper.params.slidesOffsetAfter =
-          slidesOffset -
-          this.swiperOptions.spaceBetween * (this.classIds.length - 1);
+        this.swiper.params.slidesOffsetAfter = this.swiper.params.slidesOffsetBefore;
         this.swiper.update();
       });
     },
