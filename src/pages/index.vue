@@ -1219,7 +1219,7 @@
           />
 
           <IndexPageFreeCollectCTA
-            class="mt-[6rem]"
+            class="mt-[6rem] w-full"
             :class-id="freeMintNFTClassId"
             @collect="handleClickCollectForFreeButton"
             @click-collect-button="handleCollectForFreeButtonClickInAllStoriesMatterSection"
