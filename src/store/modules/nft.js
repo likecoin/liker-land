@@ -54,11 +54,8 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO](state, { classId, data }) {
     if (data) {
-      const { fiatPrice, listingInfo } = data;
-      Vue.set(state.fiatPriceInfoByClassIdMap, classId, {
-        fiatPrice,
-        listingInfo,
-      });
+      const { fiatPrice } = data;
+      Vue.set(state.fiatPriceInfoByClassIdMap, classId, { fiatPrice });
     } else {
       Vue.delete(state.fiatPriceInfoByClassIdMap, classId);
     }
@@ -400,10 +397,10 @@ const actions = {
   },
   async fetchNFTFiatPriceInfoByClassId({ commit }, classId) {
     if (!classId) return undefined;
-    const { fiatPrice, listingInfo } = await this.$api.$get(
+    const { fiatPrice } = await this.$api.$get(
       api.getStripeFiatPrice({ classId })
     );
-    const data = { fiatPrice, listingInfo };
+    const data = { fiatPrice };
     commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, data });
     return data;
   },

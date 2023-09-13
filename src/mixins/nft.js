@@ -285,9 +285,6 @@ export default {
     nftPriceInUSD() {
       return this.getNFTClassFiatPriceInfoById(this.classId)?.fiatPrice;
     },
-    nftPriceInUSDisListingInfo() {
-      return this.getNFTClassFiatPriceInfoById(this.classId)?.listingInfo;
-    },
     NFTPriceUSD() {
       return this.LIKEPriceInUSD * this.NFTPrice;
     },
@@ -951,10 +948,6 @@ export default {
     async collectNFTWithStripe(classId, { memo = '' }) {
       try {
         const body = { memo };
-        if (this.nftPriceInUSDisListingInfo) {
-          body.nftId = this.listingInfo.nftId;
-          body.seller = this.listingInfo.seller;
-        }
         if (this.walletEmail) {
           body.email = this.walletEmail;
         }
