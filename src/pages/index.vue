@@ -498,11 +498,11 @@
         @collect="handleClickCollectForFreeButton"
         @click-collect-button="handleCollectForFreeButtonClickBelowHeroSection"
       >
-        <Label
+        <!-- <Label
           class="max-w-[560px] mx-auto mt-[1.5rem] text-[2rem] laptop:text-[2.75rem] font-proxima font-[600]"
           :text="$t('index_page_free_collect_cta_tagline')"
           align="center"
-        />
+        /> -->
       </IndexPageFreeCollectCTA>
     </section>
 

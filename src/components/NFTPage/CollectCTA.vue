@@ -67,8 +67,16 @@
       v-if="ctaForFreeDescriptionHeading && ctaForFreeDescriptionContent"
       class="mt-[2rem] laptop:px-[40px]"
     >
-      <Label class="text-like-green" :text="ctaForFreeDescriptionHeading" />
-      <Label class="mt-[0.5rem] leading-[1.5] font-[300]" :text="ctaForFreeDescriptionContent" />
+      <Label
+        class="text-like-green"
+        :text="ctaForFreeDescriptionHeading"
+        :align="isMidAutumnStyle ? 'center' : 'left'"
+      />
+      <Label
+        class="mt-[0.75rem] leading-[1.5] font-[300]"
+        :text="ctaForFreeDescriptionContent"
+        :align="isMidAutumnStyle ? 'center' : 'left'"
+      />
       <CollectButton
         class="mt-[2.5rem]"
         :button-text="ctaButtonText"
