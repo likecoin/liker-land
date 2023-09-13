@@ -107,45 +107,43 @@
       </div>
 
       <!-- batch send receiver info -->
-      <div v-if="isBatchSendEvent" class="flex flex-col gap-[12px]">
-        <div class="flex gap-[8px]">
-          <IconTransfer class="flex-shrink-0 text-medium-gray" />
-          <ul class="flex gap-[8px] flex-wrap items-center">
-            <li
-              v-for="receiver of formattedBatchSendList"
-              :key="receiver.wallet"
-              class="flex"
+      <div v-if="isBatchSendEvent" class="flex gap-[12px]">
+        <IconTransfer class="flex-shrink-0 text-medium-gray" />
+        <ul class="flex gap-[8px] flex-wrap items-center">
+          <li
+            v-for="receiver of formattedBatchSendList"
+            :key="receiver.wallet"
+            class="flex"
+          >
+            <NuxtLink
+              class="flex items-center justify-center gap-[8px] text-like-green group"
+              :to="
+                receiver.wallet
+                  ? localeLocation({
+                      name: 'id',
+                      params: { id: receiver.wallet },
+                    })
+                  : ''"
+              target="_blank"
+              @click.native="$emit('receiver-click', receiver.wallet)"
             >
-              <NuxtLink
-                class="flex items-center justify-center gap-[8px] text-like-green group"
-                :to="
-                  receiver.wallet
-                    ? localeLocation({
-                        name: 'id',
-                        params: { id: receiver.wallet },
-                      })
-                    : ''"
-                target="_blank"
-                @click.native="$emit('receiver-click', receiver.wallet)"
-              >
-                <Identity
-                  class="self-start flex-shrink-0"
-                  :avatar-url="receiver.avatar"
-                  :avatar-size="32"
-                  :is-avatar-outlined="false"
-                />
-                <p class="text-[14px] font-600 text-like-green group-hover:underline">
-                  {{ receiver.displayName }}
-                </p>
-              </NuxtLink>
-            </li>
-            <li v-if="numberOfAlsoSendTo">
-              <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
-                {{ $tc('feed_also_send_to', numberOfAlsoSendTo, { num: numberOfAlsoSendTo }) }}
+              <Identity
+                class="self-start flex-shrink-0"
+                :avatar-url="receiver.avatar"
+                :avatar-size="32"
+                :is-avatar-outlined="false"
+              />
+              <p class="text-[14px] font-600 text-like-green group-hover:underline">
+                {{ receiver.displayName }}
               </p>
-            </li>
-          </ul>
-        </div>
+            </NuxtLink>
+          </li>
+          <li v-if="numberOfAlsoSendTo">
+            <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
+              {{ $tc('feed_also_send_to', numberOfAlsoSendTo, { num: numberOfAlsoSendTo }) }}
+            </p>
+          </li>
+        </ul>
       </div>
     </CardV2>
 
