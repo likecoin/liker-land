@@ -283,7 +283,7 @@ const nuxtConfig = {
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: [{ path: '~/components', ignore: ['~/components/Async/**.*'] }],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [

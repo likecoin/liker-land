@@ -1129,16 +1129,19 @@
       <div class="relative pt-[5rem] pb-[4rem]">
         <client-only>
           <lazy-component
-            class="absolute inset-0 -top-full pointer-events-none"
+            v-if="!trendingNFTList.length"
             @show.once="fetchTrendingNFTList"
+          >
+            <IndexPageTrendingNFTListPlaceholder />
+          </lazy-component>
+          <LazyAsyncIndexPageTrendingNFTList
+            v-else
+            :class-ids="trendingNFTList"
+            @slide-prev="handleClickPrevTrendingNFT"
+            @slide-next="handleClickNextTrendingNFT"
+            @slider-move="handleMoveTrendingNFT"
           />
         </client-only>
-        <IndexPageTrendingNFTList
-          :class-ids="trendingNFTList"
-          @slide-prev="handleClickPrevTrendingNFT"
-          @slide-next="handleClickNextTrendingNFT"
-          @slider-move="handleMoveTrendingNFT"
-        />
       </div>
 
       <hr class="max-w-[1024px] h-[2px] mx-auto border-t-[2px] border-shade-gray rounded-full"/>
