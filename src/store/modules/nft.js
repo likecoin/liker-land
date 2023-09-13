@@ -20,7 +20,7 @@ import { getGemLevelBySoldCount } from '~/util/writing-nft';
 import {
   BATCH_COLLECT_MAX,
   NFT_CLASS_LATEST_DISPLAY_COUNT,
-  NFT_CLASS_TRENDING_MAX_OWNER,
+  NFT_CLASS_TRENDING_LIMIT_PER_OWNER,
   NFT_DISPLAY_STATE,
 } from '~/constant';
 import * as TYPES from '../mutation-types';
@@ -177,7 +177,7 @@ function compareNumber(X, Y, order) {
   }
 }
 
-function limitOwnerForNFTClassList(nftClasses, limit = 1) {
+function limitOwnerForNFTClassList(nftClasses, { limit = 1, max = 10 }) {
   const nftClassList = [];
   const ownerToNFTClassCountMap = {};
   for (let i = 0; i < nftClasses.length; i += 1) {
@@ -189,7 +189,7 @@ function limitOwnerForNFTClassList(nftClasses, limit = 1) {
       nftClassList.push(nftClasses[i]);
       ownerToNFTClassCountMap[owner] += 1;
     }
-    if (nftClassList.length >= NFT_CLASS_LATEST_DISPLAY_COUNT) break;
+    if (nftClassList.length >= max) break;
   }
   return nftClassList;
 }
@@ -802,10 +802,10 @@ const actions = {
     );
     commit(
       TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST,
-      limitOwnerForNFTClassList(
-        trendingClasses,
-        NFT_CLASS_TRENDING_MAX_OWNER
-      ).map(c => c.id)
+      limitOwnerForNFTClassList(trendingClasses, {
+        limit: NFT_CLASS_TRENDING_LIMIT_PER_OWNER,
+        max: NFT_CLASS_LATEST_DISPLAY_COUNT,
+      }).map(c => c.id)
     );
   },
   async lazyFetchLatestAndTrendingNFTClassIdList({ getters, dispatch }) {
