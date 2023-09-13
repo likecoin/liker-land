@@ -79,78 +79,25 @@
         ]"
       >
         {{ /* Main View -- Town */ }}
-        <section
-          v-if="currentMainTab === 'town'"
-          :class="[
-            'w-full',
-            'flex',
-            'flex-col',
-            'items-stretch',
-            'gap-[3rem]',
-          ]"
-        >
-          <template v-if="shouldShowLoading">
-            <SocialFeedPlaceholder />
-          </template>
-          <ul v-if="displayedEvents.length" class="flex flex-col w-full gap-[48px]">
-            <li v-for="e in displayedEvents" :key="e.tx_hash">
-              <client-only>
-                <lazy-component @show.once="fetchInfo({ event: e })" />
-              </client-only>
-              <SocialFeedItem
-                :type="e.type"
-                :sender-address="e.sender"
-                :receiver-address="e.receiver"
-                :memo="getFeedEventMemo(e.key)"
-                :timestamp="e.timestamp"
-                :class-id="e.class_id"
-                :nft-id="e.nft_id"
-                :batch-send-list="e.batchSendList"
-                @sender-click="handleClickFeedSender"
-                @receiver-click="handleClickFeedReceiver"
-                @follow="handleFollowFeed"
-                @nft-title-click="handleClickFeedNFTTitle"
-                @nft-click="handleClickFeedNFT"
-                @nft-collect="handleCollectFeedNFT"
-              />
-            </li>
-          </ul>
-          <template v-if="shouldShowMore">
-            <div
-              v-if="!isFetchingEventsWithMemo"
-              class="py-[128px] text-gray-9b"
-            >
-              <client-only>
-                <lazy-component @show.once="handleInfiniteScrollFeed" />
-              </client-only>
-            </div>
-            <SocialFeedPlaceholder v-if="isFetchingEventsWithMemo"/>
-          </template>
-          <template v-if="shouldShowEnd">
-            <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
-            <div
-              class="flex justify-center font-[600] py-[24px] text-gray-9b"
-            >
-              {{ $t('feed_end_of_items') }}
-            </div>
-          </template>
-          <CardV2
-            v-if="shouldShowEmpty"
-            class="flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
-            :is-outline="true"
-          >
-            <i18n
-              class="text-[0.9em] text-medium-gray text-center p-[3rem]"
-              path="feed_empty_description"
-            >
-              <NuxtLink
-                class="underline text-like-green hover:text-like-green-dark"
-                :to="localeLocation({ name: 'store' })"
-                place="action"
-                @click.native="handleEmptyFeedActionClick"
-              >{{ $t('feed_empty_action') }}</NuxtLink>
-            </i18n>
-          </CardV2>
+        <section v-if="currentMainTab === 'town'">
+          <SocialFeed
+            :should-show-loading="shouldShowLoading"
+            :displayed-events="displayedEvents"
+            :should-show-more="shouldShowMore"
+            :should-show-end="shouldShowEnd"
+            :should-show-empty="shouldShowEmpty"
+            :suggest-to-follow="undefined"
+            :is-fetching-events-with-memo="isFetchingEventsWithMemo"
+            @on-fetch-info="fetchInfo"
+            @on-scroll-feed="handleInfiniteScrollFeed"
+            @on-click-feed="handleEmptyFeedActionClick"
+            @sender-click="handleClickFeedSender"
+            @receiver-click="handleClickFeedReceiver"
+            @follow="handleFollowFeed"
+            @nft-title-click="handleClickFeedNFTTitle"
+            @nft-click="handleClickFeedNFT"
+            @nft-collect="handleCollectFeedNFT"
+          />
         </section>
 
         {{ /* Main View -- collectibles */ }}
@@ -328,7 +275,6 @@ export default {
     ...mapGetters([
       'getFolloweeEvents',
       'getHasFetchMemo',
-      'getFeedEventMemo',
       'getAvailableFeedTxList',
     ]),
     wallet() {
@@ -375,16 +321,22 @@ export default {
       return this.$route.query.view;
     },
     shouldShowLoading() {
-      return this.walletFollowees.length && !this.displayedEvents.length;
+      return Boolean(
+        this.walletFollowees.length && !this.displayedEvents.length
+      );
     },
     shouldShowMore() {
-      return !!this.pendingMemoFetchList.length;
+      return Boolean(this.pendingMemoFetchList.length);
     },
     shouldShowEnd() {
-      return this.displayedEvents.length && !this.pendingMemoFetchList.length;
+      return Boolean(
+        this.displayedEvents.length && !this.pendingMemoFetchList.length
+      );
     },
     shouldShowEmpty() {
-      return !this.pendingMemoFetchList.length && !this.displayedEvents.length;
+      return Boolean(
+        !this.pendingMemoFetchList.length && !this.displayedEvents.length
+      );
     },
   },
 
