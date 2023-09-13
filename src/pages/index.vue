@@ -1126,7 +1126,14 @@
     <section id="all-story-matters">
       <IndexPageHeading :text="$t('index_page_all_stories_matter_heading')" />
 
-      <div class="relative pt-[5rem] pb-[4rem]">
+      <div
+        :class="[
+          sectionContentClass,
+          'relative',
+          'pt-[5rem]',
+          'px-[0.5rem] sm:px-[40px] laptop:px-[88px]',
+        ]"
+      >
         <client-only>
           <lazy-component
             v-if="!trendingNFTList.length"
@@ -1142,9 +1149,9 @@
             @slider-move="handleMoveTrendingNFT"
           />
         </client-only>
-      </div>
 
-      <hr class="max-w-[1024px] h-[2px] mx-auto border-t-[2px] border-shade-gray rounded-full"/>
+        <hr class="mt-[4rem] h-[2px] border-t-[2px] border-shade-gray"/>
+      </div>
 
       <div :class="sectionContentClassWithPadding">
         <p

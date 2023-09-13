@@ -6,14 +6,12 @@
     @click="handleClick"
   >
     <NFTCover
-      v-if="imgSrc"
-      class="grow"
       :src="imgSrc"
       :size="450"
       :is-fixed-height="isFixedHeight"
       :alt="title"
     />
-    <div class="p-[16px] shrink-0">
+    <div class="p-[16px] grow min-h-[76px]">
       <div
         :class="[
           'text-[16px]',

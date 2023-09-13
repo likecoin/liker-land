@@ -1,15 +1,18 @@
 <template>
   <IndexPageTrendingNFTListPlaceholder v-if="!classIds.length" />
-  <div v-else ref="root" class="relative">
+  <div
+    v-else
+    class="index-page-trending-nft-list"
+  >
     <Swiper
       ref="swiper"
       :options="swiperOptions"
-      @ready="handleSwiperReady"
       @slider-move="handleSliderMove"
     >
       <SwiperSlide
         v-for="classId in classIds"
         :key="classId"
+        class="px-[40px] sm:px-0"
         style="
           width: 360px; /* NOTE: Set width in style for auto slide per view calculation */
         "
@@ -21,25 +24,25 @@
       </SwiperSlide>
     </Swiper>
 
-    <div class="sm:absolute inset-0 pointer-events-none z-10">
-      <div class="flex justify-between sm:items-center w-full max-w-[1024px] h-full mx-auto p-[0.5rem]">
-        <ButtonV2
-          class="relative shadow-lg pointer-events-auto scale-75 sm:scale-100"
-          preset="tertiary"
-          :circle="true"
-          @click="handleClickPrev"
-        >
-          <IconArrowLeft class="w-[20px]" />
-        </ButtonV2>
-        <ButtonV2
-          class="relative shadow-lg pointer-events-auto scale-75 sm:scale-100"
-          preset="tertiary"
-          :circle="true"
-          @click="handleClickNext"
-        >
-          <IconArrowLeft class="w-[20px] rotate-180" />
-        </ButtonV2>
-      </div>
+    <div class="sm:absolute inset-0 pointer-events-none z-10 flex justify-between sm:items-center p-[0.5rem] laptop:px-[48px]">
+      <ButtonV2
+        class="relative shadow-lg pointer-events-auto scale-75 sm:scale-100"
+        preset="tertiary"
+        :circle="true"
+        size="small"
+        @click="handleClickPrev"
+      >
+        <IconArrowLeft class="w-[20px]" />
+      </ButtonV2>
+      <ButtonV2
+        class="relative shadow-lg pointer-events-auto scale-75 sm:scale-100"
+        preset="tertiary"
+        :circle="true"
+        size="small"
+        @click="handleClickNext"
+      >
+        <IconArrowLeft class="w-[20px] rotate-180" />
+      </ButtonV2>
     </div>
   </div>
 </template>
@@ -63,8 +66,6 @@ export default {
     swiperOptions() {
       return {
         slidesPerView: 'auto',
-        slidesOffsetAfter: 8,
-        slidesOffsetBefore: 8,
         spaceBetween: 40,
         centeredSlides: true,
         breakpoints: {
@@ -78,26 +79,7 @@ export default {
       return this.$refs.swiper?.$swiper;
     },
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.handleResize);
-  },
   methods: {
-    handleSwiperReady() {
-      this.handleResize();
-      window.addEventListener('resize', this.handleResize);
-    },
-    handleResize() {
-      window.requestAnimationFrame(() => {
-        const width = this.$refs.root.offsetWidth;
-        const slidesOffset = Math.max(
-          this.swiperOptions.slidesOffsetAfter,
-          (width - 1024) / 2
-        );
-        this.swiper.params.slidesOffsetBefore = slidesOffset + 64;
-        this.swiper.params.slidesOffsetAfter = this.swiper.params.slidesOffsetBefore;
-        this.swiper.update();
-      });
-    },
     handleClickPrev() {
       this.$emit('slide-prev');
       this.swiper.slidePrev();
@@ -114,4 +96,9 @@ export default {
 </script>
 <style lang="scss">
 @import 'swiper/swiper.scss';
+
+/* Override swiper styles for this component */
+.index-page-trending-nft-list .swiper-container {
+  overflow: unset;
+}
 </style>

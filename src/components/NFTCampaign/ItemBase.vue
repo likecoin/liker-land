@@ -21,7 +21,7 @@
               'transition-shadow',
               'cursor-pointer',
               'w-full',
-              isSingleColumn ? 'min-h-[245px]' : 'min-h-[300px]',
+              { 'min-h-[300px]': !isSingleColumn },
             ]"
             :title="title"
             :description="description"

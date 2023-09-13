@@ -1,14 +1,11 @@
 <template>
-  <div class="px-[32px] min-h-[425px]">
+  <div class="px-[32px] min-h-[414px]">
     <ul
       :class="[
         'grid',
         'laptop:grid-cols-2 desktop:grid-cols-3',
         'gap-[40px]',
-        'w-full',
-        'max-w-[1024px]',
         'min-h-[inherit]',
-        'mx-auto',
       ]"
     >
       <li
