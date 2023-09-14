@@ -79,21 +79,21 @@
         ]"
       >
         {{ /* Main View -- Town */ }}
-        <section v-if="currentMainTab === 'town'">
+        <section v-if="currentMainTab === 'town'" class="flex justify-center w-full">
           <SocialFeed
             :should-show-loading="shouldShowLoading"
             :displayed-events="displayedEvents"
             :should-show-more="shouldShowMore"
             :should-show-end="shouldShowEnd"
             :should-show-empty="shouldShowEmpty"
-            :suggest-to-follow="undefined"
             :is-fetching-events-with-memo="isFetchingEventsWithMemo"
-            @on-fetch-info="fetchInfo"
+            @on-fetch-event-info="fetchEventInfo"
             @on-scroll-feed="handleInfiniteScrollFeed"
             @on-click-feed="handleEmptyFeedActionClick"
+            @on-click-feed-follow="handleFollowFeed"
+            @on-click-suggested-follow="handleClickSuggestedFollow"
             @sender-click="handleClickFeedSender"
             @receiver-click="handleClickFeedReceiver"
-            @follow="handleFollowFeed"
             @nft-title-click="handleClickFeedNFTTitle"
             @nft-click="handleClickFeedNFT"
             @nft-collect="handleCollectFeedNFT"
@@ -273,9 +273,11 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getAddress',
       'getFolloweeEvents',
       'getHasFetchMemo',
       'getAvailableFeedTxList',
+      'getSuggestedFollowList',
     ]),
     wallet() {
       return this.getAddress;
@@ -343,12 +345,13 @@ export default {
   watch: {
     loginAddress: {
       immediate: true,
-      handler(loginAddress) {
-        if (this.getAddress && loginAddress) {
+      handler(address) {
+        if (address) {
           this.fetchUserInfo();
-          this.loadNFTClassesForCurrentTabByAddress(loginAddress);
-          this.fetchNFTDisplayStateListByAddress(loginAddress);
+          this.loadNFTClassesForCurrentTabByAddress(address);
+          this.fetchNFTDisplayStateListByAddress(address);
           this.updateTopRankedCreators();
+          this.fetchSuggestedFollowList();
           this.hasStartedFetchingFirstBatch = false;
           this.hasStartedFetchingFolloweeEvents = false;
         }
@@ -378,6 +381,7 @@ export default {
     if (this.getAddress) {
       this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
+      this.fetchSuggestedFollowList();
     }
   },
   methods: {
@@ -387,6 +391,7 @@ export default {
       'lazyFetchEventsMemo',
       'lazyGetNFTClassMetadata',
       'fetchFolloweeWalletEvent',
+      'fetchSuggestedFollowList',
     ]),
     fetchUserInfo() {
       this.lazyGetUserInfoByAddress(this.getAddress);
@@ -416,7 +421,7 @@ export default {
         this.isFetchingEventsWithMemo = false;
       }
     },
-    fetchInfo({ event }) {
+    fetchEventInfo({ event }) {
       this.lazyGetNFTClassMetadata(event.class_id);
       this.lazyGetUserInfoByAddresses([event.sender, event.receiver]);
     },
@@ -653,6 +658,9 @@ export default {
         logTrackerEvent(this, 'SocialFeed', 'FeedLoadMore', this.wallet, 1);
         this.fetchEventsWithMemo();
       }
+    },
+    handleClickSuggestedFollow(followee) {
+      logTrackerEvent(this, 'SocialFeed', 'SuggestedFollowClick', followee, 1);
     },
   },
 };

@@ -1,12 +1,12 @@
 <template>
-  <div :class="['w-full', 'flex', 'flex-col', 'items-stretch', 'gap-[3rem]']">
+  <div :class="['w-full','max-w-[500px]', 'flex', 'flex-col', 'items-center', 'gap-[3rem]']">
     <template v-if="shouldShowLoading">
       <SocialFeedPlaceholder />
     </template>
-    <ul v-if="displayedEvents.length" class="flex flex-col w-full gap-[48px]">
-      <li v-for="e in displayedEvents" :key="e.tx_hash">
+    <ul v-if="displayedEvents.length" class="flex flex-col items-center w-full gap-[48px]">
+      <li v-for="e in displayedEvents" :key="e.tx_hash" class="w-full">
         <client-only>
-          <lazy-component @show.once="fetchInfo({ event: e })" />
+          <lazy-component @show.once="handleFetchEventInfo({ event: e })" />
         </client-only>
         <SocialFeedItem
           :type="e.type"
@@ -60,23 +60,63 @@
     </CardV2>
     <CardV2
       v-if="shouldShowEmpty || shouldShowEnd"
-      class="flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
+      class="relative flex flex-col justify-center items-center gap-[1rem] w-full min-h-[25vh]"
       :is-outline="true"
     >
-      suggest follow
+      <div class="flex justify-center font-[600] py-[12px] text-gray-9b">
+        {{ suggestionText }}
+      </div>
+      <ul class="flex flex-col gap-[16px] w-full">
+        <li
+          v-for="{ address, avatar, displayName } in suggestedFollowList"
+          :key="address"
+          class="flex items-center justify-between w-full bg-white p-[16px] rounded-[48px]"
+        >
+          <NuxtLink
+            class="flex items-center justify-center gap-[8px] text-like-green group"
+            :to="
+              address
+                ? localeLocation({ name: 'id', params: { id: address } })
+                : ''"
+            target="_blank"
+            @click.native="$emit('suggested-click', address)"
+          >
+            <Identity
+              class="self-start flex-shrink-0"
+              :avatar-url="avatar"
+              :avatar-size="42"
+              :is-avatar-outlined="false"
+            />
+            <Label class="text-like-green ml-[4px] text-[16px] font-600">{{
+              displayName | ellipsis
+            }}</Label>
+          </NuxtLink>
+          <div>
+            <ButtonV2
+              class="min-w-[138px] rounded-full"
+              :text="$t('settings_follow_follow')"
+              preset="tertiary"
+              @click="() => clickFollow(address)"
+            />
+          </div>
+        </li>
+      </ul>
     </CardV2>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { ellipsisNFTName } from '~/util/ui';
+import { mapActions, mapGetters } from 'vuex';
+import { ellipsisNFTName, ellipsis } from '~/util/ui';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'SocialFeed',
   filters: {
     ellipsisNFTName,
+    ellipsis,
   },
+  mixins: [alertMixin],
   props: {
     shouldShowLoading: {
       type: Boolean,
@@ -104,12 +144,58 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getFeedEventMemo']),
+    ...mapGetters([
+      'getFeedEventMemo',
+      'getSuggestedFollowList',
+      'getUserInfoByAddress',
+    ]),
+    suggestedFollowList() {
+      return this.getSuggestedFollowList.map(address => ({
+        address,
+        avatar: this.getUserInfoByAddress(address)?.avatar,
+        displayName: this.getUserInfoByAddress(address)?.displayName || address,
+      }));
+    },
+    suggestionText() {
+      return this.shouldShowEmpty
+        ? this.$t('feed_suggest_to_follow_for_empty')
+        : this.$t('feed_suggest_to_follow');
+    },
   },
-
+  mounted() {
+    this.fetchSuggestedUserInfo();
+  },
   methods: {
-    fetchInfo({ event }) {
-      this.$emit('on-fetch-info', { event });
+    ...mapActions([
+      'walletFollowCreator',
+      'fetchSuggestedFollowList',
+      'lazyGetUserInfoByAddresses',
+    ]),
+    async clickFollow(wallet) {
+      try {
+        this.$emit('on-click-suggested-follow', wallet);
+        await this.walletFollowCreator(wallet);
+        this.alertPromptSuccess(
+          this.$t('portfolio_subscription_success_alert', {
+            creator: wallet,
+          })
+        );
+        await this.fetchSuggestedFollowList();
+        this.fetchSuggestedUserInfo();
+      } catch (error) {
+        this.alertPromptError(error.toString());
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    },
+    fetchSuggestedUserInfo() {
+      this.lazyGetUserInfoByAddresses(this.getSuggestedFollowList);
+    },
+    handleFetchSuggestedUserInfo() {
+      this.$emit('on-fetch-suggested-user-info');
+    },
+    handleFetchEventInfo({ event }) {
+      this.$emit('on-fetch-event-info', { event });
     },
     handleInfiniteScrollFeed() {
       this.$emit('on-scroll-feed');
@@ -123,8 +209,10 @@ export default {
     handleClickFeedReceiver() {
       this.$emit('receiver-click');
     },
-    handleFollowFeed() {
-      this.$emit('follow');
+    async handleFollowFeed() {
+      this.$emit('on-click-feed-follow');
+      await this.fetchSuggestedFollowList();
+      this.fetchSuggestedUserInfo();
     },
     handleClickFeedNFTTitle() {
       this.$emit('nft-title-click');
