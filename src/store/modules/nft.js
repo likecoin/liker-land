@@ -17,7 +17,12 @@ import {
   saveShoppingCartToStorage,
 } from '~/util/shopping-cart';
 import { getGemLevelBySoldCount } from '~/util/writing-nft';
-import { BATCH_COLLECT_MAX, NFT_DISPLAY_STATE } from '~/constant';
+import {
+  BATCH_COLLECT_MAX,
+  NFT_CLASS_LATEST_DISPLAY_COUNT,
+  NFT_CLASS_TRENDING_LIMIT_PER_OWNER,
+  NFT_DISPLAY_STATE,
+} from '~/constant';
 import * as TYPES from '../mutation-types';
 
 const typeOrder = {
@@ -39,6 +44,8 @@ const state = () => ({
   userNFTClassDisplayStateSetsMap: {},
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
+  latestNFTClassIdList: [],
+  trendingNFTClassIdList: [],
 });
 
 const mutations = {
@@ -123,6 +130,12 @@ const mutations = {
   [TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS](state, map) {
     state.shoppingCartNFTClassByIdMap = map;
   },
+  [TYPES.NFT_SET_LATEST_NFT_CLASS_ID_LIST](state, list) {
+    state.latestNFTClassIdList = list;
+  },
+  [TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST](state, list) {
+    state.trendingNFTClassIdList = list;
+  },
 };
 
 function compareNFTByFeatured(getters, address, classIdA, classIdB) {
@@ -162,6 +175,23 @@ function compareNumber(X, Y, order) {
     default:
       return Y - X;
   }
+}
+
+function limitOwnerForNFTClassList(nftClasses, { limit = 1, max = 10 }) {
+  const nftClassList = [];
+  const ownerToNFTClassCountMap = {};
+  for (let i = 0; i < nftClasses.length; i += 1) {
+    const { owner } = nftClasses[i];
+    if (!ownerToNFTClassCountMap[owner]) {
+      ownerToNFTClassCountMap[owner] = 0;
+    }
+    if (ownerToNFTClassCountMap[owner] < limit) {
+      nftClassList.push(nftClasses[i]);
+      ownerToNFTClassCountMap[owner] += 1;
+    }
+    if (nftClassList.length >= max) break;
+  }
+  return nftClassList;
 }
 
 const getters = {
@@ -330,6 +360,8 @@ const getters = {
   },
   getShoppingCartNFTClassQuantity: state => classId =>
     state.shoppingCartNFTClassByIdMap[classId]?.quantity || 0,
+  nftClassIdListInLatest: state => state.latestNFTClassIdList,
+  nftClassIdListInTrending: state => state.trendingNFTClassIdList,
 };
 
 const actions = {
@@ -746,6 +778,44 @@ const actions = {
       TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS,
       loadShoppingCartFromStorage()
     );
+  },
+  async fetchLatestAndTrendingWNFTClassIdList({ commit }) {
+    const trendingDate = new Date();
+    trendingDate.setDate(trendingDate.getDate() - 14);
+    const trendingDayString = trendingDate.toISOString().split('T')[0];
+    const [trendingRes, latestRes] = await Promise.all([
+      this.$axios.$get(
+        api.getTopNFTClasses({
+          after: new Date(trendingDayString).getTime() / 1000,
+        })
+      ),
+      this.$axios.$get(api.getNFTClassesPartial({ reverse: true })),
+    ]);
+    const [trendingClasses, latestClasses] = [trendingRes, latestRes].map(res =>
+      (res.classes || []).filter(
+        c => c.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
+      )
+    );
+    commit(
+      TYPES.NFT_SET_LATEST_NFT_CLASS_ID_LIST,
+      latestClasses.slice(0, NFT_CLASS_LATEST_DISPLAY_COUNT).map(c => c.id)
+    );
+    commit(
+      TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST,
+      limitOwnerForNFTClassList(trendingClasses, {
+        limit: NFT_CLASS_TRENDING_LIMIT_PER_OWNER,
+        max: NFT_CLASS_LATEST_DISPLAY_COUNT,
+      }).map(c => c.id)
+    );
+  },
+  async lazyFetchLatestAndTrendingNFTClassIdList({ getters, dispatch }) {
+    if (
+      getters.nftClassIdListInLatest.length &&
+      getters.nftClassIdListInTrending.length
+    ) {
+      return;
+    }
+    await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
 };
 
