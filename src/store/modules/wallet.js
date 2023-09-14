@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import {
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
+  DEFAULT_SUGGESTED_FOLLOW_LIST,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
@@ -62,6 +63,7 @@ import {
   WALLET_SET_ROYALTY_DETAILS,
   WALLET_SET_TOTAL_RESALES,
   WALLET_SET_RESALE_DETAILS,
+  WALLET_SET_SUGGESTED_FOLLOW_LIST,
 } from '../mutation-types';
 
 const WALLET_EVENT_LIMIT = 100;
@@ -84,6 +86,7 @@ const state = () => ({
   events: [],
   followeeEventsMap: {},
   feedEventMemoByTxMap: {},
+  suggestedFollowList: [],
   isInited: null,
   methodType: null,
   likeBalance: null,
@@ -219,6 +222,9 @@ const mutations = {
   [WALLET_SET_FEED_EVENT_MEMO](state, { key, event }) {
     Vue.set(state.feedEventMemoByTxMap, key, event);
   },
+  [WALLET_SET_SUGGESTED_FOLLOW_LIST](state, list) {
+    state.suggestedFollowList = list;
+  },
 };
 
 const getters = {
@@ -269,6 +275,8 @@ const getters = {
     Object.keys(state.feedEventMemoByTxMap).filter(
       key => state.feedEventMemoByTxMap[key]?.memo
     ),
+  getSuggestedFollowList: state =>
+    state.suggestedFollowList || DEFAULT_SUGGESTED_FOLLOW_LIST,
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
   walletTotalResales: state => state.totalResales,
@@ -672,6 +680,43 @@ const actions = {
     return memo;
   },
 
+  async fetchSuggestedFollowList({ state, commit }) {
+    const currentFollowees = state.followees;
+    const currentFolloweesSet = new Set(currentFollowees);
+
+    // Cache check and return cached result if it's valid
+    if (
+      state.suggestedFollowList.length &&
+      !currentFollowees.some(user => state.suggestedFollowList.includes(user))
+    ) {
+      return state.suggestedFollowList;
+    }
+
+    let suggestedList = [...DEFAULT_SUGGESTED_FOLLOW_LIST].filter(
+      suggestion => !currentFolloweesSet.has(suggestion)
+    );
+    let currentIndex = 0;
+
+    // If we don't have enough suggestions, fetch more
+    while (suggestedList.length < 3 && currentIndex < currentFollowees.length) {
+      // eslint-disable-next-line no-await-in-loop
+      const { followees = [], pastFollowees = [] } = await this.$axios.$get(
+        getUserV2Followees(currentFollowees[currentIndex])
+      );
+
+      const followSuggestions = [...followees, ...pastFollowees].filter(
+        f => !currentFolloweesSet.has(f)
+      );
+      suggestedList = [...suggestedList, ...followSuggestions];
+
+      currentIndex += 1;
+    }
+
+    const result = suggestedList.slice(0, 3);
+    commit('WALLET_SET_SUGGESTED_FOLLOW_LIST', result);
+    return result;
+  },
+
   async fetchWalletEvents(
     { state, commit, dispatch },
     { shouldFetchDetails = true }
@@ -914,6 +959,7 @@ const actions = {
     commit(WALLET_SET_SALES_DETAILS, []);
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
+    commit(WALLET_SET_SUGGESTED_FOLLOW_LIST, []);
     await this.$api.post(postUserV2Logout());
   },
   async walletUpdateEmail(

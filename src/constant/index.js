@@ -216,3 +216,15 @@ export const NFT_BOOK_PLATFORM_LIKER_LAND = 'liker_land';
 
 export const NFT_LEGACY_DEFAULT_MESSSAGE = 'like.co NFT API';
 export const NFT_BATCH_COLLECT_MESSSAGE = '(multiple purchases)';
+
+export const DEFAULT_SUGGESTED_FOLLOW_LIST = IS_TESTNET
+  ? [
+      'like13v8qtt0jz6y2304559v7l29sy7prz50jqwdewn',
+      'like1qv66yzpgg9f8w46zj7gkuk9wd2nrpqmca3huxf',
+      'like1vvxaklu364sejxe9tdwkg87aanejf8v6gj37y3',
+    ]
+  : [
+      'like19fqws220rwcmacn5dgt0dtwts8c05ty58mcr3a', // dungkaicheung
+      'like13f4glvg80zvfrrs7utft5p68pct4mcq7t5atf6', // ckxpress
+      'like1qfltekkttr8ul49x50dr5f2dq8qjgt58k99v6s', // Chow Sung Ming
+    ];

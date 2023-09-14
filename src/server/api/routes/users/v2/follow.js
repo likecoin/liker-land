@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/followees', authenticateV2Login, async (req, res, next) => {
   try {
-    const { user } = req.session;
+    const user = req.query?.user || req.session.user;
     const userDoc = await walletUserCollection.doc(user).get();
     if (!userDoc.exists) {
       res.json({ followees: [] });
