@@ -239,13 +239,15 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStorePricesByClassIdMap[classId],
-  filterNFTClassListWithState: state => (nfts, wallet) =>
-    nfts.filter(
+  filterNFTClassListWithState: state => (nfts, wallet) => {
+    if (!nfts.length) return [];
+    return nfts.filter(
       ({ classId }) =>
         !state.userNFTClassDisplayStateSetsMap[wallet]?.hiddenClassIdSet?.has(
           classId
         )
-    ),
+    );
+  },
   getNFTClassIdListSorterForCreated: (_, getters) => ({
     list,
     collectorWallet: collector,
@@ -253,9 +255,12 @@ const getters = {
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
     shouldApplyDisplayState,
   }) => {
-    const filtered = shouldApplyDisplayState
-      ? getters.filterNFTClassListWithState(list, collector)
-      : [...list];
+    let filtered = [];
+    if (shouldApplyDisplayState) {
+      filtered = getters.filterNFTClassListWithState(list, collector);
+    } else if (Array.isArray(list)) {
+      filtered = [...list];
+    }
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
       if (
@@ -303,9 +308,12 @@ const getters = {
     order = NFT_CLASS_LIST_SORTING_ORDER.DESC,
     shouldApplyDisplayState,
   }) => {
-    const filtered = shouldApplyDisplayState
-      ? getters.filterNFTClassListWithState(list, collector)
-      : [...list];
+    let filtered = [];
+    if (shouldApplyDisplayState) {
+      filtered = getters.filterNFTClassListWithState(list, collector);
+    } else if (Array.isArray(list)) {
+      filtered = [...list];
+    }
     const sorted = filtered.sort((nA, nB) => {
       const [{ classId: a }, { classId: b }] = [nA, nB];
       if (
