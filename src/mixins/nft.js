@@ -945,7 +945,7 @@ export default {
           return {};
       }
     },
-    async collectNFTWithStripe(classId, { memo = '' }) {
+    async collectNFTWithStripe(classId, { memo = '' } = {}) {
       try {
         const body = { memo };
         if (this.walletEmail) {

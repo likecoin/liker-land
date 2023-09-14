@@ -72,12 +72,21 @@
       </footer>
 
       <div class="flex justify-end mt-[2em]">
-        <div class="flex flex-col items-end">
-          <ButtonV2
-            :text="$t('shopping_cart_checkout_button')"
-            preset="secondary"
-            @click="handleClickCheckoutButton"
-          />
+        <div class="flex items-end gap-4">
+          <EventModalCollectMethodButton
+            :title="$t('shopping_cart_checkout_button_by_LIKE')"
+            type="crypto"
+            @click="handleClickCheckoutByLIKEButton"
+          /> 
+        </div>
+      </div>
+      <div class="flex justify-end mt-[1em]">
+        <div class="flex items-end gap-4">
+          <EventModalCollectMethodButton
+            :title="$t('shopping_cart_checkout_button_by_card')"
+            type="stripe"
+            @click="handleClickCheckoutByFiatButton"
+          /> 
         </div>
       </div>
       <i18n
@@ -123,6 +132,7 @@ import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { signGrant, broadcastTx, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { formatNumberWithLIKE } from '~/util/ui';
 
+import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import walletLoginMixin from '~/mixins/wallet-login';
 
@@ -131,7 +141,7 @@ export default {
   filters: {
     formatNumberWithLIKE,
   },
-  mixins: [walletMixin, walletLoginMixin],
+  mixins: [nftMixin, walletMixin, walletLoginMixin],
   computed: {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
@@ -206,7 +216,7 @@ export default {
       );
       this.removeNFTClassFromShoppingCart({ classId });
     },
-    async handleClickCheckoutButton() {
+    async handleClickCheckoutByLIKEButton() {
       logTrackerEvent(
         this,
         'NFT',
@@ -285,6 +295,21 @@ export default {
         this.uiSetTxStatus(TX_STATUS.FAILED);
       } finally {
         this.walletFetchLIKEBalance();
+      }
+    },
+    async handleClickCheckoutByFiatButton() {
+      try {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectPaymentMethod(Stripe)',
+          this.classIdList,
+          1
+        );
+        await this.collectNFTWithStripe(this.classIdList);
+      } catch (error) {
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
       }
     },
     handleClickEmptyNoticeButton() {

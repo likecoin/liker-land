@@ -648,7 +648,8 @@
     "language": "介面語言",
     "title": "設定"
   },
-  "shopping_cart_checkout_button": "結帳",
+  "shopping_cart_checkout_button_by_LIKE": "以 LIKE 結帳",
+  "shopping_cart_checkout_button_by_card": "以信用卡結帳",
   "shopping_cart_empty_notice": "背包是空的",
   "shopping_cart_empty_notice_button": "瀏覽 NFT",
   "shopping_cart_error_insufficient_balance": "餘額不足，你只有 {balance}",
