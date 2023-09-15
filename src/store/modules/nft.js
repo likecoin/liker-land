@@ -398,7 +398,7 @@ const actions = {
     const { fiatPrice } = await this.$api.$get(
       api.getStripeFiatPrice({ classId })
     );
-    if (Array.isArray(classId)) {
+    if (!Array.isArray(classId)) {
       commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, fiatPrice });
     }
     return fiatPrice;
