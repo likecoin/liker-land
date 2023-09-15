@@ -72,12 +72,23 @@
       </footer>
 
       <div class="flex justify-end mt-[2em]">
-        <div class="flex flex-col items-end">
-          <ButtonV2
-            :text="$t('shopping_cart_checkout_button')"
-            preset="secondary"
-            @click="handleClickCheckoutButton"
-          />
+        <div class="flex items-end gap-4">
+          <EventModalCollectMethodButton
+            :title="$t('shopping_cart_checkout_button_by_LIKE')"
+            type="crypto"
+            :price="totalNFTPrice | formatNumberWithLIKE"
+            @click="handleClickCheckoutByLIKEButton"
+          /> 
+        </div>
+      </div>
+      <div class="flex justify-end mt-[1em]">
+        <div class="flex items-end gap-4">
+          <EventModalCollectMethodButton
+            :title="$t('shopping_cart_checkout_button_by_card')"
+            type="stripe"
+            :price="formattedFiatPrice"
+            @click="handleClickCheckoutByFiatButton"
+          /> 
         </div>
       </div>
       <i18n
@@ -121,8 +132,9 @@ import { TX_STATUS } from '~/constant';
 import { postNFTPurchase } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { signGrant, broadcastTx, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
-import { formatNumberWithLIKE } from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUnit } from '~/util/ui';
 
+import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import walletLoginMixin from '~/mixins/wallet-login';
 
@@ -131,7 +143,12 @@ export default {
   filters: {
     formatNumberWithLIKE,
   },
-  mixins: [walletMixin, walletLoginMixin],
+  mixins: [nftMixin, walletMixin, walletLoginMixin],
+  data() {
+    return {
+      fiatPrice: 0,
+    };
+  },
   computed: {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
@@ -170,6 +187,9 @@ export default {
         return totalPrice + (purchaseInfo?.price * item.quantity || 0);
       }, 0);
     },
+    formattedFiatPrice() {
+      return formatNumberWithUnit(this.fiatPrice, 'USD');
+    },
     grantAmount() {
       return this.shoppingCartNFTClassList.reduce((totalPrice, item) => {
         const purchaseInfo = this.getNFTClassPurchaseInfoById(item.classId);
@@ -182,8 +202,14 @@ export default {
       );
     },
   },
+  watch: {
+    classIdList() {
+      this.updateFiatPrice();
+    },
+  },
   async mounted() {
     await this.lazyFetchLIKEPrice();
+    this.updateFiatPrice();
     logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
   },
   methods: {
@@ -191,6 +217,7 @@ export default {
       'clearShoppingCart',
       'removeNFTClassFromShoppingCart',
       'walletFetchLIKEBalance',
+      'fetchNFTFiatPriceInfoByClassId',
       'uiSetTxError',
       'uiSetTxStatus',
       'uiToggleCollectModal',
@@ -206,7 +233,7 @@ export default {
       );
       this.removeNFTClassFromShoppingCart({ classId });
     },
-    async handleClickCheckoutButton() {
+    async handleClickCheckoutByLIKEButton() {
       logTrackerEvent(
         this,
         'NFT',
@@ -287,6 +314,21 @@ export default {
         this.walletFetchLIKEBalance();
       }
     },
+    async handleClickCheckoutByFiatButton() {
+      try {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'NFTCollectPaymentMethod(Stripe)',
+          this.classIdList,
+          1
+        );
+        await this.collectNFTWithStripe(this.classIdList);
+      } catch (error) {
+        this.uiSetTxError(error.response?.data || error.toString());
+        this.uiSetTxStatus(TX_STATUS.FAILED);
+      }
+    },
     handleClickEmptyNoticeButton() {
       logTrackerEvent(
         this,
@@ -294,6 +336,11 @@ export default {
         'shopping_cart_click_empty_notice_button',
         this.getAddress,
         1
+      );
+    },
+    async updateFiatPrice() {
+      this.fiatPrice = await this.fetchNFTFiatPriceInfoByClassId(
+        this.classIdList
       );
     },
   },
