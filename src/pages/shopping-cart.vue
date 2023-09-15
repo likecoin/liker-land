@@ -76,6 +76,7 @@
           <EventModalCollectMethodButton
             :title="$t('shopping_cart_checkout_button_by_LIKE')"
             type="crypto"
+            :price="totalNFTPrice | formatNumberWithLIKE"
             @click="handleClickCheckoutByLIKEButton"
           /> 
         </div>
@@ -85,6 +86,7 @@
           <EventModalCollectMethodButton
             :title="$t('shopping_cart_checkout_button_by_card')"
             type="stripe"
+            :price="formattedFiatPrice"
             @click="handleClickCheckoutByFiatButton"
           /> 
         </div>
@@ -130,7 +132,7 @@ import { TX_STATUS } from '~/constant';
 import { postNFTPurchase } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { signGrant, broadcastTx, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
-import { formatNumberWithLIKE } from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUnit } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -142,6 +144,11 @@ export default {
     formatNumberWithLIKE,
   },
   mixins: [nftMixin, walletMixin, walletLoginMixin],
+  data() {
+    return {
+      fiatPrice: 0,
+    };
+  },
   computed: {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
@@ -180,6 +187,9 @@ export default {
         return totalPrice + (purchaseInfo?.price * item.quantity || 0);
       }, 0);
     },
+    formattedFiatPrice() {
+      return formatNumberWithUnit(this.fiatPrice, 'USD');
+    },
     grantAmount() {
       return this.shoppingCartNFTClassList.reduce((totalPrice, item) => {
         const purchaseInfo = this.getNFTClassPurchaseInfoById(item.classId);
@@ -192,8 +202,14 @@ export default {
       );
     },
   },
+  watch: {
+    classIdList() {
+      this.updateFiatPrice();
+    },
+  },
   async mounted() {
     await this.lazyFetchLIKEPrice();
+    this.updateFiatPrice();
     logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
   },
   methods: {
@@ -201,6 +217,7 @@ export default {
       'clearShoppingCart',
       'removeNFTClassFromShoppingCart',
       'walletFetchLIKEBalance',
+      'fetchNFTFiatPriceInfoByClassId',
       'uiSetTxError',
       'uiSetTxStatus',
       'uiToggleCollectModal',
@@ -319,6 +336,11 @@ export default {
         'shopping_cart_click_empty_notice_button',
         this.getAddress,
         1
+      );
+    },
+    async updateFiatPrice() {
+      this.fiatPrice = await this.fetchNFTFiatPriceInfoByClassId(
+        this.classIdList
       );
     },
   },
