@@ -115,6 +115,7 @@ export default {
       'getNFTBookStorePricesByClassId',
       'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
+      'uiTxErrorMessage',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
     ]),
@@ -563,6 +564,9 @@ export default {
       }
 
       return recommendedList.slice(0, 5);
+    },
+    nftTxErrorIsAlreadyCollected() {
+      return this.uiTxErrorMessage === 'ALREADY_MINTED';
     },
     nftIsMidAutumnStyle() {
       return this.classId === LIKECOIN_NFT_CLASS_FREE_MINT;

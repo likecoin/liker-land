@@ -215,6 +215,9 @@ export default {
     },
     formattedErrorMessage() {
       switch (this.uiTxErrorMessage) {
+        case 'ALREADY_MINTED':
+          return '';
+
         case 'INSUFFICIENT_BALANCE':
           return this.$t('snackbar_error_insufficient');
 
@@ -305,6 +308,9 @@ export default {
 
         case 'insufficient':
         case 'failed':
+          if (this.nftTxErrorIsAlreadyCollected) {
+            return undefined;
+          }
           return this.$t('tx_modal_button_retry');
 
         case 'completed':

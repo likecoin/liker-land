@@ -73,12 +73,7 @@
           preset="h6"
           align="center"
         >
-          <i18n
-            :path="
-              hasConnectedWallet
-                ? 'tx_modal_status_complete_text_collect'
-                : 'tx_modal_status_complete_text_collect_without_wallet'"
-          >
+          <i18n :path="completedMessageI18nPath">
             <NuxtLink
               class="font-[600] underline"
               place="portfolio"
@@ -473,7 +468,17 @@ export default {
       );
     },
     isCompleted() {
-      return this.uiTxNFTStatus === 'completed';
+      return (
+        this.uiTxNFTStatus === 'completed' || this.nftTxErrorIsAlreadyCollected
+      );
+    },
+    completedMessageI18nPath() {
+      if (this.nftTxErrorIsAlreadyCollected) {
+        return this.$t('nft_collect_modal_already_minted');
+      }
+      return this.hasConnectedWallet
+        ? 'tx_modal_status_complete_text_collect'
+        : 'tx_modal_status_complete_text_collect_without_wallet';
     },
     isInsufficientLIKE() {
       return this.walletLIKEBalance < this.NFTPrice;

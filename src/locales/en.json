@@ -362,6 +362,7 @@
   "nft_collect_modal_added_to_shopping_cart_description": "You added \"{nft}\" to backpack",
   "nft_collect_modal_alert_fail": "Collect {name} fail: {error}",
   "nft_collect_modal_alert_success": "{name} was collected successfully",
+  "nft_collect_modal_already_minted": "You have already collected this work.",
   "nft_collect_modal_free": "Free",
   "nft_collect_modal_go_to_shopping_cart_button": "View backpack",
   "nft_collect_modal_leave_message": "Leave a signed message to creator",
