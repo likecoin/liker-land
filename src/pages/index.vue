@@ -835,12 +835,14 @@
           @click-avatar="handleAuthorClickInNFTBookSection"
         />
 
+        <!-- Hide free collect CTA for now
         <IndexPageFreeCollectCTA
           class="mt-[6rem]"
           :class-id="freeMintNFTClassId"
           @collect="handleClickCollectForFreeButton"
           @click-collect-button="handleCollectForFreeButtonClickInNFTBookSection"
         />
+        -->
 
         <IndexPageQuote
           class="text-black max-w-[650px] mx-auto mt-[5rem]"
