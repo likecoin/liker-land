@@ -112,7 +112,6 @@ export default {
       'getCollectedNFTClassesByAddress',
       'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
-      'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
@@ -286,11 +285,9 @@ export default {
     nftPaymentPriceInUSD() {
       return this.paymentInfo?.fiatPrice;
     },
+    // alias of NFTPrice
     NFTPriceUSD() {
-      return this.LIKEPriceInUSD * this.NFTPrice;
-    },
-    formattedNFTPriceUSD() {
-      return formatNumberWithUSD(this.NFTPriceUSD);
+      return this.NFTPrice;
     },
     formattedNFTPriceInUSD() {
       return this.nftPaymentPriceInUSD !== undefined
@@ -337,7 +334,7 @@ export default {
       const defaultEdition = {
         name: '',
         description: '',
-        priceLabel: formatNumberWithUSD(this.LIKEPriceInUSD * this.NFTPrice),
+        priceLabel: this.formattedNFTPriceInUSD,
         value: 0,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length

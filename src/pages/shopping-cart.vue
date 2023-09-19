@@ -155,7 +155,6 @@ export default {
       'getNFTClassPurchaseInfoById',
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
-      'LIKEPriceInUSD',
       'shoppingCartNFTClassList',
     ]),
     purchaseEventParams() {
