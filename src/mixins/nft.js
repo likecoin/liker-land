@@ -105,7 +105,7 @@ export default {
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
-      'getNFTClassFiatPriceById',
+      'getNFTClassPaymentPriceById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
@@ -138,13 +138,11 @@ export default {
       const info = this.getNFTClassPurchaseInfoById(this.classId) || {};
       const {
         price,
-        totalPrice,
         collectExpiryAt,
         metadata: { nextNewNFTId, soldCount, basePrice } = {},
       } = info;
       return {
         price,
-        totalPrice,
         collectExpiryAt,
         soldCount,
         basePrice,
@@ -159,7 +157,6 @@ export default {
         const { price, nftId, seller } = list[0];
         return {
           price,
-          totalPrice: price,
           classId: this.classId,
           nftId,
           seller,
@@ -269,9 +266,7 @@ export default {
       );
     },
     NFTPrice() {
-      return this.nftIsUseListingPrice
-        ? this.listingInfo.price
-        : this.purchaseInfo.price;
+      return this.purchaseInfo.price;
     },
     collectExpiryTime() {
       return this.purchaseInfo.collectExpiryAt;
@@ -279,11 +274,17 @@ export default {
     nftIsCollectable() {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;
     },
-    formattedNFTPriceInLIKE() {
-      return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
+    paymentInfo() {
+      return this.getNFTClassPaymentPriceById(this.classId) || {};
     },
-    nftPriceInUSD() {
-      return this.getNFTClassFiatPriceById(this.classId);
+    nftPriceInLIKE() {
+      return this.paymentInfo.LIKEPrice;
+    },
+    formattedNFTPriceInLIKE() {
+      return this.NFTPrice ? formatNumberWithLIKE(this.nftPriceInLIKE) : '-';
+    },
+    nftPaymentPriceInUSD() {
+      return this.paymentInfo?.fiatPrice;
     },
     NFTPriceUSD() {
       return this.LIKEPriceInUSD * this.NFTPrice;
@@ -292,8 +293,8 @@ export default {
       return formatNumberWithUnit(this.NFTPriceUSD, 'USD');
     },
     formattedNFTPriceInUSD() {
-      return this.nftPriceInUSD !== undefined
-        ? formatNumberWithUnit(this.nftPriceInUSD, 'USD')
+      return this.nftPaymentPriceInUSD !== undefined
+        ? formatNumberWithUnit(this.nftPaymentPriceInUSD, 'USD')
         : '-';
     },
     controlBarPriceLabel() {
@@ -608,7 +609,7 @@ export default {
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
-      'fetchNFTFiatPriceInfoByClassId',
+      'fetchNFTPaymentPriceInfoByClassId',
       'removeNFTFiatPriceInfoByClassId',
       'initIfNecessary',
       'uiToggleCollectModal',
@@ -638,7 +639,9 @@ export default {
       catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
     async fetchNFTPrices() {
-      await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
+      await catchAxiosError(
+        this.fetchNFTPaymentPriceInfoByClassId(this.classId)
+      );
     },
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
@@ -814,7 +817,7 @@ export default {
         } else {
           signData = await signGrant({
             senderAddress: this.getAddress,
-            amountInLIKE: this.purchaseInfo.totalPrice,
+            amountInLIKE: this.NFTPrice,
             signer: this.getSigner,
             memo,
           });

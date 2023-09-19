@@ -526,8 +526,7 @@ export default {
         .filter(
           c =>
             checkIsWritingNFT(this.getNFTClassMetadataById(c.classId)) &&
-            (c.price > 0 ||
-              this.getNFTClassPurchaseInfoById(c.classId)?.totalPrice > 0)
+            (c.price > 0 || this.NFTPrice > 0)
         )
         .map(n => n.classId)
         .filter(classId => !collectedSet.has(classId));

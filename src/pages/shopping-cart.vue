@@ -67,27 +67,27 @@
       <footer class="mt-[1em] text-right">
         <div class="grid grid-cols-6 items-center gap-[1em]">
           <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">{{ $t('shopping_cart_list_total_price') }}</div>
-          <div class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]">{{ totalNFTPrice | formatNumberWithLIKE }}</div>
+          <div class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]">{{ totalNFTPriceInUSD | formatNumberWithLIKE }}</div>
         </div>
       </footer>
 
       <div class="flex justify-end mt-[2em]">
         <div class="flex items-end gap-4">
           <EventModalCollectMethodButton
-            :title="$t('shopping_cart_checkout_button_by_LIKE')"
-            type="crypto"
-            :price="totalNFTPrice | formatNumberWithLIKE"
-            @click="handleClickCheckoutByLIKEButton"
+            :title="$t('shopping_cart_checkout_button_by_card')"
+            type="stripe"
+            :price="formattedFiatPrice"
+            @click="handleClickCheckoutByFiatButton"
           /> 
         </div>
       </div>
       <div class="flex justify-end mt-[1em]">
         <div class="flex items-end gap-4">
           <EventModalCollectMethodButton
-            :title="$t('shopping_cart_checkout_button_by_card')"
-            type="stripe"
-            :price="formattedFiatPrice"
-            @click="handleClickCheckoutByFiatButton"
+            :title="$t('shopping_cart_checkout_button_by_LIKE')"
+            type="crypto"
+            :price="LIKEPrice | formatNumberWithLIKE"
+            @click="handleClickCheckoutByLIKEButton"
           /> 
         </div>
       </div>
@@ -146,7 +146,7 @@ export default {
   mixins: [nftMixin, walletMixin, walletLoginMixin],
   data() {
     return {
-      fiatPrice: 0,
+      LIKEPrice: 0,
     };
   },
   computed: {
@@ -159,14 +159,14 @@ export default {
     ]),
     purchaseEventParams() {
       return {
-        price: this.totalNFTPrice * this.LIKEPriceInUSD,
+        price: this.totalNFTPriceInUSD,
         currency: 'USD',
         items: [
           {
             classId: this.classIdList,
-            price: this.classIdList
-              .map(classId => this.getNFTClassPurchaseInfoById(classId)?.price)
-              .map(p => p && p * this.LIKEPriceInUSD),
+            price: this.classIdList.map(
+              classId => this.getNFTClassPurchaseInfoById(classId)?.price
+            ),
             name: this.classIdList.map(
               classId => this.getNFTClassMetadataById(classId)?.name
             ),
@@ -177,39 +177,31 @@ export default {
     classIdList() {
       return this.shoppingCartNFTClassList
         .filter(
-          item => this.getNFTClassPurchaseInfoById(item.classId)?.totalPrice > 0
+          item => this.getNFTClassPurchaseInfoById(item.classId)?.price > 0
         )
         .map(item => item.classId);
     },
-    totalNFTPrice() {
+    totalNFTPriceInUSD() {
       return this.shoppingCartNFTClassList.reduce((totalPrice, item) => {
         const purchaseInfo = this.getNFTClassPurchaseInfoById(item.classId);
         return totalPrice + (purchaseInfo?.price * item.quantity || 0);
       }, 0);
     },
     formattedFiatPrice() {
-      return formatNumberWithUnit(this.fiatPrice, 'USD');
-    },
-    grantAmount() {
-      return this.shoppingCartNFTClassList.reduce((totalPrice, item) => {
-        const purchaseInfo = this.getNFTClassPurchaseInfoById(item.classId);
-        return totalPrice + purchaseInfo?.totalPrice * item.quantity;
-      }, 0);
+      return formatNumberWithUnit(this.totalNFTPriceInUSD, 'USD');
     },
     isInsufficientAmount() {
-      return (
-        this.walletLIKEBalance && this.walletLIKEBalance < this.grantAmount
-      );
+      return this.walletLIKEBalance && this.walletLIKEBalance < this.LIKEPrice;
     },
   },
   watch: {
     classIdList() {
-      this.updateFiatPrice();
+      this.updateLIKEPrice();
     },
   },
   async mounted() {
     await this.lazyFetchLIKEPrice();
-    this.updateFiatPrice();
+    this.updateLIKEPrice();
     logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
   },
   methods: {
@@ -217,7 +209,7 @@ export default {
       'clearShoppingCart',
       'removeNFTClassFromShoppingCart',
       'walletFetchLIKEBalance',
-      'fetchNFTFiatPriceInfoByClassId',
+      'fetchNFTPaymentPriceInfoByClassId',
       'uiSetTxError',
       'uiSetTxStatus',
       'uiToggleCollectModal',
@@ -274,7 +266,7 @@ export default {
 
         const signData = await signGrant({
           senderAddress: this.getAddress,
-          amountInLIKE: this.grantAmount,
+          amountInLIKE: this.LIKEPrice,
           signer: this.getSigner,
         });
 
@@ -338,10 +330,11 @@ export default {
         1
       );
     },
-    async updateFiatPrice() {
-      this.fiatPrice = await this.fetchNFTFiatPriceInfoByClassId(
+    async updateLIKEPrice() {
+      const { LIKEPrice } = await this.fetchNFTPaymentPriceInfoByClassId(
         this.classIdList
       );
+      this.LIKEPrice = LIKEPrice;
     },
   },
 };

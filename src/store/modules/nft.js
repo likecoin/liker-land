@@ -33,7 +33,7 @@ const typeOrder = {
 
 const state = () => ({
   iscnMetadataByIdMap: {},
-  fiatPriceByClassIdMap: {},
+  paymentPriceByClassIdMap: {},
   purchaseInfoByClassIdMap: {},
   listingInfoByClassIdMap: {},
   metadataByClassIdMap: {},
@@ -52,11 +52,11 @@ const mutations = {
   [TYPES.NFT_SET_ISCN_METADATA](state, { iscnId, data }) {
     Vue.set(state.iscnMetadataByIdMap, iscnId, data);
   },
-  [TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO](state, { classId, fiatPrice }) {
-    if (fiatPrice) {
-      Vue.set(state.fiatPriceByClassIdMap, classId, fiatPrice);
+  [TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO](state, { classId, info }) {
+    if (info) {
+      Vue.set(state.paymentPriceByClassIdMap, classId, info);
     } else {
-      Vue.delete(state.fiatPriceByClassIdMap, classId);
+      Vue.delete(state.paymentPriceByClassIdMap, classId);
     }
   },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
@@ -209,7 +209,8 @@ const getters = {
   getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
-  getNFTClassFiatPriceById: state => id => state.fiatPriceByClassIdMap[id],
+  getNFTClassPaymentPriceById: state => id =>
+    state.paymentPriceByClassIdMap[id],
   getNFTIscnRecordsById: state => id =>
     state.metadataByClassIdMap[id]?.iscn_record,
   getNFTClassISCNOwnerByClassId: state => id =>
@@ -387,21 +388,25 @@ const actions = {
     }
     return info;
   },
-  removeNFTFiatPriceInfoByClassId({ commit }, classId) {
-    commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, {
+  removeNFTPaymentPriceInfoByClassId({ commit }, classId) {
+    commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
       classId,
-      fiatPrice: null,
+      info: null,
     });
   },
-  async fetchNFTFiatPriceInfoByClassId({ commit }, classId) {
+  async fetchNFTPaymentPriceInfoByClassId({ commit }, classId) {
     if (!classId) return undefined;
-    const { fiatPrice } = await this.$api.$get(
-      api.getStripeFiatPrice({ classId })
+    const { fiatPrice, LIKEPrice } = await this.$api.$get(
+      api.getPaymentPrice({ classId })
     );
+    const info = { fiatPrice, LIKEPrice };
     if (!Array.isArray(classId)) {
-      commit(TYPES.NFT_SET_NFT_CLASS_FIAT_PRICE_INFO, { classId, fiatPrice });
+      commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
+        classId,
+        info,
+      });
     }
-    return fiatPrice;
+    return info;
   },
   async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
     const {
