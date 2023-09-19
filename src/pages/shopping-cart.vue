@@ -199,8 +199,7 @@ export default {
       this.updateLIKEPrice();
     },
   },
-  async mounted() {
-    await this.lazyFetchLIKEPrice();
+  mounted() {
     this.updateLIKEPrice();
     logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
   },
@@ -213,7 +212,6 @@ export default {
       'uiSetTxError',
       'uiSetTxStatus',
       'uiToggleCollectModal',
-      'lazyFetchLIKEPrice',
     ]),
     handleClickRemoveButton(classId) {
       logTrackerEvent(
