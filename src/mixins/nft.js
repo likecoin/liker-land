@@ -36,7 +36,7 @@ import {
   populateGrantEvent,
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
-import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
@@ -290,11 +290,11 @@ export default {
       return this.LIKEPriceInUSD * this.NFTPrice;
     },
     formattedNFTPriceUSD() {
-      return formatNumberWithUnit(this.NFTPriceUSD, 'USD');
+      return formatNumberWithUSD(this.NFTPriceUSD);
     },
     formattedNFTPriceInUSD() {
       return this.nftPaymentPriceInUSD !== undefined
-        ? formatNumberWithUnit(this.nftPaymentPriceInUSD, 'USD')
+        ? formatNumberWithUSD(this.nftPaymentPriceInUSD)
         : '-';
     },
     controlBarPriceLabel() {
@@ -302,7 +302,7 @@ export default {
         // Do not show the second-hand price if there is stock left
         return '';
       }
-      return this.NFTPrice && formatNumberWithLIKE(this.NFTPrice);
+      return this.NFTPrice && formatNumberWithUSD(this.NFTPrice);
     },
     collectorMap() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -337,10 +337,7 @@ export default {
       const defaultEdition = {
         name: '',
         description: '',
-        priceLabel: formatNumberWithUnit(
-          this.LIKEPriceInUSD * this.NFTPrice,
-          'USD'
-        ),
+        priceLabel: formatNumberWithUSD(this.LIKEPriceInUSD * this.NFTPrice),
         value: 0,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
@@ -357,7 +354,7 @@ export default {
               description =
                 description[locale] || description[defaultLocale] || '';
             }
-            const priceLabel = formatNumberWithUnit(edition.price, 'USD');
+            const priceLabel = formatNumberWithUSD(edition.price);
             const { stock } = edition;
             const style = {
               spineColor1: edition.spineColor1 || '#EBEBEB',

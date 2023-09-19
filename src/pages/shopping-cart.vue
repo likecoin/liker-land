@@ -67,7 +67,7 @@
       <footer class="mt-[1em] text-right">
         <div class="grid grid-cols-6 items-center gap-[1em]">
           <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">{{ $t('shopping_cart_list_total_price') }}</div>
-          <div class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]">{{ totalNFTPriceInUSD | formatNumberWithLIKE }}</div>
+          <div class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]">{{ totalNFTPriceInUSD | formatNumberWithUSD }}</div>
         </div>
       </footer>
 
@@ -132,7 +132,7 @@ import { TX_STATUS } from '~/constant';
 import { postNFTPurchase } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { signGrant, broadcastTx, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
-import { formatNumberWithLIKE, formatNumberWithUnit } from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -142,6 +142,7 @@ export default {
   name: 'ShoppingCartPage',
   filters: {
     formatNumberWithLIKE,
+    formatNumberWithUSD,
   },
   mixins: [nftMixin, walletMixin, walletLoginMixin],
   data() {
@@ -188,7 +189,7 @@ export default {
       }, 0);
     },
     formattedFiatPrice() {
-      return formatNumberWithUnit(this.totalNFTPriceInUSD, 'USD');
+      return formatNumberWithUSD(this.totalNFTPriceInUSD);
     },
     isInsufficientAmount() {
       return this.walletLIKEBalance && this.walletLIKEBalance < this.LIKEPrice;
