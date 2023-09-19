@@ -277,7 +277,7 @@ export default {
       return this.getNFTClassPaymentPriceById(this.classId) || {};
     },
     nftPriceInLIKE() {
-      return this.paymentInfo.LIKEPrice;
+      return this.paymentInfo?.LIKEPrice;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.nftPriceInLIKE) : '-';
