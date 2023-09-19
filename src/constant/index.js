@@ -150,6 +150,11 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
       'likenft1yhsps5l8tmeuy9y7k0rjpx97cl67cjkjnzkycecw5xrvjjp6c5yqz0ttmc',
     ];
 
+// 1. Set undefined to disable view content directly for all NFT classes
+// 2. Set empty array to enable view content directly for all NFT classes
+// 3. Set array of NFT class Id to disable view content directly for specific NFT classes
+export const LIKECOIN_NFT_DIRECT_VIEW_CONTENT = IS_TESTNET ? [] : undefined;
+
 // Note: Please remove this when hide NFT feature is released.
 export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
   IS_TESTNET
