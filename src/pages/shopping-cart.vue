@@ -87,6 +87,7 @@
             :title="$t('shopping_cart_checkout_button_by_LIKE')"
             type="crypto"
             :price="LIKEPrice | formatNumberWithLIKE"
+            :is-disabled="isInsufficientAmount"
             @click="handleClickCheckoutByLIKEButton"
           /> 
         </div>
