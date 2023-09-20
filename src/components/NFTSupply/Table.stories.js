@@ -1,11 +1,11 @@
-import { getPrice, getBatchStart } from '../../util/writing-nft';
+import { getUSDPrice, getBatchStart } from '../../util/writing-nft';
 
 import NFTSupplyTable from './Table';
 import NFTSupplyRow from './Row';
 import NFTSupplySlot from './Slot';
 
 const basePrices = [...new Array(9)].map((_, index) =>
-  getPrice(getBatchStart(index))
+  getUSDPrice(getBatchStart(index))
 );
 
 export default {
