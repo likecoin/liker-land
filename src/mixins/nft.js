@@ -771,7 +771,7 @@ export default {
         await this.walletFetchLIKEBalance();
         if (
           this.walletLIKEBalance === 0 ||
-          this.walletLIKEBalance < this.NFTPrice
+          this.walletLIKEBalance < this.nftPriceInLIKE
         ) {
           logTrackerEvent(
             this,
@@ -811,7 +811,7 @@ export default {
         } else {
           signData = await signGrant({
             senderAddress: this.getAddress,
-            amountInLIKE: this.NFTPrice,
+            amountInLIKE: this.nftPriceInLIKE,
             signer: this.getSigner,
             memo,
           });
