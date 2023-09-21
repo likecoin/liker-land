@@ -153,7 +153,7 @@ export const LIKECOIN_NFT_ABOUT_ITEMS = IS_TESTNET
 // 1. Set null to enable view content directly for all NFT classes
 // 2. Set empty array to disable view content directly for all NFT classes
 // 3. Set array of NFT class Id to disable view content directly for specific NFT classes
-export const LIKECOIN_NFT_DIRECT_ACCESS_ITEMS = IS_TESTNET ? [] : null;
+export const LIKECOIN_NFT_DIRECT_ACCESS_ITEMS = IS_TESTNET ? null : [];
 
 // Note: Please remove this when hide NFT feature is released.
 export const LIKECOIN_NFT_HIDDEN_ITEMS = new Set(
