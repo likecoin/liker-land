@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { LIKECOIN_NFT_DIRECT_VIEW_CONTENT } from '~/constant';
+import { LIKECOIN_NFT_DIRECT_ACCESS_ITEMS } from '~/constant';
 
 import {
   logTrackerEvent,
@@ -214,8 +214,8 @@ export default {
     },
     canViewContentDirectly() {
       return (
-        LIKECOIN_NFT_DIRECT_VIEW_CONTENT?.length === 0 ||
-        LIKECOIN_NFT_DIRECT_VIEW_CONTENT?.includes(this.classId)
+        !LIKECOIN_NFT_DIRECT_ACCESS_ITEMS ||
+        LIKECOIN_NFT_DIRECT_ACCESS_ITEMS.includes(this.classId)
       );
     },
   },
