@@ -20,6 +20,16 @@
     </div>
 
     <MobileStickyCard class="flex flex-col justify-center items-center w-full laptop:max-w-[400px] mx-auto py-[1.5rem]">
+      <NFTViewOptionList
+        v-if="canViewContentDirectly"
+        class="mb-[2rem]"
+        :url="externalUrl"
+        :content-urls="iscnContentUrls"
+        :iscn-url="iscnUrl"
+        :is-nft-book="nftIsNFTBook"
+        :is-content-viewable="true"
+        @view-content-url="handleClickViewContentDirectly"
+      />
       <template v-if="!claimingAddress">
         <template v-if="walletIsLoggingIn">
           <ProgressIndicator />
@@ -107,6 +117,8 @@
 </template>
 
 <script>
+import { LIKECOIN_NFT_DIRECT_ACCESS_ITEMS } from '~/constant';
+
 import {
   logTrackerEvent,
   logPurchaseFlowEvent,
@@ -198,6 +210,12 @@ export default {
     creatorDisplayName() {
       return (
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
+      );
+    },
+    canViewContentDirectly() {
+      return (
+        !LIKECOIN_NFT_DIRECT_ACCESS_ITEMS ||
+        LIKECOIN_NFT_DIRECT_ACCESS_ITEMS.includes(this.classId)
       );
     },
   },
@@ -415,6 +433,15 @@ export default {
     handleClickRetry() {
       logTrackerEvent(this, 'NFT', 'nft_claim_retry_button_clicked', '', 1);
       this.claim();
+    },
+    handleClickViewContentDirectly(e, contentUrl, type) {
+      if (type === 'pdf') {
+        e.preventDefault();
+        this.$router.push(
+          this.localeLocation({ name: 'reader', query: { src: contentUrl } })
+        );
+      }
+      logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.classId, 1);
     },
   },
 };
