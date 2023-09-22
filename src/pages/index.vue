@@ -849,6 +849,14 @@
           @click-collect-button="handleCollectForFreeButtonClickInNFTBookSection"
         />
         -->
+        <ul v-if="subFeaturedNFTBookClassIds.length" class="my-[5rem]">
+          <li v-for="(classId, index) in subFeaturedNFTBookClassIds" :key="classId">
+            <IndexPageFeaturedNFTBook
+              :class-id="classId"
+              :direction="index % 2 === 0 ? 'left' : 'right'"
+            />
+          </li>
+        </ul>
 
         <IndexPageQuote
           class="text-black max-w-[650px] mx-auto mt-[5rem]"
@@ -1378,6 +1386,9 @@ export default {
     },
     featuredNFTBookClassId() {
       return LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS[0];
+    },
+    subFeaturedNFTBookClassIds() {
+      return LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS.slice(1, 3);
     },
     animatedBookCoverSrc() {
       return animatedBookCover;
