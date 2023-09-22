@@ -9,40 +9,60 @@ const {
   nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
+const { getUserFollowees } = require('../../../util/api');
 
 const router = Router();
 
 router.get('/followees', authenticateV2Login, async (req, res, next) => {
   try {
-    const user = req.query?.user || req.session.user;
-    const userDoc = await walletUserCollection.doc(user).get();
-    if (!userDoc.exists) {
-      res.json({ followees: [] });
-      return;
-    }
-    const {
-      followees: walletFollowees = [],
-      email,
-      pastFollowees = [],
-    } = userDoc.data();
-    let legacyFollowees = [];
-    if (email) {
-      const snapshot = await nftMintSubscriptionCollection
-        .where('subscriberEmail', '==', email)
-        .get();
-      legacyFollowees = snapshot.docs.map(doc => {
-        const { subscribedWallet } = doc.data();
-        return subscribedWallet;
-      });
-    }
-    const followees = [
-      ...new Set([...walletFollowees, ...legacyFollowees]).values(),
-    ];
+    const { user } = req.session;
+    const { followees, pastFollowees } = await getUserFollowees(user);
     res.json({ followees, pastFollowees });
   } catch (err) {
     handleRestfulError(req, res, next, err);
   }
 });
+
+router.get(
+  '/suggested-followees',
+  authenticateV2Login,
+  async (req, res, next) => {
+    try {
+      const { user } = req.session;
+      const { initialList = [] } = req.body;
+      const { followees = [], pastFollowees = [] } = await getUserFollowees(
+        user
+      );
+
+      const currentFollowees = [...followees, ...pastFollowees];
+      const currentFolloweesSet = new Set(currentFollowees);
+
+      const suggestedSet = new Set(initialList);
+      let currentIndex = 0;
+
+      // If we don't have enough suggestions, fetch more
+      while (suggestedSet.size < 3 && currentIndex < currentFollowees.length) {
+        // eslint-disable-next-line no-await-in-loop
+        const { followees = [], pastFollowees = [] } = await getUserFollowees(
+          currentFollowees[currentIndex]
+        );
+
+        const followSuggestions = [...followees, ...pastFollowees].filter(
+          f => !currentFolloweesSet.has(f)
+        );
+
+        followSuggestions.forEach(suggestion => suggestedSet.add(suggestion));
+        currentIndex += 1;
+      }
+
+      const result = [...suggestedSet].slice(0, 3);
+
+      res.json({ result });
+    } catch (err) {
+      handleRestfulError(req, res, next, err);
+    }
+  }
+);
 
 router.post('/followees', authenticateV2Login, async (req, res, next) => {
   try {

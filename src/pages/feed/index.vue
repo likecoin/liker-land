@@ -351,7 +351,6 @@ export default {
           this.loadNFTClassesForCurrentTabByAddress(address);
           this.fetchNFTDisplayStateListByAddress(address);
           this.updateTopRankedCreators();
-          this.fetchSuggestedFollowList();
           this.hasStartedFetchingFirstBatch = false;
           this.hasStartedFetchingFolloweeEvents = false;
         }
@@ -362,6 +361,7 @@ export default {
       handler(walletFollowees) {
         if (walletFollowees.length && !this.hasStartedFetchingFolloweeEvents) {
           this.fetchFolloweeWalletEvent();
+          this.fetchSuggestedFollowList();
           this.hasStartedFetchingFolloweeEvents = true;
         }
       },
@@ -381,7 +381,6 @@ export default {
     if (this.getAddress) {
       this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
-      this.fetchSuggestedFollowList();
     }
   },
   methods: {

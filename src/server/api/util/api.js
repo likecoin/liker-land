@@ -7,7 +7,11 @@ const {
   LIKE_CO_CLIENT_ID,
   LIKE_CO_CLIENT_SECRET,
 } = require('../../config/config');
-const { userCollection } = require('../../modules/firebase');
+const {
+  userCollection,
+  walletUserCollection,
+  nftMintSubscriptionCollection,
+} = require('../../modules/firebase');
 const { OAUTH_SCOPE_REQUEST } = require('../constant');
 
 const LIKECOIN_API_BASE = IS_TESTNET
@@ -174,6 +178,33 @@ const getOAuthCallbackAPI = authCode => {
   )}`;
 };
 
+async function getUserFollowees(user) {
+  const userDoc = await walletUserCollection.doc(user).get();
+  if (!userDoc.exists) {
+    return [];
+  }
+  const {
+    followees: walletFollowees = [],
+    email,
+    pastFollowees = [],
+  } = userDoc.data();
+  let legacyFollowees = [];
+  if (email) {
+    const snapshot = await nftMintSubscriptionCollection
+      .where('subscriberEmail', '==', email)
+      .get();
+    legacyFollowees = snapshot.docs.map(doc => {
+      const { subscribedWallet } = doc.data();
+      return subscribedWallet;
+    });
+  }
+  const followees = [
+    ...new Set([...walletFollowees, ...legacyFollowees]).values(),
+  ];
+
+  return { followees, pastFollowees };
+}
+
 module.exports = {
   EXTERNAL_URL,
   apiRefreshAccessToken,
@@ -190,4 +221,5 @@ module.exports = {
   apiCivicLikerGetStakingInfo,
   getOAuthURL,
   getOAuthCallbackAPI,
+  getUserFollowees,
 };

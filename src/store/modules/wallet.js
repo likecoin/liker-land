@@ -16,6 +16,7 @@ import {
   postUserV2Login,
   postUserV2Logout,
   getUserV2Followees,
+  getUserV2SuggestedFollowees,
   postUserV2Followees,
   deleteUserV2Followees,
   getUserV2Followers,
@@ -691,33 +692,21 @@ const actions = {
     ) {
       return state.suggestedFollowList;
     }
-
     const initialSuggestions = [...DEFAULT_SUGGESTED_FOLLOW_LIST].filter(
       suggestion => !currentFolloweesSet.has(suggestion)
     );
 
     const suggestedSet = new Set(initialSuggestions);
-    let currentIndex = 0;
-
-    // If we don't have enough suggestions, fetch more
-    while (suggestedSet.size < 3 && currentIndex < currentFollowees.length) {
-      // eslint-disable-next-line no-await-in-loop
-      const { followees = [], pastFollowees = [] } = await this.$axios.$get(
-        getUserV2Followees(currentFollowees[currentIndex])
-      );
-
-      const followSuggestions = [...followees, ...pastFollowees].filter(
-        f => !currentFolloweesSet.has(f)
-      );
-
-      followSuggestions.forEach(suggestion => suggestedSet.add(suggestion));
-
-      currentIndex += 1;
+    let resultList = [];
+    if (suggestedSet.size < 3) {
+      const { result } = await this.$api.$get(getUserV2SuggestedFollowees(), {
+        initialList: suggestedSet.value,
+      });
+      resultList = result;
     }
 
-    const result = [...suggestedSet].slice(0, 3);
-    commit('WALLET_SET_SUGGESTED_FOLLOW_LIST', result);
-    return result;
+    commit('WALLET_SET_SUGGESTED_FOLLOW_LIST', resultList);
+    return resultList;
   },
 
   async fetchWalletEvents(

@@ -366,14 +366,9 @@ export const getUserV2DisplayState = wallet =>
 export const postUserV2DisplayState = wallet =>
   `/api/v2/users/${wallet}/nfts/display-state`;
 export const getUserV2LocaleURL = () => `/api/v2/users/locale`;
-export const getUserV2Followees = user => {
-  if (user) {
-    const qsPayload = { user };
-    return `/api/v2/users/followees?${querystring.stringify(qsPayload)}`;
-  }
-  return `/api/v2/users/followees`;
-};
-
+export const getUserV2Followees = () => `/api/v2/users/followees`;
+export const getUserV2SuggestedFollowees = () =>
+  `/api/v2/users/suggested-followees`;
 export const getUserV2Followers = () => `/api/v2/users/followers`;
 export const postUserV2Followees = creator => {
   const qsPayload = { creator };
