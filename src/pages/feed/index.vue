@@ -101,10 +101,11 @@
                 :type="e.type"
                 :sender-address="e.sender"
                 :receiver-address="e.receiver"
-                :memo="getFeedEventMemo(e.tx_hash)"
+                :memo="getFeedEventMemo(e.key)"
                 :timestamp="e.timestamp"
                 :class-id="e.class_id"
                 :nft-id="e.nft_id"
+                :batch-send-list="e.batchSendList"
                 @sender-click="handleClickFeedSender"
                 @receiver-click="handleClickFeedReceiver"
                 @follow="handleFollowFeed"
@@ -353,15 +354,19 @@ export default {
       }));
     },
     formattedEvents() {
-      return this.sortAndFilterEvents(this.getFolloweeEvents);
+      if (this.getFolloweeEvents.length) {
+        return this.sortAndFilterEvents(this.getFolloweeEvents);
+      }
+
+      return [];
     },
     pendingMemoFetchList() {
-      return this.formattedEvents.filter(e => !this.getHasFetchMemo(e.tx_hash));
+      return this.formattedEvents.filter(e => !this.getHasFetchMemo(e?.key));
     },
     displayedEvents() {
       if (this.getAvailableFeedTxList) {
         return this.formattedEvents.filter(e =>
-          this.getAvailableFeedTxList.includes(e.tx_hash)
+          this.getAvailableFeedTxList.includes(e?.key)
         );
       }
       return [];
@@ -409,7 +414,7 @@ export default {
     formattedEvents: {
       immediate: true,
       handler(formattedEvents) {
-        if (formattedEvents.length && !this.hasStartedFetchingFirstBatch) {
+        if (formattedEvents?.length && !this.hasStartedFetchingFirstBatch) {
           this.fetchEventsWithMemo();
           this.hasStartedFetchingFirstBatch = true;
         }
@@ -682,8 +687,8 @@ export default {
       return events
         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
         .filter(event => {
-          if (!uniqueTxHashes.has(event.tx_hash)) {
-            uniqueTxHashes.add(event.tx_hash);
+          if (!uniqueTxHashes.has(event?.key)) {
+            uniqueTxHashes.add(event?.key);
             return true;
           }
           return false;

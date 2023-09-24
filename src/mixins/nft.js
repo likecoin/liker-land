@@ -105,7 +105,7 @@ export default {
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
-      'getNFTClassFiatPriceInfoById',
+      'getNFTClassFiatPriceById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
@@ -286,10 +286,7 @@ export default {
       return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
     },
     nftPriceInUSD() {
-      return this.getNFTClassFiatPriceInfoById(this.classId)?.fiatPrice;
-    },
-    nftPriceInUSDisListingInfo() {
-      return this.getNFTClassFiatPriceInfoById(this.classId)?.listingInfo;
+      return this.getNFTClassFiatPriceById(this.classId);
     },
     NFTPriceUSD() {
       return this.LIKEPriceInUSD * this.NFTPrice;
@@ -954,13 +951,9 @@ export default {
           return {};
       }
     },
-    async collectNFTWithStripe(classId, { memo = '' }) {
+    async collectNFTWithStripe(classId, { memo = '' } = {}) {
       try {
         const body = { memo };
-        if (this.nftPriceInUSDisListingInfo) {
-          body.nftId = this.listingInfo.nftId;
-          body.seller = this.listingInfo.seller;
-        }
         if (this.walletEmail) {
           body.email = this.walletEmail;
         }

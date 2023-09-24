@@ -6,17 +6,29 @@
     @click="handleClick"
   >
     <NFTCover
-      v-if="imgSrc"
-      class="grow"
       :src="imgSrc"
       :size="450"
+      :is-fixed-height="isFixedHeight"
       :alt="title"
     />
-    <div class="p-[16px] shrink-0">
-      <div class="text-[16px] leading-[1.25] font-[600] line-clamp-2">{{ title }}</div>
-      <div class="text-[16px] leading-[1.25] font-[400] mt-[4px] line-clamp-4">
-        {{ description }}
-      </div>
+    <div class="p-[16px] grow min-h-[76px]">
+      <div
+        :class="[
+          'text-[16px]',
+          'leading-[1.25]',
+          'font-[600]',
+          isFixedHeight ? 'line-clamp-1' : 'line-clamp-2',
+        ]"
+      >{{ title }}</div>
+      <div
+        :class="[
+          'text-[16px]',
+          'leading-[1.25]',
+          'font-[400]',
+          'mt-[4px]',
+          isFixedHeight ? 'line-clamp-1' : 'line-clamp-4',
+        ]"
+      >{{ description }}</div>
     </div>
   </component>
 </template>
@@ -43,6 +55,10 @@ export default {
     tag: {
       type: String,
       default: 'div',
+    },
+    isFixedHeight: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

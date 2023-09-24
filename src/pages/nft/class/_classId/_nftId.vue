@@ -18,7 +18,7 @@
         >
           <NFTMessageIdentity
             v-if="nftCollectorWalletAddress"
-            class="phone:order-3 phone:self-center"
+            class="phone:order-3 phone:self-center desktop:whitespace-nowrap"
             :type="getWalletIdentityType(nftCollectorWalletAddress)"
             :wallet-address="nftCollectorWalletAddress"
             wrapper-classes="!bg-transparent"

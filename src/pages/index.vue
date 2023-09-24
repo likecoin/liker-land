@@ -265,6 +265,7 @@
           >
             <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
+              theme="glow"
               preset="secondary"
               :to="localeLocation({
                 name: 'nft-class-classId',
@@ -277,6 +278,7 @@
               v-if="publishStoryURL"
               :text="$t('index_page_hero_publish_story_button')"
               :href="publishStoryURL"
+              theme="glow"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInHeroSection"
             />
@@ -453,6 +455,7 @@
                 >
                   <ButtonV2
                     :text="$t('index_page_hero_try_collect_button')"
+                    theme="glow"
                     preset="secondary"
                     :to="localeLocation({
                       name: 'nft-class-classId',
@@ -465,6 +468,7 @@
                     v-if="publishStoryURL"
                     :text="$t('index_page_hero_publish_story_button')"
                     :href="publishStoryURL"
+                    theme="glow"
                     preset="tertiary"
                     @click.native="handlePublishStoryButtonClickInHeroSection"
                   />
@@ -684,6 +688,7 @@
             >
               <ButtonV2
                 :text="$t('index_page_nft_book_free_mint_button')"
+                theme="glow"
                 preset="secondary"
                 :to="localeLocation({
                   name: 'nft-class-classId',
@@ -694,6 +699,7 @@
               />
               <ButtonV2
                 :text="$t('index_page_nft_book_paid_mint_button')"
+                theme="glow"
                 preset="tertiary"
                 :to="localeLocation({
                   name: 'nft-class-classId',
@@ -853,6 +859,7 @@
           <ButtonV2
             :text="$t('index_page_nft_book_cta_button')"
             :to="localeLocation({ name: 'store' })"
+            theme="glow"
             preset="tertiary"
             @click.native="handleCTAClickInNFTBookSection"
           />
@@ -1012,6 +1019,7 @@
           <template #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_1_cta_button')"
+              theme="glow"
               preset="tertiary"
               :to="localeLocation({ name: 'writing-nft-about' })"
               @click.native="handleAboutWritingNFTButtonClickInNewCultureSection"
@@ -1033,6 +1041,7 @@
           <template #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_2_cta_button')"
+              theme="glow"
               preset="tertiary"
               :to="localeLocation({
                 name: 'nft-class-classId',
@@ -1135,6 +1144,7 @@
           <template v-if="publishStoryURL" #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_3_cta_button')"
+              theme="glow"
               :href="publishStoryURL"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInNewCultureSection"
@@ -1144,14 +1154,40 @@
       </div>
     </section>
 
-    <section id="all-story-matters">
+    <section id="all-story-matters" class="overflow-hidden">
       <IndexPageHeading :text="$t('index_page_all_stories_matter_heading')" />
+
+      <div
+        :class="[
+          sectionContentClass,
+          'relative',
+          'pt-[5rem]',
+          'px-[0.5rem] sm:px-[40px] laptop:px-[88px]',
+        ]"
+      >
+        <client-only>
+          <lazy-component
+            v-if="!trendingNFTList.length"
+            @show.once="fetchTrendingNFTList"
+          >
+            <IndexPageTrendingNFTListPlaceholder />
+          </lazy-component>
+          <LazyAsyncIndexPageTrendingNFTList
+            v-else
+            :class-ids="trendingNFTList"
+            @slide-prev="handleClickPrevTrendingNFT"
+            @slide-next="handleClickNextTrendingNFT"
+            @slider-move="handleMoveTrendingNFT"
+          />
+        </client-only>
+
+        <hr class="mt-[4rem] h-[2px] border-t-[2px] border-shade-gray"/>
+      </div>
 
       <div :class="sectionContentClassWithPadding">
         <p
           :class="[
             'mx-auto',
-            'mt-[2rem]',
             'max-w-[700px]',
             'text-[2rem]',
             'text-center',
@@ -1214,6 +1250,7 @@
             v-if="publishStoryURL"
             :text="$t('index_page_all_stories_matter_cta_button')"
             :href="publishStoryURL"
+            theme="glow"
             preset="secondary"
             @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
           />
@@ -1235,6 +1272,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
 import staticBookCover from '~/assets/images/index/nft-book-cover.jpg';
@@ -1261,6 +1300,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['nftClassIdListInTrending']),
+    trendingNFTList() {
+      return this.nftClassIdListInTrending.slice(0, 5);
+    },
     publishStoryURL() {
       return this.$i18n.locale === 'zh-Hant'
         ? 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm'
@@ -1511,6 +1554,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['lazyFetchLatestAndTrendingNFTClassIdList']),
     animate() {
       this.animateHeroSection();
       this.animateLikerLandSection();
@@ -2169,6 +2213,14 @@ export default {
         'transform'
       );
     },
+    async fetchTrendingNFTList() {
+      try {
+        await this.lazyFetchLatestAndTrendingNFTClassIdList();
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error occurred when fetching trending NFTs', error);
+      }
+    },
     handleResize() {
       window.requestAnimationFrame(() => {
         this.isDesktop = window.innerWidth > 768;
@@ -2275,6 +2327,15 @@ export default {
         '',
         1
       );
+    },
+    handleClickPrevTrendingNFT() {
+      logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTClickPrev', '', 1);
+    },
+    handleClickNextTrendingNFT() {
+      logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTClickNext', '', 1);
+    },
+    handleMoveTrendingNFT() {
+      logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTMove', '', 1);
     },
     handleCollectForFreeButtonClickInAllStoriesMatterSection() {
       logTrackerEvent(
