@@ -47,6 +47,7 @@
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
         :collect-expiry-time="collectExpiryTime"
+        :theme="buttonTheme"
         :should-show-expiry-time-before-expired="true"
         @click-collect-button="handleClickCTAButton"
       />
@@ -96,6 +97,7 @@
           :button-text="ctaButtonText"
           :is-collectable="isCollectable"
           :collect-expiry-time="collectExpiryTime"
+          :theme="buttonTheme"
           :should-show-expiry-time-before-expired="true"
           @click-collect-button="handleClickCTAButton"
         />
@@ -112,6 +114,7 @@
           :button-text="ctaButtonText"
           :is-collectable="isCollectable"
           :collect-expiry-time="collectExpiryTime"
+          :theme="buttonTheme"
           :should-show-expiry-time-before-expired="true"
           @click-collect-button="handleClickCTAButton"
         />
@@ -154,6 +157,10 @@ export default {
     collectExpiryTime: {
       type: Number,
       default: 0,
+    },
+    buttonTheme: {
+      type: String,
+      default: 'classic',
     },
   },
   computed: {
