@@ -216,12 +216,17 @@ export default {
         'w-full',
         'p-[32px]',
         'pt-0',
-        this.shouldShowFreeStyle ? 'mt-[72px]' : 'mt-[58px]',
+        this.marginTopClass,
         this.isFree || this.isMidAutumnStyle
           ? 'border border-black'
           : 'bg-like-green',
         'rounded-[32px]',
       ];
+    },
+    marginTopClass() {
+      if (this.isMidAutumnStyle) return 'mt-[85px]';
+      if (this.shouldShowFreeStyle) return 'mt-[72px]';
+      return 'mt-[58px]';
     },
     creatorMessageClasses() {
       const classes = [
