@@ -265,6 +265,7 @@
           >
             <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
+              theme="glow"
               preset="secondary"
               :to="localeLocation({
                 name: 'nft-class-classId',
@@ -277,6 +278,7 @@
               v-if="publishStoryURL"
               :text="$t('index_page_hero_publish_story_button')"
               :href="publishStoryURL"
+              theme="glow"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInHeroSection"
             />
@@ -453,6 +455,7 @@
                 >
                   <ButtonV2
                     :text="$t('index_page_hero_try_collect_button')"
+                    theme="glow"
                     preset="secondary"
                     :to="localeLocation({
                       name: 'nft-class-classId',
@@ -465,6 +468,7 @@
                     v-if="publishStoryURL"
                     :text="$t('index_page_hero_publish_story_button')"
                     :href="publishStoryURL"
+                    theme="glow"
                     preset="tertiary"
                     @click.native="handlePublishStoryButtonClickInHeroSection"
                   />
@@ -670,6 +674,7 @@
             >
               <ButtonV2
                 :text="$t('index_page_nft_book_free_mint_button')"
+                theme="glow"
                 preset="secondary"
                 :to="localeLocation({
                   name: 'nft-class-classId',
@@ -680,6 +685,7 @@
               />
               <ButtonV2
                 :text="$t('index_page_nft_book_paid_mint_button')"
+                theme="glow"
                 preset="tertiary"
                 :to="localeLocation({
                   name: 'nft-class-classId',
@@ -832,6 +838,7 @@
           <ButtonV2
             :text="$t('index_page_nft_book_cta_button')"
             :to="localeLocation({ name: 'store' })"
+            theme="glow"
             preset="tertiary"
             @click.native="handleCTAClickInNFTBookSection"
           />
@@ -991,6 +998,7 @@
           <template #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_1_cta_button')"
+              theme="glow"
               preset="tertiary"
               :to="localeLocation({ name: 'writing-nft-about' })"
               @click.native="handleAboutWritingNFTButtonClickInNewCultureSection"
@@ -1012,6 +1020,7 @@
           <template #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_2_cta_button')"
+              theme="glow"
               preset="tertiary"
               :to="localeLocation({
                 name: 'nft-class-classId',
@@ -1114,6 +1123,7 @@
           <template v-if="publishStoryURL" #append>
             <ButtonV2
               :text="$t('index_page_new_culture_section_3_cta_button')"
+              theme="glow"
               :href="publishStoryURL"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInNewCultureSection"
@@ -1218,6 +1228,7 @@
           <ButtonV2
             :text="$t('index_page_all_stories_matter_cta_button')"
             :href="publishStoryURL"
+            theme="glow"
             preset="secondary"
             @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
           />
