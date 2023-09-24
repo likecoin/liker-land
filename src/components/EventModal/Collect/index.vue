@@ -251,7 +251,10 @@
             />
           </li>
         </ul>
-        <ul v-else class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full">
+        <ul
+          v-else
+          :class="['mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full', { 'mb-[5rem]': nftIsMidAutumnStyle }]"
+        >
           <li v-if="enableStripe">
             <EventModalCollectMethodButton
               :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"

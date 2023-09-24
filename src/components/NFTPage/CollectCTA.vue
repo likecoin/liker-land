@@ -82,6 +82,7 @@
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
         :collect-expiry-time="collectExpiryTime"
+        :theme="normalizedButtonTheme"
         :should-show-expiry-time-before-expired="true"
         @click-collect-button="handleClickCTAButton"
       />
@@ -113,13 +114,13 @@
               :class="[
                 'text-[14px]',
                 'text-center sm:text-left',
-                shouldShowFreeStyle ? 'text-like-green' : 'text-like-cyan',
+                shouldShowFreeStyle || isMidAutumnStyle ? 'text-like-green' : 'text-like-cyan',
               ]"
             >{{ $t('nft_message_type_collect') }}</div>
             <div
               :class="[
                 'mt-[4px]',
-                { 'text-white': !shouldShowFreeStyle },
+                { 'text-white': !shouldShowFreeStyle && !isMidAutumnStyle },
                 'text-[16px]',
                 'text-center sm:text-left',
                 'font-600',
@@ -131,6 +132,7 @@
           :button-text="ctaButtonText"
           :is-collectable="isCollectable"
           :collect-expiry-time="collectExpiryTime"
+          :theme="normalizedButtonTheme"
           :should-show-expiry-time-before-expired="true"
           @click-collect-button="handleClickCTAButton"
         />
@@ -147,6 +149,7 @@
           :button-text="ctaButtonText"
           :is-collectable="isCollectable"
           :collect-expiry-time="collectExpiryTime"
+          :theme="normalizedButtonTheme"
           :should-show-expiry-time-before-expired="true"
           @click-collect-button="handleClickCTAButton"
         />
@@ -195,6 +198,10 @@ export default {
       type: Number,
       default: 0,
     },
+    buttonTheme: {
+      type: String,
+      default: 'classic',
+    },
     isMidAutumnStyle: {
       type: Boolean,
       default: false,
@@ -210,7 +217,9 @@ export default {
         'p-[32px]',
         'pt-0',
         this.shouldShowFreeStyle ? 'mt-[72px]' : 'mt-[58px]',
-        this.isFree ? 'border border-black' : 'bg-like-green',
+        this.isFree || this.isMidAutumnStyle
+          ? 'border border-black'
+          : 'bg-like-green',
         'rounded-[32px]',
       ];
     },
@@ -232,7 +241,7 @@ export default {
         { 'desktop:flex-row desktop:justify-between': !this.isColumn },
       ];
 
-      if (this.isFree) {
+      if (this.isFree || this.isMidAutumnStyle) {
         classes.push('border', 'border-black');
       } else {
         classes.push('border-2', 'border-like-cyan');
@@ -247,7 +256,7 @@ export default {
       return this.$t('nft_page_collect_cta_title_sold_out');
     },
     ctaTitleClasses() {
-      if (this.isFree) {
+      if (this.isFree || this.isMidAutumnStyle) {
         return ['text-black'];
       }
       return [
@@ -260,7 +269,7 @@ export default {
     },
 
     ctaForFreeDescriptionHeading() {
-      if (!this.isFree) return '';
+      if (!(this.isFree || this.isMidAutumnStyle)) return '';
 
       const key = `nft_page_collect_cta_free_description_heading_${
         this.classId
@@ -268,7 +277,7 @@ export default {
       return this.$te(key) ? this.$t(key) : '';
     },
     ctaForFreeDescriptionContent() {
-      if (!this.isFree) return '';
+      if (!(this.isFree || this.isMidAutumnStyle)) return '';
 
       const key = `nft_page_collect_cta_free_description_content_${
         this.classId
@@ -286,10 +295,13 @@ export default {
       if (!this.isCollectable) {
         return this.$t('nft_page_collect_cta_button_text_ended');
       }
-      if (this.isFree) {
+      if (this.isFree || this.isMidAutumnStyle) {
         return this.$t('nft_page_collect_cta_button_text_free');
       }
       return this.$t('nft_page_collect_cta_button_text');
+    },
+    normalizedButtonTheme() {
+      return this.isMidAutumnStyle ? 'glow' : this.buttonTheme;
     },
   },
   methods: {

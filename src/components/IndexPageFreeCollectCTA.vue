@@ -11,6 +11,7 @@
       :nft-image-url="NFTImageUrl"
       :iscn-owner="iscnOwner"
       :is-collectable="nftIsCollectable"
+      button-theme="glow"
       :is-free="true"
       :collect-expiry-time="collectExpiryTime"
       :is-mid-autumn-style="nftIsMidAutumnStyle"

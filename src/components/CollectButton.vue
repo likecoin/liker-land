@@ -1,18 +1,19 @@
 <template>
   <div class="flex flex-col gap-[8px] justify-center items-center">
     <ButtonV2
+      :theme="theme"
       preset="secondary"
       :is-disabled="!isCollectable"
       @click="handleClickCollectButton"
     >
-      <template v-if="isCollectable" #prepend>
+      <template v-if="isCollectable && theme === 'classic'" #prepend>
         <IconPrice />
       </template>
       {{ buttonText }}
     </ButtonV2>
-    <div 
-      v-if="shouldShowExpiryTime" 
-      class="flex gap-[4px] justify-center items-center" 
+    <div
+      v-if="shouldShowExpiryTime"
+      class="flex gap-[4px] justify-center items-center"
       :class="expiryTimeTextClass"
     >
       <IconClock />
@@ -43,6 +44,10 @@ export default {
     shouldShowExpiryTimeBeforeExpired: {
       type: Boolean,
       default: false,
+    },
+    theme: {
+      type: String,
+      default: 'classic',
     },
   },
   computed: {

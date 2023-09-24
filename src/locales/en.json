@@ -207,6 +207,7 @@
   "FeaturedPage": {
     "headerLabel": "Today"
   },
+  "feed_also_send_to": "also sent to {num} person | also sent to {num} people",
   "feed_empty_action": "follow",
   "feed_empty_description": "It is quiet here! Try to {action} some creators to make this plaza lively!",
   "feed_end_of_items": "End of feed",
@@ -668,7 +669,8 @@
     "language": "Language",
     "title": "Settings"
   },
-  "shopping_cart_checkout_button": "Checkout",
+  "shopping_cart_checkout_button_by_LIKE": "Checkout by LIKE",
+  "shopping_cart_checkout_button_by_card": "Checkout by card",
   "shopping_cart_empty_notice": "Backpack is empty",
   "shopping_cart_empty_notice_button": "Browse NFT",
   "shopping_cart_error_insufficient_balance": "Insufficient balance, you only have {balance}",

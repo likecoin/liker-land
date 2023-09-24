@@ -740,6 +740,7 @@ module.exports = {
   plugins: [
     ({ addUtilities }) => {
       addUtilities({
+        '.line-clamp-1': getLineClamp(1),
         '.line-clamp-2': getLineClamp(2),
         '.line-clamp-4': getLineClamp(4),
         '.bg-like-gradient': {

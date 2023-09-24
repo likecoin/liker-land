@@ -155,14 +155,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import {
   LIKECOIN_NFT_CAMPAIGN_ITEMS,
   LIKECOIN_NFT_BOOK_ITEMS,
 } from '~/constant';
 
-import { getNFTClassesPartial, getTopNFTClasses } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -170,19 +169,10 @@ import inAppMixin from '~/mixins/in-app';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import walletMixin from '~/mixins/wallet';
 
-const MAX_NFT_CLASS_COUNT_PER_OWNER = 2;
-const NFT_CLASS_DISPLAY_COUNT = 10;
-
 export default {
   name: 'WritingNFTPage',
   mixins: [inAppMixin, navigationListenerMixin, walletMixin],
   layout: 'default',
-  data() {
-    return {
-      trendingClassIds: [],
-      latestClassIds: [],
-    };
-  },
   head() {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');
@@ -216,16 +206,17 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['nftClassIdListInLatest', 'nftClassIdListInTrending']),
     currentTab() {
       return this.$route.query.tab || 'featured';
     },
     nftClassIds() {
       switch (this.currentTab) {
         case 'trending': {
-          return this.trendingClassIds;
+          return this.nftClassIdListInTrending;
         }
         case 'latest': {
-          return this.latestClassIds;
+          return this.nftClassIdListInLatest;
         }
         case 'featured':
         default:
@@ -298,29 +289,22 @@ export default {
       }
     }
     this.lazyFetchLIKEPrice();
-    const trendingDate = new Date();
-    trendingDate.setDate(trendingDate.getDate() - 14);
-    const trendingDayString = trendingDate.toISOString().split('T')[0];
-    const [trendingRes, latestRes] = await Promise.all([
-      this.$axios.$get(
-        getTopNFTClasses({
-          after: new Date(trendingDayString).getTime() / 1000,
-        })
-      ),
-      this.$axios.$get(getNFTClassesPartial({ reverse: true })),
-    ]);
-    const [trendingClasses, latestClasses] = [trendingRes, latestRes].map(res =>
-      (res.classes || []).filter(
-        c => c.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
-      )
-    );
-    this.latestClassIds = latestClasses
-      .slice(0, NFT_CLASS_DISPLAY_COUNT)
-      .map(c => c.id);
-    this.trendingClassIds = this.filterNFTClassesByOwner(trendingClasses);
+    try {
+      await this.lazyFetchLatestAndTrendingNFTClassIdList();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(
+        'Error occurred when fetching latest and trending WNFTs',
+        error
+      );
+    }
   },
   methods: {
-    ...mapActions(['lazyFetchLIKEPrice', 'lazyGetISCNMetadataById']),
+    ...mapActions([
+      'lazyFetchLIKEPrice',
+      'lazyFetchLatestAndTrendingNFTClassIdList',
+      'lazyGetISCNMetadataById',
+    ]),
     async getClassOwner(classData) {
       try {
         const iscnPrefix = classData.parent.iscn_id_prefix;
@@ -331,22 +315,6 @@ export default {
         console.error(`Failed to fetch owner of ${classData.id}`);
         return null;
       }
-    },
-    filterNFTClassesByOwner(nftClasses) {
-      const filteredNFTClasses = [];
-      const ownerToNFTClassCountMap = {};
-      for (let i = 0; i < nftClasses.length; i += 1) {
-        const { owner } = nftClasses[i];
-        if (!ownerToNFTClassCountMap[owner]) {
-          ownerToNFTClassCountMap[owner] = 0;
-        }
-        if (ownerToNFTClassCountMap[owner] < MAX_NFT_CLASS_COUNT_PER_OWNER) {
-          filteredNFTClasses.push(nftClasses[i].id);
-          ownerToNFTClassCountMap[owner] += 1;
-        }
-        if (filteredNFTClasses.length >= NFT_CLASS_DISPLAY_COUNT) break;
-      }
-      return filteredNFTClasses;
     },
     handleTabClick(tab) {
       const { query } = this.$route;

@@ -7,6 +7,17 @@
     v-bind="rootProps"
     v-on="$listeners"
   >
+    <div
+      v-if="isThemeGlow"
+      :class="[
+        'absolute inset-0',
+        { [backgroundClassForPreset]: !isDisabled },
+        'rounded-full',
+        'blur-[4px]',
+        'translate-x-[4px]',
+        'translate-y-[4px]',
+      ]"
+    />
     <Label
       :class="labelClass"
       :text="text"
@@ -40,6 +51,11 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 // eslint-disable-next-line import/extensions
 import Label from './Label.vue';
 
+export enum Theme {
+  Classic = 'classic',
+  Glow = 'glow',
+}
+
 export enum Preset {
   primary = 'primary',
   secondary = 'secondary',
@@ -60,9 +76,12 @@ export enum Size {
   components: { Label },
 })
 export default class ButtonV2 extends Vue {
+  @Prop({ default: Theme.Classic })
+  readonly theme!: Theme;
+
   // Preset of the button
-  @Prop({ default: 'primary' })
-  readonly preset!: string;
+  @Prop({ default: Preset.primary })
+  readonly preset!: Preset;
 
   // Text of the button
   @Prop(String)
@@ -77,8 +96,8 @@ export default class ButtonV2 extends Vue {
   readonly circle!: boolean;
 
   // Size of the Button
-  @Prop({ default: 'large' })
-  readonly size!: string | undefined;
+  @Prop({ default: Size.large })
+  readonly size!: Size | undefined;
 
   // Class of the content wrapper
   @Prop([String, Array])
@@ -126,50 +145,103 @@ export default class ButtonV2 extends Vue {
     return this.size === 'mini';
   }
 
-  get rootClassesForPreset(): any {
+  get isPresetOutline(): boolean {
+    return this.preset === Preset.outline;
+  }
+
+  get isThemeGlow(): boolean {
+    return this.theme === Theme.Glow;
+  }
+
+  get backgroundClassForPreset(): string {
     // NOTE: Add `!` to override the [type=submit] style caused by different versions of Tailwind
-    if (this.isDisabled && this.preset !== Preset.outline) {
-      return ['!bg-shade-gray', 'text-medium-gray'];
+    if (this.isDisabled) {
+      return '!bg-shade-gray';
     }
+
     switch (this.preset) {
       case Preset.primary:
-        return ['!bg-like-green', 'text-like-cyan-light'];
+        return '!bg-like-green';
 
       case Preset.secondary:
-        return ['!bg-like-cyan-light', 'text-like-green'];
+        return '!bg-like-cyan-light';
 
       case Preset.tertiary:
-        return [
-          '!bg-shade-gray',
-          this.circle ? 'text-like-green' : 'text-dark-gray',
-        ];
+        return '!bg-shade-gray';
 
-      case Preset.plain:
-        return [];
-
-      case Preset.outline:
-        return [
-          this.isDisabled
-            ? '!bg-transparent border-shade-gray border-2 !text-gray-c'
-            : 'border-medium-gray/75 border-2',
-          this.circle ? 'text-like-green' : 'text-current',
-          {
-            'active:border-opacity-70 hover:border-opacity-50': !this
-              .isDisabled,
-          },
-        ];
       case Preset.gradient:
-        return [
-          '!bg-gradient-to-r from-[#D2F0F0] to-[#F0E6B4]',
-          'text-like-green',
-        ];
+        return '!bg-gradient-to-r from-[#D2F0F0] to-[#F0E6B4]';
 
       case Preset.cyan:
-        return ['!bg-like-cyan-pale', 'text-dark-gray'];
+        return '!bg-like-cyan-pale';
 
       default:
-        return '';
+        break;
     }
+
+    return '';
+  }
+
+  get textColorClassForPreset(): string {
+    if (this.isDisabled) {
+      return '!text-gray-c';
+    }
+
+    switch (this.preset) {
+      case Preset.primary:
+        return 'text-like-cyan-light';
+
+      case Preset.secondary:
+        return 'text-like-green';
+
+      case Preset.tertiary:
+        return this.circle ? 'text-like-green' : 'text-dark-gray';
+
+      case Preset.outline:
+        return this.circle ? 'text-like-green' : 'text-current';
+
+      case Preset.gradient:
+        return 'text-like-green';
+
+      case Preset.cyan:
+        return 'text-dark-gray';
+
+      default:
+        break;
+    }
+
+    return '';
+  }
+
+  get borderColorClassForPreset(): string {
+    if (this.isDisabled && (this.isPresetOutline || this.isThemeGlow)) {
+      return 'border-shade-gray';
+    }
+
+    if (this.isPresetOutline) {
+      return 'border-medium-gray/75 hover:border-opacity-50 active:border-opacity-70';
+    }
+
+    if (this.isThemeGlow) {
+      switch (this.preset) {
+        case Preset.primary:
+          return 'border-like-cyan-pale';
+
+        case Preset.secondary:
+        case Preset.gradient:
+          return 'border-like-green';
+
+        case Preset.tertiary:
+        case Preset.plain:
+        case Preset.cyan:
+          return 'border-dark-gray';
+
+        default:
+          break;
+      }
+    }
+
+    return '';
   }
 
   get classForSize(): any {
@@ -188,16 +260,20 @@ export default class ButtonV2 extends Vue {
 
   get rootClasses(): any {
     return [
-      ...this.rootClassesForPreset,
+      this.textColorClassForPreset,
+      this.borderColorClassForPreset,
       this.classForSize,
       'flex',
       'box-border',
-      'overflow-hidden',
       'items-center',
       'transition',
       'duration-200',
       this.isDisabled ? 'cursor-default' : 'cursor-pointer',
       {
+        'relative !rounded-full': this.isThemeGlow,
+        [this.backgroundClassForPreset]:
+          !this.isThemeGlow && !this.isPresetOutline,
+        'border-2': !this.isThemeGlow && this.isPresetOutline,
         'justify-center rounded-[50%]': this.isCircle,
       },
     ];
@@ -208,12 +284,18 @@ export default class ButtonV2 extends Vue {
       this.isCircle ? 'justify-center' : 'justify-between',
       'h-full',
       'text-center',
+      'rounded-[inherit]',
       'whitespace-nowrap',
       'hover:bg-dark-gray',
       'hover:bg-opacity-[0.2] hover:opacity-[0.8]',
       'active:bg-opacity-[0.3]',
       'transition',
       'duration-200',
+      {
+        relative: this.isThemeGlow,
+        border: this.isThemeGlow,
+        [this.borderColorClassForPreset]: this.isThemeGlow,
+      },
       {
         'px-[12px]': this.isMini,
         'py-[6px]': this.isMini,

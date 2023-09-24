@@ -59,7 +59,7 @@
             />
           </div>
 
-          <div v-if="isWritingNFT" class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+          <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
             <div class="flex items-center text-medium-gray">
               <IconMint />
               <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -78,7 +78,7 @@
             </div>
           </div>
           <Label
-            v-else-if="classCollectionName"
+            v-if="classCollectionName"
             class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
             preset="p6"
           >{{ classCollectionName }}</Label>

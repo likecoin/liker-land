@@ -52,23 +52,23 @@
       <IconCreativeWork />
 
       <NuxtLink
-        :to="
-          classId
-            ? localeLocation({ name: 'nft-class-classId-nftId', params: { classId, nftId } })
-            : ''"
+        :to="nftTitleRoute"
         class="text-[12px] hover:underline"
         target="_blank"
         @click.native="$emit('nft-title-click', { classId, nftId})"
       >{{ nftTitle | ellipsisNFTName }}</NuxtLink>
     </div>
 
+    <!-- Feed Content -->
     <CardV2 class="flex flex-col justify-start gap-[12px] border-2 border-shade-gray text-dark-gray">
 
+      <!-- memo -->
       <template v-if="memo">
         <IconMessage />
         <p class="text-[16px] font-400 text-dark-gray">{{ memo }}</p>
       </template>
 
+      <!-- publish info -->
       <NFTPortfolioItem
         v-if="shouldShowItemCard"
         class="border-2 border-shade-gray rounded-[24px] -p-[2px] self-center"
@@ -81,8 +81,9 @@
         @click.native="$emit('nft-click', classId)"
       />
 
+      <!-- send & collect receiver Info -->
       <div
-        v-if="shouldShowReceiverInfo"
+        v-if="shouldShowReceiverInfoForSendOrCollect"
         class="flex items-center justify-start gap-[6px]"
       >
         <IconTransfer class="text-medium-gray" />
@@ -105,6 +106,45 @@
         </NuxtLink>
       </div>
 
+      <!-- batch send receiver info -->
+      <div v-if="isBatchSendEvent" class="flex gap-[12px]">
+        <IconTransfer class="flex-shrink-0 text-medium-gray" />
+        <ul class="flex gap-[8px] flex-wrap items-center">
+          <li
+            v-for="receiver of formattedBatchSendList"
+            :key="receiver.wallet"
+            class="flex"
+          >
+            <NuxtLink
+              class="flex items-center justify-center gap-[8px] text-like-green group"
+              :to="
+                receiver.wallet
+                  ? localeLocation({
+                      name: 'id',
+                      params: { id: receiver.wallet },
+                    })
+                  : ''"
+              target="_blank"
+              @click.native="$emit('receiver-click', receiver.wallet)"
+            >
+              <Identity
+                class="self-start flex-shrink-0"
+                :avatar-url="receiver.avatar"
+                :avatar-size="32"
+                :is-avatar-outlined="false"
+              />
+              <p class="text-[14px] font-600 text-like-green group-hover:underline">
+                {{ receiver.displayName }}
+              </p>
+            </NuxtLink>
+          </li>
+          <li v-if="numberOfAlsoSendTo">
+            <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
+              {{ $tc('feed_also_send_to', numberOfAlsoSendTo, { num: numberOfAlsoSendTo }) }}
+            </p>
+          </li>
+        </ul>
+      </div>
     </CardV2>
 
   </component>
@@ -144,6 +184,10 @@ export default {
     receiverAddress: {
       type: String,
       default: undefined,
+    },
+    batchSendList: {
+      type: Array,
+      default: null,
     },
     timestamp: {
       type: String,
@@ -239,14 +283,29 @@ export default {
     nftTitle() {
       return this.nftName || this.classId;
     },
+    nftTitleRoute() {
+      let link = '';
+      if (this.isBatchSendEvent) {
+        link = this.localeLocation({
+          name: 'nft-class-classId',
+          params: { classId: this.classId },
+        });
+      } else {
+        link = this.localeLocation({
+          name: 'nft-class-classId-nftId',
+          params: { classId: this.classId, nftId: this.nftId },
+        });
+      }
+      return this.classId && link;
+    },
     shouldShowNftTitle() {
       return this.type !== EVENT_TYPE.PUBLISH;
     },
     shouldShowItemCard() {
       return this.type === EVENT_TYPE.PUBLISH;
     },
-    shouldShowReceiverInfo() {
-      return this.type !== EVENT_TYPE.PUBLISH;
+    shouldShowReceiverInfoForSendOrCollect() {
+      return this.type !== EVENT_TYPE.PUBLISH && !this.isBatchSendEvent;
     },
     shouldShowFollow() {
       return !this.walletFollowees.includes(this.senderWallet);
@@ -256,6 +315,42 @@ export default {
     },
     isEventTypeCollect() {
       return this.type === EVENT_TYPE.COLLECT;
+    },
+    isBatchSendEvent() {
+      return this.type === 'send' && this.batchSendList?.length;
+    },
+    formattedBatchSendList() {
+      if (!this.isBatchSendEvent) {
+        return [];
+      }
+      const filteredBatchSendList = this.batchSendList
+        .filter(
+          receiver =>
+            this.walletFollowees.includes(receiver) ||
+            this.getAddress === receiver
+        )
+        .slice(0, 8);
+
+      if (!filteredBatchSendList.length) {
+        filteredBatchSendList.push(this.getAddress);
+      }
+
+      const batchSendListWithInfo = filteredBatchSendList.map(receiver => ({
+        wallet: receiver,
+        avatar: this.getUserInfoByAddress(receiver)?.avatar,
+        displayName: ellipsis(
+          this.getUserInfoByAddress(receiver)?.displayName || receiver
+        ),
+      }));
+
+      return batchSendListWithInfo;
+    },
+    numberOfAlsoSendTo() {
+      let num = 0;
+      if (this.batchSendList?.length > this.formattedBatchSendList.length) {
+        num = this.batchSendList.length - this.formattedBatchSendList.length;
+      }
+      return num;
     },
   },
   methods: {
