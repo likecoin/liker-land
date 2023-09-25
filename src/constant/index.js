@@ -80,7 +80,7 @@ export const LIKECOIN_NFT_API_WALLET = IS_TESTNET
 
 export const LIKECOIN_NFT_CLASS_FREE_MINT = IS_TESTNET
   ? 'likenft1t2a7n9px9y5mhayjpk4s7m40zwjr3wvyg4ucg32w77jxmsw7889qg6ky8d'
-  : 'likenft1wtq5cqjw9vhpjqq6g8l55jhez6dpn78nxmna4dz235wrlwa203qs7j234q';
+  : 'likenft1hjm2gspl8gzwrcrfme6qmgge3n2sefs7kdwgd82egkrnvg74pc8s6u9g4t';
 
 export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
   ? [

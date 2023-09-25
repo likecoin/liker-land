@@ -118,6 +118,7 @@
           <ProgressIndicator v-if="isLoading" />
           <CollectButton
             v-else-if="isCollectable"
+            class="text-medium-gray"
             :button-text="$t('nft_widget_button_collect')"
             :is-collectable="isCollectable"
             :collect-expiry-time="collectExpiryTime"

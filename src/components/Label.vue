@@ -28,7 +28,14 @@
       v-else
       :class="contentWrapperClasses"
     >
-      <div v-if="isTruncated" class="truncate">{{ text }}</div>
+      <template v-if="multiLineText">
+        <p
+          v-for="(pText, pIndex) in multiLineText"
+          :key="pIndex"
+          :class="{ 'mt-[0.75rem]': pIndex > 0 }"
+        >{{ pText }}</p>
+      </template>
+      <div v-else-if="isTruncated" class="truncate">{{ text }}</div>
       <template v-else>{{ text }}</template>
     </div>
     <div
@@ -111,6 +118,11 @@ export default class Label extends Vue {
   @Prop({ default: false })
   readonly isTruncated!: boolean;
 
+  get multiLineText(): string[] | undefined {
+    const multiLineText = this.text?.split('\\n');
+    return multiLineText?.length > 1 ? multiLineText : undefined;
+  }
+
   get isHeader(): boolean {
     return this.preset.startsWith('h');
   }
@@ -184,28 +196,28 @@ export default class Label extends Vue {
   get alignClass(): string {
     switch (this.align) {
       case LabelAlign.Center:
-        return 'justify-center text-center';
+        return `${this.multiLineText ? 'items-center' : 'justify-center'} text-center`;
 
       case LabelAlign.Right:
-        return 'justify-end text-right';
+        return `${this.multiLineText ? 'items-end' : 'justify-end'} text-right`;
 
       case LabelAlign.Left:
       default:
-        return 'justify-start text-left';
+        return `${this.multiLineText ? 'items-start' : 'justify-start' } text-left`;
     }
   }
 
   get valignClass(): string {
     switch (this.valign) {
       case LabelValign.Top:
-        return 'items-start';
+        return this.multiLineText ? 'justify-start' : 'items-start';
 
       case LabelValign.Bottom:
-        return 'items-end';
+        return this.multiLineText ? 'justify-end' : 'items-end';
 
       case LabelValign.Middle:
       default:
-        return 'items-center';
+        return this.multiLineText ? 'justify-center' : 'items-center';
     }
   }
 
@@ -217,6 +229,7 @@ export default class Label extends Vue {
       this.alignClass,
       this.contentClass,
       {
+        'flex-col': !!this.multiLineText,
         truncate: this.isTruncated,
       },
     ];
