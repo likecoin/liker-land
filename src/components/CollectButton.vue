@@ -75,7 +75,9 @@ export default {
       return this.$t('nft_collect_expiry_time_far', { date });
     },
     expiryTimeTextClass() {
-      return this.isCollectExpiringSoon ? 'text-pending-orange' : 'text-white';
+      return this.isCollectExpiringSoon
+        ? 'text-pending-orange'
+        : 'text-inherit';
     },
     shouldShowExpiryTime() {
       return (

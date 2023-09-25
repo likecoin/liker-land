@@ -35,7 +35,7 @@
         'items-center laptop:items-start',
         'justify-center',
         'gap-[1rem]',
-        shouldShowFreeStyle ? 'mt-[-72px]' : 'mt-[-58px]',
+        isFree ? 'mt-[-72px]' : 'mt-[-58px]',
         'text-like-green',
         'text-[2rem]',
         'font-proxima',
@@ -43,20 +43,20 @@
       ]"
     >
       <div
-        v-if="shouldShowFreeStyle"
+        v-if="isFree"
         class="hidden laptop:block flex-1 mt-[1rem] text-right font-[600]"
       >{{ $t('collect_cta_slogan_left') }}</div>
       <NFTFreeFallGraphic
-        :class="shouldShowFreeStyle ? 'w-[178px]' : 'w-[148px]'"
+        :class="isFree ? 'w-[178px]' : 'w-[148px]'"
         :href="nftImageUrl"
-        :preset="shouldShowFreeStyle ? 'gradient' : 'plain'"
+        :preset="isFree ? 'gradient' : 'plain'"
       />
       <div
-        v-if="shouldShowFreeStyle"
+        v-if="isFree"
         class="hidden laptop:block flex-1 mt-[1rem] text-left font-[600]"
       >{{ $t('collect_cta_slogan_right') }}</div>
       <div
-        v-if="shouldShowFreeStyle"
+        v-if="isFree"
         class="laptop:hidden text-[1.5rem] text-center"
       >{{ $t('collect_cta_slogan_mobile') }}</div>
     </div>
@@ -114,13 +114,12 @@
               :class="[
                 'text-[14px]',
                 'text-center sm:text-left',
-                shouldShowFreeStyle || isMidAutumnStyle ? 'text-like-green' : 'text-like-cyan',
+                isFree || isMidAutumnStyle ? 'text-like-green' : 'text-like-cyan',
               ]"
             >{{ $t('nft_message_type_collect') }}</div>
             <div
               :class="[
                 'mt-[4px]',
-                { 'text-white': !shouldShowFreeStyle && !isMidAutumnStyle },
                 'text-[16px]',
                 'text-center sm:text-left',
                 'font-600',
@@ -139,7 +138,7 @@
       </div>
       <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
         <NFTMessageIdentity
-          v-if="!shouldShowFreeStyle"
+          v-if="!isFree"
           type="creator"
           class="flex-shrink-0"
           :wallet-address="iscnOwner"
@@ -225,7 +224,7 @@ export default {
     },
     marginTopClass() {
       if (this.isMidAutumnStyle) return 'mt-[85px]';
-      if (this.shouldShowFreeStyle) return 'mt-[72px]';
+      if (this.isFree) return 'mt-[72px]';
       return 'mt-[58px]';
     },
     creatorMessageClasses() {
@@ -243,6 +242,7 @@ export default {
         'sm:order-2',
         'sm:p-[32px]',
         'sm:mt-[32px]',
+        { 'text-white': !this.isFree && !this.isMidAutumnStyle },
         { 'desktop:flex-row desktop:justify-between': !this.isColumn },
       ];
 
@@ -288,13 +288,6 @@ export default {
         this.classId
       }`;
       return this.$te(key) ? this.$t(key) : '';
-    },
-    shouldShowFreeStyle() {
-      return (
-        this.isFree &&
-        this.ctaForFreeDescriptionHeading &&
-        this.ctaForFreeDescriptionContent
-      );
     },
     ctaButtonText() {
       if (!this.isCollectable) {

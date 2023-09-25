@@ -45,6 +45,7 @@
             <ProgressIndicator v-if="isCollecting" />
             <CollectButton
               v-else-if="!isCollectedTab"
+              class="text-medium-gray"
               :button-text="collectButtonText"
               :is-collectable="isCollectable"
               :collect-expiry-time="collectExpiryTime"
