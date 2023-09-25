@@ -1,7 +1,7 @@
 <template>
   <main
     ref="page"
-    class="pb-[10rem]"
+    class="pb-[10rem] overflow-hidden"
     style="opacity: 0"
   >
 
@@ -502,11 +502,11 @@
         @collect="handleClickCollectForFreeButton"
         @click-collect-button="handleCollectForFreeButtonClickBelowHeroSection"
       >
-        <Label
+        <!-- <Label
           class="max-w-[560px] mx-auto mt-[1.5rem] text-[2rem] laptop:text-[2.75rem] font-proxima font-[600]"
           :text="$t('index_page_free_collect_cta_tagline')"
           align="center"
-        />
+        /> -->
       </IndexPageFreeCollectCTA>
     </section>
 
@@ -841,12 +841,14 @@
           @click-avatar="handleAuthorClickInNFTBookSection"
         />
 
+        <!-- Hide free collect CTA for now
         <IndexPageFreeCollectCTA
           class="mt-[6rem]"
           :class-id="freeMintNFTClassId"
           @collect="handleClickCollectForFreeButton"
           @click-collect-button="handleCollectForFreeButtonClickInNFTBookSection"
         />
+        -->
 
         <IndexPageQuote
           class="text-black max-w-[650px] mx-auto mt-[5rem]"
@@ -1256,7 +1258,7 @@
           />
 
           <IndexPageFreeCollectCTA
-            class="mt-[6rem]"
+            class="mt-[6rem] w-full"
             :class-id="freeMintNFTClassId"
             @collect="handleClickCollectForFreeButton"
             @click-collect-button="handleCollectForFreeButtonClickInAllStoriesMatterSection"

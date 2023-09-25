@@ -42,6 +42,7 @@
             />
           </svg>
         </ButtonV2>
+        <slot name="prepend" />
         <component
           :is="panelComponent"
           :class="[
@@ -53,6 +54,7 @@
             'scrollbar-custom',
             panelClass,
           ]"
+          :style="panelStyle"
         >
           <template v-if="isBasic">
             <Label
@@ -116,6 +118,10 @@ export default class Dialog extends Vue {
   // Panel class.
   @Prop({ default: '' })
   readonly panelClass!: string;
+
+  // Panel style.
+  @Prop({ default: '' })
+  readonly panelStyle!: string;
 
   // Header text.
   @Prop({ default: '' })

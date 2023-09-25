@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page class="overflow-hidden">
     <CardV2 v-if="isLoading" class="absolute top-[40%]">{{ $t('nft_details_page_label_loading') }}</CardV2>
     <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
 
@@ -27,6 +27,7 @@
           :is-collectable="nftIsCollectable"
           :is-free="nftIsFree"
           :collect-expiry-time="collectExpiryTime"
+          :is-mid-autumn-style="nftIsMidAutumnStyle"
           @click-cta-button="handleCollectFromCTA"
         />
 

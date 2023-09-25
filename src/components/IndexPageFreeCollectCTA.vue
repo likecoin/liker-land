@@ -14,6 +14,7 @@
       button-theme="glow"
       :is-free="true"
       :collect-expiry-time="collectExpiryTime"
+      :is-mid-autumn-style="nftIsMidAutumnStyle"
       @click-cta-button="handleClickCollect"
     >
       <slot />
