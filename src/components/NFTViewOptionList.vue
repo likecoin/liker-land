@@ -117,7 +117,8 @@ export default {
       return this.contentUrls.length ? this.contentUrls : [this.url];
     },
     shouldShowViewContentButton() {
-      return !this.normalizedContentURLs.includes(this.url);
+      // NOTE: Temporarily hide the button for NFT Book
+      return !this.normalizedContentURLs.includes(this.url) && !this.isNftBook;
     },
     hasDuplicatedContentTypes() {
       const set = new Set(
