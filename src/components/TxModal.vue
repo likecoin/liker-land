@@ -198,11 +198,11 @@ export default {
     dialogProps() {
       const props = {
         panelContainerClass: this.isMidAutumnStyle
-          ? 'max-w-[380px] w-full'
-          : 'max-w-[520px] w-full',
+          ? 'relative max-w-[380px] w-full'
+          : 'fixed max-w-[520px] w-full',
         panelClass: this.isMidAutumnStyle
           ? 'shadow-lg text-white bg-[#184158] bg-cover bg-no-repeat bg-center w-full min-h-[380px] pt-[10.5rem] p-[48px] phone:px-[32px] rounded-[380px]'
-          : 'shadow-lg bg-white w-full p-[48px] phone:p-[16px] rounded-[24px]',
+          : 'shadow-lg bg-white w-full p-[48px] phone:p-[16px] rounded-[24px] max-h-[80vh]',
         open: this.isOpen,
         hasCloseButton: this.hasCloseButton || !!this.uiTxErrorMessage,
         headerText: this.headerText,
