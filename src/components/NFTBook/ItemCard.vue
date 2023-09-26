@@ -117,9 +117,13 @@
           :text="$t('campaign_nft_book_just_arrived')"
         />
         <Label preset="h4" :class="titleStyle" :text="NFTName" />
-        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
-          {{ NFTDescription }}
-        </p>
+        <p
+          :class="[
+            'text-14',
+            'whitespace-pre-line',
+            descriptionStyle
+          ]"
+        >{{ NFTDescription }}</p>
         <div class="flex">
           <client-only>
             <NuxtLink
