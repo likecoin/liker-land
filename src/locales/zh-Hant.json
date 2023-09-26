@@ -648,8 +648,8 @@
     "language": "介面語言",
     "title": "設定"
   },
-  "shopping_cart_checkout_button_by_LIKE": "以 LIKE 結帳",
   "shopping_cart_checkout_button_by_card": "以信用卡結帳",
+  "shopping_cart_checkout_button_by_LIKE": "以 LIKE 結帳",
   "shopping_cart_empty_notice": "背包是空的",
   "shopping_cart_empty_notice_button": "瀏覽 NFT",
   "shopping_cart_error_insufficient_balance": "餘額不足，你只有 {balance}",
@@ -680,6 +680,8 @@
   "snackbar_error_seq_mismatch": "交易序列錯誤，請稍等一段時間等帳戶狀態同步後，再重試購買",
   "snackbar_success_collect": "完成收藏 \"{NFT}\".",
   "snackbar_success_transfer": "已完成發送作品",
+  "store_books_page_title": "更多書目",
+  "store_nft_book_more_button": "更多書目",
   "subVPs": [
     "用 Liker Land 收發 LikeCoin 最便捷",
     "每週、每天、每篇文章所獲賺賞，一目了然",

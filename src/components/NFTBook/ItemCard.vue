@@ -300,16 +300,18 @@ export default {
   methods: {
     async fetchInfo() {
       await this.lazyFetchNFTClassAggregatedData();
+      if (this.preset === PRESET_TYPE.DETAILS) {
+        return;
+      }
+
       try {
-        if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {
-          await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
-            if (error.response?.status !== 400) {
-              throw error;
-            } else {
-              return Promise.resolve();
-            }
-          });
-        }
+        await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
+          if (error.response?.status !== 400) {
+            throw error;
+          } else {
+            return Promise.resolve();
+          }
+        });
       } catch (error) {
         if (!error.response?.status === 404) {
           // eslint-disable-next-line no-console

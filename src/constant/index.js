@@ -82,12 +82,13 @@ export const LIKECOIN_NFT_CLASS_FREE_MINT = IS_TESTNET
   ? 'likenft1t2a7n9px9y5mhayjpk4s7m40zwjr3wvyg4ucg32w77jxmsw7889qg6ky8d'
   : 'likenft1wtq5cqjw9vhpjqq6g8l55jhez6dpn78nxmna4dz235wrlwa203qs7j234q';
 
-export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
+export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
   ? [
-      'likenft1fsf4x0tsm8gj8x0adkcce68es2xt5gwk9y7zjf06wwh92t27s99q3ktwpn',
-      'likenft1xj9jkxcernd2fzd6597tee3v57hzy8r4tzpmr7hu5mqvzah7ztaqua9yvh',
-      'likenft1yycuh6458s9045xvy6205xp2uhpl7r4lukfdclhg0phwjlfytq3skmuq8j',
-      'likenft1j3azrgn736esh3sm0y03l93pecmy8mkuf43n0w3j22zeqn3r6uwsz40spa',
+      'likenft17425skd9dfq8djm9j6c73vv2393ffaq9gpes6ewq77x2mgp4w2xqp7vkla',
+      'likenft1dgvyx97wv5f3kz3ag9uk0u2t4rwd6azth9yxre7ux2pwz6f75ytstfktxm',
+      'likenft1h5td83etzwrrqvjnedwh800nkfzcnc3773l3pzupegcvyug749dslxgn5m',
+      'likenft15raex2xg55l0vutfww8faxnsjxxeqead87mtaj7tczzvmpgxmn3s95vnp2',
+      'likenft1cstgwjga3295rnp7rukqwschu7c9zka99x0lm2xwphx3aksqmp7s38d3v4',
     ]
   : [
       // 天工開物・栩栩如真
@@ -102,6 +103,34 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
       'likenft1uxjuhufvem4ccvwmquvt0uecfgcnn7wqpasyctn3glsq3q7kpxusnk7jaf',
       // 所謂「我不投資」，就是 all in 在法定貨幣
       'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
+    ];
+
+export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
+  ? [
+      'likenft1kramesxthl5f09pf5elrejvml9zufmtn9cuf74r5zmwhlf866udq5d5x25',
+      'likenft10rur203yk5mc7ufx0r56ssj5q7656upwfp56sccxm7hut0nft2gq9k70wv',
+      'likenft1pvzffhcdk5yn6sh4hju7h0k56mrd30j8nd39pemw0u4qnxzg3ynsfkhg0d',
+      'likenft1yuqkfvv9zsju94paak03sqn28rn5vrnfad3kuercenpuh3eax06qcug578',
+    ]
+  : [
+      // Animal Farm
+      'likenft14tuskytm0ewn4aadxrmlfgszexppk0f5xef2xu7zhjltdz3eud9s743mrj',
+      // Brave New World
+      'likenft16744dyfn96vswqsy6286hzatnymzg0vwnr6aqrpwm9d7hpfnh7rqmktxua',
+      // The Count of Monte Christo
+      'likenft1f7nfpgsaen3uwkhp6a3trl6u59qaapd597lnwplh75m3fer8ls2q2rmv5g',
+      // 吶喊
+      'likenft1v0y53j55l96ye4dzm00gqfhkazzy6mrytlav4cy35stthvflk9ls7fpqhs',
+      // Oliver Twist
+      'likenft1yulzjeeuz4fdj754tugqw6342dyfd5wtkfyraly45ea79h9qnjxs8cqxfe',
+      // 呼蘭河傳
+      'likenft1hfx5j4utxp9mpdzf5g5r7w9gve4lw9q2a402k00t45ruf8pca2eqndap32',
+      // 死水微瀾
+      'likenft1tjyaqr0e3pfv9squz0grs95sdnfjgr6kd59e2aen3krmdge28cesnjt8de',
+      // 沉淪
+      'likenft1cjf56z3dju27dv77hqxdpm3e034gluq3etmagxygssexr86sem6sk3szyq',
+      // The Call of the Wild
+      'likenft1yxedh53ay49u8xu6aqg6aa0gr6jj9svy40q3wjv266v6pvrzyj4s6hszzj',
     ];
 
 export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
