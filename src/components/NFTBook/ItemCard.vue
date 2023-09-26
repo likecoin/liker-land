@@ -44,7 +44,7 @@
     <Label
       class="text-medium-gray mt-[6px] mb-[12px]"
       preset="p6"
-      :text="creatorDisplayName | ellipsis"
+      :text="(iscnAuthor || creatorDisplayName) | ellipsis"
     />
     <Label
       v-if="nftBookAvailablePriceLabel"
@@ -120,41 +120,51 @@
         <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
           {{ NFTDescription }}
         </p>
-        <div class="flex">
+        <ul class="flex flex-wrap mt-[12px] gap-[1.5rem]">
+          <li v-if="iscnAuthor" class="flex flex-col justify-center ml-[8px]">
+            <span
+              class="text-like-cyan-gray text-10"
+            >{{ $t('identity_type_author') }}</span>
+            <span
+              :class="['font-[600]', displayNameStyle]"
+            >{{ iscnAuthor | ellipsis }}</span>
+          </li>
           <client-only>
-            <NuxtLink
-              class="mt-[12px] flex items-center text-like-green group my-[8px]"
-              :to="
-                iscnOwner
-                  ? localeLocation({
-                    name: 'id',
-                    params: { id: iscnOwner },
-                    query: { tab: 'created' },
-                  })
-                  : ''"
-              @click.native.stop="onClickAvatar"
-            >
-              <Identity
-                :avatar-url="creatorAvatar"
-                :avatar-size="42"
-                :is-avatar-disabled="true"
-                :is-lazy-loaded="true"
-              />
-              <div class="flex flex-col justify-start ml-[8px]">
-                <span class="text-like-cyan-gray text-10 group-hover:underline">{{
-                  $t('identity_type_creator')
-                }}</span>
-                <span
-                  :class="[
-                    'group-hover:underline',
-                    'font-[600]',
-                    displayNameStyle,
-                  ]"
-                >{{ creatorDisplayName | ellipsis }}</span>
-              </div>
-            </NuxtLink>
+            <li>
+              <NuxtLink
+                class="flex items-center text-like-green group my-[8px]"
+                :to="
+                  iscnOwner
+                    ? localeLocation({
+                      name: 'id',
+                      params: { id: iscnOwner },
+                      query: { tab: 'created' },
+                    })
+                    : ''"
+                @click.native.stop="onClickAvatar"
+              >
+                <Identity
+                  :avatar-url="creatorAvatar"
+                  :avatar-size="42"
+                  :is-avatar-disabled="true"
+                  :is-lazy-loaded="true"
+                />
+                <div class="flex flex-col justify-start ml-[8px]">
+                  <span
+                    class="text-like-cyan-gray text-10 group-hover:underline"
+                  >{{ $t(iscnAuthor ? 'identity_type_publisher' : 'identity_type_creator') }}</span>
+                  <span
+                    :class="[
+                      'group-hover:underline',
+                      'font-[600]',
+                      displayNameStyle,
+                    ]"
+                  >{{ creatorDisplayName | ellipsis }}</span>
+                </div>
+              </NuxtLink>
+            </li>
           </client-only>
-        </div>
+        </ul>
 
         <slot name="column-right" />
 

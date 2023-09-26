@@ -55,6 +55,11 @@
             displayName | ellipsis
           }}</Label>
         </NuxtLink>
+
+        <div v-if="iscnAuthor" class="my-[1rem] flex flex-col items-center text-center">
+          <span class="text-like-cyan-gray text-10">{{ $t('identity_type_author') }}</span>
+          <span class="text-dark-gray">{{ iscnAuthor | ellipsis }}</span>
+        </div>
       </div>
       <Label
         class="mt-[12px]"
@@ -162,6 +167,10 @@ export default {
 
     // Creater Info
     iscnOwner: {
+      type: String,
+      default: undefined,
+    },
+    iscnAuthor: {
       type: String,
       default: undefined,
     },
