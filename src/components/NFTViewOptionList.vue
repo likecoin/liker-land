@@ -48,7 +48,7 @@
                 :key="contentUrl"
               >
                 <ButtonV2
-                  :href="contentUrl"
+                  :href="parseNFTMetadataURL(contentUrl)"
                   preset="plain"
                   @click="e => handleClickViewContentURL(e, contentUrl)"
                 >{{ getFilenameFromURL(contentUrl) || getContentUrlButtonText(contentUrl) }}&nbsp;<IconLinkExternal /></ButtonV2>
@@ -82,6 +82,7 @@
 
 <script>
 import querystring from 'querystring';
+import { parseNFTMetadataURL } from '~/util/nft';
 
 export default {
   name: 'NFTViewOptionList',
@@ -130,6 +131,7 @@ export default {
     },
   },
   methods: {
+    parseNFTMetadataURL,
     getContentUrlType(url) {
       if (url?.includes('epub')) return 'epub';
       if (url?.includes('pdf')) return 'pdf';
@@ -156,7 +158,7 @@ export default {
     },
     handleClickViewContentURL(e, contentUrl) {
       const type = this.getContentUrlType(contentUrl);
-      this.$emit('view-content-url', e, contentUrl, type);
+      this.$emit('view-content-url', e, parseNFTMetadataURL(contentUrl), type);
     },
   },
 };
