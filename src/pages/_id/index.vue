@@ -44,7 +44,7 @@
           <!-- In App Follow -->
           <template #follow>
             <div
-              v-if="walletHasLoggedIn && !isFollowed"
+              v-if="shouldShowFollowButton"
               class="flex items-center justify-center"
             >
               <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
@@ -384,6 +384,13 @@ export default {
         'rounded-[20px]',
         'cursor-pointer',
       ];
+    },
+    shouldShowFollowButton() {
+      return (
+        this.wallet !== this.getAddress &&
+        this.walletHasLoggedIn &&
+        !this.isFollowed
+      );
     },
   },
   watch: {
