@@ -350,9 +350,11 @@ const getters = {
   shoppingCartNFTClassList: (state, getter) => {
     const list = [...Object.entries(state.shoppingCartNFTClassByIdMap)]
       .map(([classId, data]) => ({ classId, ...data }))
-      .filter(
-        item => getter.getNFTClassPurchaseInfoById(item.classId)?.price !== -1
-      );
+      .filter(item => {
+        const purchaseInfo = getter.getNFTClassPurchaseInfoById(item.classId);
+        // fetch purchase info in shopping cart component later
+        return !purchaseInfo || !purchaseInfo.price > 0;
+      });
     list.sort((a, b) => a.timestamp - b.timestamp);
     return list;
   },
