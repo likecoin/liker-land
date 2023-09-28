@@ -347,10 +347,12 @@ const getters = {
     });
     return sorted;
   },
-  shoppingCartNFTClassList: state => {
-    const list = [...Object.entries(state.shoppingCartNFTClassByIdMap)].map(
-      ([classId, data]) => ({ classId, ...data })
-    );
+  shoppingCartNFTClassList: (state, getter) => {
+    const list = [...Object.entries(state.shoppingCartNFTClassByIdMap)]
+      .map(([classId, data]) => ({ classId, ...data }))
+      .filter(
+        item => getter.getNFTClassPurchaseInfoById(item.classId)?.price !== -1
+      );
     list.sort((a, b) => a.timestamp - b.timestamp);
     return list;
   },
