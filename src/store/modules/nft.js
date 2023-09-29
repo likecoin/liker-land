@@ -353,7 +353,7 @@ const getters = {
       .filter(item => {
         const purchaseInfo = getter.getNFTClassPurchaseInfoById(item.classId);
         // fetch purchase info in shopping cart component later
-        return !purchaseInfo || !purchaseInfo.price > 0;
+        return !purchaseInfo || purchaseInfo.price > 0;
       });
     list.sort((a, b) => a.timestamp - b.timestamp);
     return list;
