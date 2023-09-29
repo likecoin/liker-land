@@ -118,9 +118,13 @@
           :text="$t('campaign_nft_book_just_arrived')"
         />
         <Label preset="h4" :class="titleStyle" :text="NFTName" />
-        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
-          {{ NFTDescription }}
-        </p>
+        <p
+          :class="[
+            'text-14',
+            'whitespace-pre-line',
+            descriptionStyle
+          ]"
+        >{{ NFTDescription }}</p>
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem]">
           <li v-if="iscnAuthor" class="flex flex-col justify-center ml-[8px]">
             <span
