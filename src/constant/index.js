@@ -118,6 +118,11 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
       },
     ]
   : [
+      // 庭刊試刊號
+      {
+        classId: 'likenft1uqslq83ghnr0nc5e7rq7dkyw5cfxwhnqj2ny8z93l52ap4c2jrqqsh4jng',
+        date: '2023-09-24T01:16:43',
+      },
       // 天工開物・栩栩如真
       {
         classId:
