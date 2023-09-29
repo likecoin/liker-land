@@ -44,7 +44,7 @@
     <Label
       class="text-medium-gray mt-[6px] mb-[12px]"
       preset="p6"
-      :text="(iscnAuthor || creatorDisplayName) | ellipsis"
+      :text="(iscnWorkAuthor || creatorDisplayName) | ellipsis"
     />
     <Label
       v-if="nftBookAvailablePriceLabel"
@@ -126,13 +126,13 @@
           ]"
         >{{ NFTDescription }}</p>
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem]">
-          <li v-if="iscnAuthor" class="flex flex-col justify-center ml-[8px]">
+          <li v-if="iscnWorkAuthor" class="flex flex-col justify-center ml-[8px]">
             <span
               class="text-like-cyan-gray text-10"
             >{{ $t('identity_type_author') }}</span>
             <span
               :class="['font-[600]', displayNameStyle]"
-            >{{ iscnAuthor | ellipsis }}</span>
+            >{{ iscnWorkAuthor | ellipsis }}</span>
           </li>
           <client-only>
             <li>
@@ -157,7 +157,7 @@
                 <div class="flex flex-col justify-start ml-[8px]">
                   <span
                     class="text-like-cyan-gray text-10 group-hover:underline"
-                  >{{ $t(iscnAuthor ? 'identity_type_publisher' : 'identity_type_creator') }}</span>
+                  >{{ $t(iscnWorkAuthor ? 'identity_type_publisher' : 'identity_type_creator') }}</span>
                   <span
                     :class="[
                       'group-hover:underline',

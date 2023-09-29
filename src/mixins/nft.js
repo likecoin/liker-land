@@ -184,7 +184,7 @@ export default {
         this.NFTClassMetadata.account_owner
       );
     },
-    iscnAuthor() {
+    iscnWorkAuthor() {
       return this.iscnData?.contentMetadata?.author?.trim();
     },
     iscnURL() {
