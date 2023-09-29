@@ -435,16 +435,16 @@ export default {
       return this.uiTxNFTStatus === 'completed';
     },
     isInsufficientLIKE() {
-      return this.walletLIKEBalance < this.NFTPrice;
+      return this.walletLIKEBalance < this.nftPriceInLIKE;
     },
     canPayByFiat() {
-      return this.nftPriceInUSD !== undefined && this.nftPriceInUSD > 0;
+      return this.NFTPrice !== undefined && this.NFTPrice > 0;
     },
     canPayByLIKE() {
       if (this.developerMode) return true;
       const notSupportedPlatforms = [];
       return (
-        this.NFTPrice > 0 &&
+        this.nftPriceInLIKE > 0 &&
         !notSupportedPlatforms.includes(this.walletMethodType)
       );
     },

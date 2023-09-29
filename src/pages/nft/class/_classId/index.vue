@@ -160,7 +160,7 @@
             <NFTPagePriceSection
               v-if="isShowPriceSection && nftIsPrimitive"
               :nft-price="NFTPrice"
-              :nft-price-u-s-d="formattedNFTPriceUSD"
+              :nft-price-u-s-d="formattedNFTPriceInUSD"
               :is-collectable="nftIsCollectable"
               :collected-count="collectedCount"
               :collector-count="ownerCount"
@@ -476,7 +476,6 @@ export default {
     try {
       this.lazyGetUserInfoByAddress(this.iscnOwner);
       this.updateNFTOwners();
-      this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
       if (this.nftIsNFTBook) {
@@ -523,7 +522,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyFetchLIKEPrice']),
     async fetchTrimmedCollectorsInfo() {
       const trimmedCollectors = this.sortedOwnerListId.slice(
         0,

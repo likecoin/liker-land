@@ -296,7 +296,6 @@ export default {
         // No-op
       }
     }
-    this.lazyFetchLIKEPrice();
     try {
       await this.lazyFetchLatestAndTrendingNFTClassIdList();
     } catch (error) {
@@ -309,7 +308,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'lazyFetchLIKEPrice',
       'lazyFetchLatestAndTrendingNFTClassIdList',
       'lazyGetISCNMetadataById',
     ]),

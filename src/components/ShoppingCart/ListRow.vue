@@ -57,7 +57,7 @@
         <span class="ml-[8px] group-hover:underline font-[600]">{{ creatorDisplayName | ellipsis }}</span>
       </NuxtLink>
     </div>
-    <div class="col-span-2 text-center text-like-green font-proxima font-[600]">{{ NFTPrice | formatNumberWithLIKE }}</div>
+    <div class="col-span-2 text-center text-like-green font-proxima font-[600]">{{ NFTPrice | formatNumberWithUSD }}</div>
     <!--
     <div class="col-span-2 text-center">{{ quantity }}</div>
     -->
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
+import { ellipsis, formatNumberWithUSD } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 
@@ -83,7 +83,7 @@ export default {
   name: 'ShoppingCartListRow',
   filters: {
     ellipsis,
-    formatNumberWithLIKE,
+    formatNumberWithUSD,
   },
   mixins: [nftMixin],
   props: {

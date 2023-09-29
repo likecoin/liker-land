@@ -1,6 +1,8 @@
 import { NFT_GEM_NAME } from '../constant';
 
 export const STARTING_PRICE = 8;
+const MIN_USD_PRICE = 1;
+const LIKE_TO_USD_CONVERT_RATIO = 1024;
 const PRICE_GROWTH_POWER = 2;
 const PRICE_GROWTH_POWER_DEGRADE_BATCH_BEGIN = 13;
 const PRICE_GROWTH_POWER_DEGRADE_BATCH_END = 18;
@@ -33,10 +35,14 @@ export function getPower(n) {
   return (PRICE_GROWTH_POWER - 1) * getPowerFactor(getBatch(n));
 }
 
-export function getPrice(n) {
+function getPrice(n) {
   if (n === 0) return STARTING_PRICE;
   const prevPrice = getPrice(n - 1);
   return prevPrice + (getBatch(n) - getBatch(n - 1)) * prevPrice * getPower(n);
+}
+
+export function getUSDPrice(n) {
+  return Math.max(getPrice(n) / LIKE_TO_USD_CONVERT_RATIO, MIN_USD_PRICE);
 }
 
 export function getSoldCountByPrice(price) {

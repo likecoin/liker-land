@@ -70,7 +70,7 @@
             </div>
             <div v-if="isCollectedTab && isCollectable" class="flex items-center text-like-green">
               <IconPrice />
-              <div class="ml-[4px]">{{ price | formatNumberWithLIKE }}</div>
+              <div class="ml-[4px]">{{ price | formatNumberWithUSD }}</div>
             </div>
             <div v-if="ownCount" class="flex items-center text-like-green">
               <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
@@ -91,14 +91,14 @@
 <script>
 import { NFT_DISPLAY_STATE } from '~/constant';
 
-import { ellipsis, formatNumberWithLIKE } from '~/util/ui';
+import { ellipsis, formatNumberWithUSD } from '~/util/ui';
 
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
 export default {
   filters: {
     ellipsis,
-    formatNumberWithLIKE,
+    formatNumberWithUSD,
   },
   mixins: [nftClassCollectionMixin],
   props: {
@@ -190,7 +190,7 @@ export default {
   computed: {
     collectButtonText() {
       return this.isCollectable
-        ? formatNumberWithLIKE(this.price)
+        ? formatNumberWithUSD(this.price)
         : this.$t('nft_class_uncollectible');
     },
   },

@@ -39,7 +39,7 @@ import {
   getBatch,
   getBatchStart,
   getAvailable,
-  getPrice,
+  getUSDPrice,
   getSoldCountByPrice,
   STARTING_PRICE,
 } from '../../util/writing-nft';
@@ -114,7 +114,7 @@ export default {
             this.activeBatch === batch
               ? getAvailable(this.offsetSoldCount, batch)
               : 0,
-          price: getPrice(batchStart),
+          price: getUSDPrice(batchStart),
           type: this.getRowType(batch),
         });
       }
