@@ -93,18 +93,13 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
   ? [
       {
         classId:
-          'likenft17425skd9dfq8djm9j6c73vv2393ffaq9gpes6ewq77x2mgp4w2xqp7vkla',
-        date: '2023-09-26T14:12:35',
-      },
-      {
-        classId:
           'likenft1dgvyx97wv5f3kz3ag9uk0u2t4rwd6azth9yxre7ux2pwz6f75ytstfktxm',
         date: '2023-09-26T14:10:25',
       },
       {
         classId:
-          'likenft1h5td83etzwrrqvjnedwh800nkfzcnc3773l3pzupegcvyug749dslxgn5m',
-        date: '2023-09-26T14:15:38',
+          'likenft17425skd9dfq8djm9j6c73vv2393ffaq9gpes6ewq77x2mgp4w2xqp7vkla',
+        date: '2023-09-26T14:12:35',
       },
       {
         classId:
@@ -116,11 +111,17 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
           'likenft1cstgwjga3295rnp7rukqwschu7c9zka99x0lm2xwphx3aksqmp7s38d3v4',
         date: '2023-09-26T14:14:25',
       },
+      {
+        classId:
+          'likenft1h5td83etzwrrqvjnedwh800nkfzcnc3773l3pzupegcvyug749dslxgn5m',
+        date: '2023-09-26T14:15:38',
+      },
     ]
   : [
       // 庭刊試刊號
       {
-        classId: 'likenft1uqslq83ghnr0nc5e7rq7dkyw5cfxwhnqj2ny8z93l52ap4c2jrqqsh4jng',
+        classId:
+          'likenft1uqslq83ghnr0nc5e7rq7dkyw5cfxwhnqj2ny8z93l52ap4c2jrqqsh4jng',
         date: '2023-09-24T01:16:43',
       },
       // 天工開物・栩栩如真
@@ -177,25 +178,19 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
           'likenft1v0y53j55l96ye4dzm00gqfhkazzy6mrytlav4cy35stthvflk9ls7fpqhs',
         date: '2023-09-24T13:37:51',
       },
-      // Brave New World
-      {
-        classId:
-          'likenft16744dyfn96vswqsy6286hzatnymzg0vwnr6aqrpwm9d7hpfnh7rqmktxua',
-        date: '2023-09-24T13:34:05',
-      },
     ];
 
 export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
   ? [
       {
         classId:
-          'likenft1kramesxthl5f09pf5elrejvml9zufmtn9cuf74r5zmwhlf866udq5d5x25',
-        date: '2023-09-26T14:09:24',
+          'likenft10rur203yk5mc7ufx0r56ssj5q7656upwfp56sccxm7hut0nft2gq9k70wv',
+        date: '2023-09-26T06:40:40',
       },
       {
         classId:
-          'likenft10rur203yk5mc7ufx0r56ssj5q7656upwfp56sccxm7hut0nft2gq9k70wv',
-        date: '2023-09-26T06:40:40',
+          'likenft1yuqkfvv9zsju94paak03sqn28rn5vrnfad3kuercenpuh3eax06qcug578',
+        date: '2023-09-26T06:50:45',
       },
       {
         classId:
@@ -204,22 +199,28 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
       },
       {
         classId:
-          'likenft1yuqkfvv9zsju94paak03sqn28rn5vrnfad3kuercenpuh3eax06qcug578',
-        date: '2023-09-26T06:50:45',
+          'likenft1kramesxthl5f09pf5elrejvml9zufmtn9cuf74r5zmwhlf866udq5d5x25',
+        date: '2023-09-26T14:09:24',
       },
     ]
   : [
+      // 呼蘭河傳
+      {
+        classId:
+          'likenft1hfx5j4utxp9mpdzf5g5r7w9gve4lw9q2a402k00t45ruf8pca2eqndap32',
+        date: '2023-09-24T13:32:48',
+      },
+      // Brave New World
+      {
+        classId:
+          'likenft16744dyfn96vswqsy6286hzatnymzg0vwnr6aqrpwm9d7hpfnh7rqmktxua',
+        date: '2023-09-24T13:34:05',
+      },
       // Animal Farm
       {
         classId:
           'likenft14tuskytm0ewn4aadxrmlfgszexppk0f5xef2xu7zhjltdz3eud9s743mrj',
         date: '2023-09-24T13:37:03',
-      },
-      // The Count of Monte Christo
-      {
-        classId:
-          'likenft1f7nfpgsaen3uwkhp6a3trl6u59qaapd597lnwplh75m3fer8ls2q2rmv5g',
-        date: '2023-09-24T13:39:27',
       },
       // Oliver Twist
       {
@@ -227,23 +228,23 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
           'likenft1yulzjeeuz4fdj754tugqw6342dyfd5wtkfyraly45ea79h9qnjxs8cqxfe',
         date: '2023-09-24T13:38:32',
       },
-      // 呼蘭河傳
+      // The Count of Monte Christo
       {
         classId:
-          'likenft1hfx5j4utxp9mpdzf5g5r7w9gve4lw9q2a402k00t45ruf8pca2eqndap32',
-        date: '2023-09-24T13:32:48',
-      },
-      // 死水微瀾
-      {
-        classId:
-          'likenft1tjyaqr0e3pfv9squz0grs95sdnfjgr6kd59e2aen3krmdge28cesnjt8de',
-        date: '2023-09-28T11:20:45',
+          'likenft1f7nfpgsaen3uwkhp6a3trl6u59qaapd597lnwplh75m3fer8ls2q2rmv5g',
+        date: '2023-09-24T13:39:27',
       },
       // The Call of the Wild
       {
         classId:
           'likenft1yxedh53ay49u8xu6aqg6aa0gr6jj9svy40q3wjv266v6pvrzyj4s6hszzj',
         date: '2023-09-25T19:41:12',
+      },
+      // 死水微瀾
+      {
+        classId:
+          'likenft1tjyaqr0e3pfv9squz0grs95sdnfjgr6kd59e2aen3krmdge28cesnjt8de',
+        date: '2023-09-28T11:20:45',
       },
     ];
 
