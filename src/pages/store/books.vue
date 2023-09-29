@@ -10,7 +10,7 @@
     ]"
   >
     <section class="w-full">
-      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
+      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('store_books_page_title') }}</h2>
       <ul class="flex flex-col items-stretch gap-[4rem] w-full max-w-[840px] mx-auto mt-[48px]">
         <li
           v-for="nft in nftBooks"
@@ -29,7 +29,10 @@
 </template>
 
 <script>
-import { LIKECOIN_NFT_BOOK_ITEMS } from '~/constant';
+import {
+  LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
+  LIKECOIN_NFT_BOOK_ITEMS,
+} from '~/constant';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -49,7 +52,12 @@ export default {
   },
   computed: {
     nftBooks() {
-      return LIKECOIN_NFT_BOOK_ITEMS.map(classId => ({ classId }));
+      const books = [
+        ...LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
+        ...LIKECOIN_NFT_BOOK_ITEMS,
+      ];
+      books.sort((a, b) => new Date(b.date) - new Date(a.date));
+      return books;
     },
   },
   methods: {

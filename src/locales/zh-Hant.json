@@ -682,7 +682,7 @@
   "snackbar_error_seq_mismatch": "交易序列錯誤，請稍等一段時間等帳戶狀態同步後，再重試購買",
   "snackbar_success_collect": "完成收藏 \"{NFT}\".",
   "snackbar_success_transfer": "已完成發送作品",
-  "store_books_page_title": "更多書目",
+  "store_books_page_title": "所有書目",
   "store_nft_book_more_button": "更多書目",
   "subVPs": [
     "用 Liker Land 收發 LikeCoin 最便捷",

@@ -1252,7 +1252,7 @@ import animatedBookCover from '~/assets/images/index/nft-book-cover.mp4';
 
 import {
   LIKECOIN_NFT_CLASS_FREE_MINT,
-  LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
+  LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS,
 } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -1346,7 +1346,7 @@ export default {
       return LIKECOIN_NFT_CLASS_FREE_MINT;
     },
     featuredNFTBookClassId() {
-      return LIKECOIN_NFT_BOOK_FEATURED_ITEMS[0];
+      return LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS[0];
     },
     animatedBookCoverSrc() {
       return animatedBookCover;
