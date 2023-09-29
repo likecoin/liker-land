@@ -113,6 +113,7 @@
       <!-- Info column -->
       <div class="flex flex-col items-center laptop:items-start justify-start py-[32px] gap-[12px] grow">
         <Label
+          v-if="isNew"
           class="text-like-cyan"
           :text="$t('campaign_nft_book_just_arrived')"
         />
@@ -249,6 +250,13 @@ export default {
     },
     isDetailsPreset() {
       return this.preset === PRESET_TYPE.DETAILS;
+    },
+    isNew() {
+      // True if within 30 days
+      return (
+        new Date().getTime() - new Date(this.iscnData?.recordTimestamp) <
+        1000 * 60 * 60 * 24 * 30
+      );
     },
     contentTypes() {
       const types = [];
