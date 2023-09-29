@@ -45,7 +45,7 @@
               { 'text-light-gray': item.isSelected },
             ]"
           >
-            {{ item.amount | formatNumberWithLIKE }}
+            {{ item.amount | formatNumberWithUSD }}
           </p>
         </div>
       </ToolTips>
@@ -53,11 +53,11 @@
   </ul>
 </template>
 <script>
-import { formatNumberWithLIKE } from '~/util/ui';
+import { formatNumberWithUSD } from '~/util/ui';
 
 export default {
   filters: {
-    formatNumberWithLIKE,
+    formatNumberWithUSD,
   },
   props: {
     typeMenuItemList: {

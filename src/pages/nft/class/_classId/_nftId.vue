@@ -520,7 +520,6 @@ export default {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.updateNFTOwners();
       this.updateNFTHistory({ getAllUserInfo: false });
-      this.lazyFetchLIKEPrice();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -553,7 +552,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyFetchLIKEPrice', 'fetchNFTMetadata']),
+    ...mapActions(['fetchNFTMetadata']),
     isMobile,
     onSelectNFT(e) {
       const { value: nftId } = e.target;

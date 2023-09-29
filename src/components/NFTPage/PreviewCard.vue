@@ -96,7 +96,7 @@
         </div>
         <div v-if="nftPrice > 0" class="flex items-center text-like-green">
           <IconPrice />
-          <div class="ml-[4px]">{{ nftPrice | formatNumberWithLIKE }}</div>
+          <div class="ml-[4px]">{{ nftPrice | formatNumberWithUSD }}</div>
         </div>
       </div>
       <Label
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { ellipsis, ellipsisDescription, formatNumberWithLIKE } from '~/util/ui';
+import { ellipsis, ellipsisDescription, formatNumberWithUSD } from '~/util/ui';
 
 import nftClassCollectionMixin from '~/mixins/nft-class-collection';
 
@@ -119,7 +119,7 @@ export default {
   filters: {
     ellipsis,
     ellipsisDescription,
-    formatNumberWithLIKE,
+    formatNumberWithUSD,
   },
   mixins: [nftClassCollectionMixin],
   props: {

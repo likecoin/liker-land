@@ -19,7 +19,7 @@
         class="font-[900] text-like-cyan"
         preset="h2"
       >
-        <template v-if="isCollectable">{{ nftPrice | formatNumberWithLIKE({ isFull: true }) }}</template>
+        <template v-if="isCollectable">{{ nftPrice | formatNumberWithUSD({ isFull: true }) }}</template>
         <template v-else>{{ $t('nft_class_uncollectible') }}</template>
       </Label>
       <Label
@@ -92,12 +92,12 @@
   </CardV2>
 </template>
 <script>
-import { formatNumberWithLIKE } from '~/util/ui';
+import { formatNumberWithUSD } from '~/util/ui';
 
 export default {
   name: 'PriceSection',
   filters: {
-    formatNumberWithLIKE,
+    formatNumberWithUSD,
   },
   props: {
     nftPrice: {

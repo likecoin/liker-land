@@ -79,6 +79,11 @@ export function formatNumberWithLIKE(num, options = {}) {
   return formatNumberWithUnit(num, 'LIKE', options);
 }
 
+export function formatNumberWithUSD(num, options = {}) {
+  if (num === 0) return 'FREE';
+  return formatNumberWithUnit(num, 'USD', options);
+}
+
 export function getLikeCoResizedImageUrl(url, size) {
   if (url.includes('like.co')) {
     return url.replace(/\?size=\d+/, `?size=${size}`);

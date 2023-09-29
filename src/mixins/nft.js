@@ -36,7 +36,7 @@ import {
   populateGrantEvent,
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
-import { formatNumberWithUnit, formatNumberWithLIKE } from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
@@ -105,14 +105,13 @@ export default {
       'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
-      'getNFTClassFiatPriceById',
+      'getNFTClassPaymentPriceById',
       'getNFTClassOwnerCount',
       'getNFTClassCollectedCount',
       'getNFTMetadataByNFTClassAndNFTId',
       'getCollectedNFTClassesByAddress',
       'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
-      'LIKEPriceInUSD',
       'uiIsOpenCollectModal',
       'uiTxTargetClassId',
       'uiTxNFTStatus',
@@ -138,13 +137,11 @@ export default {
       const info = this.getNFTClassPurchaseInfoById(this.classId) || {};
       const {
         price,
-        totalPrice,
         collectExpiryAt,
         metadata: { nextNewNFTId, soldCount, basePrice } = {},
       } = info;
       return {
         price,
-        totalPrice,
         collectExpiryAt,
         soldCount,
         basePrice,
@@ -159,7 +156,6 @@ export default {
         const { price, nftId, seller } = list[0];
         return {
           price,
-          totalPrice: price,
           classId: this.classId,
           nftId,
           seller,
@@ -269,9 +265,7 @@ export default {
       );
     },
     NFTPrice() {
-      return this.nftIsUseListingPrice
-        ? this.listingInfo.price
-        : this.purchaseInfo.price;
+      return this.purchaseInfo.price;
     },
     collectExpiryTime() {
       return this.purchaseInfo.collectExpiryAt;
@@ -279,21 +273,25 @@ export default {
     nftIsCollectable() {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;
     },
+    paymentInfo() {
+      return this.getNFTClassPaymentPriceById(this.classId) || {};
+    },
+    nftPriceInLIKE() {
+      return this.paymentInfo?.LIKEPrice;
+    },
     formattedNFTPriceInLIKE() {
-      return this.NFTPrice ? formatNumberWithLIKE(this.NFTPrice) : '-';
+      return this.NFTPrice ? formatNumberWithLIKE(this.nftPriceInLIKE) : '-';
     },
-    nftPriceInUSD() {
-      return this.getNFTClassFiatPriceById(this.classId);
+    nftPaymentPriceInUSD() {
+      return this.paymentInfo?.fiatPrice;
     },
+    // alias of NFTPrice
     NFTPriceUSD() {
-      return this.LIKEPriceInUSD * this.NFTPrice;
-    },
-    formattedNFTPriceUSD() {
-      return formatNumberWithUnit(this.NFTPriceUSD, 'USD');
+      return this.NFTPrice;
     },
     formattedNFTPriceInUSD() {
-      return this.nftPriceInUSD !== undefined
-        ? formatNumberWithUnit(this.nftPriceInUSD, 'USD')
+      return this.nftPaymentPriceInUSD !== undefined
+        ? formatNumberWithUSD(this.nftPaymentPriceInUSD)
         : '-';
     },
     controlBarPriceLabel() {
@@ -301,7 +299,7 @@ export default {
         // Do not show the second-hand price if there is stock left
         return '';
       }
-      return this.NFTPrice && formatNumberWithLIKE(this.NFTPrice);
+      return this.NFTPrice && formatNumberWithUSD(this.NFTPrice);
     },
     collectorMap() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -336,10 +334,7 @@ export default {
       const defaultEdition = {
         name: '',
         description: '',
-        priceLabel: formatNumberWithUnit(
-          this.LIKEPriceInUSD * this.NFTPrice,
-          'USD'
-        ),
+        priceLabel: this.formattedNFTPriceInUSD,
         value: 0,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
@@ -356,7 +351,7 @@ export default {
               description =
                 description[locale] || description[defaultLocale] || '';
             }
-            const priceLabel = formatNumberWithUnit(edition.price, 'USD');
+            const priceLabel = formatNumberWithUSD(edition.price);
             const { stock } = edition;
             const style = {
               spineColor1: edition.spineColor1 || '#EBEBEB',
@@ -608,7 +603,7 @@ export default {
       'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
-      'fetchNFTFiatPriceInfoByClassId',
+      'fetchNFTPaymentPriceInfoByClassId',
       'removeNFTFiatPriceInfoByClassId',
       'initIfNecessary',
       'uiToggleCollectModal',
@@ -638,7 +633,9 @@ export default {
       catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
     async fetchNFTPrices() {
-      await catchAxiosError(this.fetchNFTFiatPriceInfoByClassId(this.classId));
+      await catchAxiosError(
+        this.fetchNFTPaymentPriceInfoByClassId(this.classId)
+      );
     },
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
@@ -774,7 +771,7 @@ export default {
         await this.walletFetchLIKEBalance();
         if (
           this.walletLIKEBalance === 0 ||
-          this.walletLIKEBalance < this.NFTPrice
+          this.walletLIKEBalance < this.nftPriceInLIKE
         ) {
           logTrackerEvent(
             this,
@@ -814,7 +811,7 @@ export default {
         } else {
           signData = await signGrant({
             senderAddress: this.getAddress,
-            amountInLIKE: this.purchaseInfo.totalPrice,
+            amountInLIKE: this.nftPriceInLIKE,
             signer: this.getSigner,
             memo,
           });
