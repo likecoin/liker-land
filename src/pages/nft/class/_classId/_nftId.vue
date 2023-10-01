@@ -286,6 +286,7 @@
           v-else
           :iscn-owner="iscnOwner"
           :is-followed="isFollowed"
+          :should-show-follow-button="shouldShowFollowButton"
           :recommended-list="recommendedList"
           @header-avatar-click="handleRecommendationHeaderAvatarClick"
           @follow-button-click="handleFollowButtonClick"
@@ -513,6 +514,9 @@ export default {
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
+    },
+    shouldShowFollowButton() {
+      return Boolean(this.iscnOwner !== this.getAddress);
     },
   },
   async mounted() {

@@ -230,6 +230,7 @@
         </client-only>
         <NFTPageRecommendation
           :iscn-owner="iscnOwner"
+          :should-show-follow-button="shouldShowFollowButton"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
           :is-loading="isRecommendationLoading"
@@ -469,6 +470,9 @@ export default {
     },
     defaultSelectedValue() {
       return this.nftEditions[0]?.value;
+    },
+    shouldShowFollowButton() {
+      return Boolean(this.iscnOwner !== this.getAddress);
     },
   },
   async mounted() {

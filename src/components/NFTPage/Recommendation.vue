@@ -9,6 +9,7 @@
         @click.native="handleHeaderAvatarClick"
       />
       <ButtonV2
+        v-if="shouldShowFollowButton"
         :preset="isFollowed ? 'tertiary' : 'secondary'"
         size="mini"
         @click="handleFollowButtonClick"
@@ -98,6 +99,10 @@ export default {
       default: () => [],
     },
     isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    shouldShowFollowButton: {
       type: Boolean,
       default: false,
     },
