@@ -1,6 +1,6 @@
 <template>
   <section class="bg-like-green rounded-[24px] overflow-hidden py-[32px]">
-    <div class="flex items-center justify-between px-[32px]">
+    <div v-if="recommendedList.length" class="flex items-center justify-between px-[32px]">
       <NFTMessageIdentity
         type="creator"
         class="flex-shrink-0"
@@ -21,18 +21,16 @@
       <div v-if="isLoading" class="flex items-center justify-center my-auto">
         <ProgressIndicator />
       </div>
-      <div v-else-if="recommendedList.length > 0" class="relative mt-[24px]">
+      <div v-else class="relative mt-[24px]">
         <Swiper
           ref="recommendationSwiper"
           :options="swiperOptions"
           @slider-move="handleSliderMove"
         >
           <SwiperSlide
-            v-for="nft in recommendedList"
+            v-for="nft in displayRecommendationList"
             :key="nft.classId"
-            style="
-              width: 310px; /* NOTE: Set width in style for auto slide per view calculation */
-            "
+            style="width: 310px;"
           >
             <NFTPortfolioItem
               class="shadow-lg mb-[12px] mx-auto"
@@ -79,6 +77,9 @@
 
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
+
+const DEFAULT_LIST = LIKECOIN_NFT_CAMPAIGN_ITEMS.slice(0, 5);
 
 export default {
   name: 'NFTPageRecommendation',
@@ -119,6 +120,12 @@ export default {
     },
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
+    },
+    displayRecommendationList() {
+      if (this.recommendedList.length) {
+        return this.recommendedList;
+      }
+      return DEFAULT_LIST.map(nft => ({ classId: nft }));
     },
   },
   methods: {
