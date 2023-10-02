@@ -17,7 +17,7 @@
         {{ isFollowed ? $t('unfollow') : $t('follow') }}
       </ButtonV2>
     </div>
-    <div class="flex justify-center items-center min-h-[375px]">
+    <div class="relative flex justify-center items-center min-h-[375px]">
       <div v-if="isLoading" class="flex items-center justify-center my-auto">
         <ProgressIndicator />
       </div>
@@ -44,34 +44,35 @@
             />
           </SwiperSlide>
         </Swiper>
-
-        <div
-          class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[16px]"
-        >
-          <div
-            class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0"
-          />
-          <div
-            class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0"
-          />
-          <ButtonV2
-            class="relative shadow-lg pointer-events-auto"
-            preset="tertiary"
-            :circle="true"
-            @click="handleClickPrev"
-          >
-            <IconArrowLeft class="w-[20px]" />
-          </ButtonV2>
-          <ButtonV2
-            class="relative shadow-lg pointer-events-auto"
-            preset="tertiary"
-            :circle="true"
-            @click="handleClickNext"
-          >
-            <IconArrowLeft class="w-[20px] rotate-180" />
-          </ButtonV2>
-        </div>
       </div>
+
+      <div
+        class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[16px]"
+      >
+        <div
+          class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0"
+        />
+        <div
+          class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0"
+        />
+        <ButtonV2
+          class="relative shadow-lg pointer-events-auto"
+          preset="tertiary"
+          :circle="true"
+          @click="handleClickPrev"
+        >
+          <IconArrowLeft class="w-[20px]" />
+        </ButtonV2>
+        <ButtonV2
+          class="relative shadow-lg pointer-events-auto"
+          preset="tertiary"
+          :circle="true"
+          @click="handleClickNext"
+        >
+          <IconArrowLeft class="w-[20px] rotate-180" />
+        </ButtonV2>
+      </div>
+
     </div>
   </section>
 </template>
