@@ -17,42 +17,35 @@
         {{ isFollowed ? $t('unfollow') : $t('follow') }}
       </ButtonV2>
     </div>
-    <div class="relative flex justify-center items-center min-h-[375px]">
-      <div v-if="isLoading" class="flex items-center justify-center my-auto">
-        <ProgressIndicator />
-      </div>
-      <div v-else class="relative mt-[24px]">
-        <Swiper
-          ref="recommendationSwiper"
-          :options="swiperOptions"
-          @slider-move="handleSliderMove"
-        >
-          <SwiperSlide
-            v-for="nft in displayRecommendationList"
-            :key="nft.classId"
-            style="width: 310px;"
-          >
-            <NFTPortfolioItem
-              class="shadow-lg mb-[12px] mx-auto"
-              :class-id="nft.classId"
-              :portfolio-wallet="iscnOwner"
-              :should-fetch-when-visible="true"
-              @click.native="handleItemClick(nft.classId)"
-              @collect="handleItemCollect(nft.classId)"
-            />
-          </SwiperSlide>
-        </Swiper>
-      </div>
 
-      <div
-        class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[16px]"
+    <div v-if="isLoading" class="flex items-center justify-center my-auto min-h-[450px]">
+      <ProgressIndicator />
+    </div>
+    <div v-else class="relative mt-[24px]">
+      <Swiper
+        ref="recommendationSwiper"
+        :options="swiperOptions"
+        @slider-move="handleSliderMove"
       >
-        <div
-          class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0"
-        />
-        <div
-          class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0"
-        />
+        <SwiperSlide
+          v-for="nft in displayRecommendationList"
+          :key="nft.classId"
+          style="width: 310px;"
+        >
+          <NFTPortfolioItem
+            class="shadow-lg mb-[12px] mx-auto"
+            :class-id="nft.classId"
+            :portfolio-wallet="iscnOwner"
+            :should-fetch-when-visible="true"
+            @click.native="handleItemClick(nft.classId)"
+            @collect="handleItemCollect(nft.classId)"
+          />
+        </SwiperSlide>
+      </Swiper>
+
+      <div class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[16px]">
+        <div class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0" />
+        <div class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0" />
         <ButtonV2
           class="relative shadow-lg pointer-events-auto"
           preset="tertiary"
