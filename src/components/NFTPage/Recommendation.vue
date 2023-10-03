@@ -1,6 +1,6 @@
 <template>
-  <section class="bg-like-green rounded-[24px] overflow-hidden py-[32px]">
-    <div v-if="recommendedList.length" class="flex items-center justify-between px-[32px]">
+  <section class="bg-like-green rounded-[24px] overflow-hidden py-[2rem]">
+    <div v-if="recommendedList.length" class="flex items-center justify-between px-[2rem]">
       <NFTMessageIdentity
         type="creator"
         class="flex-shrink-0"
@@ -17,18 +17,22 @@
         {{ isFollowed ? $t('unfollow') : $t('follow') }}
       </ButtonV2>
     </div>
+    <h2
+      v-else
+      class="px-[2rem] text-like-cyan-light text-[1rem] font-[600]"
+    >{{ $t('nft_recommendation_list_other_title') }}</h2>
 
-    <div v-if="isLoading" class="flex items-center justify-center my-auto min-h-[450px]">
+    <div v-if="isLoading" class="flex items-center justify-center min-h-[450px]">
       <ProgressIndicator />
     </div>
-    <div v-else class="relative mt-[24px]">
+    <div v-else class="relative mt-[1.5rem]">
       <Swiper
         ref="recommendationSwiper"
         :options="swiperOptions"
         @slider-move="handleSliderMove"
       >
         <SwiperSlide
-          v-for="nft in displayRecommendationList"
+          v-for="nft in normalizedList"
           :key="nft.classId"
           style="width: 310px;"
         >
@@ -43,7 +47,7 @@
         </SwiperSlide>
       </Swiper>
 
-      <div class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[16px]">
+      <div class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[1rem]">
         <div class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0" />
         <div class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0" />
         <ButtonV2
@@ -114,7 +118,7 @@ export default {
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
     },
-    displayRecommendationList() {
+    normalizedList() {
       if (this.recommendedList.length) {
         return this.recommendedList;
       }
