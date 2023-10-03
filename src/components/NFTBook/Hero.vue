@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="overflow-hidden w-full">
     <div
       ref="hero"
       :class="[
@@ -9,6 +9,7 @@
         'items-stretch',
         'w-full',
         'h-full',
+        'my-[-4rem]',
         'min-h-[320px] laptop:min-h-[420px] desktop:min-h-[544px]',
       ]"
       style="background-color: #cee3e3; opacity: 0"
@@ -40,20 +41,6 @@
         <slot name="prepend" />
       </div>
       <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#cee3e3] from-25% h-[60px]" />
-      <div
-        ref="keyArtShadow"
-        :class="[
-          'absolute',
-          'inset-x-0',
-          'top-full',
-          'h-[84px]',
-          'bg-[length:350px_50%] laptop:bg-[length:420px_85%] desktop:bg-[length:768px_100%]',
-          'bg-no-repeat',
-          'bg-[center_top]',
-          'pointer-events-none',
-        ]"
-        :style="shadowStyle"
-      />
 
       <div
         ref="banner"
@@ -464,7 +451,6 @@ export default {
         keyArtTopLeftQuarterBottomRight,
         keyArtBottomLeft,
         keyArtBottomLeftCircle,
-        keyArtShadow,
         prepend,
         titleLeft,
         titleRight,
@@ -921,16 +907,6 @@ export default {
           ease: 'power1.inOut',
         },
         'keyArtAnimationEnd'
-      );
-
-      this.animation.from(
-        keyArtShadow,
-        {
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power1.out',
-        },
-        '-=0.7'
       );
 
       // NOTE: Uncomment to pause timeline for debugging
