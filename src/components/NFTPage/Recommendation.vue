@@ -1,6 +1,6 @@
 <template>
-  <section class="bg-like-green rounded-[24px] overflow-hidden py-[32px]">
-    <div class="flex items-center justify-between px-[32px]">
+  <section class="bg-like-green rounded-[24px] overflow-hidden py-[2rem]">
+    <div v-if="recommendedList.length" class="flex items-center justify-between px-[2rem]">
       <NFTMessageIdentity
         type="creator"
         class="flex-shrink-0"
@@ -9,6 +9,7 @@
         @click.native="handleHeaderAvatarClick"
       />
       <ButtonV2
+        v-if="shouldShowFollowButton"
         :preset="isFollowed ? 'tertiary' : 'secondary'"
         size="mini"
         @click="handleFollowButtonClick"
@@ -16,67 +17,66 @@
         {{ isFollowed ? $t('unfollow') : $t('follow') }}
       </ButtonV2>
     </div>
-    <div class="flex justify-center items-center min-h-[375px]">
-      <div v-if="isLoading" class="flex items-center justify-center my-auto">
-        <ProgressIndicator />
-      </div>
-      <div v-else-if="recommendedList.length > 0" class="relative mt-[24px]">
-        <Swiper
-          ref="recommendationSwiper"
-          :options="swiperOptions"
-          @slider-move="handleSliderMove"
-        >
-          <SwiperSlide
-            v-for="nft in recommendedList"
-            :key="nft.classId"
-            style="
-              width: 310px; /* NOTE: Set width in style for auto slide per view calculation */
-            "
-          >
-            <NFTPortfolioItem
-              class="shadow-lg mb-[12px] mx-auto"
-              :class-id="nft.classId"
-              :portfolio-wallet="iscnOwner"
-              :should-fetch-when-visible="true"
-              @click.native="handleItemClick(nft.classId)"
-              @collect="handleItemCollect(nft.classId)"
-            />
-          </SwiperSlide>
-        </Swiper>
+    <h2
+      v-else
+      class="px-[2rem] text-like-cyan-light text-[1rem] font-[600]"
+    >{{ $t('nft_recommendation_list_other_title') }}</h2>
 
-        <div
-          class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[16px]"
+    <div v-if="isLoading" class="flex items-center justify-center min-h-[450px]">
+      <ProgressIndicator />
+    </div>
+    <div v-else class="relative mt-[1.5rem]">
+      <Swiper
+        ref="recommendationSwiper"
+        :options="swiperOptions"
+        @slider-move="handleSliderMove"
+      >
+        <SwiperSlide
+          v-for="nft in normalizedList"
+          :key="nft.classId"
+          style="width: 310px;"
         >
-          <div
-            class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0"
+          <NFTPortfolioItem
+            class="shadow-lg mb-[12px] mx-auto"
+            :class-id="nft.classId"
+            :portfolio-wallet="iscnOwner"
+            :should-fetch-when-visible="true"
+            @click.native="handleItemClick(nft.classId)"
+            @collect="handleItemCollect(nft.classId)"
           />
-          <div
-            class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0"
-          />
-          <ButtonV2
-            class="relative shadow-lg pointer-events-auto"
-            preset="tertiary"
-            :circle="true"
-            @click="handleClickPrev"
-          >
-            <IconArrowLeft class="w-[20px]" />
-          </ButtonV2>
-          <ButtonV2
-            class="relative shadow-lg pointer-events-auto"
-            preset="tertiary"
-            :circle="true"
-            @click="handleClickNext"
-          >
-            <IconArrowLeft class="w-[20px] rotate-180" />
-          </ButtonV2>
-        </div>
+        </SwiperSlide>
+      </Swiper>
+
+      <div class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[1rem]">
+        <div class="absolute inset-y-0 left-0 w-[32px] bg-gradient-to-r from-like-green/25 to-like-green/0" />
+        <div class="absolute inset-y-0 right-0 w-[32px] bg-gradient-to-l from-like-green/25 to-like-green/0" />
+        <ButtonV2
+          class="relative shadow-lg pointer-events-auto"
+          preset="tertiary"
+          :circle="true"
+          @click="handleClickPrev"
+        >
+          <IconArrowLeft class="w-[20px]" />
+        </ButtonV2>
+        <ButtonV2
+          class="relative shadow-lg pointer-events-auto"
+          preset="tertiary"
+          :circle="true"
+          @click="handleClickNext"
+        >
+          <IconArrowLeft class="w-[20px] rotate-180" />
+        </ButtonV2>
       </div>
+
     </div>
   </section>
 </template>
 
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
+
+const DEFAULT_LIST = LIKECOIN_NFT_CAMPAIGN_ITEMS.slice(0, 5);
 
 export default {
   name: 'NFTPageRecommendation',
@@ -101,6 +101,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    shouldShowFollowButton: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     swiperOptions() {
@@ -113,6 +117,12 @@ export default {
     },
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
+    },
+    normalizedList() {
+      if (this.recommendedList.length) {
+        return this.recommendedList;
+      }
+      return DEFAULT_LIST.map(nft => ({ classId: nft }));
     },
   },
   methods: {
