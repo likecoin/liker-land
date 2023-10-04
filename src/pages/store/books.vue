@@ -11,19 +11,12 @@
   >
     <section class="w-full">
       <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('store_books_page_title') }}</h2>
-      <ul class="flex flex-col items-stretch gap-[4rem] w-full max-w-[840px] mx-auto mt-[48px]">
-        <li
-          v-for="nft in nftBooks"
-          :key="nft.classId"
-        >
-          <NFTBookItemCard
-            :class-id="nft.classId"
-            preset="default"
-            @click.native="() => handleClickItem(nft.classId)"
-            @click-avatar="() => handleClickItemAvatar(nft.classId)"
-          />
-        </li>
-      </ul>
+      <NFTBookShelf
+        class="mt-[3rem]"
+        :items="nftBooks"
+        @click-item="handleClickItem"
+        @click-item-avatar="handleClickItemAvatar"
+      />
     </section>
   </Page>
 </template>
