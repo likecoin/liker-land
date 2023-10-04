@@ -134,6 +134,7 @@
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :is-nft-book="nftIsNFTBook"
                 :iscn-owner="iscnOwner"
+                :iscn-work-author="iscnWorkAuthor"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
                 :nft-name="NFTName"

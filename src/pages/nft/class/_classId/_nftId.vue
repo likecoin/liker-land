@@ -148,6 +148,7 @@
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :iscn-owner="iscnOwner"
+                :iscn-work-author="iscnWorkAuthor"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayName"
                 :nft-name="nftName"

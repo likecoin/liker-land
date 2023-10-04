@@ -11,7 +11,7 @@
   >
     <section v-if="shouldShowNFTBookSection" class="w-full">
       <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
-      <div class="w-full max-w-[840px] mx-auto mt-[48px]">
+      <div class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]">
         <NFTBookItemCard
           v-if="nftBooks.length > 0"
           :class-id="nftBooks[0].classId"
@@ -74,6 +74,14 @@
             </li>
           </ul>
         </div>
+
+        <ButtonV2
+          class="self-center mt-[3rem]"
+          preset="secondary"
+          :text="$t('store_nft_book_more_button')"
+          :to="localeLocation({ name: 'store-books' })"
+          @click.native="handleClickNFTBookMoreButton"
+        />
       </div>
     </section>
 
@@ -159,7 +167,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import {
   LIKECOIN_NFT_CAMPAIGN_ITEMS,
-  LIKECOIN_NFT_BOOK_ITEMS,
+  LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
 } from '~/constant';
 
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
@@ -177,10 +185,10 @@ export default {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    LIKECOIN_NFT_BOOK_ITEMS.forEach(item => {
+    LIKECOIN_NFT_BOOK_FEATURED_ITEMS.forEach(nft => {
       link.push({
         rel: 'prefetch',
-        href: `/api/nft/metadata?class_id=${item}`,
+        href: `/api/nft/metadata?class_id=${nft.classId}`,
       });
     });
     return {
@@ -246,7 +254,7 @@ export default {
         });
     },
     nftBooks() {
-      return LIKECOIN_NFT_BOOK_ITEMS.map(classId => ({ classId }));
+      return LIKECOIN_NFT_BOOK_FEATURED_ITEMS;
     },
     nftBooksOnShelf() {
       return this.nftBooks.slice(1);
@@ -320,6 +328,9 @@ export default {
         ...this.$route,
         query: { ...query, tab },
       });
+    },
+    handleClickNFTBookMoreButton() {
+      logTrackerEvent(this, 'Store', 'StoreViewMoreNFTBookClick', '', 1);
     },
     handleClickAboutWritingNFTButton() {
       logTrackerEvent(

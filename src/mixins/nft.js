@@ -180,6 +180,9 @@ export default {
         this.NFTClassMetadata.account_owner
       );
     },
+    iscnWorkAuthor() {
+      return this.iscnData?.contentMetadata?.author?.trim();
+    },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },

@@ -44,7 +44,7 @@
     <Label
       class="text-medium-gray mt-[6px] mb-[12px]"
       preset="p6"
-      :text="creatorDisplayName | ellipsis"
+      :text="(iscnWorkAuthor || creatorDisplayName) | ellipsis"
     />
     <Label
       v-if="nftBookAvailablePriceLabel"
@@ -113,6 +113,7 @@
       <!-- Info column -->
       <div class="flex flex-col items-center laptop:items-start justify-start py-[32px] gap-[12px] grow">
         <Label
+          v-if="isNew"
           class="text-like-cyan"
           :text="$t('campaign_nft_book_just_arrived')"
         />
@@ -124,41 +125,51 @@
             descriptionStyle
           ]"
         >{{ NFTDescription }}</p>
-        <div class="flex">
+        <ul class="flex flex-wrap mt-[12px] gap-[1.5rem]">
+          <li v-if="iscnWorkAuthor" class="flex flex-col justify-center ml-[8px]">
+            <span
+              class="text-like-cyan-gray text-10"
+            >{{ $t('identity_type_author') }}</span>
+            <span
+              :class="['font-[600]', displayNameStyle]"
+            >{{ iscnWorkAuthor | ellipsis }}</span>
+          </li>
           <client-only>
-            <NuxtLink
-              class="mt-[12px] flex items-center text-like-green group my-[8px]"
-              :to="
-                iscnOwner
-                  ? localeLocation({
-                    name: 'id',
-                    params: { id: iscnOwner },
-                    query: { tab: 'created' },
-                  })
-                  : ''"
-              @click.native.stop="onClickAvatar"
-            >
-              <Identity
-                :avatar-url="creatorAvatar"
-                :avatar-size="42"
-                :is-avatar-disabled="true"
-                :is-lazy-loaded="true"
-              />
-              <div class="flex flex-col justify-start ml-[8px]">
-                <span class="text-like-cyan-gray text-10 group-hover:underline">{{
-                  $t('identity_type_creator')
-                }}</span>
-                <span
-                  :class="[
-                    'group-hover:underline',
-                    'font-[600]',
-                    displayNameStyle,
-                  ]"
-                >{{ creatorDisplayName | ellipsis }}</span>
-              </div>
-            </NuxtLink>
+            <li>
+              <NuxtLink
+                class="flex items-center text-like-green group my-[8px]"
+                :to="
+                  iscnOwner
+                    ? localeLocation({
+                      name: 'id',
+                      params: { id: iscnOwner },
+                      query: { tab: 'created' },
+                    })
+                    : ''"
+                @click.native.stop="onClickAvatar"
+              >
+                <Identity
+                  :avatar-url="creatorAvatar"
+                  :avatar-size="42"
+                  :is-avatar-disabled="true"
+                  :is-lazy-loaded="true"
+                />
+                <div class="flex flex-col justify-start ml-[8px]">
+                  <span
+                    class="text-like-cyan-gray text-10 group-hover:underline"
+                  >{{ $t(iscnWorkAuthor ? 'identity_type_publisher' : 'identity_type_creator') }}</span>
+                  <span
+                    :class="[
+                      'group-hover:underline',
+                      'font-[600]',
+                      displayNameStyle,
+                    ]"
+                  >{{ creatorDisplayName | ellipsis }}</span>
+                </div>
+              </NuxtLink>
+            </li>
           </client-only>
-        </div>
+        </ul>
 
         <slot name="column-right" />
 
@@ -244,6 +255,13 @@ export default {
     isDetailsPreset() {
       return this.preset === PRESET_TYPE.DETAILS;
     },
+    isNew() {
+      // True if within 30 days
+      return (
+        new Date().getTime() - new Date(this.iscnData?.recordTimestamp) <
+        1000 * 60 * 60 * 24 * 30
+      );
+    },
     contentTypes() {
       const types = [];
       this.iscnContentUrls.forEach(url => {
@@ -304,16 +322,18 @@ export default {
   methods: {
     async fetchInfo() {
       await this.lazyFetchNFTClassAggregatedData();
+      if (this.preset === PRESET_TYPE.DETAILS) {
+        return;
+      }
+
       try {
-        if ([PRESET_TYPE.CAMPAIGN, PRESET_TYPE.SHELF].includes(this.preset)) {
-          await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
-            if (error.response?.status !== 400) {
-              throw error;
-            } else {
-              return Promise.resolve();
-            }
-          });
-        }
+        await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
+          if (error.response?.status !== 400) {
+            throw error;
+          } else {
+            return Promise.resolve();
+          }
+        });
       } catch (error) {
         if (!error.response?.status === 404) {
           // eslint-disable-next-line no-console
