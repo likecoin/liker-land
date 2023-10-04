@@ -124,7 +124,7 @@ export default {
   computed: {
     ...mapGetters(['nftClassIdListInLatest', 'nftClassIdListInTrending']),
     currentTab() {
-      return this.$route.query.tab || 'featured';
+      return this.$route.query.tab || 'trending';
     },
     nftClassIds() {
       switch (this.currentTab) {
@@ -164,12 +164,12 @@ export default {
     tabMenuItemList() {
       const items = [
         {
-          text: this.$t('nft_index_page_label_featured'),
-          value: 'featured',
-        },
-        {
           text: this.$t('nft_index_page_label_trending'),
           value: 'trending',
+        },
+        {
+          text: this.$t('nft_index_page_label_featured'),
+          value: 'featured',
         },
         {
           text: this.$t('nft_index_page_label_latest'),
