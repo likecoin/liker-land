@@ -320,6 +320,9 @@ export const getTopNFTClasses = ({ before, after }) => {
   )}`;
 };
 
+export const getFreeNFTClassIds = () =>
+  `${LIKECOIN_API_BASE}/likernft/list/free`;
+
 export const getIdenticonAvatar = id =>
   `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
 

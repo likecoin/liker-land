@@ -36,7 +36,7 @@
         to: nftCollectRoute,
         tag: 'NuxtLink',
       }"
-      :is-single-column="isSingleColumn"
+      :is-single-column="isSingleColumn || !NFTPrice"
       @view-details="handleClickViewDetails"
       @view-content="handleClickViewContent"
       @collect="handleClickCollect"
