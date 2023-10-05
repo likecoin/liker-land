@@ -146,7 +146,7 @@ export default {
       return this.type === 'past';
     },
     priceLabel() {
-      return `${Math.ceil(this.price).toLocaleString('en-US')}`;
+      return this.price.toLocaleString('en-US');
     },
     priceLabelClass() {
       return [
