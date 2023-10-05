@@ -1,7 +1,7 @@
 import { NFT_GEM_NAME } from '../constant';
 
 export const STARTING_PRICE = 8;
-const MIN_USD_PRICE = 1;
+const MIN_USD_PRICE = 0.5;
 const LIKE_TO_USD_CONVERT_RATIO = 1024;
 const PRICE_GROWTH_POWER = 2;
 const PRICE_GROWTH_POWER_DEGRADE_BATCH_BEGIN = 13;
