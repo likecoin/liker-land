@@ -208,6 +208,8 @@
   "feed_empty_action": "follow",
   "feed_empty_description": "It is quiet here! Try to {action} some creators to make this plaza lively!",
   "feed_end_of_items": "End of feed",
+  "feed_suggest_to_follow": "People you following also follow",
+  "feed_suggest_to_follow_for_empty": "Recommended for you",
   "filter_menu_creator": "All Creators",
   "filter_menu_creator_selected": "{num} Creator | {num} Creators",
   "filter_menu_reset": "Clear filter",
