@@ -42,7 +42,7 @@ const state = () => ({
   collectedNFTClassesByAddressMap: {},
   createdNFTClassesByAddressMap: {},
   userNFTClassDisplayStateSetsMap: {},
-  nftBookStorePricesByClassIdMap: {},
+  nftBookStoreInfoByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
   latestNFTClassIdList: [],
   trendingNFTClassIdList: [],
@@ -99,11 +99,14 @@ const mutations = {
       hiddenClassIdSet,
     });
   },
-  [TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET](
+  [TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET](
     state,
-    { classId, prices }
+    { classId, prices, mustClaimToView }
   ) {
-    Vue.set(state.nftBookStorePricesByClassIdMap, classId, prices);
+    Vue.set(state.nftBookStoreInfoByClassIdMap, classId, {
+      prices,
+      mustClaimToView,
+    });
   },
   [TYPES.SHOPPING_CART_ADD_NFT_CLASS](state, { classId }) {
     let item = state.shoppingCartNFTClassByIdMap[classId];
@@ -234,7 +237,9 @@ const getters = {
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getNFTBookStorePricesByClassId: state => classId =>
-    state.nftBookStorePricesByClassIdMap[classId],
+    state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
+  getCanViewNFTBookBeforeClaimByClassId: state => classId =>
+    !state.nftBookStoreInfoByClassIdMap[classId]?.mustClaimToView,
   filterNFTClassListWithState: state => (nfts, wallet) =>
     nfts.filter(
       ({ classId }) =>
@@ -744,13 +749,14 @@ const actions = {
       displayState,
     });
   },
-  async fetchNFTBookPriceByClassId({ commit }, classId) {
+  async fetchNFTBookInfoByClassId({ commit }, classId) {
     const { data } = await this.$api.get(
       api.getNFTBookStorePricesByClassId(classId)
     );
-    commit(TYPES.NFT_BOOK_STORE_PRICES_BY_CLASS_ID_MAP_SET, {
+    commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, {
       classId,
       prices: data.prices,
+      mustClaimToView: data.mustClaimToView,
     });
   },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
