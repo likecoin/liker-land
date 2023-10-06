@@ -29,6 +29,7 @@
 
     <SiteHeader
       v-if="!isInInAppBrowser"
+      :key="$route.name"
       :class="[
         'text-like-green',
         { [
