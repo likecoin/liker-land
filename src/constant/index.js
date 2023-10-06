@@ -212,6 +212,18 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
       },
     ]
   : [
+      // 天工開物（明朝版）
+      {
+        classId:
+          'likenft1s0kl0jyj2pqru7js2p0qxjztpcl2nlaxpt25jqpt29q56n4hqkgs46ft72',
+        date: '2023-10-06T08:14:01',
+      },
+      // Frankenstein
+      {
+        classId:
+          'likenft1hk54hskjr0hn4lqjsexuj8gd7w9m6pvpzn0yyrqlhrvstj07d97qyesck4',
+        date: '2023-10-06T10:48:40',
+      },
       // 孽海花
       {
         classId:
