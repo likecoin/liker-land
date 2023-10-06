@@ -485,7 +485,7 @@ export default {
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
       if (this.nftIsNFTBook) {
-        blockingPromises.push(this.fetchNFTBookPriceByClassId(this.classId));
+        blockingPromises.push(this.fetchNFTBookInfoByClassId(this.classId));
       }
       await Promise.all(blockingPromises);
     } catch (error) {

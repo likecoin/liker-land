@@ -631,7 +631,7 @@ export default {
       'fetchCreatedNFTClassesByAddress',
       'fetchCollectedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
-      'fetchNFTBookPriceByClassId',
+      'fetchNFTBookInfoByClassId',
     ]),
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);

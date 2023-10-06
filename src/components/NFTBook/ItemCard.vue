@@ -327,7 +327,7 @@ export default {
       }
 
       try {
-        await this.fetchNFTBookPriceByClassId(this.classId).catch(error => {
+        await this.fetchNFTBookInfoByClassId(this.classId).catch(error => {
           if (error.response?.status !== 400) {
             throw error;
           } else {

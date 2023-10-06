@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { LIKECOIN_NFT_DIRECT_ACCESS_ITEMS } from '~/constant';
+import { mapGetters } from 'vuex';
 
 import {
   logTrackerEvent,
@@ -130,6 +130,7 @@ import {
   getNFTBookPaymentStatusEndpoint,
 } from '~/util/api';
 import { isValidAddress } from '~/util/cosmos';
+import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
 
 import alertMixin from '~/mixins/alert';
 import nftMixin from '~/mixins/nft';
@@ -157,6 +158,12 @@ export default {
     }
     try {
       await store.dispatch('lazyGetNFTClassMetadata', classId);
+      const classCollectionType = getNFTClassCollectionType(
+        store.getters.getNFTClassMetadataById(classId)
+      );
+      if (classCollectionType === nftClassCollectionType.NFTBook) {
+        await store.dispatch('fetchNFTBookInfoByClassId', classId);
+      }
     } catch (err) {
       error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
     }
@@ -172,6 +179,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getCanViewNFTBookBeforeClaimByClassId']),
     classId() {
       return this.$route.query.class_id;
     },
@@ -213,10 +221,7 @@ export default {
       );
     },
     canViewContentDirectly() {
-      return (
-        !LIKECOIN_NFT_DIRECT_ACCESS_ITEMS ||
-        LIKECOIN_NFT_DIRECT_ACCESS_ITEMS.includes(this.classId)
-      );
+      return this.getCanViewNFTBookBeforeClaimByClassId(this.classId);
     },
   },
   watch: {
