@@ -86,15 +86,15 @@
         </Label>
         <div
           v-if="!isFollowPromptStateDefault && !isBatchCollect"
-          class="flex justify-center items-center mt-[16px] px-[12px] rounded-[48px] border-[1px] border-medium-gray"
+          :class="['flex justify-center items-center mt-[16px] rounded-[48px] border-[1px] border-medium-gray', nftIsMidAutumnStyle ? 'flex-col gap-[8px] p-[12px]' : 'flex-row px-[12px]']"
         >
           <NFTMessageIdentity
             type="creator"
-            class="flex-shrink-0 !px-0"
+            :class="[nftIsMidAutumnStyle ? 'w-full' : 'flex-shrink-0 !px-0']"
             :wallet-address="iscnOwner"
             :avatar-size="40"
           />
-          <div class="ml-[24px]">
+          <div :class="[nftIsMidAutumnStyle ? 'm-0' : 'ml-[24px]']">
             <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
             <div v-else class="relative flex group w-[138px]" @click="handleClickFollow">
               <div
@@ -212,7 +212,7 @@
             id="name"
             ref="input"
             type="input"
-            class="w-full bg-transparent border-0 focus-visible:outline-none"
+            class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
             :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
             name="name"
             @input="onInputCollectMessage"

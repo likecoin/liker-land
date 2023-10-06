@@ -70,7 +70,7 @@
     "marked": "^5.1.2",
     "node-fetch": "^2.6.0",
     "nuxt": "^2.15.7",
-    "portal-vue": "^1.5.1",
+    "portal-vue": "^2.1.7",
     "postcss": "^8.4.14",
     "querystring": "^0.2.1",
     "react": "^18.2.0",

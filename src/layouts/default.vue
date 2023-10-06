@@ -54,6 +54,7 @@
     <PortalTarget
       name="dialog"
       multiple
+      @change="handleDialogChange"
     />
     <PortalTarget
       name="snackbar"
@@ -94,14 +95,23 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   mixins: [alertMixin, inAppMixin],
+  data() {
+    return {
+      hasAnyDialogOpened: false,
+    };
+  },
   head() {
     const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true });
+    const bodyClass = ['bg-gray-f7'];
+    if (this.hasAnyDialogOpened) {
+      bodyClass.push('overflow-hidden');
+    }
     return {
       htmlAttrs: {
         ...i18nHead.htmlAttrs,
       },
       bodyAttrs: {
-        class: ['bg-gray-f7'],
+        class: bodyClass,
       },
       meta: [
         ...i18nHead.meta,
@@ -148,6 +158,9 @@ export default {
         '',
         1
       );
+    },
+    handleDialogChange(hasAnyDialogOpened) {
+      this.hasAnyDialogOpened = hasAnyDialogOpened;
     },
   },
 };
