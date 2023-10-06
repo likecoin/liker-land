@@ -309,6 +309,15 @@ export const getNFTBookClaimEndpoint = ({ classId, paymentId, token }) => {
   )}`;
 };
 
+export const getFreeNFTBookPurchaseEndpoint = ({ classId, priceIndex }) => {
+  const qsPayload = {
+    price_index: priceIndex,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/free?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
     ignore_list: LIKECOIN_NFT_API_WALLET,
