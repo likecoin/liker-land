@@ -45,6 +45,7 @@ const state = () => ({
   nftBookStorePricesByClassIdMap: {},
   shoppingCartNFTClassByIdMap: {},
   latestNFTClassIdList: [],
+  freeNFTClassIdList: [],
   trendingNFTClassIdList: [],
 });
 
@@ -128,6 +129,9 @@ const mutations = {
   },
   [TYPES.NFT_SET_LATEST_NFT_CLASS_ID_LIST](state, list) {
     state.latestNFTClassIdList = list;
+  },
+  [TYPES.NFT_SET_FREE_NFT_CLASS_ID_LIST](state, list) {
+    state.freeNFTClassIdList = list;
   },
   [TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST](state, list) {
     state.trendingNFTClassIdList = list;
@@ -361,6 +365,7 @@ const getters = {
   getShoppingCartNFTClassQuantity: state => classId =>
     state.shoppingCartNFTClassByIdMap[classId]?.quantity || 0,
   nftClassIdListInLatest: state => state.latestNFTClassIdList,
+  nftClassIdListInFree: state => state.freeNFTClassIdList,
   nftClassIdListInTrending: state => state.trendingNFTClassIdList,
 };
 
@@ -788,12 +793,13 @@ const actions = {
     const trendingDate = new Date();
     trendingDate.setDate(trendingDate.getDate() - 14);
     const trendingDayString = trendingDate.toISOString().split('T')[0];
-    const [trendingRes, latestRes] = await Promise.all([
+    const [trendingRes, freeRes, latestRes] = await Promise.all([
       this.$axios.$get(
         api.getTopNFTClasses({
           after: new Date(trendingDayString).getTime() / 1000,
         })
       ),
+      this.$axios.$get(api.getFreeNFTClassIds()),
       this.$axios.$get(api.getNFTClassesPartial({ reverse: true })),
     ]);
     const [trendingClasses, latestClasses] = [trendingRes, latestRes].map(res =>
@@ -801,9 +807,14 @@ const actions = {
         c => c.metadata?.nft_meta_collection_id === 'likerland_writing_nft'
       )
     );
+    const freeClasses = freeRes.list || [];
     commit(
       TYPES.NFT_SET_LATEST_NFT_CLASS_ID_LIST,
       latestClasses.slice(0, NFT_CLASS_LATEST_DISPLAY_COUNT).map(c => c.id)
+    );
+    commit(
+      TYPES.NFT_SET_FREE_NFT_CLASS_ID_LIST,
+      freeClasses.slice(0, NFT_CLASS_LATEST_DISPLAY_COUNT)
     );
     commit(
       TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST,

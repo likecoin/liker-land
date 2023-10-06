@@ -11,9 +11,15 @@
         'laptop:grid-cols-2',
         'grid-cols-row',
         'gap-[16px]',
+        { 'flex flex-col items-center': isSingleColumn },
       ]"
     >
-      <div :class="{ 'order-2': !!storyTitle }">
+      <div
+        :class="{
+          'order-2': !!storyTitle,
+          'max-w-[440px]': isSingleColumn,
+        }"
+      >
         <NFTWidgetBaseCard class="flex flex-col items-center w-full">
           <NFTWidgetContentPreview
             :class="[

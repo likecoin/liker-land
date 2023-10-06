@@ -122,7 +122,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['nftClassIdListInLatest', 'nftClassIdListInTrending']),
+    ...mapGetters([
+      'nftClassIdListInLatest',
+      'nftClassIdListInTrending',
+      'nftClassIdListInFree',
+    ]),
     currentTab() {
       return this.$route.query.tab || 'trending';
     },
@@ -130,6 +134,9 @@ export default {
       switch (this.currentTab) {
         case 'trending': {
           return this.nftClassIdListInTrending;
+        }
+        case 'free': {
+          return this.nftClassIdListInFree;
         }
         case 'latest': {
           return this.nftClassIdListInLatest;
@@ -170,6 +177,10 @@ export default {
         {
           text: this.$t('nft_index_page_label_featured'),
           value: 'featured',
+        },
+        {
+          text: this.$t('nft_index_page_label_free'),
+          value: 'free',
         },
         {
           text: this.$t('nft_index_page_label_latest'),
