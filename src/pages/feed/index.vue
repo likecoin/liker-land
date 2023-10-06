@@ -402,6 +402,15 @@ export default {
         }
       },
     },
+    getAddress: {
+      handler(address) {
+        if (address) {
+          this.loadNFTClassesForCurrentTabByAddress(address);
+          this.fetchNFTDisplayStateListByAddress(address);
+          this.updateTopRankedCreators();
+        }
+      },
+    },
     walletFollowees: {
       immediate: true,
       handler(walletFollowees) {
@@ -424,6 +433,7 @@ export default {
   mounted() {
     this.currentMainTab = this.currentView;
     if (this.getAddress) {
+      this.loadNFTClassesForCurrentTabByAddress(this.getAddress);
       this.fetchNFTDisplayStateListByAddress(this.getAddress);
       this.updateTopRankedCreators();
     }
