@@ -30,7 +30,40 @@
         :is-content-viewable="true"
         @view-content-url="handleClickViewContentDirectly"
       />
-      <template v-if="!claimingAddress">
+      <template v-if="isFreePurchase">
+        <template v-if="state === 'INITIAL'">
+          <Label
+            class="text-medium-gray"
+            preset="p6"
+            :text="$t('nft_free_claim_email_label')"
+            align="center"
+          />
+          <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+            <input
+              v-model="claimingFreeEmail"
+              class="w-full bg-transparent border-0 focus-visible:outline-none"
+              :placeholder="$t('nft_free_claim_enter_email')"
+              type="email"
+            >
+          </div>
+          <ButtonV2
+            class="self-center mt-[24px]"
+            :text="$t('nft_free_claim_claim')"
+            preset="secondary"
+            @click="startFreePurchase"
+          />
+        </template>
+        <ProgressIndicator v-else-if="state === 'CLAIMING'" class="self-center" />
+        <template v-else-if="state === 'CLAIMED'">
+          <Label
+            class="text-medium-gray"
+            preset="p6"
+            :text="$t('nft_free_claim_check_email_label')"
+            align="center"
+          />
+        </template>
+      </template>
+      <template v-else-if="!claimingAddress">
         <template v-if="walletIsLoggingIn">
           <ProgressIndicator />
           <Label
@@ -128,6 +161,7 @@ import {
   postStripeFiatPendingClaim,
   getNFTBookClaimEndpoint,
   getNFTBookPaymentStatusEndpoint,
+  getFreeNFTBookPurchaseEndpoint,
 } from '~/util/api';
 import { isValidAddress } from '~/util/cosmos';
 import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
@@ -151,8 +185,9 @@ export default {
       class_id: classId,
       payment_id: paymentId,
       claiming_token: token,
+      free,
     } = query;
-    if (!classId || !token || !paymentId) {
+    if (!free && (!classId || !token || !paymentId)) {
       error({ statusCode: 400, message: i18n.t('nft_claim_missing_qs') });
       return;
     }
@@ -173,9 +208,12 @@ export default {
       nftId: '',
       state: NFT_CLAIM_STATE.INITIAL,
       error: '',
+      isFreePurchase: this.$route.query.free,
+      priceIndex: this.$route.query.price_index,
       collectorMessage: '',
       claimingAddressInput: '',
       claimingAddress: '',
+      claimingFreeEmail: '',
     };
   },
   computed: {
@@ -221,10 +259,16 @@ export default {
       );
     },
     canViewContentDirectly() {
-      return this.getCanViewNFTBookBeforeClaimByClassId(this.classId);
+      return (
+        !this.isFreePurchase &&
+        this.getCanViewNFTBookBeforeClaimByClassId(this.classId)
+      );
     },
   },
   watch: {
+    walletEmail() {
+      this.claimingFreeEmail = this.walletEmail;
+    },
     getAddress() {
       this.claimingAddressInput = this.getAddress;
     },
@@ -234,8 +278,8 @@ export default {
     },
   },
   async mounted() {
-    const { redirect, ...query } = this.$route.query;
-    if (redirect && query.type === 'nft_book') {
+    const { redirect, free, ...query } = this.$route.query;
+    if (!free && redirect && query.type === 'nft_book') {
       let price;
       try {
         const { data } = await this.$api.get(
@@ -293,6 +337,45 @@ export default {
         this.classId
       );
       await this.connectWallet();
+    },
+    async startFreePurchase() {
+      try {
+        this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.claimPromise = this.$api.post(
+          getFreeNFTBookPurchaseEndpoint({
+            classId: this.classId,
+            priceIndex: this.priceIndex,
+          }),
+          {
+            email: this.claimingFreeEmail,
+          }
+        );
+        await this.claimPromise;
+        this.claimPromise = undefined;
+        this.state = NFT_CLAIM_STATE.CLAIMED;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_free_nft_book_purchased',
+          this.classId
+        );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.error = error.response?.data || error.message;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_free_nft_book_purchase_error',
+          this.classId
+        );
+        this.alertPromptError(
+          this.$t('settings_email_verify_error_message', {
+            error: this.error,
+          })
+        );
+        this.state = NFT_CLAIM_STATE.ERROR;
+      }
     },
     async claim() {
       if (this.shouldBlockClaim) {
