@@ -73,11 +73,14 @@
         'relative',
         'flex',
         isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
-        'flex-col laptop:flex-row',
-        'laptop:gap-[36px]',
+        'flex-col',
+        { 'laptop:flex-row': !isCompactPreset },
+        { '!items-center': isCompactPreset },
+        { 'laptop:gap-[36px]': !isCompactPreset },
         'w-full',
         'rounded-[32px]',
-        'px-[16px] sm:px-[32px] laptop:px-[48px]',
+        'px-[16px] sm:px-[32px]',
+        { 'laptop:px-[48px]': !isCompactPreset },
         'transition-all',
         'duration-200',
         bgStyle,
@@ -111,7 +114,18 @@
         </div>
       </div>
       <!-- Info column -->
-      <div class="flex flex-col items-center laptop:items-start justify-start py-[32px] gap-[12px] grow">
+      <div
+        :class="[
+          'flex',
+          'flex-col',
+          'items-center',
+          { 'laptop:items-start': !isCompactPreset },
+          'justify-start',
+          'py-[32px]',
+          'gap-[12px]',
+          'grow',
+        ]"
+      >
         <Label
           v-if="isNew"
           class="text-like-cyan"
@@ -180,7 +194,10 @@
     </component>
 
     <!-- Footer -->
-    <div class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]">
+    <div
+      v-if="!isCompactPreset"
+      class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]"
+    >
       <NFTBookTypeTags :content-types="contentTypes" />
       <template v-if="!isDetailsPreset">
         <div v-if="nftBookAvailablePriceLabel">
@@ -208,6 +225,7 @@ import nftMixin from '~/mixins/nft';
 const PRESET_TYPE = {
   SHELF: 'shelf', // (Landing page) shelf style
   CAMPAIGN: 'campaign', // (Landing page) like-green bg
+  COMPACT: 'compact', // (Landing page) compact style
   DEFAULT: 'default', // (All books page) white bg
   DETAILS: 'details', // (Class details page) Expand all information
 };
@@ -255,6 +273,9 @@ export default {
     isDetailsPreset() {
       return this.preset === PRESET_TYPE.DETAILS;
     },
+    isCompactPreset() {
+      return this.preset === PRESET_TYPE.COMPACT;
+    },
     isNew() {
       // True if within 30 days
       return (
@@ -278,6 +299,7 @@ export default {
       switch (this.preset) {
         case PRESET_TYPE.CAMPAIGN:
           return 'bg-like-green hover:shadow-lg';
+        case PRESET_TYPE.COMPACT:
         case PRESET_TYPE.DEFAULT:
           return 'bg-white hover:shadow-md';
         case PRESET_TYPE.DETAILS:
@@ -306,6 +328,7 @@ export default {
       switch (this.preset) {
         case PRESET_TYPE.CAMPAIGN:
           return 'text-like-cyan-pale line-clamp-2';
+        case PRESET_TYPE.COMPACT:
         case PRESET_TYPE.DEFAULT:
           return 'text-dark-gray line-clamp-2';
         case PRESET_TYPE.DETAILS:

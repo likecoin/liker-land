@@ -83,10 +83,18 @@ export const LIKECOIN_NFT_CLASS_FREE_MINT = IS_TESTNET
   : 'likenft1hjm2gspl8gzwrcrfme6qmgge3n2sefs7kdwgd82egkrnvg74pc8s6u9g4t';
 
 export const LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS = IS_TESTNET
-  ? ['likenft17425skd9dfq8djm9j6c73vv2393ffaq9gpes6ewq77x2mgp4w2xqp7vkla']
+  ? [
+      'likenft17425skd9dfq8djm9j6c73vv2393ffaq9gpes6ewq77x2mgp4w2xqp7vkla',
+      'likenft15raex2xg55l0vutfww8faxnsjxxeqead87mtaj7tczzvmpgxmn3s95vnp2',
+      'likenft1cstgwjga3295rnp7rukqwschu7c9zka99x0lm2xwphx3aksqmp7s38d3v4',
+    ]
   : [
       // 天工開物・栩栩如真
       'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg',
+      // 棄床記
+      'likenft1afme4cy9vqzg5sk2lu0wku57vc94laf309msxepu9sr4qkfv2trqwdtm9q',
+      // 從新浪潮到新本土：48部電影裡的香港城誌
+      'likenft15ayw5nv7yxrlv6vvrxk0fvwdzsweqqyyw6we50dq2zaq2rk60pcs6ufhd7',
     ];
 
 export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
@@ -118,6 +126,12 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
       },
     ]
   : [
+      // 棄床記
+      {
+        classId:
+          'likenft1afme4cy9vqzg5sk2lu0wku57vc94laf309msxepu9sr4qkfv2trqwdtm9q',
+        date: '2023-10-06T04:06:57',
+      },
       // 庭刊試刊號
       {
         classId:
@@ -172,12 +186,6 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
           'likenft1cjf56z3dju27dv77hqxdpm3e034gluq3etmagxygssexr86sem6sk3szyq',
         date: '2023-09-24T13:31:01',
       },
-      // 吶喊
-      {
-        classId:
-          'likenft1v0y53j55l96ye4dzm00gqfhkazzy6mrytlav4cy35stthvflk9ls7fpqhs',
-        date: '2023-09-24T13:37:51',
-      },
     ];
 
 export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
@@ -204,6 +212,30 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
       },
     ]
   : [
+      // 天工開物（明朝版）
+      {
+        classId:
+          'likenft1s0kl0jyj2pqru7js2p0qxjztpcl2nlaxpt25jqpt29q56n4hqkgs46ft72',
+        date: '2023-10-06T08:14:01',
+      },
+      // Frankenstein
+      {
+        classId:
+          'likenft1hk54hskjr0hn4lqjsexuj8gd7w9m6pvpzn0yyrqlhrvstj07d97qyesck4',
+        date: '2023-10-06T10:48:40',
+      },
+      // 孽海花
+      {
+        classId:
+          'likenft1catx9y82l7ml3zf3lszag0ps3xumqpncg9w7xm04hy0gkz2k32ystllusj',
+        date: '2023-10-06T07:03:22',
+      },
+      // White Fang
+      {
+        classId:
+          'likenft199wngygyv2nj7yv8264kxrzqstvptv35awn20c64djz9y4c00xmsvz08yy',
+        date: '2023-10-06T05:25:18',
+      },
       // 呼蘭河傳
       {
         classId:
@@ -215,6 +247,12 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
         classId:
           'likenft16744dyfn96vswqsy6286hzatnymzg0vwnr6aqrpwm9d7hpfnh7rqmktxua',
         date: '2023-09-24T13:34:05',
+      },
+      // 吶喊
+      {
+        classId:
+          'likenft1v0y53j55l96ye4dzm00gqfhkazzy6mrytlav4cy35stthvflk9ls7fpqhs',
+        date: '2023-09-24T13:37:51',
       },
       // Animal Farm
       {
