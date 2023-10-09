@@ -33,6 +33,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     'cosmostation-mobile',
     'liker-id',
     'leap',
+    'metamask-leap',
     'walletconnect-v2',
   ],
   keplrInstallCTAPreset: 'fancy-banner',

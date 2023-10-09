@@ -397,6 +397,7 @@ const actions = {
         'cosmostation-mobile',
         'liker-id',
         'leap',
+        'metamask-leap',
         'walletconnect-v2',
       ];
     }
