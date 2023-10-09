@@ -456,35 +456,43 @@ export default {
         ],
       });
     }
+    const meta = [
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: title,
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: description,
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: description,
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: ogImage,
+      },
+      {
+        hid: 'likecoin:wallet',
+        name: 'likecoin:wallet',
+        content: this.iscnOwner,
+      },
+    ];
+    if (this.isNFTHidden) {
+      meta.push({
+        hid: 'robots',
+        name: 'robots',
+        content: 'noindex',
+      });
+    }
     return {
       title,
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: title,
-        },
-        {
-          hid: 'description',
-          name: 'description',
-          content: description,
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: description,
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: ogImage,
-        },
-        {
-          hid: 'likecoin:wallet',
-          name: 'likecoin:wallet',
-          content: this.iscnOwner,
-        },
-      ],
+      meta,
       script: schemas.length
         ? [
             {
@@ -529,6 +537,7 @@ export default {
   async mounted() {
     try {
       this.lazyGetUserInfoByAddress(this.iscnOwner);
+      this.fetchIscnOwnerNFTDisplayStateList();
       this.updateNFTOwners();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];

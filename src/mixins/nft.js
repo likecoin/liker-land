@@ -672,6 +672,9 @@ export default {
         this.fetchNFTPaymentPriceInfoByClassId(this.classId)
       );
     },
+    isNFTHidden() {
+      this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(this.classId);
+    },
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
     },
@@ -758,6 +761,9 @@ export default {
     },
     async fetchUserCollectedCount() {
       await this.updateUserCollectedCount(this.classId, this.getAddress);
+    },
+    async fetchIscnOwnerNFTDisplayStateList() {
+      await this.fetchNFTDisplayStateListByAddress(this.iscnOwner);
     },
     async fetchUserNFTDisplayStateList() {
       await this.fetchNFTDisplayStateListByAddress(this.getAddress);
