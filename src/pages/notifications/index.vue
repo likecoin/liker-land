@@ -150,7 +150,7 @@
                   <p
                     class="inline text-like-green font-600"
                     place="price"
-                  >{{ event.price }}</p>
+                  >{{ formatFreePrice(event.price) }}</p>
 
                 </i18n>
                 <div
@@ -503,6 +503,9 @@ export default {
         this.getAddress,
         1
       );
+    },
+    formatFreePrice(price) {
+      return price <= 0 ? 'free' : price;
     },
   },
 };
