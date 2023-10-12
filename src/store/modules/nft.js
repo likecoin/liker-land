@@ -102,10 +102,11 @@ const mutations = {
   },
   [TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET](
     state,
-    { classId, prices, mustClaimToView }
+    { classId, prices, defaultPaymentCurrency, mustClaimToView }
   ) {
     Vue.set(state.nftBookStoreInfoByClassIdMap, classId, {
       prices,
+      defaultPaymentCurrency,
       mustClaimToView,
     });
   },
@@ -242,6 +243,9 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
+  getNFTBookStoreBookDefaultPaymentCurrency: state => classId =>
+    state.nftBookStoreInfoByClassIdMap[classId]?.defaultPaymentCurrency ||
+    'USD',
   getCanViewNFTBookBeforeClaimByClassId: state => classId =>
     !state.nftBookStoreInfoByClassIdMap[classId]?.mustClaimToView,
   filterNFTClassListWithState: state => (nfts, wallet) =>
@@ -762,6 +766,7 @@ const actions = {
       classId,
       prices: data.prices,
       mustClaimToView: data.mustClaimToView,
+      defaultPaymentCurrency: data.defaultPaymentCurrency,
     });
   },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {

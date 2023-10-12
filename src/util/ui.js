@@ -68,19 +68,16 @@ export function formatNumber(num, options = {}) {
 }
 
 export function formatNumberWithUnit(num, unit, options = {}) {
-  if (!num) {
-    return '-';
-  }
+  if (num === 0) return 'FREE';
+  if (!num) return '-';
   return `${formatNumber(num, options)} ${unit}`;
 }
 
 export function formatNumberWithLIKE(num, options = {}) {
-  if (num === 0) return 'FREE';
   return formatNumberWithUnit(num, 'LIKE', options);
 }
 
 export function formatNumberWithUSD(num, options = {}) {
-  if (num === 0) return 'FREE';
   return formatNumberWithUnit(num, 'USD', options);
 }
 
