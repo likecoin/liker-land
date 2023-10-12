@@ -37,7 +37,11 @@ import {
   populateGrantEvent,
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
-import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
+import {
+  formatNumberWithLIKE,
+  formatNumberWithUSD,
+  formatNumberWithUnit,
+} from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
@@ -113,6 +117,7 @@ export default {
       'getCollectedNFTClassesByAddress',
       'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
+      'getNFTBookStoreBookDefaultPaymentCurrency',
       'uiIsOpenCollectModal',
       'uiTxErrorMessage',
       'uiTxTargetClassId',
@@ -348,6 +353,9 @@ export default {
           ? this.getNFTClassListingInfoById(this.classId)?.length
           : 0,
       };
+      const currency = this.getNFTBookStoreBookDefaultPaymentCurrency(
+        this.classId
+      );
       return prices
         ? prices.map((edition, index) => {
             let { name, description } = edition;
@@ -359,7 +367,15 @@ export default {
               description =
                 description[locale] || description[defaultLocale] || '';
             }
-            const priceLabel = formatNumberWithUSD(edition.price);
+            let priceLabel = formatNumberWithUSD(edition.price);
+            // TODO: support more currency
+            if (currency === 'HKD') {
+              const USD_TO_HKD_RATIO = 7.8;
+              priceLabel = formatNumberWithUnit(
+                edition.price * USD_TO_HKD_RATIO,
+                'HKD'
+              );
+            }
             const { stock } = edition;
             const style = {
               spineColor1: edition.spineColor1 || '#EBEBEB',
