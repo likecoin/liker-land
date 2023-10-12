@@ -405,7 +405,7 @@ export default {
     if (this.nftEditions) {
       const bookSchema = {
         '@context': 'https://schema.org',
-        '@type': ['Book', 'Product'],
+        '@type': 'Book',
         '@id': this.iscnId,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         name: title,
@@ -422,9 +422,15 @@ export default {
       this.nftEditions.forEach(e => {
         bookSchema.workExample.push({
           '@type': ['Book', 'Product'],
+          name: title,
+          image: [ogImage],
           iscn: this.iscnId,
           bookEdition: e.name,
           description: e.description,
+          brand: {
+            '@type': 'Brand',
+            name: 'NFT Book',
+          },
           offers: {
             '@type': 'Offer',
             price: e.price,
