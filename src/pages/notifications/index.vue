@@ -150,7 +150,11 @@
                   <p
                     class="inline text-like-green font-600"
                     place="price"
-                  >{{ formatPrice(event.price) }}</p>
+                  >{{ event.price }}</p>
+                  <p
+                    class="inline text-like-green font-600"
+                    place="currency"
+                  >{{ event.currency || 'LIKE' }}</p>
 
                 </i18n>
                 <div
@@ -258,11 +262,14 @@ export default {
             displayAvatar = this.getUserInfoByAddress(this.getAddress)?.avatar;
             isCivicLiker = this.getUserInfoByAddress(this.getAddress)
               ?.isSubscribedCivicLiker;
-            i18nPath = 'event_list_page_event_message_purchase_nft';
             fromName = this.$t('event_list_page_event_self');
             toName = this.getUserInfoByAddress(creator)?.displayName || creator;
-            // eslint-disable-next-line prefer-destructuring
-            price = e.price;
+            i18nPath =
+              e.price <= 0
+                ? 'event_list_page_event_message_purchase_nft_free'
+                : 'event_list_page_event_message_purchase_nft';
+            price = e.price <= 0 ? 'free' : e.price;
+
             memo = e.granterMemo || '';
             break;
 
@@ -319,6 +326,7 @@ export default {
         }
 
         return {
+          ...e,
           displayAvatar,
           isCivicLiker,
           eventHasSeen,
@@ -335,7 +343,6 @@ export default {
               nftId: e.nft_id,
             },
           },
-          ...e,
         };
       });
     },
@@ -503,9 +510,6 @@ export default {
         this.getAddress,
         1
       );
-    },
-    formatPrice(price) {
-      return price <= 0 ? 'free' : price;
     },
   },
 };
