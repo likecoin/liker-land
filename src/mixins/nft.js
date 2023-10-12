@@ -347,6 +347,7 @@ export default {
       const defaultEdition = {
         name: '',
         description: '',
+        price: 0,
         priceLabel: this.formattedNFTPriceInUSD,
         value: 0,
         stock: this.nftIsCollectable
@@ -389,6 +390,7 @@ export default {
               name,
               description,
               priceLabel,
+              price: edition.price,
               value: index,
               stock,
               style,

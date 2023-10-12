@@ -334,7 +334,7 @@ export default {
       return;
     }
     try {
-      await Promise.all([
+      const [metadata] = await Promise.all([
         store.dispatch('lazyGetNFTClassMetadata', classId),
         store
           .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
@@ -345,6 +345,15 @@ export default {
             }
           }),
       ]);
+      if (metadata?.nft_meta_collection_id.includes('nft_book')) {
+        await store
+          .dispatch('fetchNFTBookInfoByClassId', classId)
+          .catch(error => {
+            if (error.response?.status !== 400) {
+              throw error;
+            }
+          });
+      }
     } catch (err) {
       if (err.response?.data?.code === 3) {
         error({
@@ -392,6 +401,39 @@ export default {
           availability: 'LimitedAvailability',
         },
       });
+    }
+    if (this.nftEditions) {
+      const bookSchema = {
+        '@context': 'https://schema.org',
+        '@type': ['Book', 'Product'],
+        '@id': this.iscnId,
+        url: `${EXTERNAL_HOST}${this.$route.path}`,
+        name: title,
+        image: [ogImage],
+        description,
+        brand: {
+          '@type': 'Brand',
+          name: 'NFT Book',
+        },
+        sku: this.classId,
+        iscn: this.iscnId,
+        workExample: [],
+      };
+      this.nftEditions.forEach(e => {
+        bookSchema.workExample.push({
+          '@type': ['Book', 'Product'],
+          iscn: this.iscnId,
+          bookEdition: e.name,
+          description: e.description,
+          offers: {
+            '@type': 'Offer',
+            price: e.price,
+            priceCurrency: 'USD',
+            availability: e.stock ? 'LimitedAvailability' : 'OutOfStock',
+          },
+        });
+      });
+      schemas.push(bookSchema);
     }
     if (this.nftModelURL) {
       schemas.push({
@@ -484,9 +526,6 @@ export default {
       this.updateNFTOwners();
       this.fetchUserCollectedCount();
       const blockingPromises = [this.fetchISCNMetadata()];
-      if (this.nftIsNFTBook) {
-        blockingPromises.push(this.fetchNFTBookInfoByClassId(this.classId));
-      }
       await Promise.all(blockingPromises);
     } catch (error) {
       if (!error.response?.status === 404) {
