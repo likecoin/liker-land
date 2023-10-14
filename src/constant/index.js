@@ -132,6 +132,12 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
           'likenft1afme4cy9vqzg5sk2lu0wku57vc94laf309msxepu9sr4qkfv2trqwdtm9q',
         date: '2023-10-06T04:06:57',
       },
+      // 上行之詩
+      {
+        classId:
+          'likenft1t32cf8pnfqh7rsuz8gqa6y39mzc36yglehskp2t86g8ph07n0r2swezn2m',
+        date: '2023-10-13T18:10:01',
+      },
       // 庭刊試刊號
       {
         classId:
@@ -179,12 +185,6 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         classId:
           'likenft12ukk5nakcfxzh58vtdx7e2keun050247n8pnsfqsypgdhkq94dpste7uqw',
         date: '2023-09-27T17:13:34',
-      },
-      // 沉淪
-      {
-        classId:
-          'likenft1cjf56z3dju27dv77hqxdpm3e034gluq3etmagxygssexr86sem6sk3szyq',
-        date: '2023-09-24T13:31:01',
       },
     ];
 
@@ -235,6 +235,12 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
         classId:
           'likenft199wngygyv2nj7yv8264kxrzqstvptv35awn20c64djz9y4c00xmsvz08yy',
         date: '2023-10-06T05:25:18',
+      },
+      // 沉淪
+      {
+        classId:
+          'likenft1cjf56z3dju27dv77hqxdpm3e034gluq3etmagxygssexr86sem6sk3szyq',
+        date: '2023-09-24T13:31:01',
       },
       // 呼蘭河傳
       {
