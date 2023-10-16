@@ -3,7 +3,7 @@
     <ButtonV2
       preset="secondary"
       :text="$t('about_nft_page_nav_campaign')"
-      :to="localeLocation({ name: 'store' })"
+      :to="localeLocation({ name: 'store-articles' })"
       @click.native="handleClickCampaignPageButton"
     />
   </nav>
