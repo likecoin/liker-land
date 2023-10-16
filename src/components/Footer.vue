@@ -41,9 +41,23 @@
           </div>
 
           <div class="grid grid-flow-row gap-y-[16px]">
+            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'writing-nft-about' })">
+              {{ $t('footer_nav_about_wnft') }}
+            </NuxtLink>
+            <hr class="w-[32px] border-white border-opacity-[0.2]">
             <a class="hover:underline" target="_blank" :href="mintNftURL">
               {{ $t('footer_nav_mint_nft') }}
             </a>
+          </div>
+
+          <div class="grid grid-flow-row gap-y-[16px]">
+            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'store-books' })">
+              {{ $t('footer_nav_store_books') }}
+            </NuxtLink>
+            <hr class="w-[32px] border-white border-opacity-[0.2]">
+            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'store-articles' })">
+              {{ $t('footer_nav_store_articles') }}
+            </NuxtLink>
           </div>
 
           <div class="grid grid-flow-row gap-y-[16px]">
