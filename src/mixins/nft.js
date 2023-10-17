@@ -437,6 +437,11 @@ export default {
         this.getAddress || this.$t('nft_message_replacer_collector');
       return this.nftCreatorMessage.replaceAll('{collector}', collector);
     },
+    isNFTHidden() {
+      return this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(
+        this.classId
+      );
+    },
 
     populatedEvents() {
       return this.NFTHistory.map(event => ({
@@ -671,9 +676,6 @@ export default {
       await catchAxiosError(
         this.fetchNFTPaymentPriceInfoByClassId(this.classId)
       );
-    },
-    isNFTHidden() {
-      this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(this.classId);
     },
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
