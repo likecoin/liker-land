@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { LIKECOIN_NFT_BOOK_FEATURED_ITEMS } from '~/constant';
+import { LIKECOIN_NFT_BOOK_FEATURED_ITEMS, EXTERNAL_HOST } from '~/constant';
 
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -65,8 +65,8 @@ export default {
   mixins: [inAppMixin, navigationListenerMixin, walletMixin],
   layout: 'default',
   head() {
-    const title = this.$t('campaign_nft_page_title');
-    const description = this.$t('campaign_nft_page_description');
+    const title = this.$t('store_index_page_title');
+    const description = this.$t('store_books_page_descripition');
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
     LIKECOIN_NFT_BOOK_FEATURED_ITEMS.forEach(nft => {
       link.push({
@@ -91,6 +91,13 @@ export default {
           hid: 'og:description',
           property: 'og:description',
           content: description,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `${EXTERNAL_HOST}/images/og/${
+            this.$i18n.locale === 'zh-Hant' ? 'book-zh.png' : 'book.png'
+          }`,
         },
       ],
       link,
