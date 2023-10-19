@@ -12,14 +12,18 @@
     </template>
     <template #content="{ contentPaddingClass }">
       <template v-if="trimmedItems.length">
-        <ul :class="contentPaddingClass">
-          <NFTPageCollectorListItem
-            v-for="owner in trimmedItems"
-            :key="owner.id"
-            :class-id="classId"
-            :owner="owner"
-          />
-        </ul>
+        <div :class="contentPaddingClass">
+          <table class="w-full">
+            <tbody class="w-full">
+              <NFTPageCollectorListItem
+                v-for="owner in trimmedItems"
+                :key="owner.id"
+                :class-id="classId"
+                :owner="owner"
+              />
+            </tbody>
+          </table>
+        </div>
         <ShowMore
           v-if="shouldShowMore"
           @click-show-more="$emit('click-show-more-collector')"
@@ -50,14 +54,18 @@
             <hr class="w-full border-shade-gray">
           </template>
           <template #content>
-            <ul class="min-w-[310px]">
-              <NFTPageCollectorListItem
-                v-for="owner in items"
-                :key="owner.id"
-                :class-id="classId"
-                :owner="owner"
-              />
-            </ul>
+            <div class="min-w-[310px]">
+              <table class="w-full">
+                <tbody class="w-full">
+                  <NFTPageCollectorListItem
+                    v-for="owner in items"
+                    :key="owner.id"
+                    :class-id="classId"
+                    :owner="owner"
+                  />
+                </tbody>
+              </table>
+            </div>
           </template>
         </ShowMore>
       </template>

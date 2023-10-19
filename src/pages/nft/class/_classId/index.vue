@@ -109,7 +109,7 @@
           <NFTPageCollectorList
             :class-id="classId"
             :owner-count="ownerCount"
-            :items="populatedCollectors"
+            :items="populatedCollectorsWithMemo"
             :trimmed-count="trimmedCount"
             @click-show-more-collector="handleClickMoreCollector"
           />
@@ -182,7 +182,7 @@
             <NFTPageCollectorList
               :class-id="classId"
               :owner-count="ownerCount"
-              :items="populatedCollectors"
+              :items="populatedCollectorsWithMemo"
               :trimmed-count="trimmedCount"
               :is-narrow="true"
               @click-show-more-collector="handleClickMoreCollector"
@@ -532,6 +532,37 @@ export default {
     },
     shouldShowFollowButton() {
       return Boolean(this.iscnOwner !== this.getAddress);
+    },
+    populatedCollectorsWithMemo() {
+      if (!this.populatedCollectors || !this.populatedDisplayEvents) {
+        return [];
+      }
+      const collectorsWithMemo = this.populatedCollectors.map(collector => {
+        const event = this.populatedDisplayEvents.find(
+          event =>
+            event.event === 'purchase' &&
+            event.toWallet === collector.id &&
+            event.granterMemo
+        );
+
+        if (event) {
+          return { ...collector, memo: event.granterMemo };
+        }
+        return collector;
+      });
+
+      if (collectorsWithMemo && collectorsWithMemo.length) {
+        collectorsWithMemo.sort((a, b) => {
+          if (a.memo && !b.memo) {
+            return -1;
+          }
+          if (!a.memo && b.memo) {
+            return 1;
+          }
+          return b.collectedCount - a.collectedCount;
+        });
+      }
+      return collectorsWithMemo;
     },
   },
   async mounted() {
