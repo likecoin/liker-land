@@ -50,6 +50,7 @@ export default {
               description,
               brand: {
                 '@type': 'Brand',
+                url: `${EXTERNAL_HOST}/civic`,
                 name: 'Civic Liker',
               },
               url: `${EXTERNAL_HOST}${this.$route.path}`,

@@ -380,6 +380,12 @@ export default {
         this.$i18n.locale !== 'en' ? 'default-zh.png' : 'default.png'
       }`;
     const schemas = [];
+    const iscnOwnerPerson = {
+      '@context': 'http://www.schema.org',
+      '@type': 'Person',
+      url: `${EXTERNAL_HOST}/${this.iscnOwner}`,
+      identifier: this.iscnOwner,
+    };
     if (this.purchaseInfo.price) {
       schemas.push({
         '@context': 'http://www.schema.org',
@@ -389,6 +395,7 @@ export default {
         description,
         brand: {
           '@type': 'Brand',
+          url: `${EXTERNAL_HOST}/writing-nft/about`,
           name: 'Writing NFT',
         },
         sku: this.classId,
@@ -396,6 +403,7 @@ export default {
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
           '@type': 'Offer',
+          seller: iscnOwnerPerson,
           price: this.NFTPriceUSD,
           priceCurrency: 'USD',
           availability: 'LimitedAvailability',
@@ -415,6 +423,7 @@ export default {
           '@type': 'Brand',
           name: 'NFT Book',
         },
+        author: iscnOwnerPerson,
         sku: this.classId,
         iscn: this.iscnId,
         workExample: [],
@@ -433,6 +442,7 @@ export default {
           },
           offers: {
             '@type': 'Offer',
+            seller: iscnOwnerPerson,
             price: e.price,
             priceCurrency: 'USD',
             availability: e.stock ? 'LimitedAvailability' : 'OutOfStock',

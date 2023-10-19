@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { EXTERNAL_HOST } from '~/constant';
+
 export default {
   name: 'AboutWritingNFTPage',
   layout: 'default',
@@ -47,6 +49,11 @@ export default {
           innerHTML: JSON.stringify({
             '@context': 'http://www.schema.org',
             '@type': 'FAQPage',
+            about: {
+              '@type': 'Brand',
+              url: `${EXTERNAL_HOST}/writing-nft/about`,
+              name: 'Writing NFT',
+            },
             mainEntity: this.$t('faq_list').map(
               ({ q: question, a: answer }) => ({
                 '@type': 'Question',
