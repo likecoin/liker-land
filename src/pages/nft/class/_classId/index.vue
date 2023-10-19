@@ -534,8 +534,8 @@ export default {
       return Boolean(this.iscnOwner !== this.getAddress);
     },
     populatedCollectorsWithMemo() {
-      if (!this.populatedCollectors || !this.populatedDisplayEvents) {
-        return [];
+      if (!this.populatedDisplayEvents) {
+        return this.populatedDisplayEvents;
       }
       const collectorsWithMemo = this.populatedCollectors.map(collector => {
         const event = this.populatedDisplayEvents.find(
