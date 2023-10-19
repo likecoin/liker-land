@@ -229,6 +229,7 @@ import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
 import { fetchAllNFTClassFromChain, checkIsWritingNFT } from '~/util/nft';
+import { EXTERNAL_HOST } from '~/constant';
 
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
@@ -320,6 +321,7 @@ export default {
           innerHTML: JSON.stringify({
             '@context': 'http://www.schema.org',
             '@type': 'Person',
+            url: `${EXTERNAL_HOST}/${this.wallet}`,
             name,
             image,
             identifier: this.wallet,
