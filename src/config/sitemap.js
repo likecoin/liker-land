@@ -12,6 +12,9 @@ const axios = Axios.create({
 
 /* Copied from constant due to nuxt.config.js is not es6 import syntax */
 const { IS_TESTNET } = process.env;
+const LIKE_CO_API = IS_TESTNET
+  ? 'https://api.rinkeby.like.co'
+  : 'https://api.like.co';
 const LIKECOIN_CHAIN_API = IS_TESTNET
   ? 'https://node.testnet.like.co'
   : 'https://mainnet-node.like.co';
@@ -22,6 +25,7 @@ const getLatestNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?re
 const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getTopCreators = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getTopCollectors = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
+const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list`;
 
 /* actual routes logic */
 async function getSitemapRoutes() {
@@ -30,12 +34,14 @@ async function getSitemapRoutes() {
     topClassRes,
     creatorRes,
     collectorRes,
+    newBookRes,
   ] = await Promise.all(
     [
       getLatestNFTClasses,
       getTopNFTClasses,
       getTopCreators,
       getTopCollectors,
+      getLatestBooks,
     ].map(url =>
       axios.get(url).catch(err => {
         // eslint-disable-next-line no-console
@@ -45,7 +51,8 @@ async function getSitemapRoutes() {
     )
   );
   const classes = [].concat(
-    ...[newClassRes, topClassRes].map(r => (r.data || {}).classes || [])
+    ...[newClassRes, topClassRes].map(r => (r.data || {}).classes || []),
+    ...((newBookRes.data || {}).list || []).map(b => ({ id: b.classId }))
   );
   const classIds = classes.map(c => c.id);
   const nftDetailsPageRoutes = [...new Set(classIds)].map(
