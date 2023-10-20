@@ -109,7 +109,7 @@
           <NFTPageCollectorList
             :class-id="classId"
             :owner-count="ownerCount"
-            :items="populatedCollectors"
+            :items="populatedCollectorsWithMemo"
             :trimmed-count="trimmedCount"
             @click-show-more-collector="handleClickMoreCollector"
           />
@@ -182,7 +182,7 @@
             <NFTPageCollectorList
               :class-id="classId"
               :owner-count="ownerCount"
-              :items="populatedCollectors"
+              :items="populatedCollectorsWithMemo"
               :trimmed-count="trimmedCount"
               :is-narrow="true"
               @click-show-more-collector="handleClickMoreCollector"
@@ -205,12 +205,6 @@
 
         <Separator class="mx-auto" />
         <section>
-          <client-only>
-            <lazy-component
-              class="pointer-events-none"
-              @show.once="updateNFTHistory({ getAllUserInfo: false })"
-            />
-          </client-only>
           <NFTPageChainDataSection
             id="chain-data"
             :items="populatedDisplayEvents"
@@ -546,6 +540,37 @@ export default {
     shouldShowFollowButton() {
       return Boolean(this.iscnOwner !== this.getAddress);
     },
+    populatedCollectorsWithMemo() {
+      if (!this.populatedDisplayEvents) {
+        return this.populatedCollectors;
+      }
+      const collectorsWithMemo = this.populatedCollectors.map(collector => {
+        const event = this.populatedDisplayEvents.find(
+          event =>
+            event.event === 'purchase' &&
+            event.toWallet === collector.id &&
+            event.granterMemo
+        );
+
+        if (event) {
+          return { ...collector, memo: event.granterMemo };
+        }
+        return collector;
+      });
+
+      if (collectorsWithMemo && collectorsWithMemo.length) {
+        collectorsWithMemo.sort((a, b) => {
+          if (a.memo && !b.memo) {
+            return -1;
+          }
+          if (!a.memo && b.memo) {
+            return 1;
+          }
+          return b.collectedCount - a.collectedCount;
+        });
+      }
+      return collectorsWithMemo;
+    },
   },
   async mounted() {
     try {
@@ -600,7 +625,10 @@ export default {
         0,
         this.trimmedCount
       );
-      await this.lazyGetUserInfoByAddresses(trimmedCollectors);
+      await Promise.all([
+        this.lazyGetUserInfoByAddresses(trimmedCollectors),
+        this.updateNFTHistory({ getAllUserInfo: false }),
+      ]);
     },
     async handleFetchRecommendInfo() {
       await this.fetchRecommendInfo();
