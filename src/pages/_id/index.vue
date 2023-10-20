@@ -246,11 +246,10 @@ export default {
   mixins: [walletMixin, portfolioMixin, alertMixin],
   layout: 'default',
   async asyncData({ route, $api, error, store, redirect }) {
-    let { id } = route.params;
+    const { id: originalId } = route.params;
+    const { query, hash } = route;
+    let id = originalId;
     if (id && isValidAddress(id)) {
-      if (id.startsWith('cosmos1')) {
-        id = convertAddressPrefix(id, 'like');
-      }
       if (id.startsWith('like1')) {
         try {
           await store.dispatch('fetchUserInfoByAddress', id);
@@ -260,17 +259,28 @@ export default {
         }
         return;
       }
-    }
-    if (id && checkUserNameValid(id)) {
+      if (id.startsWith('cosmos1')) {
+        id = convertAddressPrefix(id, 'like');
+      }
+    } else if (id && checkUserNameValid(id)) {
       try {
         const userInfo = await $api.$get(getUserMinAPI(id));
-        redirect({ ...route, params: { id: userInfo.likeWallet } });
+        redirect(301, {
+          ...route,
+          params: { id: userInfo.likeWallet },
+          query,
+          hash,
+        });
         return;
       } catch (err) {
         const msg = (err.response && err.response.data) || err;
         // eslint-disable-next-line no-console
         console.error(msg);
       }
+    }
+    if (originalId !== id) {
+      redirect(301, { ...route, params: { id }, query, hash });
+      return;
     }
     error({ statusCode: 404, message: 'LIKER_NOT_FOUND' });
   },
