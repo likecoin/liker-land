@@ -205,12 +205,6 @@
 
         <Separator class="mx-auto" />
         <section>
-          <client-only>
-            <lazy-component
-              class="pointer-events-none"
-              @show.once="updateNFTHistory({ getAllUserInfo: false })"
-            />
-          </client-only>
           <NFTPageChainDataSection
             id="chain-data"
             :items="populatedDisplayEvents"
@@ -618,7 +612,10 @@ export default {
         0,
         this.trimmedCount
       );
-      await this.lazyGetUserInfoByAddresses(trimmedCollectors);
+      await Promise.all([
+        this.lazyGetUserInfoByAddresses(trimmedCollectors),
+        this.updateNFTHistory({ getAllUserInfo: false }),
+      ]);
     },
     async handleFetchRecommendInfo() {
       await this.fetchRecommendInfo();
