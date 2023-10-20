@@ -522,6 +522,9 @@ export default {
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
+    editionPriceIndex() {
+      return Number(this.$route.query.price_index) || 0;
+    },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
@@ -538,7 +541,7 @@ export default {
       return !(this.nftIsNFTBook && !this.ownCount);
     },
     defaultSelectedValue() {
-      return this.nftEditions[0]?.value;
+      return this.nftEditions[this.editionPriceIndex || 0]?.value;
     },
     shouldShowFollowButton() {
       return Boolean(this.iscnOwner !== this.getAddress);
