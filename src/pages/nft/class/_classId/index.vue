@@ -535,7 +535,7 @@ export default {
     },
     populatedCollectorsWithMemo() {
       if (!this.populatedDisplayEvents) {
-        return this.populatedDisplayEvents;
+        return this.populatedCollectors;
       }
       const collectorsWithMemo = this.populatedCollectors.map(collector => {
         const event = this.populatedDisplayEvents.find(
