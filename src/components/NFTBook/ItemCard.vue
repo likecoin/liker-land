@@ -138,7 +138,7 @@
             'whitespace-pre-line',
             descriptionStyle
           ]"
-        >{{ NFTDescription }}</p>
+        >{{ bookDescription }}</p>
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem]">
           <li v-if="iscnWorkAuthor" class="flex flex-col justify-center ml-[8px]">
             <span
@@ -340,6 +340,12 @@ export default {
     displayNameStyle() {
       if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';
       return 'text-dark-gray';
+    },
+    bookDescription() {
+      const overrideKey = `nft_override_${this.classId}_description`;
+      const hasOverride = this.$te(overrideKey);
+      if (hasOverride) return this.$t(overrideKey);
+      return this.iscnDescription || this.NFTDescription;
     },
   },
   methods: {

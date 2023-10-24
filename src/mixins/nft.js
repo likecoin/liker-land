@@ -256,6 +256,9 @@ export default {
       if (data instanceof Promise) return undefined;
       return data;
     },
+    iscnDescription() {
+      return this.iscnData?.contentMetadata?.description;
+    },
     iscnUrl() {
       return this.iscnData?.contentMetadata?.url;
     },
