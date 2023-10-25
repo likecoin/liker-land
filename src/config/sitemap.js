@@ -10,6 +10,7 @@ const axios = Axios.create({
   maxContentLength: 50 * 1000 * 1000,
 });
 
+const locales = ['zh-Hant', 'en'];
 /* Copied from constant due to nuxt.config.js is not es6 import syntax */
 const { IS_TESTNET } = process.env;
 const LIKE_CO_API = IS_TESTNET
@@ -65,7 +66,10 @@ async function getSitemapRoutes() {
   const portfolioPageRoutes = [...new Set(creator.concat(collectors))].map(
     id => `/${id}`
   );
-  return nftDetailsPageRoutes.concat(portfolioPageRoutes);
+  return nftDetailsPageRoutes.concat(portfolioPageRoutes).map(url => ({
+    url: `/${locales[0]}${url}`,
+    links: locales.map(lang => ({ lang, url: `/${lang}${url}` })),
+  }));
 }
 
 module.exports = { getSitemapRoutes };
