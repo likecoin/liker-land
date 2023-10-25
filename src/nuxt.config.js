@@ -387,6 +387,7 @@ const nuxtConfig = {
   },
   sitemap: {
     hostname: EXTERNAL_URL,
+    i18n: true,
     routes: getSitemapRoutes,
   },
   googleOptimize: {
