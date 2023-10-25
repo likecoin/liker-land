@@ -2,10 +2,7 @@
   <component
     :is="tag"
     :class="rootClasses"
-    :to="to || null"
-    :href="href || null"
-    :target="href ? '_blank' : null"
-    :rel="rel"
+    v-bind="attrs"
     v-on="$listeners"
   >
     <slot />
@@ -31,6 +28,17 @@ export default class Link extends Vue {
   get tag() {
     if (this.to) return 'NuxtLink';
     return 'a';
+  }
+
+  get attrs() {
+    if (this.to) return { to: this.to };
+    if (this.href)
+      return {
+        href: this.href,
+        target: '_blank',
+        rel: 'noopener',
+      };
+    return {};
   }
 
   get rel() {
