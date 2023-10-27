@@ -99,6 +99,15 @@ export const LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS = IS_TESTNET
 
 export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
   ? [
+      // 勇者的黃昏
+      {
+        classId: [
+          'likenft1atk7c2fc2kzrck2gr4x360u59eshwu6dwtyu8klnvxaqz6svexkqn7gzvz',
+          'likenft1w7c375cw49xd36psau32hwxvm7w5sxtntk0530key6a9zqw97jlskeex8m',
+          'likenft1rc0ja2eqecd7lp9fqmefsxt7t9fwxn554uhjcpkqs97x4mvazjcqams7ht',
+        ],
+        date: '2023-10-11T23:12:54',
+      },
       {
         classId:
           'likenft1dgvyx97wv5f3kz3ag9uk0u2t4rwd6azth9yxre7ux2pwz6f75ytstfktxm',
@@ -131,6 +140,15 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         classId:
           'likenft1afme4cy9vqzg5sk2lu0wku57vc94laf309msxepu9sr4qkfv2trqwdtm9q',
         date: '2023-10-06T04:06:57',
+      },
+      // 勇者的黃昏
+      {
+        classId: [
+          'likenft1atk7c2fc2kzrck2gr4x360u59eshwu6dwtyu8klnvxaqz6svexkqn7gzvz',
+          'likenft1m27a59y9x5x9fa9sa6ycd8q7vm3drl0qfvrjk2y9zkjqw22wq5vscwldjq',
+          'likenft1856v9yywhhrkd89ke0jc80y4czjmkf74t6ea6mmeggp3fdneu96qs0cyuy',
+        ],
+        date: '2023-10-12T08:29:39',
       },
       // 上行之詩
       {
@@ -179,12 +197,6 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         classId:
           'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
         date: '2022-12-05T05:00:56',
-      },
-      // 啼笑因緣
-      {
-        classId:
-          'likenft12ukk5nakcfxzh58vtdx7e2keun050247n8pnsfqsypgdhkq94dpste7uqw',
-        date: '2023-09-27T17:13:34',
       },
     ];
 
@@ -235,6 +247,12 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
         classId:
           'likenft199wngygyv2nj7yv8264kxrzqstvptv35awn20c64djz9y4c00xmsvz08yy',
         date: '2023-10-06T05:25:18',
+      },
+      // 啼笑因緣
+      {
+        classId:
+          'likenft12ukk5nakcfxzh58vtdx7e2keun050247n8pnsfqsypgdhkq94dpste7uqw',
+        date: '2023-09-27T17:13:34',
       },
       // 沉淪
       {
