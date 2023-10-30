@@ -84,10 +84,11 @@
         'transition-all',
         'duration-200',
         bgStyle,
+        componentClass,
         'mt-[48px]',
         { group: !isDetailsPreset },
       ]"
-      :to="isDetailsPreset ? undefined : nftCollectRoute"
+      v-bind="componentProps"
     >
       <client-only v-if="!isDetailsPreset">
         <lazy-component
@@ -260,6 +261,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    isLinkDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    componentClass: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     creatorDisplayName() {
@@ -291,9 +300,18 @@ export default {
       types.push('nft');
       return [...new Set(types.filter(type => type !== 'unknown'))];
     },
+    isLinkComponent() {
+      return !this.isLinkDisabled && !this.isDetailsPreset;
+    },
     componentTag() {
-      if (this.isDetailsPreset) return 'div';
+      if (!this.isLinkComponent) return 'div';
       return 'NuxtLink';
+    },
+    componentProps() {
+      if (!this.isLinkComponent) return {};
+      return {
+        to: this.nftCollectRoute,
+      };
     },
     bgStyle() {
       switch (this.preset) {
