@@ -774,6 +774,10 @@ export default {
       await this.fetchNFTDisplayStateListByAddress(this.getAddress);
     },
     async collectNFT() {
+      if (!this.nftIsCollectable) {
+        this.$router.push({ query: { ...this.$route.query } });
+        return;
+      }
       this.$router.push({ query: { ...this.$route.query, action: 'collect' } });
       try {
         const purchaseEventParams = {

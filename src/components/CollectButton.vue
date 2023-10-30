@@ -2,8 +2,8 @@
   <div class="flex flex-col gap-[8px] justify-center items-center">
     <ButtonV2
       :theme="theme"
-      preset="secondary"
-      :is-disabled="!isCollectable"
+      :preset="isCollectable ? 'secondary' : 'tertiary'"
+      :is-disabled="isDisabled"
       @click="handleClickCollectButton"
     >
       <template v-if="isCollectable && theme === 'classic'" #prepend>
@@ -34,6 +34,10 @@ export default {
       default: '',
     },
     isCollectable: {
+      type: Boolean,
+      default: false,
+    },
+    isDisabled: {
       type: Boolean,
       default: false,
     },

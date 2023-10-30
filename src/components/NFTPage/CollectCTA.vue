@@ -81,6 +81,7 @@
         class="mt-[2.5rem]"
         :button-text="ctaButtonText"
         :is-collectable="isCollectable"
+        :is-disabled="isCTAButtonDisabled"
         :collect-expiry-time="collectExpiryTime"
         :theme="normalizedButtonTheme"
         :should-show-expiry-time-before-expired="true"
@@ -130,6 +131,7 @@
         <CollectButton
           :button-text="ctaButtonText"
           :is-collectable="isCollectable"
+          :is-disabled="isCTAButtonDisabled"
           :collect-expiry-time="collectExpiryTime"
           :theme="normalizedButtonTheme"
           :should-show-expiry-time-before-expired="true"
@@ -147,6 +149,7 @@
         <CollectButton
           :button-text="ctaButtonText"
           :is-collectable="isCollectable"
+          :is-disabled="isCTAButtonDisabled"
           :collect-expiry-time="collectExpiryTime"
           :theme="normalizedButtonTheme"
           :should-show-expiry-time-before-expired="true"
@@ -300,6 +303,13 @@ export default {
     },
     normalizedButtonTheme() {
       return this.isMidAutumnStyle ? 'glow' : this.buttonTheme;
+    },
+    isCTAButtonDisabled() {
+      return (
+        !this.isCollectable &&
+        this.getRouteBaseName(this.$route) === 'nft-class-classId' &&
+        this.$route.params.classId === this.classId
+      );
     },
   },
   methods: {
