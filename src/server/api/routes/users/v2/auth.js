@@ -52,6 +52,7 @@ router.post('/login', async (req, res, next) => {
     publicKey,
     message,
     signMethod,
+    loginMethod = '',
   } = req.body;
   try {
     if (!inputWallet || !signature || !publicKey || !message) {
@@ -86,10 +87,12 @@ router.post('/login', async (req, res, next) => {
       const isNew = !userDoc.exists;
       const payload = {
         lastLoginTs: FieldValue.serverTimestamp(),
+        lastLoginMethod: loginMethod,
       };
       if (isNew) {
         await t.create(userRef, {
           ...payload,
+          registerLoginMethod: loginMethod,
           ts: FieldValue.serverTimestamp(),
         });
       } else {
