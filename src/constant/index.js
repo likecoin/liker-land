@@ -141,6 +141,12 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
           'likenft1afme4cy9vqzg5sk2lu0wku57vc94laf309msxepu9sr4qkfv2trqwdtm9q',
         date: '2023-10-06T04:06:57',
       },
+      // Dracula
+      {
+        classId:
+          'likenft1xcqtkpnrs4wsla38khcjqaumejmsl4zps2ec6jq6z6s07036n4ush7gm93',
+        date: '2023-10-30T12:29:09',
+      },
       // 勇者的黃昏
       {
         classId: [
@@ -191,12 +197,6 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         classId:
           'likenft1uxjuhufvem4ccvwmquvt0uecfgcnn7wqpasyctn3glsq3q7kpxusnk7jaf',
         date: '2023-04-14T17:45:17',
-      },
-      // 所謂「我不投資」，就是 all in 在法定貨幣
-      {
-        classId:
-          'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
-        date: '2022-12-05T05:00:56',
       },
     ];
 
