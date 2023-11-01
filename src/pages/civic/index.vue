@@ -5,10 +5,32 @@
 <script>
 import { EXTERNAL_HOST } from '~/constant';
 import CivicPageV3 from '~/components/CivicLikerV3/Page';
+import { getUserMinAPI } from '~/util/api';
+import { checkUserNameValid } from '~/util/user';
 
 export default {
   components: {
     CivicPageV3,
+  },
+  async fetch({ redirect, $api, query, localeLocation }) {
+    const { from: id } = query;
+    if (id && checkUserNameValid(id)) {
+      try {
+        const userInfo = await $api.$get(getUserMinAPI(id));
+        redirect(
+          301,
+          localeLocation({
+            name: 'id',
+            params: { id: userInfo.likeWallet },
+          })
+        );
+        return;
+      } catch (err) {
+        const msg = (err.response && err.response.data) || err;
+        // eslint-disable-next-line no-console
+        console.error(msg);
+      }
+    }
   },
   head() {
     const title = this.$t('civic_page_v3_title');
