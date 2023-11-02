@@ -629,6 +629,7 @@
             :text="$t('index_page_liker_land_quote')"
             :author="$t('index_page_liker_land_quote_author')"
             :author-title="$t('index_page_liker_land_quote_author_title')"
+            :author-avatar-src="require('~/assets/images/index/avatar/dungkaicheung.jpg')"
           />
         </div>
       </div>
@@ -863,6 +864,7 @@
           :text="$t('index_page_nft_book_quote')"
           :author="$t('index_page_nft_book_quote_author')"
           :author-title="$t('index_page_nft_book_quote_author_title')"
+          :author-avatar-src="require('~/assets/images/index/avatar/wanszezit.jpg')"
         />
 
         <footer class="flex flex-col items-center gap-[1rem] mt-[3rem] mb-[6rem]">
@@ -1252,6 +1254,7 @@
           :text="$t('index_page_all_stories_matter_quote')"
           :author="$t('index_page_all_stories_matter_quote_author')"
           :author-title="$t('index_page_all_stories_matter_quote_author_title')"
+          :author-avatar-src="require('~/assets/images/index/avatar/kinko.jpg')"
           :is-small="true"
         />
 
