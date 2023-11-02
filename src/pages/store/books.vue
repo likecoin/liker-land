@@ -77,7 +77,18 @@ export default {
         ...LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
         ...LIKECOIN_NFT_BOOK_ITEMS,
       ];
-      books.sort((a, b) => new Date(b.date) - new Date(a.date));
+      books.sort((a, b) => {
+        const { locale } = this.$i18n;
+        const aMatchedLocale = locale.includes(a.locale);
+        const bMatchedLocale = locale.includes(b.locale);
+        if (aMatchedLocale && !bMatchedLocale) {
+          return -1;
+        }
+        if (!aMatchedLocale && bMatchedLocale) {
+          return 1;
+        }
+        return new Date(b.date) - new Date(a.date);
+      });
       return books;
     },
   },
