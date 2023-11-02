@@ -64,7 +64,7 @@
           class="mt-[12px] w-full"
           preset="outline"
           :text="getContentUrlButtonText(contentUrl)"
-          :href="contentUrl"
+          :href="parseNFTMetadataURL(contentUrl)"
           :is-disabled="!isContentViewable"
           @click="e => handleClickViewContentURL(e, contentUrl)"
         >
