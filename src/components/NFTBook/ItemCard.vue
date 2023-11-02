@@ -140,14 +140,14 @@
             descriptionStyle
           ]"
         >{{ bookDescription }}</p>
-        <ul class="flex flex-wrap mt-[12px] gap-[1.5rem]">
-          <li v-if="iscnWorkAuthor" class="flex flex-col justify-center ml-[8px]">
+        <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
+          <li v-if="iscnWorkAuthor" class="flex flex-col justify-center min-w-0 ml-[8px]">
             <span
               class="text-like-cyan-gray text-10"
             >{{ $t('identity_type_author') }}</span>
             <span
-              :class="['font-[600]', displayNameStyle]"
-            >{{ iscnWorkAuthor | ellipsis }}</span>
+              :class="['font-[600] truncate', displayNameStyle]"
+            >{{ iscnWorkAuthor }}</span>
           </li>
           <client-only>
             <li>
@@ -164,12 +164,13 @@
                 @click.native.stop="onClickAvatar"
               >
                 <Identity
+                  class="shrink-0"
                   :avatar-url="creatorAvatar"
                   :avatar-size="42"
                   :is-avatar-disabled="true"
                   :is-lazy-loaded="true"
                 />
-                <div class="flex flex-col justify-start ml-[8px]">
+                <div class="flex flex-col justify-start ml-[8px] min-w-0">
                   <span
                     class="text-like-cyan-gray text-10 group-hover:underline"
                   >{{ $t(iscnWorkAuthor ? 'identity_type_publisher' : 'identity_type_creator') }}</span>
@@ -177,9 +178,10 @@
                     :class="[
                       'group-hover:underline',
                       'font-[600]',
+                      'truncate',
                       displayNameStyle,
                     ]"
-                  >{{ creatorDisplayName | ellipsis }}</span>
+                  >{{ creatorDisplayNameFull }}</span>
                 </div>
               </NuxtLink>
             </li>

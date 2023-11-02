@@ -14,7 +14,7 @@
       content-class="min-w-0"
       align="center"
     >
-      <span class="truncate">{{ displayName }}</span>
+      <span class="line-clamp-2">{{ displayName }}</span>
     </Label>
 
     <ToolTips :tool-tip-text="wallet">

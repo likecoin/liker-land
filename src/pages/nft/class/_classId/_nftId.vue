@@ -150,7 +150,7 @@
                 :iscn-owner="iscnOwner"
                 :iscn-work-author="iscnWorkAuthor"
                 :iscn-url="iscnURL"
-                :display-name="creatorDisplayName"
+                :display-name="creatorDisplayNameFull"
                 :nft-name="nftName"
                 :nft-description="nftDescription"
                 :nft-price="NFTPrice"

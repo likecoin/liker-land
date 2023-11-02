@@ -32,12 +32,14 @@
               :is-avatar-outlined="isUserCivicLiker"
               :is-lazy-loaded="true"
             />
-            <div class="flex mt-[8px]">
-              <Label class="text-medium-gray">by</Label>
-              <Label
-                class="text-like-green ml-[4px] font-[600]"
-              >{{ userDisplayName | ellipsis }}</Label>
-            </div>
+            <Label
+              class="w-full mt-[8px] text-like-green font-[600]"
+              content-class="min-w-0"
+              align="center"
+            >
+              <span class="text-medium-gray">by</span>&nbsp;
+              <span class="truncate">{{ userDisplayName }}</span>
+            </Label>
           </div>
           <Label preset="h5" class="mt-[12px] break-normal" align="center">{{ title }}</Label>
 
