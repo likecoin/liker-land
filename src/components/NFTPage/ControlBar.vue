@@ -27,7 +27,7 @@
         :text="collectButtonText"
       />
       <ButtonV2
-        :preset="isCollectible ? 'secondary': 'tertiary'"
+        :preset="canCollect ? 'secondary': 'tertiary'"
         @click="handleClickCollect"
       >
         {{ price }}
@@ -102,6 +102,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    isCollectable: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     isCollector() {
@@ -118,7 +123,7 @@ export default {
       return this.isCollector && this.view !== 'created';
     },
     isPotentialCollector() {
-      return !!this.price && !this.isCollector;
+      return this.isCollectable && !this.isCollector;
     },
     shouldShowControlBar() {
       return (
@@ -144,11 +149,14 @@ export default {
       }
       return `${LIKECOIN_NFT_MARKETPLACE_BASE}/owned`;
     },
-    isCollectible() {
-      return this.isWritingNft || this.currentNftId === this.nextNftId;
+    canCollect() {
+      return (
+        this.isCollectable &&
+        (this.isWritingNft || this.currentNftId === this.nextNftId)
+      );
     },
     collectButtonText() {
-      return this.isCollectible
+      return this.canCollect
         ? this.$t('nft_details_page_button_collect_now')
         : this.$t('nft_details_page_button_collect_class_now');
     },
@@ -158,7 +166,7 @@ export default {
       this.$emit('click-user-collected-count');
     },
     handleClickCollect() {
-      this.isCollectible ? this.$emit('collect') : this.$emit('go-to-collect');
+      this.canCollect ? this.$emit('collect') : this.$emit('go-to-collect');
     },
     handleClickTransfer() {
       this.$emit('transfer');

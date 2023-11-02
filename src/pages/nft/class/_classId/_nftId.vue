@@ -33,6 +33,7 @@
             view="collected"
             :price="controlBarPriceLabel"
             :is-writing-nft="nftIsWritingNFT"
+            :is-collectable="nftIsCollectable"
             @transfer="onToggleTransfer"
             @collect="handleCollectFromControlBar"
             @go-to-collect="handleGotoCollectFromControlBar"

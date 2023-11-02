@@ -12,6 +12,7 @@
     <NFTPortfolioBase
       :title="NFTName"
       :price="NFTPrice"
+      :is-free="nftIsFree"
       :class-id="classId"
       :class-collection-type="nftClassCollectionType"
       :class-collection-name="nftClassCollectionName"

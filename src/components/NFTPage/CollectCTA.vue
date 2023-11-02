@@ -192,6 +192,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    ownCount: {
+      type: Number,
+      default: 0,
+    },
     isColumn: {
       type: Boolean,
       default: false,
@@ -293,12 +297,18 @@ export default {
       return this.$te(key) ? this.$t(key) : '';
     },
     ctaButtonText() {
+      if (this.ownCount > 0 && this.isFree) {
+        return this.$t('nft_class_claimed');
+      }
+
       if (!this.isCollectable) {
         return this.$t('nft_page_collect_cta_button_text_ended');
       }
+
       if (this.isFree || this.isMidAutumnStyle) {
         return this.$t('nft_page_collect_cta_button_text_free');
       }
+
       return this.$t('nft_page_collect_cta_button_text');
     },
     normalizedButtonTheme() {
