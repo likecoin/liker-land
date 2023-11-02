@@ -73,6 +73,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    shouldResizeImage: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     rootClass() {
@@ -85,7 +89,11 @@ export default {
       ];
     },
     imageSrc() {
-      return getLikeCoResizedImageUrl(this.url || DEFAULT_AVATAR, this.size);
+      const imageSrc = this.url || DEFAULT_AVATAR;
+      if (!this.shouldResizeImage) {
+        return imageSrc;
+      }
+      return getLikeCoResizedImageUrl(imageSrc, this.size);
     },
     imageStyle() {
       const borderWidth = `${Math.floor(this.size * 0.05)}px`;
