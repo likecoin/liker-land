@@ -9,7 +9,6 @@
       'auto-rows-[1fr]',
       'justify-center',
       'items-stretch',
-      'mb-[18px]',
     ]"
     :stat-wallet="statWallet"
   >

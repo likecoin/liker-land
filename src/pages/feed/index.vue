@@ -13,8 +13,20 @@
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
+      <UserInfoCard
+        class="flex desktop:hidden min-w-[256px] max-w-[300px] mb-[1.5rem] mx-auto"
+        :wallet="loginAddress"
+        :display-name="walletUserDisplayName"
+        :avatar-src="walletUserAvatar"
+        :is-civic-liker="isWalletUserCivicLiker"
+        @click-avatar="handleClickUserInfoCardAvatar"
+        @copy-wallet="handleCopyWallet"
+      >
+        <UserStatsGem :wallet="wallet" />
+      </UserInfoCard>
+
       {{ /* Tab Bar */ }}
-      <nav class="flex justify-center mb-[24px] desktop:mb-[48px]">
+      <nav class="flex justify-center mb-[1.5rem] desktop:mb-[48px]">
         <ul
           :class="[
             'flex',
@@ -192,16 +204,31 @@
             'justify-center',
             'items-center',
             'desktop:flex',
+            'gap-[1.5rem]',
             'w-full',
             'max-w-[272px]',
           ]"
         >
+
+          <UserInfoCard
+            class="hidden desktop:flex w-full"
+            :wallet="loginAddress"
+            :display-name="walletUserDisplayName"
+            :avatar-src="walletUserAvatar"
+            :is-civic-liker="isWalletUserCivicLiker"
+            @click-avatar="handleClickUserInfoCardAvatar"
+            @copy-wallet="handleCopyWallet"
+          >
+            <UserStatsGem :wallet="wallet" />
+          </UserInfoCard>
+
           <UserStatsMyDashboard
             :stat-wallet="getAddress"
             @go-created="handleGoCreated"
             @go-collected="handleGoCollected"
             @click-total-sales="handleClickTotalSales"
           />
+
           <NFTPortfolioTopUsersList
             v-if="topRankedUsers && topRankedUsers.length"
             type="creator"
@@ -237,7 +264,7 @@
               </div>
             </template>
           </NFTPortfolioTopUsersList>
-          <div class="flex justify-center my-[24px]">
+          <div class="flex justify-center">
             <ButtonV2
               preset="tertiary"
               size="small"
@@ -663,6 +690,25 @@ export default {
           name: 'id',
           params: { id: this.wallet },
         })
+      );
+    },
+    handleClickUserInfoCardAvatar() {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        'DashboardLikerIdSettingsByAvatarClick',
+        this.wallet,
+        1
+      );
+      window.open(this.likerIdSettingsURL, '_blank');
+    },
+    handleCopyWallet() {
+      logTrackerEvent(
+        this,
+        'MyDashboard',
+        'DashboardCopyWallet',
+        this.wallet,
+        1
       );
     },
     handleEmptyFeedActionClick() {

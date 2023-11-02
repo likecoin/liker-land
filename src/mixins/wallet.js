@@ -45,6 +45,9 @@ export default {
         getIdenticonAvatar(this.getAddress)
       );
     },
+    walletUserDisplayName() {
+      return this.getLikerInfo?.displayName || this.getAddress;
+    },
     likerIdSettingsURL() {
       return getLikerIdSettingsURL({
         wallet: this.getAddress || '',

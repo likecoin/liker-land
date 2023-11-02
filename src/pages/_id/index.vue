@@ -30,10 +30,7 @@
       >
         <NFTPortfolioUserInfo :wallet="wallet">
           <template #gem>
-            <UserStatsGem
-              class="mx-auto mt-[16px] mb-[24px]"
-              :wallet="wallet"
-            />
+            <UserStatsGem :wallet="wallet" />
           </template>
           <template #stats>
             <UserStatsPortfolio
@@ -121,7 +118,7 @@
         <!-- goMyDashboard btn -->
         <div
           v-if="isUserPortfolio"
-          class="flex justify-center mt-[16px] mb-[24px]"
+          class="flex justify-center"
         >
           <ButtonV2
             preset="outline"

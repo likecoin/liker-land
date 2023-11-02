@@ -1,55 +1,27 @@
 <template>
-  <CardV2 :class="['flex', 'flex-col', 'items-center', 'w-full']">
-    <Identity :avatar-url="userAvatar" :avatar-size="88" :is-avatar-outlined="isUserCivicLiker" />
-    <Label preset="h3" :class="['text-like-green', 'mt-[18px]']" align="center">
-      {{ userDisplayName }}
-    </Label>
-    <ToolTips :tool-tip-text="wallet" class="mt-[12px]">
-      <div
-        :class="[
-          'flex',
-          'items-center',
-          'justify-center',
-
-          'px-[12px]',
-          'text-medium-gray',
-          'text-[10px]',
-          'rounded-full',
-          'border-[1px]',
-          'border-medium-gray',
-
-          'cursor-pointer',
-          'hover:text-dark-gray',
-          'transition',
-          'duration-200',
-        ]"
-        @click="copyToClipboard(wallet)"
-      >
-        {{ wallet | ellipsis }}
-      </div>
-    </ToolTips>
+  <UserInfoCard
+    :wallet="wallet"
+    :display-name="userDisplayName"
+    :avatar-src="userAvatar"
+    :is-civic-liker="isUserCivicLiker"
+  >
     <slot name="gem" />
     <template v-if="userDescription">
-      <Label preset="p6" class="break-normal font-200 mb-[24px]">
+      <Label preset="p6" class="break-normal font-200">
         {{ userDescription }}
       </Label>
     </template>
     <slot name="stats" />
-    <div v-if="$slots.follow" class="mt-[24px]">
+    <div v-if="$slots.follow">
       <slot name="follow" />
     </div>
-  </CardV2>
+  </UserInfoCard>
 </template>
 <script>
 import userInfoMixin from '~/mixins/user-info';
-import clipboardMixin from '~/mixins/clipboard';
-import { ellipsis } from '~/util/ui';
 
 export default {
-  filters: {
-    ellipsis,
-  },
-  mixins: [userInfoMixin, clipboardMixin],
+  mixins: [userInfoMixin],
   props: {
     wallet: {
       type: String,

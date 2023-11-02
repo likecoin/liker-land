@@ -3,6 +3,7 @@
     :is="isDisabled ? 'div' : 'a'"
     :class="rootClass"
     v-bind="$attrs"
+    v-on="$listeners"
   >
     <div>
       <img
