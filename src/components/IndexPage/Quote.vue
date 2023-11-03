@@ -10,12 +10,13 @@
     <footer class="flex flex-col items-end mt-[1.5em] text-[1em] text-right">
       <IdentityAvatar
         v-if="authorAvatarSrc"
+        class="mb-[0.5rem]"
         :url="authorAvatarSrc"
         :size="64"
         :is-outline-extruded="true"
         :should-resize-image="false"
       />
-      <div class="mt-[0.5rem] opacity-[0.6]">
+      <div class="opacity-[0.6]">
         <cite>{{ author }}</cite>
         <div>{{ authorTitle }}</div>
       </div>
