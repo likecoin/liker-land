@@ -30,39 +30,6 @@
         :is-content-viewable="true"
         @view-content-url="handleClickViewContentDirectly"
       />
-      <template v-if="isFreePurchase">
-        <template v-if="state === 'INITIAL'">
-          <Label
-            class="text-medium-gray"
-            preset="p6"
-            :text="$t('nft_free_claim_email_label')"
-            align="center"
-          />
-          <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
-            <input
-              v-model="claimingFreeEmail"
-              class="w-full bg-transparent border-0 focus-visible:outline-none"
-              :placeholder="$t('nft_free_claim_enter_email')"
-              type="email"
-            >
-          </div>
-          <ButtonV2
-            class="self-center mt-[24px]"
-            :text="$t('nft_free_claim_claim')"
-            preset="secondary"
-            @click="startFreePurchase"
-          />
-        </template>
-        <ProgressIndicator v-else-if="state === 'CLAIMING'" class="self-center" />
-        <template v-else-if="state === 'CLAIMED'">
-          <Label
-            class="text-medium-gray"
-            preset="p6"
-            :text="$t('nft_free_claim_check_email_label')"
-            align="center"
-          />
-        </template>
-      </template>
       <template v-else-if="!claimingAddress">
         <template v-if="walletIsLoggingIn">
           <ProgressIndicator />
@@ -74,36 +41,69 @@
           />
         </template>
         <template v-else>
-          <Label
-            class="text-medium-gray"
-            preset="p6"
-            :text="$t('nft_claim_enter_address_label')"
-            align="center"
-          />
-          <div class="flex justify-center w-full gap-[12px] mt-[6px]">
-            <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
-              <input
-                v-model="claimingAddressInput"
-                class="w-full bg-transparent border-0 focus-visible:outline-none"
-                :placeholder="$t('nft_claim_enter_address_placeholder')"
-                type="input"
-              >
+          <template v-if="isFreePurchase">
+            <template v-if="state === 'INITIAL'">
+              <Label
+                class="text-medium-gray"
+                preset="p6"
+                :text="$t('nft_free_claim_email_label')"
+                align="center"
+              />
+              <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+                <input
+                  v-model="claimingFreeEmail"
+                  class="w-full bg-transparent border-0 focus-visible:outline-none"
+                  :placeholder="$t('nft_free_claim_enter_email')"
+                  type="email"
+                >
+              </div>
+              <ButtonV2
+                class="self-center mt-[24px]"
+                :text="$t('nft_free_claim_claim')"
+                preset="secondary"
+                @click="startFreePurchase"
+              />
+            </template>
+            <Label
+              v-else
+              class="text-medium-gray"
+              preset="p6"
+              :text="$t('nft_free_claim_check_email_label')"
+              align="center"
+            />
+          </template>
+          <template v-else>
+            <Label
+              class="text-medium-gray"
+              preset="p6"
+              :text="$t('nft_claim_enter_address_label')"
+              align="center"
+            />
+            <div class="flex justify-center w-full gap-[12px] mt-[6px]">
+              <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+                <input
+                  v-model="claimingAddressInput"
+                  class="w-full bg-transparent border-0 focus-visible:outline-none"
+                  :placeholder="$t('nft_claim_enter_address_placeholder')"
+                  type="input"
+                >
+              </div>
+              <ButtonV2
+                v-if="!claimingAddressInput"
+                class="flex-shrink-0"
+                :text="$t('settings_page_content_with_auth_login_button')"
+                preset="secondary"
+                @click="onClickLogin"
+              />
             </div>
             <ButtonV2
-              v-if="!claimingAddressInput"
-              class="flex-shrink-0"
-              :text="$t('settings_page_content_with_auth_login_button')"
+              class="self-center mt-[24px]"
+              :text="$t('nft_claim_claim')"
               preset="secondary"
-              @click="onClickLogin"
+              :is-disabled="!claimingAddressInput || !isValidAddress(claimingAddressInput)"
+              @click="onEnterClaimingAddress"
             />
-          </div>
-          <ButtonV2
-            class="self-center mt-[24px]"
-            :text="$t('nft_claim_claim')"
-            preset="secondary"
-            :is-disabled="!claimingAddressInput || !isValidAddress(claimingAddressInput)"
-            @click="onEnterClaimingAddress"
-          />
+          </template>
         </template>
       </template>
       <template v-else>
@@ -274,6 +274,7 @@ export default {
     },
     getAddress() {
       this.claimingAddressInput = this.getAddress;
+      this.claimingAddress = this.getAddress;
     },
     loginAddress() {
       this.claimingAddressInput = this.loginAddress;
@@ -281,7 +282,7 @@ export default {
     },
   },
   async mounted() {
-    const { redirect, free, ...query } = this.$route.query;
+    const { redirect, free, from, ...query } = this.$route.query;
     if (!free && redirect && query.type === 'nft_book') {
       let price;
       try {
@@ -351,6 +352,7 @@ export default {
           }),
           {
             email: this.claimingFreeEmail,
+            wallet: this.claimingAddress,
           }
         );
         await this.claimPromise;
@@ -382,6 +384,10 @@ export default {
     },
     async claim() {
       if (this.shouldBlockClaim) {
+        return;
+      }
+      if (this.isFreePurchase) {
+        await this.startFreePurchase();
         return;
       }
 
