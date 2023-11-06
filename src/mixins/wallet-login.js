@@ -1,17 +1,8 @@
 import { mapActions } from 'vuex';
 
-import experimentMixin from '~/mixins/experiment';
-
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  mixins: [
-    experimentMixin(
-      'shouldRecommendConnectionMethod',
-      'recommend-connection-method',
-      'variant'
-    ),
-  ],
   methods: {
     ...mapActions([
       'openConnectWalletModal',
@@ -28,7 +19,7 @@ export default {
           language: this.$i18n.locale.split('-')[0],
           connectWalletTitle: this.$t('connect_wallet_title'),
           connectWalletMobileWarning: this.$t('connect_wallet_mobile_warning'),
-          shouldRecommendConnectionMethod: this.shouldRecommendConnectionMethod,
+          shouldRecommendConnectionMethod: true,
           onEvent: this.handleConnectWalletEvent,
         });
         if (!connection) return false;

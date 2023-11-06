@@ -1,11 +1,12 @@
 <template>
   <CardV2 class="flex flex-col items-center w-full gap-[1rem]">
-    <Identity
+    <IdentityAvatar
       :class="{ 'cursor-pointer hover:scale-105 transition-transform': $listeners['click-avatar'] }"
-      :avatar-url="avatarSrc"
-      :avatar-size="88"
-      :is-avatar-outlined="isCivicLiker"
-      @click-avatar="handleClickAvatar"
+      :url="avatarSrc"
+      :size="88"
+      :is-outlined="isCivicLiker"
+      :display-name="displayName"
+      @click="handleClickAvatar"
     />
 
     <Label

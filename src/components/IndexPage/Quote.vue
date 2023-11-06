@@ -7,9 +7,19 @@
       </p>
       <Quotemark class="shrink-0 w-[1.5em] laptop:w-[2em] self-end" />
     </div>
-    <footer class="mt-[1.5em] text-[1em] text-right opacity-[0.6]">
-      <cite>{{ author }}</cite>
-      <div>{{ authorTitle }}</div>
+    <footer class="flex flex-col items-end mt-[1.5em] text-[1em] text-right">
+      <IdentityAvatar
+        v-if="authorAvatarSrc"
+        class="mb-[0.5rem]"
+        :url="authorAvatarSrc"
+        :size="64"
+        :is-outline-extruded="true"
+        :should-resize-image="false"
+      />
+      <div class="opacity-[0.6]">
+        <cite>{{ author }}</cite>
+        <div>{{ authorTitle }}</div>
+      </div>
     </footer>
   </blockquote>
 </template>
@@ -34,6 +44,10 @@ export default {
     authorTitle: {
       type: String,
       default: '',
+    },
+    authorAvatarSrc: {
+      type: String,
+      default: undefined,
     },
     isSmall: {
       type: Boolean,
