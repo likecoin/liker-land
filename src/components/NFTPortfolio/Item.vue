@@ -20,7 +20,7 @@
       :is-collectable="nftIsCollectable"
       :collected-count="collectedCount"
       :collector-count="ownerCount"
-      :user-display-name="creatorDisplayName"
+      :user-display-name="creatorDisplayNameFull"
       :user-avatar-src="creatorAvatar"
       :is-user-civic-liker="isCreatorCivicLiker"
       :image-src="NFTImageUrl"

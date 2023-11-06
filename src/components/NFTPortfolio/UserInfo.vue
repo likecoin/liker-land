@@ -1,7 +1,7 @@
 <template>
   <UserInfoCard
     :wallet="wallet"
-    :display-name="userDisplayName"
+    :display-name="userDisplayNameFull"
     :avatar-src="userAvatar"
     :is-civic-liker="isUserCivicLiker"
   >

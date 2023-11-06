@@ -3,7 +3,7 @@
     class="border-b-shade-gray border-b-[1px] text-dark-gray cursor-pointer hover:bg-light-gray transition-colors"
     @click="handleRowClick"
   >
-    <td class="py-[12px]">
+    <td class="py-[12px] max-w-[200px]">
       <LinkV2
         class="flex items-center gap-[8px]"
         :to="
@@ -16,12 +16,13 @@
         @click.native.stop
       >
         <Identity
+          class="shrink-0"
           :avatar-url="owner.avatar"
           :avatar-size="24"
           :is-avatar-outlined="owner.isCivicLiker"
           :is-lazy-loaded="true"
         />
-        <span>{{ owner.displayName | ellipsis }}</span>
+        <span class="truncate">{{ owner.displayName }}</span>
       </LinkV2>
     </td>
     <td class="py-[12px]">

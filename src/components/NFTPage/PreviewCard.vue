@@ -35,14 +35,14 @@
         'relative',
       ]"
     >
-      <div class="flex flex-col items-center justify-center mt-[-70px]">
+      <div class="flex flex-col items-center justify-center mt-[-70px] w-full">
         <Identity
           :avatar-url="avatarUrl"
           :avatar-size="avatarSize"
           :is-avatar-outlined="isAvatarOutlined"
         />
         <NuxtLink
-          class="flex mt-[8px]"
+          class="flex mt-[8px] w-full"
           :to="iscnOwner ? localeLocation({
             name: 'id',
             params: { id: iscnOwner },
@@ -50,15 +50,19 @@
           }) : ''"
           @click.native="onClickAvatar"
         >
-          <Label class="text-medium-gray" text="by" />
-          <Label class="text-like-green ml-[4px] font-600">{{
-            displayName | ellipsis
-          }}</Label>
+          <Label
+            class="w-full text-like-green font-[600]"
+            content-class="min-w-0"
+            align="center"
+          >
+            <span class="text-medium-gray">by</span>&nbsp;
+            <span class="truncate">{{ displayName }}</span>
+          </Label>
         </NuxtLink>
 
-        <div v-if="iscnWorkAuthor" class="my-[1rem] flex flex-col items-center text-center">
+        <div v-if="iscnWorkAuthor" class="my-[1rem] flex flex-col items-center text-center min-w-0 w-full">
           <span class="text-like-cyan-gray text-10">{{ $t('identity_type_author') }}</span>
-          <span class="text-dark-gray">{{ iscnWorkAuthor | ellipsis }}</span>
+          <span class="text-dark-gray truncate w-full">{{ iscnWorkAuthor }}</span>
         </div>
       </div>
       <Label

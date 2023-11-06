@@ -30,6 +30,9 @@ export const createUserInfoMixin = ({
       [getPropName('{key}DisplayName')]() {
         return ellipsis(this[userInfoPropName]?.displayName || this[walletKey]);
       },
+      [getPropName('{key}DisplayNameFull')]() {
+        return this[userInfoPropName]?.displayName || ellipsis(this[walletKey]);
+      },
       [getPropName('{key}Description')]() {
         return this[userInfoPropName]?.description;
       },
