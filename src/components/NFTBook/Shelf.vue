@@ -34,8 +34,8 @@
         :key="`dummy-${i}`"
         :class="[
           'hidden',
-          { 'sm:block desktop:!hidden': i === 1 && normalizedItems.length % 2 > 0 },
-          { 'desktop:block': normalizedItems.length % 3 > 0 },
+          { 'sm:block !desktop:hidden': i === 1 && normalizedItems.length % 2 > 0 },
+          { 'desktop:block': i === 2 && normalizedItems.length % 3 > 0 },
           'relative',
           'w-full',
           'max-w-[220px]',
