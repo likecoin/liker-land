@@ -3,6 +3,7 @@
     :is="isDisabled ? 'div' : 'a'"
     :class="rootClass"
     v-bind="$attrs"
+    v-on="$listeners"
   >
     <div>
       <img
@@ -137,6 +138,8 @@ export default {
   }
 
   &__halo {
+    pointer-events: none;
+
     position: absolute;
     top: 0;
     left: 0;
