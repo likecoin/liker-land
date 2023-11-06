@@ -141,6 +141,13 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
       },
     ]
   : [
+      // 角醒1-15期合訂本
+      {
+        classId:
+          'likenft1cwd2h4xsj5paa57z4yfan5ycreaskzq55ww4z0q9hkp2sdyy7jps67a2kq',
+        date: '2023-11-03T07:58:22',
+        locale: 'zh',
+      },
       // 棄床記
       {
         classId:
@@ -341,6 +348,12 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
           'likenft1tjyaqr0e3pfv9squz0grs95sdnfjgr6kd59e2aen3krmdge28cesnjt8de',
         date: '2023-09-28T11:20:45',
         locale: 'zh',
+      },
+      // 所謂「我不投資」，就是 all in 在法定貨幣
+      {
+        classId:
+          'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
+        date: '2022-12-05T05:00:56',
       },
     ];
 
