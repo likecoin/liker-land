@@ -117,6 +117,10 @@ export default {
       type: Number,
       default: undefined,
     },
+    isFree: {
+      type: Boolean,
+      default: false,
+    },
     collectedCount: {
       type: Number,
       default: 0,
@@ -192,9 +196,19 @@ export default {
   },
   computed: {
     collectButtonText() {
-      return this.isCollectable
-        ? formatNumberWithUSD(this.price)
-        : this.$t('nft_class_uncollectible');
+      if (this.isFree && this.ownCount > 0) {
+        return this.$t('nft_class_claimed');
+      }
+
+      if (this.isCollectable) {
+        return formatNumberWithUSD(this.price);
+      }
+
+      if (this.ownCount > 0) {
+        return this.$t('nft_class_collected');
+      }
+
+      return this.$t('nft_class_uncollectible');
     },
   },
   methods: {

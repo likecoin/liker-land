@@ -645,7 +645,6 @@ export default {
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'fetchNFTPaymentPriceInfoByClassId',
-      'removeNFTFiatPriceInfoByClassId',
       'initIfNecessary',
       'uiToggleCollectModal',
       'uiSetCollectedCount',

@@ -653,7 +653,6 @@ export default {
 
       // Mixin
       this.userCollectedCount = undefined;
-      this.removeNFTFiatPriceInfoByClassId(this.classId);
       this.fetchNFTPrices();
       this.fetchUserCollectedCount();
     },
