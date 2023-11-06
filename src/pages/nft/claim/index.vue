@@ -30,7 +30,7 @@
         :is-content-viewable="true"
         @view-content-url="handleClickViewContentDirectly"
       />
-      <template v-else-if="!claimingAddress">
+      <template v-if="!claimingAddress">
         <template v-if="walletIsLoggingIn">
           <ProgressIndicator />
           <Label
