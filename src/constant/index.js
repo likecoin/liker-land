@@ -221,6 +221,12 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         date: '2023-04-14T17:45:17',
         locale: 'en',
       },
+      // 所謂「我不投資」，就是 all in 在法定貨幣
+      {
+        classId:
+          'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
+        date: '2022-12-05T05:00:56',
+      },
     ];
 
 export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
@@ -348,12 +354,6 @@ export const LIKECOIN_NFT_BOOK_ITEMS = IS_TESTNET
           'likenft1tjyaqr0e3pfv9squz0grs95sdnfjgr6kd59e2aen3krmdge28cesnjt8de',
         date: '2023-09-28T11:20:45',
         locale: 'zh',
-      },
-      // 所謂「我不投資」，就是 all in 在法定貨幣
-      {
-        classId:
-          'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
-        date: '2022-12-05T05:00:56',
       },
     ];
 
