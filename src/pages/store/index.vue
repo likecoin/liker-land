@@ -53,7 +53,10 @@
 <script>
 import { LIKECOIN_NFT_BOOK_FEATURED_ITEMS, EXTERNAL_HOST } from '~/constant';
 
-import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
+import {
+  checkIsForcedInAppPage,
+  checkIsLikeCoinAppInAppBrowser,
+} from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import inAppMixin from '~/mixins/in-app';
@@ -64,6 +67,11 @@ export default {
   name: 'WritingNFTPage',
   mixins: [inAppMixin, navigationListenerMixin, walletMixin],
   layout: 'default',
+  fetch({ route, redirect, localeLocation }) {
+    if (checkIsForcedInAppPage(route)) {
+      redirect(301, localeLocation({ name: 'store-articles' }));
+    }
+  },
   head() {
     const title = this.$t('store_index_page_title');
     const description = this.$t('store_books_page_description');

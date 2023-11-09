@@ -13,6 +13,10 @@ export function checkIsLikeCoinApp() {
   return userAgent.includes('LikeCoinApp');
 }
 
+export function checkIsForcedInAppPage(route) {
+  return route?.query?.in_app !== undefined;
+}
+
 export function checkIsLikeCoinAppInAppBrowser(route) {
-  return route?.query?.in_app !== undefined || checkIsLikeCoinApp();
+  return checkIsForcedInAppPage(route) || checkIsLikeCoinApp();
 }

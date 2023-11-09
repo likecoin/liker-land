@@ -92,13 +92,15 @@ import { EXTERNAL_HOST } from '~/constant';
 
 import alertMixin from '~/mixins/alert';
 import inAppMixin from '~/mixins/in-app';
+import walletLoginMixin from '~/mixins/wallet-login';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  mixins: [alertMixin, inAppMixin],
+  mixins: [alertMixin, inAppMixin, walletLoginMixin],
   data() {
     return {
       hasAnyDialogOpened: false,
+      isWalletAutoLoggingIn: false,
     };
   },
   head() {
@@ -147,6 +149,27 @@ export default {
     },
     isHomePage() {
       return this.getRouteBaseName(this.$route) === 'index';
+    },
+  },
+  watch: {
+    isInInAppBrowser: {
+      immediate: true,
+      async handler(isInInAppBrowser) {
+        if (
+          process.server ||
+          !isInInAppBrowser ||
+          this.walletHasLoggedIn ||
+          this.isWalletAutoLoggingIn
+        ) {
+          return;
+        }
+        try {
+          this.isWalletAutoLoggingIn = true;
+          await this.connectWallet();
+        } finally {
+          this.isWalletAutoLoggingIn = false;
+        }
+      },
     },
   },
   methods: {
