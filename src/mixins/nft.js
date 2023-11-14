@@ -21,6 +21,7 @@ import {
   postNewStripeFiatPayment,
   getIdenticonAvatar,
   getNFTCountByClassId,
+  getNftBookBuyerMessage,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
@@ -715,9 +716,34 @@ export default {
         actionType,
         ignoreToList,
       });
-      this.NFTHistory = this.nftIsWritingNFT
-        ? populateGrantEvent(latestBatchEvents, dbEventMap)
-        : latestBatchEvents;
+
+      const nftBookLatestBatchEvents = latestBatchEvents;
+      if (this.nftIsNFTBook) {
+        const { messages: nftBookBuyerMessages } = await this.$api.$get(
+          getNftBookBuyerMessage(this.classId)
+        );
+        for (let i = 0; i < nftBookBuyerMessages.length; i += 1) {
+          const buyerMessage = nftBookBuyerMessages[i].message;
+          const { txHash } = nftBookBuyerMessages[i];
+
+          const matchingEvent = nftBookLatestBatchEvents.find(
+            event => event.txHash === txHash
+          );
+
+          if (matchingEvent) {
+            matchingEvent.buyerMessage = buyerMessage;
+          }
+        }
+      }
+
+      if (this.nftIsWritingNFT) {
+        this.NFTHistory = populateGrantEvent(latestBatchEvents, dbEventMap);
+      } else if (this.nftIsNFTBook) {
+        this.NFTHistory = nftBookLatestBatchEvents;
+      } else {
+        this.NFTHistory = latestBatchEvents;
+      }
+
       const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
       this.lazyGetUserInfoByAddresses(
         getAllUserInfo

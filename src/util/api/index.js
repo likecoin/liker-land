@@ -443,3 +443,6 @@ export const getTotalResalesByAddress = address => {
     qsPayload
   )}`;
 };
+
+export const getNftBookBuyerMessage = classId =>
+  `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/messages`;
