@@ -577,10 +577,15 @@ export default {
       if (!this.populatedDisplayEvents) {
         return this.populatedCollectors;
       }
+
+      const filteredEvents = this.populatedDisplayEvents.filter(
+        event => event.buyerMessage
+      );
+
       const collectorsWithBuyerMessages = this.populatedCollectors.map(
         buyer => {
-          const event = this.populatedDisplayEvents.find(
-            event => event.buyerMessage && buyer.id === event.toWallet
+          const event = filteredEvents.find(
+            event => buyer.id === event.toWallet
           );
 
           if (event) {
