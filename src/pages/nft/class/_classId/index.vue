@@ -111,7 +111,7 @@
           <NFTPageCollectorList
             :class-id="classId"
             :owner-count="ownerCount"
-            :items="populatedCollectorsWithMemo"
+            :items="populatedBuyerWithMessage"
             :trimmed-count="trimmedCount"
             @click-show-more-collector="handleClickMoreCollector"
           />
@@ -572,6 +572,40 @@ export default {
         });
       }
       return collectorsWithMemo;
+    },
+    populatedBuyerWithMessage() {
+      if (!this.populatedDisplayEvents) {
+        return this.populatedCollectors;
+      }
+
+      const filteredEvents = this.populatedDisplayEvents.filter(
+        event => event.buyerMessage
+      );
+
+      const collectorsWithBuyerMessages = this.populatedCollectors.map(
+        buyer => {
+          const event = filteredEvents.find(
+            event => buyer.id === event.toWallet
+          );
+
+          if (event) {
+            return { ...buyer, memo: event.buyerMessage };
+          }
+          return buyer;
+        }
+      );
+      if (collectorsWithBuyerMessages && collectorsWithBuyerMessages.length) {
+        collectorsWithBuyerMessages.sort((a, b) => {
+          if (a.memo && !b.memo) {
+            return -1;
+          }
+          if (!a.memo && b.memo) {
+            return 1;
+          }
+          return b.collectedCount - a.collectedCount;
+        });
+      }
+      return collectorsWithBuyerMessages;
     },
   },
   async mounted() {

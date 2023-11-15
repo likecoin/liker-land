@@ -21,6 +21,7 @@ import {
   postNewStripeFiatPayment,
   getIdenticonAvatar,
   getNFTCountByClassId,
+  getNftBookBuyerMessage,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
@@ -696,6 +697,7 @@ export default {
       if (!this.nftIsWritingNFT && !this.nftIsNFTBook) {
         actionType.push('mint_nft');
       }
+
       const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
       let dbEventMap = null;
       if (this.nftIsWritingNFT) {
@@ -715,9 +717,39 @@ export default {
         actionType,
         ignoreToList,
       });
-      this.NFTHistory = this.nftIsWritingNFT
-        ? populateGrantEvent(latestBatchEvents, dbEventMap)
-        : latestBatchEvents;
+
+      const nftBookLatestBatchEvents = latestBatchEvents;
+      try {
+        if (this.nftIsNFTBook) {
+          const { messages: nftBookBuyerMessages } = await this.$api.$get(
+            getNftBookBuyerMessage(this.classId)
+          );
+          if (nftBookBuyerMessages && nftBookBuyerMessages.length) {
+            for (let i = 0; i < nftBookBuyerMessages.length; i += 1) {
+              const buyerMessage = nftBookBuyerMessages[i].message;
+              const { txHash } = nftBookBuyerMessages[i];
+
+              const matchingEvent = nftBookLatestBatchEvents.find(
+                event => event.txHash === txHash
+              );
+
+              if (matchingEvent) {
+                matchingEvent.buyerMessage = buyerMessage;
+              }
+            }
+          }
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+
+      if (this.nftIsWritingNFT) {
+        this.NFTHistory = populateGrantEvent(latestBatchEvents, dbEventMap);
+      } else {
+        this.NFTHistory = nftBookLatestBatchEvents;
+      }
+
       const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
       this.lazyGetUserInfoByAddresses(
         getAllUserInfo
