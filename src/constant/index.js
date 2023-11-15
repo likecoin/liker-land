@@ -141,11 +141,48 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
       },
     ]
   : [
+      // 蜀山劍俠傳-全集
+      {
+        classId:
+          'likenft172trlle2ts4t4lppkc0vksflzsd898wk8u5dwgl5ph3zr4lw9e3qa24c56',
+        date: '2023-11-15T05:27:37',
+        locale: 'zh',
+        isHighlight: true,
+      },
       // 角醒1-15期合訂本
       {
         classId:
           'likenft1cwd2h4xsj5paa57z4yfan5ycreaskzq55ww4z0q9hkp2sdyy7jps67a2kq',
         date: '2023-11-03T07:58:22',
+        locale: 'zh',
+        isHighlight: true,
+      },
+      // 蜀山劍俠傳 - 卷一
+      {
+        classId:
+          'likenft1w6y57g420f32pdln5mqj2wlwjm9d0upfd6fzeg0xcvg4hurpneqqu8cfa4',
+        date: '2023-11-15T05:10:13',
+        locale: 'zh',
+      },
+      // 蜀山劍俠傳 - 卷二
+      {
+        classId:
+          'likenft1qqexezvq74x7g930gkz3w29h43pdaf7t4yvvk6q5n55xl8jgnces5aellp',
+        date: '2023-11-15T05:10:13',
+        locale: 'zh',
+      },
+      // 蜀山劍俠傳 - 卷三
+      {
+        classId:
+          'likenft1fae3f7w40056636p4r0cmnawcj0fw2ajesctz02cvms3h0qkzrxstq3n79',
+        date: '2023-11-15T05:10:13',
+        locale: 'zh',
+      },
+      // 蜀山劍俠傳 - 卷四
+      {
+        classId:
+          'likenft1v6y9xxx5jea7t7y8darasnwd338lqp33477q9887q8mem3cvu30svtvrp0',
+        date: '2023-11-15T05:10:13',
         locale: 'zh',
       },
       // 棄床記

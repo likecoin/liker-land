@@ -15,13 +15,19 @@
       <section>
         <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
         <div class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]">
-          <NFTBookItemCard
-            v-if="nftBooks.length > 0"
-            :class-id="nftBooks[0].classId"
-            preset="campaign"
-            @click.native="() => onClickCampaignItem(nftBooks[0].classId)"
-            @click-avatar="() => onClickCampaignItemAvatar(nftBooks[0].classId)"
-          />
+          <ul class="space-y-[1rem]">
+            <li
+              v-for="nftBook in nftBooksHighlight"
+              :key="nftBook.classId"
+            >
+              <NFTBookItemCard
+                :class-id="nftBook.classId"
+                preset="campaign"
+                @click.native="() => onClickCampaignItem(nftBook.classId)"
+                @click-avatar="() => onClickCampaignItemAvatar(nftBook.classId)"
+              />
+            </li>
+          </ul>
           <NFTBookShelf
             class="mt-[48px]"
             :items="nftBooksOnShelf"
@@ -115,8 +121,24 @@ export default {
     nftBooks() {
       return LIKECOIN_NFT_BOOK_FEATURED_ITEMS;
     },
+    nftBooksHighlight() {
+      return this.nftBooks.filter(nft => nft.isHighlight);
+    },
     nftBooksOnShelf() {
-      return this.nftBooks.slice(1);
+      const books = this.nftBooks.filter(nft => !nft.isHighlight);
+      books.sort((a, b) => {
+        const { locale } = this.$i18n;
+        const aMatchedLocale = locale.includes(a.locale);
+        const bMatchedLocale = locale.includes(b.locale);
+        if (aMatchedLocale && !bMatchedLocale) {
+          return -1;
+        }
+        if (!aMatchedLocale && bMatchedLocale) {
+          return 1;
+        }
+        return 0;
+      });
+      return books;
     },
   },
   mounted() {
