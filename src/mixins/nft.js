@@ -698,86 +698,86 @@ export default {
         actionType.push('mint_nft');
       }
 
-      try {
-        const ignoreToList = this.nftIsWritingNFT
-          ? LIKECOIN_NFT_API_WALLET
-          : '';
-        let dbEventMap = null;
-        if (this.nftIsWritingNFT) {
-          dbEventMap = await getNFTHistoryDataMap({
-            axios: this.$api,
-            classId: this.classId,
-            nftId: this.nftId,
-          });
-        }
-        const {
-          nextKey,
-          events: latestBatchEvents,
-        } = await getFormattedNFTEvents({
+      const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      let dbEventMap = null;
+      if (this.nftIsWritingNFT) {
+        dbEventMap = await getNFTHistoryDataMap({
           axios: this.$api,
           classId: this.classId,
           nftId: this.nftId,
-          actionType,
-          ignoreToList,
         });
+      }
+      const {
+        nextKey,
+        events: latestBatchEvents,
+      } = await getFormattedNFTEvents({
+        axios: this.$api,
+        classId: this.classId,
+        nftId: this.nftId,
+        actionType,
+        ignoreToList,
+      });
 
-        const nftBookLatestBatchEvents = latestBatchEvents;
+      const nftBookLatestBatchEvents = latestBatchEvents;
+      try {
         if (this.nftIsNFTBook) {
           const { messages: nftBookBuyerMessages } = await this.$api.$get(
             getNftBookBuyerMessage(this.classId)
           );
-          for (let i = 0; i < nftBookBuyerMessages.length; i += 1) {
-            const buyerMessage = nftBookBuyerMessages[i].message;
-            const { txHash } = nftBookBuyerMessages[i];
+          if (nftBookBuyerMessages && nftBookBuyerMessages.length) {
+            for (let i = 0; i < nftBookBuyerMessages.length; i += 1) {
+              const buyerMessage = nftBookBuyerMessages[i].message;
+              const { txHash } = nftBookBuyerMessages[i];
 
-            const matchingEvent = nftBookLatestBatchEvents.find(
-              event => event.txHash === txHash
-            );
+              const matchingEvent = nftBookLatestBatchEvents.find(
+                event => event.txHash === txHash
+              );
 
-            if (matchingEvent) {
-              matchingEvent.buyerMessage = buyerMessage;
+              if (matchingEvent) {
+                matchingEvent.buyerMessage = buyerMessage;
+              }
             }
           }
         }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
 
+      if (this.nftIsWritingNFT) {
+        this.NFTHistory = populateGrantEvent(latestBatchEvents, dbEventMap);
+      } else {
+        this.NFTHistory = nftBookLatestBatchEvents;
+      }
+
+      const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
+      this.lazyGetUserInfoByAddresses(
+        getAllUserInfo
+          ? uniqueAddresses
+          : uniqueAddresses.slice(0, trimmedCount)
+      );
+      this.isHistoryInfoLoading = false;
+
+      if (latestBatchEvents.length === NFT_INDEXER_LIMIT_MAX) {
+        let { events: remainEvents } = await getFormattedNFTEvents({
+          axios: this.$api,
+          classId: this.classId,
+          nftId: this.nftId,
+          key: nextKey,
+          actionType,
+          ignoreToList,
+          getAll: true,
+        });
         if (this.nftIsWritingNFT) {
-          this.NFTHistory = populateGrantEvent(latestBatchEvents, dbEventMap);
-        } else {
-          this.NFTHistory = nftBookLatestBatchEvents;
+          remainEvents = populateGrantEvent(remainEvents, dbEventMap);
         }
-
         const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
         this.lazyGetUserInfoByAddresses(
           getAllUserInfo
             ? uniqueAddresses
             : uniqueAddresses.slice(0, trimmedCount)
         );
-        this.isHistoryInfoLoading = false;
-
-        if (latestBatchEvents.length === NFT_INDEXER_LIMIT_MAX) {
-          let { events: remainEvents } = await getFormattedNFTEvents({
-            axios: this.$api,
-            classId: this.classId,
-            nftId: this.nftId,
-            key: nextKey,
-            actionType,
-            ignoreToList,
-            getAll: true,
-          });
-          if (this.nftIsWritingNFT) {
-            remainEvents = populateGrantEvent(remainEvents, dbEventMap);
-          }
-          const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
-          this.lazyGetUserInfoByAddresses(
-            getAllUserInfo
-              ? uniqueAddresses
-              : uniqueAddresses.slice(0, trimmedCount)
-          );
-          this.NFTHistory.push(...remainEvents);
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        this.NFTHistory.push(...remainEvents);
       }
     },
     async updateUserCollectedCount(classId, address) {
