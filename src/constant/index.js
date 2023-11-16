@@ -270,6 +270,7 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         classId:
           'likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83',
         date: '2022-12-05T05:00:56',
+        locale: 'zh',
       },
     ];
 
