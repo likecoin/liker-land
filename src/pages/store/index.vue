@@ -125,19 +125,26 @@ export default {
       return this.nftBooks.filter(nft => nft.isHighlight);
     },
     nftBooksOnShelf() {
-      const books = this.nftBooks.filter(nft => !nft.isHighlight);
-      books.sort((a, b) => {
-        const { locale } = this.$i18n;
-        const aMatchedLocale = locale.includes(a.locale);
-        const bMatchedLocale = locale.includes(b.locale);
-        if (aMatchedLocale && !bMatchedLocale) {
-          return -1;
-        }
-        if (!aMatchedLocale && bMatchedLocale) {
-          return 1;
-        }
-        return 0;
-      });
+      const { locale } = this.$i18n;
+      const isChinese = locale === 'zh-Hant';
+      const books = this.nftBooks.filter(
+        // List only Chinese books if the locale is Chinese
+        nft => !nft.isHighlight && (locale.includes(nft.locale) || !isChinese)
+      );
+      if (!isChinese) {
+        // Display books of the current locale first unless it is Chinese
+        books.sort((a, b) => {
+          const aMatchedLocale = locale.includes(a.locale);
+          const bMatchedLocale = locale.includes(b.locale);
+          if (aMatchedLocale && !bMatchedLocale) {
+            return -1;
+          }
+          if (!aMatchedLocale && bMatchedLocale) {
+            return 1;
+          }
+          return 0;
+        });
+      }
       return books;
     },
   },
