@@ -149,13 +149,20 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         locale: 'zh',
         isHighlight: true,
       },
+      // 庭刊 - 創刊號
+      {
+        classId:
+          'likenft1m6tr4ezzt4tw9ukmhe7s0zcuch95hu4kp5md702r7k4t0z5pf3qqemdev0',
+        date: '2023-11-03T07:58:22',
+        locale: 'zh',
+        isHighlight: true,
+      },
       // 角醒1-15期合訂本
       {
         classId:
           'likenft1cwd2h4xsj5paa57z4yfan5ycreaskzq55ww4z0q9hkp2sdyy7jps67a2kq',
         date: '2023-11-03T07:58:22',
         locale: 'zh',
-        isHighlight: true,
       },
       // 蜀山劍俠傳 - 卷一
       {
