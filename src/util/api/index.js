@@ -323,6 +323,30 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   )}`;
 };
 
+export const postNFTBookLIKEPurchaseEndpoint = ({
+  txHash,
+  classId,
+  priceIndex,
+}) => {
+  const qsPayload = {
+    tx_hash: txHash,
+    price_index: priceIndex,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTBookPaymentPrice = ({ classId, priceIndex }) => {
+  const qsPayload = {
+    class_id: classId,
+    price_index: priceIndex,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/payment/price?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
     ignore_list: LIKECOIN_NFT_API_WALLET,

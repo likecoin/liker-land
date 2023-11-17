@@ -22,6 +22,8 @@ import {
   getIdenticonAvatar,
   getNFTCountByClassId,
   getNftBookBuyerMessage,
+  getNFTBookPurchaseLink,
+  postNFTBookLIKEPurchaseEndpoint,
 } from '~/util/api';
 import {
   logTrackerEvent,
@@ -286,7 +288,9 @@ export default {
       );
     },
     NFTPrice() {
-      return this.purchaseInfo.price;
+      return this.nftIsNFTBook
+        ? this.nftPaymentPriceInUSD
+        : this.purchaseInfo.price;
     },
     collectExpiryTime() {
       return this.purchaseInfo.collectExpiryAt;
@@ -295,7 +299,12 @@ export default {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;
     },
     paymentInfo() {
-      return this.getNFTClassPaymentPriceById(this.classId) || {};
+      const result =
+        this.getNFTClassPaymentPriceById(
+          this.classId,
+          this.editionPriceIndex
+        ) || {};
+      return result;
     },
     nftPriceInLIKE() {
       return this.paymentInfo?.LIKEPrice;
@@ -409,6 +418,10 @@ export default {
             };
           })
         : [defaultEdition];
+    },
+    editionPriceIndex() {
+      if (!this.nftIsNFTBook) return undefined;
+      return Number(this.$route.query.price_index) || 0;
     },
     nftBookAvailablePriceLabel() {
       const purchasePrice = this.nftEditions.find(item => item.stock > 0)
@@ -672,6 +685,7 @@ export default {
       'fetchCollectedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
       'fetchNFTBookInfoByClassId',
+      'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
     ]),
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
@@ -691,7 +705,12 @@ export default {
     },
     async fetchNFTPrices() {
       await catchAxiosError(
-        this.fetchNFTPaymentPriceInfoByClassId(this.classId)
+        this.nftIsNFTBook
+          ? this.fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
+              classId: this.classId,
+              priceIndex: this.editionPriceIndex,
+            })
+          : this.fetchNFTPaymentPriceInfoByClassId(this.classId)
       );
     },
     lazyFetchNFTOwners() {
@@ -943,13 +962,23 @@ export default {
             result = { data: { nftId: this.listingInfo.nftId } };
           } else {
             this.uiSetTxStatus(TX_STATUS.PROCESSING_NON_BLOCKING);
-            result = await this.$api.post(
-              postNFTPurchase({
-                txHash,
-                classId,
-                ts: Date.now(),
-              })
-            );
+            if (this.nftIsNFTBook) {
+              result = await this.$api.post(
+                postNFTBookLIKEPurchaseEndpoint({
+                  txHash,
+                  classId,
+                  priceIndex: this.editionPriceIndex,
+                })
+              );
+            } else {
+              result = await this.$api.post(
+                postNFTPurchase({
+                  txHash,
+                  classId,
+                  ts: Date.now(),
+                })
+              );
+            }
           }
           logTrackerEvent(
             this,
@@ -1037,6 +1066,16 @@ export default {
       }
     },
     async collectNFTWithStripe(classId, { memo = '' } = {}) {
+      if (this.nftIsNFTBook) {
+        const link = getNFTBookPurchaseLink({
+          classId: this.classId,
+          priceIndex: this.editionPriceIndex,
+          platform: this.platform,
+        });
+        window.open(link, '_blank', 'noopener');
+        return;
+      }
+
       try {
         const gaClientId = await getGaClientId(this);
         const body = { memo, gaClientId };

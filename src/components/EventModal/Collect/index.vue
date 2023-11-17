@@ -748,7 +748,7 @@ export default {
             const result = await this.collectNFTWithLIKE(classId, {
               memo: this.memo,
             });
-            if (result) {
+            if (result && !this.nftIsNFTBook) {
               this.justCollectedNFTId =
                 result.nftId || result.purchased?.[0]?.nftId;
             }
