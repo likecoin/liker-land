@@ -23,7 +23,11 @@ import {
   getNFTCountByClassId,
   getNftBookBuyerMessage,
 } from '~/util/api';
-import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
+import {
+  logTrackerEvent,
+  logPurchaseFlowEvent,
+  getGaClientId,
+} from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
 import {
   NFT_INDEXER_LIMIT_MAX,
@@ -1024,7 +1028,8 @@ export default {
     },
     async collectNFTWithStripe(classId, { memo = '' } = {}) {
       try {
-        const body = { memo };
+        const gaClientId = await getGaClientId();
+        const body = { memo, gaClientId };
         if (this.walletEmail) {
           body.email = this.walletEmail;
         }
