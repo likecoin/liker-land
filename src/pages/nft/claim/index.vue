@@ -156,6 +156,7 @@ import {
   logTrackerEvent,
   logPurchaseFlowEvent,
   logPurchaseNFTBookEvent,
+  getGaClientId,
 } from '~/util/EventLogger';
 import {
   postStripeFiatPendingClaim,
@@ -341,10 +342,12 @@ export default {
     async startFreePurchase() {
       try {
         this.state = NFT_CLAIM_STATE.CLAIMING;
+        const gaClientId = await getGaClientId();
         this.claimPromise = this.$api.post(
           getFreeNFTBookPurchaseEndpoint({
             classId: this.classId,
             priceIndex: this.priceIndex,
+            gaClientId,
           }),
           {
             email: this.claimingFreeEmail,
