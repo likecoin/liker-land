@@ -283,7 +283,12 @@ import { mapActions } from 'vuex';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
+import {
+  EXTERNAL_HOST,
+  NFT_BOOK_PLATFORM_LIKER_LAND,
+  LIKECOIN_API_BASE,
+  LIKECOIN_BUTTON_BASE,
+} from '~/constant';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -496,9 +501,31 @@ export default {
         content: 'noindex',
       });
     }
+    const link = [];
+    if (this.isWritingNft) {
+      link.push({
+        hid: 'alternate-json-oembed',
+        type: 'application/json+oembed',
+        rel: 'alternate',
+        href: `${LIKECOIN_API_BASE}/oembed?url=${encodeURIComponent(
+          `${LIKECOIN_BUTTON_BASE}/nft?class_id=${this.classId}`
+        )}&format=json`,
+        title,
+      });
+      link.push({
+        hid: 'alternate-xml-oembed',
+        type: 'application/xml+oembed',
+        rel: 'alternate',
+        href: `${LIKECOIN_API_BASE}/oembed?url=${encodeURIComponent(
+          `${LIKECOIN_BUTTON_BASE}/nft?class_id=${this.classId}`
+        )}&format=xml`,
+        title,
+      });
+    }
     return {
       title,
       meta,
+      link,
       script: schemas.length
         ? [
             {
