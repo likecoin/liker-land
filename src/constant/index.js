@@ -164,6 +164,13 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         date: '2023-11-03T07:58:22',
         locale: 'zh',
       },
+      // 時尚經典人物篇：CoCo Chanel 成長的香奈兒 (有聲粵語)
+      {
+        classId:
+          'likenft1gxr2lkfrmw2z69y49rdylnn32d9gtj05hk76cap4wvz4sl5m9etsg4e02u',
+        date: '2023-11-18T08:46:42',
+        locale: 'zh',
+      },
       // 蜀山劍俠傳 - 卷一
       {
         classId:
