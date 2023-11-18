@@ -15,7 +15,9 @@
         :key="item.classId"
         class="max-w-[220px]"
       >
-        <NFTBookItemCard
+        <component
+          :is="cardTag"
+          :class="{ 'h-[290px] w-[216px] bg-medium-gray': isDummy }"
           :class-id="item.classId"
           preset="shelf"
           :shelf-class="[
@@ -34,8 +36,7 @@
         :key="`dummy-${i}`"
         :class="[
           'hidden',
-          { 'sm:block !desktop:hidden': i === 1 && normalizedItems.length % 2 > 0 },
-          { 'desktop:block': i === 2 && normalizedItems.length % 3 > 0 },
+          getDummyResponsiveClass(i),
           'relative',
           'w-full',
           'max-w-[220px]',
@@ -68,7 +69,8 @@
           :id="classId"
           :key="classId"
         >
-          <NFTBookItemCard
+          <component
+            :is="cardTag"
             :class-id="classId"
             preset="default"
             component-class="!bg-like-cyan-pale"
@@ -89,6 +91,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    isDummy: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -96,6 +102,9 @@ export default {
     };
   },
   computed: {
+    cardTag() {
+      return this.isDummy ? 'div' : 'NFTBookItemCard';
+    },
     normalizedItems() {
       return this.items.map(item => {
         const isMultiple =
@@ -116,6 +125,29 @@ export default {
     },
   },
   methods: {
+    getDummyResponsiveClass(index) {
+      const total = this.normalizedItems.length;
+      switch (total % 3) {
+        case 1:
+          if (index === 1 && total % 2 !== 0) {
+            return 'sm:block';
+          }
+          return 'desktop:block';
+
+        case 2:
+          if (index === 1) {
+            return 'sm:block';
+          }
+          return '';
+
+        case 0:
+        default:
+          if (index === 1 && total % 2 !== 0) {
+            return 'sm:block desktop:hidden';
+          }
+          return '';
+      }
+    },
     handleClickItem(item) {
       if (item.isMultiple) {
         this.dialogNFTClassList = item.classIds;
