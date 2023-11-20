@@ -379,6 +379,8 @@
   "nft_collect_modal_method_stripe": "Pay by card",
   "nft_collect_modal_mid_autumn_description_content": "Thank you for your support and adding vibrancy to this platform over the past year.\\nOn this special festival, we have crafted some special words into a Writing NFT to gift you.\\nThis NFT represents the affirmation of your presence in our platform's growth, as well as the new endeavors we have embarked upon together.\\nPreserve the words, and preserve our collective experiences and memories as a community.\\nWishing everyone a joyous reunion of family and loved ones under the moon.",
   "nft_collect_modal_mid_autumn_description_heading": "Happy Mid-Autumn Festival.",
+  "nft_collect_modal_share_title": "I just collected \"{name}\"",
+  "nft_collect_modal_share_text": "I just collected a Writing NFT \"{name}\" from {creator}, check out my collection now.",
   "nft_collect_modal_subtitle_select_collect_method": "Select a collect method",
   "nft_collect_modal_title_collect": "Collect NFT",
   "nft_collect_modal_title_collecting": "Collecting NFT",

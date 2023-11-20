@@ -175,6 +175,18 @@
           <IconEye class="w-[20px]" />
         </template>
       </ButtonV2>
+
+      <ButtonV2
+        v-if="canShare"
+        preset="outline"
+        class="mx-[12px]"
+        :text="$t('nft_details_page_button_share')"
+        @click="shareNFTResult"
+      >
+        <template #prepend>
+          <IconShare class="w-[20px]" />
+        </template>
+      </ButtonV2>
     </template>
 
     <template v-else-if="isAddedToShoppingCart" #button>
@@ -362,6 +374,8 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
+import { isThisSecond } from 'date-fns';
+import { EXTERNAL_URL } from '~/server/config/config';
 
 const FOLLOW_PROMPT_STATE = {
   DEFAULT: 'default', // No need to show any follow UI.
@@ -396,6 +410,7 @@ export default {
       modelExposure: 0,
       animationTimer: null,
       isAddedToShoppingCart: false,
+      canShare: false,
     };
   },
   head() {
@@ -613,6 +628,7 @@ export default {
     if (this.classId) {
       this.resetState();
     }
+    this.canShare = !!navigator.share;
   },
   beforeDestroy() {
     this.stopExposureAnimation();
@@ -769,6 +785,28 @@ export default {
     },
     onInputCollectMessage(e) {
       this.memo = e.target.value;
+    },
+    shareNFTResult() {
+      logTrackerEvent(this, 'NFT', 'NFTClickShare', this.classId, 1);
+      if (navigator?.share) {
+        const title = this.$t('nft_collect_modal_share_title', {
+          name: this.NFTName,
+        });
+        const text = this.$t('nft_collect_modal_share_text', {
+          name: this.NFTName,
+          creator: this.creatorDisplayName,
+        });
+        const url = this.justCollectedNFTId
+          ? `${EXTERNAL_URL}/nft/class/${this.classId}/${
+              this.justCollectedNFTId
+            }`
+          : `${EXTERNAL_URL}/nft/class/${this.classId}`;
+        navigator.share({
+          title,
+          text,
+          url,
+        });
+      }
     },
     async handleClickFollow() {
       try {
