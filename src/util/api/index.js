@@ -405,11 +405,13 @@ export const getNFTBookStorePricesByClassId = classId =>
 export const getNFTBookPurchaseLink = ({
   classId,
   priceIndex,
+  gaClientId,
   platform = NFT_BOOK_PLATFORM_LIKER_LAND,
 }) => {
   const qsPayload = {
     from: platform,
     price_index: priceIndex,
+    ga_client_id: gaClientId,
   };
   return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new?${querystring.stringify(
     qsPayload

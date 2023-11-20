@@ -282,7 +282,11 @@
 import { mapActions } from 'vuex';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
-import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
+import {
+  logTrackerEvent,
+  logPurchaseFlowEvent,
+  getGaClientId,
+} from '~/util/EventLogger';
 import {
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
@@ -844,7 +848,7 @@ export default {
       );
       return this.handleCollect();
     },
-    handleCollectFromEdition(selectedValue) {
+    async handleCollectFromEdition(selectedValue) {
       const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
       const edition = editions[selectedValue];
       const hasStock = edition?.stock;
@@ -865,18 +869,20 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+        const gaClientId = await getGaClientId(this);
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
           priceIndex: edition.index,
           platform: this.platform,
+          gaClientId,
         });
         window.open(link, '_blank', 'noopener');
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
     },
-    handleCollectFromEditionSelector(selectedValue) {
-      this.handleCollectFromEdition(selectedValue);
+    async handleCollectFromEditionSelector(selectedValue) {
+      await this.handleCollectFromEdition(selectedValue);
       logTrackerEvent(
         this,
         'NFT',
@@ -885,8 +891,8 @@ export default {
         1
       );
     },
-    handleCollectFromEditionCompareTable(selectedValue) {
-      this.handleCollectFromEdition(selectedValue);
+    async handleCollectFromEditionCompareTable(selectedValue) {
+      await this.handleCollectFromEdition(selectedValue);
       logTrackerEvent(
         this,
         'NFT',

@@ -1028,7 +1028,7 @@ export default {
     },
     async collectNFTWithStripe(classId, { memo = '' } = {}) {
       try {
-        const gaClientId = await getGaClientId();
+        const gaClientId = await getGaClientId(this);
         const body = { memo, gaClientId };
         if (this.walletEmail) {
           body.email = this.walletEmail;
