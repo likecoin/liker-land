@@ -323,13 +323,8 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   )}`;
 };
 
-export const postNFTBookLIKEPurchaseEndpoint = ({
-  txHash,
-  classId,
-  priceIndex,
-}) => {
+export const postNFTBookLIKEPurchaseEndpoint = ({ classId, priceIndex }) => {
   const qsPayload = {
-    tx_hash: txHash,
     price_index: priceIndex,
   };
   return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
@@ -339,10 +334,9 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
 
 export const getNFTBookPaymentPrice = ({ classId, priceIndex }) => {
   const qsPayload = {
-    class_id: classId,
     price_index: priceIndex,
   };
-  return `${LIKECOIN_API_BASE}/likernft/book/payment/price?${querystring.stringify(
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/price?${querystring.stringify(
     qsPayload
   )}`;
 };

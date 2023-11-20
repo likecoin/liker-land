@@ -965,10 +965,10 @@ export default {
             if (this.nftIsNFTBook) {
               result = await this.$api.post(
                 postNFTBookLIKEPurchaseEndpoint({
-                  txHash,
                   classId,
                   priceIndex: this.editionPriceIndex,
-                })
+                }),
+                { txHash, email: '' }
               );
             } else {
               result = await this.$api.post(
