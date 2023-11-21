@@ -179,7 +179,7 @@
       <ButtonV2
         v-if="canShare"
         preset="outline"
-        class="mx-[12px]"
+        class="ml-[12px]"
         :text="$t('nft_details_page_button_share')"
         @click="shareNFTResult"
       >
