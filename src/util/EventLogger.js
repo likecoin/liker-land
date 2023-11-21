@@ -38,7 +38,7 @@ export function getGaClientId(vue) {
   if (vue?.$gtag && process.env.GA_TRACKING_ID) {
     return new Promise(resolve => {
       try {
-        this.$gtag.query('get', process.env.GA_TRACKING_ID, 'client_id', id =>
+        vue.$gtag.query('get', process.env.GA_TRACKING_ID, 'client_id', id =>
           resolve(id)
         );
       } catch (err) {
