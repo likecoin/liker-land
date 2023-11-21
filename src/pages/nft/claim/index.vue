@@ -264,6 +264,9 @@ export default {
         this.getCanViewNFTBookBeforeClaimByClassId(this.classId)
       );
     },
+    canDownloadContent() {
+      return this.isFreePurchase || !this.nftIsDownloadHidden;
+    },
   },
   watch: {
     walletEmail() {
@@ -526,7 +529,13 @@ export default {
       if (type === 'pdf') {
         e.preventDefault();
         this.$router.push(
-          this.localeLocation({ name: 'reader', query: { src: contentUrl } })
+          this.localeLocation({
+            name: 'reader',
+            query: {
+              download: this.canDownloadContent ? '1' : '0',
+              src: contentUrl,
+            },
+          })
         );
       }
       logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.classId, 1);

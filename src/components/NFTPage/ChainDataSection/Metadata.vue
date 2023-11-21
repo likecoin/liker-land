@@ -115,6 +115,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    isDownloadHidden: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     recordMap() {
@@ -132,16 +136,20 @@ export default {
         if (!recordMap[protocol]) recordMap[protocol] = [];
         switch (protocol) {
           case 'ar':
-            recordMap[protocol].push({
-              href: `${ARWEAVE_ENDPOINT}/${text}`,
-              text,
-            });
+            if (!this.isDownloadHidden) {
+              recordMap[protocol].push({
+                href: `${ARWEAVE_ENDPOINT}/${text}`,
+                text,
+              });
+            }
             break;
           case 'ipfs':
-            recordMap[protocol].push({
-              href: `${IPFS_VIEW_GATEWAY_URL}/${text}`,
-              text,
-            });
+            if (!this.isDownloadHidden) {
+              recordMap[protocol].push({
+                href: `${IPFS_VIEW_GATEWAY_URL}/${text}`,
+                text,
+              });
+            }
             break;
           default:
             break;

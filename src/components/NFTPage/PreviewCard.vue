@@ -223,6 +223,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isContentDownloadable: {
+      type: Boolean,
+      default: true,
+    },
     isNftBook: {
       type: Boolean,
       default: false,
@@ -236,7 +240,13 @@ export default {
       if (type === 'pdf') {
         e.preventDefault();
         this.$router.push(
-          this.localeLocation({ name: 'reader', query: { src: contentUrl } })
+          this.localeLocation({
+            name: 'reader',
+            query: {
+              download: this.isContentDownloadable ? '1' : '0',
+              src: contentUrl,
+            },
+          })
         );
       }
       this.$emit('view-content-url', type);

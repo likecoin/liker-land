@@ -102,12 +102,13 @@ const mutations = {
   },
   [TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET](
     state,
-    { classId, prices, defaultPaymentCurrency, mustClaimToView }
+    { classId, prices, defaultPaymentCurrency, mustClaimToView, hideDownload }
   ) {
     Vue.set(state.nftBookStoreInfoByClassIdMap, classId, {
       prices,
       defaultPaymentCurrency,
       mustClaimToView,
+      hideDownload,
     });
   },
   [TYPES.SHOPPING_CART_ADD_NFT_CLASS](state, { classId }) {
@@ -248,6 +249,8 @@ const getters = {
     'USD',
   getCanViewNFTBookBeforeClaimByClassId: state => classId =>
     !state.nftBookStoreInfoByClassIdMap[classId]?.mustClaimToView,
+  getIsHideNFTBookDownload: state => classId =>
+    !!state.nftBookStoreInfoByClassIdMap[classId]?.hideDownload,
   filterNFTClassListWithState: state => (nfts, wallet) =>
     nfts.filter(
       ({ classId }) =>
@@ -766,6 +769,7 @@ const actions = {
       classId,
       prices: data.prices,
       mustClaimToView: data.mustClaimToView,
+      hideDownload: data.hideDownload,
       defaultPaymentCurrency: data.defaultPaymentCurrency,
     });
   },
