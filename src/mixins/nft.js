@@ -872,7 +872,7 @@ export default {
         });
       }
     },
-    async collectNFTWithLIKE(classId, { memo = '' }) {
+    async collectNFTWithLIKE(classId, { memo = '', email = '' }) {
       logTrackerEvent(
         this,
         'NFT',
@@ -968,7 +968,7 @@ export default {
                   classId,
                   priceIndex: this.editionPriceIndex,
                 }),
-                { txHash, email: '' }
+                { txHash, email }
               );
             } else {
               result = await this.$api.post(

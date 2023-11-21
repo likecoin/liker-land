@@ -275,6 +275,52 @@
             @input="onInputCollectMessage"
           />
         </div>
+        <Label
+          v-if="nftIsNFTBook"
+          preset="p6"
+          align="left"
+          class="text-medium-gray mt-[12px] mb-[6px]"
+          :text="$t('nft_collect_modal_email')"
+        />
+        <div
+          v-if="nftIsNFTBook"
+          class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+        >
+          <IconEmail class="text-dark-gray" />
+          <input
+            v-model="email"
+            type="input"
+            class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+            :placeholder="
+              $t('nft_collect_modal_email_placeholder', {
+                name: creatorDisplayName,
+              })
+            "
+          />
+        </div>
+        <Label
+          v-if="nftIsNFTBook"
+          preset="p6"
+          align="left"
+          class="text-medium-gray mt-[12px] mb-[6px]"
+          :text="$t('nft_collect_modal_email')"
+        />
+        <div
+          v-if="nftIsNFTBook"
+          class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+        >
+          <IconEmail class="text-dark-gray" />
+          <input
+            v-model="email"
+            type="input"
+            class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+            :placeholder="
+              $t('nft_collect_modal_email_placeholder', {
+                name: creatorDisplayName,
+              })
+            "
+          />
+        </div>
       </section>
 
       <section v-if="paymentMethod === undefined">
@@ -426,6 +472,7 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
 import { EXTERNAL_HOST } from '~/constant';
 
 const FOLLOW_PROMPT_STATE = {
@@ -442,7 +489,7 @@ export default {
     LocalMallIcon,
     MidAutumnSloganText,
   },
-  mixins: [clipboardMixin, nftMixin],
+  mixins: [clipboardMixin, nftMixin, walletMixin],
   props: {
     isOpen: {
       type: Boolean,
@@ -456,6 +503,7 @@ export default {
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
       memo: '',
+      email: this.$store.getters.walletEmail || '',
       followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
       isFollowPromptUpdating: false,
       modelExposure: 0,
@@ -747,6 +795,7 @@ export default {
             );
             const result = await this.collectNFTWithLIKE(classId, {
               memo: this.memo,
+              email: this.email,
             });
             if (result && !this.nftIsNFTBook) {
               this.justCollectedNFTId =

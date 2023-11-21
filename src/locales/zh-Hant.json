@@ -370,6 +370,8 @@
   "nft_collect_modal_alert_fail": "收藏 {name} 失敗： {error}",
   "nft_collect_modal_alert_success": "{name} 已成功收藏",
   "nft_collect_modal_already_minted": "你已經收藏了此作品。",
+  "nft_collect_modal_email": "電郵",
+  "nft_collect_modal_email_placeholder": "提供電郵給 {name}",
   "nft_collect_modal_free": "免費",
   "nft_collect_modal_go_to_shopping_cart_button": "前往背包",
   "nft_collect_modal_leave_message": "簽署留言給創作者",
