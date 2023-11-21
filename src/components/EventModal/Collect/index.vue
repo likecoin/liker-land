@@ -374,8 +374,7 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
-import { isThisSecond } from 'date-fns';
-import { EXTERNAL_URL } from '~/server/config/config';
+import { EXTERNAL_HOST } from '~/constant';
 
 const FOLLOW_PROMPT_STATE = {
   DEFAULT: 'default', // No need to show any follow UI.
@@ -797,10 +796,10 @@ export default {
           creator: this.creatorDisplayName,
         });
         const url = this.justCollectedNFTId
-          ? `${EXTERNAL_URL}/nft/class/${this.classId}/${
+          ? `${EXTERNAL_HOST}/nft/class/${this.classId}/${
               this.justCollectedNFTId
             }`
-          : `${EXTERNAL_URL}/nft/class/${this.classId}`;
+          : `${EXTERNAL_HOST}/nft/class/${this.classId}`;
         navigator.share({
           title,
           text,
