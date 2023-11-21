@@ -2,7 +2,7 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint *.js",
@@ -59,7 +59,7 @@
     "magic-grid": "^3.2.4",
     "marked": "^5.1.2",
     "node-fetch": "^2.6.7",
-    "nuxt-start": "^2.15.3",
+    "nuxt-start": "^2.17.2",
     "portal-vue": "^1.5.1",
     "querystring": "^0.2.1",
     "react": "^18.2.0",
@@ -98,8 +98,8 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "2.6.2",
-    "node-sass": "^7.0.0",
-    "prettier": "1.14.3",
+    "node-sass": "^8.0.0",
+    "prettier": "1.16.0",
     "sass-loader": "^10.2.0",
     "tailwindcss": "^3.1.6",
     "webpack": "^4.46.0"

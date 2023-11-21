@@ -2,7 +2,7 @@
   "name": "liker-land",
   "version": "1.0.0",
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "description": "Liker Land",
   "contributors": [
@@ -71,7 +71,7 @@
     "magic-grid": "^3.2.4",
     "marked": "^5.1.2",
     "node-fetch": "^2.6.0",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.17.2",
     "portal-vue": "^2.1.7",
     "postcss": "^8.4.14",
     "querystring": "^0.2.1",
@@ -131,9 +131,9 @@
     "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-vue": "^7.20.0",
     "extract-css-chunks-webpack-plugin": "^4.8.0",
-    "node-sass": "^7.0.0",
+    "node-sass": "^8.0.0",
     "nodemon": "^1.18.9",
-    "prettier": "1.14.3",
+    "prettier": "1.16.0",
     "react-is": "^16.13.1",
     "require-extension-hooks": "^0.3.3",
     "require-extension-hooks-babel": "^0.1.1",
