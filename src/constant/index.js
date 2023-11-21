@@ -164,6 +164,13 @@ export const LIKECOIN_NFT_BOOK_FEATURED_ITEMS = IS_TESTNET
         date: '2023-11-03T07:58:22',
         locale: 'zh',
       },
+      // 《馬聞》1-15期合訂本
+      {
+        classId:
+          'likenft1j39x86yl8xvmk33u62h00l5970e25clkvs33lsk4crajd7achmnq36dxqz',
+        date: '2023-11-17T16:35:27',
+        locale: 'zh',
+      },
       // 時尚經典人物篇：CoCo Chanel 成長的香奈兒 (有聲粵語)
       {
         classId:
