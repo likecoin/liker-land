@@ -264,7 +264,7 @@ export default {
         this.getCanViewNFTBookBeforeClaimByClassId(this.classId)
       );
     },
-    canDownloadContent() {
+    isContentDownloadable() {
       return this.isFreePurchase || !this.nftIsDownloadHidden;
     },
   },
@@ -532,7 +532,7 @@ export default {
           this.localeLocation({
             name: 'reader',
             query: {
-              download: this.canDownloadContent ? '1' : '0',
+              download: this.isContentDownloadable ? '1' : '0',
               src: contentUrl,
             },
           })
