@@ -101,7 +101,7 @@ router.get('/bookstore/lists', async (req, res, next) => {
 
         results[listId].push({
           classId: parseClassId(classId.rich_text[0].plain_text),
-          title: titlePropList[index].title[0].plain_text,
+          title: (titlePropList[index].title[0] || {}).plain_text || '',
           locale: localePropList[index].select.name,
         });
       });
