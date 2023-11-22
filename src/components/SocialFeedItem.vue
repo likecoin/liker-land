@@ -65,7 +65,7 @@
       <!-- memo -->
       <template v-if="memo">
         <IconMessage />
-        <p class="text-[16px] font-400 text-dark-gray">{{ memo }}</p>
+        <NFTMessageText :value="memo" />
       </template>
 
       <!-- publish info -->
