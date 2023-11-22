@@ -220,6 +220,7 @@ export default {
     mainMenuItems() {
       const options = [
         { value: 'store', name: this.$t('main_menu_store') },
+        { value: 'article', name: this.$t('main_menu_articles') },
         { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
         { value: 'mintNft', name: this.$t('main_menu_mint_nft') },
       ];
@@ -252,6 +253,12 @@ export default {
         case 'store': {
           logTrackerEvent(this, 'site_menu', 'SiteMenuStoreClick', '', 1);
           this.$router.push(this.localeLocation({ name: 'store' }));
+          break;
+        }
+
+        case 'article': {
+          logTrackerEvent(this, 'site_menu', 'SiteMenuArticleClick', '', 1);
+          this.$router.push(this.localeLocation({ name: 'store-articles' }));
           break;
         }
 
