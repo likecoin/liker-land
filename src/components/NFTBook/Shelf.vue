@@ -6,20 +6,23 @@
         'grid-cols-1 sm:grid-cols-2 desktop:grid-cols-3',
         'justify-center',
         'gap-[48px]',
-        'sm:px-[48px]',
+        { 'sm:px-[48px]': isShelfPreset },
       ]"
     >
       <li
         v-for="(item, index) in normalizedItems"
         :id="item.classId"
         :key="item.classId"
-        class="max-w-[220px]"
+        :class="{
+          'max-w-[220px]': isShelfPreset,
+          'sm:col-span-2 desktop:col-span-3': isCampaignPreset,
+        }"
       >
         <component
           :is="cardTag"
           :class="{ 'h-[290px] w-[216px] bg-medium-gray': isDummy }"
           :class-id="item.classId"
-          preset="shelf"
+          :preset="preset"
           :shelf-class="[
             // NOTE: Make the shelf appear to be continuous.
             { 'sm:rounded-l-[0px]': index % 2 !== 0 && index % 3 === 1 },
@@ -30,30 +33,33 @@
           @click-avatar="$emit('click-item-avatar', classId)"
         />
       </li>
-      {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
-      <li
-        v-for="i in 2"
-        :key="`dummy-${i}`"
-        :class="[
-          'hidden',
-          getDummyResponsiveClass(i),
-          'relative',
-          'w-full',
-          'max-w-[220px]',
-          'h-[290px]',
-        ]"
-      >
-        <div
+
+      <template v-if="isShelfPreset">
+        {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
+        <li
+          v-for="i in 2"
+          :key="`dummy-${i}`"
           :class="[
-            'absolute',
-            'inset-x-[-48px]',
-            'inset-y-0',
-            'mt-[48px]',
-            'bg-like-cyan-pale',
-            'rounded-r-[32px]',
+            'hidden',
+            getDummyResponsiveClass(i),
+            'relative',
+            'w-full',
+            'max-w-[220px]',
+            'h-[290px]',
           ]"
-        />
-      </li>
+        >
+          <div
+            :class="[
+              'absolute',
+              'inset-x-[-48px]',
+              'inset-y-0',
+              'mt-[48px]',
+              'bg-like-cyan-pale',
+              'rounded-r-[32px]',
+            ]"
+          />
+        </li>
+      </template>
     </ul>
     <Dialog
       :open="dialogNFTClassList.length > 0"
@@ -91,6 +97,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    preset: {
+      type: String,
+      default: 'shelf',
+    },
     isDummy: {
       type: Boolean,
       default: false,
@@ -104,6 +114,12 @@ export default {
   computed: {
     cardTag() {
       return this.isDummy ? 'div' : 'NFTBookItemCard';
+    },
+    isShelfPreset() {
+      return this.preset === 'shelf';
+    },
+    isCampaignPreset() {
+      return this.preset === 'campaign';
     },
     normalizedItems() {
       return this.items.map(item => {

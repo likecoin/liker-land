@@ -15,19 +15,12 @@
       <section>
         <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
         <div class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]">
-          <ul class="space-y-[1rem]">
-            <li
-              v-for="nftBook in nftBooksDisplayInFullWidth"
-              :key="nftBook.classId"
-            >
-              <NFTBookItemCard
-                :class-id="nftBook.classId"
-                preset="campaign"
-                @click.native="() => onClickCampaignItem(nftBook.classId)"
-                @click-avatar="() => onClickCampaignItemAvatar(nftBook.classId)"
-              />
-            </li>
-          </ul>
+          <NFTBookShelf
+            :items="nftBooksDisplayInFullWidth"
+            preset="campaign"
+            @click-item="onClickCampaignItem"
+            @click-item-avatar="onClickCampaignItemAvatar"
+          />
           <NFTBookShelf
             class="mt-[48px]"
             :items="nftBooksDisplayOnShelf"
