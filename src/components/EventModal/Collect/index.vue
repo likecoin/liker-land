@@ -608,7 +608,8 @@ export default {
       const notSupportedPlatforms = [];
       return (
         this.nftPriceInLIKE > 0 &&
-        !notSupportedPlatforms.includes(this.walletMethodType)
+        !notSupportedPlatforms.includes(this.walletMethodType) &&
+        !(this.nftIsNFTBook && !this.email)
       );
     },
     mintedFreeNFT() {

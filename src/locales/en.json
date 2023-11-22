@@ -371,7 +371,7 @@
   "nft_collect_modal_alert_success": "{name} was collected successfully",
   "nft_collect_modal_already_minted": "You have already collected this work.",
   "nft_collect_modal_email": "Email",
-  "nft_collect_modal_email_placeholder": "Leave email to {name}",
+  "nft_collect_modal_email_placeholder": "Leave email to pay by LIKE",
   "nft_collect_modal_free": "Free",
   "nft_collect_modal_go_to_shopping_cart_button": "View backpack",
   "nft_collect_modal_leave_message": "Leave a signed message to creator",
