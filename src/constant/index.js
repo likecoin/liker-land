@@ -209,3 +209,5 @@ export const NFT_BOOK_PLATFORM_LIKER_LAND = 'liker_land';
 
 export const NFT_LEGACY_DEFAULT_MESSSAGE = 'like.co NFT API';
 export const NFT_BATCH_COLLECT_MESSSAGE = '(multiple purchases)';
+
+export const W3C_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;

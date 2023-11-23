@@ -473,7 +473,7 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import { EXTERNAL_HOST } from '~/constant';
+import { EXTERNAL_HOST, W3C_EMAIL_REGEX } from '~/constant';
 
 const FOLLOW_PROMPT_STATE = {
   DEFAULT: 'default', // No need to show any follow UI.
@@ -578,6 +578,9 @@ export default {
         this.uiTxNFTStatus === 'processing_non_blocking'
       );
     },
+    isValidEmail() {
+      return W3C_EMAIL_REGEX.test(this.email);
+    },
     isProcessing() {
       return (
         this.uiTxNFTStatus === 'processing' ||
@@ -609,7 +612,7 @@ export default {
       return (
         this.nftPriceInLIKE > 0 &&
         !notSupportedPlatforms.includes(this.walletMethodType) &&
-        !(this.nftIsNFTBook && !this.email)
+        !(this.nftIsNFTBook && !this.isValidEmail)
       );
     },
     mintedFreeNFT() {
