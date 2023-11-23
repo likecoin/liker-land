@@ -877,6 +877,21 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+        if (edition.price === 0) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-claim',
+              query: {
+                class_id: this.classId,
+                type: 'nft_book',
+                free: true,
+                price_index: selectedValue,
+                from: 'liker_land_waived',
+              },
+            })
+          );
+          return;
+        }
         await this.initIfNecessary();
         if (this.hasConnectedWallet) {
           logPurchaseFlowEvent(this, 'add_shipping_info', purchaseEventParams);
