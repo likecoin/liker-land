@@ -445,6 +445,7 @@ const nuxtConfig = {
       '@likecoin/iscn-js',
       '@likecoin/wallet-connector',
       '@walletconnect',
+      ({ isLegacy }) => (isLegacy ? 'axios' : undefined),
     ],
 
     /*
