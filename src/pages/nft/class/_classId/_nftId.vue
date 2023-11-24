@@ -160,6 +160,7 @@
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
                 :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+                :is-content-downloadable="!nftIsDownloadHidden"
                 :is-nft-book="nftIsNFTBook"
                 @view-content="handleViewContent"
                 @view-content-url="handleViewContentUrl"
@@ -236,6 +237,7 @@
             :class-id="classId"
             :nft-id="nftId"
             :content-fingerprints="nftISCNContentFingerprints"
+            :is-download-hidden="nftIsDownloadHidden"
           />
         </section>
 
@@ -322,6 +324,7 @@ import { isMobile } from '@walletconnect/browser-utils';
 import { EXTERNAL_HOST } from '~/constant';
 
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
+import { nftClassCollectionType } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
@@ -537,6 +540,9 @@ export default {
       this.updateNFTOwners();
       this.updateNFTHistory({ getAllUserInfo: false });
       this.fetchUserCollectedCount();
+      if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
+        this.fetchNFTBookInfoByClassId(this.classId).catch();
+      }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
     } catch (error) {

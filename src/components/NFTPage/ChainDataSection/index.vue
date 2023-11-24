@@ -15,6 +15,7 @@
           :iscn-id="iscnId"
           :iscn-url="iscnUrl"
           :content-fingerprints="contentFingerprints"
+          :is-download-hidden="isDownloadHidden"
         />
       </div>
       <template v-if="items.length && view !== 'created'">
@@ -118,6 +119,10 @@ export default {
     contentFingerprints: {
       type: Array,
       default: () => [],
+    },
+    isDownloadHidden: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
