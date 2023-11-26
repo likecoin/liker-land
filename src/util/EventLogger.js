@@ -36,7 +36,7 @@ export async function setLoggerUser(vue, { wallet, method }) {
 
 export function getGaClientId(vue) {
   if (vue?.$gtag && process.env.GA_TRACKING_ID) {
-    return new Promise(resolve => {
+    const promise = new Promise(resolve => {
       try {
         vue.$gtag.query('get', process.env.GA_TRACKING_ID, 'client_id', id =>
           resolve(id)
@@ -46,6 +46,11 @@ export function getGaClientId(vue) {
         resolve(undefined);
       }
     });
+    // Assumem no GA response after 300ms
+    const timeout = new Promise(resolve =>
+      setTimeout(() => resolve(undefined), 300)
+    );
+    return Promise.race([promise, timeout]);
   }
   return new Promise(resolve => resolve(undefined));
 }
