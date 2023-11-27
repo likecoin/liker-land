@@ -323,9 +323,14 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   )}`;
 };
 
-export const postNFTBookLIKEPurchaseEndpoint = ({ classId, priceIndex }) => {
+export const postNFTBookLIKEPurchaseEndpoint = ({
+  classId,
+  priceIndex,
+  platform = NFT_BOOK_PLATFORM_LIKER_LAND,
+}) => {
   const qsPayload = {
     price_index: priceIndex,
+    from: platform,
   };
   return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
     qsPayload
