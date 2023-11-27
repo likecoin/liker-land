@@ -77,7 +77,7 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
-                @change.once="handleEditionSelectChange"
+                @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
@@ -923,7 +923,13 @@ export default {
         1
       );
     },
-    handleEditionSelectChange() {
+    handleEditionSelectChange(selectedValue) {
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          price_index: selectedValue,
+        },
+      });
       logTrackerEvent(
         this,
         'NFT',
