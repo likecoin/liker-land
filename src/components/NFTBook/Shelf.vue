@@ -6,6 +6,7 @@
         'grid-cols-1 sm:grid-cols-2 desktop:grid-cols-3',
         'justify-center',
         'gap-[48px]',
+        { 'w-full': isCampaignPreset },
         { 'sm:px-[48px]': isShelfPreset },
       ]"
     >
