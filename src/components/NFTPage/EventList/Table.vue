@@ -3,7 +3,7 @@
     <thead class="border-b-shade-gray border-b-[2px]">
       <tr class="text-medium-gray py-[12px]">
         <th><Label :text="$t('nft_details_page_activity_list_event')" /></th>
-        <th><Label class="break-normal" :text="$t('nft_details_page_activity_list_event_price')" /></th>
+        <th v-if="showPrice"><Label class="break-normal" :text="$t('nft_details_page_activity_list_event_price')" /></th>
         <th><Label :text="$t('nft_details_page_activity_list_event_from')" /></th>
         <th><Label :text="$t('nft_details_page_activity_list_event_to')" /></th>
         <th><Label :text="$t('nft_details_page_activity_list_event_date')" /></th>
@@ -67,7 +67,7 @@
             </template>
           </Label>
         </td>
-        <td>
+        <td v-if="showPrice">
           <Label
             v-if="event.price"
             content-class="overflow-hidden"
@@ -149,6 +149,10 @@ export default {
     nftHistory: {
       type: Array,
       default: undefined,
+    },
+    showPrice: {
+      type: Boolean,
+      default: true,
     },
     showMemo: {
       type: Boolean,

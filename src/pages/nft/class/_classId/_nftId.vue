@@ -230,6 +230,7 @@
           <NFTPageChainDataSection
             id="chain-data"
             :items="populatedDisplayEvents"
+            :show-price="!nftIsNFTBook"
             :is-loading="isHistoryInfoLoading"
             :content-url="externalUrl"
             :iscn-id="iscnId"
