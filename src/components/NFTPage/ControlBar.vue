@@ -9,7 +9,8 @@
         :text="$t('nft_details_page_activity_list_event_transfer')"
         @click="handleClickTransfer"
       />
-      <ButtonV2
+      <!-- Hide sell button until redesign -->
+      <!-- <ButtonV2
         size="mini"
         preset="tertiary"
         content-class="!text-[12px]"
@@ -19,7 +20,7 @@
         rel="noopener"
         @mouseenter.once="handleMouseEnterSell"
         @click.native="handleClickSell"
-      />
+      /> -->
     </template>
     <template v-else-if="isPotentialCollector">
       <Label
