@@ -150,6 +150,7 @@
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
                 :is-content-viewable="isContentViewable"
+                :is-content-downloadable="!nftIsDownloadHidden"
                 @view-content="handleViewContent"
                 @view-content-url="handleViewContentURL"
                 @click-avatar="handleNFTCardClickAvatar"
@@ -217,6 +218,7 @@
             :iscn-url="iscnURL"
             :class-id="classId"
             :content-fingerprints="nftISCNContentFingerprints"
+            :is-download-hidden="nftIsDownloadHidden"
             @click-show-more-history="handleClickMoreHistory"
           />
         </section>
@@ -281,6 +283,7 @@
 <script>
 import { mapActions } from 'vuex';
 
+import { nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import {
   logTrackerEvent,
@@ -645,6 +648,9 @@ export default {
       this.fetchIscnOwnerNFTDisplayStateList();
       this.updateNFTOwners();
       this.fetchUserCollectedCount();
+      if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
+        this.fetchNFTBookInfoByClassId(this.classId).catch();
+      }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
     } catch (error) {

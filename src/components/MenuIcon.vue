@@ -1,6 +1,7 @@
 <template>
   <IconPerson v-if="type === 'dashboard'" />
   <IconPrice v-else-if="type === 'store'" class="w-[20px]" />
+  <IconArticle v-else-if="type === 'article'" class="w-[20px]" />
   <IconLikeEvent v-else-if="type === 'civic'" />
   <IconSetting v-else-if="type === 'setting'" />
   <IconLogOut v-else-if="type === 'signOut'" />

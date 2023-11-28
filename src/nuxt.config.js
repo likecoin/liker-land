@@ -215,6 +215,7 @@ const nuxtConfig = {
           'connect.facebook.net',
         ],
         'frame-src': [
+          'blob:',
           'www.google.com',
           'button.like.co',
           'https://js.stripe.com',
@@ -445,6 +446,7 @@ const nuxtConfig = {
       '@likecoin/iscn-js',
       '@likecoin/wallet-connector',
       '@walletconnect',
+      ({ isLegacy }) => (isLegacy ? 'axios' : undefined),
     ],
 
     /*

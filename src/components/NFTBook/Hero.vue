@@ -968,11 +968,12 @@ export default {
       });
     },
     getHasPreviouslyAnimated() {
-      let shouldStopAnimation = false;
-      try {
-        shouldStopAnimation = localStorage.getItem(SESSION_STORAGE_KEY) === '1';
-      } catch {}
-      return shouldStopAnimation;
+      return true; // Disable animation
+      // let shouldStopAnimation = false;
+      // try {
+      //   shouldStopAnimation = localStorage.getItem(SESSION_STORAGE_KEY) === '1';
+      // } catch {}
+      // return shouldStopAnimation;
     },
     setHasPreviouslyAnimated() {
       try {
