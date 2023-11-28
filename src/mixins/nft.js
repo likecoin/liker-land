@@ -382,7 +382,7 @@ export default {
             if (currency === 'HKD') {
               const USD_TO_HKD_RATIO = 7.8;
               priceLabel = formatNumberWithUnit(
-                edition.price * USD_TO_HKD_RATIO,
+                Number((edition.price * USD_TO_HKD_RATIO).toFixed(1)),
                 'HKD'
               );
             }
