@@ -123,6 +123,7 @@ export default {
       'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
       'getNFTBookStoreBookDefaultPaymentCurrency',
+      'getCanViewNFTBookBeforeClaimByClassId',
       'getIsHideNFTBookDownload',
       'uiIsOpenCollectModal',
       'uiTxErrorMessage',
@@ -411,6 +412,9 @@ export default {
       const purchasePrice = this.nftEditions.find(item => item.stock > 0)
         ?.priceLabel;
       return purchasePrice;
+    },
+    nftMustClaimToView() {
+      return !this.getCanViewNFTBookBeforeClaimByClassId(this.classId);
     },
     nftIsDownloadHidden() {
       return this.getIsHideNFTBookDownload(this.classId);

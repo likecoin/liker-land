@@ -1,7 +1,8 @@
 <template>
   <div class="h-screen">
     <ProgressIndicator v-if="isLoading" />
-    <AuthRequiredView
+    <Component
+      :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
       v-else
       class="w-full h-screen"
       :login-label="$t('dashboard_login_in')"
@@ -12,11 +13,12 @@
       <div v-else>
         Not implemented
       </div>
-    </AuthRequiredView>
+    </Component>
   </div>
 </template>
 
 <script>
+import Component from 'vue-class-component';
 import { mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
@@ -50,6 +52,9 @@ export default {
       }
       return this.iscnContentUrls.find(url => url.includes(this.format));
     },
+    isLoginRequired() {
+      return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);
+    },
     pdfIframeSrc() {
       const download =
         this.$route.query.download === '0' || this.nftIsDownloadHidden
@@ -68,7 +73,7 @@ export default {
     async getAddress(address) {
       if (address) {
         await this.fetchUserCollectedCount();
-        if (!this.userCollectedCount) {
+        if (!this.userCollectedCount && this.isLoginRequired) {
           this.$router.replace(
             this.localeLocation({
               name: 'nft-class-classId',
@@ -92,7 +97,7 @@ export default {
       // TODO: use loginAddress
       if (this.getAddress) {
         await this.fetchUserCollectedCount();
-        if (!this.userCollectedCount) {
+        if (!this.userCollectedCount && this.isLoginRequired) {
           this.$router.replace(
             this.localeLocation({
               name: 'nft-class-classId',
