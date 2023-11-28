@@ -274,7 +274,7 @@ export default {
     },
     getAddress() {
       this.claimingAddressInput = this.getAddress;
-      this.claimingAddress = this.getAddress;
+      if (this.isFreePurchase) this.claimingAddress = this.getAddress;
     },
     loginAddress() {
       this.claimingAddressInput = this.loginAddress;
@@ -321,6 +321,9 @@ export default {
       });
     }
     this.claimingAddressInput = this.loginAddress || this.getAddress;
+    if (this.isFreePurchase) {
+      this.claimingAddress = this.claimingAddressInput;
+    }
   },
   methods: {
     isValidAddress,
