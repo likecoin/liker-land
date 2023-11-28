@@ -128,29 +128,26 @@ export default {
       ];
     },
     nftBooksDisplayInFullWidth() {
-      return this.nftGetBookstoreListItems('highlighted');
+      return this.nftGetBookstoreListItems('highlighted').filter(nft =>
+        // Display books of the current locale only
+        this.$i18n.locale.includes(nft.locale)
+      );
     },
     nftBooksDisplayOnShelf() {
       const { locale } = this.$i18n;
-      const isChinese = locale === 'zh-Hant';
-      const books = this.nftGetBookstoreListItems('featured').filter(
-        // List only Chinese books if the locale is Chinese
-        nft => locale.includes(nft.locale) || !isChinese
-      );
-      if (!isChinese) {
-        // Display books of the current locale first unless it is Chinese
-        books.sort((a, b) => {
-          const aMatchedLocale = locale.includes(a.locale);
-          const bMatchedLocale = locale.includes(b.locale);
-          if (aMatchedLocale && !bMatchedLocale) {
-            return -1;
-          }
-          if (!aMatchedLocale && bMatchedLocale) {
-            return 1;
-          }
-          return 0;
-        });
-      }
+      const books = [...this.nftGetBookstoreListItems('featured')];
+      // Display books of the current locale first
+      books.sort((a, b) => {
+        const aMatchedLocale = locale.includes(a.locale);
+        const bMatchedLocale = locale.includes(b.locale);
+        if (aMatchedLocale && !bMatchedLocale) {
+          return -1;
+        }
+        if (!aMatchedLocale && bMatchedLocale) {
+          return 1;
+        }
+        return 0;
+      });
       return books;
     },
   },
