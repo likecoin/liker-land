@@ -15,22 +15,15 @@
       <section>
         <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
         <div class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]">
-          <ul class="space-y-[1rem]">
-            <li
-              v-for="nftBook in nftBooksHighlight"
-              :key="nftBook.classId"
-            >
-              <NFTBookItemCard
-                :class-id="nftBook.classId"
-                preset="campaign"
-                @click.native="() => onClickCampaignItem(nftBook.classId)"
-                @click-avatar="() => onClickCampaignItemAvatar(nftBook.classId)"
-              />
-            </li>
-          </ul>
+          <NFTBookShelf
+            :items="nftBooksDisplayInFullWidth"
+            preset="campaign"
+            @click-item="onClickCampaignItem"
+            @click-item-avatar="onClickCampaignItemAvatar"
+          />
           <NFTBookShelf
             class="mt-[48px]"
-            :items="nftBooksOnShelf"
+            :items="nftBooksDisplayOnShelf"
             @click-item="onClickShelfItem"
             @click-item-avatar="onClickShelfItemAvatar"
           />
@@ -57,7 +50,9 @@
 </template>
 
 <script>
-import { LIKECOIN_NFT_BOOK_FEATURED_ITEMS, EXTERNAL_HOST } from '~/constant';
+import { mapGetters } from 'vuex';
+
+import { EXTERNAL_HOST } from '~/constant';
 
 import {
   checkIsForcedInAppPage,
@@ -73,16 +68,23 @@ export default {
   name: 'WritingNFTPage',
   mixins: [inAppMixin, navigationListenerMixin, walletMixin],
   layout: 'default',
-  fetch({ route, redirect, localeLocation }) {
+  async fetch({ route, redirect, localeLocation, store }) {
     if (checkIsForcedInAppPage(route)) {
       redirect(301, localeLocation({ name: 'store-articles' }));
+    }
+
+    try {
+      await store.dispatch('fetchBookstoreList');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
     }
   },
   head() {
     const title = this.$t('store_index_page_title');
     const description = this.$t('store_books_page_description');
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    LIKECOIN_NFT_BOOK_FEATURED_ITEMS.forEach(nft => {
+    this.nftBooks.forEach(nft => {
       link.push({
         rel: 'prefetch',
         href: `/api/nft/metadata?class_id=${nft.classId}`,
@@ -118,18 +120,22 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['nftGetBookstoreListItems']),
     nftBooks() {
-      return LIKECOIN_NFT_BOOK_FEATURED_ITEMS;
+      return [
+        ...this.nftBooksDisplayInFullWidth,
+        ...this.nftBooksDisplayOnShelf,
+      ];
     },
-    nftBooksHighlight() {
-      return this.nftBooks.filter(nft => nft.isHighlight);
+    nftBooksDisplayInFullWidth() {
+      return this.nftGetBookstoreListItems('highlighted');
     },
-    nftBooksOnShelf() {
+    nftBooksDisplayOnShelf() {
       const { locale } = this.$i18n;
       const isChinese = locale === 'zh-Hant';
-      const books = this.nftBooks.filter(
+      const books = this.nftGetBookstoreListItems('featured').filter(
         // List only Chinese books if the locale is Chinese
-        nft => !nft.isHighlight && (locale.includes(nft.locale) || !isChinese)
+        nft => locale.includes(nft.locale) || !isChinese
       );
       if (!isChinese) {
         // Display books of the current locale first unless it is Chinese

@@ -19,6 +19,7 @@ module.exports = onRequest(
       'CRISP_USER_HASH_SECRET',
       'SENDGRID_API_KEY',
       'GET_WALLET_API_SECRET',
+      'NOTION_API_KEY',
     ],
     region: ['us-west1'],
   },

@@ -22,19 +22,24 @@
 </template>
 
 <script>
-import {
-  LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
-  LIKECOIN_NFT_BOOK_ITEMS,
-  EXTERNAL_HOST,
-} from '~/constant';
+import { mapGetters } from 'vuex';
+import { EXTERNAL_HOST } from '~/constant';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'StoreAllBooksPage',
+  async fetch({ store }) {
+    try {
+      await store.dispatch('fetchBookstoreItems');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  },
   head() {
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    LIKECOIN_NFT_BOOK_ITEMS.forEach(classId => {
+    this.nftBookstoreItems.forEach(classId => {
       link.push({
         rel: 'prefetch',
         href: `/api/nft/metadata?class_id=${classId}`,
@@ -72,11 +77,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['nftBookstoreItems']),
     nftBooks() {
-      const books = [
-        ...LIKECOIN_NFT_BOOK_FEATURED_ITEMS,
-        ...LIKECOIN_NFT_BOOK_ITEMS,
-      ];
+      const books = [...this.nftBookstoreItems];
       books.sort((a, b) => {
         const { locale } = this.$i18n;
         const aMatchedLocale = locale.includes(a.locale);
@@ -87,7 +90,7 @@ export default {
         if (!aMatchedLocale && bMatchedLocale) {
           return 1;
         }
-        return new Date(b.date) - new Date(a.date);
+        return 0;
       });
       return books;
     },
