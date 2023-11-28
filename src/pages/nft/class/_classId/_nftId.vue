@@ -152,6 +152,7 @@
                 :iscn-work-author="iscnWorkAuthor"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayNameFull"
+                :class-id="classId"
                 :nft-name="nftName"
                 :nft-description="nftDescription"
                 :nft-price="NFTPrice"
