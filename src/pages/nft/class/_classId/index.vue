@@ -294,7 +294,12 @@
 </template>
 
 <script>
-import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
+import { getNFTBookPurchaseLink } from '~/util/api';
+import {
+  logTrackerEvent,
+  logPurchaseFlowEvent,
+  getGaClientId,
+} from '~/util/EventLogger';
 import {
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
@@ -885,12 +890,26 @@ export default {
                 class_id: this.classId,
                 type: 'nft_book',
                 free: true,
-                price_index: selectedValue,
+                price_index: edition.index,
                 from: 'liker_land_waived',
               },
             })
           );
           return;
+        }
+        if (edition.price > 0) {
+          await this.fetchNFTPrices();
+          if (this.nftPriceInLIKE > 0) {
+            const gaClientId = await getGaClientId(this);
+            const link = getNFTBookPurchaseLink({
+              classId: this.classId,
+              priceIndex: edition.index,
+              platform: this.platform,
+              gaClientId,
+            });
+            window.open(link, '_blank', 'noopener');
+            return;
+          }
         }
         await this.initIfNecessary();
         if (this.hasConnectedWallet) {
