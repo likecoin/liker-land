@@ -98,7 +98,7 @@
             </div>
             <ButtonV2
               class="self-center mt-[24px]"
-              :text="$t('nft_claim_claim')"
+              :text="$t(nftIsNFTBook && nftMustClaimToView ? 'nft_claim_access_nft_book' : 'nft_claim_claim')"
               preset="secondary"
               :is-disabled="!claimingAddressInput || !isValidAddress(claimingAddressInput)"
               @click="onEnterClaimingAddress"
