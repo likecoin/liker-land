@@ -46,9 +46,9 @@ export function getGaClientId(vue) {
         resolve(undefined);
       }
     });
-    // Assumem no GA response after 300ms
+    // Assume no GA response after 100ms
     const timeout = new Promise(resolve =>
-      setTimeout(() => resolve(undefined), 300)
+      setTimeout(() => resolve(undefined), 100)
     );
     return Promise.race([promise, timeout]);
   }
