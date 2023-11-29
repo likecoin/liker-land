@@ -10,7 +10,10 @@
   <div v-else class="flex flex-col justify-center flex-grow">
     <slot name="prepend" />
 
-    <MobileStickyCard :is-sticky="isStickToBottomAtMobile">
+    <MobileStickyCard
+      class="flex flex-col justify-center"
+      :is-sticky="isStickToBottomAtMobile"
+    >
       <Label
         class="text-medium-gray"
         align="center"

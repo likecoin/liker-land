@@ -542,6 +542,8 @@ export default {
             name: 'reader',
             query: {
               download: this.isContentDownloadable ? '1' : '0',
+              classId: this.classId,
+              format: type,
               src: contentUrl,
             },
           })

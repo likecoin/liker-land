@@ -188,6 +188,10 @@ export default {
     },
 
     // NFT Info
+    classId: {
+      type: String,
+      default: undefined,
+    },
     nftName: {
       type: String,
       default: undefined,
@@ -244,6 +248,8 @@ export default {
             name: 'reader',
             query: {
               download: this.isContentDownloadable ? '1' : '0',
+              classId: this.classId,
+              format: type,
               src: contentUrl,
             },
           })
