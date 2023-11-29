@@ -16,8 +16,9 @@
               opacity: 0.3
             }"
           />
-          <div class="relative">
+          <div class="relative flex items-center justify-center w-full h-full">
             <NFTCover
+              :class="{ 'opacity-0 pointer-events-none': hasDynamicCovers }"
               :src="src"
               :size="450"
               :is-nft-book="true"
@@ -25,6 +26,46 @@
               :spine-color1="spineColor1"
               :spine-color2="spineColor2"
             />
+            <ClientOnly v-if="hasDynamicCovers">
+              <div class="absolute inset-0">
+                <Swiper
+                  class="w-full h-full"
+                  :options="{
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    autoplay: {
+                      delay: 1500,
+                      disableOnInteraction: false,
+                    },
+                    effect: 'coverflow',
+                    coverflowEffect: {
+                      rotate: 30,
+                      stretch: 30,
+                      depth: 20,
+                      modifier: 2,
+                      slideShadows : true,
+                    },
+                  }"
+                >
+                  <SwiperSlide
+                    v-for="coverSrc in dynamicCovers"
+                    :key="coverSrc"
+                    class="bg-[red]"
+                    style="width: 220px"
+                  >
+                    <NFTCover
+                      :src="coverSrc"
+                      :size="450"
+                      :is-nft-book="true"
+                      :alt="alt"
+                      :spine-color1="spineColor1"
+                      :spine-color2="spineColor2"
+                      :should-resize-src="false"
+                    />
+                  </SwiperSlide>
+                </Swiper>
+              </div>
+            </ClientOnly>
           </div>
         </div>
         <div
@@ -55,10 +96,16 @@
   </NFTGemWrapper>
 </template>
 <script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+
 import { getImageResizeAPI } from '~/util/api';
 
 export default {
   name: 'NFTBookEditionCompareTableColumn',
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   props: {
     src: {
       type: String,
@@ -105,6 +152,12 @@ export default {
     },
     priceLabel() {
       return this.editionConfig?.priceLabel;
+    },
+    dynamicCovers() {
+      return this.editionConfig?.dynamicCovers || [];
+    },
+    hasDynamicCovers() {
+      return this.dynamicCovers.length > 0;
     },
   },
 };
