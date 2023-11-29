@@ -42,6 +42,7 @@ import {
   populateGrantEvent,
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
+import { getDynamicCovers } from '~/util/nft-book';
 import {
   formatNumberWithLIKE,
   formatNumberWithUSD,
@@ -404,6 +405,7 @@ export default {
               value: index,
               stock,
               style,
+              dynamicCovers: getDynamicCovers(this.classId, edition.index),
             };
           })
         : [defaultEdition];
