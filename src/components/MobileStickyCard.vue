@@ -16,7 +16,7 @@ export default {
   computed: {
     rootClasses() {
       if (!this.isSticky) {
-        return ['w-full', 'h-full'];
+        return ['w-[inherit]', 'h-[inherit]'];
       }
       return [
         'sticky laptop:relative',

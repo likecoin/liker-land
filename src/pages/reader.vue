@@ -1,10 +1,10 @@
 <template>
-  <div class="h-screen">
+  <div class="fixed inset-0 flex flex-col justify-center items-center">
     <ProgressIndicator v-if="isLoading" />
     <Component
       :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
       v-else
-      class="w-full h-screen"
+      class="w-full h-full"
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import Component from 'vue-class-component';
 import { mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
