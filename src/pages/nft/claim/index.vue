@@ -24,10 +24,12 @@
         v-if="canViewContentDirectly"
         class="mb-[2rem]"
         :url="externalUrl"
+        :class-id="classId"
         :content-urls="iscnContentUrls"
         :iscn-url="iscnUrl"
         :is-nft-book="nftIsNFTBook"
         :is-content-viewable="true"
+        :is-content-downloadable="isContentDownloadable"
         @view-content-url="handleClickViewContentDirectly"
       />
       <template v-if="!claimingAddress">
@@ -535,20 +537,6 @@ export default {
       this.claim();
     },
     handleClickViewContentDirectly(e, contentUrl, type) {
-      if (type === 'pdf') {
-        e.preventDefault();
-        this.$router.push(
-          this.localeLocation({
-            name: 'reader',
-            query: {
-              download: this.isContentDownloadable ? '1' : '0',
-              classId: this.classId,
-              format: type,
-              src: contentUrl,
-            },
-          })
-        );
-      }
       logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.classId, 1);
     },
   },

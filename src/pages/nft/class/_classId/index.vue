@@ -54,10 +54,12 @@
               <NFTViewOptionList
                 class="mt-[24px] mb-[48px]"
                 :url="externalUrl"
+                :class-id="classId"
                 :content-urls="iscnContentUrls"
                 :iscn-url="iscnUrl"
                 :is-nft-book="nftIsNFTBook"
                 :is-content-viewable="isContentViewable"
+                :is-content-downloadable="!nftIsDownloadHidden"
                 :should-show-content-url-buttons="false"
                 @view-content="handleViewContent"
                 @view-content-url="handleViewContentURL"

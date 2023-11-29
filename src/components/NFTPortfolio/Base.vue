@@ -55,6 +55,7 @@
             />
             <NFTViewOptionList
               v-else
+              :class-id="classId"
               :url="externalUrl"
               :iscn-url="iscnUrl"
               :is-nft-book="isNftBook"
