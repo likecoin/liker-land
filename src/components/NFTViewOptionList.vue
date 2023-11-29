@@ -176,8 +176,8 @@ export default {
       const type = this.getContentUrlType(contentUrl);
       const url = parseNFTMetadataURL(contentUrl);
       this.$emit('view-content-url', e, url, type);
-      e.preventDefault();
       if (type === 'pdf') {
+        e.preventDefault();
         this.$router.push(
           this.localeLocation({
             name: 'reader',
@@ -189,15 +189,20 @@ export default {
             },
           })
         );
-      } else if (this.isContentDownloadable) {
-        try {
-          this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
-          const blob = await this.$axios.$get(url, { responseType: 'blob' });
-          saveAs(blob, this.getDownloadFilenameFromURL(contentUrl));
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          this.alertPromptError(this.$t('nft_download_content_error'));
+      } else if (type === 'epub') {
+        e.preventDefault();
+        if (this.isContentDownloadable) {
+          try {
+            this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
+            const blob = await this.$axios.$get(url, { responseType: 'blob' });
+            saveAs(blob, this.getDownloadFilenameFromURL(contentUrl));
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            this.alertPromptError(this.$t('nft_download_content_error'));
+          }
+        } else {
+          this.alertPromptError(this.$t('nft_download_content_denied'));
         }
       }
     },
