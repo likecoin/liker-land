@@ -215,12 +215,19 @@ export default {
         { value: 'store', name: this.$t('main_menu_store') },
         { value: 'article', name: this.$t('main_menu_articles') },
         { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
-        { value: 'mintNft', name: this.$t('main_menu_mint_nft') },
       ];
 
-      if (this.getAddress || this.getUserId) {
+      if (this.getAddress || this.loginAddress || this.getUserId) {
+        options.push({
+          value: 'portfolio',
+          name: this.$t('main_menu_my_portfolio'),
+        });
+      }
+
+      options.push({ value: 'mintNft', name: this.$t('main_menu_mint_nft') });
+
+      if (this.getAddress || this.loginAddress || this.getUserId) {
         options.push(
-          { value: 'notifications', name: this.$t('main_menu_notification') },
           { value: 'setting', name: this.$t('main_menu_settings') },
           { value: 'signOut', name: this.$t('main_menu_sign_out') }
         );
@@ -271,15 +278,20 @@ export default {
           window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
           break;
 
-        case 'notifications':
+        case 'portfolio':
           logTrackerEvent(
             this,
             'site_menu',
-            'site_menu_click_notifications',
+            'site_menu_click_portfolio',
             '',
             1
           );
-          this.$router.push(this.localeLocation({ name: 'notifications' }));
+          this.$router.push(
+            this.localeLocation({
+              name: 'id',
+              params: { id: this.getAddress || this.loginAddress },
+            })
+          );
           break;
 
         case 'setting':
