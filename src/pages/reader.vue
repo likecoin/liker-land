@@ -27,10 +27,11 @@
 import { mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'ReaderPage',
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin],
   layout: 'empty',
   data() {
     return {
@@ -99,6 +100,7 @@ export default {
       this.fetchNFTBookInfoByClassId(this.classId).catch();
       await this.lazyFetchNFTClassMetadata();
       await this.fetchISCNMetadata();
+      await this.restoreSession();
       // TODO: use loginAddress
       if (this.getAddress) {
         await this.fetchUserCollectedCount();
@@ -111,6 +113,8 @@ export default {
           );
           return;
         }
+      } else {
+        this.connectWallet();
       }
     } finally {
       this.isLoading = false;
