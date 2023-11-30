@@ -27,6 +27,7 @@
 import { mapGetters } from 'vuex';
 import { EXTERNAL_HOST } from '~/constant';
 
+import { parseNFTMetadataURL } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -49,6 +50,41 @@ export default {
     });
     const title = this.$t('store_books_page_title');
     const description = this.$t('store_books_page_description');
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'DataFeed',
+      dataFeedElement: this.nftBookstoreItems
+        .filter(c => this.getNFTClassMetadataById(c.classId))
+        .map(c => {
+          const {
+            name: className,
+            description: classDescription,
+            image: classImage = '',
+            iscn_owner: iscnOwner,
+          } = this.getNFTClassMetadataById(c.classId);
+          const iscnOwnerPerson = iscnOwner
+            ? {
+                '@context': 'http://www.schema.org',
+                '@type': 'Person',
+                url: `${EXTERNAL_HOST}/${iscnOwner}`,
+                identifier: iscnOwner,
+              }
+            : undefined;
+
+          return {
+            '@context': 'http://www.schema.org',
+            '@type': 'Book',
+            '@id': `${EXTERNAL_HOST}/nft/class/${c.classId}`,
+            name: className,
+            description: classDescription,
+            image: parseNFTMetadataURL(classImage),
+            url: `${EXTERNAL_HOST}/nft/class/${c.classId}`,
+            author: iscnOwnerPerson,
+            identifier: c.classId,
+          };
+        }),
+    };
     return {
       title,
       meta: [
@@ -75,11 +111,19 @@ export default {
           }`,
         },
       ],
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify(schema),
+          type: 'application/ld+json',
+          body: true,
+        },
+      ],
       link,
     };
   },
   computed: {
-    ...mapGetters(['nftBookstoreItems']),
+    ...mapGetters(['nftBookstoreItems', 'getNFTClassMetadataById']),
     nftBooks() {
       const books = [...this.nftBookstoreItems];
       books.sort((a, b) => {
