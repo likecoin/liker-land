@@ -57,6 +57,7 @@
               v-else
               :class-id="classId"
               :url="externalUrl"
+              :content-urls="contentUrls"
               :iscn-url="iscnUrl"
               :is-nft-book="isNftBook"
               @view-content="handleClickViewContent"
@@ -189,6 +190,10 @@ export default {
     iscnUrl: {
       type: String,
       default: '',
+    },
+    contentUrls: {
+      type: Array,
+      default: () => [],
     },
     collectExpiryTime: {
       type: Number,
