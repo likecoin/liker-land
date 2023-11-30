@@ -6,6 +6,7 @@
   <IconSetting v-else-if="type === 'setting'" />
   <IconLogOut v-else-if="type === 'signOut'" />
   <IconMint v-else-if="type === 'mintNft'" class="w-[20px]" />
+  <IconCreativeWork v-else-if="type === 'portfolio'" />
   <IconBell v-else-if="type === 'notifications'" />
 </template>
 
