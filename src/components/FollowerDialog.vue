@@ -6,8 +6,15 @@
     panel-class="overflow-y-scroll shadow-lg"
     @close="$emit('close')"
   >
-    <Label preset="h5" class="mt-[-24px] mb-[12px] text-like-green" :text="$t('portfolio_follower_title')" />
-    <div v-if="!populatedFollowers.length" class="flex justify-center my-[48px]">
+    <Label
+      preset="h5"
+      class="mt-[-24px] mb-[12px] text-like-green"
+      :text="$t('portfolio_follower_title')"
+    />
+    <div
+      v-if="!populatedFollowers.length"
+      class="flex justify-center my-[48px]"
+    >
       <ProgressIndicator v-if="walletIsFetchingFollowers" />
       <Label
         v-else
@@ -35,7 +42,11 @@
       >
         <NuxtLink
           class="flex items-center text-like-green"
-          :to="follower.wallet ? localeLocation({ name: 'id', params: { id: follower.wallet } }) : ''"
+          :to="
+            follower.wallet
+              ? localeLocation({ name: 'id', params: { id: follower.wallet } })
+              : ''
+          "
           target="_blank"
         >
           <Identity
@@ -51,7 +62,11 @@
       </div>
       <div class="flex flex-col items-center">
         <div class="h-[2px] w-[24px] bg-shade-gray my-[12px]" />
-        <ButtonV2 size="mini" preset="tertiary" @click="$emit('on-export-followers')">
+        <ButtonV2
+          size="mini"
+          preset="tertiary"
+          @click="$emit('on-export-followers')"
+        >
           <template #prepend>
             <IconShare />
           </template>

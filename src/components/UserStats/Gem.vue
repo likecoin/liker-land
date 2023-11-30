@@ -1,22 +1,24 @@
 <template>
   <ul v-if="gemList.length" class="flex flex-wrap gap-[6px]">
-    <li
-      v-for="gem, i in gemList"
-      :key="i"
-      class="w-[20px] h-[20px]"
-    >
+    <li v-for="(gem, i) in gemList" :key="i" class="w-[20px] h-[20px]">
       <NuxtLink
-        :to="localeLocation({
-          name: gem.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
-          params: {
-            classId: gem.classId,
-            nftId: gem.nftId,
-          },
-        })"
+        :to="
+          localeLocation({
+            name: gem.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
+            params: {
+              classId: gem.classId,
+              nftId: gem.nftId,
+            },
+          })
+        "
         @mouseenter.native.once="onHoverGemLink(gem)"
         @click.native="onClickGemLink(gem)"
       >
-        <img :src="getLevelImageSrc(gem.level)" :title="getGemName(gem.level)" :alt="getGemName(gem.level)">
+        <img
+          :src="getLevelImageSrc(gem.level)"
+          :title="getGemName(gem.level)"
+          :alt="getGemName(gem.level)"
+        />
       </NuxtLink>
     </li>
   </ul>

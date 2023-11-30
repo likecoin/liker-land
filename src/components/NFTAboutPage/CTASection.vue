@@ -1,5 +1,7 @@
 <template>
-  <nav class="grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]">
+  <nav
+    class="grid items-center justify-center grid-flow-row laptop:grid-flow-col gap-[16px]"
+  >
     <ButtonV2
       preset="secondary"
       :text="$t('about_nft_page_nav_campaign')"

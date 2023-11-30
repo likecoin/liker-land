@@ -3,9 +3,9 @@
     v-if="isOpen"
     class="flex items-center p-[16px] pl-[24px] bg-like-gradient gap-[8px]"
   >
-
-    <div class="flex flex-col desktop:flex-row flex-grow items-center desktop:justify-between gap-[16px]">
-
+    <div
+      class="flex flex-col desktop:flex-row flex-grow items-center desktop:justify-between gap-[16px]"
+    >
       <div class="text-center desktop:text-left"><slot /></div>
 
       <div
@@ -40,7 +40,6 @@
     >
       <IconClose />
     </ButtonV2>
-
   </div>
 </template>
 

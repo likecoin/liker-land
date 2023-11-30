@@ -1,15 +1,15 @@
 <template>
   <Page class="overflow-x-hidden">
-    <CardV2
-      v-if="isLoading"
-      class="absolute top-[40%]"
-    >{{ $t('nft_details_page_label_loading') }}</CardV2>
+    <CardV2 v-if="isLoading" class="absolute top-[40%]">{{
+      $t('nft_details_page_label_loading')
+    }}</CardV2>
     <div
       v-else-if="!isLoading && !isMessagePage"
       class="px-[12px] laptop:px-[24px] phone:px-[12px] pb-[120px] w-full"
     >
-
-      <div class="flex flex-col gap-[32px] phone:gap-[16px] w-full max-w-[962px] mx-auto">
+      <div
+        class="flex flex-col gap-[32px] phone:gap-[16px] w-full max-w-[962px] mx-auto"
+      >
         <header
           :class="[
             'flex flex-col items-center w-full sm:flex-row gap-[24px]',
@@ -49,10 +49,12 @@
               'w-full',
               'border-shade-gray',
             ]"
-          >
+          />
         </header>
 
-        <section class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]">
+        <section
+          class="flex flex-col desktop:grid grid-cols-3 gap-x-[16px] gap-y-[32px]"
+        >
           <!-- NFT Message List -->
           <div class="col-span-2 flex flex-col items-center gap-[24px]">
             <NFTPageNFTSelect
@@ -62,7 +64,9 @@
               :nft-collector-collected-nft-list="nftCollectorCollectedNFTList"
               @select="onSelectNFT"
             />
-            <ul class="flex flex-col gap-[24px] w-full laptop:px-[24px] phone:hidden">
+            <ul
+              class="flex flex-col gap-[24px] w-full laptop:px-[24px] phone:hidden"
+            >
               <NFTMessage
                 v-for="m in messageList"
                 :key="`${m.txHash}-${m.event}`"
@@ -83,7 +87,10 @@
               v-if="messageList.length && messageList[0].message"
               class="hidden flex-col items-center justify-center w-full py-[24px] border-[2px] border-shade-gray rounded-[24px] phone:flex phone:order-1"
             >
-              <ul v-if="creatorMessage && creatorMessage.message" class="flex flex-col gap-[24px] w-full px-[16px]">
+              <ul
+                v-if="creatorMessage && creatorMessage.message"
+                class="flex flex-col gap-[24px] w-full px-[16px]"
+              >
                 <NFTMessage
                   :key="`${creatorMessage.txHash}-${creatorMessage.event}`"
                   :type="creatorMessage.event"
@@ -101,13 +108,17 @@
                 v-if="shouldShowMessageButton"
                 preset="outline"
                 class="mt-[16px] mb-[8px]"
-                :text="$t('nft_details_page_button_view_message', {
-                  num: validMessageCount
-                })"
-                :to="localeLocation({
-                  name: 'nft-class-classId-nftId-message',
-                  params: { classId, nftId: selectedNFTId }
-                })"
+                :text="
+                  $t('nft_details_page_button_view_message', {
+                    num: validMessageCount,
+                  })
+                "
+                :to="
+                  localeLocation({
+                    name: 'nft-class-classId-nftId-message',
+                    params: { classId, nftId: selectedNFTId },
+                  })
+                "
               >
                 <template #prepend>
                   <IconView />
@@ -118,7 +129,11 @@
               </ButtonV2>
             </div>
             <ul
-              v-if="messageList.length === 1 && creatorMessage && !creatorMessage.message"
+              v-if="
+                messageList.length === 1 &&
+                  creatorMessage &&
+                  !creatorMessage.message
+              "
               class="hidden flex-col gap-[24px] w-full px-[16px] phone:flex phone:order-3"
             >
               <NFTMessage
@@ -137,7 +152,9 @@
           </div>
 
           <!-- NFT Preview -->
-          <div class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none">
+          <div
+            class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none"
+          >
             <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsNFTBook">
               <NFTPagePreviewCard
                 :url="externalUrl"
@@ -168,7 +185,12 @@
               />
               <NFTFeatured
                 :class-id="classId"
-                :read-only="!(nftCollectorWalletAddress && nftCollectorWalletAddress.includes(getAddress))"
+                :read-only="
+                  !(
+                    nftCollectorWalletAddress &&
+                    nftCollectorWalletAddress.includes(getAddress)
+                  )
+                "
                 :display-state="nftDisplayState"
               />
             </NFTGemWrapper>
@@ -177,7 +199,12 @@
               content-class="text-[12px]"
               preset="plain"
               size="mini"
-              :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: { classId },
+                })
+              "
             >
               <template #prepend>
                 <IconEye class="w-[12px] h-[12px]" />
@@ -250,7 +277,9 @@
             content-class="text-[12px]"
             preset="plain"
             size="mini"
-            :to="localeLocation({ name: 'nft-class-classId', params: { classId } })"
+            :to="
+              localeLocation({ name: 'nft-class-classId', params: { classId } })
+            "
           >
             <template #prepend>
               <IconEye class="w-[12px] h-[12px]" />
@@ -266,7 +295,7 @@
               'my-[24px]',
               'border-shade-gray',
             ]"
-          >
+          />
           <NFTPageControlBar
             :collected-count="ownCount"
             :collected-nft-ids="userCollectedNFTList"
@@ -285,7 +314,10 @@
         </section>
 
         <!-- recommend -->
-        <div v-if="isRecommendationLoading" class="flex justify-center items-center my-[24px]">
+        <div
+          v-if="isRecommendationLoading"
+          class="flex justify-center items-center my-[24px]"
+        >
           <ProgressIndicator />
         </div>
         <NFTPageRecommendation
@@ -304,16 +336,17 @@
         />
       </div>
     </div>
-    <NuxtChild
-      keep-alive
-    />
+    <NuxtChild keep-alive />
     <EventModalTransfer
       v-if="classId"
       :is-open="isOpenTransferModal"
       :is-transferring="isTransferring"
       :user-collected-count="userCollectedCount"
       :nft-id="nftId"
-      @close="isOpenTransferModal = false; isTransferring = false"
+      @close="
+        isOpenTransferModal = false;
+        isTransferring = false;
+      "
       @submit="handleTransfer"
     />
   </Page>

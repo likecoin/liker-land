@@ -12,14 +12,18 @@
           pb-[16px]
         "
       >
-        <NuxtLink class="text-white transition-colors hover:text-like-cyan" to="/">
+        <NuxtLink
+          class="text-white transition-colors hover:text-like-cyan"
+          to="/"
+        >
           <Logo class="fill-current h-[16px]" />
         </NuxtLink>
         <CommunityCTA class="mt-[24px] laptop:mt-0 !justify-start" />
       </div>
 
-      <div class="flex flex-col-reverse desktop:flex-row pl-[56px] pr-[32px] pt-[24px] pb-[48px] gap-[3rem]">
-
+      <div
+        class="flex flex-col-reverse desktop:flex-row pl-[56px] pr-[32px] pt-[24px] pb-[48px] gap-[3rem]"
+      >
         <div
           class="
             flex-grow
@@ -35,38 +39,53 @@
             <a
               class="cursor-pointer hover:underline"
               @click="isOpenAboutTeam = !isOpenAboutTeam"
-            >{{ $t('footer_nav_about_liker_land') }}</a>
-            <hr class="w-[32px] border-white border-opacity-[0.2]">
-            <a class="hover:underline" target="_blank" href="https://like.co">{{ $t('footer_nav_about_likecoin') }}</a>
+              >{{ $t('footer_nav_about_liker_land') }}</a
+            >
+            <hr class="w-[32px] border-white border-opacity-[0.2]" />
+            <a class="hover:underline" target="_blank" href="https://like.co">{{
+              $t('footer_nav_about_likecoin')
+            }}</a>
           </div>
 
           <div class="grid grid-flow-row gap-y-[16px]">
-            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'writing-nft-about' })">
+            <NuxtLink
+              class="hover:underline"
+              :to="localeLocation({ name: 'writing-nft-about' })"
+            >
               {{ $t('footer_nav_about_wnft') }}
             </NuxtLink>
-            <hr class="w-[32px] border-white border-opacity-[0.2]">
+            <hr class="w-[32px] border-white border-opacity-[0.2]" />
             <a class="hover:underline" target="_blank" :href="mintNftURL">
               {{ $t('footer_nav_mint_nft') }}
             </a>
           </div>
 
           <div class="grid grid-flow-row gap-y-[16px]">
-            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'store-books' })">
+            <NuxtLink
+              class="hover:underline"
+              :to="localeLocation({ name: 'store-books' })"
+            >
               {{ $t('footer_nav_store_books') }}
             </NuxtLink>
-            <hr class="w-[32px] border-white border-opacity-[0.2]">
-            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'store-articles' })">
+            <hr class="w-[32px] border-white border-opacity-[0.2]" />
+            <NuxtLink
+              class="hover:underline"
+              :to="localeLocation({ name: 'store-articles' })"
+            >
               {{ $t('footer_nav_store_articles') }}
             </NuxtLink>
           </div>
 
           <div class="grid grid-flow-row gap-y-[16px]">
-            <NuxtLink class="hover:underline" :to="localeLocation({ name: 'civic' })">{{ $t('footer_nav_civic_liker') }}</NuxtLink>
+            <NuxtLink
+              class="hover:underline"
+              :to="localeLocation({ name: 'civic' })"
+              >{{ $t('footer_nav_civic_liker') }}</NuxtLink
+            >
           </div>
         </div>
 
         <div id="custom-substack-embed" />
-
       </div>
     </div>
     <div
@@ -81,17 +100,27 @@
         text-like-green
       "
     >
-      <button class="cursor-pointer hover:underline" @click="handleClickHelp">{{ $t('footer_nav_help') }}</button>
-      <a class="hover:underline" :href="$t('footer_nav_doc_link')">{{ $t('footer_nav_doc') }}</a>
-      <a class="hover:underline" :href="$t('footer_nav_faq_link')">{{ $t('footer_nav_faq') }}</a>
+      <button class="cursor-pointer hover:underline" @click="handleClickHelp">
+        {{ $t('footer_nav_help') }}
+      </button>
+      <a class="hover:underline" :href="$t('footer_nav_doc_link')">{{
+        $t('footer_nav_doc')
+      }}</a>
+      <a class="hover:underline" :href="$t('footer_nav_faq_link')">{{
+        $t('footer_nav_faq')
+      }}</a>
     </div>
     <Dialog
       v-model="isOpenAboutTeam"
       preset="custom"
       panel-class="text-white shadow-lg bg-like-green max-w-[520px] w-full p-[48px] rounded-[24px]"
     >
-      <div class="text-like-cyan-pale text-opacity-[0.4]">{{ $t('about_the_team_top_label') }}</div>
-      <h1 class="text-like-cyan text-[32px] my-[40px] font-proxima font-[700]">{{ $t('about_the_team_title') }}</h1>
+      <div class="text-like-cyan-pale text-opacity-[0.4]">
+        {{ $t('about_the_team_top_label') }}
+      </div>
+      <h1 class="text-like-cyan text-[32px] my-[40px] font-proxima font-[700]">
+        {{ $t('about_the_team_title') }}
+      </h1>
       <div>{{ $t('about_the_team_description') }}</div>
       <svg
         class="mt-[32px]"

@@ -16,7 +16,10 @@
       <IconAttention class="mr-[12px]" />
       <slot name="icon" />
     </div>
-    <Label class="whitespace-pre-line text-medium-gray mt-[12px]" :text="attentionText" />
+    <Label
+      class="whitespace-pre-line text-medium-gray mt-[12px]"
+      :text="attentionText"
+    />
   </div>
 </template>
 

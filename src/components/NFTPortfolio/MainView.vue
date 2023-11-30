@@ -5,8 +5,9 @@
       { [narrowClass]: isNarrow },
     ]"
   >
-
-    <nav class="relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]">
+    <nav
+      class="relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]"
+    >
       <slot name="tab-bar-prepend" />
       <ul
         :class="[
@@ -31,21 +32,21 @@
               () => {
                 item.handleClick();
                 selectedFilter = 'type';
-              }"
+              }
+            "
           />
         </li>
       </ul>
     </nav>
 
     <div :class="['flex flex-col items-center gap-[32px] w-full', narrowClass]">
-
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
           'flex self-stretch justify-center gap-[8px] items-center desktop:justify-end',
           {
-            'opacity-0 pointer-events-none': isLoadingPortfolioItems
-          }
+            'opacity-0 pointer-events-none': isLoadingPortfolioItems,
+          },
         ]"
       >
         <div class="flex justify-center items-center gap-[16px]">
@@ -55,16 +56,15 @@
             :get-type-button-preset="getTypeButtonPreset"
             :get-creators-button-preset="getCreatorsButtonPreset"
             :get-keywords-button-preset="getKeywordsButtonPreset"
-
             :selected-filter="selectedFilter"
             :nft-type-options="nftTypeOptions"
             :is-portfolio-tab-collected-active="isPortfolioTabCollectedActive"
-
             :portfolio-items-type-filtering="portfolioItemsTypeFiltering"
-            :portfolio-collected-creator-list-with-sorting="portfolioCollectedCreatorListWithSorting"
+            :portfolio-collected-creator-list-with-sorting="
+              portfolioCollectedCreatorListWithSorting
+            "
             :nft-keyword-list="nftKeywordList"
             :nft-keyword-filtering="nftKeywordFiltering"
-
             @filter-click-type-filter="selectedFilter = 'type'"
             @filter-click-creator-filter="selectedFilter = 'creators'"
             @filter-click-keyword-filter="selectedFilter = 'keywords'"
@@ -132,8 +132,8 @@
         :class="[
           'self-stretch -mx-[12px] desktop:w-[668px] transition-all relative',
           {
-            'opacity-0 pointer-events-none': isLoadingPortfolioItems
-          }
+            'opacity-0 pointer-events-none': isLoadingPortfolioItems,
+          },
         ]"
       >
         <li v-if="!portfolioItemsTrimmed.length" class="w-full mx-[12px]">
@@ -165,13 +165,15 @@
         v-if="!isLoadingPortfolioItems && hasMorePortfolioItems"
         ref="infiniteScrollTrigger"
         class="animate-pulse flex justify-center font-[600] px-[24px] py-[128px] text-gray-9b min-h-screen"
-      >{{ $t('nft_portfolio_page_label_loading_more') }}</div>
+      >
+        {{ $t('nft_portfolio_page_label_loading_more') }}
+      </div>
 
       <slot name="grid-append" />
     </div>
 
     <template v-if="!isLoadingPortfolioItems">
-      <hr class="w-[32px] h-[2px] bg-shade-gray border-none">
+      <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
 
       <ButtonV2
         preset="outline"

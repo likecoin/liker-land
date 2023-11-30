@@ -1,52 +1,35 @@
 <template>
-  <component
-    :is="componentTag"
-    v-if="isRaw"
-    :class="rawClasses"
-  >
+  <component :is="componentTag" v-if="isRaw" :class="rawClasses">
     <slot />
   </component>
-  <component
-    :is="componentTag"
-    v-else
-    :class="rootClasses"
-  >
-    <div
-      v-if="$slots.prepend"
-      :class="prependWrapperClasses"
-    ><slot name="prepend" /></div>
-    <div
-      v-if="$slots.default"
-      :class="contentWrapperClasses"
-    >
+  <component :is="componentTag" v-else :class="rootClasses">
+    <div v-if="$slots.prepend" :class="prependWrapperClasses">
+      <slot name="prepend" />
+    </div>
+    <div v-if="$slots.default" :class="contentWrapperClasses">
       <div v-if="isTruncated" class="truncate">
         <slot />
       </div>
       <slot v-else />
     </div>
-    <div
-      v-else
-      :class="contentWrapperClasses"
-    >
+    <div v-else :class="contentWrapperClasses">
       <template v-if="multiLineText">
         <p
           v-for="(pText, pIndex) in multiLineText"
           :key="pIndex"
           :class="{ 'mt-[0.75rem]': pIndex > 0 }"
-        >{{ pText }}</p>
+        >
+          {{ pText }}
+        </p>
       </template>
       <div v-else-if="isTruncated" class="truncate">{{ text }}</div>
       <template v-else>{{ text }}</template>
     </div>
-    <div
-      v-if="$slots.append"
-      :class="appendWrapperClasses"
-    >
+    <div v-if="$slots.append" :class="appendWrapperClasses">
       <slot name="append" />
     </div>
   </component>
 </template>
-
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';

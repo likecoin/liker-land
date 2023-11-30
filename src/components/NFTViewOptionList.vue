@@ -4,7 +4,13 @@
       v-if="url && shouldShowViewContentButton"
       class="w-full"
       preset="outline"
-      :text="$t(isNftBook ? 'nft_details_page_button_view_nft_book' : 'nft_details_page_button_view')"
+      :text="
+        $t(
+          isNftBook
+            ? 'nft_details_page_button_view_nft_book'
+            : 'nft_details_page_button_view'
+        )
+      "
       :href="url"
       target="_blank"
       @click="handleClickViewContent"
@@ -20,7 +26,15 @@
     <p
       v-if="normalizedContentURLs.length && !isContentViewable"
       class="text-[14px] text-medium-gray text-center mt-[16px]"
-    >{{ $t(isNftBook ? 'nft_details_page_button_collect_to_view_nft_book' : 'nft_details_page_button_collect_to_view') }}</p>
+    >
+      {{
+        $t(
+          isNftBook
+            ? 'nft_details_page_button_collect_to_view_nft_book'
+            : 'nft_details_page_button_collect_to_view'
+        )
+      }}
+    </p>
 
     <template v-if="contentUrls.length && shouldShowContentUrlButtons">
       <template v-if="hasDuplicatedContentTypes">
@@ -35,7 +49,13 @@
               <template #prepend>
                 <IconDownload class="w-20 h-20" />
               </template>
-              <template #default>{{ $t(isNftBook ? 'nft_details_page_download_nft_book_button' : 'nft_details_page_download_button') }}</template>
+              <template #default>{{
+                $t(
+                  isNftBook
+                    ? 'nft_details_page_download_nft_book_button'
+                    : 'nft_details_page_download_button'
+                )
+              }}</template>
               <template #append>
                 <IconArrowDown class="w-16 h-16" />
               </template>
@@ -43,16 +63,17 @@
           </template>
           <MenuList>
             <ul>
-              <li
-                v-for="contentUrl in normalizedContentURLs"
-                :key="contentUrl"
-              >
+              <li v-for="contentUrl in normalizedContentURLs" :key="contentUrl">
                 <ButtonV2
                   :href="parseNFTMetadataURL(contentUrl)"
                   preset="plain"
                   :download="getDownloadFilenameFromURL(contentUrl)"
                   @click="e => handleClickViewContentURL(e, contentUrl)"
-                >{{ getFilenameFromURL(contentUrl) || getContentUrlButtonText(contentUrl) }}&nbsp;<IconLinkExternal /></ButtonV2>
+                  >{{
+                    getFilenameFromURL(contentUrl) ||
+                      getContentUrlButtonText(contentUrl)
+                  }}&nbsp;<IconLinkExternal
+                /></ButtonV2>
               </li>
             </ul>
           </MenuList>

@@ -1,8 +1,6 @@
 <template>
   <CollapsibleCard
-    :class="[
-      'w-full',
-    ]"
+    :class="['w-full']"
     :title="$t('nft_details_page_title_collector')"
     :has-content-padding="false"
     :is-narrow="isNarrow"
@@ -32,7 +30,9 @@
             <div class="flex justify-between mb-[12px] min-w-[310px]">
               <Label
                 class="w-min font-600"
-                :text="`${$t('nft_details_page_title_collector')} (${items.length})`"
+                :text="
+                  `${$t('nft_details_page_title_collector')} (${items.length})`
+                "
                 preset="h5"
                 valign="middle"
                 content-class="whitespace-nowrap text-like-green "
@@ -51,7 +51,7 @@
                 prepend-class="text-like-green"
               />
             </div>
-            <hr class="w-full border-shade-gray">
+            <hr class="w-full border-shade-gray" />
           </template>
           <template #content>
             <div class="min-w-[310px]">
@@ -69,10 +69,7 @@
           </template>
         </ShowMore>
       </template>
-      <div
-        v-else
-        class="flex justify-center items-center min-h-[180px]"
-      >
+      <div v-else class="flex justify-center items-center min-h-[180px]">
         <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
       </div>
     </template>

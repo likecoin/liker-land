@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="identity"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+  <div class="identity" v-bind="$attrs" v-on="$listeners">
     <Avatar
       class="identity__avatar"
       :url="avatarUrl"
@@ -16,14 +12,15 @@
       @click="onClickAvatar"
     />
     <div>
-      <div
-        v-if="likerId"
-        :class="['text-12 opacity-50 mx-8', likerIdClass]"
-      >ID: {{ likerId }}</div>
+      <div v-if="likerId" :class="['text-12 opacity-50 mx-8', likerIdClass]">
+        ID: {{ likerId }}
+      </div>
       <div
         v-if="displayName"
         :class="['identity__display-name', displayNameClass]"
-      >{{ displayName }}</div>
+      >
+        {{ displayName }}
+      </div>
     </div>
   </div>
 </template>

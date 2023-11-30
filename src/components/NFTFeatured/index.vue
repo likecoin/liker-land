@@ -10,8 +10,9 @@
       'ease-in',
       'duration-200',
       { 'cursor-pointer': readOnly },
-      { 'cursor-default': !readOnly }]"
-    @click="(e) => handleClick(e)"
+      { 'cursor-default': !readOnly },
+    ]"
+    @click="e => handleClick(e)"
   >
     <div class="flex gap-[8px] items-center">
       <div

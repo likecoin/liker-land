@@ -20,13 +20,11 @@
         preset="h6"
         :text="$t('nft_class_details_info_section_nft_class_id_label')"
       />
-      <Label
-        preset="p6"
-        :text="classId"
-        :is-truncated="true"
-      />
+      <Label preset="p6" :text="classId" :is-truncated="true" />
 
-      <div class="flex gap-[16px] items-center mt-[24px] text-[12px] text-medium-gray">
+      <div
+        class="flex gap-[16px] items-center mt-[24px] text-[12px] text-medium-gray"
+      >
         <div class="flex items-center">
           <IconMint />
           <div class="ml-[4px]">{{ collectedCount }}</div>

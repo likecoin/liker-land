@@ -23,7 +23,11 @@
       :sold-count="nftSoldCount"
       :is-loading="uiIsOpenCollectModal && isCollecting"
       :is-content-viewable="isContentViewable"
-      :view-details-label="isContentViewable ? $t('campaign_nft_item_view_details_label') : $t('nft_details_page_button_collect_to_view')"
+      :view-details-label="
+        isContentViewable
+          ? $t('campaign_nft_item_view_details_label')
+          : $t('nft_details_page_button_collect_to_view')
+      "
       :like-action-label="$t('campaign_nft_item_like_action_label')"
       :owner-count-label="$t('nft_details_page_title_collector')"
       :sold-count-label="$t('campaign_nft_item_collected_count_label')"

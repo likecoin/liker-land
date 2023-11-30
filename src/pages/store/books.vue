@@ -10,7 +10,9 @@
     ]"
   >
     <section class="w-full">
-      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('store_books_page_header') }}</h2>
+      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">
+        {{ $t('store_books_page_header') }}
+      </h2>
       <NFTBookShelf
         class="mt-[3rem]"
         :items="nftBooks"

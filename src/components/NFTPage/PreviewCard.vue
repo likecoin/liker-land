@@ -1,12 +1,6 @@
 <template>
   <CardV2
-    :class="[
-      'flex',
-      'flex-col',
-
-      'border-[1px]',
-      'border-shade-gray',
-    ]"
+    :class="['flex', 'flex-col', 'border-[1px]', 'border-shade-gray']"
     :has-padding="false"
   >
     <a
@@ -43,11 +37,15 @@
         />
         <NuxtLink
           class="flex mt-[8px] w-full"
-          :to="iscnOwner ? localeLocation({
-            name: 'id',
-            params: { id: iscnOwner },
-            query: { tab: 'created' },
-          }) : ''"
+          :to="
+            iscnOwner
+              ? localeLocation({
+                  name: 'id',
+                  params: { id: iscnOwner },
+                  query: { tab: 'created' },
+                })
+              : ''
+          "
           @click.native="onClickAvatar"
         >
           <Label
@@ -60,9 +58,16 @@
           </Label>
         </NuxtLink>
 
-        <div v-if="iscnWorkAuthor" class="my-[1rem] flex flex-col items-center text-center min-w-0 w-full">
-          <span class="text-like-cyan-gray text-10">{{ $t('identity_type_author') }}</span>
-          <span class="text-dark-gray truncate w-full">{{ iscnWorkAuthor }}</span>
+        <div
+          v-if="iscnWorkAuthor"
+          class="my-[1rem] flex flex-col items-center text-center min-w-0 w-full"
+        >
+          <span class="text-like-cyan-gray text-10">{{
+            $t('identity_type_author')
+          }}</span>
+          <span class="text-dark-gray truncate w-full">{{
+            iscnWorkAuthor
+          }}</span>
         </div>
       </div>
       <Label
@@ -114,8 +119,8 @@
         v-else-if="classCollectionName"
         class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
         preset="p6"
-      >{{ classCollectionName }}</Label>
-
+        >{{ classCollectionName }}</Label
+      >
     </div>
   </CardV2>
 </template>

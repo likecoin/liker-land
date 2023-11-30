@@ -1,10 +1,5 @@
 <template>
-  <Page
-    :class="[
-      'overflow-x-hidden',
-      { 'p-[16px]': isInInAppBrowser }
-    ]"
-  >
+  <Page :class="['overflow-x-hidden', { 'p-[16px]': isInInAppBrowser }]">
     <AuthRequiredView
       class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
       :is-loading-start-immediately="isInInAppBrowser"
@@ -14,7 +9,11 @@
       <Label
         preset="h5"
         class="text-like-green mb-[8px]"
-        :text="$tc('event_list_page_notifications', getNotificationCount, { number: getNotificationCount })"
+        :text="
+          $tc('event_list_page_notifications', getNotificationCount, {
+            number: getNotificationCount,
+          })
+        "
       >
         <template #prepend>
           <IconBell />
@@ -25,13 +24,20 @@
           </ButtonV2>
         </template>
       </Label>
-      <hr class="border-shade-gray border-[1px]">
+      <hr class="border-shade-gray border-[1px]" />
       <div v-if="getIsFetchingEvent" class="flex items-center justify-center">
         <CardV2 class="flex p-[8px] my-[48px]">
-          <Label preset="h5" class="text-like-green" :text="$t('nft_portfolio_page_label_loading')" />
+          <Label
+            preset="h5"
+            class="text-like-green"
+            :text="$t('nft_portfolio_page_label_loading')"
+          />
         </CardV2>
       </div>
-      <div v-else-if="!processedEvents.length" class="text-center text-medium-gray mt-[24px]">
+      <div
+        v-else-if="!processedEvents.length"
+        class="text-center text-medium-gray mt-[24px]"
+      >
         {{ $t('event_list_page_no_event') }}
       </div>
       <template v-else>
@@ -58,7 +64,14 @@
           <!-- events -->
           <LinkV2
             v-for="event in group.events"
-            :key="[event.tx_hash, event.class_id, event.nft_id, event.eventType].join('-')"
+            :key="
+              [
+                event.tx_hash,
+                event.class_id,
+                event.nft_id,
+                event.eventType,
+              ].join('-')
+            "
             :to="localeLocation(event.targetRoute)"
             :class="[
               'relative',
@@ -112,7 +125,7 @@
                     'bg-danger',
                     'rounded-[50%]',
                     'w-[8px]',
-                    'h-[8px]'
+                    'h-[8px]',
                   ]"
                 />
               </div>
@@ -136,26 +149,21 @@
                   <p
                     class="inline text-black font-600 text-16"
                     place="fromName"
-                  >{{ event.fromName | ellipsis }}</p>
-                  <p
-                    class="inline text-black font-600 text-16"
-                    place="toName"
-                  >{{ event.toName | ellipsis }}</p>
-                  <p
-                    class="inline italic text-black font-600"
-                    place="nftName"
                   >
+                    {{ event.fromName | ellipsis }}
+                  </p>
+                  <p class="inline text-black font-600 text-16" place="toName">
+                    {{ event.toName | ellipsis }}
+                  </p>
+                  <p class="inline italic text-black font-600" place="nftName">
                     {{ event.nftName }}
                   </p>
-                  <p
-                    class="inline text-like-green font-600"
-                    place="price"
-                  >{{ event.price }}</p>
-                  <p
-                    class="inline text-like-green font-600"
-                    place="currency"
-                  >{{ event.currency || 'LIKE' }}</p>
-
+                  <p class="inline text-like-green font-600" place="price">
+                    {{ event.price }}
+                  </p>
+                  <p class="inline text-like-green font-600" place="currency">
+                    {{ event.currency || 'LIKE' }}
+                  </p>
                 </i18n>
                 <div
                   v-if="event.message"
@@ -171,14 +179,10 @@
 
                     'group-hover:border-light-gray',
                     'duration-75',
-                    'transition-all'
+                    'transition-all',
                   ]"
                 >
-                  <Label
-                    preset="p6"
-                    align="middle"
-                    class="text-medium-gray"
-                  >
+                  <Label preset="p6" align="middle" class="text-medium-gray">
                     <NFTMessageText :value="event.message" />
                   </Label>
                 </div>

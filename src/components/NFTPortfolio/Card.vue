@@ -4,7 +4,10 @@
       'rounded-[24px]',
       'w-full',
       'overflow-hidden',
-      { 'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4] hover:bg-none': displayState === 'featured' },
+      {
+        'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4] hover:bg-none':
+          displayState === 'featured',
+      },
       { [hoverClass]: displayState !== 'hidden' },
       'transition',
       'ease-in',

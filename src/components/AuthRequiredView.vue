@@ -31,7 +31,10 @@
         </template>
         <ButtonV2
           v-else
-          :text="loginButtonLabel || $t('settings_page_content_with_auth_login_button')"
+          :text="
+            loginButtonLabel ||
+              $t('settings_page_content_with_auth_login_button')
+          "
           preset="secondary"
           @click="onClickLogin"
         />

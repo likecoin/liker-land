@@ -21,7 +21,11 @@
       <template v-if="items.length && view !== 'created'">
         <div class="overflow-x-scroll scrollbar-custom">
           <div :class="['min-w-[800px]', contentPaddingClass]">
-            <NFTPageEventListTable :nft-history="trimmedItems" :show-memo="showMemo" :show-price="showPrice" />
+            <NFTPageEventListTable
+              :nft-history="trimmedItems"
+              :show-memo="showMemo"
+              :show-price="showPrice"
+            />
           </div>
         </div>
         <ShowMore
@@ -60,11 +64,13 @@
         class="flex justify-center items-center mb-[24px]"
       >
         <NuxtLink
-          :to="localeLocation({
-            name: 'nft-class-classId',
-            params: { classId },
-            hash: '#chain-data',
-          })"
+          :to="
+            localeLocation({
+              name: 'nft-class-classId',
+              params: { classId },
+              hash: '#chain-data',
+            })
+          "
           class="text-medium-gray underline text-[14px]"
         >
           {{ $t('nft_details_page_label_class_page') }}

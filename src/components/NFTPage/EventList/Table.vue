@@ -3,11 +3,22 @@
     <thead class="border-b-shade-gray border-b-[2px]">
       <tr class="text-medium-gray py-[12px]">
         <th><Label :text="$t('nft_details_page_activity_list_event')" /></th>
-        <th v-if="showPrice"><Label class="break-normal" :text="$t('nft_details_page_activity_list_event_price')" /></th>
-        <th><Label :text="$t('nft_details_page_activity_list_event_from')" /></th>
+        <th v-if="showPrice">
+          <Label
+            class="break-normal"
+            :text="$t('nft_details_page_activity_list_event_price')"
+          />
+        </th>
+        <th>
+          <Label :text="$t('nft_details_page_activity_list_event_from')" />
+        </th>
         <th><Label :text="$t('nft_details_page_activity_list_event_to')" /></th>
-        <th><Label :text="$t('nft_details_page_activity_list_event_date')" /></th>
-        <th v-if="showMemo"><Label :text="$t('nft_details_page_activity_list_event_memo')" /></th>
+        <th>
+          <Label :text="$t('nft_details_page_activity_list_event_date')" />
+        </th>
+        <th v-if="showMemo">
+          <Label :text="$t('nft_details_page_activity_list_event_memo')" />
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -58,32 +69,36 @@
               <IconFlare />
             </template>
           </Label>
-          <Label
-            v-else
-            :text="event.event"
-          >
+          <Label v-else :text="event.event">
             <template #prepend>
               <IconCircle />
             </template>
           </Label>
         </td>
         <td v-if="showPrice">
-          <Label
-            v-if="event.price"
-            content-class="overflow-hidden"
-          >
+          <Label v-if="event.price" content-class="overflow-hidden">
             <span class="truncate">{{ event.price | formatNumber }}</span>
           </Label>
           <Label v-else text="-" />
         </td>
         <td>
           <Label
-            v-if="['new_class', 'mint_nft' ,'transfer', 'buy_nft', 'sell_nft'].includes(event.event)"
+            v-if="
+              [
+                'new_class',
+                'mint_nft',
+                'transfer',
+                'buy_nft',
+                'sell_nft',
+              ].includes(event.event)
+            "
             content-class="overflow-hidden"
           >
             <LinkV2
               class="overflow-hidden"
-              :to="localeLocation({ name: 'id', params: { id: event.fromWallet } })"
+              :to="
+                localeLocation({ name: 'id', params: { id: event.fromWallet } })
+              "
               :is-inline="true"
               @click.native.stop
             >
@@ -94,12 +109,18 @@
         </td>
         <td>
           <Label
-            v-if="['purchase' ,'transfer', 'buy_nft', 'sell_nft'].includes(event.event)"
+            v-if="
+              ['purchase', 'transfer', 'buy_nft', 'sell_nft'].includes(
+                event.event
+              )
+            "
             content-class="overflow-hidden"
           >
             <LinkV2
               class="overflow-hidden"
-              :to="localeLocation({ name: 'id', params: { id: event.toWallet } })"
+              :to="
+                localeLocation({ name: 'id', params: { id: event.toWallet } })
+              "
               :is-inline="true"
               @click.native.stop
             >

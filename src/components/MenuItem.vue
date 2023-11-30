@@ -5,17 +5,14 @@
       'transition',
       'duration-100',
       'cursor-pointer',
-      {'text-like-green': value === selectedValue},
-      {'font-[600]': value === selectedValue},
+      { 'text-like-green': value === selectedValue },
+      { 'font-[600]': value === selectedValue },
       'hover:text-medium-gray',
       'active:text-like-green',
     ]"
     @click="handleSelectItem(value)"
   >
-    <Label
-      :class="['py-[16px]', labelClass]"
-      :align="labelAlign"
-    >
+    <Label :class="['py-[16px]', labelClass]" :align="labelAlign">
       <template #prepend>
         <slot name="label-prepend" />
       </template>

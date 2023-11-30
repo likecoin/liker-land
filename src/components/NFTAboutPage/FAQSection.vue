@@ -7,7 +7,9 @@
         font-proxima font-[300]
         text-like-green text-center
       "
-    >{{ $t('about_nft_page_faq_title') }}</h1>
+    >
+      {{ $t('about_nft_page_faq_title') }}
+    </h1>
     <div class="mt-[32px]">
       <ul class="mx-auto max-w-[700px] w-full">
         <li

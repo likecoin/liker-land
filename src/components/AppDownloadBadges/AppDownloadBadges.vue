@@ -1,28 +1,21 @@
 <template>
   <div class="app-download-badges">
-    <a
-      v-if="!isSingleType"
-      class="phone:hidden"
-      :href="url"
-      target="_blank"
-    ><img src="./apple.svg"></a>
-    <a
-      v-if="!isSingleType"
-      class="phone:hidden"
-      :href="url"
-      target="_blank"
-    ><img src="./google.svg"></a>
-    <a
-      :class="singleButtonClass"
-      :href="url"
-      target="_blank"
-    >{{ $t(`AppDownloadBadges.${isStartType ? 'Start' : 'Download'}`) }}</a>
+    <a v-if="!isSingleType" class="phone:hidden" :href="url" target="_blank"
+      ><img src="./apple.svg"
+    /></a>
+    <a v-if="!isSingleType" class="phone:hidden" :href="url" target="_blank"
+      ><img src="./google.svg"
+    /></a>
+    <a :class="singleButtonClass" :href="url" target="_blank">{{
+      $t(`AppDownloadBadges.${isStartType ? 'Start' : 'Download'}`)
+    }}</a>
     <a
       v-if="isStartType"
       class="text-12 text-like-green hover:underline phone:inline tablet:hidden laptop:hidden"
       :href="url"
       target="_blank"
-    >{{ $t('AppDownloadBadges.Download') }}</a>
+      >{{ $t('AppDownloadBadges.Download') }}</a
+    >
   </div>
 </template>
 

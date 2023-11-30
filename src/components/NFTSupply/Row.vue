@@ -4,7 +4,7 @@
       'group',
       {
         'hidden laptop:table-row': !isActive && shouldCollapseInMobile,
-      }
+      },
     ]"
   >
     <td v-show="!isDisabled" class="w-[64px]">
@@ -21,16 +21,14 @@
             'laptop:-ml-[18px]',
             'translate-y-[-50%]',
           ]"
-        >
-        <span class="relative">{{ priceLabel }}</span>&nbsp;
+        />
+        <span class="relative">{{ priceLabel }}</span
+        >&nbsp;
         <span class="relative text-[0.8em] leading-[1.5]">USD</span>
       </div>
     </td>
     <td class="pl-[12px] py-[4px]">
-      <div
-        :class="slotContainerClass"
-        @click="handleClick"
-      >
+      <div :class="slotContainerClass" @click="handleClick">
         <div
           :class="[
             'flex',
@@ -71,14 +69,15 @@
 
                 'opacity-[0.4]',
               ]"
-            >{{ i - 1 }}</span>
+              >{{ i - 1 }}</span
+            >
             <NFTSupplySlot :type="getSlotType(i)" />
           </div>
         </div>
         <div :class="hoverLabelClass">
-          <hr v-if="!isActive" :class="hoverLabelStrikethroughClass">
+          <hr v-if="!isActive" :class="hoverLabelStrikethroughClass" />
           <span class="mx-[8px]">{{ getHoverLabel }}</span>
-          <hr v-if="!isActive" :class="hoverLabelStrikethroughClass">
+          <hr v-if="!isActive" :class="hoverLabelStrikethroughClass" />
         </div>
         <div
           v-if="isActive"
@@ -95,7 +94,9 @@
             text-medium-gray
             leading-[5/3]
           "
-        >{{ available }} left</div>
+        >
+          {{ available }} left
+        </div>
       </div>
     </td>
   </tr>

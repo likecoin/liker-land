@@ -25,22 +25,26 @@
       </i18n>
     </AlertBanner> -->
 
-    <AlertBanner v-if="uiIsChainUpgrading">{{ $t('notice_chain_upgrading') }}</AlertBanner>
+    <AlertBanner v-if="uiIsChainUpgrading">{{
+      $t('notice_chain_upgrading')
+    }}</AlertBanner>
 
     <SiteHeader
       v-if="!isInInAppBrowser"
       :key="$route.name"
       :class="[
         'text-like-green',
-        { [
-          ['bg-opacity-75',
-          'bg-gray-f7',
-          'backdrop-blur-sm',
-          'fixed',
-          'inset-x-0',
-          'top-0',
-          'z-1'].join(' ')
-        ]: isHomePage },
+        {
+          [[
+            'bg-opacity-75',
+            'bg-gray-f7',
+            'backdrop-blur-sm',
+            'fixed',
+            'inset-x-0',
+            'top-0',
+            'z-1',
+          ].join(' ')]: isHomePage,
+        },
       ]"
     />
     <nuxt
@@ -48,19 +52,12 @@
         'flex-grow',
         {
           'pt-[32px]': isInInAppBrowser,
-        }
+        },
       ]"
     />
     <Footer v-if="!isInInAppBrowser" />
-    <PortalTarget
-      name="dialog"
-      multiple
-      @change="handleDialogChange"
-    />
-    <PortalTarget
-      name="snackbar"
-      multiple
-    />
+    <PortalTarget name="dialog" multiple @change="handleDialogChange" />
+    <PortalTarget name="snackbar" multiple />
 
     <Snackbar
       :open="uiIsOpenSnackbar"
@@ -71,7 +68,7 @@
       {{ alertMessage }}
       <LinkV2
         v-if="alertMessage.toString().includes('INSUFFICIENT_BALANCE')"
-        :class="['text-white','ml-[5px]']"
+        :class="['text-white', 'ml-[5px]']"
         href="https://docs.like.co/general-guides/trade"
       >
         {{ $t('snackbar_error_buyLIKE') }}

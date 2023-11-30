@@ -1,22 +1,13 @@
 <template>
   <div class="copy-text">
-    <input
-      ref="text"
-      :value="text"
-      readonly
-      @click="onClickText"
-    >
+    <input ref="text" :value="text" readonly @click="onClickText" />
     <div>
-      <button
-        v-clipboard:copy="text"
-        v-clipboard:success="onCopy"
-      >
+      <button v-clipboard:copy="text" v-clipboard:success="onCopy">
         {{ $t(hasCopied ? 'copied' : 'copy') }}
       </button>
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -43,7 +34,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss">
 .copy-text {

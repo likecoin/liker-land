@@ -23,10 +23,7 @@
           <animateTransform v-bind="animatedProps[0].transform" />
         </template>
       </rect>
-      <rect
-        v-if="isIntermediate"
-        v-bind="progressProps"
-      >
+      <rect v-if="isIntermediate" v-bind="progressProps">
         <animate v-bind="animatedProps[1].animate" />
         <animateTransform v-bind="animatedProps[1].transform" />
       </rect>

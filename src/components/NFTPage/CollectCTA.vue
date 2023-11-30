@@ -1,6 +1,5 @@
 <template>
   <div :class="rootClasses">
-
     <div
       v-if="isMidAutumnStyle"
       :class="[
@@ -45,7 +44,9 @@
       <div
         v-if="isFree"
         class="hidden laptop:block flex-1 mt-[1rem] text-right font-[600]"
-      >{{ $t('collect_cta_slogan_left') }}</div>
+      >
+        {{ $t('collect_cta_slogan_left') }}
+      </div>
       <NFTFreeFallGraphic
         :class="isFree ? 'w-[178px]' : 'w-[148px]'"
         :href="nftImageUrl"
@@ -54,11 +55,12 @@
       <div
         v-if="isFree"
         class="hidden laptop:block flex-1 mt-[1rem] text-left font-[600]"
-      >{{ $t('collect_cta_slogan_right') }}</div>
-      <div
-        v-if="isFree"
-        class="laptop:hidden text-[1.5rem] text-center"
-      >{{ $t('collect_cta_slogan_mobile') }}</div>
+      >
+        {{ $t('collect_cta_slogan_right') }}
+      </div>
+      <div v-if="isFree" class="laptop:hidden text-[1.5rem] text-center">
+        {{ $t('collect_cta_slogan_mobile') }}
+      </div>
     </div>
 
     <slot />
@@ -99,11 +101,10 @@
         />
       </div>
       <!-- Creator's Message -->
-      <div
-        v-if="creatorMessage"
-        :class="creatorMessageClasses"
-      >
-        <div class="flex flex-col gap-[24px] items-center sm:flex-row sm:mr-[24px]">
+      <div v-if="creatorMessage" :class="creatorMessageClasses">
+        <div
+          class="flex flex-col gap-[24px] items-center sm:flex-row sm:mr-[24px]"
+        >
           <NFTMessageIdentity
             type="creator"
             class="flex-shrink-0"
@@ -115,9 +116,13 @@
               :class="[
                 'text-[14px]',
                 'text-center sm:text-left',
-                isFree || isMidAutumnStyle ? 'text-like-green' : 'text-like-cyan',
+                isFree || isMidAutumnStyle
+                  ? 'text-like-green'
+                  : 'text-like-cyan',
               ]"
-            >{{ $t('nft_message_type_collect') }}</div>
+            >
+              {{ $t('nft_message_type_collect') }}
+            </div>
             <div
               :class="[
                 'mt-[4px]',
@@ -125,7 +130,9 @@
                 'text-center sm:text-left',
                 'font-600',
               ]"
-            >{{ creatorMessage }}</div>
+            >
+              {{ creatorMessage }}
+            </div>
           </div>
         </div>
         <CollectButton
@@ -138,7 +145,10 @@
           @click-collect-button="handleClickCTAButton"
         />
       </div>
-      <div v-else class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row">
+      <div
+        v-else
+        class="flex flex-col gap-[16px] justify-center items-center mt-[60px] order-1 sm:order-2 sm:mt-[32px] sm:flex-row"
+      >
         <NFTMessageIdentity
           v-if="!isFree"
           type="creator"

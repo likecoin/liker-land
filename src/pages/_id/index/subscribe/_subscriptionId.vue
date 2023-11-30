@@ -14,14 +14,14 @@
         :avatar-size="88"
         :is-avatar-outlined="isCreatorCivicLiker"
       />
-      <Label
-        class="mt-[24px]"
-        preset="p5"
-        align="center"
-      >
+      <Label class="mt-[24px]" preset="p5" align="center">
         <i18n :path="messageI18nPath">
-          <span class="font-[600] text-like-green" place="creator">{{ creatorDisplayName }}</span>
-          <span class="font-[600] text-like-green" place="email">{{ email }}</span>
+          <span class="font-[600] text-like-green" place="creator">{{
+            creatorDisplayName
+          }}</span>
+          <span class="font-[600] text-like-green" place="email">{{
+            email
+          }}</span>
         </i18n>
       </Label>
       <ProgressIndicator v-if="isLoading" class="mt-[16px] h-[44px]" />

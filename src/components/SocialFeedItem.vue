@@ -1,16 +1,13 @@
 <template>
-  <component
-    :is="tag"
-    class="flex flex-col justify-start gap-[12px]"
-  >
-
+  <component :is="tag" class="flex flex-col justify-start gap-[12px]">
     <header class="flex items-center justify-between gap-[1.5rem]">
       <NuxtLink
         class="flex justify-start items-center gap-[8px] text-like-green group"
         :to="
           senderWallet
             ? localeLocation({ name: 'id', params: { id: senderWallet } })
-            : ''"
+            : ''
+        "
         target="_blank"
         @click.native="$emit('sender-click', senderWallet)"
       >
@@ -21,7 +18,9 @@
         />
         <div class="flex flex-col justify-start">
           <p class="text-[1rem] leading-[1.5] font-600 text-dark-gray">
-            <span class="text-like-green group-hover:underline">{{ senderId }}</span>
+            <span class="text-like-green group-hover:underline">{{
+              senderId
+            }}</span>
             {{ formattedType }}
           </p>
           <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
@@ -55,13 +54,15 @@
         :to="nftTitleRoute"
         class="text-[12px] hover:underline"
         target="_blank"
-        @click.native="$emit('nft-title-click', { classId, nftId})"
-      >{{ nftTitle | ellipsisNFTName }}</NuxtLink>
+        @click.native="$emit('nft-title-click', { classId, nftId })"
+        >{{ nftTitle | ellipsisNFTName }}</NuxtLink
+      >
     </div>
 
     <!-- Feed Content -->
-    <CardV2 class="flex flex-col justify-start gap-[12px] border-2 border-shade-gray text-dark-gray">
-
+    <CardV2
+      class="flex flex-col justify-start gap-[12px] border-2 border-shade-gray text-dark-gray"
+    >
       <!-- memo -->
       <template v-if="memo">
         <IconMessage />
@@ -92,7 +93,8 @@
           :to="
             receiverWallet
               ? localeLocation({ name: 'id', params: { id: receiverWallet } })
-              : ''"
+              : ''
+          "
           target="_blank"
           @click.native="$emit('receiver-click', receiverWallet)"
         >
@@ -102,7 +104,9 @@
             :avatar-size="32"
             :is-avatar-outlined="false"
           />
-          <p class="text-[14px] font-600 text-like-green group-hover:underline">{{ receiverId }}</p>
+          <p class="text-[14px] font-600 text-like-green group-hover:underline">
+            {{ receiverId }}
+          </p>
         </NuxtLink>
       </div>
 
@@ -123,7 +127,8 @@
                       name: 'id',
                       params: { id: receiver.wallet },
                     })
-                  : ''"
+                  : ''
+              "
               target="_blank"
               @click.native="$emit('receiver-click', receiver.wallet)"
             >
@@ -133,20 +138,25 @@
                 :avatar-size="32"
                 :is-avatar-outlined="false"
               />
-              <p class="text-[14px] font-600 text-like-green group-hover:underline">
+              <p
+                class="text-[14px] font-600 text-like-green group-hover:underline"
+              >
                 {{ receiver.displayName }}
               </p>
             </NuxtLink>
           </li>
           <li v-if="numberOfAlsoSendTo">
             <p class="text-[0.75rem] leading-[2] font-400 text-medium-gray">
-              {{ $tc('feed_also_send_to', numberOfAlsoSendTo, { num: numberOfAlsoSendTo }) }}
+              {{
+                $tc('feed_also_send_to', numberOfAlsoSendTo, {
+                  num: numberOfAlsoSendTo,
+                })
+              }}
             </p>
           </li>
         </ul>
       </div>
     </CardV2>
-
   </component>
 </template>
 <script>

@@ -1,10 +1,5 @@
 <template>
-  <component
-    :is="tag"
-    :class="rootClasses"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+  <component :is="tag" :class="rootClasses" v-bind="$attrs" v-on="$listeners">
     <slot />
   </component>
 </template>

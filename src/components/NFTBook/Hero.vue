@@ -14,7 +14,9 @@
       ]"
       style="background-color: #cee3e3; opacity: 0"
     >
-      <div class="absolute inset-0 overflow-hidden pointer-events-none flex justify-center items-center">
+      <div
+        class="absolute inset-0 overflow-hidden pointer-events-none flex justify-center items-center"
+      >
         <svg
           ref="bgOutlinedBoxes"
           :class="[
@@ -30,17 +32,38 @@
           stroke-miterlimit="10"
           stroke-width="2"
         >
-          <g><path d="m737.72,1113.6l70.48-377.19,374.1,69.9-70.48,377.19-374.1-69.9Z" /></g>
-          <g><path d="m1423.98,821.12l-323.81,603.31-604.16-325.7,323.81-603.31,604.16,325.7Z" /></g>
-          <g><path d="m254.14,1082.24L833.32,254.94l832.55,582.85-579.17,827.3L254.14,1082.24Z" /></g>
-          <g><path d="m12.84,1062.66L849.56,13.72l1057.59,843.62-836.72,1048.94L12.84,1062.66Z" /></g>
+          <g>
+            <path
+              d="m737.72,1113.6l70.48-377.19,374.1,69.9-70.48,377.19-374.1-69.9Z"
+            />
+          </g>
+          <g>
+            <path
+              d="m1423.98,821.12l-323.81,603.31-604.16-325.7,323.81-603.31,604.16,325.7Z"
+            />
+          </g>
+          <g>
+            <path
+              d="m254.14,1082.24L833.32,254.94l832.55,582.85-579.17,827.3L254.14,1082.24Z"
+            />
+          </g>
+          <g>
+            <path
+              d="m12.84,1062.66L849.56,13.72l1057.59,843.62-836.72,1048.94L12.84,1062.66Z"
+            />
+          </g>
         </svg>
       </div>
 
-      <div ref="prepend" class="relative z-1 bg-gradient-to-b from-[#cee3e3] from-25%">
+      <div
+        ref="prepend"
+        class="relative z-1 bg-gradient-to-b from-[#cee3e3] from-25%"
+      >
         <slot name="prepend" />
       </div>
-      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#cee3e3] from-25% h-[60px]" />
+      <div
+        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#cee3e3] from-25% h-[60px]"
+      />
 
       <div
         ref="banner"
@@ -78,34 +101,64 @@
                   <circle cx="180" cy="420" r="60" fill="none" />
                 </clipPath>
                 <clipPath id="key-art-piece-d">
-                  <path fill="none" d="M360 480c-66.27 0-120-53.73-120-120s53.73-120 120-120v240Z" />
+                  <path
+                    fill="none"
+                    d="M360 480c-66.27 0-120-53.73-120-120s53.73-120 120-120v240Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-e">
-                  <path fill="none" d="M120 240C53.73 240 0 186.27 0 120S53.73 0 120 0v240Z" />
+                  <path
+                    fill="none"
+                    d="M120 240C53.73 240 0 186.27 0 120S53.73 0 120 0v240Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-f">
-                  <path fill="none" d="M480 0c-66.27 0-120 53.73-120 120h120V0Z" />
+                  <path
+                    fill="none"
+                    d="M480 0c-66.27 0-120 53.73-120 120h120V0Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-g">
-                  <path fill="none" d="M240 240c66.27 0 120-53.73 120-120H240v120Z" />
+                  <path
+                    fill="none"
+                    d="M240 240c66.27 0 120-53.73 120-120H240v120Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-h">
-                  <path fill="none" d="M240 120c-66.27 0-120 53.73-120 120h120V120Z" />
+                  <path
+                    fill="none"
+                    d="M240 120c-66.27 0-120 53.73-120 120h120V120Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-i">
-                  <path fill="none" d="M240 360c0-66.27-53.73-120-120-120v120h120Z" />
+                  <path
+                    fill="none"
+                    d="M240 360c0-66.27-53.73-120-120-120v120h120Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-j">
-                  <path fill="none" d="M360 240c66.27 0 120-53.73 120-120H360v120Z" />
+                  <path
+                    fill="none"
+                    d="M360 240c66.27 0 120-53.73 120-120H360v120Z"
+                  />
                 </clipPath>
                 <clipPath id="key-art-piece-k">
-                  <path fill="none" d="M0 360c0 66.27 53.73 120 120 120V360H0Z" />
+                  <path
+                    fill="none"
+                    d="M0 360c0 66.27 53.73 120 120 120V360H0Z"
+                  />
                 </clipPath>
                 <clipPath id="book-cover-mask-left">
-                  <path fill="none" d="m240,116c68.48,0,124,55.52,124,124s-55.52,124-124,124V116Z" />
+                  <path
+                    fill="none"
+                    d="m240,116c68.48,0,124,55.52,124,124s-55.52,124-124,124V116Z"
+                  />
                 </clipPath>
                 <clipPath id="book-cover-mask-right">
-                  <path fill="none" d="m240,116c-68.48,0-124,55.52-124,124s55.52,124,124,124V116Z" />
+                  <path
+                    fill="none"
+                    d="m240,116c-68.48,0-124,55.52-124,124s55.52,124,124,124V116Z"
+                  />
                 </clipPath>
               </defs>
 
@@ -128,8 +181,20 @@
               </g>
               <g ref="bookBindGroup" style="opacity: 0">
                 <g ref="bookBindLeft" class="text-[#1d4449]">
-                  <circle ref="dot1" cx="240" cy="240" r="120" fill="currentColor" />
-                  <circle ref="dot2" cx="240" cy="240" r="120" fill="currentColor" />
+                  <circle
+                    ref="dot1"
+                    cx="240"
+                    cy="240"
+                    r="120"
+                    fill="currentColor"
+                  />
+                  <circle
+                    ref="dot2"
+                    cx="240"
+                    cy="240"
+                    r="120"
+                    fill="currentColor"
+                  />
                   <line
                     ref="line1"
                     x1="240"
@@ -166,44 +231,101 @@
 
               <g ref="keyArtGroup">
                 <g ref="keyArtTopRight">
-                  <g ref="keyArtTopRightCircle" fill="none" clip-path="url(#key-art-piece-b)">
-                    <image v-bind="keyArtImageProps" transform="matrix(0 -.41 .41 0 -714.29 843.96)" />
+                  <g
+                    ref="keyArtTopRightCircle"
+                    fill="none"
+                    clip-path="url(#key-art-piece-b)"
+                  >
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(0 -.41 .41 0 -714.29 843.96)"
+                    />
                   </g>
-                  <g ref="keyArtTopRightQuarterTopRight" fill="none" clip-path="url(#key-art-piece-f)">
-                    <image v-bind="keyArtImageProps" transform="matrix(.62 0 0 .62 -447.28 -1237.99)" />
+                  <g
+                    ref="keyArtTopRightQuarterTopRight"
+                    fill="none"
+                    clip-path="url(#key-art-piece-f)"
+                  >
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(.62 0 0 .62 -447.28 -1237.99)"
+                    />
                   </g>
-                  <g ref="keyArtTopRightQuarterTopLeft" fill="none" clip-path="url(#key-art-piece-g)">
-                    <image v-bind="keyArtImageProps" transform="matrix(-.18 0 0 -.18 637.18 450)" />
+                  <g
+                    ref="keyArtTopRightQuarterTopLeft"
+                    fill="none"
+                    clip-path="url(#key-art-piece-g)"
+                  >
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(-.18 0 0 -.18 637.18 450)"
+                    />
                   </g>
                   <g fill="none" clip-path="url(#key-art-piece-j)">
-                    <image v-bind="keyArtImageProps" transform="rotate(-180 753.98 789.03) scale(.62)" />
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="rotate(-180 753.98 789.03) scale(.62)"
+                    />
                   </g>
                 </g>
                 <g ref="keyArtBottomRight">
-                  <g ref="keyArtBottomRightCircle" fill="none" clip-path="url(#key-art-piece-a)">
-                    <image v-bind="keyArtImageProps" transform="matrix(.31 0 0 .31 -183 -69)" />
+                  <g
+                    ref="keyArtBottomRightCircle"
+                    fill="none"
+                    clip-path="url(#key-art-piece-a)"
+                  >
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(.31 0 0 .31 -183 -69)"
+                    />
                   </g>
                   <g fill="none" clip-path="url(#key-art-piece-d)">
-                    <image v-bind="keyArtImageProps" transform="matrix(.24 0 0 .24 -126 -162)" />
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(.24 0 0 .24 -126 -162)"
+                    />
                   </g>
                 </g>
                 <g ref="keyArtTopLeft">
                   <g fill="none" clip-path="url(#key-art-piece-e)">
-                    <image v-bind="keyArtImageProps" transform="matrix(.22 0 0 .22 -48 -325)" />
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(.22 0 0 .22 -48 -325)"
+                    />
                   </g>
-                  <g ref="keyArtTopLeftQuarterBottomRight" fill="none" clip-path="url(#key-art-piece-h)">
-                    <image v-bind="keyArtImageProps" transform="matrix(.26 0 0 .26 -107 -404)" />
+                  <g
+                    ref="keyArtTopLeftQuarterBottomRight"
+                    fill="none"
+                    clip-path="url(#key-art-piece-h)"
+                  >
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(.26 0 0 .26 -107 -404)"
+                    />
                   </g>
                 </g>
                 <g ref="keyArtBottomLeft">
-                  <g ref="keyArtBottomLeftCircle" fill="none" clip-path="url(#key-art-piece-c)">
-                    <image v-bind="keyArtImageProps" transform="matrix(.6 0 0 .6 -579 -939)" />
+                  <g
+                    ref="keyArtBottomLeftCircle"
+                    fill="none"
+                    clip-path="url(#key-art-piece-c)"
+                  >
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(.6 0 0 .6 -579 -939)"
+                    />
                   </g>
                   <g fill="none" clip-path="url(#key-art-piece-i)">
-                    <image v-bind="keyArtImageProps" transform="matrix(0 .38 -.38 0 1168.26 -401)" />
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(0 .38 -.38 0 1168.26 -401)"
+                    />
                   </g>
                   <g fill="none" clip-path="url(#key-art-piece-k)">
-                    <image v-bind="keyArtImageProps" transform="matrix(0 -.62 .62 0 -1575 1225)" />
+                    <image
+                      v-bind="keyArtImageProps"
+                      transform="matrix(0 -.62 .62 0 -1575 1225)"
+                    />
                   </g>
                 </g>
               </g>
@@ -225,11 +347,13 @@
             'origin-center',
           ]"
         >
-          <g class="scale-[1.2] translate-y-[64px] sm:scale-100 sm:translate-y-0 origin-center">
+          <g
+            class="scale-[1.2] translate-y-[64px] sm:scale-100 sm:translate-y-0 origin-center"
+          >
             <g ref="titleRightDotsGroup">
               <component
                 :is="type"
-                v-for="({ type, ...props}, i) in titleRightDotsList"
+                v-for="({ type, ...props }, i) in titleRightDotsList"
                 :key="`${type}-${i}`"
                 v-bind="props"
               />
@@ -275,8 +399,13 @@
       </div>
 
       <Transition name="fade">
-        <div v-if="isAnimationCompleted" class="absolute top-full sm:top-auto sm:bottom-0 right-0 m-[0.5rem] sm:m-[1rem]">
-          <ToolTips :tool-tip-text="$t('nft_book_hero_replay_animation_button')">
+        <div
+          v-if="isAnimationCompleted"
+          class="absolute top-full sm:top-auto sm:bottom-0 right-0 m-[0.5rem] sm:m-[1rem]"
+        >
+          <ToolTips
+            :tool-tip-text="$t('nft_book_hero_replay_animation_button')"
+          >
             <ButtonV2
               preset="outline"
               size="mini"
@@ -287,7 +416,10 @@
             </ButtonV2>
           </ToolTips>
         </div>
-        <div v-else-if="isShowSkipButton" class="absolute bottom-0 right-0 m-[0.5rem] sm:m-[1rem]">
+        <div
+          v-else-if="isShowSkipButton"
+          class="absolute bottom-0 right-0 m-[0.5rem] sm:m-[1rem]"
+        >
           <ToolTips :tool-tip-text="$t('nft_book_hero_skip_animation_button')">
             <ButtonV2
               preset="outline"

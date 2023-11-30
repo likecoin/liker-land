@@ -6,13 +6,15 @@
     :is-narrow="true"
   >
     <slot name="prepend" />
-    <ul class="flex flex-row-reverse justify-center items-center mt-[18px] px-[4px]">
+    <ul
+      class="flex flex-row-reverse justify-center items-center mt-[18px] px-[4px]"
+    >
       <li
         v-for="user in users"
         :key="user.id"
         :class="[
           'bg-white rounded-full p-[2px] mx-[-8px] relative transition-all duration-300 ease-in-out group',
-          user.index === 0 ? 'hover:mr-[10px]' : 'hover:mx-[10px]'
+          user.index === 0 ? 'hover:mr-[10px]' : 'hover:mx-[10px]',
         ]"
       >
         <ToolTips
@@ -20,11 +22,13 @@
           @mouseenter.native.once="onHover(user.index)"
         >
           <LinkV2
-            :to="localeLocation({
-              name: 'id',
-              params: { id: user.id },
-              query: { tab: type === 'creator' ? 'created' : 'collected' },
-            })"
+            :to="
+              localeLocation({
+                name: 'id',
+                params: { id: user.id },
+                query: { tab: type === 'creator' ? 'created' : 'collected' },
+              })
+            "
             @click.native="onClick(user.index)"
           >
             <IdentityAvatar

@@ -88,7 +88,7 @@
           v-if="
             (isCurrentTabCollected ? userTopCreators : userTopCollectors)
               .length &&
-            (isCurrentTabCollected || isCurrentTabCreated)
+              (isCurrentTabCollected || isCurrentTabCreated)
           "
           :type="isCurrentTabCollected ? 'creator' : 'collector'"
           :user-list="
@@ -100,7 +100,11 @@
           <template #prepend>
             <Label
               class="w-min font-600 text-like-green"
-              :text="isCurrentTabCollected ? $t('nft_portfolio_page_label_top_creators') : $t('nft_portfolio_page_label_top_collector')"
+              :text="
+                isCurrentTabCollected
+                  ? $t('nft_portfolio_page_label_top_creators')
+                  : $t('nft_portfolio_page_label_top_collector')
+              "
               preset="h5"
               align="center"
               valign="middle"
@@ -108,18 +112,20 @@
           </template>
         </NFTPortfolioTopUsersList>
         <!-- Follower List -->
-        <div v-if="walletHasLoggedIn && isUserPortfolio" class="flex items-center justify-center">
+        <div
+          v-if="walletHasLoggedIn && isUserPortfolio"
+          class="flex items-center justify-center"
+        >
           <div
             class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
             @click="handleClickFollowers"
-          >{{ $t('portfolio_follower_title') }}</div>
+          >
+            {{ $t('portfolio_follower_title') }}
+          </div>
         </div>
 
         <!-- goMyDashboard btn -->
-        <div
-          v-if="isUserPortfolio"
-          class="flex justify-center"
-        >
+        <div v-if="isUserPortfolio" class="flex justify-center">
           <ButtonV2
             preset="outline"
             :text="$t('main_menu_my_dashboard')"
@@ -205,7 +211,6 @@
         @item-click="handlePortfolioItemClick"
         @item-collect="handlePortfolioItemCollect"
       />
-
     </div>
 
     <NuxtChild />

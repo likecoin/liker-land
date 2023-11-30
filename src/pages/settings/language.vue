@@ -13,10 +13,7 @@
           <span>{{ $t(`Locale.${locale}`) }}</span>
         </button>
 
-        <div
-          v-if="getLocale === locale"
-          class="list-view-item__accessory-view"
-        >
+        <div v-if="getLocale === locale" class="list-view-item__accessory-view">
           <TickIcon />
         </div>
       </li>

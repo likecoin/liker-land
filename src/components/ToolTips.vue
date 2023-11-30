@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'tooltip':showToolTip}">
+  <div :class="{ tooltip: showToolTip }">
     <slot />
     <span v-if="showToolTip" class="tooltiptext">
       {{ toolTipText }}

@@ -23,11 +23,7 @@
       @collect="() => $router.go(-1)"
     />
     <div class="flex flex-col">
-      <Label
-        preset="h2"
-        class="text-like-green"
-        :text="errorInfo.title"
-      />
+      <Label preset="h2" class="text-like-green" :text="errorInfo.title" />
       <Label
         class="text-medium-gray text-[18px] my-[18px]"
         :text="errorInfo.description"

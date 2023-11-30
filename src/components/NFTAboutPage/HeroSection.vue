@@ -596,10 +596,22 @@
             fill="#28646e"
           />
         </g>
-        <text class="nft-hero-graph__tagline laptop:hidden" x="27%" y="360" font-size="24px" alignment-baseline="middle" text-anchor="middle">
+        <text
+          class="nft-hero-graph__tagline laptop:hidden"
+          x="27%"
+          y="360"
+          font-size="24px"
+          alignment-baseline="middle"
+          text-anchor="middle"
+        >
           {{ $t('about_nft_page_hero_tagline') }}
         </text>
-        <text class="hidden nft-hero-graph__tagline laptop:block" x="500" y="280" font-size="24px">
+        <text
+          class="hidden nft-hero-graph__tagline laptop:block"
+          x="500"
+          y="280"
+          font-size="24px"
+        >
           {{ $t('about_nft_page_hero_tagline') }}
         </text>
       </g>

@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="isShelfPreset"
-    class="relative flex flex-col items-start"
-  >
+  <div v-if="isShelfPreset" class="relative flex flex-col items-start">
     <client-only>
       <lazy-component
         class="absolute inset-0 pointer-events-none -top-full"
@@ -36,11 +33,7 @@
         />
       </component>
     </div>
-    <Label
-      :class="[titleStyle, 'mt-[20px]']"
-      preset="p5"
-      :text="NFTName"
-    />
+    <Label :class="[titleStyle, 'mt-[20px]']" preset="p5" :text="NFTName" />
     <Label
       class="text-medium-gray mt-[6px] mb-[12px]"
       preset="p6"
@@ -59,14 +52,7 @@
       :text="$t('nft_details_page_label_sold_out')"
     />
   </div>
-  <div
-    v-else
-    :class="[
-      'flex',
-      'flex-col',
-      'justify-center',
-    ]"
-  >
+  <div v-else :class="['flex', 'flex-col', 'justify-center']">
     <component
       :is="componentTag"
       :class="[
@@ -98,10 +84,7 @@
       </client-only>
       <div class="flex flex-col items-center shrink-0">
         <NFTCover
-          :class="[
-            'mt-[-48px]',
-            coverClasses,
-          ]"
+          :class="['mt-[-48px]', coverClasses]"
           :is-nft-book="true"
           :src="imageSrc || NFTImageUrl"
           :should-resize-src="shouldResizeSrc"
@@ -133,21 +116,20 @@
           :text="$t('campaign_nft_book_just_arrived')"
         />
         <Label preset="h4" :class="titleStyle" :text="NFTName" />
-        <p
-          :class="[
-            'text-14',
-            'whitespace-pre-line',
-            descriptionStyle
-          ]"
-        >{{ bookDescription }}</p>
+        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
+          {{ bookDescription }}
+        </p>
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
-          <li v-if="iscnWorkAuthor" class="flex flex-col justify-center min-w-0 ml-[8px]">
-            <span
-              class="text-like-cyan-gray text-10"
-            >{{ $t('identity_type_author') }}</span>
-            <span
-              :class="['font-[600] truncate', displayNameStyle]"
-            >{{ iscnWorkAuthor }}</span>
+          <li
+            v-if="iscnWorkAuthor"
+            class="flex flex-col justify-center min-w-0 ml-[8px]"
+          >
+            <span class="text-like-cyan-gray text-10">{{
+              $t('identity_type_author')
+            }}</span>
+            <span :class="['font-[600] truncate', displayNameStyle]">{{
+              iscnWorkAuthor
+            }}</span>
           </li>
           <client-only>
             <li>
@@ -156,11 +138,12 @@
                 :to="
                   iscnOwner
                     ? localeLocation({
-                      name: 'id',
-                      params: { id: iscnOwner },
-                      query: { tab: 'created' },
-                    })
-                    : ''"
+                        name: 'id',
+                        params: { id: iscnOwner },
+                        query: { tab: 'created' },
+                      })
+                    : ''
+                "
                 @click.native.stop="onClickAvatar"
               >
                 <Identity
@@ -173,7 +156,14 @@
                 <div class="flex flex-col justify-start ml-[8px] min-w-0">
                   <span
                     class="text-like-cyan-gray text-10 group-hover:underline"
-                  >{{ $t(iscnWorkAuthor ? 'identity_type_publisher' : 'identity_type_creator') }}</span>
+                    >{{
+                      $t(
+                        iscnWorkAuthor
+                          ? 'identity_type_publisher'
+                          : 'identity_type_creator'
+                      )
+                    }}</span
+                  >
                   <span
                     :class="[
                       'group-hover:underline',
@@ -181,7 +171,8 @@
                       'truncate',
                       displayNameStyle,
                     ]"
-                  >{{ creatorDisplayNameFull }}</span>
+                    >{{ creatorDisplayNameFull }}</span
+                  >
                 </div>
               </NuxtLink>
             </li>
@@ -189,7 +180,6 @@
         </ul>
 
         <slot name="column-right" />
-
       </div>
       <div class="flex flex-col items-center laptop:hidden">
         <slot name="column-left" />

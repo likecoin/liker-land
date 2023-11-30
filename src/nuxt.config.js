@@ -37,8 +37,8 @@ const nuxtConfig = {
   telemetry: false,
 
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     titleTemplate: titleChunk =>
       titleChunk
@@ -187,8 +187,8 @@ const nuxtConfig = {
   },
 
   /*
-  ** Customize the progress-bar color
-  */
+   ** Customize the progress-bar color
+   */
   loading: { color: theme.colors['like-cyan'] },
 
   render: {
@@ -241,8 +241,8 @@ const nuxtConfig = {
     },
   },
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: [
     { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
     { src: '@likecoin/wallet-connector/dist/style.css', lang: 'css' },
@@ -250,8 +250,8 @@ const nuxtConfig = {
   ],
 
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/likecoin-ui-vue.js',
@@ -265,8 +265,8 @@ const nuxtConfig = {
   ],
 
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
@@ -301,8 +301,8 @@ const nuxtConfig = {
   devServerHandlers: [],
 
   /*
-  ** Axios module configuration
-  */
+   ** Axios module configuration
+   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     browserBaseURL: '/',
@@ -424,8 +424,8 @@ const nuxtConfig = {
   },
 
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     babel: {
       presets: ({ isServer }) => [
@@ -450,8 +450,8 @@ const nuxtConfig = {
     ],
 
     /*
-    ** You can extend webpack config here
-    */
+     ** You can extend webpack config here
+     */
     extend(config, ctx) {
       /* eslint-disable no-param-reassign */
       if (ctx.isClient && !ctx.isDev) {

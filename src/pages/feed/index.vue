@@ -62,7 +62,7 @@
               <IconCreativeWork class="desktop:hidden" />
             </MenuButton>
           </li>
-          <li><MenuButtonDivider class="desktop:hidden"/></li>
+          <li><MenuButtonDivider class="desktop:hidden" /></li>
           <li class="flex items-center desktop:hidden">
             <MenuButton
               :is-selected="currentMainTab === 'userStats'"
@@ -93,18 +93,15 @@
         {{ /* Main View -- Town */ }}
         <section
           v-if="currentMainTab === 'town'"
-          :class="[
-            'w-full',
-            'flex',
-            'flex-col',
-            'items-stretch',
-            'gap-[3rem]',
-          ]"
+          :class="['w-full', 'flex', 'flex-col', 'items-stretch', 'gap-[3rem]']"
         >
           <template v-if="shouldShowLoading">
             <SocialFeedPlaceholder />
           </template>
-          <ul v-if="displayedEvents.length" class="flex flex-col w-full gap-[48px]">
+          <ul
+            v-if="displayedEvents.length"
+            class="flex flex-col w-full gap-[48px]"
+          >
             <li v-for="e in displayedEvents" :key="e.tx_hash">
               <client-only>
                 <lazy-component @show.once="fetchInfo({ event: e })" />
@@ -136,13 +133,11 @@
                 <lazy-component @show.once="handleInfiniteScrollFeed" />
               </client-only>
             </div>
-            <SocialFeedPlaceholder v-if="isFetchingEventsWithMemo"/>
+            <SocialFeedPlaceholder v-if="isFetchingEventsWithMemo" />
           </template>
           <template v-if="shouldShowEnd">
             <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
-            <div
-              class="flex justify-center font-[600] py-[24px] text-gray-9b"
-            >
+            <div class="flex justify-center font-[600] py-[24px] text-gray-9b">
               {{ $t('feed_end_of_items') }}
             </div>
           </template>
@@ -160,7 +155,8 @@
                 :to="localeLocation({ name: 'store' })"
                 place="action"
                 @click.native="handleEmptyFeedActionClick"
-              >{{ $t('feed_empty_action') }}</NuxtLink>
+                >{{ $t('feed_empty_action') }}</NuxtLink
+              >
             </i18n>
           </CardV2>
         </section>
@@ -176,7 +172,9 @@
           :portfolio-items-show-count="currentNFTClassListShowCount"
           :portfolio-items-sorting="currentNFTClassListSorting"
           :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
-          :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
+          :portfolio-items-sorting-option-list="
+            currentNFTClassSortingOptionList
+          "
           :portfolio-items-creator-filtering="nftCreatorFilter"
           :portfolio-items-type-filtering="nftTypeFilter"
           :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
@@ -191,8 +189,12 @@
           @portfolio-change-keywords="handleNFTKeywordsChange"
           @infinite-scroll="handleInfiniteScroll"
           @portfolio-reset-filter="handleClearFilter"
-          @portfolio-input-filter-change-creator="handleCreatorInputFilterChange"
-          @portfolio-input-filter-change-keyword="handleKeywordInputFilterChange"
+          @portfolio-input-filter-change-creator="
+            handleCreatorInputFilterChange
+          "
+          @portfolio-input-filter-change-keyword="
+            handleKeywordInputFilterChange
+          "
         />
 
         {{ /* Main View -- UserStats */ }}
@@ -209,7 +211,6 @@
             'max-w-[272px]',
           ]"
         >
-
           <UserInfoCard
             class="hidden desktop:flex w-full"
             :wallet="loginAddress"
@@ -259,7 +260,8 @@
                     preset="tertiary"
                     size="mini"
                     @click="handleClickFollowers"
-                  >{{ $t('portfolio_follower_title') }}</ButtonV2>
+                    >{{ $t('portfolio_follower_title') }}</ButtonV2
+                  >
                 </div>
               </div>
             </template>

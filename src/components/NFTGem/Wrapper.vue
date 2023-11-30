@@ -1,9 +1,6 @@
 <template>
   <div class="relative w-full">
-    <slot
-      :level="gemLevel"
-      :hover-class="gemHoverClass"
-    />
+    <slot :level="gemLevel" :hover-class="gemHoverClass" />
     <NFTGem
       class="translate-y-[-50%] w-[90%]"
       :level="gemLevel"

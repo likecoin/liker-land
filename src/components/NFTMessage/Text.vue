@@ -1,5 +1,7 @@
 <template>
-  <div class="whitespace-pre-line">{{ sanitizedValue || $t('nft_message_empty') }}</div>
+  <div class="whitespace-pre-line">
+    {{ sanitizedValue || $t('nft_message_empty') }}
+  </div>
 </template>
 
 <script>

@@ -9,7 +9,13 @@
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
       <ProgressIndicator v-if="!fileSrc" />
-      <iframe v-else-if="format === 'pdf'" :src="pdfIframeSrc" width="100%" height="100%" style="border:none" />
+      <iframe
+        v-else-if="format === 'pdf'"
+        :src="pdfIframeSrc"
+        width="100%"
+        height="100%"
+        style="border:none"
+      />
       <div v-else>
         Not implemented
       </div>

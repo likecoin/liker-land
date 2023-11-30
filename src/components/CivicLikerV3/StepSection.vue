@@ -15,7 +15,9 @@
         mb-[20px]
         font-[600]
       "
-    >{{ step }}</div>
+    >
+      {{ step }}
+    </div>
     <slot />
   </section>
 </template>

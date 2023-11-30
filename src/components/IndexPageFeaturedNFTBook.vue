@@ -6,8 +6,7 @@
       isDirectionLeft ? 'desktop:flex-row-reverse' : 'desktop:flex-row',
       'items-center',
       'gap-[1.5rem]',
-    ]
-    "
+    ]"
   >
     <NFTBookItemCard
       class="shrink-0 w-full max-w-[292px]"
@@ -38,7 +37,9 @@
           'hidden desktop:block',
           'absolute',
           'mx-[3rem]',
-          (isDirectionLeft && i === 1) || (!isDirectionLeft && i === 2) ? 'top-0 left-0 translate-y-[-50%]' : 'bottom-0 right-0 translate-y-[50%]',
+          (isDirectionLeft && i === 1) || (!isDirectionLeft && i === 2)
+            ? 'top-0 left-0 translate-y-[-50%]'
+            : 'bottom-0 right-0 translate-y-[50%]',
         ]"
         :shape="isDirectionLeft ? 'star' : 'circle'"
         :variant="i"
@@ -61,12 +62,16 @@
           'text-center desktop:text-left',
           'whitespace-pre-line',
         ]"
-      >{{ heading }}</h2>
+      >
+        {{ heading }}
+      </h2>
       <p
         v-for="(pContent, index) in content.split('\\n')"
         :key="`p-${index}`"
         class="text-[1rem] mt-[0.5rem]"
-      >{{ pContent }}</p>
+      >
+        {{ pContent }}
+      </p>
       <ButtonV2
         class="mt-[1.5rem]"
         :text="$t('index_page_featured_nft_book_collect_button')"

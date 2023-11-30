@@ -1,7 +1,5 @@
 <template>
-  <span
-    class="border-black card-brand border-1 rounded-4"
-  >
+  <span class="border-black card-brand border-1 rounded-4">
     <AmexIcon v-if="brand === 'amex'" />
     <MasterCardIcon v-else-if="brand === 'mastercard'" />
     <VisaIcon v-else-if="brand === 'visa'" />

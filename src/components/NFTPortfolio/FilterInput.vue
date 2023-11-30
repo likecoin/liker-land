@@ -4,8 +4,8 @@
       type="input"
       class="w-full bg-transparent border-0 focus-visible:outline-none"
       :placeholder="$t('order_menu_filter_by_input')"
-      @input="$emit('handle-input-change', $event.target.value);"
-    >
+      @input="$emit('handle-input-change', $event.target.value)"
+    />
     <IconSearch class="text-dark-gray" />
   </div>
 </template>

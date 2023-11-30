@@ -19,7 +19,7 @@
       'rounded-full',
       'cursor-pointer',
 
-      wrapperClasses
+      wrapperClasses,
     ]"
     :to="toRoute"
   >
@@ -33,8 +33,12 @@
       <div
         v-if="isShowTypeLabel"
         class="text-[12px] text-medium-gray phone:text-center"
-      >{{ userLabel }}</div>
-      <Label class="text-like-green" :preset="userLabelSize" align="center">{{ userDisplayNameFull }}</Label>
+      >
+        {{ userLabel }}
+      </div>
+      <Label class="text-like-green" :preset="userLabelSize" align="center">{{
+        userDisplayNameFull
+      }}</Label>
     </div>
   </component>
 </template>

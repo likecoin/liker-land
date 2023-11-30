@@ -1,8 +1,5 @@
 <template>
-  <CardV2
-    class="bg-white rounded-[24px] overflow-hidden"
-    :has-padding="false"
-  >
+  <CardV2 class="bg-white rounded-[24px] overflow-hidden" :has-padding="false">
     <header
       :class="[
         'flex',
@@ -15,13 +12,7 @@
       ]"
       @click="isOpen = !isOpen"
     >
-      <div
-        :class="[
-          'flex',
-          'justify-between',
-          'items-center',
-        ]"
-      >
+      <div :class="['flex', 'justify-between', 'items-center']">
         <Label
           class="w-min font-600"
           :text="title"
@@ -58,7 +49,7 @@
     <Transition @enter="onEnter" @leave="onLeave">
       <div v-if="isOpen">
         <div v-if="isShowSeparator" :class="xPaddingClass">
-          <hr class="w-full border-[#ebebeb]">
+          <hr class="w-full border-[#ebebeb]" />
         </div>
         <div
           :class="{

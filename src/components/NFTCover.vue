@@ -29,13 +29,13 @@
         :src="resizedSrc"
         @load="handleMediaLoad"
         @error="handleImageError"
-      >
+      />
       <img
         v-if="!isShowVideo && (!isShowImage || !isLoaded)"
         v-bind="imgProps"
         :class="imgClassNameForPlaceholder"
         src="~/assets/images/nft/primitive-nft.jpg"
-      >
+      />
     </div>
     <div
       v-if="isNftBook"

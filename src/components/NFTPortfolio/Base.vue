@@ -41,9 +41,14 @@
               <span class="truncate">{{ userDisplayName }}</span>
             </Label>
           </div>
-          <Label preset="h5" class="mt-[12px] break-normal" align="center">{{ title }}</Label>
+          <Label preset="h5" class="mt-[12px] break-normal" align="center">{{
+            title
+          }}</Label>
 
-          <div v-if="(!isPrimitive && price !== undefined) || price > 0" class="z-[48] flex justify-center mt-[16px]">
+          <div
+            v-if="(!isPrimitive && price !== undefined) || price > 0"
+            class="z-[48] flex justify-center mt-[16px]"
+          >
             <ProgressIndicator v-if="isCollecting" />
             <CollectButton
               v-else-if="!isCollectedTab"
@@ -64,7 +69,9 @@
             />
           </div>
 
-          <div class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]">
+          <div
+            class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]"
+          >
             <div class="flex items-center text-medium-gray">
               <IconMint />
               <div class="ml-[4px]">{{ collectedCount }}</div>
@@ -73,12 +80,16 @@
               <IconOwner />
               <div class="ml-[4px]">{{ collectorCount }}</div>
             </div>
-            <div v-if="isCollectedTab && isCollectable" class="flex items-center text-like-green">
+            <div
+              v-if="isCollectedTab && isCollectable"
+              class="flex items-center text-like-green"
+            >
               <IconPrice />
               <div class="ml-[4px]">{{ price | formatNumberWithUSD }}</div>
             </div>
             <div v-if="ownCount" class="flex items-center text-like-green">
-              <span>{{ $t('nft_details_page_label_owning') }}</span>&nbsp;
+              <span>{{ $t('nft_details_page_label_owning') }}</span
+              >&nbsp;
               <span>{{ ownCount }}</span>
             </div>
           </div>
@@ -86,7 +97,8 @@
             v-if="classCollectionName"
             class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
             preset="p6"
-          >{{ classCollectionName }}</Label>
+            >{{ classCollectionName }}</Label
+          >
         </div>
       </NFTPortfolioCard>
     </template>

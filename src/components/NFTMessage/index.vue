@@ -1,6 +1,5 @@
 <template>
   <component :is="tag" class="flex flex-col items-center">
-
     <hr
       v-if="isList"
       :class="[
@@ -11,18 +10,21 @@
         'border-none',
         { 'phone:hidden': !hasSeparator },
       ]"
-    >
+    />
 
     <template v-if="message">
-      <div
-        class="text-[12px] text-medium-gray text-center"
-      >{{ messageHint }}</div>
+      <div class="text-[12px] text-medium-gray text-center">
+        {{ messageHint }}
+      </div>
       <CardV2
         :class="[
           'my-[8px] p-[32px] border-[2px] w-full text-dark-gray',
-          type === 'mint_nft' || type === 'purchase' ? 'border-like-cyan' : 'border-shade-gray'
+          type === 'mint_nft' || type === 'purchase'
+            ? 'border-like-cyan'
+            : 'border-shade-gray',
         ]"
-      ><NFTMessageText :value="message" /></CardV2>
+        ><NFTMessageText :value="message"
+      /></CardV2>
     </template>
 
     <div
@@ -30,7 +32,7 @@
         'flex items-center gap-[8px] justify-center',
         {
           'sm:bg-white rounded-[24px] sm:rounded-full':
-            fromWallet && toWallet && !message
+            fromWallet && toWallet && !message,
         },
       ]"
     >
@@ -53,7 +55,6 @@
         :avatar-size="avatarSize"
       />
     </div>
-
   </component>
 </template>
 

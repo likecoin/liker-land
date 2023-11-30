@@ -1,10 +1,5 @@
 <template>
-  <component
-    :is="tag"
-    :class="rootClasses"
-    v-bind="attrs"
-    v-on="$listeners"
-  >
+  <component :is="tag" :class="rootClasses" v-bind="attrs" v-on="$listeners">
     <slot />
     <IconNorthEast v-if="href" class="ml-[4px] self-center shrink-0" />
   </component>

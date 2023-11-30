@@ -15,7 +15,7 @@
         'w-full',
         shouldCollapseInMobile ? 'laptop:-my-[21px]' : '-my-[21px]',
         {
-          'mb-[0] laptop:mb-[0]': shouldHideLowerBound
+          'mb-[0] laptop:mb-[0]': shouldHideLowerBound,
         },
       ]"
     >

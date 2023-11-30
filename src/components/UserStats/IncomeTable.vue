@@ -1,13 +1,19 @@
 <template>
   <div>
-    <ul v-if="currentList.length" class="flex flex-col px-[6px] laptop:px-[12px]">
+    <ul
+      v-if="currentList.length"
+      class="flex flex-col px-[6px] laptop:px-[12px]"
+    >
       <li>
         <NuxtLink
           v-for="item in currentList"
           :key="item.classId"
-          :to="localeLocation(
-            { name: 'nft-class-classId',
-              params: { classId: item.classId } })"
+          :to="
+            localeLocation({
+              name: 'nft-class-classId',
+              params: { classId: item.classId },
+            })
+          "
           target="_blank"
           :class="[
             'flex',
@@ -32,19 +38,33 @@
           ]"
         >
           <div class="flex flex-col justify-start mr-[12px] text-dark-gray">
-            <Label preset="h5" class="text-like-green">{{ item.nftName }}</Label>
+            <Label preset="h5" class="text-like-green">{{
+              item.nftName
+            }}</Label>
             <div class="flex justify-start gap-[6px] mt-[6px]">
               <ToolTips :tool-tip-text="$t('dashboard_table_class_price')">
-                <div class="py-[4px] px-[8px] rounded-[6px] bg-shade-gray text-10 cursor-default">{{ item.itemSales | formatNumberWithLIKE }}</div>
+                <div
+                  class="py-[4px] px-[8px] rounded-[6px] bg-shade-gray text-10 cursor-default"
+                >
+                  {{ item.itemSales | formatNumberWithLIKE }}
+                </div>
               </ToolTips>
-              <ToolTips :tool-tip-text="$t('dashboard_table_class_stake_percentage')">
-                <div class="py-[4px] px-[8px] rounded-[6px] bg-like-cyan-pale text-10 cursor-default">{{ item.royaltyPercentage }}%</div>
+              <ToolTips
+                :tool-tip-text="$t('dashboard_table_class_stake_percentage')"
+              >
+                <div
+                  class="py-[4px] px-[8px] rounded-[6px] bg-like-cyan-pale text-10 cursor-default"
+                >
+                  {{ item.royaltyPercentage }}%
+                </div>
               </ToolTips>
             </div>
           </div>
 
           <ToolTips :tool-tip-text="$t('dashboard_table_class_net_earning')">
-            <div class="flex-shrink-0 cursor-default text-like-cyan-dark whitespace-nowrap">
+            <div
+              class="flex-shrink-0 cursor-default text-like-cyan-dark whitespace-nowrap"
+            >
               {{ item.salesEarnings | formatNumberWithLIKE }}
             </div>
           </ToolTips>
@@ -52,7 +72,11 @@
       </li>
     </ul>
     <div v-else class=" w-full my-[62px]">
-      <Label class="text-medium-gray" :text="$t('dashboard_table_no_data')" align="center" />
+      <Label
+        class="text-medium-gray"
+        :text="$t('dashboard_table_no_data')"
+        align="center"
+      />
     </div>
   </div>
 </template>

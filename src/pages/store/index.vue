@@ -13,8 +13,12 @@
       ]"
     >
       <section>
-        <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">{{ $t('home_section_book_title') }}</h2>
-        <div class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]">
+        <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600]">
+          {{ $t('home_section_book_title') }}
+        </h2>
+        <div
+          class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]"
+        >
           <NFTBookShelf
             :items="nftBooksDisplayInFullWidth"
             preset="campaign"
@@ -30,7 +34,9 @@
         </div>
       </section>
 
-      <footer class="flex flex-wrap justify-center items-center mt-[3rem] gap-[0.5rem]">
+      <footer
+        class="flex flex-wrap justify-center items-center mt-[3rem] gap-[0.5rem]"
+      >
         <ButtonV2
           preset="secondary"
           :text="$t('store_nft_book_more_button')"
@@ -45,7 +51,6 @@
         />
       </footer>
     </div>
-
   </Page>
 </template>
 

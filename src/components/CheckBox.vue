@@ -8,26 +8,14 @@
       ]"
     >
       <input
-        :class="[
-          'absolute',
-          'w-0',
-          'h-0',
-          'opacity-0',
-          'inset',
-        ]"
+        :class="['absolute', 'w-0', 'h-0', 'opacity-0', 'inset']"
         :disabled="isDisabled"
         type="checkbox"
         :checked="value"
         @change="handleChange"
-      >
-      <IconCheckBoxOn
-        v-if="value"
-        :class="iconClass"
       />
-      <IconCheckBoxOff
-        v-else
-        :class="iconClass"
-      />
+      <IconCheckBoxOn v-if="value" :class="iconClass" />
+      <IconCheckBoxOff v-else :class="iconClass" />
       <slot />
     </label>
   </span>

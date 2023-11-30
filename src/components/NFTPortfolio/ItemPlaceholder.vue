@@ -2,7 +2,9 @@
   <div class="bg-white rounded-[24px] overflow-hidden">
     <div :class="coverClass" />
     <div class="relative pt-[0] p-[24px] flex flex-col items-center">
-      <div class="top-[-20px] w-[48px] h-[48px] mx-auto -mt-[20px] bg-white rounded-full p-[2px]">
+      <div
+        class="top-[-20px] w-[48px] h-[48px] mx-auto -mt-[20px] bg-white rounded-full p-[2px]"
+      >
         <div :class="creatorAvatarClass" />
       </div>
       <div :class="creatorDisplayNameClass" />

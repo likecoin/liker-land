@@ -15,7 +15,10 @@
       :key="item.value"
       class="flex items-center justify-center w-full"
     >
-      <ToolTips :tool-tip-text="item.tooltips" class="flex items-center justify-center w-full">
+      <ToolTips
+        :tool-tip-text="item.tooltips"
+        class="flex items-center justify-center w-full"
+      >
         <div
           :class="[
             'flex',
@@ -31,10 +34,12 @@
             'duration-200',
 
             'text-dark-gray bg-shade-gray hover:text-medium-gray',
-            { '!bg-like-green text-shade-gray shadow-sm hover:text-like-cyan-gray': item.isSelected },
-
+            {
+              '!bg-like-green text-shade-gray shadow-sm hover:text-like-cyan-gray':
+                item.isSelected,
+            },
           ]"
-          @click="$emit('type-click',item.value)"
+          @click="$emit('type-click', item.value)"
         >
           <Label preset="h5" :text="item.text" align="center" />
           <p

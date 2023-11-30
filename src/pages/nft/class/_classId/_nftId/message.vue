@@ -9,7 +9,7 @@
     />
     <hr
       :class="['block', 'h-[2px]', 'w-full', 'my-[16px]', 'border-shade-gray']"
-    >
+    />
     <ul class="flex flex-col gap-[24px] w-full px-[12px]">
       <NFTMessage
         v-for="(m, index) in messageList"

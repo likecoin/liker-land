@@ -35,10 +35,9 @@
         @click="handleClickCompareItemsButton"
       />
       <template v-if="isSingleItem || isAllSoldOut">
-        <span
-          v-if="(isSingleItem && !items[0].name)"
-          class="text-white"
-        >{{ priceLabel }}</span>
+        <span v-if="isSingleItem && !items[0].name" class="text-white">{{
+          priceLabel
+        }}</span>
         <NFTStockLabel
           v-if="items.length > 1 || isAllSoldOut"
           :stock="stock"
