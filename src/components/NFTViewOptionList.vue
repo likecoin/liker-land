@@ -191,7 +191,7 @@ export default {
         );
       } else if (type === 'epub') {
         e.preventDefault();
-        // NOTE: Allow user to download epub file directly for now
+        // NOTE: Allow user to download epub file before we have web epub reader
         try {
           this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
           const blob = await this.$axios.$get(url, { responseType: 'blob' });
