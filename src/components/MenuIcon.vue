@@ -9,7 +9,6 @@
   <IconBell v-else-if="type === 'notifications'" />
 </template>
 
-
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 

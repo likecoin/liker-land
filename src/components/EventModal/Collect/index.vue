@@ -22,7 +22,10 @@
     </template>
 
     <template #top>
-      <div v-if="nftIsMidAutumnStyle" class="flex justify-center gap-[24px] mb-[1.5rem]">
+      <div
+        v-if="nftIsMidAutumnStyle"
+        class="flex justify-center gap-[24px] mb-[1.5rem]"
+      >
         <MidAutumnSloganText class="hidden" />
         <svg
           v-for="index in 4"
@@ -32,11 +35,18 @@
           height="38"
           :style="`order: ${index >= 3 ? index + 1 : index};`"
         >
-          <use :xlink:href="`#mid-autumn-slogan-text-${index}`" fill="#B1A370" />
+          <use
+            :xlink:href="`#mid-autumn-slogan-text-${index}`"
+            fill="#B1A370"
+          />
         </svg>
       </div>
       <NFTPageOwning
-        v-else-if="(!uiTxNFTStatus || ['insufficient', 'failed'].includes(uiTxNFTStatus)) && hasConnectedWallet"
+        v-else-if="
+          (!uiTxNFTStatus ||
+            ['insufficient', 'failed'].includes(uiTxNFTStatus)) &&
+            hasConnectedWallet
+        "
         class="mb-[10px] phone:mt-0"
         :collected-count="userCollectedCount"
       />
@@ -62,14 +72,18 @@
           />
         </client-only>
       </transition>
-      <Label
-        v-if="isAddedToShoppingCart"
-        preset="p5"
-        align="center"
-      >{{ $t('nft_collect_modal_added_to_shopping_cart_description', { nft: NFTName }) }}</Label>
+      <Label v-if="isAddedToShoppingCart" preset="p5" align="center">{{
+        $t('nft_collect_modal_added_to_shopping_cart_description', {
+          nft: NFTName,
+        })
+      }}</Label>
       <template v-else-if="isCompleted">
         <Label
-          :class="[nftIsMidAutumnStyle ? 'text-white' : 'text-medium-gray', 'mt-[12px]', 'flex-nowrap']"
+          :class="[
+            nftIsMidAutumnStyle ? 'text-white' : 'text-medium-gray',
+            'mt-[12px]',
+            'flex-nowrap',
+          ]"
           preset="h6"
           align="center"
         >
@@ -77,16 +91,26 @@
             <NuxtLink
               class="font-[600] underline"
               place="portfolio"
-              :to="localeLocation({
-                name: 'id',
-                params: { id: getAddress }
-              })"
-            >{{ $t('tx_modal_status_complete_text_collect_portfolio') }}</NuxtLink>
+              :to="
+                localeLocation({
+                  name: 'id',
+                  params: { id: getAddress },
+                })
+              "
+              >{{
+                $t('tx_modal_status_complete_text_collect_portfolio')
+              }}</NuxtLink
+            >
           </i18n>
         </Label>
         <div
           v-if="!isFollowPromptStateDefault && !isBatchCollect"
-          :class="['flex justify-center items-center mt-[16px] rounded-[48px] border-[1px] border-medium-gray', nftIsMidAutumnStyle ? 'flex-col gap-[8px] p-[12px]' : 'flex-row px-[12px]']"
+          :class="[
+            'flex justify-center items-center mt-[16px] rounded-[48px] border-[1px] border-medium-gray',
+            nftIsMidAutumnStyle
+              ? 'flex-col gap-[8px] p-[12px]'
+              : 'flex-row px-[12px]',
+          ]"
         >
           <NFTMessageIdentity
             type="creator"
@@ -96,7 +120,11 @@
           />
           <div :class="[nftIsMidAutumnStyle ? 'm-0' : 'ml-[24px]']">
             <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
-            <div v-else class="relative flex group w-[138px]" @click="handleClickFollow">
+            <div
+              v-else
+              class="relative flex group w-[138px]"
+              @click="handleClickFollow"
+            >
               <div
                 :class="[
                   ...getDefaultClass,
@@ -129,7 +157,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </template>
     </template>
@@ -150,15 +177,18 @@
     </template>
 
     <!-- Button for complete of collecting -->
-    <template
-      v-if="isCompleted && hasConnectedWallet"
-      #button
-    >
+    <template v-if="isCompleted && hasConnectedWallet" #button>
       <ButtonV2
         v-if="isBatchCollect"
         preset="outline"
         :text="$t('nft_details_page_button_view_portfolio')"
-        :to="localeLocation({ name: 'id', params: { id: getAddress }, query: { tab: 'collected' } })"
+        :to="
+          localeLocation({
+            name: 'id',
+            params: { id: getAddress },
+            query: { tab: 'collected' },
+          })
+        "
         @click.native="handleClose"
       >
         <template #prepend>
@@ -208,27 +238,42 @@
         class="flex flex-col items-start mb-[28px]"
       >
         <template v-if="nftIsMidAutumnStyle">
-          <Label class="text-like-cyan-light" :text="$t('nft_collect_modal_mid_autumn_description_heading')" />
-          <Label class="mt-[0.5rem] mb-[2rem] leading-[1.5] font-[300]" :text="$t('nft_collect_modal_mid_autumn_description_content')" />
+          <Label
+            class="text-like-cyan-light"
+            :text="$t('nft_collect_modal_mid_autumn_description_heading')"
+          />
+          <Label
+            class="mt-[0.5rem] mb-[2rem] leading-[1.5] font-[300]"
+            :text="$t('nft_collect_modal_mid_autumn_description_content')"
+          />
         </template>
-        <Separator v-else class="h-[2px] bg-shade-gray self-center phone:hidden" />
+        <Separator
+          v-else
+          class="h-[2px] bg-shade-gray self-center phone:hidden"
+        />
         <Label
           preset="p6"
           align="left"
           class="text-medium-gray mt-[12px] mb-[6px]"
           :text="$t('nft_collect_modal_leave_message')"
         />
-        <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+        <div
+          class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+        >
           <IconMessage class="text-dark-gray" />
           <input
             id="name"
             ref="input"
             type="input"
             class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
-            :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
+            :placeholder="
+              $t('nft_collect_modal_leave_message_to_name', {
+                name: creatorDisplayName,
+              })
+            "
             name="name"
             @input="onInputCollectMessage"
-          >
+          />
         </div>
       </section>
 
@@ -265,11 +310,16 @@
         </ul>
         <ul
           v-else
-          :class="['mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full', { 'mb-[5rem]': nftIsMidAutumnStyle }]"
+          :class="[
+            'mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full',
+            { 'mb-[5rem]': nftIsMidAutumnStyle },
+          ]"
         >
           <li v-if="enableStripe">
             <EventModalCollectMethodButton
-              :class="{ 'border-like-cyan': canPayByFiat && !hasConnectedWallet }"
+              :class="{
+                'border-like-cyan': canPayByFiat && !hasConnectedWallet,
+              }"
               :title="$t('nft_collect_modal_method_stripe')"
               type="stripe"
               :is-disabled="!canPayByFiat"
@@ -299,7 +349,9 @@
                 'rounded-b-[8px]',
                 'px-[16px]',
                 'py-[4px]',
-                hasConnectedWallet && isInsufficientLIKE ? 'text-danger' : 'text-like-green',
+                hasConnectedWallet && isInsufficientLIKE
+                  ? 'text-danger'
+                  : 'text-like-green',
                 'text-[12px]',
                 'text-right',
                 'font-[600]',

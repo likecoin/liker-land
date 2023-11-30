@@ -2,7 +2,12 @@
   <main>
     <div class="w-full max-w-[400px] mx-auto p-[1rem] laptop:p-0 pt-0">
       <NFTWidgetBaseCard>
-        <NuxtLink :to="localeLocation({ name: 'nft-class-classId', params: { classId } })" target="_blank">
+        <NuxtLink
+          :to="
+            localeLocation({ name: 'nft-class-classId', params: { classId } })
+          "
+          target="_blank"
+        >
           <NFTWidgetContentPreview
             :class="[
               'transition-shadow',
@@ -19,7 +24,9 @@
       </NFTWidgetBaseCard>
     </div>
 
-    <MobileStickyCard class="flex flex-col justify-center items-center w-full laptop:max-w-[400px] mx-auto py-[1.5rem]">
+    <MobileStickyCard
+      class="flex flex-col justify-center items-center w-full laptop:max-w-[400px] mx-auto py-[1.5rem]"
+    >
       <NFTViewOptionList
         v-if="canViewContentDirectly"
         class="mb-[2rem]"
@@ -51,13 +58,15 @@
                 :text="$t('nft_free_claim_email_label')"
                 align="center"
               />
-              <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+              <div
+                class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+              >
                 <input
                   v-model="claimingFreeEmail"
                   class="w-full bg-transparent border-0 focus-visible:outline-none"
                   :placeholder="$t('nft_free_claim_enter_email')"
                   type="email"
-                >
+                />
               </div>
               <ButtonV2
                 class="self-center mt-[24px]"
@@ -82,13 +91,15 @@
               align="center"
             />
             <div class="flex justify-center w-full gap-[12px] mt-[6px]">
-              <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+              <div
+                class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+              >
                 <input
                   v-model="claimingAddressInput"
                   class="w-full bg-transparent border-0 focus-visible:outline-none"
                   :placeholder="$t('nft_claim_enter_address_placeholder')"
                   type="input"
-                >
+                />
               </div>
               <ButtonV2
                 v-if="!claimingAddressInput"
@@ -100,9 +111,17 @@
             </div>
             <ButtonV2
               class="self-center mt-[24px]"
-              :text="$t(nftIsNFTBook && nftMustClaimToView ? 'nft_claim_access_nft_book' : 'nft_claim_claim')"
+              :text="
+                $t(
+                  nftIsNFTBook && nftMustClaimToView
+                    ? 'nft_claim_access_nft_book'
+                    : 'nft_claim_claim'
+                )
+              "
               preset="secondary"
-              :is-disabled="!claimingAddressInput || !isValidAddress(claimingAddressInput)"
+              :is-disabled="
+                !claimingAddressInput || !isValidAddress(claimingAddressInput)
+              "
               @click="onEnterClaimingAddress"
             />
           </template>
@@ -111,20 +130,38 @@
       <template v-else>
         <Label v-if="text" class="mb-[16px]" :text="text" align="center" />
         <template v-if="state === 'INITIAL'">
-          <Label preset="p6" class="text-medium-gray mb-[6px]" :text="$t('nft_collect_modal_leave_message')" />
-          <div class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]">
+          <Label
+            preset="p6"
+            class="text-medium-gray mb-[6px]"
+            :text="$t('nft_collect_modal_leave_message')"
+          />
+          <div
+            class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+          >
             <IconMessage class="text-dark-gray" />
             <input
               v-model="collectorMessage"
               class="w-full bg-transparent border-0 focus-visible:outline-none"
-              :placeholder="$t('nft_collect_modal_leave_message_to_name', { name: creatorDisplayName })"
+              :placeholder="
+                $t('nft_collect_modal_leave_message_to_name', {
+                  name: creatorDisplayName,
+                })
+              "
               type="input"
               @input.once="onInputCollectorMessage"
-            >
+            />
           </div>
-          <ButtonV2 class="self-center mt-[24px]" :text="$t('nft_claim_claim')" preset="secondary" @click="claim" />
+          <ButtonV2
+            class="self-center mt-[24px]"
+            :text="$t('nft_claim_claim')"
+            preset="secondary"
+            @click="claim"
+          />
         </template>
-        <ProgressIndicator v-else-if="state === 'CLAIMING'" class="self-center" />
+        <ProgressIndicator
+          v-else-if="state === 'CLAIMING'"
+          class="self-center"
+        />
         <template v-else-if="state === 'CLAIMED'">
           <ButtonV2
             v-if="nftId"

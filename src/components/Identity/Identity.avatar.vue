@@ -13,11 +13,8 @@
         :alt="displayName"
         :style="imageStyle"
         :loading="loadingType"
-      >
-      <div
-        v-if="isOutlined"
-        class="avatar__halo"
-      >
+      />
+      <div v-if="isOutlined" class="avatar__halo">
         <svg viewBox="0 0 152 152">
           <path
             v-if="size > 56"

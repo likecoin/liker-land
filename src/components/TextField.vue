@@ -6,7 +6,8 @@
       v-bind="inputProps"
       @input="handleInput"
       @blur="$emit('delete-empty-field')"
-    ><template v-if="isTextarea && value">{{ value }}</template></component>
+      ><template v-if="isTextarea && value">{{ value }}</template></component
+    >
     <span :class="errorMsgClasses">{{ errorMessage }}</span>
   </div>
 </template>

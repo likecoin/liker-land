@@ -1,19 +1,20 @@
 <template>
   <NFTGemWrapper :is-nft-book="true" :class-id="classId">
     <template #default="gem">
-      <NFTPortfolioCard
-        :gem-level="gem.level"
-        :hover-class="gem.hoverClass"
-      >
+      <NFTPortfolioCard :gem-level="gem.level" :hover-class="gem.hoverClass">
         <div class="relative flex items-center justify-center py-[16px]">
           <div class="absolute inset-0 w-full h-full">
-            <img :src="resizedSrc" :alt="alt" class="h-auto max-w-full blur-sm">
+            <img
+              :src="resizedSrc"
+              :alt="alt"
+              class="h-auto max-w-full blur-sm"
+            />
           </div>
           <div
             class="absolute inset-0 w-full h-full"
             :style="{
               backgroundColor: themeColor || 'none',
-              opacity: 0.3
+              opacity: 0.3,
             }"
           />
           <div class="relative flex items-center justify-center w-full h-full">
@@ -43,7 +44,7 @@
                       stretch: 30,
                       depth: 20,
                       modifier: 2,
-                      slideShadows : true,
+                      slideShadows: true,
                     },
                   }"
                 >
@@ -84,7 +85,11 @@
           <Label align="center" :text="nftName" class="text-like-green" />
           <Markdown :md-string="nftDescription" />
           <div class="flex items-center justify-center">
-            <ButtonV2 preset="secondary" :text="priceLabel" @click="$emit('click-collect', nftValue)">
+            <ButtonV2
+              preset="secondary"
+              :text="priceLabel"
+              @click="$emit('click-collect', nftValue)"
+            >
               <template #prepend>
                 <NFTWidgetIconInsertCoin class="w-[16px]" />
               </template>

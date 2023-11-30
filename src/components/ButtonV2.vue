@@ -28,17 +28,11 @@
       :tag="labelTag"
       align="center"
     >
-      <template
-        v-if="shouldShowPrepend"
-        #prepend
-      >
+      <template v-if="shouldShowPrepend" #prepend>
         <slot name="prepend" />
       </template>
       <slot />
-      <template
-        v-if="shouldShowAppend"
-        #append
-      >
+      <template v-if="shouldShowAppend" #append>
         <slot name="append" />
       </template>
     </Label>

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="shouldShowControlBar" class="flex items-center justify-end w-full gap-[12px]">
+  <div
+    v-if="shouldShowControlBar"
+    class="flex items-center justify-end w-full gap-[12px]"
+  >
     <template v-if="isCollectorButNotCreator">
       <ButtonV2
         v-if="currentNftId"
@@ -23,12 +26,9 @@
       /> -->
     </template>
     <template v-else-if="isPotentialCollector">
-      <Label
-        class="!text-[12px] text-medium-gray"
-        :text="collectButtonText"
-      />
+      <Label class="!text-[12px] text-medium-gray" :text="collectButtonText" />
       <ButtonV2
-        :preset="canCollect ? 'secondary': 'tertiary'"
+        :preset="canCollect ? 'secondary' : 'tertiary'"
         @click="handleClickCollect"
       >
         {{ price }}

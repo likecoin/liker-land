@@ -12,7 +12,8 @@
                 name: 'id',
                 params: { id: owner.id },
               })
-            : ''"
+            : ''
+        "
         @click.native.stop
       >
         <Identity
@@ -26,7 +27,9 @@
       </LinkV2>
     </td>
     <td class="py-[12px]">
-      <span class="truncate text-[12px] text-medium-gray font-500">{{ owner.memo }}</span>
+      <span class="truncate text-[12px] text-medium-gray font-500">{{
+        owner.memo
+      }}</span>
     </td>
     <td class="py-[12px]">
       <Label preset="p6">{{ owner.collectedCount }}</Label>

@@ -1,13 +1,20 @@
 <template>
   <NFTWidgetBaseCard class="flex items-center justify-between px-[24px]">
-    <button class="flex items-center transition-colors text-medium-gray hover:text-dark-gray" @click="handleClickLike">
+    <button
+      class="flex items-center transition-colors text-medium-gray hover:text-dark-gray"
+      @click="handleClickLike"
+    >
       <NFTWidgetIconLike class="w-[20px] h-[20px]" />
       <span class="ml-[12px]">{{ likeActionLabel }}</span>
     </button>
     <div class="flex items-center text-dark-gray ml-[8px]">
       <NuxtLink
         class="flex items-center text-like-green group -my-[8px]"
-        :to="creatorAddress ? localeLocation({ name: 'id', params: { id: creatorAddress } }) : ''"
+        :to="
+          creatorAddress
+            ? localeLocation({ name: 'id', params: { id: creatorAddress } })
+            : ''
+        "
       >
         <Identity
           :avatar-url="creatorAvatarSrc"
@@ -15,7 +22,9 @@
           :is-avatar-outlined="isCivicLiker"
           :is-lazy-loaded="true"
         />
-        <span class="ml-[8px] group-hover:underline">{{ formattedCreatorDisplayName }}</span>
+        <span class="ml-[8px] group-hover:underline">{{
+          formattedCreatorDisplayName
+        }}</span>
       </NuxtLink>
     </div>
   </NFTWidgetBaseCard>

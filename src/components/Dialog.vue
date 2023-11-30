@@ -4,10 +4,7 @@
       <div key="scrollableContent" :class="scrollableClasses">
         <div
           key="backdrop"
-          :class="[
-            'fixed',
-            'inset-0',
-          ]"
+          :class="['fixed', 'inset-0']"
           @click="handleBackdropClick"
         />
 

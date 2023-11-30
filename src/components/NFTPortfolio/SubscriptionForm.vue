@@ -6,16 +6,26 @@
     <Label
       preset="h4"
       align="center"
-      :text="$t(isEmpty ? 'portfolio_subscription_title_empty' : 'portfolio_subscription_title')"
+      :text="
+        $t(
+          isEmpty
+            ? 'portfolio_subscription_title_empty'
+            : 'portfolio_subscription_title'
+        )
+      "
     />
     <Label v-if="isEmpty" preset="p5" align="center">
       <i18n path="portfolio_subscription_description_empty">
-        <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
+        <span class="font-[600] text-like-green" place="creator">{{
+          formattedCreatorDisplayName
+        }}</span>
       </i18n>
     </Label>
     <Label class="text-dark-gray" preset="p6" align="center">
       <i18n :path="labelText">
-        <span class="font-[600] text-like-green" place="creator">{{ formattedCreatorDisplayName }}</span>
+        <span class="font-[600] text-like-green" place="creator">{{
+          formattedCreatorDisplayName
+        }}</span>
       </i18n>
     </Label>
     <form
@@ -36,10 +46,7 @@
       <ButtonV2
         v-else
         :key="subscriptionId"
-        :class="[
-          'font-[600]',
-          { 'border-2 border-medium-gray': !email },
-        ]"
+        :class="['font-[600]', { 'border-2 border-medium-gray': !email }]"
         :preset="isWalletConnected ? 'primary' : 'secondary'"
         type="submit"
         :is-disabled="!email"
@@ -55,7 +62,12 @@
     </form>
     <div v-else-if="!walletHasVerifiedEmail">
       <ProgressIndicator v-if="isLoading" />
-      <ButtonV2 v-else preset="primary" :text="$t('portfolio_subscription_follow')" @click="handleClickVerify" />
+      <ButtonV2
+        v-else
+        preset="primary"
+        :text="$t('portfolio_subscription_follow')"
+        @click="handleClickVerify"
+      />
     </div>
     <div v-else-if="isWalletConnected && walletEmail">
       <ProgressIndicator v-if="isLoading" />
@@ -64,13 +76,16 @@
         :preset="isFollowed ? 'outline' : 'primary'"
         @click="handleClickFollow"
       >
-        {{ isFollowed ? $t('portfolio_subscription_unfollow') : $t('portfolio_subscription_follow') }}
+        {{
+          isFollowed
+            ? $t('portfolio_subscription_unfollow')
+            : $t('portfolio_subscription_follow')
+        }}
       </ButtonV2>
     </div>
-    <p
-      v-if="subscriptionId"
-      class="text-medium-gray text-[14px] text-center"
-    >{{ $t('portfolio_subscription_submitted_hint') }}</p>
+    <p v-if="subscriptionId" class="text-medium-gray text-[14px] text-center">
+      {{ $t('portfolio_subscription_submitted_hint') }}
+    </p>
     <Dialog
       v-model="shouldShowAlertDialog"
       preset="custom"
@@ -82,14 +97,33 @@
           <IconEmail class="w-[32px] text-like-green" />
         </div>
       </div>
-      <Label preset="h4" align="center" class="mb-[8px]" :text="$t('portfolio_subscription_verify_title')" />
+      <Label
+        preset="h4"
+        align="center"
+        class="mb-[8px]"
+        :text="$t('portfolio_subscription_verify_title')"
+      />
       <Label class="text-dark-gray" preset="p5" align="center">
         <i18n path="portfolio_subscription_verify">
-          <a v-if="!!checkEmailLink" :href="checkEmailLink" target="_blank" class="font-[600] text-like-green underline" place="email">{{ walletEmailUnverified }}</a>
-          <span v-else class="font-[600] text-like-green" place="email">{{ walletEmailUnverified }}</span>
+          <a
+            v-if="!!checkEmailLink"
+            :href="checkEmailLink"
+            target="_blank"
+            class="font-[600] text-like-green underline"
+            place="email"
+            >{{ walletEmailUnverified }}</a
+          >
+          <span v-else class="font-[600] text-like-green" place="email">{{
+            walletEmailUnverified
+          }}</span>
         </i18n>
       </Label>
-      <p class="text-center underline text-[10px] text-medium-gray mt-[32px] cursor-pointer" @click="handleClickResend">{{ $t('portfolio_subscription_verify_sendAgain') }}</p>
+      <p
+        class="text-center underline text-[10px] text-medium-gray mt-[32px] cursor-pointer"
+        @click="handleClickResend"
+      >
+        {{ $t('portfolio_subscription_verify_sendAgain') }}
+      </p>
     </Dialog>
   </CardV2>
 </template>

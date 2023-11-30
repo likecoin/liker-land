@@ -22,16 +22,31 @@
 
     <slot name="top" />
 
-    <template v-if="!isShowQuitConfirm || ['processing', 'processing_non_blocking', 'completed'].includes(uiTxNFTStatus)">
+    <template
+      v-if="
+        !isShowQuitConfirm ||
+          ['processing', 'processing_non_blocking', 'completed'].includes(
+            uiTxNFTStatus
+          )
+      "
+    >
       <!-- Title & Message -->
       <div
-        v-if="formattedStatusTitle || formattedStatusText || $slots.title || $slots.message"
+        v-if="
+          formattedStatusTitle ||
+            formattedStatusText ||
+            $slots.title ||
+            $slots.message
+        "
         class="flex flex-col items-center justify-center"
       >
         <slot v-if="$slots.title" name="title" />
         <Label
           v-else-if="formattedStatusTitle"
-          :class="[isMidAutumnStyle ? 'text-like-cyan-light' : 'text-like-green', 'font-600']"
+          :class="[
+            isMidAutumnStyle ? 'text-like-cyan-light' : 'text-like-green',
+            'font-600',
+          ]"
           preset="h4"
           align="center"
           :text="formattedStatusTitle"
@@ -39,7 +54,10 @@
         <slot v-if="$slots.message" name="message" />
         <Label
           v-else-if="formattedStatusText"
-          :class="[isMidAutumnStyle ? 'text-white' : 'text-medium-gray', 'mt-[12px]']"
+          :class="[
+            isMidAutumnStyle ? 'text-white' : 'text-medium-gray',
+            'mt-[12px]',
+          ]"
           preset="h6"
           align="center"
           :text="formattedStatusText"
@@ -49,7 +67,11 @@
       <slot name="default" />
 
       <ProgressIndicator
-        v-if="['sign', 'processing', 'processing_non_blocking'].includes(uiTxNFTStatus)"
+        v-if="
+          ['sign', 'processing', 'processing_non_blocking'].includes(
+            uiTxNFTStatus
+          )
+        "
         class="mt-[32px] mx-auto"
       />
 
@@ -77,10 +99,7 @@
           <template #prepend>
             <IconError />
           </template>
-          <template
-            v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE'"
-            #append
-          >
+          <template v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE'" #append>
             <LinkV2
               class="text-danger"
               href="https://docs.like.co/general-guides/trade"
@@ -96,10 +115,7 @@
         v-if="uiTxNFTStatus === 'sign' && attentionText"
         class="mt-[48px] border-0 border-dashed border-t-[2px] border-t-shade-gray"
       >
-        <AttentionSign
-          class="pb-0"
-          :attention-text="attentionText"
-        >
+        <AttentionSign class="pb-0" :attention-text="attentionText">
           <template #icon>
             <IconLedger v-if="walletMethodType === 'keplr'" />
             <IconLikerLandApp v-if="walletMethodType === 'liker-id'" />
@@ -115,7 +131,9 @@
         v-t="'tx_modal_quitAlert_content'"
         class="max-w-[336px] text-center text-medium-gray text-[16px] font-500 mx-auto"
       />
-      <div class="mx-auto mt-[24px] grid grid-flow-col gap-x-[12px] text-center">
+      <div
+        class="mx-auto mt-[24px] grid grid-flow-col gap-x-[12px] text-center"
+      >
         <ButtonV2
           preset="outline"
           class="text-danger border-danger"

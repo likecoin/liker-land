@@ -9,9 +9,7 @@
             'text-like-cyan leading-[0] fill-current',
             'hover:opacity-50 active:opacity-25',
             'transition-all duration-[0.25s] ease-in-out',
-            isDisabledBackButton
-              ? 'w-40 pointer-events-none'
-              : 'w-24 ml-16',
+            isDisabledBackButton ? 'w-40 pointer-events-none' : 'w-24 ml-16',
           ]"
           @click="onClickBackButton"
         >
@@ -23,14 +21,16 @@
               'box-content',
               'translate-y-[-50%]',
               'transition-opacity duration-[0.25s] ease-in-out',
-              { 'opacity-0': isDisabledBackButton }
+              { 'opacity-0': isDisabledBackButton },
             ]"
           />
           <SettingsIcon />
         </button>
 
         <transition name="fade">
-          <span v-if="isDisabledBackButton">{{ $t('SettingsPage.title') }}</span>
+          <span v-if="isDisabledBackButton">{{
+            $t('SettingsPage.title')
+          }}</span>
         </transition>
       </div>
 

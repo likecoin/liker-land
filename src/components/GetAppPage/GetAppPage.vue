@@ -3,19 +3,18 @@
   <article class="get-app-page">
     <section class="screen-wrapper">
       <section class="container banner-container">
-        <img class="feature-image" src="./getapp-banner.png">
-        <img v-if="showCross" class="cross" src="./cross_3x.png">
+        <img class="feature-image" src="./getapp-banner.png" />
+        <img v-if="showCross" class="cross" src="./cross_3x.png" />
       </section>
       <section class="container top-container">
         <div class="center app-logo">
-          <img
-            class="w-[160px]"
-            src="~/assets/images/app-logo.svg"
-          >
+          <img class="w-[160px]" src="~/assets/images/app-logo.svg" />
         </div>
         <h1 class="slogan center">
           <div class="slogan-text center">{{ $t('GetAppPage.Download') }}</div>
-          <div class="slogan-text center">{{ $t('GetAppPage.Manage.like') }}</div>
+          <div class="slogan-text center">
+            {{ $t('GetAppPage.Manage.like') }}
+          </div>
         </h1>
       </section>
       <section class="container">
@@ -26,7 +25,7 @@
         </div>
       </section>
       <section class="container">
-        <hr class="separate-line">
+        <hr class="separate-line" />
       </section>
       <section class="feature">
         <div>
@@ -36,7 +35,7 @@
             class="container side-by-side"
           >
             <div class="icon-part">
-              <img src="./phone_icon_3x.png" width="56px">
+              <img src="./phone_icon_3x.png" width="56px" />
             </div>
             <div class="vp-part">
               <div class="main-vp">{{ feature.main }}</div>

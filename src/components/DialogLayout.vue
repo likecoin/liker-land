@@ -40,7 +40,6 @@ export default {
 };
 </script>
 
-
 <style lang="scss">
 .page-layout--dialog {
   box-sizing: border-box;

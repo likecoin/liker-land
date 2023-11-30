@@ -1,8 +1,15 @@
 <template>
   <blockquote ref="root" class="text-[1rem]">
     <div class="flex gap-[1em]">
-      <Quotemark class="shrink-0 w-[1.5em] laptop:w-[2em] rotate-180 self-start" />
-      <p :class="['font-proxima font-[300]', isSmall ? 'text-[1.375rem]' : 'text-[1.875em]']">
+      <Quotemark
+        class="shrink-0 w-[1.5em] laptop:w-[2em] rotate-180 self-start"
+      />
+      <p
+        :class="[
+          'font-proxima font-[300]',
+          isSmall ? 'text-[1.375rem]' : 'text-[1.875em]',
+        ]"
+      >
         {{ text }}
       </p>
       <Quotemark class="shrink-0 w-[1.5em] laptop:w-[2em] self-end" />

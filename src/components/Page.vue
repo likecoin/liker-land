@@ -1,11 +1,5 @@
 <template>
-  <main
-    :class="[
-      'flex',
-      'flex-grow',
-      flexLayoutClass,
-    ]"
-  >
+  <main :class="['flex', 'flex-grow', flexLayoutClass]">
     <slot />
   </main>
 </template>

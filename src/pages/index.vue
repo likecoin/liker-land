@@ -1,18 +1,9 @@
 <template>
-  <main
-    ref="page"
-    class="pb-[10rem] overflow-hidden"
-    style="opacity: 0"
-  >
-
+  <main ref="page" class="pb-[10rem] overflow-hidden" style="opacity: 0">
     <section
       id="hero"
       ref="heroSection"
-      :class="[
-        'relative',
-        'pb-[200vh]',
-        'bg-fixed',
-      ]"
+      :class="['relative', 'pb-[200vh]', 'bg-fixed']"
       :style="heroSectionStyle"
     >
       <svg
@@ -42,10 +33,10 @@
             v-bind="props"
           >
             <template v-if="index === 0">
-              <stop offset="0" stop-color="#f3ea8c"/>
-              <stop offset=".32" stop-color="#f28f9b"/>
-              <stop offset=".7" stop-color="#d6afec"/>
-              <stop offset="1" stop-color="#addeec"/>
+              <stop offset="0" stop-color="#f3ea8c" />
+              <stop offset=".32" stop-color="#f28f9b" />
+              <stop offset=".7" stop-color="#d6afec" />
+              <stop offset="1" stop-color="#addeec" />
             </template>
           </linearGradient>
         </defs>
@@ -75,11 +66,7 @@
       >
         <div
           ref="heroSectionKeyArt"
-          :class="[
-            'relative',
-            'hidden laptop:block',
-            sectionContentClass,
-          ]"
+          :class="['relative', 'hidden laptop:block', sectionContentClass]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -88,10 +75,7 @@
           >
             <defs>
               <clipPath id="hero-section-tagline-right-path">
-                <path
-                  fill="none"
-                  :d="heroSectionTaglineRightPath"
-                />
+                <path fill="none" :d="heroSectionTaglineRightPath" />
               </clipPath>
               <image
                 id="hero-section-gradient"
@@ -108,7 +92,11 @@
               >
                 <use
                   xlink:href="#hero-section-gradient"
-                  :transform="isEnglish ? 'translate(613.55 203.03) scale(.7)' : 'translate(610.98 248.2) scale(.43)'"
+                  :transform="
+                    isEnglish
+                      ? 'translate(613.55 203.03) scale(.7)'
+                      : 'translate(610.98 248.2) scale(.43)'
+                  "
                 />
               </g>
             </g>
@@ -129,7 +117,10 @@
               </clipPath>
             </defs>
             <g clip-path="url(#hero-section-portal-path)">
-              <use xlink:href="#hero-section-gradient" transform="matrix(0 -1.39 1.39 0 174.71 552.98)"/>
+              <use
+                xlink:href="#hero-section-gradient"
+                transform="matrix(0 -1.39 1.39 0 174.71 552.98)"
+              />
             </g>
           </svg>
           <svg
@@ -154,9 +145,9 @@
                 y2="319.35"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="0" stop-color="#000"/>
-                <stop offset=".93" stop-color="#000"/>
-                <stop offset="1" stop-color="#000" stop-opacity=".05"/>
+                <stop offset="0" stop-color="#000" />
+                <stop offset=".93" stop-color="#000" />
+                <stop offset="1" stop-color="#000" stop-opacity=".05" />
               </linearGradient>
               <linearGradient
                 v-else
@@ -167,9 +158,9 @@
                 y2="318.21"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="0" stop-color="#000"/>
-                <stop offset=".74" stop-color="#000"/>
-                <stop offset="1" stop-color="#000" stop-opacity=".1"/>
+                <stop offset="0" stop-color="#000" />
+                <stop offset=".74" stop-color="#000" />
+                <stop offset="1" stop-color="#000" stop-opacity=".1" />
               </linearGradient>
               <linearGradient
                 id="hero-section-indicator-fill"
@@ -180,9 +171,9 @@
                 gradientTransform="matrix(1 0 0 -1 0 636)"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop offset="0" stop-opacity=".04"/>
-                <stop offset=".88"/>
-                <stop offset="1" stop-opacity="0"/>
+                <stop offset="0" stop-opacity=".04" />
+                <stop offset=".88" />
+                <stop offset="1" stop-opacity="0" />
               </linearGradient>
             </defs>
             <path
@@ -214,7 +205,10 @@
               fill="none"
               clip-path="url(#hero-section-writing-nft-text)"
             >
-              <use xlink:href="#hero-section-gradient" transform="matrix(.64 0 0 .64 612.02 212.55)"/>
+              <use
+                xlink:href="#hero-section-gradient"
+                transform="matrix(.64 0 0 .64 612.02 212.55)"
+              />
             </g>
           </svg>
           <div
@@ -229,8 +223,12 @@
               'pr-[2.5rem]',
             ]"
           >
-            <h2 class="text-[1rem] font-[600]">{{ $t('index_page_hero_all_stories_matter_heading') }}</h2>
-            <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_all_stories_matter_content') }}</p>
+            <h2 class="text-[1rem] font-[600]">
+              {{ $t('index_page_hero_all_stories_matter_heading') }}
+            </h2>
+            <p class="mt-[0.5rem] text-[1rem]">
+              {{ $t('index_page_hero_all_stories_matter_content') }}
+            </p>
           </div>
           <div
             ref="heroSectionWritingNFTDescription"
@@ -245,7 +243,9 @@
               'pl-[2.5rem]',
             ]"
           >
-            <p class="text-[1rem]">{{ $t('index_page_hero_writing_nft_content') }}</p>
+            <p class="text-[1rem]">
+              {{ $t('index_page_hero_writing_nft_content') }}
+            </p>
           </div>
 
           <nav
@@ -267,11 +267,13 @@
               :text="$t('index_page_hero_try_collect_button')"
               theme="glow"
               preset="secondary"
-              :to="localeLocation({
-                name: 'nft-class-classId',
-                params: { classId: freeMintNFTClassId },
-                query: { action: 'collect' },
-              })"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: { classId: freeMintNFTClassId },
+                  query: { action: 'collect' },
+                })
+              "
               @click.native="handleTryCollectButtonClickInHeroSection"
             />
             <ButtonV2
@@ -283,7 +285,6 @@
               @click.native="handlePublishStoryButtonClickInHeroSection"
             />
           </nav>
-
         </div>
         <div
           ref="heroSectionMobileKeyArt"
@@ -298,7 +299,10 @@
           >
             <defs>
               <clipPath id="hero-section-portal-path-mobile">
-                <path d="m175.66,1.43h0c59.65,0,108,48.35,108,108v152c0,59.65-48.35,108-108,108h0c-59.65,0-108-48.35-108-108V109.43C67.66,49.79,116.02,1.43,175.66,1.43Z" fill="none"/>
+                <path
+                  d="m175.66,1.43h0c59.65,0,108,48.35,108,108v152c0,59.65-48.35,108-108,108h0c-59.65,0-108-48.35-108-108V109.43C67.66,49.79,116.02,1.43,175.66,1.43Z"
+                  fill="none"
+                />
               </clipPath>
             </defs>
             <g
@@ -306,7 +310,10 @@
               clip-path="url(#hero-section-portal-path-mobile)"
               fill="none"
             >
-              <use transform="translate(-164.63 421.41) rotate(-90) scale(1.39)" xlink:href="#hero-section-gradient"/>
+              <use
+                transform="translate(-164.63 421.41) rotate(-90) scale(1.39)"
+                xlink:href="#hero-section-gradient"
+              />
             </g>
           </svg>
           <svg
@@ -317,7 +324,7 @@
             viewBox="0 0 328 450"
           >
             <path
-            ref="heroSectionMobilePortalBorder"
+              ref="heroSectionMobilePortalBorder"
               d="m152.66,1.93h0c59.37,0,107.5,48.13,107.5,107.5v152c0,59.37-48.13,107.5-107.5,107.5h0c-59.37,0-107.5-48.13-107.5-107.5V109.43C45.16,50.06,93.29,1.93,152.66,1.93Z"
               fill="none"
               stroke="#4a4a4a"
@@ -332,16 +339,19 @@
           >
             <defs>
               <clipPath id="hero-section-collectibles-path-en-mobile">
-                <path d="m22.11,441.49c-8.58,0-15.4-6.16-15.4-15.18s6.82-15.18,15.4-15.18c6.69,0,10.43,3.52,12.5,7.17l-5.37,2.64c-1.23-2.38-3.87-4.27-7.13-4.27-5.1,0-8.98,4.09-8.98,9.64s3.87,9.64,8.98,9.64c3.26,0,5.9-1.85,7.13-4.27l5.37,2.6c-2.11,3.65-5.81,7.22-12.5,7.22Zm15.69-15.18c0-8.84,6.47-15.18,15.31-15.18s15.36,6.34,15.36,15.18-6.47,15.18-15.36,15.18-15.31-6.34-15.31-15.18Zm24.24,0c0-5.5-3.52-9.64-8.93-9.64s-8.89,4.14-8.89,9.64,3.48,9.64,8.89,9.64,8.93-4.18,8.93-9.64Zm30.34,14.65h-18.66v-29.35h6.25v23.85h12.41v5.5Zm23.91,0h-18.66v-29.35h6.25v23.85h12.41v5.5Zm26.02,0h-20.77v-29.35h20.77v5.37h-14.52v6.38h14.21v5.37h-14.21v6.82h14.52v5.41Zm19.76.53c-8.58,0-15.4-6.16-15.4-15.18s6.82-15.18,15.4-15.18c6.69,0,10.43,3.52,12.5,7.17l-5.37,2.64c-1.23-2.38-3.87-4.27-7.13-4.27-5.1,0-8.98,4.09-8.98,9.64s3.87,9.64,8.98,9.64c3.26,0,5.9-1.85,7.13-4.27l5.37,2.6c-2.11,3.65-5.81,7.22-12.5,7.22Zm30.16-.53h-6.29v-23.85h-8.58v-5.5h23.41v5.5h-8.54v23.85Zm19.67,0h-6.25v-29.35h6.25v29.35Zm22.63,0h-15.93v-29.35h15.44c5.59,0,8.45,3.56,8.45,7.48,0,3.7-2.29,6.16-5.06,6.73,3.12.48,5.63,3.52,5.63,7.22,0,4.4-2.95,7.92-8.54,7.92Zm-9.68-24.02v6.47h7.83c2.11,0,3.43-1.36,3.43-3.26s-1.32-3.21-3.43-3.21h-7.83Zm0,11.79v6.91h8.05c2.38,0,3.78-1.36,3.78-3.48,0-1.85-1.32-3.43-3.78-3.43h-8.05Zm42.46,12.23h-18.66v-29.35h6.25v23.85h12.41v5.5Zm26.02,0h-20.77v-29.35h20.77v5.37h-14.52v6.38h14.21v5.37h-14.21v6.82h14.52v5.41Zm3.74-4.14l3.43-4.75c2.07,2.16,5.28,3.96,9.33,3.96,3.43,0,5.1-1.63,5.1-3.3,0-2.2-2.55-2.95-5.94-3.74-4.8-1.1-10.96-2.42-10.96-8.98,0-4.88,4.22-8.84,11.13-8.84,4.66,0,8.54,1.41,11.44,4.09l-3.48,4.58c-2.38-2.2-5.54-3.21-8.4-3.21s-4.31,1.23-4.31,2.99c0,1.98,2.46,2.6,5.85,3.39,4.84,1.1,11,2.55,11,9.06,0,5.37-3.83,9.42-11.75,9.42-5.63,0-9.68-1.89-12.45-4.66Z" fill="none"/>
+                <path
+                  d="m22.11,441.49c-8.58,0-15.4-6.16-15.4-15.18s6.82-15.18,15.4-15.18c6.69,0,10.43,3.52,12.5,7.17l-5.37,2.64c-1.23-2.38-3.87-4.27-7.13-4.27-5.1,0-8.98,4.09-8.98,9.64s3.87,9.64,8.98,9.64c3.26,0,5.9-1.85,7.13-4.27l5.37,2.6c-2.11,3.65-5.81,7.22-12.5,7.22Zm15.69-15.18c0-8.84,6.47-15.18,15.31-15.18s15.36,6.34,15.36,15.18-6.47,15.18-15.36,15.18-15.31-6.34-15.31-15.18Zm24.24,0c0-5.5-3.52-9.64-8.93-9.64s-8.89,4.14-8.89,9.64,3.48,9.64,8.89,9.64,8.93-4.18,8.93-9.64Zm30.34,14.65h-18.66v-29.35h6.25v23.85h12.41v5.5Zm23.91,0h-18.66v-29.35h6.25v23.85h12.41v5.5Zm26.02,0h-20.77v-29.35h20.77v5.37h-14.52v6.38h14.21v5.37h-14.21v6.82h14.52v5.41Zm19.76.53c-8.58,0-15.4-6.16-15.4-15.18s6.82-15.18,15.4-15.18c6.69,0,10.43,3.52,12.5,7.17l-5.37,2.64c-1.23-2.38-3.87-4.27-7.13-4.27-5.1,0-8.98,4.09-8.98,9.64s3.87,9.64,8.98,9.64c3.26,0,5.9-1.85,7.13-4.27l5.37,2.6c-2.11,3.65-5.81,7.22-12.5,7.22Zm30.16-.53h-6.29v-23.85h-8.58v-5.5h23.41v5.5h-8.54v23.85Zm19.67,0h-6.25v-29.35h6.25v29.35Zm22.63,0h-15.93v-29.35h15.44c5.59,0,8.45,3.56,8.45,7.48,0,3.7-2.29,6.16-5.06,6.73,3.12.48,5.63,3.52,5.63,7.22,0,4.4-2.95,7.92-8.54,7.92Zm-9.68-24.02v6.47h7.83c2.11,0,3.43-1.36,3.43-3.26s-1.32-3.21-3.43-3.21h-7.83Zm0,11.79v6.91h8.05c2.38,0,3.78-1.36,3.78-3.48,0-1.85-1.32-3.43-3.78-3.43h-8.05Zm42.46,12.23h-18.66v-29.35h6.25v23.85h12.41v5.5Zm26.02,0h-20.77v-29.35h20.77v5.37h-14.52v6.38h14.21v5.37h-14.21v6.82h14.52v5.41Zm3.74-4.14l3.43-4.75c2.07,2.16,5.28,3.96,9.33,3.96,3.43,0,5.1-1.63,5.1-3.3,0-2.2-2.55-2.95-5.94-3.74-4.8-1.1-10.96-2.42-10.96-8.98,0-4.88,4.22-8.84,11.13-8.84,4.66,0,8.54,1.41,11.44,4.09l-3.48,4.58c-2.38-2.2-5.54-3.21-8.4-3.21s-4.31,1.23-4.31,2.99c0,1.98,2.46,2.6,5.85,3.39,4.84,1.1,11,2.55,11,9.06,0,5.37-3.83,9.42-11.75,9.42-5.63,0-9.68-1.89-12.45-4.66Z"
+                  fill="none"
+                />
               </clipPath>
               <clipPath id="hero-section-collectibles-path-zh-mobile">
-                <path d="m90.95,433.26c3.41-.66,8.59-1.95,13.59-3.19l.62,4.69c-4.25,1.42-8.77,2.79-12.4,3.9l-1.82-5.4Zm11.38-27.45h5.18v41.22h-5.18v-41.22Zm-8.63,4.83h5.09v23.87h-5.09v-23.87Zm20.59,2.79h18.77v5h-18.77v-5Zm.04-7.97l5.45,1.06c-1.86,8.28-5.14,16.21-9.43,21.17-.84-1.06-2.97-3.1-4.16-4.03,3.94-4.16,6.73-11.03,8.15-18.2Zm11.16,10.63l5.31.8c-2.83,14.97-8.72,24.66-20.46,30.33-.49-1.24-2.04-3.68-3.01-4.83,10.8-4.61,15.94-13.06,18.15-26.3Zm-9.12.75c2.35,11.78,7.44,21.43,17.14,25.64-1.2,1.06-2.88,3.19-3.63,4.61-10.49-5.18-15.45-15.59-18.33-29.31l4.83-.93Zm29.09-8.68h39.59v4.34h-39.59v-4.34Zm9.3,8.15h30.69v4.47h-30.69v-4.47Zm-6.51,7.26h5.89v4.21h-5.89v-4.21Zm-3.85,6.86h9.52v4.3h-9.52v-4.3Zm15.59,8.59h11.51v3.32h-11.51v-3.32Zm-4.78-33.52h5.27v9.25h-5.27v-9.25Zm14.61,0h5.27v9.39h-5.27v-9.39Zm-5.4,18.91h3.5v5h-3.5v-5Zm-18.2-7.62h3.85v11.87h-3.85v-11.87Zm18.2,18.46h3.5v5h-3.5v-5Zm-3.94-7.35h10.8v8.81h-10.8v-3.1h7.17v-2.61h-7.17v-3.1Zm-2.17-5.45h12.84v3.32h-9.17v19.04h-3.68v-22.36Zm-5.89-6.15h4.38v13.33c0,5.49-.4,12.84-2.92,17.58-.84-.71-2.83-1.77-3.94-2.17,2.3-4.34,2.48-10.58,2.48-15.45v-13.28Zm18.86-2.57h4.74c-.04,18.55,3.23,28.78,5.53,28.78.75-.04,1.2-1.37,1.42-5.62.93.93,2.35,1.9,3.45,2.3-.58,6.69-1.99,7.93-5.27,7.93-6.2,0-9.34-13.2-9.87-33.39Zm6.46.71l3.1-2.3c1.37.89,3.06,2.21,3.81,3.23l-3.28,2.48c-.71-1.02-2.26-2.44-3.63-3.41Zm1.64,7.93l4.69.8c-2.21,10.63-6.51,18.91-13.11,24.04-.8-.84-2.75-2.48-3.85-3.19,6.6-4.47,10.49-12.09,12.27-21.65Zm-32.86,9.7h3.72v3.76c0,3.06-.44,8.1-3.23,11.25-.71-.62-2.17-1.64-3.01-2.08,2.21-2.7,2.52-6.77,2.52-9.3v-3.63Zm63.98-19.75v5.98h15.59v-5.98h-15.59Zm-5.14-5.05h26.17v16.07h-26.17v-16.07Zm-6.07,19.79h16.91v19.75h-5.31v-14.7h-6.6v14.97h-5v-20.01Zm20.68,0h17.53v19.79h-5.36v-14.74h-7.08v14.97h-5.09v-20.01Zm-18.46,12.71h11.6v5.09h-11.6v-5.09Zm20.9,0h12.4v5.09h-12.4v-5.09Z" fill="none"/>
+                <path
+                  d="m90.95,433.26c3.41-.66,8.59-1.95,13.59-3.19l.62,4.69c-4.25,1.42-8.77,2.79-12.4,3.9l-1.82-5.4Zm11.38-27.45h5.18v41.22h-5.18v-41.22Zm-8.63,4.83h5.09v23.87h-5.09v-23.87Zm20.59,2.79h18.77v5h-18.77v-5Zm.04-7.97l5.45,1.06c-1.86,8.28-5.14,16.21-9.43,21.17-.84-1.06-2.97-3.1-4.16-4.03,3.94-4.16,6.73-11.03,8.15-18.2Zm11.16,10.63l5.31.8c-2.83,14.97-8.72,24.66-20.46,30.33-.49-1.24-2.04-3.68-3.01-4.83,10.8-4.61,15.94-13.06,18.15-26.3Zm-9.12.75c2.35,11.78,7.44,21.43,17.14,25.64-1.2,1.06-2.88,3.19-3.63,4.61-10.49-5.18-15.45-15.59-18.33-29.31l4.83-.93Zm29.09-8.68h39.59v4.34h-39.59v-4.34Zm9.3,8.15h30.69v4.47h-30.69v-4.47Zm-6.51,7.26h5.89v4.21h-5.89v-4.21Zm-3.85,6.86h9.52v4.3h-9.52v-4.3Zm15.59,8.59h11.51v3.32h-11.51v-3.32Zm-4.78-33.52h5.27v9.25h-5.27v-9.25Zm14.61,0h5.27v9.39h-5.27v-9.39Zm-5.4,18.91h3.5v5h-3.5v-5Zm-18.2-7.62h3.85v11.87h-3.85v-11.87Zm18.2,18.46h3.5v5h-3.5v-5Zm-3.94-7.35h10.8v8.81h-10.8v-3.1h7.17v-2.61h-7.17v-3.1Zm-2.17-5.45h12.84v3.32h-9.17v19.04h-3.68v-22.36Zm-5.89-6.15h4.38v13.33c0,5.49-.4,12.84-2.92,17.58-.84-.71-2.83-1.77-3.94-2.17,2.3-4.34,2.48-10.58,2.48-15.45v-13.28Zm18.86-2.57h4.74c-.04,18.55,3.23,28.78,5.53,28.78.75-.04,1.2-1.37,1.42-5.62.93.93,2.35,1.9,3.45,2.3-.58,6.69-1.99,7.93-5.27,7.93-6.2,0-9.34-13.2-9.87-33.39Zm6.46.71l3.1-2.3c1.37.89,3.06,2.21,3.81,3.23l-3.28,2.48c-.71-1.02-2.26-2.44-3.63-3.41Zm1.64,7.93l4.69.8c-2.21,10.63-6.51,18.91-13.11,24.04-.8-.84-2.75-2.48-3.85-3.19,6.6-4.47,10.49-12.09,12.27-21.65Zm-32.86,9.7h3.72v3.76c0,3.06-.44,8.1-3.23,11.25-.71-.62-2.17-1.64-3.01-2.08,2.21-2.7,2.52-6.77,2.52-9.3v-3.63Zm63.98-19.75v5.98h15.59v-5.98h-15.59Zm-5.14-5.05h26.17v16.07h-26.17v-16.07Zm-6.07,19.79h16.91v19.75h-5.31v-14.7h-6.6v14.97h-5v-20.01Zm20.68,0h17.53v19.79h-5.36v-14.74h-7.08v14.97h-5.09v-20.01Zm-18.46,12.71h11.6v5.09h-11.6v-5.09Zm20.9,0h12.4v5.09h-12.4v-5.09Z"
+                  fill="none"
+                />
               </clipPath>
             </defs>
-            <g
-              v-if="isEnglish"
-              ref="heroSectionMobileTaglineParts"
-            >
+            <g v-if="isEnglish" ref="heroSectionMobileTaglineParts">
               <path
                 d="m14.1,124.75h-3.49v-24.91H1.75v-3.11h21.25v3.11h-8.9v24.91Zm15.64-10.88v-17.14h3.49v17.05c0,5.12,2.77,8.36,7.94,8.36s7.94-3.23,7.94-8.36v-17.05h3.49v17.09c0,6.97-3.82,11.42-11.42,11.42s-11.42-4.49-11.42-11.38Zm51.84,10.88h-4.12l-7.14-11.13h-5.59v11.13h-3.49v-28.01h11.26c5.12,0,8.78,3.28,8.78,8.44s-3.44,7.81-7.27,8.15l7.56,11.42Zm-3.91-19.57c0-3.15-2.27-5.33-5.59-5.33h-7.35v10.71h7.35c3.32,0,5.59-2.23,5.59-5.38Zm34.41,19.57h-3.36l-16.34-22.6v22.6h-3.49v-28.01h3.57l16.13,22.13v-22.13h3.49v28.01ZM15.31,165.75h-3.49v-11.84L.78,137.73h4.07l8.69,13.02,8.69-13.02h4.07l-11,16.17v11.84Zm13.94-13.99c0-8.27,5.59-14.49,13.9-14.49s13.9,6.22,13.9,14.49-5.63,14.49-13.9,14.49-13.9-6.22-13.9-14.49Zm24.19,0c0-6.55-4.03-11.38-10.29-11.38s-10.29,4.83-10.29,11.38,3.99,11.38,10.29,11.38,10.29-4.87,10.29-11.38Zm11.16,3.11v-17.14h3.49v17.05c0,5.12,2.77,8.36,7.94,8.36s7.94-3.23,7.94-8.36v-17.05h3.49v17.09c0,6.97-3.82,11.42-11.42,11.42s-11.42-4.49-11.42-11.38Zm51.84,10.88h-4.12l-7.14-11.13h-5.59v11.13h-3.49v-28.01h11.26c5.12,0,8.78,3.28,8.78,8.44s-3.44,7.81-7.27,8.15l7.56,11.42Zm-3.91-19.57c0-3.15-2.27-5.33-5.59-5.33h-7.35v10.71h7.35c3.32,0,5.59-2.23,5.59-5.38ZM2,202.8l2.06-2.65c1.85,2.06,4.87,3.99,8.82,3.99,5,0,6.59-2.69,6.59-4.83,0-3.36-3.4-4.28-7.1-5.29-4.49-1.18-9.49-2.44-9.49-7.94,0-4.62,4.12-7.77,9.62-7.77,4.28,0,7.6,1.43,9.95,3.91l-2.1,2.56c-2.1-2.31-5.04-3.36-8.11-3.36-3.36,0-5.75,1.81-5.75,4.45,0,2.81,3.23,3.65,6.8,4.62,4.58,1.22,9.79,2.65,9.79,8.53,0,4.07-2.77,8.23-10.33,8.23-4.87,0-8.44-1.85-10.75-4.45Zm38.56,3.95h-3.49v-24.91h-8.86v-3.11h21.25v3.11h-8.9v24.91Zm13.35-13.99c0-8.27,5.59-14.49,13.9-14.49s13.9,6.22,13.9,14.49-5.63,14.49-13.9,14.49-13.9-6.22-13.9-14.49Zm24.19,0c0-6.55-4.03-11.38-10.29-11.38s-10.29,4.83-10.29,11.38,3.99,11.38,10.29,11.38,10.29-4.87,10.29-11.38Zm31.48,13.99h-4.12l-7.14-11.13h-5.59v11.13h-3.49v-28.01h11.26c5.12,0,8.78,3.28,8.78,8.44s-3.44,7.81-7.27,8.15l7.56,11.42Zm-3.91-19.57c0-3.15-2.27-5.33-5.59-5.33h-7.35v10.71h7.35c3.32,0,5.59-2.23,5.59-5.38Zm14.72,19.57h-3.49v-28.01h3.49v28.01Zm27.02,0h-18.35v-28.01h18.35v3.11h-14.87v9.03h14.57v3.11h-14.57v9.66h14.87v3.11Zm5.98-3.95l2.06-2.65c1.85,2.06,4.87,3.99,8.82,3.99,5,0,6.59-2.69,6.59-4.83,0-3.36-3.4-4.28-7.1-5.29-4.49-1.18-9.49-2.44-9.49-7.94,0-4.62,4.12-7.77,9.62-7.77,4.28,0,7.6,1.43,9.95,3.91l-2.1,2.56c-2.1-2.31-5.04-3.36-8.11-3.36-3.36,0-5.75,1.81-5.75,4.45,0,2.81,3.23,3.65,6.8,4.62,4.58,1.22,9.79,2.65,9.79,8.53,0,4.07-2.77,8.23-10.33,8.23-4.87,0-8.44-1.85-10.75-4.45Z"
                 fill="#000"
@@ -350,14 +360,17 @@
                 d="m7.17,275.75h-3.49v-28.01h3.49v28.01Zm31.85,0h-3.36l-16.34-22.6v22.6h-3.49v-28.01h3.57l16.13,22.13v-22.13h3.49v28.01Zm19.07,0h-3.49v-24.91h-8.86v-3.11h21.25v3.11h-8.9v24.91Zm27.26-28.48c-8.32,0-13.9,6.22-13.9,14.49s5.59,14.49,13.9,14.49,13.9-6.22,13.9-14.49-5.63-14.49-13.9-14.49Zm0,25.87c-6.3,0-10.29-4.87-10.29-11.38s3.99-11.38,10.29-11.38,10.29,4.83,10.29,11.38-4.03,11.38-10.29,11.38Z"
                 fill="#000"
               />
-              <g clip-path="url(#hero-section-collectibles-path-en-mobile)" fill="none">
-                <use transform="translate(.19 317.28) scale(.66)" xlink:href="#hero-section-gradient"/>
+              <g
+                clip-path="url(#hero-section-collectibles-path-en-mobile)"
+                fill="none"
+              >
+                <use
+                  transform="translate(.19 317.28) scale(.66)"
+                  xlink:href="#hero-section-gradient"
+                />
               </g>
             </g>
-            <g
-              v-else
-              ref="heroSectionMobileTaglineParts"
-            >
+            <g v-else ref="heroSectionMobileTaglineParts">
               <path
                 d="m38.11,108.41h24.15v2.44h-24.15v-2.44Zm.8,13.52h22.81v2.14h-22.81v-2.14Zm.71,4.33h21.34v2.1h-21.34v-2.1Zm-2.02,4.45h24.91v2.35h-24.91v-2.35Zm10.79-25.24h3.19v4.16h-3.19v-4.16Zm-4.37,14.15h2.86v12.14h-2.86v-12.14Zm9.2,0h2.86v12.14h-2.86v-12.14Zm-5.12,11.68l2.39.76c-2.65,2.94-7.64,5.21-11.97,6.64-.29-.55-1.09-1.64-1.6-2.1,4.2-1.13,8.86-2.94,11.17-5.29Zm4.16.42c1.68,4.87,5.5,8.74,10.88,10.21-.63.55-1.43,1.55-1.81,2.27-5.67-1.89-9.58-6.17-11.47-11.93l2.39-.55Zm7.9,2.02l1.72,1.64c-1.89,1.39-4.45,2.65-6.38,3.49l-1.51-1.55c1.89-.88,4.62-2.48,6.17-3.57Zm-18.02-19.24v3.23h4.45v-3.23h-4.45Zm-2.39-1.97h9.37v7.14h-9.37v-7.14Zm14.03,1.97v3.23h4.58v-3.23h-4.58Zm-2.44-1.97h9.53v7.14h-9.53v-7.14Zm-25.62,5.67h10.79v2.52h-10.79v-2.52Zm.25-11.21h10.42v2.52h-10.42v-2.52Zm-.25,16.84h10.79v2.52h-10.79v-2.52Zm-1.72-11.34h13.57v2.6h-13.57v-2.6Zm3.19,17.01h9.28v12.22h-9.28v-2.6h6.64v-7.01h-6.64v-2.6Zm-1.55,0h2.6v14.2h-2.6v-14.2Zm13.78,11.76c3.53-.5,8.65-1.34,13.69-2.18l.17,2.35c-4.62.88-9.37,1.72-13.06,2.39l-.8-2.56Zm3.91-5.84l1.51-1.51,1.22.46v7.35h-2.73v-6.3Zm2.6,30.87h16.8v2.98h-16.8v-2.98Zm-21.76.38h18.44v2.98h-18.44v-2.98Zm23.06-8.19l3.15.5c-1.55,7.85-4.2,15.08-7.81,19.78-.55-.5-1.89-1.55-2.69-2.02,3.61-4.28,6.01-11.13,7.35-18.27Zm9.41,9.45l3.11.38c-2.35,14.91-7.39,23.65-18.98,28.85-.34-.71-1.26-2.14-1.81-2.77,11.05-4.45,15.67-12.68,17.68-26.46Zm-9.24,1.01c2.14,11.84,6.72,21.55,15.62,25.54-.76.63-1.72,1.85-2.18,2.69-9.28-4.62-13.86-14.7-16.3-27.72l2.86-.5Zm-15.54-10.46h3.19v20.37h-3.19v-20.37Zm-5.92,18.86h2.98v17.98h-2.98v-17.98Zm1.76,0h13.23v15.04h-13.23v-2.94h10.25v-9.11h-10.25v-2.98Zm64.34-18.86h3.19v35.11c0,1.97-.55,2.73-1.85,3.19-1.34.42-3.53.46-7.06.46-.17-.76-.67-1.93-1.09-2.65,2.52.08,5.04.04,5.8.04.76-.04,1.01-.29,1.01-1.05v-35.11Zm-16.42,3.36h36.46v2.6h-36.46v-2.6Zm7.39,7.31v3.02h21.67v-3.02h-21.67Zm-2.98-2.18h27.85v7.43h-27.85v-7.43Zm-1.22,10.37h29.69v15.29h-3.15v-12.94h-26.54v-2.35Zm-3.99,5.25h38.05v2.52h-38.05v-2.52Zm3.57,5.71h28.6v2.44h-28.6v-2.44Z"
                 fill="#000"
@@ -366,8 +379,14 @@
                 d="m29.54,257.22h10.46v2.94h-10.46v-2.94Zm9.2,0h3.07v1.34c-.21,9.49-.46,13.02-1.34,14.2-.67.76-1.34,1.05-2.52,1.18-1.09.13-2.98.08-5.04,0-.08-.92-.42-2.14-.88-2.94,1.89.17,3.74.17,4.45.17.59,0,1.01-.04,1.3-.42.63-.76.84-3.91.97-12.98v-.55Zm11.84-13.61l1.89-1.97c2.6,1.34,5.92,3.36,7.56,4.83l-1.97,2.14c-1.6-1.47-4.83-3.61-7.48-5Zm6.01,11.38l3.15.76c-3.57,10.96-9.83,19.07-18.44,24.15-.46-.63-1.64-1.93-2.31-2.56,8.53-4.54,14.45-12.22,17.6-22.34Zm-26.8-6.38h32.51v3.11H29.8v-3.11Zm-2.02,0h3.28v11.84c0,5.96-.67,14.45-4.49,19.95-.55-.63-1.89-1.72-2.65-2.1,3.49-5.17,3.86-12.39,3.86-17.89v-11.8Zm17.43-7.06h3.28c-.08,19.32,4.03,35.07,9.49,35.07,1.18,0,1.72-2.18,1.97-7.77.71.71,1.89,1.43,2.73,1.72-.59,7.18-1.76,9.24-4.96,9.24-8.57,0-12.35-18.14-12.52-38.26Zm36.41,22.3h28.6v2.77h-28.6v-2.77Zm-5.42-15.16h27.47v2.9h-27.47v-2.9Zm11.84,7.56h19.24v2.81h-19.24v-2.81Zm20.83,7.6h3.15s-.04.92-.13,1.39c-.76,8.86-1.55,12.35-2.9,13.73-.8.8-1.6,1.09-2.86,1.18-1.05.08-3.15.04-5.33-.04-.04-.88-.38-2.1-.88-2.94,2.1.25,4.12.25,4.91.25s1.22-.08,1.6-.42c.97-.97,1.76-4.28,2.44-12.64v-.5Zm-9.32,5.04l2.23-.84c1.34,1.72,2.65,4.07,3.19,5.59l-2.31.97c-.55-1.51-1.85-3.95-3.11-5.71Zm-18.14-26.17l2.73-1.13c1.64,1.68,3.49,4.07,4.33,5.67l-2.94,1.34c-.71-1.64-2.48-4.12-4.12-5.88Zm5.71,27.22l2.56-.34c.84,2.65,1.3,6.13,1.3,8.4l-2.77.38c.08-2.27-.38-5.71-1.09-8.44Zm6.17-.38l2.48-.59c1.09,2.31,2.14,5.29,2.48,7.27l-2.6.71c-.29-2.02-1.3-5.08-2.35-7.39Zm-11.55-.59l2.65.88c-.97,3.49-2.44,7.48-5,10.04l-2.44-1.72c2.35-2.23,3.95-5.96,4.79-9.2Zm12.39-27.51l3.19.8c-3.82,11.76-10.42,22.85-21.55,29.44-.38-.76-1.18-2.02-1.72-2.69,10.42-5.92,16.88-16.67,20.08-27.55Zm8.82,7.22h2.98c-.59,2.9-1.34,6.38-1.97,8.65l-2.77-.38c.59-2.23,1.3-5.59,1.76-8.27Zm3.15,7.56h2.98c-.59,2.9-1.3,6.43-1.89,8.69l-2.86-.34c.63-2.27,1.34-5.67,1.76-8.36Z"
                 fill="#000"
               />
-              <g clip-path="url(#hero-section-collectibles-path-zh-mobile)" fill="none">
-                <use transform="translate(91.39 318.76) scale(.29 .66)" xlink:href="#hero-section-gradient"/>
+              <g
+                clip-path="url(#hero-section-collectibles-path-zh-mobile)"
+                fill="none"
+              >
+                <use
+                  transform="translate(91.39 318.76) scale(.29 .66)"
+                  xlink:href="#hero-section-gradient"
+                />
               </g>
             </g>
           </svg>
@@ -385,8 +404,12 @@
                 'mb-[2.5rem]',
               ]"
             >
-              <h2 class="text-[1rem] font-[600]">{{ $t('index_page_hero_all_stories_matter_heading') }}</h2>
-              <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_all_stories_matter_content') }}</p>
+              <h2 class="text-[1rem] font-[600]">
+                {{ $t('index_page_hero_all_stories_matter_heading') }}
+              </h2>
+              <p class="mt-[0.5rem] text-[1rem]">
+                {{ $t('index_page_hero_all_stories_matter_content') }}
+              </p>
             </div>
             <svg
               ref="heroSectionMobileAllStoryMattersIndicator"
@@ -395,13 +418,24 @@
               viewBox="0 0 308 2"
             >
               <defs>
-                <linearGradient id="hero-section-mobile-indicator-fill" x1="1" y1="656.85" x2="308" y2="656.85" gradientTransform="translate(0 657.85) scale(1 -1)" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#000" stop-opacity=".04"/>
-                  <stop offset=".88" stop-color="#000"/>
-                  <stop offset="1" stop-color="#000" stop-opacity="0"/>
+                <linearGradient
+                  id="hero-section-mobile-indicator-fill"
+                  x1="1"
+                  y1="656.85"
+                  x2="308"
+                  y2="656.85"
+                  gradientTransform="translate(0 657.85) scale(1 -1)"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0" stop-color="#000" stop-opacity=".04" />
+                  <stop offset=".88" stop-color="#000" />
+                  <stop offset="1" stop-color="#000" stop-opacity="0" />
                 </linearGradient>
               </defs>
-              <path d="m1,0C.45,0,0,.45,0,1s.45,1,1,1V0Zm0,2h307V0H1v2Z" fill="url(#hero-section-mobile-indicator-fill)"/>
+              <path
+                d="m1,0C.45,0,0,.45,0,1s.45,1,1,1V0Zm0,2h307V0H1v2Z"
+                fill="url(#hero-section-mobile-indicator-fill)"
+              />
             </svg>
             <div
               ref="heroSectionMobileWritingNFTDescription"
@@ -425,10 +459,16 @@
                 >
                   <defs>
                     <clipPath id="hero-section-mobile-writing-nft-path">
-                      <path d="m43.56,42.36h-9.06l-7.02-27.48-6.96,27.48h-9.06L0,2.34h9.54l7.02,28.92L24.18,2.34h6.66l7.56,28.92,6.96-28.92h9.6l-11.4,40.02Zm20.44,0h-7.62V13.38h7.62v3.96c2.04-2.58,5.64-4.62,9.24-4.62v7.44c-.54-.12-1.26-.18-2.1-.18-2.52,0-5.88,1.38-7.14,3.24v19.14Zm17.18-33.24c-2.46,0-4.56-2.04-4.56-4.56s2.1-4.56,4.56-4.56,4.56,2.04,4.56,4.56-2.04,4.56-4.56,4.56Zm3.84,33.24h-7.62V13.38h7.62v28.98Zm16.68.72c-5.34,0-8.22-2.76-8.22-7.92v-15.12h-4.8v-6.66h4.8v-7.92h7.68v7.92h5.88v6.66h-5.88v13.08c0,1.8.96,3.18,2.64,3.18,1.14,0,2.22-.42,2.64-.84l1.62,5.76c-1.14,1.02-3.18,1.86-6.36,1.86Zm13.73-33.96c-2.46,0-4.56-2.04-4.56-4.56s2.1-4.56,4.56-4.56,4.56,2.04,4.56,4.56-2.04,4.56-4.56,4.56Zm3.84,33.24h-7.62V13.38h7.62v28.98Zm34.14,0h-7.62v-17.52c0-4.02-2.1-5.4-5.34-5.4-3,0-5.34,1.68-6.6,3.42v19.5h-7.62V13.38h7.62v3.78c1.86-2.22,5.4-4.5,10.14-4.5,6.36,0,9.42,3.6,9.42,9.24v20.46Zm6.37,7.44l3.42-5.52c2.34,2.58,5.4,3.6,9.06,3.6s7.98-1.62,7.98-7.32v-2.94c-2.28,2.88-5.4,4.56-8.94,4.56-7.26,0-12.78-5.1-12.78-14.76s5.46-14.76,12.78-14.76c3.48,0,6.6,1.5,8.94,4.44v-3.72h7.68v27c0,11.04-8.52,13.74-15.66,13.74-4.98,0-8.88-1.14-12.48-4.32Zm20.46-17.7v-9.36c-1.26-1.92-4.02-3.3-6.54-3.3-4.32,0-7.32,3-7.32,7.98s3,7.98,7.32,7.98c2.52,0,5.28-1.44,6.54-3.3Zm65.39,10.26h-8.22l-19.08-26.88v26.88h-8.52V2.34h8.76l18.54,25.92V2.34h8.52v40.02Zm15.81,0h-8.52V2.34h28.32v7.32h-19.8v8.7h19.38v7.32h-19.38v16.68Zm42.98,0h-8.58V9.84h-11.7V2.34h31.92v7.5h-11.64v32.52Z" fill="none"/>
+                      <path
+                        d="m43.56,42.36h-9.06l-7.02-27.48-6.96,27.48h-9.06L0,2.34h9.54l7.02,28.92L24.18,2.34h6.66l7.56,28.92,6.96-28.92h9.6l-11.4,40.02Zm20.44,0h-7.62V13.38h7.62v3.96c2.04-2.58,5.64-4.62,9.24-4.62v7.44c-.54-.12-1.26-.18-2.1-.18-2.52,0-5.88,1.38-7.14,3.24v19.14Zm17.18-33.24c-2.46,0-4.56-2.04-4.56-4.56s2.1-4.56,4.56-4.56,4.56,2.04,4.56,4.56-2.04,4.56-4.56,4.56Zm3.84,33.24h-7.62V13.38h7.62v28.98Zm16.68.72c-5.34,0-8.22-2.76-8.22-7.92v-15.12h-4.8v-6.66h4.8v-7.92h7.68v7.92h5.88v6.66h-5.88v13.08c0,1.8.96,3.18,2.64,3.18,1.14,0,2.22-.42,2.64-.84l1.62,5.76c-1.14,1.02-3.18,1.86-6.36,1.86Zm13.73-33.96c-2.46,0-4.56-2.04-4.56-4.56s2.1-4.56,4.56-4.56,4.56,2.04,4.56,4.56-2.04,4.56-4.56,4.56Zm3.84,33.24h-7.62V13.38h7.62v28.98Zm34.14,0h-7.62v-17.52c0-4.02-2.1-5.4-5.34-5.4-3,0-5.34,1.68-6.6,3.42v19.5h-7.62V13.38h7.62v3.78c1.86-2.22,5.4-4.5,10.14-4.5,6.36,0,9.42,3.6,9.42,9.24v20.46Zm6.37,7.44l3.42-5.52c2.34,2.58,5.4,3.6,9.06,3.6s7.98-1.62,7.98-7.32v-2.94c-2.28,2.88-5.4,4.56-8.94,4.56-7.26,0-12.78-5.1-12.78-14.76s5.46-14.76,12.78-14.76c3.48,0,6.6,1.5,8.94,4.44v-3.72h7.68v27c0,11.04-8.52,13.74-15.66,13.74-4.98,0-8.88-1.14-12.48-4.32Zm20.46-17.7v-9.36c-1.26-1.92-4.02-3.3-6.54-3.3-4.32,0-7.32,3-7.32,7.98s3,7.98,7.32,7.98c2.52,0,5.28-1.44,6.54-3.3Zm65.39,10.26h-8.22l-19.08-26.88v26.88h-8.52V2.34h8.76l18.54,25.92V2.34h8.52v40.02Zm15.81,0h-8.52V2.34h28.32v7.32h-19.8v8.7h19.38v7.32h-19.38v16.68Zm42.98,0h-8.58V9.84h-11.7V2.34h31.92v7.5h-11.64v32.52Z"
+                        fill="none"
+                      />
                     </clipPath>
                   </defs>
-                  <g clip-path="url(#hero-section-mobile-writing-nft-path)" fill="none">
+                  <g
+                    clip-path="url(#hero-section-mobile-writing-nft-path)"
+                    fill="none"
+                  >
                     <image
                       width="500"
                       height="333"
@@ -437,7 +477,9 @@
                     />
                   </g>
                 </svg>
-                <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_hero_writing_nft_content') }}</p>
+                <p class="mt-[0.5rem] text-[1rem]">
+                  {{ $t('index_page_hero_writing_nft_content') }}
+                </p>
                 <nav
                   ref="heroSectionMobileCTA"
                   :class="[
@@ -457,11 +499,13 @@
                     :text="$t('index_page_hero_try_collect_button')"
                     theme="glow"
                     preset="secondary"
-                    :to="localeLocation({
-                      name: 'nft-class-classId',
-                      params: { classId: freeMintNFTClassId },
-                      query: { action: 'collect' },
-                    })"
+                    :to="
+                      localeLocation({
+                        name: 'nft-class-classId',
+                        params: { classId: freeMintNFTClassId },
+                        query: { action: 'collect' },
+                      })
+                    "
                     @click.native="handleTryCollectButtonClickInHeroSection"
                   />
                   <ButtonV2
@@ -520,13 +564,9 @@
         <div :class="['py-[5rem]', sectionContentClassWithPadding]">
           <div ref="likerLandSectionContent">
             <Logo class="w-[130px] fill-white" />
-            <p
-              :class="[
-                'text-like-cyan-light',
-                'max-w-[392px]',
-                'mt-[1em]',
-              ]"
-            >{{ $t('index_page_liker_land_description') }}</p>
+            <p :class="['text-like-cyan-light', 'max-w-[392px]', 'mt-[1em]']">
+              {{ $t('index_page_liker_land_description') }}
+            </p>
           </div>
           <div
             :class="[
@@ -536,34 +576,79 @@
               'justify-end',
               'my-[1rem]',
               'laptop:-mt-[104px]',
-              'desktop:-mb-[80px]'
+              'desktop:-mb-[80px]',
             ]"
           >
             <svg
-              :class="[
-                'w-full',
-                'h-full',
-                'max-w-[470px]',
-                'max-h-[331px]',
-              ]"
+              :class="['w-full', 'h-full', 'max-w-[470px]', 'max-h-[331px]']"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
               viewBox="0 0 470 331"
             >
               <defs>
-                <linearGradient id="stroke-gradient" x1="-1336" y1="914.5" x2="-1037" y2="914.5" gradientTransform="translate(-921 -749) rotate(-180) scale(1 -1)" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#df9cd0"/>
-                  <stop offset=".3" stop-color="#7bfdd7"/>
-                  <stop offset=".61" stop-color="#81e3c6"/>
-                  <stop offset="1" stop-color="#809cdc"/>
+                <linearGradient
+                  id="stroke-gradient"
+                  x1="-1336"
+                  y1="914.5"
+                  x2="-1037"
+                  y2="914.5"
+                  gradientTransform="translate(-921 -749) rotate(-180) scale(1 -1)"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0" stop-color="#df9cd0" />
+                  <stop offset=".3" stop-color="#7bfdd7" />
+                  <stop offset=".61" stop-color="#81e3c6" />
+                  <stop offset="1" stop-color="#809cdc" />
                 </linearGradient>
-                <linearGradient id="stroke-gradient-2" x1="-1352" x2="-1053" gradientTransform="translate(-953 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
-                <linearGradient id="stroke-gradient-3" x1="-1368" x2="-1069" gradientTransform="translate(-985 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
-                <linearGradient id="stroke-gradient-4" x1="-1384" x2="-1085" gradientTransform="translate(-1017 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
-                <linearGradient id="stroke-gradient-5" x1="-1400" x2="-1101" gradientTransform="translate(-1049 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
-                <linearGradient id="stroke-gradient-6" x1="-1416" x2="-1117" gradientTransform="translate(-1081 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
-                <linearGradient id="stroke-gradient-7" x1="-1432" x2="-1133" gradientTransform="translate(-1113 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
-                <linearGradient id="stroke-gradient-8" x1="-1448" x2="-1149" gradientTransform="translate(-1145 -749) rotate(-180) scale(1 -1)" xlink:href="#stroke-gradient"/>
+                <linearGradient
+                  id="stroke-gradient-2"
+                  x1="-1352"
+                  x2="-1053"
+                  gradientTransform="translate(-953 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
+                <linearGradient
+                  id="stroke-gradient-3"
+                  x1="-1368"
+                  x2="-1069"
+                  gradientTransform="translate(-985 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
+                <linearGradient
+                  id="stroke-gradient-4"
+                  x1="-1384"
+                  x2="-1085"
+                  gradientTransform="translate(-1017 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
+                <linearGradient
+                  id="stroke-gradient-5"
+                  x1="-1400"
+                  x2="-1101"
+                  gradientTransform="translate(-1049 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
+                <linearGradient
+                  id="stroke-gradient-6"
+                  x1="-1416"
+                  x2="-1117"
+                  gradientTransform="translate(-1081 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
+                <linearGradient
+                  id="stroke-gradient-7"
+                  x1="-1432"
+                  x2="-1133"
+                  gradientTransform="translate(-1113 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
+                <linearGradient
+                  id="stroke-gradient-8"
+                  x1="-1448"
+                  x2="-1149"
+                  gradientTransform="translate(-1145 -749) rotate(-180) scale(1 -1)"
+                  xlink:href="#stroke-gradient"
+                />
               </defs>
               <image
                 ref="likerLandSectionPortalImage"
@@ -573,24 +658,67 @@
                 xlink:href="~assets/images/index/gradient-2.png"
               />
               <g ref="likerLandSectionPortalGroup">
-                <circle cx="265.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient)"/>
-                <circle cx="249.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-2)"/>
-                <circle cx="233.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-3)"/>
-                <circle cx="217.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-4)"/>
-                <circle cx="201.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-5)"/>
-                <circle cx="185.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-6)"/>
-                <circle cx="169.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-7)"/>
-                <circle cx="153.5" cy="165.5" r="149" fill="none" stroke="url(#stroke-gradient-8)"/>
+                <circle
+                  cx="265.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient)"
+                />
+                <circle
+                  cx="249.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-2)"
+                />
+                <circle
+                  cx="233.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-3)"
+                />
+                <circle
+                  cx="217.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-4)"
+                />
+                <circle
+                  cx="201.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-5)"
+                />
+                <circle
+                  cx="185.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-6)"
+                />
+                <circle
+                  cx="169.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-7)"
+                />
+                <circle
+                  cx="153.5"
+                  cy="165.5"
+                  r="149"
+                  fill="none"
+                  stroke="url(#stroke-gradient-8)"
+                />
               </g>
             </svg>
             <svg
               ref="likerLandSectionSignature"
-              :class="[
-                'absolute',
-                'right-[40%]',
-                'w-full',
-                'max-w-[487px]',
-              ]"
+              :class="['absolute', 'right-[40%]', 'w-full', 'max-w-[487px]']"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
               viewBox="0 0 487 94.61"
@@ -605,9 +733,14 @@
                   gradientTransform="translate(0 1062) scale(1 -1)"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop ref="likerLandSectionSignatureGradientStart" offset="0" stop-color="#50e3c2" stop-opacity="0"/>
-                  <stop offset=".09" stop-color="#50e3c2"/>
-                  <stop offset="1" stop-color="#50e3c2" stop-opacity="0"/>
+                  <stop
+                    ref="likerLandSectionSignatureGradientStart"
+                    offset="0"
+                    stop-color="#50e3c2"
+                    stop-opacity="0"
+                  />
+                  <stop offset=".09" stop-color="#50e3c2" />
+                  <stop offset="1" stop-color="#50e3c2" stop-opacity="0" />
                 </linearGradient>
               </defs>
               <path
@@ -621,27 +754,20 @@
           </div>
           <IndexPageQuote
             ref="likerLandSectionQuote"
-            :class="[
-              'relative',
-              'text-like-cyan',
-              'max-w-[650px]',
-            ]"
+            :class="['relative', 'text-like-cyan', 'max-w-[650px]']"
             :text="$t('index_page_liker_land_quote')"
             :author="$t('index_page_liker_land_quote_author')"
             :author-title="$t('index_page_liker_land_quote_author_title')"
-            :author-avatar-src="require('~/assets/images/index/avatar/dungkaicheung.jpg')"
+            :author-avatar-src="
+              require('~/assets/images/index/avatar/dungkaicheung.jpg')
+            "
           />
         </div>
       </div>
     </section>
 
-    <section
-      id="nft-book"
-      ref="nftBookSection"
-      class="overflow-hidden"
-    >
+    <section id="nft-book" ref="nftBookSection" class="overflow-hidden">
       <div :class="['relative', sectionContentClassWithPadding]">
-
         <img
           :class="[
             'absolute',
@@ -656,7 +782,9 @@
           alt=""
         />
 
-        <div :class="['laptop:flex', 'flex-row-reverse', 'laptop:justify-between']">
+        <div
+          :class="['laptop:flex', 'flex-row-reverse', 'laptop:justify-between']"
+        >
           <div
             ref="nftBookSectionContent"
             :class="[
@@ -674,8 +802,12 @@
                 'text-center laptop:text-left',
                 'whitespace-pre-line',
               ]"
-            >{{ $t('index_page_nft_book_heading').replaceAll(/\\n/g, '\n') }}</h2>
-            <p class="mt-[0.5rem] text-[1rem]">{{ $t('index_page_nft_book_content') }}</p>
+            >
+              {{ $t('index_page_nft_book_heading').replaceAll(/\\n/g, '\n') }}
+            </h2>
+            <p class="mt-[0.5rem] text-[1rem]">
+              {{ $t('index_page_nft_book_content') }}
+            </p>
 
             <footer
               :class="[
@@ -691,26 +823,29 @@
                 :text="$t('index_page_nft_book_free_mint_button')"
                 theme="glow"
                 preset="secondary"
-                :to="localeLocation({
-                  name: 'nft-class-classId',
-                  params: { classId: freeMintNFTClassId },
-                  query: { action: 'collect' },
-                })"
+                :to="
+                  localeLocation({
+                    name: 'nft-class-classId',
+                    params: { classId: freeMintNFTClassId },
+                    query: { action: 'collect' },
+                  })
+                "
                 @click.native="handleTryCollectButtonClickInNFTBookSection"
               />
               <ButtonV2
                 :text="$t('index_page_nft_book_paid_mint_button')"
                 theme="glow"
                 preset="tertiary"
-                :to="localeLocation({
-                  name: 'nft-class-classId',
-                  params: { classId: featuredNFTBookClassId },
-                  query: { action: 'collect' },
-                })"
+                :to="
+                  localeLocation({
+                    name: 'nft-class-classId',
+                    params: { classId: featuredNFTBookClassId },
+                    query: { action: 'collect' },
+                  })
+                "
                 @click.native="handleBuyFullVersionButtonInNFTBookSection"
               />
             </footer>
-
           </div>
 
           <div
@@ -731,14 +866,36 @@
               viewBox="0 0 646 822.12"
             >
               <defs>
-                <linearGradient id="nft-book-ray-gradient-1" x1="240" y1="689" x2="443" y2="436" gradientTransform="translate(0 1062) scale(1 -1)" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#e0b3af" stop-opacity=".1"/>
-                  <stop offset=".38" stop-color="#f266a0" stop-opacity=".5"/>
-                  <stop offset=".73" stop-color="#d65fec" stop-opacity=".8"/>
-                  <stop offset=".97" stop-color="#ad66ec"/>
+                <linearGradient
+                  id="nft-book-ray-gradient-1"
+                  x1="240"
+                  y1="689"
+                  x2="443"
+                  y2="436"
+                  gradientTransform="translate(0 1062) scale(1 -1)"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0" stop-color="#e0b3af" stop-opacity=".1" />
+                  <stop offset=".38" stop-color="#f266a0" stop-opacity=".5" />
+                  <stop offset=".73" stop-color="#d65fec" stop-opacity=".8" />
+                  <stop offset=".97" stop-color="#ad66ec" />
                 </linearGradient>
-                <linearGradient id="nft-book-ray-gradient-2" x1="341" y1="537" x2="544" y2="284" xlink:href="#nft-book-ray-gradient-1"/>
-                <linearGradient id="nft-book-ray-gradient-3" x1="442" y1="522" x2="645" y2="269" xlink:href="#nft-book-ray-gradient-1"/>
+                <linearGradient
+                  id="nft-book-ray-gradient-2"
+                  x1="341"
+                  y1="537"
+                  x2="544"
+                  y2="284"
+                  xlink:href="#nft-book-ray-gradient-1"
+                />
+                <linearGradient
+                  id="nft-book-ray-gradient-3"
+                  x1="442"
+                  y1="522"
+                  x2="645"
+                  y2="269"
+                  xlink:href="#nft-book-ray-gradient-1"
+                />
               </defs>
               <g class="rotate-[39deg] laptop:rotate-0 origin-[238px_371px]">
                 <g ref="nftBookSectionRayGroup">
@@ -766,11 +923,22 @@
             >
               <defs>
                 <clipPath id="nft-book-portal-gradient-clip-path">
-                  <path d="m403.74,230.51h0c41.36,49.29,34.93,122.78-14.36,164.13l-125.61,105.4c-49.29,41.36-122.78,34.93-164.13-14.36h0c-41.36-49.29-34.93-122.78,14.36-164.13l125.61-105.4c49.29-41.36,122.78-34.93,164.13,14.36Z" fill="none"/>
+                  <path
+                    d="m403.74,230.51h0c41.36,49.29,34.93,122.78-14.36,164.13l-125.61,105.4c-49.29,41.36-122.78,34.93-164.13-14.36h0c-41.36-49.29-34.93-122.78,14.36-164.13l125.61-105.4c49.29-41.36,122.78-34.93,164.13,14.36Z"
+                    fill="none"
+                  />
                 </clipPath>
               </defs>
-              <g clip-path="url(#nft-book-portal-gradient-clip-path)" fill="none">
-                <image width="500" height="333" transform="translate(-179.27 240.52) rotate(-40) scale(1.5)" xlink:href="~assets/images/index/gradient-1.jpg"/>
+              <g
+                clip-path="url(#nft-book-portal-gradient-clip-path)"
+                fill="none"
+              >
+                <image
+                  width="500"
+                  height="333"
+                  transform="translate(-179.27 240.52) rotate(-40) scale(1.5)"
+                  xlink:href="~assets/images/index/gradient-1.jpg"
+                />
               </g>
             </svg>
             <svg
@@ -780,14 +948,50 @@
               viewBox="0 0 646 822.12"
             >
               <defs>
-                <linearGradient id="nft-book-word-rain-gradient-1" x1="236" y1="833.94" x2="236" y2="962.94" gradientTransform="translate(0 1062) scale(1 -1)" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#000"/>
-                  <stop offset="1" stop-color="#000" stop-opacity="0"/>
+                <linearGradient
+                  id="nft-book-word-rain-gradient-1"
+                  x1="236"
+                  y1="833.94"
+                  x2="236"
+                  y2="962.94"
+                  gradientTransform="translate(0 1062) scale(1 -1)"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0" stop-color="#000" />
+                  <stop offset="1" stop-color="#000" stop-opacity="0" />
                 </linearGradient>
-                <linearGradient id="nft-book-word-rain-gradient-2" xlink:href="#nft-book-word-rain-gradient-1" x1="291" y1="752.94" x2="291" y2="881.94" />
-                <linearGradient id="nft-book-word-rain-gradient-3" xlink:href="#nft-book-word-rain-gradient-1" x1="265" y1="658.94" x2="265" y2="787.94" />
-                <linearGradient id="nft-book-word-rain-gradient-4" xlink:href="#nft-book-word-rain-gradient-1" x1="326" y1="931.94" x2="326" y2="1060.94" />
-                <linearGradient id="nft-book-word-rain-gradient-5" xlink:href="#nft-book-word-rain-gradient-1" x1="130.5" y1="653.94" x2="130.5" y2="782.94" />
+                <linearGradient
+                  id="nft-book-word-rain-gradient-2"
+                  xlink:href="#nft-book-word-rain-gradient-1"
+                  x1="291"
+                  y1="752.94"
+                  x2="291"
+                  y2="881.94"
+                />
+                <linearGradient
+                  id="nft-book-word-rain-gradient-3"
+                  xlink:href="#nft-book-word-rain-gradient-1"
+                  x1="265"
+                  y1="658.94"
+                  x2="265"
+                  y2="787.94"
+                />
+                <linearGradient
+                  id="nft-book-word-rain-gradient-4"
+                  xlink:href="#nft-book-word-rain-gradient-1"
+                  x1="326"
+                  y1="931.94"
+                  x2="326"
+                  y2="1060.94"
+                />
+                <linearGradient
+                  id="nft-book-word-rain-gradient-5"
+                  xlink:href="#nft-book-word-rain-gradient-1"
+                  x1="130.5"
+                  y1="653.94"
+                  x2="130.5"
+                  y2="782.94"
+                />
               </defs>
               <path
                 ref="nftBookSectionPortalFrame"
@@ -799,37 +1003,101 @@
               />
               <g ref="nftBookSectionWordRainGroup">
                 <g>
-                  <path d="m239.04,249.83l-1.22-.7.53-3.86-6.76-3.9-3.08,2.39-1.22-.7,12.54-9.71,1.35.78-2.14,15.71Zm-.46-5.75l1.3-9.29-7.37,5.78,6.08,3.51Z"/>
-                  <path fill="none" stroke="url(#nft-book-word-rain-gradient-1)" stroke-linecap="round" d="m236,227V99" />
+                  <path
+                    d="m239.04,249.83l-1.22-.7.53-3.86-6.76-3.9-3.08,2.39-1.22-.7,12.54-9.71,1.35.78-2.14,15.71Zm-.46-5.75l1.3-9.29-7.37,5.78,6.08,3.51Z"
+                  />
+                  <path
+                    fill="none"
+                    stroke="url(#nft-book-word-rain-gradient-1)"
+                    stroke-linecap="round"
+                    d="m236,227V99"
+                  />
                 </g>
                 <g>
-                  <path d="m296.41,316.52l.84.74c-2.07,2.21-4.44,3.98-6.66,4.76-.07-.27-.31-.8-.46-1.08,2.14-.65,4.37-2.34,6.27-4.42Zm3.86,5.76l1.01.59s-.25.4-.36.54c-4.47,6.92-6.22,9.15-7.3,9.55-.55.23-.9.19-1.41-.04-.43-.19-1.11-.6-1.77-1.04.16-.32.31-.82.3-1.2.7.49,1.35.86,1.65,1.03.25.14.45.2.74.09.87-.29,2.7-2.58,6.99-9.27l.14-.25Zm-5.61-3.24l6.03,3.48-.57.98-6.45-3.73.99-.74Zm1.51,1.27l.56.86c-2.3,2.39-5.59,4.65-8.28,5.16-.08-.33-.27-.78-.47-1.1,2.67-.37,5.92-2.55,8.18-4.92Zm2.18,1.36l.62.88c-3.22,3.77-7.47,7.07-11.31,7.64-.09-.34-.31-.83-.54-1.16,3.85-.37,8.06-3.62,11.23-7.36Zm-14.77-.98c1.69.46,4.28,1.08,6.78,1.65l-.39,1c-2.35-.5-4.83-1.06-6.68-1.47l.29-1.18Zm7.93-6.98l.98.57-8.23,14.26-.98-.57,8.23-14.26Zm-2.42-.21l.84.67c-1.46,1.95-3.05,3.81-4.43,4.86-.11-.23-.39-.7-.55-.92,1.37-1,2.84-2.79,4.14-4.61Zm-1.29,2.35l4.51,2.6-.59,1.01-4.66-2.69.74-.92Z"/>
-                  <path fill="none" stroke="url(#nft-book-word-rain-gradient-2)" stroke-linecap="round" d="m291,308v-128" />
+                  <path
+                    d="m296.41,316.52l.84.74c-2.07,2.21-4.44,3.98-6.66,4.76-.07-.27-.31-.8-.46-1.08,2.14-.65,4.37-2.34,6.27-4.42Zm3.86,5.76l1.01.59s-.25.4-.36.54c-4.47,6.92-6.22,9.15-7.3,9.55-.55.23-.9.19-1.41-.04-.43-.19-1.11-.6-1.77-1.04.16-.32.31-.82.3-1.2.7.49,1.35.86,1.65,1.03.25.14.45.2.74.09.87-.29,2.7-2.58,6.99-9.27l.14-.25Zm-5.61-3.24l6.03,3.48-.57.98-6.45-3.73.99-.74Zm1.51,1.27l.56.86c-2.3,2.39-5.59,4.65-8.28,5.16-.08-.33-.27-.78-.47-1.1,2.67-.37,5.92-2.55,8.18-4.92Zm2.18,1.36l.62.88c-3.22,3.77-7.47,7.07-11.31,7.64-.09-.34-.31-.83-.54-1.16,3.85-.37,8.06-3.62,11.23-7.36Zm-14.77-.98c1.69.46,4.28,1.08,6.78,1.65l-.39,1c-2.35-.5-4.83-1.06-6.68-1.47l.29-1.18Zm7.93-6.98l.98.57-8.23,14.26-.98-.57,8.23-14.26Zm-2.42-.21l.84.67c-1.46,1.95-3.05,3.81-4.43,4.86-.11-.23-.39-.7-.55-.92,1.37-1,2.84-2.79,4.14-4.61Zm-1.29,2.35l4.51,2.6-.59,1.01-4.66-2.69.74-.92Z"
+                  />
+                  <path
+                    fill="none"
+                    stroke="url(#nft-book-word-rain-gradient-2)"
+                    stroke-linecap="round"
+                    d="m291,308v-128"
+                  />
                 </g>
                 <g>
-                  <path d="m269.34,413.14c-1.15,1.52-2.5,3.17-3.94,4.52-2.8,2.66-4.94,3.55-6.34,2.74-1.32-.77-1.81-3.08-.33-5.66,1.93-3.35,6.61-4.56,10.38-2.39,3.62,2.09,4.43,5.97,2.63,9.09-1.89,3.27-5.3,4.17-9.23,2.53l-.04-1.41c.49.24,1.01.44,1.42.57,2.25.72,5.15.4,6.76-2.38,1.45-2.51.9-5.63-2.14-7.39-3.46-2-7.3-.43-8.65,1.91-1.18,2.04-.74,3.48-.02,3.89.75.43,2.23-.12,4.62-2.38,1.33-1.23,2.67-2.78,3.74-4.32l1.14.68Z"/>
-                  <path fill="none" stroke="url(#nft-book-word-rain-gradient-3)" stroke-linecap="round" d="m265,402v-128" />
+                  <path
+                    d="m269.34,413.14c-1.15,1.52-2.5,3.17-3.94,4.52-2.8,2.66-4.94,3.55-6.34,2.74-1.32-.77-1.81-3.08-.33-5.66,1.93-3.35,6.61-4.56,10.38-2.39,3.62,2.09,4.43,5.97,2.63,9.09-1.89,3.27-5.3,4.17-9.23,2.53l-.04-1.41c.49.24,1.01.44,1.42.57,2.25.72,5.15.4,6.76-2.38,1.45-2.51.9-5.63-2.14-7.39-3.46-2-7.3-.43-8.65,1.91-1.18,2.04-.74,3.48-.02,3.89.75.43,2.23-.12,4.62-2.38,1.33-1.23,2.67-2.78,3.74-4.32l1.14.68Z"
+                  />
+                  <path
+                    fill="none"
+                    stroke="url(#nft-book-word-rain-gradient-3)"
+                    stroke-linecap="round"
+                    d="m265,402v-128"
+                  />
                 </g>
                 <g>
-                  <path d="m325.44,139.03c.93.54,1.61,1.1,2.04,1.69.42.59.6,1.24.54,1.97-.06.72-.36,1.54-.9,2.47l-4.85,8.4-1.4-.81,4.86-8.42c.54-.93.73-1.7.57-2.31-.15-.6-.69-1.17-1.62-1.71l-2.11-1.22-1.52,2.63,1.86,1.07-.75,1.29-3.27-1.89,3.01-5.22,3.54,2.04Z"/>
-                  <path fill="none" stroke="url(#nft-book-word-rain-gradient-4)" stroke-linecap="round" d="m326,129V1" />
+                  <path
+                    d="m325.44,139.03c.93.54,1.61,1.1,2.04,1.69.42.59.6,1.24.54,1.97-.06.72-.36,1.54-.9,2.47l-4.85,8.4-1.4-.81,4.86-8.42c.54-.93.73-1.7.57-2.31-.15-.6-.69-1.17-1.62-1.71l-2.11-1.22-1.52,2.63,1.86,1.07-.75,1.29-3.27-1.89,3.01-5.22,3.54,2.04Z"
+                  />
+                  <path
+                    fill="none"
+                    stroke="url(#nft-book-word-rain-gradient-4)"
+                    stroke-linecap="round"
+                    d="m326,129V1"
+                  />
                 </g>
                 <g>
-                  <path d="m122.95,423.71l2.09-3.62c.46-.8.97-1.27,1.53-1.43.57-.16,1.17-.16,1.79.02l.05-.05-1.63-2.01.36-.63c.3-.52.75-.91,1.36-1.17.61-.27,1.32-.36,2.12-.28.82.08,1.67.38,2.56.89.77.45,1.42.99,1.93,1.62.52.62.82,1.31.91,2.08.1.76-.09,1.56-.58,2.41l-4.06,7.03-1.7-.98,3.96-6.86c.49-.85.58-1.6.26-2.26-.29-.66-.82-1.21-1.57-1.64-.77-.45-1.49-.64-2.13-.57-.64.05-1.1.33-1.39.82l1.46,2.22-.68.83c-.47-.27-.97-.35-1.51-.24-.52.11-.97.5-1.36,1.17l-2.09,3.62-1.7-.98Z"/>
-                  <path fill="none" stroke="url(#nft-book-word-rain-gradient-5)" stroke-linecap="round" d="m130.5,407v-128" />
+                  <path
+                    d="m122.95,423.71l2.09-3.62c.46-.8.97-1.27,1.53-1.43.57-.16,1.17-.16,1.79.02l.05-.05-1.63-2.01.36-.63c.3-.52.75-.91,1.36-1.17.61-.27,1.32-.36,2.12-.28.82.08,1.67.38,2.56.89.77.45,1.42.99,1.93,1.62.52.62.82,1.31.91,2.08.1.76-.09,1.56-.58,2.41l-4.06,7.03-1.7-.98,3.96-6.86c.49-.85.58-1.6.26-2.26-.29-.66-.82-1.21-1.57-1.64-.77-.45-1.49-.64-2.13-.57-.64.05-1.1.33-1.39.82l1.46,2.22-.68.83c-.47-.27-.97-.35-1.51-.24-.52.11-.97.5-1.36,1.17l-2.09,3.62-1.7-.98Z"
+                  />
+                  <path
+                    fill="none"
+                    stroke="url(#nft-book-word-rain-gradient-5)"
+                    stroke-linecap="round"
+                    d="m130.5,407v-128"
+                  />
                 </g>
               </g>
               <g ref="nftBookSectionBook">
-                <image width="158" height="228" transform="translate(44.99 75)" xlink:href="~assets/images/index/nft-book-cover-old.jpg"/>
-                <path fill="none" stroke="#000" stroke-miterlimit="10" d="m196.82,80.2H39.8v227.92h157.01V80.2Z" />
-                <path fill="none" stroke="#000" stroke-miterlimit="10" d="m29.44,90.61v227.92h157.01" />
-                <path fill="none" stroke="#000" stroke-miterlimit="10" d="m186.46,80.2v227.92" />
-                <path fill="none" stroke="#000" stroke-miterlimit="10" d="m34.62,85.41v227.92h157.01" />
-                <path fill="none" stroke="#000" stroke-miterlimit="10" d="m196.82,308.13l-15.55,15.61H24.26V95.82l15.55-15.61" />
+                <image
+                  width="158"
+                  height="228"
+                  transform="translate(44.99 75)"
+                  xlink:href="~assets/images/index/nft-book-cover-old.jpg"
+                />
+                <path
+                  fill="none"
+                  stroke="#000"
+                  stroke-miterlimit="10"
+                  d="m196.82,80.2H39.8v227.92h157.01V80.2Z"
+                />
+                <path
+                  fill="none"
+                  stroke="#000"
+                  stroke-miterlimit="10"
+                  d="m29.44,90.61v227.92h157.01"
+                />
+                <path
+                  fill="none"
+                  stroke="#000"
+                  stroke-miterlimit="10"
+                  d="m186.46,80.2v227.92"
+                />
+                <path
+                  fill="none"
+                  stroke="#000"
+                  stroke-miterlimit="10"
+                  d="m34.62,85.41v227.92h157.01"
+                />
+                <path
+                  fill="none"
+                  stroke="#000"
+                  stroke-miterlimit="10"
+                  d="m196.82,308.13l-15.55,15.61H24.26V95.82l15.55-15.61"
+                />
               </g>
             </svg>
           </div>
-
         </div>
 
         <NFTBookItemCard
@@ -851,7 +1119,10 @@
         />
         -->
         <ul v-if="subFeaturedNFTBookClassIds.length" class="my-[5rem]">
-          <li v-for="(classId, index) in subFeaturedNFTBookClassIds" :key="classId">
+          <li
+            v-for="(classId, index) in subFeaturedNFTBookClassIds"
+            :key="classId"
+          >
             <IndexPageFeaturedNFTBook
               :class-id="classId"
               :direction="index % 2 === 0 ? 'left' : 'right'"
@@ -864,10 +1135,14 @@
           :text="$t('index_page_nft_book_quote')"
           :author="$t('index_page_nft_book_quote_author')"
           :author-title="$t('index_page_nft_book_quote_author_title')"
-          :author-avatar-src="require('~/assets/images/index/avatar/wanszezit.jpg')"
+          :author-avatar-src="
+            require('~/assets/images/index/avatar/wanszezit.jpg')
+          "
         />
 
-        <footer class="flex flex-col items-center gap-[1rem] mt-[3rem] mb-[6rem]">
+        <footer
+          class="flex flex-col items-center gap-[1rem] mt-[3rem] mb-[6rem]"
+        >
           <ButtonV2
             :text="$t('index_page_nft_book_cta_button')"
             :to="localeLocation({ name: 'store' })"
@@ -876,7 +1151,6 @@
             @click.native="handleCTAClickInNFTBookSection"
           />
         </footer>
-
       </div>
     </section>
 
@@ -884,7 +1158,9 @@
       <IndexPageHeading :text="$t('index_page_new_culture_heading')" />
 
       <div :class="['relative', sectionContentClass]">
-        <div class="hidden laptop:block absolute inset-x-0 -top-[2rem] px-[2rem]">
+        <div
+          class="hidden laptop:block absolute inset-x-0 -top-[2rem] px-[2rem]"
+        >
           <div ref="fansKeyArt" class="relative">
             <svg
               class="blur-[10px]"
@@ -902,10 +1178,10 @@
                   gradientTransform="translate(0 -707.6) scale(1 -1)"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset=".09" stop-color="#8f7fcd"/>
-                  <stop offset=".29" stop-color="#b596cc"/>
-                  <stop offset=".63" stop-color="#e0a5a6"/>
-                  <stop offset=".92" stop-color="#febca0"/>
+                  <stop offset=".09" stop-color="#8f7fcd" />
+                  <stop offset=".29" stop-color="#b596cc" />
+                  <stop offset=".63" stop-color="#e0a5a6" />
+                  <stop offset=".92" stop-color="#febca0" />
                 </linearGradient>
                 <linearGradient
                   id="fans-bg-gradient-2"
@@ -916,10 +1192,10 @@
                   gradientTransform="translate(0 -707.6) scale(1 -1)"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset=".09" stop-color="#f270cf"/>
-                  <stop offset=".29" stop-color="#fa73ae"/>
-                  <stop offset=".63" stop-color="#fa94a6"/>
-                  <stop offset=".92" stop-color="#f9b5b6"/>
+                  <stop offset=".09" stop-color="#f270cf" />
+                  <stop offset=".29" stop-color="#fa73ae" />
+                  <stop offset=".63" stop-color="#fa94a6" />
+                  <stop offset=".92" stop-color="#f9b5b6" />
                 </linearGradient>
                 <linearGradient
                   id="fans-bg-gradient-3"
@@ -930,10 +1206,10 @@
                   gradientTransform="translate(0 -707.6) scale(1 -1)"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset=".09" stop-color="#ff98b1"/>
-                  <stop offset=".29" stop-color="#fc98b0"/>
-                  <stop offset=".63" stop-color="#ffc5c1"/>
-                  <stop offset=".92" stop-color="#ffe7e2"/>
+                  <stop offset=".09" stop-color="#ff98b1" />
+                  <stop offset=".29" stop-color="#fc98b0" />
+                  <stop offset=".63" stop-color="#ffc5c1" />
+                  <stop offset=".92" stop-color="#ffe7e2" />
                 </linearGradient>
                 <linearGradient
                   id="fans-bg-gradient-4"
@@ -944,10 +1220,10 @@
                   gradientTransform="translate(0 -707.6) scale(1 -1)"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset=".09" stop-color="#8482e4"/>
-                  <stop offset=".29" stop-color="#a67ada"/>
-                  <stop offset=".63" stop-color="#c888e2"/>
-                  <stop offset=".92" stop-color="#f5b8d9"/>
+                  <stop offset=".09" stop-color="#8482e4" />
+                  <stop offset=".29" stop-color="#a67ada" />
+                  <stop offset=".63" stop-color="#c888e2" />
+                  <stop offset=".92" stop-color="#f5b8d9" />
                 </linearGradient>
                 <linearGradient
                   id="fans-bg-gradient-5"
@@ -958,10 +1234,10 @@
                   gradientTransform="translate(0 -707.6) scale(1 -1)"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset=".09" stop-color="#ef9999"/>
-                  <stop offset=".29" stop-color="#f5b996"/>
-                  <stop offset=".63" stop-color="#fad3a3"/>
-                  <stop offset=".92" stop-color="#fbf1bb"/>
+                  <stop offset=".09" stop-color="#ef9999" />
+                  <stop offset=".29" stop-color="#f5b996" />
+                  <stop offset=".63" stop-color="#fad3a3" />
+                  <stop offset=".92" stop-color="#fbf1bb" />
                 </linearGradient>
               </defs>
               <circle
@@ -985,7 +1261,11 @@
                 :key="`fan-symbol-${index}`"
               >
                 <path
-                  :d="`m${symbol.bodyPath}c0-17.38-14.09-31.47-31.47-31.47s-31.47,14.09-31.47,31.47`"
+                  :d="
+                    `m${
+                      symbol.bodyPath
+                    }c0-17.38-14.09-31.47-31.47-31.47s-31.47,14.09-31.47,31.47`
+                  "
                   fill="none"
                   fill-rule="evenodd"
                   stroke="#000"
@@ -993,8 +1273,12 @@
                   stroke-miterlimit="10"
                 />
                 <g ref="fanSymbolHeadFilled">
-                  <path :d="symbol.head.glowing.fillPath" fill="#fff"/>
-                  <path :d="symbol.head.glowing.strokePath" fill="none" stroke="#000"/>
+                  <path :d="symbol.head.glowing.fillPath" fill="#fff" />
+                  <path
+                    :d="symbol.head.glowing.strokePath"
+                    fill="none"
+                    stroke="#000"
+                  />
                 </g>
                 <circle
                   ref="fanSymbolHeadPlain"
@@ -1034,7 +1318,9 @@
               theme="glow"
               preset="tertiary"
               :to="localeLocation({ name: 'writing-nft-about' })"
-              @click.native="handleAboutWritingNFTButtonClickInNewCultureSection"
+              @click.native="
+                handleAboutWritingNFTButtonClickInNewCultureSection
+              "
             />
           </template>
         </IndexPageHeadingContentWithCTA>
@@ -1055,11 +1341,13 @@
               :text="$t('index_page_new_culture_section_2_cta_button')"
               theme="glow"
               preset="tertiary"
-              :to="localeLocation({
-                name: 'nft-class-classId',
-                params: { classId: freeMintNFTClassId },
-                query: { action: 'collect' },
-              })"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: { classId: freeMintNFTClassId },
+                  query: { action: 'collect' },
+                })
+              "
               @click.native="handleTryCollectButtonClickInNewCultureSection"
             />
           </template>
@@ -1089,8 +1377,20 @@
               <stop stop-color="#b9aefb" offset="1" />
             </linearGradient>
           </defs>
-          <g class="animate-spin origin-center" style="animation-duration: 10s;">
-            <rect x="-12.09" y="226.18" width="576.22" height="207.65" rx="103.82" ry="103.82" transform="translate(-147.78 404.04) rotate(-60)" fill="url(#tech-fill-gradient)"/>
+          <g
+            class="animate-spin origin-center"
+            style="animation-duration: 10s;"
+          >
+            <rect
+              x="-12.09"
+              y="226.18"
+              width="576.22"
+              height="207.65"
+              rx="103.82"
+              ry="103.82"
+              transform="translate(-147.78 404.04) rotate(-60)"
+              fill="url(#tech-fill-gradient)"
+            />
           </g>
         </svg>
         <svg
@@ -1109,8 +1409,8 @@
               gradientTransform="translate(1123.36 -606) rotate(90) scale(1 -1)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#4a4a4a"/>
-              <stop offset="1" stop-color="#4a4a4a" stop-opacity="0"/>
+              <stop offset="0" stop-color="#4a4a4a" />
+              <stop offset="1" stop-color="#4a4a4a" stop-opacity="0" />
             </linearGradient>
             <linearGradient
               id="tech-stroke-gradient-2"
@@ -1131,14 +1431,59 @@
               xlink:href="#tech-stroke-gradient-1"
             />
           </defs>
-          <g class="animate-spin origin-center" style="animation-duration: 10s;">
-            <rect y="226.18" width="576.22" height="207.65" rx="103.82" ry="103.82" fill="none" stroke="url(#tech-stroke-gradient-1)" stroke-miterlimit="4" stroke-width="1" x="22.34" transform="translate(-130.57 433.85) rotate(-60)" />
+          <g
+            class="animate-spin origin-center"
+            style="animation-duration: 10s;"
+          >
+            <rect
+              y="226.18"
+              width="576.22"
+              height="207.65"
+              rx="103.82"
+              ry="103.82"
+              fill="none"
+              stroke="url(#tech-stroke-gradient-1)"
+              stroke-miterlimit="4"
+              stroke-width="1"
+              x="22.34"
+              transform="translate(-130.57 433.85) rotate(-60)"
+            />
           </g>
-          <g class="animate-spin origin-center" style="animation-duration: 10s;">
-            <rect y="226.18" width="576.22" height="207.65" rx="103.82" ry="103.82" fill="none" stroke="url(#tech-stroke-gradient-2)" stroke-miterlimit="4" stroke-width="1" x="59.22" transform="translate(-113.07 464.17) rotate(-60)" />
+          <g
+            class="animate-spin origin-center"
+            style="animation-duration: 10s;"
+          >
+            <rect
+              y="226.18"
+              width="576.22"
+              height="207.65"
+              rx="103.82"
+              ry="103.82"
+              fill="none"
+              stroke="url(#tech-stroke-gradient-2)"
+              stroke-miterlimit="4"
+              stroke-width="1"
+              x="59.22"
+              transform="translate(-113.07 464.17) rotate(-60)"
+            />
           </g>
-          <g class="animate-spin origin-center" style="animation-duration: 10s;">
-            <rect y="226.18" width="576.22" height="207.65" rx="103.82" ry="103.82" fill="none" stroke="url(#tech-stroke-gradient-3)" stroke-miterlimit="4" stroke-width="1" x="94.88" transform="translate(-94.29 496.68) rotate(-60)" />
+          <g
+            class="animate-spin origin-center"
+            style="animation-duration: 10s;"
+          >
+            <rect
+              y="226.18"
+              width="576.22"
+              height="207.65"
+              rx="103.82"
+              ry="103.82"
+              fill="none"
+              stroke="url(#tech-stroke-gradient-3)"
+              stroke-miterlimit="4"
+              stroke-width="1"
+              x="94.88"
+              transform="translate(-94.29 496.68) rotate(-60)"
+            />
           </g>
         </svg>
 
@@ -1193,7 +1538,7 @@
           />
         </client-only>
 
-        <hr class="mt-[4rem] h-[2px] border-t-[2px] border-shade-gray"/>
+        <hr class="mt-[4rem] h-[2px] border-t-[2px] border-shade-gray" />
       </div>
 
       <div :class="sectionContentClassWithPadding">
@@ -1206,7 +1551,9 @@
             'font-proxima',
             'font-[300]',
           ]"
-        >{{ $t('index_page_all_stories_matter_sub_heading') }}</p>
+        >
+          {{ $t('index_page_all_stories_matter_sub_heading') }}
+        </p>
 
         <ul class="grid laptop:grid-cols-3 gap-[2.5rem] mt-[3rem]">
           <li class="text-center">
@@ -1215,37 +1562,65 @@
               src="~assets/images/index/reader-insights.png"
               :alt="$t('index_page_all_stories_matter_reader_insights_heading')"
             />
-            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_reader_insights_heading') }}</h3>
-            <p class="mt-[8px] ">{{ $t('index_page_all_stories_matter_reader_insights_content') }}</p>
+            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">
+              {{ $t('index_page_all_stories_matter_reader_insights_heading') }}
+            </h3>
+            <p class="mt-[8px] ">
+              {{ $t('index_page_all_stories_matter_reader_insights_content') }}
+            </p>
           </li>
           <li class="text-center">
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~assets/images/index/payment-systems.png"
-              :alt="$t('index_page_all_stories_matter_social_interaction_heading')"
+              :alt="
+                $t('index_page_all_stories_matter_social_interaction_heading')
+              "
             />
-            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_payment_systems_heading') }}</h3>
-            <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_payment_systems_content') }}</p>
+            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">
+              {{ $t('index_page_all_stories_matter_payment_systems_heading') }}
+            </h3>
+            <p class="mt-[8px]">
+              {{ $t('index_page_all_stories_matter_payment_systems_content') }}
+            </p>
           </li>
           <li class="text-center">
             <img
               class="max-w-[200px] mx-auto mb-[1rem]"
               src="~/assets/images/index/social-interaction.png"
-              :alt="$t('index_page_all_stories_matter_social_interaction_heading')"
+              :alt="
+                $t('index_page_all_stories_matter_social_interaction_heading')
+              "
             />
-            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_social_interaction_heading') }}</h3>
-            <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_social_interaction_content') }}</p>
+            <h3 class="text-[1.5rem] text-like-green font-proxima font-[600]">
+              {{
+                $t('index_page_all_stories_matter_social_interaction_heading')
+              }}
+            </h3>
+            <p class="mt-[8px]">
+              {{
+                $t('index_page_all_stories_matter_social_interaction_content')
+              }}
+            </p>
           </li>
         </ul>
 
         <ul class="grid laptop:grid-cols-2 gap-[4rem] mt-[5rem]">
           <li>
-            <h3 class="text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_blog_heading') }}</h3>
-            <p class="mt-[8px] ">{{ $t('index_page_all_stories_matter_blog_content') }}</p>
+            <h3 class="text-like-green font-proxima font-[600]">
+              {{ $t('index_page_all_stories_matter_blog_heading') }}
+            </h3>
+            <p class="mt-[8px] ">
+              {{ $t('index_page_all_stories_matter_blog_content') }}
+            </p>
           </li>
           <li>
-            <h3 class="text-like-green font-proxima font-[600]">{{ $t('index_page_all_stories_matter_ebook_heading') }}</h3>
-            <p class="mt-[8px]">{{ $t('index_page_all_stories_matter_ebook_content') }}</p>
+            <h3 class="text-like-green font-proxima font-[600]">
+              {{ $t('index_page_all_stories_matter_ebook_heading') }}
+            </h3>
+            <p class="mt-[8px]">
+              {{ $t('index_page_all_stories_matter_ebook_content') }}
+            </p>
           </li>
         </ul>
 
@@ -1265,14 +1640,18 @@
             :href="publishStoryURL"
             theme="glow"
             preset="secondary"
-            @click.native="handlePublishStoryButtonClickInAllStoriesMatterSection"
+            @click.native="
+              handlePublishStoryButtonClickInAllStoriesMatterSection
+            "
           />
 
           <IndexPageFreeCollectCTA
             class="mt-[6rem] w-full"
             :class-id="freeMintNFTClassId"
             @collect="handleClickCollectForFreeButton"
-            @click-collect-button="handleCollectForFreeButtonClickInAllStoriesMatterSection"
+            @click-collect-button="
+              handleCollectForFreeButtonClickInAllStoriesMatterSection
+            "
           />
         </footer>
       </div>

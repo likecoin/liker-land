@@ -19,7 +19,9 @@
         'font-proxima',
         'font-[600]',
       ]"
-    >{{ $t('shopping_cart_title') }}</h1>
+    >
+      {{ $t('shopping_cart_title') }}
+    </h1>
 
     <CardV2
       v-if="shoppingCartNFTClassList.length"
@@ -37,21 +39,20 @@
           'text-gray-9b',
         ]"
       >
-        <div class="col-start-1 col-end-8">{{ $t('shopping_cart_list_header_item') }}</div>
+        <div class="col-start-1 col-end-8">
+          {{ $t('shopping_cart_list_header_item') }}
+        </div>
         <!--
         <div class="col-start-8 col-end-10 text-center">{{ $t('shopping_cart_list_header_price') }}</div>
         -->
-        <div class="col-start-10 col-end-12 text-center">{{ $t('shopping_cart_list_header_price') }}</div>
+        <div class="col-start-10 col-end-12 text-center">
+          {{ $t('shopping_cart_list_header_price') }}
+        </div>
         <!--
         <div class="col-start-10 col-end-12 text-center">{{ $t('shopping_cart_list_header_quantity') }}</div>
         -->
       </header>
-      <ul
-        :class="[
-          'border-b',
-          'border-b-gray-d8',
-        ]"
-      >
+      <ul :class="['border-b', 'border-b-gray-d8']">
         <li
           v-for="(item, index) in shoppingCartNFTClassList"
           :key="item.classId"
@@ -66,8 +67,14 @@
       </ul>
       <footer class="mt-[1em] text-right">
         <div class="grid grid-cols-6 items-center gap-[1em]">
-          <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">{{ $t('shopping_cart_list_total_price') }}</div>
-          <div class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]">{{ totalNFTPriceInUSD | formatNumberWithUSD }}</div>
+          <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">
+            {{ $t('shopping_cart_list_total_price') }}
+          </div>
+          <div
+            class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]"
+          >
+            {{ totalNFTPriceInUSD | formatNumberWithUSD }}
+          </div>
         </div>
       </footer>
 
@@ -78,7 +85,7 @@
             type="stripe"
             :price="formattedFiatPrice"
             @click="handleClickCheckoutByFiatButton"
-          /> 
+          />
         </div>
       </div>
       <div class="flex justify-end mt-[1em]">
@@ -89,7 +96,7 @@
             :price="LIKEPrice | formatNumberWithLIKE"
             :is-disabled="isInsufficientAmount"
             @click="handleClickCheckoutByLIKEButton"
-          /> 
+          />
         </div>
       </div>
       <i18n
@@ -98,7 +105,9 @@
         tag="div"
         path="shopping_cart_error_insufficient_balance"
       >
-        <span class="font-[600]" place="balance">{{ walletLIKEBalance | formatNumberWithLIKE }}</span>
+        <span class="font-[600]" place="balance">{{
+          walletLIKEBalance | formatNumberWithLIKE
+        }}</span>
       </i18n>
     </CardV2>
 
@@ -122,7 +131,6 @@
         @click="handleClickEmptyNoticeButton"
       />
     </CardV2>
-
   </Page>
 </template>
 

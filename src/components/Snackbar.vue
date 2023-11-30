@@ -1,13 +1,7 @@
 <template>
-  <Portal
-    v-if="isOpen"
-    to="snackbar"
-  >
+  <Portal v-if="isOpen" to="snackbar">
     <div :class="rootClasses">
-      <div
-        class="fixed inset-0"
-        @click="close"
-      />
+      <div class="fixed inset-0" @click="close" />
       <div :class="containerWrapperClasses">
         <Label
           :text="text"

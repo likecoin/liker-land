@@ -1,9 +1,6 @@
 <template>
   <IndexPageTrendingNFTListPlaceholder v-if="!classIds.length" />
-  <div
-    v-else
-    class="index-page-trending-nft-list"
-  >
+  <div v-else class="index-page-trending-nft-list">
     <Swiper
       ref="swiper"
       :options="swiperOptions"
@@ -17,14 +14,13 @@
           width: 360px; /* NOTE: Set width in style for auto slide per view calculation */
         "
       >
-        <NFTCampaignItem
-          :class-id="classId"
-          :is-single-column="true"
-        />
+        <NFTCampaignItem :class-id="classId" :is-single-column="true" />
       </SwiperSlide>
     </Swiper>
 
-    <div class="sm:absolute inset-0 pointer-events-none z-10 flex justify-between sm:items-center p-[0.5rem] laptop:px-[48px]">
+    <div
+      class="sm:absolute inset-0 pointer-events-none z-10 flex justify-between sm:items-center p-[0.5rem] laptop:px-[48px]"
+    >
       <ButtonV2
         class="relative shadow-lg pointer-events-auto scale-75 sm:scale-100"
         preset="tertiary"

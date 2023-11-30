@@ -7,10 +7,7 @@
       :active-since="formattedSince"
     />
     <section
-      :class="[
-        'mt-32 transition-opacity',
-        { 'opacity-25': isFetching },
-      ]"
+      :class="['mt-32 transition-opacity', { 'opacity-25': isFetching }]"
     >
       <div class="overflow-hidden bg-white rounded-8">
         <header v-if="!isSignedIn">
@@ -19,7 +16,7 @@
             src="~/assets/images/civic-v3/banner.png"
             :alt="$t('civic_dashboard_v3_intro_title')"
             style="height: 168px"
-          >
+          />
         </header>
         <header
           v-else
@@ -28,9 +25,7 @@
             'flex-col',
             'items-center',
             'p-40',
-            isActivating || isActive
-              ? 'bg-like-gradient'
-              : 'bg-like-cyan-pale',
+            isActivating || isActive ? 'bg-like-gradient' : 'bg-like-cyan-pale',
           ]"
         >
           <i18n
@@ -51,9 +46,8 @@
               :href="stakingManagementUrl"
               target="_blank"
               rel="noopener"
-            >{{
-              stakingValidatorName
-            }}</a>
+              >{{ stakingValidatorName }}</a
+            >
             <i18n
               place="civicLiker"
               class="text-like-green font-600"
@@ -64,7 +58,6 @@
         </header>
 
         <div class="py-32 px-52">
-
           <CivicLikerV3StepSection class="mt-[24px]" :step="1">
             <i18n path="civic_dashboard_v3_summary_liker_id_description">
               <i18n
@@ -74,7 +67,9 @@
                 path="civicLiker"
               />
             </i18n>
-            <div class="border border-shade-gray rounded-[8px] mx-auto mt-[24px] p-[12px] flex justify-center items-center">
+            <div
+              class="border border-shade-gray rounded-[8px] mx-auto mt-[24px] p-[12px] flex justify-center items-center"
+            >
               <ButtonV2
                 v-if="!isSignedIn"
                 :text="buttonTitle"
@@ -97,23 +92,20 @@
               </ButtonV2>
               <template v-else>
                 <i18n
-                  :class="['text-like-green' ,'font-600']"
+                  :class="['text-like-green', 'font-600']"
                   tag="span"
                   path="civic_dashboard_v3_summary_liker_id_registered"
                 />
-                <TickIcon
-                  class="w-16 h-16 ml-8 fill-current text-success"
-                />
+                <TickIcon class="w-16 h-16 ml-8 fill-current text-success" />
               </template>
             </div>
           </CivicLikerV3StepSection>
 
           <CivicLikerV3StepSection class="mt-[64px]" :step="2">
             <i18n :path="stakingHintI18nKey">
-              <span
-                class="text-like-green font-600"
-                place="amount"
-              >{{ formattedRemainingStakingAmount }} {{ stakingDenom }}</span>
+              <span class="text-like-green font-600" place="amount"
+                >{{ formattedRemainingStakingAmount }} {{ stakingDenom }}</span
+              >
               <i18n
                 place="civicLiker"
                 class="text-like-green font-600"
@@ -126,9 +118,12 @@
             >
               <div
                 class="h-full bg-like-cyan"
-                :style="`width: ${
-                  Math.min(100, (stakingAmount / stakingAmountTarget) * 100)
-                }%`"
+                :style="
+                  `width: ${Math.min(
+                    100,
+                    (stakingAmount / stakingAmountTarget) * 100
+                  )}%`
+                "
               />
             </div>
             <div class="flex items-center mt-16 text-14 text-gray-9b">
@@ -137,7 +132,9 @@
                 class="w-16 h-16 mr-8 fill-current text-success"
               />
               <span>
-                <span class="text-like-green">{{ formattedStakingAmount }}</span>
+                <span class="text-like-green">{{
+                  formattedStakingAmount
+                }}</span>
                 / {{ formattedRequiredStakingAmount }} {{ stakingDenom }}
               </span>
             </div>
@@ -179,7 +176,7 @@
           class="rounded-[8px]"
           src="/images/og/writing-nft.jpg"
           :alt="$t('civic_dashboard_v3_intro_title')"
-        >
+        />
         <i18n
           class="mt-32"
           path="civic_dashboard_v3_intro_description"

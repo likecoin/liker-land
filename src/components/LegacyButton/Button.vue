@@ -1,42 +1,19 @@
 <template>
-  <a
-    v-if="href"
-    v-bind="buttonProps"
-    :href="href"
-    v-on="$listeners"
-  >
+  <a v-if="href" v-bind="buttonProps" :href="href" v-on="$listeners">
     <div :class="contentClass">
-      <span
-        v-if="title"
-        v-bind="titleProps"
-      >{{ title }}</span>
+      <span v-if="title" v-bind="titleProps">{{ title }}</span>
       <slot v-else />
     </div>
   </a>
-  <nuxt-link
-    v-else-if="to"
-    v-bind="buttonProps"
-    :to="to"
-    v-on="$listeners"
-  >
+  <nuxt-link v-else-if="to" v-bind="buttonProps" :to="to" v-on="$listeners">
     <div :class="contentClass">
-      <span
-        v-if="title"
-        v-bind="titleProps"
-      >{{ title }}</span>
+      <span v-if="title" v-bind="titleProps">{{ title }}</span>
       <slot v-else />
     </div>
   </nuxt-link>
-  <button
-    v-else
-    v-bind="buttonProps"
-    v-on="$listeners"
-  >
+  <button v-else v-bind="buttonProps" v-on="$listeners">
     <div :class="contentClass">
-      <span
-        v-if="title"
-        v-bind="titleProps"
-      >{{ title }}</span>
+      <span v-if="title" v-bind="titleProps">{{ title }}</span>
       <slot v-else />
     </div>
   </button>

@@ -6,17 +6,22 @@
       tag="div"
       preset="p6"
     />
-    <div class="flex flex-col laptop:flex-row laptop:items-end laptop:justify-between gap-x-[32px]">
+    <div
+      class="flex flex-col laptop:flex-row laptop:items-end laptop:justify-between gap-x-[32px]"
+    >
       <div class="min-w-0 truncate">
         <Label class="!text-[12px] text-medium-gray font-600">
-          {{ $t('nft_details_page_section_metadata_url') }}&nbsp;<IconLinkExternal />
+          {{
+            $t('nft_details_page_section_metadata_url')
+          }}&nbsp;<IconLinkExternal />
         </Label>
         <a
           class="text-medium-gray underline text-[12px]"
           :href="contentUrl"
           rel="noopener"
           target="_blank"
-        >{{ contentUrl }}</a>
+          >{{ contentUrl }}</a
+        >
       </div>
       <div v-if="nftId" class="min-w-0 truncate">
         <Label class="!text-[12px] text-medium-gray font-600">
@@ -27,10 +32,7 @@
         </Label>
       </div>
       <ul class="flex mt-[12px] gap-[8px] laptop:mt-0">
-        <li
-          v-for="{ type, label, records } in recordMap"
-          :key="type"
-        >
+        <li v-for="{ type, label, records } in recordMap" :key="type">
           <Dropdown v-if="records.length > 1">
             <template #trigger="{ toggle }">
               <ButtonV2
@@ -45,10 +47,7 @@
             </template>
             <MenuList>
               <ul>
-                <li
-                  v-for="record in records"
-                  :key="record.href"
-                >
+                <li v-for="record in records" :key="record.href">
                   <ButtonV2
                     :href="record.href"
                     size="mini"

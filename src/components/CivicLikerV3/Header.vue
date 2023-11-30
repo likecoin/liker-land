@@ -5,7 +5,9 @@
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 528 180"
-      :style="`border-color: ${isInactive || isFetching ? '#ebebeb' : '#e3ccaf'}`"
+      :style="
+        `border-color: ${isInactive || isFetching ? '#ebebeb' : '#e3ccaf'}`
+      "
     >
       <defs>
         <linearGradient
@@ -21,29 +23,13 @@
           <stop offset="1" stop-color="#d2f0f0" />
         </linearGradient>
         <clipPath id="civic-liker-v3-header-bg-clip">
-          <rect
-            x="1"
-            y="1"
-            width="526"
-            height="178"
-            rx="15"
-          />
+          <rect x="1" y="1" width="526" height="178" rx="15" />
         </clipPath>
         <clipPath id="civic-liker-v3-header-avatar-clip">
-          <circle
-            cx="264"
-            cy="90"
-            r="42"
-          />
+          <circle cx="264" cy="90" r="42" />
         </clipPath>
       </defs>
-      <rect
-        x="1"
-        y="1"
-        width="526"
-        height="178"
-        fill="#fff"
-      />
+      <rect x="1" y="1" width="526" height="178" fill="#fff" />
       <transition name="fade">
         <image
           v-if="isFetching"
@@ -74,20 +60,8 @@
         d="M264,40h0a50,50,0,0,1,50,50h0a50,50,0,0,1-50,50h0a50,50,0,0,1-50-50h0A50,50,0,0,1,264,40Z"
         fill="#fff"
       /> -->
-      <circle
-        v-if="isActive"
-        cx="264"
-        cy="90"
-        r="50"
-        fill="#fff"
-      />
-      <circle
-        v-else
-        cx="264"
-        cy="90"
-        r="42"
-        fill="#fff"
-      />
+      <circle v-if="isActive" cx="264" cy="90" r="50" fill="#fff" />
+      <circle v-else cx="264" cy="90" r="42" fill="#fff" />
       <image
         v-if="!isFetching"
         x="222"

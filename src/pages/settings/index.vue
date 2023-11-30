@@ -2,27 +2,49 @@
   <div>
     <ul class="settings-menu">
       <li>
-        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-email' })">
-          <span class="settings-menu__item-title"> {{ $t('settings_email') }}</span>
+        <NuxtLink
+          class="settings-menu__item"
+          :to="localeLocation({ name: 'settings-email' })"
+        >
+          <span class="settings-menu__item-title">
+            {{ $t('settings_email') }}</span
+          >
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-following' })">
-          <span class="settings-menu__item-title"> {{ $t('settings_following') }}</span>
+        <NuxtLink
+          class="settings-menu__item"
+          :to="localeLocation({ name: 'settings-following' })"
+        >
+          <span class="settings-menu__item-title">
+            {{ $t('settings_following') }}</span
+          >
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink class="settings-menu__item" :to="localeLocation({ name: 'settings-language' })">
+        <NuxtLink
+          class="settings-menu__item"
+          :to="localeLocation({ name: 'settings-language' })"
+        >
           <GlobeIcon class="settings-menu__item-title-icon" />
-          <span class="settings-menu__item-title"> {{ $t('SettingsPage.language') }}</span>
+          <span class="settings-menu__item-title">
+            {{ $t('SettingsPage.language') }}</span
+          >
         </NuxtLink>
       </li>
     </ul>
 
     <ul class="settings-menu !mt-[24px]">
       <li>
-        <a class="settings-menu__item" :href="likerIdSettingsURL" target="_blank" rel="noreferrer noopener">
-          <span class="settings-menu__item-title"> {{ $t('settings_liker_id') }}</span>
+        <a
+          class="settings-menu__item"
+          :href="likerIdSettingsURL"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <span class="settings-menu__item-title">
+            {{ $t('settings_liker_id') }}</span
+          >
         </a>
       </li>
     </ul>

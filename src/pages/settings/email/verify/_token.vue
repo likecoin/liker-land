@@ -4,18 +4,26 @@
       <Label :text="$t('settings_email_verify_verifying')" align="center" />
       <ProgressIndicator class="self-center mt-[16px]" />
     </template>
-    <Label v-else-if="isVerifiedEmail" :text="$t('settings_email_verify_verified')" align="center" />
+    <Label
+      v-else-if="isVerifiedEmail"
+      :text="$t('settings_email_verify_verified')"
+      align="center"
+    />
     <Label v-else-if="error" align="center">
       {{ $t('settings_email_verify_error_message', { error }) }}
     </Label>
     <Label v-else align="center">
       {{ $t('settings_email_verify_error_message_unknown') }}
     </Label>
-    <Label 
-      v-if="pendingClaimCount" 
+    <Label
+      v-if="pendingClaimCount"
       class="mt-[16px]"
-      :text="$t('settings_email_verify_has_pending_claim', { count: pendingClaimCount })" 
-      align="center" 
+      :text="
+        $t('settings_email_verify_has_pending_claim', {
+          count: pendingClaimCount,
+        })
+      "
+      align="center"
     />
     <div class="flex justify-center gap-[16px] mt-[16px]">
       <ButtonV2

@@ -45,7 +45,15 @@
       </div>
       <NuxtLink
         class="flex items-center group text-like-green mt-[.5rem]"
-        :to="iscnOwner ? localeLocation({ name: 'id', params: { id: iscnOwner }, query: { tab: 'created' }, }) : ''"
+        :to="
+          iscnOwner
+            ? localeLocation({
+                name: 'id',
+                params: { id: iscnOwner },
+                query: { tab: 'created' },
+              })
+            : ''
+        "
       >
         <Identity
           :avatar-url="creatorAvatar"
@@ -54,10 +62,14 @@
           :is-avatar-outlined="isCreatorCivicLiker"
           :is-lazy-loaded="true"
         />
-        <span class="ml-[8px] group-hover:underline font-[600]">{{ creatorDisplayName | ellipsis }}</span>
+        <span class="ml-[8px] group-hover:underline font-[600]">{{
+          creatorDisplayName | ellipsis
+        }}</span>
       </NuxtLink>
     </div>
-    <div class="col-span-2 text-center text-like-green font-proxima font-[600]">{{ NFTPrice | formatNumberWithUSD }}</div>
+    <div class="col-span-2 text-center text-like-green font-proxima font-[600]">
+      {{ NFTPrice | formatNumberWithUSD }}
+    </div>
     <!--
     <div class="col-span-2 text-center">{{ quantity }}</div>
     -->

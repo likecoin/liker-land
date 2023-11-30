@@ -169,7 +169,6 @@
   </section>
 </template>
 
-
 <script>
 import nftMixin from '~/mixins/nft';
 

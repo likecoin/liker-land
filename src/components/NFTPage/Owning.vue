@@ -9,7 +9,7 @@
       'my-[32px]',
       'border-[2px]',
       'border-shade-gray',
-      {'border-like-cyan-darker': uiTxNFTStatus === 'completed'},
+      { 'border-like-cyan-darker': uiTxNFTStatus === 'completed' },
       'rounded-[16px]',
     ]"
   >

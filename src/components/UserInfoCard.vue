@@ -1,7 +1,10 @@
 <template>
   <CardV2 class="flex flex-col items-center w-full gap-[1rem]">
     <IdentityAvatar
-      :class="{ 'cursor-pointer hover:scale-105 transition-transform': $listeners['click-avatar'] }"
+      :class="{
+        'cursor-pointer hover:scale-105 transition-transform':
+          $listeners['click-avatar'],
+      }"
       :url="avatarSrc"
       :size="88"
       :is-outlined="isCivicLiker"
@@ -38,11 +41,12 @@
           'duration-200',
         ]"
         @click="handleClickWallet"
-      >{{ wallet | ellipsis }}</div>
+      >
+        {{ wallet | ellipsis }}
+      </div>
     </ToolTips>
 
     <slot />
-
   </CardV2>
 </template>
 

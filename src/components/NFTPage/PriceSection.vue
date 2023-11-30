@@ -15,18 +15,15 @@
     </Label>
 
     <div class="flex items-baseline justify-start mt-[40px]">
-      <Label
-        class="font-[900] text-like-cyan"
-        preset="h2"
-      >
-        <template v-if="isCollectable">{{ nftPrice | formatNumberWithUSD({ isFull: true }) }}</template>
+      <Label class="font-[900] text-like-cyan" preset="h2">
+        <template v-if="isCollectable">{{
+          nftPrice | formatNumberWithUSD({ isFull: true })
+        }}</template>
         <template v-else>{{ $t('nft_class_uncollectible') }}</template>
       </Label>
-      <Label
-        v-if="isCollectable && nftPriceUSD"
-        class="ml-[4px]"
-        preset="p5"
-      >{{ `(${nftPriceUSD})` }}</Label>
+      <Label v-if="isCollectable && nftPriceUSD" class="ml-[4px]" preset="p5">{{
+        `(${nftPriceUSD})`
+      }}</Label>
     </div>
 
     <div class="flex items-baseline justify-start">
@@ -74,7 +71,11 @@
       </div>
       <ButtonV2
         preset="primary"
-        :text="isContentViewable ? $t('nft_details_page_button_view') : $t('nft_details_page_button_collect_to_view')"
+        :text="
+          isContentViewable
+            ? $t('nft_details_page_button_view')
+            : $t('nft_details_page_button_collect_to_view')
+        "
         class="hidden laptop:block !border-[2px] !border-like-cyan-light"
         :href="url"
         target="_blank"

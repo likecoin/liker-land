@@ -22,10 +22,7 @@
     />
 
     <ul>
-      <li
-        v-for="record in records"
-        :key="record.text"
-      >
+      <li v-for="record in records" :key="record.text">
         <Separator class="mt-[24px]" />
 
         <Label
@@ -35,7 +32,9 @@
           :text="record.label"
         />
         <LinkV2 class="text-medium-gray" :href="record.href">
-          <Label class="truncate" preset="p6" :is-raw="true">{{ record.text }}</Label>
+          <Label class="truncate" preset="p6" :is-raw="true">{{
+            record.text
+          }}</Label>
         </LinkV2>
       </li>
     </ul>

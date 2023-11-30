@@ -7,10 +7,7 @@
       :to="to"
       v-on="$listeners"
     >
-      <template
-        v-for="(_, slot) of $scopedSlots"
-        #[slot]
-      >
+      <template v-for="(_, slot) of $scopedSlots" #[slot]>
         <slot :name="slot" />
       </template>
     </ButtonV2>

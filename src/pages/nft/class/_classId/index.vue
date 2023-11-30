@@ -1,8 +1,9 @@
 <template>
   <Page class="overflow-hidden">
-    <CardV2 v-if="isLoading" class="absolute top-[40%]">{{ $t('nft_details_page_label_loading') }}</CardV2>
+    <CardV2 v-if="isLoading" class="absolute top-[40%]">{{
+      $t('nft_details_page_label_loading')
+    }}</CardV2>
     <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
-
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
         <NFTPageControlBar
           :collected-count="ownCount"
@@ -40,7 +41,9 @@
             @click-avatar="handleNFTCardClickAvatar"
           >
             <template #column-left>
-              <ul class="flex gap-[16px] justify-center items-center mt-[24px] text-medium-gray text-[12px]">
+              <ul
+                class="flex gap-[16px] justify-center items-center mt-[24px] text-medium-gray text-[12px]"
+              >
                 <li class="flex items-center">
                   <IconMint />
                   <span class="ml-[4px]">{{ collectedCount }}</span>
@@ -83,15 +86,25 @@
           <div
             v-if="
               nftBookAvailablePriceLabel &&
-                (nftEditions.length > 1 || (nftEditions.length === 1 && nftEditions[0].description))"
+                (nftEditions.length > 1 ||
+                  (nftEditions.length === 1 && nftEditions[0].description))
+            "
             ref="compareSection"
             class="max-w-[962px] mx-auto flex flex-col justify-center"
           >
-            <Label :text="$t('nft_edition_label')" preset="h3" align="center" class="text-like-green mt-[38px] mb-[24px]" />
+            <Label
+              :text="$t('nft_edition_label')"
+              preset="h3"
+              align="center"
+              class="text-like-green mt-[38px] mb-[24px]"
+            />
             <ul
               class="flex flex-wrap items-start justify-center gap-[24px] w-full"
             >
-              <li v-for="editionConfig in nftEditions" :key="editionConfig.name">
+              <li
+                v-for="editionConfig in nftEditions"
+                :key="editionConfig.name"
+              >
                 <NFTBookEditionCompareTableColumn
                   class="w-[280px]"
                   :src="NFTImageUrl"
@@ -126,7 +139,7 @@
           <div
             :class="[
               'col-span-1 grid desktop:grid-cols-1 gap-[24px]',
-              { 'laptop:grid-cols-2': isShowPriceSection }
+              { 'laptop:grid-cols-2': isShowPriceSection },
             ]"
           >
             <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsNFTBook">
@@ -200,7 +213,9 @@
               :collector-count="ownerCount"
             />
             <NFTPageSupplySection
-              v-else-if="isShowPriceSection && nftIsWritingNFT && nftIsCollectable"
+              v-else-if="
+                isShowPriceSection && nftIsWritingNFT && nftIsCollectable
+              "
               :sold-count="nftSoldCount"
               :current-price="NFTPrice"
               :base-price="nftBasePrice"
@@ -249,22 +264,16 @@
         />
         <!-- useful links -->
         <section>
-          <ul class="flex flex-row gap-[8px] items-center justify-center text-medium-gray underline text-[8px]">
+          <ul
+            class="flex flex-row gap-[8px] items-center justify-center text-medium-gray underline text-[8px]"
+          >
             <li>
-              <a
-                class="hover:underline "
-                target="_blank"
-                :href="rawDataURL"
-              >
+              <a class="hover:underline " target="_blank" :href="rawDataURL">
                 {{ $t('nft_class_footer_raw') }}
               </a>
             </li>
             <li>
-              <a
-                class="hover:underline"
-                target="_blank"
-                :href="nftWidgetURL"
-              >
+              <a class="hover:underline" target="_blank" :href="nftWidgetURL">
                 {{ $t('nft_class_footer_widget') }}
               </a>
             </li>

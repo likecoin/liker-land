@@ -1,8 +1,5 @@
 <template>
-  <NuxtLink
-    class="relative block w-[310px]"
-    :to="detailsPageRoute"
-  >
+  <NuxtLink class="relative block w-[310px]" :to="detailsPageRoute">
     <client-only v-if="shouldFetchWhenVisible">
       <lazy-component
         class="absolute inset-0 pointer-events-none -top-full"

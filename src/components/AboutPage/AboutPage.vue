@@ -3,12 +3,19 @@
     <header class="bg-like-green">
       <div class="about-page-column">
         <p class="pt-48 my-0 text-white">
-          <span class="text-24">LikeCoin Foundation</span><br>is a section-88 non-profit organization registered in Hong Kong.
-          The foundation has been promoting the Civic Liker movement, which encourages readers
-          to contribute USD5 per month to support creativity. We also develop an open-source
-          toolkit for content rewards, curation, and archive. All latest project developments
-          documented in <a class="text-like-cyan" href="https://github.com/likecoin/likecoin" target="_blank" alt="GitHub">Github</a>,
-          open for volunteers and contributors to participate in the project.
+          <span class="text-24">LikeCoin Foundation</span><br />is a section-88
+          non-profit organization registered in Hong Kong. The foundation has
+          been promoting the Civic Liker movement, which encourages readers to
+          contribute USD5 per month to support creativity. We also develop an
+          open-source toolkit for content rewards, curation, and archive. All
+          latest project developments documented in
+          <a
+            class="text-like-cyan"
+            href="https://github.com/likecoin/likecoin"
+            target="_blank"
+            alt="GitHub"
+            >Github</a
+          >, open for volunteers and contributors to participate in the project.
         </p>
         <p class="pb-24 mt-8 cta-section">
           <a
@@ -16,46 +23,55 @@
             href="https://github.com/likecoin/likecoin"
             target="_blank"
             alt="Contribute"
-          >Contribute</a>
+            >Contribute</a
+          >
         </p>
       </div>
     </header>
     <div class="about-page-column">
       <p>
-        The foundation has a mission to empower content creators and publishers through the
-        formation of Liker Land. Content creators are able to receive actual rewards from
-        readers through the reinvented Like button in Liker Land. The foundation supports
-        the <nuxt-link :to="localeLocation({ name: 'civic' })" alt="Civic Liker Movement">Civic Liker Movement</nuxt-link>
-        in a form of matching funds, which distribute rewards to content creators on a daily
-        basis by the “like” they receive every day.
+        The foundation has a mission to empower content creators and publishers
+        through the formation of Liker Land. Content creators are able to
+        receive actual rewards from readers through the reinvented Like button
+        in Liker Land. The foundation supports the
+        <nuxt-link
+          :to="localeLocation({ name: 'civic' })"
+          alt="Civic Liker Movement"
+          >Civic Liker Movement</nuxt-link
+        >
+        in a form of matching funds, which distribute rewards to content
+        creators on a daily basis by the “like” they receive every day.
       </p>
       <p>
-        The foundation also organizes various events with schools and non-profits to promote
-        writings and content creation.
+        The foundation also organizes various events with schools and
+        non-profits to promote writings and content creation.
       </p>
 
       <ul class="gallery-list">
         <li class="gallery-list__block">
-          <img src="./images/01.jpg" alt="Writing workshop at the Direction Association For The Fandi">
+          <img
+            src="./images/01.jpg"
+            alt="Writing workshop at the Direction Association For The Fandi"
+          />
         </li>
         <li class="gallery-list__block">
-          <img src="./images/02.jpg" alt="Writing workshop at the Direction Association For The Fandi">
+          <img
+            src="./images/02.jpg"
+            alt="Writing workshop at the Direction Association For The Fandi"
+          />
         </li>
         <li class="gallery-list__block gallery-list__block--big">
-          <img src="./images/03.jpg" alt="Mozilla Foundation">
+          <img src="./images/03.jpg" alt="Mozilla Foundation" />
         </li>
-        <li class="gallery-list__block gallery-list__block--big public-report-statistics">
+        <li
+          class="gallery-list__block gallery-list__block--big public-report-statistics"
+        >
           <h3>Public report and statistic</h3>
           <ul>
-            <li
-              v-for="link in links"
-              :key="link.name"
-            >
-              <a
-                :href="link.href"
-                target="_blank"
-                :alt="link.name"
-              >{{ link.name }}</a>
+            <li v-for="link in links" :key="link.name">
+              <a :href="link.href" target="_blank" :alt="link.name">{{
+                link.name
+              }}</a>
             </li>
           </ul>
         </li>
@@ -67,7 +83,8 @@
           href="https://github.com/sponsors/likecoin"
           target="_blank"
           alt="Contribute"
-        >Donate</a>
+          >Donate</a
+        >
       </p>
     </div>
   </article>

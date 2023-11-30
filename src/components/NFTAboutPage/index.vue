@@ -82,7 +82,9 @@
             font-proxima font-[300]
             text-like-green text-center
           "
-        >{{ $t('about_nft_page_join_the_community_title') }}</h1>
+        >
+          {{ $t('about_nft_page_join_the_community_title') }}
+        </h1>
         <ul
           class="
             grid
@@ -116,7 +118,9 @@
                   fill="currentColor"
                 />
               </svg>
-              <div class="text-center mt-[4px] group-hover:underline">Discord</div>
+              <div class="text-center mt-[4px] group-hover:underline">
+                Discord
+              </div>
             </a>
           </li>
           <li>
@@ -141,7 +145,9 @@
                   fill="currentColor"
                 />
               </svg>
-              <div class="text-center mt-[4px] group-hover:underline">GitHub</div>
+              <div class="text-center mt-[4px] group-hover:underline">
+                GitHub
+              </div>
             </a>
           </li>
           <li>
@@ -164,7 +170,9 @@
                   fill="currentColor"
                 />
               </svg>
-              <div class="text-center mt-[4px] group-hover:underline">Twitter</div>
+              <div class="text-center mt-[4px] group-hover:underline">
+                Twitter
+              </div>
             </a>
           </li>
           <li>

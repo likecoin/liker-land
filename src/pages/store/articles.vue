@@ -9,77 +9,76 @@
       'pb-[132px]',
     ]"
   >
-      <section
-        :class="[
-          'w-full',
-          'max-w-[416px]',
-          'laptop:max-w-full',
-        ]"
+    <section :class="['w-full', 'max-w-[416px]', 'laptop:max-w-full']">
+      <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600] inline">
+        {{ $t('home_section_articles_title') }}
+      </h2>
+      <NuxtLink
+        class="mx-[6px] align-text-top text-medium-gray hover:text-like-cyan-dark text-[12px] cursor-pointer inline-block"
+        :to="localeLocation({ name: 'writing-nft-about' })"
       >
-        <h2 class="text-[#3AB7A2] text-[48px] font-proxima font-[600] inline">{{ $t('home_section_articles_title') }}</h2>
-        <NuxtLink
-          class="mx-[6px] align-text-top text-medium-gray hover:text-like-cyan-dark text-[12px] cursor-pointer inline-block"
-          :to="localeLocation({ name: 'writing-nft-about' })"
+        <IconHelp />
+      </NuxtLink>
+      <nav class="flex items-center justify-center mt-[48px]">
+        <ul
+          :class="[
+            'flex',
+            'justify-center',
+            'items-center',
+            'p-[4px]',
+            'bg-shade-gray',
+            'rounded-[14px]',
+          ]"
         >
-          <IconHelp />
-        </NuxtLink>
-        <nav class="flex items-center justify-center mt-[48px]">
-          <ul
-            :class="[
-              'flex',
-              'justify-center',
-              'items-center',
-              'p-[4px]',
-              'bg-shade-gray',
-              'rounded-[14px]',
-            ]"
-          >
-            <li
-              v-for="(item, index) in tabMenuItemList"
-              :key="item.value"
-              class="flex items-center"
-            >
-              <MenuButtonDivider v-if="index > 0" />
-              <MenuButton
-                :text="item.text"
-                :is-selected="item.isSelected"
-                @click="handleTabClick(item.value)"
-              />
-            </li>
-          </ul>
-        </nav>
-
-        <ul class="mt-[48px]">
           <li
-            v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
-            :id="classId"
-            :key="classId"
-            :class="{ 'mt-[88px]': index > 0 }"
+            v-for="(item, index) in tabMenuItemList"
+            :key="item.value"
+            class="flex items-center"
           >
-            <NFTCampaignItem
-              :class-id="classId"
-              :story-title="storyTitle"
-              :story-description="storyDescription"
+            <MenuButtonDivider v-if="index > 0" />
+            <MenuButton
+              :text="item.text"
+              :is-selected="item.isSelected"
+              @click="handleTabClick(item.value)"
             />
           </li>
         </ul>
-      </section>
+      </nav>
 
-      <section class="mt-[88px] px-[24px] flex flex-wrap justify-center gap-[16px]">
-        <NuxtLink
-          class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
-          :to="localeLocation({ name: 'writing-nft-about' })"
+      <ul class="mt-[48px]">
+        <li
+          v-for="({ classId, storyTitle, storyDescription }, index) in nfts"
+          :id="classId"
+          :key="classId"
+          :class="{ 'mt-[88px]': index > 0 }"
         >
-          {{ $t('home_button_about_writing_nft') }}
-        </NuxtLink>
-        <a
-          v-if="!isInInAppBrowser"
-          class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
-          href="https://likecoin.github.io/likecoin-nft-dashboard/"
-          target="_blank"
-          rel="noopener"
-        >{{ $t('campaign_nft_view_nft_dashboard') }}</a>
-      </section>
+          <NFTCampaignItem
+            :class-id="classId"
+            :story-title="storyTitle"
+            :story-description="storyDescription"
+          />
+        </li>
+      </ul>
+    </section>
+
+    <section
+      class="mt-[88px] px-[24px] flex flex-wrap justify-center gap-[16px]"
+    >
+      <NuxtLink
+        class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
+        :to="localeLocation({ name: 'writing-nft-about' })"
+      >
+        {{ $t('home_button_about_writing_nft') }}
+      </NuxtLink>
+      <a
+        v-if="!isInInAppBrowser"
+        class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
+        href="https://likecoin.github.io/likecoin-nft-dashboard/"
+        target="_blank"
+        rel="noopener"
+        >{{ $t('campaign_nft_view_nft_dashboard') }}</a
+      >
+    </section>
   </Page>
 </template>
 

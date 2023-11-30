@@ -19,7 +19,9 @@
           'font-[600]',
           isFixedHeight ? 'line-clamp-1' : 'line-clamp-2',
         ]"
-      >{{ title }}</div>
+      >
+        {{ title }}
+      </div>
       <div
         :class="[
           'text-[16px]',
@@ -28,7 +30,9 @@
           'mt-[4px]',
           isFixedHeight ? 'line-clamp-1' : 'line-clamp-4',
         ]"
-      >{{ description }}</div>
+      >
+        {{ description }}
+      </div>
     </div>
   </component>
 </template>

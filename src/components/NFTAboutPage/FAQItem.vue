@@ -49,7 +49,7 @@
     <Transition @enter="onEnter" @leave="onLeave">
       <div v-show="isOpen">
         <div class="laptop:pl-[108px] px-[32px] pb-[24px]">
-          <hr class="w-[32px] mb-[8px] border-[#EBEBEB]">
+          <hr class="w-[32px] mb-[8px] border-[#EBEBEB]" />
           <slot name="answer" />
         </div>
       </div>

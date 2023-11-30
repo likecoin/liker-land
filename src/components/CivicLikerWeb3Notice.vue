@@ -6,14 +6,16 @@
       @click="close"
     />
     <div :class="dialogClass">
-      <div class="flex items-start justify-between p-32 bg-like-gradient text-like-green">
+      <div
+        class="flex items-start justify-between p-32 bg-like-gradient text-like-green"
+      >
         <div class="flex items-center">
           <img
             class="mr-16"
             src="~/assets/images/civic-liker-icon.png"
             :alt="$t('civic_page_v3_title')"
             style="width:64px"
-          >
+          />
           <i18n class="text-32" path="civic_liker_web_3_notice_header">
             <i18n
               class="font-600"
@@ -28,7 +30,10 @@
         </Button>
       </div>
       <div class="p-32 bg-white">
-        <i18n class="leading-1_5 font-200" path="civic_liker_web_3_notice_message">
+        <i18n
+          class="leading-1_5 font-200"
+          path="civic_liker_web_3_notice_message"
+        >
           <i18n
             v-for="(path, i) in [
               'civic_liker_web_3_notice_message_highlight_1',

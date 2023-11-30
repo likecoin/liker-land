@@ -9,7 +9,11 @@
       border-[2px] border-like-cyan-light
     "
   >
-    <Label preset="h5" :text="$t('nft_details_page_label_owning')" class="text-like-green font-600">
+    <Label
+      preset="h5"
+      :text="$t('nft_details_page_label_owning')"
+      class="text-like-green font-600"
+    >
       <template #prepend>
         <IconCreativeWork />
       </template>
@@ -33,7 +37,11 @@
       </template>
       <template #append>
         <ProgressIndicator v-if="isTransferring" />
-        <ToolTips v-else :show-tool-tip="!isLogIn" :tool-tip-text="$t('tooltip_signin')">
+        <ToolTips
+          v-else
+          :show-tool-tip="!isLogIn"
+          :tool-tip-text="$t('tooltip_signin')"
+        >
           <ButtonV2
             preset="secondary"
             class="-z-1"

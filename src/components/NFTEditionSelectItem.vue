@@ -5,7 +5,7 @@
       'rounded-[16px]',
       'text-[16px]',
       'align-middle',
-      isInStock ? 'cursor-pointer' : 'opacity-50 pointer-events-none'
+      isInStock ? 'cursor-pointer' : 'opacity-50 pointer-events-none',
     ]"
     @click="$emit('click', $event)"
   >
@@ -26,18 +26,9 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
         <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="2"
-        />
-        <circle
-          :class="[
-            'transition-opacity',
-            { 'opacity-0': !isSelected },
-          ]"
+          :class="['transition-opacity', { 'opacity-0': !isSelected }]"
           cx="12"
           cy="12"
           r="5"
@@ -46,20 +37,10 @@
       </svg>
     </td>
     <td
-      :class="[
-        'pr-[12px]',
-        'border-x-0',
-        'text-like-cyan-light',
-        cellClasses,
-      ]"
+      :class="['pr-[12px]', 'border-x-0', 'text-like-cyan-light', cellClasses]"
     >
       <div>{{ name }}</div>
-      <div
-        :class="[
-          'sm:hidden',
-          'text-white',
-        ]"
-      >{{ priceLabel }}</div>
+      <div :class="['sm:hidden', 'text-white']">{{ priceLabel }}</div>
     </td>
     <td
       :class="[
@@ -70,7 +51,9 @@
         'text-right',
         cellClasses,
       ]"
-    >{{ priceLabel }}</td>
+    >
+      {{ priceLabel }}
+    </td>
     <td
       :class="[
         'pr-[8px] sm:pr-[14px]',

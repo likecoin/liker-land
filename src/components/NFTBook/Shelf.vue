@@ -71,11 +71,7 @@
       @close="closeMultipleNFTClassDialog"
     >
       <ul class="flex flex-col gap-[2rem]">
-        <li
-          v-for="classId in dialogNFTClassList"
-          :id="classId"
-          :key="classId"
-        >
+        <li v-for="classId in dialogNFTClassList" :id="classId" :key="classId">
           <component
             :is="cardTag"
             :class-id="classId"

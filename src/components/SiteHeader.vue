@@ -21,7 +21,6 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
-
       <!--
       <ShoppingCartSiteButton />
       -->
@@ -61,10 +60,7 @@
 
       <Dropdown>
         <template #trigger="{ toggle }">
-          <ButtonV2
-            :preset="isPlain ? 'plain' : 'tertiary'"
-            @click="toggle"
-          >
+          <ButtonV2 :preset="isPlain ? 'plain' : 'tertiary'" @click="toggle">
             <GlobeIcon class="w-20 h-20 fill-like-green" />
           </ButtonV2>
         </template>
@@ -99,7 +95,6 @@
         </template>
       </ButtonV2>
 
-
       <Dropdown>
         <template #trigger="{ toggle }">
           <ButtonV2
@@ -121,21 +116,19 @@
           </div>
         </template>
         <MenuList>
-          <template
-            v-if="getAddress"
-          >
+          <template v-if="getAddress">
             <a
               class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer"
               href="https://dao.like.co/"
               target="_blank"
               rel="noopener"
             >
-              <div
-                class="text-center text-like-green text-[32px] font-600"
-              >{{ walletLIKEBalance | formatNumber }}</div>
-              <div
-                class="text-medium-gray text-[12px] leading-[1]"
-              >{{ $t('header_menu_LIKE') }}</div>
+              <div class="text-center text-like-green text-[32px] font-600">
+                {{ walletLIKEBalance | formatNumber }}
+              </div>
+              <div class="text-medium-gray text-[12px] leading-[1]">
+                {{ $t('header_menu_LIKE') }}
+              </div>
             </a>
           </template>
           <MenuItem
@@ -163,7 +156,7 @@
                   'rounded-full',
                   'min-w-[24px]',
                   'px-[8px]',
-                  'py-[4px]'
+                  'py-[4px]',
                 ]"
               >
                 <div class="text-white text-[10px]">

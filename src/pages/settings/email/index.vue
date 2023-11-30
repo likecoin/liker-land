@@ -7,12 +7,18 @@
     <template v-if="hasEmail">
       <div class="grid sm:grid-cols-2 gap-[16px]">
         <div v-if="walletEmail">
-          <Label class="text-medium-gray" :text="$t('settings_email_current_email')" />
+          <Label
+            class="text-medium-gray"
+            :text="$t('settings_email_current_email')"
+          />
           <Label :text="walletEmail" />
         </div>
 
         <div v-if="walletEmailUnverified">
-          <Label class="text-medium-gray" :text="$t('settings_email_unverified_email')" />
+          <Label
+            class="text-medium-gray"
+            :text="$t('settings_email_unverified_email')"
+          />
           <Label :text="walletEmailUnverified" />
           <ButtonV2
             class="mt-[8px]"
@@ -29,12 +35,22 @@
     </template>
 
     <form @submit.prevent="handleClickConfirm">
-      <Label v-if="isClaimingPendingNftMode" class="justify-center mb-[12px]" align="center">
+      <Label
+        v-if="isClaimingPendingNftMode"
+        class="justify-center mb-[12px]"
+        align="center"
+      >
         {{ $t('settings_email_claim_pending_nft') }}
       </Label>
       <Label
         class="text-medium-gray"
-        :text="$t(hasEmail ? 'settings_email_change_email' : 'settings_email_new_email')"
+        :text="
+          $t(
+            hasEmail
+              ? 'settings_email_change_email'
+              : 'settings_email_new_email'
+          )
+        "
       />
       <TextField
         v-model="newEmail"

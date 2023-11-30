@@ -153,14 +153,7 @@
             />
           </clipPath>
         </defs>
-        <rect
-          y="50.9"
-          width="259"
-          height="320"
-          rx="16"
-          ry="16"
-          fill="#fff"
-        />
+        <rect y="50.9" width="259" height="320" rx="16" ry="16" fill="#fff" />
         <g class="nft-portal-graph__lines">
           <rect
             x="32"

@@ -1,24 +1,19 @@
 <template>
-  <div class="absolute left-[50%] translate-x-[-50%] flex items-center justify-center mx-auto">
+  <div
+    class="absolute left-[50%] translate-x-[-50%] flex items-center justify-center mx-auto"
+  >
     <!-- Square gem -->
     <div
       v-if="level !== undefined"
       class="relative flex items-center justify-center"
     >
-      <div
-        class="absolute w-[24px] h-[24px]"
-      >
+      <div class="absolute w-[24px] h-[24px]">
         <ToolTips :tool-tip-text="name">
-          <img :src="levelImgSrc" :title="name" :alt="name">
+          <img :src="levelImgSrc" :title="name" :alt="name" />
         </ToolTips>
       </div>
       <!-- Spark background -->
-      <img
-        v-if="level >= 13"
-        :src="sparkImgSrc"
-        :title="name"
-        :alt="name"
-      >
+      <img v-if="level >= 13" :src="sparkImgSrc" :title="name" :alt="name" />
     </div>
 
     <!-- Gem line -->

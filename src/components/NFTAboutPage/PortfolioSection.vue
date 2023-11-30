@@ -15,7 +15,9 @@
     >
       {{ $t('about_nft_page_nft_portfolio_title') }}
     </h1>
-    <div class="mt-[16px] laptop:mt-0 items-start justify-center w-full laptop:flex">
+    <div
+      class="mt-[16px] laptop:mt-0 items-start justify-center w-full laptop:flex"
+    >
       <div class="overflow-hidden">
         <svg
           class="transform scale-[2] mx-auto max-w-[375px] w-full"

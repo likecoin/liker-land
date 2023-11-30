@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-show="shoppingCartNFTClassList.length > 0"
-    class="relative"
-  >
+  <div v-show="shoppingCartNFTClassList.length > 0" class="relative">
     <ButtonV2
       preset="tertiary"
       :to="localeLocation({ name: 'shopping-cart' })"

@@ -22,12 +22,14 @@ router.get('/reader/bookmark', async (req, res, next) => {
     const bookmarksSet = new Set();
     if (apiBookmarks.data.list) {
       const { list } = apiBookmarks.data;
-      list.sort((a, b) => a.ts - b.ts).forEach(b => {
-        if (!bookmarksSet.has(b.url)) {
-          outputList.push(b.url);
-          bookmarksSet.add(b.url);
-        }
-      });
+      list
+        .sort((a, b) => a.ts - b.ts)
+        .forEach(b => {
+          if (!bookmarksSet.has(b.url)) {
+            outputList.push(b.url);
+            bookmarksSet.add(b.url);
+          }
+        });
     }
     res.json({ bookmarks: outputList });
   } catch (err) {

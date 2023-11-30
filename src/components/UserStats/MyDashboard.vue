@@ -15,12 +15,7 @@
     <template #default="stats">
       <!-- Collect section -->
       <div
-        :class="[
-          itemClasses,
-          'grid-cols-2',
-          'col-span-2',
-          'w-full',
-        ]"
+        :class="[itemClasses, 'grid-cols-2', 'col-span-2', 'w-full']"
         @click="$emit('go-collected')"
       >
         <UserStatsItem
@@ -45,12 +40,7 @@
 
       <!-- Created section -->
       <div
-        :class="[
-          itemClasses,
-          'grid-cols-2',
-          'col-span-2',
-          'w-full',
-        ]"
+        :class="[itemClasses, 'grid-cols-2', 'col-span-2', 'w-full']"
         @click="$emit('go-created')"
       >
         <UserStatsItem
@@ -74,10 +64,7 @@
       </div>
 
       <div
-        :class="[
-          itemClasses,
-          'col-span-2',
-        ]"
+        :class="[itemClasses, 'col-span-2']"
         @click="$emit('click-total-sales')"
       >
         <UserStatsItem
@@ -88,7 +75,10 @@
             <IconPriceMini />
           </template>
           <template #label>
-            <span>{{ $t('nft_portfolio_page_state_sales') }} <IconOpenInNew class="inline-block text-medium-gray" /></span>
+            <span
+              >{{ $t('nft_portfolio_page_state_sales') }}
+              <IconOpenInNew class="inline-block text-medium-gray"
+            /></span>
           </template>
         </UserStatsItem>
       </div>

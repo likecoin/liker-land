@@ -8,5 +8,5 @@
       'border-none',
       'rounded-[1px]',
     ]"
-  >
+  />
 </template>

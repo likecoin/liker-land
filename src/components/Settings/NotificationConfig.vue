@@ -1,12 +1,13 @@
 <template>
   <section class="mt-[24px]">
-    <h1 class="text-like-green text-[600] text-[24px]">{{ $t('settings_notification_title') }}</h1>
-    <h2 class="text-medium-gray">{{ $t('settings_notification_tx_section_title') }}</h2>
+    <h1 class="text-like-green text-[600] text-[24px]">
+      {{ $t('settings_notification_title') }}
+    </h1>
+    <h2 class="text-medium-gray">
+      {{ $t('settings_notification_tx_section_title') }}
+    </h2>
 
-    <ProgressIndicator
-      v-if="isFetchingSettings"
-      class="mx-auto my-[32px]"
-    />
+    <ProgressIndicator v-if="isFetchingSettings" class="mx-auto my-[32px]" />
     <ul
       v-else
       :class="[

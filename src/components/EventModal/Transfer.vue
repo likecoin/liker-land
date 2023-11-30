@@ -13,13 +13,19 @@
     </template>
     <template #top>
       <NFTPageOwning v-if="!nftId" :collected-count="userCollectedCount" />
-      <div v-else class="flex-col justify-center p-[16px] my-[24px] border-[2px] border-shade-gray rounded-[16px]">
-        <div class="text-[10px] text-medium-gray">{{ $t('tx_modal_label_nft_id') }}</div>
+      <div
+        v-else
+        class="flex-col justify-center p-[16px] my-[24px] border-[2px] border-shade-gray rounded-[16px]"
+      >
+        <div class="text-[10px] text-medium-gray">
+          {{ $t('tx_modal_label_nft_id') }}
+        </div>
         <Label
           preset="h5"
           class="text-like-green font-600"
           content-class="min-w-0"
-        ><div class="truncate">{{ selectedNFTId }}</div></Label>
+          ><div class="truncate">{{ selectedNFTId }}</div></Label
+        >
       </div>
     </template>
     <template v-if="!isTransferring">
@@ -31,15 +37,10 @@
         />
         <div class="flex items-center gap-[8px] mb-[24px] mt-[4px]">
           <div class="flex items-center gap-[8px] relative overflow-hidden">
-            <select
-              v-model="selectedNFTId"
-              class="absolute opacity-0"
-            >
-              <option
-                v-for="id in userCollectedNftIds"
-                :key="id"
-                :value="id"
-              >{{ id }}</option>
+            <select v-model="selectedNFTId" class="absolute opacity-0">
+              <option v-for="id in userCollectedNftIds" :key="id" :value="id">{{
+                id
+              }}</option>
             </select>
             <div class="truncate">{{ selectedNFTId }}</div>
             <IconArrowDown class="w-[12px] h-[12px] shrink-0" />
@@ -48,10 +49,12 @@
             class="shrink-0"
             preset="outline"
             :text="$t('nft_details_page_button_view_details')"
-            :to="localeLocation({
-              name: 'nft-class-classId-nftId',
-              params: { classId, nftId: selectedNFTId }
-            })"
+            :to="
+              localeLocation({
+                name: 'nft-class-classId-nftId',
+                params: { classId, nftId: selectedNFTId },
+              })
+            "
             size="mini"
             target="_blank"
             rel="noopener"
@@ -99,14 +102,10 @@
         border-0 border-dashed border-b-[2px] border-b-shade-gray
       "
     >
-      <FormField
-        class="mx-[8px]"
-        :label="$t('tx_modal_label_nft_id')"
-      >{{ selectedNFTId }}</FormField>
-      <FormField
-        class="mx-[8px]"
-        :label="$t('tx_modal_label_receiver')"
-      >
+      <FormField class="mx-[8px]" :label="$t('tx_modal_label_nft_id')">{{
+        selectedNFTId
+      }}</FormField>
+      <FormField class="mx-[8px]" :label="$t('tx_modal_label_receiver')">
         <div class="flex items-center gap-[8px]">
           <Identity
             v-if="toUserAvatar"
@@ -117,10 +116,7 @@
         </div>
       </FormField>
     </div>
-    <template
-      v-if="!isTransferring"
-      #button
-    >
+    <template v-if="!isTransferring" #button>
       <ButtonV2
         preset="secondary"
         :is-disabled="!isReady"
