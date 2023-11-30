@@ -83,10 +83,12 @@
 
       <NFTViewOptionList
         :url="url"
+        :class-id="classId"
         :content-urls="contentUrls"
         :iscn-url="iscnUrl"
         :is-nft-book="isNftBook"
         :is-content-viewable="isContentViewable"
+        :is-content-downloadable="isContentDownloadable"
         @view-content="handleClickViewContent"
         @view-content-url="handleClickViewContentURL"
       />
@@ -240,21 +242,7 @@ export default {
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    handleClickViewContentURL(e, contentUrl, type) {
-      if (type === 'pdf') {
-        e.preventDefault();
-        this.$router.push(
-          this.localeLocation({
-            name: 'reader',
-            query: {
-              download: this.isContentDownloadable ? '1' : '0',
-              classId: this.classId,
-              format: type,
-              src: contentUrl,
-            },
-          })
-        );
-      }
+    handleClickViewContentURL(e, url, type) {
       this.$emit('view-content-url', type);
     },
     onClickAvatar(e) {

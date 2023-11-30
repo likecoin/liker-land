@@ -50,6 +50,7 @@
                 <ButtonV2
                   :href="parseNFTMetadataURL(contentUrl)"
                   preset="plain"
+                  :download="getDownloadFilenameFromURL(contentUrl)"
                   @click="e => handleClickViewContentURL(e, contentUrl)"
                 >{{ getFilenameFromURL(contentUrl) || getContentUrlButtonText(contentUrl) }}&nbsp;<IconLinkExternal /></ButtonV2>
               </li>
@@ -82,12 +83,21 @@
 
 <script>
 import querystring from 'querystring';
+import { saveAs } from 'file-saver';
+
+import alertMixin from '~/mixins/alert';
+
 import { parseNFTMetadataURL } from '~/util/nft';
 
 export default {
   name: 'NFTViewOptionList',
+  mixins: [alertMixin],
   props: {
     url: {
+      type: String,
+      default: undefined,
+    },
+    classId: {
       type: String,
       default: undefined,
     },
@@ -111,6 +121,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isContentDownloadable: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     normalizedContentURLs() {
@@ -118,8 +132,7 @@ export default {
       return this.contentUrls.length ? this.contentUrls : [this.url];
     },
     shouldShowViewContentButton() {
-      // NOTE: Temporarily hide the button for NFT Book
-      return !this.normalizedContentURLs.includes(this.url) && !this.isNftBook;
+      return !!this.normalizedContentURLs.includes(this.url);
     },
     hasDuplicatedContentTypes() {
       const set = new Set(
@@ -153,12 +166,45 @@ export default {
       const qs = querystring.parse(qsStr);
       return qs?.name || '';
     },
+    getDownloadFilenameFromURL(url) {
+      return `${this.getFilenameFromURL(url) || 'content'}`;
+    },
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    handleClickViewContentURL(e, contentUrl) {
+    async handleClickViewContentURL(e, contentUrl) {
       const type = this.getContentUrlType(contentUrl);
-      this.$emit('view-content-url', e, parseNFTMetadataURL(contentUrl), type);
+      const url = parseNFTMetadataURL(contentUrl);
+      this.$emit('view-content-url', e, url, type);
+      if (type === 'pdf') {
+        e.preventDefault();
+        this.$router.push(
+          this.localeLocation({
+            name: 'reader',
+            query: {
+              download: this.isContentDownloadable ? '1' : '0',
+              classId: this.classId,
+              format: type,
+              src: url,
+            },
+          })
+        );
+      } else if (type === 'epub') {
+        e.preventDefault();
+        if (this.isContentDownloadable) {
+          try {
+            this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
+            const blob = await this.$axios.$get(url, { responseType: 'blob' });
+            saveAs(blob, this.getDownloadFilenameFromURL(contentUrl));
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            this.alertPromptError(this.$t('nft_download_content_error'));
+          }
+        } else {
+          this.alertPromptError(this.$t('nft_download_content_denied'));
+        }
+      }
     },
   },
 };
