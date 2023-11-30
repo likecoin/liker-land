@@ -123,11 +123,29 @@ const nuxtConfig = {
         innerHTML: JSON.stringify([
           {
             '@context': 'http://www.schema.org',
-            '@type': 'Organization',
+            '@type': 'OnlineStore',
             name: 'Liker Land',
+            description:
+              'Liker Land is a Web3 bookstore with a decentralized publishing stack that assists authors in registering and storing their articles, ebooks on the blockchain and decentralized networks',
             url: 'https://liker.land',
             logo: 'https://liker.land/logo.png',
             sameAs: ['https://www.facebook.com/Liker.Land'],
+            brand: [
+              {
+                '@type': 'Brand',
+                url: 'https://liker.land/writing-nft/about',
+                name: 'Writing NFT',
+              },
+              {
+                '@type': 'Brand',
+                name: 'NFT Book',
+              },
+              {
+                '@type': 'Brand',
+                url: 'https://liker.land/civic',
+                name: 'Civic Liker',
+              },
+            ],
           },
           {
             '@context': 'http://www.schema.org',
