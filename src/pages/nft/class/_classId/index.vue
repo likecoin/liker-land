@@ -410,7 +410,7 @@ export default {
     if (this.purchaseInfo.price) {
       schemas.push({
         '@context': 'http://www.schema.org',
-        '@type': 'Product',
+        '@type': ['CreativeWork', 'Product'],
         name: title,
         image: [ogImage],
         description,
