@@ -22,7 +22,7 @@
       class="text-[14px] text-medium-gray text-center mt-[16px]"
     >{{ $t(isNftBook ? 'nft_details_page_button_collect_to_view_nft_book' : 'nft_details_page_button_collect_to_view') }}</p>
 
-    <template v-if="shouldShowContentUrlButtons">
+    <template v-if="contentUrls.length && shouldShowContentUrlButtons">
       <template v-if="hasDuplicatedContentTypes">
         <Dropdown>
           <template #trigger="{ toggle }">

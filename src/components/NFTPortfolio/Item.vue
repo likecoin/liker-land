@@ -18,6 +18,7 @@
       :class-collection-name="nftClassCollectionName"
       :external-url="externalUrl"
       :iscn-url="iscnURL"
+      :content-urls="iscnContentUrls"
       :is-collectable="nftIsCollectable"
       :collected-count="collectedCount"
       :collector-count="ownerCount"
