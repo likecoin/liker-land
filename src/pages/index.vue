@@ -264,6 +264,13 @@
             ]"
           >
             <ButtonV2
+              :text="$t('index_page_hero_enter_book_store')"
+              theme="glow"
+              preset="secondary"
+              :to="localeLocation({ name: 'store' })"
+              @click.native="handleEnterBookstoreButtonClickInHeroSection"
+            />
+            <!-- <ButtonV2
               :text="$t('index_page_hero_try_collect_button')"
               theme="glow"
               preset="secondary"
@@ -283,7 +290,7 @@
               theme="glow"
               preset="tertiary"
               @click.native="handlePublishStoryButtonClickInHeroSection"
-            />
+            /> -->
           </nav>
         </div>
         <div
@@ -540,19 +547,19 @@
       </div>
     </section>
 
-    <section :class="sectionContentClassWithPadding">
+    <!-- <section :class="sectionContentClassWithPadding">
       <IndexPageFreeCollectCTA
         :class-id="freeMintNFTClassId"
         @collect="handleClickCollectForFreeButton"
         @click-collect-button="handleCollectForFreeButtonClickBelowHeroSection"
       >
-        <!-- <Label
+        <Label
           class="max-w-[560px] mx-auto mt-[1.5rem] text-[2rem] laptop:text-[2.75rem] font-proxima font-[600]"
           :text="$t('index_page_free_collect_cta_tagline')"
           align="center"
-        /> -->
+        />
       </IndexPageFreeCollectCTA>
-    </section>
+    </section> -->
 
     <section
       id="about-liker-land"
@@ -562,7 +569,10 @@
     >
       <div class="bg-[#0F3339]">
         <div :class="['py-[5rem]', sectionContentClassWithPadding]">
-          <div ref="likerLandSectionContent">
+          <div
+            ref="likerLandSectionContent"
+            class="opacity-0 pointer-events-none"
+          >
             <Logo class="w-[130px] fill-white" />
             <p :class="['text-like-cyan-light', 'max-w-[392px]', 'mt-[1em]']">
               {{ $t('index_page_liker_land_description') }}
@@ -1645,14 +1655,14 @@
             "
           />
 
-          <IndexPageFreeCollectCTA
+          <!-- <IndexPageFreeCollectCTA
             class="mt-[6rem] w-full"
             :class-id="freeMintNFTClassId"
             @collect="handleClickCollectForFreeButton"
             @click-collect-button="
               handleCollectForFreeButtonClickInAllStoriesMatterSection
             "
-          />
+          /> -->
         </footer>
       </div>
     </section>
@@ -2629,6 +2639,9 @@ export default {
           query: { action: 'collect' },
         })
       );
+    },
+    handleEnterBookstoreButtonClickInHeroSection() {
+      logTrackerEvent(this, 'IndexPage', 'IndexHeroEnterBookstoreClick', '', 1);
     },
     handleTryCollectButtonClickInHeroSection() {
       logTrackerEvent(this, 'IndexPage', 'IndexHeroTryCollectClick', '', 1);
