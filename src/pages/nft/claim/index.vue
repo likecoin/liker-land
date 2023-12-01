@@ -506,9 +506,15 @@ export default {
           this.classId
         );
       } catch (error) {
+        const errorMessage = error.response?.data || error.message;
+        if (errorMessage === 'PAYMENT_ALREADY_CLAIMED') {
+          this.state = NFT_CLAIM_STATE.CLAIMED;
+          return;
+        }
+
         // eslint-disable-next-line no-console
         console.error(error);
-        this.error = error.response?.data || error.message;
+        this.error = errorMessage;
         logTrackerEvent(
           this,
           'NFT',
