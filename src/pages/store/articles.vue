@@ -85,7 +85,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
+import { EXTERNAL_HOST, LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
+
+import { parseNFTMetadataURL } from '~/util/nft';
 
 import inAppMixin from '~/mixins/in-app';
 import navigationListenerMixin from '~/mixins/navigation-listener';
@@ -98,6 +100,41 @@ export default {
   head() {
     const title = this.$t('campaign_nft_page_title');
     const description = this.$t('campaign_nft_page_description');
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'DataFeed',
+      dataFeedElement: this.allNftClassIds
+        .filter(classId => this.getNFTClassMetadataById(classId))
+        .map(classId => {
+          const {
+            name: className,
+            description: classDescription,
+            image: classImage = '',
+            iscn_owner: iscnOwner,
+          } = this.getNFTClassMetadataById(classId);
+          const iscnOwnerPerson = iscnOwner
+            ? {
+                '@context': 'http://www.schema.org',
+                '@type': 'Person',
+                url: `${EXTERNAL_HOST}/${iscnOwner}`,
+                identifier: iscnOwner,
+              }
+            : undefined;
+
+          return {
+            '@context': 'http://www.schema.org',
+            '@type': 'CreativeWork',
+            '@id': `${EXTERNAL_HOST}/nft/class/${classId}`,
+            name: className,
+            description: classDescription,
+            image: parseNFTMetadataURL(classImage),
+            url: `${EXTERNAL_HOST}/nft/class/${classId}`,
+            author: iscnOwnerPerson,
+            identifier: classId,
+          };
+        }),
+    };
     return {
       title,
       meta: [
@@ -117,6 +154,14 @@ export default {
           content: description,
         },
       ],
+      script: [
+        {
+          hid: 'schema',
+          innerHTML: JSON.stringify(schema),
+          type: 'application/ld+json',
+          body: true,
+        },
+      ],
       link: [{ rel: 'canonical', href: `${this.$route.path}` }],
     };
   },
@@ -125,9 +170,17 @@ export default {
       'nftClassIdListInLatest',
       'nftClassIdListInTrending',
       'nftClassIdListInFree',
+      'getNFTClassMetadataById',
     ]),
     currentTab() {
       return this.$route.query.tab || 'trending';
+    },
+    allNftClassIds() {
+      return LIKECOIN_NFT_CAMPAIGN_ITEMS.concat(
+        this.nftClassIdListInTrending,
+        this.nftClassIdListInFree,
+        this.nftClassIdListInLatest
+      );
     },
     nftClassIds() {
       switch (this.currentTab) {

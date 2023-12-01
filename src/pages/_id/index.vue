@@ -230,7 +230,11 @@ import { getUserMinAPI } from '~/util/api';
 import { convertAddressPrefix, isValidAddress } from '~/util/cosmos';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { checkUserNameValid } from '~/util/user';
-import { fetchAllNFTClassFromChain, checkIsWritingNFT } from '~/util/nft';
+import {
+  fetchAllNFTClassFromChain,
+  checkIsWritingNFT,
+  parseNFTMetadataURL,
+} from '~/util/nft';
 import { EXTERNAL_HOST } from '~/constant';
 
 import walletMixin from '~/mixins/wallet';
@@ -331,12 +335,34 @@ export default {
         {
           hid: 'schema',
           innerHTML: JSON.stringify({
-            '@context': 'http://www.schema.org',
-            '@type': 'Person',
-            url: `${EXTERNAL_HOST}/${this.wallet}`,
-            name,
-            image,
-            identifier: this.wallet,
+            '@context': 'https://schema.org',
+            '@type': 'ProfilePage',
+            mainEntity: {
+              '@context': 'http://www.schema.org',
+              '@type': 'Person',
+              url: `${EXTERNAL_HOST}/${this.wallet}`,
+              name,
+              image,
+              identifier: this.wallet,
+            },
+            hasPart: this.nftClassListOfCreated
+              .filter(c => this.getNFTClassMetadataById(c.classId))
+              .map(c => {
+                const {
+                  name: className,
+                  description: classDescription,
+                  image: classImage = '',
+                } = this.getNFTClassMetadataById(c.classId);
+                return {
+                  '@context': 'http://www.schema.org',
+                  '@type': 'CreativeWork',
+                  name: className,
+                  description: classDescription,
+                  image: parseNFTMetadataURL(classImage),
+                  url: `${EXTERNAL_HOST}/nft/class/${c.classId}`,
+                  identifier: c.classId,
+                };
+              }),
           }),
           type: 'application/ld+json',
           body: true,
@@ -425,6 +451,7 @@ export default {
     this.loadNFTClassesForCurrentTabByAddress(this.wallet);
     this.fetchNFTDisplayStateListByAddress(this.wallet);
     this.loadTopUserListByAddress(this.wallet);
+    this.lazyFetchCreatedNFTClassesByAddress(this.wallet);
   },
   methods: {
     ...mapActions([
