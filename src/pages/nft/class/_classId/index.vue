@@ -294,6 +294,7 @@
 </template>
 
 <script>
+import { nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import {
   logTrackerEvent,
