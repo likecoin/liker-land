@@ -366,7 +366,7 @@ export default {
             }
           }),
       ]);
-      if (metadata?.nft_meta_collection_id.includes('nft_book')) {
+      if (metadata?.nft_meta_collection_id?.includes('nft_book')) {
         await store
           .dispatch('fetchNFTBookInfoByClassId', classId)
           .catch(error => {
