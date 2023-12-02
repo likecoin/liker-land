@@ -3,7 +3,7 @@ const path = require('path');
 const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
 
-const siteName = 'Liker.Land';
+const siteName = 'Liker Land';
 
 const {
   IS_TESTNET,
@@ -121,6 +121,13 @@ const nuxtConfig = {
       {
         hid: 'schema',
         innerHTML: JSON.stringify([
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Liker Land',
+            alternateName: ['Liker.Land'],
+            url: 'https://liker.land/',
+          },
           {
             '@context': 'http://www.schema.org',
             '@type': 'OnlineStore',
