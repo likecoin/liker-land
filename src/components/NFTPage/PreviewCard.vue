@@ -7,7 +7,7 @@
       class="rounded-t-[inherit] overflow-hidden"
       :href="url || iscnUrl"
       target="_blank"
-      rel="noopener"
+      :rel="url ? 'noopener ugc' : 'noopener'"
     >
       <NFTCover
         :src="imageUrl"

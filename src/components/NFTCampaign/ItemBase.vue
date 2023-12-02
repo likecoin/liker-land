@@ -45,7 +45,7 @@
             class="transition-colors cursor-pointer hover:text-like-cyan-dark flex items-center justify-center text-medium-gray mt-[8px]"
             :href="isContentViewable ? url : ''"
             target="_blank"
-            rel="noopener"
+            rel="noopener ugc"
             @click="handleClickViewContent"
           >
             <NFTWidgetIconEye class="w-[17px]" />

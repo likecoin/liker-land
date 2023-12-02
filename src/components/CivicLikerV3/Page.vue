@@ -17,7 +17,7 @@
           preset="secondary-outline"
           :href="$t('civic_dashboard_v3_about_url')"
           target="_blank"
-          rel="noreferrer noopener"
+          rel="noopener"
         >
           <template #prepend>
             <AlertCircle class="w-16 ml-4" />

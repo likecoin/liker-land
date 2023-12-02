@@ -31,7 +31,12 @@
           content-class="text-medium-gray font-600"
           :text="record.label"
         />
-        <LinkV2 class="text-medium-gray" :href="record.href">
+        <LinkV2
+          class="text-medium-gray"
+          :href="record.href"
+          :nofollow="!!record.nofollow"
+          :ugc="!!record.ugc"
+        >
           <Label class="truncate" preset="p6" :is-raw="true">{{
             record.text
           }}</Label>
@@ -75,6 +80,7 @@ export default {
           label: this.$t('nft_details_page_section_metadata_url'),
           href: this.contentUrl,
           text: this.contentUrl,
+          ugc: true,
         },
         {
           label: this.$t('nft_details_page_section_metadata_iscn'),
@@ -91,6 +97,7 @@ export default {
               label: this.$t('nft_details_page_section_metadata_ar'),
               href: `${ARWEAVE_ENDPOINT}/${text}`,
               text,
+              nofollow: true,
             });
             break;
           case 'ipfs':
@@ -98,6 +105,7 @@ export default {
               label: this.$t('nft_details_page_section_metadata_ipfs'),
               href: `${IPFS_VIEW_GATEWAY_URL}/${text}`,
               text,
+              nofollow: true,
             });
             break;
           case 'num':
@@ -105,6 +113,7 @@ export default {
               label: this.$t('nft_details_page_section_metadata_ipfs'),
               href: `${APP_LIKE_CO_URL_BASE}/api/numbers-protocol/assets/${text}`,
               text,
+              nofollow: true,
             });
             break;
           default:
