@@ -79,6 +79,7 @@
         class="hidden laptop:block !border-[2px] !border-like-cyan-light"
         :href="url"
         target="_blank"
+        rel="noopener ugc"
         :is-disabled="!isContentViewable"
         @click="handleClickViewContent"
       >

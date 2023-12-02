@@ -18,7 +18,7 @@
         <a
           class="text-medium-gray underline text-[12px]"
           :href="contentUrl"
-          rel="noopener"
+          rel="noopener ugc"
           target="_blank"
           >{{ contentUrl }}</a
         >

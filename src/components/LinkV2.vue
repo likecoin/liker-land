@@ -20,6 +20,15 @@ export default class Link extends Vue {
   @Prop({ default: false })
   readonly isInline!: boolean;
 
+  @Prop({ default: false })
+  readonly ugc!: boolean;
+
+  @Prop({ default: false })
+  readonly nofollow!: boolean;
+
+  @Prop({ default: false })
+  readonly noreferrer!: boolean;
+
   get tag() {
     if (this.to) return 'NuxtLink';
     return 'a';
@@ -27,12 +36,17 @@ export default class Link extends Vue {
 
   get attrs() {
     if (this.to) return { to: this.to };
-    if (this.href)
+    if (this.href) {
+      const rel = ['noopener'];
+      if (this.ugc) rel.push('ugc');
+      if (this.nofollow) rel.push('nofollow');
+      if (this.noreferrer) rel.push('noreferrer');
       return {
         href: this.href,
         target: '_blank',
-        rel: 'noopener',
+        rel: rel.join(' '),
       };
+    }
     return {};
   }
 
