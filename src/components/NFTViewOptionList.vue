@@ -12,6 +12,7 @@
         )
       "
       :href="url"
+      rel="noopener ugc"
       target="_blank"
       @click="handleClickViewContent"
     >

@@ -134,6 +134,7 @@
             class="text-left"
             :href="getChainExplorerTx(event.txHash)"
             :is-inline="true"
+            :nofollow="true"
             @click.native.stop
           >
             <TimeAgo

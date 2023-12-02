@@ -40,7 +40,7 @@
           class="settings-menu__item"
           :href="likerIdSettingsURL"
           target="_blank"
-          rel="noreferrer noopener"
+          rel="noopener"
         >
           <span class="settings-menu__item-title">
             {{ $t('settings_liker_id') }}</span

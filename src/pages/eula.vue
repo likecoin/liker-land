@@ -37,15 +37,7 @@
       described herein. The terms also apply to any oice Limited updates,
       supplements, Internet-based services, and support services for the
       Software, unless other terms accompany those items on delivery. If so,
-      those terms apply. This EULA was created by
-      <a
-        class="text-like-green"
-        href="https://www.eulatemplate.com/"
-        target="_blank"
-        rel="noopener nofollow"
-        >EULA Template</a
-      >
-      for Liker Land.
+      those terms apply.
     </p>
     <h2>License Grant</h2>
     <p>
