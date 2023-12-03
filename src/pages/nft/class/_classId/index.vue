@@ -408,6 +408,8 @@ export default {
       identifier: this.iscnOwner,
     };
     if (this.purchaseInfo.price) {
+      // TODO: check if we can use last purchase price if current price is -1
+      const NFTPriceUSD = Math.max(this.NFTPriceUSD, 0);
       schemas.push({
         '@context': 'http://www.schema.org',
         '@type': ['CreativeWork', 'Product'],
@@ -425,9 +427,10 @@ export default {
         offers: {
           '@type': 'Offer',
           seller: iscnOwnerPerson,
-          price: this.NFTPriceUSD,
+          price: NFTPriceUSD,
           priceCurrency: 'USD',
-          availability: 'LimitedAvailability',
+          availability:
+            this.NFTPriceUSD >= 0 ? 'LimitedAvailability' : 'OutOfStock',
         },
       });
     }
