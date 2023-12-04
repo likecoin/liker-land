@@ -13,6 +13,35 @@
         <div :class="contentPaddingClass">
           <table class="w-full">
             <tbody class="w-full">
+              <tr class="w-full border-b-shade-gray border-b-[1px]">
+                <td class="my-[12px]">
+                  <Label
+                    class="w-min text-[12px] font-500"
+                    :text="$t('nft_details_page_title_collector')"
+                    valign="middle"
+                    content-class="whitespace-nowrap text-dark-gray"
+                  >
+                  </Label>
+                </td>
+                <td>
+                  <Label
+                    class="justify-start text-left text-dark-gray text-[12px] font-500"
+                    :text="$t('nft_message_type_generic')"
+                    tag="div"
+                    valign="middle"
+                    align="left"
+                    content-class="whitespace-nowrap"
+                  />
+                </td>
+                <td>
+                  <Label
+                    class="w-min text-dark-gray text-[12px] font-500"
+                    :text="$t('nft_details_page_label_owning')"
+                    valign="middle"
+                    content-class="whitespace-nowrap"
+                  />
+                </td>
+              </tr>
               <NFTPageCollectorListItem
                 v-for="owner in trimmedItems"
                 :key="owner.id"
@@ -26,37 +55,39 @@
           v-if="shouldShowMore"
           @click-show-more="$emit('click-show-more-collector')"
         >
-          <template #header>
-            <div class="flex justify-between mb-[12px] min-w-[310px]">
-              <Label
-                class="w-min font-600"
-                :text="
-                  `${$t('nft_details_page_title_collector')} (${items.length})`
-                "
-                preset="h5"
-                valign="middle"
-                content-class="whitespace-nowrap text-like-green "
-                prepend-class="text-like-green"
-              >
-                <template #prepend>
-                  <IconPerson />
-                </template>
-              </Label>
-              <Label
-                class="w-min font-600"
-                :text="$t('nft_details_page_label_owning')"
-                preset="h5"
-                valign="middle"
-                content-class="whitespace-nowrap text-like-green "
-                prepend-class="text-like-green"
-              />
-            </div>
-            <hr class="w-full border-shade-gray" />
-          </template>
           <template #content>
             <div class="min-w-[310px]">
               <table class="w-full">
                 <tbody class="w-full">
+                  <tr class="w-full border-b-shade-gray border-b-[1px]">
+                    <td class="my-[12px]">
+                      <Label
+                        class="w-min text-[12px] font-500"
+                        :text="$t('nft_details_page_title_collector')"
+                        valign="middle"
+                        content-class="whitespace-nowrap text-dark-gray"
+                      >
+                      </Label>
+                    </td>
+                    <td>
+                      <Label
+                        class="justify-start text-left text-dark-gray text-[12px] font-500"
+                        :text="$t('nft_message_type_generic')"
+                        tag="div"
+                        valign="middle"
+                        align="left"
+                        content-class="whitespace-nowrap"
+                      />
+                    </td>
+                    <td>
+                      <Label
+                        class="w-min text-dark-gray text-[12px] font-500"
+                        :text="$t('nft_details_page_label_owning')"
+                        valign="middle"
+                        content-class="whitespace-nowrap"
+                      />
+                    </td>
+                  </tr>
                   <NFTPageCollectorListItem
                     v-for="owner in items"
                     :key="owner.id"
