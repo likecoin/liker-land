@@ -286,7 +286,7 @@
           v-if="nftIsNFTBook"
           class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
         >
-          <IconEmail class="text-dark-gray" />
+          <IconEmail class="w-[20px] text-dark-gray" />
           <input
             v-model="email"
             type="input"
