@@ -39,6 +39,35 @@
         :is-content-downloadable="isContentDownloadable"
         @view-content-url="handleClickViewContentDirectly"
       />
+      <div v-if="giftInfo" class="flex flex-col w-full my-[32px]">
+        <div class="flex gap-[8px]">
+          <IconGift class="w-[32px] mb-[8px] text-dark-gray" />
+          <Label
+            class="text-medium-gray w-full my-[4px]"
+            preset="p6"
+            align="left"
+            text="This book is a gift"
+          />
+        </div>
+        <Label
+          class="text-medium-gray w-full my-[4px]"
+          preset="p6"
+          align="left"
+          :text="giftInfo.toName"
+        />
+        <Label
+          class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+          preset="p6"
+          align="center"
+          :text="giftInfo.message"
+        />
+        <Label
+          class="text-medium-gray w-full my-[4px]"
+          preset="p6"
+          align="right"
+          :text="giftInfo.fromName"
+        />
+      </div>
       <template v-if="!claimingAddress">
         <template v-if="walletIsLoggingIn">
           <ProgressIndicator />
@@ -253,6 +282,7 @@ export default {
       claimingAddressInput: '',
       claimingAddress: '',
       claimingFreeEmail: '',
+      giftInfo: null,
     };
   },
   computed: {
@@ -322,20 +352,21 @@ export default {
   },
   async mounted() {
     const { redirect, free, from, ...query } = this.$route.query;
+    let price;
+    try {
+      const { data } = await this.$api.get(
+        getNFTBookPaymentStatusEndpoint({
+          classId: this.classId,
+          paymentId: this.paymentId,
+        })
+      );
+      ({ price } = data);
+      this.giftInfo = data.giftInfo;
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
     if (!free && redirect && query.type === 'nft_book') {
-      let price;
-      try {
-        const { data } = await this.$api.get(
-          getNFTBookPaymentStatusEndpoint({
-            classId: this.classId,
-            paymentId: this.paymentId,
-          })
-        );
-        ({ price } = data);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      }
       logPurchaseFlowEvent(this, 'purchase', {
         items: [
           {
