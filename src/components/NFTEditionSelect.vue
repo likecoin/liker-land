@@ -93,7 +93,7 @@ export default {
         if (!items.length) return true;
         return items.every(
           item =>
-            item.value &&
+            item.value >= 0 &&
             item.name &&
             item.priceLabel &&
             !Number.isNaN(item.stock) &&
