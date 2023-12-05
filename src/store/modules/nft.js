@@ -809,6 +809,18 @@ const actions = {
       info,
     });
   },
+  async lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
+    { getters, dispatch },
+    { classId, priceIndex }
+  ) {
+    const info = getters.getNFTClassPaymentPriceById(classId, priceIndex);
+    if (!info) {
+      await dispatch('fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex', {
+        classId,
+        priceIndex,
+      });
+    }
+  },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
     if (getters.shoppingCartNFTClassList.length >= BATCH_COLLECT_MAX) {
       return;

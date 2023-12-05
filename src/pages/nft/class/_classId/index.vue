@@ -658,6 +658,7 @@ export default {
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.fetchNFTBookInfoByClassId(this.classId).catch();
+        this.fetchNFTBookPaymentPriceInfo();
       }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -899,7 +900,6 @@ export default {
           return;
         }
         if (edition.price > 0) {
-          await this.fetchNFTPrices();
           if (this.nftPriceInLIKE > 0) {
             const gaClientId = await getGaClientId(this);
             const link = getNFTBookPurchaseLink({
@@ -943,13 +943,14 @@ export default {
         1
       );
     },
-    handleEditionSelectChange(selectedValue) {
-      this.$router.replace({
+    async handleEditionSelectChange(selectedValue) {
+      await this.$router.replace({
         query: {
           ...this.$route.query,
           price_index: selectedValue,
         },
       });
+      await this.lazyFetchNFTBookPaymentPriceInfo();
       logTrackerEvent(
         this,
         'NFT',

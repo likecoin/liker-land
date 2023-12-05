@@ -686,6 +686,7 @@ export default {
       'fetchNFTDisplayStateListByAddress',
       'fetchNFTBookInfoByClassId',
       'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
+      'lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
     ]),
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
@@ -711,6 +712,22 @@ export default {
               priceIndex: this.editionPriceIndex,
             })
           : this.fetchNFTPaymentPriceInfoByClassId(this.classId)
+      );
+    },
+    async fetchNFTBookPaymentPriceInfo() {
+      await catchAxiosError(
+        this.fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
+          classId: this.classId,
+          priceIndex: this.editionPriceIndex,
+        })
+      );
+    },
+    async lazyFetchNFTBookPaymentPriceInfo() {
+      await catchAxiosError(
+        this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
+          classId: this.classId,
+          priceIndex: this.editionPriceIndex,
+        })
       );
     },
     lazyFetchNFTOwners() {
