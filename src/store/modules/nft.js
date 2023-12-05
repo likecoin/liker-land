@@ -59,20 +59,13 @@ const mutations = {
     state,
     { classId, priceIndex, info }
   ) {
+    const key = Number.isInteger(priceIndex)
+      ? `${classId}_${priceIndex}`
+      : classId;
     if (info) {
-      if (Number.isInteger(priceIndex)) {
-        if (state.paymentPriceByClassIdMap[classId]) {
-          Vue.set(state.paymentPriceByClassIdMap[classId], priceIndex, info);
-        } else {
-          Vue.set(state.paymentPriceByClassIdMap, classId, {
-            [priceIndex]: info,
-          });
-        }
-      } else {
-        Vue.set(state.paymentPriceByClassIdMap, classId, info);
-      }
+      Vue.set(state.paymentPriceByClassIdMap, key, info);
     } else {
-      Vue.delete(state.paymentPriceByClassIdMap, classId);
+      Vue.delete(state.paymentPriceByClassIdMap, key);
     }
   },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
@@ -241,7 +234,7 @@ const getters = {
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
   getNFTClassPaymentPriceById: state => (id, priceIndex) =>
     Number.isInteger(priceIndex)
-      ? state.paymentPriceByClassIdMap[id]?.[priceIndex]
+      ? state.paymentPriceByClassIdMap[`${id}_${priceIndex}`]
       : state.paymentPriceByClassIdMap[id],
   getNFTIscnRecordsById: state => id =>
     state.metadataByClassIdMap[id]?.iscn_record,
