@@ -46,7 +46,7 @@
       </template>
 
       <ButtonV2
-        v-if="!isAllSoldOut"
+        v-if="!isAllSoldOut && selectedItem.price > 0"
         :is-disabled="!selectedItem"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text_gift')"
