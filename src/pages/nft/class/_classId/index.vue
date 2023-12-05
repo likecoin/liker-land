@@ -899,26 +899,28 @@ export default {
           );
           return;
         }
-        if (edition.price > 0) {
-          if (this.nftPriceInLIKE > 0) {
-            const gaClientId = await getGaClientId(this);
-            const link = getNFTBookPurchaseLink({
-              classId: this.classId,
-              priceIndex: edition.index,
-              platform: this.platform,
-              gaClientId,
-            });
-            window.open(link, '_blank', 'noopener');
-            return;
+        if (edition.price > 0 && this.nftPriceInLIKE > 0) {
+          await this.initIfNecessary();
+          if (this.hasConnectedWallet) {
+            logPurchaseFlowEvent(
+              this,
+              'add_shipping_info',
+              purchaseEventParams
+            );
+            this.fetchUserCollectedCount();
+            this.walletFetchLIKEBalance();
           }
+          this.uiToggleCollectModal({ classId: this.classId });
+          return;
         }
-        await this.initIfNecessary();
-        if (this.hasConnectedWallet) {
-          logPurchaseFlowEvent(this, 'add_shipping_info', purchaseEventParams);
-          this.fetchUserCollectedCount();
-          this.walletFetchLIKEBalance();
-        }
-        this.uiToggleCollectModal({ classId: this.classId });
+        const gaClientId = await getGaClientId(this);
+        const link = getNFTBookPurchaseLink({
+          classId: this.classId,
+          priceIndex: edition.index,
+          platform: this.platform,
+          gaClientId,
+        });
+        window.open(link, '_blank', 'noopener');
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
