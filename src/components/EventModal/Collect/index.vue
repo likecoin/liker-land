@@ -275,29 +275,29 @@
             @input="onInputCollectMessage"
           />
         </div>
-        <Label
-          v-if="nftIsNFTBook"
-          preset="p6"
-          align="left"
-          class="text-medium-gray mt-[12px] mb-[6px]"
-          :text="$t('nft_collect_modal_email')"
-        />
-        <div
-          v-if="nftIsNFTBook"
-          class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-        >
-          <IconEmail class="w-[20px] text-dark-gray" />
-          <input
-            v-model="email"
-            type="input"
-            class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
-            :placeholder="
-              $t('nft_collect_modal_email_placeholder', {
-                name: creatorDisplayName,
-              })
-            "
+        <template v-if="nftIsNFTBook">
+          <Label
+            preset="p6"
+            align="left"
+            class="text-medium-gray mt-[12px] mb-[6px]"
+            :text="$t('nft_collect_modal_email')"
           />
-        </div>
+          <div
+            class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+          >
+            <IconEmail class="w-[20px] text-dark-gray" />
+            <input
+              v-model="email"
+              type="input"
+              class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+              :placeholder="
+                $t('nft_collect_modal_email_placeholder', {
+                  name: creatorDisplayName,
+                })
+              "
+            />
+          </div>
+        </template>
       </section>
 
       <section v-if="paymentMethod === undefined">
