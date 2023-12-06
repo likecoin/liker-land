@@ -606,7 +606,7 @@
   "portfolio_subscription_verify": "Email verification link has been sent to the following email address: {email}",
   "portfolio_subscription_verify_sendAgain": "Didn't get the mail? Send it again",
   "portfolio_subscription_verify_title": "Verify your email address",
-  "portfolio_title": "{name}'s Writing NFT",
+  "portfolio_title": "{name}'s Portfolio",
   "portfolio_unfollow_hint": "You've already followed {creator}",
   "portfolio_unsubscribe_confirm_button": "Unfollow",
   "portfolio_unsubscribe_error_alert": "Error occurred when unfollowing {creator}: {error}",

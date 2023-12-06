@@ -606,7 +606,7 @@
   "portfolio_subscription_verify": "驗證信已發到以下地址：{email}",
   "portfolio_subscription_verify_sendAgain": "沒收到驗證信？按此重試",
   "portfolio_subscription_verify_title": "驗證你的信箱",
-  "portfolio_title": "{name} 的 Writing NFT",
+  "portfolio_title": "{name} 的書架",
   "portfolio_unfollow_hint": "你已經關注了 {creator}",
   "portfolio_unsubscribe_confirm_button": "取消關注",
   "portfolio_unsubscribe_error_alert": "取消關注 {creator} 時遇到錯誤： {error}",
