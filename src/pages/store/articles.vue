@@ -94,7 +94,7 @@ import navigationListenerMixin from '~/mixins/navigation-listener';
 import walletMixin from '~/mixins/wallet';
 
 export default {
-  name: 'WritingNFTPage',
+  name: 'ArticleStorePage',
   mixins: [inAppMixin, navigationListenerMixin, walletMixin],
   layout: 'default',
   head() {
