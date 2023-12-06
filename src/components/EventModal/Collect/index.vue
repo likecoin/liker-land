@@ -777,9 +777,9 @@ export default {
               memo: this.memo,
               email: this.email,
             });
-            if (result && !this.nftIsNFTBook) {
-              this.justCollectedNFTId =
-                result.nftId || result.purchased?.[0]?.nftId;
+            const nftId = result?.nftId || result?.purchased?.[0]?.nftId;
+            if (nftId) {
+              this.justCollectedNFTId = nftId;
             }
             break;
           }
