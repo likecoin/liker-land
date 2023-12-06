@@ -6,8 +6,9 @@
         @show.once="fetchInfo"
       />
     </client-only>
-    <div class="flex relative mt-[48px]">
+    <div :class="['flex', 'relative', { 'mt-[48px]': !isCoverPreset }]">
       <div
+        v-if="!isFutureTheme"
         :class="[
           'absolute',
           'z-[0]',
@@ -29,28 +30,31 @@
           :video-src="videoSrc"
           :should-resize-src="shouldResizeSrc"
           :size="300"
+          :theme="theme"
           :alt="NFTName"
         />
       </component>
     </div>
-    <Label :class="[titleStyle, 'mt-[20px]']" preset="p5" :text="NFTName" />
-    <Label
-      class="text-medium-gray mt-[6px] mb-[12px]"
-      preset="p6"
-      :text="(iscnWorkAuthor || creatorDisplayName) | ellipsis"
-    />
-    <Label
-      v-if="nftBookAvailablePriceLabel"
-      class="text-like-green-dark"
-      preset="p5"
-      :text="nftBookAvailablePriceLabel"
-    />
-    <Label
-      v-else
-      class="text-medium-gray"
-      preset="p5"
-      :text="$t('nft_details_page_label_sold_out')"
-    />
+    <template v-if="!isCoverPreset">
+      <Label :class="[titleStyle, 'mt-[20px]']" preset="p5" :text="NFTName" />
+      <Label
+        class="text-medium-gray mt-[6px] mb-[12px]"
+        preset="p6"
+        :text="(iscnWorkAuthor || creatorDisplayName) | ellipsis"
+      />
+      <Label
+        v-if="nftBookAvailablePriceLabel"
+        class="text-like-green-dark"
+        preset="p5"
+        :text="nftBookAvailablePriceLabel"
+      />
+      <Label
+        v-else
+        class="text-medium-gray"
+        preset="p5"
+        :text="$t('nft_details_page_label_sold_out')"
+      />
+    </template>
   </div>
   <div v-else :class="['flex', 'flex-col', 'justify-center']">
     <component
@@ -90,6 +94,7 @@
           :should-resize-src="shouldResizeSrc"
           :video-src="videoSrc"
           :size="300"
+          :theme="theme"
           :alt="NFTName"
         />
 
@@ -219,8 +224,14 @@ const PRESET_TYPE = {
   SHELF: 'shelf', // (Landing page) shelf style
   CAMPAIGN: 'campaign', // (Landing page) like-green bg
   COMPACT: 'compact', // (Landing page) compact style
+  COVER: 'cover', // Cover style
   DEFAULT: 'default', // (All books page) white bg
   DETAILS: 'details', // (Class details page) Expand all information
+};
+
+const THEME_TYPE = {
+  DEFAULT: 'default',
+  FUTURE: 'future',
 };
 
 export default {
@@ -236,6 +247,10 @@ export default {
     preset: {
       type: String,
       default: PRESET_TYPE.DEFAULT,
+    },
+    theme: {
+      type: String,
+      default: THEME_TYPE.DEFAULT,
     },
     shelfClass: {
       type: [Array, String],
@@ -269,13 +284,21 @@ export default {
       );
     },
     isShelfPreset() {
-      return this.preset === PRESET_TYPE.SHELF;
+      return (
+        this.preset === PRESET_TYPE.SHELF || this.preset === PRESET_TYPE.COVER
+      );
     },
     isDetailsPreset() {
       return this.preset === PRESET_TYPE.DETAILS;
     },
     isCompactPreset() {
       return this.preset === PRESET_TYPE.COMPACT;
+    },
+    isCoverPreset() {
+      return this.preset === PRESET_TYPE.COVER;
+    },
+    isFutureTheme() {
+      return this.theme === THEME_TYPE.FUTURE;
     },
     isNew() {
       // True if within 30 days
@@ -306,6 +329,9 @@ export default {
       };
     },
     bgStyle() {
+      if (this.isFutureTheme) {
+        return '';
+      }
       switch (this.preset) {
         case PRESET_TYPE.CAMPAIGN:
           return 'bg-like-green hover:shadow-lg';
@@ -319,6 +345,9 @@ export default {
       }
     },
     coverClasses() {
+      if (this.isFutureTheme) {
+        return [];
+      }
       const classes = ['shadow-lg'];
       if (!this.isDetailsPreset) {
         classes.push(

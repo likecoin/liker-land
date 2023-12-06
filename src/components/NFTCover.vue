@@ -37,16 +37,34 @@
         src="~/assets/images/nft/primitive-nft.jpg"
       />
     </div>
-    <div
-      v-if="isNftBook"
-      :class="['h-auto', 'w-[16px]', 'shrink-0']"
-      :style="`background: linear-gradient(to bottom, ${color1}, ${color2});`"
-    />
+    <template v-if="isNftBook">
+      <div
+        v-if="isFutureTheme"
+        :class="['h-auto', 'w-[25px]', 'shrink-0', 'flex', 'justify-between']"
+      >
+        <span
+          v-for="index in 4"
+          :key="index"
+          class="w-[1px] h-full"
+          :style="`background: ${index % 2 > 0 ? color1 : color2}`"
+        />
+      </div>
+      <div
+        v-else
+        :class="['h-auto', 'w-[16px]', 'shrink-0']"
+        :style="`background: linear-gradient(to bottom, ${color1}, ${color2});`"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import { getImageResizeAPI } from '~/util/api';
+
+const THEME_TYPE = {
+  DEFAULT: 'default',
+  FUTURE: 'future',
+};
 
 export default {
   name: 'NFTCover',
@@ -86,6 +104,10 @@ export default {
     shouldResizeSrc: {
       type: Boolean,
       default: true,
+    },
+    theme: {
+      type: String,
+      default: THEME_TYPE.DEFAULT,
     },
   },
   data() {
@@ -142,11 +164,16 @@ export default {
     },
     color1() {
       if (this.spineColor1 && this.spineColor2) return this.spineColor1;
+      if (this.theme === THEME_TYPE.FUTURE) return '#07233A';
       return '#EBEBEB';
     },
     color2() {
       if (this.spineColor1 && this.spineColor2) return this.spineColor2;
+      if (this.theme === THEME_TYPE.FUTURE) return '#07233A';
       return '#9B9B9B';
+    },
+    isFutureTheme() {
+      return this.theme === THEME_TYPE.FUTURE;
     },
   },
   watch: {
