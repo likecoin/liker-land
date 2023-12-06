@@ -13,6 +13,22 @@
         <div :class="contentPaddingClass">
           <table class="w-full">
             <tbody class="w-full">
+              <tr class="w-full border-b-shade-gray border-b-[1px]">
+                <td
+                  v-for="(text, index) in tableHeaderItems"
+                  :key="index"
+                  class="py-[8px]"
+                >
+                  <Label
+                    class="justify-start text-left text-dark-gray text-[12px] font-500"
+                    :text="text"
+                    tag="div"
+                    valign="middle"
+                    align="left"
+                    content-class="whitespace-nowrap"
+                  />
+                </td>
+              </tr>
               <NFTPageCollectorListItem
                 v-for="owner in trimmedItems"
                 :key="owner.id"
@@ -42,14 +58,6 @@
                   <IconPerson />
                 </template>
               </Label>
-              <Label
-                class="w-min font-600"
-                :text="$t('nft_details_page_label_owning')"
-                preset="h5"
-                valign="middle"
-                content-class="whitespace-nowrap text-like-green "
-                prepend-class="text-like-green"
-              />
             </div>
             <hr class="w-full border-shade-gray" />
           </template>
@@ -57,6 +65,22 @@
             <div class="min-w-[310px]">
               <table class="w-full">
                 <tbody class="w-full">
+                  <tr class="w-full border-b-shade-gray border-b-[1px]">
+                    <td
+                      v-for="(text, index) in tableHeaderItems"
+                      :key="index"
+                      class="py-[8px]"
+                    >
+                      <Label
+                        class="justify-start text-left text-dark-gray text-[12px] font-500"
+                        :text="text"
+                        tag="div"
+                        valign="middle"
+                        align="left"
+                        content-class="whitespace-nowrap"
+                      />
+                    </td>
+                  </tr>
                   <NFTPageCollectorListItem
                     v-for="owner in items"
                     :key="owner.id"
@@ -106,6 +130,13 @@ export default {
     },
     shouldShowMore() {
       return this.items.length > this.trimmedItems.length;
+    },
+    tableHeaderItems() {
+      return [
+        this.$t('nft_details_page_title_collector'),
+        this.$t('nft_message_type_generic'),
+        this.$t('nft_details_page_label_owning'),
+      ];
     },
   },
 };
