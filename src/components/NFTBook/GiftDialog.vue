@@ -6,90 +6,79 @@
     panel-class="overflow-y-scroll shadow-lg"
     @close="$emit('close')"
   >
-    <div class="flex gap-[8px]">
-      <IconGift class="w-[32px] text-dark-gray" />
-      <h1 class="text-like-cyan text-[32px] font-proxima font-[700]">
-        {{ $t('nft_book_gift_dialog_title') }}
-      </h1>
-    </div>
     <Label
-      class="text-medium-gray my-[12px]"
+      preset="h2"
+      class="text-like-green"
+      :text="$t('nft_book_gift_dialog_title')"
+    >
+      <template #prepend>
+        <IconGift class="w-[32px] text-like-green" />
+      </template>
+    </Label>
+    <Label
+      class="text-dark-gray my-[12px]"
       :text="$t('nft_book_gift_dialog_description')"
     />
-    <form class="flex-col w-full gap-[12px]" @submit.prevent="submitGiftInfo">
-      <div
-        class="flex w-full my-[8px] py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-      >
+    <hr class="w-full border-shade-gray" />
+    <form
+      class="flex flex-col w-full gap-[12px] my-[20px]"
+      @submit.prevent="submitGiftInfo"
+    >
+      <div class="flex flex-col">
         <Label
-          class="text-medium-gray"
           preset="p6"
+          class="text-medium-gray"
           :text="$t('nft_book_gift_dialog_label_to_email')"
-          align="center"
         />
-        <input
+        <TextField
           v-model="toEmail"
-          required
+          class="mt-[4px]"
           :placeholder="$t('nft_book_gift_dialog_placeholder_to_email')"
-          type="input"
-          class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
-          name="toEmail"
         />
       </div>
-      <div
-        class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-      >
+      <div class="flex flex-col">
         <Label
-          class="text-medium-gray"
           preset="p6"
+          class="text-medium-gray"
           :text="$t('nft_book_gift_dialog_label_to_name')"
-          align="center"
         />
-        <input
+        <TextField
           v-model="toName"
-          required
+          class="mt-[4px]"
           :placeholder="$t('nft_book_gift_dialog_placeholder_to_name')"
-          type="input"
-          class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
-          name="toName"
         />
       </div>
-      <div
-        class="flex-col w-full py-[10px] px-[16px] gap-[12px] rounded-[12px]"
-      >
-        <div class="flex gap-[8px]">
-          <IconMessage class="text-dark-gray" />
-          <Label
-            class="text-medium-gray"
-            preset="p6"
-            :text="$t('nft_book_gift_dialog_label_message')"
-            align="center"
-          />
-        </div>
-        <textarea
-          v-model="message"
-          cols="20"
-          class="w-full h-[20vh]"
-          :placeholder="$t('nft_book_gift_dialog_placeholder_message')"
-        ></textarea>
-      </div>
-      <div
-        class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-      >
+      <div class="flex flex-col justify-start">
         <Label
-          class="text-medium-gray"
           preset="p6"
-          :text="$t('nft_book_gift_dialog_label_from_name')"
-          align="center"
-        />
-        <input
-          v-model="fromName"
-          required
-          :placeholder="$t('nft_book_gift_dialog_placeholder_from_name')"
-          type="input"
-          class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
-          name="fromName"
+          content-class="flex-grow-0"
+          class="text-medium-gray"
+          :text="$t('nft_book_gift_dialog_label_message')"
+        >
+          <template #append>
+            <IconMessage class="text-dark-gray" />
+          </template>
+        </Label>
+        <TextField
+          v-model="message"
+          class="mt-[4px]"
+          :is-textarea="true"
+          :placeholder="$t('nft_book_gift_dialog_placeholder_message')"
         />
       </div>
+      <div class="flex flex-col">
+        <Label
+          preset="p6"
+          class="text-medium-gray"
+          :text="$t('nft_book_gift_dialog_label_from_name')"
+        />
+        <TextField
+          v-model="fromName"
+          class="mt-[4px]"
+          :placeholder="$t('nft_book_gift_dialog_placeholder_from_name')"
+        />
+      </div>
+      <hr class="w-full border-shade-gray mt-[20px]" />
       <ButtonV2
         type="submit"
         preset="outline"
