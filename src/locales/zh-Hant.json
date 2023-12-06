@@ -233,7 +233,7 @@
   "footer_subscribe_newsletter_button": "訂閱電子報",
   "GetAppPage": {
     "Og": {
-      "Description": "Writing NFT：隨心收藏，輕鬆出版。",
+      "Description": "下載手機應用程式，指尖之間收藏至愛作品。Liker Land - 讓故事成為收藏品",
       "Title": "@:GetAppPage.Title"
     },
     "Title": "下載 Liker Land App"
@@ -449,6 +449,8 @@
   "nft_details_page_section_metadata_nft_id": "NFT ID",
   "nft_details_page_section_metadata_url": "網址",
   "nft_details_page_title": "Writing NFT",
+  "nft_details_page_title_article": "Writing NFT",
+  "nft_details_page_title_book": "電子書",
   "nft_details_page_title_collector": "收藏者",
   "nft_details_page_title_transfer": "發送你的 NFT",
   "nft_download_content_error": "下載失敗",
@@ -549,7 +551,8 @@
   "notification_login_in": "驗證錢包以讀取通知",
   "notification_login_in_button": "驗證",
   "notification_view_more_button": "顯示更多",
-  "og_description": "讓故事成為收藏品",
+  "og_description": "讓故事成為收藏品。 Liker Land 電子書店將你的文字作品永續於去中心化網絡。",
+  "og_title": "Liker Land - 讓故事成為收藏品",
   "ok": "OK",
   "order_menu_by": "按{order}",
   "order_menu_collected": "擁有",
@@ -604,7 +607,7 @@
   "portfolio_subscription_verify": "驗證信已發到以下地址：{email}",
   "portfolio_subscription_verify_sendAgain": "沒收到驗證信？按此重試",
   "portfolio_subscription_verify_title": "驗證你的信箱",
-  "portfolio_title": "{name} 的 Writing NFT",
+  "portfolio_title": "{name} 的書架",
   "portfolio_unfollow_hint": "你已經關注了 {creator}",
   "portfolio_unsubscribe_confirm_button": "取消關注",
   "portfolio_unsubscribe_error_alert": "取消關注 {creator} 時遇到錯誤： {error}",
@@ -720,10 +723,10 @@
   "snackbar_success_collect": "完成收藏 \"{NFT}\".",
   "snackbar_success_transfer": "已完成發送作品",
   "store_articles_button": "瀏覽文章",
-  "store_books_page_description": "Liker Land 電子書城是電子書及文章愛好者的廣場，提供中文、英文的 EPUB 電子書，讓讀者擁有不一樣的閱讀體驗。Liker Land 推動分散式出版，實現出版自主，實現創作自由。",
+  "store_books_page_description": "Liker Land 電子書店是電子書及文章愛好者的廣場，提供中文、英文的 EPUB 電子書，讓讀者擁有不一樣的閱讀體驗。Liker Land 推動分散式出版，實現出版自主，實現創作自由。",
   "store_books_page_header": "所有書目",
-  "store_books_page_title": "Liker Land 電子書城 - 熱賣中的電子書",
-  "store_index_page_title": "Liker Land 電子書城 - 有溫度的電子書",
+  "store_books_page_title": "熱賣電子書 - Liker Land 電子書店",
+  "store_index_page_title": "Liker Land 電子書店",
   "store_nft_book_more_button": "更多書目",
   "subVPs": [
     "用 Liker Land 收發 LikeCoin 最便捷",

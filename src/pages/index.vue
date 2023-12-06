@@ -1701,6 +1701,31 @@ export default {
       hasFinishedHeroSectionScrollAnimation: false,
     };
   },
+  head() {
+    const title = this.$t('og_title');
+    const description = this.$t('og_description');
+    const meta = [
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: title,
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: description,
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: description,
+      },
+    ];
+    return {
+      title,
+      meta,
+    };
+  },
   computed: {
     ...mapGetters(['nftClassIdListInTrending']),
     trendingNFTList() {
