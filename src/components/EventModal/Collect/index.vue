@@ -449,7 +449,6 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
-import walletMixin from '~/mixins/wallet';
 import { EXTERNAL_HOST, W3C_EMAIL_REGEX } from '~/constant';
 
 const FOLLOW_PROMPT_STATE = {
@@ -466,7 +465,7 @@ export default {
     LocalMallIcon,
     MidAutumnSloganText,
   },
-  mixins: [clipboardMixin, nftMixin, walletMixin],
+  mixins: [clipboardMixin, nftMixin],
   props: {
     isOpen: {
       type: Boolean,
