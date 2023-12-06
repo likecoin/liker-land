@@ -1090,26 +1090,25 @@ export default {
           platform: this.platform,
         });
         window.open(link, '_blank', 'noopener');
-        return;
-      }
-
-      try {
-        const gaClientId = await getGaClientId(this);
-        const body = { memo, gaClientId };
-        if (this.walletEmail) {
-          body.email = this.walletEmail;
+      } else {
+        try {
+          const gaClientId = await getGaClientId(this);
+          const body = { memo, gaClientId };
+          if (this.walletEmail) {
+            body.email = this.walletEmail;
+          }
+          const { url } = await this.$api.$post(
+            postNewStripeFiatPayment({
+              classId,
+              wallet: this.getAddress,
+            }),
+            body
+          );
+          if (url) window.location.href = url;
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
         }
-        const { url } = await this.$api.$post(
-          postNewStripeFiatPayment({
-            classId,
-            wallet: this.getAddress,
-          }),
-          body
-        );
-        if (url) window.location.href = url;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
       }
     },
     async collectFreeNFT(classId, { memo = '' }) {

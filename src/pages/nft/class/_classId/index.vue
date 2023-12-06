@@ -897,9 +897,7 @@ export default {
               },
             })
           );
-          return;
-        }
-        if (edition.price > 0 && this.nftPriceInLIKE > 0) {
+        } else if (edition.price > 0 && this.nftPriceInLIKE > 0) {
           await this.initIfNecessary();
           if (this.hasConnectedWallet) {
             logPurchaseFlowEvent(
@@ -911,16 +909,16 @@ export default {
             this.walletFetchLIKEBalance();
           }
           this.uiToggleCollectModal({ classId: this.classId });
-          return;
+        } else {
+          const gaClientId = await getGaClientId(this);
+          const link = getNFTBookPurchaseLink({
+            classId: this.classId,
+            priceIndex: edition.index,
+            platform: this.platform,
+            gaClientId,
+          });
+          window.open(link, '_blank', 'noopener');
         }
-        const gaClientId = await getGaClientId(this);
-        const link = getNFTBookPurchaseLink({
-          classId: this.classId,
-          priceIndex: edition.index,
-          platform: this.platform,
-          gaClientId,
-        });
-        window.open(link, '_blank', 'noopener');
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
