@@ -43,7 +43,7 @@ export default {
   name: 'BookStorePage',
   async fetch({ store }) {
     try {
-      await store.dispatch('fetchBookstoreItems');
+      await store.dispatch('fetchBookstoreEditorialItems');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -51,7 +51,7 @@ export default {
   },
   head() {
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    this.nftBookstoreItems.forEach(classId => {
+    this.nftBookstoreEditorialItems.forEach(classId => {
       link.push({
         rel: 'prefetch',
         href: `/api/nft/metadata?class_id=${classId}`,
@@ -63,7 +63,7 @@ export default {
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'DataFeed',
-      dataFeedElement: this.nftBookstoreItems
+      dataFeedElement: this.nftBookstoreEditorialItems
         .filter(c => this.getNFTClassMetadataById(c.classId))
         .map(c => {
           const {
@@ -132,9 +132,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['nftBookstoreItems', 'getNFTClassMetadataById']),
+    ...mapGetters(['nftBookstoreEditorialItems', 'getNFTClassMetadataById']),
     nftBooks() {
-      const books = [...this.nftBookstoreItems];
+      const books = [...this.nftBookstoreEditorialItems];
       books.sort((a, b) => {
         const { locale } = this.$i18n;
         const aMatchedLocale = locale.includes(a.locale);

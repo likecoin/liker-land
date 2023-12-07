@@ -47,7 +47,7 @@ const state = () => ({
   latestNFTClassIdList: [],
   freeNFTClassIdList: [],
   trendingNFTClassIdList: [],
-  bookstoreItems: [],
+  bookstoreEditorialItems: [],
   bookstoreLists: {},
 });
 
@@ -149,8 +149,8 @@ const mutations = {
   [TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST](state, list) {
     state.trendingNFTClassIdList = list;
   },
-  [TYPES.NFT_SET_BOOKSTORE_ITEMS](state, items) {
-    state.bookstoreItems = items;
+  [TYPES.NFT_SET_BOOKSTORE_EDITORIAL_ITEMS](state, items) {
+    state.bookstoreEditorialItems = items;
   },
   [TYPES.NFT_SET_BOOKSTORE_LISTS](state, lists) {
     state.bookstoreLists = lists;
@@ -396,7 +396,7 @@ const getters = {
   nftClassIdListInFree: state => state.freeNFTClassIdList,
   nftClassIdListInTrending: state => state.trendingNFTClassIdList,
 
-  nftBookstoreItems: state => state.bookstoreItems,
+  nftBookstoreEditorialItems: state => state.bookstoreEditorialItems,
   nftGetBookstoreListItems: state => listId =>
     state.bookstoreLists[listId] || [],
 };
@@ -901,10 +901,10 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreItems({ commit, state }) {
-    if (state.bookstoreItems.length) return;
-    const { data } = await this.$api.get(api.fetchBookstoreItems());
-    commit(TYPES.NFT_SET_BOOKSTORE_ITEMS, data.results);
+  async fetchBookstoreEditorialItems({ commit, state }) {
+    if (state.bookstoreEditorialItems.length) return;
+    const { data } = await this.$api.get(api.fetchBookstoreEditorialItems());
+    commit(TYPES.NFT_SET_BOOKSTORE_EDITORIAL_ITEMS, data.results);
   },
   async fetchBookstoreList({ commit, state }) {
     if (Object.keys(state.bookstoreLists).length) return;
