@@ -253,6 +253,36 @@
     "WordPress": "WordPress"
   },
   "goBack": "Back",
+  "gutenbergPage":{
+    "Title": "Project Gutenberg",
+    "Og": {
+      "Description": "5,000 Project Gutenberg audiobooks are on LikeCoin chain",
+      "Title": "@:gutenbergPage.Title"
+    }
+  },
+  "gutenberg_intro_title": "5,000 Project Gutenberg audiobooks are on LikeCoin chain",
+  "gutenberg_intro_subtitle": "Knowledge is owned by everyone and yet no one",
+  "gutenberg_intro_description": "Knowledge in the public domain is possessed by everyone and yet owned by no one. This open nature of public knowledge is vital for fostering cultural and educational proliferation, where technologies can play transformative roles.  Project Gutenberg, an online library of free eBooks, is one of the most well-known initiative that has contributed to the human knowledge vault for 50 years.",
+  "gutenberg_project_title": "AI-Enhanced Audiobooks Unlock Global Knowledge",
+  "gutenberg_project_description": "n 2023 Sep, the project between Project Gutenberg, Microsoft, and MIT turns 5,000 ebooks in public domains into audiobooks with AI’s assistance. This collaborative effort opened up a treasure trove of literature in a widely consumable format, thereby extending the reach and impact of shared knowledge. ",
+  "gutenberg_decentralize_title": "Decentralize and Democratize Publishing with Blockchain",
+  "gutenberg_decentralize_description": "Although the project significantly improves the accessibility of knowledge by presenting it in more humanized and engaging ways, the maintenance of the knowledge vault, in this case the metadata and ebooks in various formats, still relies heavily on a few significant contributors like Project Gutenberg and Microsoft.  The ownership model of knowledge needs to be reformed, and this is where the concept of “Decentralized Publishing” comes into play.",
+  "gutenberg_blende_title": "LikeCoin’s Unique Blend of Literature and Blockchain",
+  "gutenberg_blende_description": "LikeCoin emerges as a pioneering blockchain devoted to decentralized publishing.  It preserves the knowledge treasures and further enhances them by registering over 5,000 ebooks and audiobooks—initially digitized by Project Gutenberg, voiced by Microsoft's AI, and supported by MIT's technological prowess—and is now on the LikeCoin chain.  All books have obtained a unique identifier called ISCN (International Standard Content Number), similar to ISBN in the traditional publishing industry but a Web3 version.  These books are now available for free download at Liker Land, an ebook store based on the LikeCoin ecosystem.",
+  "gutenberg_download_title": "Download the Free ebooks from Liker Land",
+  "gutenberg_download_subtitle": "Both EPUB and MP3 are Available",
+  "gutenberg_download_description": "Everyone can augment the books with improved readability and visual appeal by AI tools, and then publish the new Web3 edition as NFT books to capture additional revenue.  The books \"Dracula\" and \"Frankenstein\", which were gifted freely during Halloween by Liker Land, are examples that based on public domain ebooks, AI-generated covers, and manual re-editing.  Liker Land is thus setting the stage for anyone to publish and share ideas across various formats, democratizing the publishing industry and enabling creators to earn a living from their intellectual contributions.",
+  "gutenberg_book_whiteFang": "White Fang",
+  "gutenberg_book_frankenstein": "Frankenstein",
+  "gutenberg_download": "Download",
+  "gutenberg_download_more": "View more eBooks",
+  "gutenberg_publish_title": "What is Decentralized Publishing",
+  "gutenberg_publish_subtitle": "From the angle of traditional publishing industry",
+  "gutenberg_publish_description": "Publishing a book on the blockchain, was once technically challenging, has been greatly simplified. This innovation mirrors the traditional book publishing process but with a unique twist for the digital age. The first step involves registering the book's metadata, akin to obtaining an ISBN in conventional publishing, but in this case on the blockchain. Next, instead of printing physical copies, books are minted as NFTs. Distribution also takes a modern turn, with books being made available in digital ebook stores as opposed to traditional brick-and-mortar bookstores.",
+  "gutenberg_sign_title": "Together We Own Human’s History",
+  "gutenberg_sign_description": "With the help of artificial intelligence and blockchain, content can be presented in various formats and languages, also allowing a wide range of people to participate in collaboration, preserving shared memories. The latest developments in decentralized publishing demonstrate how new technologies are driving the progress of human society and realizing the beautiful vision of knowledge as a public resource.",
+  "gutenberg_sign_button": "Sign Up",
+
   "header_button_connect_to_wallet": "Connect Wallet",
   "header_button_try_collect": "Enter Store",
   "header_menu_LIKE": "LIKE",

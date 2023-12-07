@@ -253,6 +253,37 @@
     "WordPress": "WordPress"
   },
   "goBack": "返回",
+  "gutenbergPage":{
+    "Title": "本古騰堡計劃",
+    "Og": {
+      "Description": "古騰堡計劃、微軟和麻省理工學院的合作，將 5,000 本公有領域的著作製作成有聲書，並由 LikeCoin 去中心化社群保存。這個區塊鏈出版革命讓公有知識更易普及，同時促進知識的共享和保護。探索分散式出版的新時代。",
+      "Title": "@:gutenbergPage.Title"
+    }
+  },
+  "gutenberg_intro_title": "5,000 本「古騰堡計劃」有聲書上 LikeCoin 鏈",
+  "gutenberg_intro_subtitle": "社群協作讓知識天下公有",
+  "gutenberg_intro_description": "公有領域的知識也為所有人共有，卻又不屬於任何人。公有知識是集體的資源，思潮對所有人開放，不受版權的束縛；這種開放性對促進人類文明至關重要，而儲存、演繹和傳播技術在促進公有領域知識一事中扮演著變革性的角色。古騰堡計劃（Project Gutenberg）這個提供免費電子書的線上圖書館，正是一個默默貢獻人類知識寶庫 50 年的佼佼者。",
+  "gutenberg_project_title": "以 AI 技術提升的有聲書，連接全球知識",
+  "gutenberg_project_description": "2023年9月，古騰堡計劃、微軟和麻省理工學院合作以人工智能技術為 5,000 本公有領域的著作製作了有聲書版本，利用人工智能讓人類更方便地獲取知識。此合作項目開啟了一個更易普及和消化的文學寶藏，從而擴大了共享知識的影響。",
+  "gutenberg_decentralize_title": "以區塊鏈分散及民主化出版業",
+  "gutenberg_decentralize_description": "儘管該項目以更人性化和引人入勝的呈現方式顯著地降低了吸收知識的門檻，但知識庫的維護 - 即元資料和各種格式的電子書檔案 - 仍然在很大程度上依賴如古騰堡計劃和微軟等少數貢獻者。知識的擁有權模式必需改革以提高韌性，確保更廣泛的人群能參與知識庫的營運——這就是「分散式出版」的概念。",
+  "gutenberg_blende_title": "LikeCoin 創新整合區塊鏈及文學",
+  "gutenberg_blende_description": "LikeCoin 作為專注分散式出版的區塊鏈，保存並進一步強化了古騰堡計劃所收集的寶藏。5,000本由古騰堡計劃數碼化、由微軟的人工智能改進、並獲麻省理工學院的技術支援所生成的電子書和有聲書，現在已由 LikeCoin 區塊鏈註冊保存並整理。所有作品都註冊了一個稱為 ISCN（國際標準內容編號 International Standard Content Numbner）的唯一編碼，可理解為傳統出版業中的 ISBN 的 Web3 版本。這些藏品共中的1000本已出版成「NFT書」，供讀者和出版業者收藏、分享和售賣。這些書籍現在已可在 Liker Land 電子書店免費下載。",
+  "gutenberg_download_title": "從 Liker Land 下載免費電子書",
+  "gutenberg_download_subtitle": "提供 EPUB 及 MP3 檔",
+  "gutenberg_download_description": "任何人均可利用人工智能工具，提高書籍視覺上的吸引力和改善可讀性，並把新編之作出版成 NFT 書銷售以賺取利潤。例如，在萬聖節期間免費贈送的《德古拉》和《科學怪人》便是基於公有領域作品，以人工智能生成全新封面，並人手編輯文本重新包裝出版的 NFT 書，兩部作品已在 Liker Land 電子書店的書架上重生。Liker Land 搭起了民主化出版的舞台，讓任何人輕鬆地以各種格式發布和分享作品，使創作者能以創意謀生。",
+  "gutenberg_book_whiteFang": "White Fang",
+  "gutenberg_book_frankenstein": "Frankenstein",
+  "gutenberg_download": "下載",
+  "gutenberg_download_more": "查看更多電子書",
+  "gutenberg_publish_title": "分散式出版是什麼",
+  "gutenberg_publish_subtitle": "從傳統出版業的視角",
+  "gutenberg_publish_description": "在區塊鏈出版一本書的技術門檻對一般作者來說曾經高不可攀，但現在已變得簡單直接。分散式出版的每個步驟均可理解為傳統出版業的對應步驟：首先涉及註冊書籍的元資料，類似於在傳統出版中獲取 ISBN，但在分散式出版中則是在區塊鏈註冊 ISCN（國際標準內容編號）；接下來，有別於印刷實體書，在區塊鏈上則是「印刷」NFT 書，將擁有權和獨特性封裝起來；分銷模式也有根本的轉變，書籍在電子書店中上架而非實體書店。",
+  "gutenberg_sign_title": "讓人們真正掌握歷史話語權",
+  "gutenberg_sign_description": "在人工智能和區塊鏈的幫助下，內容可以多種格式和語言呈現，也讓廣泛的群眾參與協作，保存共享記憶。分散式出版的最新發展展示了新技術如何推動人類社會進步，並實現知識作公有資源的美好願景。",
+  "gutenberg_sign_button": "Sign Up",
+
+
   "header_button_connect_to_wallet": "連接錢包",
   "header_button_try_collect": "瀏覽書店",
   "header_menu_LIKE": "LIKE",
