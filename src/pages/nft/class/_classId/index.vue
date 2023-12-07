@@ -77,7 +77,7 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
-                @change.once="handleEditionSelectChange"
+                @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
@@ -294,8 +294,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 import { nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import {
@@ -573,9 +571,6 @@ export default {
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
-    editionPriceIndex() {
-      return Number(this.$route.query.price_index) || 0;
-    },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
@@ -671,6 +666,7 @@ export default {
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.fetchNFTBookInfoByClassId(this.classId).catch();
+        this.fetchNFTBookPaymentPriceInfo();
       }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -896,14 +892,41 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        const gaClientId = await getGaClientId(this);
-        const link = getNFTBookPurchaseLink({
-          classId: this.classId,
-          priceIndex: edition.index,
-          platform: this.platform,
-          gaClientId,
-        });
-        window.open(link, '_blank', 'noopener');
+        if (edition.price === 0) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-claim',
+              query: {
+                class_id: this.classId,
+                type: 'nft_book',
+                free: true,
+                price_index: edition.index,
+                from: 'liker_land_waived',
+              },
+            })
+          );
+        } else if (edition.price > 0 && this.nftPriceInLIKE > 0) {
+          await this.initIfNecessary();
+          if (this.hasConnectedWallet) {
+            logPurchaseFlowEvent(
+              this,
+              'add_shipping_info',
+              purchaseEventParams
+            );
+            this.fetchUserCollectedCount();
+            this.walletFetchLIKEBalance();
+          }
+          this.uiToggleCollectModal({ classId: this.classId });
+        } else {
+          const gaClientId = await getGaClientId(this);
+          const link = getNFTBookPurchaseLink({
+            classId: this.classId,
+            priceIndex: edition.index,
+            platform: this.platform,
+            gaClientId,
+          });
+          window.open(link, '_blank', 'noopener');
+        }
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
@@ -928,7 +951,14 @@ export default {
         1
       );
     },
-    handleEditionSelectChange() {
+    async handleEditionSelectChange(selectedValue) {
+      await this.$router.replace({
+        query: {
+          ...this.$route.query,
+          price_index: selectedValue,
+        },
+      });
+      await this.lazyFetchNFTBookPaymentPriceInfo();
       logTrackerEvent(
         this,
         'NFT',
