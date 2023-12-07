@@ -109,6 +109,11 @@
       <a class="hover:underline" :href="$t('footer_nav_faq_link')">{{
         $t('footer_nav_faq')
       }}</a>
+      <a
+        class="hover:underline"
+        href="https://likecoin.notion.site/liker-land-Terms-of-Service-dfcc13cf114e4fbc809c25559ce1d0e8?pvs=4"
+        >{{ $t('footer_nav_tnc') }}</a
+      >
     </div>
     <Dialog
       v-model="isOpenAboutTeam"
