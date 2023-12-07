@@ -477,6 +477,9 @@ export const getTotalResalesByAddress = address => {
 export const getNftBookBuyerMessage = classId =>
   `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/messages`;
 
+export const fetchBookstoreLatestItems = () =>
+  `${LIKECOIN_API_BASE}/likernft/book/store/list`;
+
 export const fetchBookstoreEditorialItems = () =>
   `${EXTERNAL_HOST}/api/bookstore/items`;
 
