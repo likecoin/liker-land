@@ -528,7 +528,7 @@ export default {
       });
     }
     const link = [];
-    if (this.isWritingNft) {
+    if (this.nftIsWritingNft) {
       link.push({
         hid: 'alternate-json-oembed',
         type: 'application/json+oembed',
