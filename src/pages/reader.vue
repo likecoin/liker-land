@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 flex flex-col justify-center items-center">
+  <div class="flex flex-col justify-center items-center">
     <ProgressIndicator v-if="isLoading" />
     <Component
       :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
@@ -11,11 +11,30 @@
       <ProgressIndicator v-if="!fileSrc" />
       <iframe
         v-else-if="format === 'pdf'"
+        class="fixed inset-0"
         :src="pdfIframeSrc"
         width="100%"
         height="100%"
         style="border:none"
       />
+      <template v-else-if="format === 'epub'">
+        <a
+          id="prev"
+          class="left-0 laptop:left-10 fixed top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
+          @click="onClickPrev"
+          >‹</a
+        >
+        <div
+          id="viewer"
+          class="mx-auto my-[40px] w-[1200px] h-[700px] shadow-md rounded-md p-0 relative"
+        />
+        <a
+          id="next"
+          class="right-0 laptop:right-10 fixed top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
+          @click="onClickNext"
+          >›</a
+        >
+      </template>
       <div v-else>
         Not implemented
       </div>
@@ -25,6 +44,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import Epub from 'epubjs';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -36,10 +56,8 @@ export default {
   data() {
     return {
       isLoading: true,
+      rendition: null,
     };
-  },
-  head: {
-    bodyAttrs: { class: 'overflow-hidden' },
   },
   computed: {
     ...mapGetters(['getHomeRoute']),
@@ -116,9 +134,27 @@ export default {
       } else {
         this.connectWallet();
       }
+
+      if (this.format === 'epub') {
+        const book = Epub(this.fileSrc);
+        this.rendition = book.renderTo('viewer', {
+          width: '100%',
+          height: '100%',
+          spread: 'always',
+        });
+        this.rendition.display();
+      }
     } finally {
       this.isLoading = false;
     }
+  },
+  methods: {
+    onClickPrev() {
+      this.rendition.prev();
+    },
+    onClickNext() {
+      this.rendition.next();
+    },
   },
 };
 </script>
