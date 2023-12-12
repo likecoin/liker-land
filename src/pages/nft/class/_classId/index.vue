@@ -753,6 +753,12 @@ export default {
     },
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+
+      if (this.nftIsNFTBook) {
+        await this.handleCollectFromEdition(this.defaultSelectedValue);
+        return;
+      }
+
       try {
         this.isCollecting = true;
         await this.collectNFT();
