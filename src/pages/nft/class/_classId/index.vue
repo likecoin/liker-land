@@ -921,7 +921,8 @@ export default {
               },
             })
           );
-        } else if (edition.price > 0 && this.nftPriceInLIKE > 0) {
+          // gift does not support LIKE payment for now
+        } else if (!giftInfo && edition.price > 0 && this.nftPriceInLIKE > 0) {
           await this.initIfNecessary();
           if (this.hasConnectedWallet) {
             logPurchaseFlowEvent(
