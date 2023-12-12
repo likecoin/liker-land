@@ -161,8 +161,6 @@
   </div>
 </template>
 <script>
-import { fetchGutenbergCsv } from '~/util/api';
-
 export default {
   name: 'GutenbergPage',
   layout: 'default',
@@ -194,27 +192,7 @@ export default {
       isOpenBookListDialog: false,
     };
   },
-  async mounted() {
-    await this.loadCSVFile();
-  },
   methods: {
-    async loadCSVFile() {
-      try {
-        console.log('here');
-        const response = await this.$api.$get(fetchGutenbergCsv()); // 替换为你的CSV文件路径
-        console.log('response', response);
-        // if (response.ok) {
-        //   const content = await response.text();
-        //   this.csvContent = content;
-        //   // 在这里处理CSV文件内容，例如将其解析为数据结构
-        //   console.log(content);
-        // } else {
-        //   console.error('Failed to fetch CSV file');
-        // }
-      } catch (error) {
-        console.error('Error loading CSV file:', error);
-      }
-    },
     handleClickFrankenstein() {
       this.$router.push(
         this.localeLocation({
