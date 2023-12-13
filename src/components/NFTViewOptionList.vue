@@ -104,12 +104,13 @@
 </template>
 
 <script>
-import querystring from 'querystring';
-import { saveAs } from 'file-saver';
-
 import alertMixin from '~/mixins/alert';
 
 import { parseNFTMetadataURL } from '~/util/nft';
+import {
+  getFilenameFromURL,
+  getDownloadFilenameFromURL,
+} from '~/util/nft-book';
 
 export default {
   name: 'NFTViewOptionList',
@@ -183,14 +184,8 @@ export default {
           return this.$t('nft_details_page_button_view_unknown');
       }
     },
-    getFilenameFromURL(url) {
-      const qsStr = url.split('?').pop();
-      const qs = querystring.parse(qsStr);
-      return qs?.name || '';
-    },
-    getDownloadFilenameFromURL(url) {
-      return `${this.getFilenameFromURL(url) || 'content'}`;
-    },
+    getFilenameFromURL,
+    getDownloadFilenameFromURL,
     handleClickViewContent() {
       this.$emit('view-content');
     },
