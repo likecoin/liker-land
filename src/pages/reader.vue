@@ -34,7 +34,11 @@
             </option>
           </select>
           <div class="flex grow justify-end">
-            <button class="w-[50px] my-[10px]" @click="onClickDownloadEpub">
+            <button
+              v-if="!hideDownload"
+              class="w-[50px] my-[10px]"
+              @click="onClickDownloadEpub"
+            >
               <IconDownload class="w-20 h-20" />
             </button>
           </div>
@@ -104,11 +108,11 @@ export default {
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);
     },
+    hideDownload() {
+      return this.$route.query.download === '0' || this.nftIsDownloadHidden;
+    },
     pdfIframeSrc() {
-      const download =
-        this.$route.query.download === '0' || this.nftIsDownloadHidden
-          ? '0'
-          : '1';
+      const download = this.hideDownload ? '0' : '1';
       const encodedUrl = encodeURIComponent(this.fileSrc);
       const encodedCorsUrl = encodeURIComponent(
         `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`
