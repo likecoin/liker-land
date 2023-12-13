@@ -18,19 +18,27 @@
         style="border:none"
       />
       <template v-else-if="format === 'epub'">
-        <select
-          v-model="epubSelectedChapter"
-          class="block mx-auto my-[10px] shadow-md rounded-4"
-          @change="onChangeEpubChapter"
-        >
-          <option
-            v-for="chapter in epubTOC"
-            :key="chapter.href"
-            :value="chapter.href"
+        <div class="flex justify-between items-center">
+          <div class="grow" />
+          <select
+            v-model="epubSelectedChapter"
+            class="my-[10px] shadow-md rounded-4"
+            @change="onChangeEpubChapter"
           >
-            {{ chapter.label }}
-          </option>
-        </select>
+            <option
+              v-for="chapter in epubTOC"
+              :key="chapter.href"
+              :value="chapter.href"
+            >
+              {{ chapter.label }}
+            </option>
+          </select>
+          <div class="flex grow justify-end">
+            <button class="w-[50px] my-[10px]" @click="onClickDownloadEpub">
+              <IconDownload class="w-20 h-20" />
+            </button>
+          </div>
+        </div>
         <a
           class="left-0 laptop:left-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
           @click="onClickEpubPrev"
@@ -56,9 +64,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import Epub from 'epubjs';
+import { saveAs } from 'file-saver';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+
+import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 export default {
   name: 'ReaderPage',
@@ -180,6 +191,19 @@ export default {
     },
     onClickEpubNext() {
       this.epubRendition.next();
+    },
+    async onClickDownloadEpub() {
+      try {
+        this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
+        const blob = await this.$axios.$get(this.fileSrc, {
+          responseType: 'blob',
+        });
+        saveAs(blob, getDownloadFilenameFromURL(this.fileSrc));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.alertPromptError(this.$t('nft_download_content_error'));
+      }
     },
   },
 };
