@@ -32,6 +32,7 @@
         />
         <TextField
           v-model="toEmail"
+          required
           class="mt-[4px]"
           :placeholder="$t('nft_book_gift_dialog_placeholder_to_email')"
         />
@@ -44,6 +45,7 @@
         />
         <TextField
           v-model="toName"
+          required
           class="mt-[4px]"
           :placeholder="$t('nft_book_gift_dialog_placeholder_to_name')"
         />
@@ -61,6 +63,7 @@
         </Label>
         <TextField
           v-model="message"
+          required
           class="mt-[4px]"
           :is-textarea="true"
           :placeholder="$t('nft_book_gift_dialog_placeholder_message')"
@@ -74,6 +77,7 @@
         />
         <TextField
           v-model="fromName"
+          required
           class="mt-[4px]"
           :placeholder="$t('nft_book_gift_dialog_placeholder_from_name')"
         />
