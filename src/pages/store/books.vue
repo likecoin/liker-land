@@ -20,6 +20,15 @@
         @click-item-avatar="handleClickItemAvatar"
       />
     </section>
+    <footer
+      class="flex flex-wrap justify-center items-center mt-[3rem] gap-[0.5rem]"
+    >
+      <ButtonV2
+        preset="secondary"
+        :text="$t('backToHome')"
+        :to="localeLocation({ name: 'store' })"
+      />
+    </footer>
   </Page>
 </template>
 
@@ -31,7 +40,7 @@ import { parseNFTMetadataURL } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  name: 'StoreAllBooksPage',
+  name: 'BookStorePage',
   async fetch({ store }) {
     try {
       await store.dispatch('fetchBookstoreItems');

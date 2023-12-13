@@ -42,7 +42,7 @@
         <Dropdown>
           <template #trigger="{ toggle }">
             <ButtonV2
-              class="mt-[12px] w-full"
+              class="w-full"
               preset="outline"
               :is-disabled="!isContentViewable"
               @click="toggle"

@@ -212,3 +212,5 @@ export const NFT_BATCH_COLLECT_MESSSAGE = '(multiple purchases)';
 
 export const GUTENBERG_ISCN_VIDEO_LINK =
   'https://youtu.be/85DOlacoy5Q?feature=shared';
+
+export const W3C_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
