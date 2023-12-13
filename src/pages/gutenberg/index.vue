@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-center text-dark-gray gap-[24px]">
     <section name="hero" class="mb-[36px] desktop:mb-[60px]">
       <div
-        class="relative flex justify-center px-[36px] pb-[60px] laptop:px-[24px] desktop:pb-[160px] mb-[48px]"
+        class="relative flex justify-center px-[36px] pb-[60px] mb-[48px] laptop:px-[24px] desktop:pb-[160px]"
       >
         <img
           class="w-full max-w-[90%] desktop:max-w-[936px]"
@@ -10,7 +10,7 @@
           alt=""
         />
         <div
-          class="absolute w-full bottom-0 bg-like-cyan-pale -z-1 h-[160px] desktop:h-[398px]"
+          class="absolute w-full h-[160px] bottom-0 bg-like-cyan-pale -z-1 desktop:h-[398px]"
         />
         <img
           class="absolute bottom-0 w-full max-w-[95%] sm:w-auto"
@@ -24,7 +24,7 @@
         />
       </div>
       <Label
-        class="w-full whitespace-pre-wrap text-[40px] text-like-green font-[300] italic"
+        class="w-full text-[40px] text-like-green font-[300] italic whitespace-pre-wrap "
         align="center"
         :text="$t('gutenberg_intro_title')"
       />
@@ -106,7 +106,7 @@
 
     <section
       name="blende"
-      class="flex flex-col my-[40px] items-center w-full mx-auto max-w-[1024px] desktop:pr-[85px] desktop:px-[85px] desktop:grid grid-cols-3 gap-x-[48px] gap-y-[32px]"
+      class="flex flex-col items-center mx-auto my-[40px] w-full max-w-[1024px] desktop:pr-[85px] desktop:px-[85px] desktop:grid grid-cols-3 gap-x-[48px] gap-y-[32px]"
     >
       <div class="col-span-1 flex flex-col items-center gap-[24px]">
         <img src="~/assets/images/gutenberg/blende.png" alt="" />
@@ -137,7 +137,7 @@
     </section>
 
     <section
-      class="flex flex-col gap-[18px] my-[40px] pt-[50px] bg-like-cyan-pale w-full"
+      class="flex flex-col gap-[18px] my-[40px] pt-[50px] w-full bg-like-cyan-pale"
       name="freeEpub"
     >
       <Label
@@ -345,21 +345,10 @@ export default {
     handleClickMore() {
       this.isOpenBookListDialog = true;
     },
-    resizeIframe() {
-      const iframe = document.getElementById('iframe');
-      const contentHeight = iframe.contentWindow.document.body.scrollHeight;
-      console.log('contentHeight', contentHeight);
-      iframe.style.height = `${contentHeight}px`;
-    },
   },
 };
 </script>
 <style>
-/* #frame {
-  width: 800px;
-  height: 520px;
-  border: 1px solid black;
-} */
 #frame {
   -ms-zoom: 0.75;
   -moz-transform: scale(0.75);
