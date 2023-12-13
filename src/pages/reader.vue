@@ -18,20 +18,31 @@
         style="border:none"
       />
       <template v-else-if="format === 'epub'">
+        <select
+          v-model="epubSelectedChapter"
+          class="block mx-auto my-[10px] shadow-md rounded-4"
+          @change="onChangeEpubChapter"
+        >
+          <option
+            v-for="chapter in epubTOC"
+            :key="chapter.href"
+            :value="chapter.href"
+          >
+            {{ chapter.label }}
+          </option>
+        </select>
         <a
-          id="prev"
           class="left-0 laptop:left-10 fixed top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-          @click="onClickPrev"
+          @click="onClickEpubPrev"
           >‹</a
         >
         <div
           id="viewer"
-          class="mx-auto my-[40px] w-[1200px] h-[700px] shadow-md rounded-md p-0 relative"
+          class="mx-auto my-0 w-[1200px] h-[700px] shadow-md rounded-4 p-0 relative"
         />
         <a
-          id="next"
           class="right-0 laptop:right-10 fixed top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-          @click="onClickNext"
+          @click="onClickEpubNext"
           >›</a
         >
       </template>
@@ -56,7 +67,10 @@ export default {
   data() {
     return {
       isLoading: true,
-      rendition: null,
+      epubTOC: [],
+      epubSelectedChapter: '',
+      epubBook: null,
+      epubRendition: null,
     };
   },
   computed: {
@@ -136,25 +150,53 @@ export default {
       }
 
       if (this.format === 'epub') {
-        const book = Epub(this.fileSrc);
-        this.rendition = book.renderTo('viewer', {
-          width: '100%',
-          height: '100%',
-          spread: 'always',
-        });
-        this.rendition.display();
+        this.initEpubRendition();
       }
     } finally {
       this.isLoading = false;
     }
   },
   methods: {
-    onClickPrev() {
-      this.rendition.prev();
+    initEpubRendition() {
+      this.epubBook = Epub(this.fileSrc);
+      this.epubBook.loaded.navigation.then(
+        navigation => (this.epubTOC = navigation.toc)
+      );
+      this.epubRendition = this.epubBook.renderTo('viewer', {
+        width: '100%',
+        height: '100%',
+        spread: 'always',
+      });
+      this.epubRendition.display();
+      this.epubRendition.on('rendered', () => {
+        this.epubSelectedChapter = this.epubRendition.currentLocation().start.href;
+      });
     },
-    onClickNext() {
-      this.rendition.next();
+    onChangeEpubChapter() {
+      this.epubRendition.display(this.epubSelectedChapter);
+    },
+    onClickEpubPrev() {
+      this.epubRendition.prev();
+    },
+    onClickEpubNext() {
+      this.epubRendition.next();
     },
   },
 };
 </script>
+
+<style>
+#viewer:after {
+  position: absolute;
+  width: 1px;
+  border-right: 1px #000 solid;
+  height: 90%;
+  z-index: 1;
+  left: 50%;
+  margin-left: -1px;
+  top: 5%;
+  opacity: 0.15;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
+  content: '';
+}
+</style>
