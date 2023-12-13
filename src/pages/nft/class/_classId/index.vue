@@ -79,6 +79,7 @@
                 :value="defaultSelectedValue"
                 @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
+                @click-gift="handleGiftFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
             </template>
@@ -290,6 +291,12 @@
         </section>
       </div>
     </div>
+    <NFTBookGiftDialog
+      :open="isGiftDialogOpen"
+      :selected-value="giftSelectedValue"
+      @submit="handleGiftSubmit"
+      @close="() => (isGiftDialogOpen = false)"
+    />
   </Page>
 </template>
 
@@ -327,6 +334,9 @@ export default {
       isOpenTransferModal: false,
       isTransferring: false,
       isCollecting: false,
+
+      isGiftDialogOpen: false,
+      giftSelectedValue: 0,
 
       trimmedCount: 10,
     };
@@ -877,7 +887,7 @@ export default {
       );
       return this.handleCollect();
     },
-    async handleCollectFromEdition(selectedValue) {
+    async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
       const edition = editions[selectedValue];
       const hasStock = edition?.stock;
@@ -911,7 +921,8 @@ export default {
               },
             })
           );
-        } else if (edition.price > 0 && this.nftPriceInLIKE > 0) {
+          // gift does not support LIKE payment for now
+        } else if (!giftInfo && edition.price > 0 && this.nftPriceInLIKE > 0) {
           await this.initIfNecessary();
           if (this.hasConnectedWallet) {
             logPurchaseFlowEvent(
@@ -929,9 +940,16 @@ export default {
             classId: this.classId,
             priceIndex: edition.index,
             platform: this.platform,
-            gaClientId,
           });
-          window.open(link, '_blank', 'noopener');
+          const { url } = await this.$axios.$post(link, {
+            gaClientId,
+            giftInfo,
+          });
+          if (url) {
+            window.location.href = url;
+          } else {
+            throw new Error('Failed to get purchase link');
+          }
         }
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
@@ -943,6 +961,28 @@ export default {
         this,
         'NFT',
         'nft_class_details_edition_selector_collect',
+        this.classId,
+        1
+      );
+    },
+    async handleGiftSubmit({ selectedValue, giftInfo }) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_gift_submit',
+        this.classId,
+        1
+      );
+      await this.handleCollectFromEdition(selectedValue, giftInfo);
+      this.isGiftDialogOpen = false;
+    },
+    handleGiftFromEditionSelector(selectedValue) {
+      this.giftSelectedValue = selectedValue;
+      this.isGiftDialogOpen = true;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_edition_selector_gift',
         this.classId,
         1
       );
