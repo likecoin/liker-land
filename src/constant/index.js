@@ -209,3 +209,6 @@ export const NFT_BOOK_PLATFORM_LIKER_LAND = 'liker_land';
 
 export const NFT_LEGACY_DEFAULT_MESSSAGE = 'like.co NFT API';
 export const NFT_BATCH_COLLECT_MESSSAGE = '(multiple purchases)';
+
+export const GUTENBERG_ISCN_VIDEO_LINK =
+  'https://youtu.be/85DOlacoy5Q?feature=shared';

@@ -1,16 +1,39 @@
 <template>
   <div class="flex flex-col justify-center text-dark-gray gap-[24px]">
+    <section name="hero" class="mb-[36px] desktop:mb-[60px]">
+      <div
+        class="relative flex justify-center px-[36px] pb-[60px] laptop:px-[24px] desktop:pb-[160px] mb-[48px]"
+      >
+        <img
+          class="w-full max-w-[90%] desktop:max-w-[936px]"
+          src="~/assets/images/gutenberg/hero.png"
+          alt=""
+        />
+        <div
+          class="absolute w-full bottom-0 bg-like-cyan-pale -z-1 h-[160px] desktop:h-[398px]"
+        />
+        <img
+          class="absolute bottom-0 w-full max-w-[95%] sm:w-auto"
+          src="~/assets/images/gutenberg/library.svg"
+          alt=""
+        />
+        <img
+          class="absolute bottom-[-20px] w-full max-w-[40%] laptop:w-auto laptop:bottom-[-30px]"
+          src="~/assets/images/gutenberg/title.svg"
+          alt=""
+        />
+      </div>
+      <Label
+        class="w-full whitespace-pre-wrap text-[40px] text-like-green font-[300] italic"
+        align="center"
+        :text="$t('gutenberg_intro_title')"
+      />
+    </section>
+
     <section
       name="intro"
       class="grid grid-cols-3 mb-[60px] px-[85px] w-full mx-auto max-w-[1024px]"
     >
-      <div class="col-span-3 mb-[120px]">
-        <Label
-          class="w-full whitespace-pre-wrap text-[54px] text-like-green"
-          align="left"
-          :text="$t('gutenberg_intro_title')"
-        />
-      </div>
       <div class="col-span-3">
         <Label
           class="w-full whitespace-pre-wrap"
@@ -33,18 +56,27 @@
 
     <section
       name="gutenbergProject"
-      class="flex flex-col desktop:grid desktop:grid-cols-2 relative items-center px-[85px] mb-[180px] w-full mx-auto max-w-[1024px]"
+      class="flex flex-col relative items-center px-[85px] mb-[180px] w-full mx-auto max-w-[1024px] desktop:grid desktop:grid-cols-2"
     >
-      <div class="flex justify-center col-span-1">
+      <div class="relative flex justify-center col-span-1">
         <div class="relative w-[60%] mb-[12px] desktop:ml-[-24px] desktop:mb-0">
           <img
             class="absolute top-[-12px] left-[-12px]"
             src="~/assets/images/gutenberg/imgContainer.svg"
             alt=""
           />
-          <img src="~/assets/images/gutenberg/gutenbergProject.png" alt="" />
+          <img
+            class="w-full max-w-[256px]"
+            src="~/assets/images/gutenberg/gutenbergProject.png"
+            alt=""
+          />
         </div>
       </div>
+      <img
+        class="absolute translate-y-[50%] bottom-[-75px] laptop:bottom-[-35px] laptop:z-1"
+        src="~/assets/images/gutenberg/sound.svg"
+        alt=""
+      />
       <div class="col-span-1 flex flex-col gap-[24px]">
         <Label preset="h2" :text="$t('gutenberg_project_title')" />
         <Label
@@ -52,16 +84,11 @@
           :text="$t('gutenberg_project_description')"
         />
       </div>
-      <img
-        class="absolute bottom-[-35px] translate-y-[50%]"
-        src="~/assets/images/gutenberg/sound.svg"
-        alt=""
-      />
     </section>
 
     <section
       name="decentralize"
-      class="relative flex items-center justify-center mb-[220px] w-full mx-auto max-w-[1024px]"
+      class="relative flex items-center justify-center px-[24px] mb-[220px] w-full mx-auto max-w-[1024px]"
     >
       <div class="flex flex-col items-center gap-[24px] desktop:w-[60%]">
         <Label preset="h2" :text="$t('gutenberg_decentralize_title')" />
@@ -79,12 +106,28 @@
 
     <section
       name="blende"
-      class="flex flex-col my-[40px] px-[85px] desktop:pr-[85px] pl-0 desktop:grid grid-cols-3 gap-x-[48px] gap-y-[32px] items-center w-full mx-auto max-w-[1024px]"
+      class="flex flex-col my-[40px] items-center w-full mx-auto max-w-[1024px] desktop:pr-[85px] desktop:px-[85px] desktop:grid grid-cols-3 gap-x-[48px] gap-y-[32px]"
     >
       <div class="col-span-1 flex flex-col items-center gap-[24px]">
         <img src="~/assets/images/gutenberg/blende.png" alt="" />
       </div>
-      <div class="col-span-2 flex flex-col items-start gap-[24px]">
+      <div
+        class="flex flex-col justify-center gap-[24px] px-[24px] laptop:hidden"
+      >
+        <Label
+          preset="h2"
+          align="center"
+          :text="$t('gutenberg_blende_title')"
+        />
+        <Label
+          class="text-like-green"
+          align="left"
+          :text="$t('gutenberg_blende_description')"
+        />
+      </div>
+      <div
+        class="hidden col-span-2 flex-col gap-[24px] px-[24px] laptop:flex laptop:items-start laptop:px-0"
+      >
         <Label preset="h2" :text="$t('gutenberg_blende_title')" />
         <Label
           class="text-like-green"
@@ -107,7 +150,9 @@
         class="text-[20px] text-like-green"
         :text="$t('gutenberg_download_subtitle')"
       />
-      <div class="flex items-center justify-center gap-[48px]">
+      <div
+        class="flex items-center justify-center gap-[12px] laptop:gap-[48px]"
+      >
         <div class="flex flex-col gap-[24px] relative max-w-[220px]">
           <img
             class="shadow-xl"
@@ -115,7 +160,7 @@
             alt=""
           />
           <div
-            class="flex flex-col justify-start gap-[12px] desktop:absolute desktop:translate-y-[100%] desktop:bottom-[-24px]"
+            class="flex flex-col justify-start gap-[12px] absolute translate-y-[100%] bottom-[-24px]"
           >
             <Label
               align="left"
@@ -144,10 +189,10 @@
             alt=""
           />
           <div
-            class="flex flex-col justify-start gap-[12px] desktop:absolute desktop:translate-y-[100%] desktop:bottom-[-24px]"
+            class="flex flex-col justify-start gap-[12px] absolute translate-y-[100%] bottom-[-24px]"
           >
             <Label
-              align="center"
+              align="left"
               preset="h4"
               :text="$t('gutenberg_book_whiteFang')"
             />
@@ -177,18 +222,33 @@
 
     <section
       name="publish"
-      class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[88px] my-[40px] w-full mx-auto max-w-[820px]"
+      class="flex flex-col items-center justify-center px-[12px] w-full max-w-[820px] mx-auto laptop:p-0"
     >
-      <Label preset="h2" :text="$t('gutenberg_publish_title')" />
-      <Label
-        class="text-[20px] text-medium-gray"
-        :text="$t('gutenberg_publish_subtitle')"
-      />
-      <Label
-        preset="p5"
-        class="w-full text-like-green"
-        :text="$t('gutenberg_publish_description')"
-      />
+      <div
+        class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[48px] my-[40px] laptop:px-[88px]"
+      >
+        <div class="w-full h-[300px] overflow-hidden mb-[12px]">
+          <iframe
+            id="frame"
+            class="w-full max-w-[800px] h-[520px]"
+            :src="youtubeUrl"
+            frameborder="0"
+            allowfullscreen
+            scrolling="no"
+          ></iframe>
+        </div>
+
+        <Label preset="h2" :text="$t('gutenberg_publish_title')" />
+        <Label
+          class="text-[20px] text-medium-gray"
+          :text="$t('gutenberg_publish_subtitle')"
+        />
+        <Label
+          preset="p5"
+          class="w-full text-like-green"
+          :text="$t('gutenberg_publish_description')"
+        />
+      </div>
     </section>
 
     <section
@@ -222,6 +282,8 @@
   </div>
 </template>
 <script>
+import { GUTENBERG_ISCN_VIDEO_LINK } from '~/constant';
+
 export default {
   name: 'GutenbergPage',
   layout: 'default',
@@ -247,11 +309,15 @@ export default {
       ],
     };
   },
-  computed: {},
   data() {
     return {
       isOpenBookListDialog: false,
     };
+  },
+  computed: {
+    youtubeUrl() {
+      return GUTENBERG_ISCN_VIDEO_LINK;
+    },
   },
   methods: {
     handleClickFrankenstein() {
@@ -277,9 +343,30 @@ export default {
       );
     },
     handleClickMore() {
-      console.log('here');
       this.isOpenBookListDialog = true;
+    },
+    resizeIframe() {
+      const iframe = document.getElementById('iframe');
+      const contentHeight = iframe.contentWindow.document.body.scrollHeight;
+      console.log('contentHeight', contentHeight);
+      iframe.style.height = `${contentHeight}px`;
     },
   },
 };
 </script>
+<style>
+/* #frame {
+  width: 800px;
+  height: 520px;
+  border: 1px solid black;
+} */
+#frame {
+  -ms-zoom: 0.75;
+  -moz-transform: scale(0.75);
+  -moz-transform-origin: 0 0;
+  -o-transform: scale(0.75);
+  -o-transform-origin: 0 0;
+  -webkit-transform: scale(0.75);
+  -webkit-transform-origin: 0 0;
+}
+</style>
