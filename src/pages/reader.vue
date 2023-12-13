@@ -32,7 +32,7 @@
           </option>
         </select>
         <a
-          class="left-0 laptop:left-10 fixed top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
+          class="left-0 laptop:left-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
           @click="onClickEpubPrev"
           >‹</a
         >
@@ -41,7 +41,7 @@
           class="mx-auto my-0 w-[1200px] h-[700px] shadow-md rounded-4 p-0 relative"
         />
         <a
-          class="right-0 laptop:right-10 fixed top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
+          class="right-0 laptop:right-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
           @click="onClickEpubNext"
           >›</a
         >
