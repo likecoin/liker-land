@@ -10,7 +10,7 @@
           alt=""
         />
         <div
-          class="absolute w-full h-[160px] bottom-0 bg-like-cyan-pale -z-1 desktop:h-[398px]"
+          class="absolute w-full h-[120px] sm:h-[160px] bottom-0 bg-like-cyan-pale -z-1 desktop:h-[398px]"
         />
         <img
           class="absolute bottom-0 w-full max-w-[95%] sm:w-auto"
@@ -227,17 +227,19 @@
       <div
         class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[48px] my-[40px] laptop:px-[88px]"
       >
-        <div class="w-full h-[300px] overflow-hidden mb-[12px]">
-          <iframe
-            id="frame"
-            class="w-full max-w-[800px] h-[520px]"
-            :src="youtubeUrl"
-            frameborder="0"
-            allowfullscreen
-            scrolling="no"
-          ></iframe>
+        <div class="w-full">
+          <vue-plyr>
+            <div class="plyr__video-embed">
+              <iframe
+                src="https://youtu.be/85DOlacoy5Q?feature=shared"
+                allowfullscreen
+                allowtransparency
+                allow="autoplay"
+                scrolling="no"
+              ></iframe>
+            </div>
+          </vue-plyr>
         </div>
-
         <Label preset="h2" :text="$t('gutenberg_publish_title')" />
         <Label
           class="text-[20px] text-medium-gray"
@@ -348,14 +350,3 @@ export default {
   },
 };
 </script>
-<style>
-#frame {
-  -ms-zoom: 0.75;
-  -moz-transform: scale(0.75);
-  -moz-transform-origin: 0 0;
-  -o-transform: scale(0.75);
-  -o-transform-origin: 0 0;
-  -webkit-transform: scale(0.75);
-  -webkit-transform-origin: 0 0;
-}
-</style>
