@@ -268,12 +268,9 @@
         :text="$t('gutenberg_sign_description')"
       />
       <div class="flex justify-center mt-[12px]">
-        <GutenbergButton
-          class="w-min"
-          :text="$t('gutenberg_sign_button')"
-          preset="primary"
-          @click="handleClickMore"
-        />
+        <div class="bg-like-green rounded-[14px] p-[4px]">
+          <div id="custom-substack-embed" />
+        </div>
       </div>
     </section>
 
@@ -350,3 +347,20 @@ export default {
   },
 };
 </script>
+
+<style>
+#custom-substack-embed .custom-substack-widget {
+  border-radius: 14px;
+}
+#custom-substack-embed .custom-substack-widget + .success {
+  color: #28646e;
+}
+@media screen and (min-width: 992px) {
+  .custom-substack-widget {
+    margin-left: auto;
+  }
+  .custom-substack-widget + .success {
+    text-align: right;
+  }
+}
+</style>
