@@ -24,7 +24,7 @@
         />
       </div>
       <Label
-        class="w-full text-[40px] text-like-green font-[300] italic whitespace-pre-wrap "
+        class="w-full text-[36px] text-like-green font-[300] italic whitespace-pre-wrap laptop:text-[40px]"
         align="center"
         :text="$t('gutenberg_intro_title')"
       />
@@ -32,11 +32,11 @@
 
     <section
       name="intro"
-      class="grid grid-cols-3 mb-[60px] px-[85px] w-full mx-auto max-w-[1024px]"
+      class="grid grid-cols-3 mb-[60px] px-[24px] w-full mx-auto max-w-[1024px] laptop:px-[85px]"
     >
       <div class="col-span-3">
         <Label
-          class="w-full whitespace-pre-wrap"
+          class="w-full laptop:whitespace-pre-wrap"
           preset="h2"
           align="left"
           :text="$t('gutenberg_intro_subtitle')"
@@ -56,7 +56,7 @@
 
     <section
       name="gutenbergProject"
-      class="flex flex-col relative items-center px-[85px] mb-[180px] w-full mx-auto max-w-[1024px] desktop:grid desktop:grid-cols-2"
+      class="flex flex-col relative items-center px-[24px] mb-[180px] w-full mx-auto max-w-[1024px] laptop:px-[85px] desktop:grid desktop:grid-cols-2"
     >
       <div class="relative flex justify-center col-span-1">
         <div class="relative w-[60%] mb-[12px] desktop:ml-[-24px] desktop:mb-0">
@@ -88,7 +88,7 @@
 
     <section
       name="decentralize"
-      class="relative flex items-center justify-center px-[24px] mb-[220px] w-full mx-auto max-w-[1024px]"
+      class="relative flex items-center justify-center px-[24px] mb-[160px] w-full mx-auto max-w-[1024px] laptop:mb-[220px]"
     >
       <div class="flex flex-col items-center gap-[24px] desktop:w-[60%]">
         <Label preset="h2" :text="$t('gutenberg_decentralize_title')" />
@@ -98,7 +98,7 @@
         />
       </div>
       <img
-        class="absolute bottom-[-125px] translate-y-[50%]"
+        class="absolute bottom-[-105px] translate-y-[50%] laptop:bottom-[-125px]"
         src="~/assets/images/gutenberg/decentralize.svg"
         alt=""
       />
@@ -137,7 +137,7 @@
     </section>
 
     <section
-      class="flex flex-col gap-[18px] my-[40px] pt-[50px] w-full bg-like-cyan-pale"
+      class="flex flex-col gap-[18px] my-[40px] p-[12px] pt-[50px] w-full bg-like-cyan-pale"
       name="freeEpub"
     >
       <Label
@@ -225,7 +225,7 @@
       class="flex flex-col items-center justify-center px-[12px] w-full max-w-[820px] mx-auto laptop:p-0"
     >
       <div
-        class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[48px] my-[40px] laptop:px-[88px]"
+        class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[24px] my-[40px] laptop:px-[88px]"
       >
         <div class="w-full">
           <vue-plyr>
@@ -240,7 +240,7 @@
             </div>
           </vue-plyr>
         </div>
-        <Label preset="h2" :text="$t('gutenberg_publish_title')" />
+        <Label preset="h3" :text="$t('gutenberg_publish_title')" />
         <Label
           class="text-[20px] text-medium-gray"
           :text="$t('gutenberg_publish_subtitle')"
@@ -255,11 +255,11 @@
 
     <section
       name="sign"
-      class="flex flex-col justify-center gap-[18px] mt-[24px] mb-[180px] w-full mx-auto max-w-[740px] "
+      class="flex flex-col justify-center gap-[18px] px-[12px] mt-[24px] mb-[180px] w-full mx-auto max-w-[740px] "
     >
       <Label
         align="center"
-        class="text-[54px] font-200 text-like-green whitespace-pre-wrap"
+        class="text-[40px] font-200 text-like-green whitespace-pre-wrap laptop:text-[52px]"
         :text="$t('gutenberg_sign_title')"
       />
       <Label

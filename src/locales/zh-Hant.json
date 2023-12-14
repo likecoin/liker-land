@@ -261,8 +261,8 @@
       "Title": "@:gutenbergPage.Title"
     }
   },
-  "gutenberg_intro_title": "5,000 本「古騰堡計劃」有聲書上 LikeCoin 鏈",
-  "gutenberg_intro_subtitle": "社群協作讓知識天下公有",
+  "gutenberg_intro_title": "本「古騰堡計劃」有聲書上 LikeCoin 鏈",
+  "gutenberg_intro_subtitle": "社群協作讓知識\n天下公有",
   "gutenberg_intro_description": "公有領域的知識也為所有人共有，卻又不屬於任何人。公有知識是集體的資源，思潮對所有人開放，不受版權的束縛；這種開放性對促進人類文明至關重要，而儲存、演繹和傳播技術在促進公有領域知識一事中扮演著變革性的角色。古騰堡計劃（Project Gutenberg）這個提供免費電子書的線上圖書館，正是一個默默貢獻人類知識寶庫 50 年的佼佼者。",
   "gutenberg_project_title": "以 AI 技術提升的有聲書，連接全球知識",
   "gutenberg_project_description": "2023年9月，古騰堡計劃、微軟和麻省理工學院合作以人工智能技術為 5,000 本公有領域的著作製作了有聲書版本，利用人工智能讓人類更方便地獲取知識。此合作項目開啟了一個更易普及和消化的文學寶藏，從而擴大了共享知識的影響。",
@@ -277,7 +277,9 @@
   "gutenberg_download_subtitle": "提供 EPUB 及 MP3 檔",
   "gutenberg_download_description": "任何人均可利用人工智能工具，提高書籍視覺上的吸引力和改善可讀性，並把新編之作出版成 NFT 書銷售以賺取利潤。例如，在萬聖節期間免費贈送的《德古拉》和《科學怪人》便是基於公有領域作品，以人工智能生成全新封面，並人手編輯文本重新包裝出版的 NFT 書，兩部作品已在 Liker Land 電子書店的書架上重生。Liker Land 搭起了民主化出版的舞台，讓任何人輕鬆地以各種格式發布和分享作品，使創作者能以創意謀生。",
   "gutenberg_book_whiteFang": "White Fang",
+  "gutenberg_author_whiteFang": "Jack London",
   "gutenberg_book_frankenstein": "Frankenstein",
+  "gutenberg_author_frankenstein": "Mary Shelle",
   "gutenberg_download": "下載",
   "gutenberg_download_more": "查看更多電子書",
   "gutenberg_publish_title": "分散式出版是什麼",
