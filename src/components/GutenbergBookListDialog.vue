@@ -15,9 +15,6 @@
             <th class="py-[12px] text-[14px] text-left">
               {{ $t('gutenberg_dialog_title_classTitle') }}
             </th>
-            <th class="py-[12px] text-[14px] text-left whitespace-nowrap">
-              {{ $t('gutenberg_dialog_title_price') }}
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -62,7 +59,7 @@ import { ellipsis } from '~/util/ui';
 import { fetchGutenbergCsv } from '~/util/api';
 import csvParser from 'csv-parser';
 
-const DISPLAY_COLUMN = ['classTitle', 'editionTitleEn', 'classId'];
+const DISPLAY_COLUMN = ['classTitle', 'classId'];
 
 export default {
   filters: {
@@ -134,14 +131,15 @@ export default {
       if (!classId || classId === 'failed') {
         return;
       }
-      this.$router.push(
+      const url = this.$router.resolve(
         this.localeLocation({
           name: 'nft-class-classId',
           params: {
             classId,
           },
         })
-      );
+      ).href;
+      window.open(url, '_blank');
     },
   },
 };

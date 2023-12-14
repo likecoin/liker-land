@@ -321,7 +321,7 @@ export default {
   },
   methods: {
     handleClickFrankenstein() {
-      this.$router.push(
+      const url = this.$router.resolve(
         this.localeLocation({
           name: 'nft-class-classId',
           params: {
@@ -329,7 +329,8 @@ export default {
               'likenft1hk54hskjr0hn4lqjsexuj8gd7w9m6pvpzn0yyrqlhrvstj07d97qyesck4',
           },
         })
-      );
+      ).href;
+      window.open(url, '_blank');
     },
     handleClickWhiteFang() {
       this.$router.push(
