@@ -269,9 +269,14 @@
         :text="$t('gutenberg_sign_description')"
       />
       <div class="flex justify-center mt-[12px]">
-        <div class="bg-like-green rounded-[14px] p-[4px]">
-          <div id="custom-substack-embed" />
-        </div>
+        <iframe
+          src="https://newsletter.like.co/embed"
+          width="480"
+          height="320"
+          style="border:1px solid #EEE; background:white;"
+          frameborder="0"
+          scrolling="no"
+        ></iframe>
       </div>
     </section>
 
@@ -321,7 +326,7 @@ export default {
   },
   methods: {
     handleClickFrankenstein() {
-      const url = this.$router.resolve(
+      this.$router.push(
         this.localeLocation({
           name: 'nft-class-classId',
           params: {
@@ -329,8 +334,7 @@ export default {
               'likenft1hk54hskjr0hn4lqjsexuj8gd7w9m6pvpzn0yyrqlhrvstj07d97qyesck4',
           },
         })
-      ).href;
-      window.open(url, '_blank');
+      );
     },
     handleClickWhiteFang() {
       this.$router.push(
@@ -349,20 +353,3 @@ export default {
   },
 };
 </script>
-
-<style>
-#custom-substack-embed .custom-substack-widget {
-  border-radius: 14px;
-}
-#custom-substack-embed .custom-substack-widget + .success {
-  color: #28646e;
-}
-@media screen and (min-width: 992px) {
-  .custom-substack-widget {
-    margin-left: auto;
-  }
-  .custom-substack-widget + .success {
-    text-align: right;
-  }
-}
-</style>
