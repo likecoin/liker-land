@@ -219,9 +219,14 @@ export default {
           const blob = await this.$axios.$get(url, { responseType: 'blob' });
           saveAs(blob, this.getDownloadFilenameFromURL(contentUrl));
         } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          this.alertPromptError(this.$t('nft_download_content_error'));
+          if (error.message === 'Network Error') {
+            // bypass CORS
+            window.location.href = url;
+          } else {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            this.alertPromptError(this.$t('nft_download_content_error'));
+          }
         }
       }
     },
