@@ -24,7 +24,7 @@
         />
       </div>
       <Label
-        class="w-full text-[36px] text-like-green font-[300] italic whitespace-pre-wrap laptop:text-[40px]"
+        class="w-full text-[36px] text-like-green font-[300] italic whitespace-pre-wrap laptop:text-[52px]"
         align="center"
         :text="$t('gutenberg_intro_title')"
       />
@@ -137,6 +137,7 @@
     </section>
 
     <section
+      id="download"
       class="flex flex-col gap-[18px] my-[40px] p-[12px] pt-[50px] w-full bg-like-cyan-pale"
       name="freeEpub"
     >
