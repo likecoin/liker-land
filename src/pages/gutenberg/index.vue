@@ -188,9 +188,9 @@
           <SwiperSlide
             v-for="book of freeDownloadList"
             :key="book.classId"
-            class="px-[40px] sm:px-0"
+            class="px-[30px] sm:px-0"
             style="
-          width: 360px; /* NOTE: Set width in style for auto slide per view calculation */
+          width: 240px; /* NOTE: Set width in style for auto slide per view calculation */
         "
           >
             <div class="flex flex-col gap-[24px] relative">
@@ -343,7 +343,7 @@ export default {
         spaceBetween: 40,
         centeredSlides: true,
         breakpoints: {
-          laptop: {
+          769: {
             centeredSlides: true,
           },
         },
