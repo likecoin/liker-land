@@ -138,7 +138,7 @@
 
     <section
       id="download"
-      class="flex flex-col gap-[18px] my-[40px] p-[12px] pt-[50px] w-full bg-like-cyan-pale"
+      class="flex flex-col gap-[18px] my-[40px] px-[12px] pt-[50px] w-full bg-like-cyan-pale"
       name="freeEpub"
     >
       <Label
@@ -152,68 +152,70 @@
         :text="$t('gutenberg_download_subtitle')"
       />
       <div
-        class="flex items-center justify-center gap-[12px] laptop:gap-[48px]"
+        class="items-end justify-center gap-[12px] hidden laptop:gap-[48px] laptop:flex"
       >
-        <div class="flex flex-col gap-[24px] relative max-w-[220px]">
-          <img
-            class="shadow-xl"
-            src="~/assets/images/gutenberg/Frankenstein.png"
-            alt=""
-          />
+        <div
+          v-for="book of freeDownloadList"
+          :key="book.classId"
+          class="flex flex-col gap-[24px] relative max-w-[220px]"
+        >
+          <img class="shadow-2xl" :src="book.imgSrc" :alt="book.title" />
           <div
             class="flex flex-col justify-start gap-[12px] absolute translate-y-[100%] bottom-[-24px]"
           >
-            <Label
-              align="left"
-              preset="h4"
-              :text="$t('gutenberg_book_frankenstein')"
-            />
+            <Label align="left" preset="h4" :text="book.title" />
             <Label
               align="left"
               class="text-[14px] text-medium-gray"
-              :text="$t('gutenberg_author_frankenstein')"
+              :text="book.author"
             />
             <div class="flex">
               <GutenbergButton
                 class="w-min mt-[8px]"
                 :text="$t('gutenberg_download')"
-                @click="handleClickFrankenstein"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-col gap-[24px] relative max-w-[220px]">
-          <img
-            class="shadow-xl"
-            src="~/assets/images/gutenberg/WhiteFang.jpeg"
-            alt=""
-          />
-          <div
-            class="flex flex-col justify-start gap-[12px] absolute translate-y-[100%] bottom-[-24px]"
-          >
-            <Label
-              align="left"
-              preset="h4"
-              :text="$t('gutenberg_book_whiteFang')"
-            />
-            <Label
-              align="left"
-              class="text-[14px] text-medium-gray"
-              :text="$t('gutenberg_author_whiteFang')"
-            />
-            <div class="flex">
-              <GutenbergButton
-                class="mt-[8px]"
-                :text="$t('gutenberg_download')"
-                @click="handleClickWhiteFang"
+                @click="() => handleClickDownload(book.classId)"
               />
             </div>
           </div>
         </div>
       </div>
+      <div class="w-full mb-[12px] laptop:hidden">
+        <Swiper
+          ref="swiper"
+          :options="swiperOptions"
+          @slider-move="handleSliderMove"
+        >
+          <SwiperSlide
+            v-for="book of freeDownloadList"
+            :key="book.classId"
+            class="px-[40px] sm:px-0"
+            style="
+          width: 360px; /* NOTE: Set width in style for auto slide per view calculation */
+        "
+          >
+            <div class="flex flex-col gap-[24px] relative">
+              <img class="shadow-2xl" :src="book.imgSrc" :alt="book.title" />
+              <div class="flex flex-col justify-start gap-[12px]">
+                <Label align="left" preset="h4" :text="book.title" />
+                <Label
+                  align="left"
+                  class="text-[14px] text-medium-gray"
+                  :text="book.author"
+                />
+                <div class="flex">
+                  <GutenbergButton
+                    class="w-min mt-[8px]"
+                    :text="$t('gutenberg_download')"
+                    @click="() => handleClickDownload(book.classId)"
+                  />
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
     </section>
-    <div class="flex justify-center mt-[160px]">
+    <div class="flex justify-center mt-[220px]">
       <GutenbergButton
         :text="$t('gutenberg_download_more')"
         preset="primary"
@@ -287,11 +289,25 @@
   </div>
 </template>
 <script>
-import { GUTENBERG_ISCN_VIDEO_LINK } from '~/constant';
+import {
+  GUTENBERG_ISCN_VIDEO_LINK,
+  GUTENBERG_FREE_DOWNLOAD_LIST,
+} from '~/constant';
+
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 export default {
   name: 'GutenbergPage',
   layout: 'default',
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  data() {
+    return {
+      isOpenBookListDialog: false,
+    };
+  },
   head() {
     return {
       title: this.$t('gutenbergPage.Title'),
@@ -314,41 +330,55 @@ export default {
       ],
     };
   },
-  data() {
-    return {
-      isOpenBookListDialog: false,
-    };
-  },
   computed: {
     youtubeUrl() {
       return GUTENBERG_ISCN_VIDEO_LINK;
     },
+    freeDownloadList() {
+      return GUTENBERG_FREE_DOWNLOAD_LIST;
+    },
+    swiperOptions() {
+      return {
+        slidesPerView: 'auto',
+        spaceBetween: 40,
+        centeredSlides: true,
+        breakpoints: {
+          laptop: {
+            centeredSlides: true,
+          },
+        },
+        loop: true,
+      };
+    },
+    swiper() {
+      return this.$refs.swiper?.$swiper;
+    },
   },
   methods: {
-    handleClickFrankenstein() {
-      this.$router.push(
+    handleClickDownload(classId) {
+      const url = this.$router.resolve(
         this.localeLocation({
           name: 'nft-class-classId',
           params: {
-            classId:
-              'likenft1hk54hskjr0hn4lqjsexuj8gd7w9m6pvpzn0yyrqlhrvstj07d97qyesck4',
+            classId,
           },
         })
-      );
-    },
-    handleClickWhiteFang() {
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: {
-            classId:
-              'likenft199wngygyv2nj7yv8264kxrzqstvptv35awn20c64djz9y4c00xmsvz08yy',
-          },
-        })
-      );
+      ).href;
+      window.open(url, '_blank');
     },
     handleClickMore() {
       this.isOpenBookListDialog = true;
+    },
+    handleClickPrev() {
+      this.$emit('slide-prev');
+      this.swiper.slidePrev();
+    },
+    handleClickNext() {
+      this.$emit('slide-next');
+      this.swiper.slideNext();
+    },
+    handleSliderMove() {
+      this.$emit('slider-move');
     },
   },
 };
