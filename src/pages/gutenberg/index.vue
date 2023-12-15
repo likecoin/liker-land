@@ -106,9 +106,9 @@
 
     <section
       name="blende"
-      class="flex flex-col items-center mx-auto my-[40px] w-full max-w-[1024px] desktop:pr-[85px] desktop:px-[85px] desktop:grid grid-cols-3 gap-x-[48px] gap-y-[32px]"
+      class="flex flex-col items-center mx-auto my-[40px] w-full max-w-[1024px] px-[12px] desktop:pr-[85px] desktop:grid grid-cols-7 gap-x-[48px] gap-y-[32px]"
     >
-      <div class="col-span-1 flex flex-col items-center gap-[24px]">
+      <div class="col-span-3 flex flex-col items-center gap-[24px]">
         <img src="~/assets/images/gutenberg/blende.png" alt="" />
       </div>
       <div
@@ -126,7 +126,7 @@
         />
       </div>
       <div
-        class="hidden col-span-2 flex-col gap-[24px] px-[24px] laptop:flex laptop:items-start laptop:px-0"
+        class="hidden col-span-4 flex-col gap-[24px] px-[24px] laptop:flex laptop:items-start laptop:px-0"
       >
         <Label preset="h2" :text="$t('gutenberg_blende_title')" />
         <Label
