@@ -179,7 +179,35 @@
           </div>
         </div>
       </div>
-      <div class="w-full mb-[12px] laptop:hidden">
+      <div
+        class="flex items-end justify-center gap-[12px] laptop:gap-[48px] laptop:hidden"
+      >
+        <div class="flex flex-col gap-[24px] relative max-w-[220px]">
+          <img
+            class="shadow-2xl"
+            :src="freeDownloadList[0].imgSrc"
+            :alt="freeDownloadList[0].title"
+          />
+          <div
+            class="flex flex-col justify-start gap-[12px] absolute translate-y-[100%] bottom-[-24px]"
+          >
+            <Label align="left" preset="h4" :text="freeDownloadList[0].title" />
+            <Label
+              align="left"
+              class="text-[14px] text-medium-gray"
+              :text="freeDownloadList[0].author"
+            />
+            <div class="flex">
+              <GutenbergButton
+                class="w-min mt-[8px]"
+                :text="$t('gutenberg_download')"
+                @click="() => handleClickDownload(freeDownloadList[0].classId)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="w-full mb-[12px] laptop:hidden">
         <client-only>
           <Swiper
             ref="swiper"
@@ -215,7 +243,7 @@
             </SwiperSlide>
           </Swiper>
         </client-only>
-      </div>
+      </div> -->
     </section>
     <div class="flex justify-center mt-[220px]">
       <GutenbergButton
@@ -298,14 +326,14 @@ import {
   GUTENBERG_FREE_DOWNLOAD_LIST,
 } from '~/constant';
 
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+// import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 export default {
   name: 'GutenbergPage',
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
+  // components: {
+  //   Swiper,
+  //   SwiperSlide,
+  // },
   layout: 'default',
   data() {
     return {
