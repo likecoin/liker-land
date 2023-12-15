@@ -230,19 +230,21 @@
       <div
         class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[24px] my-[40px] laptop:px-[88px]"
       >
-        <div class="w-full">
-          <vue-plyr>
-            <div class="plyr__video-embed">
-              <iframe
-                src="https://youtu.be/85DOlacoy5Q?feature=shared"
-                allowfullscreen
-                allowtransparency
-                allow="autoplay"
-                scrolling="no"
-              ></iframe>
-            </div>
-          </vue-plyr>
-        </div>
+        <client-only>
+          <div class="w-full">
+            <VuePlyr>
+              <div class="plyr__video-embed">
+                <iframe
+                  src="https://youtu.be/85DOlacoy5Q?feature=shared"
+                  allowfullscreen
+                  allowtransparency
+                  allow="autoplay"
+                  scrolling="no"
+                ></iframe>
+              </div>
+            </VuePlyr>
+          </div>
+        </client-only>
         <Label preset="h3" :text="$t('gutenberg_publish_title')" />
         <Label
           class="text-[20px] text-medium-gray"
@@ -298,11 +300,11 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 export default {
   name: 'GutenbergPage',
-  layout: 'default',
   components: {
     Swiper,
     SwiperSlide,
   },
+  layout: 'default',
   data() {
     return {
       isOpenBookListDialog: false,
