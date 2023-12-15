@@ -180,39 +180,41 @@
         </div>
       </div>
       <div class="w-full mb-[12px] laptop:hidden">
-        <Swiper
-          ref="swiper"
-          :options="swiperOptions"
-          @slider-move="handleSliderMove"
-        >
-          <SwiperSlide
-            v-for="book of freeDownloadList"
-            :key="book.classId"
-            class="px-[30px] sm:px-0"
-            style="
+        <client-only>
+          <Swiper
+            ref="swiper"
+            :options="swiperOptions"
+            @slider-move="handleSliderMove"
+          >
+            <SwiperSlide
+              v-for="book of freeDownloadList"
+              :key="book.classId"
+              class="px-[30px] sm:px-0"
+              style="
           width: 240px; /* NOTE: Set width in style for auto slide per view calculation */
         "
-          >
-            <div class="flex flex-col gap-[24px] relative">
-              <img class="shadow-2xl" :src="book.imgSrc" :alt="book.title" />
-              <div class="flex flex-col justify-start gap-[12px]">
-                <Label align="left" preset="h4" :text="book.title" />
-                <Label
-                  align="left"
-                  class="text-[14px] text-medium-gray"
-                  :text="book.author"
-                />
-                <div class="flex">
-                  <GutenbergButton
-                    class="w-min mt-[8px]"
-                    :text="$t('gutenberg_download')"
-                    @click="() => handleClickDownload(book.classId)"
+            >
+              <div class="flex flex-col gap-[24px] relative">
+                <img class="shadow-2xl" :src="book.imgSrc" :alt="book.title" />
+                <div class="flex flex-col justify-start gap-[12px]">
+                  <Label align="left" preset="h4" :text="book.title" />
+                  <Label
+                    align="left"
+                    class="text-[14px] text-medium-gray"
+                    :text="book.author"
                   />
+                  <div class="flex">
+                    <GutenbergButton
+                      class="w-min mt-[8px]"
+                      :text="$t('gutenberg_download')"
+                      @click="() => handleClickDownload(book.classId)"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </SwiperSlide>
-        </Swiper>
+            </SwiperSlide>
+          </Swiper>
+        </client-only>
       </div>
     </section>
     <div class="flex justify-center mt-[220px]">
