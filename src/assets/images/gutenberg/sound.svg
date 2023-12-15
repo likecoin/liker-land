@@ -1,0 +1,17 @@
+<svg width="1024" height="226" viewBox="0 0 1024 226" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <rect x="434" width="4" height="226" rx="2" fill="#AAF1E7"/>
+  <rect x="446" y="22" width="4" height="182" rx="2" fill="#AAF1E7"/>
+  <rect x="422" y="47" width="4" height="132" rx="2" fill="#AAF1E7"/>
+  <rect x="410" y="80" width="4" height="66" rx="2" fill="#AAF1E7"/>
+  <rect x="398" y="68" width="4" height="90" rx="2" fill="#AAF1E7"/>
+  <rect x="386" y="92" width="4" height="42" rx="2" fill="#AAF1E7"/>
+  <rect x="374" y="101" width="4" height="24" rx="2" fill="#AAF1E7"/>
+  <rect x="458" y="19" width="4" height="188" rx="2" fill="#AAF1E7"/>
+  <rect x="470" y="68" width="4" height="90" rx="2" fill="#AAF1E7"/>
+  <rect x="482" y="61" width="4" height="104" rx="2" fill="#AAF1E7"/>
+  <rect x="494" y="99" width="4" height="28" rx="2" fill="#AAF1E7"/>
+  <rect x="506" y="107" width="4" height="12" rx="2" fill="#AAF1E7"/>
+  <path d="M528 113.001L1024 113.001" stroke="#AAF1E7" stroke-width="2"/>
+  <path d="M0 113L358 113" stroke="#AAF1E7" stroke-width="2"/>
+</svg>

@@ -210,4 +210,34 @@ export const NFT_BOOK_PLATFORM_LIKER_LAND = 'liker_land';
 export const NFT_LEGACY_DEFAULT_MESSSAGE = 'like.co NFT API';
 export const NFT_BATCH_COLLECT_MESSSAGE = '(multiple purchases)';
 
+export const GUTENBERG_ISCN_VIDEO_LINK =
+  'https://youtu.be/85DOlacoy5Q?feature=shared';
+
+export const GUTENBERG_FREE_DOWNLOAD_LIST = [
+  {
+    title: "Dorothy Dale's Great Secret",
+    author: 'Penrose, Margaret',
+    classId:
+      'likenft1y4c54rtr0gjs24fvyd6n93ydwycr06trg5kxamfvqf9qq2t729jqsf9vc0',
+    imgSrc:
+      'https://static.like.co/thumbnail/?url=https%3A%2F%2Fwww.gutenberg.org%2Fcache%2Fepub%2F41558%2Fpg41558.cover.medium.jpg&width=300',
+  },
+  {
+    title: 'Camp and Trail: A Story of the Maine Woods',
+    author: 'Hornibrook, Isabel, 1859-1952',
+    classId:
+      'likenft1vzzsj7956qpdzdmkaskml3c8mt8xam5eetv3hr8w0605s68dcetqhmr4qv',
+    imgSrc:
+      'https://www.gutenberg.org/cache/epub/13946/pg13946.cover.medium.jpg',
+  },
+  {
+    title: 'césar ó nada english by pío baroja',
+    author: 'Marks, Jeannette Augustus, 1875-1964',
+    classId:
+      'likenft12tzpq3ccvlgc3uu25hg5663vwg3k3ld2uv85p8knmdymj5kc3hzsa89ncv',
+    imgSrc:
+      'https://static.like.co/thumbnail/?url=https%3A%2F%2Fwww.gutenberg.org%2Fcache%2Fepub%2F53723%2Fpg53723.cover.medium.jpg&width=300',
+  },
+];
+
 export const W3C_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
