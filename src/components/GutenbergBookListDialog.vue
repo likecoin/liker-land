@@ -22,7 +22,7 @@
             v-for="(row, rowIndex) in csvData"
             :key="rowIndex"
             :class="[
-              'py-[12px] border-b-shade-gray border-b-[1px] text-dark-gray hover:bg-light-gray transition-colors',
+              'py-[12px] cursor-pointer border-b-shade-gray border-b-[1px] text-dark-gray hover:bg-light-gray transition-colors',
               {
                 'cursor-not-allowed':
                   !csvData[rowIndex].classId ||
