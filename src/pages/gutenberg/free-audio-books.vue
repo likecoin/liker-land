@@ -1,10 +1,25 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full">
-    <Label preset="h1" text="Free Audio eBooks on Liker Land" />
-    <table class="w-full text-[14px]">
+  <div class="flex flex-col items-center justify-center w-full px-[24px]">
+    <Label
+      preset="h1"
+      class="text-like-green my-[24px]"
+      align="center"
+      :text="$t('gutenberg_dialog_title')"
+    />
+    <div
+      v-if="!csvData.length"
+      class="flex flex-col items-center justify-center gap-[24px]"
+    >
+      <Label :text="$t('nft_details_page_label_loading')" align="center" />
+      <ProgressIndicator />
+    </div>
+    <table v-else class="w-full text-[14px] mt-[24px] max-w-[960px]">
       <thead class="border-b-shade-gray border-b-[2px]">
         <tr class="text-medium-gray">
-          <th class="py-[12px] text-[14px] text-left">
+          <th class="py-[12px] text-[16px] text-left">
+            {{ $t('gutenberg_dialog_title_no') }}
+          </th>
+          <th class="py-[12px] text-[16px] text-left">
             {{ $t('gutenberg_dialog_title_classTitle') }}
           </th>
         </tr>
@@ -14,7 +29,7 @@
           v-for="(row, rowIndex) in csvData"
           :key="rowIndex"
           :class="[
-            'py-[12px] cursor-pointer border-b-shade-gray border-b-[1px] text-dark-gray hover:bg-light-gray transition-colors',
+            'py-[12px] cursor-pointer border-b-shade-gray border-b-[1px] text-[16px] text-like-green hover:bg-shade-gray transition-colors',
             {
               'cursor-not-allowed':
                 !csvData[rowIndex].classId ||
@@ -27,17 +42,19 @@
             }
           "
         >
+          <td class="px-[8px] text-medium-gray">{{ rowIndex + 1 }}</td>
           <td
-            :class="{
-              '!text-shade-gray':
-                !csvData[rowIndex].classId ||
-                csvData[rowIndex].classId === 'failed',
-            }"
+            :class="[
+              'py-[12px]',
+              'font-600',
+              {
+                '!text-shade-gray':
+                  !csvData[rowIndex].classId ||
+                  csvData[rowIndex].classId === 'failed',
+              },
+            ]"
           >
             {{ row.classTitle }}
-          </td>
-          <td>
-            {{ row.editionTitleEn }}
           </td>
         </tr>
       </tbody>
@@ -46,7 +63,6 @@
 </template>
 
 <script>
-import { ellipsis } from '~/util/ui';
 import { fetchGutenbergCsv } from '~/util/api';
 import csvParser from 'csv-parser';
 
@@ -54,9 +70,6 @@ const DISPLAY_COLUMN = ['classTitle', 'classId'];
 
 export default {
   name: 'FreeAudioBooks',
-  filters: {
-    ellipsis,
-  },
   layout: 'default',
   head() {
     return {
