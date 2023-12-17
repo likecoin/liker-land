@@ -313,11 +313,6 @@
         ></iframe>
       </div>
     </section>
-
-    <GutenbergBookListDialog
-      :is-open-dialog="isOpenBookListDialog"
-      @close="isOpenBookListDialog = false"
-    />
   </div>
 </template>
 <script>
@@ -399,7 +394,11 @@ export default {
       window.open(url, '_blank');
     },
     handleClickMore() {
-      this.isOpenBookListDialog = true;
+      this.$router.push(
+        this.localeLocation({
+          name: 'gutenberg-free-audio-books',
+        })
+      );
     },
     handleClickPrev() {
       this.$emit('slide-prev');

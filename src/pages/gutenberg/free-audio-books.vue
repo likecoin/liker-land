@@ -1,57 +1,48 @@
 <template>
-  <Dialog
-    :open="isOpenDialog"
-    class="w-full max-w-[900px]"
-    :header-text="$t('gutenberg_dialog_title')"
-    panel-component="CardV2"
-    panel-container-class="!max-w-[920px]"
-    panel-class="overflow-y-scroll shadow-lg"
-    @close="$emit('close')"
-  >
-    <div class="flex w-full">
-      <table class="w-full text-[14px]">
-        <thead class="border-b-shade-gray border-b-[2px]">
-          <tr class="text-medium-gray">
-            <th class="py-[12px] text-[14px] text-left">
-              {{ $t('gutenberg_dialog_title_classTitle') }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(row, rowIndex) in csvData"
-            :key="rowIndex"
-            :class="[
-              'py-[12px] cursor-pointer border-b-shade-gray border-b-[1px] text-dark-gray hover:bg-light-gray transition-colors',
-              {
-                'cursor-not-allowed':
-                  !csvData[rowIndex].classId ||
-                  csvData[rowIndex].classId === 'failed',
-              },
-            ]"
-            @click="
-              () => {
-                handleClickRow(csvData[rowIndex].classId);
-              }
-            "
+  <div class="flex flex-col items-center justify-center w-full">
+    <Label preset="h1" text="Free Audio eBooks on Liker Land" />
+    <table class="w-full text-[14px]">
+      <thead class="border-b-shade-gray border-b-[2px]">
+        <tr class="text-medium-gray">
+          <th class="py-[12px] text-[14px] text-left">
+            {{ $t('gutenberg_dialog_title_classTitle') }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(row, rowIndex) in csvData"
+          :key="rowIndex"
+          :class="[
+            'py-[12px] cursor-pointer border-b-shade-gray border-b-[1px] text-dark-gray hover:bg-light-gray transition-colors',
+            {
+              'cursor-not-allowed':
+                !csvData[rowIndex].classId ||
+                csvData[rowIndex].classId === 'failed',
+            },
+          ]"
+          @click="
+            () => {
+              handleClickRow(csvData[rowIndex].classId);
+            }
+          "
+        >
+          <td
+            :class="{
+              '!text-shade-gray':
+                !csvData[rowIndex].classId ||
+                csvData[rowIndex].classId === 'failed',
+            }"
           >
-            <td
-              :class="{
-                '!text-shade-gray':
-                  !csvData[rowIndex].classId ||
-                  csvData[rowIndex].classId === 'failed',
-              }"
-            >
-              {{ row.classTitle }}
-            </td>
-            <td>
-              {{ row.editionTitleEn }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </Dialog>
+            {{ row.classTitle }}
+          </td>
+          <td>
+            {{ row.editionTitleEn }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -62,14 +53,32 @@ import csvParser from 'csv-parser';
 const DISPLAY_COLUMN = ['classTitle', 'classId'];
 
 export default {
+  name: 'FreeAudioBooks',
   filters: {
     ellipsis,
   },
-  props: {
-    isOpenDialog: {
-      type: Boolean,
-      default: false,
-    },
+  layout: 'default',
+  head() {
+    return {
+      title: this.$t('gutenbergFreeAudioBooksPage.Title'),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('gutenbergFreeAudioBooksPage.Og.Title'),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('gutenbergFreeAudioBooksPage.Og.Description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('gutenbergFreeAudioBooksPage.Og.Description'),
+        },
+      ],
+    };
   },
   data() {
     return {

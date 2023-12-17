@@ -261,6 +261,13 @@
       "Title": "@:gutenbergPage.Title"
     }
   },
+  "gutenbergFreeAudioBooksPage":{
+    "Title": "Download Free Audio Books",
+    "Og": {
+      "Description": "5,000 Project Gutenberg audiobooks are on LikeCoin chain",
+      "Title": "@:gutenbergFreeAudioBooksPage.Title"
+    }
+  },
   "gutenberg_intro_title": "Project Gutenberg\naudiobooks are on LikeCoin chain",
   "gutenberg_intro_subtitle": "Knowledge is owned by everyone\nand yet no one",
   "gutenberg_intro_description": "Knowledge in the public domain is possessed by everyone and yet owned by no one. This open nature of public knowledge is vital for fostering cultural and educational proliferation, where technologies can play transformative roles.  Project Gutenberg, an online library of free eBooks, is one of the most well-known initiative that has contributed to the human knowledge vault for 50 years.",
