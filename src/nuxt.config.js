@@ -251,7 +251,10 @@ const nuxtConfig = {
           'https://likecoin.github.io',
           'verify.walletconnect.com',
           'www.facebook.com',
-          '*',
+          'youtube.com',
+          'www.youtube.com',
+          'https://www.youtube-nocookie.com',
+          'https://newsletter.like.co',
         ],
         'connect-src': [
           "'self'",
