@@ -337,22 +337,22 @@ export default {
   },
   head() {
     return {
-      title: this.$t('gutenbergPage.Title'),
+      title: this.$t('gutenbergPage_og_title'),
       meta: [
         {
           hid: 'og:title',
           property: 'og:title',
-          content: this.$t('gutenbergPage.Og.Title'),
+          content: this.$t('gutenbergPage_og_title'),
         },
         {
           hid: 'description',
           name: 'description',
-          content: this.$t('gutenbergPage.Og.Description'),
+          content: this.$t('gutenbergPage_og_description'),
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: this.$t('gutenbergPage.Og.Description'),
+          content: this.$t('gutenbergPage_og_description'),
         },
       ],
     };

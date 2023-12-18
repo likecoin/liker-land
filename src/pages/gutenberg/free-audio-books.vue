@@ -71,32 +71,32 @@ const DISPLAY_COLUMN = ['classTitle', 'classId'];
 export default {
   name: 'FreeAudioBooks',
   layout: 'default',
-  head() {
-    return {
-      title: this.$t('gutenbergFreeAudioBooksPage.Title'),
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: this.$t('gutenbergFreeAudioBooksPage.Og.Title'),
-        },
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.$t('gutenbergFreeAudioBooksPage.Og.Description'),
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: this.$t('gutenbergFreeAudioBooksPage.Og.Description'),
-        },
-      ],
-    };
-  },
   data() {
     return {
       csvData: [],
       csvHeader: [],
+    };
+  },
+  head() {
+    return {
+      title: this.$t('gutenbergFreeAudioBooksPage_og_title'),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('gutenbergFreeAudioBooksPage_og_title'),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('gutenbergFreeAudioBooksPage_og_description'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('gutenbergFreeAudioBooksPage_og_description'),
+        },
+      ],
     };
   },
   async mounted() {
