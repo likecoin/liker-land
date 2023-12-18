@@ -421,8 +421,8 @@ export default {
       this.$emit('slider-move');
     },
     scrollToElement(hash) {
-      const currentRef = this.$refs[hash];
       setTimeout(() => {
+        const currentRef = this.$refs[hash];
         currentRef.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
