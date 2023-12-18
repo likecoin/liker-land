@@ -50,7 +50,7 @@
         >
         <div
           id="viewer"
-          class="mx-auto my-0 w-[1200px] h-[700px] shadow-md rounded-4 p-0 relative"
+          class="mx-auto my-0 w-full h-dynamic laptop:w-[1200px] laptop:h-[700px] shadow-md rounded-4 p-0 relative"
         />
         <a
           class="right-0 laptop:right-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
@@ -214,17 +214,23 @@ export default {
 </script>
 
 <style>
-#viewer:after {
-  position: absolute;
-  width: 1px;
-  border-right: 1px #000 solid;
-  height: 90%;
-  z-index: 1;
-  left: 50%;
-  margin-left: -1px;
-  top: 5%;
-  opacity: 0.15;
-  box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
-  content: '';
+.h-dynamic {
+  height: calc(100vh - 64px);
+}
+
+@media (min-width: 769px) {
+  #viewer:after {
+    position: absolute;
+    width: 1px;
+    border-right: 1px #000 solid;
+    height: 90%;
+    z-index: 1;
+    left: 50%;
+    margin-left: -1px;
+    top: 5%;
+    opacity: 0.15;
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
+    content: '';
+  }
 }
 </style>
