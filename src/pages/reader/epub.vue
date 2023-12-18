@@ -9,24 +9,16 @@
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
       <ProgressIndicator v-if="!fileSrc" />
-      <iframe
-        v-else-if="format === 'pdf'"
-        class="fixed inset-0"
-        :src="pdfIframeSrc"
-        width="100%"
-        height="100%"
-        style="border:none"
-      />
       <template v-else-if="format === 'epub'">
         <div class="flex justify-between items-center">
           <div class="grow" />
           <select
-            v-model="epubSelectedChapter"
+            v-model="selectedChapter"
             class="my-[10px] shadow-md rounded-4"
             @change="onChangeEpubChapter"
           >
             <option
-              v-for="chapter in epubTOC"
+              v-for="chapter in toc"
               :key="chapter.href"
               :value="chapter.href"
             >
@@ -76,16 +68,16 @@ import walletMixin from '~/mixins/wallet';
 import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 export default {
-  name: 'ReaderPage',
+  name: 'EPUBReaderPage',
   mixins: [nftMixin, walletMixin],
   layout: 'empty',
   data() {
     return {
       isLoading: true,
-      epubTOC: [],
-      epubSelectedChapter: '',
-      epubBook: null,
-      epubRendition: null,
+      toc: [],
+      selectedChapter: '',
+      book: null,
+      rendition: null,
     };
   },
   computed: {
@@ -94,7 +86,7 @@ export default {
       return this.$route.query.classId;
     },
     format() {
-      return this.$route.query.format || 'pdf';
+      return this.$route.query.format || 'epub';
     },
     fileSrc() {
       const { src } = this.$route.query;
@@ -110,15 +102,6 @@ export default {
     },
     hideDownload() {
       return this.$route.query.download === '0' || this.nftIsDownloadHidden;
-    },
-    pdfIframeSrc() {
-      const download = this.hideDownload ? '0' : '1';
-      const encodedUrl = encodeURIComponent(this.fileSrc);
-      const encodedCorsUrl = encodeURIComponent(
-        `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`
-      );
-      // TODO: customize pdf.js instead of using default build
-      return `https://likecoin.github.io/pdf.js/web/viewer.html?download=${download}&file=${encodedCorsUrl}`;
     },
   },
   watch: {
@@ -164,37 +147,35 @@ export default {
         this.connectWallet();
       }
 
-      if (this.format === 'epub') {
-        this.initEpubRendition();
-      }
+      this.initRendition();
     } finally {
       this.isLoading = false;
     }
   },
   methods: {
-    initEpubRendition() {
-      this.epubBook = Epub(this.fileSrc);
-      this.epubBook.loaded.navigation.then(
-        navigation => (this.epubTOC = navigation.toc)
+    initRendition() {
+      this.book = Epub(this.fileSrc);
+      this.book.loaded.navigation.then(
+        navigation => (this.toc = navigation.toc)
       );
-      this.epubRendition = this.epubBook.renderTo('viewer', {
+      this.rendition = this.book.renderTo('viewer', {
         width: '100%',
         height: '100%',
         spread: 'always',
       });
-      this.epubRendition.display();
-      this.epubRendition.on('rendered', () => {
-        this.epubSelectedChapter = this.epubRendition.currentLocation().start.href;
+      this.rendition.display();
+      this.rendition.on('rendered', () => {
+        this.selectedChapter = this.rendition.currentLocation().start.href;
       });
     },
     onChangeEpubChapter() {
-      this.epubRendition.display(this.epubSelectedChapter);
+      this.rendition.display(this.selectedChapter);
     },
     onClickEpubPrev() {
-      this.epubRendition.prev();
+      this.rendition.prev();
     },
     onClickEpubNext() {
-      this.epubRendition.next();
+      this.rendition.next();
     },
     async onClickDownloadEpub() {
       try {

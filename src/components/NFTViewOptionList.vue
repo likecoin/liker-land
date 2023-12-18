@@ -197,7 +197,7 @@ export default {
         e.preventDefault();
         this.$router.push(
           this.localeLocation({
-            name: 'reader',
+            name: `reader-${type}`,
             query: {
               download: this.isContentDownloadable ? '1' : '0',
               classId: this.classId,
