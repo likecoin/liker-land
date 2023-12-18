@@ -138,6 +138,7 @@
 
     <section
       id="download"
+      ref="download"
       class="flex flex-col gap-[18px] my-[40px] px-[12px] pt-[50px] w-full bg-like-cyan-pale"
       name="freeEpub"
     >
@@ -265,11 +266,12 @@
             <VuePlyr>
               <div class="plyr__video-embed">
                 <iframe
-                  src="https://youtu.be/85DOlacoy5Q?feature=shared"
+                  width="100%"
+                  src="https://www.youtube.com/embed/85DOlacoy5Q"
+                  title="What is Decentralized Publishing"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen
-                  allowtransparency
-                  allow="autoplay"
-                  scrolling="no"
                 ></iframe>
               </div>
             </VuePlyr>
@@ -386,6 +388,12 @@ export default {
       return this.$refs.swiper?.$swiper;
     },
   },
+  mounted() {
+    const hashValue = this.$route.hash?.substring(1);
+    if (hashValue) {
+      this.scrollToElement(hashValue);
+    }
+  },
   methods: {
     handleClickDownload(classId) {
       const url = this.$router.resolve(
@@ -411,6 +419,15 @@ export default {
     },
     handleSliderMove() {
       this.$emit('slider-move');
+    },
+    scrollToElement(hash) {
+      setTimeout(() => {
+        const currentRef = this.$refs[hash];
+        currentRef.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
     },
   },
 };

@@ -238,6 +238,8 @@ const nuxtConfig = {
           'https://substackapi.com',
           '*.crisp.chat',
           'connect.facebook.net',
+          'https://www.youtube.com/iframe_api',
+          'https://www.youtube.com/s/player/d23221b6/www-widgetapi.vflset/www-widgetapi.js',
         ],
         'frame-src': [
           'blob:',
@@ -249,6 +251,10 @@ const nuxtConfig = {
           'https://likecoin.github.io',
           'verify.walletconnect.com',
           'www.facebook.com',
+          'youtube.com',
+          'www.youtube.com',
+          'https://www.youtube-nocookie.com',
+          'https://newsletter.like.co',
         ],
         'connect-src': [
           "'self'",
