@@ -449,6 +449,13 @@ export default {
     async startFreePurchase() {
       try {
         this.state = NFT_CLAIM_STATE.CLAIMING;
+        if (!this.claimingFreeEmail && !this.claimingAddress) {
+          this.alertPromptError(
+            this.$t('nft_free_claim_enter_email_or_address')
+          );
+          this.state = NFT_CLAIM_STATE.INITIAL;
+          return;
+        }
         this.claimPromise = this.$api.post(
           getFreeNFTBookPurchaseEndpoint({
             classId: this.classId,
@@ -479,7 +486,7 @@ export default {
           this.classId
         );
         this.alertPromptError(
-          this.$t('settings_email_verify_error_message', {
+          this.$t('nft_free_claim_error_message', {
             error: this.error,
           })
         );
