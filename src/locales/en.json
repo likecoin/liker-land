@@ -550,6 +550,8 @@
   "nft_free_claim_claim": "Claim your eBook",
   "nft_free_claim_email_label": "Please enter your email to claim your eBook",
   "nft_free_claim_enter_email": "Your email here",
+  "nft_free_claim_enter_email_or_address": "Please enter your email or wallet address to claim your eBook",
+  "nft_free_claim_error_message": "Error occurs when claiming eBook {error}",
   "nft_in_stock": "In stock",
   "nft_index_page_label_featured": "Featured",
   "nft_index_page_label_free": "Free",

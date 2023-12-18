@@ -549,6 +549,8 @@
   "nft_free_claim_claim": "領取",
   "nft_free_claim_email_label": "請輸入電郵以領取你的電子書",
   "nft_free_claim_enter_email": "電郵地址",
+  "nft_free_claim_enter_email_or_address": "請輸入電郵或錢包地址以領取你的電子書",
+  "nft_free_claim_error_message": "領取電子書時發生錯誤：{error}",
   "nft_in_stock": "有庫存",
   "nft_index_page_label_featured": "精選",
   "nft_index_page_label_free": "免費",
