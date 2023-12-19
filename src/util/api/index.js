@@ -379,7 +379,18 @@ export const getNFTBookPaymentPrice = ({
       )}`;
 };
 
-export const getNFTBookCollectionInfo = ({ collectionId }) =>
+export const getNFTCollectionInfo = ({ wallet, classId, type }) => {
+  const qsPayload = {
+    class_id: classId,
+    wallet,
+    type,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/collection?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTCollectionInfoById = ({ collectionId }) =>
   `${LIKECOIN_API_BASE}/likernft/collection/${collectionId}`;
 
 export const getTopNFTClasses = ({ before, after }) => {

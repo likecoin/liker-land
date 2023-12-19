@@ -324,7 +324,7 @@ export default {
     }
     try {
       if (collectionId) {
-        await store.dispatch('fetchNFTBookCollectionInfoByCollectionId', {
+        await store.dispatch('fetchNFTCollectionInfoByCollectionId', {
           collectionId,
         });
       } else if (classId) {

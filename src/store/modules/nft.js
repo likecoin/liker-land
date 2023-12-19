@@ -270,6 +270,10 @@ const getters = {
     state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
   getNFTCollectionInfoByCollectionId: state => collectionId =>
     state.nftCollectionInfoByCollectionIdMap[collectionId],
+  getNFTCollectionInfoByClassId: state => classId =>
+    Object.entries(state.nftCollectionInfoByCollectionIdMap)
+      .filter(([_, data]) => data.classIds.includes(classId))
+      .map(([id, data]) => ({ id, ...data })),
   getNFTBookStoreBookDefaultPaymentCurrency: state => classId =>
     state.nftBookStoreInfoByClassIdMap[classId]?.defaultPaymentCurrency ||
     'USD',
@@ -838,12 +842,12 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTBookCollectionInfoByCollectionId(
+  async fetchNFTCollectionInfoByCollectionId(
     { commit, dispatch },
     { collectionId }
   ) {
     const { data } = await this.$api.get(
-      api.getNFTBookCollectionInfo({ collectionId })
+      api.getNFTCollectionInfoById({ collectionId })
     );
     commit(TYPES.NFT_SET_NFT_COLLECTION_INFO, {
       collectionId,
@@ -854,6 +858,26 @@ const actions = {
       classIds.map(classId => dispatch('lazyGetNFTClassMetadata', classId))
     );
     return data;
+  },
+  async fetchNFTCollectionInfoByClassId(
+    { commit, dispatch },
+    { classId, type }
+  ) {
+    const { data } = await this.$api.get(
+      api.getNFTCollectionInfo({ classId, type })
+    );
+    const { list } = data;
+    list.forEach(async ({ id, ...collectionData }) => {
+      commit(TYPES.NFT_SET_NFT_COLLECTION_INFO, {
+        collectionId: id,
+        data: collectionData,
+      });
+      const { classIds } = collectionData;
+      await Promise.all(
+        classIds.map(classId => dispatch('lazyGetNFTClassMetadata', classId))
+      );
+    });
+    return list;
   },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
     if (getters.shoppingCartNFTClassList.length >= BATCH_COLLECT_MAX) {
