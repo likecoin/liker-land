@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     handleDownload() {
-      this.$emit('download', this.book.classId);
+      this.$emit('download', this.bookInfo.classId);
     },
   },
 };
