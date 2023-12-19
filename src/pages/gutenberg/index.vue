@@ -490,6 +490,8 @@ import {
   GUTENBERG_FREE_DOWNLOAD_LIST,
 } from '~/constant';
 
+import { logTrackerEvent } from '~/util/EventLogger';
+
 export default {
   name: 'GutenbergPage',
   layout: 'default',
@@ -552,6 +554,7 @@ export default {
   },
   methods: {
     handleClickDownload(classId) {
+      logTrackerEvent(this, 'Gutenberg', 'clickDownload', classId, 1);
       const url = this.$router.resolve(
         this.localeLocation({
           name: 'nft-class-classId',
@@ -563,22 +566,12 @@ export default {
       window.open(url, '_blank');
     },
     handleClickMore() {
+      logTrackerEvent(this, 'Gutenberg', 'clickShowMore', '', 1);
       this.$router.push(
         this.localeLocation({
           name: 'gutenberg-free-audio-books',
         })
       );
-    },
-    handleClickPrev() {
-      this.$emit('slide-prev');
-      this.swiper.slidePrev();
-    },
-    handleClickNext() {
-      this.$emit('slide-next');
-      this.swiper.slideNext();
-    },
-    handleSliderMove() {
-      this.$emit('slider-move');
     },
     scrollToElement(hash) {
       setTimeout(() => {
