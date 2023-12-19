@@ -341,45 +341,11 @@
           'laptop:gap-[48px]',
         ]"
       >
-        <div
-          v-for="book of freeDownloadList"
-          :key="book.classId"
-          :class="[
-            'relative',
-            'flex',
-            'flex-col',
-            'gap-[24px]',
-            'max-w-[220px]',
-          ]"
-        >
-          <img :class="['shadow-2xl']" :src="book.imgSrc" :alt="book.title" />
-          <div
-            :class="[
-              'absolute',
-
-              'flex',
-              'flex-col',
-              'justify-start',
-              'gap-[12px]',
-
-              'translate-y-[100%]',
-              'bottom-[-24px]',
-            ]"
-          >
-            <Label align="left" preset="h4" :text="book.title" />
-            <Label
-              align="left"
-              :class="['text-[14px]', 'text-medium-gray']"
-              :text="book.author"
-            />
-            <div class="flex">
-              <GutenbergButton
-                :class="['w-min', 'mt-[8px]']"
-                :text="$t('gutenberg_download')"
-                @click="() => handleClickDownload(book.classId)"
-              />
-            </div>
-          </div>
+        <div v-for="book of freeDownloadList" :key="book.classId">
+          <GutenbergDownloadItem
+            :book-info="book"
+            @download="handleClickDownload"
+          />
         </div>
       </div>
       <div
@@ -394,48 +360,10 @@
           'laptop:gap-[48px]',
         ]"
       >
-        <div
-          :class="[
-            'relative',
-
-            'flex',
-            'flex-col',
-            'gap-[24px]',
-            'max-w-[220px]',
-          ]"
-        >
-          <img
-            :class="['shadow-2xl']"
-            :src="freeDownloadList[0].imgSrc"
-            :alt="freeDownloadList[0].title"
-          />
-          <div
-            :class="[
-              'absolute',
-
-              'flex',
-              'flex-col',
-              'justify-start',
-              'gap-[12px]',
-              'translate-y-[100%]',
-              'bottom-[-24px]',
-            ]"
-          >
-            <Label align="left" preset="h4" :text="freeDownloadList[0].title" />
-            <Label
-              align="left"
-              :class="['text-[14px]', 'text-medium-gray']"
-              :text="freeDownloadList[0].author"
-            />
-            <div class="flex">
-              <GutenbergButton
-                :class="['w-min', 'mt-[8px]']"
-                :text="$t('gutenberg_download')"
-                @click="() => handleClickDownload(freeDownloadList[0].classId)"
-              />
-            </div>
-          </div>
-        </div>
+        <GutenbergDownloadItem
+          :book-info="freeDownloadList[0]"
+          @download="handleClickDownload"
+        />
       </div>
     </section>
     <div :class="['flex', 'justify-center', 'mt-[220px]']">
