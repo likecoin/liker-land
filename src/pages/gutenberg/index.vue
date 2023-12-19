@@ -262,19 +262,15 @@
         class="flex flex-col justify-center gap-[12px] border-[1px] border-like-cyan py-[40px] px-[24px] my-[40px] laptop:px-[88px]"
       >
         <client-only>
-          <div class="w-full">
-            <VuePlyr>
-              <div class="plyr__video-embed">
-                <iframe
-                  width="100%"
-                  src="https://www.youtube.com/embed/85DOlacoy5Q"
-                  title="What is Decentralized Publishing"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </VuePlyr>
+          <div class="relative w-full h-0 pb-[56.25%]">
+            <iframe
+              class="absolute top-0 left-0 w-full h-full"
+              src="https://www.youtube.com/embed/85DOlacoy5Q"
+              title="What is Decentralized Publishing"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
           </div>
         </client-only>
         <Label preset="h3" :text="$t('gutenberg_publish_title')" />

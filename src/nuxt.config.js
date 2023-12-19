@@ -289,7 +289,6 @@ const nuxtConfig = {
     '~/plugins/portal-vue.js',
     { src: '~/plugins/gtag.client.js', mode: 'client' },
     { src: '~/plugins/ui-plugin.client.js', ssr: false },
-    { src: '~/plugins/plyr.js', ssr: false },
     { src: '~/plugins/vue-cookie.client.js', ssr: false },
     { src: '~/plugins/crisp.client.js', ssr: false },
     { src: '~/plugins/vue-clipboard2', ssr: false },
