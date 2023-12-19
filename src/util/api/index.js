@@ -299,18 +299,34 @@ export const postStripeFiatPendingClaim = ({ wallet, paymentId, token }) => {
   )}`;
 };
 
-export const getNFTBookPaymentStatusEndpoint = ({ classId, paymentId }) =>
-  `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/status/${paymentId}`;
+export const getNFTBookPaymentStatusEndpoint = ({
+  classId,
+  collectionId,
+  paymentId,
+}) =>
+  collectionId
+    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/status/${paymentId}`
+    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/status/${paymentId}`;
 
-export const getNFTBookClaimEndpoint = ({ classId, paymentId, token }) => {
+export const getNFTBookClaimEndpoint = ({
+  classId,
+  collectionId,
+  paymentId,
+  token,
+}) => {
   const qsPayload = { token };
-  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/claim/${paymentId}?${querystring.stringify(
-    qsPayload
-  )}`;
+  return collectionId
+    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/claim/${paymentId}?${querystring.stringify(
+        qsPayload
+      )}`
+    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/claim/${paymentId}?${querystring.stringify(
+        qsPayload
+      )}`;
 };
 
 export const getFreeNFTBookPurchaseEndpoint = ({
   classId,
+  collectionId,
   priceIndex,
   gaClientId,
 }) => {
@@ -318,13 +334,18 @@ export const getFreeNFTBookPurchaseEndpoint = ({
     price_index: priceIndex,
     ga_client_id: gaClientId,
   };
-  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/free?${querystring.stringify(
-    qsPayload
-  )}`;
+  return collectionId
+    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/free?${querystring.stringify(
+        qsPayload
+      )}`
+    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/free?${querystring.stringify(
+        qsPayload
+      )}`;
 };
 
 export const postNFTBookLIKEPurchaseEndpoint = ({
   classId,
+  collectionId,
   priceIndex,
   platform = NFT_BOOK_PLATFORM_LIKER_LAND,
 }) => {
@@ -332,19 +353,34 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
     price_index: priceIndex,
     from: platform,
   };
-  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
-    qsPayload
-  )}`;
+  return collectionId
+    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/like?${querystring.stringify(
+        qsPayload
+      )}`
+    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
+        qsPayload
+      )}`;
 };
 
-export const getNFTBookPaymentPrice = ({ classId, priceIndex }) => {
+export const getNFTBookPaymentPrice = ({
+  classId,
+  collectionId,
+  priceIndex,
+}) => {
   const qsPayload = {
     price_index: priceIndex,
   };
-  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/price?${querystring.stringify(
-    qsPayload
-  )}`;
+  return collectionId
+    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/price?${querystring.stringify(
+        qsPayload
+      )}`
+    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/price?${querystring.stringify(
+        qsPayload
+      )}`;
 };
+
+export const getNFTBookCollectionInfo = ({ collectionId }) =>
+  `${LIKECOIN_API_BASE}/likernft/collection/${collectionId}`;
 
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {

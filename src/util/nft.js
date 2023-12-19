@@ -420,6 +420,7 @@ export function formatOwnerInfoFromChain(owners) {
 }
 
 export function parseNFTMetadataURL(url) {
+  if (!url) return url;
   const [schema, path] = url.split('://');
   if (schema === 'ar') return `${ARWEAVE_ENDPOINT}/${path}`;
   if (schema === 'ipfs') return `${IPFS_VIEW_GATEWAY_URL}/${path}`;
