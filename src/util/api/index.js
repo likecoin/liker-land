@@ -480,7 +480,7 @@ export const getNftBookBuyerMessage = classId =>
 export const fetchBookstoreItems = () => `${EXTERNAL_HOST}/api/bookstore/items`;
 
 export const fetchGutenbergCsv = () =>
-  `${EXTERNAL_HOST}/csv/gutenberg-audio-books.csv`;
+  `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v2.csv`;
 
 export const fetchBookstoreLists = () =>
   `${EXTERNAL_HOST}/api/bookstore/lists?t=1701404376`;
