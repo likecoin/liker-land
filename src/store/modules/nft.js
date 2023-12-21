@@ -859,6 +859,18 @@ const actions = {
     );
     return data;
   },
+  async lazyFetchNFTCollectionInfoByCollectionId(
+    { getters, dispatch },
+    { collectionId }
+  ) {
+    let info = getters.getNFTCollectionInfoByCollectionId(collectionId);
+    if (!info) {
+      info = await dispatch('fetchNFTCollectionInfoByCollectionId', {
+        collectionId,
+      });
+    }
+    return info;
+  },
   async fetchNFTCollectionInfoByClassId(
     { commit, dispatch },
     { classId, type }
