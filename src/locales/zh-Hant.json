@@ -288,7 +288,7 @@
   "gutenberg_sign_button": "Sign Up",
 
 
-  "header_button_connect_to_wallet": "連接錢包",
+  "header_button_connect_to_wallet": "登入",
   "header_button_try_collect": "瀏覽書店",
   "header_menu_LIKE": "LIKE",
   "here": "這裏",
@@ -718,7 +718,7 @@
   "settings_email_current_email": "目前電郵",
   "settings_email_input_email_placeholder": "輸入新電郵",
   "settings_email_login_in": "驗證錢包以更改電郵",
-  "settings_email_login_in_button": "連接錢包",
+  "settings_email_login_in_button": "登入",
   "settings_email_new_email": "輸入新電郵",
   "settings_email_resend_verification_email": "重發認證電郵",
   "settings_email_unverified_email": "未認證電郵",

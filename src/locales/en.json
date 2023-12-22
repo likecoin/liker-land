@@ -287,7 +287,7 @@
   "gutenberg_sign_description": "With the help of artificial intelligence and blockchain, content can be presented in various formats and languages, also allowing a wide range of people to participate in collaboration, preserving shared memories. The latest developments in decentralized publishing demonstrate how new technologies are driving the progress of human society and realizing the beautiful vision of knowledge as a public resource.",
   "gutenberg_sign_button": "Sign Up",
 
-  "header_button_connect_to_wallet": "Connect Wallet",
+  "header_button_connect_to_wallet": "Login",
   "header_button_try_collect": "Enter Store",
   "header_menu_LIKE": "LIKE",
   "here": "Here",
@@ -717,7 +717,7 @@
   "settings_email_current_email": "Current email",
   "settings_email_input_email_placeholder": "Enter new email",
   "settings_email_login_in": "Verify wallet to update email",
-  "settings_email_login_in_button": "Connect Wallet",
+  "settings_email_login_in_button": "Login",
   "settings_email_new_email": "Input new email",
   "settings_email_resend_verification_email": "Resend Verification Email",
   "settings_email_unverified_email": "Unverified Email",
