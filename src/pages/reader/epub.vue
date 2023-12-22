@@ -9,7 +9,7 @@
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
       <ProgressIndicator v-if="!fileSrc" />
-      <template v-else-if="format === 'epub'">
+      <template v-else>
         <div class="flex justify-between items-center">
           <div class="grow" />
           <select
@@ -50,9 +50,6 @@
           >›</a
         >
       </template>
-      <div v-else>
-        Not implemented
-      </div>
     </Component>
   </div>
 </template>
@@ -85,9 +82,6 @@ export default {
     classId() {
       return this.$route.query.classId;
     },
-    format() {
-      return this.$route.query.format || 'epub';
-    },
     fileSrc() {
       const { src } = this.$route.query;
       // TODO: check src exists in ISCN
@@ -95,7 +89,7 @@ export default {
       if (src) {
         return src;
       }
-      return this.iscnContentUrls.find(url => url.includes(this.format));
+      return this.iscnContentUrls.find(url => url.includes('epub'));
     },
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);

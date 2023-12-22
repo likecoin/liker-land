@@ -10,15 +10,12 @@
     >
       <ProgressIndicator v-if="!fileSrc" />
       <iframe
-        v-else-if="format === 'pdf'"
+        v-else
         :src="pdfIframeSrc"
         width="100%"
         height="100%"
         style="border:none"
       />
-      <div v-else>
-        Not implemented
-      </div>
     </Component>
   </div>
 </template>
@@ -46,9 +43,6 @@ export default {
     classId() {
       return this.$route.query.classId;
     },
-    format() {
-      return this.$route.query.format || 'pdf';
-    },
     fileSrc() {
       const { src } = this.$route.query;
       // TODO: check src exists in ISCN
@@ -56,7 +50,7 @@ export default {
       if (src) {
         return src;
       }
-      return this.iscnContentUrls.find(url => url.includes(this.format));
+      return this.iscnContentUrls.find(url => url.includes('pdf'));
     },
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);
