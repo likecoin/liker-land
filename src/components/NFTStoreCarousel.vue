@@ -20,7 +20,7 @@
         <SwiperSlide>
           <div class="bg-[#ff3653] h-full">
             <img
-              class="block mx-auto h-full"
+              class="block mx-auto h-full object-cover"
               src="~assets/images/banner/boox-christmas.png"
             />
           </div>
