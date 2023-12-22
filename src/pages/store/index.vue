@@ -1,6 +1,6 @@
 <template>
   <Page class="pb-[132px]">
-    <NFTBookHero />
+    <NFTStoreCarousel class="w-full" />
 
     <div
       :class="[
