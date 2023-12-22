@@ -161,6 +161,19 @@ export default {
       this.rendition.on('rendered', () => {
         this.selectedChapter = this.rendition.currentLocation().start.href;
       });
+
+      const keyListener = e => {
+        // Left Key
+        if ((e.keyCode || e.which) === 37) {
+          this.rendition.prev();
+        }
+        // Right Key
+        if ((e.keyCode || e.which) === 39) {
+          this.rendition.next();
+        }
+      };
+      this.rendition.on('keydown', keyListener);
+      document.addEventListener('keydown', keyListener, false);
     },
     onChangeEpubChapter() {
       this.rendition.display(this.selectedChapter);
