@@ -112,8 +112,8 @@ export default {
       const books = [...this.nftBookstoreEditorialItems];
       books.sort((a, b) => {
         const { locale } = this.$i18n;
-        const aMatchedLocale = locale.includes(a.locale);
-        const bMatchedLocale = locale.includes(b.locale);
+        const aMatchedLocale = a.locales.some(l => locale.includes(l));
+        const bMatchedLocale = b.locales.some(l => locale.includes(l));
         if (aMatchedLocale && !bMatchedLocale) {
           return -1;
         }

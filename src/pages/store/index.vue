@@ -179,7 +179,7 @@ export default {
     nftBooksDisplayInFullWidth() {
       return this.nftGetBookstoreListItems('highlighted').filter(nft =>
         // Display books of the current locale only
-        this.$i18n.locale.includes(nft.locale)
+        nft.locales.some(l => this.$i18n.locale.includes(l))
       );
     },
     nftBooksDisplayOnShelf() {
@@ -187,8 +187,8 @@ export default {
       const books = [...this.nftGetBookstoreListItems('featured')];
       // Display books of the current locale first
       books.sort((a, b) => {
-        const aMatchedLocale = locale.includes(a.locale);
-        const bMatchedLocale = locale.includes(b.locale);
+        const aMatchedLocale = a.locales.some(l => locale.includes(l));
+        const bMatchedLocale = b.locales.some(l => locale.includes(l));
         if (aMatchedLocale && !bMatchedLocale) {
           return -1;
         }
