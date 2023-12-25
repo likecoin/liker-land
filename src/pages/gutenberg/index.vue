@@ -329,24 +329,24 @@
         :class="['text-[20px]', 'text-like-green']"
         :text="$t('gutenberg_download_subtitle')"
       />
-      <div
-        :class="[
-          'hidden',
-          'laptop:flex',
-
-          'items-end',
-          'justify-center',
-
-          'gap-[12px]',
-          'laptop:gap-[48px]',
-        ]"
-      >
-        <div v-for="book of freeDownloadList" :key="book.classId">
-          <GutenbergDownloadItem
-            :book-info="book"
-            @download="handleClickDownload"
-          />
-        </div>
+      <div :class="['hidden', 'laptop:flex', 'justify-center']">
+        <ul
+          :class="[
+            'flex',
+            'flex-wrap',
+            'items-end',
+            'justify-center',
+            'gap-[24px]',
+            'laptop:gap-[48px]',
+          ]"
+        >
+          <li v-for="book of freeDownloadList" :key="book.classId">
+            <GutenbergDownloadItem
+              :book-info="book"
+              @download="handleClickDownload"
+            />
+          </li>
+        </ul>
       </div>
       <div
         :class="[
