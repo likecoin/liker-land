@@ -406,17 +406,14 @@
         ]"
       >
         <client-only>
-          <!-- 16:9 container -->
-          <div :class="['relative', 'w-full', 'h-0', 'pb-[56.25%]']">
-            <iframe
-              :class="['absolute', 'top-0', 'left-0', 'w-full', 'h-full']"
-              src="https://www.youtube.com/embed/85DOlacoy5Q"
-              title="What is Decentralized Publishing"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </div>
+          <iframe
+            :class="['w-full', 'aspect-video']"
+            src="https://www.youtube.com/embed/85DOlacoy5Q"
+            title="What is Decentralized Publishing"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
         </client-only>
         <Label preset="h3" :text="$t('gutenberg_publish_title')" />
         <Label
