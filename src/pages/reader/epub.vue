@@ -1,61 +1,48 @@
 <template>
-  <div class="flex flex-col justify-center items-center">
-    <ProgressIndicator v-if="isLoading" />
-    <Component
-      :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
-      v-else
-      class="w-full h-full"
-      :login-label="$t('dashboard_login_in')"
-      :login-button-label="$t('header_button_connect_to_wallet')"
+  <div>
+    <div class="flex justify-between items-center">
+      <div class="grow" />
+      <select
+        v-model="selectedChapter"
+        class="my-[10px] shadow-md rounded-4"
+        @change="onChangeEpubChapter"
+      >
+        <option
+          v-for="chapter in toc"
+          :key="chapter.href"
+          :value="chapter.href"
+        >
+          {{ chapter.label }}
+        </option>
+      </select>
+      <div class="flex grow justify-end">
+        <button
+          v-if="!hideDownload"
+          class="w-[50px] my-[10px]"
+          @click="onClickDownloadEpub"
+        >
+          <IconDownload class="w-20 h-20" />
+        </button>
+      </div>
+    </div>
+    <a
+      class="left-0 laptop:left-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
+      @click="onClickEpubPrev"
+      >‹</a
     >
-      <ProgressIndicator v-if="!fileSrc" />
-      <template v-else>
-        <div class="flex justify-between items-center">
-          <div class="grow" />
-          <select
-            v-model="selectedChapter"
-            class="my-[10px] shadow-md rounded-4"
-            @change="onChangeEpubChapter"
-          >
-            <option
-              v-for="chapter in toc"
-              :key="chapter.href"
-              :value="chapter.href"
-            >
-              {{ chapter.label }}
-            </option>
-          </select>
-          <div class="flex grow justify-end">
-            <button
-              v-if="!hideDownload"
-              class="w-[50px] my-[10px]"
-              @click="onClickDownloadEpub"
-            >
-              <IconDownload class="w-20 h-20" />
-            </button>
-          </div>
-        </div>
-        <a
-          class="left-0 laptop:left-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-          @click="onClickEpubPrev"
-          >‹</a
-        >
-        <div
-          id="viewer"
-          class="mx-auto my-0 w-full h-dynamic laptop:w-[1200px] laptop:h-[700px] shadow-md rounded-4 p-0 relative"
-        />
-        <a
-          class="right-0 laptop:right-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-          @click="onClickEpubNext"
-          >›</a
-        >
-      </template>
-    </Component>
+    <div
+      id="viewer"
+      class="mx-auto my-0 w-full h-dynamic laptop:w-[1200px] laptop:h-[700px] shadow-md rounded-4 p-0 relative"
+    />
+    <a
+      class="right-0 laptop:right-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
+      @click="onClickEpubNext"
+      >›</a
+    >
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import Epub from 'epubjs';
 import { saveAs } from 'file-saver';
 
@@ -67,10 +54,14 @@ import { getDownloadFilenameFromURL } from '~/util/nft-book';
 export default {
   name: 'EPUBReaderPage',
   mixins: [nftMixin, walletMixin],
-  layout: 'empty',
+  props: {
+    fileSrc: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
-      isLoading: true,
       toc: [],
       selectedChapter: '',
       book: null,
@@ -78,73 +69,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getHomeRoute']),
-    classId() {
-      return this.$route.query.classId;
-    },
-    fileSrc() {
-      const { src } = this.$route.query;
-      // TODO: check src exists in ISCN
-      // if (src && this.iscnContentUrls.find(url => url === src)) {
-      if (src) {
-        return src;
-      }
-      return this.iscnContentUrls.find(url => url.includes('epub'));
-    },
-    isLoginRequired() {
-      return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);
-    },
     hideDownload() {
       return this.$route.query.download === '0' || this.nftIsDownloadHidden;
     },
   },
-  watch: {
-    // TODO: use loginAddress
-    async getAddress(address) {
-      if (address) {
-        await this.fetchUserCollectedCount();
-        if (!this.userCollectedCount && this.isLoginRequired) {
-          this.$router.replace(
-            this.localeLocation({
-              name: 'nft-class-classId',
-              params: { classId: this.classId },
-            })
-          );
-        }
-      }
-    },
-  },
-  async mounted() {
-    try {
-      this.isLoading = true;
-      if (!this.classId) {
-        this.$router.replace(this.localeLocation(this.getHomeRoute));
-        return;
-      }
-      this.fetchNFTBookInfoByClassId(this.classId).catch();
-      await this.lazyFetchNFTClassMetadata();
-      await this.fetchISCNMetadata();
-      await this.restoreSession();
-      // TODO: use loginAddress
-      if (this.getAddress) {
-        await this.fetchUserCollectedCount();
-        if (!this.userCollectedCount && this.isLoginRequired) {
-          this.$router.replace(
-            this.localeLocation({
-              name: 'nft-class-classId',
-              params: { classId: this.classId },
-            })
-          );
-          return;
-        }
-      } else {
-        this.connectWallet();
-      }
-
-      this.initRendition();
-    } finally {
-      this.isLoading = false;
-    }
+  mounted() {
+    this.initRendition();
   },
   methods: {
     initRendition() {
