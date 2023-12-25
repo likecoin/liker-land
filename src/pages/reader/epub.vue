@@ -114,6 +114,11 @@ export default {
       });
 
       const keyListener = e => {
+        const inputs = ['input', 'select', 'button', 'textarea'];
+        if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
+          return;
+        }
+
         // Left Key
         if ((e.keyCode || e.which) === 37) {
           this.rendition.prev();
