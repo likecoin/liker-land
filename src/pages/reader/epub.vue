@@ -16,6 +16,24 @@
         </option>
       </select>
       <div class="flex grow justify-end">
+        <input
+          v-if="showSearch"
+          ref="searchInput"
+          v-model="searchText"
+          class="my-[10px] shadow-md rounded-4"
+          placeholder="Search for ..."
+          @input="onInputSearch"
+        />
+        <button
+          v-if="searchText"
+          class="w-[50px] my-[10px]"
+          @click="onClickClearSearch"
+        >
+          <IconClose class="w-20 h-20" />
+        </button>
+        <button class="w-[50px] my-[10px]" @click="onClickSearchButton">
+          <IconSearch class="w-20 h-20" />
+        </button>
         <button
           v-if="!hideDownload"
           class="w-[50px] my-[10px]"
@@ -66,6 +84,9 @@ export default {
       selectedChapter: '',
       book: null,
       rendition: null,
+      showSearch: false,
+      searchText: '',
+      searchHighlights: [],
     };
   },
   computed: {
@@ -126,6 +147,54 @@ export default {
         console.error(error);
         this.alertPromptError(this.$t('nft_download_content_error'));
       }
+    },
+    removeHighlight() {
+      this.searchHighlights.forEach(result => {
+        this.rendition.annotations.remove(result.cfi, 'highlight');
+      });
+    },
+    async searchFromChapter(chapter) {
+      try {
+        await chapter.load(this.book.load.bind(this.book));
+        const result = await chapter.find(this.searchText);
+        return result;
+      } finally {
+        chapter.unload.bind(chapter)();
+      }
+    },
+    async searchEntireBook() {
+      if (this.searchText.length < 3) return [];
+      const results = await Promise.all(
+        this.book.spine.spineItems.map(this.searchFromChapter)
+      );
+      return results.flat().slice(0, 1000);
+    },
+    updateSearchHighlights(searchHighlights = [], directToFirst = true) {
+      this.searchHighlights = searchHighlights;
+      this.searchHighlights.forEach(result => {
+        this.rendition.annotations.highlight(result.cfi);
+      });
+      if (directToFirst && this.searchHighlights.length) {
+        this.rendition.display(this.searchHighlights[0].cfi);
+      }
+    },
+    async onClickSearchButton() {
+      this.showSearch = !this.showSearch;
+      if (!this.showSearch) {
+        this.removeHighlight();
+      } else {
+        const searchHighlights = await this.searchEntireBook();
+        this.updateSearchHighlights(searchHighlights, false);
+      }
+    },
+    async onInputSearch() {
+      this.removeHighlight();
+      const searchHighlights = await this.searchEntireBook();
+      this.updateSearchHighlights(searchHighlights);
+    },
+    onClickClearSearch() {
+      this.searchText = '';
+      this.removeHighlight();
     },
   },
 };
