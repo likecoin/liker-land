@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import Epub from 'epubjs';
+import Epub, { EpubCFI } from 'epubjs';
 import { saveAs } from 'file-saver';
 
 import nftMixin from '~/mixins/nft';
@@ -174,14 +174,35 @@ export default {
       );
       return results.flat().slice(0, 1000);
     },
-    updateSearchHighlights(searchHighlights = [], directToFirst = true) {
+    updateSearchHighlights(searchHighlights = []) {
       this.searchHighlights = searchHighlights;
       this.searchHighlights.forEach(result => {
         this.rendition.annotations.highlight(result.cfi);
       });
-      if (directToFirst && this.searchHighlights.length) {
-        this.rendition.display(this.searchHighlights[0].cfi);
-      }
+    },
+    directToNextSearchHighlight() {
+      if (!this.searchHighlights.length) return;
+      let targetCFI;
+        const currentLocation = this.rendition.currentLocation();
+      const currStartCFI = new EpubCFI(currentLocation.start.cfi);
+      const currEndCFI = new EpubCFI(currentLocation.end.cfi);
+        for (let i = 0; i < this.searchHighlights.length; i += 1) {
+          const cfi = new EpubCFI(this.searchHighlights[i].cfi);
+        const compareStart = cfi.compare(cfi, currStartCFI);
+        const compareEnd = cfi.compare(cfi, currEndCFI);
+          if (compareStart >= 0) {
+            if (compareEnd === -1) {
+              targetCFI = cfi;
+              break;
+            } else if (compareEnd === 1 && !targetCFI) {
+              targetCFI = cfi;
+            }
+          }
+        }
+        if (!targetCFI) {
+          targetCFI = new EpubCFI(this.searchHighlights[0].cfi);
+        }
+        this.rendition.display(targetCFI.toString());
     },
     async onClickSearchButton() {
       this.showSearch = !this.showSearch;
@@ -189,13 +210,15 @@ export default {
         this.removeHighlight();
       } else {
         const searchHighlights = await this.searchEntireBook();
-        this.updateSearchHighlights(searchHighlights, false);
+        this.updateSearchHighlights(searchHighlights);
       }
     },
     async onInputSearch() {
       this.removeHighlight();
       const searchHighlights = await this.searchEntireBook();
       this.updateSearchHighlights(searchHighlights);
+      this.directToNextSearchHighlight();
+    },
     },
     onClickClearSearch() {
       this.searchText = '';
