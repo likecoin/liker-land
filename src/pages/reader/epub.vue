@@ -32,14 +32,14 @@
             <IconClose class="w-20 h-20" />
           </button>
           <button
-            :disabled="!searchHighlights.length"
+            :disabled="!searchResults.length"
             class="w-[20px] text-[30px]"
             @click="onClickSearchPrev"
           >
             ‹
           </button>
           <button
-            :disabled="!searchHighlights.length"
+            :disabled="!searchResults.length"
             class="w-[20px] text-[30px]"
             @click="onClickSearchNext"
           >
@@ -101,7 +101,7 @@ export default {
       rendition: null,
       showSearch: false,
       searchText: '',
-      searchHighlights: [],
+      searchResults: [],
       selectedSearchResultIndex: 0,
     };
   },
@@ -170,7 +170,7 @@ export default {
       }
     },
     removeHighlight() {
-      this.searchHighlights.forEach(result => {
+      this.searchResults.forEach(result => {
         this.rendition.annotations.remove(result.cfi, 'highlight');
       });
     },
@@ -190,26 +190,26 @@ export default {
       );
       return results.flat().slice(0, 1000);
     },
-    updateSearchHighlights(searchHighlights = []) {
-      this.searchHighlights = searchHighlights;
-      this.searchHighlights.forEach(result => {
+    updateSearchResults(searchResults = []) {
+      this.searchResults = searchResults;
+      this.searchResults.forEach(result => {
         this.rendition.annotations.highlight(result.cfi);
       });
     },
-    directToSelectedSearchHighlight() {
-      if (!this.searchHighlights.length) return;
+    directToSelectedSearchResult() {
+      if (!this.searchResults.length) return;
       this.rendition.display(
-        this.searchHighlights[this.selectedSearchResultIndex].cfi.toString()
+        this.searchResults[this.selectedSearchResultIndex].cfi.toString()
       );
     },
-    directToNextSearchHighlight() {
-      if (!this.searchHighlights.length) return;
+    directToNextSearchResult() {
+      if (!this.searchResults.length) return;
       this.selectedSearchResultIndex = 0;
       const currentLocation = this.rendition.currentLocation();
       const currStartCFI = new EpubCFI(currentLocation.start.cfi);
       const currEndCFI = new EpubCFI(currentLocation.end.cfi);
-      for (let i = 0; i < this.searchHighlights.length; i += 1) {
-        const cfi = new EpubCFI(this.searchHighlights[i].cfi);
+      for (let i = 0; i < this.searchResults.length; i += 1) {
+        const cfi = new EpubCFI(this.searchResults[i].cfi);
         const compareStart = cfi.compare(cfi, currStartCFI);
         const compareEnd = cfi.compare(cfi, currEndCFI);
         if (compareStart >= 0) {
@@ -221,33 +221,33 @@ export default {
           }
         }
       }
-      this.directToSelectedSearchHighlight();
+      this.directToSelectedSearchResult();
     },
     async onClickSearchButton() {
       this.showSearch = !this.showSearch;
       if (!this.showSearch) {
         this.removeHighlight();
       } else {
-        const searchHighlights = await this.searchEntireBook();
-        this.updateSearchHighlights(searchHighlights);
+        const searchResults = await this.searchEntireBook();
+        this.updateSearchResults(searchResults);
       }
     },
     async onInputSearch() {
       this.removeHighlight();
-      const searchHighlights = await this.searchEntireBook();
-      this.updateSearchHighlights(searchHighlights);
-      this.directToNextSearchHighlight();
+      const searchResults = await this.searchEntireBook();
+      this.updateSearchResults(searchResults);
+      this.directToNextSearchResult();
     },
     onClickSearchPrev() {
       if (this.selectedSearchResultIndex > 0) {
         this.selectedSearchResultIndex -= 1;
-        this.directToSelectedSearchHighlight();
+        this.directToSelectedSearchResult();
       }
     },
     onClickSearchNext() {
-      if (this.selectedSearchResultIndex < this.searchHighlights.length - 1) {
+      if (this.selectedSearchResultIndex < this.searchResults.length - 1) {
         this.selectedSearchResultIndex += 1;
-        this.directToSelectedSearchHighlight();
+        this.directToSelectedSearchResult();
       }
     },
     onClickClearSearch() {
