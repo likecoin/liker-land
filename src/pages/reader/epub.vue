@@ -15,28 +15,43 @@
           {{ chapter.label }}
         </option>
       </select>
-      <div class="flex grow justify-end">
-        <input
-          v-if="showSearch"
-          ref="searchInput"
-          v-model="searchText"
-          class="my-[10px] shadow-md rounded-4"
-          placeholder="Search for ..."
-          @input="onInputSearch"
-        />
-        <button
-          v-if="searchText"
-          class="w-[50px] my-[10px]"
-          @click="onClickClearSearch"
-        >
-          <IconClose class="w-20 h-20" />
-        </button>
-        <button class="w-[50px] my-[10px]" @click="onClickSearchButton">
+      <div class="flex grow justify-end mr-8 gap-4">
+        <div v-if="showSearch" class="flex items-center gap-4">
+          <input
+            ref="searchInput"
+            v-model="searchText"
+            class="my-[10px] shadow-md rounded-4"
+            placeholder="Search for ..."
+            @input="onInputSearch"
+          />
+          <button
+            :disabled="!searchText"
+            class="my-[10px]"
+            @click="onClickClearSearch"
+          >
+            <IconClose class="w-20 h-20" />
+          </button>
+          <button
+            :disabled="!searchHighlights.length"
+            class="w-[20px] text-[30px]"
+            @click="onClickSearchPrev"
+          >
+            ‹
+          </button>
+          <button
+            :disabled="!searchHighlights.length"
+            class="w-[20px] text-[30px]"
+            @click="onClickSearchNext"
+          >
+            ›
+          </button>
+        </div>
+        <button class="my-[10px]" @click="onClickSearchButton">
           <IconSearch class="w-20 h-20" />
         </button>
         <button
           v-if="!hideDownload"
-          class="w-[50px] my-[10px]"
+          class="my-[10px]"
           @click="onClickDownloadEpub"
         >
           <IconDownload class="w-20 h-20" />
@@ -87,6 +102,7 @@ export default {
       showSearch: false,
       searchText: '',
       searchHighlights: [],
+      selectedSearchResultIndex: 0,
     };
   },
   computed: {
@@ -180,29 +196,32 @@ export default {
         this.rendition.annotations.highlight(result.cfi);
       });
     },
+    directToSelectedSearchHighlight() {
+      if (!this.searchHighlights.length) return;
+      this.rendition.display(
+        this.searchHighlights[this.selectedSearchResultIndex].cfi.toString()
+      );
+    },
     directToNextSearchHighlight() {
       if (!this.searchHighlights.length) return;
-      let targetCFI;
-        const currentLocation = this.rendition.currentLocation();
+      this.selectedSearchResultIndex = 0;
+      const currentLocation = this.rendition.currentLocation();
       const currStartCFI = new EpubCFI(currentLocation.start.cfi);
       const currEndCFI = new EpubCFI(currentLocation.end.cfi);
-        for (let i = 0; i < this.searchHighlights.length; i += 1) {
-          const cfi = new EpubCFI(this.searchHighlights[i].cfi);
+      for (let i = 0; i < this.searchHighlights.length; i += 1) {
+        const cfi = new EpubCFI(this.searchHighlights[i].cfi);
         const compareStart = cfi.compare(cfi, currStartCFI);
         const compareEnd = cfi.compare(cfi, currEndCFI);
-          if (compareStart >= 0) {
-            if (compareEnd === -1) {
-              targetCFI = cfi;
-              break;
-            } else if (compareEnd === 1 && !targetCFI) {
-              targetCFI = cfi;
-            }
+        if (compareStart >= 0) {
+          if (compareEnd === -1) {
+            this.selectedSearchResultIndex = i;
+            break;
+          } else if (compareEnd === 1 && this.selectedSearchResultIndex === 0) {
+            this.selectedSearchResultIndex = i;
           }
         }
-        if (!targetCFI) {
-          targetCFI = new EpubCFI(this.searchHighlights[0].cfi);
-        }
-        this.rendition.display(targetCFI.toString());
+      }
+      this.directToSelectedSearchHighlight();
     },
     async onClickSearchButton() {
       this.showSearch = !this.showSearch;
@@ -219,10 +238,22 @@ export default {
       this.updateSearchHighlights(searchHighlights);
       this.directToNextSearchHighlight();
     },
+    onClickSearchPrev() {
+      if (this.selectedSearchResultIndex > 0) {
+        this.selectedSearchResultIndex -= 1;
+        this.directToSelectedSearchHighlight();
+      }
+    },
+    onClickSearchNext() {
+      if (this.selectedSearchResultIndex < this.searchHighlights.length - 1) {
+        this.selectedSearchResultIndex += 1;
+        this.directToSelectedSearchHighlight();
+      }
     },
     onClickClearSearch() {
       this.searchText = '';
       this.removeHighlight();
+      this.selectedSearchResultIndex = 0;
     },
   },
 };
