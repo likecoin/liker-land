@@ -5,7 +5,7 @@
       <select
         v-model="selectedChapter"
         class="my-[10px] shadow-md rounded-4"
-        @change="onChangeEpubChapter"
+        @change="onChangeChapter"
       >
         <option
           v-for="chapter in toc"
@@ -34,14 +34,14 @@
           <button
             :disabled="!searchResults.length"
             class="w-[20px] text-[30px]"
-            @click="onClickSearchPrev"
+            @click="onClickGoToPrevSearchResult"
           >
             ‹
           </button>
           <button
             :disabled="!searchResults.length"
             class="w-[20px] text-[30px]"
-            @click="onClickSearchNext"
+            @click="onClickGoToNextSearchResult"
           >
             ›
           </button>
@@ -60,7 +60,7 @@
     </div>
     <a
       class="left-0 laptop:left-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-      @click="onClickEpubPrev"
+      @click="onClickGoToPrevPage"
       >‹</a
     >
     <div
@@ -69,7 +69,7 @@
     />
     <a
       class="right-0 laptop:right-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-      @click="onClickEpubNext"
+      @click="onClickGoToNextPage"
       >›</a
     >
   </div>
@@ -147,13 +147,13 @@ export default {
       this.rendition.on('keydown', keyListener);
       document.addEventListener('keydown', keyListener, false);
     },
-    onChangeEpubChapter() {
+    onChangeChapter() {
       this.rendition.display(this.selectedChapter);
     },
-    onClickEpubPrev() {
+    onClickGoToPrevPage() {
       this.rendition.prev();
     },
-    onClickEpubNext() {
+    onClickGoToNextPage() {
       this.rendition.next();
     },
     async onClickDownloadEpub() {
@@ -238,13 +238,13 @@ export default {
       this.updateSearchResults(searchResults);
       this.directToNextSearchResult();
     },
-    onClickSearchPrev() {
+    onClickGoToPrevSearchResult() {
       if (this.selectedSearchResultIndex > 0) {
         this.selectedSearchResultIndex -= 1;
         this.directToSelectedSearchResult();
       }
     },
-    onClickSearchNext() {
+    onClickGoToNextSearchResult() {
       if (this.selectedSearchResultIndex < this.searchResults.length - 1) {
         this.selectedSearchResultIndex += 1;
         this.directToSelectedSearchResult();
