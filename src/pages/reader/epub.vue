@@ -231,6 +231,9 @@ export default {
       } else {
         const searchResults = await this.searchEntireBook();
         this.updateSearchResults(searchResults);
+        this.$nextTick(() => {
+          this.$refs.searchInput.focus();
+        });
       }
     },
     async onInputSearch() {
