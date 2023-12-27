@@ -13,7 +13,7 @@
         v-if="trimmedItems.length"
         class="overflow-x-scroll scrollbar-custom"
       >
-        <div :class="[contentPaddingClass, 'min-w-[800px]']">
+        <div :class="[contentPaddingClass, 'phone:min-w-[600px]']">
           <table class="w-full">
             <tbody class="w-full">
               <tr class="w-full border-b-shade-gray border-b-[1px]">
@@ -37,6 +37,7 @@
                 :key="owner.id"
                 :class-id="classId"
                 :owner="owner"
+                :has-memo="hasMemo"
               />
             </tbody>
           </table>
@@ -89,6 +90,7 @@
                     :key="owner.id"
                     :class-id="classId"
                     :owner="owner"
+                    :has-memo="hasMemo"
                   />
                 </tbody>
               </table>
@@ -134,10 +136,19 @@ export default {
     shouldShowMore() {
       return this.items.length > this.trimmedItems.length;
     },
+    hasMemo() {
+      return this.items.some(item => item.memo);
+    },
     tableHeaderItems() {
+      if (this.hasMemo) {
+        return [
+          this.$t('nft_details_page_title_collector'),
+          this.$t('nft_message_type_generic'),
+          this.$t('nft_details_page_label_owning'),
+        ];
+      }
       return [
         this.$t('nft_details_page_title_collector'),
-        this.$t('nft_message_type_generic'),
         this.$t('nft_details_page_label_owning'),
       ];
     },
