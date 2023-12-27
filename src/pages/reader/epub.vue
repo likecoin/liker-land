@@ -99,6 +99,7 @@ export default {
       selectedChapter: '',
       book: null,
       rendition: null,
+      contents: null,
       showSearch: false,
       searchText: '',
       searchResults: [],
@@ -125,8 +126,9 @@ export default {
         spread: 'always',
       });
       this.rendition.display();
-      this.rendition.on('rendered', () => {
+      this.rendition.on('rendered', (cfiRange, contents) => {
         this.selectedChapter = this.rendition.currentLocation().start.href;
+        this.contents = contents;
       });
 
       const keyListener = e => {
@@ -196,12 +198,19 @@ export default {
         this.rendition.annotations.highlight(result.cfi);
       });
     },
-    directToSelectedSearchResult() {
+    async directToSelectedSearchResult() {
       if (!this.searchResults.length) return;
       const cfiString = this.searchResults[
         this.searchResultIndex
       ].cfi.toString();
-      this.rendition.display(cfiString);
+      await this.rendition.display(cfiString);
+      const range = this.rendition.getRange(cfiString);
+      const selection = this.contents.window.getSelection();
+      // TODO: selection is null when the page is not rendered (e.g. change chapter)
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     },
     directToNextSearchResult() {
       if (!this.searchResults.length) return;
