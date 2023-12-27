@@ -9,8 +9,11 @@
       <IconPerson />
     </template>
     <template #content="{ contentPaddingClass }">
-      <template v-if="trimmedItems.length">
-        <div :class="contentPaddingClass">
+      <div
+        v-if="trimmedItems.length"
+        class="overflow-x-scroll scrollbar-custom"
+      >
+        <div :class="[contentPaddingClass, 'min-w-[800px]']">
           <table class="w-full">
             <tbody class="w-full">
               <tr class="w-full border-b-shade-gray border-b-[1px]">
@@ -92,7 +95,7 @@
             </div>
           </template>
         </ShowMore>
-      </template>
+      </div>
       <div v-else class="flex justify-center items-center min-h-[180px]">
         <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
       </div>
