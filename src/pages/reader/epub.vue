@@ -16,11 +16,14 @@
         </option>
       </select>
       <div class="flex grow justify-end mr-8 gap-4">
+        <button class="my-[10px]" @click="onClickSearchButton">
+          <IconSearch class="w-20 h-20" />
+        </button>
         <div v-if="showSearch" class="flex items-center gap-4">
           <input
             ref="searchInput"
             v-model="searchText"
-            class="my-[10px] shadow-md rounded-4"
+            class="w-[120px] my-[10px] shadow-md rounded-4"
             placeholder="Search for ..."
             @input="onInputSearch"
           />
@@ -46,9 +49,6 @@
             ›
           </button>
         </div>
-        <button class="my-[10px]" @click="onClickSearchButton">
-          <IconSearch class="w-20 h-20" />
-        </button>
         <button
           v-if="!hideDownload"
           class="my-[10px]"
@@ -102,7 +102,7 @@ export default {
       showSearch: false,
       searchText: '',
       searchResults: [],
-      selectedSearchResultIndex: 0,
+      searchResultIndex: 0,
     };
   },
   computed: {
@@ -198,13 +198,14 @@ export default {
     },
     directToSelectedSearchResult() {
       if (!this.searchResults.length) return;
-      this.rendition.display(
-        this.searchResults[this.selectedSearchResultIndex].cfi.toString()
-      );
+      const cfiString = this.searchResults[
+        this.searchResultIndex
+      ].cfi.toString();
+      this.rendition.display(cfiString);
     },
     directToNextSearchResult() {
       if (!this.searchResults.length) return;
-      this.selectedSearchResultIndex = 0;
+      this.searchResultIndex = 0;
       const currentLocation = this.rendition.currentLocation();
       const currStartCFI = new EpubCFI(currentLocation.start.cfi);
       const currEndCFI = new EpubCFI(currentLocation.end.cfi);
@@ -214,10 +215,10 @@ export default {
         const compareEnd = cfi.compare(cfi, currEndCFI);
         if (compareStart >= 0) {
           if (compareEnd === -1) {
-            this.selectedSearchResultIndex = i;
+            this.searchResultIndex = i;
             break;
-          } else if (compareEnd === 1 && this.selectedSearchResultIndex === 0) {
-            this.selectedSearchResultIndex = i;
+          } else if (compareEnd === 1 && this.searchResultIndex === 0) {
+            this.searchResultIndex = i;
           }
         }
       }
@@ -239,21 +240,27 @@ export default {
       this.directToNextSearchResult();
     },
     onClickGoToPrevSearchResult() {
-      if (this.selectedSearchResultIndex > 0) {
-        this.selectedSearchResultIndex -= 1;
-        this.directToSelectedSearchResult();
+      if (!this.searchResults.length) return;
+      if (this.searchResultIndex > 0) {
+        this.searchResultIndex -= 1;
+      } else {
+        this.searchResultIndex = this.searchResults.length - 1;
       }
+      this.directToSelectedSearchResult();
     },
     onClickGoToNextSearchResult() {
-      if (this.selectedSearchResultIndex < this.searchResults.length - 1) {
-        this.selectedSearchResultIndex += 1;
-        this.directToSelectedSearchResult();
+      if (!this.searchResults.length) return;
+      if (this.searchResultIndex < this.searchResults.length - 1) {
+        this.searchResultIndex += 1;
+      } else {
+        this.searchResultIndex = 0;
       }
+      this.directToSelectedSearchResult();
     },
     onClickClearSearch() {
       this.searchText = '';
       this.removeHighlight();
-      this.selectedSearchResultIndex = 0;
+      this.searchResultIndex = 0;
     },
   },
 };
