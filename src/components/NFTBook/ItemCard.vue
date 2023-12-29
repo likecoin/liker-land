@@ -128,7 +128,7 @@
               $t('identity_type_author')
             }}</span>
             <span :class="['font-[600] truncate', displayNameStyle]">{{
-              iscnWorkAuthor
+              iscnWorkAuthor | ellipsis
             }}</span>
           </li>
           <client-only>
