@@ -168,9 +168,14 @@ export default {
         });
         saveAs(blob, getDownloadFilenameFromURL(this.fileSrc));
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        this.alertPromptError(this.$t('nft_download_content_error'));
+        if (error.message === 'Network Error') {
+          // bypass CORS
+          window.open(this.fileSrc);
+        } else {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          this.alertPromptError(this.$t('nft_download_content_error'));
+        }
       }
     },
     removeHighlight() {
