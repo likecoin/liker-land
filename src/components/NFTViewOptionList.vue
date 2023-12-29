@@ -189,40 +189,23 @@ export default {
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    async passCORSPolicy(url) {
-      try {
-        const res = await this.$axios.get(url, { responseType: 'stream' });
-        if (res.status === 200) {
-          res.data.destroy();
-        }
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
-    async handleClickViewContentURL(e, contentUrl) {
+    handleClickViewContentURL(e, contentUrl) {
       const type = this.getContentUrlType(contentUrl);
       const url = parseNFTMetadataURL(contentUrl);
       this.$emit('view-content-url', e, url, type);
       if (['pdf', 'epub'].includes(type)) {
         e.preventDefault();
-        const passCORS = await this.passCORSPolicy(url);
-        if (passCORS) {
-          this.$router.push(
-            this.localeLocation({
-              name: `reader-${type}`,
-              query: {
-                download: this.isContentDownloadable ? '1' : '0',
-                classId: this.classId,
-                format: type,
-                src: url,
-              },
-            })
-          );
-        } else {
-          // bypass CORS
-          window.location.href = url;
-        }
+        this.$router.push(
+          this.localeLocation({
+            name: `reader-${type}`,
+            query: {
+              download: this.isContentDownloadable ? '1' : '0',
+              classId: this.classId,
+              format: type,
+              src: url,
+            },
+          })
+        );
       }
     },
   },

@@ -116,7 +116,9 @@ export default {
   },
   methods: {
     initRendition() {
-      this.book = Epub(this.fileSrc);
+      const encodedUrl = encodeURIComponent(this.fileSrc);
+      const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
+      this.book = Epub(corsUrl);
       this.book.loaded.navigation.then(
         navigation => (this.toc = navigation.toc)
       );
