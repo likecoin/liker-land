@@ -191,7 +191,10 @@ export default {
     },
     async passCORSPolicy(url) {
       try {
-        await this.$axios.head(url);
+        const res = await this.$axios.get(url, { responseType: 'stream' });
+        if (res.status === 200) {
+          res.data.destroy();
+        }
         return true;
       } catch (error) {
         return false;
