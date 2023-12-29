@@ -9,38 +9,37 @@
       <IconPerson />
     </template>
     <template #content="{ contentPaddingClass }">
-      <div
-        v-if="trimmedItems.length"
-        class="overflow-x-scroll scrollbar-custom"
-      >
-        <div :class="[contentPaddingClass, 'phone:min-w-[600px]']">
-          <table class="w-full">
-            <tbody class="w-full">
-              <tr class="w-full border-b-shade-gray border-b-[1px]">
-                <td
-                  v-for="(text, index) in tableHeaderItems"
-                  :key="index"
-                  class="py-[8px]"
-                >
-                  <Label
-                    class="justify-start text-left text-dark-gray text-[12px] font-500"
-                    :text="text"
-                    tag="div"
-                    valign="middle"
-                    align="left"
-                    content-class="whitespace-nowrap"
-                  />
-                </td>
-              </tr>
-              <NFTPageCollectorListItem
-                v-for="owner in trimmedItems"
-                :key="owner.id"
-                :class-id="classId"
-                :owner="owner"
-                :has-memo="hasMemo"
-              />
-            </tbody>
-          </table>
+      <template v-if="trimmedItems.length">
+        <div class="overflow-x-scroll scrollbar-custom">
+          <div :class="['min-w-[800px]', contentPaddingClass]">
+            <table class="w-full">
+              <tbody class="w-full">
+                <tr class="w-full border-b-shade-gray border-b-[1px]">
+                  <td
+                    v-for="(text, index) in tableHeaderItems"
+                    :key="index"
+                    class="py-[8px]"
+                  >
+                    <Label
+                      class="justify-start text-left text-dark-gray text-[12px] font-500"
+                      :text="text"
+                      tag="div"
+                      valign="middle"
+                      align="left"
+                      content-class="whitespace-nowrap"
+                    />
+                  </td>
+                </tr>
+                <NFTPageCollectorListItem
+                  v-for="owner in trimmedItems"
+                  :key="owner.id"
+                  :class-id="classId"
+                  :owner="owner"
+                  :has-memo="hasMemo"
+                />
+              </tbody>
+            </table>
+          </div>
         </div>
         <ShowMore
           v-if="shouldShowMore"
@@ -97,7 +96,7 @@
             </div>
           </template>
         </ShowMore>
-      </div>
+      </template>
       <div v-else class="flex justify-center items-center min-h-[180px]">
         <Label preset="p6" :text="$t('nft_details_page_label_no_record')" />
       </div>
