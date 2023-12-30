@@ -603,7 +603,7 @@
       </svg>
     </section>
 
-    <section id="store" class="px-[2rem] pt-[3rem] pb-[6rem]">
+    <section id="store" class="relative px-[2rem] pt-[3rem] pb-[7.5rem]">
       <div class="w-full mx-auto max-w-[1024px] space-y-[2rem]">
         <h2 class="text-[1.5rem] text-center font-irohamaru tracking-[0.5rem]">
           {{ $t('about_nft_book_section_store_title') }}
@@ -626,6 +626,76 @@
           />
         </footer>
       </div>
+
+      <div
+        class="absolute inset-x-0 bottom-0 h-[48px] bg-repeat-x bg-contain bg-bottom pointer-events-none"
+        :style="{ backgroundImage: `url(${storeSectionOverlayBG})` }"
+      />
+    </section>
+
+    <section id="features" class="px-[2rem] pt-[5.5rem] pb-[7.5rem] bg-white">
+      <div class="w-full max-w-[1024px] mx-auto">
+        <h2 class="text-[2.5rem] text-center font-irohamaru tracking-[0.5rem]">
+          {{ $t('about_nft_book_section_features_title') }}
+        </h2>
+
+        <p class="mt-[2rem] text-center">
+          {{ $t('about_nft_book_section_features_description') }}
+        </p>
+
+        <ul
+          class="grid sm:grid-cols-2 gap-[5.5rem] tracking-widest mt-[5.5rem]"
+        >
+          <li class="flex flex-col items-center">
+            <img
+              class="w-[100px] h-[100px]"
+              src="~assets/images/about/nft-book/icons/ownership.png"
+            />
+            <h4 class="font-600 mt-[3rem]">
+              {{ $t('about_nft_book_section_features_ownership_title') }}
+            </h4>
+            <p class="mt-[0.5rem] text-center">
+              {{ $t('about_nft_book_section_features_ownership_description') }}
+            </p>
+          </li>
+          <li class="flex flex-col items-center">
+            <img
+              class="w-[100px] h-[100px]"
+              src="~assets/images/about/nft-book/icons/gifting.png"
+            />
+            <h4 class="font-600 mt-[3rem]">
+              {{ $t('about_nft_book_section_features_gifting_title') }}
+            </h4>
+            <p class="mt-[0.5rem] text-center">
+              {{ $t('about_nft_book_section_features_gifting_description') }}
+            </p>
+          </li>
+          <li class="flex flex-col items-center">
+            <img
+              class="w-[100px] h-[100px]"
+              src="~assets/images/about/nft-book/icons/multimedia.png"
+            />
+            <h4 class="font-600 mt-[3rem]">
+              {{ $t('about_nft_book_section_features_multimedia_title') }}
+            </h4>
+            <p class="mt-[0.5rem] text-center">
+              {{ $t('about_nft_book_section_features_multimedia_description') }}
+            </p>
+          </li>
+          <li class="flex flex-col items-center">
+            <img
+              class="w-[100px] h-[100px]"
+              src="~assets/images/about/nft-book/icons/social.png"
+            />
+            <h4 class="font-600 mt-[3rem]">
+              {{ $t('about_nft_book_section_features_social_title') }}
+            </h4>
+            <p class="mt-[0.5rem] text-center">
+              {{ $t('about_nft_book_section_features_social_description') }}
+            </p>
+          </li>
+        </ul>
+      </div>
     </section>
   </main>
 </template>
@@ -636,7 +706,8 @@ import { mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS } from '~/constant';
 
-import WaveBg from '~/assets/images/about/nft-book/wave.svg';
+import WaveCyanBg from '~/assets/images/about/nft-book/wave-cyan.svg';
+import WaveWhiteBg from '~/assets/images/about/nft-book/wave-white.svg';
 
 export default {
   name: 'AboutNFTBookPage',
@@ -651,7 +722,10 @@ export default {
   computed: {
     ...mapGetters(['nftGetBookstoreListItems']),
     bannerOverlayBG() {
-      return WaveBg;
+      return WaveCyanBg;
+    },
+    storeSectionOverlayBG() {
+      return WaveWhiteBg;
     },
     bookSectionClassId() {
       return LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS[0];
