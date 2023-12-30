@@ -429,6 +429,7 @@
   "nft_claim_error_message_unknown": "An unknown error occurs when adding to bookshelf",
   "nft_claim_login_in": "Verify wallet to claim your NFT",
   "nft_claim_login_in_button": "Verify Wallet",
+  "nft_claim_physical_only": "Payment successful. We will arrange delivery shortly, which will take about 3-5 days. Thank you for your support!",
   "nft_claim_missing_qs": "Kindly locate the notification email and proceed to click the provided link in order to claim your Writing NFT.",
   "nft_class_claimed": "Claimed",
   "nft_class_collected": "Collected",

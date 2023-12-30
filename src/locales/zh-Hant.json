@@ -429,6 +429,7 @@
   "nft_claim_error_message_unknown": "加進書架時出現不明錯誤",
   "nft_claim_login_in": "驗證錢包以領取 NFT",
   "nft_claim_login_in_button": "驗證錢包",
+  "nft_claim_physical_only": "付款成功。我們會盡快安排寄送，所需大約 3-5 天時間。感謝支持！",
   "nft_claim_missing_qs": "請點擊通知郵件中的連結以領取你的 Writing NFT",
   "nft_class_claimed": "已領取",
   "nft_class_collected": "已收集",
