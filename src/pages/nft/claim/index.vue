@@ -397,7 +397,7 @@ export default {
       // eslint-disable-next-line no-console
       console.error(err);
     }
-    if (!free && redirect && query.type === 'nft_book') {
+    if (!free && !this.giftInfo && redirect && query.type === 'nft_book') {
       logPurchaseFlowEvent(this, 'purchase', {
         items: [
           {
