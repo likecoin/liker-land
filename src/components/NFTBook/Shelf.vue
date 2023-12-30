@@ -3,7 +3,9 @@
     <ul
       :class="[
         'grid',
-        'grid-cols-1 sm:grid-cols-2 desktop:grid-cols-3',
+        isFutureTheme
+          ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 desktop:grid-cols-4'
+          : 'grid-cols-1 sm:grid-cols-2 desktop:grid-cols-3',
         'justify-center',
         'gap-[48px]',
         { 'w-full': isCampaignPreset },
@@ -24,6 +26,7 @@
           :class="{ 'h-[290px] w-[216px] bg-medium-gray': isDummy }"
           :class-id="item.classId"
           :preset="preset"
+          :theme="theme"
           :shelf-class="[
             // NOTE: Make the shelf appear to be continuous.
             { 'sm:rounded-l-[0px]': index % 2 !== 0 && index % 3 === 1 },
@@ -35,7 +38,7 @@
         />
       </li>
 
-      <template v-if="isShelfPreset">
+      <template v-if="isShelfPreset && !isFutureTheme">
         {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
         <li
           v-for="i in 2"
@@ -76,6 +79,7 @@
             :is="cardTag"
             :class-id="classId"
             preset="default"
+            :theme="theme"
             component-class="!bg-like-cyan-pale"
             @click.native="$emit('click-item', classId)"
             @click-avatar="$emit('click-item-avatar', classId)"
@@ -87,6 +91,11 @@
 </template>
 
 <script>
+const THEME_TYPE = {
+  DEFAULT: 'default',
+  FUTURE: 'future',
+};
+
 export default {
   name: 'NFTBookShelf',
   props: {
@@ -97,6 +106,10 @@ export default {
     preset: {
       type: String,
       default: 'shelf',
+    },
+    theme: {
+      type: String,
+      default: THEME_TYPE.DEFAULT,
     },
     isDummy: {
       type: Boolean,
@@ -117,6 +130,9 @@ export default {
     },
     isCampaignPreset() {
       return this.preset === 'campaign';
+    },
+    isFutureTheme() {
+      return this.theme === THEME_TYPE.FUTURE;
     },
     normalizedItems() {
       return this.items.map(item => {
