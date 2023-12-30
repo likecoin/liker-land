@@ -275,6 +275,29 @@
             @input="onInputCollectMessage"
           />
         </div>
+        <template v-if="nftIsNFTBook">
+          <Label
+            preset="p6"
+            align="left"
+            class="text-medium-gray mt-[12px] mb-[6px]"
+            :text="$t('nft_collect_modal_email')"
+          />
+          <div
+            class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
+          >
+            <IconEmail class="w-[20px] text-dark-gray" />
+            <input
+              v-model="email"
+              type="input"
+              class="w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+              :placeholder="
+                $t('nft_collect_modal_email_placeholder', {
+                  name: creatorDisplayName,
+                })
+              "
+            />
+          </div>
+        </template>
       </section>
 
       <section v-if="paymentMethod === undefined">
@@ -426,7 +449,7 @@ import { formatNumberWithLIKE, oscillate } from '~/util/ui';
 
 import clipboardMixin from '~/mixins/clipboard';
 import nftMixin from '~/mixins/nft';
-import { EXTERNAL_HOST } from '~/constant';
+import { EXTERNAL_HOST, W3C_EMAIL_REGEX } from '~/constant';
 
 const FOLLOW_PROMPT_STATE = {
   DEFAULT: 'default', // No need to show any follow UI.
@@ -456,6 +479,7 @@ export default {
       justCollectedNFTId: undefined,
       shouldShowMessageInput: false,
       memo: '',
+      email: this.$store.getters.walletEmail || '',
       followPromptState: FOLLOW_PROMPT_STATE.DEFAULT,
       isFollowPromptUpdating: false,
       modelExposure: 0,
@@ -530,6 +554,9 @@ export default {
         this.uiTxNFTStatus === 'processing_non_blocking'
       );
     },
+    isValidEmail() {
+      return W3C_EMAIL_REGEX.test(this.email);
+    },
     isProcessing() {
       return (
         this.uiTxNFTStatus === 'processing' ||
@@ -560,7 +587,8 @@ export default {
       const notSupportedPlatforms = [];
       return (
         this.nftPriceInLIKE > 0 &&
-        !notSupportedPlatforms.includes(this.walletMethodType)
+        !notSupportedPlatforms.includes(this.walletMethodType) &&
+        !(this.nftIsNFTBook && !this.isValidEmail)
       );
     },
     mintedFreeNFT() {
@@ -747,10 +775,11 @@ export default {
             );
             const result = await this.collectNFTWithLIKE(classId, {
               memo: this.memo,
+              email: this.email,
             });
-            if (result) {
-              this.justCollectedNFTId =
-                result.nftId || result.purchased?.[0]?.nftId;
+            const nftId = result?.nftId || result?.purchased?.[0]?.nftId;
+            if (nftId) {
+              this.justCollectedNFTId = nftId;
             }
             break;
           }

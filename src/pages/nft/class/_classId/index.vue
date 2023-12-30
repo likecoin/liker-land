@@ -77,8 +77,9 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
-                @change.once="handleEditionSelectChange"
+                @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
+                @click-gift="handleGiftFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
             </template>
@@ -290,12 +291,16 @@
         </section>
       </div>
     </div>
+    <NFTBookGiftDialog
+      :open="isGiftDialogOpen"
+      :selected-value="giftSelectedValue"
+      @submit="handleGiftSubmit"
+      @close="() => (isGiftDialogOpen = false)"
+    />
   </Page>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 import { nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import {
@@ -329,6 +334,9 @@ export default {
       isOpenTransferModal: false,
       isTransferring: false,
       isCollecting: false,
+
+      isGiftDialogOpen: false,
+      giftSelectedValue: 0,
 
       trimmedCount: 10,
     };
@@ -530,7 +538,7 @@ export default {
       });
     }
     const link = [];
-    if (this.isWritingNft) {
+    if (this.nftIsWritingNft) {
       link.push({
         hid: 'alternate-json-oembed',
         type: 'application/json+oembed',
@@ -572,9 +580,6 @@ export default {
     },
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
-    },
-    editionPriceIndex() {
-      return Number(this.$route.query.price_index) || 0;
     },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
@@ -671,6 +676,7 @@ export default {
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.fetchNFTBookInfoByClassId(this.classId).catch();
+        this.fetchNFTBookPaymentPriceInfo();
       }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -757,6 +763,12 @@ export default {
     },
     async handleCollect() {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+
+      if (this.nftIsNFTBook) {
+        await this.handleCollectFromEdition(this.defaultSelectedValue);
+        return;
+      }
+
       try {
         this.isCollecting = true;
         await this.collectNFT();
@@ -875,7 +887,7 @@ export default {
       );
       return this.handleCollect();
     },
-    async handleCollectFromEdition(selectedValue) {
+    async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
       const edition = editions[selectedValue];
       const hasStock = edition?.stock;
@@ -896,14 +908,49 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        const gaClientId = await getGaClientId(this);
-        const link = getNFTBookPurchaseLink({
-          classId: this.classId,
-          priceIndex: edition.index,
-          platform: this.platform,
-          gaClientId,
-        });
-        window.open(link, '_blank', 'noopener');
+        if (edition.price === 0) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-claim',
+              query: {
+                class_id: this.classId,
+                type: 'nft_book',
+                free: true,
+                price_index: edition.index,
+                from: 'liker_land_waived',
+              },
+            })
+          );
+          // gift does not support LIKE payment for now
+        } else if (!giftInfo && edition.price > 0 && this.nftPriceInLIKE > 0) {
+          await this.initIfNecessary();
+          if (this.hasConnectedWallet) {
+            logPurchaseFlowEvent(
+              this,
+              'add_shipping_info',
+              purchaseEventParams
+            );
+            this.fetchUserCollectedCount();
+            this.walletFetchLIKEBalance();
+          }
+          this.uiToggleCollectModal({ classId: this.classId });
+        } else {
+          const gaClientId = await getGaClientId(this);
+          const link = getNFTBookPurchaseLink({
+            classId: this.classId,
+            priceIndex: edition.index,
+            platform: this.platform,
+          });
+          const { url } = await this.$axios.$post(link, {
+            gaClientId,
+            giftInfo,
+          });
+          if (url) {
+            window.location.href = url;
+          } else {
+            throw new Error('Failed to get purchase link');
+          }
+        }
       } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
@@ -918,6 +965,28 @@ export default {
         1
       );
     },
+    async handleGiftSubmit({ selectedValue, giftInfo }) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_gift_submit',
+        this.classId,
+        1
+      );
+      await this.handleCollectFromEdition(selectedValue, giftInfo);
+      this.isGiftDialogOpen = false;
+    },
+    handleGiftFromEditionSelector(selectedValue) {
+      this.giftSelectedValue = selectedValue;
+      this.isGiftDialogOpen = true;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_edition_selector_gift',
+        this.classId,
+        1
+      );
+    },
     async handleCollectFromEditionCompareTable(selectedValue) {
       await this.handleCollectFromEdition(selectedValue);
       logTrackerEvent(
@@ -928,7 +997,14 @@ export default {
         1
       );
     },
-    handleEditionSelectChange() {
+    async handleEditionSelectChange(selectedValue) {
+      await this.$router.replace({
+        query: {
+          ...this.$route.query,
+          price_index: selectedValue,
+        },
+      });
+      await this.lazyFetchNFTBookPaymentPriceInfo();
       logTrackerEvent(
         this,
         'NFT',

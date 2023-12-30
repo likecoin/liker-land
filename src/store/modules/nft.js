@@ -55,11 +55,17 @@ const mutations = {
   [TYPES.NFT_SET_ISCN_METADATA](state, { iscnId, data }) {
     Vue.set(state.iscnMetadataByIdMap, iscnId, data);
   },
-  [TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO](state, { classId, info }) {
+  [TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO](
+    state,
+    { classId, priceIndex, info }
+  ) {
+    const key = Number.isInteger(priceIndex)
+      ? `${classId}_${priceIndex}`
+      : classId;
     if (info) {
-      Vue.set(state.paymentPriceByClassIdMap, classId, info);
+      Vue.set(state.paymentPriceByClassIdMap, key, info);
     } else {
-      Vue.delete(state.paymentPriceByClassIdMap, classId);
+      Vue.delete(state.paymentPriceByClassIdMap, key);
     }
   },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
@@ -226,8 +232,10 @@ const getters = {
   getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
-  getNFTClassPaymentPriceById: state => id =>
-    state.paymentPriceByClassIdMap[id],
+  getNFTClassPaymentPriceById: state => (id, priceIndex) =>
+    Number.isInteger(priceIndex)
+      ? state.paymentPriceByClassIdMap[`${id}_${priceIndex}`]
+      : state.paymentPriceByClassIdMap[id],
   getNFTIscnRecordsById: state => id =>
     state.metadataByClassIdMap[id]?.iscn_record,
   getNFTClassISCNOwnerByClassId: state => id =>
@@ -784,6 +792,39 @@ const actions = {
       hideDownload: data.hideDownload,
       defaultPaymentCurrency: data.defaultPaymentCurrency,
     });
+  },
+  async fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
+    { commit },
+    { classId, priceIndex }
+  ) {
+    const {
+      data: { fiatPrice, LIKEPrice },
+    } = await this.$api.get(
+      api.getNFTBookPaymentPrice({ classId, priceIndex })
+    );
+    const info = { fiatPrice, LIKEPrice };
+    commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
+      classId,
+      priceIndex,
+      info,
+    });
+    return info;
+  },
+  async lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
+    { getters, dispatch },
+    { classId, priceIndex }
+  ) {
+    let info = getters.getNFTClassPaymentPriceById(classId, priceIndex);
+    if (!info) {
+      info = await dispatch(
+        'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
+        {
+          classId,
+          priceIndex,
+        }
+      );
+    }
+    return info;
   },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
     if (getters.shoppingCartNFTClassList.length >= BATCH_COLLECT_MAX) {

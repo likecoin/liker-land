@@ -323,6 +323,29 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   )}`;
 };
 
+export const postNFTBookLIKEPurchaseEndpoint = ({
+  classId,
+  priceIndex,
+  platform = NFT_BOOK_PLATFORM_LIKER_LAND,
+}) => {
+  const qsPayload = {
+    price_index: priceIndex,
+    from: platform,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
+export const getNFTBookPaymentPrice = ({ classId, priceIndex }) => {
+  const qsPayload = {
+    price_index: priceIndex,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/price?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTopNFTClasses = ({ before, after }) => {
   const qsPayload = {
     ignore_list: LIKECOIN_NFT_API_WALLET,
@@ -455,6 +478,9 @@ export const getNftBookBuyerMessage = classId =>
   `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/messages`;
 
 export const fetchBookstoreItems = () => `${EXTERNAL_HOST}/api/bookstore/items`;
+
+export const fetchGutenbergCsv = () =>
+  `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v2.csv`;
 
 export const fetchBookstoreLists = () =>
   `${EXTERNAL_HOST}/api/bookstore/lists?t=1701404376`;

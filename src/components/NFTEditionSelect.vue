@@ -46,6 +46,17 @@
       </template>
 
       <ButtonV2
+        v-if="!isAllSoldOut && selectedItem.price > 0"
+        :is-disabled="!selectedItem"
+        preset="secondary"
+        :text="$t('nft_edition_select_confirm_button_text_gift')"
+        @click="handleClickGiftButton"
+      >
+        <template #prepend>
+          <IconGift class="w-[16px]" />
+        </template>
+      </ButtonV2>
+      <ButtonV2
         v-if="!isAllSoldOut"
         :is-disabled="!selectedItem"
         preset="secondary"
@@ -93,7 +104,7 @@ export default {
         if (!items.length) return true;
         return items.every(
           item =>
-            item.value &&
+            item.value >= 0 &&
             item.name &&
             item.priceLabel &&
             !Number.isNaN(item.stock) &&
@@ -172,6 +183,9 @@ export default {
       this.selectedValue = value;
       this.$emit('change', value);
       this.$emit('update:value', value);
+    },
+    handleClickGiftButton() {
+      this.$emit('click-gift', this.selectedValue);
     },
     handleClickCollectButton() {
       this.$emit('click-collect', this.selectedValue);

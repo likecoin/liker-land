@@ -73,6 +73,8 @@
           :class="[
             'flex',
             'flex-col',
+            'gap-[12px]',
+
             'text-center',
             'whitespace-pre-line',
             'px-[24px]',
