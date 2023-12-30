@@ -469,12 +469,8 @@
         <h2
           class="font-irohamaru text-center text-[1.8rem] desktop:text-[2.25rem] tracking-[0.5rem]"
         >
-          {{ $t('about_nft_book_section_1_title') }}
+          {{ $t('about_nft_book_section_about_title') }}
         </h2>
-
-        <p class="text-justify leading-2 tracking-[0.1]">
-          {{ $t('about_nft_book_section_1_description') }}
-        </p>
       </div>
     </section>
 
