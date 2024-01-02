@@ -9,16 +9,7 @@
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
       <ProgressIndicator v-if="!fileSrc" />
-      <iframe
-        v-else-if="format === 'pdf'"
-        :src="pdfIframeSrc"
-        width="100%"
-        height="100%"
-        style="border:none"
-      />
-      <div v-else>
-        Not implemented
-      </div>
+      <NuxtChild v-else-if="canRead" :file-src="fileSrc" />
     </Component>
   </div>
 </template>
@@ -30,7 +21,7 @@ import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 
 export default {
-  name: 'ReaderPage',
+  name: 'PDFReaderPage',
   mixins: [nftMixin, walletMixin],
   layout: 'empty',
   data() {
@@ -46,9 +37,6 @@ export default {
     classId() {
       return this.$route.query.classId;
     },
-    format() {
-      return this.$route.query.format || 'pdf';
-    },
     fileSrc() {
       const { src } = this.$route.query;
       // TODO: check src exists in ISCN
@@ -56,22 +44,13 @@ export default {
       if (src) {
         return src;
       }
-      return this.iscnContentUrls.find(url => url.includes(this.format));
+      return this.iscnContentUrls.find(url => url.includes('pdf'));
     },
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);
     },
-    pdfIframeSrc() {
-      const download =
-        this.$route.query.download === '0' || this.nftIsDownloadHidden
-          ? '0'
-          : '1';
-      const encodedUrl = encodeURIComponent(this.fileSrc);
-      const encodedCorsUrl = encodeURIComponent(
-        `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`
-      );
-      // TODO: customize pdf.js instead of using default build
-      return `https://likecoin.github.io/pdf.js/web/viewer.html?download=${download}&file=${encodedCorsUrl}`;
+    canRead() {
+      return this.isLoginRequired ? Boolean(this.getAddress) : true;
     },
   },
   watch: {
