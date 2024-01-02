@@ -328,9 +328,8 @@ export default {
         : '-';
     },
     controlBarPriceLabel() {
-      if (this.nftIsNFTBook && this.nftBookAvailablePriceLabel) {
-        // Do not show the second-hand price if there is stock left
-        return '';
+      if (this.nftIsNFTBook) {
+        return this.nftBookAvailablePriceLabel;
       }
       return this.NFTPrice && formatNumberWithUSD(this.NFTPrice);
     },

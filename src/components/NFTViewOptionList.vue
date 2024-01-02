@@ -42,7 +42,7 @@
         <Dropdown>
           <template #trigger="{ toggle }">
             <ButtonV2
-              class="mt-[12px] w-full"
+              class="w-full"
               preset="outline"
               :is-disabled="!isContentViewable"
               @click="toggle"
@@ -104,12 +104,13 @@
 </template>
 
 <script>
-import querystring from 'querystring';
-import { saveAs } from 'file-saver';
-
 import alertMixin from '~/mixins/alert';
 
 import { parseNFTMetadataURL } from '~/util/nft';
+import {
+  getFilenameFromURL,
+  getDownloadFilenameFromURL,
+} from '~/util/nft-book';
 
 export default {
   name: 'NFTViewOptionList',
@@ -183,26 +184,20 @@ export default {
           return this.$t('nft_details_page_button_view_unknown');
       }
     },
-    getFilenameFromURL(url) {
-      const qsStr = url.split('?').pop();
-      const qs = querystring.parse(qsStr);
-      return qs?.name || '';
-    },
-    getDownloadFilenameFromURL(url) {
-      return `${this.getFilenameFromURL(url) || 'content'}`;
-    },
+    getFilenameFromURL,
+    getDownloadFilenameFromURL,
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    async handleClickViewContentURL(e, contentUrl) {
+    handleClickViewContentURL(e, contentUrl) {
       const type = this.getContentUrlType(contentUrl);
       const url = parseNFTMetadataURL(contentUrl);
       this.$emit('view-content-url', e, url, type);
-      if (type === 'pdf') {
+      if (['pdf', 'epub'].includes(type)) {
         e.preventDefault();
         this.$router.push(
           this.localeLocation({
-            name: 'reader',
+            name: `reader-${type}`,
             query: {
               download: this.isContentDownloadable ? '1' : '0',
               classId: this.classId,
@@ -211,18 +206,6 @@ export default {
             },
           })
         );
-      } else if (type === 'epub') {
-        e.preventDefault();
-        // NOTE: Allow user to download epub file before we have web epub reader
-        try {
-          this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
-          const blob = await this.$axios.$get(url, { responseType: 'blob' });
-          saveAs(blob, this.getDownloadFilenameFromURL(contentUrl));
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          this.alertPromptError(this.$t('nft_download_content_error'));
-        }
       }
     },
   },

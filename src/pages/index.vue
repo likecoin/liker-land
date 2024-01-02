@@ -1128,6 +1128,8 @@
           @click-collect-button="handleCollectForFreeButtonClickInNFTBookSection"
         />
         -->
+        <GutenbergEntrance class="my-[5rem]" />
+
         <ul v-if="subFeaturedNFTBookClassIds.length" class="my-[5rem]">
           <li
             v-for="(classId, index) in subFeaturedNFTBookClassIds"
@@ -1388,7 +1390,7 @@
             </linearGradient>
           </defs>
           <g
-            class="animate-spin origin-center"
+            class="origin-center animate-spin"
             style="animation-duration: 10s;"
           >
             <rect
@@ -1442,7 +1444,7 @@
             />
           </defs>
           <g
-            class="animate-spin origin-center"
+            class="origin-center animate-spin"
             style="animation-duration: 10s;"
           >
             <rect
@@ -1460,7 +1462,7 @@
             />
           </g>
           <g
-            class="animate-spin origin-center"
+            class="origin-center animate-spin"
             style="animation-duration: 10s;"
           >
             <rect
@@ -1478,7 +1480,7 @@
             />
           </g>
           <g
-            class="animate-spin origin-center"
+            class="origin-center animate-spin"
             style="animation-duration: 10s;"
           >
             <rect

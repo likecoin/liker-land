@@ -15,7 +15,7 @@ const { LIKECOIN_API_BASE } = process.env;
 
 exports.fetchLikerInfoByWallet = async walletAddress => {
   let likerId = walletAddress;
-  let avatar = `https://avatars.dicebear.com/api/identicon/${walletAddress}.svg?background=%23ffffff`;
+  let avatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${walletAddress}&backgroundColor=ffffff`;
   let displayName = walletAddress;
   let isSubscribedCivicLiker = false;
   try {

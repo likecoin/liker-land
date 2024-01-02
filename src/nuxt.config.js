@@ -249,6 +249,8 @@ const nuxtConfig = {
           'https://likecoin.github.io',
           'verify.walletconnect.com',
           'www.facebook.com',
+          'www.youtube.com',
+          'https://newsletter.like.co',
         ],
         'connect-src': [
           "'self'",

@@ -10,33 +10,36 @@
     </template>
     <template #content="{ contentPaddingClass }">
       <template v-if="trimmedItems.length">
-        <div :class="contentPaddingClass">
-          <table class="w-full">
-            <tbody class="w-full">
-              <tr class="w-full border-b-shade-gray border-b-[1px]">
-                <td
-                  v-for="(text, index) in tableHeaderItems"
-                  :key="index"
-                  class="py-[8px]"
-                >
-                  <Label
-                    class="justify-start text-left text-dark-gray text-[12px] font-500"
-                    :text="text"
-                    tag="div"
-                    valign="middle"
-                    align="left"
-                    content-class="whitespace-nowrap"
-                  />
-                </td>
-              </tr>
-              <NFTPageCollectorListItem
-                v-for="owner in trimmedItems"
-                :key="owner.id"
-                :class-id="classId"
-                :owner="owner"
-              />
-            </tbody>
-          </table>
+        <div class="overflow-x-scroll scrollbar-custom">
+          <div :class="['min-w-[800px]', contentPaddingClass]">
+            <table class="w-full">
+              <tbody class="w-full">
+                <tr class="w-full border-b-shade-gray border-b-[1px]">
+                  <td
+                    v-for="(text, index) in tableHeaderItems"
+                    :key="index"
+                    class="py-[8px]"
+                  >
+                    <Label
+                      class="justify-start text-left text-dark-gray text-[12px] font-500"
+                      :text="text"
+                      tag="div"
+                      valign="middle"
+                      align="left"
+                      content-class="whitespace-nowrap"
+                    />
+                  </td>
+                </tr>
+                <NFTPageCollectorListItem
+                  v-for="owner in trimmedItems"
+                  :key="owner.id"
+                  :class-id="classId"
+                  :owner="owner"
+                  :has-memo="hasMemo"
+                />
+              </tbody>
+            </table>
+          </div>
         </div>
         <ShowMore
           v-if="shouldShowMore"
@@ -86,6 +89,7 @@
                     :key="owner.id"
                     :class-id="classId"
                     :owner="owner"
+                    :has-memo="hasMemo"
                   />
                 </tbody>
               </table>
@@ -131,10 +135,19 @@ export default {
     shouldShowMore() {
       return this.items.length > this.trimmedItems.length;
     },
+    hasMemo() {
+      return this.items.some(item => item.memo);
+    },
     tableHeaderItems() {
+      if (this.hasMemo) {
+        return [
+          this.$t('nft_details_page_title_collector'),
+          this.$t('nft_message_type_generic'),
+          this.$t('nft_details_page_label_owning'),
+        ];
+      }
       return [
         this.$t('nft_details_page_title_collector'),
-        this.$t('nft_message_type_generic'),
         this.$t('nft_details_page_label_owning'),
       ];
     },
