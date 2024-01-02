@@ -15,7 +15,7 @@ import { parseNFTMetadataURL } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  name: 'StorePaidBooksPage',
+  name: 'StoreFreeBooksPage',
   async fetch({ store }) {
     try {
       await store.dispatch('fetchBookstoreLatestItems');
