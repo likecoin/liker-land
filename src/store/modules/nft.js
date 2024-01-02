@@ -47,8 +47,9 @@ const state = () => ({
   latestNFTClassIdList: [],
   freeNFTClassIdList: [],
   trendingNFTClassIdList: [],
-  bookstoreItems: [],
+  bookstoreEditorialItems: [],
   bookstoreLists: {},
+  bookstoreLatestItems: [],
 });
 
 const mutations = {
@@ -149,11 +150,14 @@ const mutations = {
   [TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST](state, list) {
     state.trendingNFTClassIdList = list;
   },
-  [TYPES.NFT_SET_BOOKSTORE_ITEMS](state, items) {
-    state.bookstoreItems = items;
+  [TYPES.NFT_SET_BOOKSTORE_EDITORIAL_ITEMS](state, items) {
+    state.bookstoreEditorialItems = items;
   },
   [TYPES.NFT_SET_BOOKSTORE_LISTS](state, lists) {
     state.bookstoreLists = lists;
+  },
+  [TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS](state, items) {
+    state.bookstoreLatestItems = items;
   },
 };
 
@@ -396,9 +400,19 @@ const getters = {
   nftClassIdListInFree: state => state.freeNFTClassIdList,
   nftClassIdListInTrending: state => state.trendingNFTClassIdList,
 
-  nftBookstoreItems: state => state.bookstoreItems,
+  nftBookstoreEditorialItems: state => state.bookstoreEditorialItems,
   nftGetBookstoreListItems: state => listId =>
     state.bookstoreLists[listId] || [],
+  nftBookstoreLatestFreeItems: state =>
+    state.bookstoreLatestItems.filter(item =>
+      item.prices.some(
+        priceItem => priceItem.price <= 0 && !priceItem.isSoldOut
+      )
+    ),
+  nftBookstoreLatestPaidItems: state =>
+    state.bookstoreLatestItems.filter(item =>
+      item.prices.every(priceItem => priceItem.price > 0)
+    ),
 };
 
 const actions = {
@@ -901,15 +915,20 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreItems({ commit, state }) {
-    if (state.bookstoreItems.length) return;
-    const { data } = await this.$api.get(api.fetchBookstoreItems());
-    commit(TYPES.NFT_SET_BOOKSTORE_ITEMS, data.results);
+  async fetchBookstoreEditorialItems({ commit, state }) {
+    if (state.bookstoreEditorialItems.length) return;
+    const { data } = await this.$api.get(api.fetchBookstoreEditorialItems());
+    commit(TYPES.NFT_SET_BOOKSTORE_EDITORIAL_ITEMS, data.results);
   },
   async fetchBookstoreList({ commit, state }) {
     if (Object.keys(state.bookstoreLists).length) return;
     const { data } = await this.$api.get(api.fetchBookstoreLists());
     commit(TYPES.NFT_SET_BOOKSTORE_LISTS, data.results);
+  },
+  async fetchBookstoreLatestItems({ commit, state }) {
+    if (state.bookstoreLatestItems.length) return;
+    const { data } = await this.$api.get(api.fetchBookstoreLatestItems());
+    commit(TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS, data.list);
   },
 };
 
