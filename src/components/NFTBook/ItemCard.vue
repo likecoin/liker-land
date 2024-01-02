@@ -132,7 +132,7 @@
             <span class="text-like-cyan-gray text-10">{{
               $t('identity_type_author')
             }}</span>
-            <span :class="['font-[600] truncate', displayNameStyle]">{{
+            <span :class="['font-[600]', displayNameStyle]">{{
               iscnWorkAuthor
             }}</span>
           </li>
