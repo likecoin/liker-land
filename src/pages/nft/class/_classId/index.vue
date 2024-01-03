@@ -131,7 +131,7 @@
                 <li v-for="collection in nftCollections" :key="collection.id">
                   <NFTBookEditionCompareTableColumn
                     class="w-[280px]"
-                    :src="collection.image"
+                    :src="parseNFTMetadataURL(collection.image)"
                     :edition-config="collection"
                     :class-id="''"
                     :collection-id="collection.id"
@@ -330,7 +330,7 @@
 </template>
 
 <script>
-import { nftClassCollectionType } from '~/util/nft';
+import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import {
   logTrackerEvent,
@@ -750,6 +750,7 @@ export default {
     }
   },
   methods: {
+    parseNFTMetadataURL,
     async fetchTrimmedCollectorsInfo() {
       const trimmedCollectors = this.sortedOwnerListId.slice(
         0,

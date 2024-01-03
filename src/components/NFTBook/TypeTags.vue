@@ -34,6 +34,8 @@ export default {
           return this.$t('nft_details_page_button_type_pdf');
         case 'nft':
           return this.$t('nft_details_page_button_type_nft');
+        case 'collection':
+          return this.$t('nft_details_page_button_type_collection');
         default:
           return this.$t('nft_details_page_button_type_other');
       }

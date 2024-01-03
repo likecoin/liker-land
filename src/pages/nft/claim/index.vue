@@ -301,6 +301,7 @@ import {
 
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
+import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 
 const NFT_CLAIM_STATE = {
   GIFTING: 'GIFTING',
@@ -313,7 +314,7 @@ const NFT_CLAIM_STATE = {
 
 export default {
   name: 'NFTClaimPage',
-  mixins: [alertMixin, walletMixin],
+  mixins: [alertMixin, walletMixin, nftOrCollectionMixin],
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
@@ -328,7 +329,7 @@ export default {
     }
     try {
       if (collectionId) {
-        await store.dispatch('fetchNFTCollectionInfoByCollectionId', {
+        await store.dispatch('lazyFetchNFTCollectionInfoByCollectionId', {
           collectionId,
         });
       } else if (classId) {
@@ -375,16 +376,6 @@ export default {
     classId() {
       return this.$route.query.class_id;
     },
-    classIds() {
-      if (this.collectionId) {
-        return this.getNFTCollectionInfoByCollectionId(this.collectionId)
-          ?.classIds;
-      }
-      return [this.classId];
-    },
-    isCollection() {
-      return !!this.collectionId;
-    },
     collectionId() {
       return this.$route.query.collection_id;
     },
@@ -416,37 +407,6 @@ export default {
           return '';
       }
     },
-    collectionLocale() {
-      let { locale } = this.$i18n;
-      if (locale === 'zh-Hant') {
-        locale = 'zh';
-      }
-      return locale;
-    },
-    NFTMetadata() {
-      if (this.isCollection) {
-        return this.getNFTCollectionInfoByCollectionId(this.collectionId);
-      }
-      return this.getNFTClassMetadataById(this.classId);
-    },
-    NFTName() {
-      const name = this.NFTMetadata?.name;
-      if (name[this.collectionLocale] !== undefined) {
-        return name[this.collectionLocale];
-      }
-      return name;
-    },
-    NFTDescription() {
-      const description = this.NFTMetadata?.description;
-      if (description[this.collectionLocale] !== undefined) {
-        return description[this.collectionLocale];
-      }
-      return description;
-    },
-    NFTImageUrl() {
-      const image = this.NFTMetadata?.image;
-      return image ? parseNFTMetadataURL(image) : '';
-    },
     nftIsDownloadHidden() {
       return this.classIds.some(classId =>
         this.getIsHideNFTBookDownload(classId)
@@ -459,14 +419,7 @@ export default {
       );
     },
     creatorDisplayName() {
-      let wallet;
-      if (this.isCollection) {
-        wallet = this.getNFTCollectionInfoByCollectionId(this.collectionId)
-          ?.ownerWallet;
-      } else {
-        wallet = this.NFTMetadata?.iscn_owner;
-      }
-      return this.getUserInfoByAddress(wallet)?.displayName || 'creator';
+      return this.getUserInfoByAddress(this.NFTOwner)?.displayName || 'creator';
     },
     canViewContentDirectly() {
       return (
