@@ -12,8 +12,8 @@ const ALLOWED_ADDRESS_PREFIXES = ['like', 'cosmos'];
 
 export function isValidAddress(address) {
   try {
-    bech32.decode(address);
-    return true;
+    const { prefix } = bech32.decode(address);
+    return ALLOWED_ADDRESS_PREFIXES.includes(prefix);
   } catch (error) {
     return false;
   }

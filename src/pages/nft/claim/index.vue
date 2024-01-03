@@ -32,7 +32,10 @@
     <MobileStickyCard
       class="flex flex-col justify-center items-center w-full laptop:max-w-[400px] mx-auto py-[1.5rem]"
     >
-      <template v-if="giftInfo && state === 'GIFTING'">
+      <template v-if="state === 'PHYSICAL_ONLY'">
+        <Label v-if="text" class="mb-[16px]" :text="text" align="center" />
+      </template>
+      <template v-else-if="giftInfo && state === 'GIFTING'">
         <div class="flex flex-col mt-[12px] mb-[18px]">
           <Label
             class="text-like-green"
@@ -227,7 +230,9 @@
             :text="$t('nft_claim_claimed_download')"
           />
           <div v-for="id in classIds" :key="id">
-            <NFTWidgetBaseCard v-if="isCollection">
+            <NFTWidgetBaseCard
+              v-if="isCollection && getCanViewNFTBookBeforeClaimByClassId(id)"
+            >
               <NuxtLink
                 :to="
                   localeLocation({
@@ -303,6 +308,7 @@ const NFT_CLAIM_STATE = {
   INITIAL: 'INITIAL',
   CLAIMING: 'CLAIMING',
   CLAIMED: 'CLAIMED',
+  PHYSICAL_ONLY: 'PHYSICAL_ONLY',
   ERROR: 'ERROR',
 };
 
@@ -352,6 +358,7 @@ export default {
       claimingAddress: '',
       claimingFreeEmail: '',
       giftInfo: null,
+      isPhysicalOnly: false,
     };
   },
   computed: {
@@ -390,6 +397,8 @@ export default {
             return this.$t('nft_claim_claimed_nft_book');
           }
           return this.$t('nft_claim_claimed');
+        case NFT_CLAIM_STATE.PHYSICAL_ONLY:
+          return this.$t('nft_claim_physical_only');
         case NFT_CLAIM_STATE.ERROR:
           return this.error
             ? this.$t('nft_claim_error_message', { error: this.error })
@@ -449,15 +458,19 @@ export default {
         })
       );
       ({ price } = data);
-      this.giftInfo = data.giftInfo;
-      if (this.giftInfo) {
+      const { giftInfo, isPhysicalOnly } = data;
+      this.giftInfo = giftInfo;
+      this.isPhysicalOnly = isPhysicalOnly;
+      if (this.isPhysicalOnly) {
+        this.state = NFT_CLAIM_STATE.PHYSICAL_ONLY;
+      } else if (this.giftInfo) {
         this.state = NFT_CLAIM_STATE.GIFTING;
       }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
     }
-    if (!free && redirect && query.type === 'nft_book') {
+    if (!free && !this.giftInfo && redirect && query.type === 'nft_book') {
       logPurchaseFlowEvent(this, 'purchase', {
         items: [
           {

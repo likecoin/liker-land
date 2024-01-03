@@ -3,7 +3,7 @@
     class="border-b-shade-gray border-b-[1px] text-dark-gray cursor-pointer hover:bg-light-gray transition-colors"
     @click="handleRowClick"
   >
-    <td class="py-[12px] max-w-[200px]">
+    <td class="py-[12px] max-w-[200px] px-[8px]">
       <LinkV2
         class="flex items-center gap-[8px]"
         :to="
@@ -26,12 +26,12 @@
         <span class="truncate">{{ owner.displayName }}</span>
       </LinkV2>
     </td>
-    <td class="py-[12px]">
+    <td v-if="hasMemo" class="py-[12px] px-[8px]">
       <span class="truncate text-[12px] text-medium-gray font-500">{{
         owner.memo
       }}</span>
     </td>
-    <td class="py-[12px]">
+    <td class="py-[12px] px-[8px]">
       <Label preset="p6">{{ owner.collectedCount }}</Label>
     </td>
   </tr>
@@ -53,6 +53,10 @@ export default {
     owner: {
       type: Object,
       required: true,
+    },
+    hasMemo: {
+      type: Boolean,
+      required: false,
     },
   },
   methods: {

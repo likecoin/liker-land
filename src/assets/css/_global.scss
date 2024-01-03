@@ -21,8 +21,6 @@ html {
 
 body {
   @media screen and (max-width: 600px) {
-    @apply bg-like-green;
-
     &::before,
     &::after {
       content: '';

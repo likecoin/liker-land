@@ -51,8 +51,13 @@
 </template>
 
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
+import {
+  logTrackerEvent,
+  logPurchaseFlowEvent,
+  logPurchaseNFTBookEvent,
+} from '~/util/EventLogger';
 import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
+import { getNFTBookPaymentStatusEndpoint } from '~/util/api';
 
 import nftMixin from '~/mixins/nft';
 
@@ -86,6 +91,56 @@ export default {
     classId() {
       return this.$route.query.class_id;
     },
+    paymentId() {
+      return this.$route.query.payment_id;
+    },
+  },
+  async mounted() {
+    const { redirect, from, ...query } = this.$route.query;
+    let price;
+    try {
+      const { data } = await this.$api.get(
+        getNFTBookPaymentStatusEndpoint({
+          classId: this.classId,
+          paymentId: this.paymentId,
+        })
+      );
+      ({ price } = data);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+    if (redirect && query.type === 'nft_book') {
+      logPurchaseFlowEvent(this, 'purchase', {
+        items: [
+          {
+            name: this.NFTName,
+            classId: this.classId,
+            price,
+          },
+        ],
+        price,
+        currency: 'USD',
+        isNFTBook: true,
+      });
+      logPurchaseNFTBookEvent(this, {
+        name: this.NFTName,
+        currency: 'USD',
+        classId: this.classId,
+        price,
+      });
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_gift_purchase_success',
+        this.classId,
+        1
+      );
+      this.$router.replace({
+        ...this.$route,
+        query,
+      });
+    }
   },
   methods: {
     handleClickViewDetails() {

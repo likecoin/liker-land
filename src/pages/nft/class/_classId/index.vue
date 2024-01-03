@@ -118,7 +118,7 @@
                 </li>
               </ul>
             </div>
-            <div class="flex-col">
+            <div v-if="nftCollections?.length" class="flex-col">
               <Label
                 :text="$t('nft_collection_label')"
                 preset="h3"

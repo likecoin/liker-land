@@ -370,6 +370,8 @@ export default {
         price: 0,
         priceLabel: this.formattedNFTPriceInUSD,
         value: 0,
+        isPhysicalOnly: false,
+        hasShipping: false,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
           : 0,
@@ -397,7 +399,7 @@ export default {
                 'HKD'
               );
             }
-            const { stock } = edition;
+            const { stock, isPhysicalOnly, hasShipping } = edition;
             const style = {
               spineColor1: edition.spineColor1 || '#EBEBEB',
               spineColor2: edition.spineColor2 || '#9B9B9B',
@@ -414,6 +416,8 @@ export default {
               value: index,
               stock,
               style,
+              isPhysicalOnly,
+              hasShipping,
               dynamicCovers: getDynamicCovers(this.classId, edition.index),
             };
           })

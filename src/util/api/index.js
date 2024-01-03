@@ -408,7 +408,7 @@ export const getFreeNFTClassIds = () =>
   `${LIKECOIN_API_BASE}/likernft/list/free`;
 
 export const getIdenticonAvatar = id =>
-  `https://avatars.dicebear.com/api/identicon/${id}.svg?background=%23ffffff`;
+  `https://api.dicebear.com/7.x/identicon/svg?seed=${id}&backgroundColor=ffffff`;
 
 export const getNFTClassMetadata = classId =>
   `/api/nft/metadata?class_id=${classId}`;
@@ -529,10 +529,14 @@ export const getTotalResalesByAddress = address => {
 export const getNftBookBuyerMessage = classId =>
   `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/messages`;
 
-export const fetchBookstoreItems = () => `${EXTERNAL_HOST}/api/bookstore/items`;
+export const fetchBookstoreLatestItems = () =>
+  `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100`;
+
+export const fetchBookstoreEditorialItems = () =>
+  `${EXTERNAL_HOST}/api/bookstore/items`;
 
 export const fetchGutenbergCsv = () =>
-  `${EXTERNAL_HOST}/csv/gutenberg-audio-books.csv`;
+  `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v2.csv`;
 
 export const fetchBookstoreLists = () =>
   `${EXTERNAL_HOST}/api/bookstore/lists?t=1701404376`;
