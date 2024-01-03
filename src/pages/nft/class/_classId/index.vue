@@ -86,35 +86,64 @@
           </NFTBookItemCard>
           <div
             v-if="
-              nftBookAvailablePriceLabel &&
-                (nftEditions.length > 1 ||
-                  (nftEditions.length === 1 && nftEditions[0].description))
+              nftCollections?.length ||
+                (nftBookAvailablePriceLabel &&
+                  (nftEditions.length > 1 ||
+                    (nftEditions.length === 1 && nftEditions[0].description)))
             "
             ref="compareSection"
-            class="max-w-[962px] mx-auto flex flex-col justify-center"
+            class="max-w-[962px] mx-auto flex gap-[24px] justify-center"
           >
-            <Label
-              :text="$t('nft_edition_label')"
-              preset="h3"
-              align="center"
-              class="text-like-green mt-[38px] mb-[24px]"
-            />
-            <ul
-              class="flex flex-wrap items-start justify-center gap-[24px] w-full"
-            >
-              <li
-                v-for="editionConfig in nftEditions"
-                :key="editionConfig.name"
+            <div class="flex-col">
+              <Label
+                :text="$t('nft_edition_label')"
+                preset="h3"
+                align="center"
+                class="text-like-green mt-[38px] mb-[24px]"
+              />
+              <ul
+                class="flex flex-wrap items-start justify-center gap-[24px] w-full"
               >
-                <NFTBookEditionCompareTableColumn
-                  class="w-[280px]"
-                  :src="NFTImageUrl"
-                  :edition-config="editionConfig"
-                  :class-id="classId"
-                  @click-collect="handleCollectFromEditionCompareTable"
-                />
-              </li>
-            </ul>
+                <li
+                  v-for="editionConfig in nftEditions"
+                  :key="editionConfig.name"
+                >
+                  <NFTBookEditionCompareTableColumn
+                    class="w-[280px]"
+                    :src="NFTImageUrl"
+                    :edition-config="editionConfig"
+                    :class-id="classId"
+                    @click-collect="handleCollectFromEditionCompareTable"
+                  />
+                </li>
+              </ul>
+            </div>
+            <div v-if="nftCollections?.length" class="flex-col">
+              <Label
+                :text="$t('nft_collection_label')"
+                preset="h3"
+                align="center"
+                class="text-like-green mt-[38px] mb-[24px]"
+              />
+              <ul
+                class="flex flex-wrap items-start justify-center gap-[24px] w-full"
+              >
+                <li v-for="collection in nftCollections" :key="collection.id">
+                  <NFTBookEditionCompareTableColumn
+                    class="w-[280px]"
+                    :src="collection.image"
+                    :edition-config="collection"
+                    :class-id="''"
+                    :collection-id="collection.id"
+                    @click-collect="
+                      handleClickCollectionFromEditionCompareTable({
+                        collectionId: collection.id,
+                      })
+                    "
+                  />
+                </li>
+              </ul>
+            </div>
           </div>
 
           <Separator class="mx-auto" />
@@ -677,6 +706,7 @@ export default {
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.fetchNFTBookInfoByClassId(this.classId).catch();
         this.fetchNFTBookPaymentPriceInfo();
+        this.fetchRelatedNFTCollection({ type: 'book' });
       }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
@@ -995,6 +1025,21 @@ export default {
         `nft_class_details_edition_compare_table_collect`,
         this.classId,
         1
+      );
+    },
+    handleClickCollectionFromEditionCompareTable({ collectionId }) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_class_details_edition_compare_table_go_to_collection`,
+        collectionId,
+        1
+      );
+      this.$router.push(
+        this.localeLocation({
+          name: 'nft-collection-collectionId',
+          params: { collectionId },
+        })
       );
     },
     async handleEditionSelectChange(selectedValue) {

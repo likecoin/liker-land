@@ -4,7 +4,12 @@
       <NFTWidgetBaseCard>
         <NuxtLink
           :to="
-            localeLocation({ name: 'nft-class-classId', params: { classId } })
+            localeLocation({
+              name: isCollection
+                ? 'nft-collection-collectionId'
+                : 'nft-class-classId',
+              params: { collectionId, classId },
+            })
           "
           target="_blank"
         >
@@ -152,7 +157,7 @@
                 class="self-center mt-[24px]"
                 :text="
                   $t(
-                    nftIsNFTBook && nftMustClaimToView
+                    canViewContentDirectly
                       ? 'nft_claim_access_nft_book'
                       : 'nft_claim_claim'
                   )
@@ -203,16 +208,9 @@
           />
           <template v-else-if="state === 'CLAIMED'">
             <ButtonV2
-              v-if="nftId"
               :text="$t('nft_claim_claimed_view_button')"
               preset="tertiary"
               @click="handleClickView"
-            />
-            <ButtonV2
-              v-else
-              :text="$t('nft_claim_claimed_view_class_button')"
-              preset="tertiary"
-              @click="handleClickViewClass"
             />
           </template>
 
@@ -231,16 +229,49 @@
             class="text-medium-gray text-[12px]"
             :text="$t('nft_claim_claimed_download')"
           />
-          <NFTViewOptionList
-            :url="externalUrl"
-            :class-id="classId"
-            :content-urls="iscnContentUrls"
-            :iscn-url="iscnUrl"
-            :is-nft-book="nftIsNFTBook"
-            :is-content-viewable="true"
-            :is-content-downloadable="isContentDownloadable"
-            @view-content-url="handleClickViewContentDirectly"
-          />
+          <div v-for="id in classIds" :key="id">
+            <NFTWidgetBaseCard
+              v-if="isCollection && getCanViewNFTBookBeforeClaimByClassId(id)"
+            >
+              <NuxtLink
+                :to="
+                  localeLocation({
+                    name: 'nft-class-classId',
+                    params: { classId: id },
+                  })
+                "
+                target="_blank"
+              >
+                <NFTWidgetContentPreview
+                  :class="[
+                    'transition-shadow',
+                    'cursor-pointer',
+                    'min-h-[300px]',
+                    'w-full',
+                  ]"
+                  :title="getNFTClassMetadataById(id).name"
+                  :description="getNFTClassMetadataById(id).description"
+                  :img-src="
+                    parseNFTMetadataURL(getNFTClassMetadataById(id).image)
+                  "
+                />
+              </NuxtLink>
+            </NFTWidgetBaseCard>
+            <NFTViewOptionList
+              v-if="getCanViewNFTBookBeforeClaimByClassId(id)"
+              :url="
+                getIscnData(id)?.contentMetadata.url ||
+                  getNFTClassMetadataById(id)?.external_url
+              "
+              :class-id="id"
+              :content-urls="getIscnData(id)?.contentMetadata.sameAs"
+              :iscn-url="getIscnData(id)?.contentMetadata.url"
+              :is-nft-book="checkNftIsNFTBook(id)"
+              :is-content-viewable="true"
+              :is-content-downloadable="!getIsHideNFTBookDownload(id)"
+              @view-content-url="handleClickViewContentDirectly"
+            />
+          </div>
         </div>
       </template>
     </MobileStickyCard>
@@ -262,10 +293,13 @@ import {
   getFreeNFTBookPurchaseEndpoint,
 } from '~/util/api';
 import { isValidAddress } from '~/util/cosmos';
-import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
+import {
+  getNFTClassCollectionType,
+  nftClassCollectionType,
+  parseNFTMetadataURL,
+} from '~/util/nft';
 
 import alertMixin from '~/mixins/alert';
-import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 
 const NFT_CLAIM_STATE = {
@@ -279,27 +313,35 @@ const NFT_CLAIM_STATE = {
 
 export default {
   name: 'NFTClaimPage',
-  mixins: [alertMixin, nftMixin, walletMixin],
+  mixins: [alertMixin, walletMixin],
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
+      collection_id: collectionId,
       payment_id: paymentId,
       claiming_token: token,
       free,
     } = query;
-    if (!free && (!classId || !token || !paymentId)) {
+    if (!free && ((!classId && !collectionId) || !token || !paymentId)) {
       error({ statusCode: 400, message: i18n.t('nft_claim_missing_qs') });
       return;
     }
     try {
-      await store.dispatch('lazyGetNFTClassMetadata', classId);
-      const classCollectionType = getNFTClassCollectionType(
-        store.getters.getNFTClassMetadataById(classId)
-      );
-      if (classCollectionType === nftClassCollectionType.NFTBook) {
-        await store.dispatch('fetchNFTBookInfoByClassId', classId);
+      if (collectionId) {
+        await store.dispatch('fetchNFTCollectionInfoByCollectionId', {
+          collectionId,
+        });
+      } else if (classId) {
+        await store.dispatch('lazyGetNFTClassMetadata', classId);
+        const classCollectionType = getNFTClassCollectionType(
+          store.getters.getNFTClassMetadataById(classId)
+        );
+        if (classCollectionType === nftClassCollectionType.NFTBook) {
+          await store.dispatch('fetchNFTBookInfoByClassId', classId);
+        }
       }
     } catch (err) {
+      console.error(err);
       error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
     }
   },
@@ -319,9 +361,32 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getCanViewNFTBookBeforeClaimByClassId']),
+    ...mapGetters([
+      'getNFTClassMetadataById',
+      'getISCNMetadataById',
+      'getCanViewNFTBookBeforeClaimByClassId',
+      'getNFTCollectionInfoByCollectionId',
+      'getCanViewNFTBookBeforeClaimByClassId',
+      'getIsHideNFTBookDownload',
+    ]),
+    primaryKey() {
+      return this.collectionId || this.classId;
+    },
     classId() {
       return this.$route.query.class_id;
+    },
+    classIds() {
+      if (this.collectionId) {
+        return this.getNFTCollectionInfoByCollectionId(this.collectionId)
+          ?.classIds;
+      }
+      return [this.classId];
+    },
+    isCollection() {
+      return !!this.collectionId;
+    },
+    collectionId() {
+      return this.$route.query.collection_id;
     },
     paymentId() {
       return this.$route.query.payment_id;
@@ -351,6 +416,42 @@ export default {
           return '';
       }
     },
+    collectionLocale() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
+      return locale;
+    },
+    NFTMetadata() {
+      if (this.isCollection) {
+        return this.getNFTCollectionInfoByCollectionId(this.collectionId);
+      }
+      return this.getNFTClassMetadataById(this.classId);
+    },
+    NFTName() {
+      const name = this.NFTMetadata?.name;
+      if (name[this.collectionLocale] !== undefined) {
+        return name[this.collectionLocale];
+      }
+      return name;
+    },
+    NFTDescription() {
+      const description = this.NFTMetadata?.description;
+      if (description[this.collectionLocale] !== undefined) {
+        return description[this.collectionLocale];
+      }
+      return description;
+    },
+    NFTImageUrl() {
+      const image = this.NFTMetadata?.image;
+      return image ? parseNFTMetadataURL(image) : '';
+    },
+    nftIsDownloadHidden() {
+      return this.classIds.some(classId =>
+        this.getIsHideNFTBookDownload(classId)
+      );
+    },
     shouldBlockClaim() {
       return (
         !this.claimingAddress ||
@@ -358,14 +459,21 @@ export default {
       );
     },
     creatorDisplayName() {
-      return (
-        this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
-      );
+      let wallet;
+      if (this.isCollection) {
+        wallet = this.getNFTCollectionInfoByCollectionId(this.collectionId)
+          ?.ownerWallet;
+      } else {
+        wallet = this.NFTMetadata?.iscn_owner;
+      }
+      return this.getUserInfoByAddress(wallet)?.displayName || 'creator';
     },
     canViewContentDirectly() {
       return (
         !this.isFreePurchase &&
-        this.getCanViewNFTBookBeforeClaimByClassId(this.classId)
+        this.classIds.some(classId =>
+          this.getCanViewNFTBookBeforeClaimByClassId(classId)
+        )
       );
     },
     isContentDownloadable() {
@@ -392,6 +500,7 @@ export default {
       const { data } = await this.$api.get(
         getNFTBookPaymentStatusEndpoint({
           classId: this.classId,
+          collectionId: this.collectionId,
           paymentId: this.paymentId,
         })
       );
@@ -413,6 +522,7 @@ export default {
         items: [
           {
             name: this.NFTName,
+            collectionId: this.collectionId,
             classId: this.classId,
             price,
           },
@@ -424,6 +534,7 @@ export default {
       logPurchaseNFTBookEvent(this, {
         name: this.NFTName,
         currency: 'USD',
+        collectionId: this.collectionId,
         classId: this.classId,
         price,
       });
@@ -439,12 +550,27 @@ export default {
   },
   methods: {
     isValidAddress,
+    parseNFTMetadataURL,
+    getIscnData(classId) {
+      const metadata = this.getNFTClassMetadataById(classId);
+      const iscnId =
+        metadata.parent?.iscnIdPrefix || metadata.parent?.iscn_id_prefix;
+      const data = this.getISCNMetadataById(iscnId);
+      if (data instanceof Promise) return undefined;
+      return data;
+    },
+    checkNftIsNFTBook(classId) {
+      const metadata = this.getNFTClassMetadataById(classId);
+      return (
+        getNFTClassCollectionType(metadata) === nftClassCollectionType.NFTBook
+      );
+    },
     onEnterClaimingAddress() {
       logTrackerEvent(
         this,
         'NFT',
         'nft_claim_nft_book_on_address_entered',
-        this.classId
+        this.primaryKey
       );
       this.claimingAddress = this.claimingAddressInput;
     },
@@ -453,7 +579,7 @@ export default {
         this,
         'NFT',
         'nft_claim_nft_book_on_login_clicked',
-        this.classId
+        this.primaryKey
       );
       await this.connectWallet();
     },
@@ -470,6 +596,7 @@ export default {
         this.claimPromise = this.$api.post(
           getFreeNFTBookPurchaseEndpoint({
             classId: this.classId,
+            collectionId: this.collectionId,
             priceIndex: this.priceIndex,
           }),
           {
@@ -484,7 +611,7 @@ export default {
           this,
           'NFT',
           'nft_free_nft_book_purchased',
-          this.classId
+          this.primaryKey
         );
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -494,7 +621,7 @@ export default {
           this,
           'NFT',
           'nft_free_nft_book_purchase_error',
-          this.classId
+          this.primaryKey
         );
         this.alertPromptError(
           this.$t('nft_free_claim_error_message', {
@@ -540,7 +667,7 @@ export default {
           this,
           'NFT',
           'nft_claim_fiat_purchase_claimed',
-          this.classId
+          this.primaryKey
         );
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -550,7 +677,7 @@ export default {
           this,
           'NFT',
           'nft_claim_fiat_purchase_claim_error',
-          this.classId
+          this.primaryKey
         );
         this.alertPromptError(
           this.$t('settings_email_verify_error_message', {
@@ -567,6 +694,7 @@ export default {
         this.claimPromise = this.$api.post(
           getNFTBookClaimEndpoint({
             classId: this.classId,
+            collectionId: this.collectionId,
             paymentId: this.paymentId,
             token: this.token,
           }),
@@ -583,7 +711,7 @@ export default {
           this,
           'NFT',
           'nft_claim_nft_book_claimed',
-          this.classId
+          this.primaryKey
         );
       } catch (error) {
         const errorMessage = error.response?.data || error.message;
@@ -599,7 +727,7 @@ export default {
           this,
           'NFT',
           'nft_claim_nft_book_claim_error',
-          this.classId
+          this.primaryKey
         );
         this.alertPromptError(
           this.$t('settings_email_verify_error_message', {
@@ -614,7 +742,7 @@ export default {
         this,
         'NFT',
         'nft_claim_collector_message_input',
-        this.classId
+        this.primaryKey
       );
     },
     handleClickViewDetails() {
@@ -622,45 +750,45 @@ export default {
         this,
         'NFT',
         'nft_claim_view_details_clicked',
-        this.classId,
+        this.primaryKey,
         1
       );
     },
     handleClickView() {
       logTrackerEvent(this, 'NFT', 'nft_claim_view_button_clicked', '', 1);
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId-nftId',
-          params: {
-            classId: this.classId,
-            nftId: this.nftId,
-          },
-        })
-      );
-    },
-    handleClickViewClass() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_view_class_button_clicked',
-        '',
-        1
-      );
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: {
-            classId: this.classId,
-          },
-        })
-      );
+      if (this.collectionId) {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-collection-collectionId',
+            params: {
+              collectionId: this.collectionId,
+            },
+          })
+        );
+      } else {
+        this.$router.push(
+          this.localeLocation({
+            name: this.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
+            params: {
+              classId: this.classId,
+              nftId: this.nftId,
+            },
+          })
+        );
+      }
     },
     handleClickRetry() {
       logTrackerEvent(this, 'NFT', 'nft_claim_retry_button_clicked', '', 1);
       this.claim();
     },
     handleClickViewContentDirectly(e, contentUrl, type) {
-      logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.classId, 1);
+      logTrackerEvent(
+        this,
+        'NFT',
+        'ClaimViewContentDirect',
+        this.primaryKey,
+        1
+      );
     },
     handleClickNext() {
       this.state = NFT_CLAIM_STATE.INITIAL;

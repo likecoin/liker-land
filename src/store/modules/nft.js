@@ -43,6 +43,7 @@ const state = () => ({
   createdNFTClassesByAddressMap: {},
   userNFTClassDisplayStateSetsMap: {},
   nftBookStoreInfoByClassIdMap: {},
+  nftCollectionInfoByCollectionIdMap: {},
   shoppingCartNFTClassByIdMap: {},
   latestNFTClassIdList: [],
   freeNFTClassIdList: [],
@@ -118,6 +119,13 @@ const mutations = {
       defaultPaymentCurrency,
       mustClaimToView,
       hideDownload,
+    });
+  },
+  [TYPES.NFT_SET_NFT_COLLECTION_INFO](state, { collectionId, data }) {
+    const { typePayload, ...otherData } = data;
+    Vue.set(state.nftCollectionInfoByCollectionIdMap, collectionId, {
+      ...typePayload,
+      ...otherData,
     });
   },
   [TYPES.SHOPPING_CART_ADD_NFT_CLASS](state, { classId }) {
@@ -264,6 +272,12 @@ const getters = {
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
+  getNFTCollectionInfoByCollectionId: state => collectionId =>
+    state.nftCollectionInfoByCollectionIdMap[collectionId],
+  getNFTCollectionInfoByClassId: state => classId =>
+    Object.entries(state.nftCollectionInfoByCollectionIdMap)
+      .filter(([_, data]) => data.classIds.includes(classId))
+      .map(([id, data]) => ({ id, ...data })),
   getNFTBookStoreBookDefaultPaymentCurrency: state => classId =>
     state.nftBookStoreInfoByClassIdMap[classId]?.defaultPaymentCurrency ||
     'USD',
@@ -799,13 +813,15 @@ const actions = {
     const { data } = await this.$api.get(
       api.getNFTBookStorePricesByClassId(classId)
     );
-    commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, {
+    const payload = {
       classId,
       prices: data.prices,
       mustClaimToView: data.mustClaimToView,
       hideDownload: data.hideDownload,
       defaultPaymentCurrency: data.defaultPaymentCurrency,
-    });
+    };
+    commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
+    return payload;
   },
   async fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
     { commit },
@@ -839,6 +855,43 @@ const actions = {
       );
     }
     return info;
+  },
+  async fetchNFTCollectionInfoByCollectionId(
+    { commit, dispatch },
+    { collectionId }
+  ) {
+    const { data } = await this.$api.get(
+      api.getNFTCollectionInfoById({ collectionId })
+    );
+    commit(TYPES.NFT_SET_NFT_COLLECTION_INFO, {
+      collectionId,
+      data,
+    });
+    const { classIds } = data;
+    await Promise.all(
+      classIds.map(classId => dispatch('lazyGetNFTClassMetadata', classId))
+    );
+    return data;
+  },
+  async fetchNFTCollectionInfoByClassId(
+    { commit, dispatch },
+    { classId, type }
+  ) {
+    const { data } = await this.$api.get(
+      api.getNFTCollectionInfo({ classId, type })
+    );
+    const { list } = data;
+    list.forEach(async ({ id, ...collectionData }) => {
+      commit(TYPES.NFT_SET_NFT_COLLECTION_INFO, {
+        collectionId: id,
+        data: collectionData,
+      });
+      const { classIds } = collectionData;
+      await Promise.all(
+        classIds.map(classId => dispatch('lazyGetNFTClassMetadata', classId))
+      );
+    });
+    return list;
   },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
     if (getters.shoppingCartNFTClassList.length >= BATCH_COLLECT_MAX) {

@@ -125,6 +125,7 @@ export default {
       'getCollectedNFTClassesByAddress',
       'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
+      'getNFTCollectionInfoByClassId',
       'getNFTBookStoreBookDefaultPaymentCurrency',
       'getCanViewNFTBookBeforeClaimByClassId',
       'getIsHideNFTBookDownload',
@@ -426,6 +427,37 @@ export default {
       if (!this.nftIsNFTBook) return undefined;
       return Number(this.$route.query.price_index) || 0;
     },
+    nftCollections() {
+      const collections = this.getNFTCollectionInfoByClassId(this.classId);
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
+      const defaultLocale = 'en';
+      return collections.map(collection => {
+        let { name, description } = collection;
+        const { id, priceInDecimal, stock, image } = collection;
+        const price = priceInDecimal / 100;
+
+        if (typeof name === 'object') {
+          name = name[locale] || name[defaultLocale] || '';
+        }
+        if (typeof description === 'object') {
+          description = description[locale] || description[defaultLocale] || '';
+        }
+        const priceLabel = formatNumberWithUSD(price);
+        return {
+          id,
+          name,
+          image,
+          description,
+          priceLabel,
+          price,
+          value: -1,
+          stock,
+        };
+      });
+    },
     nftBookAvailablePriceLabel() {
       const purchasePrice = this.nftEditions.find(item => item.stock > 0)
         ?.priceLabel;
@@ -690,6 +722,7 @@ export default {
       'fetchNFTBookInfoByClassId',
       'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
       'lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
+      'fetchNFTCollectionInfoByClassId',
     ]),
     async fetchISCNMetadata() {
       await this.lazyGetISCNMetadataById(this.iscnId);
@@ -732,6 +765,15 @@ export default {
           priceIndex: this.editionPriceIndex,
         })
       );
+    },
+    async fetchRelatedNFTCollection({ type } = {}) {
+      const res = await catchAxiosError(
+        this.fetchNFTCollectionInfoByClassId({
+          classId: this.classId,
+          type,
+        })
+      );
+      return res;
     },
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
