@@ -697,16 +697,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 import { logTrackerEvent } from '~/util/EventLogger';
 import { LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS } from '~/constant';
 
 import WaveCyanBg from '~/assets/images/about/nft-book/wave-cyan.svg';
 import WaveWhiteBg from '~/assets/images/about/nft-book/wave-white.svg';
 
+import bookstoreMixin from '~/mixins/bookstore';
+
 export default {
   name: 'AboutNFTBookPage',
+  mixins: [bookstoreMixin],
   async fetch({ store }) {
     try {
       await store.dispatch('fetchBookstoreList');
@@ -716,7 +717,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['nftGetBookstoreListItems']),
     bannerOverlayBG() {
       return WaveCyanBg;
     },
@@ -728,32 +728,9 @@ export default {
     },
     nftBooks() {
       return [
-        ...this.nftBooksDisplayInFullWidth,
-        ...this.nftBooksDisplayOnShelf,
+        ...this.bookstoreListItemsInHighlighted,
+        ...this.bookstoreListItemsInFeatured,
       ].slice(0, 4);
-    },
-    nftBooksDisplayInFullWidth() {
-      return this.nftGetBookstoreListItems('highlighted').filter(nft =>
-        // Display books of the current locale only
-        this.$i18n.locale.includes(nft.locale)
-      );
-    },
-    nftBooksDisplayOnShelf() {
-      const { locale } = this.$i18n;
-      const books = [...this.nftGetBookstoreListItems('featured')];
-      // Display books of the current locale first
-      books.sort((a, b) => {
-        const aMatchedLocale = a.locales.some(l => locale.includes(l));
-        const bMatchedLocale = b.locales.some(l => locale.includes(l));
-        if (aMatchedLocale && !bMatchedLocale) {
-          return -1;
-        }
-        if (!aMatchedLocale && bMatchedLocale) {
-          return 1;
-        }
-        return 0;
-      });
-      return books;
     },
   },
   mounted() {

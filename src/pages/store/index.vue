@@ -20,14 +20,14 @@
           class="flex flex-col items-stretch w-full max-w-[840px] mx-auto mt-[48px]"
         >
           <NFTBookShelf
-            :items="nftBooksDisplayInFullWidth"
+            :items="bookstoreListItemsInHighlighted"
             preset="campaign"
             @click-item="onClickCampaignItem"
             @click-item-avatar="onClickCampaignItemAvatar"
           />
           <NFTBookShelf
             class="mt-[48px]"
-            :items="nftBooksDisplayOnShelf"
+            :items="bookstoreListItemsInFeatured"
             @click-item="onClickShelfItem"
             @click-item-avatar="onClickShelfItemAvatar"
           />
@@ -66,13 +66,14 @@ import {
 import { parseNFTMetadataURL } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import bookstoreMixin from '~/mixins/bookstore';
 import inAppMixin from '~/mixins/in-app';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import walletMixin from '~/mixins/wallet';
 
 export default {
   name: 'StoreIndexPage',
-  mixins: [inAppMixin, navigationListenerMixin, walletMixin],
+  mixins: [inAppMixin, navigationListenerMixin, walletMixin, bookstoreMixin],
   layout: 'default',
   async fetch({ route, redirect, localeLocation, store }) {
     if (checkIsForcedInAppPage(route)) {
@@ -169,35 +170,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['nftGetBookstoreListItems', 'getNFTClassMetadataById']),
+    ...mapGetters(['getNFTClassMetadataById']),
     nftBooks() {
       return [
-        ...this.nftBooksDisplayInFullWidth,
-        ...this.nftBooksDisplayOnShelf,
+        ...this.bookstoreListItemsInHighlighted,
+        ...this.bookstoreListItemsInFeatured,
       ];
-    },
-    nftBooksDisplayInFullWidth() {
-      return this.nftGetBookstoreListItems('highlighted').filter(nft =>
-        // Display books of the current locale only
-        nft.locales.some(l => this.$i18n.locale.includes(l))
-      );
-    },
-    nftBooksDisplayOnShelf() {
-      const { locale } = this.$i18n;
-      const books = [...this.nftGetBookstoreListItems('featured')];
-      // Display books of the current locale first
-      books.sort((a, b) => {
-        const aMatchedLocale = a.locales.some(l => locale.includes(l));
-        const bMatchedLocale = b.locales.some(l => locale.includes(l));
-        if (aMatchedLocale && !bMatchedLocale) {
-          return -1;
-        }
-        if (!aMatchedLocale && bMatchedLocale) {
-          return 1;
-        }
-        return 0;
-      });
-      return books;
     },
   },
   mounted() {
