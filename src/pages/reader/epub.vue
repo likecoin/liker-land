@@ -96,6 +96,7 @@ export default {
   data() {
     return {
       toc: [],
+      dirPath: '',
       selectedChapter: '',
       book: null,
       rendition: null,
@@ -129,7 +130,10 @@ export default {
       });
       this.rendition.display();
       this.rendition.on('rendered', (cfiRange, contents) => {
-        this.selectedChapter = this.rendition.currentLocation().start.href;
+        const path = this.rendition.currentLocation().start.href;
+        const pathArr = path.split('/');
+        this.selectedChapter = pathArr.pop();
+        this.dirPath = pathArr.join('/');
         this.contents = contents;
       });
 
@@ -152,7 +156,10 @@ export default {
       document.addEventListener('keydown', keyListener, false);
     },
     onChangeChapter() {
-      this.rendition.display(this.selectedChapter);
+      const chapter = this.dirPath
+        ? `${this.dirPath}/${this.selectedChapter}`
+        : this.selectedChapter;
+      this.rendition.display(chapter);
     },
     onClickGoToPrevPage() {
       this.rendition.prev();
