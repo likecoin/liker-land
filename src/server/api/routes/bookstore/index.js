@@ -59,7 +59,9 @@ router.get('/bookstore/items', async (req, res, next) => {
 
     const results = response.results.map(({ properties }) => ({
       classId: parseClassId(properties['NFT Class ID'].rich_text[0].plain_text),
-      locale: properties.Locale.select.name,
+      locales: properties.Locale.select
+        ? [properties.Locale.select.name]
+        : (properties.Locale.multi_select || []).map(({ name }) => name),
       date: properties['Listing Date'].date.start,
     }));
 
@@ -99,10 +101,13 @@ router.get('/bookstore/lists', async (req, res, next) => {
         const isVisible = visibilityPropList[index].formula.boolean;
         if (!isVisible) return;
 
+        const localeProp = localePropList[index];
         results[listId].push({
           classId: parseClassId(classId.rich_text[0].plain_text),
           title: (titlePropList[index].title[0] || {}).plain_text || '',
-          locale: localePropList[index].select.name,
+          locales: localeProp.select
+            ? [localeProp.select.name]
+            : (localeProp.multi_select || []).map(({ name }) => name),
         });
       });
     });

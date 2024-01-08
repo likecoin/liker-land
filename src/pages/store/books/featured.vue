@@ -14,8 +14,11 @@ import { EXTERNAL_HOST } from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
+import bookstoreMixin from '~/mixins/bookstore';
+
 export default {
   name: 'StoreEditorialBooksPage',
+  mixins: [bookstoreMixin],
   async fetch({ store }) {
     try {
       await store.dispatch('fetchBookstoreEditorialItems');
@@ -109,20 +112,9 @@ export default {
   computed: {
     ...mapGetters(['nftBookstoreEditorialItems', 'getNFTClassMetadataById']),
     nftBooks() {
-      const books = [...this.nftBookstoreEditorialItems];
-      books.sort((a, b) => {
-        const { locale } = this.$i18n;
-        const aMatchedLocale = locale.includes(a.locale);
-        const bMatchedLocale = locale.includes(b.locale);
-        if (aMatchedLocale && !bMatchedLocale) {
-          return -1;
-        }
-        if (!aMatchedLocale && bMatchedLocale) {
-          return 1;
-        }
-        return 0;
-      });
-      return books;
+      return this.sortBookstoreListItemsByLocale(
+        this.nftBookstoreEditorialItems
+      );
     },
   },
   methods: {
