@@ -121,15 +121,15 @@ export default {
   },
   computed: {
     recordMap() {
-      const recordMap = {
-        iscn: [
+      const recordMap = {};
+      if (!this.isDownloadHidden) {
+        recordMap.iscn = [
           {
             href: this.iscnUrl,
             text: this.iscnId,
           },
-        ],
-      };
-
+        ];
+      }
       this.contentFingerprints.forEach(fingerprint => {
         const [protocol, text] = fingerprint.split('://');
         if (!recordMap[protocol]) recordMap[protocol] = [];
