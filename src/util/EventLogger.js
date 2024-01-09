@@ -67,7 +67,14 @@ export function updateSentryUser(vue, { user, displayName }) {
   }
 }
 
-export function logTrackerEvent(vue, category, action, label = '', value = 1) {
+export function logTrackerEvent(
+  vue,
+  category,
+  action,
+  label = '',
+  value = 1,
+  otherPayload = {}
+) {
   try {
     // do not track
     if (window.doNotTrack || navigator.doNotTrack) return;
@@ -76,6 +83,7 @@ export function logTrackerEvent(vue, category, action, label = '', value = 1) {
         event_category: category?.substring(0, 100),
         event_label: label?.substring(0, 100),
         value,
+        ...otherPayload,
       });
     }
   } catch (err) {
