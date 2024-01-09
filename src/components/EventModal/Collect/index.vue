@@ -881,6 +881,10 @@ export default {
               this.justCollectedNFTId
             }`
           : `${EXTERNAL_HOST}/nft/class/${this.classId}`;
+        logTrackerEvent(this, 'NFT', 'share', this.classId, 1, {
+          item_id: this.classId,
+          content_type: 'collect_nft',
+        });
         navigator.share({
           title,
           text,
