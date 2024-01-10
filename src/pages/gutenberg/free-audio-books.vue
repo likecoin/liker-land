@@ -49,36 +49,47 @@
             'border-b-shade-gray',
             'border-b-[1px]',
             'py-[12px]',
-
-            'transition-colors',
-            'hover:bg-shade-gray',
-
-            'cursor-pointer',
-            {
-              'cursor-not-allowed':
-                !csvData[rowIndex].classId ||
-                csvData[rowIndex].classId === 'failed',
-            },
           ]"
-          @click="
-            () => {
-              handleClickRow(csvData[rowIndex].classId);
-            }
-          "
         >
-          <td :class="['px-[8px]', 'text-medium-gray']">{{ rowIndex + 1 }}</td>
+          <td class="px-[8px] text-medium-gray">
+            {{ rowIndex + 1 }}
+          </td>
           <td
             :class="[
+              'font-600',
+              'py-[12px]',
+              'transition-colors',
+              'hover:bg-shade-gray',
+
+              'cursor-pointer',
               {
-                '!text-shade-gray':
+                'cursor-not-allowed':
                   !csvData[rowIndex].classId ||
                   csvData[rowIndex].classId === 'failed',
               },
-              'font-600',
-              'py-[12px]',
             ]"
           >
-            {{ row.classTitle }}
+            <NuxtLink
+              v-if="
+                csvData[rowIndex].classId &&
+                  csvData[rowIndex].classId !== 'failed'
+              "
+              class="flex w-full"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: {
+                    classId: csvData[rowIndex].classId,
+                  },
+                })
+              "
+              target="_blank"
+            >
+              {{ row.classTitle }}
+            </NuxtLink>
+            <span v-else>
+              {{ row.classTitle }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -89,6 +100,7 @@
 <script>
 import { fetchGutenbergCsv } from '~/util/api';
 import csvParser from 'csv-parser';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 const DISPLAY_COLUMN = ['classTitle', 'classId'];
 
@@ -174,18 +186,7 @@ export default {
     },
 
     handleClickRow(classId) {
-      if (!classId || classId === 'failed') {
-        return;
-      }
-      const url = this.$router.resolve(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: {
-            classId,
-          },
-        })
-      ).href;
-      window.open(url, '_blank');
+      logTrackerEvent(this, 'Gutenberg', 'clickDownload', classId, 1);
     },
   },
 };

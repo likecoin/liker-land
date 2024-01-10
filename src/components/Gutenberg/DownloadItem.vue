@@ -15,11 +15,23 @@
       <Label align="left" preset="h4" :text="title" />
       <Label :class="['text-[14px]', 'text-medium-gray']" :text="author" />
       <div :class="['flex']">
-        <GutenbergButton
-          :class="['w-min', 'mt-[8px]']"
-          :text="$t('gutenberg_download')"
-          @click="handleDownload"
-        />
+        <NuxtLink
+          :to="
+            localeLocation({
+              name: 'nft-class-classId',
+              params: {
+                classId,
+              },
+            })
+          "
+          target="_blank"
+        >
+          <GutenbergButton
+            :class="['w-min', 'mt-[8px]']"
+            :text="$t('gutenberg_download')"
+            @click="handleDownload"
+          />
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -42,6 +54,9 @@ export default {
     },
     author() {
       return this.bookInfo?.author || '';
+    },
+    classId() {
+      return this.bookInfo?.classId || '';
     },
   },
   methods: {
