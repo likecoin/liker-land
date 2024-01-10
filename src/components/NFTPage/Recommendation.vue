@@ -1,7 +1,7 @@
 <template>
   <section class="bg-like-green rounded-[24px] overflow-hidden py-[2rem]">
     <div
-      v-if="recommendedList.length"
+      v-if="normalizedList.length"
       class="flex items-center justify-between px-[2rem]"
     >
       <NFTMessageIdentity
@@ -83,10 +83,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
-import { LIKECOIN_NFT_CAMPAIGN_ITEMS } from '~/constant';
-
-const DEFAULT_LIST = LIKECOIN_NFT_CAMPAIGN_ITEMS.slice(0, 5);
+import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
+import bookstoreMixin from '~/mixins/bookstore';
 
 export default {
   name: 'NFTPageRecommendation',
@@ -94,6 +94,7 @@ export default {
     Swiper,
     SwiperSlide,
   },
+  mixins: [bookstoreMixin],
   props: {
     iscnOwner: {
       type: String,
@@ -115,6 +116,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    isBookNft: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      nftFeaturedWNFT: DEFAULT_RECOMMENDATIONS_LIST.WNFT.map(nft => ({
+        classId: nft,
+      })),
+    };
   },
   computed: {
     swiperOptions() {
@@ -128,14 +140,50 @@ export default {
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
     },
+    nftBookListIngItems() {
+      return [
+        // from bookstore mixin
+        ...this.bookstoreListItemsInHighlighted,
+        ...this.bookstoreListItemsInFeatured,
+      ];
+    },
+    nftFeaturedBooks() {
+      return this.nftBookListIngItems.length
+        ? [...this.nftBookListIngItems]
+        : [...DEFAULT_RECOMMENDATIONS_LIST.BOOK.map(nft => ({ classId: nft }))];
+    },
     normalizedList() {
-      if (this.recommendedList.length) {
-        return this.recommendedList;
+      const currentList = [...this.recommendedList];
+      if (this.recommendedList.length < 5) {
+        let index = 0;
+        const sourceData = this.isBookNft
+          ? this.nftFeaturedBooks
+          : this.nftFeaturedWNFT;
+        while (currentList.length < 5) {
+          if (index < sourceData.length) {
+            currentList.push(sourceData[index]);
+            index += 1;
+          } else {
+            break;
+          }
+        }
       }
-      return DEFAULT_LIST.map(nft => ({ classId: nft }));
+      return currentList;
+    },
+  },
+  watch: {
+    async recommendedList(list) {
+      if (this.isBookNft && list.length < 5) {
+        try {
+          await this.fetchBookstoreList();
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
   },
   methods: {
+    ...mapActions(['fetchBookstoreList']),
     handleHeaderAvatarClick() {
       this.$emit('header-avatar-click');
     },

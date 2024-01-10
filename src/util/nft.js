@@ -278,6 +278,7 @@ export function formatNFTClassInfo(classData) {
   const result = {
     classId: classData.id,
     createdAt: Date.parse(classData.created_at),
+    symbol: classData.symbol,
     price: classData.latest_price
       ? new BigNumber(classData.latest_price).shiftedBy(-9).toNumber()
       : 0,

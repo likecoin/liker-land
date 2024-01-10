@@ -67,6 +67,7 @@ const nftClassCollectionMixin = createNFTClassCollectionMixin({
 });
 
 const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
+const BOOK_NFT_SYMBOL = ['BOOK', 'CNR'];
 
 export default {
   mixins: [
@@ -645,6 +646,26 @@ export default {
         recommendedList = featuredItems.concat(
           recommendedList.filter(item => !featuredSet.has(item.classId))
         );
+      }
+
+      if (this.nftIsNFTBook) {
+        const sortedList = [...recommendedList];
+        sortedList.sort((a, b) => {
+          if (
+            BOOK_NFT_SYMBOL.includes(a.symbol) &&
+            !BOOK_NFT_SYMBOL.includes(b.symbol)
+          ) {
+            return -1;
+          }
+          if (
+            !BOOK_NFT_SYMBOL.includes(a.symbol) &&
+            BOOK_NFT_SYMBOL.includes(b.symbol)
+          ) {
+            return 1;
+          }
+          return 0;
+        });
+        return sortedList.slice(0, 5);
       }
 
       return recommendedList.slice(0, 5);

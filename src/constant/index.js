@@ -241,3 +241,25 @@ export const GUTENBERG_FREE_DOWNLOAD_LIST = [
 ];
 
 export const W3C_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+export const DEFAULT_RECOMMENDATIONS_LIST = IS_TESTNET
+  ? {
+      WNFT: [...LIKECOIN_NFT_CAMPAIGN_ITEMS],
+      BOOK: [
+        ...LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS,
+        // 疫
+        'likenft1rhzat6y53ge79mgp28avxyrk6n4990l76uz9t45le4dx2krkgdzstqa875',
+        // The Count of Monte Christo
+        'likenft1qufacdmg36dn0vqllrgk2tvk53xykkjfgepfavnpgnkpx730d2cqfx3gkw',
+      ],
+    }
+  : {
+      WNFT: [...LIKECOIN_NFT_CAMPAIGN_ITEMS],
+      BOOK: [
+        ...LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS,
+        // 疫
+        'likenft10w7w9gn8g5cy47wmwjzpl8nf4tnfe5rjxqyg5am5m6zpfufwuszqdjympl',
+        // 轉世
+        'likenft1ku0gmdq6pm8vgq68fvnr7dl0vxs4j2yv0c0qlvadj5k39fdfzgsqycdllx',
+      ],
+    };
