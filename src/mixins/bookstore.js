@@ -8,9 +8,17 @@ export default {
         this.nftGetBookstoreListItems('highlighted')
       );
     },
+    bookstoreListItemsInHighlightedClassIdSet() {
+      return new Set(
+        this.bookstoreListItemsInHighlighted.map(item => item.classId)
+      );
+    },
     bookstoreListItemsInFeatured() {
       return this.sortBookstoreListItemsByLocale(
-        this.nftGetBookstoreListItems('featured')
+        this.nftGetBookstoreListItems('featured').filter(
+          item =>
+            !this.bookstoreListItemsInHighlightedClassIdSet.has(item.classId)
+        )
       );
     },
   },
