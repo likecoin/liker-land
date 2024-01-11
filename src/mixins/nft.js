@@ -54,6 +54,7 @@ import {
 
 import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
+import utmMixin from '~/mixins/utm';
 import { createUserInfoMixin } from '~/mixins/user-info';
 import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
@@ -75,6 +76,7 @@ export default {
     alertMixin,
     creatorInfoMixin,
     nftClassCollectionMixin,
+    utmMixin,
     CrispMixinFactory({ isBootAtMounted: true }),
   ],
   head() {
@@ -1154,12 +1156,21 @@ export default {
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
           platform: this.platform,
+          utmCampaign: this.utmCampaign,
+          utmSource: this.utmSource,
+          utmMedium: this.utmMedium,
         });
         window.open(link, '_blank', 'noopener');
       } else {
         try {
           const gaClientId = await getGaClientId(this);
-          const body = { memo, gaClientId };
+          const body = {
+            memo,
+            gaClientId,
+            utmCampaign: this.utmCampaign,
+            utmSource: this.utmSource,
+            utmMedium: this.utmMedium,
+          };
           if (this.walletEmail) {
             body.email = this.walletEmail;
           }
