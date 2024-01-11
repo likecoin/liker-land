@@ -120,6 +120,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayItemCount: {
+      type: [Number, String],
+      default: 5,
+    },
   },
   data() {
     return {
@@ -153,27 +157,26 @@ export default {
         : [...DEFAULT_RECOMMENDATIONS_LIST.BOOK.map(nft => ({ classId: nft }))];
     },
     normalizedList() {
-      const currentList = [...this.recommendedList];
-      if (this.recommendedList.length < 5) {
+      const normalizedRecommendedList = [...this.recommendedList];
+      if (this.recommendedList.length < +this.displayItemCount) {
         let index = 0;
         const sourceData = this.isBookNft
           ? this.nftFeaturedBooks
           : this.nftFeaturedWNFT;
-        while (currentList.length < 5) {
-          if (index < sourceData.length) {
-            currentList.push(sourceData[index]);
-            index += 1;
-          } else {
-            break;
-          }
+        while (
+          normalizedRecommendedList.length < +this.displayItemCount &&
+          index < sourceData.length
+        ) {
+          normalizedRecommendedList.push(sourceData[index]);
+          index += 1;
         }
       }
-      return currentList;
+      return normalizedRecommendedList;
     },
   },
   watch: {
     async recommendedList(list) {
-      if (this.isBookNft && list.length < 5) {
+      if (this.isBookNft && list.length < +this.displayItemCount) {
         try {
           await this.fetchBookstoreList();
         } catch (error) {
