@@ -55,6 +55,7 @@
             preset="secondary"
             :to="localeLocation({ name: 'store' })"
             :text="$t('civic_dashboard_v3_banner_button')"
+            @click.native="handleClickToStore"
           />
         </div>
       </div>
@@ -95,6 +96,8 @@
 </template>
 
 <script>
+import { logTrackerEvent } from '~/util/EventLogger';
+
 import AlertCircle from '~/assets/icons/alert-circle.svg?inline';
 import ExternalLink from '~/assets/icons/external-link.svg?inline';
 
@@ -107,5 +110,10 @@ export default {
     CivicDashboardV3,
   },
   layout: 'default',
+  methods: {
+    handleClickToStore() {
+      logTrackerEvent(this, 'civic-index', 'RedirectToStoreClicked', '', 1);
+    },
+  },
 };
 </script>
