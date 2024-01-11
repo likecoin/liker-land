@@ -10,14 +10,20 @@ export default {
     },
     bookstoreListItemsInHighlightedClassIdSet() {
       return new Set(
-        this.bookstoreListItemsInHighlighted.map(item => item.classId)
+        this.bookstoreListItemsInHighlighted.map(item => item.classId).flat()
       );
     },
     bookstoreListItemsInFeatured() {
       return this.sortBookstoreListItemsByLocale(
         this.nftGetBookstoreListItems('featured').filter(
           item =>
-            !this.bookstoreListItemsInHighlightedClassIdSet.has(item.classId)
+            !(Array.isArray(item.classId)
+              ? item.classId.some(id =>
+                  this.bookstoreListItemsInHighlightedClassIdSet.has(id)
+                )
+              : this.bookstoreListItemsInHighlightedClassIdSet.has(
+                  item.classId
+                ))
         )
       );
     },
