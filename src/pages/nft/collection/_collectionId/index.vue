@@ -90,10 +90,16 @@ import { parseNFTMetadataURL } from '~/util/nft';
 import nftCollectionMixin from '~/mixins/nft-collection';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import utmMixin from '~/mixins/utm';
 
 export default {
   name: 'NFTCollectionDetailsPage',
-  mixins: [clipboardMixin, nftCollectionMixin, navigationListenerMixin],
+  mixins: [
+    clipboardMixin,
+    nftCollectionMixin,
+    navigationListenerMixin,
+    utmMixin,
+  ],
   layout: 'default',
   data() {
     return {
@@ -237,6 +243,9 @@ export default {
         const { url } = await this.$axios.$post(link, {
           gaClientId,
           giftInfo,
+          utmCampaign: this.utmCampaign,
+          utmSource: this.utmSource,
+          utmMedium: this.utmMedium,
         });
         if (url) {
           window.location.href = url;

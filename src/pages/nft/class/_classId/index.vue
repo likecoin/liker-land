@@ -350,10 +350,11 @@ import {
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import utmMixin from '~/mixins/utm';
 
 export default {
   name: 'NFTClassDetailsPage',
-  mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
+  mixins: [clipboardMixin, nftMixin, navigationListenerMixin, utmMixin],
   layout: 'default',
   asyncData({ query }) {
     const { action } = query;
@@ -978,6 +979,9 @@ export default {
           const { url } = await this.$axios.$post(link, {
             gaClientId,
             giftInfo,
+            utmCampaign: this.utmCampaign,
+            utmSource: this.utmSource,
+            utmMedium: this.utmMedium,
           });
           if (url) {
             window.location.href = url;

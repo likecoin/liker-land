@@ -256,10 +256,19 @@ export const postNFTTransfer = ({ txHash, classId, nftId }) => {
   )}`;
 };
 
-export const postNewStripeFiatPayment = ({ classId, wallet }) => {
+export const postNewStripeFiatPayment = ({
+  classId,
+  wallet,
+  utmCampaign,
+  utmSource,
+  utmMedium,
+}) => {
   const qsPayload = {
     class_id: classId,
     wallet,
+    utm_campaign: utmCampaign,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
   };
   return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/new?${querystring.stringify(
     qsPayload
@@ -329,10 +338,16 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   collectionId,
   priceIndex,
   gaClientId,
+  utmCampaign,
+  utmSource,
+  utmMedium,
 }) => {
   const qsPayload = {
     price_index: priceIndex,
     ga_client_id: gaClientId,
+    utm_campaign: utmCampaign,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
   };
   return collectionId
     ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/free?${querystring.stringify(
@@ -347,11 +362,19 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
   classId,
   collectionId,
   priceIndex,
+  gaClientId,
+  utmCampaign,
+  utmSource,
+  utmMedium,
   platform = NFT_BOOK_PLATFORM_LIKER_LAND,
 }) => {
   const qsPayload = {
     price_index: priceIndex,
     from: platform,
+    ga_client_id: gaClientId,
+    utm_campaign: utmCampaign,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
   };
   return collectionId
     ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/like?${querystring.stringify(
@@ -478,10 +501,16 @@ export const getNFTBookPurchaseLink = ({
   collectionId,
   gaClientId,
   platform = NFT_BOOK_PLATFORM_LIKER_LAND,
+  utmCampaign,
+  utmSource,
+  utmMedium,
 }) => {
   const qsPayload = {
     from: platform,
     ga_client_id: gaClientId,
+    utm_campaign: utmCampaign,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
   };
   if (priceIndex) qsPayload.price_index = priceIndex;
   return collectionId
