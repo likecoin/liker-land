@@ -43,6 +43,7 @@ import {
   getNFTHistoryDataMap,
   populateGrantEvent,
   getUniqueAddressesFromEvent,
+  nftClassCollectionType,
 } from '~/util/nft';
 import { getDynamicCovers } from '~/util/nft-book';
 import {
@@ -645,6 +646,26 @@ export default {
         recommendedList = featuredItems.concat(
           recommendedList.filter(item => !featuredSet.has(item.classId))
         );
+      }
+
+      if (this.nftIsNFTBook) {
+        const sortedList = [...recommendedList];
+        sortedList.sort((a, b) => {
+          if (
+            a.type === nftClassCollectionType.NFTBook &&
+            b.type !== nftClassCollectionType.NFTBook
+          ) {
+            return -1;
+          }
+          if (
+            a.type !== nftClassCollectionType.NFTBook &&
+            b.type === nftClassCollectionType.NFTBook
+          ) {
+            return 1;
+          }
+          return 0;
+        });
+        return sortedList.slice(0, 5);
       }
 
       return recommendedList.slice(0, 5);

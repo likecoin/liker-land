@@ -283,6 +283,7 @@
           :should-show-follow-button="shouldShowFollowButton"
           :is-followed="isFollowed"
           :recommended-list="recommendedList"
+          :is-book-nft="nftIsNFTBook"
           :is-loading="isRecommendationLoading"
           @header-avatar-click="handleRecommendationHeaderAvatarClick"
           @follow-button-click="handleFollowButtonClick"
