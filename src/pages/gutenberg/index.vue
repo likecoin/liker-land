@@ -367,10 +367,7 @@
       </div>
     </section>
     <div :class="['flex', 'justify-center', 'mt-[220px]']">
-      <NuxtLink
-        :to="localeLocation({ name: 'gutenberg-free-audio-books' })"
-        target="_blank"
-      >
+      <NuxtLink :to="localeLocation({ name: 'gutenberg-free-audio-books' })">
         <GutenbergButton
           :text="$t('gutenberg_download_more')"
           preset="primary"
