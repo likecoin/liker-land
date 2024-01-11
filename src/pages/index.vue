@@ -2276,6 +2276,9 @@ export default {
             scrub: 0.1,
             snap: 'labelsDirectional',
           },
+          onComplete: () => {
+            logTrackerEvent(this, 'IndexPage', 'IndexScrollPassHero', '', 1);
+          },
         });
 
         this.$options.heroSectionScrollAnimation.addLabel('slide2');
