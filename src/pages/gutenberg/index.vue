@@ -367,11 +367,13 @@
       </div>
     </section>
     <div :class="['flex', 'justify-center', 'mt-[220px]']">
-      <GutenbergButton
-        :text="$t('gutenberg_download_more')"
-        preset="primary"
-        @click="handleClickMore"
-      />
+      <NuxtLink :to="localeLocation({ name: 'gutenberg-free-audio-books' })">
+        <GutenbergButton
+          :text="$t('gutenberg_download_more')"
+          preset="primary"
+          @click="handleClickMore"
+        />
+      </NuxtLink>
     </div>
 
     <section
@@ -552,23 +554,9 @@ export default {
   methods: {
     handleClickDownload(classId) {
       logTrackerEvent(this, 'Gutenberg', 'clickDownload', classId, 1);
-      const url = this.$router.resolve(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: {
-            classId,
-          },
-        })
-      ).href;
-      window.open(url, '_blank');
     },
     handleClickMore() {
       logTrackerEvent(this, 'Gutenberg', 'clickShowMore', '', 1);
-      this.$router.push(
-        this.localeLocation({
-          name: 'gutenberg-free-audio-books',
-        })
-      );
     },
     scrollToElement(hash) {
       setTimeout(() => {
