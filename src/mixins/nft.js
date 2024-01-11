@@ -43,6 +43,7 @@ import {
   getNFTHistoryDataMap,
   populateGrantEvent,
   getUniqueAddressesFromEvent,
+  nftClassCollectionType,
 } from '~/util/nft';
 import { getDynamicCovers } from '~/util/nft-book';
 import {
@@ -67,7 +68,6 @@ const nftClassCollectionMixin = createNFTClassCollectionMixin({
 });
 
 const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
-const BOOK_NFT_SYMBOL = ['BOOK', 'CNR'];
 
 export default {
   mixins: [
@@ -652,14 +652,14 @@ export default {
         const sortedList = [...recommendedList];
         sortedList.sort((a, b) => {
           if (
-            BOOK_NFT_SYMBOL.includes(a.symbol) &&
-            !BOOK_NFT_SYMBOL.includes(b.symbol)
+            a.type === nftClassCollectionType.NFTBook &&
+            b.type !== nftClassCollectionType.NFTBook
           ) {
             return -1;
           }
           if (
-            !BOOK_NFT_SYMBOL.includes(a.symbol) &&
-            BOOK_NFT_SYMBOL.includes(b.symbol)
+            a.type !== nftClassCollectionType.NFTBook &&
+            b.type === nftClassCollectionType.NFTBook
           ) {
             return 1;
           }
