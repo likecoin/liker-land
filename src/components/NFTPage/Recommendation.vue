@@ -158,13 +158,14 @@ export default {
     },
     normalizedList() {
       const normalizedRecommendedList = [...this.recommendedList];
-      if (this.recommendedList.length < +this.displayItemCount) {
+      const displayItemCount = Number(this.displayItemCount);
+      if (this.recommendedList.length < displayItemCount) {
         let index = 0;
         const sourceData = this.isBookNft
           ? this.nftFeaturedBooks
           : this.nftFeaturedWNFT;
         while (
-          normalizedRecommendedList.length < +this.displayItemCount &&
+          normalizedRecommendedList.length < displayItemCount &&
           index < sourceData.length
         ) {
           normalizedRecommendedList.push(sourceData[index]);
