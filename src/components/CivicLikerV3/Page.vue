@@ -8,7 +8,6 @@
           'items-stretch',
           'justify-center',
           'w-full',
-          'h-full',
           'rounded-[32px]',
           'overflow-hidden',
           'border-[1px]',
@@ -18,22 +17,24 @@
           'laptop:flex-nowrap',
         ]"
       >
-        <div class="flex flex-grow basis-2/3">
+        <div
+          class="relative flex flex-grow min-h-[220px] basis-2/3 laptop:min-h-[380px]"
+        >
           <img
             v-if="$i18n.locale === 'zh-Hant'"
             src="~/assets/images/civic-v3/keyBanner-zh.png"
             :alt="$t('og_description')"
-            class="object-contain"
+            class="absolute top-0 left-0 object-cover w-full h-full"
           />
           <img
             v-else
             src="~/assets/images/civic-v3/keyBanner-en.png"
             :alt="$t('og_description')"
-            class="object-contain"
+            class="absolute top-0 left-0 object-cover w-full h-full"
           />
         </div>
         <div
-          class="flex flex-col justify-center flex-grow basis-1/3 h-full bg-like-green px-[32px] py-[46px]"
+          class="flex flex-col justify-center flex-grow basis-1/3 bg-like-green px-[32px] py-[46px]"
         >
           <Label
             class="text-white font-600 mb-[4px]"
@@ -100,7 +101,6 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import AlertCircle from '~/assets/icons/alert-circle.svg?inline';
 import ExternalLink from '~/assets/icons/external-link.svg?inline';
-
 import CivicDashboardV3 from './Dashboard';
 
 export default {
