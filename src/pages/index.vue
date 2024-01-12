@@ -1329,7 +1329,7 @@
               :text="$t('index_page_new_culture_section_1_cta_button')"
               theme="glow"
               preset="tertiary"
-              :to="localeLocation({ name: 'writing-nft-about' })"
+              :to="localeLocation({ name: 'about-writing-nft' })"
               @click.native="
                 handleAboutWritingNFTButtonClickInNewCultureSection
               "

@@ -15,7 +15,7 @@
       </h2>
       <NuxtLink
         class="mx-[6px] align-text-top text-medium-gray hover:text-like-cyan-dark text-[12px] cursor-pointer inline-block"
-        :to="localeLocation({ name: 'writing-nft-about' })"
+        :to="localeLocation({ name: 'about-writing-nft' })"
       >
         <IconHelp />
       </NuxtLink>
@@ -66,7 +66,7 @@
     >
       <NuxtLink
         class="text-medium-gray hover:text-like-cyan-dark text-[12px] leading-[5/3] underline transition-colors cursor-pointer"
-        :to="localeLocation({ name: 'writing-nft-about' })"
+        :to="localeLocation({ name: 'about-writing-nft' })"
       >
         {{ $t('home_button_about_writing_nft') }}
       </NuxtLink>

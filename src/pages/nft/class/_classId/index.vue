@@ -464,7 +464,7 @@ export default {
         description,
         brand: {
           '@type': 'Brand',
-          url: `${EXTERNAL_HOST}/writing-nft/about`,
+          url: `${EXTERNAL_HOST}/about/writing-nft`,
           name: 'Writing NFT',
         },
         sku: this.classId,

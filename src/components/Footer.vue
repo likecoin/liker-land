@@ -50,7 +50,7 @@
           <div class="grid grid-flow-row gap-y-[16px]">
             <NuxtLink
               class="hover:underline"
-              :to="localeLocation({ name: 'writing-nft-about' })"
+              :to="localeLocation({ name: 'about-writing-nft' })"
             >
               {{ $t('footer_nav_about_wnft') }}
             </NuxtLink>
