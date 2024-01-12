@@ -136,7 +136,10 @@ const nuxtConfig = {
               'Liker Land is a Web3 bookstore with a decentralized publishing stack that assists authors in registering and storing their articles, ebooks on the blockchain and decentralized networks',
             url: 'https://liker.land',
             logo: 'https://liker.land/logo.png',
-            sameAs: ['https://www.facebook.com/Liker.Land'],
+            sameAs: [
+              'https://www.facebook.com/Liker.Land',
+              'https://www.instagram.com/liker.land/',
+            ],
             brand: [
               {
                 '@type': 'Brand',
