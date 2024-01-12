@@ -143,7 +143,7 @@ const nuxtConfig = {
             brand: [
               {
                 '@type': 'Brand',
-                url: 'https://liker.land/writing-nft/about',
+                url: 'https://liker.land/about/writing-nft',
                 name: 'Writing NFT',
               },
               {
