@@ -148,6 +148,7 @@ const nuxtConfig = {
               },
               {
                 '@type': 'Brand',
+                url: 'https://liker.land/about/nft-book',
                 name: 'NFT Book',
               },
               {
