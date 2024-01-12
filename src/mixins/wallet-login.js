@@ -15,6 +15,13 @@ export default {
     ]),
     async connectWallet({ shouldSkipLogin = false } = {}) {
       try {
+        logTrackerEvent(
+          this,
+          'user',
+          'connect_wallet_start',
+          'connect_wallet_start',
+          1
+        );
         const connection = await this.openConnectWalletModal({
           language: this.$i18n.locale.split('-')[0],
           connectWalletTitle: this.$t('connect_wallet_title'),
@@ -31,9 +38,22 @@ export default {
           'connected_wallet',
           1
         );
-        return shouldSkipLogin
+
+        const res = await (shouldSkipLogin
           ? this.initWallet(connection)
-          : this.initWalletAndLogin(connection);
+          : this.initWalletAndLogin(connection));
+
+        if (res) {
+          logTrackerEvent(
+            this,
+            'user',
+            `connect_wallet_done${shouldSkipLogin ? '' : '_with_login'}`,
+            'connect_wallet_done',
+            1
+          );
+        }
+
+        return res;
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
