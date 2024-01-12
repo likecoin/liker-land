@@ -55,9 +55,12 @@
               {{ $t('footer_nav_about_wnft') }}
             </NuxtLink>
             <hr class="w-[32px] border-white border-opacity-[0.2]" />
-            <a class="hover:underline" target="_blank" :href="mintNftURL">
-              {{ $t('footer_nav_mint_nft') }}
-            </a>
+            <NuxtLink
+              class="hover:underline"
+              :to="localeLocation({ name: 'about-nft-book' })"
+            >
+              {{ $t('footer_nav_about_nft_book') }}
+            </NuxtLink>
           </div>
 
           <div class="grid grid-flow-row gap-y-[16px]">
@@ -82,6 +85,10 @@
               :to="localeLocation({ name: 'civic' })"
               >{{ $t('footer_nav_civic_liker') }}</NuxtLink
             >
+            <hr class="w-[32px] border-white border-opacity-[0.2]" />
+            <a class="hover:underline" target="_blank" :href="mintNftURL">
+              {{ $t('footer_nav_mint_nft') }}
+            </a>
           </div>
         </div>
 
