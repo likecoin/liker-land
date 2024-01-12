@@ -491,6 +491,7 @@ export default {
         description,
         brand: {
           '@type': 'Brand',
+          url: 'https://liker.land/about/nft-book',
           name: 'NFT Book',
         },
         author: iscnOwnerPerson,
@@ -508,6 +509,7 @@ export default {
           description: e.description,
           brand: {
             '@type': 'Brand',
+            url: 'https://liker.land/about/nft-book',
             name: 'NFT Book',
           },
           offers: {
