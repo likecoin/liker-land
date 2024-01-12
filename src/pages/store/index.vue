@@ -91,25 +91,28 @@ export default {
     const title = this.$t('store_index_page_title');
     const description = this.$t('store_books_page_description');
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    this.nftBooks.forEach(nft => {
+    const classIds = Array.from(
+      new Set(this.nftBooks.map(b => b.classId).flat())
+    );
+    classIds.forEach(classId =>
       link.push({
         rel: 'prefetch',
-        href: `/api/nft/metadata?class_id=${nft.classId}`,
-      });
-    });
+        href: `/api/nft/metadata?class_id=${classId}`,
+      })
+    );
 
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'DataFeed',
-      dataFeedElement: this.nftBooks
-        .filter(c => this.getNFTClassMetadataById(c.classId))
-        .map(c => {
+      dataFeedElement: classIds
+        .filter(classId => this.getNFTClassMetadataById(classId))
+        .map(classId => {
           const {
             name: className,
             description: classDescription,
             image: classImage = '',
             iscn_owner: iscnOwner,
-          } = this.getNFTClassMetadataById(c.classId);
+          } = this.getNFTClassMetadataById(classId);
           const iscnOwnerPerson = iscnOwner
             ? {
                 '@context': 'http://www.schema.org',
@@ -122,13 +125,13 @@ export default {
           return {
             '@context': 'http://www.schema.org',
             '@type': 'Book',
-            '@id': `${EXTERNAL_HOST}/nft/class/${c.classId}`,
+            '@id': `${EXTERNAL_HOST}/nft/class/${classId}`,
             name: className,
             description: classDescription,
             image: parseNFTMetadataURL(classImage),
-            url: `${EXTERNAL_HOST}/nft/class/${c.classId}`,
+            url: `${EXTERNAL_HOST}/nft/class/${classId}`,
             author: iscnOwnerPerson,
-            identifier: c.classId,
+            identifier: classId,
           };
         }),
     };
