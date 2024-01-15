@@ -568,4 +568,4 @@ export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v2.csv`;
 
 export const fetchBookstoreLists = () =>
-  `${EXTERNAL_HOST}/api/bookstore/lists?t=1701404376`;
+  `${EXTERNAL_HOST}/api/bookstore/lists?t=1705305172`;
