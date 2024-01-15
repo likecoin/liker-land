@@ -469,7 +469,7 @@
         <h2
           class="font-irohamaru text-center text-[1.8rem] desktop:text-[2.25rem] tracking-[0.5rem]"
         >
-          {{ $t('about_nft_book_section_about_title') }}
+          {{ $t('about_nft_book_section_about_subtitle') }}
         </h2>
       </div>
     </section>
@@ -715,6 +715,28 @@ export default {
       // eslint-disable-next-line no-console
       console.error(error);
     }
+  },
+  head() {
+    return {
+      title: this.$t('about_nft_book_section_about_title'),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('about_nft_book_section_about_title'),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('about_nft_book_section_about_subtitle'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('about_nft_book_section_about_subtitle'),
+        },
+      ],
+    };
   },
   computed: {
     bannerOverlayBG() {
