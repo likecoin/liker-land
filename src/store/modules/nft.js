@@ -869,7 +869,15 @@ const actions = {
     });
     const { classIds } = data;
     await Promise.all(
-      classIds.map(classId => dispatch('lazyGetNFTClassMetadata', classId))
+      []
+        .concat(
+          classIds.map(classId => dispatch('lazyGetNFTClassMetadata', classId))
+        )
+        .concat(
+          classIds.map(classId =>
+            dispatch('fetchNFTBookInfoByClassId', classId).catch()
+          )
+        )
     );
     return data;
   },
