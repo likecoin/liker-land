@@ -384,7 +384,7 @@ export default {
       const overrideKey = `nft_override_${this.classId}_description`;
       const hasOverride = this.$te(overrideKey);
       if (hasOverride) return this.$t(overrideKey);
-      return this.iscnDescription || this.NFTDescription;
+      return this.iscnDescription || this.NFTDescription || '';
     },
     bookDescriptionTrimmedOneline() {
       return this.bookDescription
