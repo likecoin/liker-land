@@ -8,7 +8,6 @@ export default {
       'getISCNMetadataById',
       'getCanViewNFTBookBeforeClaimByClassId',
       'getNFTCollectionInfoByCollectionId',
-      'getCanViewNFTBookBeforeClaimByClassId',
       'getIsHideNFTBookDownload',
     ]),
     classIds() {

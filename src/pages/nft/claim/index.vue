@@ -230,9 +230,7 @@
             :text="$t('nft_claim_claimed_download')"
           />
           <div v-for="id in classIds" :key="id">
-            <NFTWidgetBaseCard
-              v-if="isCollection && getCanViewNFTBookBeforeClaimByClassId(id)"
-            >
+            <NFTWidgetBaseCard v-if="isCollection">
               <NuxtLink
                 :to="
                   localeLocation({
@@ -367,7 +365,6 @@ export default {
       'getISCNMetadataById',
       'getCanViewNFTBookBeforeClaimByClassId',
       'getNFTCollectionInfoByCollectionId',
-      'getCanViewNFTBookBeforeClaimByClassId',
       'getIsHideNFTBookDownload',
     ]),
     primaryKey() {
