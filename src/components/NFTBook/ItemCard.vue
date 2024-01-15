@@ -387,7 +387,10 @@ export default {
       return this.iscnDescription || this.NFTDescription;
     },
     bookDescriptionTrimmedOneline() {
-      return this.bookDescription.replaceAll('\n', '').trim();
+      return this.bookDescription
+        .replaceAll('\n', '')
+        .trim()
+        .substring(0, 100);
     },
   },
   methods: {
