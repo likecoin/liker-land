@@ -356,6 +356,7 @@
               :title="$t('nft_collect_modal_method_like')"
               type="crypto"
               :is-disabled="isDisabledPayByLIKE"
+              :discount-info="discountInfo"
               :price="formattedNFTPriceInLIKE"
               @click="handleSelectPaymentMethod"
             />
@@ -659,6 +660,25 @@ export default {
     },
     hasAddedToShoppingCart() {
       return this.shoppingCartQuantity > 0;
+    },
+    discountInfo() {
+      if (!this.nftPreDiscountedLIKE) {
+        return undefined;
+      }
+      const originalPrice = this.nftPreDiscountedLIKE;
+      const discountedPrice = this.nftPriceInLIKE;
+      if (originalPrice <= discountedPrice) {
+        return undefined;
+      }
+      const discountAmount = originalPrice - discountedPrice;
+      const discountPercentage = Math.ceil(
+        (discountAmount / originalPrice) * 100
+      );
+
+      return {
+        originalPriceInLIKE: this.formattedNFTPreDiscountedLIKE,
+        discountPercentage,
+      };
     },
   },
   watch: {

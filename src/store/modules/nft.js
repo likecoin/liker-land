@@ -465,10 +465,10 @@ const actions = {
   },
   async fetchNFTPaymentPriceInfoByClassId({ commit }, classId) {
     if (!classId) return undefined;
-    const { fiatPrice, LIKEPrice } = await this.$api.$get(
+    const { fiatPrice, LIKEPrice, LIKEPricePrediscount } = await this.$api.$get(
       api.getPaymentPrice({ classId })
     );
-    const info = { fiatPrice, LIKEPrice };
+    const info = { fiatPrice, LIKEPrice, LIKEPricePrediscount };
     if (!Array.isArray(classId)) {
       commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
         classId,
