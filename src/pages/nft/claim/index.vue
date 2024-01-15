@@ -707,14 +707,23 @@ export default {
     handleClickView() {
       logTrackerEvent(this, 'NFT', 'nft_claim_view_button_clicked', '', 1);
       if (this.collectionId) {
-        this.$router.push(
-          this.localeLocation({
-            name: 'nft-collection-collectionId',
-            params: {
-              collectionId: this.collectionId,
-            },
-          })
-        );
+        if (this.claimingAddress) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'id',
+              params: { id: this.claimingAddress },
+            })
+          );
+        } else {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-collection-collectionId',
+              params: {
+                collectionId: this.collectionId,
+              },
+            })
+          );
+        }
       } else {
         this.$router.push(
           this.localeLocation({
