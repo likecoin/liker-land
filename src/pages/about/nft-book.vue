@@ -467,7 +467,10 @@
     >
       <div class="w-full max-w-[640px] mx-auto space-y-[1rem]">
         <h2
-          class="font-irohamaru text-center text-[1.8rem] desktop:text-[2.25rem] tracking-[0.5rem]"
+          :class="[
+            'font-irohamaru text-center text-[1.8rem] desktop:text-[2.25rem]',
+            { 'tracking-[0.5rem]': isChinese },
+          ]"
         >
           {{ $t('about_nft_book_section_about_subtitle') }}
         </h2>
@@ -631,16 +634,24 @@
 
     <section id="features" class="px-[2rem] pt-[5.5rem] pb-[7.5rem] bg-white">
       <div class="w-full max-w-[1024px] mx-auto">
-        <h2 class="text-[2.5rem] text-center font-irohamaru tracking-[0.5rem]">
+        <h2
+          :class="[
+            'text-[2.5rem] text-center font-irohamaru',
+            { 'tracking-[0.5rem]': isChinese },
+          ]"
+        >
           {{ $t('about_nft_book_section_features_title') }}
         </h2>
 
-        <p class="mt-[2rem] text-center">
+        <p :class="['mt-[2rem] text-center', { 'tracking-widest': isChinese }]">
           {{ $t('about_nft_book_section_features_description') }}
         </p>
 
         <ul
-          class="grid sm:grid-cols-2 gap-[5.5rem] tracking-widest mt-[5.5rem]"
+          :class="[
+            'grid sm:grid-cols-2 gap-[5.5rem] mt-[5.5rem]',
+            { 'tracking-widest': isChinese },
+          ]"
         >
           <li>
             <a
@@ -783,6 +794,9 @@ export default {
         ...this.bookstoreListItemsInHighlighted,
         ...this.bookstoreListItemsInFeatured,
       ].slice(0, 4);
+    },
+    isChinese() {
+      return this.$i18n.locale.includes('zh');
     },
   },
   mounted() {
