@@ -4,7 +4,15 @@
       <NFTWidgetBaseCard>
         <NuxtLink
           :to="
-            localeLocation({ name: 'nft-class-classId', params: { classId } })
+            collectionId
+              ? localeLocation({
+                  name: 'nft-collection-collectionId',
+                  params: { collectionId },
+                })
+              : localeLocation({
+                  name: 'nft-class-classId',
+                  params: { classId },
+                })
           "
           target="_blank"
         >
@@ -58,25 +66,30 @@ import {
 } from '~/util/EventLogger';
 import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPaymentStatusEndpoint } from '~/util/api';
-
-import nftMixin from '~/mixins/nft';
+import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 
 export default {
   name: 'NFTGiftSuccessPage',
-  mixins: [nftMixin],
+  mixins: [nftOrCollectionMixin],
   async asyncData({ query, store, error, i18n }) {
-    const { class_id: classId } = query;
-    if (!classId) {
+    const { class_id: classId, collection_id: collectionId } = query;
+    if (!classId && !collectionId) {
       error({ statusCode: 400, message: i18n.t('nft_gift_missing_qs') });
       return;
     }
     try {
-      await store.dispatch('lazyGetNFTClassMetadata', classId);
-      const classCollectionType = getNFTClassCollectionType(
-        store.getters.getNFTClassMetadataById(classId)
-      );
-      if (classCollectionType === nftClassCollectionType.NFTBook) {
-        await store.dispatch('fetchNFTBookInfoByClassId', classId);
+      if (collectionId) {
+        await store.dispatch('lazyFetchNFTCollectionInfoByCollectionId', {
+          collectionId,
+        });
+      } else if (classId) {
+        await store.dispatch('lazyGetNFTClassMetadata', classId);
+        const classCollectionType = getNFTClassCollectionType(
+          store.getters.getNFTClassMetadataById(classId)
+        );
+        if (classCollectionType === nftClassCollectionType.NFTBook) {
+          await store.dispatch('fetchNFTBookInfoByClassId', classId);
+        }
       }
     } catch (err) {
       error({ statusCode: 404, message: i18n.t('nft_gift_class_not_found') });
@@ -91,6 +104,12 @@ export default {
     classId() {
       return this.$route.query.class_id;
     },
+    collectionId() {
+      return this.$route.query.collection_id;
+    },
+    primaryKey() {
+      return this.collectionId || this.classId;
+    },
     paymentId() {
       return this.$route.query.payment_id;
     },
@@ -102,6 +121,7 @@ export default {
       const { data } = await this.$api.get(
         getNFTBookPaymentStatusEndpoint({
           classId: this.classId,
+          collectionId: this.collectionId,
           paymentId: this.paymentId,
         })
       );
@@ -116,6 +136,7 @@ export default {
           {
             name: this.NFTName,
             classId: this.classId,
+            collectionId: this.collectionId,
             price,
           },
         ],
@@ -127,13 +148,14 @@ export default {
         name: this.NFTName,
         currency: 'USD',
         classId: this.classId,
+        collectionId: this.collectionId,
         price,
       });
       logTrackerEvent(
         this,
         'NFT',
         'nft_gift_purchase_success',
-        this.classId,
+        this.primaryKey,
         1
       );
       this.$router.replace({
@@ -148,20 +170,37 @@ export default {
         this,
         'NFT',
         'nft_gift_view_details_clicked',
-        this.classId,
+        this.primaryKey,
         1
       );
     },
     handleClickViewClass() {
-      logTrackerEvent(this, 'NFT', 'nft_gift_view_class_button_clicked', '', 1);
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: {
-            classId: this.classId,
-          },
-        })
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_gift_view_class_button_clicked',
+        this.primaryKey,
+        1
       );
+      if (this.collectionId) {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-collection-collectionId',
+            params: {
+              classId: this.collectionId,
+            },
+          })
+        );
+      } else {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: {
+              classId: this.classId,
+            },
+          })
+        );
+      }
     },
   },
 };
