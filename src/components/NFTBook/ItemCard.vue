@@ -122,7 +122,7 @@
         />
         <Label preset="h4" :class="titleStyle" :text="NFTName" />
         <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
-          {{ bookDescriptionTrimmedOneline }}
+          {{ bookDescriptionTrimmed }}
         </p>
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
           <li
@@ -386,11 +386,14 @@ export default {
       if (hasOverride) return this.$t(overrideKey);
       return this.iscnDescription || this.NFTDescription || '';
     },
-    bookDescriptionTrimmedOneline() {
-      return this.bookDescription
-        .replaceAll('\n', '')
-        .trim()
-        .substring(0, 100);
+    bookDescriptionTrimmed() {
+      if (this.preset === PRESET_TYPE.CAMPAIGN) {
+        return this.bookDescription
+          .replaceAll('\n', '')
+          .trim()
+          .substring(0, 100);
+      }
+      return this.bookDescription.trim();
     },
   },
   methods: {
