@@ -984,6 +984,7 @@ export default {
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
+            email: this.walletEmail,
           });
           if (url) {
             window.location.href = url;
