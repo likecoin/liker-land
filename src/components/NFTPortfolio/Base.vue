@@ -46,7 +46,7 @@
           }}</Label>
 
           <div
-            v-if="(!isPrimitive && price !== undefined) || price > 0"
+            v-if="price !== undefined"
             class="z-[48] flex justify-center mt-[16px]"
           >
             <ProgressIndicator v-if="isCollecting" />
@@ -59,7 +59,7 @@
               @click-collect-button="handleClickCollect"
             />
             <NFTViewOptionList
-              v-else
+              v-else-if="!isNftBook || ownCount"
               :class-id="classId"
               :url="externalUrl"
               :content-urls="contentUrls"
