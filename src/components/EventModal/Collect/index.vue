@@ -670,14 +670,12 @@ export default {
       if (originalPrice <= discountedPrice) {
         return undefined;
       }
-      const discountAmount = originalPrice - discountedPrice;
-      const discountPercentage = Math.ceil(
-        (discountAmount / originalPrice) * 100
-      );
+
+      const discountMultiplier = (discountedPrice / originalPrice) * 100;
 
       return {
         originalPriceInLIKE: this.formattedNFTPreDiscountedLIKE,
-        discountPercentage,
+        discountPercentage: discountMultiplier.toFixed(0),
       };
     },
   },
