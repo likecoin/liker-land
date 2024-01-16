@@ -432,6 +432,7 @@
   "nft_claim_class_not_found": "NFT Class not found",
   "nft_claim_enter_address_label": "Enter your wallet address to add to your bookshelf",
   "nft_claim_enter_address_placeholder": "like1.... or connect by logging in",
+  "nft_claim_enter_address_errorMessage": "Only LIKE wallets (like1...) are allowed",
   "nft_claim_error_message": "Error occurs when adding to bookshelf {error}",
   "nft_claim_error_message_unknown": "An unknown error occurs when adding to bookshelf",
   "nft_claim_login_in": "Verify wallet to claim your NFT",

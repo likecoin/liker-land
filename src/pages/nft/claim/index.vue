@@ -135,16 +135,13 @@
                 align="center"
               />
               <div class="flex justify-center w-full gap-[12px] mt-[6px]">
-                <div
-                  class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-                >
-                  <input
-                    v-model="claimingAddressInput"
-                    class="w-full bg-transparent border-0 focus-visible:outline-none"
-                    :placeholder="$t('nft_claim_enter_address_placeholder')"
-                    type="input"
-                  />
-                </div>
+                <TextField
+                  v-model="claimingAddressInput"
+                  class="w-full"
+                  :error-message="errorMessage"
+                  required
+                  :placeholder="$t('nft_claim_enter_address_placeholder')"
+                />
                 <ButtonV2
                   v-if="!claimingAddressInput"
                   class="flex-shrink-0"
@@ -164,7 +161,9 @@
                 "
                 preset="secondary"
                 :is-disabled="
-                  !claimingAddressInput || !isValidAddress(claimingAddressInput)
+                  !claimingAddressInput ||
+                    !isValidAddress(claimingAddressInput) ||
+                    errorMessage
                 "
                 @click="onEnterClaimingAddress"
               />
@@ -295,6 +294,7 @@ import {
   getNFTClassCollectionType,
   nftClassCollectionType,
   parseNFTMetadataURL,
+  LIKE_ADDRESS_REGEX,
 } from '~/util/nft';
 
 import alertMixin from '~/mixins/alert';
@@ -428,6 +428,15 @@ export default {
     },
     isContentDownloadable() {
       return this.isFreePurchase || !this.nftIsDownloadHidden;
+    },
+    errorMessage() {
+      if (
+        this.claimingAddressInput &&
+        !LIKE_ADDRESS_REGEX.test(this.claimingAddressInput)
+      ) {
+        return this.$t('nft_claim_enter_address_errorMessage');
+      }
+      return '';
     },
   },
   watch: {
