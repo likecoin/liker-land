@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { formatNumberWithUSD } from '~/util/ui';
 import { catchAxiosError } from '~/util/misc';
 
+import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
 
 const creatorInfoMixin = createUserInfoMixin({
@@ -11,7 +12,7 @@ const creatorInfoMixin = createUserInfoMixin({
 });
 
 export default {
-  mixins: [creatorInfoMixin],
+  mixins: [creatorInfoMixin, walletMixin],
   computed: {
     ...mapGetters([
       'getUserInfoByAddress',
