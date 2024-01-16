@@ -467,9 +467,12 @@
     >
       <div class="w-full max-w-[640px] mx-auto space-y-[1rem]">
         <h2
-          class="font-irohamaru text-center text-[1.8rem] desktop:text-[2.25rem] tracking-[0.5rem]"
+          :class="[
+            'font-irohamaru text-center text-[1.8rem] desktop:text-[2.25rem]',
+            { 'tracking-[0.5rem]': isChinese },
+          ]"
         >
-          {{ $t('about_nft_book_section_about_title') }}
+          {{ $t('about_nft_book_section_about_subtitle') }}
         </h2>
       </div>
     </section>
@@ -631,64 +634,102 @@
 
     <section id="features" class="px-[2rem] pt-[5.5rem] pb-[7.5rem] bg-white">
       <div class="w-full max-w-[1024px] mx-auto">
-        <h2 class="text-[2.5rem] text-center font-irohamaru tracking-[0.5rem]">
+        <h2
+          :class="[
+            'text-[2.5rem] text-center font-irohamaru',
+            { 'tracking-[0.5rem]': isChinese },
+          ]"
+        >
           {{ $t('about_nft_book_section_features_title') }}
         </h2>
 
-        <p class="mt-[2rem] text-center">
+        <p :class="['mt-[2rem] text-center', { 'tracking-widest': isChinese }]">
           {{ $t('about_nft_book_section_features_description') }}
         </p>
 
         <ul
-          class="grid sm:grid-cols-2 gap-[5.5rem] tracking-widest mt-[5.5rem]"
+          :class="[
+            'grid sm:grid-cols-2 gap-[5.5rem] mt-[5.5rem]',
+            { 'tracking-widest': isChinese },
+          ]"
         >
-          <li class="flex flex-col items-center">
-            <img
-              class="w-[100px] h-[100px]"
-              src="~assets/images/about/nft-book/icons/ownership.png"
-            />
-            <h4 class="font-600 mt-[3rem]">
-              {{ $t('about_nft_book_section_features_ownership_title') }}
-            </h4>
-            <p class="mt-[0.5rem] text-center">
-              {{ $t('about_nft_book_section_features_ownership_description') }}
-            </p>
+          <li>
+            <a
+              class="flex flex-col items-center"
+              href="https://dungfookei.com/en/why-should-i-publish-a-book-using-nft/"
+              target="_blank"
+              rel="noopener"
+            >
+              <img
+                class="w-[100px] h-[100px]"
+                src="~assets/images/about/nft-book/icons/ownership.png"
+              />
+              <h4 class="font-600 mt-[3rem]">
+                {{ $t('about_nft_book_section_features_ownership_title') }}
+              </h4>
+              <p class="mt-[0.5rem] text-center">
+                {{
+                  $t('about_nft_book_section_features_ownership_description')
+                }}
+              </p>
+            </a>
           </li>
-          <li class="flex flex-col items-center">
-            <img
-              class="w-[100px] h-[100px]"
-              src="~assets/images/about/nft-book/icons/gifting.png"
-            />
-            <h4 class="font-600 mt-[3rem]">
-              {{ $t('about_nft_book_section_features_gifting_title') }}
-            </h4>
-            <p class="mt-[0.5rem] text-center">
-              {{ $t('about_nft_book_section_features_gifting_description') }}
-            </p>
+          <li>
+            <a
+              class="flex flex-col items-center"
+              href="https://newsletter.liker.land/p/4de"
+              target="_blank"
+              rel="noopener"
+            >
+              <img
+                class="w-[100px] h-[100px]"
+                src="~assets/images/about/nft-book/icons/gifting.png"
+              />
+              <h4 class="font-600 mt-[3rem]">
+                {{ $t('about_nft_book_section_features_gifting_title') }}
+              </h4>
+              <p class="mt-[0.5rem] text-center">
+                {{ $t('about_nft_book_section_features_gifting_description') }}
+              </p>
+            </a>
           </li>
-          <li class="flex flex-col items-center">
-            <img
-              class="w-[100px] h-[100px]"
-              src="~assets/images/about/nft-book/icons/multimedia.png"
-            />
-            <h4 class="font-600 mt-[3rem]">
-              {{ $t('about_nft_book_section_features_multimedia_title') }}
-            </h4>
-            <p class="mt-[0.5rem] text-center">
-              {{ $t('about_nft_book_section_features_multimedia_description') }}
-            </p>
+          <li>
+            <NuxtLink
+              class="flex flex-col items-center"
+              :to="localeLocation({ name: 'gutenberg' })"
+            >
+              <img
+                class="w-[100px] h-[100px]"
+                src="~assets/images/about/nft-book/icons/multimedia.png"
+              />
+              <h4 class="font-600 mt-[3rem]">
+                {{ $t('about_nft_book_section_features_multimedia_title') }}
+              </h4>
+              <p class="mt-[0.5rem] text-center">
+                {{
+                  $t('about_nft_book_section_features_multimedia_description')
+                }}
+              </p>
+            </NuxtLink>
           </li>
-          <li class="flex flex-col items-center">
-            <img
-              class="w-[100px] h-[100px]"
-              src="~assets/images/about/nft-book/icons/social.png"
-            />
-            <h4 class="font-600 mt-[3rem]">
-              {{ $t('about_nft_book_section_features_social_title') }}
-            </h4>
-            <p class="mt-[0.5rem] text-center">
-              {{ $t('about_nft_book_section_features_social_description') }}
-            </p>
+          <li>
+            <a
+              class="flex flex-col items-center"
+              href="https://blog.like.co/zh/%E5%85%A7%E5%AE%B9%E6%84%9B%E5%A5%BD%E8%80%85%E7%9A%84%E5%BB%A3%E5%A0%B4-liker-land-%E6%96%B0%E5%8A%9F%E8%83%BD/"
+              target="_blank"
+              rel="noopener"
+            >
+              <img
+                class="w-[100px] h-[100px]"
+                src="~assets/images/about/nft-book/icons/social.png"
+              />
+              <h4 class="font-600 mt-[3rem]">
+                {{ $t('about_nft_book_section_features_social_title') }}
+              </h4>
+              <p class="mt-[0.5rem] text-center">
+                {{ $t('about_nft_book_section_features_social_description') }}
+              </p>
+            </a>
           </li>
         </ul>
       </div>
@@ -716,6 +757,28 @@ export default {
       console.error(error);
     }
   },
+  head() {
+    return {
+      title: this.$t('about_nft_book_section_about_title'),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('about_nft_book_section_about_title'),
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('about_nft_book_section_about_subtitle'),
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.$t('about_nft_book_section_about_subtitle'),
+        },
+      ],
+    };
+  },
   computed: {
     bannerOverlayBG() {
       return WaveCyanBg;
@@ -731,6 +794,9 @@ export default {
         ...this.bookstoreListItemsInHighlighted,
         ...this.bookstoreListItemsInFeatured,
       ].slice(0, 4);
+    },
+    isChinese() {
+      return this.$i18n.locale.includes('zh');
     },
   },
   mounted() {

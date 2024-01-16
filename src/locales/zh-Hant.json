@@ -1,5 +1,6 @@
 {
-  "about_nft_book_section_about_title": "讀書人的事，能算偷麼",
+  "about_nft_book_section_about_title": "偷拿一本未來 - Liker Land 電子書",
+  "about_nft_book_section_about_subtitle": "讀書人的事，能算偷麼",
   "about_nft_book_section_book_cta": "立即購買",
   "about_nft_book_section_book_description": "香港小說家董啟章經典作品《天工開物．栩栩如真》與初版相隔接近二十年，新版文本經過仔細修訂，並增加了全新的一章作為序言以NFT書的形式重新出版了。 「虛構一個想像世界，然後在裡面生活。」2023年，文學與NFT的想像世界終於重合。",
   "about_nft_book_section_book_title": "天工開物．栩栩如真",
@@ -15,7 +16,7 @@
   "about_nft_book_section_features_title": "電子書的未來",
   "about_nft_book_section_quote_author": "尹思哲",
   "about_nft_book_section_quote_author_title": "前《信報》科技新聞版編輯",
-  "about_nft_book_section_quote_content": "“我至今只有在 Liker.Land 生態感受到 NFT 應有的「温度」，這種 UX 是所有其他 web3 所謂項目都沒有的。”",
+  "about_nft_book_section_quote_content": "“我至今只有在 Liker Land 生態感受到 NFT 應有的「温度」，這種 UX 是所有其他 web3 所謂項目都沒有的。”",
   "about_nft_book_section_store_title": "最新藏書",
   "about_nft_book_section_store_view_more": "瀏覽更多",
   "about_nft_page_description": "珍藏文字，回饋創作",
@@ -801,7 +802,7 @@
     "creator": "創作者",
     "home": "主頁",
     "logout": "登出",
-    "openWithApp": "以 Liker.Land App 開啟",
+    "openWithApp": "以 Liker Land App 開啟",
     "settings": "@:SettingsPage.title",
     "support": "幫助"
   },
