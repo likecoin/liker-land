@@ -313,7 +313,7 @@ export default {
     nftPriceInLIKE() {
       return this.paymentInfo?.LIKEPrice;
     },
-    nftPreDiscountedLIKE() {
+    nftPrediscountedLIKE() {
       return this.paymentInfo?.LIKEPricePrediscount;
     },
     nftIsFree() {
@@ -322,9 +322,9 @@ export default {
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.nftPriceInLIKE) : '-';
     },
-    formattedNFTPreDiscountedLIKE() {
+    formattedNFTPrediscountedLIKE() {
       return this.NFTPrice
-        ? formatNumberWithLIKE(this.nftPreDiscountedLIKE)
+        ? formatNumberWithLIKE(this.nftPrediscountedLIKE)
         : '-';
     },
     nftPaymentPriceInUSD() {

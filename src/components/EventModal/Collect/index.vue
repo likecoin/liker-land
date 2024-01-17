@@ -662,10 +662,10 @@ export default {
       return this.shoppingCartQuantity > 0;
     },
     discountInfo() {
-      if (!this.nftPreDiscountedLIKE) {
+      if (!this.nftPrediscountedLIKE) {
         return undefined;
       }
-      const originalPrice = this.nftPreDiscountedLIKE;
+      const originalPrice = this.nftPrediscountedLIKE;
       const discountedPrice = this.nftPriceInLIKE;
       if (originalPrice <= discountedPrice) {
         return undefined;
@@ -674,7 +674,7 @@ export default {
       const discountMultiplier = (discountedPrice / originalPrice) * 100;
 
       return {
-        originalPriceInLIKE: this.formattedNFTPreDiscountedLIKE,
+        originalPriceInLIKE: this.formattedNFTPrediscountedLIKE,
         discountPercentage: discountMultiplier.toFixed(0),
       };
     },
