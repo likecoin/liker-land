@@ -24,8 +24,10 @@
           </template>
         </NFTCollectionItemCard>
 
-        <div class="max-w-[962px] mx-auto flex gap-[24px] justify-center">
-          <div class="flex-col">
+        <div
+          class="max-w-[962px] mx-auto flex gap-[24px] justify-center flex-wrap"
+        >
+          <div>
             <Label
               :text="$t('nft_collection_content_label')"
               preset="h3"
