@@ -8,7 +8,7 @@ import {
   LIKECOIN_CHAIN_MIN_DENOM,
 } from '@/constant/index';
 
-const ALLOWED_ADDRESS_PREFIXES = ['like', 'cosmos'];
+const ALLOWED_ADDRESS_PREFIXES = ['like'];
 
 export function isValidAddress(address) {
   try {
@@ -22,15 +22,6 @@ export function isValidAddress(address) {
 export function convertAddressPrefix(address, prefix = 'like') {
   const { words } = bech32.decode(address);
   return bech32.encode(prefix, words);
-}
-
-export function deriveAllPrefixedAddresses(address) {
-  if (!isValidAddress(address)) {
-    throw new Error('Invalid address');
-  }
-  return ALLOWED_ADDRESS_PREFIXES.map(prefix =>
-    convertAddressPrefix(address, prefix)
-  );
 }
 
 async function signLoginMessageMemo(signer, address, payload) {
