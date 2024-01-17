@@ -63,5 +63,21 @@ export default {
         wallet = this.NFTMetadata?.iscn_owner;
       }
     },
+    viewInfoLocation() {
+      if (this.collectionId) {
+        return this.localeLocation({
+          name: 'nft-collection-collectionId',
+          params: {
+            collectionId: this.collectionId,
+          },
+        });
+      }
+      return this.localeLocation({
+        name: 'nft-class-classId',
+        params: {
+          classId: this.classId,
+        },
+      });
+    },
   },
 };
