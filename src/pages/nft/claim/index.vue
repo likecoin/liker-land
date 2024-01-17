@@ -306,6 +306,7 @@ const NFT_CLAIM_STATE = {
   INITIAL: 'INITIAL',
   CLAIMING: 'CLAIMING',
   CLAIMED: 'CLAIMED',
+  SENT: 'SENT',
   PHYSICAL_ONLY: 'PHYSICAL_ONLY',
   ERROR: 'ERROR',
 };
@@ -394,6 +395,8 @@ export default {
             return this.$t('nft_claim_claimed_nft_book');
           }
           return this.$t('nft_claim_claimed');
+        case NFT_CLAIM_STATE.SENT:
+          return this.$t('nft_claim_sent_nft_book');
         case NFT_CLAIM_STATE.PHYSICAL_ONLY:
           return this.$t('nft_claim_physical_only');
         case NFT_CLAIM_STATE.ERROR:
@@ -654,9 +657,13 @@ export default {
             message: this.collectorMessage,
           }
         );
-        await this.claimPromise;
+        const { data } = await this.claimPromise;
         this.claimPromise = undefined;
-        this.state = NFT_CLAIM_STATE.CLAIMED;
+        if (data.autoDeliverTxHash) {
+          this.state = NFT_CLAIM_STATE.SENT;
+        } else {
+          this.state = NFT_CLAIM_STATE.CLAIMED;
+        }
         logTrackerEvent(
           this,
           'NFT',
