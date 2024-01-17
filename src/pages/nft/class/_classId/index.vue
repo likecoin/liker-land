@@ -92,9 +92,9 @@
                     (nftEditions.length === 1 && nftEditions[0].description)))
             "
             ref="compareSection"
-            class="max-w-[962px] mx-auto flex gap-[24px] justify-center"
+            class="max-w-[962px] mx-auto flex gap-[48px] justify-center flex-wrap"
           >
-            <div class="flex-col">
+            <div>
               <Label
                 :text="$t('nft_edition_label')"
                 preset="h3"
