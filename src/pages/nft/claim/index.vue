@@ -367,9 +367,6 @@ export default {
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
     ]),
-    primaryKey() {
-      return this.collectionId || this.classId;
-    },
     classId() {
       return this.$route.query.class_id;
     },

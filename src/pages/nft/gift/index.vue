@@ -2,20 +2,7 @@
   <main>
     <div class="w-full max-w-[400px] mx-auto p-[1rem] laptop:p-0 pt-0">
       <NFTWidgetBaseCard>
-        <NuxtLink
-          :to="
-            collectionId
-              ? localeLocation({
-                  name: 'nft-collection-collectionId',
-                  params: { collectionId },
-                })
-              : localeLocation({
-                  name: 'nft-class-classId',
-                  params: { classId },
-                })
-          "
-          target="_blank"
-        >
+        <NuxtLink :to="viewInfoLocation" target="_blank">
           <NFTWidgetContentPreview
             :class="[
               'transition-shadow',
@@ -107,9 +94,6 @@ export default {
     collectionId() {
       return this.$route.query.collection_id;
     },
-    primaryKey() {
-      return this.collectionId || this.classId;
-    },
     paymentId() {
       return this.$route.query.payment_id;
     },
@@ -182,25 +166,7 @@ export default {
         this.primaryKey,
         1
       );
-      if (this.collectionId) {
-        this.$router.push(
-          this.localeLocation({
-            name: 'nft-collection-collectionId',
-            params: {
-              classId: this.collectionId,
-            },
-          })
-        );
-      } else {
-        this.$router.push(
-          this.localeLocation({
-            name: 'nft-class-classId',
-            params: {
-              classId: this.classId,
-            },
-          })
-        );
-      }
+      this.$router.push(this.viewInfoLocation);
     },
   },
 };
