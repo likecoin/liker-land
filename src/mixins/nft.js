@@ -313,11 +313,19 @@ export default {
     nftPriceInLIKE() {
       return this.paymentInfo?.LIKEPrice;
     },
+    nftPrediscountedLIKE() {
+      return this.paymentInfo?.LIKEPricePrediscount;
+    },
     nftIsFree() {
       return this.NFTPrice !== undefined && this.NFTPrice === 0;
     },
     formattedNFTPriceInLIKE() {
       return this.NFTPrice ? formatNumberWithLIKE(this.nftPriceInLIKE) : '-';
+    },
+    formattedNFTPrediscountedLIKE() {
+      return this.NFTPrice
+        ? formatNumberWithLIKE(this.nftPrediscountedLIKE)
+        : '-';
     },
     nftPaymentPriceInUSD() {
       return this.paymentInfo?.fiatPrice;
