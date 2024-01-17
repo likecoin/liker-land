@@ -432,6 +432,7 @@
   "nft_claim_class_not_found": "找不到 NFT Class",
   "nft_claim_enter_address_label": "輸入錢包地址以將這本書加進書架",
   "nft_claim_enter_address_placeholder": "like1.... 或登入以獲取地址",
+  "nft_claim_enter_address_errorMessage": "僅限使用 LIKE 錢包 （like1...)",
   "nft_claim_error_message": "加進書架時出現錯誤：{error}",
   "nft_claim_error_message_unknown": "加進書架時出現不明錯誤",
   "nft_claim_login_in": "驗證錢包以領取 NFT",
