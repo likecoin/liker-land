@@ -671,11 +671,14 @@ export default {
         return undefined;
       }
 
-      const discountMultiplier = (discountedPrice / originalPrice) * 100;
+      const discountAmount = originalPrice - discountedPrice;
+      const discountPercentage = Math.ceil(
+        (discountAmount / originalPrice) * 100
+      );
 
       return {
         originalPriceInLIKE: this.formattedNFTPrediscountedLIKE,
-        discountPercentage: discountMultiplier.toFixed(0),
+        discountPercentage: `-${discountPercentage}`,
       };
     },
   },
