@@ -85,25 +85,17 @@
               <div
                 v-if="nftCollections.length"
                 class="items-center justify-end w-full"
+                @click="handleClickCollectionHint"
               >
-                <NuxtLink
-                  :to="
-                    localeLocation({
-                      name: 'nft-collection-collectionId',
-                      params: { collectionId: nftCollections[0].id },
-                    })
-                  "
+                <Label
+                  class="underline text-like-collection !text-[14px] cursor-pointer"
+                  align="right"
+                  :text="$t('nft_collection_hint')"
                 >
-                  <Label
-                    class="underline text-like-collection !text-[14px]"
-                    align="right"
-                    :text="$t('nft_collection_hint')"
-                  >
-                    <template #append>
-                      <IconCollection />
-                    </template>
-                  </Label>
-                </NuxtLink>
+                  <template #append>
+                    <IconCollection />
+                  </template>
+                </Label>
               </div>
             </template>
           </NFTBookItemCard>
@@ -123,7 +115,7 @@
                   'text-[28px]',
                   'font-600',
                   'text-like-green',
-                  { 'text-medium-gray': shouldShowCollectionItem },
+                  { '!text-medium-gray': shouldShowCollectionItem },
                 ]"
                 preset="plain"
                 :text="$t('nft_edition_label')"
@@ -1233,6 +1225,26 @@ export default {
         1
       );
       this.shouldShowCollectionItem = false;
+    },
+    handleClickCollectionHint() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_click_collection_hint',
+        this.classId,
+        1
+      );
+      this.shouldShowCollectionItem = true;
+      this.scrollToElement();
+    },
+    scrollToElement() {
+      setTimeout(() => {
+        const currentRef = this.$refs.compareSection;
+        currentRef.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
     },
   },
 };
