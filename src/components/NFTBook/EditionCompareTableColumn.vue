@@ -1,8 +1,14 @@
 <template>
   <NFTGemWrapper :is-nft-book="true" :class-id="classId">
     <template #default="gem">
-      <NFTPortfolioCard :gem-level="gem.level" :hover-class="gem.hoverClass">
-        <div class="relative flex items-center justify-center py-[16px]">
+      <NFTPortfolioCard
+        :class="{ 'border-like-collection border-[2px]': collectionId }"
+        :gem-level="gem.level"
+        :hover-class="gem.hoverClass"
+      >
+        <div
+          class="relative flex items-center justify-center py-[16px] min-w-[276px]"
+        >
           <div class="absolute inset-0 w-full h-full">
             <img
               :src="resizedSrc"
@@ -133,6 +139,10 @@ export default {
     editionConfig: {
       type: Object,
       default: () => {},
+    },
+    collectionId: {
+      type: String,
+      default: '',
     },
   },
   computed: {
