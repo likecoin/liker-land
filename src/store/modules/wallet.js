@@ -377,6 +377,18 @@ const actions = {
     return connector;
   },
 
+  async handleConnectorRedirect({ dispatch }, { method, params }) {
+    const connector = await dispatch('getConnector');
+    const connection = await connector.handleRedirect(method, params);
+    if (connection) {
+      const { accounts } = connection;
+      await dispatch('initWallet', { accounts, method });
+      if (getters.walletIsMatchedSession) {
+        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+      }
+    }
+  },
+
   async openConnectWalletModal(
     { commit, dispatch },
     {
@@ -391,11 +403,12 @@ const actions = {
     const connector = await dispatch('getConnector');
     if (shouldRecommendConnectionMethod) {
       connector.options.availableMethods = [
+        ['liker-id', { tier: 1, isRecommended: true }],
         'keplr',
-        ['keplr-mobile', { tier: 1, isRecommended: true }],
+        'keplr-mobile',
         'cosmostation',
         'cosmostation-mobile',
-        'liker-id',
+        'likerland-app',
         'leap',
         'metamask-leap',
         'walletconnect-v2',

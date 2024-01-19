@@ -5,6 +5,7 @@ import {
   LIKECOIN_CHAIN_DENOM,
   LIKECOIN_CHAIN_MIN_DENOM,
   CIVIC_LIKER_V3_STAKING_ENDPOINT,
+  EXTERNAL_HOST,
 } from '.';
 
 const { IS_TESTNET } = process.env;
@@ -27,11 +28,12 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
   bech32PrefixConsAddr: 'likevalcons',
   bech32PrefixConsPub: 'likevalconspub',
   availableMethods: [
+    'liker-id',
     'keplr',
     'keplr-mobile',
     'cosmostation',
     'cosmostation-mobile',
-    'liker-id',
+    'likerland-app',
     'leap',
     'metamask-leap',
     'walletconnect-v2',
@@ -46,6 +48,10 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     name: 'Liker Land',
   },
   cosmostationDirectSignEnabled: true,
+  authcoreApiHost: IS_TESTNET
+    ? 'https://likecoin-integration-test.authcore.io'
+    : 'https://authcore.like.co',
+  authcoreRedirectUrl: `${EXTERNAL_HOST}/auth/redirect?method=liker-id`,
 };
 
 export default LIKECOIN_WALLET_CONNECTOR_CONFIG;
