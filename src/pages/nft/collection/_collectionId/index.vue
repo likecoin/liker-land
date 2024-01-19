@@ -32,39 +32,14 @@
               :text="$t('nft_collection_content_label')"
               preset="h3"
               align="center"
-              class="text-like-green mt-[38px] mb-[24px]"
+              class="text-like-collection mt-[38px] mb-[24px]"
             />
-            <ul
-              class="flex flex-wrap items-start justify-center gap-[24px] w-full"
-            >
-              <li v-for="id in classIds" :key="id">
-                <NFTWidgetBaseCard class="w-[280px]">
-                  <NuxtLink
-                    :to="
-                      localeLocation({
-                        name: 'nft-class-classId',
-                        params: { classId: id },
-                      })
-                    "
-                    target="_blank"
-                  >
-                    <NFTWidgetContentPreview
-                      :class="[
-                        'transition-shadow',
-                        'cursor-pointer',
-                        'min-h-[300px]',
-                        'w-full',
-                      ]"
-                      :title="getNFTClassMetadataById(id)?.name"
-                      :description="getNFTClassMetadataById(id)?.description"
-                      :img-src="
-                        parseNFTMetadataURL(getNFTClassMetadataById(id)?.image)
-                      "
-                    />
-                  </NuxtLink>
-                </NFTWidgetBaseCard>
-              </li>
-            </ul>
+            <NFTBookShelf
+              class="mt-[48px]"
+              :items="shelfItems"
+              @click-item="onClickShelfItem"
+              @click-item-avatar="onClickShelfItemAvatar"
+            />
           </div>
         </div>
       </div>
@@ -180,6 +155,9 @@ export default {
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
+    shelfItems() {
+      return this.classIds.map(id => ({ classId: id }));
+    },
   },
   mounted() {
     try {
@@ -262,7 +240,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_class_details_edition_selector_collect',
+        'nft_collection_details_edition_selector_collect',
         this.classId,
         1
       );
@@ -271,7 +249,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_class_details_gift_submit',
+        'nft_collection_details_gift_submit',
         this.classId,
         1
       );
@@ -283,8 +261,26 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_class_details_edition_selector_gift',
+        'nft_collection_details_edition_selector_gift',
         this.classId,
+        1
+      );
+    },
+    onClickShelfItem(classId) {
+      logTrackerEvent(
+        this,
+        'nft_collection',
+        'nft_book_shelf_click_book',
+        classId,
+        1
+      );
+    },
+    onClickShelfItemAvatar(classId) {
+      logTrackerEvent(
+        this,
+        'nft_collection',
+        'nft_book_shelf_click_avatar',
+        classId,
         1
       );
     },
