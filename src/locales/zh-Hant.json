@@ -545,6 +545,7 @@
   "nft_details_page_title_transfer": "發送你的 NFT",
   "nft_download_content_error": "下載失敗",
   "nft_download_content_prepare": "預備下載",
+  "nft_collection_hint": "此本書收錄在套裝中",
   "nft_collection_label": "套裝",
   "nft_edition_label": "發行版本",
   "nft_edition_select_compare_button_text": "比較不同版本",

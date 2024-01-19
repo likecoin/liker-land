@@ -82,6 +82,29 @@
                 @click-gift="handleGiftFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
+              <div
+                v-if="nftCollections.length"
+                class="items-center justify-end w-full"
+              >
+                <NuxtLink
+                  :to="
+                    localeLocation({
+                      name: 'nft-collection-collectionId',
+                      params: { collectionId: nftCollections[0].id },
+                    })
+                  "
+                >
+                  <Label
+                    class="underline text-like-collection !text-[14px]"
+                    align="right"
+                    :text="$t('nft_collection_hint')"
+                  >
+                    <template #append>
+                      <IconCollection />
+                    </template>
+                  </Label>
+                </NuxtLink>
+              </div>
             </template>
           </NFTBookItemCard>
           <div
