@@ -448,16 +448,15 @@ const actions = {
     }
   },
 
-  async initIfNecessary({ dispatch }) {
+  async initIfNecessary({ dispatch }, { isLogin = false } = {}) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
     if (connection) {
-      const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWallet', {
-        accounts,
-        offlineSigner,
-        method,
-      });
+      if (isLogin) {
+        await dispatch('initWalletAndLogin', connection);
+      } else {
+        await dispatch('initWallet', connection);
+      }
     }
   },
 
