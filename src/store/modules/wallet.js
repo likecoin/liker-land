@@ -377,12 +377,18 @@ const actions = {
     return connector;
   },
 
-  async handleConnectorRedirect({ dispatch }, { method, params }) {
+  async handleConnectorRedirect(
+    { dispatch },
+    { method, params, isLogin = true }
+  ) {
     const connector = await dispatch('getConnector');
     const connection = await connector.handleRedirect(method, params);
     if (connection) {
-      const { accounts } = connection;
-      await dispatch('initWallet', { accounts, method });
+      if (isLogin) {
+        await dispatch('initWalletAndLogin', connection);
+      } else {
+        await dispatch('initWallet', connection);
+      }
       if (getters.walletIsMatchedSession) {
         dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
       }
