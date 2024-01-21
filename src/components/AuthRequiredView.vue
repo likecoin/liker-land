@@ -46,9 +46,10 @@
 
 <script>
 import walletMixin from '~/mixins/wallet';
+import walletLoginMixin from '~/mixins/wallet-login';
 
 export default {
-  mixins: [walletMixin],
+  mixins: [walletMixin, walletLoginMixin],
   props: {
     loginLabel: {
       type: String,
@@ -70,7 +71,11 @@ export default {
   methods: {
     async onClickLogin() {
       this.$emit('click-login');
-      await this.connectWallet();
+      if (this.hasConnectedWallet) {
+        await this.initIfNecessary({ isLogin: true });
+      } else {
+        await this.connectWallet();
+      }
       this.$emit('login');
     },
   },
