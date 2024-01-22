@@ -19,16 +19,28 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getHomeRoute']),
+    ...mapGetters(['getHomeRoute', 'walletEmail', 'walletEmailUnverified']),
   },
   async mounted() {
     const { error, method, code } = this.$route.query;
     if (method && code) {
       try {
-        await this.handleConnectorRedirect({
+        const { user } = await this.handleConnectorRedirect({
           method,
           params: { code },
         });
+        if (
+          user?.primary_email &&
+          !this.walletEmail &&
+          !this.walletEmailUnverified
+        ) {
+          try {
+            await this.walletUpdateEmail({ email: user?.primary_email });
+          } catch (error) {
+            console.error(error);
+            // ignore
+          }
+        }
         let postAuthRoute = this.localeLocation(this.getHomeRoute);
         if (window.sessionStorage) {
           const storedRoute = window.sessionStorage.getItem(
@@ -68,7 +80,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['handleConnectorRedirect']),
+    ...mapActions(['handleConnectorRedirect', 'walletUpdateEmail']),
   },
 };
 </script>

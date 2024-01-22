@@ -388,11 +388,12 @@ const actions = {
         await dispatch('initWalletAndLogin', connection);
       } else {
         await dispatch('initWallet', connection);
-      }
-      if (getters.walletIsMatchedSession) {
-        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+        if (getters.walletIsMatchedSession) {
+          dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+        }
       }
     }
+    return connection;
   },
 
   async openConnectWalletModal(
