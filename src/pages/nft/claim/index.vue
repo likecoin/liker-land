@@ -560,9 +560,22 @@ export default {
             wallet: this.claimingAddress,
           }
         );
-        await this.claimPromise;
+        const { data } = await this.claimPromise;
         this.claimPromise = undefined;
-        this.state = NFT_CLAIM_STATE.CLAIMED;
+        this.nftId = data.nftId;
+        if (data.nftId) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-class-classId-nftId',
+              params: {
+                classId: this.classId,
+                nftId: data.nftId,
+              },
+            })
+          );
+        } else {
+          this.state = NFT_CLAIM_STATE.CLAIMED;
+        }
         logTrackerEvent(
           this,
           'NFT',
@@ -662,6 +675,7 @@ export default {
         );
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
+        this.nftId = data.nftId;
         if (data.nftId) {
           this.$router.push(
             this.localeLocation({
