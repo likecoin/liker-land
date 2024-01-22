@@ -1,6 +1,6 @@
 <template>
   <main class="redirect-page">
-    <div class="my-48">
+    <div class="flex flex-col items-center my-48">
       <h1 class="text-24">{{ $t('RedirectPage.title') }}</h1>
       <LcLoadingIndicator class="text-like-cyan mx-auto" />
     </div>
