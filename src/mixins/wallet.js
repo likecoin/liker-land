@@ -84,20 +84,13 @@ export default {
       'walletFetchTotalSales',
       'walletFetchTotalResales',
     ]),
-    async navigateToMyDashboard() {
-      if (!this.getAddress) {
-        const isConnected = await this.connectWallet();
-        if (isConnected) {
-          this.navigateToMyDashboard();
-        }
-      } else {
-        this.$router.push(
-          this.localeLocation({
-            name: 'feed',
-            query: { view: 'town' },
-          })
-        );
-      }
+    navigateToMyDashboard() {
+      this.$router.push(
+        this.localeLocation({
+          name: 'feed',
+          query: { view: 'town', login: '1' },
+        })
+      );
     },
     navigateToSettings() {
       window.open(
