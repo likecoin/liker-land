@@ -68,6 +68,12 @@ export default {
       default: false,
     },
   },
+  mounted() {
+    const { login } = this.$route.query;
+    if (!this.walletIsMatchedSession && login) {
+      this.onClickLogin();
+    }
+  },
   methods: {
     async onClickLogin() {
       this.$emit('click-login');
