@@ -73,9 +73,10 @@
           :text="$t('nft_collection_label')"
         />
         <Label preset="h4" :class="titleStyle" :text="collectionName" />
-        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
+        <!-- <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
           {{ collectionDescription }}
-        </p>
+        </p> -->
+        <Markdown :md-string="collectionDescription" />
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
           <client-only>
             <li>
