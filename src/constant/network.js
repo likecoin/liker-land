@@ -38,7 +38,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     'metamask-leap',
     'walletconnect-v2',
   ],
-  keplrInstallCTAPreset: 'fancy-banner',
+  keplrInstallCTAPreset: 'origin',
   likerLandAppWCBridge: 'https://wc-bridge-1.like.co',
   walletConnectProjectId: 'e110ac49451fee41d5bcda1b0dfdb94e',
   walletConnectMetadata: {
