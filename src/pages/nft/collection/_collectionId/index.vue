@@ -206,6 +206,17 @@ export default {
         }
       });
     }
+    logPurchaseFlowEvent(this, 'view_item', {
+      items: [
+        {
+          name: this.collectionName,
+          collectionId: this.collectionId,
+          price: this.collectionPrice,
+        },
+      ],
+      price: this.collectionPrice,
+      currency: 'USD',
+    });
   },
   methods: {
     parseNFTMetadataURL,
@@ -226,7 +237,7 @@ export default {
         const purchaseEventParams = {
           items: [
             {
-              name: this.NFTName,
+              name: this.collectionName,
               price: this.collectionPrice,
               collection: this.collectionId,
             },
