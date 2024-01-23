@@ -124,7 +124,7 @@ export default {
       return this.isCollector && this.view !== 'created';
     },
     isPotentialCollector() {
-      return this.isCollectable && !this.isCollector;
+      return this.price && this.isCollectable && !this.isCollector;
     },
     shouldShowControlBar() {
       return (
