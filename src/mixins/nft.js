@@ -328,7 +328,7 @@ export default {
         : '-';
     },
     nftPaymentPriceInUSD() {
-      return this.paymentInfo?.fiatPrice;
+      return this.paymentInfo?.fiatPrice || undefined;
     },
     // alias of NFTPrice
     NFTPriceUSD() {

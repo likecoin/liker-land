@@ -90,6 +90,7 @@
             <ButtonV2
               preset="secondary"
               :text="priceLabel"
+              :is-disabled="!stock"
               @click="$emit('click-collect', nftValue)"
             >
               <template #prepend>
@@ -162,6 +163,9 @@ export default {
     },
     dynamicCovers() {
       return this.editionConfig?.dynamicCovers || [];
+    },
+    stock() {
+      return this.editionConfig?.stock || 0;
     },
     hasDynamicCovers() {
       return this.dynamicCovers.length > 0;
