@@ -711,7 +711,7 @@ export default {
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.fetchNFTBookInfoByClassId(this.classId).catch();
-        this.fetchNFTBookPaymentPriceInfo();
+        this.lazyFetchNFTBookAllPaymentPriceInfo();
         this.fetchRelatedNFTCollection({ type: 'book' });
       }
       const blockingPromises = [this.fetchISCNMetadata()];
@@ -981,6 +981,7 @@ export default {
           const { url } = await this.$axios.$post(link, {
             gaClientId,
             giftInfo,
+            coupon: this.$route.query.coupon,
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
@@ -1060,7 +1061,6 @@ export default {
           price_index: selectedValue,
         },
       });
-      await this.lazyFetchNFTBookPaymentPriceInfo();
       logTrackerEvent(
         this,
         'NFT',

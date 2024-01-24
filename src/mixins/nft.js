@@ -401,12 +401,15 @@ export default {
               description =
                 description[locale] || description[defaultLocale] || '';
             }
-            let priceLabel = formatNumberWithUSD(edition.price);
+            const price =
+              this.getNFTClassPaymentPriceById(this.classId, index)
+                ?.fiatPrice || edition.price;
+            let priceLabel = formatNumberWithUSD(price);
             // TODO: support more currency
             if (currency === 'HKD') {
               const USD_TO_HKD_RATIO = 7.8;
               priceLabel = formatNumberWithUnit(
-                Number((edition.price * USD_TO_HKD_RATIO).toFixed(1)),
+                Number((price * USD_TO_HKD_RATIO).toFixed(1)),
                 'HKD'
               );
             }
@@ -423,7 +426,7 @@ export default {
               name,
               description,
               priceLabel,
-              price: edition.price,
+              price,
               value: index,
               stock,
               style,
@@ -786,6 +789,7 @@ export default {
         this.fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
+          coupon: this.$route.query.coupon,
         })
       );
     },
@@ -794,7 +798,22 @@ export default {
         this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
+          coupon: this.$route.query.coupon,
         })
+      );
+    },
+    async lazyFetchNFTBookAllPaymentPriceInfo() {
+      const prices = this.getNFTBookStorePricesByClassId(this.classId);
+      await Promise.all(
+        prices.map((_, index) =>
+          catchAxiosError(
+            this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
+              classId: this.classId,
+              priceIndex: index,
+              coupon: this.$route.query.coupon,
+            })
+          )
+        )
       );
     },
     async fetchRelatedNFTCollection({ type } = {}) {
@@ -1160,14 +1179,25 @@ export default {
     },
     async collectNFTWithStripe(classId, { memo = '' } = {}) {
       if (this.nftIsNFTBook) {
+        const gaClientId = await getGaClientId(this);
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
           platform: this.platform,
+        });
+        const { url } = await this.$axios.$post(link, {
+          gaClientId,
+          coupon: this.$route.query.coupon,
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
+          email: this.walletEmail,
         });
+        if (url) {
+          window.location.href = url;
+        } else {
+          throw new Error('Failed to get purchase link');
+        }
         window.open(link, '_blank', 'noopener');
       } else {
         try {
@@ -1175,6 +1205,7 @@ export default {
           const body = {
             memo,
             gaClientId,
+            coupon: this.$route.query.coupon,
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
