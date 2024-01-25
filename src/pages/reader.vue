@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 flex flex-col justify-center items-center">
+  <div class="fixed inset-0 flex flex-col items-center justify-center">
     <ProgressIndicator v-if="isLoading" />
     <Component
       :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
@@ -38,13 +38,8 @@ export default {
       return this.$route.query.classId;
     },
     fileSrc() {
-      const { src } = this.$route.query;
-      // TODO: check src exists in ISCN
-      // if (src && this.iscnContentUrls.find(url => url === src)) {
-      if (src) {
-        return src;
-      }
-      return this.iscnContentUrls.find(url => url.includes('pdf'));
+      const { format: type } = this.$route.query;
+      return this.iscnContentUrls.find(url => url.includes(type));
     },
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);

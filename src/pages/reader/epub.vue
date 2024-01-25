@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between items-center">
+    <div class="flex items-center justify-between">
       <div class="grow" />
       <select
         v-model="selectedChapter"
@@ -15,7 +15,7 @@
           {{ chapter.label }}
         </option>
       </select>
-      <div class="flex grow justify-end mr-8 gap-4">
+      <div class="flex justify-end gap-4 mr-8 grow">
         <button class="my-[10px]" @click="onClickSearchButton">
           <IconSearch class="w-20 h-20" />
         </button>
