@@ -13,6 +13,7 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'AuthRedirect',
+  layout: 'empty',
   head() {
     return {
       title: this.$t('RedirectPage.title'),
