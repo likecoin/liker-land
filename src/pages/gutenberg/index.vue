@@ -246,6 +246,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
@@ -319,6 +320,7 @@
           <a
             href="https://like.co"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="LikeCoin"
             >{{ $t('gutenberg_external_link_likecoin') }}</a
@@ -326,6 +328,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
@@ -333,6 +336,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="ISCN"
             >{{ $t('gutenberg_external_link_ISCN') }}</a
@@ -340,6 +344,7 @@
           <a
             href="https://liker.land"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="LikerLand"
             >{{ $t('gutenberg_external_link_likerland') }}</a
@@ -377,6 +382,7 @@
           <a
             href="https://like.co"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="LikeCoin"
             >{{ $t('gutenberg_external_link_likecoin') }}</a
@@ -384,6 +390,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
@@ -391,6 +398,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="ISCN"
             >{{ $t('gutenberg_external_link_ISCN') }}</a
@@ -398,6 +406,7 @@
           <a
             href="https://liker.land"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="LikerLand"
             >{{ $t('gutenberg_external_link_likerland') }}</a
@@ -540,6 +549,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
@@ -547,6 +557,7 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="ISCN"
             >{{ $t('gutenberg_external_link_ISCN') }}</a
@@ -554,6 +565,7 @@
           <a
             href="https://liker.land/store"
             target="_blank"
+            rel="noopener"
             class="underline"
             place="bookstore"
             >{{ $t('gutenberg_external_link_bookstore') }}</a
@@ -597,6 +609,7 @@
         <a
           href="https://docs.like.co/general-guides/decentralized-publishing"
           target="_blank"
+          rel="noopener"
           class="underline"
           place="decentralized"
           >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
