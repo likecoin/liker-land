@@ -280,7 +280,7 @@
     "WordPress": "WordPress"
   },
   "goBack": "Back",
-  "gutenberg_external_link_bookStore": "digital ebook stores",
+  "gutenberg_external_link_bookstore": "digital ebook stores",
   "gutenberg_external_link_decentralized_publishing": "decentralized publishing",
   "gutenberg_external_link_gutenberg": "Project Gutenberg",
   "gutenberg_external_link_ISCN": "ISCN (International Standard Content Number)",
@@ -309,7 +309,7 @@
   "gutenberg_intro_title": "Project Gutenberg\naudiobooks are on LikeCoin chain",
   "gutenberg_project_description": "In 2023 Sep, the project between {MIT} turns 5,000 ebooks in public domains into audiobooks with AI’s assistance. This collaborative effort opened up a treasure trove of literature in a widely consumable format, thereby extending the reach and impact of shared knowledge. ",
   "gutenberg_project_title": "AI-Enhanced Audiobooks Unlock Global Knowledge",
-  "gutenberg_publish_description": "Publishing a book on the blockchain, was once technically challenging, has been greatly simplified. This innovation mirrors the traditional book publishing process but with a unique twist for the digital age. The first step involves registering the book's metadata, akin to obtaining an ISBN in conventional publishing, but in this case on the blockchain. Next, instead of printing physical copies, books are minted as NFTs. Distribution also takes a modern turn, with books being made available in {bookStore} as opposed to traditional brick-and-mortar bookstores.",
+  "gutenberg_publish_description": "Publishing a book on the blockchain, was once technically challenging, has been greatly simplified. This innovation mirrors the traditional book publishing process but with a unique twist for the digital age. The first step involves registering the book's metadata, akin to obtaining an ISBN in conventional publishing, but in this case on the blockchain. Next, instead of printing physical copies, books are minted as NFTs. Distribution also takes a modern turn, with books being made available in {bookstore} as opposed to traditional brick-and-mortar bookstores.",
   "gutenberg_publish_subtitle": "From the angle of traditional publishing industry",
   "gutenberg_publish_title": "What is Decentralized Publishing",
   "gutenberg_sign_button": "Sign Up",

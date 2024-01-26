@@ -119,7 +119,7 @@
             href="https://www.gutenberg.org/"
             target="_blank"
             rel="noopener"
-            class="font-[600]"
+            class="underline"
             place="ProjectGutenberg"
             >{{ $t('gutenberg_external_link_gutenberg') }}</a
           >
@@ -193,7 +193,7 @@
             href="https://marhamilresearch4.blob.core.windows.net/gutenberg-public/Website/index.html"
             target="_blank"
             rel="noopener"
-            class="font-[600]"
+            class="underline"
             place="MIT"
             >{{ $t('gutenberg_external_link_MIT') }}</a
           >
@@ -239,14 +239,14 @@
             href="https://www.gutenberg.org/"
             target="_blank"
             rel="noopener"
-            class="font-[600]"
+            class="underline"
             place="ProjectGutenberg"
             >{{ $t('gutenberg_external_link_gutenberg') }}</a
           >
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
           >
@@ -319,28 +319,28 @@
           <a
             href="https://like.co"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="LikeCoin"
             >{{ $t('gutenberg_external_link_likecoin') }}</a
           >
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
           >
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="ISCN"
             >{{ $t('gutenberg_external_link_ISCN') }}</a
           >
           <a
             href="https://liker.land"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="LikerLand"
             >{{ $t('gutenberg_external_link_likerland') }}</a
           >
@@ -348,7 +348,7 @@
             href="https://www.gutenberg.org/"
             target="_blank"
             rel="noopener"
-            class="font-[600]"
+            class="underline"
             place="ProjectGutenberg"
             >{{ $t('gutenberg_external_link_gutenberg') }}</a
           >
@@ -377,28 +377,28 @@
           <a
             href="https://like.co"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="LikeCoin"
             >{{ $t('gutenberg_external_link_likecoin') }}</a
           >
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
           >
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="ISCN"
             >{{ $t('gutenberg_external_link_ISCN') }}</a
           >
           <a
             href="https://liker.land"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="LikerLand"
             >{{ $t('gutenberg_external_link_likerland') }}</a
           >
@@ -406,7 +406,7 @@
             href="https://www.gutenberg.org/"
             target="_blank"
             rel="noopener"
-            class="font-[600]"
+            class="underline"
             place="ProjectGutenberg"
             >{{ $t('gutenberg_external_link_gutenberg') }}</a
           >
@@ -540,23 +540,23 @@
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="decentralized"
             >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
           >
           <a
             href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
             target="_blank"
-            class="font-[600]"
+            class="underline"
             place="ISCN"
             >{{ $t('gutenberg_external_link_ISCN') }}</a
           >
           <a
             href="https://liker.land/store"
             target="_blank"
-            class="font-[600]"
-            place="bookStore"
-            >{{ $t('gutenberg_external_link_bookStore') }}</a
+            class="underline"
+            place="bookstore"
+            >{{ $t('gutenberg_external_link_bookstore') }}</a
           >
         </i18n>
       </div>
@@ -597,7 +597,7 @@
         <a
           href="https://docs.like.co/general-guides/decentralized-publishing"
           target="_blank"
-          class="font-[600]"
+          class="underline"
           place="decentralized"
           >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
         >
