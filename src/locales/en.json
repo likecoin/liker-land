@@ -319,6 +319,8 @@
   "gutenbergFreeAudioBooksPage_og_title": "Download Free Audio Books",
   "gutenbergPage_og_description": "5,000 Project Gutenberg audiobooks are on LikeCoin chain",
   "gutenbergPage_og_title": "Project Gutenberg",
+  "gutenbergFreeAudioBooksPage_description": "All books are prepared by {ProjectGutenberg} which are in public domain.\nThe list is the book directory on {LikeCoin} blockchain.  User can collect the NFT book and read on Liker Land {bookstore}.",
+  "gutenbergFreeAudioBooksPage_button_back": "Back to Gutenberg project page",
   "header_button_connect_to_wallet": "Login",
   "header_button_try_collect": "Enter Store",
   "header_menu_LIKE": "LIKE",

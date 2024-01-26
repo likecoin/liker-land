@@ -319,6 +319,8 @@
   "gutenbergFreeAudioBooksPage_og_title": "下載免費電子書",
   "gutenbergPage_og_description": "古騰堡計劃、微軟和麻省理工學院的合作，將 5,000 本公有領域的著作製作成有聲書，並由 LikeCoin 去中心化社群保存。這個區塊鏈出版革命讓公有知識更易普及，同時促進知識的共享和保護。探索分散式出版的新時代。",
   "gutenbergPage_og_title": "本古騰堡計劃",
+  "gutenbergFreeAudioBooksPage_description": "所有書籍都是由 {ProjectGutenberg} 計劃準備的，這些書籍都屬於公有領域。\n該列表位於 {LikeCoin} 區塊鏈上的書籍目錄中。用戶可以收集這些NFT書籍，並在 Liker Land {bookstore}上閱讀。",
+  "gutenbergFreeAudioBooksPage_button_back": "返回古騰堡計畫頁面",
   "header_button_connect_to_wallet": "登入",
   "header_button_try_collect": "瀏覽書店",
   "header_menu_LIKE": "LIKE",

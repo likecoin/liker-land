@@ -11,6 +11,55 @@
       align="center"
       :text="$t('gutenberg_dialog_title')"
     />
+    <i18n
+      :class="[
+        'text-like-green',
+        'text-left',
+        'whitespace-pre-line',
+        'text-center',
+        'mb-[24px]',
+      ]"
+      tag="div"
+      path="gutenbergFreeAudioBooksPage_description"
+    >
+      <a
+        href="https://www.gutenberg.org/"
+        target="_blank"
+        rel="noopener"
+        class="underline"
+        place="ProjectGutenberg"
+        >{{ $t('gutenberg_external_link_gutenberg') }}</a
+      >
+      <a
+        href="https://like.co"
+        target="_blank"
+        rel="noopener"
+        class="underline"
+        place="LikeCoin"
+        >{{ $t('gutenberg_external_link_likecoin') }}</a
+      >
+      <a
+        href="https://liker.land/store"
+        target="_blank"
+        rel="noopener"
+        class="underline"
+        place="bookstore"
+        >{{ $t('gutenberg_external_link_bookstore') }}</a
+      >
+    </i18n>
+
+    <div class="flex justify-center mb-[24px]">
+      <ButtonV2
+        preset="plain"
+        class="text-medium-gray"
+        :text="$t('gutenbergFreeAudioBooksPage_button_back')"
+        @click="handleGoToPGPage"
+      >
+        <template #prepend>
+          <IconArrowLeft class="w-[20px]" />
+        </template>
+      </ButtonV2>
+    </div>
 
     <div
       v-if="!csvData.length"
@@ -22,7 +71,6 @@
         'gap-[24px]',
       ]"
     >
-      <Label :text="$t('nft_details_page_label_loading')" align="center" />
       <ProgressIndicator />
     </div>
     <table
@@ -187,6 +235,14 @@ export default {
 
     handleClickRow(classId) {
       logTrackerEvent(this, 'Gutenberg', 'clickDownload', classId, 1);
+    },
+    handleGoToPGPage() {
+      logTrackerEvent(this, 'Gutenberg', 'clickBackToPG', '', 1);
+      this.$router.push(
+        this.localeLocation({
+          name: 'gutenberg',
+        })
+      );
     },
   },
 };
