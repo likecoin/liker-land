@@ -141,13 +141,18 @@ export default {
         height: '100%',
         spread: 'always',
       });
-      this.rendition.display();
+      const cfi = this.resumeFromLocalStorage();
+      this.rendition.display(cfi);
       this.rendition.on('rendered', (cfiRange, contents) => {
         const path = this.rendition.currentLocation().start.href;
         const pathArr = path.split('/');
         this.selectedChapter = pathArr.pop();
         this.dirPath = pathArr.join('/');
         this.contents = contents;
+      });
+
+      this.rendition.on('relocated', location => {
+        this.saveToLocalStorage(location.start.cfi);
       });
 
       const keyListener = e => {
@@ -224,6 +229,31 @@ export default {
       this.searchResults.forEach(result => {
         this.rendition.annotations.highlight(result.cfi);
       });
+    },
+    saveToLocalStorage(currentCfi) {
+      if (window.localStorage && currentCfi) {
+        window.localStorage.setItem(
+          `epub-reader-${this.fileSrc}`,
+          JSON.stringify({ currentCfi: currentCfi.toString() })
+        );
+      }
+    },
+    resumeFromLocalStorage() {
+      if (window.localStorage) {
+        const epubData = window.localStorage.getItem(
+          `epub-reader-${this.fileSrc}`
+        );
+        if (epubData) {
+          try {
+            const { currentCfi } = JSON.parse(epubData);
+            return currentCfi;
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
+        }
+      }
+      return undefined;
     },
     async directToSelectedSearchResult() {
       if (!this.searchResults.length) return;
