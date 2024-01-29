@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div class="flex justify-between items-center">
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 flex flex-col justify-center items-center"
+    >
+      <ProgressIndicator />
+    </div>
+    <div v-else class="flex justify-between items-center">
       <div class="grow" />
       <select
         v-model="selectedChapter"
@@ -95,6 +101,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       toc: [],
       dirPath: '',
       selectedChapter: '',
@@ -116,10 +123,16 @@ export default {
     this.initRendition();
   },
   methods: {
-    initRendition() {
+    async initRendition() {
+      this.isLoading = true;
       const encodedUrl = encodeURIComponent(this.fileSrc);
       const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
-      this.book = Epub(corsUrl);
+      const buffer = await this.$axios.$get(corsUrl, {
+        responseType: 'arraybuffer',
+      });
+      this.book = Epub(buffer);
+      await this.book.ready;
+      this.isLoading = false;
       this.book.loaded.navigation.then(
         navigation => (this.toc = navigation.toc)
       );
