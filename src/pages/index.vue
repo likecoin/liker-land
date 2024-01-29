@@ -2688,7 +2688,7 @@ export default {
       logTrackerEvent(this, 'IndexPage', 'IndexHeroTryCollectClick', '', 1);
     },
     handlePublishStoryButtonClick(e) {
-      const res = this.showCrisp(
+      const res = this.openCrisp(
         'Hi I would like to start publishing books on LikerLand'
       );
       if (res) e.preventDefault();
