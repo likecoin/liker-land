@@ -2,9 +2,9 @@
 export default {
   fetch({ redirect, params, query, localeLocation }) {
     redirect(
-      302,
+      301,
       localeLocation({
-        name: 'index',
+        name: 'about-writing-nft',
         params,
         query,
       })
