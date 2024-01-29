@@ -11,7 +11,7 @@ export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
     if (options.isBootAtMounted) this.hideCrisp();
   },
   methods: {
-    showCrisp() {
+    showCrisp(prefillText = '') {
       if (!this.$crisp) return false;
       try {
         if (this.$crisp.is('chat:hidden')) {
@@ -19,6 +19,9 @@ export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
           const { $crisp } = this;
           if (displayName) $crisp.push(['set', 'user:nickname', [displayName]]);
           this.$crisp.push(['do', 'chat:show']);
+          if (prefillText) {
+            this.$crisp.push(['set', 'message:text', [prefillText]]);
+          }
           return true;
         }
       } catch (err) {
