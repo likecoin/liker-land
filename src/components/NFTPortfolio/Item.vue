@@ -54,7 +54,7 @@ export default {
     },
     portfolioWallet: {
       type: String,
-      required: true,
+      default: undefined,
     },
     nftId: {
       type: String,

@@ -1,7 +1,7 @@
 <template>
   <section class="bg-like-green rounded-[24px] overflow-hidden py-[2rem]">
     <div
-      v-if="normalizedList.length"
+      v-if="normalizedList.length && shouldShowIscnOwner"
       class="flex items-center justify-between px-[2rem]"
     >
       <NFTMessageIdentity
@@ -123,6 +123,10 @@ export default {
     displayItemCount: {
       type: [Number, String],
       default: 5,
+    },
+    shouldShowIscnOwner: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
