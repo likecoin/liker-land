@@ -84,6 +84,7 @@
 <script>
 import Epub, { EpubCFI } from 'epubjs';
 import { saveAs } from 'file-saver';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -124,54 +125,65 @@ export default {
   },
   methods: {
     async initRendition() {
-      this.isLoading = true;
-      const encodedUrl = encodeURIComponent(this.fileSrc);
-      const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
-      const buffer = await this.$axios.$get(corsUrl, {
-        responseType: 'arraybuffer',
-      });
-      this.book = Epub(buffer);
-      await this.book.ready;
-      this.isLoading = false;
-      this.book.loaded.navigation.then(
-        navigation => (this.toc = navigation.toc)
-      );
-      this.rendition = this.book.renderTo('viewer', {
-        width: '100%',
-        height: '100%',
-        spread: 'always',
-      });
-      const cfi = this.resumeFromLocalStorage();
-      this.rendition.display(cfi);
-      this.rendition.on('rendered', (cfiRange, contents) => {
-        const path = this.rendition.currentLocation().start.href;
-        const pathArr = path.split('/');
-        this.selectedChapter = pathArr.pop();
-        this.dirPath = pathArr.join('/');
-        this.contents = contents;
-      });
+      try {
+        this.isLoading = true;
+        const encodedUrl = encodeURIComponent(this.fileSrc);
+        const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
+        const buffer = await this.$axios.$get(corsUrl, {
+          responseType: 'arraybuffer',
+        });
+        this.book = Epub(buffer);
+        await this.book.ready;
+        this.isLoading = false;
+        this.book.loaded.navigation.then(
+          navigation => (this.toc = navigation.toc)
+        );
+        this.rendition = this.book.renderTo('viewer', {
+          width: '100%',
+          height: '100%',
+          spread: 'always',
+        });
+        const cfi = this.resumeFromLocalStorage();
+        this.rendition.display(cfi);
+        this.rendition.on('rendered', (cfiRange, contents) => {
+          const path = this.rendition.currentLocation().start.href;
+          const pathArr = path.split('/');
+          this.selectedChapter = pathArr.pop();
+          this.dirPath = pathArr.join('/');
+          this.contents = contents;
+        });
 
-      this.rendition.on('relocated', location => {
-        this.saveToLocalStorage(location.start.cfi);
-      });
+        this.rendition.on('relocated', location => {
+          this.saveToLocalStorage(location.start.cfi);
+        });
 
-      const keyListener = e => {
-        const inputs = ['input', 'select', 'button', 'textarea'];
-        if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
-          return;
-        }
+        const keyListener = e => {
+          const inputs = ['input', 'select', 'button', 'textarea'];
+          if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
+            return;
+          }
 
-        // Left Key
-        if ((e.keyCode || e.which) === 37) {
-          this.rendition.prev();
-        }
-        // Right Key
-        if ((e.keyCode || e.which) === 39) {
-          this.rendition.next();
-        }
-      };
-      this.rendition.on('keydown', keyListener);
-      document.addEventListener('keydown', keyListener, false);
+          // Left Key
+          if ((e.keyCode || e.which) === 37) {
+            this.rendition.prev();
+          }
+          // Right Key
+          if ((e.keyCode || e.which) === 39) {
+            this.rendition.next();
+          }
+        };
+        this.rendition.on('keydown', keyListener);
+        document.addEventListener('keydown', keyListener, false);
+      } catch (err) {
+        const errData = err.response || err;
+        const errMessage = errData.data || errData.message || errData;
+        console.error(errMessage); // eslint-disable-line no-console
+        logTrackerEvent(this, 'ReaderEpub', 'ReaderEpubError', errMessage, 1);
+        this.$nuxt.error({
+          statusCode: errData.status || 400,
+          message: errMessage,
+        });
+      }
     },
     onChangeChapter() {
       const chapter = this.dirPath
