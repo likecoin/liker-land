@@ -34,27 +34,6 @@ export async function setLoggerUser(vue, { wallet, method }) {
   }
 }
 
-export function getGaClientId(vue) {
-  if (vue?.$gtag && process.env.GA_TRACKING_ID) {
-    const promise = new Promise(resolve => {
-      try {
-        vue.$gtag.query('get', process.env.GA_TRACKING_ID, 'client_id', id =>
-          resolve(id)
-        );
-      } catch (err) {
-        console.error(err);
-        resolve(undefined);
-      }
-    });
-    // Assume no GA response after 100ms
-    const timeout = new Promise(resolve =>
-      setTimeout(() => resolve(undefined), 100)
-    );
-    return Promise.race([promise, timeout]);
-  }
-  return new Promise(resolve => resolve(undefined));
-}
-
 export function updateSentryUser(vue, { user, displayName }) {
   if (user) {
     const opt = {

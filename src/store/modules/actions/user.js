@@ -51,6 +51,14 @@ export function setUserCivicLiker({ commit }, { civicLikerVersion = 1 } = {}) {
   });
 }
 
+export function setGaClientId({ commit }, gaClientId) {
+  commit(types.USER_SET_GA_CLIENT_ID, gaClientId);
+}
+
+export function setGaSessionId({ commit }, gaSessionId) {
+  commit(types.USER_SET_GA_SESSION_ID, gaSessionId);
+}
+
 export async function updatePreferences(
   { dispatch, getters },
   { locale } = {}
