@@ -216,8 +216,8 @@
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import MagicGrid from 'magic-grid';
-import { logTrackerEvent } from '~/util/EventLogger';
 
+import { logTrackerEvent } from '~/util/EventLogger';
 import { NFT_CLASS_LIST_SORTING, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
