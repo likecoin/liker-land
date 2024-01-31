@@ -130,13 +130,16 @@
       <ul
         ref="portfolioGrid"
         :class="[
-          'self-stretch -mx-[12px] desktop:w-[668px] transition-all relative',
+          'self-stretch -mx-[12px] desktop:w-[644px] transition-all relative',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
         ]"
       >
-        <li v-if="!portfolioItemsTrimmed.length" class="w-full mx-[12px]">
+        <li
+          v-if="!portfolioItemsTrimmed.length"
+          class="flex flex-col w-full mx-[12px] gap-[24px]"
+        >
           <NFTPortfolioEmpty :preset="portfolioTab" />
         </li>
         <li
@@ -170,6 +173,31 @@
       </div>
 
       <slot name="grid-append" />
+
+      <div
+        v-if="!portfolioItemsTrimmed.length"
+        class="flex flex-col gap-[12px] max-w-[644px]"
+      >
+        <Label
+          preset="h5"
+          class="text-dark-gray"
+          align="center"
+          :text="$t('nft_recommendation_title')"
+        />
+        <NFTPageRecommendation
+          :iscn-owner="getAddress"
+          :should-show-follow-button="false"
+          :should-show-iscn-owner="false"
+          :recommended-list="[]"
+          :is-book-nft="true"
+          :is-loading="isRecommendationLoading"
+          @item-click="handleRecommendedItemClick"
+          @item-collect="handleRecommendedItemCollect"
+          @slide-next.once="handleRecommendationSlideNext"
+          @slide-prev.once="handleRecommendationSlidePrev"
+          @slider-move.once="handleRecommendationSliderMove"
+        />
+      </div>
     </div>
 
     <template v-if="!isLoadingPortfolioItems">
@@ -189,10 +217,12 @@ import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import MagicGrid from 'magic-grid';
 
+import { logTrackerEvent } from '~/util/EventLogger';
 import { NFT_CLASS_LIST_SORTING, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
+import nftMixin from '~/mixins/nft';
 
 const portfolioGridDebounceArgs = [
   60,
@@ -210,6 +240,7 @@ const SELECTED_FILTER = {
 };
 
 export default {
+  mixins: [nftMixin],
   props: {
     isNarrow: {
       type: Boolean,
@@ -417,13 +448,17 @@ export default {
     $route() {
       this.$nextTick(this.setupPortfolioGrid);
     },
-    portfolioItemsTrimmed(items, prevItems) {
+    async portfolioItemsTrimmed(items, prevItems) {
       if (this.isLoadingPortfolioItems) return;
 
       if (items.length === prevItems.length && this.portfolioGridController) {
         this.$nextTick(this.updatePortfolioGrid);
       } else {
         this.$nextTick(this.setupPortfolioGrid);
+      }
+
+      if (!items.length) {
+        await this.fetchRecommendInfo();
       }
     },
     portfolioItemsSortingValue() {
@@ -565,6 +600,51 @@ export default {
     },
     handleItemCollect(classId) {
       this.$emit('item-collect', classId);
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_recommend_item_click',
+        classId,
+        1
+      );
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_recommend_item_collect',
+        classId,
+        1
+      );
+    },
+    handleRecommendationSlideNext() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_recommendation_clicked_next',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSlidePrev() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_recommendation_clicked_prev',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSliderMove() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_recommendation_moved_slider',
+        this.classId,
+        1
+      );
     },
   },
 };

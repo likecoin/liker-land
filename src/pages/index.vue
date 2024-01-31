@@ -1678,6 +1678,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import { CrispMixinFactory } from '~/mixins/crisp';
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
 import staticBookCover from '~/assets/images/index/nft-book-cover.jpg';
@@ -1697,10 +1698,12 @@ export default {
   resizeListener: null,
   heroSectionTimeline: null,
   heroSectionScrollAnimation: null,
+  mixins: [CrispMixinFactory()],
   data() {
     return {
       isDesktop: true,
       hasFinishedHeroSectionScrollAnimation: false,
+      crispWebsiteId: '',
     };
   },
   head() {
@@ -1734,9 +1737,15 @@ export default {
       return this.nftClassIdListInTrending.slice(0, 5);
     },
     publishStoryURL() {
-      return this.$i18n.locale === 'zh-Hant'
-        ? 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm'
-        : '';
+      if (this.$i18n.locale === 'zh-Hant') {
+        return 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm';
+      }
+      if (this.crispWebsiteId) {
+        return `https://go.crisp.chat/chat/embed/?website_id=${
+          this.crispWebsiteId
+        }`;
+      }
+      return '';
     },
     heroSectionStyle() {
       return {
@@ -1962,6 +1971,8 @@ export default {
     },
   },
   mounted() {
+    // populate crisp on mount to avoid ssr issues
+    if (window.CRISP_WEBSITE_ID) this.crispWebsiteId = window.CRISP_WEBSITE_ID;
     this.$options.resizeListener = window.addEventListener(
       'resize',
       this.handleResize
@@ -2676,8 +2687,15 @@ export default {
     handleTryCollectButtonClickInHeroSection() {
       logTrackerEvent(this, 'IndexPage', 'IndexHeroTryCollectClick', '', 1);
     },
-    handlePublishStoryButtonClickInHeroSection() {
+    handlePublishStoryButtonClick(e) {
+      const res = this.openCrisp(
+        'Hi I would like to start publishing books on LikerLand'
+      );
+      if (res) e.preventDefault();
+    },
+    handlePublishStoryButtonClickInHeroSection(e) {
       logTrackerEvent(this, 'IndexPage', 'IndexHeroPublishStoryClick', '', 1);
+      this.handlePublishStoryButtonClick(e);
     },
     handleCollectForFreeButtonClickBelowHeroSection() {
       logTrackerEvent(
@@ -2748,7 +2766,7 @@ export default {
         1
       );
     },
-    handlePublishStoryButtonClickInNewCultureSection() {
+    handlePublishStoryButtonClickInNewCultureSection(e) {
       logTrackerEvent(
         this,
         'IndexPage',
@@ -2756,8 +2774,9 @@ export default {
         '',
         1
       );
+      this.handlePublishStoryButtonClick(e);
     },
-    handlePublishStoryButtonClickInAllStoriesMatterSection() {
+    handlePublishStoryButtonClickInAllStoriesMatterSection(e) {
       logTrackerEvent(
         this,
         'IndexPage',
@@ -2765,6 +2784,7 @@ export default {
         '',
         1
       );
+      this.handlePublishStoryButtonClick(e);
     },
     handleClickPrevTrendingNFT() {
       logTrackerEvent(this, 'IndexPage', 'IndexTrendingNFTClickPrev', '', 1);

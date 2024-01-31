@@ -25,11 +25,7 @@ import {
   getNFTBookPurchaseLink,
   postNFTBookLIKEPurchaseEndpoint,
 } from '~/util/api';
-import {
-  logTrackerEvent,
-  logPurchaseFlowEvent,
-  getGaClientId,
-} from '~/util/EventLogger';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
 import {
   NFT_INDEXER_LIMIT_MAX,
@@ -113,6 +109,8 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getGaClientId',
+      'getGaSessionId',
       'getUserInfoByAddress',
       'getISCNMetadataById',
       'getNFTClassFeaturedSetByAddress',
@@ -1179,7 +1177,8 @@ export default {
     },
     async collectNFTWithStripe(classId, { memo = '' } = {}) {
       if (this.nftIsNFTBook) {
-        const gaClientId = await getGaClientId(this);
+        const gaClientId = this.getGaClientId;
+        const gaSessionId = this.getGaSessionId;
         const link = getNFTBookPurchaseLink({
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
@@ -1187,6 +1186,7 @@ export default {
         });
         const { url } = await this.$axios.$post(link, {
           gaClientId,
+          gaSessionId,
           coupon: this.$route.query.coupon,
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
@@ -1198,13 +1198,14 @@ export default {
         } else {
           throw new Error('Failed to get purchase link');
         }
-        window.open(link, '_blank', 'noopener');
       } else {
         try {
-          const gaClientId = await getGaClientId(this);
+          const gaClientId = this.getGaClientId;
+          const gaSessionId = this.getGaSessionId;
           const body = {
             memo,
             gaClientId,
+            gaSessionId,
             coupon: this.$route.query.coupon,
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,

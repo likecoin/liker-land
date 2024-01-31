@@ -22,6 +22,10 @@ export default {
           'connect_wallet_start',
           1
         );
+        window.sessionStorage.setItem(
+          'USER_POST_AUTH_ROUTE',
+          this.$route.fullPath
+        );
         const connection = await this.openConnectWalletModal({
           language: this.$i18n.locale.split('-')[0],
           connectWalletTitle: this.$t('connect_wallet_title'),

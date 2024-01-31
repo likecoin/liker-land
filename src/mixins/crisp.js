@@ -26,6 +26,20 @@ export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
       }
       return false;
     },
+    openCrisp(prefillText = '') {
+      if (!this.$crisp) return false;
+      try {
+        this.showCrisp();
+        this.$crisp.push(['do', 'chat:open']);
+        if (prefillText) {
+          this.$crisp.push(['set', 'message:text', [prefillText]]);
+        }
+        return true;
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
+      }
+      return false;
+    },
     hideCrisp() {
       if (!this.$crisp) return;
       this.$crisp.push(['do', 'chat:hide']);

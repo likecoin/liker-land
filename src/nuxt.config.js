@@ -255,6 +255,8 @@ const nuxtConfig = {
           'www.facebook.com',
           'www.youtube.com',
           'https://newsletter.like.co',
+          'https://authcore.like.co',
+          'https://likecoin-integration-test.authcore.io',
         ],
         'connect-src': [
           "'self'",

@@ -20,7 +20,7 @@
     "@likecoin/iscn-js": "^0.6.9",
     "@likecoin/nuxt-google-optimize": "^0.5.3-like.11",
     "@likecoin/ui-vue": "^0.7.1",
-    "@likecoin/wallet-connector": "^0.25.3",
+    "@likecoin/wallet-connector": "^0.26.0",
     "@notionhq/client": "^2.2.13",
     "@nuxt/postcss8": "^1.1.3",
     "@nuxt/typescript-build": "^2.1.0",
