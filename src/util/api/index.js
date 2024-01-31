@@ -364,6 +364,7 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
   classId,
   collectionId,
   priceIndex,
+  coupon,
   gaClientId,
   gaSessionId,
   utmCampaign,
@@ -374,6 +375,7 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
   const qsPayload = {
     price_index: priceIndex,
     from: platform,
+    coupon,
     ga_client_id: gaClientId,
     ga_session_id: gaSessionId,
     utm_campaign: utmCampaign,
@@ -393,9 +395,11 @@ export const getNFTBookPaymentPrice = ({
   classId,
   collectionId,
   priceIndex,
+  coupon,
 }) => {
   const qsPayload = {
     price_index: priceIndex,
+    coupon,
   };
   return collectionId
     ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/price?${querystring.stringify(
@@ -502,6 +506,7 @@ export const getNFTBookStorePricesByClassId = classId =>
 export const getNFTBookPurchaseLink = ({
   classId,
   priceIndex,
+  coupon,
   collectionId,
   gaClientId,
   gaSessionId,
@@ -512,6 +517,7 @@ export const getNFTBookPurchaseLink = ({
 }) => {
   const qsPayload = {
     from: platform,
+    coupon,
     ga_client_id: gaClientId,
     ga_session_id: gaSessionId,
     utm_campaign: utmCampaign,

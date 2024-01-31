@@ -192,7 +192,7 @@ export default {
     } finally {
       this.isLoading = false;
     }
-
+    this.lazyFetchNFTCollectionPaymentPriceInfo();
     const { hash } = this.$route;
     if (hash) {
       this.$nextTick(() => {
@@ -258,6 +258,7 @@ export default {
           gaClientId,
           giftInfo,
           gaSessionId,
+          coupon: this.$route.query.coupon,
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
