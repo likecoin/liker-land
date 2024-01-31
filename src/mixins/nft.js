@@ -802,7 +802,7 @@ export default {
         })
       );
     },
-    async lazyFetchNFTBookAllPaymentPriceInfo() {
+    async lazyFetchNFTBookPaymentPriceInfoForAllEditions() {
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
       await Promise.all(
         prices.map((_, index) =>
