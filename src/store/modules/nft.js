@@ -59,11 +59,12 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO](
     state,
-    { classId, priceIndex, info }
+    { collectionId, classId, priceIndex, info }
   ) {
-    const key = Number.isInteger(priceIndex)
-      ? `${classId}_${priceIndex}`
-      : classId;
+    let key = collectionId || classId;
+    if (Number.isInteger(priceIndex)) {
+      key = `${classId}_${priceIndex}`;
+    }
     if (info) {
       Vue.set(state.paymentPriceByClassIdMap, key, info);
     } else {
@@ -825,12 +826,12 @@ const actions = {
   },
   async fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
     { commit },
-    { classId, priceIndex }
+    { classId, priceIndex, coupon }
   ) {
     const {
       data: { fiatPrice, LIKEPrice },
     } = await this.$api.get(
-      api.getNFTBookPaymentPrice({ classId, priceIndex })
+      api.getNFTBookPaymentPrice({ classId, priceIndex, coupon })
     );
     const info = { fiatPrice, LIKEPrice };
     commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
@@ -842,7 +843,7 @@ const actions = {
   },
   async lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
     { getters, dispatch },
-    { classId, priceIndex }
+    { classId, priceIndex, coupon }
   ) {
     let info = getters.getNFTClassPaymentPriceById(classId, priceIndex);
     if (!info) {
@@ -851,6 +852,7 @@ const actions = {
         {
           classId,
           priceIndex,
+          coupon,
         }
       );
     }
@@ -912,6 +914,35 @@ const actions = {
       );
     });
     return list;
+  },
+  async fetchNFTCollectionPaymentPriceInfoByCollectionId(
+    { commit },
+    { collectionId, coupon }
+  ) {
+    const {
+      data: { fiatPrice, LIKEPrice },
+    } = await this.$api.get(
+      api.getNFTBookPaymentPrice({ collectionId, coupon })
+    );
+    const info = { fiatPrice, LIKEPrice };
+    commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
+      collectionId,
+      info,
+    });
+    return info;
+  },
+  async lazyFetchNFTCollectionPaymentPriceInfoByCollectionId(
+    { getters, dispatch },
+    { collectionId, coupon }
+  ) {
+    let info = getters.getNFTClassPaymentPriceById(collectionId);
+    if (!info) {
+      info = await dispatch(
+        'fetchNFTCollectionPaymentPriceInfoByCollectionId',
+        { collectionId, coupon }
+      );
+    }
+    return info;
   },
   addNFTClassToShoppingCart({ commit, dispatch, getters }, { classId }) {
     if (getters.shoppingCartNFTClassList.length >= BATCH_COLLECT_MAX) {

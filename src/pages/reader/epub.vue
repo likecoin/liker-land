@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div class="flex items-center justify-between">
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 flex flex-col justify-center items-center"
+    >
+      <ProgressIndicator />
+    </div>
+    <div v-else class="flex items-center justify-between">
       <div class="grow" />
       <select
         v-model="selectedChapter"
@@ -78,6 +84,7 @@
 <script>
 import Epub, { EpubCFI } from 'epubjs';
 import { saveAs } from 'file-saver';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -95,6 +102,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       toc: [],
       dirPath: '',
       selectedChapter: '',
@@ -116,44 +124,66 @@ export default {
     this.initRendition();
   },
   methods: {
-    initRendition() {
-      const encodedUrl = encodeURIComponent(this.fileSrc);
-      const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
-      this.book = Epub(corsUrl);
-      this.book.loaded.navigation.then(
-        navigation => (this.toc = navigation.toc)
-      );
-      this.rendition = this.book.renderTo('viewer', {
-        width: '100%',
-        height: '100%',
-        spread: 'always',
-      });
-      this.rendition.display();
-      this.rendition.on('rendered', (cfiRange, contents) => {
-        const path = this.rendition.currentLocation().start.href;
-        const pathArr = path.split('/');
-        this.selectedChapter = pathArr.pop();
-        this.dirPath = pathArr.join('/');
-        this.contents = contents;
-      });
+    async initRendition() {
+      try {
+        this.isLoading = true;
+        const encodedUrl = encodeURIComponent(this.fileSrc);
+        const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
+        const buffer = await this.$axios.$get(corsUrl, {
+          responseType: 'arraybuffer',
+        });
+        this.book = Epub(buffer);
+        await this.book.ready;
+        this.isLoading = false;
+        this.book.loaded.navigation.then(
+          navigation => (this.toc = navigation.toc)
+        );
+        this.rendition = this.book.renderTo('viewer', {
+          width: '100%',
+          height: '100%',
+          spread: 'always',
+        });
+        const cfi = this.resumeFromLocalStorage();
+        this.rendition.display(cfi);
+        this.rendition.on('rendered', (cfiRange, contents) => {
+          const path = this.rendition.currentLocation().start.href;
+          const pathArr = path.split('/');
+          this.selectedChapter = pathArr.pop();
+          this.dirPath = pathArr.join('/');
+          this.contents = contents;
+        });
 
-      const keyListener = e => {
-        const inputs = ['input', 'select', 'button', 'textarea'];
-        if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
-          return;
-        }
+        this.rendition.on('relocated', location => {
+          this.saveToLocalStorage(location.start.cfi);
+        });
 
-        // Left Key
-        if ((e.keyCode || e.which) === 37) {
-          this.rendition.prev();
-        }
-        // Right Key
-        if ((e.keyCode || e.which) === 39) {
-          this.rendition.next();
-        }
-      };
-      this.rendition.on('keydown', keyListener);
-      document.addEventListener('keydown', keyListener, false);
+        const keyListener = e => {
+          const inputs = ['input', 'select', 'button', 'textarea'];
+          if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
+            return;
+          }
+
+          // Left Key
+          if ((e.keyCode || e.which) === 37) {
+            this.rendition.prev();
+          }
+          // Right Key
+          if ((e.keyCode || e.which) === 39) {
+            this.rendition.next();
+          }
+        };
+        this.rendition.on('keydown', keyListener);
+        document.addEventListener('keydown', keyListener, false);
+      } catch (err) {
+        const errData = err.response || err;
+        const errMessage = errData.data || errData.message || errData;
+        console.error(errMessage); // eslint-disable-line no-console
+        logTrackerEvent(this, 'ReaderEpub', 'ReaderEpubError', errMessage, 1);
+        this.$nuxt.error({
+          statusCode: errData.status || 400,
+          message: errMessage,
+        });
+      }
     },
     onChangeChapter() {
       const chapter = this.dirPath
@@ -211,6 +241,31 @@ export default {
       this.searchResults.forEach(result => {
         this.rendition.annotations.highlight(result.cfi);
       });
+    },
+    saveToLocalStorage(currentCfi) {
+      if (window.localStorage && currentCfi) {
+        window.localStorage.setItem(
+          `epub-reader-${this.fileSrc}`,
+          JSON.stringify({ currentCfi: currentCfi.toString() })
+        );
+      }
+    },
+    resumeFromLocalStorage() {
+      if (window.localStorage) {
+        const epubData = window.localStorage.getItem(
+          `epub-reader-${this.fileSrc}`
+        );
+        if (epubData) {
+          try {
+            const { currentCfi } = JSON.parse(epubData);
+            return currentCfi;
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
+        }
+      }
+      return undefined;
     },
     async directToSelectedSearchResult() {
       if (!this.searchResults.length) return;

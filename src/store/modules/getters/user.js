@@ -10,3 +10,6 @@ export const getUserCivicLikerHalo = ({ user }) => {
 export const getHomeRoute = () => ({
   name: 'index',
 });
+
+export const getGaClientId = state => state.gaClientId;
+export const getGaSessionId = state => state.gaSessionId;
