@@ -19,6 +19,7 @@ import { mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import { parseNFTMetadataURL } from '~/util/nft';
 
 export default {
   name: 'PDFReaderPage',
@@ -39,7 +40,13 @@ export default {
     },
     fileSrc() {
       const { format: type } = this.$route.query;
-      return this.iscnContentUrls.find(url => url.includes(type));
+      if (type && Array.isArray(this.iscnContentUrls)) {
+        const matchingUrl = this.iscnContentUrls.find(url =>
+          url.includes(type)
+        );
+        return parseNFTMetadataURL(matchingUrl);
+      }
+      return undefined;
     },
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);
