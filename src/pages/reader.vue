@@ -39,11 +39,12 @@ export default {
       return this.$route.query.classId;
     },
     fileSrc() {
-      const { format: type } = this.$route.query;
+      const { format: type, index: fileIndex } = this.$route.query;
       if (type && Array.isArray(this.iscnContentUrls)) {
-        const matchingUrl = this.iscnContentUrls.find(url =>
-          url.includes(type)
-        );
+        const matchingUrl =
+          (this.iscnContentUrls[fileIndex]?.includes(type) &&
+            this.iscnContentUrls[fileIndex]) ||
+          this.iscnContentUrls.find(url => url.includes(type));
         return parseNFTMetadataURL(matchingUrl);
       }
       return undefined;
