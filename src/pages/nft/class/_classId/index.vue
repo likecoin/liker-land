@@ -164,7 +164,7 @@
                   :to="
                     localeLocation({
                       name: 'nft-collection-collectionId',
-                      params: { collectionId: nftCollections[0].id },
+                      params: { collectionId: collection.id },
                     })
                   "
                 >
