@@ -1205,26 +1205,17 @@ export default {
         1
       );
     },
-    handleSwitchToCollection(boolean) {
-      if (boolean) {
-        logTrackerEvent(
-          this,
-          'NFT',
-          'nft_class_details_switch_to_collection',
-          this.classId,
-          1
-        );
-        this.shouldShowCollectionItem = true;
-        return;
-      }
+    handleSwitchToCollection(shouldShowCollectionItem) {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_class_details_switch_to_edition',
+        shouldShowCollectionItem
+          ? 'nft_class_details_switch_to_collection'
+          : 'nft_class_details_switch_to_edition',
         this.classId,
         1
       );
-      this.shouldShowCollectionItem = false;
+      this.shouldShowCollectionItem = shouldShowCollectionItem;
     },
     handleClickCollectionHint() {
       logTrackerEvent(
