@@ -466,13 +466,19 @@ export default {
     walletEmail() {
       this.claimingFreeEmail = this.walletEmail;
     },
-    getAddress() {
+    async getAddress() {
       this.claimingAddressInput = this.getAddress;
       if (this.isFreePurchase) this.claimingAddress = this.getAddress;
+      if (this.claimingAddress) {
+        await this.fetchRecommendInfo();
+      }
     },
-    loginAddress() {
+    async loginAddress() {
       this.claimingAddressInput = this.loginAddress;
       this.claimingAddress = this.loginAddress;
+      if (this.claimingAddress) {
+        await this.fetchRecommendInfo();
+      }
     },
   },
   async mounted() {
@@ -529,7 +535,9 @@ export default {
     if (this.isFreePurchase) {
       this.claimingAddress = this.claimingAddressInput;
     }
-    await this.fetchRecommendInfo();
+    if (this.claimingAddress) {
+      await this.fetchRecommendInfo();
+    }
   },
   methods: {
     isValidAddress,
