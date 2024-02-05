@@ -834,7 +834,7 @@ export default {
         this,
         'NFT',
         'nft_claim_recommendation_clicked_next',
-        this.classId,
+        this.primaryKey,
         1
       );
     },
@@ -843,7 +843,7 @@ export default {
         this,
         'NFT',
         'nft_claim_recommendation_clicked_prev',
-        this.classId,
+        this.primaryKey,
         1
       );
     },
@@ -852,7 +852,7 @@ export default {
         this,
         'NFT',
         'nft_claim_recommendation_moved_slider',
-        this.classId,
+        this.primaryKey,
         1
       );
     },
