@@ -1226,15 +1226,17 @@ export default {
         1
       );
       this.shouldShowCollectionItem = true;
-      this.scrollToElement();
+      this.scrollToCompareSection();
     },
-    scrollToElement() {
+    scrollToCompareSection() {
       setTimeout(() => {
         const currentRef = this.$refs.compareSection;
-        currentRef.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        if (currentRef) {
+          currentRef.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
       }, 100);
     },
   },
