@@ -130,7 +130,7 @@
       <ul
         ref="portfolioGrid"
         :class="[
-          'self-stretch -mx-[12px] desktop:w-[644px] transition-all relative',
+          'self-stretch -mx-[12px] desktop:w-[668px] transition-all relative',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
