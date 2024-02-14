@@ -18,14 +18,6 @@
         @slide-change="handleSwiperChange"
       >
         <SwiperSlide>
-          <div class="bg-[#ff3653] h-full">
-            <img
-              class="block mx-auto h-full object-cover"
-              src="~assets/images/banner/boox-christmas.png"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
           <div class="bg-transparent h-full" />
         </SwiperSlide>
       </Swiper>
@@ -33,7 +25,7 @@
       <ul
         class="absolute inset-x-0 bottom-0 flex justify-center gap-[0.5rem] w-full p-[0.5rem] z-10"
       >
-        <li v-for="slide in 2" :key="`slide-${slide}`">
+        <li v-for="slide in 1" :key="`slide-${slide}`">
           <button
             :class="[
               'w-[12px]',
