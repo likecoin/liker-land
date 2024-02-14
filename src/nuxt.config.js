@@ -266,6 +266,7 @@ const nuxtConfig = {
         ],
         'style-src': [
           "'self'",
+          'blob:',
           "'unsafe-inline'",
           'client.crisp.chat',
           'fonts.googleapis.com',
