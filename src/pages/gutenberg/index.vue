@@ -110,12 +110,20 @@
           'desktop:mt-0',
         ]"
       >
-        <Label
-          class="w-full text-like-green"
-          preset="p5"
-          align="left"
-          :text="$t('gutenberg_intro_description')"
-        />
+        <i18n
+          :class="['text-like-green', 'text-left']"
+          tag="div"
+          path="gutenberg_intro_description"
+        >
+          <a
+            href="https://www.gutenberg.org/"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ProjectGutenberg"
+            >{{ $t('gutenberg_external_link_gutenberg') }}</a
+          >
+        </i18n>
       </div>
     </section>
 
@@ -176,10 +184,20 @@
       />
       <div :class="['col-span-1', 'flex', 'flex-col', 'gap-[24px]']">
         <Label preset="h2" :text="$t('gutenberg_project_title')" />
-        <Label
-          :class="['text-like-green']"
-          :text="$t('gutenberg_project_description')"
-        />
+        <i18n
+          :class="['text-like-green', 'text-left']"
+          tag="div"
+          path="gutenberg_project_description"
+        >
+          <a
+            href="https://marhamilresearch4.blob.core.windows.net/gutenberg-public/Website/index.html"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="MIT"
+            >{{ $t('gutenberg_external_link_MIT') }}</a
+          >
+        </i18n>
       </div>
     </section>
 
@@ -212,10 +230,28 @@
         ]"
       >
         <Label preset="h2" :text="$t('gutenberg_decentralize_title')" />
-        <Label
-          :class="['text-like-green']"
-          :text="$t('gutenberg_decentralize_description')"
-        />
+        <i18n
+          :class="['text-like-green', 'text-left']"
+          tag="div"
+          path="gutenberg_decentralize_description"
+        >
+          <a
+            href="https://www.gutenberg.org/"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ProjectGutenberg"
+            >{{ $t('gutenberg_external_link_gutenberg') }}</a
+          >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="decentralized"
+            >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
+          >
+        </i18n>
       </div>
       <img
         :class="[
@@ -276,11 +312,52 @@
           align="center"
           :text="$t('gutenberg_blende_title')"
         />
-        <Label
-          :class="['text-like-green']"
-          align="left"
-          :text="$t('gutenberg_blende_description')"
-        />
+        <i18n
+          :class="['text-like-green', 'text-left']"
+          tag="div"
+          path="gutenberg_blende_description"
+        >
+          <a
+            href="https://like.co"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="LikeCoin"
+            >{{ $t('gutenberg_external_link_likecoin') }}</a
+          >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="decentralized"
+            >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
+          >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ISCN"
+            >{{ $t('gutenberg_external_link_ISCN') }}</a
+          >
+          <a
+            href="https://liker.land"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="LikerLand"
+            >{{ $t('gutenberg_external_link_likerland') }}</a
+          >
+          <a
+            href="https://www.gutenberg.org/"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ProjectGutenberg"
+            >{{ $t('gutenberg_external_link_gutenberg') }}</a
+          >
+        </i18n>
       </div>
       <div
         :class="[
@@ -297,10 +374,52 @@
         ]"
       >
         <Label preset="h2" :text="$t('gutenberg_blende_title')" />
-        <Label
-          :class="['text-like-green']"
-          :text="$t('gutenberg_blende_description')"
-        />
+        <i18n
+          :class="['text-like-green', 'text-left']"
+          tag="div"
+          path="gutenberg_blende_description"
+        >
+          <a
+            href="https://like.co"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="LikeCoin"
+            >{{ $t('gutenberg_external_link_likecoin') }}</a
+          >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="decentralized"
+            >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
+          >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ISCN"
+            >{{ $t('gutenberg_external_link_ISCN') }}</a
+          >
+          <a
+            href="https://liker.land"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="LikerLand"
+            >{{ $t('gutenberg_external_link_likerland') }}</a
+          >
+          <a
+            href="https://www.gutenberg.org/"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ProjectGutenberg"
+            >{{ $t('gutenberg_external_link_gutenberg') }}</a
+          >
+        </i18n>
       </div>
     </section>
 
@@ -422,11 +541,36 @@
           :class="['text-[20px]', 'text-medium-gray']"
           :text="$t('gutenberg_publish_subtitle')"
         />
-        <Label
-          preset="p5"
-          :class="['w-full', 'text-like-green']"
-          :text="$t('gutenberg_publish_description')"
-        />
+        <i18n
+          :class="['text-like-green', 'text-left']"
+          tag="div"
+          path="gutenberg_publish_description"
+        >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="decentralized"
+            >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
+          >
+          <a
+            href="https://docs.like.co/general-guides/decentralized-publishing/what-is-iscn"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="ISCN"
+            >{{ $t('gutenberg_external_link_ISCN') }}</a
+          >
+          <a
+            href="https://liker.land/store"
+            target="_blank"
+            rel="noopener"
+            class="underline"
+            place="bookstore"
+            >{{ $t('gutenberg_external_link_bookstore') }}</a
+          >
+        </i18n>
       </div>
     </section>
 
@@ -457,11 +601,20 @@
         ]"
         :text="$t('gutenberg_sign_title')"
       />
-      <Label
-        :class="['whitespace-pre-line']"
-        align="center"
-        :text="$t('gutenberg_sign_description')"
-      />
+      <i18n
+        :class="['text-like-green', 'text-left']"
+        tag="div"
+        path="gutenberg_sign_description"
+      >
+        <a
+          href="https://docs.like.co/general-guides/decentralized-publishing"
+          target="_blank"
+          rel="noopener"
+          class="underline"
+          place="decentralized"
+          >{{ $t('gutenberg_external_link_decentralized_publishing') }}</a
+        >
+      </i18n>
       <div
         :class="[
           'relative',

@@ -371,13 +371,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
-import {
-  logTrackerEvent,
-  logPurchaseFlowEvent,
-  getGaClientId,
-} from '~/util/EventLogger';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
@@ -649,6 +646,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getGaClientId', 'getGaSessionId']),
     classId() {
       return this.$route.params.classId;
     },
@@ -750,7 +748,7 @@ export default {
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.fetchNFTBookInfoByClassId(this.classId).catch();
-        this.fetchNFTBookPaymentPriceInfo();
+        this.lazyFetchNFTBookPaymentPriceInfoForAllEditions();
         this.fetchRelatedNFTCollection({ type: 'book' });
       }
       const blockingPromises = [this.fetchISCNMetadata()];
@@ -1011,7 +1009,8 @@ export default {
           }
           this.uiToggleCollectModal({ classId: this.classId });
         } else {
-          const gaClientId = await getGaClientId(this);
+          const gaClientId = this.getGaClientId;
+          const gaSessionId = this.getGaSessionId;
           const link = getNFTBookPurchaseLink({
             classId: this.classId,
             priceIndex: edition.index,
@@ -1019,7 +1018,9 @@ export default {
           });
           const { url } = await this.$axios.$post(link, {
             gaClientId,
+            gaSessionId,
             giftInfo,
+            coupon: this.$route.query.coupon,
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
@@ -1099,7 +1100,6 @@ export default {
           price_index: selectedValue,
         },
       });
-      await this.lazyFetchNFTBookPaymentPriceInfo();
       logTrackerEvent(
         this,
         'NFT',

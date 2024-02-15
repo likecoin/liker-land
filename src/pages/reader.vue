@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 flex flex-col justify-center items-center">
+  <div class="fixed inset-0 flex flex-col items-center justify-center">
     <ProgressIndicator v-if="isLoading" />
     <Component
       :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
@@ -19,6 +19,7 @@ import { mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import { parseNFTMetadataURL } from '~/util/nft';
 
 export default {
   name: 'PDFReaderPage',
@@ -38,13 +39,15 @@ export default {
       return this.$route.query.classId;
     },
     fileSrc() {
-      const { src } = this.$route.query;
-      // TODO: check src exists in ISCN
-      // if (src && this.iscnContentUrls.find(url => url === src)) {
-      if (src) {
-        return src;
+      const { format: type, index: fileIndex } = this.$route.query;
+      if (type && Array.isArray(this.iscnContentUrls)) {
+        const matchingUrl =
+          (this.iscnContentUrls[fileIndex]?.includes(type) &&
+            this.iscnContentUrls[fileIndex]) ||
+          this.iscnContentUrls.find(url => url.includes(type));
+        return parseNFTMetadataURL(matchingUrl);
       }
-      return this.iscnContentUrls.find(url => url.includes('pdf'));
+      return undefined;
     },
     isLoginRequired() {
       return !!(this.nftIsDownloadHidden || this.nftMustClaimToView);

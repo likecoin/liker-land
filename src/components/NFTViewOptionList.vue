@@ -64,12 +64,15 @@
           </template>
           <MenuList>
             <ul>
-              <li v-for="contentUrl in normalizedContentURLs" :key="contentUrl">
+              <li
+                v-for="(contentUrl, index) in normalizedContentURLs"
+                :key="contentUrl"
+              >
                 <ButtonV2
                   :href="parseNFTMetadataURL(contentUrl)"
                   preset="plain"
                   :download="getDownloadFilenameFromURL(contentUrl)"
-                  @click="e => handleClickViewContentURL(e, contentUrl)"
+                  @click="e => handleClickViewContentURL(e, contentUrl, index)"
                   >{{
                     getFilenameFromURL(contentUrl) ||
                       getContentUrlButtonText(contentUrl)
@@ -82,14 +85,14 @@
       </template>
       <template v-else>
         <ButtonV2
-          v-for="contentUrl in normalizedContentURLs"
+          v-for="(contentUrl, index) in normalizedContentURLs"
           :key="contentUrl"
           class="mt-[12px] w-full"
           preset="outline"
           :text="getContentUrlButtonText(contentUrl)"
           :href="parseNFTMetadataURL(contentUrl)"
           :is-disabled="!isContentViewable"
-          @click="e => handleClickViewContentURL(e, contentUrl)"
+          @click="e => handleClickViewContentURL(e, contentUrl, index)"
         >
           <template #prepend>
             <IconArticle />
@@ -189,7 +192,7 @@ export default {
     handleClickViewContent() {
       this.$emit('view-content');
     },
-    handleClickViewContentURL(e, contentUrl) {
+    handleClickViewContentURL(e, contentUrl, index) {
       const type = this.getContentUrlType(contentUrl);
       const url = parseNFTMetadataURL(contentUrl);
       this.$emit('view-content-url', e, url, type);
@@ -202,7 +205,7 @@ export default {
               download: this.isContentDownloadable ? '1' : '0',
               classId: this.classId,
               format: type,
-              src: url,
+              index,
             },
           })
         );

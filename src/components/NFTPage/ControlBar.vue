@@ -124,7 +124,7 @@ export default {
       return this.isCollector && this.view !== 'created';
     },
     isPotentialCollector() {
-      return this.isCollectable && !this.isCollector;
+      return this.price && this.isCollectable && !this.isCollector;
     },
     shouldShowControlBar() {
       return (
@@ -157,8 +157,13 @@ export default {
       );
     },
     collectButtonText() {
+      if (this.isWritingNft) {
+        return this.canCollect
+          ? this.$t('nft_details_page_button_collect_now')
+          : this.$t('nft_details_page_button_collect_class_now');
+      }
       return this.canCollect
-        ? this.$t('nft_details_page_button_collect_now')
+        ? this.$t('nft_details_page_button_purchase_now')
         : this.$t('nft_details_page_button_collect_class_now');
     },
   },

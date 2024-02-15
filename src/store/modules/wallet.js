@@ -377,6 +377,25 @@ const actions = {
     return connector;
   },
 
+  async handleConnectorRedirect(
+    { dispatch },
+    { method, params, isLogin = true }
+  ) {
+    const connector = await dispatch('getConnector');
+    const connection = await connector.handleRedirect(method, params);
+    if (connection) {
+      if (isLogin) {
+        await dispatch('initWalletAndLogin', connection);
+      } else {
+        await dispatch('initWallet', connection);
+        if (getters.walletIsMatchedSession) {
+          dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+        }
+      }
+    }
+    return connection;
+  },
+
   async openConnectWalletModal(
     { commit, dispatch },
     {
@@ -391,11 +410,12 @@ const actions = {
     const connector = await dispatch('getConnector');
     if (shouldRecommendConnectionMethod) {
       connector.options.availableMethods = [
+        ['liker-id', { tier: 1, isRecommended: true }],
         'keplr',
-        ['keplr-mobile', { tier: 1, isRecommended: true }],
+        'keplr-mobile',
         'cosmostation',
         'cosmostation-mobile',
-        'liker-id',
+        'likerland-app',
         'leap',
         'metamask-leap',
         'walletconnect-v2',
@@ -448,16 +468,15 @@ const actions = {
     }
   },
 
-  async initIfNecessary({ dispatch }) {
+  async initIfNecessary({ dispatch }, { isLogin = false } = {}) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
     if (connection) {
-      const { accounts, offlineSigner, method } = connection;
-      await dispatch('initWallet', {
-        accounts,
-        offlineSigner,
-        method,
-      });
+      if (isLogin) {
+        await dispatch('initWalletAndLogin', connection);
+      } else {
+        await dispatch('initWallet', connection);
+      }
     }
   },
 

@@ -56,11 +56,7 @@
 import { mapGetters } from 'vuex';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
-import {
-  logTrackerEvent,
-  logPurchaseFlowEvent,
-  getGaClientId,
-} from '~/util/EventLogger';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 
@@ -148,7 +144,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getNFTClassMetadataById']),
+    ...mapGetters([
+      'getNFTClassMetadataById',
+      'getGaClientId',
+      'getGaSessionId',
+    ]),
     collectionId() {
       return this.$route.params.collectionId;
     },
@@ -170,7 +170,7 @@ export default {
     } finally {
       this.isLoading = false;
     }
-
+    this.lazyFetchNFTCollectionPaymentPriceInfo();
     const { hash } = this.$route;
     if (hash) {
       this.$nextTick(() => {
@@ -184,6 +184,17 @@ export default {
         }
       });
     }
+    logPurchaseFlowEvent(this, 'view_item', {
+      items: [
+        {
+          name: this.collectionName,
+          collectionId: this.collectionId,
+          price: this.collectionPrice,
+        },
+      ],
+      price: this.collectionPrice,
+      currency: 'USD',
+    });
   },
   methods: {
     parseNFTMetadataURL,
@@ -204,7 +215,7 @@ export default {
         const purchaseEventParams = {
           items: [
             {
-              name: this.NFTName,
+              name: this.collectionName,
               price: this.collectionPrice,
               collection: this.collectionId,
             },
@@ -215,7 +226,8 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        const gaClientId = await getGaClientId(this);
+        const gaClientId = this.getGaClientId;
+        const gaSessionId = this.getGaSessionId;
         const link = getNFTBookPurchaseLink({
           collectionId: this.collectionId,
           platform: this.platform,
@@ -223,6 +235,8 @@ export default {
         const { url } = await this.$axios.$post(link, {
           gaClientId,
           giftInfo,
+          gaSessionId,
+          coupon: this.$route.query.coupon,
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
