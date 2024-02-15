@@ -82,6 +82,21 @@
                 @click-gift="handleGiftFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
               />
+              <div
+                v-if="nftCollections.length"
+                class="items-center justify-end w-full"
+                @click="handleClickCollectionHint"
+              >
+                <Label
+                  class="underline text-like-collection !text-[14px] cursor-pointer"
+                  align="right"
+                  :text="$t('nft_collection_hint')"
+                >
+                  <template #append>
+                    <IconCollection />
+                  </template>
+                </Label>
+              </div>
             </template>
           </NFTBookItemCard>
           <div
@@ -92,45 +107,68 @@
                     (nftEditions.length === 1 && nftEditions[0].description)))
             "
             ref="compareSection"
-            class="max-w-[962px] mx-auto flex gap-[48px] justify-center flex-wrap"
+            class="max-w-[962px] mx-auto flex flex-col gap-[48px] justify-center flex-wrap"
           >
-            <div>
-              <Label
+            <div class="flex justify-center items-center gap-[40px]">
+              <ButtonV2
+                :content-class="[
+                  'text-[28px]',
+                  'font-600',
+                  'text-like-green',
+                  { '!text-medium-gray': shouldShowCollectionItem },
+                ]"
+                preset="plain"
                 :text="$t('nft_edition_label')"
-                preset="h3"
-                align="center"
-                class="text-like-green mt-[38px] mb-[24px]"
+                @click="() => handleSwitchToCollection(false)"
               />
-              <ul
-                class="flex flex-wrap items-start justify-center gap-[24px] w-full"
+              <div
+                v-if="nftCollections?.length"
+                class="w-[1px] bg-medium-gray h-[24px]"
+              />
+              <ButtonV2
+                v-if="nftCollections?.length"
+                :content-class="[
+                  'text-[28px]',
+                  'font-600',
+                  'text-medium-gray',
+                  { 'text-like-collection': shouldShowCollectionItem },
+                ]"
+                preset="plain"
+                :text="$t('nft_collection_label')"
+                @click="() => handleSwitchToCollection(true)"
+              />
+            </div>
+            <ul
+              v-if="!shouldShowCollectionItem"
+              class="flex flex-wrap items-start justify-center gap-[16px] w-full"
+            >
+              <li
+                v-for="editionConfig in nftEditions"
+                :key="editionConfig.name"
               >
-                <li
-                  v-for="editionConfig in nftEditions"
-                  :key="editionConfig.name"
+                <NFTBookEditionCompareTableColumn
+                  class="w-[280px]"
+                  :src="NFTImageUrl"
+                  :edition-config="editionConfig"
+                  :class-id="classId"
+                  @click-collect="handleCollectFromEditionCompareTable"
+                />
+              </li>
+            </ul>
+            <ul
+              v-else
+              class="flex flex-wrap items-start justify-center gap-[24px] w-full"
+            >
+              <li v-for="collection in nftCollections" :key="collection.id">
+                <NuxtLink
+                  :to="
+                    localeLocation({
+                      name: 'nft-collection-collectionId',
+                      params: { collectionId: collection.id },
+                    })
+                  "
                 >
                   <NFTBookEditionCompareTableColumn
-                    class="w-[280px]"
-                    :src="NFTImageUrl"
-                    :edition-config="editionConfig"
-                    :class-id="classId"
-                    @click-collect="handleCollectFromEditionCompareTable"
-                  />
-                </li>
-              </ul>
-            </div>
-            <div v-if="nftCollections?.length" class="flex-col">
-              <Label
-                :text="$t('nft_collection_label')"
-                preset="h3"
-                align="center"
-                class="text-like-green mt-[38px] mb-[24px]"
-              />
-              <ul
-                class="flex flex-wrap items-start justify-center gap-[24px] w-full"
-              >
-                <li v-for="collection in nftCollections" :key="collection.id">
-                  <NFTBookEditionCompareTableColumn
-                    class="w-[280px]"
                     :src="parseNFTMetadataURL(collection.image)"
                     :edition-config="collection"
                     :class-id="''"
@@ -141,9 +179,9 @@
                       })
                     "
                   />
-                </li>
-              </ul>
-            </div>
+                </NuxtLink>
+              </li>
+            </ul>
           </div>
 
           <Separator class="mx-auto" />
@@ -367,6 +405,7 @@ export default {
 
       isGiftDialogOpen: false,
       giftSelectedValue: 0,
+      shouldShowCollectionItem: false,
 
       trimmedCount: 10,
     };
@@ -1165,6 +1204,40 @@ export default {
         this.classId,
         1
       );
+    },
+    handleSwitchToCollection(shouldShowCollectionItem) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        shouldShowCollectionItem
+          ? 'nft_class_details_switch_to_collection'
+          : 'nft_class_details_switch_to_edition',
+        this.classId,
+        1
+      );
+      this.shouldShowCollectionItem = shouldShowCollectionItem;
+    },
+    handleClickCollectionHint() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_click_collection_hint',
+        this.classId,
+        1
+      );
+      this.shouldShowCollectionItem = true;
+      this.scrollToCompareSection();
+    },
+    scrollToCompareSection() {
+      setTimeout(() => {
+        const currentRef = this.$refs.compareSection;
+        if (currentRef) {
+          currentRef.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 100);
     },
   },
 };

@@ -1,62 +1,5 @@
 <template>
-  <div v-if="isShelfPreset" class="relative flex flex-col items-start">
-    <client-only>
-      <lazy-component
-        class="absolute inset-0 pointer-events-none -top-full"
-        @show.once="fetchInfo"
-      />
-    </client-only>
-    <div class="flex relative mt-[48px]">
-      <div
-        :class="[
-          'absolute',
-          'z-[0]',
-          'inset-x-[-38px] sm:inset-x-[-48px]',
-          'inset-y-0',
-          'bg-like-cyan-pale',
-          'rounded-[32px]',
-          shelfClass,
-        ]"
-      />
-      <component
-        :is="componentTag"
-        :class="[coverClasses, 'mt-[-48px]', 'z-[1]']"
-        :to="collectionRoute"
-      >
-        <NFTCover
-          :is-nft-book="true"
-          :src="imageSrc || collectionImageUrl"
-          :video-src="videoSrc"
-          :should-resize-src="shouldResizeSrc"
-          :size="300"
-          :alt="collectionName"
-        />
-      </component>
-    </div>
-    <Label
-      :class="[titleStyle, 'mt-[20px]']"
-      preset="p5"
-      :text="collectionName"
-    />
-    <Label
-      class="text-medium-gray mt-[6px] mb-[12px]"
-      preset="p6"
-      :text="creatorDisplayName | ellipsis"
-    />
-    <Label
-      v-if="collectionAvailablePriceLabel"
-      class="text-like-green-dark"
-      preset="p5"
-      :text="collectionAvailablePriceLabel"
-    />
-    <Label
-      v-else
-      class="text-medium-gray"
-      preset="p5"
-      :text="$t('nft_details_page_label_sold_out')"
-    />
-  </div>
-  <div v-else :class="['flex', 'flex-col', 'justify-center']">
+  <div :class="['flex', 'flex-col', 'justify-center']">
     <component
       :is="componentTag"
       :class="[
@@ -77,6 +20,8 @@
         componentClass,
         'mt-[48px]',
         { group: !isDetailsPreset },
+        'border-like-collection',
+        'border-[2px]',
       ]"
       v-bind="componentProps"
     >
@@ -95,6 +40,10 @@
           :video-src="videoSrc"
           :size="300"
           :alt="collectionName"
+        />
+        <Label
+          class="mt-[24px] !text-[12px] text-medium-gray"
+          :text="$t('nft_collection_num_of_books', { num: classIds.length })"
         />
 
         <div class="hidden laptop:block">
@@ -119,10 +68,12 @@
           class="text-like-cyan"
           :text="$t('campaign_nft_book_just_arrived')"
         />
+        <Label
+          class="text-like-collection"
+          :text="$t('nft_collection_label')"
+        />
         <Label preset="h4" :class="titleStyle" :text="collectionName" />
-        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
-          {{ collectionDescription }}
-        </p>
+        <Markdown :md-string="collectionDescription" />
         <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
           <client-only>
             <li>
