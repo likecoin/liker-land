@@ -272,6 +272,31 @@
         </div>
       </template>
     </MobileStickyCard>
+    <div
+      v-if="state === 'CLAIMED'"
+      class="flex flex-col gap-[12px] w-full max-w-[996px] mx-auto my-[48px]"
+    >
+      <Label
+        preset="h5"
+        class="text-dark-gray"
+        align="center"
+        :text="$t('nft_recommendation_title')"
+      />
+      <NFTPageRecommendation
+        class="w-full "
+        :iscn-owner="getNFTClassMetadataById(classId).iscn_owner"
+        :should-show-follow-button="false"
+        :should-show-iscn-owner="false"
+        :recommended-list="[]"
+        :is-book-nft="true"
+        :is-loading="isRecommendationLoading"
+        @item-click="handleRecommendedItemClick"
+        @item-collect="handleRecommendedItemCollect"
+        @slide-next.once="handleRecommendationSlideNext"
+        @slide-prev.once="handleRecommendationSlidePrev"
+        @slider-move.once="handleRecommendationSliderMove"
+      />
+    </div>
   </main>
 </template>
 
@@ -299,6 +324,7 @@ import {
 
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
+import nftMixin from '~/mixins/nft';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 
 const NFT_CLAIM_STATE = {
@@ -312,7 +338,7 @@ const NFT_CLAIM_STATE = {
 
 export default {
   name: 'NFTClaimPage',
-  mixins: [alertMixin, walletMixin, nftOrCollectionMixin],
+  mixins: [alertMixin, walletMixin, nftOrCollectionMixin, nftMixin],
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
@@ -440,13 +466,19 @@ export default {
     walletEmail() {
       this.claimingFreeEmail = this.walletEmail;
     },
-    getAddress() {
+    async getAddress() {
       this.claimingAddressInput = this.getAddress;
       if (this.isFreePurchase) this.claimingAddress = this.getAddress;
+      if (this.claimingAddress) {
+        await this.fetchRecommendInfo();
+      }
     },
-    loginAddress() {
+    async loginAddress() {
       this.claimingAddressInput = this.loginAddress;
       this.claimingAddress = this.loginAddress;
+      if (this.claimingAddress) {
+        await this.fetchRecommendInfo();
+      }
     },
   },
   async mounted() {
@@ -502,6 +534,9 @@ export default {
     this.claimingAddressInput = this.loginAddress || this.getAddress;
     if (this.isFreePurchase) {
       this.claimingAddress = this.claimingAddressInput;
+    }
+    if (this.claimingAddress) {
+      await this.fetchRecommendInfo();
     }
   },
   methods: {
@@ -783,6 +818,51 @@ export default {
     },
     handleClickNext() {
       this.state = NFT_CLAIM_STATE.INITIAL;
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_recommend_item_click',
+        classId,
+        1
+      );
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_recommend_item_collect',
+        classId,
+        1
+      );
+    },
+    handleRecommendationSlideNext() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_recommendation_clicked_next',
+        this.primaryKey,
+        1
+      );
+    },
+    handleRecommendationSlidePrev() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_recommendation_clicked_prev',
+        this.primaryKey,
+        1
+      );
+    },
+    handleRecommendationSliderMove() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_recommendation_moved_slider',
+        this.primaryKey,
+        1
+      );
     },
   },
 };
