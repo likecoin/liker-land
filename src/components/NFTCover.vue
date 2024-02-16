@@ -34,7 +34,11 @@
         v-if="!isShowVideo && (!isShowImage || !isLoaded)"
         v-bind="imgProps"
         :class="imgClassNameForPlaceholder"
-        src="~/assets/images/nft/primitive-nft.jpg"
+        :src="
+          isCollection
+            ? '~/assets/images/nft/collection.png'
+            : '~/assets/images/nft/primitive-nft.jpg'
+        "
       />
     </div>
     <template v-if="isNftBook">
@@ -90,6 +94,10 @@ export default {
       default: '',
     },
     isNftBook: {
+      type: Boolean,
+      default: false,
+    },
+    isCollection: {
       type: Boolean,
       default: false,
     },

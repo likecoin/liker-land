@@ -39,6 +39,7 @@
           :should-resize-src="shouldResizeSrc"
           :video-src="videoSrc"
           :size="300"
+          :is-collection="true"
           :alt="collectionName"
         />
         <Label
