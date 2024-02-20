@@ -222,7 +222,6 @@ import { NFT_CLASS_LIST_SORTING, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 
 import { tabOptions } from '~/mixins/portfolio';
-import nftMixin from '~/mixins/nft';
 
 const portfolioGridDebounceArgs = [
   60,
@@ -240,7 +239,6 @@ const SELECTED_FILTER = {
 };
 
 export default {
-  mixins: [nftMixin],
   props: {
     isNarrow: {
       type: Boolean,
@@ -448,17 +446,12 @@ export default {
     $route() {
       this.$nextTick(this.setupPortfolioGrid);
     },
-    async portfolioItemsTrimmed(items, prevItems) {
+    portfolioItemsTrimmed(items, prevItems) {
       if (this.isLoadingPortfolioItems) return;
-
       if (items.length === prevItems.length && this.portfolioGridController) {
         this.$nextTick(this.updatePortfolioGrid);
       } else {
         this.$nextTick(this.setupPortfolioGrid);
-      }
-
-      if (!items.length) {
-        await this.fetchRecommendInfo();
       }
     },
     portfolioItemsSortingValue() {

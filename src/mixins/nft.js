@@ -1390,6 +1390,7 @@ export default {
       return m.memo;
     },
     async fetchRecommendInfo() {
+      if (this.isRecommendationLoading) return;
       this.isRecommendationLoading = true;
       try {
         const promises = [
