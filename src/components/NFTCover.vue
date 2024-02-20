@@ -30,16 +30,20 @@
         @load="handleMediaLoad"
         @error="handleImageError"
       />
-      <img
-        v-if="!isShowVideo && (!isShowImage || !isLoaded)"
-        v-bind="imgProps"
-        :class="imgClassNameForPlaceholder"
-        :src="
-          isCollection
-            ? '~/assets/images/nft/collection.png'
-            : '~/assets/images/nft/primitive-nft.jpg'
-        "
-      />
+      <template v-if="!isShowVideo && (!isShowImage || !isLoaded)">
+        <img
+          v-if="isCollection"
+          v-bind="imgProps"
+          :class="imgClassNameForPlaceholder"
+          src="~/assets/images/nft/collection.png"
+        />
+        <img
+          v-else
+          v-bind="imgProps"
+          :class="imgClassNameForPlaceholder"
+          src="~/assets/images/nft/primitive-nft.jpg"
+        />
+      </template>
     </div>
     <template v-if="isNftBook">
       <div
