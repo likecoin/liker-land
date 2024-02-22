@@ -40,7 +40,36 @@
       :class="['pr-[12px]', 'border-x-0', 'text-like-cyan-light', cellClasses]"
     >
       <div>{{ name }}</div>
-      <div :class="['sm:hidden', 'text-white']">{{ priceLabel }}</div>
+      <div
+        :class="[
+          'sm:hidden',
+          'text-white',
+          'flex',
+          'items-center',
+          'justify-start',
+          'w-full',
+          'gap-[12px]',
+        ]"
+      >
+        {{ priceLabel }}
+        <div
+          v-if="discountInfo"
+          class="flex justify-start items-center gap-[4px]"
+        >
+          <span
+            class="text-shade-gray line-through font-400 text-[12px] text-right"
+          >
+            {{ discountInfo.originalPriceLabel }}
+          </span>
+          <span class="text-danger font-400 text-[12px] text-right">
+            {{
+              $t('nft_collect_modal_method_like_discount', {
+                percentage: discountInfo.discountPercentage,
+              })
+            }}
+          </span>
+        </div>
+      </div>
     </td>
     <td
       :class="[
@@ -52,7 +81,26 @@
         cellClasses,
       ]"
     >
-      {{ priceLabel }}
+      <div class="flex items-center justify-end w-full gap-[12px]">
+        <div
+          v-if="discountInfo"
+          class="flex justify-end items-center gap-[4px]"
+        >
+          <span
+            class="text-shade-gray line-through font-400 text-[12px] text-right"
+          >
+            {{ discountInfo.originalPriceLabel }}
+          </span>
+          <span class="text-danger font-400 text-[12px] text-right">
+            {{
+              $t('nft_collect_modal_method_like_discount', {
+                percentage: discountInfo.discountPercentage,
+              })
+            }}
+          </span>
+        </div>
+        {{ priceLabel }}
+      </div>
     </td>
     <td
       :class="[
@@ -69,7 +117,10 @@
 </template>
 
 <script>
+import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
 import NFTStockLabel from './NFTStockLabel';
+
+const USD_TO_HKD_RATIO = 7.8;
 
 export default {
   name: 'NFTPriceSelectItem',
@@ -93,6 +144,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    discountedPrice: {
+      type: Number,
+      default: 0,
+    },
+    defaultPrice: {
+      type: Number,
+      default: 0,
+    },
+    currency: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     isInStock() {
@@ -109,6 +172,29 @@ export default {
         { 'group-hover:border-like-cyan-light/50': !this.isSelected },
         'transition-colors',
       ];
+    },
+    discountInfo() {
+      const originalPrice = this.defaultPrice;
+      const { discountedPrice } = this;
+      if (originalPrice <= discountedPrice) {
+        return undefined;
+      }
+
+      const discountAmount = originalPrice - discountedPrice;
+      const discountPercentage = Math.ceil(
+        (discountAmount / originalPrice) * 100
+      );
+
+      return {
+        originalPriceLabel:
+          this.currency === 'HKD'
+            ? formatNumberWithUnit(
+                Number((originalPrice * USD_TO_HKD_RATIO).toFixed(1)),
+                'HKD'
+              )
+            : formatNumberWithUSD(originalPrice),
+        discountPercentage: `-${discountPercentage}`,
+      };
     },
   },
 };

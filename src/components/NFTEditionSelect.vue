@@ -12,6 +12,9 @@
           :price-label="item.priceLabel"
           :stock="item.stock"
           :is-selected="item.value === selectedValue"
+          :discounted-price="item.price"
+          :default-price="item.defaultPrice"
+          :currency="item.currency"
           @click="handleClickPriceSelectItem(item)"
         />
       </tbody>
