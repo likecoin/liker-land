@@ -211,6 +211,10 @@ import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { updateEventLastSeen } from '~/util/api';
 import { ellipsis } from '~/util/ui';
+import {
+  NFT_LEGACY_DEFAULT_MESSSAGE,
+  NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
+} from '~/constant';
 
 import inAppMixin from '~/mixins/in-app';
 import walletMixin from '~/mixins/wallet';
@@ -258,7 +262,11 @@ export default {
         let isCivicLiker;
         const eventHasSeen = this.checkHasSeenEvent(e);
 
-        let memo = e.memo === 'like.co NFT API' ? '' : e.memo;
+        let memo =
+          e.memo === NFT_LEGACY_DEFAULT_MESSSAGE ||
+          e.memo === NFT_AUTO_DELIVER_DEFAULT_MESSAGE
+            ? ''
+            : e.memo;
         const nftName = this.getNFTClassMetadataById(e.class_id)?.name;
         const creator = this.getNFTClassMetadataById(e.class_id)?.iscn_owner;
         switch (e.eventType) {

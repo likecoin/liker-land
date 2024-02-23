@@ -12,6 +12,7 @@ import {
   NFT_DISPLAY_STATE,
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
+  NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
 } from '~/constant';
 
 import {
@@ -1381,7 +1382,10 @@ export default {
       );
     },
     normalizeNFTMessage(m) {
-      if (m.memo === NFT_LEGACY_DEFAULT_MESSSAGE) {
+      if (
+        m.memo === NFT_LEGACY_DEFAULT_MESSSAGE ||
+        m.memo === NFT_AUTO_DELIVER_DEFAULT_MESSAGE
+      ) {
         return '';
       }
       if (m.event === 'mint_nft' || m.memo === NFT_BATCH_COLLECT_MESSSAGE) {
