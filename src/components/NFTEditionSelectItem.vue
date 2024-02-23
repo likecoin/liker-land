@@ -56,7 +56,7 @@
             v-model="customPrice"
             class="text-black text-right"
             type="number"
-            :min="currentPrice"
+            :min="convertedPrice"
             step="0.1"
             @input="handleInputCustomPrice"
           />
@@ -117,7 +117,7 @@
             v-model="customPrice"
             class="text-black text-right"
             type="number"
-            :min="currentPrice"
+            :min="convertedPrice"
             step="0.1"
             @input="handleInputCustomPrice"
           />
@@ -142,9 +142,8 @@
 
 <script>
 import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
+import { USD_TO_HKD_RATIO } from '~/constant';
 import NFTStockLabel from './NFTStockLabel';
-
-const USD_TO_HKD_RATIO = 7.8;
 
 export default {
   name: 'NFTPriceSelectItem',
@@ -187,10 +186,15 @@ export default {
   },
   data() {
     return {
-      customPrice: this.currentPrice,
+      customPrice: this.convertedPrice,
     };
   },
   computed: {
+    convertedPrice() {
+      return this.currency === 'HKD'
+        ? Number((this.currentPrice * USD_TO_HKD_RATIO).toFixed(1))
+        : this.currentPrice;
+    },
     isInStock() {
       return this.stock > 0;
     },
@@ -232,12 +236,22 @@ export default {
   },
   watch: {
     isSelected() {
-      this.customPrice = this.currentPrice;
+      this.customPrice = this.convertedPrice;
     },
+    convertedPrice() {
+      this.customPrice = this.convertedPrice;
+    },
+  },
+  mounted() {
+    this.customPrice = this.convertedPrice;
   },
   methods: {
     handleInputCustomPrice(event) {
-      this.$emit('input-custom-price', event.target.value);
+      let newPrice = parseFloat(event.target.value);
+      if (this.currency === 'HKD') {
+        newPrice /= USD_TO_HKD_RATIO.toFixed(1);
+      }
+      this.$emit('input-custom-price', newPrice);
     },
   },
 };

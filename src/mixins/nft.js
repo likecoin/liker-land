@@ -13,6 +13,7 @@ import {
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
+  USD_TO_HKD_RATIO,
 } from '~/constant';
 
 import {
@@ -409,7 +410,6 @@ export default {
             let priceLabel = formatNumberWithUSD(price);
             // TODO: support more currency
             if (currency === 'HKD') {
-              const USD_TO_HKD_RATIO = 7.8;
               priceLabel = formatNumberWithUnit(
                 Number((price * USD_TO_HKD_RATIO).toFixed(1)),
                 'HKD'
