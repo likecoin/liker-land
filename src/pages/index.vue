@@ -212,25 +212,6 @@
             </g>
           </svg>
           <div
-            ref="heroSectionAllStoryMattersDescription"
-            :class="[
-              'absolute',
-              'left-[65%]',
-              'inset-0',
-              'flex',
-              'flex-col',
-              'justify-center',
-              'pr-[2.5rem]',
-            ]"
-          >
-            <h2 class="text-[1rem] font-[600]">
-              {{ $t('index_page_hero_all_stories_matter_heading') }}
-            </h2>
-            <p class="mt-[0.5rem] text-[1rem]">
-              {{ $t('index_page_hero_all_stories_matter_content') }}
-            </p>
-          </div>
-          <div
             ref="heroSectionWritingNFTDescription"
             :class="[
               'absolute',
@@ -243,6 +224,9 @@
               'pl-[2.5rem]',
             ]"
           >
+            <h2 class="mb-[0.5rem] text-[1rem] font-[600]">
+              {{ $t('index_page_hero_all_stories_matter_heading') }}
+            </h2>
             <p class="text-[1rem]">
               {{ $t('index_page_hero_writing_nft_content') }}
             </p>
@@ -398,26 +382,6 @@
             </g>
           </svg>
           <div class="absolute inset-x-0 bottom-[50%]">
-            <div
-              ref="heroSectionMobileAllStoryMattersDescription"
-              :class="[
-                'absolute',
-                'inset-x-0',
-                'bottom-[50%]',
-                'flex',
-                'flex-col',
-                'justify-center',
-                'mr-[2.5rem]',
-                'mb-[2.5rem]',
-              ]"
-            >
-              <h2 class="text-[1rem] font-[600]">
-                {{ $t('index_page_hero_all_stories_matter_heading') }}
-              </h2>
-              <p class="mt-[0.5rem] text-[1rem]">
-                {{ $t('index_page_hero_all_stories_matter_content') }}
-              </p>
-            </div>
             <svg
               ref="heroSectionMobileAllStoryMattersIndicator"
               xmlns="http://www.w3.org/2000/svg"
@@ -459,31 +423,9 @@
               ]"
             >
               <div class="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  viewBox="0 0 316.05 54.12"
-                >
-                  <defs>
-                    <clipPath id="hero-section-mobile-writing-nft-path">
-                      <path
-                        d="m43.56,42.36h-9.06l-7.02-27.48-6.96,27.48h-9.06L0,2.34h9.54l7.02,28.92L24.18,2.34h6.66l7.56,28.92,6.96-28.92h9.6l-11.4,40.02Zm20.44,0h-7.62V13.38h7.62v3.96c2.04-2.58,5.64-4.62,9.24-4.62v7.44c-.54-.12-1.26-.18-2.1-.18-2.52,0-5.88,1.38-7.14,3.24v19.14Zm17.18-33.24c-2.46,0-4.56-2.04-4.56-4.56s2.1-4.56,4.56-4.56,4.56,2.04,4.56,4.56-2.04,4.56-4.56,4.56Zm3.84,33.24h-7.62V13.38h7.62v28.98Zm16.68.72c-5.34,0-8.22-2.76-8.22-7.92v-15.12h-4.8v-6.66h4.8v-7.92h7.68v7.92h5.88v6.66h-5.88v13.08c0,1.8.96,3.18,2.64,3.18,1.14,0,2.22-.42,2.64-.84l1.62,5.76c-1.14,1.02-3.18,1.86-6.36,1.86Zm13.73-33.96c-2.46,0-4.56-2.04-4.56-4.56s2.1-4.56,4.56-4.56,4.56,2.04,4.56,4.56-2.04,4.56-4.56,4.56Zm3.84,33.24h-7.62V13.38h7.62v28.98Zm34.14,0h-7.62v-17.52c0-4.02-2.1-5.4-5.34-5.4-3,0-5.34,1.68-6.6,3.42v19.5h-7.62V13.38h7.62v3.78c1.86-2.22,5.4-4.5,10.14-4.5,6.36,0,9.42,3.6,9.42,9.24v20.46Zm6.37,7.44l3.42-5.52c2.34,2.58,5.4,3.6,9.06,3.6s7.98-1.62,7.98-7.32v-2.94c-2.28,2.88-5.4,4.56-8.94,4.56-7.26,0-12.78-5.1-12.78-14.76s5.46-14.76,12.78-14.76c3.48,0,6.6,1.5,8.94,4.44v-3.72h7.68v27c0,11.04-8.52,13.74-15.66,13.74-4.98,0-8.88-1.14-12.48-4.32Zm20.46-17.7v-9.36c-1.26-1.92-4.02-3.3-6.54-3.3-4.32,0-7.32,3-7.32,7.98s3,7.98,7.32,7.98c2.52,0,5.28-1.44,6.54-3.3Zm65.39,10.26h-8.22l-19.08-26.88v26.88h-8.52V2.34h8.76l18.54,25.92V2.34h8.52v40.02Zm15.81,0h-8.52V2.34h28.32v7.32h-19.8v8.7h19.38v7.32h-19.38v16.68Zm42.98,0h-8.58V9.84h-11.7V2.34h31.92v7.5h-11.64v32.52Z"
-                        fill="none"
-                      />
-                    </clipPath>
-                  </defs>
-                  <g
-                    clip-path="url(#hero-section-mobile-writing-nft-path)"
-                    fill="none"
-                  >
-                    <image
-                      width="500"
-                      height="333"
-                      transform="translate(-.04 -82.09) scale(.64)"
-                      xlink:href="~assets/images/index/gradient-1.jpg"
-                    />
-                  </g>
-                </svg>
+                <h2 class="mb-[0.5rem] text-[1rem] font-[600]">
+                  {{ $t('index_page_hero_all_stories_matter_heading') }}
+                </h2>
                 <p class="mt-[0.5rem] text-[1rem]">
                   {{ $t('index_page_hero_writing_nft_content') }}
                 </p>
@@ -503,25 +445,11 @@
                   ]"
                 >
                   <ButtonV2
-                    :text="$t('index_page_hero_try_collect_button')"
+                    :text="$t('index_page_hero_enter_book_store')"
                     theme="glow"
                     preset="secondary"
-                    :to="
-                      localeLocation({
-                        name: 'nft-class-classId',
-                        params: { classId: freeMintNFTClassId },
-                        query: { action: 'collect' },
-                      })
-                    "
-                    @click.native="handleTryCollectButtonClickInHeroSection"
-                  />
-                  <ButtonV2
-                    v-if="publishStoryURL"
-                    :text="$t('index_page_hero_publish_story_button')"
-                    :href="publishStoryURL"
-                    theme="glow"
-                    preset="tertiary"
-                    @click.native="handlePublishStoryButtonClickInHeroSection"
+                    :to="localeLocation({ name: 'store' })"
+                    @click.native="handleEnterBookstoreButtonClickInHeroSection"
                   />
                 </nav>
               </div>
@@ -2018,7 +1946,6 @@ export default {
         heroSectionTaglineRight,
         heroSectionTaglineRightText,
         heroSectionIndicator,
-        heroSectionAllStoryMattersDescription,
         heroSectionWritingNFTDescription,
         heroSectionWritingNFTText,
         heroSectionCTA,
@@ -2030,7 +1957,6 @@ export default {
         heroSectionMobilePortalBorderLayer,
         heroSectionMobileTagline,
         heroSectionMobileTaglineParts,
-        heroSectionMobileAllStoryMattersDescription,
         heroSectionMobileAllStoryMattersIndicator,
         heroSectionMobileWritingNFTDescription,
         heroSectionMobileCTA,
@@ -2204,28 +2130,7 @@ export default {
           'slide2+=1'
         );
 
-        this.$options.heroSectionScrollAnimation.from(
-          heroSectionAllStoryMattersDescription,
-          {
-            x: '+=40',
-            duration: 1,
-            opacity: 0,
-            ease: 'power2.out',
-          },
-          'slide2+=1'
-        );
-
         this.$options.heroSectionScrollAnimation.addLabel('slide3');
-
-        this.$options.heroSectionScrollAnimation.to(
-          heroSectionAllStoryMattersDescription,
-          {
-            delay: 0.5,
-            duration: 1,
-            opacity: 0,
-            ease: 'power2.in',
-          }
-        );
 
         this.$options.heroSectionScrollAnimation.to(
           heroSectionIndicator,
@@ -2306,19 +2211,6 @@ export default {
           }
         );
 
-        this.$options.heroSectionScrollAnimation.to(
-          [
-            heroSectionMobilePortalFillLayer,
-            heroSectionMobilePortalBorderLayer,
-          ],
-          {
-            x: `${heroSectionMobileAllStoryMattersDescription.offsetWidth -
-              32}`,
-            duration: 4,
-            ease: 'power2.inOut',
-          }
-        );
-
         this.$options.heroSectionScrollAnimation.from(
           heroSectionMobileAllStoryMattersIndicator,
           {
@@ -2331,28 +2223,8 @@ export default {
           '-=0.5'
         );
 
-        this.$options.heroSectionScrollAnimation.from(
-          heroSectionMobileAllStoryMattersDescription,
-          {
-            x: 32,
-            duration: 1,
-            opacity: 0,
-            ease: 'power2.out',
-          },
-          '-=0.5'
-        );
-
         this.$options.heroSectionScrollAnimation.addLabel('slide3', '+=0.5');
 
-        this.$options.heroSectionScrollAnimation.to(
-          heroSectionMobileAllStoryMattersDescription,
-          {
-            duration: 1,
-            opacity: 0,
-            ease: 'power2.in',
-          },
-          'slide3'
-        );
         this.$options.heroSectionScrollAnimation.to(
           heroSectionMobileAllStoryMattersIndicator,
           {
