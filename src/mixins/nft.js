@@ -12,6 +12,7 @@ import {
   NFT_DISPLAY_STATE,
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
+  NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
 } from '~/constant';
 
 import {
@@ -841,7 +842,10 @@ export default {
         actionType.push('mint_nft');
       }
 
-      const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      const ignoreToList =
+        this.nftIsWritingNFT || this.nftIsNFTBook
+          ? LIKECOIN_NFT_API_WALLET
+          : '';
       let dbEventMap = null;
       if (this.nftIsWritingNFT) {
         dbEventMap = await getNFTHistoryDataMap({
@@ -1381,7 +1385,10 @@ export default {
       );
     },
     normalizeNFTMessage(m) {
-      if (m.memo === NFT_LEGACY_DEFAULT_MESSSAGE) {
+      if (
+        m.memo === NFT_LEGACY_DEFAULT_MESSSAGE ||
+        m.memo === NFT_AUTO_DELIVER_DEFAULT_MESSAGE
+      ) {
         return '';
       }
       if (m.event === 'mint_nft' || m.memo === NFT_BATCH_COLLECT_MESSSAGE) {
