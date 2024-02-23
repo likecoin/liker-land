@@ -81,6 +81,7 @@
                 @click-collect="handleCollectFromEditionSelector"
                 @click-gift="handleGiftFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
+                @input-custom-price="handleInputCustomPrice"
               />
               <div
                 v-if="nftCollections.length"
@@ -408,6 +409,8 @@ export default {
       shouldShowCollectionItem: false,
 
       trimmedCount: 10,
+
+      customPrice: -1,
     };
   },
   async fetch({ route, store, redirect, error, localeLocation }) {
@@ -1009,6 +1012,10 @@ export default {
           }
           this.uiToggleCollectModal({ classId: this.classId });
         } else {
+          const customPriceInDecimal =
+            this.customPrice > -1
+              ? Math.round(this.customPrice * 100)
+              : undefined;
           const gaClientId = this.getGaClientId;
           const gaSessionId = this.getGaSessionId;
           const link = getNFTBookPurchaseLink({
@@ -1021,6 +1028,7 @@ export default {
             gaSessionId,
             giftInfo,
             coupon: this.$route.query.coupon,
+            customPriceInDecimal,
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
@@ -1094,6 +1102,7 @@ export default {
       );
     },
     async handleEditionSelectChange(selectedValue) {
+      this.customPrice = -1;
       await this.$router.replace({
         query: {
           ...this.$route.query,
@@ -1107,6 +1116,9 @@ export default {
         this.classId,
         1
       );
+    },
+    handleInputCustomPrice(price) {
+      this.customPrice = Number(price);
     },
     handleCopyURL() {
       this.shareURLPath({

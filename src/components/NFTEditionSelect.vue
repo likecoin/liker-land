@@ -9,13 +9,15 @@
           v-for="(item, index) in items"
           :key="index"
           :name="item.name"
+          :currency="item.currency"
           :price-label="item.priceLabel"
+          :allow-custom-price="item.isAllowCustomPrice"
           :stock="item.stock"
           :is-selected="item.value === selectedValue"
           :current-price="item.price"
           :default-price="item.defaultPrice"
-          :currency="item.currency"
           @click="handleClickPriceSelectItem(item)"
+          @input-custom-price="handleInputCustomPrice"
         />
       </tbody>
     </table>
@@ -187,9 +189,14 @@ export default {
   },
   methods: {
     handleClickPriceSelectItem({ value }) {
+      if (this.selectedValue === value) return;
       this.selectedValue = value;
       this.$emit('change', value);
       this.$emit('update:value', value);
+      this.$emit('reset-custom-price');
+    },
+    handleInputCustomPrice(price) {
+      this.$emit('input-custom-price', price);
     },
     handleClickGiftButton() {
       this.$emit('click-gift', this.selectedValue);

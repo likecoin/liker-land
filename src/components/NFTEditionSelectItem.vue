@@ -51,7 +51,20 @@
           'gap-[12px]',
         ]"
       >
-        {{ priceLabel }}
+        <template v-if="isSelected && allowCustomPrice">
+          <input
+            v-model="customPrice"
+            class="text-black text-right"
+            type="number"
+            :min="currentPrice"
+            step="0.1"
+            @input="handleInputCustomPrice"
+          />
+          {{ currency }}
+        </template>
+        <span v-else>
+          {{ priceLabel }}
+        </span>
         <div
           v-if="discountInfo"
           class="flex justify-start items-center gap-[4px]"
@@ -99,7 +112,18 @@
             }}
           </span>
         </div>
-        {{ priceLabel }}
+        <template v-if="isSelected && allowCustomPrice">
+          <input
+            v-model="customPrice"
+            class="text-black text-right"
+            type="number"
+            :min="currentPrice"
+            step="0.1"
+            @input="handleInputCustomPrice"
+          />
+          {{ currency }}
+        </template>
+        <span v-else>{{ priceLabel }}</span>
       </div>
     </td>
     <td
@@ -132,6 +156,10 @@ export default {
       type: String,
       default: '',
     },
+    currency: {
+      type: String,
+      default: 'USD',
+    },
     priceLabel: {
       type: String,
       default: '',
@@ -139,6 +167,10 @@ export default {
     stock: {
       type: Number,
       default: 0,
+    },
+    allowCustomPrice: {
+      type: Boolean,
+      default: false,
     },
     isSelected: {
       type: Boolean,
@@ -152,10 +184,11 @@ export default {
       type: Number,
       default: 0,
     },
-    currency: {
-      type: String,
-      default: '',
-    },
+  },
+  data() {
+    return {
+      customPrice: this.currentPrice,
+    };
   },
   computed: {
     isInStock() {
@@ -195,6 +228,16 @@ export default {
             : formatNumberWithUSD(originalPrice),
         discountPercentage: `-${discountPercentage}`,
       };
+    },
+  },
+  watch: {
+    isSelected() {
+      this.customPrice = this.currentPrice;
+    },
+  },
+  methods: {
+    handleInputCustomPrice(event) {
+      this.$emit('input-custom-price', event.target.value);
     },
   },
 };

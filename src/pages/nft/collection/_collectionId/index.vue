@@ -20,6 +20,7 @@
               :should-show-notify-button="false"
               @click-collect="handleCollectFromEditionSelector"
               @click-gift="handleGiftFromEditionSelector"
+              @input-custom-price="handleInputCustomPrice"
             />
           </template>
         </NFTCollectionItemCard>
@@ -78,6 +79,7 @@ export default {
     return {
       isLoading: true,
       isGiftDialogOpen: false,
+      customPrice: -1,
     };
   },
   async fetch({ route, store, error }) {
@@ -207,6 +209,9 @@ export default {
         1
       );
     },
+    handleInputCustomPrice(price) {
+      this.customPrice = Number(price);
+    },
     async handleCollectFromEdition(giftInfo = undefined) {
       const hasStock = this.collection?.stock;
       if (!hasStock) return;
@@ -226,6 +231,10 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+        const customPriceInDecimal =
+          this.customPrice > -1
+            ? Math.round(this.customPrice * 100)
+            : undefined;
         const gaClientId = this.getGaClientId;
         const gaSessionId = this.getGaSessionId;
         const link = getNFTBookPurchaseLink({
@@ -237,6 +246,7 @@ export default {
           giftInfo,
           gaSessionId,
           coupon: this.$route.query.coupon,
+          customPriceInDecimal,
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
