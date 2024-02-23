@@ -842,7 +842,10 @@ export default {
         actionType.push('mint_nft');
       }
 
-      const ignoreToList = this.nftIsWritingNFT ? LIKECOIN_NFT_API_WALLET : '';
+      const ignoreToList =
+        this.nftIsWritingNFT || this.nftIsNFTBook
+          ? LIKECOIN_NFT_API_WALLET
+          : '';
       let dbEventMap = null;
       if (this.nftIsWritingNFT) {
         dbEventMap = await getNFTHistoryDataMap({
