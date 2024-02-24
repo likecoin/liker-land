@@ -1,7 +1,7 @@
 <template>
   <NFTBookShelf
     class="w-full"
-    :items="nftBooks"
+    :items="nftBookstoreLatestPaidItems"
     @click-item="handleClickItem"
     @click-item-avatar="handleClickItemAvatar"
   />
@@ -14,14 +14,11 @@ import { EXTERNAL_HOST } from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-import bookstoreMixin from '~/mixins/bookstore';
-
 export default {
-  name: 'StoreEditorialBooksPage',
-  mixins: [bookstoreMixin],
+  name: 'StorePaidBooksPage',
   async fetch({ store }) {
     try {
-      await store.dispatch('fetchBookstoreEditorialItems');
+      await store.dispatch('fetchBookstoreLatestItems');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -29,7 +26,7 @@ export default {
   },
   head() {
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    this.nftBookstoreEditorialItems.forEach(classId => {
+    this.nftBookstoreLatestPaidItems.forEach(classId => {
       link.push({
         rel: 'prefetch',
         href: `/api/nft/metadata?class_id=${classId}`,
@@ -41,7 +38,7 @@ export default {
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'DataFeed',
-      dataFeedElement: this.nftBookstoreEditorialItems
+      dataFeedElement: this.nftBookstoreLatestPaidItems
         .filter(c => this.getNFTClassMetadataById(c.classId))
         .map(c => {
           const {
@@ -110,12 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['nftBookstoreEditorialItems', 'getNFTClassMetadataById']),
-    nftBooks() {
-      return this.sortBookstoreListItemsByLocale(
-        this.nftBookstoreEditorialItems
-      );
-    },
+    ...mapGetters(['nftBookstoreLatestPaidItems', 'getNFTClassMetadataById']),
   },
   methods: {
     handleClickItem(classId) {

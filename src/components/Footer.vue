@@ -66,7 +66,7 @@
           <div class="grid grid-flow-row gap-y-[16px]">
             <NuxtLink
               class="hover:underline"
-              :to="localeLocation({ name: 'store-books' })"
+              :to="localeLocation({ name: 'store' })"
             >
               {{ $t('footer_nav_store_books') }}
             </NuxtLink>
