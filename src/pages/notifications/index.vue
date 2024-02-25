@@ -290,7 +290,9 @@ export default {
               this.getUserInfoByAddress(e.receiver)?.displayName || e.receiver;
             // eslint-disable-next-line prefer-destructuring
             price = e.price;
-            i18nPath = 'event_list_page_event_message_nft_sale';
+            i18nPath = e.price
+              ? 'event_list_page_event_message_nft_sale_with_price'
+              : 'event_list_page_event_message_nft_sale';
             displayAvatar = this.getUserInfoByAddress(e.receiver)?.avatar;
             isCivicLiker = this.getUserInfoByAddress(e.receiver)
               ?.isSubscribedCivicLiker;
