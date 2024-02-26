@@ -869,7 +869,7 @@ export default {
         ignoreToList,
       });
 
-      const nftBookLatestBatchEvents = latestBatchEvents;
+      const nftBookLatestBatchEvents = [];
       try {
         if (this.nftIsNFTBook) {
           const { messages: nftBookBuyerMessages } = await this.$api.$get(
@@ -880,7 +880,7 @@ export default {
               const buyerMessage = nftBookBuyerMessages[i].message;
               const { txHash } = nftBookBuyerMessages[i];
 
-              const matchingEvent = nftBookLatestBatchEvents.find(
+              const matchingEvent = latestBatchEvents.find(
                 event => event.txHash === txHash
               );
 
@@ -889,6 +889,30 @@ export default {
               }
             }
           }
+          latestBatchEvents.forEach(event => {
+            const {
+              classId,
+              nftId,
+              fromWallet,
+              toWallet,
+              buyerMessage,
+              txHash,
+              timestamp,
+            } = event;
+            nftBookLatestBatchEvents.push(event);
+            if (buyerMessage) {
+              nftBookLatestBatchEvents.push({
+                event: 'grant',
+                classId,
+                nftId,
+                fromWallet: toWallet,
+                toWallet: fromWallet,
+                memo: buyerMessage,
+                txHash,
+                timestamp: timestamp - 1,
+              });
+            }
+          });
         }
       } catch (error) {
         // eslint-disable-next-line no-console
