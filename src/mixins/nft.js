@@ -374,6 +374,9 @@ export default {
       }
       const defaultLocale = 'en';
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
+      const currency = this.getNFTBookStoreBookDefaultPaymentCurrency(
+        this.classId
+      );
       const defaultEdition = {
         name: '',
         description: '',
@@ -385,10 +388,9 @@ export default {
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
           : 0,
+        defaultPrice: 0,
+        currency,
       };
-      const currency = this.getNFTBookStoreBookDefaultPaymentCurrency(
-        this.classId
-      );
       return prices
         ? prices.map((edition, index) => {
             let { name, description } = edition;
@@ -432,6 +434,8 @@ export default {
               isPhysicalOnly,
               hasShipping,
               dynamicCovers: getDynamicCovers(this.classId, edition.index),
+              defaultPrice: edition.price,
+              currency,
             };
           })
         : [defaultEdition];

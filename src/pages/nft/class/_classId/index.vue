@@ -143,8 +143,8 @@
               class="flex flex-wrap items-start justify-center gap-[16px] w-full"
             >
               <li
-                v-for="editionConfig in nftEditions"
-                :key="editionConfig.name"
+                v-for="(editionConfig, i) in nftEditions"
+                :key="`${editionConfig.name}-${i}`"
               >
                 <NFTBookEditionCompareTableColumn
                   class="w-[280px]"
