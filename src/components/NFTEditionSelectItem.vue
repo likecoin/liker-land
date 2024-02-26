@@ -61,7 +61,7 @@
           >
             {{ discountInfo.originalPriceLabel }}
           </span>
-          <span class="text-danger font-400 text-[12px] text-right">
+          <span class="text-like-cyan-light font-400 text-[12px] text-right">
             {{
               $t('nft_collect_modal_method_like_discount', {
                 percentage: discountInfo.discountPercentage,
@@ -91,7 +91,7 @@
           >
             {{ discountInfo.originalPriceLabel }}
           </span>
-          <span class="text-danger font-400 text-[12px] text-right">
+          <span class="text-like-cyan-light font-400 text-[12px] text-right">
             {{
               $t('nft_collect_modal_method_like_discount', {
                 percentage: discountInfo.discountPercentage,
