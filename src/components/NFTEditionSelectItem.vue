@@ -144,7 +144,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    discountedPrice: {
+    currentPrice: {
       type: Number,
       default: 0,
     },
@@ -175,12 +175,12 @@ export default {
     },
     discountInfo() {
       const originalPrice = this.defaultPrice;
-      const { discountedPrice } = this;
-      if (originalPrice <= discountedPrice) {
+      const { currentPrice } = this;
+      if (originalPrice <= currentPrice) {
         return undefined;
       }
 
-      const discountAmount = originalPrice - discountedPrice;
+      const discountAmount = originalPrice - currentPrice;
       const discountPercentage = Math.ceil(
         (discountAmount / originalPrice) * 100
       );
