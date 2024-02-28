@@ -91,6 +91,7 @@ export default {
   async fetch({ route, redirect, localeLocation, store }) {
     if (checkIsForcedInAppPage(route)) {
       redirect(301, localeLocation({ name: 'store-articles' }));
+      return;
     }
 
     try {
@@ -222,7 +223,6 @@ export default {
     },
   },
   mounted() {
-    console.log('mounted', this.$route.name);
     // NOTE: Redirect to store-articles page if in LikeCoin App
     if (checkIsLikeCoinAppInAppBrowser(this.$route)) {
       this.$router.replace(this.localeLocation({ name: 'store-articles' }));
