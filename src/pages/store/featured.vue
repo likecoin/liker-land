@@ -113,7 +113,14 @@ export default {
     ...mapGetters(['nftBookstoreEditorialItems', 'getNFTClassMetadataById']),
     nftBooks() {
       return this.sortBookstoreListItemsByLocale(
-        this.nftBookstoreEditorialItems
+        this.nftBookstoreEditorialItems.filter(
+          nft =>
+            !(Array.isArray(nft.classId)
+              ? nft.classId.some(classId =>
+                  this.bookstoreListItemsInHighlightedClassIdSet.has(classId)
+                )
+              : this.bookstoreListItemsInHighlightedClassIdSet.has(nft.classId))
+        )
       );
     },
   },
