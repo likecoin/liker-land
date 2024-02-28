@@ -1,7 +1,7 @@
 <script>
 export default {
   fetch({ redirect, localeLocation }) {
-    redirect(localeLocation({ name: 'store-books-featured' }));
+    redirect(301, localeLocation({ name: 'store' }));
   },
 };
 </script>
