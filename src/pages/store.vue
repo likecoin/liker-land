@@ -227,6 +227,12 @@ export default {
     if (checkIsLikeCoinAppInAppBrowser(this.$route)) {
       this.$router.replace(this.localeLocation({ name: 'store-articles' }));
     }
+
+    // Reset scroll position when navigating to this page
+    // scrollToTop: true in Nuxt component is buggy in this case
+    // since it will trigger when navigating to different child components
+    // Ref: https://v2.nuxt.com/docs/components-glossary/scrolltotop#the-scrolltotop-property
+    window.scrollTo(0, 0);
   },
   methods: {
     handleTabClick(tab) {
