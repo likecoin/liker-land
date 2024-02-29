@@ -23,7 +23,7 @@
         </div>
       </section>
 
-      <section class="mt-[6rem]">
+      <section ref="tabsSection" class="mt-[3rem] pt-[3rem]">
         <nav class="flex items-center justify-center mb-[3rem]">
           <ul
             :class="[
@@ -229,10 +229,14 @@ export default {
     }
 
     // Reset scroll position when navigating to this page
-    // scrollToTop: true in Nuxt component is buggy in this case
-    // since it will trigger when navigating to different child components
-    // Ref: https://v2.nuxt.com/docs/components-glossary/scrolltotop#the-scrolltotop-property
-    window.scrollTo(0, 0);
+    if (this.currentTab === 'featured') {
+      // scrollToTop: true in Nuxt component is buggy in this case
+      // since it will trigger when navigating to different child components
+      // Ref: https://v2.nuxt.com/docs/components-glossary/scrolltotop#the-scrolltotop-property
+      window.scrollTo(0, 0);
+    } else if (this.$refs.tabsSection) {
+      this.$refs.tabsSection.scrollIntoView();
+    }
   },
   methods: {
     handleTabClick(tab) {
