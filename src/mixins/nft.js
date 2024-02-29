@@ -1428,10 +1428,11 @@ export default {
       if (this.isRecommendationLoading) return;
       this.isRecommendationLoading = true;
       try {
-        const promises = [
-          this.fetchCreatedNFTClassesByAddress(this.iscnOwner),
-          this.fetchNFTDisplayStateListByAddress(this.iscnOwner),
-        ];
+        const promises = [];
+        if (this.iscnOwner) {
+          promises.push(this.fetchCreatedNFTClassesByAddress(this.iscnOwner));
+          promises.push(this.fetchNFTDisplayStateListByAddress(this.iscnOwner));
+        }
         if (this.getAddress) {
           promises.push(
             this.fetchCollectedNFTClassesByAddress(this.getAddress)
