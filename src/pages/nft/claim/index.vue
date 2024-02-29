@@ -284,7 +284,7 @@
       />
       <NFTPageRecommendation
         class="w-full "
-        :iscn-owner="getNFTClassMetadataById(classId).iscn_owner"
+        :iscn-owner="getNFTClassMetadataById(classId)?.iscn_owner"
         :should-show-follow-button="false"
         :should-show-iscn-owner="false"
         :recommended-list="[]"
@@ -338,7 +338,7 @@ const NFT_CLAIM_STATE = {
 
 export default {
   name: 'NFTClaimPage',
-  mixins: [alertMixin, walletMixin, nftOrCollectionMixin, nftMixin],
+  mixins: [alertMixin, walletMixin, nftMixin, nftOrCollectionMixin],
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
