@@ -290,6 +290,7 @@
   "gutenberg_decentralize_description": "Although the project significantly improves the accessibility of knowledge by presenting it in more humanized and engaging ways, the maintenance of the knowledge vault, in this case the metadata and ebooks in various formats, still relies heavily on a few significant contributors like {ProjectGutenberg} and Microsoft.  The ownership model of knowledge needs to be reformed, and this is where the concept of “{decentralized}” comes into play.",
   "gutenberg_decentralize_title": "Decentralize and Democratize Publishing with Blockchain",
   "gutenberg_dialog_title": "Free Audio eBooks on Liker Land",
+  "gutenberg_dialog_title_author": "Author",
   "gutenberg_dialog_title_classTitle": "Title",
   "gutenberg_dialog_title_no": "No.",
   "gutenberg_dialog_title_price": "Edition Price",

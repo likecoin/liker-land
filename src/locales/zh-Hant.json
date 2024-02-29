@@ -290,6 +290,7 @@
   "gutenberg_decentralize_description": "儘管該項目以更人性化和引人入勝的呈現方式顯著地降低了吸收知識的門檻，但知識庫的維護 - 即元資料和各種格式的電子書檔案 - 仍然在很大程度上依賴如{ProjectGutenberg}和微軟等少數貢獻者。知識的擁有權模式必需改革以提高韌性，確保更廣泛的人群能參與知識庫的營運——這就是「{decentralized}」的概念。",
   "gutenberg_decentralize_title": "以區塊鏈分散及民主化出版業",
   "gutenberg_dialog_title": "Liker Land 的免費有聲書",
+  "gutenberg_dialog_title_author": "作者",
   "gutenberg_dialog_title_classTitle": "書名",
   "gutenberg_dialog_title_no": "編號",
   "gutenberg_dialog_title_price": "價格",
