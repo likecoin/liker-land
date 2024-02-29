@@ -75,7 +75,13 @@
     </div>
     <table
       v-else
-      :class="['w-full', 'text-[14px]', 'mt-[24px]', 'max-w-[960px]']"
+      :class="[
+        'w-full',
+        'table-fixed',
+        'text-[14px]',
+        'mt-[24px]',
+        'max-w-[960px]',
+      ]"
     >
       <thead :class="['border-b-shade-gray', 'border-b-[2px]']">
         <tr class="text-medium-gray">
@@ -84,6 +90,9 @@
           </th>
           <th :class="['py-[12px]', 'text-[16px]', 'text-left']">
             {{ $t('gutenberg_dialog_title_classTitle') }}
+          </th>
+          <th :class="['py-[12px]', 'text-[16px]', 'text-left']">
+            {{ $t('gutenberg_dialog_title_author') }}
           </th>
         </tr>
       </thead>
@@ -139,6 +148,9 @@
               {{ row.classTitle }}
             </span>
           </td>
+          <td>
+            {{ row.author }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -150,7 +162,7 @@ import { fetchGutenbergCsv } from '~/util/api';
 import csvParser from 'csv-parser';
 import { logTrackerEvent } from '~/util/EventLogger';
 
-const DISPLAY_COLUMN = ['classTitle', 'classId'];
+const DISPLAY_COLUMN = ['classTitle', 'classId', 'author'];
 
 export default {
   name: 'FreeAudioBooks',

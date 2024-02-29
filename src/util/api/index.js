@@ -577,7 +577,7 @@ export const fetchBookstoreEditorialItems = () =>
   `${EXTERNAL_HOST}/api/bookstore/items`;
 
 export const fetchGutenbergCsv = () =>
-  `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v2.csv`;
+  `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;
 
 export const fetchBookstoreLists = () =>
   `${EXTERNAL_HOST}/api/bookstore/lists?t=1705305172`;
