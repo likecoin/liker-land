@@ -1427,8 +1427,8 @@ export default {
     async fetchRecommendInfo() {
       if (this.isRecommendationLoading) return;
       this.isRecommendationLoading = true;
-      const promises = [];
       try {
+        const promises = [];
         if (this.iscnOwner) {
           promises.push(this.fetchCreatedNFTClassesByAddress(this.iscnOwner));
           promises.push(this.fetchNFTDisplayStateListByAddress(this.iscnOwner));
