@@ -434,6 +434,7 @@ export default {
               currency,
               description,
               priceLabel,
+              price,
               value: index,
               stock,
               style,
