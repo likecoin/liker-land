@@ -17,7 +17,6 @@
           :current-price="item.price"
           :default-price="item.defaultPrice"
           @click="handleClickPriceSelectItem(item)"
-          @input-custom-price="handleInputCustomPrice"
         />
       </tbody>
     </table>
@@ -194,9 +193,6 @@ export default {
       this.$emit('change', value);
       this.$emit('update:value', value);
       this.$emit('reset-custom-price');
-    },
-    handleInputCustomPrice(price) {
-      this.$emit('input-custom-price', price);
     },
     handleClickGiftButton() {
       this.$emit('click-gift', this.selectedValue);

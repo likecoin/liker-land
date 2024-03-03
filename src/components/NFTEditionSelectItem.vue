@@ -51,18 +51,7 @@
           'gap-[12px]',
         ]"
       >
-        <template v-if="isSelected && allowCustomPrice">
-          <input
-            v-model="customPrice"
-            class="text-black text-right"
-            type="number"
-            :min="convertedPrice"
-            step="0.1"
-            @input="handleInputCustomPrice"
-          />
-          {{ currency }}
-        </template>
-        <span v-else>
+        <span>
           {{ priceLabel }}
         </span>
         <div
@@ -112,18 +101,7 @@
             }}
           </span>
         </div>
-        <template v-if="isSelected && allowCustomPrice">
-          <input
-            v-model="customPrice"
-            class="text-black text-right"
-            type="number"
-            :min="convertedPrice"
-            step="0.1"
-            @input="handleInputCustomPrice"
-          />
-          {{ currency }}
-        </template>
-        <span v-else>{{ priceLabel }}</span>
+        <span>{{ priceLabel }}</span>
       </div>
     </td>
     <td
@@ -167,10 +145,6 @@ export default {
       type: Number,
       default: 0,
     },
-    allowCustomPrice: {
-      type: Boolean,
-      default: false,
-    },
     isSelected: {
       type: Boolean,
       default: false,
@@ -184,17 +158,7 @@ export default {
       default: 0,
     },
   },
-  data() {
-    return {
-      customPrice: this.convertedPrice,
-    };
-  },
   computed: {
-    convertedPrice() {
-      return this.currency === 'HKD'
-        ? Number((this.currentPrice * USD_TO_HKD_RATIO).toFixed(1))
-        : this.currentPrice;
-    },
     isInStock() {
       return this.stock > 0;
     },
@@ -213,7 +177,7 @@ export default {
     discountInfo() {
       const originalPrice = this.defaultPrice;
       const { currentPrice } = this;
-      if (originalPrice <= currentPrice) {
+      if (!currentPrice || originalPrice <= currentPrice) {
         return undefined;
       }
 
@@ -232,26 +196,6 @@ export default {
             : formatNumberWithUSD(originalPrice),
         discountPercentage: `-${discountPercentage}`,
       };
-    },
-  },
-  watch: {
-    isSelected() {
-      this.customPrice = this.convertedPrice;
-    },
-    convertedPrice() {
-      this.customPrice = this.convertedPrice;
-    },
-  },
-  mounted() {
-    this.customPrice = this.convertedPrice;
-  },
-  methods: {
-    handleInputCustomPrice(event) {
-      let newPrice = parseFloat(event.target.value);
-      if (this.currency === 'HKD') {
-        newPrice /= USD_TO_HKD_RATIO.toFixed(1);
-      }
-      this.$emit('input-custom-price', newPrice);
     },
   },
 };
