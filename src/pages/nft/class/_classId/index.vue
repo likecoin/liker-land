@@ -368,6 +368,16 @@
       @submit="handleGiftSubmit"
       @close="() => (isGiftDialogOpen = false)"
     />
+    <NFTBookTippingDialog
+      :open="isTippingDialogOpen"
+      :creator-avatar="creatorAvatar"
+      :display-name="creatorDisplayNameFull"
+      :currency="defaultCurrency"
+      :class-id="classId"
+      @on-submit="handleSubmitTipping"
+      @on-skip="handleSkipTipping"
+      @close="() => (isTippingDialogOpen = false)"
+    />
   </Page>
 </template>
 
@@ -377,6 +387,7 @@ import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
+  USD_TO_HKD_RATIO,
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   LIKECOIN_API_BASE,
@@ -405,12 +416,15 @@ export default {
       isCollecting: false,
 
       isGiftDialogOpen: false,
+      isTippingDialogOpen: false,
+      isTriggerFromEditionSelector: false,
       giftSelectedValue: 0,
       shouldShowCollectionItem: false,
 
       trimmedCount: 10,
 
       customPrice: -1,
+      selectedValue: undefined,
     };
   },
   async fetch({ route, store, redirect, error, localeLocation }) {
@@ -649,7 +663,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getGaClientId', 'getGaSessionId']),
+    ...mapGetters([
+      'getGaClientId',
+      'getGaSessionId',
+      'getNFTBookStoreBookDefaultPaymentCurrency',
+    ]),
     classId() {
       return this.$route.params.classId;
     },
@@ -673,6 +691,9 @@ export default {
     },
     defaultSelectedValue() {
       return this.nftEditions[this.editionPriceIndex || 0]?.value;
+    },
+    defaultCurrency() {
+      return this.getNFTBookStoreBookDefaultPaymentCurrency(this.classId);
     },
     shouldShowFollowButton() {
       return Boolean(this.iscnOwner !== this.getAddress);
@@ -842,7 +863,7 @@ export default {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
 
       if (this.nftIsNFTBook) {
-        await this.handleCollectFromEdition(this.defaultSelectedValue);
+        await this.checkTippingAvailability(this.defaultSelectedValue);
         return;
       }
 
@@ -964,12 +985,28 @@ export default {
       );
       return this.handleCollect();
     },
-    async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
+    checkTippingAvailability(selectedValue) {
+      this.selectedValue = selectedValue;
       const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
       const edition = editions[selectedValue];
-      const hasStock = edition?.stock;
-      if (!hasStock && !this.nftIsCollectable) return;
+      const hasStock = Boolean(edition?.stock);
+      const allowCustomPrice = edition?.isAllowCustomPrice;
 
+      if (!hasStock && !this.nftIsCollectable) return;
+      if (hasStock) {
+        if (allowCustomPrice) {
+          this.isTippingDialogOpen = true;
+          return;
+        }
+        this.handleCollectFromEdition();
+      }
+    },
+    async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
+      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const edition = editions[selectedValue || this.selectedValue];
+      const hasStock = edition?.stock;
+
+      if (!hasStock && !this.nftIsCollectable) return;
       if (hasStock) {
         const purchaseEventParams = {
           items: [
@@ -1014,7 +1051,7 @@ export default {
         } else {
           const customPriceInDecimal =
             this.customPrice > -1
-              ? Math.round(this.customPrice * 100)
+              ? this.formatCustomPrice(this.customPrice, edition.price)
               : undefined;
           const gaClientId = this.getGaClientId;
           const gaSessionId = this.getGaSessionId;
@@ -1040,12 +1077,20 @@ export default {
             throw new Error('Failed to get purchase link');
           }
         }
-      } else if (this.nftIsCollectable) {
+      }
+      if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
     },
-    async handleCollectFromEditionSelector(selectedValue) {
-      await this.handleCollectFromEdition(selectedValue);
+    formatCustomPrice(customPrice, editionPrice) {
+      let newPrice = parseFloat(customPrice);
+      if (this.defaultCurrency === 'HKD') {
+        newPrice /= USD_TO_HKD_RATIO.toFixed(1);
+      }
+      return Math.floor((newPrice + editionPrice) * 100);
+    },
+    handleCollectFromEditionSelector(selectedValue) {
+      this.isTriggerFromEditionSelector = true;
       logTrackerEvent(
         this,
         'NFT',
@@ -1053,6 +1098,7 @@ export default {
         this.classId,
         1
       );
+      this.checkTippingAvailability(selectedValue);
     },
     async handleGiftSubmit({ selectedValue, giftInfo }) {
       logTrackerEvent(
@@ -1076,8 +1122,8 @@ export default {
         1
       );
     },
-    async handleCollectFromEditionCompareTable(selectedValue) {
-      await this.handleCollectFromEdition(selectedValue);
+    handleCollectFromEditionCompareTable(selectedValue) {
+      this.isTriggerFromEditionSelector = false;
       logTrackerEvent(
         this,
         'NFT',
@@ -1085,6 +1131,7 @@ export default {
         this.classId,
         1
       );
+      this.checkTippingAvailability(selectedValue);
     },
     handleClickCollectionFromEditionCompareTable({ collectionId }) {
       logTrackerEvent(
@@ -1250,6 +1297,23 @@ export default {
           });
         }
       }, 100);
+    },
+    handleSubmitTipping(price) {
+      this.customPrice = Number(price);
+      this.handleCollectFromEdition();
+    },
+    handleSkipTipping() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        this.isTriggerFromEditionSelector
+          ? 'nft_class_details_compare_skip_button_clicked'
+          : 'nft_class_details_edition_selector_skip_button_clicked',
+        this.classId,
+        1
+      );
+      this.isTippingDialogOpen = false;
+      this.handleCollectFromEdition();
     },
   },
 };
