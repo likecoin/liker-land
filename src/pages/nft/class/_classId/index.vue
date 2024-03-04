@@ -865,7 +865,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_details_page_view_content',
+        'nft_class_details_view_content',
         this.classId,
         1
       );
@@ -874,7 +874,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        'nft_details_page_view_content_url',
+        'nft_class_details_view_content_url',
         type,
         1
       );
