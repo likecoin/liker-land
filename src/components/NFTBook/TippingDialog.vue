@@ -85,22 +85,14 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import Avatar from '../Identity/Identity.avatar';
 
 const DEFAULT_TIPPING_PRICES_BY_CURRENCY = {
-  HKD: [50, 100, 500],
-  USD: [50, 100, 500], // Should handle other ratio for USD?
+  HKD: [40, 200, 1000],
+  USD: [5, 20, 100],
 };
 
 export default {
   name: 'NFTBookTippingDialog',
   components: {
     Avatar,
-  },
-  data() {
-    return {
-      selectedIndex: 1,
-      tipPrice: 100,
-      inputValue: undefined,
-      customPrice: undefined,
-    };
   },
   props: {
     open: {
@@ -123,6 +115,14 @@ export default {
       type: String,
       default: undefined,
     },
+  },
+  data() {
+    return {
+      selectedIndex: 1,
+      tipPrice: 100,
+      inputValue: undefined,
+      customPrice: undefined,
+    };
   },
   methods: {
     getDefaultTipping(currency) {
