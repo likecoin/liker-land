@@ -22,8 +22,12 @@
         </div>
       </div>
       <div class="flex flex-col items-center gap-[6px] mt-[36px] mb-[24px]">
-        <Label preset="h4" class="text-dark-gray">想給予額外支持嗎？</Label>
-        <p class="text-dark-gray font-200 text-[14px]">款項將會分配給創作者</p>
+        <Label preset="h4" class="text-dark-gray">{{
+          $t('nft_tipping_title')
+        }}</Label>
+        <p class="text-dark-gray font-200 text-[14px]">
+          {{ $t('nft_tipping_description') }}
+        </p>
       </div>
       <div class="flex flex-col items-center w-full px-[40px]">
         <div class="flex items-center justify-between w-full">
