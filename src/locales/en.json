@@ -649,6 +649,8 @@
   "nft_sold_out": "Sold out",
   "nft_stock_left": "{stock} left",
   "nft_supply_section_title": "Item Supply",
+  "nft_tipping_button_continue": "Continue",
+  "nft_tipping_button_skip": "Skip",
   "nft_tipping_title": "Show your support with a tip!",
   "nft_tipping_description": "The funds will be distributed to the creators",
   "nft_type_all_NFTs": "All NFTs",

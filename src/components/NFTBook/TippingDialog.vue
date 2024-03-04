@@ -66,13 +66,13 @@
             preset="secondary"
             :is-disabled="selectedIndex === -1 && !inputValue"
             @click.prevent="handleSubmit"
-            >繼續</ButtonV2
+            >{{ $t('nft_tipping_button_continue') }}</ButtonV2
           >
           <ButtonV2
             class="mt-[12px] w-full"
             preset="plain"
             @click.prevent="handleSkip"
-            >不用了</ButtonV2
+            >{{ $t('nft_tipping_button_skip') }}</ButtonV2
           >
         </div>
       </div>
