@@ -20,7 +20,6 @@
               :should-show-notify-button="false"
               @click-collect="handleCollectFromEditionSelector"
               @click-gift="handleGiftFromEditionSelector"
-              @input-custom-price="handleInputCustomPrice"
             />
           </template>
         </NFTCollectionItemCard>
@@ -50,6 +49,16 @@
       @submit="handleGiftSubmit"
       @close="() => (isGiftDialogOpen = false)"
     />
+    <NFTBookTippingDialog
+      :open="isTippingDialogOpen"
+      :creator-avatar="creatorAvatar"
+      :display-name="creatorDisplayNameFull"
+      :currency="defaultCurrency"
+      :class-id="classId"
+      @on-submit="handleSubmitTipping"
+      @on-skip="handleSkipTipping"
+      @close="() => (isTippingDialogOpen = false)"
+    />
   </Page>
 </template>
 
@@ -58,7 +67,11 @@ import { mapGetters } from 'vuex';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { EXTERNAL_HOST, NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
+import {
+  EXTERNAL_HOST,
+  NFT_BOOK_PLATFORM_LIKER_LAND,
+  USD_TO_HKD_RATIO,
+} from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 
 import nftCollectionMixin from '~/mixins/nft-collection';
@@ -80,6 +93,7 @@ export default {
       isLoading: true,
       isGiftDialogOpen: false,
       customPrice: -1,
+      isTippingDialogOpen: false,
     };
   },
   async fetch({ route, store, error }) {
@@ -160,6 +174,9 @@ export default {
     shelfItems() {
       return this.classIds.map(id => ({ classId: id }));
     },
+    defaultCurrency() {
+      return this.collection?.defaultPaymentCurrency;
+    },
   },
   mounted() {
     try {
@@ -233,7 +250,7 @@ export default {
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         const customPriceInDecimal =
           this.customPrice > -1
-            ? Math.round(this.customPrice * 100)
+            ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
             : undefined;
         const gaClientId = this.getGaClientId;
         const gaSessionId = this.getGaSessionId;
@@ -259,8 +276,7 @@ export default {
         }
       }
     },
-    async handleCollectFromEditionSelector() {
-      await this.handleCollectFromEdition();
+    handleCollectFromEditionSelector() {
       logTrackerEvent(
         this,
         'NFT',
@@ -268,6 +284,26 @@ export default {
         this.classId,
         1
       );
+      this.checkTippingAvailability();
+    },
+    checkTippingAvailability() {
+      const hasStock = this.collection?.stock;
+      if (!hasStock) return;
+
+      const allowCustomPrice = this.collection?.isAllowCustomPrice;
+      // Missing isAllowCustomPrice in collection
+      if (allowCustomPrice) {
+        this.isTippingDialogOpen = true;
+        return;
+      }
+      this.handleCollectFromEdition();
+    },
+    formatCustomPrice(customPrice, editionPrice) {
+      let newPrice = parseFloat(customPrice);
+      if (this.defaultCurrency === 'HKD') {
+        newPrice /= USD_TO_HKD_RATIO.toFixed(1);
+      }
+      return Math.floor((newPrice + editionPrice) * 100);
     },
     async handleGiftSubmit({ giftInfo }) {
       logTrackerEvent(
@@ -307,6 +343,21 @@ export default {
         classId,
         1
       );
+    },
+    handleSubmitTipping(price) {
+      this.customPrice = Number(price);
+      this.handleCollectFromEdition();
+    },
+    handleSkipTipping() {
+      logTrackerEvent(
+        this,
+        'nft_collection',
+        'nft_collection_skip_button_clicked',
+        this.collectionId,
+        1
+      );
+      this.isTippingDialogOpen = false;
+      this.handleCollectFromEdition();
     },
   },
 };
