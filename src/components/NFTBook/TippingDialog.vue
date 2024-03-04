@@ -13,7 +13,7 @@
           src="~/assets/images/nft/tip-background.png"
         />
         <div
-          class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col items-center gap-[4px]"
+          class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-30%] flex flex-col items-center gap-[4px]"
         >
           <Avatar :url="creatorAvatar" :display-name="displayName" :size="88" />
           <div v-if="displayName" class="text-[12px] text-like-green">
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col items-center gap-[6px] my-[24px]">
+      <div class="flex flex-col items-center gap-[6px] mt-[36px] mb-[24px]">
         <Label preset="h4" class="text-dark-gray">想給予額外支持嗎？</Label>
         <p class="text-dark-gray font-200 text-[14px]">款項將會分配給創作者</p>
       </div>
