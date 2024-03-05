@@ -5,6 +5,8 @@
         v-bind="inputProps"
         :value="value"
         type="number"
+        :min="0"
+        :max="999999"
         @input="handleInput"
         @focus="$emit('on-focus')"
       />
