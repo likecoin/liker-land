@@ -121,7 +121,7 @@ export default {
       selectedIndex: 1,
       tipPrice: 100,
       inputValue: undefined,
-      customPrice: undefined,
+      customPrice: 0,
     };
   },
   methods: {

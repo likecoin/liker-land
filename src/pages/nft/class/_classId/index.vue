@@ -1050,9 +1050,9 @@ export default {
           this.uiToggleCollectModal({ classId: this.classId });
         } else {
           const customPriceInDecimal =
-            this.customPrice > -1
-              ? this.formatCustomPrice(this.customPrice, edition.price)
-              : undefined;
+            this.customPrice === 0
+              ? undefined
+              : this.formatCustomPrice(this.customPrice, edition.price);
           const gaClientId = this.getGaClientId;
           const gaSessionId = this.getGaSessionId;
           const link = getNFTBookPurchaseLink({
@@ -1149,7 +1149,7 @@ export default {
       );
     },
     async handleEditionSelectChange(selectedValue) {
-      this.customPrice = -1;
+      this.customPrice = 0;
       await this.$router.replace({
         query: {
           ...this.$route.query,
