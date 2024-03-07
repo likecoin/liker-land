@@ -1049,10 +1049,9 @@ export default {
           }
           this.uiToggleCollectModal({ classId: this.classId });
         } else {
-          const customPriceInDecimal =
-            this.customPrice === 0
-              ? undefined
-              : this.formatCustomPrice(this.customPrice, edition.price);
+          const customPriceInDecimal = !this.customPrice
+            ? undefined
+            : this.formatCustomPrice(this.customPrice, this.collectionPrice);
           const gaClientId = this.getGaClientId;
           const gaSessionId = this.getGaSessionId;
           const link = getNFTBookPurchaseLink({
