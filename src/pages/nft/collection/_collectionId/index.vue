@@ -92,7 +92,7 @@ export default {
     return {
       isLoading: true,
       isGiftDialogOpen: false,
-      customPrice: -1,
+      customPrice: 0,
       isTippingDialogOpen: false,
     };
   },
@@ -249,9 +249,10 @@ export default {
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
         const customPriceInDecimal =
-          this.customPrice > -1
-            ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
-            : undefined;
+          this.customPrice === 0
+            ? undefined
+            : this.formatCustomPrice(this.customPrice, this.collectionPrice);
+
         const gaClientId = this.getGaClientId;
         const gaSessionId = this.getGaSessionId;
         const link = getNFTBookPurchaseLink({
