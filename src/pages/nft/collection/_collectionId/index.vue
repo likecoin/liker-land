@@ -20,6 +20,7 @@
               :should-show-notify-button="false"
               @click-collect="handleCollectFromEditionSelector"
               @click-gift="handleGiftFromEditionSelector"
+              @input-custom-price="handleInputCustomPrice"
             />
           </template>
         </NFTCollectionItemCard>

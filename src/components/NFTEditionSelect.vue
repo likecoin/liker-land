@@ -11,7 +11,6 @@
           :name="item.name"
           :currency="item.currency"
           :price-label="item.priceLabel"
-          :allow-custom-price="item.isAllowCustomPrice"
           :stock="item.stock"
           :is-selected="item.value === selectedValue"
           :current-price="item.price"
