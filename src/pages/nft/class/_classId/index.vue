@@ -1312,7 +1312,9 @@ export default {
         this.classId,
         1
       );
+      this.customPrice = 0;
       this.isTippingDialogOpen = false;
+
       this.handleCollectFromEdition();
     },
   },

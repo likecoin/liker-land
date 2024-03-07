@@ -358,6 +358,7 @@ export default {
         this.collectionId,
         1
       );
+      this.customPrice = 0;
       this.isTippingDialogOpen = false;
       this.handleCollectFromEdition();
     },
