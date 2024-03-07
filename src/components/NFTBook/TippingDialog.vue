@@ -30,7 +30,7 @@
         </p>
       </div>
       <div class="flex flex-col items-center w-full px-0 sm:px-[40px]">
-        <div class="flex items-center justify-between w-full">
+        <div class="flex items-center justify-center w-full gap-[16px]">
           <ButtonV2
             v-for="(tipping, i) of getDefaultTipping(currency)"
             :key="`${tipping}-${currency}`"
