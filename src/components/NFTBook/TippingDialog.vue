@@ -29,7 +29,7 @@
           {{ $t('nft_tipping_description') }}
         </p>
       </div>
-      <div class="flex flex-col items-center w-full px-[40px]">
+      <div class="flex flex-col items-center w-full px-0 sm:px-[40px]">
         <div class="flex items-center justify-between w-full">
           <ButtonV2
             v-for="(tipping, i) of getDefaultTipping(currency)"
