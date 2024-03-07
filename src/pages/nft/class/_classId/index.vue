@@ -863,7 +863,7 @@ export default {
       logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
 
       if (this.nftIsNFTBook) {
-        await this.checkTippingAvailability(this.defaultSelectedValue);
+        this.checkTippingAvailability(this.defaultSelectedValue);
         return;
       }
 
@@ -998,7 +998,7 @@ export default {
           this.isTippingDialogOpen = true;
           return;
         }
-        this.handleCollectFromEdition();
+        this.handleCollectFromEdition(selectedValue);
       }
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
