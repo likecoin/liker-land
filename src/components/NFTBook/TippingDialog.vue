@@ -56,6 +56,7 @@
           <NFTBookTippingInput
             v-model="inputValue"
             :fixed-text="currency"
+            :placeholder="$t('nft_tipping_placeholder')"
             @input="handleInputChange"
             @on-focus="selectedIndex = -1"
           />

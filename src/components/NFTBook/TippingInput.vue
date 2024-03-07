@@ -22,7 +22,7 @@
 import { Vue, Component, Prop, Model } from 'vue-property-decorator';
 
 @Component
-export default class TextField extends Vue {
+export default class TippingInput extends Vue {
   @Model('input', { type: [String, Number] })
   readonly value!: string | number;
 
@@ -62,7 +62,7 @@ export default class TextField extends Vue {
 
   get rootClasses(): any {
     return [
-      TextField.presetClasses,
+      TippingInput.presetClasses,
       'bg-white',
       this.errorClasses,
       { '!border-like-green': this.value },
