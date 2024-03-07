@@ -13,6 +13,7 @@ import {
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
+  USD_TO_HKD_RATIO,
 } from '~/constant';
 
 import {
@@ -384,6 +385,7 @@ export default {
         priceLabel: this.formattedNFTPriceInUSD,
         value: 0,
         isPhysicalOnly: false,
+        isAllowCustomPrice: false,
         hasShipping: false,
         stock: this.nftIsCollectable
           ? this.getNFTClassListingInfoById(this.classId)?.length
@@ -408,13 +410,17 @@ export default {
             let priceLabel = formatNumberWithUSD(price);
             // TODO: support more currency
             if (currency === 'HKD') {
-              const USD_TO_HKD_RATIO = 7.8;
               priceLabel = formatNumberWithUnit(
                 Number((price * USD_TO_HKD_RATIO).toFixed(1)),
                 'HKD'
               );
             }
-            const { stock, isPhysicalOnly, hasShipping } = edition;
+            const {
+              stock,
+              isPhysicalOnly,
+              isAllowCustomPrice,
+              hasShipping,
+            } = edition;
             const style = {
               spineColor1: edition.spineColor1 || '#EBEBEB',
               spineColor2: edition.spineColor2 || '#9B9B9B',
@@ -425,17 +431,18 @@ export default {
 
             return {
               name,
+              currency,
               description,
               priceLabel,
               price,
               value: index,
               stock,
               style,
+              isAllowCustomPrice,
               isPhysicalOnly,
               hasShipping,
               dynamicCovers: getDynamicCovers(this.classId, edition.index),
               defaultPrice: edition.price,
-              currency,
             };
           })
         : [defaultEdition];

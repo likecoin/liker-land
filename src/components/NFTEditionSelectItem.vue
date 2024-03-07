@@ -51,7 +51,9 @@
           'gap-[12px]',
         ]"
       >
-        {{ priceLabel }}
+        <span>
+          {{ priceLabel }}
+        </span>
         <div
           v-if="discountInfo"
           class="flex justify-start items-center gap-[4px]"
@@ -99,7 +101,7 @@
             }}
           </span>
         </div>
-        {{ priceLabel }}
+        <span>{{ priceLabel }}</span>
       </div>
     </td>
     <td
@@ -118,9 +120,8 @@
 
 <script>
 import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
+import { USD_TO_HKD_RATIO } from '~/constant';
 import NFTStockLabel from './NFTStockLabel';
-
-const USD_TO_HKD_RATIO = 7.8;
 
 export default {
   name: 'NFTPriceSelectItem',
@@ -131,6 +132,10 @@ export default {
     name: {
       type: String,
       default: '',
+    },
+    currency: {
+      type: String,
+      default: 'USD',
     },
     priceLabel: {
       type: String,
@@ -152,10 +157,6 @@ export default {
       type: Number,
       default: 0,
     },
-    currency: {
-      type: String,
-      default: '',
-    },
   },
   computed: {
     isInStock() {
@@ -176,7 +177,7 @@ export default {
     discountInfo() {
       const originalPrice = this.defaultPrice;
       const { currentPrice } = this;
-      if (originalPrice <= currentPrice) {
+      if (!currentPrice || originalPrice <= currentPrice) {
         return undefined;
       }
 
