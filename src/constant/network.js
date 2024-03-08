@@ -48,6 +48,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
     name: 'Liker Land',
   },
   cosmostationDirectSignEnabled: true,
+  authcoreClientId: 'likecoin-app-hidesocial', // 'likecoin-app' if not hide
   authcoreApiHost: IS_TESTNET
     ? 'https://likecoin-integration-test.authcore.io'
     : 'https://authcore.like.co',
