@@ -31,6 +31,7 @@ export default {
           connectWalletTitle: this.$t('connect_wallet_title'),
           connectWalletMobileWarning: this.$t('connect_wallet_mobile_warning'),
           shouldRecommendConnectionMethod: true,
+          shouldShowLegacyAuthcoreOptions: !!this.$route.query.authcore_legacy,
           onEvent: this.handleConnectWalletEvent,
         });
         if (!connection) return false;

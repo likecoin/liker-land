@@ -403,6 +403,7 @@ const actions = {
       connectWalletTitle,
       connectWalletMobileWarning,
       shouldRecommendConnectionMethod = false,
+      shouldShowLegacyAuthcoreOptions = false,
       onEvent,
     } = {}
   ) {
@@ -420,6 +421,9 @@ const actions = {
         'metamask-leap',
         'walletconnect-v2',
       ];
+    }
+    if (shouldShowLegacyAuthcoreOptions) {
+      connector.options.authcoreClientId = 'likecoin-app';
     }
     const connection = await connector.openConnectionMethodSelectionDialog({
       language,
