@@ -125,6 +125,11 @@ export default {
       customPrice: 0,
     };
   },
+  mounted() {
+    this.customPrice = this.getDefaultTipping(this.currency)[
+      this.selectedIndex
+    ];
+  },
   methods: {
     getDefaultTipping(currency) {
       return DEFAULT_TIPPING_PRICES_BY_CURRENCY[currency];

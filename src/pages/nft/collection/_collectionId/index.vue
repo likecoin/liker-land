@@ -249,9 +249,9 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        const customPriceInDecimal = !this.customPrice
-          ? undefined
-          : this.formatCustomPrice(this.customPrice, this.collectionPrice);
+        const customPriceInDecimal = this.customPrice
+          ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
+          : undefined;
 
         const gaClientId = this.getGaClientId;
         const gaSessionId = this.getGaSessionId;
