@@ -48,7 +48,7 @@
       >
     </i18n>
 
-    <div class="flex justify-center mb-[24px]">
+    <div class="flex justify-center mb-[24px] w-full max-w-[960px]">
       <ButtonV2
         preset="plain"
         class="text-medium-gray"
@@ -77,9 +77,10 @@
       v-else
       :class="[
         'w-full',
-        'table-fixed',
+        'table-auto',
+        'sm:table-fixed',
         'text-[14px]',
-        'mt-[24px]',
+        'my-[24px]',
         'max-w-[960px]',
       ]"
     >
@@ -154,6 +155,24 @@
         </tr>
       </tbody>
     </table>
+    <div
+      v-if="csvData.length"
+      class="flex flex-col justify-center items-center fixed right-[12px] sm:right-[60px] bottom-[20px] gap-[12px]"
+    >
+      <div
+        class="px-[12px] py-[8px] rounded-[32px] cursor-pointer border-[1px] border-like-green bg-light-gray text-like-green duration-75 hover:bg-shade-gray"
+        @click="scrollToTop"
+      >
+        <IconScrollToTop />
+      </div>
+      <ButtonV2
+        :text="$t('index_page_hero_enter_book_store')"
+        theme="glow"
+        preset="secondary"
+        :to="localeLocation({ name: 'store' })"
+        @click.native="handleGoToStorePage"
+      />
+    </div>
   </div>
 </template>
 
@@ -255,6 +274,17 @@ export default {
           name: 'gutenberg',
         })
       );
+    },
+    handleGoToStorePage() {
+      logTrackerEvent(this, 'Gutenberg', 'clickBackToStorePage', '', 1);
+      this.$router.push(
+        this.localeLocation({
+          name: 'store',
+        })
+      );
+    },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   },
 };
