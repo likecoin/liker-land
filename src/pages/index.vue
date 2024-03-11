@@ -1617,6 +1617,7 @@ import {
   LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS,
 } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { checkIsMobileClient } from '~/util/client';
 
 export default {
   name: 'IndexPageV2',
@@ -1665,7 +1666,8 @@ export default {
       return this.nftClassIdListInTrending.slice(0, 5);
     },
     publishStoryURL() {
-      if (this.$i18n.locale === 'zh-Hant') {
+      const isMobile = checkIsMobileClient();
+      if (this.$i18n.locale === 'zh-Hant' && !isMobile) {
         return 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm';
       }
       if (this.crispWebsiteId) {
