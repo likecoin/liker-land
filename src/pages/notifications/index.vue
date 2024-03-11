@@ -276,10 +276,13 @@ export default {
               ?.isSubscribedCivicLiker;
             fromName = this.$t('event_list_page_event_self');
             toName = this.getUserInfoByAddress(creator)?.displayName || creator;
-            i18nPath =
-              e.price <= 0
-                ? 'event_list_page_event_message_purchase_nft_free'
-                : 'event_list_page_event_message_purchase_nft';
+            i18nPath = 'event_list_page_event_message_purchase_nft';
+            if (e.price !== undefined) {
+              i18nPath =
+                e.price <= 0
+                  ? 'event_list_page_event_message_purchase_nft_free'
+                  : 'event_list_page_event_message_purchase_nft_with_price';
+            }
             price = e.price <= 0 ? 'free' : e.price;
 
             memo = e.granterMemo || '';
