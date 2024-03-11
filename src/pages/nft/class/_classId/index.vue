@@ -950,12 +950,14 @@ export default {
         this.nftId,
         1
       );
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId-nftId',
-          params: { classId: this.classId, nftId: this.nftIdCollectNext },
-        })
-      );
+      if (this.nftIdCollectNext) {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-class-classId-nftId',
+            params: { classId: this.classId, nftId: this.nftIdCollectNext },
+          })
+        );
+      }
     },
     handleClickSellFromPriceSection() {
       logTrackerEvent(
@@ -1076,8 +1078,7 @@ export default {
             throw new Error('Failed to get purchase link');
           }
         }
-      }
-      if (this.nftIsCollectable) {
+      } else if (this.nftIsCollectable) {
         this.handleGotoCollectFromControlBar();
       }
     },
