@@ -157,7 +157,7 @@
     </table>
     <div
       v-if="csvData.length"
-      class="flex flex-col justify-center items-center fixed right-[12px] sm:right-[60px] bottom-[20px] gap-[12px]"
+      class="flex flex-col justify-center items-center fixed right-[12px] translate-x-0 sm:translate-x-[50%] sm:right-[50%] bottom-[20px] gap-[12px]"
     >
       <div
         class="px-[12px] py-[8px] rounded-[32px] cursor-pointer border-[1px] border-like-green bg-light-gray text-like-green duration-75 hover:bg-shade-gray"
