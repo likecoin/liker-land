@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full px-[24px]">
+  <div
+    class="flex flex-col items-center justify-center w-full px-[24px] pb-[2rem]"
+  >
     <Label
       :class="[
         'text-[36px]',
@@ -157,14 +159,17 @@
     </table>
     <div
       v-if="csvData.length"
-      class="flex flex-col justify-center items-center fixed right-[12px] translate-x-0 sm:translate-x-[50%] sm:right-[50%] bottom-[20px] gap-[12px]"
+      class="sticky bottom-0 w-full flex flex-row justify-center items-center gap-[12px] p-[1rem] pt-[2rem] bg-gradient-to-t from-gray-f7"
     >
-      <div
-        class="px-[12px] py-[8px] rounded-[32px] cursor-pointer border-[1px] border-like-green bg-light-gray text-like-green duration-75 hover:bg-shade-gray"
+      <ButtonV2
+        :circle="true"
+        theme="glow"
+        preset="tertiary"
+        size="small"
         @click="scrollToTop"
       >
         <IconScrollToTop />
-      </div>
+      </ButtonV2>
       <ButtonV2
         :text="$t('index_page_hero_enter_book_store')"
         theme="glow"
