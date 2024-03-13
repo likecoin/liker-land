@@ -398,16 +398,7 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await Promise.all([
-        this.lazyFetchNFTClassAggregatedData(),
-        this.lazyFetchNFTBookInfoByClassId(this.classId).catch(error => {
-          if (error.response?.status !== 400) {
-            throw error;
-          } else {
-            return Promise.resolve();
-          }
-        }),
-      ]);
+      await this.lazyFetchNFTClassAggregatedData();
     },
     getContentUrlType(url) {
       if (url.includes('epub')) return 'epub';

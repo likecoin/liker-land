@@ -37,6 +37,7 @@ router.get('/nft/metadata', async (req, res, next) => {
         'owner',
         'listing',
         'purchase',
+        'bookstore',
       ].some(s => selectedSet.has(s))
     ) {
       selectedSet.add('all');
@@ -66,10 +67,17 @@ router.get('/nft/metadata', async (req, res, next) => {
       promises.push(null);
     }
 
+    if (['all', 'bookstore'].some(s => selectedSet.has(s))) {
+      promises.push(getNFTClassBookstoreInfo(classId));
+    } else {
+      promises.push(null);
+    }
+
     const [
       [classData, iscnData],
       [ownerInfo, listings],
       purchaseInfo,
+      bookstoreInfo,
     ] = await Promise.all(promises);
 
     const result = {};
@@ -87,6 +95,9 @@ router.get('/nft/metadata', async (req, res, next) => {
     }
     if (['all', 'purchase'].some(s => selectedSet.has(s))) {
       result.purchaseInfo = purchaseInfo;
+    }
+    if (['all', 'bookstore'].some(s => selectedSet.has(s))) {
+      result.bookstoreInfo = bookstoreInfo;
     }
 
     res.set('Cache-Control', 'public, max-age=10, stale-while-revalidate=50');
@@ -253,6 +264,20 @@ async function getNFTClassPurchaseInfo(classId) {
     return data || null;
   } catch (err) {
     if (err.response && err.response.status === 404) {
+      return null;
+    }
+    throw err;
+  }
+}
+
+async function getNFTClassBookstoreInfo(classId) {
+  try {
+    const { data } = await axios.get(
+      `${LIKECOIN_API_BASE}/likernft/book/store/${classId}`
+    );
+    return data || null;
+  } catch (err) {
+    if (err.response && err.response.status === 400) {
       return null;
     }
     throw err;
