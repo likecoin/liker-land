@@ -487,6 +487,7 @@ const actions = {
       ownerInfo,
       listings,
       purchaseInfo,
+      bookstoreInfo,
     } = await this.$api.$get(api.getNFTClassMetadata(classId));
     const iscnId = classData.parent.iscn_id_prefix;
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
@@ -499,6 +500,16 @@ const actions = {
         classId,
         info: purchaseInfo,
       });
+    }
+    if (bookstoreInfo) {
+      const payload = {
+        classId,
+        prices: bookstoreInfo.prices,
+        mustClaimToView: bookstoreInfo.mustClaimToView,
+        hideDownload: bookstoreInfo.hideDownload,
+        defaultPaymentCurrency: bookstoreInfo.defaultPaymentCurrency,
+      };
+      commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     }
     if (classData.iscn_owner) {
       const promise = dispatch(
