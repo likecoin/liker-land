@@ -449,7 +449,7 @@ export default {
       return;
     }
     try {
-      const [metadata] = await Promise.all([
+      await Promise.all([
         store.dispatch('lazyGetNFTClassMetadata', classId),
         store
           .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
@@ -459,16 +459,14 @@ export default {
               console.error(JSON.stringify(err));
             }
           }),
-      ]);
-      if (metadata?.nft_meta_collection_id?.includes('nft_book')) {
-        await store
-          .dispatch('fetchNFTBookInfoByClassId', classId)
+        store
+          .dispatch('lazyFetchNFTBookInfoByClassId', classId)
           .catch(error => {
             if (error.response?.status !== 400) {
               throw error;
             }
-          });
-      }
+          }),
+      ]);
     } catch (err) {
       if (err.response?.data?.code === 3) {
         error({
@@ -771,7 +769,7 @@ export default {
       this.updateNFTOwners();
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
-        this.fetchNFTBookInfoByClassId(this.classId).catch();
+        this.lazyFetchNFTBookInfoByClassId(this.classId).catch();
         this.lazyFetchNFTBookPaymentPriceInfoForAllEditions();
         this.fetchRelatedNFTCollection({ type: 'book' });
       }

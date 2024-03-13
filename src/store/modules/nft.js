@@ -271,6 +271,8 @@ const getters = {
     ),
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
+  getNFTBookStoreInfoByClassId: state => classId =>
+    state.nftBookStoreInfoByClassIdMap[classId],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
   getNFTCollectionInfoByCollectionId: state => collectionId =>
@@ -809,6 +811,13 @@ const actions = {
       classId,
       displayState,
     });
+  },
+  async lazyFetchNFTBookInfoByClassId({ dispatch, getters }, classId) {
+    let info = getters.getNFTBookStoreInfoByClassId(classId);
+    if (!info) {
+      info = await dispatch('fetchNFTBookInfoByClassId', classId);
+    }
+    return info;
   },
   async fetchNFTBookInfoByClassId({ commit }, classId) {
     const { data } = await this.$api.get(

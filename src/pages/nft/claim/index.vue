@@ -362,7 +362,7 @@ export default {
           store.getters.getNFTClassMetadataById(classId)
         );
         if (classCollectionType === nftClassCollectionType.NFTBook) {
-          await store.dispatch('fetchNFTBookInfoByClassId', classId);
+          await store.dispatch('lazyFetchNFTBookInfoByClassId', classId);
         }
       }
     } catch (err) {

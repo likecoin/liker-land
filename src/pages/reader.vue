@@ -79,7 +79,7 @@ export default {
         this.$router.replace(this.localeLocation(this.getHomeRoute));
         return;
       }
-      this.fetchNFTBookInfoByClassId(this.classId).catch();
+      this.lazyFetchNFTBookInfoByClassId(this.classId).catch();
       await this.lazyFetchNFTClassMetadata();
       await this.fetchISCNMetadata();
       await this.restoreSession();
