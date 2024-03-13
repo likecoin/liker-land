@@ -26,7 +26,10 @@ export default {
   },
   head() {
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
-    this.nftBookstoreLatestFreeItems.forEach(classId => {
+    const classIds = Array.from(
+      new Set(this.nftBookstoreLatestFreeItems.map(b => b.classId).flat())
+    );
+    classIds.forEach(classId => {
       link.push({
         rel: 'prefetch',
         href: `/api/nft/metadata?class_id=${classId}`,
