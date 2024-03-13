@@ -89,7 +89,7 @@ router.get('/nft/metadata', async (req, res, next) => {
       result.purchaseInfo = purchaseInfo;
     }
 
-    res.set('Cache-Control', 'public, max-age=1');
+    res.set('Cache-Control', 'public, max-age=10, stale-while-revalidate=50');
     res.json(result);
   } catch (err) {
     if (err.message === 'NFT_CLASS_NOT_FOUND') {
