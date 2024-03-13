@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full px-[24px]">
+  <div
+    class="flex flex-col items-center justify-center w-full px-[24px] pb-[2rem]"
+  >
     <Label
       :class="[
         'text-[36px]',
@@ -48,7 +50,7 @@
       >
     </i18n>
 
-    <div class="flex justify-center mb-[24px]">
+    <div class="flex justify-center mb-[24px] w-full max-w-[960px]">
       <ButtonV2
         preset="plain"
         class="text-medium-gray"
@@ -77,9 +79,10 @@
       v-else
       :class="[
         'w-full',
-        'table-fixed',
+        'table-auto',
+        'sm:table-fixed',
         'text-[14px]',
-        'mt-[24px]',
+        'my-[24px]',
         'max-w-[960px]',
       ]"
     >
@@ -154,6 +157,27 @@
         </tr>
       </tbody>
     </table>
+    <div
+      v-if="csvData.length"
+      class="sticky bottom-0 w-full flex flex-row justify-center items-center gap-[12px] p-[1rem] pt-[2rem] bg-gradient-to-t from-gray-f7"
+    >
+      <ButtonV2
+        :circle="true"
+        theme="glow"
+        preset="tertiary"
+        size="small"
+        @click="scrollToTop"
+      >
+        <IconScrollToTop />
+      </ButtonV2>
+      <ButtonV2
+        :text="$t('index_page_hero_enter_book_store')"
+        theme="glow"
+        preset="secondary"
+        :to="localeLocation({ name: 'store' })"
+        @click.native="handleGoToStorePage"
+      />
+    </div>
   </div>
 </template>
 
@@ -255,6 +279,17 @@ export default {
           name: 'gutenberg',
         })
       );
+    },
+    handleGoToStorePage() {
+      logTrackerEvent(this, 'Gutenberg', 'clickBackToStorePage', '', 1);
+      this.$router.push(
+        this.localeLocation({
+          name: 'store',
+        })
+      );
+    },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   },
 };
