@@ -307,7 +307,6 @@ const nuxtConfig = {
     '@nuxtjs/i18n',
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
-    ['@nuxtjs/pwa', { icon: false }],
     'portal-vue/nuxt',
     // [
     //   '@likecoin/nuxt-google-optimize',
