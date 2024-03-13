@@ -398,25 +398,16 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.lazyFetchNFTClassAggregatedData();
-      if (this.preset === PRESET_TYPE.DETAILS) {
-        return;
-      }
-
-      try {
-        await this.fetchNFTBookInfoByClassId(this.classId).catch(error => {
+      await Promise.all([
+        this.lazyFetchNFTClassAggregatedData(),
+        this.lazyFetchNFTBookInfoByClassId(this.classId).catch(error => {
           if (error.response?.status !== 400) {
             throw error;
           } else {
             return Promise.resolve();
           }
-        });
-      } catch (error) {
-        if (!error.response?.status === 404) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
-      }
+        }),
+      ]);
     },
     getContentUrlType(url) {
       if (url.includes('epub')) return 'epub';

@@ -577,7 +577,7 @@ export default {
       this.updateNFTHistory({ getAllUserInfo: false });
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
-        this.fetchNFTBookInfoByClassId(this.classId).catch();
+        this.lazyFetchNFTBookInfoByClassId(this.classId).catch();
       }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);

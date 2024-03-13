@@ -764,6 +764,7 @@ export default {
       'fetchCollectedNFTClassesByAddress',
       'fetchNFTDisplayStateListByAddress',
       'fetchNFTBookInfoByClassId',
+      'lazyFetchNFTBookInfoByClassId',
       'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
       'lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
       'fetchNFTCollectionInfoByClassId',
