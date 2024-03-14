@@ -137,7 +137,6 @@ export default {
     },
     imgProps() {
       return {
-        loading: 'lazy',
         // NOTE: Mitigate image deform before Tailwind CSS is loaded
         style: 'object-fit: cover;',
         ...this.$attrs,
