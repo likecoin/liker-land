@@ -45,6 +45,11 @@ const nuxtConfig = {
         ? `${titleChunk} - ${process.env.SITE_NAME}`
         : process.env.SITE_NAME,
     meta: [
+      {
+        hid: 'viewport',
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
