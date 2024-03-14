@@ -23,6 +23,7 @@ const hasIntersectionObserverSupport =
 
 Vue.use(VueLazyLoad, {
   lazyComponent: true,
+  throttleWait: 0,
   observer: hasIntersectionObserverSupport,
 });
 
