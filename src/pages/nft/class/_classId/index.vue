@@ -520,6 +520,7 @@ export default {
         },
         sku: this.classId,
         iscn: this.iscnId,
+        isbn: this.iscnData?.contentMetadata?.isbn,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
           '@type': 'Offer',
@@ -548,6 +549,7 @@ export default {
         author: iscnOwnerPerson,
         sku: this.classId,
         iscn: this.iscnId,
+        isbn: this.iscnData?.contentMetadata?.isbn,
         workExample: [],
       };
       this.nftEditions.forEach(e => {
@@ -556,6 +558,7 @@ export default {
           name: title,
           image: [ogImage],
           iscn: this.iscnId,
+          isbn: this.iscnData?.contentMetadata?.isbn,
           bookEdition: e.name,
           description: e.description,
           brand: {
