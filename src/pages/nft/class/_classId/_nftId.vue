@@ -454,6 +454,7 @@ export default {
         },
         sku: this.classId,
         iscn: this.iscnId,
+        isbn: this.iscnData?.contentMetadata?.isbn,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
           '@type': 'Offer',
