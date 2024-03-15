@@ -1022,7 +1022,7 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        if (edition.price === 0) {
+        if (edition.price === 0 && !this.customPrice) {
           this.$router.push(
             this.localeLocation({
               name: 'nft-claim',
