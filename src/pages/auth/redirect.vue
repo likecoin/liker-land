@@ -49,7 +49,7 @@ export default {
           );
           if (storedRoute) {
             postAuthRoute = storedRoute;
-            window.localStorage.removeItem('USER_POST_AUTH_ROUTE');
+            window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
           }
         }
         this.$router.replace(postAuthRoute);
