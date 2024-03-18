@@ -277,7 +277,10 @@ async function getNFTClassBookstoreInfo(classId) {
     );
     return data || null;
   } catch (err) {
-    if (err.response && err.response.status === 400) {
+    if (
+      err.response &&
+      (err.response.status === 400 || err.response.status === 404)
+    ) {
       return null;
     }
     throw err;

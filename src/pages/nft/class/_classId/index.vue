@@ -462,7 +462,10 @@ export default {
         store
           .dispatch('lazyFetchNFTBookInfoByClassId', classId)
           .catch(error => {
-            if (error.response?.status !== 400) {
+            if (
+              error.response?.status !== 400 &&
+              error.response?.status !== 404
+            ) {
               throw error;
             }
           }),
