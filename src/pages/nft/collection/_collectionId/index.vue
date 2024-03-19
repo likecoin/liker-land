@@ -249,31 +249,45 @@ export default {
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        const customPriceInDecimal = this.customPrice
-          ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
-          : undefined;
-
-        const gaClientId = this.getGaClientId;
-        const gaSessionId = this.getGaSessionId;
-        const link = getNFTBookPurchaseLink({
-          collectionId: this.collectionId,
-          platform: this.platform,
-        });
-        const { url } = await this.$axios.$post(link, {
-          gaClientId,
-          giftInfo,
-          gaSessionId,
-          coupon: this.$route.query.coupon,
-          customPriceInDecimal,
-          utmCampaign: this.utmCampaign,
-          utmSource: this.utmSource,
-          utmMedium: this.utmMedium,
-          email: this.walletEmail,
-        });
-        if (url) {
-          window.location.href = url;
+        if (this.collectionPrice === 0 && !this.customPrice) {
+          this.$router.push(
+            this.localeLocation({
+              name: 'nft-claim',
+              query: {
+                collection_id: this.collectionId,
+                type: 'nft_book',
+                free: true,
+                from: 'liker_land_waived',
+              },
+            })
+          );
         } else {
-          throw new Error('Failed to get purchase link');
+          const customPriceInDecimal = this.customPrice
+            ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
+            : undefined;
+
+          const gaClientId = this.getGaClientId;
+          const gaSessionId = this.getGaSessionId;
+          const link = getNFTBookPurchaseLink({
+            collectionId: this.collectionId,
+            platform: this.platform,
+          });
+          const { url } = await this.$axios.$post(link, {
+            gaClientId,
+            giftInfo,
+            gaSessionId,
+            coupon: this.$route.query.coupon,
+            customPriceInDecimal,
+            utmCampaign: this.utmCampaign,
+            utmSource: this.utmSource,
+            utmMedium: this.utmMedium,
+            email: this.walletEmail,
+          });
+          if (url) {
+            window.location.href = url;
+          } else {
+            throw new Error('Failed to get purchase link');
+          }
         }
       }
     },
