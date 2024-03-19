@@ -110,7 +110,7 @@
                       'truncate',
                       displayNameStyle,
                     ]"
-                    >{{ creatorDisplayNameFull }}</span
+                    >{{ creatorDisplayName }}</span
                   >
                 </div>
               </NuxtLink>
