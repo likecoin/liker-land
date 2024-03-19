@@ -104,6 +104,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'lazyGetUserInfoByAddress',
       'lazyFetchNFTCollectionInfoByCollectionId',
       'lazyFetchNFTCollectionPaymentPriceInfoByCollectionId',
     ]),
