@@ -101,7 +101,7 @@
                 <div class="flex flex-col justify-start ml-[8px] min-w-0">
                   <span
                     class="text-like-cyan-gray text-10 group-hover:underline"
-                    >{{ $t('identity_type_publisher') }}</span
+                    >{{ $t('identity_type_distributor') }}</span
                   >
                   <span
                     :class="[
