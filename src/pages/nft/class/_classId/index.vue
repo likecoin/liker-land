@@ -364,7 +364,6 @@
     </div>
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
-      :selected-value="giftSelectedValue"
       @submit="handleGiftSubmit"
       @close="() => (isGiftDialogOpen = false)"
     />
@@ -424,7 +423,7 @@ export default {
       trimmedCount: 10,
 
       customPrice: -1,
-      selectedValue: undefined,
+      selectedValue: 0,
     };
   },
   async fetch({ route, store, redirect, error, localeLocation }) {
@@ -1009,7 +1008,7 @@ export default {
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const edition = editions[selectedValue || this.selectedValue];
+      const edition = editions[selectedValue ?? this.selectedValue];
       const hasStock = edition?.stock;
 
       if (!hasStock && !this.nftIsCollectable) return;
@@ -1104,7 +1103,7 @@ export default {
       );
       this.checkTippingAvailability(selectedValue);
     },
-    async handleGiftSubmit({ selectedValue, giftInfo }) {
+    async handleGiftSubmit({ giftInfo }) {
       logTrackerEvent(
         this,
         'NFT',
@@ -1112,7 +1111,7 @@ export default {
         this.classId,
         1
       );
-      await this.handleCollectFromEdition(selectedValue, giftInfo);
+      await this.handleCollectFromEdition(this.giftSelectedValue, giftInfo);
       this.isGiftDialogOpen = false;
     },
     handleGiftFromEditionSelector(selectedValue) {

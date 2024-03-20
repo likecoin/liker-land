@@ -101,10 +101,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    selectedValue: {
-      type: Number,
-      default: 0,
-    },
   },
   data() {
     return {
@@ -117,7 +113,6 @@ export default {
   methods: {
     submitGiftInfo() {
       this.$emit('submit', {
-        selectedValue: this.selectedValue,
         giftInfo: {
           fromName: this.fromName,
           toName: this.toName,
