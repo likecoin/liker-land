@@ -1,8 +1,8 @@
 import { parseNFTMetadataURL } from '~/util/nft';
 import { mapActions, mapGetters } from 'vuex';
-import { formatNumberWithUSD } from '~/util/ui';
+import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
 import { catchAxiosError } from '~/util/misc';
-
+import { USD_TO_HKD_RATIO } from '~/constant';
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
 
@@ -22,6 +22,7 @@ export default {
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
       'getNFTClassPaymentPriceById',
+      'getNFTCollectionDefaultPaymentCurrency',
     ]),
     classIds() {
       return this.collection?.classIds || [];
@@ -40,11 +41,21 @@ export default {
       if (typeof description === 'object') {
         description = description[this.collectionLocale] || '';
       }
-      const priceLabel = formatNumberWithUSD(price);
+      const currency = this.getNFTCollectionDefaultPaymentCurrency(
+        this.collectionId
+      );
+      const priceLabel =
+        currency === 'HKD'
+          ? formatNumberWithUnit(
+              Number((price * USD_TO_HKD_RATIO).toFixed(1)),
+              'HKD'
+            )
+          : formatNumberWithUSD(price);
       return {
         id,
         name,
         description,
+        defaultPrice: this.collectionDefaultPrice,
         priceLabel,
         price,
         value: 0,
@@ -89,6 +100,13 @@ export default {
       const { priceInDecimal } = this.collection;
       const price =
         this.getNFTClassPaymentPriceById(this.collectionId)?.fiatPrice ||
+        priceInDecimal / 100;
+      return price;
+    },
+    collectionDefaultPrice() {
+      const { priceInDecimal } = this.collection;
+      const price =
+        this.getNFTClassPaymentPriceById(this.collectionId)?.defaultPrice ||
         priceInDecimal / 100;
       return price;
     },

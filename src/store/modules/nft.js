@@ -277,6 +277,9 @@ const getters = {
     state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
   getNFTCollectionInfoByCollectionId: state => collectionId =>
     state.nftCollectionInfoByCollectionIdMap[collectionId],
+  getNFTCollectionDefaultPaymentCurrency: state => collectionId =>
+    state.nftCollectionInfoByCollectionIdMap[collectionId]
+      ?.defaultPaymentCurrency || 'USD',
   getNFTCollectionInfoByClassId: state => classId =>
     Object.entries(state.nftCollectionInfoByCollectionIdMap)
       .filter(([_, data]) => data.classIds.includes(classId))
@@ -939,17 +942,37 @@ const actions = {
     { commit },
     { collectionId, coupon }
   ) {
-    const {
-      data: { fiatPrice, LIKEPrice },
-    } = await this.$api.get(
-      api.getNFTBookPaymentPrice({ collectionId, coupon })
-    );
-    const info = { fiatPrice, LIKEPrice };
-    commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
-      collectionId,
-      info,
-    });
-    return info;
+    const fetchPaymentInfo = params =>
+      this.$api
+        .get(api.getNFTBookPaymentPrice(params))
+        .then(response => response.data);
+
+    const requests = [fetchPaymentInfo({ collectionId })];
+    if (coupon) {
+      requests.push(fetchPaymentInfo({ collectionId, coupon }));
+    }
+
+    try {
+      const responses = await Promise.all(requests);
+      const defaultPriceInfo = responses[0];
+      const discountedPriceInfo = responses[1] || defaultPriceInfo;
+      const info = {
+        defaultPrice: defaultPriceInfo.fiatPrice,
+        fiatPrice: discountedPriceInfo.fiatPrice,
+        LIKEPrice: discountedPriceInfo.LIKEPrice,
+      };
+
+      commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
+        collectionId,
+        info,
+      });
+
+      return info;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      throw error;
+    }
   },
   async lazyFetchNFTCollectionPaymentPriceInfoByCollectionId(
     { getters, dispatch },
