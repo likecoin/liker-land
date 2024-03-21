@@ -55,7 +55,7 @@
       :creator-avatar="creatorAvatar"
       :display-name="creatorDisplayNameFull"
       :currency="defaultCurrency"
-      :class-id="classId"
+      :collection-id="collectionId"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
       @close="() => (isTippingDialogOpen = false)"
@@ -325,7 +325,7 @@ export default {
         this,
         'NFT',
         'nft_collection_details_gift_submit',
-        this.classId,
+        this.collectionId,
         1
       );
       await this.handleCollectFromEdition(giftInfo);
@@ -337,7 +337,7 @@ export default {
         this,
         'NFT',
         'nft_collection_details_edition_selector_gift',
-        this.classId,
+        this.collectionId,
         1
       );
     },
