@@ -942,26 +942,13 @@ const actions = {
     { commit },
     { collectionId, coupon }
   ) {
-    const fetchPaymentInfo = params =>
-      this.$api
-        .get(api.getNFTBookPaymentPrice(params))
-        .then(response => response.data);
-
-    const requests = [fetchPaymentInfo({ collectionId })];
-    if (coupon) {
-      requests.push(fetchPaymentInfo({ collectionId, coupon }));
-    }
-
     try {
-      const responses = await Promise.all(requests);
-      const defaultPriceInfo = responses[0];
-      const discountedPriceInfo = responses[1] || defaultPriceInfo;
-      const info = {
-        defaultPrice: defaultPriceInfo.fiatPrice,
-        fiatPrice: discountedPriceInfo.fiatPrice,
-        LIKEPrice: discountedPriceInfo.LIKEPrice,
-      };
-
+      const {
+        data: { fiatPricePrediscount, fiatPrice, LIKEPrice },
+      } = await this.$api.get(
+        api.getNFTBookPaymentPrice({ collectionId, coupon })
+      );
+      const info = { fiatPricePrediscount, fiatPrice, LIKEPrice };
       commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
         collectionId,
         info,
