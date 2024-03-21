@@ -104,11 +104,8 @@ export default {
       return price;
     },
     collectionDefaultPrice() {
-      const { priceInDecimal } = this.collection;
-      const price =
-        this.getNFTClassPaymentPriceById(this.collectionId)?.defaultPrice ||
-        priceInDecimal / 100;
-      return price;
+      return this.getNFTClassPaymentPriceById(this.collectionId)
+        ?.fiatPricePrediscount;
     },
     collectionAvailablePriceLabel() {
       return formatNumberWithUSD(this.collectionPrice);
