@@ -55,7 +55,7 @@
       :creator-avatar="creatorAvatar"
       :display-name="creatorDisplayNameFull"
       :currency="defaultCurrency"
-      :class-id="collectionId"
+      :collection-id="collectionId"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
       @close="() => (isTippingDialogOpen = false)"

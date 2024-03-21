@@ -116,6 +116,10 @@ export default {
       type: String,
       default: undefined,
     },
+    collectionId: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -124,6 +128,11 @@ export default {
       inputValue: undefined,
       customPrice: 0,
     };
+  },
+  computed: {
+    currentId() {
+      return this.classId || this.collectionId;
+    },
   },
   mounted() {
     this.customPrice = this.getDefaultTipping(this.currency)[
@@ -150,11 +159,11 @@ export default {
       this.customPrice = value;
     },
     handleSubmit() {
-      logTrackerEvent(this, 'NFT', 'NFTTippingSubmit', this.classId, 1);
+      logTrackerEvent(this, 'NFT', 'NFTTippingSubmit', this.currentId, 1);
       this.$emit('on-submit', this.customPrice);
     },
     handleSkip() {
-      logTrackerEvent(this, 'NFT', 'NFTTippingSkip', this.classId, 1);
+      logTrackerEvent(this, 'NFT', 'NFTTippingSkip', this.currentId, 1);
       this.$emit('on-skip', this.customPrice);
     },
   },
