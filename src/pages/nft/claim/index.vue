@@ -1,7 +1,7 @@
 <template>
   <main>
-    <div class="w-full max-w-[400px] mx-auto p-[1rem] laptop:p-0 pt-0">
-      <NFTWidgetBaseCard>
+    <div class="flex justify-center item-start gap-[45px] w-full mb-[60px]">
+      <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink
           :to="
             localeLocation({
@@ -27,274 +27,42 @@
           />
         </NuxtLink>
       </NFTWidgetBaseCard>
-    </div>
-
-    <MobileStickyCard
-      class="flex flex-col justify-center items-center w-full laptop:max-w-[400px] mx-auto py-[1.5rem]"
-    >
-      <template v-if="state === 'PHYSICAL_ONLY'">
-        <Label v-if="text" class="mb-[16px]" :text="text" align="center" />
-      </template>
-      <template v-else-if="giftInfo && state === 'GIFTING'">
-        <div class="flex flex-col mt-[12px] mb-[18px]">
-          <Label
-            class="text-like-green"
-            :text="
-              $t('nft_claim_claimed_gift_title', { name: giftInfo.fromName })
-            "
-          >
-            <template #prepend>
-              <IconGift class="w-[32px]" />
-            </template>
-          </Label>
-        </div>
-        <div
-          class="w-full flex flex-col gap-[8px] px-[12px] py-[8px] rounded-[12px] bg-shade-gray"
-        >
-          <Label
-            class="text-dark-gray"
-            :text="
-              $t('nft_claim_claimed_gift_toName', { name: giftInfo.toName })
-            "
-          />
-          <Label
-            class="text-dark-gray"
-            align="center"
-            :text="giftInfo.message"
-          />
-          <Label
-            class="text-medium-gray mt-[8px]"
-            align="right"
-            :text="
-              $t('nft_claim_claimed_gift_fromName', { name: giftInfo.fromName })
-            "
-          />
-        </div>
-        <ButtonV2
-          class="self-center mt-[24px]"
-          :text="$t('nft_claim_claim')"
-          preset="secondary"
-          @click="handleClickNext"
-        />
-      </template>
-      <template v-else>
-        <div v-if="!claimingAddress" class="w-full">
-          <template v-if="walletIsLoggingIn">
-            <ProgressIndicator />
-            <Label
-              class="text-medium-gray w-full mt-[4px]"
-              preset="p6"
-              align="center"
-              :text="$t('auth_required_view_hint_label_loading')"
-            />
-          </template>
-          <template v-else>
-            <template v-if="isFreePurchase">
-              <div
-                v-if="state === 'INITIAL'"
-                class="flex flex-col justify-center w-full"
-              >
-                <Label
-                  class="text-medium-gray"
-                  preset="p6"
-                  :text="$t('nft_free_claim_email_label')"
-                  align="center"
-                />
-                <div
-                  class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-                >
-                  <input
-                    v-model="claimingFreeEmail"
-                    class="w-full bg-transparent border-0 focus-visible:outline-none"
-                    :placeholder="$t('nft_free_claim_enter_email')"
-                    type="email"
-                  />
-                </div>
-                <div class="flex justify-center w-full">
-                  <ButtonV2
-                    class="self-center mt-[24px]"
-                    :text="$t('nft_free_claim_claim')"
-                    preset="secondary"
-                    @click="startFreePurchase"
-                  />
-                </div>
-              </div>
-              <Label
-                v-else
-                class="text-medium-gray"
-                preset="p6"
-                :text="$t('nft_free_claim_check_email_label')"
-                align="center"
-              />
-            </template>
-            <div v-else class="flex flex-col justify-center w-full">
-              <Label
-                class="text-medium-gray"
-                preset="p6"
-                :text="$t('nft_claim_enter_address_label')"
-                align="center"
-              />
-              <div class="flex justify-center w-full gap-[12px] mt-[6px]">
-                <TextField
-                  v-model="claimingAddressInput"
-                  class="w-full"
-                  :error-message="errorMessage"
-                  required
-                  :placeholder="$t('nft_claim_enter_address_placeholder')"
-                />
-                <ButtonV2
-                  v-if="!claimingAddressInput"
-                  class="flex-shrink-0"
-                  :text="$t('settings_page_content_with_auth_login_button')"
-                  preset="secondary"
-                  @click="onClickLogin"
-                />
-              </div>
-              <ButtonV2
-                class="self-center mt-[24px]"
-                :text="
-                  $t(
-                    canViewContentDirectly
-                      ? 'nft_claim_access_nft_book'
-                      : 'nft_claim_claim'
-                  )
-                "
-                preset="secondary"
-                :is-disabled="
-                  !claimingAddressInput ||
-                    !isValidAddress(claimingAddressInput) ||
-                    errorMessage
-                "
-                @click="onEnterClaimingAddress"
-              />
-            </div>
-          </template>
-        </div>
-        <div v-else class="flex flex-col justify-center w-full">
-          <Label v-if="text" class="mb-[16px]" :text="text" align="center" />
-          <template v-if="state === 'INITIAL'">
-            <Label
-              preset="p6"
-              class="text-medium-gray mb-[6px]"
-              :text="$t('nft_collect_modal_leave_message')"
-            />
-            <div
-              class="flex w-full py-[10px] px-[16px] gap-[12px] bg-shade-gray rounded-[12px]"
-            >
-              <IconMessage class="text-dark-gray" />
-              <input
-                v-model="collectorMessage"
-                class="w-full bg-transparent border-0 focus-visible:outline-none"
-                :placeholder="
-                  $t('nft_collect_modal_leave_message_to_name', {
-                    name: creatorDisplayName,
-                  })
-                "
-                type="input"
-                @input.once="onInputCollectorMessage"
-              />
-            </div>
-            <ButtonV2
-              class="self-center mt-[24px]"
-              :text="$t('nft_claim_claim')"
-              preset="secondary"
-              @click="claim"
-            />
-          </template>
-          <ProgressIndicator
-            v-else-if="state === 'CLAIMING'"
-            class="self-center"
-          />
-          <template v-else-if="state === 'CLAIMED'">
-            <ButtonV2
-              :text="$t('nft_claim_claimed_view_button')"
-              preset="tertiary"
-              @click="handleClickView"
-            />
-          </template>
-
-          <ButtonV2
-            v-else-if="state === 'ERROR'"
-            :text="$t('nft_claim_claimed_retry_button')"
-            preset="outline"
-            @click="handleClickRetry"
-          />
-        </div>
-        <div
-          v-if="canViewContentDirectly"
-          class="flex items-center justify-center gap-[4px] mt-[18px]"
-        >
-          <Label
-            class="text-medium-gray text-[12px]"
-            :text="$t('nft_claim_claimed_download')"
-          />
-          <div v-for="id in classIds" :key="id">
-            <NFTWidgetBaseCard v-if="isCollection">
-              <NuxtLink
-                :to="
-                  localeLocation({
-                    name: 'nft-class-classId',
-                    params: { classId: id },
-                  })
-                "
-                target="_blank"
-              >
-                <NFTWidgetContentPreview
-                  :class="[
-                    'transition-shadow',
-                    'cursor-pointer',
-                    'min-h-[300px]',
-                    'w-full',
-                  ]"
-                  :title="getNFTClassMetadataById(id).name"
-                  :description="getNFTClassMetadataById(id).description"
-                  :img-src="
-                    parseNFTMetadataURL(getNFTClassMetadataById(id).image)
-                  "
-                />
-              </NuxtLink>
-            </NFTWidgetBaseCard>
-            <NFTViewOptionList
-              v-if="getCanViewNFTBookBeforeClaimByClassId(id)"
-              :url="
-                getIscnData(id)?.contentMetadata.url ||
-                  getNFTClassMetadataById(id)?.external_url
-              "
-              :class-id="id"
-              :content-urls="getIscnData(id)?.contentMetadata.sameAs"
-              :iscn-url="getIscnData(id)?.contentMetadata.url"
-              :is-nft-book="checkNftIsNFTBook(id)"
-              :is-content-viewable="true"
-              :is-content-downloadable="!getIsHideNFTBookDownload(id)"
-              @view-content-url="handleClickViewContentDirectly"
-            />
-          </div>
-        </div>
-      </template>
-    </MobileStickyCard>
-    <div
-      v-if="state === 'CLAIMED'"
-      class="flex flex-col gap-[12px] w-full max-w-[996px] mx-auto my-[48px]"
-    >
-      <Label
-        preset="h5"
-        class="text-dark-gray"
-        align="center"
-        :text="$t('nft_recommendation_title')"
+      <NFTClaimMainSection
+        v-if="state === NFT_CLAIM_STATE.ERROR"
+        :header-text="`ERRORs`"
       />
-      <NFTPageRecommendation
-        class="w-full "
-        :iscn-owner="getNFTClassMetadataById(classId)?.iscn_owner"
-        :should-show-follow-button="false"
-        :should-show-iscn-owner="false"
-        :recommended-list="[]"
-        :is-book-nft="true"
-        :is-loading="isRecommendationLoading"
-        @item-click="handleRecommendedItemClick"
-        @item-collect="handleRecommendedItemCollect"
-        @slide-next.once="handleRecommendationSlideNext"
-        @slide-prev.once="handleRecommendationSlidePrev"
-        @slider-move.once="handleRecommendationSliderMove"
+
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.WELCOME && giftInfo"
+        :header-text="`GiftInfo`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.WELCOME && isPhysicalOnly"
+        :header-text="`Physical`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.WELCOME"
+        :step="1"
+        :total-step="3"
+        :header-text="`感謝你的支持與購買`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.LOGIN"
+        :step="1"
+        :total-step="3"
+        :header-text="`login`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.ID_CONFIRMATION"
+        :header-text="`ID_CONFIRMATION`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.MESSAGE"
+        :header-text="`MESSAGE`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.CLAIMED"
+        :header-text="`CLAIMED`"
       />
     </div>
   </main>
@@ -328,11 +96,12 @@ import nftMixin from '~/mixins/nft';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 
 const NFT_CLAIM_STATE = {
-  GIFTING: 'GIFTING',
-  INITIAL: 'INITIAL',
+  WELCOME: 'WELCOME',
+  LOGIN: 'LOGIN',
+  ID_CONFIRMATION: 'ID_CONFIRMATION',
+  MESSAGE: 'MESSAGE',
   CLAIMING: 'CLAIMING',
   CLAIMED: 'CLAIMED',
-  PHYSICAL_ONLY: 'PHYSICAL_ONLY',
   ERROR: 'ERROR',
 };
 
@@ -373,7 +142,7 @@ export default {
   data() {
     return {
       nftId: '',
-      state: NFT_CLAIM_STATE.INITIAL,
+      state: NFT_CLAIM_STATE.WELCOME,
       error: '',
       isFreePurchase: this.$route.query.free,
       priceIndex: this.$route.query.price_index,
@@ -383,6 +152,7 @@ export default {
       claimingFreeEmail: '',
       giftInfo: null,
       isPhysicalOnly: false,
+      NFT_CLAIM_STATE,
     };
   },
   computed: {
@@ -496,11 +266,6 @@ export default {
       const { giftInfo, isPhysicalOnly } = data;
       this.giftInfo = giftInfo;
       this.isPhysicalOnly = isPhysicalOnly;
-      if (this.isPhysicalOnly) {
-        this.state = NFT_CLAIM_STATE.PHYSICAL_ONLY;
-      } else if (this.giftInfo) {
-        this.state = NFT_CLAIM_STATE.GIFTING;
-      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -581,7 +346,7 @@ export default {
           this.alertPromptError(
             this.$t('nft_free_claim_enter_email_or_address')
           );
-          this.state = NFT_CLAIM_STATE.INITIAL;
+          this.state = NFT_CLAIM_STATE.WELCOME;
           return;
         }
         this.claimPromise = this.$api.post(
