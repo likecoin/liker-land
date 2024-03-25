@@ -24,71 +24,78 @@
       <div
         class="flex flex-col-reverse desktop:flex-row pl-[56px] pr-[32px] pt-[24px] pb-[48px] gap-[3rem]"
       >
-        <div
-          class="
-            flex-grow
-            grid
-            laptop:grid-flow-col
-            justify-start
-            gap-x-[4rem]
-            gap-y-[1rem]
-            mt-[0.75rem]
-          "
-        >
-          <div class="grid grid-flow-row gap-y-[16px]">
-            <a
-              class="cursor-pointer hover:underline"
-              @click="isOpenAboutTeam = !isOpenAboutTeam"
-              >{{ $t('footer_nav_about_liker_land') }}</a
-            >
-            <hr class="w-[32px] border-white border-opacity-[0.2]" />
-            <a class="hover:underline" target="_blank" href="https://like.co">{{
-              $t('footer_nav_about_likecoin')
-            }}</a>
-          </div>
+        <div class="flex-grow space-y-[3rem]">
+          <aside class="space-y-[1rem]">
+            <h3 class="text-[2rem] text-like-cyan-light font-bold">
+              {{ $t('inquiry_form_title') }}
+            </h3>
+            <p>{{ $t('inquiry_form_description') }}</p>
+            <ButtonV2 preset="secondary" @click="handleClickHelp">
+              {{ $t('inquiry_form_button') }}
+            </ButtonV2>
+          </aside>
 
-          <div class="grid grid-flow-row gap-y-[16px]">
-            <NuxtLink
-              class="hover:underline"
-              :to="localeLocation({ name: 'about-writing-nft' })"
-            >
-              {{ $t('footer_nav_about_wnft') }}
-            </NuxtLink>
-            <hr class="w-[32px] border-white border-opacity-[0.2]" />
-            <NuxtLink
-              class="hover:underline"
-              :to="localeLocation({ name: 'about-nft-book' })"
-            >
-              {{ $t('footer_nav_about_nft_book') }}
-            </NuxtLink>
-          </div>
-
-          <div class="grid grid-flow-row gap-y-[16px]">
-            <NuxtLink
-              class="hover:underline"
-              :to="localeLocation({ name: 'store' })"
-            >
-              {{ $t('footer_nav_store_books') }}
-            </NuxtLink>
-            <hr class="w-[32px] border-white border-opacity-[0.2]" />
-            <NuxtLink
-              class="hover:underline"
-              :to="localeLocation({ name: 'store-articles' })"
-            >
-              {{ $t('footer_nav_store_articles') }}
-            </NuxtLink>
-          </div>
-
-          <div class="grid grid-flow-row gap-y-[16px]">
-            <NuxtLink
-              class="hover:underline"
-              :to="localeLocation({ name: 'civic' })"
-              >{{ $t('footer_nav_civic_liker') }}</NuxtLink
-            >
-            <hr class="w-[32px] border-white border-opacity-[0.2]" />
-            <a class="hover:underline" target="_blank" :href="mintNftURL">
-              {{ $t('footer_nav_mint_nft') }}
-            </a>
+          <div
+            class="
+              grid
+              laptop:grid-flow-col
+              justify-start
+              gap-x-[4rem]
+              gap-y-[1rem]
+            "
+          >
+            <div class="grid grid-flow-row gap-y-[16px]">
+              <a
+                class="cursor-pointer hover:underline"
+                @click="isOpenAboutTeam = !isOpenAboutTeam"
+                >{{ $t('footer_nav_about_liker_land') }}</a
+              >
+              <hr class="w-[32px] border-white border-opacity-[0.2]" />
+              <a class="hover:underline" target="_blank" href="https://like.co">
+                {{ $t('footer_nav_about_likecoin') }}
+              </a>
+            </div>
+            <div class="grid grid-flow-row gap-y-[16px]">
+              <NuxtLink
+                class="hover:underline"
+                :to="localeLocation({ name: 'about-writing-nft' })"
+              >
+                {{ $t('footer_nav_about_wnft') }}
+              </NuxtLink>
+              <hr class="w-[32px] border-white border-opacity-[0.2]" />
+              <NuxtLink
+                class="hover:underline"
+                :to="localeLocation({ name: 'about-nft-book' })"
+              >
+                {{ $t('footer_nav_about_nft_book') }}
+              </NuxtLink>
+            </div>
+            <div class="grid grid-flow-row gap-y-[16px]">
+              <NuxtLink
+                class="hover:underline"
+                :to="localeLocation({ name: 'store' })"
+              >
+                {{ $t('footer_nav_store_books') }}
+              </NuxtLink>
+              <hr class="w-[32px] border-white border-opacity-[0.2]" />
+              <NuxtLink
+                class="hover:underline"
+                :to="localeLocation({ name: 'store-articles' })"
+              >
+                {{ $t('footer_nav_store_articles') }}
+              </NuxtLink>
+            </div>
+            <div class="grid grid-flow-row gap-y-[16px]">
+              <NuxtLink
+                class="hover:underline"
+                :to="localeLocation({ name: 'civic' })"
+                >{{ $t('footer_nav_civic_liker') }}</NuxtLink
+              >
+              <hr class="w-[32px] border-white border-opacity-[0.2]" />
+              <a class="hover:underline" target="_blank" :href="mintNftURL">
+                {{ $t('footer_nav_mint_nft') }}
+              </a>
+            </div>
           </div>
         </div>
 
