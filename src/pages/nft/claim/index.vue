@@ -130,12 +130,29 @@
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.ID_CONFIRMATION"
         :key="state"
-        :header-text="`ID_CONFIRMATION`"
-      />
+        :step="2"
+        :total-step="3"
+        :header-text="$t('nft_claim_confirmation_title')"
+        :content-text="isNewAccount ? $t('nft_claim_confirmation_content') : ''"
+      >
+        <template #footer>
+          <ButtonV2
+            :content-class="['px-[56px]']"
+            :text="$t('nft_claim_confirmation_button_confirm')"
+            @click="handleClickNext"
+          />
+        </template>
+      </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.MESSAGE"
         :key="state"
         :header-text="`MESSAGE`"
+      />
+      <NFTClaimMainSection
+        v-else-if="state === NFT_CLAIM_STATE.CLAIMING"
+        :key="state"
+        :header-text="`CLAIMING`"
       />
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.CLAIMED"
@@ -238,6 +255,7 @@ export default {
       isPhysicalOnly: false,
       NFT_CLAIM_STATE,
       isLoginLoading: false,
+      isNewAccount: false,
     };
   },
   computed: {
