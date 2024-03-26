@@ -29,39 +29,71 @@
       </NFTWidgetBaseCard>
       <NFTClaimMainSection
         v-if="state === NFT_CLAIM_STATE.ERROR"
+        :key="state"
         :header-text="`ERRORs`"
       />
 
+      <!-- Edge Case -->
+      <!-- <NFTClaimMainSection
+        v-else-if="
+          state === NFT_CLAIM_STATE.WELCOME && giftInfo && isPhysicalOnly
+        "
+        :header-text="`GiftInfo`"
+      /> -->
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME && giftInfo"
+        :key="`${state}-giftInfo`"
         :header-text="`GiftInfo`"
       />
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME && isPhysicalOnly"
+        :key="`${state}-isPhysicalOnly`"
         :header-text="`Physical`"
       />
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME"
-        :step="1"
-        :total-step="3"
-        :header-text="`感謝你的支持與購買`"
-      />
+        :key="state"
+        :header-text="$t('nft_claim_welcome_title')"
+        :content-text="$t('nft_claim_welcome_text')"
+      >
+        <template #header-prepend>
+          <IconCircleCheck class="w-[48px]" />
+        </template>
+        <template #header-append>
+          <Label
+            class="text-like-green"
+            preset="h5"
+            :text="$t('nft_claim_NFT_name', { name: NFTName })"
+          />
+        </template>
+        <template #footer>
+          <ButtonV2
+            :text="$t('nft_claim_welcome_button_claim')"
+            @click="handleClickNext"
+          />
+        </template>
+      </NFTClaimMainSection>
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.LOGIN"
+        :key="state"
         :step="1"
         :total-step="3"
         :header-text="`login`"
       />
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.ID_CONFIRMATION"
+        :key="state"
         :header-text="`ID_CONFIRMATION`"
       />
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.MESSAGE"
+        :key="state"
         :header-text="`MESSAGE`"
       />
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.CLAIMED"
+        :key="state"
         :header-text="`CLAIMED`"
       />
     </div>
@@ -222,33 +254,16 @@ export default {
     isContentDownloadable() {
       return this.isFreePurchase || !this.nftIsDownloadHidden;
     },
-    errorMessage() {
-      if (
-        this.claimingAddressInput &&
-        !LIKE_ADDRESS_REGEX.test(this.claimingAddressInput)
-      ) {
-        return this.$t('nft_claim_enter_address_errorMessage');
-      }
-      return '';
-    },
   },
   watch: {
     walletEmail() {
       this.claimingFreeEmail = this.walletEmail;
     },
-    async getAddress() {
-      this.claimingAddressInput = this.getAddress;
+    getAddress() {
       if (this.isFreePurchase) this.claimingAddress = this.getAddress;
-      if (this.claimingAddress) {
-        await this.fetchRecommendInfo();
-      }
     },
-    async loginAddress() {
-      this.claimingAddressInput = this.loginAddress;
+    loginAddress() {
       this.claimingAddress = this.loginAddress;
-      if (this.claimingAddress) {
-        await this.fetchRecommendInfo();
-      }
     },
   },
   async mounted() {
@@ -296,12 +311,9 @@ export default {
         query,
       });
     }
-    this.claimingAddressInput = this.loginAddress || this.getAddress;
+    this.claimingAddress = this.loginAddress;
     if (this.isFreePurchase) {
-      this.claimingAddress = this.claimingAddressInput;
-    }
-    if (this.claimingAddress) {
-      await this.fetchRecommendInfo();
+      this.claimingAddress = this.getAddress;
     }
   },
   methods: {
@@ -581,9 +593,6 @@ export default {
         1
       );
     },
-    handleClickNext() {
-      this.state = NFT_CLAIM_STATE.INITIAL;
-    },
     handleRecommendedItemClick(classId) {
       logTrackerEvent(
         this,
@@ -628,6 +637,44 @@ export default {
         this.primaryKey,
         1
       );
+    },
+
+    handleClickNext() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_claim_click_next_from_${this.state}`,
+        this.primaryKey,
+        1
+      );
+      switch (this.state) {
+        case NFT_CLAIM_STATE.WELCOME:
+          if (this.claimingAddress) {
+            this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+            break;
+          }
+          this.state = NFT_CLAIM_STATE.LOGIN;
+          break;
+
+        case NFT_CLAIM_STATE.LOGIN:
+          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+          break;
+
+        case NFT_CLAIM_STATE.ID_CONFIRMATION:
+          this.state = NFT_CLAIM_STATE.MESSAGE;
+          break;
+
+        case NFT_CLAIM_STATE.MESSAGE:
+          this.state = NFT_CLAIM_STATE.CLAIMING;
+          break;
+
+        case NFT_CLAIM_STATE.CLAIMING:
+          this.state = NFT_CLAIM_STATE.CLAIMED;
+          break;
+
+        default:
+          break;
+      }
     },
   },
 };

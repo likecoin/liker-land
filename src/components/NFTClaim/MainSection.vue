@@ -10,12 +10,12 @@
       class="flex flex-col items-start justify-start gap-[8px] w-full text-like-green"
     >
       <slot name="header-prepend" />
-      <Label preset="h2" :text="headerText" />
+      <Label class="text-[40px] font-600" :text="headerText" />
       <slot name="header-append" />
     </section>
 
     <section
-      class="flex flex-col justify-start items-start gap-[32px] text-dark-gray text-left font-200 text-[18px] w-full"
+      class="flex flex-col justify-start items-start gap-[32px] text-dark-gray text-left font-400 text-[18px] w-full"
     >
       <p>{{ contentText }}</p>
       <slot name="content-append" />
