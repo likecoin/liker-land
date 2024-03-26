@@ -74,13 +74,59 @@
           />
         </template>
       </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.LOGIN"
         :key="state"
         :step="1"
         :total-step="3"
-        :header-text="`login`"
-      />
+        :header-text="$t('nft_claim_login_title')"
+        :content-text="$t('nft_claim_login_content')"
+      >
+        <template #content-append>
+          <div class="flex flex-col gap-[16px]">
+            <div
+              v-for="item of loginContentArray"
+              :key="item.title"
+              class="flex gap-[24px] items-center"
+            >
+              <div
+                class="p-[16px] flex justify-center items-center rounded-[12px] bg-like-cyan-pale text-like-green min-w-[56px]"
+              >
+                <component :is="item.icon" />
+              </div>
+              <div class="flex flex-col items-start">
+                <Label :text="item.title" class="text-[18px] font-600" />
+                <p class="text-[16px] font-200">{{ item.content }}</p>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div v-if="isLoginLoading" class="flex justify-center w-full">
+            <ProgressIndicator />
+          </div>
+          <div
+            v-else
+            class="flex justify-start items-start gap-[24px] w-full mt-[12px]"
+          >
+            <!-- HACK: The sign-up method might result in the wallet connect dialog not being displayed -->
+            <!-- HACK: so we temporarily using the sign-in method instead -->
+            <ButtonV2
+              :content-class="['px-[56px]']"
+              :text="$t('nft_claim_login_button_sign_up')"
+              @click="handleClickSignIn"
+            />
+            <ButtonV2
+              preset="tertiary"
+              :content-class="['px-[12px]']"
+              :text="$t('nft_claim_login_button_sign_in')"
+              @click="handleClickSignIn"
+            />
+          </div>
+        </template>
+      </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.ID_CONFIRMATION"
         :key="state"
@@ -119,13 +165,13 @@ import {
   getNFTClassCollectionType,
   nftClassCollectionType,
   parseNFTMetadataURL,
-  LIKE_ADDRESS_REGEX,
 } from '~/util/nft';
 
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
 import nftMixin from '~/mixins/nft';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
+import walletLoginMixin from '~/mixins/wallet-login';
 
 const NFT_CLAIM_STATE = {
   WELCOME: 'WELCOME',
@@ -139,7 +185,13 @@ const NFT_CLAIM_STATE = {
 
 export default {
   name: 'NFTClaimPage',
-  mixins: [alertMixin, walletMixin, nftMixin, nftOrCollectionMixin],
+  mixins: [
+    alertMixin,
+    walletMixin,
+    nftMixin,
+    nftOrCollectionMixin,
+    walletLoginMixin,
+  ],
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
@@ -185,6 +237,7 @@ export default {
       giftInfo: null,
       isPhysicalOnly: false,
       NFT_CLAIM_STATE,
+      isLoginLoading: false,
     };
   },
   computed: {
@@ -253,6 +306,25 @@ export default {
     },
     isContentDownloadable() {
       return this.isFreePurchase || !this.nftIsDownloadHidden;
+    },
+    loginContentArray() {
+      return [
+        {
+          title: this.$t('nft_claim_login_title_collection'),
+          content: this.$t('nft_claim_login_content_collection'),
+          icon: 'IconFolder',
+        },
+        {
+          title: this.$t('nft_claim_login_title_identity'),
+          content: this.$t('nft_claim_login_content_identity'),
+          icon: 'IconIdentity',
+        },
+        {
+          title: this.$t('nft_claim_login_title_community'),
+          content: this.$t('nft_claim_login_content_community'),
+          icon: 'IconCommunity',
+        },
+      ];
     },
   },
   watch: {
@@ -675,6 +747,37 @@ export default {
         default:
           break;
       }
+    },
+    async handleClickSignUp() {
+      this.isLoginLoading = true;
+      if (!this.getAddress) {
+        const isConnected = await this.connectWallet({
+          isOpenAuthcore: true,
+        });
+        if (isConnected || this.loginAddress) {
+          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+        }
+        this.isLoginLoading = false;
+      } else {
+        await this.initIfNecessary();
+      }
+      this.isLoginLoading = false;
+    },
+    async handleClickSignIn() {
+      this.isLoginLoading = true;
+      if (!this.getAddress) {
+        const isConnected = await this.connectWallet();
+        if (isConnected || this.loginAddress) {
+          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+        }
+        this.isLoginLoading = false;
+      } else {
+        await this.initIfNecessary();
+        if (this.loginAddress) {
+          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+        }
+      }
+      this.isLoginLoading = false;
     },
   },
 };

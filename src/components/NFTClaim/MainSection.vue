@@ -15,13 +15,13 @@
     </section>
 
     <section
-      class="flex flex-col justify-start items-start gap-[32px] text-dark-gray text-left font-400 text-[18px] w-full"
+      class="flex flex-col justify-start items-start gap-[32px] text-dark-gray text-left font-200 text-[18px] w-full"
     >
       <p>{{ contentText }}</p>
       <slot name="content-append" />
     </section>
 
-    <section class="flex justify-start items-start gap-[24px] w-full">
+    <section class="flex justify-start items-start gap-[24px] w-full mt-[12px]">
       <slot name="footer" />
     </section>
   </main>
