@@ -30,7 +30,7 @@
           :preset="isPlain ? 'plain' : 'tertiary'"
           :to="localeLocation({ name: 'notifications' })"
         >
-          <IconBell class="w-20 h-20 text-like-green" />
+          <IconBell class="w-20 h-20 text-current" />
         </ButtonV2>
         <div
           v-if="getNotificationCount > 0"
@@ -61,7 +61,7 @@
       <Dropdown>
         <template #trigger="{ toggle }">
           <ButtonV2 :preset="isPlain ? 'plain' : 'tertiary'" @click="toggle">
-            <GlobeIcon class="w-20 h-20 fill-like-green" />
+            <GlobeIcon class="w-20 h-20 fill-current" />
           </ButtonV2>
         </template>
         <MenuList>
@@ -78,7 +78,7 @@
 
       <ButtonV2
         v-if="getRouteBaseName($route) === 'index'"
-        preset="secondary"
+        :preset="isPlain ? 'outline' : 'secondary'"
         :to="localeLocation({ name: 'store' })"
         :text="$t('header_button_try_collect')"
         @click.native="handleClickTryCollect"
