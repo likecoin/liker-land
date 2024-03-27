@@ -21,7 +21,7 @@
       <slot name="content-append" />
     </section>
 
-    <section class="flex justify-start items-start gap-[24px] w-full mt-[12px]">
+    <section class="flex justify-start items-start gap-[24px] w-full mt-[24px]">
       <slot name="footer" />
     </section>
   </main>

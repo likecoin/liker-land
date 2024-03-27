@@ -147,13 +147,51 @@
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.MESSAGE"
         :key="state"
-        :header-text="`MESSAGE`"
-      />
+        :step="3"
+        :total-step="3"
+        :header-text="$t('nft_claim_message_title')"
+      >
+        <template #content-append>
+          <div class="flex flex-col items-start gap-[2px] w-full">
+            <Label
+              preset="p6"
+              class="text-medium-gray"
+              :text="$t('nft_claim_message_input_label')"
+            />
+            <TextField
+              v-model="collectorMessage"
+              class="w-full bg-transparent border-0 focus-visible:outline-none"
+              :placeholder="
+                $t('nft_collect_modal_leave_message_to_name', {
+                  name: creatorDisplayName,
+                })
+              "
+              @input.once="onInputCollectorMessage"
+            />
+          </div>
+        </template>
+        <template #footer>
+          <ButtonV2
+            :content-class="['px-[56px]']"
+            :text="$t('nft_claim_confirmation_button_confirm')"
+            @click="claim"
+          />
+        </template>
+      </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.CLAIMING"
         :key="state"
-        :header-text="`CLAIMING`"
-      />
+        :step="3"
+        :total-step="3"
+      >
+        <template #content-append>
+          <div class="flex flex-col items-center justify-center w-full">
+            <Label preset="h5" :text="$t('nft_claim_claiming_content')" />
+            <ProgressIndicator />
+          </div>
+        </template>
+      </NFTClaimMainSection>
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.CLAIMED"
         :key="state"
@@ -255,6 +293,7 @@ export default {
       isPhysicalOnly: false,
       NFT_CLAIM_STATE,
       isLoginLoading: false,
+      isClaimLoading: false,
       isNewAccount: false,
     };
   },
@@ -312,7 +351,7 @@ export default {
       );
     },
     creatorDisplayName() {
-      return this.getUserInfoByAddress(this.NFTOwner)?.displayName || 'creator';
+      return this.getUserInfoByAddress(this.NFTOwner)?.displayName || 'author';
     },
     canViewContentDirectly() {
       return (
@@ -443,6 +482,7 @@ export default {
     },
     async startFreePurchase() {
       try {
+        this.isClaimLoading = true;
         this.state = NFT_CLAIM_STATE.CLAIMING;
         if (!this.claimingFreeEmail && !this.claimingAddress) {
           this.alertPromptError(
@@ -500,10 +540,13 @@ export default {
           })
         );
         this.state = NFT_CLAIM_STATE.ERROR;
+      } finally {
+        this.isClaimLoading = false;
       }
     },
     async claim() {
       if (this.shouldBlockClaim) {
+        this.state = NFT_CLAIM_STATE.ERROR;
         return;
       }
       if (this.isFreePurchase) {
@@ -523,6 +566,7 @@ export default {
       try {
         if (this.claimPromise) return;
         this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.isClaimLoading = true;
         this.claimPromise = this.$api.post(
           postStripeFiatPendingClaim({
             wallet: this.claimingAddress,
@@ -556,12 +600,15 @@ export default {
           })
         );
         this.state = NFT_CLAIM_STATE.ERROR;
+      } finally {
+        this.isClaimLoading = true;
       }
     },
     async claimNFTBookPurchase() {
       try {
         if (this.claimPromise) return;
         this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.isClaimLoading = true;
         this.claimPromise = this.$api.post(
           getNFTBookClaimEndpoint({
             classId: this.classId,
@@ -619,6 +666,8 @@ export default {
           })
         );
         this.state = NFT_CLAIM_STATE.ERROR;
+      } finally {
+        this.isClaimLoading = false;
       }
     },
     onInputCollectorMessage() {
