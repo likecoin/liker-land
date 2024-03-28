@@ -374,6 +374,7 @@
       :currency="defaultCurrency"
       :class-id="classId"
       :is-loading="isOpeningCheckoutPage"
+      :price="formattedNFTPriceInUSD"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
       @close="() => (isTippingDialogOpen = false)"

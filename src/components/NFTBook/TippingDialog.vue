@@ -26,7 +26,7 @@
           $t('nft_tipping_title')
         }}</Label>
         <p class="text-dark-gray font-200 text-[14px]">
-          {{ $t('nft_tipping_description') }}
+          {{ $t('nft_tipping_description', { price: price }) }}
         </p>
       </div>
       <div class="flex flex-col items-center w-full px-0 sm:px-[40px]">
@@ -135,6 +135,10 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+    price: {
+      type: String,
+      default: undefined,
     },
   },
   data() {

@@ -55,6 +55,7 @@
       :creator-avatar="creatorAvatar"
       :display-name="creatorDisplayNameFull"
       :currency="defaultCurrency"
+      :price="formattedNFTPriceInUSD"
       :collection-id="collectionId"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
