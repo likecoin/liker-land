@@ -13,18 +13,29 @@
           "
           target="_blank"
         >
-          <NFTWidgetContentPreview
-            :class="[
-              'transition-shadow',
-              'cursor-pointer',
-              'min-h-[300px]',
-              'w-full',
-            ]"
-            :title="NFTName"
-            :description="NFTDescription"
-            :img-src="NFTImageUrl"
-            @click="handleClickViewDetails"
-          />
+          <div class="flex flex-col gap-[16px] mb-[24px]">
+            <NFTBookCoverWithFrame :src="NFTImageUrl" />
+            <Label class="text-[28px] font-600" :text="NFTName" />
+            <div class="grid grid-cols-2">
+              <div class="flex flex-col">
+                <Label
+                  preset="h6"
+                  :text="$t('nft_claim_NFT_author')"
+                  class=" text-medium-gray"
+                />
+                <Label preset="h5" :text="iscnWorkAuthor" />
+              </div>
+              <div class="flex flex-col">
+                <Label
+                  preset="h6"
+                  :text="$t('nft_claim_NFT_author')"
+                  class=" text-medium-gray"
+                />
+                <Label preset="h5" :text="creatorDisplayName" />
+              </div>
+            </div>
+            <p class="w-full line-clamp-3">{{ NFTDescription }}</p>
+          </div>
         </NuxtLink>
       </NFTWidgetBaseCard>
       <NFTClaimMainSection
