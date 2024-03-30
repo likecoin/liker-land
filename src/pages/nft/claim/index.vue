@@ -192,11 +192,45 @@
           </div>
         </template>
       </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.CLAIMED"
         :key="state"
-        :header-text="`CLAIMED`"
-      />
+        :header-text="
+          isAutoDelivery
+            ? $t('nft_claim_claimed_title_autoDelivery')
+            : $t('nft_claim_claimed_title_manualDelivery')
+        "
+        :content-text="
+          isAutoDelivery
+            ? $t('nft_claim_claimed_content_autoDelivery', {
+                publisher: creatorDisplayName,
+                name: NFTName,
+              })
+            : $t('nft_claim_claimed_content_manualDelivery')
+        "
+      >
+        <template #header-prepend>
+          <Label
+            preset="h3"
+            :text="$t('nft_claim_claimed_title_congratulations')"
+          />
+        </template>
+        <template #footer>
+          <ButtonV2
+            v-if="isAutoDelivery"
+            :content-class="['px-[48px]']"
+            :text="$t('nft_claim_claimed_button_start_reading')"
+            @click="handleStartReading"
+          />
+          <ButtonV2
+            :content-class="['px-[48px]']"
+            preset="tertiary"
+            :text="$t('nft_claim_claimed_button_view_collection')"
+            @click="handleViewCollection"
+          />
+        </template>
+      </NFTClaimMainSection>
     </div>
   </main>
 </template>
@@ -291,6 +325,7 @@ export default {
       claimingFreeEmail: '',
       giftInfo: null,
       isPhysicalOnly: false,
+      isAutoDelivery: false,
       NFT_CLAIM_STATE,
       isLoginLoading: false,
       isClaimLoading: false,
@@ -351,7 +386,10 @@ export default {
       );
     },
     creatorDisplayName() {
-      return this.getUserInfoByAddress(this.NFTOwner)?.displayName || 'author';
+      return (
+        this.getUserInfoByAddress(this.iscnOwner)?.displayName ||
+        this.$t('nft_claim_author')
+      );
     },
     canViewContentDirectly() {
       return (
@@ -816,6 +854,13 @@ export default {
       }
     },
     async handleClickSignUp() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_claim_click_sign_up`,
+        this.primaryKey,
+        1
+      );
       this.isLoginLoading = true;
       if (!this.getAddress) {
         const isConnected = await this.connectWallet({
@@ -831,6 +876,13 @@ export default {
       this.isLoginLoading = false;
     },
     async handleClickSignIn() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_claim_click_sign_in`,
+        this.primaryKey,
+        1
+      );
       this.isLoginLoading = true;
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
@@ -845,6 +897,33 @@ export default {
         }
       }
       this.isLoginLoading = false;
+    },
+
+    handleStartReading() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_claim_click_start_reading`,
+        this.primaryKey,
+        1
+      );
+      // wait for API ready
+    },
+    handleViewCollection() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        `nft_claim_click_view_collection`,
+        this.primaryKey,
+        1
+      );
+      this.$router.push(
+        this.localeLocation({
+          name: 'id',
+          params: { id: this.claimingAddress },
+          query: { tab: 'collected' },
+        })
+      );
     },
   },
 };

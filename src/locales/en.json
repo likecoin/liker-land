@@ -431,8 +431,11 @@
   "nft_book_hero_skip_animation_button": "Skip Animation",
   "nft_book_shelf_multiple_nft_class_dialog_title": "Please select a version",
   "nft_claim_access_nft_book": "Proceed",
+  "nft_claim_author": "author",
   "nft_claim_claim": "Proceed",
+  "nft_claim_NFT_author": "Author",
   "nft_claim_NFT_name": "\"{name}\"",
+  "nft_claim_NFT_publisher": "Publisher",
   "nft_claim_welcome_title": "Thank you for your support",
   "nft_claim_welcome_text": "A confirmation email has been sent to your email address as well. \n\nPlease begin the ebook claiming process. in order to receive the book from the author and add it to your collection.\n\nYour book will be updated on the blockchain network. Where you will have complete ownership & access to the content.",
   "nft_claim_welcome_button_claim": "Start claiming my eBook",
@@ -452,6 +455,16 @@
   "nft_claim_claiming_content": "Verifying",
   "nft_claim_message_input_label": "Leave a message for the author.",
   "nft_claim_message_title": "Sign a message to the creator",
+  "nft_claim_claimed_title_autoDelivery": "You have successfully claimed your eBook",
+  "nft_claim_claimed_title_manualDelivery": "Your book is on its way!",
+  "nft_claim_claimed_title_congratulations": "Congratulations",
+  "nft_claim_claimed_content_autoDelivery": "{publisher} has just sent you {name},You can visit your dashboard on LikerLand to view your collection and read the content.",
+  "nft_claim_claimed_content_manualDelivery": "Please wait for the author to sign and send the eBook, which may take about 1-3 days. We will notify you by email. Thank you for your support!",
+  "nft_claim_claimed_button_start_reading": "Start reading",
+  "nft_claim_claimed_button_view_collection": "View collection",
+
+
+
   "nft_claim_claimed": "NFT is claimed",
   "nft_claim_claimed_download": "Or just download the eBook?",
   "nft_claim_claimed_gift_fromName": "—— {name}",
