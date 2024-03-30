@@ -114,8 +114,16 @@
           </div>
         </template>
         <template #footer>
-          <div v-if="isLoginLoading" class="flex justify-center w-full">
+          <div
+            v-if="isLoginLoading"
+            class="flex flex-col items-start justify-start w-full"
+          >
             <ProgressIndicator />
+            <Label
+              class="text-medium-gray w-full mt-[4px]"
+              preset="p6"
+              :text="$t('nft_claim_login_button_loading')"
+            />
           </div>
           <div
             v-else
@@ -146,6 +154,32 @@
         :header-text="$t('nft_claim_confirmation_title')"
         :content-text="isNewAccount ? $t('nft_claim_confirmation_content') : ''"
       >
+        <template #content-append>
+          <div class="flex flex-col items-start gap-[8px] mt-[-32px]">
+            <div
+              class="flex items-center gap-[16px] px-[20px] py-[16px] rounded-[12px] bg-shade-gray"
+            >
+              <Identity
+                :avatar-url="walletUserAvatar"
+                :avatar-size="48"
+                :is-lazy-loaded="true"
+              />
+              <div class="flex flex-col gap-[8px]">
+                <Label
+                  v-if="loginUserDisplayName"
+                  preset="h5"
+                  :text="loginUserDisplayName"
+                />
+                <Label preset="h6" :text="claimingAddress" />
+              </div>
+            </div>
+            <Label
+              preset="p6"
+              class="text-medium-gray"
+              :text="$t('nft_claim_login_title_identity_check')"
+            />
+          </div>
+        </template>
         <template #footer>
           <ButtonV2
             :content-class="['px-[56px]']"
@@ -431,6 +465,9 @@ export default {
           icon: 'IconCommunity',
         },
       ];
+    },
+    loginUserDisplayName() {
+      return this.getLikerInfo?.displayName;
     },
   },
   watch: {
