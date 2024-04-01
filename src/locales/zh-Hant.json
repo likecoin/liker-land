@@ -473,7 +473,7 @@
 
 
   "nft_claim_claimed": "已領取 NFT",
-  "nft_claim_claimed_download": "想先睹為快？",
+  "nft_claim_claimed_download": "其他方式取得電子書",
   "nft_claim_claimed_gift_fromName": "—— {name}",
   "nft_claim_claimed_gift_title": "這本書籍是由 {name} 精心挑選，特別贈送給你的，希望你會喜歡！",
   "nft_claim_claimed_gift_toName": "給 {name} :",

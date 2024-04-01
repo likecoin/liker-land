@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="relative px-[12px]">
     <div class="flex justify-center item-start gap-[45px] w-full mb-[60px]">
       <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink
@@ -325,6 +325,24 @@
         </template>
       </NFTClaimMainSection>
     </div>
+    <div v-if="canViewContentDirectly" class="flex justify-end w-full">
+      <div v-for="id in classIds" :key="id">
+        <NFTClaimOptionList
+          v-if="getCanViewNFTBookBeforeClaimByClassId(id)"
+          :url="
+            getIscnData(id)?.contentMetadata.url ||
+              getNFTClassMetadataById(id)?.external_url
+          "
+          :class-id="id"
+          :content-urls="getIscnData(id)?.contentMetadata.sameAs"
+          :iscn-url="getIscnData(id)?.contentMetadata.url"
+          :is-nft-book="checkNftIsNFTBook(id)"
+          :is-content-viewable="true"
+          :is-content-downloadable="!getIsHideNFTBookDownload(id)"
+          @view-content-url="handleClickViewContentDirectly"
+        />
+      </div>
+    </div>
   </main>
 </template>
 
@@ -585,7 +603,7 @@ export default {
     getIscnData(classId) {
       const metadata = this.getNFTClassMetadataById(classId);
       const iscnId =
-        metadata.parent?.iscnIdPrefix || metadata.parent?.iscn_id_prefix;
+        metadata?.parent?.iscnIdPrefix || metadata?.parent?.iscn_id_prefix;
       const data = this.getISCNMetadataById(iscnId);
       if (data instanceof Promise) return undefined;
       return data;
