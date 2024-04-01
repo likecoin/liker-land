@@ -437,6 +437,8 @@
   "nft_claim_NFT_name": "\"{name}\"",
   "nft_claim_NFT_publisher": "發行",
   "nft_claim_welcome_title": "感謝你的支持與購買",
+  "nft_claim_welcome_title_gift": "這本書籍是由 {name} 精心挑選，特別贈送給你的，希望你會喜歡！",
+  "nft_claim_welcome_title_gift_toName": "給 {name}：",
   "nft_claim_welcome_text": "確認信已同時發送到你的電子郵箱\n\n你即將開始進行電子書的派發程序，作者會將書籍添加進你的收藏中。\n在你的區塊鏈書櫃裡，你將擁有完全的所有權和內容訪問權限。",
   "nft_claim_welcome_button_claim": "開始領取我的電子書",
   "nft_claim_login_button_sign_in": "或以其他方式登入",
