@@ -1,47 +1,57 @@
 <template>
   <main>
-    <div class="w-full max-w-[400px] mx-auto p-[1rem] laptop:p-0 pt-0">
-      <NFTWidgetBaseCard>
+    <div class="flex justify-center item-start gap-[45px] w-full mb-[60px]">
+      <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink :to="viewInfoLocation" target="_blank">
-          <NFTWidgetContentPreview
-            :class="[
-              'transition-shadow',
-              'cursor-pointer',
-              'min-h-[300px]',
-              'w-full',
-            ]"
-            :title="NFTName"
-            :description="NFTDescription"
-            :img-src="NFTImageUrl"
-            @click="handleClickViewDetails"
-          />
+          <div class="flex flex-col gap-[16px] mb-[24px]">
+            <NFTBookCoverWithFrame :src="NFTImageUrl" />
+            <Label class="text-[28px] font-600" :text="NFTName" />
+            <div class="grid grid-cols-2">
+              <div class="flex flex-col">
+                <Label
+                  preset="h6"
+                  :text="$t('nft_claim_NFT_author')"
+                  class=" text-medium-gray"
+                />
+                <Label preset="h5" :text="iscnWorkAuthor" />
+              </div>
+              <div class="flex flex-col">
+                <Label
+                  preset="h6"
+                  :text="$t('nft_claim_NFT_author')"
+                  class=" text-medium-gray"
+                />
+                <Label preset="h5" :text="creatorDisplayName" />
+              </div>
+            </div>
+            <p class="w-full line-clamp-3">{{ NFTDescription }}</p>
+          </div>
         </NuxtLink>
       </NFTWidgetBaseCard>
+      <NFTClaimMainSection
+        :header-text="$t('nft_claim_welcome_title_send_gift')"
+        :content-text="$t('nft_claim_welcome_text_send_gift')"
+      >
+        <template #header-prepend>
+          <IconGift class="w-[48px]" />
+        </template>
+        <template #header-append>
+          <Label
+            class="text-like-green"
+            preset="h5"
+            :text="$t('nft_claim_NFT_name', { name: NFTName })"
+          />
+        </template>
+        <template #footer>
+          <ButtonV2
+            class="px-[32px]"
+            preset="tertiary"
+            :text="$t('nft_book_gift_page_view_class_button')"
+            @click="handleClickViewClass"
+          />
+        </template>
+      </NFTClaimMainSection>
     </div>
-
-    <MobileStickyCard
-      class="flex flex-col justify-center items-center w-full laptop:max-w-[400px] mx-auto py-[1.5rem]"
-    >
-      <IconGift class="w-[32px] mb-[8px] text-dark-gray" />
-      <Label
-        class="text-medium-gray w-full my-[4px]"
-        preset="p6"
-        align="center"
-        :text="$t('nft_book_gift_page_description_0')"
-      />
-      <Label
-        class="text-medium-gray w-full my-[4px]"
-        preset="p6"
-        align="center"
-        :text="$t('nft_book_gift_page_description_1')"
-      />
-      <ButtonV2
-        class="my-[8px]"
-        :text="$t('nft_book_gift_page_view_class_button')"
-        preset="tertiary"
-        @click="handleClickViewClass"
-      />
-    </MobileStickyCard>
   </main>
 </template>
 
@@ -54,10 +64,11 @@ import {
 import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPaymentStatusEndpoint } from '~/util/api';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
+import nftMixin from '~/mixins/nft';
 
 export default {
   name: 'NFTGiftSuccessPage',
-  mixins: [nftOrCollectionMixin],
+  mixins: [nftOrCollectionMixin, nftMixin],
   async asyncData({ query, store, error, i18n }) {
     const { class_id: classId, collection_id: collectionId } = query;
     if (!classId && !collectionId) {
