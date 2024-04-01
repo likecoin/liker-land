@@ -90,11 +90,26 @@
           />
         </template>
       </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME && isPhysicalOnly"
         :key="`${state}-isPhysicalOnly`"
-        :header-text="`Physical`"
-      />
+        :header-text="$t('nft_claim_welcome_title')"
+        :content-text="$t('nft_claim_welcome_text_physical_only')"
+      >
+        <template #header-prepend>
+          <IconCircleCheck class="w-[48px]" />
+        </template>
+        <template #footer>
+          <ButtonV2
+            class="px-[32px]"
+            preset="tertiary"
+            :text="$t('nft_book_gift_page_view_class_button')"
+            @click="handleClickViewClass"
+          />
+        </template>
+      </NFTClaimMainSection>
+
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME"
         :key="state"
@@ -1005,6 +1020,16 @@ export default {
           query: { tab: 'collected' },
         })
       );
+    },
+    handleClickViewClass() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_click_physical_view_class_page',
+        this.primaryKey,
+        1
+      );
+      this.$router.push(this.viewInfoLocation);
     },
   },
 };

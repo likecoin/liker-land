@@ -443,6 +443,7 @@
   "nft_claim_welcome_text": "確認信已同時發送到你的電子郵箱\n\n你即將開始進行電子書的派發程序，作者會將書籍添加進你的收藏中。\n在你的區塊鏈書櫃裡，你將擁有完全的所有權和內容訪問權限。",
   "nft_claim_welcome_text_send_gift": "你的電子書禮物已經經電郵發送。收件人領取電子書後將會有電郵通知你。\n感謝你分享閲讀的喜悦。",
   "nft_claim_welcome_button_claim": "開始領取我的電子書",
+  "nft_claim_welcome_text_physical_only": "付款成功。我們會盡快安排寄送。感謝支持！",
   "nft_claim_login_button_sign_in": "或以其他方式登入",
   "nft_claim_login_button_sign_up": "註冊",
   "nft_claim_login_button_loading": "正在載入你的去中心化身分...",
