@@ -466,25 +466,6 @@ export default {
     isNFTBook() {
       return this.$route.query.type === 'nft_book';
     },
-    text() {
-      switch (this.state) {
-        case NFT_CLAIM_STATE.CLAIMING:
-          return this.$t('nft_claim_claiming');
-        case NFT_CLAIM_STATE.CLAIMED:
-          if (this.isNFTBook && !this.nftId) {
-            return this.$t('nft_claim_claimed_nft_book');
-          }
-          return this.$t('nft_claim_claimed');
-        case NFT_CLAIM_STATE.PHYSICAL_ONLY:
-          return this.$t('nft_claim_physical_only');
-        case NFT_CLAIM_STATE.ERROR:
-          return this.error
-            ? this.$t('nft_claim_error_message', { error: this.error })
-            : this.$t('nft_claim_error_message_unknown');
-        default:
-          return '';
-      }
-    },
     nftIsDownloadHidden() {
       return this.classIds.some(classId =>
         this.getIsHideNFTBookDownload(classId)
