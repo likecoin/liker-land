@@ -320,7 +320,7 @@
         </template>
         <template #footer>
           <ButtonV2
-            v-if="isAutoDeliver"
+            v-if="shouldShowStartReadingButton"
             :content-class="['px-[48px]']"
             :text="$t('nft_claim_claimed_button_start_reading')"
             @click="handleStartReading"
@@ -530,6 +530,13 @@ export default {
     loginUserDisplayName() {
       return this.getLikerInfo?.displayName;
     },
+    shouldShowStartReadingButton() {
+      return (
+        this.state === NFT_CLAIM_STATE.CLAIMED &&
+        this.isAutoDeliver &&
+        this.nftId
+      );
+    },
   },
   watch: {
     walletEmail() {
@@ -565,6 +572,7 @@ export default {
       this.isPhysicalOnly = isPhysicalOnly;
       this.isAutoDeliver = isAutoDeliver;
       this.creatorMessage = autoMemo;
+      this.status = status;
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -598,6 +606,11 @@ export default {
     this.claimingAddress = this.loginAddress;
     if (this.isFreePurchase) {
       this.claimingAddress = this.getAddress;
+    }
+    if (this.status === 'completed') {
+      if (!this.giftInfo && !this.isPhysicalOnly) {
+        this.state = NFT_CLAIM_STATE.CLAIMED;
+      }
     }
   },
   methods: {
