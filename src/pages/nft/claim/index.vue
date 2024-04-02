@@ -1,6 +1,6 @@
 <template>
-  <main class="relative px-[12px]">
-    <div class="flex justify-center item-start gap-[45px] w-full mb-[60px]">
+  <main class="relative p-[12px]">
+    <div class="flex justify-center item-start gap-[32px] w-full mb-[60px]">
       <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink
           :to="
@@ -290,12 +290,12 @@
         v-else-if="state === NFT_CLAIM_STATE.CLAIMED"
         :key="state"
         :header-text="
-          isAutoDelivery
+          isAutoDeliver
             ? $t('nft_claim_claimed_title_autoDelivery')
             : $t('nft_claim_claimed_title_manualDelivery')
         "
         :content-text="
-          isAutoDelivery
+          isAutoDeliver
             ? $t('nft_claim_claimed_content_autoDelivery', {
                 publisher: creatorDisplayName,
                 name: NFTName,
@@ -303,6 +303,15 @@
             : $t('nft_claim_claimed_content_manualDelivery')
         "
       >
+        <template #stepper-append>
+          <NFTClaimMessageBlock
+            v-if="isAutoDeliver && creatorMessage"
+            class="ml-[-62px] mt-[32px]"
+            :avatar-url="creatorAvatar"
+            :creator-display-name="creatorDisplayName"
+            :message="creatorMessage"
+          />
+        </template>
         <template #header-prepend>
           <Label
             preset="h3"
@@ -311,7 +320,7 @@
         </template>
         <template #footer>
           <ButtonV2
-            v-if="isAutoDelivery"
+            v-if="isAutoDeliver"
             :content-class="['px-[48px]']"
             :text="$t('nft_claim_claimed_button_start_reading')"
             @click="handleStartReading"
@@ -419,6 +428,7 @@ export default {
         }
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
       error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
     }
@@ -431,12 +441,13 @@ export default {
       isFreePurchase: this.$route.query.free,
       priceIndex: this.$route.query.price_index,
       collectorMessage: '',
+      creatorMessage: '',
       claimingAddressInput: '',
       claimingAddress: '',
       claimingFreeEmail: '',
       giftInfo: null,
       isPhysicalOnly: false,
-      isAutoDelivery: false,
+      isAutoDeliver: false,
       NFT_CLAIM_STATE,
       isLoginLoading: false,
       isClaimLoading: false,
@@ -482,6 +493,9 @@ export default {
         this.getUserInfoByAddress(this.iscnOwner)?.displayName ||
         this.$t('nft_claim_author')
       );
+    },
+    creatorAvatar() {
+      return this.getUserInfoByAddress(this.iscnOwner)?.avatar;
     },
     canViewContentDirectly() {
       return (
@@ -540,9 +554,17 @@ export default {
         })
       );
       ({ price } = data);
-      const { giftInfo, isPhysicalOnly } = data;
+      const {
+        giftInfo,
+        isPhysicalOnly,
+        status,
+        autoMemo,
+        isAutoDeliver,
+      } = data;
       this.giftInfo = giftInfo;
       this.isPhysicalOnly = isPhysicalOnly;
+      this.isAutoDeliver = isAutoDeliver;
+      this.creatorMessage = autoMemo;
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -638,19 +660,8 @@ export default {
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;
-        if (data.nftId) {
-          this.$router.push(
-            this.localeLocation({
-              name: 'nft-class-classId-nftId',
-              params: {
-                classId: this.classId,
-                nftId: data.nftId,
-              },
-            })
-          );
-        } else {
-          this.state = NFT_CLAIM_STATE.CLAIMED;
-        }
+        this.state = NFT_CLAIM_STATE.CLAIMED;
+
         logTrackerEvent(
           this,
           'NFT',
@@ -758,19 +769,8 @@ export default {
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;
-        if (data.nftId) {
-          this.$router.push(
-            this.localeLocation({
-              name: 'nft-class-classId-nftId',
-              params: {
-                classId: this.classId,
-                nftId: data.nftId,
-              },
-            })
-          );
-        } else {
-          this.state = NFT_CLAIM_STATE.CLAIMED;
-        }
+        this.state = NFT_CLAIM_STATE.CLAIMED;
+
         logTrackerEvent(
           this,
           'NFT',
@@ -1002,7 +1002,23 @@ export default {
         this.primaryKey,
         1
       );
-      // wait for API ready
+
+      if (this.nftId) {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-class-classId-nftId',
+            params: { classId: this.classId, nftId: this.nftId },
+          })
+        );
+      } else {
+        this.$router.push(
+          this.localeLocation({
+            name: 'id',
+            params: { id: this.claimingAddress },
+            query: { tab: 'collected' },
+          })
+        );
+      }
     },
     handleViewCollection() {
       logTrackerEvent(

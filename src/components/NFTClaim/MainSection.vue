@@ -4,6 +4,7 @@
   >
     <div class="flex justify-start items-center min-h-[60px] w-full">
       <Stepper v-if="step" :step="step" :total-step="totalStep" />
+      <slot name="stepper-append" />
     </div>
 
     <section
