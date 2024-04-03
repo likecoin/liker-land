@@ -307,6 +307,7 @@
             :class-id="classId"
             :content-fingerprints="nftISCNContentFingerprints"
             :is-download-hidden="nftIsDownloadHidden"
+            :is-nft-book="nftIsNFTBook"
             @click-show-more-history="handleClickMoreHistory"
           />
         </section>
