@@ -118,6 +118,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isNftBook: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     recordMap() {
@@ -135,7 +139,7 @@ export default {
         if (!recordMap[protocol]) recordMap[protocol] = [];
         switch (protocol) {
           case 'ar':
-            if (!this.isDownloadHidden) {
+            if (!this.isDownloadHidden && !this.isNftBook) {
               recordMap[protocol].push({
                 href: `${ARWEAVE_ENDPOINT}/${text}`,
                 text,
@@ -143,7 +147,7 @@ export default {
             }
             break;
           case 'ipfs':
-            if (!this.isDownloadHidden) {
+            if (!this.isDownloadHidden && !this.isNftBook) {
               recordMap[protocol].push({
                 href: `${IPFS_VIEW_GATEWAY_URL}/${text}`,
                 text,

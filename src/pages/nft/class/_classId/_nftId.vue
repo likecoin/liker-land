@@ -267,6 +267,7 @@
             :nft-id="nftId"
             :content-fingerprints="nftISCNContentFingerprints"
             :is-download-hidden="nftIsDownloadHidden"
+            :is-nft-book="nftIsNFTBook"
           />
         </section>
 
