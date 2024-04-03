@@ -539,18 +539,31 @@ export default {
     },
   },
   watch: {
-    walletEmail() {
-      this.claimingFreeEmail = this.walletEmail;
+    walletEmail(newValue) {
+      this.claimingFreeEmail = newValue;
     },
-    getAddress() {
-      if (this.isFreePurchase) this.claimingAddress = this.getAddress;
+    getAddress(newValue) {
+      if (this.isFreePurchase) this.claimingAddress = newValue;
+      if (!newValue && !this.loginAddress && !(this.status === 'completed')) {
+        this.claimingAddress = '';
+        this.state = NFT_CLAIM_STATE.LOGIN;
+      }
     },
-    loginAddress() {
-      this.claimingAddress = this.loginAddress;
+    loginAddress(newValue) {
+      this.claimingAddress = newValue;
+      if (!this.getAddress && !newValue && !(this.status === 'completed')) {
+        this.claimingAddress = '';
+        this.state = NFT_CLAIM_STATE.LOGIN;
+      }
+    },
+    state(newValue) {
+      if (newValue) {
+        this.$router.push({ query: { ...this.$route.query, state: newValue } });
+      }
     },
   },
   async mounted() {
-    const { redirect, free, from, ...query } = this.$route.query;
+    const { redirect, free, from, state, ...query } = this.$route.query;
     let price;
     try {
       const { data } = await this.$api.get(
@@ -607,8 +620,11 @@ export default {
     if (this.isFreePurchase) {
       this.claimingAddress = this.getAddress;
     }
-    if (this.status === 'completed') {
-      if (!this.giftInfo && !this.isPhysicalOnly) {
+    if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
+      this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+    }
+    if (!this.giftInfo && !this.isPhysicalOnly) {
+      if (this.status === 'completed') {
         this.state = NFT_CLAIM_STATE.CLAIMED;
       }
     }
