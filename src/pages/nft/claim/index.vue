@@ -1,5 +1,5 @@
 <template>
-  <main class="relative p-[12px]">
+  <main class="relative p-[12px] laptop:px-[32px] desktop:px-[40px]">
     <div class="flex justify-center item-start gap-[32px] w-full mb-[60px]">
       <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink
@@ -21,9 +21,9 @@
                 <Label
                   preset="h6"
                   :text="$t('nft_claim_NFT_author')"
-                  class=" text-medium-gray"
+                  class=" text-medium-gray font-[500]"
                 />
-                <Label preset="h5" :text="iscnWorkAuthor" />
+                <Label preset="h5" class="font-[500]" :text="iscnWorkAuthor" />
               </div>
               <div class="flex flex-col">
                 <Label
@@ -34,7 +34,7 @@
                 <Label preset="h5" :text="creatorDisplayName" />
               </div>
             </div>
-            <p class="w-full line-clamp-3">{{ NFTDescription }}</p>
+            <p class="w-full line-clamp-3 font-[400]">{{ NFTDescription }}</p>
           </div>
         </NuxtLink>
       </NFTWidgetBaseCard>
@@ -121,8 +121,7 @@
         </template>
         <template #header-append>
           <Label
-            class="text-like-green"
-            preset="h5"
+            class="text-like-green text-[24px] font-600"
             :text="$t('nft_claim_NFT_name', { name: NFTName })"
           />
         </template>
