@@ -433,6 +433,7 @@
   "nft_claim_access_nft_book": "Proceed",
   "nft_claim_author": "author",
   "nft_claim_claim": "Proceed",
+  "nft_claim_claim_header_title": "Claimed eBook",
   "nft_claim_claimed_button_start_reading": "Start reading",
   "nft_claim_claimed_button_view_collection": "View collection",
   "nft_claim_claimed_content_autoDelivery": "{publisher} has just sent you {name},You can visit your dashboard on Liker Land to view your collection and read the content.",
