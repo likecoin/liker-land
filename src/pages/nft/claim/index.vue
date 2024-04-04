@@ -600,11 +600,6 @@ export default {
     isNFTBook() {
       return this.$route.query.type === 'nft_book';
     },
-    nftIsDownloadHidden() {
-      return this.classIds.some(classId =>
-        this.getIsHideNFTBookDownload(classId)
-      );
-    },
     shouldBlockClaim() {
       return (
         !this.claimingAddress ||
@@ -627,9 +622,6 @@ export default {
           this.getCanViewNFTBookBeforeClaimByClassId(classId)
         )
       );
-    },
-    isContentDownloadable() {
-      return this.isFreePurchase || !this.nftIsDownloadHidden;
     },
     loginContentArray() {
       return [
@@ -784,24 +776,6 @@ export default {
       return (
         getNFTClassCollectionType(metadata) === nftClassCollectionType.NFTBook
       );
-    },
-    onEnterClaimingAddress() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_nft_book_on_address_entered',
-        this.primaryKey
-      );
-      this.claimingAddress = this.claimingAddressInput;
-    },
-    async onClickLogin() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_nft_book_on_login_clicked',
-        this.primaryKey
-      );
-      await this.connectWallet();
     },
     async startFreePurchase() {
       try {
@@ -979,51 +953,6 @@ export default {
         this.primaryKey
       );
     },
-    handleClickViewDetails() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_view_details_clicked',
-        this.primaryKey,
-        1
-      );
-    },
-    handleClickView() {
-      logTrackerEvent(this, 'NFT', 'nft_claim_view_button_clicked', '', 1);
-      if (this.collectionId) {
-        if (this.claimingAddress) {
-          this.$router.push(
-            this.localeLocation({
-              name: 'id',
-              params: { id: this.claimingAddress },
-            })
-          );
-        } else {
-          this.$router.push(
-            this.localeLocation({
-              name: 'nft-collection-collectionId',
-              params: {
-                collectionId: this.collectionId,
-              },
-            })
-          );
-        }
-      } else {
-        this.$router.push(
-          this.localeLocation({
-            name: this.nftId ? 'nft-class-classId-nftId' : 'nft-class-classId',
-            params: {
-              classId: this.classId,
-              nftId: this.nftId,
-            },
-          })
-        );
-      }
-    },
-    handleClickRetry() {
-      logTrackerEvent(this, 'NFT', 'nft_claim_retry_button_clicked', '', 1);
-      this.claim();
-    },
     handleClickViewContentDirectly(e, contentUrl, type) {
       logTrackerEvent(
         this,
@@ -1033,52 +962,6 @@ export default {
         1
       );
     },
-    handleRecommendedItemClick(classId) {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_recommend_item_click',
-        classId,
-        1
-      );
-    },
-    handleRecommendedItemCollect(classId) {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_recommend_item_collect',
-        classId,
-        1
-      );
-    },
-    handleRecommendationSlideNext() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_recommendation_clicked_next',
-        this.primaryKey,
-        1
-      );
-    },
-    handleRecommendationSlidePrev() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_recommendation_clicked_prev',
-        this.primaryKey,
-        1
-      );
-    },
-    handleRecommendationSliderMove() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_claim_recommendation_moved_slider',
-        this.primaryKey,
-        1
-      );
-    },
-
     handleClickNext() {
       logTrackerEvent(
         this,
