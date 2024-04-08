@@ -488,6 +488,9 @@ export default {
   },
   head() {
     let title = this.NFTName || this.$t('nft_details_page_title');
+    if (this.iscnWorkAuthor) {
+      title += ` - ${this.iscnWorkAuthor}`;
+    }
     if (this.nftIsNFTBook) {
       title += ` - ${this.$t('nft_details_page_title_book')}`;
     } else if (!title.includes(this.$t('nft_details_page_title_article'))) {
@@ -514,6 +517,7 @@ export default {
         '@context': 'http://www.schema.org',
         '@type': ['CreativeWork', 'Product'],
         name: title,
+        author: this.iscnWorkAuthor,
         image: [ogImage],
         description,
         brand: {

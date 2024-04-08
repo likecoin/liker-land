@@ -432,7 +432,15 @@ export default {
     };
   },
   head() {
-    const title = this.nftName || this.$t('nft_details_page_title');
+    let title = this.nftName || this.$t('nft_details_page_title');
+    if (this.iscnWorkAuthor) {
+      title += ` - ${this.iscnWorkAuthor}`;
+    }
+    if (this.nftIsNFTBook) {
+      title += ` - ${this.$t('nft_details_page_title_book')}`;
+    } else if (!title.includes(this.$t('nft_details_page_title_article'))) {
+      title += ` - ${this.$t('nft_details_page_title_article')}`;
+    }
     const description =
       this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
@@ -446,6 +454,7 @@ export default {
         '@context': 'http://www.schema.org',
         '@type': ['CreativeWork', 'Product'],
         name: title,
+        author: this.iscnWorkAuthor,
         image: [ogImage],
         description,
         brand: {
