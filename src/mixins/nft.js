@@ -914,7 +914,7 @@ export default {
                 classId,
                 nftId,
                 fromWallet: toWallet,
-                toWallet: fromWallet,
+                toWallet: this.iscnOwner || fromWallet,
                 memo: buyerMessage,
                 txHash,
                 timestamp: timestamp - 1,
