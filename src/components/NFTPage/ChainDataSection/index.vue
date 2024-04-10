@@ -16,6 +16,7 @@
           :iscn-url="iscnUrl"
           :content-fingerprints="contentFingerprints"
           :is-download-hidden="isDownloadHidden"
+          :is-nft-book="isNftBook"
         />
       </div>
       <template v-if="items.length && view !== 'created'">
@@ -132,6 +133,10 @@ export default {
       default: () => [],
     },
     isDownloadHidden: {
+      type: Boolean,
+      default: false,
+    },
+    isNftBook: {
       type: Boolean,
       default: false,
     },
