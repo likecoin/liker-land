@@ -657,7 +657,7 @@
   "nft_tipping_button_skip": "Skip",
   "nft_tipping_placeholder": "Or another amount",
   "nft_tipping_title": "Show your support with a tip!",
-  "nft_tipping_description": "In addition to the original price ({price}), you can also give an extra tip.",
+  "nft_tipping_description": "Give an extra tip on top of the original price ({price}).",
   "nft_type_all_NFTs": "All NFTs",
   "nft_type_book": "Books",
   "nft_type_other": "Other NFT",
