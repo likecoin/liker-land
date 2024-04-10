@@ -55,6 +55,7 @@
       :creator-avatar="creatorAvatar"
       :display-name="creatorDisplayNameFull"
       :currency="defaultCurrency"
+      :price="formattedNFTPriceInUSD"
       :collection-id="collectionId"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
@@ -95,6 +96,7 @@ export default {
       isGiftDialogOpen: false,
       customPrice: 0,
       isTippingDialogOpen: false,
+      isOpeningCheckoutPage: false,
     };
   },
   async fetch({ route, store, error }) {
@@ -235,59 +237,67 @@ export default {
       if (!hasStock) return;
 
       if (hasStock) {
-        const purchaseEventParams = {
-          items: [
-            {
-              name: this.collectionName,
-              price: this.collectionPrice,
-              collection: this.collectionId,
-            },
-          ],
-          price: this.collectionPrice,
-          currency: 'USD',
-          isNFTBook: true,
-        };
-        logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
-        logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-        if (this.collectionPrice === 0 && !this.customPrice) {
-          this.$router.push(
-            this.localeLocation({
-              name: 'nft-claim',
-              query: {
-                collection_id: this.collectionId,
-                type: 'nft_book',
-                free: true,
-                from: 'liker_land_waived',
+        try {
+          this.isOpeningCheckoutPage = true;
+          const purchaseEventParams = {
+            items: [
+              {
+                name: this.collectionName,
+                price: this.collectionPrice,
+                collection: this.collectionId,
               },
-            })
-          );
-        } else {
-          const customPriceInDecimal = this.customPrice
-            ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
-            : undefined;
-
-          const gaClientId = this.getGaClientId;
-          const gaSessionId = this.getGaSessionId;
-          const link = getNFTBookPurchaseLink({
-            collectionId: this.collectionId,
-            platform: this.platform,
-          });
-          const { url } = await this.$axios.$post(link, {
-            gaClientId,
-            giftInfo,
-            gaSessionId,
-            coupon: this.$route.query.coupon,
-            customPriceInDecimal,
-            utmCampaign: this.utmCampaign,
-            utmSource: this.utmSource,
-            utmMedium: this.utmMedium,
-            email: this.walletEmail,
-          });
-          if (url) {
-            window.location.href = url;
+            ],
+            price: this.collectionPrice,
+            currency: 'USD',
+            isNFTBook: true,
+          };
+          logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+          logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+          if (this.collectionPrice === 0 && !this.customPrice) {
+            this.$router.push(
+              this.localeLocation({
+                name: 'nft-claim',
+                query: {
+                  collection_id: this.collectionId,
+                  type: 'nft_book',
+                  free: true,
+                  from: 'liker_land_waived',
+                },
+              })
+            );
           } else {
-            throw new Error('Failed to get purchase link');
+            const customPriceInDecimal = this.customPrice
+              ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
+              : undefined;
+
+            const gaClientId = this.getGaClientId;
+            const gaSessionId = this.getGaSessionId;
+            const link = getNFTBookPurchaseLink({
+              collectionId: this.collectionId,
+              platform: this.platform,
+            });
+            const { url } = await this.$axios.$post(link, {
+              gaClientId,
+              giftInfo,
+              gaSessionId,
+              coupon: this.$route.query.coupon,
+              customPriceInDecimal,
+              utmCampaign: this.utmCampaign,
+              utmSource: this.utmSource,
+              utmMedium: this.utmMedium,
+              email: this.walletEmail,
+            });
+            if (url) {
+              window.location.href = url;
+            } else {
+              throw new Error('Failed to get purchase link');
+            }
           }
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        } finally {
+          this.isOpeningCheckoutPage = false;
         }
       }
     },
@@ -372,7 +382,6 @@ export default {
         1
       );
       this.customPrice = 0;
-      this.isTippingDialogOpen = false;
       this.handleCollectFromEdition();
     },
   },

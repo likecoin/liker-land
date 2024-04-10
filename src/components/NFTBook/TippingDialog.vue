@@ -26,7 +26,7 @@
           $t('nft_tipping_title')
         }}</Label>
         <p class="text-dark-gray font-200 text-[14px]">
-          {{ $t('nft_tipping_description') }}
+          {{ $t('nft_tipping_description', { price: price }) }}
         </p>
       </div>
       <div class="flex flex-col items-center w-full px-0 sm:px-[40px]">
@@ -61,7 +61,10 @@
             @on-focus="selectedIndex = -1"
           />
         </div>
-        <div class="flex flex-col items-center justify-center w-full mt-[48px]">
+        <div
+          v-if="!isLoading"
+          class="flex flex-col items-center justify-center w-full mt-[48px]"
+        >
           <ButtonV2
             class="w-full"
             preset="secondary"
@@ -75,6 +78,15 @@
             @click.prevent="handleSkip"
             >{{ $t('nft_tipping_button_skip') }}</ButtonV2
           >
+        </div>
+        <div
+          v-else
+          class="w-full flex flex-col gap-[8px] justify-center items-center mt-[48px]"
+        >
+          <ProgressIndicator />
+          <p class="text-[12px] text-medium-gray">
+            {{ $t('nft_tipping_button_loading') }}
+          </p>
         </div>
       </div>
     </div>
@@ -117,6 +129,14 @@ export default {
       default: undefined,
     },
     collectionId: {
+      type: String,
+      default: undefined,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    price: {
       type: String,
       default: undefined,
     },
