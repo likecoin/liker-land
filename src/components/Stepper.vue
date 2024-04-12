@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-start gap-[8px]">
-    <div class="flex flex-row justify-start">
+    <div class="flex-row justify-start hidden laptop:flex">
       <IconStepDot
         v-for="(item, index) in totalStep"
         :key="item"

@@ -47,11 +47,11 @@
         },
         {
           [[
-            'phone:bg-gray-f7',
-            'phone:sticky',
-            'phone:inset-x-0',
-            'phone:top-0',
-            'phone:z-1',
+            'phoneLg:bg-gray-f7',
+            'phoneLg:sticky',
+            'phoneLg:inset-x-0',
+            'phoneLg:top-0',
+            'phoneLg:z-50',
           ].join(' ')]: isClaimPage,
         },
       ]"
@@ -66,7 +66,7 @@
     />
     <Footer
       v-if="!isInInAppBrowser"
-      :class="[{ 'phone:hidden': isClaimPage }]"
+      :class="[{ 'phoneLg:hidden': isClaimPage }]"
     />
     <PortalTarget name="dialog" multiple @change="handleDialogChange" />
     <PortalTarget name="snackbar" multiple />

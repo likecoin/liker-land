@@ -27,6 +27,7 @@ export default {
         'grid grid-cols-1',
         'divide-y',
         'divide-shade-gray',
+        'z-50',
       ];
 
       if (!this.isFlat) {

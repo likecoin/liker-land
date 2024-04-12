@@ -4,12 +4,12 @@
       'relative',
       'mt-[-1px]',
 
-      'px-[24px]',
-      'sm:px-[32px]',
+      'pt-[68x]',
+      'laptop:px-[32px]',
       'desktop:px-[40px]',
 
       'pb-[160px]',
-      'sm:pb-[24px]',
+      'laptop:pb-[24px]',
     ]"
   >
     <!--phone version cover -->
@@ -24,12 +24,12 @@
         'justify-start',
         'gap-[12px]',
         'px-[24px]',
-        'pb-[24px]',
+        'pb-[16px]',
 
         'bg-gray-f7',
         'shadow-md',
 
-        'sm:hidden',
+        'laptop:hidden',
       ]"
     >
       <NFTBookCover
@@ -49,16 +49,16 @@
         'relative',
         'flex',
         'flex-col',
-        'sm:flex-row',
+        'laptop:flex-row',
 
         'justify-center',
         'item-start',
-        'sm:gap-[32px]',
+        'laptop:gap-[32px]',
         'w-full',
         'mb-[60px]',
       ]"
     >
-      <NFTWidgetBaseCard class="hidden sm:block w-full max-w-[426px]">
+      <NFTWidgetBaseCard class="hidden laptop:block w-full max-w-[260px]">
         <NuxtLink
           :to="
             localeLocation({
@@ -72,9 +72,9 @@
         >
           <div class="flex flex-col gap-[16px] mb-[24px]">
             <NFTBookCoverWithFrame :src="NFTImageUrl" />
-            <Label class="text-[28px] font-600" :text="NFTName" />
+            <Label class="text-[24px] font-600" :text="NFTName" />
             <div class="grid grid-cols-2">
-              <div class="flex flex-col">
+              <div v-if="iscnWorkAuthor" class="flex flex-col">
                 <Label
                   preset="h6"
                   :text="$t('nft_claim_NFT_author')"
@@ -82,16 +82,18 @@
                 />
                 <Label preset="h5" class="font-[500]" :text="iscnWorkAuthor" />
               </div>
-              <div class="flex flex-col">
+              <div v-if="creatorDisplayName" class="flex flex-col">
                 <Label
-                  preset="h6"
+                  preset="h5"
                   :text="$t('nft_claim_NFT_author')"
                   class=" text-medium-gray"
                 />
                 <Label preset="h5" :text="creatorDisplayName" />
               </div>
             </div>
-            <p class="w-full line-clamp-3 font-[400]">{{ NFTDescription }}</p>
+            <p class="w-full text-[14px] line-clamp-3 font-[400]">
+              {{ NFTDescription }}
+            </p>
           </div>
         </NuxtLink>
       </NFTWidgetBaseCard>
@@ -119,6 +121,7 @@
         :format-download-links="
           canViewContentDirectly ? formatDownloadLinks : []
         "
+        :should-display-download-options="shouldDisplayDownloadOptions"
       >
         <template #header-prepend>
           <IconGift class="w-[48px]" />
@@ -131,7 +134,7 @@
               class="border-[1px] border-shade-gray rounded-[20px] rounded-bl-[8px] shadow-md pl-[32px] pr-[24px] py-[12px] w-full min-w-[220px]"
             >
               <Label
-                preset="h5"
+                class="text-[18px] font-600 desktop:text-[24px]"
                 :text="
                   $t('nft_claim_welcome_title_gift_toName', {
                     name: giftInfo.toName,
@@ -140,12 +143,15 @@
               />
               <span class="text-[18px] font-200">{{ giftInfo.message }}</span>
             </div>
-            <Label preset="h5" :text="giftInfo.fromName" />
+            <Label
+              class="text-[18px] font-600 desktop:text-[24px]"
+              :text="giftInfo.fromName"
+            />
           </div>
         </template>
         <template #footer>
           <ButtonV2
-            class="phone:w-full"
+            class="phoneLg:w-full"
             :text="$t('nft_claim_welcome_button_claim')"
             @click="handleClickNext"
           />
@@ -166,7 +172,7 @@
         </template>
         <template #footer>
           <ButtonV2
-            class="px-[32px] phone:w-full"
+            class="px-[32px] phoneLg:w-full phoneLg:max-w-[480px]"
             preset="tertiary"
             :text="$t('nft_book_gift_page_view_class_button')"
             @click="handleClickViewClass"
@@ -182,19 +188,20 @@
         :format-download-links="
           canViewContentDirectly ? formatDownloadLinks : []
         "
+        :should-display-download-options="shouldDisplayDownloadOptions"
       >
         <template #header-prepend>
           <IconCircleCheck class="w-[48px]" />
         </template>
         <template #header-append>
           <Label
-            class="text-like-green text-[24px] font-600"
+            class="text-like-green text-[18px] font-600 desktop:text-[24px]"
             :text="$t('nft_claim_NFT_name', { name: NFTName })"
           />
         </template>
         <template #footer>
           <ButtonV2
-            class="phone:w-full"
+            class="phoneLg:w-full max-w-[480px]"
             :text="$t('nft_claim_welcome_button_claim')"
             @click="handleClickNext"
           />
@@ -221,9 +228,9 @@
               >
                 <component :is="item.icon" />
               </div>
-              <div class="flex flex-col items-start">
+              <div class="flex flex-col items-start font-200">
                 <Label :text="item.title" class="text-[18px] font-600" />
-                <p class="text-[16px] font-200">{{ item.content }}</p>
+                <p class="text-[14px] laptop:text-[16px]">{{ item.content }}</p>
               </div>
             </div>
           </div>
@@ -231,12 +238,13 @@
         <template #footer>
           <div
             v-if="isLoginLoading"
-            class="flex flex-col items-start justify-start w-full"
+            class="flex flex-col items-center justify-start w-full"
           >
             <ProgressIndicator />
             <Label
-              class="text-medium-gray w-full mt-[4px]"
+              class="text-medium-gray w-full mt-[4px] text-center"
               preset="p6"
+              align="center"
               :text="$t('nft_claim_login_button_loading')"
             />
           </div>
@@ -245,10 +253,11 @@
             :class="[
               'flex',
               'flex-col',
-              'sm:flex-row',
+              'laptop:flex-row',
 
               'justify-start',
-              'items-start',
+              'items-center',
+              'laptop:items-start',
               'gap-[24px]',
 
               'w-full',
@@ -258,13 +267,13 @@
             <!-- HACK: The sign-up method might result in the wallet connect dialog not being displayed -->
             <!-- HACK: so we temporarily using the sign-in method instead -->
             <ButtonV2
-              class="phone:w-full"
+              class="phoneLg:w-full phoneLg:max-w-[480px]"
               :content-class="['px-[56px]']"
               :text="$t('nft_claim_login_button_sign_up')"
               @click="handleClickSignIn"
             />
             <ButtonV2
-              class="phone:w-full"
+              class="phoneLg:w-full phoneLg:max-w-[480px]"
               preset="tertiary"
               :content-class="['px-[12px]']"
               :text="$t('nft_claim_login_button_sign_in')"
@@ -289,12 +298,14 @@
               'flex-col',
               'items-start',
               'gap-[8px]',
-              'mt-[-32px]',
-              'phone:w-full',
+              'mt-0',
+              'laptop:mt-[-32px]',
+              'w-full',
+              'phoneLg:w-full',
             ]"
           >
             <div
-              class="flex items-center w-full gap-[16px] px-[20px] py-[16px] rounded-[12px] bg-shade-gray"
+              class="flex items-center w-full overflow-clip gap-[16px] px-[20px] py-[16px] rounded-[12px] bg-shade-gray"
             >
               <Identity
                 class="flex-shrink-0 "
@@ -302,21 +313,26 @@
                 :avatar-size="48"
                 :is-lazy-loaded="true"
               />
-              <div class="flex flex-col justify-center gap-[8px]">
+              <div
+                class="flex flex-col w-[80%] justify-center gap-[8px] whitespace-normal"
+              >
                 <Label
                   v-if="loginUserDisplayName"
-                  class="w-min"
+                  class="break-words"
                   preset="h5"
                   :text="loginUserDisplayName"
                 />
-                <span class="mt-[-8px] text-[14px] desktop:hidden">
-                  {{ claimingAddress | ellipsis }}
-                </span>
-                <Label
-                  class="hidden desktop:block"
+                <!-- <Label
+                  class="break-words"
                   preset="h6"
                   :text="claimingAddress"
-                />
+                /> -->
+                <p
+                  v-if="loginUserDisplayName"
+                  class="break-words text-[16px] text-medium-gray w-full"
+                >
+                  {{ claimingAddress }}
+                </p>
               </div>
             </div>
             <Label
@@ -328,6 +344,7 @@
         </template>
         <template #footer>
           <ButtonV2
+            class="phoneLg:w-full phoneLg:max-w-[480px]"
             :content-class="['px-[56px]']"
             :text="$t('nft_claim_confirmation_button_confirm')"
             @click="handleClickNext"
@@ -363,6 +380,7 @@
         </template>
         <template #footer>
           <ButtonV2
+            class="phoneLg:w-full phoneLg:max-w-[480px]"
             :content-class="['px-[56px]']"
             :text="$t('nft_claim_confirmation_button_confirm')"
             @click="claim"
@@ -404,7 +422,7 @@
         <template #stepper-append>
           <NFTClaimMessageBlock
             v-if="isAutoDeliver && creatorMessage"
-            class="hidden sm:block ml-[-62px] mt-[32px]"
+            class="hidden laptop:block ml-[-62px] mt-[32px]"
             :avatar-url="creatorAvatar"
             :creator-display-name="creatorDisplayName"
             :message="creatorMessage"
@@ -412,14 +430,14 @@
         </template>
         <template #header-prepend>
           <Label
-            preset="h3"
+            class="text-[18px] laptop:text-[24px] font-600"
             :text="$t('nft_claim_claimed_title_congratulations')"
           />
         </template>
         <template #content-append>
           <NFTClaimMessageBlock
             v-if="isAutoDeliver && creatorMessage"
-            class="sm:hidden"
+            class="laptop:hidden"
             :avatar-url="creatorAvatar"
             :creator-display-name="creatorDisplayName"
             :message="creatorMessage"
@@ -428,12 +446,14 @@
         <template #footer>
           <ButtonV2
             v-if="shouldShowStartReadingButton"
+            class="phoneLg:w-full phoneLg:max-w-[480px]"
             :content-class="['px-[48px]']"
             :text="$t('nft_claim_claimed_button_start_reading')"
             @click="handleStartReading"
           />
           <ButtonV2
             :content-class="['px-[48px]']"
+            class="phoneLg:w-full phoneLg:max-w-[480px]"
             preset="tertiary"
             :text="$t('nft_claim_claimed_button_view_collection')"
             @click="handleViewCollection"
@@ -442,12 +462,12 @@
       </NFTClaimMainSection>
     </div>
     <div
-      v-if="canViewContentDirectly"
-      :class="['hidden', 'sm:flex', 'justify-end', 'w-full']"
+      v-if="shouldDisplayDownloadOptions"
+      :class="['hidden', 'laptop:flex', 'justify-end', 'w-full']"
     >
       <div
         v-for="{
-          CanViewNFTBookBeforeClaim,
+          canViewNFTBookBeforeClaim,
           url,
           id,
           contentUrls,
@@ -459,7 +479,7 @@
         :key="id"
       >
         <NFTClaimOptionList
-          v-if="CanViewNFTBookBeforeClaim"
+          v-if="canViewNFTBookBeforeClaim"
           :url="url"
           :class-id="id"
           :content-urls="contentUrls"
@@ -654,7 +674,7 @@ export default {
     },
     formatDownloadLinks() {
       return this.classIds?.map(id => ({
-        CanViewNFTBookBeforeClaim: this.getCanViewNFTBookBeforeClaimByClassId(
+        canViewNFTBookBeforeClaim: this.getCanViewNFTBookBeforeClaimByClassId(
           id
         ),
         url:
@@ -667,6 +687,13 @@ export default {
         isContentViewable: true,
         isDownloadable: !this.getIsHideNFTBookDownload(id),
       }));
+    },
+    shouldDisplayDownloadOptions() {
+      return (
+        this.state === NFT_CLAIM_STATE.WELCOME &&
+        this.canViewContentDirectly &&
+        !this.isPhysicalOnly
+      );
     },
   },
   watch: {
