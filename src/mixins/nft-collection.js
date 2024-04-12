@@ -116,6 +116,11 @@ export default {
         params: { collectionId: this.collectionId },
       });
     },
+    formattedNFTPriceInUSD() {
+      return this.collectionPrice !== undefined
+        ? formatNumberWithUSD(this.collectionPrice)
+        : '-';
+    },
   },
   methods: {
     ...mapActions([
