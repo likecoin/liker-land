@@ -1,6 +1,8 @@
 <template>
   <main>
-    <div class="flex justify-center item-start gap-[45px] w-full mb-[60px]">
+    <div
+      class="flex items-center flex-col-reverse laptop:flex-row laptop:justify-center laptop:item-start gap-[45px] w-full mb-[60px] px-[12px]"
+    >
       <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink :to="viewInfoLocation" target="_blank">
           <div class="flex flex-col gap-[16px] mb-[24px]">
