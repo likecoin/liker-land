@@ -369,11 +369,7 @@
             <TextField
               v-model="collectorMessage"
               class="w-full bg-transparent border-0 focus-visible:outline-none"
-              :placeholder="
-                $t('nft_collect_modal_leave_message_to_name', {
-                  name: creatorDisplayName,
-                })
-              "
+              :placeholder="$t('nft_claim_message_placeholder')"
               @input.once="onInputCollectorMessage"
             />
           </div>
