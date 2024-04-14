@@ -85,7 +85,7 @@
               <div v-if="creatorDisplayName" class="flex flex-col">
                 <Label
                   preset="h5"
-                  :text="$t('nft_claim_NFT_author')"
+                  :text="$t('identity_type_publisher')"
                   class=" text-medium-gray"
                 />
                 <Label preset="h5" :text="creatorDisplayName" />
@@ -517,6 +517,7 @@ import walletMixin from '~/mixins/wallet';
 import nftMixin from '~/mixins/nft';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 import walletLoginMixin from '~/mixins/wallet-login';
+import collectionMixin from '~/mixins/nft-collection';
 
 const NFT_CLAIM_STATE = {
   WELCOME: 'WELCOME',
@@ -539,6 +540,7 @@ export default {
     nftMixin,
     nftOrCollectionMixin,
     walletLoginMixin,
+    collectionMixin,
   ],
   async asyncData({ query, store, error, i18n }) {
     const {
@@ -623,6 +625,12 @@ export default {
       );
     },
     creatorDisplayName() {
+      if (this.collectionId) {
+        return (
+          this.getUserInfoByAddress(this.collectionOwner)?.displayName ||
+          ellipsis(this.collectionOwner)
+        );
+      }
       return (
         this.getUserInfoByAddress(this.iscnOwner)?.displayName ||
         this.$t('nft_claim_author')
@@ -740,6 +748,10 @@ export default {
       this.isAutoDeliver = isAutoDeliver;
       this.creatorMessage = autoMemo;
       this.status = status;
+
+      if (this.collectionId) {
+        await this.lazyFetchNFTCollectionInfo();
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
