@@ -135,6 +135,7 @@ module.exports = {
       sm: { min: '528px' },
       laptop: { min: '769px' },
       desktop: { min: '992px' },
+      desktopLg: { min: '1439px' },
     },
 
     /*

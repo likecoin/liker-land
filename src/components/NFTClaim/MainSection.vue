@@ -36,7 +36,7 @@
     </section>
 
     <section
-      class="flex flex-col justify-start items-start gap-[12px] laptop:gap-[32px] text-dark-gray text-left font-400 text-[16px] laptop:text-[18px] w-full"
+      class="flex flex-col justify-start items-start gap-[24px] laptop:gap-[32px] text-dark-gray text-left font-400 text-[16px] laptop:text-[18px] w-full"
     >
       <p>{{ contentText }}</p>
       <slot name="content-append" />

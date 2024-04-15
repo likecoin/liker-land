@@ -52,13 +52,15 @@
         'laptop:flex-row',
 
         'justify-center',
-        'item-start',
+        'items-start',
         'laptop:gap-[32px]',
         'w-full',
         'mb-[60px]',
       ]"
     >
-      <NFTWidgetBaseCard class="hidden laptop:block w-full max-w-[260px]">
+      <NFTWidgetBaseCard
+        class="hidden laptop:block w-full max-w-[260px] desktopLg:max-w-[426px]"
+      >
         <NuxtLink
           :to="
             localeLocation({
@@ -229,7 +231,7 @@
                 <component :is="item.icon" />
               </div>
               <div class="flex flex-col items-start font-200">
-                <Label :text="item.title" class="text-[18px] font-600" />
+                <Label :text="item.title" class="text-[16px] font-600" />
                 <p class="text-[14px] laptop:text-[16px]">{{ item.content }}</p>
               </div>
             </div>
