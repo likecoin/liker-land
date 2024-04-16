@@ -11,7 +11,7 @@
         "
       />
     </div>
-    <p class="text-black font-200">{{ message }}</p>
+    <p class="text-black whitespace-pre-wrap font-200">{{ message }}</p>
   </div>
 </template>
 
