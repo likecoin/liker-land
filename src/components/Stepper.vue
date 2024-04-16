@@ -11,10 +11,11 @@
       />
     </div>
     <span class="text-medium-gray text-[14px]">{{
-      `Step ${step} / ${totalStep}`
+      $t('stepper', { step, totalStep })
     }}</span>
   </div>
 </template>
+
 <script>
 export default {
   name: 'Stepper',

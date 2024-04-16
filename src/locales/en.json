@@ -863,6 +863,7 @@
   "snackbar_error_seq_mismatch": "Transaction sequence error. Please wait for a moment until the account status matches, and then try purchasing again.",
   "snackbar_success_collect": "Complete the collect of \"{NFT}\".",
   "snackbar_success_transfer": "Complete the transfer of NFT.",
+  "stepper": "Step {step} / {totalStep}",
   "store_articles_button": "Browse Articles",
   "store_books_page_description": "Liker Land eBook store is a plaza for eBook and article enthusiasts, providing Chinese and English EPUB eBooks, allowing readers a unique reading experience. Liker Land promotes decentralized publishing, enabling authors to publish their works and achieve creative freedom independently.",
   "store_books_page_header": "All Books",

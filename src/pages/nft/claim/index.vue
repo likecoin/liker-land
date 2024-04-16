@@ -111,7 +111,8 @@
       <NFTClaimMainSection
         v-if="state === NFT_CLAIM_STATE.ERROR"
         :key="state"
-        :header-text="`ERRORs`"
+        :header-text="$t('error_page_not_found_description_widget')"
+        :content-text="error"
       />
 
       <!-- Edge Case -->

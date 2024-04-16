@@ -863,6 +863,7 @@
   "snackbar_error_seq_mismatch": "交易序列錯誤，請稍等一段時間等帳戶狀態同步後，再重試購買",
   "snackbar_success_collect": "完成收藏 \"{NFT}\".",
   "snackbar_success_transfer": "已完成發送作品",
+  "stepper": "步驟 {step} / {totalStep}",
   "store_articles_button": "瀏覽文章",
   "store_books_page_description": "Liker Land 電子書店是電子書及文章愛好者的廣場，提供中文、英文的 EPUB 電子書，讓讀者擁有不一樣的閱讀體驗。Liker Land 推動分散式出版，實現出版自主，實現創作自由。",
   "store_books_page_header": "所有書目",
