@@ -160,7 +160,7 @@ export default {
       return this.getRouteBaseName(this.$route) === 'index';
     },
     isClaimPage() {
-      return this.getRouteBaseName(this.$route) === 'nft-claim';
+      return this.getRouteBaseName(this.$route).includes('nft-claim');
     },
   },
   watch: {
