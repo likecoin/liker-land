@@ -40,7 +40,9 @@
         <p class="text-[12px] font-400 text-medium-gray">
           {{ $t('nft_claim_claim_header_title') }}
         </p>
-        <Label class="text-[16px] font-600" :text="NFTName" />
+        <p class="text-[16px] font-600 line-clamp-1">
+          {{ NFTName }}
+        </p>
       </div>
     </div>
 
