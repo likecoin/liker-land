@@ -88,11 +88,15 @@
               </div>
               <div v-if="creatorDisplayName" class="flex flex-col">
                 <Label
-                  preset="h5"
+                  preset="h6"
                   :text="$t('identity_type_publisher')"
-                  class=" text-medium-gray"
+                  class=" text-medium-gray font-[500]"
                 />
-                <Label preset="h5" :text="creatorDisplayName" />
+                <Label
+                  preset="h5"
+                  class="font-[500]"
+                  :text="creatorDisplayName"
+                />
               </div>
             </div>
             <p class="w-full text-[14px] line-clamp-3 font-[400]">
