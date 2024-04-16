@@ -323,13 +323,8 @@
                   preset="h5"
                   :text="loginUserDisplayName"
                 />
-                <!-- <Label
-                  class="break-words"
-                  preset="h6"
-                  :text="claimingAddress"
-                /> -->
                 <p
-                  v-if="loginUserDisplayName"
+                  v-if="claimingAddress"
                   class="break-words text-[16px] text-medium-gray w-full"
                 >
                   {{ claimingAddress }}
