@@ -138,7 +138,7 @@
               class="border-[1px] border-shade-gray rounded-[20px] rounded-bl-[8px] shadow-md pl-[32px] pr-[24px] py-[12px] w-full min-w-[220px]"
             >
               <Label
-                class="text-[18px] font-600 desktop:text-[24px]"
+                class="text-[18px] font-600"
                 :text="
                   $t('nft_claim_welcome_title_gift_toName', {
                     name: giftInfo.toName,
@@ -147,10 +147,7 @@
               />
               <span class="text-[18px] font-200">{{ giftInfo.message }}</span>
             </div>
-            <Label
-              class="text-[18px] font-600 desktop:text-[24px]"
-              :text="giftInfo.fromName"
-            />
+            <Label class="text-[18px] font-600" :text="giftInfo.fromName" />
           </div>
         </template>
         <template #footer>
