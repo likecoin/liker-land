@@ -648,23 +648,24 @@ export default {
       );
     },
     loginContentArray() {
-      return [
-        {
-          title: this.$t('nft_claim_login_title_collection'),
-          content: this.$t('nft_claim_login_content_collection'),
-          icon: 'IconFolder',
-        },
-        {
-          title: this.$t('nft_claim_login_title_identity'),
-          content: this.$t('nft_claim_login_content_identity'),
-          icon: 'IconIdentity',
-        },
-        {
-          title: this.$t('nft_claim_login_title_community'),
-          content: this.$t('nft_claim_login_content_community'),
-          icon: 'IconCommunity',
-        },
-      ];
+      // return [
+      //   {
+      //     title: this.$t('nft_claim_login_title_collection'),
+      //     content: this.$t('nft_claim_login_content_collection'),
+      //     icon: 'IconFolder',
+      //   },
+      //   {
+      //     title: this.$t('nft_claim_login_title_identity'),
+      //     content: this.$t('nft_claim_login_content_identity'),
+      //     icon: 'IconIdentity',
+      //   },
+      //   {
+      //     title: this.$t('nft_claim_login_title_community'),
+      //     content: this.$t('nft_claim_login_content_community'),
+      //     icon: 'IconCommunity',
+      //   },
+      // ];
+      return [];
     },
     loginUserDisplayName() {
       return this.getLikerInfo?.displayName;
