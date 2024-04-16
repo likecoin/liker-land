@@ -4,10 +4,10 @@
     :class="[
       'group',
       'relative',
+      classAspectRatio,
       'bg-gray-e6',
       'rounded-[8px]',
       'overflow-hidden',
-      aspectRatioClass,
     ]"
     :to="to"
   >
@@ -55,7 +55,7 @@ export default {
       type: Object,
       default: null,
     },
-    aspectRatioClass: {
+    classAspectRatio: {
       type: String,
       default: 'aspect-[4/5]',
     },

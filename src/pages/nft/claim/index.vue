@@ -77,7 +77,7 @@
           <div class="flex flex-col gap-[16px] mb-[24px]">
             <NFTBookCoverWithFrame
               :src="NFTImageUrl"
-              aspect-ratio-class="aspect-[1]"
+              class-aspect-ratio="aspect-[1]"
             />
             <Label class="text-[24px] font-600" :text="NFTName" />
             <div class="grid grid-cols-2">
