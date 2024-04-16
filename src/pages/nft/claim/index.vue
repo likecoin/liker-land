@@ -538,9 +538,9 @@ export default {
     alertMixin,
     walletMixin,
     nftMixin,
+    collectionMixin,
     nftOrCollectionMixin,
     walletLoginMixin,
-    collectionMixin,
   ],
   async asyncData({ query, store, error, i18n }) {
     const {
