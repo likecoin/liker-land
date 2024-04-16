@@ -713,9 +713,8 @@ export default {
     },
     loginAddress(newValue) {
       this.claimingAddress = newValue;
-      if (!this.getAddress && !newValue && !(this.status === 'completed')) {
+      if (!this.getAddress && !(this.status === 'completed')) {
         this.claimingAddress = '';
-        this.state = NFT_CLAIM_STATE.LOGIN;
       }
     },
     state(newValue) {
@@ -1050,7 +1049,6 @@ export default {
         if (isConnected || this.loginAddress) {
           this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
         }
-        this.isLoginLoading = false;
       } else {
         await this.initIfNecessary();
       }
@@ -1074,7 +1072,6 @@ export default {
         if (isConnected || this.loginAddress) {
           this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
         }
-        this.isLoginLoading = false;
       } else {
         await this.initIfNecessary();
         if (this.loginAddress) {
