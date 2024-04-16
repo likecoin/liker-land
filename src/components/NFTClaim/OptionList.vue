@@ -29,11 +29,12 @@
             preset="plain"
             :download="getDownloadFilenameFromURL(contentUrl)"
             @click="e => handleClickViewContentURL(e, contentUrl, index)"
-            >{{
+          >
+            {{
               getFilenameFromURL(contentUrl) ||
                 getContentUrlButtonText(contentUrl)
-            }}&nbsp;<IconLinkExternal
-          /></ButtonV2>
+            }}&nbsp;<IconLinkExternal />
+          </ButtonV2>
         </li>
       </ul>
     </MenuList>
