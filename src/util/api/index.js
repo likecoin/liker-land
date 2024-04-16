@@ -442,7 +442,7 @@ export const getIdenticonAvatar = id =>
   `https://api.dicebear.com/7.x/identicon/svg?seed=${id}&backgroundColor=ffffff`;
 
 export const getNFTClassMetadata = classId =>
-  `/api/nft/metadata?class_id=${classId}`;
+  `${LIKECOIN_API_BASE}/likerland/nft/metadata?class_id=${classId}`;
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   const qsPayload = { email, wallet, language };

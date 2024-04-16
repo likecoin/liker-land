@@ -70,7 +70,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import { EXTERNAL_HOST } from '~/constant';
+import { EXTERNAL_HOST, LIKECOIN_API_BASE } from '~/constant';
 
 import {
   checkIsForcedInAppPage,
@@ -111,7 +111,7 @@ export default {
     classIds.forEach(classId =>
       link.push({
         rel: 'prefetch',
-        href: `/api/nft/metadata?class_id=${classId}`,
+        href: `${LIKECOIN_API_BASE}/likerland/nft/metadata?class_id=${classId}`,
       })
     );
 
