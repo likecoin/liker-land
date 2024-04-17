@@ -7,7 +7,7 @@
       'items-center',
       'w-full',
       'h-full',
-      'min-h-[200px]',
+      containerClasses,
     ]"
   >
     <img
@@ -42,6 +42,10 @@ export default {
     imgClass: {
       type: String,
       default: '',
+    },
+    containerClasses: {
+      type: Array,
+      default: () => ['min-h-[200px]'],
     },
   },
   data() {

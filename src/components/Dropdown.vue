@@ -13,7 +13,7 @@
       <div
         v-if="isOpen"
         ref="dropdown"
-        class="absolute right-0 top-full mt-[8px] z-10"
+        :class="contentClasses"
         @click="handleDropdownClick"
       >
         <slot />
@@ -28,6 +28,10 @@ export default {
     closeOnChildClick: {
       type: Boolean,
       default: true,
+    },
+    contentClasses: {
+      type: Array,
+      default: () => ['absolute', 'right-0', 'top-full', 'mt-[8px]', 'z-10'],
     },
   },
   data() {

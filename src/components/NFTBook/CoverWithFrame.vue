@@ -4,7 +4,7 @@
     :class="[
       'group',
       'relative',
-      'aspect-[4/5]',
+      classAspectRatio,
       'bg-gray-e6',
       'rounded-[8px]',
       'overflow-hidden',
@@ -12,7 +12,7 @@
     :to="to"
   >
     <div
-      class="absolute inset-0 bg-cover bg-no-repeat opacity-25 brightness-150 pointer-events-none"
+      class="absolute inset-0 bg-no-repeat bg-cover opacity-25 pointer-events-none brightness-150"
       :style="`background-image: url(${bgImageSrc})`"
     />
 
@@ -54,6 +54,10 @@ export default {
     to: {
       type: Object,
       default: null,
+    },
+    classAspectRatio: {
+      type: String,
+      default: 'aspect-[4/5]',
     },
   },
   computed: {

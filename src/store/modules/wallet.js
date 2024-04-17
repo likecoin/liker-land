@@ -435,6 +435,14 @@ const actions = {
     return connection;
   },
 
+  async openAuthcoreModal({ state, commit, dispatch }) {
+    commit(WALLET_SET_IS_CONNECTING_WALLET, true);
+    const connector = await dispatch('getConnector');
+    const connection = await connector.init('liker-id');
+    commit(WALLET_SET_IS_CONNECTING_WALLET, false);
+    return connection;
+  },
+
   async disconnectWallet({ state, commit, dispatch }) {
     if (state.connector) {
       state.connector.disconnect();

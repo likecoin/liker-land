@@ -45,6 +45,15 @@
             'z-1',
           ].join(' ')]: isHomePage,
         },
+        {
+          [[
+            'phoneLg:bg-gray-f7',
+            'phoneLg:sticky',
+            'phoneLg:inset-x-0',
+            'phoneLg:top-0',
+            'phoneLg:z-50',
+          ].join(' ')]: isClaimPage,
+        },
       ]"
     />
     <nuxt
@@ -55,7 +64,10 @@
         },
       ]"
     />
-    <Footer v-if="!isInInAppBrowser" />
+    <Footer
+      v-if="!isInInAppBrowser"
+      :class="[{ 'phoneLg:hidden': isClaimPage }]"
+    />
     <PortalTarget name="dialog" multiple @change="handleDialogChange" />
     <PortalTarget name="snackbar" multiple />
 
@@ -146,6 +158,9 @@ export default {
     },
     isHomePage() {
       return this.getRouteBaseName(this.$route) === 'index';
+    },
+    isClaimPage() {
+      return this.getRouteBaseName(this.$route).includes('nft-claim');
     },
   },
   watch: {

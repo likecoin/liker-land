@@ -130,10 +130,12 @@ module.exports = {
 
     screens: {
       phone: { max: '527px' },
+      phoneLg: { max: '768px' },
       tablet: { min: '528px', max: '768px' },
       sm: { min: '528px' },
       laptop: { min: '769px' },
       desktop: { min: '992px' },
+      desktopLg: { min: '1439px' },
     },
 
     /*
@@ -749,6 +751,7 @@ module.exports = {
       addUtilities({
         '.line-clamp-1': getLineClamp(1),
         '.line-clamp-2': getLineClamp(2),
+        '.line-clamp-3': getLineClamp(3),
         '.line-clamp-4': getLineClamp(4),
         '.bg-like-gradient': {
           'background-image': 'linear-gradient(78deg, #d2f0f0, #f0e6b4)',
