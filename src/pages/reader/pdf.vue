@@ -22,7 +22,7 @@ export default {
           : '1';
       const encodedUrl = encodeURIComponent(this.fileSrc);
       const encodedCorsUrl = encodeURIComponent(
-        `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`
+        `https://static2.like.co/pdf-cors/?url=${encodedUrl}`
       );
       // TODO: customize pdf.js instead of using default build
       return `https://likecoin.github.io/pdf.js/web/viewer.html?download=${download}&file=${encodedCorsUrl}`;
