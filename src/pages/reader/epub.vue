@@ -128,7 +128,7 @@ export default {
       try {
         this.isLoading = true;
         const encodedUrl = encodeURIComponent(this.fileSrc);
-        const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
+        const corsUrl = `https://static2.like.co/pdf-cors/?url=${encodedUrl}`;
         const buffer = await this.$axios.$get(corsUrl, {
           responseType: 'arraybuffer',
         });
