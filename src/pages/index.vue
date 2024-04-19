@@ -211,7 +211,9 @@
                   fill="#AAF1E7"
                 />
               </svg>
-              <h2 class="text-[2rem] desktop:text-[2.25rem]">{{ $t('index_intro_title') }}</h2>
+              <h2 class="text-[2rem] desktop:text-[2.25rem]">
+                {{ $t('index_intro_title') }}
+              </h2>
             </div>
             <p class="text-[1.125rem] mt-[0.25rem]">
               {{ $t('index_intro_description') }}
