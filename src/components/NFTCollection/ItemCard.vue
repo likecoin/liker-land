@@ -38,7 +38,7 @@
           :src="imageSrc || collectionImageUrl"
           :should-resize-src="shouldResizeSrc"
           :video-src="videoSrc"
-          :size="300"
+          :size="200"
           :is-collection="true"
           :alt="collectionName"
         />
