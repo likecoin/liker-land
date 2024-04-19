@@ -29,7 +29,7 @@
           :src="imageSrc || NFTImageUrl"
           :video-src="videoSrc"
           :should-resize-src="shouldResizeSrc"
-          :size="300"
+          :size="200"
           :theme="theme"
           :alt="NFTName"
         />
@@ -93,7 +93,7 @@
           :src="imageSrc || NFTImageUrl"
           :should-resize-src="shouldResizeSrc"
           :video-src="videoSrc"
-          :size="300"
+          :size="200"
           :theme="theme"
           :alt="NFTName"
         />
