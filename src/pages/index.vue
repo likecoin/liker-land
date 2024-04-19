@@ -1,19 +1,24 @@
 <template>
   <main class="overflow-hidden">
     <SiteHeader
-      :is-plain="true"
+      :is-plain="!isSiteHeaderFixed"
       :class="[
-        'absolute',
+        isSiteHeaderFixed ? 'fixed' : 'absolute',
         'inset-x-0',
         'top-0',
         'z-1',
         'text-[#f7f7f7]',
         'bg-opacity-75',
+        'transition-all',
+        {
+          ['!text-like-green bg-gray-f7 backdrop-blur-sm']: isSiteHeaderFixed,
+        },
       ]"
     />
 
     <section
       id="hero"
+      ref="hero"
       class="relative pt-[124px] bg-like-green font-serif overflow-hidden"
     >
       <div
@@ -601,6 +606,7 @@ export default {
   data() {
     return {
       dialogNFTClassList: [],
+      isSiteHeaderFixed: false,
     };
   },
   async fetch({ store }) {
@@ -681,7 +687,23 @@ export default {
       }));
     },
   },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   methods: {
+    handleScroll() {
+      if (!this.$refs.hero) return;
+
+      const { clientHeight: heroHeight } = this.$refs.hero;
+      if (window.scrollY > heroHeight) {
+        this.isSiteHeaderFixed = true;
+      } else {
+        this.isSiteHeaderFixed = false;
+      }
+    },
     handleClickItem(event, item) {
       if (item.isMultiple) {
         event.stopPropagation();
