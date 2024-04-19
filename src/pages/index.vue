@@ -6,7 +6,7 @@
         isSiteHeaderFixed ? 'fixed' : 'absolute',
         'inset-x-0',
         'top-0',
-        'z-1',
+        'z-10',
         'text-[#f7f7f7]',
         'bg-opacity-75',
         'transition-all',
@@ -198,7 +198,7 @@
 
             <div class="relative">
               <svg
-                class="absolute inset-x-0 top-[50%] translate-y-[-50%] scale-x-[1.1] scale-y-[0.9]"
+                class="absolute inset-x-0 top-[50%] translate-y-[-50%] scale-x-[1.1] scale-y-[0.9] pointer-events-none"
                 viewBox="0 0 407 114"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +211,7 @@
                   fill="#AAF1E7"
                 />
               </svg>
-              <h2 class="text-[2.25rem]">{{ $t('index_intro_title') }}</h2>
+              <h2 class="text-[2rem] desktop:text-[2.25rem]">{{ $t('index_intro_title') }}</h2>
             </div>
             <p class="text-[1.125rem] mt-[0.25rem]">
               {{ $t('index_intro_description') }}
@@ -280,7 +280,7 @@
             <li v-for="item in bookstoreItemsInGrid" :key="item.classId">
               <NFTBookItemCardV2
                 :class-id="item.classId"
-                class-cover-frame-aspect-ratio="min-h-[360px] sm:aspect-[4/5]"
+                class-cover-frame-aspect-ratio="min-h-[360px] aspect-[4/5]"
                 @click-cover="handleClickItem($event, item)"
               />
             </li>
@@ -304,7 +304,7 @@
         >
           <NFTBookItemCardV2
             :class-id="item.classId"
-            class-cover-frame-aspect-ratio="sm:aspect-[4/5]"
+            class-cover-frame-aspect-ratio="aspect-[4/5]"
             @click-cover="handleClickItem($event, item)"
           />
         </SwiperSlide>
@@ -347,7 +347,7 @@
       class="px-[2rem] pt-[5.5rem] pb-[7.5rem] bg-like-cyan-pale"
     >
       <div class="w-full max-w-[600px] laptop:max-w-[1024px] mx-auto">
-        <h2 :class="['text-[2.5rem] text-center font-serif']">
+        <h2 class="text-[2.25rem] desktop:text-[2.5rem] text-center font-serif">
           {{ $t('index_features_title') }}
         </h2>
 
@@ -447,6 +447,7 @@
               'grid-cols-10',
               'items-center',
               'gap-[10px]',
+              'max-h-[inherit]',
               'text-like-green',
               'font-serif',
               'rounded-[12px]',
@@ -470,7 +471,7 @@
               </div>
             </div>
             <img
-              class="col-span-6 my-[-2rem] translate-x-[2rem] scale-[1.2] group-hover:scale-[1.3] transition-transform object-contain h-full"
+              class="col-span-6 my-[-2rem] translate-x-[2rem] scale-[1.2] group-hover:scale-[1.3] transition-transform object-contain h-full max-h-[inherit]"
               :alt="$t('index_category_button_ebook')"
               src="~assets/images/index/v2/category-ebook.png"
             />
