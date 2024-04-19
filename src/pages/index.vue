@@ -244,9 +244,9 @@
 
     <section
       id="bookstore"
-      class="w-full max-w-[600px] laptop:max-w-[1920px] mx-auto mt-[3rem] px-[10px]"
+      class="w-full max-w-[600px] laptop:max-w-[1920px] mx-auto mt-[3rem]"
     >
-      <div class="desktop:flex gap-[10px]">
+      <div class="desktop:flex gap-[10px] px-[10px]">
         <div
           class="desktop:w-[80px] mb-[1rem] desktop:mb-0 text-[3rem] font-[600] desktop:text-center desktop:break-all font-serif font-bold"
         >
@@ -270,7 +270,7 @@
           </div>
 
           <ul
-            class="col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-[20px] items-stretch mt-[2rem] desktop:mt-0"
+            class="col-span-3 hidden desktop:grid grid-cols-1 sm:grid-cols-2 gap-[20px] items-stretch mt-[2rem] desktop:mt-0"
           >
             <li v-for="item in bookstoreItemsInGrid" :key="item.classId">
               <NFTBookItemCardV2
@@ -283,7 +283,31 @@
         </div>
       </div>
 
-      <div class="flex justify-center item-center pt-[6.25rem] pb-[5rem]">
+      <Swiper
+        class="block desktop:hidden mt-[32px]"
+        :options="{
+          slidesOffsetBefore: 10,
+          slidesOffsetAfter: 10,
+          spaceBetween: 20,
+          slidesPerView: 'auto',
+        }"
+      >
+        <SwiperSlide
+          v-for="item in bookstoreItemsInGrid"
+          :key="item.classId"
+          style="width: 220px"
+        >
+          <NFTBookItemCardV2
+            :class-id="item.classId"
+            class-cover-frame-aspect-ratio="sm:aspect-[4/5]"
+            @click-cover="handleClickItem($event, item)"
+          />
+        </SwiperSlide>
+      </Swiper>
+
+      <div
+        class="flex justify-center item-center pt-[4rem] px-[10px] pb-[5rem]"
+      >
         <ButtonV2
           :text="$t('index_bookstore_more_button')"
           :to="localeLocation({ name: 'store' })"
@@ -562,10 +586,16 @@
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+
 import bookstoreMixin from '~/mixins/bookstore';
 
 export default {
   name: 'IndexV2',
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   mixins: [bookstoreMixin],
   layout: 'index',
   data() {
