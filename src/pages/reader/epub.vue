@@ -135,7 +135,6 @@ export default {
             const cache = await caches.open('reader-epub');
             let response = await cache.match(corsUrl);
             if (!response) response = await cache.add(corsUrl);
-            console.log(response);
             buffer = await response?.arrayBuffer();
           } catch (error) {
             // eslint-disable-next-line no-console
