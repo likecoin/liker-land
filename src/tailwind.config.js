@@ -159,14 +159,28 @@ module.exports = {
 
     fontFamily: {
       irohamaru: ['irohamaru', 'sans-serif'],
-      proxima: ['proxima-nova', 'sans-serif'],
+      proxima: [
+        'proxima-nova',
+        'Avant Grade',
+        'STHeiti',
+        'Microsoft JhengHei',
+        'sans-serif',
+      ],
       sans: [
         'source-han-sans-traditional',
         'source-han-sans-simplified-c',
         'open-sans',
+        'STHeiti',
+        'Microsoft JhengHei',
         'sans-serif',
       ],
-      serif: ['source-han-serif-tc', 'source-han-serif-sc', 'serif'],
+      serif: [
+        'source-han-serif-tc',
+        'source-han-serif-sc',
+        'STSong',
+        'Microsoft YaHei',
+        'serif',
+      ],
       mono: ['monospace'],
       emoji: ['emoji'],
     },
