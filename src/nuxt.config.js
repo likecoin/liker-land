@@ -40,6 +40,9 @@ const nuxtConfig = {
    ** Headers of the page
    */
   head: {
+    htmlAttrs: {
+      class: ['text-[16px]', 'font-sans'],
+    },
     titleTemplate: titleChunk =>
       titleChunk
         ? `${titleChunk} - ${process.env.SITE_NAME}`
