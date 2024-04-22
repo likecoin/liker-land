@@ -4,7 +4,8 @@
       'w-full',
       'laptop:max-w-[656px]',
 
-      'px-[12px]',
+      'px-[24px]',
+      'laptop:px-[12px]',
       'mt-[72px]',
       'laptop:mt-0',
 
