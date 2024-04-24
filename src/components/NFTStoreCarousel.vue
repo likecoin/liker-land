@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <NFTBookHero />
+    <NFTBookHeroStatic />
 
     <div class="absolute inset-0">
       <Swiper
