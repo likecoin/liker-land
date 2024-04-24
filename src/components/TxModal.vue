@@ -43,10 +43,7 @@
         <slot v-if="$slots.title" name="title" />
         <Label
           v-else-if="formattedStatusTitle"
-          :class="[
-            isMidAutumnStyle ? 'text-like-cyan-light' : 'text-like-green',
-            'font-600',
-          ]"
+          :class="['text-like-green', 'font-600']"
           preset="h4"
           align="center"
           :text="formattedStatusTitle"
@@ -54,10 +51,7 @@
         <slot v-if="$slots.message" name="message" />
         <Label
           v-else-if="formattedStatusText"
-          :class="[
-            isMidAutumnStyle ? 'text-white' : 'text-medium-gray',
-            'mt-[12px]',
-          ]"
+          :class="['text-medium-gray', 'mt-[12px]']"
           preset="h6"
           align="center"
           :text="formattedStatusText"
@@ -157,8 +151,6 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import MidAutumnBg from '~/assets/images/mid-autumn/bg.jpg';
-
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import alertMixin from '~/mixins/alert';
@@ -197,10 +189,6 @@ export default {
       type: String,
       default: '',
     },
-    isMidAutumnStyle: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return { isShowQuitConfirm: false };
@@ -215,20 +203,14 @@ export default {
     ]),
     dialogProps() {
       const props = {
-        panelContainerClass: this.isMidAutumnStyle
-          ? 'relative max-w-[380px] w-full'
-          : 'fixed max-w-[520px] w-full',
-        panelClass: this.isMidAutumnStyle
-          ? 'shadow-lg text-white bg-[#184158] bg-cover bg-no-repeat bg-center w-full min-h-[380px] pt-[10.5rem] p-[48px] phone:px-[32px] rounded-[380px]'
-          : 'shadow-lg bg-white w-full p-[48px] phone:p-[16px] rounded-[24px] max-h-[80vh]',
+        panelContainerClass: 'fixed max-w-[520px] w-full',
+        panelClass:
+          'shadow-lg bg-white w-full p-[48px] phone:p-[16px] rounded-[24px] max-h-[80vh]',
         open: this.isOpen,
         hasCloseButton: this.hasCloseButton || !!this.uiTxErrorMessage,
         headerText: this.headerText,
-        preset: this.isMidAutumnStyle ? 'custom' : 'basic',
+        preset: 'basic',
       };
-      if (this.isMidAutumnStyle) {
-        props.panelStyle = `background-blend-mode: multiply; background-image: url(${MidAutumnBg})`;
-      }
       return props;
     },
     formattedErrorMessage() {
