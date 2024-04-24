@@ -15,7 +15,6 @@
       :is-free="true"
       :own-count="ownCount"
       :collect-expiry-time="collectExpiryTime"
-      :is-mid-autumn-style="nftIsMidAutumnStyle"
       @click-cta-button="handleClickCollect"
     >
       <slot />

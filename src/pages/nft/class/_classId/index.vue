@@ -30,7 +30,6 @@
           :is-free="nftIsFree"
           :own-count="ownCount"
           :collect-expiry-time="collectExpiryTime"
-          :is-mid-autumn-style="nftIsMidAutumnStyle"
           @click-cta-button="handleCollectFromCTA"
         />
 

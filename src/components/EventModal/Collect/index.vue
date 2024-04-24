@@ -6,43 +6,15 @@
     preset="collect"
     :processing-title="$t('collect_modal_processing_title')"
     :complete-title="$t('collect_modal_complete_title')"
-    :is-mid-autumn-style="nftIsMidAutumnStyle"
     @close="handleClose"
   >
-    <template v-if="nftIsMidAutumnStyle" #prepend>
-      <div class="relative flex justify-center z-1">
-        <div>
-          <NFTMidAutumnMoonGraphic class="mb-[-41%]" />
-        </div>
-      </div>
-    </template>
-
     <template #header-prepend>
       <IconPrice />
     </template>
 
     <template #top>
-      <div
-        v-if="nftIsMidAutumnStyle"
-        class="flex justify-center gap-[24px] mb-[1.5rem]"
-      >
-        <MidAutumnSloganText class="hidden" />
-        <svg
-          v-for="index in 4"
-          :key="`text-${index}`"
-          class="mt-[-48px]"
-          width="26"
-          height="38"
-          :style="`order: ${index >= 3 ? index + 1 : index};`"
-        >
-          <use
-            :xlink:href="`#mid-autumn-slogan-text-${index}`"
-            fill="#B1A370"
-          />
-        </svg>
-      </div>
       <NFTPageOwning
-        v-else-if="
+        v-if="
           (!uiTxNFTStatus ||
             ['insufficient', 'failed'].includes(uiTxNFTStatus)) &&
             hasConnectedWallet
@@ -79,11 +51,7 @@
       }}</Label>
       <template v-else-if="isCompleted">
         <Label
-          :class="[
-            nftIsMidAutumnStyle ? 'text-white' : 'text-medium-gray',
-            'mt-[12px]',
-            'flex-nowrap',
-          ]"
+          :class="['text-medium-gray', 'mt-[12px]', 'flex-nowrap']"
           preset="h6"
           align="center"
         >
@@ -107,18 +75,16 @@
           v-if="!isFollowPromptStateDefault && !isBatchCollect"
           :class="[
             'flex justify-center items-center mt-[16px] rounded-[48px] border-[1px] border-medium-gray',
-            nftIsMidAutumnStyle
-              ? 'flex-col gap-[8px] p-[12px]'
-              : 'flex-row px-[12px]',
+            'flex-row px-[12px]',
           ]"
         >
           <NFTMessageIdentity
             type="creator"
-            :class="[nftIsMidAutumnStyle ? 'w-full' : 'flex-shrink-0 !px-0']"
+            class="flex-shrink-0 !px-0"
             :wallet-address="iscnOwner"
             :avatar-size="40"
           />
-          <div :class="[nftIsMidAutumnStyle ? 'm-0' : 'ml-[24px]']">
+          <div class="ml-[24px]">
             <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
             <div
               v-else
@@ -237,20 +203,7 @@
         v-if="paymentMethod === undefined"
         class="flex flex-col items-start mb-[28px]"
       >
-        <template v-if="nftIsMidAutumnStyle">
-          <Label
-            class="text-like-cyan-light"
-            :text="$t('nft_collect_modal_mid_autumn_description_heading')"
-          />
-          <Label
-            class="mt-[0.5rem] mb-[2rem] leading-[1.5] font-[300]"
-            :text="$t('nft_collect_modal_mid_autumn_description_content')"
-          />
-        </template>
-        <Separator
-          v-else
-          class="h-[2px] bg-shade-gray self-center phone:hidden"
-        />
+        <Separator class="h-[2px] bg-shade-gray self-center phone:hidden" />
         <Label
           preset="p6"
           align="left"
@@ -308,16 +261,8 @@
           align="center"
           :text="$t('nft_collect_modal_subtitle_select_collect_method')"
         />
-        <ButtonV2
-          v-if="nftIsMidAutumnStyle && nftIsFree"
-          class="mx-auto mt-[3rem]"
-          :text="$t('nft_collect_modal_method_free')"
-          :is-disabled="mintedFreeNFT"
-          preset="secondary"
-          @click="handleSelectPaymentMethod('free')"
-        />
         <ul
-          v-else-if="nftIsFree"
+          v-if="nftIsFree"
           class="mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full"
         >
           <li>
@@ -335,7 +280,6 @@
           v-else
           :class="[
             'mt-[16px] flex flex-col gap-[16px] mx-auto max-w-[320px] w-full',
-            { 'mb-[5rem]': nftIsMidAutumnStyle },
           ]"
         >
           <li v-if="enableStripe">
@@ -442,7 +386,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 import modelLoadingImage from '~/assets/images/nft/model-loading.png';
 import LocalMallIcon from '~/assets/icons/local-mall.svg?inline';
-import MidAutumnSloganText from '~/assets/images/mid-autumn/slogan-text.svg?inline';
 
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
@@ -464,7 +407,6 @@ export default {
   },
   components: {
     LocalMallIcon,
-    MidAutumnSloganText,
   },
   mixins: [clipboardMixin, nftMixin],
   props: {
