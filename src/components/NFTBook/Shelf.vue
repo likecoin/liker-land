@@ -27,6 +27,7 @@
           :class-id="item.classId"
           :preset="preset"
           :theme="theme"
+          :is-lazy-loaded="index !== 0"
           :shelf-class="[
             // NOTE: Make the shelf appear to be continuous.
             { 'sm:rounded-l-[0px]': index % 2 !== 0 && index % 3 === 1 },
