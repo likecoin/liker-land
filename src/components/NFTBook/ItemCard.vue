@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShelfPreset" class="relative flex flex-col items-start">
-    <client-only>
+    <client-only v-if="isLazyLoaded">
       <lazy-component
         class="absolute inset-0 pointer-events-none -top-full"
         @show.once="fetchInfo"
@@ -80,7 +80,7 @@
       ]"
       v-bind="componentProps"
     >
-      <client-only v-if="!isDetailsPreset">
+      <client-only v-if="!isDetailsPreset && isLazyLoaded">
         <lazy-component
           class="absolute inset-0 pointer-events-none -top-full"
           @show.once="fetchInfo"
@@ -240,6 +240,10 @@ export default {
   },
   mixins: [nftMixin],
   props: {
+    isLazyLoaded: {
+      type: Boolean,
+      default: true,
+    },
     classId: {
       type: String,
       required: true,
@@ -395,6 +399,9 @@ export default {
       }
       return this.bookDescription.trim();
     },
+  },
+  mounted() {
+    if (!this.isLazyLoaded) this.fetchInfo();
   },
   methods: {
     async fetchInfo() {
