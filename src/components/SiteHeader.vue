@@ -78,6 +78,7 @@
 
       <ButtonV2
         v-if="getRouteBaseName($route) === 'index'"
+        class="phone:hidden"
         :preset="isPlain ? 'outline' : 'secondary'"
         :to="localeLocation({ name: 'store' })"
         :text="$t('header_button_try_collect')"

@@ -18,13 +18,15 @@
       @click.native="$emit('click-cover', $event)"
     />
 
-    <div class="mt-[8px] text-[#8B8B8B] text-[0.875rem]">
+    <div class="mt-[8px] text-[#8B8B8B] text-[0.875rem] laptop:text-[1rem]">
       {{ (iscnWorkAuthor || creatorDisplayName) | ellipsis }}
     </div>
 
-    <div class="mt-[4px] text-[#333] text-[1rem]">{{ NFTName }}</div>
+    <div class="mt-[4px] text-[#333] text-[1rem] laptop:text-[1.125rem]">
+      {{ NFTName }}
+    </div>
 
-    <div class="mt-[8px] text-[#1F1F1F] text-[0.875rem]">
+    <div class="mt-[8px] text-[#1F1F1F] text-[0.875rem] laptop:text-[1rem]">
       {{ nftBookAvailablePriceLabel || $t('nft_details_page_label_sold_out') }}
     </div>
   </div>

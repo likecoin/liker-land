@@ -4,14 +4,14 @@
   "about_nft_book_section_book_cta": "立即購買",
   "about_nft_book_section_book_description": "香港小說家董啟章經典作品《天工開物．栩栩如真》與初版相隔接近二十年，新版文本經過仔細修訂，並增加了全新的一章作為序言以NFT書的形式重新出版了。 「虛構一個想像世界，然後在裡面生活。」2023年，文學與NFT的想像世界終於重合。",
   "about_nft_book_section_book_title": "天工開物．栩栩如真",
-  "about_nft_book_section_features_description": "我讀故我在。一刻曾經擁有，便即永遠擁有。",
-  "about_nft_book_section_features_gifting_description": "作者可以彈性決定分成比例，獲得較大收益。Liker Land 在每次賣出電子書，或者作品被轉售時，會自動支付作者一定比例的收益。為作者提供了新的收入來源和更大的作品控制權。",
-  "about_nft_book_section_features_gifting_title": "真正支持作者",
+  "about_nft_book_section_features_gifting_description": "作者可以彈性決定分成比例，獲得較大自由度和收益。Liker Land 在每次賣出電子書，會自動支付作者一定比例的收益。為作者提供新的收入來源和更大的版權控制權。",
+  "about_nft_book_section_features_gifting_title": "直接支持作者",
   "about_nft_book_section_features_multimedia_description": "不賣廣告，以人為本的書城。結合科技與人文，讓讀者更易發現好故事，在擁有作品之餘，可以在 Liker Land 展示和分享它們。為您帶來了結合紙本書的收藏體驗。",
   "about_nft_book_section_features_multimedia_title": "獨特體驗",
-  "about_nft_book_section_features_ownership_description": "數位世界本來沒有擁有權的概念，Liker Land 透過 NFT 作為底層，每本電子書在區塊鏈上都有唯一的識別符和由作者親自簽發，獨特和不可替代的作品。",
-  "about_nft_book_section_features_ownership_title": "獨一無二的收藏品",
-  "about_nft_book_section_features_social_description": "讀者會賦予書本持有人的身份。區塊鏈技術使得NFT的交易記錄可以透明和可追溯，讓作者和讀者可以互相辨認，並直接和讀者互動。",
+  "about_nft_book_section_features_ownership_description": "數位世界本無擁有權的概念，Liker Land 透過 NFT 作為底層，每本電子書在區塊鏈上都有唯一的識別符號和由作者親自簽發，獨特和不可替代的作品。",
+  "about_nft_book_section_features_ownership_title": "獨一無二的電子書",
+  "about_nft_book_section_features_social_description": "讀者會賦予持有人的身份。區塊鏈技術使得NFT的交易記錄可以透明和可追溯，讓作者和讀者可以互相辨認，並直接和讀者互動。",
+  "about_nft_book_section_features_social_link": "https://blog.like.co/zh/%E5%85%A7%E5%AE%B9%E6%84%9B%E5%A5%BD%E8%80%85%E7%9A%84%E5%BB%A3%E5%A0%B4-liker-land-%E6%96%B0%E5%8A%9F%E8%83%BD/",
   "about_nft_book_section_features_social_title": "參與專屬社群",
   "about_nft_book_section_features_title": "電子書的未來",
   "about_nft_book_section_quote_author": "尹思哲",
@@ -346,23 +346,23 @@
   "index_category_button_printed_book": "紙本書",
   "index_faq_list": [
     {
-      "a": "每一本電子書都是獨一無二的，並由作者親自簽發。NFT書是可交易的電子書，您可以在Liker Land 書城的市場上將其出售或轉讓給其他人。這為您提供了資產轉換為現金的機會，或者與其他讀者進行交流和交易。",
+      "a": "每一本電子書都是獨一無二的，並由作者親自簽發。NFT 書是可交易的電子書，您可以在 Liker Land 書城的市場上將其轉讓給其他人。這為您提供了資產轉換為現金的機會，或者與其他讀者進行交流和交易。",
       "q": "NFT 電子書有什麼特別？"
     },
     {
-      "a": "成功購買電子書後，你會收到確認電郵。簡單幾步註冊帳户，作者便會把書發送到你的區塊鏈書櫃。你將擁有電子書的擁有權和內容訪問權限。",
+      "a": "成功購買電子書後，你會收到確認電郵。簡單幾步註冊帳户，作者便會把書發送到你的電子書櫃書櫃。你將獲得電子書的擁有權證明和閱讀權限。",
       "q": "購買成功後，會發生什麼事？"
     },
     {
-      "a": "網站跟一般電子書無異，主要支援 e-Pub 和 PDF 兩個格式。視乎作者設定，你可以彈性選擇在任何手機，平板，閱讀器線上瀏覽或者下載文本來讀。",
+      "a": "Liker Land 跟一般電子書城無異，可以在網站直接打開電子書，主要支援 EPUB 和 PDF 兩個格式。視乎作者設定，你可以彈性選擇在任何手機，平板，閱讀器線上瀏覽或者下載文本來讀。",
       "q": "買了 Liker Land 的電子書，可以如何讀？"
     }
   ],
   "index_faq_title": "你會想知的事",
-  "index_features_title": "Liker Land的特色",
+  "index_features_title": "Liker Land 的特色",
   "index_hero_slogan_part1": "讓好故事流傳",
-  "index_hero_slogan_part2": "重新定義數位閱讀",
-  "index_intro_description": "集合科技與人文。推動區塊鏈數位出版，讓好故事繼續流傳。Liker Land 連接新世界和舊產業，重塑閱讀和傳播文化。",
+  "index_hero_slogan_part2": "重塑數位閱讀",
+  "index_intro_description": "Liker Land 連接新世界和舊產業，重塑閱讀和傳播文化。",
   "index_intro_more_button": "了解更多",
   "index_intro_title": "線上書店 x 數位出版",
   "index_page_all_stories_matter_blog_content": "Liker Land Writing NFT 小插件助你在保持內容開放的同時，提供付費訂閱服務或收費內容項目，支援 WordPress 或 Substack 等寫作平台。",

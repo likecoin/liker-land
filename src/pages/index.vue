@@ -1,5 +1,5 @@
 <template>
-  <main class="overflow-hidden">
+  <main class="relative">
     <SiteHeader
       :is-plain="!isSiteHeaderFixed"
       :class="[
@@ -26,10 +26,30 @@
       />
 
       <div
-        class="relative desktop:grid grid-cols-5 w-full max-w-[600px] laptop:max-w-[1920px] mx-auto desktop:min-h-[464px] px-[32px]"
+        :class="[
+          'relative',
+
+          'desktop:grid',
+          'grid-cols-11',
+          'grid-rows-2',
+
+          'w-full',
+          'laptop:max-w-[1920px]',
+          'mx-auto',
+          paddingClass,
+        ]"
       >
+        <!-- Hero Center Guide -->
+        <!-- <div
+          :class="[
+            'w-[20px]',
+            'h-[20px]',
+            'bg-[blue]',
+            heroGraphicPositionClass,
+          ]"
+        /> -->
         <svg
-          class="absolute left-[40%] top-[50%] translate-y-[-50%] translate-x-[-20%] scale-[1.2] pointer-events-none"
+          :class="[heroGraphicPositionClass, 'scale-[1.5]', 'origin-center']"
           viewBox="0 0 2168 1929"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -86,14 +106,15 @@
           </g>
         </svg>
         <img
-          class="absolute left-[40%] h-full"
+          :class="[heroGraphicPositionClass, 'h-full', 'object-contain']"
           src="~assets/images/index/v2/hero-image.png"
           style="mix-blend-mode: screen"
         />
 
         <div
-          class="relative flex flex-col items-start justify-end col-span-2 mt-[56px] font-bold pb-[3.75rem] font-[600]"
+          class="relative flex flex-col items-start justify-end col-span-5 col-start-1 row-span-2 mt-[56px] font-bold pb-[3.75rem] font-[600]"
         >
+          <!-- Slogan bg gradient -->
           <svg
             class="absolute inset-x-0 top-[40%] scale-[1.5] translate-x-[-15%] pointer-events-none"
             viewBox="0 0 1449 1062"
@@ -142,10 +163,11 @@
             </defs>
           </svg>
 
-          <h1 class="text-[3rem] text-like-cyan-light">
+          <h1 class="text-[6vw] desktop:text-[2.5vw] text-like-cyan-light">
             {{ $t('index_hero_slogan_part1') }}
           </h1>
           <div class="relative">
+            <!-- Slogan line 2 bg -->
             <svg
               class="absolute inset-x-0 top-[50%] translate-y-[-50%] opacity-[0.8]"
               viewBox="0 0 486 91"
@@ -159,31 +181,55 @@
               />
             </svg>
 
-            <h1 class="relative text-[5rem] leading-1 text-white">
+            <h1
+              :class="[
+                'relative',
+                isEnglish
+                  ? 'text-[8vw] desktop:text-[3vw]'
+                  : 'text-[12vw] laptop:text-[3.5rem] desktop:text-[5vw]',
+                'leading-1',
+                'text-white',
+              ]"
+            >
               {{ $t('index_hero_slogan_part2') }}
             </h1>
           </div>
         </div>
 
         <div
-          class="relative flex flex-col desktop:items-end justify-end col-span-3 text-like-green desktop:text-right"
+          :class="[
+            'relative',
+            'flex',
+            'flex-col',
+            'desktop:items-end',
+            'justify-start',
+
+            'col-start-6',
+            'col-span-6',
+            'row-start-1 desktop:row-start-2',
+            'row-span-2',
+
+            'text-like-green',
+            'desktop:text-right',
+          ]"
         >
           <div
-            class="relative flex flex-col items-start desktop:items-end mt-[3rem] max-w-[490px] font-[600] pt-[24px] bg-[#f7f7f7]"
+            class="relative z-[2] flex flex-col items-start desktop:items-end max-w-[490px] h-full font-[600] pt-[24px]"
           >
+            <!-- Description bg smooth corner -->
             <svg
               :class="[
                 'absolute',
+                'top-0',
                 'left-full desktop:left-auto',
                 'desktop:right-full',
-                'inset-y-0',
-                'h-full',
-                'translate-x-[-1px] desktop:translate-x-[1px]',
+                'translate-x-[-80px] desktop:translate-x-[100px]',
                 'scale-x-[-1] desktop:scale-x-[1]',
                 'pointer-events-none',
               ]"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 350.97 141"
+              style="height: calc(100% + 1px)"
             >
               <path
                 d="M270.22,20.13L80.74,120.87c-24.86,13.22-52.59,20.13-80.74,20.13h350.97V0c-28.16,0-55.89,6.91-80.75,20.13Z"
@@ -192,11 +238,27 @@
               />
             </svg>
 
+            <!-- Description extended bg -->
             <div
-              class="absolute right-full desktop:right-auto desktop:left-full inset-y-0 bg-[#f7f7f7] h-full w-screen pointer-events-none"
+              :class="[
+                'absolute',
+                'right-0 desktop:right-auto',
+                'desktop:left-0',
+                'inset-y-0',
+
+                'bg-[#f7f7f7]',
+
+                'w-screen',
+                'h-full',
+
+                'pointer-events-none',
+
+                'translate-x-[-79px] desktop:translate-x-[99px]',
+              ]"
             />
 
             <div class="relative">
+              <!-- Intro title circle brush stoke -->
               <svg
                 class="absolute inset-x-0 top-[50%] translate-y-[-50%] scale-x-[1.1] scale-y-[0.9] pointer-events-none"
                 viewBox="0 0 407 114"
@@ -211,15 +273,27 @@
                   fill="#AAF1E7"
                 />
               </svg>
-              <h2 class="text-[2rem] desktop:text-[2.25rem]">
+              <h2
+                :class="[
+                  'relative',
+                  'text-[1.5rem]',
+                  isEnglish
+                    ? 'desktop:text-[1.8rem]'
+                    : 'desktop:text-[2.25rem]',
+                ]"
+              >
                 {{ $t('index_intro_title') }}
               </h2>
             </div>
-            <p class="text-[1.125rem] mt-[0.25rem]">
+
+            <p
+              class="relative text-[1rem] desktop:text-[1.125rem] mt-[0.25rem]"
+            >
               {{ $t('index_intro_description') }}
             </p>
+
             <NuxtLink
-              class="mt-[0.75rem] flex gap-[4px] items-center group"
+              class="relative mt-[0.75rem] flex gap-[4px] items-center group"
               :to="localeLocation({ name: 'about-nft-book' })"
             >
               {{ $t('index_intro_more_button') }}
@@ -251,11 +325,11 @@
 
     <section
       id="bookstore"
-      class="w-full max-w-[600px] laptop:max-w-[1920px] mx-auto mt-[3rem]"
+      class="w-full laptop:max-w-[1920px] mx-auto mt-[3rem]"
     >
-      <div class="desktop:flex gap-[10px] px-[10px]">
+      <div :class="['desktop:flex', 'gap-[16px]', paddingClass]">
         <div
-          class="desktop:w-[80px] mb-[1rem] desktop:mb-0 text-[3rem] font-[600] desktop:text-center desktop:break-all font-serif font-bold"
+          class="mb-[1rem] desktop:vertical-lr desktop:mb-0 font-[2rem] desktop:text-[2.5rem] font-[600] font-serif font-bold"
         >
           {{ $t('index_bookstore_title') }}
         </div>
@@ -263,7 +337,7 @@
         <div
           class="desktop:grid grid-cols-5 items-stretch gap-[20px] flex-grow"
         >
-          <div class="col-span-2 relative">
+          <div class="col-span-2">
             <NFTBookItemCardV2
               class="w-full sticky top-[124px]"
               class-cover-frame-aspect-ratio="min-h-[360px] desktop:min-h-[0] desktop:aspect-[4/5]"
@@ -291,10 +365,16 @@
       </div>
 
       <Swiper
-        class="block desktop:hidden mt-[32px]"
+        class="relative block desktop:hidden mt-[32px] right-0"
         :options="{
-          slidesOffsetBefore: 10,
-          slidesOffsetAfter: 10,
+          slidesOffsetBefore: 16,
+          slidesOffsetAfter: 16,
+          breakpoints: {
+            769: {
+              slidesOffsetBefore: 32,
+              slidesOffsetAfter: 32,
+            },
+          },
           spaceBetween: 20,
           slidesPerView: 'auto',
         }"
@@ -344,252 +424,264 @@
       </Dialog>
     </section>
 
-    <section
-      id="features"
-      class="px-[2rem] pt-[5.5rem] pb-[7.5rem] bg-like-cyan-pale"
-    >
-      <div class="w-full max-w-[600px] laptop:max-w-[1024px] mx-auto">
-        <h2 class="text-[2.25rem] desktop:text-[2.5rem] text-center font-serif">
-          {{ $t('index_features_title') }}
-        </h2>
+    <div class="overflow-hidden">
+      <section
+        id="features"
+        :class="[
+          paddingClass,
+          'pt-[5.5rem]',
+          'pb-[7.5rem]',
+          'bg-like-cyan-pale',
+        ]"
+      >
+        <div class="w-full laptop:max-w-[1920px] mx-auto">
+          <h2 class="text-[2rem] desktop:text-[2.5rem] text-center font-serif">
+            {{ $t('index_features_title') }}
+          </h2>
 
+          <ul :class="['grid desktop:grid-cols-3 gap-[4rem] mt-[5.5rem]']">
+            <li>
+              <a
+                class="flex flex-col items-center"
+                href="https://newsletter.liker.land/p/4de"
+                target="_blank"
+                rel="noopener"
+              >
+                <img
+                  class="w-[100px] h-[100px]"
+                  src="~assets/images/about/nft-book/icons/gifting.png"
+                />
+                <h4 class="font-600 mt-[2rem]">
+                  {{ $t('about_nft_book_section_features_gifting_title') }}
+                </h4>
+                <p class="mt-[0.5rem] text-center">
+                  {{
+                    $t('about_nft_book_section_features_gifting_description')
+                  }}
+                </p>
+              </a>
+            </li>
+            <li>
+              <a
+                class="flex flex-col items-center"
+                href="https://dungfookei.com/en/why-should-i-publish-a-book-using-nft/"
+                target="_blank"
+                rel="noopener"
+              >
+                <img
+                  class="w-[100px] h-[100px]"
+                  src="~assets/images/about/nft-book/icons/ownership.png"
+                />
+                <h4 class="font-600 mt-[2rem]">
+                  {{ $t('about_nft_book_section_features_ownership_title') }}
+                </h4>
+                <p class="mt-[0.5rem] text-center">
+                  {{
+                    $t('about_nft_book_section_features_ownership_description')
+                  }}
+                </p>
+              </a>
+            </li>
+            <li>
+              <a
+                class="flex flex-col items-center"
+                :href="$t('about_nft_book_section_features_social_link')"
+                target="_blank"
+                rel="noopener"
+              >
+                <img
+                  class="w-[100px] h-[100px]"
+                  src="~assets/images/about/nft-book/icons/social.png"
+                />
+                <h4 class="font-600 mt-[2rem]">
+                  {{ $t('about_nft_book_section_features_social_title') }}
+                </h4>
+                <p class="mt-[0.5rem] text-center">
+                  {{ $t('about_nft_book_section_features_social_description') }}
+                </p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="categories" class="bg-gradient-to-b from-like-cyan-pale">
         <ul
           :class="[
-            'grid sm:grid-cols-2 desktop:grid-cols-4 gap-[5.5rem] mt-[5.5rem]',
+            'flex',
+            'justify-center',
+            'items-center',
+            'gap-[2.25rem]',
+            paddingClass,
           ]"
         >
-          <li>
-            <a
-              class="flex flex-col items-center"
-              href="https://newsletter.liker.land/p/4de"
-              target="_blank"
-              rel="noopener"
-            >
-              <img
-                class="w-[100px] h-[100px]"
-                src="~assets/images/about/nft-book/icons/gifting.png"
-              />
-              <h4 class="font-600 mt-[3rem]">
-                {{ $t('about_nft_book_section_features_gifting_title') }}
-              </h4>
-              <p class="mt-[0.5rem] text-center">
-                {{ $t('about_nft_book_section_features_gifting_description') }}
-              </p>
-            </a>
-          </li>
-          <li>
-            <a
-              class="flex flex-col items-center"
-              href="https://dungfookei.com/en/why-should-i-publish-a-book-using-nft/"
-              target="_blank"
-              rel="noopener"
-            >
-              <img
-                class="w-[100px] h-[100px]"
-                src="~assets/images/about/nft-book/icons/ownership.png"
-              />
-              <h4 class="font-600 mt-[3rem]">
-                {{ $t('about_nft_book_section_features_ownership_title') }}
-              </h4>
-              <p class="mt-[0.5rem] text-center">
-                {{
-                  $t('about_nft_book_section_features_ownership_description')
-                }}
-              </p>
-            </a>
-          </li>
-          <li>
-            <a
-              class="flex flex-col items-center"
-              href="https://blog.like.co/zh/%E5%85%A7%E5%AE%B9%E6%84%9B%E5%A5%BD%E8%80%85%E7%9A%84%E5%BB%A3%E5%A0%B4-liker-land-%E6%96%B0%E5%8A%9F%E8%83%BD/"
-              target="_blank"
-              rel="noopener"
-            >
-              <img
-                class="w-[100px] h-[100px]"
-                src="~assets/images/about/nft-book/icons/social.png"
-              />
-              <h4 class="font-600 mt-[3rem]">
-                {{ $t('about_nft_book_section_features_social_title') }}
-              </h4>
-              <p class="mt-[0.5rem] text-center">
-                {{ $t('about_nft_book_section_features_social_description') }}
-              </p>
-            </a>
-          </li>
-          <li>
+          <li
+            class="w-full max-w-[430px] phone:max-w-[80%] desktop:max-w-[600px]"
+          >
             <NuxtLink
-              class="flex flex-col items-center"
-              :to="localeLocation({ name: 'gutenberg' })"
+              :class="[
+                'flex',
+                'justify-between',
+                'items-center',
+                'text-like-green',
+                'font-serif',
+                'rounded-[12px]',
+                'border-[1px]',
+                'bg-gradient-to-b',
+                'from-[#F3EFEB]',
+                'to-[#ECE9E2]',
+                'border-[#CFC6BC]',
+                'group',
+              ]"
+              :to="localeLocation({ name: 'store' })"
             >
-              <img
-                class="w-[100px] h-[100px]"
-                src="~assets/images/about/nft-book/icons/multimedia.png"
-              />
-              <h4 class="font-600 mt-[3rem]">
-                {{ $t('about_nft_book_section_features_multimedia_title') }}
-              </h4>
-              <p class="mt-[0.5rem] text-center">
-                {{
-                  $t('about_nft_book_section_features_multimedia_description')
-                }}
-              </p>
+              <div
+                class="shrink-0 p-[1rem] laptop:p-[2rem] pr-0 laptop:pr-0 text-left"
+              >
+                <div class="opacity-50 font-[600]">
+                  {{ $t('index_category_button_browse_label') }}
+                </div>
+                <div class="text-[1.8rem] laptop:text-[2.25rem]">
+                  {{ $t('index_category_button_ebook') }}
+                </div>
+              </div>
+
+              <svg
+                class="origin-center scale-[1.2] group-hover:scale-[1.3] transition-transform max-h-[110px] laptop:max-h-[180px]"
+                viewBox="0 0 216 141"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <image
+                  href="~assets/images/index/v2/category-ebook.png"
+                  width="216"
+                  height="141"
+                />
+              </svg>
             </NuxtLink>
           </li>
         </ul>
-      </div>
-    </section>
+      </section>
 
-    <section id="categories" class="bg-gradient-to-b from-like-cyan-pale">
-      <ul class="flex justify-center items-center gap-[2.25rem] px-[16px]">
-        <li class="max-w-[430px] max-h-[116px]">
-          <NuxtLink
-            :class="[
-              'grid',
-              'grid-cols-10',
-              'items-center',
-              'gap-[10px]',
-              'max-h-[inherit]',
-              'text-like-green',
-              'font-serif',
-              'rounded-[12px]',
-              'border-[1px]',
-              'bg-gradient-to-b',
-              'from-[#F3EFEB]',
-              'to-[#ECE9E2]',
-              'border-[#CFC6BC]',
-              'group',
-            ]"
-            :to="localeLocation({ name: 'store' })"
-          >
-            <div
-              class="col-span-4 p-[1rem] laptop:p-[2rem] pr-0 laptop:pr-0 text-left"
-            >
-              <div class="opacity-50 font-[600]">
-                {{ $t('index_category_button_browse_label') }}
-              </div>
-              <div class="text-[1.8rem] laptop:text-[2.25rem]">
-                {{ $t('index_category_button_ebook') }}
-              </div>
+      <section id="faq" class="pt-[12rem] pb-[3rem] font-serif">
+        <div
+          :class="[
+            'laptop:grid',
+            'grid-cols-5',
+
+            'w-full',
+            'laptop:max-w-[1600px]',
+            'mx-auto',
+            paddingClass,
+          ]"
+        >
+          <div class="flex flex-col items-start justify-start col-span-2">
+            <div class="relative flex laptop:justify-center">
+              <!-- Faq section soft gradient bg -->
+              <img
+                class="absolute top-[50%] translate-y-[-50%] pointer-events-none scale-[4]"
+                src="~assets/images/index/v2/faq-bg.png"
+              />
+
+              <h2
+                class="relative text-[2rem] laptop:text-[3rem] text-like-green font-[600]"
+              >
+                {{ $t('index_faq_title') }}
+
+                <!-- Faq title decoration -->
+                <svg
+                  class="absolute pointer-events-none top-[50%] translate-y-[-45%] translate-x-[-50%] left-full w-full"
+                  viewBox="0 0 311 328"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    opacity="0.6"
+                    d="M89.21 109L120.775 61.7885V61.7885C142.878 28.2161 188.012 18.9186 221.585 41.0219L223.905 42.5498C258.759 65.4969 268.412 112.354 245.465 147.208L168.477 264.143C145.53 298.997 98.6729 308.65 63.8189 285.702L61.4982 284.175C27.9258 262.071 18.6284 216.937 40.7317 183.365V183.365"
+                    stroke="url(#paint0_linear_252_654)"
+                  />
+                  <path
+                    opacity="0.6"
+                    d="M112.546 109L144.111 61.7885V61.7885C166.214 28.2161 211.348 18.9186 244.921 41.0219L247.241 42.5498C282.095 65.4969 291.748 112.354 268.801 147.208L191.633 264.416C168.786 299.119 122.131 308.73 87.4278 285.882L79.0141 280.343C48.7333 260.407 40.5125 219.607 60.71 189.5V189.5"
+                    stroke="url(#paint1_linear_252_654)"
+                  />
+                  <defs>
+                    <linearGradient
+                      id="paint0_linear_252_654"
+                      x1="204.667"
+                      y1="206.498"
+                      x2="57.4837"
+                      y2="116.78"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stop-color="#28646E" />
+                      <stop offset="1" stop-color="#28646E" stop-opacity="0" />
+                    </linearGradient>
+                    <linearGradient
+                      id="paint1_linear_252_654"
+                      x1="228.003"
+                      y1="206.498"
+                      x2="80.8197"
+                      y2="116.78"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stop-color="#28646E" />
+                      <stop offset="1" stop-color="#28646E" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </h2>
             </div>
-            <img
-              class="col-span-6 my-[-2rem] translate-x-[2rem] scale-[1.2] group-hover:scale-[1.3] transition-transform object-contain h-full max-h-[inherit]"
-              :alt="$t('index_category_button_ebook')"
-              src="~assets/images/index/v2/category-ebook.png"
-            />
-          </NuxtLink>
-        </li>
-      </ul>
-    </section>
+          </div>
 
-    <section id="faq" class="pt-[12rem] pb-[3rem] font-serif">
-      <div
-        class="laptop:grid grid-cols-5 w-full max-w-[600px] laptop:max-w-[1600px] mx-auto px-[10px]"
-      >
-        <div class="flex flex-col items-start justify-start col-span-2">
-          <div class="relative flex laptop:justify-center">
-            <img
-              class="absolute top-[50%] translate-y-[-50%] pointer-events-none scale-[4]"
-              src="~assets/images/index/v2/faq-bg.png"
-            />
-            <h2
-              class="relative text-[2rem] laptop:text-[3rem] text-like-green font-[600]"
-            >
-              {{ $t('index_faq_title') }}
+          <div class="relative mt-[2.5rem] laptop:mt-0 col-span-3">
+            <ul class="w-full space-y-[1rem]">
+              <li v-for="(faq, index) in faqs" :key="`faq-${index}`">
+                <IndexPageFAQItem
+                  :number="index + 1"
+                  :is-initial-open="index === 0"
+                >
+                  <template #question>
+                    {{ faq.question }}
+                  </template>
+                  <template #answer>
+                    <div v-html="faq.answer" />
+                  </template>
+                </IndexPageFAQItem>
+              </li>
+            </ul>
 
-              <svg
-                class="absolute pointer-events-none top-[50%] translate-y-[-45%] translate-x-[-50%] left-full w-full"
-                viewBox="0 0 311 328"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  opacity="0.6"
-                  d="M89.21 109L120.775 61.7885V61.7885C142.878 28.2161 188.012 18.9186 221.585 41.0219L223.905 42.5498C258.759 65.4969 268.412 112.354 245.465 147.208L168.477 264.143C145.53 298.997 98.6729 308.65 63.8189 285.702L61.4982 284.175C27.9258 262.071 18.6284 216.937 40.7317 183.365V183.365"
-                  stroke="url(#paint0_linear_252_654)"
-                />
-                <path
-                  opacity="0.6"
-                  d="M112.546 109L144.111 61.7885V61.7885C166.214 28.2161 211.348 18.9186 244.921 41.0219L247.241 42.5498C282.095 65.4969 291.748 112.354 268.801 147.208L191.633 264.416C168.786 299.119 122.131 308.73 87.4278 285.882L79.0141 280.343C48.7333 260.407 40.5125 219.607 60.71 189.5V189.5"
-                  stroke="url(#paint1_linear_252_654)"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_252_654"
-                    x1="204.667"
-                    y1="206.498"
-                    x2="57.4837"
-                    y2="116.78"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#28646E" />
-                    <stop offset="1" stop-color="#28646E" stop-opacity="0" />
-                  </linearGradient>
-                  <linearGradient
-                    id="paint1_linear_252_654"
-                    x1="228.003"
-                    y1="206.498"
-                    x2="80.8197"
-                    y2="116.78"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#28646E" />
-                    <stop offset="1" stop-color="#28646E" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </h2>
+            <div class="flex justify-center items-center mt-[32px] gap-[24px]">
+              <ButtonV2
+                theme="glow"
+                preset="tertiary"
+                :href="$t('about_nft_page_faq_know_more_url')"
+                :text="$t('about_nft_page_faq_know_more_button')"
+              />
+              <ButtonV2
+                theme="glow"
+                preset="tertiary"
+                :href="$t('about_nft_page_faq_more_url')"
+                :text="$t('about_nft_page_faq_more_button')"
+              />
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="relative mt-[2.5rem] laptop:mt-0 col-span-3">
-          <ul class="w-full space-y-[1rem]">
-            <li v-for="(faq, index) in faqs" :key="`faq-${index}`">
-              <IndexPageFAQItem
-                :number="index + 1"
-                :is-initial-open="index === 0"
-              >
-                <template #question>
-                  {{ faq.question }}
-                </template>
-                <template #answer>
-                  <div v-html="faq.answer" />
-                </template>
-              </IndexPageFAQItem>
-            </li>
-          </ul>
-
-          <div class="flex justify-center items-center mt-[32px] gap-[24px]">
-            <ButtonV2
-              theme="glow"
-              preset="tertiary"
-              :href="$t('about_nft_page_faq_know_more_url')"
-              :text="$t('about_nft_page_faq_know_more_button')"
-            />
-            <ButtonV2
-              theme="glow"
-              preset="tertiary"
-              :href="$t('about_nft_page_faq_more_url')"
-              :text="$t('about_nft_page_faq_more_button')"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="social" class="py-[48px]">
-      <h2
-        class="flex flex-wrap items-center justify-center gap-[0.75rem] text-[2rem] font-serif font-bold"
-      >
-        {{ $t('index_social_title') }}
-        <ButtonV2
-          theme="glow"
-          preset="tertiary"
-          text="@liker.land"
-          href="https://instagram.com/@liker.land?utm_medium=web&utm_source=likerlandweb"
-        />
-      </h2>
-    </section>
+      <section id="social" class="py-[48px]">
+        <h2
+          class="flex flex-wrap items-center justify-center gap-[0.75rem] text-[2rem] font-serif font-bold"
+        >
+          {{ $t('index_social_title') }}
+          <ButtonV2
+            theme="glow"
+            preset="tertiary"
+            text="@liker.land"
+            href="https://instagram.com/@liker.land?utm_medium=web&utm_source=likerlandweb"
+          />
+        </h2>
+      </section>
+    </div>
   </main>
 </template>
 
@@ -659,6 +751,15 @@ export default {
     };
   },
   computed: {
+    isEnglish() {
+      return this.$i18n.locale === 'en';
+    },
+    paddingClass() {
+      return 'px-[16px] laptop:px-[32px] desktop:px-[48px]';
+    },
+    heroGraphicPositionClass() {
+      return 'absolute left-[70%] desktop:left-[60%] top-[30%] translate-y-[-50%] translate-x-[-50%] pointer-events-none';
+    },
     bookstoreItems() {
       return this.bookstoreListItemsInHighlighted.slice(0, 7).map(item => {
         const isMultiple =

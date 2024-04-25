@@ -15,7 +15,7 @@
       </h3>
       <svg
         :class="[
-          'transform transition-transform duration-[0.5s]',
+          'transform transition-transform duration-[0.5s] shrink-0',
           {
             'rotate-180': isOpen,
           },

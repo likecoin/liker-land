@@ -138,10 +138,15 @@ export default {
           });
         }
       }
+
       if (window.caches) {
         const keyList = await window.caches.keys();
         if (keyList?.length) {
-          await Promise.all(keyList.map(key => caches.delete(key)));
+          await Promise.all(
+            keyList
+              .filter(key => !key.startsWith('reader'))
+              .map(key => caches.delete(key))
+          );
         }
       }
     } catch (error) {
