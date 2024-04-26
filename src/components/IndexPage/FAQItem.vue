@@ -10,7 +10,14 @@
       "
       @click="isOpen = !isOpen"
     >
-      <h3 class="text-like-green text-[1.25rem] flex-grow">
+      <h3
+        :class="[
+          'flex-grow',
+
+          'text-like-green',
+          'text-[1.125rem] desktop:text-[1.25rem]',
+        ]"
+      >
         <slot name="question" />
       </h3>
       <svg

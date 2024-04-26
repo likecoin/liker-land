@@ -50,6 +50,11 @@ const nuxtConfig = {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
+      {
+        hid: 'theme-color',
+        name: 'theme-color',
+        content: theme.colors['like-green'],
+      },
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },

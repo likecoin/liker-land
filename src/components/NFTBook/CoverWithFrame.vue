@@ -5,6 +5,7 @@
       'group',
       'relative',
       classAspectRatio,
+      'max-h-[70vh]',
       'bg-gray-e6',
       'rounded-[8px]',
       'overflow-hidden',

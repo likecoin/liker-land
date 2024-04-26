@@ -19,7 +19,7 @@
     <section
       id="hero"
       ref="hero"
-      class="relative pt-[124px] bg-like-green font-serif overflow-hidden"
+      class="relative pt-[260px] desktop:pt-[180px] bg-like-green font-serif overflow-hidden"
     >
       <div
         class="absolute inset-0 bg-[url('/images/index/hero-bg-noise.png')] opacity-[0.15] pointer-events-none"
@@ -49,7 +49,12 @@
           ]"
         /> -->
         <svg
-          :class="[heroGraphicPositionClass, 'scale-[1.5]', 'origin-center']"
+          :class="[
+            heroGraphicPositionClass,
+            'scale-[2.5] desktop:scale-[4]',
+            'h-full',
+            'origin-center',
+          ]"
           viewBox="0 0 2168 1929"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -106,13 +111,34 @@
           </g>
         </svg>
         <img
-          :class="[heroGraphicPositionClass, 'h-full', 'object-contain']"
+          :class="[
+            heroGraphicPositionClass,
+            'h-full',
+            'desktop:scale-[1.6]',
+            'object-contain',
+          ]"
           src="~assets/images/index/v2/hero-image.png"
           style="mix-blend-mode: screen"
         />
 
         <div
-          class="relative flex flex-col items-start justify-end col-span-5 col-start-1 row-span-2 mt-[56px] font-bold pb-[3.75rem] font-[600]"
+          :class="[
+            'relative',
+
+            'flex',
+            'flex-col',
+            'items-start',
+            'justify-end',
+
+            'col-span-5',
+            'col-start-1',
+            'row-span-2',
+
+            'mt-[56px]',
+            'pb-[2.5rem] desktop:pb-[3.75rem]',
+
+            'font-[600]',
+          ]"
         >
           <!-- Slogan bg gradient -->
           <svg
@@ -163,7 +189,12 @@
             </defs>
           </svg>
 
-          <h1 class="text-[6vw] desktop:text-[2.5vw] text-like-cyan-light">
+          <h1
+            :class="[
+              'text-[6vw] desktop:text-[2.5vw] full-hd:text-[48px]',
+              'text-like-cyan-light',
+            ]"
+          >
             {{ $t('index_hero_slogan_part1') }}
           </h1>
           <div class="relative">
@@ -185,8 +216,8 @@
               :class="[
                 'relative',
                 isEnglish
-                  ? 'text-[8vw] desktop:text-[3vw]'
-                  : 'text-[12vw] laptop:text-[3.5rem] desktop:text-[5vw]',
+                  ? 'text-[8vw] desktop:text-[3vw] full-hd:text-[56px]'
+                  : 'text-[12vw] laptop:text-[3.5rem] desktop:text-[5vw] full-hd:text-[96px]',
                 'leading-1',
                 'text-white',
               ]"
@@ -223,7 +254,7 @@
                 'top-0',
                 'left-full desktop:left-auto',
                 'desktop:right-full',
-                'translate-x-[-80px] desktop:translate-x-[100px]',
+                'translate-x-[-120px] desktop:translate-x-[100px]',
                 'scale-x-[-1] desktop:scale-x-[1]',
                 'pointer-events-none',
               ]"
@@ -253,7 +284,7 @@
 
                 'pointer-events-none',
 
-                'translate-x-[-79px] desktop:translate-x-[99px]',
+                'translate-x-[-119px] desktop:translate-x-[99px]',
               ]"
             />
 
@@ -276,10 +307,9 @@
               <h2
                 :class="[
                   'relative',
-                  'text-[1.5rem]',
                   isEnglish
-                    ? 'desktop:text-[1.8rem]'
-                    : 'desktop:text-[2.25rem]',
+                    ? 'text-[1.3rem] desktop:text-[1.8rem]'
+                    : 'text-[1.5rem] desktop:text-[2.25rem]',
                 ]"
               >
                 {{ $t('index_intro_title') }}
@@ -329,7 +359,19 @@
     >
       <div :class="['desktop:flex', 'gap-[16px]', paddingClass]">
         <div
-          class="mb-[1rem] desktop:vertical-lr desktop:mb-0 font-[2rem] desktop:text-[2.5rem] font-[600] font-serif font-bold"
+          :class="[
+            bookstoreSectionStickyClass,
+
+            'self-start',
+
+            'mb-[1rem] desktop:mb-0',
+
+            'font-[2rem] desktop:text-[2.5rem]',
+            'font-[600]',
+            'font-serif',
+
+            'desktop:vertical-lr',
+          ]"
         >
           {{ $t('index_bookstore_title') }}
         </div>
@@ -339,7 +381,7 @@
         >
           <div class="col-span-2">
             <NFTBookItemCardV2
-              class="w-full sticky top-[124px]"
+              :class="[bookstoreSectionStickyClass, 'w-full']"
               class-cover-frame-aspect-ratio="min-h-[360px] desktop:min-h-[0] desktop:aspect-[4/5]"
               :class-id="stickyBookstoreItem.classId"
               preset="shelf"
@@ -427,19 +469,22 @@
     <div class="overflow-hidden">
       <section
         id="features"
-        :class="[
-          paddingClass,
-          'pt-[5.5rem]',
-          'pb-[7.5rem]',
-          'bg-like-cyan-pale',
-        ]"
+        :class="[paddingClass, 'pb-[7.5rem]', 'bg-like-cyan-pale']"
       >
         <div class="w-full laptop:max-w-[1920px] mx-auto">
-          <h2 class="text-[2rem] desktop:text-[2.5rem] text-center font-serif">
+          <h2
+            :class="[
+              'py-[3rem] desktop:py-[5.5rem]',
+
+              'text-[2rem] desktop:text-[2.5rem]',
+              'text-center',
+              'font-serif',
+            ]"
+          >
             {{ $t('index_features_title') }}
           </h2>
 
-          <ul :class="['grid desktop:grid-cols-3 gap-[4rem] mt-[5.5rem]']">
+          <ul :class="['grid desktop:grid-cols-3 gap-[4rem]']">
             <li>
               <a
                 class="flex flex-col items-center"
@@ -449,7 +494,7 @@
               >
                 <img
                   class="w-[100px] h-[100px]"
-                  src="~assets/images/about/nft-book/icons/gifting.png"
+                  src="~assets/images/about/nft-book/icons/author.png"
                 />
                 <h4 class="font-600 mt-[2rem]">
                   {{ $t('about_nft_book_section_features_gifting_title') }}
@@ -523,14 +568,19 @@
                 'flex',
                 'justify-between',
                 'items-center',
+                'gap-[16px]',
+
                 'text-like-green',
                 'font-serif',
                 'rounded-[12px]',
-                'border-[1px]',
+
                 'bg-gradient-to-b',
                 'from-[#F3EFEB]',
                 'to-[#ECE9E2]',
+
+                'border-[1px]',
                 'border-[#CFC6BC]',
+
                 'group',
               ]"
               :to="localeLocation({ name: 'store' })"
@@ -546,17 +596,12 @@
                 </div>
               </div>
 
-              <svg
-                class="origin-center scale-[1.2] group-hover:scale-[1.3] transition-transform max-h-[110px] laptop:max-h-[180px]"
-                viewBox="0 0 216 141"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <image
-                  href="~assets/images/index/v2/category-ebook.png"
-                  width="216"
-                  height="141"
+              <div>
+                <img
+                  class="origin-center scale-[1.2] group-hover:scale-[1.3] transition-transform max-h-[110px] laptop:max-h-[180px]"
+                  src="~assets/images/index/v2/category-ebook.png"
                 />
-              </svg>
+              </div>
             </NuxtLink>
           </li>
         </ul>
@@ -758,7 +803,18 @@ export default {
       return 'px-[16px] laptop:px-[32px] desktop:px-[48px]';
     },
     heroGraphicPositionClass() {
-      return 'absolute left-[70%] desktop:left-[60%] top-[30%] translate-y-[-50%] translate-x-[-50%] pointer-events-none';
+      return [
+        'absolute',
+        'left-[70%]',
+        'desktop:left-[60%]',
+        'top-[30%]',
+        'translate-y-[-120%] desktop:translate-y-[-50%]',
+        'translate-x-[-50%]',
+        'pointer-events-none',
+      ].join(' ');
+    },
+    bookstoreSectionStickyClass() {
+      return 'desktop:sticky top-[124px]';
     },
     bookstoreItems() {
       return this.bookstoreListItemsInHighlighted.slice(0, 7).map(item => {
