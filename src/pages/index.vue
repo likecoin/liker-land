@@ -722,7 +722,7 @@
             theme="glow"
             preset="tertiary"
             text="@liker.land"
-            href="https://instagram.com/@liker.land?utm_medium=web&utm_source=likerlandweb"
+            href="https://instagram.com/liker.land?utm_medium=web&utm_source=likerlandweb"
           />
         </h2>
       </section>
