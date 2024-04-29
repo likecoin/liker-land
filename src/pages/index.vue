@@ -366,7 +366,7 @@
 
             'mb-[1rem] desktop:mb-0',
 
-            'font-[2rem] desktop:text-[2.5rem]',
+            'font-[1.75rem] desktop:text-[2.5rem]',
             'font-[600]',
             'font-serif',
 
