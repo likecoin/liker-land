@@ -399,6 +399,7 @@
               <NFTBookItemCardV2
                 :class-id="item.classId"
                 class-cover-frame-aspect-ratio="min-h-[360px] aspect-[4/5]"
+                :is-link-disabled="stickyBookstoreItem.isMultiple"
                 @click-cover="handleClickItem($event, item)"
               />
             </li>
@@ -866,7 +867,6 @@ export default {
     },
     handleClickItem(event, item) {
       if (item.isMultiple) {
-        event.stopPropagation();
         event.preventDefault();
         this.dialogNFTClassList = item.classIds;
       }

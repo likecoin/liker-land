@@ -15,6 +15,7 @@
       :src="NFTImageUrl"
       :alt="NFTName"
       :to="nftCollectRoute"
+      :event="isLinkDisabled ? '' : 'click'"
       @click.native="$emit('click-cover', $event)"
     />
 
@@ -50,6 +51,10 @@ export default {
     classCoverFrameAspectRatio: {
       type: String,
       default: 'aspect-[4/5]',
+    },
+    isLinkDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
