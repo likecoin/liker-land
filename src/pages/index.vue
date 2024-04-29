@@ -814,7 +814,7 @@ export default {
       ].join(' ');
     },
     bookstoreSectionStickyClass() {
-      return 'desktop:sticky top-[124px]';
+      return 'desktop:sticky desktop:top-[124px]';
     },
     bookstoreItems() {
       return this.bookstoreListItemsInHighlighted.slice(0, 7).map(item => {
