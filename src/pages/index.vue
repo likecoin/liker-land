@@ -398,7 +398,7 @@
             <li v-for="item in bookstoreItemsInGrid" :key="item.classId">
               <NFTBookItemCardV2
                 :class-id="item.classId"
-                class-cover-frame-aspect-ratio="min-h-[360px] aspect-[4/5]"
+                class-cover-frame-aspect-ratio="min-h-[360px] laptop:min-h-[0] aspect-[4/5]"
                 :is-link-disabled="stickyBookstoreItem.isMultiple"
                 @click-cover="handleClickItem($event, item)"
               />
