@@ -790,10 +790,31 @@ export default {
         content: description,
       },
     ];
+
+    const script = [
+      {
+        hid: 'schema',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: this.faqs.map(({ question, answer }) => ({
+            '@type': 'Question',
+            name: question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: answer,
+            },
+          })),
+        }),
+        type: 'application/ld+json',
+      },
+    ];
+
     return {
       title,
       meta,
       link: links,
+      script,
     };
   },
   computed: {
