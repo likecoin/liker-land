@@ -40,6 +40,9 @@ const nuxtConfig = {
    ** Headers of the page
    */
   head: {
+    htmlAttrs: {
+      class: ['text-[16px]', 'font-sans'],
+    },
     titleTemplate: titleChunk =>
       titleChunk
         ? `${titleChunk} - ${process.env.SITE_NAME}`
@@ -77,14 +80,7 @@ const nuxtConfig = {
     ],
     link: [
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
-      { rel: 'preconnect', href: 'https://p.typekit.net' },
-      { rel: 'preload', href: '/vendor/typekit.js', as: 'script' },
       { rel: 'preload', href: '/vendor/fbq.js', as: 'script' },
-      {
-        rel: 'preload',
-        href: 'https://use.typekit.net/rul4lrs.js',
-        as: 'script',
-      },
       {
         rel: 'icon',
         type: 'image/png',
@@ -126,7 +122,6 @@ const nuxtConfig = {
       })),
     ],
     script: [
-      { src: '/vendor/typekit.js', type: 'text/javascript' },
       { src: '/vendor/fbq.js', type: 'text/javascript', defer: true },
       {
         hid: 'schema',
@@ -246,7 +241,6 @@ const nuxtConfig = {
           'www.google.com',
           'googleads.g.doubleclick.net',
           'www.googleadservices.com',
-          'use.typekit.net',
           'https://js.stripe.com',
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           'https://substackapi.com',

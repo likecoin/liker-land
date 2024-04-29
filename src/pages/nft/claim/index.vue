@@ -80,26 +80,26 @@
               class-aspect-ratio="aspect-[1]"
             />
             <Label class="text-[24px] font-600" :text="NFTName" />
-            <div class="grid grid-cols-2">
-              <div v-if="iscnWorkAuthor" class="flex flex-col">
+            <div class="flex items-center justify-evenly">
+              <div v-if="iscnWorkAuthor" class="flex flex-col w-full">
                 <Label
                   preset="h6"
                   :text="$t('nft_claim_NFT_author')"
                   class=" text-medium-gray font-[500]"
                 />
-                <Label preset="h5" class="font-[500]" :text="iscnWorkAuthor" />
+                <p class="text-[16px] font-[500] w-full break-words">
+                  {{ iscnWorkAuthor }}
+                </p>
               </div>
-              <div v-if="creatorDisplayName" class="flex flex-col">
+              <div v-if="creatorDisplayName" class="flex flex-col w-full">
                 <Label
                   preset="h6"
                   :text="$t('identity_type_publisher')"
                   class=" text-medium-gray font-[500]"
                 />
-                <Label
-                  preset="h5"
-                  class="font-[500]"
-                  :text="creatorDisplayName"
-                />
+                <p class="text-[16px] font-[500] w-full break-words">
+                  {{ creatorDisplayName }}
+                </p>
               </div>
             </div>
             <p class="w-full text-[14px] line-clamp-3 font-[400]">
@@ -146,16 +146,21 @@
               class="border-[1px] border-shade-gray rounded-[20px] rounded-bl-[8px] shadow-md pl-[32px] pr-[24px] py-[12px] w-full min-w-[220px]"
             >
               <Label
-                class="text-[18px] font-600"
+                class="text-[16px] laptop:text-[18px] font-600"
                 :text="
                   $t('nft_claim_welcome_title_gift_toName', {
                     name: giftInfo.toName,
                   })
                 "
               />
-              <span class="text-[18px] font-200">{{ giftInfo.message }}</span>
+              <span class="text-[16px] laptop:text-[18px] font-200">{{
+                giftInfo.message
+              }}</span>
             </div>
-            <Label class="text-[18px] font-600" :text="giftInfo.fromName" />
+            <Label
+              class="text-[16px] laptop:text-[18px] font-600"
+              :text="giftInfo.fromName"
+            />
           </div>
         </template>
         <template #footer>
@@ -364,10 +369,12 @@
         :header-text="$t('nft_claim_message_title')"
       >
         <template #content-append>
-          <div class="flex flex-col items-start gap-[2px] w-full">
+          <div
+            class="flex flex-col items-start gap-[4px] w-full laptop:mt-[-32px]"
+          >
             <Label
               preset="p6"
-              class="text-medium-gray"
+              class="text-dark-gray"
               :text="$t('nft_claim_message_input_label')"
             />
             <TextField
@@ -395,7 +402,9 @@
         :total-step="3"
       >
         <template #content-append>
-          <div class="flex flex-col items-center justify-center w-full">
+          <div
+            class="flex flex-col gap-[4px] items-center justify-center w-full"
+          >
             <Label preset="h5" :text="$t('nft_claim_claiming_content')" />
             <ProgressIndicator />
           </div>
@@ -422,7 +431,7 @@
         <template #stepper-append>
           <NFTClaimMessageBlock
             v-if="isAutoDeliver && creatorMessage"
-            class="hidden laptop:block ml-[-62px] mt-[32px]"
+            class="hidden laptop:block ml-[-80px] mt-[32px]"
             :avatar-url="creatorAvatar"
             :creator-display-name="creatorDisplayName"
             :message="creatorMessage"
@@ -652,24 +661,23 @@ export default {
       );
     },
     loginContentArray() {
-      // return [
-      //   {
-      //     title: this.$t('nft_claim_login_title_collection'),
-      //     content: this.$t('nft_claim_login_content_collection'),
-      //     icon: 'IconFolder',
-      //   },
-      //   {
-      //     title: this.$t('nft_claim_login_title_identity'),
-      //     content: this.$t('nft_claim_login_content_identity'),
-      //     icon: 'IconIdentity',
-      //   },
-      //   {
-      //     title: this.$t('nft_claim_login_title_community'),
-      //     content: this.$t('nft_claim_login_content_community'),
-      //     icon: 'IconCommunity',
-      //   },
-      // ];
-      return [];
+      return [
+        {
+          title: this.$t('nft_claim_login_title_collection'),
+          content: this.$t('nft_claim_login_content_collection'),
+          icon: 'IconFolder',
+        },
+        {
+          title: this.$t('nft_claim_login_title_identity'),
+          content: this.$t('nft_claim_login_content_identity'),
+          icon: 'IconIdentity',
+        },
+        {
+          title: this.$t('nft_claim_login_title_community'),
+          content: this.$t('nft_claim_login_content_community'),
+          icon: 'IconCommunity',
+        },
+      ];
     },
     loginUserDisplayName() {
       return this.getLikerInfo?.displayName;

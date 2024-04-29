@@ -1,33 +1,6 @@
 <template>
   <div :class="rootClasses">
     <div
-      v-if="isMidAutumnStyle"
-      :class="[
-        'flex',
-        'flex-row',
-        'flex-wrap',
-        'justify-center',
-        'items-center laptop:items-start',
-        'gap-[20px] laptop:gap-[40px]',
-      ]"
-    >
-      <div class="laptop:order-3 mx-[100%] laptop:mx-0 mb-[60px] ">
-        <NFTMidAutumnMoonGraphic class="mt-[-61%]" />
-      </div>
-      <MidAutumnSloganText class="hidden" />
-      <svg
-        v-for="index in 4"
-        :key="`text-${index}`"
-        class="mt-[-48px]"
-        width="26"
-        height="38"
-        :style="`order: ${index >= 3 ? index + 1 : index};`"
-      >
-        <use :xlink:href="`#mid-autumn-slogan-text-${index}`" fill="#184158" />
-      </svg>
-    </div>
-    <div
-      v-else
       :class="[
         'flex',
         'flex-col laptop:flex-row',
@@ -72,12 +45,12 @@
       <Label
         class="text-like-green"
         :text="ctaForFreeDescriptionHeading"
-        :align="isMidAutumnStyle ? 'center' : 'left'"
+        align="left"
       />
       <Label
         class="mt-[0.75rem] leading-[1.5] font-[300]"
         :text="ctaForFreeDescriptionContent"
-        :align="isMidAutumnStyle ? 'center' : 'left'"
+        align="left"
       />
       <CollectButton
         class="mt-[2.5rem]"
@@ -116,9 +89,7 @@
               :class="[
                 'text-[14px]',
                 'text-center sm:text-left',
-                isFree || isMidAutumnStyle
-                  ? 'text-like-green'
-                  : 'text-like-cyan',
+                isFree ? 'text-like-green' : 'text-like-cyan',
               ]"
             >
               {{ $t('nft_message_type_collect') }}
@@ -171,12 +142,7 @@
 </template>
 
 <script>
-import MidAutumnSloganText from '~/assets/images/mid-autumn/slogan-text.svg?inline';
-
 export default {
-  components: {
-    MidAutumnSloganText,
-  },
   props: {
     classId: {
       type: String,
@@ -218,10 +184,6 @@ export default {
       type: String,
       default: 'classic',
     },
-    isMidAutumnStyle: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     rootClasses() {
@@ -233,14 +195,11 @@ export default {
         'p-[32px]',
         'pt-0',
         this.marginTopClass,
-        this.isFree || this.isMidAutumnStyle
-          ? 'border border-black'
-          : 'bg-like-green',
+        this.isFree ? 'border border-black' : 'bg-like-green',
         'rounded-[32px]',
       ];
     },
     marginTopClass() {
-      if (this.isMidAutumnStyle) return 'mt-[85px]';
       if (this.isFree) return 'mt-[72px]';
       return 'mt-[58px]';
     },
@@ -259,11 +218,11 @@ export default {
         'sm:order-2',
         'sm:p-[32px]',
         'sm:mt-[32px]',
-        { 'text-white': !this.isFree && !this.isMidAutumnStyle },
+        { 'text-white': !this.isFree },
         { 'desktop:flex-row desktop:justify-between': !this.isColumn },
       ];
 
-      if (this.isFree || this.isMidAutumnStyle) {
+      if (this.isFree) {
         classes.push('border', 'border-black');
       } else {
         classes.push('border-2', 'border-like-cyan');
@@ -278,7 +237,7 @@ export default {
       return this.$t('nft_page_collect_cta_title_sold_out');
     },
     ctaTitleClasses() {
-      if (this.isFree || this.isMidAutumnStyle) {
+      if (this.isFree) {
         return ['text-black'];
       }
       return [
@@ -291,7 +250,7 @@ export default {
     },
 
     ctaForFreeDescriptionHeading() {
-      if (!(this.isFree || this.isMidAutumnStyle)) return '';
+      if (!this.isFree) return '';
 
       const key = `nft_page_collect_cta_free_description_heading_${
         this.classId
@@ -299,7 +258,7 @@ export default {
       return this.$te(key) ? this.$t(key) : '';
     },
     ctaForFreeDescriptionContent() {
-      if (!(this.isFree || this.isMidAutumnStyle)) return '';
+      if (!this.isFree) return '';
 
       const key = `nft_page_collect_cta_free_description_content_${
         this.classId
@@ -315,14 +274,14 @@ export default {
         return this.$t('nft_page_collect_cta_button_text_ended');
       }
 
-      if (this.isFree || this.isMidAutumnStyle) {
+      if (this.isFree) {
         return this.$t('nft_page_collect_cta_button_text_free');
       }
 
       return this.$t('nft_page_collect_cta_button_text');
     },
     normalizedButtonTheme() {
-      return this.isMidAutumnStyle ? 'glow' : this.buttonTheme;
+      return this.buttonTheme;
     },
     isCTAButtonDisabled() {
       return (

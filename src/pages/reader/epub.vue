@@ -128,10 +128,24 @@ export default {
       try {
         this.isLoading = true;
         const encodedUrl = encodeURIComponent(this.fileSrc);
-        const corsUrl = `https://pdf-cors-ufdrogmd2q-uw.a.run.app/pdf-cors?url=${encodedUrl}`;
-        const buffer = await this.$axios.$get(corsUrl, {
-          responseType: 'arraybuffer',
-        });
+        const corsUrl = `https://static2.like.co/pdf-cors/?url=${encodedUrl}`;
+        let buffer;
+        if (window.caches) {
+          try {
+            const cache = await caches.open('reader-epub');
+            let response = await cache.match(corsUrl);
+            if (!response) response = await cache.add(corsUrl);
+            buffer = await response?.arrayBuffer();
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
+        }
+        if (!buffer) {
+          buffer = await this.$axios.$get(corsUrl, {
+            responseType: 'arraybuffer',
+          });
+        }
         this.book = Epub(buffer);
         await this.book.ready;
         this.isLoading = false;

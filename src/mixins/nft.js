@@ -696,9 +696,6 @@ export default {
     nftTxErrorIsAlreadyCollected() {
       return this.uiTxErrorMessage === 'ALREADY_MINTED';
     },
-    nftIsMidAutumnStyle() {
-      return this.classId === LIKECOIN_NFT_CLASS_FREE_MINT;
-    },
   },
   watch: {
     getAddress(newAddress) {
