@@ -22,9 +22,9 @@
       </h3>
       <svg
         :class="[
-          'transform transition-transform duration-[0.5s] shrink-0',
+          'transform transition-transform duration-[0.2s] shrink-0',
           {
-            'rotate-180': isOpen,
+            'rotate-180': !isOpen,
           },
         ]"
         width="16"
