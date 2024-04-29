@@ -325,6 +325,7 @@
             <NuxtLink
               class="relative mt-[0.75rem] flex gap-[4px] items-center group"
               :to="localeLocation({ name: 'about-nft-book' })"
+              @click.native="handleClickAboutNFTBook"
             >
               {{ $t('index_intro_more_button') }}
 
@@ -421,6 +422,7 @@
           spaceBetween: 20,
           slidesPerView: 'auto',
         }"
+        @sliderMove="handleSwiperBookstoreSwiper"
       >
         <SwiperSlide
           v-for="item in bookstoreItemsInGrid"
@@ -441,6 +443,7 @@
         <ButtonV2
           :text="$t('index_bookstore_more_button')"
           :to="localeLocation({ name: 'store' })"
+          @click.native="handleClickBookstoreMore"
         />
       </div>
 
@@ -492,6 +495,7 @@
                 href="https://newsletter.liker.land/p/4de"
                 target="_blank"
                 rel="noopener"
+                @click="handleClickFeatureSupportAuthor"
               >
                 <img
                   class="w-[100px] h-[100px]"
@@ -513,6 +517,7 @@
                 href="https://dungfookei.com/en/why-should-i-publish-a-book-using-nft/"
                 target="_blank"
                 rel="noopener"
+                @click="handleClickFeatureOwnership"
               >
                 <img
                   class="w-[100px] h-[100px]"
@@ -534,6 +539,7 @@
                 :href="$t('about_nft_book_section_features_social_link')"
                 target="_blank"
                 rel="noopener"
+                @click="handleClickFeatureCommunity"
               >
                 <img
                   class="w-[100px] h-[100px]"
@@ -585,6 +591,7 @@
                 'group',
               ]"
               :to="localeLocation({ name: 'store' })"
+              @click.native="handleClickCategoryEbook"
             >
               <div
                 class="shrink-0 p-[1rem] laptop:p-[2rem] pr-0 laptop:pr-0 text-left"
@@ -702,12 +709,14 @@
                 preset="tertiary"
                 :href="$t('about_nft_page_faq_know_more_url')"
                 :text="$t('about_nft_page_faq_know_more_button')"
+                @click.native="handleClickDocs"
               />
               <ButtonV2
                 theme="glow"
                 preset="tertiary"
                 :href="$t('about_nft_page_faq_more_url')"
                 :text="$t('about_nft_page_faq_more_button')"
+                @click.native="handleClickFAQ"
               />
             </div>
           </div>
@@ -724,6 +733,7 @@
             preset="tertiary"
             text="@liker.land"
             href="https://instagram.com/liker.land?utm_medium=web&utm_source=likerlandweb"
+            @click.native="handleClickSocialFollow"
           />
         </h2>
       </section>
@@ -735,6 +745,8 @@
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 import bookstoreMixin from '~/mixins/bookstore';
+
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'IndexV2',
@@ -880,17 +892,80 @@ export default {
       if (!this.$refs.hero) return;
 
       const { clientHeight: heroHeight } = this.$refs.hero;
-      if (window.scrollY > heroHeight) {
+      if (
+        !this.hasScrolledHitBottom &&
+        window.scrollY >= document.body.scrollHeight - window.screen.availHeight
+      ) {
+        this.hasScrolledHitBottom = true;
+        logTrackerEvent(this, 'IndexPage', 'IndexScrollHitBottom', '', 1);
+      } else if (window.scrollY > heroHeight) {
         this.isSiteHeaderFixed = true;
+        if (!this.hasScrolledPastHero) {
+          this.hasScrolledPastHero = true;
+          logTrackerEvent(this, 'IndexPage', 'IndexScrollPassHero', '', 1);
+        }
       } else {
         this.isSiteHeaderFixed = false;
       }
+    },
+    handleClickAboutNFTBook() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickAboutNFTBook', '', 1);
     },
     handleClickItem(event, item) {
       if (item.isMultiple) {
         event.preventDefault();
         this.dialogNFTClassList = item.classIds;
+        logTrackerEvent(
+          this,
+          'IndexPage',
+          'IndexNFTBookItemCardClick',
+          item.classIds[0],
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'IndexPage',
+          'IndexNFTBookItemCardClick',
+          item.classId,
+          1
+        );
       }
+    },
+    handleSwiperBookstoreSwiper() {
+      if (this.hasSwipedBookstoreSwiper) return;
+      this.hasSwipedBookstoreSwiper = true;
+      logTrackerEvent(this, 'IndexPage', 'IndexSwipeBookstoreSwiper', '', 1);
+    },
+    handleClickBookstoreMore() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickBookstoreMore', '', 1);
+    },
+    handleClickFeatureSupportAuthor() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'IndexClickFeatureSupportAuthor',
+        '',
+        1
+      );
+    },
+    handleClickFeatureOwnership() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickFeatureOwnership', '', 1);
+    },
+    handleClickFeatureCommunity() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickFeatureCommunity', '', 1);
+    },
+    handleClickCategoryEbook() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickCategoryEbook', '', 1);
+    },
+    handleClickSocialFollow() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickSocialFollow', '', 1);
+    },
+    handleClickDocs() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickDocs', '', 1);
+    },
+    handleClickFAQ() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickFAQ', '', 1);
     },
     closeMultipleNFTClassDialog() {
       this.dialogNFTClassList = [];
