@@ -30,6 +30,7 @@
               {{ $t('inquiry_form_title') }}
             </h3>
             <p>{{ $t('inquiry_form_description') }}</p>
+            <p>{{ $t('inquiry_form_callout') }}</p>
             <ButtonV2 preset="secondary" @click="handleClickHelp">
               {{ $t('inquiry_form_button') }}
             </ButtonV2>
