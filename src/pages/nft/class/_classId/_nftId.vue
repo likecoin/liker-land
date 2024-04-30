@@ -446,7 +446,7 @@ export default {
     const ogImage =
       this.NFTImageUrl ||
       `${EXTERNAL_HOST}/images/og/${
-        this.$i18n.locale === 'zh-Hant' ? 'default-zh.png' : 'default.png'
+        this.$i18n.locale === 'zh-Hant' ? 'default-zh.jpg' : 'default.jpg'
       }`;
     const schemas = [];
     if (this.purchaseInfo.price) {

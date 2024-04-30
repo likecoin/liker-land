@@ -75,7 +75,7 @@ const nuxtConfig = {
         hid: 'og:image',
         name: 'og:image',
         property: 'og:image',
-        content: `${EXTERNAL_URL}/images/og/default.png`,
+        content: `${EXTERNAL_URL}/images/og/default.jpg`,
       },
     ],
     link: [

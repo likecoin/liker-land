@@ -86,7 +86,7 @@ export default {
           hid: 'og:image',
           property: 'og:image',
           content: `${EXTERNAL_HOST}/images/og/${
-            this.$i18n.locale === 'zh-Hant' ? 'default-zh.png' : 'default.png'
+            this.$i18n.locale === 'zh-Hant' ? 'default-zh.jpg' : 'default.jpg'
           }`,
         },
       ],

@@ -503,7 +503,7 @@ export default {
     const ogImage =
       this.NFTImageUrl ||
       `${EXTERNAL_HOST}/images/og/${
-        this.$i18n.locale !== 'en' ? 'default-zh.png' : 'default.png'
+        this.$i18n.locale !== 'en' ? 'default-zh.jpg' : 'default.jpg'
       }`;
     const schemas = [];
     const iscnOwnerPerson = {
