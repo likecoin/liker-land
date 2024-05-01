@@ -3,7 +3,7 @@ const path = require('path');
 const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
 
-const siteName = 'Liker Land';
+const SITE_NAME = 'Liker Land';
 
 const {
   IS_TESTNET,
@@ -23,7 +23,7 @@ const nuxtConfig = {
     STRIPE_PUBLIC_KEY,
     GA_TRACKING_ID,
     ADWORDS_TRACKING_ID,
-    SITE_NAME: siteName,
+    SITE_NAME,
     EXTERNAL_URL,
   },
   mode: 'universal',
@@ -43,10 +43,16 @@ const nuxtConfig = {
     htmlAttrs: {
       class: ['text-[16px]', 'font-sans'],
     },
-    titleTemplate: titleChunk =>
-      titleChunk
-        ? `${titleChunk} - ${process.env.SITE_NAME}`
-        : process.env.SITE_NAME,
+    titleTemplate: titleChunk => {
+      const siteName = process.env.SITE_NAME;
+      if (titleChunk) {
+        if (titleChunk.includes(siteName)) {
+          return titleChunk;
+        }
+        return `${titleChunk} - ${siteName}`;
+      }
+      return siteName;
+    },
     meta: [
       {
         hid: 'viewport',
@@ -387,14 +393,14 @@ const nuxtConfig = {
     ],
   },
   meta: {
-    name: siteName,
+    name: SITE_NAME,
     theme_color: theme.colors['like-green'],
     nativeUI: true,
     appleStatusBarStyle: 'black-translucent',
   },
   manifest: {
-    name: siteName,
-    short_name: siteName,
+    name: SITE_NAME,
+    short_name: SITE_NAME,
     icons: [
       '48x48',
       '72x72',
