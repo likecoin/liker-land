@@ -1,61 +1,9 @@
 <template>
   <div class="flex flex-col items-stretch min-h-screen">
-    <!-- <AlertBanner
-      v-if="getRouteBaseName($route) !== 'nft-class-classId' && $route.params.classId !== alertBannerNFTClassId"
-      :primary-button-text="$t('alert_banner_actions_purchase')"
-      :primary-button-to="
-        localeLocation({
-          name: 'nft-class-classId',
-          params: { classId: alertBannerNFTClassId },
-        })"
-      :secondary-button-text="$t('alert_banner_actions_about')"
-      secondary-button-href="https://nowherebookstore.io/"
-      @click-primary-button="onClickAlertBanner('primary')"
-      @click-secondary-button="onClickAlertBanner('secondary')"
-    >
-      <i18n path="alert_banner_content_heavenly_creations_life_like">
-        <span
-          class="text-like-green font-[600]"
-          place="creator"
-        >{{ $t('alert_banner_content_heavenly_creations_life_like_creator') }}</span>
-        <span
-          class="text-like-green font-[600]"
-          place="book"
-        >{{ $t('alert_banner_content_heavenly_creations_life_like_name') }}</span>
-      </i18n>
-    </AlertBanner> -->
-
     <AlertBanner v-if="uiIsChainUpgrading">{{
       $t('notice_chain_upgrading')
     }}</AlertBanner>
 
-    <SiteHeader
-      v-if="!isInInAppBrowser"
-      :key="$route.name"
-      :class="[
-        'text-like-green',
-        {
-          [[
-            'bg-opacity-75',
-            'bg-gray-f7',
-            'backdrop-blur-sm',
-            'fixed',
-            'inset-x-0',
-            'top-0',
-            'z-1',
-          ].join(' ')]: isFixedSiteHeader,
-        },
-        {
-          [[
-            'phoneLg:bg-gray-f7',
-            'phoneLg:sticky',
-            'phoneLg:inset-x-0',
-            'phoneLg:top-0',
-            'phoneLg:z-50',
-          ].join(' ')]: isClaimPage,
-        },
-      ]"
-    />
     <nuxt
       :class="[
         'flex-grow',
@@ -64,10 +12,7 @@
         },
       ]"
     />
-    <Footer
-      v-if="!isInInAppBrowser"
-      :class="[{ 'phoneLg:hidden': isClaimPage }]"
-    />
+    <Footer v-if="!isInInAppBrowser" />
     <PortalTarget name="dialog" multiple @change="handleDialogChange" />
     <PortalTarget name="snackbar" multiple />
 
@@ -156,11 +101,8 @@ export default {
     alertBannerNFTClassId() {
       return 'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg';
     },
-    isFixedSiteHeader() {
-      return this.getRouteBaseName(this.$route) === 'about-nft-book';
-    },
-    isClaimPage() {
-      return this.getRouteBaseName(this.$route).includes('nft-claim');
+    isHomePage() {
+      return this.getRouteBaseName(this.$route) === 'index';
     },
   },
   watch: {
@@ -196,6 +138,7 @@ export default {
           });
         }
       }
+
       if (window.caches) {
         const keyList = await window.caches.keys();
         if (keyList?.length) {

@@ -5,20 +5,10 @@
       'flex-col',
       isDirectionLeft ? 'desktop:flex-row-reverse' : 'desktop:flex-row',
       'items-center',
-      'gap-[1rem] laptop:gap-[5rem]',
+      'gap-[1rem] laptop:gap-[1.5rem]',
     ]"
   >
     <div class="flex flex-shrink-0 relative mt-[48px]">
-      <div
-        :class="[
-          'absolute',
-          'z-[0]',
-          'inset-x-[-38px] sm:inset-x-[-48px]',
-          'inset-y-0',
-          'bg-white',
-          'rounded-[32px]',
-        ]"
-      />
       <div
         :class="[
           'flex',
@@ -26,14 +16,16 @@
           'items-center',
           'justify-center',
           'gap-[36px]',
-          'mt-[-48px]',
           'z-[1]',
           'pb-[48px]',
+          'px-[32px]',
+          'bg-white',
+          'rounded-[32px]',
         ]"
       >
         <img
           src="~/assets/images/gutenberg/blende.png"
-          :class="['w-full', 'max-w-[264px]']"
+          :class="['w-full', 'max-w-[204px]', 'mt-[-48px]']"
           alt=""
         />
         <Label

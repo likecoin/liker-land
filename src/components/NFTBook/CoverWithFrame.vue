@@ -5,11 +5,13 @@
       'group',
       'relative',
       classAspectRatio,
+      'max-h-[70vh]',
       'bg-gray-e6',
       'rounded-[8px]',
       'overflow-hidden',
     ]"
     :to="to"
+    v-bind="$attrs"
   >
     <div
       class="absolute inset-0 bg-no-repeat bg-cover opacity-25 pointer-events-none brightness-150"

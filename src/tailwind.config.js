@@ -136,6 +136,7 @@ module.exports = {
       laptop: { min: '769px' },
       desktop: { min: '992px' },
       desktopLg: { min: '1439px' },
+      'full-hd': { min: '1920px' },
     },
 
     /*
@@ -763,6 +764,9 @@ module.exports = {
   plugins: [
     ({ addUtilities }) => {
       addUtilities({
+        '.vertical-lr': {
+          writingMode: 'vertical-lr',
+        },
         '.line-clamp-1': getLineClamp(1),
         '.line-clamp-2': getLineClamp(2),
         '.line-clamp-3': getLineClamp(3),
