@@ -316,11 +316,15 @@
               </h2>
             </div>
 
-            <p
+            <i18n
               class="relative text-[1rem] desktop:text-[1.125rem] mt-[0.25rem]"
+              tag="p"
+              path="index_intro_description"
             >
-              {{ $t('index_intro_description') }}
-            </p>
+              <span class="whitespace-nowrap" place="likerLand">{{
+                $t('index_intro_description_liker_land')
+              }}</span>
+            </i18n>
 
             <NuxtLink
               class="relative mt-[0.75rem] flex gap-[4px] items-center group"
@@ -526,11 +530,19 @@
                 <h4 class="font-600 mt-[2rem]">
                   {{ $t('about_nft_book_section_features_ownership_title') }}
                 </h4>
-                <p class="mt-[0.5rem] text-center">
-                  {{
-                    $t('about_nft_book_section_features_ownership_description')
-                  }}
-                </p>
+                <i18n
+                  class="mt-[0.5rem] text-center"
+                  path="about_nft_book_section_features_ownership_description"
+                  tag="p"
+                >
+                  <span class="whitespace-nowrap" place="replace"
+                    >{{
+                      $t(
+                        'about_nft_book_section_features_ownership_description_replace'
+                      )
+                    }}
+                  </span>
+                </i18n>
               </a>
             </li>
             <li>
