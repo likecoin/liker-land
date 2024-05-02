@@ -43,7 +43,7 @@
             'inset-x-0',
             'top-0',
             'z-1',
-          ].join(' ')]: isHomePage,
+          ].join(' ')]: isFixedSiteHeader,
         },
         {
           [[
@@ -156,8 +156,8 @@ export default {
     alertBannerNFTClassId() {
       return 'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg';
     },
-    isHomePage() {
-      return this.getRouteBaseName(this.$route) === 'index';
+    isFixedSiteHeader() {
+      return this.getRouteBaseName(this.$route) === 'about-nft-book';
     },
     isClaimPage() {
       return this.getRouteBaseName(this.$route).includes('nft-claim');
