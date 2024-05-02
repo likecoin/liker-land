@@ -892,20 +892,17 @@ export default {
       if (!this.$refs.hero) return;
 
       const { clientHeight: heroHeight } = this.$refs.hero;
+      this.isSiteHeaderFixed = window.scrollY > heroHeight;
+
       if (
         !this.hasScrolledHitBottom &&
         window.scrollY >= document.body.scrollHeight - window.screen.availHeight
       ) {
         this.hasScrolledHitBottom = true;
         logTrackerEvent(this, 'IndexPage', 'IndexScrollHitBottom', '', 1);
-      } else if (window.scrollY > heroHeight) {
-        this.isSiteHeaderFixed = true;
-        if (!this.hasScrolledPastHero) {
-          this.hasScrolledPastHero = true;
-          logTrackerEvent(this, 'IndexPage', 'IndexScrollPassHero', '', 1);
-        }
-      } else {
-        this.isSiteHeaderFixed = false;
+      } else if (!this.hasScrolledPastHero && this.isSiteHeaderFixed) {
+        this.hasScrolledPastHero = true;
+        logTrackerEvent(this, 'IndexPage', 'IndexScrollPassHero', '', 1);
       }
     },
     handleClickAboutNFTBook() {
