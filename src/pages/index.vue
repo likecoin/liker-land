@@ -732,7 +732,7 @@
             theme="glow"
             preset="tertiary"
             text="@liker.land"
-            href="https://instagram.com/liker.land?utm_medium=web&utm_source=likerlandweb"
+            href="https://newsletter.liker.land/?utm_medium=web&utm_source=likerlandweb&utm_campaign=home_page"
             @click.native="handleClickSocialFollow"
           />
         </h2>
