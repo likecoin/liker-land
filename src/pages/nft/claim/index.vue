@@ -593,7 +593,6 @@ export default {
       state: NFT_CLAIM_STATE.WELCOME,
       error: '',
       isFreePurchase: this.$route.query.free,
-      priceIndex: this.$route.query.price_index,
       collectorMessage: '',
       creatorMessage: '',
       claimingAddressInput: '',
@@ -613,6 +612,7 @@ export default {
       'getNFTClassMetadataById',
       'getISCNMetadataById',
       'getCanViewNFTBookBeforeClaimByClassId',
+      'getNFTBookStoreInfoByClassId',
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
     ]),
@@ -624,6 +624,9 @@ export default {
     },
     paymentId() {
       return this.$route.query.payment_id;
+    },
+    priceIndex() {
+      return this.$route.query.price_index;
     },
     token() {
       return this.$route.query.claiming_token;
@@ -739,35 +742,44 @@ export default {
   async mounted() {
     const { redirect, free, from, state, ...query } = this.$route.query;
     let price;
-    try {
-      const { data } = await this.$api.get(
-        getNFTBookPaymentStatusEndpoint({
-          classId: this.classId,
-          collectionId: this.collectionId,
-          paymentId: this.paymentId,
-        })
-      );
-      ({ price } = data);
-      const {
-        giftInfo,
-        isPhysicalOnly,
-        status,
-        autoMemo,
-        isAutoDeliver,
-      } = data;
-      this.giftInfo = giftInfo;
+    if (this.paymentId) {
+      try {
+        const { data } = await this.$api.get(
+          getNFTBookPaymentStatusEndpoint({
+            classId: this.classId,
+            collectionId: this.collectionId,
+            paymentId: this.paymentId,
+          })
+        );
+        ({ price } = data);
+        const {
+          giftInfo,
+          isPhysicalOnly,
+          status,
+          autoMemo,
+          isAutoDeliver,
+        } = data;
+        this.giftInfo = giftInfo;
+        this.isPhysicalOnly = isPhysicalOnly;
+        this.isAutoDeliver = isAutoDeliver;
+        this.creatorMessage = autoMemo;
+        this.status = status;
+        if (this.collectionId) {
+          await this.lazyFetchNFTCollectionInfo();
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
+    } else {
+      const { prices } = this.getNFTBookStoreInfoByClassId(this.classId);
+      const data = prices[this.priceIndex];
+      const { isPhysicalOnly, autoMemo, isAutoDeliver } = data;
       this.isPhysicalOnly = isPhysicalOnly;
       this.isAutoDeliver = isAutoDeliver;
       this.creatorMessage = autoMemo;
-      this.status = status;
-
-      if (this.collectionId) {
-        await this.lazyFetchNFTCollectionInfo();
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
     }
+
     if (!free && !this.giftInfo && redirect && query.type === 'nft_book') {
       logPurchaseFlowEvent(this, 'purchase', {
         items: [
