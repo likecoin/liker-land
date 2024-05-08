@@ -46,7 +46,12 @@ export function uiSetTxStatus({ commit }, status) {
 }
 
 export function uiSetTxError({ commit }, error) {
-  commit(types.UI_SET_TX_ERROR_MESSAGE, error);
+  if (error.includes('does not exist on chain')) {
+    // no token in account
+    commit(types.UI_SET_TX_ERROR_MESSAGE, 'INSUFFICIENT_BALANCE');
+  } else {
+    commit(types.UI_SET_TX_ERROR_MESSAGE, error);
+  }
 }
 
 export function uiCloseTxModal({ commit }) {

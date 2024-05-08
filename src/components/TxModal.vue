@@ -96,9 +96,11 @@
           <template v-if="uiTxErrorMessage === 'INSUFFICIENT_BALANCE'" #append>
             <LinkV2
               class="text-danger"
-              href="https://docs.like.co/general-guides/trade"
+              :href="
+                `https://faucet.like.co/?platform=likerland&wallet=${getAddress}`
+              "
             >
-              {{ $t('snackbar_error_buyLIKE') }}
+              {{ $t('snackbar_error_getLIKE') }}
             </LinkV2>
           </template>
         </Label>
@@ -200,6 +202,7 @@ export default {
       'uiTxErrorMessage',
       'uiCollectOwnedCount',
       'walletMethodType',
+      'getAddress',
     ]),
     dialogProps() {
       const props = {
