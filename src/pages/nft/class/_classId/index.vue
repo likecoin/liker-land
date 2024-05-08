@@ -947,7 +947,7 @@ export default {
         this,
         'NFT',
         'NFTCollect(ClassDetailsPageControlBar)',
-        this.nftId,
+        this.classId,
         1
       );
       return this.handleCollect();
@@ -957,7 +957,7 @@ export default {
         this,
         'NFT',
         'NFTGotoCollect(ClassDetailsPageControlBar)',
-        this.nftId,
+        this.classId,
         1
       );
       if (this.nftIdCollectNext) {
