@@ -1,7 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
 
-import { CrispMixinFactory } from '~/mixins/crisp';
-
 import {
   APP_LIKE_CO_VIEW,
   LIKECOIN_CHAIN_API,
@@ -75,7 +73,6 @@ export default {
     creatorInfoMixin,
     nftClassCollectionMixin,
     utmMixin,
-    CrispMixinFactory({ isBootAtMounted: true }),
   ],
   head() {
     // Only load stripe if a wallet is connected
