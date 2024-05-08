@@ -52,6 +52,7 @@ export default {
       return getLikerIdSettingsURL({
         wallet: this.getAddress || '',
         language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
+        legacy: this.walletMethodType === 'authcore' ? '1' : '',
       });
     },
     populatedFollowers() {
