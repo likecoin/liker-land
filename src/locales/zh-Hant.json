@@ -437,6 +437,21 @@
   "LogoutPage": {
     "loggingOut": "登出中"
   },
+  "listing_page_filter_price_all": "全部",
+  "listing_page_filter_price_free": "免費",
+  "listing_page_filter_price_paid": "付費",
+  "listing_page_filter_price_title": "費用",
+  "listing_page_filter_type_all": "全部",
+  "listing_page_filter_type_epub": "電子書",
+  "listing_page_filter_type_paper": "紙本書",
+  "listing_page_filter_type_title": "版本",
+  "listing_page_select_language_all": "全部",
+  "listing_page_select_language_ch": "簡體中文",
+  "listing_page_select_language_en": "英文",
+  "listing_page_select_language_title": "語言",
+  "listing_page_select_language_zh": "繁體中文",
+
+
   "main_menu_articles": "熱門文章",
   "main_menu_civic_liker": "讚賞公民",
   "main_menu_mint_nft": "發行 NFT",
