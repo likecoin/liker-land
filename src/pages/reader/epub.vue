@@ -99,6 +99,14 @@ export default {
       type: String,
       default: '',
     },
+    corsUrl: {
+      type: String,
+      default: '',
+    },
+    cacheKey: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -124,28 +132,30 @@ export default {
     this.initRendition();
   },
   methods: {
+    async getFileBuffer() {
+      let buffer;
+      if (window.caches) {
+        try {
+          const cache = await caches.open('reader-epub');
+          let response = await cache.match(this.corsUrl);
+          if (!response) response = await cache.add(this.corsUrl);
+          buffer = await response?.arrayBuffer();
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
+      }
+      if (!buffer) {
+        buffer = await this.$axios.$get(this.corsUrl, {
+          responseType: 'arraybuffer',
+        });
+      }
+      return buffer;
+    },
     async initRendition() {
       try {
         this.isLoading = true;
-        const encodedUrl = encodeURIComponent(this.fileSrc);
-        const corsUrl = `https://static2.like.co/pdf-cors/?url=${encodedUrl}`;
-        let buffer;
-        if (window.caches) {
-          try {
-            const cache = await caches.open('reader-epub');
-            let response = await cache.match(corsUrl);
-            if (!response) response = await cache.add(corsUrl);
-            buffer = await response?.arrayBuffer();
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-          }
-        }
-        if (!buffer) {
-          buffer = await this.$axios.$get(corsUrl, {
-            responseType: 'arraybuffer',
-          });
-        }
+        const buffer = await this.getFileBuffer();
         this.book = Epub(buffer);
         await this.book.ready;
         this.isLoading = false;
@@ -214,10 +224,13 @@ export default {
     async onClickDownloadEpub() {
       try {
         this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
-        const blob = await this.$axios.$get(this.fileSrc, {
-          responseType: 'blob',
-        });
-        saveAs(blob, getDownloadFilenameFromURL(this.fileSrc));
+        const buffer = await this.getFileBuffer();
+        saveAs(
+          new Blob([buffer], {
+            type: 'application/epub+zip',
+          }),
+          getDownloadFilenameFromURL(this.fileSrc)
+        );
       } catch (error) {
         if (error.message === 'Network Error') {
           // bypass CORS
@@ -259,7 +272,7 @@ export default {
     saveToLocalStorage(currentCfi) {
       if (window.localStorage && currentCfi) {
         window.localStorage.setItem(
-          `epub-reader-${this.fileSrc}`,
+          `epub-reader-${this.cacheKey}`,
           JSON.stringify({ currentCfi: currentCfi.toString() })
         );
       }
@@ -267,7 +280,7 @@ export default {
     resumeFromLocalStorage() {
       if (window.localStorage) {
         const epubData = window.localStorage.getItem(
-          `epub-reader-${this.fileSrc}`
+          `epub-reader-${this.cacheKey}`
         );
         if (epubData) {
           try {

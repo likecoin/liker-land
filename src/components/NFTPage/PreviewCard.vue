@@ -199,6 +199,10 @@ export default {
       type: String,
       default: undefined,
     },
+    nftId: {
+      type: String,
+      default: '',
+    },
     nftName: {
       type: String,
       default: undefined,
