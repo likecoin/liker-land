@@ -65,9 +65,10 @@
     >
       <section
         id="features"
-        class="hidden laptop:block w-[260px] desktopLg:w-[320px]"
+        class="hidden laptop:flex flex-col w-[260px] gap-[24px] desktopLg:w-[320px]"
       >
         <ListingPageFilterSection class="w-full" />
+        <ListingPageQASection class="w-full" :item-list="QAList" />
       </section>
       <section id="mainContent" class="flex-1 w-full">
         <div class="w-full bg-dark-gray h-[100px]"></div>
@@ -125,6 +126,22 @@ export default {
         {
           text: this.$t('listing_page_header_sort_higher_price'),
           value: SORTING_OPTIONS.HIGHER_PRICE,
+        },
+      ];
+    },
+    QAList() {
+      return [
+        {
+          label: this.$t('listing_page_QA_label'),
+          content: this.$t('listing_page_QA_content'),
+        },
+        {
+          label: `${this.$t('listing_page_QA_label')}_1`,
+          content: this.$t('listing_page_QA_content'),
+        },
+        {
+          label: `${this.$t('listing_page_QA_label')}_2`,
+          content: this.$t('listing_page_QA_content'),
         },
       ];
     },

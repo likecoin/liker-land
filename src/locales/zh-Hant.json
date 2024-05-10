@@ -453,6 +453,8 @@
   "listing_page_header_sort_recommend": "推薦",
   "listing_page_header_sort": "排序：{sort}",
   "listing_page_header_total_books": "共 {num} 本書",
+  "listing_page_QA_content": "電子書和紙本書有什麼分別?",
+  "listing_page_QA_label": "電子書和紙本書有什麼分別?",
   "listing_page_select_language_all": "全部",
   "listing_page_select_language_ch": "簡體中文",
   "listing_page_select_language_en": "英文",
