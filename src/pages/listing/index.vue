@@ -1,6 +1,7 @@
 <template>
   <Page
     :class="[
+      'relative',
       'overflow-x-hidden',
       'max-w-[1924px]',
       'px-[16px]',
@@ -72,6 +73,17 @@
         <div class="w-full bg-dark-gray h-[100px]"></div>
       </section>
     </div>
+    <div class="absolute bottom-[40px] right-[16px] laptop:right-[48px]">
+      <ButtonV2
+        :circle="true"
+        theme="glow"
+        preset="tertiary"
+        size="small"
+        @click="scrollToTop"
+      >
+        <IconScrollToTop />
+      </ButtonV2>
+    </div>
   </Page>
 </template>
 
@@ -120,6 +132,9 @@ export default {
   methods: {
     handleSelectSorting(value) {
       this.selectedSorting = value;
+    },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   },
 };
