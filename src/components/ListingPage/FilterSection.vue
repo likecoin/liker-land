@@ -196,12 +196,15 @@ export default {
   methods: {
     handleTypeChange(value) {
       this.filterType = value;
+      this.$emit('on-filter-type-change', value);
     },
     handlePriceChange(value) {
       this.filterPrice = value;
+      this.$emit('on-filter-price-change', value);
     },
     handleSelectLanguage(value) {
       this.selectedLanguage = value;
+      this.$emit('on-filter-language-change', value);
     },
   },
 };

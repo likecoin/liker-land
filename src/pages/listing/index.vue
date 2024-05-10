@@ -67,7 +67,12 @@
         id="features"
         class="hidden laptop:flex flex-col w-[260px] gap-[24px] desktopLg:w-[320px]"
       >
-        <ListingPageFilterSection class="w-full" />
+        <ListingPageFilterSection
+          class="w-full"
+          @on-filter-type-change="handleFilterTypeChange"
+          @on-filter-price-change="handleFilterPriceChange"
+          @on-filter-language-change="handleFilterLanguageChange"
+        />
         <ListingPageQASection class="w-full" :item-list="QAList" />
       </section>
       <section id="mainContent" class="flex-1 w-full">
@@ -89,11 +94,29 @@
 </template>
 
 <script>
+import { logTrackerEvent } from '~/util/EventLogger';
+
 const SORTING_OPTIONS = {
   RECOMMEND: 'recommend',
   LATEST: 'latest',
   LOWER_PRICE: 'lower_price',
   HIGHER_PRICE: 'higher_price',
+};
+const TYPE_OPTIONS = {
+  ALL: 'all',
+  EPUB: 'epub',
+  PAPER: 'paper',
+};
+const PRICE_OPTIONS = {
+  ALL: 'all',
+  FREE: 'free',
+  Paid: 'paid',
+};
+const LANGUAGE_OPTIONS = {
+  ALL: 'all',
+  ZH: 'zh',
+  CH: 'ch',
+  EN: 'en',
 };
 export default {
   name: 'ListingPage',
@@ -102,6 +125,9 @@ export default {
     return {
       totalBooks: 0,
       selectedSorting: SORTING_OPTIONS.RECOMMEND,
+      filterType: TYPE_OPTIONS.ALL,
+      filterPrice: PRICE_OPTIONS.ALL,
+      filterLanguage: LANGUAGE_OPTIONS.ALL,
     };
   },
   computed: {
@@ -148,10 +174,35 @@ export default {
   },
   methods: {
     handleSelectSorting(value) {
+      logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
       this.selectedSorting = value;
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    handleFilterTypeChange(value) {
+      logTrackerEvent(this, 'listing', 'listing_filter_type_clicked', value, 1);
+      this.filterType = value;
+    },
+    handleFilterPriceChange(value) {
+      logTrackerEvent(
+        this,
+        'listing',
+        'listing_filter_price_clicked',
+        value,
+        1
+      );
+      this.filterPrice = value;
+    },
+    handleFilterLanguageChange(value) {
+      logTrackerEvent(
+        this,
+        'listing',
+        'listing_filter_language_clicked',
+        value,
+        1
+      );
+      this.filterLanguage = value;
     },
   },
 };
