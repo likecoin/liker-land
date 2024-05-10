@@ -1,12 +1,71 @@
 <template>
   <Page
-    :class="['overflow-x-hidden', 'max-w-[1924px]', 'p-[16px]', 'min-h-screen']"
+    :class="[
+      'overflow-x-hidden',
+      'max-w-[1924px]',
+      'px-[16px]',
+      'laptop:px-[48px]',
+      'min-h-screen',
+    ]"
   >
-    <header></header>
+    <!-- header -->
+    <div class="flex justify-between items-center w-full mb-[24px]">
+      <div class="flex gap-[8px] px-[4px] items-center">
+        <NuxtLink
+          class="text-[14px] text-medium-gray"
+          :to="localeLocation({ name: 'index' })"
+          >{{ $t('listing_page_header_homePage') }}</NuxtLink
+        >
+        <IconArrowRight class="text-medium-gray" />
+        <NuxtLink
+          class="text-[20px] laptop:text-[28px]"
+          :to="localeLocation({ name: 'listing' })"
+          >{{ $t('listing_page_header_listingPage') }}</NuxtLink
+        >
+      </div>
+      <div class="flex items-center gap-[16px]">
+        <div class="text-medium-gray whitespace-nowrap text-[14px]">
+          {{ $t('listing_page_header_total_books', { num: totalBooks }) }}
+        </div>
+        <Dropdown class="hidden w-full laptop:block">
+          <template #trigger="{ toggle }">
+            <ButtonV2
+              preset="tertiary"
+              :text="$t(currentSortingText)"
+              @click="toggle"
+            >
+              <template #append>
+                <IconArrowDown />
+              </template>
+            </ButtonV2>
+          </template>
+          <MenuList class="w-[129px]">
+            <MenuItem
+              v-for="(item, i) in availableSorting"
+              :key="i"
+              label-align="left"
+              label-class="py-[6px]"
+              :value="item.value"
+              :label="item.text"
+              :selected-value="selectedSorting"
+              @select="handleSelectSorting"
+            >
+              <template v-if="selectedSorting === item.value" #label-append>
+                <IconCheck />
+              </template>
+            </MenuItem>
+          </MenuList>
+        </Dropdown>
+      </div>
+    </div>
+    <!-- main -->
     <div
       class="flex flex-col gap-[32px] w-full laptop:flex-row laptop:gap-[20px]"
     >
-      <section id="features" class="w-[260px] desktopLg:w-[320px]">
+      <section
+        id="features"
+        class="hidden laptop:block w-[260px] desktopLg:w-[320px]"
+      >
         <ListingPageFilterSection class="w-full" />
       </section>
       <section id="mainContent" class="flex-1 w-full">
@@ -17,8 +76,51 @@
 </template>
 
 <script>
+const SORTING_OPTIONS = {
+  RECOMMEND: 'recommend',
+  LATEST: 'latest',
+  LOWER_PRICE: 'lower_price',
+  HIGHER_PRICE: 'higher_price',
+};
 export default {
   name: 'ListingPage',
   layout: 'default',
+  data() {
+    return {
+      totalBooks: 0,
+      selectedSorting: SORTING_OPTIONS.RECOMMEND,
+    };
+  },
+  computed: {
+    currentSortingText() {
+      const text = `listing_page_header_sort_${this.selectedSorting}`;
+      return this.$t('listing_page_header_sort', { sort: this.$t(text) });
+    },
+    availableSorting() {
+      return [
+        {
+          text: this.$t('listing_page_header_sort_recommend'),
+          value: SORTING_OPTIONS.RECOMMEND,
+        },
+        {
+          text: this.$t('listing_page_header_sort_latest'),
+          value: SORTING_OPTIONS.LATEST,
+        },
+        {
+          text: this.$t('listing_page_header_sort_lower_price'),
+          value: SORTING_OPTIONS.LOWER_PRICE,
+        },
+        {
+          text: this.$t('listing_page_header_sort_higher_price'),
+          value: SORTING_OPTIONS.HIGHER_PRICE,
+        },
+      ];
+    },
+  },
+  methods: {
+    handleSelectSorting(value) {
+      this.selectedSorting = value;
+    },
+  },
 };
 </script>
