@@ -43,7 +43,7 @@
               </template>
             </ButtonV2>
           </template>
-          <MenuList class="w-[129px]">
+          <MenuList>
             <MenuItem
               v-for="(item, i) in availableSorting"
               :key="i"
