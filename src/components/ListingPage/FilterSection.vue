@@ -1,7 +1,13 @@
 <template>
   <div
     v-bind="$attrs"
-    class="px-[20px] py-[24px] rounded-[12px] bg-white laptop:shadow-md"
+    :class="[
+      'px-[20px]',
+      'py-[24px]',
+      'rounded-[12px]',
+      'bg-white',
+      { 'shadow-md': !isMobile },
+    ]"
   >
     <div class="flex flex-col gap-[28px]">
       <!-- Type -->
@@ -60,7 +66,7 @@
           class="whitespace-nowrap"
           :text="$t('listing_page_select_language_title')"
         />
-        <Dropdown class="hidden w-full laptop:block">
+        <Dropdown :class="[{ hidden: isMobile }, 'w-full']">
           <template #trigger="{ toggle }">
             <div
               class="border-[1px] border-shade-gray rounded-[8px] bg-white cursor-pointer px-[16px] py-[12px] hover:bg-shade-gray duration-75"
@@ -91,7 +97,15 @@
             </MenuItem>
           </MenuList>
         </Dropdown>
-        <ul class="flex flex-col gap-[12px] w-full laptop:hidden">
+        <ul
+          :class="[
+            'flex',
+            'flex-col',
+            'gap-[12px]',
+            'w-full',
+            { hidden: !isMobile },
+          ]"
+        >
           <li
             v-for="item of availableLocales"
             :key="item.value"
@@ -112,7 +126,7 @@
             </label>
           </li>
         </ul>
-        <div class="flex gap-[12px] w-full laptop:hidden">
+        <div :class="['flex', 'gap-[12px]', 'w-full', { hidden: !isMobile }]">
           <ButtonV2
             preset="tertiary"
             :text="$t('listing_page_button_reset')"
@@ -163,6 +177,10 @@ export default {
     selectedLanguage: {
       type: String,
       default: undefined,
+    },
+    isMobile: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

@@ -125,36 +125,24 @@
       </ButtonV2>
     </div>
 
-    <Dialog
-      v-model="isOpenDialog"
-      preset="custom"
-      panel-class="px-0 overflow-x-auto shadow-lg rounded-b-none rounded-t-[24px] sm:rounded-[24px]"
-      panel-container-class="max-w-[500px] p-[0] sm:px-[12px] sm:py-[24px]"
-      panel-component="CardV2"
-      :scrollable-wrapper-classes="[
-        '!items-end',
-        'phone:pb-[12px]',
-        'phone:px-[12px]',
-        'phoneLg:pb-[0px]',
-        'phoneLg:px-[0px]',
-        'py-[80px]',
-      ]"
+    <ListingPageDialog
+      :is-open="isShowSortingDialog"
       @close="handleCloseDialog"
     >
       <ListingPageMobileSortingSection
-        v-if="isShowSortingDialog"
         :available-sorting="availableSorting"
         :selected-sorting="selectedSorting"
         @click-confirm-change="handleSelectSorting"
       />
+    </ListingPageDialog>
+    <ListingPageDialog :is-open="isShowFilterDialog" @close="handleCloseDialog">
       <ListingPageMobileFilterSection
-        v-else-if="isShowFilterDialog"
         :selected-type="filterType"
         :selected-price="filterPrice"
         :selected-language="filterLanguage"
         @handle-click-confirm="handleFilterConfirm"
       />
-    </Dialog>
+    </ListingPageDialog>
   </Page>
 </template>
 
@@ -194,7 +182,6 @@ export default {
       filterPrice: PRICE_OPTIONS.ALL,
       filterLanguage: LANGUAGE_OPTIONS.ALL,
 
-      isOpenDialog: false,
       isShowSortingDialog: false,
       isShowFilterDialog: false,
     };
@@ -245,7 +232,7 @@ export default {
     handleSelectSorting(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
       this.selectedSorting = value;
-      this.isOpenDialog = false;
+      this.isShowSortingDialog = false;
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -275,15 +262,12 @@ export default {
       this.filterLanguage = value;
     },
     handleOpenSortingDialog() {
-      this.isOpenDialog = true;
       this.isShowSortingDialog = true;
     },
     handleOpenFilterDialog() {
-      this.isOpenDialog = true;
       this.isShowFilterDialog = true;
     },
     handleCloseDialog() {
-      this.isOpenDialog = false;
       this.isShowFilterDialog = false;
       this.isShowSortingDialog = false;
     },
@@ -298,7 +282,7 @@ export default {
       this.handleFilterTypeChange(values.type);
       this.handleFilterPriceChange(values.price);
       this.handleFilterLanguageChange(values.language);
-      this.isOpenDialog = false;
+      this.isShowFilterDialog = false;
     },
   },
 };

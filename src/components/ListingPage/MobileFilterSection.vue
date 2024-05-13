@@ -7,6 +7,7 @@
     />
     <div class="w-full border-b-[1px] border-shade-gray my-[8px]" />
     <ListingPageFilterSection
+      :is-mobile="true"
       :selected-type="selectedType"
       :selected-price="selectedPrice"
       :selected-language="selectedLanguage"
