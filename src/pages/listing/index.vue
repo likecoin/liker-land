@@ -11,6 +11,7 @@
   >
     <!-- header -->
     <div class="flex justify-between items-center w-full mb-[24px]">
+      <!-- Breadcrumb -->
       <div class="flex gap-[8px] px-[4px] items-center">
         <NuxtLink
           class="text-[14px] text-medium-gray"
@@ -24,10 +25,12 @@
           >{{ $t('listing_page_header_listingPage') }}</NuxtLink
         >
       </div>
+
       <div class="flex items-center gap-[16px]">
         <div class="text-medium-gray whitespace-nowrap text-[14px]">
           {{ $t('listing_page_header_total_books', { num: totalBooks }) }}
         </div>
+
         <Dropdown class="hidden w-full laptop:block">
           <template #trigger="{ toggle }">
             <ButtonV2
@@ -59,6 +62,8 @@
         </Dropdown>
       </div>
     </div>
+
+    <!-- Mobile Header -->
     <div
       class="grid w-full grid-cols-2 border-t-[1px] border-b-[1px] border-shade-gray mb-[24px] laptop:hidden"
     >
@@ -104,6 +109,8 @@
         <div class="w-full bg-dark-gray h-[100px]"></div>
       </section>
     </div>
+
+    <!-- Scroll To Top Button -->
     <div class="absolute bottom-[40px] right-[16px] laptop:right-[48px]">
       <ButtonV2
         :circle="true"
