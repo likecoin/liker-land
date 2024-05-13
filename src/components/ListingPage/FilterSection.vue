@@ -1,7 +1,7 @@
 <template>
   <div
     v-bind="$attrs"
-    class="px-[20px] py-[24px] rounded-[12px] bg-white shadow-md"
+    class="px-[20px] py-[24px] rounded-[12px] bg-white laptop:shadow-md"
   >
     <div class="flex flex-col gap-[28px]">
       <!-- Type -->
@@ -15,13 +15,15 @@
         <ListingPageOptionList
           :wrapper-class="[
             'flex',
-            'justify-center',
+            'justify-evenly',
+            'laptop:justify-center',
             'items-center',
             'p-[4px]',
             'border-[1px]',
             'border-shade-gray',
             'bg-white',
             'rounded-[14px]',
+            'w-full',
           ]"
           :item-list="filterTypeList"
         />
@@ -38,7 +40,8 @@
           :wrapper-class="[
             'flex',
             'w-full',
-            'justify-between',
+            'justify-evenly',
+            'laptop:justify-between',
             'items-center',
             'p-[4px]',
             'border-[1px]',
@@ -57,36 +60,70 @@
           class="whitespace-nowrap"
           :text="$t('listing_page_select_language_title')"
         />
-        <Dropdown class="w-full">
+        <Dropdown class="hidden w-full laptop:block">
           <template #trigger="{ toggle }">
             <div
               class="border-[1px] border-shade-gray rounded-[8px] bg-white cursor-pointer px-[16px] py-[12px] hover:bg-shade-gray duration-75"
               @click="toggle"
             >
-              <Label align="left" :text="$t(selectedLanguageText)">
+              <Label align="left" :text="selectedLanguageText">
                 <template #append>
                   <IconArrowDown />
                 </template>
               </Label>
             </div>
           </template>
-          <MenuList class="w-[220px]">
+          <MenuList class="w-full laptop:w-[220px]">
             <MenuItem
               v-for="(item, i) in availableLocales"
               :key="i"
+              class="w-full"
               label-align="left"
               label-class="py-[4px]"
               :value="item.value"
               :label="item.text"
-              :selected-value="selectedLanguage"
+              :selected-value="filterLanguage"
               @select="handleSelectLanguage"
             >
-              <template v-if="selectedLanguage === item.value" #label-append>
+              <template v-if="filterLanguage === item.value" #label-append>
                 <IconCheck />
               </template>
             </MenuItem>
           </MenuList>
         </Dropdown>
+        <ul class="flex flex-col gap-[12px] w-full laptop:hidden">
+          <li
+            v-for="item of availableLocales"
+            :key="item.value"
+            :class="[
+              'px-[16px] py-[12px] border-[1px] border-shade-gray flex justify-between items-center cursor-pointer rounded-[6px] w-full',
+              { 'border-like-green': item.value === filterLanguage },
+            ]"
+          >
+            <label class="flex justify-between w-full">
+              <p>{{ item.text }}</p>
+              <input
+                type="radio"
+                name="sorting"
+                :value="item.value"
+                :checked="item.value === filterLanguage"
+                @change="() => handleSelectLanguage(item.value)"
+              />
+            </label>
+          </li>
+        </ul>
+        <div class="flex gap-[12px] w-full laptop:hidden">
+          <ButtonV2
+            preset="tertiary"
+            :text="$t('listing_page_button_reset')"
+            @click="handleReset"
+          />
+          <ButtonV2
+            class="flex-auto w-full"
+            :text="$t('listing_page_button_confirm')"
+            @click="handleConfirm"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -114,11 +151,25 @@ const LANGUAGE_OPTIONS = {
 
 export default {
   name: 'ListingPageFilterSection',
+  props: {
+    selectedType: {
+      type: String,
+      default: undefined,
+    },
+    selectedPrice: {
+      type: String,
+      default: undefined,
+    },
+    selectedLanguage: {
+      type: String,
+      default: undefined,
+    },
+  },
   data() {
     return {
-      filterType: TYPE_OPTIONS.ALL,
-      filterPrice: PRICE_OPTIONS.ALL,
-      selectedLanguage: LANGUAGE_OPTIONS.ALL,
+      filterType: this.selectedType || TYPE_OPTIONS.ALL,
+      filterPrice: this.selectedPrice || PRICE_OPTIONS.ALL,
+      filterLanguage: this.selectedLanguage || LANGUAGE_OPTIONS.ALL,
     };
   },
   computed: {
@@ -189,22 +240,34 @@ export default {
       ];
     },
     selectedLanguageText() {
-      const text = `listing_page_select_language_${this.selectedLanguage}`;
+      const text = `listing_page_select_language_${this.filterLanguage}`;
       return this.$t(text);
     },
   },
   methods: {
     handleTypeChange(value) {
       this.filterType = value;
-      this.$emit('on-filter-type-change', value);
+      this.$emit('handle-filter-type-change', value);
     },
     handlePriceChange(value) {
       this.filterPrice = value;
-      this.$emit('on-filter-price-change', value);
+      this.$emit('handle-filter-price-change', value);
     },
     handleSelectLanguage(value) {
-      this.selectedLanguage = value;
-      this.$emit('on-filter-language-change', value);
+      this.filterLanguage = value;
+      this.$emit('handle-filter-language-change', value);
+    },
+    handleConfirm() {
+      this.$emit('handle-click-confirm', {
+        type: this.filterType,
+        price: this.filterPrice,
+        language: this.filterLanguage,
+      });
+    },
+    handleReset() {
+      this.filterType = TYPE_OPTIONS.ALL;
+      this.filterPrice = PRICE_OPTIONS.ALL;
+      this.filterLanguage = LANGUAGE_OPTIONS.ALL;
     },
   },
 };

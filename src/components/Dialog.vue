@@ -148,6 +148,9 @@ export default class Dialog extends Vue {
   @Prop({ default: true })
   readonly hasCloseButton!: boolean;
 
+  @Prop({ default: () => [] })
+  readonly scrollableWrapperClasses!: any;
+
   // Show/Hide dialog.
   @ModelSync('open', 'toggle', { type: Boolean, default: false })
   isOpen!: boolean;
@@ -172,6 +175,7 @@ export default class Dialog extends Vue {
       'backdrop-blur-lg',
       'min-h-screen',
       this.isVerticallyCenter ? 'items-center' : 'pt-[100px]',
+      ...this.scrollableWrapperClasses,
     ];
   }
 

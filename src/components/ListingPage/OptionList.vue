@@ -1,6 +1,10 @@
 <template>
   <ul :class="wrapperClass">
-    <li v-for="item in itemList" :key="item.value" class="flex items-center">
+    <li
+      v-for="(item, i) in itemList"
+      :key="i"
+      class="flex items-center cursor-pointer"
+    >
       <MenuButton
         :text="item.text"
         :is-selected="item.isSelected"

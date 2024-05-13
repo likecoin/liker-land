@@ -32,7 +32,7 @@
           <template #trigger="{ toggle }">
             <ButtonV2
               preset="tertiary"
-              :text="$t(currentSortingText)"
+              :text="currentSortingText"
               @click="toggle"
             >
               <template #append>
@@ -59,6 +59,31 @@
         </Dropdown>
       </div>
     </div>
+    <div
+      class="grid w-full grid-cols-2 border-t-[1px] border-b-[1px] border-shade-gray mb-[24px] laptop:hidden"
+    >
+      <div
+        class="flex items-center justify-center cursor-pointer py-[14px] border-r-[1px] border-shade-gray"
+        @click="handleOpenFilterDialog"
+      >
+        <Label :text="$t('listing_page_filter')">
+          <template #prepend>
+            <IconFilter />
+          </template>
+        </Label>
+      </div>
+      <div
+        class="flex items-center justify-center cursor-pointer py-[14px]"
+        @click="handleOpenSortingDialog"
+      >
+        <Label :text="currentSortingText">
+          <template #prepend>
+            <IconSorter />
+          </template>
+        </Label>
+      </div>
+    </div>
+
     <!-- main -->
     <div
       class="flex flex-col gap-[32px] w-full laptop:flex-row laptop:gap-[20px]"
@@ -69,9 +94,9 @@
       >
         <ListingPageFilterSection
           class="w-full"
-          @on-filter-type-change="handleFilterTypeChange"
-          @on-filter-price-change="handleFilterPriceChange"
-          @on-filter-language-change="handleFilterLanguageChange"
+          @handle-filter-type-change="handleFilterTypeChange"
+          @handle-filter-price-change="handleFilterPriceChange"
+          @handle-filter-language-change="handleFilterLanguageChange"
         />
         <ListingPageQASection class="w-full" :item-list="QAList" />
       </section>
@@ -90,6 +115,37 @@
         <IconScrollToTop />
       </ButtonV2>
     </div>
+
+    <Dialog
+      v-model="isOpenDialog"
+      preset="custom"
+      panel-class="px-0 overflow-x-auto shadow-lg rounded-b-none rounded-t-[24px] sm:rounded-[24px]"
+      panel-container-class="max-w-[500px] p-[0] sm:px-[12px] sm:py-[24px]"
+      panel-component="CardV2"
+      :scrollable-wrapper-classes="[
+        '!items-end',
+        'phone:pb-[12px]',
+        'phone:px-[12px]',
+        'phoneLg:pb-[0px]',
+        'phoneLg:px-[0px]',
+        'py-[80px]',
+      ]"
+      @close="handleCloseDialog"
+    >
+      <ListingPageMobileSortingSection
+        v-if="isShowSortingDialog"
+        :available-sorting="availableSorting"
+        :selected-sorting="selectedSorting"
+        @click-confirm-change="handleSelectSorting"
+      />
+      <ListingPageMobileFilterSection
+        v-else-if="isShowFilterDialog"
+        :selected-type="filterType"
+        :selected-price="filterPrice"
+        :selected-language="filterLanguage"
+        @handle-click-confirm="handleFilterConfirm"
+      />
+    </Dialog>
   </Page>
 </template>
 
@@ -128,6 +184,10 @@ export default {
       filterType: TYPE_OPTIONS.ALL,
       filterPrice: PRICE_OPTIONS.ALL,
       filterLanguage: LANGUAGE_OPTIONS.ALL,
+
+      isOpenDialog: false,
+      isShowSortingDialog: false,
+      isShowFilterDialog: false,
     };
   },
   computed: {
@@ -176,6 +236,7 @@ export default {
     handleSelectSorting(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
       this.selectedSorting = value;
+      this.isOpenDialog = false;
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,6 +264,32 @@ export default {
         1
       );
       this.filterLanguage = value;
+    },
+    handleOpenSortingDialog() {
+      this.isOpenDialog = true;
+      this.isShowSortingDialog = true;
+    },
+    handleOpenFilterDialog() {
+      this.isOpenDialog = true;
+      this.isShowFilterDialog = true;
+    },
+    handleCloseDialog() {
+      this.isOpenDialog = false;
+      this.isShowFilterDialog = false;
+      this.isShowSortingDialog = false;
+    },
+    handleRestFilter() {
+      logTrackerEvent(this, 'listing', 'listing_filter_reset_clicked', '', 1);
+      this.filterType = TYPE_OPTIONS.ALL;
+      this.filterPrice = PRICE_OPTIONS.ALL;
+      this.filterLanguage = LANGUAGE_OPTIONS.ALL;
+    },
+    handleFilterConfirm(values) {
+      logTrackerEvent(this, 'listing', 'listing_filter_confirm_clicked', '', 1);
+      this.handleFilterTypeChange(values.type);
+      this.handleFilterPriceChange(values.price);
+      this.handleFilterLanguageChange(values.language);
+      this.isOpenDialog = false;
     },
   },
 };
