@@ -7,6 +7,8 @@
       'px-[16px]',
       'laptop:px-[48px]',
       'min-h-screen',
+      'mx-auto',
+      'w-full',
     ]"
   >
     <!-- header -->
