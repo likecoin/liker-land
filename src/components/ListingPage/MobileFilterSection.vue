@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <Label
-      :text="$t('listing_page_sorter')"
+      :text="$t('listing_page_filter')"
       align="center"
       class="mb-[12px] text-[18px] font-600"
     />
