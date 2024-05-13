@@ -87,7 +87,11 @@ export default {
           this.fetchUserCollectedCount(),
           this.updateNFTOwners(),
         ]);
-        if (!this.userCollectedCount && this.isLoginRequired) {
+        if (
+          (!this.userCollectedCount && this.isLoginRequired) ||
+          (this.nftCollectorWalletAddress &&
+            this.nftCollectorWalletAddress !== this.getAddress)
+        ) {
           this.$router.replace(
             this.localeLocation({
               name: 'nft-class-classId',
@@ -115,7 +119,11 @@ export default {
           this.fetchUserCollectedCount(),
           this.updateNFTOwners(),
         ]);
-        if (!this.userCollectedCount && this.isLoginRequired) {
+        if (
+          (!this.userCollectedCount && this.isLoginRequired) ||
+          (this.nftCollectorWalletAddress &&
+            this.nftCollectorWalletAddress !== this.getAddress)
+        ) {
           this.$router.replace(
             this.localeLocation({
               name: 'nft-class-classId',
