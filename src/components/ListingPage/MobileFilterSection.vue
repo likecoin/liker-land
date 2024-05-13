@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'MobileSortingSection',
+  name: 'MobileFilterSection',
   props: {
     selectedType: {
       type: String,
