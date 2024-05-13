@@ -11,6 +11,7 @@
       <ProgressIndicator v-if="!fileSrc" />
       <NuxtChild
         v-else-if="canRead"
+        :class-id="classId"
         :file-src="fileSrc"
         :cors-url="corsUrl"
         :cache-key="cacheKey"

@@ -19,12 +19,15 @@
 <script>
 import nftMixin from '~/mixins/nft';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
 
 export default {
   name: 'PDFReaderPage',
   mixins: [nftMixin],
   props: {
+    classId: {
+      type: String,
+      default: '',
+    },
     fileSrc: {
       type: String,
       default: '',
@@ -132,10 +135,12 @@ export default {
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
         logTrackerEvent(this, 'ReaderPdf', 'ReaderPdfError', errMessage, 1);
-        this.$nuxt.error({
-          statusCode: errData.status || 400,
-          message: errMessage,
-        });
+        this.$router.replace(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          })
+        );
       }
     },
   },

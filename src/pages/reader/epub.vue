@@ -95,6 +95,10 @@ export default {
   name: 'EPUBReaderPage',
   mixins: [nftMixin, walletMixin],
   props: {
+    classId: {
+      type: String,
+      default: '',
+    },
     fileSrc: {
       type: String,
       default: '',
@@ -203,10 +207,12 @@ export default {
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
         logTrackerEvent(this, 'ReaderEpub', 'ReaderEpubError', errMessage, 1);
-        this.$nuxt.error({
-          statusCode: errData.status || 400,
-          message: errMessage,
-        });
+        this.$router.replace(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          })
+        );
       }
     },
     onChangeChapter() {
