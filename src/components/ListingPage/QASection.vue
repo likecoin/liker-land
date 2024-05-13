@@ -3,7 +3,11 @@
     v-bind="$attrs"
     class="px-[20px] py-[24px] rounded-[12px] bg-white shadow-md"
   >
-    <Label preset="h3" class="text-like-green mb-[16px]">常見問題</Label>
+    <Label
+      preset="h3"
+      class="text-like-green mb-[16px]"
+      :text="$t('listing_page_QA_title')"
+    />
     <ul>
       <li
         v-for="item in itemList"
