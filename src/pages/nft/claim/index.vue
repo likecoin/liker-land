@@ -737,11 +737,11 @@ export default {
       }
     },
     state(newValue) {
-      if (newValue) {
-        this.$router.push({ query: { ...this.$route.query, state: newValue } });
-      }
       if (newValue === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
         this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+        this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
+      } else if (newValue) {
+        this.navigateToState(newValue);
       }
     },
   },
@@ -1035,12 +1035,6 @@ export default {
         this.primaryKey,
         1
       );
-      console.log(
-        'this.state',
-        this.state,
-        'this.claimingAddress',
-        this.claimingAddress
-      );
       switch (this.state) {
         case NFT_CLAIM_STATE.WELCOME:
           if (this.claimingAddress) {
@@ -1169,6 +1163,9 @@ export default {
         1
       );
       this.$router.push(this.viewInfoLocation);
+    },
+    navigateToState(state) {
+      this.$router.push({ query: { ...this.$route.query, state } });
     },
   },
 };
