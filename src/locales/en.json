@@ -825,6 +825,8 @@
   "register": "Register",
   "registered": "Registered",
   "renew": "Renew",
+  "settings_clear_cache": "Clear Reader Cache",
+  "settings_clear_cache_success": "Reader cache has been cleared",
   "settings_email": "Email",
   "settings_email_change_email": "Change email",
   "settings_email_changing_email_submitted": "An verification email has been sent, please check your inbox.",
