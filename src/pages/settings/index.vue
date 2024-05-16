@@ -48,11 +48,22 @@
         </a>
       </li>
     </ul>
+
+    <ul v-if="showClearCacheButton" class="settings-menu !mt-[24px]">
+      <li>
+        <button class="settings-menu__item" @click="onClickClearCache">
+          <span class="settings-menu__item-title">
+            {{ $t('settings_clear_cache') }}</span
+          >
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 import walletMixin from '~/mixins/wallet';
+import alertMixin from '~/mixins/alert';
 
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
 
@@ -60,7 +71,30 @@ export default {
   components: {
     GlobeIcon,
   },
-  mixins: [walletMixin],
+  mixins: [walletMixin, alertMixin],
+  data() {
+    return {
+      showClearCacheButton: false,
+    };
+  },
+  mounted() {
+    this.showClearCacheButton = !!window.caches;
+  },
+  methods: {
+    async onClickClearCache() {
+      if (window.caches) {
+        const keyList = await window.caches.keys();
+        if (keyList?.length) {
+          await Promise.all(
+            keyList
+              .filter(key => key.startsWith('reader'))
+              .map(key => caches.delete(key))
+          );
+        }
+        this.uiPromptSuccessAlert(this.$t('settings_clear_cache_success'));
+      }
+    },
+  },
 };
 </script>
 
