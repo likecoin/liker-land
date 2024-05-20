@@ -722,20 +722,15 @@ export default {
     },
     getAddress(newValue) {
       if (this.isFreePurchase) this.claimingAddress = newValue;
-      if (!newValue && !this.loginAddress && !(this.status === 'completed')) {
+      if (!newValue && !(this.status === 'completed')) {
         this.claimingAddress = '';
-        this.state = NFT_CLAIM_STATE.LOGIN;
+        this.navigateToState(NFT_CLAIM_STATE.LOGIN);
       }
     },
     loginAddress(newValue) {
       this.claimingAddress = newValue;
-      if (!this.getAddress && !(this.status === 'completed')) {
-        this.claimingAddress = '';
-      }
-    },
-    state(newValue) {
-      if (newValue) {
-        this.$router.push({ query: { ...this.$route.query, state: newValue } });
+      if (this.claimingAddress && this.state === NFT_CLAIM_STATE.LOGIN) {
+        this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
       }
     },
   },
@@ -806,16 +801,18 @@ export default {
         query,
       });
     }
-    this.claimingAddress = this.loginAddress;
-    if (this.isFreePurchase) {
-      this.claimingAddress = this.getAddress;
-    }
+
+    this.claimingAddress =
+      (this.loginAddress && this.getAddress) ||
+      (this.isFreePurchase && this.getAddress);
+
     if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
-      this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+      this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
     }
+
     if (!this.giftInfo && !this.isPhysicalOnly) {
       if (this.status === 'completed') {
-        this.state = NFT_CLAIM_STATE.CLAIMED;
+        this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
       }
     }
   },
@@ -839,12 +836,12 @@ export default {
     async startFreePurchase() {
       try {
         this.isClaimLoading = true;
-        this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
         if (!this.claimingFreeEmail && !this.claimingAddress) {
           this.alertPromptError(
             this.$t('nft_free_claim_enter_email_or_address')
           );
-          this.state = NFT_CLAIM_STATE.WELCOME;
+          this.navigateToState(NFT_CLAIM_STATE.WELCOME);
           return;
         }
         this.claimPromise = this.$api.post(
@@ -861,8 +858,7 @@ export default {
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;
-        this.state = NFT_CLAIM_STATE.CLAIMED;
-
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
         logTrackerEvent(
           this,
           'NFT',
@@ -884,14 +880,14 @@ export default {
             error: this.error,
           })
         );
-        this.state = NFT_CLAIM_STATE.ERROR;
+        this.navigateToState(NFT_CLAIM_STATE.ERROR);
       } finally {
         this.isClaimLoading = false;
       }
     },
     async claim() {
       if (this.shouldBlockClaim) {
-        this.state = NFT_CLAIM_STATE.ERROR;
+        this.navigateToState(NFT_CLAIM_STATE.ERROR);
         return;
       }
       if (this.isFreePurchase) {
@@ -910,7 +906,7 @@ export default {
     async claimFiatPurchase() {
       try {
         if (this.claimPromise) return;
-        this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
         this.isClaimLoading = true;
         this.claimPromise = this.$api.post(
           postStripeFiatPendingClaim({
@@ -922,7 +918,7 @@ export default {
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;
-        this.state = NFT_CLAIM_STATE.CLAIMED;
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
         logTrackerEvent(
           this,
           'NFT',
@@ -944,7 +940,7 @@ export default {
             error: this.error,
           })
         );
-        this.state = NFT_CLAIM_STATE.ERROR;
+        this.navigateToState(NFT_CLAIM_STATE.ERROR);
       } finally {
         this.isClaimLoading = true;
       }
@@ -952,7 +948,7 @@ export default {
     async claimNFTBookPurchase() {
       try {
         if (this.claimPromise) return;
-        this.state = NFT_CLAIM_STATE.CLAIMING;
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
         this.isClaimLoading = true;
         this.claimPromise = this.$api.post(
           getNFTBookClaimEndpoint({
@@ -970,8 +966,7 @@ export default {
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;
-        this.state = NFT_CLAIM_STATE.CLAIMED;
-
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
         logTrackerEvent(
           this,
           'NFT',
@@ -981,7 +976,7 @@ export default {
       } catch (error) {
         const errorMessage = error.response?.data || error.message;
         if (errorMessage === 'PAYMENT_ALREADY_CLAIMED') {
-          this.state = NFT_CLAIM_STATE.CLAIMED;
+          this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
           return;
         }
 
@@ -999,7 +994,7 @@ export default {
             error: this.error,
           })
         );
-        this.state = NFT_CLAIM_STATE.ERROR;
+        this.navigateToState(NFT_CLAIM_STATE.ERROR);
       } finally {
         this.isClaimLoading = false;
       }
@@ -1022,6 +1017,7 @@ export default {
       );
     },
     handleClickNext() {
+      console.log('claiming', this.claimingAddress);
       logTrackerEvent(
         this,
         'NFT',
@@ -1032,26 +1028,29 @@ export default {
       switch (this.state) {
         case NFT_CLAIM_STATE.WELCOME:
           if (this.claimingAddress) {
-            this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+            this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
             break;
           }
-          this.state = NFT_CLAIM_STATE.LOGIN;
+          this.navigateToState(NFT_CLAIM_STATE.LOGIN);
           break;
 
         case NFT_CLAIM_STATE.LOGIN:
-          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+          this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
+
           break;
 
         case NFT_CLAIM_STATE.ID_CONFIRMATION:
-          this.state = NFT_CLAIM_STATE.MESSAGE;
+          this.navigateToState(NFT_CLAIM_STATE.MESSAGE);
+
           break;
 
         case NFT_CLAIM_STATE.MESSAGE:
-          this.state = NFT_CLAIM_STATE.CLAIMING;
+          this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
+
           break;
 
         case NFT_CLAIM_STATE.CLAIMING:
-          this.state = NFT_CLAIM_STATE.CLAIMED;
+          this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
           break;
 
         default:
@@ -1072,7 +1071,7 @@ export default {
           isOpenAuthcore: true,
         });
         if (isConnected || this.loginAddress) {
-          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+          this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
         }
       } else {
         await this.initIfNecessary();
@@ -1088,19 +1087,19 @@ export default {
         1
       );
       if (this.claimingAddress) {
-        this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+        this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
         return;
       }
       this.isLoginLoading = true;
       if (!this.getAddress) {
         const isConnected = await this.connectWallet();
         if (isConnected || this.loginAddress) {
-          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+          this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
         }
       } else {
         await this.initIfNecessary();
         if (this.loginAddress) {
-          this.state = NFT_CLAIM_STATE.ID_CONFIRMATION;
+          this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
         }
       }
       this.isLoginLoading = false;
@@ -1157,6 +1156,10 @@ export default {
         1
       );
       this.$router.push(this.viewInfoLocation);
+    },
+    navigateToState(state) {
+      this.state = state;
+      this.$router.push({ query: { ...this.$route.query, state } });
     },
   },
 };
