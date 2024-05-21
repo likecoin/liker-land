@@ -4,21 +4,24 @@
       'absolute',
       'right-0',
       'bottom-full',
-      'mt-[8px]',
+      'laptop:top-full',
+
+      'mb-[8px]',
+      'laptop:my-[8px]',
       'z-10',
     ]"
   >
     <template #trigger="{ toggle }">
       <ButtonV2
-        class="w-full underline text-medium-gray"
-        preset="plain"
+        class="w-full"
+        preset="tertiary"
         :is-disabled="!isContentViewable"
         @click="toggle"
       >
         <template #default>{{ $t('nft_claim_claimed_download') }}</template>
       </ButtonV2>
     </template>
-    <MenuList>
+    <MenuList :has-padding="false">
       <ul>
         <li
           v-for="(contentUrl, index) in normalizedContentURLs"
