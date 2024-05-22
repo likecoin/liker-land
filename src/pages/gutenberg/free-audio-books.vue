@@ -50,7 +50,7 @@
       >
     </i18n>
 
-    <div class="flex justify-center mb-[24px] w-full max-w-[960px]">
+    <div class="flex justify-between mb-[24px] w-full max-w-[960px]">
       <ButtonV2
         preset="plain"
         class="text-medium-gray"
@@ -61,10 +61,20 @@
           <IconArrowLeft class="w-[20px]" />
         </template>
       </ButtonV2>
+      <div class="flex justify-end items-center gap-[4px]">
+        <IconSearch />
+        <input
+          v-model="searchKeyword"
+          class="w-full bg-transparent border-0 focus-visible:outline-none"
+          type="text"
+          :placeholder="$t('gutenberg_search_placeholder')"
+          @change="handleInputChange"
+        />
+      </div>
     </div>
 
     <div
-      v-if="!csvData.length"
+      v-if="isLoadingCSV"
       :class="[
         'flex',
         'flex-col',
@@ -75,8 +85,20 @@
     >
       <ProgressIndicator />
     </div>
+    <div
+      v-else-if="!isLoadingCSV && !displayData.length"
+      :class="[
+        'flex',
+        'flex-col',
+        'items-center',
+        'justify-center',
+        'gap-[24px]',
+      ]"
+    >
+      {{ $t('gutenberg_search_empty') }}
+    </div>
     <table
-      v-else
+      v-else-if="displayData.length"
       :class="[
         'w-full',
         'table-auto',
@@ -101,8 +123,8 @@
       </thead>
       <tbody>
         <tr
-          v-for="(row, rowIndex) in csvData"
-          :key="rowIndex"
+          v-for="(row, rowIndex) in displayData"
+          :key="`${row.classTitle}-${rowIndex}`"
           :class="[
             'text-[16px]',
             'text-like-green',
@@ -157,8 +179,13 @@
         </tr>
       </tbody>
     </table>
+    <ButtonV2
+      v-if="filteredData.length && filteredData.length > currentDisplayNumber"
+      :text="$t('gutenberg_search_load_more')"
+      @click="handleLoadMore"
+    />
     <div
-      v-if="csvData.length"
+      v-if="displayData.length"
       class="sticky bottom-0 w-full flex flex-row justify-center items-center gap-[12px] p-[1rem] pt-[2rem] bg-gradient-to-t from-gray-f7"
     >
       <ButtonV2
@@ -187,6 +214,7 @@ import csvParser from 'csv-parser';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 const DISPLAY_COLUMN = ['classTitle', 'classId', 'author'];
+const DISPLAY_NUMBER = 100;
 
 export default {
   name: 'FreeAudioBooks',
@@ -195,6 +223,10 @@ export default {
     return {
       csvData: [],
       csvHeader: [],
+      searchKeyword: '',
+      currentDisplayNumber: DISPLAY_NUMBER,
+      totalAmount: 0,
+      isLoadingCSV: false,
     };
   },
   head() {
@@ -219,9 +251,35 @@ export default {
       ],
     };
   },
-  async mounted() {
-    await this.loadCSVFile(DISPLAY_COLUMN);
+  computed: {
+    filteredData() {
+      if (!this.searchKeyword) {
+        return this.csvData;
+      }
+      const lowerCaseKeyword = this.searchKeyword.toLowerCase();
+      const filtered = this.csvData.filter(row =>
+        row.classTitle
+          .toString()
+          .toLowerCase()
+          .includes(lowerCaseKeyword)
+      );
+      return filtered;
+    },
+    displayData() {
+      return this.filteredData.slice(0, this.currentDisplayNumber);
+    },
   },
+  watch: {
+    searchKeyword() {
+      this.currentDisplayNumber = DISPLAY_NUMBER;
+    },
+  },
+  async mounted() {
+    this.isLoadingCSV = true;
+    await this.loadCSVFile(DISPLAY_COLUMN);
+    this.isLoadingCSV = false;
+  },
+
   methods: {
     async loadCSVFile(displayColumn) {
       this.csvHeader = displayColumn;
@@ -290,6 +348,12 @@ export default {
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    handleLoadMore() {
+      this.currentDisplayNumber += 100;
+    },
+    handleInputChange(value) {
+      logTrackerEvent(this, 'Gutenberg', 'inputChange', value.target.value, 1);
     },
   },
 };
