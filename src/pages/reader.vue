@@ -73,7 +73,9 @@ export default {
     corsUrl() {
       return `${LIKECOIN_API_BASE}/ebook-cors/?class_id=${
         this.classId
-      }&nft_id=${this.nftId}&index=${this.index}`;
+      }&nft_id=${this.nftId}&index=${this.index}&custom_message=${
+        this.nftIsCustomMessageEnabled ? '1' : '0'
+      }`;
     },
     cacheKey() {
       return `${this.type}-${this.classId}-${this.nftId}-${this.index}`;
