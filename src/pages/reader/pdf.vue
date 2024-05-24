@@ -18,29 +18,12 @@
 
 <script>
 import nftMixin from '~/mixins/nft';
+import readerMixin from '~/mixins/reader';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'PDFReaderPage',
-  mixins: [nftMixin],
-  props: {
-    classId: {
-      type: String,
-      default: '',
-    },
-    fileSrc: {
-      type: String,
-      default: '',
-    },
-    corsUrl: {
-      type: String,
-      default: '',
-    },
-    cacheKey: {
-      type: String,
-      default: '',
-    },
-  },
+  mixins: [nftMixin, readerMixin],
   data() {
     return {
       isLoading: false,
@@ -87,30 +70,10 @@ export default {
         }
       }
     },
-    async getFileBuffer() {
-      let buffer;
-      if (window.caches) {
-        try {
-          const cache = await caches.open('reader-epub');
-          let response = await cache.match(this.corsUrl);
-          if (!response) response = await cache.add(this.corsUrl);
-          buffer = await response?.arrayBuffer();
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
-      }
-      if (!buffer) {
-        buffer = await this.$axios.$get(this.corsUrl, {
-          responseType: 'arraybuffer',
-        });
-      }
-      return buffer;
-    },
     async initRendition() {
       try {
         this.isLoading = true;
-        const buffer = await this.getFileBuffer();
+        const buffer = await this.getFileBuffer('reader-pdf');
         this.base64FileData = btoa(
           new Uint8Array(buffer).reduce(
             (data, byte) => data + String.fromCharCode(byte),

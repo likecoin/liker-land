@@ -88,30 +88,13 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import readerMixin from '~/mixins/reader';
 
 import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 export default {
   name: 'EPUBReaderPage',
-  mixins: [nftMixin, walletMixin],
-  props: {
-    classId: {
-      type: String,
-      default: '',
-    },
-    fileSrc: {
-      type: String,
-      default: '',
-    },
-    corsUrl: {
-      type: String,
-      default: '',
-    },
-    cacheKey: {
-      type: String,
-      default: '',
-    },
-  },
+  mixins: [nftMixin, walletMixin, readerMixin],
   data() {
     return {
       isLoading: false,
@@ -136,30 +119,10 @@ export default {
     this.initRendition();
   },
   methods: {
-    async getFileBuffer() {
-      let buffer;
-      if (window.caches) {
-        try {
-          const cache = await caches.open('reader-epub');
-          let response = await cache.match(this.corsUrl);
-          if (!response) response = await cache.add(this.corsUrl);
-          buffer = await response?.arrayBuffer();
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
-      }
-      if (!buffer) {
-        buffer = await this.$axios.$get(this.corsUrl, {
-          responseType: 'arraybuffer',
-        });
-      }
-      return buffer;
-    },
     async initRendition() {
       try {
         this.isLoading = true;
-        const buffer = await this.getFileBuffer();
+        const buffer = await this.getFileBuffer('reader-epub');
         this.book = Epub(buffer);
         await this.book.ready;
         this.isLoading = false;
@@ -230,7 +193,7 @@ export default {
     async onClickDownloadEpub() {
       try {
         this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
-        const buffer = await this.getFileBuffer();
+        const buffer = await this.getFileBuffer('reader-epub');
         saveAs(
           new Blob([buffer], {
             type: 'application/epub+zip',
