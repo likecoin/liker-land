@@ -56,10 +56,51 @@
         'w-full',
         'px-[16px]',
         'py-[16px]',
-        'bg-gray-f7',
-        'shadow-[0_-4px_30px_-15px_rgba(0,0,0,0.25)]',
 
         'laptop:hidden',
+      ]"
+    >
+      <slot name="footer" />
+      <div v-if="shouldDisplayDownloadOptions" class="w-full">
+        <div
+          v-for="{
+            canViewNFTBookBeforeClaim,
+            url,
+            id,
+            contentUrls,
+            iscnUrl,
+            isNftBook,
+            isContentViewable,
+            isDownloadable,
+          } in formatDownloadLinks"
+          :key="id"
+          class="w-full"
+        >
+          <NFTClaimOptionList
+            v-if="canViewNFTBookBeforeClaim"
+            class="w-full"
+            :url="url"
+            :class-id="id"
+            :content-urls="contentUrls"
+            :iscn-url="iscnUrl"
+            :is-nft-book="isNftBook"
+            :is-content-viewable="isContentViewable"
+            :is-content-downloadable="isDownloadable"
+            @view-content-url="handleClickViewContentDirectly"
+          />
+        </div>
+      </div>
+    </section>
+    <section
+      :class="[
+        'hidden',
+        'laptop:flex',
+
+        'justify-start',
+        'items-start',
+        'gap-[24px]',
+        'w-full',
+        'mt-[24px]',
       ]"
     >
       <slot name="footer" />
@@ -91,20 +132,6 @@
           />
         </div>
       </div>
-    </section>
-    <section
-      :class="[
-        'hidden',
-        'laptop:flex',
-
-        'justify-start',
-        'items-start',
-        'gap-[24px]',
-        'w-full',
-        'mt-[24px]',
-      ]"
-    >
-      <slot name="footer" />
     </section>
   </main>
 </template>

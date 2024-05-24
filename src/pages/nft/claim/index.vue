@@ -470,36 +470,6 @@
         </template>
       </NFTClaimMainSection>
     </div>
-    <div
-      v-if="shouldDisplayDownloadOptions"
-      :class="['hidden', 'laptop:flex', 'justify-end', 'w-full']"
-    >
-      <div
-        v-for="{
-          canViewNFTBookBeforeClaim,
-          url,
-          id,
-          contentUrls,
-          iscnUrl,
-          isNftBook,
-          isContentViewable,
-          isDownloadable,
-        } in formatDownloadLinks"
-        :key="id"
-      >
-        <NFTClaimOptionList
-          v-if="canViewNFTBookBeforeClaim"
-          :url="url"
-          :class-id="id"
-          :content-urls="contentUrls"
-          :iscn-url="iscnUrl"
-          :is-nft-book="isNftBook"
-          :is-content-viewable="isContentViewable"
-          :is-content-downloadable="isDownloadable"
-          @view-content-url="handleClickViewContentDirectly"
-        />
-      </div>
-    </div>
   </main>
 </template>
 
@@ -802,18 +772,15 @@ export default {
       });
     }
 
+    if (this.status === 'completed') {
+      this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
+    }
+
     this.claimingAddress =
-      (this.loginAddress && this.getAddress) ||
-      (this.isFreePurchase && this.getAddress);
+      this.loginAddress || (this.isFreePurchase && this.getAddress);
 
     if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
       this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
-    }
-
-    if (!this.giftInfo && !this.isPhysicalOnly) {
-      if (this.status === 'completed') {
-        this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
-      }
     }
   },
   methods: {
@@ -1017,7 +984,6 @@ export default {
       );
     },
     handleClickNext() {
-      console.log('claiming', this.claimingAddress);
       logTrackerEvent(
         this,
         'NFT',
