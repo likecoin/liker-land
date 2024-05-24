@@ -1,123 +1,173 @@
 <template>
-  <Page
-    :class="[
-      'relative',
-      'overflow-x-hidden',
-      'max-w-[1924px]',
-      'px-[16px]',
-      'laptop:px-[48px]',
-      'min-h-screen',
-      'mx-auto',
-      'w-full',
-    ]"
-  >
-    <!-- header -->
-    <div class="flex justify-between items-center w-full mb-[24px]">
-      <!-- Breadcrumb -->
-      <div class="flex gap-[8px] px-[4px] items-center">
-        <NuxtLink
-          class="text-[14px] text-medium-gray"
-          :to="localeLocation({ name: 'index' })"
-          >{{ $t('listing_page_header_homePage') }}</NuxtLink
-        >
-        <IconArrowRight class="text-medium-gray" />
-        <NuxtLink
-          class="text-[20px] laptop:text-[28px]"
-          :to="localeLocation({ name: 'listing' })"
-          >{{ $t('listing_page_header_listingPage') }}</NuxtLink
-        >
-      </div>
+  <Page :class="['relative', 'w-full', 'min-h-screen', 'pb-[80px]']">
+    <div
+      :class="[
+        'w-full',
+        'max-w-[1924px]',
+        'mx-auto',
+        'px-[16px] laptop:px-[48px]',
+      ]"
+    >
+      <!-- Header -->
+      <header>
+        <div class="flex justify-between items-center w-full mb-[24px]">
+          <!-- Breadcrumb -->
+          <div class="flex gap-[8px] px-[4px] items-center">
+            <NuxtLink
+              class="text-[14px] text-medium-gray"
+              :to="localeLocation({ name: 'index' })"
+              >{{ $t('listing_page_header_homePage') }}</NuxtLink
+            >
+            <IconArrowRight class="text-medium-gray" />
+            <NuxtLink
+              class="text-[20px] laptop:text-[28px]"
+              :to="localeLocation({ name: 'listing' })"
+              >{{ $t('listing_page_header_listingPage') }}</NuxtLink
+            >
+          </div>
 
-      <div class="flex items-center gap-[16px]">
-        <div class="text-medium-gray whitespace-nowrap text-[14px]">
-          {{ $t('listing_page_header_total_books', { num: totalBooks }) }}
+          <div class="flex items-center gap-[16px]">
+            <div class="text-medium-gray whitespace-nowrap text-[14px]">
+              {{
+                $t('listing_page_header_total_books', {
+                  num: sortedBookstoreItems.length,
+                })
+              }}
+            </div>
+
+            <Dropdown class="hidden w-full laptop:block">
+              <template #trigger="{ toggle }">
+                <ButtonV2
+                  preset="tertiary"
+                  :text="currentSortingText"
+                  @click="toggle"
+                >
+                  <template #append>
+                    <IconArrowDown />
+                  </template>
+                </ButtonV2>
+              </template>
+              <MenuList>
+                <MenuItem
+                  v-for="(item, i) in availableSorting"
+                  :key="i"
+                  label-align="left"
+                  label-class="py-[6px]"
+                  :value="item.value"
+                  :label="item.text"
+                  :selected-value="selectedSorting"
+                  @select="handleSelectSorting"
+                >
+                  <template v-if="selectedSorting === item.value" #label-append>
+                    <IconCheck />
+                  </template>
+                </MenuItem>
+              </MenuList>
+            </Dropdown>
+          </div>
         </div>
 
-        <Dropdown class="hidden w-full laptop:block">
-          <template #trigger="{ toggle }">
-            <ButtonV2
-              preset="tertiary"
-              :text="currentSortingText"
-              @click="toggle"
-            >
-              <template #append>
-                <IconArrowDown />
+        <!-- Mobile Filter Section -->
+        <div
+          class="grid w-full grid-cols-2 border-t-[1px] border-b-[1px] border-shade-gray mb-[24px] laptop:hidden"
+        >
+          <div
+            class="flex items-center justify-center cursor-pointer py-[14px] border-r-[1px] border-shade-gray"
+            @click="handleOpenFilterDialog"
+          >
+            <Label :text="$t('listing_page_filter')">
+              <template #prepend>
+                <IconFilter />
               </template>
-            </ButtonV2>
-          </template>
-          <MenuList>
-            <MenuItem
-              v-for="(item, i) in availableSorting"
-              :key="i"
-              label-align="left"
-              label-class="py-[6px]"
-              :value="item.value"
-              :label="item.text"
-              :selected-value="selectedSorting"
-              @select="handleSelectSorting"
-            >
-              <template v-if="selectedSorting === item.value" #label-append>
-                <IconCheck />
+            </Label>
+          </div>
+          <div
+            class="flex items-center justify-center cursor-pointer py-[14px]"
+            @click="handleOpenSortingDialog"
+          >
+            <Label :text="currentSortingText">
+              <template #prepend>
+                <IconSorter />
               </template>
-            </MenuItem>
-          </MenuList>
-        </Dropdown>
-      </div>
-    </div>
+            </Label>
+          </div>
+        </div>
+      </header>
 
-    <!-- Mobile Header -->
-    <div
-      class="grid w-full grid-cols-2 border-t-[1px] border-b-[1px] border-shade-gray mb-[24px] laptop:hidden"
-    >
+      <!-- Body -->
       <div
-        class="flex items-center justify-center cursor-pointer py-[14px] border-r-[1px] border-shade-gray"
-        @click="handleOpenFilterDialog"
+        :class="[
+          'flex',
+          'flex-col laptop:flex-row',
+          'gap-[32px] laptop:gap-[20px]',
+          'w-full',
+          'overflow-hidden',
+        ]"
       >
-        <Label :text="$t('listing_page_filter')">
-          <template #prepend>
-            <IconFilter />
-          </template>
-        </Label>
-      </div>
-      <div
-        class="flex items-center justify-center cursor-pointer py-[14px]"
-        @click="handleOpenSortingDialog"
-      >
-        <Label :text="currentSortingText">
-          <template #prepend>
-            <IconSorter />
-          </template>
-        </Label>
-      </div>
-    </div>
+        <!-- Desktop Filter Section -->
+        <section
+          :class="[
+            'hidden',
+            'laptop:flex',
+            'flex-col',
+            'gap-[24px]',
+            'w-[260px] desktopLg:w-[320px] full-hd:w-[466px]',
+          ]"
+        >
+          <!-- Is it possible to use multiple `v-model` in Vue2? -->
+          <ListingPageFilterSection
+            class="w-full"
+            :selected-type="filterType"
+            :selected-price="filterPrice"
+            :selected-language="filterLanguage"
+            @change-type="handleFilterTypeChange"
+            @change-price="handleFilterPriceChange"
+            @change-language="handleFilterLanguageChange"
+          />
+          <ListingPageQASection class="w-full" :item-list="QAList" />
+        </section>
 
-    <!-- main -->
-    <div
-      class="flex flex-col gap-[32px] w-full laptop:flex-row laptop:gap-[20px]"
-    >
-      <section
-        id="features"
-        class="hidden laptop:flex flex-col w-[260px] gap-[24px] desktopLg:w-[320px]"
-      >
-        <ListingPageFilterSection
-          class="w-full"
-          @handle-filter-type-change="handleFilterTypeChange"
-          @handle-filter-price-change="handleFilterPriceChange"
-          @handle-filter-language-change="handleFilterLanguageChange"
-        />
-        <ListingPageQASection class="w-full" :item-list="QAList" />
-      </section>
-      <section id="mainContent" class="flex-1 w-full">
-        <div class="w-full bg-dark-gray h-[100px]"></div>
-      </section>
+        <!-- Listing items -->
+        <section class="flex-1 w-full">
+          <ul
+            :class="[
+              'w-full',
+              'grid',
+              'grid-cols-2',
+              'sm:grid-cols-3',
+              'laptop:grid-cols-2',
+              'desktop:grid-cols-3',
+              'desktopLg:grid-cols-4',
+              'full-hd:grid-cols-5',
+              'gap-[16px] sm:gap-[20px]',
+              'items-stretch',
+              'desktop:mt-0',
+            ]"
+          >
+            <li v-for="item in sortedBookstoreItems" :key="item.classId">
+              <NFTBookItemCardV2
+                :class-id="item.classId"
+                class-cover-frame-aspect-ratio="aspect-[4/5]"
+                :is-link-disabled="item.isMultiple"
+                @click-cover="handleClickItem($event, item)"
+              />
+            </li>
+          </ul>
+        </section>
+      </div>
     </div>
 
     <!-- Scroll To Top Button -->
-    <div class="absolute bottom-[40px] right-[16px] laptop:right-[48px]">
+    <div class="sticky bottom-[32px] self-end">
       <ButtonV2
-        :circle="true"
-        theme="glow"
-        preset="tertiary"
+        :class="[
+          'bg-white',
+          'border-[1px] border-r-[0]',
+          'border-[#e3e3e3]',
+          'rounded-l-[8px]',
+          'rounded-r-[0]',
+        ]"
+        preset="plain"
         size="small"
         @click="scrollToTop"
       >
@@ -125,6 +175,7 @@
       </ButtonV2>
     </div>
 
+    <!-- Mobile Sorting Dialog -->
     <ListingPageDialog
       :is-open="isShowSortingDialog"
       @close="handleCloseDialog"
@@ -135,81 +186,177 @@
         @click-confirm-change="handleSelectSorting"
       />
     </ListingPageDialog>
+    <!-- Mobile Filter Dialog -->
     <ListingPageDialog :is-open="isShowFilterDialog" @close="handleCloseDialog">
       <ListingPageMobileFilterSection
         :selected-type="filterType"
         :selected-price="filterPrice"
         :selected-language="filterLanguage"
-        @handle-click-confirm="handleFilterConfirm"
+        @change-type="handleFilterTypeChange"
+        @change-price="handleFilterPriceChange"
+        @change-language="handleFilterLanguageChange"
       />
     </ListingPageDialog>
+
+    <!-- TODO: Refactor this and the one on the landing page -->
+    <Dialog
+      :open="dialogNFTClassList.length > 0"
+      :header-text="$t('nft_book_shelf_multiple_nft_class_dialog_title')"
+      panel-container-class="phone:max-w-[520px] laptop:max-w-[768px]"
+      panel-component="CardV2"
+      panel-class="overflow-y-scroll shadow-lg"
+      @close="closeMultipleNFTClassDialog"
+    >
+      <ul class="flex flex-col gap-[2rem]">
+        <li v-for="classId in dialogNFTClassList" :id="classId" :key="classId">
+          <NFTBookItemCard
+            :class-id="classId"
+            component-class="!bg-like-cyan-pale"
+          />
+        </li>
+      </ul>
+    </Dialog>
   </Page>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
+import {
+  SORTING_OPTIONS,
+  TYPE_OPTIONS,
+  PRICE_OPTIONS,
+  LANGUAGE_OPTIONS,
+} from '~/constant/store';
+
 import { logTrackerEvent } from '~/util/EventLogger';
 
-const SORTING_OPTIONS = {
-  RECOMMEND: 'recommend',
-  LATEST: 'latest',
-  LOWER_PRICE: 'lower_price',
-  HIGHER_PRICE: 'higher_price',
-};
-const TYPE_OPTIONS = {
-  ALL: 'all',
-  EPUB: 'epub',
-  PAPER: 'paper',
-};
-const PRICE_OPTIONS = {
-  ALL: 'all',
-  FREE: 'free',
-  Paid: 'paid',
-};
-const LANGUAGE_OPTIONS = {
-  ALL: 'all',
-  ZH: 'zh',
-  CH: 'ch',
-  EN: 'en',
-};
+import bookstoreMixin from '~/mixins/bookstore';
+
 export default {
   name: 'ListingPage',
+  mixins: [bookstoreMixin],
   layout: 'default',
   data() {
     return {
       totalBooks: 0,
+
       selectedSorting: SORTING_OPTIONS.RECOMMEND,
+
       filterType: TYPE_OPTIONS.ALL,
       filterPrice: PRICE_OPTIONS.ALL,
       filterLanguage: LANGUAGE_OPTIONS.ALL,
 
       isShowSortingDialog: false,
       isShowFilterDialog: false,
+      dialogNFTClassList: [],
     };
   },
+  async fetch({ store }) {
+    try {
+      await Promise.all([
+        store.dispatch('fetchBookstoreList'),
+        store.dispatch('fetchBookstoreLatestItems'),
+      ]);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  },
   computed: {
+    ...mapGetters([
+      'nftBookstoreLatestItems',
+      'nftBookstoreLatestPaidItems',
+      'nftBookstoreLatestFreeItems',
+      'getNFTBookStorePricesByClassId',
+    ]),
     currentSortingText() {
       const text = `listing_page_header_sort_${this.selectedSorting}`;
       return this.$t('listing_page_header_sort', { sort: this.$t(text) });
     },
     availableSorting() {
-      return [
-        {
+      const options = [];
+
+      if (this.filterPrice === PRICE_OPTIONS.ALL) {
+        options.push({
           text: this.$t('listing_page_header_sort_recommend'),
           value: SORTING_OPTIONS.RECOMMEND,
-        },
-        {
-          text: this.$t('listing_page_header_sort_latest'),
-          value: SORTING_OPTIONS.LATEST,
-        },
-        {
-          text: this.$t('listing_page_header_sort_lower_price'),
-          value: SORTING_OPTIONS.LOWER_PRICE,
-        },
-        {
-          text: this.$t('listing_page_header_sort_higher_price'),
-          value: SORTING_OPTIONS.HIGHER_PRICE,
-        },
-      ];
+        });
+      }
+
+      options.push({
+        text: this.$t('listing_page_header_sort_latest'),
+        value: SORTING_OPTIONS.LATEST,
+      });
+
+      if (this.filterPrice !== PRICE_OPTIONS.FREE) {
+        options.push(
+          {
+            text: this.$t('listing_page_header_sort_lower_price'),
+            value: SORTING_OPTIONS.LOWER_PRICE,
+          },
+          {
+            text: this.$t('listing_page_header_sort_higher_price'),
+            value: SORTING_OPTIONS.HIGHER_PRICE,
+          }
+        );
+      }
+
+      return options;
+    },
+    bookstoreItems() {
+      switch (this.filterPrice) {
+        case PRICE_OPTIONS.FREE:
+          return this.nftBookstoreLatestFreeItems;
+        case PRICE_OPTIONS.PAID:
+          return this.nftBookstoreLatestPaidItems;
+        case PRICE_OPTIONS.ALL:
+        default:
+          if (this.selectedSorting === SORTING_OPTIONS.RECOMMEND) {
+            return this.bookstoreListItemsInFeatured;
+          }
+          return this.nftBookstoreLatestItems;
+      }
+    },
+    normalizedBookstoreItems() {
+      return this.normalizeBookstoreListItems(this.bookstoreItems);
+    },
+    filteredBookstoreItems() {
+      if (this.filterType === TYPE_OPTIONS.ALL) {
+        return this.normalizedBookstoreItems;
+      }
+      return this.normalizedBookstoreItems.filter(item => {
+        switch (this.filterType) {
+          case TYPE_OPTIONS.EBOOK:
+            return item.hasEbook;
+          case TYPE_OPTIONS.PAPER:
+            return item.hasPhysical;
+          default:
+            return true;
+        }
+      });
+    },
+    sortedBookstoreItems() {
+      const items = [...this.filteredBookstoreItems];
+
+      if (
+        [PRICE_OPTIONS.ALL, PRICE_OPTIONS.PAID].includes(this.filterPrice) &&
+        [SORTING_OPTIONS.HIGHER_PRICE, SORTING_OPTIONS.LOWER_PRICE].includes(
+          this.selectedSorting
+        )
+      ) {
+        items.sort((a, b) => {
+          const priceA = a.minPrice;
+          const priceB = b.minPrice;
+
+          if (this.selectedSorting === SORTING_OPTIONS.HIGHER_PRICE) {
+            return priceB - priceA;
+          }
+          return priceA - priceB;
+        });
+      }
+
+      return items;
     },
     QAList() {
       return [
@@ -233,6 +380,9 @@ export default {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
       this.selectedSorting = value;
       this.isShowSortingDialog = false;
+      if (value === SORTING_OPTIONS.RECOMMEND) {
+        this.filterType = TYPE_OPTIONS.ALL;
+      }
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -240,6 +390,9 @@ export default {
     handleFilterTypeChange(value) {
       logTrackerEvent(this, 'listing', 'listing_filter_type_clicked', value, 1);
       this.filterType = value;
+      if (value !== TYPE_OPTIONS.ALL) {
+        this.selectedSorting = SORTING_OPTIONS.LATEST;
+      }
     },
     handleFilterPriceChange(value) {
       logTrackerEvent(
@@ -250,6 +403,16 @@ export default {
         1
       );
       this.filterPrice = value;
+      switch (value) {
+        case PRICE_OPTIONS.PAID:
+        case PRICE_OPTIONS.FREE:
+          this.selectedSorting = SORTING_OPTIONS.LATEST;
+          break;
+        case PRICE_OPTIONS.ALL:
+        default:
+          this.selectedSorting = SORTING_OPTIONS.RECOMMEND;
+          break;
+      }
     },
     handleFilterLanguageChange(value) {
       logTrackerEvent(
@@ -271,18 +434,22 @@ export default {
       this.isShowFilterDialog = false;
       this.isShowSortingDialog = false;
     },
-    handleRestFilter() {
-      logTrackerEvent(this, 'listing', 'listing_filter_reset_clicked', '', 1);
-      this.filterType = TYPE_OPTIONS.ALL;
-      this.filterPrice = PRICE_OPTIONS.ALL;
-      this.filterLanguage = LANGUAGE_OPTIONS.ALL;
-    },
     handleFilterConfirm(values) {
       logTrackerEvent(this, 'listing', 'listing_filter_confirm_clicked', '', 1);
       this.handleFilterTypeChange(values.type);
       this.handleFilterPriceChange(values.price);
       this.handleFilterLanguageChange(values.language);
       this.isShowFilterDialog = false;
+    },
+    handleClickItem(event, item) {
+      if (item.isMultiple) {
+        event.preventDefault();
+        this.dialogNFTClassList = item.classIds;
+      }
+      logTrackerEvent(this, 'listing', 'listing_item_click', item.classId, 1);
+    },
+    closeMultipleNFTClassDialog() {
+      this.dialogNFTClassList = [];
     },
   },
 };

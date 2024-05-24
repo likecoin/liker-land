@@ -45,7 +45,7 @@ export default {
     },
     containerClasses: {
       type: Array,
-      default: () => ['min-h-[200px]'],
+      default: () => [],
     },
   },
   data() {

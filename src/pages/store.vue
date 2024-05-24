@@ -88,6 +88,16 @@ export default {
   name: 'StoreIndexPage',
   mixins: [inAppMixin, navigationListenerMixin, walletMixin, bookstoreMixin],
   layout: 'default',
+  fetch({ route, redirect, localeLocation }) {
+    if (checkIsForcedInAppPage(route)) {
+      redirect(301, localeLocation({ name: 'store-articles' }));
+      return;
+    }
+
+    // NOTE: Temporary redirect to listing page for testing
+    redirect(301, localeLocation({ name: 'listing' }));
+  },
+  /*
   async fetch({ route, redirect, localeLocation, store }) {
     if (checkIsForcedInAppPage(route)) {
       redirect(301, localeLocation({ name: 'store-articles' }));
@@ -101,6 +111,7 @@ export default {
       console.error(error);
     }
   },
+  */
   head() {
     const title = this.$t('store_index_page_title');
     const description = this.$t('store_books_page_description');

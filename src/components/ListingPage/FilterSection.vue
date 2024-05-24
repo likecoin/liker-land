@@ -21,8 +21,7 @@
         <ListingPageOptionList
           :wrapper-class="[
             'flex',
-            'justify-evenly',
-            'laptop:justify-center',
+            'justify-between',
             'items-center',
             'p-[4px]',
             'border-[1px]',
@@ -46,8 +45,7 @@
           :wrapper-class="[
             'flex',
             'w-full',
-            'justify-evenly',
-            'laptop:justify-between',
+            'justify-between',
             'items-center',
             'p-[4px]',
             'border-[1px]',
@@ -59,6 +57,7 @@
         />
       </div>
       <!-- Language -->
+      <!-- Not supported yet
       <div
         class="flex flex-col items-start justify-center gap-[16px] desktopLg:flex-row desktopLg:items-center desktopLg:justify-start"
       >
@@ -139,29 +138,17 @@
           />
         </div>
       </div>
+      -->
     </div>
   </div>
 </template>
 
 <script>
-const TYPE_OPTIONS = {
-  ALL: 'all',
-  EPUB: 'epub',
-  PAPER: 'paper',
-};
-
-const PRICE_OPTIONS = {
-  ALL: 'all',
-  FREE: 'free',
-  Paid: 'paid',
-};
-
-const LANGUAGE_OPTIONS = {
-  ALL: 'all',
-  ZH: 'zh',
-  CH: 'ch',
-  EN: 'en',
-};
+import {
+  TYPE_OPTIONS,
+  PRICE_OPTIONS,
+  LANGUAGE_OPTIONS,
+} from '~/constant/store';
 
 export default {
   name: 'ListingPageFilterSection',
@@ -198,8 +185,8 @@ export default {
           value: TYPE_OPTIONS.ALL,
         },
         {
-          text: this.$t('listing_page_filter_type_epub'),
-          value: TYPE_OPTIONS.EPUB,
+          text: this.$t('listing_page_filter_type_ebook'),
+          value: TYPE_OPTIONS.EBOOK,
         },
         {
           text: this.$t('listing_page_filter_type_paper'),
@@ -226,7 +213,7 @@ export default {
         },
         {
           text: this.$t('listing_page_filter_price_paid'),
-          value: PRICE_OPTIONS.Paid,
+          value: PRICE_OPTIONS.PAID,
         },
       ];
 
@@ -262,25 +249,34 @@ export default {
       return this.$t(text);
     },
   },
+  watch: {
+    selectedType(value) {
+      this.filterType = value;
+    },
+    selectedPrice(value) {
+      this.filterPrice = value;
+    },
+    selectedLanguage(value) {
+      this.filterLanguage = value;
+    },
+  },
   methods: {
     handleTypeChange(value) {
       this.filterType = value;
-      this.$emit('handle-filter-type-change', value);
+      this.$emit('change-type', value);
     },
     handlePriceChange(value) {
       this.filterPrice = value;
-      this.$emit('handle-filter-price-change', value);
+      this.$emit('change-price', value);
     },
     handleSelectLanguage(value) {
       this.filterLanguage = value;
-      this.$emit('handle-filter-language-change', value);
+      this.$emit('change-language', value);
     },
     handleConfirm() {
-      this.$emit('handle-click-confirm', {
-        type: this.filterType,
-        price: this.filterPrice,
-        language: this.filterLanguage,
-      });
+      this.$emit('change-type', this.filterType);
+      this.$emit('change-price', this.filterPrice);
+      this.$emit('change-language', this.filterLanguage);
     },
     handleReset() {
       this.filterType = TYPE_OPTIONS.ALL;

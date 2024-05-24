@@ -423,16 +423,27 @@ const getters = {
   nftBookstoreEditorialItems: state => state.bookstoreEditorialItems,
   nftGetBookstoreListItems: state => listId =>
     state.bookstoreLists[listId] || [],
-  nftBookstoreLatestFreeItems: state =>
-    state.bookstoreLatestItems.filter(item =>
-      item.prices.some(
-        priceItem => priceItem.price <= 0 && !priceItem.isSoldOut
-      )
-    ),
-  nftBookstoreLatestPaidItems: state =>
-    state.bookstoreLatestItems.filter(item =>
-      item.prices.every(priceItem => priceItem.price > 0)
-    ),
+  nftBookstoreLatestItems: state =>
+    state.bookstoreLatestItems.map(item => ({
+      ...item,
+      // Add minPrice, hasPhysical, hasEbook to each item
+      ...item.prices.reduce(
+        ({ minPrice, hasPhysical, hasEbook }, item) => ({
+          minPrice: Math.min(minPrice, item.price),
+          hasPhysical: hasPhysical || item.isPhysicalOnly,
+          hasEbook: hasEbook || !item.isPhysicalOnly,
+        }),
+        {
+          minPrice: Infinity,
+          hasPhysical: false,
+          hasEbook: false,
+        }
+      ),
+    })),
+  nftBookstoreLatestFreeItems: (_, getter) =>
+    getter.nftBookstoreLatestItems.filter(item => item.minPrice === 0),
+  nftBookstoreLatestPaidItems: (_, getter) =>
+    getter.nftBookstoreLatestItems.filter(item => item.minPrice > 0),
 };
 
 const actions = {
