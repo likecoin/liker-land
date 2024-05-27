@@ -9,7 +9,13 @@
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
       <ProgressIndicator v-if="!fileSrc" />
-      <NuxtChild v-else-if="canRead" :file-src="fileSrc" />
+      <NuxtChild
+        v-else-if="canRead"
+        :class-id="classId"
+        :file-src="fileSrc"
+        :cors-url="corsUrl"
+        :cache-key="cacheKey"
+      />
     </Component>
   </div>
 </template>
@@ -20,6 +26,7 @@ import { mapGetters } from 'vuex';
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import { parseNFTMetadataURL } from '~/util/nft';
+import { LIKECOIN_API_BASE } from '~/constant';
 
 export default {
   name: 'PDFReaderPage',
@@ -38,13 +45,21 @@ export default {
     classId() {
       return this.$route.query.classId;
     },
+    nftId() {
+      return this.$route.query.nftId || this.nftIdCollectedFirstByUser || '';
+    },
+    index() {
+      return this.$route.query.index || '0';
+    },
+    type() {
+      return this.$route.query.format || '';
+    },
     fileSrc() {
-      const { format: type, index: fileIndex } = this.$route.query;
-      if (type && Array.isArray(this.iscnContentUrls)) {
+      if (this.type && Array.isArray(this.iscnContentUrls)) {
         const matchingUrl =
-          (this.iscnContentUrls[fileIndex]?.includes(type) &&
-            this.iscnContentUrls[fileIndex]) ||
-          this.iscnContentUrls.find(url => url.includes(type));
+          (this.iscnContentUrls[this.index]?.includes(this.type) &&
+            this.iscnContentUrls[this.index]) ||
+          this.iscnContentUrls.find(url => url.includes(this.type));
         return parseNFTMetadataURL(matchingUrl);
       }
       return undefined;
@@ -55,13 +70,30 @@ export default {
     canRead() {
       return this.isLoginRequired ? Boolean(this.getAddress) : true;
     },
+    corsUrl() {
+      return `${LIKECOIN_API_BASE}/ebook-cors/?class_id=${
+        this.classId
+      }&nft_id=${this.nftId}&index=${this.index}&custom_message=${
+        this.nftIsCustomMessageEnabled ? '1' : '0'
+      }`;
+    },
+    cacheKey() {
+      return `${this.type}-${this.classId}-${this.nftId}-${this.index}`;
+    },
   },
   watch: {
     // TODO: use loginAddress
     async getAddress(address) {
       if (address) {
-        await this.fetchUserCollectedCount();
-        if (!this.userCollectedCount && this.isLoginRequired) {
+        await Promise.all([
+          this.fetchUserCollectedCount(),
+          this.updateNFTOwners(),
+        ]);
+        if (
+          (!this.userCollectedCount && this.isLoginRequired) ||
+          (this.nftCollectorWalletAddress &&
+            this.nftCollectorWalletAddress !== this.getAddress)
+        ) {
           this.$router.replace(
             this.localeLocation({
               name: 'nft-class-classId',
@@ -85,8 +117,15 @@ export default {
       await this.restoreSession();
       // TODO: use loginAddress
       if (this.getAddress) {
-        await this.fetchUserCollectedCount();
-        if (!this.userCollectedCount && this.isLoginRequired) {
+        await Promise.all([
+          this.fetchUserCollectedCount(),
+          this.updateNFTOwners(),
+        ]);
+        if (
+          (!this.userCollectedCount && this.isLoginRequired) ||
+          (this.nftCollectorWalletAddress &&
+            this.nftCollectorWalletAddress !== this.getAddress)
+        ) {
           this.$router.replace(
             this.localeLocation({
               name: 'nft-class-classId',

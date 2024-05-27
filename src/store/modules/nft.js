@@ -113,13 +113,21 @@ const mutations = {
   },
   [TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET](
     state,
-    { classId, prices, defaultPaymentCurrency, mustClaimToView, hideDownload }
+    {
+      classId,
+      prices,
+      defaultPaymentCurrency,
+      mustClaimToView,
+      hideDownload,
+      enableCustomMessagePage,
+    }
   ) {
     Vue.set(state.nftBookStoreInfoByClassIdMap, classId, {
       prices,
       defaultPaymentCurrency,
       mustClaimToView,
       hideDownload,
+      enableCustomMessagePage,
     });
   },
   [TYPES.NFT_SET_NFT_COLLECTION_INFO](state, { collectionId, data }) {
@@ -511,6 +519,7 @@ const actions = {
         mustClaimToView: bookstoreInfo.mustClaimToView,
         hideDownload: bookstoreInfo.hideDownload,
         defaultPaymentCurrency: bookstoreInfo.defaultPaymentCurrency,
+        enableCustomMessagePage: bookstoreInfo.enableCustomMessagePage,
       };
       commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     }
@@ -843,6 +852,7 @@ const actions = {
       mustClaimToView: data.mustClaimToView,
       hideDownload: data.hideDownload,
       defaultPaymentCurrency: data.defaultPaymentCurrency,
+      enableCustomMessagePage: data.enableCustomMessagePage,
     };
     commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     return payload;

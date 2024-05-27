@@ -18,17 +18,12 @@
 
 <script>
 import nftMixin from '~/mixins/nft';
+import readerMixin from '~/mixins/reader';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'PDFReaderPage',
-  mixins: [nftMixin],
-  props: {
-    fileSrc: {
-      type: String,
-      default: '',
-    },
-  },
+  mixins: [nftMixin, readerMixin],
   data() {
     return {
       isLoading: false,
@@ -78,25 +73,7 @@ export default {
     async initRendition() {
       try {
         this.isLoading = true;
-        const encodedUrl = encodeURIComponent(this.fileSrc);
-        const corsUrl = `https://static2.like.co/pdf-cors/?url=${encodedUrl}`;
-        let buffer;
-        if (window.caches) {
-          try {
-            const cache = await caches.open('reader-pdf');
-            let response = await cache.match(corsUrl);
-            if (!response) response = await cache.add(corsUrl);
-            buffer = await response?.arrayBuffer();
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-          }
-        }
-        if (!buffer) {
-          buffer = await this.$axios.$get(corsUrl, {
-            responseType: 'arraybuffer',
-          });
-        }
+        const buffer = await this.getFileBuffer('reader-pdf');
         this.base64FileData = btoa(
           new Uint8Array(buffer).reduce(
             (data, byte) => data + String.fromCharCode(byte),
@@ -121,10 +98,12 @@ export default {
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
         logTrackerEvent(this, 'ReaderPdf', 'ReaderPdfError', errMessage, 1);
-        this.$nuxt.error({
-          statusCode: errData.status || 400,
-          message: errMessage,
-        });
+        this.$router.replace(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          })
+        );
       }
     },
   },

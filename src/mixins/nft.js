@@ -129,6 +129,7 @@ export default {
       'getNFTBookStoreBookDefaultPaymentCurrency',
       'getCanViewNFTBookBeforeClaimByClassId',
       'getIsHideNFTBookDownload',
+      'getNFTBookStoreInfoByClassId',
       'uiIsOpenCollectModal',
       'uiTxErrorMessage',
       'uiTxTargetClassId',
@@ -489,6 +490,10 @@ export default {
     },
     nftIsDownloadHidden() {
       return this.getIsHideNFTBookDownload(this.classId);
+    },
+    nftIsCustomMessageEnabled() {
+      return this.getNFTBookStoreInfoByClassId(this.classId)
+        ?.enableCustomMessagePage;
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];

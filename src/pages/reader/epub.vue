@@ -88,18 +88,13 @@ import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import readerMixin from '~/mixins/reader';
 
 import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 export default {
   name: 'EPUBReaderPage',
-  mixins: [nftMixin, walletMixin],
-  props: {
-    fileSrc: {
-      type: String,
-      default: '',
-    },
-  },
+  mixins: [nftMixin, walletMixin, readerMixin],
   data() {
     return {
       isLoading: false,
@@ -127,25 +122,7 @@ export default {
     async initRendition() {
       try {
         this.isLoading = true;
-        const encodedUrl = encodeURIComponent(this.fileSrc);
-        const corsUrl = `https://static2.like.co/pdf-cors/?url=${encodedUrl}`;
-        let buffer;
-        if (window.caches) {
-          try {
-            const cache = await caches.open('reader-epub');
-            let response = await cache.match(corsUrl);
-            if (!response) response = await cache.add(corsUrl);
-            buffer = await response?.arrayBuffer();
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-          }
-        }
-        if (!buffer) {
-          buffer = await this.$axios.$get(corsUrl, {
-            responseType: 'arraybuffer',
-          });
-        }
+        const buffer = await this.getFileBuffer('reader-epub');
         this.book = Epub(buffer);
         await this.book.ready;
         this.isLoading = false;
@@ -193,10 +170,12 @@ export default {
         const errMessage = errData.data || errData.message || errData;
         console.error(errMessage); // eslint-disable-line no-console
         logTrackerEvent(this, 'ReaderEpub', 'ReaderEpubError', errMessage, 1);
-        this.$nuxt.error({
-          statusCode: errData.status || 400,
-          message: errMessage,
-        });
+        this.$router.replace(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          })
+        );
       }
     },
     onChangeChapter() {
@@ -214,10 +193,13 @@ export default {
     async onClickDownloadEpub() {
       try {
         this.alertPromptSuccess(this.$t('nft_download_content_prepare'));
-        const blob = await this.$axios.$get(this.fileSrc, {
-          responseType: 'blob',
-        });
-        saveAs(blob, getDownloadFilenameFromURL(this.fileSrc));
+        const buffer = await this.getFileBuffer('reader-epub');
+        saveAs(
+          new Blob([buffer], {
+            type: 'application/epub+zip',
+          }),
+          getDownloadFilenameFromURL(this.fileSrc)
+        );
       } catch (error) {
         if (error.message === 'Network Error') {
           // bypass CORS
@@ -259,7 +241,7 @@ export default {
     saveToLocalStorage(currentCfi) {
       if (window.localStorage && currentCfi) {
         window.localStorage.setItem(
-          `epub-reader-${this.fileSrc}`,
+          `epub-reader-${this.cacheKey}`,
           JSON.stringify({ currentCfi: currentCfi.toString() })
         );
       }
@@ -267,7 +249,7 @@ export default {
     resumeFromLocalStorage() {
       if (window.localStorage) {
         const epubData = window.localStorage.getItem(
-          `epub-reader-${this.fileSrc}`
+          `epub-reader-${this.cacheKey}`
         );
         if (epubData) {
           try {

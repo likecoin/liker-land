@@ -127,6 +127,10 @@ export default {
       type: String,
       default: undefined,
     },
+    nftId: {
+      type: String,
+      default: '',
+    },
     contentUrls: {
       type: Array,
       default: () => [],
@@ -204,6 +208,7 @@ export default {
             query: {
               download: this.isContentDownloadable ? '1' : '0',
               classId: this.classId,
+              nftId: this.nftId,
               format: type,
               index,
             },
