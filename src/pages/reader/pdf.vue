@@ -57,7 +57,7 @@ export default {
       if (event.data === 'ready') {
         this.isIframeReady = true;
         if (this.base64FileData) {
-          this.$refs.pdfIframe?.contentWindow.postMessage(
+          this.$refs.pdfIframe?.contentWindow?.postMessage(
             JSON.stringify({
               action: 'openBase64File',
               data: {
@@ -81,7 +81,7 @@ export default {
           )
         );
         if (this.isIframeReady) {
-          this.$refs.pdfIframe?.contentWindow.postMessage(
+          this.$refs.pdfIframe?.contentWindow?.postMessage(
             JSON.stringify({
               action: 'openBase64File',
               data: {
