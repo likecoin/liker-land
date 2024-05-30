@@ -1,5 +1,5 @@
 <template>
-  <Page :class="['relative', 'w-full', 'min-h-screen', 'pb-[80px]']">
+  <Page :class="['w-full', 'min-h-screen', 'pb-[80px]']">
     <div
       :class="[
         'w-full',
@@ -101,30 +101,29 @@
           'flex-col laptop:flex-row',
           'gap-[32px] laptop:gap-[20px]',
           'w-full',
-          'overflow-hidden',
         ]"
       >
         <!-- Desktop Filter Section -->
         <section
           :class="[
             'hidden',
-            'laptop:flex',
-            'flex-col',
-            'gap-[24px]',
-            'w-[260px] desktopLg:w-[320px] full-hd:w-[466px]',
+            'laptop:block',
+            'min-[300px] desktopLg:min-w-[360px] full-hd:min-w-[466px]',
           ]"
         >
-          <!-- Is it possible to use multiple `v-model` in Vue2? -->
-          <ListingPageFilterSection
-            class="w-full"
-            :selected-type="filterType"
-            :selected-price="filterPrice"
-            :selected-language="filterLanguage"
-            @change-type="handleFilterTypeChange"
-            @change-price="handleFilterPriceChange"
-            @change-language="handleFilterLanguageChange"
-          />
-          <ListingPageQASection class="w-full" :item-list="QAList" />
+          <div class="sticky top-[24px] flex flex-col gap-[24px]">
+            <!-- Is it possible to use multiple `v-model` in Vue2? -->
+            <ListingPageFilterSection
+              class="w-full"
+              :selected-type="filterType"
+              :selected-price="filterPrice"
+              :selected-language="filterLanguage"
+              @change-type="handleFilterTypeChange"
+              @change-price="handleFilterPriceChange"
+              @change-language="handleFilterLanguageChange"
+            />
+            <ListingPageQASection class="w-full" :item-list="QAList" />
+          </div>
         </section>
 
         <section class="flex-1 w-full">
