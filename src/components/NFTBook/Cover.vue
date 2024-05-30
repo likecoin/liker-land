@@ -20,7 +20,14 @@
 
     <img
       v-if="isShowPlaceholder"
-      :class="[imageClassesInCommon, 'aspect-[4/5]', 'animate-pulse']"
+      :class="[
+        imageClassesInCommon,
+        'absolute',
+        'inset-y-0',
+        'h-full',
+        'aspect-[4/5]',
+        'animate-pulse',
+      ]"
       src="~/assets/images/nft/primitive-nft.jpg"
     />
   </div>
@@ -60,9 +67,8 @@ export default {
     },
     imageClassesInCommon() {
       return [
-        'absolute',
-        'inset-y-0',
-        'h-full',
+        'max-w-full',
+        'max-h-full',
         'rounded-[4px]',
         'object-cover',
         '[box-shadow:-8px_42px_64px_0px_rgba(0,_0,_0,_0.12)]',
