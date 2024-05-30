@@ -139,7 +139,7 @@
               'desktop:grid-cols-3',
               'desktopLg:grid-cols-4',
               'full-hd:grid-cols-5',
-              'gap-[16px] sm:gap-[20px]',
+              'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
               'items-stretch',
               'desktop:mt-0',
             ]"
