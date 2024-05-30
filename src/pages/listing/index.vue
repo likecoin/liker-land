@@ -127,8 +127,8 @@
           <ListingPageQASection class="w-full" :item-list="QAList" />
         </section>
 
-        <!-- Listing items -->
         <section class="flex-1 w-full">
+          <!-- Listing items -->
           <ul
             :class="[
               'w-full',
@@ -153,6 +153,17 @@
               />
             </li>
           </ul>
+
+          <footer
+            class="flex flex-col items-center gap-[24px] mt-[40px] p-[24px]"
+          >
+            <p>{{ $t('listing_page_cant_find_books') }}</p>
+            <ButtonV2
+              preset="tertiary"
+              :text="$t('listing_page_cant_find_books_button')"
+              @click="handleClickCantFindBook"
+            />
+          </footer>
         </section>
       </div>
     </div>
@@ -232,10 +243,11 @@ import {
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import bookstoreMixin from '~/mixins/bookstore';
+import crispMixin from '~/mixins/crisp';
 
 export default {
   name: 'ListingPage',
-  mixins: [bookstoreMixin],
+  mixins: [bookstoreMixin, crispMixin],
   layout: 'default',
   data() {
     return {
@@ -450,6 +462,16 @@ export default {
     },
     closeMultipleNFTClassDialog() {
       this.dialogNFTClassList = [];
+    },
+    handleClickCantFindBook() {
+      this.openCrisp(this.$t('listing_page_cant_find_books_prefilled_message'));
+      logTrackerEvent(
+        this,
+        'listing',
+        'listing_cant_find_book_button_click',
+        '',
+        1
+      );
     },
   },
 };
