@@ -337,8 +337,19 @@ export default {
           return this.nftBookstoreLatestPaidItems;
         case PRICE_OPTIONS.ALL:
         default:
+          // FIXME: Need modifying API for obtaining price & book type of featured items
           if (this.selectedSorting === SORTING_OPTIONS.RECOMMEND) {
-            return this.bookstoreListItemsInFeatured;
+            const setOfFeaturedItemClasses = new Set(
+              this.bookstoreListItemsInFeatured.map(item => item.classId)
+            );
+            return [
+              // NOTE: Featured items always come first
+              ...this.bookstoreListItemsInFeatured,
+              // NOTE: Filter out featured items from latest items
+              ...this.nftBookstoreLatestItems.filter(
+                item => !setOfFeaturedItemClasses.has(item.classId)
+              ),
+            ];
           }
           return this.nftBookstoreLatestItems;
       }
