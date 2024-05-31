@@ -188,23 +188,33 @@
     <!-- Mobile Sorting Dialog -->
     <ListingPageDialog
       :is-open="isShowSortingDialog"
+      :title="$t('listing_page_sorter')"
       @close="handleCloseDialog"
     >
       <ListingPageMobileSortingSection
         :available-sorting="availableSorting"
+        :default-sorting="$options.defaultSorting"
         :selected-sorting="selectedSorting"
-        @click-confirm-change="handleSelectSorting"
+        @change-sorting="handleSelectSorting"
       />
     </ListingPageDialog>
     <!-- Mobile Filter Dialog -->
-    <ListingPageDialog :is-open="isShowFilterDialog" @close="handleCloseDialog">
+    <ListingPageDialog
+      :is-open="isShowFilterDialog"
+      :title="$t('listing_page_filter')"
+      @close="handleCloseDialog"
+    >
       <ListingPageMobileFilterSection
         :selected-type="filterType"
         :selected-price="filterPrice"
         :selected-language="filterLanguage"
+        :default-type="$options.defaultType"
+        :default-price="$options.defaultPrice"
+        :default-language="$options.defaultLanguage"
         @change-type="handleFilterTypeChange"
         @change-price="handleFilterPriceChange"
         @change-language="handleFilterLanguageChange"
+        @close="handleCloseDialog"
       />
     </ListingPageDialog>
 
@@ -248,15 +258,19 @@ export default {
   name: 'ListingPage',
   mixins: [bookstoreMixin, crispMixin],
   layout: 'default',
+  defaultSorting: SORTING_OPTIONS.RECOMMEND,
+  defaultType: TYPE_OPTIONS.ALL,
+  defaultPrice: PRICE_OPTIONS.ALL,
+  defaultLanguage: LANGUAGE_OPTIONS.ALL,
   data() {
     return {
       totalBooks: 0,
 
-      selectedSorting: SORTING_OPTIONS.RECOMMEND,
+      selectedSorting: this.$options.defaultSorting,
 
-      filterType: TYPE_OPTIONS.ALL,
-      filterPrice: PRICE_OPTIONS.ALL,
-      filterLanguage: LANGUAGE_OPTIONS.ALL,
+      filterType: this.$options.defaultType,
+      filterPrice: this.$options.defaultPrice,
+      filterLanguage: this.$options.defaultLanguage,
 
       isShowSortingDialog: false,
       isShowFilterDialog: false,

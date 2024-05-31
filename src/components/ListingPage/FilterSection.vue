@@ -19,18 +19,9 @@
           :text="$t('listing_page_filter_type_title')"
         />
         <ListingPageOptionList
-          :wrapper-class="[
-            'flex',
-            'justify-between',
-            'items-center',
-            'p-[4px]',
-            'border-[1px]',
-            'border-shade-gray',
-            'bg-white',
-            'rounded-[14px]',
-            'w-full',
-          ]"
-          :item-list="filterTypeList"
+          :value="filterType"
+          :items="filterTypeList"
+          @update:value="handleTypeChange"
         />
       </div>
       <!-- Price -->
@@ -42,18 +33,9 @@
           :text="$t('listing_page_filter_price_title')"
         />
         <ListingPageOptionList
-          :wrapper-class="[
-            'flex',
-            'w-full',
-            'justify-between',
-            'items-center',
-            'p-[4px]',
-            'border-[1px]',
-            'border-shade-gray',
-            'bg-white',
-            'rounded-[14px]',
-          ]"
-          :item-list="filterPriceList"
+          :value="filterPrice"
+          :items="filterPriceList"
+          @update:value="handlePriceChange"
         />
       </div>
       <!-- Language -->
@@ -125,18 +107,6 @@
             </label>
           </li>
         </ul>
-        <div :class="['flex', 'gap-[12px]', 'w-full', { hidden: !isMobile }]">
-          <ButtonV2
-            preset="tertiary"
-            :text="$t('listing_page_button_reset')"
-            @click="handleReset"
-          />
-          <ButtonV2
-            class="flex-auto w-full"
-            :text="$t('listing_page_button_confirm')"
-            @click="handleConfirm"
-          />
-        </div>
       </div>
       -->
     </div>
@@ -179,7 +149,7 @@ export default {
   },
   computed: {
     filterTypeList() {
-      const items = [
+      return [
         {
           text: this.$t('listing_page_filter_type_all'),
           value: TYPE_OPTIONS.ALL,
@@ -193,16 +163,9 @@ export default {
           value: TYPE_OPTIONS.PAPER,
         },
       ];
-
-      return items.map(item => ({
-        type: 'item',
-        ...item,
-        isSelected: item.value === this.filterType,
-        handleClick: () => this.handleTypeChange(item.value),
-      }));
     },
     filterPriceList() {
-      const items = [
+      return [
         {
           text: this.$t('listing_page_filter_price_all'),
           value: PRICE_OPTIONS.ALL,
@@ -216,13 +179,6 @@ export default {
           value: PRICE_OPTIONS.PAID,
         },
       ];
-
-      return items.map(item => ({
-        type: 'item',
-        ...item,
-        isSelected: item.value === this.filterPrice,
-        handleClick: () => this.handlePriceChange(item.value),
-      }));
     },
     availableLocales() {
       return [
@@ -272,16 +228,6 @@ export default {
     handleSelectLanguage(value) {
       this.filterLanguage = value;
       this.$emit('change-language', value);
-    },
-    handleConfirm() {
-      this.$emit('change-type', this.filterType);
-      this.$emit('change-price', this.filterPrice);
-      this.$emit('change-language', this.filterLanguage);
-    },
-    handleReset() {
-      this.filterType = TYPE_OPTIONS.ALL;
-      this.filterPrice = PRICE_OPTIONS.ALL;
-      this.filterLanguage = LANGUAGE_OPTIONS.ALL;
     },
   },
 };

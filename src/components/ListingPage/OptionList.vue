@@ -1,14 +1,29 @@
 <template>
-  <ul :class="wrapperClass">
+  <ul
+    :class="[
+      'flex',
+      'justify-between',
+      'items-center',
+
+      'w-full',
+      'p-[4px]',
+
+      'bg-white',
+
+      'border-[1px]',
+      'border-shade-gray',
+      'rounded-[14px]',
+    ]"
+  >
     <li
-      v-for="(item, i) in itemList"
-      :key="i"
+      v-for="item in items"
+      :key="item.value"
       class="flex items-center cursor-pointer"
     >
       <MenuButton
         :text="item.text"
-        :is-selected="item.isSelected"
-        @click="item.handleClick"
+        :is-selected="item.value === value"
+        @click="$emit('update:value', item.value)"
       />
     </li>
   </ul>
@@ -16,13 +31,13 @@
 
 <script>
 export default {
-  name: 'OptionList',
+  name: 'ListingPageOptionList',
   props: {
-    itemList: {
-      type: Array,
-      default: () => [],
+    value: {
+      type: String,
+      default: '',
     },
-    wrapperClass: {
+    items: {
       type: Array,
       default: () => [],
     },

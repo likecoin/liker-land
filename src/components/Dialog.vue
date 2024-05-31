@@ -25,6 +25,7 @@
               'z-1',
               'bottom-full',
               'mb-[8px]',
+              'ml-[16px] sm:ml-0',
               'w-[48px]',
               'h-[48px]',
               'text-like-green',

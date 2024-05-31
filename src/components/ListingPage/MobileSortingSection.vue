@@ -1,11 +1,5 @@
 <template>
   <div class="flex flex-col">
-    <Label
-      :text="$t('listing_page_sorter')"
-      align="center"
-      class="mb-[12px] text-[18px] font-600"
-    />
-    <div class="w-full border-b-[1px] border-shade-gray my-[8px]" />
     <ul class="flex flex-col gap-[12px] p-[12px]">
       <li
         v-for="(item, i) of availableSorting"
@@ -18,6 +12,7 @@
         <label class="flex justify-between w-full">
           <p>{{ item.text }}</p>
           <input
+            class="accent-like-green"
             type="radio"
             name="sorting"
             :checked="item.value === currentSelect"
@@ -26,9 +21,15 @@
         </label>
       </li>
     </ul>
-    <div class="flex gap-[12px] px-[12px]">
-      <ButtonV2 class="flex-auto w-full" @click="handleConfirm">確定</ButtonV2>
-    </div>
+
+    <footer class="grid grid-cols-2 gap-[12px] px-[12px]">
+      <ButtonV2 preset="tertiary" @click="handleReset">{{
+        $t('listing_page_button_reset')
+      }}</ButtonV2>
+      <ButtonV2 @click="handleConfirm">{{
+        $t('listing_page_button_confirm')
+      }}</ButtonV2>
+    </footer>
   </div>
 </template>
 
@@ -44,9 +45,9 @@ export default {
       type: String,
       default: '',
     },
-    defaultOption: {
+    defaultSorting: {
       type: String,
-      default: 'recommend',
+      default: undefined,
     },
   },
   data() {
@@ -55,8 +56,11 @@ export default {
     };
   },
   methods: {
+    handleReset() {
+      this.currentSelect = this.defaultSorting;
+    },
     handleConfirm() {
-      this.$emit('click-confirm-change', this.currentSelect);
+      this.$emit('change-sorting', this.currentSelect);
     },
   },
 };
