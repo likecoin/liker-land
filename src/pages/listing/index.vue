@@ -400,6 +400,20 @@ export default {
       ];
     },
   },
+  watch: {
+    selectedSorting() {
+      this.scrollToTop();
+    },
+    filterType() {
+      this.scrollToTop();
+    },
+    filterPrice() {
+      this.scrollToTop();
+    },
+    filterLanguage() {
+      this.scrollToTop();
+    },
+  },
   methods: {
     handleSelectSorting(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
