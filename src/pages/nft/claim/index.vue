@@ -566,7 +566,6 @@ export default {
       collectorMessage: '',
       creatorMessage: '',
       claimingAddressInput: '',
-      claimingAddress: '',
       claimingFreeEmail: '',
       giftInfo: null,
       isPhysicalOnly: false,
@@ -685,21 +684,18 @@ export default {
         !this.isPhysicalOnly
       );
     },
+    claimingAddress() {
+      return this.getAddress || this.loginAddress;
+    },
   },
   watch: {
     walletEmail(newValue) {
       this.claimingFreeEmail = newValue;
     },
-    getAddress(newValue) {
-      if (this.isFreePurchase) this.claimingAddress = newValue;
+    claimingAddress(newValue) {
       if (!newValue && !(this.status === 'completed')) {
-        this.claimingAddress = '';
         this.navigateToState(NFT_CLAIM_STATE.LOGIN);
-      }
-    },
-    loginAddress(newValue) {
-      this.claimingAddress = newValue;
-      if (this.claimingAddress && this.state === NFT_CLAIM_STATE.LOGIN) {
+      } else if (newValue) {
         this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
       }
     },
@@ -775,9 +771,6 @@ export default {
     if (this.status === 'completed') {
       this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
     }
-
-    this.claimingAddress =
-      this.loginAddress || (this.isFreePurchase && this.getAddress);
 
     if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
       this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
@@ -1032,7 +1025,7 @@ export default {
         1
       );
       this.isLoginLoading = true;
-      if (!this.getAddress) {
+      if (!this.claimingAddress) {
         const isConnected = await this.connectWallet({
           isOpenAuthcore: true,
         });
@@ -1057,7 +1050,7 @@ export default {
         return;
       }
       this.isLoginLoading = true;
-      if (!this.getAddress) {
+      if (!this.claimingAddress) {
         const isConnected = await this.connectWallet();
         if (isConnected || this.loginAddress) {
           this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
