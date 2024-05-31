@@ -11,7 +11,7 @@
       :selected-type="selectedType"
       :selected-price="selectedPrice"
       :selected-language="selectedLanguage"
-      @handle-click-confirm="handleConfirm"
+      v-on="$listeners"
     />
   </div>
 </template>
@@ -39,12 +39,6 @@ export default {
       filterPrice: '',
       filterLanguage: '',
     };
-  },
-  computed: {},
-  methods: {
-    handleConfirm(value) {
-      this.$emit('handle-click-confirm', value);
-    },
   },
 };
 </script>
