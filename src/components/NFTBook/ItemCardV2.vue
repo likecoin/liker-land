@@ -11,7 +11,8 @@
       tag="NuxtLink"
       class="group"
       :class-aspect-ratio="classCoverFrameAspectRatio"
-      img-class="group-hover:scale-[1.02] transition-transform"
+      cover-class="group-hover:scale-[1.02] transition-transform"
+      :cover-resize="coverResize"
       :src="NFTImageUrl"
       :alt="NFTName"
       :to="nftCollectRoute"
@@ -51,6 +52,10 @@ export default {
     classCoverFrameAspectRatio: {
       type: String,
       default: 'aspect-[4/5]',
+    },
+    coverResize: {
+      type: Number,
+      default: 300,
     },
     isLinkDisabled: {
       type: Boolean,

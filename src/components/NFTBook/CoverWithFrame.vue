@@ -27,7 +27,12 @@
         'items-center',
       ]"
     >
-      <NFTBookCover :src="src" :alt="alt" :img-class="imgClass" />
+      <NFTBookCover
+        :class="coverClass"
+        :src="src"
+        :alt="alt"
+        :resize="coverResize"
+      />
     </div>
   </component>
 </template>
@@ -49,9 +54,13 @@ export default {
       type: String,
       default: 'div',
     },
-    imgClass: {
+    coverClass: {
       type: String,
       default: '',
+    },
+    coverResize: {
+      type: Number,
+      default: 300,
     },
     to: {
       type: Object,

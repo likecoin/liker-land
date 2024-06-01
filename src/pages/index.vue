@@ -404,6 +404,7 @@
               <NFTBookItemCardV2
                 :class-id="item.classId"
                 class-cover-frame-aspect-ratio="min-h-[360px] laptop:min-h-[0] aspect-[4/5]"
+                :cover-resize="450"
                 :is-link-disabled="item.isMultiple"
                 @click-cover="handleClickItem($event, item)"
               />
