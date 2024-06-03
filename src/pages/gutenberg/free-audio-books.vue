@@ -265,6 +265,7 @@ export default {
     const scripts = [];
     if (this.generatedJSONLD) {
       scripts.push({
+        hid: 'schema',
         type: 'application/ld+json',
         json: this.generatedJSONLD,
       });
