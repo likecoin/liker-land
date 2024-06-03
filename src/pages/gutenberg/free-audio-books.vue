@@ -50,7 +50,9 @@
       >
     </i18n>
 
-    <div class="flex justify-between mb-[24px] w-full max-w-[960px]">
+    <div
+      class="flex flex-col items-start w-full max-w-[960px] laptop:flex-row laptop:justify-between laptop:mb-[24px]"
+    >
       <ButtonV2
         preset="plain"
         class="text-medium-gray"
@@ -61,7 +63,9 @@
           <IconArrowLeft class="w-[20px]" />
         </template>
       </ButtonV2>
-      <div class="flex justify-end items-center gap-[4px]">
+      <div
+        class="flex self-end laptop:justify-end laptop:items-center laptop:self-center gap-[4px]"
+      >
         <IconSearch />
         <input
           v-model="searchKeyword"
@@ -293,11 +297,16 @@ export default {
         return this.parsedData;
       }
       const lowerCaseKeyword = this.searchKeyword.toLowerCase();
-      const filtered = this.parsedData.filter(row =>
-        row.classTitle
-          .toString()
-          .toLowerCase()
-          .includes(lowerCaseKeyword)
+      const filtered = this.parsedData.filter(
+        row =>
+          row.classTitle
+            .toString()
+            .toLowerCase()
+            .includes(lowerCaseKeyword) ||
+          row.author
+            .toString()
+            .toLowerCase()
+            .includes(lowerCaseKeyword)
       );
       return filtered;
     },
