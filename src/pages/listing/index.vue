@@ -266,12 +266,6 @@ export default {
     return {
       totalBooks: 0,
 
-      selectedSorting: this.$options.defaultSorting,
-
-      filterType: this.$options.defaultType,
-      filterPrice: this.$options.defaultPrice,
-      filterLanguage: this.$options.defaultLanguage,
-
       isShowSortingDialog: false,
       isShowFilterDialog: false,
       dialogNFTClassList: [],
@@ -295,6 +289,85 @@ export default {
       'nftBookstoreLatestFreeItems',
       'getNFTBookStorePricesByClassId',
     ]),
+    selectedSorting: {
+      get() {
+        return this.$route.query.sort || this.$options.defaultSorting;
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          sort: Object.values(SORTING_OPTIONS).includes(value)
+            ? value
+            : this.$options.defaultSorting,
+        };
+
+        if (value === SORTING_OPTIONS.RECOMMEND) {
+          query.type = TYPE_OPTIONS.ALL;
+        }
+
+        this.$router.push({ query });
+      },
+    },
+    filterType: {
+      get() {
+        return this.$route.query.type || this.$options.defaultType;
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          type: Object.values(TYPE_OPTIONS).includes(value)
+            ? value
+            : this.$options.defaultType,
+        };
+
+        if (value !== TYPE_OPTIONS.ALL) {
+          query.sort = SORTING_OPTIONS.LATEST;
+        }
+
+        this.$router.push({ query });
+      },
+    },
+    filterPrice: {
+      get() {
+        return this.$route.query.price || this.$options.defaultPrice;
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          price: Object.values(PRICE_OPTIONS).includes(value)
+            ? value
+            : this.$options.defaultPrice,
+        };
+
+        switch (value) {
+          case PRICE_OPTIONS.PAID:
+          case PRICE_OPTIONS.FREE:
+            query.sort = SORTING_OPTIONS.LATEST;
+            break;
+          case PRICE_OPTIONS.ALL:
+          default:
+            query.sort = SORTING_OPTIONS.RECOMMEND;
+            break;
+        }
+
+        this.$router.push({ query });
+      },
+    },
+    filterLanguage: {
+      get() {
+        return this.$route.query.lang || this.$options.defaultLanguage;
+      },
+      set(value) {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            lang: Object.values(LANGUAGE_OPTIONS).includes(value)
+              ? value
+              : this.$options.defaultLanguage,
+          },
+        });
+      },
+    },
     currentSortingText() {
       const text = `listing_page_header_sort_${this.selectedSorting}`;
       return this.$t('listing_page_header_sort', { sort: this.$t(text) });
@@ -426,23 +499,17 @@ export default {
     },
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
     handleSelectSorting(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
       this.selectedSorting = value;
       this.isShowSortingDialog = false;
-      if (value === SORTING_OPTIONS.RECOMMEND) {
-        this.filterType = TYPE_OPTIONS.ALL;
-      }
-    },
-    scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     handleFilterTypeChange(value) {
       logTrackerEvent(this, 'listing', 'listing_filter_type_clicked', value, 1);
       this.filterType = value;
-      if (value !== TYPE_OPTIONS.ALL) {
-        this.selectedSorting = SORTING_OPTIONS.LATEST;
-      }
     },
     handleFilterPriceChange(value) {
       logTrackerEvent(
@@ -453,16 +520,6 @@ export default {
         1
       );
       this.filterPrice = value;
-      switch (value) {
-        case PRICE_OPTIONS.PAID:
-        case PRICE_OPTIONS.FREE:
-          this.selectedSorting = SORTING_OPTIONS.LATEST;
-          break;
-        case PRICE_OPTIONS.ALL:
-        default:
-          this.selectedSorting = SORTING_OPTIONS.RECOMMEND;
-          break;
-      }
     },
     handleFilterLanguageChange(value) {
       logTrackerEvent(
