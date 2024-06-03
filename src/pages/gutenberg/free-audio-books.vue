@@ -131,24 +131,36 @@
             'border-b-shade-gray',
             'border-b-[1px]',
             'py-[12px]',
+            'transition-colors',
+            'hover:bg-shade-gray',
+
+            'cursor-pointer',
+            {
+              'cursor-not-allowed': !row.classId || row.classId === 'failed',
+            },
           ]"
         >
           <td class="px-[8px] text-medium-gray">
-            {{ rowIndex + 1 }}
+            <NuxtLink
+              v-if="row.classId && row.classId !== 'failed'"
+              class="flex w-full"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: {
+                    classId: row.classId,
+                  },
+                })
+              "
+              target="_blank"
+            >
+              {{ rowIndex + 1 }}
+            </NuxtLink>
+            <span v-else>
+              {{ rowIndex + 1 }}
+            </span>
           </td>
-          <td
-            :class="[
-              'font-600',
-              'py-[12px]',
-              'transition-colors',
-              'hover:bg-shade-gray',
-
-              'cursor-pointer',
-              {
-                'cursor-not-allowed': !row.classId || row.classId === 'failed',
-              },
-            ]"
-          >
+          <td :class="['font-600', 'py-[12px]']">
             <NuxtLink
               v-if="row.classId && row.classId !== 'failed'"
               class="flex w-full"
@@ -169,7 +181,24 @@
             </span>
           </td>
           <td>
-            {{ row.author }}
+            <NuxtLink
+              v-if="row.classId && row.classId !== 'failed'"
+              class="flex w-full"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: {
+                    classId: row.classId,
+                  },
+                })
+              "
+              target="_blank"
+            >
+              {{ row.author }}
+            </NuxtLink>
+            <span v-else>
+              {{ row.author }}
+            </span>
           </td>
         </tr>
       </tbody>
