@@ -224,6 +224,7 @@ export default {
     const parsedData = await parseCSV(csvData);
     const jsonLd = generateJSONLD(parsedData);
 
+    // eslint-disable-next-line no-param-reassign
     app.head.script = app.head.script || [];
     app.head.script.push({
       type: 'application/ld+json',
