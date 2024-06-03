@@ -468,20 +468,10 @@ export default {
       return items;
     },
     QAList() {
-      return [
-        {
-          label: this.$t('listing_page_QA_label'),
-          content: this.$t('listing_page_QA_content'),
-        },
-        {
-          label: `${this.$t('listing_page_QA_label')}_1`,
-          content: this.$t('listing_page_QA_content'),
-        },
-        {
-          label: `${this.$t('listing_page_QA_label')}_2`,
-          content: this.$t('listing_page_QA_content'),
-        },
-      ];
+      return this.$t('index_faq_list').map(({ q: label, a: content }) => ({
+        label,
+        content,
+      }));
     },
   },
   watch: {
