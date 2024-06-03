@@ -219,6 +219,17 @@ const DISPLAY_NUMBER = 100;
 export default {
   name: 'FreeAudioBooks',
   layout: 'default',
+  async asyncData({ app, $api }) {
+    const csvData = await $api.$get(fetchGutenbergCsv());
+    const parsedData = await parseCSV(csvData);
+    const jsonLd = generateJSONLD(parsedData);
+
+    app.head.script = app.head.script || [];
+    app.head.script.push({
+      type: 'application/ld+json',
+      json: jsonLd,
+    });
+  },
   data() {
     return {
       csvData: [],
@@ -357,4 +368,44 @@ export default {
     },
   },
 };
+
+function parseCSV(csvData) {
+  return new Promise((resolve, reject) => {
+    const parsedData = [];
+    const csvStream = csvParser();
+
+    csvStream.on('data', record => {
+      parsedData.push(record);
+    });
+
+    csvStream.on('end', () => {
+      resolve(parsedData);
+    });
+
+    csvStream.on('error', err => {
+      reject(err);
+    });
+
+    csvStream.write(csvData);
+    csvStream.end();
+  });
+}
+
+function generateJSONLD(data) {
+  if (!Array.isArray(data)) {
+    return {};
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: data.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.classTitle,
+      author: item.author,
+      classId: item.classId,
+    })),
+  };
+}
 </script>
