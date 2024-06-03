@@ -145,23 +145,18 @@
 
               'cursor-pointer',
               {
-                'cursor-not-allowed':
-                  !csvData[rowIndex].classId ||
-                  csvData[rowIndex].classId === 'failed',
+                'cursor-not-allowed': !row.classId || row.classId === 'failed',
               },
             ]"
           >
             <NuxtLink
-              v-if="
-                csvData[rowIndex].classId &&
-                  csvData[rowIndex].classId !== 'failed'
-              "
+              v-if="row.classId && row.classId !== 'failed'"
               class="flex w-full"
               :to="
                 localeLocation({
                   name: 'nft-class-classId',
                   params: {
-                    classId: csvData[rowIndex].classId,
+                    classId: row.classId,
                   },
                 })
               "
@@ -209,11 +204,11 @@
 </template>
 
 <script>
-import { fetchGutenbergCsv } from '~/util/api';
 import csvParser from 'csv-parser';
+import { fetchGutenbergCsv } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { APP_LIKE_CO_URL_BASE, EXTERNAL_HOST } from '~/constant';
 
-const DISPLAY_COLUMN = ['classTitle', 'classId', 'author'];
 const DISPLAY_NUMBER = 100;
 
 export default {
@@ -222,14 +217,12 @@ export default {
   async asyncData({ $api }) {
     const csvData = await $api.$get(fetchGutenbergCsv());
     const parsedData = await parseCSV(csvData);
-    const jsonLd = generateJSONLD(parsedData);
 
-    return { csvData, jsonLd };
+    return { parsedData };
   },
   data() {
     return {
-      csvData: [],
-      csvHeader: [],
+      parsedData: [],
       searchKeyword: '',
       currentDisplayNumber: DISPLAY_NUMBER,
       totalAmount: 0,
@@ -237,10 +230,10 @@ export default {
   },
   head() {
     const scripts = [];
-    if (this.jsonLd) {
+    if (this.generatedJSONLD) {
       scripts.push({
         type: 'application/ld+json',
-        json: this.jsonLd,
+        json: this.generatedJSONLD,
       });
     }
     return {
@@ -268,10 +261,10 @@ export default {
   computed: {
     filteredData() {
       if (!this.searchKeyword) {
-        return this.csvData;
+        return this.parsedData;
       }
       const lowerCaseKeyword = this.searchKeyword.toLowerCase();
-      const filtered = this.csvData.filter(row =>
+      const filtered = this.parsedData.filter(row =>
         row.classTitle
           .toString()
           .toLowerCase()
@@ -282,61 +275,29 @@ export default {
     displayData() {
       return this.filteredData.slice(0, this.currentDisplayNumber);
     },
+    generatedJSONLD() {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'DataFeed',
+        dataFeedElement: this.parsedData.map(row => ({
+          '@type': 'Book',
+          '@id': row.classId,
+          name: row.classTitle,
+          author: row.author,
+          url: `${EXTERNAL_HOST}/nft/class/${row.classId}`,
+          sameAs: `${APP_LIKE_CO_URL_BASE}/view/${encodeURIComponent(
+            row.iscnPrefix
+          )}`,
+        })),
+      };
+    },
   },
   watch: {
     searchKeyword() {
       this.currentDisplayNumber = DISPLAY_NUMBER;
     },
   },
-  mounted() {
-    this.loadCSVFile(DISPLAY_COLUMN);
-  },
-
   methods: {
-    loadCSVFile(displayColumn) {
-      this.csvHeader = displayColumn;
-      try {
-        const parsedData = [];
-        const csvStream = csvParser({ headers: false });
-
-        csvStream.write(this.csvData);
-        csvStream.end();
-
-        csvStream.on('data', record => {
-          parsedData.push(record);
-        });
-
-        csvStream.on('end', () => {
-          const headerValues = Object.values(parsedData[0]);
-          const headerMap = [];
-
-          displayColumn.forEach(name => {
-            const num = headerValues.indexOf(name);
-            if (num !== -1) {
-              headerMap.push(num);
-            }
-          });
-          const selectedData = parsedData.map(row => {
-            const selectedRow = {};
-            headerMap.forEach(index => {
-              const columnName = headerValues[index];
-              selectedRow[columnName] = row[index];
-            });
-            return selectedRow;
-          });
-
-          if (selectedData && selectedData.length) {
-            this.csvData = selectedData.splice(1);
-          } else {
-            this.csvData = [];
-          }
-        });
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error loading CSV file:', error);
-      }
-    },
-
     handleClickRow(classId) {
       logTrackerEvent(this, 'Gutenberg', 'clickDownload', classId, 1);
     },
@@ -388,23 +349,5 @@ function parseCSV(csvData) {
     csvStream.write(csvData);
     csvStream.end();
   });
-}
-
-function generateJSONLD(data) {
-  if (!Array.isArray(data)) {
-    return {};
-  }
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    itemListElement: data.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.classTitle,
-      author: item.author,
-      classId: item.classId,
-    })),
-  };
 }
 </script>
