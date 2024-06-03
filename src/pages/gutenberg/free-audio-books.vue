@@ -110,7 +110,7 @@
     >
       <thead :class="['border-b-shade-gray', 'border-b-[2px]']">
         <tr class="text-medium-gray">
-          <th :class="['py-[12px]', 'text-[16px]', 'text-left']">
+          <th :class="['py-[12px]', 'text-[16px]', 'text-left', 'w-[48px]']">
             {{ $t('gutenberg_dialog_title_no') }}
           </th>
           <th :class="['py-[12px]', 'text-[16px]', 'text-left']">
