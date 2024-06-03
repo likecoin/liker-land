@@ -50,7 +50,9 @@
       >
     </i18n>
 
-    <div class="flex justify-center mb-[24px] w-full max-w-[960px]">
+    <div
+      class="flex flex-col items-start w-full max-w-[960px] laptop:flex-row laptop:justify-between laptop:mb-[24px]"
+    >
       <ButtonV2
         preset="plain"
         class="text-medium-gray"
@@ -61,10 +63,22 @@
           <IconArrowLeft class="w-[20px]" />
         </template>
       </ButtonV2>
+      <div
+        class="flex self-end laptop:justify-end laptop:items-center laptop:self-center gap-[4px]"
+      >
+        <IconSearch />
+        <input
+          v-model="searchKeyword"
+          class="w-full bg-transparent border-0 focus-visible:outline-none"
+          type="text"
+          :placeholder="$t('gutenberg_search_placeholder')"
+          @change="handleInputChange"
+        />
+      </div>
     </div>
 
     <div
-      v-if="!csvData.length"
+      v-if="!displayData.length && !searchKeyword"
       :class="[
         'flex',
         'flex-col',
@@ -75,8 +89,20 @@
     >
       <ProgressIndicator />
     </div>
+    <div
+      v-else-if="!displayData.length && searchKeyword"
+      :class="[
+        'flex',
+        'flex-col',
+        'items-center',
+        'justify-center',
+        'gap-[24px]',
+      ]"
+    >
+      {{ $t('gutenberg_search_empty') }}
+    </div>
     <table
-      v-else
+      v-else-if="displayData.length"
       :class="[
         'w-full',
         'table-auto',
@@ -88,7 +114,7 @@
     >
       <thead :class="['border-b-shade-gray', 'border-b-[2px]']">
         <tr class="text-medium-gray">
-          <th :class="['py-[12px]', 'text-[16px]', 'text-left']">
+          <th :class="['py-[12px]', 'text-[16px]', 'text-left', 'w-[48px]']">
             {{ $t('gutenberg_dialog_title_no') }}
           </th>
           <th :class="['py-[12px]', 'text-[16px]', 'text-left']">
@@ -101,45 +127,52 @@
       </thead>
       <tbody>
         <tr
-          v-for="(row, rowIndex) in csvData"
-          :key="rowIndex"
+          v-for="(row, rowIndex) in displayData"
+          :key="`${row.classTitle}-${rowIndex}`"
           :class="[
             'text-[16px]',
             'text-like-green',
             'border-b-shade-gray',
             'border-b-[1px]',
             'py-[12px]',
+            'transition-colors',
+            'hover:bg-shade-gray',
+
+            'cursor-pointer',
+            {
+              'cursor-not-allowed': !row.classId || row.classId === 'failed',
+            },
           ]"
         >
           <td class="px-[8px] text-medium-gray">
-            {{ rowIndex + 1 }}
-          </td>
-          <td
-            :class="[
-              'font-600',
-              'py-[12px]',
-              'transition-colors',
-              'hover:bg-shade-gray',
-
-              'cursor-pointer',
-              {
-                'cursor-not-allowed':
-                  !csvData[rowIndex].classId ||
-                  csvData[rowIndex].classId === 'failed',
-              },
-            ]"
-          >
             <NuxtLink
-              v-if="
-                csvData[rowIndex].classId &&
-                  csvData[rowIndex].classId !== 'failed'
-              "
+              v-if="row.classId && row.classId !== 'failed'"
               class="flex w-full"
               :to="
                 localeLocation({
                   name: 'nft-class-classId',
                   params: {
-                    classId: csvData[rowIndex].classId,
+                    classId: row.classId,
+                  },
+                })
+              "
+              target="_blank"
+            >
+              {{ rowIndex + 1 }}
+            </NuxtLink>
+            <span v-else>
+              {{ rowIndex + 1 }}
+            </span>
+          </td>
+          <td :class="['font-600', 'py-[12px]']">
+            <NuxtLink
+              v-if="row.classId && row.classId !== 'failed'"
+              class="flex w-full"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: {
+                    classId: row.classId,
                   },
                 })
               "
@@ -152,13 +185,35 @@
             </span>
           </td>
           <td>
-            {{ row.author }}
+            <NuxtLink
+              v-if="row.classId && row.classId !== 'failed'"
+              class="flex w-full"
+              :to="
+                localeLocation({
+                  name: 'nft-class-classId',
+                  params: {
+                    classId: row.classId,
+                  },
+                })
+              "
+              target="_blank"
+            >
+              {{ row.author }}
+            </NuxtLink>
+            <span v-else>
+              {{ row.author }}
+            </span>
           </td>
         </tr>
       </tbody>
     </table>
+    <ButtonV2
+      v-if="filteredData.length && filteredData.length > currentDisplayNumber"
+      :text="$t('gutenberg_search_load_more')"
+      @click="handleLoadMore"
+    />
     <div
-      v-if="csvData.length"
+      v-if="displayData.length"
       class="sticky bottom-0 w-full flex flex-row justify-center items-center gap-[12px] p-[1rem] pt-[2rem] bg-gradient-to-t from-gray-f7"
     >
       <ButtonV2
@@ -182,22 +237,38 @@
 </template>
 
 <script>
-import { fetchGutenbergCsv } from '~/util/api';
 import csvParser from 'csv-parser';
+import { fetchGutenbergCsv } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { APP_LIKE_CO_URL_BASE, EXTERNAL_HOST } from '~/constant';
 
-const DISPLAY_COLUMN = ['classTitle', 'classId', 'author'];
+const DISPLAY_NUMBER = 100;
 
 export default {
   name: 'FreeAudioBooks',
   layout: 'default',
+  async asyncData({ $api }) {
+    const csvData = await $api.$get(fetchGutenbergCsv());
+    const parsedData = await parseCSV(csvData);
+
+    return { parsedData };
+  },
   data() {
     return {
-      csvData: [],
-      csvHeader: [],
+      parsedData: [],
+      searchKeyword: '',
+      currentDisplayNumber: DISPLAY_NUMBER,
+      totalAmount: 0,
     };
   },
   head() {
+    const scripts = [];
+    if (this.generatedJSONLD) {
+      scripts.push({
+        type: 'application/ld+json',
+        json: this.generatedJSONLD,
+      });
+    }
     return {
       title: this.$t('gutenbergFreeAudioBooksPage_og_title'),
       meta: [
@@ -217,58 +288,53 @@ export default {
           content: this.$t('gutenbergFreeAudioBooksPage_og_description'),
         },
       ],
+      script: scripts,
     };
   },
-  async mounted() {
-    await this.loadCSVFile(DISPLAY_COLUMN);
+  computed: {
+    filteredData() {
+      if (!this.searchKeyword) {
+        return this.parsedData;
+      }
+      const lowerCaseKeyword = this.searchKeyword.toLowerCase();
+      const filtered = this.parsedData.filter(
+        row =>
+          row.classTitle
+            .toString()
+            .toLowerCase()
+            .includes(lowerCaseKeyword) ||
+          row.author
+            .toString()
+            .toLowerCase()
+            .includes(lowerCaseKeyword)
+      );
+      return filtered;
+    },
+    displayData() {
+      return this.filteredData.slice(0, this.currentDisplayNumber);
+    },
+    generatedJSONLD() {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'DataFeed',
+        dataFeedElement: this.parsedData.map(row => ({
+          '@context': 'http://www.schema.org',
+          '@type': 'Book',
+          '@id': `${EXTERNAL_HOST}/nft/class/${row.classId}`,
+          name: row.classTitle,
+          author: row.author,
+          url: `${EXTERNAL_HOST}/nft/class/${row.classId}`,
+          identifier: row.classId,
+        })),
+      };
+    },
+  },
+  watch: {
+    searchKeyword() {
+      this.currentDisplayNumber = DISPLAY_NUMBER;
+    },
   },
   methods: {
-    async loadCSVFile(displayColumn) {
-      this.csvHeader = displayColumn;
-      try {
-        const response = await this.$api.$get(fetchGutenbergCsv());
-        const parsedData = [];
-
-        const csvStream = csvParser({ headers: false });
-
-        csvStream.write(response);
-        csvStream.end();
-
-        csvStream.on('data', record => {
-          parsedData.push(record);
-        });
-
-        csvStream.on('end', () => {
-          const headerValues = Object.values(parsedData[0]);
-          const headerMap = [];
-
-          displayColumn.forEach(name => {
-            const num = headerValues.indexOf(name);
-            if (num !== -1) {
-              headerMap.push(num);
-            }
-          });
-          const selectedData = parsedData.map(row => {
-            const selectedRow = {};
-            headerMap.forEach(index => {
-              const columnName = headerValues[index];
-              selectedRow[columnName] = row[index];
-            });
-            return selectedRow;
-          });
-
-          if (selectedData && selectedData.length) {
-            this.csvData = selectedData.splice(1);
-          } else {
-            this.csvData = [];
-          }
-        });
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error loading CSV file:', error);
-      }
-    },
-
     handleClickRow(classId) {
       logTrackerEvent(this, 'Gutenberg', 'clickDownload', classId, 1);
     },
@@ -291,6 +357,34 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
+    handleLoadMore() {
+      this.currentDisplayNumber += 100;
+    },
+    handleInputChange(value) {
+      logTrackerEvent(this, 'Gutenberg', 'inputChange', value.target.value, 1);
+    },
   },
 };
+
+function parseCSV(csvData) {
+  return new Promise((resolve, reject) => {
+    const parsedData = [];
+    const csvStream = csvParser();
+
+    csvStream.on('data', record => {
+      parsedData.push(record);
+    });
+
+    csvStream.on('end', () => {
+      resolve(parsedData);
+    });
+
+    csvStream.on('error', err => {
+      reject(err);
+    });
+
+    csvStream.write(csvData);
+    csvStream.end();
+  });
+}
 </script>
