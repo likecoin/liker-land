@@ -318,14 +318,13 @@ export default {
         '@context': 'https://schema.org',
         '@type': 'DataFeed',
         dataFeedElement: this.parsedData.map(row => ({
+          '@context': 'http://www.schema.org',
           '@type': 'Book',
-          '@id': row.classId,
+          '@id': `${EXTERNAL_HOST}/nft/class/${row.classId}`,
           name: row.classTitle,
           author: row.author,
           url: `${EXTERNAL_HOST}/nft/class/${row.classId}`,
-          sameAs: `${APP_LIKE_CO_URL_BASE}/view/${encodeURIComponent(
-            row.iscnPrefix
-          )}`,
+          identifier: row.classId,
         })),
       };
     },
