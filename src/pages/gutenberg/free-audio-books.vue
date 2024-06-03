@@ -74,7 +74,7 @@
     </div>
 
     <div
-      v-if="isLoadingCSV"
+      v-if="!displayData.length && !searchKeyword"
       :class="[
         'flex',
         'flex-col',
@@ -86,7 +86,7 @@
       <ProgressIndicator />
     </div>
     <div
-      v-else-if="!isLoadingCSV && !displayData.length"
+      v-else-if="!displayData.length && searchKeyword"
       :class="[
         'flex',
         'flex-col',
@@ -219,17 +219,12 @@ const DISPLAY_NUMBER = 100;
 export default {
   name: 'FreeAudioBooks',
   layout: 'default',
-  async asyncData({ app, $api }) {
+  async asyncData({ $api }) {
     const csvData = await $api.$get(fetchGutenbergCsv());
     const parsedData = await parseCSV(csvData);
     const jsonLd = generateJSONLD(parsedData);
 
-    // eslint-disable-next-line no-param-reassign
-    app.head.script = app.head.script || [];
-    app.head.script.push({
-      type: 'application/ld+json',
-      json: jsonLd,
-    });
+    return { csvData, jsonLd };
   },
   data() {
     return {
@@ -238,10 +233,16 @@ export default {
       searchKeyword: '',
       currentDisplayNumber: DISPLAY_NUMBER,
       totalAmount: 0,
-      isLoadingCSV: false,
     };
   },
   head() {
+    const scripts = [];
+    if (this.jsonLd) {
+      scripts.push({
+        type: 'application/ld+json',
+        json: this.jsonLd,
+      });
+    }
     return {
       title: this.$t('gutenbergFreeAudioBooksPage_og_title'),
       meta: [
@@ -261,6 +262,7 @@ export default {
           content: this.$t('gutenbergFreeAudioBooksPage_og_description'),
         },
       ],
+      script: scripts,
     };
   },
   computed: {
@@ -286,22 +288,18 @@ export default {
       this.currentDisplayNumber = DISPLAY_NUMBER;
     },
   },
-  async mounted() {
-    this.isLoadingCSV = true;
-    await this.loadCSVFile(DISPLAY_COLUMN);
-    this.isLoadingCSV = false;
+  mounted() {
+    this.loadCSVFile(DISPLAY_COLUMN);
   },
 
   methods: {
-    async loadCSVFile(displayColumn) {
+    loadCSVFile(displayColumn) {
       this.csvHeader = displayColumn;
       try {
-        const response = await this.$api.$get(fetchGutenbergCsv());
         const parsedData = [];
-
         const csvStream = csvParser({ headers: false });
 
-        csvStream.write(response);
+        csvStream.write(this.csvData);
         csvStream.end();
 
         csvStream.on('data', record => {
