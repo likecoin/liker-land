@@ -186,7 +186,7 @@
     </div>
 
     <!-- Scroll To Top Button -->
-    <div class="sticky bottom-[32px] self-end">
+    <div class="sticky bottom-[96px] self-end">
       <ButtonV2
         :class="[
           'bg-white',

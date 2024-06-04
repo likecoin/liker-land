@@ -2,6 +2,7 @@
   <Dialog
     :open="isOpen"
     preset="custom"
+    z-index-class="z-[1000001]"
     panel-class="px-0 overflow-x-auto shadow-lg rounded-b-none rounded-t-[24px] sm:rounded-[24px] !py-[16px]"
     panel-container-class="max-w-[500px] p-[0] sm:px-[12px] sm:py-[24px]"
     panel-component="CardV2"

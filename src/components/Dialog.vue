@@ -1,6 +1,14 @@
 <template>
   <Portal v-if="isOpen" to="dialog">
-    <div class="fixed inset-0 z-[50] overflow-x-hidden overflow-y-auto">
+    <div
+      :class="[
+        'fixed',
+        'inset-0',
+        'overflow-x-hidden',
+        'overflow-y-auto',
+        zIndexClass,
+      ]"
+    >
       <div key="scrollableContent" :class="scrollableClasses">
         <div
           key="backdrop"
@@ -148,6 +156,9 @@ export default class Dialog extends Vue {
   // Set to false to hide the close button
   @Prop({ default: true })
   readonly hasCloseButton!: boolean;
+
+  @Prop({ default: 'z-[50]' })
+  readonly zIndexClass!: string;
 
   @Prop({ default: () => [] })
   readonly scrollableWrapperClasses!: any;
