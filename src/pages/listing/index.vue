@@ -241,12 +241,10 @@
         :selected-type="filterType"
         :selected-price="filterPrice"
         :selected-language="filterLanguage"
-        :default-type="$options.defaultType"
-        :default-price="$options.defaultPrice"
-        :default-language="$options.defaultLanguage"
         @change-type="handleFilterTypeChange"
         @change-price="handleFilterPriceChange"
         @change-language="handleFilterLanguageChange"
+        @reset="handleFilterReset"
         @close="handleCloseDialog"
       />
     </ListingPageDialog>
@@ -552,6 +550,11 @@ export default {
         1
       );
       this.filterLanguage = value;
+    },
+    handleFilterReset() {
+      logTrackerEvent(this, 'listing', 'listing_filter_reset', '', 1);
+      const { type, price, lang, ...query } = this.$route.query;
+      this.$router.push({ query });
     },
     handleOpenSortingDialog() {
       this.isShowSortingDialog = true;

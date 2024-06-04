@@ -37,18 +37,6 @@ export default {
       type: String,
       default: undefined,
     },
-    defaultType: {
-      type: String,
-      default: undefined,
-    },
-    defaultPrice: {
-      type: String,
-      default: undefined,
-    },
-    defaultLanguage: {
-      type: String,
-      default: undefined,
-    },
   },
   computed: {
     filterType: {
@@ -87,9 +75,7 @@ export default {
       this.filterLanguage = value;
     },
     handleReset() {
-      this.filterType = this.defaultType;
-      this.filterPrice = this.defaultPrice;
-      this.filterLanguage = this.defaultLanguage;
+      this.$emit('reset');
     },
     handleConfirm() {
       this.$emit('close');
