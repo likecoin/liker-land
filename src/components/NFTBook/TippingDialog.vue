@@ -3,7 +3,7 @@
     :open="open"
     panel-container-class="phone:w-full laptop:w-full max-w-[400px]"
     panel-component="CardV2"
-    panel-class="overflow-y-scroll shadow-lg"
+    panel-class="overflow-y-scroll shadow-lg px-[12px]"
     @close="$emit('close')"
   >
     <div class="flex flex-col items-center">
@@ -29,16 +29,24 @@
           {{ $t('nft_tipping_description', { price: price }) }}
         </p>
       </div>
-      <div class="flex flex-col items-center w-full px-0 sm:px-[40px]">
-        <div class="flex items-center justify-center w-full gap-[16px]">
-          <ButtonV2
+      <div class="flex flex-col items-center w-full px-0 sm:px-[20px]">
+        <div class="flex items-center w-full justify-center gap-[6px]">
+          <div
             v-for="(tipping, i) of getDefaultTipping(currency)"
             :key="`${tipping}-${currency}`"
-            preset="outline"
             :class="[
+              'py-[12px]',
+              'px-[28px]',
+
+              'flex-auto',
+              'rounded-[12px]',
+              'border-[2px]',
+              'border-shade-gray',
               { '!border-like-green': selectedIndex === i && !inputValue },
-              'min-h-[60px]',
-              'min-w-[8-px]',
+              'hover:border-medium-gray',
+              'cursor-pointer',
+              'duration-100',
+              'relative',
             ]"
             @click.prevent="
               () => {
@@ -50,15 +58,23 @@
               <Label class="text-dark-gray" preset="h4">{{ tipping }}</Label>
               <Label preset="h6" class="text-medium-gray">{{ currency }}</Label>
             </div>
-          </ButtonV2>
+            <TippingCheckIcon
+              v-if="selectedIndex === i && !inputValue"
+              class="absolute top-[-10px] left-[-10px]"
+            />
+          </div>
         </div>
-        <div class="flex justify-center w-full mt-[8px]">
+        <div class="flex justify-center w-full mt-[8px] relative">
           <NFTBookTippingInput
             v-model="inputValue"
             :fixed-text="currency"
             :placeholder="$t('nft_tipping_placeholder')"
             @input="handleInputChange"
             @on-focus="selectedIndex = -1"
+          />
+          <TippingCheckIcon
+            v-if="selectedIndex === -1"
+            class="absolute top-[-10px] left-[-10px]"
           />
         </div>
         <div
