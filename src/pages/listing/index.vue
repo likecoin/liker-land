@@ -1,16 +1,19 @@
 <template>
   <Page :class="['w-full', 'min-h-screen', 'pb-[80px]']">
-    <div
-      :class="[
-        'w-full',
-        'max-w-[1924px]',
-        'mx-auto',
-        'px-[16px] laptop:px-[48px]',
-      ]"
-    >
+    <div :class="['w-full', 'max-w-[1924px]', 'mx-auto', 'laptop:px-[48px]']">
       <!-- Header -->
       <header>
-        <div class="flex justify-between items-center w-full mb-[24px]">
+        <div
+          :class="[
+            'flex',
+            'justify-between',
+            'items-center',
+
+            'w-full',
+            'mb-[16px]',
+            'px-[16px] laptop:px-0',
+          ]"
+        >
           <!-- Breadcrumb -->
           <div class="flex gap-[8px] px-[4px] items-center">
             <NuxtLink
@@ -69,10 +72,23 @@
 
         <!-- Mobile Filter Section -->
         <div
-          class="grid w-full grid-cols-2 border-t-[1px] border-b-[1px] border-shade-gray mb-[24px] laptop:hidden"
+          :class="[
+            'grid laptop:hidden',
+            'grid-cols-2',
+
+            'w-full',
+            'mb-[24px]',
+
+            'border-t-[1px]',
+            'border-b-[1px]',
+            'border-shade-gray',
+
+            'divide-x',
+            'divide-shade-gray',
+          ]"
         >
           <div
-            class="flex items-center justify-center cursor-pointer py-[14px] border-r-[1px] border-shade-gray"
+            class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenFilterDialog"
           >
             <Label :text="$t('listing_page_filter')">
@@ -82,7 +98,7 @@
             </Label>
           </div>
           <div
-            class="flex items-center justify-center cursor-pointer py-[14px]"
+            class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenSortingDialog"
           >
             <Label :text="currentSortingText">
@@ -100,7 +116,9 @@
           'flex',
           'flex-col laptop:flex-row',
           'gap-[32px] laptop:gap-[20px]',
+
           'w-full',
+          'px-[16px] laptop:px-0',
         ]"
       >
         <!-- Desktop Filter Section -->
