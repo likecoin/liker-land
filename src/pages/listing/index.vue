@@ -226,7 +226,6 @@
     >
       <ListingPageMobileSortingSection
         :available-sorting="availableSorting"
-        :default-sorting="$options.defaultSorting"
         :selected-sorting="selectedSorting"
         @change-sorting="handleSelectSorting"
         @close="handleCloseDialog"

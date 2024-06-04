@@ -22,10 +22,7 @@
       </li>
     </ul>
 
-    <footer class="grid grid-cols-2 gap-[12px] px-[12px]">
-      <ButtonV2 preset="tertiary" @click="handleReset">{{
-        $t('listing_page_button_reset')
-      }}</ButtonV2>
+    <footer class="grid grid-cols-1 gap-[12px] px-[12px]">
       <ButtonV2 @click="handleConfirm">{{
         $t('listing_page_button_confirm')
       }}</ButtonV2>
@@ -45,15 +42,11 @@ export default {
       type: String,
       default: '',
     },
-    defaultSorting: {
-      type: String,
-      default: undefined,
-    },
   },
   computed: {
     currentSelect: {
       get() {
-        return this.selectedSorting;
+        return this.selectedSorting || (this.availableSorting[0] || {}).value;
       },
       set(value) {
         this.$emit('change-sorting', value);
@@ -61,9 +54,6 @@ export default {
     },
   },
   methods: {
-    handleReset() {
-      this.currentSelect = this.defaultSorting;
-    },
     handleConfirm() {
       this.$emit('close');
     },
