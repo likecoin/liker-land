@@ -1,5 +1,5 @@
 <template>
-  <Page :class="['w-full', 'min-h-screen', 'pb-[80px]']">
+  <Page :class="['w-full', 'min-h-screen', 'pb-[24px]']">
     <div :class="['w-full', 'max-w-[1924px]', 'mx-auto', 'laptop:px-[48px]']">
       <!-- Header -->
       <header>
@@ -144,7 +144,17 @@
           </div>
         </section>
 
-        <section class="flex-1 w-full">
+        <section
+          :class="[
+            'flex',
+            'flex-col',
+            'items-center',
+            'gap-[32px]',
+            'flex-1',
+
+            'w-full',
+          ]"
+        >
           <!-- Listing items -->
           <ul
             :class="[
@@ -171,14 +181,19 @@
             </li>
           </ul>
 
-          <footer
-            class="flex flex-col items-center gap-[24px] mt-[40px] p-[24px]"
-          >
-            <p>{{ $t('listing_page_cant_find_books') }}</p>
-            <ButtonV2
-              preset="tertiary"
-              :text="$t('listing_page_cant_find_books_button')"
-              @click="handleClickCantFindBook"
+          <footer class="flex flex-col gap-[32px]">
+            <div class="flex flex-col items-center gap-[24px] py-[24px]">
+              <p>{{ $t('listing_page_cant_find_books') }}</p>
+              <ButtonV2
+                preset="tertiary"
+                :text="$t('listing_page_cant_find_books_button')"
+                @click="handleClickCantFindBook"
+              />
+            </div>
+
+            <ListingPageQASection
+              class="w-full laptop:hidden"
+              :item-list="QAList"
             />
           </footer>
         </section>
@@ -186,7 +201,7 @@
     </div>
 
     <!-- Scroll To Top Button -->
-    <div class="sticky bottom-[96px] self-end">
+    <div class="sticky bottom-[96px] self-end mt-[16px]">
       <ButtonV2
         :class="[
           'bg-white',
