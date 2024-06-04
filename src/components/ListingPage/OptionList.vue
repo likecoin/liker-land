@@ -23,7 +23,7 @@
       <MenuButton
         :text="item.text"
         :is-selected="item.value === value"
-        @click="$emit('update:value', item.value)"
+        @click="$emit('input', item.value)"
       />
     </li>
   </ul>

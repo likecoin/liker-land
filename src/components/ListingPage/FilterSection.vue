@@ -18,11 +18,7 @@
           class="whitespace-nowrap"
           :text="$t('listing_page_filter_type_title')"
         />
-        <ListingPageOptionList
-          :value="filterType"
-          :items="filterTypeList"
-          @update:value="handleTypeChange"
-        />
+        <ListingPageOptionList v-model="filterType" :items="filterTypeList" />
       </div>
       <!-- Price -->
       <div
@@ -32,11 +28,7 @@
           class="whitespace-nowrap"
           :text="$t('listing_page_filter_price_title')"
         />
-        <ListingPageOptionList
-          :value="filterPrice"
-          :items="filterPriceList"
-          @update:value="handlePriceChange"
-        />
+        <ListingPageOptionList v-model="filterPrice" :items="filterPriceList" />
       </div>
       <!-- Language -->
       <!-- Not supported yet
@@ -70,7 +62,7 @@
               :value="item.value"
               :label="item.text"
               :selected-value="filterLanguage"
-              @select="handleSelectLanguage"
+              @select="filterLanguage = item.value"
             >
               <template v-if="filterLanguage === item.value" #label-append>
                 <IconCheck />
@@ -102,7 +94,7 @@
                 name="sorting"
                 :value="item.value"
                 :checked="item.value === filterLanguage"
-                @change="() => handleSelectLanguage(item.value)"
+                @change="filterLanguage = item.value"
               />
             </label>
           </li>
@@ -140,14 +132,31 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      filterType: this.selectedType || TYPE_OPTIONS.ALL,
-      filterPrice: this.selectedPrice || PRICE_OPTIONS.ALL,
-      filterLanguage: this.selectedLanguage || LANGUAGE_OPTIONS.ALL,
-    };
-  },
   computed: {
+    filterType: {
+      get() {
+        return this.selectedType || TYPE_OPTIONS.ALL;
+      },
+      set(value) {
+        this.$emit('change-type', value);
+      },
+    },
+    filterPrice: {
+      get() {
+        return this.selectedPrice || PRICE_OPTIONS.ALL;
+      },
+      set(value) {
+        this.$emit('change-price', value);
+      },
+    },
+    filterLanguage: {
+      get() {
+        return this.selectedLanguage || LANGUAGE_OPTIONS.ALL;
+      },
+      set(value) {
+        this.$emit('change-language', value);
+      },
+    },
     filterTypeList() {
       return [
         {
@@ -203,31 +212,6 @@ export default {
     selectedLanguageText() {
       const text = `listing_page_select_language_${this.filterLanguage}`;
       return this.$t(text);
-    },
-  },
-  watch: {
-    selectedType(value) {
-      this.filterType = value;
-    },
-    selectedPrice(value) {
-      this.filterPrice = value;
-    },
-    selectedLanguage(value) {
-      this.filterLanguage = value;
-    },
-  },
-  methods: {
-    handleTypeChange(value) {
-      this.filterType = value;
-      this.$emit('change-type', value);
-    },
-    handlePriceChange(value) {
-      this.filterPrice = value;
-      this.$emit('change-price', value);
-    },
-    handleSelectLanguage(value) {
-      this.filterLanguage = value;
-      this.$emit('change-language', value);
     },
   },
 };

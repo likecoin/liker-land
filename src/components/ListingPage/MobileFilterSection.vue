@@ -50,12 +50,31 @@ export default {
       default: undefined,
     },
   },
-  data() {
-    return {
-      filterType: this.selectedType,
-      filterPrice: this.selectedPrice,
-      filterLanguage: this.selectedLanguage,
-    };
+  computed: {
+    filterType: {
+      get() {
+        return this.selectedType;
+      },
+      set(value) {
+        this.$emit('change-type', value);
+      },
+    },
+    filterPrice: {
+      get() {
+        return this.selectedPrice;
+      },
+      set(value) {
+        this.$emit('change-price', value);
+      },
+    },
+    filterLanguage: {
+      get() {
+        return this.selectedLanguage;
+      },
+      set(value) {
+        this.$emit('change-language', value);
+      },
+    },
   },
   methods: {
     handleTypeChange(value) {
@@ -73,9 +92,6 @@ export default {
       this.filterLanguage = this.defaultLanguage;
     },
     handleConfirm() {
-      this.$emit('change-type', this.filterType);
-      this.$emit('change-price', this.filterPrice);
-      this.$emit('change-language', this.filterLanguage);
       this.$emit('close');
     },
   },

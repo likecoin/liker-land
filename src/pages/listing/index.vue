@@ -229,6 +229,7 @@
         :default-sorting="$options.defaultSorting"
         :selected-sorting="selectedSorting"
         @change-sorting="handleSelectSorting"
+        @close="handleCloseDialog"
       />
     </ListingPageDialog>
     <!-- Mobile Filter Dialog -->
@@ -528,7 +529,6 @@ export default {
     handleSelectSorting(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
       this.selectedSorting = value;
-      this.isShowSortingDialog = false;
     },
     handleFilterTypeChange(value) {
       logTrackerEvent(this, 'listing', 'listing_filter_type_clicked', value, 1);

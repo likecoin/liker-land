@@ -50,17 +50,22 @@ export default {
       default: undefined,
     },
   },
-  data() {
-    return {
-      currentSelect: this.selectedSorting,
-    };
+  computed: {
+    currentSelect: {
+      get() {
+        return this.selectedSorting;
+      },
+      set(value) {
+        this.$emit('change-sorting', value);
+      },
+    },
   },
   methods: {
     handleReset() {
       this.currentSelect = this.defaultSorting;
     },
     handleConfirm() {
-      this.$emit('change-sorting', this.currentSelect);
+      this.$emit('close');
     },
   },
 };
