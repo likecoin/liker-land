@@ -58,25 +58,10 @@
               <Label class="text-dark-gray" preset="h4">{{ tipping }}</Label>
               <Label preset="h6" class="text-medium-gray">{{ currency }}</Label>
             </div>
-            <div
+            <TippingCheckIcon
               v-if="selectedIndex === i && !inputValue"
-              :class="[
-                'w-[20px]',
-                'h-[20px]',
-                'flex',
-                'justify-center',
-                'items-center',
-                'rounded-[50%]',
-                'bg-like-green',
-                'border-[1px]',
-                'border-white',
-                'absolute',
-                'top-[-10px]',
-                'left-[-10px]',
-              ]"
-            >
-              <IconCheckMini class="text-white" />
-            </div>
+              class="absolute top-[-10px] left-[-10px]"
+            />
           </div>
         </div>
         <div class="flex justify-center w-full mt-[8px] relative">
@@ -87,25 +72,10 @@
             @input="handleInputChange"
             @on-focus="selectedIndex = -1"
           />
-          <div
+          <TippingCheckIcon
             v-if="selectedIndex === -1"
-            :class="[
-              'w-[20px]',
-              'h-[20px]',
-              'flex',
-              'justify-center',
-              'items-center',
-              'rounded-[50%]',
-              'bg-like-green',
-              'border-[1px]',
-              'border-white',
-              'absolute',
-              'top-[-10px]',
-              'left-[-10px]',
-            ]"
-          >
-            <IconCheckMini class="text-white" />
-          </div>
+            class="absolute top-[-10px] left-[-10px]"
+          />
         </div>
         <div
           v-if="!isLoading"
