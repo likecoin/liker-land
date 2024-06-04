@@ -95,7 +95,7 @@
               { 'border-like-green': item.value === filterLanguage },
             ]"
           >
-            <label class="flex justify-between w-full">
+            <label class="flex justify-between items-center w-full">
               <p>{{ item.text }}</p>
               <input
                 type="radio"
