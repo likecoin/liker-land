@@ -123,12 +123,14 @@ export default {
       try {
         this.isLoading = true;
         const buffer = await this.getFileBuffer('reader-epub');
+        if (this.book) return;
         this.book = Epub(buffer);
         await this.book.ready;
         this.isLoading = false;
         this.book.loaded.navigation.then(
           navigation => (this.toc = navigation.toc)
         );
+        if (this.rendition) return;
         this.rendition = this.book.renderTo('viewer', {
           width: '100%',
           height: '100%',
