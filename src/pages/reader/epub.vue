@@ -116,7 +116,7 @@ export default {
     },
   },
   mounted() {
-    this.initRendition();
+    if (!this.rendition) this.initRendition();
   },
   methods: {
     async initRendition() {
@@ -125,7 +125,6 @@ export default {
         const buffer = await this.getFileBuffer('reader-epub');
         this.book = Epub(buffer);
         await this.book.ready;
-        this.isLoading = false;
         this.book.loaded.navigation.then(
           navigation => (this.toc = navigation.toc)
         );
@@ -134,8 +133,6 @@ export default {
           height: '100%',
           spread: 'always',
         });
-        const cfi = this.resumeFromLocalStorage();
-        this.rendition.display(cfi);
         this.rendition.on('rendered', (cfiRange, contents) => {
           const path = this.rendition.currentLocation().start.href;
           const pathArr = path.split('/');
@@ -143,6 +140,9 @@ export default {
           this.dirPath = pathArr.join('/');
           this.contents = contents;
         });
+        const cfi = this.resumeFromLocalStorage();
+        await this.rendition.display(cfi);
+        this.isLoading = false;
 
         this.rendition.on('relocated', location => {
           this.saveToLocalStorage(location.start.cfi);
@@ -179,6 +179,7 @@ export default {
       }
     },
     onChangeChapter() {
+      if (this.isLoading) return;
       const chapter = this.dirPath
         ? `${this.dirPath}/${this.selectedChapter}`
         : this.selectedChapter;
