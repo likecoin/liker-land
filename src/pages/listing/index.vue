@@ -29,7 +29,7 @@
           </div>
 
           <!-- Desktop Filter & Sorting -->
-          <div class="hidden laptop:flex items-center gap-[16px]">
+          <div class="hidden desktop:flex items-center gap-[16px]">
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
@@ -139,7 +139,7 @@
         <!-- Mobile Filter & Sorting -->
         <div
           :class="[
-            'grid laptop:hidden',
+            'grid desktop:hidden',
             'grid-cols-2',
 
             'w-full',
