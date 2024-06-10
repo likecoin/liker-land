@@ -26,7 +26,7 @@
       :append-class="appendClass"
       :preset="textPreset"
       :tag="labelTag"
-      align="center"
+      :align="align"
     >
       <template v-if="shouldShowPrepend" #prepend>
         <slot name="prepend" />
@@ -116,6 +116,12 @@ export default class ButtonV2 extends Vue {
   // HTML tag of the label
   @Prop(String)
   readonly labelTag!: string | undefined;
+
+  @Prop({ default: 'center' })
+  readonly align!: string | undefined;
+
+  @Prop(String)
+  readonly borderClass!: string | undefined;
 
   get tag() {
     if (!this.isDisabled) {
@@ -267,7 +273,8 @@ export default class ButtonV2 extends Vue {
         'relative !rounded-full': this.isThemeGlow,
         [this.backgroundClassForPreset]:
           !this.isThemeGlow && !this.isPresetOutline,
-        'border-2': !this.isThemeGlow && this.isPresetOutline,
+        [this.borderClass || 'border-2']:
+          !this.isThemeGlow && this.isPresetOutline,
         'justify-center rounded-[50%]': this.isCircle,
       },
     ];

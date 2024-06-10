@@ -12,7 +12,7 @@
 
       'border-[1px]',
       'border-shade-gray',
-      'rounded-[14px]',
+      'rounded-[8px]',
     ]"
   >
     <li
@@ -21,6 +21,7 @@
       class="flex items-center cursor-pointer"
     >
       <MenuButton
+        class="rounded-[8px]"
         :text="item.text"
         :is-selected="item.value === value"
         @click="$emit('input', item.value)"

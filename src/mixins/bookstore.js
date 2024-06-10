@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     normalizeBookstoreListItems(items) {
-      return items.map(item => {
+      return items.map(({ hideDownload, ...item }) => {
         const isMultiple =
           Array.isArray(item.classId) && item.classId.length > 1;
 
@@ -39,6 +39,10 @@ export default {
           isMultiple,
           classId: isMultiple ? item.classId[0] : item.classId,
         };
+
+        if (hideDownload !== undefined) {
+          newItem.isDRMFree = !hideDownload;
+        }
 
         if (isMultiple) {
           newItem.classIds = item.classId;

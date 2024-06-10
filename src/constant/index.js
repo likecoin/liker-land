@@ -266,3 +266,7 @@ export const DEFAULT_RECOMMENDATIONS_LIST = IS_TESTNET
         'likenft1ku0gmdq6pm8vgq68fvnr7dl0vxs4j2yv0c0qlvadj5k39fdfzgsqycdllx',
       ],
     };
+
+export const BOOKSTORE_LIST_EXCLUDED_WALLET = IS_TESTNET
+  ? 'like1e25m8qmnuw905dzuv4k6prpu03z4ve6kelfx5n'
+  : 'like1zur83433p88clexqwl3yejcyntljtfvsn0kczf';

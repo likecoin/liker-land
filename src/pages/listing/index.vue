@@ -10,7 +10,6 @@
             'items-center',
 
             'w-full',
-            'mb-[16px]',
             'px-[16px] laptop:px-0',
           ]"
         >
@@ -29,20 +28,13 @@
             >
           </div>
 
-          <div class="flex items-center gap-[16px]">
-            <div class="text-medium-gray whitespace-nowrap text-[14px]">
-              {{
-                $t('listing_page_header_total_books', {
-                  num: sortedBookstoreItems.length,
-                })
-              }}
-            </div>
-
-            <Dropdown class="hidden w-full laptop:block">
+          <!-- Desktop Filter & Sorting -->
+          <div class="hidden laptop:flex items-center gap-[16px]">
+            <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
                   preset="tertiary"
-                  :text="currentSortingText"
+                  :text="selectedLanguageFilterLabel"
                   @click="toggle"
                 >
                   <template #append>
@@ -50,16 +42,90 @@
                   </template>
                 </ButtonV2>
               </template>
-              <MenuList>
+              <MenuList class="!py-[8px]">
+                <MenuItem
+                  v-for="(item, i) in languageFilterList"
+                  :key="i"
+                  class="w-full"
+                  label-align="left"
+                  label-class="py-[8px]"
+                  :value="item.value"
+                  :label="item.text"
+                  :selected-value="selectedLanguageFilter"
+                  @select="selectedLanguageFilter = item.value"
+                >
+                  <template
+                    v-if="selectedLanguageFilter === item.value"
+                    #label-append
+                  >
+                    <IconCheck />
+                  </template>
+                </MenuItem>
+              </MenuList>
+            </Dropdown>
+
+            <Dropdown>
+              <template #trigger="{ toggle }">
+                <ButtonV2
+                  preset="tertiary"
+                  :text="selectedPriceFilterLabel"
+                  @click="toggle"
+                >
+                  <template #append>
+                    <IconArrowDown />
+                  </template>
+                </ButtonV2>
+              </template>
+              <MenuList class="!py-[8px]">
+                <MenuItem
+                  v-for="(item, i) in priceFilterList"
+                  :key="i"
+                  class="w-full"
+                  label-align="left"
+                  label-class="py-[8px]"
+                  :value="item.value"
+                  :label="item.text"
+                  :selected-value="selectedPriceFilter"
+                  @select="selectedPriceFilter = item.value"
+                >
+                  <template
+                    v-if="selectedPriceFilter === item.value"
+                    #label-append
+                  >
+                    <IconCheck />
+                  </template>
+                </MenuItem>
+              </MenuList>
+            </Dropdown>
+
+            <ListingPageToggleButton
+              v-model="isAppliedDRMFreeFilter"
+              :label="$t('listing_page_filter_drm_free_label')"
+              @input="handleToggleDRMFreeFilter"
+            />
+
+            <Dropdown>
+              <template #trigger="{ toggle }">
+                <ButtonV2
+                  preset="tertiary"
+                  :text="selectedSortingLabel"
+                  @click="toggle"
+                >
+                  <template #append>
+                    <IconArrowDown />
+                  </template>
+                </ButtonV2>
+              </template>
+              <MenuList class="!py-[8px]">
                 <MenuItem
                   v-for="(item, i) in availableSorting"
                   :key="i"
                   label-align="left"
-                  label-class="py-[6px]"
+                  label-class="!py-[8px]"
                   :value="item.value"
                   :label="item.text"
                   :selected-value="selectedSorting"
-                  @select="handleSelectSorting"
+                  @select="handleSortingChange"
                 >
                   <template v-if="selectedSorting === item.value" #label-append>
                     <IconCheck />
@@ -70,14 +136,14 @@
           </div>
         </div>
 
-        <!-- Mobile Filter Section -->
+        <!-- Mobile Filter & Sorting -->
         <div
           :class="[
             'grid laptop:hidden',
             'grid-cols-2',
 
             'w-full',
-            'mb-[24px]',
+            'mt-[16px]',
 
             'border-t-[1px]',
             'border-b-[1px]',
@@ -97,11 +163,12 @@
               </template>
             </Label>
           </div>
+
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenSortingDialog"
           >
-            <Label :text="currentSortingText">
+            <Label :text="selectedSortingLabel">
               <template #prepend>
                 <IconSorter />
               </template>
@@ -111,93 +178,58 @@
       </header>
 
       <!-- Body -->
-      <div
+      <section
         :class="[
           'flex',
-          'flex-col laptop:flex-row',
-          'gap-[32px] laptop:gap-[20px]',
+          'flex-col',
+          'items-center',
+          'gap-[32px]',
+          'flex-1',
 
           'w-full',
+          'mt-[40px]',
           'px-[16px] laptop:px-0',
         ]"
       >
-        <!-- Desktop Filter Section -->
-        <section
+        <!-- Listing items -->
+        <ul
           :class="[
-            'hidden',
-            'laptop:block',
-            'min-[300px] desktopLg:min-w-[360px] full-hd:min-w-[466px]',
-          ]"
-        >
-          <div class="sticky top-[24px] flex flex-col gap-[24px]">
-            <!-- Is it possible to use multiple `v-model` in Vue2? -->
-            <ListingPageFilterSection
-              class="w-full"
-              :selected-type="filterType"
-              :selected-price="filterPrice"
-              :selected-language="filterLanguage"
-              @change-type="handleFilterTypeChange"
-              @change-price="handleFilterPriceChange"
-              @change-language="handleFilterLanguageChange"
-            />
-            <ListingPageQASection class="w-full" :item-list="QAList" />
-          </div>
-        </section>
-
-        <section
-          :class="[
-            'flex',
-            'flex-col',
-            'items-center',
-            'gap-[32px]',
-            'flex-1',
-
             'w-full',
+            'grid',
+            'grid-cols-2',
+            'sm:grid-cols-3',
+            'laptop:grid-cols-3',
+            'desktop:grid-cols-4',
+            'desktopLg:grid-cols-5',
+            'full-hd:grid-cols-6',
+            'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
+            'items-stretch',
+            'desktop:mt-0',
           ]"
         >
-          <!-- Listing items -->
-          <ul
-            :class="[
-              'w-full',
-              'grid',
-              'grid-cols-2',
-              'sm:grid-cols-3',
-              'laptop:grid-cols-2',
-              'desktop:grid-cols-3',
-              'desktopLg:grid-cols-4',
-              'full-hd:grid-cols-5',
-              'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
-              'items-stretch',
-              'desktop:mt-0',
-            ]"
-          >
-            <li v-for="item in sortedBookstoreItems" :key="item.classId">
-              <NFTBookItemCardV2
-                :class-id="item.classId"
-                class-cover-frame-aspect-ratio="aspect-[4/5]"
-                :is-link-disabled="item.isMultiple"
-                @click-cover="handleClickItem($event, item)"
-              />
-            </li>
-          </ul>
-
-          <footer class="flex flex-col gap-[32px]">
-            <div class="flex flex-col items-center gap-[24px] py-[24px]">
-              <p>{{ $t('listing_page_cant_find_books') }}</p>
-              <ButtonV2
-                preset="tertiary"
-                :text="$t('listing_page_cant_find_books_button')"
-                @click="handleClickCantFindBook"
-              />
-            </div>
-
-            <ListingPageQASection
-              class="w-full laptop:hidden"
-              :item-list="QAList"
+          <li v-for="item in sortedBookstoreItems" :key="item.classId">
+            <NFTBookItemCardV2
+              :class-id="item.classId"
+              class-cover-frame-aspect-ratio="aspect-[4/5]"
+              :is-link-disabled="item.isMultiple"
+              @click-cover="handleClickItem($event, item)"
             />
-          </footer>
-        </section>
-      </div>
+          </li>
+        </ul>
+
+        <footer class="flex flex-col gap-[32px]">
+          <div class="flex flex-col items-center gap-[24px] py-[24px]">
+            <p>{{ $t('listing_page_cant_find_books') }}</p>
+            <ButtonV2
+              preset="tertiary"
+              :text="$t('listing_page_cant_find_books_button')"
+              @click="handleClickCantFindBook"
+            />
+          </div>
+
+          <ListingPageQASection class="w-full" :item-list="QAList" />
+        </footer>
+      </section>
     </div>
 
     <!-- Scroll To Top Button -->
@@ -227,26 +259,85 @@
       <ListingPageMobileSortingSection
         :available-sorting="availableSorting"
         :selected-sorting="selectedSorting"
-        @change-sorting="handleSelectSorting"
+        @change-sorting="handleSortingChange"
         @close="handleCloseDialog"
       />
     </ListingPageDialog>
+
     <!-- Mobile Filter Dialog -->
     <ListingPageDialog
       :is-open="isShowFilterDialog"
       :title="$t('listing_page_filter')"
       @close="handleCloseDialog"
     >
-      <ListingPageMobileFilterSection
-        :selected-type="filterType"
-        :selected-price="filterPrice"
-        :selected-language="filterLanguage"
-        @change-type="handleFilterTypeChange"
-        @change-price="handleFilterPriceChange"
-        @change-language="handleFilterLanguageChange"
-        @reset="handleFilterReset"
-        @close="handleCloseDialog"
-      />
+      <ul class="flex flex-col gap-[24px] px-[20px] py-[24px]">
+        <!-- Language -->
+        <li class="flex flex-col gap-[16px]">
+          <Label :text="$t('listing_page_select_language_title')" />
+          <ul class="flex flex-col gap-[12px] w-full">
+            <li
+              v-for="item of languageFilterList"
+              :key="item.value"
+              :class="[
+                'flex',
+                'justify-between',
+                'items-center',
+
+                'w-full',
+                'px-[16px]',
+                'py-[12px]',
+
+                'border-[1px]',
+                item.value === selectedLanguageFilter
+                  ? 'border-like-green'
+                  : 'border-shade-gray',
+                'rounded-[8px]',
+
+                'cursor-pointer',
+              ]"
+            >
+              <label class="flex justify-between items-center w-full">
+                <p>{{ item.text }}</p>
+                <input
+                  class="accent-like-green"
+                  type="radio"
+                  name="sorting"
+                  :value="item.value"
+                  :checked="item.value === selectedLanguageFilter"
+                  @change="selectedLanguageFilter = item.value"
+                />
+              </label>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Price -->
+        <li class="flex flex-col gap-[16px]">
+          <Label :text="$t('listing_page_filter_price_title')" />
+          <ListingPageOptionList
+            v-model="selectedPriceFilter"
+            :items="priceFilterList"
+          />
+        </li>
+
+        <li>
+          <ListingPageToggleButton
+            v-model="isAppliedDRMFreeFilter"
+            :label="$t('listing_page_filter_drm_free_label')"
+            :is-full-width="true"
+            @input="handleToggleDRMFreeFilter"
+          />
+        </li>
+      </ul>
+
+      <footer class="grid grid-cols-2 gap-[12px] px-[12px]">
+        <ButtonV2 preset="tertiary" @click="handleFilterReset">{{
+          $t('listing_page_button_reset')
+        }}</ButtonV2>
+        <ButtonV2 @click="handleCloseDialog">{{
+          $t('listing_page_button_confirm')
+        }}</ButtonV2>
+      </footer>
     </ListingPageDialog>
 
     <!-- TODO: Refactor this and the one on the landing page -->
@@ -275,7 +366,6 @@ import { mapGetters } from 'vuex';
 
 import {
   SORTING_OPTIONS,
-  TYPE_OPTIONS,
   PRICE_OPTIONS,
   LANGUAGE_OPTIONS,
 } from '~/constant/store';
@@ -290,7 +380,6 @@ export default {
   mixins: [bookstoreMixin, crispMixin],
   layout: 'default',
   defaultSorting: SORTING_OPTIONS.RECOMMEND,
-  defaultType: TYPE_OPTIONS.ALL,
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,
   data() {
@@ -320,45 +409,25 @@ export default {
       'nftBookstoreLatestFreeItems',
       'getNFTBookStorePricesByClassId',
     ]),
-    selectedSorting: {
-      get() {
-        return this.$route.query.sort || this.$options.defaultSorting;
-      },
-      set(value) {
-        const query = {
-          ...this.$route.query,
-          sort: Object.values(SORTING_OPTIONS).includes(value)
-            ? value
-            : this.$options.defaultSorting,
-        };
 
-        if (value === SORTING_OPTIONS.RECOMMEND) {
-          query.type = TYPE_OPTIONS.ALL;
-        }
-
-        this.$router.push({ query });
-      },
+    // Price filter related
+    priceFilterList() {
+      return [
+        {
+          text: this.$t('listing_page_filter_price_all'),
+          value: PRICE_OPTIONS.ALL,
+        },
+        {
+          text: this.$t('listing_page_filter_price_free'),
+          value: PRICE_OPTIONS.FREE,
+        },
+        {
+          text: this.$t('listing_page_filter_price_paid'),
+          value: PRICE_OPTIONS.PAID,
+        },
+      ];
     },
-    filterType: {
-      get() {
-        return this.$route.query.type || this.$options.defaultType;
-      },
-      set(value) {
-        const query = {
-          ...this.$route.query,
-          type: Object.values(TYPE_OPTIONS).includes(value)
-            ? value
-            : this.$options.defaultType,
-        };
-
-        if (value !== TYPE_OPTIONS.ALL) {
-          query.sort = SORTING_OPTIONS.LATEST;
-        }
-
-        this.$router.push({ query });
-      },
-    },
-    filterPrice: {
+    selectedPriceFilter: {
       get() {
         return this.$route.query.price || this.$options.defaultPrice;
       },
@@ -384,7 +453,41 @@ export default {
         this.$router.push({ query });
       },
     },
-    filterLanguage: {
+    selectedPriceFilterLabel() {
+      return this.$t('listing_page_filter_price_label', {
+        price: this.$t(`listing_page_filter_price_${this.selectedPriceFilter}`),
+      });
+    },
+
+    // DRM-free filter related
+    isAppliedDRMFreeFilter: {
+      get() {
+        return this.$route.query.drm_free === '1';
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          drm_free: value ? '1' : undefined,
+        };
+
+        this.$router.push({ query });
+      },
+    },
+
+    // Language filter related
+    languageFilterList() {
+      return [
+        {
+          text: this.$t('listing_page_select_language_all'),
+          value: LANGUAGE_OPTIONS.ALL,
+        },
+        {
+          text: this.$t('listing_page_select_language_en'),
+          value: LANGUAGE_OPTIONS.EN,
+        },
+      ];
+    },
+    selectedLanguageFilter: {
       get() {
         return this.$route.query.lang || this.$options.defaultLanguage;
       },
@@ -399,14 +502,19 @@ export default {
         });
       },
     },
-    currentSortingText() {
-      const text = `listing_page_header_sort_${this.selectedSorting}`;
-      return this.$t('listing_page_header_sort', { sort: this.$t(text) });
+    selectedLanguageFilterLabel() {
+      return this.$t('listing_page_filter_language_label', {
+        language: this.$t(
+          `listing_page_select_language_${this.selectedLanguageFilter}`
+        ),
+      });
     },
+
+    // Sorting related
     availableSorting() {
       const options = [];
 
-      if (this.filterPrice === PRICE_OPTIONS.ALL) {
+      if (this.selectedPriceFilter === PRICE_OPTIONS.ALL) {
         options.push({
           text: this.$t('listing_page_header_sort_recommend'),
           value: SORTING_OPTIONS.RECOMMEND,
@@ -418,7 +526,7 @@ export default {
         value: SORTING_OPTIONS.LATEST,
       });
 
-      if (this.filterPrice !== PRICE_OPTIONS.FREE) {
+      if (this.selectedPriceFilter !== PRICE_OPTIONS.FREE) {
         options.push(
           {
             text: this.$t('listing_page_header_sort_lower_price'),
@@ -433,8 +541,28 @@ export default {
 
       return options;
     },
+    selectedSorting: {
+      get() {
+        return this.$route.query.sort || this.$options.defaultSorting;
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          sort: Object.values(SORTING_OPTIONS).includes(value)
+            ? value
+            : this.$options.defaultSorting,
+        };
+
+        this.$router.push({ query });
+      },
+    },
+    selectedSortingLabel() {
+      const text = `listing_page_header_sort_${this.selectedSorting}`;
+      return this.$t('listing_page_header_sort', { sort: this.$t(text) });
+    },
+
     bookstoreItems() {
-      switch (this.filterPrice) {
+      switch (this.selectedPriceFilter) {
         case PRICE_OPTIONS.FREE:
           return this.nftBookstoreLatestFreeItems;
         case PRICE_OPTIONS.PAID:
@@ -462,25 +590,30 @@ export default {
       return this.normalizeBookstoreListItems(this.bookstoreItems);
     },
     filteredBookstoreItems() {
-      if (this.filterType === TYPE_OPTIONS.ALL) {
-        return this.normalizedBookstoreItems;
-      }
-      return this.normalizedBookstoreItems.filter(item => {
-        switch (this.filterType) {
-          case TYPE_OPTIONS.EBOOK:
-            return item.hasEbook;
-          case TYPE_OPTIONS.PAPER:
-            return item.hasPhysical;
-          default:
-            return true;
-        }
-      });
+      return this.normalizedBookstoreItems
+        .filter(item => {
+          if (this.isAppliedDRMFreeFilter) {
+            return item.isDRMFree;
+          }
+          return true;
+        })
+        .filter(item => {
+          if (
+            this.selectedLanguageFilter === LANGUAGE_OPTIONS.EN &&
+            item.locales
+          ) {
+            return item.locales.includes('en');
+          }
+          return true;
+        });
     },
     sortedBookstoreItems() {
       const items = [...this.filteredBookstoreItems];
 
       if (
-        [PRICE_OPTIONS.ALL, PRICE_OPTIONS.PAID].includes(this.filterPrice) &&
+        [PRICE_OPTIONS.ALL, PRICE_OPTIONS.PAID].includes(
+          this.selectedPriceFilter
+        ) &&
         [SORTING_OPTIONS.HIGHER_PRICE, SORTING_OPTIONS.LOWER_PRICE].includes(
           this.selectedSorting
         )
@@ -509,13 +642,10 @@ export default {
     selectedSorting() {
       this.scrollToTop();
     },
-    filterType() {
+    selectedPriceFilter() {
       this.scrollToTop();
     },
-    filterPrice() {
-      this.scrollToTop();
-    },
-    filterLanguage() {
+    selectedLanguageFilter() {
       this.scrollToTop();
     },
   },
@@ -523,14 +653,7 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    handleSelectSorting(value) {
-      logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
-      this.selectedSorting = value;
-    },
-    handleFilterTypeChange(value) {
-      logTrackerEvent(this, 'listing', 'listing_filter_type_clicked', value, 1);
-      this.filterType = value;
-    },
+
     handleFilterPriceChange(value) {
       logTrackerEvent(
         this,
@@ -539,7 +662,7 @@ export default {
         value,
         1
       );
-      this.filterPrice = value;
+      this.selectedPriceFilter = value;
     },
     handleFilterLanguageChange(value) {
       logTrackerEvent(
@@ -549,12 +672,26 @@ export default {
         value,
         1
       );
-      this.filterLanguage = value;
+      this.selectedLanguageFilter = value;
+    },
+    handleToggleDRMFreeFilter(value) {
+      logTrackerEvent(
+        this,
+        'listing',
+        'listing_filter_drm_free_clicked',
+        value ? '1' : '0',
+        1
+      );
     },
     handleFilterReset() {
       logTrackerEvent(this, 'listing', 'listing_filter_reset', '', 1);
-      const { type, price, lang, ...query } = this.$route.query;
+      // eslint-disable-next-line camelcase
+      const { type, price, lang, drm_free, ...query } = this.$route.query;
       this.$router.push({ query });
+    },
+    handleSortingChange(value) {
+      logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
+      this.selectedSorting = value;
     },
     handleOpenSortingDialog() {
       this.isShowSortingDialog = true;

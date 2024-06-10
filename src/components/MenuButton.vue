@@ -1,17 +1,15 @@
 <template>
-  <div class="flex justify-center">
-    <ButtonV2
-      class="w-full"
-      v-bind="$attrs"
-      :preset="buttonPreset"
-      :to="to"
-      v-on="$listeners"
-    >
-      <template v-for="(_, slot) of $scopedSlots" #[slot]>
-        <slot :name="slot" />
-      </template>
-    </ButtonV2>
-  </div>
+  <ButtonV2
+    class="w-full"
+    v-bind="$attrs"
+    :preset="buttonPreset"
+    :to="to"
+    v-on="$listeners"
+  >
+    <template v-for="(_, slot) of $scopedSlots" #[slot]>
+      <slot :name="slot" />
+    </template>
+  </ButtonV2>
 </template>
 
 <script lang="ts">

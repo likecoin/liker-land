@@ -5,12 +5,6 @@ export const SORTING_OPTIONS = {
   HIGHER_PRICE: 'higher_price',
 };
 
-export const TYPE_OPTIONS = {
-  ALL: 'all',
-  EBOOK: 'ebook',
-  PAPER: 'paper',
-};
-
 export const PRICE_OPTIONS = {
   ALL: 'all',
   FREE: 'free',
