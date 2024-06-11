@@ -123,6 +123,9 @@ export default class ButtonV2 extends Vue {
   @Prop(String)
   readonly borderClass!: string | undefined;
 
+  @Prop({ default: true })
+  readonly hasHoverEffect!: boolean;
+
   get tag() {
     if (!this.isDisabled) {
       if (this.to) return 'NuxtLink';
@@ -219,7 +222,11 @@ export default class ButtonV2 extends Vue {
     }
 
     if (this.isPresetOutline) {
-      return 'border-medium-gray/75 hover:border-opacity-50 active:border-opacity-70';
+      const classes = ['border-medium-gray/75'];
+      if (this.hasHoverEffect) {
+        classes.push('hover:border-opacity-50 active:border-opacity-70');
+      }
+      return classes.join(' ');
     }
 
     if (this.isThemeGlow) {
@@ -287,9 +294,13 @@ export default class ButtonV2 extends Vue {
       'text-center',
       'rounded-[inherit]',
       'whitespace-nowrap',
-      'hover:bg-dark-gray',
-      'hover:bg-opacity-[0.2] hover:opacity-[0.8]',
-      'active:bg-opacity-[0.3]',
+      {
+        [[
+          'hover:bg-dark-gray',
+          'hover:bg-opacity-[0.2] hover:opacity-[0.8]',
+          'active:bg-opacity-[0.3]',
+        ].join(' ')]: this.hasHoverEffect,
+      },
       'transition',
       'duration-200',
       {

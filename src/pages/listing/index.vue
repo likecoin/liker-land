@@ -323,6 +323,8 @@
         <li>
           <ListingPageToggleButton
             v-model="isAppliedDRMFreeFilter"
+            class="min-h-[50px]"
+            :has-hover-effect="false"
             :label="$t('listing_page_filter_drm_free_label')"
             :is-full-width="true"
             @input="handleToggleDRMFreeFilter"

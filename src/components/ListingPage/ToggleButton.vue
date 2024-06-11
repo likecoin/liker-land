@@ -1,5 +1,6 @@
 <template>
   <ButtonV2
+    v-bind="$attrs"
     :class="['group', { 'w-full !rounded-[8px]': isFullWidth }]"
     border-class="border border-gray-e6"
     :preset="isFullWidth ? 'outline' : 'tertiary'"
