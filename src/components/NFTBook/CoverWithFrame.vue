@@ -21,7 +21,7 @@
     <div
       :class="[
         'absolute',
-        'inset-[24px] desktop:inset-[30px]',
+        'inset-[8%]',
         'flex',
         'justify-center',
         'items-center',
