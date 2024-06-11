@@ -442,6 +442,8 @@ export default {
         switch (value) {
           case PRICE_OPTIONS.PAID:
           case PRICE_OPTIONS.FREE:
+            // NOTE: Language filter is available only when price filter is not applied
+            delete query.lang;
             query.sort = SORTING_OPTIONS.LATEST;
             break;
           case PRICE_OPTIONS.ALL:
@@ -492,14 +494,20 @@ export default {
         return this.$route.query.lang || this.$options.defaultLanguage;
       },
       set(value) {
-        this.$router.push({
-          query: {
-            ...this.$route.query,
-            lang: Object.values(LANGUAGE_OPTIONS).includes(value)
-              ? value
-              : this.$options.defaultLanguage,
-          },
-        });
+        const query = {
+          ...this.$route.query,
+          lang: Object.values(LANGUAGE_OPTIONS).includes(value)
+            ? value
+            : this.$options.defaultLanguage,
+        };
+
+        // NOTE: Language filter is available only when recommended sorting is applied
+        if (value !== LANGUAGE_OPTIONS.ALL) {
+          delete query.price;
+          query.sort = SORTING_OPTIONS.RECOMMEND;
+        }
+
+        this.$router.push({ query });
       },
     },
     selectedLanguageFilterLabel() {
@@ -552,6 +560,14 @@ export default {
             ? value
             : this.$options.defaultSorting,
         };
+
+        // NOTE: Language filter is available only when recommend sorting is applied
+        if (
+          value !== SORTING_OPTIONS.RECOMMEND &&
+          this.selectedLanguageFilter !== LANGUAGE_OPTIONS.ALL
+        ) {
+          delete query.lang;
+        }
 
         this.$router.push({ query });
       },
