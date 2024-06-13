@@ -53,7 +53,7 @@ export const CIVIC_LIKER_V3_STAKING_ENDPOINT = IS_TESTNET
 
 export const LIKECOIN_CHAIN_VIEW_TX = IS_TESTNET
   ? 'https://node.testnet.like.co/cosmos/tx/v1beta1/txs'
-  : 'https://mintscan.io/likecoin/txs';
+  : 'https://ping.pub/likecoin/tx';
 
 export const LIKECOIN_CHAIN_API = IS_TESTNET
   ? 'https://node.testnet.like.co'
