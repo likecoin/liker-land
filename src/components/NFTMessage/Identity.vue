@@ -37,7 +37,7 @@
         {{ userLabel }}
       </div>
       <Label class="text-like-green" :preset="userLabelSize" align="center">{{
-        userDisplayNameFull
+        userDisplayNameFull | ellipsis
       }}</Label>
     </div>
   </component>
@@ -47,12 +47,16 @@
 import { mapActions } from 'vuex';
 
 import { createUserInfoMixin } from '~/mixins/user-info';
+import { ellipsis } from '~/util/ui';
 
 const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
   name: 'MessageIdentity',
   mixins: [userInfoMixin],
+  filters: {
+    ellipsis,
+  },
   props: {
     walletAddress: {
       type: String,
