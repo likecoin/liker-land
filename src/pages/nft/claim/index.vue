@@ -850,17 +850,18 @@ export default {
         this.navigateToState(NFT_CLAIM_STATE.ERROR);
         return;
       }
-      if (this.isFreePurchase) {
-        await this.startFreePurchase();
-        return;
-      }
-
       logTrackerEvent(this, 'NFT', 'nft_claim_claim_button_clicked', '', 1);
 
-      if (this.isNFTBook) {
+      if (this.isFreePurchase) {
+        await this.startFreePurchase();
+      } else if (this.isNFTBook) {
         await this.claimNFTBookPurchase();
       } else {
         await this.claimFiatPurchase();
+      }
+
+      if (this.isAutoDeliver) {
+        await this.fetchCollectedNFTClassesByAddress(this.claimingAddress);
       }
     },
     async claimFiatPurchase() {
