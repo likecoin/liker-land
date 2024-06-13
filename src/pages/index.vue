@@ -748,6 +748,14 @@
             @click.native="handleClickSocialFollow"
           />
         </h2>
+
+        <div class="overflow-hidden mt-[40px]">
+          <div
+            class="elfsight-app-7e044f5d-8211-4f9e-aa27-63d239cc36fc"
+            data-elfsight-app-lazy
+            style="margin-bottom: -56px;"
+          />
+        </div>
       </section>
     </div>
   </main>
@@ -831,6 +839,12 @@ export default {
           })),
         }),
         type: 'application/ld+json',
+      },
+      {
+        hid: 'elfsight',
+        src: 'https://apps.elfsight.com/p/platform.js',
+        defer: true,
+        dataUseServiceCore: 'data-use-service-core',
       },
     ];
 

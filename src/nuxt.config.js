@@ -252,6 +252,7 @@ const nuxtConfig = {
           'https://substackapi.com',
           '*.crisp.chat',
           'connect.facebook.net',
+          '*.elfsight.com',
         ],
         'frame-src': [
           'blob:',
