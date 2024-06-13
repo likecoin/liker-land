@@ -74,12 +74,7 @@ export default {
       try {
         this.isLoading = true;
         const buffer = await this.getFileBuffer('reader-pdf');
-        this.base64FileData = btoa(
-          new Uint8Array(buffer).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ''
-          )
-        );
+        this.base64FileData = Buffer.from(buffer).toString('base64');
         if (this.isIframeReady) {
           this.$refs.pdfIframe?.contentWindow?.postMessage(
             JSON.stringify({
