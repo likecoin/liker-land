@@ -737,7 +737,7 @@
 
       <section id="social" class="py-[48px]">
         <h2
-          class="flex flex-wrap items-center justify-center gap-[0.75rem] text-[2rem] font-serif font-bold"
+          class="flex flex-wrap items-center justify-center gap-[0.75rem] text-[2rem] font-serif font-bold mb-[40px]"
         >
           {{ $t('index_social_title') }}
           <ButtonV2
@@ -749,13 +749,10 @@
           />
         </h2>
 
-        <div class="overflow-hidden mt-[40px]">
-          <div
-            class="elfsight-app-7e044f5d-8211-4f9e-aa27-63d239cc36fc"
-            data-elfsight-app-lazy
-            style="margin-bottom: -56px;"
-          />
-        </div>
+        <div
+          class="elfsight-app-7e044f5d-8211-4f9e-aa27-63d239cc36fc"
+          data-elfsight-app-lazy
+        />
       </section>
     </div>
   </main>
