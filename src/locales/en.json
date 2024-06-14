@@ -67,6 +67,8 @@
     },
     "headerLabel": "Your Bookmark List"
   },
+  "boox_banner_alt_text": "Boox e-ink readers for 10% off, enter the code `likerland` at checkout",
+  "boox_banner_link": "https://www.boox.com.hk/?sl-ref=likerland&locale=en",
   "campaign_nft_book_just_arrived": "Just arrived",
   "campaign_nft_item_collected_count_label": "Collected",
   "campaign_nft_item_header_hint": "Collect this content as NFT",

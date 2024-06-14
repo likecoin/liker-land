@@ -67,6 +67,8 @@
     },
     "headerLabel": "你的收藏列表"
   },
+  "boox_banner_alt_text": "文石閱讀器，購買盡享九折優惠，結帳時輸入優惠碼「likerland」",
+  "boox_banner_link": "https://www.boox.com.hk/?sl-ref=likerland&locale=zh-hant",
   "campaign_nft_book_just_arrived": "新書上架",
   "campaign_nft_item_collected_count_label": "已收藏",
   "campaign_nft_item_header_hint": "收集此 Writing NFT",
