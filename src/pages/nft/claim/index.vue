@@ -474,7 +474,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 import {
   logTrackerEvent,
@@ -777,7 +777,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchCollectedNFTClassesByAddress']),
     isValidAddress,
     parseNFTMetadataURL,
     getIscnData(classId) {
