@@ -373,10 +373,7 @@ import {
   LANGUAGE_OPTIONS,
 } from '~/constant/store';
 
-import {
-  checkIsForcedInAppPage,
-  checkIsLikeCoinAppInAppBrowser,
-} from '~/util/client';
+import { checkIsForcedInAppPage } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { parseNFTMetadataURL } from '~/util/nft';
 
