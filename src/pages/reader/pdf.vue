@@ -67,6 +67,7 @@ export default {
             }),
             this.iframeOrigin
           );
+          this.base64FileData = null;
         }
       }
     },
@@ -86,6 +87,7 @@ export default {
             }),
             this.iframeOrigin
           );
+          this.base64FileData = null;
         }
         this.isLoading = false;
       } catch (err) {
