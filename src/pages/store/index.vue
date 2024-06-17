@@ -207,34 +207,8 @@
             'desktop:mt-0',
           ]"
         >
-          <!-- Boox Banner -->
-          <li class="row-start-2 col-span-full">
-            <a
-              :href="$t('boox_banner_link')"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <picture>
-                <source
-                  media="(max-width: 527px)"
-                  srcset="~assets/images/boox/banner-mobile.jpg"
-                />
-                <source
-                  media="(max-width: 992px)"
-                  srcset="~assets/images/boox/banner-tablet.jpg"
-                />
-                <img
-                  :class="[
-                    'w-full',
-                    'sm:h-[250px] desktop:h-[300px]',
-                    'rounded-[8px]',
-                    'object-cover',
-                  ]"
-                  src="~assets/images/boox/banner-desktop.jpg"
-                  :alt="$t('boox_banner_alt_text')"
-                />
-              </picture>
-            </a>
+          <li :class="['row-start-4', 'sm:row-start-3', 'col-span-full']">
+            <ListingPageBooxBanner />
           </li>
 
           <li v-for="item in sortedBookstoreItems" :key="item.classId">
