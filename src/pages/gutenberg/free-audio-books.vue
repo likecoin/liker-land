@@ -238,9 +238,10 @@
 
 <script>
 import csvParser from 'csv-parser';
+import debounce from 'lodash.debounce';
+
 import { fetchGutenbergCsv } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { APP_LIKE_CO_URL_BASE, EXTERNAL_HOST } from '~/constant';
 
 const DISPLAY_NUMBER = 100;
 
@@ -263,13 +264,6 @@ export default {
   },
   head() {
     const scripts = [];
-    if (this.generatedJSONLD) {
-      scripts.push({
-        hid: 'schema',
-        type: 'application/ld+json',
-        json: this.generatedJSONLD,
-      });
-    }
     return {
       title: this.$t('gutenbergFreeAudioBooksPage_og_title'),
       meta: [
@@ -314,25 +308,17 @@ export default {
     displayData() {
       return this.filteredData.slice(0, this.currentDisplayNumber);
     },
-    generatedJSONLD() {
-      return {
-        '@context': 'https://schema.org',
-        '@type': 'DataFeed',
-        dataFeedElement: this.parsedData.map(row => ({
-          '@context': 'http://www.schema.org',
-          '@type': 'Book',
-          '@id': `${EXTERNAL_HOST}/nft/class/${row.classId}`,
-          name: row.classTitle,
-          author: row.author,
-          url: `${EXTERNAL_HOST}/nft/class/${row.classId}`,
-          identifier: row.classId,
-        })),
-      };
-    },
   },
   watch: {
-    searchKeyword() {
-      this.currentDisplayNumber = DISPLAY_NUMBER;
+    searchKeyword: {
+      handler(value) {
+        if (!value) {
+          this.$nextTick(this.debouncedUpdateDisplayNumber);
+        } else {
+          this.currentDisplayNumber = DISPLAY_NUMBER;
+        }
+      },
+      immediate: true,
     },
   },
   methods: {
@@ -364,6 +350,12 @@ export default {
     handleInputChange(value) {
       logTrackerEvent(this, 'Gutenberg', 'inputChange', value.target.value, 1);
     },
+    debouncedUpdateDisplayNumber: debounce(
+      function debouncedUpdateDisplayNumber() {
+        this.currentDisplayNumber = this.parsedData.length;
+      },
+      300
+    ),
   },
 };
 
