@@ -6,7 +6,7 @@
 
       'px-[24px]',
       'laptop:px-[12px]',
-      'mt-[72px]',
+      'mt-[78px]',
       'laptop:mt-0',
 
       'flex',

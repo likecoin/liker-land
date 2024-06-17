@@ -33,7 +33,7 @@
       ]"
     >
       <NFTBookCover
-        :container-classes="['min-h-[44px] w-[44px]']"
+        :container-classes="['!h-[44px]', 'w-[44px]']"
         :src="NFTImageUrl"
       />
       <div class="flex flex-col items-start">
@@ -272,7 +272,9 @@
               'justify-start',
               'items-center',
               'laptop:items-start',
-              'gap-[24px]',
+              'gap-[16px]',
+
+              'bg-light-gray',
 
               'w-full',
               'mt-[12px]',
