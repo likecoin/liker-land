@@ -213,6 +213,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import MagicGrid from 'magic-grid';
@@ -307,6 +309,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getAddress']),
     narrowClass() {
       return 'max-w-[644px] desktop:w-[644px]';
     },
