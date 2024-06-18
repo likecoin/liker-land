@@ -68,10 +68,11 @@
       >
         <IconSearch />
         <input
-          v-model="searchKeyword"
+          :value="searchKeyword"
           class="w-full bg-transparent border-0 focus-visible:outline-none"
           type="text"
           :placeholder="$t('gutenberg_search_placeholder')"
+          @input="debouncedUpdateSearchKeyword"
           @change="handleInputChange"
         />
       </div>
@@ -313,7 +314,7 @@ export default {
     searchKeyword: {
       handler(value) {
         if (!value) {
-          this.$nextTick(this.debouncedUpdateDisplayNumber);
+          this.currentDisplayNumber = this.parsedData.length;
         } else {
           this.currentDisplayNumber = DISPLAY_NUMBER;
         }
@@ -350,9 +351,9 @@ export default {
     handleInputChange(value) {
       logTrackerEvent(this, 'Gutenberg', 'inputChange', value.target.value, 1);
     },
-    debouncedUpdateDisplayNumber: debounce(
-      function debouncedUpdateDisplayNumber() {
-        this.currentDisplayNumber = this.parsedData.length;
+    debouncedUpdateSearchKeyword: debounce(
+      function debouncedUpdateSearchKeyword(event) {
+        this.searchKeyword = event.target.value;
       },
       300
     ),
