@@ -79,13 +79,6 @@ router.get('/bookstore/lists', async (req, res, next) => {
   try {
     const response = await notion.databases.query({
       database_id: NOTION_DATABASE_ID_FOR_BOOKSTORE_LISTS,
-      filter_properties: [
-        'title',
-        'aygV', // Class ID List
-        '%3CSgS', // Name List
-        'pe%5Bj', // Locale List
-        'VESz', // Visibility List
-      ],
     });
 
     const results = {};
@@ -95,16 +88,19 @@ router.get('/bookstore/lists', async (req, res, next) => {
       const titlePropList = properties['Name List'].rollup.array;
       const localePropList = properties['Locale List'].rollup.array;
       const visibilityPropList = properties['Visibility List'].rollup.array;
+      const drmFreeList = properties['DRM-free List'].rollup.array;
 
       results[listId] = [];
       classIdPropList.forEach((classId, index) => {
         const isVisible = visibilityPropList[index].formula.boolean;
         if (!isVisible) return;
 
+        const isDRMFree = drmFreeList[index].checkbox;
         const localeProp = localePropList[index];
         results[listId].push({
           classId: parseClassId(classId.rich_text[0].plain_text),
           title: (titlePropList[index].title[0] || {}).plain_text || '',
+          isDRMFree,
           locales: localeProp.select
             ? [localeProp.select.name]
             : (localeProp.multi_select || []).map(({ name }) => name),

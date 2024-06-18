@@ -8,6 +8,7 @@ import {
   LIKE_CO_THUMBNAIL_FN_BASE,
   LIKECOIN_NFT_API_WALLET,
   NFT_BOOK_PLATFORM_LIKER_LAND,
+  BOOKSTORE_LIST_EXCLUDED_WALLET,
 } from '../../constant';
 import { normalizeLocaleForLikeCo } from '../../locales';
 
@@ -571,7 +572,7 @@ export const getNftBookBuyerMessage = classId =>
   `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/messages`;
 
 export const fetchBookstoreLatestItems = () =>
-  `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100`;
+  `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100&exclude_wallet=${BOOKSTORE_LIST_EXCLUDED_WALLET}`;
 
 export const fetchBookstoreEditorialItems = () =>
   `${EXTERNAL_HOST}/api/bookstore/items`;
@@ -580,4 +581,4 @@ export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;
 
 export const fetchBookstoreLists = () =>
-  `${EXTERNAL_HOST}/api/bookstore/lists?t=1705305172`;
+  `${EXTERNAL_HOST}/api/bookstore/lists?t=1718013531`;

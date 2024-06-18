@@ -32,10 +32,7 @@
         'laptop:hidden',
       ]"
     >
-      <NFTBookCover
-        :container-classes="['min-h-[44px] w-[44px]']"
-        :src="NFTImageUrl"
-      />
+      <NFTBookCover class="h-[44px] w-[44px]" :src="NFTImageUrl" />
       <div class="flex flex-col items-start">
         <p class="text-[12px] font-400 text-medium-gray">
           {{ $t('nft_claim_claim_header_title') }}

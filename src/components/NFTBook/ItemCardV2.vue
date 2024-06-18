@@ -11,7 +11,8 @@
       tag="NuxtLink"
       class="group"
       :class-aspect-ratio="classCoverFrameAspectRatio"
-      img-class="group-hover:scale-[1.02] transition-transform"
+      cover-class="group-hover:scale-[1.02] transition-transform"
+      :cover-resize="coverResize"
       :src="NFTImageUrl"
       :alt="NFTName"
       :to="nftCollectRoute"
@@ -19,15 +20,17 @@
       @click.native="$emit('click-cover', $event)"
     />
 
-    <div class="mt-[8px] text-[#8B8B8B] text-[0.875rem] laptop:text-[1rem]">
-      {{ (iscnWorkAuthor || creatorDisplayName) | ellipsis }}
-    </div>
-
-    <div class="mt-[4px] text-[#333] text-[1rem] laptop:text-[1.125rem]">
+    <div
+      class="mt-[8px] text-[#333] text-[1rem] font-[500] laptop:text-[1.125rem]"
+    >
       {{ NFTName }}
     </div>
 
-    <div class="mt-[8px] text-[#1F1F1F] text-[0.875rem] laptop:text-[1rem]">
+    <div class="text-[#8B8B8B] text-[0.875rem] laptop:text-[1rem]">
+      {{ (iscnWorkAuthor || creatorDisplayName) | ellipsis }}
+    </div>
+
+    <div class="mt-[16px] text-[#1F1F1F] text-[0.875rem] laptop:text-[1rem]">
       {{ nftBookAvailablePriceLabel || $t('nft_details_page_label_sold_out') }}
     </div>
   </div>
@@ -51,6 +54,10 @@ export default {
     classCoverFrameAspectRatio: {
       type: String,
       default: 'aspect-[4/5]',
+    },
+    coverResize: {
+      type: Number,
+      default: 300,
     },
     isLinkDisabled: {
       type: Boolean,
