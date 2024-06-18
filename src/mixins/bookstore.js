@@ -14,18 +14,7 @@ export default {
       );
     },
     bookstoreListItemsInFeatured() {
-      return this.sortBookstoreListItemsByLocale(
-        this.nftGetBookstoreListItems('featured').filter(
-          item =>
-            !(Array.isArray(item.classId)
-              ? item.classId.some(id =>
-                  this.bookstoreListItemsInHighlightedClassIdSet.has(id)
-                )
-              : this.bookstoreListItemsInHighlightedClassIdSet.has(
-                  item.classId
-                ))
-        )
-      );
+      return this.nftGetBookstoreListItems('featured');
     },
   },
   methods: {
