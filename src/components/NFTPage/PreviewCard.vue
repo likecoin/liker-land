@@ -3,18 +3,25 @@
     :class="['flex', 'flex-col', 'border-[1px]', 'border-shade-gray']"
     :has-padding="false"
   >
-    <a
+    <component
+      :is="url ? 'a' : 'div'"
       class="rounded-t-[inherit] overflow-hidden"
-      :href="url || iscnUrl"
-      target="_blank"
-      :rel="url ? 'noopener ugc' : 'noopener'"
+      v-bind="
+        url
+          ? {
+              href: url,
+              target: '_blank',
+              rel: 'noopener ugc',
+            }
+          : {}
+      "
     >
       <NFTCover
         :src="imageUrl"
         :video-src="animationUrl"
         :bg-color="imageBgColor"
       />
-    </a>
+    </component>
     <div
       :class="[
         'flex',
