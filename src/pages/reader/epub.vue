@@ -73,6 +73,7 @@
     <div
       id="viewer"
       ref="epubViewer"
+      :key="cacheKey"
       class="mx-auto my-0 w-full h-dynamic laptop:w-[1200px] laptop:h-[700px] shadow-md rounded-4 p-0 relative"
     />
     <a
@@ -117,8 +118,20 @@ export default {
       return this.$route.query.download === '0' || this.nftIsDownloadHidden;
     },
   },
+  beforeUnmount() {
+    if (this.rendition) {
+      this.rendition.destroy();
+      this.rendition = null;
+    }
+    if (this.book) {
+      this.book.destroy();
+      this.book = null;
+    }
+    document.removeEventListener('keydown', this.keyListener);
+  },
   mounted() {
     this.initRendition();
+    document.addEventListener('keydown', this.keyListener, false);
   },
   methods: {
     async initRendition() {
@@ -153,24 +166,7 @@ export default {
         this.rendition.on('relocated', location => {
           this.saveToLocalStorage(location.start.cfi);
         });
-
-        const keyListener = e => {
-          const inputs = ['input', 'select', 'button', 'textarea'];
-          if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
-            return;
-          }
-
-          // Left Key
-          if ((e.keyCode || e.which) === 37) {
-            this.rendition.prev();
-          }
-          // Right Key
-          if ((e.keyCode || e.which) === 39) {
-            this.rendition.next();
-          }
-        };
-        this.rendition.on('keydown', keyListener);
-        document.addEventListener('keydown', keyListener, false);
+        this.rendition.on('keydown', this.keyListener);
       } catch (err) {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
@@ -182,6 +178,22 @@ export default {
             params: { classId: this.classId },
           })
         );
+      }
+    },
+    keyListener(e) {
+      const inputs = ['input', 'select', 'button', 'textarea'];
+      if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
+        return;
+      }
+
+      if (!this.rendition) return;
+      // Left Key
+      if ((e.keyCode || e.which) === 37) {
+        this.rendition.prev();
+      }
+      // Right Key
+      if ((e.keyCode || e.which) === 39) {
+        this.rendition.next();
       }
     },
     onChangeChapter() {
