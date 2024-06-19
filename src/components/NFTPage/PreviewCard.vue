@@ -17,9 +17,19 @@
       "
     >
       <NFTCover
+        v-if="animationUrl"
         :src="imageUrl"
         :video-src="animationUrl"
         :bg-color="imageBgColor"
+      />
+      <NFTBookCoverWithFrame
+        v-else
+        class="w-full !rounded-none"
+        :src="imageUrl"
+        :alt="nftName"
+        :cover-resize="450"
+        :background-color="imageBgColor"
+        class-aspect-ratio="aspect-[1]"
       />
     </component>
     <div
