@@ -72,6 +72,7 @@
     >
     <div
       id="viewer"
+      ref="epubViewer"
       class="mx-auto my-0 w-full h-dynamic laptop:w-[1200px] laptop:h-[700px] shadow-md rounded-4 p-0 relative"
     />
     <a
@@ -131,8 +132,10 @@ export default {
         this.book.loaded.navigation.then(
           navigation => (this.toc = navigation.toc)
         );
+        const viewerEl = this.$refs.epubViewer;
+        if (!viewerEl) return;
         if (this.rendition) return;
-        this.rendition = this.book.renderTo('viewer', {
+        this.rendition = this.book.renderTo(viewerEl, {
           width: '100%',
           height: '100%',
           spread: 'always',
