@@ -19,26 +19,30 @@ export default {
   },
   methods: {
     async getFileBuffer(cacheKey) {
-      let buffer;
+      let res;
+      const req = new Request(this.corsUrl);
       if (window.caches) {
         try {
           const cache = await caches.open(cacheKey);
-          let response = await cache.match(this.corsUrl);
-          if (!response) {
-            await cache.add(this.corsUrl);
-            response = await cache.match(this.corsUrl);
-          }
-          buffer = await response?.arrayBuffer();
+          res = await cache.match(req);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
         }
       }
-      if (!buffer) {
-        buffer = await this.$axios.$get(this.corsUrl, {
-          responseType: 'arraybuffer',
-        });
+      if (!res) {
+        res = await fetch(req);
+        if (window.caches) {
+          try {
+            const cache = await caches.open(cacheKey);
+            await cache.put(req, res.clone());
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+          }
+        }
       }
+      const buffer = await res.arrayBuffer();
       return buffer;
     },
   },
