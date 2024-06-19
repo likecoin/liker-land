@@ -68,6 +68,8 @@ export default {
       return [
         this.isPortrait ? 'h-full' : 'w-full',
         this.imgClass,
+        'max-w-[inherit]',
+        'max-h-[inherit]',
         'object-cover',
         'transition-opacity transition-transform',
         {
