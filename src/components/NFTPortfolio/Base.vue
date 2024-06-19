@@ -6,10 +6,13 @@
         :hover-class="gem.hoverClass"
         :display-state="displayState"
       >
-        <NFTCover
+        <NFTBookCoverWithFrame
+          class="w-full !rounded-none"
           :src="imageSrc"
-          :size="350"
-          :bg-color="imageBgColor"
+          :alt="title"
+          :cover-resize="350"
+          class-aspect-ratio="aspect-[1]"
+          :background-color="imageBgColor"
           @load="handleCoverLoaded"
         />
         <div
@@ -153,7 +156,7 @@ export default {
     },
     imageBgColor: {
       type: String,
-      default: '#f7f7f7',
+      default: undefined,
     },
     userAvatarSrc: {
       type: String,

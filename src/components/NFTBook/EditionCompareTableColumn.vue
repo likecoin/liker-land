@@ -6,32 +6,35 @@
         :gem-level="gem.level"
         :hover-class="gem.hoverClass"
       >
-        <div
-          class="relative flex items-center justify-center py-[16px] min-w-[276px]"
-        >
-          <div class="absolute inset-0 w-full h-full">
-            <img
-              :src="resizedSrc"
-              :alt="alt"
-              class="h-auto max-w-full blur-sm"
+        <div class="relative flex items-center justify-center min-w-[276px]">
+          <template v-if="hasDynamicCovers">
+            <div class="absolute inset-0 w-full h-full">
+              <img
+                :src="resizedSrc"
+                :alt="alt"
+                class="h-auto max-w-full blur-sm"
+              />
+            </div>
+            <div
+              class="absolute inset-0 w-full h-full"
+              :style="{
+                backgroundColor: themeColor || 'none',
+                opacity: 0.3,
+              }"
             />
-          </div>
-          <div
-            class="absolute inset-0 w-full h-full"
-            :style="{
-              backgroundColor: themeColor || 'none',
-              opacity: 0.3,
-            }"
-          />
+          </template>
           <div class="relative flex items-center justify-center w-full h-full">
-            <NFTCover
-              :class="{ 'opacity-0 pointer-events-none': hasDynamicCovers }"
+            <NFTBookCoverWithFrame
+              :class="[
+                'w-full',
+                '!rounded-none',
+                { 'opacity-0 pointer-events-none': hasDynamicCovers },
+              ]"
               :src="src"
-              :size="450"
-              :is-nft-book="true"
               :alt="alt"
-              :spine-color1="spineColor1"
-              :spine-color2="spineColor2"
+              :cover-resize="450"
+              class-aspect-ratio="aspect-[1]"
+              :background-color="themeColor"
             />
             <ClientOnly v-if="hasDynamicCovers">
               <div class="absolute inset-0">

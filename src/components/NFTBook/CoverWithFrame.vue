@@ -15,7 +15,7 @@
   >
     <div
       class="absolute inset-0 bg-no-repeat bg-cover opacity-25 pointer-events-none brightness-150"
-      :style="`background-image: url(${bgImageSrc})`"
+      :style="backgroundStyle"
     />
 
     <div
@@ -32,6 +32,7 @@
         :src="src"
         :alt="alt"
         :resize="coverResize"
+        @load="$emit('load', $event)"
       />
     </div>
   </component>
@@ -70,10 +71,23 @@ export default {
       type: String,
       default: 'aspect-[4/5]',
     },
+    backgroundColor: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     bgImageSrc() {
       return getImageResizeAPI(this.src, { width: 4 });
+    },
+    backgroundStyle() {
+      const style = {};
+      if (this.backgroundColor) {
+        style.backgroundColor = this.backgroundColor;
+      } else {
+        style.backgroundImage = `url(${this.bgImageSrc})`;
+      }
+      return style;
     },
   },
 };

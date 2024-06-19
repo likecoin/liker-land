@@ -25,6 +25,7 @@
         :to="nftCollectRoute"
       >
         <NFTCover
+          v-if="videoSrc"
           :is-nft-book="true"
           :src="imageSrc || NFTImageUrl"
           :video-src="videoSrc"
@@ -32,6 +33,13 @@
           :size="200"
           :theme="theme"
           :alt="NFTName"
+        />
+        <NFTBookCover
+          v-else
+          :class="['mt-[-48px]', coverClasses]"
+          :src="imageSrc || NFTImageUrl"
+          :alt="NFTName"
+          :resize="200"
         />
       </component>
     </div>
@@ -88,6 +96,7 @@
       </client-only>
       <div class="flex flex-col items-center shrink-0">
         <NFTCover
+          v-if="videoSrc"
           :class="['mt-[-48px]', coverClasses]"
           :is-nft-book="true"
           :src="imageSrc || NFTImageUrl"
@@ -96,6 +105,13 @@
           :size="200"
           :theme="theme"
           :alt="NFTName"
+        />
+        <NFTBookCover
+          v-else
+          :class="['mt-[-48px]', coverClasses]"
+          :src="imageSrc || NFTImageUrl"
+          :alt="NFTName"
+          :resize="200"
         />
 
         <div class="hidden laptop:block">
