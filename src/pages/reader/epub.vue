@@ -9,6 +9,7 @@
     <div v-else class="flex items-center justify-between">
       <div class="grow" />
       <select
+        v-if="toc.length"
         v-model="selectedChapter"
         class="my-[10px] shadow-md rounded-4"
         @change="onChangeChapter"
