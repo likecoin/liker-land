@@ -32,6 +32,9 @@ export default {
       }
       if (!res) {
         res = await fetch(req);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
         if (window.caches) {
           try {
             const cache = await caches.open(cacheKey);
