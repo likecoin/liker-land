@@ -38,70 +38,49 @@
     </p>
 
     <template v-if="contentUrls.length && shouldShowContentUrlButtons">
-      <template v-if="hasDuplicatedContentTypes">
-        <Dropdown>
-          <template #trigger="{ toggle }">
-            <ButtonV2
-              class="w-full"
-              preset="outline"
-              :is-disabled="!isContentViewable"
-              @click="toggle"
+      <Dropdown>
+        <template #trigger="{ toggle }">
+          <ButtonV2
+            class="w-full"
+            preset="outline"
+            :is-disabled="!isContentViewable"
+            @click="toggle"
+          >
+            <template #prepend>
+              <IconDownload class="w-20 h-20" />
+            </template>
+            <template #default>{{
+              $t(
+                isNftBook
+                  ? 'nft_details_page_download_nft_book_button'
+                  : 'nft_details_page_download_button'
+              )
+            }}</template>
+            <template #append>
+              <IconArrowDown class="w-16 h-16" />
+            </template>
+          </ButtonV2>
+        </template>
+        <MenuList>
+          <ul>
+            <li
+              v-for="(contentUrl, index) in normalizedContentURLs"
+              :key="contentUrl"
             >
-              <template #prepend>
-                <IconDownload class="w-20 h-20" />
-              </template>
-              <template #default>{{
-                $t(
-                  isNftBook
-                    ? 'nft_details_page_download_nft_book_button'
-                    : 'nft_details_page_download_button'
-                )
-              }}</template>
-              <template #append>
-                <IconArrowDown class="w-16 h-16" />
-              </template>
-            </ButtonV2>
-          </template>
-          <MenuList>
-            <ul>
-              <li
-                v-for="(contentUrl, index) in normalizedContentURLs"
-                :key="contentUrl"
-              >
-                <ButtonV2
-                  :href="parseNFTMetadataURL(contentUrl)"
-                  preset="plain"
-                  :download="getDownloadFilenameFromURL(contentUrl)"
-                  @click="e => handleClickViewContentURL(e, contentUrl, index)"
-                  >{{
-                    getFilenameFromURL(contentUrl) ||
-                      getContentUrlButtonText(contentUrl)
-                  }}&nbsp;<IconLinkExternal
-                /></ButtonV2>
-              </li>
-            </ul>
-          </MenuList>
-        </Dropdown>
-      </template>
-      <template v-else>
-        <ButtonV2
-          v-for="(contentUrl, index) in normalizedContentURLs"
-          :key="contentUrl"
-          class="mt-[12px] w-full"
-          preset="outline"
-          :text="getContentUrlButtonText(contentUrl)"
-          :href="parseNFTMetadataURL(contentUrl)"
-          :is-disabled="!isContentViewable"
-          @click="e => handleClickViewContentURL(e, contentUrl, index)"
-        >
-          <template #prepend>
-            <IconArticle />
-          </template>
-          <template #append>
-            <IconLinkExternal />
-          </template>
-        </ButtonV2>
-      </template>
+              <ButtonV2
+                :href="parseNFTMetadataURL(contentUrl)"
+                preset="plain"
+                :download="getDownloadFilenameFromURL(contentUrl)"
+                @click="e => handleClickViewContentURL(e, contentUrl, index)"
+                >{{
+                  getFilenameFromURL(contentUrl) ||
+                    getContentUrlButtonText(contentUrl)
+                }}&nbsp;<IconLinkExternal
+              /></ButtonV2>
+            </li>
+          </ul>
+        </MenuList>
+      </Dropdown>
     </template>
   </div>
 </template>
@@ -178,7 +157,7 @@ export default {
     getContentUrlType(url) {
       if (url?.includes('epub')) return 'epub';
       if (url?.includes('pdf')) return 'pdf';
-      return 'unknown';
+      return undefined;
     },
     getContentUrlButtonText(url) {
       const type = this.getContentUrlType(url);
