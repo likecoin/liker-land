@@ -111,8 +111,10 @@ export default {
         this.$router.replace(this.localeLocation(this.getHomeRoute));
         return;
       }
-      this.lazyFetchNFTBookInfoByClassId(this.classId).catch();
-      await this.lazyFetchNFTClassMetadata();
+      await Promise.all([
+        this.lazyFetchNFTBookInfoByClassId(this.classId).catch(),
+        this.lazyFetchNFTClassMetadata(),
+      ]);
       await this.fetchISCNMetadata();
       await this.restoreSession();
       // TODO: use loginAddress
