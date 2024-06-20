@@ -574,11 +574,11 @@ export const getNftBookBuyerMessage = classId =>
 export const fetchBookstoreLatestItems = () =>
   `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100&exclude_wallet=${BOOKSTORE_LIST_EXCLUDED_WALLET}`;
 
-export const fetchBookstoreEditorialItems = () =>
-  `${EXTERNAL_HOST}/api/bookstore/items`;
+export const fetchBookstoreItemsFromCMSForLandingPage = () =>
+  `${EXTERNAL_HOST}/api/bookstore/lists/landing?limit=7`;
+
+export const fetchBookstoreItemListsFromCMSById = (id, { limit = 100 } = {}) =>
+  `${EXTERNAL_HOST}/api/bookstore/lists/${id}?limit=${limit}t=1718841600`;
 
 export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;
-
-export const fetchBookstoreLists = () =>
-  `${EXTERNAL_HOST}/api/bookstore/lists?t=1718013531`;

@@ -30,8 +30,7 @@ const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ign
 const getTopCreators = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getTopCollectors = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list`;
-const getBookStoreEditorialItems = `${EXTERNAL_HOST}/api/bookstore/items`;
-const getBookStoreList = `${EXTERNAL_HOST}/api/bookstore/lists`;
+const getBookstoreItemsFromCMS = `${EXTERNAL_HOST}/api/bookstore/lists/all`;
 
 /* actual routes logic */
 async function getSitemapRoutes() {
@@ -41,8 +40,7 @@ async function getSitemapRoutes() {
     creatorRes,
     collectorRes,
     newBookRes,
-    editorialBookRes,
-    bookListRes,
+    cmsBookRes,
   ] = await Promise.all(
     [
       getLatestNFTClasses,
@@ -50,8 +48,7 @@ async function getSitemapRoutes() {
       getTopCreators,
       getTopCollectors,
       getLatestBooks,
-      getBookStoreEditorialItems,
-      getBookStoreList,
+      getBookstoreItemsFromCMS,
     ].map(url =>
       axios.get(url).catch(err => {
         // eslint-disable-next-line no-console
@@ -63,13 +60,7 @@ async function getSitemapRoutes() {
   const classes = [].concat(
     ...[newClassRes, topClassRes].map(r => (r.data || {}).classes || []),
     ...((newBookRes.data || {}).list || []).map(b => ({ id: b.classId })),
-    ...((editorialBookRes.data || {}).results || []).map(b => ({
-      id: b.classId,
-    })),
-    ...(((bookListRes.data || {}).results || {}).featured || []).map(b => ({
-      id: b.classId,
-    })),
-    ...(((bookListRes.data || {}).results || {}).highlighted || []).map(b => ({
+    ...((cmsBookRes.data || {}).records || []).map(b => ({
       id: b.classId,
     }))
   );

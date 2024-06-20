@@ -782,7 +782,7 @@ export default {
   },
   async fetch({ store }) {
     try {
-      await store.dispatch('fetchBookstoreList');
+      await store.dispatch('fetchBookstoreItemsFromCMSForLandingPage');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -793,7 +793,11 @@ export default {
     const description = this.$t('og_description');
 
     const classIds = Array.from(
-      new Set(this.bookstoreItems.map(b => b.classId).flat())
+      new Set(
+        this.nftBookstoreItemsFromCMSForLandingPage
+          .map(b => b.classIds || b.classId)
+          .flat()
+      )
     );
     const links = [];
     classIds.forEach(classId =>
@@ -874,29 +878,11 @@ export default {
     bookstoreSectionStickyClass() {
       return 'desktop:sticky desktop:top-[124px]';
     },
-    bookstoreItems() {
-      return this.bookstoreListItemsInHighlighted.slice(0, 7).map(item => {
-        const isMultiple =
-          Array.isArray(item.classId) && item.classId.length > 1;
-
-        const newItem = {
-          ...item,
-          isMultiple,
-          classId: isMultiple ? item.classId[0] : item.classId,
-        };
-
-        if (isMultiple) {
-          newItem.classIds = item.classId;
-        }
-
-        return newItem;
-      });
-    },
     stickyBookstoreItem() {
-      return this.bookstoreItems[0];
+      return this.nftBookstoreItemsFromCMSForLandingPage[0];
     },
     bookstoreItemsInGrid() {
-      return this.bookstoreItems.slice(1);
+      return this.nftBookstoreItemsFromCMSForLandingPage.slice(1, 7);
     },
     faqs() {
       return this.$t('index_faq_list').map(({ q: question, a: answer }) => ({
