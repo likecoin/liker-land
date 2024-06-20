@@ -441,7 +441,7 @@
   "listing_page_cant_find_books_button": "告訴我們",
   "listing_page_cant_find_books_prefilled_message": "我想找",
   "listing_page_filter": "篩選",
-  "listing_page_filter_drm_free_label": "不含 DRM",
+  "listing_page_filter_drm_free_label": "不設 DRM",
   "listing_page_filter_language_label": "語言：{language}",
   "listing_page_filter_price_all": "全部",
   "listing_page_filter_price_free": "免費",
