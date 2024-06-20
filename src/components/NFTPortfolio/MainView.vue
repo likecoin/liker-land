@@ -190,7 +190,7 @@
           :should-show-iscn-owner="false"
           :recommended-list="[]"
           :is-book-nft="true"
-          :is-loading="isRecommendationLoading"
+          :is-loading="false"
           @item-click="handleRecommendedItemClick"
           @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"
