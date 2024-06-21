@@ -3,18 +3,35 @@
     :class="['flex', 'flex-col', 'border-[1px]', 'border-shade-gray']"
     :has-padding="false"
   >
-    <a
+    <component
+      :is="url ? 'a' : 'div'"
       class="rounded-t-[inherit] overflow-hidden"
-      :href="url || iscnUrl"
-      target="_blank"
-      :rel="url ? 'noopener ugc' : 'noopener'"
+      v-bind="
+        url
+          ? {
+              href: url,
+              target: '_blank',
+              rel: 'noopener ugc',
+            }
+          : {}
+      "
     >
       <NFTCover
+        v-if="animationUrl"
         :src="imageUrl"
         :video-src="animationUrl"
         :bg-color="imageBgColor"
       />
-    </a>
+      <NFTBookCoverWithFrame
+        v-else
+        class="w-full !rounded-none"
+        :src="imageUrl"
+        :alt="nftName"
+        :cover-resize="450"
+        :background-color="imageBgColor"
+        class-aspect-ratio="aspect-[1]"
+      />
+    </component>
     <div
       :class="[
         'flex',
