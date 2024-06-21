@@ -249,12 +249,6 @@ const DISPLAY_NUMBER = 100;
 export default {
   name: 'FreeAudioBooks',
   layout: 'default',
-  async asyncData({ $api }) {
-    const csvData = await $api.$get(fetchGutenbergCsv());
-    const parsedData = await parseCSV(csvData);
-
-    return { parsedData };
-  },
   data() {
     return {
       parsedData: [],
@@ -319,8 +313,12 @@ export default {
           this.currentDisplayNumber = DISPLAY_NUMBER;
         }
       },
-      immediate: true,
     },
+  },
+  async mounted() {
+    const csvData = await this.$axios.$get(fetchGutenbergCsv());
+    this.parsedData = await parseCSV(csvData);
+    this.currentDisplayNumber = this.parsedData.length;
   },
   methods: {
     handleClickRow(classId) {
