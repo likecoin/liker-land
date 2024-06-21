@@ -5,6 +5,9 @@
       class="fixed inset-0 flex flex-col justify-center items-center"
     >
       <ProgressIndicator />
+      <div class="text-like-green">
+        {{ progressSizeInMB }} / {{ totalSizeInMB }}MB ({{ progressPercent }}%)
+      </div>
     </div>
     <div v-else class="flex items-center justify-between">
       <div class="grow" />

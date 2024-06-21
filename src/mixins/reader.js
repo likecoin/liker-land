@@ -1,4 +1,10 @@
 export default {
+  data() {
+    return {
+      totalSize: 0,
+      progressSize: 0,
+    };
+  },
   props: {
     classId: {
       type: String,
@@ -17,8 +23,23 @@ export default {
       default: '',
     },
   },
+  computed: {
+    progressPercent() {
+      return this.totalSize
+        ? Math.round((this.progressSize * 100.0) / this.totalSize)
+        : 0;
+    },
+    progressSizeInMB() {
+      return (this.progressSize / (1024 * 1024)).toFixed(2);
+    },
+    totalSizeInMB() {
+      return (this.totalSize / (1024 * 1024)).toFixed(2);
+    },
+  },
   methods: {
     async getFileBuffer(cacheKey) {
+      this.totalSize = 0;
+      this.progressSize = 0;
       let res;
       const req = new Request(this.corsUrl);
       if (window.caches) {
@@ -38,15 +59,41 @@ export default {
         if (window.caches) {
           try {
             const cache = await caches.open(cacheKey);
-            await cache.put(req, res.clone());
+            cache.put(req, res.clone());
           } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
           }
         }
       }
-      const buffer = await res.arrayBuffer();
-      return buffer;
+      const reader = res.body.getReader();
+
+      const contentLength = +res.headers.get('X-Original-Content-Length');
+      if (contentLength) {
+        this.totalSize = contentLength;
+      }
+
+      let receivedLength = 0;
+      const chunks = [];
+      while (true) {
+        // eslint-disable-next-line no-await-in-loop
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        chunks.push(value);
+        receivedLength += value.length;
+        this.progressSize = receivedLength;
+      }
+
+      const chunksAll = new Uint8Array(receivedLength);
+      let position = 0;
+      chunks.forEach(chunk => {
+        chunksAll.set(chunk, position);
+        position += chunk.length;
+      });
+
+      return chunksAll.buffer;
     },
   },
 };

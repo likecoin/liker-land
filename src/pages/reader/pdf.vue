@@ -5,6 +5,9 @@
       class="fixed inset-0 flex flex-col justify-center items-center"
     >
       <ProgressIndicator />
+      <div class="text-white">
+        {{ progressSizeInMB }} / {{ totalSizeInMB }}MB ({{ progressPercent }}%)
+      </div>
     </div>
     <iframe
       ref="pdfIframe"
