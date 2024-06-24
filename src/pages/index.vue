@@ -653,7 +653,6 @@
               >
                 {{ $t('index_faq_title') }}
 
-                <!-- Faq title decoration -->
                 <svg
                   class="absolute pointer-events-none top-[50%] translate-y-[-45%] translate-x-[-50%] left-full w-full"
                   viewBox="0 0 311 328"
