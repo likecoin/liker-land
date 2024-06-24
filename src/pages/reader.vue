@@ -1,6 +1,12 @@
 <template>
   <div class="fixed inset-0 flex flex-col items-center justify-center">
-    <ProgressIndicator v-if="isLoading" />
+    <div
+      v-if="isLoading"
+      class="fixed inset flex flex-col justify-center items-center bg-white gap-[16px]"
+    >
+      <ProgressIndicator />
+      <span class="text-like-green">{{ $t('reader_loading_label') }}</span>
+    </div>
     <Component
       :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
       v-else

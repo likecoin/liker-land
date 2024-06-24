@@ -2,12 +2,13 @@
   <div>
     <div
       v-if="isLoading"
-      class="fixed inset-0 flex flex-col justify-center items-center"
+      class="fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-white"
     >
-      <ProgressIndicator />
-      <div class="text-like-green">
-        {{ progressSizeInMB }} / {{ totalSizeInMB }}MB ({{ progressPercent }}%)
-      </div>
+      <ProgressIndicator
+        :type="progressIndicatorType"
+        :value="progressPercent"
+      />
+      <span class="text-like-green text-center">{{ progressLabelText }}</span>
     </div>
     <div v-else class="flex items-center justify-between">
       <div class="grow" />

@@ -858,6 +858,7 @@
     }
   },
   "preview": "預覽",
+  "reader_loading_label": "載入中",
   "RedirectPage": {
     "title": "重新轉向"
   },

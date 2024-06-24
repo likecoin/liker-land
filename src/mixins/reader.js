@@ -35,6 +35,16 @@ export default {
     totalSizeInMB() {
       return (this.totalSize / (1024 * 1024)).toFixed(2);
     },
+    progressIndicatorType() {
+      return this.totalSize ? 'determinate' : 'indeterminate';
+    },
+    progressLabelText() {
+      return this.totalSize
+        ? `${this.progressSizeInMB} / ${this.totalSizeInMB} MB (${
+            this.progressPercent
+          }%)`
+        : this.$t('reader_loading_label');
+    },
   },
   methods: {
     async getFileBuffer(cacheKey) {

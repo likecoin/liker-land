@@ -2,12 +2,13 @@
   <div class="w-full h-full">
     <div
       v-if="isLoading"
-      class="fixed inset-0 flex flex-col justify-center items-center"
+      class="fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-like-green"
     >
-      <ProgressIndicator />
-      <div class="text-white">
-        {{ progressSizeInMB }} / {{ totalSizeInMB }}MB ({{ progressPercent }}%)
-      </div>
+      <ProgressIndicator
+        :type="progressIndicatorType"
+        :value="progressPercent"
+      />
+      <span class="text-white text-center">{{ progressLabelText }}</span>
     </div>
     <iframe
       ref="pdfIframe"
