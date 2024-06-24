@@ -384,7 +384,7 @@
         <div
           class="desktop:grid grid-cols-5 items-stretch gap-[20px] flex-grow"
         >
-          <div class="col-span-2">
+          <div v-if="stickyBookstoreItem" class="col-span-2">
             <NFTBookItemCardV2
               :class="[bookstoreSectionStickyClass, 'w-full']"
               class-cover-frame-aspect-ratio="min-h-[360px] desktop:min-h-[0] desktop:aspect-[4/5]"
