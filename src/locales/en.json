@@ -858,6 +858,7 @@
     }
   },
   "preview": "Preview",
+  "reader_loading_label": "Loading",
   "RedirectPage": {
     "title": "Redirecting"
   },
