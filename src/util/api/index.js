@@ -578,7 +578,7 @@ export const fetchBookstoreItemsFromCMSForLandingPage = () =>
   `${EXTERNAL_HOST}/api/bookstore/lists/landing?limit=7`;
 
 export const fetchBookstoreItemListsFromCMSById = (id, { limit = 100 } = {}) =>
-  `${EXTERNAL_HOST}/api/bookstore/lists/${id}?limit=${limit}t=1718841600`;
+  `${EXTERNAL_HOST}/api/bookstore/lists/${id}?limit=${limit}&t=1718841600`;
 
 export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;
