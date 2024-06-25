@@ -32,7 +32,7 @@ export default {
     return {
       isLoading: false,
       isIframeReady: false,
-      base64FileData: null,
+      fileData: null,
     };
   },
   computed: {
@@ -60,18 +60,20 @@ export default {
       if (event.origin !== this.iframeOrigin) return;
       if (event.data === 'ready') {
         this.isIframeReady = true;
-        if (this.base64FileData) {
+        if (this.fileData) {
+          const buffer = this.fileData;
           this.$refs.pdfIframe?.contentWindow?.postMessage(
-            JSON.stringify({
-              action: 'openBase64File',
+            {
+              action: 'openArrayBufferFile',
               data: {
-                data: this.base64FileData,
+                data: buffer,
                 name: this.nftName,
               },
-            }),
-            this.iframeOrigin
+            },
+            this.iframeOrigin,
+            [buffer]
           );
-          this.base64FileData = null;
+          this.fileData = null;
         }
       }
     },
@@ -79,19 +81,20 @@ export default {
       try {
         this.isLoading = true;
         const buffer = await this.getFileBuffer('reader-pdf');
-        this.base64FileData = Buffer.from(buffer).toString('base64');
         if (this.isIframeReady) {
           this.$refs.pdfIframe?.contentWindow?.postMessage(
-            JSON.stringify({
-              action: 'openBase64File',
+            {
+              action: 'openArrayBufferFile',
               data: {
-                data: this.base64FileData,
+                data: buffer,
                 name: this.nftName,
               },
-            }),
-            this.iframeOrigin
+            },
+            this.iframeOrigin,
+            [buffer]
           );
-          this.base64FileData = null;
+        } else {
+          this.fileData = buffer;
         }
         this.isLoading = false;
       } catch (err) {
