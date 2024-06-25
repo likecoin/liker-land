@@ -83,9 +83,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+
 import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
+
 import bookstoreMixin from '~/mixins/bookstore';
 
 export default {
@@ -148,16 +149,9 @@ export default {
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
     },
-    nftBookListIngItems() {
-      return [
-        // from bookstore mixin
-        ...this.bookstoreListItemsInHighlighted,
-        ...this.bookstoreListItemsInFeatured,
-      ];
-    },
     nftFeaturedBooks() {
-      return this.nftBookListIngItems.length
-        ? [...this.nftBookListIngItems]
+      return this.bookstoreListItemForLandingPage.length
+        ? this.bookstoreListItemForLandingPage
         : [...DEFAULT_RECOMMENDATIONS_LIST.BOOK.map(nft => ({ classId: nft }))];
     },
     normalizedList() {
@@ -183,7 +177,7 @@ export default {
     async recommendedList(list) {
       if (this.isBookNft && list.length < +this.displayItemCount) {
         try {
-          await this.fetchBookstoreList();
+          await this.fetchBookstoreItemsFromCMSForLandingPage();
         } catch (error) {
           console.error(error);
         }
@@ -191,7 +185,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchBookstoreList']),
     handleHeaderAvatarClick() {
       this.$emit('header-avatar-click');
     },
@@ -218,6 +211,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
 @import 'swiper/swiper.scss';
 </style>

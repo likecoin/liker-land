@@ -212,6 +212,7 @@
           </li>
 
           <li v-for="item in sortedBookstoreItems" :key="item.classId">
+            {{ item.isRecommended ? 'Recommended' : '' }}
             <NFTBookItemCardV2
               :class-id="item.classId"
               class-cover-frame-aspect-ratio="aspect-[4/5]"
@@ -377,44 +378,54 @@ import {
   LANGUAGE_OPTIONS,
 } from '~/constant/store';
 
+import { fetchBookstoreItemListsFromCMSById } from '~/util/api';
 import { checkIsForcedInAppPage } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { parseNFTMetadataURL } from '~/util/nft';
 
-import bookstoreMixin from '~/mixins/bookstore';
 import crispMixin from '~/mixins/crisp';
 
 export default {
   name: 'ListingPage',
-  mixins: [bookstoreMixin, crispMixin],
+  mixins: [crispMixin],
   layout: 'default',
   defaultSorting: SORTING_OPTIONS.RECOMMEND,
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,
+  async asyncData({ store, redirect, localeLocation, route, $api }) {
+    if (checkIsForcedInAppPage(route)) {
+      redirect(301, localeLocation({ name: 'dashboard' }));
+      return {};
+    }
+
+    let bookstoreItemsFromCMS = [];
+    try {
+      const [result] = await Promise.all([
+        $api.$get(
+          fetchBookstoreItemListsFromCMSById('Listing', { limit: 100 })
+        ),
+        store.dispatch('fetchBookstoreLatestItems'),
+      ]);
+      bookstoreItemsFromCMS = result.records.map((item, index) => ({
+        ...item,
+        recommendOrder: index + 1,
+      }));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+    return { bookstoreItemsFromCMS };
+  },
   data() {
     return {
+      bookstoreItemsFromCMS: [], // Fetch in asyncData
+
       totalBooks: 0,
 
       isShowSortingDialog: false,
       isShowFilterDialog: false,
       dialogNFTClassList: [],
     };
-  },
-  async fetch({ store, redirect, localeLocation, route }) {
-    if (checkIsForcedInAppPage(route)) {
-      redirect(301, localeLocation({ name: 'dashboard' }));
-      return;
-    }
-
-    try {
-      await Promise.all([
-        store.dispatch('fetchBookstoreList'),
-        store.dispatch('fetchBookstoreLatestItems'),
-      ]);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
   },
   head() {
     const title = this.$t('store_index_page_title');
@@ -504,8 +515,6 @@ export default {
   computed: {
     ...mapGetters([
       'nftBookstoreLatestItems',
-      'nftBookstoreLatestPaidItems',
-      'nftBookstoreLatestFreeItems',
       'getNFTBookStorePricesByClassId',
       'getNFTClassMetadataById',
     ]),
@@ -538,19 +547,6 @@ export default {
             ? value
             : this.$options.defaultPrice,
         };
-
-        switch (value) {
-          case PRICE_OPTIONS.PAID:
-          case PRICE_OPTIONS.FREE:
-            // NOTE: Language filter is available only when price filter is not applied
-            delete query.lang;
-            query.sort = SORTING_OPTIONS.LATEST;
-            break;
-          case PRICE_OPTIONS.ALL:
-          default:
-            query.sort = SORTING_OPTIONS.RECOMMEND;
-            break;
-        }
 
         this.$router.push({ query });
       },
@@ -601,12 +597,6 @@ export default {
             : this.$options.defaultLanguage,
         };
 
-        // NOTE: Language filter is available only when recommended sorting is applied
-        if (value !== LANGUAGE_OPTIONS.ALL) {
-          delete query.price;
-          query.sort = SORTING_OPTIONS.RECOMMEND;
-        }
-
         this.$router.push({ query });
       },
     },
@@ -622,12 +612,10 @@ export default {
     availableSorting() {
       const options = [];
 
-      if (this.selectedPriceFilter === PRICE_OPTIONS.ALL) {
-        options.push({
-          text: this.$t('listing_page_header_sort_recommend'),
-          value: SORTING_OPTIONS.RECOMMEND,
-        });
-      }
+      options.push({
+        text: this.$t('listing_page_header_sort_recommend'),
+        value: SORTING_OPTIONS.RECOMMEND,
+      });
 
       options.push({
         text: this.$t('listing_page_header_sort_latest'),
@@ -661,14 +649,6 @@ export default {
             : this.$options.defaultSorting,
         };
 
-        // NOTE: Language filter is available only when recommend sorting is applied
-        if (
-          value !== SORTING_OPTIONS.RECOMMEND &&
-          this.selectedLanguageFilter !== LANGUAGE_OPTIONS.ALL
-        ) {
-          delete query.lang;
-        }
-
         this.$router.push({ query });
       },
     },
@@ -678,35 +658,18 @@ export default {
     },
 
     bookstoreItems() {
-      switch (this.selectedPriceFilter) {
-        case PRICE_OPTIONS.FREE:
-          return this.nftBookstoreLatestFreeItems;
-        case PRICE_OPTIONS.PAID:
-          return this.nftBookstoreLatestPaidItems;
-        case PRICE_OPTIONS.ALL:
-        default:
-          // FIXME: Need modifying API for obtaining price & book type of featured items
-          if (this.selectedSorting === SORTING_OPTIONS.RECOMMEND) {
-            const setOfFeaturedItemClasses = new Set(
-              this.bookstoreListItemsInFeatured.map(item => item.classId)
-            );
-            return [
-              // NOTE: Featured items always come first
-              ...this.bookstoreListItemsInFeatured,
-              // NOTE: Filter out featured items from latest items
-              ...this.nftBookstoreLatestItems.filter(
-                item => !setOfFeaturedItemClasses.has(item.classId)
-              ),
-            ];
-          }
-          return this.nftBookstoreLatestItems;
-      }
-    },
-    normalizedBookstoreItems() {
-      return this.normalizeBookstoreListItems(this.bookstoreItems);
+      const bookstoreItemsClassIdsSetFromCMS = new Set(
+        this.bookstoreItemsFromCMS.map(item => item.classId)
+      );
+      return [
+        ...this.bookstoreItemsFromCMS,
+        ...this.nftBookstoreLatestItems.filter(
+          item => !bookstoreItemsClassIdsSetFromCMS.has(item.classId)
+        ),
+      ];
     },
     filteredBookstoreItems() {
-      return this.normalizedBookstoreItems
+      return this.bookstoreItems
         .filter(item => {
           if (this.isAppliedDRMFreeFilter) {
             return item.isDRMFree;
@@ -715,10 +678,19 @@ export default {
         })
         .filter(item => {
           if (
-            this.selectedLanguageFilter === LANGUAGE_OPTIONS.EN &&
+            this.selectedLanguageFilter !== LANGUAGE_OPTIONS.ALL &&
             item.locales
           ) {
-            return item.locales.includes('en');
+            return item.locales.includes(this.selectedLanguageFilter);
+          }
+          return true;
+        })
+        .filter(item => {
+          if (PRICE_OPTIONS.PAID === this.selectedPriceFilter) {
+            return item.minPrice > 0;
+          }
+          if (PRICE_OPTIONS.FREE === this.selectedPriceFilter) {
+            return item.minPrice === 0;
           }
           return true;
         });
@@ -726,24 +698,52 @@ export default {
     sortedBookstoreItems() {
       const items = [...this.filteredBookstoreItems];
 
-      if (
-        [PRICE_OPTIONS.ALL, PRICE_OPTIONS.PAID].includes(
-          this.selectedPriceFilter
-        ) &&
-        [SORTING_OPTIONS.HIGHER_PRICE, SORTING_OPTIONS.LOWER_PRICE].includes(
-          this.selectedSorting
-        )
-      ) {
-        items.sort((a, b) => {
-          const priceA = a.minPrice;
-          const priceB = b.minPrice;
-
-          if (this.selectedSorting === SORTING_OPTIONS.HIGHER_PRICE) {
-            return priceB - priceA;
+      items.sort((a, b) => {
+        const locale = this.selectedLanguageFilter;
+        if (locale !== LANGUAGE_OPTIONS.ALL) {
+          const aLocales = a.locales || [];
+          const bLocales = b.locales || [];
+          if (aLocales.includes(locale) && !bLocales.includes(locale)) {
+            return -1;
           }
-          return priceA - priceB;
-        });
-      }
+          if (!aLocales.includes(locale) && bLocales.includes(locale)) {
+            return 1;
+          }
+        }
+
+        switch (this.selectedSorting) {
+          case SORTING_OPTIONS.RECOMMEND:
+            if (a.recommendOrder && b.recommendOrder) {
+              return a.recommendOrder - b.recommendOrder;
+            }
+            if (a.recommendOrder && !b.recommendOrder) {
+              return -1;
+            }
+            if (!a.recommendOrder && b.recommendOrder) {
+              return 1;
+            }
+            break;
+
+          case SORTING_OPTIONS.HIGHER_PRICE: {
+            if (a.minPrice !== b.minPrice) {
+              return b.minPrice - a.minPrice;
+            }
+            break;
+          }
+
+          case SORTING_OPTIONS.LOWER_PRICE: {
+            if (a.minPrice !== b.minPrice) {
+              return a.minPrice - b.minPrice;
+            }
+            break;
+          }
+
+          default:
+            break;
+        }
+
+        return b.timestamp - a.timestamp;
+      });
 
       return items;
     },
