@@ -6,7 +6,20 @@ const {
 
 const axios = require('../../modules/axios');
 
-async function fetchAirtableCMSItems(view, { pageSize = 100, offset }) {
+function normalizeViewName(viewName) {
+  switch (viewName) {
+    case 'landing':
+      return 'Landing Page';
+    case 'listing':
+      return 'Listing Page';
+    case 'all':
+      return 'All';
+    default:
+      return viewName;
+  }
+}
+
+async function fetchAirtableCMSItems(viewName, { pageSize = 100, offset }) {
   const results = await axios.get(
     `https://api.airtable.com/v0/${AIRTABLE_CMS_BASE_ID}/${AIRTABLE_CMS_TABLE_ID}`,
     {
@@ -16,7 +29,7 @@ async function fetchAirtableCMSItems(view, { pageSize = 100, offset }) {
       params: {
         filterByFormula: 'NOT(Hidden)',
         pageSize,
-        view,
+        view: normalizeViewName(viewName),
         offset,
       },
     }
