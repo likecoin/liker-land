@@ -143,14 +143,6 @@ export default {
     shouldShowViewContentButton() {
       return !!this.normalizedContentURLs.includes(this.url);
     },
-    hasDuplicatedContentTypes() {
-      const set = new Set(
-        this.normalizedContentURLs.map(
-          url => url === this.getContentUrlType(url)
-        )
-      );
-      return set.size !== this.normalizedContentURLs.length;
-    },
   },
   methods: {
     parseNFTMetadataURL,
