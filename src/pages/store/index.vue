@@ -402,7 +402,7 @@ export default {
     try {
       const [result] = await Promise.all([
         $api.$get(
-          fetchBookstoreItemListsFromCMSById('Listing', { limit: 100 })
+          fetchBookstoreItemListsFromCMSById('listing', { limit: 100 })
         ),
         store.dispatch('fetchBookstoreLatestItems'),
       ]);
