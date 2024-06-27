@@ -212,7 +212,6 @@
           </li>
 
           <li v-for="item in sortedBookstoreItems" :key="item.classId">
-            {{ item.isRecommended ? 'Recommended' : '' }}
             <NFTBookItemCardV2
               :class-id="item.classId"
               class-cover-frame-aspect-ratio="aspect-[4/5]"
