@@ -51,10 +51,6 @@
                 @click="isOpenAboutTeam = !isOpenAboutTeam"
                 >{{ $t('footer_nav_about_liker_land') }}</a
               >
-              <hr class="w-[32px] border-white border-opacity-[0.2]" />
-              <a class="hover:underline" target="_blank" href="https://like.co">
-                {{ $t('footer_nav_about_likecoin') }}
-              </a>
             </div>
             <div class="grid grid-flow-row gap-y-[16px]">
               <NuxtLink
