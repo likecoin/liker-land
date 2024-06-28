@@ -1,6 +1,9 @@
 import { mapActions, mapGetters } from 'vuex';
 import { getIdenticonAvatar } from '~/util/api';
-import { getLikerIdSettingsURL } from '~/util/links';
+import {
+  getLikerIdSettingsURL,
+  getExportSeedWordWidgetURL,
+} from '~/util/links';
 import { escapeCSVField, downloadCSV } from '~/util/misc';
 
 import walletLoginMixin from './wallet-login';
@@ -39,6 +42,9 @@ export default {
     isWalletUserCivicLiker() {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
     },
+    isWalletUserAuthcore() {
+      return this.walletMethodType === 'authcore';
+    },
     walletUserAvatar() {
       return (
         (this.getLikerInfo && this.getLikerInfo.avatar) ||
@@ -53,6 +59,11 @@ export default {
         wallet: this.getAddress || '',
         language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
         legacy: this.walletMethodType === 'authcore' ? '1' : '',
+      });
+    },
+    exportSeedWordURL() {
+      return getExportSeedWordWidgetURL({
+        language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
       });
     },
     populatedFollowers() {

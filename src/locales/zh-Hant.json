@@ -886,6 +886,7 @@
   "settings_email_verify_verified": "電郵已驗證",
   "settings_email_verify_verified_back_button": "返回",
   "settings_email_verify_verifying": "驗證電郵中",
+  "settings_export_seed_word": "匯出錢包助記詞",
   "settings_follow_follow": "關注",
   "settings_follow_loading": "載入中",
   "settings_follow_no_followee": "尚無關注中作者",

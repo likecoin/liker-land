@@ -49,6 +49,21 @@
       </li>
     </ul>
 
+    <ul v-if="isWalletUserAuthcore" class="settings-menu !mt-[24px]">
+      <li>
+        <a
+          class="settings-menu__item"
+          :href="exportSeedWordURL"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="settings-menu__item-title">
+            {{ $t('settings_export_seed_word') }}</span
+          >
+        </a>
+      </li>
+    </ul>
+
     <ul v-if="showClearCacheButton" class="settings-menu !mt-[24px]">
       <li>
         <button class="settings-menu__item" @click="onClickClearCache">
