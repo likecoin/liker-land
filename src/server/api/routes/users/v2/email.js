@@ -2,7 +2,7 @@
 const querystring = require('querystring');
 const { Router } = require('express');
 const { v4: uuidv4 } = require('uuid');
-const { getBasicTemplate } = require('@likecoin/edm');
+const { getBasicV2Template } = require('@likecoin/edm');
 const {
   db,
   FieldValue,
@@ -76,8 +76,10 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
       qsPayload
     )}`;
-    const { subject, body } = getBasicTemplate({
-      subject: 'Verify your email',
+    const title = 'Verify Your Email';
+    const { subject, body } = getBasicV2Template({
+      subject: title,
+      title,
       content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
     });
     await sendEmail({
