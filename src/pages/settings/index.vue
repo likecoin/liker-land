@@ -47,10 +47,7 @@
           >
         </a>
       </li>
-    </ul>
-
-    <ul v-if="isWalletUserAuthcore" class="settings-menu !mt-[24px]">
-      <li>
+      <li v-if="isWalletUserAuthcore">
         <a
           class="settings-menu__item"
           :href="exportSeedWordURL"
