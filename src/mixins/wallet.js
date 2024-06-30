@@ -43,7 +43,7 @@ export default {
       return this.getLikerInfo && this.getLikerInfo.isSubscribedCivicLiker;
     },
     isWalletUserAuthcore() {
-      return this.walletMethodType === 'authcore';
+      return this.walletMethodType === 'liker-id';
     },
     walletUserAvatar() {
       return (
@@ -58,7 +58,6 @@ export default {
       return getLikerIdSettingsURL({
         wallet: this.getAddress || '',
         language: this.getLocale.startsWith('zh') ? 'zh' : 'en',
-        legacy: this.walletMethodType === 'authcore' ? '1' : '',
       });
     },
     exportSeedWordURL() {

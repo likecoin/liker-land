@@ -114,7 +114,7 @@
         <AttentionSign class="pb-0" :attention-text="attentionText">
           <template #icon>
             <IconLedger v-if="walletMethodType === 'keplr'" />
-            <IconLikerLandApp v-if="walletMethodType === 'liker-id'" />
+            <IconLikerLandApp v-if="walletMethodType === 'likerland-app'" />
             <IconKeplrMobile v-if="walletMethodType === 'keplr-mobile'" />
           </template>
         </AttentionSign>
@@ -250,7 +250,7 @@ export default {
             case 'cosmostation':
               return this.$t('tx_modal_status_sign_title_cosmostation');
 
-            case 'liker-id':
+            case 'likerland-app':
               return this.$t('tx_modal_status_sign_title_likerId');
 
             default:
@@ -295,7 +295,7 @@ export default {
         case 'keplr-mobile':
           return this.$t('attention_keplrMobile_openApp');
 
-        case 'liker-id':
+        case 'likerland-app':
           if (this.isInInAppBrowser) return undefined;
           return this.$t('attention_likerland_openApp');
 
