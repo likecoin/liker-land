@@ -650,7 +650,7 @@
   "nft_details_page_placeholder_transfer": "like1....",
   "nft_details_page_section_metadata": "Metadata",
   "nft_details_page_section_metadata_ar": "Storage(A)",
-  "nft_details_page_section_metadata_intro": "The content has been permanently stored on-chain and signed by its creator.",
+  "nft_details_page_section_metadata_intro": "The content has been permanently stored on-chain and signed by its publisher.",
   "nft_details_page_section_metadata_ipfs": "Storage(I)",
   "nft_details_page_section_metadata_iscn": "Verify",
   "nft_details_page_section_metadata_nft_id": "NFT ID",
