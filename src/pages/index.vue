@@ -504,6 +504,7 @@
               >
                 <img
                   class="w-[100px] h-[100px]"
+                  loading="lazy"
                   src="~assets/images/about/nft-book/icons/author.png"
                 />
                 <h4 class="font-600 mt-[2rem]">
@@ -526,6 +527,7 @@
               >
                 <img
                   class="w-[100px] h-[100px]"
+                  loading="lazy"
                   src="~assets/images/about/nft-book/icons/ownership.png"
                 />
                 <h4 class="font-600 mt-[2rem]">
@@ -556,6 +558,7 @@
               >
                 <img
                   class="w-[100px] h-[100px]"
+                  loading="lazy"
                   src="~assets/images/about/nft-book/icons/social.png"
                 />
                 <h4 class="font-600 mt-[2rem]">
@@ -620,6 +623,7 @@
               <div>
                 <img
                   class="origin-center scale-[1.2] group-hover:scale-[1.3] transition-transform max-h-[110px] laptop:max-h-[180px]"
+                  loading="lazy"
                   src="~assets/images/index/v2/category-ebook.png"
                 />
               </div>
@@ -645,6 +649,7 @@
               <!-- Faq section soft gradient bg -->
               <img
                 class="absolute top-[50%] translate-y-[-50%] pointer-events-none scale-[4]"
+                loading="lazy"
                 src="~assets/images/index/v2/faq-bg.png"
               />
 
