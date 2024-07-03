@@ -563,7 +563,7 @@ export default {
       collectorMessage: '',
       creatorMessage: '',
       claimingAddressInput: '',
-      claimingFreeEmail: '',
+      claimingFreeEmail: this.walletEmail || '',
       giftInfo: null,
       isPhysicalOnly: false,
       isAutoDeliver: false,
