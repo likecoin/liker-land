@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex flex-col">
-    <client-only>
+    <client-only v-if="isLazyLoaded">
       <lazy-component
         class="absolute inset-0 pointer-events-none -top-full"
         @show.once="fetchInfo"
@@ -63,6 +63,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isLazyLoaded: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     creatorDisplayName() {
@@ -70,6 +74,9 @@ export default {
         this.getUserInfoByAddress(this.iscnOwner)?.displayName || this.iscnOwner
       );
     },
+  },
+  mounted() {
+    if (!this.isLazyLoaded) this.fetchInfo();
   },
   methods: {
     async fetchInfo() {
