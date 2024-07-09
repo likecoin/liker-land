@@ -886,6 +886,7 @@
   "settings_email_verify_verified": "Email is verified",
   "settings_email_verify_verified_back_button": "Back",
   "settings_email_verify_verifying": "Verifying email",
+  "settings_export_seed_word": "Export wallet seed words",
   "settings_follow_follow": "Follow",
   "settings_follow_loading": "Loading",
   "settings_follow_no_followee": "No Following creators",
