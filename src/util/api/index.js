@@ -334,6 +334,16 @@ export const getNFTBookClaimEndpoint = ({
       )}`;
 };
 
+export const getNFTBookCartStatusEndpoint = ({ cartId }) =>
+  `${LIKECOIN_API_BASE}/likernft/book/purchase/cart/${cartId}/status`;
+
+export const getNFTBookCartClaimEndpoint = ({ cartId, token }) => {
+  const qsPayload = { token };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/cart/${cartId}/claim?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getFreeNFTBookPurchaseEndpoint = ({
   classId,
   collectionId,

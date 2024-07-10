@@ -38,7 +38,7 @@
           {{ $t('nft_claim_claim_header_title') }}
         </p>
         <p class="text-[16px] font-600 line-clamp-1">
-          {{ NFTName }}
+          {{ productTitle }}
         </p>
       </div>
     </div>
@@ -76,7 +76,7 @@
               :src="NFTImageUrl"
               class-aspect-ratio="aspect-[1]"
             />
-            <Label class="text-[24px] font-600" :text="NFTName" />
+            <Label class="text-[24px] font-600" :text="productTitle" />
             <div class="flex items-center justify-evenly">
               <div v-if="iscnWorkAuthor" class="flex flex-col w-full">
                 <Label
@@ -207,7 +207,7 @@
         <template #header-append>
           <Label
             class="text-like-green text-[18px] font-600 desktop:text-[24px]"
-            :text="$t('nft_claim_NFT_name', { name: NFTName })"
+            :text="$t('nft_claim_NFT_name', { name: productTitle })"
           />
         </template>
         <template #footer>
@@ -483,6 +483,8 @@ import {
   getNFTBookClaimEndpoint,
   getNFTBookPaymentStatusEndpoint,
   getFreeNFTBookPurchaseEndpoint,
+  getNFTBookCartStatusEndpoint,
+  getNFTBookCartClaimEndpoint,
 } from '~/util/api';
 import { isValidAddress } from '~/util/cosmos';
 import {
@@ -532,6 +534,7 @@ export default {
       isNewAccount: false,
       classId: this.$route.query.class_id,
       collectionId: this.$route.query.collection_id,
+      cartItems: [],
     };
   },
   computed: {
@@ -543,6 +546,9 @@ export default {
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
     ]),
+    cartId() {
+      return this.$route.query.cart_id;
+    },
     paymentId() {
       return this.$route.query.payment_id;
     },
@@ -554,6 +560,9 @@ export default {
     },
     isNFTBook() {
       return this.$route.query.type === 'nft_book';
+    },
+    cartItemsCount() {
+      return this.cartItems.length;
     },
     shouldBlockClaim() {
       return (
@@ -575,6 +584,16 @@ export default {
     },
     creatorAvatar() {
       return this.getUserInfoByAddress(this.iscnOwner)?.avatar;
+    },
+    productTitle() {
+      let title = this.NFTName;
+      if (this.cartItemsCount && this.cartItemsCount > 1) {
+        title = this.$tc('nft_claim_title', this.cartItemsCount - 1, {
+          name: this.NFTName,
+          count: this.cartItemsCount - 1,
+        });
+      }
+      return title;
     },
     canViewContentDirectly() {
       return (
@@ -659,7 +678,9 @@ export default {
     const { redirect, free, from, state, ...query } = this.$route.query;
     if (
       !free &&
-      ((!this.classId && !this.collectionId) || !this.token || !this.paymentId)
+      ((!this.classId && !this.collectionId && !this.cartId) ||
+        !this.token ||
+        !this.paymentId)
     ) {
       this.$nuxt.error({
         statusCode: 400,
@@ -667,29 +688,30 @@ export default {
       });
       return;
     }
-    try {
-      if (this.collectionId) {
-        await this.lazyFetchNFTCollectionInfoByCollectionId(this.collectionId);
-      } else if (this.classId) {
-        await this.lazyGetNFTClassMetadata(this.classId);
-        const classCollectionType = getNFTClassCollectionType(
-          this.getNFTClassMetadataById(this.classId)
-        );
-        if (classCollectionType === nftClassCollectionType.NFTBook) {
-          await this.lazyFetchNFTBookInfoByClassId(this.classId);
-        }
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      this.$nuxt.error({
-        statusCode: 404,
-        message: this.t('nft_claim_class_not_found'),
-      });
-      return;
-    }
     let price;
-    if (this.paymentId) {
+    if (this.cartId) {
+      const { data } = await this.$api.get(
+        getNFTBookCartStatusEndpoint({
+          cartId: this.cartId,
+          token: this.token,
+        })
+      );
+      ({ price } = data);
+      const {
+        classIdsWithPrice = [],
+        collectionIdsWithPrice = [],
+        classIds = [],
+        collectionIds = [],
+        status,
+      } = data;
+      this.cartItems = classIdsWithPrice.concat(collectionIdsWithPrice);
+      if (classIds.length) {
+        [this.classId] = classIds;
+      } else if (collectionIds.length) {
+        [this.collectionId] = collectionIds;
+      }
+      this.status = status;
+    } else if (this.paymentId) {
       try {
         const { data } = await this.$api.get(
           getNFTBookPaymentStatusEndpoint({
@@ -712,9 +734,6 @@ export default {
         this.isAutoDeliver = isAutoDeliver;
         this.creatorMessage = autoMemo;
         this.status = status;
-        if (this.collectionId) {
-          await this.lazyFetchNFTCollectionInfo();
-        }
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
@@ -729,26 +748,83 @@ export default {
       this.creatorMessage = autoMemo;
     }
 
+    try {
+      if (this.cartItems) {
+        await Promise.all(
+          this.cartItems.map(async item => {
+            if (item.classId) {
+              await this.lazyGetNFTClassMetadata(item.classId);
+              const classCollectionType = getNFTClassCollectionType(
+                this.getNFTClassMetadataById(item.classId)
+              );
+              if (classCollectionType === nftClassCollectionType.NFTBook) {
+                await this.lazyFetchNFTBookInfoByClassId(item.classId);
+              }
+            } else if (item.collectionId) {
+              this.lazyFetchNFTCollectionInfoByCollectionId(item.collectionId);
+            }
+          })
+        );
+      } else if (this.collectionId) {
+        await this.lazyFetchNFTCollectionInfoByCollectionId(this.collectionId);
+      } else if (this.classId) {
+        await this.lazyGetNFTClassMetadata(this.classId);
+        const classCollectionType = getNFTClassCollectionType(
+          this.getNFTClassMetadataById(this.classId)
+        );
+        if (classCollectionType === nftClassCollectionType.NFTBook) {
+          await this.lazyFetchNFTBookInfoByClassId(this.classId);
+        }
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      this.$nuxt.error({
+        statusCode: 404,
+        message: this.t('nft_claim_class_not_found'),
+      });
+      return;
+    }
+
     if (!free && !this.giftInfo && redirect && query.type === 'nft_book') {
+      const items = this.cartItems.length
+        ? this.cartItems.map(item => {
+            const { classId, collectionId, price } = item;
+            const name = classId
+              ? this.getNFTClassMetadataById(classId)?.name
+              : this.getNFTCollectionInfoByCollectionId(collectionId)?.name[
+                  this.collectionLocale
+                ];
+            return {
+              name,
+              classId,
+              collectionId,
+              price,
+            };
+          })
+        : [
+            {
+              name: this.NFTName,
+              classId: this.classId,
+              collectionId: this.collectionId,
+              price,
+            },
+          ];
+
       logPurchaseFlowEvent(this, 'purchase', {
-        items: [
-          {
-            name: this.NFTName,
-            collectionId: this.collectionId,
-            classId: this.classId,
-            price,
-          },
-        ],
+        items,
         price,
         currency: 'USD',
         isNFTBook: true,
       });
-      logPurchaseNFTBookEvent(this, {
-        name: this.NFTName,
-        currency: 'USD',
-        collectionId: this.collectionId,
-        classId: this.classId,
-        price,
+      items.forEach(item => {
+        logPurchaseNFTBookEvent(this, {
+          name: item.name,
+          currency: 'USD',
+          collectionId: item.collectionId,
+          classId: item.classId,
+          price: item.price,
+        });
       });
       this.$router.replace({
         ...this.$route,
@@ -853,7 +929,7 @@ export default {
         await this.claimFiatPurchase();
       }
 
-      if (this.isAutoDeliver) {
+      if (this.isAutoDeliver || this.cartItemsCount > 1) {
         await this.fetchCollectedNFTClassesByAddress(this.claimingAddress);
       }
     },
@@ -904,19 +980,23 @@ export default {
         if (this.claimPromise) return;
         this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
         this.isClaimLoading = true;
-        this.claimPromise = this.$api.post(
-          getNFTBookClaimEndpoint({
-            classId: this.classId,
-            collectionId: this.collectionId,
-            paymentId: this.paymentId,
-            token: this.token,
-          }),
-          {
-            paymentId: this.paymentId,
-            wallet: this.claimingAddress,
-            message: this.collectorMessage,
-          }
-        );
+        const endpoint =
+          this.cartItemsCount > 1
+            ? getNFTBookCartClaimEndpoint({
+                cartId: this.cartId,
+                token: this.token,
+              })
+            : getNFTBookClaimEndpoint({
+                classId: this.classId,
+                collectionId: this.collectionId,
+                paymentId: this.paymentId,
+                token: this.token,
+              });
+        this.claimPromise = this.$api.post(endpoint, {
+          paymentId: this.paymentId,
+          wallet: this.claimingAddress,
+          message: this.collectorMessage,
+        });
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;

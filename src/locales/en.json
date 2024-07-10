@@ -551,6 +551,7 @@
   "nft_claim_NFT_author": "Author",
   "nft_claim_NFT_name": "\"{name}\"",
   "nft_claim_NFT_publisher": "Publisher",
+  "nft_claim_title": "{name} and {count} other books",
   "nft_claim_welcome_button_claim": "Start claiming my eBook",
   "nft_claim_welcome_text": "A confirmation email has been sent to your email address as well. \n\nPlease begin the ebook claiming process to receive the book from the author.\n\nYour book will be recorded on the blockchain network, in which you will have complete ownership & access to the content.",
   "nft_claim_welcome_text_physical_only": "Payment successful. We will arrange delivery shortly. Thank you for your support!",
