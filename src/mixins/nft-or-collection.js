@@ -1,40 +1,21 @@
 import { parseNFTMetadataURL } from '~/util/nft';
-import { mapGetters } from 'vuex';
+import nftMixin from './nft';
+import collectionMixin from './nft-collection';
 
 export default {
+  mixins: [nftMixin, collectionMixin],
   computed: {
-    ...mapGetters([
-      'getNFTClassMetadataById',
-      'getISCNMetadataById',
-      'getCanViewNFTBookBeforeClaimByClassId',
-      'getNFTCollectionInfoByCollectionId',
-      'getIsHideNFTBookDownload',
-    ]),
     classIds() {
-      if (this.collectionId) {
-        return this.getNFTCollectionInfoByCollectionId(this.collectionId)
-          ?.classIds;
-      }
-      return [this.classId];
+      return this.collectionId ? this.classIds : [this.classId];
     },
     isCollection() {
       return !!this.collectionId;
     },
-    primaryKey() {
+    productId() {
       return this.collectionId || this.classId;
     },
-    collectionLocale() {
-      let { locale } = this.$i18n;
-      if (locale === 'zh-Hant') {
-        locale = 'zh';
-      }
-      return locale;
-    },
     NFTMetadata() {
-      if (this.isCollection) {
-        return this.getNFTCollectionInfoByCollectionId(this.collectionId);
-      }
-      return this.getNFTClassMetadataById(this.classId);
+      return this.isCollection ? this.collection : this.NFTMetadata;
     },
     NFTName() {
       const name = this.NFTMetadata?.name;
@@ -55,29 +36,24 @@ export default {
       return image ? parseNFTMetadataURL(image) : '';
     },
     NFTOwner() {
-      let wallet;
-      if (this.isCollection) {
-        wallet = this.getNFTCollectionInfoByCollectionId(this.collectionId)
-          ?.ownerWallet;
-      } else {
-        wallet = this.NFTMetadata?.iscn_owner;
-      }
+      return this.isCollection
+        ? this.NFTMetadata?.ownerWallet
+        : this.NFTMetadata?.iscn_owner;
     },
     viewInfoLocation() {
-      if (this.collectionId) {
-        return this.localeLocation({
-          name: 'nft-collection-collectionId',
-          params: {
-            collectionId: this.collectionId,
-          },
-        });
-      }
-      return this.localeLocation({
-        name: 'nft-class-classId',
-        params: {
-          classId: this.classId,
-        },
-      });
+      return this.isCollection
+        ? this.localeLocation({
+            name: 'nft-collection-collectionId',
+            params: {
+              collectionId: this.collectionId,
+            },
+          })
+        : this.localeLocation({
+            name: 'nft-class-classId',
+            params: {
+              classId: this.classId,
+            },
+          });
     },
   },
 };

@@ -66,11 +66,10 @@ import {
 import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
 import { getNFTBookPaymentStatusEndpoint } from '~/util/api';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
-import nftMixin from '~/mixins/nft';
 
 export default {
   name: 'NFTGiftSuccessPage',
-  mixins: [nftOrCollectionMixin, nftMixin],
+  mixins: [nftOrCollectionMixin],
   async asyncData({ query, store, error, i18n }) {
     const { class_id: classId, collection_id: collectionId } = query;
     if (!classId && !collectionId) {
@@ -152,7 +151,7 @@ export default {
         this,
         'NFT',
         'nft_gift_purchase_success',
-        this.primaryKey,
+        this.productId,
         1
       );
       this.$router.replace({
@@ -167,7 +166,7 @@ export default {
         this,
         'NFT',
         'nft_gift_view_details_clicked',
-        this.primaryKey,
+        this.productId,
         1
       );
     },
@@ -176,7 +175,7 @@ export default {
         this,
         'NFT',
         'nft_gift_view_class_button_clicked',
-        this.primaryKey,
+        this.productId,
         1
       );
       this.$router.push(this.viewInfoLocation);
