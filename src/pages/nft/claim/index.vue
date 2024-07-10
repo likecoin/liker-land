@@ -420,7 +420,7 @@
           isAutoDeliver
             ? $t('nft_claim_claimed_content_autoDelivery', {
                 publisher: creatorDisplayName,
-                name: NFTName,
+                name: productName,
               })
             : $t('nft_claim_claimed_content_manualDelivery')
         "

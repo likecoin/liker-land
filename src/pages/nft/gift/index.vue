@@ -130,7 +130,7 @@ export default {
       logPurchaseFlowEvent(this, 'purchase', {
         items: [
           {
-            name: this.NFTName,
+            name: this.productName,
             classId: this.classId,
             collectionId: this.collectionId,
             price,
@@ -141,7 +141,7 @@ export default {
         isNFTBook: true,
       });
       logPurchaseNFTBookEvent(this, {
-        name: this.NFTName,
+        name: this.productName,
         currency: 'USD',
         classId: this.classId,
         collectionId: this.collectionId,

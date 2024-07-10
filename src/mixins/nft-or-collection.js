@@ -14,28 +14,28 @@ export default {
     productId() {
       return this.collectionId || this.classId;
     },
-    NFTMetadata() {
+    productMetadata() {
       return this.isCollection ? this.collection : this.NFTMetadata;
     },
-    NFTName() {
+    productName() {
       const name = this.NFTMetadata?.name;
       if (name && name[this.collectionLocale] !== undefined) {
         return name[this.collectionLocale];
       }
       return name;
     },
-    NFTDescription() {
+    productDescription() {
       const description = this.NFTMetadata?.description;
       if (description && description[this.collectionLocale] !== undefined) {
         return description[this.collectionLocale];
       }
       return description;
     },
-    NFTImageUrl() {
+    productImageUrl() {
       const image = this.NFTMetadata?.image;
       return image ? parseNFTMetadataURL(image) : '';
     },
-    NFTOwner() {
+    productOwner() {
       return this.isCollection
         ? this.NFTMetadata?.ownerWallet
         : this.NFTMetadata?.iscn_owner;
