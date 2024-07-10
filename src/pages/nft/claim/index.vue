@@ -654,7 +654,10 @@ export default {
       this.claimingFreeEmail = newValue;
     },
     claimingAddress(newValue) {
-      if (!newValue && !(this.status === 'completed')) {
+      if (
+        !newValue &&
+        !(this.status === 'completed' || this.status === 'pending')
+      ) {
         this.navigateToState(NFT_CLAIM_STATE.LOGIN);
       } else if (newValue) {
         this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
@@ -762,7 +765,7 @@ export default {
       });
     }
 
-    if (this.status === 'completed') {
+    if (this.status === 'completed' || this.status === 'pending') {
       this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
     } else if (!free && this.status !== 'paid') {
       this.alertPromptError(
