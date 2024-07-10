@@ -160,6 +160,17 @@
             />
           </div>
         </template>
+        <template v-if="cartItemsCount > 1" #content-prepend>
+          <div class="flex w-full gap-[16px]">
+            <NFTBookCoverWithFrame
+              v-for="item in cartItems"
+              :key="item.classId || item.collectionId"
+              class="w-full"
+              :src="getNFTImageUrl(item)"
+              class-aspect-ratio="aspect-[1]"
+            />
+          </div>
+        </template>
         <template #footer>
           <ButtonV2
             class="phoneLg:w-full"
@@ -209,6 +220,17 @@
             class="text-like-green text-[18px] font-600 desktop:text-[24px]"
             :text="$t('nft_claim_NFT_name', { name: productTitle })"
           />
+        </template>
+        <template v-if="cartItemsCount > 1" #content-prepend>
+          <div class="flex w-full gap-[16px]">
+            <NFTBookCoverWithFrame
+              v-for="item in cartItems"
+              :key="item.classId || item.collectionId"
+              class="w-full max-w-[128px]"
+              :src="getNFTImageUrl(item)"
+              class-aspect-ratio="aspect-[1]"
+            />
+          </div>
         </template>
         <template #footer>
           <ButtonV2
@@ -413,11 +435,17 @@
         :key="state"
         :header-text="
           isAutoDeliver
-            ? $t('nft_claim_claimed_title_autoDelivery')
-            : $t('nft_claim_claimed_title_manualDelivery')
+            ? $tc('nft_claim_claimed_title_autoDelivery', cartItemsCount, {
+                count: cartItemsCount,
+              })
+            : $tc('nft_claim_claimed_title_manualDelivery', cartItemsCount, {
+                count: cartItemsCount,
+              })
         "
         :content-text="
-          isAutoDeliver
+          cartItemsCount > 1
+            ? $t('nft_claim_claimed_content_mixedDelivery')
+            : isAutoDeliver
             ? $t('nft_claim_claimed_content_autoDelivery', {
                 publisher: creatorDisplayName,
                 name: productName,
@@ -439,6 +467,17 @@
             class="text-[18px] laptop:text-[24px] font-600"
             :text="$t('nft_claim_claimed_title_congratulations')"
           />
+        </template>
+        <template v-if="cartItemsCount > 1" #content-prepend>
+          <div class="flex w-full gap-[16px]">
+            <NFTBookCoverWithFrame
+              v-for="item in cartItems"
+              :key="item.classId || item.collectionId"
+              class="w-full max-w-[128px]"
+              :src="getNFTImageUrl(item)"
+              class-aspect-ratio="aspect-[1]"
+            />
+          </div>
         </template>
         <template #content-append>
           <NFTClaimMessageBlock
@@ -861,6 +900,15 @@ export default {
       return (
         getNFTClassCollectionType(metadata) === nftClassCollectionType.NFTBook
       );
+    },
+    getNFTImageUrl({ classId, collectionId }) {
+      let image = '';
+      if (collectionId) {
+        image = this.getNFTCollectionInfoByCollectionId(collectionId)?.image;
+      } else {
+        image = this.getNFTClassMetadataById(classId)?.image;
+      }
+      return image ? parseNFTMetadataURL(image) : '';
     },
     async startFreePurchase() {
       try {
