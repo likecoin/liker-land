@@ -82,7 +82,7 @@
           <span class="text-like-cyan-gray text-10">{{
             $t('identity_type_author')
           }}</span>
-          <span class="text-dark-gray truncate w-full">{{
+          <span class="w-full truncate text-dark-gray">{{
             iscnWorkAuthor
           }}</span>
         </div>
@@ -109,6 +109,7 @@
         :content-urls="contentUrls"
         :iscn-url="iscnUrl"
         :is-nft-book="isNftBook"
+        :nft-id="nftId"
         :is-content-viewable="isContentViewable"
         :is-content-downloadable="isContentDownloadable"
         @view-content="handleClickViewContent"
