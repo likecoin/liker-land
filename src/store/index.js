@@ -10,6 +10,7 @@ import user from './modules/user';
 import staticData from './modules/staticData';
 import wallet from './modules/wallet';
 import nft from './modules/nft';
+import cart from './modules/cart';
 
 const createStore = () =>
   new Vuex.Store({
@@ -46,6 +47,7 @@ const createStore = () =>
       staticData,
       wallet,
       nft,
+      cart,
     },
   });
 

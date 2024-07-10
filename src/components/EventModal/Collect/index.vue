@@ -189,7 +189,7 @@
       <ButtonV2
         preset="secondary"
         :text="$t('nft_collect_modal_go_to_shopping_cart_button')"
-        :to="localeLocation({ name: 'shopping-cart' })"
+        :to="localeLocation({ name: 'shopping-cart-wnft' })"
         @click.native="handleClose"
       >
         <template #prepend>
@@ -492,7 +492,7 @@ export default {
     isShowCloseButton() {
       return (
         (this.paymentMethod === undefined &&
-          this.getRouteBaseName(this.$route) !== 'shopping-cart') ||
+          this.getRouteBaseName(this.$route) !== 'shopping-cart-wnft') ||
         this.uiTxNFTStatus === 'completed' ||
         this.uiTxNFTStatus === 'processing_non_blocking'
       );

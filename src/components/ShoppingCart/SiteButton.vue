@@ -2,7 +2,7 @@
   <div v-show="shoppingCartNFTClassList.length > 0" class="relative">
     <ButtonV2
       preset="tertiary"
-      :to="localeLocation({ name: 'shopping-cart' })"
+      :to="localeLocation({ name: 'shopping-cart-wnft' })"
       @click="handleClickCartButton"
     >
       <LocalMallIcon class="w-20 h-20 text-like-green" />
