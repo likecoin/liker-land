@@ -97,7 +97,7 @@ export default {
       return this.collection?.ownerWallet;
     },
     collectionPrice() {
-      const { priceInDecimal } = this.collection;
+      const priceInDecimal = this.collection?.priceInDecimal || 0;
       const price =
         this.getNFTClassPaymentPriceById(this.collectionId)?.fiatPrice ||
         priceInDecimal / 100;
@@ -130,7 +130,9 @@ export default {
     ]),
     async lazyFetchNFTCollectionInfo() {
       await catchAxiosError(
-        this.lazyFetchNFTCollectionInfoByCollectionId(this.classId)
+        this.lazyFetchNFTCollectionInfoByCollectionId({
+          collectionId: this.collectionId,
+        })
       );
     },
     async lazyFetchNFTCollectionPaymentPriceInfo() {
