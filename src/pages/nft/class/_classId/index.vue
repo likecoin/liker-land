@@ -426,7 +426,7 @@ export default {
 
       trimmedCount: 10,
 
-      customPrice: -1,
+      customPrice: 0,
       selectedValue: 0,
       isOpeningCheckoutPage: false,
     };
