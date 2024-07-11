@@ -601,7 +601,7 @@ export default {
       return this.$route.query.type === 'nft_book';
     },
     cartItemsCount() {
-      return this.cartItems.length;
+      return this.cartItems.length || 1;
     },
     shouldBlockClaim() {
       return (
