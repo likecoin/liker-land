@@ -545,6 +545,25 @@ export const getNFTBookPurchaseLink = ({
       )}`;
 };
 
+export const getNFTBookCartPurchaseLink = ({
+  gaClientId,
+  gaSessionId,
+  utmCampaign,
+  utmSource,
+  utmMedium,
+} = {}) => {
+  const qsPayload = {
+    ga_client_id: gaClientId,
+    ga_session_id: gaSessionId,
+    utm_campaign: utmCampaign,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
+  };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/cart/new?${querystring.stringify(
+    qsPayload
+  )}`;
+};
+
 export const getTotalSalesByAddress = address => {
   const qsPayload = {
     address,
