@@ -510,7 +510,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import {
   logTrackerEvent,
@@ -750,6 +750,7 @@ export default {
         [this.collectionId] = collectionIds;
       }
       this.status = status;
+      if (query.type === 'nft_book') this.clearBookProductShoppingCart();
     } else if (this.paymentId) {
       try {
         const { data } = await this.$api.get(
@@ -885,6 +886,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['clearBookProductShoppingCart']),
     isValidAddress,
     parseNFTMetadataURL,
     getIscnData(classId) {
