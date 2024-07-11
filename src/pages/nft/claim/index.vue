@@ -513,38 +513,6 @@ export default {
     ellipsis,
   },
   mixins: [alertMixin, walletMixin, nftOrCollectionMixin, walletLoginMixin],
-  async asyncData({ query, store, error, i18n }) {
-    const {
-      class_id: classId,
-      collection_id: collectionId,
-      payment_id: paymentId,
-      claiming_token: token,
-      free,
-    } = query;
-    if (!free && ((!classId && !collectionId) || !token || !paymentId)) {
-      error({ statusCode: 400, message: i18n.t('nft_claim_missing_qs') });
-      return;
-    }
-    try {
-      if (collectionId) {
-        await store.dispatch('lazyFetchNFTCollectionInfoByCollectionId', {
-          collectionId,
-        });
-      } else if (classId) {
-        await store.dispatch('lazyGetNFTClassMetadata', classId);
-        const classCollectionType = getNFTClassCollectionType(
-          store.getters.getNFTClassMetadataById(classId)
-        );
-        if (classCollectionType === nftClassCollectionType.NFTBook) {
-          await store.dispatch('lazyFetchNFTBookInfoByClassId', classId);
-        }
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      error({ statusCode: 404, message: i18n.t('nft_claim_class_not_found') });
-    }
-  },
   data() {
     return {
       nftId: '',
@@ -562,6 +530,8 @@ export default {
       isLoginLoading: false,
       isClaimLoading: false,
       isNewAccount: false,
+      classId: this.$route.query.class_id,
+      collectionId: this.$route.query.collection_id,
     };
   },
   computed: {
@@ -573,12 +543,6 @@ export default {
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
     ]),
-    classId() {
-      return this.$route.query.class_id;
-    },
-    collectionId() {
-      return this.$route.query.collection_id;
-    },
     paymentId() {
       return this.$route.query.payment_id;
     },
@@ -681,7 +645,10 @@ export default {
       this.claimingFreeEmail = newValue;
     },
     claimingAddress(newValue) {
-      if (!newValue && !(this.status === 'completed')) {
+      if (
+        !newValue &&
+        !(this.status === 'completed' || this.status === 'pending')
+      ) {
         this.navigateToState(NFT_CLAIM_STATE.LOGIN);
       } else if (newValue) {
         this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
@@ -690,6 +657,37 @@ export default {
   },
   async mounted() {
     const { redirect, free, from, state, ...query } = this.$route.query;
+    if (
+      !free &&
+      ((!this.classId && !this.collectionId) || !this.token || !this.paymentId)
+    ) {
+      this.$nuxt.error({
+        statusCode: 400,
+        message: this.t('nft_claim_missing_qs'),
+      });
+      return;
+    }
+    try {
+      if (this.collectionId) {
+        await this.lazyFetchNFTCollectionInfoByCollectionId(this.collectionId);
+      } else if (this.classId) {
+        await this.lazyGetNFTClassMetadata(this.classId);
+        const classCollectionType = getNFTClassCollectionType(
+          this.getNFTClassMetadataById(this.classId)
+        );
+        if (classCollectionType === nftClassCollectionType.NFTBook) {
+          await this.lazyFetchNFTBookInfoByClassId(this.classId);
+        }
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      this.$nuxt.error({
+        statusCode: 404,
+        message: this.t('nft_claim_class_not_found'),
+      });
+      return;
+    }
     let price;
     if (this.paymentId) {
       try {
@@ -698,6 +696,7 @@ export default {
             classId: this.classId,
             collectionId: this.collectionId,
             paymentId: this.paymentId,
+            token: this.token,
           })
         );
         ({ price } = data);
@@ -721,6 +720,7 @@ export default {
         console.error(err);
       }
     } else {
+      // free purchase?
       const { prices } = this.getNFTBookStoreInfoByClassId(this.classId);
       const data = prices[this.priceIndex];
       const { isPhysicalOnly, autoMemo, isAutoDeliver } = data;
@@ -756,11 +756,16 @@ export default {
       });
     }
 
-    if (this.status === 'completed') {
+    if (this.status === 'completed' || this.status === 'pending') {
       this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
-    }
-
-    if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
+    } else if (!free && this.status !== 'paid') {
+      this.alertPromptError(
+        this.$t('nft_free_claim_error_message', {
+          error: `Payment status is ${this.status}`,
+        })
+      );
+      this.navigateToState(NFT_CLAIM_STATE.ERROR);
+    } else if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
       this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
     }
   },

@@ -93,7 +93,9 @@ export default {
   computed: {
     normalizedContentURLs() {
       // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
-      return this.contentUrls.length ? this.contentUrls : [this.url];
+      if (this.contentUrls.length) return this.contentUrls;
+      if (this.url) return [this.url];
+      return [];
     },
   },
   methods: {

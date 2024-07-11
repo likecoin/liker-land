@@ -15,30 +15,30 @@ export default {
       return this.collectionId || this.classId;
     },
     productMetadata() {
-      return this.isCollection ? this.collection : this.NFTMetadata;
+      return this.isCollection ? this.collection : this.NFTClassMetadata;
     },
     productName() {
-      const name = this.NFTMetadata?.name;
+      const name = this.productMetadata?.name;
       if (name && name[this.collectionLocale] !== undefined) {
         return name[this.collectionLocale];
       }
       return name;
     },
     productDescription() {
-      const description = this.NFTMetadata?.description;
+      const description = this.productMetadata?.description;
       if (description && description[this.collectionLocale] !== undefined) {
         return description[this.collectionLocale];
       }
       return description;
     },
     productImageUrl() {
-      const image = this.NFTMetadata?.image;
+      const image = this.productMetadata?.image;
       return image ? parseNFTMetadataURL(image) : '';
     },
     productOwner() {
       return this.isCollection
-        ? this.NFTMetadata?.ownerWallet
-        : this.NFTMetadata?.iscn_owner;
+        ? this.productMetadata?.ownerWallet
+        : this.productMetadata?.iscn_owner;
     },
     viewInfoLocation() {
       return this.isCollection
