@@ -6,7 +6,7 @@ export default {
   mixins: [nftMixin, collectionMixin],
   computed: {
     classIds() {
-      return this.collectionId ? this.classIds : [this.classId];
+      return this.collectionId ? this.collection?.classIds : [this.classId];
     },
     isCollection() {
       return !!this.collectionId;
