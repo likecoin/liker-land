@@ -446,6 +446,7 @@ export default {
         : [defaultEdition];
     },
     editionPriceIndex() {
+      if (this.priceIndex !== undefined) return this.priceIndex;
       if (!this.nftIsNFTBook) return undefined;
       return Number(this.$route.query.price_index) || 0;
     },
