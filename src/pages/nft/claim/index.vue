@@ -420,7 +420,7 @@
           isAutoDeliver
             ? $t('nft_claim_claimed_content_autoDelivery', {
                 publisher: creatorDisplayName,
-                name: NFTName,
+                name: productName,
               })
             : $t('nft_claim_claimed_content_manualDelivery')
         "
@@ -494,10 +494,8 @@ import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
-import nftMixin from '~/mixins/nft';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 import walletLoginMixin from '~/mixins/wallet-login';
-import collectionMixin from '~/mixins/nft-collection';
 
 const NFT_CLAIM_STATE = {
   WELCOME: 'WELCOME',
@@ -514,14 +512,7 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [
-    alertMixin,
-    walletMixin,
-    nftMixin,
-    collectionMixin,
-    nftOrCollectionMixin,
-    walletLoginMixin,
-  ],
+  mixins: [alertMixin, walletMixin, nftOrCollectionMixin, walletLoginMixin],
   async asyncData({ query, store, error, i18n }) {
     const {
       class_id: classId,
@@ -820,7 +811,7 @@ export default {
           this,
           'NFT',
           'nft_free_nft_book_purchased',
-          this.primaryKey
+          this.productId
         );
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -830,7 +821,7 @@ export default {
           this,
           'NFT',
           'nft_free_nft_book_purchase_error',
-          this.primaryKey
+          this.productId
         );
         this.alertPromptError(
           this.$t('nft_free_claim_error_message', {
@@ -881,7 +872,7 @@ export default {
           this,
           'NFT',
           'nft_claim_fiat_purchase_claimed',
-          this.primaryKey
+          this.productId
         );
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -891,7 +882,7 @@ export default {
           this,
           'NFT',
           'nft_claim_fiat_purchase_claim_error',
-          this.primaryKey
+          this.productId
         );
         this.alertPromptError(
           this.$t('settings_email_verify_error_message', {
@@ -929,7 +920,7 @@ export default {
           this,
           'NFT',
           'nft_claim_nft_book_claimed',
-          this.primaryKey
+          this.productId
         );
       } catch (error) {
         const errorMessage = error.response?.data || error.message;
@@ -945,7 +936,7 @@ export default {
           this,
           'NFT',
           'nft_claim_nft_book_claim_error',
-          this.primaryKey
+          this.productId
         );
         this.alertPromptError(
           this.$t('settings_email_verify_error_message', {
@@ -962,24 +953,18 @@ export default {
         this,
         'NFT',
         'nft_claim_collector_message_input',
-        this.primaryKey
+        this.productId
       );
     },
     handleClickViewContentDirectly(e, contentUrl, type) {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'ClaimViewContentDirect',
-        this.primaryKey,
-        1
-      );
+      logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.productId, 1);
     },
     handleClickNext() {
       logTrackerEvent(
         this,
         'NFT',
         `nft_claim_click_next_from_${this.state}`,
-        this.primaryKey,
+        this.productId,
         1
       );
       switch (this.state) {
@@ -1019,7 +1004,7 @@ export default {
         this,
         'NFT',
         `nft_claim_click_sign_up`,
-        this.primaryKey,
+        this.productId,
         1
       );
       this.isLoginLoading = true;
@@ -1040,7 +1025,7 @@ export default {
         this,
         'NFT',
         `nft_claim_click_sign_in`,
-        this.primaryKey,
+        this.productId,
         1
       );
       if (this.claimingAddress) {
@@ -1067,7 +1052,7 @@ export default {
         this,
         'NFT',
         `nft_claim_click_start_reading`,
-        this.primaryKey,
+        this.productId,
         1
       );
 
@@ -1093,7 +1078,7 @@ export default {
         this,
         'NFT',
         `nft_claim_click_view_collection`,
-        this.primaryKey,
+        this.productId,
         1
       );
       this.$router.push(
@@ -1109,7 +1094,7 @@ export default {
         this,
         'NFT',
         'nft_claim_click_physical_view_class_page',
-        this.primaryKey,
+        this.productId,
         1
       );
       this.$router.push(this.viewInfoLocation);

@@ -169,13 +169,7 @@ export default {
   },
   methods: {
     handleClickViewContentDirectly(e, contentUrl, type) {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'ClaimViewContentDirect',
-        this.primaryKey,
-        1
-      );
+      logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.productId, 1);
     },
   },
 };
