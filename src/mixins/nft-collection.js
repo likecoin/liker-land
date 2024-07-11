@@ -7,7 +7,7 @@ import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
 
 const creatorInfoMixin = createUserInfoMixin({
-  propKey: 'Creator',
+  propKey: 'collectionCreator',
   walletKey: 'collectionOwner',
 });
 
