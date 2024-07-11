@@ -38,6 +38,7 @@ const createStore = () =>
       nuxtClientInit({ dispatch }) {
         setTimeout(() => {
           dispatch('loadShoppingCart');
+          dispatch('loadBookProductShoppingCart');
         });
       },
     },

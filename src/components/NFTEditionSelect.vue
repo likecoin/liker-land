@@ -75,6 +75,17 @@
         </template>
       </ButtonV2>
       <ButtonV2
+        v-if="!isAllSoldOut"
+        :is-disabled="!selectedItem"
+        preset="secondary"
+        :text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
+        @click="handleClickAddToCartButton"
+      >
+        <template #prepend>
+          <IconAdd class="w-[16px]" />
+        </template>
+      </ButtonV2>
+      <ButtonV2
         v-else-if="shouldShowNotifyButton"
         preset="outline"
         :text="$t('nft_edition_select_notify_button_text')"
@@ -198,6 +209,9 @@ export default {
     },
     handleClickCollectButton() {
       this.$emit('click-collect', this.selectedValue);
+    },
+    handleClickAddToCartButton() {
+      this.$emit('click-add-to-cart', this.selectedValue);
     },
     handleClickNotifyButton() {
       this.$emit('click-notify');

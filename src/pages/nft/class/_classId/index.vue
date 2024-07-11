@@ -79,6 +79,7 @@
                 :value="defaultSelectedValue"
                 @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
+                @click-add-to-cart="handleClickAddToCart"
                 @click-gift="handleGiftFromEditionSelector"
                 @click-compare="handleClickCompareItemsButton"
                 @input-custom-price="handleInputCustomPrice"
@@ -385,7 +386,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
@@ -420,6 +421,7 @@ export default {
 
       isGiftDialogOpen: false,
       isTippingDialogOpen: false,
+      isAddingToCart: false,
       isTriggerFromEditionSelector: false,
       giftSelectedValue: 0,
       shouldShowCollectionItem: false,
@@ -829,6 +831,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'addBookProductToShoppingCart',
+      'uiPromptSuccessAlert',
+      'uiPromptErrorAlert',
+    ]),
     parseNFTMetadataURL,
     async fetchTrimmedCollectorsInfo() {
       const trimmedCollectors = this.sortedOwnerListId.slice(
@@ -1012,8 +1019,39 @@ export default {
           this.isTippingDialogOpen = true;
           return;
         }
-        this.handleCollectFromEdition(selectedValue);
+        if (this.isAddingToCart) {
+          this.handleAddToCart(selectedValue);
+        } else {
+          this.handleCollectFromEdition(selectedValue);
+        }
       }
+    },
+    handleClickAddToCart(selectedValue) {
+      this.isAddingToCart = true;
+      this.checkTippingAvailability(selectedValue);
+    },
+    handleAddToCart(selectedValue) {
+      this.isAddingToCart = false;
+      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const edition = editions[selectedValue ?? this.selectedValue];
+      const hasStock = edition?.stock;
+
+      if (!hasStock && !this.nftIsCollectable) return;
+      const customPriceInDecimal = this.customPrice
+        ? this.formatCustomPrice(this.customPrice, edition.price)
+        : undefined;
+      if (edition.price === 0 && !this.customPrice) {
+        this.uiPromptErrorAlert(this.$t('cart_item_free_not_supported'));
+        return;
+      }
+      this.addBookProductToShoppingCart({
+        classId: this.classId,
+        priceIndex: edition.index,
+        from: this.platform,
+        customPriceInDecimal,
+        coupon: this.$route.query.coupon,
+      });
+      this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
@@ -1324,7 +1362,11 @@ export default {
     },
     handleSubmitTipping(price) {
       this.customPrice = Number(price);
-      this.handleCollectFromEdition();
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        this.handleCollectFromEdition();
+      }
     },
     handleSkipTipping() {
       logTrackerEvent(
