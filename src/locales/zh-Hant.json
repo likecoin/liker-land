@@ -953,6 +953,10 @@
   "store_books_page_title": "熱賣電子書 - Liker Land 電子書店",
   "store_index_page_title": "Liker Land 電子書店",
   "store_nft_book_more_button": "更多書目",
+  "substack_button_loading": "請稍候...",
+  "substack_button_submit": "訂閱電子報",
+  "substack_button_submitted": "訂閱成功！",
+  "substack_input_placeholder": "example@gmail.com",
   "subVPs": [
     "用 Liker Land 收發 LikeCoin 最便捷",
     "每週、每天、每篇文章所獲賺賞，一目了然",

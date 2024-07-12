@@ -953,6 +953,10 @@
   "store_books_page_title": "Latest eBook - Liker Land eBook store",
   "store_index_page_title": "Liker Land eBook store",
   "store_nft_book_more_button": "More Books",
+  "substack_button_loading": "Loading...",
+  "substack_button_submit": "Subscribe Newsletter",
+  "substack_button_submitted": "Subscribed!",
+  "substack_input_placeholder": "example@gmail.com",
   "subVPs": [
     "The easiest way to send and receive LikeCoin.",
     "View the weekly, daily statistics of your LikeCoin bonus, down to each workpiece.",

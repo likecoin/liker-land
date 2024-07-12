@@ -617,21 +617,14 @@
       </i18n>
       <div
         :class="[
-          'relative',
           'flex',
           'justify-center',
+          'items-center',
           'w-full',
-          'pb-[75%]',
-          'mt-[12px]',
+          'my-[68px]',
         ]"
       >
-        <iframe
-          :class="['absolute', 'top-0', 'left-0', 'w-full', 'h-full']"
-          src="https://newsletter.like.co/embed"
-          style="border:1px solid #EEE; background:white;"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
+        <Substack domain-type="LikeCoin" preset="dark" />
       </div>
     </section>
   </div>
