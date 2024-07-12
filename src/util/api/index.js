@@ -582,3 +582,6 @@ export const fetchBookstoreItemListsFromCMSById = (id, { limit = 100 } = {}) =>
 
 export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;
+
+export const postSubstackSubscribe = () =>
+  `https://substackapi.com/api/subscribe`;

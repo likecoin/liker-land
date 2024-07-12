@@ -75,8 +75,9 @@
             </div>
           </div>
         </div>
-
-        <div id="custom-substack-embed" />
+        <div class="flex items-start self-start">
+          <Substack class="w-auto" />
+        </div>
       </div>
     </div>
     <div
@@ -162,17 +163,6 @@ export default {
       isOpenAboutTeam: false,
     };
   },
-  head() {
-    return {
-      script: [
-        {
-          hid: 'substack-js-script',
-          src: 'https://substackapi.com/widget.js',
-          async: 'true',
-        },
-      ],
-    };
-  },
   computed: {
     mintNftURL() {
       return `${APP_LIKE_CO_URL_BASE}/nft`;
@@ -202,20 +192,3 @@ export default {
   },
 };
 </script>
-
-<style>
-#custom-substack-embed .custom-substack-widget {
-  border-radius: 14px;
-}
-#custom-substack-embed .custom-substack-widget + .success {
-  color: #d7ecec;
-}
-@media screen and (min-width: 992px) {
-  .custom-substack-widget {
-    margin-left: auto;
-  }
-  .custom-substack-widget + .success {
-    text-align: right;
-  }
-}
-</style>
