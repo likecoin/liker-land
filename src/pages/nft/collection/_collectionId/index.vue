@@ -433,7 +433,11 @@ export default {
         1
       );
       this.customPrice = 0;
-      this.handleCollectFromEdition();
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        this.handleCollectFromEdition();
+      }
     },
   },
 };
