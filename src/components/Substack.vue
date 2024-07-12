@@ -34,7 +34,7 @@ export default {
   props: {
     domainType: {
       type: String,
-      default: SUBSTACK_TYPES.LIKERLAND.name,
+      default: SUBSTACK_TYPES.LikerLand.name,
     },
     // Input text color preset
     preset: {
