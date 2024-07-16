@@ -72,9 +72,7 @@
     <div class="col-span-2 text-center text-like-green font-proxima font-[600]">
       {{ (customPrice || productPrice) | formatNumberWithUSD }}
     </div>
-    <!--
     <div class="col-span-2 text-center">{{ quantity }}</div>
-    -->
     <div class="col-span-1 flex justify-end mt-[-.25em]">
       <ButtonV2
         preset="plain"
@@ -123,7 +121,7 @@ export default {
     },
     quantity: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     from: {
       type: String,
