@@ -68,7 +68,7 @@
       </NuxtLink>
     </div>
     <div class="col-span-2 text-center text-like-green font-proxima font-[600]">
-      {{ productPrice | formatNumberWithUSD }}
+      {{ (customPrice || productPrice) | formatNumberWithUSD }}
     </div>
     <!--
     <div class="col-span-2 text-center">{{ quantity }}</div>
@@ -114,6 +114,10 @@ export default {
     index: {
       type: Number,
       required: true,
+    },
+    customPrice: {
+      type: Number,
+      default: 0,
     },
     quantity: {
       type: Number,

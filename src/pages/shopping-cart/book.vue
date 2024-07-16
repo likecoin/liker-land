@@ -60,6 +60,7 @@
             :price-index="item.priceIndex"
             :collection-id="item.collectionId"
             :quantity="item.quantity"
+            :custom-price="item.customPriceInDecimal / 100"
             @remove="handleClickRemoveButton"
           />
         </li>
@@ -145,12 +146,14 @@ export default {
       return this.shoppingCartBookProductList.map(item => item.productId);
     },
     totalNFTPriceInUSD() {
-      return this.shoppingCartBookProductList.reduce((totalPrice, item) => {
+      return this.shoppingCartBookItems.reduce((totalPrice, item) => {
         const priceInfo = this.getNFTClassPaymentPriceById(
           item.productId,
           item.priceIndex
         );
-        return totalPrice + (priceInfo?.fiatPrice * item.quantity || 0);
+        const unitPrice =
+          item.customPriceInDecimal / 100 || priceInfo?.fiatPrice;
+        return totalPrice + (unitPrice * item.quantity || 0);
       }, 0);
     },
     formattedFiatPrice() {
