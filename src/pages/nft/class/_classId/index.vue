@@ -1367,6 +1367,7 @@ export default {
       } else {
         this.handleCollectFromEdition();
       }
+      this.isTippingDialogOpen = false;
     },
     handleSkipTipping() {
       logTrackerEvent(
@@ -1385,6 +1386,7 @@ export default {
       } else {
         this.handleCollectFromEdition();
       }
+      this.isTippingDialogOpen = false;
     },
   },
 };
