@@ -41,7 +41,9 @@
         <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
       </div>
       <div class="line-clamp-2 mt-[.5em] text-gray-9b">
-        <NuxtLink :to="viewInfoLocation">{{ productDescription }}</NuxtLink>
+        <NuxtLink :to="viewInfoLocation">{{
+          productDisplayDescription
+        }}</NuxtLink>
       </div>
       <NuxtLink
         class="flex items-center group text-like-green mt-[.5rem]"
@@ -123,11 +125,22 @@ export default {
       type: Number,
       default: 0,
     },
+    from: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       isFetching: false,
     };
+  },
+  computed: {
+    productDisplayDescription() {
+      return this.from
+        ? `[${this.from}] ${this.productDescription}`
+        : this.productDescription;
+    },
   },
   mounted() {
     this.fetchInfo();

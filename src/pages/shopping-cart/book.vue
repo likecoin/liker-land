@@ -61,6 +61,7 @@
             :collection-id="item.collectionId"
             :quantity="item.quantity"
             :custom-price="item.customPriceInDecimal / 100"
+            :from="item.from"
             @remove="handleClickRemoveButton"
           />
         </li>
