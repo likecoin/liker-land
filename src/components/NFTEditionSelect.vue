@@ -75,7 +75,9 @@
         </template>
       </ButtonV2>
       <ButtonV2
-        v-if="!isAllSoldOut"
+        v-if="
+          !isAllSoldOut && selectedItem.price > 0 && !selectedItem.hasShipping
+        "
         :is-disabled="!selectedItem"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
