@@ -388,7 +388,7 @@
             <NFTBookItemCardV2
               :class="[bookstoreSectionStickyClass, 'w-full']"
               class-cover-frame-aspect-ratio="min-h-[360px] desktop:min-h-[0] desktop:aspect-[4/5]"
-              :class-id="stickyBookstoreItem.classId"
+              :item-id="stickyBookstoreItem.classId"
               preset="shelf"
               theme="spencer"
               :cover-resize="300"
@@ -403,7 +403,7 @@
           >
             <li v-for="item in bookstoreItemsInGrid" :key="item.classId">
               <NFTBookItemCardV2
-                :class-id="item.classId"
+                :item-id="item.classId"
                 class-cover-frame-aspect-ratio="min-h-[360px] laptop:min-h-[0] aspect-[4/5]"
                 :cover-resize="300"
                 :is-link-disabled="item.isMultiple"
@@ -436,7 +436,7 @@
           style="width: 220px"
         >
           <NFTBookItemCardV2
-            :class-id="item.classId"
+            :item-id="item.classId"
             class-cover-frame-aspect-ratio="aspect-[4/5]"
             @click-cover="handleClickItem($event, item)"
           />

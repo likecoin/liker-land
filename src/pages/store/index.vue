@@ -213,7 +213,7 @@
 
           <li v-for="item in sortedBookstoreItems" :key="item.classId">
             <NFTBookItemCardV2
-              :class-id="item.classId"
+              :item-id="item.classId"
               class-cover-frame-aspect-ratio="aspect-[4/5]"
               :is-link-disabled="item.isMultiple"
               @click-cover="handleClickItem($event, item)"
