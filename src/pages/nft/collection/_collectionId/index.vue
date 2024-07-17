@@ -169,6 +169,7 @@ export default {
       'getNFTClassMetadataById',
       'getGaClientId',
       'getGaSessionId',
+      'getShoppingCartBookProductQuantity',
     ]),
     collectionId() {
       return this.$route.params.collectionId;
@@ -240,6 +241,10 @@ export default {
       this.customPrice = Number(price);
     },
     handleClickAddToCart() {
+      if (this.getShoppingCartBookProductQuantity(this.collectionId) > 0) {
+        this.handleAddToCart();
+        return;
+      }
       this.isAddingToCart = true;
       this.checkTippingAvailability();
     },

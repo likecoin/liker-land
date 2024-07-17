@@ -681,6 +681,7 @@ export default {
       'getGaClientId',
       'getGaSessionId',
       'getNFTBookStoreBookDefaultPaymentCurrency',
+      'getShoppingCartBookProductQuantity',
     ]),
     classId() {
       return this.$route.params.classId;
@@ -1027,6 +1028,10 @@ export default {
       }
     },
     handleClickAddToCart(selectedValue) {
+      if (this.getShoppingCartBookProductQuantity(this.classId)) {
+        this.handleAddToCart(selectedValue);
+        return;
+      }
       this.isAddingToCart = true;
       this.checkTippingAvailability(selectedValue);
     },
