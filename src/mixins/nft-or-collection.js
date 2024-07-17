@@ -40,6 +40,11 @@ export default {
         ? this.productMetadata?.ownerWallet
         : this.productMetadata?.iscn_owner;
     },
+    productAvailablePriceLabel() {
+      return this.isCollection
+        ? this.collectionAvailablePriceLabel
+        : this.nftBookAvailablePriceLabel;
+    },
     viewInfoLocation() {
       return this.isCollection
         ? this.localeLocation({

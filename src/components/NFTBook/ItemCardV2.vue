@@ -13,9 +13,9 @@
       :class-aspect-ratio="classCoverFrameAspectRatio"
       cover-class="group-hover:scale-[1.02] transition-transform"
       :cover-resize="coverResize"
-      :src="NFTImageUrl"
-      :alt="NFTName"
-      :to="nftCollectRoute"
+      :src="productImageUrl"
+      :alt="productName"
+      :to="viewInfoLocation"
       :event="isLinkDisabled ? '' : 'click'"
       @click.native="$emit('click-cover', $event)"
     />
@@ -23,7 +23,7 @@
     <div
       class="mt-[8px] text-[#333] text-[1rem] font-[500] laptop:text-[1.125rem]"
     >
-      {{ NFTName }}
+      {{ productName }}
     </div>
 
     <div class="text-[#8B8B8B] text-[0.875rem] laptop:text-[1rem]">
@@ -31,13 +31,13 @@
     </div>
 
     <div class="mt-[16px] text-[#1F1F1F] text-[0.875rem] laptop:text-[1rem]">
-      {{ nftBookAvailablePriceLabel || $t('nft_details_page_label_sold_out') }}
+      {{ productAvailablePriceLabel || $t('nft_details_page_label_sold_out') }}
     </div>
   </div>
 </template>
 
 <script>
-import nftMixin from '~/mixins/nft';
+import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 
 import { ellipsis } from '~/util/ui';
 
@@ -45,9 +45,9 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [nftMixin],
+  mixins: [nftOrCollectionMixin],
   props: {
-    classId: {
+    itemId: {
       type: String,
       required: true,
     },
@@ -69,9 +69,16 @@ export default {
     },
   },
   computed: {
+    classId() {
+      return this.itemId.startsWith('likenft1') ? this.itemId : '';
+    },
+    collectionId() {
+      return this.itemId.startsWith('col') ? this.itemId : '';
+    },
     creatorDisplayName() {
       return (
-        this.getUserInfoByAddress(this.iscnOwner)?.displayName || this.iscnOwner
+        this.getUserInfoByAddress(this.productOwner)?.displayName ||
+        this.productOwner
       );
     },
   },
@@ -80,7 +87,11 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.lazyFetchNFTClassAggregatedData();
+      if (this.isCollection) {
+        await this.lazyFetchNFTCollectionInfo();
+      } else {
+        await this.lazyFetchNFTClassAggregatedData();
+      }
     },
   },
 };
