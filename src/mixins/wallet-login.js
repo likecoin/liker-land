@@ -17,6 +17,7 @@ export default {
     async connectWallet({
       shouldSkipLogin = false,
       isOpenAuthcore = false,
+      isSignUp = false,
     } = {}) {
       try {
         logTrackerEvent(
@@ -31,7 +32,7 @@ export default {
           this.$route.fullPath
         );
         const connection = isOpenAuthcore
-          ? await this.openAuthcoreModal()
+          ? await this.openAuthcoreModal({ isSignUp })
           : await this.openConnectWalletModal({
               language: this.$i18n.locale.split('-')[0],
               connectWalletTitle: this.$t('connect_wallet_title'),

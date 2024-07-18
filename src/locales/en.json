@@ -534,7 +534,7 @@
   "nft_claim_error_message_unknown": "An unknown error occurs when adding to bookshelf",
   "nft_claim_login_button_loading": "Loading your decentralized identity",
   "nft_claim_login_button_sign_in": "Or log in with another method",
-  "nft_claim_login_button_sign_up": "Sign Up",
+  "nft_claim_login_button_sign_up": "Sign Up with Email",
   "nft_claim_login_content": "Please login to your Liker Land account to read and manage your purchased ebook.",
   "nft_claim_login_content_collection": "Authors can flexibly decide on the revenue share, gaining a new source of income and greater control over their copyrights.",
   "nft_claim_login_content_community": "Readers are granted holder status. Blockchain technology allows for transparent and traceable NFT transaction records, enabling authors and readers to recognize each other and interact directly.",
