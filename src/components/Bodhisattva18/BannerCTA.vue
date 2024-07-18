@@ -33,11 +33,11 @@
     <div
       :class="[
         'flex',
-        'justify-between',
+        'justify-center',
         'items-center',
 
         'w-full',
-        'max-w-[768px]',
+        'max-w-[800px]',
         'mx-auto',
 
         'text-[#573f16]',
@@ -52,24 +52,23 @@
           'flex',
           'justify-start',
           'items-center',
-          'gap-[24px]',
-          'flex-grow',
+          'gap-[16px] laptop:gap-[24px]',
 
           'px-[16px]',
           'py-[16px]',
         ]"
       >
         <div>
-          <div class="text-[12px] desktop:text-[20px] desktop:inline">
+          <div class="text-[12px] laptop:text-[20px] laptop:inline">
             {{ $t('bodhisattva18_flowing_cta_text_line1') }}
           </div>
-          <div class="text-[14px] desktop:text-[20px] desktop:inline">
+          <div class="text-[14px] laptop:text-[20px] laptop:inline">
             {{ $t('bodhisattva18_flowing_cta_text_line2') }}
           </div>
         </div>
 
         <ButtonV2
-          class="text-[14px]"
+          content-class="phoneLg:text-[14px]"
           :text="$t('bodhisattva18_flowing_cta_button_text')"
           href="https://books.liker.land/bodhisattva18/?utm_source=likerlandweb"
           preset="outline"
@@ -81,7 +80,7 @@
       </div>
 
       <img
-        class="relative w-[96px] desktop:w-[120px] -mt-[32px]"
+        class="relative w-[96px] laptop:w-[120px] -mt-[32px]"
         :src="src"
         :alt="$t('bodhisattva18_flowing_cta_alt')"
       />
