@@ -18,7 +18,7 @@
       content-class="min-w-0"
       align="center"
     >
-      <span class="line-clamp-2">{{ displayName | ellipsis }}</span>
+      <span>{{ displayName | ellipsis }}</span>
     </Label>
 
     <ToolTips :tool-tip-text="wallet">
