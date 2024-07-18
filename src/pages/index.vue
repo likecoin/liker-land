@@ -761,6 +761,8 @@
         />
       </section>
     </div>
+
+    <Bodhisattva18BannerCTA @click-button="handleClickNewBookBannerCTA" />
   </main>
 </template>
 
@@ -978,6 +980,15 @@ export default {
     },
     handleClickFAQ() {
       logTrackerEvent(this, 'IndexPage', 'IndexClickFAQ', '', 1);
+    },
+    handleClickNewBookBannerCTA() {
+      logTrackerEvent(
+        this,
+        'IndexPage',
+        'index_new_book_banner_cta_button_click',
+        '',
+        1
+      );
     },
     closeMultipleNFTClassDialog() {
       this.dialogNFTClassList = [];

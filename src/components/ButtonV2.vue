@@ -64,6 +64,7 @@ export enum Size {
   large = 'large',
   small = 'small',
   mini = 'mini',
+  tiny = 'tiny',
 }
 
 @Component({
@@ -258,6 +259,9 @@ export default class ButtonV2 extends Vue {
 
       case Size.mini:
         return this.circle ? 'h-[32px] w-[32px]' : 'h-[30px] rounded-[16px]';
+
+      case Size.tiny:
+        return this.circle ? 'h-[24px] w-[24px]' : 'h-[24px] rounded-[16px]';
 
       case Size.small:
       default:
