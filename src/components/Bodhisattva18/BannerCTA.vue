@@ -128,7 +128,7 @@ export default {
     },
     startRotation() {
       this.interval = setInterval(() => {
-        this.index = ((this.index + 6) % 167) + 1;
+        this.index = ((this.index + 6) % 168) + 1;
       }, 200);
     },
     close() {
