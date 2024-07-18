@@ -15,7 +15,7 @@
       <select
         v-if="toc.length"
         v-model="selectedChapter"
-        class="my-[10px] shadow-md rounded-4"
+        class="my-[10px] shadow-md rounded-4 min-w-[50%]"
         @change="onChangeChapter"
       >
         <option
