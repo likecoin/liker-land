@@ -435,10 +435,16 @@ const actions = {
     return connection;
   },
 
-  async openAuthcoreModal({ state, commit, dispatch }) {
+  async openAuthcoreModal({ state, commit, dispatch }, { isSignUp = false }) {
+    const initialScreen = isSignUp ? 'register' : 'signin';
     commit(WALLET_SET_IS_CONNECTING_WALLET, true);
     const connector = await dispatch('getConnector');
-    const connection = await connector.init('liker-id');
+    const connection = await connector.init(
+      'liker-id',
+      undefined, // params
+      undefined, // language
+      initialScreen
+    );
     commit(WALLET_SET_IS_CONNECTING_WALLET, false);
     return connection;
   },

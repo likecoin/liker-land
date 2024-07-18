@@ -281,7 +281,7 @@
               class="phoneLg:w-full phoneLg:max-w-[480px]"
               :content-class="['px-[56px]']"
               :text="$t('nft_claim_login_button_sign_up')"
-              @click="handleClickSignIn"
+              @click="handleClickSignUp"
             />
             <ButtonV2
               class="phoneLg:w-full phoneLg:max-w-[480px]"
@@ -1016,6 +1016,7 @@ export default {
       if (!this.claimingAddress) {
         const isConnected = await this.connectWallet({
           isOpenAuthcore: true,
+          isSignUp: true,
         });
         if (isConnected || this.loginAddress) {
           this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
