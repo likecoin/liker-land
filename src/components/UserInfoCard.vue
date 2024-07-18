@@ -13,12 +13,12 @@
     />
 
     <Label
-      class="text-like-green w-full"
+      class="w-full text-like-green"
       preset="h3"
       content-class="min-w-0"
       align="center"
     >
-      <span class="line-clamp-2">{{ displayName }}</span>
+      <span>{{ displayName | ellipsis }}</span>
     </Label>
 
     <ToolTips :tool-tip-text="wallet">
