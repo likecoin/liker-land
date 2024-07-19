@@ -647,7 +647,11 @@ export default {
     claimingAddress(newValue) {
       if (
         !newValue &&
-        !(this.status === 'completed' || this.status === 'pending')
+        !(
+          this.status === 'completed' ||
+          this.status === 'pending' ||
+          this.status === 'pendingNFT'
+        )
       ) {
         this.navigateToState(NFT_CLAIM_STATE.LOGIN);
       } else if (newValue) {
@@ -756,7 +760,11 @@ export default {
       });
     }
 
-    if (this.status === 'completed' || this.status === 'pending') {
+    if (
+      this.status === 'completed' ||
+      this.status === 'pending' ||
+      this.status === 'pendingNFT'
+    ) {
       this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
     } else if (!free && this.status !== 'paid') {
       this.alertPromptError(
