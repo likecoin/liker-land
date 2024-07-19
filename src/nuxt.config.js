@@ -440,6 +440,7 @@ const nuxtConfig = {
   //   maxAge: 86400, // 1 day
   // },
   router: {
+    middleware: 'from-channel',
     extendRoutes(routes, resolve) {
       const route = routes.find(r => r.name === 'id');
       const [subscribeRoute] = route.children;
