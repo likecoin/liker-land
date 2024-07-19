@@ -977,7 +977,7 @@ export default {
         await this.claimFiatPurchase();
       }
 
-      if (this.isAutoDeliver || this.cartItemsCount > 1) {
+      if (this.isAutoDeliver || this.cartId) {
         await this.fetchCollectedNFTClassesByAddress(this.claimingAddress);
       }
     },
@@ -1028,18 +1028,17 @@ export default {
         if (this.claimPromise) return;
         this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
         this.isClaimLoading = true;
-        const endpoint =
-          this.cartItemsCount > 1
-            ? getNFTBookCartClaimEndpoint({
-                cartId: this.cartId,
-                token: this.token,
-              })
-            : getNFTBookClaimEndpoint({
-                classId: this.classId,
-                collectionId: this.collectionId,
-                paymentId: this.paymentId,
-                token: this.token,
-              });
+        const endpoint = this.cartId
+          ? getNFTBookCartClaimEndpoint({
+              cartId: this.cartId,
+              token: this.token,
+            })
+          : getNFTBookClaimEndpoint({
+              classId: this.classId,
+              collectionId: this.collectionId,
+              paymentId: this.paymentId,
+              token: this.token,
+            });
         this.claimPromise = this.$api.post(endpoint, {
           paymentId: this.paymentId,
           wallet: this.claimingAddress,
