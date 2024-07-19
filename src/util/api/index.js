@@ -462,6 +462,7 @@ export const postUserV2WalletEmail = ({
   classId,
   paymentId,
   claimingToken,
+  verify,
 }) => {
   const qsPayload = {
     email,
@@ -469,6 +470,7 @@ export const postUserV2WalletEmail = ({
     class_id: classId,
     payment_id: paymentId,
     claiming_token: claimingToken,
+    verify: verify ? '1' : '0',
   };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };

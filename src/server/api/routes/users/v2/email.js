@@ -30,6 +30,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       class_id: classId,
       payment_id: paymentId,
       claiming_token: claimingToken,
+      verify = '1',
     } = req.query;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
@@ -73,20 +74,22 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       qsPayload.payment_id = paymentId;
       qsPayload.claiming_token = claimingToken;
     }
-    const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
-      qsPayload
-    )}`;
-    const title = 'Verify Your Email';
-    const { subject, body } = getBasicV2Template({
-      subject: title,
-      title,
-      content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
-    });
-    await sendEmail({
-      email,
-      subject,
-      html: body,
-    });
+    if (verify !== '0') {
+      const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
+        qsPayload
+      )}`;
+      const title = 'Verify Your Email';
+      const { subject, body } = getBasicV2Template({
+        subject: title,
+        title,
+        content: `<p>Please click the link to verify your email:</p><p>${verificationURL}</p>`,
+      });
+      await sendEmail({
+        email,
+        subject,
+        html: body,
+      });
+    }
     res.sendStatus(200);
   } catch (error) {
     switch (error.message) {
