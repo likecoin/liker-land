@@ -1,5 +1,191 @@
 <template>
-  <div>
+  <div class="fixed inset-0 flex flex-col">
+    <header class="border-b border-[#ccc]">
+      <div class="flex items-center justify-between px-[16px] py-[8px]">
+        <div class="flex items-center gap-4">
+          <NuxtLink
+            :to="
+              localeLocation({
+                name: 'dashboard',
+                query: {
+                  view: 'collectibles',
+                  tab: 'collected',
+                  type: 'nft_book',
+                },
+              })
+            "
+            :alt="$t('main_menu_my_portfolio')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-20"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+              />
+            </svg>
+          </NuxtLink>
+
+          <div class="relative">
+            <ButtonV2 preset="outline" size="tiny">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-20"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                />
+              </svg>
+            </ButtonV2>
+            <select
+              v-if="toc.length"
+              v-model="selectedChapter"
+              class="absolute inset-0 opacity-0"
+              @change="onChangeChapter"
+            >
+              <option
+                v-for="chapter in toc"
+                :key="chapter.href"
+                :value="chapter.href"
+              >
+                {{ chapter.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button @click="onClickSearchButton">
+            <IconSearch class="w-20 h-20" />
+          </button>
+
+          <button v-if="!hideDownload" @click="onClickDownloadEpub">
+            <IconDownload class="w-20 h-20" />
+          </button>
+        </div>
+      </div>
+
+      {{ /* Search Bar */ }}
+      <div
+        v-if="showSearch"
+        class="flex items-center gap-4 px-[16px] bg-gray-f7 border-t border-[#ccc]"
+      >
+        <input
+          ref="searchInput"
+          v-model="searchText"
+          class="grow shadow-sm rounded-4 px-[8px] border border-[#ccc]"
+          placeholder="Search for ..."
+          @input="onInputSearch"
+        />
+
+        <button
+          :disabled="!searchResults.length"
+          :class="[
+            'w-[20px]',
+            'text-[30px]',
+            { 'opacity-[0.2]': !searchResults.length },
+          ]"
+          @click="onClickGoToPrevSearchResult"
+        >
+          ‹
+        </button>
+        <button
+          :disabled="!searchResults.length"
+          :class="[
+            'w-[20px]',
+            'text-[30px]',
+            { 'opacity-[0.2]': !searchResults.length },
+          ]"
+          @click="onClickGoToNextSearchResult"
+        >
+          ›
+        </button>
+
+        <button @click="onClickClearSearch">
+          <IconClose class="w-20 h-20" />
+        </button>
+      </div>
+    </header>
+
+    <main
+      :class="[
+        'relative',
+        'flex',
+        'gap-[8px]',
+        'grow',
+
+        'laptop:p-[24px] laptop:px-[32px]',
+
+        'bg-gray-f7',
+      ]"
+    >
+      <div
+        id="viewer"
+        ref="epubViewer"
+        :key="cacheKey"
+        :class="[
+          'relative',
+
+          'grow',
+
+          'w-full',
+          'h-full',
+          'max-w-[1200px]',
+          'mx-auto',
+          'my-0',
+          'p-[16px] laptop:p-[32px]',
+
+          'bg-white',
+          'shadow-lg',
+          'rounded-[8px]',
+        ]"
+      />
+
+      <div
+        :class="[
+          'absolute',
+          'inset-0',
+
+          'flex',
+          'justify-center',
+          'items-stretch',
+
+          'text-[64px]',
+          'text-like-green',
+          'font-bold',
+          'no-underline',
+
+          'pointer-events-none',
+        ]"
+      >
+        <button
+          class="flex items-center cursor-pointer select-none pointer-events-auto p-[8px]"
+          @click="onClickGoToPrevPage"
+        >
+          ‹
+        </button>
+        <div class="grow max-w-[1200px]" />
+        <button
+          class="flex items-center cursor-pointer select-none pointer-events-auto p-[8px]"
+          @click="onClickGoToNextPage"
+        >
+          ›
+        </button>
+      </div>
+    </main>
+
     <div
       v-if="isLoading"
       class="fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-white"
@@ -10,81 +196,6 @@
       />
       <span class="text-like-green text-center">{{ progressLabelText }}</span>
     </div>
-    <div v-else class="flex items-center justify-between">
-      <div class="grow" />
-      <select
-        v-if="toc.length"
-        v-model="selectedChapter"
-        class="my-[10px] shadow-md rounded-4 min-w-[50%]"
-        @change="onChangeChapter"
-      >
-        <option
-          v-for="chapter in toc"
-          :key="chapter.href"
-          :value="chapter.href"
-        >
-          {{ chapter.label }}
-        </option>
-      </select>
-      <div class="flex justify-end gap-4 mr-8 grow">
-        <button class="my-[10px]" @click="onClickSearchButton">
-          <IconSearch class="w-20 h-20" />
-        </button>
-        <div v-if="showSearch" class="flex items-center gap-4">
-          <input
-            ref="searchInput"
-            v-model="searchText"
-            class="w-[120px] my-[10px] shadow-md rounded-4"
-            placeholder="Search for ..."
-            @input="onInputSearch"
-          />
-          <button
-            :disabled="!searchText"
-            class="my-[10px]"
-            @click="onClickClearSearch"
-          >
-            <IconClose class="w-20 h-20" />
-          </button>
-          <button
-            :disabled="!searchResults.length"
-            class="w-[20px] text-[30px]"
-            @click="onClickGoToPrevSearchResult"
-          >
-            ‹
-          </button>
-          <button
-            :disabled="!searchResults.length"
-            class="w-[20px] text-[30px]"
-            @click="onClickGoToNextSearchResult"
-          >
-            ›
-          </button>
-        </div>
-        <button
-          v-if="!hideDownload"
-          class="my-[10px]"
-          @click="onClickDownloadEpub"
-        >
-          <IconDownload class="w-20 h-20" />
-        </button>
-      </div>
-    </div>
-    <a
-      class="left-0 laptop:left-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-      @click="onClickGoToPrevPage"
-      >‹</a
-    >
-    <div
-      id="viewer"
-      ref="epubViewer"
-      :key="cacheKey"
-      class="mx-auto my-0 w-full h-dynamic laptop:w-[1200px] laptop:h-[700px] shadow-md rounded-4 p-0 relative"
-    />
-    <a
-      class="right-0 laptop:right-10 fixed z-10 top-1/2 text-[64px] text-like-green font-bold cursor-pointer select-none no-underline"
-      @click="onClickGoToNextPage"
-      >›</a
-    >
   </div>
 </template>
 
@@ -248,7 +359,8 @@ export default {
       }
     },
     async searchEntireBook() {
-      if (this.searchText.length < 3) return [];
+      if (!this.searchText.length) return [];
+
       const results = await Promise.all(
         this.book.spine.spineItems.map(this.searchFromChapter)
       );
@@ -357,31 +469,31 @@ export default {
       this.directToSelectedSearchResult();
     },
     onClickClearSearch() {
-      this.searchText = '';
-      this.removeHighlight();
-      this.searchResultIndex = 0;
+      if (this.searchText) {
+        this.searchText = '';
+        this.removeHighlight();
+        this.searchResultIndex = 0;
+      } else {
+        this.showSearch = false;
+      }
     },
   },
 };
 </script>
 
 <style>
-.h-dynamic {
-  height: calc(100vh - 64px);
-}
-
-@media (min-width: 769px) {
+@media (min-width: 928px) {
   #viewer:after {
     position: absolute;
     width: 1px;
-    border-right: 1px #000 solid;
-    height: 90%;
+    border-right: 1px #00000020 solid;
+    height: 100%;
     z-index: 1;
     left: 50%;
     margin-left: -1px;
-    top: 5%;
-    opacity: 0.15;
-    box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
+    top: 0;
+    bottom: 0;
+    box-shadow: -2px 0 24px rgba(0, 0, 0, 1);
     content: '';
   }
 }
