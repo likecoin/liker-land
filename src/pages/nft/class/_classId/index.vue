@@ -406,6 +406,7 @@ export default {
   name: 'NFTClassDetailsPage',
   mixins: [clipboardMixin, nftMixin, navigationListenerMixin, utmMixin],
   layout: 'default',
+  middleware: 'from-channel',
   asyncData({ query }) {
     const { action } = query;
     return { action };
