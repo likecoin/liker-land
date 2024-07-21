@@ -781,7 +781,6 @@ export default {
   },
   mixins: [bookstoreMixin],
   layout: 'index',
-  middleware: 'from-channel',
   data() {
     return {
       dialogNFTClassList: [],

@@ -393,7 +393,6 @@ export default {
   name: 'ListingPage',
   mixins: [crispMixin],
   layout: 'default',
-  middleware: 'from-channel',
   defaultSorting: SORTING_OPTIONS.RECOMMEND,
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,

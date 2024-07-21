@@ -90,7 +90,6 @@ export default {
     utmMixin,
   ],
   layout: 'default',
-  middleware: 'from-channel',
   data() {
     return {
       isLoading: true,
