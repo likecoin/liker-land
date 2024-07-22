@@ -42,17 +42,7 @@ export default {
             // ignore
           }
         }
-        let postAuthRoute = this.localeLocation(this.getHomeRoute);
-        if (window.sessionStorage) {
-          const storedRoute = window.sessionStorage.getItem(
-            'USER_POST_AUTH_ROUTE'
-          );
-          if (storedRoute) {
-            postAuthRoute = storedRoute;
-            window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-          }
-        }
-        this.$router.replace(postAuthRoute);
+        this.redirectToPostAuthRoute();
       } catch (err) {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
@@ -64,10 +54,16 @@ export default {
           errMessage,
           1
         );
-        this.$nuxt.error({
-          statusCode: errData.status || 400,
-          message: errMessage,
-        });
+        if (errData.status === 403) {
+          // random 403 from authcore tokens endpoint
+          // but user is already logged in
+          this.redirectToPostAuthRoute();
+        } else {
+          this.$nuxt.error({
+            statusCode: errData.status || 400,
+            message: errMessage,
+          });
+        }
       }
     } else {
       logTrackerEvent(this, 'RedirectLogin', 'RedirectLoginFail', error, 1);
@@ -82,6 +78,19 @@ export default {
   },
   methods: {
     ...mapActions(['handleConnectorRedirect', 'walletUpdateEmail']),
+    redirectToPostAuthRoute() {
+      let postAuthRoute = this.localeLocation(this.getHomeRoute);
+      if (window.sessionStorage) {
+        const storedRoute = window.sessionStorage.getItem(
+          'USER_POST_AUTH_ROUTE'
+        );
+        if (storedRoute) {
+          postAuthRoute = storedRoute;
+          window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+        }
+      }
+      this.$router.replace(postAuthRoute);
+    },
   },
 };
 </script>
