@@ -74,7 +74,10 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       qsPayload.payment_id = paymentId;
       qsPayload.claiming_token = claimingToken;
     }
-    if (verify !== '0') {
+    // We would set verify to 0 if authcore email is not verified
+    // to prevent spamming user with verification email
+    const shouldSendVerificationEmail = verify !== '0';
+    if (shouldSendVerificationEmail) {
       const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
         qsPayload
       )}`;
