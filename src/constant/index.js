@@ -68,7 +68,7 @@ export const APP_LIKE_CO_VIEW = IS_TESTNET
   : 'https://app.like.co/view';
 
 export const ARWEAVE_ENDPOINT = 'https://arweave.net';
-export const IPFS_VIEW_GATEWAY_URL = 'https://ipfs.io/ipfs';
+export const IPFS_VIEW_GATEWAY_URL = 'https://w3s.link/ipfs';
 
 export const LIKECOIN_CHAIN_ID = IS_TESTNET
   ? 'likecoin-public-testnet-5'
