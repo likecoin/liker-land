@@ -70,7 +70,7 @@
         <ButtonV2
           content-class="phoneLg:text-[14px]"
           :text="$t('bodhisattva18_flowing_cta_button_text')"
-          href="https://books.liker.land/bodhisattva18/?utm_source=likerlandweb"
+          :href="buttonHref"
           preset="outline"
           theme="glow"
           size="small"
@@ -113,6 +113,13 @@ export default {
     },
     bannerBg() {
       return bannerBg;
+    },
+    buttonHref() {
+      const qs = new URLSearchParams({
+        utm_source: 'likerlandweb',
+        ...this.$route.query,
+      });
+      return `https://books.liker.land/bodhisattva18/?${qs.toString()}`;
     },
   },
   mounted() {
