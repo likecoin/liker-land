@@ -964,7 +964,7 @@ const actions = {
   },
   async walletUpdateEmail(
     { commit },
-    { email, followee, classId, paymentId, claimingToken }
+    { email, verify = true, followee, classId, paymentId, claimingToken }
   ) {
     try {
       await this.$api.$post(
@@ -974,6 +974,7 @@ const actions = {
           classId,
           paymentId,
           claimingToken,
+          verify,
         })
       );
       commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });

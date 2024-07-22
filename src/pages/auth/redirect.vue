@@ -36,7 +36,10 @@ export default {
           !this.walletEmailUnverified
         ) {
           try {
-            await this.walletUpdateEmail({ email: user?.primary_email });
+            await this.walletUpdateEmail({
+              email: user?.primary_email,
+              verify: user?.primary_email_verified,
+            });
           } catch (error) {
             console.error(error);
             // ignore
