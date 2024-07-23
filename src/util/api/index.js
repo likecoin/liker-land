@@ -577,7 +577,7 @@ export const fetchBookstoreLatestItems = () =>
   `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100&exclude_wallet=${BOOKSTORE_LIST_EXCLUDED_WALLET}`;
 
 export const fetchBookstoreItemsFromCMSForLandingPage = () =>
-  `${EXTERNAL_HOST}/api/bookstore/lists/landing?limit=7`;
+  `${EXTERNAL_HOST}/api/bookstore/lists/landing`;
 
 export const fetchBookstoreItemListsFromCMSById = (id, { limit = 100 } = {}) =>
   `${EXTERNAL_HOST}/api/bookstore/lists/${id}?limit=${limit}&t=1718841600`;

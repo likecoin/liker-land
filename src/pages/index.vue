@@ -800,11 +800,7 @@ export default {
     const description = this.$t('og_description');
 
     const classIds = Array.from(
-      new Set(
-        this.nftBookstoreItemsFromCMSForLandingPage
-          .map(b => b.classIds || b.classId)
-          .flat()
-      )
+      new Set(this.bookstoreItems.map(b => b.classIds || b.classId).flat())
     );
     const links = [];
     classIds.forEach(classId =>
@@ -885,11 +881,16 @@ export default {
     bookstoreSectionStickyClass() {
       return 'desktop:sticky desktop:top-[124px]';
     },
+    bookstoreItems() {
+      return this.nftBookstoreItemsFromCMSForLandingPage.filter(item =>
+        item.locales.some(locale => this.$i18n.locale.includes(locale))
+      );
+    },
     stickyBookstoreItem() {
-      return this.nftBookstoreItemsFromCMSForLandingPage[0];
+      return this.bookstoreItems[0];
     },
     bookstoreItemsInGrid() {
-      return this.nftBookstoreItemsFromCMSForLandingPage.slice(1, 7);
+      return this.bookstoreItems.slice(1, 7);
     },
     faqs() {
       return this.$t('index_faq_list').map(({ q: question, a: answer }) => ({
