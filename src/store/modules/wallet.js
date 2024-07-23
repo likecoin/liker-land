@@ -964,10 +964,18 @@ const actions = {
   },
   async walletUpdateEmail(
     { commit },
-    { email, verify = true, followee, classId, paymentId, claimingToken }
+    {
+      authcoreIdToken,
+      email,
+      verify = true,
+      followee,
+      classId,
+      paymentId,
+      claimingToken,
+    }
   ) {
     try {
-      await this.$api.$post(
+      const data = await this.$api.$post(
         postUserV2WalletEmail({
           email,
           followee,
@@ -975,9 +983,19 @@ const actions = {
           paymentId,
           claimingToken,
           verify,
-        })
+        }),
+        {
+          authcoreIdToken,
+        }
       );
-      commit(WALLET_SET_USER_INFO, { emailUnconfirmed: email });
+      const payload = {};
+      if (data.isVerified) {
+        payload.email = email;
+        payload.emailUnconfirmed = '';
+      } else {
+        payload.emailUnconfirmed = email;
+      }
+      commit(WALLET_SET_USER_INFO, payload);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);

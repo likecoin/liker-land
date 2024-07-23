@@ -29,4 +29,6 @@ config.AIRTABLE_API_SECRET = process.env.AIRTABLE_API_SECRET;
 config.AIRTABLE_CMS_BASE_ID = process.env.AIRTABLE_CMS_BASE_ID;
 config.AIRTABLE_CMS_TABLE_ID = process.env.AIRTABLE_CMS_TABLE_ID;
 
+config.AUTHCORE_PUBLIC_KEY = process.env.AUTHCORE_PUBLIC_KEY;
+
 module.exports = config;
