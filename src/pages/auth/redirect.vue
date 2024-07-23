@@ -26,7 +26,7 @@ export default {
     const { error, method, code } = this.$route.query;
     if (method && code) {
       try {
-        const { user } = await this.handleConnectorRedirect({
+        const { user, idToken } = await this.handleConnectorRedirect({
           method,
           params: { code },
         });
@@ -39,6 +39,7 @@ export default {
             await this.walletUpdateEmail({
               email: user?.primary_email,
               verify: user?.primary_email_verified,
+              authcoreIdToken: idToken,
             });
           } catch (error) {
             console.error(error);

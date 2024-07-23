@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const querystring = require('querystring');
 const { Router } = require('express');
+const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const { getBasicV2Template } = require('@likecoin/edm');
 const {
@@ -17,7 +18,10 @@ const { isValidFollowee } = require('../../../util/cosmos');
 const {
   VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS,
 } = require('../../../constant');
-const { EXTERNAL_URL } = require('../../../../config/config');
+const {
+  EXTERNAL_URL,
+  AUTHCORE_PUBLIC_KEY,
+} = require('../../../../config/config');
 
 const router = Router();
 
@@ -32,9 +36,21 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       claiming_token: claimingToken,
       verify = '1',
     } = req.query;
+    const { authcoreIdToken } = req.body;
     if (!email) {
       res.status(400).send('MISSING_EMAIL');
       return;
+    }
+    let isVerified = false;
+    if (authcoreIdToken && AUTHCORE_PUBLIC_KEY) {
+      const payload = jwt.verify(authcoreIdToken, AUTHCORE_PUBLIC_KEY);
+      const {
+        email: authcoreEmail,
+        email_verified: authcoreEmailVerified,
+      } = payload;
+      if (email === authcoreEmail && authcoreEmailVerified) {
+        isVerified = true;
+      }
     }
     const token = uuidv4();
     await db.runTransaction(async t => {
@@ -51,6 +67,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       }
       const { emailUnconfirmed, emailLastUpdatedTs } = userDoc.data();
       if (
+        !isVerified &&
         emailUnconfirmed === email &&
         emailLastUpdatedTs &&
         Date.now() - emailLastUpdatedTs.toMillis() <
@@ -59,11 +76,24 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
         throw new Error('EMAIL_UPDATE_IN_COOLDOWN');
       }
 
-      await t.update(userRef, {
-        emailUnconfirmed: email,
-        emailVerifyToken: token,
-        emailLastUpdatedTs: FieldValue.serverTimestamp(),
-      });
+      await t.update(
+        userRef,
+        isVerified
+          ? {
+              email,
+              emailUnconfirmed: FieldValue.delete(),
+              emailVerifyToken: FieldValue.delete(),
+              notification: {
+                transfer: true,
+                purchasePrice: 0,
+              },
+            }
+          : {
+              emailUnconfirmed: email,
+              emailVerifyToken: token,
+              emailLastUpdatedTs: FieldValue.serverTimestamp(),
+            }
+      );
     });
     const qsPayload = { wallet: user };
     if (isValidFollowee(user, followee)) {
@@ -76,7 +106,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
     }
     // We would set verify to 0 if authcore email is not verified
     // to prevent spamming user with verification email
-    const shouldSendVerificationEmail = verify !== '0';
+    const shouldSendVerificationEmail = !isVerified && verify !== '0';
     if (shouldSendVerificationEmail) {
       const verificationURL = `${EXTERNAL_URL}/settings/email/verify/${token}?${querystring.stringify(
         qsPayload
@@ -93,7 +123,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
         html: body,
       });
     }
-    res.sendStatus(200);
+    res.json({ email, isVerified });
   } catch (error) {
     switch (error.message) {
       case 'EMAIL_ALREADY_BEEN_USED_BY_OTHER_USER':
