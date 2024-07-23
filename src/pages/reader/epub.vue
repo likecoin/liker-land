@@ -67,7 +67,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-          <button @click="onClickSearchButton">
+          <button @click="handleSearchButtonClick">
             <IconSearch class="w-20 h-20" />
           </button>
 
@@ -79,79 +79,90 @@
 
       {{ /* Search Bar */ }}
       <div
-        v-if="showSearch"
-        class="flex items-center gap-4 px-[16px] bg-gray-f7 border-t border-[#ccc]"
+        v-if="isShowSearchBar"
+        class="flex items-center gap-4 px-[16px] py-[8px] bg-gray-f7 border-t border-[#ccc]"
       >
         <input
           ref="searchInput"
           v-model="searchText"
           class="grow shadow-sm rounded-4 px-[8px] border border-[#ccc]"
           placeholder="Search for ..."
-          @input="onInputSearch"
+          @input="handleSearchInput"
         />
 
+        <span v-if="searchResults.length"
+          >{{ selectedSearchResultIndex + 1 }}/{{ searchResults.length }}</span
+        >
+
         <button
           :disabled="!searchResults.length"
-          :class="[
-            'w-[20px]',
-            'text-[30px]',
-            { 'opacity-[0.2]': !searchResults.length },
-          ]"
-          @click="onClickGoToPrevSearchResult"
+          :class="{ 'opacity-[0.2]': !searchResults.length }"
+          @click="handlePrevSearchResultButtonClick"
         >
-          ‹
-        </button>
-        <button
-          :disabled="!searchResults.length"
-          :class="[
-            'w-[20px]',
-            'text-[30px]',
-            { 'opacity-[0.2]': !searchResults.length },
-          ]"
-          @click="onClickGoToNextSearchResult"
-        >
-          ›
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2.5"
+            stroke="currentColor"
+            class="w-[20px]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+          </svg>
         </button>
 
-        <button @click="onClickClearSearch">
+        <button
+          :disabled="!searchResults.length"
+          :class="{ 'opacity-[0.2]': !searchResults.length }"
+          @click="handleNextSearchResultButtonClick"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2.5"
+            stroke="currentColor"
+            class="w-[20px]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
+          </svg>
+        </button>
+
+        <button @click="handleClearSearchInputButtonClick">
           <IconClose class="w-20 h-20" />
         </button>
       </div>
     </header>
 
-    <main
-      :class="[
-        'relative',
-        'flex',
-        'gap-[8px]',
-        'grow',
+    <main class="relative grow bg-gray-f7">
+      <div class="absolute inset-0 laptop:inset-[24px] laptop:inset-x-[32px]">
+        <div
+          id="viewer"
+          ref="epubViewer"
+          :key="cacheKey"
+          :class="[
+            'relative',
 
-        'laptop:p-[24px] laptop:px-[32px]',
+            'w-full',
+            'h-full',
+            'max-w-[1200px]',
+            'mx-auto',
+            'my-0',
 
-        'bg-gray-f7',
-      ]"
-    >
-      <div
-        id="viewer"
-        ref="epubViewer"
-        :key="cacheKey"
-        :class="[
-          'relative',
-
-          'grow',
-
-          'w-full',
-          'h-full',
-          'max-w-[1200px]',
-          'mx-auto',
-          'my-0',
-          'p-[16px] laptop:p-[32px]',
-
-          'bg-white',
-          'shadow-lg',
-          'rounded-[8px]',
-        ]"
-      />
+            'bg-white',
+            'shadow-lg',
+            'rounded-[8px]',
+          ]"
+        />
+      </div>
 
       <div
         :class="[
@@ -171,17 +182,43 @@
         ]"
       >
         <button
-          class="flex items-center cursor-pointer select-none pointer-events-auto p-[8px]"
+          class="flex items-center cursor-pointer select-none pointer-events-auto laptop:p-[8px]"
           @click="onClickGoToPrevPage"
         >
-          ‹
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="4"
+            stroke="currentColor"
+            class="w-[20px] laptop:w-[24px]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+          </svg>
         </button>
         <div class="grow max-w-[1200px]" />
         <button
-          class="flex items-center cursor-pointer select-none pointer-events-auto p-[8px]"
+          class="flex items-center cursor-pointer select-none pointer-events-auto laptop:p-[8px]"
           @click="onClickGoToNextPage"
         >
-          ›
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="4"
+            stroke="currentColor"
+            class="w-[20px] laptop:w-[24px]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
+          </svg>
         </button>
       </div>
     </main>
@@ -202,12 +239,13 @@
 <script>
 import Epub, { EpubCFI } from 'epubjs';
 import { saveAs } from 'file-saver';
-import { logTrackerEvent } from '~/util/EventLogger';
+import debounce from 'lodash.debounce';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import readerMixin from '~/mixins/reader';
 
+import { logTrackerEvent } from '~/util/EventLogger';
 import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 export default {
@@ -222,15 +260,35 @@ export default {
       book: null,
       rendition: null,
       contents: null,
-      showSearch: false,
+
+      isShowSearchBar: false,
       searchText: '',
-      searchResults: [],
-      searchResultIndex: 0,
+      searchResults: [], // Store CFI string of search results
+      selectedSearchResultIndex: 0,
     };
   },
   computed: {
     hideDownload() {
       return this.$route.query.download === '0' || this.nftIsDownloadHidden;
+    },
+  },
+  watch: {
+    isShowSearchBar(isShow) {
+      if (!isShow) {
+        this.searchText = '';
+      }
+      this.$nextTick(() => {
+        this.rendition.resize();
+      });
+    },
+    searchText(text) {
+      if (!text) {
+        this.searchResults = [];
+        this.selectedSearchResultIndex = 0;
+        this.removeSearchResultHighlights();
+        const selection = this.contents.window.getSelection();
+        if (selection) selection.removeAllRanges();
+      }
     },
   },
   beforeUnmount() {
@@ -270,7 +328,7 @@ export default {
         });
         const cfi = this.resumeFromLocalStorage();
         this.rendition.display(cfi);
-        this.rendition.on('rendered', (cfiRange, contents) => {
+        this.rendition.on('rendered', (_, contents) => {
           const path = this.rendition.currentLocation().start.href;
           const pathArr = path.split('/');
           this.selectedChapter = pathArr.pop();
@@ -282,6 +340,10 @@ export default {
           this.saveToLocalStorage(location.start.cfi);
         });
         this.rendition.on('keydown', this.keyListener);
+        this.rendition.on(
+          'locationChanged',
+          this.highlightVisibleSearchResults
+        );
       } catch (err) {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
@@ -344,34 +406,141 @@ export default {
         }
       }
     },
-    removeHighlight() {
-      this.searchResults.forEach(result => {
-        this.rendition.annotations.remove(result.cfi, 'highlight');
+
+    // Search related methods
+    compareCFIWithCurrent(cfiInput) {
+      const cfi = new EpubCFI(cfiInput);
+      const { start, end } = this.rendition.currentLocation();
+      // Returns -1 if input is before, returns 1 if input is after, returns 0 if equal
+      const compareStart = cfi.compare(cfi, start.cfi);
+      const compareEnd = cfi.compare(cfi, end.cfi);
+      return {
+        compareStart,
+        compareEnd,
+      };
+    },
+    highlightVisibleSearchResults: debounce(function highlightResults() {
+      if (!this.searchResults.length) return;
+
+      this.removeSearchResultHighlights();
+
+      for (let i = 0; i < this.searchResults.length; i += 1) {
+        const cfi = this.searchResults[i];
+        const { compareStart, compareEnd } = this.compareCFIWithCurrent(cfi);
+        if (compareStart >= 0 && compareEnd <= 0) {
+          this.rendition.annotations.highlight(cfi);
+        }
+      }
+    }, 200),
+    removeSearchResultHighlights() {
+      this.searchResults.forEach(cfi => {
+        this.rendition.annotations.remove(cfi, 'highlight');
       });
     },
-    async searchFromChapter(chapter) {
+    async searchChapter(chapter) {
       try {
         await chapter.load(this.book.load.bind(this.book));
-        const result = await chapter.find(this.searchText);
-        return result;
+        const results = await chapter.find(this.searchText);
+        return results.map(r => r.cfi);
       } finally {
         chapter.unload.bind(chapter)();
       }
     },
-    async searchEntireBook() {
-      if (!this.searchText.length) return [];
+    searchBook: debounce(async function searchBook() {
+      if (!this.searchText.length) return;
 
-      const results = await Promise.all(
-        this.book.spine.spineItems.map(this.searchFromChapter)
+      const searchResultsByChapters = await Promise.all(
+        this.book.spine.spineItems.map(this.searchChapter)
       );
-      return results.flat().slice(0, 1000);
+      this.searchResults = searchResultsByChapters.flat();
+      if (!this.searchResults.length) return;
+
+      this.selectedSearchResultIndex = this.findSelectedSearchResultIndex();
+
+      this.focusSelectedSearchResult();
+    }, 1000),
+    findSelectedSearchResultIndex() {
+      if (!this.searchResults.length) return 0;
+
+      // Find the first search result that is after the current location
+      let start = 0;
+      let end = this.searchResults.length - 1;
+      while (start <= end) {
+        const mid = Math.floor((start + end) / 2);
+        const cfi = this.searchResults[mid];
+        const { compareStart } = this.compareCFIWithCurrent(cfi);
+
+        if (compareStart === 0) {
+          return mid;
+        }
+        if (compareStart < 0) {
+          start = mid + 1;
+        } else {
+          end = mid - 1;
+        }
+      }
+
+      return start < this.searchResults.length ? start : 0;
     },
-    updateSearchResults(searchResults = []) {
-      this.searchResults = searchResults;
-      this.searchResults.forEach(result => {
-        this.rendition.annotations.highlight(result.cfi);
-      });
+    async focusSelectedSearchResult() {
+      if (!this.searchResults.length) return;
+
+      const cfiString = this.searchResults[
+        this.selectedSearchResultIndex
+      ].toString();
+      await this.rendition.display(cfiString);
+      const range = this.rendition.getRange(cfiString);
+      const selection = this.contents.window.getSelection();
+      // Selection becomes null when changing chapter
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        // Focus again after changing chapter
+        this.$nextTick(() => {
+          this.focusSelectedSearchResult();
+        });
+      }
     },
+    handleSearchButtonClick() {
+      if (this.isShowSearchBar) {
+        this.isShowSearchBar = false;
+        this.removeSearchResultHighlights();
+      } else {
+        this.isShowSearchBar = true;
+        this.$nextTick(() => {
+          this.$refs.searchInput.focus();
+        });
+      }
+    },
+    handleSearchInput() {
+      this.removeSearchResultHighlights();
+      this.searchBook();
+    },
+    handleClearSearchInputButtonClick() {
+      if (this.searchText) {
+        this.searchText = '';
+        this.removeSearchResultHighlights();
+      } else {
+        this.isShowSearchBar = false;
+      }
+    },
+    cycleSearchResult(direction) {
+      if (!this.searchResults.length) return;
+
+      const { length } = this.searchResults;
+      this.selectedSearchResultIndex =
+        (this.selectedSearchResultIndex + direction + length) % length;
+
+      this.focusSelectedSearchResult();
+    },
+    handlePrevSearchResultButtonClick() {
+      this.cycleSearchResult(-1);
+    },
+    handleNextSearchResultButtonClick() {
+      this.cycleSearchResult(1);
+    },
+
     saveToLocalStorage(currentCfi) {
       if (window.localStorage && currentCfi) {
         window.localStorage.setItem(
@@ -396,86 +565,6 @@ export default {
         }
       }
       return undefined;
-    },
-    async directToSelectedSearchResult() {
-      if (!this.searchResults.length) return;
-      const cfiString = this.searchResults[
-        this.searchResultIndex
-      ].cfi.toString();
-      await this.rendition.display(cfiString);
-      const range = this.rendition.getRange(cfiString);
-      const selection = this.contents.window.getSelection();
-      // TODO: selection is null when the page is not rendered (e.g. change chapter)
-      if (selection) {
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-    },
-    directToNextSearchResult() {
-      if (!this.searchResults.length) return;
-      this.searchResultIndex = 0;
-      const currentLocation = this.rendition.currentLocation();
-      const currStartCFI = new EpubCFI(currentLocation.start.cfi);
-      const currEndCFI = new EpubCFI(currentLocation.end.cfi);
-      for (let i = 0; i < this.searchResults.length; i += 1) {
-        const cfi = new EpubCFI(this.searchResults[i].cfi);
-        const compareStart = cfi.compare(cfi, currStartCFI);
-        const compareEnd = cfi.compare(cfi, currEndCFI);
-        if (compareStart >= 0) {
-          if (compareEnd === -1) {
-            this.searchResultIndex = i;
-            break;
-          } else if (compareEnd === 1 && this.searchResultIndex === 0) {
-            this.searchResultIndex = i;
-          }
-        }
-      }
-      this.directToSelectedSearchResult();
-    },
-    async onClickSearchButton() {
-      this.showSearch = !this.showSearch;
-      if (!this.showSearch) {
-        this.removeHighlight();
-      } else {
-        const searchResults = await this.searchEntireBook();
-        this.updateSearchResults(searchResults);
-        this.$nextTick(() => {
-          this.$refs.searchInput.focus();
-        });
-      }
-    },
-    async onInputSearch() {
-      this.removeHighlight();
-      const searchResults = await this.searchEntireBook();
-      this.updateSearchResults(searchResults);
-      this.directToNextSearchResult();
-    },
-    onClickGoToPrevSearchResult() {
-      if (!this.searchResults.length) return;
-      if (this.searchResultIndex > 0) {
-        this.searchResultIndex -= 1;
-      } else {
-        this.searchResultIndex = this.searchResults.length - 1;
-      }
-      this.directToSelectedSearchResult();
-    },
-    onClickGoToNextSearchResult() {
-      if (!this.searchResults.length) return;
-      if (this.searchResultIndex < this.searchResults.length - 1) {
-        this.searchResultIndex += 1;
-      } else {
-        this.searchResultIndex = 0;
-      }
-      this.directToSelectedSearchResult();
-    },
-    onClickClearSearch() {
-      if (this.searchText) {
-        this.searchText = '';
-        this.removeHighlight();
-        this.searchResultIndex = 0;
-      } else {
-        this.showSearch = false;
-      }
     },
   },
 };
