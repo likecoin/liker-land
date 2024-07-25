@@ -6,7 +6,7 @@
           <NuxtLink
             :to="
               localeLocation({
-                name: 'dashboard',
+                name: 'feed',
                 query: {
                   view: 'collectibles',
                   tab: 'collected',
