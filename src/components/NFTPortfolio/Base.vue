@@ -68,6 +68,8 @@
               :content-urls="contentUrls"
               :iscn-url="iscnUrl"
               :is-nft-book="isNftBook"
+              :is-content-viewable="isContentViewable"
+              :is-content-downloadable="isContentDownloadable"
               @view-content="handleClickViewContent"
             />
           </div>
@@ -213,6 +215,14 @@ export default {
     collectExpiryTime: {
       type: Number,
       default: 0,
+    },
+    isContentViewable: {
+      type: Boolean,
+      default: false,
+    },
+    isContentDownloadable: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
