@@ -259,7 +259,6 @@ export default {
       selectedChapter: '',
       book: null,
       rendition: null,
-      contents: null,
 
       isShowSearchBar: false,
       searchText: '',
@@ -281,13 +280,11 @@ export default {
         this.rendition.resize();
       });
     },
-    searchText(text) {
-      if (!text) {
+    searchText(text, prevText) {
+      if (prevText !== text && !text) {
         this.searchResults = [];
         this.selectedSearchResultIndex = 0;
         this.removeSearchResultHighlights();
-        const selection = this.contents.window.getSelection();
-        if (selection) selection.removeAllRanges();
       }
     },
   },
@@ -328,12 +325,11 @@ export default {
         });
         const cfi = this.resumeFromLocalStorage();
         this.rendition.display(cfi);
-        this.rendition.on('rendered', (_, contents) => {
+        this.rendition.on('rendered', () => {
           const path = this.rendition.currentLocation().start.href;
           const pathArr = path.split('/');
           this.selectedChapter = pathArr.pop();
           this.dirPath = pathArr.join('/');
-          this.contents = contents;
         });
 
         this.rendition.on('relocated', location => {
@@ -428,7 +424,9 @@ export default {
         const cfi = this.searchResults[i];
         const { compareStart, compareEnd } = this.compareCFIWithCurrent(cfi);
         if (compareStart >= 0 && compareEnd <= 0) {
-          this.rendition.annotations.highlight(cfi);
+          this.rendition.annotations.highlight(cfi, {}, {}, '', {
+            fill: this.selectedSearchResultIndex === i ? '#ffbf44' : '#50e3c2',
+          });
         }
       }
     }, 200),
@@ -489,18 +487,6 @@ export default {
         this.selectedSearchResultIndex
       ].toString();
       await this.rendition.display(cfiString);
-      const range = this.rendition.getRange(cfiString);
-      const selection = this.contents.window.getSelection();
-      // Selection becomes null when changing chapter
-      if (selection) {
-        selection.removeAllRanges();
-        selection.addRange(range);
-      } else {
-        // Focus again after changing chapter
-        this.$nextTick(() => {
-          this.focusSelectedSearchResult();
-        });
-      }
     },
     handleSearchButtonClick() {
       if (this.isShowSearchBar) {
