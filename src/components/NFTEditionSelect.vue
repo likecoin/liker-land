@@ -25,8 +25,8 @@
         'flex',
         'flex-wrap',
         'justify-end',
-        'items-center',
-        'gap-[12px] sm:gap-x-[24px]',
+        'items-stretch sm:items-center',
+        'gap-[12px]',
         'flex-col sm:flex-row',
       ]"
     >
