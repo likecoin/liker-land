@@ -579,7 +579,7 @@ export default {
     canViewContentDirectly() {
       return (
         !this.isFreePurchase &&
-        this.classIds.some(classId =>
+        this.classIds?.some(classId =>
           this.getCanViewNFTBookBeforeClaimByClassId(classId)
         )
       );
@@ -673,7 +673,9 @@ export default {
     }
     try {
       if (this.collectionId) {
-        await this.lazyFetchNFTCollectionInfoByCollectionId(this.collectionId);
+        await this.lazyFetchNFTCollectionInfoByCollectionId({
+          collectionId: this.collectionId,
+        });
       } else if (this.classId) {
         await this.lazyGetNFTClassMetadata(this.classId);
         const classCollectionType = getNFTClassCollectionType(
@@ -688,7 +690,7 @@ export default {
       console.error(err);
       this.$nuxt.error({
         statusCode: 404,
-        message: this.t('nft_claim_class_not_found'),
+        message: this.$t('nft_claim_class_not_found'),
       });
       return;
     }

@@ -10,6 +10,7 @@ export default context => {
 
   // If the from query is present in the current route but not in the next route, add it to the next route
   if (
+    fromRoute &&
     fromRoute.query.from &&
     !toRoute.query.from &&
     // Exclude navigating from /nft/* routes
