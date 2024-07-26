@@ -10,7 +10,7 @@
           preset="details"
           @click-avatar="handleNFTCardClickAvatar"
         >
-          <template #column-right>
+          <template #column-edition-select>
             <Separator />
 
             <NFTEditionSelect

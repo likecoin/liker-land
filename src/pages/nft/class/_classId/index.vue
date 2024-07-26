@@ -69,7 +69,7 @@
               />
             </template>
 
-            <template #column-right>
+            <template #column-edition-select>
               <Separator />
 
               <NFTEditionSelect

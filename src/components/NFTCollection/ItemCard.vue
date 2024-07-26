@@ -5,11 +5,7 @@
       :class="[
         'relative',
         'flex',
-        isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
         'flex-col',
-        { 'laptop:flex-row': !isCompactPreset },
-        { '!items-center': isCompactPreset },
-        { 'laptop:gap-[36px]': !isCompactPreset },
         'w-full',
         'rounded-[32px]',
         'px-[16px] sm:px-[32px]',
@@ -25,103 +21,118 @@
       ]"
       v-bind="componentProps"
     >
-      <client-only v-if="!isDetailsPreset">
-        <lazy-component
-          class="absolute inset-0 pointer-events-none -top-full"
-          @show.once="fetchInfo"
-        />
-      </client-only>
-      <div class="flex flex-col items-center shrink-0">
-        <NFTCover
-          :class="['mt-[-48px]', coverClasses]"
-          :is-nft-book="true"
-          :src="imageSrc || collectionImageUrl"
-          :should-resize-src="shouldResizeSrc"
-          :video-src="videoSrc"
-          :size="200"
-          :is-collection="true"
-          :alt="collectionName"
-        />
-        <Label
-          class="mt-[24px] !text-[12px] text-medium-gray"
-          :text="$t('nft_collection_num_of_books', { num: classIds.length })"
-        />
+      <div
+        :class="[
+          isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
+          'flex',
+          'flex-col',
+          { 'laptop:flex-row': !isCompactPreset },
+          { '!items-center': isCompactPreset },
+          { 'laptop:gap-[36px]': !isCompactPreset },
+        ]"
+      >
+        <client-only v-if="!isDetailsPreset">
+          <lazy-component
+            class="absolute inset-0 pointer-events-none -top-full"
+            @show.once="fetchInfo"
+          />
+        </client-only>
+        <div class="flex flex-col items-center shrink-0">
+          <NFTCover
+            :class="['mt-[-48px]', coverClasses]"
+            :is-nft-book="true"
+            :src="imageSrc || collectionImageUrl"
+            :should-resize-src="shouldResizeSrc"
+            :video-src="videoSrc"
+            :size="200"
+            :is-collection="true"
+            :alt="collectionName"
+          />
+          <Label
+            class="mt-[24px] !text-[12px] text-medium-gray"
+            :text="$t('nft_collection_num_of_books', { num: classIds.length })"
+          />
 
-        <div class="hidden laptop:block">
+          <div class="hidden laptop:block">
+            <slot name="column-left" />
+          </div>
+        </div>
+        <!-- Info column -->
+        <div
+          :class="[
+            'flex',
+            'flex-col',
+            'items-center',
+            { 'laptop:items-start': !isCompactPreset },
+            'justify-start',
+            'py-[32px]',
+            'gap-[12px]',
+            'grow',
+          ]"
+        >
+          <Label
+            v-if="isNew"
+            class="text-like-cyan"
+            :text="$t('campaign_nft_book_just_arrived')"
+          />
+          <Label
+            class="text-like-collection"
+            :text="$t('nft_collection_label')"
+          />
+          <Label preset="h4" :class="titleStyle" :text="collectionName" />
+          <Markdown :md-string="collectionDescription" />
+          <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
+            <client-only>
+              <li>
+                <NuxtLink
+                  class="flex items-center text-like-green group my-[8px]"
+                  :to="
+                    collectionOwner
+                      ? localeLocation({
+                          name: 'id',
+                          params: { id: collectionOwner },
+                          query: { tab: 'created' },
+                        })
+                      : ''
+                  "
+                  @click.native.stop="onClickAvatar"
+                >
+                  <Identity
+                    class="shrink-0"
+                    :avatar-url="creatorAvatar"
+                    :avatar-size="42"
+                    :is-avatar-disabled="true"
+                    :is-lazy-loaded="true"
+                  />
+                  <div class="flex flex-col justify-start ml-[8px] min-w-0">
+                    <span
+                      class="text-like-cyan-gray text-10 group-hover:underline"
+                      >{{ $t('identity_type_distributor') }}</span
+                    >
+                    <span
+                      :class="[
+                        'group-hover:underline',
+                        'font-[600]',
+                        'truncate',
+                        displayNameStyle,
+                      ]"
+                      >{{ creatorDisplayName }}</span
+                    >
+                  </div>
+                </NuxtLink>
+              </li>
+            </client-only>
+          </ul>
+          <div class="flex flex-col items-center w-full laptop:hidden">
+            <slot name="column-edition-select" />
+          </div>
+        </div>
+        <div class="flex flex-col items-center laptop:hidden">
           <slot name="column-left" />
         </div>
       </div>
-      <!-- Info column -->
-      <div
-        :class="[
-          'flex',
-          'flex-col',
-          'items-center',
-          { 'laptop:items-start': !isCompactPreset },
-          'justify-start',
-          'py-[32px]',
-          'gap-[12px]',
-          'grow',
-        ]"
-      >
-        <Label
-          v-if="isNew"
-          class="text-like-cyan"
-          :text="$t('campaign_nft_book_just_arrived')"
-        />
-        <Label
-          class="text-like-collection"
-          :text="$t('nft_collection_label')"
-        />
-        <Label preset="h4" :class="titleStyle" :text="collectionName" />
-        <Markdown :md-string="collectionDescription" />
-        <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
-          <client-only>
-            <li>
-              <NuxtLink
-                class="flex items-center text-like-green group my-[8px]"
-                :to="
-                  collectionOwner
-                    ? localeLocation({
-                        name: 'id',
-                        params: { id: collectionOwner },
-                        query: { tab: 'created' },
-                      })
-                    : ''
-                "
-                @click.native.stop="onClickAvatar"
-              >
-                <Identity
-                  class="shrink-0"
-                  :avatar-url="creatorAvatar"
-                  :avatar-size="42"
-                  :is-avatar-disabled="true"
-                  :is-lazy-loaded="true"
-                />
-                <div class="flex flex-col justify-start ml-[8px] min-w-0">
-                  <span
-                    class="text-like-cyan-gray text-10 group-hover:underline"
-                    >{{ $t('identity_type_distributor') }}</span
-                  >
-                  <span
-                    :class="[
-                      'group-hover:underline',
-                      'font-[600]',
-                      'truncate',
-                      displayNameStyle,
-                    ]"
-                    >{{ creatorDisplayName }}</span
-                  >
-                </div>
-              </NuxtLink>
-            </li>
-          </client-only>
-        </ul>
-
-        <slot name="column-right" />
-      </div>
-      <div class="flex flex-col items-center laptop:hidden">
-        <slot name="column-left" />
+      <div class="pb-[32px] w-full hidden laptop:flex flex-col">
+        <slot name="column-edition-select" />
       </div>
     </component>
 
