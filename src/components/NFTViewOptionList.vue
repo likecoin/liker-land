@@ -73,11 +73,6 @@
               :key="contentUrl"
             >
               <ButtonV2
-                :href="
-                  isContentDownloadable
-                    ? parseNFTMetadataURL(contentUrl)
-                    : undefined
-                "
                 preset="plain"
                 :download="getDownloadFilenameFromURL(contentUrl)"
                 @click="e => handleClickViewContentURL(e, contentUrl, index)"
