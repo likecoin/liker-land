@@ -10,71 +10,87 @@
       { 'animate-pulse': isFetching },
     ]"
   >
-    <div
-      :class="[
-        'col-span-1 laptop:col-span-2',
-        'flex',
-        'flex-col laptop:flex-row',
-        'items-start',
-        'gap-[.5em]',
-      ]"
-    >
+    <!-- index -->
+    <div :class="['hidden laptop:block', 'col-span-1']">
       <span class="min-w-[2em] text-gray-9b">{{ index }}</span>
-      <NuxtLink class="hidden laptop:block" :to="viewInfoLocation">
-        <NFTCover
-          class="rounded-[4px] overflow-hidden shrink"
-          :src="productImageUrl"
-        />
-      </NuxtLink>
     </div>
-    <!--
-    <div class="col-span-6 laptop:col-span-5">
-    -->
-    <div class="col-span-8 laptop:col-span-7">
-      <NuxtLink class="block laptop:hidden mb-[.75em]" :to="viewInfoLocation">
-        <NFTCover
-          class="rounded-[4px] overflow-hidden shrink"
-          :src="productImageUrl"
-        />
-      </NuxtLink>
-      <div class="line-clamp-2 font-[600]">
-        <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
+    <!-- product info -->
+    <div class="col-span-7">
+      <div class="flex items-start justify-start gap-[12px]">
+        <NuxtLink
+          :class="[
+            'block',
+            'flex-shrink-0',
+            'w-[80px] sm:w-full',
+            'max-w-[150px]',
+            'object-contain',
+          ]"
+          :to="viewInfoLocation"
+        >
+          <NFTCover
+            class="rounded-[4px] overflow-hidden shrink"
+            :src="productImageUrl"
+          />
+        </NuxtLink>
+        <div class="flex flex-col flex-shrink gap-[8px]">
+          <div class="line-clamp-3 font-[600]">
+            <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
+          </div>
+          <NuxtLink
+            :class="[
+              'flex',
+              'flex-col laptop:flex-row',
+              'items-start laptop:items-center',
+              'gap-[4px] laptop:gap-[8px]',
+              'group',
+              'text-like-green',
+              'mt-[.5rem]',
+            ]"
+            :to="
+              productOwner
+                ? localeLocation({
+                    name: 'id',
+                    params: { id: productOwner },
+                    query: { tab: 'created' },
+                  })
+                : ''
+            "
+          >
+            <Identity
+              :class="['!hidden laptop:!flex']"
+              :avatar-url="productCreator"
+              :avatar-size="32"
+              :is-avatar-disabled="true"
+              :is-avatar-outlined="isCreatorCivicLiker"
+              :is-lazy-loaded="true"
+            />
+            <span
+              :class="[
+                'font-[400]',
+                'text-[12px]',
+                'text-medium-gray',
+                'laptop:hidden',
+              ]"
+              >{{ $t('identity_type_publisher') }}</span
+            >
+            <span class="group-hover:underline font-[600]">{{
+              productCreatorDisplayName | ellipsis
+            }}</span>
+          </NuxtLink>
+        </div>
       </div>
-      <div class="line-clamp-2 mt-[.5em] text-gray-9b">
-        <NuxtLink :to="viewInfoLocation">{{
-          productDisplayDescription
-        }}</NuxtLink>
-      </div>
-      <NuxtLink
-        class="flex items-center group text-like-green mt-[.5rem]"
-        :to="
-          productOwner
-            ? localeLocation({
-                name: 'id',
-                params: { id: productOwner },
-                query: { tab: 'created' },
-              })
-            : ''
-        "
-      >
-        <Identity
-          :avatar-url="productCreator"
-          :avatar-size="32"
-          :is-avatar-disabled="true"
-          :is-avatar-outlined="isCreatorCivicLiker"
-          :is-lazy-loaded="true"
-        />
-        <span class="ml-[8px] group-hover:underline font-[600]">{{
-          productCreatorDisplayName | ellipsis
-        }}</span>
-      </NuxtLink>
     </div>
-    <div class="col-span-2 text-center text-like-green font-proxima font-[600]">
-      {{ (customPrice || productPrice) | formatNumberWithUSD }}
-    </div>
-    <div v-if="quantity > 1" class="col-span-2 text-center">
+    <!-- quantity -->
+    <div class="col-span-1 col-start-9 text-center">
       {{ quantity }}
     </div>
+    <!-- price -->
+    <div
+      class="col-start-10 col-end-12 text-center text-like-green font-proxima font-[600]"
+    >
+      {{ (customPrice || productPrice) | formatNumberWithUSD }}
+    </div>
+    <!-- remove button -->
     <div class="col-span-1 flex justify-end mt-[-.25em]">
       <ButtonV2
         preset="plain"

@@ -926,7 +926,7 @@
   "shopping_cart_empty_notice_button": "瀏覽 NFT",
   "shopping_cart_error_insufficient_balance": "餘額不足，你只有 {balance}",
   "shopping_cart_list_header_item": "購物明細",
-  "shopping_cart_list_header_price": "小計",
+  "shopping_cart_list_header_price": "單價",
   "shopping_cart_list_header_quantity": "數量",
   "shopping_cart_list_total_price": "金額共計",
   "shopping_cart_list_wallet_balance": "餘額",

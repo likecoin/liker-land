@@ -36,23 +36,23 @@
           'text-gray-9b',
         ]"
       >
-        <div class="col-start-1 col-end-8">
+        <div class="col-start-1 col-end-9">
           {{ $t('shopping_cart_list_header_item') }}
         </div>
-        <!--
-        <div class="col-start-8 col-end-10 text-center">{{ $t('shopping_cart_list_header_price') }}</div>
-        -->
+
+        <div class="col-start-9 col-end-10 text-center">
+          {{ $t('shopping_cart_list_header_quantity') }}
+        </div>
+
         <div class="col-start-10 col-end-12 text-center">
           {{ $t('shopping_cart_list_header_price') }}
         </div>
-        <!--
-        <div class="col-start-10 col-end-12 text-center">{{ $t('shopping_cart_list_header_quantity') }}</div>
-        -->
       </header>
-      <ul :class="['border-b', 'border-b-gray-d8']">
+      <ul>
         <li
           v-for="(item, index) in shoppingCartBookItems"
           :key="item.productId"
+          :class="['border-b', 'border-b-gray-d8']"
         >
           <ShoppingCartListRow
             :index="index + 1"
