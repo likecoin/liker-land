@@ -70,8 +70,6 @@
             </template>
 
             <template #column-edition-select>
-              <Separator />
-
               <NFTEditionSelect
                 class="self-stretch"
                 :items="nftEditions"
@@ -86,7 +84,7 @@
               />
               <div
                 v-if="nftCollections.length"
-                class="items-center justify-end w-full"
+                class="items-center justify-end w-full mt-[12px]"
                 @click="handleClickCollectionHint"
               >
                 <Label

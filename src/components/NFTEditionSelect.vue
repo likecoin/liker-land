@@ -33,7 +33,7 @@
       <ButtonV2
         v-if="!isSingleItem && !isAllSoldOut"
         preset="plain"
-        class="text-white underline phone:order-1"
+        class="text-white underline max-638:order-1"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
       />
@@ -165,12 +165,12 @@ export default {
       if (this.isAllSoldOut) {
         classes.push('p-[24px]');
       } else if (this.isSingleItem) {
-        classes.push('px-[20px]', 'py-[20px] sm:py-[8px]');
+        classes.push('px-[20px]', 'py-[20px] sm:pt-[16px] sm:pb-[24px]');
       } else {
         classes.push(
           'p-[12px] sm:p-[24px]',
           'pt-[4px] sm:pt-[16px]',
-          'pb-[14px]'
+          'pb-[16px]'
         );
       }
       return classes;
