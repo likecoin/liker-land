@@ -28,6 +28,8 @@
       :display-state="nftDisplayState"
       :is-nft-book="nftIsNFTBook"
       :is-collected-tab="isCollectedTab"
+      :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+      :is-content-downloadable="!nftIsDownloadHidden"
       :collect-expiry-time="collectExpiryTime"
       @collect="handleClickCollect"
       @load-cover="handleCoverLoaded"

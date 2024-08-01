@@ -44,7 +44,12 @@
             class="w-full"
             preset="outline"
             :is-disabled="!isContentViewable"
-            @click="toggle"
+            @click="
+              e => {
+                e.preventDefault();
+                toggle();
+              }
+            "
           >
             <template #prepend>
               <IconDownload class="w-20 h-20" />
@@ -68,7 +73,6 @@
               :key="contentUrl"
             >
               <ButtonV2
-                :href="parseNFTMetadataURL(contentUrl)"
                 preset="plain"
                 :download="getDownloadFilenameFromURL(contentUrl)"
                 @click="e => handleClickViewContentURL(e, contentUrl, index)"

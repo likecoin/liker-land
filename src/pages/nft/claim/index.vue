@@ -637,7 +637,7 @@ export default {
     canViewContentDirectly() {
       return (
         !this.isFreePurchase &&
-        this.classIds.some(classId =>
+        this.classIds?.some(classId =>
           this.getCanViewNFTBookBeforeClaimByClassId(classId)
         )
       );
@@ -705,7 +705,11 @@ export default {
     claimingAddress(newValue) {
       if (
         !newValue &&
-        !(this.status === 'completed' || this.status === 'pending')
+        !(
+          this.status === 'completed' ||
+          this.status === 'pending' ||
+          this.status === 'pendingNFT'
+        )
       ) {
         this.navigateToState(NFT_CLAIM_STATE.LOGIN);
       } else if (newValue) {
@@ -801,12 +805,16 @@ export default {
                 await this.lazyFetchNFTBookInfoByClassId(item.classId);
               }
             } else if (item.collectionId) {
-              this.lazyFetchNFTCollectionInfoByCollectionId(item.collectionId);
+              this.lazyFetchNFTCollectionInfoByCollectionId({
+                collectionId: item.collectionId,
+              });
             }
           })
         );
       } else if (this.collectionId) {
-        await this.lazyFetchNFTCollectionInfoByCollectionId(this.collectionId);
+        await this.lazyFetchNFTCollectionInfoByCollectionId({
+          collectionId: this.collectionId,
+        });
       } else if (this.classId) {
         await this.lazyGetNFTClassMetadata(this.classId);
         const classCollectionType = getNFTClassCollectionType(
@@ -821,7 +829,7 @@ export default {
       console.error(err);
       this.$nuxt.error({
         statusCode: 404,
-        message: this.t('nft_claim_class_not_found'),
+        message: this.$t('nft_claim_class_not_found'),
       });
       return;
     }
@@ -872,7 +880,11 @@ export default {
       });
     }
 
-    if (this.status === 'completed' || this.status === 'pending') {
+    if (
+      this.status === 'completed' ||
+      this.status === 'pending' ||
+      this.status === 'pendingNFT'
+    ) {
       this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
     } else if (!free && this.status !== 'paid') {
       this.alertPromptError(

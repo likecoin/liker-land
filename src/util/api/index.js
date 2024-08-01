@@ -472,6 +472,7 @@ export const postUserV2WalletEmail = ({
   classId,
   paymentId,
   claimingToken,
+  verify,
 }) => {
   const qsPayload = {
     email,
@@ -479,6 +480,7 @@ export const postUserV2WalletEmail = ({
     class_id: classId,
     payment_id: paymentId,
     claiming_token: claimingToken,
+    verify: verify ? '1' : '0',
   };
   return `/api/v2/users/email?${querystring.stringify(qsPayload)}`;
 };
@@ -604,7 +606,7 @@ export const fetchBookstoreLatestItems = () =>
   `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100&exclude_wallet=${BOOKSTORE_LIST_EXCLUDED_WALLET}`;
 
 export const fetchBookstoreItemsFromCMSForLandingPage = () =>
-  `${EXTERNAL_HOST}/api/bookstore/lists/landing?limit=7`;
+  `${EXTERNAL_HOST}/api/bookstore/lists/landing`;
 
 export const fetchBookstoreItemListsFromCMSById = (id, { limit = 100 } = {}) =>
   `${EXTERNAL_HOST}/api/bookstore/lists/${id}?limit=${limit}&t=1718841600`;
