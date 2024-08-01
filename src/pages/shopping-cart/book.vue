@@ -4,7 +4,7 @@
       'w-full',
       'max-w-[960px]',
       'mx-auto',
-      'px-[.75em] laptop:px-[2em]',
+      'laptop:px-[2em]',
       'pb-[8em]',
       'text-[0.75em] sm:text-[1em]',
     ]"
@@ -12,7 +12,8 @@
     <h1
       :class="[
         'w-full',
-        'mb-[0.5em]',
+        'mb-[12px] sm:mb-[0.5em]',
+        'px-[12px] sm:px-[24px] laptop:px-[0]',
         'text-[#3AB7A2]',
         'text-[1.5rem] sm:text-[3rem]',
         'text-left',
@@ -23,24 +24,27 @@
       {{ $t('shopping_cart_title') }}
     </h1>
 
-    <CardV2 v-if="shoppingCartBookItems.length" class="w-full laptop:px-[2em]">
+    <CardV2
+      v-if="shoppingCartBookItems.length"
+      class="w-full laptop:px-[2em] phoneLg:rounded-[0] phoneLg:px-[12px] phoneLg:py-[16px]"
+    >
       <header
         :class="[
           'grid',
           'grid-cols-12',
-          'gap-[1em]',
-          'pl-[1em]',
+          'gap-[8px] sm:gap-[1em]',
           'p-[0.5em]',
+          'pl-[1em] phone:pl-[0]',
           'border-b-gray-d8',
           'border-b',
           'text-gray-9b',
         ]"
       >
-        <div class="col-start-1 col-end-9">
+        <div class="col-start-1 col-end-8">
           {{ $t('shopping_cart_list_header_item') }}
         </div>
 
-        <div class="col-start-9 col-end-10 text-center">
+        <div class="col-start-8 col-end-10 text-center">
           {{ $t('shopping_cart_list_header_quantity') }}
         </div>
 
@@ -66,21 +70,21 @@
           />
         </li>
       </ul>
-      <footer class="mt-[1em] text-right">
-        <div class="grid grid-cols-6 items-center gap-[1em]">
-          <div class="col-start-2 sm:col-start-4 sm:col-span-1 text-gray-4a">
-            {{ $t('shopping_cart_list_total_price') }}
-          </div>
-          <div
-            class="col-span-4 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]"
-          >
-            {{ totalNFTPriceInUSD | formatNumberWithUSD }}
-          </div>
+      <footer
+        class="grid grid-cols-6 items-center gap-[1em] mt-[1em] text-right"
+      >
+        <div class="col-span-3 sm:col-span-4 text-gray-4a">
+          {{ $t('shopping_cart_list_total_price') }}
+        </div>
+        <div
+          class="col-span-3 sm:col-span-2 text-like-green font-proxima font-[600] leading-1 text-[2em]"
+        >
+          {{ totalNFTPriceInUSD | formatNumberWithUSD }}
         </div>
       </footer>
 
       <div class="flex justify-end mt-[2em]">
-        <div class="flex items-end gap-4">
+        <div>
           <EventModalCollectMethodButton
             :title="$t('shopping_cart_checkout_button_by_card')"
             type="stripe"

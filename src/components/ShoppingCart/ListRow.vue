@@ -3,7 +3,7 @@
     :class="[
       'grid',
       'grid-cols-12',
-      'gap-[1em]',
+      'gap-[8px] sm:gap-[1em]',
       'sm:pl-[1em]',
       'sm:pr-[0.5em]',
       'py-[1.5em]',
@@ -11,77 +11,83 @@
     ]"
   >
     <!-- index -->
-    <div :class="['hidden laptop:block', 'col-span-1']">
-      <span class="min-w-[2em] text-gray-9b">{{ index }}</span>
+    <div class="col-span-1 min-w-[2em] text-gray-9b">
+      {{ index }}
     </div>
     <!-- product info -->
-    <div class="col-span-7">
-      <div class="flex items-start justify-start gap-[12px]">
+    <div
+      :class="[
+        'col-span-6',
+
+        'flex',
+        'items-start',
+        'justify-start',
+        'gap-[8px] sm:gap-[12px]',
+      ]"
+    >
+      <NuxtLink
+        :class="[
+          'block',
+          'flex-shrink-0',
+          'w-full',
+          'max-w-[10vw] laptop:max-w-[80px]',
+          'object-contain',
+        ]"
+        :to="viewInfoLocation"
+      >
+        <NFTCover
+          class="rounded-[4px] overflow-hidden shrink"
+          :src="productImageUrl"
+        />
+      </NuxtLink>
+      <div class="flex flex-col flex-shrink gap-[8px]">
+        <div class="line-clamp-3 font-[600]">
+          <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
+        </div>
         <NuxtLink
           :class="[
-            'block',
-            'flex-shrink-0',
-            'w-[80px] sm:w-full',
-            'max-w-[150px]',
-            'object-contain',
+            'flex',
+            'flex-col laptop:flex-row',
+            'items-start laptop:items-center',
+            'gap-[4px] laptop:gap-[8px]',
+            'group',
+            'text-like-green',
           ]"
-          :to="viewInfoLocation"
+          :to="
+            productOwner
+              ? localeLocation({
+                  name: 'id',
+                  params: { id: productOwner },
+                  query: { tab: 'created' },
+                })
+              : ''
+          "
         >
-          <NFTCover
-            class="rounded-[4px] overflow-hidden shrink"
-            :src="productImageUrl"
+          <Identity
+            :class="['!hidden laptop:!flex']"
+            :avatar-url="productCreator"
+            :avatar-size="32"
+            :is-avatar-disabled="true"
+            :is-avatar-outlined="isCreatorCivicLiker"
+            :is-lazy-loaded="true"
           />
-        </NuxtLink>
-        <div class="flex flex-col flex-shrink gap-[8px]">
-          <div class="line-clamp-3 font-[600]">
-            <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
-          </div>
-          <NuxtLink
+          <span
             :class="[
-              'flex',
-              'flex-col laptop:flex-row',
-              'items-start laptop:items-center',
-              'gap-[4px] laptop:gap-[8px]',
-              'group',
-              'text-like-green',
-              'mt-[.5rem]',
+              'font-[400]',
+              'text-[12px]',
+              'text-medium-gray',
+              'laptop:hidden',
             ]"
-            :to="
-              productOwner
-                ? localeLocation({
-                    name: 'id',
-                    params: { id: productOwner },
-                    query: { tab: 'created' },
-                  })
-                : ''
-            "
+            >{{ $t('identity_type_publisher') }}</span
           >
-            <Identity
-              :class="['!hidden laptop:!flex']"
-              :avatar-url="productCreator"
-              :avatar-size="32"
-              :is-avatar-disabled="true"
-              :is-avatar-outlined="isCreatorCivicLiker"
-              :is-lazy-loaded="true"
-            />
-            <span
-              :class="[
-                'font-[400]',
-                'text-[12px]',
-                'text-medium-gray',
-                'laptop:hidden',
-              ]"
-              >{{ $t('identity_type_publisher') }}</span
-            >
-            <span class="group-hover:underline font-[600]">{{
-              productCreatorDisplayName | ellipsis
-            }}</span>
-          </NuxtLink>
-        </div>
+          <span class="group-hover:underline font-[600]">{{
+            productCreatorDisplayName | ellipsis
+          }}</span>
+        </NuxtLink>
       </div>
     </div>
     <!-- quantity -->
-    <div class="col-span-1 col-start-9 text-center">
+    <div class="col-span-2 col-start-8 text-center">
       {{ quantity }}
     </div>
     <!-- price -->
@@ -91,7 +97,7 @@
       {{ (customPrice || productPrice) | formatNumberWithUSD }}
     </div>
     <!-- remove button -->
-    <div class="col-span-1 flex justify-end mt-[-.25em]">
+    <div class="col-span-1 flex justify-end -mt-[8px]">
       <ButtonV2
         preset="plain"
         size="mini"
