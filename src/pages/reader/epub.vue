@@ -225,7 +225,7 @@
 
     <div
       v-if="isLoading"
-      class="fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-white"
+      class="z-[10] fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-white"
     >
       <ProgressIndicator
         :type="progressIndicatorType"
