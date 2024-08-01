@@ -70,11 +70,7 @@
       :class="[
         'relative',
         'flex',
-        isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
         'flex-col',
-        { 'laptop:flex-row': !isCompactPreset },
-        { '!items-center': isCompactPreset },
-        { 'laptop:gap-[36px]': !isCompactPreset },
         'w-full',
         'rounded-[32px]',
         'px-[16px] sm:px-[32px]',
@@ -88,122 +84,137 @@
       ]"
       v-bind="componentProps"
     >
-      <client-only v-if="!isDetailsPreset && isLazyLoaded">
-        <lazy-component
-          class="absolute inset-0 pointer-events-none -top-full"
-          @show.once="fetchInfo"
-        />
-      </client-only>
-      <div class="flex flex-col items-center shrink-0">
-        <NFTCover
-          v-if="videoSrc"
-          :class="['mt-[-48px]', coverClasses]"
-          :is-nft-book="true"
-          :src="imageSrc || NFTImageUrl"
-          :should-resize-src="shouldResizeSrc"
-          :video-src="videoSrc"
-          :size="200"
-          :theme="theme"
-          :alt="NFTName"
-        />
-        <NFTBookCover
-          v-else
-          :class="['mt-[-48px]', coverClasses]"
-          :src="imageSrc || NFTImageUrl"
-          :alt="NFTName"
-          :resize="200"
-        />
+      <div
+        :class="[
+          isDetailsPreset ? 'laptop:items-start' : 'laptop:items-end',
+          'flex',
+          'flex-col',
+          { 'laptop:flex-row': !isCompactPreset },
+          { '!items-center': isCompactPreset },
+          { 'laptop:gap-[36px]': !isCompactPreset },
+        ]"
+      >
+        <client-only v-if="!isDetailsPreset && isLazyLoaded">
+          <lazy-component
+            class="absolute inset-0 pointer-events-none -top-full"
+            @show.once="fetchInfo"
+          />
+        </client-only>
+        <div class="flex flex-col items-center shrink-0">
+          <NFTCover
+            v-if="videoSrc"
+            :class="['mt-[-48px]', coverClasses]"
+            :is-nft-book="true"
+            :src="imageSrc || NFTImageUrl"
+            :should-resize-src="shouldResizeSrc"
+            :video-src="videoSrc"
+            :size="200"
+            :theme="theme"
+            :alt="NFTName"
+          />
+          <NFTBookCover
+            v-else
+            :class="['mt-[-48px]', coverClasses]"
+            :src="imageSrc || NFTImageUrl"
+            :alt="NFTName"
+            :resize="200"
+          />
 
-        <div class="hidden laptop:block">
+          <div class="hidden laptop:block">
+            <slot name="column-left" />
+          </div>
+        </div>
+        <!-- Info column -->
+        <div
+          :class="[
+            'flex',
+            'flex-col',
+            'items-center',
+            { 'laptop:items-start': !isCompactPreset },
+            'justify-start',
+            'py-[32px]',
+            'gap-[12px]',
+            'grow',
+          ]"
+        >
+          <Label
+            v-if="isNew"
+            class="text-like-cyan"
+            :text="$t('campaign_nft_book_just_arrived')"
+          />
+          <Label preset="h4" :class="titleStyle" :text="NFTName" />
+          <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
+            {{ bookDescriptionTrimmed }}
+          </p>
+          <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
+            <li
+              v-if="iscnWorkAuthor"
+              class="flex flex-col justify-center min-w-0 ml-[8px]"
+            >
+              <span class="text-like-cyan-gray text-10">{{
+                $t('identity_type_author')
+              }}</span>
+              <span :class="['font-[600]', displayNameStyle]">{{
+                iscnWorkAuthor
+              }}</span>
+            </li>
+            <client-only>
+              <li>
+                <NuxtLink
+                  class="flex items-center text-like-green group my-[8px]"
+                  :to="
+                    iscnOwner
+                      ? localeLocation({
+                          name: 'id',
+                          params: { id: iscnOwner },
+                          query: { tab: 'created' },
+                        })
+                      : ''
+                  "
+                  @click.native.stop="onClickAvatar"
+                >
+                  <Identity
+                    class="shrink-0"
+                    :avatar-url="creatorAvatar"
+                    :avatar-size="42"
+                    :is-avatar-disabled="true"
+                    :is-lazy-loaded="true"
+                  />
+                  <div class="flex flex-col justify-start ml-[8px] min-w-0">
+                    <span
+                      class="text-like-cyan-gray text-10 group-hover:underline"
+                      >{{
+                        $t(
+                          iscnWorkAuthor
+                            ? 'identity_type_publisher'
+                            : 'identity_type_creator'
+                        )
+                      }}</span
+                    >
+                    <span
+                      :class="[
+                        'group-hover:underline',
+                        'font-[600]',
+                        'truncate',
+                        displayNameStyle,
+                      ]"
+                      >{{ creatorDisplayNameFull }}</span
+                    >
+                  </div>
+                </NuxtLink>
+              </li>
+            </client-only>
+          </ul>
+          <div class="flex flex-col items-center w-full laptop:hidden">
+            <slot name="column-edition-select" />
+          </div>
+        </div>
+        <div class="flex flex-col items-center laptop:hidden">
           <slot name="column-left" />
         </div>
       </div>
-      <!-- Info column -->
-      <div
-        :class="[
-          'flex',
-          'flex-col',
-          'items-center',
-          { 'laptop:items-start': !isCompactPreset },
-          'justify-start',
-          'py-[32px]',
-          'gap-[12px]',
-          'grow',
-        ]"
-      >
-        <Label
-          v-if="isNew"
-          class="text-like-cyan"
-          :text="$t('campaign_nft_book_just_arrived')"
-        />
-        <Label preset="h4" :class="titleStyle" :text="NFTName" />
-        <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
-          {{ bookDescriptionTrimmed }}
-        </p>
-        <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
-          <li
-            v-if="iscnWorkAuthor"
-            class="flex flex-col justify-center min-w-0 ml-[8px]"
-          >
-            <span class="text-like-cyan-gray text-10">{{
-              $t('identity_type_author')
-            }}</span>
-            <span :class="['font-[600]', displayNameStyle]">{{
-              iscnWorkAuthor
-            }}</span>
-          </li>
-          <client-only>
-            <li>
-              <NuxtLink
-                class="flex items-center text-like-green group my-[8px]"
-                :to="
-                  iscnOwner
-                    ? localeLocation({
-                        name: 'id',
-                        params: { id: iscnOwner },
-                        query: { tab: 'created' },
-                      })
-                    : ''
-                "
-                @click.native.stop="onClickAvatar"
-              >
-                <Identity
-                  class="shrink-0"
-                  :avatar-url="creatorAvatar"
-                  :avatar-size="42"
-                  :is-avatar-disabled="true"
-                  :is-lazy-loaded="true"
-                />
-                <div class="flex flex-col justify-start ml-[8px] min-w-0">
-                  <span
-                    class="text-like-cyan-gray text-10 group-hover:underline"
-                    >{{
-                      $t(
-                        iscnWorkAuthor
-                          ? 'identity_type_publisher'
-                          : 'identity_type_creator'
-                      )
-                    }}</span
-                  >
-                  <span
-                    :class="[
-                      'group-hover:underline',
-                      'font-[600]',
-                      'truncate',
-                      displayNameStyle,
-                    ]"
-                    >{{ creatorDisplayNameFull }}</span
-                  >
-                </div>
-              </NuxtLink>
-            </li>
-          </client-only>
-        </ul>
-
-        <slot name="column-right" />
-      </div>
-      <div class="flex flex-col items-center laptop:hidden">
-        <slot name="column-left" />
+      <div class="pb-[32px] w-full hidden laptop:flex flex-col">
+        <slot name="column-edition-select" />
       </div>
     </component>
 

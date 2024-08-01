@@ -1,8 +1,8 @@
 <template>
-  <div v-show="shoppingCartNFTClassList.length > 0" class="relative">
+  <div v-show="shoppingCartBookProductList.length > 0" class="relative">
     <ButtonV2
       preset="tertiary"
-      :to="localeLocation({ name: 'shopping-cart' })"
+      :to="localeLocation({ name: 'shopping-cart-book' })"
       @click="handleClickCartButton"
     >
       <LocalMallIcon class="w-20 h-20 text-like-green" />
@@ -27,7 +27,7 @@
       ]"
     >
       <span class="text-like-cyan text-[10px] leading-[1em]">
-        {{ shoppingCartNFTClassList.length }}
+        {{ shoppingCartBookProductList.length }}
       </span>
     </div>
   </div>
@@ -46,7 +46,7 @@ export default {
     LocalMallIcon,
   },
   computed: {
-    ...mapGetters(['getAddress', 'shoppingCartNFTClassList']),
+    ...mapGetters(['getAddress', 'shoppingCartBookProductList']),
   },
   methods: {
     handleClickCartButton() {

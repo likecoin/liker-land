@@ -45,6 +45,22 @@ export default {
         ? this.collectionAvailablePriceLabel
         : this.nftBookAvailablePriceLabel;
     },
+    productCreator() {
+      return this.isCollection ? this.collectionCreator : this.creator;
+    },
+    productCreatorAvatar() {
+      return this.isCollection
+        ? this.collectionCreatorAvatar
+        : this.creatorAvatar;
+    },
+    productCreatorDisplayName() {
+      return this.isCollection
+        ? this.collectionCreatorDisplayName
+        : this.creatorDisplayName;
+    },
+    productPrice() {
+      return this.isCollection ? this.collectionPrice : this.NFTPrice;
+    },
     viewInfoLocation() {
       return this.isCollection
         ? this.localeLocation({

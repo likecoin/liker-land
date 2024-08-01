@@ -573,7 +573,7 @@ export default {
         .filter(classId => !collectedSet.has(classId));
       if (classIds.length) {
         this.addNFTClassesToShoppingCart({ classIds });
-        this.$router.push(this.localeLocation({ name: 'shopping-cart' }));
+        this.$router.push(this.localeLocation({ name: 'shopping-cart-wnft' }));
       } else {
         this.alertPromptSuccess(this.$t('portfolio_collect_all_already_alert'));
       }

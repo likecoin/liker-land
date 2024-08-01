@@ -3,77 +3,101 @@
     :class="[
       'grid',
       'grid-cols-12',
-      'gap-[1em]',
+      'gap-[8px] sm:gap-[1em]',
       'sm:pl-[1em]',
       'sm:pr-[0.5em]',
       'py-[1.5em]',
       { 'animate-pulse': isFetching },
     ]"
   >
+    <!-- index -->
+    <div class="col-span-1 min-w-[2em] text-gray-9b">
+      {{ index }}
+    </div>
+    <!-- product info -->
     <div
       :class="[
-        'col-span-1 laptop:col-span-2',
+        'col-span-6',
+
         'flex',
-        'flex-col laptop:flex-row',
         'items-start',
-        'gap-[.5em]',
+        'justify-start',
+        'gap-[8px] sm:gap-[12px]',
       ]"
     >
-      <span class="min-w-[2em] text-gray-9b">{{ index }}</span>
-      <NuxtLink class="hidden laptop:block" :to="nftCollectRoute">
-        <NFTCover
-          class="rounded-[4px] overflow-hidden shrink"
-          :src="NFTImageUrl"
-        />
-      </NuxtLink>
-    </div>
-    <!--
-    <div class="col-span-6 laptop:col-span-5">
-    -->
-    <div class="col-span-8 laptop:col-span-7">
-      <NuxtLink class="block laptop:hidden mb-[.75em]" :to="nftCollectRoute">
-        <NFTCover
-          class="rounded-[4px] overflow-hidden shrink"
-          :src="NFTImageUrl"
-        />
-      </NuxtLink>
-      <div class="line-clamp-2 font-[600]">
-        <NuxtLink :to="nftCollectRoute">{{ NFTName }}</NuxtLink>
-      </div>
-      <div class="line-clamp-2 mt-[.5em] text-gray-9b">
-        <NuxtLink :to="nftCollectRoute">{{ NFTDescription }}</NuxtLink>
-      </div>
       <NuxtLink
-        class="flex items-center group text-like-green mt-[.5rem]"
-        :to="
-          iscnOwner
-            ? localeLocation({
-                name: 'id',
-                params: { id: iscnOwner },
-                query: { tab: 'created' },
-              })
-            : ''
-        "
+        :class="[
+          'block',
+          'flex-shrink-0',
+          'w-full',
+          'max-w-[10vw] laptop:max-w-[80px]',
+          'object-contain',
+        ]"
+        :to="viewInfoLocation"
       >
-        <Identity
-          :avatar-url="creatorAvatar"
-          :avatar-size="32"
-          :is-avatar-disabled="true"
-          :is-avatar-outlined="isCreatorCivicLiker"
-          :is-lazy-loaded="true"
+        <NFTCover
+          class="rounded-[4px] overflow-hidden shrink"
+          :src="productImageUrl"
         />
-        <span class="ml-[8px] group-hover:underline font-[600]">{{
-          creatorDisplayName | ellipsis
-        }}</span>
       </NuxtLink>
+      <div class="flex flex-col flex-shrink gap-[8px]">
+        <div class="line-clamp-3 font-[600]">
+          <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
+        </div>
+        <NuxtLink
+          :class="[
+            'flex',
+            'flex-col laptop:flex-row',
+            'items-start laptop:items-center',
+            'gap-[4px] laptop:gap-[8px]',
+            'group',
+            'text-like-green',
+          ]"
+          :to="
+            productOwner
+              ? localeLocation({
+                  name: 'id',
+                  params: { id: productOwner },
+                  query: { tab: 'created' },
+                })
+              : ''
+          "
+        >
+          <Identity
+            :class="['!hidden laptop:!flex']"
+            :avatar-url="productCreator"
+            :avatar-size="32"
+            :is-avatar-disabled="true"
+            :is-avatar-outlined="isCreatorCivicLiker"
+            :is-lazy-loaded="true"
+          />
+          <span
+            :class="[
+              'font-[400]',
+              'text-[12px]',
+              'text-medium-gray',
+              'laptop:hidden',
+            ]"
+            >{{ $t('identity_type_publisher') }}</span
+          >
+          <span class="group-hover:underline font-[600]">{{
+            productCreatorDisplayName | ellipsis
+          }}</span>
+        </NuxtLink>
+      </div>
     </div>
-    <div class="col-span-2 text-center text-like-green font-proxima font-[600]">
-      {{ NFTPrice | formatNumberWithUSD }}
+    <!-- quantity -->
+    <div class="col-span-2 col-start-8 text-center">
+      {{ quantity }}
     </div>
-    <!--
-    <div class="col-span-2 text-center">{{ quantity }}</div>
-    -->
-    <div class="col-span-1 flex justify-end mt-[-.25em]">
+    <!-- price -->
+    <div
+      class="col-start-10 col-end-12 text-center text-like-green font-proxima font-[600]"
+    >
+      {{ (customPrice || productPrice) | formatNumberWithUSD }}
+    </div>
+    <!-- remove button -->
+    <div class="col-span-1 flex justify-end -mt-[8px]">
       <ButtonV2
         preset="plain"
         size="mini"
@@ -89,7 +113,7 @@
 <script>
 import { ellipsis, formatNumberWithUSD } from '~/util/ui';
 
-import nftMixin from '~/mixins/nft';
+import nftOrCollection from '~/mixins/nft-or-collection';
 
 export default {
   name: 'ShoppingCartListRow',
@@ -97,25 +121,48 @@ export default {
     ellipsis,
     formatNumberWithUSD,
   },
-  mixins: [nftMixin],
+  mixins: [nftOrCollection],
   props: {
     classId: {
       type: String,
-      required: true,
+      default: '',
+    },
+    priceIndex: {
+      type: Number,
+      default: 0,
+    },
+    collectionId: {
+      type: String,
+      default: '',
     },
     index: {
       type: Number,
       required: true,
     },
-    quantity: {
+    customPrice: {
       type: Number,
       default: 0,
+    },
+    quantity: {
+      type: Number,
+      default: 1,
+    },
+    from: {
+      type: String,
+      default: '',
     },
   },
   data() {
     return {
       isFetching: false,
     };
+  },
+  computed: {
+    productDisplayDescription() {
+      return this.from
+        ? `[${this.from}] ${this.productDescription}`
+        : this.productDescription;
+    },
   },
   mounted() {
     this.fetchInfo();
@@ -124,13 +171,23 @@ export default {
     async fetchInfo() {
       try {
         this.isFetching = true;
-        await this.lazyFetchNFTClassAggregatedData();
+        if (this.collectionId) {
+          await Promise.all([
+            this.lazyFetchNFTCollectionInfo(),
+            this.lazyFetchNFTCollectionPaymentPriceInfo(),
+          ]);
+        } else {
+          await Promise.all([
+            this.lazyFetchNFTClassAggregatedData(),
+            this.lazyFetchNFTBookPaymentPriceInfo(),
+          ]);
+        }
       } finally {
         this.isFetching = false;
       }
     },
     handleClickRemoveButton() {
-      this.$emit('remove', this.classId);
+      this.$emit('remove', this.productId);
     },
   },
 };

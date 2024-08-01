@@ -10,7 +10,7 @@
           preset="details"
           @click-avatar="handleNFTCardClickAvatar"
         >
-          <template #column-right>
+          <template #column-edition-select>
             <Separator />
 
             <NFTEditionSelect
@@ -19,6 +19,7 @@
               :items="[formattedCollection]"
               :should-show-notify-button="false"
               @click-collect="handleCollectFromEditionSelector"
+              @click-add-to-cart="handleClickAddToCart"
               @click-gift="handleGiftFromEditionSelector"
               @input-custom-price="handleInputCustomPrice"
             />
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
@@ -97,6 +98,7 @@ export default {
       customPrice: 0,
       isTippingDialogOpen: false,
       isOpeningCheckoutPage: false,
+      isAddingToCart: false,
     };
   },
   async fetch({ route, store, error }) {
@@ -167,6 +169,7 @@ export default {
       'getNFTClassMetadataById',
       'getGaClientId',
       'getGaSessionId',
+      'getShoppingCartBookProductQuantity',
     ]),
     collectionId() {
       return this.$route.params.collectionId;
@@ -219,6 +222,11 @@ export default {
     });
   },
   methods: {
+    ...mapActions([
+      'addBookProductToShoppingCart',
+      'uiPromptSuccessAlert',
+      'uiPromptErrorAlert',
+    ]),
     parseNFTMetadataURL,
     handleNFTCardClickAvatar() {
       logTrackerEvent(
@@ -231,6 +239,46 @@ export default {
     },
     handleInputCustomPrice(price) {
       this.customPrice = Number(price);
+    },
+    handleClickAddToCart() {
+      if (this.getShoppingCartBookProductQuantity(this.collectionId) > 0) {
+        this.handleAddToCart();
+        return;
+      }
+      this.isAddingToCart = true;
+      this.checkTippingAvailability();
+    },
+    handleAddToCart() {
+      this.isAddingToCart = false;
+      const hasStock = this.collection?.stock;
+      if (!hasStock) return;
+      const customPriceInDecimal = this.customPrice
+        ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
+        : undefined;
+      if (this.collectionPrice === 0 && !this.customPrice) {
+        this.uiPromptErrorAlert(this.$t('cart_item_free_not_supported'));
+        return;
+      }
+      const purchaseEventParams = {
+        items: [
+          {
+            name: this.collectionName,
+            price: this.collectionPrice,
+            collection: this.collectionId,
+          },
+        ],
+        price: this.collectionPrice,
+        currency: 'USD',
+        isNFTBook: true,
+      };
+      logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+      this.addBookProductToShoppingCart({
+        collectionId: this.collectionId,
+        from: this.platform,
+        customPriceInDecimal,
+        coupon: this.$route.query.coupon,
+      });
+      this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
     async handleCollectFromEdition(giftInfo = undefined) {
       const hasStock = this.collection?.stock;
@@ -321,7 +369,11 @@ export default {
         this.isTippingDialogOpen = true;
         return;
       }
-      this.handleCollectFromEdition();
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        this.handleCollectFromEdition();
+      }
     },
     formatCustomPrice(customPrice, editionPrice) {
       let newPrice = parseFloat(customPrice);
@@ -371,7 +423,12 @@ export default {
     },
     handleSubmitTipping(price) {
       this.customPrice = Number(price);
-      this.handleCollectFromEdition();
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        this.handleCollectFromEdition();
+      }
+      this.isTippingDialogOpen = false;
     },
     handleSkipTipping() {
       logTrackerEvent(
@@ -382,7 +439,12 @@ export default {
         1
       );
       this.customPrice = 0;
-      this.handleCollectFromEdition();
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        this.handleCollectFromEdition();
+      }
+      this.isTippingDialogOpen = false;
     },
   },
 };

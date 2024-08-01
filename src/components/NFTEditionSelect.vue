@@ -25,15 +25,15 @@
         'flex',
         'flex-wrap',
         'justify-end',
-        'items-center',
-        'gap-[12px] sm:gap-x-[24px]',
+        'items-stretch sm:items-center',
+        'gap-[12px]',
         'flex-col sm:flex-row',
       ]"
     >
       <ButtonV2
         v-if="!isSingleItem && !isAllSoldOut"
         preset="plain"
-        class="text-white underline phone:order-1"
+        class="text-white underline max-638:order-1"
         :text="$t('nft_edition_select_compare_button_text')"
         @click="handleClickCompareItemsButton"
       />
@@ -72,6 +72,19 @@
       >
         <template #prepend>
           <NFTWidgetIconInsertCoin class="w-[16px]" />
+        </template>
+      </ButtonV2>
+      <ButtonV2
+        v-if="
+          !isAllSoldOut && selectedItem.price > 0 && !selectedItem.hasShipping
+        "
+        :is-disabled="!selectedItem"
+        preset="secondary"
+        :text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
+        @click="handleClickAddToCartButton"
+      >
+        <template #prepend>
+          <IconAdd class="w-[16px]" />
         </template>
       </ButtonV2>
       <ButtonV2
@@ -152,12 +165,12 @@ export default {
       if (this.isAllSoldOut) {
         classes.push('p-[24px]');
       } else if (this.isSingleItem) {
-        classes.push('px-[20px]', 'py-[20px] sm:py-[8px]');
+        classes.push('px-[20px]', 'py-[20px] sm:pt-[16px] sm:pb-[24px]');
       } else {
         classes.push(
           'p-[12px] sm:p-[24px]',
           'pt-[4px] sm:pt-[16px]',
-          'pb-[14px]'
+          'pb-[16px]'
         );
       }
       return classes;
@@ -198,6 +211,9 @@ export default {
     },
     handleClickCollectButton() {
       this.$emit('click-collect', this.selectedValue);
+    },
+    handleClickAddToCartButton() {
+      this.$emit('click-add-to-cart', this.selectedValue);
     },
     handleClickNotifyButton() {
       this.$emit('click-notify');

@@ -21,9 +21,7 @@
     </NuxtLink>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
-      <!--
       <ShoppingCartSiteButton />
-      -->
 
       <div v-if="loginAddress" class="relative">
         <ButtonV2
