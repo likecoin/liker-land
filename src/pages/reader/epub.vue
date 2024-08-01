@@ -142,25 +142,13 @@
       </div>
     </header>
 
-    <main class="relative grow bg-gray-f7">
-      <div class="absolute inset-0 laptop:inset-[24px] laptop:inset-x-[32px]">
+    <main class="relative grow">
+      <div class="absolute inset-y-0 inset-x-[16px] laptop:inset-x-[32px]">
         <div
           id="viewer"
           ref="epubViewer"
           :key="cacheKey"
-          :class="[
-            'relative',
-
-            'w-full',
-            'h-full',
-            'max-w-[1200px]',
-            'mx-auto',
-            'my-0',
-
-            'bg-white',
-            'shadow-lg',
-            'rounded-[8px]',
-          ]"
+          class="relative w-full h-full bg-white"
         />
       </div>
 
@@ -200,7 +188,7 @@
             />
           </svg>
         </button>
-        <div class="grow max-w-[1200px]" />
+        <div class="grow" />
         <button
           class="flex items-center cursor-pointer select-none pointer-events-auto laptop:p-[8px]"
           @click="onClickGoToNextPage"
