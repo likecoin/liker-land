@@ -261,6 +261,7 @@ const nuxtConfig = {
           'https://js.stripe.com',
           'https://hooks.stripe.com',
           'bid.g.doubleclick.net',
+          'td.doubleclick.net',
           'https://likecoin.github.io',
           'verify.walletconnect.com',
           'www.facebook.com',
