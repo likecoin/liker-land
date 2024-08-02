@@ -145,6 +145,7 @@ export default {
         price: this.totalNFTPriceInUSD,
         currency: 'USD',
         items: this.shoppingCartBookItems,
+        isNFTBook: true,
       };
     },
     productIdList() {
@@ -166,7 +167,7 @@ export default {
     },
   },
   mounted() {
-    logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
+    logPurchaseFlowEvent(this, 'view_cart', this.purchaseEventParams);
   },
   methods: {
     ...mapActions([
@@ -177,16 +178,29 @@ export default {
       'lazyFetchNFTCollectionInfoByCollectionId',
       'uiSetTxError',
     ]),
-    handleClickRemoveButton(productId) {
-      logTrackerEvent(this, 'NFT', 'shopping_cart_remove_item', productId, 1);
+    handleClickRemoveButton(item) {
+      const { productId } = item;
+      logPurchaseFlowEvent(this, 'remove_from_cart', {
+        items: [item],
+        price: item.price * item.quantity,
+        currency: 'USD',
+        isNFTBook: true,
+      });
+      logTrackerEvent(
+        this,
+        'BookCart',
+        'BookCartClickRemove',
+        this.productId,
+        1
+      );
       this.removeBookProductFromShoppingCart({ productId });
     },
     async handleClickCheckoutByFiatButton() {
       try {
         logTrackerEvent(
           this,
-          'NFT',
-          'NFTCollectPaymentMethod(Stripe)',
+          'BookCart',
+          'BookCartClickCheckout',
           this.productIdList,
           1
         );
@@ -216,7 +230,7 @@ export default {
     handleClickEmptyNoticeButton() {
       logTrackerEvent(
         this,
-        'NFT',
+        'BookCart',
         'shopping_cart_click_empty_notice_button',
         this.getAddress,
         1

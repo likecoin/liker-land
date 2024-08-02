@@ -80,6 +80,7 @@ export function logPurchaseFlowEvent(
     if (
       ![
         'view_item',
+        'view_cart',
         'begin_checkout',
         'add_shipping_info',
         'add_to_cart',
@@ -94,14 +95,17 @@ export function logPurchaseFlowEvent(
         transaction_id: txHash,
         value: price,
         currency,
-        items: items.map(i => ({
-          item_id: i.classId,
-          item_name: i.name?.substring(0, 100),
-          item_brand: isNFTBook ? 'Book NFT' : 'Writing NFT',
-          currency,
-          price: i.price,
-          quantity: 1,
-        })),
+        items: items.map(i => {
+          const itemId = i.productId || i.collectionId || i.classId;
+          return {
+            item_id: itemId,
+            item_name: i.name?.substring(0, 100) || itemId,
+            item_brand: isNFTBook ? 'NFT Book' : 'Writing NFT',
+            currency,
+            price: i.price,
+            quantity: i.quantity || 1,
+          };
+        }),
       });
     }
     if (window.fbq && !IS_TESTNET) {

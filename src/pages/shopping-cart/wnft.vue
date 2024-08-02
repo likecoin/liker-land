@@ -207,6 +207,7 @@ export default {
   mounted() {
     this.updateLIKEPrice();
     logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
+    logPurchaseFlowEvent(this, 'view_cart', this.purchaseEventParams);
   },
   methods: {
     ...mapActions([
@@ -218,14 +219,13 @@ export default {
       'uiSetTxStatus',
       'uiToggleCollectModal',
     ]),
-    handleClickRemoveButton(classId) {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'shopping_cart_remove_item',
-        this.getAddress,
-        1
-      );
+    handleClickRemoveButton(item) {
+      const { classId } = item;
+      logPurchaseFlowEvent(this, 'remove_from_cart', {
+        items: [item],
+        price: item.price * item.quantity,
+        currency: 'USD',
+      });
       this.removeNFTClassFromShoppingCart({ classId });
     },
     async handleClickCheckoutByLIKEButton() {
@@ -318,6 +318,7 @@ export default {
           this.classIdList,
           1
         );
+        logPurchaseFlowEvent(this, 'begin_checkout', this.purchaseEventParams);
         await this.collectNFTWithStripe(this.classIdList);
       } catch (error) {
         this.uiSetTxError(error.response?.data || error.toString());
