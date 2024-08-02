@@ -283,6 +283,13 @@ export default {
         return;
       }
       logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
+      logTrackerEvent(
+        this,
+        'BookCart',
+        'BookCartAddItem',
+        this.collectionId,
+        1
+      );
       this.addBookProductToShoppingCart({
         collectionId: this.collectionId,
         from: this.platform,

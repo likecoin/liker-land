@@ -186,13 +186,7 @@ export default {
         currency: 'USD',
         isNFTBook: true,
       });
-      logTrackerEvent(
-        this,
-        'BookCart',
-        'BookCartClickRemove',
-        this.productId,
-        1
-      );
+      logTrackerEvent(this, 'BookCart', 'BookCartRemoveItem', productId, 1);
       this.removeBookProductFromShoppingCart({ productId });
     },
     async handleClickCheckoutByFiatButton() {
@@ -200,7 +194,7 @@ export default {
         logTrackerEvent(
           this,
           'BookCart',
-          'BookCartClickCheckout',
+          'BookCartBeginCheckout',
           this.productIdList,
           1
         );
