@@ -177,11 +177,34 @@ export default {
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
+    quantity() {
+      return this.$route.query.quantity || 1;
+    },
     shelfItems() {
       return this.classIds.map(id => ({ classId: id }));
     },
     defaultCurrency() {
       return this.collection?.defaultPaymentCurrency;
+    },
+    purchaseEventParams() {
+      const customPriceInDecimal = this.customPrice
+        ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
+        : undefined;
+      const totalPrice =
+        (customPriceInDecimal || this.collectionPrice) * this.quantity;
+      return {
+        items: [
+          {
+            name: this.collectionName,
+            price: customPriceInDecimal || this.collectionPrice,
+            collection: this.collectionId,
+            quantity: this.quantity,
+          },
+        ],
+        price: totalPrice,
+        currency: 'USD',
+        isNFTBook: true,
+      };
     },
   },
   mounted() {
@@ -259,19 +282,7 @@ export default {
         this.uiPromptErrorAlert(this.$t('cart_item_free_not_supported'));
         return;
       }
-      const purchaseEventParams = {
-        items: [
-          {
-            name: this.collectionName,
-            price: this.collectionPrice,
-            collection: this.collectionId,
-          },
-        ],
-        price: this.collectionPrice,
-        currency: 'USD',
-        isNFTBook: true,
-      };
-      logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+      logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
       this.addBookProductToShoppingCart({
         collectionId: this.collectionId,
         from: this.platform,
@@ -287,20 +298,12 @@ export default {
       if (hasStock) {
         try {
           this.isOpeningCheckoutPage = true;
-          const purchaseEventParams = {
-            items: [
-              {
-                name: this.collectionName,
-                price: this.collectionPrice,
-                collection: this.collectionId,
-              },
-            ],
-            price: this.collectionPrice,
-            currency: 'USD',
-            isNFTBook: true,
-          };
-          logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
-          logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+          logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
+          logPurchaseFlowEvent(
+            this,
+            'begin_checkout',
+            this.purchaseEventParams
+          );
           if (this.collectionPrice === 0 && !this.customPrice) {
             this.$router.push(
               this.localeLocation({
@@ -317,7 +320,6 @@ export default {
             const customPriceInDecimal = this.customPrice
               ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
               : undefined;
-
             const gaClientId = this.getGaClientId;
             const gaSessionId = this.getGaSessionId;
             const link = getNFTBookPurchaseLink({

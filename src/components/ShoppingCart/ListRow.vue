@@ -187,7 +187,15 @@ export default {
       }
     },
     handleClickRemoveButton() {
-      this.$emit('remove', this.productId);
+      const item = {
+        classId: this.classId,
+        priceIndex: this.priceIndex,
+        collectionId: this.collectionId,
+        name: this.productName,
+        quantity: this.quantity || 1,
+        price: this.customPrice || this.productPrice,
+      };
+      this.$emit('remove', item);
     },
   },
 };

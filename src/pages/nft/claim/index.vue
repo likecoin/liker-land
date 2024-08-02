@@ -564,6 +564,7 @@ export default {
       creatorMessage: '',
       claimingAddressInput: '',
       claimingFreeEmail: this.walletEmail || '',
+      quantity: 1,
       giftInfo: null,
       isPhysicalOnly: false,
       isAutoDeliver: false,
@@ -772,12 +773,14 @@ export default {
           status,
           autoMemo,
           isAutoDeliver,
+          quantity,
         } = data;
         this.giftInfo = giftInfo;
         this.isPhysicalOnly = isPhysicalOnly;
         this.isAutoDeliver = isAutoDeliver;
         this.creatorMessage = autoMemo;
         this.status = status;
+        this.quantity = quantity;
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
@@ -837,7 +840,7 @@ export default {
     if (!free && !this.giftInfo && redirect && query.type === 'nft_book') {
       const items = this.cartItems.length
         ? this.cartItems.map(item => {
-            const { classId, collectionId, price } = item;
+            const { classId, collectionId, price, quantity = 1 } = item;
             const name = classId
               ? this.getNFTClassMetadataById(classId)?.name
               : this.getNFTCollectionInfoByCollectionId(collectionId)?.name[
@@ -848,6 +851,7 @@ export default {
               classId,
               collectionId,
               price,
+              quantity,
             };
           })
         : [
@@ -856,6 +860,7 @@ export default {
               classId: this.classId,
               collectionId: this.collectionId,
               price,
+              quantity: this.quantity,
             },
           ];
 
@@ -872,6 +877,7 @@ export default {
           collectionId: item.collectionId,
           classId: item.classId,
           price: item.price,
+          quantity: item.quantity || 1,
         });
       });
       this.$router.replace({
