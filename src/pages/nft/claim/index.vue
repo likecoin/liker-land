@@ -793,7 +793,7 @@ export default {
     }
 
     try {
-      if (this.cartItems) {
+      if (this.cartItems.length) {
         await Promise.all(
           this.cartItems.map(async item => {
             if (item.classId) {
