@@ -687,6 +687,9 @@ export default {
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
+    quantity() {
+      return this.$route.query.quantity || 1;
+    },
     isTransferDisabled() {
       return this.isOwnerInfoLoading || !this.userCollectedCount;
     },
@@ -845,6 +848,26 @@ export default {
         this.lazyGetUserInfoByAddresses(trimmedCollectors),
         this.updateNFTHistory({ getAllUserInfo: false }),
       ]);
+    },
+    getPurchaseEventParams(edition) {
+      const customPriceInDecimal = this.customPrice
+        ? this.formatCustomPrice(this.customPrice, edition.price)
+        : undefined;
+      const totalPrice =
+        (customPriceInDecimal || edition.price) * this.quantity;
+      return {
+        items: [
+          {
+            name: this.NFTName,
+            price: customPriceInDecimal || edition.price,
+            classId: this.classId,
+            quantity: this.quantity,
+          },
+        ],
+        price: totalPrice,
+        currency: 'USD',
+        isNFTBook: true,
+      };
     },
     async handleFetchRecommendInfo() {
       await this.fetchRecommendInfo();
@@ -1054,6 +1077,8 @@ export default {
         customPriceInDecimal,
         coupon: this.$route.query.coupon,
       });
+      const purchaseEventParams = this.getPurchaseEventParams(edition);
+      logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
@@ -1065,18 +1090,7 @@ export default {
       if (hasStock) {
         try {
           this.isOpeningCheckoutPage = true;
-          const purchaseEventParams = {
-            items: [
-              {
-                name: this.NFTName,
-                price: edition.price,
-                classId: this.classId,
-              },
-            ],
-            price: edition.price,
-            currency: 'USD',
-            isNFTBook: true,
-          };
+          const purchaseEventParams = this.getPurchaseEventParams(edition);
           logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
           logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
           if (edition.price === 0 && !this.customPrice) {
@@ -1100,11 +1114,6 @@ export default {
           ) {
             await this.initIfNecessary();
             if (this.hasConnectedWallet) {
-              logPurchaseFlowEvent(
-                this,
-                'add_shipping_info',
-                purchaseEventParams
-              );
               this.fetchUserCollectedCount();
               this.walletFetchLIKEBalance();
             }
