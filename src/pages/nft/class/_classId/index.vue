@@ -1079,6 +1079,7 @@ export default {
       });
       const purchaseEventParams = this.getPurchaseEventParams(edition);
       logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+      logTrackerEvent(this, 'BookCart', 'BookCartAddItem', this.classId, 1);
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
