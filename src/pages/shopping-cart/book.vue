@@ -137,14 +137,30 @@ export default {
     ...mapGetters([
       'getNFTClassMetadataById',
       'getNFTClassPaymentPriceById',
+      'getNFTCollectionInfoByCollectionId',
       'shoppingCartBookProductList',
       'shoppingCartBookItems',
     ]),
     purchaseEventParams() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
       return {
         price: this.totalNFTPriceInUSD,
         currency: 'USD',
-        items: this.shoppingCartBookItems,
+        items: this.shoppingCartBookItems.map(item => {
+          const { classId, collectionId } = item;
+          const name = classId
+            ? this.getNFTClassMetadataById(classId)?.name
+            : this.getNFTCollectionInfoByCollectionId(collectionId)?.name[
+                locale
+              ];
+          return {
+            name,
+            ...item,
+          };
+        }),
         isNFTBook: true,
       };
     },
