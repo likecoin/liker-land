@@ -84,6 +84,7 @@ export function logPurchaseFlowEvent(
         'begin_checkout',
         'add_shipping_info',
         'add_to_cart',
+        'remove_from_cart',
         'purchase',
       ].includes(event)
     ) {
