@@ -188,6 +188,7 @@ export default {
     },
     handleClickRemoveButton() {
       const item = {
+        productId: this.productId,
         classId: this.classId,
         priceIndex: this.priceIndex,
         collectionId: this.collectionId,
