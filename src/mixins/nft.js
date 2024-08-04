@@ -392,7 +392,8 @@ export default {
         currency,
       };
       return prices
-        ? prices.map((edition, index) => {
+        ? prices.map((edition, i) => {
+            const index = edition.index ?? i;
             let { name, description } = edition;
 
             if (typeof name === 'object') {
@@ -439,7 +440,7 @@ export default {
               isAllowCustomPrice,
               isPhysicalOnly,
               hasShipping,
-              dynamicCovers: getDynamicCovers(this.classId, edition.index),
+              dynamicCovers: getDynamicCovers(this.classId, index),
               defaultPrice: edition.price,
             };
           })
@@ -816,15 +817,16 @@ export default {
     async lazyFetchNFTBookPaymentPriceInfoForAllEditions() {
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
       await Promise.all(
-        prices.map((_, index) =>
-          catchAxiosError(
+        prices.map((p, i) => {
+          const index = p.index ?? i;
+          return catchAxiosError(
             this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
               classId: this.classId,
               priceIndex: index,
               coupon: this.$route.query.coupon,
             })
-          )
-        )
+          );
+        })
       );
     },
     async fetchRelatedNFTCollection({ type } = {}) {
