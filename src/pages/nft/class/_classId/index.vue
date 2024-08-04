@@ -1028,10 +1028,16 @@ export default {
       );
       return this.handleCollect();
     },
+    getEdition(selectedValue) {
+      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const index = selectedValue ?? this.selectedValue;
+      const edition =
+        editions.find(e => e.index === Number(index)) || editions[index];
+      return edition;
+    },
     checkTippingAvailability(selectedValue) {
       this.selectedValue = selectedValue;
-      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const edition = editions[selectedValue];
+      const edition = this.getEdition(selectedValue);
       const hasStock = Boolean(edition?.stock);
       const allowCustomPrice = edition?.isAllowCustomPrice;
 
@@ -1058,8 +1064,7 @@ export default {
     },
     handleAddToCart(selectedValue) {
       this.isAddingToCart = false;
-      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const edition = editions[selectedValue ?? this.selectedValue];
+      const edition = this.getEdition(selectedValue ?? this.selectedValue);
       const hasStock = edition?.stock;
 
       if (!hasStock && !this.nftIsCollectable) return;
@@ -1083,8 +1088,7 @@ export default {
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
-      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const edition = editions[selectedValue ?? this.selectedValue];
+      const edition = this.getEdition(selectedValue ?? this.selectedValue);
       const hasStock = edition?.stock;
 
       if (!hasStock && !this.nftIsCollectable) return;
