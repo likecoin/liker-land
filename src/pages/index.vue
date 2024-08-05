@@ -882,8 +882,10 @@ export default {
       return 'desktop:sticky desktop:top-[124px]';
     },
     bookstoreItems() {
-      return this.nftBookstoreItemsFromCMSForLandingPage.filter(item =>
-        item.locales.some(locale => this.$i18n.locale.includes(locale))
+      return this.nftBookstoreItemsFromCMSForLandingPage.filter(
+        item =>
+          !item.locales ||
+          item.locales.some(locale => this.$i18n.locale.includes(locale))
       );
     },
     stickyBookstoreItem() {
