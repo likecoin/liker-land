@@ -435,6 +435,7 @@ export default {
               priceLabel,
               price,
               value: index,
+              index,
               stock,
               style,
               isAllowCustomPrice,
@@ -447,7 +448,7 @@ export default {
         : [defaultEdition];
     },
     editionPriceIndex() {
-      if (this.priceIndex !== undefined) return this.priceIndex;
+      if (this.priceIndex !== undefined) return Number(this.priceIndex);
       if (!this.nftIsNFTBook) return undefined;
       return Number(this.$route.query.price_index) || 0;
     },
@@ -483,8 +484,16 @@ export default {
       });
     },
     nftBookAvailablePriceLabel() {
-      const purchasePrice = this.nftEditions.find(item => item.stock > 0)
-        ?.priceLabel;
+      let edition;
+      if (this.editionPriceIndex !== undefined) {
+        edition = this.nftEditions.find(
+          e => e.index === this.editionPriceIndex
+        );
+      }
+      if (!edition) {
+        edition = this.nftEditions.find(item => item.stock > 0);
+      }
+      const purchasePrice = edition?.priceLabel;
       return purchasePrice;
     },
     nftMustClaimToView() {
