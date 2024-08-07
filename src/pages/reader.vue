@@ -142,7 +142,7 @@ export default {
           );
           return;
         }
-      } else {
+      } else if (this.isLoginRequired) {
         this.connectWallet();
       }
     } finally {
