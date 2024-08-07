@@ -24,19 +24,6 @@
       </template>
     </ButtonV2>
 
-    <p
-      v-if="normalizedContentURLs.length && !isContentViewable"
-      class="text-[14px] text-medium-gray text-center mt-[16px]"
-    >
-      {{
-        $t(
-          isNftBook
-            ? 'nft_details_page_button_collect_to_view_nft_book'
-            : 'nft_details_page_button_collect_to_view'
-        )
-      }}
-    </p>
-
     <template v-if="contentUrls.length && shouldShowContentUrlButtons">
       <Dropdown>
         <template #trigger="{ toggle }">
