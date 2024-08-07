@@ -1,5 +1,5 @@
 <template>
-  <div v-show="shoppingCartBookProductList.length > 0" class="relative">
+  <div class="relative">
     <ButtonV2
       preset="tertiary"
       :to="localeLocation({ name: 'shopping-cart-book' })"
