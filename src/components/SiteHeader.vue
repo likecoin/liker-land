@@ -12,51 +12,34 @@
       'py-[2.5em] phone:py-[28px]',
     ]"
   >
-    <NuxtLink
-      class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
-      :disabled="localeLocation(getHomeRoute).name === $route.name"
-      :to="localeLocation(getHomeRoute)"
-    >
-      <Logo class="fill-current" />
-    </NuxtLink>
+    <div class="flex items-center gap-[40px]">
+      <NuxtLink
+        class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
+        :disabled="localeLocation(getHomeRoute).name === $route.name"
+        :to="localeLocation(getHomeRoute)"
+      >
+        <Logo class="fill-current" />
+      </NuxtLink>
+
+      <NuxtLink
+        :to="localeLocation({ name: 'store' })"
+        @click.native="handleClickTryCollect"
+      >
+        <div
+          :class="[
+            isPlain ? 'text-white' : 'text-like-green',
+            'hover:scale-105 active:scale-100 transition-transform',
+          ]"
+        >
+          {{ $t('header_button_try_collect') }}
+        </div>
+      </NuxtLink>
+    </div>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
       <ShoppingCartSiteButton />
 
-      <div v-if="loginAddress" class="relative">
-        <ButtonV2
-          :preset="isPlain ? 'plain' : 'tertiary'"
-          :to="localeLocation({ name: 'notifications' })"
-        >
-          <IconBell class="w-20 h-20 text-current" />
-        </ButtonV2>
-        <div
-          v-if="getNotificationCount > 0"
-          :class="[
-            'absolute',
-            'bottom-full',
-            'left-full',
-            'flex',
-            'justify-center',
-            'items-center',
-            'bg-danger',
-            'rounded-full',
-            'min-w-[20px]',
-            'min-h-[20px]',
-            'ml-[-10px]',
-            'mb-[-10px]',
-            'px-[4px]',
-            'py-[5px]',
-            'pointer-events-none',
-          ]"
-        >
-          <span class="text-white text-[10px] leading-[1em]">
-            {{ formattedNotificationCount }}
-          </span>
-        </div>
-      </div>
-
-      <Dropdown>
+      <Dropdown class="hidden laptop:block">
         <template #trigger="{ toggle }">
           <ButtonV2 :preset="isPlain ? 'plain' : 'tertiary'" @click="toggle">
             <GlobeIcon class="w-20 h-20 fill-current" />
@@ -75,15 +58,7 @@
       </Dropdown>
 
       <ButtonV2
-        v-if="getRouteBaseName($route) === 'index'"
-        class="phone:hidden"
-        :preset="isPlain ? 'outline' : 'secondary'"
-        :to="localeLocation({ name: 'store' })"
-        :text="$t('header_button_try_collect')"
-        @click.native="handleClickTryCollect"
-      />
-      <ButtonV2
-        v-else-if="!getAddress"
+        v-if="!getAddress"
         class="hidden laptop:flex"
         :preset="isPlain ? 'outline' : 'secondary'"
         :text="$t('header_button_connect_to_wallet')"
@@ -96,21 +71,17 @@
 
       <Dropdown>
         <template #trigger="{ toggle }">
-          <ButtonV2
-            v-if="!getAddress"
-            class="-mr-[8px]"
-            preset="plain"
-            @click="toggle"
-          >
-            <IconNav />
-          </ButtonV2>
-          <div v-else class="relative">
+          <div v-if="getAddress" class="relative">
             <Identity
               class="cursor-pointer"
               :avatar-url="walletUserAvatar"
               :avatar-size="42"
               :is-avatar-outlined="isWalletUserCivicLiker"
               @click="toggle"
+            />
+            <div
+              v-if="getNotificationCount"
+              class="w-[12px] h-[12px] absolute top-0 right-0 bg-danger rounded-full"
             />
           </div>
         </template>
@@ -150,15 +121,19 @@
                   'flex',
                   'justify-center',
                   'items-center',
+                  'rounded-full',
+                  'min-w-[20px]',
+                  'min-h-[20px]',
+                  'ml-[-10px]',
+                  'mb-[-10px]',
+                  'px-[4px]',
+                  'py-[5px]',
+                  'pointer-events-none',
                   'bg-shade-gray',
                   { 'bg-danger': getNotificationCount },
-                  'rounded-full',
-                  'min-w-[24px]',
-                  'px-[8px]',
-                  'py-[4px]',
                 ]"
               >
-                <div class="text-white text-[10px]">
+                <div class="text-white text-[10px] leading-[1em]">
                   {{ formattedNotificationCount }}
                 </div>
               </div>
@@ -211,27 +186,11 @@ export default {
     },
     mainMenuItems() {
       const options = [
-        { value: 'store', name: this.$t('main_menu_store') },
-        { value: 'article', name: this.$t('main_menu_articles') },
-        { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
+        { value: 'portfolio', name: this.$t('main_menu_my_portfolio') },
+        { value: 'notifications', name: this.$t('main_menu_notification') },
+        { value: 'setting', name: this.$t('main_menu_settings') },
+        { value: 'signOut', name: this.$t('main_menu_sign_out') },
       ];
-
-      if (this.getAddress || this.loginAddress || this.getUserId) {
-        options.push({
-          value: 'portfolio',
-          name: this.$t('main_menu_my_portfolio'),
-        });
-      }
-
-      options.push({ value: 'mintNft', name: this.$t('main_menu_mint_nft') });
-
-      if (this.getAddress || this.loginAddress || this.getUserId) {
-        options.push(
-          { value: 'setting', name: this.$t('main_menu_settings') },
-          { value: 'signOut', name: this.$t('main_menu_sign_out') }
-        );
-      }
-
       return options;
     },
     formattedNotificationCount() {
