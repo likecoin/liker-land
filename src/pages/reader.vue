@@ -76,11 +76,14 @@ export default {
     canRead() {
       return this.isLoginRequired ? Boolean(this.getAddress) : true;
     },
+    shouldEnableCustomMessage() {
+      return this.nftIsCustomMessageEnabled && this.nftId ? '1' : '0';
+    },
     corsUrl() {
       return `${LIKECOIN_API_BASE}/ebook-cors/?class_id=${
         this.classId
       }&nft_id=${this.nftId}&index=${this.index}&custom_message=${
-        this.nftIsCustomMessageEnabled ? '1' : '0'
+        this.shouldEnableCustomMessage
       }`;
     },
     cacheKey() {
