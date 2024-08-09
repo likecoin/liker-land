@@ -171,7 +171,7 @@ export default {
       return this.shoppingCartBookItems.reduce((totalPrice, item) => {
         const priceInfo = this.getNFTClassPaymentPriceById(
           item.productId,
-          item.priceIndex
+          item.collectionId ? undefined : item.priceIndex
         );
         const unitPrice =
           item.customPriceInDecimal / 100 || priceInfo?.fiatPrice;
