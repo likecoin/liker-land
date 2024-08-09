@@ -55,7 +55,7 @@ const mutations = {
         from,
         timestamp: Date.now(),
         quantity: 1,
-        priceIndex: priceIndex || 0,
+        priceIndex: priceIndex ?? (classId ? 0 : undefined),
       };
     } else {
       item = {
