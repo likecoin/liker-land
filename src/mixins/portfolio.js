@@ -21,7 +21,7 @@ export const tabOptions = {
   collected: 'collected',
   created: 'created',
 };
-const DEFAULT_TAB = tabOptions.collected;
+const DEFAULT_TAB = tabOptions.created;
 
 const ITEMS_PER_PAGE = 10;
 
