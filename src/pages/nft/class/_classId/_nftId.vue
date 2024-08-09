@@ -449,6 +449,22 @@ export default {
       `${EXTERNAL_HOST}/images/og/${
         this.$i18n.locale === 'zh-Hant' ? 'default-zh.jpg' : 'default.jpg'
       }`;
+
+    const threeDModel = this.nftModelURL
+      ? {
+          '@context': 'http://schema.org/',
+          '@type': '3DModel',
+          image: ogImage,
+          name: title,
+          encoding: [
+            {
+              '@type': 'MediaObject',
+              contentUrl: this.nftModelURL,
+              encodingFormat: 'model/gltf-json',
+            },
+          ],
+        }
+      : undefined;
     const schemas = [];
     if (this.purchaseInfo.price) {
       schemas.push({
@@ -473,21 +489,7 @@ export default {
           priceCurrency: 'USD',
           availability: 'LimitedAvailability',
         },
-      });
-    }
-    if (this.nftModelURL) {
-      schemas.push({
-        '@context': 'http://schema.org/',
-        '@type': '3DModel',
-        image: ogImage,
-        name: title,
-        encoding: [
-          {
-            '@type': 'MediaObject',
-            contentUrl: this.nftModelURL,
-            encodingFormat: 'model/gltf-json',
-          },
-        ],
+        subjectOf: threeDModel,
       });
     }
     const meta = [

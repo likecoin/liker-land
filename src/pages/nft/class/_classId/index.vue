@@ -514,6 +514,22 @@ export default {
       url: `${EXTERNAL_HOST}/${this.iscnOwner}`,
       identifier: this.iscnOwner,
     };
+
+    const threeDModel = this.nftModelURL
+      ? {
+          '@context': 'http://schema.org/',
+          '@type': '3DModel',
+          image: ogImage,
+          name: title,
+          encoding: [
+            {
+              '@type': 'MediaObject',
+              contentUrl: this.nftModelURL,
+              encodingFormat: 'model/gltf-json',
+            },
+          ],
+        }
+      : undefined;
     if (this.purchaseInfo.price) {
       // TODO: check if we can use last purchase price if current price is -1
       const NFTPriceUSD = Math.max(this.NFTPriceUSD, 0);
@@ -541,6 +557,7 @@ export default {
           availability:
             this.NFTPriceUSD >= 0 ? 'LimitedAvailability' : 'OutOfStock',
         },
+        subjectOf: threeDModel,
       });
     }
     if (this.nftEditions) {
@@ -587,21 +604,6 @@ export default {
         });
       });
       schemas.push(bookSchema);
-    }
-    if (this.nftModelURL) {
-      schemas.push({
-        '@context': 'http://schema.org/',
-        '@type': '3DModel',
-        image: ogImage,
-        name: title,
-        encoding: [
-          {
-            '@type': 'MediaObject',
-            contentUrl: this.nftModelURL,
-            encodingFormat: 'model/gltf-json',
-          },
-        ],
-      });
     }
     const meta = [
       {
