@@ -626,10 +626,10 @@ export default {
       return this.getUserInfoByAddress(this.iscnOwner)?.avatar;
     },
     productTitle() {
-      let title = this.NFTName;
+      let title = this.productName;
       if (this.cartItemsCount && this.cartItemsCount > 1) {
         title = this.$tc('nft_claim_title', this.cartItemsCount - 1, {
-          name: this.NFTName,
+          name: this.productName,
           count: this.cartItemsCount - 1,
         });
       }
@@ -856,7 +856,7 @@ export default {
           })
         : [
             {
-              name: this.NFTName,
+              name: this.productName,
               classId: this.classId,
               collectionId: this.collectionId,
               price,
