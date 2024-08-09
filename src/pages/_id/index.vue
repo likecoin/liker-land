@@ -438,10 +438,10 @@ export default {
       if (!isLoading) {
         if (
           // If collected tab is empty
-          this.isCurrentTabCollected &&
-          !this.nftClassListOfFilteredCollectedByType.length
+          this.isCurrentTabCreated &&
+          !this.nftClassListOfFilteredCreatedByType.length
         ) {
-          this.changeTab(tabOptions.created);
+          this.changeTab(tabOptions.collected);
         }
       }
     },
