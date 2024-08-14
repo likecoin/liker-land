@@ -53,8 +53,8 @@
     />
     <NFTBookTippingDialog
       :open="isTippingDialogOpen"
-      :creator-avatar="creatorAvatar"
-      :display-name="creatorDisplayNameFull"
+      :creator-avatar="collectionCreatorAvatar"
+      :display-name="collectionCreatorDisplayNameFull"
       :currency="defaultCurrency"
       :price="formattedNFTPriceInUSD"
       :collection-id="collectionId"
