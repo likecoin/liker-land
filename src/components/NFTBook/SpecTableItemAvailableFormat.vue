@@ -1,28 +1,26 @@
 <template>
-  <ul class="flex gap-[4px] sm:gap-[8px]">
-    <li
-      v-for="(type, index) in contentTypes"
-      :key="type"
-      class="flex gap-[4px] sm:gap-[8px] items-center"
-    >
-      <div
-        class="py-[6px] px-[12px] sm:px-[24px] bg-shade-gray rounded-[16px] text-10"
-      >
-        {{ getContentType(type) }}
-      </div>
-      <IconAdd
-        v-if="index !== contentTypes.length - 1"
-        class="text-medium-gray"
-      />
-    </li>
-  </ul>
+  <component :is="tag">
+    <NFTBookSpecTableLabel :text="$t('nft_details_page_label_content_types')" />
+    <div class="font-[600]">{{ label }}</div>
+  </component>
 </template>
 <script>
 export default {
   props: {
+    tag: {
+      type: String,
+      default: 'li',
+    },
     contentTypes: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    label() {
+      return this.contentTypes
+        .map(type => this.getContentType(type))
+        .join(' + ');
     },
   },
   methods: {

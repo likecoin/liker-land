@@ -63,4 +63,10 @@ export function escapeHtml(text = '') {
     .replace(/"/g, '&quot;');
 }
 
+export function getContentUrlType(url) {
+  if (url?.includes('epub')) return 'epub';
+  if (url?.includes('pdf')) return 'pdf';
+  return undefined;
+}
+
 export default sleep;
