@@ -1,5 +1,5 @@
 <template>
-  <Page class="overflow-hidden">
+  <Page class="relative">
     <CardV2 v-if="isLoading" class="absolute top-[40%]">{{
       $t('nft_details_page_label_loading')
     }}</CardV2>
@@ -379,6 +379,12 @@
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
       @close="() => (isTippingDialogOpen = false)"
+    />
+
+    <Bodhisattva18BannerCTA
+      v-if="isShowBanner"
+      class="w-full"
+      @click-button="handleClickBookBannerCTA"
     />
   </Page>
 </template>
@@ -780,6 +786,12 @@ export default {
         });
       }
       return collectorsWithBuyerMessages;
+    },
+    isShowBanner() {
+      return (
+        this.classId ===
+        'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3'
+      );
     },
   },
   async mounted() {
@@ -1406,6 +1418,15 @@ export default {
         this.handleCollectFromEdition();
       }
       this.isTippingDialogOpen = false;
+    },
+    handleClickBookBannerCTA() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_book_banner_cta_clicked',
+        this.classId,
+        1
+      );
     },
   },
 };
