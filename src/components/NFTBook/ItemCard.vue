@@ -7,18 +7,6 @@
       />
     </client-only>
     <div :class="['flex', 'relative', { 'mt-[48px]': !isCoverPreset }]">
-      <div
-        v-if="!isFutureTheme"
-        :class="[
-          'absolute',
-          'z-[0]',
-          'inset-x-[-38px] sm:inset-x-[-48px]',
-          'inset-y-0',
-          'bg-like-cyan-pale',
-          'rounded-[32px]',
-          shelfClass,
-        ]"
-      />
       <component
         :is="componentTag"
         :class="[coverClasses, 'mt-[-48px]', 'z-[1]']"
@@ -36,7 +24,7 @@
         />
         <NFTBookCover
           v-else
-          :class="['mt-[-48px]', coverClasses]"
+          :class="coverClasses"
           :src="imageSrc || NFTImageUrl"
           :alt="NFTName"
           :resize="200"

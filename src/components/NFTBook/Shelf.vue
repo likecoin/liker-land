@@ -38,33 +38,6 @@
           @click-avatar="$emit('click-item-avatar', classId)"
         />
       </li>
-
-      <template v-if="isShelfPreset && !isFutureTheme">
-        {{ /* NOTE: A dummy to make the book shelf extend to the right if only 1 book in 2 columns */ }}
-        <li
-          v-for="i in 2"
-          :key="`dummy-${i}`"
-          :class="[
-            'hidden',
-            getDummyResponsiveClass(i),
-            'relative',
-            'w-full',
-            'max-w-[220px]',
-            'h-[290px]',
-          ]"
-        >
-          <div
-            :class="[
-              'absolute',
-              'inset-x-[-48px]',
-              'inset-y-0',
-              'mt-[48px]',
-              'bg-like-cyan-pale',
-              'rounded-r-[32px]',
-            ]"
-          />
-        </li>
-      </template>
     </ul>
     <Dialog
       :open="dialogNFTClassList.length > 0"
