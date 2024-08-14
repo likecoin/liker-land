@@ -99,7 +99,7 @@
                 >
                   <Identity
                     class="shrink-0"
-                    :avatar-url="creatorAvatar"
+                    :avatar-url="collectionCreatorAvatar"
                     :avatar-size="42"
                     :is-avatar-disabled="true"
                     :is-lazy-loaded="true"
@@ -116,7 +116,7 @@
                         'truncate',
                         displayNameStyle,
                       ]"
-                      >{{ creatorDisplayName }}</span
+                      >{{ collectionCreatorDisplayName }}</span
                     >
                   </div>
                 </NuxtLink>
