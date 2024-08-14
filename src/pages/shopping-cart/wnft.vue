@@ -238,9 +238,7 @@ export default {
       );
       try {
         if (!this.getAddress) {
-          const isConnected = await this.connectWallet({
-            shouldSkipLogin: true,
-          });
+          const isConnected = await this.connectWallet();
           if (!isConnected) return;
         } else {
           await this.initIfNecessary();

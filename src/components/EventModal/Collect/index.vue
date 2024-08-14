@@ -724,9 +724,7 @@ export default {
         switch (method) {
           case 'crypto': {
             if (!this.getAddress) {
-              const isConnected = await this.connectWallet({
-                shouldSkipLogin: true,
-              });
+              const isConnected = await this.connectWallet();
               if (!isConnected) return;
             }
             logTrackerEvent(
@@ -758,9 +756,7 @@ export default {
             break;
           case 'free': {
             if (!this.getAddress) {
-              const isConnected = await this.connectWallet({
-                shouldSkipLogin: true,
-              });
+              const isConnected = await this.connectWallet();
               if (!isConnected) return;
             }
             logTrackerEvent(
