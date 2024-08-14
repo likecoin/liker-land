@@ -496,7 +496,7 @@ const actions = {
     }
   },
 
-  async initIfNecessary({ dispatch }, { isLogin = false } = {}) {
+  async initIfNecessary({ dispatch }, { isLogin = true } = {}) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
     if (connection) {

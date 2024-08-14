@@ -78,7 +78,7 @@ export default {
     async onClickLogin() {
       this.$emit('click-login');
       if (this.hasConnectedWallet) {
-        await this.initIfNecessary({ isLogin: true });
+        await this.initIfNecessary();
       } else {
         await this.connectWallet();
       }
