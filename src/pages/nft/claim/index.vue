@@ -183,7 +183,7 @@
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME && isPhysicalOnly"
         :key="`${state}-isPhysicalOnly`"
-        :header-text="$t('nft_claim_welcome_title')"
+        :header-text="$t('nft_claim_welcome_title', { name: productTitle })"
         :content-text="$t('nft_claim_welcome_text_physical_only')"
         :format-download-links="
           canViewContentDirectly ? formatDownloadLinks : []
@@ -205,7 +205,7 @@
       <NFTClaimMainSection
         v-else-if="state === NFT_CLAIM_STATE.WELCOME"
         :key="state"
-        :header-text="$t('nft_claim_welcome_title')"
+        :header-text="$t('nft_claim_welcome_title', { name: productTitle })"
         :content-text="$t('nft_claim_welcome_text')"
         :format-download-links="
           canViewContentDirectly ? formatDownloadLinks : []
@@ -214,12 +214,6 @@
       >
         <template #header-prepend>
           <IconCircleCheck class="w-[48px]" />
-        </template>
-        <template #header-append>
-          <Label
-            class="text-like-green text-[18px] font-600 desktop:text-[24px]"
-            :text="$t('nft_claim_NFT_name', { name: productTitle })"
-          />
         </template>
         <template v-if="cartItemsCount > 1" #content-prepend>
           <div class="flex w-full gap-[16px]">
@@ -263,7 +257,6 @@
               </div>
               <div class="flex flex-col items-start font-200">
                 <Label :text="item.title" class="text-[16px] font-600" />
-                <p class="text-[14px] laptop:text-[16px]">{{ item.content }}</p>
               </div>
             </div>
           </div>
@@ -647,17 +640,14 @@ export default {
       return [
         {
           title: this.$t('nft_claim_login_title_collection'),
-          content: this.$t('nft_claim_login_content_collection'),
           icon: 'IconFolder',
         },
         {
           title: this.$t('nft_claim_login_title_identity'),
-          content: this.$t('nft_claim_login_content_identity'),
           icon: 'IconIdentity',
         },
         {
           title: this.$t('nft_claim_login_title_community'),
-          content: this.$t('nft_claim_login_content_community'),
           icon: 'IconCommunity',
         },
       ];
