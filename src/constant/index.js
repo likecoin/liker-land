@@ -270,3 +270,7 @@ export const DEFAULT_RECOMMENDATIONS_LIST = IS_TESTNET
 export const BOOKSTORE_LIST_EXCLUDED_WALLET = IS_TESTNET
   ? 'like1e25m8qmnuw905dzuv4k6prpu03z4ve6kelfx5n'
   : 'like1zur83433p88clexqwl3yejcyntljtfvsn0kczf';
+
+export const READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST = [
+  'like1cfz3cpmnq4tvxqec77mxr3ygqtet3vqtqmejwm',
+];

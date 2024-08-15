@@ -16,6 +16,9 @@ export const createUserInfoMixin = ({
       [userInfoPropName]() {
         return this.getUserInfoByAddress(this[walletKey]);
       },
+      [getPropName('{key}Wallet')]() {
+        return this[userInfoPropName]?.likeWallet;
+      },
       [getPropName('{key}Avatar')]() {
         return (
           this[userInfoPropName]?.avatar || getIdenticonAvatar(this[walletKey])

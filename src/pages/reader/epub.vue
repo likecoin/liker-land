@@ -236,6 +236,8 @@ import readerMixin from '~/mixins/reader';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
+import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
+
 export default {
   name: 'EPUBReaderPage',
   mixins: [nftMixin, walletMixin, readerMixin],
@@ -310,7 +312,9 @@ export default {
           width: '100%',
           height: '100%',
           spread: 'always',
-          allowScriptedContent: true, // NOTE: Potential security risk
+          allowScriptedContent: READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST.includes(
+            this.creatorWallet
+          ),
         });
         const cfi = this.resumeFromLocalStorage();
         this.rendition.display(cfi);
