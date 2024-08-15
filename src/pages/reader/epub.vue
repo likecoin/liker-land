@@ -310,6 +310,7 @@ export default {
           width: '100%',
           height: '100%',
           spread: 'always',
+          allowScriptedContent: true, // NOTE: Potential security risk
         });
         const cfi = this.resumeFromLocalStorage();
         this.rendition.display(cfi);
