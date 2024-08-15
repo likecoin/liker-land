@@ -134,14 +134,12 @@
           <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
             {{ bookDescriptionTrimmed }}
           </p>
-          <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
+          <NFTBookSpecTable class="mt-[12px]">
             <li
               v-if="iscnWorkAuthor"
-              class="flex flex-col justify-center min-w-0 ml-[8px]"
+              class="flex flex-col justify-center min-w-0"
             >
-              <span class="text-like-cyan-gray text-10">{{
-                $t('identity_type_author')
-              }}</span>
+              <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
               <span :class="['font-[600]', displayNameStyle]">{{
                 iscnWorkAuthor
               }}</span>
@@ -149,7 +147,7 @@
             <client-only>
               <li>
                 <NuxtLink
-                  class="flex items-center text-like-green group my-[8px]"
+                  class="flex items-center text-like-green group"
                   :to="
                     iscnOwner
                       ? localeLocation({
@@ -169,16 +167,15 @@
                     :is-lazy-loaded="true"
                   />
                   <div class="flex flex-col justify-start ml-[8px] min-w-0">
-                    <span
-                      class="text-like-cyan-gray text-10 group-hover:underline"
-                      >{{
+                    <NFTBookSpecTableLabel
+                      :text="
                         $t(
                           iscnWorkAuthor
                             ? 'identity_type_publisher'
                             : 'identity_type_creator'
                         )
-                      }}</span
-                    >
+                      "
+                    />
                     <span
                       :class="[
                         'group-hover:underline',
@@ -192,7 +189,15 @@
                 </NuxtLink>
               </li>
             </client-only>
-          </ul>
+          </NFTBookSpecTable>
+          <NFTBookSpecTable class="mt-[12px]">
+            <NFTBookSpecTableItemAvailableFormat
+              :content-types="contentTypes"
+            />
+            <NFTBookSpecTableItemAccessMethod
+              :is-downloadable="!nftIsDownloadHidden"
+            />
+          </NFTBookSpecTable>
           <div class="flex flex-col items-center w-full laptop:hidden">
             <slot name="column-edition-select" />
           </div>
@@ -211,7 +216,6 @@
       v-if="!isCompactPreset"
       class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]"
     >
-      <NFTBookTypeTags :content-types="contentTypes" />
       <template v-if="!isDetailsPreset">
         <div v-if="nftBookAvailablePriceLabel">
           <Label
@@ -231,6 +235,7 @@
   </div>
 </template>
 <script>
+import { getContentUrlType } from '~/util/misc';
 import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
@@ -329,9 +334,8 @@ export default {
     contentTypes() {
       const types = [];
       this.iscnContentUrls.forEach(url => {
-        types.push(this.getContentUrlType(url));
+        types.push(getContentUrlType(url));
       });
-      types.push('nft');
       return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     isLinkComponent() {
@@ -421,11 +425,6 @@ export default {
   methods: {
     async fetchInfo() {
       await this.lazyFetchNFTClassAggregatedData();
-    },
-    getContentUrlType(url) {
-      if (url.includes('epub')) return 'epub';
-      if (url.includes('pdf')) return 'pdf';
-      return 'unknown';
     },
     onClickAvatar() {
       this.$emit('click-avatar', this.iscnOwner);

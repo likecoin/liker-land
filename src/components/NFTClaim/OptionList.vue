@@ -47,6 +47,7 @@
 <script>
 import alertMixin from '~/mixins/alert';
 
+import { getContentUrlType } from '~/util/misc';
 import { parseNFTMetadataURL } from '~/util/nft';
 import {
   getFilenameFromURL,
@@ -100,13 +101,8 @@ export default {
   },
   methods: {
     parseNFTMetadataURL,
-    getContentUrlType(url) {
-      if (url?.includes('epub')) return 'epub';
-      if (url?.includes('pdf')) return 'pdf';
-      return 'unknown';
-    },
     getContentUrlButtonText(url) {
-      const type = this.getContentUrlType(url);
+      const type = getContentUrlType(url);
       switch (type) {
         case 'epub':
           return this.$t('nft_details_page_button_view_epub');
@@ -119,7 +115,7 @@ export default {
     getFilenameFromURL,
     getDownloadFilenameFromURL,
     handleClickViewContentURL(e, contentUrl, index) {
-      const type = this.getContentUrlType(contentUrl);
+      const type = getContentUrlType(contentUrl);
       const url = parseNFTMetadataURL(contentUrl);
       this.$emit('view-content-url', e, url, type);
       if (['pdf', 'epub'].includes(type)) {

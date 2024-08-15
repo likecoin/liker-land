@@ -81,11 +81,11 @@
           />
           <Label preset="h4" :class="titleStyle" :text="collectionName" />
           <Markdown :md-string="collectionDescription" />
-          <ul class="flex flex-wrap mt-[12px] gap-[1.5rem] w-full">
+          <NFTBookSpecTable class="mt-[12px]">
             <client-only>
               <li>
                 <NuxtLink
-                  class="flex items-center text-like-green group my-[8px]"
+                  class="flex items-center text-like-green group"
                   :to="
                     collectionOwner
                       ? localeLocation({
@@ -105,10 +105,9 @@
                     :is-lazy-loaded="true"
                   />
                   <div class="flex flex-col justify-start ml-[8px] min-w-0">
-                    <span
-                      class="text-like-cyan-gray text-10 group-hover:underline"
-                      >{{ $t('identity_type_distributor') }}</span
-                    >
+                    <NFTBookSpecTableLabel
+                      :text="$t('identity_type_distributor')"
+                    />
                     <span
                       :class="[
                         'group-hover:underline',
@@ -122,7 +121,15 @@
                 </NuxtLink>
               </li>
             </client-only>
-          </ul>
+          </NFTBookSpecTable>
+          <NFTBookSpecTable class="mt-[12px]">
+            <NFTBookSpecTableItemAvailableFormat
+              :content-types="contentTypes"
+            />
+            <NFTBookSpecTableItemAccessMethod
+              :is-downloadable="isDownloadable"
+            />
+          </NFTBookSpecTable>
           <div class="flex flex-col items-center w-full laptop:hidden">
             <slot name="column-edition-select" />
           </div>
@@ -141,7 +148,6 @@
       v-if="!isCompactPreset"
       class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]"
     >
-      <NFTBookTypeTags :content-types="contentTypes" />
       <template v-if="!isDetailsPreset">
         <div v-if="collectionAvailablePriceLabel">
           <Label
@@ -161,6 +167,9 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
+import { getContentUrlType } from '~/util/misc';
 import { ellipsis } from '~/util/ui';
 
 import collectionMixin from '~/mixins/nft-collection';
@@ -213,6 +222,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('getIsHideNFTBookDownload'),
     creatorDisplayName() {
       return (
         this.getUserInfoByAddress(this.collectionOwner)?.displayName ||
@@ -235,10 +245,25 @@ export default {
         1000 * 60 * 60 * 24 * 30
       );
     },
+    isDownloadable() {
+      return this.classIds.every(
+        classId => !this.getIsHideNFTBookDownload(classId)
+      );
+    },
     contentTypes() {
+      const contentURLs = this.classIds
+        .map(classId => {
+          const { parent } = this.getNFTClassMetadataById(classId) || {};
+          const iscnId = parent?.iscnIdPrefix || parent?.iscn_id_prefix;
+          const data = this.getISCNMetadataById(iscnId);
+          if (!data || data instanceof Promise) return undefined;
+          return data.contentMetadata?.sameAs || [];
+        })
+        .flat();
       const types = [];
-      types.push('nft');
-      types.push('collection');
+      contentURLs.forEach(url => {
+        types.push(getContentUrlType(url));
+      });
       return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     isLinkComponent() {
