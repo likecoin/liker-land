@@ -1,226 +1,93 @@
 <template>
-  <Page class="px-[8px]">
-    <div
-      :class="[
-        'flex',
-
-        'flex-col',
-        'desktop:flex-row',
-        'gap-x-[24px]',
-        'gap-y-[48px]',
-
-        'items-center',
-        'desktop:items-start',
-        'desktop:justify-center',
-
-        'w-full',
-        'pt-[32px]',
-        'pb-[120px]',
-      ]"
+  <Page
+    :class="[
+      'w-full',
+      'px-[.75em] laptop:px-[2em]',
+      'pb-[8em]',
+      'text-[0.75em] sm:text-[1em]',
+    ]"
+  >
+    <AuthRequiredView
+      class="w-full max-w-[960px] mx-auto"
+      :is-loading-start-immediately="isInInAppBrowser"
+      :login-label="$t('dashboard_login_in')"
+      :login-button-label="$t('header_button_connect_to_wallet')"
     >
-      {{ /* Left Column */ }}
       <div
         :class="[
           'flex',
+
           'flex-col',
-          'gap-y-[24px]',
-          'min-w-[280px]',
-          'desktop:w-[280px]',
+          'desktop:flex-row',
+          'gap-x-[24px]',
+          'gap-y-[48px]',
+
+          'items-center',
+          'desktop:items-start',
+          'desktop:justify-center',
+
+          'w-full',
+          'pt-[32px]',
+          'pb-[120px]',
         ]"
       >
-        <NFTPortfolioUserInfo :wallet="wallet">
-          <template #gem>
-            <UserStatsGem :wallet="wallet" />
-          </template>
-          <template #stats>
-            <UserStatsPortfolio
-              class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"
-              :stat-wallet="wallet"
-            />
-          </template>
-          <!-- In App Follow -->
-          <template #follow>
-            <div
-              v-if="shouldShowFollowButton"
-              class="flex items-center justify-center"
-            >
-              <ProgressIndicator v-if="isFollowPromptUpdating" preset="thin" />
-              <div
-                v-else
-                class="relative flex group w-[138px]"
-                @click="clickFollow(wallet, userDisplayName)"
-              >
-                <div
-                  :class="[
-                    ...getDefaultClass,
-                    isFollowPromptStateAuto
-                      ? '!bg-like-cyan-light text-like-green'
-                      : '!bg-shade-gray text-dark-gray',
-                  ]"
-                >
-                  <Label align="center" :text="followPromptButtonText">
-                    <template v-if="isFollowPromptStateAuto" #prepend>
-                      <IconCheck />
-                    </template>
-                  </Label>
-                </div>
-                <div
-                  :class="[
-                    ...getDefaultClass,
-                    'group-hover:opacity-[100]',
-                    'group-active:!bg-medium-gray',
-                    'opacity-0',
-                    'transition-all',
-                    'absolute',
-                    'inset-0',
-                    isFollowPromptStateAuto
-                      ? '!bg-shade-gray text-dark-gray'
-                      : '!bg-like-cyan-light text-like-green',
-                  ]"
-                >
-                  <Label align="center" :text="followPromptButtonHoverText" />
-                </div>
-              </div>
-            </div>
-          </template>
-        </NFTPortfolioUserInfo>
-        <NFTPortfolioTopUsersList
-          v-if="
-            (isCurrentTabCollected ? userTopCreators : userTopCollectors)
-              .length &&
-              (isCurrentTabCollected || isCurrentTabCreated)
+        {{ /* Right Column */ }}
+        <NFTPortfolioMainView
+          key="portfolio"
+          ref="portfolioMainView"
+          :portfolio-wallet="wallet"
+          :portfolio-tab="currentTab"
+          :portfolio-items="currentNFTClassList"
+          :portfolio-items-show-count="currentNFTClassListShowCount"
+          :portfolio-items-sorting="currentNFTClassListSorting"
+          :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
+          :portfolio-items-sorting-option-list="
+            currentNFTClassSortingOptionList
           "
-          :type="isCurrentTabCollected ? 'creator' : 'collector'"
-          :user-list="
-            isCurrentTabCollected ? userTopCreators : userTopCollectors
+          :portfolio-items-creator-filtering="nftCreatorFilter"
+          :portfolio-items-type-filtering="nftTypeFilter"
+          :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
+          :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
+          :nft-keyword-list="nftKeywordList"
+          :nft-keyword-filtering="nftKeywordsFilter"
+          :is-loading-portfolio-items="isLoading"
+          :is-narrow="false"
+          :is-bookshelf="true"
+          @portfolio-change-tab="handleTabChange"
+          @portfolio-change-sorting="handleNFTClassListSortingChange"
+          @portfolio-change-creator="handleNFTClassListCreatorChange"
+          @portfolio-change-type="handleNFTClassListTypeChange"
+          @portfolio-change-keywords="handleNFTKeywordsChange"
+          @infinite-scroll="handleInfiniteScroll"
+          @portfolio-reset-filter="handleClearFilter"
+          @portfolio-input-filter-change-creator="
+            handleCreatorInputFilterChange
           "
-          @hover="handleTopUserHover"
-          @click="handleTopUserClick"
+          @portfolio-input-filter-change-keyword="
+            handleKeywordInputFilterChange
+          "
+          @item-click="handlePortfolioItemClick"
+          @item-collect="handlePortfolioItemCollect"
         >
-          <template #prepend>
-            <Label
-              class="w-min font-600 text-like-green"
-              :text="
-                isCurrentTabCollected
-                  ? $t('nft_portfolio_page_label_top_creators')
-                  : $t('nft_portfolio_page_label_top_collector')
-              "
-              preset="h5"
-              align="center"
-              valign="middle"
-            />
-          </template>
-        </NFTPortfolioTopUsersList>
-        <!-- Follower List -->
-        <div
-          v-if="walletHasLoggedIn && isUserPortfolio"
-          class="flex items-center justify-center"
-        >
-          <div
-            class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
-            @click="handleClickFollowers"
-          >
-            {{ $t('portfolio_follower_title') }}
-          </div>
-        </div>
-
-        <!-- goMyDashboard btn -->
-        <div v-if="isUserPortfolio" class="flex justify-center">
-          <ButtonV2
-            preset="outline"
-            :text="$t('main_menu_my_dashboard')"
-            @click="goMyDashboard"
-          >
-            <template #prepend>
-              <IconPerson />
-            </template>
-          </ButtonV2>
-        </div>
-        <template v-else>
-          <CardV2
-            v-show="isCurrentTabCreated"
-            :is-outline="true"
-            :class="[
-              'flex',
-              'flex-col',
-              'items-center',
-              'gap-[1rem]',
-              'w-full',
-              'py-[1rem]',
-              'text-[.875rem]',
-            ]"
-          >
-            <span
-              v-t="'portfolio_collect_all_description'"
-              class="text-center"
-            />
-            <ButtonV2
-              class="shrink-0"
-              :text="$t('portfolio_collect_all_button')"
-              preset="secondary"
-              :is-disabled="isLoading"
-              @click="handleClickCollectAllButton"
+          <template #tab-bar-prepend>
+            <h3
+              class="text-[28px] font-500 relative laptop:left-0 laptop:absolute"
             >
-              <template #prepend>
-                <IconPrice />
-              </template>
-            </ButtonV2>
-          </CardV2>
-          <NFTPortfolioSubscriptionForm
-            v-if="!walletHasLoggedIn"
-            id="creator-follow"
-            class="w-full"
-            :creator-wallet-address="wallet"
-            :creator-display-name="userDisplayName"
-            :is-wallet-connected="!!getAddress"
-            :is-wallet-logged-in="walletHasLoggedIn"
-            :is-followed="isFollowed"
-            :is-empty="false"
-          />
-        </template>
+              我的書架
+            </h3>
+          </template>
+        </NFTPortfolioMainView>
       </div>
 
-      {{ /* Right Column */ }}
-      <NFTPortfolioMainView
-        key="portfolio"
-        ref="portfolioMainView"
-        :portfolio-wallet="wallet"
-        :portfolio-tab="currentTab"
-        :portfolio-items="currentNFTClassList"
-        :portfolio-items-show-count="currentNFTClassListShowCount"
-        :portfolio-items-sorting="currentNFTClassListSorting"
-        :portfolio-items-sorting-order="currentNFTClassListSortingOrder"
-        :portfolio-items-sorting-option-list="currentNFTClassSortingOptionList"
-        :portfolio-items-creator-filtering="nftCreatorFilter"
-        :portfolio-items-type-filtering="nftTypeFilter"
-        :portfolio-items-type-filtering-options="nftTypeFilteringOptions"
-        :portfolio-collected-creator-list="nftCreatorInfoListOfCollected"
-        :nft-keyword-list="nftKeywordList"
-        :nft-keyword-filtering="nftKeywordsFilter"
-        :is-loading-portfolio-items="isLoading"
-        :is-narrow="true"
-        @portfolio-change-tab="handleTabChange"
-        @portfolio-change-sorting="handleNFTClassListSortingChange"
-        @portfolio-change-creator="handleNFTClassListCreatorChange"
-        @portfolio-change-type="handleNFTClassListTypeChange"
-        @portfolio-change-keywords="handleNFTKeywordsChange"
-        @infinite-scroll="handleInfiniteScroll"
-        @portfolio-reset-filter="handleClearFilter"
-        @portfolio-input-filter-change-creator="handleCreatorInputFilterChange"
-        @portfolio-input-filter-change-keyword="handleKeywordInputFilterChange"
-        @item-click="handlePortfolioItemClick"
-        @item-collect="handlePortfolioItemCollect"
+      <NuxtChild />
+      <FollowerDialog
+        :is-open-followers-dialog="isOpenFollowersDialog"
+        :wallet-is-fetching-followers="walletIsFetchingFollowers"
+        :populated-followers="populatedFollowers"
+        @close="isOpenFollowersDialog = false"
+        @on-export-followers="handleClickExportFollowerList"
       />
-    </div>
-
-    <NuxtChild />
-    <FollowerDialog
-      :is-open-followers-dialog="isOpenFollowersDialog"
-      :wallet-is-fetching-followers="walletIsFetchingFollowers"
-      :populated-followers="populatedFollowers"
-      @close="isOpenFollowersDialog = false"
-      @on-export-followers="handleClickExportFollowerList"
-    />
+    </AuthRequiredView>
   </Page>
 </template>
 
@@ -237,6 +104,7 @@ import {
 } from '~/util/nft';
 import { EXTERNAL_HOST } from '~/constant';
 
+import inAppMixin from '~/mixins/in-app';
 import walletMixin from '~/mixins/wallet';
 import portfolioMixin, { tabOptions } from '~/mixins/portfolio';
 import alertMixin from '~/mixins/alert';
@@ -249,7 +117,7 @@ const FOLLOW_PROMPT_STATE = {
 
 export default {
   name: 'NFTPortfolioPage',
-  mixins: [walletMixin, portfolioMixin, alertMixin],
+  mixins: [walletMixin, portfolioMixin, alertMixin, inAppMixin],
   layout: 'default',
   async asyncData({ route, $api, error, store, redirect }) {
     const { id: originalId } = route.params;
@@ -438,10 +306,10 @@ export default {
       if (!isLoading) {
         if (
           // If collected tab is empty
-          this.isCurrentTabCreated &&
-          !this.nftClassListOfFilteredCreatedByType.length
+          this.isCurrentTabCollected &&
+          !this.nftClassListOfFilteredCollectedByType.length
         ) {
-          this.changeTab(tabOptions.collected);
+          this.changeTab(tabOptions.created);
         }
       }
     },
