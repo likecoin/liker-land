@@ -37,9 +37,6 @@
           />
         </li>
       </ul>
-    </nav>
-
-    <div :class="['flex flex-col items-center gap-[32px] w-full', narrowClass]">
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
@@ -47,9 +44,17 @@
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
+          'laptop:absolute laptop:right-0 laptop:top-[50%] laptop:transform laptop:-translate-y-1/2',
         ]"
       >
         <div class="flex justify-center items-center gap-[16px]">
+          <ButtonV2
+            v-if="isBookshelf"
+            :text="$t('bookshelf_view_portfolio_button')"
+            preset="tertiary"
+            size="mini"
+            @click="goToPortfolioPage"
+          />
           <!-- filter -->
           <NFTPortfolioFilterDropdown
             :get-filter-button-preset="getFilterButtonPreset"
@@ -109,12 +114,43 @@
           </Dropdown>
         </div>
       </div>
+      <div
+        v-else
+        :class="[
+          'flex self-stretch justify-center gap-[8px] items-center desktop:justify-end',
+          {
+            'opacity-0 pointer-events-none': isLoadingPortfolioItems,
+          },
+          'laptop:absolute laptop:right-0 laptop:top-[50%] laptop:transform laptop:-translate-y-1/2',
+        ]"
+      >
+        <ButtonV2
+          v-if="isBookshelf"
+          :text="$t('bookshelf_view_portfolio_button')"
+          preset="tertiary"
+          size="mini"
+          @click="goToPortfolioPage"
+        />
+      </div>
+    </nav>
 
+    <div
+      :class="[
+        'flex flex-col items-center gap-[32px] w-full',
+        { [narrowClass]: isNarrow },
+      ]"
+    >
       <slot name="before-grid" />
 
       <div
         v-if="isLoadingPortfolioItems"
-        class="grid grid-cols-1 laptop:grid-cols-2 gap-[24px] w-full"
+        :class="[
+          'grid',
+          'grid-cols-1 laptop:grid-cols-2',
+          { 'grid-cols-2 laptop:grid-cols-3': isBookshelf },
+          'gap-[24px]',
+          'w-full',
+        ]"
       >
         <div class="flex flex-col gap-[24px]">
           <NFTPortfolioItemPlaceholder />
@@ -130,7 +166,7 @@
       <ul
         ref="portfolioGrid"
         :class="[
-          'self-stretch -mx-[12px] desktop:w-[668px] transition-all relative',
+          'self-stretch -mx-[12px] transition-all relative',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
@@ -146,7 +182,7 @@
           v-for="(nft, i) in portfolioItemsTrimmed"
           :key="nft.classId"
           :class="[
-            'absolute left-[12px] w-[310px] pb-[20px]',
+            'absolute left-0 w-[310px] pb-[20px]',
             // Let the first item covers the items not ready to be shown
             i > 0 ? 'z-0' : 'z-[1]',
           ]"
@@ -242,6 +278,10 @@ const SELECTED_FILTER = {
 
 export default {
   props: {
+    isBookshelf: {
+      type: Boolean,
+      default: false,
+    },
     isNarrow: {
       type: Boolean,
       default: false,
@@ -559,8 +599,8 @@ export default {
       this.portfolioGridController = new MagicGrid({
         container,
         items: this.portfolioItemsTrimmedCount || 1,
-        gutter: 24,
-        maxColumns: 2,
+        gutter: this.isBookshelf ? 12 : 20,
+        maxColumns: this.isBookshelf ? 3 : 2,
         useMin: true,
         // Note: Mitigate the layout issue by disabling transform and use absolute position
         useTransform: false,
@@ -641,6 +681,21 @@ export default {
         this.classId,
         1
       );
+    },
+    goToPortfolioPage() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_clicked_view_public_page',
+        this.classId,
+        1
+      );
+      const portfolioUrl = this.localeLocation({
+        name: 'id',
+        params: { id: this.getAddress || this.loginAddress },
+      });
+      const portfolioUrlString = this.$router.resolve(portfolioUrl).href;
+      window.open(portfolioUrlString, '_blank');
     },
   },
 };
