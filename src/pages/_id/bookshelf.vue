@@ -71,9 +71,9 @@
         >
           <template #tab-bar-prepend>
             <h3
-              class="text-[28px] font-500 relative laptop:left-0 laptop:absolute"
+              class="text-[20px] laptop:text-[28px] font-500 relative laptop:left-0 laptop:absolute"
             >
-              我的書架
+              {{ $t('main_menu_my_portfolio') }}
             </h3>
           </template>
         </NFTPortfolioMainView>

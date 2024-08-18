@@ -231,9 +231,25 @@
 
           <ul v-if="showClearCacheButton" class="settings-menu !mt-[24px]">
             <li>
-              <button class="settings-menu__item" @click="onClickClearCache">
+              <button
+                class="w-full text-left settings-menu__item"
+                @click="onClickClearCache"
+              >
                 <span class="settings-menu__item-title">
                   {{ $t('settings_clear_cache') }}</span
+                >
+              </button>
+            </li>
+          </ul>
+
+          <ul v-if="showClearCacheButton" class="settings-menu !mt-[24px]">
+            <li>
+              <button
+                class="flex py-12 pl-24 pr-16 settings-menu text-like-green"
+                @click="onClickLogOut"
+              >
+                <span class="settings-menu__item-title">
+                  {{ $t('main_menu_sign_out') }}</span
                 >
               </button>
             </li>
@@ -338,7 +354,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['lazyGetUserInfoByAddress']),
+    ...mapActions([
+      'lazyGetUserInfoByAddress',
+      'userLogout',
+      'disconnectWallet',
+    ]),
     async onClickClearCache() {
       if (window.caches) {
         const keyList = await window.caches.keys();
@@ -525,6 +545,17 @@ export default {
           break;
       }
       this.currentMainTab = tab;
+    },
+    async onClickLogOut() {
+      logTrackerEvent(
+        this,
+        'Settings',
+        'Settings_logout_click',
+        this.wallet,
+        1
+      );
+      this.disconnectWallet();
+      await this.userLogout();
     },
   },
 };
