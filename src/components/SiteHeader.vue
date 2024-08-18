@@ -69,7 +69,7 @@
         </template>
       </ButtonV2>
 
-      <Dropdown>
+      <Dropdown class="hidden laptop:block">
         <template #trigger="{ toggle }">
           <div v-if="getAddress" class="relative">
             <Identity
@@ -81,7 +81,16 @@
             />
             <div
               v-if="getNotificationCount"
-              class="w-[12px] h-[12px] absolute top-0 right-0 bg-danger rounded-full"
+              :class="[
+                'w-[12px]',
+                'h-[12px]',
+                'absolute',
+                'top-0',
+                'right-0',
+                'bg-danger',
+                'rounded-full',
+                'hidden laptop:block',
+              ]"
             />
           </div>
         </template>
@@ -126,7 +135,109 @@
           </MenuItem>
         </MenuList>
       </Dropdown>
+
+      {{ /* phone version */ }}
+      <ButtonV2
+        v-if="!getAddress"
+        class="laptop:hidden"
+        :preset="isPlain ? 'outline' : 'secondary'"
+        @click="handleOpenSider"
+      >
+        <template #prepend>
+          <IconNav />
+        </template>
+      </ButtonV2>
+      <Identity
+        v-if="getAddress"
+        class="cursor-pointer laptop:!hidden"
+        :avatar-url="walletUserAvatar"
+        :avatar-size="42"
+        :is-avatar-outlined="isWalletUserCivicLiker"
+        @click="handleOpenSider"
+      />
     </div>
+
+    <SiteMenuSider v-if="isShowSider" @close="isShowSider = false">
+      <ButtonV2
+        v-if="!getAddress"
+        class="w-full"
+        preset="secondary"
+        @click="connectWallet"
+        ><div class="flex gap-[12px]">
+          <IconLogin />
+          {{ $t('header_button_connect_to_wallet') }}
+        </div>
+      </ButtonV2>
+      <div v-else class="flex justify-start w-full">
+        <ul class="text-dark-gray">
+          <MenuItem
+            v-for="(item, i) in mainMenuItems"
+            :key="i"
+            class="w-min"
+            :value="item.value"
+            :label="item.name"
+            label-align="left"
+            @select="handleSelectMenuItem"
+          >
+            <template #label-prepend>
+              <MenuIcon :type="item.value" />
+            </template>
+            <template
+              v-if="item.value === 'notifications' && getNotificationCount > 0"
+              #label-append
+            >
+              <div
+                :class="[
+                  'flex',
+                  'justify-center',
+                  'items-center',
+                  'rounded-full',
+                  'min-w-[20px]',
+                  'min-h-[20px]',
+                  'ml-[-10px]',
+                  'mb-[-10px]',
+                  'px-[4px]',
+                  'py-[5px]',
+                  'pointer-events-none',
+                  'bg-shade-gray',
+                  { 'bg-danger': getNotificationCount },
+                ]"
+              >
+                <div class="text-white text-[10px] leading-[1em]">
+                  {{ formattedNotificationCount }}
+                </div>
+              </div>
+            </template>
+          </MenuItem>
+        </ul>
+      </div>
+
+      <template #footer>
+        <Dropdown>
+          <template #trigger="{ toggle }">
+            <ButtonV2
+              preset="tertiary"
+              :text="$t(`Locale.${currentLocale}`),"
+              @click="toggle"
+            >
+              <template #prepend>
+                <GlobeIcon class="w-20 h-20 fill-current" />
+              </template>
+            </ButtonV2>
+          </template>
+          <MenuList>
+            <MenuItem
+              v-for="(item, i) in availableLocales"
+              :key="i"
+              :value="item.value"
+              :label="item.name"
+              :selected-value="currentLocale"
+              @select="handleSelectLocale"
+            />
+          </MenuList>
+        </Dropdown>
+      </template>
+    </SiteMenuSider>
   </div>
 </template>
 
@@ -136,7 +247,6 @@ import { mapActions, mapGetters } from 'vuex';
 import walletMixin from '~/mixins/wallet';
 import { ellipsis, formatNumber } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
 
 import Logo from '~/assets/icons/logo.svg?inline';
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
@@ -157,6 +267,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      isShowSider: false,
+    };
   },
   computed: {
     ...mapGetters(['getHomeRoute', 'getUserId', 'getNotificationCount']),
@@ -237,8 +352,26 @@ export default {
           break;
       }
     },
-    handleClickTryCollect() {
-      logTrackerEvent(this, 'site_menu', 'SiteMenuTryCollectingClick', '', 1);
+    handleOpenSider() {
+      this.isShowSider = true;
+
+      if (this.getAddress) {
+        logTrackerEvent(
+          this,
+          'site_menu',
+          'site_menu_click_sider_menu',
+          this.getAddress,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'site_menu',
+          'site_menu_click_sider_login',
+          '',
+          1
+        );
+      }
     },
   },
 };

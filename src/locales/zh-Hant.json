@@ -71,6 +71,7 @@
     },
     "headerLabel": "你的收藏列表"
   },
+  "bookshelf_view_portfolio_button": "檢視公開頁",
   "boox_banner_alt_text": "文石閱讀器，購買盡享九折優惠，結帳時輸入優惠碼「likerland」",
   "boox_banner_link": "https://www.boox.com.hk/?sl-ref=likerland&locale=zh-hant",
   "campaign_nft_book_just_arrived": "新書上架",
@@ -485,10 +486,9 @@
   "main_menu_articles": "熱門文章",
   "main_menu_civic_liker": "讚賞公民",
   "main_menu_mint_nft": "發行 NFT",
-  "main_menu_my_dashboard": "個人主頁",
   "main_menu_my_portfolio": "我的書架",
   "main_menu_notification": "通知",
-  "main_menu_settings": "設定",
+  "main_menu_settings": "帳戶及設定",
   "main_menu_sign_out": "登出",
   "main_menu_store": "瀏覽書店",
   "mainVPs": [
