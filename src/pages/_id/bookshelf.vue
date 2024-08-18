@@ -375,12 +375,6 @@ export default {
       }
       this.changeTab(tab);
     },
-    goMyDashboard() {
-      logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
-      this.$router.push(
-        this.localeLocation({ name: 'feed', query: { view: 'town' } })
-      );
-    },
     async handleClickFollowers() {
       logTrackerEvent(
         this,

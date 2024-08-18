@@ -124,19 +124,7 @@
           </div>
         </div>
 
-        <!-- goMyDashboard btn -->
-        <div v-if="isUserPortfolio" class="flex justify-center">
-          <ButtonV2
-            preset="outline"
-            :text="$t('main_menu_my_dashboard')"
-            @click="goMyDashboard"
-          >
-            <template #prepend>
-              <IconPerson />
-            </template>
-          </ButtonV2>
-        </div>
-        <template v-else>
+        <template v-if="!isUserPortfolio">
           <CardV2
             v-show="isCurrentTabCreated"
             :is-outline="true"
@@ -506,12 +494,6 @@ export default {
           break;
       }
       this.changeTab(tab);
-    },
-    goMyDashboard() {
-      logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
-      this.$router.push(
-        this.localeLocation({ name: 'feed', query: { view: 'town' } })
-      );
     },
     async handleClickFollowers() {
       logTrackerEvent(
