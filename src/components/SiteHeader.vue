@@ -86,21 +86,6 @@
           </div>
         </template>
         <MenuList>
-          <template v-if="getAddress">
-            <a
-              class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer"
-              href="https://dao.like.co/"
-              target="_blank"
-              rel="noopener"
-            >
-              <div class="text-center text-like-green text-[32px] font-600">
-                {{ walletLIKEBalance | formatNumber }}
-              </div>
-              <div class="text-medium-gray text-[12px] leading-[1]">
-                {{ $t('header_menu_LIKE') }}
-              </div>
-            </a>
-          </template>
           <MenuItem
             v-for="(item, i) in mainMenuItems"
             :key="i"
@@ -206,47 +191,30 @@ export default {
     handleSelectLocale(value) {
       this.updatePreferences({ locale: value });
     },
-    async handleSelectMenuItem(value) {
+    handleSelectMenuItem(value) {
       switch (value) {
-        case 'store': {
-          logTrackerEvent(this, 'site_menu', 'SiteMenuStoreClick', '', 1);
-          this.$router.push(this.localeLocation({ name: 'store' }));
-          break;
-        }
-
-        case 'article': {
-          logTrackerEvent(this, 'site_menu', 'SiteMenuArticleClick', '', 1);
-          this.$router.push(this.localeLocation({ name: 'store-articles' }));
-          break;
-        }
-
-        case 'dashboard': {
-          logTrackerEvent(this, 'site_menu', 'site_menu_click_dashboad', '', 1);
-          await this.navigateToMyDashboard();
-          break;
-        }
-
-        case 'civic':
-          logTrackerEvent(this, 'site_menu', 'site_menu_click_civic', '', 1);
-          this.$router.push(this.localeLocation({ name: 'civic' }));
-          break;
-
-        case 'mintNft':
-          logTrackerEvent(this, 'site_menu', 'site_menu_click_mint_nft', '', 1);
-          window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
+        case 'notifications':
+          logTrackerEvent(
+            this,
+            'site_menu',
+            'site_menu_click_notifications',
+            '',
+            1
+          );
+          this.$router.push(this.localeLocation({ name: 'notifications' }));
           break;
 
         case 'portfolio':
           logTrackerEvent(
             this,
             'site_menu',
-            'site_menu_click_portfolio',
+            'site_menu_click_book_shelf',
             '',
             1
           );
           this.$router.push(
             this.localeLocation({
-              name: 'id',
+              name: 'id-bookshelf',
               params: { id: this.getAddress || this.loginAddress },
             })
           );

@@ -1,6 +1,9 @@
 <template>
-  <main class="max-w-[640px] w-full mx-auto mb-[48px] flex flex-col">
-    <SettingsPageHeader :is-show-back="isHeaderShowBack" />
+  <main class="w-full max-w-[1140px] mx-auto mb-[48px] flex flex-col px-[16px]">
+    <SettingsPageHeader
+      v-if="isHeaderShowBack"
+      :is-show-back="isHeaderShowBack"
+    />
     <NuxtChild />
   </main>
 </template>

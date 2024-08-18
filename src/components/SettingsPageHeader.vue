@@ -1,5 +1,5 @@
 <template>
-  <header class="px-8 mb-24 text-like-green text-16 font-600">
+  <header class="w-full px-8 mb-24 text-like-green text-16 font-600">
     <div class="flex items-center justify-between w-full">
       <div class="flex items-center">
         <button
