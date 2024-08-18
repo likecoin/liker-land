@@ -140,12 +140,10 @@
       <ButtonV2
         v-if="!getAddress"
         class="laptop:hidden"
-        :preset="isPlain ? 'outline' : 'secondary'"
+        preset="plain"
         @click="handleOpenSider"
       >
-        <template #prepend>
-          <IconNav />
-        </template>
+        <IconNav />
       </ButtonV2>
       <Identity
         v-if="getAddress"
