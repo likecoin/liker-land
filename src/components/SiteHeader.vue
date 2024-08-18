@@ -168,12 +168,12 @@
           {{ $t('header_button_connect_to_wallet') }}
         </div>
       </ButtonV2>
-      <div v-else class="flex justify-start w-full">
-        <ul class="text-dark-gray">
+      <div v-else class="w-full">
+        <ul class="w-full text-dark-gray">
           <MenuItem
             v-for="(item, i) in mainMenuItems"
             :key="i"
-            class="w-min"
+            class="flex justify-start w-full"
             :value="item.value"
             :label="item.name"
             label-align="left"
