@@ -908,6 +908,7 @@
   "settings_following": "Following",
   "settings_following_login_in_button": "Verify",
   "settings_following_login_label": "Verify wallet to view following list",
+  "settings_login_in": "Verify wallet to view account and settings",
   "settings_liker_id": "Liker ID",
   "settings_notification": "Notification",
   "settings_notification_fetch_error_message": "Error occurred while loading notification settings: {error}",

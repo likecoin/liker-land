@@ -908,6 +908,7 @@
   "settings_following": "關注中",
   "settings_following_login_in_button": "驗證",
   "settings_following_login_label": "驗證錢包以查看關注列表",
+  "settings_login_in": "驗證錢包以查看帳戶及設定",
   "settings_liker_id": "Liker ID",
   "settings_notification": "通知",
   "settings_notification_fetch_error_message": "載入通知設定時出現錯誤：{error}",
