@@ -212,7 +212,7 @@
 
       <div
         v-if="!portfolioItemsTrimmed.length"
-        class="flex flex-col gap-[12px] max-w-[644px]"
+        class="flex flex-col gap-[12px] w-full"
       >
         <Label
           preset="h5"
@@ -221,6 +221,7 @@
           :text="$t('nft_recommendation_title')"
         />
         <NFTPageRecommendation
+          class="w-full"
           :iscn-owner="getAddress"
           :should-show-follow-button="false"
           :should-show-iscn-owner="false"
