@@ -10,6 +10,7 @@
       'pl-[1em] sm:pl-[3.5em]',
       'pr-[.75em] sm:pr-[2em]',
       'py-[2.5em] phone:py-[28px]',
+      'z-[1000]',
     ]"
   >
     <div class="flex items-center gap-[40px]">
@@ -335,6 +336,7 @@ export default {
             this.localeLocation({
               name: 'id-bookshelf',
               params: { id: this.getAddress || this.loginAddress },
+              query: { tab: 'collected' },
             })
           );
           break;
