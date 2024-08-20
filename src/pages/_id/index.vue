@@ -111,18 +111,6 @@
             />
           </template>
         </NFTPortfolioTopUsersList>
-        <!-- Follower List -->
-        <div
-          v-if="walletHasLoggedIn && isUserPortfolio"
-          class="flex items-center justify-center"
-        >
-          <div
-            class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
-            @click="handleClickFollowers"
-          >
-            {{ $t('portfolio_follower_title') }}
-          </div>
-        </div>
 
         <template v-if="!isUserPortfolio">
           <CardV2
