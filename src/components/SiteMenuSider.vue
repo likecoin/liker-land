@@ -1,5 +1,7 @@
 <template>
-  <div class="fixed top-0 left-0 z-50 w-full h-screen bg-shade-gray">
+  <div
+    class="fixed top-0 left-0 z-50 w-full h-screen bg-black bg-opacity-[30%]"
+  >
     <div
       class="flex flex-col items-center gap-[22px] w-full bg-white px-[18px] py-[42px]"
     >
@@ -13,8 +15,11 @@
         >
           <Logo class="fill-current" />
         </NuxtLink>
-        <div class="cursor-pointer w-[20px] mr-[8px]" @click="close">
-          <IconClose class="w-[24px]" />
+        <div
+          class="flex justify-center items-center cursor-pointer w-[40px] h-[40px]"
+          @click="close"
+        >
+          <IconClose class="w-[20px]" />
         </div>
       </div>
       <slot />

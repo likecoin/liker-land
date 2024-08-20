@@ -148,7 +148,7 @@
       </ButtonV2>
       <Identity
         v-if="getAddress"
-        class="cursor-pointer laptop:!hidden"
+        class="cursor-pointer laptop:!hidden ml-[12px]"
         :avatar-url="walletUserAvatar"
         :avatar-size="42"
         :is-avatar-outlined="isWalletUserCivicLiker"
@@ -179,7 +179,7 @@
             @select="handleSelectMenuItem"
           >
             <template #label-prepend>
-              <MenuIcon :type="item.value" />
+              <MenuIcon :type="item.value" class="mr-[12px]" />
             </template>
             <template
               v-if="item.value === 'notifications' && getNotificationCount > 0"
