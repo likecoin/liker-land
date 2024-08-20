@@ -8,10 +8,8 @@
     >
       <div
         :class="[
-          'relative',
-
           'flex flex-col desktop:flex-row',
-          'gap-[14px]',
+          'gap-[24px]',
           'items-center desktop:items-start',
           'justify-center',
           'pt-[80px]',
@@ -21,20 +19,6 @@
           'mx-auto',
         ]"
       >
-        <h3
-          :class="[
-            'hidden desktop:block',
-            'text-[28px]',
-            'font-500',
-            'absolute',
-            'left-0',
-            'top-0',
-            'translate-x-full',
-          ]"
-        >
-          {{ $t('main_menu_settings') }}
-        </h3>
-
         {{ /* phone version UI */ }}
         <UserInfoCard
           class="flex w-full mb-[12px] desktop:hidden"
@@ -85,6 +69,7 @@
         <section
           :class="[
             'flex',
+            'relative',
             'flex-col',
             'justify-center',
             'items-center',
@@ -93,9 +78,21 @@
             'desktop:flex',
             'gap-[1.5rem]',
             'w-full',
-            'max-w-[272px]',
+            'max-w-[280px]',
           ]"
         >
+          <h3
+            :class="[
+              'hidden desktop:block',
+              'text-[28px]',
+              'font-500',
+              'absolute',
+              'left-0',
+              'top-[-70px]',
+            ]"
+          >
+            {{ $t('main_menu_settings') }}
+          </h3>
           <UserInfoCard
             class="hidden w-full desktop:flex"
             :wallet="loginAddress"
@@ -162,7 +159,7 @@
             'flex-grow',
 
             'w-full',
-            'desktop:max-w-[608px]',
+            'desktop:max-w-[640px]',
 
             { hidden: !isShowSettingsTab },
             'desktop:block',
@@ -242,10 +239,10 @@
             </li>
           </ul>
 
-          <ul v-if="showClearCacheButton" class="settings-menu !mt-[24px]">
+          <ul class="settings-menu !mt-[24px]">
             <li>
               <button
-                class="flex py-12 pl-24 pr-16 settings-menu text-like-green"
+                class="flex w-full py-12 pl-24 pr-16 text-left settings-menu text-like-green"
                 @click="onClickLogOut"
               >
                 <span class="settings-menu__item-title">

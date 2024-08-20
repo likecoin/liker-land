@@ -7,7 +7,7 @@
         'flex-col',
         'desktop:flex-row',
         'gap-x-[24px]',
-        'gap-y-[48px]',
+        'gap-y-[24px]',
 
         'items-center',
         'desktop:items-start',

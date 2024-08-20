@@ -1,5 +1,5 @@
 <template>
-  <main class="w-full max-w-[1140px] mx-auto mb-[48px] flex flex-col px-[16px]">
+  <main class="w-full max-w-[960px] mx-auto mb-[48px] flex flex-col px-[16px]">
     <SettingsPageHeader
       v-if="isHeaderShowBack"
       :is-show-back="isHeaderShowBack"

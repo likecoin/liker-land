@@ -354,7 +354,7 @@ export default {
   computed: {
     ...mapGetters(['getAddress']),
     narrowClass() {
-      return 'max-w-[644px] desktop:w-[644px]';
+      return 'max-w-[640px] w-full';
     },
 
     // Items
