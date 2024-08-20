@@ -12,7 +12,7 @@
           'gap-[24px]',
           'items-center desktop:items-start',
           'justify-center',
-          'pt-[80px]',
+          'desktop:pt-[80px]',
 
           'w-full',
           'max-w-[300px] desktop:max-w-[1140px]',
@@ -316,7 +316,7 @@ export default {
       isOpenFollowersDialog: false,
 
       targetType: DETAILS_TYPE.SALES,
-      currentMainTab: TAB_OPTIONS.USER_STATS,
+      currentMainTab: TAB_OPTIONS.SETTINGS,
     };
   },
   computed: {
