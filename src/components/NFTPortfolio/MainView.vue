@@ -6,7 +6,7 @@
     ]"
   >
     <nav
-      class="relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]"
+      class="relative flex-col desktop:flex-row flex items-center justify-center self-stretch gap-[32px] z-[500]"
     >
       <slot name="tab-bar-prepend" />
       <ul
@@ -44,7 +44,7 @@
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
-          'laptop:absolute laptop:right-0 laptop:top-[50%] laptop:transform laptop:-translate-y-1/2',
+          'desktop:absolute desktop:right-0 desktop:top-[50%] desktop:transform desktop:-translate-y-1/2',
         ]"
       >
         <div class="flex justify-center items-center gap-[16px]">
@@ -121,7 +121,7 @@
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
-          'laptop:absolute laptop:right-0 laptop:top-[50%] laptop:transform laptop:-translate-y-1/2',
+          'desktop:absolute desktop:right-0 desktop:top-[50%] desktop:transform desktop:-translate-y-1/2',
         ]"
       >
         <ButtonV2
@@ -150,6 +150,7 @@
           { 'grid-cols-2 laptop:grid-cols-3': isBookshelf },
           'gap-[24px]',
           'w-full',
+          'z-[0]',
         ]"
       >
         <div class="flex flex-col gap-[24px]">
@@ -170,6 +171,7 @@
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
+          'z-[0]',
         ]"
       >
         <li
