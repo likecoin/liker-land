@@ -72,7 +72,7 @@
           <template #tab-bar-prepend>
             <h3
               :class="[
-                'text-[20px] desktop:text-[28px]',
+                'text-[28px]',
                 'font-500',
                 'relative desktop:absolute desktop:left-0',
               ]"

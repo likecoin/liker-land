@@ -176,7 +176,7 @@
       >
         <li
           v-if="!portfolioItemsTrimmed.length"
-          class="flex flex-col w-full mx-[12px] gap-[24px]"
+          class="flex flex-col w-full gap-[24px] px-[16px]"
         >
           <NFTPortfolioEmpty :preset="portfolioTab" />
         </li>
