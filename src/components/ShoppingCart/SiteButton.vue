@@ -1,11 +1,13 @@
 <template>
   <div class="relative">
     <ButtonV2
-      preset="tertiary"
+      :preset="isPlain ? 'plain' : 'tertiary'"
       :to="localeLocation({ name: 'shopping-cart-book' })"
       @click="handleClickCartButton"
     >
-      <LocalMallIcon class="w-20 h-20 text-like-green" />
+      <LocalMallIcon
+        :class="['w-20 h-20', '!text-like-green', { '!text-white': isPlain }]"
+      />
     </ButtonV2>
     <div
       :class="[
@@ -16,6 +18,7 @@
         'justify-center',
         'items-center',
         'bg-like-green',
+        { 'bg-like-cyan': isPlain },
         'rounded-full',
         'min-w-[20px]',
         'min-h-[20px]',
@@ -26,7 +29,13 @@
         'pointer-events-none',
       ]"
     >
-      <span class="text-like-cyan text-[10px] leading-[1em]">
+      <span
+        :class="[
+          'text-like-cyan',
+          { '!text-like-green': isPlain },
+          'text-[10px] leading-[1em]',
+        ]"
+      >
         {{ shoppingCartBookProductList.length }}
       </span>
     </div>
@@ -44,6 +53,12 @@ export default {
   name: 'ShoppingCartSiteButton',
   components: {
     LocalMallIcon,
+  },
+  props: {
+    isPlain: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapGetters(['getAddress', 'shoppingCartBookProductList']),

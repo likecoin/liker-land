@@ -21,23 +21,24 @@
         <Logo class="fill-current" />
       </NuxtLink>
 
-      <NuxtLink
+      <ButtonV2
         :to="localeLocation({ name: 'store' })"
+        preset="tertiary"
+        size="mini"
+        :text="$t('header_button_try_collect')"
+        :class="[
+          '!text-like-green',
+          { '!text-white !bg-[rgba(235,235,235,0.2)]': isPlain },
+        ]"
         @click.native="handleClickTryCollect"
-      >
-        <div
-          :class="[
-            isPlain ? 'text-white' : 'text-like-green',
-            'hover:scale-105 active:scale-100 transition-transform',
-          ]"
-        >
-          {{ $t('header_button_try_collect') }}
-        </div>
-      </NuxtLink>
+      />
     </div>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
-      <ShoppingCartSiteButton />
+      <ShoppingCartSiteButton
+        v-if="shoppingCartBookProductList.length"
+        :is-plain="isPlain"
+      />
 
       <Dropdown class="hidden laptop:block">
         <template #trigger="{ toggle }">
@@ -60,7 +61,7 @@
       <ButtonV2
         v-if="!getAddress"
         class="hidden laptop:flex"
-        :preset="isPlain ? 'outline' : 'secondary'"
+        :preset="isPlain ? 'secondary' : 'tertiary'"
         :text="$t('header_button_connect_to_wallet')"
         @click="connectWallet"
       >
@@ -69,7 +70,7 @@
         </template>
       </ButtonV2>
 
-      <Dropdown class="hidden laptop:block">
+      <Dropdown class="hidden laptop:block ml-[4px]">
         <template #trigger="{ toggle }">
           <div v-if="getAddress" class="relative">
             <Identity
@@ -272,7 +273,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getHomeRoute', 'getUserId', 'getNotificationCount']),
+    ...mapGetters([
+      'getHomeRoute',
+      'getUserId',
+      'getNotificationCount',
+      'shoppingCartBookProductList',
+    ]),
     currentLocale() {
       return this.$i18n.locale;
     },
