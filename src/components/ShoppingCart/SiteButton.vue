@@ -52,7 +52,7 @@ export default {
     handleClickCartButton() {
       logTrackerEvent(
         this,
-        'NFT',
+        'site_button',
         'shopping_cart_click_site_button',
         this.getAddress,
         1
