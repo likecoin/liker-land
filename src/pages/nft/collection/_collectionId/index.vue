@@ -372,7 +372,13 @@ export default {
     checkTippingAvailability() {
       const hasStock = this.collection?.stock;
       if (!hasStock) return;
-
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_tipping_check',
+        this.collection,
+        1
+      );
       const allowCustomPrice = this.collection?.isAllowCustomPrice;
       // Missing isAllowCustomPrice in collection
       if (allowCustomPrice) {
