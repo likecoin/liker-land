@@ -1056,6 +1056,13 @@ export default {
       const allowCustomPrice = edition?.isAllowCustomPrice;
 
       if (!hasStock && !this.nftIsCollectable) return;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_tipping_check',
+        this.classId,
+        1
+      );
       if (hasStock) {
         if (allowCustomPrice) {
           this.isTippingDialogOpen = true;
