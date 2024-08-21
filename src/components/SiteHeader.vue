@@ -31,7 +31,7 @@
           '!text-like-green',
           { '!text-white !bg-[rgba(235,235,235,0.2)]': isPlain },
         ]"
-        @click.native="handleClickTryCollect"
+        @click.native="handleClickGoStore"
       />
     </div>
 
@@ -308,6 +308,9 @@ export default {
   },
   methods: {
     ...mapActions(['updatePreferences', 'userLogout']),
+    handleClickGoStore() {
+      logTrackerEvent(this, 'site_header', 'site_header_click_store', '', 1);
+    },
     handleSelectLocale(value) {
       this.updatePreferences({ locale: value });
     },
