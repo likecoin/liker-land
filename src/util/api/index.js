@@ -263,6 +263,7 @@ export const postNewStripeFiatPayment = ({
   utmCampaign,
   utmSource,
   utmMedium,
+  referrer,
 }) => {
   const qsPayload = {
     class_id: classId,
@@ -270,6 +271,7 @@ export const postNewStripeFiatPayment = ({
     utm_campaign: utmCampaign,
     utm_source: utmSource,
     utm_medium: utmMedium,
+    referrer,
   };
   return `${LIKECOIN_API_BASE}/likernft/fiat/stripe/new?${querystring.stringify(
     qsPayload
@@ -353,6 +355,7 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   utmCampaign,
   utmSource,
   utmMedium,
+  referrer,
 }) => {
   const qsPayload = {
     price_index: priceIndex,
@@ -361,6 +364,7 @@ export const getFreeNFTBookPurchaseEndpoint = ({
     utm_campaign: utmCampaign,
     utm_source: utmSource,
     utm_medium: utmMedium,
+    referrer,
   };
   return collectionId
     ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/free?${querystring.stringify(
@@ -381,6 +385,7 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
   utmCampaign,
   utmSource,
   utmMedium,
+  referrer,
   platform = NFT_BOOK_PLATFORM_LIKER_LAND,
 }) => {
   const qsPayload = {
@@ -392,6 +397,7 @@ export const postNFTBookLIKEPurchaseEndpoint = ({
     utm_campaign: utmCampaign,
     utm_source: utmSource,
     utm_medium: utmMedium,
+    referrer,
   };
   return collectionId
     ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/like?${querystring.stringify(
@@ -527,6 +533,7 @@ export const getNFTBookPurchaseLink = ({
   utmCampaign,
   utmSource,
   utmMedium,
+  referrer,
 }) => {
   const qsPayload = {
     from: platform,
@@ -536,6 +543,7 @@ export const getNFTBookPurchaseLink = ({
     utm_campaign: utmCampaign,
     utm_source: utmSource,
     utm_medium: utmMedium,
+    referrer,
   };
   if (priceIndex) qsPayload.price_index = priceIndex;
   return collectionId
@@ -553,6 +561,7 @@ export const getNFTBookCartPurchaseLink = ({
   utmCampaign,
   utmSource,
   utmMedium,
+  referrer,
 } = {}) => {
   const qsPayload = {
     ga_client_id: gaClientId,
@@ -560,6 +569,7 @@ export const getNFTBookCartPurchaseLink = ({
     utm_campaign: utmCampaign,
     utm_source: utmSource,
     utm_medium: utmMedium,
+    referrer,
   };
   return `${LIKECOIN_API_BASE}/likernft/book/purchase/cart/new?${querystring.stringify(
     qsPayload
