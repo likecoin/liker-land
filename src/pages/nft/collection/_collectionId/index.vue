@@ -286,7 +286,7 @@ export default {
       logTrackerEvent(
         this,
         'BookCart',
-        'BookCartAddItem',
+        'collection_class_add_to_cart',
         this.collectionId,
         1
       );
@@ -430,7 +430,7 @@ export default {
       logTrackerEvent(
         this,
         'nft_collection',
-        'nft_book_shelf_click_book',
+        'nft_collection_click_shelf_item',
         classId,
         1
       );

@@ -916,7 +916,13 @@ export default {
       this.fetchUserCollectedCount();
     },
     async handleCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_click_collect',
+        this.classId,
+        1
+      );
 
       if (this.nftIsNFTBook) {
         this.checkTippingAvailability(this.defaultSelectedValue);
@@ -1113,7 +1119,7 @@ export default {
       });
       const purchaseEventParams = this.getPurchaseEventParams(edition);
       logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
-      logTrackerEvent(this, 'BookCart', 'BookCartAddItem', this.classId, 1);
+      logTrackerEvent(this, 'BookCart', 'class_add_to_cart', this.classId, 1);
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
