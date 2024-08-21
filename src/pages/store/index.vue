@@ -346,11 +346,6 @@
       </footer>
     </ListingPageDialog>
 
-    <Bodhisattva18BannerCTA
-      class="w-full -mb-[24px] mt-[24px]"
-      @click-button="handleClickNewBookBannerCTA"
-    />
-
     <!-- TODO: Refactor this and the one on the landing page -->
     <Dialog
       :open="dialogNFTClassList.length > 0"
@@ -846,15 +841,6 @@ export default {
         this,
         'listing',
         'listing_cant_find_book_button_click',
-        '',
-        1
-      );
-    },
-    handleClickNewBookBannerCTA() {
-      logTrackerEvent(
-        this,
-        'listing',
-        'listing_new_book_banner_cta_button_click',
         '',
         1
       );
