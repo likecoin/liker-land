@@ -662,15 +662,19 @@ export default {
     },
 
     bookstoreItems() {
-      const bookstoreItemsClassIdsSetFromCMS = new Set(
-        this.bookstoreItemsFromCMS.map(item => item.classId)
-      );
-      return [
+      const items = [
         ...this.bookstoreItemsFromCMS,
-        ...this.nftBookstoreLatestItems.filter(
-          item => !bookstoreItemsClassIdsSetFromCMS.has(item.classId)
-        ),
+        ...this.nftBookstoreLatestItems,
       ];
+      const uniqueIds = new Set();
+      const dedupedItems = [];
+      items.forEach(item => {
+        if (!uniqueIds.has(item.classId)) {
+          uniqueIds.add(item.classId);
+          dedupedItems.push(item);
+        }
+      });
+      return dedupedItems;
     },
     filteredBookstoreItems() {
       return this.bookstoreItems
