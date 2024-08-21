@@ -7,7 +7,7 @@
         :display-state="displayState"
       >
         <NFTBookCoverWithFrame
-          class="w-full !rounded-none"
+          class="w-full rounded-t-[inherit] !rounded-b-[0]"
           :src="imageSrc"
           :alt="title"
           :cover-resize="350"
@@ -15,6 +15,7 @@
           :background-color="imageBgColor"
           @load="handleCoverLoaded"
         />
+
         <div
           :class="[
             'flex',
@@ -26,6 +27,7 @@
             'py-[24px]',
             'bg-white',
             'relative',
+            'rounded-b-[inherit] !rounded-t-[0]',
           ]"
         >
           <div class="flex flex-col items-center justify-center mt-[-70px]">
@@ -48,21 +50,11 @@
             title
           }}</Label>
 
-          <div
-            v-if="price !== undefined"
-            class="z-[48] flex justify-center mt-[16px]"
-          >
+          <div class="z-[48] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
-            <CollectButton
-              v-else-if="!isCollectedTab"
-              class="text-medium-gray"
-              :button-text="collectButtonText"
-              :is-collectable="isCollectable"
-              :collect-expiry-time="collectExpiryTime"
-              @click-collect-button="handleClickCollect"
-            />
             <NFTViewOptionList
-              v-else-if="!isNftBook || ownCount"
+              v-else-if="portfolioTab === 'created' || ownCount"
+              class="flex-grow"
               :class-id="classId"
               :url="externalUrl"
               :content-urls="contentUrls"
@@ -72,38 +64,15 @@
               :is-content-downloadable="isContentDownloadable"
               @view-content="handleClickViewContent"
             />
+            <CollectButton
+              v-else
+              class="text-medium-gray"
+              :button-text="collectButtonText"
+              :is-collectable="isCollectable"
+              :collect-expiry-time="collectExpiryTime"
+              @click-collect-button="handleClickCollect"
+            />
           </div>
-
-          <div
-            class="grid grid-flow-col gap-[16px] items-center justify-center mt-[16px] text-[12px]"
-          >
-            <div class="flex items-center text-medium-gray">
-              <IconMint />
-              <div class="ml-[4px]">{{ collectedCount }}</div>
-            </div>
-            <div class="flex items-center text-medium-gray">
-              <IconOwner />
-              <div class="ml-[4px]">{{ collectorCount }}</div>
-            </div>
-            <div
-              v-if="isCollectedTab && isCollectable"
-              class="flex items-center text-like-green"
-            >
-              <IconPrice />
-              <div class="ml-[4px]">{{ price | formatNumberWithUSD }}</div>
-            </div>
-            <div v-if="ownCount" class="flex items-center text-like-green">
-              <span>{{ $t('nft_details_page_label_owning') }}</span
-              >&nbsp;
-              <span>{{ ownCount }}</span>
-            </div>
-          </div>
-          <Label
-            v-if="classCollectionName"
-            class="mt-[16px] mx-auto rounded-full bg-shade-gray text-dark-gray font-[600] w-min px-[12px] py-[2px]"
-            preset="p6"
-            >{{ classCollectionName }}</Label
-          >
         </div>
       </NFTPortfolioCard>
     </template>
@@ -140,14 +109,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    collectedCount: {
-      type: Number,
-      default: 0,
-    },
-    collectorCount: {
-      type: Number,
-      default: 0,
-    },
     isCollecting: {
       type: Boolean,
       default: false,
@@ -180,14 +141,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    classCollectionType: {
-      type: String,
-      default: '',
-    },
-    classCollectionName: {
-      type: String,
-      default: '',
-    },
     displayState: {
       type: String,
       default: NFT_DISPLAY_STATE.DEFAULT,
@@ -196,9 +149,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    isCollectedTab: {
-      type: Boolean,
-      default: false,
+    portfolioTab: {
+      type: String,
+      default: undefined,
     },
     externalUrl: {
       type: String,

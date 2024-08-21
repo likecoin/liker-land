@@ -3,7 +3,6 @@
     :class="[
       'rounded-[24px]',
       'w-full',
-      'overflow-hidden',
       {
         'bg-gradient-to-tr from-[#D2F0F0] to-[#F0E6B4] hover:bg-none':
           displayState === 'featured',
@@ -21,9 +20,9 @@
         'rounded-[24px]',
         'w-full',
         'h-auto',
-        'overflow-hidden',
         'box-border',
         'border-[2px]',
+        'rounded-[inherit]',
         'border-transparent',
         { 'opacity-25': displayState === 'hidden' },
       ]"

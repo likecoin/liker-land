@@ -31,7 +31,14 @@ export default {
     },
     contentClasses: {
       type: Array,
-      default: () => ['absolute', 'right-0', 'top-full', 'mt-[8px]', 'z-10'],
+      default: () => [
+        'absolute',
+        'right-[50%]',
+        'translate-x-[50%]',
+        'max-w-[90vw]',
+        'mt-[8px]',
+        'z-10',
+      ],
     },
   },
   data() {

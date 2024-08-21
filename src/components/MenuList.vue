@@ -19,6 +19,7 @@ export default {
   computed: {
     rootClasses() {
       const classes = [
+        'max-w-[inherit]',
         'min-w-[150px]',
         'w-max',
         'text-dark-gray',

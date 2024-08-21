@@ -66,7 +66,7 @@
                 >{{
                   getFilenameFromURL(contentUrl) ||
                     getContentUrlButtonText(contentUrl)
-                }}&nbsp;<IconLinkExternal
+                }}&nbsp;<IconLinkExternal class="flex-shrink-0"
               /></ButtonV2>
             </li>
           </ul>
@@ -151,7 +151,8 @@ export default {
     },
     getFilenameFromURL,
     getDownloadFilenameFromURL,
-    handleClickViewContent() {
+    handleClickViewContent(e) {
+      e.stopPropagation();
       this.$emit('view-content');
     },
     handleClickViewContentURL(e, contentUrl, index) {
