@@ -1242,6 +1242,7 @@ export default {
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
+          referrer: document.referrer,
           email: this.walletEmail,
         });
         if (url) {
@@ -1261,6 +1262,7 @@ export default {
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
+            referrer: document.referrer,
           };
           if (this.walletEmail) {
             body.email = this.walletEmail;

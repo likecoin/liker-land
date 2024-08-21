@@ -224,6 +224,7 @@ export default {
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
+          referrer: document.referrer,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
         });

@@ -1157,6 +1157,7 @@ export default {
               utmCampaign: this.utmCampaign,
               utmSource: this.utmSource,
               utmMedium: this.utmMedium,
+              referrer: document.referrer,
               email: this.walletEmail,
             });
             if (url) {
