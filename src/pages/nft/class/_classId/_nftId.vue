@@ -433,7 +433,8 @@ export default {
     };
   },
   head() {
-    let title = this.nftName || this.$t('nft_details_page_title');
+    let title =
+      this.nftName || this.NFTName || this.$t('nft_details_page_title');
     if (this.iscnWorkAuthor) {
       title += ` - ${this.iscnWorkAuthor}`;
     }
@@ -443,8 +444,11 @@ export default {
       title += ` - ${this.$t('nft_details_page_title_article')}`;
     }
     const description =
-      this.nftDescription || this.$t('nft_details_page_description');
+      this.nftDescription ||
+      this.NFTDescription ||
+      this.$t('nft_details_page_description');
     const ogImage =
+      this.nftImageURL ||
       this.NFTImageUrl ||
       `${EXTERNAL_HOST}/images/og/${
         this.$i18n.locale === 'zh-Hant' ? 'default-zh.jpg' : 'default.jpg'
@@ -465,33 +469,46 @@ export default {
           ],
         }
       : undefined;
-    const schemas = [];
-    if (this.purchaseInfo.price) {
-      schemas.push({
-        '@context': 'http://www.schema.org',
-        '@type': ['CreativeWork', 'Product'],
-        name: title,
-        author: this.iscnWorkAuthor,
-        image: [ogImage],
-        description,
-        brand: {
-          '@type': 'Brand',
-          url: `${EXTERNAL_HOST}/about/writing-nft`,
-          name: 'Writing NFT',
-        },
-        sku: this.classId,
-        iscn: this.iscnId,
-        isbn: this.iscnData?.contentMetadata?.isbn,
-        url: `${EXTERNAL_HOST}${this.$route.path}`,
-        offers: {
-          '@type': 'Offer',
-          price: this.NFTPriceUSD,
-          priceCurrency: 'USD',
-          availability: 'LimitedAvailability',
-        },
-        subjectOf: threeDModel,
-      });
+    let brand;
+    if (this.isWritingNft) {
+      brand = {
+        '@type': 'Brand',
+        url: `${EXTERNAL_HOST}/about/writing-nft`,
+        name: 'Writing NFT',
+      };
+    } else if (this.isNftBook) {
+      brand = {
+        '@type': 'Brand',
+        url: `${EXTERNAL_HOST}/about/nft-book`,
+        name: 'NFT Book',
+      };
     }
+    const schemas = [
+      {
+        '@context': 'http://schema.org',
+        '@type': this.isNftBook ? 'Book' : 'CreativeWork',
+        name: title,
+        description,
+        url: `${EXTERNAL_HOST}${this.$route.path}`,
+        exampleOfWork: {
+          '@context': 'http://www.schema.org',
+          '@type': this.isNftBook ? 'Book' : 'CreativeWork',
+          name: title,
+          author: this.iscnWorkAuthor,
+          image: [this.NFTImageUrl],
+          description: this.NFTDescription,
+          brand,
+          sku: this.classId,
+          iscn: this.iscnId,
+          isbn: this.iscnData?.contentMetadata?.isbn,
+          url: `${EXTERNAL_HOST}${this.$route.path}`.replace(
+            `/${this.nftId}`,
+            ''
+          ),
+          subjectOf: threeDModel,
+        },
+      },
+    ];
     const meta = [
       {
         hid: 'og:title',
