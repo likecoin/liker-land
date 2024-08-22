@@ -142,11 +142,11 @@
                   class="flex items-center justify-center"
                 >
                   <ButtonV2
+                    :text="$t('portfolio_follower_title')"
                     preset="tertiary"
                     size="mini"
                     @click="handleClickFollowers"
-                    >{{ $t('portfolio_follower_title') }}</ButtonV2
-                  >
+                  />
                 </div>
               </div>
             </template>
