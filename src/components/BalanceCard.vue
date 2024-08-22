@@ -1,19 +1,17 @@
 <template>
-  <div class=" bg-white rounded-[14px]">
-    <a
-      class="flex flex-col items-center px-[24px] py-[14px] cursor-pointer"
-      href="https://dao.like.co/"
-      target="_blank"
-      rel="noopener"
-    >
-      <div class="text-center text-like-green text-[32px] font-600">
-        {{ balance | formatNumber }}
-      </div>
-      <div class="text-medium-gray text-[12px] leading-[1]">
-        {{ $t('header_menu_LIKE') }}
-      </div>
-    </a>
-  </div>
+  <a
+    class="flex flex-col items-center px-[24px] py-[14px] cursor-pointer bg-white rounded-[14px]"
+    href="https://dao.like.co/"
+    target="_blank"
+    rel="noopener"
+  >
+    <div class="text-center text-like-green text-[32px] font-600">
+      {{ balance | formatNumber }}
+    </div>
+    <div class="text-medium-gray text-[12px] leading-[1]">
+      {{ $t('header_menu_LIKE') }}
+    </div>
+  </a>
 </template>
 
 <script>
