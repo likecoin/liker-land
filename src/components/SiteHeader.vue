@@ -127,11 +127,12 @@
                   'pointer-events-none',
                   'bg-shade-gray',
                   { 'bg-danger': getNotificationCount },
+                  'text-white',
+                  'text-[10px]',
+                  'leading-[1em]',
                 ]"
               >
-                <div class="text-white text-[10px] leading-[1em]">
-                  {{ formattedNotificationCount }}
-                </div>
+                {{ formattedNotificationCount }}
               </div>
             </template>
           </MenuItem>
@@ -173,7 +174,7 @@
           <MenuItem
             v-for="(item, i) in mainMenuItems"
             :key="i"
-            class="flex justify-start w-full"
+            class="flex items-center justify-start w-full"
             :value="item.value"
             :label="item.name"
             label-align="left"
@@ -201,11 +202,12 @@
                   'pointer-events-none',
                   'bg-shade-gray',
                   { 'bg-danger': getNotificationCount },
+                  'text-white',
+                  'text-[10px]',
+                  'leading-[1em]',
                 ]"
               >
-                <div class="text-white text-[10px] leading-[1em]">
-                  {{ formattedNotificationCount }}
-                </div>
+                {{ formattedNotificationCount }}
               </div>
             </template>
           </MenuItem>
