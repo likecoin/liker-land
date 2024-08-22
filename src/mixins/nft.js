@@ -241,7 +241,7 @@ export default {
       return parseNFTMetadataURL(video);
     },
     nftModelURL() {
-      return this.nftIsWritingNFT
+      return this.nftIsWritingNFT || this.nftIsNFTBook
         ? getNFTModel({ classId: this.classId })
         : undefined;
     },

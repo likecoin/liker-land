@@ -607,6 +607,7 @@ export default {
             priceCurrency: 'USD',
             availability: e.stock ? 'LimitedAvailability' : 'OutOfStock',
           },
+          subjectOf: threeDModel,
         });
       });
       schemas.push(bookSchema);
