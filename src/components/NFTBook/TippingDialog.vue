@@ -157,6 +157,13 @@ export default {
       default: undefined,
     },
   },
+  watch: {
+    open(val) {
+      if (val) {
+        logTrackerEvent(this, 'tipping', 'tipping_open', this.currentId, 1);
+      }
+    },
+  },
   data() {
     return {
       selectedIndex: 1,
@@ -171,7 +178,6 @@ export default {
     },
   },
   mounted() {
-    logTrackerEvent(this, 'NFT', 'NFTTippingOpen', this.currentId, 1);
     this.customPrice = this.getDefaultTipping(this.currency)[
       this.selectedIndex
     ];
