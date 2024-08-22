@@ -1,11 +1,9 @@
 <template>
-  <div
-    class="fixed top-0 left-0 z-50 w-full h-screen bg-black bg-opacity-[30%]"
-  >
+  <div class="fixed inset-0 z-50 bg-black bg-opacity-[30%]">
     <div
       class="flex flex-col items-center gap-[22px] w-full bg-white px-[18px] py-[42px]"
     >
-      <div
+      <header
         class="flex items-center justify-between w-full text-like-green mb-[40px]"
       >
         <NuxtLink
@@ -21,7 +19,7 @@
         >
           <IconClose class="w-[20px]" />
         </div>
-      </div>
+      </header>
       <slot />
       <slot name="footer" />
     </div>
@@ -34,6 +32,7 @@ import { mapGetters } from 'vuex';
 import Logo from '~/assets/icons/logo.svg?inline';
 
 export default {
+  name: 'SiteMenuForMobile',
   components: {
     Logo,
   },

@@ -158,7 +158,10 @@
       />
     </div>
 
-    <SiteMenuSider v-if="isShowSider" @close="isShowSider = false">
+    <SiteMenuForMobile
+      v-if="isShowMobileMenu"
+      @close="isShowMobileMenu = false"
+    >
       <ButtonV2
         v-if="!getAddress"
         class="w-full"
@@ -239,7 +242,7 @@
           </MenuList>
         </Dropdown>
       </template>
-    </SiteMenuSider>
+    </SiteMenuForMobile>
   </div>
 </template>
 
@@ -272,7 +275,7 @@ export default {
   },
   data() {
     return {
-      isShowSider: false,
+      isShowMobileMenu: false,
     };
   },
   computed: {
@@ -364,7 +367,7 @@ export default {
       }
     },
     handleOpenSider() {
-      this.isShowSider = true;
+      this.isShowMobileMenu = true;
 
       if (this.getAddress) {
         logTrackerEvent(
