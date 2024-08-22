@@ -60,7 +60,7 @@
       :collection-id="collectionId"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
-      @close="() => (isTippingDialogOpen = false)"
+      @close="handleCloseTippingDialog"
     />
   </Page>
 </template>
@@ -383,6 +383,13 @@ export default {
       // Missing isAllowCustomPrice in collection
       if (allowCustomPrice) {
         this.isTippingDialogOpen = true;
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_collection_details_tipping_open',
+          this.currentId,
+          1
+        );
         return;
       }
       if (this.isAddingToCart) {
@@ -461,6 +468,16 @@ export default {
         this.handleCollectFromEdition();
       }
       this.isTippingDialogOpen = false;
+    },
+    handleCloseTippingDialog() {
+      this.isTippingDialogOpen = false;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_tipping_close',
+        this.classId,
+        1
+      );
     },
   },
 };

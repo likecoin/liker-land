@@ -171,7 +171,6 @@ export default {
     },
   },
   mounted() {
-    logTrackerEvent(this, 'NFT', 'NFTTippingOpen', this.currentId, 1);
     this.customPrice = this.getDefaultTipping(this.currency)[
       this.selectedIndex
     ];

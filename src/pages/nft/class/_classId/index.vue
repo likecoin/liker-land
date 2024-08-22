@@ -378,7 +378,7 @@
       :price="formattedNFTPriceInUSD"
       @on-submit="handleSubmitTipping"
       @on-skip="handleSkipTipping"
-      @close="() => (isTippingDialogOpen = false)"
+      @close="handleCloseTippingDialog"
     />
 
     <Bodhisattva18BannerCTA
@@ -1066,6 +1066,13 @@ export default {
       if (hasStock) {
         if (allowCustomPrice) {
           this.isTippingDialogOpen = true;
+          logTrackerEvent(
+            this,
+            'NFT',
+            'nft_class_details_tipping_open',
+            this.currentId,
+            1
+          );
           return;
         }
         if (this.isAddingToCart) {
@@ -1432,6 +1439,16 @@ export default {
         this,
         'NFT',
         'nft_class_details_book_banner_cta_clicked',
+        this.classId,
+        1
+      );
+    },
+    handleCloseTippingDialog() {
+      this.isTippingDialogOpen = false;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_tipping_close',
         this.classId,
         1
       );
