@@ -1097,9 +1097,6 @@ export default {
         this.productId
       );
     },
-    handleClickViewContentDirectly(e, contentUrl, type) {
-      logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.productId, 1);
-    },
     handleClickNext() {
       logTrackerEvent(
         this,
