@@ -552,7 +552,7 @@
   "nft_claim_NFT_name": "\"{name}\"",
   "nft_claim_NFT_publisher": "Publisher",
   "nft_claim_title": "{name} and {count} other books",
-  "nft_claim_welcome_button_claim": "Login/Register",
+  "nft_claim_welcome_button_claim": "Continue",
   "nft_claim_welcome_text": "Please log in to Liker Land Bookshelf to read your e-book. If you have not registered a Liker Land account, please click here to register.",
   "nft_claim_welcome_text_physical_only": "Payment successful. We will arrange delivery shortly. Thank you for your support!",
   "nft_claim_welcome_text_send_gift": "Your eBook gift has been sent via email. You will be notified by email when the recipient claims the eBook.\nThank you for sharing the joy of reading.",
