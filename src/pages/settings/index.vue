@@ -376,7 +376,7 @@ export default {
       logTrackerEvent(
         this,
         'Settings',
-        'Settings_avatar_click',
+        'settings_avatar_click',
         this.wallet,
         1
       );
@@ -386,7 +386,7 @@ export default {
       logTrackerEvent(
         this,
         'Settings',
-        'Settings_copy_wallet_click',
+        'settings_copy_wallet_click',
         this.wallet,
         1
       );
@@ -416,7 +416,7 @@ export default {
       logTrackerEvent(
         this,
         'Settings',
-        'Settings_collected_click',
+        'settings_collected_click',
         `${this.getAddress}`,
         1
       );
@@ -433,7 +433,7 @@ export default {
       logTrackerEvent(
         this,
         'Settings',
-        'Settings_created_click',
+        'settings_created_click',
         `${this.getAddress}`,
         1
       );
@@ -450,7 +450,7 @@ export default {
       logTrackerEvent(
         this,
         'Settings',
-        'Settings_sales_click',
+        'settings_sales_click',
         `${this.wallet}`,
         1
       );
@@ -521,7 +521,7 @@ export default {
           logTrackerEvent(
             this,
             'Settings',
-            'Settings_tab_click',
+            'settings_tab_click',
             this.wallet,
             1
           );
@@ -531,7 +531,7 @@ export default {
           logTrackerEvent(
             this,
             'Settings',
-            'Settings_user_state_click',
+            'settings_user_state_click',
             this.wallet,
             1
           );
@@ -547,7 +547,7 @@ export default {
       logTrackerEvent(
         this,
         'Settings',
-        'Settings_logout_click',
+        'settings_logout_click',
         this.wallet,
         1
       );
