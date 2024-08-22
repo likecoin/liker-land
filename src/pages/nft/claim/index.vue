@@ -290,8 +290,6 @@
               'mt-[12px]',
             ]"
           >
-            <!-- HACK: The sign-up method might result in the wallet connect dialog not being displayed -->
-            <!-- HACK: so we temporarily using the sign-in method instead -->
             <ButtonV2
               class="phoneLg:w-full phoneLg:max-w-[480px]"
               :content-class="['px-[56px]']"
@@ -777,6 +775,7 @@ export default {
       }
     } else {
       // free purchase?
+      await this.lazyFetchNFTBookInfoByClassId(this.classId);
       const { prices } = this.getNFTBookStoreInfoByClassId(this.classId);
       const data = prices[this.priceIndex];
       const { isPhysicalOnly, autoMemo, isAutoDeliver } = data;
