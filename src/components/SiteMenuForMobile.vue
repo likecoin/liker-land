@@ -13,12 +13,9 @@
         >
           <Logo class="fill-current" />
         </NuxtLink>
-        <div
-          class="flex justify-center items-center cursor-pointer w-[40px] h-[40px]"
-          @click="close"
-        >
+        <ButtonV2 preset="plain" @click="close">
           <IconClose class="w-[20px]" />
-        </div>
+        </ButtonV2>
       </header>
       <slot />
       <slot name="footer" />
