@@ -52,18 +52,23 @@
 
           <div class="z-[48] flex justify-center mt-[16px]">
             <ProgressIndicator v-if="isCollecting" />
-            <NFTViewOptionList
+
+            <div
               v-else-if="portfolioTab === 'created' || ownCount"
-              class="flex-grow"
-              :class-id="classId"
-              :url="externalUrl"
-              :content-urls="contentUrls"
-              :iscn-url="iscnUrl"
-              :is-nft-book="isNftBook"
-              :is-content-viewable="isContentViewable"
-              :is-content-downloadable="isContentDownloadable"
-              @view-content="handleClickViewContent"
-            />
+              class="flex w-full gap-[8px]"
+            >
+              <NFTViewOptionList
+                class="flex-grow"
+                :class-id="classId"
+                :url="externalUrl"
+                :content-urls="contentUrls"
+                :iscn-url="iscnUrl"
+                :is-nft-book="isNftBook"
+                :is-content-viewable="isContentViewable"
+                :is-content-downloadable="isContentDownloadable"
+                @view-content="handleClickViewContent"
+              />
+            </div>
             <CollectButton
               v-else
               class="text-medium-gray"
