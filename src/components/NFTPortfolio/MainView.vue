@@ -146,8 +146,9 @@
         v-if="isLoadingPortfolioItems"
         :class="[
           'grid',
-          'grid-cols-1 laptop:grid-cols-2',
-          { 'grid-cols-2 laptop:grid-cols-3': isBookshelf },
+          isBookshelf
+            ? 'grid-cols-2 laptop:grid-cols-3'
+            : 'grid-cols-1 laptop:grid-cols-2',
           'gap-[24px]',
           'w-full',
           'z-[0]',
