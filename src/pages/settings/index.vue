@@ -12,7 +12,6 @@
           'gap-[24px]',
           'items-center desktop:items-start',
           'justify-center',
-          'desktop:pt-[80px]',
 
           'w-full',
           'max-w-[300px] desktop:max-w-[1140px]',
@@ -81,18 +80,6 @@
             'max-w-[280px]',
           ]"
         >
-          <h3
-            :class="[
-              'hidden desktop:block',
-              'text-[28px]',
-              'font-500',
-              'absolute',
-              'left-0',
-              'top-[-70px]',
-            ]"
-          >
-            {{ $t('main_menu_settings') }}
-          </h3>
           <UserInfoCard
             class="hidden w-full desktop:flex"
             :wallet="loginAddress"
@@ -590,14 +577,14 @@ export default {
     }
 
     &:first-child {
-      @apply rounded-t-[8px];
+      @apply rounded-t-[16px];
     }
     &:not(:first-child) {
       @apply border-t-2;
       @apply border-gray-e6;
     }
     &:last-child {
-      @apply rounded-b-[8px];
+      @apply rounded-b-[16px];
     }
   }
 
