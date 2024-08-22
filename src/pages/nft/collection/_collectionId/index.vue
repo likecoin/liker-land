@@ -446,6 +446,13 @@ export default {
     },
     handleSubmitTipping(price) {
       this.customPrice = Number(price);
+      logTrackerEvent(
+        this,
+        'nft_collection',
+        'nft_collection_details_tipping_submit',
+        this.collectionId,
+        1
+      );
       if (this.isAddingToCart) {
         this.handleAddToCart();
       } else {
@@ -457,7 +464,7 @@ export default {
       logTrackerEvent(
         this,
         'nft_collection',
-        'nft_collection_skip_button_clicked',
+        'nft_collection_details_tipping_skip',
         this.collectionId,
         1
       );
