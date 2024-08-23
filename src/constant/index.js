@@ -275,6 +275,10 @@ export const READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST = [
   'like1cfz3cpmnq4tvxqec77mxr3ygqtet3vqtqmejwm',
 ];
 
-export const CROSS_SELL_PRODUCT_ID = IS_TESTNET
-  ? 'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz'
-  : '';
+export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
+  ? {
+      likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8: [
+        'col_book_37fd9fd7-3323-4b4e-9d94-83566f8fba96',
+      ],
+    }
+  : {};

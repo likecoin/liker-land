@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex';
 
-import { CROSS_SELL_PRODUCT_ID } from '~/constant';
+import { CROSS_SELL_PRODUCT_IDS_MAP } from '~/constant';
 
 export default {
   data() {
@@ -21,7 +21,9 @@ export default {
         : undefined;
     },
     crossSellProductId() {
-      return CROSS_SELL_PRODUCT_ID;
+      const productIds =
+        CROSS_SELL_PRODUCT_IDS_MAP[this.collectionId || this.classId] || [];
+      return productIds.length ? productIds[0] : undefined;
     },
     shouldCrossSell() {
       return (
