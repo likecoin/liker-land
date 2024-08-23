@@ -496,6 +496,9 @@
     "委託 LikeCoin"
   ],
   "month": "月",
+  "nft_book_cross_sell_action_accept": "加購",
+  "nft_book_cross_sell_action_reject": "暫不考慮",
+  "nft_book_cross_sell_title": "你可能也會喜歡⋯⋯",
   "nft_book_gift_dialog_description": "贈送電子書給親朋好友，分享閲讀的喜悦。",
   "nft_book_gift_dialog_label_from_name": "署名",
   "nft_book_gift_dialog_label_message": "給收禮者的信息",

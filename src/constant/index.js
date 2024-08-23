@@ -274,3 +274,7 @@ export const BOOKSTORE_LIST_EXCLUDED_WALLET = IS_TESTNET
 export const READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST = [
   'like1cfz3cpmnq4tvxqec77mxr3ygqtet3vqtqmejwm',
 ];
+
+export const CROSS_SELL_PRODUCT_ID = IS_TESTNET
+  ? 'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz'
+  : '';

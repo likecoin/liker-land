@@ -1466,5 +1466,11 @@ export default {
       }
       this.isRecommendationLoading = false;
     },
+    getEditionByIndex(index) {
+      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
+      const edition =
+        editions.find(e => e.index === Number(index)) || editions[index];
+      return edition;
+    },
   },
 };

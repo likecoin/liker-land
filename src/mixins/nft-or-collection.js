@@ -1,3 +1,4 @@
+import { formatNumberWithUSD } from '~/util/ui';
 import { parseNFTMetadataURL } from '~/util/nft';
 import nftMixin from './nft';
 import collectionMixin from './nft-collection';
@@ -61,6 +62,9 @@ export default {
     productPrice() {
       return this.isCollection ? this.collectionPrice : this.NFTPrice;
     },
+    productPriceWithFormat() {
+      return formatNumberWithUSD(this.productPrice);
+    },
     viewInfoLocation() {
       return this.isCollection
         ? this.localeLocation({
@@ -75,6 +79,21 @@ export default {
               classId: this.classId,
             },
           });
+    },
+  },
+  methods: {
+    async lazyFetchProductInfo() {
+      if (this.isCollection) {
+        await Promise.all([
+          this.lazyFetchNFTCollectionInfo(),
+          this.lazyFetchNFTCollectionPaymentPriceInfo(),
+        ]);
+      } else {
+        Promise.all([
+          this.lazyFetchNFTClassAggregatedData(),
+          this.lazyFetchNFTBookPaymentPriceInfoForAllEditions(),
+        ]);
+      }
     },
   },
 };

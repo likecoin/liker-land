@@ -496,6 +496,9 @@
     "LikeCoin staking"
   ],
   "month": "month",
+  "nft_book_cross_sell_action_accept": "Add to cart",
+  "nft_book_cross_sell_action_reject": "No, Thanks",
+  "nft_book_cross_sell_title": "You might also like...",
   "nft_book_gift_dialog_description": "Send an eBook gift to your friend via email, share the joy of reading!",
   "nft_book_gift_dialog_label_from_name": "Your Name",
   "nft_book_gift_dialog_label_message": "Your message to the receiver",
