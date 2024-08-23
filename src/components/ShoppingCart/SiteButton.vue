@@ -6,7 +6,7 @@
       @click="handleClickCartButton"
     >
       <LocalMallIcon
-        :class="['w-20 h-20', '!text-like-green', { '!text-white': isPlain }]"
+        :class="['w-20 h-20', isPlain ? 'text-white' : 'text-dark-gray']"
       />
     </ButtonV2>
     <div
@@ -17,8 +17,7 @@
         'flex',
         'justify-center',
         'items-center',
-        'bg-like-green',
-        { 'bg-like-cyan': isPlain },
+        isPlain ? 'bg-like-cyan' : 'bg-like-green',
         'rounded-full',
         'min-w-[20px]',
         'min-h-[20px]',
@@ -31,8 +30,7 @@
     >
       <span
         :class="[
-          'text-like-cyan',
-          { '!text-like-green': isPlain },
+          isPlain ? 'text-like-green' : 'text-like-cyan',
           'text-[10px] leading-[1em]',
         ]"
       >
