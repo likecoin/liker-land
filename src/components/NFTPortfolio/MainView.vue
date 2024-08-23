@@ -6,7 +6,7 @@
     ]"
   >
     <nav
-      class="relative flex-col desktop:flex-row flex items-center justify-center self-stretch gap-[32px] z-[500]"
+      class="relative flex-col desktop:flex-row flex items-center justify-center self-stretch gap-[32px] z-[49]"
     >
       <slot name="tab-bar-prepend" />
       <ul
