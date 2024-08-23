@@ -62,7 +62,7 @@
       <ButtonV2
         v-if="!getAddress"
         class="hidden laptop:flex"
-        :preset="isPlain ? 'secondary' : 'tertiary'"
+        preset="secondary"
         :text="$t('header_button_connect_to_wallet')"
         @click="connectWallet"
       >
