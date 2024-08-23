@@ -100,7 +100,8 @@ export default {
       const priceInDecimal = this.collection?.priceInDecimal || 0;
       const price =
         this.getNFTClassPaymentPriceById(this.collectionId)?.fiatPrice ||
-        priceInDecimal / 100;
+        // eslint-disable-next-line prettier/prettier
+        (priceInDecimal / 100);
       return price;
     },
     collectionDefaultPrice() {
