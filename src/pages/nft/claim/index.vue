@@ -1241,7 +1241,7 @@ export default {
       );
       this.$router.push(
         this.localeLocation({
-          name: 'id',
+          name: 'id-bookshelf',
           params: { id: this.claimingAddress },
           query: { tab: 'collected' },
         })
