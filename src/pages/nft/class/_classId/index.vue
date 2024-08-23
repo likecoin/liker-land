@@ -366,7 +366,7 @@
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
       @submit="handleGiftSubmit"
-      @close="() => (isGiftDialogOpen = false)"
+      @close="handleGiftClose"
     />
     <NFTBookTippingDialog
       :open="isTippingDialogOpen"
@@ -1461,6 +1461,16 @@ export default {
         this,
         'NFT',
         'nft_class_details_tipping_close',
+        this.classId,
+        1
+      );
+    },
+    handleGiftClose() {
+      this.isGiftDialogOpen = false;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_gift_close',
         this.classId,
         1
       );
