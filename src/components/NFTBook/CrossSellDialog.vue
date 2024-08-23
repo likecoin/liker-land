@@ -109,7 +109,7 @@ export default {
         this.addBookProductToShoppingCart({
           collectionId: this.collectionId,
           from: NFT_BOOK_PLATFORM_LIKER_LAND,
-          customPriceInDecimal: this.collectionPrice,
+          customPriceInDecimal: this.collectionPrice * 100,
           coupon: this.$route.query.coupon,
         });
 
