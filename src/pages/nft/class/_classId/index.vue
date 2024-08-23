@@ -392,7 +392,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
-import { getNFTBookPurchaseLink } from '~/util/api';
+import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
   USD_TO_HKD_RATIO,
@@ -562,6 +562,9 @@ export default {
           priceCurrency: 'USD',
           availability:
             this.NFTPriceUSD >= 0 ? 'LimitedAvailability' : 'OutOfStock',
+          checkoutPageURLTemplate: postNewStripeFiatPayment({
+            classId: this.classId,
+          }),
         },
         subjectOf: threeDModel,
       });
@@ -606,6 +609,10 @@ export default {
             price: e.price,
             priceCurrency: 'USD',
             availability: e.stock ? 'LimitedAvailability' : 'OutOfStock',
+            checkoutPageURLTemplate: getNFTBookPurchaseLink({
+              classId: this.classId,
+              priceIndex: e.index,
+            }),
           },
           subjectOf: threeDModel,
         });
