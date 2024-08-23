@@ -3,8 +3,10 @@
     :open="open"
     panel-container-class="phone:w-full laptop:w-full max-w-[400px]"
     panel-component="CardV2"
-    panel-class="overflow-y-scroll shadow-lg px-[12px]"
+    panel-class="overflow-y-scroll shadow-lg px-[24px]"
     header-text=""
+    :is-disabled-backdrop-click="false"
+    :has-close-button="false"
   >
     <div class="flex flex-col items-center">
       <Label
@@ -15,10 +17,10 @@
 
       <NFTBookCover class="mt-[24px] h-[200px]" :src="productImageUrl" />
 
-      <Label class="mt-[8px]" preset="h5" :text="productName" />
+      <Label class="mt-[16px]" preset="h5" :text="productName" />
       <Label class="mt-[4px]" preset="p6" :text="productPriceWithFormat" />
 
-      <p class="mt-[16px] line-clamp-2">{{ productDescription }}</p>
+      <p class="mt-[16px] text-[14px] line-clamp-2">{{ productDescription }}</p>
 
       <footer
         class="flex flex-col items-stretch justify-center w-full mt-[20px] gap-[12px]"
