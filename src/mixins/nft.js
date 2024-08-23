@@ -331,10 +331,7 @@ export default {
         if (!result || !result.length) return undefined;
 
         const [price, ...prices] = result;
-        return prices.reduce(
-          (acc, price) => Math.min(acc, price.price),
-          price.price
-        );
+        return prices.reduce((acc, p) => Math.min(acc, p.price), price.price);
       }
 
       return this.paymentInfo?.fiatPrice || undefined;
