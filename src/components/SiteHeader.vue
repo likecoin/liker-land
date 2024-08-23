@@ -118,15 +118,13 @@
                   'min-w-[20px]',
                   'min-h-[20px]',
                   'ml-[-10px]',
-                  'mb-[-10px]',
+                  'mb-[-3px]',
                   'px-[4px]',
-                  'py-[5px]',
                   'pointer-events-none',
                   'bg-shade-gray',
                   { 'bg-danger': getNotificationCount },
                   'text-white',
                   'text-[10px]',
-                  'leading-[1em]',
                 ]"
               >
                 {{ formattedNotificationCount }}
@@ -145,14 +143,28 @@
       >
         <IconNav />
       </ButtonV2>
-      <Identity
-        v-if="getAddress"
-        class="cursor-pointer laptop:!hidden ml-[12px]"
-        :avatar-url="walletUserAvatar"
-        :avatar-size="42"
-        :is-avatar-outlined="isWalletUserCivicLiker"
-        @click="handleOpenSider"
-      />
+      <div v-if="getAddress" class="relative laptop:!hidden">
+        <Identity
+          v-if="getAddress"
+          class="cursor-pointer ml-[12px]"
+          :avatar-url="walletUserAvatar"
+          :avatar-size="42"
+          :is-avatar-outlined="isWalletUserCivicLiker"
+          @click="handleOpenSider"
+        />
+        <div
+          v-if="getNotificationCount"
+          :class="[
+            'w-[12px]',
+            'h-[12px]',
+            'absolute',
+            'top-0',
+            'right-0',
+            'bg-danger',
+            'rounded-full',
+          ]"
+        />
+      </div>
     </div>
 
     <SiteMenuForMobile
@@ -195,8 +207,8 @@
                   'rounded-full',
                   'min-w-[20px]',
                   'min-h-[20px]',
-                  'ml-[-10px]',
-                  'mb-[-10px]',
+                  'ml-[-4px]',
+                  'mb-[-3px]',
                   'px-[4px]',
                   'py-[5px]',
                   'pointer-events-none',
