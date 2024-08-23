@@ -13,7 +13,7 @@
       'z-[1000]',
     ]"
   >
-    <div class="flex items-center gap-[40px]">
+    <div class="flex items-center gap-[40px] phone:gap-[20px]">
       <NuxtLink
         class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
         :disabled="localeLocation(getHomeRoute).name === $route.name"
