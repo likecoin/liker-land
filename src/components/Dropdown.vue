@@ -20,7 +20,6 @@
 
 <script>
 import DropdownMenu from 'v-dropdown-menu/vue2';
-import 'v-dropdown-menu/dist/vue2/v-dropdown-menu.css';
 
 export default {
   components: {
