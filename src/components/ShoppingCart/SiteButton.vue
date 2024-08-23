@@ -10,6 +10,7 @@
       />
     </ButtonV2>
     <div
+      v-if="shoppingCartBookProductList.length"
       :class="[
         'absolute',
         'bottom-full',

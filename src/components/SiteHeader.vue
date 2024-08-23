@@ -36,10 +36,7 @@
     </div>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
-      <ShoppingCartSiteButton
-        v-if="shoppingCartBookProductList.length"
-        :is-plain="isPlain"
-      />
+      <ShoppingCartSiteButton :is-plain="isPlain" />
 
       <Dropdown class="hidden laptop:block">
         <template #trigger="{ toggle }">
