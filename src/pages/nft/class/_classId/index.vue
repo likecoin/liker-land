@@ -387,7 +387,6 @@
       :collection-id="crossSellCollectionId"
       @accept="handleCrossSellAccept"
       @reject="handleCrossSellReject"
-      @close="handleCrossSellDialogClose"
     />
 
     <Bodhisattva18BannerCTA
@@ -1514,15 +1513,6 @@ export default {
       } else {
         this.handleCollectFromEdition();
       }
-    },
-    handleCrossSellDialogClose() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_class_details_cross_sell_close',
-        this.classId,
-        1
-      );
     },
   },
 };

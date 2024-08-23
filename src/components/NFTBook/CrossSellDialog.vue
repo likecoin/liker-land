@@ -5,7 +5,6 @@
     panel-component="CardV2"
     panel-class="overflow-y-scroll shadow-lg px-[12px]"
     header-text=""
-    @close="handleClose"
   >
     <div class="flex flex-col items-center">
       <Label
@@ -169,17 +168,6 @@ export default {
         1
       );
       this.$emit('reject');
-    },
-    handleClose() {
-      logTrackerEvent(
-        this,
-        'NFT',
-        'nft_book_cross_sell_dialog_close',
-        this.productId,
-        1
-      );
-      this.$emit('reject');
-      this.$emit('close');
     },
   },
 };
