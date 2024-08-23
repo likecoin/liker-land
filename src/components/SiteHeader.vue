@@ -38,7 +38,7 @@
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
       <ShoppingCartSiteButton :is-plain="isPlain" />
 
-      <Dropdown class="hidden laptop:block">
+      <Dropdown class="!hidden laptop:!block">
         <template #trigger="{ toggle }">
           <ButtonV2 :preset="isPlain ? 'plain' : 'tertiary'" @click="toggle">
             <GlobeIcon class="w-20 h-20 fill-current" />
@@ -68,7 +68,7 @@
         </template>
       </ButtonV2>
 
-      <Dropdown class="hidden laptop:block ml-[4px]">
+      <Dropdown class="!hidden laptop:!block !ml-[4px]">
         <template #trigger="{ toggle }">
           <div v-if="getAddress" class="relative">
             <Identity
