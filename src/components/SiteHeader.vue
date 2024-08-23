@@ -10,7 +10,7 @@
       'pl-[1em] sm:pl-[3.5em]',
       'pr-[.75em] sm:pr-[2em]',
       'py-[2.5em] phone:py-[28px]',
-      'z-[1000]',
+      'z-[50]',
     ]"
   >
     <div class="flex items-center gap-[40px] phone:gap-[20px]">
