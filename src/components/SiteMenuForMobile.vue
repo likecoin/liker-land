@@ -4,7 +4,7 @@
       class="flex flex-col items-center gap-[22px] w-full bg-white pl-[16px] pr-[8px] py-[28px]"
     >
       <header
-        class="flex items-center justify-between w-full text-like-green mb-[40px]"
+        class="flex items-center justify-between w-full text-like-green mb-[10px]"
       >
         <NuxtLink
           class="w-[90px] transition-transform hover:scale-105 active:scale-100"
