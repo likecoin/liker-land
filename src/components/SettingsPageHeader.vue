@@ -1,62 +1,57 @@
 <template>
-  <header class="w-full px-8 mb-24 text-like-green text-16 font-600">
-    <div class="flex items-center justify-between w-full">
-      <div class="flex items-center">
-        <button
-          :class="[
-            'relative',
-            'mr-16',
-            'text-like-cyan leading-[0] fill-current',
-            'hover:opacity-50 active:opacity-25',
-            'transition-all duration-[0.25s] ease-in-out',
-            isDisabledBackButton ? 'w-40 pointer-events-none' : 'w-24 ml-16',
-          ]"
-          @click="onClickBackButton"
-        >
-          <ArrowLeftIcon
-            :class="[
-              'absolute top-[50%] right-[100%]',
-              'w-[8px] h-[16px] px-[8px]',
-              'text-like-green',
-              'box-content',
-              'translate-y-[-50%]',
-              'transition-opacity duration-[0.25s] ease-in-out',
-              { 'opacity-0': isDisabledBackButton },
-            ]"
-          />
-          <SettingsIcon />
-        </button>
+  <header
+    :class="[
+      'flex',
+      'items-center',
+      'w-full',
+      isDisabledBackButton ? 'h-[0]' : 'h-[66px]',
+      'desktop:h-auto',
+      'transition-all duration-[0.5s] ease-in-out',
+    ]"
+  >
+    <button
+      :class="[
+        'absolute',
+        'p-8',
+        'hover:opacity-50 active:opacity-25',
+        'transition-all duration-[0.5s] ease-in-out',
+        { 'opacity-0 translate-x-[-100%]': isDisabledBackButton },
+        { 'pointer-events-none': isDisabledBackButton },
+      ]"
+      @click="onClickBackButton"
+    >
+      <ArrowLeftIcon class="w-[8px] h-[16px]" />
+    </button>
 
-        <transition name="fade">
-          <span v-if="isDisabledBackButton">{{
-            $t('SettingsPage.title')
-          }}</span>
-        </transition>
-      </div>
+    <h3
+      :class="[
+        { 'opacity-0 desktop:opacity-100': isDisabledBackButton },
 
-      <Button
-        v-if="getRouteBaseName($route) === 'settings-support'"
-        preset="primary-outline"
-        :title="$t('civicLiker.about')"
-        :to="localeLocation({ name: 'civic' })"
-      />
-    </div>
+        'text-[28px]',
+        'font-500',
+
+        { 'scale-75 translate-x-[12px]': !isDisabledBackButton },
+        'transition-all duration-[0.5s] ease-in-out',
+      ]"
+    >
+      {{ title }}
+    </h3>
   </header>
 </template>
 
 <script>
-import Button from '~/components/LegacyButton/Button';
-import SettingsIcon from '~/assets/icons/cog.svg?inline';
 import ArrowLeftIcon from '~/assets/icons/arrow-left.svg?inline';
 
 export default {
   name: 'SettingsPageHeader',
   components: {
     ArrowLeftIcon,
-    Button,
-    SettingsIcon,
   },
   props: {
+    title: {
+      type: String,
+      default: '',
+    },
     isShowBack: {
       type: Boolean,
       default: false,
