@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       isCrossSellDialogOpen: false,
+      crossSellProductIndex: 0,
     };
   },
   computed: {
@@ -20,16 +21,33 @@ export default {
         ? this.crossSellProductId
         : undefined;
     },
+    crossSellProductIds() {
+      return (
+        CROSS_SELL_PRODUCT_IDS_MAP[this.collectionId || this.classId] || []
+      );
+    },
     crossSellProductId() {
-      const productIds =
-        CROSS_SELL_PRODUCT_IDS_MAP[this.collectionId || this.classId] || [];
-      return productIds.length ? productIds[0] : undefined;
+      return this.crossSellProductIds?.length
+        ? this.crossSellProductIds[this.crossSellProductIndex]
+        : undefined;
     },
     shouldCrossSell() {
       return (
         this.crossSellProductId &&
         !this.getShoppingCartBookProductQuantity(this.crossSellProductId)
       );
+    },
+  },
+  watch: {
+    isCrossSellDialogOpen: {
+      handler(open) {
+        if (open) {
+          this.crossSellProductIndex = Math.floor(
+            Math.random() * this.crossSellProductIds.length
+          );
+        }
+      },
+      immediate: true,
     },
   },
   methods: {
