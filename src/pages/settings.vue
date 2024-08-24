@@ -1,5 +1,8 @@
 <template>
-  <main class="w-full max-w-[960px] mx-auto mb-[48px] flex flex-col px-[16px]">
+  <Page
+    class="w-full max-w-[960px] mx-auto mb-[48px] px-[16px]"
+    flex-layout-class="flex-col items-stretch"
+  >
     <SettingsPageHeader
       class="pb-[24px]"
       :title="title"
@@ -7,7 +10,7 @@
     />
 
     <NuxtChild />
-  </main>
+  </Page>
 </template>
 
 <script>
