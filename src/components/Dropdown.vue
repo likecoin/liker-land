@@ -2,6 +2,7 @@
   <div>
     <DropdownMenu
       ref="dropdown"
+      class="w-[inherit]"
       :direction="direction"
       :close-on-click-outside="closeOnClickOutside"
       :overlay="false"
