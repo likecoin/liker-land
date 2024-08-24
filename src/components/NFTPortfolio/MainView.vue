@@ -240,7 +240,7 @@
       </div>
     </div>
 
-    <template v-if="!isLoadingPortfolioItems">
+    <template v-if="!isLoadingPortfolioItems && !this.isBookshelf">
       <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
 
       <ButtonV2

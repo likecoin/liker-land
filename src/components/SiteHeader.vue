@@ -351,7 +351,7 @@ export default {
           );
           this.$router.push(
             this.localeLocation({
-              name: 'id-bookshelf',
+              name: 'bookshelf',
               params: { id: this.getAddress || this.loginAddress },
               query: { tab: 'collected' },
             })
