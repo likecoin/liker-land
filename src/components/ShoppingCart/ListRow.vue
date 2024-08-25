@@ -162,7 +162,9 @@ export default {
   },
   computed: {
     purchaseChannel() {
-      return this.from ? `cannel : ${this.from}` : '';
+      return this.from
+        ? `${this.$t('cart_purchase_channel')} : ${this.from}`
+        : '';
     },
   },
   mounted() {
