@@ -13,7 +13,7 @@
       :class="[
         'absolute',
         'p-8',
-        'hover:opacity-50 active:opacity-25',
+        { 'hover:opacity-50 active:opacity-25': !isDisabledBackButton },
         'transition-all duration-[0.5s] ease-in-out',
         { 'opacity-0 translate-x-[-100%]': isDisabledBackButton },
         { 'pointer-events-none': isDisabledBackButton },
