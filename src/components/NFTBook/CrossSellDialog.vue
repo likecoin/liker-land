@@ -139,7 +139,7 @@ export default {
           classId: this.classId,
           priceIndex: edition.index,
           from: NFT_BOOK_PLATFORM_LIKER_LAND,
-          customPriceInDecimal: edition.price,
+          customPriceInDecimal: edition.price * 100,
           coupon: this.$route.query.coupon,
         });
 
