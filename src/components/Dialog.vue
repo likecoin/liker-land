@@ -71,7 +71,8 @@
           >
             <template v-if="isBasic">
               <Label
-                class="font-bold text-like-green"
+                v-if="headerText"
+                class="font-bold text-like-green mb-[24px]"
                 tag="header"
                 preset="h5"
                 align="left"
@@ -81,10 +82,8 @@
                   <slot name="header-prepend" />
                 </template>
               </Label>
-              <div class="mt-[24px]">
-                <template v-if="text">{{ text }}</template>
-                <slot v-else />
-              </div>
+              <template v-if="text">{{ text }}</template>
+              <slot v-else />
             </template>
             <slot v-else />
           </component>
