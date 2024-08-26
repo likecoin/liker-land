@@ -68,7 +68,7 @@
         >
           <Identity
             :class="['!hidden laptop:!flex']"
-            :avatar-url="productCreator"
+            :avatar-url="productCreatorAvatar"
             :avatar-size="32"
             :is-avatar-disabled="true"
             :is-avatar-outlined="isCreatorCivicLiker"
