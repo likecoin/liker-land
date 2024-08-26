@@ -178,7 +178,7 @@ export const getNFTClassesPartial = ({
   if (reverse) qsPayload['pagination.reverse'] = reverse;
   if (limit) qsPayload['pagination.limit'] = limit;
   if (key) qsPayload['pagination.key'] = key;
-  if (nocache) qsPayload.nocache = `${new Date().getTime()}`;
+  if (nocache) qsPayload.ts = `${Math.round(new Date().getTime() / 1000)}`;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?${querystring.stringify(
     qsPayload
   )}`;

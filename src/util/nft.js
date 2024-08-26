@@ -303,10 +303,8 @@ export const fetchAllNFTClassFromChain = async (
   const params = {
     iscnOwner,
     nftOwner,
+    nocache,
   };
-  if (nocache) {
-    params.nocache = nocache;
-  }
   const classes = await queryAllDataFromChain(
     axios,
     api.getNFTClassesPartial,
