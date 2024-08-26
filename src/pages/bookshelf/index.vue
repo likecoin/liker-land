@@ -208,13 +208,13 @@ export default {
         }
       }
     },
+    wallet() {
+      this.fetchData();
+    },
   },
   mounted() {
     this.syncRouteForTab();
-    this.loadNFTClassesForCurrentTabByAddress(this.wallet);
-    this.fetchNFTDisplayStateListByAddress(this.wallet);
-    this.loadTopUserListByAddress(this.wallet);
-    this.lazyFetchCreatedNFTClassesByAddress(this.wallet);
+    this.fetchData();
   },
   methods: {
     ...mapActions([
@@ -222,6 +222,14 @@ export default {
       'clearShoppingCart',
       'fetchNFTDisplayStateListByAddress',
     ]),
+    fetchData() {
+      if (!this.wallet) return;
+
+      this.loadNFTClassesForCurrentTabByAddress(this.wallet);
+      this.fetchNFTDisplayStateListByAddress(this.wallet);
+      this.loadTopUserListByAddress(this.wallet);
+      this.lazyFetchCreatedNFTClassesByAddress(this.wallet);
+    },
     handleTabChange(tab) {
       switch (tab) {
         case tabOptions.collected:
