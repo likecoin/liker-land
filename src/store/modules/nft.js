@@ -711,9 +711,13 @@ const actions = {
       });
     });
   },
-  async fetchCollectedNFTClassesByAddress({ commit, dispatch }, address) {
+  async fetchCollectedNFTClassesByAddress(
+    { commit, dispatch },
+    { address, nocache = false }
+  ) {
     const promise = fetchAllNFTClassFromChain(this.$api, {
       nftOwner: address,
+      nocache,
     });
     commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
       address,

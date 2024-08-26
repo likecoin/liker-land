@@ -169,6 +169,7 @@ export const getNFTClassesPartial = ({
   reverse,
   limit,
   key,
+  nocache,
 }) => {
   const qsPayload = {}; // TODO: support account based query
   if (iscnOwner) qsPayload.iscn_owner = iscnOwner;
@@ -177,6 +178,7 @@ export const getNFTClassesPartial = ({
   if (reverse) qsPayload['pagination.reverse'] = reverse;
   if (limit) qsPayload['pagination.limit'] = limit;
   if (key) qsPayload['pagination.key'] = key;
+  if (nocache) qsPayload.ts = `${Math.round(new Date().getTime() / 1000)}`;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?${querystring.stringify(
     qsPayload
   )}`;

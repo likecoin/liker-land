@@ -989,7 +989,10 @@ export default {
       }
 
       if (this.isAutoDeliver || this.cartId) {
-        await this.fetchCollectedNFTClassesByAddress(this.claimingAddress);
+        await this.fetchCollectedNFTClassesByAddress({
+          address: this.claimingAddress,
+          nocache: true,
+        });
       }
     },
     async claimFiatPurchase() {
