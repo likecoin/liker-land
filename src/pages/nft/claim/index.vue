@@ -548,7 +548,9 @@ export default {
   data() {
     return {
       nftId: '',
-      state: NFT_CLAIM_STATE.WELCOME,
+      state:
+        NFT_CLAIM_STATE[(this.$route.query.state || '').toUpperCase()] ||
+        NFT_CLAIM_STATE.WELCOME,
       error: '',
       isFreePurchase: this.$route.query.free,
       collectorMessage: '',
@@ -888,7 +890,7 @@ export default {
         })
       );
       this.navigateToState(NFT_CLAIM_STATE.ERROR);
-    } else if (state === NFT_CLAIM_STATE.LOGIN && this.claimingAddress) {
+    } else if (this.claimingAddress) {
       this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
     }
   },
