@@ -298,13 +298,20 @@ export function formatNFTClassInfo(classData) {
 
 export const fetchAllNFTClassFromChain = async (
   axios,
-  { iscnOwner, nftOwner }
+  { iscnOwner, nftOwner, nocache = false }
 ) => {
+  const params = {
+    iscnOwner,
+    nftOwner,
+  };
+  if (nocache) {
+    params.nocache = nocache;
+  }
   const classes = await queryAllDataFromChain(
     axios,
     api.getNFTClassesPartial,
     'classes',
-    { iscnOwner, nftOwner }
+    params
   );
   return classes;
 };
