@@ -13,8 +13,8 @@
       v-if="shoppingCartBookProductList.length"
       :class="[
         'absolute',
-        'bottom-full',
-        'left-full',
+        'bottom-[85%]',
+        'left-[85%]',
         'flex',
         'justify-center',
         'items-center',
