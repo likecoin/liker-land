@@ -150,23 +150,24 @@
         v-if="isLoadingPortfolioItems"
         :class="[
           'grid',
-          isBookshelf
-            ? 'grid-cols-2 laptop:grid-cols-3'
-            : 'grid-cols-1 laptop:grid-cols-2',
+          'grid-cols-1 laptop:grid-cols-2',
+          { 'desktop:grid-cols-3': isBookshelf },
           'gap-[24px]',
           'w-full',
-          'z-[0]',
         ]"
       >
-        <div class="flex flex-col gap-[24px]">
-          <NFTPortfolioItemPlaceholder />
-          <NFTPortfolioItemPlaceholder />
-          <NFTPortfolioItemPlaceholder />
+        <div class="flex flex-col items-center gap-[24px]">
+          <NFTPortfolioItemPlaceholder
+            v-for="i in 3"
+            :key="`row-${i}`"
+            class="w-full max-w-[310px] laptop:max-w-full"
+          />
         </div>
-        <div class="flex flex-col gap-[24px]">
-          <NFTPortfolioItemPlaceholder />
-          <NFTPortfolioItemPlaceholder />
-          <NFTPortfolioItemPlaceholder />
+        <div class="hidden laptop:flex flex-col gap-[24px]">
+          <NFTPortfolioItemPlaceholder v-for="i in 3" :key="`row-${i}`" />
+        </div>
+        <div v-if="isBookshelf" class="hidden desktop:flex flex-col gap-[24px]">
+          <NFTPortfolioItemPlaceholder v-for="i in 3" :key="`row-${i}`" />
         </div>
       </div>
       <ul
