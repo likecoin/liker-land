@@ -49,7 +49,7 @@
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
       @submit="handleGiftSubmit"
-      @close="() => (isGiftDialogOpen = false)"
+      @close="handleGiftClose"
     />
     <NFTBookTippingDialog
       :open="isTippingDialogOpen"
@@ -286,7 +286,7 @@ export default {
       logTrackerEvent(
         this,
         'BookCart',
-        'BookCartAddItem',
+        'collection_class_add_to_cart',
         this.collectionId,
         1
       );
@@ -430,7 +430,7 @@ export default {
       logTrackerEvent(
         this,
         'nft_collection',
-        'nft_book_shelf_click_book',
+        'nft_collection_click_shelf_item',
         classId,
         1
       );
@@ -446,6 +446,13 @@ export default {
     },
     handleSubmitTipping(price) {
       this.customPrice = Number(price);
+      logTrackerEvent(
+        this,
+        'nft_collection',
+        'nft_collection_details_tipping_submit',
+        this.collectionId,
+        1
+      );
       if (this.isAddingToCart) {
         this.handleAddToCart();
       } else {
@@ -457,7 +464,7 @@ export default {
       logTrackerEvent(
         this,
         'nft_collection',
-        'nft_collection_skip_button_clicked',
+        'nft_collection_details_tipping_skip',
         this.collectionId,
         1
       );
@@ -475,6 +482,16 @@ export default {
         this,
         'NFT',
         'nft_collection_details_tipping_close',
+        this.classId,
+        1
+      );
+    },
+    handleGiftClose() {
+      this.isGiftDialogOpen = false;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_gift_close',
         this.classId,
         1
       );

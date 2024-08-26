@@ -18,6 +18,7 @@
             <NuxtLink
               class="text-[14px] text-medium-gray"
               :to="localeLocation({ name: 'index' })"
+              @click.native="handleClickHomePage"
               >{{ $t('listing_page_header_homePage') }}</NuxtLink
             >
             <IconArrowRight class="text-medium-gray" />
@@ -300,7 +301,7 @@
                 'cursor-pointer',
               ]"
             >
-              <label class="flex justify-between items-center w-full">
+              <label class="flex items-center justify-between w-full">
                 <p>{{ item.text }}</p>
                 <input
                   class="accent-like-green"
@@ -848,6 +849,9 @@ export default {
         '',
         1
       );
+    },
+    handleClickHomePage() {
+      logTrackerEvent(this, 'listing', 'listing_home_page_click', '', 1);
     },
   },
 };

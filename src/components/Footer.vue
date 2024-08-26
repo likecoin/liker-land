@@ -15,6 +15,7 @@
         <NuxtLink
           class="text-white transition-colors hover:text-like-cyan"
           to="/"
+          @click.native="handleClickButton('home')"
         >
           <Logo class="fill-current h-[16px]" />
         </NuxtLink>
@@ -49,6 +50,7 @@
               <a
                 class="cursor-pointer hover:underline"
                 @click="isOpenAboutTeam = !isOpenAboutTeam"
+                @click.native="handleClickButton('about_team')"
                 >{{ $t('footer_nav_about_liker_land') }}</a
               >
             </div>
@@ -56,6 +58,7 @@
               <NuxtLink
                 class="hover:underline"
                 :to="localeLocation({ name: 'about-nft-book' })"
+                @click.native="handleClickButton('about_nft_book')"
               >
                 {{ $t('footer_nav_about_nft_book') }}
               </NuxtLink>
@@ -64,12 +67,18 @@
               <NuxtLink
                 class="hover:underline"
                 :to="localeLocation({ name: 'store' })"
+                @click.native="handleClickButton('store_books')"
               >
                 {{ $t('footer_nav_store_books') }}
               </NuxtLink>
             </div>
             <div class="grid grid-flow-row gap-y-[16px]">
-              <a class="hover:underline" target="_blank" :href="mintNftURL">
+              <a
+                class="hover:underline"
+                target="_blank"
+                :href="mintNftURL"
+                @click.native="handleClickButton('mint_nft')"
+              >
                 {{ $t('footer_nav_mint_nft') }}
               </a>
             </div>
@@ -77,6 +86,7 @@
               <NuxtLink
                 class="hover:underline"
                 :to="localeLocation({ name: 'store-articles' })"
+                @click.native="handleClickButton('store_articles')"
               >
                 {{ $t('footer_nav_store_articles') }}
               </NuxtLink>
@@ -153,6 +163,7 @@
 
 <script>
 import Logo from '~/assets/icons/logo.svg?inline';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import crispMixin from '~/mixins/crisp';
 import { APP_LIKE_CO_URL_BASE } from '~/constant';
@@ -192,10 +203,14 @@ export default {
   },
   methods: {
     handleClickHelp() {
+      logTrackerEvent(this, 'footer', 'footer_click_help', '', 1);
       if (this.$crisp) {
         this.showCrisp();
         this.$crisp.push(['do', 'chat:open']);
       }
+    },
+    handleClickButton(buttonName) {
+      logTrackerEvent(this, 'footer', `footer_click_${buttonName}`, '', 1);
     },
   },
 };

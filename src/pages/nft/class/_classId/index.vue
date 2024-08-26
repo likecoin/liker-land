@@ -366,7 +366,7 @@
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
       @submit="handleGiftSubmit"
-      @close="() => (isGiftDialogOpen = false)"
+      @close="handleGiftClose"
     />
     <NFTBookTippingDialog
       :open="isTippingDialogOpen"
@@ -931,7 +931,13 @@ export default {
       this.fetchUserCollectedCount();
     },
     async handleCollect() {
-      logTrackerEvent(this, 'NFT', 'NFTCollect(DetailsPage)', this.classId, 1);
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_click_collect',
+        this.classId,
+        1
+      );
 
       if (this.nftIsNFTBook) {
         this.checkTippingAvailability(this.defaultSelectedValue);
@@ -1131,7 +1137,7 @@ export default {
       });
       const purchaseEventParams = this.getPurchaseEventParams(edition);
       logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
-      logTrackerEvent(this, 'BookCart', 'BookCartAddItem', this.classId, 1);
+      logTrackerEvent(this, 'BookCart', 'class_add_to_cart', this.classId, 1);
     },
     handleAddToCart(selectedValue) {
       this.addToCart(selectedValue);
@@ -1437,6 +1443,13 @@ export default {
     },
     handleSubmitTipping(price) {
       this.customPrice = Number(price);
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_tipping_submit',
+        this.classId,
+        1
+      );
       this.isTippingDialogOpen = false;
       if (this.isAddingToCart) {
         this.handleAddToCart();
@@ -1450,9 +1463,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        this.isTriggerFromEditionSelector
-          ? 'nft_class_details_compare_skip_button_clicked'
-          : 'nft_class_details_edition_selector_skip_button_clicked',
+        'nft_class_details_tipping_skip',
         this.classId,
         1
       );
@@ -1482,6 +1493,16 @@ export default {
         this,
         'NFT',
         'nft_class_details_tipping_close',
+        this.classId,
+        1
+      );
+    },
+    handleGiftClose() {
+      this.isGiftDialogOpen = false;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_gift_close',
         this.classId,
         1
       );
