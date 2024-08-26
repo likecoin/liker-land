@@ -41,13 +41,16 @@
           :src="productImageUrl"
         />
       </NuxtLink>
-      <div class="flex flex-col flex-shrink gap-[8px]">
-        <div class="line-clamp-3 font-[600]">
+      <div class="flex flex-col flex-shrink gap-[6px] laptop:gap-[8px]">
+        <div class="line-clamp-3 text-[14px] font-[600]">
           <NuxtLink
             :to="viewInfoLocation"
             @click.native="handleClickProductName"
             >{{ productName }}</NuxtLink
           >
+        </div>
+        <div class="text-dark-gray text-[12px] font-[500]">
+          {{ purchaseChannel }}
         </div>
         <NuxtLink
           :class="[
@@ -71,7 +74,7 @@
         >
           <Identity
             :class="['!hidden laptop:!flex']"
-            :avatar-url="productCreator"
+            :avatar-url="productCreatorAvatar"
             :avatar-size="32"
             :is-avatar-disabled="true"
             :is-avatar-outlined="isCreatorCivicLiker"
@@ -165,10 +168,10 @@ export default {
     };
   },
   computed: {
-    productDisplayDescription() {
+    purchaseChannel() {
       return this.from
-        ? `[${this.from}] ${this.productDescription}`
-        : this.productDescription;
+        ? `${this.$t('cart_purchase_channel')} : ${this.from}`
+        : '';
     },
   },
   mounted() {
