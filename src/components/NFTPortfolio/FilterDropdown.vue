@@ -1,21 +1,19 @@
 <template>
-  <Dropdown :close-on-child-click="false">
-    <template #trigger="{ toggle }">
+  <Dropdown direction="center" :close-on-child-click="false">
+    <template #trigger>
       <ButtonV2
         :text="$t('order_menu_filter_by')"
         :preset="getFilterButtonPreset"
         size="mini"
-        @click="toggle"
       />
     </template>
-    <div
-      class="flex flex-col px-[24px] py-[16px] rounded-[32px] bg-white shadow-md left-[50%] translate-x-[55%] desktop:translate-x-[30%] translate-y-[8px]"
-    >
+    <div class="flex flex-col rounded-[24px] bg-white shadow-md">
       <header
-        class="flex w-full max-w-[70vw] overflow-x-scroll pb-[16px] border-b-[1px] border-b-shade-gray scrollbar-custom"
+        class="flex w-full max-w-[70vw] px-[24px] py-[16px] border-b-[1px] border-b-shade-gray"
       >
         <div class="flex justify-center items-center gap-[8px]">
           <ButtonV2
+            class="flex-shrink-0"
             :preset="getTypeButtonPreset"
             size="mini"
             :text="$t('order_menu_filter_by_type')"
@@ -23,6 +21,7 @@
           />
           <ButtonV2
             v-if="isPortfolioTabCollectedActive"
+            class="flex-shrink-0"
             :preset="getCreatorsButtonPreset"
             size="mini"
             :text="$t('order_menu_filter_by_creators')"
@@ -30,13 +29,14 @@
           />
           <ButtonV2
             v-if="nftKeywordList.length"
+            class="flex-shrink-0"
             :preset="getKeywordsButtonPreset"
             size="mini"
             :text="$t('order_menu_filter_by_keywords')"
             @click="handleClickKeywords"
           />
           <ButtonV2
-            class="ml-0 laptop:ml-[20px]"
+            class="flex-shrink-0 laptop:ml-[20px]"
             preset="plain"
             size="mini"
             :text="$t('order_menu_filter_clean')"
@@ -45,83 +45,89 @@
         </div>
       </header>
       <main class="flex flex-col justify-start">
-        <!-- type -->
-        <MenuList
-          v-if="selectedFilter === 'type'"
-          class="!w-full border-none"
-          :has-padding="false"
+        <div
+          class="px-[24px] py-[16px] max-h-[35vh] overflow-y-scroll scrollbar-custom"
         >
-          <MenuItem
-            v-for="{ value, label } in nftTypeOptions"
-            :key="value"
-            :value="value"
-            :label="label"
-            label-align="left"
-            :selected-value="portfolioItemsTypeFiltering"
-            @select="handlePortfolioTypeChange"
-          />
-        </MenuList>
-        <!-- creators -->
-        <MenuList
-          v-else-if="selectedFilter === 'creators'"
-          class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom"
-          :has-padding="false"
-        >
-          <NFTPortfolioFilterInput
-            @handle-input-change="
-              value => $emit('input-filter-change-creator', value)
-            "
-          />
-          <MenuItem
-            v-for="user in portfolioCollectedCreatorListWithSorting"
-            :key="user.id"
-            :value="user.id"
-            :label="user.label"
-            :label-class="{
-              'font-600 text-like-green': user.isSelected,
-            }"
-            label-align="left"
-            @select="handlePortfolioCreatorChange"
+          <!-- type -->
+          <MenuList
+            v-if="selectedFilter === 'type'"
+            class="!w-full border-none"
+            :has-padding="false"
           >
-            <template #label-prepend>
-              <IdentityAvatar
-                :url="user.avatar"
-                :display-name="user.displayName"
-                :size="36"
-                :is-outlined="user.isCivicLiker"
-                :is-outline-extruded="false"
-                :is-lazy-loaded="true"
-              />
-            </template>
-            <template v-if="user.isSelected" #label-append>
-              <TickIcon class="w-[20px] fill-like-cyan" />
-            </template>
-          </MenuItem>
-        </MenuList>
-        <!-- keywords -->
-        <MenuList
-          v-else-if="selectedFilter === 'keywords'"
-          class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom"
-          :has-padding="false"
-        >
-          <NFTPortfolioFilterInput
-            @handle-input-change="
-              value => $emit('input-filter-change-keyword', value)
-            "
-          />
-          <div class="flex flex-row flex-wrap items-center gap-[6px] py-[12px]">
-            <ButtonV2
-              v-for="keyword in nftKeywordList"
-              :key="keyword"
-              :preset="
-                nftKeywordFiltering.includes(keyword) ? 'cyan' : 'tertiary'
+            <MenuItem
+              v-for="{ value, label } in nftTypeOptions"
+              :key="value"
+              :value="value"
+              :label="label"
+              label-align="left"
+              :selected-value="portfolioItemsTypeFiltering"
+              @select="handlePortfolioTypeChange"
+            />
+          </MenuList>
+          <!-- creators -->
+          <MenuList
+            v-else-if="selectedFilter === 'creators'"
+            class="!w-full border-none"
+            :has-padding="false"
+          >
+            <NFTPortfolioFilterInput
+              @handle-input-change="
+                value => $emit('input-filter-change-creator', value)
               "
-              @click="() => handleChangeKeywords(keyword)"
+            />
+            <MenuItem
+              v-for="user in portfolioCollectedCreatorListWithSorting"
+              :key="user.id"
+              :value="user.id"
+              :label="user.label"
+              :label-class="{
+                'font-600 text-like-green': user.isSelected,
+              }"
+              label-align="left"
+              @select="handlePortfolioCreatorChange"
             >
-              {{ keyword }}
-            </ButtonV2>
-          </div>
-        </MenuList>
+              <template #label-prepend>
+                <IdentityAvatar
+                  :url="user.avatar"
+                  :display-name="user.displayName"
+                  :size="36"
+                  :is-outlined="user.isCivicLiker"
+                  :is-outline-extruded="false"
+                  :is-lazy-loaded="true"
+                />
+              </template>
+              <template v-if="user.isSelected" #label-append>
+                <TickIcon class="w-[20px] fill-like-cyan" />
+              </template>
+            </MenuItem>
+          </MenuList>
+          <!-- keywords -->
+          <MenuList
+            v-else-if="selectedFilter === 'keywords'"
+            class="!w-full border-none max-h-[35vh] overflow-y-scroll scrollbar-custom"
+            :has-padding="false"
+          >
+            <NFTPortfolioFilterInput
+              @handle-input-change="
+                value => $emit('input-filter-change-keyword', value)
+              "
+            />
+            <div
+              class="flex flex-row flex-wrap items-center gap-[6px] py-[12px]"
+            >
+              <ButtonV2
+                v-for="keyword in nftKeywordList"
+                :key="keyword"
+                :preset="
+                  nftKeywordFiltering.includes(keyword) ? 'cyan' : 'tertiary'
+                "
+                @click="() => handleChangeKeywords(keyword)"
+              >
+                {{ keyword }}
+              </ButtonV2>
+            </div>
+          </MenuList>
+        </div>
       </main>
     </div>
   </Dropdown>

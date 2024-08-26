@@ -292,6 +292,7 @@ const nuxtConfig = {
   css: [
     { src: '@likecoin/ui-vue/dist/ui-vue.css', lang: 'css' },
     { src: '@likecoin/wallet-connector/dist/style.css', lang: 'css' },
+    { src: 'v-dropdown-menu/vue2/css', lang: 'css' },
     { src: '~/assets/css/index.scss', lang: 'scss' },
   ],
 

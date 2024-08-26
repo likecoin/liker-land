@@ -11,14 +11,10 @@
       :price="NFTPrice"
       :is-free="nftIsFree"
       :class-id="classId"
-      :class-collection-type="nftClassCollectionType"
-      :class-collection-name="nftClassCollectionName"
       :external-url="externalUrl"
       :iscn-url="iscnURL"
       :content-urls="iscnContentUrls"
       :is-collectable="nftIsCollectable"
-      :collected-count="collectedCount"
-      :collector-count="ownerCount"
       :user-display-name="creatorDisplayNameFull"
       :user-avatar-src="creatorAvatar"
       :is-user-civic-liker="isCreatorCivicLiker"
@@ -27,7 +23,7 @@
       :own-count="ownCount"
       :display-state="nftDisplayState"
       :is-nft-book="nftIsNFTBook"
-      :is-collected-tab="isCollectedTab"
+      :portfolio-tab="portfolioTab"
       :is-content-viewable="!(nftIsNFTBook && !ownCount)"
       :is-content-downloadable="!nftIsDownloadHidden"
       :collect-expiry-time="collectExpiryTime"
@@ -78,11 +74,8 @@ export default {
     };
   },
   computed: {
-    isCollectedTab() {
-      return this.portfolioTab === 'collected';
-    },
     nftIdForDetails() {
-      return this.isCollectedTab && this.nftId;
+      return this.portfolioTab === 'collected' && this.nftId;
     },
     detailsPageRoute() {
       if (this.nftIdForDetails) {

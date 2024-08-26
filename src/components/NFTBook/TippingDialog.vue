@@ -9,7 +9,7 @@
     <div class="flex flex-col items-center">
       <div class="relative">
         <img
-          class="object-cover w-full"
+          class="object-cover w-full h-[104px]"
           src="~/assets/images/nft/tip-background.png"
         />
         <div

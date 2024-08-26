@@ -274,3 +274,20 @@ export const BOOKSTORE_LIST_EXCLUDED_WALLET = IS_TESTNET
 export const READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST = [
   'like1cfz3cpmnq4tvxqec77mxr3ygqtet3vqtqmejwm',
 ];
+
+export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
+  ? {
+      likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8: [
+        'col_book_37fd9fd7-3323-4b4e-9d94-83566f8fba96',
+        'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
+        'likenft17us58us2sjkr8sau5s6lc0as48traluas440qm7j5r2kaz6z086q7v4a5x',
+      ],
+    }
+  : {
+      likenft1wrskn9a683stkje3wdmcwuvpuqrp5eevjsnn9y4f55wlystzxausuhj3em: [
+        'col_book_4d7b04b5-da74-48d3-9da7-9ae1e9719bf9',
+        'likenft1mgehyarx3lft82g9zwvv9c4g9rgzxfsjda90vzmq5h56vg5u26qsec7rpc',
+        'likenft1eawzxut5zf9t9myyd6prquef7c2r7pe0z3rzlreup59wtxe9hplqcd4987',
+        'likenft1r8mce5h96nvedtm7rh9va5mda6fgysqfprlxftuef09s8kfjt2jsqeyyjq',
+      ],
+    };

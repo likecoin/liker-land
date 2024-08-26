@@ -381,6 +381,14 @@
       @close="handleCloseTippingDialog"
     />
 
+    <NFTBookCrossSellDialog
+      :open="isCrossSellDialogOpen"
+      :class-id="crossSellClassId"
+      :collection-id="crossSellCollectionId"
+      @accept="handleCrossSellAccept"
+      @reject="handleCrossSellReject"
+    />
+
     <Bodhisattva18BannerCTA
       v-if="isShowBanner"
       class="w-full"
@@ -404,12 +412,19 @@ import {
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
+import crossSellMixin from '~/mixins/cross-sell';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
 
 export default {
   name: 'NFTClassDetailsPage',
-  mixins: [clipboardMixin, nftMixin, navigationListenerMixin, utmMixin],
+  mixins: [
+    clipboardMixin,
+    crossSellMixin,
+    nftMixin,
+    navigationListenerMixin,
+    utmMixin,
+  ],
   layout: 'default',
   asyncData({ query }) {
     const { action } = query;
@@ -1050,11 +1065,8 @@ export default {
       return this.handleCollect();
     },
     getEdition(selectedValue) {
-      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
       const index = selectedValue ?? this.selectedValue;
-      const edition =
-        editions.find(e => e.index === Number(index)) || editions[index];
-      return edition;
+      return this.getEditionByIndex(index);
     },
     checkTippingAvailability(selectedValue) {
       this.selectedValue = selectedValue;
@@ -1084,9 +1096,16 @@ export default {
         }
         if (this.isAddingToCart) {
           this.handleAddToCart(selectedValue);
+        } else if (this.shouldCrossSell) {
+          this.selectedValue = selectedValue;
+          this.openCrossSellDialog();
         } else {
           this.handleCollectFromEdition(selectedValue);
         }
+      } else {
+        this.uiPromptErrorAlert(
+          this.$t('nft_class_details_edition_out_of_stock')
+        );
       }
     },
     handleClickAddToCart(selectedValue) {
@@ -1097,8 +1116,7 @@ export default {
       this.isAddingToCart = true;
       this.checkTippingAvailability(selectedValue);
     },
-    handleAddToCart(selectedValue) {
-      this.isAddingToCart = false;
+    addToCart(selectedValue) {
       const edition = this.getEdition(selectedValue ?? this.selectedValue);
       const hasStock = edition?.stock;
 
@@ -1121,6 +1139,13 @@ export default {
       logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
       logTrackerEvent(this, 'BookCart', 'class_add_to_cart', this.classId, 1);
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
+
+      if (this.shouldCrossSell) {
+        this.isAddingToCart = true;
+        this.openCrossSellDialog();
+      } else {
+        this.isAddingToCart = false;
+      }
     },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const edition = this.getEdition(selectedValue ?? this.selectedValue);
@@ -1422,12 +1447,14 @@ export default {
         this.classId,
         1
       );
+      this.isTippingDialogOpen = false;
       if (this.isAddingToCart) {
         this.handleAddToCart();
+      } else if (this.shouldCrossSell) {
+        this.openCrossSellDialog();
       } else {
         this.handleCollectFromEdition();
       }
-      this.isTippingDialogOpen = false;
     },
     handleSkipTipping() {
       logTrackerEvent(
@@ -1439,12 +1466,14 @@ export default {
       );
       this.customPrice = 0;
 
+      this.isTippingDialogOpen = false;
       if (this.isAddingToCart) {
         this.handleAddToCart();
+      } else if (this.shouldCrossSell) {
+        this.openCrossSellDialog();
       } else {
         this.handleCollectFromEdition();
       }
-      this.isTippingDialogOpen = false;
     },
     handleClickBookBannerCTA() {
       logTrackerEvent(
@@ -1474,6 +1503,38 @@ export default {
         this.classId,
         1
       );
+    },
+    handleCrossSellAccept() {
+      this.closeCrossSellDialog();
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_cross_sell_accept',
+        this.classId,
+        1
+      );
+      if (this.isAddingToCart) {
+        this.isAddingToCart = false;
+      } else {
+        this.addToCart();
+        this.$router.push(this.localeLocation({ name: 'shopping-cart-book' }));
+      }
+    },
+    handleCrossSellReject() {
+      this.closeCrossSellDialog();
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_cross_sell_reject',
+        this.classId,
+        1
+      );
+
+      if (this.isAddingToCart) {
+        this.isAddingToCart = false;
+      } else {
+        this.handleCollectFromEdition();
+      }
     },
   },
 };
