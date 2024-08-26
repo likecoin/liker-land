@@ -149,7 +149,7 @@ export default {
     if (!selectedItem || selectedItem.stock <= 0) {
       selectedItem = items.find(
         item =>
-          (selectedItem && item.value !== selectedItem.value) || item.stock > 0
+          selectedItem && item.index !== selectedItem.index && item.stock > 0
       );
     }
     return {

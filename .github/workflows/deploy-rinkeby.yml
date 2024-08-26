@@ -36,6 +36,7 @@ jobs:
           firebase_token: ${{ secrets.FIREBASE_TOKEN }}
       - run: firebase deploy --project civic-liker-develop -f
         env:
+          GA_TRACKING_ID: ${{ vars.GA_TRACKING_ID }}
           CRISP_WEBSITE_ID: ${{ vars.CRISP_WEBSITE_ID }}
           STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}

@@ -71,6 +71,7 @@
     "tiny-cookie": "^1.0.1",
     "url-parse": "^1.4.7",
     "uuid": "^8.3.2",
+    "v-dropdown-menu": "git+ssh://git@github.com:likecoin/v-dropdown-menu.git#9ab8dd0320125c105ae99df096ed3fcb477fe0e0",
     "v-tooltip": "^2.0.2",
     "vue": "2.7.15",
     "vue-awesome-swiper": "^4.1.1",

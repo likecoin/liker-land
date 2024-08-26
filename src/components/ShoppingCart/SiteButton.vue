@@ -1,21 +1,24 @@
 <template>
   <div class="relative">
     <ButtonV2
-      preset="tertiary"
+      :preset="isPlain ? 'plain' : 'tertiary'"
       :to="localeLocation({ name: 'shopping-cart-book' })"
       @click="handleClickCartButton"
     >
-      <LocalMallIcon class="w-20 h-20 text-like-green" />
+      <LocalMallIcon
+        :class="['w-20 h-20', isPlain ? 'text-white' : 'text-dark-gray']"
+      />
     </ButtonV2>
     <div
+      v-if="shoppingCartBookProductList.length"
       :class="[
         'absolute',
-        'bottom-full',
-        'left-full',
+        'bottom-[85%]',
+        'left-[85%]',
         'flex',
         'justify-center',
         'items-center',
-        'bg-like-green',
+        isPlain ? 'bg-like-cyan' : 'bg-like-green',
         'rounded-full',
         'min-w-[20px]',
         'min-h-[20px]',
@@ -26,7 +29,12 @@
         'pointer-events-none',
       ]"
     >
-      <span class="text-like-cyan text-[10px] leading-[1em]">
+      <span
+        :class="[
+          isPlain ? 'text-like-green' : 'text-like-cyan',
+          'text-[10px] leading-[1em]',
+        ]"
+      >
         {{ shoppingCartBookProductList.length }}
       </span>
     </div>
@@ -45,6 +53,12 @@ export default {
   components: {
     LocalMallIcon,
   },
+  props: {
+    isPlain: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     ...mapGetters(['getAddress', 'shoppingCartBookProductList']),
   },
@@ -52,7 +66,7 @@ export default {
     handleClickCartButton() {
       logTrackerEvent(
         this,
-        'NFT',
+        'site_button',
         'shopping_cart_click_site_button',
         this.getAddress,
         1

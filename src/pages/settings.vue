@@ -1,25 +1,31 @@
 <template>
-  <main class="max-w-[640px] w-full mx-auto mb-[48px] flex flex-col">
-    <SettingsPageHeader :is-show-back="isHeaderShowBack" />
+  <Page
+    class="w-full max-w-[960px] mx-auto mb-[48px] px-[16px]"
+    flex-layout-class="flex-col items-stretch"
+  >
+    <SettingsPageHeader
+      class="pb-[24px]"
+      :title="title"
+      :is-show-back="isHeaderShowBack"
+    />
+
     <NuxtChild />
-  </main>
+  </Page>
 </template>
 
 <script>
-import SettingsPageHeader from '~/components/SettingsPageHeader';
-
 export default {
   name: 'SettingsPage',
-  components: {
-    SettingsPageHeader,
-  },
   layout: 'default',
   head() {
     return {
-      title: this.$t('SettingsPage.title'),
+      title: this.title,
     };
   },
   computed: {
+    title() {
+      return this.$t('main_menu_settings');
+    },
     isHeaderShowBack() {
       return /^settings-.+$/.test(this.getRouteBaseName(this.$route));
     },

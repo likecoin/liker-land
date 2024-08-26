@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col gap-[8px] justify-center items-center">
     <ButtonV2
+      :text="buttonText"
       :theme="theme"
       :preset="isCollectable ? 'secondary' : 'tertiary'"
       :is-disabled="isDisabled"
@@ -9,7 +10,6 @@
       <template v-if="isCollectable && theme === 'classic'" #prepend>
         <IconPrice />
       </template>
-      {{ buttonText }}
     </ButtonV2>
     <div
       v-if="shouldShowExpiryTime"

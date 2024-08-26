@@ -93,10 +93,12 @@ export const createPortfolioMixin = ({
       );
     },
     nftClassListOfCollected() {
-      return this.getCollectedNFTClassesByAddress(this.wallet) || [];
+      const nfts = this.getCollectedNFTClassesByAddress(this.wallet);
+      return Array.isArray(nfts) ? nfts : [];
     },
     nftClassListOfCreated() {
-      return this.getCreatedNFTClassesByAddress(this.wallet) || [];
+      const nfts = this.getCreatedNFTClassesByAddress(this.wallet);
+      return Array.isArray(nfts) ? nfts : [];
     },
     nftClassMapOfWritingNft() {
       const nftClassMapOfWritingNft = Array.from(this.allNFTClassMap.values())

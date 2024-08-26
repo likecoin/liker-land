@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col gap-[8px]">
     <ButtonV2
       v-if="url && shouldShowViewContentButton"
       class="w-full"
@@ -24,30 +24,52 @@
       </template>
     </ButtonV2>
 
-    <template v-if="contentUrls.length && shouldShowContentUrlButtons">
-      <Dropdown>
-        <template #trigger="{ toggle }">
+    <ButtonV2
+      v-if="shouldShowContentUrlButtons && contentUrls.length === 1"
+      class="w-full"
+      :text="
+        $t(
+          isNftBook
+            ? 'nft_details_page_download_nft_book_button'
+            : 'nft_details_page_download_button'
+        )
+      "
+      preset="outline"
+      :is-disabled="!isContentViewable"
+      @click="
+        e => {
+          handleClickViewContentURL(e, contentUrls[0], 0);
+          e.preventDefault();
+        }
+      "
+    >
+      <template #prepend>
+        <IconBook class="w-20 h-20" />
+      </template>
+      <!-- HACK: Append an empty icon to keep the button width consistent -->
+      <template #append>
+        <IconArrowDown class="w-16 h-16 opacity-[0]" />
+      </template>
+    </ButtonV2>
+    <template v-else-if="shouldShowContentUrlButtons && contentUrls.length > 1">
+      <Dropdown class="w-full" direction="center">
+        <template #trigger>
           <ButtonV2
             class="w-full"
-            preset="outline"
-            :is-disabled="!isContentViewable"
-            @click="
-              e => {
-                e.preventDefault();
-                toggle();
-              }
-            "
-          >
-            <template #prepend>
-              <IconDownload class="w-20 h-20" />
-            </template>
-            <template #default>{{
+            :text="
               $t(
                 isNftBook
                   ? 'nft_details_page_download_nft_book_button'
                   : 'nft_details_page_download_button'
               )
-            }}</template>
+            "
+            preset="outline"
+            :is-disabled="!isContentViewable"
+            @click="e => e.preventDefault()"
+          >
+            <template #prepend>
+              <IconBook class="w-20 h-20" />
+            </template>
             <template #append>
               <IconArrowDown class="w-16 h-16" />
             </template>
@@ -60,14 +82,19 @@
               :key="contentUrl"
             >
               <ButtonV2
+                class="w-full"
                 preset="plain"
+                :text="
+                  getDownloadFilenameFromURL(contentUrl) ||
+                    getContentUrlButtonText(contentUrl)
+                "
                 :download="getDownloadFilenameFromURL(contentUrl)"
                 @click="e => handleClickViewContentURL(e, contentUrl, index)"
-                >{{
-                  getFilenameFromURL(contentUrl) ||
-                    getContentUrlButtonText(contentUrl)
-                }}&nbsp;<IconLinkExternal
-              /></ButtonV2>
+              >
+                <template #append>
+                  <IconLinkExternal class="flex-shrink-0" />
+                </template>
+              </ButtonV2>
             </li>
           </ul>
         </MenuList>
@@ -151,7 +178,8 @@ export default {
     },
     getFilenameFromURL,
     getDownloadFilenameFromURL,
-    handleClickViewContent() {
+    handleClickViewContent(e) {
+      e.stopPropagation();
       this.$emit('view-content');
     },
     handleClickViewContentURL(e, contentUrl, index) {

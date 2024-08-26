@@ -34,6 +34,7 @@
           'object-contain',
         ]"
         :to="viewInfoLocation"
+        @click.native="handleClickProductImage"
       >
         <NFTCover
           class="rounded-[4px] overflow-hidden shrink"
@@ -42,7 +43,11 @@
       </NuxtLink>
       <div class="flex flex-col flex-shrink gap-[6px] laptop:gap-[8px]">
         <div class="line-clamp-3 text-[14px] font-[600]">
-          <NuxtLink :to="viewInfoLocation">{{ productName }}</NuxtLink>
+          <NuxtLink
+            :to="viewInfoLocation"
+            @click.native="handleClickProductName"
+            >{{ productName }}</NuxtLink
+          >
         </div>
         <div class="text-dark-gray text-[12px] font-[500]">
           {{ purchaseChannel }}
@@ -65,6 +70,7 @@
                 })
               : ''
           "
+          @click.native="handleClickProductOwner"
         >
           <Identity
             :class="['!hidden laptop:!flex']"
@@ -115,6 +121,7 @@
 
 <script>
 import { ellipsis, formatNumberWithUSD } from '~/util/ui';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 import nftOrCollection from '~/mixins/nft-or-collection';
 
@@ -200,6 +207,33 @@ export default {
         price: this.customPrice || this.productPrice,
       };
       this.$emit('remove', item);
+    },
+    handleClickProductImage() {
+      logTrackerEvent(
+        this,
+        'shopping_cart',
+        'shopping_cart_product_image_click',
+        this.productId,
+        1
+      );
+    },
+    handleClickProductName() {
+      logTrackerEvent(
+        this,
+        'shopping_cart',
+        'shopping_cart_product_name_click',
+        this.productId,
+        1
+      );
+    },
+    handleClickProductOwner() {
+      logTrackerEvent(
+        this,
+        'shopping_cart',
+        'shopping_cart_product_owner_click',
+        this.productOwner,
+        1
+      );
     },
   },
 };

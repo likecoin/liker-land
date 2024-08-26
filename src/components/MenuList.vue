@@ -19,8 +19,6 @@ export default {
   computed: {
     rootClasses() {
       const classes = [
-        'min-w-[150px]',
-        'w-max',
         'text-dark-gray',
         'text-left',
         { 'p-[12px]': this.hasPadding },
