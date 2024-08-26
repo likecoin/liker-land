@@ -1,5 +1,5 @@
 <template>
-  <Page :class="['overflow-x-hidden', { 'p-[16px]': isInInAppBrowser }]">
+  <Page :class="['overflow-x-hidden', 'p-[16px]']">
     <AuthRequiredView
       class="flex flex-col relative w-full max-w-[962px] mx-auto mb-[48px]"
       :is-loading-start-immediately="isInInAppBrowser"
