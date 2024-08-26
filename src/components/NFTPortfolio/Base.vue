@@ -70,7 +70,7 @@
               />
             </div>
             <CollectButton
-              v-else
+              v-else-if="portfolioTab !== 'collected'"
               class="text-medium-gray"
               :button-text="collectButtonText"
               :is-collectable="isCollectable"
