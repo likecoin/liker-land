@@ -54,7 +54,9 @@
             preset="tertiary"
             size="mini"
             @click="goToPortfolioPage"
-          />
+            ><template #prepend>
+              <IconEye class="w-[12px]"/></template
+          ></ButtonV2>
           <!-- filter -->
           <NFTPortfolioFilterDropdown
             :get-filter-button-preset="getFilterButtonPreset"
@@ -130,7 +132,9 @@
           preset="tertiary"
           size="mini"
           @click="goToPortfolioPage"
-        />
+          ><template #prepend>
+            <IconEye class="w-[12px]" /> </template
+        ></ButtonV2>
       </div>
     </nav>
 
@@ -240,7 +244,7 @@
       </div>
     </div>
 
-    <template v-if="!isLoadingPortfolioItems && !this.isBookshelf">
+    <template v-if="!isLoadingPortfolioItems && !isBookshelf">
       <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
 
       <ButtonV2
