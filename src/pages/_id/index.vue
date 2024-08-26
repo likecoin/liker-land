@@ -7,7 +7,7 @@
         'flex-col',
         'desktop:flex-row',
         'gap-x-[24px]',
-        'gap-y-[48px]',
+        'gap-y-[24px]',
 
         'items-center',
         'desktop:items-start',
@@ -111,32 +111,8 @@
             />
           </template>
         </NFTPortfolioTopUsersList>
-        <!-- Follower List -->
-        <div
-          v-if="walletHasLoggedIn && isUserPortfolio"
-          class="flex items-center justify-center"
-        >
-          <div
-            class="underline transition-all duration-75 cursor-pointer text-medium-gray hover:text-dark-gray"
-            @click="handleClickFollowers"
-          >
-            {{ $t('portfolio_follower_title') }}
-          </div>
-        </div>
 
-        <!-- goMyDashboard btn -->
-        <div v-if="isUserPortfolio" class="flex justify-center">
-          <ButtonV2
-            preset="outline"
-            :text="$t('main_menu_my_dashboard')"
-            @click="goMyDashboard"
-          >
-            <template #prepend>
-              <IconPerson />
-            </template>
-          </ButtonV2>
-        </div>
-        <template v-else>
+        <template v-if="!isUserPortfolio">
           <CardV2
             v-show="isCurrentTabCreated"
             :is-outline="true"
@@ -506,12 +482,6 @@ export default {
           break;
       }
       this.changeTab(tab);
-    },
-    goMyDashboard() {
-      logTrackerEvent(this, 'UserPortfolio', 'GoToMyDashboard', this.wallet, 1);
-      this.$router.push(
-        this.localeLocation({ name: 'feed', query: { view: 'town' } })
-      );
     },
     async handleClickFollowers() {
       logTrackerEvent(

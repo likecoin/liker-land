@@ -6,12 +6,9 @@
           <NuxtLink
             :to="
               localeLocation({
-                name: 'feed',
-                query: {
-                  view: 'collectibles',
-                  tab: 'collected',
-                  type: 'nft_book',
-                },
+                name: 'id',
+                params: { id: getAddress },
+                query: { tab: 'collected' },
               })
             "
             :alt="$t('main_menu_my_portfolio')"
@@ -219,7 +216,7 @@
         :type="progressIndicatorType"
         :value="progressPercent"
       />
-      <span class="text-like-green text-center">{{ progressLabelText }}</span>
+      <span class="text-center text-like-green">{{ progressLabelText }}</span>
     </div>
   </div>
 </template>

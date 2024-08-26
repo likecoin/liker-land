@@ -7,9 +7,7 @@
 <script>
 export default {
   fetch({ redirect, localeLocation, query }) {
-    redirect(
-      localeLocation({ name: 'feed', query: { ...query, view: 'town' } })
-    );
+    redirect(localeLocation({ name: 'bookshelf', query }));
   },
 };
 </script>
