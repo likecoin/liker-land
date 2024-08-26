@@ -1096,6 +1096,10 @@ export default {
         } else {
           this.handleCollectFromEdition(selectedValue);
         }
+      } else {
+        this.uiPromptErrorAlert(
+          this.$t('nft_class_details_edition_out_of_stock')
+        );
       }
     },
     handleClickAddToCart(selectedValue) {

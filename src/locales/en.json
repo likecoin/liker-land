@@ -565,6 +565,7 @@
   "nft_claim_welcome_title_send_gift": "Thank you for your support and for sending the gift",
   "nft_class_claimed": "Claimed",
   "nft_class_collected": "Collected",
+  "nft_class_details_edition_out_of_stock": "Your selected edition is out of stock.",
   "nft_class_details_info_section_nft_class_id_label": "NFT Class ID",
   "nft_class_details_info_section_title": "Info",
   "nft_class_footer_image": "NFT Widget Image",
