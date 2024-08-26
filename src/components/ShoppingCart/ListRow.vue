@@ -210,7 +210,7 @@ export default {
         this,
         'shopping_cart',
         'shopping_cart_product_image_click',
-        '',
+        this.productId,
         1
       );
     },
@@ -219,7 +219,7 @@ export default {
         this,
         'shopping_cart',
         'shopping_cart_product_name_click',
-        '',
+        this.productId,
         1
       );
     },
@@ -228,7 +228,7 @@ export default {
         this,
         'shopping_cart',
         'shopping_cart_product_owner_click',
-        '',
+        this.productOwner,
         1
       );
     },
