@@ -326,6 +326,14 @@ export default {
         : '-';
     },
     nftPaymentPriceInUSD() {
+      if (this.nftIsNFTBook) {
+        const result = this.getNFTBookStorePricesByClassId(this.classId);
+        if (!result || !result.length) return undefined;
+
+        const [price, ...prices] = result;
+        return prices.reduce((acc, p) => Math.min(acc, p.price), price.price);
+      }
+
       return this.paymentInfo?.fiatPrice || undefined;
     },
     // alias of NFTPrice
