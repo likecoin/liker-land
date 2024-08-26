@@ -6,7 +6,7 @@
     ]"
   >
     <nav
-      class="relative flex-col laptop:flex-row flex items-center justify-center self-stretch gap-[32px]"
+      class="relative flex-col desktop:flex-row flex items-center justify-center self-stretch gap-[32px] z-[49]"
     >
       <slot name="tab-bar-prepend" />
       <ul
@@ -37,9 +37,6 @@
           />
         </li>
       </ul>
-    </nav>
-
-    <div :class="['flex flex-col items-center gap-[32px] w-full', narrowClass]">
       <div
         v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
@@ -47,9 +44,19 @@
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
+          'desktop:absolute desktop:right-0 desktop:top-[50%] desktop:transform desktop:-translate-y-1/2',
         ]"
       >
         <div class="flex justify-center items-center gap-[16px]">
+          <ButtonV2
+            v-if="isBookshelf"
+            :text="$t('bookshelf_view_portfolio_button')"
+            preset="tertiary"
+            size="mini"
+            @click="goToPortfolioPage"
+            ><template #prepend>
+              <IconEye class="w-[12px]"/></template
+          ></ButtonV2>
           <!-- filter -->
           <NFTPortfolioFilterDropdown
             :get-filter-button-preset="getFilterButtonPreset"
@@ -109,12 +116,47 @@
           </Dropdown>
         </div>
       </div>
+      <div
+        v-else
+        :class="[
+          'flex self-stretch justify-center gap-[8px] items-center desktop:justify-end',
+          {
+            'opacity-0 pointer-events-none': isLoadingPortfolioItems,
+          },
+          'desktop:absolute desktop:right-0 desktop:top-[50%] desktop:transform desktop:-translate-y-1/2',
+        ]"
+      >
+        <ButtonV2
+          v-if="isBookshelf"
+          :text="$t('bookshelf_view_portfolio_button')"
+          preset="tertiary"
+          size="mini"
+          @click="goToPortfolioPage"
+          ><template #prepend>
+            <IconEye class="w-[12px]" /> </template
+        ></ButtonV2>
+      </div>
+    </nav>
 
+    <div
+      :class="[
+        'flex flex-col items-center gap-[32px] w-full',
+        { [narrowClass]: isNarrow },
+      ]"
+    >
       <slot name="before-grid" />
 
       <div
         v-if="isLoadingPortfolioItems"
-        class="grid grid-cols-1 laptop:grid-cols-2 gap-[24px] w-full"
+        :class="[
+          'grid',
+          isBookshelf
+            ? 'grid-cols-2 laptop:grid-cols-3'
+            : 'grid-cols-1 laptop:grid-cols-2',
+          'gap-[24px]',
+          'w-full',
+          'z-[0]',
+        ]"
       >
         <div class="flex flex-col gap-[24px]">
           <NFTPortfolioItemPlaceholder />
@@ -130,15 +172,16 @@
       <ul
         ref="portfolioGrid"
         :class="[
-          'self-stretch -mx-[12px] desktop:w-[668px] transition-all relative',
+          'self-stretch -mx-[12px] transition-all relative',
           {
             'opacity-0 pointer-events-none': isLoadingPortfolioItems,
           },
+          'z-[0]',
         ]"
       >
         <li
           v-if="!portfolioItemsTrimmed.length"
-          class="flex flex-col w-full mx-[12px] gap-[24px]"
+          class="flex flex-col w-full gap-[24px] px-[16px]"
         >
           <NFTPortfolioEmpty :preset="portfolioTab" />
         </li>
@@ -172,7 +215,7 @@
 
       <div
         v-if="!portfolioItemsTrimmed.length"
-        class="flex flex-col gap-[12px] max-w-[644px]"
+        class="flex flex-col gap-[12px] w-full"
       >
         <Label
           preset="h5"
@@ -181,6 +224,7 @@
           :text="$t('nft_recommendation_title')"
         />
         <NFTPageRecommendation
+          class="w-full"
           :iscn-owner="getAddress"
           :should-show-follow-button="false"
           :should-show-iscn-owner="false"
@@ -196,7 +240,7 @@
       </div>
     </div>
 
-    <template v-if="!isLoadingPortfolioItems">
+    <template v-if="!isLoadingPortfolioItems && !isBookshelf">
       <hr class="w-[32px] h-[2px] bg-shade-gray border-none" />
 
       <ButtonV2
@@ -238,6 +282,10 @@ const SELECTED_FILTER = {
 
 export default {
   props: {
+    isBookshelf: {
+      type: Boolean,
+      default: false,
+    },
     isNarrow: {
       type: Boolean,
       default: false,
@@ -307,7 +355,7 @@ export default {
   computed: {
     ...mapGetters(['getAddress']),
     narrowClass() {
-      return 'max-w-[644px] desktop:w-[644px]';
+      return 'max-w-[640px] w-full';
     },
 
     // Items
@@ -555,8 +603,8 @@ export default {
       this.portfolioGridController = new MagicGrid({
         container,
         items: this.portfolioItemsTrimmedCount || 1,
-        gutter: 24,
-        maxColumns: 2,
+        gutter: this.isBookshelf ? 12 : 20,
+        maxColumns: this.isBookshelf ? 3 : 2,
         useMin: true,
         // Note: Mitigate the layout issue by disabling transform and use absolute position
         useTransform: false,
@@ -637,6 +685,21 @@ export default {
         this.classId,
         1
       );
+    },
+    goToPortfolioPage() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_portfolio_clicked_view_public_page',
+        this.classId,
+        1
+      );
+      const portfolioUrl = this.localeLocation({
+        name: 'id',
+        params: { id: this.getAddress || this.loginAddress },
+      });
+      const portfolioUrlString = this.$router.resolve(portfolioUrl).href;
+      window.open(portfolioUrlString, '_blank');
     },
   },
 };

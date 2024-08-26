@@ -10,53 +10,35 @@
       'pl-[1em] sm:pl-[3.5em]',
       'pr-[.75em] sm:pr-[2em]',
       'py-[2.5em] phone:py-[28px]',
+      'z-[50]',
     ]"
   >
-    <NuxtLink
-      class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
-      :disabled="localeLocation(getHomeRoute).name === $route.name"
-      :to="localeLocation(getHomeRoute)"
-    >
-      <Logo class="fill-current" />
-    </NuxtLink>
+    <div class="flex items-center gap-[40px] phone:gap-[20px]">
+      <NuxtLink
+        class="w-[90px] hover:scale-105 active:scale-100 transition-transform"
+        :disabled="localeLocation(getHomeRoute).name === $route.name"
+        :to="localeLocation(getHomeRoute)"
+      >
+        <Logo class="fill-current" />
+      </NuxtLink>
+
+      <ButtonV2
+        :to="localeLocation({ name: 'store' })"
+        preset="tertiary"
+        size="mini"
+        :text="$t('header_button_try_collect')"
+        :class="[
+          '!text-like-green',
+          { '!text-white !bg-[rgba(235,235,235,0.2)]': isPlain },
+        ]"
+        @click.native="handleClickGoStore"
+      />
+    </div>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
-      <ShoppingCartSiteButton />
+      <ShoppingCartSiteButton :is-plain="isPlain" />
 
-      <div v-if="loginAddress" class="relative">
-        <ButtonV2
-          :preset="isPlain ? 'plain' : 'tertiary'"
-          :to="localeLocation({ name: 'notifications' })"
-        >
-          <IconBell class="w-20 h-20 text-current" />
-        </ButtonV2>
-        <div
-          v-if="getNotificationCount > 0"
-          :class="[
-            'absolute',
-            'bottom-full',
-            'left-full',
-            'flex',
-            'justify-center',
-            'items-center',
-            'bg-danger',
-            'rounded-full',
-            'min-w-[20px]',
-            'min-h-[20px]',
-            'ml-[-10px]',
-            'mb-[-10px]',
-            'px-[4px]',
-            'py-[5px]',
-            'pointer-events-none',
-          ]"
-        >
-          <span class="text-white text-[10px] leading-[1em]">
-            {{ formattedNotificationCount }}
-          </span>
-        </div>
-      </div>
-
-      <Dropdown>
+      <Dropdown class="hidden laptop:block">
         <template #trigger="{ toggle }">
           <ButtonV2 :preset="isPlain ? 'plain' : 'tertiary'" @click="toggle">
             <GlobeIcon class="w-20 h-20 fill-current" />
@@ -75,17 +57,9 @@
       </Dropdown>
 
       <ButtonV2
-        v-if="getRouteBaseName($route) === 'index'"
-        class="phone:hidden"
-        :preset="isPlain ? 'outline' : 'secondary'"
-        :to="localeLocation({ name: 'store' })"
-        :text="$t('header_button_try_collect')"
-        @click.native="handleClickTryCollect"
-      />
-      <ButtonV2
-        v-else-if="!getAddress"
+        v-if="!getAddress"
         class="hidden laptop:flex"
-        :preset="isPlain ? 'outline' : 'secondary'"
+        preset="secondary"
         :text="$t('header_button_connect_to_wallet')"
         @click="connectWallet"
       >
@@ -94,17 +68,9 @@
         </template>
       </ButtonV2>
 
-      <Dropdown>
+      <Dropdown class="hidden laptop:block ml-[4px]">
         <template #trigger="{ toggle }">
-          <ButtonV2
-            v-if="!getAddress"
-            class="-mr-[8px]"
-            preset="plain"
-            @click="toggle"
-          >
-            <IconNav />
-          </ButtonV2>
-          <div v-else class="relative">
+          <div v-if="getAddress" class="relative">
             <Identity
               class="cursor-pointer"
               :avatar-url="walletUserAvatar"
@@ -112,24 +78,22 @@
               :is-avatar-outlined="isWalletUserCivicLiker"
               @click="toggle"
             />
+            <div
+              v-if="getNotificationCount"
+              :class="[
+                'w-[12px]',
+                'h-[12px]',
+                'absolute',
+                'top-0',
+                'right-0',
+                'bg-danger',
+                'rounded-full',
+                'hidden laptop:block',
+              ]"
+            />
           </div>
         </template>
         <MenuList>
-          <template v-if="getAddress">
-            <a
-              class="flex flex-col items-center px-[24px] py-[12px] cursor-pointer"
-              href="https://dao.like.co/"
-              target="_blank"
-              rel="noopener"
-            >
-              <div class="text-center text-like-green text-[32px] font-600">
-                {{ walletLIKEBalance | formatNumber }}
-              </div>
-              <div class="text-medium-gray text-[12px] leading-[1]">
-                {{ $t('header_menu_LIKE') }}
-              </div>
-            </a>
-          </template>
           <MenuItem
             v-for="(item, i) in mainMenuItems"
             :key="i"
@@ -150,23 +114,144 @@
                   'flex',
                   'justify-center',
                   'items-center',
+                  'rounded-full',
+                  'min-w-[20px]',
+                  'min-h-[20px]',
+                  'ml-[-10px]',
+                  'mb-[-3px]',
+                  'px-[4px]',
+                  'pointer-events-none',
                   'bg-shade-gray',
                   { 'bg-danger': getNotificationCount },
-                  'rounded-full',
-                  'min-w-[24px]',
-                  'px-[8px]',
-                  'py-[4px]',
+                  'text-white',
+                  'text-[10px]',
                 ]"
               >
-                <div class="text-white text-[10px]">
-                  {{ formattedNotificationCount }}
-                </div>
+                {{ formattedNotificationCount }}
               </div>
             </template>
           </MenuItem>
         </MenuList>
       </Dropdown>
+
+      {{ /* phone version */ }}
+      <ButtonV2
+        v-if="!getAddress"
+        class="laptop:hidden"
+        preset="plain"
+        @click="handleOpenSider"
+      >
+        <IconNav />
+      </ButtonV2>
+      <div v-if="getAddress" class="relative laptop:!hidden">
+        <Identity
+          v-if="getAddress"
+          class="cursor-pointer ml-[12px]"
+          :avatar-url="walletUserAvatar"
+          :avatar-size="42"
+          :is-avatar-outlined="isWalletUserCivicLiker"
+          @click="handleOpenSider"
+        />
+        <div
+          v-if="getNotificationCount"
+          :class="[
+            'w-[12px]',
+            'h-[12px]',
+            'absolute',
+            'top-0',
+            'right-0',
+            'bg-danger',
+            'rounded-full',
+          ]"
+        />
+      </div>
     </div>
+
+    <SiteMenuForMobile
+      v-if="isShowMobileMenu"
+      @close="isShowMobileMenu = false"
+    >
+      <ButtonV2
+        v-if="!getAddress"
+        class="w-full"
+        preset="secondary"
+        @click="connectWallet"
+        ><div class="flex gap-[12px]">
+          <IconLogin />
+          {{ $t('header_button_connect_to_wallet') }}
+        </div>
+      </ButtonV2>
+      <div v-else class="w-full">
+        <ul class="w-full text-dark-gray">
+          <MenuItem
+            v-for="(item, i) in mainMenuItems"
+            :key="i"
+            class="flex items-center justify-start w-full"
+            :value="item.value"
+            :label="item.name"
+            label-align="left"
+            @select="handleSelectMenuItem"
+          >
+            <template #label-prepend>
+              <MenuIcon :type="item.value" class="mr-[12px]" />
+            </template>
+            <template
+              v-if="item.value === 'notifications' && getNotificationCount > 0"
+              #label-append
+            >
+              <div
+                :class="[
+                  'flex',
+                  'justify-center',
+                  'items-center',
+                  'rounded-full',
+                  'min-w-[20px]',
+                  'min-h-[20px]',
+                  'ml-[-4px]',
+                  'mb-[-3px]',
+                  'px-[4px]',
+                  'py-[5px]',
+                  'pointer-events-none',
+                  'bg-shade-gray',
+                  { 'bg-danger': getNotificationCount },
+                  'text-white',
+                  'text-[10px]',
+                  'leading-[1em]',
+                ]"
+              >
+                {{ formattedNotificationCount }}
+              </div>
+            </template>
+          </MenuItem>
+        </ul>
+      </div>
+
+      <template #footer>
+        <Dropdown>
+          <template #trigger="{ toggle }">
+            <ButtonV2
+              preset="tertiary"
+              :text="$t(`Locale.${currentLocale}`),"
+              @click="toggle"
+            >
+              <template #prepend>
+                <GlobeIcon class="w-20 h-20 fill-current" />
+              </template>
+            </ButtonV2>
+          </template>
+          <MenuList>
+            <MenuItem
+              v-for="(item, i) in availableLocales"
+              :key="i"
+              :value="item.value"
+              :label="item.name"
+              :selected-value="currentLocale"
+              @select="handleSelectLocale"
+            />
+          </MenuList>
+        </Dropdown>
+      </template>
+    </SiteMenuForMobile>
   </div>
 </template>
 
@@ -176,7 +261,6 @@ import { mapActions, mapGetters } from 'vuex';
 import walletMixin from '~/mixins/wallet';
 import { ellipsis, formatNumber } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
 
 import Logo from '~/assets/icons/logo.svg?inline';
 import GlobeIcon from '~/assets/icons/globe.svg?inline';
@@ -198,8 +282,18 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      isShowMobileMenu: false,
+    };
+  },
   computed: {
-    ...mapGetters(['getHomeRoute', 'getUserId', 'getNotificationCount']),
+    ...mapGetters([
+      'getHomeRoute',
+      'getUserId',
+      'getNotificationCount',
+      'shoppingCartBookProductList',
+    ]),
     currentLocale() {
       return this.$i18n.locale;
     },
@@ -211,27 +305,11 @@ export default {
     },
     mainMenuItems() {
       const options = [
-        { value: 'store', name: this.$t('main_menu_store') },
-        { value: 'article', name: this.$t('main_menu_articles') },
-        { value: 'dashboard', name: this.$t('main_menu_my_dashboard') },
+        { value: 'portfolio', name: this.$t('main_menu_my_portfolio') },
+        { value: 'notifications', name: this.$t('main_menu_notification') },
+        { value: 'setting', name: this.$t('main_menu_settings') },
+        { value: 'signOut', name: this.$t('main_menu_sign_out') },
       ];
-
-      if (this.getAddress || this.loginAddress || this.getUserId) {
-        options.push({
-          value: 'portfolio',
-          name: this.$t('main_menu_my_portfolio'),
-        });
-      }
-
-      options.push({ value: 'mintNft', name: this.$t('main_menu_mint_nft') });
-
-      if (this.getAddress || this.loginAddress || this.getUserId) {
-        options.push(
-          { value: 'setting', name: this.$t('main_menu_settings') },
-          { value: 'signOut', name: this.$t('main_menu_sign_out') }
-        );
-      }
-
       return options;
     },
     formattedNotificationCount() {
@@ -244,51 +322,38 @@ export default {
   },
   methods: {
     ...mapActions(['updatePreferences', 'userLogout']),
+    handleClickGoStore() {
+      logTrackerEvent(this, 'site_header', 'site_header_click_store', '', 1);
+    },
     handleSelectLocale(value) {
       this.updatePreferences({ locale: value });
     },
-    async handleSelectMenuItem(value) {
+    handleSelectMenuItem(value) {
       switch (value) {
-        case 'store': {
-          logTrackerEvent(this, 'site_menu', 'SiteMenuStoreClick', '', 1);
-          this.$router.push(this.localeLocation({ name: 'store' }));
-          break;
-        }
-
-        case 'article': {
-          logTrackerEvent(this, 'site_menu', 'SiteMenuArticleClick', '', 1);
-          this.$router.push(this.localeLocation({ name: 'store-articles' }));
-          break;
-        }
-
-        case 'dashboard': {
-          logTrackerEvent(this, 'site_menu', 'site_menu_click_dashboad', '', 1);
-          await this.navigateToMyDashboard();
-          break;
-        }
-
-        case 'civic':
-          logTrackerEvent(this, 'site_menu', 'site_menu_click_civic', '', 1);
-          this.$router.push(this.localeLocation({ name: 'civic' }));
-          break;
-
-        case 'mintNft':
-          logTrackerEvent(this, 'site_menu', 'site_menu_click_mint_nft', '', 1);
-          window.open(`${APP_LIKE_CO_URL_BASE}/nft`, '_blank');
+        case 'notifications':
+          logTrackerEvent(
+            this,
+            'site_menu',
+            'site_menu_click_notifications',
+            '',
+            1
+          );
+          this.$router.push(this.localeLocation({ name: 'notifications' }));
           break;
 
         case 'portfolio':
           logTrackerEvent(
             this,
             'site_menu',
-            'site_menu_click_portfolio',
+            'site_menu_click_book_shelf',
             '',
             1
           );
           this.$router.push(
             this.localeLocation({
-              name: 'id',
+              name: 'bookshelf',
               params: { id: this.getAddress || this.loginAddress },
+              query: { tab: 'collected' },
             })
           );
           break;
@@ -310,8 +375,26 @@ export default {
           break;
       }
     },
-    handleClickTryCollect() {
-      logTrackerEvent(this, 'site_menu', 'SiteMenuTryCollectingClick', '', 1);
+    handleOpenSider() {
+      this.isShowMobileMenu = true;
+
+      if (this.getAddress) {
+        logTrackerEvent(
+          this,
+          'site_menu',
+          'site_menu_click_sider_menu',
+          this.getAddress,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'site_menu',
+          'site_menu_click_sider_login',
+          '',
+          1
+        );
+      }
     },
   },
 };
