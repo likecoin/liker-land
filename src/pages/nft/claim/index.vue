@@ -32,7 +32,7 @@
         'laptop:hidden',
       ]"
     >
-      <NFTBookCover class="max-h-[44px] max-w-[44px]" :src="NFTImageUrl" />
+      <NFTBookCover class="max-h-[44px] max-w-[44px]" :src="productImageUrl" />
       <div class="flex flex-col items-start">
         <p class="text-[12px] font-400 text-medium-gray">
           {{ $t('nft_claim_claim_header_title') }}
@@ -73,7 +73,7 @@
         >
           <div class="flex flex-col gap-[16px] mb-[24px]">
             <NFTBookCoverWithFrame
-              :src="NFTImageUrl"
+              :src="productImageUrl"
               class-aspect-ratio="aspect-[1]"
             />
             <Label class="text-[24px] font-600" :text="productTitle" />
@@ -100,7 +100,7 @@
               </div>
             </div>
             <p class="w-full text-[14px] line-clamp-3 font-[400]">
-              {{ NFTDescription }}
+              {{ productDescription }}
             </p>
           </div>
         </NuxtLink>
