@@ -24,6 +24,16 @@ export default {
   },
   async mounted() {
     const { error, method, code } = this.$route.query;
+
+    let postAuthRoute = this.localeLocation(this.getHomeRoute);
+    if (window.sessionStorage) {
+      const storedRoute = window.sessionStorage.getItem('USER_POST_AUTH_ROUTE');
+      if (storedRoute) {
+        postAuthRoute = storedRoute;
+        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+      }
+    }
+
     if (method && code) {
       try {
         const { user, idToken } = await this.handleConnectorRedirect({
@@ -46,7 +56,7 @@ export default {
             // ignore
           }
         }
-        this.redirectToPostAuthRoute();
+        this.$router.replace(postAuthRoute);
       } catch (err) {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
@@ -61,7 +71,7 @@ export default {
         if (errData.status === 403) {
           // random 403 from authcore tokens endpoint
           // but user is already logged in
-          this.redirectToPostAuthRoute();
+          this.$router.replace(postAuthRoute);
         } else {
           this.$nuxt.error({
             statusCode: errData.status || 400,
@@ -82,19 +92,6 @@ export default {
   },
   methods: {
     ...mapActions(['handleConnectorRedirect', 'walletUpdateEmail']),
-    redirectToPostAuthRoute() {
-      let postAuthRoute = this.localeLocation(this.getHomeRoute);
-      if (window.sessionStorage) {
-        const storedRoute = window.sessionStorage.getItem(
-          'USER_POST_AUTH_ROUTE'
-        );
-        if (storedRoute) {
-          postAuthRoute = storedRoute;
-          window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-        }
-      }
-      this.$router.replace(postAuthRoute);
-    },
   },
 };
 </script>
