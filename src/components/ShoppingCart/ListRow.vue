@@ -1,120 +1,131 @@
 <template>
-  <div
-    :class="[
-      'grid',
-      'grid-cols-12',
-      'gap-[8px] sm:gap-[1em]',
-      'sm:pl-[1em]',
-      'sm:pr-[0.5em]',
-      'py-[1.5em]',
-      { 'animate-pulse': isFetching },
-    ]"
-  >
-    <!-- index -->
-    <div class="col-span-1 min-w-[2em] text-gray-9b">
-      {{ index }}
-    </div>
-    <!-- product info -->
+  <div class="w-ful pb-[1.0em]">
     <div
       :class="[
-        'col-span-6',
-
-        'flex',
-        'items-start',
-        'justify-start',
-        'gap-[8px] sm:gap-[12px]',
+        'grid',
+        'grid-cols-12',
+        'gap-[8px] sm:gap-[1em]',
+        'sm:pl-[1em]',
+        'sm:pr-[0.5em]',
+        'pt-[1.5em]',
+        { 'animate-pulse': isFetching },
       ]"
     >
-      <NuxtLink
+      <!-- index -->
+      <div class="col-span-1 min-w-[2em] text-gray-9b">
+        {{ index }}
+      </div>
+      <!-- product info -->
+      <div
         :class="[
-          'block',
-          'flex-shrink-0',
-          'w-full',
-          'max-w-[10vw] laptop:max-w-[80px]',
-          'object-contain',
+          'col-span-6',
+
+          'flex',
+          'items-start',
+          'justify-start',
+          'gap-[8px] sm:gap-[12px]',
         ]"
-        :to="viewInfoLocation"
-        @click.native="handleClickProductImage"
       >
-        <NFTCover
-          class="rounded-[4px] overflow-hidden shrink"
-          :src="productImageUrl"
-        />
-      </NuxtLink>
-      <div class="flex flex-col flex-shrink gap-[6px] laptop:gap-[8px]">
-        <div class="line-clamp-3 text-[14px] font-[600]">
-          <NuxtLink
-            :to="viewInfoLocation"
-            @click.native="handleClickProductName"
-            >{{ productName }}</NuxtLink
-          >
-        </div>
-        <div class="text-dark-gray text-[12px] font-[500]">
-          {{ purchaseChannel }}
-        </div>
         <NuxtLink
           :class="[
-            'flex',
-            'flex-col laptop:flex-row',
-            'items-start laptop:items-center',
-            'gap-[4px] laptop:gap-[8px]',
-            'group',
-            'text-like-green',
+            'block',
+            'flex-shrink-0',
+            'w-full',
+            'max-w-[10vw] laptop:max-w-[80px]',
+            'object-contain',
           ]"
-          :to="
-            productOwner
-              ? localeLocation({
-                  name: 'id',
-                  params: { id: productOwner },
-                  query: { tab: 'created' },
-                })
-              : ''
-          "
-          @click.native="handleClickProductOwner"
+          :to="viewInfoLocation"
+          @click.native="handleClickProductImage"
         >
-          <Identity
-            :class="['!hidden laptop:!flex']"
-            :avatar-url="productCreatorAvatar"
-            :avatar-size="32"
-            :is-avatar-disabled="true"
-            :is-avatar-outlined="isCreatorCivicLiker"
-            :is-lazy-loaded="true"
+          <NFTCover
+            class="rounded-[4px] overflow-hidden shrink"
+            :src="productImageUrl"
           />
-          <span
-            :class="[
-              'font-[400]',
-              'text-[12px]',
-              'text-medium-gray',
-              'laptop:hidden',
-            ]"
-            >{{ $t('identity_type_publisher') }}</span
-          >
-          <span class="group-hover:underline font-[600]">{{
-            productCreatorDisplayName | ellipsis
-          }}</span>
         </NuxtLink>
+        <div class="flex flex-col flex-shrink gap-[6px] laptop:gap-[8px]">
+          <div class="line-clamp-3 text-[14px] font-[600]">
+            <NuxtLink
+              :to="viewInfoLocation"
+              @click.native="handleClickProductName"
+              >{{ productName }}</NuxtLink
+            >
+          </div>
+          <div class="text-dark-gray text-[12px] font-[500]">
+            {{ purchaseChannel }}
+          </div>
+          <NuxtLink
+            :class="[
+              'flex',
+              'flex-col laptop:flex-row',
+              'items-start laptop:items-center',
+              'gap-[4px] laptop:gap-[8px]',
+              'group',
+              'text-like-green',
+            ]"
+            :to="
+              productOwner
+                ? localeLocation({
+                    name: 'id',
+                    params: { id: productOwner },
+                    query: { tab: 'created' },
+                  })
+                : ''
+            "
+            @click.native="handleClickProductOwner"
+          >
+            <Identity
+              :class="['!hidden laptop:!flex']"
+              :avatar-url="productCreatorAvatar"
+              :avatar-size="32"
+              :is-avatar-disabled="true"
+              :is-avatar-outlined="isCreatorCivicLiker"
+              :is-lazy-loaded="true"
+            />
+            <span
+              :class="[
+                'font-[400]',
+                'text-[12px]',
+                'text-medium-gray',
+                'laptop:hidden',
+              ]"
+              >{{ $t('identity_type_publisher') }}</span
+            >
+            <span class="group-hover:underline font-[600]">{{
+              productCreatorDisplayName | ellipsis
+            }}</span>
+          </NuxtLink>
+        </div>
+      </div>
+      <!-- quantity -->
+      <div class="col-span-2 col-start-8 text-center">
+        {{ quantity }}
+      </div>
+      <!-- price -->
+      <div
+        class="col-start-10 col-end-12 text-center text-like-green font-proxima font-[600]"
+      >
+        {{ (customPrice || productPrice) | formatNumberWithUSD }}
+      </div>
+      <!-- remove button -->
+      <div class="col-span-1 flex justify-end -mt-[8px]">
+        <ButtonV2
+          preset="plain"
+          size="mini"
+          :circle="true"
+          @click="handleClickRemoveButton"
+        >
+          <IconClose class="w-[20px] text-gray-4a" />
+        </ButtonV2>
       </div>
     </div>
-    <!-- quantity -->
-    <div class="col-span-2 col-start-8 text-center">
-      {{ quantity }}
-    </div>
-    <!-- price -->
     <div
-      class="col-start-10 col-end-12 text-center text-like-green font-proxima font-[600]"
+      v-if="tippingAmount"
+      class="flex items-center justify-end gap-[0.3em] w-full"
     >
-      {{ (customPrice || productPrice) | formatNumberWithUSD }}
-    </div>
-    <!-- remove button -->
-    <div class="col-span-1 flex justify-end -mt-[8px]">
-      <ButtonV2
-        preset="plain"
-        size="mini"
-        :circle="true"
-        @click="handleClickRemoveButton"
-      >
-        <IconClose class="w-[20px] text-gray-4a" />
-      </ButtonV2>
+      <IconPriceMini class=" text-airdrop-gold" />
+      <p class="text-[12px] text-medium-gray pr-[1em]">
+        {{ $t('cart_item_tipping', { amount: tippingAmount }) }}
+      </p>
     </div>
   </div>
 </template>
@@ -153,6 +164,10 @@ export default {
       type: Number,
       default: 0,
     },
+    productPrice: {
+      type: Number,
+      default: 0,
+    },
     quantity: {
       type: Number,
       default: 1,
@@ -172,6 +187,12 @@ export default {
       return this.from
         ? `${this.$t('cart_purchase_channel')} : ${this.from}`
         : '';
+    },
+    tippingAmount() {
+      if (this.productPrice < this.customPrice) {
+        return this.customPrice - this.productPrice;
+      }
+      return 0;
     },
   },
   mounted() {
