@@ -110,6 +110,7 @@ export default {
           collectionId: this.collectionId,
           from: NFT_BOOK_PLATFORM_LIKER_LAND,
           customPriceInDecimal: this.collectionPrice * 100,
+          producePrice: this.collectionPrice,
           coupon: this.$route.query.coupon,
         });
 
@@ -140,6 +141,7 @@ export default {
           priceIndex: edition.index,
           from: NFT_BOOK_PLATFORM_LIKER_LAND,
           customPriceInDecimal: edition.price * 100,
+          producePrice: edition.price,
           coupon: this.$route.query.coupon,
         });
 

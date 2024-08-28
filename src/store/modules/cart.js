@@ -41,6 +41,7 @@ const mutations = {
       priceIndex,
       coupon,
       customPriceInDecimal,
+      productPrice,
       from,
     } = newItem;
     const productId = collectionId || classId;
@@ -52,6 +53,7 @@ const mutations = {
         classId,
         coupon,
         customPriceInDecimal,
+        productPrice,
         from,
         timestamp: Date.now(),
         quantity: 1,

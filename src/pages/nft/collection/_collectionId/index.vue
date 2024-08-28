@@ -294,6 +294,7 @@ export default {
         collectionId: this.collectionId,
         from: this.platform,
         customPriceInDecimal,
+        productPrice: this.collectionPrice,
         coupon: this.$route.query.coupon,
       });
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
