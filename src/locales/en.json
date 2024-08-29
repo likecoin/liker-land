@@ -89,7 +89,7 @@
   "cart_purchase_channel": "channel",
   "cart_item_added": "Item added to cart",
   "cart_item_free_not_supported": "Free items cannot be added to cart",
-  "cart_item_tipping": "Price includes a tip {amount} USD",
+  "cart_item_tipping": "Price includes a tip of {amount} USD",
   "civic_dashboard_v3_about_url": "https://docs.like.co/user-guide/civic-liker",
   "civic_dashboard_v3_banner_book_nft": "NFT BOOK",
   "civic_dashboard_v3_banner_book_nft_description": "unleashes the potential value of e-books, elevating the essence of books, making them books, yet no longer just books",
