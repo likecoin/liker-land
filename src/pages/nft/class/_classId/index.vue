@@ -1140,7 +1140,6 @@ export default {
         priceIndex: edition.index,
         from: this.platform,
         customPriceInDecimal,
-        productPrice: edition.price,
         coupon: this.$route.query.coupon,
       });
       const purchaseEventParams = this.getPurchaseEventParams(edition);
