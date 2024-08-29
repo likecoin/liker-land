@@ -164,10 +164,6 @@ export default {
       type: Number,
       default: 0,
     },
-    productPrice: {
-      type: Number,
-      default: 0,
-    },
     quantity: {
       type: Number,
       default: 1,
