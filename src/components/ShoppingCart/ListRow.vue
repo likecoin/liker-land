@@ -185,10 +185,7 @@ export default {
         : '';
     },
     tippingAmount() {
-      if (this.productPrice < this.customPrice) {
-        return this.customPrice - this.productPrice;
-      }
-      return 0;
+      return Math.max(this.customPrice - this.productPrice, 0);
     },
   },
   mounted() {
