@@ -291,3 +291,41 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
         'likenft1r8mce5h96nvedtm7rh9va5mda6fgysqfprlxftuef09s8kfjt2jsqeyyjq',
       ],
     };
+
+export const AFFILIATION_CHANNELS = [
+  { id: 'liker_land', name: { en: 'Liker Land', 'zh-Hant': 'Liker Land' } },
+  { id: '@bookpunch', name: { en: 'bookpunch', 'zh-Hant': '一拳書店' } },
+  {
+    id: '@boundarybooks',
+    name: { en: 'boundarybooks', 'zh-Hant': '界限書店' },
+  },
+  {
+    id: '@breakthrough_publish',
+    name: { en: 'breakthrough_publish', 'zh-Hant': '突破書廊' },
+  },
+  {
+    id: '@hansbookstore',
+    name: { en: 'hansbookstore', 'zh-Hant': '留下書店' },
+  },
+  {
+    id: '@hkhouseofliterature',
+    name: { en: 'hkhouseofliterature', 'zh-Hant': '香港文學生活館' },
+  },
+  {
+    id: '@hkreaders',
+    name: { en: 'hkreaders', 'zh-Hant': '序言書室' },
+  },
+  {
+    id: '@hunterbookstore',
+    name: { en: 'hunterbookstore', 'zh-Hant': '獵人書店' },
+  },
+  { id: '@kubrick_hk', name: { en: 'kubrick_hk', 'zh-Hant': 'Kubrick' } },
+  {
+    id: '@nowherebooks',
+    name: { en: 'nowherebooks', 'zh-Hant': '飛地書店' },
+  },
+  {
+    id: '@samkeebook',
+    name: { en: 'samkeebook', 'zh-Hant': '森記圖書公司' },
+  },
+];
