@@ -33,7 +33,13 @@
         :avatar-size="40"
       />
       <p class="text-black whitespace-normal break-words font-600 text-[14px]">
-        {{ $t('campaign_nft_book_channel', { channel: affiliationName }) }}
+        {{
+          isCollection
+            ? $t('campaign_nft_collection_channel', {
+                channel: affiliationName,
+              })
+            : $t('campaign_nft_book_channel', { channel: affiliationName })
+        }}
       </p>
     </div>
   </div>
@@ -48,6 +54,10 @@ export default {
     channel: {
       type: String,
       default: '',
+    },
+    isCollection: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

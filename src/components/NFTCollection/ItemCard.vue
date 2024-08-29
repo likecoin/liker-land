@@ -1,5 +1,11 @@
 <template>
   <div :class="['flex', 'flex-col', 'justify-center']">
+    <NFTPageChannelBlock
+      v-if="isDetailsPreset && channelId"
+      class="laptop:hidden mb-[24px] self-start mt-[12px]"
+      :is-collection="true"
+      :channel="channelId"
+    />
     <component
       :is="componentTag"
       :class="[
@@ -60,6 +66,7 @@
         <!-- Info column -->
         <div
           :class="[
+            'relative',
             'flex',
             'flex-col',
             'items-center',
@@ -70,6 +77,12 @@
             'grow',
           ]"
         >
+          <NFTPageChannelBlock
+            v-if="isDetailsPreset && channelId"
+            class="hidden laptop:flex absolute top-[-24px] left-0"
+            :is-collection="true"
+            :channel="channelId"
+          />
           <Label
             v-if="isNew"
             class="text-like-cyan"
@@ -324,6 +337,10 @@ export default {
     displayNameStyle() {
       if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';
       return 'text-dark-gray';
+    },
+    channelId() {
+      const { from } = this.$route.query;
+      return from;
     },
   },
   methods: {
