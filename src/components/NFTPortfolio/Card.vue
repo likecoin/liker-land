@@ -17,7 +17,6 @@
       :class="[
         'flex',
         'flex-col',
-        'rounded-[24px]',
         'w-full',
         'h-auto',
         'box-border',

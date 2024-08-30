@@ -3,80 +3,79 @@
     <template #default="gem">
       <NFTPortfolioCard
         :class="{ 'border-like-collection border-[2px]': collectionId }"
-        :gem-level="gem.level"
         :hover-class="gem.hoverClass"
       >
-        <div class="relative flex items-center justify-center min-w-[276px]">
-          <template v-if="hasDynamicCovers">
-            <div class="absolute inset-0 w-full h-full">
-              <img
-                :src="resizedSrc"
-                :alt="alt"
-                class="h-auto max-w-full blur-sm"
-              />
-            </div>
-            <div
-              class="absolute inset-0 w-full h-full"
-              :style="{
-                backgroundColor: themeColor || 'none',
-                opacity: 0.3,
-              }"
-            />
-          </template>
-          <div class="relative flex items-center justify-center w-full h-full">
-            <NFTBookCoverWithFrame
-              :class="[
-                'w-full',
-                '!rounded-none',
-                { 'opacity-0 pointer-events-none': hasDynamicCovers },
-              ]"
-              :src="src"
+        <template v-if="hasDynamicCovers">
+          <div class="absolute inset-0 w-full h-full">
+            <img
+              :src="resizedSrc"
               :alt="alt"
-              :cover-resize="450"
-              class-aspect-ratio="aspect-[1]"
-              :background-color="themeColor"
+              class="h-auto max-w-full blur-sm"
             />
-            <ClientOnly v-if="hasDynamicCovers">
-              <div class="absolute inset-0">
-                <Swiper
-                  class="w-full h-full"
-                  :options="{
-                    slidesPerView: 'auto',
-                    centeredSlides: true,
-                    autoplay: {
-                      delay: 1500,
-                      disableOnInteraction: false,
-                    },
-                    effect: 'coverflow',
-                    coverflowEffect: {
-                      rotate: 30,
-                      stretch: 30,
-                      depth: 20,
-                      modifier: 2,
-                      slideShadows: true,
-                    },
-                  }"
-                >
-                  <SwiperSlide
-                    v-for="coverSrc in dynamicCovers"
-                    :key="coverSrc"
-                    class="bg-[red]"
-                    style="width: 220px"
-                  >
-                    <NFTCover
-                      :src="coverSrc"
-                      :size="450"
-                      :is-nft-book="true"
-                      :alt="alt"
-                      :spine-color1="spineColor1"
-                      :spine-color2="spineColor2"
-                      :should-resize-src="false"
-                    />
-                  </SwiperSlide>
-                </Swiper>
-              </div>
-            </ClientOnly>
           </div>
+          <div
+            class="absolute inset-0 w-full h-full"
+            :style="{
+              backgroundColor: themeColor || 'none',
+              opacity: 0.3,
+            }"
+          />
+        </template>
+        <div
+          class="relative flex items-center justify-center w-full h-full rounded-t-[inherit]"
+        >
+          <NFTBookCoverWithFrame
+            :class="[
+              'w-full',
+              'rounded-t-[inherit] rounded-b-[0]',
+              { 'opacity-0 pointer-events-none': hasDynamicCovers },
+            ]"
+            :src="src"
+            :alt="alt"
+            :cover-resize="450"
+            class-aspect-ratio="aspect-[1]"
+            :background-color="themeColor"
+          />
+          <ClientOnly v-if="hasDynamicCovers">
+            <div class="absolute inset-0">
+              <Swiper
+                class="w-full h-full"
+                :options="{
+                  slidesPerView: 'auto',
+                  centeredSlides: true,
+                  autoplay: {
+                    delay: 1500,
+                    disableOnInteraction: false,
+                  },
+                  effect: 'coverflow',
+                  coverflowEffect: {
+                    rotate: 30,
+                    stretch: 30,
+                    depth: 20,
+                    modifier: 2,
+                    slideShadows: true,
+                  },
+                }"
+              >
+                <SwiperSlide
+                  v-for="coverSrc in dynamicCovers"
+                  :key="coverSrc"
+                  class="bg-[red]"
+                  style="width: 220px"
+                >
+                  <NFTCover
+                    :src="coverSrc"
+                    :size="450"
+                    :is-nft-book="true"
+                    :alt="alt"
+                    :spine-color1="spineColor1"
+                    :spine-color2="spineColor2"
+                    :should-resize-src="false"
+                  />
+                </SwiperSlide>
+              </Swiper>
+            </div>
+          </ClientOnly>
         </div>
         <div
           :class="[
@@ -91,6 +90,7 @@
             'pb-[24px]',
             'bg-white',
             'relative',
+            'rounded-b-[inherit]',
           ]"
         >
           <Label align="center" :text="nftName" class="text-like-green" />
