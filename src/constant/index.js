@@ -294,38 +294,38 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
 
 export const AFFILIATION_CHANNELS = [
   { id: 'liker_land', name: { en: 'Liker Land', 'zh-Hant': 'Liker Land' } },
-  { id: '@bookpunch', name: { en: 'bookpunch', 'zh-Hant': '一拳書店' } },
+  { id: '@bookpunch', name: { en: 'Book Punch', 'zh-Hant': '一拳書店' } },
   {
     id: '@boundarybooks',
-    name: { en: 'boundarybooks', 'zh-Hant': '界限書店' },
+    name: { en: 'Boundary Bookstore', 'zh-Hant': '界限書店' },
   },
   {
     id: '@breakthrough_publish',
-    name: { en: 'breakthrough_publish', 'zh-Hant': '突破書廊' },
+    name: { en: 'Breakthrough Book Gallery', 'zh-Hant': '突破書廊' },
   },
   {
     id: '@hansbookstore',
-    name: { en: 'hansbookstore', 'zh-Hant': '留下書店' },
+    name: { en: 'Have A Nice Stay', 'zh-Hant': '留下書舍' },
   },
   {
     id: '@hkhouseofliterature',
-    name: { en: 'hkhouseofliterature', 'zh-Hant': '香港文學生活館' },
+    name: { en: 'House of HKLIT', 'zh-Hant': '香港文學生活館' },
   },
   {
     id: '@hkreaders',
-    name: { en: 'hkreaders', 'zh-Hant': '序言書室' },
+    name: { en: 'Hong Kong Reader', 'zh-Hant': '序言書室' },
   },
   {
     id: '@hunterbookstore',
-    name: { en: 'hunterbookstore', 'zh-Hant': '獵人書店' },
+    name: { en: 'Hunter Bookstore', 'zh-Hant': '獵人書店' },
   },
   { id: '@kubrick_hk', name: { en: 'kubrick_hk', 'zh-Hant': 'Kubrick' } },
   {
     id: '@nowherebooks',
-    name: { en: 'nowherebooks', 'zh-Hant': '飛地書店' },
+    name: { en: 'Nowhere Bookstore', 'zh-Hant': '飛地書店' },
   },
   {
     id: '@samkeebook',
-    name: { en: 'samkeebook', 'zh-Hant': '森記圖書公司' },
+    name: { en: 'Samkee Book', 'zh-Hant': '森記圖書公司' },
   },
 ];
