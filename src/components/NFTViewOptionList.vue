@@ -85,7 +85,7 @@
                 class="w-full"
                 preset="plain"
                 :text="
-                  getDownloadFilenameFromURL(contentUrl) ||
+                  getFilenameFromURL(contentUrl) ||
                     getContentUrlButtonText(contentUrl)
                 "
                 :download="getDownloadFilenameFromURL(contentUrl)"
