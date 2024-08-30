@@ -924,6 +924,7 @@ export default {
     async startFreePurchase() {
       try {
         this.isClaimLoading = true;
+        this.claimingFreeEmail = this.walletEmail;
         this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
         if (!this.claimingFreeEmail && !this.claimingAddress) {
           this.alertPromptError(
