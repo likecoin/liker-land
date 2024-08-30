@@ -868,6 +868,18 @@ export default {
         currency: 'USD',
       });
     }
+
+    if (this.hasCrossSell) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        this.isEnableCrossSell
+          ? 'nft_class_details_cross_sell_enabled'
+          : 'nft_class_details_cross_sell_disabled',
+        this.classId,
+        1
+      );
+    }
   },
   methods: {
     ...mapActions([
