@@ -9,9 +9,23 @@
     </template>
     <div class="flex flex-col rounded-[24px] bg-white shadow-md">
       <header
-        class="flex w-full max-w-[70vw] px-[24px] py-[16px] border-b-[1px] border-b-shade-gray"
+        :class="[
+          'flex',
+          'justify-between',
+          'items-center',
+          'gap-[12px]',
+
+          'w-full',
+          'px-[16px]',
+          'py-[16px]',
+
+          'border-b-[1px]',
+          'border-b-shade-gray',
+
+          'overflow-x-auto',
+        ]"
       >
-        <div class="flex justify-center items-center gap-[8px]">
+        <div class="flex items-center gap-[8px] flex-shrink-0">
           <ButtonV2
             class="flex-shrink-0"
             :preset="getTypeButtonPreset"
@@ -35,18 +49,19 @@
             :text="$t('order_menu_filter_by_keywords')"
             @click="handleClickKeywords"
           />
-          <ButtonV2
-            class="flex-shrink-0 laptop:ml-[20px]"
-            preset="plain"
-            size="mini"
-            :text="$t('order_menu_filter_clean')"
-            @click="handleResetFilter"
-          />
         </div>
+
+        <ButtonV2
+          class="flex-shrink-0"
+          preset="plain"
+          size="mini"
+          :text="$t('order_menu_filter_clean')"
+          @click="handleResetFilter"
+        />
       </header>
       <main class="flex flex-col justify-start">
         <div
-          class="px-[24px] py-[16px] max-h-[35vh] overflow-y-scroll scrollbar-custom"
+          class="px-[16px] py-[16px] max-h-[35vh] overflow-y-scroll scrollbar-custom"
         >
           <!-- type -->
           <MenuList
