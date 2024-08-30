@@ -49,8 +49,7 @@
             <div class="grid grid-flow-row gap-y-[16px]">
               <a
                 class="cursor-pointer hover:underline"
-                @click="isOpenAboutTeam = !isOpenAboutTeam"
-                @click.native="handleClickButton('about_team')"
+                @click="handleClickButton('about_team')"
                 >{{ $t('footer_nav_about_liker_land') }}</a
               >
             </div>
@@ -77,7 +76,7 @@
                 class="hover:underline"
                 target="_blank"
                 :href="mintNftURL"
-                @click.native="handleClickButton('mint_nft')"
+                @click="handleClickButton('mint_nft')"
               >
                 {{ $t('footer_nav_mint_nft') }}
               </a>
@@ -210,6 +209,9 @@ export default {
       }
     },
     handleClickButton(buttonName) {
+      if (buttonName === 'about_team') {
+        this.isOpenAboutTeam = !this.isOpenAboutTeam;
+      }
       logTrackerEvent(this, 'footer', `footer_click_${buttonName}`, '', 1);
     },
   },
