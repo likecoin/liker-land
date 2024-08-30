@@ -46,8 +46,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { AFFILIATION_CHANNELS } from '~/constant';
-import { getUserMinAPI } from '~/util/api';
 
 export default {
   name: 'NFTPageChannelBlock',
@@ -67,6 +67,9 @@ export default {
       avatarUrl: '',
     };
   },
+  computed: {
+    ...mapGetters(['getUserInfoById']),
+  },
   watch: {
     channel: {
       immediate: true,
@@ -75,23 +78,23 @@ export default {
       },
     },
   },
+
   methods: {
+    ...mapActions(['fetchUserInfo']),
     async fetchAffiliationName(channel) {
       if (channel.startsWith('@')) {
         const id = channel.slice(1);
         try {
-          const { displayName, avatar } = await this.$api.$get(
-            getUserMinAPI(id)
-          );
+          await this.fetchUserInfo({ id });
+          const { displayName, avatar } = this.getUserInfoById(id);
           this.affiliationName = displayName || id;
           this.avatarUrl = avatar;
-          return;
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
           this.affiliationName = id;
-          return;
         }
+        return;
       }
 
       const affiliation = AFFILIATION_CHANNELS.find(
