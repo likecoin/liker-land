@@ -7,6 +7,7 @@ export default {
     return {
       isCrossSellDialogOpen: false,
       crossSellProductIndex: 0,
+      isEnableCrossSell: Math.random() < 0.5,
     };
   },
   computed: {
@@ -31,11 +32,14 @@ export default {
         ? this.crossSellProductIds[this.crossSellProductIndex]
         : undefined;
     },
-    shouldCrossSell() {
+    hasCrossSell() {
       return (
         this.crossSellProductId &&
         !this.getShoppingCartBookProductQuantity(this.crossSellProductId)
       );
+    },
+    shouldCrossSell() {
+      return this.isEnableCrossSell && this.hasCrossSell;
     },
   },
   watch: {
