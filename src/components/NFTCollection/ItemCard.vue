@@ -222,7 +222,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('getIsHideNFTBookDownload'),
+    ...mapGetters(['getIsHideNFTBookDownload']),
     creatorDisplayName() {
       return (
         this.getUserInfoByAddress(this.collectionOwner)?.displayName ||
