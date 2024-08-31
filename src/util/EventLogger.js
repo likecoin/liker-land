@@ -152,7 +152,7 @@ export function logPurchaseNFTBookEvent(
       });
     }
     if (window.fbq && !IS_TESTNET) {
-      window.fbq('trackCustom', 'PurchaseNFTBook', {
+      window.fbq('trackCustom', 'PurchaseBook', {
         currency,
         value: price,
         content_ids: [classId],
