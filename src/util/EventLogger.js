@@ -16,7 +16,7 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setLoggerUser(vue, { wallet, method }) {
+export async function setLoggerUser(vue, { wallet, method, isNew }) {
   if (window.doNotTrack || navigator.doNotTrack) return;
   try {
     if (vue.$gtag) {
@@ -27,7 +27,11 @@ export async function setLoggerUser(vue, { wallet, method }) {
       // https://support.google.com/analytics/answer/9973999?hl=en
       // vue.$gtag.config({ user_id: hashedId });
       vue.$gtag.set({ user_id: hashedId });
-      vue.$gtag.event('login', { method });
+      if (isNew) {
+        vue.$gtag.event('sign_up', { method });
+      } else {
+        vue.$gtag.event('login', { method });
+      }
     }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console

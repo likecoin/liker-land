@@ -336,7 +336,6 @@ const actions = {
     commit(WALLET_SET_ADDRESS, walletAddress);
     commit(WALLET_SET_SIGNER, offlineSigner);
     commit(WALLET_SET_IS_CONNECTING_WALLET, false);
-    await setLoggerUser(this, { wallet: walletAddress, method });
     catchAxiosError(
       this.$api.$get(getUserInfoMinByAddress(walletAddress)).then(userInfo => {
         commit(WALLET_SET_LIKERINFO, userInfo);
@@ -928,9 +927,14 @@ const actions = {
       commit(WALLET_SET_IS_LOGGING_IN, true);
       const { signer, methodType } = state;
       const data = await signLoginMessage(signer, address);
-      await this.$api.post(postUserV2Login(), {
+      const result = await this.$api.$post(postUserV2Login(), {
         loginMethod: methodType,
         ...data,
+      });
+      await setLoggerUser(this, {
+        wallet: address,
+        method: methodType,
+        isNew: result.isNew,
       });
       await dispatch('walletFetchSessionUserData');
     } catch (error) {
