@@ -29,7 +29,11 @@ import {
   getAccountBalance,
 } from '~/util/api';
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
-import { setLoggerUser } from '~/util/EventLogger';
+import {
+  setLoggerUser,
+  updateLoggerUserInfo,
+  resetLoggerUser,
+} from '~/util/EventLogger';
 
 import {
   WALLET_SET_IS_DEBUG,
@@ -913,6 +917,8 @@ const actions = {
     if (!checkIsLikeCoinAppInAppBrowser(this.$router.app.$route)) {
       await dispatch('setLocale', userInfo.locale);
     }
+    const { displayName, email } = userInfo;
+    updateLoggerUserInfo(this, { email, displayName, wallet: state.address });
     return userInfo;
   },
   async walletFetchSessionUserData(
@@ -976,6 +982,7 @@ const actions = {
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
     commit(WALLET_SET_FEED_EVENT_MEMO, {});
     await this.$api.post(postUserV2Logout());
+    resetLoggerUser(this);
   },
   async walletUpdateEmail(
     { commit },
