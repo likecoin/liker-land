@@ -16,6 +16,21 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
+export function resetLoggerUser(vue) {
+  if (vue.$sentry) {
+    vue.$sentry.configureScope(scope => {
+      scope.setUser({});
+    });
+  }
+  if (vue.$gtag) {
+    vue.$gtag.set({ userId: null });
+    vue.$gtag.set({ user_id: null });
+  }
+  if (this.$crisp) {
+    this.$crisp.push(['do', 'session:reset']);
+  }
+}
+
 export async function setLoggerUser(
   vue,
   { wallet, method, event = 'restore' }
@@ -51,15 +66,23 @@ export async function setLoggerUser(
   }
 }
 
-export function updateSentryUser(vue, { user, displayName }) {
-  if (user) {
+export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
+  if (vue.$sentry) {
     const opt = {
-      id: user,
-      username: displayName || user,
+      id: wallet,
+      username: displayName || wallet,
     };
     vue.$sentry.configureScope(scope => {
       scope.setUser(opt);
     });
+  }
+  if (vue.$crisp) {
+    if (displayName) {
+      vue.$crisp.push(['set', 'user:nickname', [displayName || wallet]]);
+    }
+    if (email) {
+      vue.$crisp.push(['set', 'user:email', [email]]);
+    }
   }
 }
 
@@ -81,6 +104,13 @@ export function logTrackerEvent(
         value,
         ...otherPayload,
       });
+    }
+    if (vue.$crisp) {
+      vue.$crisp.push([
+        'set',
+        'session:event',
+        [[[action, { category, action, label, value, ...otherPayload }]]],
+      ]);
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
@@ -136,9 +166,31 @@ export function logPurchaseFlowEvent(
         window.fbq('track', eventNameMapping[event], {
           currency,
           value: price,
-          content_ids: items.map(i => i.classId),
+          content_ids: items.map(
+            i => i.productId || i.collectionId || i.classId
+          ),
         });
       }
+    }
+    if (vue.$crisp) {
+      vue.$crisp.push([
+        'set',
+        'session:event',
+        [
+          [
+            [
+              event,
+              {
+                price,
+                currency,
+                items: items.map(
+                  i => i.productId || i.collectionId || i.classId
+                ),
+              },
+            ],
+          ],
+        ],
+      ]);
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
@@ -148,7 +200,7 @@ export function logPurchaseFlowEvent(
 
 export function logPurchaseNFTBookEvent(
   vue,
-  { name, price, currency, classId }
+  { name, price, currency, classId, collectionId, quantity = 1 }
 ) {
   try {
     if (vue.$gtag) {
@@ -157,12 +209,12 @@ export function logPurchaseNFTBookEvent(
         currency,
         items: [
           {
-            item_id: classId,
+            item_id: collectionId || classId,
             item_name: name?.substring(0, 100),
             item_brand: 'NFT Book',
             currency,
             price,
-            quantity: 1,
+            quantity,
           },
         ],
       });
@@ -171,8 +223,23 @@ export function logPurchaseNFTBookEvent(
       window.fbq('trackCustom', 'PurchaseBook', {
         currency,
         value: price,
-        content_ids: [classId],
+        quantity,
+        content_ids: [collectionId || classId],
       });
+    }
+    if (vue.$crisp) {
+      vue.$crisp.push([
+        'set',
+        'session:event',
+        [
+          [
+            [
+              'purchase_nft_book',
+              { name, price, currency, classId, collectionId, quantity },
+            ],
+          ],
+        ],
+      ]);
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
