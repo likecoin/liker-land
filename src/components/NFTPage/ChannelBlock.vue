@@ -82,29 +82,33 @@ export default {
   methods: {
     ...mapActions(['fetchUserInfo']),
     async fetchAffiliationName(channel) {
+      let likerId = '';
+
       if (channel.startsWith('@')) {
-        const id = channel.slice(1);
-        try {
-          await this.fetchUserInfo({ id });
-          const { displayName, avatar } = this.getUserInfoById(id);
-          this.affiliationName = displayName || id;
-          this.avatarUrl = avatar;
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          this.affiliationName = id;
+        likerId = channel.slice(1);
+      } else {
+        const legacyEntry = AFFILIATION_CHANNELS.find(
+          store => store.legacyId === channel
+        );
+        if (legacyEntry) {
+          likerId = legacyEntry.id.slice(1);
         }
+      }
+
+      if (!likerId) {
+        this.affiliationName = channel;
         return;
       }
 
-      const affiliation = AFFILIATION_CHANNELS.find(
-        store => store.id === channel
-      );
-      if (affiliation) {
-        this.affiliationName =
-          affiliation.name[this.$i18n.locale] || affiliation.name.en;
-      } else {
-        this.affiliationName = channel;
+      try {
+        await this.fetchUserInfo({ id: likerId });
+        const { displayName, avatar } = this.getUserInfoById(likerId);
+        this.affiliationName = displayName || likerId;
+        this.avatarUrl = avatar;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.affiliationName = likerId;
       }
     },
   },
