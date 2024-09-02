@@ -16,20 +16,33 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
-export async function setLoggerUser(vue, { wallet, method, isNew }) {
-  if (window.doNotTrack || navigator.doNotTrack) return;
+export async function setLoggerUser(
+  vue,
+  { wallet, method, event = 'restore' }
+) {
+  if (vue.$sentry) {
+    const opt = {
+      id: wallet,
+      username: wallet,
+    };
+    vue.$sentry.configureScope(scope => {
+      scope.setUser(opt);
+    });
+  }
   try {
     if (vue.$gtag) {
-      let hashedId = await digestMessage(wallet);
-      hashedId = hexString(hashedId);
-      vue.$gtag.set({ userId: hashedId });
-      // HACK: use .set to mitigate connected site user_id issue
-      // https://support.google.com/analytics/answer/9973999?hl=en
-      // vue.$gtag.config({ user_id: hashedId });
-      vue.$gtag.set({ user_id: hashedId });
-      if (isNew) {
+      if (!window.doNotTrack && !navigator.doNotTrack) {
+        let hashedId = await digestMessage(wallet);
+        hashedId = hexString(hashedId);
+        vue.$gtag.set({ userId: hashedId });
+        // HACK: use .set to mitigate connected site user_id issue
+        // https://support.google.com/analytics/answer/9973999?hl=en
+        // vue.$gtag.config({ user_id: hashedId });
+        vue.$gtag.set({ user_id: hashedId });
+      }
+      if (event === 'signup') {
         vue.$gtag.event('sign_up', { method });
-      } else {
+      } else if (event === 'login') {
         vue.$gtag.event('login', { method });
       }
     }
@@ -94,7 +107,6 @@ export function logPurchaseFlowEvent(
     ) {
       throw new Error('Not purchase event');
     }
-    if (window.doNotTrack || navigator.doNotTrack) return;
     if (vue.$gtag) {
       vue.$gtag.event(event, {
         transaction_id: txHash,

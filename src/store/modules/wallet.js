@@ -351,6 +351,11 @@ const actions = {
     try {
       if (getters.walletIsMatchedSession) {
         // Do not await here to prevent blocking
+        await setLoggerUser(this, {
+          wallet: getters.loginAddress,
+          method: getters.walletMethodType,
+          event: 'login',
+        });
         dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
       } else if (getters.getAddress) {
         // Re-login if the wallet address is different from session
@@ -388,6 +393,11 @@ const actions = {
       } else {
         await dispatch('initWallet', connection);
         if (getters.walletIsMatchedSession) {
+          await setLoggerUser(this, {
+            wallet: getters.loginAddress,
+            method: getters.walletMethodType,
+            event: 'login',
+          });
           dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
         }
       }
@@ -480,6 +490,7 @@ const actions = {
       const { accounts, method } = session;
       await dispatch('initWallet', { accounts, method });
       if (getters.walletIsMatchedSession) {
+        await setLoggerUser(this, { wallet: getters.loginAddress, method });
         dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
       }
     }
@@ -934,7 +945,7 @@ const actions = {
       await setLoggerUser(this, {
         wallet: address,
         method: methodType,
-        isNew: result.isNew,
+        event: result.isNew ? 'signup' : 'login',
       });
       await dispatch('walletFetchSessionUserData');
     } catch (error) {
