@@ -294,7 +294,71 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
 
 export const AFFILIATION_CHANNELS = [
   {
-    legacyId: 'liker_land',
-    id: '@likerland',
+    fromString: 'Muddy Water',
+    id: '@muddydirtywater',
+  },
+  {
+    fromString: 'bchai',
+    id: '@edmondyu',
+  },
+  {
+    fromString: 'boundarybooks',
+    id: '@boundarybooks',
+  },
+  {
+    fromString: 'ckxpress',
+    id: '@ckxpress',
+  },
+  {
+    fromString: 'dungfookei',
+    id: '@nghengsun',
+  },
+  {
+    fromString: 'hkcourtnews',
+    id: '@hkcourtnews2023',
+  },
+  {
+    fromString: 'hkhouseofliterature',
+    id: '@hkhouseofliterature',
+  },
+  {
+    fromString: 'hkreaders',
+    id: '@hkreaders',
+  },
+  {
+    fromString: 'hunter',
+    id: '@hunterbookstore',
+  },
+  {
+    fromString: 'incommonbreath',
+    id: '@incommonbreath',
+  },
+  {
+    fromString: 'liberresearch',
+    id: '@liber-research',
+  },
+  {
+    fromString: 'nowhere',
+    id: '@nowherebooks',
+  },
+  {
+    fromString: 'punch',
+    id: '@bookpunch',
+  },
+  {
+    fromString: 'samkee',
+    id: '@samkeebook',
+  },
+  {
+    fromString: 'stay',
+    id: '@hansbookstore',
+  },
+  {
+    fromString: 'thewitness',
+    id: 'thewitness',
+  },
+  {
+    fromString: 'victoriabooklit',
+    id: 'victoriacitylit',
   },
 ];

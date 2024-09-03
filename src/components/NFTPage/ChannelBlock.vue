@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="affiliationName"
     :class="[
       'flex',
       'flex-col',
@@ -61,54 +62,59 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      affiliationName: '',
-      avatarUrl: '',
-    };
-  },
   computed: {
     ...mapGetters(['getUserInfoById']),
+    validAffiliationId() {
+      if (!this.channel) {
+        return undefined;
+      }
+
+      if (this.channel.startsWith('@')) {
+        return this.channel.slice(1);
+      }
+
+      const legacyEntry = AFFILIATION_CHANNELS.find(
+        store => store.fromString === this.channel
+      );
+      if (legacyEntry) {
+        return legacyEntry.id.slice(1);
+      }
+
+      return undefined;
+    },
+    affiliationName() {
+      if (!this.validAffiliationId) {
+        return undefined;
+      }
+      const userData = this.getUserInfoById(this.validAffiliationId);
+
+      return userData?.displayName;
+    },
+    avatarUrl() {
+      if (!this.validAffiliationId) {
+        return undefined;
+      }
+      const userData = this.getUserInfoById(this.validAffiliationId);
+      return userData?.avatar;
+    },
   },
   watch: {
-    channel: {
+    validAffiliationId: {
       immediate: true,
-      handler(newVal) {
-        this.fetchAffiliationName(newVal);
+      handler() {
+        this.fetchAffiliationName();
       },
     },
   },
 
   methods: {
     ...mapActions(['fetchUserInfo']),
-    async fetchAffiliationName(channel) {
-      let likerId = '';
-
-      if (channel.startsWith('@')) {
-        likerId = channel.slice(1);
-      } else {
-        const legacyEntry = AFFILIATION_CHANNELS.find(
-          store => store.legacyId === channel
-        );
-        if (legacyEntry) {
-          likerId = legacyEntry.id.slice(1);
-        }
-      }
-
-      if (!likerId) {
-        this.affiliationName = channel;
-        return;
-      }
-
+    async fetchAffiliationName() {
       try {
-        await this.fetchUserInfo({ id: likerId });
-        const { displayName, avatar } = this.getUserInfoById(likerId);
-        this.affiliationName = displayName || likerId;
-        this.avatarUrl = avatar;
+        await this.fetchUserInfo({ id: this.validAffiliationId });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
-        this.affiliationName = likerId;
       }
     },
   },
