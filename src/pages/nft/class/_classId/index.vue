@@ -1491,10 +1491,13 @@ export default {
       this.isTippingDialogOpen = false;
       if (this.isAddingToCart) {
         this.handleAddToCart();
-      } else if (this.shouldCrossSell) {
-        this.openCrossSellDialog();
       } else {
-        this.handleCollectFromEdition();
+        const edition = this.getEdition(this.selectedValue);
+        if (edition.price > 0) {
+          this.openCrossSellDialog();
+        } else {
+          this.handleCollectFromEdition();
+        }
       }
     },
     handleClickBookBannerCTA() {
