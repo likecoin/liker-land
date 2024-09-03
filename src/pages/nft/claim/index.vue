@@ -987,9 +987,15 @@ export default {
           this.productId
         );
       } catch (error) {
+        const errorMessage = error.response?.data || error.message;
+        if (errorMessage === 'ALREADY_PURCHASED') {
+          this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
+          return;
+        }
+
         // eslint-disable-next-line no-console
         console.error(error);
-        this.error = error.response?.data || error.message;
+        this.error = errorMessage;
         logTrackerEvent(
           this,
           'NFT',
