@@ -1115,7 +1115,7 @@ export default {
         }
         if (this.isAddingToCart) {
           this.handleAddToCart(selectedValue);
-        } else if (this.shouldCrossSell) {
+        } else if (edition?.price > 0 && this.shouldCrossSell) {
           this.selectedValue = selectedValue;
           this.openCrossSellDialog();
         } else {
