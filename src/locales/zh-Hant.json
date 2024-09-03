@@ -86,7 +86,7 @@
   "campaign_nft_page_title": "珍藏文字，回饋創作",
   "campaign_nft_upcoming": "下一篇 Writing NFT 即將推出",
   "campaign_nft_view_nft_dashboard": "查看 Writing NFT 書架",
-  "cart_purchase_channel": "透過",
+  "cart_purchase_channel": "透過 {from}",
   "cart_item_added": "已加入購物車",
   "cart_item_free_not_supported": "購物車暫不支援免費收藏",
   "cart_item_tipping": "單價已含小額打賞 {amount} USD",
