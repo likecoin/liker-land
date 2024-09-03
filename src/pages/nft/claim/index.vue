@@ -497,6 +497,14 @@
         </template>
       </NFTClaimMainSection>
     </div>
+
+    <NFTBookCrossSellDialog
+      :open="isCrossSellDialogOpen"
+      :class-id="crossSellClassId"
+      :collection-id="crossSellCollectionId"
+      @accept="handleCrossSellAccept"
+      @reject="handleCrossSellReject"
+    />
   </main>
 </template>
 
@@ -525,6 +533,7 @@ import {
 import { ellipsis } from '~/util/ui';
 
 import alertMixin from '~/mixins/alert';
+import crossSellMixin from '~/mixins/cross-sell';
 import walletMixin from '~/mixins/wallet';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 import walletLoginMixin from '~/mixins/wallet-login';
@@ -544,7 +553,13 @@ export default {
   filters: {
     ellipsis,
   },
-  mixins: [alertMixin, walletMixin, nftOrCollectionMixin, walletLoginMixin],
+  mixins: [
+    alertMixin,
+    crossSellMixin,
+    walletMixin,
+    nftOrCollectionMixin,
+    walletLoginMixin,
+  ],
   data() {
     return {
       nftId: '',
@@ -552,7 +567,7 @@ export default {
         NFT_CLAIM_STATE[(this.$route.query.state || '').toUpperCase()] ||
         NFT_CLAIM_STATE.WELCOME,
       error: '',
-      isFreePurchase: this.$route.query.free,
+      isFreePurchase: !!this.$route.query.free,
       collectorMessage: '',
       creatorMessage: '',
       claimingAddressInput: '',
@@ -706,6 +721,9 @@ export default {
       } else if (newValue) {
         this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
       }
+    },
+    $route() {
+      this.showCrossSellDialogIfNecessary();
     },
   },
   async mounted() {
@@ -890,9 +908,23 @@ export default {
         })
       );
       this.navigateToState(NFT_CLAIM_STATE.ERROR);
-    } else if (this.claimingAddress) {
+    } else if (this.state !== NFT_CLAIM_STATE.CLAIMED && this.claimingAddress) {
       this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
     }
+
+    if (this.hasCrossSell) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        this.isEnableCrossSell
+          ? 'nft_claim_cross_sell_enabled'
+          : 'nft_claim_cross_sell_disabled',
+        this.classId,
+        1
+      );
+    }
+
+    this.showCrossSellDialogIfNecessary();
   },
   methods: {
     ...mapActions(['clearBookProductShoppingCart']),
@@ -1252,6 +1284,38 @@ export default {
     navigateToState(state) {
       this.state = state;
       this.$router.push({ query: { ...this.$route.query, state } });
+    },
+    showCrossSellDialogIfNecessary() {
+      if (
+        this.state === NFT_CLAIM_STATE.CLAIMED &&
+        this.isFreePurchase &&
+        this.shouldCrossSell
+      ) {
+        // Delay 1s to avoid blocking the claimed success message
+        setTimeout(() => {
+          this.openCrossSellDialog();
+        }, 1000);
+      }
+    },
+    handleCrossSellAccept() {
+      this.closeCrossSellDialog();
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_cross_sell_accept',
+        this.productId,
+        1
+      );
+    },
+    handleCrossSellReject() {
+      this.closeCrossSellDialog();
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_cross_sell_reject',
+        this.productId,
+        1
+      );
     },
   },
 };
