@@ -407,7 +407,7 @@ export default {
       try {
         await this.signLogin();
       } catch (err) {
-        this.alertPromptError(err.toString());
+        this.alertPromptError(err);
       }
     }
   },

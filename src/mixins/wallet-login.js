@@ -74,7 +74,7 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
-        this.alertPromptError(err.toString());
+        this.alertPromptError(err);
         return false;
       }
     },
