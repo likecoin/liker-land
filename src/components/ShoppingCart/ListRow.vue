@@ -181,7 +181,7 @@ export default {
   computed: {
     purchaseChannel() {
       return this.from
-        ? `${this.$t('cart_purchase_channel')} : ${this.from}`
+        ? this.$t('cart_purchase_channel', { from: this.from })
         : '';
     },
     tippingAmount() {
