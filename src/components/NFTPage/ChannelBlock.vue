@@ -48,7 +48,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { AFFILIATION_CHANNELS } from '~/constant';
+import { AFFILIATION_CHANNEL_LEGACY_STRINGS_MAP } from '~/constant';
 
 export default {
   name: 'NFTPageChannelBlock',
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfoById']),
-    validAffiliationId() {
+    affiliationLikerId() {
       if (!this.channel) {
         return undefined;
       }
@@ -73,33 +73,31 @@ export default {
         return this.channel.slice(1);
       }
 
-      const legacyEntry = AFFILIATION_CHANNELS.find(
-        store => store.fromString === this.channel
-      );
-      if (legacyEntry) {
-        return legacyEntry.id.slice(1);
+      const affiliationId = AFFILIATION_CHANNEL_LEGACY_STRINGS_MAP.get(this.channel);
+      if (affiliationId) {
+        return affiliationId.slice(1);
       }
 
       return undefined;
     },
     affiliationName() {
-      if (!this.validAffiliationId) {
+      if (!this.affiliationLikerId) {
         return undefined;
       }
-      const userData = this.getUserInfoById(this.validAffiliationId);
+      const userData = this.getUserInfoById(this.affiliationLikerId);
 
       return userData?.displayName;
     },
     avatarUrl() {
-      if (!this.validAffiliationId) {
+      if (!this.affiliationLikerId) {
         return undefined;
       }
-      const userData = this.getUserInfoById(this.validAffiliationId);
+      const userData = this.getUserInfoById(this.affiliationLikerId);
       return userData?.avatar;
     },
   },
   watch: {
-    validAffiliationId: {
+    affiliationLikerId: {
       immediate: true,
       handler() {
         this.fetchAffiliationName();
@@ -111,7 +109,7 @@ export default {
     ...mapActions(['fetchUserInfo']),
     async fetchAffiliationName() {
       try {
-        await this.fetchUserInfo({ id: this.validAffiliationId });
+        await this.fetchUserInfo({ id: this.affiliationLikerId });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
