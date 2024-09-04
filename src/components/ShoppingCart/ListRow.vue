@@ -133,6 +133,7 @@
 <script>
 import { ellipsis, formatNumberWithUSD } from '~/util/ui';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 
 import nftOrCollection from '~/mixins/nft-or-collection';
 
@@ -180,7 +181,7 @@ export default {
   },
   computed: {
     purchaseChannel() {
-      return this.from
+      return this.from && this.from !== NFT_BOOK_PLATFORM_LIKER_LAND
         ? this.$t('cart_purchase_channel', { from: this.from })
         : '';
     },
