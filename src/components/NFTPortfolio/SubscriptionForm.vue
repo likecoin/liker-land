@@ -263,8 +263,8 @@ export default {
           try {
             this.isLoading = true;
             await this.signLogin();
-          } catch {
-            // No-op
+          } catch (err) {
+            this.alertPromptError(err.toString());
           } finally {
             this.isLoading = false;
           }
@@ -369,8 +369,8 @@ export default {
         if (!this.isWalletLoggedIn) {
           try {
             await this.signLogin();
-          } catch {
-            // No-op
+          } catch (err) {
+            this.alertPromptError(err.toString());
           }
           if (!this.isWalletLoggedIn) {
             return;

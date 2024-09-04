@@ -406,8 +406,8 @@ export default {
     if (this.getAddress && !this.walletHasLoggedIn) {
       try {
         await this.signLogin();
-      } catch {
-        // No-op
+      } catch (err) {
+        this.alertPromptError(err.toString());
       }
     }
   },

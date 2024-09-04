@@ -1,8 +1,10 @@
 import { mapActions } from 'vuex';
 
+import alertMixin from '~/mixins/alert';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
+  mixins: [alertMixin],
   methods: {
     ...mapActions([
       'openConnectWalletModal',
@@ -72,6 +74,7 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
+        this.alertPromptError(err.toString());
         return false;
       }
     },

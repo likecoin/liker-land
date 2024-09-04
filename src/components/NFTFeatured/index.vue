@@ -63,6 +63,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { NFT_DISPLAY_STATE } from '~/constant';
 
+import alertMixin from '~/mixins/alert';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
@@ -80,7 +81,7 @@ export default {
       default: true,
     },
   },
-
+  mixins: [alertMixin],
   computed: {
     ...mapGetters(['getAddress', 'walletHasLoggedIn']),
     formatdisplayState() {
@@ -129,8 +130,8 @@ export default {
       if (!this.walletHasLoggedIn) {
         try {
           await this.signLogin();
-        } catch {
-          // No-op
+        } catch (err) {
+          this.alertPromptError(err.toString());
         }
         if (!this.walletHasLoggedIn) {
           return;
