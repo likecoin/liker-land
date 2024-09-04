@@ -675,8 +675,9 @@ export default {
         item =>
           !userCollected.some(
             collectedItem => collectedItem.classId === item.classId
-          ) && item.classId !== this.classId
+          )
       );
+
       if (hiddenSet) {
         recommendedList = recommendedList.filter(
           item => !hiddenSet.has(item.classId)
@@ -691,6 +692,10 @@ export default {
           recommendedList.filter(item => !featuredSet.has(item.classId))
         );
       }
+
+      recommendedList = recommendedList.filter(
+        item => item.classId !== this.classId
+      );
 
       if (this.nftIsNFTBook) {
         const sortedList = [...recommendedList];
