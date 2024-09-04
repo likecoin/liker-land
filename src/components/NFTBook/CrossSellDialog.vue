@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :open="open"
+    :open="open || isKeepingDialogOpen"
     panel-container-class="phone:w-full laptop:w-full max-w-[400px]"
     panel-component="CardV2"
     panel-class="overflow-y-scroll shadow-lg px-[24px]"
@@ -49,11 +49,13 @@
         <ButtonV2
           preset="secondary"
           :text="$t('nft_book_cross_sell_action_accept')"
+          :is-disabled="isKeepingDialogOpen"
           @click.prevent="handleAccept"
         />
         <ButtonV2
           preset="plain"
           :text="$t('nft_book_cross_sell_action_reject')"
+          :is-disabled="isKeepingDialogOpen"
           @click.prevent="handleReject"
         />
       </footer>
@@ -62,10 +64,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 
+import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
@@ -90,6 +93,14 @@ export default {
       type: String,
       default: undefined,
     },
+  },
+  data() {
+    return {
+      isKeepingDialogOpen: false,
+    };
+  },
+  computed: {
+    ...mapGetters(['getGaClientId', 'getGaSessionId', 'shoppingCartBookItems']),
   },
   watch: {
     open: {
@@ -128,7 +139,35 @@ export default {
         1
       );
     },
-    handleAccept() {
+    async gotoCheckoutPage({ link, customPriceInDecimal }) {
+      try {
+        const { url } = await this.$axios.$post(link, {
+          gaClientId: this.getGaClientId,
+          gaSessionId: this.getGaSessionId,
+          coupon: this.$route.query.coupon,
+          customPriceInDecimal,
+          utmCampaign: this.utmCampaign,
+          utmSource: `${this.utmSource}_cross-sell`,
+          utmMedium: this.utmMedium,
+          referrer: document.referrer,
+          email: this.walletEmail,
+        });
+        if (url) {
+          window.location.href = url;
+        } else {
+          throw new Error('Failed to get checkout link');
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.uiPromptErrorAlert(error.toString());
+      } finally {
+        this.isKeepingDialogOpen = false;
+      }
+    },
+    async handleAccept() {
+      if (this.isKeepingDialogOpen) return;
+
       logTrackerEvent(
         this,
         'NFT',
@@ -145,14 +184,8 @@ export default {
           return;
         }
 
-        this.addBookProductToShoppingCart({
-          collectionId: this.collectionId,
-          from: NFT_BOOK_PLATFORM_LIKER_LAND,
-          customPriceInDecimal: this.collectionPrice * 100,
-          coupon: this.$route.query.coupon,
-        });
-
-        logPurchaseFlowEvent(this, 'add_to_cart', {
+        const customPriceInDecimal = this.collectionPrice * 100;
+        const purchaseEventParams = {
           items: [
             {
               name: this.collectionName,
@@ -164,6 +197,29 @@ export default {
           price: this.collectionPrice,
           currency: 'USD',
           isNFTBook: true,
+        };
+
+        this.isKeepingDialogOpen = true;
+        this.$emit('accept');
+
+        logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+
+        if (this.shoppingCartBookItems.length < 1) {
+          logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+
+          const link = getNFTBookPurchaseLink({
+            collectionId: this.collectionId,
+            platform: this.platform,
+          });
+          await this.gotoCheckoutPage({ link, customPriceInDecimal });
+          return;
+        }
+
+        this.addBookProductToShoppingCart({
+          collectionId: this.collectionId,
+          from: NFT_BOOK_PLATFORM_LIKER_LAND,
+          customPriceInDecimal,
+          coupon: this.$route.query.coupon,
         });
       } else {
         // NOTE: Only support single edition for now
@@ -174,15 +230,8 @@ export default {
           return;
         }
 
-        this.addBookProductToShoppingCart({
-          classId: this.classId,
-          priceIndex: edition.index,
-          from: NFT_BOOK_PLATFORM_LIKER_LAND,
-          customPriceInDecimal: edition.price * 100,
-          coupon: this.$route.query.coupon,
-        });
-
-        logPurchaseFlowEvent(this, 'add_to_cart', {
+        const customPriceInDecimal = edition.price * 100;
+        const purchaseEventParams = {
           items: [
             {
               name: this.NFTName,
@@ -194,13 +243,40 @@ export default {
           price: edition.price,
           currency: 'USD',
           isNFTBook: true,
+        };
+
+        this.isKeepingDialogOpen = true;
+        this.$emit('accept');
+
+        logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
+
+        if (this.shoppingCartBookItems.length < 1) {
+          logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
+
+          const link = getNFTBookPurchaseLink({
+            classId: this.classId,
+            priceIndex: edition.index,
+            platform: this.platform,
+          });
+          await this.gotoCheckoutPage({ link, customPriceInDecimal });
+          return;
+        }
+
+        this.addBookProductToShoppingCart({
+          classId: this.classId,
+          priceIndex: edition.index,
+          from: NFT_BOOK_PLATFORM_LIKER_LAND,
+          customPriceInDecimal,
+          coupon: this.$route.query.coupon,
         });
       }
       logTrackerEvent(this, 'BookCart', 'BookCartAddItem', this.productId, 1);
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
-      this.$emit('accept');
+      this.isKeepingDialogOpen = false;
     },
     handleReject() {
+      if (this.isKeepingDialogOpen) return;
+
       logTrackerEvent(
         this,
         'NFT',

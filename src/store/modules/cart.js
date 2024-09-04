@@ -94,7 +94,11 @@ const getters = {
           item.productId,
           item.priceIndex
         );
-        return !priceInfo || priceInfo?.fiatPrice > 0;
+        return (
+          !priceInfo ||
+          priceInfo?.fiatPrice > 0 ||
+          item.customPriceInDecimal > 0
+        );
       }
     );
     list.sort((a, b) => a.timestamp - b.timestamp);

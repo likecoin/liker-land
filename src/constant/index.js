@@ -280,7 +280,17 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
       likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8: [
         'col_book_37fd9fd7-3323-4b4e-9d94-83566f8fba96',
         'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
-        'likenft17us58us2sjkr8sau5s6lc0as48traluas440qm7j5r2kaz6z086q7v4a5x',
+        'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
+      ],
+      // Free product w/ tipping
+      likenft1akaqh0pd9wv8lfy3xyd9tnc4mk8vmy7ehzg7ssgczqxcq3hzc2vqugtvty: [
+        'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
+        'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
+      ],
+      // Free product w/o tipping
+      likenft1qq06n42guzvt087wxunaajvz3alx6wadq6mfz0yz57gffwsrgrasl2m59x: [
+        'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
+        'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
       ],
     }
   : {
@@ -289,5 +299,9 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
         'likenft1mgehyarx3lft82g9zwvv9c4g9rgzxfsjda90vzmq5h56vg5u26qsec7rpc',
         'likenft1eawzxut5zf9t9myyd6prquef7c2r7pe0z3rzlreup59wtxe9hplqcd4987',
         'likenft1r8mce5h96nvedtm7rh9va5mda6fgysqfprlxftuef09s8kfjt2jsqeyyjq',
+      ],
+      likenft14jz77ywl6hmfxlus6qrat36c2y7l5xkxhlzp76tdvk06mw69pjzsy5zu9l: [
+        'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3',
+        'likenft1rfd3pp4q4hvuha8xpl8wzzf7uwannv0wm05s7jz34828e4qjnyzsfd9srz',
       ],
     };
