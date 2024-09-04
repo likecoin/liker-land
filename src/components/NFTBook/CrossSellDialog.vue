@@ -15,9 +15,30 @@
         :text="$t('nft_book_cross_sell_title')"
       />
 
-      <NFTBookCover class="mt-[24px] h-[200px]" :src="productImageUrl" />
+      <NuxtLink
+        class="mt-[24px] group"
+        :to="viewInfoLocation"
+        target="_blank"
+        @click.native="handleProductCoverClick"
+      >
+        <NFTBookCover
+          class="h-[200px] group-hover:scale-105 transition-transform"
+          :src="productImageUrl"
+        />
+      </NuxtLink>
 
-      <Label class="mt-[16px]" preset="h5" :text="productName" />
+      <NuxtLink
+        class="mt-[16px] group"
+        :to="viewInfoLocation"
+        target="_blank"
+        @click.native="handleProductTitleClick"
+      >
+        <Label
+          class="text-like-green group-hover:underline"
+          preset="h5"
+          :text="productName"
+        />
+      </NuxtLink>
       <Label class="mt-[4px]" preset="p6" :text="productPriceWithFormat" />
 
       <p class="mt-[16px] text-[14px] line-clamp-2">{{ productDescription }}</p>
@@ -89,6 +110,24 @@ export default {
   },
   methods: {
     ...mapActions(['addBookProductToShoppingCart', 'uiPromptSuccessAlert']),
+    handleProductCoverClick() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_book_cross_sell_dialog_p_cover_click',
+        this.productId,
+        1
+      );
+    },
+    handleProductTitleClick() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_book_cross_sell_dialog_p_title_click',
+        this.productId,
+        1
+      );
+    },
     handleAccept() {
       logTrackerEvent(
         this,
