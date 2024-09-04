@@ -54,9 +54,8 @@
   </div>
   <div v-else :class="['flex', 'flex-col', 'justify-center']">
     <NFTPageChannelBlock
-      v-if="isDetailsPreset && channelId"
+      v-if="isDetailsPreset"
       class="laptop:hidden mb-[24px] self-start"
-      :channel="channelId"
     />
     <component
       :is="componentTag"
@@ -132,9 +131,8 @@
           ]"
         >
           <NFTPageChannelBlock
-            v-if="isDetailsPreset && channelId"
+            v-if="isDetailsPreset"
             class="hidden laptop:flex absolute top-[-24px] left-0"
-            :channel="channelId"
           />
           <Label
             v-if="isNew"
@@ -428,10 +426,6 @@ export default {
           .substring(0, 100);
       }
       return this.bookDescription.trim();
-    },
-    channelId() {
-      const { from } = this.$route.query;
-      return from;
     },
   },
   mounted() {

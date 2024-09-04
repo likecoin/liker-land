@@ -48,15 +48,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { AFFILIATION_CHANNEL_LEGACY_STRINGS_MAP } from '~/constant';
+import { AFFILIATION_CHANNEL_LEGACY_STRINGS } from '~/constant';
 
 export default {
   name: 'NFTPageChannelBlock',
   props: {
-    channel: {
-      type: String,
-      default: '',
-    },
     isCollection: {
       type: Boolean,
       default: false,
@@ -64,6 +60,10 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfoById']),
+    channel() {
+      const { from } = this.$route.query;
+      return from;
+    },
     affiliationLikerId() {
       if (!this.channel) {
         return undefined;
@@ -73,7 +73,7 @@ export default {
         return this.channel.slice(1);
       }
 
-      const affiliationId = AFFILIATION_CHANNEL_LEGACY_STRINGS_MAP.get(this.channel);
+      const affiliationId = AFFILIATION_CHANNEL_LEGACY_STRINGS[this.channel];
       if (affiliationId) {
         return affiliationId.slice(1);
       }
