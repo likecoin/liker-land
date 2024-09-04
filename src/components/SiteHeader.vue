@@ -61,7 +61,7 @@
         class="hidden laptop:flex"
         preset="secondary"
         :text="$t('header_button_connect_to_wallet')"
-        @click="connectWallet"
+        @click="handleConnectWallet"
       >
         <template #prepend>
           <IconLogin />
@@ -175,7 +175,7 @@
         v-if="!getAddress"
         class="w-full"
         preset="secondary"
-        @click="connectWallet"
+        @click="handleConnectWallet"
         ><div class="flex gap-[12px]">
           <IconLogin />
           {{ $t('header_button_connect_to_wallet') }}
@@ -327,6 +327,21 @@ export default {
     },
     handleSelectLocale(value) {
       this.updatePreferences({ locale: value });
+    },
+    async handleConnectWallet() {
+      try {
+        logTrackerEvent(
+          this,
+          'site_menu',
+          'site_menu_click_connect_wallet',
+          '',
+          1
+        );
+        await this.connectWallet();
+      } catch (err) {
+        console.error(err);
+        this.alertPromptError(err);
+      }
     },
     handleSelectMenuItem(value) {
       switch (value) {

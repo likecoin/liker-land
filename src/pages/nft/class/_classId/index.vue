@@ -102,9 +102,7 @@
           <div
             v-if="
               nftCollections?.length ||
-                (nftBookAvailablePriceLabel &&
-                  (nftEditions.length > 1 ||
-                    (nftEditions.length === 1 && nftEditions[0].description)))
+                (nftBookAvailablePriceLabel && nftEditions.length > 1)
             "
             ref="compareSection"
             class="max-w-[962px] mx-auto flex flex-col gap-[48px] justify-center flex-wrap"
@@ -183,6 +181,29 @@
               </li>
             </ul>
           </div>
+
+          <!-- recommend -->
+          <client-only>
+            <lazy-component
+              class="pointer-events-none"
+              @show.once="handleFetchRecommendInfo"
+            />
+          </client-only>
+          <NFTPageRecommendation
+            :iscn-owner="iscnOwner"
+            :should-show-follow-button="shouldShowFollowButton"
+            :is-followed="isFollowed"
+            :recommended-list="recommendedList"
+            :is-book-nft="nftIsNFTBook"
+            :is-loading="isRecommendationLoading"
+            @header-avatar-click="handleRecommendationHeaderAvatarClick"
+            @follow-button-click="handleFollowButtonClick"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
 
           <Separator class="mx-auto" />
           <client-only>
@@ -311,28 +332,6 @@
             @click-show-more-history="handleClickMoreHistory"
           />
         </section>
-        <!-- recommend -->
-        <client-only>
-          <lazy-component
-            class="pointer-events-none"
-            @show.once="handleFetchRecommendInfo"
-          />
-        </client-only>
-        <NFTPageRecommendation
-          :iscn-owner="iscnOwner"
-          :should-show-follow-button="shouldShowFollowButton"
-          :is-followed="isFollowed"
-          :recommended-list="recommendedList"
-          :is-book-nft="nftIsNFTBook"
-          :is-loading="isRecommendationLoading"
-          @header-avatar-click="handleRecommendationHeaderAvatarClick"
-          @follow-button-click="handleFollowButtonClick"
-          @item-click="handleRecommendedItemClick"
-          @item-collect="handleRecommendedItemCollect"
-          @slide-next.once="handleRecommendationSlideNext"
-          @slide-prev.once="handleRecommendationSlidePrev"
-          @slider-move.once="handleRecommendationSliderMove"
-        />
         <!-- useful links -->
         <section>
           <ul

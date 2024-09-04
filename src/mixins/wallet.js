@@ -132,8 +132,8 @@ export default {
         if (!this.walletHasLoggedIn) {
           try {
             await this.signLogin();
-          } catch {
-            // No-op
+          } catch (err) {
+            this.alertPromptError(err);
           }
           if (!this.walletHasLoggedIn) {
             return;
