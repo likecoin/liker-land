@@ -490,8 +490,12 @@
           <ButtonV2
             :content-class="['px-[48px]']"
             class="phoneLg:w-full phoneLg:max-w-[480px]"
-            preset="tertiary"
-            :text="$t('nft_claim_claimed_button_view_collection')"
+            :preset="isViewCollectionLoading ? 'plain' : 'tertiary'"
+            :text="
+              isViewCollectionLoading
+                ? $t('settings_follow_loading')
+                : $t('nft_claim_claimed_button_view_collection')
+            "
             @click="handleViewCollection"
           />
         </template>
@@ -539,6 +543,8 @@ const NFT_CLAIM_STATE = {
   ERROR: 'ERROR',
 };
 
+const MAX_ATTEMPT = 3;
+
 export default {
   name: 'NFTClaimPage',
   filters: {
@@ -568,6 +574,7 @@ export default {
       classId: this.$route.query.class_id,
       collectionId: this.$route.query.collection_id,
       cartItems: [],
+      isViewCollectionLoading: false,
     };
   },
   computed: {
@@ -1223,7 +1230,37 @@ export default {
         );
       }
     },
-    handleViewCollection() {
+    async ensureClassIdInCollected() {
+      this.isViewCollectionLoading = true;
+
+      let collectedNFTs = this.getCollectedNFTClassesByAddress(
+        this.claimingAddress
+      );
+      let attempts = 0;
+
+      while (
+        !collectedNFTs?.some(item => item.classId === this.classId) &&
+        attempts < MAX_ATTEMPT
+      ) {
+        // eslint-disable-next-line no-await-in-loop
+        await this.fetchCollectedNFTClassesByAddress({
+          address: this.claimingAddress,
+          nocache: true,
+        });
+
+        collectedNFTs = this.getCollectedNFTClassesByAddress(
+          this.claimingAddress
+        );
+
+        attempts += 1;
+
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      this.isViewCollectionLoading = false;
+    },
+    async handleViewCollection() {
       logTrackerEvent(
         this,
         'NFT',
@@ -1231,6 +1268,9 @@ export default {
         this.productId,
         1
       );
+      if (this.cartItemsCount <= 1 && this.isAutoDeliver) {
+        await this.ensureClassIdInCollected();
+      }
       this.$router.push(
         this.localeLocation({
           name: 'bookshelf',
