@@ -77,8 +77,15 @@
           :key="id"
           class="w-full"
         >
-          <NFTClaimOptionList
-            v-if="canViewNFTBookBeforeClaim"
+          <ButtonV2
+            v-if="isContentViewable && canViewNFTBookBeforeClaim"
+            class="w-full"
+            preset="tertiary"
+            :text="$t('nft_claim_claimed_download')"
+            @click="handleOpenOptionListForMobile"
+          />
+          <NFTClaimOptionListForMobile
+            v-if="isShowingOptionListForMobile"
             class="w-full"
             :url="url"
             :class-id="id"
@@ -88,6 +95,7 @@
             :is-content-viewable="isContentViewable"
             :is-content-downloadable="isDownloadable"
             @view-content-url="handleClickViewContentDirectly"
+            @close="isShowingOptionListForMobile = false"
           />
         </div>
       </div>
@@ -168,9 +176,23 @@ export default {
       default: false,
     },
   },
+  data() {
+    return { isShowingOptionListForMobile: false };
+  },
   methods: {
     handleClickViewContentDirectly(e, contentUrl, type) {
       logTrackerEvent(this, 'NFT', 'ClaimViewContentDirect', this.productId, 1);
+    },
+    handleOpenOptionListForMobile() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'ClaimOtherWayToViewClicked',
+        this.productId,
+        1
+      );
+
+      this.isShowingOptionListForMobile = true;
     },
   },
 };
