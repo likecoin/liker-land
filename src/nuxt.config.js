@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
+const Sentry = require('@sentry/vue');
 const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
 
@@ -427,6 +428,10 @@ const nuxtConfig = {
     config: {
       ignoreErrors: ['WebAssembly.instantiate'],
     },
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.browserProfilingIntegration(),
+    ],
     clientIntegrations: {
       /* default integrations will still be added due to deep-merge */
       ReportingObserver: false, // reporting is very noisy on CSP violation.
