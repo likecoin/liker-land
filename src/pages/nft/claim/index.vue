@@ -77,7 +77,14 @@
               class-aspect-ratio="aspect-[1]"
             />
             <Label class="text-[24px] font-600" :text="productTitle" />
-            <div class="flex items-center justify-evenly">
+            <div
+              :class="[
+                'flex',
+                'flex-col desktopLg:flex-row',
+                'justify-evenly',
+                'gap-[12px]',
+              ]"
+            >
               <div v-if="iscnWorkAuthor" class="flex flex-col w-full">
                 <Label
                   preset="h6"
@@ -329,30 +336,54 @@
             ]"
           >
             <div
-              class="flex items-center w-full overflow-clip gap-[16px] px-[20px] py-[16px] rounded-[12px] bg-shade-gray"
+              :class="[
+                'flex',
+                'phone:flex-col',
+                'items-start phone:items-center',
+                'gap-[16px] phone:gap-[8px]',
+
+                'w-full',
+                'px-[20px]',
+                'py-[16px]',
+
+                'rounded-[12px]',
+                'bg-shade-gray',
+              ]"
             >
               <Identity
-                class="flex-shrink-0 "
+                class="flex-shrink-0"
                 :avatar-url="walletUserAvatar"
                 :avatar-size="48"
                 :is-lazy-loaded="true"
               />
-              <div
-                class="flex flex-col w-[80%] justify-center gap-[8px] whitespace-normal"
-              >
-                <Label
+              <ul class="space-y-[4px] overflow-hidden phone:text-center">
+                <li
                   v-if="loginUserDisplayName"
-                  class="break-words"
-                  preset="h5"
-                  :text="loginUserDisplayName"
+                  class="text-like-green text-[16px] font-[600] break-words"
+                  v-text="loginUserDisplayName"
                 />
-                <p
+                <li
+                  v-if="walletEmail"
+                  class="text-[14px] break-all"
+                  v-text="walletEmail"
+                />
+                <li
                   v-if="claimingAddress"
-                  class="break-words text-[16px] text-medium-gray w-full"
-                >
-                  {{ claimingAddress }}
-                </p>
-              </div>
+                  :class="[
+                    'px-[8px]',
+                    'py-[4px]',
+
+                    'text-dark-gray',
+                    'text-[8px]',
+                    'font-mono',
+                    'truncate',
+
+                    'rounded-[4px]',
+                    'bg-gray-d8',
+                  ]"
+                  v-text="claimingAddress"
+                />
+              </ul>
             </div>
             <Label
               preset="p6"
