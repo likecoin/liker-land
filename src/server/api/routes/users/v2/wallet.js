@@ -38,11 +38,20 @@ router.get('/wallet', async (req, res, next) => {
       return;
     }
     const userWallet = userDoc.id;
-    const { lastLoginMethod, registerLoginMethod } = userDoc.data();
+    const {
+      lastLoginMethod,
+      registerLoginMethod,
+      displayName,
+      email: docEmail,
+      emailUnconfirmed,
+    } = userDoc.data();
     res.json({
       wallet: userWallet,
       lastLoginMethod,
       registerLoginMethod,
+      displayName,
+      email: docEmail,
+      emailUnconfirmed,
     });
   } catch (err) {
     next(err);
