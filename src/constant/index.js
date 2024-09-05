@@ -305,3 +305,23 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
         'likenft1rfd3pp4q4hvuha8xpl8wzzf7uwannv0wm05s7jz34828e4qjnyzsfd9srz',
       ],
     };
+
+export const AFFILIATION_CHANNEL_LEGACY_STRINGS = {
+  'Muddy Water': '@muddydirtywater',
+  bchai: '@edmondyu',
+  boundarybooks: '@boundarybooks',
+  ckxpress: '@ckxpress',
+  dungfookei: '@nghengsun',
+  hkcourtnews: '@hkcourtnews2023',
+  hkhouseofliterature: '@hkhouseofliterature',
+  hkreaders: '@hkreaders',
+  hunter: '@hunterbookstore',
+  incommonbreath: '@incommonbreath',
+  liberresearch: '@liber-research',
+  nowhere: '@nowherebooks',
+  punch: '@bookpunch',
+  samkee: '@samkeebook',
+  stay: '@hansbookstore',
+  thewitness: '@thewitness',
+  victoriabooklit: '@victoriacitylit',
+};

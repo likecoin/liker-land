@@ -53,6 +53,10 @@
     </template>
   </div>
   <div v-else :class="['flex', 'flex-col', 'justify-center']">
+    <NFTPageChannelBlock
+      v-if="isDetailsPreset"
+      class="laptop:hidden mb-[24px] self-start"
+    />
     <component
       :is="componentTag"
       :class="[
@@ -115,6 +119,7 @@
         <!-- Info column -->
         <div
           :class="[
+            'relative',
             'flex',
             'flex-col',
             'items-center',
@@ -125,6 +130,10 @@
             'grow',
           ]"
         >
+          <NFTPageChannelBlock
+            v-if="isDetailsPreset"
+            class="hidden laptop:flex absolute top-[-24px] left-0"
+          />
           <Label
             v-if="isNew"
             class="text-like-cyan"
