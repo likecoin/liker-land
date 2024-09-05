@@ -331,6 +331,12 @@ export default {
         if (!result || !result.length) return undefined;
 
         const [price, ...prices] = result;
+        if (this.priceIndex !== undefined) {
+          const foundPrice = result.find(p => p.index === this.priceIndex);
+          if (foundPrice) {
+            return foundPrice.price;
+          }
+        }
         return prices.reduce((acc, p) => Math.min(acc, p.price), price.price);
       }
 
