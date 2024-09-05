@@ -563,9 +563,6 @@ export default {
   data() {
     return {
       nftId: '',
-      state:
-        NFT_CLAIM_STATE[(this.$route.query.state || '').toUpperCase()] ||
-        NFT_CLAIM_STATE.WELCOME,
       error: '',
       isFreePurchase: !!this.$route.query.free,
       collectorMessage: '',
@@ -594,6 +591,22 @@ export default {
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
     ]),
+    state: {
+      get() {
+        return (
+          NFT_CLAIM_STATE[(this.$route.query.state || '').toUpperCase()] ||
+          NFT_CLAIM_STATE.WELCOME
+        );
+      },
+      set(value) {
+        this.$router.replace({
+          query: {
+            ...this.$route.query,
+            state: value,
+          },
+        });
+      },
+    },
     cartId() {
       return this.$route.query.cart_id;
     },
@@ -721,9 +734,6 @@ export default {
       } else if (newValue) {
         this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
       }
-    },
-    $route() {
-      this.showCrossSellDialogIfNecessary();
     },
   },
   async mounted() {
@@ -923,8 +933,6 @@ export default {
         1
       );
     }
-
-    this.showCrossSellDialogIfNecessary();
   },
   methods: {
     ...mapActions(['clearBookProductShoppingCart']),
@@ -1289,17 +1297,13 @@ export default {
     },
     navigateToState(state) {
       this.state = state;
-      this.$router.push({ query: { ...this.$route.query, state } });
-    },
-    showCrossSellDialogIfNecessary() {
-      if (
-        this.state === NFT_CLAIM_STATE.CLAIMED &&
-        this.isFreePurchase &&
-        this.shouldCrossSell
-      ) {
+
+      if (state === NFT_CLAIM_STATE.CLAIMED) {
         // Delay 1s to avoid blocking the claimed success message
         setTimeout(() => {
-          this.openCrossSellDialog();
+          if (this.isFreePurchase && this.shouldCrossSell) {
+            this.openCrossSellDialog();
+          }
         }, 1000);
       }
     },
