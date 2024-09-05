@@ -1,13 +1,13 @@
 import { mapGetters } from 'vuex';
 
-import { CROSS_SELL_PRODUCT_IDS_MAP } from '~/constant';
+import { CROSS_SELL_PRODUCT_IDS_MAP, IS_TESTNET } from '~/constant';
 
 export default {
   data() {
     return {
       isCrossSellDialogOpen: false,
       crossSellProductIndex: 0,
-      isEnableCrossSell: Math.random() < 0.5,
+      isEnableCrossSell: IS_TESTNET ? true : Math.random() < 0.5,
     };
   },
   computed: {
