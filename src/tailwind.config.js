@@ -164,7 +164,6 @@ module.exports = {
       proxima: [
         'proxima-nova',
         'Avant Grade',
-        'STHeiti',
         'Microsoft JhengHei',
         'sans-serif',
       ],
@@ -172,7 +171,6 @@ module.exports = {
         'source-han-sans-traditional',
         'source-han-sans-simplified-c',
         'open-sans',
-        'STHeiti',
         'Microsoft JhengHei',
         'sans-serif',
       ],
