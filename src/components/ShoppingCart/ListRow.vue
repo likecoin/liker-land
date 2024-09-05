@@ -104,7 +104,7 @@
       <div
         class="col-start-10 col-end-12 text-center text-like-green font-proxima font-[600]"
       >
-        {{ (customPrice || unitPrice) | formatNumberWithUSD }}
+        {{ (customPrice || productPrice) | formatNumberWithUSD }}
       </div>
       <!-- remove button -->
       <div class="col-span-1 flex justify-end -mt-[8px]">
@@ -186,11 +186,7 @@ export default {
         : '';
     },
     tippingAmount() {
-      return Math.max(this.customPrice - this.unitPrice, 0);
-    },
-    unitPrice() {
-      const prices = this.getNFTBookStorePricesByClassId(this.classId);
-      return prices?.[this.priceIndex]?.price || this.productPrice;
+      return Math.max(this.customPrice - this.productPrice, 0);
     },
   },
   mounted() {
@@ -223,7 +219,7 @@ export default {
         collectionId: this.collectionId,
         name: this.productName,
         quantity: this.quantity || 1,
-        price: this.customPrice || this.unitPrice,
+        price: this.customPrice || this.productPrice,
       };
       this.$emit('remove', item);
     },
