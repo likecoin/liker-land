@@ -532,6 +532,7 @@ import alertMixin from '~/mixins/alert';
 import walletMixin from '~/mixins/wallet';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 import walletLoginMixin from '~/mixins/wallet-login';
+import { sleep } from '~/util/misc';
 
 const NFT_CLAIM_STATE = {
   WELCOME: 'WELCOME',
@@ -1236,26 +1237,28 @@ export default {
       let collectedNFTs = this.getCollectedNFTClassesByAddress(
         this.claimingAddress
       );
-      let attempts = 0;
 
-      while (
-        !collectedNFTs?.some(item => item.classId === this.classId) &&
-        attempts < MAX_ATTEMPT
-      ) {
-        // eslint-disable-next-line no-await-in-loop
-        await this.fetchCollectedNFTClassesByAddress({
-          address: this.claimingAddress,
-          nocache: true,
-        });
+      for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await this.fetchCollectedNFTClassesByAddress({
+            address: this.claimingAddress,
+            nocache: true,
+          });
 
-        collectedNFTs = this.getCollectedNFTClassesByAddress(
-          this.claimingAddress
-        );
+          collectedNFTs = this.getCollectedNFTClassesByAddress(
+            this.claimingAddress
+          );
 
-        attempts += 1;
-
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise(resolve => setTimeout(resolve, 500));
+          if (collectedNFTs?.some(item => item.classId === this.classId)) {
+            break;
+          }
+          // eslint-disable-next-line no-await-in-loop
+          await sleep(500);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
       }
 
       this.isViewCollectionLoading = false;
