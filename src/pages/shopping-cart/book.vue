@@ -84,7 +84,17 @@
       </footer>
 
       <div class="flex justify-end mt-[2em]">
-        <div>
+        <div class="flex gap-[1em]">
+          <ButtonV2
+            class="min-w-[120px]"
+            preset="secondary"
+            :text="$t('nft_edition_select_confirm_button_text_gift')"
+            @click="handleClickGiftButton"
+          >
+            <template #prepend>
+              <IconGift class="w-[16px]" />
+            </template>
+          </ButtonV2>
           <EventModalCollectMethodButton
             :title="$t('shopping_cart_checkout_button_by_card')"
             type="stripe"
@@ -115,6 +125,11 @@
         @click="handleClickEmptyNoticeButton"
       />
     </CardV2>
+    <NFTBookGiftDialog
+      :open="isGiftDialogOpen"
+      @submit="handleGiftSubmit"
+      @close="handleGiftClose"
+    />
   </Page>
 </template>
 
@@ -134,6 +149,11 @@ export default {
     formatNumberWithUSD,
   },
   mixins: [nftMixin, alertMixin],
+  data() {
+    return {
+      isGiftDialogOpen: false,
+    };
+  },
   computed: {
     ...mapGetters([
       'getNFTClassMetadataById',
@@ -255,7 +275,20 @@ export default {
       logTrackerEvent(this, 'BookCart', 'BookCartRemoveItem', productId, 1);
       this.removeBookProductFromShoppingCart({ productId });
     },
-    async handleClickCheckoutByFiatButton() {
+    async handleGiftSubmit({ giftInfo }) {
+      logTrackerEvent(this, 'BookCart', 'BookCartGiftSubmit', '', 1);
+      await this.handleClickCheckoutByFiatButton(giftInfo);
+      this.isGiftDialogOpen = false;
+    },
+    handleGiftClose() {
+      this.isGiftDialogOpen = false;
+      logTrackerEvent(this, 'BookCart', 'BookCartGiftClose', '', 1);
+    },
+    handleClickGiftButton() {
+      this.isGiftDialogOpen = true;
+      logTrackerEvent(this, 'BookCart', 'BookCartGiftClick', '', 1);
+    },
+    async handleClickCheckoutByFiatButton(giftInfo = undefined) {
       try {
         logTrackerEvent(
           this,
@@ -279,6 +312,7 @@ export default {
           gadSource: this.gadSource,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
+          giftInfo,
         });
         if (url) {
           window.location.href = url;
