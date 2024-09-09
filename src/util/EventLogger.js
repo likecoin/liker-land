@@ -18,7 +18,7 @@ function digestMessage(message) {
 
 export function resetLoggerUser(vue) {
   if (vue.$sentry) {
-    vue.$sentry.getCurrentScope().setUser({});
+    vue.$sentry.setUser({});
   }
   if (vue.$gtag) {
     vue.$gtag.set({ userId: null });
@@ -38,7 +38,7 @@ export async function setLoggerUser(
       id: wallet,
       username: wallet,
     };
-    vue.$sentry.getCurrentScope().setUser(opt);
+    vue.$sentry.setUser(opt);
   }
   try {
     if (vue.$gtag) {
@@ -67,8 +67,9 @@ export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
     const opt = {
       id: wallet,
       username: displayName || wallet,
+      email,
     };
-    vue.$sentry.getCurrentScope().setUser(opt);
+    vue.$sentry.setUser(opt);
   }
   if (vue.$crisp) {
     if (displayName) {
