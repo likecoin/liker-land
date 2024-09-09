@@ -1254,7 +1254,7 @@ export default {
             break;
           }
           // eslint-disable-next-line no-await-in-loop
-          await sleep(500);
+          await sleep(1000);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);
