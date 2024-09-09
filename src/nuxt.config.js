@@ -283,6 +283,8 @@ const nuxtConfig = {
           'client.crisp.chat',
           'fonts.googleapis.com',
         ],
+        'worker-src': ["'self'", 'blob:'],
+        'child-src': ["'self'", 'blob:'],
       },
     },
   },
@@ -440,6 +442,11 @@ const nuxtConfig = {
     clientIntegrations: {
       /* default integrations will still be added due to deep-merge */
       ReportingObserver: false, // reporting is very noisy on CSP violation.
+      Replay: {},
+    },
+    clientConfig: {
+      replaysSessionSampleRate: IS_TESTNET ? 1.0 : 0.05,
+      replaysOnErrorSampleRate: IS_TESTNET ? 1.0 : 1.0,
     },
   },
   sitemap: {
