@@ -1261,7 +1261,7 @@ export default {
           utmCampaign: this.utmCampaign,
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
-          referrer: document.referrer,
+          referrer: this.documentReferrer,
           email: this.walletEmail,
         });
         if (url) {
@@ -1281,7 +1281,7 @@ export default {
             utmCampaign: this.utmCampaign,
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
-            referrer: document.referrer,
+            referrer: this.documentReferrer,
           };
           if (this.walletEmail) {
             body.email = this.walletEmail;

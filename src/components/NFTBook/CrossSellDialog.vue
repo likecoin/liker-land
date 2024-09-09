@@ -149,7 +149,7 @@ export default {
           utmCampaign: this.utmCampaign,
           utmSource: `${this.utmSource}_cross-sell`,
           utmMedium: this.utmMedium,
-          referrer: document.referrer,
+          referrer: this.documentReferrer,
           email: this.walletEmail,
         });
         if (url) {

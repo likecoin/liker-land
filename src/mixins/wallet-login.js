@@ -2,6 +2,7 @@ import { mapActions } from 'vuex';
 
 import alertMixin from '~/mixins/alert';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { setSessionStorageItem } from '~/util/misc';
 
 export default {
   mixins: [alertMixin],
@@ -29,10 +30,7 @@ export default {
           'connect_wallet_start',
           1
         );
-        window.sessionStorage.setItem(
-          'USER_POST_AUTH_ROUTE',
-          this.$route.fullPath
-        );
+        setSessionStorageItem('USER_POST_AUTH_ROUTE', this.$route.fullPath);
         const connection = isOpenAuthcore
           ? await this.openAuthcoreModal({ isSignUp })
           : await this.openConnectWalletModal({
