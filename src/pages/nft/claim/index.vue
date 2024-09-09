@@ -493,7 +493,7 @@
             :preset="isViewCollectionLoading ? 'plain' : 'tertiary'"
             :text="
               isViewCollectionLoading
-                ? $t('settings_follow_loading')
+                ? $t('nft_claim_loading')
                 : $t('nft_claim_claimed_button_view_collection')
             "
             @click="handleViewCollection"
