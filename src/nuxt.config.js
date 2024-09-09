@@ -428,7 +428,7 @@ const nuxtConfig = {
       ignoreErrors: ['WebAssembly.instantiate'],
     },
     tracing: {
-      tracesSampleRate: 1.0,
+      tracesSampleRate: IS_TESTNET ? 1.0 : 0.1,
       browserTracing: {},
       vueOptions: {
         trackComponents: true,
