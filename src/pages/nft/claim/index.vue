@@ -521,8 +521,12 @@
           <ButtonV2
             :content-class="['px-[48px]']"
             class="phoneLg:w-full phoneLg:max-w-[480px]"
-            preset="tertiary"
-            :text="$t('nft_claim_claimed_button_view_collection')"
+            :preset="isViewCollectionLoading ? 'plain' : 'tertiary'"
+            :text="
+              isViewCollectionLoading
+                ? $t('nft_claim_loading')
+                : $t('nft_claim_claimed_button_view_collection')
+            "
             @click="handleViewCollection"
           />
         </template>
@@ -568,6 +572,7 @@ import crossSellMixin from '~/mixins/cross-sell';
 import walletMixin from '~/mixins/wallet';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 import walletLoginMixin from '~/mixins/wallet-login';
+import { sleep } from '~/util/misc';
 
 const NFT_CLAIM_STATE = {
   WELCOME: 'WELCOME',
@@ -578,6 +583,8 @@ const NFT_CLAIM_STATE = {
   CLAIMED: 'CLAIMED',
   ERROR: 'ERROR',
 };
+
+const MAX_ATTEMPT = 3;
 
 export default {
   name: 'NFTClaimPage',
@@ -611,6 +618,7 @@ export default {
       classId: this.$route.query.class_id,
       collectionId: this.$route.query.collection_id,
       cartItems: [],
+      isViewCollectionLoading: false,
     };
   },
   computed: {
@@ -1300,7 +1308,39 @@ export default {
         );
       }
     },
-    handleViewCollection() {
+    async ensureClassIdInCollected() {
+      this.isViewCollectionLoading = true;
+
+      let collectedNFTs = this.getCollectedNFTClassesByAddress(
+        this.claimingAddress
+      );
+
+      for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await this.fetchCollectedNFTClassesByAddress({
+            address: this.claimingAddress,
+            nocache: true,
+          });
+
+          collectedNFTs = this.getCollectedNFTClassesByAddress(
+            this.claimingAddress
+          );
+
+          if (collectedNFTs?.some(item => item.classId === this.classId)) {
+            break;
+          }
+          // eslint-disable-next-line no-await-in-loop
+          await sleep(1000);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
+      }
+
+      this.isViewCollectionLoading = false;
+    },
+    async handleViewCollection() {
       logTrackerEvent(
         this,
         'NFT',
@@ -1308,6 +1348,9 @@ export default {
         this.productId,
         1
       );
+      if (this.cartItemsCount <= 1 && this.isAutoDeliver) {
+        await this.ensureClassIdInCollected();
+      }
       this.$router.push(
         this.localeLocation({
           name: 'bookshelf',

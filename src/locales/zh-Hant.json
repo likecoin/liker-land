@@ -543,6 +543,7 @@
   "nft_claim_confirmation_title": "此書將新增至以下帳戶中",
   "nft_claim_error_message": "加進書架時出現錯誤：{error}",
   "nft_claim_error_message_unknown": "加進書架時出現不明錯誤",
+  "nft_claim_loading": "載入中",
   "nft_claim_login_button_loading": "正在載入你的去中心化身分...",
   "nft_claim_login_button_sign_in": "或以其他方式登入",
   "nft_claim_login_button_sign_up": "使用信箱註冊",
