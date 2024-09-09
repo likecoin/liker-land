@@ -126,13 +126,14 @@ import { formatNumberWithUSD } from '~/util/ui';
 import { getNFTBookCartPurchaseLink } from '~/util/api';
 
 import nftMixin from '~/mixins/nft';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'ShoppingCartPage',
   filters: {
     formatNumberWithUSD,
   },
-  mixins: [nftMixin],
+  mixins: [nftMixin, alertMixin],
   computed: {
     ...mapGetters([
       'getNFTClassMetadataById',
@@ -183,17 +184,66 @@ export default {
     },
   },
   mounted() {
+    const { checkout } = this.$route.query;
+    this.parseCartItemFromQueryString();
     logPurchaseFlowEvent(this, 'view_cart', this.purchaseEventParams);
+    if (checkout === '1') {
+      this.handleClickCheckoutByFiatButton();
+    }
   },
   methods: {
     ...mapActions([
       'clearBookProductShoppingCart',
+      'addBookProductToShoppingCart',
       'removeBookProductFromShoppingCart',
       'lazyGetNFTClassMetadata',
       'lazyFetchNFTBookInfoByClassId',
       'lazyFetchNFTCollectionInfoByCollectionId',
-      'uiSetTxError',
     ]),
+    parseCartItemFromQueryString() {
+      const { query } = this.$route;
+      const {
+        class_id: classId,
+        price_index: priceIndex,
+        collection_id: collectionId,
+        from,
+      } = query;
+      if (!classId && !collectionId) {
+        return;
+      }
+      let classIds = [];
+      if (classId) {
+        classIds = Array.isArray(classId) ? classId : [classId];
+      }
+      let priceIndexes = [];
+      if (collectionId) {
+        priceIndexes = Array.isArray(priceIndex) ? priceIndex : [priceIndex];
+      }
+      let collectionIds = [];
+      if (collectionId) {
+        collectionIds = Array.isArray(collectionId)
+          ? collectionId
+          : [collectionId];
+      }
+      if (!classIds.length && !collectionIds.length) {
+        return;
+      }
+      this.clearBookProductShoppingCart();
+      classIds.forEach((id, index) => {
+        const priceIndex = priceIndexes[index];
+        this.addBookProductToShoppingCart({
+          classId: id,
+          priceIndex: priceIndex ?? 0,
+          from,
+        });
+      });
+      collectionIds.forEach(id => {
+        this.addBookProductToShoppingCart({
+          collectionId: id,
+          from,
+        });
+      });
+    },
     handleClickRemoveButton(item) {
       const { productId } = item;
       logPurchaseFlowEvent(this, 'remove_from_cart', {
@@ -235,7 +285,7 @@ export default {
         }
       } catch (error) {
         console.error(error);
-        this.uiSetTxError(error);
+        this.alertPromptError(error);
       }
     },
     handleClickEmptyNoticeButton() {
