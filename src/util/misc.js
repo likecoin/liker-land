@@ -69,18 +69,32 @@ export function getContentUrlType(url) {
   return undefined;
 }
 
-export function getFromSessionStorage(key) {
-  if (window.sessionStorage) {
-    return window.sessionStorage.getItem(key);
-  }
+export function getFromSessionStorage(key, remove = false) {
+  try {
+    if (window.sessionStorage) {
+      const item = window.sessionStorage.getItem(key);
+      if (remove) window.sessionStorage.removeItem(key);
+      return item;
+    }
+  } catch {}
   return null;
 }
 
 export function setSessionStorageItem(key, item) {
-  if (window.sessionStorage) {
-    return window.sessionStorage.setItem(key, item);
-  }
-  return undefined;
+  try {
+    if (window.sessionStorage) {
+      window.sessionStorage.setItem(key, item);
+    }
+  } catch {}
+}
+
+export function removeSessionStorageItem(key) {
+  try {
+    if (window.sessionStorage) {
+      window.sessionStorage.removeItem(key);
+    }
+  } catch {}
+  return null;
 }
 
 export default sleep;
