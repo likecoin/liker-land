@@ -999,7 +999,12 @@ const actions = {
     const { data } = await this.$api.get(
       api.fetchBookstoreItemsFromCMSForLandingPage()
     );
-    commit(TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS, data.records);
+    const items = data.records;
+    if (!items?.length) {
+      // eslint-disable-next-line no-console
+      console.warn('CMS did not return any bookstore items');
+    }
+    commit(TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS, items || []);
   },
   async fetchBookstoreLatestItems({ commit, state }) {
     if (state.bookstoreLatestItems.length) return;
