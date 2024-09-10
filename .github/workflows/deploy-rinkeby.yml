@@ -40,6 +40,7 @@ jobs:
           CRISP_WEBSITE_ID: ${{ vars.CRISP_WEBSITE_ID }}
           STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_PUBLISH_RELEASE: 'TRUE'
