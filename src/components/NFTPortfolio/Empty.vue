@@ -61,9 +61,13 @@ export default {
   methods: {
     handleClickHelp() {
       logTrackerEvent(this, 'bookshelf', 'bookshelf_crisp_click', '', 1);
-      if (this.$crisp) {
-        this.showCrisp();
-        this.$crisp.push(['do', 'chat:open']);
+      const res = this.openCrisp(
+        this.$t('nft_claim_claimed_empty_crisp_prefilled_message')
+      );
+      if (!res) {
+        window.open(
+          'https://discord.com/channels/763001015712350231/814761730349596712'
+        );
       }
     },
   },

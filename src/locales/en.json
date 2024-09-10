@@ -533,6 +533,7 @@
   "nft_claim_claimed_content_mixedDelivery": "Some of the book requires author to sign and send the eBook, which may take about 1-3 days. Any update will be notified via email. For auto delivered books, visit your dashboard to start reading. Thank you for your support!",
   "nft_claim_claimed_download": "Other Ways to Obtain the eBook",
   "nft_claim_claimed_empty_collected_help": "Can't find your purchased content? Seek {help}.",
+  "nft_claim_claimed_empty_crisp_prefilled_message": "Hi, I am unable to find the e-book I recently purchased. Could you please help me locate it? Thank you!",
   "nft_claim_claimed_help": "online help",
   "nft_claim_claimed_message_title": "{name}'s message:",
   "nft_claim_claimed_nft_book": "You have successfully completed the required verification to claim your eBook. Please await the addition of the creator's digital signature or personalized message, after which the eBook will be delivered to you. Thank you for your valued support!",
