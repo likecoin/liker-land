@@ -386,7 +386,7 @@ const actions = {
   },
 
   async handleConnectorRedirect(
-    { dispatch },
+    { dispatch, getters },
     { method, params, isLogin = true }
   ) {
     const connector = await dispatch('getConnector');
@@ -473,7 +473,7 @@ const actions = {
     await dispatch('walletLogout');
   },
 
-  async restoreSession({ dispatch }) {
+  async restoreSession({ dispatch, getters }) {
     // HACK: check for localStorage session before init-ing wallet connector lib
     // wallet connector lib is a huge js
     let hasSession = false;
