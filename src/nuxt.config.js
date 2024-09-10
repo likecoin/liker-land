@@ -425,7 +425,11 @@ const nuxtConfig = {
   },
   sentry: {
     config: {
-      ignoreErrors: ['WebAssembly.instantiate'],
+      ignoreErrors: [
+        'WebAssembly.instantiate',
+        '["@context"].toLowerCase',
+        'pktAnnotationHighlighter',
+      ],
     },
     tracing: {
       tracesSampleRate: IS_TESTNET ? 1.0 : 0.1,
