@@ -127,6 +127,7 @@
     </CardV2>
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
+      :prefill-gift-info="giftInfo"
       @submit="handleGiftSubmit"
       @close="handleGiftClose"
     />
@@ -152,6 +153,7 @@ export default {
   data() {
     return {
       isGiftDialogOpen: false,
+      giftInfo: null,
     };
   },
   computed: {
@@ -204,12 +206,8 @@ export default {
     },
   },
   mounted() {
-    const { checkout } = this.$route.query;
-    this.parseCartItemFromQueryString();
     logPurchaseFlowEvent(this, 'view_cart', this.purchaseEventParams);
-    if (checkout === '1') {
-      this.handleClickCheckoutByFiatButton();
-    }
+    this.parseCartItemFromQueryString();
   },
   methods: {
     ...mapActions([
@@ -226,8 +224,26 @@ export default {
         class_id: classId,
         price_index: priceIndex,
         collection_id: collectionId,
+        gift_to_email: giftToEmail,
         from,
+        checkout,
       } = query;
+      let {
+        gift_to_name: giftToName,
+        gift_message: giftMessage,
+        gift_from_name: giftFromName,
+      } = query;
+      if (giftToEmail) {
+        if (!giftToName) [giftToName] = giftToEmail.split('@');
+        if (!giftMessage) giftMessage = 'Enjoy your book!';
+        if (!giftFromName) giftFromName = 'Liker Land Bookstore';
+        this.giftInfo = {
+          toEmail: giftToEmail,
+          toName: giftToName,
+          message: giftMessage,
+          fromName: giftFromName,
+        };
+      }
       if (!classId && !collectionId) {
         return;
       }
@@ -263,6 +279,9 @@ export default {
           from,
         });
       });
+      if (checkout === '1') {
+        this.handleClickCheckoutByFiatButton();
+      }
     },
     handleClickRemoveButton(item) {
       const { productId } = item;
@@ -277,7 +296,8 @@ export default {
     },
     async handleGiftSubmit({ giftInfo }) {
       logTrackerEvent(this, 'BookCart', 'BookCartGiftSubmit', '', 1);
-      await this.handleClickCheckoutByFiatButton(giftInfo);
+      this.giftInfo = giftInfo;
+      await this.handleClickCheckoutByFiatButton();
       this.isGiftDialogOpen = false;
     },
     handleGiftClose() {
@@ -288,7 +308,7 @@ export default {
       this.isGiftDialogOpen = true;
       logTrackerEvent(this, 'BookCart', 'BookCartGiftClick', '', 1);
     },
-    async handleClickCheckoutByFiatButton(giftInfo = undefined) {
+    async handleClickCheckoutByFiatButton(giftInfo = this.giftInfo) {
       try {
         logTrackerEvent(
           this,
