@@ -1,14 +1,24 @@
+import { setSessionStorageItem, getFromSessionStorage } from '@/util/misc';
+
+const INTERNAL_REFERRERS = [
+  'https://liker.land',
+  'https://authcore.like.co',
+  'https://checkout.stripe.com',
+];
+
 export default {
-  computed: {
-    utmCampaign() {
-      return this.$route.query.utm_campaign;
-    },
-    utmSource() {
-      return this.$route.query.utm_source;
-    },
-    utmMedium() {
-      return this.$route.query.utm_medium;
-    },
+  data() {
+    return {
+      utmCampaign: this.$route.query.utm_campaign,
+      utmSource: this.$route.query.utm_source,
+      utmMedium: this.$route.query.utm_medium,
+      documentReferrer: '',
+    };
+  },
+  mounted() {
+    this.documentReferrer = document.referrer;
+    this.restoreUTMFromSessionStorage();
+    this.storeUTMToSessionStorage();
   },
   methods: {
     getUtmProps({
@@ -21,6 +31,35 @@ export default {
         utmSource: this.utmSource || defaultUtmSource,
         utmMedium: this.utmMedium || defaultUtmMedium,
       };
+    },
+    restoreUTMFromSessionStorage() {
+      const utm = JSON.parse(getFromSessionStorage('UTM_INFO'));
+      if (utm) {
+        if (!this.utmCampaign) this.utmCampaign = utm.utmCampaign;
+        if (!this.utmSource) this.utmSource = utm.utmSource;
+        if (!this.utmMedium) this.utmMedium = utm.utmMedium;
+        if (
+          !this.documentReferrer ||
+          (utm.documentReferrer &&
+            INTERNAL_REFERRERS.find(referrer =>
+              this.documentReferrer.includes(referrer)
+            ) &&
+            INTERNAL_REFERRERS.find(referrer =>
+              utm.documentReferrer.includes(referrer)
+            ))
+        ) {
+          this.documentReferrer = utm.documentReferrer;
+        }
+      }
+    },
+    storeUTMToSessionStorage() {
+      const utm = {
+        utmCampaign: this.utmCampaign,
+        utmSource: this.utmSource,
+        utmMedium: this.utmMedium,
+        documentReferrer: this.documentReferrer,
+      };
+      setSessionStorageItem('UTM_INFO', JSON.stringify(utm));
     },
   },
 };

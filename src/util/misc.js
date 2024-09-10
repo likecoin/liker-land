@@ -69,4 +69,18 @@ export function getContentUrlType(url) {
   return undefined;
 }
 
+export function getFromSessionStorage(key) {
+  if (window.sessionStorage) {
+    return window.sessionStorage.getItem(key);
+  }
+  return null;
+}
+
+export function setSessionStorageItem(key, item) {
+  if (window.sessionStorage) {
+    return window.sessionStorage.setItem(key, item);
+  }
+  return undefined;
+}
+
 export default sleep;
