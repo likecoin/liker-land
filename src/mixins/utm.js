@@ -1,9 +1,7 @@
 import { setSessionStorageItem, getFromSessionStorage } from '@/util/misc';
 
 const INTERNAL_REFERRERS = [
-  'https://liker.land/',
-  'https://liker.land/en',
-  'https://liker.land/zh-Hant',
+  'https://liker.land',
   'https://authcore.like.co',
   'https://checkout.stripe.com',
 ];
@@ -42,11 +40,15 @@ export default {
         if (!this.utmMedium) this.utmMedium = utm.utmMedium;
         if (
           !this.documentReferrer ||
-          INTERNAL_REFERRERS.find(referrer =>
-            this.documentReferrer.includes(referrer)
-          )
+          (utm.documentReferrer &&
+            INTERNAL_REFERRERS.find(referrer =>
+              this.documentReferrer.includes(referrer)
+            ) &&
+            INTERNAL_REFERRERS.find(referrer =>
+              utm.documentReferrer.includes(referrer)
+            ))
         ) {
-          this.documentReferrer = utm.documentReferrer || this.documentReferrer;
+          this.documentReferrer = utm.documentReferrer;
         }
       }
     },
