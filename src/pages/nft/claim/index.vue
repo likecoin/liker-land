@@ -785,7 +785,7 @@ export default {
     ) {
       this.$nuxt.error({
         statusCode: 400,
-        message: this.t('nft_claim_missing_qs'),
+        message: this.$t('nft_claim_missing_qs'),
       });
       return;
     }
