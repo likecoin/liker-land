@@ -80,8 +80,8 @@ export default {
       }
     } else {
       logTrackerEvent(this, 'Register', 'RegisterFail', error, 1);
-      if (window.sessionStorage) {
-        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
+      if (window.localStorage) {
+        window.localStorage.removeItem('USER_POST_AUTH_ROUTE');
       }
       this.$nuxt.error({
         statusCode: 400,

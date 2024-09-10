@@ -10,6 +10,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
+import { getFromSessionStorage, removeSessionStorageItem } from '~/util/misc';
 
 export default {
   name: 'AuthRedirect',
@@ -26,12 +27,9 @@ export default {
     const { error, method, code } = this.$route.query;
 
     let postAuthRoute = this.localeLocation(this.getHomeRoute);
-    if (window.sessionStorage) {
-      const storedRoute = window.sessionStorage.getItem('USER_POST_AUTH_ROUTE');
-      if (storedRoute) {
-        postAuthRoute = storedRoute;
-        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-      }
+    const storedRoute = getFromSessionStorage('USER_POST_AUTH_ROUTE', true);
+    if (storedRoute) {
+      postAuthRoute = storedRoute;
     }
 
     if (method && code) {
@@ -81,9 +79,7 @@ export default {
       }
     } else {
       logTrackerEvent(this, 'RedirectLogin', 'RedirectLoginFail', error, 1);
-      if (window.sessionStorage) {
-        window.sessionStorage.removeItem('USER_POST_AUTH_ROUTE');
-      }
+      removeSessionStorageItem('USER_POST_AUTH_ROUTE');
       this.$nuxt.error({
         statusCode: 400,
         message: error,
