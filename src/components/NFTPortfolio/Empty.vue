@@ -46,6 +46,11 @@ export default {
       default: 'collected',
     },
   },
+  data() {
+    return {
+      crispWebsiteId: '',
+    };
+  },
   computed: {
     cardText() {
       return this.preset === 'collected'
@@ -58,6 +63,10 @@ export default {
       );
     },
   },
+  mounted() {
+    // populate crisp on mount to avoid ssr issues
+    if (window.CRISP_WEBSITE_ID) this.crispWebsiteId = window.CRISP_WEBSITE_ID;
+  },
   methods: {
     handleClickHelp() {
       logTrackerEvent(this, 'bookshelf', 'bookshelf_crisp_click', '', 1);
@@ -65,9 +74,17 @@ export default {
         this.$t('nft_claim_claimed_empty_crisp_prefilled_message')
       );
       if (!res) {
-        window.open(
-          'https://discord.com/channels/763001015712350231/814761730349596712'
-        );
+        if (this.crispWebsiteId) {
+          window.open(
+            `https://go.crisp.chat/chat/embed/?website_id=${
+              this.crispWebsiteId
+            }`
+          );
+        } else {
+          window.open(
+            'https://discord.com/channels/763001015712350231/814761730349596712'
+          );
+        }
       }
     },
   },
