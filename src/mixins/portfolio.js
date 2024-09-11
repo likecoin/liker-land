@@ -507,15 +507,19 @@ export const createPortfolioMixin = ({
 
       const newQuery = {};
 
-      if (!queryTab || !tabOptions[queryTab] || this.currentTab !== tab) {
+      if (
+        queryTab !== tab &&
+        (!queryTab || !tabOptions[queryTab] || this.currentTab !== tab)
+      ) {
         newQuery.tab = tab;
         type = NFT_TYPE_FILTER_OPTIONS.ALL;
       }
 
       if (
-        !queryType ||
-        !NFT_TYPE_FILTER_OPTIONS[queryType] ||
-        this.nftTypeFilter !== type
+        queryType !== type &&
+        (!queryType ||
+          !NFT_TYPE_FILTER_OPTIONS[queryType] ||
+          this.nftTypeFilter !== type)
       ) {
         newQuery.type =
           type === NFT_TYPE_FILTER_OPTIONS.ALL ? undefined : type.toLowerCase();
