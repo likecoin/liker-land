@@ -316,7 +316,8 @@ export default {
         const cfi = this.resumeFromLocalStorage();
         this.rendition.display(cfi);
         this.rendition.on('rendered', () => {
-          const path = this.rendition.currentLocation().start.href;
+          const path = this.rendition.currentLocation().start?.href;
+          if (!path) return;
           const pathArr = path.split('/');
           this.selectedChapter = pathArr.pop();
           this.dirPath = pathArr.join('/');
