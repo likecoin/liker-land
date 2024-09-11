@@ -741,12 +741,21 @@ export default {
         this.nftId,
         1
       );
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId-nftId',
-          params: { classId: this.classId, nftId: this.nftIdCollectNext },
-        })
-      );
+      if (this.nftIdCollectNext) {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-class-classId-nftId',
+            params: { classId: this.classId, nftId: this.nftIdCollectNext },
+          })
+        );
+      } else {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          })
+        );
+      }
     },
     handleClickUserCollectedCount() {
       logTrackerEvent(

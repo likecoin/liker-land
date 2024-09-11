@@ -1052,6 +1052,13 @@ export default {
             params: { classId: this.classId, nftId: this.nftIdCollectNext },
           })
         );
+      } else {
+        this.$router.push(
+          this.localeLocation({
+            name: 'nft-class-classId',
+            params: { classId: this.classId },
+          })
+        );
       }
     },
     handleClickSellFromPriceSection() {
