@@ -639,12 +639,14 @@ export default {
         );
       },
       set(value) {
-        this.$router.replace({
-          query: {
-            ...this.$route.query,
-            state: value,
-          },
-        });
+        if (this.$route.query.state !== value) {
+          this.$router.replace({
+            query: {
+              ...this.$route.query,
+              state: value,
+            },
+          });
+        }
       },
     },
     cartId() {
@@ -939,10 +941,19 @@ export default {
           quantity: item.quantity || 1,
         });
       });
-      this.$router.replace({
-        ...this.$route,
-        query,
-      });
+      const newQueryItems = Object.values(query);
+      const currentQueryItems = Object.values(this.$route.query);
+      const queryUpdated =
+        newQueryItems.length !== currentQueryItems.length ||
+        !newQueryItems.every(
+          (value, index) => value === currentQueryItems[index]
+        );
+      if (queryUpdated) {
+        this.$router.replace({
+          ...this.$route,
+          query,
+        });
+      }
     }
 
     if (
