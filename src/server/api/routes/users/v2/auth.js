@@ -5,6 +5,7 @@ const {
   walletUserCollection,
 } = require('../../../../modules/firebase');
 const { authenticateV2Login } = require('../../../middleware/auth');
+const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 const {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTION,
@@ -100,6 +101,21 @@ router.post('/login', async (req, res, next) => {
       }
       return { isNew };
     });
+    if (result.isNew) {
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserSignUp',
+        signMethod,
+        loginMethod,
+        user: userId,
+      });
+    } else {
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserLogin',
+        signMethod,
+        loginMethod,
+        user: userId,
+      });
+    }
     res.json(result);
     return;
   } catch (error) {

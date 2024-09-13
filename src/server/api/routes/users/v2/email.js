@@ -13,6 +13,7 @@ const {
 const { authenticateV2Login } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/error');
 const { sendEmail } = require('../../../../modules/sendgrid');
+const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 const { isValidFollowee } = require('../../../util/cosmos');
 
 const {
@@ -95,6 +96,16 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
             }
       );
     });
+
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'UserEmailUpdate',
+      email,
+      user,
+      followee,
+      classId,
+      paymentId,
+    });
+
     const qsPayload = { wallet: user };
     if (isValidFollowee(user, followee)) {
       qsPayload.followee = followee;
@@ -155,12 +166,12 @@ router.put('/email', async (req, res, next) => {
       if (!userDoc.exists) {
         throw new Error('USER_NOT_FOUND');
       }
-      const { emailUnconfirmed: email, emailVerifyToken } = userDoc.data();
+      const { emailUnconfirmed, emailVerifyToken } = userDoc.data();
       if (emailVerifyToken !== token) {
         throw new Error('INVALID_TOKEN');
       }
       const payload = {
-        email,
+        email: emailUnconfirmed,
         emailUnconfirmed: FieldValue.delete(),
         emailVerifyToken: FieldValue.delete(),
         notification: {
@@ -172,7 +183,7 @@ router.put('/email', async (req, res, next) => {
         payload.followees = FieldValue.arrayUnion(followee);
       }
       t.update(userRef, payload);
-      return email;
+      return emailUnconfirmed;
     });
 
     const legacyQuery = nftMintSubscriptionCollection
@@ -193,6 +204,13 @@ router.put('/email', async (req, res, next) => {
       // eslint-disable-next-line no-await-in-loop
       querySnapshot = await legacyQuery.get();
     }
+
+    publisher.publish(PUBSUB_TOPIC_MISC, req, {
+      logType: 'UserEmailVerified',
+      email,
+      user,
+      followee,
+    });
 
     res.json({ email });
   } catch (error) {
