@@ -28,6 +28,7 @@ export default {
       'walletIsFetchingFollowers',
       'walletMethodType',
       'walletEmail',
+      'walletEmailUnverified',
       'walletHasVerifiedEmail',
       'walletLIKEBalance',
       'walletLIKEBalanceFetchPromise',

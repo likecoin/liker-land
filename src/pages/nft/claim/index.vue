@@ -363,9 +363,9 @@
                   v-text="loginUserDisplayName"
                 />
                 <li
-                  v-if="walletEmail"
+                  v-if="claimingEmail"
                   class="text-[14px] break-all"
-                  v-text="walletEmail"
+                  v-text="claimingEmail"
                 />
                 <li
                   v-if="claimingAddress"
@@ -606,7 +606,6 @@ export default {
       collectorMessage: '',
       creatorMessage: '',
       claimingAddressInput: '',
-      claimingFreeEmail: this.walletEmail || '',
       quantity: 1,
       giftInfo: null,
       isPhysicalOnly: false,
@@ -753,13 +752,13 @@ export default {
       );
     },
     claimingAddress() {
-      return this.getAddress || this.loginAddress;
+      return this.loginAddress;
+    },
+    claimingEmail() {
+      return this.walletEmail || this.walletEmailUnverified;
     },
   },
   watch: {
-    walletEmail(newValue) {
-      this.claimingFreeEmail = newValue;
-    },
     claimingAddress(newValue) {
       if (
         !newValue &&
@@ -1003,9 +1002,8 @@ export default {
     async startFreePurchase() {
       try {
         this.isClaimLoading = true;
-        this.claimingFreeEmail = this.walletEmail;
         this.navigateToState(NFT_CLAIM_STATE.CLAIMING);
-        if (!this.claimingFreeEmail && !this.claimingAddress) {
+        if (!this.claimingEmail && !this.claimingAddress) {
           this.alertPromptError(
             this.$t('nft_free_claim_enter_email_or_address')
           );
@@ -1019,7 +1017,7 @@ export default {
             priceIndex: this.priceIndex,
           }),
           {
-            email: this.claimingFreeEmail,
+            email: this.claimingEmail,
             wallet: this.claimingAddress,
           }
         );

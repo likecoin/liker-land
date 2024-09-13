@@ -57,7 +57,7 @@
       </Dropdown>
 
       <ButtonV2
-        v-if="!getAddress"
+        v-if="!loginAddress"
         class="hidden laptop:flex"
         preset="secondary"
         :text="$t('header_button_connect_to_wallet')"
@@ -70,7 +70,7 @@
 
       <Dropdown class="hidden laptop:block ml-[4px]">
         <template #trigger="{ toggle }">
-          <div v-if="getAddress" class="relative">
+          <div v-if="loginAddress" class="relative">
             <Identity
               class="cursor-pointer"
               :avatar-url="walletUserAvatar"
@@ -136,21 +136,20 @@
 
       {{ /* phone version */ }}
       <ButtonV2
-        v-if="!getAddress"
+        v-if="!loginAddress"
         class="laptop:hidden"
         preset="plain"
-        @click="handleOpenSider"
+        @click="handleOpenSlider"
       >
         <IconNav />
       </ButtonV2>
-      <div v-if="getAddress" class="relative laptop:!hidden">
+      <div v-else class="relative laptop:!hidden">
         <Identity
-          v-if="getAddress"
           class="cursor-pointer ml-[12px]"
           :avatar-url="walletUserAvatar"
           :avatar-size="42"
           :is-avatar-outlined="isWalletUserCivicLiker"
-          @click="handleOpenSider"
+          @click="handleOpenSlider"
         />
         <div
           v-if="getNotificationCount"
@@ -172,7 +171,7 @@
       @close="isShowMobileMenu = false"
     >
       <ButtonV2
-        v-if="!getAddress"
+        v-if="!loginAddress"
         class="w-full"
         preset="secondary"
         @click="handleConnectWallet"
@@ -367,7 +366,7 @@ export default {
           this.$router.push(
             this.localeLocation({
               name: 'bookshelf',
-              params: { id: this.getAddress || this.loginAddress },
+              params: { id: this.loginAddress },
               query: { tab: 'collected' },
             })
           );
@@ -390,22 +389,22 @@ export default {
           break;
       }
     },
-    handleOpenSider() {
+    handleOpenSlider() {
       this.isShowMobileMenu = true;
 
-      if (this.getAddress) {
+      if (this.loginAddress) {
         logTrackerEvent(
           this,
           'site_menu',
-          'site_menu_click_sider_menu',
-          this.getAddress,
+          'site_menu_click_slider_menu',
+          this.loginAddress,
           1
         );
       } else {
         logTrackerEvent(
           this,
           'site_menu',
-          'site_menu_click_sider_login',
+          'site_menu_click_slider_login',
           '',
           1
         );
