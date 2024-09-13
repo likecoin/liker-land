@@ -99,8 +99,10 @@ export default {
   watch: {
     affiliationLikerId: {
       immediate: true,
-      handler() {
-        this.fetchAffiliationName();
+      handler(value) {
+        if (value) {
+          this.fetchAffiliationName();
+        }
       },
     },
   },
