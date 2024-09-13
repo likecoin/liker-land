@@ -186,8 +186,8 @@ export function logPurchaseFlowEvent(
               {
                 price,
                 currency,
-                items: items.map(
-                  i => i.productId || i.collectionId || i.classId
+                items: JSON.stringify(
+                  items.map(i => i.productId || i.collectionId || i.classId)
                 ),
               },
             ],
