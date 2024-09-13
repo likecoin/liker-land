@@ -1376,6 +1376,7 @@ export default {
         // Delay 1s to avoid blocking the claimed success message
         setTimeout(() => {
           if (this.isFreePurchase && this.shouldCrossSell) {
+            this.setUTMProps({ utmCampaign: `cross_claim_${this.productId}` });
             this.openCrossSellDialog();
           }
         }, 1000);

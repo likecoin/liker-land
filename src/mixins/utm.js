@@ -21,6 +21,12 @@ export default {
     this.storeUTMToSessionStorage();
   },
   methods: {
+    setUTMProps({ utmCampaign, utmSource, utmMedium }) {
+      if (utmCampaign !== undefined) this.utmCampaign = utmCampaign;
+      if (utmSource !== undefined) this.utmSource = utmSource;
+      if (utmMedium !== undefined) this.utmMedium = utmMedium;
+      this.storeUTMToSessionStorage();
+    },
     getUtmProps({
       utmCampaign: defaultUtmCampaign,
       utmSource: defaultUtmSource,
