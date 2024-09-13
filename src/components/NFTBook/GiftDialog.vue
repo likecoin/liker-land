@@ -32,6 +32,7 @@
         />
         <TextField
           v-model="toEmail"
+          type="email"
           required
           class="mt-[4px]"
           :placeholder="$t('nft_book_gift_dialog_placeholder_to_email')"
