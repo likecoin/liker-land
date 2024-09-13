@@ -515,14 +515,16 @@ export const createPortfolioMixin = ({
         type = NFT_TYPE_FILTER_OPTIONS.ALL;
       }
 
+      const newQueryType =
+        type === NFT_TYPE_FILTER_OPTIONS.ALL ? undefined : type.toLowerCase();
+
       if (
-        queryType !== type &&
+        queryType !== newQueryType &&
         (!queryType ||
           !NFT_TYPE_FILTER_OPTIONS[queryType] ||
           this.nftTypeFilter !== type)
       ) {
-        newQuery.type =
-          type === NFT_TYPE_FILTER_OPTIONS.ALL ? undefined : type.toLowerCase();
+        newQuery.type = newQueryType;
       }
 
       if (Object.keys(newQuery).length) {
