@@ -99,7 +99,7 @@
             :title="$t('shopping_cart_checkout_button_by_card')"
             type="stripe"
             :price="formattedFiatPrice"
-            @click="handleClickCheckoutByFiatButton"
+            @click="_ => handleClickCheckoutByFiatButton()"
           />
         </div>
       </div>
