@@ -622,6 +622,8 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getGaClientId',
+      'getGaSessionId',
       'getNFTClassMetadataById',
       'getISCNMetadataById',
       'getCanViewNFTBookBeforeClaimByClassId',
@@ -1019,6 +1021,13 @@ export default {
           {
             email: this.claimingEmail,
             wallet: this.claimingAddress,
+            message: this.collectorMessage,
+            gaClientId: this.getGaClientId,
+            gaSessionId: this.getGaSessionId,
+            utmCampaign: this.utmCampaign,
+            utmSource: this.utmSource,
+            utmMedium: this.utmMedium,
+            referrer: this.documentReferrer,
           }
         );
         const { data } = await this.claimPromise;
