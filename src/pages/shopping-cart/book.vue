@@ -86,6 +86,7 @@
       <div class="flex justify-end mt-[2em]">
         <div class="flex gap-[1em]">
           <ButtonV2
+            v-if="giftInfo"
             class="min-w-[120px]"
             preset="secondary"
             :text="$t('nft_edition_select_confirm_button_text_gift')"
