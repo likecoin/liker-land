@@ -57,6 +57,10 @@ export async function setLoggerUser(
         vue.$gtag.event('login', { method });
       }
     }
+    if (vue.$crisp) {
+      vue.$crisp.push(['set', 'session:data', ['wallet', wallet]]);
+      vue.$crisp.push(['set', 'session:data', ['loginMethod', method]]);
+    }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
   }
@@ -72,6 +76,7 @@ export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
     vue.$sentry.setUser(opt);
   }
   if (vue.$crisp) {
+    vue.$crisp.push(['set', 'session:data', ['wallet', wallet]]);
     if (displayName) {
       vue.$crisp.push(['set', 'user:nickname', [displayName || wallet]]);
     }
@@ -101,6 +106,9 @@ export function logTrackerEvent(
       });
     }
     if (vue.$crisp) {
+      if (action === 'nft_free_nft_book_purchased') {
+        vue.$crisp.push(['set', 'session:segments', [['free book']]]);
+      }
       vue.$crisp.push([
         'set',
         'session:event',
@@ -178,14 +186,17 @@ export function logPurchaseFlowEvent(
               {
                 price,
                 currency,
-                items: items.map(
-                  i => i.productId || i.collectionId || i.classId
+                items: JSON.stringify(
+                  items.map(i => i.productId || i.collectionId || i.classId)
                 ),
               },
             ],
           ],
         ],
       ]);
+      if (event === 'purchase') {
+        vue.$crisp.push(['set', 'session:segments', [['purchaser']]]);
+      }
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
