@@ -5,6 +5,7 @@ const {
 } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/error');
 const { walletUserCollection } = require('../../../../modules/firebase');
+const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 
 const router = Router();
 
@@ -52,6 +53,13 @@ router.post(
       }
 
       await walletUserCollection.doc(user).update({ notification: payload });
+
+      publisher.publish(PUBSUB_TOPIC_MISC, req, {
+        logType: 'UserNotificationSettingUpdate',
+        user,
+        transfer,
+        purchasePrice,
+      });
       res.sendStatus(200);
     } catch (err) {
       handleRestfulError(req, res, next, err);
