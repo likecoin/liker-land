@@ -358,9 +358,11 @@ export const getFreeNFTBookPurchaseEndpoint = ({
   utmSource,
   utmMedium,
   referrer,
+  platform = NFT_BOOK_PLATFORM_LIKER_LAND,
 }) => {
   const qsPayload = {
     price_index: priceIndex,
+    from: platform,
     ga_client_id: gaClientId,
     ga_session_id: gaSessionId,
     utm_campaign: utmCampaign,
