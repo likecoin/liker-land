@@ -1195,7 +1195,7 @@ export default {
                   type: 'nft_book',
                   free: true,
                   price_index: edition.index,
-                  from: 'liker_land_waived',
+                  from: this.platform,
                 },
               })
             );

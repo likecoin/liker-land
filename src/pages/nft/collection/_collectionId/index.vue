@@ -319,7 +319,7 @@ export default {
                   collection_id: this.collectionId,
                   type: 'nft_book',
                   free: true,
-                  from: 'liker_land_waived',
+                  from: this.platform,
                 },
               })
             );

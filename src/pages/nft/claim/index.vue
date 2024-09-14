@@ -566,7 +566,7 @@ import {
   parseNFTMetadataURL,
 } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
-
+import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 import alertMixin from '~/mixins/alert';
 import crossSellMixin from '~/mixins/cross-sell';
 import walletMixin from '~/mixins/wallet';
@@ -657,6 +657,9 @@ export default {
     },
     priceIndex() {
       return this.$route.query.price_index;
+    },
+    platform() {
+      return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
     token() {
       return this.$route.query.claiming_token;
@@ -1028,6 +1031,7 @@ export default {
             classId: this.classId,
             collectionId: this.collectionId,
             priceIndex: this.priceIndex,
+            platform: this.platform,
           }),
           {
             email: this.claimingEmail,
