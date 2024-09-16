@@ -1170,6 +1170,9 @@ export default {
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
         this.nftId = data.nftId;
+        if (this.nftId || data.allItemsAutoClaimed) {
+          this.isAutoDeliver = true;
+        }
         this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
         logTrackerEvent(
           this,
