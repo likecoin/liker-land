@@ -2,7 +2,12 @@ import { mapGetters } from 'vuex';
 
 export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
   computed: {
-    ...mapGetters(['getAddress', 'getLikerInfo']),
+    ...mapGetters([
+      'getAddress',
+      'loginAddress',
+      'getLikerInfo',
+      'walletEmail',
+    ]),
   },
   mounted() {
     if (options.isBootAtMounted) this.$nextTick(() => this.showCrisp());
@@ -14,11 +19,14 @@ export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
     showCrisp() {
       if (!this.$crisp) return false;
       try {
-        if (this.$crisp.is('chat:hidden')) {
-          const displayName = this.getLikerInfo?.displayName || this.getAddress;
-          const { $crisp } = this;
-          if (displayName) $crisp.push(['set', 'user:nickname', [displayName]]);
-          this.$crisp.push(['do', 'chat:show']);
+        const email = this.walletEmail;
+        const wallet = this.loginAddress || this.getAddress;
+        const displayName = this.getLikerInfo?.displayName || wallet;
+        const { $crisp } = this;
+        if (email) $crisp.push(['set', 'user:email', [email]]);
+        if (displayName) $crisp.push(['set', 'user:nickname', [displayName]]);
+        if (wallet) $crisp.push(['set', 'chat:show']);
+        if ($crisp.is('chat:hidden')) {
           return true;
         }
       } catch (err) {
