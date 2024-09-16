@@ -159,9 +159,13 @@ export default {
       const displayItemCount = Number(this.displayItemCount);
       if (this.recommendedList.length < displayItemCount) {
         let index = 0;
-        const sourceData = this.isBookNft
+        let sourceData = this.isBookNft
           ? this.nftFeaturedBooks
           : this.nftFeaturedWNFT;
+        // TODO: remove filter after recommendation support collection
+        sourceData = sourceData.filter(nft =>
+          nft.classId.startsWith('likenft1')
+        );
         while (
           normalizedRecommendedList.length < displayItemCount &&
           index < sourceData.length
