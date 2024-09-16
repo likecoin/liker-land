@@ -76,12 +76,14 @@ export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
     vue.$sentry.setUser(opt);
   }
   if (vue.$crisp) {
-    vue.$crisp.push(['set', 'session:data', [[['wallet', wallet]]]]);
-    if (displayName) {
-      vue.$crisp.push(['set', 'user:nickname', [displayName || wallet]]);
-    }
     if (email) {
       vue.$crisp.push(['set', 'user:email', [email]]);
+    }
+    if (wallet) {
+      vue.$crisp.push(['set', 'session:data', [[['wallet', wallet]]]]);
+    }
+    if (displayName) {
+      vue.$crisp.push(['set', 'user:nickname', [displayName || wallet]]);
     }
   }
 }
