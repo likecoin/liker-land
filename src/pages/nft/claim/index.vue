@@ -630,6 +630,7 @@ export default {
       'getNFTBookStoreInfoByClassId',
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
+      'walletMethodType',
     ]),
     state: {
       get() {
@@ -1166,6 +1167,7 @@ export default {
           paymentId: this.paymentId,
           wallet: this.claimingAddress,
           message: this.collectorMessage,
+          loginMethod: this.walletMethodType,
         });
         const { data } = await this.claimPromise;
         this.claimPromise = undefined;
