@@ -233,7 +233,7 @@ export default {
         const priceIndex = priceIndexes[index];
         this.addBookProductToShoppingCart({
           classId: id,
-          priceIndex: priceIndex ?? 0,
+          priceIndex: Number(priceIndex) ?? 0,
           from,
         });
       });
