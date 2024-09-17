@@ -216,7 +216,7 @@ export default {
         classIds = Array.isArray(classId) ? classId : [classId];
       }
       let priceIndexes = [];
-      if (collectionId) {
+      if (priceIndex) {
         priceIndexes = Array.isArray(priceIndex) ? priceIndex : [priceIndex];
       }
       let collectionIds = [];
