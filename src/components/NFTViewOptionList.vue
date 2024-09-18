@@ -52,7 +52,7 @@
       </template>
     </ButtonV2>
     <template v-else-if="shouldShowContentUrlButtons && contentUrls.length > 1">
-      <Dropdown class="w-full" direction="center">
+      <Dropdown class="hidden w-full laptop:block" direction="center">
         <template #trigger>
           <ButtonV2
             class="w-full"
@@ -99,6 +99,40 @@
           </ul>
         </MenuList>
       </Dropdown>
+      <ButtonV2
+        class="w-full laptop:hidden"
+        :text="
+          $t(
+            isNftBook
+              ? 'nft_details_page_download_nft_book_button'
+              : 'nft_details_page_download_button'
+          )
+        "
+        preset="outline"
+        :is-disabled="!isContentViewable"
+        @click.prevent="handleOpenOptionListForMobile"
+      >
+        <template #prepend>
+          <IconBook class="w-20 h-20" />
+        </template>
+        <template #append>
+          <IconArrowDown class="w-16 h-16" />
+        </template>
+      </ButtonV2>
+      <NFTClaimOptionListForMobile
+        v-if="isShowingOptionListForMobile"
+        class="w-full"
+        :url="url"
+        :class-id="classId"
+        :content-urls="contentUrls"
+        :iscn-url="iscnUrl"
+        :is-nft-book="isNftBook"
+        :is-content-viewable="isContentViewable"
+        @view-content-url="
+          (e, url, type) => $emit('view-content-url', e, url, type)
+        "
+        @close="handleCloseOptionListForMobile"
+      />
     </template>
   </div>
 </template>
@@ -154,6 +188,9 @@ export default {
       default: true,
     },
   },
+  data() {
+    return { isShowingOptionListForMobile: false };
+  },
   computed: {
     normalizedContentURLs() {
       // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
@@ -201,6 +238,14 @@ export default {
           })
         );
       }
+    },
+    handleOpenOptionListForMobile() {
+      this.isShowingOptionListForMobile = true;
+      document.body.style.overflow = 'hidden';
+    },
+    handleCloseOptionListForMobile() {
+      this.isShowingOptionListForMobile = false;
+      document.body.style.overflow = '';
     },
   },
 };

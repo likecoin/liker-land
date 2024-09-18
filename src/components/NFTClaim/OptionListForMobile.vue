@@ -1,20 +1,22 @@
 <template>
-  <div class="fixed left-0 bottom-0 z-50 bg-black bg-opacity-[30%]">
+  <div class="fixed inset-0 z-50 bg-black bg-opacity-[30%]">
     <div
-      class="flex flex-col items-center gap-[8px] w-full bg-white pl-[16px] pr-[8px] pt-[12px] pb-[28px]"
+      class="fixed left-0 bottom-0 flex flex-col items-center gap-[8px] w-full bg-white pt-[12px] pb-[28px]"
     >
       <div class="flex self-end">
-        <ButtonV2 preset="plain" @click="close">
+        <ButtonV2 preset="plain" @click.prevent="close">
           <IconClose class="w-[20px]" />
         </ButtonV2>
       </div>
-      <MenuList :has-padding="false">
+      <div class="w-full h-[1px] bg-medium-gray" />
+      <MenuList :has-padding="false" class="w-full border-0 px-[8px]">
         <ul>
           <li
             v-for="(contentUrl, index) in normalizedContentURLs"
             :key="contentUrl"
           >
             <ButtonV2
+              class="w-full"
               preset="plain"
               :download="getDownloadFilenameFromURL(contentUrl)"
               @click="e => handleClickViewContentURL(e, contentUrl, index)"
