@@ -9,6 +9,9 @@
         class="flex-shrink-0"
         :wallet-address="iscnOwner"
         :avatar-size="40"
+        :custom-user-label="
+          iscnWorkAuthor ? $t('identity_type_publisher') : undefined
+        "
         @click.native="handleHeaderAvatarClick"
       />
       <ButtonV2
@@ -128,6 +131,10 @@ export default {
     shouldShowIscnOwner: {
       type: Boolean,
       default: true,
+    },
+    iscnWorkAuthor: {
+      type: String,
+      default: undefined,
     },
   },
   data() {

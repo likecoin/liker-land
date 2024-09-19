@@ -53,10 +53,10 @@ const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
   name: 'MessageIdentity',
-  mixins: [userInfoMixin],
   filters: {
     ellipsis,
   },
+  mixins: [userInfoMixin],
   props: {
     walletAddress: {
       type: String,
@@ -78,6 +78,10 @@ export default {
       type: Number,
       default: 42,
     },
+    customUserLabel: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     toRoute() {
@@ -92,6 +96,9 @@ export default {
       });
     },
     userLabel() {
+      if (this.customUserLabel) {
+        return this.customUserLabel;
+      }
       return this.$t(
         this.type === 'creator'
           ? 'identity_type_creator'

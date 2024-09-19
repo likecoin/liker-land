@@ -325,6 +325,7 @@
         <NFTPageRecommendation
           v-else
           :iscn-owner="iscnOwner"
+          :iscn-work-author="iscnWorkAuthor"
           :is-followed="isFollowed"
           :should-show-follow-button="shouldShowFollowButton"
           :recommended-list="recommendedList"
