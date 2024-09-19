@@ -197,6 +197,7 @@ export const getNFTsPartial = ({ owner, expandClasses, limit, key }) => {
 export const getNFTOwners = classId => {
   const qsPayload = {
     class_id: classId,
+    timestamp: Math.round(new Date().getTime() / 1000),
   };
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?${querystring.stringify(
     qsPayload

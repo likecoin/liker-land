@@ -102,6 +102,7 @@ export default {
   methods: {
     fetchInfo() {
       this.lazyFetchNFTClassAggregatedData();
+      this.updateNFTOwners();
     },
     async handleClickCollect() {
       this.$emit('collect');
