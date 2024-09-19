@@ -275,6 +275,7 @@ export default {
           utmSource: this.utmSource,
           utmMedium: this.utmMedium,
           referrer: this.documentReferrer,
+          gclid: this.gclid,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
         });

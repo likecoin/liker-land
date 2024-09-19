@@ -15,6 +15,11 @@ export default {
       documentReferrer: '',
     };
   },
+  computed: {
+    gclid() {
+      return this.$route.query.gclid;
+    },
+  },
   mounted() {
     this.documentReferrer = document.referrer;
     this.restoreUTMFromSessionStorage();
