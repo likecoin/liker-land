@@ -151,7 +151,8 @@ export default {
           utmMedium: this.utmMedium,
           referrer: this.documentReferrer,
           email: this.walletEmail,
-          gclid: this.gclid,
+          gadClickId: this.gadClickId,
+          gadSource: this.gadSource,
         });
         if (url) {
           window.location.href = url;

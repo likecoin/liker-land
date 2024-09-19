@@ -1232,7 +1232,8 @@ export default {
               utmSource: this.utmSource,
               utmMedium: this.utmMedium,
               referrer: this.documentReferrer,
-              gclid: this.gclid,
+              gadClickId: this.gadClickId,
+              gadSource: this.gadSource,
               email: this.walletEmail,
             });
             if (url) {
