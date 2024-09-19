@@ -170,7 +170,14 @@ export default {
           normalizedRecommendedList.length < displayItemCount &&
           index < sourceData.length
         ) {
-          normalizedRecommendedList.push(sourceData[index]);
+          const itemToAdd = sourceData[index];
+          const alreadyExists = normalizedRecommendedList.some(
+            item => item.classId === itemToAdd.classId
+          );
+
+          if (!alreadyExists) {
+            normalizedRecommendedList.push(itemToAdd);
+          }
           index += 1;
         }
       }
