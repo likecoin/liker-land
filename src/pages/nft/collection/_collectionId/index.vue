@@ -343,6 +343,7 @@ export default {
               utmSource: this.utmSource,
               utmMedium: this.utmMedium,
               referrer: this.documentReferrer,
+              gclid: this.gclid,
               email: this.walletEmail,
             });
             if (url) {

@@ -1263,6 +1263,7 @@ export default {
           utmMedium: this.utmMedium,
           referrer: this.documentReferrer,
           email: this.walletEmail,
+          gclid: this.gclid,
         });
         if (url) {
           window.location.href = url;
@@ -1282,6 +1283,7 @@ export default {
             utmSource: this.utmSource,
             utmMedium: this.utmMedium,
             referrer: this.documentReferrer,
+            gclid: this.gclid,
           };
           if (this.walletEmail) {
             body.email = this.walletEmail;
