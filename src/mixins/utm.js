@@ -16,8 +16,11 @@ export default {
     };
   },
   computed: {
-    gclid() {
+    gadClickId() {
       return this.$route.query.gclid;
+    },
+    gadSource() {
+      return this.$route.query.gad_source;
     },
   },
   mounted() {
