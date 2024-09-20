@@ -53,10 +53,10 @@ const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
   name: 'MessageIdentity',
-  mixins: [userInfoMixin],
   filters: {
     ellipsis,
   },
+  mixins: [userInfoMixin],
   props: {
     walletAddress: {
       type: String,
@@ -88,15 +88,19 @@ export default {
       return this.localeLocation({
         name: 'id',
         params: { id: this.walletAddress },
-        query: { tab: this.type === 'creator' ? 'created' : 'collected' },
+        query: { tab: this.isCreatedTab ? 'created' : 'collected' },
       });
     },
     userLabel() {
-      return this.$t(
-        this.type === 'creator'
-          ? 'identity_type_creator'
-          : 'identity_type_collector'
-      );
+      switch (this.type) {
+        case 'publisher':
+          return this.$t('identity_type_publisher');
+        case 'collector':
+          return this.$t('identity_type_collector');
+        case 'creator':
+        default:
+          return this.$t('identity_type_creator');
+      }
     },
     userLabelSize() {
       switch (this.avatarSize) {
@@ -106,6 +110,9 @@ export default {
         default:
           return 'h5';
       }
+    },
+    isCreatedTab() {
+      return this.type === 'creator' || this.type === 'publisher';
     },
   },
   watch: {

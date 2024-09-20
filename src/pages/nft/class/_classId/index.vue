@@ -191,6 +191,7 @@
           </client-only>
           <NFTPageRecommendation
             :iscn-owner="iscnOwner"
+            :iscn-work-author="iscnWorkAuthor"
             :should-show-follow-button="shouldShowFollowButton"
             :is-followed="isFollowed"
             :recommended-list="recommendedList"

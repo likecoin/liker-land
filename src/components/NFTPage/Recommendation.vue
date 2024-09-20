@@ -5,7 +5,7 @@
       class="flex items-center justify-between px-[2rem]"
     >
       <NFTMessageIdentity
-        type="creator"
+        :type="iscnWorkAuthor ? 'publisher' : 'creator'"
         class="flex-shrink-0"
         :wallet-address="iscnOwner"
         :avatar-size="40"
@@ -129,6 +129,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    iscnWorkAuthor: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -170,7 +174,14 @@ export default {
           normalizedRecommendedList.length < displayItemCount &&
           index < sourceData.length
         ) {
-          normalizedRecommendedList.push(sourceData[index]);
+          const itemToAdd = sourceData[index];
+          const alreadyExists = normalizedRecommendedList.some(
+            item => item.classId === itemToAdd.classId
+          );
+
+          if (!alreadyExists) {
+            normalizedRecommendedList.push(itemToAdd);
+          }
           index += 1;
         }
       }
