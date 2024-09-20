@@ -237,7 +237,7 @@ export default {
         1
       );
       try {
-        if (!this.getAddress) {
+        if (!this.getSessionWallet) {
           const isConnected = await this.connectWallet();
           if (!isConnected) return;
         } else {

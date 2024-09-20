@@ -36,6 +36,9 @@ export default {
       'walletIsMatchedSession',
       'walletIsLoggingIn',
       'loginAddress',
+      'getToken',
+      'getSessionWallet',
+      'getIsRestoringSession',
     ]),
     hasConnectedWallet() {
       return !!this.getAddress && !!this.walletMethodType;

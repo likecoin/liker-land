@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     const { login } = this.$route.query;
-    if (!this.walletIsMatchedSession && login) {
+    if (!this.getSessionWallet && login) {
       this.onClickLogin();
     }
   },
