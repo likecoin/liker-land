@@ -464,6 +464,7 @@ const actions = {
     commit(WALLET_SET_CONNECTOR, null);
     commit(WALLET_SET_LIKERINFO, null);
     await dispatch('walletLogout');
+    dispatch('clearSession');
   },
 
   async restoreSession({ dispatch, getters }) {
@@ -900,8 +901,11 @@ const actions = {
         event: result.isNew ? 'signup' : 'login',
       });
       await dispatch('walletFetchSessionUserData');
+      await dispatch('authenticate', { inputWallet: address, signature: data });
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
+      dispatch('disconnectWallet');
+      dispatch('clearSession');
       if (error.message === 'Request rejected') {
         // User rejected login request
       } else {
