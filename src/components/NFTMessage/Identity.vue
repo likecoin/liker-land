@@ -96,14 +96,15 @@ export default {
       });
     },
     userLabel() {
-      if (this.customUserLabel) {
-        return this.customUserLabel;
+      switch (this.type) {
+        case 'publisher':
+          return this.$t('identity_type_publisher');
+        case 'collector':
+          return this.$t('identity_type_collector');
+        case 'creator':
+        default:
+          return this.$t('identity_type_creator');
       }
-      return this.$t(
-        this.type === 'creator'
-          ? 'identity_type_creator'
-          : 'identity_type_collector'
-      );
     },
     userLabelSize() {
       switch (this.avatarSize) {

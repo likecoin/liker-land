@@ -5,13 +5,10 @@
       class="flex items-center justify-between px-[2rem]"
     >
       <NFTMessageIdentity
-        type="creator"
+        :type="iscnWorkAuthor ? 'publisher' : 'creator'"
         class="flex-shrink-0"
         :wallet-address="iscnOwner"
         :avatar-size="40"
-        :custom-user-label="
-          iscnWorkAuthor ? $t('identity_type_publisher') : undefined
-        "
         @click.native="handleHeaderAvatarClick"
       />
       <ButtonV2
