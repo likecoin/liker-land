@@ -168,7 +168,7 @@
       >
         <button
           class="flex items-center cursor-pointer select-none pointer-events-auto laptop:p-[8px]"
-          @click="onClickGoToPrevPage"
+          @click="handleLeftArrowButtonClick"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +188,7 @@
         <div class="grow" />
         <button
           class="flex items-center cursor-pointer select-none pointer-events-auto laptop:p-[8px]"
-          @click="onClickGoToNextPage"
+          @click="handleRightArrowButtonClick"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -246,6 +246,7 @@ export default {
       selectedChapter: '',
       book: null,
       rendition: null,
+      isRightToLeft: false,
 
       isShowSearchBar: false,
       searchText: '',
@@ -315,12 +316,14 @@ export default {
         });
         const cfi = this.resumeFromLocalStorage();
         this.rendition.display(cfi);
-        this.rendition.on('rendered', () => {
+        this.rendition.on('rendered', (_, view) => {
           const path = this.rendition.currentLocation().start?.href;
           if (!path) return;
           const pathArr = path.split('/');
           this.selectedChapter = pathArr.pop();
           this.dirPath = pathArr.join('/');
+
+          this.isRightToLeft = view?.settings?.direction === 'rtl';
         });
 
         this.rendition.on('relocated', location => {
@@ -344,6 +347,20 @@ export default {
         );
       }
     },
+    goLeft() {
+      if (this.isRightToLeft) {
+        this.rendition.next();
+      } else {
+        this.rendition.prev();
+      }
+    },
+    goRight() {
+      if (this.isRightToLeft) {
+        this.rendition.prev();
+      } else {
+        this.rendition.next();
+      }
+    },
     keyListener(e) {
       const inputs = ['input', 'select', 'button', 'textarea'];
       if (inputs.includes(document.activeElement?.tagName.toLowerCase())) {
@@ -353,11 +370,11 @@ export default {
       if (!this.rendition) return;
       // Left Key
       if ((e.keyCode || e.which) === 37) {
-        this.rendition.prev();
+        this.goLeft();
       }
       // Right Key
       if ((e.keyCode || e.which) === 39) {
-        this.rendition.next();
+        this.goRight();
       }
     },
     onChangeChapter() {
@@ -366,11 +383,11 @@ export default {
         : this.selectedChapter;
       this.rendition.display(chapter);
     },
-    onClickGoToPrevPage() {
-      this.rendition.prev();
+    handleLeftArrowButtonClick() {
+      this.goLeft();
     },
-    onClickGoToNextPage() {
-      this.rendition.next();
+    handleRightArrowButtonClick() {
+      this.goRight();
     },
     async onClickDownloadEpub() {
       try {
