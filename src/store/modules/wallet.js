@@ -881,7 +881,13 @@ const actions = {
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
       const { signer, methodType } = state;
-      const data = await signLoginMessage(signer, address);
+      const data = await signLoginMessage(signer, address, 'authorize', [
+        'profile',
+        'read:nftbook',
+        'write:nftbook',
+        'read:nftcollection',
+        'write:nftcollection',
+      ]);
       const result = await this.$api.$post(postUserV2Login(), {
         loginMethod: methodType,
         ...data,
