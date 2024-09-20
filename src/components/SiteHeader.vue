@@ -57,7 +57,7 @@
       </Dropdown>
 
       <ButtonV2
-        v-if="!loginAddress"
+        v-if="!getSessionWallet"
         class="hidden laptop:flex"
         preset="secondary"
         :text="$t('header_button_connect_to_wallet')"
@@ -70,7 +70,7 @@
 
       <Dropdown class="hidden laptop:block ml-[4px]">
         <template #trigger="{ toggle }">
-          <div v-if="loginAddress" class="relative">
+          <div v-if="getSessionWallet" class="relative">
             <Identity
               class="cursor-pointer"
               :avatar-url="walletUserAvatar"
@@ -136,7 +136,7 @@
 
       {{ /* phone version */ }}
       <ButtonV2
-        v-if="!loginAddress"
+        v-if="!getSessionWallet"
         class="laptop:hidden"
         preset="plain"
         @click="handleOpenSlider"
@@ -171,7 +171,7 @@
       @close="isShowMobileMenu = false"
     >
       <ButtonV2
-        v-if="!loginAddress"
+        v-if="!getSessionWallet"
         class="w-full"
         preset="secondary"
         @click="handleConnectWallet"
@@ -292,6 +292,7 @@ export default {
       'getUserId',
       'getNotificationCount',
       'shoppingCartBookProductList',
+      'getSessionWallet',
     ]),
     currentLocale() {
       return this.$i18n.locale;
@@ -317,10 +318,10 @@ export default {
     },
   },
   async mounted() {
-    await this.restoreSession();
+    await this.restoreAuthSession();
   },
   methods: {
-    ...mapActions(['updatePreferences', 'userLogout']),
+    ...mapActions(['updatePreferences', 'userLogout', 'restoreAuthSession']),
     handleClickGoStore() {
       logTrackerEvent(this, 'site_header', 'site_header_click_store', '', 1);
     },
@@ -366,7 +367,7 @@ export default {
           this.$router.push(
             this.localeLocation({
               name: 'bookshelf',
-              params: { id: this.loginAddress },
+              params: { id: this.getSessionWallet },
               query: { tab: 'collected' },
             })
           );
@@ -392,12 +393,12 @@ export default {
     handleOpenSlider() {
       this.isShowMobileMenu = true;
 
-      if (this.loginAddress) {
+      if (this.getSessionWallet) {
         logTrackerEvent(
           this,
           'site_menu',
           'site_menu_click_slider_menu',
-          this.loginAddress,
+          this.getSessionWallet,
           1
         );
       } else {

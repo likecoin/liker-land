@@ -127,7 +127,7 @@ export default {
       await this.fetchISCNMetadata();
       await this.restoreSession();
       // TODO: use loginAddress
-      if (this.getAddress) {
+      if (this.getSessionWallet) {
         await Promise.all([
           this.fetchUserCollectedCount(),
           this.updateNFTOwners(),
@@ -135,7 +135,7 @@ export default {
         if (
           (!this.userCollectedCount && this.isLoginRequired) ||
           (this.nftCollectorWalletAddress &&
-            this.nftCollectorWalletAddress !== this.getAddress)
+            this.nftCollectorWalletAddress !== this.getSessionWallet)
         ) {
           this.$router.replace(
             this.localeLocation({
