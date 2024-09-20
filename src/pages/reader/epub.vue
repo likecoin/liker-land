@@ -151,6 +151,7 @@
 
       <div
         :class="[
+          'phoneLg:hidden',
           'absolute',
           'inset-0',
 
@@ -291,6 +292,12 @@ export default {
     this.initRendition();
     document.addEventListener('keydown', this.keyListener, false);
   },
+  beforeDestroy() {
+    if (this.cleanUpClickListener) {
+      this.cleanUpClickListener();
+      this.cleanUpClickListener = undefined;
+    }
+  },
   methods: {
     async initRendition() {
       try {
@@ -324,6 +331,37 @@ export default {
           this.dirPath = pathArr.join('/');
 
           this.isRightToLeft = view?.settings?.direction === 'rtl';
+
+          if (this.cleanUpClickListener) {
+            this.cleanUpClickListener();
+          }
+          this.cleanUpClickListener = view.window.addEventListener(
+            'click',
+            event => {
+              // Ignore clicks on links
+              const hasClickedLink = event
+                .composedPath()
+                .some(eventTarget => eventTarget.tagName === 'A');
+              if (hasClickedLink) {
+                return;
+              }
+
+              // Ignore when selecting text
+              const selection = view.window.getSelection();
+              if (selection?.toString()?.length) {
+                return;
+              }
+
+              const width = this.rendition?.manager?.container.clientWidth || 0;
+              const range = width * (1 / 3);
+              const x = event.clientX % width; // Normalize x to be within the window
+              if (x < range) {
+                this.goLeft();
+              } else if (width - x < range) {
+                this.goRight();
+              }
+            }
+          );
         });
 
         this.rendition.on('relocated', location => {
