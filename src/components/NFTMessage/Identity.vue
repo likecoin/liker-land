@@ -78,10 +78,6 @@ export default {
       type: Number,
       default: 42,
     },
-    customUserLabel: {
-      type: String,
-      default: undefined,
-    },
   },
   computed: {
     toRoute() {
@@ -92,7 +88,7 @@ export default {
       return this.localeLocation({
         name: 'id',
         params: { id: this.walletAddress },
-        query: { tab: this.type === 'creator' ? 'created' : 'collected' },
+        query: { tab: this.isCreatedTab ? 'created' : 'collected' },
       });
     },
     userLabel() {
@@ -114,6 +110,9 @@ export default {
         default:
           return 'h5';
       }
+    },
+    isCreatedTab() {
+      return this.type === 'creator' || this.type === 'publisher';
     },
   },
   watch: {
