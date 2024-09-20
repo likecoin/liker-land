@@ -463,8 +463,8 @@ const actions = {
     commit(WALLET_SET_SIGNER, null);
     commit(WALLET_SET_CONNECTOR, null);
     commit(WALLET_SET_LIKERINFO, null);
-    await dispatch('walletLogout');
     dispatch('clearSession');
+    await dispatch('walletLogout');
   },
 
   async restoreSession({ dispatch, getters }) {
@@ -893,6 +893,7 @@ const actions = {
         loginMethod: methodType,
         ...data,
       });
+      await dispatch('authenticate', { inputWallet: address, signature: data });
       await setLoggerUser(this, {
         wallet: address,
         method: methodType,
@@ -901,7 +902,6 @@ const actions = {
         event: result.isNew ? 'signup' : 'login',
       });
       await dispatch('walletFetchSessionUserData');
-      await dispatch('authenticate', { inputWallet: address, signature: data });
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       dispatch('disconnectWallet');
