@@ -578,3 +578,5 @@ export const fetchGutenbergCsv = () =>
 
 export const postSubstackSubscribe = () =>
   `https://substackapi.com/api/subscribe`;
+
+export const postAuthenticate = () => `${LIKECOIN_API_BASE}/wallet/authorize`;

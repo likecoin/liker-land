@@ -11,6 +11,7 @@ import staticData from './modules/staticData';
 import wallet from './modules/wallet';
 import nft from './modules/nft';
 import cart from './modules/cart';
+import bookStoreAPI from './modules/bookStoreApi';
 
 const createStore = () =>
   new Vuex.Store({
@@ -49,6 +50,7 @@ const createStore = () =>
       wallet,
       nft,
       cart,
+      bookStoreAPI,
     },
   });
 
