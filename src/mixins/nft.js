@@ -207,6 +207,9 @@ export default {
     },
     // nft info
     NFTName() {
+      if (this.nftIsNFTBook) {
+        return this.iscnName || this.NFTClassMetadata.name;
+      }
       return this.NFTClassMetadata.name;
     },
     nftName() {
@@ -216,6 +219,10 @@ export default {
       const overrideKey = `nft_override_${this.classId}_description`;
       const hasOverride = this.$te(overrideKey);
       if (hasOverride) return this.$t(overrideKey);
+
+      if (this.nftIsNFTBook) {
+        return this.iscnDescription || this.NFTClassMetadata.description;
+      }
       return this.NFTClassMetadata.description;
     },
     nftDescription() {
@@ -267,6 +274,9 @@ export default {
       const data = this.getISCNMetadataById(this.iscnId);
       if (data instanceof Promise) return undefined;
       return data;
+    },
+    iscnName() {
+      return this.iscnData?.contentMetadata?.name;
     },
     iscnDescription() {
       return this.iscnData?.contentMetadata?.description;
