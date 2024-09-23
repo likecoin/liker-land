@@ -1,4 +1,4 @@
-import { IS_TESTNET } from '../constant';
+import { IS_TESTNET, AD_CONVERSION_ID } from '../constant';
 
 function hexString(buffer) {
   const byteArray = new Uint8Array(buffer);
@@ -126,7 +126,7 @@ export function logTrackerEvent(
 export function logPurchaseFlowEvent(
   vue,
   event,
-  { txHash, price, currency, items, isNFTBook }
+  { txHash, price, currency, items, isNFTBook, paymentId }
 ) {
   try {
     if (
@@ -144,7 +144,7 @@ export function logPurchaseFlowEvent(
     }
     if (vue.$gtag) {
       vue.$gtag.event(event, {
-        transaction_id: txHash,
+        transaction_id: paymentId || txHash,
         value: price,
         currency,
         items: items.map(i => {
@@ -159,6 +159,14 @@ export function logPurchaseFlowEvent(
           };
         }),
       });
+      if (event === 'purchase' && AD_CONVERSION_ID) {
+        vue.$gtag.event('conversion', {
+          send_to: AD_CONVERSION_ID,
+          value: price,
+          currency: 'USD',
+          transaction_id: paymentId || txHash,
+        });
+      }
     }
     if (window.fbq && !IS_TESTNET) {
       const eventNameMapping = {

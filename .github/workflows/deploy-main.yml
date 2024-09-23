@@ -30,6 +30,7 @@ jobs:
       - run: firebase deploy --project civic-liker -f
         env:
           GA_TRACKING_ID: ${{ vars.GA_TRACKING_ID }}
+          AD_CONVERSION_ID: ${{ vars.AD_CONVERSION_ID }}
           STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
           CRISP_WEBSITE_ID: ${{ vars.CRISP_WEBSITE_ID }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
