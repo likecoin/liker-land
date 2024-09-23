@@ -412,20 +412,13 @@ export default {
       if (this.preset === PRESET_TYPE.CAMPAIGN) return 'text-white';
       return 'text-dark-gray';
     },
-    bookDescription() {
-      const overrideKey = `nft_override_${this.classId}_description`;
-      const hasOverride = this.$te(overrideKey);
-      if (hasOverride) return this.$t(overrideKey);
-      return this.iscnDescription || this.NFTDescription || '';
-    },
     bookDescriptionTrimmed() {
       if (this.preset === PRESET_TYPE.CAMPAIGN) {
-        return this.bookDescription
-          .replaceAll('\n', '')
+        return this.NFTDescription.replaceAll('\n', '')
           .trim()
           .substring(0, 100);
       }
-      return this.bookDescription.trim();
+      return this.NFTDescription.trim();
     },
   },
   mounted() {
