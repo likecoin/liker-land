@@ -1038,6 +1038,7 @@ export default {
           {
             email: this.claimingEmail,
             wallet: this.claimingAddress,
+            loginMethod: this.walletMethodType,
             message: this.collectorMessage,
             gaClientId: this.getGaClientId,
             gaSessionId: this.getGaSessionId,
