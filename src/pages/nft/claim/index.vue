@@ -934,6 +934,7 @@ export default {
         price,
         currency: 'USD',
         isNFTBook: true,
+        paymentId: this.paymentId,
       });
       items.forEach(item => {
         logPurchaseNFTBookEvent(this, {

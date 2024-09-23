@@ -9,9 +9,6 @@ export default (ctx, inject) => {
   } = ctx;
   if (process.env.GA_TRACKING_ID) {
     const includes = [];
-    if (process.env.ADWORDS_TRACKING_ID) {
-      includes.push({ id: process.env.ADWORDS_TRACKING_ID });
-    }
     Vue.use(
       VueGtag,
       {
