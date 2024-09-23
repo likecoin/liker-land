@@ -179,6 +179,11 @@ export function logPurchaseFlowEvent(
         window.fbq('track', eventNameMapping[event], {
           currency,
           value: price,
+          content_type: 'product',
+          contents: items.map(i => ({
+            id: i.productId || i.collectionId || i.classId,
+            quantity: i.quantity || 1,
+          })),
           content_ids: items.map(
             i => i.productId || i.collectionId || i.classId
           ),
@@ -239,7 +244,13 @@ export function logPurchaseNFTBookEvent(
       window.fbq('trackCustom', 'PurchaseBook', {
         currency,
         value: price,
-        quantity,
+        content_type: 'product',
+        contents: [
+          {
+            id: collectionId || classId,
+            quantity: quantity || 1,
+          },
+        ],
         content_ids: [collectionId || classId],
       });
     }
