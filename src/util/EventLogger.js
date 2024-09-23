@@ -58,7 +58,7 @@ export async function setLoggerUser(
       }
     }
     if (vue.$crisp) {
-      vue.$crisp.push(['set', 'session:data', [[['wallet', wallet]]]]);
+      vue.$crisp.push(['set', 'session:data', [[['like_wallet', wallet]]]]);
       vue.$crisp.push(['set', 'session:data', [[['login_method', method]]]]);
     }
   } catch (err) {
@@ -66,7 +66,10 @@ export async function setLoggerUser(
   }
 }
 
-export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
+export function updateLoggerUserInfo(
+  vue,
+  { wallet, displayName, email, crispToken }
+) {
   if (vue.$sentry) {
     const opt = {
       id: wallet,
@@ -77,10 +80,10 @@ export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
   }
   if (vue.$crisp) {
     if (email) {
-      vue.$crisp.push(['set', 'user:email', [email]]);
+      vue.$crisp.push(['set', 'user:email', [email, crispToken]]);
     }
     if (wallet) {
-      vue.$crisp.push(['set', 'session:data', [[['wallet', wallet]]]]);
+      vue.$crisp.push(['set', 'session:data', [[['like_wallet', wallet]]]]);
     }
     if (displayName) {
       vue.$crisp.push(['set', 'user:nickname', [displayName || wallet]]);

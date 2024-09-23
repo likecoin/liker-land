@@ -19,14 +19,21 @@ export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
     showCrisp() {
       if (!this.$crisp) return false;
       try {
-        const email = this.walletEmail;
-        const wallet = this.loginAddress || this.getAddress;
-        const displayName = this.getLikerInfo?.displayName || wallet;
         const { $crisp } = this;
-        if (email) $crisp.push(['set', 'user:email', [email]]);
-        if (displayName) $crisp.push(['set', 'user:nickname', [displayName]]);
-        if (wallet) $crisp.push(['set', 'chat:show']);
         if ($crisp.is('chat:hidden')) {
+          const email = this.walletEmail;
+          const wallet = this.loginAddress || this.getAddress;
+          const displayName = this.getLikerInfo?.displayName || wallet;
+          if (email && !$crisp.get('user:email')) {
+            $crisp.push(['set', 'user:email', [email]]);
+          }
+          if (displayName) {
+            $crisp.push(['set', 'user:nickname', [displayName]]);
+          }
+          if (wallet) {
+            $crisp.push(['set', 'session:data', [[['like_wallet', wallet]]]]);
+          }
+          $crisp.push(['do', 'chat:show']);
           return true;
         }
       } catch (err) {

@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { userCollection } = require('../../modules/firebase');
 const { setPrivateCacheHeader } = require('../middleware/cache');
 const axios = require('../../modules/axios');
+const { getCrispUserHash } = require('../util/crisp');
 const {
   apiFetchUserProfile,
   apiFetchUserSuperLikeStatus,
@@ -18,17 +19,8 @@ const {
   AUTH_COOKIE_OPTION,
   OAUTH_SCOPE_REQUIRED,
 } = require('../constant');
-const { CRISP_USER_HASH_SECRET } = require('../../config/config');
 
 const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
-
-function getCrispUserHash(email) {
-  if (!CRISP_USER_HASH_SECRET) return undefined;
-  return crypto
-    .createHmac('sha256', CRISP_USER_HASH_SECRET)
-    .update(email)
-    .digest('hex');
-}
 
 function setSessionOAuthState(req) {
   const state = crypto.randomBytes(8).toString('hex');
