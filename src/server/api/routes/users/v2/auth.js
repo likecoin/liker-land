@@ -15,6 +15,7 @@ const {
   isValidAddress,
   checkCosmosSignPayload,
 } = require('../../../util/cosmos');
+const { getCrispUserHash } = require('../../../util/crisp');
 
 const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
@@ -38,6 +39,7 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       emailUnconfirmed,
       eventLastSeenTs: eventLastSeenTs ? eventLastSeenTs.toMillis() : 1000,
       locale,
+      crispToken: email ? getCrispUserHash(email) : undefined,
     });
   } catch (err) {
     if (req.session) req.session = null;
@@ -86,6 +88,7 @@ router.post('/login', async (req, res, next) => {
       const userRef = walletUserCollection.doc(userId);
       const userDoc = await t.get(userRef);
       const isNew = !userDoc.exists;
+      const userDocData = userDoc.data();
       const payload = {
         lastLoginTs: FieldValue.serverTimestamp(),
         lastLoginMethod: loginMethod,
@@ -99,8 +102,9 @@ router.post('/login', async (req, res, next) => {
       } else {
         await t.update(userRef, payload);
       }
-      return { isNew };
+      return { ...userDocData, isNew };
     });
+    const { isNew, email, displayName } = result;
     if (result.isNew) {
       publisher.publish(PUBSUB_TOPIC_MISC, req, {
         logType: 'UserSignUp',
@@ -116,7 +120,13 @@ router.post('/login', async (req, res, next) => {
         user: userId,
       });
     }
-    res.json(result);
+    const payload = {
+      user: userId,
+      displayName,
+      isNew,
+      crispToken: email ? getCrispUserHash(email) : undefined,
+    };
+    res.json(payload);
     return;
   } catch (error) {
     // eslint-disable-next-line no-console

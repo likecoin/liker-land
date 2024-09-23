@@ -917,8 +917,13 @@ const actions = {
     if (!checkIsLikeCoinAppInAppBrowser(this.$router.app.$route)) {
       await dispatch('setLocale', userInfo.locale);
     }
-    const { displayName, email } = userInfo;
-    updateLoggerUserInfo(this, { email, displayName, wallet: state.address });
+    const { displayName, email, crispToken } = userInfo;
+    updateLoggerUserInfo(this, {
+      email,
+      displayName,
+      wallet: state.address,
+      crispToken,
+    });
     return userInfo;
   },
   async walletFetchSessionUserData(
@@ -951,6 +956,8 @@ const actions = {
       await setLoggerUser(this, {
         wallet: address,
         method: methodType,
+        email: result.email,
+        crispToken: result.crispToken,
         event: result.isNew ? 'signup' : 'login',
       });
       await dispatch('walletFetchSessionUserData');
