@@ -221,7 +221,7 @@ export default {
       if (hasOverride) return this.$t(overrideKey);
 
       if (this.nftIsNFTBook) {
-        return this.iscnDescription || this.NFTClassMetadata.description;
+        return this.iscnDescription || this.NFTClassMetadata.description || '';
       }
       return this.NFTClassMetadata.description;
     },
