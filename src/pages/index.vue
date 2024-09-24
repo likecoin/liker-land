@@ -382,7 +382,13 @@
         </div>
 
         <div
-          class="desktop:grid grid-cols-5 items-stretch gap-[20px] flex-grow"
+          :class="[
+            'desktop:grid',
+            'grid-cols-5 min-1280:grid-cols-6',
+            'items-stretch',
+            'gap-[20px] min-1280:gap-[24px]',
+            'flex-grow',
+          ]"
         >
           <div v-if="stickyBookstoreItem" class="col-span-2">
             <NFTBookItemCardV2
@@ -399,7 +405,15 @@
           </div>
 
           <ul
-            class="col-span-3 hidden desktop:grid grid-cols-1 sm:grid-cols-2 gap-[20px] items-stretch mt-[2rem] desktop:mt-0"
+            :class="[
+              'col-span-3 min-1280:col-span-4',
+              'hidden desktop:grid',
+              'grid-cols-1 sm:grid-cols-2 min-1280:grid-cols-3',
+              'gap-[20px] min-1280:gap-[24px]',
+              'items-stretch',
+              'mt-[2rem]',
+              'desktop:mt-0',
+            ]"
           >
             <li v-for="item in bookstoreItemsInGrid" :key="item.classId">
               <NFTBookItemCardV2
@@ -890,7 +904,7 @@ export default {
       return this.bookstoreItems[0];
     },
     bookstoreItemsInGrid() {
-      return this.bookstoreItems.slice(1, 7);
+      return this.bookstoreItems.slice(1, 10);
     },
     faqs() {
       return this.$t('index_faq_list').map(({ q: question, a: answer }) => ({
