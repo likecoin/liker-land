@@ -279,6 +279,7 @@ export default {
           gadSource: this.gadSource,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
+          coupon: this.$route.query.coupon,
         });
         if (url) {
           window.location.href = url;
