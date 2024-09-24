@@ -88,7 +88,7 @@
           <ButtonV2
             v-if="giftInfo"
             class="min-w-[120px]"
-            preset="secondary"
+            preset="outline"
             :text="$t('nft_edition_select_confirm_button_text_gift')"
             @click="handleClickGiftButton"
           >

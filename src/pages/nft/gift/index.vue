@@ -162,7 +162,7 @@ export default {
                 await this.lazyFetchNFTBookInfoByClassId(item.classId);
               }
             } else if (item.collectionId) {
-              this.lazyFetchNFTCollectionInfoByCollectionId({
+              await this.lazyFetchNFTCollectionInfoByCollectionId({
                 collectionId: item.collectionId,
               });
             }
