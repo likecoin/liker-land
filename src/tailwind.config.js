@@ -136,6 +136,7 @@ module.exports = {
       sm: { min: '528px' },
       laptop: { min: '769px' },
       desktop: { min: '992px' },
+      'min-1280': { min: '1280px' },
       desktopLg: { min: '1439px' },
       'full-hd': { min: '1920px' },
     },
