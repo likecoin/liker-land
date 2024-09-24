@@ -17,6 +17,8 @@ module.exports = onRequest(
       'LIKE_CO_CLIENT_SECRET',
       'COOKIE_SECRET',
       'CRISP_USER_HASH_SECRET',
+      'CRISP_PLUGIN_KEY',
+      'CRISP_PLUGIN_IDENTIFIER',
       'SENDGRID_API_KEY',
       'GET_WALLET_API_SECRET',
       'AIRTABLE_API_SECRET',

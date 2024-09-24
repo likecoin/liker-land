@@ -15,6 +15,7 @@ const { handleRestfulError } = require('../../../middleware/error');
 const { sendEmail } = require('../../../../modules/sendgrid');
 const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 const { isValidFollowee } = require('../../../util/cosmos');
+const { upsertCrispProfile } = require('../../../util/crisp');
 
 const {
   VERIFICATION_EMAIL_RESEND_COOLDOWN_IN_MS,
@@ -54,7 +55,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       }
     }
     const token = uuidv4();
-    await db.runTransaction(async t => {
+    const userInfo = await db.runTransaction(async t => {
       const userRef = walletUserCollection.doc(user);
       const [userDoc, userDocWithSameEmail] = await Promise.all([
         t.get(userRef),
@@ -66,7 +67,8 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
         }
         throw new Error('EMAIL_ALREADY_BEEN_USED_BY_OTHER_USER');
       }
-      const { emailUnconfirmed, emailLastUpdatedTs } = userDoc.data();
+      const userData = userDoc.data();
+      const { emailUnconfirmed, emailLastUpdatedTs } = userData;
       if (
         !isVerified &&
         emailUnconfirmed === email &&
@@ -95,6 +97,7 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
               emailLastUpdatedTs: FieldValue.serverTimestamp(),
             }
       );
+      return userData;
     });
 
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
@@ -105,6 +108,20 @@ router.post('/email', authenticateV2Login, async (req, res, next) => {
       classId,
       paymentId,
     });
+
+    if (isVerified) {
+      try {
+        const { displayName, lastLoginMethod: loginMethod } = userInfo;
+        await upsertCrispProfile(email, {
+          displayName,
+          wallet: user,
+          loginMethod,
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    }
 
     const qsPayload = { wallet: user };
     if (isValidFollowee(user, followee)) {
@@ -161,12 +178,13 @@ router.put('/email', async (req, res, next) => {
     }
 
     const userRef = walletUserCollection.doc(user);
-    const email = await db.runTransaction(async t => {
+    const userInfo = await db.runTransaction(async t => {
       const userDoc = await t.get(userRef);
       if (!userDoc.exists) {
         throw new Error('USER_NOT_FOUND');
       }
-      const { emailUnconfirmed, emailVerifyToken } = userDoc.data();
+      const userData = userDoc.data();
+      const { emailUnconfirmed, emailVerifyToken } = userData;
       if (emailVerifyToken !== token) {
         throw new Error('INVALID_TOKEN');
       }
@@ -183,8 +201,9 @@ router.put('/email', async (req, res, next) => {
         payload.followees = FieldValue.arrayUnion(followee);
       }
       t.update(userRef, payload);
-      return emailUnconfirmed;
+      return { ...userData, email: emailUnconfirmed };
     });
+    const { email, displayName, lastLoginMethod: loginMethod } = userInfo;
 
     const legacyQuery = nftMintSubscriptionCollection
       .where('subscriberEmail', '==', email)
@@ -211,6 +230,17 @@ router.put('/email', async (req, res, next) => {
       user,
       followee,
     });
+
+    try {
+      await upsertCrispProfile(email, {
+        displayName,
+        wallet: user,
+        loginMethod,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
 
     res.json({ email });
   } catch (error) {

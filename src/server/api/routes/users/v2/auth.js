@@ -15,7 +15,7 @@ const {
   isValidAddress,
   checkCosmosSignPayload,
 } = require('../../../util/cosmos');
-const { getCrispUserHash } = require('../../../util/crisp');
+const { getCrispUserHash, upsertCrispProfile } = require('../../../util/crisp');
 
 const CLEAR_AUTH_COOKIE_OPTION = { ...AUTH_COOKIE_OPTION, maxAge: 0 };
 
@@ -30,8 +30,21 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       email,
       emailUnconfirmed,
       eventLastSeenTs,
+      lastLoginMethod: loginMethod,
       locale = DEFAULT_LOCALE,
     } = userDoc.data();
+    if (email) {
+      try {
+        await upsertCrispProfile(email, {
+          displayName,
+          wallet: user,
+          loginMethod,
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    }
     res.json({
       user,
       displayName,
@@ -119,6 +132,18 @@ router.post('/login', async (req, res, next) => {
         loginMethod,
         user: userId,
       });
+    }
+    if (email) {
+      try {
+        await upsertCrispProfile(email, {
+          displayName,
+          wallet: userId,
+          loginMethod,
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     }
     const payload = {
       user: userId,
