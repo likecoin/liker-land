@@ -102,7 +102,9 @@
           <div
             v-if="
               nftCollections?.length ||
-                (nftBookAvailablePriceLabel && nftEditions.length > 1)
+                (nftBookAvailablePriceLabel &&
+                  (nftEditions.length > 1 ||
+                    (nftEditions.length === 1 && nftEditions[0].description)))
             "
             ref="compareSection"
             class="max-w-[962px] mx-auto flex flex-col gap-[48px] justify-center flex-wrap"
