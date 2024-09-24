@@ -281,7 +281,7 @@ export default {
       searchResults: [], // Store CFI string of search results
       selectedSearchResultIndex: 0,
 
-      fontSize: FONT_SIZES[9],
+      fontSizeIndex: 9,
     };
   },
   computed: {
@@ -345,7 +345,7 @@ export default {
           ),
         });
         const cfi = this.resumeFromLocalStorage();
-        this.rendition.themes.fontSize(`${this.fontSize}px`);
+        this.rendition.themes.fontSize(`${FONT_SIZES[this.fontSizeIndex]}px`);
         this.rendition.display(cfi);
         this.rendition.on('rendered', (_, view) => {
           const path = this.rendition.currentLocation().start?.href;
@@ -379,9 +379,12 @@ export default {
       }
     },
     adjustFontSize(indexDiff) {
-      const currentIndex = FONT_SIZES.indexOf(this.fontSize);
-      this.fontSize = FONT_SIZES[currentIndex + indexDiff] || this.fontSize;
-      this.rendition.themes.fontSize(`${this.fontSize}px`);
+      this.fontSizeIndex = Math.max(
+        0,
+        Math.min(FONT_SIZES.length - 1, this.fontSizeIndex + indexDiff)
+      );
+      const fontSize = FONT_SIZES[this.fontSizeIndex];
+      this.rendition.themes.fontSize(`${fontSize}px`);
     },
     increaseFontSize() {
       this.adjustFontSize(+1);
