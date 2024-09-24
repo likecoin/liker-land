@@ -64,6 +64,32 @@
         </div>
 
         <div class="flex items-center gap-4">
+          <button @click="decreaseFontSize">
+            <svg
+              class="w-20 h-20"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M10.5 7h-2L3 21h2.2l1.1-3h6.2l1.1 3H16zm-3.4 9l2.4-6.3l2.4 6.3zM22 7h-8V5h8z"
+              />
+            </svg>
+          </button>
+
+          <button @click="increaseFontSize">
+            <svg
+              class="w-20 h-20"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M8.5 7h2L16 21h-2.4l-1.1-3H6.3l-1.1 3H3zm-1.4 9h4.8L9.5 9.7zM22 5v2h-3v3h-2V7h-3V5h3V2h2v3z"
+              />
+            </svg>
+          </button>
+
           <button @click="handleSearchButtonClick">
             <IconSearch class="w-20 h-20" />
           </button>
@@ -235,6 +261,8 @@ import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
 
+const FONT_SIZES = [6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 50, 60];
+
 export default {
   name: 'EPUBReaderPage',
   mixins: [nftMixin, walletMixin, readerMixin],
@@ -252,6 +280,8 @@ export default {
       searchText: '',
       searchResults: [], // Store CFI string of search results
       selectedSearchResultIndex: 0,
+
+      fontSize: FONT_SIZES[9],
     };
   },
   computed: {
@@ -315,7 +345,7 @@ export default {
           ),
         });
         const cfi = this.resumeFromLocalStorage();
-        this.rendition.themes.fontSize('25px');
+        this.rendition.themes.fontSize(`${this.fontSize}px`);
         this.rendition.display(cfi);
         this.rendition.on('rendered', (_, view) => {
           const path = this.rendition.currentLocation().start?.href;
@@ -347,6 +377,17 @@ export default {
           })
         );
       }
+    },
+    adjustFontSize(indexDiff) {
+      const currentIndex = FONT_SIZES.indexOf(this.fontSize);
+      this.fontSize = FONT_SIZES[currentIndex + indexDiff] || this.fontSize;
+      this.rendition.themes.fontSize(`${this.fontSize}px`);
+    },
+    increaseFontSize() {
+      this.adjustFontSize(+1);
+    },
+    decreaseFontSize() {
+      this.adjustFontSize(-1);
     },
     goLeft() {
       if (this.isRightToLeft) {
