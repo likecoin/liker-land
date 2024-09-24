@@ -263,6 +263,21 @@ import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
 
 const FONT_SIZES = [6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 50, 60];
 
+function flattenTOC(toc, level = 0) {
+  const result = [];
+  toc.forEach(({ subitems, ...item }) => {
+    result.push({
+      ...item,
+      label: `${'-'.repeat(level)}${level > 0 ? ' ' : ''}${item.label}`,
+    });
+
+    if (subitems && Array.isArray(subitems)) {
+      result.push(...flattenTOC(subitems, level + 1));
+    }
+  });
+  return result;
+}
+
 export default {
   name: 'EPUBReaderPage',
   mixins: [nftMixin, walletMixin, readerMixin],
@@ -336,9 +351,9 @@ export default {
         this.book = Epub(buffer);
         await this.book.ready;
         this.isLoading = false;
-        this.book.loaded.navigation.then(
-          navigation => (this.toc = navigation.toc)
-        );
+        this.book.loaded.navigation.then(navigation => {
+          this.toc = flattenTOC(navigation.toc);
+        });
         const viewerEl = this.$refs.epubViewer;
         if (!viewerEl) return;
         if (this.rendition) return;
