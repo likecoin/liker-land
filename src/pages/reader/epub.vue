@@ -315,6 +315,7 @@ export default {
           ),
         });
         const cfi = this.resumeFromLocalStorage();
+        this.rendition.themes.fontSize('25px');
         this.rendition.display(cfi);
         this.rendition.on('rendered', (_, view) => {
           const path = this.rendition.currentLocation().start?.href;
