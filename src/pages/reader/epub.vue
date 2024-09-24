@@ -288,6 +288,9 @@ export default {
     hideDownload() {
       return this.$route.query.download === '0' || this.nftIsDownloadHidden;
     },
+    fontSize() {
+      return FONT_SIZES[this.fontSizeIndex];
+    },
   },
   watch: {
     isShowSearchBar(isShow) {
@@ -304,6 +307,9 @@ export default {
         this.selectedSearchResultIndex = 0;
         this.removeSearchResultHighlights();
       }
+    },
+    fontSize() {
+      this.rendition?.themes.fontSize(`${this.fontSize}px`);
     },
   },
   beforeUnmount() {
@@ -345,7 +351,7 @@ export default {
           ),
         });
         const cfi = this.resumeFromLocalStorage();
-        this.rendition.themes.fontSize(`${FONT_SIZES[this.fontSizeIndex]}px`);
+        this.rendition.themes.fontSize(`${this.fontSize}px`);
         this.rendition.display(cfi);
         this.rendition.on('rendered', (_, view) => {
           const path = this.rendition.currentLocation().start?.href;
@@ -383,8 +389,6 @@ export default {
         0,
         Math.min(FONT_SIZES.length - 1, this.fontSizeIndex + indexDiff)
       );
-      const fontSize = FONT_SIZES[this.fontSizeIndex];
-      this.rendition.themes.fontSize(`${fontSize}px`);
     },
     increaseFontSize() {
       this.adjustFontSize(+1);
