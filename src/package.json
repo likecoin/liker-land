@@ -52,6 +52,7 @@
     "cookie-parser": "^1.4.4",
     "cosmjs-types": "^0.8.0",
     "create-hash": "^1.2.0",
+    "crisp-api": "^9.0.0",
     "cross-env": "^5.2.0",
     "csv-parser": "^3.0.0",
     "date-fns": "^1.30.1",
