@@ -333,6 +333,7 @@ export default {
           gadSource: this.gadSource,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
+          coupon: this.$route.query.coupon,
           giftInfo,
         });
         if (url) {
