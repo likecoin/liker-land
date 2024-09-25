@@ -839,7 +839,6 @@ export default {
         this.fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
-          coupon: this.$route.query.coupon,
         })
       );
     },
@@ -848,7 +847,6 @@ export default {
         this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
           classId: this.classId,
           priceIndex: this.editionPriceIndex,
-          coupon: this.$route.query.coupon,
         })
       );
     },
@@ -861,7 +859,6 @@ export default {
             this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
               classId: this.classId,
               priceIndex: index,
-              coupon: this.$route.query.coupon,
             })
           );
         })

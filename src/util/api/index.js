@@ -416,11 +416,9 @@ export const getNFTBookPaymentPrice = ({
   classId,
   collectionId,
   priceIndex,
-  coupon,
 }) => {
   const qsPayload = {
     price_index: priceIndex,
-    coupon,
   };
   return collectionId
     ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/price?${querystring.stringify(
