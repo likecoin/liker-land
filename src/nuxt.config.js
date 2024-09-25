@@ -258,7 +258,13 @@ const nuxtConfig = {
           'www.google.com',
           'googleads.g.doubleclick.net',
           'www.googleadservices.com',
+
+          // stripe
           'https://js.stripe.com',
+          'https://checkout.stripe.com',
+          'https://*.js.stripe.com',
+          'https://maps.googleapis.com',
+
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           'https://substackapi.com',
           '*.crisp.chat',
@@ -269,7 +275,13 @@ const nuxtConfig = {
           'blob:',
           'www.google.com',
           'button.like.co',
+
+          // stripe
           'https://js.stripe.com',
+          'https://*.js.stripe.com',
+          'https://hooks.stripe.com',
+          'https://checkout.stripe.com',
+
           'bid.g.doubleclick.net',
           'td.doubleclick.net',
           'https://likecoin.github.io',
@@ -284,6 +296,12 @@ const nuxtConfig = {
           "'self'",
           'data:',
           '*',
+
+          // stripe
+          'https://checkout.stripe.com',
+          'https://api.stripe.com',
+          'https://maps.googleapis.com',
+
           'wss://client.relay.crisp.chat',
         ],
         'style-src': [
