@@ -74,27 +74,6 @@ export default {
     nftClassCollectionMixin,
     utmMixin,
   ],
-  head() {
-    // Only load stripe if a wallet is connected
-    if (!this.getAddress) return {};
-    return {
-      link: [
-        {
-          hid: 'stripe-js-link',
-          rel: 'preload',
-          href: 'https://js.stripe.com/v3',
-          as: 'script',
-        },
-      ],
-      script: [
-        {
-          hid: 'stripe-js-script',
-          src: 'https://js.stripe.com/v3',
-          defer: true,
-        },
-      ],
-    };
-  },
   data() {
     return {
       NFTHistory: [],

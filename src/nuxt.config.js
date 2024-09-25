@@ -88,6 +88,12 @@ const nuxtConfig = {
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
       { rel: 'preload', href: '/vendor/fbq.js', as: 'script' },
       {
+        hid: 'stripe-js-link',
+        rel: 'preload',
+        href: 'https://js.stripe.com/v3',
+        as: 'script',
+      },
+      {
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
@@ -128,7 +134,12 @@ const nuxtConfig = {
       })),
     ],
     script: [
-      { src: '/vendor/fbq.js', type: 'text/javascript', defer: true },
+      { src: '/vendor/fbq.js', type: 'text/javascript', async: true },
+      {
+        hid: 'stripe-js-script',
+        src: 'https://js.stripe.com/v3',
+        async: true,
+      },
       {
         hid: 'schema',
         innerHTML: JSON.stringify([
@@ -259,7 +270,6 @@ const nuxtConfig = {
           'www.google.com',
           'button.like.co',
           'https://js.stripe.com',
-          'https://hooks.stripe.com',
           'bid.g.doubleclick.net',
           'td.doubleclick.net',
           'https://likecoin.github.io',
