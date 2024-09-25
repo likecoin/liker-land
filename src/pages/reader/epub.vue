@@ -261,7 +261,7 @@ import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
 
-const FONT_SIZES = [6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 50, 60];
+const FONT_SIZES = [26, 28, 32, 36, 40, 44, 48, 56, 60];
 
 function flattenTOC(toc, level = 0) {
   const result = [];
@@ -296,7 +296,7 @@ export default {
       searchResults: [], // Store CFI string of search results
       selectedSearchResultIndex: 0,
 
-      fontSizeIndex: 9,
+      fontSizeIndex: 0,
     };
   },
   computed: {
