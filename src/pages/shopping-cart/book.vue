@@ -84,12 +84,23 @@
       </footer>
 
       <div class="flex justify-end mt-[2em]">
-        <div>
+        <div class="flex gap-[1em]">
+          <ButtonV2
+            v-if="giftInfo"
+            class="min-w-[120px]"
+            preset="outline"
+            :text="$t('nft_edition_select_confirm_button_text_gift')"
+            @click="handleClickGiftButton"
+          >
+            <template #prepend>
+              <IconGift class="w-[16px]" />
+            </template>
+          </ButtonV2>
           <EventModalCollectMethodButton
             :title="$t('shopping_cart_checkout_button_by_card')"
             type="stripe"
             :price="formattedFiatPrice"
-            @click="handleClickCheckoutByFiatButton"
+            @click="_ => handleClickCheckoutByFiatButton()"
           />
         </div>
       </div>
@@ -115,6 +126,12 @@
         @click="handleClickEmptyNoticeButton"
       />
     </CardV2>
+    <NFTBookGiftDialog
+      :open="isGiftDialogOpen"
+      :prefill-gift-info="giftInfo"
+      @submit="handleGiftSubmit"
+      @close="handleGiftClose"
+    />
   </Page>
 </template>
 
@@ -134,6 +151,12 @@ export default {
     formatNumberWithUSD,
   },
   mixins: [nftMixin, alertMixin],
+  data() {
+    return {
+      isGiftDialogOpen: false,
+      giftInfo: null,
+    };
+  },
   computed: {
     ...mapGetters([
       'getNFTClassMetadataById',
@@ -184,12 +207,8 @@ export default {
     },
   },
   mounted() {
-    const { checkout } = this.$route.query;
-    this.parseCartItemFromQueryString();
     logPurchaseFlowEvent(this, 'view_cart', this.purchaseEventParams);
-    if (checkout === '1') {
-      this.handleClickCheckoutByFiatButton();
-    }
+    this.parseCartItemFromQueryString();
   },
   methods: {
     ...mapActions([
@@ -206,8 +225,26 @@ export default {
         class_id: classId,
         price_index: priceIndex,
         collection_id: collectionId,
+        gift_to_email: giftToEmail,
         from,
+        checkout,
       } = query;
+      let {
+        gift_to_name: giftToName,
+        gift_message: giftMessage,
+        gift_from_name: giftFromName,
+      } = query;
+      if (giftToEmail) {
+        if (!giftToName) [giftToName] = giftToEmail.split('@');
+        if (!giftMessage) giftMessage = 'Enjoy your book!';
+        if (!giftFromName) giftFromName = 'Liker Land Bookstore';
+        this.giftInfo = {
+          toEmail: giftToEmail,
+          toName: giftToName,
+          message: giftMessage,
+          fromName: giftFromName,
+        };
+      }
       if (!classId && !collectionId) {
         return;
       }
@@ -243,6 +280,9 @@ export default {
           from,
         });
       });
+      if (checkout === '1') {
+        this.handleClickCheckoutByFiatButton();
+      }
     },
     handleClickRemoveButton(item) {
       const { productId } = item;
@@ -255,7 +295,21 @@ export default {
       logTrackerEvent(this, 'BookCart', 'BookCartRemoveItem', productId, 1);
       this.removeBookProductFromShoppingCart({ productId });
     },
-    async handleClickCheckoutByFiatButton() {
+    async handleGiftSubmit({ giftInfo }) {
+      logTrackerEvent(this, 'BookCart', 'BookCartGiftSubmit', '', 1);
+      this.giftInfo = giftInfo;
+      await this.handleClickCheckoutByFiatButton();
+      this.isGiftDialogOpen = false;
+    },
+    handleGiftClose() {
+      this.isGiftDialogOpen = false;
+      logTrackerEvent(this, 'BookCart', 'BookCartGiftClose', '', 1);
+    },
+    handleClickGiftButton() {
+      this.isGiftDialogOpen = true;
+      logTrackerEvent(this, 'BookCart', 'BookCartGiftClick', '', 1);
+    },
+    async handleClickCheckoutByFiatButton(giftInfo = this.giftInfo) {
       try {
         logTrackerEvent(
           this,
@@ -280,6 +334,7 @@ export default {
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
           coupon: this.$route.query.coupon,
+          giftInfo,
         });
         if (url) {
           window.location.href = url;

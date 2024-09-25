@@ -102,14 +102,34 @@ export default {
       type: Boolean,
       default: false,
     },
+    prefillGiftInfo: {
+      type: Object,
+      default: () => ({
+        fromName: '',
+        toName: '',
+        toEmail: '',
+        message: '',
+      }),
+    },
   },
   data() {
     return {
-      fromName: '',
-      toName: '',
-      toEmail: '',
-      message: '',
+      fromName: this.prefillGiftInfo?.fromName,
+      toName: this.prefillGiftInfo?.toName,
+      toEmail: this.prefillGiftInfo?.toEmail,
+      message: this.prefillGiftInfo?.message,
     };
+  },
+  watch: {
+    prefillGiftInfo: {
+      handler(newVal) {
+        this.fromName = newVal.fromName;
+        this.toName = newVal.toName;
+        this.toEmail = newVal.toEmail;
+        this.message = newVal.message;
+      },
+      deep: true,
+    },
   },
   methods: {
     submitGiftInfo() {

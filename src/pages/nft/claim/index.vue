@@ -811,6 +811,7 @@ export default {
         classIds = [],
         collectionIds = [],
         status,
+        giftInfo,
       } = data;
       this.cartItems = classIdsWithPrice.concat(collectionIdsWithPrice);
       if (classIds.length) {
@@ -819,6 +820,7 @@ export default {
         [this.collectionId] = collectionIds;
       }
       this.status = status;
+      this.giftInfo = giftInfo;
       if (query.type === 'nft_book') this.clearBookProductShoppingCart();
     } else if (this.paymentId) {
       try {

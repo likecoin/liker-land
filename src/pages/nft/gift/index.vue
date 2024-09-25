@@ -6,10 +6,10 @@
       <NFTWidgetBaseCard class="w-full max-w-[426px]">
         <NuxtLink :to="viewInfoLocation" target="_blank">
           <div class="flex flex-col gap-[16px] mb-[24px]">
-            <NFTBookCoverWithFrame :src="NFTImageUrl" />
-            <Label class="text-[28px] font-600" :text="NFTName" />
+            <NFTBookCoverWithFrame :src="productImageUrl" />
+            <Label class="text-[28px] font-600" :text="productTitle" />
             <div class="grid grid-cols-2">
-              <div class="flex flex-col">
+              <div v-if="iscnWorkAuthor" class="flex flex-col">
                 <Label
                   preset="h6"
                   :text="$t('nft_claim_NFT_author')"
@@ -20,13 +20,13 @@
               <div class="flex flex-col">
                 <Label
                   preset="h6"
-                  :text="$t('nft_claim_NFT_author')"
+                  :text="$t('identity_type_publisher')"
                   class=" text-medium-gray"
                 />
                 <Label preset="h5" :text="creatorDisplayName" />
               </div>
             </div>
-            <p class="w-full line-clamp-3">{{ NFTDescription }}</p>
+            <p class="w-full line-clamp-3">{{ productDescription }}</p>
           </div>
         </NuxtLink>
       </NFTWidgetBaseCard>
@@ -41,7 +41,7 @@
           <Label
             class="text-like-green"
             preset="h5"
-            :text="$t('nft_claim_NFT_name', { name: NFTName })"
+            :text="$t('nft_claim_NFT_name', { name: productTitle })"
           />
         </template>
         <template #footer>
@@ -58,62 +58,88 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import {
   logTrackerEvent,
   logPurchaseFlowEvent,
   logPurchaseNFTBookEvent,
 } from '~/util/EventLogger';
 import { getNFTClassCollectionType, nftClassCollectionType } from '~/util/nft';
-import { getNFTBookPaymentStatusEndpoint } from '~/util/api';
+import {
+  getNFTBookPaymentStatusEndpoint,
+  getNFTBookCartStatusEndpoint,
+} from '~/util/api';
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
 
 export default {
   name: 'NFTGiftSuccessPage',
   mixins: [nftOrCollectionMixin],
-  async asyncData({ query, store, error, i18n }) {
-    const { class_id: classId, collection_id: collectionId } = query;
-    if (!classId && !collectionId) {
-      error({ statusCode: 400, message: i18n.t('nft_gift_missing_qs') });
-      return;
-    }
-    try {
-      if (collectionId) {
-        await store.dispatch('lazyFetchNFTCollectionInfoByCollectionId', {
-          collectionId,
-        });
-      } else if (classId) {
-        await store.dispatch('lazyGetNFTClassMetadata', classId);
-        const classCollectionType = getNFTClassCollectionType(
-          store.getters.getNFTClassMetadataById(classId)
-        );
-        if (classCollectionType === nftClassCollectionType.NFTBook) {
-          await store.dispatch('lazyFetchNFTBookInfoByClassId', classId);
-        }
-      }
-    } catch (err) {
-      error({ statusCode: 404, message: i18n.t('nft_gift_class_not_found') });
-    }
-  },
   data() {
     return {
+      classId: this.$route.query.class_id,
+      collectionId: this.$route.query.collection_id,
+      cartItems: [],
       priceIndex: this.$route.query.price_index,
     };
   },
   computed: {
-    classId() {
-      return this.$route.query.class_id;
-    },
-    collectionId() {
-      return this.$route.query.collection_id;
+    cartId() {
+      return this.$route.query.cart_id;
     },
     paymentId() {
       return this.$route.query.payment_id;
     },
+    token() {
+      return this.$route.query.claiming_token;
+    },
+    productTitle() {
+      let title = this.productName;
+      if (this.cartItemsCount && this.cartItemsCount > 1) {
+        title = this.$tc('nft_claim_title', this.cartItemsCount - 1, {
+          name: this.productName,
+          count: this.cartItemsCount - 1,
+        });
+      }
+      return title;
+    },
+    cartItemsCount() {
+      return this.cartItems.length || 1;
+    },
   },
   async mounted() {
     const { redirect, from, ...query } = this.$route.query;
+    if (!this.classId && !this.collectionId && !this.cartId) {
+      this.$nuxt.error({
+        statusCode: 400,
+        message: this.t('nft_gift_missing_qs'),
+      });
+      return;
+    }
     let price;
-    try {
+
+    if (this.cartId) {
+      const { data } = await this.$api.get(
+        getNFTBookCartStatusEndpoint({
+          cartId: this.cartId,
+          token: this.token,
+        })
+      );
+      ({ price } = data);
+      const {
+        classIdsWithPrice = [],
+        collectionIdsWithPrice = [],
+        classIds = [],
+        collectionIds = [],
+      } = data;
+      this.cartItems = classIdsWithPrice.concat(collectionIdsWithPrice);
+      if (classIds.length) {
+        [this.classId] = classIds;
+      } else if (collectionIds.length) {
+        [this.collectionId] = collectionIds;
+      }
+      if (query.type === 'nft_book') this.clearBookProductShoppingCart();
+    } else {
       const { data } = await this.$api.get(
         getNFTBookPaymentStatusEndpoint({
           classId: this.classId,
@@ -122,31 +148,91 @@ export default {
         })
       );
       ({ price } = data);
+    }
+    try {
+      if (this.cartItems.length) {
+        await Promise.all(
+          this.cartItems.map(async item => {
+            if (item.classId) {
+              await this.lazyGetNFTClassMetadata(item.classId);
+              const classCollectionType = getNFTClassCollectionType(
+                this.getNFTClassMetadataById(item.classId)
+              );
+              if (classCollectionType === nftClassCollectionType.NFTBook) {
+                await this.lazyFetchNFTBookInfoByClassId(item.classId);
+              }
+            } else if (item.collectionId) {
+              await this.lazyFetchNFTCollectionInfoByCollectionId({
+                collectionId: item.collectionId,
+              });
+            }
+          })
+        );
+      } else if (this.collectionId) {
+        await this.lazyFetchNFTCollectionInfoByCollectionId({
+          collectionId: this.collectionId,
+        });
+      } else if (this.classId) {
+        await this.lazyGetNFTClassMetadata(this.classId);
+        const classCollectionType = getNFTClassCollectionType(
+          this.getNFTClassMetadataById(this.classId)
+        );
+        if (classCollectionType === nftClassCollectionType.NFTBook) {
+          await this.lazyFetchNFTBookInfoByClassId(this.classId);
+        }
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
+      this.$nuxt.error({
+        statusCode: 404,
+        message: this.$t('nft_gift_class_not_found'),
+      });
+      return;
     }
     if (redirect && query.type === 'nft_book') {
+      const items = this.cartItems.length
+        ? this.cartItems.map(item => {
+            const { classId, collectionId, price, quantity = 1 } = item;
+            const name = classId
+              ? this.getNFTClassMetadataById(classId)?.name
+              : this.getNFTCollectionInfoByCollectionId(collectionId)?.name[
+                  this.collectionLocale
+                ];
+            return {
+              name,
+              classId,
+              collectionId,
+              price,
+              quantity,
+            };
+          })
+        : [
+            {
+              name: this.productName,
+              classId: this.classId,
+              collectionId: this.collectionId,
+              price,
+              quantity: this.quantity,
+            },
+          ];
+
       logPurchaseFlowEvent(this, 'purchase', {
-        items: [
-          {
-            name: this.productName,
-            classId: this.classId,
-            collectionId: this.collectionId,
-            price,
-          },
-        ],
+        items,
         price,
         currency: 'USD',
         isNFTBook: true,
         paymentId: this.paymentId,
       });
-      logPurchaseNFTBookEvent(this, {
-        name: this.productName,
-        currency: 'USD',
-        classId: this.classId,
-        collectionId: this.collectionId,
-        price,
+      items.forEach(item => {
+        logPurchaseNFTBookEvent(this, {
+          name: item.name,
+          currency: 'USD',
+          collectionId: item.collectionId,
+          classId: item.classId,
+          price: item.price,
+          quantity: item.quantity || 1,
+        });
       });
       logTrackerEvent(
         this,
@@ -162,6 +248,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['clearBookProductShoppingCart']),
     handleClickViewDetails() {
       logTrackerEvent(
         this,
