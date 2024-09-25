@@ -84,15 +84,9 @@ export default {
   methods: {
     async lazyFetchProductInfo() {
       if (this.isCollection) {
-        await Promise.all([
-          this.lazyFetchNFTCollectionInfo(),
-          this.lazyFetchNFTCollectionPaymentPriceInfo(),
-        ]);
+        await this.lazyFetchNFTCollectionInfo();
       } else {
-        Promise.all([
-          this.lazyFetchNFTClassAggregatedData(),
-          this.lazyFetchNFTBookPaymentPriceInfoForAllEditions(),
-        ]);
+        await this.lazyFetchNFTClassAggregatedData();
       }
     },
   },

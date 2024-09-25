@@ -160,8 +160,9 @@ export default {
   computed: {
     ...mapGetters([
       'getNFTClassMetadataById',
-      'getNFTClassPaymentPriceById',
       'getNFTCollectionInfoByCollectionId',
+      'getNFTCollectionPriceByCollectionId',
+      'getNFTBookStorePriceByClassIdAndIndex',
       'shoppingCartBookProductList',
       'shoppingCartBookItems',
     ]),
@@ -193,12 +194,19 @@ export default {
     },
     totalNFTPriceInUSD() {
       return this.shoppingCartBookItems.reduce((totalPrice, item) => {
-        const priceInfo = this.getNFTClassPaymentPriceById(
-          item.productId,
-          item.classId ? item.priceIndex : undefined
-        );
-        const unitPrice =
-          item.customPriceInDecimal / 100 || priceInfo?.fiatPrice;
+        let itemPrice = 0;
+        if (item.collectionId) {
+          itemPrice = this.getNFTCollectionPriceByCollectionId(
+            item.collectionId
+          );
+        } else {
+          const edition = this.getNFTBookStorePriceByClassIdAndIndex(
+            item.productId,
+            item.classId ? item.priceIndex : undefined
+          );
+          itemPrice = edition?.price;
+        }
+        const unitPrice = item.customPriceInDecimal / 100 || itemPrice || 0;
         return totalPrice + (unitPrice * item.quantity || 0);
       }, 0);
     },

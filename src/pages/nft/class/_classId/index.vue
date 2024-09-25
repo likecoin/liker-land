@@ -1202,18 +1202,6 @@ export default {
                 },
               })
             );
-            // gift does not support LIKE payment for now
-          } else if (
-            !giftInfo &&
-            edition.price > 0 &&
-            this.nftPriceInLIKE > 0
-          ) {
-            await this.initIfNecessary();
-            if (this.hasConnectedWallet) {
-              this.fetchUserCollectedCount();
-              this.walletFetchLIKEBalance();
-            }
-            this.uiToggleCollectModal({ classId: this.classId });
           } else {
             const customPriceInDecimal = this.customPrice
               ? this.formatCustomPrice(this.customPrice, edition.price)

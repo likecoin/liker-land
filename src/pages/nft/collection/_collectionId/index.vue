@@ -218,7 +218,6 @@ export default {
     } finally {
       this.isLoading = false;
     }
-    this.lazyFetchNFTCollectionPaymentPriceInfo();
     const { hash } = this.$route;
     if (hash) {
       this.$nextTick(() => {
