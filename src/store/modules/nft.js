@@ -825,12 +825,12 @@ const actions = {
   },
   async fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
     { commit },
-    { classId, priceIndex, coupon }
+    { classId, priceIndex }
   ) {
     const {
       data: { fiatPrice, LIKEPrice },
     } = await this.$api.get(
-      api.getNFTBookPaymentPrice({ classId, priceIndex, coupon })
+      api.getNFTBookPaymentPrice({ classId, priceIndex })
     );
     const info = { fiatPrice, LIKEPrice };
     commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
@@ -842,7 +842,7 @@ const actions = {
   },
   async lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
     { getters, dispatch },
-    { classId, priceIndex, coupon }
+    { classId, priceIndex }
   ) {
     let info = getters.getNFTClassPaymentPriceById(classId, priceIndex);
     if (!info) {
@@ -851,7 +851,6 @@ const actions = {
         {
           classId,
           priceIndex,
-          coupon,
         }
       );
     }
@@ -916,14 +915,12 @@ const actions = {
   },
   async fetchNFTCollectionPaymentPriceInfoByCollectionId(
     { commit },
-    { collectionId, coupon }
+    { collectionId }
   ) {
     try {
       const {
         data: { fiatPricePrediscount, fiatPrice, LIKEPrice },
-      } = await this.$api.get(
-        api.getNFTBookPaymentPrice({ collectionId, coupon })
-      );
+      } = await this.$api.get(api.getNFTBookPaymentPrice({ collectionId }));
       const info = { fiatPricePrediscount, fiatPrice, LIKEPrice };
       commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
         collectionId,
@@ -939,13 +936,13 @@ const actions = {
   },
   async lazyFetchNFTCollectionPaymentPriceInfoByCollectionId(
     { getters, dispatch },
-    { collectionId, coupon }
+    { collectionId }
   ) {
     let info = getters.getNFTClassPaymentPriceById(collectionId);
     if (!info) {
       info = await dispatch(
         'fetchNFTCollectionPaymentPriceInfoByCollectionId',
-        { collectionId, coupon }
+        { collectionId }
       );
     }
     return info;

@@ -140,7 +140,6 @@ export default {
       await catchAxiosError(
         this.lazyFetchNFTCollectionPaymentPriceInfoByCollectionId({
           collectionId: this.collectionId,
-          coupon: this.$route.query.coupon,
         })
       );
     },
