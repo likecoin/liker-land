@@ -78,6 +78,9 @@ export function updateLoggerUserInfo(
     };
     vue.$sentry.setUser(opt);
   }
+  if (vue.$gtag) {
+    if (email) vue.$gtag.set('user_data', { email });
+  }
   if (vue.$crisp) {
     if (email) {
       vue.$crisp.push(['set', 'user:email', [email, crispToken]]);

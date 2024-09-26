@@ -12,8 +12,12 @@ export default (ctx, inject) => {
     Vue.use(
       VueGtag,
       {
-        config: { id: process.env.GA_TRACKING_ID },
-        bootstrap: !(window.doNotTrack || navigator.doNotTrack),
+        config: {
+          id: process.env.GA_TRACKING_ID,
+          allow_enhanced_conversions: !(
+            window.doNotTrack || navigator.doNotTrack
+          ),
+        },
         includes,
       },
       router
