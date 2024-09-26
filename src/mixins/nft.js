@@ -202,7 +202,7 @@ export default {
       if (this.nftIsNFTBook) {
         return this.iscnDescription || this.NFTClassMetadata.description || '';
       }
-      return this.NFTClassMetadata.description;
+      return this.NFTClassMetadata.description || '';
     },
     nftDescription() {
       const overrideKey = `nft_override_${this.classId}_description`;
