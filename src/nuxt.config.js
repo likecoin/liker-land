@@ -88,6 +88,12 @@ const nuxtConfig = {
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
       { rel: 'preload', href: '/vendor/fbq.js', as: 'script' },
       {
+        hid: 'stripe-js-link',
+        rel: 'preload',
+        href: 'https://js.stripe.com/v3',
+        as: 'script',
+      },
+      {
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
@@ -128,7 +134,12 @@ const nuxtConfig = {
       })),
     ],
     script: [
-      { src: '/vendor/fbq.js', type: 'text/javascript', defer: true },
+      { src: '/vendor/fbq.js', type: 'text/javascript', async: true },
+      {
+        hid: 'stripe-js-script',
+        src: 'https://js.stripe.com/v3',
+        async: true,
+      },
       {
         hid: 'schema',
         innerHTML: JSON.stringify([
@@ -247,7 +258,13 @@ const nuxtConfig = {
           'www.google.com',
           'googleads.g.doubleclick.net',
           'www.googleadservices.com',
+
+          // stripe
           'https://js.stripe.com',
+          'https://checkout.stripe.com',
+          'https://*.js.stripe.com',
+          'https://maps.googleapis.com',
+
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           'https://substackapi.com',
           '*.crisp.chat',
@@ -258,8 +275,13 @@ const nuxtConfig = {
           'blob:',
           'www.google.com',
           'button.like.co',
+
+          // stripe
           'https://js.stripe.com',
+          'https://*.js.stripe.com',
           'https://hooks.stripe.com',
+          'https://checkout.stripe.com',
+
           'bid.g.doubleclick.net',
           'td.doubleclick.net',
           'https://likecoin.github.io',
@@ -274,6 +296,12 @@ const nuxtConfig = {
           "'self'",
           'data:',
           '*',
+
+          // stripe
+          'https://checkout.stripe.com',
+          'https://api.stripe.com',
+          'https://maps.googleapis.com',
+
           'wss://client.relay.crisp.chat',
         ],
         'style-src': [
