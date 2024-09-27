@@ -45,7 +45,7 @@ async function upsertCrispProfile(email, { displayName, wallet, loginMethod }) {
       person: {
         nickname: displayName || wallet,
       },
-      active: Math.floor(Date.now() / 1000),
+      active: Date.now(),
     });
   } else {
     await CrispClient.website.addNewPeopleProfile(CRISP_WEBSITE_ID, {
@@ -53,7 +53,7 @@ async function upsertCrispProfile(email, { displayName, wallet, loginMethod }) {
       person: {
         nickname: displayName || wallet || email.split('@')[0],
       },
-      active: Math.floor(Date.now() / 1000),
+      active: Date.now(),
     });
   }
   await CrispClient.website.updatePeopleData(CRISP_WEBSITE_ID, email, {
