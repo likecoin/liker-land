@@ -171,7 +171,7 @@ export default {
       }
       // stripe only support one coupon
       const firstCoupon = this.shoppingCartBookItems.find(item => item.coupon)
-        .coupon;
+        ?.coupon;
       return firstCoupon || '';
     },
     purchaseEventParams() {
