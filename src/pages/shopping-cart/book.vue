@@ -165,6 +165,15 @@ export default {
       'shoppingCartBookProductList',
       'shoppingCartBookItems',
     ]),
+    coupon() {
+      if (this.$route.query.coupon) {
+        return this.$route.query.coupon;
+      }
+      // stripe only support one coupon
+      const firstCoupon = this.shoppingCartBookItems.find(item => item.coupon)
+        .coupon;
+      return firstCoupon || '';
+    },
     purchaseEventParams() {
       let { locale } = this.$i18n;
       if (locale === 'zh-Hant') {
@@ -333,7 +342,7 @@ export default {
           gadSource: this.gadSource,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
-          coupon: this.$route.query.coupon,
+          coupon: this.coupon,
           giftInfo,
         });
         if (url) {
