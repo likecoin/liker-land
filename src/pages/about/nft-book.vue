@@ -1676,10 +1676,6 @@ export default {
       return this.nftClassIdListInTrending.slice(0, 5);
     },
     publishStoryURL() {
-      const isMobile = checkIsMobileClient();
-      if (this.$i18n.locale === 'zh-Hant' && !isMobile) {
-        return 'https://32k2x0rfurx.typeform.com/to/FtZZcOEm';
-      }
       if (this.crispWebsiteId) {
         return `https://go.crisp.chat/chat/embed/?website_id=${
           this.crispWebsiteId
@@ -2608,10 +2604,10 @@ export default {
       );
     },
     handlePublishStoryButtonClick(e) {
-      const res = this.openCrisp(
-        'Hi I would like to start publishing books on LikerLand'
-      );
-      if (res) e.preventDefault();
+      if (this.$crisp) {
+        const res = this.openCrisp(this.$t('inquiry_form_prefilled_message'));
+        if (res) e.preventDefault();
+      }
     },
     handlePublishStoryButtonClickInHeroSection(e) {
       logTrackerEvent(
