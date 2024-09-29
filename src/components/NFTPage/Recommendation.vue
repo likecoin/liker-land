@@ -168,7 +168,8 @@ export default {
           : this.nftFeaturedWNFT;
         // TODO: remove filter after recommendation support collection
         sourceData = sourceData.filter(nft =>
-          nft.classId.startsWith('likenft1')
+          // TODO: find out and fix classId undefined reason
+          nft.classId?.startsWith('likenft1')
         );
         while (
           normalizedRecommendedList.length < displayItemCount &&
