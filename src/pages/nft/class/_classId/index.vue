@@ -271,7 +271,7 @@
               :is-collectable="nftIsCollectable"
               :collected-count="collectedCount"
               :collector-count="ownerCount"
-              :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+              :is-content-viewable="!(nftIsNFTBook && !isOwningNFT)"
               :is-loading="uiIsOpenCollectModal && isCollecting"
               :url="externalUrl"
               @collect="handleCollectFromPriceSection"

@@ -570,6 +570,7 @@ export default {
           id,
           displayName: owner?.displayName || id,
           collectedCount: this.collectorMap[id].length,
+          collectedNftIds: this.collectorMap[id],
           collectedFirstNFTId: this.collectorMap[id][0],
           avatar: owner?.avatar || getIdenticonAvatar(id),
           isCivicLiker:
@@ -582,6 +583,13 @@ export default {
         ({ id }) => id === this.getAddress
       );
       return collector?.collectedCount || 0;
+    },
+    isOwningNFT() {
+      if (!this.nftId) return this.ownCount > 0;
+      const collector = this.populatedCollectors.find(
+        ({ id }) => id === this.getAddress
+      );
+      return (collector?.collectedNftIds || []).includes(this.nftId);
     },
     nftClassDetailsPageURL() {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
