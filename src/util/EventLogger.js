@@ -24,6 +24,9 @@ export function resetLoggerUser(vue) {
     vue.$gtag.set({ userId: null });
     vue.$gtag.set({ user_id: null });
   }
+  if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
+    window.fbq('init', window.PIXEL_ID);
+  }
   if (vue.$crisp) {
     vue.$crisp.push(['do', 'session:reset']);
   }
@@ -57,6 +60,13 @@ export async function setLoggerUser(
         vue.$gtag.event('login', { method });
       }
     }
+    if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
+      if (!window.doNotTrack && !navigator.doNotTrack) {
+        window.fbq('init', window.PIXEL_ID, {
+          external_id: wallet,
+        });
+      }
+    }
     if (vue.$crisp) {
       vue.$crisp.push(['set', 'session:data', [[['like_wallet', wallet]]]]);
       vue.$crisp.push(['set', 'session:data', [[['login_method', method]]]]);
@@ -79,7 +89,17 @@ export function updateLoggerUserInfo(
     vue.$sentry.setUser(opt);
   }
   if (vue.$gtag) {
-    if (email) vue.$gtag.set('user_data', { email });
+    if (!window.doNotTrack && !navigator.doNotTrack) {
+      if (email) vue.$gtag.set('user_data', { email });
+    }
+  }
+  if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
+    if (!window.doNotTrack && !navigator.doNotTrack) {
+      window.fbq('init', window.PIXEL_ID, {
+        em: email,
+        external_id: wallet,
+      });
+    }
   }
   if (vue.$crisp) {
     if (email) {
@@ -185,6 +205,7 @@ export function logPurchaseFlowEvent(
         window.fbq('track', eventNameMapping[event], {
           currency,
           value: price,
+          order_id: paymentId || txHash,
           content_type: 'product',
           contents: items.map(i => ({
             id: i.productId || i.collectionId || i.classId,
