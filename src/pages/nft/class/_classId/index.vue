@@ -99,64 +99,17 @@
               </div>
             </template>
           </NFTBookItemCard>
-          <div
-            v-if="
-              nftCollections?.length ||
-                (nftBookAvailablePriceLabel &&
-                  (nftEditions.length > 1 ||
-                    (nftEditions.length === 1 && nftEditions[0].description)))
-            "
-            ref="compareSection"
-            class="max-w-[962px] mx-auto flex flex-col gap-[48px] justify-center flex-wrap"
+
+          <section
+            v-if="nftCollections?.length"
+            ref="collectionSection"
+            class="max-w-[962px] mx-auto flex flex-col gap-[24px] justify-center flex-wrap py-[24px]"
           >
-            <div class="flex justify-center items-center gap-[40px]">
-              <ButtonV2
-                :content-class="[
-                  'text-[28px]',
-                  'font-600',
-                  'text-like-green',
-                  { '!text-medium-gray': shouldShowCollectionItem },
-                ]"
-                preset="plain"
-                :text="$t('nft_edition_label')"
-                @click="() => handleSwitchToCollection(false)"
-              />
-              <div
-                v-if="nftCollections?.length"
-                class="w-[1px] bg-medium-gray h-[24px]"
-              />
-              <ButtonV2
-                v-if="nftCollections?.length"
-                :content-class="[
-                  'text-[28px]',
-                  'font-600',
-                  'text-medium-gray',
-                  { 'text-like-collection': shouldShowCollectionItem },
-                ]"
-                preset="plain"
-                :text="$t('nft_collection_label')"
-                @click="() => handleSwitchToCollection(true)"
-              />
-            </div>
+            <h3
+              class="text-[28px] font-600 text-center text-like-collection"
+              v-text="$t('nft_collection_label')"
+            />
             <ul
-              v-if="!shouldShowCollectionItem"
-              class="flex flex-wrap items-start justify-center gap-[16px] w-full"
-            >
-              <li
-                v-for="(editionConfig, i) in nftEditions"
-                :key="`${editionConfig.name}-${i}`"
-              >
-                <NFTBookEditionCompareTableColumn
-                  class="w-[280px]"
-                  :src="NFTImageUrl"
-                  :edition-config="editionConfig"
-                  :class-id="classId"
-                  @click-collect="handleCollectFromEditionCompareTable"
-                />
-              </li>
-            </ul>
-            <ul
-              v-else
               class="flex flex-wrap items-start justify-center gap-[24px] w-full"
             >
               <li v-for="collection in nftCollections" :key="collection.id">
@@ -169,10 +122,10 @@
                   "
                 >
                   <NFTBookEditionCompareTableColumn
+                    class="max-w-[280px] w-full"
+                    :collection-id="collection.id"
                     :src="parseNFTMetadataURL(collection.image)"
                     :edition-config="collection"
-                    :class-id="''"
-                    :collection-id="collection.id"
                     @click-collect="
                       handleClickCollectionFromEditionCompareTable({
                         collectionId: collection.id,
@@ -182,47 +135,84 @@
                 </NuxtLink>
               </li>
             </ul>
-          </div>
+          </section>
 
           <!-- recommend -->
-          <client-only>
-            <lazy-component
-              class="pointer-events-none"
-              @show.once="handleFetchRecommendInfo"
+          <section>
+            <client-only>
+              <lazy-component
+                class="pointer-events-none"
+                @show.once="handleFetchRecommendInfo"
+              />
+            </client-only>
+            <NFTPageRecommendation
+              :iscn-owner="iscnOwner"
+              :iscn-work-author="iscnWorkAuthor"
+              :should-show-follow-button="shouldShowFollowButton"
+              :is-followed="isFollowed"
+              :recommended-list="recommendedList"
+              :is-book-nft="nftIsNFTBook"
+              :is-loading="isRecommendationLoading"
+              @header-avatar-click="handleRecommendationHeaderAvatarClick"
+              @follow-button-click="handleFollowButtonClick"
+              @item-click="handleRecommendedItemClick"
+              @item-collect="handleRecommendedItemCollect"
+              @slide-next.once="handleRecommendationSlideNext"
+              @slide-prev.once="handleRecommendationSlidePrev"
+              @slider-move.once="handleRecommendationSliderMove"
             />
-          </client-only>
-          <NFTPageRecommendation
-            :iscn-owner="iscnOwner"
-            :iscn-work-author="iscnWorkAuthor"
-            :should-show-follow-button="shouldShowFollowButton"
-            :is-followed="isFollowed"
-            :recommended-list="recommendedList"
-            :is-book-nft="nftIsNFTBook"
-            :is-loading="isRecommendationLoading"
-            @header-avatar-click="handleRecommendationHeaderAvatarClick"
-            @follow-button-click="handleFollowButtonClick"
-            @item-click="handleRecommendedItemClick"
-            @item-collect="handleRecommendedItemCollect"
-            @slide-next.once="handleRecommendationSlideNext"
-            @slide-prev.once="handleRecommendationSlidePrev"
-            @slider-move.once="handleRecommendationSliderMove"
-          />
+          </section>
+
+          <section
+            v-if="
+              nftBookAvailablePriceLabel &&
+                (nftEditions.length > 1 ||
+                  (nftEditions.length === 1 && nftEditions[0].description))
+            "
+            ref="compareSection"
+            class="max-w-[962px] mx-auto flex flex-col gap-[24px] justify-center flex-wrap py-[24px]"
+          >
+            <h3
+              class="text-[28px] font-600 text-center text-like-green"
+              v-text="$t('nft_edition_label')"
+            />
+            <ul
+              class="flex flex-wrap items-start justify-center gap-[16px] w-full"
+            >
+              <li
+                v-for="(editionConfig, i) in nftEditions"
+                :key="`${editionConfig.name}-${i}`"
+              >
+                <NFTBookEditionCompareTableColumn
+                  class="max-w-[280px] w-full"
+                  :class-id="classId"
+                  :src="NFTImageUrl"
+                  :edition-config="editionConfig"
+                  @click-collect="handleCollectFromEditionCompareTable"
+                />
+              </li>
+            </ul>
+          </section>
 
           <Separator class="mx-auto" />
-          <client-only>
-            <lazy-component
-              class="pointer-events-none"
-              @show.once="fetchTrimmedCollectorsInfo"
+
+          <section>
+            <client-only>
+              <lazy-component
+                class="pointer-events-none"
+                @show.once="fetchTrimmedCollectorsInfo"
+              />
+            </client-only>
+            <NFTPageCollectorList
+              :class-id="classId"
+              :owner-count="ownerCount"
+              :items="populatedBuyerWithMessage"
+              :trimmed-count="trimmedCount"
+              @click-show-more-collector="handleClickMoreCollector"
             />
-          </client-only>
-          <NFTPageCollectorList
-            :class-id="classId"
-            :owner-count="ownerCount"
-            :items="populatedBuyerWithMessage"
-            :trimmed-count="trimmedCount"
-            @click-show-more-collector="handleClickMoreCollector"
-          />
+          </section>
         </template>
+
         <section
           v-else
           class="flex flex-col desktop:grid grid-cols-3 gap-[24px]"
@@ -318,6 +308,7 @@
         </section>
 
         <Separator class="mx-auto" />
+
         <section>
           <NFTPageChainDataSection
             id="chain-data"
@@ -335,6 +326,7 @@
             @click-show-more-history="handleClickMoreHistory"
           />
         </section>
+
         <!-- useful links -->
         <section>
           <ul
@@ -445,7 +437,6 @@ export default {
       isAddingToCart: false,
       isTriggerFromEditionSelector: false,
       giftSelectedValue: 0,
-      shouldShowCollectionItem: false,
 
       trimmedCount: 10,
 
@@ -1437,18 +1428,6 @@ export default {
         1
       );
     },
-    handleSwitchToCollection(shouldShowCollectionItem) {
-      logTrackerEvent(
-        this,
-        'NFT',
-        shouldShowCollectionItem
-          ? 'nft_class_details_switch_to_collection'
-          : 'nft_class_details_switch_to_edition',
-        this.classId,
-        1
-      );
-      this.shouldShowCollectionItem = shouldShowCollectionItem;
-    },
     handleClickCollectionHint() {
       logTrackerEvent(
         this,
@@ -1457,19 +1436,9 @@ export default {
         this.classId,
         1
       );
-      this.shouldShowCollectionItem = true;
-      this.scrollToCompareSection();
-    },
-    scrollToCompareSection() {
-      setTimeout(() => {
-        const currentRef = this.$refs.compareSection;
-        if (currentRef) {
-          currentRef.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }
-      }, 100);
+      this.$nextTick(() =>
+        this.$refs.collectionSection.scrollIntoView({ behavior: 'smooth' })
+      );
     },
     handleSubmitTipping(price) {
       this.customPrice = Number(price);
