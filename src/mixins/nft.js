@@ -6,12 +6,12 @@ import {
   LIKECOIN_BUTTON_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
-  LIKECOIN_NFT_CLASS_FREE_MINT,
   NFT_DISPLAY_STATE,
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
   USD_TO_HKD_RATIO,
+  NFT_BOOK_WITH_SIGN_IMAGE_SET,
 } from '~/constant';
 
 import {
@@ -716,6 +716,9 @@ export default {
     },
     nftTxErrorIsAlreadyCollected() {
       return this.uiTxErrorMessage === 'ALREADY_MINTED';
+    },
+    nftHasSignImage() {
+      return NFT_BOOK_WITH_SIGN_IMAGE_SET.has(this.classId);
     },
   },
   watch: {

@@ -140,6 +140,12 @@
             </ul>
           </section>
 
+          <NFTBookSignatureBanner
+            v-if="nftHasSignImage"
+            tag="section"
+            :name="iscnWorkAuthor"
+          />
+
           <!-- recommend -->
           <section>
             <client-only>
