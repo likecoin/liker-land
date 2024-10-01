@@ -178,7 +178,6 @@ module.exports = {
       serif: [
         'source-han-serif-tc',
         'source-han-serif-sc',
-        'STSong',
         'Microsoft YaHei',
         'serif',
       ],
