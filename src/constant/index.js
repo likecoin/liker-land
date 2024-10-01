@@ -340,6 +340,7 @@ export const NFT_BOOK_WITH_SIGN_IMAGE_SET = new Set(
         'likenft1atwyg8mznmaekeszfq0nryksh3qut4c3clhrq8ksje6p0l3wjlrstnkups',
         'likenft1gmm4c4rqf4x4svspx66j27wary9kxhk43n9kwcrpg6zraj7cdveqppvr4j',
         'likenft1kd8xglgepr2p8j8urewraa2ekvc7769unena0zjtc8psfzg23a7skwsnxz',
+        'likenft1nekez4y50uk0dmgxuxql7v2vnhy3wqa24ld46hk4frlwcvwpr88selunrr',
       ]
     : [
         'likenft138rp6lqc74clx4zz3l980lzjnusxwjpw2kwkln4t8kh08h2j6t5szwur6v',
