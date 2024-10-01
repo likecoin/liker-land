@@ -31,10 +31,16 @@
       ]"
     >
       <ButtonV2
-        v-if="!isSingleItem && !isAllSoldOut"
+        v-if="!isAllSoldOut"
         preset="plain"
         class="text-white underline max-638:order-1"
-        :text="$t('nft_edition_select_compare_button_text')"
+        :text="
+          $t(
+            isSingleItem
+              ? 'nft_edition_view_edition_button_text'
+              : 'nft_edition_select_compare_button_text'
+          )
+        "
         @click="handleClickCompareItemsButton"
       />
       <template v-if="isSingleItem || isAllSoldOut">

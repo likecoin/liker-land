@@ -222,24 +222,22 @@
 
     <!-- Footer -->
     <div
-      v-if="!isCompactPreset"
+      v-if="!isCompactPreset && !isDetailsPreset"
       class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]"
     >
-      <template v-if="!isDetailsPreset">
-        <div v-if="nftBookAvailablePriceLabel">
-          <Label
-            preset="p5"
-            class="text-like-green-dark"
-            :text="nftBookAvailablePriceLabel"
-          />
-        </div>
+      <div v-if="nftBookAvailablePriceLabel">
         <Label
-          v-else
           preset="p5"
-          class="text-medium-gray"
-          :text="$t('nft_details_page_label_sold_out')"
+          class="text-like-green-dark"
+          :text="nftBookAvailablePriceLabel"
         />
-      </template>
+      </div>
+      <Label
+        v-else
+        preset="p5"
+        class="text-medium-gray"
+        :text="$t('nft_details_page_label_sold_out')"
+      />
     </div>
   </div>
 </template>
