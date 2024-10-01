@@ -103,16 +103,20 @@
           <section
             v-if="nftCollections?.length"
             ref="collectionSection"
-            class="max-w-[962px] mx-auto flex flex-col gap-[24px] justify-center flex-wrap py-[24px]"
+            class="flex flex-col items-center gap-[24px] w-full py-[24px]"
           >
             <h3
               class="text-[28px] font-600 text-center text-like-collection"
               v-text="$t('nft_collection_label')"
             />
             <ul
-              class="flex flex-wrap items-start justify-center gap-[24px] w-full"
+              class="flex flex-wrap items-start justify-center gap-[16px] w-full"
             >
-              <li v-for="collection in nftCollections" :key="collection.id">
+              <li
+                v-for="collection in nftCollections"
+                :key="collection.id"
+                class="max-w-[280px] w-full"
+              >
                 <NuxtLink
                   :to="
                     localeLocation({
@@ -122,7 +126,6 @@
                   "
                 >
                   <NFTBookEditionCompareTableColumn
-                    class="max-w-[280px] w-full"
                     :collection-id="collection.id"
                     :src="parseNFTMetadataURL(collection.image)"
                     :edition-config="collection"
@@ -170,7 +173,7 @@
                   (nftEditions.length === 1 && nftEditions[0].description))
             "
             ref="compareSection"
-            class="max-w-[962px] mx-auto flex flex-col gap-[24px] justify-center flex-wrap py-[24px]"
+            class="flex flex-col items-center gap-[24px] w-full py-[24px]"
           >
             <h3
               class="text-[28px] font-600 text-center text-like-green"
@@ -182,9 +185,9 @@
               <li
                 v-for="(editionConfig, i) in nftEditions"
                 :key="`${editionConfig.name}-${i}`"
+                class="w-full max-w-[280px]"
               >
                 <NFTBookEditionCompareTableColumn
-                  class="max-w-[280px] w-full"
                   :class-id="classId"
                   :src="NFTImageUrl"
                   :edition-config="editionConfig"
