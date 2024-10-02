@@ -51,7 +51,6 @@ import {
   WALLET_SET_FOLLOWEES_FETCHING_STATE,
   WALLET_SET_FOLLOWEE_EVENTS,
   WALLET_SET_FOLLOWEE_EVENT_FETCHING,
-  WALLET_SET_FEED_EVENT_MEMO,
   WALLET_SET_FOLLOWERS,
   WALLET_SET_FOLLOWERS_FETCHING_STATE,
   WALLET_SET_USER_INFO,
@@ -220,9 +219,6 @@ const mutations = {
   [WALLET_SET_FOLLOWEE_EVENTS](state, { key, event }) {
     Vue.set(state.followeeEventsMap, key, event);
   },
-  [WALLET_SET_FEED_EVENT_MEMO](state, { key, event }) {
-    Vue.set(state.feedEventMemoByTxMap, key, event);
-  },
 };
 
 const getters = {
@@ -266,13 +262,6 @@ const getters = {
       return count;
     }, 0);
   },
-  getHasFetchMemo: state => key => key in state.feedEventMemoByTxMap,
-  getFeedEventMemo: state => key =>
-    (state.feedEventMemoByTxMap[key] || {}).memo,
-  getAvailableFeedTxList: state =>
-    Object.keys(state.feedEventMemoByTxMap).filter(
-      key => state.feedEventMemoByTxMap[key]?.memo
-    ),
   walletTotalSales: state => state.totalSales,
   walletTotalRoyalty: state => state.totalRoyalty,
   walletTotalResales: state => state.totalResales,
@@ -666,69 +655,6 @@ const actions = {
     return filteredEvents;
   },
 
-  async lazyFetchEventsMemo({ commit, dispatch, getters }, categorizedEvent) {
-    if (getters.getHasFetchMemo(categorizedEvent.key))
-      return getters.getFeedEventMemo(categorizedEvent.key);
-
-    const txHash = categorizedEvent.tx_hash;
-    const event = { ...categorizedEvent };
-    let memo;
-
-    switch (event.type) {
-      case 'send':
-        memo = event.memo;
-        break;
-
-      case 'publish':
-        try {
-          const metadata = await dispatch(
-            'lazyGetNFTClassMetadata',
-            event.class_id
-          );
-          memo = metadata.message;
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          memo = '';
-        }
-        break;
-
-      case 'collect':
-      case 'purchase':
-        try {
-          const map = await getNFTHistoryDataMap({
-            axios: this.$api,
-            classId: event.class_id,
-            txHash,
-          });
-          if (map.size) {
-            map.forEach(data => {
-              const { granterMemo } = data;
-              memo = granterMemo;
-            });
-          } else {
-            memo = '';
-          }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          memo = '';
-        }
-        break;
-
-      default:
-        memo = '';
-        break;
-    }
-    const key = `${categorizedEvent.type}-${categorizedEvent.tx_hash}`;
-
-    commit(WALLET_SET_FEED_EVENT_MEMO, {
-      key,
-      event: { memo },
-    });
-    return memo;
-  },
-
   async fetchWalletEvents(
     { state, commit, dispatch },
     { shouldFetchDetails = true }
@@ -987,7 +913,6 @@ const actions = {
     commit(WALLET_SET_TOTAL_SALES, 0);
     commit(WALLET_SET_SALES_DETAILS, []);
     commit(WALLET_SET_FOLLOWEE_EVENTS, []);
-    commit(WALLET_SET_FEED_EVENT_MEMO, {});
     await this.$api.post(postUserV2Logout());
     resetLoggerUser(this);
   },
