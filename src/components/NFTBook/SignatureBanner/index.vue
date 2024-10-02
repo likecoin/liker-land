@@ -36,11 +36,17 @@
         'text-like-green',
 
         'rounded-[inherit]',
+
+        'bg-gradient-to-t desktop:bg-gradient-to-r',
+        'from-[rgba(232,252,255,0.70)]',
+        'to-[rgba(232,252,255,0.90)]',
+        'to-60%',
+
+        'overflow-hidden desktop:overflow-visible',
       ]"
-      style="background: linear-gradient(to right, rgba(232, 252, 255, 0.70) 0%, rgba(232, 252, 255, 0.90) 60%)"
     >
       <img
-        class="w-full max-w-[450px] desktop:ml-[-56px]"
+        class="w-full max-w-[450px] desktop:ml-[-56px] scale-125 phone:translate-x-[-20%]"
         :src="signedBookImage"
       />
 
