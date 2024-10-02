@@ -477,7 +477,7 @@ const nuxtConfig = {
       Replay: {},
     },
     clientConfig: {
-      replaysSessionSampleRate: IS_TESTNET ? 1.0 : 0.05,
+      replaysSessionSampleRate: IS_TESTNET ? 0.5 : 0.01,
       replaysOnErrorSampleRate: IS_TESTNET ? 1.0 : 1.0,
     },
   },

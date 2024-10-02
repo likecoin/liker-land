@@ -826,6 +826,17 @@ export default {
       }
       const blockingPromises = [this.fetchISCNMetadata()];
       await Promise.all(blockingPromises);
+
+      // Investigate google ads drop reason
+      if (this.$sentry) {
+        this.$sentry.setTag('utm_medium', this.utmMedium);
+        if (this.utmMedium === 'ads') {
+          const replay = this.$sentry.getReplay();
+          if (replay) {
+            replay.start();
+          }
+        }
+      }
     } catch (error) {
       if (!error.response?.status === 404) {
         // eslint-disable-next-line no-console
@@ -866,6 +877,14 @@ export default {
     }
 
     if (this.hasCrossSell) {
+      // Manually start replay to investigate cross sell UX
+      if (this.$sentry) {
+        this.$sentry.setTag('cross_sell', 'enabled');
+        const replay = this.$sentry.getReplay();
+        if (replay) {
+          replay.start();
+        }
+      }
       logTrackerEvent(
         this,
         'NFT',
