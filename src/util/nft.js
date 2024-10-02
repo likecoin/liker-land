@@ -214,6 +214,18 @@ export function checkIsNFTBook(classMetadata) {
   );
 }
 
+export function formatEventMemo(event) {
+  const { memo } = event;
+  if (!memo) return memo;
+  try {
+    const payload = JSON.parse(event.memo);
+    if (Array.isArray(payload)) {
+      return payload[event.msg_index || 0] || memo;
+    }
+  } catch (error) {}
+  return memo;
+}
+
 export function formatNFTEvent(event) {
   const {
     class_id: classId,
@@ -224,8 +236,8 @@ export function formatNFTEvent(event) {
     action,
     timestamp,
     price,
-    memo,
   } = event;
+  const memo = formatEventMemo(event);
   let eventName;
   switch (action) {
     case '/cosmos.nft.v1beta1.MsgSend':
