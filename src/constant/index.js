@@ -279,6 +279,8 @@ export const READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST = [
   'like1cfz3cpmnq4tvxqec77mxr3ygqtet3vqtqmejwm',
 ];
 
+export const CROSS_SELL_PRODUCT_PROBABILITY = 0.5;
+
 export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
   ? {
       likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8: [
