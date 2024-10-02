@@ -178,7 +178,7 @@
                 :collector-count="ownerCount"
                 :class-collection-type="nftClassCollectionType"
                 :class-collection-name="nftClassCollectionName"
-                :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+                :is-content-viewable="!(nftIsNFTBook && !isOwningNFT)"
                 :is-content-downloadable="!nftIsDownloadHidden"
                 :is-nft-book="nftIsNFTBook"
                 @view-content="handleViewContent"

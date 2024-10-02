@@ -24,7 +24,7 @@
       :display-state="nftDisplayState"
       :is-nft-book="nftIsNFTBook"
       :portfolio-tab="portfolioTab"
-      :is-content-viewable="!(nftIsNFTBook && !ownCount)"
+      :is-content-viewable="!(nftIsNFTBook && !isOwningNFT)"
       :is-content-downloadable="!nftIsDownloadHidden"
       :collect-expiry-time="collectExpiryTime"
       @collect="handleClickCollect"
