@@ -22,6 +22,9 @@ export default {
     gadSource() {
       return this.$route.query.gad_source;
     },
+    fbClickId() {
+      return this.$route.query.fbclid;
+    },
   },
   mounted() {
     this.documentReferrer = document.referrer;

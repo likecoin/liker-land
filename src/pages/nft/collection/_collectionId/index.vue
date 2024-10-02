@@ -345,6 +345,7 @@ export default {
               referrer: this.documentReferrer,
               gadClickId: this.gadClickId,
               gadSource: this.gadSource,
+              fbClickId: this.fbClickId,
               email: this.walletEmail,
             });
             if (url) {

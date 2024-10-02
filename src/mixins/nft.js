@@ -1259,6 +1259,7 @@ export default {
           email: this.walletEmail,
           gadClickId: this.gadClickId,
           gadSource: this.gadSource,
+          fbClickId: this.fbClickId,
         });
         if (url) {
           window.location.href = url;
@@ -1280,6 +1281,7 @@ export default {
             referrer: this.documentReferrer,
             gadClickId: this.gadClickId,
             gadSource: this.gadSource,
+            fbClickId: this.fbClickId,
           };
           if (this.walletEmail) {
             body.email = this.walletEmail;
