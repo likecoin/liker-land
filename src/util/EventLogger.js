@@ -202,19 +202,26 @@ export function logPurchaseFlowEvent(
         purchase: 'Purchase',
       };
       if (eventNameMapping[event]) {
-        window.fbq('track', eventNameMapping[event], {
-          currency,
-          value: price,
-          order_id: paymentId || txHash,
-          content_type: 'product',
-          contents: items.map(i => ({
-            id: i.productId || i.collectionId || i.classId,
-            quantity: i.quantity || 1,
-          })),
-          content_ids: items.map(
-            i => i.productId || i.collectionId || i.classId
-          ),
-        });
+        const eventName = eventNameMapping[event];
+        const eventID = paymentId ? `${eventName}_${paymentId}` : undefined;
+        window.fbq(
+          'track',
+          eventName,
+          {
+            currency,
+            value: price,
+            order_id: paymentId || txHash,
+            content_type: 'product',
+            contents: items.map(i => ({
+              id: i.productId || i.collectionId || i.classId,
+              quantity: i.quantity || 1,
+            })),
+            content_ids: items.map(
+              i => i.productId || i.collectionId || i.classId
+            ),
+          },
+          eventID ? { eventID } : undefined
+        );
       }
     }
     if (vue.$crisp) {

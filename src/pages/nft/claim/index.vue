@@ -1050,6 +1050,7 @@ export default {
             referrer: this.documentReferrer,
             gadClickId: this.gadClickId,
             gadSource: this.gadSource,
+            fbClickId: this.fbClickId,
           }
         );
         const { data } = await this.claimPromise;

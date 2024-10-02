@@ -153,6 +153,7 @@ export default {
           email: this.walletEmail,
           gadClickId: this.gadClickId,
           gadSource: this.gadSource,
+          fbClickId: this.fbClickId,
         });
         if (url) {
           window.location.href = url;

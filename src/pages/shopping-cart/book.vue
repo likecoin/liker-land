@@ -340,6 +340,7 @@ export default {
           referrer: this.documentReferrer,
           gadClickId: this.gadClickId,
           gadSource: this.gadSource,
+          fbClickId: this.fbClickId,
           items: this.shoppingCartBookItems,
           email: this.walletEmail,
           coupon: this.coupon,
