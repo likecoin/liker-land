@@ -1,5 +1,13 @@
 <template>
-  <component :is="tag" class="relative rounded-[24px]">
+  <component
+    :is="tag"
+    :class="[
+      'relative',
+      'rounded-[24px]',
+      { 'cursor-pointer': $listeners.click },
+    ]"
+    @click="$emit('click')"
+  >
     <video
       :class="[
         'absolute',
@@ -15,6 +23,8 @@
 
         '-translate-x-1/2',
         '-translate-y-1/2',
+
+        'pointer-events-none',
       ]"
       autoplay
       loop
@@ -75,6 +85,9 @@
         <p class="mt-[16px]" v-text="$t('nft_book_signature_banner_content')" />
       </div>
     </div>
+    <client-only>
+      <lazy-component @show.once="$emit('scroll-to-bottom')" />
+    </client-only>
   </component>
 </template>
 

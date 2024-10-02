@@ -79,7 +79,7 @@
                 @click-collect="handleCollectFromEditionSelector"
                 @click-add-to-cart="handleClickAddToCart"
                 @click-gift="handleGiftFromEditionSelector"
-                @click-compare="handleClickCompareItemsButton"
+                @click-compare="handleClickEditionCompareButton"
                 @input-custom-price="handleInputCustomPrice"
               />
               <div
@@ -144,6 +144,8 @@
             v-if="nftHasSignImage"
             tag="section"
             :name="iscnWorkAuthor"
+            @click="handleSignatureBannerClick"
+            @scroll-to-bottom="handleSignatureBannerScrollToBottom"
           />
 
           <!-- recommend -->
@@ -178,7 +180,7 @@
                 (nftEditions.length > 1 ||
                   (nftEditions.length === 1 && nftEditions[0].description))
             "
-            ref="compareSection"
+            ref="editionCompareSection"
             class="flex flex-col items-center gap-[24px] w-full py-[24px]"
           >
             <h3
@@ -1425,10 +1427,13 @@ export default {
         1
       );
     },
-    handleClickCompareItemsButton() {
+    scrollToEditionCompareSection() {
       this.$nextTick(() =>
-        this.$refs.compareSection.scrollIntoView({ behavior: 'smooth' })
+        this.$refs.editionCompareSection.scrollIntoView({ behavior: 'smooth' })
       );
+    },
+    handleClickEditionCompareButton() {
+      this.scrollToEditionCompareSection();
       logTrackerEvent(
         this,
         'NFT',
@@ -1549,6 +1554,25 @@ export default {
       } else {
         this.handleCollectFromEdition();
       }
+    },
+    handleSignatureBannerClick() {
+      this.scrollToEditionCompareSection();
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_sign_banner_click',
+        this.classId,
+        1
+      );
+    },
+    handleSignatureBannerScrollToBottom() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_sign_banner_scroll',
+        this.classId,
+        1
+      );
     },
   },
 };
