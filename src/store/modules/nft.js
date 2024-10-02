@@ -687,8 +687,8 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTOwners({ commit }, classId) {
-    const { owners } = await this.$api.$get(api.getNFTOwners(classId));
+  async fetchNFTOwners({ commit }, { classId, nocache = true }) {
+    const { owners } = await this.$api.$get(api.getNFTOwners(classId, nocache));
     const info = formatOwnerInfoFromChain(owners);
     commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info });
     return info;
@@ -696,7 +696,7 @@ const actions = {
   async lazyGetNFTOwners({ getters, dispatch }, classId) {
     let owners = getters.getNFTClassOwnerInfoById(classId);
     if (!owners) {
-      owners = await dispatch('fetchNFTOwners', classId);
+      owners = await dispatch('fetchNFTOwners', { classId });
     }
     return owners;
   },

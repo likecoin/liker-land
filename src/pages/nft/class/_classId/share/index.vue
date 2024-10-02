@@ -4,7 +4,9 @@ export default {
     const { classId } = params;
     const { referrer } = query;
     if (referrer) {
-      const ownerMap = await store.dispatch('fetchNFTOwners', classId);
+      const ownerMap = await store.dispatch('fetchNFTOwners', {
+        classId,
+      });
       const ownerCollectedNFTIds = ownerMap[referrer];
       if (ownerCollectedNFTIds) {
         redirect(

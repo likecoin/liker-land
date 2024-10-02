@@ -874,8 +874,8 @@ export default {
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
     },
-    updateNFTOwners() {
-      return this.fetchNFTOwners(this.classId);
+    updateNFTOwners({ nocache = true } = {}) {
+      return this.fetchNFTOwners({ classId: this.classId, nocache });
     },
     async updateNFTHistory({ getAllUserInfo = false, trimmedCount = 10 }) {
       this.isHistoryInfoLoading = true;
