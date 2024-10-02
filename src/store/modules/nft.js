@@ -453,7 +453,10 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
+  async fetchNFTClassAggregatedInfo(
+    { commit, dispatch },
+    { classId, excludeOptions = [] }
+  ) {
     const {
       classData,
       iscnData,
@@ -461,12 +464,14 @@ const actions = {
       listings,
       purchaseInfo,
       bookstoreInfo,
-    } = await this.$api.$get(api.getNFTClassMetadata(classId));
+    } = await this.$api.$get(api.getNFTClassMetadata(classId, excludeOptions));
     const iscnId = classData.parent.iscn_id_prefix;
     commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
     commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
-    commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
     commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
+    if (ownerInfo) {
+      commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
+    }
     // skip for non Writing NFT
     if (purchaseInfo) {
       commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
@@ -494,7 +499,10 @@ const actions = {
       if (!process.client) await promise;
     }
   },
-  async lazyFetchNFTClassAggregatedInfo({ getters, dispatch }, classId) {
+  async lazyFetchNFTClassAggregatedInfo(
+    { getters, dispatch },
+    { classId, excludeOptions = [] }
+  ) {
     const metadata = getters.getNFTClassMetadataById(classId);
     const fieldsToCheck = [
       metadata,
@@ -504,7 +512,10 @@ const actions = {
     ];
 
     if (fieldsToCheck.some(value => !value)) {
-      await dispatch('fetchNFTClassAggregatedInfo', classId);
+      await dispatch('fetchNFTClassAggregatedInfo', {
+        classId,
+        excludeOptions,
+      });
     }
   },
   async fetchNFTPurchaseInfo({ commit }, classId) {
@@ -742,7 +753,9 @@ const actions = {
       .filter(c => c.symbol === 'WRITING')
       .sort((a, b) => b.latest_price - a.latest_price)
       .slice(0, 5)
-      .forEach(c => dispatch('lazyFetchNFTClassAggregatedInfo', c.id));
+      .forEach(c =>
+        dispatch('lazyFetchNFTClassAggregatedInfo', { classId: c.id })
+      );
   },
   async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
     const classesOrPromise = state.createdNFTClassesByAddressMap[address];

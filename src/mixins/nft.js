@@ -807,8 +807,13 @@ export default {
         this.lazyGetUserInfoByAddresses(this.iscnOwner);
       }
     },
-    async lazyFetchNFTClassAggregatedData() {
-      await catchAxiosError(this.lazyFetchNFTClassAggregatedInfo(this.classId));
+    async lazyFetchNFTClassAggregatedData(excludeOptions = []) {
+      await catchAxiosError(
+        this.lazyFetchNFTClassAggregatedInfo({
+          classId: this.classId,
+          excludeOptions,
+        })
+      );
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
