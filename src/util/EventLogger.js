@@ -16,6 +16,10 @@ function digestMessage(message) {
   return window.crypto.subtle.digest('SHA-256', data);
 }
 
+function hasDoNotTrack() {
+  return window.doNotTrack || navigator.doNotTrack;
+}
+
 export function resetLoggerUser(vue) {
   if (vue.$sentry) {
     vue.$sentry.setUser({});
@@ -45,7 +49,14 @@ export async function setLoggerUser(
   }
   try {
     if (vue.$gtag) {
-      if (!window.doNotTrack && !navigator.doNotTrack) {
+      if (event === 'signup') {
+        vue.$gtag.event('sign_up', { method });
+      } else if (event === 'login') {
+        vue.$gtag.event('login', { method });
+      }
+    }
+    if (!hasDoNotTrack()) {
+      if (vue.$gtag) {
         let hashedId = await digestMessage(wallet);
         hashedId = hexString(hashedId);
         vue.$gtag.set({ userId: hashedId });
@@ -54,14 +65,7 @@ export async function setLoggerUser(
         // vue.$gtag.config({ user_id: hashedId });
         vue.$gtag.set({ user_id: hashedId });
       }
-      if (event === 'signup') {
-        vue.$gtag.event('sign_up', { method });
-      } else if (event === 'login') {
-        vue.$gtag.event('login', { method });
-      }
-    }
-    if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
-      if (!window.doNotTrack && !navigator.doNotTrack) {
+      if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
         window.fbq('init', window.PIXEL_ID, {
           external_id: wallet,
         });
@@ -88,13 +92,11 @@ export function updateLoggerUserInfo(
     };
     vue.$sentry.setUser(opt);
   }
-  if (vue.$gtag) {
-    if (!window.doNotTrack && !navigator.doNotTrack) {
+  if (!hasDoNotTrack()) {
+    if (vue.$gtag) {
       if (email) vue.$gtag.set('user_data', { email });
     }
-  }
-  if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
-    if (!window.doNotTrack && !navigator.doNotTrack) {
+    if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
       window.fbq('init', window.PIXEL_ID, {
         em: email,
         external_id: wallet,
@@ -123,8 +125,6 @@ export function logTrackerEvent(
   otherPayload = {}
 ) {
   try {
-    // do not track
-    if (window.doNotTrack || navigator.doNotTrack) return;
     if (vue.$gtag) {
       vue.$gtag.event(action?.substring(0, 40), {
         event_category: category?.substring(0, 100),
