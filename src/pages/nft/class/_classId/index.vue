@@ -1429,7 +1429,7 @@ export default {
     },
     scrollToEditionCompareSection() {
       this.$nextTick(() =>
-        this.$refs.editionCompareSection.scrollIntoView({ behavior: 'smooth' })
+        this.$refs.editionCompareSection?.scrollIntoView({ behavior: 'smooth' })
       );
     },
     handleClickEditionCompareButton() {
@@ -1451,7 +1451,7 @@ export default {
         1
       );
       this.$nextTick(() =>
-        this.$refs.collectionSection.scrollIntoView({ behavior: 'smooth' })
+        this.$refs.collectionSection?.scrollIntoView({ behavior: 'smooth' })
       );
     },
     handleSubmitTipping(price) {

@@ -707,7 +707,7 @@ export default {
     scrollToElement(hash) {
       setTimeout(() => {
         const currentRef = this.$refs[hash];
-        currentRef.scrollIntoView({
+        currentRef?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
         });
