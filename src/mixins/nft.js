@@ -580,14 +580,14 @@ export default {
     },
     ownCount() {
       const collector = this.populatedCollectors.find(
-        ({ id }) => id === this.getAddress
+        ({ id }) => id === this.loginAddress
       );
       return collector?.collectedCount || 0;
     },
     isOwningNFT() {
       if (!this.nftId) return this.ownCount > 0;
       const collector = this.populatedCollectors.find(
-        ({ id }) => id === this.getAddress
+        ({ id }) => id === this.loginAddress
       );
       return (collector?.collectedNftIds || []).includes(this.nftId);
     },
@@ -595,7 +595,7 @@ export default {
       return `/nft/class/${this.classId}?referrer=${this.getAddress}`;
     },
     nftIdCollectedFirstByUser() {
-      const ownNFT = this.collectorMap[this.getAddress];
+      const ownNFT = this.collectorMap[this.loginAddress];
       return ownNFT?.[0];
     },
     nftIdCollectNext() {
