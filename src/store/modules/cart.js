@@ -90,15 +90,20 @@ const getters = {
   shoppingCartBookProductList: (state, getter) => {
     const list = Object.values(state.shoppingCartBookProductByIdMap).filter(
       item => {
-        const priceInfo = getter.getNFTClassPaymentPriceById(
-          item.productId,
-          item.priceIndex
-        );
-        return (
-          !priceInfo ||
-          priceInfo?.fiatPrice > 0 ||
-          item.customPriceInDecimal > 0
-        );
+        let itemPrice = 0;
+        if (item.collectionId) {
+          const price = getter.getNFTCollectionPriceByCollectionId(
+            item.collectionId
+          );
+          itemPrice = price;
+        } else {
+          const edition = getter.getNFTBookStorePriceByClassIdAndIndex(
+            item.classId,
+            item.priceIndex || 0
+          );
+          itemPrice = edition?.price;
+        }
+        return itemPrice || item.customPriceInDecimal > 0;
       }
     );
     list.sort((a, b) => a.timestamp - b.timestamp);

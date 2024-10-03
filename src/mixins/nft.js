@@ -104,6 +104,7 @@ export default {
       'getCollectedNFTClassesByAddress',
       'getCreatedNFTClassesByAddress',
       'getNFTBookStorePricesByClassId',
+      'getNFTBookStorePriceByClassIdAndIndex',
       'getNFTCollectionInfoByClassId',
       'getNFTBookStoreBookDefaultPaymentCurrency',
       'getCanViewNFTBookBeforeClaimByClassId',
@@ -290,11 +291,10 @@ export default {
       return this.NFTPrice !== undefined && this.NFTPrice !== -1;
     },
     paymentInfo() {
-      const result =
-        this.getNFTClassPaymentPriceById(
-          this.classId,
-          this.editionPriceIndex
-        ) || {};
+      if (this.nftIsNFTBook) {
+        return null;
+      }
+      const result = this.getNFTClassPaymentPriceById(this.classId);
       return result;
     },
     nftPriceInLIKE() {
@@ -316,16 +316,16 @@ export default {
     },
     nftPaymentPriceInUSD() {
       if (this.nftIsNFTBook) {
+        if (this.priceIndex !== undefined) {
+          const edition = this.getNFTBookStorePriceByClassIdAndIndex(
+            this.classId,
+            this.priceIndex
+          );
+          if (edition) return edition.price;
+        }
         const result = this.getNFTBookStorePricesByClassId(this.classId);
         if (!result || !result.length) return undefined;
-
         const [price, ...prices] = result;
-        if (this.priceIndex !== undefined) {
-          const foundPrice = result.find(p => p.index === this.priceIndex);
-          if (foundPrice) {
-            return foundPrice.price;
-          }
-        }
         return prices.reduce((acc, p) => Math.min(acc, p.price), price.price);
       }
 
@@ -791,8 +791,6 @@ export default {
       'fetchNFTDisplayStateListByAddress',
       'fetchNFTBookInfoByClassId',
       'lazyFetchNFTBookInfoByClassId',
-      'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
-      'lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
       'fetchNFTCollectionInfoByClassId',
     ]),
     async fetchISCNMetadata() {
@@ -813,42 +811,7 @@ export default {
     },
     async fetchNFTPrices() {
       await catchAxiosError(
-        this.nftIsNFTBook
-          ? this.fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
-              classId: this.classId,
-              priceIndex: this.editionPriceIndex,
-            })
-          : this.fetchNFTPaymentPriceInfoByClassId(this.classId)
-      );
-    },
-    async fetchNFTBookPaymentPriceInfo() {
-      await catchAxiosError(
-        this.fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
-          classId: this.classId,
-          priceIndex: this.editionPriceIndex,
-        })
-      );
-    },
-    async lazyFetchNFTBookPaymentPriceInfo() {
-      await catchAxiosError(
-        this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
-          classId: this.classId,
-          priceIndex: this.editionPriceIndex,
-        })
-      );
-    },
-    async lazyFetchNFTBookPaymentPriceInfoForAllEditions() {
-      const prices = this.getNFTBookStorePricesByClassId(this.classId);
-      await Promise.all(
-        prices.map((p, i) => {
-          const index = p.index ?? i;
-          return catchAxiosError(
-            this.lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex({
-              classId: this.classId,
-              priceIndex: index,
-            })
-          );
-        })
+        this.fetchNFTPaymentPriceInfoByClassId(this.classId)
       );
     },
     async fetchRelatedNFTCollection({ type } = {}) {
@@ -1486,10 +1449,7 @@ export default {
       this.isRecommendationLoading = false;
     },
     getEditionByIndex(index) {
-      const editions = this.getNFTBookStorePricesByClassId(this.classId) || {};
-      const edition =
-        editions.find(e => e.index === Number(index)) || editions[index];
-      return edition;
+      return this.getNFTBookStorePriceByClassIdAndIndex(this.classId, index);
     },
   },
 };

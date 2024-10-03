@@ -21,7 +21,6 @@ export default {
       'getCanViewNFTBookBeforeClaimByClassId',
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
-      'getNFTClassPaymentPriceById',
       'getNFTCollectionDefaultPaymentCurrency',
     ]),
     classIds() {
@@ -98,15 +97,11 @@ export default {
     },
     collectionPrice() {
       const priceInDecimal = this.collection?.priceInDecimal || 0;
-      const price =
-        this.getNFTClassPaymentPriceById(this.collectionId)?.fiatPrice ||
-        // eslint-disable-next-line prettier/prettier
-        (priceInDecimal / 100);
+      const price = priceInDecimal / 100;
       return price;
     },
     collectionDefaultPrice() {
-      return this.getNFTClassPaymentPriceById(this.collectionId)
-        ?.fiatPricePrediscount;
+      return this.collectionPrice;
     },
     collectionAvailablePriceLabel() {
       return formatNumberWithUSD(this.collectionPrice);
@@ -127,18 +122,10 @@ export default {
     ...mapActions([
       'lazyGetUserInfoByAddress',
       'lazyFetchNFTCollectionInfoByCollectionId',
-      'lazyFetchNFTCollectionPaymentPriceInfoByCollectionId',
     ]),
     async lazyFetchNFTCollectionInfo() {
       await catchAxiosError(
         this.lazyFetchNFTCollectionInfoByCollectionId({
-          collectionId: this.collectionId,
-        })
-      );
-    },
-    async lazyFetchNFTCollectionPaymentPriceInfo() {
-      await catchAxiosError(
-        this.lazyFetchNFTCollectionPaymentPriceInfoByCollectionId({
           collectionId: this.collectionId,
         })
       );

@@ -222,10 +222,8 @@ const getters = {
   getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
-  getNFTClassPaymentPriceById: state => (id, priceIndex) =>
-    Number.isInteger(priceIndex)
-      ? state.paymentPriceByClassIdMap[`${id}_${priceIndex}`]
-      : state.paymentPriceByClassIdMap[id],
+  getNFTClassPaymentPriceById: state => id =>
+    state.paymentPriceByClassIdMap[id],
   getNFTIscnRecordsById: state => id =>
     state.metadataByClassIdMap[id]?.iscn_record,
   getNFTClassISCNOwnerByClassId: state => id =>
@@ -252,8 +250,20 @@ const getters = {
     state.nftBookStoreInfoByClassIdMap[classId],
   getNFTBookStorePricesByClassId: state => classId =>
     state.nftBookStoreInfoByClassIdMap[classId]?.prices || [],
+  getNFTBookStorePriceByClassIdAndIndex: state => (classId, index) => {
+    const prices = state.nftBookStoreInfoByClassIdMap[classId]?.prices || [];
+    return prices.find(p => p.index === index) || prices[index];
+  },
   getNFTCollectionInfoByCollectionId: state => collectionId =>
     state.nftCollectionInfoByCollectionIdMap[collectionId],
+  getNFTCollectionPriceByCollectionId: state => collectionId => {
+    const priceInDecimal =
+      state.nftCollectionInfoByCollectionIdMap[collectionId]?.priceInDecimal;
+    if (priceInDecimal !== undefined) {
+      return priceInDecimal / 100;
+    }
+    return undefined;
+  },
   getNFTCollectionDefaultPaymentCurrency: state => collectionId =>
     state.nftCollectionInfoByCollectionIdMap[collectionId]
       ?.defaultPaymentCurrency || 'USD',
@@ -823,39 +833,6 @@ const actions = {
     commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     return payload;
   },
-  async fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
-    { commit },
-    { classId, priceIndex }
-  ) {
-    const {
-      data: { fiatPrice, LIKEPrice },
-    } = await this.$api.get(
-      api.getNFTBookPaymentPrice({ classId, priceIndex })
-    );
-    const info = { fiatPrice, LIKEPrice };
-    commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
-      classId,
-      priceIndex,
-      info,
-    });
-    return info;
-  },
-  async lazyFetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex(
-    { getters, dispatch },
-    { classId, priceIndex }
-  ) {
-    let info = getters.getNFTClassPaymentPriceById(classId, priceIndex);
-    if (!info) {
-      info = await dispatch(
-        'fetchNFTBookPaymentPriceInfoByClassIdAndPriceIndex',
-        {
-          classId,
-          priceIndex,
-        }
-      );
-    }
-    return info;
-  },
   async fetchNFTCollectionInfoByCollectionId(
     { commit, dispatch },
     { collectionId }
@@ -912,40 +889,6 @@ const actions = {
       );
     });
     return list;
-  },
-  async fetchNFTCollectionPaymentPriceInfoByCollectionId(
-    { commit },
-    { collectionId }
-  ) {
-    try {
-      const {
-        data: { fiatPricePrediscount, fiatPrice, LIKEPrice },
-      } = await this.$api.get(api.getNFTBookPaymentPrice({ collectionId }));
-      const info = { fiatPricePrediscount, fiatPrice, LIKEPrice };
-      commit(TYPES.NFT_SET_NFT_CLASS_PAYMENT_PRICE_INFO, {
-        collectionId,
-        info,
-      });
-
-      return info;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      throw error;
-    }
-  },
-  async lazyFetchNFTCollectionPaymentPriceInfoByCollectionId(
-    { getters, dispatch },
-    { collectionId }
-  ) {
-    let info = getters.getNFTClassPaymentPriceById(collectionId);
-    if (!info) {
-      info = await dispatch(
-        'fetchNFTCollectionPaymentPriceInfoByCollectionId',
-        { collectionId }
-      );
-    }
-    return info;
   },
   async fetchLatestAndTrendingWNFTClassIdList({ commit }) {
     const trendingDate = new Date();

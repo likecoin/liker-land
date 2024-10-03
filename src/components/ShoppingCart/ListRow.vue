@@ -197,15 +197,9 @@ export default {
       try {
         this.isFetching = true;
         if (this.collectionId) {
-          await Promise.all([
-            this.lazyFetchNFTCollectionInfo(),
-            this.lazyFetchNFTCollectionPaymentPriceInfo(),
-          ]);
+          await this.lazyFetchNFTCollectionInfo();
         } else {
-          await Promise.all([
-            this.lazyFetchNFTClassAggregatedData(),
-            this.lazyFetchNFTBookPaymentPriceInfo(),
-          ]);
+          await this.lazyFetchNFTClassAggregatedData();
         }
       } finally {
         this.isFetching = false;
