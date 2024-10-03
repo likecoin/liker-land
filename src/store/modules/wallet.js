@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import {
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
+  SIGN_AUTHORIZATION_PERMISSIONS,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
@@ -882,13 +883,12 @@ const actions = {
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
       const { signer, methodType } = state;
-      const data = await signLoginMessage(signer, address, 'authorize', [
-        'profile',
-        'read:nftbook',
-        'write:nftbook',
-        'read:nftcollection',
-        'write:nftcollection',
-      ]);
+      const data = await signLoginMessage(
+        signer,
+        address,
+        'authorize',
+        SIGN_AUTHORIZATION_PERMISSIONS
+      );
       const result = await this.$api.$post(postUserV2Login(), {
         loginMethod: methodType,
         ...data,
