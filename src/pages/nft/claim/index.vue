@@ -564,6 +564,7 @@ import {
   getNFTClassCollectionType,
   nftClassCollectionType,
   parseNFTMetadataURL,
+  parseAutoMemo,
 } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
 import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
@@ -844,7 +845,7 @@ export default {
         this.giftInfo = giftInfo;
         this.isPhysicalOnly = isPhysicalOnly;
         this.isAutoDeliver = isAutoDeliver;
-        this.creatorMessage = autoMemo;
+        this.creatorMessage = parseAutoMemo(autoMemo);
         this.status = status;
         this.quantity = quantity;
       } catch (err) {
@@ -859,7 +860,7 @@ export default {
       const { isPhysicalOnly, autoMemo, isAutoDeliver } = data;
       this.isPhysicalOnly = isPhysicalOnly;
       this.isAutoDeliver = isAutoDeliver;
-      this.creatorMessage = autoMemo;
+      this.creatorMessage = parseAutoMemo(autoMemo);
     }
 
     try {

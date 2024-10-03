@@ -7,7 +7,11 @@ import {
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
-import { amountToLIKE, getNFTHistoryDataMap } from '~/util/nft';
+import {
+  amountToLIKE,
+  getNFTHistoryDataMap,
+  formatEventMemo,
+} from '~/util/nft';
 import { signLoginMessage } from '~/util/cosmos';
 import {
   getUserInfoMinByAddress,
@@ -596,7 +600,10 @@ const actions = {
       }
       return event;
     };
-    const categorizedEvents = events.map(categorizeEvent);
+    const categorizedEvents = events.map(categorizeEvent).map(event => ({
+      ...event,
+      memo: formatEventMemo(event),
+    }));
 
     // 3. filter available events
     const filteredEvents = categorizedEvents.filter(event => {
