@@ -43,6 +43,9 @@ const actions = {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
+      if (error.response?.data) {
+        throw new Error(`AUTHENTICATION_FAILED: ${error.response?.data}`);
+      }
       throw new Error('AUTHENTICATION_FAILED');
     }
   },
