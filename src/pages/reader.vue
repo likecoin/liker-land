@@ -92,7 +92,7 @@ export default {
   },
   watch: {
     // TODO: use loginAddress
-    async getAddress(address) {
+    async getSessionWallet(address) {
       if (address) {
         await Promise.all([
           this.fetchUserCollectedCount(),
@@ -101,7 +101,7 @@ export default {
         if (
           (!this.userCollectedCount && this.isLoginRequired) ||
           (this.nftCollectorWalletAddress &&
-            this.nftCollectorWalletAddress !== this.getAddress)
+            this.nftCollectorWalletAddress !== this.getSessionWallet)
         ) {
           this.$router.replace(
             this.localeLocation({
