@@ -143,7 +143,7 @@
           <NFTBookSignatureBanner
             v-if="nftHasSignImage"
             tag="section"
-            :name="iscnWorkAuthor"
+            :name="iscnWorkAuthor || creatorDisplayNameFull"
             @click="handleSignatureBannerClick"
             @scroll-to-bottom="handleSignatureBannerScrollToBottom"
           />
