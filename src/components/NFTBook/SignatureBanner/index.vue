@@ -141,10 +141,7 @@ export default {
       };
     },
     bgVideoSources() {
-      return [
-        'https://books.liker.land/bodhisattva18/videos/Web-loop-promo-horizontal-transcode.mp4',
-        'https://books.liker.land/bodhisattva18/videos/Web-loop-promo-horizontal-transcode.webm',
-      ];
+      return ['/videos/signature-banner.mp4'];
     },
   },
   watch: {
