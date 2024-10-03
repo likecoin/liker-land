@@ -214,16 +214,20 @@ export function checkIsNFTBook(classMetadata) {
   );
 }
 
-export function formatEventMemo(event) {
-  const { memo } = event;
+export function parseAutoMemo(memo, index = 0) {
   if (!memo) return memo;
   try {
-    const payload = JSON.parse(event.memo);
+    const payload = JSON.parse(memo.replaceAll('\\"', '"'));
     if (Array.isArray(payload)) {
-      return payload[event.msg_index || 0] || memo;
+      return payload[index] || memo;
     }
   } catch (error) {}
   return memo;
+}
+
+export function formatEventMemo(event) {
+  const { memo } = event;
+  return parseAutoMemo(memo, event.msg_index || 0);
 }
 
 export function formatNFTEvent(event) {
