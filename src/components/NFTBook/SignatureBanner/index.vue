@@ -56,14 +56,21 @@
       ]"
     >
       <img
-        class="w-full max-w-[450px] desktop:ml-[-56px] scale-125 phone:translate-x-[-20%]"
+        class="w-full max-w-[450px] desktop:ml-[-56px] phone:scale-[1.2] phone:translate-x-[-20%]"
         :src="signedBookImage"
       />
 
-      <div class="px-[32px] desktop:px-[56px] py-[48px]">
+      <div
+        :class="[
+          'px-[24px]',
+          'py-[32px]',
+          'desktop:pl-[32px]',
+          'desktop:p-[48px]',
+        ]"
+      >
         <i18n
           :class="[
-            'text-[32px] desktop:text-[40px]',
+            'text-[28px] desktop:text-[40px]',
             'font-serif',
             'font-bold',
             'leading-1_25',
