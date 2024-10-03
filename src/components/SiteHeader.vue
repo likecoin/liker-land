@@ -56,17 +56,19 @@
         </MenuList>
       </Dropdown>
 
-      <ButtonV2
-        v-if="!getSessionWallet"
-        class="hidden laptop:flex"
-        preset="secondary"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="handleConnectWallet"
-      >
-        <template #prepend>
-          <IconLogin />
-        </template>
-      </ButtonV2>
+      <div v-if="!getSessionWallet" class="hidden laptop:flex">
+        <ProgressIndicator v-if="isLoginIng" />
+        <ButtonV2
+          v-else
+          preset="secondary"
+          :text="$t('header_button_connect_to_wallet')"
+          @click="handleConnectWallet"
+        >
+          <template #prepend>
+            <IconLogin />
+          </template>
+        </ButtonV2>
+      </div>
 
       <Dropdown class="hidden laptop:block ml-[4px]">
         <template #trigger="{ toggle }">
@@ -170,16 +172,19 @@
       v-if="isShowMobileMenu"
       @close="isShowMobileMenu = false"
     >
-      <ButtonV2
-        v-if="!getSessionWallet"
-        class="w-full"
-        preset="secondary"
-        @click="handleConnectWallet"
-        ><div class="flex gap-[12px]">
-          <IconLogin />
-          {{ $t('header_button_connect_to_wallet') }}
-        </div>
-      </ButtonV2>
+      <div v-if="!getSessionWallet">
+        <ProgressIndicator v-if="isLoginIng" />
+        <ButtonV2
+          v-else
+          class="w-full"
+          preset="secondary"
+          @click="handleConnectWallet"
+          ><div class="flex gap-[12px]">
+            <IconLogin />
+            {{ $t('header_button_connect_to_wallet') }}
+          </div>
+        </ButtonV2>
+      </div>
       <div v-else class="w-full">
         <ul class="w-full text-dark-gray">
           <MenuItem
@@ -284,6 +289,7 @@ export default {
   data() {
     return {
       isShowMobileMenu: false,
+      isLoginIng: false,
     };
   },
   computed: {
@@ -330,6 +336,7 @@ export default {
     },
     async handleConnectWallet() {
       try {
+        this.isLoginIng = true;
         logTrackerEvent(
           this,
           'site_menu',
@@ -341,6 +348,8 @@ export default {
       } catch (err) {
         console.error(err);
         this.alertPromptError(err);
+      } finally {
+        this.isLoginIng = false;
       }
     },
     handleSelectMenuItem(value) {
