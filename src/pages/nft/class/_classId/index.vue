@@ -827,7 +827,6 @@ export default {
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.lazyFetchNFTBookInfoByClassId(this.classId).catch();
-        this.lazyFetchNFTBookPaymentPriceInfoForAllEditions();
         this.fetchRelatedNFTCollection({ type: 'book' });
       }
       const blockingPromises = [this.fetchISCNMetadata()];
