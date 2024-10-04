@@ -157,13 +157,7 @@
               />
             </client-only>
             <NFTPageRecommendation
-              :iscn-owner="iscnOwner"
-              :iscn-work-author="iscnWorkAuthor"
-              :should-show-follow-button="shouldShowFollowButton"
-              :is-followed="isFollowed"
-              :recommended-list="recommendedList"
-              :is-book-nft="nftIsNFTBook"
-              :is-loading="isRecommendationLoading"
+              :class-id="classId"
               @header-avatar-click="handleRecommendationHeaderAvatarClick"
               @follow-button-click="handleFollowButtonClick"
               @item-click="handleRecommendedItemClick"

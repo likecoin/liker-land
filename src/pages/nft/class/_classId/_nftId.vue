@@ -316,22 +316,8 @@
         </section>
 
         <!-- recommend -->
-        <div
-          v-if="isRecommendationLoading"
-          class="flex justify-center items-center my-[24px]"
-        >
-          <ProgressIndicator />
-        </div>
         <NFTPageRecommendation
-          v-else
-          :iscn-owner="iscnOwner"
-          :iscn-work-author="iscnWorkAuthor"
-          :is-followed="isFollowed"
-          :should-show-follow-button="shouldShowFollowButton"
-          :recommended-list="recommendedList"
-          :is-book-nft="nftIsNFTBook"
-          @header-avatar-click="handleRecommendationHeaderAvatarClick"
-          @follow-button-click="handleFollowButtonClick"
+          :class-id="classId"
           @item-click="handleRecommendedItemClick"
           @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"
@@ -596,9 +582,6 @@ export default {
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
-    },
-    shouldShowFollowButton() {
-      return Boolean(this.iscnOwner !== this.getAddress);
     },
   },
   async mounted() {

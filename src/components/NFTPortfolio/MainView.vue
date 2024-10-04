@@ -225,13 +225,7 @@
           :text="$t('nft_recommendation_title')"
         />
         <NFTPageRecommendation
-          class="w-full"
-          :iscn-owner="getAddress"
-          :should-show-follow-button="false"
-          :should-show-iscn-owner="false"
-          :recommended-list="[]"
-          :is-book-nft="true"
-          :is-loading="false"
+          :is-author-specific="false"
           @item-click="handleRecommendedItemClick"
           @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"
