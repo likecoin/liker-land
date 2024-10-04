@@ -70,7 +70,7 @@
       >
         <i18n
           :class="[
-            'text-[28px] desktop:text-[40px]',
+            'text-[32px] desktop:text-[40px]',
             'font-serif',
             'font-bold',
             'leading-1_25',
