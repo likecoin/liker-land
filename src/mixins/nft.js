@@ -728,6 +728,10 @@ export default {
     nftHasSignImage() {
       return NFT_BOOK_WITH_SIGN_IMAGE_SET.has(this.classId);
     },
+    nftSignImageAuthor() {
+      const customAuthor = NFT_BOOK_WITH_SIGN_IMAGE_SET.get(this.classId);
+      return customAuthor || this.iscnWorkAuthor || this.creatorDisplayNameFull;
+    },
   },
   watch: {
     getAddress(newAddress) {
