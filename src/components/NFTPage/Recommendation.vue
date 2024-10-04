@@ -207,17 +207,16 @@ export default {
         });
       }
 
-      if (recommendedList.length < DISPLAY_ITEM_COUNT) {
-        const filteredDefaultList = this.defaultFeaturedList.filter(
-          item => item.classId !== this.classId
-        );
-        const itemsToAdd = DISPLAY_ITEM_COUNT - recommendedList.length;
-        recommendedList = recommendedList.concat(
-          filteredDefaultList.slice(0, itemsToAdd)
-        );
+      if (recommendedList.length > DISPLAY_ITEM_COUNT) {
+        return recommendedList.slice(0, 5);
       }
 
-      return recommendedList;
+      const filteredDefaultList = this.defaultFeaturedList.filter(
+        item => item.classId !== this.classId
+      );
+      const itemsToAdd = DISPLAY_ITEM_COUNT - recommendedList.length;
+
+      return recommendedList.concat(filteredDefaultList.slice(0, itemsToAdd));
     },
     swiperOptions() {
       return {
