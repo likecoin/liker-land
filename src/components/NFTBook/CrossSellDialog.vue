@@ -139,9 +139,13 @@ export default {
         1
       );
     },
-    async gotoCheckoutPage({ link, customPriceInDecimal }) {
+    async gotoCheckoutPage({
+      link,
+      customPriceInDecimal,
+      purchaseEventParams,
+    }) {
       try {
-        const { url } = await this.$axios.$post(link, {
+        const { url, paymentId } = await this.$axios.$post(link, {
           gaClientId: this.getGaClientId,
           gaSessionId: this.getGaSessionId,
           coupon: this.$route.query.coupon,
@@ -154,6 +158,10 @@ export default {
           gadClickId: this.gadClickId,
           gadSource: this.gadSource,
           fbClickId: this.fbClickId,
+        });
+        logPurchaseFlowEvent(this, 'begin_checkout', {
+          ...purchaseEventParams,
+          paymentId,
         });
         if (url) {
           window.location.href = url;
@@ -208,13 +216,15 @@ export default {
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
 
         if (this.shoppingCartBookItems.length < 1) {
-          logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-
           const link = getNFTBookPurchaseLink({
             collectionId: this.collectionId,
             platform: this.platform,
           });
-          await this.gotoCheckoutPage({ link, customPriceInDecimal });
+          await this.gotoCheckoutPage({
+            link,
+            customPriceInDecimal,
+            purchaseEventParams,
+          });
           return;
         }
 
@@ -254,14 +264,16 @@ export default {
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
 
         if (this.shoppingCartBookItems.length < 1) {
-          logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-
           const link = getNFTBookPurchaseLink({
             classId: this.classId,
             priceIndex: edition.index,
             platform: this.platform,
           });
-          await this.gotoCheckoutPage({ link, customPriceInDecimal });
+          await this.gotoCheckoutPage({
+            link,
+            customPriceInDecimal,
+            purchaseEventParams,
+          });
           return;
         }
 
