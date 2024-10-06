@@ -112,6 +112,10 @@ export default {
       type: String,
       default: '',
     },
+    collectionId: {
+      type: String,
+      default: '',
+    },
     // if true, show author works, else show default featured works
     isAuthorSpecific: {
       type: Boolean,
@@ -248,7 +252,7 @@ export default {
       this.$emit('header-avatar-click');
     },
     handleFollowButtonClick() {
-      this.$emit('follow-button-click');
+      this.$emit('follow-button-click', this.productOwner);
     },
     handleItemClick(classId) {
       this.$emit('item-click', classId);

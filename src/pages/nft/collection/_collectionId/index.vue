@@ -44,6 +44,16 @@
             />
           </div>
         </div>
+        <NFTPageRecommendation
+          :collection-id="collectionId"
+          @header-avatar-click="handleRecommendationHeaderAvatarClick"
+          @follow-button-click="handleFollowButtonClick"
+          @item-click="handleRecommendedItemClick"
+          @item-collect="handleRecommendedItemCollect"
+          @slide-next.once="handleRecommendationSlideNext"
+          @slide-prev.once="handleRecommendationSlidePrev"
+          @slider-move.once="handleRecommendationSliderMove"
+        />
       </div>
     </div>
     <NFTBookGiftDialog
@@ -81,6 +91,7 @@ import nftCollectionMixin from '~/mixins/nft-collection';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTCollectionDetailsPage',
@@ -89,6 +100,7 @@ export default {
     nftCollectionMixin,
     navigationListenerMixin,
     utmMixin,
+    alertMixin,
   ],
   layout: 'default',
   data() {
@@ -495,6 +507,87 @@ export default {
         'NFT',
         'nft_collection_details_gift_close',
         this.classId,
+        1
+      );
+    },
+    async handleFollowButtonClick(productOwner) {
+      await this.handleClickFollow({
+        followOwner: productOwner,
+      });
+      this.alertPromptSuccess(
+        this.$t('portfolio_subscription_success_alert', {
+          creator: this.getUserInfoByAddress(productOwner)?.displayName,
+        })
+      );
+      if (this.walletFollowees?.includes(productOwner)) {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_collection_details_click_unfollow',
+          this.collectionId,
+          1
+        );
+      } else {
+        logTrackerEvent(
+          this,
+          'NFT',
+          'nft_collection_details_click_follow',
+          this.collectionId,
+          1
+        );
+      }
+    },
+    handleRecommendationHeaderAvatarClick() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_recommend_header_avatar_click',
+        this.collection_id,
+        1
+      );
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_recommend_item_click',
+        classId,
+        1
+      );
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_recommend_item_collect',
+        classId,
+        1
+      );
+    },
+    handleRecommendationSlideNext() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_recommendation_clicked_next',
+        this.collection_id,
+        1
+      );
+    },
+    handleRecommendationSlidePrev() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_recommendation_clicked_prev',
+        this.collection_id,
+        1
+      );
+    },
+    handleRecommendationSliderMove() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_recommendation_moved_slider',
+        this.collection_id,
         1
       );
     },
