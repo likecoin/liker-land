@@ -150,12 +150,6 @@
 
           <!-- recommend -->
           <section>
-            <client-only>
-              <lazy-component
-                class="pointer-events-none"
-                @show.once="handleFetchRecommendInfo"
-              />
-            </client-only>
             <NFTPageRecommendation
               :class-id="classId"
               @header-avatar-click="handleRecommendationHeaderAvatarClick"
