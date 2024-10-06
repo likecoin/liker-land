@@ -1246,7 +1246,7 @@ export default {
           break;
 
         case NFT_CLAIM_STATE.ID_CONFIRMATION:
-          if (this.cartId) {
+          if (this.cartId && this.cartItemsCount > 1) {
             // skip buyer message for cart claim for now
             this.claim();
           } else {
