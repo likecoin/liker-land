@@ -355,13 +355,14 @@ import { ellipsis } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTDetailsPage',
   filters: {
     ellipsis,
   },
-  mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
+  mixins: [clipboardMixin, nftMixin, navigationListenerMixin, alertMixin],
   layout: 'default',
   async asyncData({ route, query, store, redirect, error, localeLocation }) {
     const { action } = query;
@@ -754,6 +755,11 @@ export default {
       await this.handleClickFollow({
         followOwner: this.iscnOwner,
       });
+      this.alertPromptSuccess(
+        this.$t('portfolio_subscription_success_alert', {
+          creator: this.getUserInfoByAddress(this.iscnOwner)?.displayName,
+        })
+      );
       if (this.isFollowed) {
         logTrackerEvent(
           this,

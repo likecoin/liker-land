@@ -414,6 +414,7 @@ import clipboardMixin from '~/mixins/clipboard';
 import crossSellMixin from '~/mixins/cross-sell';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTClassDetailsPage',
@@ -423,6 +424,7 @@ export default {
     nftMixin,
     navigationListenerMixin,
     utmMixin,
+    alertMixin,
   ],
   layout: 'default',
   asyncData({ query }) {
@@ -1337,6 +1339,11 @@ export default {
       await this.handleClickFollow({
         followOwner: this.iscnOwner,
       });
+      this.alertPromptSuccess(
+        this.$t('portfolio_subscription_success_alert', {
+          creator: this.getUserInfoByAddress(this.iscnOwner)?.displayName,
+        })
+      );
       if (this.isFollowed) {
         logTrackerEvent(
           this,
