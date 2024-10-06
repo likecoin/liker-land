@@ -606,8 +606,6 @@ export default {
       this.isLoading = false;
     }
 
-    await this.fetchRecommendInfo();
-
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
       this.handleCollect();

@@ -911,9 +911,6 @@ export default {
         isNFTBook: true,
       };
     },
-    async handleFetchRecommendInfo() {
-      await this.fetchRecommendInfo();
-    },
     async handleClickMoreCollector() {
       logTrackerEvent(
         this,
