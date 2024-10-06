@@ -169,9 +169,12 @@ export default {
       if (!this.isAuthorSpecific) {
         return this.defaultFeaturedBooks;
       }
-      let recommendedList =
-        this.getCreatedNFTClassesByAddress(this.productOwner) || [];
-
+      let recommendedList = [
+        ...(this.getCreatedNFTClassesByAddress(this.productOwner) || []),
+        ...this.defaultFeaturedList.filter(
+          item => item.classId !== this.classId
+        ),
+      ];
       const featuredSet =
         this.getNFTClassFeaturedSetByAddress(this.iscnOwner) || new Set();
       const hiddenSet =
@@ -217,16 +220,7 @@ export default {
         });
       }
 
-      if (recommendedList.length > DISPLAY_ITEM_COUNT) {
-        return recommendedList.slice(0, 5);
-      }
-
-      const filteredDefaultList = this.defaultFeaturedList.filter(
-        item => item.classId !== this.classId
-      );
-      const itemsToAdd = DISPLAY_ITEM_COUNT - recommendedList.length;
-
-      return recommendedList.concat(filteredDefaultList.slice(0, itemsToAdd));
+      return recommendedList.slice(0, 5);
     },
     swiperOptions() {
       return {
