@@ -1,0 +1,191 @@
+<template>
+  <NuxtLink class="relative block w-[310px]" :to="detailsPageRoute">
+    <NFTGemWrapper :is-nft-book="true" :class-id="''">
+      <template #default="gem">
+        <NFTPortfolioCard
+          :class="{ 'border-like-collection border-[2px]': collectionId }"
+          :hover-class="gem.hoverClass"
+        >
+          <div
+            class="relative flex items-center justify-center w-full h-full rounded-t-[inherit]"
+          >
+            <NFTBookCoverWithFrame
+              :class="['w-full', 'rounded-t-[inherit] rounded-b-[0]']"
+              :src="imageSrc"
+              :alt="nftName"
+              :cover-resize="450"
+              class-aspect-ratio="aspect-[1]"
+            />
+          </div>
+          <div
+            :class="[
+              'flex',
+              'flex-col',
+              'text-center',
+              'whitespace-pre-line',
+              'px-[24px]',
+              'pt-[48px]',
+              'py-[24px]',
+              'bg-white',
+              'relative',
+              'rounded-b-[inherit] !rounded-t-[0]',
+            ]"
+          >
+            <div class="flex flex-col items-center justify-center mt-[-70px]">
+              <Identity
+                :avatar-url="ownerAvatar"
+                :avatar-size="40"
+                :is-lazy-loaded="true"
+              />
+              <Label
+                class="w-full mt-[8px] text-like-green font-[600]"
+                content-class="min-w-0"
+                align="center"
+              >
+                <span class="text-medium-gray">by</span>&nbsp;
+                <span class="truncate">{{ ownerDisplayName }}</span>
+              </Label>
+            </div>
+            <Label preset="h5" class="mt-[12px] break-normal" align="center">{{
+              nftName
+            }}</Label>
+            <div class="flex items-center justify-center mt-[16px]">
+              <ButtonV2
+                preset="secondary"
+                :text="priceLabel"
+                :is-disabled="!stock"
+                @click="handleClickCollect"
+              >
+                <template #prepend>
+                  <NFTWidgetIconInsertCoin class="w-[16px]" />
+                </template>
+              </ButtonV2>
+            </div>
+          </div>
+        </NFTPortfolioCard>
+      </template>
+    </NFTGemWrapper>
+  </NuxtLink>
+</template>
+<script>
+import { mapActions, mapGetters } from 'vuex';
+import { formatNumberWithUSD } from '~/util/ui';
+import { parseNFTMetadataURL } from '~/util/nft';
+
+export default {
+  name: 'NFTBookCollectionItemCard',
+  props: {
+    collectionId: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
+    return {
+      data: null,
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'getNFTCollectionInfoByCollectionId',
+      'getUserInfoByAddress',
+    ]),
+    detailsPageRoute() {
+      return this.localeLocation({
+        name: 'nft-collection-collectionId',
+        params: { collectionId: this.collectionId },
+      });
+    },
+    nftCollection() {
+      let { locale } = this.$i18n;
+      if (locale === 'zh-Hant') {
+        locale = 'zh';
+      }
+      const defaultLocale = 'en';
+      const collection = this.getNFTCollectionInfoByCollectionId(
+        this.collectionId
+      );
+      if (collection) {
+        let { name, description, image } = collection;
+        const { id, priceInDecimal, stock, ownerWallet } = collection;
+        const price = priceInDecimal / 100;
+
+        if (typeof name === 'object') {
+          name = name[locale] || name[defaultLocale] || '';
+        }
+        if (typeof description === 'object') {
+          description = description[locale] || description[defaultLocale] || '';
+        }
+        const priceLabel = formatNumberWithUSD(price);
+        image = parseNFTMetadataURL(image);
+        return {
+          id,
+          name,
+          image,
+          description,
+          priceLabel,
+          price,
+          value: -1,
+          stock,
+          ownerWallet,
+        };
+      }
+      return null;
+    },
+    nftName() {
+      return this.nftCollection?.name;
+    },
+    nftId() {
+      return this.nftCollection?.id;
+    },
+    nftValue() {
+      return this.nftCollection?.value;
+    },
+    priceLabel() {
+      return this.nftCollection?.priceLabel;
+    },
+    stock() {
+      return this.nftCollection?.stock;
+    },
+    imageSrc() {
+      return parseNFTMetadataURL(this.nftCollection?.image);
+    },
+    ownerWallet() {
+      return this.nftCollection?.ownerWallet;
+    },
+    ownerDisplayName() {
+      return (
+        this.getUserInfoByAddress(this.ownerWallet)?.displayName ||
+        this.ownerWallet
+      );
+    },
+    ownerAvatar() {
+      return this.getUserInfoByAddress(this.ownerWallet)?.avatar;
+    },
+  },
+  async mounted() {
+    try {
+      const data = await this.lazyFetchNFTCollectionInfoByCollectionId({
+        collectionId: this.collectionId,
+      });
+      if (data) {
+        this.lazyGetUserInfoByAddresses(data.ownerWallet);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(`Error fetching collection info: ${error}`);
+    }
+  },
+  methods: {
+    ...mapActions([
+      'lazyFetchNFTCollectionInfoByCollectionId',
+      'lazyGetUserInfoByAddresses',
+    ]),
+    parseNFTMetadataURL,
+    handleClickCollect() {
+      this.$emit('click-collect');
+      this.$router.push(this.detailsPageRoute);
+    },
+  },
+};
+</script>

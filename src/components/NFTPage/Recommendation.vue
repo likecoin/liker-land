@@ -41,7 +41,13 @@
           :key="nft.classId"
           style="width: 310px;"
         >
+          <NFTBookCollectionItemCard
+            v-if="nft.classId.startsWith('col')"
+            :collection-id="nft.classId"
+            @click-collect="$emit('item-collect', nft.classId)"
+          />
           <NFTPortfolioItem
+            v-else
             class="shadow-lg mb-[12px] mx-auto"
             :class-id="nft.classId"
             :portfolio-wallet="productOwner"
