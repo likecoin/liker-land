@@ -96,7 +96,7 @@ import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
 import bookstoreMixin from '~/mixins/bookstore';
 import nftOrCollection from '~/mixins/nft-or-collection';
 import walletMixin from '~/mixins/wallet';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 const DISPLAY_ITEM_COUNT = 5;
 
@@ -241,6 +241,9 @@ export default {
     },
   },
   mounted() {
+    if (this.isAuthorSpecific) {
+      this.lazyFetchCreatedNFTClassesByAddress(this.productOwner);
+    }
     if (!this.isAuthorSpecific || !this.nftIsWritingNFT) {
       if (!this.bookstoreListItemForLandingPage?.length) {
         this.fetchBookstoreItemsFromCMSForLandingPage();
@@ -248,6 +251,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['lazyFetchCreatedNFTClassesByAddress']),
     handleHeaderAvatarClick() {
       this.$emit('header-avatar-click');
     },
