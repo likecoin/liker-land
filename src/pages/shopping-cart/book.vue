@@ -335,11 +335,10 @@ export default {
           this.productIdList,
           1
         );
-        logPurchaseFlowEvent(this, 'begin_checkout', this.purchaseEventParams);
         const gaClientId = this.getGaClientId;
         const gaSessionId = this.getGaSessionId;
         const link = getNFTBookCartPurchaseLink();
-        const { url } = await this.$axios.$post(link, {
+        const { url, paymentId } = await this.$axios.$post(link, {
           gaClientId,
           gaSessionId,
           utmCampaign: this.utmCampaign,
@@ -353,6 +352,10 @@ export default {
           email: this.walletEmail,
           coupon: this.coupon,
           giftInfo,
+        });
+        logPurchaseFlowEvent(this, 'begin_checkout', {
+          ...this.purchaseEventParams,
+          paymentId,
         });
         if (url) {
           window.location.href = url;

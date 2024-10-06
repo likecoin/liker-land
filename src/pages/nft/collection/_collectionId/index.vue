@@ -305,12 +305,12 @@ export default {
         try {
           this.isOpeningCheckoutPage = true;
           logPurchaseFlowEvent(this, 'add_to_cart', this.purchaseEventParams);
-          logPurchaseFlowEvent(
-            this,
-            'begin_checkout',
-            this.purchaseEventParams
-          );
           if (this.collectionPrice === 0 && !this.customPrice) {
+            logPurchaseFlowEvent(
+              this,
+              'begin_checkout',
+              this.purchaseEventParams
+            );
             this.$router.push(
               this.localeLocation({
                 name: 'nft-claim',
@@ -332,7 +332,7 @@ export default {
               collectionId: this.collectionId,
               platform: this.platform,
             });
-            const { url } = await this.$axios.$post(link, {
+            const { url, paymentId } = await this.$axios.$post(link, {
               gaClientId,
               giftInfo,
               gaSessionId,
@@ -346,6 +346,10 @@ export default {
               gadSource: this.gadSource,
               fbClickId: this.fbClickId,
               email: this.walletEmail,
+            });
+            logPurchaseFlowEvent(this, 'begin_checkout', {
+              ...this.purchaseEventParams,
+              paymentId,
             });
             if (url) {
               window.location.href = url;

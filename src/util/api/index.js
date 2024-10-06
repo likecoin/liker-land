@@ -379,39 +379,6 @@ export const getFreeNFTBookPurchaseEndpoint = ({
       )}`;
 };
 
-export const postNFTBookLIKEPurchaseEndpoint = ({
-  classId,
-  collectionId,
-  priceIndex,
-  coupon,
-  gaClientId,
-  gaSessionId,
-  utmCampaign,
-  utmSource,
-  utmMedium,
-  referrer,
-  platform = NFT_BOOK_PLATFORM_LIKER_LAND,
-}) => {
-  const qsPayload = {
-    price_index: priceIndex,
-    from: platform,
-    coupon,
-    ga_client_id: gaClientId,
-    ga_session_id: gaSessionId,
-    utm_campaign: utmCampaign,
-    utm_source: utmSource,
-    utm_medium: utmMedium,
-    referrer,
-  };
-  return collectionId
-    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/new/like?${querystring.stringify(
-        qsPayload
-      )}`
-    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/new/like?${querystring.stringify(
-        qsPayload
-      )}`;
-};
-
 export const getNFTCollectionInfo = ({ wallet, classId, type }) => {
   const qsPayload = {
     class_id: classId,

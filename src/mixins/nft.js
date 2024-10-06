@@ -23,7 +23,6 @@ import {
   getNFTCountByClassId,
   getNftBookBuyerMessage,
   getNFTBookPurchaseLink,
-  postNFTBookLIKEPurchaseEndpoint,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { sleep, catchAxiosError } from '~/util/misc';
@@ -1106,23 +1105,13 @@ export default {
             result = { data: { nftId: this.listingInfo.nftId } };
           } else {
             this.uiSetTxStatus(TX_STATUS.PROCESSING_NON_BLOCKING);
-            if (this.nftIsNFTBook) {
-              result = await this.$api.post(
-                postNFTBookLIKEPurchaseEndpoint({
-                  classId,
-                  priceIndex: this.editionPriceIndex,
-                }),
-                { txHash, email }
-              );
-            } else {
-              result = await this.$api.post(
-                postNFTPurchase({
-                  txHash,
-                  classId,
-                  ts: Date.now(),
-                })
-              );
-            }
+            result = await this.$api.post(
+              postNFTPurchase({
+                txHash,
+                classId,
+                ts: Date.now(),
+              })
+            );
           }
           logTrackerEvent(
             this,
