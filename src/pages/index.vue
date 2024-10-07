@@ -512,7 +512,7 @@
             <li>
               <a
                 class="flex flex-col items-center"
-                href="https://newsletter.liker.land/p/4de"
+                :href="$t('about_nft_book_section_features_gifting_link')"
                 target="_blank"
                 rel="noopener"
                 @click="handleClickFeatureSupportAuthor"
@@ -535,7 +535,7 @@
             <li>
               <a
                 class="flex flex-col items-center"
-                href="https://dungfookei.com/en/why-should-i-publish-a-book-using-nft/"
+                :href="$t('about_nft_book_section_features_ownership_link')"
                 target="_blank"
                 rel="noopener"
                 @click="handleClickFeatureOwnership"
