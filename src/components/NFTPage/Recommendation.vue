@@ -169,10 +169,15 @@ export default {
       if (!this.isAuthorSpecific) {
         return this.defaultFeaturedBooks;
       }
+      const createdList =
+        this.getCreatedNFTClassesByAddress(this.productOwner) || [];
+      const createdClassIds = new Set(createdList.map(item => item.classId));
+
       let recommendedList = [
-        ...(this.getCreatedNFTClassesByAddress(this.productOwner) || []),
+        ...createdList,
         ...this.defaultFeaturedList.filter(
-          item => item.classId !== this.classId
+          item =>
+            item.classId !== this.classId && !createdClassIds.has(item.classId)
         ),
       ];
       const featuredSet =
@@ -220,7 +225,7 @@ export default {
         });
       }
 
-      return recommendedList.slice(0, 5);
+      return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
     },
     swiperOptions() {
       return {
