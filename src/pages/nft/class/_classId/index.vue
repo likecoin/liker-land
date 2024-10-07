@@ -149,7 +149,7 @@
           />
 
           <!-- recommend -->
-          <section>
+          <client-only>
             <NFTPageRecommendation
               :class-id="classId"
               @header-avatar-click="handleRecommendationHeaderAvatarClick"
@@ -160,7 +160,7 @@
               @slide-prev.once="handleRecommendationSlidePrev"
               @slider-move.once="handleRecommendationSliderMove"
             />
-          </section>
+          </client-only>
 
           <section
             v-if="

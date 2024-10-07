@@ -44,16 +44,18 @@
             />
           </div>
         </div>
-        <NFTPageRecommendation
-          :collection-id="collectionId"
-          @header-avatar-click="handleRecommendationHeaderAvatarClick"
-          @follow-button-click="handleFollowButtonClick"
-          @item-click="handleRecommendedItemClick"
-          @item-collect="handleRecommendedItemCollect"
-          @slide-next.once="handleRecommendationSlideNext"
-          @slide-prev.once="handleRecommendationSlidePrev"
-          @slider-move.once="handleRecommendationSliderMove"
-        />
+        <client-only>
+          <NFTPageRecommendation
+            :collection-id="collectionId"
+            @header-avatar-click="handleRecommendationHeaderAvatarClick"
+            @follow-button-click="handleFollowButtonClick"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
+        </client-only>
       </div>
     </div>
     <NFTBookGiftDialog
