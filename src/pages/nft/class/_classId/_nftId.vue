@@ -502,6 +502,8 @@ export default {
           sku: this.classId,
           iscn: this.iscnId,
           isbn: this.iscnData?.contentMetadata?.isbn,
+          datePublished: this.iscnData?.recordTimestamp,
+          bookFormat: this.isNftBook ? 'https://schema.org/EBook' : undefined,
           url: `${EXTERNAL_HOST}${this.$route.path}`.replace(
             `/${this.nftId}`,
             ''

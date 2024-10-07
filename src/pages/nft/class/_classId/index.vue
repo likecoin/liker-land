@@ -573,6 +573,7 @@ export default {
         sku: this.classId,
         iscn: this.iscnId,
         isbn: this.iscnData?.contentMetadata?.isbn,
+        datePublished: this.iscnData?.recordTimestamp,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
           '@type': 'Offer',
@@ -591,8 +592,8 @@ export default {
     if (this.nftEditions) {
       const bookSchema = {
         '@context': 'https://schema.org',
-        '@type': 'Book',
-        '@id': this.iscnId,
+        '@type': ['Book', 'ProductGroup'],
+        '@id': this.classId,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         name: title,
         image: [ogImage],
@@ -606,15 +607,21 @@ export default {
         sku: this.classId,
         iscn: this.iscnId,
         isbn: this.iscnData?.contentMetadata?.isbn,
+        productGroupID: this.classId,
+        datePublished: this.iscnData?.recordTimestamp,
+        bookFormat: 'https://schema.org/EBook',
         workExample: [],
       };
       this.nftEditions.forEach(e => {
         bookSchema.workExample.push({
           '@type': ['Book', 'Product'],
-          name: title,
+          name: `${title} - ${e.name}`,
           image: [ogImage],
+          sku: `${this.classId}-${e.index}`,
+          inProductGroupWithID: this.classId,
           iscn: this.iscnId,
           isbn: this.iscnData?.contentMetadata?.isbn,
+          bookFormat: 'https://schema.org/EBook',
           bookEdition: e.name,
           description: e.description,
           brand: {
