@@ -341,37 +341,25 @@ export const AFFILIATION_CHANNEL_LEGACY_STRINGS = {
 export const NFT_BOOK_WITH_SIGN_IMAGE_SET = new Map(
   IS_TESTNET
     ? [
-        ['likenft15zduda2nmhp0fycc5yp346ummdrq9fs4qm9q36sspxxmyqh9s3uqrhzcan'],
         ['likenft16lzy2d7p7rvpn2jwntcvg3jekeryvnxjxtrlls3ggljgkl4mycmqafq6me'],
         ['likenft17h0ka8jzag50jg3sd30mzs2zrkax9s46xdefdydzy7u72e3r0e6s9gm77q'],
         ['likenft18vzfkzeq3jevlt8r54apqye6l35q0pm86rj9cx8l3cmmsgn64muqgwjmvm'],
         ['likenft1atwyg8mznmaekeszfq0nryksh3qut4c3clhrq8ksje6p0l3wjlrstnkups'],
         ['likenft1gmm4c4rqf4x4svspx66j27wary9kxhk43n9kwcrpg6zraj7cdveqppvr4j'],
-        ['likenft1kd8xglgepr2p8j8urewraa2ekvc7769unena0zjtc8psfzg23a7skwsnxz'],
         [
           'likenft1nekez4y50uk0dmgxuxql7v2vnhy3wqa24ld46hk4frlwcvwpr88selunrr',
-          ['陳建民'],
+          ['陳健民'],
         ],
       ]
     : [
-        ['likenft138rp6lqc74clx4zz3l980lzjnusxwjpw2kwkln4t8kh08h2j6t5szwur6v'],
         ['likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x'],
-        ['likenft15entdx6z5l2r7wqc93fz32g53ve6lfk4tgqqzl8ereg7tvs3t9nq82n5m3'],
         ['likenft16guxp3ve3srczsarf5nlkz32cv097z6ceee02ekxt3cphpfv9n0qmcpvqa'],
-        ['likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3'],
-        ['likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg'],
-        ['likenft19ul7dkwj2p8fs3m6t4gy77p7mlgnyy3ehcmran2f4us8ctn6yw5sk7fx2z'],
         ['likenft1aa48m08ep06m2celycx9qdsyl0vaqje2jlzdnufe64czevg2ed3syk9g6v'],
-        ['likenft1eawzxut5zf9t9myyd6prquef7c2r7pe0z3rzlreup59wtxe9hplqcd4987'],
         [
           'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
-          ['陳建民'],
+          ['陳健民'],
         ],
-        ['likenft1eypeyd844dpyljga8s0mez53hx5tkncttkzaxqevr4ckl8uv9q4qqy8qju'],
-        ['likenft1ku4ra0e7dgknhd0wckrkxspuultynl4mgkxa3j08xeshfr2l0ujqmmvy83'],
         ['likenft1mppyvyuvvft62yc66saee28q8nyl6xuh8vg332d8y9fn6gz9qtssj4trzl'],
-        ['likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z'],
         ['likenft1tlnn2x6864q6l5ag4fd87lc8eel7xafxnahd0836sap9eqshtuesesavum'],
-        ['likenft1wrskn9a683stkje3wdmcwuvpuqrp5eevjsnn9y4f55wlystzxausuhj3em'],
       ]
 );
