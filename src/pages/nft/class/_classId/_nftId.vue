@@ -314,16 +314,16 @@
             @click-user-collected-count="handleClickUserCollectedCount"
           />
         </section>
-<client-only>
-        <!-- recommend -->
-        <NFTPageRecommendation
-          :class-id="classId"
-          @item-click="handleRecommendedItemClick"
-          @item-collect="handleRecommendedItemCollect"
-          @slide-next.once="handleRecommendationSlideNext"
-          @slide-prev.once="handleRecommendationSlidePrev"
-          @slider-move.once="handleRecommendationSliderMove"
-        />
+        <client-only>
+          <!-- recommend -->
+          <NFTPageRecommendation
+            :class-id="classId"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
         </client-only>
       </div>
     </div>
