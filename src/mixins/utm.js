@@ -13,6 +13,7 @@ export default {
       utmSource: this.$route.query.utm_source,
       utmMedium: this.$route.query.utm_medium,
       documentReferrer: '',
+      fbClickId: this.formattedFbcQs,
     };
   },
   computed: {
@@ -22,14 +23,16 @@ export default {
     gadSource() {
       return this.$route.query.gad_source;
     },
-    fbClickId() {
-      return this.$route.query.fbclid;
+    formattedFbcQs() {
+      const { fbclid } = this.$route.query;
+      return fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined;
     },
   },
   mounted() {
     this.documentReferrer = document.referrer;
     this.restoreUTMFromSessionStorage();
     this.storeUTMToSessionStorage();
+    this.getFbClickIdFromCookie();
   },
   methods: {
     setUTMProps({ utmCampaign, utmSource, utmMedium }) {
@@ -77,6 +80,20 @@ export default {
         documentReferrer: this.documentReferrer,
       };
       setSessionStorageItem('UTM_INFO', JSON.stringify(utm));
+    },
+    getFbClickIdFromCookie() {
+      try {
+        const fbc = this.$cookie.get('_fbc');
+        if (fbc) {
+          this.fbClickId = fbc;
+        } else if (this.formattedFbcQs) {
+          this.fbClickId = this.formattedFbcQs;
+          this.$cookie.set('_fbc', this.fbClickId, { expires: '90D' });
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
   },
 };
