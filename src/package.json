@@ -59,7 +59,7 @@
     "dayjs": "^1.11.9",
     "dompurify": "^3.0.5",
     "epubjs": "^0.3.93",
-    "express": "^4.16.4",
+    "express": "^4.21.0",
     "express-session": "^1.17.0",
     "fast-json-stable-stringify": "^2.1.0",
     "file-saver": "^2.0.5",
