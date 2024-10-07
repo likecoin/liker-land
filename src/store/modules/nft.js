@@ -466,20 +466,32 @@ const actions = {
       bookstoreInfo,
     } = await this.$api.$get(api.getNFTClassMetadata(classId, excludeOptions));
     const iscnId = classData.parent.iscn_id_prefix;
-    commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
-    commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
-    commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
-    if (ownerInfo) {
+
+    const shouldCommit = option => !excludeOptions.includes(option);
+    if (shouldCommit('class_chain')) {
+      commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+        classId,
+        metadata: classData,
+      });
+    }
+    if (shouldCommit('iscn')) {
+      commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
+    }
+    if (shouldCommit('listing')) {
+      commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
+    }
+    if (shouldCommit('owner')) {
       commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
     }
+
     // skip for non Writing NFT
-    if (purchaseInfo) {
+    if (shouldCommit('purchase') && purchaseInfo) {
       commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
         classId,
         info: purchaseInfo,
       });
     }
-    if (bookstoreInfo) {
+    if (shouldCommit('bookstore') && bookstoreInfo) {
       const payload = {
         classId,
         prices: bookstoreInfo.prices,

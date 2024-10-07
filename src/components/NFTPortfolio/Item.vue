@@ -101,8 +101,10 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.lazyFetchNFTClassAggregatedData(['owner']);
-      this.updateNFTOwners();
+      await Promise.all([
+        this.lazyFetchNFTClassAggregatedData({ excludeOptions: ['owner'] }),
+        this.updateNFTOwners(),
+      ]);
     },
     async handleClickCollect() {
       this.$emit('collect');

@@ -6,7 +6,6 @@ import {
   LIKECOIN_BUTTON_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
-  LIKECOIN_NFT_CLASS_FREE_MINT,
   NFT_DISPLAY_STATE,
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
@@ -807,7 +806,7 @@ export default {
         this.lazyGetUserInfoByAddresses(this.iscnOwner);
       }
     },
-    async lazyFetchNFTClassAggregatedData(excludeOptions = []) {
+    async lazyFetchNFTClassAggregatedData({ excludeOptions = [] } = {}) {
       await catchAxiosError(
         this.lazyFetchNFTClassAggregatedInfo({
           classId: this.classId,
