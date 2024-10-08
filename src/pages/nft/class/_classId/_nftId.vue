@@ -477,7 +477,7 @@ export default {
         url: `${EXTERNAL_HOST}/about/writing-nft`,
         name: 'Writing NFT',
       };
-    } else if (this.isNftBook) {
+    } else if (this.nftIsNFTBook) {
       brand = {
         '@type': 'Brand',
         url: `${EXTERNAL_HOST}/about/nft-book`,
@@ -487,13 +487,13 @@ export default {
     const schemas = [
       {
         '@context': 'http://schema.org',
-        '@type': this.isNftBook ? 'Book' : 'CreativeWork',
+        '@type': this.nftIsNFTBook ? 'Book' : 'CreativeWork',
         name: title,
         description,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         exampleOfWork: {
           '@context': 'http://www.schema.org',
-          '@type': this.isNftBook ? 'Book' : 'CreativeWork',
+          '@type': this.nftIsNFTBook ? 'Book' : 'CreativeWork',
           name: title,
           author: this.iscnWorkAuthor,
           image: [this.NFTImageUrl],
@@ -502,6 +502,10 @@ export default {
           sku: this.classId,
           iscn: this.iscnId,
           isbn: this.iscnData?.contentMetadata?.isbn,
+          datePublished: this.iscnData?.recordTimestamp,
+          bookFormat: this.nftIsNFTBook
+            ? 'https://schema.org/EBook'
+            : undefined,
           url: `${EXTERNAL_HOST}${this.$route.path}`.replace(
             `/${this.nftId}`,
             ''
