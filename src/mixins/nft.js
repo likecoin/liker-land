@@ -808,8 +808,13 @@ export default {
         this.lazyGetUserInfoByAddresses(this.iscnOwner);
       }
     },
-    async lazyFetchNFTClassAggregatedData() {
-      await catchAxiosError(this.lazyFetchNFTClassAggregatedInfo(this.classId));
+    async lazyFetchNFTClassAggregatedData({ excludeOptions = [] } = {}) {
+      await catchAxiosError(
+        this.lazyFetchNFTClassAggregatedInfo({
+          classId: this.classId,
+          excludeOptions,
+        })
+      );
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
@@ -832,8 +837,8 @@ export default {
     lazyFetchNFTOwners() {
       return this.lazyGetNFTOwners(this.classId);
     },
-    updateNFTOwners() {
-      return this.fetchNFTOwners(this.classId);
+    updateNFTOwners({ nocache = true } = {}) {
+      return this.fetchNFTOwners({ classId: this.classId, nocache });
     },
     async updateNFTHistory({ getAllUserInfo = false, trimmedCount = 10 }) {
       this.isHistoryInfoLoading = true;

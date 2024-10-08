@@ -463,7 +463,10 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTClassAggregatedInfo({ commit, dispatch }, classId) {
+  async fetchNFTClassAggregatedInfo(
+    { commit, dispatch },
+    { classId, excludeOptions = [] }
+  ) {
     const {
       classData,
       iscnData,
@@ -471,20 +474,34 @@ const actions = {
       listings,
       purchaseInfo,
       bookstoreInfo,
-    } = await this.$api.$get(api.getNFTClassMetadata(classId));
+    } = await this.$api.$get(api.getNFTClassMetadata(classId, excludeOptions));
     const iscnId = classData.parent.iscn_id_prefix;
-    commit(TYPES.NFT_SET_NFT_CLASS_METADATA, { classId, metadata: classData });
-    commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
-    commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
-    commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
+
+    const shouldCommit = option => !excludeOptions.includes(option);
+    if (shouldCommit('class_chain')) {
+      commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+        classId,
+        metadata: classData,
+      });
+    }
+    if (shouldCommit('iscn')) {
+      commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
+    }
+    if (shouldCommit('listing')) {
+      commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
+    }
+    if (shouldCommit('owner')) {
+      commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
+    }
+
     // skip for non Writing NFT
-    if (purchaseInfo) {
+    if (shouldCommit('purchase') && purchaseInfo) {
       commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, {
         classId,
         info: purchaseInfo,
       });
     }
-    if (bookstoreInfo) {
+    if (shouldCommit('bookstore') && bookstoreInfo) {
       const payload = {
         classId,
         prices: bookstoreInfo.prices,
@@ -504,7 +521,10 @@ const actions = {
       if (!process.client) await promise;
     }
   },
-  async lazyFetchNFTClassAggregatedInfo({ getters, dispatch }, classId) {
+  async lazyFetchNFTClassAggregatedInfo(
+    { getters, dispatch },
+    { classId, excludeOptions = [] }
+  ) {
     const metadata = getters.getNFTClassMetadataById(classId);
     const fieldsToCheck = [
       metadata,
@@ -514,7 +534,10 @@ const actions = {
     ];
 
     if (fieldsToCheck.some(value => !value)) {
-      await dispatch('fetchNFTClassAggregatedInfo', classId);
+      await dispatch('fetchNFTClassAggregatedInfo', {
+        classId,
+        excludeOptions,
+      });
     }
   },
   async fetchNFTPurchaseInfo({ commit }, classId) {
@@ -686,8 +709,8 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTOwners({ commit }, classId) {
-    const { owners } = await this.$api.$get(api.getNFTOwners(classId));
+  async fetchNFTOwners({ commit }, { classId, nocache = true }) {
+    const { owners } = await this.$api.$get(api.getNFTOwners(classId, nocache));
     const info = formatOwnerInfoFromChain(owners);
     commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info });
     return info;
@@ -695,7 +718,7 @@ const actions = {
   async lazyGetNFTOwners({ getters, dispatch }, classId) {
     let owners = getters.getNFTClassOwnerInfoById(classId);
     if (!owners) {
-      owners = await dispatch('fetchNFTOwners', classId);
+      owners = await dispatch('fetchNFTOwners', { classId });
     }
     return owners;
   },
@@ -752,7 +775,9 @@ const actions = {
       .filter(c => c.symbol === 'WRITING')
       .sort((a, b) => b.latest_price - a.latest_price)
       .slice(0, 5)
-      .forEach(c => dispatch('lazyFetchNFTClassAggregatedInfo', c.id));
+      .forEach(c =>
+        dispatch('lazyFetchNFTClassAggregatedInfo', { classId: c.id })
+      );
   },
   async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
     const classesOrPromise = state.createdNFTClassesByAddressMap[address];

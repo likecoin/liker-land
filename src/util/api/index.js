@@ -194,10 +194,11 @@ export const getNFTsPartial = ({ owner, expandClasses, limit, key }) => {
   )}`;
 };
 
-export const getNFTOwners = classId => {
+export const getNFTOwners = (classId, nocache) => {
   const qsPayload = {
     class_id: classId,
   };
+  if (nocache) qsPayload.ts = `${Math.round(new Date().getTime() / 1000)}`;
   return `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/owner?${querystring.stringify(
     qsPayload
   )}`;
@@ -410,8 +411,26 @@ export const getFreeNFTClassIds = () =>
 export const getIdenticonAvatar = id =>
   `https://api.dicebear.com/7.x/identicon/svg?seed=${id}&backgroundColor=ffffff`;
 
-export const getNFTClassMetadata = classId =>
-  `${LIKECOIN_API_BASE}/likerland/nft/metadata?class_id=${classId}`;
+export const getNFTClassMetadata = (classId, excludeOptions = []) => {
+  const baseUrl = `${LIKECOIN_API_BASE}/likerland/nft/metadata?class_id=${classId}`;
+  if (!excludeOptions.length) {
+    return baseUrl;
+  }
+  const allOptions = [
+    'class_chain',
+    'class_api',
+    'iscn',
+    'owner',
+    'listing',
+    'purchase',
+    'bookstore',
+  ];
+  const dataOptions = allOptions.filter(
+    option => !excludeOptions.includes(option)
+  );
+  const queryParams = dataOptions.map(option => `data=${option}`).join('&');
+  return `${baseUrl}${queryParams ? `&${queryParams}` : ''}`;
+};
 
 export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
   const qsPayload = { email, wallet, language };
