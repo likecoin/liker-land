@@ -3,7 +3,7 @@
     <NFTBookSpecTableLabel
       :text="$t('nft_details_page_label_access_methods')"
     />
-    <div class="font-[600]">{{ label }}</div>
+    <div :class="['font-[600]', labelStyle]">{{ label }}</div>
   </component>
 </template>
 
@@ -18,12 +18,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    isCampaign: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     label() {
       return this.isDownloadable
         ? this.$t('nft_details_page_label_access_methods_downloadable')
         : this.$t('nft_details_page_label_access_methods_web_only');
+    },
+    labelStyle() {
+      if (this.isCampaign) return 'text-white';
+      return 'text-dark-gray';
     },
   },
 };
