@@ -163,7 +163,7 @@ export default {
     if (this.collectionPrice) {
       schemas.push({
         '@context': 'http://schema.org',
-        '@type': 'ProductCollection',
+        '@type': ['Product', 'ProductCollection'],
         name: this.collectionName,
         description: this.collectionDescription,
         image: ogImage,
@@ -175,30 +175,35 @@ export default {
             iscn_owner: iscnOwner,
           } = this.getNFTClassMetadataById(id);
           return {
-            '@type': this.collectionIsBook ? 'Book' : 'CreativeWork',
-            name: className,
-            description: classDescription,
-            image: classImage,
-            url: `${EXTERNAL_HOST}/nft/class/${id}`,
-            author: iscnOwner
-              ? {
-                  '@context': 'http://www.schema.org',
-                  '@type': 'Person',
-                  url: `${EXTERNAL_HOST}/${iscnOwner}`,
-                  identifier: iscnOwner,
-                }
-              : undefined,
-            brand: this.collectionIsBook
-              ? {
-                  '@type': 'Brand',
-                  url: `${EXTERNAL_HOST}/about/nft-book`,
-                  name: 'NFT Book',
-                }
-              : {
-                  '@type': 'Brand',
-                  url: `${EXTERNAL_HOST}/about/writing-nft`,
-                  name: 'Writing NFT',
-                },
+            '@type': 'TypeAndQuantityNode',
+            typeOfGood: {
+              '@type': this.collectionIsBook ? 'Book' : 'CreativeWork',
+              name: className,
+              description: classDescription,
+              image: classImage,
+              url: `${EXTERNAL_HOST}/nft/class/${id}`,
+              author: iscnOwner
+                ? {
+                    '@context': 'http://www.schema.org',
+                    '@type': 'Person',
+                    url: `${EXTERNAL_HOST}/${iscnOwner}`,
+                    identifier: iscnOwner,
+                  }
+                : undefined,
+              brand: this.collectionIsBook
+                ? {
+                    '@type': 'Brand',
+                    url: `${EXTERNAL_HOST}/about/nft-book`,
+                    name: 'NFT Book',
+                  }
+                : {
+                    '@type': 'Brand',
+                    url: `${EXTERNAL_HOST}/about/writing-nft`,
+                    name: 'Writing NFT',
+                  },
+            },
+            amountOfThisGood: '1',
+            unitCode: 'C62',
           };
         }),
         offers: {
