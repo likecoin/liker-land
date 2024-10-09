@@ -465,7 +465,6 @@ export default {
           return {
             '@context': 'http://www.schema.org',
             '@type': 'Book',
-            '@id': `${EXTERNAL_HOST}/nft/class/${classId}`,
             name: className,
             description: classDescription,
             image: parseNFTMetadataURL(classImage),
