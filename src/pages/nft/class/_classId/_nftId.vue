@@ -463,6 +463,7 @@ export default {
           name: title,
           encoding: [
             {
+              '@context': 'http://www.schema.org',
               '@type': 'MediaObject',
               contentUrl: this.nftModelURL,
               encodingFormat: 'model/gltf-json',
@@ -473,12 +474,14 @@ export default {
     let brand;
     if (this.isWritingNft) {
       brand = {
+        '@context': 'http://www.schema.org',
         '@type': 'Brand',
         url: `${EXTERNAL_HOST}/about/writing-nft`,
         name: 'Writing NFT',
       };
     } else if (this.nftIsNFTBook) {
       brand = {
+        '@context': 'http://www.schema.org',
         '@type': 'Brand',
         url: `${EXTERNAL_HOST}/about/nft-book`,
         name: 'NFT Book',

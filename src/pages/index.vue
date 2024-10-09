@@ -847,9 +847,11 @@ export default {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
           mainEntity: this.faqs.map(({ question, answer }) => ({
+            '@context': 'http://www.schema.org',
             '@type': 'Question',
             name: question,
             acceptedAnswer: {
+              '@context': 'http://www.schema.org',
               '@type': 'Answer',
               text: answer,
             },

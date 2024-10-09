@@ -175,8 +175,10 @@ export default {
             iscn_owner: iscnOwner,
           } = this.getNFTClassMetadataById(id);
           return {
+            '@context': 'http://www.schema.org',
             '@type': 'TypeAndQuantityNode',
             typeOfGood: {
+              '@context': 'http://www.schema.org',
               '@type': this.collectionIsBook ? 'Book' : 'CreativeWork',
               name: className,
               description: classDescription,
@@ -192,11 +194,13 @@ export default {
                 : undefined,
               brand: this.collectionIsBook
                 ? {
+                    '@context': 'http://www.schema.org',
                     '@type': 'Brand',
                     url: `${EXTERNAL_HOST}/about/nft-book`,
                     name: 'NFT Book',
                   }
                 : {
+                    '@context': 'http://www.schema.org',
                     '@type': 'Brand',
                     url: `${EXTERNAL_HOST}/about/writing-nft`,
                     name: 'Writing NFT',
@@ -207,6 +211,7 @@ export default {
           };
         }),
         offers: {
+          '@context': 'http://www.schema.org',
           '@type': 'Offer',
           price: this.collectionPrice,
           priceCurrency: 'USD',

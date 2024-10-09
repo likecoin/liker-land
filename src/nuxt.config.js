@@ -164,16 +164,19 @@ const nuxtConfig = {
             ],
             brand: [
               {
+                '@context': 'http://www.schema.org',
                 '@type': 'Brand',
                 url: 'https://liker.land/about/writing-nft',
                 name: 'Writing NFT',
               },
               {
+                '@context': 'http://www.schema.org',
                 '@type': 'Brand',
                 url: 'https://liker.land/about/nft-book',
                 name: 'NFT Book',
               },
               {
+                '@context': 'http://www.schema.org',
                 '@type': 'Brand',
                 url: 'https://liker.land/civic',
                 name: 'Civic Liker',
@@ -188,42 +191,7 @@ const nuxtConfig = {
             operatingSystem: 'All',
             url: 'https://liker.land',
             offers: {
-              '@type': 'Offer',
-              price: '0',
-              priceCurrency: 'USD',
-            },
-          },
-          {
-            '@context': 'http://www.schema.org',
-            '@type': 'MobileApplication',
-            name: 'Liker Land',
-            applicationCategory: 'LifestyleApplication',
-            operatingSystem: 'IOS',
-            url: 'https://apps.apple.com/app/liker-land/id1248232355',
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: '4.3',
-              ratingCount: '16',
-            },
-            offers: {
-              '@type': 'Offer',
-              price: '0',
-              priceCurrency: 'USD',
-            },
-          },
-          {
-            '@context': 'http://www.schema.org',
-            '@type': 'MobileApplication',
-            name: 'Liker Land',
-            applicationCategory: 'LifestyleApplication',
-            operatingSystem: 'ANDROID',
-            url: 'https://play.google.com/store/apps/details?id=com.oice',
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: '3.8',
-              ratingCount: '1699',
-            },
-            offers: {
+              '@context': 'http://www.schema.org',
               '@type': 'Offer',
               price: '0',
               priceCurrency: 'USD',
