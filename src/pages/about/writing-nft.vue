@@ -50,15 +50,18 @@ export default {
             '@context': 'http://www.schema.org',
             '@type': 'FAQPage',
             about: {
+              '@context': 'http://www.schema.org',
               '@type': 'Brand',
               url: `${EXTERNAL_HOST}/about/writing-nft`,
               name: 'Writing NFT',
             },
             mainEntity: this.$t('faq_list').map(
               ({ q: question, a: answer }) => ({
+                '@context': 'http://www.schema.org',
                 '@type': 'Question',
                 name: question,
                 acceptedAnswer: {
+                  '@context': 'http://www.schema.org',
                   '@type': 'Answer',
                   text: answer,
                 },

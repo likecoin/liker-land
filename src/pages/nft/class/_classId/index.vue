@@ -548,6 +548,7 @@ export default {
           name: title,
           encoding: [
             {
+              '@context': 'http://www.schema.org',
               '@type': 'MediaObject',
               contentUrl: this.nftModelURL,
               encodingFormat: 'model/gltf-json',
@@ -566,6 +567,7 @@ export default {
         image: [ogImage],
         description,
         brand: {
+          '@context': 'http://www.schema.org',
           '@type': 'Brand',
           url: `${EXTERNAL_HOST}/about/writing-nft`,
           name: 'Writing NFT',
@@ -576,6 +578,7 @@ export default {
         datePublished: this.iscnData?.recordTimestamp,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
+          '@context': 'http://www.schema.org',
           '@type': 'Offer',
           seller: iscnOwnerPerson,
           price: NFTPriceUSD,
@@ -598,6 +601,7 @@ export default {
         image: [ogImage],
         description,
         brand: {
+          '@context': 'http://www.schema.org',
           '@type': 'Brand',
           url: 'https://liker.land/about/nft-book',
           name: 'NFT Book',
@@ -615,6 +619,7 @@ export default {
       };
       this.nftEditions.forEach(e => {
         schemas.push({
+          '@context': 'http://www.schema.org',
           '@type': ['Book', 'Product'],
           '@id': `@${this.classId}-${e.index}`,
           name: `${title} - ${e.name}`,
@@ -627,11 +632,13 @@ export default {
           bookEdition: e.name,
           description: e.description,
           brand: {
+            '@context': 'http://www.schema.org',
             '@type': 'Brand',
             url: 'https://liker.land/about/nft-book',
             name: 'NFT Book',
           },
           offers: {
+            '@context': 'http://www.schema.org',
             '@type': 'Offer',
             seller: iscnOwnerPerson,
             price: e.price,
