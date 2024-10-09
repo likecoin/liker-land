@@ -174,7 +174,10 @@ export function logPurchaseFlowEvent(
         value: price,
         currency,
         items: items.map(i => {
-          const itemId = i.productId || i.collectionId || i.classId;
+          let itemId = i.productId || i.collectionId || i.classId;
+          if (i.priceIndex !== undefined) {
+            itemId = `${itemId}-${i.priceIndex}`;
+          }
           return {
             item_id: itemId,
             item_name: i.name?.substring(0, 100) || itemId,
@@ -212,13 +215,23 @@ export function logPurchaseFlowEvent(
             value: price,
             order_id: paymentId || txHash,
             content_type: 'product',
-            contents: items.map(i => ({
-              id: i.productId || i.collectionId || i.classId,
-              quantity: i.quantity || 1,
-            })),
-            content_ids: items.map(
-              i => i.productId || i.collectionId || i.classId
-            ),
+            contents: items.map(i => {
+              let id = i.productId || i.collectionId || i.classId;
+              if (i.priceIndex !== undefined) {
+                id = `${id}-${i.priceIndex}`;
+              }
+              return {
+                id,
+                quantity: i.quantity || 1,
+              };
+            }),
+            content_ids: items.map(i => {
+              let id = i.productId || i.collectionId || i.classId;
+              if (i.priceIndex !== undefined) {
+                id = `${id}-${i.priceIndex}`;
+              }
+              return id;
+            }),
           },
           eventID ? { eventID } : undefined
         );
