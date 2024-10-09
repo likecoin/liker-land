@@ -593,7 +593,6 @@ export default {
       const bookSchema = {
         '@context': 'https://schema.org',
         '@type': ['Book', 'ProductGroup'],
-        '@id': this.classId,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         name: title,
         image: [ogImage],
@@ -611,10 +610,13 @@ export default {
         datePublished: this.iscnData?.recordTimestamp,
         bookFormat: 'https://schema.org/EBook',
         workExample: [],
+        hasVariant: [],
+        variesBy: ['https://schema.org/BookEdition'],
       };
       this.nftEditions.forEach(e => {
-        bookSchema.workExample.push({
+        schemas.push({
           '@type': ['Book', 'Product'],
+          '@id': `${this.classId}-${e.index}`,
           name: `${title} - ${e.name}`,
           image: [ogImage],
           sku: `${this.classId}-${e.index}`,
@@ -641,6 +643,12 @@ export default {
             }),
           },
           subjectOf: threeDModel,
+        });
+        bookSchema.workExample.push({
+          '@id': `@${this.classId}-${e.index}`,
+        });
+        bookSchema.hasVariant.push({
+          '@id': `@${this.classId}-${e.index}`,
         });
       });
       schemas.push(bookSchema);
