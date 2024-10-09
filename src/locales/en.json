@@ -52,7 +52,7 @@
     "Start": "Start"
   },
   "attention_keplrMobile_openApp": "Open your Keplr mobile app and you should find a dialog box pending your approval.\nIf you cannot find the dialog box, kill the app instance and retry all over again.",
-  "attention_likerland_openApp": "Open your Liker Land app and you should find a dialog box pending your approval.\nIf you cannot find the dialog box, delete the Wallet Connect session in the “app setting” and retry all over again.",
+  "attention_likerland_openApp": "Open your LikeCoin App and you should find a dialog box pending your approval.\nIf you cannot find the dialog box, delete the Wallet Connect session in the “app setting” and retry all over again.",
   "auth_required_view_hint_label_loading": "Verifying wallet",
   "back": "Back",
   "backToHome": "Home",
@@ -279,12 +279,12 @@
   "footer_subscribe_newsletter_button": "Subscribe Newsletter",
   "GetAppPage": {
     "Og": {
-      "Description": "Collect your favorite story on your fingertips. Liker Land - Turn stories into collectibles",
+      "Description": "Collect your favorite story on your fingertips.",
       "Title": "@:GetAppPage.Title"
     },
-    "Title": "Download Liker Land App"
+    "Title": "Download LikeCoin App"
   },
-  "GetAppPage.Download": "Download Liker Land",
+  "GetAppPage.Download": "Download LikeCoin App",
   "GetAppPage.Download.now": "Download Now",
   "GetAppPage.Manage.like": "Manage your LikeCoin",
   "Glossary": {
@@ -958,7 +958,7 @@
     "creator": "I'm a Creator too",
     "home": "Home",
     "logout": "Logout",
-    "openWithApp": "Open with Liker Land app",
+    "openWithApp": "Open with LikeCoin App",
     "settings": "@:SettingsPage.title",
     "support": "Support"
   },
@@ -1016,7 +1016,7 @@
   "tx_modal_status_sign_title_cosmostation": "Pending your signature on Cosmostation extension",
   "tx_modal_status_sign_title_keplr": "Pending your signature on Keplr",
   "tx_modal_status_sign_title_keplrMobile": "Pending your signature on Keplr mobile app",
-  "tx_modal_status_sign_title_likerId": "Pending your signature on Liker Land app",
+  "tx_modal_status_sign_title_likerId": "Pending your signature on LikeCoin App",
   "unfollow": "Unfollow",
   "unfollowed": "Unfollowed",
   "upgrade": "Upgrade"

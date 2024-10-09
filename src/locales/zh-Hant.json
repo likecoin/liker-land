@@ -279,12 +279,12 @@
   "footer_subscribe_newsletter_button": "訂閱電子報",
   "GetAppPage": {
     "Og": {
-      "Description": "下載手機應用程式，指尖之間收藏至愛作品。Liker Land - 讓故事成為收藏品",
+      "Description": "下載手機應用程式，指尖之間收藏至愛作品。",
       "Title": "@:GetAppPage.Title"
     },
-    "Title": "下載 Liker Land App"
+    "Title": "下載 LikeCoin App"
   },
-  "GetAppPage.Download": "下載 Liker Land",
+  "GetAppPage.Download": "下載 LikeCoin App",
   "GetAppPage.Download.now": "立即下載",
   "GetAppPage.Manage.like": "管理你的 LikeCoin",
   "Glossary": {
@@ -958,7 +958,7 @@
     "creator": "創作者",
     "home": "主頁",
     "logout": "登出",
-    "openWithApp": "以 Liker Land App 開啟",
+    "openWithApp": "以 LikeCoin App 開啟",
     "settings": "@:SettingsPage.title",
     "support": "幫助"
   },
@@ -984,7 +984,7 @@
   "substack_button_submitted": "訂閱成功！",
   "substack_input_placeholder": "example@gmail.com",
   "subVPs": [
-    "用 Liker Land 收發 LikeCoin 最便捷",
+    "收發 LikeCoin 最便捷",
     "每週、每天、每篇文章所獲賺賞，一目了然",
     "委託 LikeCoin 獲得額外回報，同時參與社群決策"
   ],
