@@ -1,7 +1,7 @@
 <template>
   <section class="bg-like-green rounded-[24px] overflow-hidden py-[2rem]">
     <div
-      v-if="recommendedList.length && isAuthorSpecific"
+      v-if="recommendedList.length && !shouldShowDefaultRecommendation"
       class="flex items-center justify-between px-[2rem]"
     >
       <NFTMessageIdentity
@@ -116,11 +116,6 @@ export default {
       type: String,
       default: '',
     },
-    // if true, show author works, else show default featured works
-    isAuthorSpecific: {
-      type: Boolean,
-      default: true,
-    },
   },
   computed: {
     ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
@@ -166,7 +161,7 @@ export default {
       return this.defaultFeaturedBooks;
     },
     recommendedList() {
-      if (!this.isAuthorSpecific) {
+      if (this.shouldShowDefaultRecommendation) {
         return this.defaultFeaturedBooks;
       }
       const createdList =
@@ -238,12 +233,15 @@ export default {
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
     },
+    shouldShowDefaultRecommendation() {
+      return !this.classId && !this.collectionId && !this.productOwner;
+    },
   },
   mounted() {
-    if (this.isAuthorSpecific) {
+    if (!this.shouldShowDefaultRecommendation) {
       this.lazyFetchCreatedNFTClassesByAddress(this.productOwner);
     }
-    if (!this.isAuthorSpecific || !this.nftIsWritingNFT) {
+    if (this.shouldShowDefaultRecommendation || !this.nftIsWritingNFT) {
       if (!this.bookstoreListItemForLandingPage?.length) {
         this.fetchBookstoreItemsFromCMSForLandingPage();
       }

@@ -226,7 +226,6 @@
         />
         <client-only>
           <NFTPageRecommendation
-            :is-author-specific="false"
             @item-click="handleRecommendedItemClick"
             @item-collect="handleRecommendedItemCollect"
             @slide-next.once="handleRecommendationSlideNext"
