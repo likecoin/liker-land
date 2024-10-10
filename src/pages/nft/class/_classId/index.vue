@@ -634,7 +634,7 @@ export default {
           inLanguage: this.iscnData?.contentMetadata?.inLanguage,
           bookFormat: 'https://schema.org/EBook',
           bookEdition: e.name,
-          description: e.description,
+          description: `${e.description}\n${description}`,
           brand: {
             '@context': 'http://www.schema.org',
             '@type': 'Brand',
