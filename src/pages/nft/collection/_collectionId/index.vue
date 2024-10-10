@@ -164,6 +164,8 @@ export default {
       schemas.push({
         '@context': 'http://schema.org',
         '@type': ['Product', 'ProductCollection'],
+        url: `${EXTERNAL_HOST}/nft/collection/${this.collectionId}`,
+        productID: this.collectionId,
         name: this.collectionName,
         description: this.collectionDescription,
         image: ogImage,
@@ -224,6 +226,7 @@ export default {
           availability: this.collection?.stock
             ? 'LimitedAvailability'
             : 'OutOfStock',
+          itemCondition: 'https://schema.org/NewCondition',
           checkoutPageURLTemplate: getNFTBookPurchaseLink({
             collectionId: this.collectionId,
           }),
