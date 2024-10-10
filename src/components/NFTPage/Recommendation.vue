@@ -1,13 +1,13 @@
 <template>
   <section class="bg-like-green rounded-[24px] overflow-hidden py-[2rem]">
     <div
-      v-if="normalizedList.length && shouldShowIscnOwner"
+      v-if="recommendedList.length && isAuthorSpecific"
       class="flex items-center justify-between px-[2rem]"
     >
       <NFTMessageIdentity
-        :type="iscnWorkAuthor ? 'publisher' : 'creator'"
+        :type="hasPublisher ? 'publisher' : 'creator'"
         class="flex-shrink-0"
-        :wallet-address="iscnOwner"
+        :wallet-address="productOwner"
         :avatar-size="40"
         @click.native="handleHeaderAvatarClick"
       />
@@ -25,7 +25,7 @@
     </h2>
 
     <div
-      v-if="isLoading"
+      v-if="recommendedList.length === 0"
       class="flex items-center justify-center min-h-[450px]"
     >
       <ProgressIndicator />
@@ -37,14 +37,20 @@
         @slider-move="handleSliderMove"
       >
         <SwiperSlide
-          v-for="nft in normalizedList"
+          v-for="nft in recommendedList"
           :key="nft.classId"
           style="width: 310px;"
         >
+          <NFTBookCollectionItemCard
+            v-if="nft.classId.startsWith('col')"
+            :collection-id="nft.classId"
+            @click-collect="$emit('item-collect', nft.classId)"
+          />
           <NFTPortfolioItem
+            v-else
             class="shadow-lg mb-[12px] mx-auto"
             :class-id="nft.classId"
-            :portfolio-wallet="iscnOwner"
+            :portfolio-wallet="productOwner"
             :should-fetch-when-visible="true"
             @click.native="handleItemClick(nft.classId)"
             @collect="handleItemCollect(nft.classId)"
@@ -88,6 +94,11 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
 
 import bookstoreMixin from '~/mixins/bookstore';
+import nftOrCollection from '~/mixins/nft-or-collection';
+import walletMixin from '~/mixins/wallet';
+import { mapActions, mapGetters } from 'vuex';
+
+const DISPLAY_ITEM_COUNT = 5;
 
 export default {
   name: 'NFTPageRecommendation',
@@ -95,53 +106,127 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  mixins: [bookstoreMixin],
+  mixins: [bookstoreMixin, nftOrCollection, walletMixin],
   props: {
-    iscnOwner: {
+    classId: {
       type: String,
-      default: undefined,
+      default: '',
     },
-    isFollowed: {
-      type: Boolean,
-      default: false,
+    collectionId: {
+      type: String,
+      default: '',
     },
-    recommendedList: {
-      type: Array,
-      default: () => [],
-    },
-    isLoading: {
-      type: Boolean,
-      default: false,
-    },
-    shouldShowFollowButton: {
-      type: Boolean,
-      default: false,
-    },
-    isBookNft: {
-      type: Boolean,
-      default: false,
-    },
-    displayItemCount: {
-      type: [Number, String],
-      default: 5,
-    },
-    shouldShowIscnOwner: {
+    // if true, show author works, else show default featured works
+    isAuthorSpecific: {
       type: Boolean,
       default: true,
     },
-    iscnWorkAuthor: {
-      type: String,
-      default: undefined,
-    },
-  },
-  data() {
-    return {
-      nftFeaturedWNFT: DEFAULT_RECOMMENDATIONS_LIST.WNFT.map(nft => ({
-        classId: nft,
-      })),
-    };
   },
   computed: {
+    ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
+    type() {
+      if (this.nftIsWritingNFT) {
+        return 'writingNFT';
+      }
+      if (this.classId) {
+        return 'book';
+      }
+      return 'collection';
+    },
+    isFollowed() {
+      return this.walletFollowees?.includes(this.productOwner) || false;
+    },
+    shouldShowFollowButton() {
+      return (
+        this.wallet !== this.getAddress &&
+        this.walletHasLoggedIn &&
+        !this.isFollowed
+      );
+    },
+    hasPublisher() {
+      if (this.type === 'collection') {
+        return true;
+      }
+      return !!this.iscnWorkAuthor;
+    },
+    defaultFeaturedWNFT() {
+      return DEFAULT_RECOMMENDATIONS_LIST.WNFT.map(nft => ({
+        classId: nft,
+      }));
+    },
+    defaultFeaturedBooks() {
+      return this.bookstoreListItemForLandingPage?.length
+        ? this.bookstoreListItemForLandingPage
+        : DEFAULT_RECOMMENDATIONS_LIST.BOOK.map(nft => ({ classId: nft }));
+    },
+    defaultFeaturedList() {
+      if (this.nftIsWritingNFT) {
+        return this.defaultFeaturedWNFT;
+      }
+      return this.defaultFeaturedBooks;
+    },
+    recommendedList() {
+      if (!this.isAuthorSpecific) {
+        return this.defaultFeaturedBooks;
+      }
+      const createdList =
+        this.getCreatedNFTClassesByAddress(this.productOwner) || [];
+      const createdClassIds = new Set(createdList.map(item => item.classId));
+
+      let recommendedList = [
+        ...createdList,
+        ...this.defaultFeaturedList.filter(
+          item =>
+            item.classId !== this.classId && !createdClassIds.has(item.classId)
+        ),
+      ];
+      const featuredSet =
+        this.getNFTClassFeaturedSetByAddress(this.iscnOwner) || new Set();
+      const hiddenSet =
+        this.getNFTClassHiddenSetByAddress(this.iscnOwner) || new Set();
+      const userCollected = this.getAddress
+        ? this.getCollectedNFTClassesByAddress(this.getAddress)
+        : [];
+
+      if (userCollected?.length) {
+        recommendedList = recommendedList.filter(
+          item =>
+            !userCollected.some(
+              collectedItem => collectedItem.classId === item.classId
+            )
+        );
+      }
+
+      recommendedList = recommendedList.filter(
+        item => !hiddenSet.has(item.classId) && item.classId !== this.classId
+      );
+
+      recommendedList = recommendedList.sort((a, b) => {
+        const aIsFeatured = featuredSet.has(a.classId);
+        const bIsFeatured = featuredSet.has(b.classId);
+        if (aIsFeatured && !bIsFeatured) {
+          return -1;
+        }
+        if (!aIsFeatured && bIsFeatured) {
+          return 1;
+        }
+        return 0;
+      });
+
+      if (this.nftIsNFTBook) {
+        recommendedList = recommendedList.sort((a, b) => {
+          if (a.type === 'nft_book' && b.type !== 'nft_book') {
+            return -1;
+          }
+          if (a.type !== 'nft_book' && b.type === 'nft_book') {
+            return 1;
+          }
+          return 0;
+        });
+      }
+
+      return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
+    },
     swiperOptions() {
       return {
         slidesPerView: 'auto',
@@ -153,59 +238,24 @@ export default {
     swiper() {
       return this.$refs.recommendationSwiper.$swiper;
     },
-    nftFeaturedBooks() {
-      return this.bookstoreListItemForLandingPage.length
-        ? this.bookstoreListItemForLandingPage
-        : [...DEFAULT_RECOMMENDATIONS_LIST.BOOK.map(nft => ({ classId: nft }))];
-    },
-    normalizedList() {
-      const normalizedRecommendedList = [...this.recommendedList];
-      const displayItemCount = Number(this.displayItemCount);
-      if (this.recommendedList.length < displayItemCount) {
-        let index = 0;
-        let sourceData = this.isBookNft
-          ? this.nftFeaturedBooks
-          : this.nftFeaturedWNFT;
-        // TODO: remove filter after recommendation support collection
-        sourceData = sourceData.filter(nft =>
-          // TODO: find out and fix classId undefined reason
-          nft.classId?.startsWith('likenft1')
-        );
-        while (
-          normalizedRecommendedList.length < displayItemCount &&
-          index < sourceData.length
-        ) {
-          const itemToAdd = sourceData[index];
-          const alreadyExists = normalizedRecommendedList.some(
-            item => item.classId === itemToAdd.classId
-          );
-
-          if (!alreadyExists) {
-            normalizedRecommendedList.push(itemToAdd);
-          }
-          index += 1;
-        }
-      }
-      return normalizedRecommendedList;
-    },
   },
-  watch: {
-    async recommendedList(list) {
-      if (this.isBookNft && list.length < +this.displayItemCount) {
-        try {
-          await this.fetchBookstoreItemsFromCMSForLandingPage();
-        } catch (error) {
-          console.error(error);
-        }
+  mounted() {
+    if (this.isAuthorSpecific) {
+      this.lazyFetchCreatedNFTClassesByAddress(this.productOwner);
+    }
+    if (!this.isAuthorSpecific || !this.nftIsWritingNFT) {
+      if (!this.bookstoreListItemForLandingPage?.length) {
+        this.fetchBookstoreItemsFromCMSForLandingPage();
       }
-    },
+    }
   },
   methods: {
+    ...mapActions(['lazyFetchCreatedNFTClassesByAddress']),
     handleHeaderAvatarClick() {
       this.$emit('header-avatar-click');
     },
     handleFollowButtonClick() {
-      this.$emit('follow-button-click');
+      this.$emit('follow-button-click', this.productOwner);
     },
     handleItemClick(classId) {
       this.$emit('item-click', classId);

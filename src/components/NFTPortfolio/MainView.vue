@@ -224,20 +224,16 @@
           align="center"
           :text="$t('nft_recommendation_title')"
         />
-        <NFTPageRecommendation
-          class="w-full"
-          :iscn-owner="getAddress"
-          :should-show-follow-button="false"
-          :should-show-iscn-owner="false"
-          :recommended-list="[]"
-          :is-book-nft="true"
-          :is-loading="false"
-          @item-click="handleRecommendedItemClick"
-          @item-collect="handleRecommendedItemCollect"
-          @slide-next.once="handleRecommendationSlideNext"
-          @slide-prev.once="handleRecommendationSlidePrev"
-          @slider-move.once="handleRecommendationSliderMove"
-        />
+        <client-only>
+          <NFTPageRecommendation
+            :is-author-specific="false"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
+        </client-only>
       </div>
     </div>
 
