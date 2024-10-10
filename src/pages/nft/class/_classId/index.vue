@@ -548,6 +548,7 @@ export default {
           name: title,
           encoding: [
             {
+              '@context': 'http://www.schema.org',
               '@type': 'MediaObject',
               contentUrl: this.nftModelURL,
               encodingFormat: 'model/gltf-json',
@@ -566,6 +567,7 @@ export default {
         image: [ogImage],
         description,
         brand: {
+          '@context': 'http://www.schema.org',
           '@type': 'Brand',
           url: `${EXTERNAL_HOST}/about/writing-nft`,
           name: 'Writing NFT',
@@ -576,6 +578,7 @@ export default {
         datePublished: this.iscnData?.recordTimestamp,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
+          '@context': 'http://www.schema.org',
           '@type': 'Offer',
           seller: iscnOwnerPerson,
           price: NFTPriceUSD,
@@ -598,6 +601,7 @@ export default {
         image: [ogImage],
         description,
         brand: {
+          '@context': 'http://www.schema.org',
           '@type': 'Brand',
           url: 'https://liker.land/about/nft-book',
           name: 'NFT Book',
@@ -606,6 +610,7 @@ export default {
         sku: this.classId,
         iscn: this.iscnId,
         isbn: this.iscnData?.contentMetadata?.isbn,
+        inLanguage: this.iscnData?.contentMetadata?.inLanguage,
         productGroupID: this.classId,
         datePublished: this.iscnData?.recordTimestamp,
         bookFormat: 'https://schema.org/EBook',
@@ -615,28 +620,35 @@ export default {
       };
       this.nftEditions.forEach(e => {
         schemas.push({
+          '@context': 'http://www.schema.org',
           '@type': ['Book', 'Product'],
           '@id': `@${this.classId}-${e.index}`,
+          url: `${EXTERNAL_HOST}${this.$route.path}?price_index=${e.index}`,
+          productID: `${this.classId}-${e.index}`,
           name: `${title} - ${e.name}`,
           image: [ogImage],
           sku: `${this.classId}-${e.index}`,
           inProductGroupWithID: this.classId,
           iscn: this.iscnId,
           isbn: this.iscnData?.contentMetadata?.isbn,
+          inLanguage: this.iscnData?.contentMetadata?.inLanguage,
           bookFormat: 'https://schema.org/EBook',
           bookEdition: e.name,
-          description: e.description,
+          description: `${e.description}\n${description}`,
           brand: {
+            '@context': 'http://www.schema.org',
             '@type': 'Brand',
             url: 'https://liker.land/about/nft-book',
             name: 'NFT Book',
           },
           offers: {
+            '@context': 'http://www.schema.org',
             '@type': 'Offer',
             seller: iscnOwnerPerson,
             price: e.price,
             priceCurrency: 'USD',
             availability: e.stock ? 'LimitedAvailability' : 'OutOfStock',
+            itemCondition: 'https://schema.org/NewCondition',
             checkoutPageURLTemplate: getNFTBookPurchaseLink({
               classId: this.classId,
               priceIndex: e.index,
