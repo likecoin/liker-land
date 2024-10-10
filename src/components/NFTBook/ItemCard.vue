@@ -201,9 +201,11 @@
           </NFTBookSpecTable>
           <NFTBookSpecTable class="mt-[12px]">
             <NFTBookSpecTableItemAvailableFormat
+              :is-campaign="preset === 'campaign'"
               :content-types="contentTypes"
             />
             <NFTBookSpecTableItemAccessMethod
+              :is-campaign="preset === 'campaign'"
               :is-downloadable="!nftIsDownloadHidden"
             />
           </NFTBookSpecTable>
