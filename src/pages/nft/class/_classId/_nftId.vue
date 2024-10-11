@@ -640,6 +640,7 @@ export default {
           {
             name: this.NFTName,
             price: this.NFTPriceUSD,
+            priceIndex: this.editionPriceIndex,
             classId: this.classId,
           },
         ],
