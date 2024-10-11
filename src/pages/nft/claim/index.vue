@@ -798,6 +798,7 @@ export default {
       return;
     }
     let price;
+    let priceIndex;
     if (this.cartId) {
       const { data } = await this.$api.get(
         getNFTBookCartStatusEndpoint({
@@ -805,7 +806,7 @@ export default {
           token: this.token,
         })
       );
-      ({ price } = data);
+      ({ price, priceIndex } = data);
       const {
         classIdsWithPrice = [],
         collectionIdsWithPrice = [],
@@ -908,7 +909,13 @@ export default {
     if (!free && !this.giftInfo && redirect && query.type === 'nft_book') {
       const items = this.cartItems.length
         ? this.cartItems.map(item => {
-            const { classId, collectionId, price, quantity = 1 } = item;
+            const {
+              classId,
+              collectionId,
+              price,
+              priceIndex,
+              quantity = 1,
+            } = item;
             const name = classId
               ? this.getNFTClassMetadataById(classId)?.name
               : this.getNFTCollectionInfoByCollectionId(collectionId)?.name[
@@ -918,6 +925,7 @@ export default {
               name,
               classId,
               collectionId,
+              priceIndex,
               price,
               quantity,
             };
@@ -927,6 +935,7 @@ export default {
               name: this.productName,
               classId: this.classId,
               collectionId: this.collectionId,
+              priceIndex,
               price,
               quantity: this.quantity,
             },

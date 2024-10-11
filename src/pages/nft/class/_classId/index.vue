@@ -891,6 +891,7 @@ export default {
           {
             name: this.NFTName,
             classId: this.classId,
+            priceIndex: this.editionPriceIndex,
             price: this.NFTPriceUSD,
           },
         ],
@@ -940,6 +941,7 @@ export default {
             name: this.NFTName,
             price: customPriceInDecimal || edition.price,
             classId: this.classId,
+            priceIndex: edition.index,
             quantity: this.quantity,
           },
         ],
@@ -1357,6 +1359,18 @@ export default {
         this.classId,
         1
       );
+      logPurchaseFlowEvent(this, 'view_item', {
+        items: [
+          {
+            name: this.NFTName,
+            classId: this.classId,
+            priceIndex: this.editionPriceIndex,
+            price: this.NFTPriceUSD,
+          },
+        ],
+        price: this.NFTPriceUSD,
+        currency: 'USD',
+      });
     },
     handleInputCustomPrice(price) {
       this.customPrice = Number(price);
