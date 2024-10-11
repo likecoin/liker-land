@@ -71,12 +71,14 @@ export default {
               image: [ogImage],
               description,
               brand: {
+                '@context': 'http://www.schema.org',
                 '@type': 'Brand',
                 url: `${EXTERNAL_HOST}/civic`,
                 name: 'Civic Liker',
               },
               url: `${EXTERNAL_HOST}${this.$route.path}`,
               offers: {
+                '@context': 'http://www.schema.org',
                 '@type': 'Offer',
                 price: '0',
                 priceCurrency: 'USD',
