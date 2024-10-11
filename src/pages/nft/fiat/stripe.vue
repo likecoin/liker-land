@@ -130,6 +130,7 @@ export default {
                   name: this.NFTName,
                   price: this.result.fiatPrice,
                   classId: this.classId,
+                  priceIndex: this.editionPriceIndex,
                 },
               ],
               price: this.result.fiatPrice,

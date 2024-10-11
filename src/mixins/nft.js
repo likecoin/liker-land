@@ -997,6 +997,7 @@ export default {
           items: [
             {
               classId: this.classId,
+              priceIndex: this.editionPriceIndex,
               price: this.NFTPriceUSD,
               name: this.NFTName,
             },
@@ -1131,6 +1132,7 @@ export default {
               {
                 name: this.NFTName,
                 price: this.NFTPriceUSD,
+                priceIndex: this.editionPriceIndex,
                 classId,
               },
             ],

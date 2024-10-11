@@ -117,6 +117,7 @@ export default {
       return;
     }
     let price;
+    let priceIndex;
 
     if (this.cartId) {
       const { data } = await this.$api.get(
@@ -147,7 +148,7 @@ export default {
           paymentId: this.paymentId,
         })
       );
-      ({ price } = data);
+      ({ price, priceIndex } = data);
     }
     try {
       if (this.cartItems.length) {
@@ -212,6 +213,7 @@ export default {
               name: this.productName,
               classId: this.classId,
               collectionId: this.collectionId,
+              priceIndex,
               price,
               quantity: this.quantity,
             },

@@ -236,7 +236,8 @@ export default {
         });
       } else {
         // NOTE: Only support single edition for now
-        const edition = this.getEditionByIndex(0);
+        const priceIndex = 0;
+        const edition = this.getEditionByIndex(priceIndex);
         const hasStock = edition?.stock;
         if (!hasStock || !this.nftIsCollectable || edition.price === 0) {
           this.handleReject();
@@ -250,6 +251,7 @@ export default {
               name: this.NFTName,
               price: edition.price,
               classId: this.classId,
+              priceIndex,
               quantity: 1,
             },
           ],
