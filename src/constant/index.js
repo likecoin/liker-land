@@ -350,6 +350,10 @@ export const NFT_BOOK_WITH_SIGN_IMAGE_SET = new Map(
           'likenft1nekez4y50uk0dmgxuxql7v2vnhy3wqa24ld46hk4frlwcvwpr88selunrr',
           ['陳健民'],
         ],
+        [
+          'likenft1gp28fe9uzqdadrps67hz20035m0hh9zu9m8kzvz6gdawvms5xtts5m6qds',
+          ['賴佩霞'],
+        ],
       ]
     : [
         ['likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x'],
