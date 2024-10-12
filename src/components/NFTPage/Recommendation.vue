@@ -200,9 +200,17 @@ export default {
         );
       }
 
-      recommendedList = recommendedList.filter(
-        item => !hiddenSet.has(item.classId) && item.classId !== this.classId
-      );
+      recommendedList = recommendedList.filter(item => {
+        const isNotHidden = !hiddenSet.has(item.classId);
+        const isNotCurrentClass = item.classId !== this.classId;
+
+        const isNotCurrentCollection =
+          this.type === NFT_TYPE.COLLECTION
+            ? item.classId !== this.collectionId
+            : true;
+
+        return isNotHidden && isNotCurrentClass && isNotCurrentCollection;
+      });
 
       recommendedList = recommendedList.sort((a, b) => {
         const aIsFeatured = featuredSet.has(a.classId);
