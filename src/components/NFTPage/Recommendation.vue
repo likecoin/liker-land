@@ -99,6 +99,11 @@ import walletMixin from '~/mixins/wallet';
 import { mapActions, mapGetters } from 'vuex';
 
 const DISPLAY_ITEM_COUNT = 5;
+const NFT_TYPE = {
+  WRITING_NFT: 'writingNFT',
+  BOOK: 'book',
+  COLLECTION: 'collection',
+};
 
 export default {
   name: 'NFTPageRecommendation',
@@ -121,12 +126,15 @@ export default {
     ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
     type() {
       if (this.nftIsWritingNFT) {
-        return 'writingNFT';
+        return NFT_TYPE.WRITING_NFT;
       }
       if (this.classId) {
-        return 'book';
+        return NFT_TYPE.BOOK;
       }
-      return 'collection';
+      if (this.collectionId) {
+        return NFT_TYPE.COLLECTION;
+      }
+      return '';
     },
     isFollowed() {
       return this.walletFollowees?.includes(this.productOwner) || false;
@@ -139,7 +147,7 @@ export default {
       );
     },
     hasPublisher() {
-      if (this.type === 'collection') {
+      if (this.type === NFT_TYPE.COLLECTION) {
         return true;
       }
       return !!this.iscnWorkAuthor;
@@ -155,7 +163,7 @@ export default {
         : DEFAULT_RECOMMENDATIONS_LIST.BOOK.map(nft => ({ classId: nft }));
     },
     defaultFeaturedList() {
-      if (this.nftIsWritingNFT) {
+      if (this.type === NFT_TYPE.WRITING_NFT) {
         return this.defaultFeaturedWNFT;
       }
       return this.defaultFeaturedBooks;
@@ -176,9 +184,9 @@ export default {
         ),
       ];
       const featuredSet =
-        this.getNFTClassFeaturedSetByAddress(this.iscnOwner) || new Set();
+        this.getNFTClassFeaturedSetByAddress(this.productOwner) || new Set();
       const hiddenSet =
-        this.getNFTClassHiddenSetByAddress(this.iscnOwner) || new Set();
+        this.getNFTClassHiddenSetByAddress(this.productOwner) || new Set();
       const userCollected = this.getAddress
         ? this.getCollectedNFTClassesByAddress(this.getAddress)
         : [];
@@ -241,7 +249,10 @@ export default {
     if (!this.shouldShowDefaultRecommendation) {
       this.lazyFetchCreatedNFTClassesByAddress(this.productOwner);
     }
-    if (this.shouldShowDefaultRecommendation || !this.nftIsWritingNFT) {
+    if (
+      this.shouldShowDefaultRecommendation ||
+      !this.type === NFT_TYPE.WRITING_NFT
+    ) {
       if (!this.bookstoreListItemForLandingPage?.length) {
         this.fetchBookstoreItemsFromCMSForLandingPage();
       }
