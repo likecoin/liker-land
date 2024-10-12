@@ -197,6 +197,7 @@
             :nft-id="nft.lastOwnedNFTId"
             :portfolio-tab="portfolioTab"
             :should-fetch-when-visible="true"
+            :is-bookshelf="isBookshelf"
             @load-cover="updatePortfolioGrid"
             @click.native="handleItemClick(nft.classId)"
             @collect="handleItemCollect(nft.classId)"

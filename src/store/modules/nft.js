@@ -792,7 +792,10 @@ const actions = {
     if (classesOrPromise) {
       await classesOrPromise;
     } else {
-      await dispatch('fetchCollectedNFTClassesByAddress', { address });
+      await dispatch('fetchCollectedNFTClassesByAddress', {
+        address,
+        nocache: true,
+      });
     }
   },
   async fetchNFTDisplayStateListByAddress({ commit }, address) {

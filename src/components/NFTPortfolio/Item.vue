@@ -24,7 +24,7 @@
       :display-state="nftDisplayState"
       :is-nft-book="nftIsNFTBook"
       :portfolio-tab="portfolioTab"
-      :is-content-viewable="!(nftIsNFTBook && !isOwningNFT)"
+      :is-content-viewable="isContentViewable"
       :is-content-downloadable="!nftIsDownloadHidden"
       :collect-expiry-time="collectExpiryTime"
       @collect="handleClickCollect"
@@ -39,12 +39,11 @@
 </template>
 
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
-
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
 
 export default {
-  mixins: [nftMixin],
+  mixins: [nftMixin, walletMixin],
   props: {
     classId: {
       type: String,
@@ -66,6 +65,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isBookshelf: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -74,8 +77,17 @@ export default {
     };
   },
   computed: {
+    ownedNftId() {
+      return this.collectorMap?.[this.getAddress]?.[0];
+    },
+    isContentViewable() {
+      return this.nftIsNFTBook && this.isBookshelf && this.ownedNftId;
+    },
     nftIdForDetails() {
-      return this.portfolioTab === 'collected' && this.nftId;
+      if (this.portfolioTab === 'collected') {
+        return this.isBookshelf ? this.ownedNftId : this.nftId;
+      }
+      return undefined;
     },
     detailsPageRoute() {
       if (this.nftIdForDetails) {
