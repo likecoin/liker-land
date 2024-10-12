@@ -582,7 +582,7 @@ export default {
         subjectOf: threeDModel,
       });
     }
-    if (this.nftEditions) {
+    if (this.nftIsNFTBook && this.nftEditions) {
       const bookSchema = {
         '@context': 'https://schema.org',
         '@type': ['Book', 'ProductGroup'],
