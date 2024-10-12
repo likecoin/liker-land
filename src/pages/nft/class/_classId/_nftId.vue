@@ -314,30 +314,17 @@
             @click-user-collected-count="handleClickUserCollectedCount"
           />
         </section>
-
-        <!-- recommend -->
-        <div
-          v-if="isRecommendationLoading"
-          class="flex justify-center items-center my-[24px]"
-        >
-          <ProgressIndicator />
-        </div>
-        <NFTPageRecommendation
-          v-else
-          :iscn-owner="iscnOwner"
-          :iscn-work-author="iscnWorkAuthor"
-          :is-followed="isFollowed"
-          :should-show-follow-button="shouldShowFollowButton"
-          :recommended-list="recommendedList"
-          :is-book-nft="nftIsNFTBook"
-          @header-avatar-click="handleRecommendationHeaderAvatarClick"
-          @follow-button-click="handleFollowButtonClick"
-          @item-click="handleRecommendedItemClick"
-          @item-collect="handleRecommendedItemCollect"
-          @slide-next.once="handleRecommendationSlideNext"
-          @slide-prev.once="handleRecommendationSlidePrev"
-          @slider-move.once="handleRecommendationSliderMove"
-        />
+        <client-only>
+          <!-- recommend -->
+          <NFTPageRecommendation
+            :class-id="classId"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
+        </client-only>
       </div>
     </div>
     <NuxtChild keep-alive />
@@ -369,13 +356,14 @@ import { ellipsis } from '~/util/ui';
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTDetailsPage',
   filters: {
     ellipsis,
   },
-  mixins: [clipboardMixin, nftMixin, navigationListenerMixin],
+  mixins: [clipboardMixin, nftMixin, navigationListenerMixin, alertMixin],
   layout: 'default',
   async asyncData({ route, query, store, redirect, error, localeLocation }) {
     const { action } = query;
@@ -604,9 +592,6 @@ export default {
     isFollowed() {
       return this.walletFollowees?.includes(this.iscnOwner) || false;
     },
-    shouldShowFollowButton() {
-      return Boolean(this.iscnOwner !== this.getAddress);
-    },
   },
   async mounted() {
     try {
@@ -628,8 +613,6 @@ export default {
     } finally {
       this.isLoading = false;
     }
-
-    await this.fetchRecommendInfo();
 
     if (this.action === 'collect') {
       logTrackerEvent(this, 'NFT', 'NFTCollect(NFTWidget)', this.classId, 1);
@@ -779,6 +762,11 @@ export default {
       await this.handleClickFollow({
         followOwner: this.iscnOwner,
       });
+      this.alertPromptSuccess(
+        this.$t('portfolio_subscription_success_alert', {
+          creator: this.getUserInfoByAddress(this.iscnOwner)?.displayName,
+        })
+      );
       if (this.isFollowed) {
         logTrackerEvent(
           this,
