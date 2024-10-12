@@ -12,7 +12,7 @@
             <NFTBookCoverWithFrame
               :class="['w-full', 'rounded-t-[inherit] rounded-b-[0]']"
               :src="imageSrc"
-              :alt="nftName"
+              :alt="collectionName"
               :cover-resize="450"
               class-aspect-ratio="aspect-[1]"
             />
@@ -47,7 +47,7 @@
               </Label>
             </div>
             <Label preset="h5" class="mt-[12px] break-normal" align="center">{{
-              nftName
+              collectionName
             }}</Label>
             <div class="flex items-center justify-center mt-[16px]">
               <ButtonV2
@@ -69,11 +69,12 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { formatNumberWithUSD } from '~/util/ui';
 import { parseNFTMetadataURL } from '~/util/nft';
+import collectionMixin from '~/mixins/nft-collection';
 
 export default {
   name: 'NFTBookCollectionItemCard',
+  mixins: [collectionMixin],
   props: {
     collectionId: {
       type: String,
@@ -96,62 +97,17 @@ export default {
         params: { collectionId: this.collectionId },
       });
     },
-    nftCollection() {
-      let { locale } = this.$i18n;
-      if (locale === 'zh-Hant') {
-        locale = 'zh';
-      }
-      const defaultLocale = 'en';
-      const collection = this.getNFTCollectionInfoByCollectionId(
-        this.collectionId
-      );
-      if (collection) {
-        let { name, description, image } = collection;
-        const { id, priceInDecimal, stock, ownerWallet } = collection;
-        const price = priceInDecimal / 100;
-
-        if (typeof name === 'object') {
-          name = name[locale] || name[defaultLocale] || '';
-        }
-        if (typeof description === 'object') {
-          description = description[locale] || description[defaultLocale] || '';
-        }
-        const priceLabel = formatNumberWithUSD(price);
-        image = parseNFTMetadataURL(image);
-        return {
-          id,
-          name,
-          image,
-          description,
-          priceLabel,
-          price,
-          value: -1,
-          stock,
-          ownerWallet,
-        };
-      }
-      return null;
-    },
-    nftName() {
-      return this.nftCollection?.name;
-    },
-    nftId() {
-      return this.nftCollection?.id;
-    },
-    nftValue() {
-      return this.nftCollection?.value;
-    },
     priceLabel() {
-      return this.nftCollection?.priceLabel;
+      return this.formattedCollection?.priceLabel;
     },
     stock() {
-      return this.nftCollection?.stock;
+      return this.formattedCollection?.stock;
     },
     imageSrc() {
-      return parseNFTMetadataURL(this.nftCollection?.image);
+      return parseNFTMetadataURL(this.formattedCollection?.image);
     },
     ownerWallet() {
-      return this.nftCollection?.ownerWallet;
+      return this.formattedCollection?.ownerWallet;
     },
     ownerDisplayName() {
       return (
@@ -168,7 +124,7 @@ export default {
       const data = await this.lazyFetchNFTCollectionInfoByCollectionId({
         collectionId: this.collectionId,
       });
-      if (data) {
+      if (data?.ownerWallet) {
         this.lazyGetUserInfoByAddresses(data.ownerWallet);
       }
     } catch (error) {
