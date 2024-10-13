@@ -449,6 +449,18 @@ export default {
           })
         : [defaultEdition];
     },
+    nftEdition() {
+      let edition;
+      if (this.editionPriceIndex !== undefined) {
+        edition = this.nftEditions.find(
+          e => e.index === this.editionPriceIndex
+        );
+      }
+      if (!edition) {
+        edition = this.nftEditions.find(item => item.stock > 0);
+      }
+      return edition;
+    },
     editionPriceIndex() {
       if (this.priceIndex !== undefined) return Number(this.priceIndex);
       if (!this.nftIsNFTBook) return undefined;
@@ -486,15 +498,7 @@ export default {
       });
     },
     nftBookAvailablePriceLabel() {
-      let edition;
-      if (this.editionPriceIndex !== undefined) {
-        edition = this.nftEditions.find(
-          e => e.index === this.editionPriceIndex
-        );
-      }
-      if (!edition) {
-        edition = this.nftEditions.find(item => item.stock > 0);
-      }
+      const edition = this.nftEdition;
       const purchasePrice = edition?.priceLabel;
       return purchasePrice;
     },
