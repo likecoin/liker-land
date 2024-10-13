@@ -491,7 +491,6 @@ export default {
           description: this.NFTDescription,
           brand,
           sku: this.classId,
-          iscn: this.iscnId,
           isbn: this.iscnData?.contentMetadata?.isbn,
           datePublished: this.iscnData?.recordTimestamp,
           bookFormat: this.nftIsNFTBook
@@ -502,6 +501,13 @@ export default {
             ''
           ),
           subjectOf: threeDModel,
+          additionalProperty: [
+            {
+              '@type': 'PropertyValue',
+              propertyID: 'iscn',
+              value: this.iscnId,
+            },
+          ],
         },
       },
     ];

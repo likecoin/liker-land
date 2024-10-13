@@ -523,6 +523,38 @@ export default {
         this.$i18n.locale !== 'en' ? 'default-zh.jpg' : 'default.jpg'
       }`;
     const schemas = [];
+    const meta = [
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: title,
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: description,
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: description,
+      },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: `${EXTERNAL_HOST}${this.$route.path}`,
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: ogImage,
+      },
+      {
+        hid: 'likecoin:wallet',
+        name: 'likecoin:wallet',
+        content: this.iscnOwner,
+      },
+    ];
     const iscnOwnerPerson = {
       '@context': 'http://www.schema.org',
       '@type': 'Person',
@@ -563,7 +595,6 @@ export default {
           name: 'Writing NFT',
         },
         sku: this.classId,
-        iscn: this.iscnId,
         isbn: this.iscnData?.contentMetadata?.isbn,
         datePublished: this.iscnData?.recordTimestamp,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
@@ -580,6 +611,13 @@ export default {
           }),
         },
         subjectOf: threeDModel,
+        additionalProperty: [
+          {
+            '@type': 'PropertyValue',
+            propertyID: 'iscn',
+            value: this.iscnId,
+          },
+        ],
       });
     }
     if (this.nftIsNFTBook && this.nftEditions) {
@@ -598,7 +636,6 @@ export default {
         },
         author: iscnOwnerPerson,
         sku: this.classId,
-        iscn: this.iscnId,
         isbn: this.iscnData?.contentMetadata?.isbn,
         inLanguage: this.iscnData?.contentMetadata?.inLanguage,
         productGroupID: this.classId,
@@ -607,6 +644,14 @@ export default {
         workExample: [],
         hasVariant: [],
         variesBy: ['https://schema.org/BookEdition'],
+
+        additionalProperty: [
+          {
+            '@type': 'PropertyValue',
+            propertyID: 'iscn',
+            value: this.iscnId,
+          },
+        ],
       };
       this.nftEditions.forEach(e => {
         schemas.push({
@@ -619,7 +664,6 @@ export default {
           image: [ogImage],
           sku: `${this.classId}-${e.index}`,
           inProductGroupWithID: this.classId,
-          iscn: this.iscnId,
           isbn: this.iscnData?.contentMetadata?.isbn,
           inLanguage: this.iscnData?.contentMetadata?.inLanguage,
           bookFormat: 'https://schema.org/EBook',
@@ -645,6 +689,13 @@ export default {
             }),
           },
           subjectOf: threeDModel,
+          additionalProperty: [
+            {
+              '@type': 'PropertyValue',
+              propertyID: 'iscn',
+              value: this.iscnId,
+            },
+          ],
         });
         bookSchema.workExample.push({
           '@id': `@${this.classId}-${e.index}`,
@@ -654,34 +705,77 @@ export default {
         });
       });
       schemas.push(bookSchema);
+      if (this.nftEdition?.price) {
+        const e = this.nftEdition;
+        [
+          {
+            hid: 'og:price:amount',
+            property: 'og:price:amount',
+            content: e.price,
+          },
+          {
+            hid: 'product:price:amount',
+            property: 'product:price:amount',
+            content: e.price,
+          },
+          {
+            hid: 'og:price:currency',
+            property: 'og:price:currency',
+            content: 'USD',
+          },
+          {
+            hid: 'product:price:currency',
+            property: 'product:price:currency',
+            content: 'USD',
+          },
+          {
+            hid: 'og:availability',
+            property: 'og:availability',
+            content: e.stock ? 'in stock' : 'out of stock',
+          },
+          {
+            hid: 'product:brand',
+            property: 'product:brand',
+            content: 'NFT Book',
+          },
+          {
+            hide: 'product:locale',
+            property: 'product:locale',
+            content: this.$i18n.locale,
+          },
+          {
+            hid: 'product:catalog_id',
+            property: 'product:catalog_id',
+            content: `${this.classId}-${e.index}`,
+          },
+          {
+            hid: 'product:retailer_item_id',
+            property: 'product:retailer_item_id',
+            content: `${this.classId}-${e.index}`,
+          },
+          {
+            hid: 'product:category',
+            property: 'product:category',
+            content: 543542,
+          },
+          {
+            hid: 'product:condition',
+            property: 'product:condition',
+            content: 'new',
+          },
+        ].forEach(m => meta.push(m));
+        meta.find(m => m.hid === 'og:url').content = `${EXTERNAL_HOST}${
+          this.$route.path
+        }?price_index=${e.index}`;
+        if (this.iscnData?.contentMetadata?.isbn) {
+          meta.push({
+            hid: 'product:isbn',
+            property: 'product:isbn',
+            content: this.iscnData?.contentMetadata?.isbn,
+          });
+        }
+      }
     }
-    const meta = [
-      {
-        hid: 'og:title',
-        property: 'og:title',
-        content: title,
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: description,
-      },
-      {
-        hid: 'og:description',
-        property: 'og:description',
-        content: description,
-      },
-      {
-        hid: 'og:image',
-        property: 'og:image',
-        content: ogImage,
-      },
-      {
-        hid: 'likecoin:wallet',
-        name: 'likecoin:wallet',
-        content: this.iscnOwner,
-      },
-    ];
     if (this.isNFTHidden) {
       meta.push({
         hid: 'robots',
