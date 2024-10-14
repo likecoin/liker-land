@@ -773,6 +773,11 @@ export default {
             property: 'product:condition',
             content: 'new',
           },
+          {
+            hid: 'product:custom_label_0',
+            property: 'product:custom_label_0',
+            content: this.iscnOwner,
+          },
         ].forEach(m => meta.push(m));
         meta.find(m => m.hid === 'og:url').content = `${EXTERNAL_HOST}${
           this.$route.path
@@ -780,7 +785,7 @@ export default {
         if (e.name) {
           let titleWithEdition =
             this.NFTName || this.$t('nft_details_page_title');
-          if (e.name) titleWithEdition += ` - ${e.name}`;
+          titleWithEdition += ` - ${e.name}`;
           if (this.iscnWorkAuthor) {
             titleWithEdition += ` - ${this.iscnWorkAuthor}`;
           }
@@ -792,6 +797,20 @@ export default {
             hid: 'product:isbn',
             property: 'product:isbn',
             content: this.iscnData?.contentMetadata?.isbn,
+          });
+        }
+        if (this.iscnWorkAuthor) {
+          meta.push({
+            hid: 'product:custom_label_1',
+            property: 'product:custom_label_1',
+            content: this.iscnWorkAuthor,
+          });
+        }
+        if (this.iscnData?.contentMetadata?.inLanguage) {
+          meta.push({
+            hid: 'product:custom_label_2',
+            property: 'product:custom_label_2',
+            content: this.iscnData?.contentMetadata?.inLanguage,
           });
         }
       }

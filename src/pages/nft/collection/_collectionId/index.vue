@@ -294,6 +294,11 @@ export default {
           property: 'product:condition',
           content: 'new',
         },
+        {
+          hid: 'product:custom_label_0',
+          property: 'product:custom_label_0',
+          content: this.collectionOwner,
+        },
       ].forEach(m => meta.push(m));
     }
     return {
