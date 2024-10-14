@@ -777,6 +777,16 @@ export default {
         meta.find(m => m.hid === 'og:url').content = `${EXTERNAL_HOST}${
           this.$route.path
         }?price_index=${e.index}`;
+        if (e.name) {
+          let titleWithEdition =
+            this.NFTName || this.$t('nft_details_page_title');
+          if (e.name) titleWithEdition += ` - ${e.name}`;
+          if (this.iscnWorkAuthor) {
+            titleWithEdition += ` - ${this.iscnWorkAuthor}`;
+          }
+          titleWithEdition += ` - ${this.$t('nft_details_page_title_book')}`;
+          meta.find(m => m.hid === 'og:title').content = titleWithEdition;
+        }
         if (this.iscnData?.contentMetadata?.isbn) {
           meta.push({
             hid: 'product:isbn',
