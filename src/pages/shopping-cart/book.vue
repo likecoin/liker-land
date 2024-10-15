@@ -338,21 +338,31 @@ export default {
         const gaClientId = this.getGaClientId;
         const gaSessionId = this.getGaSessionId;
         const link = getNFTBookCartPurchaseLink();
-        const { url, paymentId } = await this.$axios.$post(link, {
-          gaClientId,
-          gaSessionId,
-          utmCampaign: this.utmCampaign,
-          utmSource: this.utmSource,
-          utmMedium: this.utmMedium,
-          referrer: this.documentReferrer,
-          gadClickId: this.gadClickId,
-          gadSource: this.gadSource,
-          fbClickId: this.fbClickId,
-          items: this.shoppingCartBookItems,
-          email: this.walletEmail,
-          coupon: this.coupon,
-          giftInfo,
-        });
+        const { url, paymentId } = await this.$axios.$post(
+          link,
+          {
+            gaClientId,
+            gaSessionId,
+            utmCampaign: this.utmCampaign,
+            utmSource: this.utmSource,
+            utmMedium: this.utmMedium,
+            referrer: this.documentReferrer,
+            gadClickId: this.gadClickId,
+            gadSource: this.gadSource,
+            fbClickId: this.fbClickId,
+            items: this.shoppingCartBookItems,
+            email: this.walletEmail,
+            coupon: this.coupon,
+            giftInfo,
+          },
+          {
+            headers: {
+              Authorization: this.getAccessToken
+                ? `Bearer ${this.getAccessToken}`
+                : undefined,
+            },
+          }
+        );
         logPurchaseFlowEvent(this, 'begin_checkout', {
           ...this.purchaseEventParams,
           paymentId,
