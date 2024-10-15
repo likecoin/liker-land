@@ -80,8 +80,15 @@ export default {
     ownedNftId() {
       return this.collectorMap?.[this.getAddress]?.[0];
     },
+    isCurrentUserPortfolio() {
+      return this.getAddress === this.portfolioWallet;
+    },
     isContentViewable() {
-      return this.nftIsNFTBook && this.isBookshelf && this.ownedNftId;
+      return (
+        this.nftIsNFTBook &&
+        (this.isBookshelf || this.isCurrentUserPortfolio) &&
+        this.ownedNftId
+      );
     },
     nftIdForDetails() {
       if (this.portfolioTab === 'collected') {
