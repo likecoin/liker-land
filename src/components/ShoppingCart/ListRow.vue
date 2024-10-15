@@ -186,7 +186,7 @@ export default {
         : '';
     },
     tippingAmount() {
-      return Math.max(this.customPrice - this.productPrice, 0);
+      return Math.max((this.customPrice - this.productPrice).toFixed(2), 0);
     },
   },
   mounted() {
