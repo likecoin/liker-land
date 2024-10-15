@@ -154,6 +154,12 @@ export default {
         content: description,
       },
       {
+        hid: 'og:url',
+        property: 'og:url',
+        content: `${EXTERNAL_HOST}${this.$route.path}`,
+      },
+
+      {
         hid: 'og:image',
         property: 'og:image',
         content: ogImage,
@@ -232,8 +238,69 @@ export default {
           }),
         },
       });
+      [
+        {
+          hid: 'og:price:amount',
+          property: 'og:price:amount',
+          content: this.collectionPrice,
+        },
+        {
+          hid: 'product:price:amount',
+          property: 'product:price:amount',
+          content: this.collectionPrice,
+        },
+        {
+          hid: 'og:price:currency',
+          property: 'og:price:currency',
+          content: 'USD',
+        },
+        {
+          hid: 'product:price:currency',
+          property: 'product:price:currency',
+          content: 'USD',
+        },
+        {
+          hid: 'og:availability',
+          property: 'og:availability',
+          content: this.collection?.stock ? 'in stock' : 'out of stock',
+        },
+        {
+          hid: 'product:brand',
+          property: 'product:brand',
+          content: 'NFT Book',
+        },
+        {
+          hide: 'product:locale',
+          property: 'product:locale',
+          content: this.$i18n.locale,
+        },
+        {
+          hid: 'product:catalog_id',
+          property: 'product:catalog_id',
+          content: this.collectionId,
+        },
+        {
+          hid: 'product:retailer_item_id',
+          property: 'product:retailer_item_id',
+          content: this.collectionId,
+        },
+        {
+          hid: 'product:category',
+          property: 'product:category',
+          content: 543542,
+        },
+        {
+          hid: 'product:condition',
+          property: 'product:condition',
+          content: 'new',
+        },
+        {
+          hid: 'product:custom_label_0',
+          property: 'product:custom_label_0',
+          content: this.collectionOwner,
+        },
+      ].forEach(m => meta.push(m));
     }
-    // ProductCollection
     return {
       title,
       meta,
