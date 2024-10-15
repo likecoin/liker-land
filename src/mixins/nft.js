@@ -90,6 +90,7 @@ export default {
       'getGaSessionId',
       'getUserInfoByAddress',
       'getISCNMetadataById',
+      'getAccessToken',
       'getNFTClassFeaturedSetByAddress',
       'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
@@ -1218,19 +1219,29 @@ export default {
           priceIndex: this.editionPriceIndex,
           platform: this.platform,
         });
-        const { url } = await this.$axios.$post(link, {
-          gaClientId,
-          gaSessionId,
-          coupon: this.$route.query.coupon,
-          utmCampaign: this.utmCampaign,
-          utmSource: this.utmSource,
-          utmMedium: this.utmMedium,
-          referrer: this.documentReferrer,
-          email: this.walletEmail,
-          gadClickId: this.gadClickId,
-          gadSource: this.gadSource,
-          fbClickId: this.fbClickId,
-        });
+        const { url } = await this.$axios.$post(
+          link,
+          {
+            gaClientId,
+            gaSessionId,
+            coupon: this.$route.query.coupon,
+            utmCampaign: this.utmCampaign,
+            utmSource: this.utmSource,
+            utmMedium: this.utmMedium,
+            referrer: this.documentReferrer,
+            email: this.walletEmail,
+            gadClickId: this.gadClickId,
+            gadSource: this.gadSource,
+            fbClickId: this.fbClickId,
+          },
+          {
+            headers: {
+              Authorization: this.getAccessToken
+                ? `Bearer ${this.getAccessToken}`
+                : undefined,
+            },
+          }
+        );
         if (url) {
           window.location.href = url;
         } else {
