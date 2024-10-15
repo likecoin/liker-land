@@ -326,6 +326,7 @@ export default {
       'getGaClientId',
       'getGaSessionId',
       'getShoppingCartBookProductQuantity',
+      'getAccessToken',
     ]),
     collectionId() {
       return this.$route.params.collectionId;
@@ -488,21 +489,31 @@ export default {
               collectionId: this.collectionId,
               platform: this.platform,
             });
-            const { url, paymentId } = await this.$axios.$post(link, {
-              gaClientId,
-              giftInfo,
-              gaSessionId,
-              coupon: this.$route.query.coupon,
-              customPriceInDecimal,
-              utmCampaign: this.utmCampaign,
-              utmSource: this.utmSource,
-              utmMedium: this.utmMedium,
-              referrer: this.documentReferrer,
-              gadClickId: this.gadClickId,
-              gadSource: this.gadSource,
-              fbClickId: this.fbClickId,
-              email: this.walletEmail,
-            });
+            const { url, paymentId } = await this.$axios.$post(
+              link,
+              {
+                gaClientId,
+                giftInfo,
+                gaSessionId,
+                coupon: this.$route.query.coupon,
+                customPriceInDecimal,
+                utmCampaign: this.utmCampaign,
+                utmSource: this.utmSource,
+                utmMedium: this.utmMedium,
+                referrer: this.documentReferrer,
+                gadClickId: this.gadClickId,
+                gadSource: this.gadSource,
+                fbClickId: this.fbClickId,
+                email: this.walletEmail,
+              },
+              {
+                headers: {
+                  Authorization: this.getAccessToken
+                    ? `Bearer ${this.getAccessToken}`
+                    : undefined,
+                },
+              }
+            );
             logPurchaseFlowEvent(this, 'begin_checkout', {
               ...this.purchaseEventParams,
               paymentId,
