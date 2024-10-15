@@ -699,7 +699,7 @@ export default {
       try {
         switch (method) {
           case 'crypto': {
-            if (!this.getAddress) {
+            if (!this.getSessionWallet) {
               const isConnected = await this.connectWallet();
               if (!isConnected) return;
             }
@@ -731,7 +731,7 @@ export default {
             await this.collectNFTWithStripe(classId, { memo: this.memo });
             break;
           case 'free': {
-            if (!this.getAddress) {
+            if (!this.getSessionWallet) {
               const isConnected = await this.connectWallet();
               if (!isConnected) return;
             }
