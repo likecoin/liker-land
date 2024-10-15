@@ -1353,21 +1353,31 @@ export default {
               priceIndex: edition.index,
               platform: this.platform,
             });
-            const { url, paymentId } = await this.$axios.$post(link, {
-              gaClientId,
-              gaSessionId,
-              giftInfo,
-              coupon: this.$route.query.coupon,
-              customPriceInDecimal,
-              utmCampaign: this.utmCampaign,
-              utmSource: this.utmSource,
-              utmMedium: this.utmMedium,
-              referrer: this.documentReferrer,
-              gadClickId: this.gadClickId,
-              gadSource: this.gadSource,
-              fbClickId: this.fbClickId,
-              email: this.walletEmail,
-            });
+            const { url, paymentId } = await this.$axios.$post(
+              link,
+              {
+                gaClientId,
+                gaSessionId,
+                giftInfo,
+                coupon: this.$route.query.coupon,
+                customPriceInDecimal,
+                utmCampaign: this.utmCampaign,
+                utmSource: this.utmSource,
+                utmMedium: this.utmMedium,
+                referrer: this.documentReferrer,
+                gadClickId: this.gadClickId,
+                gadSource: this.gadSource,
+                fbClickId: this.fbClickId,
+                email: this.walletEmail,
+              },
+              {
+                headers: {
+                  Authorization: this.getToken
+                    ? `Bearer ${this.getToken}`
+                    : undefined,
+                },
+              }
+            );
             logPurchaseFlowEvent(this, 'begin_checkout', {
               ...purchaseEventParams,
               paymentId,
