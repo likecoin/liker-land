@@ -173,7 +173,7 @@
       @close="isShowMobileMenu = false"
     >
       <div v-if="!getSessionWallet">
-        <ProgressIndicator v-if="isLoggingIn" />
+        <ProgressIndicator v-if="isLoggingIn || getIsRestoringSession" />
         <ButtonV2
           v-else
           class="w-full"
