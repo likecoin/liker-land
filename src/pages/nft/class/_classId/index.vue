@@ -149,18 +149,16 @@
           />
 
           <!-- recommend -->
-          <client-only>
-            <NFTPageRecommendation
-              :class-id="classId"
-              @header-avatar-click="handleRecommendationHeaderAvatarClick"
-              @follow-button-click="handleFollowButtonClick"
-              @item-click="handleRecommendedItemClick"
-              @item-collect="handleRecommendedItemCollect"
-              @slide-next.once="handleRecommendationSlideNext"
-              @slide-prev.once="handleRecommendationSlidePrev"
-              @slider-move.once="handleRecommendationSliderMove"
-            />
-          </client-only>
+          <NFTPageRecommendation
+            :class-id="classId"
+            @header-avatar-click="handleRecommendationHeaderAvatarClick"
+            @follow-button-click="handleFollowButtonClick"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
 
           <section
             v-if="
