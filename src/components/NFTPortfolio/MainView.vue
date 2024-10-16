@@ -225,15 +225,13 @@
           align="center"
           :text="$t('nft_recommendation_title')"
         />
-        <client-only>
-          <NFTPageRecommendation
-            @item-click="handleRecommendedItemClick"
-            @item-collect="handleRecommendedItemCollect"
-            @slide-next.once="handleRecommendationSlideNext"
-            @slide-prev.once="handleRecommendationSlidePrev"
-            @slider-move.once="handleRecommendationSliderMove"
-          />
-        </client-only>
+        <NFTPageRecommendation
+          @item-click="handleRecommendedItemClick"
+          @item-collect="handleRecommendedItemCollect"
+          @slide-next.once="handleRecommendationSlideNext"
+          @slide-prev.once="handleRecommendationSlidePrev"
+          @slider-move.once="handleRecommendationSliderMove"
+        />
       </div>
     </div>
 

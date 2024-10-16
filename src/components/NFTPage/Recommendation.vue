@@ -31,33 +31,34 @@
       <ProgressIndicator />
     </div>
     <div v-else class="relative mt-[1.5rem]">
-      <Swiper
-        ref="recommendationSwiper"
-        :options="swiperOptions"
-        @slider-move="handleSliderMove"
-      >
-        <SwiperSlide
-          v-for="nft in recommendedList"
-          :key="nft.classId"
-          style="width: 310px;"
+      <client-only>
+        <Swiper
+          ref="recommendationSwiper"
+          :options="swiperOptions"
+          @slider-move="handleSliderMove"
         >
-          <NFTBookCollectionItemCard
-            v-if="nft.classId.startsWith('col')"
-            :collection-id="nft.classId"
-            @click-collect="$emit('item-collect', nft.classId)"
-          />
-          <NFTPortfolioItem
-            v-else
-            class="shadow-lg mb-[12px] mx-auto"
-            :class-id="nft.classId"
-            :portfolio-wallet="productOwner"
-            :should-fetch-when-visible="true"
-            @click.native="handleItemClick(nft.classId)"
-            @collect="handleItemCollect(nft.classId)"
-          />
-        </SwiperSlide>
-      </Swiper>
-
+          <SwiperSlide
+            v-for="nft in recommendedList"
+            :key="nft.classId"
+            style="width: 310px;"
+          >
+            <NFTBookCollectionItemCard
+              v-if="nft.classId.startsWith('col')"
+              :collection-id="nft.classId"
+              @click-collect="$emit('item-collect', nft.classId)"
+            />
+            <NFTPortfolioItem
+              v-else
+              class="shadow-lg mb-[12px] mx-auto"
+              :class-id="nft.classId"
+              :portfolio-wallet="productOwner"
+              :should-fetch-when-visible="true"
+              @click.native="handleItemClick(nft.classId)"
+              @collect="handleItemCollect(nft.classId)"
+            />
+          </SwiperSlide>
+        </Swiper>
+      </client-only>
       <div
         class="absolute inset-0 pointer-events-none flex justify-between items-center z-10 px-[1rem]"
       >
