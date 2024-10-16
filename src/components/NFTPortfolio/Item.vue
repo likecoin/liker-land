@@ -77,9 +77,6 @@ export default {
     };
   },
   computed: {
-    ownedNftId() {
-      return this.collectorMap?.[this.getAddress]?.[0];
-    },
     isCurrentUserPortfolio() {
       return this.getAddress === this.portfolioWallet;
     },
@@ -87,12 +84,12 @@ export default {
       return (
         this.nftIsNFTBook &&
         (this.isBookshelf || this.isCurrentUserPortfolio) &&
-        this.ownedNftId
+        this.nftIdCollectedFirstByUser
       );
     },
     nftIdForDetails() {
       if (this.portfolioTab === 'collected') {
-        return this.isBookshelf ? this.ownedNftId : this.nftId;
+        return this.isBookshelf ? this.nftIdCollectedFirstByUser : this.nftId;
       }
       return undefined;
     },
