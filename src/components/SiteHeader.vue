@@ -57,7 +57,7 @@
       </Dropdown>
 
       <div v-if="!getSessionWallet" class="hidden laptop:flex">
-        <ProgressIndicator v-if="isLoginIng" />
+        <ProgressIndicator v-if="isLoggingIn" />
         <ButtonV2
           v-else
           preset="secondary"
@@ -173,7 +173,7 @@
       @close="isShowMobileMenu = false"
     >
       <div v-if="!getSessionWallet">
-        <ProgressIndicator v-if="isLoginIng" />
+        <ProgressIndicator v-if="isLoggingIn" />
         <ButtonV2
           v-else
           class="w-full"
@@ -289,7 +289,7 @@ export default {
   data() {
     return {
       isShowMobileMenu: false,
-      isLoginIng: false,
+      isLoggingIn: false,
     };
   },
   computed: {
@@ -336,7 +336,7 @@ export default {
     },
     async handleConnectWallet() {
       try {
-        this.isLoginIng = true;
+        this.isLoggingIn = true;
         logTrackerEvent(
           this,
           'site_menu',
@@ -349,7 +349,7 @@ export default {
         console.error(err);
         this.alertPromptError(err);
       } finally {
-        this.isLoginIng = false;
+        this.isLoggingIn = false;
       }
     },
     handleSelectMenuItem(value) {

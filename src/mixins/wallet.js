@@ -36,7 +36,7 @@ export default {
       'walletIsMatchedSession',
       'walletIsLoggingIn',
       'loginAddress',
-      'getToken',
+      'getAccessToken',
       'getSessionWallet',
       'getIsRestoringSession',
     ]),

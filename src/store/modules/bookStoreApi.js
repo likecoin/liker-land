@@ -1,6 +1,6 @@
 /* eslint no-param-reassign: "off" */
 
-import { postAuthenticate } from '~/util/api';
+import { postLikeCoAuthenticate } from '~/util/api';
 import {
   saveAuthSession,
   clearAuthSession,
@@ -33,7 +33,7 @@ const mutations = {
 const actions = {
   async authenticate({ commit }, { inputWallet = '', signature = {} }) {
     try {
-      const { token } = await this.$api.$post(postAuthenticate(), signature);
+      const { token } = await this.$api.$post(postLikeCoAuthenticate(), signature);
       if (!token) {
         throw new Error('INVALID_SIGNATURE');
       }
@@ -74,7 +74,7 @@ const actions = {
 };
 
 const getters = {
-  getToken: state => state.token,
+  getAccessToken: state => state.token,
   getSessionWallet: state => state.sessionWallet,
   getIsRestoringSession: state => state.isRestoringSession,
 };
