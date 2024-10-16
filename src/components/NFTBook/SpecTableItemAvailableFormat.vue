@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
     <NFTBookSpecTableLabel :text="$t('nft_details_page_label_content_types')" />
-    <div :class="['font-[600]', labelStyle]">{{ label }}</div>
+    <NFTBookSpecTableValue :label="label" :is-campaign="isCampaign" />
   </component>
 </template>
 <script>
@@ -25,10 +25,6 @@ export default {
       return this.contentTypes
         .map(type => this.getContentType(type))
         .join(' + ');
-    },
-    labelStyle() {
-      if (this.isCampaign) return 'text-white';
-      return 'text-dark-gray';
     },
   },
   methods: {
