@@ -33,7 +33,10 @@ const mutations = {
 const actions = {
   async authenticate({ commit }, { inputWallet = '', signature = {} }) {
     try {
-      const { token } = await this.$api.$post(postLikeCoAuthenticate(), signature);
+      const { token } = await this.$api.$post(
+        postLikeCoAuthenticate(),
+        signature
+      );
       if (!token) {
         throw new Error('INVALID_SIGNATURE');
       }

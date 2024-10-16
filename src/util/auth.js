@@ -17,13 +17,16 @@ export function loadAuthSession() {
   return null;
 }
 
-export function saveAuthSession(session) {
+export function saveAuthSession({ wallet, token }) {
   try {
     if (!window.localStorage) {
       return;
     }
 
-    window.localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+    window.localStorage.setItem(
+      AUTH_SESSION_KEY,
+      JSON.stringify({ wallet, token })
+    );
   } catch {}
 }
 
