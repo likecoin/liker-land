@@ -71,6 +71,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
+  IS_TESTNET,
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   USD_TO_HKD_RATIO,
@@ -238,68 +239,71 @@ export default {
           }),
         },
       });
-      [
-        {
-          hid: 'og:price:amount',
-          property: 'og:price:amount',
-          content: this.collectionPrice,
-        },
-        {
-          hid: 'product:price:amount',
-          property: 'product:price:amount',
-          content: this.collectionPrice,
-        },
-        {
-          hid: 'og:price:currency',
-          property: 'og:price:currency',
-          content: 'USD',
-        },
-        {
-          hid: 'product:price:currency',
-          property: 'product:price:currency',
-          content: 'USD',
-        },
-        {
-          hid: 'og:availability',
-          property: 'og:availability',
-          content: this.collection?.stock ? 'in stock' : 'out of stock',
-        },
-        {
-          hid: 'product:brand',
-          property: 'product:brand',
-          content: 'NFT Book',
-        },
-        {
-          hide: 'product:locale',
-          property: 'product:locale',
-          content: this.$i18n.locale,
-        },
-        {
-          hid: 'product:catalog_id',
-          property: 'product:catalog_id',
-          content: this.collectionId,
-        },
-        {
-          hid: 'product:retailer_item_id',
-          property: 'product:retailer_item_id',
-          content: this.collectionId,
-        },
-        {
-          hid: 'product:category',
-          property: 'product:category',
-          content: 543542,
-        },
-        {
-          hid: 'product:condition',
-          property: 'product:condition',
-          content: 'new',
-        },
-        {
-          hid: 'product:custom_label_0',
-          property: 'product:custom_label_0',
-          content: this.collectionOwner,
-        },
-      ].forEach(m => meta.push(m));
+      // disable og product for testnet to avoid pixel auto fetch
+      if (!IS_TESTNET) {
+        [
+          {
+            hid: 'og:price:amount',
+            property: 'og:price:amount',
+            content: this.collectionPrice,
+          },
+          {
+            hid: 'product:price:amount',
+            property: 'product:price:amount',
+            content: this.collectionPrice,
+          },
+          {
+            hid: 'og:price:currency',
+            property: 'og:price:currency',
+            content: 'USD',
+          },
+          {
+            hid: 'product:price:currency',
+            property: 'product:price:currency',
+            content: 'USD',
+          },
+          {
+            hid: 'og:availability',
+            property: 'og:availability',
+            content: this.collection?.stock ? 'in stock' : 'out of stock',
+          },
+          {
+            hid: 'product:brand',
+            property: 'product:brand',
+            content: 'NFT Book',
+          },
+          {
+            hide: 'product:locale',
+            property: 'product:locale',
+            content: this.$i18n.locale,
+          },
+          {
+            hid: 'product:catalog_id',
+            property: 'product:catalog_id',
+            content: this.collectionId,
+          },
+          {
+            hid: 'product:retailer_item_id',
+            property: 'product:retailer_item_id',
+            content: this.collectionId,
+          },
+          {
+            hid: 'product:category',
+            property: 'product:category',
+            content: 543542,
+          },
+          {
+            hid: 'product:condition',
+            property: 'product:condition',
+            content: 'new',
+          },
+          {
+            hid: 'product:custom_label_0',
+            property: 'product:custom_label_0',
+            content: this.collectionOwner,
+          },
+        ].forEach(m => meta.push(m));
+      }
     }
     return {
       title,

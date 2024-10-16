@@ -408,6 +408,7 @@ import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
+  IS_TESTNET,
   USD_TO_HKD_RATIO,
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
@@ -715,7 +716,8 @@ export default {
         });
       });
       schemas.push(bookSchema);
-      if (this.nftEdition?.price) {
+      // disable og product for testnet to avoid pixel auto fetch
+      if (!IS_TESTNET && this.nftEdition?.price) {
         const e = this.nftEdition;
         [
           {
