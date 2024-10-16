@@ -24,7 +24,7 @@
             <IconArrowRight class="text-medium-gray" />
             <NuxtLink
               class="text-[20px] laptop:text-[28px]"
-              :to="localeLocation({ name: 'listing' })"
+              :to="localeLocation({ name: 'store' })"
               >{{ $t('listing_page_header_listingPage') }}</NuxtLink
             >
           </div>
