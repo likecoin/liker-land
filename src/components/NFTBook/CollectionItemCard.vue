@@ -11,7 +11,7 @@
           >
             <NFTBookCoverWithFrame
               :class="['w-full', 'rounded-t-[inherit] rounded-b-[0]']"
-              :src="imageSrc"
+              :src="collectionImageUrl"
               :alt="collectionName"
               :cover-resize="450"
               class-aspect-ratio="aspect-[1]"
@@ -52,7 +52,7 @@
             <div class="flex items-center justify-center mt-[16px]">
               <ButtonV2
                 preset="secondary"
-                :text="priceLabel"
+                :text="collectionAvailablePriceLabel"
                 :is-disabled="!stock"
                 @click="handleClickCollect"
               >
@@ -97,26 +97,17 @@ export default {
         params: { collectionId: this.collectionId },
       });
     },
-    priceLabel() {
-      return this.formattedCollection?.priceLabel;
-    },
     stock() {
       return this.formattedCollection?.stock;
     },
-    imageSrc() {
-      return parseNFTMetadataURL(this.formattedCollection?.image);
-    },
-    ownerWallet() {
-      return this.formattedCollection?.ownerWallet;
-    },
     ownerDisplayName() {
       return (
-        this.getUserInfoByAddress(this.ownerWallet)?.displayName ||
-        this.ownerWallet
+        this.getUserInfoByAddress(this.collectionOwner)?.displayName ||
+        this.collectionOwner
       );
     },
     ownerAvatar() {
-      return this.getUserInfoByAddress(this.ownerWallet)?.avatar;
+      return this.getUserInfoByAddress(this.collectionOwner)?.avatar;
     },
   },
   async mounted() {
@@ -124,8 +115,8 @@ export default {
       const data = await this.lazyFetchNFTCollectionInfoByCollectionId({
         collectionId: this.collectionId,
       });
-      if (data?.ownerWallet) {
-        this.lazyGetUserInfoByAddresses(data.ownerWallet);
+      if (data?.collectionOwner) {
+        this.lazyGetUserInfoByAddresses(data.collectionOwner);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
