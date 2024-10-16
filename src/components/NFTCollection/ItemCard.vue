@@ -160,13 +160,18 @@
       class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]"
     >
       <template v-if="!isDetailsPreset">
-        <div v-if="collectionAvailablePriceLabel">
-          <Label
-            preset="p5"
-            class="text-like-green-dark"
-            :text="collectionAvailablePriceLabel"
-          />
-        </div>
+        <Label
+          v-if="isLoading"
+          preset="p5"
+          class="text-medium-gray"
+          :text="$t('nft_details_page_label_item_loading')"
+        />
+        <Label
+          v-else-if="collectionAvailablePriceLabel"
+          preset="p5"
+          class="text-like-green-dark"
+          :text="collectionAvailablePriceLabel"
+        />
         <Label
           v-else
           preset="p5"
@@ -231,6 +236,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      isLoading: false,
+    };
   },
   computed: {
     ...mapGetters(['getIsHideNFTBookDownload']),
@@ -339,7 +349,13 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.lazyFetchNFTCollectionInfo();
+      try {
+        this.isLoading = true;
+        await this.lazyFetchNFTCollectionInfo();
+      } catch (error) {
+      } finally {
+        this.isLoading = false;
+      }
     },
     onClickAvatar() {
       this.$emit('click-avatar', this.collectionOwner);

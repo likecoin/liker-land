@@ -31,7 +31,7 @@
     </div>
 
     <div class="mt-[16px] text-[#1F1F1F] text-[0.875rem] laptop:text-[1rem]">
-      {{ productAvailablePriceLabel || $t('nft_details_page_label_sold_out') }}
+      {{ priceLabel }}
     </div>
   </div>
 </template>
@@ -68,6 +68,11 @@ export default {
       default: true,
     },
   },
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   computed: {
     classId() {
       return this.itemId.startsWith('likenft1') ? this.itemId : '';
@@ -81,16 +86,29 @@ export default {
         this.productOwner
       );
     },
+    priceLabel() {
+      if (this.isLoading) return this.$t('nft_details_page_label_item_loading');
+      return (
+        this.productAvailablePriceLabel ||
+        this.$t('nft_details_page_label_sold_out')
+      );
+    },
   },
   mounted() {
     if (!this.isLazyLoaded) this.fetchInfo();
   },
   methods: {
     async fetchInfo() {
-      if (this.isCollection) {
-        await this.lazyFetchNFTCollectionInfo();
-      } else {
-        await this.lazyFetchNFTClassAggregatedData();
+      this.isLoading = true;
+      try {
+        if (this.isCollection) {
+          await this.lazyFetchNFTCollectionInfo();
+        } else {
+          await this.lazyFetchNFTClassAggregatedData();
+        }
+      } catch (error) {
+      } finally {
+        this.isLoading = false;
       }
     },
   },
