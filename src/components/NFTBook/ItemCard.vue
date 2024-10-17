@@ -437,7 +437,6 @@ export default {
       this.isLoading = true;
       try {
         await this.lazyFetchNFTClassAggregatedData();
-      } catch (error) {
       } finally {
         this.isLoading = false;
       }

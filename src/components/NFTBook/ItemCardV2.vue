@@ -106,7 +106,6 @@ export default {
         } else {
           await this.lazyFetchNFTClassAggregatedData();
         }
-      } catch (error) {
       } finally {
         this.isLoading = false;
       }

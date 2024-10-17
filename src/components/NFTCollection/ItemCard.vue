@@ -352,7 +352,6 @@ export default {
       try {
         this.isLoading = true;
         await this.lazyFetchNFTCollectionInfo();
-      } catch (error) {
       } finally {
         this.isLoading = false;
       }
