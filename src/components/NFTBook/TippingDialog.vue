@@ -54,8 +54,12 @@
               }
             "
           >
-            <div class="flex flex-col items-center justify-center">
-              <Label class="text-dark-gray" preset="h4">{{ tipping }}</Label>
+            <div
+              class="flex flex-col items-center justify-center whitespace-nowrap"
+            >
+              <Label class="text-dark-gray" preset="h4">{{
+                `+ ${tipping}`
+              }}</Label>
               <Label preset="h6" class="text-medium-gray">{{ currency }}</Label>
             </div>
             <TippingCheckIcon
