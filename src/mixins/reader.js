@@ -1,3 +1,5 @@
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -24,6 +26,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(['getAccessToken']),
     progressPercent() {
       return this.totalSize
         ? Math.round((this.progressSize * 100.0) / this.totalSize)
@@ -62,7 +65,13 @@ export default {
         }
       }
       if (!res) {
-        res = await fetch(req);
+        res = await fetch(req, {
+          headers: {
+            Authorization: this.getAccessToken
+              ? `Bearer ${this.getAccessToken}`
+              : undefined,
+          },
+        });
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
