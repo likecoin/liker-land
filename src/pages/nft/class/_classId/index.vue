@@ -1372,8 +1372,8 @@ export default {
               },
               {
                 headers: {
-                  Authorization: this.getToken
-                    ? `Bearer ${this.getToken}`
+                  Authorization: this.getAccessToken
+                    ? `Bearer ${this.getAccessToken}`
                     : undefined,
                 },
               }

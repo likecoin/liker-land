@@ -338,7 +338,7 @@ export default {
       'getGaClientId',
       'getGaSessionId',
       'getShoppingCartBookProductQuantity',
-      'getToken',
+      'getAccessToken',
     ]),
     collectionId() {
       return this.$route.params.collectionId;
@@ -520,8 +520,8 @@ export default {
               },
               {
                 headers: {
-                  Authorization: this.getToken
-                    ? `Bearer ${this.getToken}`
+                  Authorization: this.getAccessToken
+                    ? `Bearer ${this.getAccessToken}`
                     : undefined,
                 },
               }

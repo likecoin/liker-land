@@ -89,7 +89,7 @@ export default {
       'getGaSessionId',
       'getUserInfoByAddress',
       'getISCNMetadataById',
-      'getToken',
+      'getAccessToken',
       'getNFTClassFeaturedSetByAddress',
       'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
@@ -1178,8 +1178,8 @@ export default {
           },
           {
             headers: {
-              Authorization: this.getToken
-                ? `Bearer ${this.getToken}`
+              Authorization: this.getAccessToken
+                ? `Bearer ${this.getAccessToken}`
                 : undefined,
             },
           }
