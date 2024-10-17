@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
     <NFTBookSpecTableLabel :text="$t('nft_details_page_label_content_types')" />
-    <div class="font-[600]">{{ label }}</div>
+    <NFTBookSpecTableValue :label="label" :is-campaign="isCampaign" />
   </component>
 </template>
 <script>
@@ -14,6 +14,10 @@ export default {
     contentTypes: {
       type: Array,
       default: () => [],
+    },
+    isCampaign: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
