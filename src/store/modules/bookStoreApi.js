@@ -78,7 +78,14 @@ const actions = {
 
 const getters = {
   getAccessToken: state => state.token,
-  getSessionWallet: state => state.sessionWallet,
+  getSessionWallet: (state, getters, rootState, rootGetters) => {
+    const { walletIsMatchedSession } = rootGetters;
+    const { loginAddress } = rootGetters;
+    if (state.sessionWallet === loginAddress && walletIsMatchedSession) {
+      return state.sessionWallet;
+    }
+    return undefined;
+  },
   getIsRestoringSession: state => state.isRestoringSession,
 };
 

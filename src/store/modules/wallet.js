@@ -231,8 +231,14 @@ const getters = {
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
   walletHasLoggedIn: state => !!state.address && !!state.loginAddress,
-  walletIsMatchedSession: (state, getters) =>
-    getters.walletHasLoggedIn && state.address === state.loginAddress,
+  walletIsMatchedSession: (state, getters, rootState) => {
+    const { sessionWallet } = rootState.bookStoreAPI;
+    return (
+      getters.walletHasLoggedIn &&
+      state.address === state.loginAddress &&
+      state.address === sessionWallet
+    );
+  },
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
