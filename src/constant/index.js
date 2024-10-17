@@ -367,3 +367,11 @@ export const NFT_BOOK_WITH_SIGN_IMAGE_SET = new Map(
         ['likenft1tlnn2x6864q6l5ag4fd87lc8eel7xafxnahd0836sap9eqshtuesesavum'],
       ]
 );
+
+export const SIGN_AUTHORIZATION_PERMISSIONS = [
+  'profile',
+  'read:nftbook',
+  'write:nftbook',
+  'read:nftcollection',
+  'write:nftcollection',
+];

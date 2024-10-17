@@ -56,21 +56,23 @@
         </MenuList>
       </Dropdown>
 
-      <ButtonV2
-        v-if="!loginAddress"
-        class="hidden laptop:flex"
-        preset="secondary"
-        :text="$t('header_button_connect_to_wallet')"
-        @click="handleConnectWallet"
-      >
-        <template #prepend>
-          <IconLogin />
-        </template>
-      </ButtonV2>
+      <div v-if="!getSessionWallet" class="hidden laptop:flex">
+        <ProgressIndicator v-if="isLoggingIn" />
+        <ButtonV2
+          v-else
+          preset="secondary"
+          :text="$t('header_button_connect_to_wallet')"
+          @click="handleConnectWallet"
+        >
+          <template #prepend>
+            <IconLogin />
+          </template>
+        </ButtonV2>
+      </div>
 
       <Dropdown class="hidden laptop:block ml-[4px]">
         <template #trigger="{ toggle }">
-          <div v-if="loginAddress" class="relative">
+          <div v-if="getSessionWallet" class="relative">
             <Identity
               class="cursor-pointer"
               :avatar-url="walletUserAvatar"
@@ -136,7 +138,7 @@
 
       {{ /* phone version */ }}
       <ButtonV2
-        v-if="!loginAddress"
+        v-if="!getSessionWallet"
         class="laptop:hidden"
         preset="plain"
         @click="handleOpenSlider"
@@ -170,16 +172,19 @@
       v-if="isShowMobileMenu"
       @close="isShowMobileMenu = false"
     >
-      <ButtonV2
-        v-if="!loginAddress"
-        class="w-full"
-        preset="secondary"
-        @click="handleConnectWallet"
-        ><div class="flex gap-[12px]">
-          <IconLogin />
-          {{ $t('header_button_connect_to_wallet') }}
-        </div>
-      </ButtonV2>
+      <div v-if="!getSessionWallet">
+        <ProgressIndicator v-if="isLoggingIn || getIsRestoringSession" />
+        <ButtonV2
+          v-else
+          class="w-full"
+          preset="secondary"
+          @click="handleConnectWallet"
+          ><div class="flex gap-[12px]">
+            <IconLogin />
+            {{ $t('header_button_connect_to_wallet') }}
+          </div>
+        </ButtonV2>
+      </div>
       <div v-else class="w-full">
         <ul class="w-full text-dark-gray">
           <MenuItem
@@ -284,6 +289,7 @@ export default {
   data() {
     return {
       isShowMobileMenu: false,
+      isLoggingIn: false,
     };
   },
   computed: {
@@ -292,6 +298,7 @@ export default {
       'getUserId',
       'getNotificationCount',
       'shoppingCartBookProductList',
+      'getSessionWallet',
     ]),
     currentLocale() {
       return this.$i18n.locale;
@@ -317,10 +324,10 @@ export default {
     },
   },
   async mounted() {
-    await this.restoreSession();
+    await this.restoreAuthSession();
   },
   methods: {
-    ...mapActions(['updatePreferences', 'userLogout']),
+    ...mapActions(['updatePreferences', 'userLogout', 'restoreAuthSession']),
     handleClickGoStore() {
       logTrackerEvent(this, 'site_header', 'site_header_click_store', '', 1);
     },
@@ -329,6 +336,7 @@ export default {
     },
     async handleConnectWallet() {
       try {
+        this.isLoggingIn = true;
         logTrackerEvent(
           this,
           'site_menu',
@@ -340,6 +348,8 @@ export default {
       } catch (err) {
         console.error(err);
         this.alertPromptError(err);
+      } finally {
+        this.isLoggingIn = false;
       }
     },
     handleSelectMenuItem(value) {
@@ -366,7 +376,7 @@ export default {
           this.$router.push(
             this.localeLocation({
               name: 'bookshelf',
-              params: { id: this.loginAddress },
+              params: { id: this.getSessionWallet },
               query: { tab: 'collected' },
             })
           );
@@ -392,12 +402,12 @@ export default {
     handleOpenSlider() {
       this.isShowMobileMenu = true;
 
-      if (this.loginAddress) {
+      if (this.getSessionWallet) {
         logTrackerEvent(
           this,
           'site_menu',
           'site_menu_click_slider_menu',
-          this.loginAddress,
+          this.getSessionWallet,
           1
         );
       } else {

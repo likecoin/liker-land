@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import {
   LIKECOIN_CHAIN_MIN_DENOM,
   LIKECOIN_NFT_API_WALLET,
+  SIGN_AUTHORIZATION_PERMISSIONS,
 } from '@/constant/index';
 import { LIKECOIN_WALLET_CONNECTOR_CONFIG } from '@/constant/network';
 import { catchAxiosError } from '~/util/misc';
@@ -230,8 +231,14 @@ const getters = {
   getSigner: state => state.signer,
   loginAddress: state => state.loginAddress,
   walletHasLoggedIn: state => !!state.address && !!state.loginAddress,
-  walletIsMatchedSession: (state, getters) =>
-    getters.walletHasLoggedIn && state.address === state.loginAddress,
+  walletIsMatchedSession: (state, getters, rootState) => {
+    const { sessionWallet } = rootState.bookStoreAPI;
+    return (
+      getters.walletHasLoggedIn &&
+      state.address === state.loginAddress &&
+      state.address === sessionWallet
+    );
+  },
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
   walletFollowees: state => state.followees,
@@ -463,6 +470,7 @@ const actions = {
     commit(WALLET_SET_SIGNER, null);
     commit(WALLET_SET_CONNECTOR, null);
     commit(WALLET_SET_LIKERINFO, null);
+    dispatch('clearSession');
     await dispatch('walletLogout');
   },
 
@@ -881,11 +889,17 @@ const actions = {
     try {
       commit(WALLET_SET_IS_LOGGING_IN, true);
       const { signer, methodType } = state;
-      const data = await signLoginMessage(signer, address);
+      const data = await signLoginMessage(
+        signer,
+        address,
+        'authorize',
+        SIGN_AUTHORIZATION_PERMISSIONS
+      );
       const result = await this.$api.$post(postUserV2Login(), {
         loginMethod: methodType,
         ...data,
       });
+      await dispatch('authenticate', { inputWallet: address, signature: data });
       await setLoggerUser(this, {
         wallet: address,
         method: methodType,
@@ -896,6 +910,8 @@ const actions = {
       await dispatch('walletFetchSessionUserData');
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
+      dispatch('disconnectWallet');
+      dispatch('clearSession');
       if (error.message === 'Request rejected') {
         // User rejected login request
       } else {

@@ -193,7 +193,7 @@ export default {
       'walletFollowees',
     ]),
     wallet() {
-      return this.loginAddress;
+      return this.getSessionWallet;
     },
   },
   watch: {
