@@ -145,20 +145,30 @@ export default {
       purchaseEventParams,
     }) {
       try {
-        const { url, paymentId } = await this.$axios.$post(link, {
-          gaClientId: this.getGaClientId,
-          gaSessionId: this.getGaSessionId,
-          coupon: this.$route.query.coupon,
-          customPriceInDecimal,
-          utmCampaign: this.utmCampaign,
-          utmSource: `${this.utmSource}_cross-sell`,
-          utmMedium: this.utmMedium,
-          referrer: this.documentReferrer,
-          email: this.walletEmail,
-          gadClickId: this.gadClickId,
-          gadSource: this.gadSource,
-          fbClickId: this.fbClickId,
-        });
+        const { url, paymentId } = await this.$axios.$post(
+          link,
+          {
+            gaClientId: this.getGaClientId,
+            gaSessionId: this.getGaSessionId,
+            coupon: this.$route.query.coupon,
+            customPriceInDecimal,
+            utmCampaign: this.utmCampaign,
+            utmSource: `${this.utmSource}_cross-sell`,
+            utmMedium: this.utmMedium,
+            referrer: this.documentReferrer,
+            email: this.walletEmail,
+            gadClickId: this.gadClickId,
+            gadSource: this.gadSource,
+            fbClickId: this.fbClickId,
+          },
+          {
+            headers: {
+              Authorization: this.getAccessToken
+                ? `Bearer ${this.getAccessToken}`
+                : undefined,
+            },
+          }
+        );
         logPurchaseFlowEvent(this, 'begin_checkout', {
           ...purchaseEventParams,
           paymentId,
