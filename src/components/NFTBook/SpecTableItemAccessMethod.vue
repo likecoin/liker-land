@@ -3,7 +3,7 @@
     <NFTBookSpecTableLabel
       :text="$t('nft_details_page_label_access_methods')"
     />
-    <div class="font-[600]">{{ label }}</div>
+    <NFTBookSpecTableValue :label="label" :is-campaign="isCampaign" />
   </component>
 </template>
 
@@ -15,6 +15,10 @@ export default {
       default: 'li',
     },
     isDownloadable: {
+      type: Boolean,
+      default: false,
+    },
+    isCampaign: {
       type: Boolean,
       default: false,
     },
