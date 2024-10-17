@@ -225,13 +225,18 @@
       v-if="!isCompactPreset && !isDetailsPreset"
       class="flex justify-between px-[8px] sm:px-[24px] mt-[20px]"
     >
-      <div v-if="nftBookAvailablePriceLabel">
-        <Label
-          preset="p5"
-          class="text-like-green-dark"
-          :text="nftBookAvailablePriceLabel"
-        />
-      </div>
+      <Label
+        v-if="isLoading"
+        preset="p5"
+        class="text-medium-gray"
+        :text="$t('nft_details_page_label_item_loading')"
+      />
+      <Label
+        v-else-if="nftBookAvailablePriceLabel"
+        preset="p5"
+        class="text-like-green-dark"
+        :text="nftBookAvailablePriceLabel"
+      />
       <Label
         v-else
         preset="p5"
@@ -307,6 +312,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      isLoading: false,
+    };
   },
   computed: {
     creatorDisplayName() {
@@ -424,7 +434,12 @@ export default {
   },
   methods: {
     async fetchInfo() {
-      await this.lazyFetchNFTClassAggregatedData();
+      this.isLoading = true;
+      try {
+        await this.lazyFetchNFTClassAggregatedData();
+      } finally {
+        this.isLoading = false;
+      }
     },
     onClickAvatar() {
       this.$emit('click-avatar', this.iscnOwner);
