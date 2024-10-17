@@ -81,11 +81,6 @@ export default {
       default: '',
     },
   },
-  data() {
-    return {
-      data: null,
-    };
-  },
   computed: {
     ...mapGetters([
       'getNFTCollectionInfoByCollectionId',
@@ -112,11 +107,13 @@ export default {
   },
   async mounted() {
     try {
-      const data = await this.lazyFetchNFTCollectionInfoByCollectionId({
+      await this.lazyFetchNFTCollectionInfoByCollectionId({
         collectionId: this.collectionId,
       });
-      if (data?.collectionOwner) {
-        this.lazyGetUserInfoByAddresses(data.collectionOwner);
+      if (this.getNFTCollectionInfoByCollectionId?.collectionOwner) {
+        this.lazyGetUserInfoByAddresses(
+          this.getNFTCollectionInfoByCollectionId.collectionOwner
+        );
       }
     } catch (error) {
       // eslint-disable-next-line no-console
