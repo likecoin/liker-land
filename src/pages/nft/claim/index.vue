@@ -761,7 +761,7 @@ export default {
       );
     },
     claimingAddress() {
-      return this.loginAddress;
+      return this.getSessionWallet;
     },
     claimingEmail() {
       return this.walletEmail || this.walletEmailUnverified;
