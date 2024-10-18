@@ -95,10 +95,10 @@ export const LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS = IS_TESTNET
   : [
       // 天工開物・栩栩如真
       'likenft19symzw3xmh42gukzts858wf6rsdkn6e4jtc9wp8jh4kphfmffy5s6acyxg',
-      // 棄床記
-      'likenft1afme4cy9vqzg5sk2lu0wku57vc94laf309msxepu9sr4qkfv2trqwdtm9q',
-      // 從新浪潮到新本土：48部電影裡的香港城誌
-      'likenft15ayw5nv7yxrlv6vvrxk0fvwdzsweqqyyw6we50dq2zaq2rk60pcs6ufhd7',
+      // 人在
+      'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
+      // 哲學未來書
+      'likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z',
     ];
 
 export const LIKECOIN_NFT_CAMPAIGN_ITEMS = IS_TESTNET
