@@ -81,7 +81,6 @@ export default {
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
-      isRecommendationLoading: false,
     };
   },
   computed: {
@@ -668,63 +667,6 @@ export default {
           toType: this.getWalletIdentityType(m.toWallet),
           message: this.normalizeNFTMessage(m),
         }));
-    },
-    recommendedList() {
-      const featuredSet = this.getNFTClassFeaturedSetByAddress(this.iscnOwner);
-      const hiddenSet = this.getNFTClassHiddenSetByAddress(this.iscnOwner);
-
-      let recommendedList =
-        this.getCreatedNFTClassesByAddress(this.iscnOwner) || [];
-      const userCollected =
-        this.getCollectedNFTClassesByAddress(this.getAddress) || [];
-
-      recommendedList = recommendedList.filter(
-        item =>
-          !userCollected.some(
-            collectedItem => collectedItem.classId === item.classId
-          )
-      );
-
-      if (hiddenSet) {
-        recommendedList = recommendedList.filter(
-          item => !hiddenSet.has(item.classId)
-        );
-      }
-
-      if (featuredSet) {
-        const featuredItems = recommendedList.filter(item =>
-          featuredSet.has(item.classId)
-        );
-        recommendedList = featuredItems.concat(
-          recommendedList.filter(item => !featuredSet.has(item.classId))
-        );
-      }
-
-      recommendedList = recommendedList.filter(
-        item => item.classId !== this.classId
-      );
-
-      if (this.nftIsNFTBook) {
-        const sortedList = [...recommendedList];
-        sortedList.sort((a, b) => {
-          if (
-            a.type === nftClassCollectionType.NFTBook &&
-            b.type !== nftClassCollectionType.NFTBook
-          ) {
-            return -1;
-          }
-          if (
-            a.type !== nftClassCollectionType.NFTBook &&
-            b.type === nftClassCollectionType.NFTBook
-          ) {
-            return 1;
-          }
-          return 0;
-        });
-        return sortedList.slice(0, 5);
-      }
-
-      return recommendedList.slice(0, 5);
     },
     nftTxErrorIsAlreadyCollected() {
       return this.uiTxErrorMessage === 'ALREADY_MINTED';
@@ -1444,27 +1386,6 @@ export default {
         return this.nftClassCreatorMessage;
       }
       return m.memo;
-    },
-    async fetchRecommendInfo() {
-      if (this.isRecommendationLoading) return;
-      this.isRecommendationLoading = true;
-      try {
-        const promises = [];
-        if (this.iscnOwner) {
-          promises.push(this.fetchCreatedNFTClassesByAddress(this.iscnOwner));
-          promises.push(this.fetchNFTDisplayStateListByAddress(this.iscnOwner));
-        }
-        if (this.getAddress) {
-          promises.push(
-            this.fetchCollectedNFTClassesByAddress({ address: this.getAddress })
-          );
-        }
-        await Promise.all(promises);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-      this.isRecommendationLoading = false;
     },
     getEditionByIndex(index) {
       return this.getNFTBookStorePriceByClassIdAndIndex(this.classId, index);

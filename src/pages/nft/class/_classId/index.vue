@@ -149,30 +149,16 @@
           />
 
           <!-- recommend -->
-          <section>
-            <client-only>
-              <lazy-component
-                class="pointer-events-none"
-                @show.once="handleFetchRecommendInfo"
-              />
-            </client-only>
-            <NFTPageRecommendation
-              :iscn-owner="iscnOwner"
-              :iscn-work-author="iscnWorkAuthor"
-              :should-show-follow-button="shouldShowFollowButton"
-              :is-followed="isFollowed"
-              :recommended-list="recommendedList"
-              :is-book-nft="nftIsNFTBook"
-              :is-loading="isRecommendationLoading"
-              @header-avatar-click="handleRecommendationHeaderAvatarClick"
-              @follow-button-click="handleFollowButtonClick"
-              @item-click="handleRecommendedItemClick"
-              @item-collect="handleRecommendedItemCollect"
-              @slide-next.once="handleRecommendationSlideNext"
-              @slide-prev.once="handleRecommendationSlidePrev"
-              @slider-move.once="handleRecommendationSliderMove"
-            />
-          </section>
+          <NFTPageRecommendation
+            :class-id="classId"
+            @header-avatar-click="handleRecommendationHeaderAvatarClick"
+            @follow-button-click="handleFollowButtonClick"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
 
           <section
             v-if="
@@ -421,6 +407,7 @@ import clipboardMixin from '~/mixins/clipboard';
 import crossSellMixin from '~/mixins/cross-sell';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
+import alertMixin from '~/mixins/alert';
 
 export default {
   name: 'NFTClassDetailsPage',
@@ -430,6 +417,7 @@ export default {
     nftMixin,
     navigationListenerMixin,
     utmMixin,
+    alertMixin,
   ],
   layout: 'default',
   asyncData({ query }) {
@@ -1075,9 +1063,6 @@ export default {
         isNFTBook: true,
       };
     },
-    async handleFetchRecommendInfo() {
-      await this.fetchRecommendInfo();
-    },
     async handleClickMoreCollector() {
       logTrackerEvent(
         this,
@@ -1523,6 +1508,11 @@ export default {
       await this.handleClickFollow({
         followOwner: this.iscnOwner,
       });
+      this.alertPromptSuccess(
+        this.$t('portfolio_subscription_success_alert', {
+          creator: this.getUserInfoByAddress(this.iscnOwner)?.displayName,
+        })
+      );
       if (this.isFollowed) {
         logTrackerEvent(
           this,

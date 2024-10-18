@@ -30,9 +30,12 @@ export default {
       return this.getNFTCollectionInfoByCollectionId(this.collectionId);
     },
     formattedCollection() {
-      let { name, description } = this.collection;
-      const { id, stock } = this.collection;
-      const price = this.collectionPrice;
+      if (!this.collection) {
+        return {};
+      }
+      let { name, description, image } = this.collection;
+      const { id, priceInDecimal, stock, ownerWallet } = this.collection;
+      const price = priceInDecimal / 100;
 
       if (typeof name === 'object') {
         name = name[this.collectionLocale] || '';
@@ -50,15 +53,18 @@ export default {
               'HKD'
             )
           : formatNumberWithUSD(price);
+      image = parseNFTMetadataURL(image);
       return {
         id,
         name,
+        image,
         description,
         defaultPrice: this.collectionDefaultPrice,
         priceLabel,
         price,
         value: 0,
         stock,
+        ownerWallet,
       };
     },
     collectionType() {
@@ -76,14 +82,14 @@ export default {
     },
     collectionName() {
       const name = this.collection?.name;
-      if (name[this.collectionLocale] !== undefined) {
+      if (name?.[this.collectionLocale] !== undefined) {
         return name[this.collectionLocale];
       }
       return name;
     },
     collectionDescription() {
       const description = this.collection?.description;
-      if (description[this.collectionLocale] !== undefined) {
+      if (description?.[this.collectionLocale] !== undefined) {
         return description[this.collectionLocale];
       }
       return description;
