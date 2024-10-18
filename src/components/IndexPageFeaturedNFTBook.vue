@@ -73,7 +73,7 @@
         {{ pContent }}
       </p>
       <ButtonV2
-        class="mt-[1.5rem]"
+        class="mt-[1.5rem] mb-[3rem] desktop:mb-0"
         :text="$t('index_page_featured_nft_book_collect_button')"
         theme="glow"
         preset="tertiary"
