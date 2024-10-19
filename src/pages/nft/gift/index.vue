@@ -146,6 +146,7 @@ export default {
           classId: this.classId,
           collectionId: this.collectionId,
           paymentId: this.paymentId,
+          token: this.token,
         })
       );
       ({ price, priceIndex } = data);
