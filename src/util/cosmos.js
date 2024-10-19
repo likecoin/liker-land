@@ -69,7 +69,7 @@ export async function signLoginMessage(signer, address, action, permissions) {
       message: stringify(signDoc),
       wallet: address,
       from: address,
-      expiresIn: '7d',
+      expiresIn: '30d',
     };
   }
 
@@ -101,7 +101,7 @@ export async function signLoginMessage(signer, address, action, permissions) {
       wallet: address,
       from: address,
       signMethod: 'memo',
-      expiresIn: '7d',
+      expiresIn: '30d',
     };
   }
   throw new Error('SIGNER_NOT_SUPPORT_AMINO');
