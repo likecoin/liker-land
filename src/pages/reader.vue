@@ -145,6 +145,15 @@ export default {
           );
           return;
         }
+        if (
+          (this.isLoginRequired || this.nftIsCustomMessageEnabled) &&
+          this.nftId &&
+          !this.$route.query.nftId
+        ) {
+          this.$router.replace({
+            query: { ...this.$route.query, nftId: this.nftId },
+          });
+        }
       } else if (this.isLoginRequired) {
         this.connectWallet();
       }
