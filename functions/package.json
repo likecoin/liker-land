@@ -55,6 +55,7 @@
     "form-data": "^4.0.0",
     "helmet": "^3.21.2",
     "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^4.0.0",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "lru-cache": "^10.0.0",

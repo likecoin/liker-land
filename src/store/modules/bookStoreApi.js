@@ -5,6 +5,7 @@ import {
   saveAuthSession,
   clearAuthSession,
   loadAuthSession,
+  checkJwtTokenValidity,
 } from '~/util/auth';
 import {
   BOOKSTORE_API_SET_TOKEN,
@@ -63,7 +64,7 @@ const actions = {
     try {
       commit(BOOKSTORE_API_SET_IS_LOADING, true);
       const session = loadAuthSession();
-      if (session) {
+      if (session && checkJwtTokenValidity(session.token)) {
         commit(BOOKSTORE_API_SET_TOKEN, session.token);
         commit(BOOKSTORE_API_SET_SESSION_WALLET, session.wallet);
         if (session.wallet) {
