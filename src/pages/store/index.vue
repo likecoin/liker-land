@@ -30,7 +30,51 @@
           </div>
 
           <!-- Desktop Filter & Sorting -->
-          <div class="hidden desktop:flex items-center gap-[16px]">
+          <div class="hidden desktop:flex items-center gap-[16px] relative">
+            <!-- Search button -->
+            <div class="cursor-pointer p-[8px]" @click="toggleSearch">
+              <IconSearch />
+            </div>
+            <!-- Search bar -->
+            <div
+              :style="{
+                width: isSearchOpen ? '100%' : '0',
+              }"
+              :class="[
+                'absolute',
+                'top-0',
+                'left-0',
+                'z-10',
+                'flex',
+                'items-center',
+                'bg-shade-gray',
+                'gap-[8px]',
+                isSearchOpen && 'pl-[8px]',
+                'h-full',
+                'rounded-2',
+                'transition-[width]',
+                'duration-[5000]',
+                'ease-in-out',
+              ]"
+            >
+              <IconSearch />
+              <input
+                :value="searchQuery"
+                class="w-full bg-transparent border-0 focus-visible:outline-none"
+                type="text"
+                :placeholder="$t('gutenberg_search_placeholder')"
+                @input="debouncedUpdateSearchKeyword"
+              />
+              <ButtonV2
+                v-if="isSearchOpen"
+                size="tiny"
+                preset="plain"
+                @click="toggleSearch"
+              >
+                <IconClose class="cursor-auto" />
+              </ButtonV2>
+            </div>
+
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
@@ -141,7 +185,7 @@
         <div
           :class="[
             'grid desktop:hidden',
-            'grid-cols-2',
+            'grid-cols-3',
 
             'w-full',
             'mt-[16px]',
@@ -152,8 +196,59 @@
 
             'divide-x',
             'divide-shade-gray',
+
+            'relative',
           ]"
         >
+          <div
+            class="flex items-center justify-center cursor-pointer p-[8px]"
+            @click="toggleSearch"
+          >
+            <Label :text="$t('listing_page_search')">
+              <template #prepend>
+                <IconSearch />
+              </template>
+            </Label>
+          </div>
+          <!-- Search bar -->
+          <div
+            :style="{
+              width: isSearchOpen ? '100%' : '0',
+            }"
+            :class="[
+              'absolute',
+              'top-0',
+              'left-0',
+              'z-10',
+              'flex',
+              'items-center',
+              'bg-shade-gray',
+              'gap-[8px]',
+              isSearchOpen && 'pl-[24px]',
+              'h-full',
+              'rounded-2',
+              'transition-[width]',
+              'duration-[5000]',
+              'ease-in-out',
+            ]"
+          >
+            <IconSearch />
+            <input
+              :value="searchQuery"
+              class="w-full bg-transparent border-0 focus-visible:outline-none"
+              type="text"
+              :placeholder="$t('gutenberg_search_placeholder')"
+              @input="debouncedUpdateSearchKeyword"
+            />
+            <ButtonV2
+              v-if="isSearchOpen"
+              size="tiny"
+              preset="plain"
+              @click="toggleSearch"
+            >
+              <IconClose class="cursor-auto" />
+            </ButtonV2>
+          </div>
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenFilterDialog"
@@ -194,6 +289,7 @@
       >
         <!-- Listing items -->
         <ul
+          v-if="!searchQuery"
           :class="[
             'w-full',
             'grid',
@@ -221,6 +317,62 @@
             />
           </li>
         </ul>
+
+        <!-- Search loading -->
+        <div v-else-if="isSearchLoading" class="flex justify-center">
+          <ProgressIndicator />
+        </div>
+
+        <!-- Search result -->
+        <ul
+          v-else
+          :class="[
+            'w-full',
+            'grid',
+            'grid-cols-2',
+            'sm:grid-cols-3',
+            'laptop:grid-cols-3',
+            'desktop:grid-cols-4',
+            'desktopLg:grid-cols-5',
+            'full-hd:grid-cols-6',
+            'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
+            'items-stretch',
+            'desktop:mt-0',
+          ]"
+        >
+          <li v-for="item in sortedBookstoreItems" :key="item.classId">
+            <NFTBookItemCardV2
+              :item-id="item.classId"
+              class-cover-frame-aspect-ratio="aspect-[4/5]"
+              :is-link-disabled="item.isMultiple"
+              @click-cover="handleClickItem($event, item)"
+            />
+          </li>
+        </ul>
+        <!-- Search not found -->
+        <div
+          v-if="searchQuery && !sortedBookstoreItems.length"
+          class="flex flex-col items-center justify-center gap-[12px] w-full"
+        >
+          <Label
+            preset="h5"
+            class="text-medium-gray"
+            :text="$t('listing_page_search_not_found')"
+          />
+          <Label
+            preset="p5"
+            class="text-medium-gray"
+            :text="$t('listing_page_search_recommend')"
+          />
+          <NFTPageRecommendation
+            class="w-full mt-[24px]"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
+        </div>
 
         <footer class="flex flex-col gap-[32px]">
           <div class="flex flex-col items-center gap-[24px] py-[24px]">
@@ -370,6 +522,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import debounce from 'lodash.debounce';
 
 import { EXTERNAL_HOST, LIKECOIN_API_BASE } from '~/constant';
 import {
@@ -378,7 +531,10 @@ import {
   LANGUAGE_OPTIONS,
 } from '~/constant/store';
 
-import { fetchBookstoreItemListsFromCMSById } from '~/util/api';
+import {
+  fetchBookstoreItemListsFromCMSById,
+  fetchBookstoreItemSearchResults,
+} from '~/util/api';
 import { checkIsForcedInAppPage } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { parseNFTMetadataURL } from '~/util/nft';
@@ -425,6 +581,11 @@ export default {
       isShowSortingDialog: false,
       isShowFilterDialog: false,
       dialogNFTClassList: [],
+
+      searchQuery: this.$route.query.q,
+      isSearchOpen: !!this.$route.query.q,
+      isSearchLoading: false,
+      searchItems: [],
     };
   },
   head() {
@@ -699,6 +860,9 @@ export default {
         });
     },
     sortedBookstoreItems() {
+      if (this.searchQuery) {
+        return this.searchItems;
+      }
       const items = [...this.filteredBookstoreItems];
 
       items.sort((a, b) => {
@@ -767,6 +931,28 @@ export default {
     selectedLanguageFilter() {
       this.scrollToTop();
     },
+    async searchQuery(newQuery) {
+      if (newQuery) {
+        try {
+          this.isSearchLoading = true;
+          this.$router.push({ query: { q: newQuery } });
+          await this.fetchSearchItems(newQuery);
+        } catch (error) {
+          this.searchItems = [];
+          // eslint-disable-next-line no-console
+          console.error(error);
+        } finally {
+          this.isSearchLoading = false;
+        }
+      } else {
+        this.$router.push({ query: {} });
+      }
+    },
+  },
+  async mounted() {
+    if (this.searchQuery) {
+      await this.fetchSearchItems(this.searchQuery);
+    }
   },
   methods: {
     scrollToTop() {
@@ -851,6 +1037,64 @@ export default {
     },
     handleClickHomePage() {
       logTrackerEvent(this, 'listing', 'listing_home_page_click', '', 1);
+    },
+    toggleSearch() {
+      if (this.isSearchOpen) {
+        this.searchQuery = '';
+        logTrackerEvent(this, 'listing', 'search_clean', '', 1);
+      } else {
+        logTrackerEvent(this, 'listing', 'search_open', '', 1);
+      }
+      this.isSearchOpen = !this.isSearchOpen;
+    },
+    async fetchSearchItems(query) {
+      logTrackerEvent(this, 'listing', 'search_query', query, 1);
+      const { list } = await this.$api.$get(
+        fetchBookstoreItemSearchResults(query)
+      );
+      this.searchItems = list?.map(item => ({
+        ...item,
+        classId: item.id,
+      }));
+    },
+    debouncedUpdateSearchKeyword: debounce(
+      function debouncedUpdateSearchKeyword(event) {
+        this.searchQuery = event.target.value;
+      },
+      500
+    ),
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(this, 'listing', 'recommend_item_click', classId, 1);
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(this, 'listing', 'recommend_item_collect', classId, 1);
+    },
+    handleRecommendationSlideNext() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'recommendation_clicked_next',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSlidePrev() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'recommendation_clicked_prev',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSliderMove() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'recommendation_moved_slider',
+        this.classId,
+        1
+      );
     },
   },
 };

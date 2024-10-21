@@ -586,6 +586,10 @@ export const getNftBookBuyerMessage = classId =>
 export const fetchBookstoreLatestItems = () =>
   `${LIKECOIN_API_BASE}/likernft/book/store/list?limit=100&exclude_wallet=${BOOKSTORE_LIST_EXCLUDED_WALLET}`;
 
+export const fetchBookstoreItemSearchResults = q => {
+  const encodedQuery = encodeURIComponent(q);
+  return `${LIKECOIN_API_BASE}/likernft/book/store/search?q=${encodedQuery}`;
+};
 export const fetchBookstoreItemsFromCMSForLandingPage = () =>
   `${EXTERNAL_HOST}/api/bookstore/lists/landing`;
 
