@@ -68,7 +68,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "resize-observer": "^1.0.0",
-    "secp256k1": "^4.0.3",
+    "secp256k1": "^4.0.4",
     "source-map-support": "^0.5.10",
     "swiper": "^5.4.5",
     "tiny-cookie": "^1.0.1",
