@@ -234,7 +234,7 @@ export default {
         ...recommendedList,
       ];
 
-      const uniqueRecommendedList = Array.from(
+      recommendedList = Array.from(
         new Map(recommendedList.map(item => [item.classId, item])).values()
       );
 
@@ -251,7 +251,7 @@ export default {
         );
       }
 
-      return uniqueRecommendedList.slice(0, DISPLAY_ITEM_COUNT);
+      return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
     },
     swiperOptions() {
       return {
