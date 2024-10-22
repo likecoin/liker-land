@@ -92,7 +92,10 @@
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
-import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
+import {
+  DEFAULT_RECOMMENDATIONS_LIST,
+  CROSS_SELL_PRODUCT_IDS_MAP,
+} from '~/constant';
 
 import bookstoreMixin from '~/mixins/bookstore';
 import nftOrCollection from '~/mixins/nft-or-collection';
@@ -237,7 +240,19 @@ export default {
         });
       }
 
-      return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
+      let crossSellList = [];
+      const crossSellItems = CROSS_SELL_PRODUCT_IDS_MAP[this.classId] || [];
+      if (crossSellItems.length > 0) {
+        crossSellList = crossSellItems.map(classId => ({ classId }));
+      } else {
+        return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
+      }
+      const combinedList = [...crossSellList, ...recommendedList];
+      const uniqueList = Array.from(
+        new Map(combinedList.map(item => [item.classId, item])).values()
+      );
+
+      return uniqueList.slice(0, DISPLAY_ITEM_COUNT);
     },
     swiperOptions() {
       return {
