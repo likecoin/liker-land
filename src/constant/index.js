@@ -311,12 +311,28 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
         'likenft1rfd3pp4q4hvuha8xpl8wzzf7uwannv0wm05s7jz34828e4qjnyzsfd9srz',
       ],
       likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x: [
+        'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
         'likenft1mppyvyuvvft62yc66saee28q8nyl6xuh8vg332d8y9fn6gz9qtssj4trzl',
       ],
       likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h: [
         'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
       ],
+      likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny: [
+        'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
+      ],
+      likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633: [
+        'likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp',
+      ],
+      likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp: [
+        'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633',
+      ],
     };
+
+export const DISABLED_CROSS_SELL_POPUP_LIST = [
+  'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny', // 坐監情緒學
+  'likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp', // 來一場散步學
+  'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633', // 鯨魚之城
+];
 
 export const AFFILIATION_CHANNEL_LEGACY_STRINGS = {
   'Muddy Water': '@muddydirtywater',

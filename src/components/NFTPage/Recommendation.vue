@@ -92,11 +92,15 @@
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
-import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
+import {
+  DEFAULT_RECOMMENDATIONS_LIST,
+  CROSS_SELL_PRODUCT_IDS_MAP,
+} from '~/constant';
 
 import bookstoreMixin from '~/mixins/bookstore';
 import nftOrCollection from '~/mixins/nft-or-collection';
 import walletMixin from '~/mixins/wallet';
+import crossSellMixin from '~/mixins/cross-sell';
 import { mapActions, mapGetters } from 'vuex';
 
 const DISPLAY_ITEM_COUNT = 5;
@@ -112,7 +116,7 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  mixins: [bookstoreMixin, nftOrCollection, walletMixin],
+  mixins: [bookstoreMixin, nftOrCollection, walletMixin, crossSellMixin],
   props: {
     classId: {
       type: String,
@@ -188,18 +192,6 @@ export default {
         this.getNFTClassFeaturedSetByAddress(this.productOwner) || new Set();
       const hiddenSet =
         this.getNFTClassHiddenSetByAddress(this.productOwner) || new Set();
-      const userCollected = this.getAddress
-        ? this.getCollectedNFTClassesByAddress(this.getAddress)
-        : [];
-
-      if (userCollected?.length) {
-        recommendedList = recommendedList.filter(
-          item =>
-            !userCollected.some(
-              collectedItem => collectedItem.classId === item.classId
-            )
-        );
-      }
 
       recommendedList = recommendedList.filter(item => {
         const isNotHidden = !hiddenSet.has(item.classId);
@@ -235,6 +227,28 @@ export default {
           }
           return 0;
         });
+      }
+
+      recommendedList = [
+        ...this.crossSellProductIds?.map(classId => ({ classId })),
+        ...recommendedList,
+      ];
+
+      recommendedList = Array.from(
+        new Map(recommendedList.map(item => [item.classId, item])).values()
+      );
+
+      const userCollected = this.getAddress
+        ? this.getCollectedNFTClassesByAddress(this.getAddress)
+        : [];
+
+      if (userCollected?.length) {
+        recommendedList = recommendedList.filter(
+          item =>
+            !userCollected.some(
+              collectedItem => collectedItem.classId === item.classId
+            )
+        );
       }
 
       return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
