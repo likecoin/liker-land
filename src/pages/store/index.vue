@@ -312,11 +312,11 @@
         </div>
 
         <!-- Search result -->
-        <div v-else class="flex flex-col w-full gap-[8px]">
+        <div v-else class="flex flex-col w-full gap-[32px]">
           <Label
             v-if="sortedBookstoreItems.length"
             preset="h5"
-            class="text-medium-gray"
+            class="text-dark-gray"
             :text="$t('listing_page_search_result', { query: searchQuery })"
           />
           <ul
