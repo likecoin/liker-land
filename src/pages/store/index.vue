@@ -32,9 +32,9 @@
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
             <!-- Search button -->
-            <div class="cursor-pointer p-[8px]" @click="toggleSearch">
+            <ButtonV2 preset="tertiary" @click="toggleSearch">
               <IconSearch />
-            </div>
+            </ButtonV2>
             <!-- Search bar -->
             <div
               :style="{
@@ -48,10 +48,10 @@
                 'flex',
                 'items-center',
                 'bg-shade-gray',
-                'gap-[8px]',
-                isSearchOpen && 'pl-[8px]',
+                'gap-[12px]',
+                isSearchOpen && 'pl-[16px]',
                 'h-full',
-                'rounded-2',
+                'rounded-[10px]',
                 'transition-[width]',
                 'duration-[5000]',
                 'ease-in-out',
