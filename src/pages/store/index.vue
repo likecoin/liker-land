@@ -324,31 +324,38 @@
         </div>
 
         <!-- Search result -->
-        <ul
-          v-else
-          :class="[
-            'w-full',
-            'grid',
-            'grid-cols-2',
-            'sm:grid-cols-3',
-            'laptop:grid-cols-3',
-            'desktop:grid-cols-4',
-            'desktopLg:grid-cols-5',
-            'full-hd:grid-cols-6',
-            'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
-            'items-stretch',
-            'desktop:mt-0',
-          ]"
-        >
-          <li v-for="item in sortedBookstoreItems" :key="item.classId">
-            <NFTBookItemCardV2
-              :item-id="item.classId"
-              class-cover-frame-aspect-ratio="aspect-[4/5]"
-              :is-link-disabled="item.isMultiple"
-              @click-cover="handleClickItem($event, item)"
-            />
-          </li>
-        </ul>
+        <div v-else class="flex flex-col w-full gap-[8px]">
+          <Label
+            v-if="sortedBookstoreItems.length"
+            preset="h5"
+            class="text-medium-gray"
+            :text="$t('listing_page_search_result', { query: searchQuery })"
+          />
+          <ul
+            :class="[
+              'w-full',
+              'grid',
+              'grid-cols-2',
+              'sm:grid-cols-3',
+              'laptop:grid-cols-3',
+              'desktop:grid-cols-4',
+              'desktopLg:grid-cols-5',
+              'full-hd:grid-cols-6',
+              'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
+              'items-stretch',
+              'desktop:mt-0',
+            ]"
+          >
+            <li v-for="item in sortedBookstoreItems" :key="item.classId">
+              <NFTBookItemCardV2
+                :item-id="item.classId"
+                class-cover-frame-aspect-ratio="aspect-[4/5]"
+                :is-link-disabled="item.isMultiple"
+                @click-cover="handleClickItem($event, item)"
+              />
+            </li>
+          </ul>
+        </div>
         <!-- Search not found -->
         <div
           v-if="searchQuery && !sortedBookstoreItems.length"

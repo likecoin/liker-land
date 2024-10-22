@@ -476,6 +476,7 @@
   "listing_page_search": "搜尋",
   "listing_page_search_not_found": "沒有找到相關的書籍，請嘗試使用其他關鍵字。",
   "listing_page_search_recommend": "或是您可以瀏覽我們的推薦書籍。",
+  "listing_page_search_result": "以下為 “{query}” 的搜尋結果：",
   "listing_page_select_language_all": "全部",
   "listing_page_select_language_ch": "簡體中文",
   "listing_page_select_language_en": "英文",
