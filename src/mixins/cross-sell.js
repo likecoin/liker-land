@@ -12,9 +12,6 @@ export default {
     return {
       isCrossSellDialogOpen: false,
       crossSellProductIndex: 0,
-      isEnableCrossSell: IS_TESTNET
-        ? true
-        : Math.random() < CROSS_SELL_PRODUCT_PROBABILITY,
     };
   },
   computed: {
@@ -45,15 +42,19 @@ export default {
         !this.getShoppingCartBookProductQuantity(this.crossSellProductId)
       );
     },
-    isCrossSellDisabled() {
-      return [this.classId, this.collectionId].some(id =>
+    isCrossSellEnabled() {
+      const shouldAttemptCrossSell = IS_TESTNET
+        ? true
+        : Math.random() < CROSS_SELL_PRODUCT_PROBABILITY;
+
+      const isCrossSellBlocked = [this.classId, this.collectionId].some(id =>
         DISABLED_CROSS_SELL_POPUP_LIST.includes(id)
       );
+
+      return shouldAttemptCrossSell && !isCrossSellBlocked;
     },
     shouldCrossSell() {
-      return (
-        this.isEnableCrossSell && this.hasCrossSell && !this.isCrossSellDisabled
-      );
+      return this.isCrossSellEnabled && this.hasCrossSell;
     },
   },
   watch: {

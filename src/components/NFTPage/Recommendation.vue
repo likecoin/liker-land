@@ -100,6 +100,7 @@ import {
 import bookstoreMixin from '~/mixins/bookstore';
 import nftOrCollection from '~/mixins/nft-or-collection';
 import walletMixin from '~/mixins/wallet';
+import crossSellMixin from '~/mixins/cross-sell';
 import { mapActions, mapGetters } from 'vuex';
 
 const DISPLAY_ITEM_COUNT = 5;
@@ -115,7 +116,7 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  mixins: [bookstoreMixin, nftOrCollection, walletMixin],
+  mixins: [bookstoreMixin, nftOrCollection, walletMixin, crossSellMixin],
   props: {
     classId: {
       type: String,
@@ -191,18 +192,6 @@ export default {
         this.getNFTClassFeaturedSetByAddress(this.productOwner) || new Set();
       const hiddenSet =
         this.getNFTClassHiddenSetByAddress(this.productOwner) || new Set();
-      const userCollected = this.getAddress
-        ? this.getCollectedNFTClassesByAddress(this.getAddress)
-        : [];
-
-      if (userCollected?.length) {
-        recommendedList = recommendedList.filter(
-          item =>
-            !userCollected.some(
-              collectedItem => collectedItem.classId === item.classId
-            )
-        );
-      }
 
       recommendedList = recommendedList.filter(item => {
         const isNotHidden = !hiddenSet.has(item.classId);
@@ -240,19 +229,29 @@ export default {
         });
       }
 
-      let crossSellList = [];
-      const crossSellItems = CROSS_SELL_PRODUCT_IDS_MAP[this.classId] || [];
-      if (crossSellItems.length > 0) {
-        crossSellList = crossSellItems.map(classId => ({ classId }));
-      } else {
-        return recommendedList.slice(0, DISPLAY_ITEM_COUNT);
-      }
-      const combinedList = [...crossSellList, ...recommendedList];
-      const uniqueList = Array.from(
-        new Map(combinedList.map(item => [item.classId, item])).values()
+      recommendedList = [
+        ...this.crossSellProductIds?.map(classId => ({ classId })),
+        ...recommendedList,
+      ];
+
+      const uniqueRecommendedList = Array.from(
+        new Map(recommendedList.map(item => [item.classId, item])).values()
       );
 
-      return uniqueList.slice(0, DISPLAY_ITEM_COUNT);
+      const userCollected = this.getAddress
+        ? this.getCollectedNFTClassesByAddress(this.getAddress)
+        : [];
+
+      if (userCollected?.length) {
+        recommendedList = recommendedList.filter(
+          item =>
+            !userCollected.some(
+              collectedItem => collectedItem.classId === item.classId
+            )
+        );
+      }
+
+      return uniqueRecommendedList.slice(0, DISPLAY_ITEM_COUNT);
     },
     swiperOptions() {
       return {
