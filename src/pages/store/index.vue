@@ -935,7 +935,7 @@ export default {
       if (newQuery) {
         try {
           this.isSearching = true;
-          this.$router.push({ query: { q: newQuery } });
+          this.$router.replace({ query: { q: newQuery } });
           await this.fetchSearchItems(newQuery);
         } catch (error) {
           this.searchItems = [];
@@ -945,7 +945,7 @@ export default {
           this.isSearching = false;
         }
       } else {
-        this.$router.push({ query: {} });
+        this.$router.replace({ query: {} });
       }
     },
   },
