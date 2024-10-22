@@ -204,11 +204,7 @@
             class="flex items-center justify-center cursor-pointer p-[8px]"
             @click="toggleSearch"
           >
-            <Label :text="$t('listing_page_search')">
-              <template #prepend>
-                <IconSearch />
-              </template>
-            </Label>
+            <IconSearch />
           </div>
           <!-- Search bar -->
           <div
@@ -253,22 +249,14 @@
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenFilterDialog"
           >
-            <Label :text="$t('listing_page_filter')">
-              <template #prepend>
-                <IconFilter />
-              </template>
-            </Label>
+            <IconFilter />
           </div>
 
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenSortingDialog"
           >
-            <Label :text="selectedSortingLabel">
-              <template #prepend>
-                <IconSorter />
-              </template>
-            </Label>
+            <IconSorter />
           </div>
         </div>
       </header>
