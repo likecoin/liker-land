@@ -350,8 +350,8 @@
           class="flex flex-col items-center justify-center gap-[12px] w-full"
         >
           <Label
-            preset="h5"
-            class="text-medium-gray"
+            preset="h4"
+            class="text-dark-gray"
             :text="$t('listing_page_search_not_found')"
           />
           <Label
@@ -360,7 +360,7 @@
             :text="$t('listing_page_search_recommend')"
           />
           <NFTPageRecommendation
-            class="w-full mt-[24px]"
+            class="w-full mt-[72px]"
             @item-click="handleRecommendedItemClick"
             @item-collect="handleRecommendedItemCollect"
             @slide-next.once="handleRecommendationSlideNext"
