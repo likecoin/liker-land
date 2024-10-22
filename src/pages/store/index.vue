@@ -1056,7 +1056,7 @@ export default {
       function debouncedUpdateSearchKeyword(event) {
         this.searchQuery = event.target.value;
       },
-      500
+      200
     ),
     handleRecommendedItemClick(classId) {
       logTrackerEvent(this, 'listing', 'recommend_item_click', classId, 1);
