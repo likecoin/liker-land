@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex';
 import {
   CROSS_SELL_PRODUCT_PROBABILITY,
   CROSS_SELL_PRODUCT_IDS_MAP,
+  DISABLED_CROSS_SELL_POPUP_LIST,
   IS_TESTNET,
 } from '~/constant';
 
@@ -44,8 +45,15 @@ export default {
         !this.getShoppingCartBookProductQuantity(this.crossSellProductId)
       );
     },
+    isCrossSellDisabled() {
+      return [this.classId, this.collectionId].some(id =>
+        DISABLED_CROSS_SELL_POPUP_LIST.includes(id)
+      );
+    },
     shouldCrossSell() {
-      return this.isEnableCrossSell && this.hasCrossSell;
+      return (
+        this.isEnableCrossSell && this.hasCrossSell && !this.isCrossSellDisabled
+      );
     },
   },
   watch: {
