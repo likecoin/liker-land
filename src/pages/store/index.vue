@@ -31,50 +31,7 @@
 
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
-            <!-- Search button -->
-            <ButtonV2 preset="tertiary" @click="toggleSearch">
-              <IconSearch />
-            </ButtonV2>
-            <!-- Search bar -->
-            <div
-              :style="{
-                width: isSearchOpen ? '100%' : '0',
-              }"
-              :class="[
-                'absolute',
-                'top-0',
-                'left-0',
-                'z-10',
-                'flex',
-                'items-center',
-                'bg-shade-gray',
-                'gap-[12px]',
-                isSearchOpen && 'pl-[16px]',
-                'h-full',
-                'rounded-[10px]',
-                'transition-[width]',
-                'duration-[5000]',
-                'ease-in-out',
-              ]"
-            >
-              <IconSearch />
-              <input
-                :value="searchQuery"
-                class="w-full bg-transparent border-0 focus-visible:outline-none"
-                type="text"
-                :placeholder="$t('gutenberg_search_placeholder')"
-                @input="debouncedUpdateSearchKeyword"
-              />
-              <ButtonV2
-                v-if="isSearchOpen"
-                size="tiny"
-                preset="plain"
-                @click="toggleSearch"
-              >
-                <IconClose class="cursor-auto" />
-              </ButtonV2>
-            </div>
-
+            <Search />
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
@@ -200,63 +157,29 @@
             'relative',
           ]"
         >
-          <div
-            class="flex items-center justify-center cursor-pointer p-[8px]"
-            @click="toggleSearch"
-          >
-            <IconSearch />
-          </div>
-          <!-- Search bar -->
-          <div
-            :style="{
-              width: isSearchOpen ? '100%' : '0',
-            }"
-            :class="[
-              'absolute',
-              'top-0',
-              'left-0',
-              'z-10',
-              'flex',
-              'items-center',
-              'bg-shade-gray',
-              'gap-[8px]',
-              isSearchOpen && 'pl-[24px]',
-              'h-full',
-              'rounded-2',
-              'transition-[width]',
-              'duration-[5000]',
-              'ease-in-out',
-            ]"
-          >
-            <IconSearch />
-            <input
-              :value="searchQuery"
-              class="w-full bg-transparent border-0 focus-visible:outline-none"
-              type="text"
-              :placeholder="$t('gutenberg_search_placeholder')"
-              @input="debouncedUpdateSearchKeyword"
-            />
-            <ButtonV2
-              v-if="isSearchOpen"
-              size="tiny"
-              preset="plain"
-              @click="toggleSearch"
-            >
-              <IconClose class="cursor-auto" />
-            </ButtonV2>
+          <div class="flex items-center justify-center">
+            <Search />
           </div>
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenFilterDialog"
           >
-            <IconFilter />
+            <Label :text="$t('listing_page_filter')">
+              <template #prepend>
+                <IconFilter />
+              </template>
+            </Label>
           </div>
 
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenSortingDialog"
           >
-            <IconSorter />
+            <Label :text="$t('order_menu_sort_by')">
+              <template #prepend>
+                <IconSorter />
+              </template>
+            </Label>
           </div>
         </div>
       </header>
@@ -517,7 +440,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import debounce from 'lodash.debounce';
 
 import { EXTERNAL_HOST, LIKECOIN_API_BASE } from '~/constant';
 import {
@@ -577,8 +499,6 @@ export default {
       isShowFilterDialog: false,
       dialogNFTClassList: [],
 
-      searchQuery: this.$route.query.q,
-      isSearchOpen: !!this.$route.query.q,
       isSearching: false,
       searchItems: [],
     };
@@ -915,6 +835,9 @@ export default {
         content,
       }));
     },
+    searchQuery() {
+      return this.$route.query?.q || '';
+    },
   },
   watch: {
     selectedSorting() {
@@ -928,19 +851,7 @@ export default {
     },
     async searchQuery(newQuery) {
       if (newQuery) {
-        try {
-          this.isSearching = true;
-          this.$router.replace({ query: { q: newQuery } });
-          await this.fetchSearchItems(newQuery);
-        } catch (error) {
-          this.searchItems = [];
-          // eslint-disable-next-line no-console
-          console.error(error);
-        } finally {
-          this.isSearching = false;
-        }
-      } else {
-        this.$router.replace({ query: {} });
+        await this.fetchSearchItems(newQuery);
       }
     },
   },
@@ -1033,31 +944,23 @@ export default {
     handleClickHomePage() {
       logTrackerEvent(this, 'listing', 'listing_home_page_click', '', 1);
     },
-    toggleSearch() {
-      if (this.isSearchOpen) {
-        this.searchQuery = '';
-        logTrackerEvent(this, 'listing', 'search_clean', '', 1);
-      } else {
-        logTrackerEvent(this, 'listing', 'search_open', '', 1);
-      }
-      this.isSearchOpen = !this.isSearchOpen;
-    },
     async fetchSearchItems(query) {
-      logTrackerEvent(this, 'listing', 'search_query', query, 1);
-      const { list } = await this.$api.$get(
-        fetchBookstoreItemSearchResults(query)
-      );
-      this.searchItems = list?.map(item => ({
-        ...item,
-        classId: item.id,
-      }));
+      this.isSearching = true;
+      try {
+        logTrackerEvent(this, 'listing', 'search_query', query, 1);
+        const { list } = await this.$api.$get(
+          fetchBookstoreItemSearchResults(query)
+        );
+        this.searchItems = list?.map(item => ({
+          ...item,
+          classId: item.id,
+        }));
+      } catch (error) {
+        this.searchItems = [];
+      } finally {
+        this.isSearching = false;
+      }
     },
-    debouncedUpdateSearchKeyword: debounce(
-      function debouncedUpdateSearchKeyword(event) {
-        this.searchQuery = event.target.value;
-      },
-      200
-    ),
     handleRecommendedItemClick(classId) {
       logTrackerEvent(this, 'listing', 'recommend_item_click', classId, 1);
     },
