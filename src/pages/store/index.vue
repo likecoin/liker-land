@@ -319,7 +319,7 @@
         </ul>
 
         <!-- Search loading -->
-        <div v-else-if="isSearchLoading" class="flex justify-center">
+        <div v-else-if="isSearching" class="flex justify-center">
           <ProgressIndicator />
         </div>
 
@@ -584,7 +584,7 @@ export default {
 
       searchQuery: this.$route.query.q,
       isSearchOpen: !!this.$route.query.q,
-      isSearchLoading: false,
+      isSearching: false,
       searchItems: [],
     };
   },
@@ -934,7 +934,7 @@ export default {
     async searchQuery(newQuery) {
       if (newQuery) {
         try {
-          this.isSearchLoading = true;
+          this.isSearching = true;
           this.$router.push({ query: { q: newQuery } });
           await this.fetchSearchItems(newQuery);
         } catch (error) {
@@ -942,7 +942,7 @@ export default {
           // eslint-disable-next-line no-console
           console.error(error);
         } finally {
-          this.isSearchLoading = false;
+          this.isSearching = false;
         }
       } else {
         this.$router.push({ query: {} });
