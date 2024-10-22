@@ -346,7 +346,7 @@
         </div>
         <!-- Search not found -->
         <div
-          v-if="searchQuery && !sortedBookstoreItems.length"
+          v-if="searchQuery && !sortedBookstoreItems.length && !isSearching"
           class="flex flex-col items-center justify-center gap-[12px] w-full"
         >
           <Label
