@@ -149,6 +149,17 @@ const nuxtConfig = {
             name: 'Liker Land',
             alternateName: ['Liker.Land'],
             url: 'https://liker.land/',
+            potentialAction: [
+              {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate:
+                    'https://liker.land/store?q={search_term_string}',
+                },
+                'query-input': 'required name=search_term_string',
+              },
+            ],
           },
           {
             '@context': 'http://www.schema.org',
