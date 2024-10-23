@@ -55,9 +55,8 @@
         'overflow-hidden desktop:overflow-visible',
       ]"
     >
-      <img
-        class="w-full max-w-[450px] desktop:ml-[-56px] phone:scale-[1.2] phone:translate-x-[-20%]"
-        :src="signedBookImage"
+      <NFTBookSignatureBannerMockup
+        class="desktop:ml-[-56px] phone:scale-[1.2] phone:translate-x-[-20%]"
       />
 
       <div
@@ -99,7 +98,6 @@
 </template>
 
 <script>
-const signedBookImage = require('./signed-book.png');
 const videoThumbnail = require('./video-thumbnail.jpg');
 
 export default {
@@ -137,10 +135,6 @@ export default {
         this.nameList[this.activeNameIndex] ||
         this.$t('nft_book_signature_banner_author')
       );
-    },
-    signedBookImage() {
-      // TODO: Dynamically show the signed book image based on author
-      return signedBookImage;
     },
     bgVideoStyle() {
       return {
