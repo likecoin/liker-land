@@ -31,7 +31,12 @@
 
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
-            <Search />
+            <SearchBar
+              :search-query="searchQuery"
+              @open="handleSearchBarOpen"
+              @clear="handleSearchBarClear"
+              @input="handleSearchBarInput"
+            />
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
@@ -158,7 +163,12 @@
           ]"
         >
           <div class="flex items-center justify-center">
-            <Search />
+            <SearchBar
+              :search-query="searchQuery"
+              @open="handleSearchBarOpen"
+              @clear="handleSearchBarClear"
+              @input="handleSearchBarInput"
+            />
           </div>
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
@@ -835,8 +845,17 @@ export default {
         content,
       }));
     },
-    searchQuery() {
-      return this.$route.query?.q || '';
+    searchQuery: {
+      get() {
+        return this.$route.query.q || '';
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          q: value,
+        };
+        this.$router.replace({ query });
+      },
     },
   },
   watch: {
@@ -993,6 +1012,17 @@ export default {
         this.classId,
         1
       );
+    },
+    handleSearchBarOpen() {
+      logTrackerEvent(this, 'listing', 'search_bar_open', '', 1);
+    },
+    handleSearchBarClear() {
+      this.searchQuery = '';
+      logTrackerEvent(this, 'listing', 'search_bar_clear', '', 1);
+    },
+    handleSearchBarInput(value) {
+      this.searchQuery = value;
+      logTrackerEvent(this, 'listing', 'search_bar_input', value, 1);
     },
   },
 };

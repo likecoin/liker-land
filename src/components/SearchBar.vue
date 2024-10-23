@@ -62,19 +62,20 @@
 </template>
 
 <script>
-import { logTrackerEvent } from '~/util/EventLogger';
 import debounce from 'lodash.debounce';
 
 export default {
+  name: 'SearchBar',
+  props: {
+    searchQuery: {
+      type: String,
+      default: undefined,
+    },
+  },
   data() {
     return {
       isSearchOpen: false,
     };
-  },
-  computed: {
-    searchQuery() {
-      return this.$route.query.q || '';
-    },
   },
   mounted() {
     if (this.searchQuery) {
@@ -84,16 +85,15 @@ export default {
   methods: {
     toggleSearch() {
       if (this.isSearchOpen) {
-        this.$router.replace({ query: { q: undefined } });
-        logTrackerEvent(this, 'listing', 'search_clear', '', 1);
+        this.$emit('clear');
       } else {
-        logTrackerEvent(this, 'listing', 'search_open', '', 1);
+        this.$emit('open');
       }
       this.isSearchOpen = !this.isSearchOpen;
     },
     debouncedUpdateSearchKeyword: debounce(
       function debouncedUpdateSearchKeyword(event) {
-        this.$router.replace({ query: { q: event.target.value } });
+        this.$emit('input', event.target.value);
       },
       200
     ),
