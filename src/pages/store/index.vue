@@ -30,7 +30,13 @@
           </div>
 
           <!-- Desktop Filter & Sorting -->
-          <div class="hidden desktop:flex items-center gap-[16px]">
+          <div class="hidden desktop:flex items-center gap-[16px] relative">
+            <SearchBar
+              :search-query="searchQuery"
+              @open="handleSearchBarOpen"
+              @clear="handleSearchBarClear"
+              @input="handleSearchBarInput"
+            />
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
@@ -141,7 +147,7 @@
         <div
           :class="[
             'grid desktop:hidden',
-            'grid-cols-2',
+            'grid-cols-3',
 
             'w-full',
             'mt-[16px]',
@@ -152,8 +158,18 @@
 
             'divide-x',
             'divide-shade-gray',
+
+            'relative',
           ]"
         >
+          <div class="flex items-center justify-center">
+            <SearchBar
+              :search-query="searchQuery"
+              @open="handleSearchBarOpen"
+              @clear="handleSearchBarClear"
+              @input="handleSearchBarInput"
+            />
+          </div>
           <div
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenFilterDialog"
@@ -169,7 +185,7 @@
             class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
             @click="handleOpenSortingDialog"
           >
-            <Label :text="selectedSortingLabel">
+            <Label :text="$t('order_menu_sort_by')">
               <template #prepend>
                 <IconSorter />
               </template>
@@ -194,6 +210,7 @@
       >
         <!-- Listing items -->
         <ul
+          v-if="!searchQuery"
           :class="[
             'w-full',
             'grid',
@@ -221,6 +238,69 @@
             />
           </li>
         </ul>
+
+        <!-- Search loading -->
+        <div v-else-if="isSearching" class="flex justify-center">
+          <ProgressIndicator />
+        </div>
+
+        <!-- Search result -->
+        <div v-else class="flex flex-col w-full gap-[32px]">
+          <Label
+            v-if="sortedBookstoreItems.length"
+            preset="h5"
+            class="text-dark-gray"
+            :text="$t('listing_page_search_result', { query: searchQuery })"
+          />
+          <ul
+            :class="[
+              'w-full',
+              'grid',
+              'grid-cols-2',
+              'sm:grid-cols-3',
+              'laptop:grid-cols-3',
+              'desktop:grid-cols-4',
+              'desktopLg:grid-cols-5',
+              'full-hd:grid-cols-6',
+              'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
+              'items-stretch',
+              'desktop:mt-0',
+            ]"
+          >
+            <li v-for="item in sortedBookstoreItems" :key="item.classId">
+              <NFTBookItemCardV2
+                :item-id="item.classId"
+                class-cover-frame-aspect-ratio="aspect-[4/5]"
+                :is-link-disabled="item.isMultiple"
+                @click-cover="handleClickItem($event, item)"
+              />
+            </li>
+          </ul>
+        </div>
+        <!-- Search not found -->
+        <div
+          v-if="searchQuery && !sortedBookstoreItems.length && !isSearching"
+          class="flex flex-col items-center justify-center gap-[12px] w-full"
+        >
+          <Label
+            preset="h4"
+            class="text-dark-gray"
+            :text="$t('listing_page_search_not_found')"
+          />
+          <Label
+            preset="p5"
+            class="text-medium-gray"
+            :text="$t('listing_page_search_recommend')"
+          />
+          <NFTPageRecommendation
+            class="w-full mt-[72px]"
+            @item-click="handleRecommendedItemClick"
+            @item-collect="handleRecommendedItemCollect"
+            @slide-next.once="handleRecommendationSlideNext"
+            @slide-prev.once="handleRecommendationSlidePrev"
+            @slider-move.once="handleRecommendationSliderMove"
+          />
+        </div>
 
         <footer class="flex flex-col gap-[32px]">
           <div class="flex flex-col items-center gap-[24px] py-[24px]">
@@ -378,7 +458,10 @@ import {
   LANGUAGE_OPTIONS,
 } from '~/constant/store';
 
-import { fetchBookstoreItemListsFromCMSById } from '~/util/api';
+import {
+  fetchBookstoreItemListsFromCMSById,
+  fetchBookstoreItemSearchResults,
+} from '~/util/api';
 import { checkIsForcedInAppPage } from '~/util/client';
 import { logTrackerEvent } from '~/util/EventLogger';
 import { parseNFTMetadataURL } from '~/util/nft';
@@ -425,6 +508,9 @@ export default {
       isShowSortingDialog: false,
       isShowFilterDialog: false,
       dialogNFTClassList: [],
+
+      isSearching: false,
+      searchItems: [],
     };
   },
   head() {
@@ -699,6 +785,9 @@ export default {
         });
     },
     sortedBookstoreItems() {
+      if (this.searchQuery) {
+        return this.searchItems;
+      }
       const items = [...this.filteredBookstoreItems];
 
       items.sort((a, b) => {
@@ -756,6 +845,18 @@ export default {
         content,
       }));
     },
+    searchQuery: {
+      get() {
+        return this.$route.query.q || '';
+      },
+      set(value) {
+        const query = {
+          ...this.$route.query,
+          q: value,
+        };
+        this.$router.replace({ query });
+      },
+    },
   },
   watch: {
     selectedSorting() {
@@ -767,6 +868,16 @@ export default {
     selectedLanguageFilter() {
       this.scrollToTop();
     },
+    async searchQuery(newQuery) {
+      if (newQuery) {
+        await this.fetchSearchItems(newQuery);
+      }
+    },
+  },
+  async mounted() {
+    if (this.searchQuery) {
+      await this.fetchSearchItems(this.searchQuery);
+    }
   },
   methods: {
     scrollToTop() {
@@ -851,6 +962,67 @@ export default {
     },
     handleClickHomePage() {
       logTrackerEvent(this, 'listing', 'listing_home_page_click', '', 1);
+    },
+    async fetchSearchItems(query) {
+      this.isSearching = true;
+      try {
+        logTrackerEvent(this, 'listing', 'search_query', query, 1);
+        const { list } = await this.$api.$get(
+          fetchBookstoreItemSearchResults(query)
+        );
+        this.searchItems = list?.map(item => ({
+          ...item,
+          classId: item.id,
+        }));
+      } catch (error) {
+        this.searchItems = [];
+      } finally {
+        this.isSearching = false;
+      }
+    },
+    handleRecommendedItemClick(classId) {
+      logTrackerEvent(this, 'listing', 'recommend_item_click', classId, 1);
+    },
+    handleRecommendedItemCollect(classId) {
+      logTrackerEvent(this, 'listing', 'recommend_item_collect', classId, 1);
+    },
+    handleRecommendationSlideNext() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'recommendation_clicked_next',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSlidePrev() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'recommendation_clicked_prev',
+        this.classId,
+        1
+      );
+    },
+    handleRecommendationSliderMove() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'recommendation_moved_slider',
+        this.classId,
+        1
+      );
+    },
+    handleSearchBarOpen() {
+      logTrackerEvent(this, 'listing', 'search_bar_open', '', 1);
+    },
+    handleSearchBarClear() {
+      this.searchQuery = '';
+      logTrackerEvent(this, 'listing', 'search_bar_clear', '', 1);
+    },
+    handleSearchBarInput(value) {
+      this.searchQuery = value;
+      logTrackerEvent(this, 'listing', 'search_bar_input', value, 1);
     },
   },
 };
