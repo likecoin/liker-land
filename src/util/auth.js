@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const AUTH_SESSION_KEY = 'likecoin_nft_book_press_token';
 
