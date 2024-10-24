@@ -516,7 +516,12 @@ export default {
   head() {
     const title = this.$t('store_index_page_title');
     const description = this.$t('store_books_page_description');
-    const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
+    const link = [
+      {
+        rel: 'canonical',
+        href: this.canonicalLink,
+      },
+    ];
     const classIds = Array.from(
       new Set(this.bookstoreItems.map(b => b.classId).flat())
     );
@@ -604,6 +609,16 @@ export default {
       'getNFTClassMetadataById',
     ]),
 
+    canonicalLink() {
+      const { tag, q } = this.$route.query;
+      if (tag) {
+        return `${this.$route.path}?tag=${tag}`;
+      }
+      if (q && this.sortedBookstoreItems.length) {
+        return `${this.$route.path}?q=${q}`;
+      }
+      return this.$route.path;
+    },
     // Price filter related
     priceFilterList() {
       return [
