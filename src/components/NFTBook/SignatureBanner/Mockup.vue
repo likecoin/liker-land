@@ -1,37 +1,43 @@
 <template>
   <div class="flex justify-center w-full px-[16px]">
-    <svg
-      class="w-full max-w-[300px]"
-      viewBox="0 0 260 240"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-    >
-      <image
-        x="0"
-        y="0"
-        width="260"
-        height="241"
-        :xlink:href="deviceFrameImage"
-      />
-      <image
-        x="22"
-        y="23"
-        width="217"
-        height="218"
-        :xlink:href="signaturePageImage"
-      />
-      <foreignObject x="28" y="172" width="86" height="52">
-        <client-only>
-          <LottieAnimation
-            :animation-data="animationData"
-            :auto-play="true"
-            :loop="true"
-            :speed="1"
-          />
-        </client-only>
-      </foreignObject>
-    </svg>
+    <div class="relative w-[240px] desktop:w-[300px]">
+      <svg
+        class="w-full"
+        viewBox="0 0 260 240"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
+        <image
+          x="0"
+          y="0"
+          width="260"
+          height="241"
+          :xlink:href="deviceFrameImage"
+        />
+        <image
+          x="22"
+          y="23"
+          width="217"
+          height="218"
+          :xlink:href="signaturePageImage"
+        />
+      </svg>
+      <client-only>
+        <LottieAnimation
+          :class="[
+            'absolute',
+            'top-[158px] desktop:top-[196px]',
+            'left-[25px] desktop:left-[32px]',
+            'w-[80px] desktop:w-[100px]',
+          ]"
+          :animation-data="animationData"
+          :auto-play="true"
+          :loop="true"
+          :speed="1"
+        />
+      </client-only>
+    </div>
   </div>
 </template>
 
