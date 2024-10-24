@@ -895,11 +895,13 @@ const actions = {
         'authorize',
         SIGN_AUTHORIZATION_PERMISSIONS
       );
-      const result = await this.$api.$post(postUserV2Login(), {
-        loginMethod: methodType,
-        ...data,
-      });
-      await dispatch('authenticate', { inputWallet: address, signature: data });
+      const [result] = await Promise.all([
+        this.$api.$post(postUserV2Login(), {
+          loginMethod: methodType,
+          ...data,
+        }),
+        dispatch('authenticate', { inputWallet: address, signature: data }),
+      ]);
       await setLoggerUser(this, {
         wallet: address,
         method: methodType,
