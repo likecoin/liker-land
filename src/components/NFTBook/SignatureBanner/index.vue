@@ -91,7 +91,7 @@
       </svg>
 
       <NFTBookSignatureBannerMockup
-        class="relative desktop:mt-[-30px] desktop:max-w-[420px]"
+        class="relative desktop:mt-[-30px] desktop:max-w-[420px] shrink-0"
       />
 
       <div

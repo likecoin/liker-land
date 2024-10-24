@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center w-full px-[16px]">
+  <div class="flex justify-center items-end w-full px-[16px]">
     <div class="relative w-[240px] desktop:w-[300px]">
       <svg
         class="w-full"
