@@ -17,11 +17,7 @@ export default {
       'signLogin',
       'openAuthcoreModal',
     ]),
-    async connectWallet({
-      shouldSkipLogin = false,
-      isOpenAuthcore = false,
-      isSignUp = false,
-    } = {}) {
+    async connectWallet({ isOpenAuthcore = false, isSignUp = false } = {}) {
       try {
         logTrackerEvent(
           this,
@@ -54,15 +50,13 @@ export default {
           1
         );
 
-        const res = await (shouldSkipLogin
-          ? this.initWallet(connection)
-          : this.initWalletAndLogin(connection));
+        const res = await this.initWalletAndLogin(connection);
 
         if (res) {
           logTrackerEvent(
             this,
             'user',
-            `connect_wallet_done${shouldSkipLogin ? '' : '_with_login'}`,
+            `connect_wallet_done$_with_login`,
             'connect_wallet_done',
             1
           );
