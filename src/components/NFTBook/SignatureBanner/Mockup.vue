@@ -59,6 +59,8 @@
 <script>
 import LottieAnimation from 'lottie-web-vue';
 
+import { fisherShuffle } from '~/util/misc';
+
 import SignatureAnimation from './signature-animation.json';
 
 const deviceFrame = require('./device-frame.png');
@@ -116,15 +118,24 @@ export default {
   mounted() {
     this.animateText();
   },
+  beforeDestroy() {
+    this.$gsap.gsap.killTweensOf(this.$refs.nameText);
+    this.$gsap.gsap.killTweensOf(this.$refs.messageText);
+  },
   methods: {
     animateText() {
-      const timeline = this.$gsap.gsap.timeline({ repeat: -1 });
+      const timeline = this.$gsap.gsap.timeline({
+        onComplete: this.animateText,
+      });
 
-      NAMES.map(name => `${name},`).forEach((str, index) => {
-        const chars = str.split('');
+      const names = fisherShuffle([...NAMES]);
+      const messages = fisherShuffle([...MESSAGES]);
 
-        // Add char by char
-        chars.forEach(char => {
+      messages.forEach((message, index) => {
+        const name = names[index % names.length];
+
+        // Show char by char
+        `${name},`.split('').forEach(char => {
           timeline.to(
             {},
             {
@@ -136,7 +147,7 @@ export default {
           );
         });
 
-        MESSAGES[index % MESSAGES.length].split('').forEach(char => {
+        message.split('').forEach(char => {
           timeline.to(
             {},
             {
