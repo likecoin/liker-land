@@ -36,6 +36,7 @@
             textClasses,
             'top-[96px] desktop:top-[120px]',
             'text-[16px] desktop:text-[20px]',
+            'whitespace-pre-line',
           ]"
         />
         <LottieAnimation
@@ -62,11 +63,32 @@ import SignatureAnimation from './signature-animation.json';
 
 const deviceFrame = require('./device-frame.png');
 
-const NAMES = ['Alice', 'Bob', 'Carol', 'David', 'Edmond'];
+const NAMES = [
+  'Aurora',
+  'Bob',
+  'Carol',
+  'David',
+  'Edmond',
+  'Phoebe',
+  'William',
+  '一心',
+  '有容',
+  '允行',
+  '修端',
+  '念慈',
+];
 const MESSAGES = [
   '不怕，我們有彼此。',
   'Thank you for your support.',
   '感謝支持！',
+  '真理在胸筆在手\n無私無畏即自由',
+  '錦瑟無端五十弦\n一弦一柱思華年',
+  '去留肝膽兩崑崙',
+  '杜絕文青！',
+  '天涼好個秋',
+  'My pen is blue, \nMy friend is you.',
+  '見書如見人',
+  '臨表涕零\n不知所言',
 ];
 
 export default {
