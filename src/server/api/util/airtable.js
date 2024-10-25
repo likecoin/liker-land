@@ -1,12 +1,13 @@
 const {
   AIRTABLE_API_SECRET,
   AIRTABLE_CMS_BASE_ID,
-  AIRTABLE_CMS_TABLE_ID,
+  AIRTABLE_CMS_PRODUCTS_TABLE_ID,
+  AIRTABLE_CMS_TAGS_TABLE_ID,
 } = require('../../config/config');
 
 const axios = require('../../modules/axios');
 
-function normalizeViewName(viewName) {
+function normalizeTagIdForViewName(viewName) {
   switch (viewName) {
     case 'landing':
       return 'Landing Page';
@@ -19,9 +20,12 @@ function normalizeViewName(viewName) {
   }
 }
 
-async function fetchAirtableCMSItems(viewName, { pageSize = 100, offset }) {
+async function fetchAirtableCMSProductsByTagId(
+  tagId,
+  { pageSize = 100, offset }
+) {
   const results = await axios.get(
-    `https://api.airtable.com/v0/${AIRTABLE_CMS_BASE_ID}/${AIRTABLE_CMS_TABLE_ID}`,
+    `https://api.airtable.com/v0/${AIRTABLE_CMS_BASE_ID}/${AIRTABLE_CMS_PRODUCTS_TABLE_ID}`,
     {
       headers: {
         Authorization: `Bearer ${AIRTABLE_API_SECRET}`,
@@ -29,7 +33,7 @@ async function fetchAirtableCMSItems(viewName, { pageSize = 100, offset }) {
       params: {
         filterByFormula: 'NOT(Hidden)',
         pageSize,
-        view: normalizeViewName(viewName),
+        view: normalizeTagIdForViewName(tagId),
         offset,
       },
     }
@@ -68,6 +72,42 @@ async function fetchAirtableCMSItems(viewName, { pageSize = 100, offset }) {
   };
 }
 
+async function fetchAirtableCMSTags({ pageSize = 100, offset }) {
+  const results = await axios.get(
+    `https://api.airtable.com/v0/${AIRTABLE_CMS_BASE_ID}/${AIRTABLE_CMS_TAGS_TABLE_ID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_API_SECRET}`,
+      },
+      params: {
+        pageSize,
+        view: 'All',
+        offset,
+      },
+    }
+  );
+
+  const normalizedRecords = results.data.records.map(({ fields }) => {
+    const id = fields.ID;
+    const name = fields.Name;
+    const nameEn = fields['Name (Eng)'];
+    const isPublic = fields.Public;
+    return {
+      id,
+      name,
+      nameZh: name,
+      nameEn,
+      isPublic,
+    };
+  });
+
+  return {
+    records: normalizedRecords,
+    offset: results.data.offset,
+  };
+}
+
 module.exports = {
-  fetchAirtableCMSItems,
+  fetchAirtableCMSProductsByTagId,
+  fetchAirtableCMSTags,
 };

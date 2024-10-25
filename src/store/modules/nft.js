@@ -42,8 +42,10 @@ const state = () => ({
   latestNFTClassIdList: [],
   freeNFTClassIdList: [],
   trendingNFTClassIdList: [],
-  bookstoreItemsFromCMSForLandingPage: [],
+  bookstoreCMSProductsForLandingPage: [],
   bookstoreLatestItems: [],
+  bookstoreCMSProductsByTagIdMap: {},
+  bookstoreCMSProductsByTagIdIsFetchingMap: {},
 });
 
 const mutations = {
@@ -140,10 +142,19 @@ const mutations = {
     state.trendingNFTClassIdList = list;
   },
   [TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS](state, items) {
-    state.bookstoreItemsFromCMSForLandingPage = items;
+    state.bookstoreCMSProductsForLandingPage = items;
   },
   [TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS](state, items) {
     state.bookstoreLatestItems = items;
+  },
+  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID](state, { id, value = [] }) {
+    Vue.set(state.bookstoreCMSProductsByTagIdMap, id, value);
+  },
+  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING](
+    state,
+    { id, value = false }
+  ) {
+    Vue.set(state.bookstoreCMSProductsByTagIdIsFetchingMap, id, value);
   },
 };
 
@@ -394,8 +405,6 @@ const getters = {
   nftClassIdListInFree: state => state.freeNFTClassIdList,
   nftClassIdListInTrending: state => state.trendingNFTClassIdList,
 
-  nftBookstoreItemsFromCMSForLandingPage: state =>
-    state.bookstoreItemsFromCMSForLandingPage,
   nftBookstoreLatestItems: state =>
     state.bookstoreLatestItems.map(item => ({
       ...item,
@@ -413,6 +422,15 @@ const getters = {
         }
       ),
     })),
+  nftBookstoreCMSProductsForLandingPage: state =>
+    state.bookstoreCMSProductsForLandingPage,
+  nftGetBookstoreCMSProductsByTagId: state => tagId =>
+    state.bookstoreCMSProductsByTagIdMap[tagId]?.map((item, index) => ({
+      ...item,
+      order: index + 1,
+    })),
+  nftGetBookstoreCMSProductsByTagIdIsFetching: state => tagId =>
+    state.bookstoreCMSProductsByTagIdIsFetchingMap[tagId],
 };
 
 const actions = {
@@ -962,10 +980,10 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreItemsFromCMSForLandingPage({ commit, state }) {
-    if (state.bookstoreItemsFromCMSForLandingPage.length) return;
+  async fetchBookstoreCMSProductsForLandingPage({ commit, state }) {
+    if (state.bookstoreCMSProductsForLandingPage.length) return;
     const { data } = await this.$api.get(
-      api.fetchBookstoreItemsFromCMSForLandingPage()
+      api.fetchBookstoreCMSProductsForLandingPage()
     );
     const items = data.records;
     if (!items?.length) {
@@ -984,6 +1002,36 @@ const actions = {
         isDRMFree: !hideDownload,
       }))
     );
+  },
+  async fetchBookstoreCMSProductsByTagId({ commit, getters }, tagId) {
+    try {
+      if (
+        !tagId ||
+        getters.nftGetBookstoreCMSProductsByTagId(tagId) ||
+        getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId)
+      ) {
+        return;
+      }
+
+      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
+        id: tagId,
+        value: true,
+      });
+
+      const { data } = await this.$api.get(
+        api.fetchBookstoreCMSProductsByTagId(tagId)
+      );
+
+      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID, {
+        id: tagId,
+        value: data.records,
+      });
+    } finally {
+      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
+        id: tagId,
+        value: false,
+      });
+    }
   },
 };
 
