@@ -144,6 +144,7 @@
         </div>
 
         <nav
+          v-show="!searchQuery"
           :class="[
             'flex',
             'items-start',
