@@ -308,36 +308,65 @@
           </ul>
         </template>
 
-        <!-- Search not found -->
+        <!-- No result -->
         <div
-          v-if="searchQuery && !sortedBookstoreItems.length && !isSearching"
-          class="flex flex-col items-center justify-center gap-[12px] w-full"
+          v-else
+          class="flex flex-col items-center justify-center gap-[12px] w-full desktop:min-h-[30vh]"
         >
           <Label
             preset="h4"
             class="text-dark-gray"
-            :text="$t('listing_page_search_not_found')"
+            :text="$t('listing_page_no_result')"
           />
-          <Label
-            preset="p5"
-            class="text-medium-gray"
-            :text="$t('listing_page_search_recommend')"
-          />
-          <NFTPageRecommendation
-            class="w-full mt-[72px]"
-            @item-click="handleRecommendedItemClick"
-            @item-collect="handleRecommendedItemCollect"
-            @slide-next.once="handleRecommendationSlideNext"
-            @slide-prev.once="handleRecommendationSlidePrev"
-            @slider-move.once="handleRecommendationSliderMove"
+
+          <!-- Search not found -->
+          <template v-if="searchQuery && !isSearching">
+            <Label
+              preset="p5"
+              class="text-dark-gray"
+              :text="$t('listing_page_search_not_found')"
+            />
+            <Label
+              preset="p5"
+              class="text-medium-gray"
+              :text="$t('listing_page_search_recommend')"
+            />
+            <NFTPageRecommendation
+              class="w-full mt-[36px]"
+              @item-click="handleRecommendedItemClick"
+              @item-collect="handleRecommendedItemCollect"
+              @slide-next.once="handleRecommendationSlideNext"
+              @slide-prev.once="handleRecommendationSlidePrev"
+              @slider-move.once="handleRecommendationSliderMove"
+            />
+          </template>
+
+          <!-- Applied Filter -->
+          <ButtonV2
+            v-else-if="isFilterApplied"
+            preset="tertiary"
+            :text="$t('listing_page_clear_filter')"
+            @click="handleClearFilterClick"
           />
         </div>
 
         <footer class="flex flex-col gap-[32px]">
-          <div class="flex flex-col items-center gap-[24px] py-[24px]">
+          <div
+            :class="[
+              'flex',
+              'flex-col',
+              'justify-center',
+              'items-center',
+              'gap-[24px]',
+
+              'min-h-[200px]',
+              'py-[24px]',
+            ]"
+          >
             <p>{{ $t('listing_page_cant_find_books') }}</p>
+
             <ButtonV2
-              preset="tertiary"
+              preset="secondary"
               :text="$t('listing_page_cant_find_books_button')"
               @click="handleClickCantFindBook"
             />
@@ -835,6 +864,9 @@ export default {
           return true;
         });
     },
+    isFilterApplied() {
+      return this.bookstoreItems.length !== this.filteredBookstoreItems.length;
+    },
     sortedBookstoreItems() {
       if (this.searchQuery) {
         return this.searchItems;
@@ -1063,6 +1095,17 @@ export default {
         '',
         1
       );
+    },
+    handleClearFilterClick() {
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          price: undefined,
+          drm_free: undefined,
+          lang: undefined,
+        },
+      });
+      logTrackerEvent(this, 'listing', 'listing_clear_filter_clicked', '', 1);
     },
     handleClickHomePage() {
       logTrackerEvent(this, 'listing', 'listing_home_page_click', '', 1);
