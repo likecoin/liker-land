@@ -1129,14 +1129,13 @@ export default {
       logTrackerEvent(this, 'listing', 'search_bar_input', value, 1);
     },
     async handleTagClick(tag) {
+      logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
       try {
         await this.fetchBookstoreCMSProductsByTagId(tag.id);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
       }
-
-      logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
     },
   },
 };
