@@ -589,7 +589,11 @@ export default {
     };
   },
   head() {
-    const title = this.$t('store_index_page_title');
+    let title = this.$t('store_index_page_title');
+    if (this.selectedTag) {
+      title = `${this.selectedTagTitle} - ${title}`;
+    }
+
     const description = this.$t('store_books_page_description');
     const link = [{ rel: 'canonical', href: `${this.$route.path}` }];
     const classIds = Array.from(
