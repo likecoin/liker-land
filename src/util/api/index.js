@@ -590,8 +590,6 @@ export const fetchBookstoreItemSearchResults = q => {
   const encodedQuery = encodeURIComponent(q);
   return `${LIKECOIN_API_BASE}/likernft/book/store/search?q=${encodedQuery}`;
 };
-export const fetchBookstoreCMSProductsForLandingPage = () =>
-  `${EXTERNAL_HOST}/api/bookstore/products?tag=landing`;
 
 export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
   `${EXTERNAL_HOST}/api/bookstore/tags?limit=${limit}`;

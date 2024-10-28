@@ -42,7 +42,6 @@ const state = () => ({
   latestNFTClassIdList: [],
   freeNFTClassIdList: [],
   trendingNFTClassIdList: [],
-  bookstoreCMSProductsForLandingPage: [],
   bookstoreLatestItems: [],
   bookstoreCMSProductsByTagIdMap: {},
   bookstoreCMSProductsByTagIdIsFetchingMap: {},
@@ -140,9 +139,6 @@ const mutations = {
   },
   [TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST](state, list) {
     state.trendingNFTClassIdList = list;
-  },
-  [TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS](state, items) {
-    state.bookstoreCMSProductsForLandingPage = items;
   },
   [TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS](state, items) {
     state.bookstoreLatestItems = items;
@@ -422,8 +418,8 @@ const getters = {
         }
       ),
     })),
-  nftBookstoreCMSProductsForLandingPage: state =>
-    state.bookstoreCMSProductsForLandingPage,
+  nftBookstoreCMSProductsForLandingPage: (_, getters) =>
+    getters.nftGetBookstoreCMSProductsByTagId('landing'),
   nftGetBookstoreCMSProductsByTagId: state => tagId =>
     state.bookstoreCMSProductsByTagIdMap[tagId]?.map((item, index) => ({
       ...item,
@@ -980,17 +976,8 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreCMSProductsForLandingPage({ commit, state }) {
-    if (state.bookstoreCMSProductsForLandingPage.length) return;
-    const { data } = await this.$api.get(
-      api.fetchBookstoreCMSProductsForLandingPage()
-    );
-    const items = data.records;
-    if (!items?.length) {
-      // eslint-disable-next-line no-console
-      console.warn('CMS did not return any bookstore items');
-    }
-    commit(TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS, items || []);
+  async fetchBookstoreCMSProductsForLandingPage({ dispatch }) {
+    await dispatch('fetchBookstoreCMSProductsByTagId', 'landing');
   },
   async fetchBookstoreLatestItems({ commit, state }) {
     if (state.bookstoreLatestItems.length) return;
@@ -1026,6 +1013,11 @@ const actions = {
         id: tagId,
         value: data.records,
       });
+
+      if (!data.records?.length) {
+        // eslint-disable-next-line no-console
+        console.warn(`CMS did not return any products for tag: ${tagId}`);
+      }
     } finally {
       commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
         id: tagId,
