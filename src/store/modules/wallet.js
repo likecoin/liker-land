@@ -360,7 +360,7 @@ const actions = {
           method: getters.walletMethodType,
           event: 'login',
         });
-        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+        dispatch('walletFetchSessionUserData');
       } else if (getters.getAddress) {
         // Re-login if the wallet address is different from session
         await dispatch('signLogin');
@@ -385,26 +385,11 @@ const actions = {
     return connector;
   },
 
-  async handleConnectorRedirect(
-    { dispatch, getters },
-    { method, params, isLogin = true }
-  ) {
+  async handleConnectorRedirect({ dispatch }, { method, params }) {
     const connector = await dispatch('getConnector');
     const connection = await connector.handleRedirect(method, params);
     if (connection) {
-      if (isLogin) {
-        await dispatch('initWalletAndLogin', connection);
-      } else {
-        await dispatch('initWallet', connection);
-        if (getters.walletIsMatchedSession) {
-          await setLoggerUser(this, {
-            wallet: getters.loginAddress,
-            method: getters.walletMethodType,
-            event: 'login',
-          });
-          dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
-        }
-      }
+      await dispatch('initWalletAndLogin', connection);
     }
     return connection;
   },
@@ -496,20 +481,16 @@ const actions = {
       await dispatch('initWallet', { accounts, method });
       if (getters.walletIsMatchedSession) {
         await setLoggerUser(this, { wallet: getters.loginAddress, method });
-        dispatch('walletFetchSessionUserData', { shouldSkipUserInfo: true });
+        dispatch('walletFetchSessionUserData');
       }
     }
   },
 
-  async initIfNecessary({ dispatch }, { isLogin = true } = {}) {
+  async initIfNecessary({ dispatch }) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
     if (connection) {
-      if (isLogin) {
-        await dispatch('initWalletAndLogin', connection);
-      } else {
-        await dispatch('initWallet', connection);
-      }
+      await dispatch('initWalletAndLogin', connection);
     }
   },
 
@@ -869,15 +850,17 @@ const actions = {
   },
   async walletFetchSessionUserData(
     { dispatch },
-    { shouldSkipUserInfo = false } = {}
+    { awaitForWalletEvents = false } = {}
   ) {
     const promises = [];
-    if (!shouldSkipUserInfo) {
-      promises.push(dispatch('walletFetchSessionUserInfo'));
+    promises.push(dispatch('walletFetchSessionUserInfo'));
+    const walletEventPromise = dispatch('walletFetchFollowees').then(() =>
+      dispatch('fetchWalletEvents', { shouldFetchDetails: false })
+    );
+    if (awaitForWalletEvents) {
+      promises.push(walletEventPromise);
     }
-    promises.push(dispatch('walletFetchFollowees'));
     await Promise.all(promises);
-    await dispatch('fetchWalletEvents', { shouldFetchDetails: false });
   },
   async signLogin({ state, commit, dispatch }) {
     // Do not trigger login if the window is not focused
