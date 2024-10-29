@@ -134,6 +134,11 @@
             </client-only>
           </NFTBookSpecTable>
           <NFTBookSpecTable class="mt-[12px]">
+            <NFTBookSpecTableItemDateReleased
+              :is-published-date="false"
+              :date="collection.timestamp"
+              :is-campaign="preset === 'campaign'"
+            />
             <NFTBookSpecTableItemAvailableFormat
               :content-types="contentTypes"
             />
@@ -262,7 +267,7 @@ export default {
     isNew() {
       // True if within 30 days
       return (
-        new Date().getTime() - new Date(this.iscnData?.recordTimestamp) <
+        new Date().getTime() - new Date(this.collection?.timestamp) <
         1000 * 60 * 60 * 24 * 30
       );
     },

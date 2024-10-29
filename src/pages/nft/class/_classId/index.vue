@@ -595,7 +595,9 @@ export default {
         },
         sku: this.classId,
         isbn: this.iscnData?.contentMetadata?.isbn,
-        datePublished: this.iscnData?.recordTimestamp,
+        datePublished:
+          this.iscnData?.contentMetadata?.datePublished ||
+          this.iscnData?.recordTimestamp,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
           '@context': 'http://www.schema.org',
