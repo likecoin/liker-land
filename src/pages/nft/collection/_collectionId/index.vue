@@ -188,6 +188,7 @@ export default {
         name: this.collectionName,
         description: this.collectionDescription,
         image: ogImage,
+        datePublished: this.collection?.timestamp,
         includesObject: this.classIds.map(id => {
           const {
             name: className,

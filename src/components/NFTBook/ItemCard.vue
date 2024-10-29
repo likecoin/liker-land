@@ -200,6 +200,11 @@
             </client-only>
           </NFTBookSpecTable>
           <NFTBookSpecTable class="mt-[12px]">
+            <NFTBookSpecTableItemDateReleased
+              :is-published-date="!!iscnData?.contentMetadata?.datePublished"
+              :date="releasedDate"
+              :is-campaign="preset === 'campaign'"
+            />
             <NFTBookSpecTableItemAvailableFormat
               :is-campaign="preset === 'campaign'"
               :content-types="contentTypes"
@@ -429,6 +434,12 @@ export default {
           .substring(0, 100);
       }
       return this.NFTDescription.trim();
+    },
+    releasedDate() {
+      return (
+        this.iscnData?.contentMetadata?.datePublished ||
+        this.iscnData?.recordTimestamp
+      );
     },
   },
   mounted() {
