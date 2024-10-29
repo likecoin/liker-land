@@ -18,7 +18,9 @@ export default {
       return this.$i18n.locale.includes(items.locales);
     },
     filterBookstoreListItemsByLocale(books) {
-      return books.filter(this.checkBookstoreListItemIsMatchedLocale);
+      return Array.isArray(books)
+        ? books.filter(this.checkBookstoreListItemIsMatchedLocale)
+        : [];
     },
   },
 };
