@@ -518,6 +518,7 @@ export default {
     const description = this.$t('store_books_page_description');
     const link = [
       {
+        hid: 'i18n-can',
         rel: 'canonical',
         href: this.canonicalLink,
       },
@@ -610,14 +611,15 @@ export default {
     ]),
 
     canonicalLink() {
+      const baseUrl = `${EXTERNAL_HOST}${this.$route.path}`;
       const { tag, q } = this.$route.query;
       if (tag) {
-        return `${this.$route.path}?tag=${tag}`;
+        return `${baseUrl}?tag=${tag}`;
       }
       if (q && this.sortedBookstoreItems.length) {
-        return `${this.$route.path}?q=${q}`;
+        return `${baseUrl}?q=${q}`;
       }
-      return this.$route.path;
+      return baseUrl;
     },
     // Price filter related
     priceFilterList() {
