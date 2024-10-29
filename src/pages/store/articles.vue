@@ -161,7 +161,6 @@ export default {
           body: true,
         },
       ],
-      link: [{ rel: 'canonical', href: `${this.$route.path}` }],
     };
   },
   computed: {
