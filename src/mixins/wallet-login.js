@@ -56,7 +56,7 @@ export default {
           logTrackerEvent(
             this,
             'user',
-            `connect_wallet_done$_with_login`,
+            `connect_wallet_done_with_login`,
             'connect_wallet_done',
             1
           );
