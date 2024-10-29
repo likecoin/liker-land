@@ -424,7 +424,9 @@ const getters = {
     state.bookstoreCMSProductsByTagIdMap[tagId]?.map((item, index) => ({
       ...item,
       order: index + 1,
-    })),
+    })) || [],
+  nftGetBookstoreCMSProductsByTagIdHasFetched: state => tagId =>
+    !!state.bookstoreCMSProductsByTagIdMap[tagId],
   nftGetBookstoreCMSProductsByTagIdIsFetching: state => tagId =>
     state.bookstoreCMSProductsByTagIdIsFetchingMap[tagId],
 };
@@ -994,7 +996,7 @@ const actions = {
     try {
       if (
         !tagId ||
-        getters.nftGetBookstoreCMSProductsByTagId(tagId) ||
+        getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId) ||
         getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId)
       ) {
         return;
