@@ -604,7 +604,8 @@ export default {
       title = `${this.selectedTagTitle} - ${title}`;
     }
 
-    const description = this.$t('store_books_page_description');
+    const description =
+      this.selectedTagDescription || this.$t('store_books_page_description');
     const link = [
       {
         hid: 'i18n-can',
