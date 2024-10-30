@@ -450,7 +450,8 @@
   "listing_page_cant_find_books": "找不到你的書籍？ ",
   "listing_page_cant_find_books_button": "告訴我們",
   "listing_page_cant_find_books_prefilled_message": "我想找",
-  "listing_page_clear_filter": "重設篩選",
+  "listing_page_clear_filter": "清除篩選",
+
   "listing_page_filter": "篩選",
   "listing_page_filter_drm_free_label": "不設 DRM",
   "listing_page_filter_language_label": "語言：{language}",
@@ -471,7 +472,8 @@
   "listing_page_header_sort_lower_price": "價錢低至高",
   "listing_page_header_sort_recommend": "推薦",
   "listing_page_header_total_books": "共 {num} 本書",
-  "listing_page_no_result": "沒有找到相關的書籍。",
+  "listing_page_no_result": "沒有找到相關書籍。",
+
   "listing_page_QA_content": "電子書和紙本書有什麼分別?",
   "listing_page_QA_label": "電子書和紙本書有什麼分別?",
   "listing_page_QA_title": "常見問題",
@@ -485,7 +487,8 @@
   "listing_page_select_language_title": "語言",
   "listing_page_select_language_zh": "繁體中文",
   "listing_page_sorter": "排序",
-  "listing_page_tag_not_found": "找不到這標籤",
+  "listing_page_tag_not_found": "找不到此標籤",
+
   "Locale": {
     "en": "English",
     "zh-Hant": "繁體中文"
