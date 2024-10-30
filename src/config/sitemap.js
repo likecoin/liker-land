@@ -30,7 +30,7 @@ const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ign
 const getTopCreators = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getTopCollectors = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list`;
-const getBookstoreItemsFromCMS = `${EXTERNAL_HOST}/api/bookstore/lists/all`;
+const getBookstoreProductsFromCMS = `${EXTERNAL_HOST}/api/bookstore/products`;
 
 /* actual routes logic */
 async function getSitemapRoutes() {
@@ -48,7 +48,7 @@ async function getSitemapRoutes() {
       getTopCreators,
       getTopCollectors,
       getLatestBooks,
-      getBookstoreItemsFromCMS,
+      getBookstoreProductsFromCMS,
     ].map(url =>
       axios.get(url).catch(err => {
         // eslint-disable-next-line no-console

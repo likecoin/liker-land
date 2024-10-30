@@ -5,8 +5,8 @@
   "about_nft_book_section_book_description": "香港小說家董啟章經典作品《天工開物．栩栩如真》與初版相隔接近二十年，新版文本經過仔細修訂，並增加了全新的一章作為序言以 NFT 書的形式重新出版了。 「虛構一個想像世界，然後在裡面生活。」2023年，文學與NFT的想像世界終於重合。",
   "about_nft_book_section_book_title": "天工開物．栩栩如真",
   "about_nft_book_section_features_gifting_description": "一方面讀者能額外打賞作者，另一方面作者可以自行決定和協作者所得的分成。這讓作者享有更多收入，以及更大的版權自主空間。讀者也能在平台上饋贈或者轉讓電子書，讓更多人認識你喜愛的作者。",
-  "about_nft_book_section_features_gifting_title": "直接支持作者",
   "about_nft_book_section_features_gifting_link": "https://blog.like.co/zh/nft-%e6%9b%b8%e5%ba%97%ef%bc%8c%e5%88%86%e6%95%a3%e5%bc%8f%e5%87%ba%e7%89%88/",
+  "about_nft_book_section_features_gifting_title": "直接支持作者",
   "about_nft_book_section_features_ownership_description": "Liker Land 以 NFT 作為技術底層，每本書在區塊鏈上都有自己的識別符號，並由作者親自簽發，獨特且不可{replace}。",
   "about_nft_book_section_features_ownership_description_replace": "替代",
   "about_nft_book_section_features_ownership_link": "https://blog.like.co/zh/remember-me-%e8%ae%93%e6%95%85%e4%ba%8b%e7%b9%bc%e7%ba%8c%e6%b5%81%e5%82%b3%ef%bc%8c%e6%88%96%e6%96%bc%e4%b8%96%e4%b8%8a%e6%ad%a3%e5%bc%8f%e6%b6%88%e5%a4%b1/",
@@ -430,10 +430,10 @@
   "index_page_nft_book_gutenberg_more": "了解詳情",
   "index_page_nft_book_gutenberg_title": "5,000 本有聲公版書",
   "index_page_nft_book_heading": "天工開物 栩栩如真\\n2005，已絕版",
-  "index_page_nft_book_likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z_content": "一哲學就像朦朧的水晶球，它不可能告訴每一個人將來具體會怎樣，但又會禁不住猜想人類將在未來會面對的煩惱。說到底，哲學就是一門反思世上萬事萬物的學問，而對象不限於某時某地。同時，敢於思考、質問、反思的人古往今來至未來，比比皆是。\\n所以，在《哲學未來書》，好青年荼毒室談及了家庭、性別、虛擬世界、金錢、烏托邦等等議題，因為我們明白無論未來是甚麼模樣，人類仍會在意這些問題。我們歡迎各位讀者一同參與這趟時光之旅，一起誠實回答自我的批判拷問，換來能把未來看得更清楚的腦袋與眼睛。",
-  "index_page_nft_book_likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z_heading": "作品簡介",
   "index_page_nft_book_likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u_content": "香港人走過動盪歲月，幾乎每個香港人都有著一個自身轉變的故事，或許包括經歷離散、生死、迷失、沮喪、重整、再找回一個方向的過程。選擇留在香港的人，有著怎樣的思考和沉澱？ 幾位現職及前新聞工作者組成團隊，出版書籍《人在》，書寫留下來的人的故事。 首本《人在》訪問資深填詞人周耀輝和他的同路人。周耀輝談及他的創作及教導年輕人的理念，如何緊扣近年社會變化。周耀輝在訪談中，講述在社會劇變的大環境下之心路歷程：如何做一個人。 書中也訪問了周耀輝的歌詞班學生（包括：李慧詩、王樂儀、「一世唔畢業同學會」成員等）、周耀輝推行的社區填詞項目參加者、唱作歌手黃妍等，剖白這些年間如何透過歌詞創作，找到生活與生存的方向和力量。\\n《人在》團隊希望藉著深度人物訪問，傾聽留下來的人的故事，了解他們生活和心理狀態的變化，如何繼續在這個地方，創造、療傷，再找回一些力量，走下去。 我們希望讀者從這些人物故事，可以得到一點療癒，甚至啟發，感覺有人在其身邊，並不孤單。 我們相信：人在，就好。",
   "index_page_nft_book_likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u_heading": "作品簡介",
+  "index_page_nft_book_likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z_content": "一哲學就像朦朧的水晶球，它不可能告訴每一個人將來具體會怎樣，但又會禁不住猜想人類將在未來會面對的煩惱。說到底，哲學就是一門反思世上萬事萬物的學問，而對象不限於某時某地。同時，敢於思考、質問、反思的人古往今來至未來，比比皆是。\\n所以，在《哲學未來書》，好青年荼毒室談及了家庭、性別、虛擬世界、金錢、烏托邦等等議題，因為我們明白無論未來是甚麼模樣，人類仍會在意這些問題。我們歡迎各位讀者一同參與這趟時光之旅，一起誠實回答自我的批判拷問，換來能把未來看得更清楚的腦袋與眼睛。",
+  "index_page_nft_book_likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z_heading": "作品簡介",
   "index_page_nft_book_paid_mint_button": "購買完整版",
   "index_page_nft_book_quote": "我至今只有在 Liker Land 生態感受到 NFT 應有的「温度」，這種 UX 是所有其他 web3 所謂項目都沒有的。",
   "index_page_nft_book_quote_author": "尹思哲",
@@ -450,6 +450,8 @@
   "listing_page_cant_find_books": "找不到你的書籍？ ",
   "listing_page_cant_find_books_button": "告訴我們",
   "listing_page_cant_find_books_prefilled_message": "我想找",
+  "listing_page_clear_filter": "清除篩選",
+
   "listing_page_filter": "篩選",
   "listing_page_filter_drm_free_label": "不設 DRM",
   "listing_page_filter_language_label": "語言：{language}",
@@ -470,11 +472,13 @@
   "listing_page_header_sort_lower_price": "價錢低至高",
   "listing_page_header_sort_recommend": "推薦",
   "listing_page_header_total_books": "共 {num} 本書",
+  "listing_page_no_result": "沒有找到相關書籍。",
+
   "listing_page_QA_content": "電子書和紙本書有什麼分別?",
   "listing_page_QA_label": "電子書和紙本書有什麼分別?",
   "listing_page_QA_title": "常見問題",
   "listing_page_search": "搜尋",
-  "listing_page_search_not_found": "沒有找到相關的書籍，請嘗試使用其他關鍵字。",
+  "listing_page_search_not_found": "請嘗試使用其他關鍵字。",
   "listing_page_search_recommend": "或是您可以瀏覽我們的推薦書籍：",
   "listing_page_search_result": "以下為 “{query}” 的搜尋結果：",
   "listing_page_select_language_all": "全部",
@@ -483,6 +487,8 @@
   "listing_page_select_language_title": "語言",
   "listing_page_select_language_zh": "繁體中文",
   "listing_page_sorter": "排序",
+  "listing_page_tag_not_found": "找不到此標籤",
+
   "Locale": {
     "en": "English",
     "zh-Hant": "繁體中文"
@@ -995,6 +1001,7 @@
     "每週、每天、每篇文章所獲賺賞，一目了然",
     "委託 LikeCoin 獲得額外回報，同時參與社群決策"
   ],
+  "tag_all_title": "全部",
   "tooltip_coming_soon": "快將推出",
   "tooltip_no_nft": "沒有可發送的 NFT",
   "tooltip_share": "複製網址",

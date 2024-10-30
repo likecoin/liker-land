@@ -590,11 +590,12 @@ export const fetchBookstoreItemSearchResults = q => {
   const encodedQuery = encodeURIComponent(q);
   return `${LIKECOIN_API_BASE}/likernft/book/store/search?q=${encodedQuery}`;
 };
-export const fetchBookstoreItemsFromCMSForLandingPage = () =>
-  `${EXTERNAL_HOST}/api/bookstore/lists/landing`;
 
-export const fetchBookstoreItemListsFromCMSById = (id, { limit = 100 } = {}) =>
-  `${EXTERNAL_HOST}/api/bookstore/lists/${id}?limit=${limit}&t=1718841600`;
+export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
+  `${EXTERNAL_HOST}/api/bookstore/tags?limit=${limit}`;
+
+export const fetchBookstoreCMSProductsByTagId = (tagId, { limit = 100 } = {}) =>
+  `${EXTERNAL_HOST}/api/bookstore/products?tag=${tagId}&limit=${limit}&t=1718841600`;
 
 export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;

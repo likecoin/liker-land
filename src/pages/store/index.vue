@@ -143,6 +143,43 @@
           </div>
         </div>
 
+        <nav
+          v-show="!searchQuery"
+          :class="[
+            'flex',
+            'items-start',
+
+            'w-full',
+            'px-[16px] laptop:px-0',
+            'py-[16px]',
+
+            'overflow-x-auto',
+            'overflow-y-hidden',
+          ]"
+        >
+          <ul class="flex gap-x-2 gap-y-4">
+            <li
+              v-for="tag in bookstoreTagButtons"
+              :key="tag.id"
+              class="shrink-0"
+            >
+              <ButtonV2
+                :preset="
+                  tag.id === selectedTag || (!selectedTag && tag.id === 'all')
+                    ? 'secondary'
+                    : 'outline'
+                "
+                :text="tag.name"
+                :alt="tag.name"
+                size="mini"
+                theme="glow"
+                :to="tag.route"
+                @click.native="handleTagClick(tag)"
+              />
+            </li>
+          </ul>
+        </nav>
+
         <!-- Mobile Filter & Sorting -->
         <div
           :class="[
@@ -192,6 +229,18 @@
             </Label>
           </div>
         </div>
+
+        <h3
+          v-if="selectedTagTitle"
+          :class="[
+            'mt-[36px] desktop:mt-[20px]',
+            'px-[16px] laptop:px-0',
+
+            'text-[24px] desktop:text-[32px]',
+            'font-bold',
+          ]"
+          v-text="selectedTagTitle"
+        />
       </header>
 
       <!-- Body -->
@@ -208,50 +257,24 @@
           'px-[16px] laptop:px-0',
         ]"
       >
-        <!-- Listing items -->
-        <ul
-          v-if="!searchQuery"
-          :class="[
-            'w-full',
-            'grid',
-            'grid-cols-2',
-            'sm:grid-cols-3',
-            'laptop:grid-cols-3',
-            'desktop:grid-cols-4',
-            'desktopLg:grid-cols-5',
-            'full-hd:grid-cols-6',
-            'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
-            'items-stretch',
-            'desktop:mt-0',
-          ]"
+        <!-- Loading -->
+        <div
+          v-if="shouldShowProgressIndicator"
+          class="flex justify-center items-center min-h-[70vh]"
         >
-          <li :class="['row-start-4', 'sm:row-start-3', 'col-span-full']">
-            <ListingPageBooxBanner />
-          </li>
-
-          <li v-for="item in sortedBookstoreItems" :key="item.classId">
-            <NFTBookItemCardV2
-              :item-id="item.classId"
-              class-cover-frame-aspect-ratio="aspect-[4/5]"
-              :is-link-disabled="item.isMultiple"
-              @click-cover="handleClickItem($event, item)"
-            />
-          </li>
-        </ul>
-
-        <!-- Search loading -->
-        <div v-else-if="isSearching" class="flex justify-center">
           <ProgressIndicator />
         </div>
 
-        <!-- Search result -->
-        <div v-else class="flex flex-col w-full gap-[32px]">
+        <!-- Listing items -->
+        <template v-else-if="sortedBookstoreItems.length">
           <Label
-            v-if="sortedBookstoreItems.length"
+            v-if="searchQuery"
             preset="h5"
-            class="text-dark-gray"
+            class="w-full text-dark-gray"
+            align="left"
             :text="$t('listing_page_search_result', { query: searchQuery })"
           />
+
           <ul
             :class="[
               'w-full',
@@ -267,6 +290,13 @@
               'desktop:mt-0',
             ]"
           >
+            <li
+              v-if="!searchQuery && !selectedTag"
+              :class="['row-start-4', 'sm:row-start-3', 'col-span-full']"
+            >
+              <ListingPageBooxBanner />
+            </li>
+
             <li v-for="item in sortedBookstoreItems" :key="item.classId">
               <NFTBookItemCardV2
                 :item-id="item.classId"
@@ -276,37 +306,67 @@
               />
             </li>
           </ul>
-        </div>
-        <!-- Search not found -->
+        </template>
+
+        <!-- No result -->
         <div
-          v-if="searchQuery && !sortedBookstoreItems.length && !isSearching"
-          class="flex flex-col items-center justify-center gap-[12px] w-full"
+          v-else
+          class="flex flex-col items-center justify-center gap-[12px] w-full desktop:min-h-[30vh]"
         >
           <Label
             preset="h4"
             class="text-dark-gray"
-            :text="$t('listing_page_search_not_found')"
+            :text="$t('listing_page_no_result')"
           />
-          <Label
-            preset="p5"
-            class="text-medium-gray"
-            :text="$t('listing_page_search_recommend')"
-          />
-          <NFTPageRecommendation
-            class="w-full mt-[72px]"
-            @item-click="handleRecommendedItemClick"
-            @item-collect="handleRecommendedItemCollect"
-            @slide-next.once="handleRecommendationSlideNext"
-            @slide-prev.once="handleRecommendationSlidePrev"
-            @slider-move.once="handleRecommendationSliderMove"
+
+          <!-- Search not found -->
+          <template v-if="searchQuery && !isSearching">
+            <Label
+              preset="p5"
+              class="text-dark-gray"
+              :text="$t('listing_page_search_not_found')"
+            />
+            <Label
+              preset="p5"
+              class="text-medium-gray"
+              :text="$t('listing_page_search_recommend')"
+            />
+            <NFTPageRecommendation
+              class="w-full mt-[36px]"
+              @item-click="handleRecommendedItemClick"
+              @item-collect="handleRecommendedItemCollect"
+              @slide-next.once="handleRecommendationSlideNext"
+              @slide-prev.once="handleRecommendationSlidePrev"
+              @slider-move.once="handleRecommendationSliderMove"
+            />
+          </template>
+
+          <!-- Applied Filter -->
+          <ButtonV2
+            v-else-if="isFilterApplied"
+            preset="tertiary"
+            :text="$t('listing_page_clear_filter')"
+            @click="handleFilterResetClickInEmpty"
           />
         </div>
 
         <footer class="flex flex-col gap-[32px]">
-          <div class="flex flex-col items-center gap-[24px] py-[24px]">
+          <div
+            :class="[
+              'flex',
+              'flex-col',
+              'justify-center',
+              'items-center',
+              'gap-[24px]',
+
+              'min-h-[200px]',
+              'py-[24px]',
+            ]"
+          >
             <p>{{ $t('listing_page_cant_find_books') }}</p>
+
             <ButtonV2
-              preset="tertiary"
+              preset="secondary"
               :text="$t('listing_page_cant_find_books_button')"
               @click="handleClickCantFindBook"
             />
@@ -418,7 +478,7 @@
       </ul>
 
       <footer class="grid grid-cols-2 gap-[12px] px-[12px]">
-        <ButtonV2 preset="tertiary" @click="handleFilterReset">{{
+        <ButtonV2 preset="tertiary" @click="handleFilterResetClick">{{
           $t('listing_page_button_reset')
         }}</ButtonV2>
         <ButtonV2 @click="handleCloseDialog">{{
@@ -449,7 +509,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import { EXTERNAL_HOST, LIKECOIN_API_BASE } from '~/constant';
 import {
@@ -459,7 +519,7 @@ import {
 } from '~/constant/store';
 
 import {
-  fetchBookstoreItemListsFromCMSById,
+  fetchBookstoreCMSTags,
   fetchBookstoreItemSearchResults,
 } from '~/util/api';
 import { checkIsForcedInAppPage } from '~/util/client';
@@ -475,35 +535,53 @@ export default {
   defaultSorting: SORTING_OPTIONS.RECOMMEND,
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,
-  async asyncData({ store, redirect, localeLocation, route, $api }) {
+  async asyncData({
+    store,
+    redirect,
+    localeLocation,
+    route,
+    error,
+    i18n,
+    $api,
+  }) {
     if (checkIsForcedInAppPage(route)) {
       redirect(301, localeLocation({ name: 'dashboard' }));
       return {};
     }
 
-    let bookstoreItemsFromCMS = [];
+    let bookstoreCMSTags = [];
     try {
-      const [result] = await Promise.all([
-        $api.$get(
-          fetchBookstoreItemListsFromCMSById('listing', { limit: 100 })
-        ),
+      const fetches = [
+        $api.$get(fetchBookstoreCMSTags({ limit: 100 })),
+        store.dispatch('lazyFetchBookstoreCMSProductsByTagId', 'listing'),
         store.dispatch('fetchBookstoreLatestItems'),
-      ]);
-      bookstoreItemsFromCMS = result.records.map((item, index) => ({
-        ...item,
-        recommendOrder: index + 1,
-      }));
-    } catch (error) {
+      ];
+      if (route.query.tag) {
+        fetches.push(
+          store.dispatch(
+            'lazyFetchBookstoreCMSProductsByTagId',
+            route.query.tag
+          )
+        );
+      }
+      const [tagsResult] = await Promise.all(fetches);
+      bookstoreCMSTags = tagsResult.records;
+    } catch (err) {
+      if (err.response?.data === 'TAG_NOT_FOUND') {
+        error({
+          statusCode: 404,
+          message: i18n.t('listing_page_tag_not_found'),
+        });
+        return {};
+      }
       // eslint-disable-next-line no-console
       console.error(error);
     }
-    return { bookstoreItemsFromCMS };
+    return { bookstoreCMSTags };
   },
   data() {
     return {
-      bookstoreItemsFromCMS: [], // Fetch in asyncData
-
-      totalBooks: 0,
+      bookstoreCMSTags: [], // Fetch in asyncData
 
       isShowSortingDialog: false,
       isShowFilterDialog: false,
@@ -514,7 +592,11 @@ export default {
     };
   },
   head() {
-    const title = this.$t('store_index_page_title');
+    let title = this.$t('store_index_page_title');
+    if (this.selectedTag) {
+      title = `${this.selectedTagTitle} - ${title}`;
+    }
+
     const description = this.$t('store_books_page_description');
     const link = [
       {
@@ -606,6 +688,8 @@ export default {
   computed: {
     ...mapGetters([
       'nftBookstoreLatestItems',
+      'nftGetBookstoreCMSProductsByTagId',
+      'nftGetBookstoreCMSProductsByTagIdIsFetching',
       'getNFTBookStorePricesByClassId',
       'getNFTClassMetadataById',
     ]),
@@ -643,14 +727,7 @@ export default {
         return this.$route.query.price || this.$options.defaultPrice;
       },
       set(value) {
-        const query = {
-          ...this.$route.query,
-          price: Object.values(PRICE_OPTIONS).includes(value)
-            ? value
-            : this.$options.defaultPrice,
-        };
-
-        this.$router.push({ query });
+        this.setFilterQuery({ price: value });
       },
     },
     selectedPriceFilterLabel() {
@@ -665,12 +742,7 @@ export default {
         return this.$route.query.drm_free === '1';
       },
       set(value) {
-        const query = {
-          ...this.$route.query,
-          drm_free: value ? '1' : undefined,
-        };
-
-        this.$router.push({ query });
+        this.setFilterQuery({ drm_free: value });
       },
     },
 
@@ -692,14 +764,7 @@ export default {
         return this.$route.query.lang || this.$options.defaultLanguage;
       },
       set(value) {
-        const query = {
-          ...this.$route.query,
-          lang: Object.values(LANGUAGE_OPTIONS).includes(value)
-            ? value
-            : this.$options.defaultLanguage,
-        };
-
-        this.$router.push({ query });
+        this.setFilterQuery({ lang: value });
       },
     },
     selectedLanguageFilterLabel() {
@@ -759,11 +824,14 @@ export default {
       return this.$t('listing_page_header_sort', { sort: this.$t(text) });
     },
 
+    bookstoreCMSProducts() {
+      return this.nftGetBookstoreCMSProductsByTagId('listing') || [];
+    },
+
     bookstoreItems() {
-      const items = [
-        ...this.bookstoreItemsFromCMS,
-        ...this.nftBookstoreLatestItems,
-      ];
+      const items = this.selectedTag
+        ? this.nftGetBookstoreCMSProductsByTagId(this.selectedTag) || []
+        : [...this.bookstoreCMSProducts, ...this.nftBookstoreLatestItems];
       const uniqueIds = new Set();
       const dedupedItems = [];
       items.forEach(item => {
@@ -801,6 +869,9 @@ export default {
           return true;
         });
     },
+    isFilterApplied() {
+      return this.bookstoreItems.length !== this.filteredBookstoreItems.length;
+    },
     sortedBookstoreItems() {
       if (this.searchQuery) {
         return this.searchItems;
@@ -822,13 +893,13 @@ export default {
 
         switch (this.selectedSorting) {
           case SORTING_OPTIONS.RECOMMEND:
-            if (a.recommendOrder && b.recommendOrder) {
-              return a.recommendOrder - b.recommendOrder;
+            if (a.order && b.order) {
+              return a.order - b.order;
             }
-            if (a.recommendOrder && !b.recommendOrder) {
+            if (a.order && !b.order) {
               return -1;
             }
-            if (!a.recommendOrder && b.recommendOrder) {
+            if (!a.order && b.order) {
               return 1;
             }
             break;
@@ -867,12 +938,60 @@ export default {
         return this.$route.query.q || '';
       },
       set(value) {
+        if (value === this.searchQuery) {
+          return;
+        }
+
         const query = {
           ...this.$route.query,
+          tag: undefined,
           q: value,
         };
         this.$router.replace({ query });
       },
+    },
+
+    bookstoreTagButtons() {
+      return [
+        {
+          id: 'all',
+          name: this.$t('tag_all_title'),
+          route: this.localeLocation({
+            query: {
+              ...this.$route.query,
+              tag: undefined,
+            },
+          }),
+        },
+        ...this.bookstoreCMSTags
+          .filter(tag => tag.isPublic)
+          .map(tag => ({
+            id: tag.id,
+            name: this.$i18n.locale === 'zh-Hant' ? tag.name : tag.nameEn,
+            route: this.localeLocation({
+              query: {
+                ...this.$route.query,
+                q: undefined,
+                tag: tag.id,
+              },
+            }),
+          })),
+      ];
+    },
+
+    selectedTag() {
+      return this.$route.query.tag || '';
+    },
+    selectedTagTitle() {
+      return this.bookstoreCMSTags.find(tag => tag.id === this.selectedTag)
+        ?.name;
+    },
+
+    shouldShowProgressIndicator() {
+      return (
+        this.isSearching ||
+        this.nftGetBookstoreCMSProductsByTagIdIsFetching(this.selectedTag)
+      );
     },
   },
   watch: {
@@ -890,6 +1009,9 @@ export default {
         await this.fetchSearchItems(newQuery);
       }
     },
+    selectedTag() {
+      this.scrollToTop();
+    },
   },
   async mounted() {
     if (this.searchQuery) {
@@ -897,8 +1019,35 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
+
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    setFilterQuery(query) {
+      const newQuery = { ...this.$route.query };
+
+      /* eslint-disable camelcase */
+      const { drm_free, lang, price } = query || {};
+
+      if (!query || drm_free !== undefined) {
+        newQuery.drm_free = drm_free ? '1' : undefined;
+      }
+      /* eslint-enable camelcase */
+
+      if (!query || lang !== undefined) {
+        newQuery.lang = Object.values(LANGUAGE_OPTIONS).includes(lang)
+          ? lang
+          : undefined;
+      }
+
+      if (!query || price !== undefined) {
+        newQuery.price = Object.values(PRICE_OPTIONS).includes(price)
+          ? price
+          : undefined;
+      }
+
+      this.$router[!query ? 'replace' : 'push']({ query: newQuery });
     },
 
     handleFilterPriceChange(value) {
@@ -930,11 +1079,13 @@ export default {
         1
       );
     },
-    handleFilterReset() {
+    handleFilterResetClick() {
       logTrackerEvent(this, 'listing', 'listing_filter_reset', '', 1);
-      // eslint-disable-next-line camelcase
-      const { type, price, lang, drm_free, ...query } = this.$route.query;
-      this.$router.push({ query });
+      this.setFilterQuery(null);
+    },
+    handleFilterResetClickInEmpty() {
+      this.setFilterQuery(null);
+      logTrackerEvent(this, 'listing', 'listing_filter_reset_in_empty', '', 1);
     },
     handleSortingChange(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
@@ -949,13 +1100,6 @@ export default {
     handleCloseDialog() {
       this.isShowFilterDialog = false;
       this.isShowSortingDialog = false;
-    },
-    handleFilterConfirm(values) {
-      logTrackerEvent(this, 'listing', 'listing_filter_confirm_clicked', '', 1);
-      this.handleFilterTypeChange(values.type);
-      this.handleFilterPriceChange(values.price);
-      this.handleFilterLanguageChange(values.language);
-      this.isShowFilterDialog = false;
     },
     handleClickItem(event, item) {
       if (item.isMultiple) {
@@ -1040,6 +1184,15 @@ export default {
     handleSearchBarInput(value) {
       this.searchQuery = value;
       logTrackerEvent(this, 'listing', 'search_bar_input', value, 1);
+    },
+    async handleTagClick(tag) {
+      logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
+      try {
+        await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
   },
 };

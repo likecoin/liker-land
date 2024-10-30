@@ -801,7 +801,7 @@ export default {
   },
   async fetch({ store }) {
     try {
-      await store.dispatch('fetchBookstoreItemsFromCMSForLandingPage');
+      await store.dispatch('fetchBookstoreCMSProductsForLandingPage');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -896,7 +896,7 @@ export default {
       return 'desktop:sticky desktop:top-[124px]';
     },
     bookstoreItems() {
-      return this.nftBookstoreItemsFromCMSForLandingPage.filter(
+      return this.nftBookstoreCMSProductsForLandingPage.filter(
         item =>
           !item.locales ||
           item.locales.some(locale => this.$i18n.locale.includes(locale))

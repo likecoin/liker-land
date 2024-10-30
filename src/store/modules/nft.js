@@ -42,8 +42,9 @@ const state = () => ({
   latestNFTClassIdList: [],
   freeNFTClassIdList: [],
   trendingNFTClassIdList: [],
-  bookstoreItemsFromCMSForLandingPage: [],
   bookstoreLatestItems: [],
+  bookstoreCMSProductsByTagIdMap: {},
+  bookstoreCMSProductsByTagIdIsFetchingMap: {},
 });
 
 const mutations = {
@@ -139,11 +140,17 @@ const mutations = {
   [TYPES.NFT_SET_TRENDING_NFT_CLASS_ID_LIST](state, list) {
     state.trendingNFTClassIdList = list;
   },
-  [TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS](state, items) {
-    state.bookstoreItemsFromCMSForLandingPage = items;
-  },
   [TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS](state, items) {
     state.bookstoreLatestItems = items;
+  },
+  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID](state, { id, value = [] }) {
+    Vue.set(state.bookstoreCMSProductsByTagIdMap, id, value);
+  },
+  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING](
+    state,
+    { id, value = false }
+  ) {
+    Vue.set(state.bookstoreCMSProductsByTagIdIsFetchingMap, id, value);
   },
 };
 
@@ -394,8 +401,6 @@ const getters = {
   nftClassIdListInFree: state => state.freeNFTClassIdList,
   nftClassIdListInTrending: state => state.trendingNFTClassIdList,
 
-  nftBookstoreItemsFromCMSForLandingPage: state =>
-    state.bookstoreItemsFromCMSForLandingPage,
   nftBookstoreLatestItems: state =>
     state.bookstoreLatestItems.map(item => ({
       ...item,
@@ -413,6 +418,17 @@ const getters = {
         }
       ),
     })),
+  nftBookstoreCMSProductsForLandingPage: (_, getters) =>
+    getters.nftGetBookstoreCMSProductsByTagId('landing'),
+  nftGetBookstoreCMSProductsByTagId: state => tagId =>
+    state.bookstoreCMSProductsByTagIdMap[tagId]?.map((item, index) => ({
+      ...item,
+      order: index + 1,
+    })) || [],
+  nftGetBookstoreCMSProductsByTagIdHasFetched: state => tagId =>
+    !!state.bookstoreCMSProductsByTagIdMap[tagId],
+  nftGetBookstoreCMSProductsByTagIdIsFetching: state => tagId =>
+    state.bookstoreCMSProductsByTagIdIsFetchingMap[tagId],
 };
 
 const actions = {
@@ -962,17 +978,8 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreItemsFromCMSForLandingPage({ commit, state }) {
-    if (state.bookstoreItemsFromCMSForLandingPage.length) return;
-    const { data } = await this.$api.get(
-      api.fetchBookstoreItemsFromCMSForLandingPage()
-    );
-    const items = data.records;
-    if (!items?.length) {
-      // eslint-disable-next-line no-console
-      console.warn('CMS did not return any bookstore items');
-    }
-    commit(TYPES.NFT_SET_BOOKSTORE_CMS_LANDING_ITEMS, items || []);
+  async fetchBookstoreCMSProductsForLandingPage({ dispatch }) {
+    await dispatch('lazyFetchBookstoreCMSProductsByTagId', 'landing');
   },
   async fetchBookstoreLatestItems({ commit, state }) {
     if (state.bookstoreLatestItems.length) return;
@@ -984,6 +991,44 @@ const actions = {
         isDRMFree: !hideDownload,
       }))
     );
+  },
+  async fetchBookstoreCMSProductsByTagId({ commit }, tagId) {
+    try {
+      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
+        id: tagId,
+        value: true,
+      });
+
+      const { data } = await this.$api.get(
+        api.fetchBookstoreCMSProductsByTagId(tagId)
+      );
+
+      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID, {
+        id: tagId,
+        value: data.records,
+      });
+
+      if (!data.records?.length) {
+        // eslint-disable-next-line no-console
+        console.warn(`CMS did not return any products for tag: ${tagId}`);
+      }
+    } finally {
+      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
+        id: tagId,
+        value: false,
+      });
+    }
+  },
+  async lazyFetchBookstoreCMSProductsByTagId({ dispatch, getters }, tagId) {
+    if (
+      !tagId ||
+      getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId) ||
+      getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId)
+    ) {
+      return;
+    }
+
+    await dispatch('fetchBookstoreCMSProductsByTagId', tagId);
   },
 };
 
