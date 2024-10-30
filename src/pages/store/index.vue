@@ -346,7 +346,7 @@
             v-else-if="isFilterApplied"
             preset="tertiary"
             :text="$t('listing_page_clear_filter')"
-            @click="handleClearFilterClick"
+            @click="handleFilterResetClickInEmpty"
           />
         </div>
 
@@ -478,7 +478,7 @@
       </ul>
 
       <footer class="grid grid-cols-2 gap-[12px] px-[12px]">
-        <ButtonV2 preset="tertiary" @click="handleFilterReset">{{
+        <ButtonV2 preset="tertiary" @click="handleFilterResetClick">{{
           $t('listing_page_button_reset')
         }}</ButtonV2>
         <ButtonV2 @click="handleCloseDialog">{{
@@ -710,14 +710,7 @@ export default {
         return this.$route.query.price || this.$options.defaultPrice;
       },
       set(value) {
-        const query = {
-          ...this.$route.query,
-          price: Object.values(PRICE_OPTIONS).includes(value)
-            ? value
-            : this.$options.defaultPrice,
-        };
-
-        this.$router.push({ query });
+        this.setFilterQuery({ price: value });
       },
     },
     selectedPriceFilterLabel() {
@@ -732,12 +725,7 @@ export default {
         return this.$route.query.drm_free === '1';
       },
       set(value) {
-        const query = {
-          ...this.$route.query,
-          drm_free: value ? '1' : undefined,
-        };
-
-        this.$router.push({ query });
+        this.setFilterQuery({ drm_free: value });
       },
     },
 
@@ -759,14 +747,7 @@ export default {
         return this.$route.query.lang || this.$options.defaultLanguage;
       },
       set(value) {
-        const query = {
-          ...this.$route.query,
-          lang: Object.values(LANGUAGE_OPTIONS).includes(value)
-            ? value
-            : this.$options.defaultLanguage,
-        };
-
-        this.$router.push({ query });
+        this.setFilterQuery({ lang: value });
       },
     },
     selectedLanguageFilterLabel() {
@@ -1026,6 +1007,31 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
+    setFilterQuery(query) {
+      const newQuery = { ...this.$route.query };
+
+      /* eslint-disable camelcase */
+      const { drm_free, lang, price } = query || {};
+
+      if (!query || drm_free !== undefined) {
+        newQuery.drm_free = drm_free ? '1' : undefined;
+      }
+      /* eslint-enable camelcase */
+
+      if (!query || lang !== undefined) {
+        newQuery.lang = Object.values(LANGUAGE_OPTIONS).includes(lang)
+          ? lang
+          : undefined;
+      }
+
+      if (!query || price !== undefined) {
+        newQuery.price = Object.values(PRICE_OPTIONS).includes(price)
+          ? price
+          : undefined;
+      }
+
+      this.$router[!query ? 'replace' : 'push']({ query: newQuery });
+    },
 
     handleFilterPriceChange(value) {
       logTrackerEvent(
@@ -1056,11 +1062,13 @@ export default {
         1
       );
     },
-    handleFilterReset() {
+    handleFilterResetClick() {
       logTrackerEvent(this, 'listing', 'listing_filter_reset', '', 1);
-      // eslint-disable-next-line camelcase
-      const { type, price, lang, drm_free, ...query } = this.$route.query;
-      this.$router.push({ query });
+      this.setFilterQuery(null);
+    },
+    handleFilterResetClickInEmpty() {
+      this.setFilterQuery(null);
+      logTrackerEvent(this, 'listing', 'listing_filter_reset_in_empty', '', 1);
     },
     handleSortingChange(value) {
       logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
@@ -1075,13 +1083,6 @@ export default {
     handleCloseDialog() {
       this.isShowFilterDialog = false;
       this.isShowSortingDialog = false;
-    },
-    handleFilterConfirm(values) {
-      logTrackerEvent(this, 'listing', 'listing_filter_confirm_clicked', '', 1);
-      this.handleFilterTypeChange(values.type);
-      this.handleFilterPriceChange(values.price);
-      this.handleFilterLanguageChange(values.language);
-      this.isShowFilterDialog = false;
     },
     handleClickItem(event, item) {
       if (item.isMultiple) {
@@ -1102,17 +1103,6 @@ export default {
         '',
         1
       );
-    },
-    handleClearFilterClick() {
-      this.$router.replace({
-        query: {
-          ...this.$route.query,
-          price: undefined,
-          drm_free: undefined,
-          lang: undefined,
-        },
-      });
-      logTrackerEvent(this, 'listing', 'listing_clear_filter_clicked', '', 1);
     },
     handleClickHomePage() {
       logTrackerEvent(this, 'listing', 'listing_home_page_click', '', 1);
