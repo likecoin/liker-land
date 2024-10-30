@@ -242,6 +242,12 @@
           ]"
           v-text="selectedTagTitle"
         />
+
+        <p
+          v-if="selectedTagDescription"
+          class="mt-[8px] px-[16px] laptop:px-0 text-gray-4a text-[14px]"
+          v-text="selectedTagDescription"
+        />
       </header>
 
       <!-- Body -->
@@ -957,6 +963,7 @@ export default {
       return this.bookstoreCMSTags.map(tag => ({
         ...tag,
         name: isChinese ? tag.nameZh : tag.nameEn,
+        description: isChinese ? tag.descriptionZh : tag.descriptionEn,
       }));
     },
     bookstoreTagButtons() {
@@ -997,6 +1004,9 @@ export default {
     },
     selectedTagTitle() {
       return this.selectedTag?.name;
+    },
+    selectedTagDescription() {
+      return this.selectedTag?.description;
     },
 
     shouldShowProgressIndicator() {
