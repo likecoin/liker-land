@@ -553,12 +553,15 @@ export default {
     try {
       const fetches = [
         $api.$get(fetchBookstoreCMSTags({ limit: 100 })),
-        store.dispatch('fetchBookstoreCMSProductsByTagId', 'listing'),
+        store.dispatch('lazyFetchBookstoreCMSProductsByTagId', 'listing'),
         store.dispatch('fetchBookstoreLatestItems'),
       ];
       if (route.query.tag) {
         fetches.push(
-          store.dispatch('fetchBookstoreCMSProductsByTagId', route.query.tag)
+          store.dispatch(
+            'lazyFetchBookstoreCMSProductsByTagId',
+            route.query.tag
+          )
         );
       }
       const [tagsResult] = await Promise.all(fetches);
@@ -1018,7 +1021,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchBookstoreCMSProductsByTagId']),
+    ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
 
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1178,7 +1181,7 @@ export default {
     async handleTagClick(tag) {
       logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
       try {
-        await this.fetchBookstoreCMSProductsByTagId(tag.id);
+        await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

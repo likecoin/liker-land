@@ -979,7 +979,7 @@ const actions = {
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
   async fetchBookstoreCMSProductsForLandingPage({ dispatch }) {
-    await dispatch('fetchBookstoreCMSProductsByTagId', 'landing');
+    await dispatch('lazyFetchBookstoreCMSProductsByTagId', 'landing');
   },
   async fetchBookstoreLatestItems({ commit, state }) {
     if (state.bookstoreLatestItems.length) return;
@@ -992,16 +992,8 @@ const actions = {
       }))
     );
   },
-  async fetchBookstoreCMSProductsByTagId({ commit, getters }, tagId) {
+  async fetchBookstoreCMSProductsByTagId({ commit }, tagId) {
     try {
-      if (
-        !tagId ||
-        getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId) ||
-        getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId)
-      ) {
-        return;
-      }
-
       commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
         id: tagId,
         value: true,
@@ -1026,6 +1018,17 @@ const actions = {
         value: false,
       });
     }
+  },
+  async lazyFetchBookstoreCMSProductsByTagId({ dispatch, getters }, tagId) {
+    if (
+      !tagId ||
+      getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId) ||
+      getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId)
+    ) {
+      return;
+    }
+
+    await dispatch('fetchBookstoreCMSProductsByTagId', tagId);
   },
 };
 
