@@ -71,7 +71,7 @@ async function getSitemapRoutes() {
   const creator = ((creatorRes.data || {}).creators || []).map(c => c.account);
   const portfolioPageRoutes = creator.map(id => `/${id}`);
 
-  const tagIds = (cmsBookRes.data || {}.records || []).map(t => t.id);
+  const tagIds = ((cmsBookRes.data || {}).records || []).map(t => t.id);
   const bookstorePageRoutes = tagIds.map(id => `/store?tag=${id}`);
 
   let allRoutes = [];
