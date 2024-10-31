@@ -335,6 +335,15 @@ export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
       ],
     };
 
+export const FENG_HUO_SHAN_LIN_CLASS_IDS = [
+  'likenft1e88egsmedlsjvtp50ngvftf3psn4u4njrlfhkcsmukpuemkwq4tqrqzejk',
+  'likenft14lz72a38tk0elxkv5jyp6uepx7jru2zhu0vcpv0sau2k069lnq6sp3hnur',
+  'likenft1tz70u4xz3wkcfm2zz55gttj4xsm67waa55rkewv0p69wdcd8t3ysq9gqst',
+  'likenft1s9he8030mnuwz53988dk2gf0u4eehmthgg6tsr64gx6kamv2z5wsv80qq4',
+  'likenft1lnp07hyzvgekvcchf0vz9xsa30qp00e3fp70z5x7vzz7dvas83as8d9h0n',
+  'likenft1ewmnn8fwkd7qk7c7h3me4xgkatjae4yx32nmwp7qkznc9plz8vfqpjvsjv',
+];
+
 export const DISABLED_CROSS_SELL_POPUP_LIST = [
   'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny', // 坐監情緒學
   'likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp', // 來一場散步學

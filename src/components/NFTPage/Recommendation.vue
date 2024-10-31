@@ -94,7 +94,7 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 import {
   DEFAULT_RECOMMENDATIONS_LIST,
-  CROSS_SELL_PRODUCT_IDS_MAP,
+  FENG_HUO_SHAN_LIN_CLASS_IDS,
 } from '~/constant';
 
 import bookstoreMixin from '~/mixins/bookstore';
@@ -229,8 +229,18 @@ export default {
         });
       }
 
+      // hardcode for fenghuoshanlin items
+      const fengHuoShanLinItems = FENG_HUO_SHAN_LIN_CLASS_IDS.includes(
+        this.classId
+      )
+        ? FENG_HUO_SHAN_LIN_CLASS_IDS.filter(id => id !== this.classId).map(
+            classId => ({ classId })
+          )
+        : [];
+
       recommendedList = [
         ...this.crossSellProductIds?.map(classId => ({ classId })),
+        ...fengHuoShanLinItems,
         ...recommendedList,
       ];
 
