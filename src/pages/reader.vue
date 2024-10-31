@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
@@ -123,10 +123,9 @@ export default {
       await Promise.all([
         this.lazyFetchNFTBookInfoByClassId(this.classId).catch(),
         this.lazyFetchNFTClassMetadata(),
+        this.restoreAuthSession(),
       ]);
       await this.fetchISCNMetadata();
-      await this.restoreSession();
-      // TODO: use loginAddress
       if (this.getSessionWallet) {
         await Promise.all([
           this.fetchUserCollectedCount(),
@@ -160,6 +159,9 @@ export default {
     } finally {
       this.isLoading = false;
     }
+  },
+  methods: {
+    ...mapActions(['restoreAuthSession']),
   },
 };
 </script>

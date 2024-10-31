@@ -69,7 +69,7 @@ export default {
           headers: {
             Authorization: this.getAccessToken
               ? `Bearer ${this.getAccessToken}`
-              : undefined,
+              : '',
           },
         });
         if (!res.ok) {
