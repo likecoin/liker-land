@@ -31,6 +31,7 @@ const getTopCreators = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?ignor
 const getTopCollectors = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list`;
 const getBookstoreProductsFromCMS = `${EXTERNAL_HOST}/api/bookstore/products`;
+const getBookstoreCMSTags = `${EXTERNAL_HOST}/api/bookstore/tags`;
 
 /* actual routes logic */
 async function getSitemapRoutes() {
@@ -38,7 +39,6 @@ async function getSitemapRoutes() {
     newClassRes,
     topClassRes,
     creatorRes,
-    collectorRes,
     newBookRes,
     cmsBookRes,
   ] = await Promise.all(
@@ -46,9 +46,9 @@ async function getSitemapRoutes() {
       getLatestNFTClasses,
       getTopNFTClasses,
       getTopCreators,
-      getTopCollectors,
       getLatestBooks,
       getBookstoreProductsFromCMS,
+      getBookstoreCMSTags,
     ].map(url =>
       axios.get(url).catch(err => {
         // eslint-disable-next-line no-console
@@ -69,13 +69,16 @@ async function getSitemapRoutes() {
     id => `/nft/class/${id}`
   );
   const creator = ((creatorRes.data || {}).creators || []).map(c => c.account);
-  const collectors = ((collectorRes.data || {}).collectors || []).map(
-    c => c.account
-  );
-  const portfolioPageRoutes = [...new Set(creator.concat(collectors))].map(
-    id => `/${id}`
-  );
-  return nftDetailsPageRoutes.concat(portfolioPageRoutes).map(url => ({
+  const portfolioPageRoutes = creator.map(id => `/${id}`);
+
+  const tagIds = (cmsBookRes.data || {}.records || []).map(t => t.id);
+  const bookstorePageRoutes = tagIds.map(id => `/store?tag=${id}`);
+
+  let allRoutes = [];
+  allRoutes = allRoutes.concat(bookstorePageRoutes);
+  allRoutes = allRoutes.concat(nftDetailsPageRoutes);
+  allRoutes = allRoutes.concat(portfolioPageRoutes);
+  return allRoutes.map(url => ({
     url: `/${locales[0]}${url}`,
     links: locales.map(lang => ({ lang, url: `/${lang}${url}` })),
   }));
