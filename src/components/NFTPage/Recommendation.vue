@@ -92,10 +92,7 @@
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
-import {
-  DEFAULT_RECOMMENDATIONS_LIST,
-  FENG_HUO_SHAN_LIN_CLASS_IDS,
-} from '~/constant';
+import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
 
 import bookstoreMixin from '~/mixins/bookstore';
 import nftOrCollection from '~/mixins/nft-or-collection';
@@ -229,18 +226,8 @@ export default {
         });
       }
 
-      // hardcode for fenghuoshanlin items
-      const fengHuoShanLinItems = FENG_HUO_SHAN_LIN_CLASS_IDS.includes(
-        this.classId
-      )
-        ? FENG_HUO_SHAN_LIN_CLASS_IDS.filter(id => id !== this.classId).map(
-            classId => ({ classId })
-          )
-        : [];
-
       recommendedList = [
         ...this.crossSellProductIds?.map(classId => ({ classId })),
-        ...fengHuoShanLinItems,
         ...recommendedList,
       ];
 
