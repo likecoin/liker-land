@@ -92,10 +92,7 @@
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
-import {
-  DEFAULT_RECOMMENDATIONS_LIST,
-  CROSS_SELL_PRODUCT_IDS_MAP,
-} from '~/constant';
+import { DEFAULT_RECOMMENDATIONS_LIST } from '~/constant';
 
 import bookstoreMixin from '~/mixins/bookstore';
 import nftOrCollection from '~/mixins/nft-or-collection';

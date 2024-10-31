@@ -281,66 +281,91 @@ export const READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST = [
 
 export const CROSS_SELL_PRODUCT_PROBABILITY = 0.3;
 
-export const CROSS_SELL_PRODUCT_IDS_MAP = IS_TESTNET
-  ? {
-      likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8: [
+export const RECOMMENDATION_GROUPS = IS_TESTNET
+  ? [
+      [
+        'likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8',
         'col_book_37fd9fd7-3323-4b4e-9d94-83566f8fba96',
         'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
         'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
       ],
-      // Free product w/ tipping
-      likenft1akaqh0pd9wv8lfy3xyd9tnc4mk8vmy7ehzg7ssgczqxcq3hzc2vqugtvty: [
+      [
+        'likenft1akaqh0pd9wv8lfy3xyd9tnc4mk8vmy7ehzg7ssgczqxcq3hzc2vqugtvty',
         'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
         'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
       ],
-      // Free product w/o tipping
-      likenft1qq06n42guzvt087wxunaajvz3alx6wadq6mfz0yz57gffwsrgrasl2m59x: [
+      [
         'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
         'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
+        'likenft1qq06n42guzvt087wxunaajvz3alx6wadq6mfz0yz57gffwsrgrasl2m59x',
       ],
-    }
-  : {
-      likenft1wrskn9a683stkje3wdmcwuvpuqrp5eevjsnn9y4f55wlystzxausuhj3em: [
+    ]
+  : [
+      // FengHouShanLin
+      [
+        'likenft1e88egsmedlsjvtp50ngvftf3psn4u4njrlfhkcsmukpuemkwq4tqrqzejk',
+        'likenft14lz72a38tk0elxkv5jyp6uepx7jru2zhu0vcpv0sau2k069lnq6sp3hnur',
+        'likenft1tz70u4xz3wkcfm2zz55gttj4xsm67waa55rkewv0p69wdcd8t3ysq9gqst',
+        'likenft1s9he8030mnuwz53988dk2gf0u4eehmthgg6tsr64gx6kamv2z5wsv80qq4',
+        'likenft1lnp07hyzvgekvcchf0vz9xsa30qp00e3fp70z5x7vzz7dvas83as8d9h0n',
+        'likenft1ewmnn8fwkd7qk7c7h3me4xgkatjae4yx32nmwp7qkznc9plz8vfqpjvsjv',
+      ],
+      // Cross Sell
+      [
+        'likenft1wrskn9a683stkje3wdmcwuvpuqrp5eevjsnn9y4f55wlystzxausuhj3em',
         'col_book_4d7b04b5-da74-48d3-9da7-9ae1e9719bf9',
         'likenft1mgehyarx3lft82g9zwvv9c4g9rgzxfsjda90vzmq5h56vg5u26qsec7rpc',
         'likenft1eawzxut5zf9t9myyd6prquef7c2r7pe0z3rzlreup59wtxe9hplqcd4987',
         'likenft1r8mce5h96nvedtm7rh9va5mda6fgysqfprlxftuef09s8kfjt2jsqeyyjq',
       ],
-      likenft14jz77ywl6hmfxlus6qrat36c2y7l5xkxhlzp76tdvk06mw69pjzsy5zu9l: [
+      [
+        'likenft14jz77ywl6hmfxlus6qrat36c2y7l5xkxhlzp76tdvk06mw69pjzsy5zu9l',
         'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3',
         'likenft1rfd3pp4q4hvuha8xpl8wzzf7uwannv0wm05s7jz34828e4qjnyzsfd9srz',
       ],
-      likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x: [
+      [
+        'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
         'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
         'likenft1mppyvyuvvft62yc66saee28q8nyl6xuh8vg332d8y9fn6gz9qtssj4trzl',
       ],
-      likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h: [
+      [
+        'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
         'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
       ],
-      likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny: [
+      [
+        'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
         'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
       ],
-      likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633: [
+      [
+        'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633',
         'likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp',
       ],
-      likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp: [
+      [
+        'likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp',
         'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633',
       ],
-      likenft1xl38uu5q7fsxcr02msjtx7jstsfz8lu6ex8nq0pksfgxx3yszkws6ngwr9: [
+      [
+        'likenft1xl38uu5q7fsxcr02msjtx7jstsfz8lu6ex8nq0pksfgxx3yszkws6ngwr9',
         'likenft1e4espt79md5gg2lc0wqfu5zf75jsvce3qjfsxmfctdgyaede7vaq6qh94n',
         'likenft19fnr8azkstpn2u8k6qc4hvk6qfhf3dly5d9gqsxrdt0c525w4gask7zmje',
         'likenft1uq0jhw2wng9u0d7fgqdhy6zwwp48ympwfcafcekasyd7aq3j6xpqsch6px',
         'likenft1t32cf8pnfqh7rsuz8gqa6y39mzc36yglehskp2t86g8ph07n0r2swezn2m',
         'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
       ],
-    };
+    ];
 
-export const DISABLED_CROSS_SELL_POPUP_LIST = [
-  'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny', // 坐監情緒學
-  'likenft1434x9tl07ysrjq9lvxv0thgn0zt2fxwhntefd249lawrznw08lrskr3jfp', // 來一場散步學
-  'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633', // 鯨魚之城
-  'likenft1xl38uu5q7fsxcr02msjtx7jstsfz8lu6ex8nq0pksfgxx3yszkws6ngwr9', // 基恩敬拜
-];
+export const CROSS_SELL_WHITE_LIST = IS_TESTNET
+  ? [
+      'likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8',
+      'likenft1akaqh0pd9wv8lfy3xyd9tnc4mk8vmy7ehzg7ssgczqxcq3hzc2vqugtvty',
+      'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
+    ]
+  : [
+      'likenft1wrskn9a683stkje3wdmcwuvpuqrp5eevjsnn9y4f55wlystzxausuhj3em',
+      'likenft14jz77ywl6hmfxlus6qrat36c2y7l5xkxhlzp76tdvk06mw69pjzsy5zu9l',
+      'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
+      'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
+    ];
 
 export const AFFILIATION_CHANNEL_LEGACY_STRINGS = {
   'Muddy Water': '@muddydirtywater',

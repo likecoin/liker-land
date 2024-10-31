@@ -2,8 +2,8 @@ import { mapGetters } from 'vuex';
 
 import {
   CROSS_SELL_PRODUCT_PROBABILITY,
-  CROSS_SELL_PRODUCT_IDS_MAP,
-  DISABLED_CROSS_SELL_POPUP_LIST,
+  RECOMMENDATION_GROUPS,
+  CROSS_SELL_WHITE_LIST,
   IS_TESTNET,
 } from '~/constant';
 
@@ -27,8 +27,20 @@ export default {
         : undefined;
     },
     crossSellProductIds() {
-      return (
-        CROSS_SELL_PRODUCT_IDS_MAP[this.collectionId || this.classId] || []
+      const matchedGroups = RECOMMENDATION_GROUPS.filter(
+        group =>
+          group.includes(this.classId) || group.includes(this.collectionId)
+      );
+
+      if (matchedGroups.length === 0) {
+        return [];
+      }
+
+      const randomGroup =
+        matchedGroups[Math.floor(Math.random() * matchedGroups.length)];
+
+      return randomGroup.filter(
+        id => id !== this.classId && id !== this.collectionId
       );
     },
     crossSellProductId() {
@@ -47,8 +59,8 @@ export default {
         ? true
         : Math.random() < CROSS_SELL_PRODUCT_PROBABILITY;
 
-      const isCrossSellBlocked = [this.classId, this.collectionId].some(id =>
-        DISABLED_CROSS_SELL_POPUP_LIST.includes(id)
+      const isCrossSellBlocked = !CROSS_SELL_WHITE_LIST.find(
+        id => id === this.classId || id === this.collectionId
       );
 
       return shouldAttemptCrossSell && !isCrossSellBlocked;
