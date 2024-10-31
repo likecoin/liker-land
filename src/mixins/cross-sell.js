@@ -59,9 +59,8 @@ export default {
         ? true
         : Math.random() < CROSS_SELL_PRODUCT_PROBABILITY;
 
-      const isCrossSellBlocked = !(
-        CROSS_SELL_WHITE_LIST.includes(this.classId) ||
-        CROSS_SELL_WHITE_LIST.includes(this.collectionId)
+      const isCrossSellBlocked = !CROSS_SELL_WHITE_LIST.find(
+        id => id === this.classId || id === this.collectionId
       );
 
       return shouldAttemptCrossSell && !isCrossSellBlocked;
