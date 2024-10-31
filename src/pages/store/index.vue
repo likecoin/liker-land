@@ -666,13 +666,6 @@ export default {
           property: 'og:description',
           content: description,
         },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: `${EXTERNAL_HOST}/images/og/${
-            this.$i18n.locale === 'zh-Hant' ? 'book-zh.png' : 'book.png'
-          }`,
-        },
       ],
       script: [
         {

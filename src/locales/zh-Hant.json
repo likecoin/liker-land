@@ -363,8 +363,8 @@
   "index_category_button_printed_book": "紙本書",
   "index_faq_list": [
     {
-      "a": "每一本電子書都是獨一無二的，並由作者親自簽發。NFT 書是可交易的電子書，您可以在 Liker Land 書城的市場上將其轉讓給其他人。這為您提供了資產轉換為現金的機會，或者與其他讀者進行交流和交易。",
-      "q": "NFT 電子書有什麼特別？"
+      "a": "每一本電子書都是獨一無二的，並由作者親自簽發。Liker Land 的電子書是可交易的，您可以在 Liker Land 書城的市場上將其轉讓給其他人。這為您提供了資產轉換為現金的機會，或者與其他讀者進行交流和交易。",
+      "q": "Liker Land 的電子書有什麼特別？"
     },
     {
       "a": "成功購買電子書後，你會收到確認電郵。簡單幾步註冊帳户，作者便會把書發送到你的電子書櫃書櫃。你將獲得電子書的擁有權證明和閱讀權限。",
@@ -382,7 +382,7 @@
   "index_intro_description": "融合科技與人文。推動區塊鏈出版，讓好故事繼續流傳。{likerLand} 連接新世界和舊產業，重塑閱讀和傳播文化。",
   "index_intro_description_liker_land": "Liker Land",
   "index_intro_more_button": "了解更多",
-  "index_intro_title": "線上書店 x 數位出版",
+  "index_intro_title": "電子書店 x 數位出版",
   "index_page_all_stories_matter_blog_content": "Liker Land Writing NFT 小插件助你在保持內容開放的同時，提供付費訂閱服務或收費內容項目，支援 WordPress 或 Substack 等寫作平台。",
   "index_page_all_stories_matter_blog_heading": "部落格",
   "index_page_all_stories_matter_cta_button": "發佈故事",
@@ -451,7 +451,6 @@
   "listing_page_cant_find_books_button": "告訴我們",
   "listing_page_cant_find_books_prefilled_message": "我想找",
   "listing_page_clear_filter": "清除篩選",
-
   "listing_page_filter": "篩選",
   "listing_page_filter_drm_free_label": "不設 DRM",
   "listing_page_filter_language_label": "語言：{language}",
@@ -473,7 +472,6 @@
   "listing_page_header_sort_recommend": "推薦",
   "listing_page_header_total_books": "共 {num} 本書",
   "listing_page_no_result": "沒有找到相關書籍。",
-
   "listing_page_QA_content": "電子書和紙本書有什麼分別?",
   "listing_page_QA_label": "電子書和紙本書有什麼分別?",
   "listing_page_QA_title": "常見問題",
@@ -488,7 +486,6 @@
   "listing_page_select_language_zh": "繁體中文",
   "listing_page_sorter": "排序",
   "listing_page_tag_not_found": "找不到此標籤",
-
   "Locale": {
     "en": "English",
     "zh-Hant": "繁體中文"
@@ -807,7 +804,7 @@
   "notification_login_in_button": "驗證",
   "notification_view_more_button": "顯示更多",
   "og_description": "融合科技與人文。推動區塊鏈出版，讓好故事繼續流傳。Liker Land 連接新世界和舊產業，重塑閱讀和傳播文化。",
-  "og_title": "首頁 - 線上書店 x 數位出版 - Liker Land",
+  "og_title": "首頁 - 電子書店 x 數位出版 - Liker Land",
   "ok": "OK",
   "order_menu_by": "按{order}",
   "order_menu_collected": "擁有",
@@ -984,13 +981,8 @@
   "snackbar_success_transfer": "已完成發送作品",
   "stepper": "步驟 {step} / {totalStep}",
   "store_articles_button": "瀏覽文章",
-  "store_books_page_description": "Liker Land 電子書店是電子書及文章愛好者的廣場，提供中文、英文的 EPUB 電子書，讓讀者擁有不一樣的閱讀體驗。Liker Land 推動分散式出版，實現出版自主，實現創作自由。",
-  "store_books_page_header": "所有書目",
-  "store_books_page_tab_featured": "精選",
-  "store_books_page_tab_free": "免費",
-  "store_books_page_tab_paid": "付費",
-  "store_books_page_title": "熱賣電子書 - Liker Land 電子書店",
-  "store_index_page_title": "Liker Land 電子書店",
+  "store_books_page_description": "融合科技與人文。推動區塊鏈出版，讓好故事繼續流傳。Liker Land 連接新世界和舊產業，重塑閱讀和傳播文化。",
+  "store_index_page_title": "書目 - 電子書店 x 數位出版 - Liker Land",
   "store_nft_book_more_button": "更多書目",
   "substack_button_loading": "請稍候...",
   "substack_button_submit": "訂閱電子報",
