@@ -165,7 +165,8 @@
             >
               <ButtonV2
                 :preset="
-                  tag.id === selectedTag || (!selectedTag && tag.id === 'all')
+                  tag.id === selectedTagId ||
+                  (!selectedTagId && tag.id === 'all')
                     ? 'secondary'
                     : 'outline'
                 "
@@ -241,6 +242,12 @@
           ]"
           v-text="selectedTagTitle"
         />
+
+        <p
+          v-if="selectedTagDescription"
+          class="mt-[8px] px-[16px] laptop:px-0 text-gray-4a text-[14px]"
+          v-text="selectedTagDescription"
+        />
       </header>
 
       <!-- Body -->
@@ -291,7 +298,7 @@
             ]"
           >
             <li
-              v-if="!searchQuery && !selectedTag"
+              v-if="!searchQuery && !selectedTagId"
               :class="['row-start-4', 'sm:row-start-3', 'col-span-full']"
             >
               <ListingPageBooxBanner />
@@ -593,11 +600,12 @@ export default {
   },
   head() {
     let title = this.$t('store_index_page_title');
-    if (this.selectedTag) {
+    if (this.selectedTagId) {
       title = `${this.selectedTagTitle} - ${title}`;
     }
 
-    const description = this.$t('store_books_page_description');
+    const description =
+      this.selectedTagDescription || this.$t('store_books_page_description');
     const link = [
       {
         hid: 'i18n-can',
@@ -822,8 +830,8 @@ export default {
     },
 
     bookstoreItems() {
-      const items = this.selectedTag
-        ? this.nftGetBookstoreCMSProductsByTagId(this.selectedTag) || []
+      const items = this.selectedTagId
+        ? this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId) || []
         : [...this.bookstoreCMSProducts, ...this.nftBookstoreLatestItems];
       const uniqueIds = new Set();
       const dedupedItems = [];
@@ -944,6 +952,14 @@ export default {
       },
     },
 
+    localizedBookstoreCMSTags() {
+      const isChinese = this.$i18n.locale === 'zh-Hant';
+      return this.bookstoreCMSTags.map(tag => ({
+        ...tag,
+        name: isChinese ? tag.nameZh : tag.nameEn,
+        description: isChinese ? tag.descriptionZh : tag.descriptionEn,
+      }));
+    },
     bookstoreTagButtons() {
       return [
         {
@@ -956,11 +972,11 @@ export default {
             },
           }),
         },
-        ...this.bookstoreCMSTags
+        ...this.localizedBookstoreCMSTags
           .filter(tag => tag.isPublic)
           .map(tag => ({
             id: tag.id,
-            name: this.$i18n.locale === 'zh-Hant' ? tag.name : tag.nameEn,
+            name: tag.name,
             route: this.localeLocation({
               query: {
                 ...this.$route.query,
@@ -972,18 +988,25 @@ export default {
       ];
     },
 
-    selectedTag() {
+    selectedTagId() {
       return this.$route.query.tag || '';
     },
+    selectedTag() {
+      return this.localizedBookstoreCMSTags.find(
+        tag => tag.id === this.selectedTagId
+      );
+    },
     selectedTagTitle() {
-      return this.bookstoreCMSTags.find(tag => tag.id === this.selectedTag)
-        ?.name;
+      return this.selectedTag?.name;
+    },
+    selectedTagDescription() {
+      return this.selectedTag?.description;
     },
 
     shouldShowProgressIndicator() {
       return (
         this.isSearching ||
-        this.nftGetBookstoreCMSProductsByTagIdIsFetching(this.selectedTag)
+        this.nftGetBookstoreCMSProductsByTagIdIsFetching(this.selectedTagId)
       );
     },
   },
