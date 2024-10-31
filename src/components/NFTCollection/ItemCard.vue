@@ -42,8 +42,9 @@
             @show.once="fetchInfo"
           />
         </client-only>
-        <div class="flex flex-col items-center shrink-0">
+        <div class="flex flex-col items-center shrink-0 w-full max-w-[200px]">
           <NFTCover
+            v-if="videoSrc"
             :class="['mt-[-48px]', coverClasses]"
             :is-nft-book="true"
             :src="imageSrc || collectionImageUrl"
@@ -52,6 +53,13 @@
             :size="200"
             :is-collection="true"
             :alt="collectionName"
+          />
+          <NFTBookCover
+            v-else
+            :class="['mt-[-48px]', coverClasses]"
+            :src="imageSrc || collectionImageUrl"
+            :alt="collectionName"
+            :resize="200"
           />
           <Label
             class="mt-[24px] !text-[12px] text-medium-gray"
