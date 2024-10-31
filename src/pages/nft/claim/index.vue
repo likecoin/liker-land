@@ -95,10 +95,20 @@
                   {{ iscnWorkAuthor }}
                 </p>
               </div>
-              <div v-if="creatorDisplayName" class="flex flex-col w-full">
+              <div v-if="iscnWorkPublisher" class="flex flex-col w-full">
                 <Label
                   preset="h6"
                   :text="$t('identity_type_publisher')"
+                  class=" text-medium-gray font-[500]"
+                />
+                <p class="text-[16px] font-[500] w-full break-words">
+                  {{ iscnWorkPublisher }}
+                </p>
+              </div>
+              <div v-if="creatorDisplayName" class="flex flex-col w-full">
+                <Label
+                  preset="h6"
+                  :text="iscnWorkPublisher ? $t('identity_type_distributor') : $t('identity_type_publisher')"
                   class=" text-medium-gray font-[500]"
                 />
                 <p class="text-[16px] font-[500] w-full break-words">
