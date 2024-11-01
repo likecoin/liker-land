@@ -181,6 +181,9 @@ export default {
     iscnWorkAuthor() {
       return this.iscnData?.contentMetadata?.author?.trim();
     },
+    iscnWorkPublisher() {
+      return this.iscnData?.contentMetadata?.publisher?.trim();
+    },
     iscnURL() {
       return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },
