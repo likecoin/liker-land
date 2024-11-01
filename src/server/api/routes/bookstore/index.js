@@ -13,8 +13,10 @@ const router = Router();
 
 router.get('/bookstore/tags', async (req, res, next) => {
   try {
+    const { limit: pageSize, offset } = req.query;
     const result = await fetchAirtableCMSTags({
-      pageSize: 100,
+      pageSize,
+      offset,
     });
 
     if (!IS_TESTNET) {
