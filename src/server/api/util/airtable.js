@@ -89,19 +89,21 @@ async function fetchAirtableCMSTags({ pageSize = 100, offset }) {
 
   const normalizedRecords = results.data.records.map(({ fields }) => {
     const id = fields.ID;
-    const name = fields.Name;
+    const nameZh = fields.Name;
     const nameEn = fields['Name (Eng)'];
-    const description = fields.Description;
+    const descriptionZh = fields.Description;
     const descriptionEn = fields['Description (Eng)'];
     const isPublic = fields.Public;
     return {
       id,
-      name,
-      nameZh: name,
-      nameEn,
-      description,
-      descriptionZh: description,
-      descriptionEn,
+      name: {
+        zh: nameZh,
+        en: nameEn,
+      },
+      description: {
+        zh: descriptionZh,
+        en: descriptionEn,
+      },
       isPublic,
     };
   });

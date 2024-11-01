@@ -953,11 +953,11 @@ export default {
     },
 
     localizedBookstoreCMSTags() {
-      const isChinese = this.$i18n.locale === 'zh-Hant';
+      const lang = this.$i18n.locale === 'zh-Hant' ? 'zh' : 'en';
       return this.bookstoreCMSTags.map(tag => ({
         ...tag,
-        name: isChinese ? tag.nameZh : tag.nameEn,
-        description: isChinese ? tag.descriptionZh : tag.descriptionEn,
+        name: tag.name[lang],
+        description: tag.description[lang],
       }));
     },
     bookstoreTagButtons() {
