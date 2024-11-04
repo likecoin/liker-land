@@ -3,7 +3,7 @@
     <NFTBookSpecTableLabel
       :text="$t('nft_details_page_label_access_methods')"
     />
-    <NFTBookSpecTableValue :label="label" :is-campaign="isCampaign" />
+    <NFTBookSpecTableValue :text="value" :is-campaign="isCampaign" />
   </component>
 </template>
 
@@ -24,7 +24,7 @@ export default {
     },
   },
   computed: {
-    label() {
+    value() {
       return this.isDownloadable
         ? this.$t('nft_details_page_label_access_methods_downloadable')
         : this.$t('nft_details_page_label_access_methods_web_only');

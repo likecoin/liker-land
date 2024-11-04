@@ -150,7 +150,7 @@
             >
               <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
               <NFTBookSpecTableValue
-                :label="iscnWorkAuthor"
+                :text="iscnWorkAuthor"
                 :is-campaign="preset === 'campaign'"
               />
             </li>
@@ -160,7 +160,7 @@
             >
               <NFTBookSpecTableLabel :text="$t('identity_type_publisher')" />
               <NFTBookSpecTableValue
-                :label="iscnWorkPublisher"
+                :text="iscnWorkPublisher"
                 :is-campaign="preset === 'campaign'"
               />
             </li>

@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
     <NFTBookSpecTableLabel :text="$t('nft_details_page_label_content_types')" />
-    <NFTBookSpecTableValue :label="label" :is-campaign="isCampaign" />
+    <NFTBookSpecTableValue :text="value" :is-campaign="isCampaign" />
   </component>
 </template>
 <script>
@@ -21,7 +21,7 @@ export default {
     },
   },
   computed: {
-    label() {
+    value() {
       return this.contentTypes
         .map(type => this.getContentType(type))
         .join(' + ');
