@@ -149,8 +149,8 @@
               class="flex flex-col justify-center min-w-0"
             >
               <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
-              <NFTBookSpecTableLabel
-                :text="iscnWorkAuthor"
+              <NFTBookSpecTableValue
+                :label="iscnWorkAuthor"
                 :is-campaign="preset === 'campaign'"
               />
             </li>
@@ -159,8 +159,8 @@
               class="flex flex-col justify-center min-w-0"
             >
               <NFTBookSpecTableLabel :text="$t('identity_type_publisher')" />
-              <NFTBookSpecTableLabel
-                :text="iscnWorkPublisher"
+              <NFTBookSpecTableValue
+                :label="iscnWorkPublisher"
                 :is-campaign="preset === 'campaign'"
               />
             </li>
