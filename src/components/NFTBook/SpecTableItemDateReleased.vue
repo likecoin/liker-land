@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
     <NFTBookSpecTableLabel :text="label" />
-    <NFTBookSpecTableValue :label="dateValue" :is-campaign="isCampaign" />
+    <NFTBookSpecTableValue :text="dateValue" :is-campaign="isCampaign" />
   </component>
 </template>
 <script>
