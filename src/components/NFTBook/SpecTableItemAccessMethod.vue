@@ -3,7 +3,7 @@
     <NFTBookSpecTableLabel
       :text="$t('nft_details_page_label_access_methods')"
     />
-    <NFTBookSpecTableValue :text="value" :is-campaign="isCampaign" />
+    <NFTBookSpecTableValue :text="value" :preset="preset" />
   </component>
 </template>
 
@@ -18,9 +18,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    isCampaign: {
-      type: Boolean,
-      default: false,
+    preset: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

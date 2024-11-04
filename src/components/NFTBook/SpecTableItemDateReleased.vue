@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
     <NFTBookSpecTableLabel :text="label" />
-    <NFTBookSpecTableValue :text="dateValue" :is-campaign="isCampaign" />
+    <NFTBookSpecTableValue :text="dateValue" :preset="preset" />
   </component>
 </template>
 <script>
@@ -19,9 +19,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    isCampaign: {
-      type: Boolean,
-      default: false,
+    preset: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

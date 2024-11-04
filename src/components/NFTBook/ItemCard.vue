@@ -149,10 +149,7 @@
               class="flex flex-col justify-center min-w-0"
             >
               <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
-              <NFTBookSpecTableValue
-                :text="iscnWorkAuthor"
-                :is-campaign="preset === 'campaign'"
-              />
+              <NFTBookSpecTableValue :text="iscnWorkAuthor" :preset="preset" />
             </li>
             <li
               v-if="iscnWorkPublisher"
@@ -161,7 +158,7 @@
               <NFTBookSpecTableLabel :text="$t('identity_type_publisher')" />
               <NFTBookSpecTableValue
                 :text="iscnWorkPublisher"
-                :is-campaign="preset === 'campaign'"
+                :preset="preset"
               />
             </li>
             <client-only>
@@ -216,15 +213,16 @@
             <NFTBookSpecTableItemDateReleased
               :is-published-date="!!iscnData?.contentMetadata?.datePublished"
               :date="releasedDate"
+              :preset="preset"
               :is-campaign="preset === 'campaign'"
             />
             <NFTBookSpecTableItemAvailableFormat
-              :is-campaign="preset === 'campaign'"
+              :preset="preset"
               :content-types="contentTypes"
             />
             <NFTBookSpecTableItemAccessMethod
-              :is-campaign="preset === 'campaign'"
               :is-downloadable="!nftIsDownloadHidden"
+              :preset="preset"
             />
           </NFTBookSpecTable>
           <div class="flex flex-col items-center w-full laptop:hidden">
@@ -272,7 +270,7 @@ import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
 
-const PRESET_TYPE = {
+export const PRESET_TYPE = {
   SHELF: 'shelf', // (Landing page) shelf style
   CAMPAIGN: 'campaign', // (Landing page) like-green bg
   COMPACT: 'compact', // (Landing page) compact style
