@@ -5,7 +5,7 @@
       class="w-full h-full"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 210 297"
-      :style="`color: ${placeholderColor}`"
+      :style="`max-width: ${resize}; color: ${placeholderColor}`"
     >
       <rect width="210" height="297" fill="currentColor" opacity="0.2" />
       <path
@@ -17,7 +17,7 @@
     <img
       v-if="!isError"
       ref="img"
-      :class="coverClass"
+      :class="[{ hidden: !isLoaded }, coverClass]"
       :src="resizedSrc"
       :alt="isLoaded ? alt : ''"
       @load="handleMediaLoad"
