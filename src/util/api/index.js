@@ -318,10 +318,17 @@ export const getNFTBookPaymentStatusEndpoint = ({
   classId,
   collectionId,
   paymentId,
-}) =>
-  collectionId
-    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/status/${paymentId}`
-    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/status/${paymentId}`;
+  token,
+}) => {
+  const qsPayload = { token };
+  return collectionId
+    ? `${LIKECOIN_API_BASE}/likernft/book/collection/purchase/${collectionId}/status/${paymentId}?${querystring.stringify(
+        qsPayload
+      )}`
+    : `${LIKECOIN_API_BASE}/likernft/book/purchase/${classId}/status/${paymentId}?${querystring.stringify(
+        qsPayload
+      )}`;
+};
 
 export const getNFTBookClaimEndpoint = ({
   classId,
@@ -339,8 +346,12 @@ export const getNFTBookClaimEndpoint = ({
       )}`;
 };
 
-export const getNFTBookCartStatusEndpoint = ({ cartId }) =>
-  `${LIKECOIN_API_BASE}/likernft/book/purchase/cart/${cartId}/status`;
+export const getNFTBookCartStatusEndpoint = ({ cartId, token }) => {
+  const qsPayload = { token };
+  return `${LIKECOIN_API_BASE}/likernft/book/purchase/cart/${cartId}/status?${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 export const getNFTBookCartClaimEndpoint = ({ cartId, token }) => {
   const qsPayload = { token };
