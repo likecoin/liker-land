@@ -91,7 +91,7 @@
       </svg>
 
       <NFTBookSignatureBannerMockup
-        class="relative desktop:mt-[-30px] desktop:max-w-[420px] shrink-0"
+        class="relative desktop:mt-[-30px] desktop:max-w-[40%] shrink-0"
       />
 
       <div
@@ -129,6 +129,8 @@
         </i18n>
 
         <p class="mt-[16px]" v-text="$t('nft_book_signature_banner_content')" />
+
+        <slot />
       </div>
     </div>
     <client-only>

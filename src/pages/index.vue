@@ -493,161 +493,126 @@
     <div class="overflow-hidden">
       <section
         id="features"
-        :class="[paddingClass, 'pb-[7.5rem]', 'bg-like-cyan-pale']"
+        :class="[
+          'relative',
+          paddingClass,
+          'pb-[64px] laptop:pb-[75px]',
+          'bg-like-green',
+        ]"
       >
-        <div class="w-full laptop:max-w-[1920px] mx-auto">
+        <svg
+          class="hidden desktop:block absolute top-0 left-0 pointer-events-none min-1280:scale-125 origin-top-left"
+          width="334"
+          height="271"
+          viewBox="0 0 334 271"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            opacity="0.3"
+            d="M332 220.338C318.913 239.425 303.695 270.969 276.99 268.902C267.121 268.07 259.225 260.099 257.669 250.487C255.505 237.23 260.152 225.102 263.999 212.282C269.093 196.638 275.593 181.473 281.977 166.255C288.829 148.575 299.433 129.308 295.596 109.934C291.675 91.0393 270.009 85.4871 255.026 95.1102C229.513 116.658 195.529 165.232 173.043 188.059C166.052 194.581 154.489 193.952 148.777 185.459C143.769 177.764 144.419 167.523 146.262 159.136C151.751 136.373 164.454 100.513 165.636 78.4217C167.064 63.257 155.246 54.5824 141.509 53.1117C114.292 50.9484 81.8952 80.7022 63.4057 98.6909C48.9337 113.504 36.0816 130.214 24.2525 147.734C2.23555 181.91 -11.8421 214.317 5.80558 233.681C12.8924 241.503 25.8937 246.767 36.9981 244.476C58.6208 241.013 68.8087 220.818 72.5386 200.794C76.3004 183.082 76.8332 165.157 73.3911 147.371C62.9261 91.1992 16.9526 74.8197 -17 125.13"
+            stroke="#FBF9DD"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+        </svg>
+
+        <svg
+          class="absolute top-0 right-0 pointer-events-none min-1280:scale-125 origin-top-right"
+          width="276"
+          height="222"
+          viewBox="0 0 276 222"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            opacity="0.3"
+            d="M105.835 -49C154.393 23.3852 102.416 38.554 35.24 32.1373C-5.14743 28.2783 -9.03299 77.5435 25.2375 95.3923C66.9683 120.814 112.784 93.3572 155.137 85.9174C184.745 85.1278 198.155 115.298 176.208 135.505C158.556 150.763 142.259 173.46 154.438 197.17C171.223 231.867 217.25 223.415 237.521 195.846C256.661 177.897 267.94 121.704 296.615 128.855C310.548 132.336 309.171 146.826 313.501 157.624C323.448 184.492 362.503 189.596 379 166.176"
+            stroke="#FBF9DD"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+        </svg>
+
+        <div class="relative w-full laptop:max-w-[1600px] mx-auto">
           <h2
             :class="[
-              'py-[3rem] desktop:py-[5.5rem]',
+              'pt-[48px] desktop:pt-[80px]',
 
+              'text-white',
               'text-[2rem] desktop:text-[2.5rem]',
               'text-center',
               'font-serif',
             ]"
-          >
-            {{ $t('index_features_title') }}
-          </h2>
+            v-text="$t('index_features_title')"
+          />
 
-          <ul :class="['grid desktop:grid-cols-3 gap-[4rem]']">
-            <li>
-              <a
-                class="flex flex-col items-center"
-                :href="$t('about_nft_book_section_features_gifting_link')"
-                target="_blank"
-                rel="noopener"
-                @click="handleClickFeatureSupportAuthor"
+          <NFTBookSignatureBanner
+            class="mt-[32px] desktop:mt-[48px]"
+            tag="div"
+            :name="signatureBannerNames"
+          >
+            <div class="flex items-center gap-[16px] mt-[32px]">
+              <img
+                class="h-[35px] shrink-0"
+                src="~assets/images/index/v2/creators-with-autograph.png"
+              />
+              <p
+                class="text-[14px]"
+                v-text="$t('landing_creators_with_autograph')"
+              />
+            </div>
+
+            <div class="flex mt-[32px]">
+              <ButtonV2
+                :text="$t('index_features_signature_button')"
+                :to="
+                  localeLocation({
+                    name: 'store',
+                    query: {
+                      tag: 'autograph',
+                      utm_source: 'landing_page_signature_banner_cta',
+                    },
+                  })
+                "
+                @click="handleSignatureBannerCTA"
               >
-                <img
-                  class="w-[100px] h-[100px]"
-                  loading="lazy"
-                  src="~assets/images/about/nft-book/icons/author.png"
-                />
-                <h4 class="font-600 mt-[2rem]">
-                  {{ $t('about_nft_book_section_features_gifting_title') }}
-                </h4>
-                <p class="mt-[0.5rem] text-center">
-                  {{
-                    $t('about_nft_book_section_features_gifting_description')
-                  }}
-                </p>
-              </a>
-            </li>
-            <li>
-              <a
-                class="flex flex-col items-center"
-                :href="$t('about_nft_book_section_features_ownership_link')"
-                target="_blank"
-                rel="noopener"
-                @click="handleClickFeatureOwnership"
-              >
-                <img
-                  class="w-[100px] h-[100px]"
-                  loading="lazy"
-                  src="~assets/images/about/nft-book/icons/ownership.png"
-                />
-                <h4 class="font-600 mt-[2rem]">
-                  {{ $t('about_nft_book_section_features_ownership_title') }}
-                </h4>
-                <i18n
-                  class="mt-[0.5rem] text-center"
-                  path="about_nft_book_section_features_ownership_description"
-                  tag="p"
-                >
-                  <span class="whitespace-nowrap" place="replace"
-                    >{{
-                      $t(
-                        'about_nft_book_section_features_ownership_description_replace'
-                      )
-                    }}
-                  </span>
-                </i18n>
-              </a>
-            </li>
-            <li>
-              <a
-                class="flex flex-col items-center"
-                :href="$t('about_nft_book_section_features_social_link')"
-                target="_blank"
-                rel="noopener"
-                @click="handleClickFeatureCommunity"
-              >
-                <img
-                  class="w-[100px] h-[100px]"
-                  loading="lazy"
-                  src="~assets/images/about/nft-book/icons/social.png"
-                />
-                <h4 class="font-600 mt-[2rem]">
-                  {{ $t('about_nft_book_section_features_social_title') }}
-                </h4>
-                <p class="mt-[0.5rem] text-center">
-                  {{ $t('about_nft_book_section_features_social_description') }}
-                </p>
-              </a>
+                <template #append>
+                  <IconArrowRight />
+                </template>
+              </ButtonV2>
+            </div>
+          </NFTBookSignatureBanner>
+
+          <ul
+            :class="[
+              'grid',
+              'laptop:grid-cols-3',
+              'items-stretch',
+              'gap-[64px] laptop:gap-[20px]',
+
+              'mt-[48px] laptop:mt-[20px]',
+              'px-[16px] laptop:px-0',
+            ]"
+          >
+            <li v-for="item in featureItems" :key="item.title">
+              <LandingPageFeatureItem
+                :title="item.title"
+                :description="item.description"
+                :href="item.href"
+                :icon-src="item.iconSrc"
+                :icon-src-white="item.iconSrcWhite"
+                @click="item.onClick"
+              />
             </li>
           </ul>
         </div>
       </section>
 
-      <section id="categories" class="bg-gradient-to-b from-like-cyan-pale">
-        <ul
-          :class="[
-            'flex',
-            'justify-center',
-            'items-center',
-            'gap-[2.25rem]',
-            paddingClass,
-          ]"
-        >
-          <li
-            class="w-full max-w-[430px] phone:max-w-[80%] desktop:max-w-[600px]"
-          >
-            <NuxtLink
-              :class="[
-                'flex',
-                'justify-between',
-                'items-center',
-                'gap-[16px]',
-
-                'text-like-green',
-                'font-serif',
-                'rounded-[12px]',
-
-                'bg-gradient-to-b',
-                'from-[#F3EFEB]',
-                'to-[#ECE9E2]',
-
-                'border-[1px]',
-                'border-[#CFC6BC]',
-
-                'group',
-              ]"
-              :to="localeLocation({ name: 'store' })"
-              @click.native="handleClickCategoryEbook"
-            >
-              <div
-                class="shrink-0 p-[1rem] laptop:p-[2rem] pr-0 laptop:pr-0 text-left"
-              >
-                <div class="opacity-50 font-[600]">
-                  {{ $t('index_category_button_browse_label') }}
-                </div>
-                <div class="text-[1.8rem] laptop:text-[2.25rem]">
-                  {{ $t('index_category_button_ebook') }}
-                </div>
-              </div>
-
-              <div>
-                <img
-                  class="origin-center scale-[1.2] group-hover:scale-[1.3] transition-transform max-h-[110px] laptop:max-h-[180px]"
-                  loading="lazy"
-                  src="~assets/images/index/v2/category-ebook.png"
-                />
-              </div>
-            </NuxtLink>
-          </li>
-        </ul>
-      </section>
-
-      <section id="faq" class="pt-[12rem] pb-[3rem] font-serif">
+      <section
+        id="faq"
+        :class="[paddingClass, 'pt-[12rem]', 'pb-[3rem]', 'font-serif']"
+      >
         <div
           :class="[
             'laptop:grid',
@@ -656,7 +621,6 @@
             'w-full',
             'laptop:max-w-[1600px]',
             'mx-auto',
-            paddingClass,
           ]"
         >
           <div class="flex flex-col items-start justify-start col-span-2">
@@ -784,6 +748,23 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import bookstoreMixin from '~/mixins/bookstore';
 
 import { logTrackerEvent } from '~/util/EventLogger';
+import { fisherShuffle } from '~/util/misc';
+
+const SIGNATURE_BANNER_NAMES = [
+  '董啟章',
+  '陳健民',
+  '高重建',
+  '邵家臻',
+  '區家麟',
+];
+
+const getFeatureIconSrc = require.context(
+  '~/assets/images/about/nft-book/icons'
+);
+
+function getFeatureIcon(iconName, { isWhite = false } = {}) {
+  return getFeatureIconSrc(`./${iconName}${isWhite ? '-white' : ''}.png`);
+}
 
 export default {
   name: 'IndexV2',
@@ -908,6 +889,44 @@ export default {
     bookstoreItemsInGrid() {
       return this.bookstoreItems.slice(1, 10);
     },
+    signatureBannerNames() {
+      return fisherShuffle([...SIGNATURE_BANNER_NAMES]);
+    },
+    featureItems() {
+      return [
+        {
+          title: this.$t('about_nft_book_section_features_gifting_title'),
+          description: this.$t(
+            'about_nft_book_section_features_gifting_description'
+          ),
+          href: this.$t('about_nft_book_section_features_gifting_link'),
+          iconName: 'author',
+          onClick: this.handleClickFeatureSupportAuthor,
+        },
+        {
+          title: this.$t('about_nft_book_section_features_ownership_title'),
+          description: this.$t(
+            'about_nft_book_section_features_ownership_description'
+          ),
+          href: this.$t('about_nft_book_section_features_ownership_link'),
+          iconName: 'ownership',
+          onClick: this.handleClickFeatureOwnership,
+        },
+        {
+          title: this.$t('about_nft_book_section_features_social_title'),
+          description: this.$t(
+            'about_nft_book_section_features_social_description'
+          ),
+          href: this.$t('about_nft_book_section_features_social_link'),
+          iconName: 'social',
+          onClick: this.handleClickFeatureCommunity,
+        },
+      ].map(({ iconName, ...item }) => ({
+        ...item,
+        iconSrc: getFeatureIcon(iconName),
+        iconSrcWhite: getFeatureIcon(iconName, { isWhite: true }),
+      }));
+    },
     faqs() {
       return this.$t('index_faq_list').map(({ q: question, a: answer }) => ({
         question,
@@ -986,7 +1005,7 @@ export default {
     handleClickFeatureCommunity() {
       logTrackerEvent(this, 'IndexPage', 'IndexClickFeatureCommunity', '', 1);
     },
-    handleClickCategoryEbook() {
+    handleSignatureBannerCTA() {
       logTrackerEvent(this, 'IndexPage', 'IndexClickCategoryEbook', '', 1);
     },
     handleClickSocialFollow() {
