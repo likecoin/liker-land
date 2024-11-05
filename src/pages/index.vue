@@ -534,7 +534,7 @@
           />
         </svg>
 
-        <div class="relative w-full laptop:max-w-[1920px] mx-auto">
+        <div class="relative w-full laptop:max-w-[1600px] mx-auto">
           <h2
             :class="[
               'pt-[48px] desktop:pt-[80px]',
@@ -609,7 +609,10 @@
         </div>
       </section>
 
-      <section id="faq" class="pt-[12rem] pb-[3rem] font-serif">
+      <section
+        id="faq"
+        :class="[paddingClass, 'pt-[12rem]', 'pb-[3rem]', 'font-serif']"
+      >
         <div
           :class="[
             'laptop:grid',
@@ -618,7 +621,6 @@
             'w-full',
             'laptop:max-w-[1600px]',
             'mx-auto',
-            paddingClass,
           ]"
         >
           <div class="flex flex-col items-start justify-start col-span-2">
