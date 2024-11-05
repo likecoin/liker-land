@@ -739,6 +739,10 @@
         />
       </section>
     </div>
+
+    <PartnersSection
+      :class="[paddingClass, 'max-w-[1600px]', 'w-full', 'mx-auto']"
+    />
   </main>
 </template>
 
