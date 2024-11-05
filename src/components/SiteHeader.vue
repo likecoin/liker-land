@@ -23,7 +23,12 @@
       </NuxtLink>
 
       <ButtonV2
-        :to="localeLocation({ name: 'store' })"
+        :to="
+          localeLocation({
+            name: 'store',
+            ll_medium: 'header_store_button',
+          })
+        "
         preset="tertiary"
         size="mini"
         :text="$t('header_button_try_collect')"

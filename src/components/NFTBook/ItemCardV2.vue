@@ -67,6 +67,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    medium: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -74,6 +78,9 @@ export default {
     };
   },
   computed: {
+    linkMedium() {
+      return this.medium || undefined;
+    },
     classId() {
       return this.itemId.startsWith('likenft1') ? this.itemId : '';
     },

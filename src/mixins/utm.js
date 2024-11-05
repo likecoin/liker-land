@@ -11,12 +11,15 @@ export default {
     return {
       utmCampaign: this.$route.query.utm_campaign,
       utmSource: this.$route.query.utm_source,
-      utmMedium: this.$route.query.utm_medium,
+      utmMedium: this.$route.query.utm_medium || this.linkMedium,
       documentReferrer: '',
       fbClickId: this.formattedFbcQs,
     };
   },
   computed: {
+    linkMedium() {
+      return this.$route.query.ll_medium;
+    },
     gadClickId() {
       return this.$route.query.gclid;
     },
@@ -33,6 +36,8 @@ export default {
     this.restoreUTMFromSessionStorage();
     this.storeUTMToSessionStorage();
     this.getFbClickIdFromCookie();
+    // TODO: split linkMedium into a new separate field
+    this.utmMedium = this.utmMedium || this.linkMedium;
   },
   methods: {
     setUTMProps({ utmCampaign, utmSource, utmMedium }) {
