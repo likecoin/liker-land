@@ -65,7 +65,14 @@
             <div class="grid grid-flow-row gap-y-[16px]">
               <NuxtLink
                 class="hover:underline"
-                :to="localeLocation({ name: 'store' })"
+                :to="
+                  localeLocation({
+                    name: 'store',
+                    query: {
+                      ll_medium: 'footer',
+                    },
+                  })
+                "
                 @click.native="handleClickButton('store_books')"
               >
                 {{ $t('footer_nav_store_books') }}

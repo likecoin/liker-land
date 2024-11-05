@@ -400,6 +400,7 @@
               :cover-resize="300"
               :is-link-disabled="stickyBookstoreItem.isMultiple"
               :is-lazy-loaded="false"
+              medium="index_sticky_item"
               @click-cover="handleClickItem($event, stickyBookstoreItem)"
             />
           </div>
@@ -421,6 +422,7 @@
                 class-cover-frame-aspect-ratio="min-h-[360px] laptop:min-h-[0] aspect-[4/5]"
                 :cover-resize="300"
                 :is-link-disabled="item.isMultiple"
+                medium="index_grid_item"
                 @click-cover="handleClickItem($event, item)"
               />
             </li>
@@ -452,6 +454,7 @@
           <NFTBookItemCardV2
             :item-id="item.classId"
             class-cover-frame-aspect-ratio="aspect-[4/5]"
+            medium="index_grid_item_swiper"
             @click-cover="handleClickItem($event, item)"
           />
         </SwiperSlide>
@@ -571,7 +574,9 @@
                     name: 'store',
                     query: {
                       tag: 'autograph',
-                      utm_source: 'landing_page_signature_banner_cta',
+                      utm_medium:
+                        $route.query.utm_medium ||
+                        'landing_page_signature_banner_cta',
                     },
                   })
                 "

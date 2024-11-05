@@ -72,11 +72,17 @@ export default {
             params: {
               collectionId: this.collectionId,
             },
+            query: {
+              ll_medium: this.linkMedium,
+            },
           })
         : this.localeLocation({
             name: 'nft-class-classId',
             params: {
               classId: this.classId,
+            },
+            query: {
+              ll_medium: this.linkMedium,
             },
           });
     },
