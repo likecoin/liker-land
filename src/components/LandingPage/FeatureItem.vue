@@ -40,15 +40,13 @@
 
     <div
       :class="[
-        'hidden laptop:block',
+        'hidden laptop:flex',
+        'items-end',
 
         'absolute',
         'top-[45%]',
         'inset-x-0',
         'bottom-0',
-
-        'flex',
-        'items-end',
 
         'mt-[24px]',
         'px-[32px]',
