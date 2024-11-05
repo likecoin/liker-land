@@ -550,7 +550,7 @@
           <NFTBookSignatureBanner
             class="mt-[32px] desktop:mt-[48px]"
             tag="div"
-            :name="['董啟章', '陳健民', '高重建', '邵家臻', '區家麟']"
+            :name="signatureBannerNames"
           >
             <div class="flex items-center gap-[16px] mt-[32px]">
               <img
@@ -748,6 +748,15 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import bookstoreMixin from '~/mixins/bookstore';
 
 import { logTrackerEvent } from '~/util/EventLogger';
+import { fisherShuffle } from '~/util/misc';
+
+const SIGNATURE_BANNER_NAMES = [
+  '董啟章',
+  '陳健民',
+  '高重建',
+  '邵家臻',
+  '區家麟',
+];
 
 const getFeatureIconSrc = require.context(
   '~/assets/images/about/nft-book/icons'
@@ -879,6 +888,9 @@ export default {
     },
     bookstoreItemsInGrid() {
       return this.bookstoreItems.slice(1, 10);
+    },
+    signatureBannerNames() {
+      return fisherShuffle([...SIGNATURE_BANNER_NAMES]);
     },
     featureItems() {
       return [
