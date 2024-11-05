@@ -346,11 +346,11 @@ export const RECOMMENDATION_GROUPS = IS_TESTNET
       ],
       [
         'likenft1xl38uu5q7fsxcr02msjtx7jstsfz8lu6ex8nq0pksfgxx3yszkws6ngwr9',
-        'likenft1e4espt79md5gg2lc0wqfu5zf75jsvce3qjfsxmfctdgyaede7vaq6qh94n',
         'likenft19fnr8azkstpn2u8k6qc4hvk6qfhf3dly5d9gqsxrdt0c525w4gask7zmje',
         'likenft1uq0jhw2wng9u0d7fgqdhy6zwwp48ympwfcafcekasyd7aq3j6xpqsch6px',
         'likenft1t32cf8pnfqh7rsuz8gqa6y39mzc36yglehskp2t86g8ph07n0r2swezn2m',
         'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
+        'likenft1e4espt79md5gg2lc0wqfu5zf75jsvce3qjfsxmfctdgyaede7vaq6qh94n',
       ],
     ];
 
