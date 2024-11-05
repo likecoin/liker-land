@@ -119,12 +119,17 @@ export default {
     this.animateText();
   },
   beforeDestroy() {
-    this.$gsap.gsap.killTweensOf(this.$refs.nameText);
-    this.$gsap.gsap.killTweensOf(this.$refs.messageText);
+    if (this.timeline) {
+      this.timeline.kill();
+      this.timeline = null;
+    }
   },
   methods: {
     animateText() {
-      const timeline = this.$gsap.gsap.timeline({
+      if (this.timeline) {
+        this.timeline.kill();
+      }
+      this.timeline = this.$gsap.gsap.timeline({
         onComplete: this.animateText,
       });
 
@@ -136,7 +141,7 @@ export default {
 
         // Show char by char
         `${name},`.split('').forEach(char => {
-          timeline.to(
+          this.timeline.to(
             {},
             {
               duration: 0.1,
@@ -148,7 +153,7 @@ export default {
         });
 
         message.split('').forEach(char => {
-          timeline.to(
+          this.timeline.to(
             {},
             {
               duration: 0.1,
@@ -160,7 +165,7 @@ export default {
         });
 
         // Clear text
-        timeline.to(
+        this.timeline.to(
           {},
           {
             duration: 1,
