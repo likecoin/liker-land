@@ -7,7 +7,10 @@ import {
   IS_TESTNET,
 } from '~/constant';
 
+import nftOrCollection from './nft-or-collection';
+
 export default {
+  mixins: [nftOrCollection],
   data() {
     return {
       isCrossSellDialogOpen: false,
@@ -63,7 +66,10 @@ export default {
         id => id === this.classId || id === this.collectionId
       );
 
-      return shouldAttemptCrossSell && !isCrossSellBlocked;
+      return (
+        this.productPrice === 0 ||
+        (shouldAttemptCrossSell && !isCrossSellBlocked)
+      );
     },
     shouldCrossSell() {
       return this.isCrossSellEnabled && this.hasCrossSell;

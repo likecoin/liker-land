@@ -1267,7 +1267,7 @@ export default {
         }
         if (this.isAddingToCart) {
           this.handleAddToCart(selectedValue);
-        } else if (this.shouldCrossSell && edition?.price > 0) {
+        } else if (this.shouldCrossSell) {
           this.selectedValue = selectedValue;
           this.openCrossSellDialog();
         } else {
@@ -1646,13 +1646,10 @@ export default {
       this.isTippingDialogOpen = false;
       if (this.isAddingToCart) {
         this.handleAddToCart();
+      } else if (this.shouldCrossSell) {
+        this.openCrossSellDialog();
       } else {
-        const edition = this.getEdition(this.selectedValue);
-        if (this.shouldCrossSell && edition?.price > 0) {
-          this.openCrossSellDialog();
-        } else {
-          this.handleCollectFromEdition();
-        }
+        this.handleCollectFromEdition();
       }
     },
     handleClickBookBannerCTA() {
