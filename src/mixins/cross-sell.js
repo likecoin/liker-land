@@ -67,7 +67,7 @@ export default {
       );
 
       return (
-        this.productPrice === 0 ||
+        this.productAvailablePriceLabel === 'FREE' ||
         (shouldAttemptCrossSell && !isCrossSellBlocked)
       );
     },
