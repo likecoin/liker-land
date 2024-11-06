@@ -1433,7 +1433,7 @@ export default {
       if (state === NFT_CLAIM_STATE.CLAIMED) {
         // Delay 1s to avoid blocking the claimed success message
         setTimeout(() => {
-          if (this.isFreePurchase && this.shouldCrossSell) {
+          if (this.isFreePurchase && this.hasCrossSell) {
             this.setUTMProps({ utmCampaign: `cross_claim_${this.productId}` });
             this.openCrossSellDialog();
           }
