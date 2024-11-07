@@ -11,8 +11,10 @@ function normalizeTagIdForViewName(viewName) {
   switch (viewName) {
     case 'landing':
       return 'Landing Page';
-    case 'listing':
-      return 'Listing Page';
+    case 'listing-zh':
+      return 'Listing Page (Chinese)';
+    case 'listing-en':
+      return 'Listing Page (English)';
     case 'all':
       return 'All';
     default:
@@ -39,7 +41,7 @@ async function fetchAirtableCMSProductsByTagId(
     }
   );
 
-  const normalizedRecords = results.data.records.map(({ fields }) => {
+  const normalizedRecords = results.data.records.map(({ id, fields }) => {
     const classId = fields.ID;
     const classIds = fields.IDs;
     const title = fields.Name;
@@ -52,6 +54,7 @@ async function fetchAirtableCMSProductsByTagId(
     const minPrice = fields['Min Price'];
     const isMultiple = classIds && classIds.length > 1;
     return {
+      id,
       classId,
       classIds: isMultiple ? classIds : undefined,
       title,

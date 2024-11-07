@@ -986,8 +986,9 @@ const actions = {
     const { data } = await this.$api.get(api.fetchBookstoreLatestItems());
     commit(
       TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS,
-      data.list.map(({ hideDownload, ...item }) => ({
+      data.list.map(({ hideDownload, inLanguage, ...item }) => ({
         ...item,
+        locale: inLanguage,
         isDRMFree: !hideDownload,
       }))
     );
