@@ -533,6 +533,7 @@
             @click="handleStartReading"
           />
           <ButtonV2
+            v-if="claimingAddress"
             :content-class="['px-[48px]']"
             class="phoneLg:w-full phoneLg:max-w-[480px]"
             :preset="isViewCollectionLoading ? 'plain' : 'tertiary'"
@@ -543,6 +544,17 @@
             "
             @click="handleViewCollection"
           />
+          <div v-else>
+            <ProgressIndicator v-if="isLoginLoading" />
+            <ButtonV2
+              v-else
+              :content-class="['px-[48px]']"
+              class="phoneLg:w-full phoneLg:max-w-[480px]"
+              preset="tertiary"
+              :text="$t('nft_claim_claimed_button_view_collection_sign_in')"
+              @click="handleClickSignIn"
+            />
+          </div>
         </template>
       </NFTClaimMainSection>
     </div>
@@ -783,6 +795,11 @@ export default {
   },
   watch: {
     claimingAddress(newValue) {
+      if (this.state === NFT_CLAIM_STATE.CLAIMED) {
+        // For the case where the user is already claimed and went back to the page
+        this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
+        return;
+      }
       if (
         !newValue &&
         !(
@@ -1325,15 +1342,14 @@ export default {
         this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
         return;
       }
-      this.isLoginLoading = true;
       if (!this.claimingAddress) {
-        const isConnected = await this.connectWallet();
-        if (isConnected || this.loginAddress) {
-          this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
-        }
-      } else {
-        await this.initIfNecessary();
-        if (this.loginAddress) {
+        this.isLoginLoading = true;
+        await this.connectWallet();
+        if (this.claimingAddress) {
+          if (this.state === NFT_CLAIM_STATE.CLAIMED) {
+            this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
+            return;
+          }
           this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
         }
       }
