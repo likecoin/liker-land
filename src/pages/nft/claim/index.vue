@@ -544,17 +544,15 @@
             "
             @click="handleViewCollection"
           />
-          <div v-else>
-            <ProgressIndicator v-if="isLoginLoading" />
-            <ButtonV2
-              v-else
-              :content-class="['px-[48px]']"
-              class="phoneLg:w-full phoneLg:max-w-[480px]"
-              preset="tertiary"
-              :text="$t('nft_claim_claimed_button_view_collection_sign_in')"
-              @click="handleClickSignIn"
-            />
-          </div>
+          <ProgressIndicator v-else-if="isLoginLoading" />
+          <ButtonV2
+            v-else
+            :content-class="['px-[48px]']"
+            class="phoneLg:w-full phoneLg:max-w-[480px]"
+            preset="tertiary"
+            :text="$t('nft_claim_claimed_button_view_collection_sign_in')"
+            @click="handleClickSignIn"
+          />
         </template>
       </NFTClaimMainSection>
     </div>
@@ -1316,18 +1314,23 @@ export default {
         this.productId,
         1
       );
-      this.isLoginLoading = true;
-      if (!this.claimingAddress) {
-        const isConnected = await this.connectWallet({
-          isOpenAuthcore: true,
-          isSignUp: true,
-        });
-        if (isConnected || this.loginAddress) {
-          this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
+      try {
+        this.isLoginLoading = true;
+        if (!this.claimingAddress) {
+          const isConnected = await this.connectWallet({
+            isOpenAuthcore: true,
+            isSignUp: true,
+          });
+          if (isConnected || this.loginAddress) {
+            this.navigateToState(NFT_CLAIM_STATE.ID_CONFIRMATION);
+          }
+        } else {
+          await this.initIfNecessary();
         }
-      } else {
-        await this.initIfNecessary();
+      } finally {
+        this.isLoginLoading = false;
       }
+
       this.isLoginLoading = false;
     },
     async handleClickSignIn() {
