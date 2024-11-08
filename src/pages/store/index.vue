@@ -304,7 +304,7 @@
               <ListingPageBooxBanner />
             </li>
 
-            <li v-for="item in sortedBookstoreItems" :key="item.classId">
+            <li v-for="item in sortedBookstoreItems" :key="item.id">
               <NFTBookItemCardV2
                 :item-id="item.classId"
                 class-cover-frame-aspect-ratio="aspect-[4/5]"
@@ -535,6 +535,17 @@ import { parseNFTMetadataURL } from '~/util/nft';
 
 import crispMixin from '~/mixins/crisp';
 
+function getCMSTagIdsForRecommendedBookstoreItemsByLocale(locale = '') {
+  const languages = ['zh', 'en'];
+  // Return language matches with locale first
+  languages.sort((a, b) => {
+    if (locale.includes(a)) return -1;
+    if (locale.includes(b)) return 1;
+    return 0;
+  });
+  return languages.map(lang => `listing-${lang}`);
+}
+
 export default {
   name: 'ListingPage',
   mixins: [crispMixin],
@@ -560,7 +571,9 @@ export default {
     try {
       const fetches = [
         $api.$get(fetchBookstoreCMSTags({ limit: 100 })),
-        store.dispatch('lazyFetchBookstoreCMSProductsByTagId', 'listing'),
+        ...getCMSTagIdsForRecommendedBookstoreItemsByLocale(i18n.locale).map(
+          tagId => store.dispatch('lazyFetchBookstoreCMSProductsByTagId', tagId)
+        ),
         store.dispatch('fetchBookstoreLatestItems'),
       ];
       if (route.query.tag) {
@@ -613,9 +626,7 @@ export default {
         href: this.canonicalLink,
       },
     ];
-    const classIds = Array.from(
-      new Set(this.bookstoreItems.map(b => b.classId).flat())
-    );
+    const classIds = this.uniqueBookstoreItems.map(item => item.classId);
     classIds.forEach(classId =>
       link.push({
         rel: 'prefetch',
@@ -755,6 +766,10 @@ export default {
           value: LANGUAGE_OPTIONS.ALL,
         },
         {
+          text: this.$t('listing_page_select_language_zh'),
+          value: LANGUAGE_OPTIONS.ZH,
+        },
+        {
           text: this.$t('listing_page_select_language_en'),
           value: LANGUAGE_OPTIONS.EN,
         },
@@ -825,17 +840,37 @@ export default {
       return this.$t('listing_page_header_sort', { sort: this.$t(text) });
     },
 
-    bookstoreCMSProducts() {
-      return this.nftGetBookstoreCMSProductsByTagId('listing') || [];
+    recommendedBookstoreItems() {
+      // Return 100 books for each locale
+      return getCMSTagIdsForRecommendedBookstoreItemsByLocale(this.$i18n.locale)
+        .map(tagId => this.nftGetBookstoreCMSProductsByTagId(tagId))
+        .flat()
+        .map((item, index) => ({ ...item, order: index + 1 }));
     },
 
     bookstoreItems() {
-      const items = this.selectedTagId
-        ? this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId) || []
-        : [...this.bookstoreCMSProducts, ...this.nftBookstoreLatestItems];
+      if (this.selectedTagId) {
+        // Return books with particular tag from CMS
+        return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
+      }
+
+      if (this.selectedSorting === SORTING_OPTIONS.LATEST) {
+        // Return the latest 100 published books & fill up with recommended books from CMS
+        return this.nftBookstoreLatestItems
+          .map(item => ({
+            ...item,
+            id: item.classId, // Imitate items from CMS that have id keys
+          }))
+          .concat(this.recommendedBookstoreItems);
+      }
+
+      // Return recommended books from CMS by default
+      return this.recommendedBookstoreItems;
+    },
+    uniqueBookstoreItems() {
       const uniqueIds = new Set();
       const dedupedItems = [];
-      items.forEach(item => {
+      this.bookstoreItems.forEach(item => {
         if (!uniqueIds.has(item.classId)) {
           uniqueIds.add(item.classId);
           dedupedItems.push(item);
@@ -844,7 +879,7 @@ export default {
       return dedupedItems;
     },
     filteredBookstoreItems() {
-      return this.bookstoreItems
+      return this.uniqueBookstoreItems
         .filter(item => {
           if (this.isAppliedDRMFreeFilter) {
             return item.isDRMFree;
@@ -852,11 +887,11 @@ export default {
           return true;
         })
         .filter(item => {
-          if (
-            this.selectedLanguageFilter !== LANGUAGE_OPTIONS.ALL &&
-            item.locales
-          ) {
-            return item.locales.includes(this.selectedLanguageFilter);
+          if (this.selectedLanguageFilter !== LANGUAGE_OPTIONS.ALL) {
+            if (Array.isArray(item.locales)) {
+              return item.locales.includes(this.selectedLanguageFilter);
+            }
+            return this.selectedLanguageFilter.includes(item.locale);
           }
           return true;
         })
@@ -871,7 +906,9 @@ export default {
         });
     },
     isFilterApplied() {
-      return this.bookstoreItems.length !== this.filteredBookstoreItems.length;
+      return (
+        this.uniqueBookstoreItems.length !== this.filteredBookstoreItems.length
+      );
     },
     sortedBookstoreItems() {
       if (this.searchQuery) {
@@ -880,18 +917,6 @@ export default {
       const items = [...this.filteredBookstoreItems];
 
       items.sort((a, b) => {
-        const locale = this.selectedLanguageFilter;
-        if (locale !== LANGUAGE_OPTIONS.ALL) {
-          const aLocales = a.locales || [];
-          const bLocales = b.locales || [];
-          if (aLocales.includes(locale) && !bLocales.includes(locale)) {
-            return -1;
-          }
-          if (!aLocales.includes(locale) && bLocales.includes(locale)) {
-            return 1;
-          }
-        }
-
         switch (this.selectedSorting) {
           case SORTING_OPTIONS.RECOMMEND:
             if (a.order && b.order) {
