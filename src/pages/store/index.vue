@@ -309,7 +309,7 @@
                 :item-id="item.classId"
                 class-cover-frame-aspect-ratio="aspect-[4/5]"
                 :is-link-disabled="item.isMultiple"
-                :medium="linkMedium"
+                :link-medium="linkMedium"
                 @click-cover="handleClickItem($event, item)"
               />
             </li>
@@ -708,18 +708,9 @@ export default {
       return baseUrl;
     },
     linkMedium() {
-      const {
-        query: { ll_medium: qsMedium, tag, q },
-      } = this.$route;
-      if (qsMedium) {
-        return qsMedium;
-      }
-      if (tag) {
-        return `tag-${tag}`;
-      }
-      if (q) {
-        return 'search';
-      }
+      const { tag, q } = this.$route.query;
+      if (tag) return `tag-${tag}`;
+      if (q) return 'search';
       return 'listing';
     },
     // Price filter related
