@@ -73,7 +73,7 @@ export default {
               collectionId: this.collectionId,
             },
             query: {
-              ll_medium: this.linkMedium,
+              ll_medium: this.mixinLinkMedium,
             },
           })
         : this.localeLocation({
@@ -82,7 +82,7 @@ export default {
               classId: this.classId,
             },
             query: {
-              ll_medium: this.linkMedium,
+              ll_medium: this.mixinLinkMedium,
             },
           });
     },

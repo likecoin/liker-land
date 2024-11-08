@@ -11,14 +11,18 @@ export default {
     return {
       utmCampaign: this.$route.query.utm_campaign,
       utmSource: this.$route.query.utm_source,
-      utmMedium: this.$route.query.utm_medium || this.linkMedium,
+      utmMedium: this.$route.query.utm_medium || this.mixinLinkMedium,
       documentReferrer: '',
       fbClickId: this.formattedFbcQs,
     };
   },
   computed: {
-    linkMedium() {
-      return this.$route.query.ll_medium;
+    mixinLinkMedium() {
+      return (
+        this.$route.query.ll_medium ||
+        // NOTE: To be injected by the mixin user
+        this.linkMedium
+      );
     },
     gadClickId() {
       return this.$route.query.gclid;
@@ -37,7 +41,7 @@ export default {
     this.storeUTMToSessionStorage();
     this.getFbClickIdFromCookie();
     // TODO: split linkMedium into a new separate field
-    this.utmMedium = this.utmMedium || this.linkMedium;
+    this.utmMedium = this.utmMedium || this.mixinLinkMedium;
   },
   methods: {
     setUTMProps({ utmCampaign, utmSource, utmMedium }) {
