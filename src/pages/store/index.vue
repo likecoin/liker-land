@@ -531,7 +531,7 @@ import {
   fetchBookstoreItemSearchResults,
 } from '~/util/api';
 import { checkIsForcedInAppPage } from '~/util/client';
-import { logTrackerEvent } from '~/util/EventLogger';
+import { logPurchaseFlowEvent, logTrackerEvent } from '~/util/EventLogger';
 import { parseNFTMetadataURL } from '~/util/nft';
 
 import crispMixin from '~/mixins/crisp';
@@ -1065,6 +1065,26 @@ export default {
     if (this.searchQuery) {
       await this.fetchSearchItems(this.searchQuery);
     }
+    const listId =
+      (this.searchQuery
+        ? `search_${encodeURIComponent(this.searchQuery)}`
+        : this.selectedTagId) || 'listing';
+    const listName =
+      (this.searchQuery
+        ? `Search: ${this.searchQuery}`
+        : this.selectedTagTitle) || 'All';
+    logPurchaseFlowEvent(this, 'view_item_list', {
+      item_list_id: listId,
+      item_list_name: listName,
+      items: this.sortedBookstoreItems.map(item => ({
+        classId: item.classId,
+        priceIndex: 0,
+        name: item.title,
+        price: item.minPrice,
+      })),
+      search_term: this.searchQuery || this.selectedTagTitle,
+      isNFTBook: true,
+    });
   },
   methods: {
     ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
@@ -1155,6 +1175,19 @@ export default {
         this.dialogNFTClassList = item.classIds;
       }
       logTrackerEvent(this, 'listing', 'listing_item_click', item.classId, 1);
+      logPurchaseFlowEvent(this, 'select_item', {
+        items: [
+          {
+            name: item.title,
+            price: item.minPrice,
+            priceIndex: 0,
+            classId: item.classId,
+          },
+        ],
+        price: item.minPrice,
+        currency: 'USD',
+        isNFTBook: true,
+      });
     },
     closeMultipleNFTClassDialog() {
       this.dialogNFTClassList = [];
@@ -1176,6 +1209,9 @@ export default {
       this.isSearching = true;
       try {
         logTrackerEvent(this, 'listing', 'search_query', query, 1);
+        logPurchaseFlowEvent(this, 'search', {
+          search_term: query,
+        });
         const { list } = await this.$api.$get(
           fetchBookstoreItemSearchResults(query)
         );
@@ -1187,6 +1223,19 @@ export default {
         this.searchItems = [];
       } finally {
         this.isSearching = false;
+        logPurchaseFlowEvent(this, 'view_item_list', {
+          item_list_id: `search_${encodeURIComponent(query)}`,
+          item_list_name: `Search: ${query}`,
+          items: this.sortedBookstoreItems.map(item => ({
+            classId: item.classId,
+            priceIndex: 0,
+            name: item.title,
+            price: item.minPrice,
+            currency: 'USD',
+          })),
+          search_term: query,
+          isNFTBook: true,
+        });
       }
     },
     handleRecommendedItemClick(classId) {
@@ -1241,6 +1290,19 @@ export default {
         // eslint-disable-next-line no-console
         console.error(error);
       }
+      logPurchaseFlowEvent(this, 'view_item_list', {
+        item_list_id: tag.id,
+        item_list_name: tag.name,
+        items: this.sortedBookstoreItems.map(item => ({
+          classId: item.classId,
+          priceIndex: 0,
+          name: item.name,
+          price: item.minPrice,
+          currency: 'USD',
+        })),
+        search_term: tag.name,
+        isNFTBook: true,
+      });
     },
   },
 };
