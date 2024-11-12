@@ -77,6 +77,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isAllSoldOut: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     // NOTE: If the selected item is out of stock, select another item.
@@ -101,11 +105,6 @@ export default {
     },
     priceLabel() {
       return this.selectedItem?.priceLabel;
-    },
-    isAllSoldOut() {
-      return this.items.every(
-        item => item.stock === 0 || item.priceLabel === undefined
-      );
     },
   },
   mounted() {

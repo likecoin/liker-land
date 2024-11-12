@@ -121,7 +121,7 @@
             :resize="200"
           />
 
-          <div class="hidden laptop:block">
+          <div class="hidden w-full laptop:block">
             <slot name="column-left" />
           </div>
         </div>
@@ -242,11 +242,16 @@
             />
             <slot name="column-edition-select" />
           </div>
-          <div class="pb-[32px] hidden laptop:flex flex-col">
+          <div class="flex-col hidden laptop:flex">
             <slot name="column-edition-select" />
           </div>
         </div>
-        <div class="flex flex-col items-center laptop:hidden">
+        <div
+          class="relative pt-[36px] flex flex-col items-center laptop:hidden"
+        >
+          <div
+            class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#ebebebeb]"
+          />
           <slot name="column-left" />
         </div>
       </div>

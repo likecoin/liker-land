@@ -10,17 +10,29 @@
           preset="details"
           @click-avatar="handleNFTCardClickAvatar"
         >
-          <template #column-edition-select>
-            <Separator />
+          <template #column-left>
+            <ButtonV2
+              preset="outline"
+              class="w-full text-dark-gray my-[24px]"
+              :is-disabled="isAllSoldOut"
+              @click="handleGiftFromEditionSelector"
+            >
+              <IconGift class="w-[16px]" />
+              <p class="ml-[8px]">
+                {{ $t('nft_edition_select_confirm_button_text_gift') }}
+              </p>
+            </ButtonV2>
+          </template>
 
+          <template #column-edition-select>
             <NFTEditionSelect
               v-if="collectionIsBook"
               class="self-stretch"
+              :is-all-sold-out="isAllSoldOut"
               :items="[formattedCollection]"
               :should-show-notify-button="false"
               @click-collect="handleCollectFromEditionSelector"
               @click-add-to-cart="handleClickAddToCart"
-              @click-gift="handleGiftFromEditionSelector"
               @input-custom-price="handleInputCustomPrice"
             />
           </template>
@@ -375,6 +387,11 @@ export default {
         currency: 'USD',
         isNFTBook: this.collectionIsBook,
       };
+    },
+    isAllSoldOut() {
+      return [this.formattedCollection].every(
+        item => item.stock === 0 || item.priceLabel === undefined
+      );
     },
   },
   mounted() {

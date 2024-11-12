@@ -53,6 +53,27 @@
                 </li>
               </ul>
 
+              <div class="flex flex-col gap-[8px] mt-[24px] w-full">
+                <ButtonV2
+                  preset="outline"
+                  class="w-full text-dark-gray"
+                  :is-disabled="isAllSoldOut"
+                  @click="handleGiftFromEditionSelector"
+                >
+                  <IconGift class="w-[16px]" />
+                  <p class="ml-[8px]">
+                    {{ $t('nft_edition_select_confirm_button_text_gift') }}
+                  </p>
+                </ButtonV2>
+
+                <ButtonV2
+                  v-if="!isAllSoldOut"
+                  preset="outline"
+                  class="w-full text-dark-gray"
+                  :text="compareButtonText"
+                  @click="handleClickEditionCompareButton"
+                />
+              </div>
               <NFTViewOptionList
                 class="mt-[24px] mb-[48px]"
                 :url="externalUrl"
@@ -75,11 +96,10 @@
                 :items="nftEditions"
                 :should-show-notify-button="false"
                 :value="defaultSelectedValue"
+                :is-all-sold-out="isAllSoldOut"
                 @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
                 @click-add-to-cart="handleClickAddToCart"
-                @click-gift="handleGiftFromEditionSelector"
-                @click-compare="handleClickEditionCompareButton"
                 @input-custom-price="handleInputCustomPrice"
               />
               <div
@@ -961,6 +981,18 @@ export default {
       return (
         this.classId ===
         'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3'
+      );
+    },
+    isAllSoldOut() {
+      return this.nftEditions.every(
+        item => item.stock === 0 || item.priceLabel === undefined
+      );
+    },
+    compareButtonText() {
+      return this.$t(
+        this.nftEditions?.length === 1
+          ? 'nft_edition_view_edition_button_text'
+          : 'nft_edition_select_compare_button_text'
       );
     },
   },
