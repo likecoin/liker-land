@@ -152,12 +152,15 @@ export function logTrackerEvent(
 export function logPurchaseFlowEvent(
   vue,
   event,
-  { txHash, price, currency, items, isNFTBook, paymentId }
+  { txHash, price, currency, items, isNFTBook, paymentId, ...otherPayload }
 ) {
   try {
     if (
       ![
+        'search',
+        'view_item_list',
         'view_item',
+        'select_item',
         'view_cart',
         'begin_checkout',
         'add_shipping_info',
@@ -173,26 +176,27 @@ export function logPurchaseFlowEvent(
         transaction_id: paymentId || txHash,
         value: price,
         currency,
-        items: items.map(i => {
+        items: items?.map(i => {
           let itemId = i.productId || i.collectionId || i.classId;
           if (i.priceIndex !== undefined) {
             itemId = `${itemId}-${i.priceIndex}`;
           }
           return {
             item_id: itemId,
-            item_name: i.name?.substring(0, 100) || itemId,
+            item_name: i.name?.substring(0, 100),
             item_brand: isNFTBook ? 'NFT Book' : 'Writing NFT',
             currency,
             price: i.price,
             quantity: i.quantity || 1,
           };
         }),
+        ...otherPayload,
       });
       if (event === 'purchase' && AD_CONVERSION_ID) {
         vue.$gtag.event('conversion', {
           send_to: AD_CONVERSION_ID,
           value: price,
-          currency: 'USD',
+          currency,
           transaction_id: paymentId || txHash,
         });
       }
@@ -203,6 +207,7 @@ export function logPurchaseFlowEvent(
         begin_checkout: 'InitiateCheckout',
         add_to_cart: 'AddToCart',
         purchase: 'Purchase',
+        search: 'Search',
       };
       if (eventNameMapping[event]) {
         const eventName = eventNameMapping[event];
@@ -214,8 +219,8 @@ export function logPurchaseFlowEvent(
             currency,
             value: price,
             order_id: paymentId || txHash,
-            content_type: 'product',
-            contents: items.map(i => {
+            content_type: items ? 'product' : undefined,
+            contents: items?.map(i => {
               let id = i.productId || i.collectionId || i.classId;
               if (i.priceIndex !== undefined) {
                 id = `${id}-${i.priceIndex}`;
@@ -225,7 +230,7 @@ export function logPurchaseFlowEvent(
                 quantity: i.quantity || 1,
               };
             }),
-            content_ids: items.map(i => {
+            content_ids: items?.map(i => {
               let id = i.productId || i.collectionId || i.classId;
               if (i.priceIndex !== undefined) {
                 id = `${id}-${i.priceIndex}`;
@@ -248,9 +253,11 @@ export function logPurchaseFlowEvent(
               {
                 price,
                 currency,
-                items: JSON.stringify(
-                  items.map(i => i.productId || i.collectionId || i.classId)
-                ),
+                items:
+                  items &&
+                  JSON.stringify(
+                    items.map(i => i.productId || i.collectionId || i.classId)
+                  ),
               },
             ],
           ],
