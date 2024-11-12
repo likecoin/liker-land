@@ -66,7 +66,7 @@
         'w-full',
         'rounded-[32px]',
         'px-[16px] sm:px-[32px]',
-        { 'laptop:px-[48px]': !isCompactPreset },
+        { 'laptop:px-[20px]': !isCompactPreset },
         'transition-all',
         'duration-200',
         bgStyle,
@@ -234,16 +234,21 @@
               :preset="preset"
             />
           </NFTBookSpecTable>
-          <div class="flex flex-col items-center w-full laptop:hidden">
+          <div
+            class="relative pt-[36px] flex flex-col items-center laptop:hidden"
+          >
+            <div
+              class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#ebebebeb]"
+            />
+            <slot name="column-edition-select" />
+          </div>
+          <div class="pb-[32px] hidden laptop:flex flex-col">
             <slot name="column-edition-select" />
           </div>
         </div>
         <div class="flex flex-col items-center laptop:hidden">
           <slot name="column-left" />
         </div>
-      </div>
-      <div class="pb-[32px] w-full hidden laptop:flex flex-col">
-        <slot name="column-edition-select" />
       </div>
     </component>
 
