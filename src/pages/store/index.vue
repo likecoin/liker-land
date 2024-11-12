@@ -1076,7 +1076,7 @@ export default {
     logPurchaseFlowEvent(this, 'view_item_list', {
       item_list_id: listId,
       item_list_name: listName,
-      items: this.sortedBookstoreItems.map(item => ({
+      items: this.sortedBookstoreItems.slice(0, 10).map(item => ({
         classId: item.classId,
         priceIndex: 0,
         name: item.title,
@@ -1226,7 +1226,7 @@ export default {
         logPurchaseFlowEvent(this, 'view_item_list', {
           item_list_id: `search_${encodeURIComponent(query)}`,
           item_list_name: `Search: ${query}`,
-          items: this.sortedBookstoreItems.map(item => ({
+          items: this.sortedBookstoreItems.slice(0, 10).map(item => ({
             classId: item.classId,
             priceIndex: 0,
             name: item.title,
@@ -1293,7 +1293,7 @@ export default {
       logPurchaseFlowEvent(this, 'view_item_list', {
         item_list_id: tag.id,
         item_list_name: tag.name,
-        items: this.sortedBookstoreItems.map(item => ({
+        items: this.sortedBookstoreItems.slice(0, 10).map(item => ({
           classId: item.classId,
           priceIndex: 0,
           name: item.name,

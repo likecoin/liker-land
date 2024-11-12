@@ -183,7 +183,7 @@ export function logPurchaseFlowEvent(
           }
           return {
             item_id: itemId,
-            item_name: i.name?.substring(0, 100) || itemId,
+            item_name: i.name?.substring(0, 100),
             item_brand: isNFTBook ? 'NFT Book' : 'Writing NFT',
             currency,
             price: i.price,
@@ -253,9 +253,11 @@ export function logPurchaseFlowEvent(
               {
                 price,
                 currency,
-                items: JSON.stringify(
-                  items.map(i => i.productId || i.collectionId || i.classId)
-                ),
+                items:
+                  items &&
+                  JSON.stringify(
+                    items.map(i => i.productId || i.collectionId || i.classId)
+                  ),
               },
             ],
           ],
