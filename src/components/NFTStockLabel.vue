@@ -1,5 +1,5 @@
 <template>
-  <span v-if="stockLabel" :class="stockLabelClasses">{{ stockLabel }}</span>
+  <span v-if="stockLabel" :class="stockLabelClasses" v-text="stockLabel" />
 </template>
 
 <script>

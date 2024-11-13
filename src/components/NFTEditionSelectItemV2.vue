@@ -29,17 +29,17 @@
           <NFTDiscountLabel v-if="discountInfo" :discount-info="discountInfo" />
           <NFTStockLabel :stock="stock" />
         </div>
-        <div class="text-like-green text-[16px] font-500">{{ name }}</div>
+        <div class="text-like-green text-[16px] font-500" v-text="name" />
       </div>
     </div>
 
     <div class="flex flex-col whitespace-nowrap">
-      <div v-if="discountInfo" class="text-like-green text-[12px]">
-        {{ discountInfo.originalPriceLabel }}
-      </div>
-      <div class="text-like-green text-[16px] font-500">
-        {{ priceLabel }}
-      </div>
+      <div
+        v-if="discountInfo"
+        class="text-like-green text-[12px]"
+        v-text="discountInfo.originalPriceLabel"
+      />
+      <div class="text-like-green text-[16px] font-500" v-text="priceLabel" />
     </div>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
     },
     defaultPrice: {
       type: Number,
-      default: 900,
+      default: 0,
     },
     preset: {
       type: String,

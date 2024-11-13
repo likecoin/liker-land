@@ -3,9 +3,11 @@
     <div
       class="hidden laptop:block border-b-[1px] border-[#ebebebeb] w-full my-[16px]"
     />
-    <div class="text-[18px] font-500 text-dark-gray w-full">
-      {{ $t('nft_edition_select_section_label') }}
-    </div>
+    <div
+      class="text-[18px] font-500 text-dark-gray w-full"
+      v-text="$t('nft_edition_select_section_label')"
+    />
+
     <div class="flex items-stretch gap-[12px] w-full flex-wrap">
       <NFTEditionSelectItemV2
         v-for="(item, index) in items"
@@ -28,13 +30,13 @@
         :is-disabled="!selectedItem"
         preset="primary"
         class="w-[58%] laptop:w-[260px]"
-        :text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
         @click="handleClickAddToCartButton"
       >
         <IconAdd class="w-[16px]" />
-        <p class="ml-[8px]">
-          {{ $t('nft_edition_select_confirm_button_text_add_to_cart') }}
-        </p>
+        <p
+          class="ml-[8px]"
+          v-text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
+        />
       </ButtonV2>
       <ButtonV2
         v-if="!isAllSoldOut"

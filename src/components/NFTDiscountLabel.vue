@@ -11,8 +11,8 @@
       'bg-[#AAF1E7]',
       'text-like-green',
     ]"
-    >{{ discountPercentage }}</span
-  >
+    v-text="discountPercentage"
+  />
 </template>
 
 <script>
