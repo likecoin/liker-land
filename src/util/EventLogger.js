@@ -30,6 +30,9 @@ export function resetLoggerUser(vue) {
   if (vue.$sentry) {
     vue.$sentry.setUser({});
   }
+  if (vue.$gre) {
+    vue.$gre.setUserId(null);
+  }
   if (vue.$gtag) {
     vue.$gtag.set({ userId: null });
     vue.$gtag.set({ user_id: null });
@@ -54,6 +57,11 @@ export async function setLoggerUser(
     vue.$sentry.setUser(opt);
   }
   try {
+    let hashedId = await digestMessage(wallet);
+    hashedId = hexString(hashedId);
+    if (vue.$gre) {
+      vue.$gre.setUserId(hashedId);
+    }
     if (vue.$gtag) {
       if (event === 'signup') {
         vue.$gtag.event('sign_up', { method });
@@ -61,20 +69,17 @@ export async function setLoggerUser(
         vue.$gtag.event('login', { method });
       }
     }
-    if (!hasDoNotTrack()) {
-      if (vue.$gtag) {
-        const hashedId = await getHashedUserId(wallet);
-        vue.$gtag.set({ userId: hashedId });
-        // HACK: use .set to mitigate connected site user_id issue
-        // https://support.google.com/analytics/answer/9973999?hl=en
-        // vue.$gtag.config({ user_id: hashedId });
-        vue.$gtag.set({ user_id: hashedId });
-      }
-      if (vue.$fb && FACEBOOK_PIXEL_ID) {
-        vue.$fb.init(FACEBOOK_PIXEL_ID, {
-          external_id: wallet,
-        });
-      }
+    if (vue.$gtag) {
+      vue.$gtag.set({ userId: hashedId });
+      // HACK: use .set to mitigate connected site user_id issue
+      // https://support.google.com/analytics/answer/9973999?hl=en
+      // vue.$gtag.config({ user_id: hashedId });
+      vue.$gtag.set({ user_id: hashedId });
+    }
+    if (vue.$fb && FACEBOOK_PIXEL_ID) {
+      vue.$fb.init(FACEBOOK_PIXEL_ID, {
+        external_id: wallet,
+      });
     }
     if (vue.$crisp) {
       vue.$crisp.push(['set', 'session:data', [[['like_wallet', wallet]]]]);
@@ -147,6 +152,35 @@ export function logTrackerEvent(
         'session:event',
         [[[action, { category, action, label, value, ...otherPayload }]]],
       ]);
+    }
+  } catch (err) {
+    console.error('logging error:'); // eslint-disable-line no-console
+    console.error(err); // eslint-disable-line no-console
+  }
+}
+
+export function logRetailEvent(vue, eventType, payload) {
+  try {
+    if (vue.$gre) {
+      if (!vue.$gre.visitorId) {
+        // HACK: query in gtag if no visitor Id
+        // multiple concurrent queries might occur
+        // if logRetailEvent is called multiple times
+        // but all should yield same result anyway
+        if (vue.$gtag && process.env.GA_TRACKING_ID) {
+          vue.$gtag.query(
+            'get',
+            process.env.GA_TRACKING_ID,
+            'client_id',
+            id => {
+              vue.$gre.setVisitorId(id);
+              vue.$gre.logEvent(eventType, payload);
+            }
+          );
+        }
+      } else {
+        vue.$gre.logEvent(eventType, payload);
+      }
     }
   } catch (err) {
     console.error('logging error:'); // eslint-disable-line no-console
