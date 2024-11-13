@@ -49,6 +49,9 @@ export function setUserCivicLiker({ commit }, { civicLikerVersion = 1 } = {}) {
 
 export function setGaClientId({ commit }, gaClientId) {
   commit(types.USER_SET_GA_CLIENT_ID, gaClientId);
+  if (this.$gre) {
+    this.$gre.setVisitorId(gaClientId);
+  }
 }
 
 export function setGaSessionId({ commit }, gaSessionId) {
