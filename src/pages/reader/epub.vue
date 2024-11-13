@@ -328,6 +328,7 @@ export default {
     },
   },
   beforeUnmount() {
+    logTrackerEvent(this, 'ReaderEpub', 'ReaderEpubUnmounted', this.classId, 1);
     if (this.rendition) {
       this.rendition.destroy();
       this.rendition = null;
@@ -339,6 +340,7 @@ export default {
     document.removeEventListener('keydown', this.keyListener);
   },
   mounted() {
+    logTrackerEvent(this, 'ReaderEpub', 'ReaderEpubMounted', this.classId, 1);
     this.initRendition();
     document.addEventListener('keydown', this.keyListener, false);
   },

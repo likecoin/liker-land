@@ -49,8 +49,12 @@ export default {
     },
   },
   mounted() {
+    logTrackerEvent(this, 'ReaderPdf', 'ReaderPdfMounted', this.classId, 1);
     window.addEventListener('message', this.handleIframeMessage);
     this.initRendition();
+  },
+  beforeUnmount() {
+    logTrackerEvent(this, 'ReaderPdf', 'ReaderPdfUnmounted', this.classId, 1);
   },
   beforeDestroy() {
     window.removeEventListener('message', this.handleIframeMessage);
