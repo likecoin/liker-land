@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-[12px] w-full flex-wrap">
     <div
-      class="hidden laptop:block border-b-[1px] border-[#ebebebeb] w-full my-[16px]"
+      class="hidden laptop:block border-b-[1px] border-[#EBEBEB] w-full my-[16px]"
     />
     <div
       class="text-[18px] font-500 text-dark-gray w-full"

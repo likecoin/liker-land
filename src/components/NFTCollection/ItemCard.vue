@@ -158,7 +158,7 @@
             class="relative pt-[36px] flex flex-col items-center w-full laptop:hidden"
           >
             <div
-              class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#ebebebeb]"
+              class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
             />
             <slot name="column-edition-select" />
           </div>
@@ -168,7 +168,7 @@
         </div>
         <div class="relative flex flex-col items-center laptop:hidden">
           <div
-            class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#ebebebeb]"
+            class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
           />
           <slot name="column-left" />
         </div>
