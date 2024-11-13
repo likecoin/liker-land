@@ -2,7 +2,7 @@
   <div
     :class="[
       'group',
-      'cursor-pointer',
+      isInStock ? 'cursor-pointer' : 'opacity-50 pointer-events-none',
       'rounded-[16px]',
       preset === 'dialog' ? 'w-full' : 'w-full desktop:w-[48%]',
       'py-[18px] px-[24px]',
@@ -24,15 +24,16 @@
           class="text-like-green w-[20px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
       </div>
-      <div class="flex flex-col">
-        <div>
+      <div class="flex flex-col gap-[4px]">
+        <div class="flex gap-[8px] items-center">
+          <NFTDiscountLabel v-if="discountInfo" :discount-info="discountInfo" />
           <NFTStockLabel :stock="stock" />
         </div>
         <div class="text-like-green text-[16px] font-500">{{ name }}</div>
       </div>
     </div>
 
-    <div class="flex flex-co whitespace-nowrap">
+    <div class="flex flex-col whitespace-nowrap">
       <div v-if="discountInfo" class="text-like-green text-[12px]">
         {{ discountInfo.originalPriceLabel }}
       </div>
@@ -124,7 +125,7 @@ export default {
                 'HKD'
               )
             : formatNumberWithUSD(originalPrice),
-        discountPercentage: `-${discountPercentage}`,
+        discountPercentage,
       };
     },
   },

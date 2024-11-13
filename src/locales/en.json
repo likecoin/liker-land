@@ -705,6 +705,7 @@
   "nft_edition_select_confirm_button_text_collect": "Collect",
   "nft_edition_select_confirm_button_text_gift": "Gift",
   "nft_edition_select_confirm_button_text_purchase": "Buy now",
+  "nft_edition_select_discount_label": "{percentage}% off",
   "nft_edition_select_notify_button_text": "Notify when available",
   "nft_edition_select_section_label": "Purchase books",
   "nft_edition_view_edition_button_text": "View Edition Details",

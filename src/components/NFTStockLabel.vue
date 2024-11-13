@@ -1,5 +1,5 @@
 <template>
-  <span :class="stockLabelClasses">{{ stockLabel }}</span>
+  <span v-if="stockLabel" :class="stockLabelClasses">{{ stockLabel }}</span>
 </template>
 
 <script>
@@ -11,10 +11,6 @@ export default {
     stock: {
       type: Number,
       default: 0,
-    },
-    isDark: {
-      type: Boolean,
-      default: true,
     },
   },
   computed: {
@@ -31,33 +27,21 @@ export default {
       if (this.isLimitedStock) {
         return this.$tc('nft_stock_left', this.stock, { stock: this.stock });
       }
-      return this.$t('nft_in_stock');
+      return '';
     },
     stockLabelClasses() {
-      const classes = ['whitespace-nowrap'];
-      if (this.isSoldOut || this.isLimitedStock) {
-        if (this.isDark) {
-          classes.push(
-            'inline-block',
-            'px-[16px]',
-            'py-[4px]',
-            'rounded-full',
-            'text-[12px]'
-          );
-        } else {
-          classes.push('text-[16px]');
-        }
-        if (this.isSoldOut) {
-          if (this.isDark) {
-            classes.push('text-white', 'bg-danger');
-          } else {
-            classes.push('text-danger');
-          }
-        } else {
-          classes.push('text-danger', 'bg-white');
-        }
-      } else {
-        classes.push('text-[16px]', 'text-like-cyan');
+      const classes = [
+        'whitespace-nowrap',
+        'px-[8px]',
+        'py-[4px]',
+        'rounded-[4px]',
+        'text-[12px]',
+        'font-500',
+      ];
+      if (this.isLimitedStock) {
+        classes.push('text-[#E35050]', 'bg-[#E35050] bg-opacity-[20%]');
+      } else if (this.isSoldOut) {
+        classes.push('text-white', 'bg-[#E35050]');
       }
       return classes;
     },

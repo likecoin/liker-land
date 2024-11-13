@@ -705,6 +705,7 @@
   "nft_edition_select_confirm_button_text_collect": "收集",
   "nft_edition_select_confirm_button_text_gift": "贈送書本",
   "nft_edition_select_confirm_button_text_purchase": "立即購買",
+  "nft_edition_select_discount_label": "{percentage}% 折扣",
   "nft_edition_select_notify_button_text": "有貨時通知我",
   "nft_edition_select_section_label": "購買書籍",
   "nft_edition_view_edition_button_text": "檢視版本資訊",

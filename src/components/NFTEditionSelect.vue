@@ -1,23 +1,25 @@
 <template>
-  <div class="flex items-center gap-[12px] w-full flex-wrap">
+  <div class="flex flex-col gap-[12px] w-full flex-wrap">
     <div
       class="hidden laptop:block border-b-[1px] border-[#ebebebeb] w-full my-[16px]"
     />
     <div class="text-[18px] font-500 text-dark-gray w-full">
       {{ $t('nft_edition_select_section_label') }}
     </div>
-    <NFTEditionSelectItemV2
-      v-for="(item, index) in items"
-      :key="index"
-      :name="item.name"
-      :currency="item.currency"
-      :price-label="item.priceLabel"
-      :stock="item.stock"
-      :is-selected="item.value === selectedValue"
-      :current-price="item.price"
-      :default-price="item.defaultPrice"
-      @click="handleClickPriceSelectItem(item)"
-    />
+    <div class="flex items-stretch gap-[12px] w-full flex-wrap">
+      <NFTEditionSelectItemV2
+        v-for="(item, index) in items"
+        :key="index"
+        :name="item.name"
+        :currency="item.currency"
+        :price-label="item.priceLabel"
+        :stock="item.stock"
+        :is-selected="item.value === selectedValue"
+        :current-price="item.price"
+        :default-price="item.defaultPrice"
+        @click="handleClickPriceSelectItem(item)"
+      />
+    </div>
     <div class="flex items-center gap-[12px] w-full mt-[12px]">
       <ButtonV2
         v-if="

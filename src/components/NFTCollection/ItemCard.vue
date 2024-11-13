@@ -155,14 +155,14 @@
             />
           </NFTBookSpecTable>
           <div
-            class="relative pt-[36px] flex flex-col items-center laptop:hidden"
+            class="relative pt-[36px] flex flex-col items-center w-full laptop:hidden"
           >
             <div
               class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#ebebebeb]"
             />
             <slot name="column-edition-select" />
           </div>
-          <div class="flex-col hidden laptop:flex">
+          <div class="flex-col hidden w-full laptop:flex">
             <slot name="column-edition-select" />
           </div>
         </div>
