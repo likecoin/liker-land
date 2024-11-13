@@ -1013,6 +1013,7 @@ export default {
         ],
         price: this.NFTPriceUSD,
         currency: 'USD',
+        isNFTBook: this.nftIsNFTBook,
       });
     }
 
@@ -1063,7 +1064,7 @@ export default {
         ],
         price: totalPrice,
         currency: 'USD',
-        isNFTBook: true,
+        isNFTBook: this.nftIsNFTBook,
       };
     },
     async handleClickMoreCollector() {
@@ -1493,6 +1494,7 @@ export default {
         ],
         price: this.NFTPriceUSD,
         currency: 'USD',
+        isNFTBook: this.nftIsNFTBook,
       });
     },
     handleInputCustomPrice(price) {

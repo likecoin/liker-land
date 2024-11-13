@@ -952,6 +952,7 @@ export default {
               name: this.NFTName,
             },
           ],
+          isNFTBook: this.nftIsNFTBook,
         };
         logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
         logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
@@ -1088,6 +1089,7 @@ export default {
             ],
             price: this.NFTPriceUSD,
             currency: 'USD',
+            isNFTBook: this.nftIsNFTBook,
           });
           if (this.uiTxTargetClassId === classId) {
             this.uiSetTxStatus(TX_STATUS.COMPLETED);

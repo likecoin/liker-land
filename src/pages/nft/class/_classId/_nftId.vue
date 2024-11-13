@@ -634,6 +634,7 @@ export default {
         ],
         price: this.NFTPriceUSD,
         currency: 'USD',
+        isNFTBook: this.nftIsNFTBook,
       });
     }
   },
