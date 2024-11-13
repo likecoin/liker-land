@@ -1,4 +1,4 @@
-import { IS_TESTNET, AD_CONVERSION_ID } from '../constant';
+import { IS_TESTNET, AD_CONVERSION_ID, FACEBOOK_PIXEL_ID } from '../constant';
 
 function hexString(buffer) {
   const byteArray = new Uint8Array(buffer);
@@ -34,8 +34,8 @@ export function resetLoggerUser(vue) {
     vue.$gtag.set({ userId: null });
     vue.$gtag.set({ user_id: null });
   }
-  if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
-    window.fbq('init', window.PIXEL_ID);
+  if (vue.$fb && FACEBOOK_PIXEL_ID) {
+    vue.$fb.init(FACEBOOK_PIXEL_ID);
   }
   if (vue.$crisp) {
     vue.$crisp.push(['do', 'session:reset']);
@@ -70,8 +70,8 @@ export async function setLoggerUser(
         // vue.$gtag.config({ user_id: hashedId });
         vue.$gtag.set({ user_id: hashedId });
       }
-      if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
-        window.fbq('init', window.PIXEL_ID, {
+      if (vue.$fb && FACEBOOK_PIXEL_ID) {
+        vue.$fb.init(FACEBOOK_PIXEL_ID, {
           external_id: wallet,
         });
       }
@@ -101,8 +101,8 @@ export function updateLoggerUserInfo(
     if (vue.$gtag) {
       if (email) vue.$gtag.set('user_data', { email });
     }
-    if (window.fbq && window.PIXEL_ID && !IS_TESTNET) {
-      window.fbq('init', window.PIXEL_ID, {
+    if (vue.$fb && FACEBOOK_PIXEL_ID) {
+      vue.$fb.init(FACEBOOK_PIXEL_ID, {
         em: email,
         external_id: wallet,
       });
@@ -206,7 +206,7 @@ export function logPurchaseFlowEvent(
         });
       }
     }
-    if (window.fbq && !IS_TESTNET) {
+    if (vue.$fb && FACEBOOK_PIXEL_ID) {
       const eventNameMapping = {
         view_item: 'ViewContent',
         begin_checkout: 'InitiateCheckout',
@@ -217,8 +217,7 @@ export function logPurchaseFlowEvent(
       if (eventNameMapping[event]) {
         const eventName = eventNameMapping[event];
         const eventID = paymentId ? `${eventName}_${paymentId}` : undefined;
-        window.fbq(
-          'track',
+        vue.$fb.track(
           eventName,
           {
             currency,
@@ -299,8 +298,8 @@ export function logPurchaseNFTBookEvent(
         ],
       });
     }
-    if (window.fbq && !IS_TESTNET) {
-      window.fbq('trackCustom', 'PurchaseBook', {
+    if (vue.$fb && FACEBOOK_PIXEL_ID) {
+      vue.$fb.query('trackCustom', 'PurchaseBook', {
         currency,
         value: price,
         content_type: 'product',
