@@ -70,6 +70,7 @@
     </div>
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
+      :items="[formattedCollection]"
       @submit="handleGiftSubmit"
       @close="handleGiftClose"
     />

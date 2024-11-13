@@ -376,6 +376,9 @@
     </div>
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
+      :items="nftEditions"
+      :value="defaultSelectedValue"
+      @change="handleEditionSelectChange"
       @submit="handleGiftSubmit"
       @close="handleGiftClose"
     />

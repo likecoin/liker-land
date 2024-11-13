@@ -15,6 +15,21 @@
         <IconGift class="w-[32px] text-like-green" />
       </template>
     </Label>
+    <div class="flex items-center gap-[12px] my-[12px] w-full flex-wrap">
+      <NFTEditionSelectItemV2
+        v-for="(item, index) in items"
+        :key="index"
+        :name="item.name"
+        :currency="item.currency"
+        :price-label="item.priceLabel"
+        :stock="item.stock"
+        :is-selected="item.value === selectedValue"
+        :current-price="item.price"
+        :default-price="item.defaultPrice"
+        preset="dialog"
+        @click="handleClickPriceSelectItem(item)"
+      />
+    </div>
     <Label
       class="text-dark-gray my-[12px]"
       :text="$t('nft_book_gift_dialog_description')"
@@ -111,13 +126,32 @@ export default {
         message: '',
       }),
     },
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    value: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
+    // NOTE: If the selected item is out of stock, select another item.
+    const items = [...this.items];
+    let selectedItem = items.find(item => item.value === this.value);
+    if (!selectedItem || selectedItem.stock <= 0) {
+      selectedItem = items.find(
+        item =>
+          selectedItem && item.index !== selectedItem.index && item.stock > 0
+      );
+    }
+
     return {
       fromName: this.prefillGiftInfo?.fromName,
       toName: this.prefillGiftInfo?.toName,
       toEmail: this.prefillGiftInfo?.toEmail,
       message: this.prefillGiftInfo?.message,
+      selectedValue: selectedItem?.value || this.value,
     };
   },
   watch: {
@@ -141,6 +175,12 @@ export default {
           message: this.message,
         },
       });
+    },
+    handleClickPriceSelectItem({ value }) {
+      if (this.selectedValue === value) return;
+      this.selectedValue = value;
+      this.$emit('change', value);
+      this.$emit('update:value', value);
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-[12px] w-full flex-wrap ">
+  <div class="flex items-center gap-[12px] w-full flex-wrap">
     <div
       class="hidden laptop:block border-b-[1px] border-[#ebebebeb] w-full my-[16px]"
     />

@@ -4,7 +4,7 @@
       'group',
       'cursor-pointer',
       'rounded-[16px]',
-      'w-full desktop:w-[48%]',
+      preset === 'dialog' ? 'w-full' : 'w-full desktop:w-[48%]',
       'py-[18px] px-[24px]',
       isSelected ? 'bg-[#E5F0F2]' : 'bg-gray-f7',
       isSelected
@@ -47,6 +47,11 @@
 import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
 import { USD_TO_HKD_RATIO } from '~/constant';
 
+const PRESET_TYPE = {
+  PRIMARY: 'primary',
+  DIALOG: 'dialog',
+};
+
 export default {
   name: 'NFTEditionSelectItemV2',
   props: {
@@ -77,6 +82,10 @@ export default {
     defaultPrice: {
       type: Number,
       default: 900,
+    },
+    preset: {
+      type: String,
+      default: PRESET_TYPE.PRIMARY,
     },
   },
   computed: {
