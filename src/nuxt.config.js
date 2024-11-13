@@ -13,6 +13,7 @@ const {
   GA_TRACKING_ID,
   AD_CONVERSION_ID,
   EXTERNAL_URL,
+  FACEBOOK_PIXEL_ID,
 } = process.env;
 
 const nuxtConfig = {
@@ -23,6 +24,7 @@ const nuxtConfig = {
     STRIPE_PUBLIC_KEY,
     GA_TRACKING_ID,
     AD_CONVERSION_ID,
+    FACEBOOK_PIXEL_ID,
     SITE_NAME,
     EXTERNAL_URL,
   },
@@ -86,7 +88,6 @@ const nuxtConfig = {
     ],
     link: [
       { rel: 'preconnect', href: 'https://storage.googleapis.com' },
-      { rel: 'preload', href: '/vendor/fbq.js', as: 'script' },
       {
         hid: 'stripe-js-link',
         rel: 'preload',
@@ -134,7 +135,6 @@ const nuxtConfig = {
       })),
     ],
     script: [
-      { src: '/vendor/fbq.js', type: 'text/javascript', async: true },
       {
         hid: 'stripe-js-script',
         src: 'https://js.stripe.com/v3',
@@ -330,6 +330,15 @@ const nuxtConfig = {
     '@nuxtjs/sentry',
     '@nuxtjs/sitemap',
     'portal-vue/nuxt',
+    [
+      'nuxt-facebook-pixel-module',
+      {
+        track: 'PageView',
+        pixelId: FACEBOOK_PIXEL_ID || '0',
+        autoPageView: true,
+        disabled: !FACEBOOK_PIXEL_ID,
+      },
+    ],
     // [
     //   '@likecoin/nuxt-google-optimize',
     //   {
