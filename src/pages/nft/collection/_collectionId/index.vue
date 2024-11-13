@@ -411,6 +411,7 @@ export default {
       ],
       price: this.collectionPrice,
       currency: 'USD',
+      isNFTBook: this.collectionIsBook,
     });
   },
   methods: {
