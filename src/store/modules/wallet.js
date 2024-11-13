@@ -38,6 +38,7 @@ import {
   setLoggerUser,
   updateLoggerUserInfo,
   resetLoggerUser,
+  getHashedUserId,
 } from '~/util/EventLogger';
 
 import {
@@ -862,7 +863,7 @@ const actions = {
     }
     await Promise.all(promises);
   },
-  async signLogin({ state, commit, dispatch }) {
+  async signLogin({ state, commit, dispatch, getters }) {
     // Do not trigger login if the window is not focused
     if (document.hidden) return;
     if (!state.signer) {
@@ -881,6 +882,8 @@ const actions = {
       const [result] = await Promise.all([
         this.$api.$post(postUserV2Login(), {
           loginMethod: methodType,
+          gaClientId: getters.getGaClientId,
+          userIdHash: getHashedUserId(address),
           ...data,
         }),
         dispatch('authenticate', { inputWallet: address, signature: data }),

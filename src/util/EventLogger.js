@@ -20,6 +20,12 @@ function hasDoNotTrack() {
   return window.doNotTrack || navigator.doNotTrack;
 }
 
+export async function getHashedUserId(wallet) {
+  let hashedId = await digestMessage(wallet);
+  hashedId = hexString(hashedId);
+  return hashedId;
+}
+
 export function resetLoggerUser(vue) {
   if (vue.$sentry) {
     vue.$sentry.setUser({});
@@ -57,8 +63,7 @@ export async function setLoggerUser(
     }
     if (!hasDoNotTrack()) {
       if (vue.$gtag) {
-        let hashedId = await digestMessage(wallet);
-        hashedId = hexString(hashedId);
+        const hashedId = await getHashedUserId(wallet);
         vue.$gtag.set({ userId: hashedId });
         // HACK: use .set to mitigate connected site user_id issue
         // https://support.google.com/analytics/answer/9973999?hl=en
