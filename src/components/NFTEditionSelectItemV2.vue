@@ -33,12 +33,16 @@
       </div>
     </div>
 
-    <div class="flex flex-col whitespace-nowrap">
+    <div class="flex flex-col items-end whitespace-nowrap">
       <div
         v-if="discountInfo"
-        class="text-like-green text-[12px]"
-        v-text="discountInfo.originalPriceLabel"
-      />
+        class="text-like-green text-[12px] opacity-[50%] relative"
+      >
+        <p v-text="discountInfo.originalPriceLabel" />
+        <div
+          class="w-full h-[1px] bg-like-green absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        />
+      </div>
       <div class="text-like-green text-[16px] font-500" v-text="priceLabel" />
     </div>
   </div>
