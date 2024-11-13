@@ -756,7 +756,7 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 import bookstoreMixin from '~/mixins/bookstore';
 
-import { logTrackerEvent } from '~/util/EventLogger';
+import { logTrackerEvent, logRetailEvent } from '~/util/EventLogger';
 import { fisherShuffle } from '~/util/misc';
 
 const SIGNATURE_BANNER_NAMES = [
@@ -944,6 +944,7 @@ export default {
     },
   },
   mounted() {
+    logRetailEvent(this, 'home-page-view');
     window.addEventListener('scroll', this.handleScroll);
   },
   beforeDestroy() {
