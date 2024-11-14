@@ -390,8 +390,9 @@ export default {
       };
     },
     isAllSoldOut() {
-      return [this.formattedCollection].every(
-        item => item.stock === 0 || item.priceLabel === undefined
+      return (
+        this.formattedCollection?.stock === 0 ||
+        this.formattedCollection?.priceLabel === undefined
       );
     },
   },
