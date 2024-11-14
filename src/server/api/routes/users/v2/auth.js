@@ -69,6 +69,8 @@ router.post('/login', async (req, res, next) => {
     message,
     signMethod,
     loginMethod = '',
+    gaClientId,
+    userIdHash,
   } = req.body;
   try {
     if (!inputWallet || !signature || !publicKey || !message) {
@@ -106,6 +108,8 @@ router.post('/login', async (req, res, next) => {
         lastLoginTs: FieldValue.serverTimestamp(),
         lastLoginMethod: loginMethod,
       };
+      if (gaClientId) payload.gaClientId = gaClientId;
+      if (userIdHash) payload.userIdHash = userIdHash;
       if (isNew) {
         await t.create(userRef, {
           ...payload,
@@ -123,6 +127,8 @@ router.post('/login', async (req, res, next) => {
         logType: 'UserSignUp',
         signMethod,
         loginMethod,
+        gaClientId,
+        userIdHash,
         user: userId,
       });
     } else {
@@ -130,6 +136,8 @@ router.post('/login', async (req, res, next) => {
         logType: 'UserLogin',
         signMethod,
         loginMethod,
+        gaClientId,
+        userIdHash,
         user: userId,
       });
     }
