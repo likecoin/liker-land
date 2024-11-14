@@ -280,6 +280,68 @@ export function logPurchaseFlowEvent(
         );
       }
     }
+    if (vue.$gre) {
+      const productDetails = items?.map(i => {
+        let itemId = i.productId || i.collectionId || i.classId;
+        if (i.priceIndex !== undefined) {
+          itemId = `${itemId}-${i.priceIndex}`;
+        }
+        return {
+          product: { id: itemId },
+          quantity: i.quantity || 1,
+        };
+      });
+      switch (event) {
+        case 'view_item_list': {
+          if (otherPayload.search_term) {
+            vue.$gre.logEvent('search', {
+              searchQuery: otherPayload.search_term,
+              pageCategories: ['eBook'],
+              productDetails,
+            });
+          } else if (otherPayload.list_id !== 'listing') {
+            vue.$gre.logEvent('category-page-view', {
+              pageCategories: [`eBook > ${otherPayload.list_id}`],
+              productDetails,
+            });
+          }
+          break;
+        }
+        case 'view_item': {
+          vue.$gre.logEvent('detail-page-view', {
+            productDetails,
+          });
+          break;
+        }
+        case 'add_to_cart': {
+          vue.$gre.logEvent('add-to-cart', {
+            cartId: paymentId,
+            productDetails,
+          });
+          break;
+        }
+        case 'view_cart': {
+          vue.$gre.logEvent('shopping-cart-view', {
+            cartId: paymentId,
+            productDetails,
+          });
+          break;
+        }
+        case 'purchase': {
+          vue.$gre.logEvent('purchase-complete', {
+            cartId: paymentId,
+            productDetails,
+            purchaseTransaction: {
+              revenue: price,
+              currencyCode: currency,
+            },
+          });
+          break;
+        }
+        default:
+          break;
+      }
+    }
     if (vue.$crisp) {
       vue.$crisp.push([
         'set',

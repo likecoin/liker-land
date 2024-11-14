@@ -1082,7 +1082,7 @@ export default {
         name: item.title,
         price: item.minPrice,
       })),
-      search_term: this.searchQuery || this.selectedTagTitle,
+      search_term: this.searchQuery || undefined,
       isNFTBook: true,
     });
   },
@@ -1300,7 +1300,6 @@ export default {
           price: item.minPrice,
           currency: 'USD',
         })),
-        search_term: tag.name,
         isNFTBook: true,
       });
     },
