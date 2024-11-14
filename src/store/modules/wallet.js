@@ -883,7 +883,7 @@ const actions = {
         this.$api.$post(postUserV2Login(), {
           loginMethod: methodType,
           gaClientId: getters.getGaClientId,
-          userIdHash: getHashedUserId(address),
+          userIdHash: await getHashedUserId(address),
           ...data,
         }),
         dispatch('authenticate', { inputWallet: address, signature: data }),
