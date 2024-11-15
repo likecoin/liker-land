@@ -20,14 +20,40 @@
       @click.native="$emit('click-cover', $event)"
     />
 
-    <div
+    <NuxtLink
+      :to="viewInfoLocation"
       class="mt-[8px] text-[#333] text-[1rem] font-[500] laptop:text-[1.125rem]"
     >
       {{ productName }}
-    </div>
+    </NuxtLink>
 
     <div class="text-[#8B8B8B] text-[0.875rem] laptop:text-[1rem]">
-      {{ (iscnWorkAuthor || creatorDisplayName) | ellipsis }}
+      <NuxtLink
+        v-if="iscnWorkAuthor"
+        :to="
+          localeLocation({
+            name: 'store',
+            query: {
+              q: iscnWorkAuthor,
+              ll_medium: linkMedium,
+            },
+          })
+        "
+      >
+        {{ iscnWorkAuthor | ellipsis }}
+      </NuxtLink>
+      <NuxtLink
+        v-else
+        :to="
+          localeLocation({
+            name: 'id',
+            params: { id: productOwner },
+            query: { ll_medium: linkMedium },
+          })
+        "
+      >
+        {{ creatorDisplayName | ellipsis }}
+      </NuxtLink>
     </div>
 
     <div class="mt-[16px] text-[#1F1F1F] text-[0.875rem] laptop:text-[1rem]">

@@ -26,7 +26,9 @@
         :to="
           localeLocation({
             name: 'store',
-            ll_medium: 'header_store_button',
+            query: {
+              ll_medium: 'header_store_button',
+            },
           })
         "
         preset="tertiary"
