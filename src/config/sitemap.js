@@ -28,8 +28,9 @@ const LIKECOIN_NFT_API_WALLET = IS_TESTNET
 const getLatestNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?reverse=true`;
 const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getTopCreators = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
-const getTopCollectors = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/collector?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
-const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list`;
+
+const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list?limit=100`;
+const getLatestCollections = `${LIKE_CO_API}/likernft/book/collection/store/list?limit=100`;
 const getBookstoreProductsFromCMS = `${EXTERNAL_HOST}/api/bookstore/products`;
 const getBookstoreCMSTags = `${EXTERNAL_HOST}/api/bookstore/tags`;
 
@@ -40,13 +41,16 @@ async function getSitemapRoutes() {
     topClassRes,
     creatorRes,
     newBookRes,
+    newCollectionRes,
     cmsBookRes,
+    cmsTagRes,
   ] = await Promise.all(
     [
       getLatestNFTClasses,
       getTopNFTClasses,
       getTopCreators,
       getLatestBooks,
+      getLatestCollections,
       getBookstoreProductsFromCMS,
       getBookstoreCMSTags,
     ].map(url =>
@@ -71,13 +75,19 @@ async function getSitemapRoutes() {
   const creator = ((creatorRes.data || {}).creators || []).map(c => c.account);
   const portfolioPageRoutes = creator.map(id => `/${id}`);
 
-  const tagIds = ((cmsBookRes.data || {}).records || []).map(t => t.id);
+  const collectionIds = ((newCollectionRes.data || {}).list || []).map(
+    c => c.id
+  );
+  const collectionPageRoutes = collectionIds.map(id => `/nft/collection/${id}`);
+
+  const tagIds = ((cmsTagRes.data || {}).records || []).map(t => t.id);
   const bookstorePageRoutes = tagIds.map(id => `/store?tag=${id}`);
 
   let allRoutes = [];
   allRoutes = allRoutes.concat(bookstorePageRoutes);
   allRoutes = allRoutes.concat(nftDetailsPageRoutes);
   allRoutes = allRoutes.concat(portfolioPageRoutes);
+  allRoutes = allRoutes.concat(collectionPageRoutes);
   return allRoutes.map(url => ({
     url: `/${locales[0]}${url}`,
     links: locales.map(lang => ({ lang, url: `/${lang}${url}` })),
