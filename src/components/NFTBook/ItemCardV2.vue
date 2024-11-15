@@ -33,7 +33,10 @@
         :to="
           localeLocation({
             name: 'store',
-            query: { q: iscnWorkAuthor },
+            query: {
+              q: iscnWorkAuthor,
+              ll_medium: linkMedium,
+            },
           })
         "
       >
@@ -45,6 +48,7 @@
           localeLocation({
             name: 'id',
             params: { id: productOwner },
+            query: { ll_medium: linkMedium },
           })
         "
       >
