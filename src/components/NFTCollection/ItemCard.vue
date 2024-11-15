@@ -14,7 +14,7 @@
         'w-full',
         'rounded-[32px]',
         'px-[16px] sm:px-[32px]',
-        { 'laptop:px-[48px]': !isCompactPreset },
+        { 'laptop:px-[20px]': !isCompactPreset },
         'transition-all',
         'duration-200',
         bgStyle,
@@ -66,7 +66,7 @@
             :text="$t('nft_collection_num_of_books', { num: classIds.length })"
           />
 
-          <div class="hidden laptop:block">
+          <div class="hidden w-full laptop:block">
             <slot name="column-left" />
           </div>
         </div>
@@ -98,7 +98,7 @@
             class="text-like-collection"
             :text="$t('nft_collection_label')"
           />
-          <Label preset="h4" :class="titleStyle" :text="collectionName" />
+          <Label preset="h3" :class="titleStyle" :text="collectionName" />
           <Markdown :md-string="collectionDescription" />
           <NFTBookSpecTable class="mt-[12px]">
             <client-only>
@@ -154,16 +154,24 @@
               :is-downloadable="isDownloadable"
             />
           </NFTBookSpecTable>
-          <div class="flex flex-col items-center w-full laptop:hidden">
+          <div
+            class="relative pt-[36px] flex flex-col items-center w-full laptop:hidden"
+          >
+            <div
+              class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
+            />
+            <slot name="column-edition-select" />
+          </div>
+          <div class="flex-col hidden w-full laptop:flex">
             <slot name="column-edition-select" />
           </div>
         </div>
-        <div class="flex flex-col items-center laptop:hidden">
+        <div class="relative flex flex-col items-center laptop:hidden">
+          <div
+            class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
+          />
           <slot name="column-left" />
         </div>
-      </div>
-      <div class="pb-[32px] w-full hidden laptop:flex flex-col">
-        <slot name="column-edition-select" />
       </div>
     </component>
 

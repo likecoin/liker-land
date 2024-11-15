@@ -10,17 +10,33 @@
           preset="details"
           @click-avatar="handleNFTCardClickAvatar"
         >
-          <template #column-edition-select>
-            <Separator />
+          <template #column-left>
+            <ButtonV2
+              preset="outline"
+              class="w-full h-[32px] border-[#EBEBEB]"
+              :is-disabled="isAllSoldOut"
+              @click="handleGiftFromEditionSelector"
+            >
+              <IconGift class="w-[16px] text-dark-gray" />
+              <p
+                class="ml-[8px] text-[12px] text-dark-gray"
+                v-text="$t('nft_edition_select_confirm_button_text_gift')"
+              />
+            </ButtonV2>
+          </template>
 
+          <template #column-edition-select>
+            <div
+              class="hidden laptop:block border-b-[1px] border-[#EBEBEB] w-full my-[16px]"
+            />
             <NFTEditionSelect
               v-if="collectionIsBook"
               class="self-stretch"
+              :is-all-sold-out="isAllSoldOut"
               :items="[formattedCollection]"
               :should-show-notify-button="false"
               @click-collect="handleCollectFromEditionSelector"
               @click-add-to-cart="handleClickAddToCart"
-              @click-gift="handleGiftFromEditionSelector"
               @input-custom-price="handleInputCustomPrice"
             />
           </template>
@@ -58,6 +74,7 @@
     </div>
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
+      :items="[formattedCollection]"
       @submit="handleGiftSubmit"
       @close="handleGiftClose"
     />
@@ -375,6 +392,12 @@ export default {
         currency: 'USD',
         isNFTBook: this.collectionIsBook,
       };
+    },
+    isAllSoldOut() {
+      return (
+        this.formattedCollection?.stock === 0 ||
+        this.formattedCollection?.priceLabel === undefined
+      );
     },
   },
   mounted() {

@@ -53,6 +53,29 @@
                 </li>
               </ul>
 
+              <div class="flex flex-col gap-[8px] mt-[24px] w-full">
+                <ButtonV2
+                  preset="outline"
+                  class="w-full h-[32px] border-[#EBEBEB]"
+                  :is-disabled="isAllSoldOut"
+                  @click="handleGiftFromEditionSelector"
+                >
+                  <IconGift class="w-[16px] text-dark-gray" />
+                  <p
+                    class="ml-[8px] text-[12px] text-dark-gray"
+                    v-text="$t('nft_edition_select_confirm_button_text_gift')"
+                  />
+                </ButtonV2>
+
+                <ButtonV2
+                  v-if="!isAllSoldOut"
+                  preset="outline"
+                  class="w-full h-[32px] border-[#EBEBEB]"
+                  content-class="text-[12px] text-dark-gray"
+                  :text="compareButtonText"
+                  @click="handleClickEditionCompareButton"
+                />
+              </div>
               <NFTViewOptionList
                 class="mt-[24px] mb-[48px]"
                 :url="externalUrl"
@@ -70,17 +93,8 @@
             </template>
 
             <template #column-edition-select>
-              <NFTEditionSelect
-                class="self-stretch"
-                :items="nftEditions"
-                :should-show-notify-button="false"
-                :value="defaultSelectedValue"
-                @change="handleEditionSelectChange"
-                @click-collect="handleCollectFromEditionSelector"
-                @click-add-to-cart="handleClickAddToCart"
-                @click-gift="handleGiftFromEditionSelector"
-                @click-compare="handleClickEditionCompareButton"
-                @input-custom-price="handleInputCustomPrice"
+              <div
+                class="hidden laptop:block border-b-[1px] border-[#EBEBEB] w-full my-[16px]"
               />
               <div
                 v-if="nftCollections.length"
@@ -88,7 +102,7 @@
                 @click="handleClickCollectionHint"
               >
                 <Label
-                  class="underline text-like-collection !text-[14px] cursor-pointer"
+                  class="underline relative text-medium-gray !text-[12px] mb-[-20px] z-50 cursor-pointer"
                   align="right"
                   :text="$t('nft_collection_hint')"
                 >
@@ -97,6 +111,17 @@
                   </template>
                 </Label>
               </div>
+              <NFTEditionSelect
+                class="self-stretch"
+                :items="nftEditions"
+                :should-show-notify-button="false"
+                :value="defaultSelectedValue"
+                :is-all-sold-out="isAllSoldOut"
+                @change="handleEditionSelectChange"
+                @click-collect="handleCollectFromEditionSelector"
+                @click-add-to-cart="handleClickAddToCart"
+                @input-custom-price="handleInputCustomPrice"
+              />
             </template>
           </NFTBookItemCard>
 
@@ -356,6 +381,9 @@
     </div>
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
+      :items="nftEditions"
+      :value="defaultSelectedValue"
+      @change="handleEditionSelectChange"
       @submit="handleGiftSubmit"
       @close="handleGiftClose"
     />
@@ -961,6 +989,18 @@ export default {
       return (
         this.classId ===
         'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3'
+      );
+    },
+    isAllSoldOut() {
+      return this.nftEditions.every(
+        item => item.stock === 0 || item.priceLabel === undefined
+      );
+    },
+    compareButtonText() {
+      return this.$t(
+        this.nftEditions?.length === 1
+          ? 'nft_edition_view_edition_button_text'
+          : 'nft_edition_select_compare_button_text'
       );
     },
   },

@@ -1,128 +1,60 @@
 <template>
-  <div :class="rootClasses">
-    <table
-      v-if="(!isSingleItem || (isSingleItem && items[0].name)) && !isAllSoldOut"
-      class="border-separate border-spacing-y-[8px] mb-[8px] w-full"
-    >
-      <tbody>
-        <NFTEditionSelectItem
-          v-for="(item, index) in items"
-          :key="index"
-          :name="item.name"
-          :currency="item.currency"
-          :price-label="item.priceLabel"
-          :stock="item.stock"
-          :is-selected="item.value === selectedValue"
-          :current-price="item.price"
-          :default-price="item.defaultPrice"
-          @click="handleClickPriceSelectItem(item)"
-        />
-      </tbody>
-    </table>
-
+  <div class="flex flex-col gap-[12px] w-full flex-wrap">
     <div
-      :class="[
-        'flex',
-        'flex-wrap',
-        'justify-end',
-        'items-stretch sm:items-center',
-        'gap-[12px]',
-        'flex-col sm:flex-row',
-      ]"
-    >
-      <ButtonV2
-        v-if="!isAllSoldOut"
-        preset="plain"
-        class="text-white underline max-638:order-1"
-        :text="
-          $t(
-            isSingleItem
-              ? 'nft_edition_view_edition_button_text'
-              : 'nft_edition_select_compare_button_text'
-          )
-        "
-        @click="handleClickCompareItemsButton"
-      />
-      <template v-if="isSingleItem || isAllSoldOut">
-        <span v-if="isSingleItem && !items[0].name" class="text-white">{{
-          priceLabel
-        }}</span>
-        <NFTStockLabel
-          v-if="items.length > 1 || isAllSoldOut"
-          :stock="stock"
-          :is-dark="!isAllSoldOut"
-        />
-      </template>
+      class="text-[18px] font-500 text-dark-gray w-full"
+      v-text="$t('nft_edition_select_section_label')"
+    />
 
-      <ButtonV2
-        v-if="
-          !isAllSoldOut &&
-            selectedItem.price > 0 &&
-            !selectedItem.isPhysicalOnly
-        "
-        :is-disabled="!selectedItem"
-        preset="secondary"
-        :text="$t('nft_edition_select_confirm_button_text_gift')"
-        @click="handleClickGiftButton"
-      >
-        <template #prepend>
-          <IconGift class="w-[16px]" />
-        </template>
-      </ButtonV2>
-      <ButtonV2
-        v-if="!isAllSoldOut"
-        :is-disabled="!selectedItem"
-        preset="secondary"
-        :text="$t('nft_edition_select_confirm_button_text_purchase')"
-        @click="handleClickCollectButton"
-      >
-        <template #prepend>
-          <NFTWidgetIconInsertCoin class="w-[16px]" />
-        </template>
-      </ButtonV2>
+    <div class="flex items-stretch gap-[12px] w-full flex-wrap">
+      <NFTEditionSelectItemV2
+        v-for="(item, index) in items"
+        :key="index"
+        :name="item.name"
+        :currency="item.currency"
+        :price-label="item.priceLabel"
+        :stock="item.stock"
+        :is-selected="item.value === selectedValue"
+        :current-price="item.price"
+        :default-price="item.defaultPrice"
+        @click="handleClickPriceSelectItem(item)"
+      />
+    </div>
+    <div class="flex items-center gap-[12px] w-full mt-[12px]">
       <ButtonV2
         v-if="
           !isAllSoldOut && selectedItem.price > 0 && !selectedItem.hasShipping
         "
         :is-disabled="!selectedItem"
-        preset="secondary"
-        :text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
+        preset="primary"
+        class="w-[58%] h-[56px] laptop:w-[260px]"
         @click="handleClickAddToCartButton"
       >
-        <template #prepend>
-          <IconAdd class="w-[16px]" />
-        </template>
+        <IconAdd class="w-[16px]" />
+        <p
+          class="ml-[8px]"
+          v-text="$t('nft_edition_select_confirm_button_text_add_to_cart')"
+        />
       </ButtonV2>
       <ButtonV2
-        v-else-if="shouldShowNotifyButton"
-        preset="outline"
-        :text="$t('nft_edition_select_notify_button_text')"
-        @click="handleClickNotifyButton"
-      >
-        <template #prepend>
-          <NotifyIcon class="w-[16px]" />
-        </template>
-      </ButtonV2>
+        v-if="!isAllSoldOut"
+        :is-disabled="!selectedItem"
+        :class="[
+          'h-[56px]',
+          selectedItem.hasShipping
+            ? 'w-full laptop:w-[260px]'
+            : 'w-[40%] laptop:w-[144px]',
+        ]"
+        preset="secondary"
+        :text="$t('nft_edition_select_confirm_button_text_purchase')"
+        @click="handleClickCollectButton"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import ButtonV2 from './ButtonV2';
-import NotifyIcon from './Icon/Notify';
-import NFTEditionSelectItem from './NFTEditionSelectItem';
-import NFTStockLabel from './NFTStockLabel';
-import NFTWidgetIconInsertCoin from './NFTWidget/Icon/InsertCoin';
-
 export default {
   name: 'NFTEditionSelect',
-  components: {
-    ButtonV2,
-    NotifyIcon,
-    NFTEditionSelectItem,
-    NFTStockLabel,
-    NFTWidgetIconInsertCoin,
-  },
   props: {
     items: {
       type: Array,
@@ -147,6 +79,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isAllSoldOut: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     // NOTE: If the selected item is out of stock, select another item.
@@ -163,27 +99,6 @@ export default {
     };
   },
   computed: {
-    rootClasses() {
-      const classes = [
-        this.isAllSoldOut ? 'bg-gray-f7' : 'bg-like-green',
-        'rounded-[16px]',
-      ];
-      if (this.isAllSoldOut) {
-        classes.push('p-[24px]');
-      } else if (this.isSingleItem) {
-        classes.push('px-[20px]', 'py-[20px] sm:pt-[16px] sm:pb-[24px]');
-      } else {
-        classes.push(
-          'p-[12px] sm:p-[24px]',
-          'pt-[4px] sm:pt-[16px]',
-          'pb-[16px]'
-        );
-      }
-      return classes;
-    },
-    isSingleItem() {
-      return this.items.length === 1;
-    },
     selectedItem() {
       return this.items.find(item => item.value === this.selectedValue);
     },
@@ -192,11 +107,6 @@ export default {
     },
     priceLabel() {
       return this.selectedItem?.priceLabel;
-    },
-    isAllSoldOut() {
-      return this.items.every(
-        item => item.stock === 0 || item.priceLabel === undefined
-      );
     },
   },
   mounted() {
