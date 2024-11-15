@@ -93,6 +93,24 @@
             </template>
 
             <template #column-edition-select>
+              <div
+                class="hidden laptop:block border-b-[1px] border-[#EBEBEB] w-full my-[16px]"
+              />
+              <div
+                v-if="nftCollections.length"
+                class="items-center justify-end w-full mt-[12px]"
+                @click="handleClickCollectionHint"
+              >
+                <Label
+                  class="underline relative text-medium-gray !text-[12px] mb-[-20px] z-50 cursor-pointer"
+                  align="right"
+                  :text="$t('nft_collection_hint')"
+                >
+                  <template #append>
+                    <IconCollection />
+                  </template>
+                </Label>
+              </div>
               <NFTEditionSelect
                 class="self-stretch"
                 :items="nftEditions"
@@ -104,21 +122,6 @@
                 @click-add-to-cart="handleClickAddToCart"
                 @input-custom-price="handleInputCustomPrice"
               />
-              <div
-                v-if="nftCollections.length"
-                class="items-center justify-end w-full mt-[12px]"
-                @click="handleClickCollectionHint"
-              >
-                <Label
-                  class="underline text-like-collection !text-[14px] cursor-pointer"
-                  align="right"
-                  :text="$t('nft_collection_hint')"
-                >
-                  <template #append>
-                    <IconCollection />
-                  </template>
-                </Label>
-              </div>
             </template>
           </NFTBookItemCard>
 

@@ -1,9 +1,6 @@
 <template>
   <div class="flex flex-col gap-[12px] w-full flex-wrap">
     <div
-      class="hidden laptop:block border-b-[1px] border-[#EBEBEB] w-full my-[16px]"
-    />
-    <div
       class="text-[18px] font-500 text-dark-gray w-full"
       v-text="$t('nft_edition_select_section_label')"
     />

@@ -26,6 +26,9 @@
           </template>
 
           <template #column-edition-select>
+            <div
+              class="hidden laptop:block border-b-[1px] border-[#EBEBEB] w-full my-[16px]"
+            />
             <NFTEditionSelect
               v-if="collectionIsBook"
               class="self-stretch"
