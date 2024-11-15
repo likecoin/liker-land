@@ -72,6 +72,9 @@ export default {
               data: {
                 data: buffer,
                 name: this.nftName,
+                classId: this.classId,
+                nftId: this.nftId,
+                wallet: this.getSessionWallet,
               },
             },
             this.iframeOrigin,
@@ -92,6 +95,9 @@ export default {
               data: {
                 data: buffer,
                 name: this.nftName,
+                classId: this.classId,
+                nftId: this.nftId,
+                wallet: this.getSessionWallet,
               },
             },
             this.iframeOrigin,
