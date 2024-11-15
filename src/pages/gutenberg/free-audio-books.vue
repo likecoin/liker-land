@@ -337,6 +337,9 @@ export default {
       this.$router.push(
         this.localeLocation({
           name: 'store',
+          query: {
+            ll_medium: 'gutenberg',
+          },
         })
       );
     },
