@@ -23,7 +23,7 @@
           class="w-[20px] h-[20px] box-border rounded-full bg-white border-shade-gray border-[1px]"
         />
         <IconCircleCheck
-          v-if="isSelected"
+          v-if="isSelected && isInStock"
           class="text-like-green h-[22px] w-[22px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
       </div>
