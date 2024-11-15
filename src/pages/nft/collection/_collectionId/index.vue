@@ -13,14 +13,15 @@
           <template #column-left>
             <ButtonV2
               preset="outline"
-              class="w-full text-dark-gray my-[24px]"
+              class="w-full h-[32px] border-[#EBEBEB]"
               :is-disabled="isAllSoldOut"
               @click="handleGiftFromEditionSelector"
             >
-              <IconGift class="w-[16px]" />
-              <p class="ml-[8px]">
-                {{ $t('nft_edition_select_confirm_button_text_gift') }}
-              </p>
+              <IconGift class="w-[16px] text-dark-gray" />
+              <p
+                class="ml-[8px] text-[12px] text-dark-gray"
+                v-text="$t('nft_edition_select_confirm_button_text_gift')"
+              />
             </ButtonV2>
           </template>
 

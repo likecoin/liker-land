@@ -56,20 +56,22 @@
               <div class="flex flex-col gap-[8px] mt-[24px] w-full">
                 <ButtonV2
                   preset="outline"
-                  class="w-full text-dark-gray"
+                  class="w-full h-[32px] border-[#EBEBEB]"
                   :is-disabled="isAllSoldOut"
                   @click="handleGiftFromEditionSelector"
                 >
-                  <IconGift class="w-[16px]" />
-                  <p class="ml-[8px]">
-                    {{ $t('nft_edition_select_confirm_button_text_gift') }}
-                  </p>
+                  <IconGift class="w-[16px] text-dark-gray" />
+                  <p
+                    class="ml-[8px] text-[12px] text-dark-gray"
+                    v-text="$t('nft_edition_select_confirm_button_text_gift')"
+                  />
                 </ButtonV2>
 
                 <ButtonV2
                   v-if="!isAllSoldOut"
                   preset="outline"
-                  class="w-full text-dark-gray"
+                  class="w-full h-[32px] border-[#EBEBEB]"
+                  content-class="text-[12px] text-dark-gray"
                   :text="compareButtonText"
                   @click="handleClickEditionCompareButton"
                 />
