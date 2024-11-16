@@ -827,7 +827,7 @@ export default {
       return;
     }
     let price;
-    let priceIndex;
+    let { priceIndex } = this;
     if (this.cartId) {
       const { data } = await this.$api.get(
         getNFTBookCartStatusEndpoint({
@@ -863,7 +863,7 @@ export default {
             token: this.token,
           })
         );
-        ({ price } = data);
+        ({ price, priceIndex } = data);
         const {
           giftInfo,
           isPhysicalOnly,
