@@ -94,7 +94,6 @@ export default {
       classId: this.$route.query.class_id,
       collectionId: this.$route.query.collection_id,
       cartItems: [],
-      priceIndex: this.$route.query.price_index,
     };
   },
   computed: {
@@ -103,6 +102,9 @@ export default {
     },
     paymentId() {
       return this.$route.query.payment_id;
+    },
+    priceIndex() {
+      return this.$route.query.price_index;
     },
     token() {
       return this.$route.query.claiming_token;
@@ -131,7 +133,7 @@ export default {
       return;
     }
     let price;
-    let priceIndex;
+    let { priceIndex } = this;
 
     if (this.cartId) {
       const { data } = await this.$api.get(
