@@ -13,7 +13,7 @@
         ? '!border-like-green'
         : 'ring-[1px] ring-shade-gray hover:ring-[#d1d1d1] transition-all duration-75',
       'flex items-center justify-between gap-[16px]',
-      'h-[82px]',
+      'min-h-[82px]',
     ]"
     @click="$emit('click', $event)"
   >
