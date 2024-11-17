@@ -111,41 +111,41 @@ export default {
     showLabels() {
       return this.isSoldOut || this.isLimitedStock || this.discountInfo;
     },
-  },
-  cellClasses() {
-    return [
-      'group-hover:bg-like-cyan-light/[0.1]',
-      'group-active:bg-like-cyan-light/[0.2]',
-      'border-[2px]',
-      this.isInStock && this.isSelected
-        ? 'border-like-cyan-light'
-        : 'border-transparent',
-      { 'group-hover:border-like-cyan-light/50': !this.isSelected },
-      'transition-colors',
-    ];
-  },
-  discountInfo() {
-    const originalPrice = this.defaultPrice;
-    const { currentPrice } = this;
-    if (!currentPrice || originalPrice <= currentPrice) {
-      return undefined;
-    }
+    cellClasses() {
+      return [
+        'group-hover:bg-like-cyan-light/[0.1]',
+        'group-active:bg-like-cyan-light/[0.2]',
+        'border-[2px]',
+        this.isInStock && this.isSelected
+          ? 'border-like-cyan-light'
+          : 'border-transparent',
+        { 'group-hover:border-like-cyan-light/50': !this.isSelected },
+        'transition-colors',
+      ];
+    },
+    discountInfo() {
+      const originalPrice = this.defaultPrice;
+      const { currentPrice } = this;
+      if (!currentPrice || originalPrice <= currentPrice) {
+        return undefined;
+      }
 
-    const discountAmount = originalPrice - currentPrice;
-    const discountPercentage = Math.ceil(
-      (discountAmount / originalPrice) * 100
-    );
+      const discountAmount = originalPrice - currentPrice;
+      const discountPercentage = Math.ceil(
+        (discountAmount / originalPrice) * 100
+      );
 
-    return {
-      originalPriceLabel:
-        this.currency === 'HKD'
-          ? formatNumberWithUnit(
-              Number((originalPrice * USD_TO_HKD_RATIO).toFixed(1)),
-              'HKD'
-            )
-          : formatNumberWithUSD(originalPrice),
-      discountPercentage,
-    };
+      return {
+        originalPriceLabel:
+          this.currency === 'HKD'
+            ? formatNumberWithUnit(
+                Number((originalPrice * USD_TO_HKD_RATIO).toFixed(1)),
+                'HKD'
+              )
+            : formatNumberWithUSD(originalPrice),
+        discountPercentage,
+      };
+    },
   },
 };
 </script>
