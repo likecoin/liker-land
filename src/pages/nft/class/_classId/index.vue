@@ -56,7 +56,8 @@
               <div class="flex flex-col gap-[8px] mt-[24px] w-full">
                 <ButtonV2
                   preset="outline"
-                  class="w-full h-[32px] border-[#EBEBEB]"
+                  class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
+                  size="tiny"
                   :is-disabled="isAllSoldOut"
                   @click="handleGiftFromEditionSelector"
                 >
@@ -70,7 +71,8 @@
                 <ButtonV2
                   v-if="!isAllSoldOut"
                   preset="outline"
-                  class="w-full h-[32px] border-[#EBEBEB]"
+                  size="tiny"
+                  class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
                   content-class="text-[12px] text-dark-gray"
                   :text="compareButtonText"
                   @click="handleClickEditionCompareButton"

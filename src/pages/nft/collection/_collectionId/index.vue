@@ -13,7 +13,8 @@
           <template #column-left>
             <ButtonV2
               preset="outline"
-              class="w-full h-[32px] border-[#EBEBEB]"
+              class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
+              size="tiny"
               :is-disabled="isAllSoldOut"
               @click="handleGiftFromEditionSelector"
             >
