@@ -1473,8 +1473,8 @@ export default {
       await this.handleCollectFromEdition(this.giftSelectedValue, giftInfo);
       this.isGiftDialogOpen = false;
     },
-    handleGiftFromEditionSelector(selectedValue) {
-      this.giftSelectedValue = selectedValue;
+    handleGiftFromEditionSelector() {
+      this.giftSelectedValue = this.selectedValue;
       this.isGiftDialogOpen = true;
       logTrackerEvent(
         this,
