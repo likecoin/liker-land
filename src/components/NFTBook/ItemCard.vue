@@ -157,8 +157,22 @@
               v-if="iscnWorkAuthor"
               class="flex flex-col justify-center min-w-0"
             >
-              <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
-              <NFTBookSpecTableValue :text="iscnWorkAuthor" :preset="preset" />
+              <NuxtLink
+                class="group"
+                :to="
+                  localeLocation({
+                    name: 'store',
+                    query: { q: iscnWorkAuthor },
+                  })
+                "
+              >
+                <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
+                <NFTBookSpecTableValue
+                  class="group-hover:underline"
+                  :text="iscnWorkAuthor"
+                  :preset="preset"
+                />
+              </NuxtLink>
             </li>
             <li
               v-if="iscnWorkPublisher"
