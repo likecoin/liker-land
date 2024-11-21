@@ -156,7 +156,6 @@ const actions = {
     dispatch('saveBookProductShoppingCart');
   },
   addBookProductsToShoppingCart({ commit, dispatch }, items) {
-    commit(TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT, {});
     items.slice(0, BATCH_COLLECT_MAX).forEach(item => {
       commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, item);
     });
