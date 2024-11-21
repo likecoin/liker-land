@@ -5,6 +5,7 @@ import {
   saveShoppingCartToStorage,
 } from '~/util/shopping-cart';
 import { BATCH_COLLECT_MAX } from '~/constant';
+import { postShoppingCart, deleteShoppingCart } from '~/util/api';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -169,14 +170,29 @@ const actions = {
     commit(TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT, {});
     dispatch('saveBookProductShoppingCart');
   },
-  saveBookProductShoppingCart({ state }) {
+  async saveBookProductShoppingCart({ state, getters }) {
     saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
+    if (getters.loginAddress) {
+      const cart = Object.values(state.shoppingCartBookProductByIdMap);
+      try {
+        if (cart.length) {
+          await this.$api.$post(postShoppingCart(), { cart });
+        } else {
+          await this.$api.$post(postShoppingCart(), { cart });
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    }
   },
-  loadBookProductShoppingCart({ commit }) {
-    commit(
-      TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT,
-      loadShoppingCartFromStorage('book')
-    );
+  loadBookProductShoppingCart({ commit, getters }) {
+    if (!getters.shoppingCartBookItems.length) {
+      commit(
+        TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT,
+        loadShoppingCartFromStorage('book')
+      );
+    }
   },
 };
 
