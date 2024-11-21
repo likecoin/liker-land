@@ -116,6 +116,9 @@
         text-like-green
       "
     >
+      <a class="hover:underline" href="https://blog.liker.land">{{
+        $t('footer_nav_blog')
+      }}</a>
       <button class="cursor-pointer hover:underline" @click="handleClickHelp">
         {{ $t('footer_nav_help') }}
       </button>
