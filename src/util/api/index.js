@@ -454,6 +454,10 @@ export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';
 
+export const getShoppingCart = () => '/api/v2/users/cart';
+export const postShoppingCart = () => '/api/v2/users/cart';
+export const deleteShoppingCart = () => '/api/v2/users/cart';
+
 export const postUserV2WalletEmail = ({
   email,
   followee,
