@@ -18,11 +18,40 @@
             <!-- Left arrow -->
             <div
               v-if="isOverflowing && !isAtStart"
-              class="absolute left-0 h-full z-10 flex items-center pr-[120px] text-gray-500 bg-gradient-to-l from-transparent to-light-gray cursor-pointer"
+              :class="[
+                'hidden laptop:flex',
+                'absolute',
+                'left-0',
+                'h-full',
+                'z-10',
+                'items-center',
+                'pr-[120px]',
+                'text-gray-500',
+                'bg-gradient-to-l',
+                'from-transparent',
+                'to-light-gray',
+                'cursor-pointer',
+              ]"
               @click="scrollLeft"
             >
               <IconArrowLeft class="w-[20px] h-[20px]" />
             </div>
+            <div
+              v-if="isOverflowing && !isAtStart"
+              :class="[
+                'flex laptop:hidden',
+                'absolute',
+                'left-0',
+                'h-full',
+                'z-10',
+                'items-center',
+                'pr-[120px]',
+                'text-gray-500',
+                'bg-gradient-to-l',
+                'from-transparent',
+                'to-light-gray',
+              ]"
+            />
             <!-- Tags -->
             <div
               ref="tagsContainer"
@@ -33,7 +62,10 @@
                 'w-full',
                 'px-[16px] laptop:px-0',
                 'py-[16px]',
-                'overflow-x-hidden',
+                'overflow-scroll',
+                'scrollbar-custom',
+
+                'laptop:overflow-x-hidden',
                 'overflow-y-hidden',
               ]"
               @scroll="handleScroll"
@@ -64,11 +96,40 @@
             <!-- Right arrow -->
             <div
               v-if="isOverflowing && !isAtEnd"
-              class="absolute right-0 h-full z-10 flex items-center pl-[120px] text-gray-500 bg-gradient-to-r from-transparent to-light-gray cursor-pointer"
+              :class="[
+                'hidden laptop:flex',
+                'absolute',
+                'right-0',
+                'h-full',
+                'z-10',
+                'items-center',
+                'pl-[120px]',
+                'text-gray-500',
+                'bg-gradient-to-r',
+                'from-transparent',
+                'to-light-gray',
+                'cursor-pointer',
+              ]"
               @click="scrollRight"
             >
               <IconArrowRight class="w-[20px] h-[20px]" />
             </div>
+            <div
+              v-if="isOverflowing && !isAtEnd"
+              :class="[
+                'flex laptop:hidden',
+                'absolute',
+                'right-0',
+                'h-full',
+                'z-10',
+                'items-center',
+                'pl-[120px]',
+                'text-gray-500',
+                'bg-gradient-to-r',
+                'from-transparent',
+                'to-light-gray',
+              ]"
+            />
           </nav>
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
