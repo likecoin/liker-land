@@ -6,7 +6,9 @@
         <div
           :class="[
             'flex',
+            'flex-row-reverse',
             'justify-between',
+            'gap-[16px]',
             'items-center',
 
             'w-full',
@@ -21,84 +23,21 @@
               @clear="handleSearchBarClear"
               @input="handleSearchBarInput"
             />
-            <Dropdown>
-              <template #trigger="{ toggle }">
-                <ButtonV2
-                  preset="tertiary"
-                  :text="selectedLanguageFilterLabel"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconArrowDown />
-                  </template>
-                </ButtonV2>
+
+            <ButtonV2
+              preset="tertiary"
+              :text="$t('listing_page_filter')"
+              class="whitespace-nowrap"
+            >
+              <template #prepend>
+                <IconFilter />
               </template>
-              <MenuList class="!py-[8px]">
-                <MenuItem
-                  v-for="(item, i) in languageFilterList"
-                  :key="i"
-                  class="w-full"
-                  label-align="left"
-                  label-class="py-[8px]"
-                  :value="item.value"
-                  :label="item.text"
-                  :selected-value="selectedLanguageFilter"
-                  @select="selectedLanguageFilter = item.value"
-                >
-                  <template
-                    v-if="selectedLanguageFilter === item.value"
-                    #label-append
-                  >
-                    <IconCheck />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
-
+            </ButtonV2>
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
                   preset="tertiary"
-                  :text="selectedPriceFilterLabel"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconArrowDown />
-                  </template>
-                </ButtonV2>
-              </template>
-              <MenuList class="!py-[8px]">
-                <MenuItem
-                  v-for="(item, i) in priceFilterList"
-                  :key="i"
-                  class="w-full"
-                  label-align="left"
-                  label-class="py-[8px]"
-                  :value="item.value"
-                  :label="item.text"
-                  :selected-value="selectedPriceFilter"
-                  @select="selectedPriceFilter = item.value"
-                >
-                  <template
-                    v-if="selectedPriceFilter === item.value"
-                    #label-append
-                  >
-                    <IconCheck />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
-
-            <ListingPageToggleButton
-              v-model="isAppliedDRMFreeFilter"
-              :label="$t('listing_page_filter_drm_free_label')"
-              @input="handleToggleDRMFreeFilter"
-            />
-
-            <Dropdown>
-              <template #trigger="{ toggle }">
-                <ButtonV2
-                  preset="tertiary"
+                  class="whitespace-nowrap"
                   :text="selectedSortingLabel"
                   @click="toggle"
                 >
@@ -125,45 +64,64 @@
               </MenuList>
             </Dropdown>
           </div>
-        </div>
 
-        <nav
-          v-show="!searchQuery"
-          :class="[
-            'flex',
-            'items-start',
-
-            'w-full',
-            'px-[16px] laptop:px-0',
-            'py-[16px]',
-
-            'overflow-x-auto',
-            'overflow-y-hidden',
-          ]"
-        >
-          <ul class="flex gap-x-2 gap-y-4">
-            <li
-              v-for="tag in bookstoreTagButtons"
-              :key="tag.id"
-              class="shrink-0"
+          <nav class="relative flex items-center">
+            <!-- Left arrow -->
+            <div
+              v-if="isOverflowing && !isAtStart"
+              class="absolute left-0 h-full z-10 flex items-center pr-[120px] text-gray-500 bg-gradient-to-l from-transparent to-light-gray cursor-pointer"
+              @click="scrollLeft"
             >
-              <ButtonV2
-                :preset="
-                  tag.id === selectedTagId ||
-                  (!selectedTagId && tag.id === 'all')
-                    ? 'secondary'
-                    : 'outline'
-                "
-                :text="tag.name"
-                :alt="tag.name"
-                size="mini"
-                theme="glow"
-                :to="tag.route"
-                @click.native="handleTagClick(tag)"
-              />
-            </li>
-          </ul>
-        </nav>
+              <IconArrowLeft class="w-[20px] h-[20px]" />
+            </div>
+            <!-- Tags -->
+            <div
+              ref="tagsContainer"
+              :class="[
+                'flex',
+                'flex-nowrap',
+                'items-start',
+                'w-full',
+                'px-[16px] laptop:px-0',
+                'py-[16px]',
+                'overflow-x-hidden',
+                'overflow-y-hidden',
+              ]"
+              @scroll="handleScroll"
+            >
+              <ul class="flex gap-x-2 gap-y-4">
+                <li
+                  v-for="tag in bookstoreTagButtons"
+                  :key="tag.id"
+                  class="shrink-0"
+                >
+                  <ButtonV2
+                    :preset="
+                      tag.id === selectedTagId ||
+                      (!selectedTagId && tag.id === 'all')
+                        ? 'secondary'
+                        : 'outline'
+                    "
+                    :text="tag.name"
+                    :alt="tag.name"
+                    size="mini"
+                    theme="glow"
+                    :to="tag.route"
+                    @click.native="handleTagClick(tag)"
+                  />
+                </li>
+              </ul>
+            </div>
+            <!-- Right arrow -->
+            <div
+              v-if="isOverflowing && !isAtEnd"
+              class="absolute right-0 h-full z-10 flex items-center pl-[120px] text-gray-500 bg-gradient-to-r from-transparent to-light-gray cursor-pointer"
+              @click="scrollRight"
+            >
+              <IconArrowRight class="w-[20px] h-[20px]" />
+            </div>
+          </nav>
+        </div>
 
         <!-- Mobile Filter & Sorting -->
         <div
@@ -594,6 +552,11 @@ export default {
 
       isSearching: false,
       searchItems: [],
+
+      // Tag scroll
+      isOverflowing: false,
+      isAtStart: true,
+      isAtEnd: false,
     };
   },
   head() {
@@ -1069,6 +1032,13 @@ export default {
       search_term: this.searchQuery || undefined,
       isNFTBook: true,
     });
+    this.$nextTick(() => {
+      this.checkOverflow();
+    });
+    window.addEventListener('resize', this.checkOverflow);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.checkOverflow);
   },
   methods: {
     ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
@@ -1286,6 +1256,30 @@ export default {
         })),
         isNFTBook: true,
       });
+    },
+    checkOverflow() {
+      const container = this.$refs.tagsContainer;
+      const overflowThreshold = 4;
+      this.isOverflowing =
+        container.scrollWidth > container.clientWidth + overflowThreshold;
+      this.handleScroll();
+    },
+    handleScroll() {
+      const container = this.$refs.tagsContainer;
+      const threshold = 4;
+
+      this.isAtStart = container.scrollLeft <= threshold;
+      this.isAtEnd =
+        container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - threshold;
+    },
+    scrollLeft() {
+      const container = this.$refs.tagsContainer;
+      container.scrollBy({ left: -100, behavior: 'smooth' });
+    },
+    scrollRight() {
+      const container = this.$refs.tagsContainer;
+      container.scrollBy({ left: 100, behavior: 'smooth' });
     },
   },
 };
