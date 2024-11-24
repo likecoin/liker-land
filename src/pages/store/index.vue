@@ -6,7 +6,6 @@
         <div
           :class="[
             'flex',
-            'flex-row-reverse',
             'justify-between',
             'gap-[16px]',
             'items-center',
@@ -15,56 +14,6 @@
             'px-[16px] laptop:px-0',
           ]"
         >
-          <!-- Desktop Filter & Sorting -->
-          <div class="hidden desktop:flex items-center gap-[16px] relative">
-            <SearchBar
-              :search-query="searchQuery"
-              @open="handleSearchBarOpen"
-              @clear="handleSearchBarClear"
-              @input="handleSearchBarInput"
-            />
-
-            <ButtonV2
-              preset="tertiary"
-              :text="$t('listing_page_filter')"
-              class="whitespace-nowrap"
-            >
-              <template #prepend>
-                <IconFilter />
-              </template>
-            </ButtonV2>
-            <Dropdown>
-              <template #trigger="{ toggle }">
-                <ButtonV2
-                  preset="tertiary"
-                  class="whitespace-nowrap"
-                  :text="selectedSortingLabel"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconArrowDown />
-                  </template>
-                </ButtonV2>
-              </template>
-              <MenuList class="!py-[8px]">
-                <MenuItem
-                  v-for="(item, i) in availableSorting"
-                  :key="i"
-                  label-align="left"
-                  label-class="!py-[8px]"
-                  :value="item.value"
-                  :label="item.text"
-                  :selected-value="selectedSorting"
-                  @select="handleSortingChange"
-                >
-                  <template v-if="selectedSorting === item.value" #label-append>
-                    <IconCheck />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
-          </div>
-
           <nav class="relative flex items-center">
             <!-- Left arrow -->
             <div
@@ -121,6 +70,56 @@
               <IconArrowRight class="w-[20px] h-[20px]" />
             </div>
           </nav>
+          <!-- Desktop Filter & Sorting -->
+          <div class="hidden desktop:flex items-center gap-[16px] relative">
+            <SearchBar
+              :search-query="searchQuery"
+              @open="handleSearchBarOpen"
+              @clear="handleSearchBarClear"
+              @input="handleSearchBarInput"
+            />
+
+            <ButtonV2
+              preset="tertiary"
+              :text="$t('listing_page_filter')"
+              class="whitespace-nowrap"
+              @click="handleOpenFilterDialog"
+            >
+              <template #prepend>
+                <IconFilter />
+              </template>
+            </ButtonV2>
+            <Dropdown>
+              <template #trigger="{ toggle }">
+                <ButtonV2
+                  preset="tertiary"
+                  class="whitespace-nowrap"
+                  :text="selectedSortingLabel"
+                  @click="toggle"
+                >
+                  <template #append>
+                    <IconArrowDown />
+                  </template>
+                </ButtonV2>
+              </template>
+              <MenuList class="!py-[8px]">
+                <MenuItem
+                  v-for="(item, i) in availableSorting"
+                  :key="i"
+                  label-align="left"
+                  label-class="!py-[8px]"
+                  :value="item.value"
+                  :label="item.text"
+                  :selected-value="selectedSorting"
+                  @select="handleSortingChange"
+                >
+                  <template v-if="selectedSorting === item.value" #label-append>
+                    <IconCheck />
+                  </template>
+                </MenuItem>
+              </MenuList>
+            </Dropdown>
+          </div>
         </div>
 
         <!-- Mobile Filter & Sorting -->
