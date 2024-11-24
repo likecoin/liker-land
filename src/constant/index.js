@@ -428,3 +428,18 @@ export const SIGN_AUTHORIZATION_PERMISSIONS = [
   'read:nftcollection',
   'write:nftcollection',
 ];
+
+export const SEARCH_SUGGESTIONS = [
+  '免費',
+  '小說',
+  '旅遊',
+  '報刊',
+  '心靈',
+  '運動',
+  '董啟章',
+  '李立峯',
+  '新聞',
+  '理財',
+  '區塊鏈',
+  '繪本',
+];

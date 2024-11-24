@@ -142,8 +142,11 @@
             'relative',
           ]"
         >
-          <div class="flex items-center justify-center">
+          <div
+            class="flex items-center justify-center cursor-pointer px-[10px]"
+          >
             <SearchBar
+              class="w-full"
               :search-query="searchQuery"
               @open="handleSearchBarOpen"
               @clear="handleSearchBarClear"

@@ -5,7 +5,13 @@
       preset="tertiary"
       @click="toggleSearch"
     >
-      <IconSearch />
+      <div class="flex flex-nowrap items-center gap-[8px]">
+        <IconSearch />
+        <p
+          class="text-medium-gray whitespace-nowrap"
+          v-text="$t('listing_page_search_label')"
+        />
+      </div>
     </ButtonV2>
     <div
       class="flex items-center justify-center cursor-pointer p-[8px] desktop:hidden"
@@ -42,10 +48,11 @@
     >
       <IconSearch />
       <input
-        :value="searchQuery"
+        ref="searchInput"
         class="w-full bg-transparent border-0 focus-visible:outline-none"
         type="text"
-        :placeholder="$t('gutenberg_search_placeholder')"
+        :value="searchQuery"
+        :placeholder="placeholderText"
         @input="debouncedUpdateSearchKeyword"
       />
       <ButtonV2
@@ -63,6 +70,7 @@
 
 <script>
 import debounce from 'lodash.debounce';
+import { SEARCH_SUGGESTIONS } from '@/constant/index';
 
 export default {
   name: 'SearchBar',
@@ -75,6 +83,7 @@ export default {
   data() {
     return {
       isSearchOpen: false,
+      placeholderText: this.$t('gutenberg_search_placeholder'),
     };
   },
   mounted() {
@@ -88,6 +97,10 @@ export default {
         this.$emit('clear');
       } else {
         this.$emit('open');
+        this.placeholderText = this.getRandomPlaceholder();
+        this.$nextTick(() => {
+          this.$refs.searchInput?.focus();
+        });
       }
       this.isSearchOpen = !this.isSearchOpen;
     },
@@ -97,6 +110,11 @@ export default {
       },
       200
     ),
+    getRandomPlaceholder() {
+      const shuffled = [...SEARCH_SUGGESTIONS].sort(() => Math.random() - 0.5);
+      const randomTerms = shuffled.slice(0, 3);
+      return randomTerms.join('、');
+    },
   },
 };
 </script>

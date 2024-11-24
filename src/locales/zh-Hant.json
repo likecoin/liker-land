@@ -480,6 +480,7 @@
   "listing_page_QA_label": "電子書和紙本書有什麼分別?",
   "listing_page_QA_title": "常見問題",
   "listing_page_search": "搜尋",
+  "listing_page_search_label": "搜尋書名或作者",
   "listing_page_search_not_found": "請嘗試使用其他關鍵字。",
   "listing_page_search_recommend": "或是您可以瀏覽我們的推薦書籍：",
   "listing_page_search_result": "以下為 “{query}” 的搜尋結果：",
