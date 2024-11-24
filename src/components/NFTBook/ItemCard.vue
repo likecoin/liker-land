@@ -158,6 +158,7 @@
               class="flex flex-col justify-center min-w-0"
             >
               <NuxtLink
+                class="group"
                 :to="
                   localeLocation({
                     name: 'store',
@@ -167,6 +168,7 @@
               >
                 <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
                 <NFTBookSpecTableValue
+                  class="group-hover:underline"
                   :text="iscnWorkAuthor"
                   :preset="preset"
                 />
