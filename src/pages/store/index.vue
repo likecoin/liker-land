@@ -13,22 +13,6 @@
             'px-[16px] laptop:px-0',
           ]"
         >
-          <!-- Breadcrumb -->
-          <div class="flex gap-[8px] px-[4px] items-center">
-            <NuxtLink
-              class="text-[14px] text-medium-gray"
-              :to="localeLocation({ name: 'index' })"
-              @click.native="handleClickHomePage"
-              >{{ $t('listing_page_header_homePage') }}</NuxtLink
-            >
-            <IconArrowRight class="text-medium-gray" />
-            <NuxtLink
-              class="text-[20px] laptop:text-[28px]"
-              :to="localeLocation({ name: 'store' })"
-              >{{ $t('listing_page_header_listingPage') }}</NuxtLink
-            >
-          </div>
-
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
             <SearchBar
