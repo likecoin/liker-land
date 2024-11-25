@@ -109,9 +109,14 @@ export default {
       return this.selectedItem?.priceLabel;
     },
   },
+  watch: {
+    value() {
+      this.selectedValue = this.value;
+    },
+  },
   mounted() {
     if (this.selectedValue !== this.value) {
-      this.$emit('update:value', this.selectedValue);
+      this.$emit('change', this.selectedValue);
     }
   },
   methods: {
@@ -119,7 +124,6 @@ export default {
       if (this.selectedValue === value) return;
       this.selectedValue = value;
       this.$emit('change', value);
-      this.$emit('update:value', value);
       this.$emit('reset-custom-price');
     },
     handleClickGiftButton() {

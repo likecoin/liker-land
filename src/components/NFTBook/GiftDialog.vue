@@ -154,6 +154,9 @@ export default {
     };
   },
   watch: {
+    value() {
+      this.selectedValue = this.value;
+    },
     prefillGiftInfo: {
       handler(newVal) {
         this.fromName = newVal.fromName;
@@ -179,7 +182,6 @@ export default {
       if (this.selectedValue === value) return;
       this.selectedValue = value;
       this.$emit('change', value);
-      this.$emit('update:value', value);
     },
   },
 };
