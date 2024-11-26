@@ -56,9 +56,15 @@
               <div class="flex flex-col gap-[8px] mt-[24px] w-full">
                 <ButtonV2
                   preset="outline"
-                  class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
+                  :class="[
+                    'w-full',
+                    '!h-[32px]',
+                    '!rounded-[10px]',
+                    'border-[#EBEBEB]',
+                    { 'opacity-50': isGiftingDisabled },
+                  ]"
                   size="tiny"
-                  :is-disabled="isAllSoldOut"
+                  :is-disabled="isGiftingDisabled"
                   @click="handleGiftButtonClick"
                 >
                   <IconGift class="w-[16px] text-dark-gray" />
@@ -1005,6 +1011,13 @@ export default {
         item => item.stock === 0 || item.priceLabel === undefined
       );
     },
+    isGiftingDisabled() {
+      return (
+        this.isAllSoldOut ||
+        this.nftEditions.find(item => item.value === this.selectedValue)
+          ?.isPhysicalOnly
+      );
+    },
     compareButtonText() {
       return this.$t(
         this.nftEditions?.length === 1
@@ -1469,7 +1482,7 @@ export default {
       );
       this.checkTippingAvailability(selectedValue);
     },
-    async handleGiftSubmit({ giftInfo }) {
+    async handleGiftSubmit({ giftInfo, selectedValue }) {
       logTrackerEvent(
         this,
         'NFT',
@@ -1477,7 +1490,7 @@ export default {
         this.classId,
         1
       );
-      await this.handleCollectFromEdition(this.selectedValue, giftInfo);
+      await this.handleCollectFromEdition(selectedValue, giftInfo);
       this.isGiftDialogOpen = false;
     },
     handleGiftButtonClick() {

@@ -86,16 +86,15 @@ export default {
   },
   data() {
     // NOTE: If the selected item is out of stock, select another item.
-    const items = [...this.items];
-    let selectedItem = items.find(item => item.value === this.value);
+    let selectedItem = this.items.find(item => item.value === this.value);
     if (!selectedItem || selectedItem.stock <= 0) {
-      selectedItem = items.find(
+      selectedItem = this.items.find(
         item =>
           selectedItem && item.index !== selectedItem.index && item.stock > 0
       );
     }
     return {
-      selectedValue: selectedItem?.value || this.value,
+      selectedValue: selectedItem?.value ?? this.value,
     };
   },
   computed: {
