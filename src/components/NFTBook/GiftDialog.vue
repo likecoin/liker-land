@@ -25,6 +25,7 @@
         :stock="item.stock"
         :is-selected="item.value === selectedValue"
         :current-price="item.price"
+        :is-disabled="item.isPhysicalOnly"
         :default-price="item.defaultPrice"
         preset="dialog"
         @click="handleClickPriceSelectItem(item)"
@@ -136,24 +137,36 @@ export default {
     },
   },
   data() {
-    // NOTE: If the selected item is out of stock, select another item.
-    let selectedItem = this.items.find(item => item.value === this.value);
-    if (!selectedItem || selectedItem.stock <= 0) {
-      selectedItem = this.items.find(
-        item =>
-          selectedItem && item.index !== selectedItem.index && item.stock > 0
-      );
-    }
-
     return {
       fromName: this.prefillGiftInfo?.fromName,
       toName: this.prefillGiftInfo?.toName,
       toEmail: this.prefillGiftInfo?.toEmail,
       message: this.prefillGiftInfo?.message,
-      selectedValue: selectedItem?.value || this.value,
+      selectedValue: this.value,
     };
   },
   watch: {
+    open(open) {
+      if (open) {
+        // NOTE: If the selected item is out of stock or is physical only, select another item.
+        let selectedItem = this.items.find(item => item.value === this.value);
+        if (
+          !selectedItem ||
+          selectedItem.stock <= 0 ||
+          selectedItem.isPhysicalOnly
+        ) {
+          selectedItem = this.items.find(
+            item =>
+              item.index !== selectedItem.index &&
+              !item.isPhysicalOnly &&
+              item.stock > 0
+          );
+          this.selectedValue = selectedItem?.value ?? this.value;
+        } else {
+          this.selectedValue = this.value;
+        }
+      }
+    },
     prefillGiftInfo: {
       handler(newVal) {
         this.fromName = newVal.fromName;
@@ -167,6 +180,7 @@ export default {
   methods: {
     submitGiftInfo() {
       this.$emit('submit', {
+        selectedValue: this.selectedValue,
         giftInfo: {
           fromName: this.fromName,
           toName: this.toName,
@@ -178,8 +192,6 @@ export default {
     handleClickPriceSelectItem({ value }) {
       if (this.selectedValue === value) return;
       this.selectedValue = value;
-      this.$emit('change', value);
-      this.$emit('update:value', value);
     },
   },
 };

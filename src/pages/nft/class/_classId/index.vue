@@ -56,10 +56,16 @@
               <div class="flex flex-col gap-[8px] mt-[24px] w-full">
                 <ButtonV2
                   preset="outline"
-                  class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
+                  :class="[
+                    'w-full',
+                    '!h-[32px]',
+                    '!rounded-[10px]',
+                    'border-[#EBEBEB]',
+                    { 'opacity-50': isGiftingDisabled },
+                  ]"
                   size="tiny"
-                  :is-disabled="isAllSoldOut"
-                  @click="handleGiftFromEditionSelector"
+                  :is-disabled="isGiftingDisabled"
+                  @click="handleGiftButtonClick"
                 >
                   <IconGift class="w-[16px] text-dark-gray" />
                   <p
@@ -117,7 +123,7 @@
                 class="self-stretch"
                 :items="nftEditions"
                 :should-show-notify-button="false"
-                :value="defaultSelectedValue"
+                :value="selectedValue"
                 :is-all-sold-out="isAllSoldOut"
                 @change="handleEditionSelectChange"
                 @click-collect="handleCollectFromEditionSelector"
@@ -384,7 +390,7 @@
     <NFTBookGiftDialog
       :open="isGiftDialogOpen"
       :items="nftEditions"
-      :value="defaultSelectedValue"
+      :value="selectedValue"
       @change="handleEditionSelectChange"
       @submit="handleGiftSubmit"
       @close="handleGiftClose"
@@ -466,12 +472,10 @@ export default {
       isTippingDialogOpen: false,
       isAddingToCart: false,
       isTriggerFromEditionSelector: false,
-      giftSelectedValue: 0,
 
       trimmedCount: 10,
 
       customPrice: 0,
-      selectedValue: 0,
       isOpeningCheckoutPage: false,
     };
   },
@@ -892,6 +896,18 @@ export default {
     classId() {
       return this.$route.params.classId;
     },
+    selectedValue: {
+      get() {
+        return Number(this.$route.query.price_index) || 0;
+      },
+      set(value) {
+        if (this.$route.query.price_index !== value) {
+          this.$router.replace({
+            query: { ...this.$route.query, price_index: value },
+          });
+        }
+      },
+    },
     platform() {
       return this.$route.query.from || NFT_BOOK_PLATFORM_LIKER_LAND;
     },
@@ -912,9 +928,6 @@ export default {
     },
     isContentViewable() {
       return !(this.nftIsNFTBook && !this.ownCount);
-    },
-    defaultSelectedValue() {
-      return this.nftEditions[this.editionPriceIndex || 0]?.value;
     },
     defaultCurrency() {
       return this.getNFTBookStoreBookDefaultPaymentCurrency(this.classId);
@@ -996,6 +1009,13 @@ export default {
     isAllSoldOut() {
       return this.nftEditions.every(
         item => item.stock === 0 || item.priceLabel === undefined
+      );
+    },
+    isGiftingDisabled() {
+      return (
+        this.isAllSoldOut ||
+        this.nftEditions.find(item => item.value === this.selectedValue)
+          ?.isPhysicalOnly
       );
     },
     compareButtonText() {
@@ -1147,7 +1167,7 @@ export default {
       );
 
       if (this.nftIsNFTBook) {
-        this.checkTippingAvailability(this.defaultSelectedValue);
+        this.checkTippingAvailability(this.selectedValue);
         return;
       }
 
@@ -1462,7 +1482,7 @@ export default {
       );
       this.checkTippingAvailability(selectedValue);
     },
-    async handleGiftSubmit({ giftInfo }) {
+    async handleGiftSubmit({ giftInfo, selectedValue }) {
       logTrackerEvent(
         this,
         'NFT',
@@ -1470,11 +1490,10 @@ export default {
         this.classId,
         1
       );
-      await this.handleCollectFromEdition(this.giftSelectedValue, giftInfo);
+      await this.handleCollectFromEdition(selectedValue, giftInfo);
       this.isGiftDialogOpen = false;
     },
-    handleGiftFromEditionSelector() {
-      this.giftSelectedValue = this.selectedValue;
+    handleGiftButtonClick() {
       this.isGiftDialogOpen = true;
       logTrackerEvent(
         this,
@@ -1510,14 +1529,9 @@ export default {
         })
       );
     },
-    async handleEditionSelectChange(selectedValue) {
+    handleEditionSelectChange(selectedValue) {
       this.customPrice = 0;
-      await this.$router.replace({
-        query: {
-          ...this.$route.query,
-          price_index: selectedValue,
-        },
-      });
+      this.selectedValue = selectedValue;
       logTrackerEvent(
         this,
         'NFT',
