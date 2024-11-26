@@ -470,6 +470,7 @@
   "listing_page_header_homePage": "Home",
   "listing_page_header_listingPage": "Bookstore",
   "listing_page_header_sort": "Sort: {sort}",
+  "listing_page_header_sort_default": "Default",
   "listing_page_header_sort_higher_price": "Price: High to Low",
   "listing_page_header_sort_latest": "Latest",
   "listing_page_header_sort_lower_price": "Price: Low to High",
@@ -1030,6 +1031,8 @@
     "Stake your LikeCoin to gain extra reward, and participate in community governance."
   ],
   "tag_all_title": "All",
+  "tag_all_featured": "Featured",
+  "tag_all_latest": "Latest Arrivals",
   "tooltip_coming_soon": "Coming Soon",
   "tooltip_no_nft": "No owned NFTs to transfer",
   "tooltip_share": "Copy URL",
