@@ -16,7 +16,7 @@
               class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
               size="tiny"
               :is-disabled="isAllSoldOut"
-              @click="handleGiftFromEditionSelector"
+              @click="handleGiftButtonClick"
             >
               <IconGift class="w-[16px] text-dark-gray" />
               <p
@@ -627,7 +627,7 @@ export default {
       await this.handleCollectFromEdition(giftInfo);
       this.isGiftDialogOpen = false;
     },
-    handleGiftFromEditionSelector() {
+    handleGiftButtonClick() {
       this.isGiftDialogOpen = true;
       logTrackerEvent(
         this,

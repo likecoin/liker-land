@@ -86,16 +86,15 @@ export default {
   },
   data() {
     // NOTE: If the selected item is out of stock, select another item.
-    const items = [...this.items];
-    let selectedItem = items.find(item => item.value === this.value);
+    let selectedItem = this.items.find(item => item.value === this.value);
     if (!selectedItem || selectedItem.stock <= 0) {
-      selectedItem = items.find(
+      selectedItem = this.items.find(
         item =>
           selectedItem && item.index !== selectedItem.index && item.stock > 0
       );
     }
     return {
-      selectedValue: selectedItem?.value || this.value,
+      selectedValue: selectedItem?.value ?? this.value,
     };
   },
   computed: {
@@ -109,9 +108,14 @@ export default {
       return this.selectedItem?.priceLabel;
     },
   },
+  watch: {
+    value() {
+      this.selectedValue = this.value;
+    },
+  },
   mounted() {
     if (this.selectedValue !== this.value) {
-      this.$emit('update:value', this.selectedValue);
+      this.$emit('change', this.selectedValue);
     }
   },
   methods: {
@@ -119,7 +123,6 @@ export default {
       if (this.selectedValue === value) return;
       this.selectedValue = value;
       this.$emit('change', value);
-      this.$emit('update:value', value);
       this.$emit('reset-custom-price');
     },
     handleClickGiftButton() {

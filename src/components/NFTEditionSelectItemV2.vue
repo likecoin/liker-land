@@ -14,8 +14,9 @@
         : 'ring-[1px] ring-shade-gray hover:ring-[#d1d1d1] transition-all duration-75',
       'flex items-center justify-between gap-[16px]',
       'min-h-[82px]',
+      { 'pointer-events-none opacity-50': isDisabled },
     ]"
-    @click="$emit('click', $event)"
+    @click="handleClick"
   >
     <div class="flex items-center gap-[16px]">
       <div class="relative">
@@ -97,6 +98,10 @@ export default {
       type: String,
       default: PRESET_TYPE.PRIMARY,
     },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     isInStock() {
@@ -145,6 +150,13 @@ export default {
             : formatNumberWithUSD(originalPrice),
         discountPercentage,
       };
+    },
+  },
+  methods: {
+    handleClick(event) {
+      if (!this.isDisabled) {
+        this.$emit('click', event);
+      }
     },
   },
 };
