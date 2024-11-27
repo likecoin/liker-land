@@ -35,7 +35,10 @@ const mutations = {
   [TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS](state, map) {
     state.shoppingCartNFTClassByIdMap = map;
   },
-  [TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT](state, newItem) {
+  [TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT](
+    state,
+    { item: newItem, overwrite = false }
+  ) {
     const {
       collectionId,
       classId,
@@ -58,7 +61,7 @@ const mutations = {
         quantity: 1,
         priceIndex: priceIndex ?? (classId ? 0 : undefined),
       };
-    } else {
+    } else if (!overwrite) {
       item = {
         ...item,
         quantity: item.quantity + 1,
@@ -152,12 +155,12 @@ const actions = {
     if (getters.shoppingCartBookProductList.length >= BATCH_COLLECT_MAX) {
       return;
     }
-    commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, item);
+    commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, { item });
     dispatch('saveBookProductShoppingCart');
   },
   addBookProductsToShoppingCart({ commit, dispatch }, items) {
     items.slice(0, BATCH_COLLECT_MAX).forEach(item => {
-      commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, item);
+      commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, { item, overwrite: true });
     });
     dispatch('saveBookProductShoppingCart');
   },
