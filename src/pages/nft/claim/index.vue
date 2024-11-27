@@ -578,6 +578,7 @@ import {
 import {
   postStripeFiatPendingClaim,
   getNFTBookClaimEndpoint,
+  getStripeFiatPaymentStatus,
   getNFTBookPaymentStatusEndpoint,
   getFreeNFTBookPurchaseEndpoint,
   getNFTBookCartStatusEndpoint,
@@ -802,6 +803,7 @@ export default {
         !newValue &&
         !(
           this.status === 'completed' ||
+          this.status === 'done' ||
           this.status === 'pending' ||
           this.status === 'pendingNFT'
         )
@@ -854,33 +856,49 @@ export default {
       this.giftInfo = giftInfo;
       if (query.type === 'nft_book') this.clearBookProductShoppingCart();
     } else if (this.paymentId) {
-      try {
-        const { data } = await this.$api.get(
-          getNFTBookPaymentStatusEndpoint({
-            classId: this.classId,
-            collectionId: this.collectionId,
-            paymentId: this.paymentId,
-            token: this.token,
-          })
-        );
-        ({ price, priceIndex } = data);
-        const {
-          giftInfo,
-          isPhysicalOnly,
-          status,
-          autoMemo,
-          isAutoDeliver,
-          quantity,
-        } = data;
-        this.giftInfo = giftInfo;
-        this.isPhysicalOnly = isPhysicalOnly;
-        this.isAutoDeliver = isAutoDeliver;
-        this.creatorMessage = parseAutoMemo(autoMemo);
-        this.status = status;
-        this.quantity = quantity;
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
+      if (this.isNFTBook) {
+        try {
+          const { data } = await this.$api.get(
+            getNFTBookPaymentStatusEndpoint({
+              classId: this.classId,
+              collectionId: this.collectionId,
+              paymentId: this.paymentId,
+              token: this.token,
+            })
+          );
+          ({ price, priceIndex } = data);
+          const {
+            giftInfo,
+            isPhysicalOnly,
+            status,
+            autoMemo,
+            isAutoDeliver,
+            quantity,
+          } = data;
+          this.giftInfo = giftInfo;
+          this.isPhysicalOnly = isPhysicalOnly;
+          this.isAutoDeliver = isAutoDeliver;
+          this.creatorMessage = parseAutoMemo(autoMemo);
+          this.status = status;
+          this.quantity = quantity;
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      } else {
+        try {
+          const { data } = await this.$api.get(
+            getStripeFiatPaymentStatus({
+              paymentId: this.paymentId,
+              token: this.token,
+            })
+          );
+          this.status = data.status;
+          price = data.fiatPrice;
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
       }
     } else {
       // free purchase?
@@ -1004,6 +1022,7 @@ export default {
 
     if (
       this.status === 'completed' ||
+      this.status === 'done' ||
       this.status === 'pending' ||
       this.status === 'pendingNFT'
     ) {
