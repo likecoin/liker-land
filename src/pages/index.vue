@@ -39,15 +39,6 @@
           paddingClass,
         ]"
       >
-        <!-- Hero Center Guide -->
-        <!-- <div
-          :class="[
-            'w-[20px]',
-            'h-[20px]',
-            'bg-[blue]',
-            heroGraphicPositionClass,
-          ]"
-        /> -->
         <svg
           :class="[
             heroGraphicPositionClass,
@@ -326,33 +317,41 @@
               }}</span>
             </i18n>
 
-            <NuxtLink
-              class="relative mt-[0.75rem] flex gap-[4px] items-center group"
-              :to="localeLocation({ name: 'about-nft-book' })"
-              @click.native="handleClickAboutNFTBook"
+            <div
+              class="flex justify-center laptop:justify-end w-full mt-[24px] mb-[8px] z-50"
             >
-              {{ $t('index_intro_more_button') }}
-
-              <svg
-                class="group-hover:animate-pulse"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                :class="[
+                  'flex',
+                  'items-center',
+                  'gap-[12px]',
+                  'bg-white',
+                  'pl-[16px] pr-[4px]',
+                  'w-full laptop:max-w-[360px]',
+                  'h-[48px]',
+                  'shadow-md',
+                  'rounded-[10px]',
+                ]"
               >
-                <g
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                <input
+                  class="bg-transparent border-0 focus-visible:outline-none"
+                  type="text"
+                  :placeholder="$t('gutenberg_search_placeholder')"
+                  @input="handleInputSearch"
+                />
+                <ButtonV2
+                  preset="secondary"
+                  class="!rounded-[10px] ml-auto"
+                  content-class="whitespace-nowrap"
+                  :text="$t('listing_page_search')"
+                  @click="toggleSearch"
                 >
-                  <path d="M5 12H19" />
-                  <path d="M15 16L19 12" />
-                  <path d="M15 8L19 12" />
-                </g>
-              </svg>
-            </NuxtLink>
+                  <template #prepend>
+                    <IconSearch />
+                  </template>
+                </ButtonV2>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -504,7 +503,7 @@
         ]"
       >
         <svg
-          class="hidden desktop:block absolute top-0 left-0 pointer-events-none min-1280:scale-125 origin-top-left"
+          class="absolute top-0 left-0 hidden origin-top-left pointer-events-none desktop:block min-1280:scale-125"
           width="334"
           height="271"
           viewBox="0 0 334 271"
@@ -521,7 +520,7 @@
         </svg>
 
         <svg
-          class="absolute top-0 right-0 pointer-events-none min-1280:scale-125 origin-top-right"
+          class="absolute top-0 right-0 origin-top-right pointer-events-none min-1280:scale-125"
           width="276"
           height="222"
           viewBox="0 0 276 222"
@@ -787,6 +786,7 @@ export default {
     return {
       dialogNFTClassList: [],
       isSiteHeaderFixed: false,
+      searchQuery: '',
     };
   },
   async fetch({ store }) {
@@ -1029,6 +1029,20 @@ export default {
     },
     closeMultipleNFTClassDialog() {
       this.dialogNFTClassList = [];
+    },
+    handleInputSearch(event) {
+      this.searchQuery = event.target.value;
+    },
+    toggleSearch() {
+      if (this.searchQuery) {
+        this.$router.push(
+          this.localeLocation({
+            name: 'store',
+            query: { q: this.searchQuery },
+          })
+        );
+      }
+      this.searchQuery = '';
     },
   },
 };
