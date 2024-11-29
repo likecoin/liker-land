@@ -111,9 +111,14 @@ export default {
       200
     ),
     getRandomPlaceholder() {
-      const shuffled = [...SEARCH_SUGGESTIONS].sort(() => Math.random() - 0.5);
-      const randomTerms = shuffled.slice(0, 3);
-      return randomTerms.join('、');
+      if (this.$i18n.locale === 'zh-Hant') {
+        const shuffled = [...SEARCH_SUGGESTIONS].sort(
+          () => Math.random() - 0.5
+        );
+        const randomTerms = shuffled.slice(0, 3);
+        return randomTerms.join('、');
+      }
+      return this.$t('gutenberg_search_placeholder');
     },
   },
 };

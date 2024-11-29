@@ -430,7 +430,6 @@ export const SIGN_AUTHORIZATION_PERMISSIONS = [
 ];
 
 export const SEARCH_SUGGESTIONS = [
-  '免費',
   '小說',
   '旅遊',
   '報刊',
@@ -442,4 +441,10 @@ export const SEARCH_SUGGESTIONS = [
   '理財',
   '區塊鏈',
   '繪本',
+  '高重建',
+  '突破',
+  '哲學',
+  '法庭',
+  '信仰',
+  '邵家臻',
 ];
