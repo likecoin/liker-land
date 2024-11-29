@@ -1,0 +1,47 @@
+name: Deploy to sepolia.liker.land
+
+on:
+  push:
+    branches:
+      - 'deploy/sepolia'
+
+env:
+  IS_TESTNET: 'TRUE'
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: sepolia
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: |
+            src/package-lock.json
+            functions/package-lock.json
+      - name: Dependencies
+        run: npm --prefix src install && npm --prefix functions install && cp -r src/nuxt.config.js src/config src/tailwind.config.js functions/
+      - name: Add robots.txt
+        run: |
+          echo 'User-agent: *' > public_base/robots.txt
+          echo 'Disallow: /' >> public_base/robots.txt
+      - uses: w9jds/setup-firebase@main
+        with:
+          tools-version: 11.30.0
+          firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+      - run: firebase deploy --project civic-liker-sepolia -f
+        env:
+          GA_TRACKING_ID: ${{ vars.GA_TRACKING_ID }}
+          AD_CONVERSION_ID: ${{ vars.AD_CONVERSION_ID }}
+          CRISP_WEBSITE_ID: ${{ vars.CRISP_WEBSITE_ID }}
+          STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
+          SENTRY_DSN: ${{ vars.SENTRY_DSN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_PUBLISH_RELEASE: 'TRUE'
