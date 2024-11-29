@@ -318,7 +318,20 @@
             </i18n>
 
             <div
-              class="flex justify-center laptop:justify-end w-full mt-[24px] mb-[8px] z-50"
+              :class="[
+                'flex',
+
+                'justify-center',
+                'laptop:justify-start',
+                'desktop:justify-end',
+
+                'w-full',
+                'mt-[24px]',
+                'mb-[8px]',
+                'z-50',
+                'font-sans',
+                'font-400',
+              ]"
             >
               <div
                 :class="[
@@ -335,7 +348,7 @@
               >
                 <input
                   v-model="searchQuery"
-                  class="bg-transparent border-0 focus-visible:outline-none"
+                  class="bg-transparent border-0 text-dark-gray focus-visible:outline-none"
                   type="text"
                   :placeholder="$t('gutenberg_search_placeholder')"
                   @keyup.enter="toggleSearch"
@@ -560,10 +573,12 @@
                 'group',
 
                 'text-white',
+                'font-serif',
                 'border-white',
                 'border-[1px]',
                 'rounded-[48px]',
-                'px-[20px]',
+                'pl-[24px]',
+                'pr-[16px]',
                 'py-[8px]',
               ]"
               :to="localeLocation({ name: 'about-nft-book' })"

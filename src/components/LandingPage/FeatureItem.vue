@@ -33,7 +33,7 @@
         />
       </picture>
 
-      <h4 class="text-[32px] font-600 laptop:mt-[32px]" v-text="title" />
+      <h4 class="text-[24px] font-500 laptop:mt-[32px]" v-text="title" />
     </header>
 
     <p class="mt-[16px]" v-text="description" />
@@ -66,7 +66,7 @@
       ]"
     >
       <ButtonV2
-        class="pointer-events-auto bg-white font-sans border-like-green"
+        class="font-sans bg-white pointer-events-auto border-like-green"
         :text="$t('landing_page_feature_item_learn_more_button')"
         :href="href"
         preset="outline"
