@@ -334,10 +334,11 @@
                 ]"
               >
                 <input
+                  v-model="searchQuery"
                   class="bg-transparent border-0 focus-visible:outline-none"
                   type="text"
                   :placeholder="$t('gutenberg_search_placeholder')"
-                  @input="handleInputSearch"
+                  @keyup.enter="toggleSearch"
                 />
                 <ButtonV2
                   preset="secondary"
@@ -1072,9 +1073,6 @@ export default {
     },
     closeMultipleNFTClassDialog() {
       this.dialogNFTClassList = [];
-    },
-    handleInputSearch(event) {
-      this.searchQuery = event.target.value;
     },
     toggleSearch() {
       if (this.searchQuery) {
