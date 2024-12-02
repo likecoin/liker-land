@@ -173,19 +173,22 @@ const actions = {
     dispatch('saveBookProductShoppingCart');
   },
   async saveBookProductShoppingCart({ state, getters }) {
-    saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
     if (getters.loginAddress) {
       const cart = Object.values(state.shoppingCartBookProductByIdMap);
       try {
         if (cart.length) {
           await this.$api.$post(postShoppingCart(), { cart });
         } else {
-          await this.$api.$post(postShoppingCart(), { cart });
+          await this.$api.$delete(postShoppingCart());
         }
+        saveShoppingCartToStorage({}, 'book');
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e);
+        saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
       }
+    } else {
+      saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
     }
   },
   loadBookProductShoppingCart({ commit, getters }) {
