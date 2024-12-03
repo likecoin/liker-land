@@ -5,6 +5,7 @@ import {
   saveShoppingCartToStorage,
 } from '~/util/shopping-cart';
 import { BATCH_COLLECT_MAX } from '~/constant';
+import { postShoppingCart, deleteShoppingCart } from '~/util/api';
 import * as TYPES from '../mutation-types';
 
 const state = () => ({
@@ -34,7 +35,10 @@ const mutations = {
   [TYPES.SHOPPING_CART_REPLACE_ALL_NFT_CLASS](state, map) {
     state.shoppingCartNFTClassByIdMap = map;
   },
-  [TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT](state, newItem) {
+  [TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT](
+    state,
+    { item: newItem, overwrite = false }
+  ) {
     const {
       collectionId,
       classId,
@@ -57,7 +61,7 @@ const mutations = {
         quantity: 1,
         priceIndex: priceIndex ?? (classId ? 0 : undefined),
       };
-    } else {
+    } else if (!overwrite) {
       item = {
         ...item,
         quantity: item.quantity + 1,
@@ -151,13 +155,12 @@ const actions = {
     if (getters.shoppingCartBookProductList.length >= BATCH_COLLECT_MAX) {
       return;
     }
-    commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, item);
+    commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, { item });
     dispatch('saveBookProductShoppingCart');
   },
   addBookProductsToShoppingCart({ commit, dispatch }, items) {
-    commit(TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT, {});
     items.slice(0, BATCH_COLLECT_MAX).forEach(item => {
-      commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, item);
+      commit(TYPES.SHOPPING_CART_ADD_BOOK_PRODUCT, { item, overwrite: true });
     });
     dispatch('saveBookProductShoppingCart');
   },
@@ -169,14 +172,32 @@ const actions = {
     commit(TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT, {});
     dispatch('saveBookProductShoppingCart');
   },
-  saveBookProductShoppingCart({ state }) {
-    saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
+  async saveBookProductShoppingCart({ state, getters }) {
+    if (getters.loginAddress) {
+      const cart = Object.values(state.shoppingCartBookProductByIdMap);
+      try {
+        if (cart.length) {
+          await this.$api.$post(postShoppingCart(), { cart });
+        } else {
+          await this.$api.$delete(postShoppingCart());
+        }
+        saveShoppingCartToStorage({}, 'book');
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+        saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
+      }
+    } else {
+      saveShoppingCartToStorage(state.shoppingCartBookProductByIdMap, 'book');
+    }
   },
-  loadBookProductShoppingCart({ commit }) {
-    commit(
-      TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT,
-      loadShoppingCartFromStorage('book')
-    );
+  loadBookProductShoppingCart({ commit, getters }) {
+    if (!getters.shoppingCartBookItems.length) {
+      commit(
+        TYPES.SHOPPING_CART_REPLACE_ALL_BOOK_PRODUCT,
+        loadShoppingCartFromStorage('book')
+      );
+    }
   },
 };
 

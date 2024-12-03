@@ -32,6 +32,7 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       eventLastSeenTs,
       lastLoginMethod: loginMethod,
       locale = DEFAULT_LOCALE,
+      cart,
     } = userDoc.data();
     if (email) {
       try {
@@ -53,6 +54,7 @@ router.get('/self', authenticateV2Login, async (req, res, next) => {
       eventLastSeenTs: eventLastSeenTs ? eventLastSeenTs.toMillis() : 1000,
       locale,
       crispToken: email ? getCrispUserHash(email) : undefined,
+      cart,
     });
   } catch (err) {
     if (req.session) req.session = null;
@@ -71,6 +73,7 @@ router.post('/login', async (req, res, next) => {
     loginMethod = '',
     gaClientId,
     userIdHash,
+    cart,
   } = req.body;
   try {
     if (!inputWallet || !signature || !publicKey || !message) {
@@ -158,6 +161,7 @@ router.post('/login', async (req, res, next) => {
       displayName,
       isNew,
       crispToken: email ? getCrispUserHash(email) : undefined,
+      cart,
     };
     res.json(payload);
     return;

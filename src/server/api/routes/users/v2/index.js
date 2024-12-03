@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const auth = require('./auth');
+const cart = require('./cart');
 const email = require('./email');
 const event = require('./event');
 const follow = require('./follow');
@@ -12,6 +13,7 @@ const wallet = require('./wallet');
 const router = Router();
 
 router.use(auth);
+router.use(cart);
 router.use(email);
 router.use(event);
 router.use(follow);
