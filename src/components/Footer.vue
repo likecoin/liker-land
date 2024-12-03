@@ -175,7 +175,7 @@ import Logo from '~/assets/icons/logo.svg?inline';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 import crispMixin from '~/mixins/crisp';
-import { APP_LIKE_CO_URL_BASE } from '~/constant';
+import { BOOK_PRESS_BASE } from '~/constant';
 
 import Dialog from './Dialog';
 
@@ -193,7 +193,7 @@ export default {
   },
   computed: {
     mintNftURL() {
-      return `${APP_LIKE_CO_URL_BASE}/nft`;
+      return BOOK_PRESS_BASE;
     },
   },
   mounted() {
