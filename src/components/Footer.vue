@@ -88,15 +88,6 @@
                 {{ $t('footer_nav_mint_nft') }}
               </a>
             </div>
-            <div class="grid grid-flow-row gap-y-[16px]">
-              <NuxtLink
-                class="hover:underline"
-                :to="localeLocation({ name: 'store-articles' })"
-                @click.native="handleClickButton('store_articles')"
-              >
-                {{ $t('footer_nav_store_articles') }}
-              </NuxtLink>
-            </div>
           </div>
         </div>
         <div class="flex items-start self-start">
