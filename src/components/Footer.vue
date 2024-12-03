@@ -107,15 +107,16 @@
         text-like-green
       "
     >
-      <a class="hover:underline" href="https://blog.liker.land">{{
-        $t('footer_nav_blog')
-      }}</a>
-      <button class="cursor-pointer hover:underline" @click="handleClickHelp">
-        {{ $t('footer_nav_help') }}
-      </button>
-      <a class="hover:underline" :href="$t('footer_nav_doc_link')">{{
-        $t('footer_nav_doc')
-      }}</a>
+      <a
+        class="hover:underline"
+        href="https://blog.liker.land?utm_source=likerland"
+        >{{ $t('footer_nav_blog') }}</a
+      >
+      <a
+        class="hover:underline"
+        href="https://newsletter.liker.land?utm_source=likerland"
+        >{{ $t('footer_nav_newsletter') }}</a
+      >
       <a class="hover:underline" :href="$t('footer_nav_faq_link')">{{
         $t('footer_nav_faq')
       }}</a>
@@ -124,6 +125,9 @@
         href="https://likecoin.notion.site/liker-land-Terms-of-Service-dfcc13cf114e4fbc809c25559ce1d0e8?pvs=4"
         >{{ $t('footer_nav_tnc') }}</a
       >
+      <button class="cursor-pointer hover:underline" @click="handleClickHelp">
+        {{ $t('footer_nav_help') }}
+      </button>
     </div>
     <Dialog
       v-model="isOpenAboutTeam"
@@ -207,6 +211,14 @@ export default {
       if (this.$crisp) {
         this.showCrisp();
         this.$crisp.push(['do', 'chat:open']);
+      } else if (window.CRISP_WEBSITE_ID) {
+        window.open(
+          `https://go.crisp.chat/chat/embed/?website_id=${window.CRISP_WEBSITE_ID}`
+        );
+      } else {
+        window.open(
+          'https://discord.com/channels/763001015712350231/814761730349596712'
+        );
       }
     },
     handleClickButton(buttonName) {
