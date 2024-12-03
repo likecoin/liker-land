@@ -75,7 +75,7 @@
     <li>
       <a
         class="block transition-colors rounded-full bg-like-cyan-light hover:bg-like-cyan"
-        href="https://blog.like.co?utm_medium=web&utm_source=likerlandweb&utm_campaign=footer"
+        href="https://blog.liker.land?utm_medium=web&utm_source=likerlandweb&utm_campaign=footer"
         target="_blank"
         rel="noopener"
       >
