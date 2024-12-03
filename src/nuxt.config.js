@@ -3,7 +3,7 @@ const path = require('path');
 const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
 
-const SITE_NAME = 'Liker Land';
+const SITE_NAME = 'Liker Land Bookstore';
 
 const {
   IS_TESTNET,
@@ -73,15 +73,18 @@ const nuxtConfig = {
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
+      { hid: 'og:title', property: 'og:title', content: SITE_NAME },
       {
         hid: 'description',
         name: 'description',
-        content: 'Turn your stories into collectibles',
+        content:
+          'Merge technology and humanity. Drive blockchain publishing to preserve and distribute great stories. Liker Land Bookstore bridges the new world and old, reshaping reading and media culture.',
       },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: 'Turn your stories into collectibles',
+        content:
+          'Merge technology and humanity. Drive blockchain publishing to preserve and distribute great stories. Liker Land Bookstore bridges the new world and old, reshaping reading and media culture.',
       },
       {
         hid: 'og:image',
