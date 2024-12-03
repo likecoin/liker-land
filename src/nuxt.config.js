@@ -3,7 +3,7 @@ const path = require('path');
 const { getSitemapRoutes } = require('./config/sitemap');
 const { theme } = require('./tailwind.config');
 
-const SITE_NAME = 'Liker Land';
+const SITE_NAME = 'Liker Land Bookstore';
 
 const {
   IS_TESTNET,
@@ -73,15 +73,18 @@ const nuxtConfig = {
       { name: 'msapplication-TileColor', content: theme.colors['like-green'] },
       { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
       { name: 'msapplication-config', content: '/browserconfig.xml' },
+      { hid: 'og:title', property: 'og:title', content: SITE_NAME },
       {
         hid: 'description',
         name: 'description',
-        content: 'Turn your stories into collectibles',
+        content:
+          'Merge technology and humanity. Drive blockchain publishing to preserve and distribute great stories. Liker Land Bookstore bridges the new world and old, reshaping reading and media culture.',
       },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: 'Turn your stories into collectibles',
+        content:
+          'Merge technology and humanity. Drive blockchain publishing to preserve and distribute great stories. Liker Land Bookstore bridges the new world and old, reshaping reading and media culture.',
       },
       {
         hid: 'og:image',
@@ -150,8 +153,8 @@ const nuxtConfig = {
           {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'Liker Land',
-            alternateName: ['Liker.Land'],
+            name: 'Liker Land Bookstore',
+            alternateName: ['Liker Land 電子書店', 'Liker.Land'],
             url: 'https://liker.land/',
             potentialAction: [
               {
@@ -168,7 +171,8 @@ const nuxtConfig = {
           {
             '@context': 'http://www.schema.org',
             '@type': 'OnlineStore',
-            name: 'Liker Land',
+            name: 'Liker Land Bookstore',
+            alternateName: ['Liker Land 電子書店', 'Liker.Land'],
             description:
               'Liker Land is a Web3 bookstore with a decentralized publishing stack that assists authors in registering and storing their articles, ebooks on the blockchain and decentralized networks',
             url: 'https://liker.land',
@@ -201,7 +205,8 @@ const nuxtConfig = {
           {
             '@context': 'http://www.schema.org',
             '@type': 'WebApplication',
-            name: 'Liker Land',
+            name: 'Liker Land Bookstore',
+            alternateName: ['Liker Land 電子書店', 'Liker.Land'],
             applicationCategory: 'LifestyleApplication',
             operatingSystem: 'All',
             url: 'https://liker.land',
