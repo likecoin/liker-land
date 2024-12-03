@@ -213,7 +213,9 @@ export default {
         this.$crisp.push(['do', 'chat:open']);
       } else if (window.CRISP_WEBSITE_ID) {
         window.open(
-          `https://go.crisp.chat/chat/embed/?website_id=${window.CRISP_WEBSITE_ID}`
+          `https://go.crisp.chat/chat/embed/?website_id=${
+            window.CRISP_WEBSITE_ID
+          }`
         );
       } else {
         window.open(
