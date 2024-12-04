@@ -33,6 +33,10 @@ export const LIKECOIN_NFT_MARKETPLACE_BASE = IS_TESTNET
   ? 'https://likecoin-nft-marketplace-testnet.netlify.app'
   : 'https://likecoin.github.io/likecoin-nft-marketplace';
 
+export const BOOK_PRESS_BASE = IS_TESTNET
+  ? 'https://likecoin-nft-book-press-testnet.netlify.app'
+  : 'https://publish.liker.land';
+
 export const LIKE_CO_THUMBNAIL_FN_BASE = 'https://static.like.co';
 
 export const LIKECOIN_LOGOUT_POPUP_URL = IS_TESTNET
