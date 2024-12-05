@@ -1027,7 +1027,11 @@ export default {
       this.status === 'pendingNFT'
     ) {
       this.navigateToState(NFT_CLAIM_STATE.CLAIMED);
-    } else if (!free && this.status !== 'paid') {
+    } else if (
+      !free &&
+      this.status !== 'paid' && // nft book
+      this.status !== 'pendingClaim' // wnft
+    ) {
       this.alertPromptError(
         this.$t('nft_free_claim_error_message', {
           error: `Payment status is ${this.status}`,
