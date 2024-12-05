@@ -1098,7 +1098,6 @@ export default {
           })
         );
       }
-      this.searchQuery = '';
     },
   },
 };
