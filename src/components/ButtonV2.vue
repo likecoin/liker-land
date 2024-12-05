@@ -303,6 +303,7 @@ export default class ButtonV2 extends Vue {
     return [
       this.isCircle ? 'justify-center' : 'justify-between',
       'h-full',
+      'min-h-[inherit]',
       'text-center',
       'rounded-[inherit]',
       {

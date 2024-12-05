@@ -368,6 +368,12 @@ export default {
           ),
         });
         const cfi = this.resumeFromLocalStorage();
+        this.rendition.themes.default({
+          p: {
+            '-webkit-text-size-adjust': 'none',
+            'text-size-adjust': 'none',
+          },
+        });
         this.rendition.themes.fontSize(`${this.fontSize}px`);
         this.rendition.display(cfi);
         this.rendition.on('rendered', (_, view) => {
