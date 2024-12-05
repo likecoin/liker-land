@@ -261,8 +261,6 @@ import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
 
-const FONT_SIZES = [26, 28, 32, 36, 40, 44, 48, 56, 60];
-
 function flattenTOC(toc, level = 0) {
   const result = [];
   toc.forEach(({ subitems, ...item }) => {
@@ -296,15 +294,12 @@ export default {
       searchResults: [], // Store CFI string of search results
       selectedSearchResultIndex: 0,
 
-      fontSizeIndex: 0,
+      fontSizePercentage: 100,
     };
   },
   computed: {
     hideDownload() {
       return this.$route.query.download === '0' || this.nftIsDownloadHidden;
-    },
-    fontSize() {
-      return FONT_SIZES[this.fontSizeIndex];
     },
   },
   watch: {
@@ -323,8 +318,8 @@ export default {
         this.removeSearchResultHighlights();
       }
     },
-    fontSize() {
-      this.rendition?.themes.fontSize(`${this.fontSize}px`);
+    fontSizePercentage() {
+      this.rendition?.themes.fontSize(`${this.fontSizePercentage}%`);
     },
   },
   beforeUnmount() {
@@ -368,7 +363,7 @@ export default {
           ),
         });
         const cfi = this.resumeFromLocalStorage();
-        this.rendition.themes.fontSize(`${this.fontSize}px`);
+        this.rendition.themes.fontSize(`${this.fontSizePercentage}%`);
         this.rendition.display(cfi);
         this.rendition.on('rendered', (_, view) => {
           const path = this.rendition.currentLocation().start?.href;
@@ -401,17 +396,11 @@ export default {
         );
       }
     },
-    adjustFontSize(indexDiff) {
-      this.fontSizeIndex = Math.max(
-        0,
-        Math.min(FONT_SIZES.length - 1, this.fontSizeIndex + indexDiff)
-      );
-    },
     increaseFontSize() {
-      this.adjustFontSize(+1);
+      this.fontSizePercentage = Math.min(300, this.fontSizePercentage + 10);
     },
     decreaseFontSize() {
-      this.adjustFontSize(-1);
+      this.fontSizePercentage = Math.max(10, this.fontSizePercentage - 10);
     },
     goLeft() {
       if (this.isRightToLeft) {
