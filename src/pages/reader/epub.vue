@@ -369,7 +369,7 @@ export default {
         });
         const cfi = this.resumeFromLocalStorage();
         this.rendition.themes.default({
-          p: {
+          body: {
             '-webkit-text-size-adjust': 'none',
             'text-size-adjust': 'none',
           },
