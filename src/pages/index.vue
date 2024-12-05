@@ -339,16 +339,15 @@
                   'items-center',
                   'gap-[12px]',
                   'bg-white',
-                  'pl-[16px] pr-[4px]',
+                  'pl-[16px] py-[4px] pr-[6px]',
                   'w-full laptop:max-w-[360px]',
-                  'h-[48px]',
                   'shadow-md',
                   'rounded-[10px]',
                 ]"
               >
                 <input
                   v-model="searchQuery"
-                  class="bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+                  class="grow w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
                   type="text"
                   :placeholder="$t('gutenberg_search_placeholder')"
                   @keyup.enter="toggleSearch"
