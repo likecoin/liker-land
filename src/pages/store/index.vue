@@ -850,7 +850,7 @@ export default {
         return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
       }
 
-      if (this.selectedSorting === SORTING_OPTIONS.LATEST) {
+      if (this.selectedTagId === 'latest') {
         // Return the latest 100 published books & fill up with recommended books from CMS
         return this.nftBookstoreLatestItems
           .map(item => ({
