@@ -7,7 +7,7 @@
     panel-container-class="max-w-[500px] p-[0] sm:px-[12px] sm:py-[24px]"
     panel-component="CardV2"
     :scrollable-wrapper-classes="[
-      '!items-end',
+      'phone:items-end',
       'phone:pb-[12px]',
       'phone:px-[12px]',
       'phoneLg:pb-[0px]',
