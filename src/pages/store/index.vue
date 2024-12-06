@@ -591,10 +591,9 @@ export default {
     };
   },
   head() {
-    let title = this.$t('store_index_page_title');
-    if (this.selectedTagTitle) {
-      title = `${this.selectedTagTitle} - ${title}`;
-    }
+    const title = this.$t('store_index_page_title', {
+      name: this.selectedTagTitle,
+    });
 
     const description =
       this.selectedTagDescription || this.$t('store_books_page_description');
@@ -850,7 +849,7 @@ export default {
         return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
       }
 
-      if (this.selectedSorting === SORTING_OPTIONS.LATEST) {
+      if (this.selectedTagId === 'latest') {
         // Return the latest 100 published books & fill up with recommended books from CMS
         return this.nftBookstoreLatestItems
           .map(item => ({
@@ -1029,7 +1028,14 @@ export default {
       );
     },
     selectedTagTitle() {
-      return this.selectedTag?.name;
+      switch (this.selectedTagId) {
+        case 'featured':
+          return this.$t('tag_all_featured');
+        case 'latest':
+          return this.$t('tag_all_latest');
+        default:
+          return this.selectedTag?.name;
+      }
     },
     selectedTagDescription() {
       return this.selectedTag?.description;
