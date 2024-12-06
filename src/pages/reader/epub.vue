@@ -261,7 +261,7 @@ import { getDownloadFilenameFromURL } from '~/util/nft-book';
 
 import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
 
-const FONT_SIZES = [26, 28, 32, 36, 40, 44, 48, 56, 60];
+const FONT_SIZES = [16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 56, 60];
 
 function flattenTOC(toc, level = 0) {
   const result = [];
