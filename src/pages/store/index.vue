@@ -592,7 +592,7 @@ export default {
   },
   head() {
     let title = this.$t('store_index_page_title');
-    if (this.selectedTagId) {
+    if (this.selectedTagTitle) {
       title = `${this.selectedTagTitle} - ${title}`;
     }
 
