@@ -1,6 +1,6 @@
 <template>
   <Page :class="['w-full', 'min-h-screen', 'pb-[24px]']">
-    <div :class="['w-full', 'max-w-[1924px]', 'mx-auto', 'laptop:px-[48px]']">
+    <div :class="['w-full', 'max-w-[1924px]', 'mx-auto', 'desktop:px-[48px]']">
       <!-- Header -->
       <header>
         <div
@@ -11,70 +11,46 @@
             'items-center',
 
             'w-full',
-            'px-[16px] laptop:px-0',
           ]"
         >
-          <nav class="relative flex items-center">
+          <nav class="relative flex items-center w-full">
             <!-- Left arrow -->
             <div
-              v-if="isOverflowing && !isAtStart"
+              v-if="isTagsContainerOverflowing && !isTagsContainerAtStart"
               :class="[
-                'hidden laptop:flex',
-                'absolute',
+                ...tagsContainerArrowClass,
+
                 'left-0',
-                'h-full',
-                'z-10',
-                'items-center',
-                'pr-[120px]',
-                'text-gray-500',
                 'bg-gradient-to-l',
-                'from-transparent',
-                'to-light-gray',
-                'cursor-pointer',
               ]"
-              @click="scrollLeft"
+              @click="scrollTagsContainerLeft"
             >
               <IconArrowLeft class="w-[20px] h-[20px]" />
             </div>
-            <div
-              v-if="isOverflowing && !isAtStart"
-              :class="[
-                'flex laptop:hidden',
-                'absolute',
-                'left-0',
-                'h-full',
-                'z-10',
-                'items-center',
-                'pr-[120px]',
-                'text-gray-500',
-                'bg-gradient-to-l',
-                'from-transparent',
-                'to-light-gray',
-              ]"
-            />
             <!-- Tags -->
             <div
               ref="tagsContainer"
               :class="[
-                'flex',
-                'flex-nowrap',
-                'items-start',
                 'w-full',
-                'px-[16px] laptop:px-0',
+                'px-[16px] desktop:px-0',
                 'py-[16px]',
-                'overflow-scroll',
-                'scrollbar-custom',
 
+                'overflow-scroll',
                 'laptop:overflow-x-hidden',
                 'overflow-y-hidden',
+                'scrollbar-custom',
               ]"
-              @scroll="handleScroll"
+              @scroll="handleTagsContainerScroll"
             >
               <ul class="flex gap-x-2 gap-y-4">
                 <li
-                  v-for="tag in bookstoreTagButtons"
+                  v-for="(tag, index) in bookstoreTagButtons"
                   :key="tag.id"
-                  class="shrink-0"
+                  :class="[
+                    'shrink-0',
+                    // NOTE: Prevent cropping the last tag button shadow
+                    { 'pr-[12px]': index === bookstoreTagButtons.length - 1 },
+                  ]"
                 >
                   <ButtonV2
                     :preset="
@@ -95,42 +71,20 @@
             </div>
             <!-- Right arrow -->
             <div
-              v-if="isOverflowing && !isAtEnd"
+              v-if="isTagsContainerOverflowing && !isTagsContainerAtEnd"
               :class="[
-                'hidden laptop:flex',
-                'absolute',
+                ...tagsContainerArrowClass,
+
+                'justify-end',
                 'right-0',
-                'h-full',
-                'z-10',
-                'items-center',
-                'pl-[120px]',
-                'text-gray-500',
                 'bg-gradient-to-r',
-                'from-transparent',
-                'to-light-gray',
-                'cursor-pointer',
               ]"
-              @click="scrollRight"
+              @click="scrollTagsContainerRight"
             >
               <IconArrowRight class="w-[20px] h-[20px]" />
             </div>
-            <div
-              v-if="isOverflowing && !isAtEnd"
-              :class="[
-                'flex laptop:hidden',
-                'absolute',
-                'right-0',
-                'h-full',
-                'z-10',
-                'items-center',
-                'pl-[120px]',
-                'text-gray-500',
-                'bg-gradient-to-r',
-                'from-transparent',
-                'to-light-gray',
-              ]"
-            />
           </nav>
+
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
             <SearchBar
@@ -240,7 +194,7 @@
           v-if="selectedTagTitle"
           :class="[
             'mt-[36px] desktop:mt-[20px]',
-            'px-[16px] laptop:px-0',
+            'px-[16px] desktop:px-0',
 
             'text-[24px] desktop:text-[32px]',
             'font-bold',
@@ -250,7 +204,7 @@
 
         <p
           v-if="selectedTagDescription"
-          class="mt-[8px] px-[16px] laptop:px-0 text-gray-4a text-[14px]"
+          class="mt-[8px] px-[16px] desktop:px-0 text-gray-4a text-[14px]"
           v-text="selectedTagDescription"
         />
       </header>
@@ -266,7 +220,7 @@
 
           'w-full',
           'mt-[40px]',
-          'px-[16px] laptop:px-0',
+          'px-[16px] desktop:px-0',
         ]"
       >
         <!-- Loading -->
@@ -541,6 +495,8 @@ import { parseNFTMetadataURL } from '~/util/nft';
 
 import crispMixin from '~/mixins/crisp';
 
+const TAGS_CONTAINER_SCROLL_BY_SIZE = 100;
+
 function getCMSTagIdsForRecommendedBookstoreItemsByLocale(locale = '') {
   const languages = ['zh', 'en'];
   // Return language matches with locale first
@@ -629,9 +585,9 @@ export default {
       searchItems: [],
 
       // Tag scroll
-      isOverflowing: false,
-      isAtStart: true,
-      isAtEnd: false,
+      isTagsContainerOverflowing: false,
+      isTagsContainerAtStart: true,
+      isTagsContainerAtEnd: false,
     };
   },
   head() {
@@ -1078,6 +1034,20 @@ export default {
     selectedTagDescription() {
       return this.selectedTag?.description;
     },
+    tagsContainerArrowClass() {
+      return [
+        'hidden laptop:flex',
+        'absolute',
+        'h-full',
+        'z-10',
+        'items-center',
+        'w-[120px]',
+        'text-gray-500',
+        'from-transparent',
+        'to-light-gray',
+        'cursor-pointer',
+      ];
+    },
 
     shouldShowProgressIndicator() {
       return (
@@ -1130,12 +1100,12 @@ export default {
       isNFTBook: true,
     });
     this.$nextTick(() => {
-      this.checkOverflow();
+      this.checkTagsContainerOverflow();
     });
-    window.addEventListener('resize', this.checkOverflow);
+    window.addEventListener('resize', this.checkTagsContainerOverflow);
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.checkOverflow);
+    window.removeEventListener('resize', this.checkTagsContainerOverflow);
   },
   methods: {
     ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
@@ -1363,29 +1333,55 @@ export default {
         isNFTBook: true,
       });
     },
-    checkOverflow() {
+    checkTagsContainerOverflow() {
       const container = this.$refs.tagsContainer;
-      const overflowThreshold = 4;
-      this.isOverflowing =
-        container.scrollWidth > container.clientWidth + overflowThreshold;
-      this.handleScroll();
+      this.isTagsContainerOverflowing =
+        container.scrollWidth > container.clientWidth;
+      this.handleTagsContainerScroll();
     },
-    handleScroll() {
+    handleTagsContainerScroll() {
       const container = this.$refs.tagsContainer;
-      const threshold = 4;
 
-      this.isAtStart = container.scrollLeft <= threshold;
-      this.isAtEnd =
-        container.scrollLeft + container.clientWidth >=
-        container.scrollWidth - threshold;
+      this.isTagsContainerAtStart = container.scrollLeft === 0;
+      this.isTagsContainerAtEnd =
+        container.scrollLeft + container.clientWidth >= container.scrollWidth;
     },
-    scrollLeft() {
+    scrollTagsContainerLeft() {
       const container = this.$refs.tagsContainer;
-      container.scrollBy({ left: -100, behavior: 'smooth' });
+      const remainingScrollLeft =
+        container.scrollLeft - TAGS_CONTAINER_SCROLL_BY_SIZE;
+      const isNearStart = remainingScrollLeft < TAGS_CONTAINER_SCROLL_BY_SIZE;
+      if (isNearStart) {
+        container.scrollTo({
+          left: 0,
+          behavior: 'smooth',
+        });
+      } else {
+        container.scrollBy({
+          left: -TAGS_CONTAINER_SCROLL_BY_SIZE,
+          behavior: 'smooth',
+        });
+      }
     },
-    scrollRight() {
+    scrollTagsContainerRight() {
       const container = this.$refs.tagsContainer;
-      container.scrollBy({ left: 100, behavior: 'smooth' });
+      const remainingScrollLeft =
+        container.scrollWidth -
+        container.clientWidth -
+        container.scrollLeft -
+        TAGS_CONTAINER_SCROLL_BY_SIZE;
+      const isNearEnd = remainingScrollLeft < TAGS_CONTAINER_SCROLL_BY_SIZE;
+      if (isNearEnd) {
+        container.scrollTo({
+          left: container.scrollWidth,
+          behavior: 'smooth',
+        });
+      } else {
+        container.scrollBy({
+          left: TAGS_CONTAINER_SCROLL_BY_SIZE,
+          behavior: 'smooth',
+        });
+      }
     },
   },
 };
