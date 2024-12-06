@@ -372,6 +372,7 @@ export default {
           body: {
             '-webkit-text-size-adjust': 'none',
             'text-size-adjust': 'none',
+            direction: 'ltr',
           },
         });
         this.rendition.themes.fontSize(`${this.fontSize}px`);
