@@ -25,7 +25,7 @@
               ]"
               @click="scrollTagsContainerLeft"
             >
-              <IconArrowLeft class="w-[20px] h-[20px]" />
+              <IconArrowLeft class="hidden desktop:block w-[20px] h-[20px]" />
             </div>
             <!-- Tags -->
             <div
@@ -39,8 +39,17 @@
                 'laptop:overflow-x-hidden',
                 'overflow-y-hidden',
                 'scrollbar-custom',
+
+                'cursor-pointer',
               ]"
               @scroll="handleTagsContainerScroll"
+              @mousedown="startDrag"
+              @mousemove="onDrag"
+              @mouseup="endDrag"
+              @mouseleave="endDrag"
+              @touchstart="startDrag"
+              @touchmove="onDrag"
+              @touchend="endDrag"
             >
               <ul class="flex gap-x-2 gap-y-4">
                 <li
@@ -81,7 +90,7 @@
               ]"
               @click="scrollTagsContainerRight"
             >
-              <IconArrowRight class="w-[20px] h-[20px]" />
+              <IconArrowRight class="hidden desktop:block w-[20px] h-[20px]" />
             </div>
           </nav>
 
@@ -588,6 +597,9 @@ export default {
       isTagsContainerOverflowing: false,
       isTagsContainerAtStart: true,
       isTagsContainerAtEnd: false,
+      isDragging: false,
+      startX: 0,
+      scrollLeft: 0,
     };
   },
   head() {
@@ -1042,12 +1054,12 @@ export default {
     },
     tagsContainerArrowClass() {
       return [
-        'hidden laptop:flex',
+        'flex',
         'absolute',
         'h-full',
         'z-10',
         'items-center',
-        'w-[120px]',
+        'w-[60px]',
         'text-gray-500',
         'from-transparent',
         'to-light-gray',
@@ -1388,6 +1400,23 @@ export default {
           behavior: 'smooth',
         });
       }
+    },
+    startDrag(event) {
+      this.isDragging = true;
+      const pageX = event.pageX || event.touches[0].pageX;
+      this.startX = pageX - this.$refs.tagsContainer.offsetLeft;
+      this.scrollLeft = this.$refs.tagsContainer.scrollLeft;
+    },
+    onDrag(event) {
+      if (!this.isDragging) return;
+      event.preventDefault();
+      const pageX = event.pageX || event.touches[0].pageX;
+      const x = pageX - this.$refs.tagsContainer.offsetLeft;
+      const walk = (x - this.startX) * 1.5;
+      this.$refs.tagsContainer.scrollLeft = this.scrollLeft - walk;
+    },
+    endDrag() {
+      this.isDragging = false;
     },
   },
 };
