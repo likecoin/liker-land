@@ -25,7 +25,7 @@
               ]"
               @click="scrollTagsContainerLeft"
             >
-              <IconArrowLeft class="w-[20px] h-[20px]" />
+              <IconArrowLeft class="hidden desktop:block w-[20px] h-[20px]" />
             </div>
             <!-- Tags -->
             <div
@@ -81,7 +81,7 @@
               ]"
               @click="scrollTagsContainerRight"
             >
-              <IconArrowRight class="w-[20px] h-[20px]" />
+              <IconArrowRight class="hidden desktop:block w-[20px] h-[20px]" />
             </div>
           </nav>
 
@@ -1042,7 +1042,7 @@ export default {
     },
     tagsContainerArrowClass() {
       return [
-        'hidden laptop:flex',
+        'flex',
         'absolute',
         'h-full',
         'z-10',
