@@ -40,7 +40,7 @@
         'gap-[12px]',
         isSearchOpen && 'pl-[16px] pr-[4px]',
         'h-full',
-        'rounded-[10px]',
+        'rounded-[0px] desktop:rounded-[10px]',
         'transition-[width]',
         'duration-[5000]',
         'ease-in-out',
