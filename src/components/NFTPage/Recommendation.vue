@@ -152,7 +152,7 @@ export default {
       if (this.type === NFT_TYPE.COLLECTION) {
         return true;
       }
-      return !!this.iscnWorkAuthor;
+      return !!this.iscnWorkAuthorName;
     },
     defaultFeaturedWNFT() {
       return DEFAULT_RECOMMENDATIONS_LIST.WNFT.map(nft => ({
