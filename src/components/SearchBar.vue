@@ -54,6 +54,7 @@
         :value="searchQuery"
         :placeholder="placeholderText"
         @input="debouncedUpdateSearchKeyword"
+        @keyup.enter="handleEnter"
       />
       <ButtonV2
         v-if="isSearchOpen"
@@ -84,6 +85,7 @@ export default {
     return {
       isSearchOpen: false,
       placeholderText: this.$t('gutenberg_search_placeholder'),
+      randomKeywords: [],
     };
   },
   mounted() {
@@ -116,9 +118,17 @@ export default {
           () => Math.random() - 0.5
         );
         const randomTerms = shuffled.slice(0, 3);
+        this.randomKeywords = randomTerms;
         return randomTerms.join('、');
       }
       return this.$t('gutenberg_search_placeholder');
+    },
+    handleEnter() {
+      if (!this.searchQuery || this.searchQuery.trim() === '') {
+        const fallbackKeyword =
+          this.randomKeywords?.[0] || this.$t('gutenberg_search_placeholder');
+        this.$emit('input', fallbackKeyword);
+      }
     },
   },
 };
