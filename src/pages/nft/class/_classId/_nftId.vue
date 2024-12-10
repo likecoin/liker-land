@@ -166,7 +166,7 @@
                 :avatar-size="40"
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :iscn-owner="iscnOwner"
-                :iscn-work-author="iscnWorkAuthor"
+                :iscn-work-author-name="iscnWorkAuthorName"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayNameFull"
                 :class-id="classId"
@@ -422,8 +422,8 @@ export default {
   head() {
     let title =
       this.nftName || this.NFTName || this.$t('nft_details_page_title');
-    if (this.iscnWorkAuthor) {
-      title += ` - ${this.iscnWorkAuthor}`;
+    if (this.iscnWorkAuthorName) {
+      title += ` - ${this.iscnWorkAuthorName}`;
     }
     if (this.nftIsNFTBook) {
       title += ` - ${this.$t('nft_details_page_title_book')}`;
