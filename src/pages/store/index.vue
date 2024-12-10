@@ -39,8 +39,8 @@
                 'laptop:overflow-x-hidden',
                 'overflow-y-hidden',
                 'scrollbar-custom',
-
-                'cursor-pointer',
+                'cursor-grab',
+                'select-none',
               ]"
               @scroll="handleTagsContainerScroll"
               @mousedown="startDrag"
