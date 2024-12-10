@@ -36,7 +36,7 @@
       <Label
         class="text-medium-gray mt-[6px] mb-[12px]"
         preset="p6"
-        :text="(iscnWorkAuthor || creatorDisplayName) | ellipsis"
+        :text="(iscnWorkAuthorName || creatorDisplayName) | ellipsis"
       />
       <Label
         v-if="nftBookAvailablePriceLabel"
@@ -157,7 +157,7 @@
           </p>
           <NFTBookSpecTable class="mt-[12px]">
             <li
-              v-if="iscnWorkAuthor"
+              v-if="iscnWorkAuthorName"
               class="flex flex-col justify-center min-w-0"
             >
               <NuxtLink
@@ -165,14 +165,14 @@
                 :to="
                   localeLocation({
                     name: 'store',
-                    query: { q: iscnWorkAuthor },
+                    query: { q: iscnWorkAuthorName },
                   })
                 "
               >
                 <NFTBookSpecTableLabel :text="$t('identity_type_author')" />
                 <NFTBookSpecTableValue
                   class="group-hover:underline"
-                  :text="iscnWorkAuthor"
+                  :text="iscnWorkAuthorName"
                   :preset="preset"
                 />
               </NuxtLink>
@@ -213,7 +213,7 @@
                     <NFTBookSpecTableLabel
                       :text="
                         $t(
-                          iscnWorkAuthor
+                          iscnWorkAuthorName
                             ? iscnWorkPublisher
                               ? 'identity_type_distributor'
                               : 'identity_type_publisher'
