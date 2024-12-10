@@ -266,7 +266,7 @@
                 :is-avatar-outlined="isCreatorCivicLiker"
                 :is-nft-book="nftIsNFTBook"
                 :iscn-owner="iscnOwner"
-                :iscn-work-author="iscnWorkAuthor"
+                :iscn-work-author-name="iscnWorkAuthorName"
                 :iscn-url="iscnURL"
                 :display-name="creatorDisplayNameFull"
                 :class-id="classId"
@@ -540,8 +540,8 @@ export default {
   },
   head() {
     let title = this.NFTName || this.$t('nft_details_page_title');
-    if (this.iscnWorkAuthor) {
-      title += ` - ${this.iscnWorkAuthor}`;
+    if (this.iscnWorkAuthorName) {
+      title += ` - ${this.iscnWorkAuthorName}`;
     }
     if (this.nftIsNFTBook) {
       title += ` - ${this.$t('nft_details_page_title_book')}`;
@@ -813,8 +813,8 @@ export default {
           let titleWithEdition =
             this.NFTName || this.$t('nft_details_page_title');
           titleWithEdition += ` - ${e.name}`;
-          if (this.iscnWorkAuthor) {
-            titleWithEdition += ` - ${this.iscnWorkAuthor}`;
+          if (this.iscnWorkAuthorName) {
+            titleWithEdition += ` - ${this.iscnWorkAuthorName}`;
           }
           titleWithEdition += ` - ${this.$t('nft_details_page_title_book')}`;
           meta.find(m => m.hid === 'og:title').content = titleWithEdition;
@@ -826,11 +826,11 @@ export default {
             content: this.iscnData?.contentMetadata?.isbn,
           });
         }
-        if (this.iscnWorkAuthor) {
+        if (this.iscnWorkAuthorName) {
           meta.push({
             hid: 'product:custom_label_1',
             property: 'product:custom_label_1',
-            content: this.iscnWorkAuthor,
+            content: this.iscnWorkAuthorName,
           });
         }
         if (this.iscnData?.contentMetadata?.inLanguage) {

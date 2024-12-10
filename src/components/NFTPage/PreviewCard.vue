@@ -76,14 +76,14 @@
         </NuxtLink>
 
         <div
-          v-if="iscnWorkAuthor"
+          v-if="iscnWorkAuthorName"
           class="my-[1rem] flex flex-col items-center text-center min-w-0 w-full"
         >
           <span class="text-like-cyan-gray text-10">{{
             $t('identity_type_author')
           }}</span>
           <span class="w-full truncate text-dark-gray">{{
-            iscnWorkAuthor
+            iscnWorkAuthorName
           }}</span>
         </div>
       </div>
@@ -199,7 +199,7 @@ export default {
       type: String,
       default: undefined,
     },
-    iscnWorkAuthor: {
+    iscnWorkAuthorName: {
       type: String,
       default: undefined,
     },

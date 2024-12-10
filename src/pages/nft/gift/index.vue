@@ -9,13 +9,13 @@
             <NFTBookCoverWithFrame :src="productImageUrl" />
             <Label class="text-[28px] font-600" :text="productTitle" />
             <div class="grid grid-cols-2">
-              <div v-if="iscnWorkAuthor" class="flex flex-col">
+              <div v-if="iscnWorkAuthorName" class="flex flex-col">
                 <Label
                   preset="h6"
                   :text="$t('nft_claim_NFT_author')"
                   class=" text-medium-gray"
                 />
-                <Label preset="h5" :text="iscnWorkAuthor" />
+                <Label preset="h5" :text="iscnWorkAuthorName" />
               </div>
               <div v-if="iscnWorkPublisher" class="flex flex-col w-full">
                 <Label

@@ -179,7 +179,13 @@ export default {
       );
     },
     iscnWorkAuthor() {
-      return this.iscnData?.contentMetadata?.author?.trim();
+      return this.iscnData?.contentMetadata?.author;
+    },
+    iscnWorkAuthorName() {
+      if (typeof this.iscnWorkAuthor === 'string') {
+        return this.iscnWorkAuthor.trim();
+      }
+      return this.iscnWorkAuthor?.name?.trim();
     },
     iscnWorkPublisher() {
       return this.iscnData?.contentMetadata?.publisher?.trim();
@@ -679,7 +685,9 @@ export default {
     },
     nftSignImageAuthor() {
       const customAuthor = NFT_BOOK_WITH_SIGN_IMAGE_SET.get(this.classId);
-      return customAuthor || this.iscnWorkAuthor || this.creatorDisplayNameFull;
+      return (
+        customAuthor || this.iscnWorkAuthorName || this.creatorDisplayNameFull
+      );
     },
   },
   watch: {
